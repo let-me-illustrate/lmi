@@ -30243,3 +30243,25 @@ Conditionally enable a test that had been suppressed.
   numeric_io_test.cpp
 Augment unit tests.
 
+20120604T1057Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_test.cpp
+Refactor.
+
+20120604T1957Z <gchicares@sbcglobal.net> [578]
+
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  mc_enum_types.xpp
+Change the headings of certain exotic columns.
+
+20120608T1631Z <wboutin@massmutual.com> [578]
+
+  nasd.xsl
+Specify basis of three columns.
+
+20120608T1645Z <wboutin@massmutual.com> [578]
+
+  fo_common.xsl
+Untangle a variable formerly used for tracking numbers.
+

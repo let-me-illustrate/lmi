@@ -333,7 +333,7 @@ template<> struct numeric_conversion_traits<Floating>
 /// COMPILER !! This C runtime's strtod() doesn't understand C99's
 /// "inf[inity]". Work around that, but don't worry about NaNs.
 
-double strtoFDL_msvc(char const* nptr, char** endptr)
+inline double strtoFDL_msvc(char const* nptr, char** endptr)
 {
     if(!nptr || !endptr)
         {
