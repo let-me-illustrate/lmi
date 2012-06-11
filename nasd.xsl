@@ -933,9 +933,9 @@ it confusing if the general account rates aren't included, too.
       <column name="DacTaxLoad_Current">DAC _Tax Load</column>
       <column name="NetPmt_Current">Net _Premium</column>
       <column name="COICharge_Current">Cost of Insurance _Charges</column>
-      <column name="AcctVal_Current">Account _Value</column>
-      <column name="CSVNet_Current">Cash Surr _Value</column>
-      <column name="EOYDeathBft_Current">Death _Benefit</column>
+      <column name="AcctVal_Current">Current _Account _Value</column>
+      <column name="CSVNet_Current">Current _Cash Surr _Value</column>
+      <column name="EOYDeathBft_Current">Current _Death _Benefit</column>
     </xsl:variable>
     <xsl:variable name="supplemental_illustration_columns" select="document('')//xsl:variable[@name='supplemental_illustration_columns_raw']/column"/>
     <xsl:variable name="columns" select="$supplemental_illustration_columns[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
