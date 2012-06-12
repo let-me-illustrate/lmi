@@ -30284,3 +30284,12 @@ Prefer terser 'md5sum' output.
   dbnames.xpp
 Add a field for minimum VLR rate.
 
+20120612T2202Z <gchicares@sbcglobal.net> [578]
+
+  fo_common.xsl
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+Rename certain variables.
+

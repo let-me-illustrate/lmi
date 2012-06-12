@@ -267,10 +267,10 @@ void product_data::ascribe_members()
     ascribe("IrrCsvFootnote"                , &product_data::IrrCsvFootnote                );
     ascribe("MortalityChargesFootnote"      , &product_data::MortalityChargesFootnote      );
     ascribe("LoanAndWithdrawalFootnote"     , &product_data::LoanAndWithdrawalFootnote     );
-    ascribe("PresaleTrackingNumber"         , &product_data::PresaleTrackingNumber         );
-    ascribe("CompositeTrackingNumber"       , &product_data::CompositeTrackingNumber       );
-    ascribe("InforceTrackingNumber"         , &product_data::InforceTrackingNumber         );
-    ascribe("InforceCompositeTrackingNumber", &product_data::InforceCompositeTrackingNumber);
+    ascribe("ImprimaturPresale"             , &product_data::ImprimaturPresale             );
+    ascribe("ImprimaturPresaleComposite"    , &product_data::ImprimaturPresaleComposite    );
+    ascribe("ImprimaturInforce"             , &product_data::ImprimaturInforce             );
+    ascribe("ImprimaturInforceComposite"    , &product_data::ImprimaturInforceComposite    );
     ascribe("InforceNonGuaranteedFootnote0" , &product_data::InforceNonGuaranteedFootnote0 );
     ascribe("InforceNonGuaranteedFootnote1" , &product_data::InforceNonGuaranteedFootnote1 );
     ascribe("InforceNonGuaranteedFootnote2" , &product_data::InforceNonGuaranteedFootnote2 );

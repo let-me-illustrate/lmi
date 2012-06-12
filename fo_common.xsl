@@ -165,18 +165,18 @@
     <xsl:choose>
       <xsl:when test="$scalars/IsInforce!='1'">
         <xsl:if test="$scalars/Composite='1'">
-          <xsl:value-of select="$scalars/CompositeTrackingNumber"/>
+          <xsl:value-of select="$scalars/ImprimaturPresaleComposite"/>
         </xsl:if>
         <xsl:if test="$scalars/Composite!='1'">
-          <xsl:value-of select="$scalars/PresaleTrackingNumber"/>
+          <xsl:value-of select="$scalars/ImprimaturPresale"/>
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="$scalars/Composite='1'">
-          <xsl:value-of select="$scalars/InforceCompositeTrackingNumber"/>
+          <xsl:value-of select="$scalars/ImprimaturInforceComposite"/>
         </xsl:if>
         <xsl:if test="$scalars/Composite!='1'">
-          <xsl:value-of select="$scalars/InforceTrackingNumber"/>
+          <xsl:value-of select="$scalars/ImprimaturInforce"/>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
