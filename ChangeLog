@@ -30265,3 +30265,22 @@ Specify basis of three columns.
   fo_common.xsl
 Untangle a variable formerly used for tracking numbers.
 
+20120611T0853Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_traits.hpp
+Fix defect introduced 20120603T1917Z (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-06/msg00000.html
+
+20120612T1738Z <gchicares@sbcglobal.net> [578]
+
+  GNUmakefile
+Prefer terser 'md5sum' output.
+
+20120612T1740Z <gchicares@sbcglobal.net> [578]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add a field for minimum VLR rate.
+

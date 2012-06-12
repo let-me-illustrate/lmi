@@ -319,6 +319,7 @@ void DBDictionary::ascribe_members()
     ascribe("AllowVlr"            , &DBDictionary::AllowVlr            );
     ascribe("FixedLoanRate"       , &DBDictionary::FixedLoanRate       );
     ascribe("MaxVlrRate"          , &DBDictionary::MaxVlrRate          );
+    ascribe("MinVlrRate"          , &DBDictionary::MinVlrRate          );
     ascribe("MaxLoanAcctValMult"  , &DBDictionary::MaxLoanAcctValMult  );
     ascribe("MaxLoanDed"          , &DBDictionary::MaxLoanDed          );
     ascribe("GuarPrefLoanSpread"  , &DBDictionary::GuarPrefLoanSpread  );
@@ -528,6 +529,25 @@ void DBDictionary::InitDB()
     // e.g., 11 or 12.
     Add(database_entity(DB_MaxMonthlyCoiRate   , 12.0));
 
+    // This must not be zero in TX, which specifically requires a
+    // "guaranteed" rate of not more than fifteen percent--see:
+    //   http://texinfo.library.unt.edu/Texasregister/html/1998/sep-25/adopted/insurance.html
+    //   "staff added this subsection which requires that 'if' policy
+    //   loans are illustrated on a guaranteed basis, interest charged
+    //   must be calculated at the highest numeric rate permitted
+    //   under the terms of the contract."
+    int mvd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
+    std::vector<int> max_vlr_dimensions(mvd, mvd + e_number_of_axes);
+    std::vector<double> max_vlr(e_max_dim_state);
+    max_vlr[mce_s_TX] = 0.15;
+    Add
+        (database_entity
+            (DB_MaxVlrRate
+            ,max_vlr_dimensions
+            ,max_vlr
+            )
+        );
+
     Add(database_entity(DB_GuarIntSpread       , dbl_inf));
 
     Add(database_entity(DB_CurrCoiTable0Limit  , dbl_inf));
@@ -702,7 +722,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_SurrChgPremMult     , 0.0));
     Add(database_entity(DB_SurrChgAmort        , 0.0));
 
-    int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, 53, 1};
+    int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
     std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
     Add
         (database_entity
@@ -845,7 +865,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AllowSepAcctNetRate , true));
     Add(database_entity(DB_MaxGenAcctRate      , 0.06));
     Add(database_entity(DB_MaxSepAcctRate      , 0.12));
-    Add(database_entity(DB_MaxVlrRate          , 0.18));
+    Add(database_entity(DB_MinVlrRate          , 0.04));
     Add(database_entity(DB_SurrChgAcctValMult  , 0.0));
     Add(database_entity(DB_IntSpreadMode       , mce_spread_daily));
     Add(database_entity(DB_StateApproved       , true));
