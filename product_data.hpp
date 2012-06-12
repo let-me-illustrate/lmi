@@ -226,10 +226,10 @@ class LMI_SO product_data
     glossed_string IrrCsvFootnote;
     glossed_string MortalityChargesFootnote;
     glossed_string LoanAndWithdrawalFootnote;
-    glossed_string PresaleTrackingNumber;
-    glossed_string CompositeTrackingNumber;
-    glossed_string InforceTrackingNumber;
-    glossed_string InforceCompositeTrackingNumber;
+    glossed_string ImprimaturPresale;
+    glossed_string ImprimaturPresaleComposite;
+    glossed_string ImprimaturInforce;
+    glossed_string ImprimaturInforceComposite;
     glossed_string InforceNonGuaranteedFootnote0;
     glossed_string InforceNonGuaranteedFootnote1;
     glossed_string InforceNonGuaranteedFootnote2;
