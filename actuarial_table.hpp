@@ -169,8 +169,15 @@ class xml_actuarial_table
     ,virtual private obstruct_slicing<xml_actuarial_table>
 {
   public:
+    xml_actuarial_table(std::string const& filename);
     xml_actuarial_table(std::string const& filename, int table_number);
     virtual ~xml_actuarial_table();
+
+    // SOA !! This is temporary code for API compatibility with soa_actuarial_table.
+    static std::string compatibility_filename
+        (std::string const& filename
+        ,int table_number
+        );
 
   protected:
     std::vector<double> specific_values(int issue_age, int length) const;

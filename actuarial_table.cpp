@@ -91,7 +91,7 @@ namespace
 } // Unnamed namespace.
 
 actuarial_table_base::actuarial_table_base()
-    :table_type_     (-1)
+    :table_type_     (e_table_invalid)
     ,min_age_        (-1)
     ,max_age_        (-1)
     ,select_period_  (-1)
@@ -182,20 +182,34 @@ std::vector<double> actuarial_table_base::values_elaborated
         }
 }
 
+xml_actuarial_table::xml_actuarial_table(std::string const& filename)
+{
+    load_xml_table(filename);
+}
+
 xml_actuarial_table::xml_actuarial_table(std::string const& filename, int table_number)
 {
     // SOA !! This is temporary code for API compatibility with soa_actuarial_table.
     // It should be changed so that the constructor takes only a single
     // argument, filename of the XML table file.
-    std::string xmlfile(filename, 0, filename.rfind('.'));
-    xmlfile += "_";
-    xmlfile += value_cast<std::string>(table_number);
-    xmlfile += ".xtable";
+    std::string const xmlfile(compatibility_filename(filename, table_number));
     load_xml_table(xmlfile);
 }
 
 xml_actuarial_table::~xml_actuarial_table()
 {
+}
+
+std::string xml_actuarial_table::compatibility_filename
+    (std::string const& filename
+    ,int table_number
+    )
+{
+    std::string xmlfile(filename, 0, filename.rfind('.'));
+    xmlfile += "_";
+    xmlfile += value_cast<std::string>(table_number);
+    xmlfile += ".xtable";
+    return xmlfile;
 }
 
 void xml_actuarial_table::load_xml_table(std::string const& filename)
