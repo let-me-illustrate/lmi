@@ -959,10 +959,13 @@ std::vector<double> actuarial_table_rates
     )
 {
 #if defined LMI_USE_XML_TABLES
-    xml_actuarial_table     z(table_filename, table_number);
+    std::string const xmlfile
+        (xml_actuarial_table::compatibility_filename(table_filename, table_number)
+         );
+    boost::shared_ptr<xml_actuarial_table const> z(xml_actuarial_table::get_cached(xmlfile));
     soa_actuarial_table z_soa(table_filename, table_number);
 
-    std::vector<double> values    (z.values(issue_age, length));
+    std::vector<double> values    (z->values(issue_age, length));
     std::vector<double> values_soa(z_soa.values(issue_age, length));
 
     // SOA !! Temporarily verify correctness of XML implementation,
@@ -987,10 +990,13 @@ std::vector<double> actuarial_table_rates_elaborated
     )
 {
 #if defined LMI_USE_XML_TABLES
-    xml_actuarial_table     z(table_filename, table_number);
+    std::string const xmlfile
+        (xml_actuarial_table::compatibility_filename(table_filename, table_number)
+         );
+    boost::shared_ptr<xml_actuarial_table const> z(xml_actuarial_table::get_cached(xmlfile));
     soa_actuarial_table z_soa(table_filename, table_number);
 
-    std::vector<double> values(z.values_elaborated
+    std::vector<double> values(z->values_elaborated
         (issue_age
         ,length
         ,method

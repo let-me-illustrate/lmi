@@ -26,6 +26,7 @@
 
 #include "config.hpp"
 
+#include "loaded_files_cache.hpp"
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
@@ -166,6 +167,7 @@ class actuarial_table_base
 class xml_actuarial_table
     :        public  actuarial_table_base
     ,        private lmi::uncopyable <xml_actuarial_table>
+    ,        public  loaded_from_cache<xml_actuarial_table>
     ,virtual private obstruct_slicing<xml_actuarial_table>
 {
   public:
