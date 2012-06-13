@@ -33,10 +33,13 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
+#include <boost/shared_ptr.hpp>
+
 #include <string>
 #include <vector>
 
 class database_entity;
+class DBDictionary;
 class yare_input;
 
 /// Database of product parameters.
@@ -81,6 +84,8 @@ class LMI_SO product_database
     database_index  index_;
     int             length_;
     int             maturity_age_;
+
+    boost::shared_ptr<DBDictionary const> db_;
 };
 
 #endif // database_hpp
