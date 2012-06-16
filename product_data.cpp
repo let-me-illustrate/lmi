@@ -33,6 +33,7 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
+#include "map_lookup.hpp"
 #include "miscellany.hpp"               // lmi_array_size()
 #include "my_proem.hpp"                 // ::write_proem()
 #include "xml_serialize.hpp"
@@ -286,10 +287,11 @@ void product_data::ascribe_members()
 /// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: 20100402T1123Z
+/// version 1: 20120616T1209Z
 
 int product_data::class_version() const
 {
-    return 0;
+    return 1;
 }
 
 std::string const& product_data::xml_root_name() const
@@ -332,10 +334,55 @@ void product_data::write_proem
 bool product_data::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
-        {"Remove this string when adding the first removed entity."
+        {"PresaleTrackingNumber"          // renamed to ImprimaturPresale
+        ,"CompositeTrackingNumber"        // renamed to ImprimaturPresaleComposite
+        ,"InforceTrackingNumber"          // renamed to ImprimaturInforce
+        ,"InforceCompositeTrackingNumber" // renamed to ImprimaturInforceComposite
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
+}
+
+void product_data::redintegrate_ex_ante
+    (int                file_version
+    ,std::string const& // name
+    ,std::string      & // value
+    ) const
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    if(file_version < 2)
+        {
+        return;
+        }
+}
+
+void product_data::redintegrate_ex_post
+    (int                                       file_version
+    ,std::map<std::string, std::string> const& detritus_map
+    ,std::list<std::string>             const& residuary_names
+    )
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    if(file_version < 1)
+        {
+        // Version 1 renamed these members:
+        LMI_ASSERT(contains(residuary_names, "ImprimaturPresale"));
+        LMI_ASSERT(contains(residuary_names, "ImprimaturPresaleComposite"));
+        LMI_ASSERT(contains(residuary_names, "ImprimaturInforce"));
+        LMI_ASSERT(contains(residuary_names, "ImprimaturInforceComposite"));
+        ImprimaturPresale          = map_lookup(detritus_map, "PresaleTrackingNumber");
+        ImprimaturPresaleComposite = map_lookup(detritus_map, "CompositeTrackingNumber");
+        ImprimaturInforce          = map_lookup(detritus_map, "InforceTrackingNumber");
+        ImprimaturInforceComposite = map_lookup(detritus_map, "InforceCompositeTrackingNumber");
+        }
 }
 
 /// Create a product file for the 'sample' product.

@@ -117,6 +117,16 @@ class LMI_SO product_data
         ,std::string const&     file_leaf_name
         ) const;
     virtual bool is_detritus(std::string const&) const;
+    virtual void redintegrate_ex_ante
+        (int                file_version
+        ,std::string const& name
+        ,std::string      & value
+        ) const;
+    virtual void redintegrate_ex_post
+        (int                                       file_version
+        ,std::map<std::string, std::string> const& detritus_map
+        ,std::list<std::string>             const& residuary_names
+        );
 
     // Names of files that contain other product data.
     glossed_string DatabaseFilename;

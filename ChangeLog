@@ -30293,3 +30293,12 @@ Add a field for minimum VLR rate.
   product_data.hpp
 Rename certain variables.
 
+20120616T1209Z <gchicares@sbcglobal.net> [578]
+
+  antediluvian_stubs.cpp
+  product_data.cpp
+  product_data.hpp
+Provide for backward compatibility, exposing a latent defect: the
+intended redintegration does not take place, because detritus_map
+holds a std::string rather than a glossed_string.
+
