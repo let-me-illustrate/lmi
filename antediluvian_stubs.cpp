@@ -132,6 +132,20 @@ bool product_data::is_detritus(std::string const&) const
     return false;
 }
 
+void product_data::redintegrate_ex_ante
+    (int
+    ,std::string const&
+    ,std::string      &
+    ) const
+{}
+
+void product_data::redintegrate_ex_post
+    (int
+    ,std::map<std::string, std::string> const&
+    ,std::list<std::string>             const&
+    )
+{}
+
 std::string const& product_data::datum(std::string const&) const
 {
     return empty_string;
