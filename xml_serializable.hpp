@@ -42,6 +42,9 @@
 template<typename T>
 class LMI_SO xml_serializable
 {
+    // For the nonce, value_type is guaranteed to be std::string.
+    typedef std::string value_type;
+
   public:
     virtual ~xml_serializable();
 
@@ -82,12 +85,12 @@ class LMI_SO xml_serializable
     virtual void redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
-        ,std::string      & value
+        ,value_type       & value
         ) const;
     virtual void redintegrate_ex_post
-        (int                                       file_version
-        ,std::map<std::string, std::string> const& detritus_map
-        ,std::list<std::string>             const& residuary_names
+        (int                                     file_version
+        ,std::map<std::string,value_type> const& detritus_map
+        ,std::list<std::string>           const& residuary_names
         );
     virtual void redintegrate_ad_terminum();
 };

@@ -115,7 +115,7 @@ using namespace xml;
 
     std::ostringstream oss;
 
-    std::map<std::string, std::string> detritus_map;
+    std::map<std::string,value_type> detritus_map;
 
     std::list<std::string> residuary_names;
     std::copy
@@ -143,9 +143,10 @@ using namespace xml;
         else if(is_detritus(node_tag))
             {
             // Hold certain obsolete entities that must be translated.
-            std::string s = xml_lmi::get_content(*child);
-            redintegrate_ex_ante(file_version, node_tag, s);
-            detritus_map[node_tag] = s;
+            // For the nonce, value_type is guaranteed to be std::string.
+            value_type e = xml_lmi::get_content(*child);
+            redintegrate_ex_ante(file_version, node_tag, e);
+            detritus_map[node_tag] = e;
             }
         else
             {
@@ -243,6 +244,7 @@ void xml_serializable<T>::read_element
     ,int                 file_version
     )
 {
+    // For the nonce, value_type is guaranteed to be std::string.
     std::string s = xml_lmi::get_content(e);
     redintegrate_ex_ante(file_version, name, s);
     t()[name] = s;
@@ -344,7 +346,7 @@ template<typename T>
 void xml_serializable<T>::redintegrate_ex_ante
     (int                file_version
     ,std::string const& // name
-    ,std::string      & // value
+    ,value_type       & // value
     ) const
 {
     if(class_version() == file_version)
@@ -390,9 +392,9 @@ void xml_serializable<T>::redintegrate_ex_ante
 
 template<typename T>
 void xml_serializable<T>::redintegrate_ex_post
-    (int                                       file_version
-    ,std::map<std::string, std::string> const& // detritus_map
-    ,std::list<std::string>             const& // residuary_names
+    (int                                     file_version
+    ,std::map<std::string,value_type> const& // detritus_map
+    ,std::list<std::string>           const& // residuary_names
     )
 {
     if(class_version() == file_version)
