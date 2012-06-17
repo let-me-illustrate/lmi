@@ -99,8 +99,6 @@ template<> glossed_string value_cast<glossed_string>(std::string const& z)
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-/// Private default ctor, for friend class product_data.
-
 glossed_string::glossed_string()
 {}
 
@@ -114,8 +112,6 @@ glossed_string::glossed_string
 
 glossed_string::~glossed_string()
 {}
-
-/// Temporary private assignment operator for external 'my_prod.cpp'.
 
 glossed_string& glossed_string::operator=(std::string const& s)
 {
@@ -287,7 +283,7 @@ void product_data::ascribe_members()
 /// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: 20100402T1123Z
-/// version 1: 20120616T1209Z
+/// version 1: 20120616T1210Z
 
 int product_data::class_version() const
 {
