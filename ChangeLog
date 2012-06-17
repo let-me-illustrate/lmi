@@ -30293,7 +30293,7 @@ Add a field for minimum VLR rate.
   product_data.hpp
 Rename certain variables.
 
-20120616T1209Z <gchicares@sbcglobal.net> [578]
+20120616T1210Z <gchicares@sbcglobal.net> [578]
 
   antediluvian_stubs.cpp
   product_data.cpp
@@ -30301,4 +30301,18 @@ Rename certain variables.
 Provide for backward compatibility, exposing a latent defect: the
 intended redintegration does not take place, because detritus_map
 holds a std::string rather than a glossed_string.
+
+20120616T2150Z <gchicares@sbcglobal.net> [578]
+
+  xml_serializable.hpp
+  xml_serializable.tpp
+Distinguish deserialized value type from std::string.
+
+20120617T1008Z <gchicares@sbcglobal.net> [578]
+
+  product_data.cpp
+  product_data.hpp
+Make private functions of class glossed_string public, so that it can
+be stored in a map (supra, at 20120616T1210Z). Privacy had been simply
+a default choice that afforded no important protective value.
 

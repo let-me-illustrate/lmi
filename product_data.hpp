@@ -46,14 +46,16 @@ class glossed_string
     :virtual private obstruct_slicing<glossed_string>
 {
     friend class PolicyDocument;
-    friend class product_data;
 
   public:
+    glossed_string();
     explicit glossed_string
         (std::string const& datum
         ,std::string const& gloss = std::string()
         );
     ~glossed_string();
+
+    glossed_string& operator=(std::string const&);
 
     bool operator==(glossed_string const&) const;
 
@@ -61,9 +63,6 @@ class glossed_string
     std::string const& gloss() const;
 
   private:
-    glossed_string();
-    glossed_string& operator=(std::string const&);
-
     std::string datum_;
     std::string gloss_;
 };
