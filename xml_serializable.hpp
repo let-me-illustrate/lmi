@@ -35,6 +35,17 @@
 #include <map>
 #include <string>
 
+/// Type of a deserialized xml element.
+///
+/// Specialize this if the intended type is not interconvertible with
+/// std::string.
+
+template<typename T>
+struct deserialized
+{
+    typedef std::string value_type;
+};
+
 /// Derive from this mixin class to use its xml serialization.
 ///
 /// Implicitly-declared special member functions do the right thing.
@@ -42,8 +53,7 @@
 template<typename T>
 class LMI_SO xml_serializable
 {
-    // For the nonce, value_type is guaranteed to be std::string.
-    typedef std::string value_type;
+    typedef typename deserialized<T>::value_type value_type;
 
   public:
     virtual ~xml_serializable();

@@ -37,6 +37,8 @@
 #include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/utility/enable_if.hpp>
 
 #include <xmlwrapp/nodes_view.h>
 
@@ -222,6 +224,25 @@ std::string const& xml_serializable<T>::xml_root_name() const
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
+template<typename X, typename Y>
+inline Y sfinae_cast
+    (X const& x
+    ,typename boost::enable_if<boost::is_same<X,Y> >::type* = 0
+    )
+{
+    return x;
+}
+
+template<typename X, typename Y>
+inline Y sfinae_cast
+    (X const&
+    ,typename boost::disable_if<boost::is_same<X,Y> >::type* = 0
+    )
+{
+    fatal_error() << "Impermissible type conversion." << LMI_FLUSH;
+    return Y();
+}
+
 /// Retrieve an xml element's value.
 
 template<typename T>
@@ -229,8 +250,7 @@ typename xml_serializable<T>::value_type xml_serializable<T>::fetch_element
     (xml::element const& e
     ) const
 {
-    // For the nonce, value_type is guaranteed to be std::string.
-    return xml_lmi::get_content(e);
+    return sfinae_cast<std::string,value_type>(xml_lmi::get_content(e));
 }
 
 /// Read an xml element.
@@ -242,7 +262,10 @@ typename xml_serializable<T>::value_type xml_serializable<T>::fetch_element
 /// xml_serialize::from_xml() does nearly the same thing, but in a
 /// type-dependent way; thus, it doesn't have the precondition above.
 /// However, the datum here has been subject to type erasure and its
-/// type is not readily unerased.
+/// type is not readily unerased. SOMEDAY !! But now that datatype is
+/// available, selectively at least, as value_type...so should
+/// from_xml() be used directly here? Or should this function be kept
+/// for parallelism with write_element()?
 ///
 /// The xml::element argument is the element to be read, which is
 /// already available through an iterator in read().
@@ -256,7 +279,7 @@ void xml_serializable<T>::read_element
 {
     value_type v = fetch_element(e);
     redintegrate_ex_ante(file_version, name, v);
-    t()[name] = v;
+    t()[name] = sfinae_cast<value_type,std::string>(v);
 }
 
 /// Write an xml element.
