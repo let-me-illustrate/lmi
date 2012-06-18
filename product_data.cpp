@@ -296,6 +296,18 @@ std::string const& product_data::xml_root_name() const
     return s;
 }
 
+product_data::value_type product_data::fetch_element
+    (xml::element const& e
+    ) const
+{
+    glossed_string r;
+    xml_serialize::from_xml(e, r);
+    // For the nonce, std::string is used as value_type,
+    // so one of {datum,gloss} must arbitrarily be discarded;
+    // choose the one that's less likely to mask a visible error.
+    return r.gloss();
+}
+
 /// This override doesn't call redintegrate_ex_ante(); that wouldn't
 /// make sense, because the underlying datatype is just a doublet of
 /// strings, and strings can legitimately contain anything.
@@ -342,7 +354,7 @@ bool product_data::is_detritus(std::string const& s) const
 void product_data::redintegrate_ex_ante
     (int                file_version
     ,std::string const& // name
-    ,std::string      & // value
+    ,value_type       & // value
     ) const
 {
     if(class_version() == file_version)
@@ -357,9 +369,9 @@ void product_data::redintegrate_ex_ante
 }
 
 void product_data::redintegrate_ex_post
-    (int                                       file_version
-    ,std::map<std::string, std::string> const& detritus_map
-    ,std::list<std::string>             const& residuary_names
+    (int                                     file_version
+    ,std::map<std::string,value_type> const& detritus_map
+    ,std::list<std::string>           const& residuary_names
     )
 {
     if(class_version() == file_version)

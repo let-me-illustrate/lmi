@@ -65,6 +65,9 @@ class LMI_SO xml_serializable
     virtual std::string const& xml_root_name() const = 0;
 
     // Reading and writing.
+    virtual value_type fetch_element
+        (xml::element const& e
+        ) const;
     virtual void read_element
         (xml::element const& e
         ,std::string const&  name
