@@ -143,10 +143,9 @@ using namespace xml;
         else if(is_detritus(node_tag))
             {
             // Hold certain obsolete entities that must be translated.
-            // For the nonce, value_type is guaranteed to be std::string.
-            value_type e = xml_lmi::get_content(*child);
-            redintegrate_ex_ante(file_version, node_tag, e);
-            detritus_map[node_tag] = e;
+            value_type v = fetch_element(*child);
+            redintegrate_ex_ante(file_version, node_tag, v);
+            detritus_map[node_tag] = v;
             }
         else
             {
@@ -223,6 +222,17 @@ std::string const& xml_serializable<T>::xml_root_name() const
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
+/// Retrieve an xml element's value.
+
+template<typename T>
+typename xml_serializable<T>::value_type xml_serializable<T>::fetch_element
+    (xml::element const& e
+    ) const
+{
+    // For the nonce, value_type is guaranteed to be std::string.
+    return xml_lmi::get_content(e);
+}
+
 /// Read an xml element.
 ///
 /// This default implementation is appropriate only for streamable
@@ -244,10 +254,9 @@ void xml_serializable<T>::read_element
     ,int                 file_version
     )
 {
-    // For the nonce, value_type is guaranteed to be std::string.
-    std::string s = xml_lmi::get_content(e);
-    redintegrate_ex_ante(file_version, name, s);
-    t()[name] = s;
+    value_type v = fetch_element(e);
+    redintegrate_ex_ante(file_version, name, v);
+    t()[name] = v;
 }
 
 /// Write an xml element.

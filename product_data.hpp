@@ -80,6 +80,9 @@ class LMI_SO product_data
     ,        public  xml_serializable  <product_data>
     ,        public  MemberSymbolTable <product_data>
 {
+    // For the nonce, value_type is guaranteed to be std::string.
+    typedef std::string value_type;
+
     friend class PolicyDocument;
 
   public:
@@ -102,6 +105,9 @@ class LMI_SO product_data
     virtual std::string const& xml_root_name() const;
 
     // xml_serializable overrides.
+    virtual value_type fetch_element
+        (xml::element const& e
+        ) const;
     virtual void read_element
         (xml::element const& e
         ,std::string const&  name
@@ -119,12 +125,12 @@ class LMI_SO product_data
     virtual void redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
-        ,std::string      & value
+        ,value_type       & value
         ) const;
     virtual void redintegrate_ex_post
-        (int                                       file_version
-        ,std::map<std::string, std::string> const& detritus_map
-        ,std::list<std::string>             const& residuary_names
+        (int                                     file_version
+        ,std::map<std::string,value_type> const& detritus_map
+        ,std::list<std::string>           const& residuary_names
         );
 
     // Names of files that contain other product data.
