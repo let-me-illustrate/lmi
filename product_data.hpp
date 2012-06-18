@@ -67,6 +67,13 @@ class glossed_string
     std::string gloss_;
 };
 
+class LMI_SO product_data;
+
+template<> struct deserialized<product_data>
+{
+    typedef glossed_string value_type;
+};
+
 /// Product data representable as strings, including filenames.
 ///
 /// This is the "master" product file: it includes the filenames of
@@ -80,8 +87,7 @@ class LMI_SO product_data
     ,        public  xml_serializable  <product_data>
     ,        public  MemberSymbolTable <product_data>
 {
-    // For the nonce, value_type is guaranteed to be std::string.
-    typedef std::string value_type;
+    typedef deserialized<product_data>::value_type value_type;
 
     friend class PolicyDocument;
 

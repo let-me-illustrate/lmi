@@ -300,12 +300,9 @@ product_data::value_type product_data::fetch_element
     (xml::element const& e
     ) const
 {
-    glossed_string r;
+    value_type r;
     xml_serialize::from_xml(e, r);
-    // For the nonce, std::string is used as value_type,
-    // so one of {datum,gloss} must arbitrarily be discarded;
-    // choose the one that's less likely to mask a visible error.
-    return r.gloss();
+    return r;
 }
 
 /// This override doesn't call redintegrate_ex_ante(); that wouldn't

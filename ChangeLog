@@ -30316,3 +30316,20 @@ Make private functions of class glossed_string public, so that it can
 be stored in a map (supra, at 20120616T1210Z). Privacy had been simply
 a default choice that afforded no important protective value.
 
+20120618T1712Z <gchicares@sbcglobal.net> [578]
+
+  antediluvian_stubs.cpp
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Add a virtual function; refactor.
+
+20120618T1835Z <gchicares@sbcglobal.net> [578]
+
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Fix defect noted 20120616T1210Z.
+
