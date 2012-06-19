@@ -157,10 +157,6 @@
     <xsl:attribute name="margin">.25in .25in .1in</xsl:attribute>
   </xsl:template>
 
-  <!--
-  Formerly, the field 'InsCoPhone' contained two compliance tracking numbers,
-  but more were needed to distinguish inforce and new business composites.
-  -->
   <xsl:variable name="compliance_tracking_string">
     <xsl:choose>
       <xsl:when test="$scalars/IsInforce!='1'">
