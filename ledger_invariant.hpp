@@ -269,10 +269,10 @@ class LMI_SO LedgerInvariant
     std::string     IrrCsvFootnote;
     std::string     MortalityChargesFootnote;
     std::string     LoanAndWithdrawalFootnote;
-    std::string     PresaleTrackingNumber;
-    std::string     CompositeTrackingNumber;
-    std::string     InforceTrackingNumber;
-    std::string     InforceCompositeTrackingNumber;
+    std::string     ImprimaturPresale;
+    std::string     ImprimaturPresaleComposite;
+    std::string     ImprimaturInforce;
+    std::string     ImprimaturInforceComposite;
     std::string     InforceNonGuaranteedFootnote0;
     std::string     InforceNonGuaranteedFootnote1;
     std::string     InforceNonGuaranteedFootnote2;

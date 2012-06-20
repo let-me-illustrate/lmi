@@ -34,6 +34,7 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
+#include "map_lookup.hpp"
 #include "miscellany.hpp"               // lmi_array_size()
 #include "my_proem.hpp"                 // ::write_proem()
 #include "xml_serialize.hpp"
@@ -99,8 +100,6 @@ template<> glossed_string value_cast<glossed_string>(std::string const& z)
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-/// Private default ctor, for friend class product_data.
-
 glossed_string::glossed_string()
 {}
 
@@ -114,8 +113,6 @@ glossed_string::glossed_string
 
 glossed_string::~glossed_string()
 {}
-
-/// Temporary private assignment operator for external 'my_prod.cpp'.
 
 glossed_string& glossed_string::operator=(std::string const& s)
 {
@@ -268,10 +265,10 @@ void product_data::ascribe_members()
     ascribe("IrrCsvFootnote"                , &product_data::IrrCsvFootnote                );
     ascribe("MortalityChargesFootnote"      , &product_data::MortalityChargesFootnote      );
     ascribe("LoanAndWithdrawalFootnote"     , &product_data::LoanAndWithdrawalFootnote     );
-    ascribe("PresaleTrackingNumber"         , &product_data::PresaleTrackingNumber         );
-    ascribe("CompositeTrackingNumber"       , &product_data::CompositeTrackingNumber       );
-    ascribe("InforceTrackingNumber"         , &product_data::InforceTrackingNumber         );
-    ascribe("InforceCompositeTrackingNumber", &product_data::InforceCompositeTrackingNumber);
+    ascribe("ImprimaturPresale"             , &product_data::ImprimaturPresale             );
+    ascribe("ImprimaturPresaleComposite"    , &product_data::ImprimaturPresaleComposite    );
+    ascribe("ImprimaturInforce"             , &product_data::ImprimaturInforce             );
+    ascribe("ImprimaturInforceComposite"    , &product_data::ImprimaturInforceComposite    );
     ascribe("InforceNonGuaranteedFootnote0" , &product_data::InforceNonGuaranteedFootnote0 );
     ascribe("InforceNonGuaranteedFootnote1" , &product_data::InforceNonGuaranteedFootnote1 );
     ascribe("InforceNonGuaranteedFootnote2" , &product_data::InforceNonGuaranteedFootnote2 );
@@ -287,16 +284,26 @@ void product_data::ascribe_members()
 /// Backward-compatibility serial number of this class's xml version.
 ///
 /// version 0: 20100402T1123Z
+/// version 1: 20120616T1210Z
 
 int product_data::class_version() const
 {
-    return 0;
+    return 1;
 }
 
 std::string const& product_data::xml_root_name() const
 {
     static std::string const s("policy");
     return s;
+}
+
+product_data::value_type product_data::fetch_element
+    (xml::element const& e
+    ) const
+{
+    value_type r;
+    xml_serialize::from_xml(e, r);
+    return r;
 }
 
 /// This override doesn't call redintegrate_ex_ante(); that wouldn't
@@ -333,10 +340,55 @@ void product_data::write_proem
 bool product_data::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
-        {"Remove this string when adding the first removed entity."
+        {"PresaleTrackingNumber"          // renamed to ImprimaturPresale
+        ,"CompositeTrackingNumber"        // renamed to ImprimaturPresaleComposite
+        ,"InforceTrackingNumber"          // renamed to ImprimaturInforce
+        ,"InforceCompositeTrackingNumber" // renamed to ImprimaturInforceComposite
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);
+}
+
+void product_data::redintegrate_ex_ante
+    (int                file_version
+    ,std::string const& // name
+    ,value_type       & // value
+    ) const
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    if(file_version < 2)
+        {
+        return;
+        }
+}
+
+void product_data::redintegrate_ex_post
+    (int                                     file_version
+    ,std::map<std::string,value_type> const& detritus_map
+    ,std::list<std::string>           const& residuary_names
+    )
+{
+    if(class_version() == file_version)
+        {
+        return;
+        }
+
+    if(file_version < 1)
+        {
+        // Version 1 renamed these members:
+        LMI_ASSERT(contains(residuary_names, "ImprimaturPresale"));
+        LMI_ASSERT(contains(residuary_names, "ImprimaturPresaleComposite"));
+        LMI_ASSERT(contains(residuary_names, "ImprimaturInforce"));
+        LMI_ASSERT(contains(residuary_names, "ImprimaturInforceComposite"));
+        ImprimaturPresale          = map_lookup(detritus_map, "PresaleTrackingNumber");
+        ImprimaturPresaleComposite = map_lookup(detritus_map, "CompositeTrackingNumber");
+        ImprimaturInforce          = map_lookup(detritus_map, "InforceTrackingNumber");
+        ImprimaturInforceComposite = map_lookup(detritus_map, "InforceCompositeTrackingNumber");
+        }
 }
 
 /// Create a product file for the 'sample' product.

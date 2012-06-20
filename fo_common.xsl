@@ -157,26 +157,22 @@
     <xsl:attribute name="margin">.25in .25in .1in</xsl:attribute>
   </xsl:template>
 
-  <!--
-  Formerly, the field 'InsCoPhone' contained two compliance tracking numbers,
-  but more were needed to distinguish inforce and new business composites.
-  -->
   <xsl:variable name="compliance_tracking_string">
     <xsl:choose>
       <xsl:when test="$scalars/IsInforce!='1'">
         <xsl:if test="$scalars/Composite='1'">
-          <xsl:value-of select="$scalars/CompositeTrackingNumber"/>
+          <xsl:value-of select="$scalars/ImprimaturPresaleComposite"/>
         </xsl:if>
         <xsl:if test="$scalars/Composite!='1'">
-          <xsl:value-of select="$scalars/PresaleTrackingNumber"/>
+          <xsl:value-of select="$scalars/ImprimaturPresale"/>
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="$scalars/Composite='1'">
-          <xsl:value-of select="$scalars/InforceCompositeTrackingNumber"/>
+          <xsl:value-of select="$scalars/ImprimaturInforceComposite"/>
         </xsl:if>
         <xsl:if test="$scalars/Composite!='1'">
-          <xsl:value-of select="$scalars/InforceTrackingNumber"/>
+          <xsl:value-of select="$scalars/ImprimaturInforce"/>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>

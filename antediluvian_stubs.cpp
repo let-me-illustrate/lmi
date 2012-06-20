@@ -108,6 +108,13 @@ std::string const& product_data::xml_root_name() const
     return empty_string;
 }
 
+product_data::value_type product_data::fetch_element
+    (xml::element const&
+    ) const
+{
+    return value_type();
+}
+
 void product_data::read_element
     (xml::element const&
     ,std::string const&
@@ -131,6 +138,20 @@ bool product_data::is_detritus(std::string const&) const
 {
     return false;
 }
+
+void product_data::redintegrate_ex_ante
+    (int
+    ,std::string const&
+    ,value_type       &
+    ) const
+{}
+
+void product_data::redintegrate_ex_post
+    (int
+    ,std::map<std::string,value_type> const&
+    ,std::list<std::string>           const&
+    )
+{}
 
 std::string const& product_data::datum(std::string const&) const
 {

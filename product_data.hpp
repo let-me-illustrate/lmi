@@ -46,14 +46,16 @@ class glossed_string
     :virtual private obstruct_slicing<glossed_string>
 {
     friend class PolicyDocument;
-    friend class product_data;
 
   public:
+    glossed_string();
     explicit glossed_string
         (std::string const& datum
         ,std::string const& gloss = std::string()
         );
     ~glossed_string();
+
+    glossed_string& operator=(std::string const&);
 
     bool operator==(glossed_string const&) const;
 
@@ -61,11 +63,15 @@ class glossed_string
     std::string const& gloss() const;
 
   private:
-    glossed_string();
-    glossed_string& operator=(std::string const&);
-
     std::string datum_;
     std::string gloss_;
+};
+
+class LMI_SO product_data;
+
+template<> struct deserialized<product_data>
+{
+    typedef glossed_string value_type;
 };
 
 /// Product data representable as strings, including filenames.
@@ -81,6 +87,8 @@ class LMI_SO product_data
     ,        public  xml_serializable  <product_data>
     ,        public  MemberSymbolTable <product_data>
 {
+    typedef deserialized<product_data>::value_type value_type;
+
     friend class PolicyDocument;
 
   public:
@@ -103,6 +111,9 @@ class LMI_SO product_data
     virtual std::string const& xml_root_name() const;
 
     // xml_serializable overrides.
+    virtual value_type fetch_element
+        (xml::element const& e
+        ) const;
     virtual void read_element
         (xml::element const& e
         ,std::string const&  name
@@ -117,6 +128,16 @@ class LMI_SO product_data
         ,std::string const&     file_leaf_name
         ) const;
     virtual bool is_detritus(std::string const&) const;
+    virtual void redintegrate_ex_ante
+        (int                file_version
+        ,std::string const& name
+        ,value_type       & value
+        ) const;
+    virtual void redintegrate_ex_post
+        (int                                     file_version
+        ,std::map<std::string,value_type> const& detritus_map
+        ,std::list<std::string>           const& residuary_names
+        );
 
     // Names of files that contain other product data.
     glossed_string DatabaseFilename;
@@ -226,10 +247,10 @@ class LMI_SO product_data
     glossed_string IrrCsvFootnote;
     glossed_string MortalityChargesFootnote;
     glossed_string LoanAndWithdrawalFootnote;
-    glossed_string PresaleTrackingNumber;
-    glossed_string CompositeTrackingNumber;
-    glossed_string InforceTrackingNumber;
-    glossed_string InforceCompositeTrackingNumber;
+    glossed_string ImprimaturPresale;
+    glossed_string ImprimaturPresaleComposite;
+    glossed_string ImprimaturInforce;
+    glossed_string ImprimaturInforceComposite;
     glossed_string InforceNonGuaranteedFootnote0;
     glossed_string InforceNonGuaranteedFootnote1;
     glossed_string InforceNonGuaranteedFootnote2;
