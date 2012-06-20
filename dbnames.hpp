@@ -379,6 +379,7 @@ enum e_database_key
         ,DB_AllowVlr
         ,DB_FixedLoanRate
         ,DB_MaxVlrRate
+        ,DB_MinVlrRate
 
         ,DB_MaxLoanAcctValMult
         ,DB_MaxLoanDed

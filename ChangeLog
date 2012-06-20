@@ -30265,3 +30265,86 @@ Specify basis of three columns.
   fo_common.xsl
 Untangle a variable formerly used for tracking numbers.
 
+20120611T0853Z <gchicares@sbcglobal.net> [578]
+
+  numeric_io_traits.hpp
+Fix defect introduced 20120603T1917Z (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-06/msg00000.html
+
+20120612T1738Z <gchicares@sbcglobal.net> [578]
+
+  GNUmakefile
+Prefer terser 'md5sum' output.
+
+20120612T1740Z <gchicares@sbcglobal.net> [578]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add a field for minimum VLR rate.
+
+20120612T2202Z <gchicares@sbcglobal.net> [578]
+
+  fo_common.xsl
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+Rename certain variables.
+
+20120616T1210Z <gchicares@sbcglobal.net> [578]
+
+  antediluvian_stubs.cpp
+  product_data.cpp
+  product_data.hpp
+Provide for backward compatibility, exposing a latent defect: the
+intended redintegration does not take place, because detritus_map
+holds a std::string rather than a glossed_string.
+
+20120616T2150Z <gchicares@sbcglobal.net> [578]
+
+  xml_serializable.hpp
+  xml_serializable.tpp
+Distinguish deserialized value type from std::string.
+
+20120617T1008Z <gchicares@sbcglobal.net> [578]
+
+  product_data.cpp
+  product_data.hpp
+Make private functions of class glossed_string public, so that it can
+be stored in a map (supra, at 20120616T1210Z). Privacy had been simply
+a default choice that afforded no important protective value.
+
+20120618T1712Z <gchicares@sbcglobal.net> [578]
+
+  antediluvian_stubs.cpp
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Add a virtual function; refactor.
+
+20120618T1835Z <gchicares@sbcglobal.net> [578]
+
+  product_data.cpp
+  product_data.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+Fix defect noted 20120616T1210Z.
+
+20120619T0559Z <gchicares@sbcglobal.net> [578]
+
+  workhorse.make
+Fix defect introduced 20100920T1232Z: 'touchstone/md5sums' not sorted.
+
+20120619T0709Z <gchicares@sbcglobal.net> [578]
+
+  fo_common.xsl
+Remove documentation of an eradicated kludge.
+
+20120619T0713Z <gchicares@sbcglobal.net> [578]
+
+  version.hpp
+Designate release candidate.
+

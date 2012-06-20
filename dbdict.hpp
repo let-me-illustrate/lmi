@@ -296,6 +296,7 @@ class LMI_SO DBDictionary
     database_entity AllowVlr            ;
     database_entity FixedLoanRate       ;
     database_entity MaxVlrRate          ;
+    database_entity MinVlrRate          ;
     database_entity MaxLoanAcctValMult  ;
     database_entity MaxLoanDed          ;
     database_entity GuarPrefLoanSpread  ;

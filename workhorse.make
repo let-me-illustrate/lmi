@@ -1277,6 +1277,7 @@ touchstone_files := \
 
 $(touchstone_md5sums): $(touchstone_files)
 	@cd $(touchstone_dir) && $(MD5SUM) $(notdir $^) > $@
+	@$(SORT) --key=2 --output=$@ $@
 
 testdeck_suffixes    := cns ill ini mec
 test_result_suffixes := test test0 monthly_trace.* mec.tsv mec.xml

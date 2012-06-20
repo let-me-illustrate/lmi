@@ -35,6 +35,17 @@
 #include <map>
 #include <string>
 
+/// Type of a deserialized xml element.
+///
+/// Specialize this if the intended type is not interconvertible with
+/// std::string.
+
+template<typename T>
+struct deserialized
+{
+    typedef std::string value_type;
+};
+
 /// Derive from this mixin class to use its xml serialization.
 ///
 /// Implicitly-declared special member functions do the right thing.
@@ -42,6 +53,8 @@
 template<typename T>
 class LMI_SO xml_serializable
 {
+    typedef typename deserialized<T>::value_type value_type;
+
   public:
     virtual ~xml_serializable();
 
@@ -62,6 +75,9 @@ class LMI_SO xml_serializable
     virtual std::string const& xml_root_name() const = 0;
 
     // Reading and writing.
+    virtual value_type fetch_element
+        (xml::element const& e
+        ) const;
     virtual void read_element
         (xml::element const& e
         ,std::string const&  name
@@ -82,12 +98,12 @@ class LMI_SO xml_serializable
     virtual void redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
-        ,std::string      & value
+        ,value_type       & value
         ) const;
     virtual void redintegrate_ex_post
-        (int                                       file_version
-        ,std::map<std::string, std::string> const& detritus_map
-        ,std::list<std::string>             const& residuary_names
+        (int                                     file_version
+        ,std::map<std::string,value_type> const& detritus_map
+        ,std::list<std::string>           const& residuary_names
         );
     virtual void redintegrate_ad_terminum();
 };

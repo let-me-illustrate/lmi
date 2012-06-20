@@ -37,6 +37,8 @@
 #include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/utility/enable_if.hpp>
 
 #include <xmlwrapp/nodes_view.h>
 
@@ -115,7 +117,7 @@ using namespace xml;
 
     std::ostringstream oss;
 
-    std::map<std::string, std::string> detritus_map;
+    std::map<std::string,value_type> detritus_map;
 
     std::list<std::string> residuary_names;
     std::copy
@@ -143,9 +145,9 @@ using namespace xml;
         else if(is_detritus(node_tag))
             {
             // Hold certain obsolete entities that must be translated.
-            std::string s = xml_lmi::get_content(*child);
-            redintegrate_ex_ante(file_version, node_tag, s);
-            detritus_map[node_tag] = s;
+            value_type v = fetch_element(*child);
+            redintegrate_ex_ante(file_version, node_tag, v);
+            detritus_map[node_tag] = v;
             }
         else
             {
@@ -222,6 +224,35 @@ std::string const& xml_serializable<T>::xml_root_name() const
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
+template<typename X, typename Y>
+inline Y sfinae_cast
+    (X const& x
+    ,typename boost::enable_if<boost::is_same<X,Y> >::type* = 0
+    )
+{
+    return x;
+}
+
+template<typename X, typename Y>
+inline Y sfinae_cast
+    (X const&
+    ,typename boost::disable_if<boost::is_same<X,Y> >::type* = 0
+    )
+{
+    fatal_error() << "Impermissible type conversion." << LMI_FLUSH;
+    return Y();
+}
+
+/// Retrieve an xml element's value.
+
+template<typename T>
+typename xml_serializable<T>::value_type xml_serializable<T>::fetch_element
+    (xml::element const& e
+    ) const
+{
+    return sfinae_cast<std::string,value_type>(xml_lmi::get_content(e));
+}
+
 /// Read an xml element.
 ///
 /// This default implementation is appropriate only for streamable
@@ -231,7 +262,10 @@ std::string const& xml_serializable<T>::xml_root_name() const
 /// xml_serialize::from_xml() does nearly the same thing, but in a
 /// type-dependent way; thus, it doesn't have the precondition above.
 /// However, the datum here has been subject to type erasure and its
-/// type is not readily unerased.
+/// type is not readily unerased. SOMEDAY !! But now that datatype is
+/// available, selectively at least, as value_type...so should
+/// from_xml() be used directly here? Or should this function be kept
+/// for parallelism with write_element()?
 ///
 /// The xml::element argument is the element to be read, which is
 /// already available through an iterator in read().
@@ -243,9 +277,9 @@ void xml_serializable<T>::read_element
     ,int                 file_version
     )
 {
-    std::string s = xml_lmi::get_content(e);
-    redintegrate_ex_ante(file_version, name, s);
-    t()[name] = s;
+    value_type v = fetch_element(e);
+    redintegrate_ex_ante(file_version, name, v);
+    t()[name] = sfinae_cast<value_type,std::string>(v);
 }
 
 /// Write an xml element.
@@ -344,7 +378,7 @@ template<typename T>
 void xml_serializable<T>::redintegrate_ex_ante
     (int                file_version
     ,std::string const& // name
-    ,std::string      & // value
+    ,value_type       & // value
     ) const
 {
     if(class_version() == file_version)
@@ -390,9 +424,9 @@ void xml_serializable<T>::redintegrate_ex_ante
 
 template<typename T>
 void xml_serializable<T>::redintegrate_ex_post
-    (int                                       file_version
-    ,std::map<std::string, std::string> const& // detritus_map
-    ,std::list<std::string>             const& // residuary_names
+    (int                                     file_version
+    ,std::map<std::string,value_type> const& // detritus_map
+    ,std::list<std::string>           const& // residuary_names
     )
 {
     if(class_version() == file_version)
