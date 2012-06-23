@@ -317,30 +317,6 @@ int Input::retirement_age     () const {return RetirementAge.value();}
 int Input::inforce_year       () const {return InforceYear  .value();}
 int Input::effective_year     () const {return EffectiveDate.value().year();}
 
-std::string Input::differing_fields(Input const& z) const
-{
-    std::ostringstream oss;
-    oss << "Fields that differ:\n";
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        std::string const s0 = operator[](*i).str();
-        std::string const s1 = z[*i].str();
-        if(s0 != s1)
-            {
-            oss
-                << "  name " << *i
-                << ": '" << s0
-                << "[" << s0.size() << "]"
-                << "' versus '" << s1
-                << "[" << s1.size() << "]"
-                << "'\n"
-                ;
-            }
-        }
-    return oss.str();
-}
-
 void Input::AscribeMembers()
 {
     ascribe("IssueAge"                              , &Input::IssueAge                              );
