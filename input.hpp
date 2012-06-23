@@ -148,8 +148,6 @@ class LMI_SO Input
 
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
-    std::string differing_fields(Input const&) const;
-
     static Input magically_rectify(Input const&);
 
   private:
