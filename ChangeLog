@@ -30366,3 +30366,9 @@ Measure speed of copy ctor and assignment and equality operators.
 Improve copy ctor and assignment and equality operators (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2012-03/msg00014.html
 
+20120624T0027Z <gchicares@sbcglobal.net> [573]
+
+  mec_input.cpp
+  mec_state.cpp
+Improve copy ctor and assignment and equality operators.
+
