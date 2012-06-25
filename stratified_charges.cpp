@@ -192,11 +192,7 @@ stratified_charges::stratified_charges(stratified_charges const& z)
     ,MemberSymbolTable <stratified_charges>()
 {
     ascribe_members();
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        datum(*i) = z.datum(*i);
-        }
+    MemberSymbolTable<stratified_charges>::assign(z);
 }
 
 stratified_charges::~stratified_charges()
@@ -205,11 +201,7 @@ stratified_charges::~stratified_charges()
 
 stratified_charges& stratified_charges::operator=(stratified_charges const& z)
 {
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        datum(*i) = z.datum(*i);
-        }
+    MemberSymbolTable<stratified_charges>::assign(z);
     return *this;
 }
 
