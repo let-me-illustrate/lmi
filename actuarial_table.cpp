@@ -90,104 +90,22 @@ namespace
     }
 } // Unnamed namespace.
 
-actuarial_table_base::actuarial_table_base()
+xml_actuarial_table::xml_actuarial_table(std::string const& filename)
     :table_type_     (e_table_invalid)
     ,min_age_        (-1)
     ,max_age_        (-1)
     ,select_period_  (-1)
     ,max_select_age_ (-1)
 {
-}
-
-actuarial_table_base::~actuarial_table_base()
-{
-}
-
-/// Read a given number of values for a given issue age.
-
-std::vector<double> actuarial_table_base::values(int issue_age, int length) const
-{
-    return specific_values(issue_age, length);
-}
-
-/// Read a given number of values for a given issue age, using a
-/// nondefault lookup method.
-///
-/// Assertions require that arguments be sane on entry, regardless of
-/// method: method-specific adjustments are not permitted to render
-/// sane what was insane ab ovo.
-
-std::vector<double> actuarial_table_base::values_elaborated
-    (int                      issue_age
-    ,int                      length
-    ,e_actuarial_table_method method
-    ,int                      inforce_duration
-    ,int                      reset_duration
-    ) const
-{
-    LMI_ASSERT(min_age_ <= issue_age && issue_age <= max_age_);
-    LMI_ASSERT(0 <= length && length <= 1 + max_age_ - issue_age);
-    LMI_ASSERT(0 <= inforce_duration);
-    LMI_ASSERT(inforce_duration < 1 + max_age_ - issue_age);
-    LMI_ASSERT(reset_duration <= inforce_duration);
-
-    if('S' != table_type_)
-        {
-        return specific_values(issue_age, length);
-        }
-
-    switch(method)
-        {
-        case e_reenter_at_inforce_duration:
-            {
-            int const delta = inforce_duration;
-            std::vector<double> v = specific_values
-                (issue_age + delta
-                ,length    - delta
-                );
-            v.insert(v.begin(), delta, 0.0);
-            return v;
-            }
-            // break;
-        case e_reenter_upon_rate_reset:
-            {
-            int const age_setback_limit = issue_age - min_age_;
-            int const delta = std::max(reset_duration, -age_setback_limit);
-            std::vector<double> v = specific_values
-                (issue_age + delta
-                ,length    - delta
-                );
-            if(delta < 0)
-                {
-                v.erase(v.begin(), v.begin() - delta);
-                }
-            else
-                {
-                v.insert(v.begin(), delta, 0.0);
-                }
-            return v;
-            }
-            // break;
-        case e_reenter_never: // Fall through.
-        default:
-            {
-            fatal_error()
-                << "Table-lookup method "
-                << method
-                << " is not valid in this context."
-                << LMI_FLUSH
-                ;
-            throw "Unreachable--silences a compiler diagnostic.";
-            }
-        }
-}
-
-xml_actuarial_table::xml_actuarial_table(std::string const& filename)
-{
     load_xml_table(filename);
 }
 
 xml_actuarial_table::xml_actuarial_table(std::string const& filename, int table_number)
+    :table_type_     (e_table_invalid)
+    ,min_age_        (-1)
+    ,max_age_        (-1)
+    ,select_period_  (-1)
+    ,max_select_age_ (-1)
 {
     // SOA !! This is temporary code for API compatibility with soa_actuarial_table.
     // It should be changed so that the constructor takes only a single
@@ -512,10 +430,95 @@ std::vector<double> xml_actuarial_table::specific_values
     return v;
 }
 
+/// Read a given number of values for a given issue age.
+
+std::vector<double> xml_actuarial_table::values(int issue_age, int length) const
+{
+    return specific_values(issue_age, length);
+}
+
+/// Read a given number of values for a given issue age, using a
+/// nondefault lookup method.
+///
+/// Assertions require that arguments be sane on entry, regardless of
+/// method: method-specific adjustments are not permitted to render
+/// sane what was insane ab ovo.
+
+std::vector<double> xml_actuarial_table::values_elaborated
+    (int                      issue_age
+    ,int                      length
+    ,e_actuarial_table_method method
+    ,int                      inforce_duration
+    ,int                      reset_duration
+    ) const
+{
+    LMI_ASSERT(min_age_ <= issue_age && issue_age <= max_age_);
+    LMI_ASSERT(0 <= length && length <= 1 + max_age_ - issue_age);
+    LMI_ASSERT(0 <= inforce_duration);
+    LMI_ASSERT(inforce_duration < 1 + max_age_ - issue_age);
+    LMI_ASSERT(reset_duration <= inforce_duration);
+
+    if('S' != table_type_)
+        {
+        return specific_values(issue_age, length);
+        }
+
+    switch(method)
+        {
+        case e_reenter_at_inforce_duration:
+            {
+            int const delta = inforce_duration;
+            std::vector<double> v = specific_values
+                (issue_age + delta
+                ,length    - delta
+                );
+            v.insert(v.begin(), delta, 0.0);
+            return v;
+            }
+            // break;
+        case e_reenter_upon_rate_reset:
+            {
+            int const age_setback_limit = issue_age - min_age_;
+            int const delta = std::max(reset_duration, -age_setback_limit);
+            std::vector<double> v = specific_values
+                (issue_age + delta
+                ,length    - delta
+                );
+            if(delta < 0)
+                {
+                v.erase(v.begin(), v.begin() - delta);
+                }
+            else
+                {
+                v.insert(v.begin(), delta, 0.0);
+                }
+            return v;
+            }
+            // break;
+        case e_reenter_never: // Fall through.
+        default:
+            {
+            fatal_error()
+                << "Table-lookup method "
+                << method
+                << " is not valid in this context."
+                << LMI_FLUSH
+                ;
+            throw "Unreachable--silences a compiler diagnostic.";
+            }
+        }
+}
+
 soa_actuarial_table::soa_actuarial_table(std::string const& filename, int table_number)
     :filename_       (filename)
     ,table_number_   (table_number)
     ,table_offset_   (-1)
+    ,table_type_     (e_table_invalid)
+    ,min_age_        (-1)
+    ,max_age_        (-1)
+    ,select_period_  (-1)
+    ,max_select_age_ (-1)
+
 {
     if(table_number_ <= 0)
         {
@@ -919,6 +922,85 @@ std::vector<double> soa_actuarial_table::specific_values
         }
     LMI_ASSERT(v.size() == static_cast<unsigned int>(length));
     return v;
+}
+
+/// Read a given number of values for a given issue age.
+
+std::vector<double> soa_actuarial_table::values(int issue_age, int length) const
+{
+    return specific_values(issue_age, length);
+}
+
+/// Read a given number of values for a given issue age, using a
+/// nondefault lookup method.
+///
+/// Assertions require that arguments be sane on entry, regardless of
+/// method: method-specific adjustments are not permitted to render
+/// sane what was insane ab ovo.
+
+std::vector<double> soa_actuarial_table::values_elaborated
+    (int                      issue_age
+    ,int                      length
+    ,e_actuarial_table_method method
+    ,int                      inforce_duration
+    ,int                      reset_duration
+    ) const
+{
+    LMI_ASSERT(min_age_ <= issue_age && issue_age <= max_age_);
+    LMI_ASSERT(0 <= length && length <= 1 + max_age_ - issue_age);
+    LMI_ASSERT(0 <= inforce_duration);
+    LMI_ASSERT(inforce_duration < 1 + max_age_ - issue_age);
+    LMI_ASSERT(reset_duration <= inforce_duration);
+
+    if('S' != table_type_)
+        {
+        return specific_values(issue_age, length);
+        }
+
+    switch(method)
+        {
+        case e_reenter_at_inforce_duration:
+            {
+            int const delta = inforce_duration;
+            std::vector<double> v = specific_values
+                (issue_age + delta
+                ,length    - delta
+                );
+            v.insert(v.begin(), delta, 0.0);
+            return v;
+            }
+            // break;
+        case e_reenter_upon_rate_reset:
+            {
+            int const age_setback_limit = issue_age - min_age_;
+            int const delta = std::max(reset_duration, -age_setback_limit);
+            std::vector<double> v = specific_values
+                (issue_age + delta
+                ,length    - delta
+                );
+            if(delta < 0)
+                {
+                v.erase(v.begin(), v.begin() - delta);
+                }
+            else
+                {
+                v.insert(v.begin(), delta, 0.0);
+                }
+            return v;
+            }
+            // break;
+        case e_reenter_never: // Fall through.
+        default:
+            {
+            fatal_error()
+                << "Table-lookup method "
+                << method
+                << " is not valid in this context."
+                << LMI_FLUSH
+                ;
+            throw "Unreachable--silences a compiler diagnostic.";
+            }
+        }
 }
 
 namespace

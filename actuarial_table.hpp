@@ -126,15 +126,23 @@ enum e_table_type
     ,e_table_select_and_ultimate   = 'S'
     };
 
-/// Base class for actuarial tables, both XML and binary.
-/// SOA !! This is only temporary, merge with xml_actuarial_table into
-/// single class once we remove binary SOA format support
+/// Read actuarial table from XML file.
 
-class actuarial_table_base
+class xml_actuarial_table
+    :        private lmi::uncopyable<xml_actuarial_table>
+    ,        public  loaded_from_cache<xml_actuarial_table>
+    ,virtual private obstruct_slicing<xml_actuarial_table>
 {
   public:
-    actuarial_table_base();
-    virtual ~actuarial_table_base();
+    xml_actuarial_table(std::string const& filename);
+    xml_actuarial_table(std::string const& filename, int table_number);
+    virtual ~xml_actuarial_table();
+
+    // SOA !! This is temporary code for API compatibility with soa_actuarial_table.
+    static std::string compatibility_filename
+        (std::string const& filename
+        ,int table_number
+        );
 
     std::vector<double> values(int issue_age, int length) const;
     std::vector<double> values_elaborated
@@ -152,36 +160,6 @@ class actuarial_table_base
     int                max_select_age () const {return max_select_age_ ;}
 
   protected:
-    virtual std::vector<double> specific_values(int issue_age, int length) const = 0;
-
-    // Table parameters, in order read from table header.
-    char table_type_     ;
-    int  min_age_        ;
-    int  max_age_        ;
-    int  select_period_  ;
-    int  max_select_age_ ;
-};
-
-/// Read actuarial table from XML file.
-
-class xml_actuarial_table
-    :        public  actuarial_table_base
-    ,        private lmi::uncopyable <xml_actuarial_table>
-    ,        public  loaded_from_cache<xml_actuarial_table>
-    ,virtual private obstruct_slicing<xml_actuarial_table>
-{
-  public:
-    xml_actuarial_table(std::string const& filename);
-    xml_actuarial_table(std::string const& filename, int table_number);
-    virtual ~xml_actuarial_table();
-
-    // SOA !! This is temporary code for API compatibility with soa_actuarial_table.
-    static std::string compatibility_filename
-        (std::string const& filename
-        ,int table_number
-        );
-
-  protected:
     std::vector<double> specific_values(int issue_age, int length) const;
 
   private:
@@ -196,6 +174,13 @@ class xml_actuarial_table
         ,int& min_age
         ,int& max_age
         );
+
+    // Table parameters, in order read from table header.
+    char table_type_     ;
+    int  min_age_        ;
+    int  max_age_        ;
+    int  select_period_  ;
+    int  max_select_age_ ;
 
     // Table data. For 1D tables (e_table_aggregate and e_table_duration), this
     // is the vector of values from min_age_ to max_age_.
@@ -230,8 +215,7 @@ class xml_actuarial_table
 /// compatibility.
 
 class soa_actuarial_table
-    :        public  actuarial_table_base
-    ,        private lmi::uncopyable <soa_actuarial_table>
+    :        private lmi::uncopyable <soa_actuarial_table>
     ,virtual private obstruct_slicing<soa_actuarial_table>
 {
   public:
@@ -239,6 +223,21 @@ class soa_actuarial_table
     virtual ~soa_actuarial_table();
 
     std::string const& filename       () const {return filename_       ;}
+
+    std::vector<double> values(int issue_age, int length) const;
+    std::vector<double> values_elaborated
+        (int                      issue_age
+        ,int                      length
+        ,e_actuarial_table_method method
+        ,int                      inforce_duration
+        ,int                      reset_duration
+        ) const;
+
+    char               table_type     () const {return table_type_     ;}
+    int                min_age        () const {return min_age_        ;}
+    int                max_age        () const {return max_age_        ;}
+    int                select_period  () const {return select_period_  ;}
+    int                max_select_age () const {return max_select_age_ ;}
 
   private:
     void find_table();
@@ -249,6 +248,13 @@ class soa_actuarial_table
     // Ctor arguments.
     std::string filename_     ;
     int         table_number_ ;
+
+    // Table parameters, in order read from table header.
+    char table_type_     ;
+    int  min_age_        ;
+    int  max_age_        ;
+    int  select_period_  ;
+    int  max_select_age_ ;
 
     // Table data.
     std::vector<double> data_;
