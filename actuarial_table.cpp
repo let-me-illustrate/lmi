@@ -91,21 +91,11 @@ namespace
 } // Unnamed namespace.
 
 xml_actuarial_table::xml_actuarial_table(std::string const& filename)
-    :table_type_     (e_table_invalid)
-    ,min_age_        (-1)
-    ,max_age_        (-1)
-    ,select_period_  (-1)
-    ,max_select_age_ (-1)
 {
     load_xml_table(filename);
 }
 
 xml_actuarial_table::xml_actuarial_table(std::string const& filename, int table_number)
-    :table_type_     (e_table_invalid)
-    ,min_age_        (-1)
-    ,max_age_        (-1)
-    ,select_period_  (-1)
-    ,max_select_age_ (-1)
 {
     // SOA !! This is temporary code for API compatibility with soa_actuarial_table.
     // It should be changed so that the constructor takes only a single
@@ -135,27 +125,69 @@ void xml_actuarial_table::load_xml_table(std::string const& filename)
     xml_lmi::dom_parser parser(filename);
     xml::element root(parser.root_node("table"));
 
+    table_.load(root);
+}
+
+/// Read a given number of values for a given issue age.
+
+std::vector<double> xml_actuarial_table::values(int issue_age, int length) const
+{
+    return table_.values(issue_age, length);
+}
+
+/// Read a given number of values for a given issue age, using a
+/// nondefault lookup method.
+///
+/// Assertions require that arguments be sane on entry, regardless of
+/// method: method-specific adjustments are not permitted to render
+/// sane what was insane ab ovo.
+
+std::vector<double> xml_actuarial_table::values_elaborated
+    (int                      issue_age
+    ,int                      length
+    ,e_actuarial_table_method method
+    ,int                      inforce_duration
+    ,int                      reset_duration
+    ) const
+{
+    return table_.values_elaborated
+        (issue_age
+        ,length
+        ,method
+        ,inforce_duration
+        ,reset_duration
+        );
+}
+
+xml_actuarial_table::basic_table::basic_table()
+    :table_type_     (e_table_invalid)
+    ,min_age_        (-1)
+    ,max_age_        (-1)
+    ,select_period_  (-1)
+    ,max_select_age_ (-1)
+{
+}
+
+void xml_actuarial_table::basic_table::load(xml::element const& root)
+{
     // SOA !! Implement loading of multi-dimensional tables as well.
-    // SOA !! Upgrade xmlwrapp:
-    // XMLWRAPP !! This should be const_iterator, but xmlwrapp < 0.7 lacks the
-    // necessary operator!= for comparing const and non-const iterators.
-    xml::node::iterator i;
+    xml::node::const_iterator i;
 
     if (root.end() != (i = root.find("aggregate")))
         {
-        load_xml_aggregate_table(*i);
+        load_aggregate_table(*i);
         }
     else if (root.end() != (i = root.find("duration")))
         {
-        load_xml_duration_table(*i);
+        load_duration_table(*i);
         }
     else if (root.end() != (i = root.find("select")))
         {
-        load_xml_select_table(*i);
+        load_select_table(*i);
         }
     else if (root.end() != (i = root.find("select-and-ultimate")))
         {
-        load_xml_select_and_ultimate_table(*i);
+        load_select_and_ultimate_table(*i);
         }
     else
         {
@@ -166,7 +198,7 @@ void xml_actuarial_table::load_xml_table(std::string const& filename)
         }
 }
 
-void xml_actuarial_table::load_xml_table_with_ages
+void xml_actuarial_table::basic_table::load_table_with_ages
     (xml::element const& node
     ,std::vector<double>& data
     ,int& min_age
@@ -215,9 +247,9 @@ void xml_actuarial_table::load_xml_table_with_ages
     LMI_ASSERT(data.size() == size_t(max_age - min_age + 1));
 }
 
-void xml_actuarial_table::load_xml_aggregate_table(xml::element const& node)
+void xml_actuarial_table::basic_table::load_aggregate_table(xml::element const& node)
 {
-    load_xml_table_with_ages
+    load_table_with_ages
         (node
         ,data_
         ,min_age_
@@ -227,7 +259,7 @@ void xml_actuarial_table::load_xml_aggregate_table(xml::element const& node)
     table_type_ = e_table_aggregate;
 }
 
-void xml_actuarial_table::load_xml_duration_table(xml::element const& node)
+void xml_actuarial_table::basic_table::load_duration_table(xml::element const& node)
 {
     xml::const_nodes_view const values = node.elements("value");
 
@@ -242,7 +274,7 @@ void xml_actuarial_table::load_xml_duration_table(xml::element const& node)
     table_type_ = e_table_duration;
 }
 
-void xml_actuarial_table::load_xml_select_table(xml::element const& node)
+void xml_actuarial_table::basic_table::load_select_table(xml::element const& node)
 {
     xml::const_nodes_view const rows = node.elements("row");
 
@@ -318,12 +350,12 @@ void xml_actuarial_table::load_xml_select_table(xml::element const& node)
     table_type_ = e_table_select_and_ultimate;
 }
 
-void xml_actuarial_table::load_xml_select_and_ultimate_table(xml::element const& node)
+void xml_actuarial_table::basic_table::load_select_and_ultimate_table(xml::element const& node)
 {
-    load_xml_select_table(*xml_lmi::retrieve_element(node, "select"));
+    load_select_table(*xml_lmi::retrieve_element(node, "select"));
 
     int ultimate_min_age;
-    load_xml_table_with_ages
+    load_table_with_ages
         (*xml_lmi::retrieve_element(node, "ultimate")
         ,ultimate_
         ,ultimate_min_age
@@ -345,7 +377,7 @@ void xml_actuarial_table::load_xml_select_and_ultimate_table(xml::element const&
     table_type_ = e_table_select_and_ultimate;
 }
 
-std::vector<double> xml_actuarial_table::specific_values
+std::vector<double> xml_actuarial_table::basic_table::specific_values
     (int issue_age
     ,int length
     ) const
@@ -432,7 +464,7 @@ std::vector<double> xml_actuarial_table::specific_values
 
 /// Read a given number of values for a given issue age.
 
-std::vector<double> xml_actuarial_table::values(int issue_age, int length) const
+std::vector<double> xml_actuarial_table::basic_table::values(int issue_age, int length) const
 {
     return specific_values(issue_age, length);
 }
@@ -444,7 +476,7 @@ std::vector<double> xml_actuarial_table::values(int issue_age, int length) const
 /// method: method-specific adjustments are not permitted to render
 /// sane what was insane ab ovo.
 
-std::vector<double> xml_actuarial_table::values_elaborated
+std::vector<double> xml_actuarial_table::basic_table::values_elaborated
     (int                      issue_age
     ,int                      length
     ,e_actuarial_table_method method

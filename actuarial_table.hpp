@@ -153,46 +153,59 @@ class xml_actuarial_table
         ,int                      reset_duration
         ) const;
 
-    char               table_type     () const {return table_type_     ;}
-    int                min_age        () const {return min_age_        ;}
-    int                max_age        () const {return max_age_        ;}
-    int                select_period  () const {return select_period_  ;}
-    int                max_select_age () const {return max_select_age_ ;}
-
   protected:
-    std::vector<double> specific_values(int issue_age, int length) const;
+    void load_xml_table(std::string const& filename);
 
-  private:
-    void load_xml_table                    (std::string const& filename);
-    void load_xml_aggregate_table          (xml::element const& node);
-    void load_xml_duration_table           (xml::element const& node);
-    void load_xml_select_table             (xml::element const& node);
-    void load_xml_select_and_ultimate_table(xml::element const& node);
-    void load_xml_table_with_ages
-        (xml::element const& node
-        ,std::vector<double>& data
-        ,int& min_age
-        ,int& max_age
-        );
+    class basic_table
+    {
+      public:
+        basic_table();
+        void load(xml::element const& node);
 
-    // Table parameters, in order read from table header.
-    char table_type_     ;
-    int  min_age_        ;
-    int  max_age_        ;
-    int  select_period_  ;
-    int  max_select_age_ ;
+        std::vector<double> values(int issue_age, int length) const;
+        std::vector<double> values_elaborated
+            (int                      issue_age
+            ,int                      length
+            ,e_actuarial_table_method method
+            ,int                      inforce_duration
+            ,int                      reset_duration
+            ) const;
 
-    // Table data. For 1D tables (e_table_aggregate and e_table_duration), this
-    // is the vector of values from min_age_ to max_age_.
-    // For e_table_select_and_ultimate, the content is organized by rows, with
-    // select_period_ entries per row, with rows ranging from min_age_ to
-    // max_select_age_.
-    std::vector<double> data_;
+      private:
+        void load_aggregate_table          (xml::element const& node);
+        void load_duration_table           (xml::element const& node);
+        void load_select_table             (xml::element const& node);
+        void load_select_and_ultimate_table(xml::element const& node);
+        void load_table_with_ages
+            (xml::element const& node
+            ,std::vector<double>& data
+            ,int& min_age
+            ,int& max_age
+            );
 
-    // For e_table_select_and_ultimate, this vector contains the ultimate
-    // column. The first value, ultimate_[0], is for min_age_+select_period_,
-    // the last is for max_select_age_.
-    std::vector<double> ultimate_;
+        std::vector<double> specific_values(int issue_age, int length) const;
+
+        // Table parameters, in order read from table header.
+        char table_type_     ;
+        int  min_age_        ;
+        int  max_age_        ;
+        int  select_period_  ;
+        int  max_select_age_ ;
+
+        // Table data. For 1D tables (e_table_aggregate and e_table_duration), this
+        // is the vector of values from min_age_ to max_age_.
+        // For e_table_select_and_ultimate, the content is organized by rows, with
+        // select_period_ entries per row, with rows ranging from min_age_ to
+        // max_select_age_.
+        std::vector<double> data_;
+
+        // For e_table_select_and_ultimate, this vector contains the ultimate
+        // column. The first value, ultimate_[0], is for min_age_+select_period_,
+        // the last is for max_select_age_.
+        std::vector<double> ultimate_;
+    };
+
+    basic_table table_;
 };
 
 /// Read a table from a database in the binary format designed by the
