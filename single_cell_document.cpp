@@ -43,8 +43,8 @@ single_cell_document::single_cell_document()
 }
 
 //============================================================================
-single_cell_document::single_cell_document(Input const& parms)
-    :input_data_(parms)
+single_cell_document::single_cell_document(Input const& z)
+    :input_data_(z)
 {
 }
 
