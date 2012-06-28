@@ -35,8 +35,6 @@
 #include <iosfwd>
 #include <string>
 
-class mec_input;
-
 class LMI_SO mec_xml_document
     :        private lmi::uncopyable <mec_xml_document>
     ,virtual private obstruct_slicing<mec_xml_document>

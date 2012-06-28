@@ -35,8 +35,6 @@
 #include <iosfwd>
 #include <string>
 
-class Input;
-
 class LMI_SO single_cell_document
     :        private lmi::uncopyable <single_cell_document>
     ,virtual private obstruct_slicing<single_cell_document>
