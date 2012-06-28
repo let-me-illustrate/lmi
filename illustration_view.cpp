@@ -110,7 +110,7 @@ IllustrationView::~IllustrationView()
 
 inline Input& IllustrationView::input_data()
 {
-    return *document().doc_.input_data_;
+    return document().doc_.input_data_;
 }
 
 IllustrationDocument& IllustrationView::document() const
