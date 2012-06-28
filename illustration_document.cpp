@@ -95,7 +95,7 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
         }
     else if(wxDOC_NEW & flags)
         {
-        *doc_.input_data_ = default_cell();
+        doc_.input_data_ = default_cell();
         }
     else
         {
