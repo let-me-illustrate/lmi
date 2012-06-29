@@ -26,17 +26,14 @@
 
 #include "config.hpp"
 
+#include "mec_input.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
-#include <boost/scoped_ptr.hpp>
-
 #include <iosfwd>
 #include <string>
-
-class mec_input;
 
 class LMI_SO mec_xml_document
     :        private lmi::uncopyable <mec_xml_document>
@@ -53,18 +50,18 @@ class LMI_SO mec_xml_document
     mec_input const& input_data() const;
 
     void read(std::istream const&);
-    void write(std::ostream&);
+    void write(std::ostream&) const;
 
   private:
     void parse(xml::element const&);
     std::string const& xml_root_name() const;
 
-    boost::scoped_ptr<mec_input> const input_data_;
+    mec_input input_data_;
 };
 
 inline mec_input const& mec_xml_document::input_data() const
 {
-    return *input_data_;
+    return input_data_;
 }
 
 #endif // mec_xml_document_hpp

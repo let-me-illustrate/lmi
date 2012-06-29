@@ -254,17 +254,7 @@ Input::Input(Input const& z)
     ,MemberSymbolTable <Input>()
 {
     AscribeMembers();
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        // This would be wrong:
-        //   operator[](*i) = z[*i];
-        // because it would swap in a copy of z's *members*.
-        //
-        // TODO ?? Would we be better off without the operator=() that
-        // does that? Using str() here, passim, seems distateful.
-        operator[](*i) = z[*i].str();
-        }
+    MemberSymbolTable<Input>::assign(z);
     DoAdaptExternalities();
 }
 
@@ -274,37 +264,14 @@ Input::~Input()
 
 Input& Input::operator=(Input const& z)
 {
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        operator[](*i) = z[*i].str();
-        }
+    MemberSymbolTable<Input>::assign(z);
     DoAdaptExternalities();
     return *this;
 }
 
-// TODO ?? Can this be put into class MemberSymbolTable?
 bool Input::operator==(Input const& z) const
 {
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-// TODO ?? Provide operator!=(). Done yet?
-//        if(operator[](*i) != z[*i])
-// TODO ?? Wait--this wouldn't work, at least not yet...
-// ...it tests *identity*, not *equivalence*.
-//        if(!(operator[](*i) == z[*i]))
-//
-// TODO ?? Then why doesn't even this work?
-//        if(!(operator[](*i).str() == z[*i].str()))
-        std::string const s0 = operator[](*i).str();
-        std::string const s1 = z[*i].str();
-        if(s0 != s1)
-            {
-            return false;
-            }
-        }
-    return true;
+    return MemberSymbolTable<Input>::equals(z);
 }
 
 mcenum_ledger_type Input::ledger_type () const {return GleanedLedgerType_;}
@@ -316,30 +283,6 @@ int Input::issue_age          () const {return IssueAge     .value();}
 int Input::retirement_age     () const {return RetirementAge.value();}
 int Input::inforce_year       () const {return InforceYear  .value();}
 int Input::effective_year     () const {return EffectiveDate.value().year();}
-
-std::string Input::differing_fields(Input const& z) const
-{
-    std::ostringstream oss;
-    oss << "Fields that differ:\n";
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        std::string const s0 = operator[](*i).str();
-        std::string const s1 = z[*i].str();
-        if(s0 != s1)
-            {
-            oss
-                << "  name " << *i
-                << ": '" << s0
-                << "[" << s0.size() << "]"
-                << "' versus '" << s1
-                << "[" << s1.size() << "]"
-                << "'\n"
-                ;
-            }
-        }
-    return oss.str();
-}
 
 void Input::AscribeMembers()
 {

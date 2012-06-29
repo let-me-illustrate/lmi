@@ -55,16 +55,14 @@
 #include "safely_dereference_as.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
-#include "wx_utility.hpp" // class ClipboardEx
-
-#include <boost/scoped_ptr.hpp>
+#include "wx_utility.hpp"               // class ClipboardEx
 
 #include <wx/html/htmlwin.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
-#include <cstdio>         // std::remove()
+#include <cstdio>                       // std::remove()
 #include <fstream>
 #include <string>
 
@@ -110,7 +108,7 @@ IllustrationView::~IllustrationView()
 
 inline Input& IllustrationView::input_data()
 {
-    return *document().doc_.input_data_;
+    return document().doc_.input_data_;
 }
 
 IllustrationDocument& IllustrationView::document() const

@@ -126,14 +126,7 @@ mec_input::mec_input(mec_input const& z)
     ,MemberSymbolTable <mec_input>()
 {
     AscribeMembers();
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        // This would be wrong:
-        //   operator[](*i) = z[*i];
-        // because it would swap in a copy of z's *members*.
-        operator[](*i) = z[*i].str();
-        }
+    MemberSymbolTable<mec_input>::assign(z);
     DoAdaptExternalities();
 }
 
@@ -143,28 +136,14 @@ mec_input::~mec_input()
 
 mec_input& mec_input::operator=(mec_input const& z)
 {
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        operator[](*i) = z[*i].str();
-        }
+    MemberSymbolTable<mec_input>::assign(z);
     DoAdaptExternalities();
     return *this;
 }
 
 bool mec_input::operator==(mec_input const& z) const
 {
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        std::string const s0 = operator[](*i).str();
-        std::string const s1 = z[*i].str();
-        if(s0 != s1)
-            {
-            return false;
-            }
-        }
-    return true;
+    return MemberSymbolTable<mec_input>::equals(z);
 }
 
 int mec_input::maturity_age() const {return GleanedMaturityAge_;}

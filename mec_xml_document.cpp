@@ -29,7 +29,6 @@
 #include "mec_xml_document.hpp"
 
 #include "assert_lmi.hpp"
-#include "mec_input.hpp"
 #include "xml_lmi.hpp"
 
 #include <xmlwrapp/nodes_view.h>
@@ -39,13 +38,13 @@
 
 //============================================================================
 mec_xml_document::mec_xml_document()
-    :input_data_(new mec_input)
+    :input_data_()
 {
 }
 
 //============================================================================
 mec_xml_document::mec_xml_document(mec_input const& z)
-    :input_data_(new mec_input(z))
+    :input_data_(z)
 {
 }
 
@@ -67,7 +66,7 @@ void mec_xml_document::parse(xml::element const& root)
     xml::const_nodes_view const elements(root.elements());
     LMI_ASSERT(!elements.empty());
     xml::const_nodes_view::const_iterator i(elements.begin());
-    *i >> *input_data_;
+    *i >> input_data_;
     // XMLWRAPP !! It would be better to have operator+(int) in the
     // iterator class, and to write this check above as
     //   LMI_ASSERT(elements.end() == 1 + i);
@@ -82,11 +81,11 @@ void mec_xml_document::read(std::istream const& is)
 }
 
 //============================================================================
-void mec_xml_document::write(std::ostream& os)
+void mec_xml_document::write(std::ostream& os) const
 {
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
-    root << *input_data_;
+    root << input_data_;
     os << document;
 }
 
