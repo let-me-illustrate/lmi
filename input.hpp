@@ -148,8 +148,6 @@ class LMI_SO Input
 
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
-    std::string differing_fields(Input const&) const;
-
     static Input magically_rectify(Input const&);
 
   private:
@@ -501,7 +499,6 @@ template<> struct reconstitutor<mc_enum_base, Input>
     static DesiredType* reconstitute(any_member<Input>& m)
         {
         DesiredType* z = 0;
-        z = exact_cast<mce_gen_basis           >(m); if(z) return z;
         z = exact_cast<mce_class               >(m); if(z) return z;
         z = exact_cast<mce_country             >(m); if(z) return z;
         z = exact_cast<mce_dbopt               >(m); if(z) return z;
@@ -510,6 +507,7 @@ template<> struct reconstitutor<mc_enum_base, Input>
         z = exact_cast<mce_from_point          >(m); if(z) return z;
         z = exact_cast<mce_fund_input_method   >(m); if(z) return z;
         z = exact_cast<mce_gen_acct_rate_type  >(m); if(z) return z;
+        z = exact_cast<mce_gen_basis           >(m); if(z) return z;
         z = exact_cast<mce_gender              >(m); if(z) return z;
         z = exact_cast<mce_loan_rate_type      >(m); if(z) return z;
         z = exact_cast<mce_mec_avoid_method    >(m); if(z) return z;

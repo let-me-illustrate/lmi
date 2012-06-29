@@ -103,7 +103,7 @@ mec_view::~mec_view()
 
 inline mec_input& mec_view::input_data()
 {
-    return *document().doc_.input_data_;
+    return document().doc_.input_data_;
 }
 
 mec_document& mec_view::document() const

@@ -30348,3 +30348,27 @@ Remove documentation of an eradicated kludge.
   version.hpp
 Designate release candidate.
 
+20120623T1215Z <gchicares@sbcglobal.net> [578]
+
+  input.cpp
+  input.hpp
+Expunge a disused member function: xml input, unlike binary, is easily
+differenced with external tools.
+
+20120623T2233Z <gchicares@sbcglobal.net> [578]
+
+  input_test.cpp
+Measure speed of copy ctor and assignment and equality operators.
+
+20120623T2234Z <gchicares@sbcglobal.net> [573]
+
+  input.cpp
+Improve copy ctor and assignment and equality operators (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2012-03/msg00014.html
+
+20120624T0027Z <gchicares@sbcglobal.net> [573]
+
+  mec_input.cpp
+  mec_state.cpp
+Improve copy ctor and assignment and equality operators.
+

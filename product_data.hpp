@@ -67,7 +67,7 @@ class glossed_string
     std::string gloss_;
 };
 
-class LMI_SO product_data;
+class product_data;
 
 template<> struct deserialized<product_data>
 {

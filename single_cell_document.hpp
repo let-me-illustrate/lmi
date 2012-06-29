@@ -26,17 +26,14 @@
 
 #include "config.hpp"
 
+#include "input.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
-#include <boost/scoped_ptr.hpp>
-
 #include <iosfwd>
 #include <string>
-
-class Input;
 
 class LMI_SO single_cell_document
     :        private lmi::uncopyable <single_cell_document>
@@ -54,18 +51,18 @@ class LMI_SO single_cell_document
     Input const& input_data() const;
 
     void read(std::istream const&);
-    void write(std::ostream&);
+    void write(std::ostream&) const;
 
   private:
     void parse(xml::element const&);
     std::string const& xml_root_name() const;
 
-    boost::scoped_ptr<Input> const input_data_;
+    Input input_data_;
 };
 
 inline Input const& single_cell_document::input_data() const
 {
-    return *input_data_;
+    return input_data_;
 }
 
 #endif // single_cell_document_hpp

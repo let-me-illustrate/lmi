@@ -61,14 +61,7 @@ mec_state::mec_state(mec_state const& z)
     ,MemberSymbolTable <mec_state>()
 {
     AscribeMembers();
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        // This would be wrong:
-        //   operator[](*i) = z[*i];
-        // because it would swap in a copy of z's *members*.
-        operator[](*i) = z[*i].str();
-        }
+    MemberSymbolTable<mec_state>::assign(z);
 }
 
 mec_state::~mec_state()
@@ -77,27 +70,13 @@ mec_state::~mec_state()
 
 mec_state& mec_state::operator=(mec_state const& z)
 {
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        operator[](*i) = z[*i].str();
-        }
+    MemberSymbolTable<mec_state>::assign(z);
     return *this;
 }
 
 bool mec_state::operator==(mec_state const& z) const
 {
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        std::string const s0 = operator[](*i).str();
-        std::string const s1 = z[*i].str();
-        if(s0 != s1)
-            {
-            return false;
-            }
-        }
-    return true;
+    return MemberSymbolTable<mec_state>::equals(z);
 }
 
 namespace

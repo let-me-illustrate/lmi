@@ -80,6 +80,9 @@ class input_test
         ,bool               test_speed_only
         );
 
+    static void mete_copy_ctor();
+    static void mete_assign_op();
+    static void mete_equal_op();
     static void mete_overhead();
     static void mete_read(xml::element& xml_data);
     static void mete_write();
@@ -314,6 +317,7 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     Input copy0(original);
     BOOST_TEST(original == copy0);
     copy0["InsuredName"] = "Claude Proulx";
+    BOOST_TEST(original != copy0);
     BOOST_TEST(std::string("Claude Proulx") == copy0   .InsuredName.value());
     BOOST_TEST(std::string("Full Name")     == original.InsuredName.value());
 
@@ -322,6 +326,7 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     copy1 = original;
     BOOST_TEST(original == copy1);
     copy1["InsuredName"] = "Angela";
+    BOOST_TEST(original != copy1);
     BOOST_TEST(std::string("Angela")    == copy1   .InsuredName.value());
     BOOST_TEST(std::string("Full Name") == original.InsuredName.value());
 
@@ -363,12 +368,15 @@ void input_test::assay_speed()
     xml::element const& e = *i;
 
     std::cout
-        << "\n  Input speed tests..."
-        << "\n  Overhead: " << TimeAnAliquot(mete_overhead            )
-        << "\n  Read    : " << TimeAnAliquot(boost::bind(mete_read, e))
-        << "\n  Write   : " << TimeAnAliquot(mete_write               )
-        << "\n  'cns' io: " << TimeAnAliquot(mete_cns_io              )
-        << "\n  'ill' io: " << TimeAnAliquot(mete_ill_io              )
+        << "\n  Class 'Input' speed tests..."
+        << "\n  Copy ctor: " << TimeAnAliquot(mete_copy_ctor           )
+        << "\n  Assign   : " << TimeAnAliquot(mete_assign_op           )
+        << "\n  Equals   : " << TimeAnAliquot(mete_equal_op            )
+        << "\n  Overhead : " << TimeAnAliquot(mete_overhead            )
+        << "\n  Read     : " << TimeAnAliquot(boost::bind(mete_read, e))
+        << "\n  Write    : " << TimeAnAliquot(mete_write               )
+        << "\n  'cns' io : " << TimeAnAliquot(mete_cns_io              )
+        << "\n  'ill' io : " << TimeAnAliquot(mete_ill_io              )
         << '\n'
         ;
 }
@@ -404,9 +412,31 @@ void input_test::test_document_io
         }
 }
 
+void input_test::mete_copy_ctor()
+{
+    static Input const x;
+    Input volatile y(x);
+}
+
+void input_test::mete_assign_op()
+{
+    static Input const x;
+    static Input y;
+    // Neither 'x' nor 'y' can be volatile, but analysis of the
+    // timings may indicate whether this operation is optimized away.
+    y = x;
+}
+
+void input_test::mete_equal_op()
+{
+    static Input const x;
+    static Input const y(x);
+    bool volatile b(x == y);
+    stifle_warning_for_unused_value(b);
+}
+
 void input_test::mete_overhead()
 {
-    static Input raw_data;
     xml_lmi::xml_document document("root");
     xml::element& root = document.root_node();
     stifle_warning_for_unused_value(root);
