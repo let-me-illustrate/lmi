@@ -125,7 +125,25 @@ void xml_actuarial_table::load_xml_table(std::string const& filename)
     xml_lmi::dom_parser parser(filename);
     xml::element root(parser.root_node("table"));
 
-    table_.load(root);
+    xml::const_nodes_view const children = root.elements();
+    xml::const_nodes_view::const_iterator child = children.begin();
+
+    // we have no use for the description element, skip it:
+    if(child != children.end() && strcmp(child->get_name(), "description") == 0)
+        child++;
+
+    if(child == children.end())
+        {
+        fatal_error()
+            << "Empty"
+            << "Table file '"
+            << filename
+            << "' doesn't contain any data."
+            << LMI_FLUSH
+            ;
+        }
+
+    table_.load(*child);
 }
 
 /// Read a given number of values for a given issue age.
@@ -171,28 +189,30 @@ xml_actuarial_table::basic_table::basic_table()
 void xml_actuarial_table::basic_table::load(xml::element const& root)
 {
     // SOA !! Implement loading of multi-dimensional tables as well.
-    xml::node::const_iterator i;
+    std::string const name(root.get_name());
 
-    if (root.end() != (i = root.find("aggregate")))
+    if (name == "aggregate")
         {
-        load_aggregate_table(*i);
+        load_aggregate_table(root);
         }
-    else if (root.end() != (i = root.find("duration")))
+    else if (name == "duration")
         {
-        load_duration_table(*i);
+        load_duration_table(root);
         }
-    else if (root.end() != (i = root.find("select")))
+    else if (name == "select")
         {
-        load_select_table(*i);
+        load_select_table(root);
         }
-    else if (root.end() != (i = root.find("select-and-ultimate")))
+    else if (name == "select-and-ultimate")
         {
-        load_select_and_ultimate_table(*i);
+        load_select_and_ultimate_table(root);
         }
     else
         {
         fatal_error()
-            << "Required data element not found."
+            << "Unknown data element '"
+            << name
+            << "'."
             << LMI_FLUSH
             ;
         }
