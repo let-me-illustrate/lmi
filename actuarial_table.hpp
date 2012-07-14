@@ -26,6 +26,7 @@
 
 #include "config.hpp"
 
+#include "dbindex.hpp"
 #include "loaded_files_cache.hpp"
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
@@ -144,9 +145,15 @@ class xml_actuarial_table
         ,int table_number
         );
 
-    std::vector<double> values(int issue_age, int length) const;
+    std::vector<double> values
+        (database_index const& lookup_for
+        ,int issue_age
+        ,int length
+        ) const;
+
     std::vector<double> values_elaborated
-        (int                      issue_age
+        (database_index const&    lookup_for
+        ,int                      issue_age
         ,int                      length
         ,e_actuarial_table_method method
         ,int                      inforce_duration
@@ -205,7 +212,33 @@ class xml_actuarial_table
         std::vector<double> ultimate_;
     };
 
-    basic_table table_;
+    struct basic_table_key
+    {
+        basic_table_key() : index_mask_(number_of_indices) {}
+
+        database_index    index_;
+        std::vector<bool> index_mask_;
+
+        bool matches(database_index const& index) const;
+    };
+
+    typedef std::pair<basic_table_key, basic_table> basic_table_record;
+    std::vector<basic_table_record> tables_;
+
+    basic_table const& find_basic_table(database_index const& key) const;
+
+    void load_xml_basic_tables
+        (xml::node const& root
+        ,basic_table_key const& parent_key
+        );
+
+    template<int Axis
+            ,typename EnumType
+            ,database_index& (database_index::*KeySetterFunc)(EnumType)>
+    void load_xml_basic_tables_for_axis
+        (xml::node const& root
+        ,basic_table_key const& parent_key
+        );
 };
 
 /// Read a table from a database in the binary format designed by the
@@ -278,6 +311,7 @@ class soa_actuarial_table
 /// Convenience function: read particular values from a table stored
 /// in the SOA table-manager format.
 
+// SOA !! To be removed, compatibility only
 std::vector<double> actuarial_table_rates
     (std::string const& table_filename
     ,int                table_number
@@ -287,7 +321,7 @@ std::vector<double> actuarial_table_rates
 
 /// Convenience function: read particular values from a table stored
 /// in the SOA table-manager format, using a nondefault lookup method.
-
+// SOA !! To be removed, compatibility only
 std::vector<double> actuarial_table_rates_elaborated
     (std::string const&       table_filename
     ,int                      table_number
@@ -297,6 +331,31 @@ std::vector<double> actuarial_table_rates_elaborated
     ,int                      inforce_duration
     ,int                      reset_duration
     );
+
+
+/// Convenience function: read particular values from a table stored
+/// in the SOA table-manager format.
+
+std::vector<double> actuarial_table_rates
+    (std::string const&    table_filename
+    ,database_index const& lookup_for
+    ,int                   issue_age
+    ,int                   length
+    );
+
+/// Convenience function: read particular values from a table stored
+/// in the SOA table-manager format, using a nondefault lookup method.
+
+std::vector<double> actuarial_table_rates_elaborated
+    (std::string const&       table_filename
+    ,database_index const&    lookup_for
+    ,int                      issue_age
+    ,int                      length
+    ,e_actuarial_table_method method
+    ,int                      inforce_duration
+    ,int                      reset_duration
+    );
+
 
 // #define LMI_USE_XML_TABLES
 

@@ -143,14 +143,120 @@ void xml_actuarial_table::load_xml_table(std::string const& filename)
             ;
         }
 
-    table_.load(*child);
+    basic_table_key key;
+    load_xml_basic_tables(*child, key);
+}
+
+void xml_actuarial_table::load_xml_basic_tables
+    (xml::node const& root
+    ,basic_table_key const& parent_key
+    )
+{
+    if(strcmp(root.get_name(), "smoking") == 0)
+        {
+        load_xml_basic_tables_for_axis
+            <e_axis_smoking
+            ,mcenum_smoking
+            ,&database_index::smoking
+            >(root, parent_key);
+        }
+    else if(strcmp(root.get_name(), "gender") == 0)
+        {
+        load_xml_basic_tables_for_axis
+            <e_axis_gender
+            ,mcenum_gender
+            ,&database_index::gender
+            >(root, parent_key);
+        }
+    else // a basic table
+        {
+        tables_.push_back(basic_table_record());
+        tables_.back().first = parent_key;
+        tables_.back().second.load(root);
+        }
+}
+
+template<int Axis
+        ,typename EnumType
+        ,database_index& (database_index::*KeySetterFunc)(EnumType)>
+void xml_actuarial_table::load_xml_basic_tables_for_axis
+    (xml::node const& root
+    ,basic_table_key const& parent_key
+    )
+{
+    typedef xml::const_nodes_view::const_iterator cnvi;
+
+    xml::const_nodes_view items(root.elements("item"));
+    for(cnvi i = items.begin(); i != items.end(); ++i)
+        {
+        std::string value_str;
+        if(!xml_lmi::get_attr(*i, "for", value_str))
+            {
+            fatal_error()
+                << "XML <item> node doesn't have 'for' attribute."
+                << LMI_FLUSH
+                ;
+            }
+
+        xml::const_nodes_view data(i->elements());
+        if(1 != std::distance(data.begin(), data.end()))
+            {
+            fatal_error()
+                << "XML <item> node doesn't have exactly one child element."
+                << LMI_FLUSH
+                ;
+            }
+
+        basic_table_key key(parent_key);
+        (key.index_.*KeySetterFunc)(mc_enum<EnumType>(value_str).value());
+        key.index_mask_[Axis] = true;
+
+        load_xml_basic_tables(*data.begin(), key);
+        }
+}
+
+bool xml_actuarial_table::basic_table_key::matches(database_index const& index) const
+{
+    // issue age part of database_index is ignored, this parameter is specified
+    // separately from other axes:
+    LMI_ASSERT(!index_mask_[e_axis_issue_age]);
+
+    std::vector<int> const& vect_my = index_.index_vector();
+    std::vector<int> const& vect_other = index.index_vector();
+
+    for(unsigned axis = 0; axis < number_of_indices; axis++)
+        {
+        if(index_mask_[axis] && vect_my[axis] != vect_other[axis])
+            return false;
+        }
+    return true;
+}
+
+xml_actuarial_table::basic_table const&
+xml_actuarial_table::find_basic_table(database_index const& key) const
+{
+    for(std::vector<basic_table_record>::const_iterator i = tables_.begin()
+       ;i != tables_.end()
+       ;++i)
+        {
+        if(i->first.matches(key))
+            return i->second;
+        }
+    fatal_error()
+        << "Table doesn't contain data for requested axis or value."
+        << LMI_FLUSH
+        ;
 }
 
 /// Read a given number of values for a given issue age.
 
-std::vector<double> xml_actuarial_table::values(int issue_age, int length) const
+std::vector<double> xml_actuarial_table::values
+    (database_index const& lookup_for
+    ,int                   issue_age
+    ,int                   length
+    ) const
 {
-    return table_.values(issue_age, length);
+    return find_basic_table(lookup_for).values(issue_age, length);
 }
 
 /// Read a given number of values for a given issue age, using a
@@ -161,14 +267,15 @@ std::vector<double> xml_actuarial_table::values(int issue_age, int length) const
 /// sane what was insane ab ovo.
 
 std::vector<double> xml_actuarial_table::values_elaborated
-    (int                      issue_age
+    (database_index const&    lookup_for
+    ,int                      issue_age
     ,int                      length
     ,e_actuarial_table_method method
     ,int                      inforce_duration
     ,int                      reset_duration
     ) const
 {
-    return table_.values_elaborated
+    return find_basic_table(lookup_for).values_elaborated
         (issue_age
         ,length
         ,method
@@ -1095,11 +1202,15 @@ std::vector<double> actuarial_table_rates
 #if defined LMI_USE_XML_TABLES
     std::string const xmlfile
         (xml_actuarial_table::compatibility_filename(table_filename, table_number)
-         );
-    boost::shared_ptr<xml_actuarial_table const> z(xml_actuarial_table::get_cached(xmlfile));
-    soa_actuarial_table z_soa(table_filename, table_number);
+        );
+    std::vector<double> values(actuarial_table_rates
+        (xmlfile
+        ,database_index() // doesn't matter for simple 1D/2D files
+        ,issue_age
+        ,length
+        ));
 
-    std::vector<double> values    (z->values(issue_age, length));
+    soa_actuarial_table z_soa(table_filename, table_number);
     std::vector<double> values_soa(z_soa.values(issue_age, length));
 
     // SOA !! Temporarily verify correctness of XML implementation,
@@ -1126,17 +1237,18 @@ std::vector<double> actuarial_table_rates_elaborated
 #if defined LMI_USE_XML_TABLES
     std::string const xmlfile
         (xml_actuarial_table::compatibility_filename(table_filename, table_number)
-         );
-    boost::shared_ptr<xml_actuarial_table const> z(xml_actuarial_table::get_cached(xmlfile));
-    soa_actuarial_table z_soa(table_filename, table_number);
-
-    std::vector<double> values(z->values_elaborated
-        (issue_age
+        );
+    std::vector<double> values(actuarial_table_rates_elaborated
+        (xmlfile
+        ,database_index() // doesn't matter for simple 1D/2D files
+        ,issue_age
         ,length
         ,method
         ,inforce_duration
         ,reset_duration
         ));
+
+    soa_actuarial_table z_soa(table_filename, table_number);
     std::vector<double> values_soa(z_soa.values_elaborated
         (issue_age
         ,length
@@ -1160,5 +1272,37 @@ std::vector<double> actuarial_table_rates_elaborated
         ,reset_duration
         );
 #endif // !defined LMI_USE_XML_TABLES
+}
+
+std::vector<double> actuarial_table_rates
+    (std::string const&    table_filename
+    ,database_index const& lookup_for
+    ,int                   issue_age
+    ,int                   length
+    )
+{
+    boost::shared_ptr<xml_actuarial_table const> z(xml_actuarial_table::get_cached(table_filename));
+    return z->values(lookup_for, issue_age, length);
+}
+
+std::vector<double> actuarial_table_rates_elaborated
+    (std::string const&       table_filename
+    ,database_index const&    lookup_for
+    ,int                      issue_age
+    ,int                      length
+    ,e_actuarial_table_method method
+    ,int                      inforce_duration
+    ,int                      reset_duration
+    )
+{
+    boost::shared_ptr<xml_actuarial_table const> z(xml_actuarial_table::get_cached(table_filename));
+    return z->values_elaborated
+        (lookup_for
+        ,issue_age
+        ,length
+        ,method
+        ,inforce_duration
+        ,reset_duration
+        );
 }
 
