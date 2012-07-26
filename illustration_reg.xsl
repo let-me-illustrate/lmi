@@ -334,6 +334,7 @@ to the xsl files first.
               and values set forth in the illustration are not guaranteed.
             </fo:block>
             <fo:block padding-top="1em">
+<!-- Retain this logic in case the inforce footnotes are ever needed again.
               <xsl:choose>
                 <xsl:when test="$scalars/IsInforce='1'">
                   <xsl:if test="$SinglePremium='1'">
@@ -374,6 +375,7 @@ to the xsl files first.
                   </xsl:if>
                 </xsl:when>
                 <xsl:otherwise>
+-->
                   <fo:block>
                     <xsl:choose>
                       <xsl:when test="$scalars/StatePostalAbbrev!='TX'">
@@ -400,9 +402,12 @@ to the xsl files first.
                       </xsl:otherwise>
                     </xsl:choose>
                   </fo:block>
+<!-- Retain this logic in case the inforce footnotes are ever needed again.
                 </xsl:otherwise>
               </xsl:choose>
+-->
             </fo:block>
+<!-- Retain this logic in case the inforce footnotes are ever needed again.
             <xsl:if test="$scalars/IsInforce='1'">
               <fo:block font-weight="bold" font-style="italic" text-align="center" padding-top="10em">
                 <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote1"/>
@@ -411,6 +416,7 @@ to the xsl files first.
                 <xsl:value-of select="$scalars/InforceNonGuaranteedFootnote2"/>
               </fo:block>
             </xsl:if>
+-->
           </fo:block>
 
           <!-- Force Second Page -->

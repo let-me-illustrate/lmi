@@ -30406,3 +30406,8 @@ Remove dross; improve concinnity.
   product_data.hpp
 Fix defect introduced 20120618T1835Z: erroneous attribute.
 
+20120726T2039Z <wboutin@massmutual.com> [573]
+
+  illustration_reg.xsl
+Suppress several inforce disclosures.
+
