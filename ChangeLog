@@ -30372,3 +30372,37 @@ Improve copy ctor and assignment and equality operators (VS). See:
   mec_state.cpp
 Improve copy ctor and assignment and equality operators.
 
+20120625T0736Z <gchicares@sbcglobal.net> [573]
+
+  stratified_charges.cpp
+Improve copy ctor and assignment operator.
+
+20120627T0908Z <gchicares@sbcglobal.net> [573]
+
+  input.hpp
+Improve concinnity.
+
+20120628T0916Z <gchicares@sbcglobal.net> [573]
+
+  illustration_document.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Simplify, avoiding pointless use of smart pointers.
+
+20120628T1138Z <gchicares@sbcglobal.net> [573]
+
+  illustration_view.cpp
+  mec_xml_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Remove dross; improve concinnity.
+
+20120629T1036Z <gchicares@sbcglobal.net> [573]
+
+  product_data.hpp
+Fix defect introduced 20120618T1835Z: erroneous attribute.
+
