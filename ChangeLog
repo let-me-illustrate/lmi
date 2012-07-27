@@ -30411,3 +30411,8 @@ Fix defect introduced 20120618T1835Z: erroneous attribute.
   illustration_reg.xsl
 Suppress several inforce disclosures.
 
+20120727T0850Z <gchicares@sbcglobal.net> [573]
+
+  version.hpp
+Designate release candidate.
+
