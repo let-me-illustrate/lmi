@@ -30416,3 +30416,8 @@ Suppress several inforce disclosures.
   version.hpp
 Designate release candidate.
 
+20120727T0857Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Resize country and state fields.
+
