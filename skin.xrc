@@ -2965,74 +2965,73 @@ the other is perforce ignored.
                             <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxFlexGridSizer">
-                                <cols>2</cols>
-                                <growablecols>1</growablecols>
+                                <rows>2</rows>
+                                <growablerows>0,1</growablerows>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxCheckBox" name="TermRider">
-                                        <help>Term rider</help>
-                                        <label>Elected</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Initial specified amount</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Term only</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW</flag>
-                                    <border>4</border>
-                                    <object class="wxTextCtrl" name="TermRiderAmount">
-                                        <help>Term rider initial specified amount</help>
-                                        <size>60,-1</size>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>Term + base</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW</flag>
-                                    <border>4</border>
-                                    <object class="wxTextCtrl" name="TotalSpecifiedAmount">
-                                        <help>Total term + base initial specified amount</help>
-                                        <size>60,-1</size>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxCheckBox" name="TermRiderUseProportion">
-                                        <help>Express term as a proportion of term + base</help>
-                                        <label>Use proportion</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW</flag>
-                                    <border>4</border>
-                                    <object class="wxTextCtrl" name="TermRiderProportion">
-                                        <help>Ratio of term to term + base initial specified amount</help>
-                                        <size>60,-1</size>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <!-- Spacer: no label, by design. -->
+                                    <object class="wxFlexGridSizer">
+                                        <cols>2</cols>
+                                        <growablecols>1</growablecols>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <border>4</border>
+                                            <object class="wxCheckBox" name="TermRider">
+                                                <help>Term rider</help>
+                                                <label>Elected</label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                            <border>4</border>
+                                            <object class="wxStaticText">
+                                                <label>Initial specified amount</label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
+                                            <border>4</border>
+                                            <object class="wxStaticText">
+                                                <label>Term only</label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxGROW</flag>
+                                            <border>4</border>
+                                            <object class="wxTextCtrl" name="TermRiderAmount">
+                                                <help>Term rider initial specified amount</help>
+                                                <size>60,-1</size>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
+                                            <border>4</border>
+                                            <object class="wxStaticText">
+                                                <label>Term + base</label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxGROW</flag>
+                                            <border>4</border>
+                                            <object class="wxTextCtrl" name="TotalSpecifiedAmount">
+                                                <help>Total term + base initial specified amount</help>
+                                                <size>60,-1</size>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <border>4</border>
+                                            <object class="wxCheckBox" name="TermRiderUseProportion">
+                                                <help>Express term as a proportion of term + base</help>
+                                                <label>Use proportion</label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxGROW</flag>
+                                            <border>4</border>
+                                            <object class="wxTextCtrl" name="TermRiderProportion">
+                                                <help>Ratio of term to term + base initial specified amount</help>
+                                                <size>60,-1</size>
+                                            </object>
+                                        </object>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
