@@ -30421,3 +30421,18 @@ Designate release candidate.
   skin.xrc
 Resize country and state fields.
 
+20120727T0937Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Improve layout of term-rider fields.
+
+20120731T1056Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Improve capitalization.
+
+20120731T1223Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Remove a comment that no longer seems meaningful.
+
