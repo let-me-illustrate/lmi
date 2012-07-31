@@ -1316,7 +1316,7 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Cumulative no-lapse premium</label>
+                                        <label>Cum no-lapse premium</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1331,7 +1331,7 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Cumulative payments</label>
+                                        <label>Cum no-lapse payments</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1467,7 +1467,7 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Case net experience reserve</label>
+                                        <label>Case experience reserve</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1482,7 +1482,7 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Case year-to-date net COI charges</label>
+                                        <label>Case YTD net COI charges</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1543,7 +1543,7 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Cumulative GLP</label>
+                                        <label>Cum GLP</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
