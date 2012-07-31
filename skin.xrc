@@ -1254,7 +1254,7 @@ demonstrate a defect in the wx library. See
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>3</cols>
-                <growablecols>0,1,2</growablecols>
+                <growablecols>0,1</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -1859,7 +1859,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
                                 <rows>1</rows>
-                                <growablecols>0,1,2</growablecols>
+                                <growablecols>0,1</growablecols>
                                 <growablerows>0</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
