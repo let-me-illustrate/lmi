@@ -2894,7 +2894,7 @@ the other is perforce ignored.
                                     <flag>wxGROW</flag>
                                     <border>4</border>
                                     <object class="wxSpinCtrl" name="SpouseIssueAge">
-                                        <help>Spouse's Insurance age on date of issue</help>
+                                        <help>Spouse's insurance age on date of issue</help>
                                         <size>50,-1</size>
                                     </object>
                                 </object>
