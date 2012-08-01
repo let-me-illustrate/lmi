@@ -30436,3 +30436,43 @@ Improve capitalization.
   skin.xrc
 Remove a comment that no longer seems meaningful.
 
+20120731T1529Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Don't grow the last in a set of parallel columns.
+
+20120731T1636Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Refine borders on inforce screen.
+
+20120731T2039Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Remove disused input fields.
+
+20120731T2051Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Move no-lapse fields.
+
+20120731T2102Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Shorten labels to keep dialog width reasonable.
+
+20120801T1958Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Add several new inforce fields.
+
+20120801T2004Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Grow rows on inforce screen.
+
+20120801T2100Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Refine descriptions of inforce fields.
+
