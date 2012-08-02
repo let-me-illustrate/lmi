@@ -587,7 +587,6 @@ void check_defect_markers(file const& f)
             &&  "EVGENIY "     != z[1]
             &&  "IHS "         != z[1]
             &&  "INELEGANT "   != z[1]
-            &&  "INFORCE "     != z[1]
             &&  "INPUT "       != z[1]
             &&  "MPATROL "     != z[1]
             &&  "MSYS "        != z[1]

@@ -723,7 +723,7 @@ void AccountValue::SetInitialValues()
     RiderCharges                = 0.0;
     NetCoiCharge                = 0.0;
     MlyDed                      = 0.0;
-    CumulativeSalesLoad         = 0.0; // INFORCE !! Add to inforce input.
+    CumulativeSalesLoad         = 0.0; // INPUT !! Add to inforce input.
 
     CoiRetentionRate                  = Database_->Query(DB_ExpRatCoiRetention);
     ExperienceRatingAmortizationYears = Database_->Query(DB_ExpRatAmortPeriod);
