@@ -181,7 +181,7 @@ class yare_input
     double                            InforceGlp                      ;
     double                            InforceCumulativeGlp            ;
     double                            InforceGsp                      ;
-// INPUT !! Also need inforce 7702 premiums paid and inforce 7702A amounts paid, and their YTD portions.
+// INPUT !! Also need inforce 7702 premiums paid.
     double                            InforceSevenPayPremium          ;
     bool                              InforceIsMec                    ;
     calendar_date                     LastMaterialChangeDate          ;

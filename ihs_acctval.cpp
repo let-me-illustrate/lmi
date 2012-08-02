@@ -444,7 +444,8 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         }
     else
         {
-        // TODO ?? Inforce surrchg needs more work.
+        // SOMEDAY !! Inforce surrchg is imperfect, but that's not
+        // important enough to fix for the products now supported.
         double prior_specamt = 0.0;
         for(int j = 0; j <= Year; ++j)
             {
@@ -598,9 +599,6 @@ void AccountValue::FinalizeLifeAllBases()
 //============================================================================
 void AccountValue::SetInitialValues()
 {
-    // These inforce things belong in input struct.
-    // TODO ?? The list is not complete; others will be required:
-    // payment history; surrender charges; DCV history? TAXATION !! INPUT !! Resolve this.
     InforceYear                 = yare_input_.InforceYear                    ;
     InforceMonth                = yare_input_.InforceMonth                   ;
     InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue     ;
