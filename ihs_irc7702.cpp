@@ -101,9 +101,6 @@ namespace
 //
 // TAXATION !! Are riders adequately supported?
 //
-// TAXATION !! need this in ctor?
-//  ,double     a_CumPmtYtd
-//
 // TAXATION !! 7702(f)(7)(B-E)
 
 // TAXATION !! Document these points in some more appropriate fashion:
