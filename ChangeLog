@@ -30476,3 +30476,16 @@ Grow rows on inforce screen.
   skin.xrc
 Refine descriptions of inforce fields.
 
+20120802T1619Z <gchicares@sbcglobal.net> [571]
+
+  ihs_acctval.cpp
+  ihs_irc7702.cpp
+  yare_input.hpp
+Correct or remove misleading comments.
+
+20120802T2201Z <gchicares@sbcglobal.net> [571]
+
+  ihs_acctval.cpp
+  test_coding_rules.cpp
+Withdraw a marker that occurred only once.
+
