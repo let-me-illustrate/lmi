@@ -1,0 +1,125 @@
+  # Set up my customary working environment (prerequisite: 'develop0')
+
+  # Work with multiple screens
+  #
+  # Only a few commands are used in each screen
+  # often they're readily selectable from history
+
+  # First screen: only for committing to repository
+
+  # Initialize session
+
+cd /lmi/src/lmi
+
+eval `ssh-agent`
+ssh-agent $SHELL
+ssh-add ~/.ssh/id_dsa
+  [passphrase]
+
+  # At end of session, terminate ssh so that no one can impersonate you
+
+ssh-add -D
+ssh-agent -k > /dev/null 2>&1
+
+  # In between...
+  # ...commit a change
+
+svn commit -m "Modify foo" foo.cpp
+
+  # ...rename a file [pending--resolved at next 'commit', as for 'add']
+  # [for cvs, add and delete--unlike svn, not an atomic operation]
+
+svn mv lmi.rc lmi_msw_res.rc
+svn commit -m"Rename msw resource file" lmi_msw_res.rc lmi.rc
+
+  # ...merge two files together, deleting the unwanted one
+
+svn remove dbdict.cpp
+svn mv ihs_dbdict.cpp dbdict.cpp
+
+  # Make a patch against repository from local tree
+  # suitable for pasting into 'ChangeLog'
+
+svn diff file0.cpp file1.cpp >/dev/clipboard
+cvs diff -U3 file0.cpp file1.cpp >/dev/clipboard
+
+  # Roll a file back to an earlier revision
+
+svn merge -r HEAD:5141 census_view.cpp
+
+  # Make a list of files modified in local tree,
+  # suitable for pasting into 'ChangeLog'
+
+for z in *; do [ ! -d $z ] && [ $z -nt ../../mirror/lmi/$z ] && echo "  $z"; done >> /dev/clipboard
+
+  # Update the local source tree (where I make my own changes)
+  # when someone else has committed a change.
+
+svn status --show-updates
+svn update
+
+  # Set local timestamps to match repository
+  # (this should be necessary only if your clock is unsynchronized)
+  #
+  # This is slow, so consider specifying the names of changed files
+  # instead of using '*' at the beginning
+  #
+  # ...for svn:
+
+for z in * ; do grep --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.* [0-9][0-9]* \([0-9]\{4\}[-0-9: ]*\).*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
+
+  # ...for cvs:
+
+for z in * ; do grep --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.*\([0-9]\{4\}[0-9\/: ]*\) .*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
+
+  # Second screen: only for updating local shadow copy of repository
+  #
+  # I use the last line repeatedly to keep my local shadow copy current
+
+cd /lmi/mirror/lmi
+svn status --show-updates
+svn update
+
+  # Similarly, for webpages repository
+
+cd /lmi/checkouts/current/web
+cvs -z3 update -l lmi
+
+  # Third screen: only for building and testing
+
+cd /lmi/src/lmi
+
+make $coefficiency install check_physical_closure >../log 2>&1
+make $coefficiency cgi_tests cli_tests gpt_server_tests >../log 2>&1
+make $coefficiency system_test >../log 2>&1
+make $coefficiency unit_tests >../log 2>&1
+
+  # Run a single unit test
+
+make $coefficiency unit_tests unit_test_targets=regex_test.exe >../log 2>&1
+
+  # Build with a compiler other than gcc
+
+make -f bcc_5_5_1.make $coefficiency unit_tests >../log 2>&1
+make -f como.make $coefficiency unit_tests >../log 2>&1
+
+  # Test xml schemata
+
+pushd /tmp; /lmi/src/lmi/test_schemata.sh >/lmi/src/log 2>&1; popd
+
+  # Fourth screen: only for checking
+
+cd /lmi/src/lmi
+
+make $coefficiency check_concinnity >../log 2>&1
+sed -f diagnostics.sed ../log 2>&1 |less -S
+
+  # Copy date to clipboard for pasting into 'ChangeLog'
+
+date -u +'%Y%m%dT%H%MZ' |tr -d '\n' >/dev/clipboard
+
+  # Fifth screen: only for running lmi
+
+cd /opt/lmi/bin
+./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data
+
