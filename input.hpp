@@ -247,10 +247,10 @@ class LMI_SO Input
     ce_product_name          ProductName                     ;
     tnr_nonnegative_double   Dumpin                          ;
     tnr_nonnegative_double   External1035ExchangeAmount      ;
-    tnr_nonnegative_double   External1035ExchangeBasis       ;
+    tnr_unrestricted_double  External1035ExchangeBasis       ;
     mce_yes_or_no            External1035ExchangeFromMec     ;
     tnr_nonnegative_double   Internal1035ExchangeAmount      ;
-    tnr_nonnegative_double   Internal1035ExchangeBasis       ;
+    tnr_unrestricted_double  Internal1035ExchangeBasis       ;
     mce_yes_or_no            Internal1035ExchangeFromMec     ;
     tnr_duration             SolveTargetTime                 ;
     tnr_duration             SolveBeginTime                  ;
@@ -334,10 +334,10 @@ class LMI_SO Input
     tnr_nonnegative_double   InforceHoneymoonValue           ;
     tnr_unrestricted_double  InforceNetExperienceReserve     ;
     tnr_nonnegative_double   InforceYtdNetCoiCharge          ;
-    tnr_nonnegative_double   InforceTaxBasis                 ;
-    tnr_nonnegative_double   InforceGlp                      ;
-    tnr_nonnegative_double   InforceCumulativeGlp            ;
-    tnr_nonnegative_double   InforceGsp                      ;
+    tnr_unrestricted_double  InforceTaxBasis                 ;
+    tnr_unrestricted_double  InforceGlp                      ;
+    tnr_unrestricted_double  InforceCumulativeGlp            ;
+    tnr_unrestricted_double  InforceGsp                      ;
     mce_yes_or_no            InforceIsMec                    ;
     tnr_nonnegative_double   InforceSevenPayPremium          ;
     tnr_date                 LastMaterialChangeDate          ;

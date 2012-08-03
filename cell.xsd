@@ -467,7 +467,7 @@ two times salary, while 'all others' get a flat $50K.</xs:documentation>
       <xs:documentation>Amount of 1035 exchange from a different insurer.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="External1035ExchangeBasis" type="nonnegative_double">
+  <xs:element name="External1035ExchangeBasis" type="xs:double">
     <xs:annotation>
       <xs:documentation>Tax basis of 1035 exchange from a different insurer.</xs:documentation>
     </xs:annotation>
@@ -615,7 +615,7 @@ preceding day.</xs:documentation>
       <xs:documentation>[obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceCumulativeGlp" type="nonnegative_double">
+  <xs:element name="InforceCumulativeGlp" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce cumulative 7702 guideline level premium.</xs:documentation>
     </xs:annotation>
@@ -643,12 +643,12 @@ including dump-ins and 1035 exchange proceeds.</xs:documentation>
       <xs:documentation>Inforce account value in the general account.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceGlp" type="nonnegative_double">
+  <xs:element name="InforceGlp" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce 7702 guideline level premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceGsp" type="nonnegative_double">
+  <xs:element name="InforceGsp" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce 7702 guideline single premium.</xs:documentation>
     </xs:annotation>
@@ -711,7 +711,7 @@ regular loans.</xs:documentation>
       <xs:documentation>Inforce 7702A seven-pay premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceTaxBasis" type="nonnegative_double">
+  <xs:element name="InforceTaxBasis" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce tax basis.</xs:documentation>
     </xs:annotation>
@@ -748,7 +748,7 @@ from external 1035 because an internal exchange may not be
 subject to premium tax.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="Internal1035ExchangeBasis" type="nonnegative_double">
+  <xs:element name="Internal1035ExchangeBasis" type="xs:double">
     <xs:annotation>
       <xs:documentation>Tax basis of 1035 exchange from the same insurer.</xs:documentation>
     </xs:annotation>
