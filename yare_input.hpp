@@ -103,8 +103,6 @@ class yare_input
     bool                              OverrideExperienceReserveRate   ;
     double                            ExperienceReserveRate           ;
     double                            ExperienceRatingInitialKFactor  ;
-    double                            InforceNetExperienceReserve     ;
-    double                            InforceYtdNetCoiCharge          ;
     bool                              WithdrawToBasisThenLoan         ;
     bool                              UseAverageOfAllFunds            ;
     bool                              OverrideFundManagementFee       ;
@@ -152,6 +150,9 @@ class yare_input
     bool                              IncludeInComposite              ;
     std::string                       Comments                        ;
     bool                              AmortizePremiumLoad             ;
+//    std::string                       PolicyNumber                    ;
+//    std::string                       Franchise                       ;
+//    calendar_date                     InforceAsOfDate                 ;
     int                               InforceYear                     ;
     int                               InforceMonth                    ;
     double                            InforceGeneralAccountValue      ;
@@ -162,6 +163,24 @@ class yare_input
     double                            InforcePreferredLoanBalance     ;
     double                            InforceCumulativeNoLapsePremium ;
     double                            InforceCumulativePayments       ;
+    double                            InforceHoneymoonValue           ;
+    double                            InforceNetExperienceReserve     ;
+    double                            InforceYtdNetCoiCharge          ;
+    double                            InforceTaxBasis                 ;
+    double                            InforceGlp                      ;
+    double                            InforceCumulativeGlp            ;
+    double                            InforceGsp                      ;
+// INPUT !! Also need inforce 7702 premiums paid.
+    bool                              InforceIsMec                    ;
+    double                            InforceSevenPayPremium          ;
+    calendar_date                     LastMaterialChangeDate          ;
+    int                               InforceContractYear             ;
+    int                               InforceContractMonth            ;
+    double                            InforceAvBeforeLastMc           ;
+    double                            InforceDcv                      ;
+    double                            InforceLeastDeathBenefit        ;
+    std::vector<double>               PremiumHistory                  ;
+    std::vector<double>               SpecamtHistory                  ;
 //    mcenum_country                    Country                         ;
 //    bool                              OverrideCoiMultiplier           ;
     double                            CountryCoiMultiplier            ;
@@ -174,22 +193,6 @@ class yare_input
     bool                              SpouseRider                     ;
     double                            SpouseRiderAmount               ;
     int                               SpouseIssueAge                  ;
-//    std::string                       Franchise                       ;
-//    std::string                       PolicyNumber                    ;
-//    calendar_date                     InforceAsOfDate                 ;
-    double                            InforceTaxBasis                 ;
-    double                            InforceGlp                      ;
-    double                            InforceCumulativeGlp            ;
-    double                            InforceGsp                      ;
-// INPUT !! Also need inforce 7702 premiums paid.
-    double                            InforceSevenPayPremium          ;
-    bool                              InforceIsMec                    ;
-    calendar_date                     LastMaterialChangeDate          ;
-    double                            InforceDcv                      ;
-    double                            InforceAvBeforeLastMc           ;
-    int                               InforceContractYear             ;
-    int                               InforceContractMonth            ;
-    double                            InforceLeastDeathBenefit        ;
     mcenum_state                      StateOfJurisdiction             ;
     mcenum_state                      PremiumTaxState                 ;
     double                            SalarySpecifiedAmountFactor     ;
@@ -197,7 +200,6 @@ class yare_input
     double                            SalarySpecifiedAmountOffset     ;
     bool                              HoneymoonEndorsement            ;
     double                            PostHoneymoonSpread             ;
-    double                            InforceHoneymoonValue           ;
     std::vector<double>               ExtraMonthlyCustodialFee        ;
     std::vector<double>               ExtraCompensationOnAssets       ;
     std::vector<double>               ExtraCompensationOnPremium      ;
@@ -219,8 +221,6 @@ class yare_input
     std::vector<double>               FlatExtra                       ;
 //    std::vector<double>               PolicyLevelFlatExtra            ;
     std::vector<double>               HoneymoonValueSpread            ;
-    std::vector<double>               PremiumHistory                  ;
-    std::vector<double>               SpecamtHistory                  ;
     std::vector<double>               FundAllocations                 ;
     std::vector<double>               CashValueEnhancementRate        ;
 //
