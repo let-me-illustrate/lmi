@@ -118,7 +118,7 @@ cell_element = element cell
     ,## Amount of 1035 exchange from a different insurer.
      element External1035ExchangeAmount       {nonnegative_double}
     ,## Tax basis of 1035 exchange from a different insurer.
-     element External1035ExchangeBasis        {nonnegative_double}
+     element External1035ExchangeBasis        {xsd:double}
     ,## MEC status of 1035 exchange from a different insurer.
      element External1035ExchangeFromMec      {yes_or_no}
     ,## Extra charge on separate-account assets. The motivation is to
@@ -188,7 +188,7 @@ cell_element = element cell
     ,## [obsolete]
      element InforceContractYear              {duration_int}
     ,## Inforce cumulative 7702 guideline level premium.
-     element InforceCumulativeGlp             {nonnegative_double}
+     element InforceCumulativeGlp             {xsd:double}
     ,## Inforce cumulative no-lapse premium, for contracts that offer
      ## a no-lapse guarantee as long as a cumulative minimum premium
      ## is paid.
@@ -201,9 +201,9 @@ cell_element = element cell
     ,## Inforce account value in the general account.
      element InforceGeneralAccountValue       {nonnegative_double}
     ,## Inforce 7702 guideline level premium.
-     element InforceGlp                       {nonnegative_double}
+     element InforceGlp                       {xsd:double}
     ,## Inforce 7702 guideline single premium.
-     element InforceGsp                       {nonnegative_double}
+     element InforceGsp                       {xsd:double}
     ,## Inforce honeymoon value. Zero if honeymoon has expired or
      ## was never present.
      element InforceHoneymoonValue            {nonnegative_double}
@@ -230,7 +230,7 @@ cell_element = element cell
     ,## Inforce 7702A seven-pay premium.
      element InforceSevenPayPremium           {nonnegative_double}
     ,## Inforce tax basis.
-     element InforceTaxBasis                  {nonnegative_double}
+     element InforceTaxBasis                  {xsd:double}
     ,## [obsolete]
      element InforceYear                      {duration_int}
     ,## Inforce year-to-date "net" COI charge for experience rating.
@@ -246,7 +246,7 @@ cell_element = element cell
      ## subject to premium tax.
      element Internal1035ExchangeAmount       {nonnegative_double}
     ,## Tax basis of 1035 exchange from the same insurer.
-     element Internal1035ExchangeBasis        {nonnegative_double}
+     element Internal1035ExchangeBasis        {xsd:double}
     ,## MEC status of 1035 exchange from the same insurer.
      element Internal1035ExchangeFromMec      {yes_or_no}
     ,## Insurance age on effective date.

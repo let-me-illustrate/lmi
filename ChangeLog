@@ -30483,9 +30483,26 @@ Refine descriptions of inforce fields.
   yare_input.hpp
 Correct or remove misleading comments.
 
-20120802T2201Z <gchicares@sbcglobal.net> [571]
+20120802T2202Z <gchicares@sbcglobal.net> [571]
 
   ihs_acctval.cpp
   test_coding_rules.cpp
 Withdraw a marker that occurred only once.
+
+20120803T0051Z <gchicares@sbcglobal.net> [571]
+
+  input.cpp
+  input.hpp
+  mec_input.cpp
+  mec_input.hpp
+  yare_input.cpp
+  yare_input.hpp
+Rearrange data members.
+
+20120803T0929Z <gchicares@sbcglobal.net> [571]
+
+  cell.rnc
+  cell.xsd
+  input.hpp
+Let tax basis and guideline premiums be negative.
 
