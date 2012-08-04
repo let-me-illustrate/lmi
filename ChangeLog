@@ -30506,3 +30506,20 @@ Rearrange data members.
   input.hpp
 Let tax basis and guideline premiums be negative.
 
+20120803T1102Z <gchicares@sbcglobal.net> [571]
+
+  yare_input.cpp
+Reformat.
+
+20120804T1149Z <gchicares@sbcglobal.net> [571]
+
+  cell.rnc
+  cell.xsd
+  input.cpp
+  input.hpp
+  sample.cns
+  sample.ill
+  yare_input.cpp
+  yare_input.hpp
+Add more inforce data members.
+
