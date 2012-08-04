@@ -150,19 +150,28 @@ class yare_input
     bool                              IncludeInComposite              ;
     std::string                       Comments                        ;
     bool                              AmortizePremiumLoad             ;
+//    std::string                       InforceDataSource               ;
 //    std::string                       PolicyNumber                    ;
 //    std::string                       Franchise                       ;
 //    calendar_date                     InforceAsOfDate                 ;
     int                               InforceYear                     ;
     int                               InforceMonth                    ;
+    double                            InforceAnnualTargetPremium      ;
+    double                            InforceYtdGrossPremium          ;
     double                            InforceGeneralAccountValue      ;
     double                            InforceSeparateAccountValue     ;
     double                            InforceRegularLoanValue         ;
     double                            InforcePreferredLoanValue       ;
     double                            InforceRegularLoanBalance       ;
     double                            InforcePreferredLoanBalance     ;
+    bool                              InforceNoLapseActive            ;
+    double                            InforceMonthlyNoLapsePremium    ;
     double                            InforceCumulativeNoLapsePremium ;
     double                            InforceCumulativePayments       ;
+    double                            InforceCumulativeRopPayments    ;
+    double                            InforceYtdTaxablePremium        ;
+    double                            InforceCumulativeSalesLoad      ;
+    double                            InforceSpecAmtLoadBase          ;
     double                            InforceHoneymoonValue           ;
     double                            InforceNetExperienceReserve     ;
     double                            InforceYtdNetCoiCharge          ;
@@ -170,7 +179,7 @@ class yare_input
     double                            InforceGlp                      ;
     double                            InforceCumulativeGlp            ;
     double                            InforceGsp                      ;
-// INPUT !! Also need inforce 7702 premiums paid.
+    double                            InforceCumulativeGptPremiumsPaid;
     bool                              InforceIsMec                    ;
     double                            InforceSevenPayPremium          ;
     calendar_date                     LastMaterialChangeDate          ;

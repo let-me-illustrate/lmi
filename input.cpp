@@ -126,19 +126,28 @@ Input::Input()
     ,IncludeInComposite               ("Yes")
 //    ,Comments                         ("")
 //    ,AmortizePremiumLoad              ("")
+    ,InforceDataSource                ("lmi")
 //    ,PolicyNumber                     ("")
 //    ,Franchise                        ("")
 //    ,InforceAsOfDate                  ("")
 //    ,InforceYear                      ("")
 //    ,InforceMonth                     ("")
+//    ,InforceAnnualTargetPremium       ("")
+//    ,InforceYtdGrossPremium           ("")
 //    ,InforceGeneralAccountValue       ("")
 //    ,InforceSeparateAccountValue      ("")
 //    ,InforceRegularLoanValue          ("")
 //    ,InforcePreferredLoanValue        ("")
 //    ,InforceRegularLoanBalance        ("")
 //    ,InforcePreferredLoanBalance      ("")
+//    ,InforceNoLapseActive             ("")
+//    ,InforceMonthlyNoLapsePremium     ("")
 //    ,InforceCumulativeNoLapsePremium  ("")
 //    ,InforceCumulativePayments        ("")
+//    ,InforceCumulativeRopPayments     ("")
+//    ,InforceYtdTaxablePremium         ("")
+//    ,InforceCumulativeSalesLoad       ("")
+//    ,InforceSpecAmtLoadBase           ("")
 //    ,InforceHoneymoonValue            ("")
 //    ,InforceNetExperienceReserve      ("")
 //    ,InforceYtdNetCoiCharge           ("")
@@ -146,6 +155,7 @@ Input::Input()
 //    ,InforceGlp                       ("")
 //    ,InforceCumulativeGlp             ("")
 //    ,InforceGsp                       ("")
+//    ,InforceCumulativeGptPremiumsPaid ("")
 //    ,InforceIsMec                     ("")
 //    ,InforceSevenPayPremium           ("")
 //    ,LastMaterialChangeDate           ("")
@@ -374,19 +384,28 @@ void Input::AscribeMembers()
     ascribe("IncludeInComposite"                    , &Input::IncludeInComposite                    );
     ascribe("Comments"                              , &Input::Comments                              );
     ascribe("AmortizePremiumLoad"                   , &Input::AmortizePremiumLoad                   );
+    ascribe("InforceDataSource"                     , &Input::InforceDataSource                     );
     ascribe("PolicyNumber"                          , &Input::PolicyNumber                          );
     ascribe("Franchise"                             , &Input::Franchise                             );
     ascribe("InforceAsOfDate"                       , &Input::InforceAsOfDate                       );
     ascribe("InforceYear"                           , &Input::InforceYear                           );
     ascribe("InforceMonth"                          , &Input::InforceMonth                          );
+    ascribe("InforceAnnualTargetPremium"            , &Input::InforceAnnualTargetPremium            );
+    ascribe("InforceYtdGrossPremium"                , &Input::InforceYtdGrossPremium                );
     ascribe("InforceGeneralAccountValue"            , &Input::InforceGeneralAccountValue            );
     ascribe("InforceSeparateAccountValue"           , &Input::InforceSeparateAccountValue           );
     ascribe("InforceRegularLoanValue"               , &Input::InforceRegularLoanValue               );
     ascribe("InforcePreferredLoanValue"             , &Input::InforcePreferredLoanValue             );
     ascribe("InforceRegularLoanBalance"             , &Input::InforceRegularLoanBalance             );
     ascribe("InforcePreferredLoanBalance"           , &Input::InforcePreferredLoanBalance           );
+    ascribe("InforceNoLapseActive"                  , &Input::InforceNoLapseActive                  );
+    ascribe("InforceMonthlyNoLapsePremium"          , &Input::InforceMonthlyNoLapsePremium          );
     ascribe("InforceCumulativeNoLapsePremium"       , &Input::InforceCumulativeNoLapsePremium       );
     ascribe("InforceCumulativePayments"             , &Input::InforceCumulativePayments             );
+    ascribe("InforceCumulativeRopPayments"          , &Input::InforceCumulativeRopPayments          );
+    ascribe("InforceYtdTaxablePremium"              , &Input::InforceYtdTaxablePremium              );
+    ascribe("InforceCumulativeSalesLoad"            , &Input::InforceCumulativeSalesLoad            );
+    ascribe("InforceSpecAmtLoadBase"                , &Input::InforceSpecAmtLoadBase                );
     ascribe("InforceHoneymoonValue"                 , &Input::InforceHoneymoonValue                 );
     ascribe("InforceNetExperienceReserve"           , &Input::InforceNetExperienceReserve           );
     ascribe("InforceYtdNetCoiCharge"                , &Input::InforceYtdNetCoiCharge                );
@@ -394,6 +413,7 @@ void Input::AscribeMembers()
     ascribe("InforceGlp"                            , &Input::InforceGlp                            );
     ascribe("InforceCumulativeGlp"                  , &Input::InforceCumulativeGlp                  );
     ascribe("InforceGsp"                            , &Input::InforceGsp                            );
+    ascribe("InforceCumulativeGptPremiumsPaid"      , &Input::InforceCumulativeGptPremiumsPaid      );
     ascribe("InforceIsMec"                          , &Input::InforceIsMec                          );
     ascribe("InforceSevenPayPremium"                , &Input::InforceSevenPayPremium                );
     ascribe("LastMaterialChangeDate"                , &Input::LastMaterialChangeDate                );

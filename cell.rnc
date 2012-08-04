@@ -174,6 +174,8 @@ cell_element = element cell
      element IndividualPaymentToAlternative   {to_point}
     ,## [obsolete]
      element IndividualPaymentToDuration      {duration_int}
+    ,## Inforce annual target premium.
+     element InforceAnnualTargetPremium       {nonnegative_double}
     ,## Date as of which inforce values are provided. This is taken to
      ## refer to the first moment of the day, before monthiversary
      ## processing. Some admin systems find it more convenient to
@@ -189,13 +191,26 @@ cell_element = element cell
      element InforceContractYear              {duration_int}
     ,## Inforce cumulative 7702 guideline level premium.
      element InforceCumulativeGlp             {xsd:double}
+    ,## Inforce cumulative 7702(f)(1) 'premiums paid'.
+     element InforceCumulativeGptPremiumsPaid {xsd:double}
     ,## Inforce cumulative no-lapse premium, for contracts that offer
      ## a no-lapse guarantee as long as a cumulative minimum premium
      ## is paid.
      element InforceCumulativeNoLapsePremium  {nonnegative_double}
-    ,## Inforce cumulative payments: sum of all gross premiums,
-     ## including dump-ins and 1035 exchange proceeds.
+    ,## Inforce cumulative payments for no-lapse guarantee: sum of all
+     ## gross premiums, including dump-ins and 1035 exchange proceeds,
+     ## minus rider charges, withdrawals, and premiums refunded or
+     ## forced out.
      element InforceCumulativePayments        {nonnegative_double}
+    ,## Inforce cumulative payments for return of premium death
+     ## benefit option: sum of all gross premiums, including dump-ins
+     ## and 1035 exchange proceeds, minus withdrawals and premiums
+     ## refunded or forced out.
+     element InforceCumulativeRopPayments     {nonnegative_double}
+    ,## Inforce cumulative refundable sales load.
+     element InforceCumulativeSalesLoad       {nonnegative_double}
+    ,## Vendor identifier for files from an external system.
+     element InforceDataSource                {text}
     ,## Inforce 7702A deemed cash value.
      element InforceDcv                       {nonnegative_double}
     ,## Inforce account value in the general account.
@@ -213,8 +228,12 @@ cell_element = element cell
      element InforceLeastDeathBenefit         {nonnegative_double}
     ,## [obsolete]
      element InforceMonth                     {month_int}
+    ,## Monthly premium required to maintain no-lapse guarantee.
+     element InforceMonthlyNoLapsePremium     {nonnegative_double}
     ,## Inforce net reserve for experience rating.
      element InforceNetExperienceReserve      {xsd:double}
+    ,## No-lapse guarantee is in effect.
+     element InforceNoLapseActive             {yes_or_no}
     ,## Inforce balance (total indebtedness) for preferred loans.
      element InforcePreferredLoanBalance      {nonnegative_double}
     ,## Inforce loaned account value (excluding accrued interest) for
@@ -229,12 +248,18 @@ cell_element = element cell
      element InforceSeparateAccountValue      {nonnegative_double}
     ,## Inforce 7702A seven-pay premium.
      element InforceSevenPayPremium           {nonnegative_double}
+    ,## Amount on which specified-amount load is charged.
+     element InforceSpecAmtLoadBase           {nonnegative_double}
     ,## Inforce tax basis.
      element InforceTaxBasis                  {xsd:double}
     ,## [obsolete]
      element InforceYear                      {duration_int}
+    ,## Year-to-date payments counted toward target premium.
+     element InforceYtdGrossPremium           {nonnegative_double}
     ,## Inforce year-to-date "net" COI charge for experience rating.
      element InforceYtdNetCoiCharge           {nonnegative_double}
+    ,## Year-to-date payments subject to premium tax.
+     element InforceYtdTaxablePremium         {nonnegative_double}
     ,## Investment management fee of a custom fund.
      element InputFundManagementFee           {nonnegative_double}
     ,## Insured's full name.

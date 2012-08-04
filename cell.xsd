@@ -102,13 +102,18 @@
         <xs:element ref="IndividualPaymentToAge"/>
         <xs:element ref="IndividualPaymentToAlternative"/>
         <xs:element ref="IndividualPaymentToDuration"/>
+        <xs:element ref="InforceAnnualTargetPremium"/>
         <xs:element ref="InforceAsOfDate"/>
         <xs:element ref="InforceAvBeforeLastMc"/>
         <xs:element ref="InforceContractMonth"/>
         <xs:element ref="InforceContractYear"/>
         <xs:element ref="InforceCumulativeGlp"/>
+        <xs:element ref="InforceCumulativeGptPremiumsPaid"/>
         <xs:element ref="InforceCumulativeNoLapsePremium"/>
         <xs:element ref="InforceCumulativePayments"/>
+        <xs:element ref="InforceCumulativeRopPayments"/>
+        <xs:element ref="InforceCumulativeSalesLoad"/>
+        <xs:element ref="InforceDataSource"/>
         <xs:element ref="InforceDcv"/>
         <xs:element ref="InforceGeneralAccountValue"/>
         <xs:element ref="InforceGlp"/>
@@ -117,16 +122,21 @@
         <xs:element ref="InforceIsMec"/>
         <xs:element ref="InforceLeastDeathBenefit"/>
         <xs:element ref="InforceMonth"/>
+        <xs:element ref="InforceMonthlyNoLapsePremium"/>
         <xs:element ref="InforceNetExperienceReserve"/>
+        <xs:element ref="InforceNoLapseActive"/>
         <xs:element ref="InforcePreferredLoanBalance"/>
         <xs:element ref="InforcePreferredLoanValue"/>
         <xs:element ref="InforceRegularLoanBalance"/>
         <xs:element ref="InforceRegularLoanValue"/>
         <xs:element ref="InforceSeparateAccountValue"/>
         <xs:element ref="InforceSevenPayPremium"/>
+        <xs:element ref="InforceSpecAmtLoadBase"/>
         <xs:element ref="InforceTaxBasis"/>
         <xs:element ref="InforceYear"/>
+        <xs:element ref="InforceYtdGrossPremium"/>
         <xs:element ref="InforceYtdNetCoiCharge"/>
+        <xs:element ref="InforceYtdTaxablePremium"/>
         <xs:element ref="InputFundManagementFee"/>
         <xs:element ref="InsuredName"/>
         <xs:element ref="InsuredPremiumTableFactor"/>
@@ -590,6 +600,11 @@ deleting them from a census.</xs:documentation>
       <xs:documentation>[obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="InforceAnnualTargetPremium" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Inforce annual target premium.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="InforceAsOfDate" type="calendar_date_int">
     <xs:annotation>
       <xs:documentation>Date as of which inforce values are provided. This is taken to
@@ -620,6 +635,11 @@ preceding day.</xs:documentation>
       <xs:documentation>Inforce cumulative 7702 guideline level premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="InforceCumulativeGptPremiumsPaid" type="xs:double">
+    <xs:annotation>
+      <xs:documentation>Inforce cumulative 7702(f)(1) 'premiums paid'.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="InforceCumulativeNoLapsePremium" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Inforce cumulative no-lapse premium, for contracts that offer
@@ -629,8 +649,28 @@ is paid.</xs:documentation>
   </xs:element>
   <xs:element name="InforceCumulativePayments" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Inforce cumulative payments: sum of all gross premiums,
-including dump-ins and 1035 exchange proceeds.</xs:documentation>
+      <xs:documentation>Inforce cumulative payments for no-lapse guarantee: sum of all
+gross premiums, including dump-ins and 1035 exchange proceeds,
+minus rider charges, withdrawals, and premiums refunded or
+forced out.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceCumulativeRopPayments" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Inforce cumulative payments for return of premium death
+benefit option: sum of all gross premiums, including dump-ins
+and 1035 exchange proceeds, minus withdrawals and premiums
+refunded or forced out.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceCumulativeSalesLoad" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Inforce cumulative refundable sales load.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceDataSource" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Vendor identifier for files from an external system.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceDcv" type="nonnegative_double">
@@ -674,9 +714,19 @@ was never present.</xs:documentation>
       <xs:documentation>[obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="InforceMonthlyNoLapsePremium" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Monthly premium required to maintain no-lapse guarantee.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="InforceNetExperienceReserve" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce net reserve for experience rating.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceNoLapseActive" type="yes_or_no">
+    <xs:annotation>
+      <xs:documentation>No-lapse guarantee is in effect.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforcePreferredLoanBalance" type="nonnegative_double">
@@ -711,6 +761,11 @@ regular loans.</xs:documentation>
       <xs:documentation>Inforce 7702A seven-pay premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="InforceSpecAmtLoadBase" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Amount on which specified-amount load is charged.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="InforceTaxBasis" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce tax basis.</xs:documentation>
@@ -721,9 +776,19 @@ regular loans.</xs:documentation>
       <xs:documentation>[obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="InforceYtdGrossPremium" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Year-to-date payments counted toward target premium.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="InforceYtdNetCoiCharge" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Inforce year-to-date "net" COI charge for experience rating.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceYtdTaxablePremium" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Year-to-date payments subject to premium tax.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InputFundManagementFee" type="nonnegative_double">
