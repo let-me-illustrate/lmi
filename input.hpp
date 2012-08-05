@@ -422,7 +422,6 @@ class LMI_SO Input
     mce_dbopt                DeathBenefitOptionFromIssue     ;
     tnr_nonnegative_double   SpecifiedAmountFromRetirement   ;
     tnr_nonnegative_double   SpecifiedAmountFromIssue        ;
-//    mce_                     SpecifiedAmountStrategyFromRetirement; // INPUT !! Obsolete scalar alternative controls.
     mce_sa_strategy          SpecifiedAmountStrategyFromIssue;
     mce_mode                 IndividualPaymentMode           ;
     mce_to_point             IndividualPaymentToAlternative  ;
