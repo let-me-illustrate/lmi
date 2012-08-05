@@ -491,7 +491,6 @@ void Input::AscribeMembers()
     ascribe("DeathBenefitOptionFromIssue"           , &Input::DeathBenefitOptionFromIssue           );
     ascribe("SpecifiedAmountFromRetirement"         , &Input::SpecifiedAmountFromRetirement         );
     ascribe("SpecifiedAmountFromIssue"              , &Input::SpecifiedAmountFromIssue              );
-//    ascribe("SpecifiedAmountStrategyFromRetirement" , &Input::SpecifiedAmountStrategyFromRetirement ); // INPUT !! Obsolete scalar alternative controls.
     ascribe("SpecifiedAmountStrategyFromIssue"      , &Input::SpecifiedAmountStrategyFromIssue      );
     ascribe("IndividualPaymentMode"                 , &Input::IndividualPaymentMode                 );
     ascribe("IndividualPaymentToAlternative"        , &Input::IndividualPaymentToAlternative        );
