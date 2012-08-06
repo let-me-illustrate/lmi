@@ -289,9 +289,10 @@ void Input::DoHarmonize()
         ,std::max(InforceAsOfDate.value(), InforceAsOfDate.minimum())
         );
 
-    InforceGlp          .enable(mce_gpt == DefinitionOfLifeInsurance);
-    InforceCumulativeGlp.enable(mce_gpt == DefinitionOfLifeInsurance);
-    InforceGsp          .enable(mce_gpt == DefinitionOfLifeInsurance);
+    InforceGlp                      .enable(mce_gpt == DefinitionOfLifeInsurance);
+    InforceCumulativeGlp            .enable(mce_gpt == DefinitionOfLifeInsurance);
+    InforceGsp                      .enable(mce_gpt == DefinitionOfLifeInsurance);
+    InforceCumulativeGptPremiumsPaid.enable(mce_gpt == DefinitionOfLifeInsurance);
 
     bool non_mec = mce_no == InforceIsMec;
 
@@ -306,6 +307,26 @@ void Input::DoHarmonize()
     InforceMonth        .enable(false);
     InforceContractYear .enable(false);
     InforceContractMonth.enable(false);
+
+    bool no_lapse_offered =
+           0 != database_->Query(DB_NoLapseMinDur)
+        || 0 != database_->Query(DB_NoLapseMinAge)
+        ;
+    InforceNoLapseActive            .enable(no_lapse_offered);
+    InforceMonthlyNoLapsePremium    .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
+    InforceCumulativeNoLapsePremium .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
+    InforceCumulativePayments       .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
+
+    InforceCumulativeRopPayments.enable(database_->Query(DB_AllowDbo3));
+
+    // It would be possible to enable 'InforceCumulativeSalesLoad' iff
+    // 'DB_LoadRfdProportion' is nonzero in the inforce year. However,
+    // analysis of database vector quantities is generally avoided in
+    // this function, in the interest of simplicity and speed.
+    //
+    // Selectively enabling 'InforceSpecAmtLoadBase' would be even
+    // more complicated: it would require inspecting not only the
+    // database, but also a rate table.
 
 // TODO ?? Nomen est omen.
 if(!egregious_kludge)
