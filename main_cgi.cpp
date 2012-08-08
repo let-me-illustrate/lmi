@@ -128,7 +128,7 @@ int try_main(int argc, char* argv[])
         "&SolveTarget=Target CSV"
         "&SolveTargetCashSurrenderValue=1000000"
         "&SolveTargetYear=20"
-        "&SolveBasis=Current"
+        "&SolveExpenseGeneralAccountBasis=Current"
         "&SpecifiedAmount=1000000"
         "&DeathBenefitOption=a"
 //        "&sRetDBOpt=A"
@@ -505,7 +505,7 @@ void ShowOutput(cgicc::Cgicc const& data)
     input["SolveTarget"]                   = GetValue(data, "SolveTarget" );
     input["SolveTargetCashSurrenderValue"] = GetValue(data, "SolveTargetCashSurrenderValue" );
     input["SolveTargetYear"]               = GetValue(data, "SolveTargetYear");
-    input["SolveBasis"]                    = GetValue(data, "SolveBasis"  );
+    input["SolveExpenseGeneralAccountBasis"] = GetValue(data, "SolveExpenseGeneralAccountBasis"  );
     input["SpecifiedAmount"]               = GetValue(data, "SpecifiedAmount" ); // rename
     input["DeathBenefitOption"]            = GetValue(data, "DeathBenefitOption"      ); // rename
     input["Payment"]                       = GetValue(data, "Payment"  );
@@ -513,7 +513,7 @@ void ShowOutput(cgicc::Cgicc const& data)
     input["Dumpin"]                        = GetValue(data, "Dumpin"      );
     input["Internal1035ExchangeAmount"]    = GetValue(data, "1035ExchangeAmount"  );
     input["Internal1035ExchangeFromMec"]   = GetValue(data, "1035ExchangeIsMec");
-    input["Internal1035ExchangeBasis"]     = GetValue(data, "1035ExchangeBasis"   );
+    input["Internal1035ExchangeTaxBasis"]  = GetValue(data, "1035ExchangeBasis"   );
     input["GeneralAccountRate"]            = GetValue(data, "GeneralAccountRate"); // rename
     input["GeneralAccountRateType"]        = GetValue(data, "GeneralAccountRateType");
 //    input["SeparateAccountRateType"]       = GetValue(data, "SeparateAccountRateType"); // not used yet

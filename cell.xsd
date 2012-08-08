@@ -54,6 +54,7 @@
         <xs:element ref="ChildRiderAmount"/>
         <xs:element ref="City"/>
         <xs:element ref="Comments"/>
+        <xs:element ref="ContractNumber"/>
         <xs:element ref="CorporationAddress"/>
         <xs:element ref="CorporationCity"/>
         <xs:element ref="CorporationName"/>
@@ -80,13 +81,12 @@
         <xs:element ref="ExperienceRatingInitialKFactor"/>
         <xs:element ref="ExperienceReserveRate"/>
         <xs:element ref="External1035ExchangeAmount"/>
-        <xs:element ref="External1035ExchangeBasis"/>
         <xs:element ref="External1035ExchangeFromMec"/>
+        <xs:element ref="External1035ExchangeTaxBasis"/>
         <xs:element ref="ExtraCompensationOnAssets"/>
         <xs:element ref="ExtraCompensationOnPremium"/>
         <xs:element ref="ExtraMonthlyCustodialFee"/>
         <xs:element ref="FlatExtra"/>
-        <xs:element ref="Franchise"/>
         <xs:element ref="FundAllocations"/>
         <xs:element ref="FundChoiceType"/>
         <xs:element ref="Gender"/>
@@ -102,6 +102,7 @@
         <xs:element ref="IndividualPaymentToAge"/>
         <xs:element ref="IndividualPaymentToAlternative"/>
         <xs:element ref="IndividualPaymentToDuration"/>
+        <xs:element ref="Inforce7702AAmountsPaidHistory"/>
         <xs:element ref="InforceAnnualTargetPremium"/>
         <xs:element ref="InforceAsOfDate"/>
         <xs:element ref="InforceAvBeforeLastMc"/>
@@ -109,8 +110,8 @@
         <xs:element ref="InforceContractYear"/>
         <xs:element ref="InforceCumulativeGlp"/>
         <xs:element ref="InforceCumulativeGptPremiumsPaid"/>
+        <xs:element ref="InforceCumulativeNoLapsePayments"/>
         <xs:element ref="InforceCumulativeNoLapsePremium"/>
-        <xs:element ref="InforceCumulativePayments"/>
         <xs:element ref="InforceCumulativeRopPayments"/>
         <xs:element ref="InforceCumulativeSalesLoad"/>
         <xs:element ref="InforceDataSource"/>
@@ -141,8 +142,8 @@
         <xs:element ref="InsuredName"/>
         <xs:element ref="InsuredPremiumTableFactor"/>
         <xs:element ref="Internal1035ExchangeAmount"/>
-        <xs:element ref="Internal1035ExchangeBasis"/>
         <xs:element ref="Internal1035ExchangeFromMec"/>
+        <xs:element ref="Internal1035ExchangeTaxBasis"/>
         <xs:element ref="IssueAge"/>
         <xs:element ref="LastCoiReentryDate"/>
         <xs:element ref="LastMaterialChangeDate"/>
@@ -156,6 +157,7 @@
         <xs:element ref="LoanToAlternative"/>
         <xs:element ref="LoanToDuration"/>
         <xs:element ref="MaleProportion"/>
+        <xs:element ref="MasterContractNumber"/>
         <xs:element ref="MaximumNaar"/>
         <xs:element ref="NewLoan"/>
         <xs:element ref="NonsmokerProportion"/>
@@ -166,9 +168,7 @@
         <xs:element ref="PartialMortalityMultiplier"/>
         <xs:element ref="Payment"/>
         <xs:element ref="PaymentMode"/>
-        <xs:element ref="PolicyNumber"/>
         <xs:element ref="PostHoneymoonSpread"/>
-        <xs:element ref="PremiumHistory"/>
         <xs:element ref="PremiumTaxState"/>
         <xs:element ref="ProductName"/>
         <xs:element ref="ProjectedSalary"/>
@@ -181,11 +181,11 @@
         <xs:element ref="SeparateAccountRate"/>
         <xs:element ref="SeparateAccountRateType"/>
         <xs:element ref="Smoking"/>
-        <xs:element ref="SolveBasis"/>
         <xs:element ref="SolveBeginTime"/>
         <xs:element ref="SolveBeginYear"/>
         <xs:element ref="SolveEndTime"/>
         <xs:element ref="SolveEndYear"/>
+        <xs:element ref="SolveExpenseGeneralAccountBasis"/>
         <xs:element ref="SolveFromWhich"/>
         <xs:element ref="SolveSeparateAccountBasis"/>
         <xs:element ref="SolveTarget"/>
@@ -249,7 +249,7 @@
       <xs:attribute name="version" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="6"/>
+            <xs:enumeration value="7"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -343,6 +343,12 @@
   <xs:element name="Comments" type="xs:string">
     <xs:annotation>
       <xs:documentation>Free-form comments.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="ContractNumber" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Contract number: a unique identifier, which, although usually
+called a "number", is often not purely numeric.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="CorporationAddress" type="xs:string">
@@ -477,14 +483,14 @@ two times salary, while 'all others' get a flat $50K.</xs:documentation>
       <xs:documentation>Amount of 1035 exchange from a different insurer.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="External1035ExchangeBasis" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>Tax basis of 1035 exchange from a different insurer.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="External1035ExchangeFromMec" type="yes_or_no">
     <xs:annotation>
       <xs:documentation>MEC status of 1035 exchange from a different insurer.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="External1035ExchangeTaxBasis" type="xs:double">
+    <xs:annotation>
+      <xs:documentation>Tax basis of 1035 exchange from a different insurer.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="ExtraCompensationOnAssets" type="xs:string">
@@ -512,11 +518,6 @@ field may be used for any extra monthly fee.</xs:documentation>
   <xs:element name="FlatExtra" type="xs:string">
     <xs:annotation>
       <xs:documentation>Annual flat extra per thousand of specified amount.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="Franchise" type="xs:string">
-    <xs:annotation>
-      <xs:documentation>Agency or brokerage code.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="FundAllocations" type="xs:string">
@@ -600,6 +601,13 @@ deleting them from a census.</xs:documentation>
       <xs:documentation>[obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="Inforce7702AAmountsPaidHistory" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>7702A "amounts paid" for each "contract year" since beginning
+of most recent seven-pay period; zero if not in a seven-pay
+period.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="InforceAnnualTargetPremium" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Inforce annual target premium.</xs:documentation>
@@ -640,19 +648,19 @@ preceding day.</xs:documentation>
       <xs:documentation>Inforce cumulative 7702(f)(1) 'premiums paid'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceCumulativeNoLapsePremium" type="nonnegative_double">
-    <xs:annotation>
-      <xs:documentation>Inforce cumulative no-lapse premium, for contracts that offer
-a no-lapse guarantee as long as a cumulative minimum premium
-is paid.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="InforceCumulativePayments" type="nonnegative_double">
+  <xs:element name="InforceCumulativeNoLapsePayments" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Inforce cumulative payments for no-lapse guarantee: sum of all
 gross premiums, including dump-ins and 1035 exchange proceeds,
 minus rider charges, withdrawals, and premiums refunded or
 forced out.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceCumulativeNoLapsePremium" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Inforce cumulative no-lapse premium, for contracts that offer
+a no-lapse guarantee as long as a cumulative minimum premium
+is paid.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceCumulativeRopPayments" type="nonnegative_double">
@@ -813,14 +821,14 @@ from external 1035 because an internal exchange may not be
 subject to premium tax.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="Internal1035ExchangeBasis" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>Tax basis of 1035 exchange from the same insurer.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="Internal1035ExchangeFromMec" type="yes_or_no">
     <xs:annotation>
       <xs:documentation>MEC status of 1035 exchange from the same insurer.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="Internal1035ExchangeTaxBasis" type="xs:double">
+    <xs:annotation>
+      <xs:documentation>Tax basis of 1035 exchange from the same insurer.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IssueAge" type="age_int">
@@ -890,6 +898,11 @@ upon successful re-underwriting (for active lives only).</xs:documentation>
       <xs:documentation>Proportion of males when rates are custom-blended by gender.</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="MasterContractNumber" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Group master contract number.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="MaximumNaar" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Maximum net amount at risk, as constrained by reinsurance.
@@ -946,24 +959,11 @@ one represents.</xs:documentation>
       <xs:documentation>Insured's premium mode.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="PolicyNumber" type="xs:string">
-    <xs:annotation>
-      <xs:documentation>Policy number: a unique identifier, which, despite its
-commonly-used name, is often not purely numeric.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="PostHoneymoonSpread" type="proportion_double">
     <xs:annotation>
       <xs:documentation>Interest decrement applied to crediting rate after the
 honeymoon expires--designed to recover the cost of providing
 the honeymoon.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="PremiumHistory" type="xs:string">
-    <xs:annotation>
-      <xs:documentation>7702A "amounts paid" for each "contract year" since beginning
-of most recent seven-pay period; zero if not in a seven-pay
-period.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="PremiumTaxState" type="state">
@@ -1030,12 +1030,6 @@ intended to represent basic group term coverage.</xs:documentation>
       <xs:documentation>Insured's smoking or tobacco use.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SolveBasis" type="gen_basis">
-    <xs:annotation>
-      <xs:documentation>Expense and general-account basis for a solve: lmi permits
-solves on guaranteed and midpoint bases as well as current.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="SolveBeginTime" type="duration_int">
     <xs:annotation>
       <xs:documentation>Age at which a solve begins  (inclusive).</xs:documentation>
@@ -1054,6 +1048,12 @@ solves on guaranteed and midpoint bases as well as current.</xs:documentation>
   <xs:element name="SolveEndYear" type="duration_int">
     <xs:annotation>
       <xs:documentation>Policy year at which a solve ends (exclusive).</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SolveExpenseGeneralAccountBasis" type="gen_basis">
+    <xs:annotation>
+      <xs:documentation>Expense and general-account basis for a solve: lmi permits
+solves on guaranteed and midpoint bases as well as current.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveFromWhich" type="from_point">

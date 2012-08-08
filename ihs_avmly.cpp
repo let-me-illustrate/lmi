@@ -630,8 +630,8 @@ void AccountValue::TxExch1035()
 
     CumPmts += GrossPmts[Month];
     TaxBasis +=
-          yare_input_.External1035ExchangeBasis
-        + yare_input_.Internal1035ExchangeBasis
+          yare_input_.External1035ExchangeTaxBasis
+        + yare_input_.Internal1035ExchangeTaxBasis
         ;
 
     if(mce_run_gen_curr_sep_full == RunBasis_)

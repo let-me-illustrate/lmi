@@ -209,7 +209,7 @@ class LMI_SO Input
     std::string RealizeWithdrawal                 ();
     std::string RealizeFlatExtra                  ();
     std::string RealizeHoneymoonValueSpread       ();
-    std::string RealizePremiumHistory             ();
+    std::string RealizeAmountsPaidHistory         ();
     std::string RealizeSpecamtHistory             ();
 
     void make_term_rider_consistent(bool aggressively = true);
@@ -247,10 +247,10 @@ class LMI_SO Input
     ce_product_name          ProductName                     ;
     tnr_nonnegative_double   Dumpin                          ;
     tnr_nonnegative_double   External1035ExchangeAmount      ;
-    tnr_unrestricted_double  External1035ExchangeBasis       ;
+    tnr_unrestricted_double  External1035ExchangeTaxBasis    ;
     mce_yes_or_no            External1035ExchangeFromMec     ;
     tnr_nonnegative_double   Internal1035ExchangeAmount      ;
-    tnr_unrestricted_double  Internal1035ExchangeBasis       ;
+    tnr_unrestricted_double  Internal1035ExchangeTaxBasis    ;
     mce_yes_or_no            Internal1035ExchangeFromMec     ;
     tnr_duration             SolveTargetTime                 ;
     tnr_duration             SolveBeginTime                  ;
@@ -261,7 +261,7 @@ class LMI_SO Input
     mce_solve_target         SolveTarget                     ;
     tnr_nonnegative_double   SolveTargetCashSurrenderValue   ;
     tnr_duration             SolveTargetYear                 ;
-    mce_gen_basis            SolveBasis                      ; // TODO ?? Poor name, but enumerators are correct.
+    mce_gen_basis            SolveExpenseGeneralAccountBasis ;
     mce_sep_basis            SolveSeparateAccountBasis       ;
     mce_yes_or_no            UseCurrentDeclaredRate          ;
     mce_gen_acct_rate_type   GeneralAccountRateType          ;
@@ -319,8 +319,8 @@ class LMI_SO Input
     datum_string             Comments                        ;
     mce_yes_or_no            AmortizePremiumLoad             ;
     datum_string             InforceDataSource               ;
-    datum_string             PolicyNumber                    ;
-    datum_string             Franchise                       ;
+    datum_string             ContractNumber                  ;
+    datum_string             MasterContractNumber            ;
     tnr_date                 InforceAsOfDate                 ;
     tnr_duration             InforceYear                     ;
     tnr_month                InforceMonth                    ;
@@ -335,7 +335,7 @@ class LMI_SO Input
     mce_yes_or_no            InforceNoLapseActive            ;
     tnr_nonnegative_double   InforceMonthlyNoLapsePremium    ;
     tnr_nonnegative_double   InforceCumulativeNoLapsePremium ;
-    tnr_nonnegative_double   InforceCumulativePayments       ;
+    tnr_nonnegative_double   InforceCumulativeNoLapsePayments;
     tnr_nonnegative_double   InforceCumulativeRopPayments    ;
     tnr_nonnegative_double   InforceYtdTaxablePremium        ;
     tnr_nonnegative_double   InforceCumulativeSalesLoad      ;
@@ -356,7 +356,7 @@ class LMI_SO Input
     tnr_nonnegative_double   InforceAvBeforeLastMc           ;
     tnr_nonnegative_double   InforceDcv                      ;
     tnr_nonnegative_double   InforceLeastDeathBenefit        ;
-    numeric_sequence         PremiumHistory                  ;
+    numeric_sequence         Inforce7702AAmountsPaidHistory  ;
     numeric_sequence         SpecamtHistory                  ;
     mce_country              Country                         ;
     mce_yes_or_no            OverrideCoiMultiplier           ;
@@ -477,7 +477,7 @@ class LMI_SO Input
     std::vector<tnr_unrestricted_double> WithdrawalRealized_                ; // tnr_nonnegative_double
     std::vector<tnr_unrestricted_double> FlatExtraRealized_                 ; // tnr_nonnegative_double
     std::vector<tnr_unrestricted_double> HoneymoonValueSpreadRealized_      ; // tnr_interest_rate (new)
-    std::vector<tnr_unrestricted_double> PremiumHistoryRealized_            ; // tnr_unrestricted_double
+    std::vector<tnr_unrestricted_double> AmountsPaidHistoryRealized_        ; // tnr_unrestricted_double
     std::vector<tnr_unrestricted_double> SpecamtHistoryRealized_            ; // tnr_nonnegative_double
 };
 

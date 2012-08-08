@@ -161,7 +161,7 @@ double AccountValue::RunOneBasis(mcenum_run_basis TheBasis)
         {
         // TODO ?? Isn't this unreachable?
         throw std::logic_error("This line had seemed to be unreachable.");
-//        LMI_ASSERT(TheBasis corresponds to yare_input_.SolveBasis);
+//        LMI_ASSERT(TheBasis corresponds to yare_input_.SolveExpenseGeneralAccountBasis);
 //        z = Solve();
         }
     else
@@ -186,7 +186,7 @@ double AccountValue::RunAllApplicableBases()
     mcenum_run_basis run_basis;
     set_run_basis_from_cloven_bases
         (run_basis
-        ,yare_input_.SolveBasis
+        ,yare_input_.SolveExpenseGeneralAccountBasis
         ,mce_sep_full
         );
 

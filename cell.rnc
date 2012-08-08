@@ -25,7 +25,7 @@
 # inclusion from other schemata.
 
 cell_element = element cell
-    {attribute version {"6"}
+    {attribute version {"7"}
 
     ,## Accidental death benefit: elected or not.
      element AccidentalDeathBenefit           {yes_or_no}
@@ -63,6 +63,9 @@ cell_element = element cell
      element City                             {text}
     ,## Free-form comments.
      element Comments                         {text}
+    ,## Contract number: a unique identifier, which, although usually
+     ## called a "number", is often not purely numeric.
+     element ContractNumber                   {text}
     ,## Corporation's address: number and street.
      element CorporationAddress               {text}
     ,## Corporation's address: city.
@@ -117,10 +120,10 @@ cell_element = element cell
      element ExperienceReserveRate            {proportion_double}
     ,## Amount of 1035 exchange from a different insurer.
      element External1035ExchangeAmount       {nonnegative_double}
-    ,## Tax basis of 1035 exchange from a different insurer.
-     element External1035ExchangeBasis        {xsd:double}
     ,## MEC status of 1035 exchange from a different insurer.
      element External1035ExchangeFromMec      {yes_or_no}
+    ,## Tax basis of 1035 exchange from a different insurer.
+     element External1035ExchangeTaxBasis     {xsd:double}
     ,## Extra charge on separate-account assets. The motivation is to
      ## let end users add a negotiated asset trailer without changing
      ## the product database, but the field may be used for any extra
@@ -136,8 +139,6 @@ cell_element = element cell
      element ExtraMonthlyCustodialFee         {numeric_sequence}
     ,## Annual flat extra per thousand of specified amount.
      element FlatExtra                        {numeric_sequence}
-    ,## Agency or brokerage code.
-     element Franchise                        {text}
     ,## As yet unused: cf. 'fund_input_method'.
      element FundAllocations                  {numeric_sequence}
     ,## Fund-allocation override: cf. 'fund_input_method'.
@@ -174,6 +175,10 @@ cell_element = element cell
      element IndividualPaymentToAlternative   {to_point}
     ,## [obsolete]
      element IndividualPaymentToDuration      {duration_int}
+    ,## 7702A "amounts paid" for each "contract year" since beginning
+     ## of most recent seven-pay period; zero if not in a seven-pay
+     ## period.
+     element Inforce7702AAmountsPaidHistory   {numeric_sequence}
     ,## Inforce annual target premium.
      element InforceAnnualTargetPremium       {nonnegative_double}
     ,## Date as of which inforce values are provided. This is taken to
@@ -193,15 +198,15 @@ cell_element = element cell
      element InforceCumulativeGlp             {xsd:double}
     ,## Inforce cumulative 7702(f)(1) 'premiums paid'.
      element InforceCumulativeGptPremiumsPaid {xsd:double}
-    ,## Inforce cumulative no-lapse premium, for contracts that offer
-     ## a no-lapse guarantee as long as a cumulative minimum premium
-     ## is paid.
-     element InforceCumulativeNoLapsePremium  {nonnegative_double}
     ,## Inforce cumulative payments for no-lapse guarantee: sum of all
      ## gross premiums, including dump-ins and 1035 exchange proceeds,
      ## minus rider charges, withdrawals, and premiums refunded or
      ## forced out.
-     element InforceCumulativePayments        {nonnegative_double}
+     element InforceCumulativeNoLapsePayments {nonnegative_double}
+    ,## Inforce cumulative no-lapse premium, for contracts that offer
+     ## a no-lapse guarantee as long as a cumulative minimum premium
+     ## is paid.
+     element InforceCumulativeNoLapsePremium  {nonnegative_double}
     ,## Inforce cumulative payments for return of premium death
      ## benefit option: sum of all gross premiums, including dump-ins
      ## and 1035 exchange proceeds, minus withdrawals and premiums
@@ -270,10 +275,10 @@ cell_element = element cell
      ## from external 1035 because an internal exchange may not be
      ## subject to premium tax.
      element Internal1035ExchangeAmount       {nonnegative_double}
-    ,## Tax basis of 1035 exchange from the same insurer.
-     element Internal1035ExchangeBasis        {xsd:double}
     ,## MEC status of 1035 exchange from the same insurer.
      element Internal1035ExchangeFromMec      {yes_or_no}
+    ,## Tax basis of 1035 exchange from the same insurer.
+     element Internal1035ExchangeTaxBasis     {xsd:double}
     ,## Insurance age on effective date.
      element IssueAge                         {age_int}
     ,## Most recent group-underwriting date, for group contracts that
@@ -302,6 +307,8 @@ cell_element = element cell
      element LoanToDuration                   {duration_int}
     ,## Proportion of males when rates are custom-blended by gender.
      element MaleProportion                   {proportion_double}
+    ,## Group master contract number.
+     element MasterContractNumber             {text}
     ,## Maximum net amount at risk, as constrained by reinsurance.
      ## Some contracts in the high-net-worth market force money out to
      ## prevent corridor death benefit from exceeding available
@@ -328,17 +335,10 @@ cell_element = element cell
      element Payment                          {payment_sequence}
     ,## Insured's premium mode.
      element PaymentMode                      {mode_sequence}
-    ,## Policy number: a unique identifier, which, despite its
-     ## commonly-used name, is often not purely numeric.
-     element PolicyNumber                     {text}
     ,## Interest decrement applied to crediting rate after the
      ## honeymoon expires--designed to recover the cost of providing
      ## the honeymoon.
      element PostHoneymoonSpread              {proportion_double}
-    ,## 7702A "amounts paid" for each "contract year" since beginning
-     ## of most recent seven-pay period; zero if not in a seven-pay
-     ## period.
-     element PremiumHistory                   {numeric_sequence}
     ,## State to which premium tax is paid.
      element PremiumTaxState                  {state}
     ,## Product (plan): enumerators depend on run-time context.
@@ -367,9 +367,6 @@ cell_element = element cell
      element SeparateAccountRateType          {sep_acct_rate_type}
     ,## Insured's smoking or tobacco use.
      element Smoking                          {smoking}
-    ,## Expense and general-account basis for a solve: lmi permits
-     ## solves on guaranteed and midpoint bases as well as current.
-     element SolveBasis                       {gen_basis}
     ,## Age at which a solve begins  (inclusive).
      element SolveBeginTime                   {duration_int}
     ,## Policy year in which a solve begins (inclusive).
@@ -378,6 +375,9 @@ cell_element = element cell
      element SolveEndTime                     {duration_int}
     ,## Policy year at which a solve ends (exclusive).
      element SolveEndYear                     {duration_int}
+    ,## Expense and general-account basis for a solve: lmi permits
+     ## solves on guaranteed and midpoint bases as well as current.
+     element SolveExpenseGeneralAccountBasis  {gen_basis}
     ,## Point at which a solve begins.
      element SolveFromWhich                   {from_point}
     ,## Separate-account basis for a solve: lmi permits solves on

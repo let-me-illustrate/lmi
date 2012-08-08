@@ -272,8 +272,8 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
     Strings         ["ProducerCity"          ] = &ProducerCity           ;
     Strings         ["CorpName"              ] = &CorpName               ;
-    Strings         ["Franchise"             ] = &Franchise              ;
-    Strings         ["PolicyNumber"          ] = &PolicyNumber           ;
+    Strings         ["MasterContractNumber"  ] = &MasterContractNumber   ;
+    Strings         ["ContractNumber"        ] = &ContractNumber         ;
     Strings         ["Insured1"              ] = &Insured1               ;
     Strings         ["Gender"                ] = &Gender                 ;
     Strings         ["UWType"                ] = &UWType                 ;
@@ -686,8 +686,8 @@ void LedgerInvariant::Init(BasicValues* b)
     ProducerCity            = agent_city_etc;
     CorpName                = (*b->Input_)["CorporationName"].str();
 
-    Franchise               = (*b->Input_)["Franchise"].str();
-    PolicyNumber            = (*b->Input_)["PolicyNumber"].str();
+    MasterContractNumber    = (*b->Input_)["MasterContractNumber"].str();
+    ContractNumber          = (*b->Input_)["ContractNumber"].str();
 
     Insured1                = (*b->Input_)["InsuredName"].str();
     Gender                  = (*b->Input_)["Gender"].str();
@@ -841,13 +841,15 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     // TODO ?? Probably we should assert that these don't vary by life.
     CorpName                    = a_Addend.CorpName;
-    Franchise                   = a_Addend.Franchise;
+    MasterContractNumber        = a_Addend.MasterContractNumber;
     ProducerName                = a_Addend.ProducerName;
     ProducerStreet              = a_Addend.ProducerStreet;
     ProducerCity                = a_Addend.ProducerCity;
     DefnLifeIns                 = a_Addend.DefnLifeIns;
     DefnMaterialChange          = a_Addend.DefnMaterialChange;
     AvoidMec                    = a_Addend.AvoidMec;
+    // This would necessarily vary by life:
+//  ContractNumber              = "";
 
     PolicyForm                  = a_Addend.PolicyForm;
     PolicyMktgName              = a_Addend.PolicyMktgName;

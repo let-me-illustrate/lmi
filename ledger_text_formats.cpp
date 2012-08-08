@@ -484,7 +484,7 @@ void PrintFormTabDelimited
 
     os << "\n\nFOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS.\n\n";
 
-    os << "PolicyNumber\t\t"      << Invar.value_str("PolicyNumber"   ) << '\n';
+    os << "ContractNumber\t\t"    << Invar.value_str("ContractNumber" ) << '\n';
     os << "ProducerName\t\t"      << Invar.value_str("ProducerName"   ) << '\n';
     os << "ProducerStreet\t\t"    << Invar.value_str("ProducerStreet" ) << '\n';
     os << "ProducerCity\t\t"      << Invar.value_str("ProducerCity"   ) << '\n';
