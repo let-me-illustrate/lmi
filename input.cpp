@@ -55,10 +55,10 @@ Input::Input()
 //    ,ProductName                      ("")
 //    ,Dumpin                           ("")
 //    ,External1035ExchangeAmount       ("")
-//    ,External1035ExchangeBasis        ("")
+//    ,External1035ExchangeTaxBasis     ("")
 //    ,External1035ExchangeFromMec      ("")
 //    ,Internal1035ExchangeAmount       ("")
-//    ,Internal1035ExchangeBasis        ("")
+//    ,Internal1035ExchangeTaxBasis     ("")
 //    ,Internal1035ExchangeFromMec      ("")
 //    ,SolveTargetTime                  ("95")
 //    ,SolveBeginTime                   ("")
@@ -69,7 +69,7 @@ Input::Input()
 //    ,SolveTarget                      ("")
 //    ,SolveTargetCashSurrenderValue    ("")
 //    ,SolveTargetYear                  ("50")
-//    ,SolveBasis                       ("")
+//    ,SolveExpenseGeneralAccountBasis  ("")
 //    ,SolveSeparateAccountBasis        ("")
     ,UseCurrentDeclaredRate           ("Yes")
 //    ,GeneralAccountRateType           ("Credited rate")
@@ -127,8 +127,8 @@ Input::Input()
 //    ,Comments                         ("")
 //    ,AmortizePremiumLoad              ("")
     ,InforceDataSource                ("lmi")
-//    ,PolicyNumber                     ("")
-//    ,Franchise                        ("")
+//    ,ContractNumber                   ("")
+//    ,MasterContractNumber             ("")
 //    ,InforceAsOfDate                  ("")
 //    ,InforceYear                      ("")
 //    ,InforceMonth                     ("")
@@ -143,7 +143,7 @@ Input::Input()
 //    ,InforceNoLapseActive             ("")
 //    ,InforceMonthlyNoLapsePremium     ("")
 //    ,InforceCumulativeNoLapsePremium  ("")
-//    ,InforceCumulativePayments        ("")
+//    ,InforceCumulativeNoLapsePayments ("")
 //    ,InforceCumulativeRopPayments     ("")
 //    ,InforceYtdTaxablePremium         ("")
 //    ,InforceCumulativeSalesLoad       ("")
@@ -164,7 +164,7 @@ Input::Input()
 //    ,InforceAvBeforeLastMc            ("")
 //    ,InforceDcv                       ("")
 //    ,InforceLeastDeathBenefit         ("")
-    ,PremiumHistory                   ("0")
+    ,Inforce7702AAmountsPaidHistory   ("0")
     ,SpecamtHistory                   ("0")
     ,Country                          ("US")
 //    ,OverrideCoiMultiplier            ("")
@@ -313,10 +313,10 @@ void Input::AscribeMembers()
     ascribe("ProductName"                           , &Input::ProductName                           );
     ascribe("Dumpin"                                , &Input::Dumpin                                );
     ascribe("External1035ExchangeAmount"            , &Input::External1035ExchangeAmount            );
-    ascribe("External1035ExchangeBasis"             , &Input::External1035ExchangeBasis             );
+    ascribe("External1035ExchangeTaxBasis"          , &Input::External1035ExchangeTaxBasis          );
     ascribe("External1035ExchangeFromMec"           , &Input::External1035ExchangeFromMec           );
     ascribe("Internal1035ExchangeAmount"            , &Input::Internal1035ExchangeAmount            );
-    ascribe("Internal1035ExchangeBasis"             , &Input::Internal1035ExchangeBasis             );
+    ascribe("Internal1035ExchangeTaxBasis"          , &Input::Internal1035ExchangeTaxBasis          );
     ascribe("Internal1035ExchangeFromMec"           , &Input::Internal1035ExchangeFromMec           );
     ascribe("SolveTargetTime"                       , &Input::SolveTargetTime                       );
     ascribe("SolveBeginTime"                        , &Input::SolveBeginTime                        );
@@ -327,7 +327,7 @@ void Input::AscribeMembers()
     ascribe("SolveTarget"                           , &Input::SolveTarget                           );
     ascribe("SolveTargetCashSurrenderValue"         , &Input::SolveTargetCashSurrenderValue         );
     ascribe("SolveTargetYear"                       , &Input::SolveTargetYear                       );
-    ascribe("SolveBasis"                            , &Input::SolveBasis                            );
+    ascribe("SolveExpenseGeneralAccountBasis"       , &Input::SolveExpenseGeneralAccountBasis       );
     ascribe("SolveSeparateAccountBasis"             , &Input::SolveSeparateAccountBasis             );
     ascribe("UseCurrentDeclaredRate"                , &Input::UseCurrentDeclaredRate                );
     ascribe("GeneralAccountRateType"                , &Input::GeneralAccountRateType                );
@@ -385,8 +385,8 @@ void Input::AscribeMembers()
     ascribe("Comments"                              , &Input::Comments                              );
     ascribe("AmortizePremiumLoad"                   , &Input::AmortizePremiumLoad                   );
     ascribe("InforceDataSource"                     , &Input::InforceDataSource                     );
-    ascribe("PolicyNumber"                          , &Input::PolicyNumber                          );
-    ascribe("Franchise"                             , &Input::Franchise                             );
+    ascribe("ContractNumber"                        , &Input::ContractNumber                        );
+    ascribe("MasterContractNumber"                  , &Input::MasterContractNumber                  );
     ascribe("InforceAsOfDate"                       , &Input::InforceAsOfDate                       );
     ascribe("InforceYear"                           , &Input::InforceYear                           );
     ascribe("InforceMonth"                          , &Input::InforceMonth                          );
@@ -401,7 +401,7 @@ void Input::AscribeMembers()
     ascribe("InforceNoLapseActive"                  , &Input::InforceNoLapseActive                  );
     ascribe("InforceMonthlyNoLapsePremium"          , &Input::InforceMonthlyNoLapsePremium          );
     ascribe("InforceCumulativeNoLapsePremium"       , &Input::InforceCumulativeNoLapsePremium       );
-    ascribe("InforceCumulativePayments"             , &Input::InforceCumulativePayments             );
+    ascribe("InforceCumulativeNoLapsePayments"      , &Input::InforceCumulativeNoLapsePayments      );
     ascribe("InforceCumulativeRopPayments"          , &Input::InforceCumulativeRopPayments          );
     ascribe("InforceYtdTaxablePremium"              , &Input::InforceYtdTaxablePremium              );
     ascribe("InforceCumulativeSalesLoad"            , &Input::InforceCumulativeSalesLoad            );
@@ -422,7 +422,7 @@ void Input::AscribeMembers()
     ascribe("InforceAvBeforeLastMc"                 , &Input::InforceAvBeforeLastMc                 );
     ascribe("InforceDcv"                            , &Input::InforceDcv                            );
     ascribe("InforceLeastDeathBenefit"              , &Input::InforceLeastDeathBenefit              );
-    ascribe("PremiumHistory"                        , &Input::PremiumHistory                        );
+    ascribe("Inforce7702AAmountsPaidHistory"        , &Input::Inforce7702AAmountsPaidHistory        );
     ascribe("SpecamtHistory"                        , &Input::SpecamtHistory                        );
     ascribe("Country"                               , &Input::Country                               );
     ascribe("OverrideCoiMultiplier"                 , &Input::OverrideCoiMultiplier                 );

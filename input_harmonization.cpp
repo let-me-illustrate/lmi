@@ -315,7 +315,7 @@ void Input::DoHarmonize()
     InforceNoLapseActive            .enable(no_lapse_offered);
     InforceMonthlyNoLapsePremium    .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
     InforceCumulativeNoLapsePremium .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
-    InforceCumulativePayments       .enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
+    InforceCumulativeNoLapsePayments.enable(no_lapse_offered && mce_yes == InforceNoLapseActive);
 
     InforceCumulativeRopPayments.enable(database_->Query(DB_AllowDbo3));
 
@@ -904,10 +904,10 @@ false // Silly workaround for now.
     SolveTarget.allow(mce_solve_for_tax_basis, actually_solving);
     SolveTarget.allow(mce_solve_for_non_mec  , actually_solving && mce_solve_loan != SolveType);
 
-    SolveBasis .enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
-    SolveBasis .allow(mce_gen_curr, actually_solving);
-    SolveBasis .allow(mce_gen_guar, actually_solving);
-    SolveBasis .allow(mce_gen_mdpt, actually_solving && is_subject_to_ill_reg(GleanedLedgerType_));
+    SolveExpenseGeneralAccountBasis.enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
+    SolveExpenseGeneralAccountBasis.allow(mce_gen_curr, actually_solving);
+    SolveExpenseGeneralAccountBasis.allow(mce_gen_guar, actually_solving);
+    SolveExpenseGeneralAccountBasis.allow(mce_gen_mdpt, actually_solving && is_subject_to_ill_reg(GleanedLedgerType_));
 
     SolveSeparateAccountBasis.enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
     SolveSeparateAccountBasis.allow(mce_sep_full, actually_solving);

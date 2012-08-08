@@ -75,6 +75,7 @@ std::string full_name
 /// version 4: 20090330T0137Z
 /// version 5: 20090526T1331Z
 /// version 6: 20100719T1349Z
+/// version 7: 20120808T2130Z
 ///
 /// Important note concerning version 3. On or about 20090311, some
 /// end users were given an off-cycle release that should have used
@@ -83,7 +84,7 @@ std::string full_name
 
 int Input::class_version() const
 {
-    return 6;
+    return 7;
 }
 
 std::string const& Input::xml_root_name() const
@@ -116,11 +117,15 @@ bool Input::is_detritus(std::string const& s) const
         ,"DeprecatedSolveToWhich"        // Renamed (without 'Deprecated'-).
         ,"DeprecatedUseDOB"              // Renamed (without 'Deprecated'-).
         ,"DeprecatedUseDOR"              // Withdrawn.
+        ,"External1035ExchangeBasis"     // Renamed to 'External1035ExchangeTaxBasis'.
         ,"FilingApprovalState"           // Alias for 'StateOfJurisdiction'.
         ,"FirstName"                     // Single name instead.
+        ,"Franchise"                     // Renamed to 'MasterContractNumber'.
+        ,"InforceCumulativePayments"     // Renamed to 'InforceCumulativeNoLapsePayments'.
         ,"InforceDcvDeathBenefit"        // Misbegotten.
         ,"InforceExperienceReserve"      // Renamed before implementation.
         ,"InsuredPremiumTableNumber"     // Never implemented.
+        ,"Internal1035ExchangeBasis"     // Renamed to 'Internal1035ExchangeTaxBasis'.
         ,"LastName"                      // Single name instead.
         ,"MiddleName"                    // Single name instead.
         ,"NetMortalityChargeHistory"     // Renamed before implementation.
@@ -129,8 +134,11 @@ bool Input::is_detritus(std::string const& s) const
         ,"PayLoanInterestInCash"         // Never implemented.
         ,"PolicyDate"                    // Never implemented.
         ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
+        ,"PolicyNumber"                  // Renamed to 'ContractNumber'.
+        ,"PremiumHistory"                // Renamed to 'Inforce7702AAmountsPaidHistory'.
         ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
-        ,"TermProportion"                // 'TermRiderProportion' instead.
+        ,"SolveBasis"                    // Renamed to 'SolveExpenseGeneralAccountBasis'.
+        ,"TermProportion"                // Disused: cf. 'TermRiderProportion'.
         ,"UseOffshoreCorridorFactor"     // Withdrawn.
         ,"YearsOfZeroDeaths"             // Withdrawn.
         };
@@ -483,6 +491,33 @@ void Input::redintegrate_ex_post
         SolveTgtAtWhich = map_lookup(detritus_map, "DeprecatedSolveTgtAtWhich");
         SolveToWhich    = map_lookup(detritus_map, "DeprecatedSolveToWhich");
         UseDOB          = map_lookup(detritus_map, "DeprecatedUseDOB");
+        }
+
+    if(file_version < 7)
+        {
+        // Version 7 renamed these elements.
+        LMI_ASSERT(contains(residuary_names, "ContractNumber"));
+        LMI_ASSERT(contains(residuary_names, "External1035ExchangeTaxBasis"));
+        LMI_ASSERT(contains(residuary_names, "Inforce7702AAmountsPaidHistory"));
+        LMI_ASSERT(contains(residuary_names, "InforceCumulativeNoLapsePayments"));
+        LMI_ASSERT(contains(residuary_names, "Internal1035ExchangeTaxBasis"));
+        LMI_ASSERT(contains(residuary_names, "MasterContractNumber"));
+        LMI_ASSERT(contains(residuary_names, "SolveExpenseGeneralAccountBasis"));
+        ContractNumber                   = map_lookup(detritus_map, "PolicyNumber");
+        External1035ExchangeTaxBasis     = map_lookup(detritus_map, "External1035ExchangeBasis");
+        InforceCumulativeNoLapsePayments = map_lookup(detritus_map, "InforceCumulativePayments");
+        Internal1035ExchangeTaxBasis     = map_lookup(detritus_map, "Internal1035ExchangeBasis");
+        MasterContractNumber             = map_lookup(detritus_map, "Franchise");
+        // Version 0 lacked 'PremiumHistory', as do "deficient" extracts.
+        if(0 < file_version && !deficient_extract)
+            {
+            Inforce7702AAmountsPaidHistory  = map_lookup(detritus_map, "PremiumHistory");
+            }
+        // "Deficient" extracts also lack 'SolveBasis'.
+        if(!deficient_extract)
+            {
+            SolveExpenseGeneralAccountBasis = map_lookup(detritus_map, "SolveBasis");
+            }
         }
 }
 

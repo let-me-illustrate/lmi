@@ -30523,3 +30523,47 @@ Reformat.
   yare_input.hpp
 Add more inforce data members.
 
+20120805T0936Z <gchicares@sbcglobal.net> [571]
+
+  input.cpp
+  input.hpp
+Remove vestiges of a disused member.
+
+20120806T1059Z <gchicares@sbcglobal.net> [571]
+
+  input_harmonization.cpp
+Enable recently-added inforce controls only when they're relevant.
+
+20120808T2130Z <gchicares@sbcglobal.net> [570]
+
+  accountvalue.cpp
+  cell.rnc
+  cell.xsd
+  custom_io_0.cpp
+  fo_common.xsl
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_realization.cpp
+  input_xml_io.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  main_cgi.cpp
+  sample.cns
+  sample.ill
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+  solve.cpp
+  yare_input.cpp
+  yare_input.hpp
+Rename various input fields.
+

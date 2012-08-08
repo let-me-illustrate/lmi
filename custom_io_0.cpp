@@ -227,7 +227,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     z["InforceRegularLoanValue"]         = n_v_pairs.string_numeric_value("InforceAVRegLn");
     z["InforcePreferredLoanValue"]       = n_v_pairs.string_numeric_value("InforceAVPrfLn");
     z["InforceCumulativeNoLapsePremium"] = n_v_pairs.string_numeric_value("InforceCumNoLapsePrem");
-    z["InforceCumulativePayments"]       = n_v_pairs.string_numeric_value("InforceCumPmts");
+    z["InforceCumulativeNoLapsePayments"]= n_v_pairs.string_numeric_value("InforceCumPmts");
 
 // TRICKY !! Other input methods distinguish the insured's first, middle,
 // and last names. This method uses a single field to meet customer

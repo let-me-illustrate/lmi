@@ -254,7 +254,7 @@ double AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
 // Apparently this should never be done because Solve() is called in
 //   RunAllApplicableBases() .
 // TODO ?? Isn't this unreachable?
-//      LMI_ASSERT(a_Basis corresponds to yare_input_.SolveBasis);
+//      LMI_ASSERT(a_Basis corresponds to yare_input_.SolveExpenseGeneralAccountBasis);
 //      z = Solve();
         }
     else
@@ -306,7 +306,7 @@ double AccountValue::RunAllApplicableBases()
             ,yare_input_.SolveTarget
             ,yare_input_.SolveTargetCashSurrenderValue
             ,yare_input_.SolveTargetYear
-            ,yare_input_.SolveBasis
+            ,yare_input_.SolveExpenseGeneralAccountBasis
             ,yare_input_.SolveSeparateAccountBasis
             );
         Solving = false;
@@ -523,7 +523,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         int length_7702a = std::min(7, BasicValues::GetLength());
         // Premium history starts at contract year zero.
         nonstd::copy_n
-            (yare_input_.PremiumHistory.begin()
+            (yare_input_.Inforce7702AAmountsPaidHistory.begin()
             ,length_7702a
             ,std::back_inserter(pmts_7702a)
             );
@@ -599,17 +599,17 @@ void AccountValue::FinalizeLifeAllBases()
 //============================================================================
 void AccountValue::SetInitialValues()
 {
-    InforceYear                 = yare_input_.InforceYear                    ;
-    InforceMonth                = yare_input_.InforceMonth                   ;
-    InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue     ;
-    InforceAVSepAcct            = yare_input_.InforceSeparateAccountValue    ;
-    InforceAVRegLn              = yare_input_.InforceRegularLoanValue        ;
-    InforceAVPrfLn              = yare_input_.InforcePreferredLoanValue      ;
-    InforceRegLnBal             = yare_input_.InforceRegularLoanBalance      ;
-    InforcePrfLnBal             = yare_input_.InforcePreferredLoanBalance    ;
-    InforceCumNoLapsePrem       = yare_input_.InforceCumulativeNoLapsePremium;
-    InforceCumPmts              = yare_input_.InforceCumulativePayments      ;
-    InforceTaxBasis             = yare_input_.InforceTaxBasis                ;
+    InforceYear                 = yare_input_.InforceYear                     ;
+    InforceMonth                = yare_input_.InforceMonth                    ;
+    InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue      ;
+    InforceAVSepAcct            = yare_input_.InforceSeparateAccountValue     ;
+    InforceAVRegLn              = yare_input_.InforceRegularLoanValue         ;
+    InforceAVPrfLn              = yare_input_.InforcePreferredLoanValue       ;
+    InforceRegLnBal             = yare_input_.InforceRegularLoanBalance       ;
+    InforcePrfLnBal             = yare_input_.InforcePreferredLoanBalance     ;
+    InforceCumNoLapsePrem       = yare_input_.InforceCumulativeNoLapsePremium ;
+    InforceCumPmts              = yare_input_.InforceCumulativeNoLapsePayments;
+    InforceTaxBasis             = yare_input_.InforceTaxBasis                 ;
 
     Year                        = InforceYear;
     Month                       = InforceMonth;

@@ -1278,7 +1278,7 @@ demonstrate a defect in the wx library. See
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="PolicyNumber">
+                                    <object class="wxTextCtrl" name="ContractNumber">
                                         <help>Contract number</help>
                                         <size>80,-1</size>
                                         <value>0</value>
@@ -1293,8 +1293,8 @@ demonstrate a defect in the wx library. See
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="Franchise">
-                                        <help>Producer franchise identifier</help>
+                                    <object class="wxTextCtrl" name="MasterContractNumber">
+                                        <help>Group master contract number</help>
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>
@@ -1416,10 +1416,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceCumulativePayments">
-<!-- Soon to be renamed:
                                     <object class="wxTextCtrl" name="InforceCumulativeNoLapsePayments">
--->
                                         <help>Cumulative payments for no-lapse guarantee</help>
                                         <size>80,-1</size>
                                         <value>0</value>
@@ -1835,7 +1832,7 @@ here, but it looks weird if we don't make this look like its siblings.
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="InputSequenceEntry" name="PremiumHistory">
+                            <object class="InputSequenceEntry" name="Inforce7702AAmountsPaidHistory">
                                 <title>7702A(e)(1) 'amounts paid' history for current seven-pay period</title>
                                 <help>7702A(e)(1) 'amounts paid' by 7702A(e)(2) 'contract year' since beginning of last seven-pay period--zero if not in a seven-pay period</help>
                                 <size>180,-1</size>
@@ -2139,7 +2136,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <growablerows>0</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <object class="wxRadioBox" name="SolveBasis">
+                                    <object class="wxRadioBox" name="SolveExpenseGeneralAccountBasis">
                                         <help>Expense, mortality, and general-account basis for solve</help>
                                         <style>wxRA_SPECIFY_COLS</style>
                                         <label>Deductions and general account</label>
@@ -2466,7 +2463,7 @@ the other is perforce ignored.
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
-                                    <object class="wxTextCtrl" name="External1035ExchangeBasis">
+                                    <object class="wxTextCtrl" name="External1035ExchangeTaxBasis">
                                         <help>Tax basis for external 1035 exchange</help>
                                         <size>10,-1</size>
                                     </object>
@@ -2474,7 +2471,7 @@ the other is perforce ignored.
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
-                                    <object class="wxTextCtrl" name="Internal1035ExchangeBasis">
+                                    <object class="wxTextCtrl" name="Internal1035ExchangeTaxBasis">
                                         <help>Tax basis for internal 1035 exchange</help>
                                         <size>10,-1</size>
                                     </object>

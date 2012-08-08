@@ -661,7 +661,7 @@ void BasicValues::Init7702()
             ,yare_input_.InforceGlp
             ,yare_input_.InforceCumulativeGlp
             ,yare_input_.InforceGsp
-            ,yare_input_.InforceCumulativePayments // TAXATION !! INPUT !! Wrong--this is not 7702 "premiums paid".
+            ,yare_input_.InforceCumulativeNoLapsePayments // TAXATION !! INPUT !! Wrong--this is not 7702 "premiums paid".
             )
         );
 }

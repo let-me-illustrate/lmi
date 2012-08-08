@@ -55,10 +55,10 @@ yare_input::yare_input(Input const& z)
     ProductName                      = z.ProductName                     .value();
     Dumpin                           = z.Dumpin                          .value();
     External1035ExchangeAmount       = z.External1035ExchangeAmount      .value();
-    External1035ExchangeBasis        = z.External1035ExchangeBasis       .value();
+    External1035ExchangeTaxBasis     = z.External1035ExchangeTaxBasis    .value();
     External1035ExchangeFromMec      = z.External1035ExchangeFromMec     .value();
     Internal1035ExchangeAmount       = z.Internal1035ExchangeAmount      .value();
-    Internal1035ExchangeBasis        = z.Internal1035ExchangeBasis       .value();
+    Internal1035ExchangeTaxBasis     = z.Internal1035ExchangeTaxBasis    .value();
     Internal1035ExchangeFromMec      = z.Internal1035ExchangeFromMec     .value();
     SolveType                        = z.SolveType                       .value();
     SolveBeginYear                   = z.SolveBeginYear                  .value();
@@ -66,7 +66,7 @@ yare_input::yare_input(Input const& z)
     SolveTarget                      = z.SolveTarget                     .value();
     SolveTargetCashSurrenderValue    = z.SolveTargetCashSurrenderValue   .value();
     SolveTargetYear                  = z.SolveTargetYear                 .value();
-    SolveBasis                       = z.SolveBasis                      .value();
+    SolveExpenseGeneralAccountBasis  = z.SolveExpenseGeneralAccountBasis .value();
     SolveSeparateAccountBasis        = z.SolveSeparateAccountBasis       .value();
     GeneralAccountRateType           = z.GeneralAccountRateType          .value();
     SeparateAccountRateType          = z.SeparateAccountRateType         .value();
@@ -113,7 +113,7 @@ yare_input::yare_input(Input const& z)
     InforceNoLapseActive             = z.InforceNoLapseActive            .value();
     InforceMonthlyNoLapsePremium     = z.InforceMonthlyNoLapsePremium    .value();
     InforceCumulativeNoLapsePremium  = z.InforceCumulativeNoLapsePremium .value();
-    InforceCumulativePayments        = z.InforceCumulativePayments       .value();
+    InforceCumulativeNoLapsePayments = z.InforceCumulativeNoLapsePayments.value();
     InforceCumulativeRopPayments     = z.InforceCumulativeRopPayments    .value();
     InforceYtdTaxablePremium         = z.InforceYtdTaxablePremium        .value();
     InforceCumulativeSalesLoad       = z.InforceCumulativeSalesLoad      .value();
@@ -134,7 +134,7 @@ yare_input::yare_input(Input const& z)
     InforceAvBeforeLastMc            = z.InforceAvBeforeLastMc           .value();
     InforceDcv                       = z.InforceDcv                      .value();
     InforceLeastDeathBenefit         = z.InforceLeastDeathBenefit        .value();
-    PremiumHistory                   = convert_vector_type<double              >(z.PremiumHistoryRealized_             );
+    Inforce7702AAmountsPaidHistory   = convert_vector_type<double              >(z.AmountsPaidHistoryRealized_         );
     SpecamtHistory                   = convert_vector_type<double              >(z.SpecamtHistoryRealized_             );
     CountryCoiMultiplier             = z.CountryCoiMultiplier            .value();
     SurviveToType                    = z.SurviveToType                   .value();

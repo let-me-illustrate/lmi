@@ -79,10 +79,10 @@ class yare_input
     std::string                       ProductName                     ;
     double                            Dumpin                          ;
     double                            External1035ExchangeAmount      ;
-    double                            External1035ExchangeBasis       ;
+    double                            External1035ExchangeTaxBasis    ;
     bool                              External1035ExchangeFromMec     ;
     double                            Internal1035ExchangeAmount      ;
-    double                            Internal1035ExchangeBasis       ;
+    double                            Internal1035ExchangeTaxBasis    ;
     bool                              Internal1035ExchangeFromMec     ;
 //    int                               SolveTargetTime                 ;
 //    int                               SolveBeginTime                  ;
@@ -93,7 +93,7 @@ class yare_input
     mcenum_solve_target               SolveTarget                     ;
     double                            SolveTargetCashSurrenderValue   ;
     int                               SolveTargetYear                 ;
-    mcenum_gen_basis                  SolveBasis                      ;
+    mcenum_gen_basis                  SolveExpenseGeneralAccountBasis ;
     mcenum_sep_basis                  SolveSeparateAccountBasis       ;
 //    bool                              UseCurrentDeclaredRate          ;
     mcenum_gen_acct_rate_type         GeneralAccountRateType          ;
@@ -151,8 +151,8 @@ class yare_input
     std::string                       Comments                        ;
     bool                              AmortizePremiumLoad             ;
 //    std::string                       InforceDataSource               ;
-//    std::string                       PolicyNumber                    ;
-//    std::string                       Franchise                       ;
+//    std::string                       ContractNumber                  ;
+//    std::string                       MasterContractNumber            ;
 //    calendar_date                     InforceAsOfDate                 ;
     int                               InforceYear                     ;
     int                               InforceMonth                    ;
@@ -167,7 +167,7 @@ class yare_input
     bool                              InforceNoLapseActive            ;
     double                            InforceMonthlyNoLapsePremium    ;
     double                            InforceCumulativeNoLapsePremium ;
-    double                            InforceCumulativePayments       ;
+    double                            InforceCumulativeNoLapsePayments;
     double                            InforceCumulativeRopPayments    ;
     double                            InforceYtdTaxablePremium        ;
     double                            InforceCumulativeSalesLoad      ;
@@ -188,7 +188,7 @@ class yare_input
     double                            InforceAvBeforeLastMc           ;
     double                            InforceDcv                      ;
     double                            InforceLeastDeathBenefit        ;
-    std::vector<double>               PremiumHistory                  ;
+    std::vector<double>               Inforce7702AAmountsPaidHistory  ;
     std::vector<double>               SpecamtHistory                  ;
 //    mcenum_country                    Country                         ;
 //    bool                              OverrideCoiMultiplier           ;
