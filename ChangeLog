@@ -30567,3 +30567,13 @@ Enable recently-added inforce controls only when they're relevant.
   yare_input.hpp
 Rename various input fields.
 
+20120809T0919Z <gchicares@sbcglobal.net> [570]
+
+  main_cgi.cpp
+Reformat.
+
+20120809T0937Z <gchicares@sbcglobal.net> [568]
+
+  main_cgi.cpp
+Revise comments.
+
