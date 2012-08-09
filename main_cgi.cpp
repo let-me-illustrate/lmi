@@ -480,45 +480,45 @@ void ShowOutput(cgicc::Cgicc const& data)
     Input input;
 
     // Explicitly set certain defaults.
-    input["IssueAge"]                      = "45";
-    input["RetirementAge"]                 = "65";
-    input["Gender"]                        = "Female";
-    input["Smoking"]                       = "Smoker";
-    input["UnderwritingClass"]             = "Preferred";
-    input["WaiverOfPremiumBenefit"]        = "No";
-    input["AccidentalDeathBenefit"]        = "No";
-    input["SolveTgtAtWhich"]               = "Year";
-    input["SolveToWhich"]                  = "Year";
-    input["UseCurrentDeclaredRate"]        = "No";
+    input["IssueAge"]                        = "45";
+    input["RetirementAge"]                   = "65";
+    input["Gender"]                          = "Female";
+    input["Smoking"]                         = "Smoker";
+    input["UnderwritingClass"]               = "Preferred";
+    input["WaiverOfPremiumBenefit"]          = "No";
+    input["AccidentalDeathBenefit"]          = "No";
+    input["SolveTgtAtWhich"]                 = "Year";
+    input["SolveToWhich"]                    = "Year";
+    input["UseCurrentDeclaredRate"]          = "No";
 
-    input["ProductName"]                   = GetValue(data, "ProductName" );
-    input["IssueAge"]                      = GetValue(data, "IssueAge"    );
-    input["RetirementAge"]                 = GetValue(data, "RetirementAge");
-    input["Gender"]                        = GetValue(data, "Gender"      );
-    input["UnderwritingClass"]             = GetValue(data, "UnderwritingClass");
-    input["Smoking"]                       = GetValue(data, "Smoking"     );
-    input["WaiverOfPremiumBenefit"]        = GetValue(data, "WaiverOfPremiumBenefit");
-    input["AccidentalDeathBenefit"]        = GetValue(data, "AccidentalDeathBenefit");
-    input["SolveType"]                     = GetValue(data, "SolveType"   );
-    input["SolveBeginYear"]                = GetValue(data, "SolveBeginYear");
-    input["SolveEndYear"]                  = GetValue(data, "SolveEndYear");
-    input["SolveTarget"]                   = GetValue(data, "SolveTarget" );
-    input["SolveTargetCashSurrenderValue"] = GetValue(data, "SolveTargetCashSurrenderValue" );
-    input["SolveTargetYear"]               = GetValue(data, "SolveTargetYear");
-    input["SolveExpenseGeneralAccountBasis"] = GetValue(data, "SolveExpenseGeneralAccountBasis"  );
-    input["SpecifiedAmount"]               = GetValue(data, "SpecifiedAmount" ); // rename
-    input["DeathBenefitOption"]            = GetValue(data, "DeathBenefitOption"      ); // rename
-    input["Payment"]                       = GetValue(data, "Payment"  );
-    input["PaymentMode"]                   = GetValue(data, "PaymentMode" );
-    input["Dumpin"]                        = GetValue(data, "Dumpin"      );
-    input["Internal1035ExchangeAmount"]    = GetValue(data, "1035ExchangeAmount"  );
-    input["Internal1035ExchangeFromMec"]   = GetValue(data, "1035ExchangeIsMec");
-    input["Internal1035ExchangeTaxBasis"]  = GetValue(data, "1035ExchangeBasis"   );
-    input["GeneralAccountRate"]            = GetValue(data, "GeneralAccountRate"); // rename
-    input["GeneralAccountRateType"]        = GetValue(data, "GeneralAccountRateType");
-//    input["SeparateAccountRateType"]       = GetValue(data, "SeparateAccountRateType"); // not used yet
-    input["LoanRate"]                      = GetValue(data, "LoanRate" );
-    input["LoanRateType"]                  = GetValue(data, "LoanRateType");
+    input["ProductName"]                     = GetValue(data, "ProductName"                    );
+    input["IssueAge"]                        = GetValue(data, "IssueAge"                       );
+    input["RetirementAge"]                   = GetValue(data, "RetirementAge"                  );
+    input["Gender"]                          = GetValue(data, "Gender"                         );
+    input["UnderwritingClass"]               = GetValue(data, "UnderwritingClass"              );
+    input["Smoking"]                         = GetValue(data, "Smoking"                        );
+    input["WaiverOfPremiumBenefit"]          = GetValue(data, "WaiverOfPremiumBenefit"         );
+    input["AccidentalDeathBenefit"]          = GetValue(data, "AccidentalDeathBenefit"         );
+    input["SolveType"]                       = GetValue(data, "SolveType"                      );
+    input["SolveBeginYear"]                  = GetValue(data, "SolveBeginYear"                 );
+    input["SolveEndYear"]                    = GetValue(data, "SolveEndYear"                   );
+    input["SolveTarget"]                     = GetValue(data, "SolveTarget"                    );
+    input["SolveTargetCashSurrenderValue"]   = GetValue(data, "SolveTargetCashSurrenderValue"  );
+    input["SolveTargetYear"]                 = GetValue(data, "SolveTargetYear"                );
+    input["SolveExpenseGeneralAccountBasis"] = GetValue(data, "SolveExpenseGeneralAccountBasis");
+    input["SpecifiedAmount"]                 = GetValue(data, "SpecifiedAmount"                ); // rename
+    input["DeathBenefitOption"]              = GetValue(data, "DeathBenefitOption"             ); // rename
+    input["Payment"]                         = GetValue(data, "Payment"                        );
+    input["PaymentMode"]                     = GetValue(data, "PaymentMode"                    );
+    input["Dumpin"]                          = GetValue(data, "Dumpin"                         );
+    input["Internal1035ExchangeAmount"]      = GetValue(data, "1035ExchangeAmount"             );
+    input["Internal1035ExchangeFromMec"]     = GetValue(data, "1035ExchangeIsMec"              );
+    input["Internal1035ExchangeTaxBasis"]    = GetValue(data, "1035ExchangeBasis"              );
+    input["GeneralAccountRate"]              = GetValue(data, "GeneralAccountRate"             ); // rename
+    input["GeneralAccountRateType"]          = GetValue(data, "GeneralAccountRateType"         );
+//    input["SeparateAccountRateType"]         = GetValue(data, "SeparateAccountRateType"        ); // not used yet
+    input["LoanRate"]                        = GetValue(data, "LoanRate"                       );
+    input["LoanRateType"]                    = GetValue(data, "LoanRateType"                   );
 
     input.RealizeAllSequenceInput();
 
