@@ -519,6 +519,15 @@ void Input::redintegrate_ex_post
             SolveExpenseGeneralAccountBasis = map_lookup(detritus_map, "SolveBasis");
             }
         }
+
+    if(file_version < 7)
+        {
+        // Prior to version 7, 'InforceCumulativePayments' was used
+        // for no-lapse, GPT, and ROP, so set them all equal here for
+        // backward compatibility.
+        InforceCumulativeGptPremiumsPaid = InforceCumulativeNoLapsePayments.value();
+        InforceCumulativeRopPayments     = InforceCumulativeNoLapsePayments.value();
+        }
 }
 
 void Input::redintegrate_ad_terminum()
