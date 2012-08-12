@@ -30577,3 +30577,19 @@ Reformat.
   main_cgi.cpp
 Revise comments.
 
+20120809T2229Z <gchicares@sbcglobal.net> [568]
+
+  ihs_basicval.cpp
+Treat 'TgtPremMonthlyPolFee' as monthly instead of annual.
+
+20120811T1013Z <gchicares@sbcglobal.net> [568]
+
+  ihs_basicval.cpp
+  input_xml_io.cpp
+Initialize cumulative 7702 'premiums paid' from new input field.
+
+20120812T0919Z <gchicares@sbcglobal.net> [568]
+
+  ihs_acctval.cpp
+Initialize cumulative sales load from new input field.
+
