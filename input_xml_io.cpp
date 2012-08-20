@@ -35,11 +35,12 @@
 #include "database.hpp"
 #include "global_settings.hpp"
 #include "map_lookup.hpp"
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 #include "oecumenic_enumerations.hpp"
 
-#include <algorithm>      // std::min()
+#include <algorithm>                    // std::min()
 #include <stdexcept>
+#include <utility>                      // std::pair
 
 template class xml_serializable<Input>;
 
@@ -527,6 +528,49 @@ void Input::redintegrate_ex_post
         // backward compatibility.
         InforceCumulativeGptPremiumsPaid = InforceCumulativeNoLapsePayments.value();
         InforceCumulativeRopPayments     = InforceCumulativeNoLapsePayments.value();
+        }
+
+    if(file_version < 7 && !contains(residuary_names, "SpecamtHistory"))
+        {
+        // Merge obsolete 'SpecamtHistory' into 'SpecifiedAmount'.
+        //
+        // Prior to version 7, 'SpecamtHistory' and 'SpecifiedAmount'
+        // were distinct. Some version-0 files had the history entity,
+        // but others did not; if it's not present, then of course it
+        // cannot be merged.
+        //
+        // Function must_overwrite_specamt_with_obsolete_history(),
+        // called below, requires 'InforceYear' and 'InforceMonth',
+        // which some "deficient" extracts omit. DoTransmogrify()
+        // sets those members downstream, but the "obsolete history"
+        // function needs them now. This requires version 5, which
+        // introduced 'InforceAsOfDate'; no "deficient" extract
+        // should have an earlier version.
+        if(deficient_extract && EffectiveDate.value() != InforceAsOfDate.value())
+            {
+            LMI_ASSERT(4 < file_version);
+            std::pair<int,int> ym0 = years_and_months_since
+                (EffectiveDate  .value()
+                ,InforceAsOfDate.value()
+                );
+            InforceYear  = ym0.first;
+            InforceMonth = ym0.second;
+            }
+        // Requiring 'deficient_extract' here wouldn't be right,
+        // because an extract file that has been modified and saved
+        // is no longer detectably "deficient".
+        if(0 != InforceYear || 0 != InforceMonth)
+            {
+            if
+                (must_overwrite_specamt_with_obsolete_history
+                    (SpecifiedAmount.value()
+                    ,SpecamtHistory .value()
+                    )
+                )
+                {
+                SpecifiedAmount = SpecamtHistory.value();
+                }
+            }
         }
 }
 

@@ -212,6 +212,12 @@ class LMI_SO Input
     std::string RealizeAmountsPaidHistory         ();
     std::string RealizeSpecamtHistory             ();
 
+    int must_overwrite_specamt_with_obsolete_history
+        (std::string specamt
+        ,std::string history
+        ,bool        hide_errors = false
+        ) const;
+
     void make_term_rider_consistent(bool aggressively = true);
 
     boost::scoped_ptr<product_database> database_;
