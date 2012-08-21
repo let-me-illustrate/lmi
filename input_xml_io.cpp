@@ -139,6 +139,7 @@ bool Input::is_detritus(std::string const& s) const
         ,"PremiumHistory"                // Renamed to 'Inforce7702AAmountsPaidHistory'.
         ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
         ,"SolveBasis"                    // Renamed to 'SolveExpenseGeneralAccountBasis'.
+        ,"SpecamtHistory"                // Merged into 'SpecifiedAmount'.
         ,"TermProportion"                // Disused: cf. 'TermRiderProportion'.
         ,"UseOffshoreCorridorFactor"     // Withdrawn.
         ,"YearsOfZeroDeaths"             // Withdrawn.
@@ -530,7 +531,7 @@ void Input::redintegrate_ex_post
         InforceCumulativeRopPayments     = InforceCumulativeNoLapsePayments.value();
         }
 
-    if(file_version < 7 && !contains(residuary_names, "SpecamtHistory"))
+    if(file_version < 7 && contains(detritus_map, "SpecamtHistory"))
         {
         // Merge obsolete 'SpecamtHistory' into 'SpecifiedAmount'.
         //
@@ -564,11 +565,11 @@ void Input::redintegrate_ex_post
             if
                 (must_overwrite_specamt_with_obsolete_history
                     (SpecifiedAmount.value()
-                    ,SpecamtHistory .value()
+                    ,map_lookup(detritus_map, "SpecamtHistory")
                     )
                 )
                 {
-                SpecifiedAmount = SpecamtHistory.value();
+                SpecifiedAmount = map_lookup(detritus_map, "SpecamtHistory");
                 }
             }
         }

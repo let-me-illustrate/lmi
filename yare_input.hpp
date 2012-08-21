@@ -189,7 +189,6 @@ class yare_input
     double                            InforceDcv                      ;
     double                            InforceLeastDeathBenefit        ;
     std::vector<double>               Inforce7702AAmountsPaidHistory  ;
-    std::vector<double>               SpecamtHistory                  ;
 //    mcenum_country                    Country                         ;
 //    bool                              OverrideCoiMultiplier           ;
     double                            CountryCoiMultiplier            ;

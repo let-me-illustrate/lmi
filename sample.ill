@@ -160,7 +160,6 @@
     <SolveTgtAtWhich>Maturity</SolveTgtAtWhich>
     <SolveToWhich>Retirement</SolveToWhich>
     <SolveType>No solve</SolveType>
-    <SpecamtHistory>0</SpecamtHistory>
     <SpecifiedAmount>1000000</SpecifiedAmount>
     <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
     <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>

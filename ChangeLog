@@ -30593,3 +30593,42 @@ Initialize cumulative 7702 'premiums paid' from new input field.
   ihs_acctval.cpp
 Initialize cumulative sales load from new input field.
 
+20120818T1147Z <gchicares@sbcglobal.net> [568]
+
+  diagnostics.sed
+Improve handling of multiple spaces.
+
+20120818T1149Z <gchicares@sbcglobal.net> [567]
+
+  input_test.cpp
+Remove a marker for a defect resolved 20080803T2323Z.
+
+20120820T1711Z <gchicares@sbcglobal.net> [567]
+
+  input.hpp
+  input_realization.cpp
+  input_test.cpp
+  input_xml_io.cpp
+Prepare to expunge 'SpecamtHistory'.
+
+20120821T0957Z <gchicares@sbcglobal.net> [567]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Prepare to expunge 'SpecamtHistory'.
+
+20120821T1307Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+  input.cpp
+  input.hpp
+  input_realization.cpp
+  input_xml_io.cpp
+  sample.cns
+  sample.ill
+  skin.xrc
+  yare_input.cpp
+  yare_input.hpp
+Expunge 'SpecamtHistory'.
+
