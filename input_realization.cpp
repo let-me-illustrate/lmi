@@ -234,7 +234,6 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
     s.push_back(RealizeFlatExtra                  ());
     s.push_back(RealizeHoneymoonValueSpread       ());
     s.push_back(RealizeAmountsPaidHistory         ());
-    s.push_back(RealizeSpecamtHistory             ());
 
     if(report_errors)
         {
@@ -893,16 +892,6 @@ std::string Input::RealizeAmountsPaidHistory()
         (*this
         ,AmountsPaidHistoryRealized_
         ,Inforce7702AAmountsPaidHistory
-        );
-}
-
-//============================================================================
-std::string Input::RealizeSpecamtHistory()
-{
-    return realize_sequence_string
-        (*this
-        ,SpecamtHistoryRealized_
-        ,SpecamtHistory
         );
 }
 

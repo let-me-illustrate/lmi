@@ -195,7 +195,6 @@
         <xs:element ref="SolveTgtAtWhich"/>
         <xs:element ref="SolveToWhich"/>
         <xs:element ref="SolveType"/>
-        <xs:element ref="SpecamtHistory"/>
         <xs:element ref="SpecifiedAmount"/>
         <xs:element ref="SpecifiedAmountFromIssue"/>
         <xs:element ref="SpecifiedAmountFromRetirement"/>
@@ -1102,15 +1101,11 @@ the basis of the hypothetical rate, half that rate, or zero.</xs:documentation>
       <xs:documentation>Parameter to be solved for.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SpecamtHistory" type="xs:string">
-    <xs:annotation>
-      <xs:documentation>Specified amount for each policy year since issue: used only
-for certain surrender charges.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="SpecifiedAmount" type="xs:string">
     <xs:annotation>
-      <xs:documentation>Specified amount.</xs:documentation>
+      <xs:documentation>Specified amount for each policy year since issue. Inforce
+extracts require only a scalar representing the current
+specified amount.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SpecifiedAmountFromIssue" type="nonnegative_double">

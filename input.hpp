@@ -210,7 +210,6 @@ class LMI_SO Input
     std::string RealizeFlatExtra                  ();
     std::string RealizeHoneymoonValueSpread       ();
     std::string RealizeAmountsPaidHistory         ();
-    std::string RealizeSpecamtHistory             ();
 
     int must_overwrite_specamt_with_obsolete_history
         (std::string specamt
@@ -363,7 +362,6 @@ class LMI_SO Input
     tnr_nonnegative_double   InforceDcv                      ;
     tnr_nonnegative_double   InforceLeastDeathBenefit        ;
     numeric_sequence         Inforce7702AAmountsPaidHistory  ;
-    numeric_sequence         SpecamtHistory                  ;
     mce_country              Country                         ;
     mce_yes_or_no            OverrideCoiMultiplier           ;
     tnr_nonnegative_double   CountryCoiMultiplier            ;
@@ -484,7 +482,6 @@ class LMI_SO Input
     std::vector<tnr_unrestricted_double> FlatExtraRealized_                 ; // tnr_nonnegative_double
     std::vector<tnr_unrestricted_double> HoneymoonValueSpreadRealized_      ; // tnr_interest_rate (new)
     std::vector<tnr_unrestricted_double> AmountsPaidHistoryRealized_        ; // tnr_unrestricted_double
-    std::vector<tnr_unrestricted_double> SpecamtHistoryRealized_            ; // tnr_nonnegative_double
 };
 
 /// Specialization of struct template reconstitutor for this Model

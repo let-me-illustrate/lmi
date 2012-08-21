@@ -397,10 +397,9 @@ cell_element = element cell
      element SolveToWhich                     {to_point}
     ,## Parameter to be solved for.
      element SolveType                        {solve_type}
-    ,## Specified amount for each policy year since issue: used only
-     ## for certain surrender charges.
-     element SpecamtHistory                   {numeric_sequence}
-    ,## Specified amount.
+    ,## Specified amount for each policy year since issue. Inforce
+     ## extracts require only a scalar representing the current
+     ## specified amount.
      element SpecifiedAmount                  {specamt_sequence}
     ,## [obsolete]
      element SpecifiedAmountFromIssue         {nonnegative_double}

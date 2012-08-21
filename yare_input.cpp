@@ -135,7 +135,6 @@ yare_input::yare_input(Input const& z)
     InforceDcv                       = z.InforceDcv                      .value();
     InforceLeastDeathBenefit         = z.InforceLeastDeathBenefit        .value();
     Inforce7702AAmountsPaidHistory   = convert_vector_type<double              >(z.AmountsPaidHistoryRealized_         );
-    SpecamtHistory                   = convert_vector_type<double              >(z.SpecamtHistoryRealized_             );
     CountryCoiMultiplier             = z.CountryCoiMultiplier            .value();
     SurviveToType                    = z.SurviveToType                   .value();
     SurviveToYear                    = z.SurviveToYear                   .value();

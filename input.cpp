@@ -165,7 +165,6 @@ Input::Input()
 //    ,InforceDcv                       ("")
 //    ,InforceLeastDeathBenefit         ("")
     ,Inforce7702AAmountsPaidHistory   ("0")
-    ,SpecamtHistory                   ("0")
     ,Country                          ("US")
 //    ,OverrideCoiMultiplier            ("")
     ,CountryCoiMultiplier             ("1")
@@ -423,7 +422,6 @@ void Input::AscribeMembers()
     ascribe("InforceDcv"                            , &Input::InforceDcv                            );
     ascribe("InforceLeastDeathBenefit"              , &Input::InforceLeastDeathBenefit              );
     ascribe("Inforce7702AAmountsPaidHistory"        , &Input::Inforce7702AAmountsPaidHistory        );
-    ascribe("SpecamtHistory"                        , &Input::SpecamtHistory                        );
     ascribe("Country"                               , &Input::Country                               );
     ascribe("OverrideCoiMultiplier"                 , &Input::OverrideCoiMultiplier                 );
     ascribe("CountryCoiMultiplier"                  , &Input::CountryCoiMultiplier                  );
