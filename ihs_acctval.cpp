@@ -451,9 +451,9 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             {
             AddSurrChgLayer
                 (j
-                ,std::max(0.0, yare_input_.SpecamtHistory[j] - prior_specamt)
+                ,std::max(0.0, yare_input_.SpecifiedAmount[j] - prior_specamt)
                 );
-            prior_specamt = yare_input_.SpecamtHistory[j];
+            prior_specamt = yare_input_.SpecifiedAmount[j];
             }
         }
 
@@ -537,7 +537,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             ,yare_input_.LastMaterialChangeDate
             );
         nonstd::copy_n
-            (yare_input_.SpecamtHistory.begin() + offset
+            (yare_input_.SpecifiedAmount.begin() + offset
             ,length_7702a
             ,std::back_inserter(bfts_7702a)
             );
