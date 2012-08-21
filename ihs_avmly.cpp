@@ -1578,7 +1578,7 @@ void AccountValue::TxSetBOMAV()
             //
             // TAXATION !! Is this really desirable? INPUT !! Should we
             // instead capture specamt as of issue date for this purpose?
-            z = yare_input_.SpecamtHistory.front();
+            z = yare_input_.SpecifiedAmount.front();
             }
         SpecAmtLoadBase = std::max(z, NetPmts[Month] * YearsCorridorFactor);
         SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
