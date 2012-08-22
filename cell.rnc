@@ -253,7 +253,8 @@ cell_element = element cell
      element InforceSeparateAccountValue      {nonnegative_double}
     ,## Inforce 7702A seven-pay premium.
      element InforceSevenPayPremium           {nonnegative_double}
-    ,## Amount on which specified-amount load is charged.
+    ,## Amount on which specified-amount load is charged, with due
+     ## regard to term rider.
      element InforceSpecAmtLoadBase           {nonnegative_double}
     ,## Inforce tax basis.
      element InforceTaxBasis                  {xsd:double}
@@ -398,8 +399,7 @@ cell_element = element cell
     ,## Parameter to be solved for.
      element SolveType                        {solve_type}
     ,## Specified amount for each policy year since issue. Inforce
-     ## extracts require only a scalar representing the current
-     ## specified amount.
+     ## extracts require only the current scalar value.
      element SpecifiedAmount                  {specamt_sequence}
     ,## [obsolete]
      element SpecifiedAmountFromIssue         {nonnegative_double}

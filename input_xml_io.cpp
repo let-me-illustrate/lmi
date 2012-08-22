@@ -525,8 +525,10 @@ void Input::redintegrate_ex_post
     if(file_version < 7)
         {
         // Prior to version 7, 'InforceCumulativePayments' was used
-        // for no-lapse, GPT, and ROP, so set them all equal here for
-        // backward compatibility.
+        // for no-lapse, GPT, and ROP, so set them all equal here
+        // for backward compatibility. This matters little for new
+        // business, but is so cheap that it may as well be done
+        // unconditionally.
         InforceCumulativeGptPremiumsPaid = InforceCumulativeNoLapsePayments.value();
         InforceCumulativeRopPayments     = InforceCumulativeNoLapsePayments.value();
         }
@@ -572,6 +574,15 @@ void Input::redintegrate_ex_post
                 SpecifiedAmount = map_lookup(detritus_map, "SpecamtHistory");
                 }
             }
+        }
+
+    if(file_version < 7 && EffectiveDate.value() != InforceAsOfDate.value())
+        {
+        // Version 7 introduced 'InforceSpecAmtLoadBase'; previously,
+        // the first element of 'SpecamtHistory' had been used in its
+        // place, which would have disregarded any term rider.
+        RealizeSpecifiedAmount();
+        InforceSpecAmtLoadBase = TermRiderAmount.value() + SpecifiedAmountRealized_[0].value();
         }
 }
 

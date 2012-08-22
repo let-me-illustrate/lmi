@@ -770,7 +770,8 @@ regular loans.</xs:documentation>
   </xs:element>
   <xs:element name="InforceSpecAmtLoadBase" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Amount on which specified-amount load is charged.</xs:documentation>
+      <xs:documentation>Amount on which specified-amount load is charged, with due
+regard to term rider.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceTaxBasis" type="xs:double">
@@ -1104,8 +1105,7 @@ the basis of the hypothetical rate, half that rate, or zero.</xs:documentation>
   <xs:element name="SpecifiedAmount" type="xs:string">
     <xs:annotation>
       <xs:documentation>Specified amount for each policy year since issue. Inforce
-extracts require only a scalar representing the current
-specified amount.</xs:documentation>
+extracts require only the current scalar value.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SpecifiedAmountFromIssue" type="nonnegative_double">
