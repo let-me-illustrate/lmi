@@ -30632,3 +30632,16 @@ Prepare to expunge 'SpecamtHistory'.
   yare_input.hpp
 Expunge 'SpecamtHistory'.
 
+20120822T1138Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+  ihs_avmly.cpp
+  input_xml_io.cpp
+Initialize base for specified-amount load from new input field.
+
+20120826T1257Z <gchicares@sbcglobal.net> [567]
+
+  regex_test.cpp
+Create regexen to test input sequences.
+
