@@ -319,7 +319,7 @@
       <xs:documentation>Custom-blend rates by smoking.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CashValueEnhancementRate" type="xs:string">
+  <xs:element name="CashValueEnhancementRate" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Negative surrender charge as proportion of total account value.</xs:documentation>
     </xs:annotation>
@@ -365,12 +365,12 @@ called a "number", is often not purely numeric.</xs:documentation>
       <xs:documentation>Corporation's name.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CorporationPayment" type="xs:string">
+  <xs:element name="CorporationPayment" type="payment_sequence">
     <xs:annotation>
       <xs:documentation>Corporation's planned premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CorporationPaymentMode" type="xs:string">
+  <xs:element name="CorporationPaymentMode" type="mode_sequence">
     <xs:annotation>
       <xs:documentation>Corporation's premium mode.</xs:documentation>
     </xs:annotation>
@@ -385,7 +385,7 @@ called a "number", is often not purely numeric.</xs:documentation>
       <xs:documentation>Corporation's address: state.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CorporationTaxBracket" type="xs:string">
+  <xs:element name="CorporationTaxBracket" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Corporation's tax bracket.</xs:documentation>
     </xs:annotation>
@@ -410,7 +410,7 @@ called a "number", is often not purely numeric.</xs:documentation>
       <xs:documentation>User-designed supplemental illustration: elected or not.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CurrentCoiMultiplier" type="xs:string">
+  <xs:element name="CurrentCoiMultiplier" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Multiplier for current COI rates.</xs:documentation>
     </xs:annotation>
@@ -420,7 +420,7 @@ called a "number", is often not purely numeric.</xs:documentation>
       <xs:documentation>Insured's date of birth.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="DeathBenefitOption" type="xs:string">
+  <xs:element name="DeathBenefitOption" type="dbo_sequence">
     <xs:annotation>
       <xs:documentation>Death benefit option.</xs:documentation>
     </xs:annotation>
@@ -492,7 +492,7 @@ two times salary, while 'all others' get a flat $50K.</xs:documentation>
       <xs:documentation>Tax basis of 1035 exchange from a different insurer.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="ExtraCompensationOnAssets" type="xs:string">
+  <xs:element name="ExtraCompensationOnAssets" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Extra charge on separate-account assets. The motivation is to
 let end users add a negotiated asset trailer without changing
@@ -500,21 +500,21 @@ the product database, but the field may be used for any extra
 charge in the nature of M&amp;E.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="ExtraCompensationOnPremium" type="xs:string">
+  <xs:element name="ExtraCompensationOnPremium" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Extra premium load. The motivation is to let end users add a
 negotiated commission without changing the product database,
 but the field may be used for any extra load on premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="ExtraMonthlyCustodialFee" type="xs:string">
+  <xs:element name="ExtraMonthlyCustodialFee" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Extra policy fee. The motivation is to let end users add an
 additional monthly custodial fee for a custom fund, but the
 field may be used for any extra monthly fee.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="FlatExtra" type="xs:string">
+  <xs:element name="FlatExtra" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Annual flat extra per thousand of specified amount.</xs:documentation>
     </xs:annotation>
@@ -534,7 +534,7 @@ field may be used for any extra monthly fee.</xs:documentation>
       <xs:documentation>Insured's gender for insurance purposes.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="GeneralAccountRate" type="xs:string">
+  <xs:element name="GeneralAccountRate" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>General-account interest rate as a decimal: e.g., '0.03' for 3%.</xs:documentation>
     </xs:annotation>
@@ -557,7 +557,7 @@ setting a minimum CSV equal to gross premium accumulated at a
 special interest rate, with no monthly deductions taken.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="HoneymoonValueSpread" type="xs:string">
+  <xs:element name="HoneymoonValueSpread" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Interest spread for honeymoon value, which grows at the net
 general account rate less this decrement.</xs:documentation>
@@ -600,7 +600,7 @@ deleting them from a census.</xs:documentation>
       <xs:documentation>[obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="Inforce7702AAmountsPaidHistory" type="xs:string">
+  <xs:element name="Inforce7702AAmountsPaidHistory" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>7702A "amounts paid" for each "contract year" since beginning
 of most recent seven-pay period; zero if not in a seven-pay
@@ -911,7 +911,7 @@ prevent corridor death benefit from exceeding available
 reinsurance.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="NewLoan" type="xs:string">
+  <xs:element name="NewLoan" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>New loan taken in cash (excluding capitalized interest).</xs:documentation>
     </xs:annotation>
@@ -944,17 +944,17 @@ one represents.</xs:documentation>
       <xs:documentation>Override investment management fee: used only with custom funds.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="PartialMortalityMultiplier" type="xs:string">
+  <xs:element name="PartialMortalityMultiplier" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Multiplier applied to partial-mortality table.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="Payment" type="xs:string">
+  <xs:element name="Payment" type="payment_sequence">
     <xs:annotation>
       <xs:documentation>Insured's planned premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="PaymentMode" type="xs:string">
+  <xs:element name="PaymentMode" type="mode_sequence">
     <xs:annotation>
       <xs:documentation>Insured's premium mode.</xs:documentation>
     </xs:annotation>
@@ -976,7 +976,7 @@ the honeymoon.</xs:documentation>
       <xs:documentation>Product (plan): enumerators depend on run-time context.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="ProjectedSalary" type="xs:string">
+  <xs:element name="ProjectedSalary" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Projected salary: used for salary-based benefits.</xs:documentation>
     </xs:annotation>
@@ -1015,7 +1015,7 @@ processed: cf. 'run_order'.</xs:documentation>
 intended to represent basic group term coverage.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SeparateAccountRate" type="xs:string">
+  <xs:element name="SeparateAccountRate" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Separate-account hypothetical rate as a decimal: e.g., '0.06' for 6%.</xs:documentation>
     </xs:annotation>
@@ -1102,7 +1102,7 @@ the basis of the hypothetical rate, half that rate, or zero.</xs:documentation>
       <xs:documentation>Parameter to be solved for.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SpecifiedAmount" type="xs:string">
+  <xs:element name="SpecifiedAmount" type="specamt_sequence">
     <xs:annotation>
       <xs:documentation>Specified amount for each policy year since issue. Inforce
 extracts require only the current scalar value.</xs:documentation>
@@ -1229,7 +1229,7 @@ everything else except premium tax.</xs:documentation>
       <xs:documentation>Presumed policy year of death, for partial mortality.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="TaxBracket" type="xs:string">
+  <xs:element name="TaxBracket" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Insured's tax bracket.</xs:documentation>
     </xs:annotation>
@@ -1308,7 +1308,7 @@ in a composite illustration.</xs:documentation>
       <xs:documentation>Reinterpret input withdrawals as loans after tax basis recovered.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="Withdrawal" type="xs:string">
+  <xs:element name="Withdrawal" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Partial surrender.</xs:documentation>
     </xs:annotation>
