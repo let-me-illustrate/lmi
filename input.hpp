@@ -402,7 +402,7 @@ class LMI_SO Input
     numeric_sequence         FlatExtra                       ;
     numeric_sequence         PolicyLevelFlatExtra            ;
     numeric_sequence         HoneymoonValueSpread            ;
-    numeric_sequence         FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
+    datum_string             FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
     numeric_sequence         CashValueEnhancementRate        ;
     mce_yes_or_no            CreateSupplementalReport        ;
     mce_report_column        SupplementalReportColumn00      ;
