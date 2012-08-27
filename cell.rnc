@@ -140,7 +140,7 @@ cell_element = element cell
     ,## Annual flat extra per thousand of specified amount.
      element FlatExtra                        {numeric_sequence}
     ,## As yet unused: cf. 'fund_input_method'.
-     element FundAllocations                  {numeric_sequence}
+     element FundAllocations                  {text}
     ,## Fund-allocation override: cf. 'fund_input_method'.
      element FundChoiceType                   {fund_input_method}
     ,## Insured's gender for insurance purposes.

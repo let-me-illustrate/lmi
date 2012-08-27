@@ -30645,3 +30645,10 @@ Initialize base for specified-amount load from new input field.
   regex_test.cpp
 Create regexen to test input sequences.
 
+20120827T1041Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  input.hpp
+Use a more appropriate type for 'FundAllocations'. It does not conform
+to the input_sequence grammar.
+
