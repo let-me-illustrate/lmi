@@ -30652,3 +30652,16 @@ Create regexen to test input sequences.
 Use a more appropriate type for 'FundAllocations'. It does not conform
 to the input_sequence grammar.
 
+20120827T1433Z <gchicares@sbcglobal.net> [567]
+
+  cell.xsd
+  types.rnc
+  types.xsd
+Validate input sequences.
+
+20120828T2049Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+Mark fields for which inforce extracts should use default values.
+
