@@ -679,7 +679,7 @@ refunded or forced out.</xs:documentation>
       <xs:documentation>Inforce cumulative refundable sales load.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceDataSource" type="xs:string">
+  <xs:element name="InforceDataSource" type="xs:nonNegativeInteger">
     <xs:annotation>
       <xs:documentation>Vendor identifier for files from an external system.</xs:documentation>
     </xs:annotation>
