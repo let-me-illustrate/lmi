@@ -30704,3 +30704,9 @@ Improve documentation.
   types.xsd
 Specify defaults as needed.
 
+20120831T1745Z <gchicares@sbcglobal.net> [567]
+
+  multiple_cell_document.rnc
+  multiple_cell_document.xsd
+Specify census defaults.
+
