@@ -142,9 +142,9 @@ cell_element = element cell
      element ExtraMonthlyCustodialFee         {numeric_sequence}
     ,## Annual flat extra per thousand of specified amount.
      element FlatExtra                        {numeric_sequence}
-    ,## * As yet unused: cf. 'fund_input_method'.
+    ,## * As yet unused.
      element FundAllocations                  {text}
-    ,## * Fund-allocation override: cf. 'fund_input_method'.
+    ,## * Fund-allocation override.
      element FundChoiceType                   {fund_input_method}
     ,## Insured's gender for insurance purposes.
      element Gender                           {gender}
@@ -356,7 +356,7 @@ cell_element = element cell
     ,## * Insured's retirement age.
      element RetirementAge                    {age_int}
     ,## * Order in which different individuals in a census are
-     ## processed: cf. 'run_order'.
+     ## processed.
      element RunOrder                         {run_order}
     ,## * Maximum salary-based specified amount.
      element SalarySpecifiedAmountCap         {nonnegative_double}
@@ -472,7 +472,7 @@ cell_element = element cell
      element TotalSpecifiedAmount             {nonnegative_double}
     ,## Underwriting class.
      element UnderwritingClass                {class}
-    ,## * Use mean separate-account fee: cf. 'fund_input_method'.
+    ,## * Use mean separate-account fee.
      element UseAverageOfAllFunds             {yes_or_no}
     ,## * Use current declared rate (read from authenticated database)
      ## instead of entering the crediting rate explicitly.
