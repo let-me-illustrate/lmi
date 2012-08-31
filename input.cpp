@@ -126,7 +126,7 @@ Input::Input()
     ,IncludeInComposite               ("Yes")
 //    ,Comments                         ("")
 //    ,AmortizePremiumLoad              ("")
-    ,InforceDataSource                ("lmi")
+    ,InforceDataSource                ("1") // 0=error; 1=lmi; 2+=other
 //    ,ContractNumber                   ("")
 //    ,MasterContractNumber             ("")
 //    ,InforceAsOfDate                  ("")

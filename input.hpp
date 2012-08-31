@@ -323,7 +323,7 @@ class LMI_SO Input
     mce_yes_or_no            IncludeInComposite              ;
     datum_string             Comments                        ;
     mce_yes_or_no            AmortizePremiumLoad             ;
-    datum_string             InforceDataSource               ;
+    tnr_nonnegative_integer  InforceDataSource               ;
     datum_string             ContractNumber                  ;
     datum_string             MasterContractNumber            ;
     tnr_date                 InforceAsOfDate                 ;
