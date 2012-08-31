@@ -525,12 +525,12 @@ field may be used for any extra monthly fee.</xs:documentation>
   </xs:element>
   <xs:element name="FundAllocations" type="xs:string">
     <xs:annotation>
-      <xs:documentation>* As yet unused: cf. 'fund_input_method'.</xs:documentation>
+      <xs:documentation>* As yet unused.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="FundChoiceType" type="fund_input_method">
     <xs:annotation>
-      <xs:documentation>* Fund-allocation override: cf. 'fund_input_method'.</xs:documentation>
+      <xs:documentation>* Fund-allocation override.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="Gender" type="gender">
@@ -1000,7 +1000,7 @@ census.</xs:documentation>
   <xs:element name="RunOrder" type="run_order">
     <xs:annotation>
       <xs:documentation>* Order in which different individuals in a census are
-processed: cf. 'run_order'.</xs:documentation>
+processed.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SalarySpecifiedAmountCap" type="nonnegative_double">
@@ -1278,7 +1278,7 @@ term rider is specified as a proportion of this total.</xs:documentation>
   </xs:element>
   <xs:element name="UseAverageOfAllFunds" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>* Use mean separate-account fee: cf. 'fund_input_method'.</xs:documentation>
+      <xs:documentation>* Use mean separate-account fee.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="UseCurrentDeclaredRate" type="yes_or_no">

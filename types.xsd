@@ -717,7 +717,7 @@ proved unworkable (e.g., because of underwriting).</xs:documentation>
   </xs:simpleType>
   <xs:simpleType name="from_point">
     <xs:annotation>
-      <xs:documentation>Inclusive start of a half-open interval, used e.g. for input sequences.</xs:documentation>
+      <xs:documentation>Inclusive start of a half-open time interval.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
       <xs:enumeration value="Issue"/>
@@ -728,7 +728,7 @@ proved unworkable (e.g., because of underwriting).</xs:documentation>
   </xs:simpleType>
   <xs:simpleType name="to_point">
     <xs:annotation>
-      <xs:documentation>Exclusive end of a half-open interval used e.g. for input sequences.</xs:documentation>
+      <xs:documentation>Exclusive end of a half-open time interval.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
       <xs:enumeration value="Retirement"/>

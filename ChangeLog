@@ -30665,3 +30665,34 @@ Validate input sequences.
   cell.xsd
 Mark fields for which inforce extracts should use default values.
 
+20120831T1057Z <gchicares@sbcglobal.net> [567]
+
+  input.cpp
+  input.hpp
+Change type of 'InforceDataSource'.
+
+20120831T1104Z <gchicares@sbcglobal.net> [567]
+
+  input.cpp
+Improve default for 'MaximumNaar'.
+
+20120831T1149Z <gchicares@sbcglobal.net> [567]
+
+  sample.cns
+  sample.ill
+Update specimen input files to reflect today's earlier changes.
+
+20120831T1157Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+Update xml schemata to reflect today's earlier changes.
+
+20120831T1216Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+  types.rnc
+  types.xsd
+Improve documentation.
+

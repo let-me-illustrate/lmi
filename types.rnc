@@ -297,14 +297,14 @@ defn_material_change =
     | "Earlier of increase or unnecessary premium"
     | "GPT adjustment event"
 
-## Inclusive start of a half-open interval, used e.g. for input sequences.
+## Inclusive start of a half-open time interval.
 from_point =
       "Issue"
     | "Year"
     | "Age"
     | "Retirement"
 
-## Exclusive end of a half-open interval used e.g. for input sequences.
+## Exclusive end of a half-open time interval.
 to_point =
       "Retirement"
     | "Year"
