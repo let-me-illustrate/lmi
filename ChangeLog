@@ -30696,3 +30696,11 @@ Update xml schemata to reflect today's earlier changes.
   types.xsd
 Improve documentation.
 
+20120831T1315Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+  types.rnc
+  types.xsd
+Specify defaults as needed.
+
