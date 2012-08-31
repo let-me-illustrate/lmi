@@ -79,7 +79,7 @@
     <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
     <InforceCumulativeRopPayments>0</InforceCumulativeRopPayments>
     <InforceCumulativeSalesLoad>0</InforceCumulativeSalesLoad>
-    <InforceDataSource>lmi</InforceDataSource>
+    <InforceDataSource>1</InforceDataSource>
     <InforceDcv>0</InforceDcv>
     <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
     <InforceGlp>0</InforceGlp>
@@ -123,7 +123,7 @@
     <LoanToDuration>50</LoanToDuration>
     <MaleProportion>1</MaleProportion>
     <MasterContractNumber/>
-    <MaximumNaar>10000000</MaximumNaar>
+    <MaximumNaar>1000000000</MaximumNaar>
     <NewLoan>0</NewLoan>
     <NonsmokerProportion>1</NonsmokerProportion>
     <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
