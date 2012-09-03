@@ -30710,3 +30710,13 @@ Specify defaults as needed.
   multiple_cell_document.xsd
 Specify census defaults.
 
+20120903T0954Z <gchicares@sbcglobal.net> [567]
+
+  workhorse.make
+Guard against a perilous command-line override.
+
+20120903T1407Z <gchicares@sbcglobal.net> [567]
+
+  workhorse.make
+Tune gcc.
+
