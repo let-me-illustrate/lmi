@@ -510,6 +510,19 @@ CXX_WARNINGS = \
 
 ################################################################################
 
+# Flags for tuning gcc.
+
+# As this is written in 2012, lmi is often built on machines with less
+# RAM per core than gcc wants. Experiments show that these flags cut
+# gcc's RAM appetite by fifty percent, in return for a ten-percent
+# speed penalty that can be overcome by increasing parallelism.
+
+ifeq (gcc,$(toolset))
+  ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
+endif
+
+################################################################################
+
 # Build type governs
 #  - optimization flags
 #  - mpatrol
@@ -622,10 +635,10 @@ ifeq (3.4.2,$(gcc_version))
 endif
 
 CFLAGS = \
-  $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(ggc_flags) $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 CXXFLAGS = \
-  $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(ggc_flags) $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 # Explicitly disable the infelicitous auto-import default. See:
 #   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
