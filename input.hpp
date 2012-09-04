@@ -209,8 +209,13 @@ class LMI_SO Input
     std::string RealizeWithdrawal                 ();
     std::string RealizeFlatExtra                  ();
     std::string RealizeHoneymoonValueSpread       ();
-    std::string RealizePremiumHistory             ();
-    std::string RealizeSpecamtHistory             ();
+    std::string RealizeAmountsPaidHistory         ();
+
+    int must_overwrite_specamt_with_obsolete_history
+        (std::string specamt
+        ,std::string history
+        ,bool        hide_errors = false
+        ) const;
 
     void make_term_rider_consistent(bool aggressively = true);
 
@@ -247,10 +252,10 @@ class LMI_SO Input
     ce_product_name          ProductName                     ;
     tnr_nonnegative_double   Dumpin                          ;
     tnr_nonnegative_double   External1035ExchangeAmount      ;
-    tnr_nonnegative_double   External1035ExchangeBasis       ;
+    tnr_unrestricted_double  External1035ExchangeTaxBasis    ;
     mce_yes_or_no            External1035ExchangeFromMec     ;
     tnr_nonnegative_double   Internal1035ExchangeAmount      ;
-    tnr_nonnegative_double   Internal1035ExchangeBasis       ;
+    tnr_unrestricted_double  Internal1035ExchangeTaxBasis    ;
     mce_yes_or_no            Internal1035ExchangeFromMec     ;
     tnr_duration             SolveTargetTime                 ;
     tnr_duration             SolveBeginTime                  ;
@@ -261,7 +266,7 @@ class LMI_SO Input
     mce_solve_target         SolveTarget                     ;
     tnr_nonnegative_double   SolveTargetCashSurrenderValue   ;
     tnr_duration             SolveTargetYear                 ;
-    mce_gen_basis            SolveBasis                      ; // TODO ?? Poor name, but enumerators are correct.
+    mce_gen_basis            SolveExpenseGeneralAccountBasis ;
     mce_sep_basis            SolveSeparateAccountBasis       ;
     mce_yes_or_no            UseCurrentDeclaredRate          ;
     mce_gen_acct_rate_type   GeneralAccountRateType          ;
@@ -271,8 +276,6 @@ class LMI_SO Input
     mce_yes_or_no            OverrideExperienceReserveRate   ;
     tnr_proportion           ExperienceReserveRate           ;
     tnr_nonnegative_double   ExperienceRatingInitialKFactor  ;
-    tnr_unrestricted_double  InforceNetExperienceReserve     ;
-    tnr_nonnegative_double   InforceYtdNetCoiCharge          ;
     mce_yes_or_no            WithdrawToBasisThenLoan         ;
     mce_yes_or_no            UseAverageOfAllFunds            ;
     mce_yes_or_no            OverrideFundManagementFee       ;
@@ -320,16 +323,45 @@ class LMI_SO Input
     mce_yes_or_no            IncludeInComposite              ;
     datum_string             Comments                        ;
     mce_yes_or_no            AmortizePremiumLoad             ;
+    tnr_nonnegative_integer  InforceDataSource               ;
+    datum_string             ContractNumber                  ;
+    datum_string             MasterContractNumber            ;
+    tnr_date                 InforceAsOfDate                 ;
     tnr_duration             InforceYear                     ;
     tnr_month                InforceMonth                    ;
+    tnr_nonnegative_double   InforceAnnualTargetPremium      ;
+    tnr_nonnegative_double   InforceYtdGrossPremium          ;
     tnr_nonnegative_double   InforceGeneralAccountValue      ;
     tnr_nonnegative_double   InforceSeparateAccountValue     ;
     tnr_nonnegative_double   InforceRegularLoanValue         ;
     tnr_nonnegative_double   InforcePreferredLoanValue       ;
     tnr_nonnegative_double   InforceRegularLoanBalance       ;
     tnr_nonnegative_double   InforcePreferredLoanBalance     ;
+    mce_yes_or_no            InforceNoLapseActive            ;
+    tnr_nonnegative_double   InforceMonthlyNoLapsePremium    ;
     tnr_nonnegative_double   InforceCumulativeNoLapsePremium ;
-    tnr_nonnegative_double   InforceCumulativePayments       ;
+    tnr_nonnegative_double   InforceCumulativeNoLapsePayments;
+    tnr_nonnegative_double   InforceCumulativeRopPayments    ;
+    tnr_nonnegative_double   InforceYtdTaxablePremium        ;
+    tnr_nonnegative_double   InforceCumulativeSalesLoad      ;
+    tnr_nonnegative_double   InforceSpecAmtLoadBase          ;
+    tnr_nonnegative_double   InforceHoneymoonValue           ;
+    tnr_unrestricted_double  InforceNetExperienceReserve     ;
+    tnr_nonnegative_double   InforceYtdNetCoiCharge          ;
+    tnr_unrestricted_double  InforceTaxBasis                 ;
+    tnr_unrestricted_double  InforceGlp                      ;
+    tnr_unrestricted_double  InforceCumulativeGlp            ;
+    tnr_unrestricted_double  InforceGsp                      ;
+    tnr_unrestricted_double  InforceCumulativeGptPremiumsPaid;
+    mce_yes_or_no            InforceIsMec                    ;
+    tnr_nonnegative_double   InforceSevenPayPremium          ;
+    tnr_date                 LastMaterialChangeDate          ;
+    tnr_duration             InforceContractYear             ;
+    tnr_month                InforceContractMonth            ;
+    tnr_nonnegative_double   InforceAvBeforeLastMc           ;
+    tnr_nonnegative_double   InforceDcv                      ;
+    tnr_nonnegative_double   InforceLeastDeathBenefit        ;
+    numeric_sequence         Inforce7702AAmountsPaidHistory  ;
     mce_country              Country                         ;
     mce_yes_or_no            OverrideCoiMultiplier           ;
     tnr_nonnegative_double   CountryCoiMultiplier            ;
@@ -342,21 +374,6 @@ class LMI_SO Input
     mce_yes_or_no            SpouseRider                     ;
     tnr_nonnegative_double   SpouseRiderAmount               ;
     tnr_age                  SpouseIssueAge                  ;
-    datum_string             Franchise                       ;
-    datum_string             PolicyNumber                    ;
-    tnr_date                 InforceAsOfDate                 ;
-    tnr_nonnegative_double   InforceTaxBasis                 ;
-    tnr_nonnegative_double   InforceGlp                      ;
-    tnr_nonnegative_double   InforceCumulativeGlp            ;
-    tnr_nonnegative_double   InforceGsp                      ;
-    tnr_nonnegative_double   InforceSevenPayPremium          ;
-    mce_yes_or_no            InforceIsMec                    ;
-    tnr_date                 LastMaterialChangeDate          ;
-    tnr_nonnegative_double   InforceDcv                      ;
-    tnr_nonnegative_double   InforceAvBeforeLastMc           ;
-    tnr_duration             InforceContractYear             ;
-    tnr_month                InforceContractMonth            ;
-    tnr_nonnegative_double   InforceLeastDeathBenefit        ;
     mce_state                StateOfJurisdiction             ;
     mce_state                PremiumTaxState                 ;
     tnr_nonnegative_double   SalarySpecifiedAmountFactor     ;
@@ -364,7 +381,6 @@ class LMI_SO Input
     tnr_nonnegative_double   SalarySpecifiedAmountOffset     ;
     mce_yes_or_no            HoneymoonEndorsement            ;
     tnr_proportion           PostHoneymoonSpread             ;
-    tnr_nonnegative_double   InforceHoneymoonValue           ;
     numeric_sequence         ExtraMonthlyCustodialFee        ;
     numeric_sequence         ExtraCompensationOnAssets       ;
     numeric_sequence         ExtraCompensationOnPremium      ;
@@ -386,9 +402,7 @@ class LMI_SO Input
     numeric_sequence         FlatExtra                       ;
     numeric_sequence         PolicyLevelFlatExtra            ;
     numeric_sequence         HoneymoonValueSpread            ;
-    numeric_sequence         PremiumHistory                  ;
-    numeric_sequence         SpecamtHistory                  ;
-    numeric_sequence         FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
+    datum_string             FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
     numeric_sequence         CashValueEnhancementRate        ;
     mce_yes_or_no            CreateSupplementalReport        ;
     mce_report_column        SupplementalReportColumn00      ;
@@ -412,7 +426,6 @@ class LMI_SO Input
     mce_dbopt                DeathBenefitOptionFromIssue     ;
     tnr_nonnegative_double   SpecifiedAmountFromRetirement   ;
     tnr_nonnegative_double   SpecifiedAmountFromIssue        ;
-//    mce_                     SpecifiedAmountStrategyFromRetirement; // INPUT !! Obsolete scalar alternative controls.
     mce_sa_strategy          SpecifiedAmountStrategyFromIssue;
     mce_mode                 IndividualPaymentMode           ;
     mce_to_point             IndividualPaymentToAlternative  ;
@@ -468,8 +481,7 @@ class LMI_SO Input
     std::vector<tnr_unrestricted_double> WithdrawalRealized_                ; // tnr_nonnegative_double
     std::vector<tnr_unrestricted_double> FlatExtraRealized_                 ; // tnr_nonnegative_double
     std::vector<tnr_unrestricted_double> HoneymoonValueSpreadRealized_      ; // tnr_interest_rate (new)
-    std::vector<tnr_unrestricted_double> PremiumHistoryRealized_            ; // tnr_unrestricted_double
-    std::vector<tnr_unrestricted_double> SpecamtHistoryRealized_            ; // tnr_nonnegative_double
+    std::vector<tnr_unrestricted_double> AmountsPaidHistoryRealized_        ; // tnr_unrestricted_double
 };
 
 /// Specialization of struct template reconstitutor for this Model

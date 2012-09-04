@@ -30372,3 +30372,351 @@ Improve copy ctor and assignment and equality operators (VS). See:
   mec_state.cpp
 Improve copy ctor and assignment and equality operators.
 
+20120625T0736Z <gchicares@sbcglobal.net> [573]
+
+  stratified_charges.cpp
+Improve copy ctor and assignment operator.
+
+20120627T0908Z <gchicares@sbcglobal.net> [573]
+
+  input.hpp
+Improve concinnity.
+
+20120628T0916Z <gchicares@sbcglobal.net> [573]
+
+  illustration_document.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Simplify, avoiding pointless use of smart pointers.
+
+20120628T1138Z <gchicares@sbcglobal.net> [573]
+
+  illustration_view.cpp
+  mec_xml_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Remove dross; improve concinnity.
+
+20120629T1036Z <gchicares@sbcglobal.net> [573]
+
+  product_data.hpp
+Fix defect introduced 20120618T1835Z: erroneous attribute.
+
+20120726T2039Z <wboutin@massmutual.com> [573]
+
+  illustration_reg.xsl
+Suppress several inforce disclosures.
+
+20120727T0850Z <gchicares@sbcglobal.net> [573]
+
+  version.hpp
+Designate release candidate.
+
+20120727T0857Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Resize country and state fields.
+
+20120727T0937Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Improve layout of term-rider fields.
+
+20120731T1056Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Improve capitalization.
+
+20120731T1223Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Remove a comment that no longer seems meaningful.
+
+20120731T1529Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Don't grow the last in a set of parallel columns.
+
+20120731T1636Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Refine borders on inforce screen.
+
+20120731T2039Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Remove disused input fields.
+
+20120731T2051Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Move no-lapse fields.
+
+20120731T2102Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Shorten labels to keep dialog width reasonable.
+
+20120801T1958Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Add several new inforce fields.
+
+20120801T2004Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Grow rows on inforce screen.
+
+20120801T2100Z <gchicares@sbcglobal.net> [573]
+
+  skin.xrc
+Refine descriptions of inforce fields.
+
+20120802T1619Z <gchicares@sbcglobal.net> [571]
+
+  ihs_acctval.cpp
+  ihs_irc7702.cpp
+  yare_input.hpp
+Correct or remove misleading comments.
+
+20120802T2202Z <gchicares@sbcglobal.net> [571]
+
+  ihs_acctval.cpp
+  test_coding_rules.cpp
+Withdraw a marker that occurred only once.
+
+20120803T0051Z <gchicares@sbcglobal.net> [571]
+
+  input.cpp
+  input.hpp
+  mec_input.cpp
+  mec_input.hpp
+  yare_input.cpp
+  yare_input.hpp
+Rearrange data members.
+
+20120803T0929Z <gchicares@sbcglobal.net> [571]
+
+  cell.rnc
+  cell.xsd
+  input.hpp
+Let tax basis and guideline premiums be negative.
+
+20120803T1102Z <gchicares@sbcglobal.net> [571]
+
+  yare_input.cpp
+Reformat.
+
+20120804T1149Z <gchicares@sbcglobal.net> [571]
+
+  cell.rnc
+  cell.xsd
+  input.cpp
+  input.hpp
+  sample.cns
+  sample.ill
+  yare_input.cpp
+  yare_input.hpp
+Add more inforce data members.
+
+20120805T0936Z <gchicares@sbcglobal.net> [571]
+
+  input.cpp
+  input.hpp
+Remove vestiges of a disused member.
+
+20120806T1059Z <gchicares@sbcglobal.net> [571]
+
+  input_harmonization.cpp
+Enable recently-added inforce controls only when they're relevant.
+
+20120808T2130Z <gchicares@sbcglobal.net> [570]
+
+  accountvalue.cpp
+  cell.rnc
+  cell.xsd
+  custom_io_0.cpp
+  fo_common.xsl
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_realization.cpp
+  input_xml_io.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  main_cgi.cpp
+  sample.cns
+  sample.ill
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+  solve.cpp
+  yare_input.cpp
+  yare_input.hpp
+Rename various input fields.
+
+20120809T0919Z <gchicares@sbcglobal.net> [570]
+
+  main_cgi.cpp
+Reformat.
+
+20120809T0937Z <gchicares@sbcglobal.net> [568]
+
+  main_cgi.cpp
+Revise comments.
+
+20120809T2229Z <gchicares@sbcglobal.net> [568]
+
+  ihs_basicval.cpp
+Treat 'TgtPremMonthlyPolFee' as monthly instead of annual.
+
+20120811T1013Z <gchicares@sbcglobal.net> [568]
+
+  ihs_basicval.cpp
+  input_xml_io.cpp
+Initialize cumulative 7702 'premiums paid' from new input field.
+
+20120812T0919Z <gchicares@sbcglobal.net> [568]
+
+  ihs_acctval.cpp
+Initialize cumulative sales load from new input field.
+
+20120818T1147Z <gchicares@sbcglobal.net> [568]
+
+  diagnostics.sed
+Improve handling of multiple spaces.
+
+20120818T1149Z <gchicares@sbcglobal.net> [567]
+
+  input_test.cpp
+Remove a marker for a defect resolved 20080803T2323Z.
+
+20120820T1711Z <gchicares@sbcglobal.net> [567]
+
+  input.hpp
+  input_realization.cpp
+  input_test.cpp
+  input_xml_io.cpp
+Prepare to expunge 'SpecamtHistory'.
+
+20120821T0957Z <gchicares@sbcglobal.net> [567]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Prepare to expunge 'SpecamtHistory'.
+
+20120821T1307Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+  input.cpp
+  input.hpp
+  input_realization.cpp
+  input_xml_io.cpp
+  sample.cns
+  sample.ill
+  skin.xrc
+  yare_input.cpp
+  yare_input.hpp
+Expunge 'SpecamtHistory'.
+
+20120822T1138Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+  ihs_avmly.cpp
+  input_xml_io.cpp
+Initialize base for specified-amount load from new input field.
+
+20120826T1257Z <gchicares@sbcglobal.net> [567]
+
+  regex_test.cpp
+Create regexen to test input sequences.
+
+20120827T1041Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  input.hpp
+Use a more appropriate type for 'FundAllocations'. It does not conform
+to the input_sequence grammar.
+
+20120827T1433Z <gchicares@sbcglobal.net> [567]
+
+  cell.xsd
+  types.rnc
+  types.xsd
+Validate input sequences.
+
+20120828T2049Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+Mark fields for which inforce extracts should use default values.
+
+20120831T1057Z <gchicares@sbcglobal.net> [567]
+
+  input.cpp
+  input.hpp
+Change type of 'InforceDataSource'.
+
+20120831T1104Z <gchicares@sbcglobal.net> [567]
+
+  input.cpp
+Improve default for 'MaximumNaar'.
+
+20120831T1149Z <gchicares@sbcglobal.net> [567]
+
+  sample.cns
+  sample.ill
+Update specimen input files to reflect today's earlier changes.
+
+20120831T1157Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+Update xml schemata to reflect today's earlier changes.
+
+20120831T1216Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+  types.rnc
+  types.xsd
+Improve documentation.
+
+20120831T1315Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+  types.rnc
+  types.xsd
+Specify defaults as needed.
+
+20120831T1745Z <gchicares@sbcglobal.net> [567]
+
+  multiple_cell_document.rnc
+  multiple_cell_document.xsd
+Specify census defaults.
+
+20120903T0954Z <gchicares@sbcglobal.net> [567]
+
+  workhorse.make
+Guard against a perilous command-line override.
+
+20120903T1407Z <gchicares@sbcglobal.net> [567]
+
+  workhorse.make
+Tune gcc.
+

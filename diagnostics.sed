@@ -73,10 +73,10 @@
 /^C++ prelinker:.*no longer needed in [^ ]*o$/d
 /^C++ prelinker: executing:/d
   # Delete expected output from borland build.
-/^[^ ]*bcc_cc --accept/d
+/^[^ ]*bcc_cc  *--accept/d
 /^Borland C++/d
 /^Loaded pre-compiled headers\.$/d
-/^[^ ]*bcc_ld --accept/d
+/^[^ ]*bcc_ld  *--accept/d
 /^Turbo Incremental Link/d
 /^\\[/A-Za-z0-9_]*.cpp:$/d
   # Delete multiple blank lines.

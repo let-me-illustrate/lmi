@@ -21,6 +21,14 @@
 
 # $Id$
 
+# Inforce data from external systems must include 'case_default' and
+# 'class_defaults'; but those elements wouldn't be expected to have
+# any analogue on an administration system, so it seems best to copy
+# them from this document:
+#   http://svn.savannah.nongnu.org/viewvc/*checkout*/lmi/trunk/sample.cns?revision=5556&root=lmi
+# overwriting its 'particular_cells' with the individual records of
+# all contracts in the group.
+
 start = element multiple_cell_document
     {attribute version {"1"}
 

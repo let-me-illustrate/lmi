@@ -225,7 +225,7 @@ char never[] = "lord";
 /// strings is excluded from the timing comparison because it can be
 /// amortized over a large number of regex searches per file.
 
-int test_main(int, char*[])
+void test_psalm_37()
 {
     lines = vectorize(original);
     typedef std::vector<std::string>::iterator vsi;
@@ -277,6 +277,158 @@ int test_main(int, char*[])
     std::cout << "  never 2:   " << TimeAnAliquot(mete<2, never>) << '\n';
     std::cout << "  never 3:   " << TimeAnAliquot(mete<3, never>) << '\n';
     std::cout << '\n';
+}
+
+/// Test regexen for input-sequence validation.
+///
+/// Motivation: to validate data from external systems. To facilitate
+/// maintenance of xml schemata, a regex is constructed and displayed
+/// for every lmi sequence type.
+///
+/// These regular expressions are overly permissive by design. The
+/// intention is to accept anything lmi's input-sequence parser does
+/// and should, while rejecting all reasonably anticipated errors.
+
+void test_input_sequence_regex()
+{
+    // A crude regex for a floating-point number, which defectively
+    // accepts '.'.
+    std::string const N("\\-?[0-9.]+");
+    // A set of keywords. These happen to be the ones permitted for
+    // 'specamt_sequence'.
+    std::string       K("maximum|target|sevenpay|glp|gsp|corridor|salary");
+    // A datum: allow both numbers and keywords for these tests,
+    // because that's the most general case.
+    // Compactly: "(N|K)"
+    std::string       X("(" + N + "|" + K + ")");
+    // An optional subexpression indicating the durations for which a
+    // datum is used. It begins with an obligatory ' ' or ',' (with
+    // optional extra spaces) that separates it from the preceding
+    // datum. Following that prefix, exactly one of these occurs:
+    //  - an integer, optionally prefixed with '@' or '#'; or
+    //  - a keyword: 'retirement' and 'maturity' are allowed, but for
+    //    simplicity any string of lowercase alphabetic characters is
+    //    accepted (designated '[a-z]' for brevity, because xml schema
+    //    languages don't support POSIX [:lower:]); or
+    //  - an interval expression beginning with '[' or '(' and ending
+    //    with ']' or ')', with anything but a semicolon in between
+    //    (the actual grammar is of course more restrictive, but need
+    //    not be described here).
+    std::string const Y("(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\\[\\(][^;]+[\\]\\)]))");
+    // The regex to be tested. It can consist solely of zero or more
+    // spaces. Otherwise, it consists of one or more data-duration
+    // pairs ('X' and an optional 'Y' as above), with an obligatory
+    // semicolon between successive pairs. Leading and trailing blanks
+    // are permitted, as is an optional semicolon after the last pair.
+    // Compactly: " *| *XY? *(; *XY? *)*;? *"
+    std::string       R(" *| *" + X + Y + "? *(; *" + X + Y + "? *)*;? *");
+
+    // This is intended to be useful with xml schema languages, which
+    // implicitly anchor the entire regex, so '^' and '$' aren't used.
+    boost::regex const r(R);
+
+    // Tests that are designed to succeed.
+
+    // Simple scalars.
+    BOOST_TEST( boost::regex_match("1234"                                                       , r));
+    BOOST_TEST( boost::regex_match("glp"                                                        , r));
+    // Semicolon-delimited values, as expected in inforce extracts.
+    BOOST_TEST( boost::regex_match("123;456;0"                                                  , r));
+    // Same, with whitespace.
+    BOOST_TEST( boost::regex_match("123; 456; 0"                                                , r));
+    BOOST_TEST( boost::regex_match("123 ;456 ;0"                                                , r));
+    BOOST_TEST( boost::regex_match("123;  456;  0"                                              , r));
+    BOOST_TEST( boost::regex_match("123  ;456  ;0"                                              , r));
+    BOOST_TEST( boost::regex_match(" 123  ;  456  ;  0 "                                        , r));
+    BOOST_TEST( boost::regex_match("  123  ;  456  ;  0  "                                      , r));
+    // Same, with optional terminal semicolon.
+    BOOST_TEST( boost::regex_match("  123  ;  456  ;  0  ;"                                     , r));
+    BOOST_TEST( boost::regex_match("  123  ;  456  ;  0  ;  "                                   , r));
+    // Single scalar with terminal semicolon and various whitespace.
+    BOOST_TEST( boost::regex_match("123;"                                                       , r));
+    BOOST_TEST( boost::regex_match("123 ;"                                                      , r));
+    BOOST_TEST( boost::regex_match("123; "                                                      , r));
+    BOOST_TEST( boost::regex_match(" 123 ; "                                                    , r));
+    // Negatives (e.g., "negative" loans representing repayments).
+    BOOST_TEST( boost::regex_match("-987; -654"                                                 , r));
+    // Decimals.
+    BOOST_TEST( boost::regex_match("0.;.0;0.0;1234.5678"                                        , r));
+    // Decimals, along with '#' and '@'.
+    BOOST_TEST( boost::regex_match("0.,2;.0,#3;0.0,@75;1234.5678"                               , r));
+    // Same, with whitespace.
+    BOOST_TEST( boost::regex_match(" 0. , 2 ; .0 , # 3 ; 0.0 , @ 75 ; 1234.5678 "               , r));
+    // No numbers--only keywords.
+    BOOST_TEST( boost::regex_match("salary,retirement;corridor,maturity"                        , r));
+    // Same, with whitespace.
+    BOOST_TEST( boost::regex_match("  salary  ,  retirement;  corridor  ,  maturity"            , r));
+    BOOST_TEST( boost::regex_match("  salary  ,  retirement;  corridor  ,  maturity  "          , r));
+    BOOST_TEST( boost::regex_match("  salary  ,  retirement  ;  corridor  ,  maturity"          , r));
+    BOOST_TEST( boost::regex_match("  salary  ,  retirement  ;  corridor  ,  maturity  "        , r));
+    // Empty except for zero or more blanks.
+    BOOST_TEST( boost::regex_match(""                                                           , r));
+    BOOST_TEST( boost::regex_match(" "                                                          , r));
+    BOOST_TEST( boost::regex_match("  "                                                         , r));
+    // Interval notation.
+    BOOST_TEST( boost::regex_match("1 [2,3);4 (5,6]"                                            , r));
+    // User-manual examples. See: http://www.nongnu.org/lmi/sequence_input.html
+    BOOST_TEST( boost::regex_match("sevenpay 7; 250000 retirement; 100000 #10; 75000 @95; 50000", r));
+    BOOST_TEST( boost::regex_match("100000; 110000; 120000; 130000; 140000; 150000"             , r));
+    BOOST_TEST( boost::regex_match("target; maximum"                                            , r)); // [Modified example.]
+    BOOST_TEST( boost::regex_match("10000 20; 0"                                                , r));
+    BOOST_TEST( boost::regex_match("10000 10; 5000 15; 0"                                       , r));
+    BOOST_TEST( boost::regex_match("10000 @70; 0"                                               , r));
+    BOOST_TEST( boost::regex_match("10000 retirement; 0"                                        , r));
+    BOOST_TEST( boost::regex_match("0 retirement; 5000"                                         , r));
+    BOOST_TEST( boost::regex_match("0 retirement; 5000 maturity"                                , r));
+    BOOST_TEST( boost::regex_match("0 retirement; 5000 #10; 0"                                  , r));
+    BOOST_TEST( boost::regex_match("0,[0,retirement);10000,[retirement,#10);0"                  , r));
+
+    // Tests that are designed to fail.
+
+    // Naked semicolon.
+    BOOST_TEST(!boost::regex_match(";"                                                          , r));
+    BOOST_TEST(!boost::regex_match(" ; "                                                        , r));
+    // Missing required semicolon.
+    BOOST_TEST(!boost::regex_match("7 24 25"                                                    , r));
+    BOOST_TEST(!boost::regex_match("7,24,25"                                                    , r));
+    BOOST_TEST(!boost::regex_match("7, 24, 25"                                                  , r));
+    BOOST_TEST(!boost::regex_match("7 , 24 , 25"                                                , r));
+    // Extraneous commas.
+    BOOST_TEST(!boost::regex_match(",1"                                                         , r));
+    BOOST_TEST(!boost::regex_match("1,"                                                         , r));
+    BOOST_TEST(!boost::regex_match("1,2,"                                                       , r));
+    BOOST_TEST(!boost::regex_match("1,,2"                                                       , r));
+    // Impermissible character.
+    BOOST_TEST(!boost::regex_match("%"                                                          , r));
+    // Uppercase in keywords.
+    BOOST_TEST(!boost::regex_match("Glp"                                                        , r));
+    BOOST_TEST(!boost::regex_match("GLP"                                                        , r));
+    // Misppellings.
+    BOOST_TEST(!boost::regex_match("gdp"                                                        , r));
+    BOOST_TEST(!boost::regex_match("glpp"                                                       , r));
+    BOOST_TEST(!boost::regex_match("gglp"                                                       , r));
+
+    X = "(\\-?[0-9.]+)";
+    R = " *| *" + X + Y + "? *(; *" + X + Y + "? *)*;? *";
+    std::cout << "numeric_sequence = xsd:string {pattern = \"" << R << "\"}" << std::endl;
+    X = "(\\-?[0-9.]+|minimum|target|sevenpay|glp|gsp|corridor|table)";
+    R = " *| *" + X + Y + "? *(; *" + X + Y + "? *)*;? *";
+    std::cout << "payment_sequence = xsd:string {pattern = \"" << R << "\"}" << std::endl;
+    X = "(annual|semiannual|quarterly|monthly)";
+    R = " *| *" + X + Y + "? *(; *" + X + Y + "? *)*;? *";
+    std::cout << "mode_sequence    = xsd:string {pattern = \"" << R << "\"}" << std::endl;
+    X = "(\\-?[0-9.]+|maximum|target|sevenpay|glp|gsp|corridor|salary)";
+    R = " *| *" + X + Y + "? *(; *" + X + Y + "? *)*;? *";
+    std::cout << "specamt_sequence = xsd:string {pattern = \"" << R << "\"}" << std::endl;
+    X = "(a|b|rop)";
+    R = " *| *" + X + Y + "? *(; *" + X + Y + "? *)*;? *";
+    std::cout << "dbo_sequence     = xsd:string {pattern = \"" << R << "\"}" << std::endl;
+}
+
+int test_main(int, char*[])
+{
+    test_psalm_37();
+    test_input_sequence_regex();
 
     return 0;
 }

@@ -241,7 +241,7 @@ double AccountValue::Solve()
     That = this;
     ThatSolveTargetCSV  = yare_input_.SolveTargetCashSurrenderValue;
     ThatSolveTarget     = yare_input_.SolveTarget;
-    ThatSolveBasis      = yare_input_.SolveBasis;
+    ThatSolveBasis      = yare_input_.SolveExpenseGeneralAccountBasis;
     only_set_values = !Solving;
 
     // We mustn't solve for a target at a duration beyond the end.

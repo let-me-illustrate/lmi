@@ -34,23 +34,24 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
+#include "handle_exceptions.hpp"
 #include "input_seq_helpers.hpp"
-#include "miscellany.hpp"     // minmax<T>()
+#include "miscellany.hpp"               // minmax<T>()
 #include "round_to.hpp"
-#include "stl_extensions.hpp" // nonstd::is_sorted()
+#include "stl_extensions.hpp"           // nonstd::is_sorted()
 #include "value_cast.hpp"
 
 #include <boost/bind.hpp>
 
 #include <algorithm>
 #include <sstream>
-#include <utility>            // std::pair
+#include <utility>                      // std::pair
 
 //============================================================================
 // Realize sequence strings with only numeric values.
 template<typename T>
 std::string realize_sequence_string
-    (Input               & input
+    (Input          const& input
     ,std::vector<T>      & v
     ,datum_sequence const& sequence_string
     ,int                   index_origin = 0
@@ -73,7 +74,7 @@ std::string realize_sequence_string
 // Realize sequence strings with only enumerative-string values.
 template<typename T>
 std::string realize_sequence_string
-    (Input                  & input
+    (Input             const& input
     ,std::vector<T>         & v
     ,datum_sequence    const& sequence_string
     ,detail::stringmap const& keyword_dictionary
@@ -106,7 +107,7 @@ std::string realize_sequence_string
 // Realize sequence strings with both numeric and enumerative-string values.
 template<typename Numeric, typename Enumerative>
 std::string realize_sequence_string
-    (Input                    & input
+    (Input               const& input
     ,std::vector<Numeric>     & vn
     ,std::vector<Enumerative> & ve
     ,datum_sequence      const& sequence_string
@@ -232,8 +233,7 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
     s.push_back(RealizeWithdrawal                 ());
     s.push_back(RealizeFlatExtra                  ());
     s.push_back(RealizeHoneymoonValueSpread       ());
-    s.push_back(RealizePremiumHistory             ());
-    s.push_back(RealizeSpecamtHistory             ());
+    s.push_back(RealizeAmountsPaidHistory         ());
 
     if(report_errors)
         {
@@ -886,23 +886,93 @@ std::string Input::RealizeHoneymoonValueSpread()
 }
 
 //============================================================================
-std::string Input::RealizePremiumHistory()
+std::string Input::RealizeAmountsPaidHistory()
 {
     return realize_sequence_string
         (*this
-        ,PremiumHistoryRealized_
-        ,PremiumHistory
+        ,AmountsPaidHistoryRealized_
+        ,Inforce7702AAmountsPaidHistory
         );
 }
 
-//============================================================================
-std::string Input::RealizeSpecamtHistory()
+/// Determine whether specamt must be overwritten with history.
+///
+/// 'SpecifiedAmount' gives values for all policy years since issue,
+/// so 'SpecamtHistory' ought never to been created. Given that it did
+/// exist, it ought to have included only a subset of the values given
+/// by 'SpecifiedAmount'; but some extracts provide only a scalar for
+/// 'SpecifiedAmount', which must therefore be overwritten with the
+/// contents of the obsolete history entity. A warning is given if
+/// this backward-compatibility measure would lose any additional
+/// information given in 'SpecifiedAmount'--e.g., if a user saved an
+/// extract after modifying it to change future specamt without
+/// copying history into 'SpecifiedAmount'.
+///
+/// One of these four values is returned:
+///  0 'SpecifiedAmount' already matches 'SpecamtHistory' through the
+///    inforce as-of date, so 'SpecamtHistory' can be discarded.
+///  1 'SpecifiedAmount' matches 'SpecamtHistory' for future durations
+///    but not for historical durations, so 'SpecifiedAmount' should
+///    be overwritten with 'SpecamtHistory'.
+///  2 Otherwise, they're inconsistent, so a warning is displayed. The
+///    warning may also be displayed when 'SpecifiedAmount' contains
+///    a keyword, in which case consistency is either difficult or
+///    impossible to determine.
+///  3 An unexpected exception occurred in parsing an argument string;
+///    it's trapped, and passed to report_exception().
+/// As the function's name implies, it's used as though it returned a
+/// boolean, but returning an int facilitates unit testing, as does
+/// the last argument.
+
+int Input::must_overwrite_specamt_with_obsolete_history
+    (std::string specamt
+    ,std::string history
+    ,bool        hide_errors
+    ) const
 {
-    return realize_sequence_string
-        (*this
-        ,SpecamtHistoryRealized_
-        ,SpecamtHistory
-        );
+    std::vector<tnr_unrestricted_double> u;
+    std::vector<tnr_unrestricted_double> v;
+    try
+        {
+        realize_sequence_string(*this, u, numeric_sequence(specamt));
+        realize_sequence_string(*this, v, numeric_sequence(history));
+        }
+    catch(...)
+        {
+        report_exception();
+        return 3;
+        }
+
+    bool history_differs = false;
+    bool future_differs  = false;
+    int const years_of_history = InforceYear.value() + (0 != InforceMonth.value());
+    for(int j = 0; j < years_of_history; ++j)
+        {
+        if(u[j] != v[j])
+            {
+            history_differs = true;
+            break;
+            }
+        }
+    for(int j = years_of_history; j < years_to_maturity(); ++j)
+        {
+        if(u[j] != v[j])
+            {
+            future_differs = true;
+            break;
+            }
+        }
+    if(history_differs && future_differs && !hide_errors)
+        {
+        warning()
+            << "Possible conflict between specified amount and history."
+            << " Merge them manually into the specified-amount field."
+            << "\nSpecified amount: " << specamt
+            << "\nHistory: " << history
+            << LMI_FLUSH
+            ;
+        }
+    return history_differs + (history_differs && future_differs);
 }
 
 // TODO ?? More attention could be paid to term-rider rounding.

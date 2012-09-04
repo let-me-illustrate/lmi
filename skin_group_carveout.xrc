@@ -505,13 +505,13 @@
                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
                             <object class="wxStaticText">
-                                <label>Franchise</label>
+                                <label>Master contract</label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxBOTTOM</flag>
-                             <object class="wxTextCtrl" name="Franchise">
-                                 <help>Producer franchise identifier</help>
+                             <object class="wxTextCtrl" name="MasterContractNumber">
+                                 <help>Group master contract number</help>
                                 <size>50,-1</size>
                             </object>
                         </object>
@@ -519,13 +519,13 @@
                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
                             <object class="wxStaticText">
-                                <label>Policy number</label>
+                                <label>Contract number</label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM</flag>
                             <border>2</border>
-                            <object class="wxTextCtrl" name="PolicyNumber">
+                            <object class="wxTextCtrl" name="ContractNumber">
                                 <help>Contract number</help>
                                 <size>50,-1</size>
                             </object>
@@ -660,7 +660,7 @@
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxBOTTOM</flag>
                             <border>2</border>
-                            <object class="wxTextCtrl" name="InforceCumulativePayments">
+                            <object class="wxTextCtrl" name="InforceCumulativeNoLapsePayments">
                                 <help>Cumulative payments since issue for no-lapse test</help>
                                 <size>50,-1</size>
                             </object>
@@ -890,7 +890,7 @@
                 <object class="sizeritem">
                     <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
-                    <object class="InputSequenceEntry" name="PremiumHistory">
+                    <object class="InputSequenceEntry" name="Inforce7702AAmountsPaidHistory">
                         <title>"Amounts paid" history</title>
                         <help>"Amounts paid" for each year since beginning of last seven-pay period--zero if not in a seven-pay period</help>
                     </object>
@@ -1252,7 +1252,7 @@
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_TOP|wxALL</flag>
                             <border>4</border>
-                            <object class="wxRadioBox" name="SolveBasis">
+                            <object class="wxRadioBox" name="SolveExpenseGeneralAccountBasis">
                                 <help>Expense and mortality basis for solve</help>
                                 <label>Basis</label>
                                 <style>wxRA_SPECIFY_COLS</style>
@@ -1502,7 +1502,7 @@
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALL</flag>
                                     <border>2</border>
-                                    <object class="wxTextCtrl" name="External1035ExchangeBasis">
+                                    <object class="wxTextCtrl" name="External1035ExchangeTaxBasis">
                                         <help>Tax basis for external 1035 exchange</help>
                                         <size>10,-1</size>
                                     </object>
@@ -1510,7 +1510,7 @@
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALL</flag>
                                     <border>2</border>
-                                    <object class="wxTextCtrl" name="Internal1035ExchangeBasis">
+                                    <object class="wxTextCtrl" name="Internal1035ExchangeTaxBasis">
                                         <help>Tax basis for internal 1035 exchange</help>
                                         <size>10,-1</size>
                                     </object>

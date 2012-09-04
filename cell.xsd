@@ -28,6 +28,10 @@
     This schema is meant not for standalone use, but rather for
     inclusion from other schemata.
   -->
+  <!--
+    Inforce data from external systems should use default values for
+    elements marked with an asterisk.
+  -->
   <xs:complexType name="cell_element">
     <xs:sequence>
       <xs:element ref="cell"/>
@@ -54,6 +58,7 @@
         <xs:element ref="ChildRiderAmount"/>
         <xs:element ref="City"/>
         <xs:element ref="Comments"/>
+        <xs:element ref="ContractNumber"/>
         <xs:element ref="CorporationAddress"/>
         <xs:element ref="CorporationCity"/>
         <xs:element ref="CorporationName"/>
@@ -80,13 +85,12 @@
         <xs:element ref="ExperienceRatingInitialKFactor"/>
         <xs:element ref="ExperienceReserveRate"/>
         <xs:element ref="External1035ExchangeAmount"/>
-        <xs:element ref="External1035ExchangeBasis"/>
         <xs:element ref="External1035ExchangeFromMec"/>
+        <xs:element ref="External1035ExchangeTaxBasis"/>
         <xs:element ref="ExtraCompensationOnAssets"/>
         <xs:element ref="ExtraCompensationOnPremium"/>
         <xs:element ref="ExtraMonthlyCustodialFee"/>
         <xs:element ref="FlatExtra"/>
-        <xs:element ref="Franchise"/>
         <xs:element ref="FundAllocations"/>
         <xs:element ref="FundChoiceType"/>
         <xs:element ref="Gender"/>
@@ -102,13 +106,19 @@
         <xs:element ref="IndividualPaymentToAge"/>
         <xs:element ref="IndividualPaymentToAlternative"/>
         <xs:element ref="IndividualPaymentToDuration"/>
+        <xs:element ref="Inforce7702AAmountsPaidHistory"/>
+        <xs:element ref="InforceAnnualTargetPremium"/>
         <xs:element ref="InforceAsOfDate"/>
         <xs:element ref="InforceAvBeforeLastMc"/>
         <xs:element ref="InforceContractMonth"/>
         <xs:element ref="InforceContractYear"/>
         <xs:element ref="InforceCumulativeGlp"/>
+        <xs:element ref="InforceCumulativeGptPremiumsPaid"/>
+        <xs:element ref="InforceCumulativeNoLapsePayments"/>
         <xs:element ref="InforceCumulativeNoLapsePremium"/>
-        <xs:element ref="InforceCumulativePayments"/>
+        <xs:element ref="InforceCumulativeRopPayments"/>
+        <xs:element ref="InforceCumulativeSalesLoad"/>
+        <xs:element ref="InforceDataSource"/>
         <xs:element ref="InforceDcv"/>
         <xs:element ref="InforceGeneralAccountValue"/>
         <xs:element ref="InforceGlp"/>
@@ -117,22 +127,27 @@
         <xs:element ref="InforceIsMec"/>
         <xs:element ref="InforceLeastDeathBenefit"/>
         <xs:element ref="InforceMonth"/>
+        <xs:element ref="InforceMonthlyNoLapsePremium"/>
         <xs:element ref="InforceNetExperienceReserve"/>
+        <xs:element ref="InforceNoLapseActive"/>
         <xs:element ref="InforcePreferredLoanBalance"/>
         <xs:element ref="InforcePreferredLoanValue"/>
         <xs:element ref="InforceRegularLoanBalance"/>
         <xs:element ref="InforceRegularLoanValue"/>
         <xs:element ref="InforceSeparateAccountValue"/>
         <xs:element ref="InforceSevenPayPremium"/>
+        <xs:element ref="InforceSpecAmtLoadBase"/>
         <xs:element ref="InforceTaxBasis"/>
         <xs:element ref="InforceYear"/>
+        <xs:element ref="InforceYtdGrossPremium"/>
         <xs:element ref="InforceYtdNetCoiCharge"/>
+        <xs:element ref="InforceYtdTaxablePremium"/>
         <xs:element ref="InputFundManagementFee"/>
         <xs:element ref="InsuredName"/>
         <xs:element ref="InsuredPremiumTableFactor"/>
         <xs:element ref="Internal1035ExchangeAmount"/>
-        <xs:element ref="Internal1035ExchangeBasis"/>
         <xs:element ref="Internal1035ExchangeFromMec"/>
+        <xs:element ref="Internal1035ExchangeTaxBasis"/>
         <xs:element ref="IssueAge"/>
         <xs:element ref="LastCoiReentryDate"/>
         <xs:element ref="LastMaterialChangeDate"/>
@@ -146,6 +161,7 @@
         <xs:element ref="LoanToAlternative"/>
         <xs:element ref="LoanToDuration"/>
         <xs:element ref="MaleProportion"/>
+        <xs:element ref="MasterContractNumber"/>
         <xs:element ref="MaximumNaar"/>
         <xs:element ref="NewLoan"/>
         <xs:element ref="NonsmokerProportion"/>
@@ -156,9 +172,7 @@
         <xs:element ref="PartialMortalityMultiplier"/>
         <xs:element ref="Payment"/>
         <xs:element ref="PaymentMode"/>
-        <xs:element ref="PolicyNumber"/>
         <xs:element ref="PostHoneymoonSpread"/>
-        <xs:element ref="PremiumHistory"/>
         <xs:element ref="PremiumTaxState"/>
         <xs:element ref="ProductName"/>
         <xs:element ref="ProjectedSalary"/>
@@ -171,11 +185,11 @@
         <xs:element ref="SeparateAccountRate"/>
         <xs:element ref="SeparateAccountRateType"/>
         <xs:element ref="Smoking"/>
-        <xs:element ref="SolveBasis"/>
         <xs:element ref="SolveBeginTime"/>
         <xs:element ref="SolveBeginYear"/>
         <xs:element ref="SolveEndTime"/>
         <xs:element ref="SolveEndYear"/>
+        <xs:element ref="SolveExpenseGeneralAccountBasis"/>
         <xs:element ref="SolveFromWhich"/>
         <xs:element ref="SolveSeparateAccountBasis"/>
         <xs:element ref="SolveTarget"/>
@@ -185,7 +199,6 @@
         <xs:element ref="SolveTgtAtWhich"/>
         <xs:element ref="SolveToWhich"/>
         <xs:element ref="SolveType"/>
-        <xs:element ref="SpecamtHistory"/>
         <xs:element ref="SpecifiedAmount"/>
         <xs:element ref="SpecifiedAmountFromIssue"/>
         <xs:element ref="SpecifiedAmountFromRetirement"/>
@@ -239,7 +252,7 @@
       <xs:attribute name="version" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="6"/>
+            <xs:enumeration value="7"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -292,12 +305,12 @@
   </xs:element>
   <xs:element name="AmortizePremiumLoad" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Amortize premium load (occasionally used for BOLI).</xs:documentation>
+      <xs:documentation>* Amortize premium load (occasionally used for BOLI).</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="AvoidMecMethod" type="mec_avoid_method">
     <xs:annotation>
-      <xs:documentation>Special logic, if any, to avoid a MEC.</xs:documentation>
+      <xs:documentation>* Special logic, if any, to avoid a MEC.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="BlendGender" type="yes_or_no">
@@ -310,9 +323,10 @@
       <xs:documentation>Custom-blend rates by smoking.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CashValueEnhancementRate" type="xs:string">
+  <xs:element name="CashValueEnhancementRate" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>Negative surrender charge as proportion of total account value.</xs:documentation>
+      <xs:documentation>Negative surrender charge as proportion of total account
+value. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="ChildRider" type="yes_or_no">
@@ -332,7 +346,13 @@
   </xs:element>
   <xs:element name="Comments" type="xs:string">
     <xs:annotation>
-      <xs:documentation>Free-form comments.</xs:documentation>
+      <xs:documentation>* Free-form comments.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="ContractNumber" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Contract number: a unique identifier, which, although usually
+called a "number", is often not purely numeric.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="CorporationAddress" type="xs:string">
@@ -350,19 +370,19 @@
       <xs:documentation>Corporation's name.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CorporationPayment" type="xs:string">
+  <xs:element name="CorporationPayment" type="payment_sequence">
     <xs:annotation>
-      <xs:documentation>Corporation's planned premium.</xs:documentation>
+      <xs:documentation>Corporation's planned premium. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CorporationPaymentMode" type="xs:string">
+  <xs:element name="CorporationPaymentMode" type="mode_sequence">
     <xs:annotation>
-      <xs:documentation>Corporation's premium mode.</xs:documentation>
+      <xs:documentation>Corporation's premium mode. Default: 'annual'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="CorporationPremiumTableFactor" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Corporation's tabular-premium multiplier.</xs:documentation>
+      <xs:documentation>* Corporation's tabular-premium multiplier. Default: '1'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="CorporationState" type="state">
@@ -370,9 +390,9 @@
       <xs:documentation>Corporation's address: state.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CorporationTaxBracket" type="xs:string">
+  <xs:element name="CorporationTaxBracket" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>Corporation's tax bracket.</xs:documentation>
+      <xs:documentation>* Corporation's tax bracket. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="CorporationZipCode" type="xs:string">
@@ -382,22 +402,22 @@
   </xs:element>
   <xs:element name="Country" type="country">
     <xs:annotation>
-      <xs:documentation>Insured's address: country.</xs:documentation>
+      <xs:documentation>Insured's address: country. Default: 'US'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="CountryCoiMultiplier" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>COI multiplier for country.</xs:documentation>
+      <xs:documentation>COI multiplier for country. Default: '1'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="CreateSupplementalReport" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: elected or not.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: elected or not.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="CurrentCoiMultiplier" type="xs:string">
+  <xs:element name="CurrentCoiMultiplier" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>Multiplier for current COI rates.</xs:documentation>
+      <xs:documentation>Multiplier for current COI rates. Default: '1'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="DateOfBirth" type="calendar_date_int">
@@ -405,19 +425,19 @@
       <xs:documentation>Insured's date of birth.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="DeathBenefitOption" type="xs:string">
+  <xs:element name="DeathBenefitOption" type="dbo_sequence">
     <xs:annotation>
-      <xs:documentation>Death benefit option.</xs:documentation>
+      <xs:documentation>Death benefit option. Default: 'a'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="DeathBenefitOptionFromIssue" type="dbopt">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="DeathBenefitOptionFromRetirement" type="dbopt">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="DefinitionOfLifeInsurance" type="defn_life_ins">
@@ -427,12 +447,13 @@
   </xs:element>
   <xs:element name="DefinitionOfMaterialChange" type="defn_material_change">
     <xs:annotation>
-      <xs:documentation>7702A definition of material change.</xs:documentation>
+      <xs:documentation>* 7702A definition of material change. Default:
+'GPT adjustment event' if GPT; else 'Unnecessary premium'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="Dumpin" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Dump-in: i.e., first-year-only extra premium other than a 1035 exchange.</xs:documentation>
+      <xs:documentation>* Dump-in: i.e., first-year-only extra premium other than a 1035 exchange.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="EffectiveDate" type="calendar_date_int">
@@ -442,19 +463,20 @@
   </xs:element>
   <xs:element name="EffectiveDateToday" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Use today's date as effective date: handy for new business.</xs:documentation>
+      <xs:documentation>* Use today's date as effective date: handy for new business.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="EmployeeClass" type="xs:string">
     <xs:annotation>
-      <xs:documentation>Employee class, used for grouping individuals in order to make
-input easier. E.g., specified amount for 'partners' might be
-two times salary, while 'all others' get a flat $50K.</xs:documentation>
+      <xs:documentation>* Employee class, used for grouping individuals in order to
+make input easier. E.g., specified amount for 'partners' might
+be two times salary, while 'all others' get a flat $50K.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="ExperienceRatingInitialKFactor" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Factor for amortizing mortality profit into future charges.</xs:documentation>
+      <xs:documentation>Factor for amortizing mortality profit into future charges.
+Default: '1'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="ExperienceReserveRate" type="proportion_double">
@@ -464,59 +486,55 @@ two times salary, while 'all others' get a flat $50K.</xs:documentation>
   </xs:element>
   <xs:element name="External1035ExchangeAmount" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Amount of 1035 exchange from a different insurer.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="External1035ExchangeBasis" type="nonnegative_double">
-    <xs:annotation>
-      <xs:documentation>Tax basis of 1035 exchange from a different insurer.</xs:documentation>
+      <xs:documentation>* Amount of 1035 exchange from a different insurer.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="External1035ExchangeFromMec" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>MEC status of 1035 exchange from a different insurer.</xs:documentation>
+      <xs:documentation>* MEC status of 1035 exchange from a different insurer.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="ExtraCompensationOnAssets" type="xs:string">
+  <xs:element name="External1035ExchangeTaxBasis" type="xs:double">
+    <xs:annotation>
+      <xs:documentation>* Tax basis of 1035 exchange from a different insurer.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="ExtraCompensationOnAssets" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Extra charge on separate-account assets. The motivation is to
 let end users add a negotiated asset trailer without changing
 the product database, but the field may be used for any extra
-charge in the nature of M&amp;E.</xs:documentation>
+charge in the nature of M&amp;E. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="ExtraCompensationOnPremium" type="xs:string">
+  <xs:element name="ExtraCompensationOnPremium" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Extra premium load. The motivation is to let end users add a
 negotiated commission without changing the product database,
-but the field may be used for any extra load on premium.</xs:documentation>
+but the field may be used for any extra load on premium.
+Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="ExtraMonthlyCustodialFee" type="xs:string">
+  <xs:element name="ExtraMonthlyCustodialFee" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Extra policy fee. The motivation is to let end users add an
 additional monthly custodial fee for a custom fund, but the
-field may be used for any extra monthly fee.</xs:documentation>
+field may be used for any extra monthly fee. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="FlatExtra" type="xs:string">
+  <xs:element name="FlatExtra" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>Annual flat extra per thousand of specified amount.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="Franchise" type="xs:string">
-    <xs:annotation>
-      <xs:documentation>Agency or brokerage code.</xs:documentation>
+      <xs:documentation>Annual flat extra per thousand of specified amount. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="FundAllocations" type="xs:string">
     <xs:annotation>
-      <xs:documentation>As yet unused: cf. 'fund_input_method'.</xs:documentation>
+      <xs:documentation>* As yet unused.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="FundChoiceType" type="fund_input_method">
     <xs:annotation>
-      <xs:documentation>Fund-allocation override: cf. 'fund_input_method'.</xs:documentation>
+      <xs:documentation>* Fund-allocation override.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="Gender" type="gender">
@@ -524,14 +542,16 @@ field may be used for any extra monthly fee.</xs:documentation>
       <xs:documentation>Insured's gender for insurance purposes.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="GeneralAccountRate" type="xs:string">
+  <xs:element name="GeneralAccountRate" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>General-account interest rate as a decimal: e.g., '0.03' for 3%.</xs:documentation>
+      <xs:documentation>General-account interest rate as a decimal: e.g., '.03' for
+3%. Default: actual credited rate; '0' for products with no
+general-account option.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="GeneralAccountRateType" type="gen_acct_rate_type">
     <xs:annotation>
-      <xs:documentation>General-account rate: before or after spread.</xs:documentation>
+      <xs:documentation>* General-account rate: before or after spread.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="GroupUnderwritingType" type="uw_basis">
@@ -547,47 +567,59 @@ setting a minimum CSV equal to gross premium accumulated at a
 special interest rate, with no monthly deductions taken.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="HoneymoonValueSpread" type="xs:string">
+  <xs:element name="HoneymoonValueSpread" type="numeric_sequence">
     <xs:annotation>
       <xs:documentation>Interest spread for honeymoon value, which grows at the net
-general account rate less this decrement.</xs:documentation>
+general account rate less this decrement. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IncludeInComposite" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Include this life in composite: default = 'Yes'. This field
-permits excluding certain lives from a composite without
-deleting them from a census.</xs:documentation>
+      <xs:documentation>* Include this life in composite: permits excluding certain
+lives from a composite without deleting them from a census.
+Default: 'Yes'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IndividualPaymentAmount" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IndividualPaymentMode" type="mode">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IndividualPaymentStrategy" type="pmt_strategy">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IndividualPaymentToAge" type="age_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IndividualPaymentToAlternative" type="to_point">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IndividualPaymentToDuration" type="duration_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="Inforce7702AAmountsPaidHistory" type="numeric_sequence">
+    <xs:annotation>
+      <xs:documentation>7702A "amounts paid" for each "contract year" since beginning
+of most recent seven-pay period. Default: '0' if not in a
+seven-pay period.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceAnnualTargetPremium" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Inforce annual target premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceAsOfDate" type="calendar_date_int">
@@ -607,17 +639,30 @@ preceding day.</xs:documentation>
   </xs:element>
   <xs:element name="InforceContractMonth" type="month_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceContractYear" type="duration_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceCumulativeGlp" type="nonnegative_double">
+  <xs:element name="InforceCumulativeGlp" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce cumulative 7702 guideline level premium.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceCumulativeGptPremiumsPaid" type="xs:double">
+    <xs:annotation>
+      <xs:documentation>Inforce cumulative 7702(f)(1) 'premiums paid'.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceCumulativeNoLapsePayments" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Inforce cumulative payments for no-lapse guarantee: sum of all
+gross premiums, including dump-ins and 1035 exchange proceeds,
+minus rider charges, withdrawals, and premiums refunded or
+forced out.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceCumulativeNoLapsePremium" type="nonnegative_double">
@@ -627,10 +672,22 @@ a no-lapse guarantee as long as a cumulative minimum premium
 is paid.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceCumulativePayments" type="nonnegative_double">
+  <xs:element name="InforceCumulativeRopPayments" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Inforce cumulative payments: sum of all gross premiums,
-including dump-ins and 1035 exchange proceeds.</xs:documentation>
+      <xs:documentation>Inforce cumulative payments for return of premium death
+benefit option: sum of all gross premiums, including dump-ins
+and 1035 exchange proceeds, minus withdrawals and premiums
+refunded or forced out.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceCumulativeSalesLoad" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Inforce cumulative refundable sales load.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceDataSource" type="xs:nonNegativeInteger">
+    <xs:annotation>
+      <xs:documentation>Vendor identifier for files from an external system.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceDcv" type="nonnegative_double">
@@ -643,12 +700,12 @@ including dump-ins and 1035 exchange proceeds.</xs:documentation>
       <xs:documentation>Inforce account value in the general account.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceGlp" type="nonnegative_double">
+  <xs:element name="InforceGlp" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce 7702 guideline level premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceGsp" type="nonnegative_double">
+  <xs:element name="InforceGsp" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce 7702 guideline single premium.</xs:documentation>
     </xs:annotation>
@@ -671,12 +728,22 @@ was never present.</xs:documentation>
   </xs:element>
   <xs:element name="InforceMonth" type="month_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceMonthlyNoLapsePremium" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Monthly premium required to maintain no-lapse guarantee.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceNetExperienceReserve" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce net reserve for experience rating.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceNoLapseActive" type="yes_or_no">
+    <xs:annotation>
+      <xs:documentation>No-lapse guarantee is in effect.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforcePreferredLoanBalance" type="nonnegative_double">
@@ -711,14 +778,25 @@ regular loans.</xs:documentation>
       <xs:documentation>Inforce 7702A seven-pay premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="InforceTaxBasis" type="nonnegative_double">
+  <xs:element name="InforceSpecAmtLoadBase" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Amount on which specified-amount load is charged, with due
+regard to term rider.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceTaxBasis" type="xs:double">
     <xs:annotation>
       <xs:documentation>Inforce tax basis.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceYear" type="duration_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceYtdGrossPremium" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Year-to-date payments counted toward target premium.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceYtdNetCoiCharge" type="nonnegative_double">
@@ -726,9 +804,14 @@ regular loans.</xs:documentation>
       <xs:documentation>Inforce year-to-date "net" COI charge for experience rating.</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="InforceYtdTaxablePremium" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Year-to-date payments subject to premium tax.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="InputFundManagementFee" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Investment management fee of a custom fund.</xs:documentation>
+      <xs:documentation>* Investment management fee of a custom fund.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InsuredName" type="xs:string">
@@ -738,24 +821,24 @@ regular loans.</xs:documentation>
   </xs:element>
   <xs:element name="InsuredPremiumTableFactor" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Insured's tabular-premium multiplier.</xs:documentation>
+      <xs:documentation>* Insured's tabular-premium multiplier. Default: '1'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="Internal1035ExchangeAmount" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Amount of 1035 exchange from the same insurer; distinguished
+      <xs:documentation>* Amount of 1035 exchange from the same insurer; distinguished
 from external 1035 because an internal exchange may not be
 subject to premium tax.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="Internal1035ExchangeBasis" type="nonnegative_double">
-    <xs:annotation>
-      <xs:documentation>Tax basis of 1035 exchange from the same insurer.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="Internal1035ExchangeFromMec" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>MEC status of 1035 exchange from the same insurer.</xs:documentation>
+      <xs:documentation>* MEC status of 1035 exchange from the same insurer.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="Internal1035ExchangeTaxBasis" type="xs:double">
+    <xs:annotation>
+      <xs:documentation>* Tax basis of 1035 exchange from the same insurer.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="IssueAge" type="age_int">
@@ -767,37 +850,39 @@ subject to premium tax.</xs:documentation>
     <xs:annotation>
       <xs:documentation>Most recent group-underwriting date, for group contracts that
 reenter a select and ultimate table of COI rates periodically
-upon successful re-underwriting (for active lives only).</xs:documentation>
+upon successful re-underwriting (for active lives only).
+Default: effective date, for contracts with no reentry.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LastMaterialChangeDate" type="calendar_date_int">
     <xs:annotation>
-      <xs:documentation>Date of most recent 7702A material change.</xs:documentation>
+      <xs:documentation>Date of most recent 7702A material change. Default: effective
+date, for contracts that have never had a material change.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LoanAmount" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LoanFromAge" type="age_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LoanFromAlternative" type="from_point">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LoanFromDuration" type="duration_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LoanRate" type="proportion_double">
     <xs:annotation>
-      <xs:documentation>Loan interest rate, if it is variable.</xs:documentation>
+      <xs:documentation>Loan interest rate, if it is variable. Default: '0' otherwise.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LoanRateType" type="loan_rate_type">
@@ -807,22 +892,28 @@ upon successful re-underwriting (for active lives only).</xs:documentation>
   </xs:element>
   <xs:element name="LoanToAge" type="age_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LoanToAlternative" type="to_point">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="LoanToDuration" type="duration_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="MaleProportion" type="proportion_double">
     <xs:annotation>
-      <xs:documentation>Proportion of males when rates are custom-blended by gender.</xs:documentation>
+      <xs:documentation>Proportion of males when rates are custom-blended by gender.
+Default: '0' otherwise.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="MasterContractNumber" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Group master contract number.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="MaximumNaar" type="nonnegative_double">
@@ -830,61 +921,57 @@ upon successful re-underwriting (for active lives only).</xs:documentation>
       <xs:documentation>Maximum net amount at risk, as constrained by reinsurance.
 Some contracts in the high-net-worth market force money out to
 prevent corridor death benefit from exceeding available
-reinsurance.</xs:documentation>
+reinsurance. Default: '1000000000'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="NewLoan" type="xs:string">
+  <xs:element name="NewLoan" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>New loan taken in cash (excluding capitalized interest).</xs:documentation>
+      <xs:documentation>* New loan taken in cash (excluding capitalized interest).
+Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="NonsmokerProportion" type="proportion_double">
     <xs:annotation>
-      <xs:documentation>Proportion of nonsmokers when rates are custom-blended by smoking.</xs:documentation>
+      <xs:documentation>Proportion of nonsmokers when rates are custom-blended by
+smoking. Default: '0' otherwise.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="NumberOfIdenticalLives" type="xs:nonNegativeInteger">
     <xs:annotation>
-      <xs:documentation>Number of identical lives represented by a single census cell.
-It is sometimes convenient to approximate a population by
-specifying a few cells and indicating the number of lives each
-one represents.</xs:documentation>
+      <xs:documentation>* Number of identical lives represented by a single census
+cell. It is sometimes convenient to approximate a population
+by specifying a few cells and indicating the number of lives
+each one represents. Default: '1'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="OverrideCoiMultiplier" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Override country COI multiplier.</xs:documentation>
+      <xs:documentation>* Override country COI multiplier. Default: 'Yes'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="OverrideExperienceReserveRate" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Override reserve rate for experience rating.</xs:documentation>
+      <xs:documentation>Override reserve rate for experience rating. Default: 'Yes'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="OverrideFundManagementFee" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Override investment management fee: used only with custom funds.</xs:documentation>
+      <xs:documentation>* Override investment management fee: used only with custom funds.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="PartialMortalityMultiplier" type="xs:string">
+  <xs:element name="PartialMortalityMultiplier" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>Multiplier applied to partial-mortality table.</xs:documentation>
+      <xs:documentation>* Multiplier applied to partial-mortality table. Default: '1'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="Payment" type="xs:string">
+  <xs:element name="Payment" type="payment_sequence">
     <xs:annotation>
-      <xs:documentation>Insured's planned premium.</xs:documentation>
+      <xs:documentation>Insured's planned premium. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="PaymentMode" type="xs:string">
+  <xs:element name="PaymentMode" type="mode_sequence">
     <xs:annotation>
-      <xs:documentation>Insured's premium mode.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="PolicyNumber" type="xs:string">
-    <xs:annotation>
-      <xs:documentation>Policy number: a unique identifier, which, despite its
-commonly-used name, is often not purely numeric.</xs:documentation>
+      <xs:documentation>Insured's premium mode. Default: 'annual'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="PostHoneymoonSpread" type="proportion_double">
@@ -892,13 +979,6 @@ commonly-used name, is often not purely numeric.</xs:documentation>
       <xs:documentation>Interest decrement applied to crediting rate after the
 honeymoon expires--designed to recover the cost of providing
 the honeymoon.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="PremiumHistory" type="xs:string">
-    <xs:annotation>
-      <xs:documentation>7702A "amounts paid" for each "contract year" since beginning
-of most recent seven-pay period; zero if not in a seven-pay
-period.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="PremiumTaxState" type="state">
@@ -911,53 +991,54 @@ period.</xs:documentation>
       <xs:documentation>Product (plan): enumerators depend on run-time context.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="ProjectedSalary" type="xs:string">
+  <xs:element name="ProjectedSalary" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>Projected salary: used for salary-based benefits.</xs:documentation>
+      <xs:documentation>* Projected salary: used for salary-based benefits. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="RetireesCanEnroll" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Retirees allowed to enroll (or not). This is handy for
+      <xs:documentation>* Retirees allowed to enroll (or not). This is handy for
 warning when retirees are unintentionally included in a
-census.</xs:documentation>
+census. Default: 'Yes'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="RetirementAge" type="age_int">
     <xs:annotation>
-      <xs:documentation>Insured's retirement age.</xs:documentation>
+      <xs:documentation>* Insured's retirement age. Default: '65'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="RunOrder" type="run_order">
     <xs:annotation>
-      <xs:documentation>Order in which different individuals in a census are
-processed: cf. 'run_order'.</xs:documentation>
+      <xs:documentation>* Order in which different individuals in a census are
+processed.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SalarySpecifiedAmountCap" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Maximum salary-based specified amount.</xs:documentation>
+      <xs:documentation>* Maximum salary-based specified amount. Default: '100000'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SalarySpecifiedAmountFactor" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Salary multiple used to determine specified amount.</xs:documentation>
+      <xs:documentation>* Salary multiple used to determine specified amount. Default: '1'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SalarySpecifiedAmountOffset" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Amount to be subtracted from salary-based specified amount,
-intended to represent basic group term coverage.</xs:documentation>
+      <xs:documentation>* Amount to be subtracted from salary-based specified amount,
+intended to represent basic group term coverage. Default: '50000'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SeparateAccountRate" type="xs:string">
+  <xs:element name="SeparateAccountRate" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>Separate-account hypothetical rate as a decimal: e.g., '0.06' for 6%.</xs:documentation>
+      <xs:documentation>* Separate-account hypothetical rate as a decimal: e.g.,
+'.0654' for 6.54%. Default: '.08'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SeparateAccountRateType" type="sep_acct_rate_type">
     <xs:annotation>
-      <xs:documentation>Separate-account rate: before or after spread.</xs:documentation>
+      <xs:documentation>* Separate-account rate: before or after spread. Default: 'Gross rate'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="Smoking" type="smoking">
@@ -965,107 +1046,103 @@ intended to represent basic group term coverage.</xs:documentation>
       <xs:documentation>Insured's smoking or tobacco use.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SolveBasis" type="gen_basis">
-    <xs:annotation>
-      <xs:documentation>Expense and general-account basis for a solve: lmi permits
-solves on guaranteed and midpoint bases as well as current.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="SolveBeginTime" type="duration_int">
     <xs:annotation>
-      <xs:documentation>Age at which a solve begins  (inclusive).</xs:documentation>
+      <xs:documentation>* Age at which a solve begins  (inclusive).</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveBeginYear" type="duration_int">
     <xs:annotation>
-      <xs:documentation>Policy year in which a solve begins (inclusive).</xs:documentation>
+      <xs:documentation>* Policy year in which a solve begins (inclusive).</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveEndTime" type="duration_int">
     <xs:annotation>
-      <xs:documentation>Age at which a solve ends (exclusive).</xs:documentation>
+      <xs:documentation>* Age at which a solve ends (exclusive).</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveEndYear" type="duration_int">
     <xs:annotation>
-      <xs:documentation>Policy year at which a solve ends (exclusive).</xs:documentation>
+      <xs:documentation>* Policy year at which a solve ends (exclusive).</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SolveExpenseGeneralAccountBasis" type="gen_basis">
+    <xs:annotation>
+      <xs:documentation>* Expense and general-account basis for a solve: lmi permits
+solves on guaranteed and midpoint bases as well as current.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveFromWhich" type="from_point">
     <xs:annotation>
-      <xs:documentation>Point at which a solve begins.</xs:documentation>
+      <xs:documentation>* Point at which a solve begins.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveSeparateAccountBasis" type="sep_basis">
     <xs:annotation>
-      <xs:documentation>Separate-account basis for a solve: lmi permits solves on
+      <xs:documentation>* Separate-account basis for a solve: lmi permits solves on
 the basis of the hypothetical rate, half that rate, or zero.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveTarget" type="solve_target">
     <xs:annotation>
-      <xs:documentation>Solve goal.</xs:documentation>
+      <xs:documentation>* Solve goal.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveTargetCashSurrenderValue" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Cash surrender value used as solve goal.</xs:documentation>
+      <xs:documentation>* Cash surrender value used as solve goal.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveTargetTime" type="duration_int">
     <xs:annotation>
-      <xs:documentation>Age at which a solve target is to be achieved.</xs:documentation>
+      <xs:documentation>* Age at which a solve target is to be achieved.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveTargetYear" type="duration_int">
     <xs:annotation>
-      <xs:documentation>Policy year in which a solve target is to be achieved.</xs:documentation>
+      <xs:documentation>* Policy year in which a solve target is to be achieved.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveTgtAtWhich" type="to_point">
     <xs:annotation>
-      <xs:documentation>Point at which a solve target is to be achieved.</xs:documentation>
+      <xs:documentation>* Point at which a solve target is to be achieved.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveToWhich" type="to_point">
     <xs:annotation>
-      <xs:documentation>Point at which a solve ends.</xs:documentation>
+      <xs:documentation>* Point at which a solve ends.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SolveType" type="solve_type">
     <xs:annotation>
-      <xs:documentation>Parameter to be solved for.</xs:documentation>
+      <xs:documentation>* Parameter to be solved for.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="SpecamtHistory" type="xs:string">
+  <xs:element name="SpecifiedAmount" type="specamt_sequence">
     <xs:annotation>
-      <xs:documentation>Specified amount for each policy year since issue: used only
-for certain surrender charges.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="SpecifiedAmount" type="xs:string">
-    <xs:annotation>
-      <xs:documentation>Specified amount.</xs:documentation>
+      <xs:documentation>Specified amount for each policy year since issue. Inforce
+extracts require only the current scalar value. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SpecifiedAmountFromIssue" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SpecifiedAmountFromRetirement" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SpecifiedAmountStrategyFromIssue" type="sa_strategy">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SpouseIssueAge" type="age_int">
     <xs:annotation>
-      <xs:documentation>Spouse's insurance age on effective date of spouse rider.</xs:documentation>
+      <xs:documentation>Spouse's insurance age on effective date of spouse rider.
+Default: '35' if rider not elected or not offered.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SpouseRider" type="yes_or_no">
@@ -1096,88 +1173,88 @@ everything else except premium tax.</xs:documentation>
   </xs:element>
   <xs:element name="SupplementalReportColumn00" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: first column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: first column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn01" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: second column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: second column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn02" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: third column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: third column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn03" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: fourth column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: fourth column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn04" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: fifth column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: fifth column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn05" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: sixth column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: sixth column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn06" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: seventh column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: seventh column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn07" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: eighth column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: eighth column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn08" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: ninth column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: ninth column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn09" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: tenth column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: tenth column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn10" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: eleventh column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: eleventh column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn11" type="report_column">
     <xs:annotation>
-      <xs:documentation>User-designed supplemental illustration: twelfth column.</xs:documentation>
+      <xs:documentation>* User-designed supplemental illustration: twelfth column.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SurviveToAge" type="age_int">
     <xs:annotation>
-      <xs:documentation>Presumed age at death, for partial mortality.</xs:documentation>
+      <xs:documentation>* Presumed age at death, for partial mortality. Default: '99'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SurviveToType" type="survival_limit">
     <xs:annotation>
-      <xs:documentation>Presumed moment of death, for partial mortality.</xs:documentation>
+      <xs:documentation>* Presumed moment of death, for partial mortality.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SurviveToYear" type="duration_int">
     <xs:annotation>
-      <xs:documentation>Presumed policy year of death, for partial mortality.</xs:documentation>
+      <xs:documentation>* Presumed policy year of death, for partial mortality. Default: '100'.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="TaxBracket" type="xs:string">
+  <xs:element name="TaxBracket" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>Insured's tax bracket.</xs:documentation>
+      <xs:documentation>* Insured's tax bracket. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="TermAdjustmentMethod" type="term_adj_method">
     <xs:annotation>
-      <xs:documentation>Order in which term and base are affected by changes in total
-specified amount.</xs:documentation>
+      <xs:documentation>* Order in which term and base are affected by changes in
+total specified amount.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="TermRider" type="yes_or_no">
@@ -1192,39 +1269,39 @@ specified amount.</xs:documentation>
   </xs:element>
   <xs:element name="TermRiderProportion" type="proportion_double">
     <xs:annotation>
-      <xs:documentation>Term rider as proportion of term and base combined.</xs:documentation>
+      <xs:documentation>* Term rider as proportion of term and base combined.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="TermRiderUseProportion" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Treat term rider as proportion of term and base combined.</xs:documentation>
+      <xs:documentation>* Treat term rider as proportion of term and base combined.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="TotalSpecifiedAmount" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Initial specified amount of term and base combined, when term
-rider is specified as a proportion of this total.</xs:documentation>
+      <xs:documentation>* Initial specified amount of term and base combined, when
+term rider is specified as a proportion of this total.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="UnderwritingClass" type="class">
     <xs:annotation>
-      <xs:documentation>Underwriting class.</xs:documentation>
+      <xs:documentation>Underwriting class. Default: 'Standard'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="UseAverageOfAllFunds" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Use mean separate-account fee: cf. 'fund_input_method'.</xs:documentation>
+      <xs:documentation>* Use mean separate-account fee.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="UseCurrentDeclaredRate" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Use current declared rate (read from authenticated database)
-instead of entering the crediting rate explicitly.</xs:documentation>
+      <xs:documentation>* Use current declared rate (read from authenticated database)
+instead of entering the crediting rate explicitly. Default: 'Yes'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="UseDOB" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Let date of birth override issue age.</xs:documentation>
+      <xs:documentation>* Let date of birth override issue age. Default: 'Yes'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="UseExperienceRating" type="yes_or_no">
@@ -1234,7 +1311,7 @@ instead of entering the crediting rate explicitly.</xs:documentation>
   </xs:element>
   <xs:element name="UsePartialMortality" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Illustrate "partial mortality": i.e., reflect assumed deaths
+      <xs:documentation>* Illustrate "partial mortality": i.e., reflect assumed deaths
 in a composite illustration.</xs:documentation>
     </xs:annotation>
   </xs:element>
@@ -1245,47 +1322,47 @@ in a composite illustration.</xs:documentation>
   </xs:element>
   <xs:element name="WithdrawToBasisThenLoan" type="yes_or_no">
     <xs:annotation>
-      <xs:documentation>Reinterpret input withdrawals as loans after tax basis recovered.</xs:documentation>
+      <xs:documentation>* Reinterpret input withdrawals as loans after tax basis recovered.</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="Withdrawal" type="xs:string">
+  <xs:element name="Withdrawal" type="numeric_sequence">
     <xs:annotation>
-      <xs:documentation>Partial surrender.</xs:documentation>
+      <xs:documentation>* Partial surrender. Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="WithdrawalAmount" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="WithdrawalFromAge" type="age_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="WithdrawalFromAlternative" type="from_point">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="WithdrawalFromDuration" type="duration_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="WithdrawalToAge" type="age_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="WithdrawalToAlternative" type="to_point">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="WithdrawalToDuration" type="duration_int">
     <xs:annotation>
-      <xs:documentation>[obsolete]</xs:documentation>
+      <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="ZipCode" type="xs:string">

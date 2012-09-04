@@ -933,14 +933,14 @@ appropriate input.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
-                                    <object class="wxTextCtrl" name="External1035ExchangeBasis">
+                                    <object class="wxTextCtrl" name="External1035ExchangeTaxBasis">
                                         <help>Tax basis for external 1035 exchange</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
-                                    <object class="wxTextCtrl" name="Internal1035ExchangeBasis">
+                                    <object class="wxTextCtrl" name="Internal1035ExchangeTaxBasis">
                                         <help>Tax basis for internal 1035 exchange</help>
                                         <size>10,-1</size>
                                     </object>

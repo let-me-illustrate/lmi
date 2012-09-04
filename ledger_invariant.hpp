@@ -288,8 +288,8 @@ class LMI_SO LedgerInvariant
     std::string     ProducerStreet;
     std::string     ProducerCity;
     std::string     CorpName;
-    std::string     Franchise; // 'MasterContractNumber' would be a better name.
-    std::string     PolicyNumber; // 'ContractNumber' would be a better name.
+    std::string     MasterContractNumber;
+    std::string     ContractNumber;
     std::string     Insured1;
     std::string     Gender;
     std::string     UWType;

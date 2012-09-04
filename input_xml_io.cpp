@@ -35,11 +35,12 @@
 #include "database.hpp"
 #include "global_settings.hpp"
 #include "map_lookup.hpp"
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 #include "oecumenic_enumerations.hpp"
 
-#include <algorithm>      // std::min()
+#include <algorithm>                    // std::min()
 #include <stdexcept>
+#include <utility>                      // std::pair
 
 template class xml_serializable<Input>;
 
@@ -75,6 +76,7 @@ std::string full_name
 /// version 4: 20090330T0137Z
 /// version 5: 20090526T1331Z
 /// version 6: 20100719T1349Z
+/// version 7: 20120808T2130Z
 ///
 /// Important note concerning version 3. On or about 20090311, some
 /// end users were given an off-cycle release that should have used
@@ -83,7 +85,7 @@ std::string full_name
 
 int Input::class_version() const
 {
-    return 6;
+    return 7;
 }
 
 std::string const& Input::xml_root_name() const
@@ -116,11 +118,15 @@ bool Input::is_detritus(std::string const& s) const
         ,"DeprecatedSolveToWhich"        // Renamed (without 'Deprecated'-).
         ,"DeprecatedUseDOB"              // Renamed (without 'Deprecated'-).
         ,"DeprecatedUseDOR"              // Withdrawn.
+        ,"External1035ExchangeBasis"     // Renamed to 'External1035ExchangeTaxBasis'.
         ,"FilingApprovalState"           // Alias for 'StateOfJurisdiction'.
         ,"FirstName"                     // Single name instead.
+        ,"Franchise"                     // Renamed to 'MasterContractNumber'.
+        ,"InforceCumulativePayments"     // Renamed to 'InforceCumulativeNoLapsePayments'.
         ,"InforceDcvDeathBenefit"        // Misbegotten.
         ,"InforceExperienceReserve"      // Renamed before implementation.
         ,"InsuredPremiumTableNumber"     // Never implemented.
+        ,"Internal1035ExchangeBasis"     // Renamed to 'Internal1035ExchangeTaxBasis'.
         ,"LastName"                      // Single name instead.
         ,"MiddleName"                    // Single name instead.
         ,"NetMortalityChargeHistory"     // Renamed before implementation.
@@ -129,8 +135,12 @@ bool Input::is_detritus(std::string const& s) const
         ,"PayLoanInterestInCash"         // Never implemented.
         ,"PolicyDate"                    // Never implemented.
         ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
+        ,"PolicyNumber"                  // Renamed to 'ContractNumber'.
+        ,"PremiumHistory"                // Renamed to 'Inforce7702AAmountsPaidHistory'.
         ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
-        ,"TermProportion"                // 'TermRiderProportion' instead.
+        ,"SolveBasis"                    // Renamed to 'SolveExpenseGeneralAccountBasis'.
+        ,"SpecamtHistory"                // Merged into 'SpecifiedAmount'.
+        ,"TermProportion"                // Disused: cf. 'TermRiderProportion'.
         ,"UseOffshoreCorridorFactor"     // Withdrawn.
         ,"YearsOfZeroDeaths"             // Withdrawn.
         };
@@ -483,6 +493,96 @@ void Input::redintegrate_ex_post
         SolveTgtAtWhich = map_lookup(detritus_map, "DeprecatedSolveTgtAtWhich");
         SolveToWhich    = map_lookup(detritus_map, "DeprecatedSolveToWhich");
         UseDOB          = map_lookup(detritus_map, "DeprecatedUseDOB");
+        }
+
+    if(file_version < 7)
+        {
+        // Version 7 renamed these elements.
+        LMI_ASSERT(contains(residuary_names, "ContractNumber"));
+        LMI_ASSERT(contains(residuary_names, "External1035ExchangeTaxBasis"));
+        LMI_ASSERT(contains(residuary_names, "Inforce7702AAmountsPaidHistory"));
+        LMI_ASSERT(contains(residuary_names, "InforceCumulativeNoLapsePayments"));
+        LMI_ASSERT(contains(residuary_names, "Internal1035ExchangeTaxBasis"));
+        LMI_ASSERT(contains(residuary_names, "MasterContractNumber"));
+        LMI_ASSERT(contains(residuary_names, "SolveExpenseGeneralAccountBasis"));
+        ContractNumber                   = map_lookup(detritus_map, "PolicyNumber");
+        External1035ExchangeTaxBasis     = map_lookup(detritus_map, "External1035ExchangeBasis");
+        InforceCumulativeNoLapsePayments = map_lookup(detritus_map, "InforceCumulativePayments");
+        Internal1035ExchangeTaxBasis     = map_lookup(detritus_map, "Internal1035ExchangeBasis");
+        MasterContractNumber             = map_lookup(detritus_map, "Franchise");
+        // Version 0 lacked 'PremiumHistory', as do "deficient" extracts.
+        if(0 < file_version && !deficient_extract)
+            {
+            Inforce7702AAmountsPaidHistory  = map_lookup(detritus_map, "PremiumHistory");
+            }
+        // "Deficient" extracts also lack 'SolveBasis'.
+        if(!deficient_extract)
+            {
+            SolveExpenseGeneralAccountBasis = map_lookup(detritus_map, "SolveBasis");
+            }
+        }
+
+    if(file_version < 7)
+        {
+        // Prior to version 7, 'InforceCumulativePayments' was used
+        // for no-lapse, GPT, and ROP, so set them all equal here
+        // for backward compatibility. This matters little for new
+        // business, but is so cheap that it may as well be done
+        // unconditionally.
+        InforceCumulativeGptPremiumsPaid = InforceCumulativeNoLapsePayments.value();
+        InforceCumulativeRopPayments     = InforceCumulativeNoLapsePayments.value();
+        }
+
+    if(file_version < 7 && contains(detritus_map, "SpecamtHistory"))
+        {
+        // Merge obsolete 'SpecamtHistory' into 'SpecifiedAmount'.
+        //
+        // Prior to version 7, 'SpecamtHistory' and 'SpecifiedAmount'
+        // were distinct. Some version-0 files had the history entity,
+        // but others did not; if it's not present, then of course it
+        // cannot be merged.
+        //
+        // Function must_overwrite_specamt_with_obsolete_history(),
+        // called below, requires 'InforceYear' and 'InforceMonth',
+        // which some "deficient" extracts omit. DoTransmogrify()
+        // sets those members downstream, but the "obsolete history"
+        // function needs them now. This requires version 5, which
+        // introduced 'InforceAsOfDate'; no "deficient" extract
+        // should have an earlier version.
+        if(deficient_extract && EffectiveDate.value() != InforceAsOfDate.value())
+            {
+            LMI_ASSERT(4 < file_version);
+            std::pair<int,int> ym0 = years_and_months_since
+                (EffectiveDate  .value()
+                ,InforceAsOfDate.value()
+                );
+            InforceYear  = ym0.first;
+            InforceMonth = ym0.second;
+            }
+        // Requiring 'deficient_extract' here wouldn't be right,
+        // because an extract file that has been modified and saved
+        // is no longer detectably "deficient".
+        if(0 != InforceYear || 0 != InforceMonth)
+            {
+            if
+                (must_overwrite_specamt_with_obsolete_history
+                    (SpecifiedAmount.value()
+                    ,map_lookup(detritus_map, "SpecamtHistory")
+                    )
+                )
+                {
+                SpecifiedAmount = map_lookup(detritus_map, "SpecamtHistory");
+                }
+            }
+        }
+
+    if(file_version < 7 && EffectiveDate.value() != InforceAsOfDate.value())
+        {
+        // Version 7 introduced 'InforceSpecAmtLoadBase'; previously,
+        // the first element of 'SpecamtHistory' had been used in its
+        // place, which would have disregarded any term rider.
+        RealizeSpecifiedAmount();
+        InforceSpecAmtLoadBase = TermRiderAmount.value() + SpecifiedAmountRealized_[0].value();
         }
 }
 
