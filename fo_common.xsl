@@ -907,27 +907,27 @@
 <xsl:template name="print-franchise-and-policynumber">
   <xsl:param name="omit_policynumber" select="$is_composite"/>
     <!--
-    This monstrosity truncates 'Franchise' and 'PolicyNumber' to:
+    This monstrosity truncates 'MasterContractNumber' and 'ContractNumber' to:
     * 30 characters if both are present;
     * 15 characters if only one is present.
     -->
-    <xsl:variable name="has_franchise" select="number($scalars/Franchise!='')"/>
-    <xsl:variable name="has_polnumber" select="number($scalars/PolicyNumber!='' and not($omit_policynumber))"/>
-    <xsl:variable name="contracts" select="$has_franchise + $has_polnumber"/>
+    <xsl:variable name="has_master_contract" select="number($scalars/MasterContractNumber!='')"/>
+    <xsl:variable name="has_polnumber" select="number($scalars/ContractNumber!='' and not($omit_policynumber))"/>
+    <xsl:variable name="contracts" select="$has_master_contract + $has_polnumber"/>
     <xsl:if test="$contracts">
       <xsl:variable name="number_length" select="floor(30 div $contracts)"/>
       <fo:block>
-        <xsl:if test="$has_franchise">
+        <xsl:if test="$has_master_contract">
           Master contract:
           <xsl:call-template name="limitstring">
-            <xsl:with-param name="passString" select="$scalars/Franchise"/>
+            <xsl:with-param name="passString" select="$scalars/MasterContractNumber"/>
             <xsl:with-param name="length" select="$number_length"/>
           </xsl:call-template>
         </xsl:if>
         <xsl:if test="$has_polnumber">
           Contract number:
           <xsl:call-template name="limitstring">
-            <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
+            <xsl:with-param name="passString" select="$scalars/ContractNumber"/>
             <xsl:with-param name="length" select="$number_length"/>
           </xsl:call-template>
         </xsl:if>

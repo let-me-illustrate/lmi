@@ -1,4 +1,4 @@
-// Common gateway interface using gnu cgicc.
+// Common gateway interface using gnu cgicc: a simplistic demo.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
 //
@@ -19,6 +19,8 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+// $Id$
+
 // This is a derived work based on Stephen F. Booth's
 //   cgicc-3.1.4/demo/test.cpp
 // which bears copyright notice
@@ -31,9 +33,8 @@
 // other reasons evident in the repository or explained in 'ChangeLog'.
 // Any defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id$
-
 #include LMI_PCH_HEADER
+
 #ifdef __BORLANDC__
 #   pragma hdrstop
 #endif // __BORLANDC__
@@ -43,19 +44,19 @@
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "main_common.hpp"
-#include "mc_enum_type_enums.hpp" // mcenum_emission
+#include "mc_enum_type_enums.hpp"       // mcenum_emission
 #include "miscellany.hpp"
 #include "path_utility.hpp"
-#include "platform_dependent.hpp" // putenv() [GWC]
+#include "platform_dependent.hpp"       // putenv() [GWC]
 #include "timer.hpp"
 #include "value_cast.hpp"
 
 #include <cgicc/Cgicc.h>
 #include <cgicc/CgiEnvironment.h>
-#include <cgicc/CgiUtils.h>       // gLogFile
+#include <cgicc/CgiUtils.h>             // gLogFile
 #include <cgicc/HTMLClasses.h>
 #ifdef USING_CURRENT_CGICC
-#   include <cgicc/HTTPHTMLHeader.h> // cgicc-3.2.3
+#   include <cgicc/HTTPHTMLHeader.h>    // cgicc-3.2.3
 #else // USING_CURRENT_CGICC not defined.
 #   include <cgicc/HTTPHeaders.h>
 #endif // USING_CURRENT_CGICC not defined.
@@ -65,7 +66,7 @@
 #include <fstream>
 #include <ios>
 #include <iostream>
-#include <istream>                // std::ws
+#include <istream>                      // std::ws
 #include <ostream>
 #include <sstream>
 #include <string>
@@ -86,7 +87,7 @@ void ShowOutput(cgicc::Cgicc const& formData);
 void ShowIllusOutput(Input const&);
 void ShowCensusOutput(Input const&, std::string const&, bool);
 
-// TODO ?? gnu getopt should be used here.
+// SOMEDAY !! It would be nicer to use gnu getopt here.
 int try_main(int argc, char* argv[])
 {
   try {
@@ -128,10 +129,9 @@ int try_main(int argc, char* argv[])
         "&SolveTarget=Target CSV"
         "&SolveTargetCashSurrenderValue=1000000"
         "&SolveTargetYear=20"
-        "&SolveBasis=Current"
+        "&SolveExpenseGeneralAccountBasis=Current"
         "&SpecifiedAmount=1000000"
         "&DeathBenefitOption=a"
-//        "&sRetDBOpt=A"
         "&Payment=0"
         "&PaymentMode=annual"
         "&Dumpin=0"
@@ -140,7 +140,6 @@ int try_main(int argc, char* argv[])
         "&1035ExchangeBasis=0"
         "&GeneralAccountRate=.055"
         "&GeneralAccountRateType=Credited rate"
-//        "&SeparateAccountRateType=Gross rate" // not used yet
         "&LoanRate=.055"
         "&LoanRateType=Fixed loan rate"
         "&Comments="
@@ -480,45 +479,45 @@ void ShowOutput(cgicc::Cgicc const& data)
     Input input;
 
     // Explicitly set certain defaults.
-    input["IssueAge"]                      = "45";
-    input["RetirementAge"]                 = "65";
-    input["Gender"]                        = "Female";
-    input["Smoking"]                       = "Smoker";
-    input["UnderwritingClass"]             = "Preferred";
-    input["WaiverOfPremiumBenefit"]        = "No";
-    input["AccidentalDeathBenefit"]        = "No";
-    input["SolveTgtAtWhich"]               = "Year";
-    input["SolveToWhich"]                  = "Year";
-    input["UseCurrentDeclaredRate"]        = "No";
+    input["IssueAge"]                        = "45";
+    input["RetirementAge"]                   = "65";
+    input["Gender"]                          = "Female";
+    input["Smoking"]                         = "Smoker";
+    input["UnderwritingClass"]               = "Preferred";
+    input["WaiverOfPremiumBenefit"]          = "No";
+    input["AccidentalDeathBenefit"]          = "No";
+    input["SolveTgtAtWhich"]                 = "Year";
+    input["SolveToWhich"]                    = "Year";
+    input["UseCurrentDeclaredRate"]          = "No";
 
-    input["ProductName"]                   = GetValue(data, "ProductName" );
-    input["IssueAge"]                      = GetValue(data, "IssueAge"    );
-    input["RetirementAge"]                 = GetValue(data, "RetirementAge");
-    input["Gender"]                        = GetValue(data, "Gender"      );
-    input["UnderwritingClass"]             = GetValue(data, "UnderwritingClass");
-    input["Smoking"]                       = GetValue(data, "Smoking"     );
-    input["WaiverOfPremiumBenefit"]        = GetValue(data, "WaiverOfPremiumBenefit");
-    input["AccidentalDeathBenefit"]        = GetValue(data, "AccidentalDeathBenefit");
-    input["SolveType"]                     = GetValue(data, "SolveType"   );
-    input["SolveBeginYear"]                = GetValue(data, "SolveBeginYear");
-    input["SolveEndYear"]                  = GetValue(data, "SolveEndYear");
-    input["SolveTarget"]                   = GetValue(data, "SolveTarget" );
-    input["SolveTargetCashSurrenderValue"] = GetValue(data, "SolveTargetCashSurrenderValue" );
-    input["SolveTargetYear"]               = GetValue(data, "SolveTargetYear");
-    input["SolveBasis"]                    = GetValue(data, "SolveBasis"  );
-    input["SpecifiedAmount"]               = GetValue(data, "SpecifiedAmount" ); // rename
-    input["DeathBenefitOption"]            = GetValue(data, "DeathBenefitOption"      ); // rename
-    input["Payment"]                       = GetValue(data, "Payment"  );
-    input["PaymentMode"]                   = GetValue(data, "PaymentMode" );
-    input["Dumpin"]                        = GetValue(data, "Dumpin"      );
-    input["Internal1035ExchangeAmount"]    = GetValue(data, "1035ExchangeAmount"  );
-    input["Internal1035ExchangeFromMec"]   = GetValue(data, "1035ExchangeIsMec");
-    input["Internal1035ExchangeBasis"]     = GetValue(data, "1035ExchangeBasis"   );
-    input["GeneralAccountRate"]            = GetValue(data, "GeneralAccountRate"); // rename
-    input["GeneralAccountRateType"]        = GetValue(data, "GeneralAccountRateType");
-//    input["SeparateAccountRateType"]       = GetValue(data, "SeparateAccountRateType"); // not used yet
-    input["LoanRate"]                      = GetValue(data, "LoanRate" );
-    input["LoanRateType"]                  = GetValue(data, "LoanRateType");
+    // Read input values.
+    input["ProductName"]                     = GetValue(data, "ProductName"                    );
+    input["IssueAge"]                        = GetValue(data, "IssueAge"                       );
+    input["RetirementAge"]                   = GetValue(data, "RetirementAge"                  );
+    input["Gender"]                          = GetValue(data, "Gender"                         );
+    input["UnderwritingClass"]               = GetValue(data, "UnderwritingClass"              );
+    input["Smoking"]                         = GetValue(data, "Smoking"                        );
+    input["WaiverOfPremiumBenefit"]          = GetValue(data, "WaiverOfPremiumBenefit"         );
+    input["AccidentalDeathBenefit"]          = GetValue(data, "AccidentalDeathBenefit"         );
+    input["SolveType"]                       = GetValue(data, "SolveType"                      );
+    input["SolveBeginYear"]                  = GetValue(data, "SolveBeginYear"                 );
+    input["SolveEndYear"]                    = GetValue(data, "SolveEndYear"                   );
+    input["SolveTarget"]                     = GetValue(data, "SolveTarget"                    );
+    input["SolveTargetCashSurrenderValue"]   = GetValue(data, "SolveTargetCashSurrenderValue"  );
+    input["SolveTargetYear"]                 = GetValue(data, "SolveTargetYear"                );
+    input["SolveExpenseGeneralAccountBasis"] = GetValue(data, "SolveExpenseGeneralAccountBasis");
+    input["SpecifiedAmount"]                 = GetValue(data, "SpecifiedAmount"                );
+    input["DeathBenefitOption"]              = GetValue(data, "DeathBenefitOption"             );
+    input["Payment"]                         = GetValue(data, "Payment"                        );
+    input["PaymentMode"]                     = GetValue(data, "PaymentMode"                    );
+    input["Dumpin"]                          = GetValue(data, "Dumpin"                         );
+    input["Internal1035ExchangeAmount"]      = GetValue(data, "1035ExchangeAmount"             );
+    input["Internal1035ExchangeFromMec"]     = GetValue(data, "1035ExchangeIsMec"              );
+    input["Internal1035ExchangeTaxBasis"]    = GetValue(data, "1035ExchangeBasis"              );
+    input["GeneralAccountRate"]              = GetValue(data, "GeneralAccountRate"             );
+    input["GeneralAccountRateType"]          = GetValue(data, "GeneralAccountRateType"         );
+    input["LoanRate"]                        = GetValue(data, "LoanRate"                       );
+    input["LoanRateType"]                    = GetValue(data, "LoanRateType"                   );
 
     input.RealizeAllSequenceInput();
 
@@ -674,8 +673,8 @@ void ShowCensusOutput
         << "<BR>\n"
         ;
 
-    // TODO ?? This is terribly inefficient: we already did all the
-    // calculations for each life in order to get the composite.
+    // SOMEDAY !! Inefficient: we already did all the calculations for
+    // each life in order to get the composite.
     if(show_each_life)
         {
         for(i = lives.begin(); i != lives.end(); ++i)

@@ -93,23 +93,23 @@ mec_input::mec_input()
     ,DefinitionOfMaterialChange       ("Unnecessary premium")
 //    ,GroupUnderwritingType            ("")
 //    ,Comments                         ("")
+//    ,InforceAsOfDate                  ("")
 //    ,InforceYear                      ("")
 //    ,InforceMonth                     ("")
     ,InforceTargetSpecifiedAmount     ("1000000")
 //    ,InforceAccountValue              ("")
-//    ,InforceAsOfDate                  ("")
 //    ,InforceIsMec                     ("")
 //    ,LastMaterialChangeDate           ("")
-//    ,InforceDcv                       ("")
-//    ,InforceAvBeforeLastMc            ("")
 //    ,InforceContractYear              ("")
 //    ,InforceContractMonth             ("")
+//    ,InforceAvBeforeLastMc            ("")
+//    ,InforceDcv                       ("")
     ,InforceLeastDeathBenefit         ("1000000")
+    ,PaymentHistory                   ("0")
+    ,BenefitHistory                   ("1000000")
     ,StateOfJurisdiction              ("CT")
     ,PremiumTaxState                  ("CT")
     ,FlatExtra                        ("0")
-    ,PaymentHistory                   ("0")
-    ,BenefitHistory                   ("1000000")
 //    ,UseDOB                           ("")
     ,Payment                          ("0")
     ,BenefitAmount                    ("1000000")
@@ -172,23 +172,23 @@ void mec_input::AscribeMembers()
     ascribe("DefinitionOfMaterialChange"            , &mec_input::DefinitionOfMaterialChange            );
     ascribe("GroupUnderwritingType"                 , &mec_input::GroupUnderwritingType                 );
     ascribe("Comments"                              , &mec_input::Comments                              );
+    ascribe("InforceAsOfDate"                       , &mec_input::InforceAsOfDate                       );
     ascribe("InforceYear"                           , &mec_input::InforceYear                           );
     ascribe("InforceMonth"                          , &mec_input::InforceMonth                          );
     ascribe("InforceTargetSpecifiedAmount"          , &mec_input::InforceTargetSpecifiedAmount          );
     ascribe("InforceAccountValue"                   , &mec_input::InforceAccountValue                   );
-    ascribe("InforceAsOfDate"                       , &mec_input::InforceAsOfDate                       );
     ascribe("InforceIsMec"                          , &mec_input::InforceIsMec                          );
     ascribe("LastMaterialChangeDate"                , &mec_input::LastMaterialChangeDate                );
-    ascribe("InforceDcv"                            , &mec_input::InforceDcv                            );
-    ascribe("InforceAvBeforeLastMc"                 , &mec_input::InforceAvBeforeLastMc                 );
     ascribe("InforceContractYear"                   , &mec_input::InforceContractYear                   );
     ascribe("InforceContractMonth"                  , &mec_input::InforceContractMonth                  );
+    ascribe("InforceAvBeforeLastMc"                 , &mec_input::InforceAvBeforeLastMc                 );
+    ascribe("InforceDcv"                            , &mec_input::InforceDcv                            );
     ascribe("InforceLeastDeathBenefit"              , &mec_input::InforceLeastDeathBenefit              );
+    ascribe("PaymentHistory"                        , &mec_input::PaymentHistory                        );
+    ascribe("BenefitHistory"                        , &mec_input::BenefitHistory                        );
     ascribe("StateOfJurisdiction"                   , &mec_input::StateOfJurisdiction                   );
     ascribe("PremiumTaxState"                       , &mec_input::PremiumTaxState                       );
     ascribe("FlatExtra"                             , &mec_input::FlatExtra                             );
-    ascribe("PaymentHistory"                        , &mec_input::PaymentHistory                        );
-    ascribe("BenefitHistory"                        , &mec_input::BenefitHistory                        );
     ascribe("UseDOB"                                , &mec_input::UseDOB                                );
     ascribe("Payment"                               , &mec_input::Payment                               );
     ascribe("BenefitAmount"                         , &mec_input::BenefitAmount                         );

@@ -1,0 +1,26 @@
+  # Work with proprietary repository (prerequisite: 'develop0')
+
+  # Create a brand-new repository
+
+svnadmin create /lmi/src/products/src/repository
+svn import /lmi/src/products/src/clean-src file:///lmi/src/products/src/repository/src -m "Initial import"
+svn import /lmi/src/products/src/clean-data file:///lmi/src/products/src/repository/data -m "Initial import"
+svnadmin verify /lmi/src/products/src/repository
+mkdir /lmi/src/products/src/tmp/working_copy
+cd /lmi/src/products/src/tmp/working_copy
+svn checkout file:///lmi/src/products/src/repository
+
+  # Check out a working copy
+
+svnadmin verify /lmi/src/products/src/repository-20120403T1557Z/repository
+mkdir /lmi/src/products/src/tmp/working_copy_tmp_20120403
+cd    /lmi/src/products/src/tmp/working_copy_tmp_20120403
+svn checkout file:///lmi/src/products/src/repository-20120403T1557Z/repository
+
+  # Test concinnity (before every commit)
+
+cd repository/data/
+cd ../data; make src_dir=/lmi/src/lmi -f /lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../src ; make src_dir=/lmi/src/lmi -f /lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../test; make src_dir=/lmi/src/lmi -f /lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+

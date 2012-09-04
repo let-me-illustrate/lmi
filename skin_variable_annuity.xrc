@@ -319,7 +319,7 @@ useful in the future.
                                         <object class="sizeritem">
                                             <flag>wxGROW|wxALL</flag>
                                             <border>2</border>
-                                            <object class="wxTextCtrl" name="External1035ExchangeBasis">
+                                            <object class="wxTextCtrl" name="External1035ExchangeTaxBasis">
                                                 <help>Tax basis for external 1035 exchange</help>
                                                 <size>10,-1</size>
                                             </object>
@@ -327,7 +327,7 @@ useful in the future.
                                         <object class="sizeritem">
                                             <flag>wxGROW|wxALL</flag>
                                             <border>2</border>
-                                            <object class="wxTextCtrl" name="Internal1035ExchangeBasis">
+                                            <object class="wxTextCtrl" name="Internal1035ExchangeTaxBasis">
                                                 <help>Tax basis for internal 1035 exchange</help>
                                                 <size>10,-1</size>
                                             </object>

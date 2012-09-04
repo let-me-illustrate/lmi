@@ -254,7 +254,7 @@ double AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
 // Apparently this should never be done because Solve() is called in
 //   RunAllApplicableBases() .
 // TODO ?? Isn't this unreachable?
-//      LMI_ASSERT(a_Basis corresponds to yare_input_.SolveBasis);
+//      LMI_ASSERT(a_Basis corresponds to yare_input_.SolveExpenseGeneralAccountBasis);
 //      z = Solve();
         }
     else
@@ -306,7 +306,7 @@ double AccountValue::RunAllApplicableBases()
             ,yare_input_.SolveTarget
             ,yare_input_.SolveTargetCashSurrenderValue
             ,yare_input_.SolveTargetYear
-            ,yare_input_.SolveBasis
+            ,yare_input_.SolveExpenseGeneralAccountBasis
             ,yare_input_.SolveSeparateAccountBasis
             );
         Solving = false;
@@ -444,15 +444,16 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         }
     else
         {
-        // TODO ?? Inforce surrchg needs more work.
+        // SOMEDAY !! Inforce surrchg is imperfect, but that's not
+        // important enough to fix for the products now supported.
         double prior_specamt = 0.0;
         for(int j = 0; j <= Year; ++j)
             {
             AddSurrChgLayer
                 (j
-                ,std::max(0.0, yare_input_.SpecamtHistory[j] - prior_specamt)
+                ,std::max(0.0, yare_input_.SpecifiedAmount[j] - prior_specamt)
                 );
-            prior_specamt = yare_input_.SpecamtHistory[j];
+            prior_specamt = yare_input_.SpecifiedAmount[j];
             }
         }
 
@@ -522,7 +523,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         int length_7702a = std::min(7, BasicValues::GetLength());
         // Premium history starts at contract year zero.
         nonstd::copy_n
-            (yare_input_.PremiumHistory.begin()
+            (yare_input_.Inforce7702AAmountsPaidHistory.begin()
             ,length_7702a
             ,std::back_inserter(pmts_7702a)
             );
@@ -536,7 +537,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             ,yare_input_.LastMaterialChangeDate
             );
         nonstd::copy_n
-            (yare_input_.SpecamtHistory.begin() + offset
+            (yare_input_.SpecifiedAmount.begin() + offset
             ,length_7702a
             ,std::back_inserter(bfts_7702a)
             );
@@ -598,20 +599,17 @@ void AccountValue::FinalizeLifeAllBases()
 //============================================================================
 void AccountValue::SetInitialValues()
 {
-    // These inforce things belong in input struct.
-    // TODO ?? The list is not complete; others will be required:
-    // payment history; surrender charges; DCV history? TAXATION !! INPUT !! Resolve this.
-    InforceYear                 = yare_input_.InforceYear                    ;
-    InforceMonth                = yare_input_.InforceMonth                   ;
-    InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue     ;
-    InforceAVSepAcct            = yare_input_.InforceSeparateAccountValue    ;
-    InforceAVRegLn              = yare_input_.InforceRegularLoanValue        ;
-    InforceAVPrfLn              = yare_input_.InforcePreferredLoanValue      ;
-    InforceRegLnBal             = yare_input_.InforceRegularLoanBalance      ;
-    InforcePrfLnBal             = yare_input_.InforcePreferredLoanBalance    ;
-    InforceCumNoLapsePrem       = yare_input_.InforceCumulativeNoLapsePremium;
-    InforceCumPmts              = yare_input_.InforceCumulativePayments      ;
-    InforceTaxBasis             = yare_input_.InforceTaxBasis                ;
+    InforceYear                 = yare_input_.InforceYear                     ;
+    InforceMonth                = yare_input_.InforceMonth                    ;
+    InforceAVGenAcct            = yare_input_.InforceGeneralAccountValue      ;
+    InforceAVSepAcct            = yare_input_.InforceSeparateAccountValue     ;
+    InforceAVRegLn              = yare_input_.InforceRegularLoanValue         ;
+    InforceAVPrfLn              = yare_input_.InforcePreferredLoanValue       ;
+    InforceRegLnBal             = yare_input_.InforceRegularLoanBalance       ;
+    InforcePrfLnBal             = yare_input_.InforcePreferredLoanBalance     ;
+    InforceCumNoLapsePrem       = yare_input_.InforceCumulativeNoLapsePremium ;
+    InforceCumPmts              = yare_input_.InforceCumulativeNoLapsePayments;
+    InforceTaxBasis             = yare_input_.InforceTaxBasis                 ;
 
     Year                        = InforceYear;
     Month                       = InforceMonth;
@@ -725,7 +723,7 @@ void AccountValue::SetInitialValues()
     RiderCharges                = 0.0;
     NetCoiCharge                = 0.0;
     MlyDed                      = 0.0;
-    CumulativeSalesLoad         = 0.0; // INFORCE !! Add to inforce input.
+    CumulativeSalesLoad         = yare_input_.InforceCumulativeSalesLoad;
 
     CoiRetentionRate                  = Database_->Query(DB_ExpRatCoiRetention);
     ExperienceRatingAmortizationYears = Database_->Query(DB_ExpRatAmortPeriod);

@@ -661,7 +661,7 @@ void BasicValues::Init7702()
             ,yare_input_.InforceGlp
             ,yare_input_.InforceCumulativeGlp
             ,yare_input_.InforceGsp
-            ,yare_input_.InforceCumulativePayments // TAXATION !! INPUT !! Wrong--this is not 7702 "premiums paid".
+            ,yare_input_.InforceCumulativeGptPremiumsPaid
             )
         );
 }
@@ -980,7 +980,7 @@ double BasicValues::GetModalPremMaxNonMec
 /// choice is left to the caller.
 ///
 /// 'TgtPremMonthlyPolFee' is applied here, not in GetModalTgtPrem(),
-/// because it is appropriate only here. In the other two cases that
+/// because it is more appropriate here. In the other two cases that
 /// GetModalPrem() contemplates:
 ///  - 'oe_monthly_deduction': deductions would naturally include any
 ///    policy fee;
@@ -993,10 +993,6 @@ double BasicValues::GetModalPremMaxNonMec
 /// this function is used for minimum premium with a nonzero fee
 /// (because no GetModalPremMinFromTable() has yet been written).
 ///
-/// It is assumed that 'TgtPremMonthlyPolFee' is on an annual basis
-/// (DATABASE !! thus, its name is misleading and should be changed)
-/// and that it can be modalized pro rata.
-///
 /// As the GetModalSpecAmt() documentation for 'oe_modal_table' says,
 /// target and minimum premiums really ought to distinguished.
 
@@ -1008,7 +1004,7 @@ double BasicValues::GetModalPremTgtFromTable
 {
     return round_max_premium()
         (
-            (   TgtPremMonthlyPolFee
+            (   TgtPremMonthlyPolFee * 12
             +       a_specamt
                 *   ldbl_eps_plus_one()
                 *   MortalityRates_->TargetPremiumRates()[0]
@@ -1200,7 +1196,7 @@ double BasicValues::GetModalSpecAmt
         {
         return round_min_specamt()
             (
-                (annualized_pmt - TgtPremMonthlyPolFee)
+                (annualized_pmt - TgtPremMonthlyPolFee * 12)
             /   MortalityRates_->TargetPremiumRates()[0]
             );
         }

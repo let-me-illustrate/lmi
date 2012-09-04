@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <multiple_cell_document version="1">
   <case_default>
-    <cell version="6">
+    <cell version="7">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
       <Address/>
       <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -20,6 +20,7 @@
       <ChildRiderAmount>0</ChildRiderAmount>
       <City/>
       <Comments/>
+      <ContractNumber/>
       <CorporationAddress/>
       <CorporationCity/>
       <CorporationName/>
@@ -46,13 +47,12 @@
       <ExperienceRatingInitialKFactor>1</ExperienceRatingInitialKFactor>
       <ExperienceReserveRate>0.02</ExperienceReserveRate>
       <External1035ExchangeAmount>0</External1035ExchangeAmount>
-      <External1035ExchangeBasis>0</External1035ExchangeBasis>
       <External1035ExchangeFromMec>No</External1035ExchangeFromMec>
+      <External1035ExchangeTaxBasis>0</External1035ExchangeTaxBasis>
       <ExtraCompensationOnAssets>0</ExtraCompensationOnAssets>
       <ExtraCompensationOnPremium>0</ExtraCompensationOnPremium>
       <ExtraMonthlyCustodialFee>0</ExtraMonthlyCustodialFee>
       <FlatExtra>0</FlatExtra>
-      <Franchise/>
       <FundAllocations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </FundAllocations>
       <FundChoiceType>Choose funds</FundChoiceType>
       <Gender>Male</Gender>
@@ -68,13 +68,19 @@
       <IndividualPaymentToAge>95</IndividualPaymentToAge>
       <IndividualPaymentToAlternative>Maturity</IndividualPaymentToAlternative>
       <IndividualPaymentToDuration>50</IndividualPaymentToDuration>
+      <Inforce7702AAmountsPaidHistory>0</Inforce7702AAmountsPaidHistory>
+      <InforceAnnualTargetPremium>0</InforceAnnualTargetPremium>
       <InforceAsOfDate>2454040</InforceAsOfDate>
       <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
       <InforceContractMonth>0</InforceContractMonth>
       <InforceContractYear>0</InforceContractYear>
       <InforceCumulativeGlp>0</InforceCumulativeGlp>
+      <InforceCumulativeGptPremiumsPaid>0</InforceCumulativeGptPremiumsPaid>
+      <InforceCumulativeNoLapsePayments>0</InforceCumulativeNoLapsePayments>
       <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
-      <InforceCumulativePayments>0</InforceCumulativePayments>
+      <InforceCumulativeRopPayments>0</InforceCumulativeRopPayments>
+      <InforceCumulativeSalesLoad>0</InforceCumulativeSalesLoad>
+      <InforceDataSource>1</InforceDataSource>
       <InforceDcv>0</InforceDcv>
       <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
       <InforceGlp>0</InforceGlp>
@@ -83,22 +89,27 @@
       <InforceIsMec>No</InforceIsMec>
       <InforceLeastDeathBenefit>0</InforceLeastDeathBenefit>
       <InforceMonth>0</InforceMonth>
+      <InforceMonthlyNoLapsePremium>0</InforceMonthlyNoLapsePremium>
       <InforceNetExperienceReserve>0</InforceNetExperienceReserve>
+      <InforceNoLapseActive>No</InforceNoLapseActive>
       <InforcePreferredLoanBalance>0</InforcePreferredLoanBalance>
       <InforcePreferredLoanValue>0</InforcePreferredLoanValue>
       <InforceRegularLoanBalance>0</InforceRegularLoanBalance>
       <InforceRegularLoanValue>0</InforceRegularLoanValue>
       <InforceSeparateAccountValue>0</InforceSeparateAccountValue>
       <InforceSevenPayPremium>0</InforceSevenPayPremium>
+      <InforceSpecAmtLoadBase>0</InforceSpecAmtLoadBase>
       <InforceTaxBasis>0</InforceTaxBasis>
       <InforceYear>0</InforceYear>
+      <InforceYtdGrossPremium>0</InforceYtdGrossPremium>
       <InforceYtdNetCoiCharge>0</InforceYtdNetCoiCharge>
+      <InforceYtdTaxablePremium>0</InforceYtdTaxablePremium>
       <InputFundManagementFee>0</InputFundManagementFee>
       <InsuredName/>
       <InsuredPremiumTableFactor>1</InsuredPremiumTableFactor>
       <Internal1035ExchangeAmount>0</Internal1035ExchangeAmount>
-      <Internal1035ExchangeBasis>0</Internal1035ExchangeBasis>
       <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
+      <Internal1035ExchangeTaxBasis>0</Internal1035ExchangeTaxBasis>
       <IssueAge>45</IssueAge>
       <LastCoiReentryDate>2454040</LastCoiReentryDate>
       <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
@@ -112,7 +123,8 @@
       <LoanToAlternative>Maturity</LoanToAlternative>
       <LoanToDuration>50</LoanToDuration>
       <MaleProportion>1</MaleProportion>
-      <MaximumNaar>10000000</MaximumNaar>
+      <MasterContractNumber/>
+      <MaximumNaar>1000000000</MaximumNaar>
       <NewLoan>0</NewLoan>
       <NonsmokerProportion>1</NonsmokerProportion>
       <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
@@ -122,9 +134,7 @@
       <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
       <Payment>20000</Payment>
       <PaymentMode>annual</PaymentMode>
-      <PolicyNumber/>
       <PostHoneymoonSpread>0</PostHoneymoonSpread>
-      <PremiumHistory>0</PremiumHistory>
       <PremiumTaxState>CT</PremiumTaxState>
       <ProductName>sample</ProductName>
       <ProjectedSalary>100000</ProjectedSalary>
@@ -137,11 +147,11 @@
       <SeparateAccountRate>.08</SeparateAccountRate>
       <SeparateAccountRateType>Gross rate</SeparateAccountRateType>
       <Smoking>Nonsmoker</Smoking>
-      <SolveBasis>Current</SolveBasis>
       <SolveBeginTime>45</SolveBeginTime>
       <SolveBeginYear>0</SolveBeginYear>
       <SolveEndTime>65</SolveEndTime>
       <SolveEndYear>20</SolveEndYear>
+      <SolveExpenseGeneralAccountBasis>Current</SolveExpenseGeneralAccountBasis>
       <SolveFromWhich>Issue</SolveFromWhich>
       <SolveSeparateAccountBasis>Hypothetical</SolveSeparateAccountBasis>
       <SolveTarget>Endowment</SolveTarget>
@@ -151,7 +161,6 @@
       <SolveTgtAtWhich>Maturity</SolveTgtAtWhich>
       <SolveToWhich>Retirement</SolveToWhich>
       <SolveType>No solve</SolveType>
-      <SpecamtHistory>0</SpecamtHistory>
       <SpecifiedAmount>1000000</SpecifiedAmount>
       <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
       <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
@@ -204,7 +213,7 @@
     </cell>
   </case_default>
   <class_defaults>
-    <cell version="6">
+    <cell version="7">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
       <Address/>
       <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -223,6 +232,7 @@
       <ChildRiderAmount>0</ChildRiderAmount>
       <City/>
       <Comments/>
+      <ContractNumber/>
       <CorporationAddress/>
       <CorporationCity/>
       <CorporationName/>
@@ -249,13 +259,12 @@
       <ExperienceRatingInitialKFactor>1</ExperienceRatingInitialKFactor>
       <ExperienceReserveRate>0.02</ExperienceReserveRate>
       <External1035ExchangeAmount>0</External1035ExchangeAmount>
-      <External1035ExchangeBasis>0</External1035ExchangeBasis>
       <External1035ExchangeFromMec>No</External1035ExchangeFromMec>
+      <External1035ExchangeTaxBasis>0</External1035ExchangeTaxBasis>
       <ExtraCompensationOnAssets>0</ExtraCompensationOnAssets>
       <ExtraCompensationOnPremium>0</ExtraCompensationOnPremium>
       <ExtraMonthlyCustodialFee>0</ExtraMonthlyCustodialFee>
       <FlatExtra>0</FlatExtra>
-      <Franchise/>
       <FundAllocations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </FundAllocations>
       <FundChoiceType>Choose funds</FundChoiceType>
       <Gender>Male</Gender>
@@ -271,13 +280,19 @@
       <IndividualPaymentToAge>95</IndividualPaymentToAge>
       <IndividualPaymentToAlternative>Maturity</IndividualPaymentToAlternative>
       <IndividualPaymentToDuration>50</IndividualPaymentToDuration>
+      <Inforce7702AAmountsPaidHistory>0</Inforce7702AAmountsPaidHistory>
+      <InforceAnnualTargetPremium>0</InforceAnnualTargetPremium>
       <InforceAsOfDate>2454040</InforceAsOfDate>
       <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
       <InforceContractMonth>0</InforceContractMonth>
       <InforceContractYear>0</InforceContractYear>
       <InforceCumulativeGlp>0</InforceCumulativeGlp>
+      <InforceCumulativeGptPremiumsPaid>0</InforceCumulativeGptPremiumsPaid>
+      <InforceCumulativeNoLapsePayments>0</InforceCumulativeNoLapsePayments>
       <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
-      <InforceCumulativePayments>0</InforceCumulativePayments>
+      <InforceCumulativeRopPayments>0</InforceCumulativeRopPayments>
+      <InforceCumulativeSalesLoad>0</InforceCumulativeSalesLoad>
+      <InforceDataSource>1</InforceDataSource>
       <InforceDcv>0</InforceDcv>
       <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
       <InforceGlp>0</InforceGlp>
@@ -286,22 +301,27 @@
       <InforceIsMec>No</InforceIsMec>
       <InforceLeastDeathBenefit>0</InforceLeastDeathBenefit>
       <InforceMonth>0</InforceMonth>
+      <InforceMonthlyNoLapsePremium>0</InforceMonthlyNoLapsePremium>
       <InforceNetExperienceReserve>0</InforceNetExperienceReserve>
+      <InforceNoLapseActive>No</InforceNoLapseActive>
       <InforcePreferredLoanBalance>0</InforcePreferredLoanBalance>
       <InforcePreferredLoanValue>0</InforcePreferredLoanValue>
       <InforceRegularLoanBalance>0</InforceRegularLoanBalance>
       <InforceRegularLoanValue>0</InforceRegularLoanValue>
       <InforceSeparateAccountValue>0</InforceSeparateAccountValue>
       <InforceSevenPayPremium>0</InforceSevenPayPremium>
+      <InforceSpecAmtLoadBase>0</InforceSpecAmtLoadBase>
       <InforceTaxBasis>0</InforceTaxBasis>
       <InforceYear>0</InforceYear>
+      <InforceYtdGrossPremium>0</InforceYtdGrossPremium>
       <InforceYtdNetCoiCharge>0</InforceYtdNetCoiCharge>
+      <InforceYtdTaxablePremium>0</InforceYtdTaxablePremium>
       <InputFundManagementFee>0</InputFundManagementFee>
       <InsuredName/>
       <InsuredPremiumTableFactor>1</InsuredPremiumTableFactor>
       <Internal1035ExchangeAmount>0</Internal1035ExchangeAmount>
-      <Internal1035ExchangeBasis>0</Internal1035ExchangeBasis>
       <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
+      <Internal1035ExchangeTaxBasis>0</Internal1035ExchangeTaxBasis>
       <IssueAge>45</IssueAge>
       <LastCoiReentryDate>2454040</LastCoiReentryDate>
       <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
@@ -315,7 +335,8 @@
       <LoanToAlternative>Maturity</LoanToAlternative>
       <LoanToDuration>50</LoanToDuration>
       <MaleProportion>1</MaleProportion>
-      <MaximumNaar>10000000</MaximumNaar>
+      <MasterContractNumber/>
+      <MaximumNaar>1000000000</MaximumNaar>
       <NewLoan>0</NewLoan>
       <NonsmokerProportion>1</NonsmokerProportion>
       <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
@@ -325,9 +346,7 @@
       <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
       <Payment>20000</Payment>
       <PaymentMode>annual</PaymentMode>
-      <PolicyNumber/>
       <PostHoneymoonSpread>0</PostHoneymoonSpread>
-      <PremiumHistory>0</PremiumHistory>
       <PremiumTaxState>CT</PremiumTaxState>
       <ProductName>sample</ProductName>
       <ProjectedSalary>100000</ProjectedSalary>
@@ -340,11 +359,11 @@
       <SeparateAccountRate>.08</SeparateAccountRate>
       <SeparateAccountRateType>Gross rate</SeparateAccountRateType>
       <Smoking>Nonsmoker</Smoking>
-      <SolveBasis>Current</SolveBasis>
       <SolveBeginTime>45</SolveBeginTime>
       <SolveBeginYear>0</SolveBeginYear>
       <SolveEndTime>65</SolveEndTime>
       <SolveEndYear>20</SolveEndYear>
+      <SolveExpenseGeneralAccountBasis>Current</SolveExpenseGeneralAccountBasis>
       <SolveFromWhich>Issue</SolveFromWhich>
       <SolveSeparateAccountBasis>Hypothetical</SolveSeparateAccountBasis>
       <SolveTarget>Endowment</SolveTarget>
@@ -354,7 +373,6 @@
       <SolveTgtAtWhich>Maturity</SolveTgtAtWhich>
       <SolveToWhich>Retirement</SolveToWhich>
       <SolveType>No solve</SolveType>
-      <SpecamtHistory>0</SpecamtHistory>
       <SpecifiedAmount>1000000</SpecifiedAmount>
       <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
       <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
@@ -407,7 +425,7 @@
     </cell>
   </class_defaults>
   <particular_cells>
-    <cell version="6">
+    <cell version="7">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
       <Address/>
       <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -426,6 +444,7 @@
       <ChildRiderAmount>0</ChildRiderAmount>
       <City/>
       <Comments/>
+      <ContractNumber/>
       <CorporationAddress/>
       <CorporationCity/>
       <CorporationName/>
@@ -452,13 +471,12 @@
       <ExperienceRatingInitialKFactor>1</ExperienceRatingInitialKFactor>
       <ExperienceReserveRate>0.02</ExperienceReserveRate>
       <External1035ExchangeAmount>0</External1035ExchangeAmount>
-      <External1035ExchangeBasis>0</External1035ExchangeBasis>
       <External1035ExchangeFromMec>No</External1035ExchangeFromMec>
+      <External1035ExchangeTaxBasis>0</External1035ExchangeTaxBasis>
       <ExtraCompensationOnAssets>0</ExtraCompensationOnAssets>
       <ExtraCompensationOnPremium>0</ExtraCompensationOnPremium>
       <ExtraMonthlyCustodialFee>0</ExtraMonthlyCustodialFee>
       <FlatExtra>0</FlatExtra>
-      <Franchise/>
       <FundAllocations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </FundAllocations>
       <FundChoiceType>Choose funds</FundChoiceType>
       <Gender>Male</Gender>
@@ -474,13 +492,19 @@
       <IndividualPaymentToAge>95</IndividualPaymentToAge>
       <IndividualPaymentToAlternative>Maturity</IndividualPaymentToAlternative>
       <IndividualPaymentToDuration>50</IndividualPaymentToDuration>
+      <Inforce7702AAmountsPaidHistory>0</Inforce7702AAmountsPaidHistory>
+      <InforceAnnualTargetPremium>0</InforceAnnualTargetPremium>
       <InforceAsOfDate>2454040</InforceAsOfDate>
       <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
       <InforceContractMonth>0</InforceContractMonth>
       <InforceContractYear>0</InforceContractYear>
       <InforceCumulativeGlp>0</InforceCumulativeGlp>
+      <InforceCumulativeGptPremiumsPaid>0</InforceCumulativeGptPremiumsPaid>
+      <InforceCumulativeNoLapsePayments>0</InforceCumulativeNoLapsePayments>
       <InforceCumulativeNoLapsePremium>0</InforceCumulativeNoLapsePremium>
-      <InforceCumulativePayments>0</InforceCumulativePayments>
+      <InforceCumulativeRopPayments>0</InforceCumulativeRopPayments>
+      <InforceCumulativeSalesLoad>0</InforceCumulativeSalesLoad>
+      <InforceDataSource>1</InforceDataSource>
       <InforceDcv>0</InforceDcv>
       <InforceGeneralAccountValue>0</InforceGeneralAccountValue>
       <InforceGlp>0</InforceGlp>
@@ -489,22 +513,27 @@
       <InforceIsMec>No</InforceIsMec>
       <InforceLeastDeathBenefit>0</InforceLeastDeathBenefit>
       <InforceMonth>0</InforceMonth>
+      <InforceMonthlyNoLapsePremium>0</InforceMonthlyNoLapsePremium>
       <InforceNetExperienceReserve>0</InforceNetExperienceReserve>
+      <InforceNoLapseActive>No</InforceNoLapseActive>
       <InforcePreferredLoanBalance>0</InforcePreferredLoanBalance>
       <InforcePreferredLoanValue>0</InforcePreferredLoanValue>
       <InforceRegularLoanBalance>0</InforceRegularLoanBalance>
       <InforceRegularLoanValue>0</InforceRegularLoanValue>
       <InforceSeparateAccountValue>0</InforceSeparateAccountValue>
       <InforceSevenPayPremium>0</InforceSevenPayPremium>
+      <InforceSpecAmtLoadBase>0</InforceSpecAmtLoadBase>
       <InforceTaxBasis>0</InforceTaxBasis>
       <InforceYear>0</InforceYear>
+      <InforceYtdGrossPremium>0</InforceYtdGrossPremium>
       <InforceYtdNetCoiCharge>0</InforceYtdNetCoiCharge>
+      <InforceYtdTaxablePremium>0</InforceYtdTaxablePremium>
       <InputFundManagementFee>0</InputFundManagementFee>
       <InsuredName/>
       <InsuredPremiumTableFactor>1</InsuredPremiumTableFactor>
       <Internal1035ExchangeAmount>0</Internal1035ExchangeAmount>
-      <Internal1035ExchangeBasis>0</Internal1035ExchangeBasis>
       <Internal1035ExchangeFromMec>No</Internal1035ExchangeFromMec>
+      <Internal1035ExchangeTaxBasis>0</Internal1035ExchangeTaxBasis>
       <IssueAge>45</IssueAge>
       <LastCoiReentryDate>2454040</LastCoiReentryDate>
       <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
@@ -518,7 +547,8 @@
       <LoanToAlternative>Maturity</LoanToAlternative>
       <LoanToDuration>50</LoanToDuration>
       <MaleProportion>1</MaleProportion>
-      <MaximumNaar>10000000</MaximumNaar>
+      <MasterContractNumber/>
+      <MaximumNaar>1000000000</MaximumNaar>
       <NewLoan>0</NewLoan>
       <NonsmokerProportion>1</NonsmokerProportion>
       <NumberOfIdenticalLives>1</NumberOfIdenticalLives>
@@ -528,9 +558,7 @@
       <PartialMortalityMultiplier>1</PartialMortalityMultiplier>
       <Payment>20000</Payment>
       <PaymentMode>annual</PaymentMode>
-      <PolicyNumber/>
       <PostHoneymoonSpread>0</PostHoneymoonSpread>
-      <PremiumHistory>0</PremiumHistory>
       <PremiumTaxState>CT</PremiumTaxState>
       <ProductName>sample</ProductName>
       <ProjectedSalary>100000</ProjectedSalary>
@@ -543,11 +571,11 @@
       <SeparateAccountRate>.08</SeparateAccountRate>
       <SeparateAccountRateType>Gross rate</SeparateAccountRateType>
       <Smoking>Nonsmoker</Smoking>
-      <SolveBasis>Current</SolveBasis>
       <SolveBeginTime>45</SolveBeginTime>
       <SolveBeginYear>0</SolveBeginYear>
       <SolveEndTime>65</SolveEndTime>
       <SolveEndYear>20</SolveEndYear>
+      <SolveExpenseGeneralAccountBasis>Current</SolveExpenseGeneralAccountBasis>
       <SolveFromWhich>Issue</SolveFromWhich>
       <SolveSeparateAccountBasis>Hypothetical</SolveSeparateAccountBasis>
       <SolveTarget>Endowment</SolveTarget>
@@ -557,7 +585,6 @@
       <SolveTgtAtWhich>Maturity</SolveTgtAtWhich>
       <SolveToWhich>Retirement</SolveToWhich>
       <SolveType>No solve</SolveType>
-      <SpecamtHistory>0</SpecamtHistory>
       <SpecifiedAmount>1000000</SpecifiedAmount>
       <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
       <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
