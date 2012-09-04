@@ -630,8 +630,8 @@ void AccountValue::TxExch1035()
 
     CumPmts += GrossPmts[Month];
     TaxBasis +=
-          yare_input_.External1035ExchangeBasis
-        + yare_input_.Internal1035ExchangeBasis
+          yare_input_.External1035ExchangeTaxBasis
+        + yare_input_.Internal1035ExchangeTaxBasis
         ;
 
     if(mce_run_gen_curr_sep_full == RunBasis_)
@@ -1552,37 +1552,25 @@ void AccountValue::TxSetBOMAV()
 {
     // Subtract monthly policy fee and per K charge from account value.
 
-    // These assignments must happen every month.
-
-    // Set base for per K load at issue. Other approaches could be imagined.
+    // Set base for specified-amount load. Usually, this represents
+    // the cost of underwriting, so the amount is determined at issue
+    // and includes term rider.
     if(Year == InforceYear && Month == InforceMonth)
         {
         if(!yare_input_.TermRider)
             {
-            HOPEFULLY(0.0 == InvariantValues().TermSpecAmt[0]);
+            LMI_ASSERT(0.0 == InvariantValues().TermSpecAmt[0]);
             }
-        double z;
-        if(0 == Year && 0 == Month)
-            {
-            z = InvariantValues().TermSpecAmt[0] + InvariantValues().SpecAmt[0];
-            }
-        else
-            {
-            // TAXATION !! We could at least change this in xrc help elements:
-            // USER !! User documentation should explain that this
-            // includes any 7702-integrated term rider.
-            //
-            // Some products have loads that depend on the initial
-            // specified amount, which probably includes term; if it
-            // doesn't, then a new input field would need to be added.
-            //
-            // TAXATION !! Is this really desirable? INPUT !! Should we
-            // instead capture specamt as of issue date for this purpose?
-            z = yare_input_.SpecamtHistory.front();
-            }
-        SpecAmtLoadBase = std::max(z, NetPmts[Month] * YearsCorridorFactor);
+        SpecAmtLoadBase =
+            (0 == Year && 0 == Month)
+            ? InvariantValues().TermSpecAmt[0] + InvariantValues().SpecAmt[0]
+            : yare_input_.InforceSpecAmtLoadBase
+            ;
+        SpecAmtLoadBase = std::max(SpecAmtLoadBase, NetPmts[Month] * YearsCorridorFactor);
         SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
         }
+
+    // These assignments must happen every month.
 
     MonthsPolicyFees = YearsMonthlyPolicyFee;
     if(0 == Month)

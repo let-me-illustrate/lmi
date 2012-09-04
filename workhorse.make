@@ -513,6 +513,19 @@ CXX_WARNINGS = \
 
 ################################################################################
 
+# Flags for tuning gcc.
+
+# As this is written in 2012, lmi is often built on machines with less
+# RAM per core than gcc wants. Experiments show that these flags cut
+# gcc's RAM appetite by fifty percent, in return for a ten-percent
+# speed penalty that can be overcome by increasing parallelism.
+
+ifeq (gcc,$(toolset))
+  ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
+endif
+
+################################################################################
+
 # Build type governs
 #  - optimization flags
 #  - mpatrol
@@ -566,9 +579,18 @@ endif
 # suffice to suppress the diagnostic, but this file actually doesn't
 # need any optimization at all.
 #
-# A similar problem was observed with 'my_db.cpp'.
+# The same problem was observed with 'my_db.cpp'. For good measure,
+# all similarly-coded 'my_*.cpp' files are treated the same way.
 
-my_db.o my_prod.o: optimization_flag := -O0
+my_unoptimizable_files := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
+
+$(my_unoptimizable_files): optimization_flag := -O0
+
+# Blocking optimization in default $(CXXFLAGS) isn't enough, because
+# it is too easily overridden by specifying $(CXXFLAGS) on the command
+# line. This flag overrides such overrides:
+
+$(my_unoptimizable_files): tutelary_flag := -O0
 
 ################################################################################
 
@@ -654,10 +676,10 @@ actually_used_pch_flags := -DLMI_COMPILER_USES_PCH
 endif # USE_PCH
 
 CFLAGS = \
-  $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(ggc_flags) $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 CXXFLAGS = \
-  $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(ggc_flags) $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 # Explicitly disable the infelicitous auto-import default. See:
 #   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
@@ -773,8 +795,8 @@ REQUIRED_RCFLAGS = \
 
 ALL_ARFLAGS  = $(REQUIRED_ARFLAGS)  $(ARFLAGS)
 ALL_CPPFLAGS = $(REQUIRED_CPPFLAGS) $(CPPFLAGS)
-ALL_CXXFLAGS = $(REQUIRED_CXXFLAGS) $(CXXFLAGS)
-ALL_CFLAGS   = $(REQUIRED_CFLAGS)   $(CFLAGS)
+ALL_CXXFLAGS = $(REQUIRED_CXXFLAGS) $(CXXFLAGS) $(tutelary_flag)
+ALL_CFLAGS   = $(REQUIRED_CFLAGS)   $(CFLAGS)   $(tutelary_flag)
 ALL_LDFLAGS  = $(REQUIRED_LDFLAGS)  $(LDFLAGS)
 ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 

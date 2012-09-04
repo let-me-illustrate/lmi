@@ -1,0 +1,214 @@
+  # Set up working environment for development
+  # Do this after running 'install_cygwin.bat' and 'install_msw.sh'
+
+  # To make sure Cygwin-1.5 and -1.7 both work, perform all steps
+  # in this file, for Cygwin-1.5 first; then remove the "C:\lmi"
+  # directory and perform them all again for Cygwin-1.7
+
+  # First of all, start bash to set up '~' directory
+  # (this might not have been done yet for Cygwin-1.5)
+
+  # Optionally mount an archive directory (assumed below--adjust prn)
+
+echo 'F:/gwc                    /archive       lmi_specific binary,user 0 0' >> /etc/fstab
+  # This alternative uses a network drive:
+#echo '//GWC/SharedDocs          /archive       lmi_specific binary,user 0 0' >> /etc/fstab
+
+  # If migrating from an old to a new machine, copy credentials
+  # to '~/.ssh' thus:
+
+pushd /archive/home
+cp --preserve --recursive .cvspass .ssh/ .subversion/ .zshrc ~
+popd
+
+  # Similarly, when replacing an old Cygwin installation whose
+  # personalized files aren't in an archive directory:
+
+pushd /cygdrive/c/OldCygwin/home/YourNameHere/
+cp --preserve --recursive .cvspass .ssh/ .subversion/ .zshrc ~
+popd
+
+  # Configure zsh (while still in bash)
+
+  # Use 'compinit -u' to avoid a "security" warning with Cygwin-1.5
+  # (securing shell history doesn't make msw secure)
+  #
+  # For bash, Cygwin's '/etc/profile' prepends this:
+  #   /usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin: [1.5]
+  #   /usr/local/bin:/usr/bin:/bin:                [1.7]
+  # to $PATH. Here, the (unnecessary) X directory is omitted,
+  #   /usr/sbin:/sbin:
+  # is added (inadvertently omitted from '/etc/profile'?), and
+  #   /opt/lmi/local/bin:/opt/lmi/local/lib
+  # is added to support lmi development.
+  #
+  # Key bindings are for mintty:
+  #   https://groups.google.com/forum/?fromgroups#!topic/mintty-discuss/v4b86DBNI80
+  # For msw console (not recommended), instead use:
+  #   bindkey "\e[1~" beginning-of-line
+  #   bindkey "\e[4~" end-of-line
+  #
+  # Adjust $coefficiency to suit the machine.
+
+/bin/cat >~/.zshrc <<\EOF
+PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+
+export coefficiency='--jobs=12'
+
+bindkey "\e[3~" delete-char      # Del
+bindkey '\e[H' beginning-of-line # Home
+bindkey '\e[F' end-of-line       # End
+bindkey "^[[1;5D" backward-word  # Ctrl-left
+bindkey "^[[1;5C" forward-word   # Ctrl-right
+bindkey '\e[1;3D' backward-word  # Alt-left
+bindkey '\e[1;3C' forward-word   # Alt-right
+
+prompt=%d[%?]$
+
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.history
+setopt HIST_IGNORE_DUPS
+
+autoload -U compinit
+compinit -u
+
+EOF
+
+  # Create a zsh-mintty shortcut--e.g., in:
+  #   C:\Documents and Settings\All Users\Start Menu
+  # Target:
+  #   C:\cygwin-1_7\bin\mintty.exe /bin/zsh --login
+  # Start in:
+  #   C:\cygwin-1_7\bin
+  # and similarly for Cygwin 1.5
+
+  # Close bash; open zsh
+
+  # Configure ssh
+
+  # Create new credentials if necessary, if not copied elsewhence
+echo "Protocol 2" > ~/.ssh/config
+ssh-keygen -t dsa
+  # and register key here:
+  #   http://savannah.gnu.org/account/editsshkeys.php
+
+  # Check permissions; make sure they're not too open
+
+chown -R `whoami` ~/.ssh
+chmod 600 ~/.ssh/*
+stat --format=%a%n ~/.ssh/*
+
+  # All those files should have '600' permissions
+
+  # Initialize cvs (savannah webpages are on a cvs-only server)
+  # Nothing to do here: 'install_msw.sh' already created '~/.cvspass'
+  # but do this:
+touch ~/.cvspass
+  # iff that failed
+
+  # Test ssh
+
+eval `ssh-agent`
+ssh-agent $SHELL
+ssh-add ~/.ssh/id_dsa
+  [passphrase]
+
+  # If you see the following:
+
+The authenticity of host 'svn.savannah.nongnu.org (140.186.70.72)' can't be established.
+RSA key fingerprint is 80:5a:b0:0c:ec:93:66:29:49:7e:04:2b:fd:ba:2c:d5.
+Are you sure you want to continue connecting (yes/no)?
+
+  # then answer 'yes' after verifying that the fingerprint matches exactly:
+  #   http://savannah.gnu.org/maintenance/SshAccess
+  # to preclude a man-in-the-middle attack (you may be asked more than once)
+
+  # Similarly, try to access this URL:
+https://savannah.gnu.org/
+  # and follow the instructions here if needed:
+http://savannah.gnu.org/tls/tutorial/
+
+  # Initialize svn
+
+svn --help >/dev/null 2>&1
+
+sed -i ~/.subversion/config \
+  -e'/[[]miscellany[]]/s/$/\nuse-commit-times = yes\nenable-auto-props = yes/' \
+  -e'/[[]auto-props[]]/s/$/\n* = svn:keywords=Id/'
+
+  # Mirror online repositories
+  #
+  # 'install_cygwin.bat' already mounted /lmi/ for Cygwin-1.7;
+  # execute this command...
+mount -f -s -b "C:/lmi" "/lmi"
+  # ...for Cygwin-1.5 only
+
+mkdir --parents /lmi/mirror
+cd /lmi/mirror
+svn checkout http://svn.savannah.nongnu.org/svn/lmi/lmi/trunk lmi
+svn checkout http://svn.savannah.nongnu.org/svn/lmi/skeleton/trunk skeleton
+
+  # All savannah webpages are on a cvs-only server
+  # Use a subdirectory to avoid conflict on name 'lmi'
+  #
+  # If you're behind a draconian corporate firewall, you may need to
+  # use your ssh credentials instead of 'pserver' (cf. code below that
+  # creates a local working copy)
+
+mkdir --parents /lmi/mirror/web
+cd /lmi/mirror/web
+cvs -z3 -d:pserver:anonymous@cvs.savannah.nongnu.org:/web/lmi checkout lmi
+
+  # Create a local working copy
+
+  # Replace my name with yours wherever it occurs below
+
+  # All savannah webpages are on a cvs-only server
+  # Use a subdirectory to avoid conflict on name 'lmi'
+  # Handle cvs first--cvs has better error messages than svn
+
+mkdir --parents /lmi/src/web
+cd /lmi/src/web
+export CVS_RSH="ssh"
+export CVSROOT="chicares@cvs.sv.gnu.org:/web/lmi"
+cvs -z3 checkout lmi
+
+  # For svn, nothing like $CVS_RSH or $CVSROOT is needed: that
+  # information is embedded in the working copy.
+  #
+  # The syntax varies among protocols:
+  #   svn checkout    http://         svn.savannah.nongnu.org/svn/lmi/lmi/trunk lmi
+  #   svn checkout     svn://         svn.savannah.nongnu.org    /lmi/lmi/trunk lmi
+  #   svn checkout svn+ssh://chicares@svn.savannah.nongnu.org    /lmi/lmi/trunk lmi
+
+mkdir --parents /lmi/src
+cd /lmi/src
+svn checkout svn+ssh://chicares@svn.savannah.nongnu.org/lmi/lmi/trunk lmi
+  # [anticipate a "fingerprint" message here the first time]
+pushd lmi; svn propset svn:keywords "Id" . --recursive; popd
+svn checkout svn+ssh://chicares@svn.savannah.nongnu.org/lmi/skeleton/trunk skeleton
+pushd skeleton; svn propset svn:keywords "Id" . --recursive; popd
+
+  # Copy proprietary test data
+
+  # contents: most recent archive, or working copy of proprietary svn
+mkdir --parents /opt/lmi/test
+cp --preserve /archive/lmi/testdecks/* /opt/lmi/test
+
+  # contents: verifiable with shared 'md5sums'
+mkdir --parents /opt/lmi/touchstone
+cp --preserve /archive/lmi/touchstone/* /opt/lmi/touchstone
+
+  # Copy proprietary products
+
+  # contents: most recent archive, or working copy of proprietary svn
+mkdir --parents /lmi/src/products/src
+cp --preserve /archive/lmi/src/products/src/* /lmi/src/products/src
+
+  # 'install_msw.sh' already created the target directory
+  #
+  # contents: any '.dat' or '.ndx' file missing or differing from
+  # 'lmi-data*' in lmi's ftp area
+cp --preserve /archive/lmi/data/* /opt/lmi/data
+
