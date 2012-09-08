@@ -1209,7 +1209,7 @@ to the xsl files first.
                   <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
                 </fo:block>
               </xsl:if>
-              <xsl:call-template name="print-franchise-and-policynumber"/>
+              <xsl:call-template name="print-mastercontractnumber-and-contractnumber"/>
             </fo:table-cell>
             <fo:table-cell text-align="left">
               <fo:block>
