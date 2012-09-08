@@ -451,7 +451,7 @@ void check_config_hpp(file const& f)
 /// | year to all files in the package, and be done with it for the
 /// | rest of the year.
 /// ...
-/// | stick with parenthesized ‘C’ unless you know that C-in-a-circle
+/// | stick with parenthesized 'C' unless you know that C-in-a-circle
 /// | will work.
 ///
 /// For html files, two copyright notices are required. The first
