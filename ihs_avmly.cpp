@@ -1144,7 +1144,7 @@ void AccountValue::TxTestGPT()
     // SOMEDAY !! Actually, forceouts reduce basis only to the extent
     // they're nontaxable. For now, tax basis is used only as a limit
     // (if requested) on withdrawals, and it is conservative for that
-    // purpose to underestimate basis. TAXATION !! 7702(f)(7)(B–E).
+    // purpose to underestimate basis. TAXATION !! 7702(f)(7)(B-E).
 
     CumPmts     -= GptForceout;
     TaxBasis    -= GptForceout;

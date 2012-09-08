@@ -30720,6 +30720,11 @@ Guard against a perilous command-line override.
   workhorse.make
 Tune gcc.
 
+20120907T1029Z <gchicares@sbcglobal.net> [567]
+
+  ihs_avmly.cpp
+Improve documentation and concinnity.
+
 20120908T0150Z <wboutin@massmutual.com> [567]
 
   fo_common.xsl
@@ -30730,4 +30735,15 @@ Tune gcc.
   reg_d_offshore.xsl
   variable_annuity.xsl
 Rename a variable.
+
+20120908T0913Z <gchicares@sbcglobal.net> [567]
+
+  test_coding_rules.cpp
+Restrict non-binary files to ISO-8859-15 and whitespace.
+
+20120908T0918Z <gchicares@sbcglobal.net> [567]
+
+  ihs_avmly.cpp
+  test_coding_rules.cpp
+Replace characters forbidden 20120908T0913Z.
 
