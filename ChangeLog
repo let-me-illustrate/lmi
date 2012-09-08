@@ -30720,3 +30720,14 @@ Guard against a perilous command-line override.
   workhorse.make
 Tune gcc.
 
+20120908T0150Z <wboutin@massmutual.com> [567]
+
+  fo_common.xsl
+  illustration_reg.xsl
+  nasd.xsl
+  reg_d_group.xsl
+  reg_d_individual.xsl
+  reg_d_offshore.xsl
+  variable_annuity.xsl
+Rename a variable.
+
