@@ -30747,3 +30747,10 @@ Restrict non-binary files to ISO-8859-15 and whitespace.
   test_coding_rules.cpp
 Replace characters forbidden 20120908T0913Z.
 
+20120916T2317Z <wboutin@massmutual.com> [567]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Add several new inforce fields.
+
