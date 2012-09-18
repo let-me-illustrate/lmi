@@ -30754,3 +30754,13 @@ Replace characters forbidden 20120908T0913Z.
   skin_reg_d.xrc
 Add several new inforce fields.
 
+20120918T0209Z <gchicares@sbcglobal.net> [567]
+
+  multiple_cell_document.cpp
+Work around defects in certain admin-system extracts.
+
+20120918T0210Z <gchicares@sbcglobal.net> [567]
+
+  version.hpp
+Designate release candidate.
+
