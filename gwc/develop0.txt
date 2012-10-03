@@ -53,7 +53,7 @@ popd
 /bin/cat >~/.zshrc <<\EOF
 PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
-export coefficiency='--jobs=12'
+export coefficiency='--jobs=16'
 
 bindkey "\e[3~" delete-char      # Del
 bindkey '\e[H' beginning-of-line # Home

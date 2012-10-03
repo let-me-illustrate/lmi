@@ -38,7 +38,6 @@ svn remove dbdict.cpp
 svn mv ihs_dbdict.cpp dbdict.cpp
 
   # Make a patch against repository from local tree
-  # suitable for pasting into 'ChangeLog'
 
 svn diff file0.cpp file1.cpp >/dev/clipboard
 cvs diff -U3 file0.cpp file1.cpp >/dev/clipboard
