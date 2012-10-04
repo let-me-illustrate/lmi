@@ -31,9 +31,9 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#include <xmlwrapp/node.h> // (for xml::element)
+#include <xmlwrapp/node.h>              // xml::element
 
-#include <cstddef>         // std::size_t
+#include <cstddef>                      // std::size_t
 #include <iosfwd>
 #include <string>
 
@@ -80,32 +80,14 @@ namespace xml_lmi
         boost::scoped_ptr<Document>    document_;
     };
 
-    /// Find an element subnode by name, throwing if it is not found.
-
     xml::node::const_iterator retrieve_element
         (xml::element const& parent
         ,std::string  const& name
         );
 
-    /// Retrieve an xml element's full text-node contents.
-    ///
-    /// The contents of all text-node children are concatenated.
-    ///
-    /// Only direct children are considered: children of child nodes
-    /// are not.
-
     std::string get_content(xml::element const&);
 
-    /// Retrieve an xml element's name.
-
     std::string get_name(xml::element const&);
-
-    // Attribute functions.
-
-    /// Get a given attribute of an xml element.
-    ///
-    /// If the element has no such attribute, then return false and
-    /// guarantee not to modify 'value'.
 
     bool get_attr
         (xml::element const&
@@ -117,8 +99,6 @@ namespace xml_lmi
         ,std::string const& name
         ,int&               value
         );
-
-    /// Set a given attribute of an xml element.
 
     void set_attr
         (xml::element&
