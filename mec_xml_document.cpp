@@ -49,6 +49,14 @@ mec_xml_document::mec_xml_document(mec_input const& z)
 }
 
 //============================================================================
+mec_xml_document::mec_xml_document(std::string const& filename)
+    :input_data_()
+{
+    xml_lmi::dom_parser parser(filename);
+    parse(parser.root_node(xml_root_name()));
+}
+
+//============================================================================
 mec_xml_document::~mec_xml_document()
 {
 }
