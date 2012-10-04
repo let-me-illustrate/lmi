@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "istream_to_string.hpp"
+#include "platform_dependent.hpp"       // access()
 #include "value_cast.hpp"
 
 #include <xmlwrapp/attributes.h>
@@ -62,6 +63,10 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
         if(filename.empty())
             {
             throw std::runtime_error("File name is empty.");
+            }
+        if(0 != access(filename.c_str(), F_OK))
+            {
+            throw std::runtime_error("File does not exist.");
             }
         parser_.reset(new DomParser(filename.c_str()));
         if(0 == parser_.get())
