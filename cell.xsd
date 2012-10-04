@@ -675,9 +675,10 @@ is paid.</xs:documentation>
   <xs:element name="InforceCumulativeRopPayments" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Inforce cumulative payments for return of premium death
-benefit option: sum of all gross premiums, including dump-ins
-and 1035 exchange proceeds, minus withdrawals and premiums
-refunded or forced out.</xs:documentation>
+benefit option and for loads banded by cumulative premium:
+sum of all gross premiums, including dump-ins and 1035
+exchange proceeds, minus withdrawals and premiums refunded
+or forced out.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceCumulativeSalesLoad" type="nonnegative_double">
