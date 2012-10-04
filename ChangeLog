@@ -30764,3 +30764,16 @@ Work around defects in certain admin-system extracts.
   version.hpp
 Designate release candidate.
 
+20121004T1049Z <gchicares@sbcglobal.net> [567]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Move comments, rephrasing some.
+
+20121004T1130Z <gchicares@sbcglobal.net> [567]
+
+  xml_lmi.cpp
+Improve diagnostics. A missing file should not be diagnosed as an
+"unknown XML parsing error". Testcase:
+  lmi_cli_shared.exe --accept --file=nonexistent.cns
+
