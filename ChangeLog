@@ -30777,3 +30777,27 @@ Improve diagnostics. A missing file should not be diagnosed as an
 "unknown XML parsing error". Testcase:
   lmi_cli_shared.exe --accept --file=nonexistent.cns
 
+20121004T1215Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+Improve documentation.
+
+20121004T1902Z <gchicares@sbcglobal.net> [567]
+
+  mec_server.cpp
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+Refactor for simplicity.
+
+20121006T1059Z <gchicares@sbcglobal.net> [567]
+
+  ihs_acctval.cpp
+Improve documentation.
+
+20121008T1344Z <gchicares@sbcglobal.net> [567]
+
+  input_harmonization.cpp
+Improve documentation. There's no point in adding a database entity to
+control a feature that's not yet implemented.
+

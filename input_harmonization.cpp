@@ -705,7 +705,7 @@ false // Silly workaround for now.
 //
 // TODO ?? WX PORT !! But for now, use this workaround: products that have no
 // general account can't select non-custom funds--there's no GUI for
-// that anyway. DATABASE !! Consider adding an 'allow fund choice' entity.
+// that anyway. INPUT !! See: http://savannah.nongnu.org/support/?104481
 //
     FundChoiceType.allow(mce_fund_selection, !sepacct_only);
 
