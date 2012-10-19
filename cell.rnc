@@ -270,11 +270,11 @@ cell_element = element cell
      element InforceTaxBasis                  {xsd:double}
     ,## * [obsolete]
      element InforceYear                      {duration_int}
-    ,## Year-to-date payments counted toward target premium.
+    ,## Policy-year-to-date payments counted toward target premium.
      element InforceYtdGrossPremium           {nonnegative_double}
-    ,## Inforce year-to-date "net" COI charge for experience rating.
+    ,## Policy-year-to-date "net" COI charge for experience rating.
      element InforceYtdNetCoiCharge           {nonnegative_double}
-    ,## Year-to-date payments subject to premium tax.
+    ,## Policy-year-to-date payments subject to premium tax.
      element InforceYtdTaxablePremium         {nonnegative_double}
     ,## * Investment management fee of a custom fund.
      element InputFundManagementFee           {nonnegative_double}
