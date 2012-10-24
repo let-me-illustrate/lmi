@@ -30801,3 +30801,29 @@ Improve documentation.
 Improve documentation. There's no point in adding a database entity to
 control a feature that's not yet implemented.
 
+20121019T1213Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+Improve documentation.
+
+20121023T0008Z <gchicares@sbcglobal.net> [567]
+
+  sort_cell_subelements.xsl [new file]
+Sort <cell> subelements.
+
+20121024T1650Z <gchicares@sbcglobal.net> [567]
+
+  input_harmonization.cpp
+Refactor.
+
+20121024T1841Z <gchicares@sbcglobal.net> [567]
+
+  input_harmonization.cpp
+Prototype a constant COI-reentry date.
+
+20121024T2205Z <gchicares@sbcglobal.net> [567]
+
+  version.hpp
+Designate release candidate.
+
