@@ -28,18 +28,17 @@
 
 #include "input.hpp"
 
+#include "actuarial_table.hpp"          // e_reenter_upon_rate_reset
 #include "alert.hpp"
-#include "assert_lmi.hpp"
 #include "calendar_date.hpp"
-#include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
-#include "mc_enum_types_aux.hpp"
-#include "value_cast.hpp"
+#include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg(), is_three_rate_nasd()
 
-#include <algorithm> // std::min(), std::max()
+#include <algorithm>                    // std::min(), std::max()
+#include <utility>                      // std::pair
 
 // Harmonization is physically separated for no better reason than to
 // facilitate its development at a time when it frequently changes.
@@ -390,13 +389,7 @@ if(!egregious_kludge)
         ,true
         );
     LastCoiReentryDate.maximum(most_recent_anniversary);
-    // DATABASE !! Here, 'e_reenter_upon_rate_reset' would be better
-    // than the hardcoded '2'. However, '2' is already hardcoded in
-    // the 'dbnames.xpp' explanation of 'LastCoiReentryDate', so
-    // hardcoding it here doesn't introduce a new kind of defect.
-    // Ultimately, the product database should probably use mc_enum
-    // types instead; until then, this will do.
-    LastCoiReentryDate.enable(2 == database_->Query(DB_CoiInforceReentry));
+    LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->Query(DB_CoiInforceReentry));
 
     BlendGender.enable(database_->Query(DB_AllowMortBlendSex));
     bool blend_mortality_by_gender = mce_yes == BlendGender;
