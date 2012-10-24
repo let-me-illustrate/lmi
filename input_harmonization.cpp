@@ -383,12 +383,22 @@ if(!egregious_kludge)
         );
     FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
 
-    calendar_date const most_recent_anniversary = add_years
-        (EffectiveDate.value()
-        ,InforceYear  .value()
-        ,true
-        );
-    LastCoiReentryDate.maximum(most_recent_anniversary);
+    // DATABASE !! This temporary kludge will soon be replaced.
+    double const coimult = database_->Query(DB_CurrCoiMultiplier);
+    if(0.9029 < coimult && coimult < 0.9031 && !global_settings::instance().regression_testing())
+        {
+        calendar_date const z(2009, 1, 1);
+        LastCoiReentryDate.minimum_and_maximum(z, z);
+        }
+    else
+        {
+        calendar_date const most_recent_anniversary = add_years
+            (EffectiveDate.value()
+            ,InforceYear  .value()
+            ,true
+            );
+        LastCoiReentryDate.maximum(most_recent_anniversary);
+        }
     LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->Query(DB_CoiInforceReentry));
 
     BlendGender.enable(database_->Query(DB_AllowMortBlendSex));
