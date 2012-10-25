@@ -1014,19 +1014,7 @@ void Input::DoTransmogrify()
         return;
         }
 
-    std::pair<int,int> ym0 = years_and_months_since
-        (EffectiveDate  .value()
-        ,InforceAsOfDate.value()
-        );
-    InforceYear  = ym0.first;
-    InforceMonth = ym0.second;
-
-    std::pair<int,int> ym1 = years_and_months_since
-        (LastMaterialChangeDate.value()
-        ,InforceAsOfDate       .value()
-        );
-    InforceContractYear  = ym1.first;
-    InforceContractMonth = ym1.second;
+    set_inforce_durations_from_dates();
 
     // USER !! This is the credited rate as of the database date,
     // regardless of the date of illustration, because the database
@@ -1077,10 +1065,10 @@ if(!egregious_kludge)
         ;
   } // end if(!egregious_kludge)
 
-    SetSolveDurations();
+    set_solve_durations();
 }
 
-void Input::SetSolveDurations()
+void Input::set_solve_durations()
 {
     switch(SolveTgtAtWhich.value())
         {
@@ -1190,5 +1178,22 @@ void Input::SetSolveDurations()
     SolveTargetTime = issue_age() + SolveTargetYear.value();
     SolveBeginTime  = issue_age() + SolveBeginYear .value();
     SolveEndTime    = issue_age() + SolveEndYear   .value();
+}
+
+void Input::set_inforce_durations_from_dates()
+{
+    std::pair<int,int> ym0 = years_and_months_since
+        (EffectiveDate  .value()
+        ,InforceAsOfDate.value()
+        );
+    InforceYear  = ym0.first;
+    InforceMonth = ym0.second;
+
+    std::pair<int,int> ym1 = years_and_months_since
+        (LastMaterialChangeDate.value()
+        ,InforceAsOfDate       .value()
+        );
+    InforceContractYear  = ym1.first;
+    InforceContractMonth = ym1.second;
 }
 
