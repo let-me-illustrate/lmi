@@ -622,34 +622,6 @@ false // Silly workaround for now.
     Payment           .enable(mce_solve_ee_prem != SolveType);
     CorporationPayment.enable(mce_solve_er_prem != SolveType);
 
-    IndividualPaymentMode.allow_all(true);
-    // TODO ?? Should the following be permitted? If so, then either
-    // enumerators must always be simple zero-based ordinals, or
-    // arguments to allow() must be values instead of ordinals.
-//    IndividualPaymentMode.allow(mce_annual    , true);
-//    IndividualPaymentMode.allow(mce_semiannual, true);
-//    IndividualPaymentMode.allow(mce_quarterly , true);
-//    IndividualPaymentMode.allow(mce_monthly   , true);
-
-/*
-    // TODO ?? WX PORT !! Figure out how to do this properly:
-
-    if(is_indv_mode_sequence_empty)
-        {
-        MODE_ANNUAL     ->SetCheck(BF_CHECKED);
-        MODE_SEMI       ->SetCheck(BF_UNCHECKED);
-        MODE_QUARTERLY  ->SetCheck(BF_UNCHECKED);
-        MODE_MONTHLY    ->SetCheck(BF_UNCHECKED);
-        }
-    if(!is_indv_mode_simply_representable)
-        {
-        MODE_ANNUAL     ->EnableWindow(false);
-        MODE_SEMI       ->EnableWindow(false);
-        MODE_QUARTERLY  ->EnableWindow(false);
-        MODE_MONTHLY    ->EnableWindow(false);
-        }
-*/
-
     GeneralAccountRateType .allow(mce_credited_rate , true);
     GeneralAccountRateType .allow(mce_earned_rate, mce_no == UseCurrentDeclaredRate && (anything_goes || database_->Query(DB_AllowGenAcctEarnRate)));
 
