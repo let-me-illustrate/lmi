@@ -477,8 +477,6 @@ true // Silly workaround for now.
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_corridor    , !inhibit_premium_based_strategies);
     SpecifiedAmountStrategyFromIssue.enable(!specamt_solve && !specamt_from_term_proportion && mce_sa_input_scalar == SpecifiedAmountStrategyFromIssue);
 
-    SpecifiedAmountFromIssue.enable(!specamt_solve && !specamt_from_term_proportion && mce_sa_input_scalar == SpecifiedAmountStrategyFromIssue);
-
     bool inhibit_sequence = specamt_solve || specamt_from_term_proportion;
     SpecifiedAmount.enable(!inhibit_sequence);
 
@@ -552,12 +550,6 @@ false // Silly workaround for now.
         || mce_solve_ee_prem == SolveType
         ;
 
-    IndividualPaymentToAlternative.allow(mce_to_retirement, !inhibit_prem_simple && !prem_solve);
-    IndividualPaymentToAlternative.allow(mce_to_year      , !inhibit_prem_simple && !prem_solve);
-    IndividualPaymentToAlternative.allow(mce_to_age       , !inhibit_prem_simple && !prem_solve);
-    IndividualPaymentToAlternative.allow(mce_to_maturity  , !inhibit_prem_simple && !prem_solve);
-    IndividualPaymentToAlternative.enable(!prem_solve);
-
     IndividualPaymentStrategy.allow(mce_pmt_input_scalar, !inhibit_prem_simple && !prem_solve);
     IndividualPaymentStrategy.allow(mce_pmt_minimum     , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
     IndividualPaymentStrategy.allow(mce_pmt_target      , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
@@ -567,10 +559,6 @@ false // Silly workaround for now.
     IndividualPaymentStrategy.allow(mce_pmt_corridor    , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
     IndividualPaymentStrategy.allow(mce_pmt_table       , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
     IndividualPaymentStrategy.enable(!inhibit_prem_simple && !prem_solve);
-
-    IndividualPaymentAmount    .enable(mce_pmt_input_scalar == IndividualPaymentStrategy);
-    IndividualPaymentToAge     .enable(mce_to_age  == IndividualPaymentToAlternative);
-    IndividualPaymentToDuration.enable(mce_to_year == IndividualPaymentToAlternative);
 
 //    InsuredPremiumTableNumber.enable(mce_pmt_table == IndividualPaymentStrategy); // // INPUT !! Obsolete scalar alternative control.
 // In the legacy system, that control, 'InsuredPremiumTableFactor',
@@ -673,29 +661,9 @@ false // Silly workaround for now.
     bool wd_solve = (mce_solve_wd == SolveType);
     bool wd_forbidden = !wd_allowed;
 
-    Withdrawal.enable(!wd_forbidden && !wd_solve);
-
     bool wd_inhibit = wd_solve || wd_forbidden;
-// TODO ?? WX PORT !! Figure out how to do this properly:
-    bool wd_inhibit_simple = wd_inhibit; // || !is_wd_simply_representable;
 
-    WithdrawalFromAlternative.allow(mce_from_issue     , !wd_inhibit_simple);
-    WithdrawalFromAlternative.allow(mce_from_year      , !wd_inhibit_simple);
-    WithdrawalFromAlternative.allow(mce_from_age       , !wd_inhibit_simple);
-    WithdrawalFromAlternative.allow(mce_from_retirement, !wd_inhibit_simple);
-    WithdrawalFromAlternative.enable(!wd_inhibit_simple);
-
-    WithdrawalToAlternative  .allow(mce_to_retirement  , !wd_inhibit_simple);
-    WithdrawalToAlternative  .allow(mce_to_year        , !wd_inhibit_simple);
-    WithdrawalToAlternative  .allow(mce_to_age         , !wd_inhibit_simple);
-    WithdrawalToAlternative  .allow(mce_to_maturity    , !wd_inhibit_simple);
-    WithdrawalToAlternative  .enable(!wd_inhibit_simple);
-
-    WithdrawalAmount         .enable(!wd_inhibit_simple);
-    WithdrawalFromAge        .enable(!wd_inhibit_simple && mce_from_age  == WithdrawalFromAlternative);
-    WithdrawalFromDuration   .enable(!wd_inhibit_simple && mce_from_year == WithdrawalFromAlternative);
-    WithdrawalToAge          .enable(!wd_inhibit_simple && mce_to_age    == WithdrawalToAlternative);
-    WithdrawalToDuration     .enable(!wd_inhibit_simple && mce_to_year   == WithdrawalToAlternative);
+    Withdrawal.enable(!wd_inhibit);
 
     bool loan_solve = mce_solve_loan == SolveType;
     bool loan_forbidden = !loan_allowed;
@@ -703,8 +671,6 @@ false // Silly workaround for now.
     WithdrawToBasisThenLoan.enable(!wd_forbidden && !loan_forbidden);
 
     bool loan_inhibit = loan_solve || loan_forbidden;
-// TODO ?? WX PORT !! Figure out how to do this properly:
-    bool loan_inhibit_simple = loan_inhibit; // !is_loan_simply_representable;
 
     NewLoan.enable(!loan_inhibit);
 
@@ -712,24 +678,6 @@ false // Silly workaround for now.
     InforcePreferredLoanValue  .enable(pref_loan_allowed);
     InforceRegularLoanBalance  .enable(loan_allowed);
     InforcePreferredLoanBalance.enable(pref_loan_allowed);
-
-    LoanFromAlternative.allow(mce_from_issue     , !loan_inhibit_simple);
-    LoanFromAlternative.allow(mce_from_year      , !loan_inhibit_simple);
-    LoanFromAlternative.allow(mce_from_age       , !loan_inhibit_simple);
-    LoanFromAlternative.allow(mce_from_retirement, !loan_inhibit_simple);
-    LoanFromAlternative.enable(!loan_inhibit_simple);
-
-    LoanToAlternative  .allow(mce_to_retirement  , !loan_inhibit_simple);
-    LoanToAlternative  .allow(mce_to_year        , !loan_inhibit_simple);
-    LoanToAlternative  .allow(mce_to_age         , !loan_inhibit_simple);
-    LoanToAlternative  .allow(mce_to_maturity    , !loan_inhibit_simple);
-    LoanToAlternative  .enable(!loan_inhibit_simple);
-
-    LoanAmount         .enable(!loan_inhibit_simple);
-    LoanFromAge        .enable(!loan_inhibit_simple && mce_from_age  == LoanFromAlternative);
-    LoanFromDuration   .enable(!loan_inhibit_simple && mce_from_year == LoanFromAlternative);
-    LoanToAge          .enable(!loan_inhibit_simple && mce_to_age    == LoanToAlternative);
-    LoanToDuration     .enable(!loan_inhibit_simple && mce_to_year   == LoanToAlternative);
 
     TermRider.enable(database_->Query(DB_AllowTerm));
     TermRider.allow(mce_yes, database_->Query(DB_AllowTerm));
