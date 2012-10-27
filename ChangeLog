@@ -30827,3 +30827,21 @@ Prototype a constant COI-reentry date.
   version.hpp
 Designate release candidate.
 
+20121025T0930Z <gchicares@sbcglobal.net> [567]
+
+  input.hpp
+  input_harmonization.cpp
+Refactor.
+
+20121026T1310Z <gchicares@sbcglobal.net> [565]
+
+  input_harmonization.cpp
+  mc_enum.cpp
+Remove obsolete code; move and improve documentation.
+
+20121027T1009Z <gchicares@sbcglobal.net> [563]
+
+  input_harmonization.cpp
+Remove obsolete code. Input::RealizeDeathBenefitOption() already
+contains equivalent logic.
+

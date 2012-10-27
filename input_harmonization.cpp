@@ -482,8 +482,8 @@ true // Silly workaround for now.
     bool inhibit_sequence = specamt_solve || specamt_from_term_proportion;
     SpecifiedAmount.enable(!inhibit_sequence);
 
-    bool never_retire = database_->Query(DB_MaturityAge) <= RetirementAge.value();
 /*
+    bool never_retire = database_->Query(DB_MaturityAge) <= RetirementAge.value();
 // TODO ?? WX PORT !! Figure out how to handle the next line:
     if(!is_specamt_simply_representable)
         {
@@ -530,31 +530,6 @@ true // Silly workaround for now.
         POSTRET_SAME_AS     ->EnableWindow(false);
         POSTRET_SCALAR      ->EnableWindow(false);
         POSTRET_AMOUNT      ->EnableWindow(false);
-        }
-*/
-
-    // TODO ?? WX PORT !! Figure out how to do this properly.
-    bool is_dbopt_simply_representable = true;
-
-    DeathBenefitOptionFromRetirement.allow(mce_option1, is_dbopt_simply_representable);
-    DeathBenefitOptionFromRetirement.allow(mce_option2, is_dbopt_simply_representable);
-    DeathBenefitOptionFromRetirement.allow(mce_rop    , is_dbopt_simply_representable && database_->Query(DB_AllowDbo3));
-    DeathBenefitOptionFromIssue     .allow(mce_option1, is_dbopt_simply_representable && !never_retire);
-    DeathBenefitOptionFromIssue     .allow(mce_option2, is_dbopt_simply_representable && !never_retire && (database_->Query(DB_AllowChangeToDbo2) || mce_option2 == DeathBenefitOptionFromRetirement));
-    DeathBenefitOptionFromIssue     .allow(mce_rop    , is_dbopt_simply_representable && !never_retire && database_->Query(DB_AllowDbo3));
-
-/*
-    // TODO ?? WX PORT !! Figure out how to do this properly.
-    if(is_dbopt_sequence_empty)
-        {
-        // Input sequence governs, and if it's empty, defaults
-        // are used, so make radiobuttons reflect that.
-        DBOPT_INIT_1        ->SetCheck(BF_CHECKED);
-        DBOPT_INIT_2        ->SetCheck(BF_UNCHECKED);
-        DBOPT_INIT_ROP      ->SetCheck(BF_UNCHECKED);
-        DBOPT_POSTRET_1     ->SetCheck(BF_CHECKED);
-        DBOPT_POSTRET_2     ->SetCheck(BF_UNCHECKED);
-        DBOPT_POSTRET_ROP   ->SetCheck(BF_UNCHECKED);
         }
 */
 
