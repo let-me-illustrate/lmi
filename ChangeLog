@@ -30845,3 +30845,15 @@ Remove obsolete code; move and improve documentation.
 Remove obsolete code. Input::RealizeDeathBenefitOption() already
 contains equivalent logic.
 
+20121027T1153Z <gchicares@sbcglobal.net> [561]
+
+  input.cpp
+  input_harmonization.cpp
+  yare_input.hpp
+Remove obsolete code involving ready-to-expunge member variables.
+
+20121028T1041Z <gchicares@sbcglobal.net> [561]
+
+  input_harmonization.cpp
+Don't enforce schema-prescribed defaults for fields marked "obsolete".
+
