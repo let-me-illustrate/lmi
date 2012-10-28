@@ -109,6 +109,49 @@ void Input::DoAdaptExternalities()
 
 void Input::DoCustomizeInitialValues()
 {
+    // First of all, initialize obsolete variables exactly as the
+    // schema prescribes, to accommodate admin extracts that don't
+    // necessarily do so.
+
+    // These are ready to expunge.
+    DeathBenefitOptionFromIssue      = "A";
+    DeathBenefitOptionFromRetirement = "A";
+    IndividualPaymentAmount          = 0.0;
+    IndividualPaymentMode            = "Annual";
+    IndividualPaymentToAge           = 0;
+    IndividualPaymentToAlternative   = "Retirement";
+    IndividualPaymentToDuration      = 0;
+    LoanAmount                       = 0.0;
+    LoanFromAge                      = 0;
+    LoanFromAlternative              = "Issue";
+    LoanFromDuration                 = 0;
+    LoanToAge                        = 0;
+    LoanToAlternative                = "Retirement";
+    LoanToDuration                   = 0;
+    SpecifiedAmountFromIssue         = 0.0;
+    SpecifiedAmountFromRetirement    = 0.0;
+    WithdrawalAmount                 = 0.0;
+    WithdrawalFromAge                = 0;
+    WithdrawalFromAlternative        = "Issue";
+    WithdrawalFromDuration           = 0;
+    WithdrawalToAge                  = 0;
+    WithdrawalToAlternative          = "Retirement";
+    WithdrawalToDuration             = 0;
+
+    // These are kept because their conditional-enablement code may be
+    // useful someday.
+    IndividualPaymentStrategy        = "PmtInputScalar";
+    SpecifiedAmountStrategyFromIssue = "SAInputScalar";
+
+    // These require special treatment. Initialize them to zero, as
+    // the schema prescribes, just to be sure that prescription works;
+    // then set them from the applicable date variables.
+    InforceContractMonth             = 0;
+    InforceContractYear              = 0;
+    InforceMonth                     = 0;
+    InforceYear                      = 0;
+    set_inforce_durations_from_dates();
+
     if(mce_yes == UseCurrentDeclaredRate)
         {
         GeneralAccountRate = current_credited_rate(*database_);
@@ -301,7 +344,10 @@ void Input::DoHarmonize()
     InforceAvBeforeLastMc   .enable(non_mec);
     InforceLeastDeathBenefit.enable(non_mec);
 
-    // These will soon be removed from the GUI:
+    // These four variables, formerly independent, are now dependent:
+    // set_inforce_durations_from_dates() calculates them from dates.
+    // They're retained in the GUI (always disabled) only because some
+    // end users have grown accustomed to them and want them kept.
     InforceYear         .enable(false);
     InforceMonth        .enable(false);
     InforceContractYear .enable(false);
