@@ -113,7 +113,7 @@ void Input::DoCustomizeInitialValues()
     // schema prescribes, to accommodate admin extracts that don't
     // necessarily do so.
 
-    // These are ready to expunge.
+    // INPUT !! These are ready to expunge.
     DeathBenefitOptionFromIssue      = "A";
     DeathBenefitOptionFromRetirement = "A";
     IndividualPaymentAmount          = 0.0;
@@ -511,7 +511,7 @@ true // Silly workaround for now.
     // Strategies based on glp and gsp are permitted even for
     // contracts that don't use gpt. One might want to select such a
     // strategy, then toggle back and forth between gpt and cvat to
-    // see what difference that makes.
+    // see what difference that makes. TAXATION !! Rethink that.
 
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_input_scalar, !specamt_solve && !specamt_from_term_proportion);
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_salary      , !specamt_solve && !specamt_from_term_proportion);
@@ -525,57 +525,6 @@ true // Silly workaround for now.
 
     bool inhibit_sequence = specamt_solve || specamt_from_term_proportion;
     SpecifiedAmount.enable(!inhibit_sequence);
-
-/*
-    bool never_retire = database_->Query(DB_MaturityAge) <= RetirementAge.value();
-// TODO ?? WX PORT !! Figure out how to handle the next line:
-    if(!is_specamt_simply_representable)
-        {
-        SCALAR              ->EnableWindow(false);
-        AMOUNT              ->EnableWindow(false);
-        IS_SALARY_PCT       ->EnableWindow(false);
-
-        MAX                 ->EnableWindow(false);
-        TGT                 ->EnableWindow(false);
-        MEC                 ->EnableWindow(false);
-        GLP                 ->EnableWindow(false);
-        GSP                 ->EnableWindow(false);
-        CORRIDOR            ->EnableWindow(false);
-        }
-*/
-
-/* TODO ?? WX PORT !! Post-retirment specamt strategy not ported.
-    POSTRET_SAME_AS     ->EnableWindow(!specamt_solve && !specamt_from_term_proportion);
-    POSTRET_SCALAR      ->EnableWindow(!specamt_solve && !specamt_from_term_proportion);
-    POSTRET_IS_PCT      ->EnableWindow(!specamt_solve && !specamt_from_term_proportion);
-
-    POSTRET_AMOUNT      ->EnableWindow
-        (   !specamt_solve
-        &&  !specamt_from_term_proportion
-        &&  BF_CHECKED == POSTRET_SCALAR->GetCheck()
-        );
-    POSTRET_PCT         ->EnableWindow
-        (   !specamt_solve
-        &&  !specamt_from_term_proportion
-        &&  BF_CHECKED == POSTRET_IS_PCT->GetCheck()
-        );
-
-    if(!is_specamt_simply_representable)
-        {
-        POSTRET_SAME_AS     ->EnableWindow(false);
-        POSTRET_SCALAR      ->EnableWindow(false);
-        POSTRET_IS_PCT      ->EnableWindow(false);
-        POSTRET_AMOUNT      ->EnableWindow(false);
-        POSTRET_PCT         ->EnableWindow(false);
-        }
-
-    if(never_retire)
-        {
-        POSTRET_SAME_AS     ->EnableWindow(false);
-        POSTRET_SCALAR      ->EnableWindow(false);
-        POSTRET_AMOUNT      ->EnableWindow(false);
-        }
-*/
 
     bool prem_solve = mce_solve_ee_prem == SolveType;
 
