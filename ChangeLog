@@ -30857,3 +30857,8 @@ Remove obsolete code involving ready-to-expunge member variables.
   input_harmonization.cpp
 Don't enforce schema-prescribed defaults for fields marked "obsolete".
 
+20121029T1030Z <gchicares@sbcglobal.net> [559]
+
+  input_harmonization.cpp
+Improve documentation; remove some obsolete commented-out code.
+
