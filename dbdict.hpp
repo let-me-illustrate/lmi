@@ -102,7 +102,6 @@ class LMI_SO DBDictionary
     database_entity AllowSimpUw         ;
     database_entity AllowGuarUw         ;
     database_entity SmokeOrTobacco      ;
-    database_entity PrefOrSelect        ;
     database_entity AllowPreferredClass ;
     database_entity AllowUltraPrefClass ;
     database_entity AllowSubstdTable    ;

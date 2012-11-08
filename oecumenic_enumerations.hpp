@@ -69,11 +69,6 @@ enum oenum_mvc_dv_rc
     ,oe_mvc_dv_changed
     };
 
-enum oenum_preferred_class_name
-    {oe_called_preferred
-    ,oe_called_select
-    };
-
 /// Used only for backward compatibility with old versions that didn't
 /// distinguish state of jurisdiction from premium-tax state.
 
