@@ -125,7 +125,6 @@ void DBDictionary::ascribe_members()
     ascribe("AllowSimpUw"         , &DBDictionary::AllowSimpUw         );
     ascribe("AllowGuarUw"         , &DBDictionary::AllowGuarUw         );
     ascribe("SmokeOrTobacco"      , &DBDictionary::SmokeOrTobacco      );
-    ascribe("PrefOrSelect"        , &DBDictionary::PrefOrSelect        );
     ascribe("AllowPreferredClass" , &DBDictionary::AllowPreferredClass );
     ascribe("AllowUltraPrefClass" , &DBDictionary::AllowUltraPrefClass );
     ascribe("AllowSubstdTable"    , &DBDictionary::AllowSubstdTable    );
@@ -834,7 +833,6 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AllowChangeToDbo2   , true));
     Add(database_entity(DB_AllowSpecAmtIncr    , true));
     Add(database_entity(DB_NoLapseAlwaysActive , false));
-    Add(database_entity(DB_PrefOrSelect        , oe_called_select));
     Add(database_entity(DB_ExpRatStdDevMult    , 0.0));
     Add(database_entity(DB_ExpRatIbnrMult      , 0.0));
     Add(database_entity(DB_ExpRatCoiRetention  , 0.0));
