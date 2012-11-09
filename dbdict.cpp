@@ -361,11 +361,9 @@ void DBDictionary::ascribe_members()
     ascribe("ExpRatAmortPeriod"   , &DBDictionary::ExpRatAmortPeriod   );
     ascribe("LedgerType"          , &DBDictionary::LedgerType          );
     ascribe("AgeLastOrNearest"    , &DBDictionary::AgeLastOrNearest    );
-    ascribe("MaxIllusAge"         , &DBDictionary::MaxIllusAge         );
     ascribe("MaturityAge"         , &DBDictionary::MaturityAge         );
     ascribe("LapseIgnoresSurrChg" , &DBDictionary::LapseIgnoresSurrChg );
     ascribe("DefaultProcessOrder" , &DBDictionary::DefaultProcessOrder );
-    ascribe("NominallyPar"        , &DBDictionary::NominallyPar        );
     ascribe("TableYTable"         , &DBDictionary::TableYTable         );
     ascribe("Gam83Table"          , &DBDictionary::Gam83Table          );
     ascribe("WeightClass"         , &DBDictionary::WeightClass         );
@@ -979,7 +977,6 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_NoLapseMinDur, 0.0));
     Add(database_entity(DB_NoLapseMinAge, 0.0));
 
-    Add(database_entity(DB_NominallyPar, 0.0));
     Add(database_entity(DB_Has1035ExchCharge, 0.0));
     Add(database_entity(DB_SmokeOrTobacco, 0.0));
     Add(database_entity(DB_DacTaxFundCharge, 0.0));

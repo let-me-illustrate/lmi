@@ -308,10 +308,6 @@ void Input::DoHarmonize()
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
         );
 
-    // DATABASE !! DB_MaxIllusAge might be more appropriate here than
-    // DB_MaturityAge, but it's not yet implemented, and perhaps there
-    // is no good reason for it even to exist--aren't DB_MaturityAge
-    // and DB_MaxIssAge sufficient?
     int max_age = static_cast<int>(database_->Query(DB_MaturityAge));
     InforceAsOfDate.minimum_and_maximum
         (EffectiveDate.value()

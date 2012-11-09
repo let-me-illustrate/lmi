@@ -338,11 +338,9 @@ class LMI_SO DBDictionary
     database_entity ExpRatAmortPeriod   ;
     database_entity LedgerType          ;
     database_entity AgeLastOrNearest    ;
-    database_entity MaxIllusAge         ;
     database_entity MaturityAge         ;
     database_entity LapseIgnoresSurrChg ;
     database_entity DefaultProcessOrder ;
-    database_entity NominallyPar        ;
     database_entity TableYTable         ;
     database_entity Gam83Table          ;
     database_entity WeightClass         ;

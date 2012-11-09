@@ -286,11 +286,9 @@
 {DB_Topic_Miscellanea,DB_FIRST,"Miscellanea","Parameters that don't fit tidily into other categories",}, \
 {DB_LedgerType,DB_Topic_Miscellanea,"LedgerType","Ledger type: 0=illustration reg, 1=NASD, 2=prospectus illustration, 3=group private placement, 4=offshore private placement, 5=private placement subject to illustration reg, 6=individual private placement, 7=variable annuity",}, \
 {DB_AgeLastOrNearest,DB_Topic_Miscellanea,"AgeLastOrNearest","Age calculated as of last or nearest birthday: 0=ALB, 1=ANB (ties --> older), 2=ANB (ties --> younger)",}, \
-{DB_MaxIllusAge,DB_Topic_Miscellanea,"MaxIllusAge","Highest attained age illustrated [not yet implemented]",}, \
 {DB_MaturityAge,DB_Topic_Miscellanea,"MaturityAge","Normal maturity age",}, \
 {DB_LapseIgnoresSurrChg,DB_Topic_Miscellanea,"LapseIgnoresSurrChg","Ignore tabular surrender charge for lapse processing",}, \
 {DB_DefaultProcessOrder,DB_Topic_Miscellanea,"DefaultProcessOrder","Default processing order: 0=life by life, 1=month by month [not yet implemented]",}, \
-{DB_NominallyPar,DB_Topic_Miscellanea,"NominallyPar","Nominally participating, but dividends expected to be zero",}, \
 {DB_TableYTable,DB_Topic_Miscellanea,"TableYTable","New York table Y (index in mortality table database)",}, \
 {DB_Gam83Table,DB_Topic_Miscellanea,"Gam83Table","1983 Group Annuitant Mortality table (index in mortality table database)",}, \
 {DB_Topic_Weights,DB_FIRST,"Weights","Weights for profit analysis cells [not yet implemented]",}, \

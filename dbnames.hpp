@@ -445,12 +445,10 @@ enum e_database_key
         ,DB_LedgerType
 
         ,DB_AgeLastOrNearest     // DATABASE !! Add more options...
-        ,DB_MaxIllusAge
         ,DB_MaturityAge
 
         ,DB_LapseIgnoresSurrChg
         ,DB_DefaultProcessOrder
-        ,DB_NominallyPar         // DATABASE !! Use a footnote instead.
 
         ,DB_TableYTable
         ,DB_Gam83Table
