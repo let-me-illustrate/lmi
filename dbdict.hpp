@@ -341,8 +341,13 @@ class LMI_SO DBDictionary
     database_entity MaturityAge         ;
     database_entity LapseIgnoresSurrChg ;
     database_entity DefaultProcessOrder ;
-    database_entity TableYTable         ;
-    database_entity Gam83Table          ;
+    database_entity GroupProxyRateTable ;
+    // SOMEDAY !! This support request:
+    //   http://savannah.nongnu.org/support/?105593
+    // would move the choice of partial mortality table to the GUI and
+    // make this entity superfluous. 'GroupProxyRateTable' could be
+    // treated the same way.
+    database_entity PartialMortTable    ;
     database_entity WeightClass         ;
     database_entity WeightGender        ;
     database_entity WeightSmoking       ;

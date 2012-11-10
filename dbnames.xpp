@@ -289,8 +289,8 @@
 {DB_MaturityAge,DB_Topic_Miscellanea,"MaturityAge","Normal maturity age",}, \
 {DB_LapseIgnoresSurrChg,DB_Topic_Miscellanea,"LapseIgnoresSurrChg","Ignore tabular surrender charge for lapse processing",}, \
 {DB_DefaultProcessOrder,DB_Topic_Miscellanea,"DefaultProcessOrder","Default processing order: 0=life by life, 1=month by month [not yet implemented]",}, \
-{DB_TableYTable,DB_Topic_Miscellanea,"TableYTable","New York table Y (index in mortality table database)",}, \
-{DB_Gam83Table,DB_Topic_Miscellanea,"Gam83Table","1983 Group Annuitant Mortality table (index in mortality table database)",}, \
+{DB_GroupProxyRateTable,DB_Topic_Miscellanea,"GroupProxyRateTable","Group-term proxy rate (index in mortality table database)",}, \
+{DB_PartialMortTable,DB_Topic_Miscellanea,"PartialMortTable","Partial mortality table (index in mortality table database)",}, \
 {DB_Topic_Weights,DB_FIRST,"Weights","Weights for profit analysis cells [not yet implemented]",}, \
 {DB_WeightClass,DB_Topic_Weights,"WeightClass","Weight by underwriting class [not yet implemented]",}, \
 {DB_WeightGender,DB_Topic_Weights,"WeightGender","Weight by gender [not yet implemented]",}, \

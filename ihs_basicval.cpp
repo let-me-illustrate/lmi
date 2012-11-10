@@ -1886,7 +1886,7 @@ std::vector<double> BasicValues::GetTableYRates() const
 {
     return GetTable
         (ProductData_->datum("TableYFilename")
-        ,DB_TableYTable
+        ,DB_GroupProxyRateTable
         );
 }
 
@@ -1919,7 +1919,7 @@ std::vector<double> BasicValues::Get83GamRates() const
 {
     return GetTable
         (ProductData_->datum("Gam83Filename")
-        ,DB_Gam83Table
+        ,DB_PartialMortTable
         ,true
         ,CannotBlend
         ,CanBlend
