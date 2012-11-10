@@ -364,8 +364,8 @@ void DBDictionary::ascribe_members()
     ascribe("MaturityAge"         , &DBDictionary::MaturityAge         );
     ascribe("LapseIgnoresSurrChg" , &DBDictionary::LapseIgnoresSurrChg );
     ascribe("DefaultProcessOrder" , &DBDictionary::DefaultProcessOrder );
-    ascribe("TableYTable"         , &DBDictionary::TableYTable         );
-    ascribe("Gam83Table"          , &DBDictionary::Gam83Table          );
+    ascribe("GroupProxyRateTable" , &DBDictionary::GroupProxyRateTable );
+    ascribe("PartialMortTable"    , &DBDictionary::PartialMortTable    );
     ascribe("WeightClass"         , &DBDictionary::WeightClass         );
     ascribe("WeightGender"        , &DBDictionary::WeightGender        );
     ascribe("WeightSmoking"       , &DBDictionary::WeightSmoking       );
@@ -807,24 +807,15 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_LedgerType          , mce_ill_reg));
     Add(database_entity(DB_AllowExpRating      , false));
 
-    // These aren't really NY Table Y group rates--in fact, they're
-    // US 65-70 male ALB. Though NY Table Y is occasionally
-    // encountered in the group-carveout market, it's not included
+    // These rates are US 65-70 male ALB. NY Table Y is more often
+    // encountered in the group-carveout market, but it's not included
     // in the SOA's databases; for default initialization, a widely-
     // available table is preferred.
-    //
-    // DATABASE !! Hence, the entity is misnamed; it really means
-    // something like "group proxy rate". However, what's really
-    // wanted is a choice among tables. The same can be said of
-    // 'DB_Gam83Table', which really means "partial-mortality table";
-    // this support request:
-    //   http://savannah.nongnu.org/support/?105593
-    // would offer a choice and make that database entity unnecessary.
-    Add(database_entity(DB_TableYTable         , 358));
+    Add(database_entity(DB_GroupProxyRateTable , 358));
 
     // Use male rates for unisex--1983 GAM seems to have no unisex version.
     double T83Gam[3] = {825, 826, 826,};
-    Add(database_entity(DB_Gam83Table, e_number_of_axes, dims311, T83Gam, "Use male rates for unisex--1983 GAM seems to have no unisex version."));
+    Add(database_entity(DB_PartialMortTable, e_number_of_axes, dims311, T83Gam, "Use male rates for unisex--1983 GAM seems to have no unisex version."));
 
     Add(database_entity(DB_AllowWd             , true));
     Add(database_entity(DB_AllowLoan           , true));

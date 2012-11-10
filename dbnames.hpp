@@ -450,8 +450,8 @@ enum e_database_key
         ,DB_LapseIgnoresSurrChg
         ,DB_DefaultProcessOrder
 
-        ,DB_TableYTable
-        ,DB_Gam83Table
+        ,DB_GroupProxyRateTable
+        ,DB_PartialMortTable
 
     ,DB_Topic_Weights
 
