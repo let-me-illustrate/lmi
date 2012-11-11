@@ -30862,3 +30862,39 @@ Don't enforce schema-prescribed defaults for fields marked "obsolete".
   input_harmonization.cpp
 Improve documentation; remove some obsolete commented-out code.
 
+20121108T1253Z <gchicares@sbcglobal.net> [559]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  oecumenic_enumerations.hpp
+Eradicate dead code.
+
+20121109T1311Z <gchicares@sbcglobal.net> [559]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  input_harmonization.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+Eradicate dead code.
+
+20121110T1333Z <gchicares@sbcglobal.net> [559]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Rename certain database entities.
+
+20121111T1341Z <gchicares@sbcglobal.net> [556]
+
+  ihs_avstrtgy.cpp
+  mortality_rates_fetch.cpp
+Note a defect; expunge redundant or mistaken comments.
+
