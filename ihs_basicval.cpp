@@ -84,7 +84,7 @@ BasicValues::BasicValues(Input const& input)
     Init();
 }
 
-// Temporary kludge for ancient GPT server.
+// Temporary kludge for ancient GPT server. TAXATION !! Remove along with that ancient stuff.
 template<typename T>
 std::string mc_str(T t)
 {
@@ -450,7 +450,7 @@ double BasicValues::InvestmentManagementFee() const
 ///   - at least one known product uses GLP as a handy proxy for a
 ///     minimum no-lapse premium, even when the GPT is not elected.
 /// TAXATION !! OTOH, such strategies need not always be offered, and
-/// the cited product's implementation actually uses 7pp, not GLP.
+/// the cited product was simplified to use a table lookup.
 ///
 /// To conform to the practices of certain admin systems, DCV COI
 /// rates are stored in a rounded table, but calculations from first
@@ -1662,6 +1662,7 @@ std::vector<double> BasicValues::GetTable
 }
 
 //============================================================================
+// TAXATION !! Resolve these issues:
 // TODO ?? This might be reworked to go through class Irc7702 all the time;
 // at least it shouldn't refer to the input class.
 // TODO ?? The profusion of similar names should be trimmed.
