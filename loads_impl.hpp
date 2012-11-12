@@ -49,7 +49,8 @@ class product_database;
 ///
 /// LowestPremiumTaxLoadRate_: The lowest rate of premium tax, which
 /// products that pass through premium tax need for 7702 calculations.
-/// The actual rate may vary if it is tiered.
+/// The actual rate may vary if it is tiered. TAXATION !! Obsolete:
+/// see commentary on lowest_premium_tax_load().
 ///
 /// asset_charge_type_: Determines whether input extra asset loads
 /// should be treated as a load or as an interest-rate decrement.
