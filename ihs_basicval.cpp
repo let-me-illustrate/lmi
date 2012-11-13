@@ -1674,18 +1674,15 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
             {
             return MortalityRates_->CvatCorridorFactors();
             }
-            // break;
         case mce_gpt:
             {
             return Irc7702_->Corridor();
             }
-            // break;
         case mce_noncompliant:
             {
             Non7702CompliantCorridor = std::vector<double>(Length, 1.0);
             return Non7702CompliantCorridor;
             }
-            // break;
         default:
             {
             fatal_error()
@@ -1695,11 +1692,8 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
                 << LMI_FLUSH
                 ;
             }
-            break;
         }
-
-    static std::vector<double> z;
-    return z;
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 // potential inlines

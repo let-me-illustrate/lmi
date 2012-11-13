@@ -30898,3 +30898,18 @@ Rename certain database entities.
   mortality_rates_fetch.cpp
 Note a defect; expunge redundant or mistaken comments.
 
+20121112T1307Z <gchicares@sbcglobal.net> [556]
+
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_mortal.cpp
+  interest_rates.cpp
+  loads_impl.hpp
+  premium_tax.cpp
+Mark some taxation issues.
+
+20121113T1109Z <gchicares@sbcglobal.net> [556]
+
+  ihs_basicval.cpp
+Refactor for simplicity.
+
