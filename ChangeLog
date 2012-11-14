@@ -30913,3 +30913,21 @@ Mark some taxation issues.
   ihs_basicval.cpp
 Refactor for simplicity.
 
+20121113T1240Z <gchicares@sbcglobal.net> [556]
+
+  multiple_cell_document.rnc
+  multiple_cell_document.xsd
+  single_cell_document.rnc
+  single_cell_document.xsd
+Improve documentation, noting desired file extensions for xml input.
+
+20121113T1357Z <gchicares@sbcglobal.net> [556]
+
+  test_schemata.sh
+Report scripted actions more verbosely.
+
+20121114T1331Z <gchicares@sbcglobal.net> [556]
+
+  input_xml_io.cpp
+Accommodate deficient admin-system extracts more selectively.
+
