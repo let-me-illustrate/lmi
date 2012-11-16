@@ -157,7 +157,6 @@ class LMI_SO product_data
     glossed_string CurrTermFilename;
     glossed_string GuarTermFilename;
     glossed_string GroupProxyFilename;
-    glossed_string PremTaxFilename;
     glossed_string TAMRA7PayFilename;
     glossed_string TgtPremFilename;
     glossed_string IRC7702Filename;

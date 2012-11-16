@@ -189,7 +189,6 @@ void product_data::ascribe_members()
     ascribe("CurrTermFilename"              , &product_data::CurrTermFilename              );
     ascribe("GuarTermFilename"              , &product_data::GuarTermFilename              );
     ascribe("GroupProxyFilename"            , &product_data::GroupProxyFilename            );
-    ascribe("PremTaxFilename"               , &product_data::PremTaxFilename               );
     ascribe("TAMRA7PayFilename"             , &product_data::TAMRA7PayFilename             );
     ascribe("TgtPremFilename"               , &product_data::TgtPremFilename               );
     ascribe("IRC7702Filename"               , &product_data::IRC7702Filename               );
@@ -415,7 +414,6 @@ void product_data::WritePolFiles()
     z.CurrTermFilename         = glossed_string("qx_cso");
     z.GuarTermFilename         = glossed_string("qx_cso");
     z.GroupProxyFilename       = glossed_string("qx_ins");
-    z.PremTaxFilename          = glossed_string("sample");
     z.TAMRA7PayFilename        = glossed_string("sample");
     z.TgtPremFilename          = glossed_string("sample");
     z.IRC7702Filename          = glossed_string("qx_cso");
