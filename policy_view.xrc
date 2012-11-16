@@ -238,13 +238,13 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
-                                            <label>TableYFilename</label>
+                                            <label>GroupProxyFilename</label>
                                         </object>
                                         <option>0</option>
                                     </object>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
-                                        <object class="wxTextCtrl" name="TableYFilename"/>
+                                        <object class="wxTextCtrl" name="GroupProxyFilename"/>
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
                                     </object>
@@ -303,13 +303,13 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
-                                            <label>Gam83Filename</label>
+                                            <label>PartialMortalityFilename</label>
                                         </object>
                                         <option>0</option>
                                     </object>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
-                                        <object class="wxTextCtrl" name="Gam83Filename"/>
+                                        <object class="wxTextCtrl" name="PartialMortalityFilename"/>
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
                                     </object>
