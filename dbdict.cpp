@@ -813,9 +813,16 @@ void DBDictionary::WriteSampleDBFile()
     // available table is preferred.
     Add(database_entity(DB_GroupProxyRateTable , 358));
 
-    // Use male rates for unisex--1983 GAM seems to have no unisex version.
     double T83Gam[3] = {825, 826, 826,};
-    Add(database_entity(DB_PartialMortTable, e_number_of_axes, dims311, T83Gam, "Use male rates for unisex--1983 GAM seems to have no unisex version."));
+    Add
+        (database_entity
+            (DB_PartialMortTable
+            ,e_number_of_axes
+            ,dims311
+            ,T83Gam
+            ,"1983 GAM, using male rates for unisex because no unisex table was published."
+            )
+        );
 
     Add(database_entity(DB_AllowWd             , true));
     Add(database_entity(DB_AllowLoan           , true));
