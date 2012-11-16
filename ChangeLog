@@ -30931,3 +30931,34 @@ Report scripted actions more verbosely.
   input_xml_io.cpp
 Accommodate deficient admin-system extracts more selectively.
 
+20121116T1239Z <gchicares@sbcglobal.net> [556]
+
+  basic_values.hpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+  ihs_mortal.cpp
+  mortality_rates.hpp
+  mortality_rates_fetch.cpp
+Rename certain members for clarity and consistency.
+
+20121116T1506Z <gchicares@sbcglobal.net> [556]
+
+  ihs_basicval.cpp
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+  product_data.cpp
+  product_data.hpp
+Rename certain members for clarity and consistency.
+
+20121116T1510Z <gchicares@sbcglobal.net> [556]
+
+  dbdict.cpp
+Improve documentation.
+
+20121116T1513Z <gchicares@sbcglobal.net> [556]
+
+  illustration_reg.xsl
+Correct the name of a statute. See:
+  http://www.finance.senate.gov/library/reports/conference/download/?id=45731c69-929b-47ae-ab07-0b171333092d
+
