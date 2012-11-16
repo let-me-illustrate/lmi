@@ -783,7 +783,7 @@ to the xsl files first.
               </fo:inline>
               Modified Endowment Contract - this classification is given
               to a contract in violation of TAMRA
-              (Technical and Miscellaneous Revenues Act), which limits
+              (Technical and Miscellaneous Revenue Act), which limits
               the amount of premium that can be paid into a life
               insurance contract. To the extent of gain in the contract, loans,
               distributions and withdrawals from a MEC are subject
