@@ -58,7 +58,7 @@ void MortalityRates::reserve_vectors()
     MonthlyMidpointCoiRatesBand2_ .reserve(Length_);
     MidpointSpouseRiderRates_     .reserve(Length_);
     MonthlyMidpointTermCoiRates_  .reserve(Length_);
-    TableYRates_                  .reserve(Length_);
+    GroupProxyRates_              .reserve(Length_);
     PartialMortalityQ_            .reserve(Length_);
     CvatCorridorFactors_          .reserve(Length_);
     SevenPayRates_                .reserve(Length_);
