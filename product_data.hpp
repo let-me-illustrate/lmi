@@ -156,12 +156,12 @@ class LMI_SO product_data
     glossed_string GuarSpouseRiderFilename;
     glossed_string CurrTermFilename;
     glossed_string GuarTermFilename;
-    glossed_string TableYFilename;
+    glossed_string GroupProxyFilename;
     glossed_string PremTaxFilename;
     glossed_string TAMRA7PayFilename;
     glossed_string TgtPremFilename;
     glossed_string IRC7702Filename;
-    glossed_string Gam83Filename;
+    glossed_string PartialMortalityFilename;
     glossed_string SubstdTblMultFilename;
     glossed_string CurrSpecAmtLoadFilename;
     glossed_string GuarSpecAmtLoadFilename;
