@@ -187,7 +187,7 @@ class LMI_SO product_data
     glossed_string CsvHeaderName;
     glossed_string NoLapseProvisionName;
 
-    // Most of the following are missing from the GUI.
+    // TODO ?? Most of the following are missing from the GUI.
 
     // Footnotes that describe various ledger columns.
     glossed_string AccountValueFootnote;
