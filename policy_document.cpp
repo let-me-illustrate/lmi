@@ -56,7 +56,6 @@ PolicyDocument::PolicyDocument()
     values_["CurrTermFilename"        ] = &product_data_.CurrTermFilename        .datum_;
     values_["GuarTermFilename"        ] = &product_data_.GuarTermFilename        .datum_;
     values_["GroupProxyFilename"      ] = &product_data_.GroupProxyFilename      .datum_;
-    values_["PremTaxFilename"         ] = &product_data_.PremTaxFilename         .datum_;
     values_["TAMRA7PayFilename"       ] = &product_data_.TAMRA7PayFilename       .datum_;
     values_["TgtPremFilename"         ] = &product_data_.TgtPremFilename         .datum_;
     values_["IRC7702Filename"         ] = &product_data_.IRC7702Filename         .datum_;

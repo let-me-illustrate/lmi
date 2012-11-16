@@ -77,7 +77,6 @@ void product_data::WriteProprietaryPolFiles()
     z.CurrTermFilename         = glossed_string("qx_cso");
     z.GuarTermFilename         = glossed_string("qx_cso");
     z.GroupProxyFilename       = glossed_string("qx_ins");
-    z.PremTaxFilename          = glossed_string("sample");
     z.TAMRA7PayFilename        = glossed_string("sample");
     z.TgtPremFilename          = glossed_string("sample");
     z.IRC7702Filename          = glossed_string("qx_cso");
