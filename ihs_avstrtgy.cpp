@@ -225,13 +225,13 @@ double AccountValue::DoPerformPmtStrategy
         case mce_pmt_table:
             {
 // TODO ?? This assumes that the group term proxy rates given by
-// TableYRates() are monthly. They should instead be annual, so that
+// GroupProxyRates() are monthly. They should instead be annual, so that
 // any other qx table can be substituted--for example, an experience
 // table from the SOA database, as DBDictionary::WriteSampleDBFile()
 // specifies.
             return
                   ActualSpecAmt
-                * MortalityRates_->TableYRates()[Year]
+                * MortalityRates_->GroupProxyRates()[Year]
                 * (12.0 / a_CurrentMode)
                 * a_TblMult
                 ;

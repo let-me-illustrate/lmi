@@ -103,8 +103,8 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     TargetPremiumRates_            = basic_values.GetTgtPremRates();
 
     Irc7702Q_                      = basic_values.GetIRC7702Rates();
-    TableYRates_                   = basic_values.GetTableYRates();
-    PartialMortalityQ_             = basic_values.Get83GamRates();
+    GroupProxyRates_               = basic_values.GetGroupProxyRates();
+    PartialMortalityQ_             = basic_values.GetPartialMortalityRates();
     CvatCorridorFactors_           = basic_values.GetCvatCorridorFactors();
     SevenPayRates_                 = basic_values.GetTAMRA7PayRates();
 

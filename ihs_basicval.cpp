@@ -1877,7 +1877,7 @@ std::vector<double> BasicValues::GetGuaranteedTermRates() const
         );
 }
 
-std::vector<double> BasicValues::GetTableYRates() const
+std::vector<double> BasicValues::GetGroupProxyRates() const
 {
     return GetTable
         (ProductData_->datum("TableYFilename")
@@ -1910,7 +1910,7 @@ std::vector<double> BasicValues::GetIRC7702Rates() const
         );
 }
 
-std::vector<double> BasicValues::Get83GamRates() const
+std::vector<double> BasicValues::GetPartialMortalityRates() const
 {
     return GetTable
         (ProductData_->datum("Gam83Filename")
