@@ -146,7 +146,7 @@ class LMI_SO product_data
     glossed_string TierFilename;
 
     // Names of rate-table files.
-    glossed_string CorridorFilename;
+    glossed_string CvatCorridorFilename;
     glossed_string CurrCOIFilename;
     glossed_string GuarCOIFilename;
     glossed_string WPFilename;
@@ -157,9 +157,9 @@ class LMI_SO product_data
     glossed_string CurrTermFilename;
     glossed_string GuarTermFilename;
     glossed_string GroupProxyFilename;
-    glossed_string TAMRA7PayFilename;
+    glossed_string SevenPayFilename;
     glossed_string TgtPremFilename;
-    glossed_string IRC7702Filename;
+    glossed_string Irc7702QFilename;
     glossed_string PartialMortalityFilename;
     glossed_string SubstdTblMultFilename;
     glossed_string CurrSpecAmtLoadFilename;

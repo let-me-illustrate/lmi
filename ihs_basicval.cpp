@@ -462,7 +462,7 @@ double BasicValues::InvestmentManagementFee() const
 
 void BasicValues::Init7702()
 {
-    Mly7702qc = GetIRC7702Rates();
+    Mly7702qc = GetIrc7702QRates();
     double max_coi_rate = Database_->Query(DB_MaxMonthlyCoiRate);
     LMI_ASSERT(0.0 != max_coi_rate);
     max_coi_rate = 1.0 / max_coi_rate;
@@ -1721,7 +1721,7 @@ std::vector<double> const& BasicValues::GetMlyDcvqc() const
 std::vector<double> BasicValues::GetCvatCorridorFactors() const
 {
     return GetTable
-        (ProductData_->datum("CorridorFilename")
+        (ProductData_->datum("CvatCorridorFilename")
         ,DB_CorridorTable
         );
 }
@@ -1885,10 +1885,10 @@ std::vector<double> BasicValues::GetGroupProxyRates() const
         );
 }
 
-std::vector<double> BasicValues::GetTAMRA7PayRates() const
+std::vector<double> BasicValues::GetSevenPayRates() const
 {
     return GetTable
-        (ProductData_->datum("TAMRA7PayFilename")
+        (ProductData_->datum("SevenPayFilename")
         ,DB_SevenPayTable
         );
 }
@@ -1902,10 +1902,10 @@ std::vector<double> BasicValues::GetTgtPremRates() const
         );
 }
 
-std::vector<double> BasicValues::GetIRC7702Rates() const
+std::vector<double> BasicValues::GetIrc7702QRates() const
 {
     return GetTable
-        (ProductData_->datum("IRC7702Filename")
+        (ProductData_->datum("Irc7702QFilename")
         ,DB_Irc7702QTable
         );
 }

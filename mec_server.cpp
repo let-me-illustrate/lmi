@@ -145,7 +145,7 @@ mec_state test_one_days_7702A_transactions
         }
 
     std::vector<double> const CvatCorridorFactors = actuarial_table_rates
-        (AddDataDir(product_filenames.datum("CorridorFilename"))
+        (AddDataDir(product_filenames.datum("CvatCorridorFilename"))
         ,static_cast<long int>(database.Query(DB_CorridorTable))
         ,input.issue_age()
         ,input.years_to_maturity()
@@ -160,14 +160,14 @@ mec_state test_one_days_7702A_transactions
     tabular_Ax.push_back(1.0);
 
     std::vector<double> const tabular_7Px = actuarial_table_rates
-        (AddDataDir(product_filenames.datum("TAMRA7PayFilename"))
+        (AddDataDir(product_filenames.datum("SevenPayFilename"))
         ,static_cast<long int>(database.Query(DB_SevenPayTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
 
     std::vector<double> Mly7702qc = actuarial_table_rates
-        (AddDataDir(product_filenames.datum("IRC7702Filename"))
+        (AddDataDir(product_filenames.datum("Irc7702QFilename"))
         ,static_cast<long int>(database.Query(DB_Irc7702QTable))
         ,input.issue_age()
         ,input.years_to_maturity()

@@ -30962,3 +30962,30 @@ Improve documentation.
 Correct the name of a statute. See:
   http://www.finance.senate.gov/library/reports/conference/download/?id=45731c69-929b-47ae-ab07-0b171333092d
 
+20121116T2339Z <gchicares@sbcglobal.net> [556]
+
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+  product_data.cpp
+  product_data.hpp
+Expunge a disused member.
+
+20121116T2347Z <gchicares@sbcglobal.net> [557]
+
+  product_data.hpp
+Mark a defect.
+
+20121117T0407Z <gchicares@sbcglobal.net> [557]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  mec_server.cpp
+  mortality_rates_fetch.cpp
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+  product_data.cpp
+  product_data.hpp
+Rename certain members for clarity and consistency.
+
