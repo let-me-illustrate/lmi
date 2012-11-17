@@ -45,7 +45,7 @@ PolicyDocument::PolicyDocument()
 {
     values_["DatabaseFilename"        ] = &product_data_.DatabaseFilename        .datum_;
     values_["FundFilename"            ] = &product_data_.FundFilename            .datum_;
-    values_["CorridorFilename"        ] = &product_data_.CorridorFilename        .datum_;
+    values_["CvatCorridorFilename"    ] = &product_data_.CvatCorridorFilename    .datum_;
     values_["CurrCOIFilename"         ] = &product_data_.CurrCOIFilename         .datum_;
     values_["GuarCOIFilename"         ] = &product_data_.GuarCOIFilename         .datum_;
     values_["WPFilename"              ] = &product_data_.WPFilename              .datum_;
@@ -56,9 +56,9 @@ PolicyDocument::PolicyDocument()
     values_["CurrTermFilename"        ] = &product_data_.CurrTermFilename        .datum_;
     values_["GuarTermFilename"        ] = &product_data_.GuarTermFilename        .datum_;
     values_["GroupProxyFilename"      ] = &product_data_.GroupProxyFilename      .datum_;
-    values_["TAMRA7PayFilename"       ] = &product_data_.TAMRA7PayFilename       .datum_;
+    values_["SevenPayFilename"        ] = &product_data_.SevenPayFilename        .datum_;
     values_["TgtPremFilename"         ] = &product_data_.TgtPremFilename         .datum_;
-    values_["IRC7702Filename"         ] = &product_data_.IRC7702Filename         .datum_;
+    values_["Irc7702QFilename"        ] = &product_data_.Irc7702QFilename        .datum_;
     values_["PartialMortalityFilename"] = &product_data_.PartialMortalityFilename.datum_;
     values_["SubstdTblMultFilename"   ] = &product_data_.SubstdTblMultFilename   .datum_;
     values_["CurrSpecAmtLoadFilename" ] = &product_data_.CurrSpecAmtLoadFilename .datum_;

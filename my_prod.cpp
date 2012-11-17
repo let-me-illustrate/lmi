@@ -66,7 +66,7 @@ void product_data::WriteProprietaryPolFiles()
     z.RoundingFilename         = glossed_string("sample.rounding");
     z.TierFilename             = glossed_string("sample.strata");
 
-    z.CorridorFilename         = glossed_string("sample");
+    z.CvatCorridorFilename     = glossed_string("sample");
     z.CurrCOIFilename          = glossed_string("qx_cso");
     z.GuarCOIFilename          = glossed_string("qx_cso");
     z.WPFilename               = glossed_string("sample");
@@ -77,9 +77,9 @@ void product_data::WriteProprietaryPolFiles()
     z.CurrTermFilename         = glossed_string("qx_cso");
     z.GuarTermFilename         = glossed_string("qx_cso");
     z.GroupProxyFilename       = glossed_string("qx_ins");
-    z.TAMRA7PayFilename        = glossed_string("sample");
+    z.SevenPayFilename         = glossed_string("sample");
     z.TgtPremFilename          = glossed_string("sample");
-    z.IRC7702Filename          = glossed_string("qx_cso");
+    z.Irc7702QFilename         = glossed_string("qx_cso");
     z.PartialMortalityFilename = glossed_string("qx_ann");
     z.SubstdTblMultFilename    = glossed_string("sample");
     z.CurrSpecAmtLoadFilename  = glossed_string("sample");

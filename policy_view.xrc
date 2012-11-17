@@ -108,13 +108,13 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
-                                            <label>CorridorFilename</label>
+                                            <label>CvatCorridorFilename</label>
                                         </object>
                                         <option>0</option>
                                     </object>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
-                                        <object class="wxTextCtrl" name="CorridorFilename"/>
+                                        <object class="wxTextCtrl" name="CvatCorridorFilename"/>
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
                                     </object>
@@ -251,13 +251,13 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
-                                            <label>TAMRA7PayFilename</label>
+                                            <label>SevenPayFilename</label>
                                         </object>
                                         <option>0</option>
                                     </object>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
-                                        <object class="wxTextCtrl" name="TAMRA7PayFilename"/>
+                                        <object class="wxTextCtrl" name="SevenPayFilename"/>
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
                                     </object>
@@ -277,13 +277,13 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
-                                            <label>IRC7702Filename</label>
+                                            <label>Irc7702QFilename</label>
                                         </object>
                                         <option>0</option>
                                     </object>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
-                                        <object class="wxTextCtrl" name="IRC7702Filename"/>
+                                        <object class="wxTextCtrl" name="Irc7702QFilename"/>
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
                                     </object>

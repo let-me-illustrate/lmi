@@ -102,11 +102,11 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     CurrentSpouseRiderRates_       = basic_values.GetCurrentSpouseRiderRates();
     TargetPremiumRates_            = basic_values.GetTgtPremRates();
 
-    Irc7702Q_                      = basic_values.GetIRC7702Rates();
+    Irc7702Q_                      = basic_values.GetIrc7702QRates();
     GroupProxyRates_               = basic_values.GetGroupProxyRates();
     PartialMortalityQ_             = basic_values.GetPartialMortalityRates();
     CvatCorridorFactors_           = basic_values.GetCvatCorridorFactors();
-    SevenPayRates_                 = basic_values.GetTAMRA7PayRates();
+    SevenPayRates_                 = basic_values.GetSevenPayRates();
 
     std::transform
         (SubstdTblMult_.begin()
