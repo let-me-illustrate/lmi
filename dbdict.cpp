@@ -807,11 +807,8 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_LedgerType          , mce_ill_reg));
     Add(database_entity(DB_AllowExpRating      , false));
 
-    // These rates are US 65-70 male ALB. NY Table Y is more often
-    // encountered in the group-carveout market, but it's not included
-    // in the SOA's databases; for default initialization, a widely-
-    // available table is preferred.
-    Add(database_entity(DB_GroupProxyRateTable , 358));
+    // 1960 CSG (which does not distinguish gender).
+    Add(database_entity(DB_GroupProxyRateTable , 305));
 
     double T83Gam[3] = {825, 826, 826,};
     Add
