@@ -425,21 +425,17 @@ if(!egregious_kludge)
         );
     FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
 
-    // DATABASE !! This temporary kludge will soon be replaced.
-    double const coimult = database_->Query(DB_CurrCoiMultiplier);
-    if(0.9029 < coimult && coimult < 0.9031 && !global_settings::instance().regression_testing())
+    calendar_date const most_recent_anniversary = add_years
+        (EffectiveDate.value()
+        ,InforceYear  .value()
+        ,true
+        );
+    calendar_date reset_min(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMinDate))));
+    calendar_date reset_max(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMaxDate))));
+    reset_max = std::min(reset_max, most_recent_anniversary);
+    if(!global_settings::instance().regression_testing())
         {
-        calendar_date const z(2009, 1, 1);
-        LastCoiReentryDate.minimum_and_maximum(z, z);
-        }
-    else
-        {
-        calendar_date const most_recent_anniversary = add_years
-            (EffectiveDate.value()
-            ,InforceYear  .value()
-            ,true
-            );
-        LastCoiReentryDate.maximum(most_recent_anniversary);
+        LastCoiReentryDate.minimum_and_maximum(reset_min, reset_max);
         }
     LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->Query(DB_CoiInforceReentry));
 

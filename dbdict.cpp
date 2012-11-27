@@ -31,6 +31,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "calendar_date.hpp"            // gregorian_epoch(), last_yyyy_date()
 #include "data_directory.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -172,6 +173,8 @@ void DBDictionary::ascribe_members()
     ascribe("SubstdTableMultTable", &DBDictionary::SubstdTableMultTable);
     ascribe("CoiUpper12Method"    , &DBDictionary::CoiUpper12Method    );
     ascribe("CoiInforceReentry"   , &DBDictionary::CoiInforceReentry   );
+    ascribe("CoiResetMinDate"     , &DBDictionary::CoiResetMinDate     );
+    ascribe("CoiResetMaxDate"     , &DBDictionary::CoiResetMaxDate     );
     ascribe("AllowMortBlendSex"   , &DBDictionary::AllowMortBlendSex   );
     ascribe("AllowMortBlendSmoke" , &DBDictionary::AllowMortBlendSmoke );
     ascribe("GuarInt"             , &DBDictionary::GuarInt             );
@@ -520,6 +523,10 @@ void DBDictionary::InitDB()
     Add(database_entity(DB_SubstdTableMult     , 1.0));
     Add(database_entity(DB_SurrChgSpecAmtSlope , 1.0));
     Add(database_entity(DB_SurrChgAcctValSlope , 1.0));
+
+    // These are the same as class date_trammel's nominal limits.
+    Add(database_entity(DB_CoiResetMinDate     , gregorian_epoch().julian_day_number()));
+    Add(database_entity(DB_CoiResetMaxDate     , last_yyyy_date ().julian_day_number()));
 
     // Usually the maximum is a reciprocal, e.g., 1/11 or 1/12; for
     // greatest precision, store the reciprocal of that reciprocal,
@@ -900,6 +907,11 @@ void DBDictionary::InitAntediluvian()
         {
         Add(database_entity(db_key_from_name(*i), 0.0));
         }
+
+    // These are the same as class date_trammel's nominal limits.
+    // They mustn't be zero.
+    Add(database_entity(DB_CoiResetMinDate     , gregorian_epoch().julian_day_number()));
+    Add(database_entity(DB_CoiResetMaxDate     , last_yyyy_date ().julian_day_number()));
 
     Add(database_entity(DB_GuarInt, 0.03));
 

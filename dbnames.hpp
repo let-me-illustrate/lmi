@@ -176,6 +176,8 @@ enum e_database_key
 
         ,DB_CoiUpper12Method
         ,DB_CoiInforceReentry
+        ,DB_CoiResetMinDate
+        ,DB_CoiResetMaxDate
 
         ,DB_AllowMortBlendSex
         ,DB_AllowMortBlendSmoke
