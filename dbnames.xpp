@@ -82,6 +82,8 @@
 {DB_SubstdTableMultTable,DB_Topic_MortalityCharges,"SubstdTableMultTable","Substandard table-rating multiplier applied to both guaranteed and current cost of insurance and term rider charges (index in mortality table database)",}, \
 {DB_CoiUpper12Method,DB_Topic_MortalityCharges,"CoiUpper12Method","Method to derive monthly from annual COI rates: 0=exponential, 1=linear [not yet implemented]",}, \
 {DB_CoiInforceReentry,DB_Topic_MortalityCharges,"CoiInforceReentry","Reenter COI table: 0=never, 1=at beginning of inforce year, 2=on anniversary >= input reset date",}, \
+{DB_CoiResetMinDate,DB_Topic_MortalityCharges,"CoiResetMinDate","Earliest permissible COI reset date",}, \
+{DB_CoiResetMaxDate,DB_Topic_MortalityCharges,"CoiResetMaxDate","Latest permissible COI reset date",}, \
 {DB_AllowMortBlendSex,DB_Topic_MortalityCharges,"AllowMortBlendSex","Mortality rating can be blended by gender: 0=no, 1=yes",}, \
 {DB_AllowMortBlendSmoke,DB_Topic_MortalityCharges,"AllowMortBlendSmoke","Mortality rating can be blended by smoking/tobacco use: 0=no, 1=yes",}, \
 {DB_Topic_Interest,DB_FIRST,"Interest","Interest rates, limits, spreads, and bonuses",}, \

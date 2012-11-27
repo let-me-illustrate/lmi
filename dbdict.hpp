@@ -149,6 +149,8 @@ class LMI_SO DBDictionary
     database_entity SubstdTableMultTable;
     database_entity CoiUpper12Method    ;
     database_entity CoiInforceReentry   ;
+    database_entity CoiResetMinDate     ;
+    database_entity CoiResetMaxDate     ;
     database_entity AllowMortBlendSex   ;
     database_entity AllowMortBlendSmoke ;
     database_entity GuarInt             ;
