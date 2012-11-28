@@ -30989,3 +30989,23 @@ Mark a defect.
   product_data.hpp
 Rename certain members for clarity and consistency.
 
+20121118T1252Z <gchicares@sbcglobal.net> [556]
+
+  dbdict.cpp
+  ihs_avstrtgy.cpp
+Resolve a marked defect.
+
+20121127T2350Z <gchicares@sbcglobal.net> [556]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  input_harmonization.cpp
+Set limits on COI-reentry date, replacing 20121024T1841Z prototype.
+
+20121128T0037Z <gchicares@sbcglobal.net> [556]
+
+  version.hpp
+Designate release candidate.
+
