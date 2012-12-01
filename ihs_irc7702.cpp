@@ -1020,7 +1020,8 @@ double Irc7702::premiums_paid() const
 #include <iostream>
 #include <iomanip>
 
-static double const Q[100] =    // I think this is unisex unismoke ANB 80CSO
+// SOA table 120: "1980 CSO 50% Male Age nearest"
+static double const Q[100] =
 {
  .00354,.00097,.00091,.00089,.00085,.00083,.00079,.00077,.00073,.00072,
  .00071,.00072,.00078,.00087,.00097,.00110,.00121,.00131,.00139,.00144,
