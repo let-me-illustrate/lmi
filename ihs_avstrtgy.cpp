@@ -226,9 +226,9 @@ double AccountValue::DoPerformPmtStrategy
             {
             return
                   ActualSpecAmt
-                * MortalityRates_->TableYRates()[Year]
-                * (12.0 / a_CurrentMode)
+                * MortalityRates_->GroupProxyRates()[Year]
                 * a_TblMult
+                / a_CurrentMode
                 ;
             }
         default:

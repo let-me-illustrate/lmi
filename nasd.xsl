@@ -720,7 +720,7 @@
                   <xsl:value-of select="$scalars/SubstandardTable"/>
                 </fo:block>
               </xsl:if>
-              <xsl:call-template name="print-franchise-and-policynumber"/>
+              <xsl:call-template name="print-mastercontractnumber-and-contractnumber"/>
             </fo:table-cell>
             <fo:table-cell>
 <!-- Keep intact in case its useful to others; however regulators may find

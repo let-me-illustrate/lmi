@@ -58,7 +58,7 @@ void MortalityRates::reserve_vectors()
     MonthlyMidpointCoiRatesBand2_ .reserve(Length_);
     MidpointSpouseRiderRates_     .reserve(Length_);
     MonthlyMidpointTermCoiRates_  .reserve(Length_);
-    TableYRates_                  .reserve(Length_);
+    GroupProxyRates_              .reserve(Length_);
     PartialMortalityQ_            .reserve(Length_);
     CvatCorridorFactors_          .reserve(Length_);
     SevenPayRates_                .reserve(Length_);
@@ -109,7 +109,7 @@ void MortalityRates::initialize()
         unisex male proportion curr
         ANB/ALB
         bool use NY COI limits
-        TODO ?? bool ignore ratings for 7702
+        TODO ?? TAXATION !! bool ignore ratings for 7702
         flat extras
         substd table
         uninsurable
@@ -286,8 +286,8 @@ void MortalityRates::SetOtherRates()
         // Assume target premium table is never changed for substandard.
         }
 
-    // TODO ?? Temporary stuff to support NSP for 7702A
-    // TODO ?? Incorrect if GPT
+    // TODO ?? TAXATION !! Temporary stuff to support NSP for 7702A
+    // TODO ?? TAXATION !! Incorrect if GPT
     LMI_ASSERT(0 == CvatNspRates_.size());
     for(int j = 0; j < Length_; ++j)
         {

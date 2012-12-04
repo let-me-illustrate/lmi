@@ -102,7 +102,6 @@ class LMI_SO DBDictionary
     database_entity AllowSimpUw         ;
     database_entity AllowGuarUw         ;
     database_entity SmokeOrTobacco      ;
-    database_entity PrefOrSelect        ;
     database_entity AllowPreferredClass ;
     database_entity AllowUltraPrefClass ;
     database_entity AllowSubstdTable    ;
@@ -150,6 +149,8 @@ class LMI_SO DBDictionary
     database_entity SubstdTableMultTable;
     database_entity CoiUpper12Method    ;
     database_entity CoiInforceReentry   ;
+    database_entity CoiResetMinDate     ;
+    database_entity CoiResetMaxDate     ;
     database_entity AllowMortBlendSex   ;
     database_entity AllowMortBlendSmoke ;
     database_entity GuarInt             ;
@@ -339,13 +340,16 @@ class LMI_SO DBDictionary
     database_entity ExpRatAmortPeriod   ;
     database_entity LedgerType          ;
     database_entity AgeLastOrNearest    ;
-    database_entity MaxIllusAge         ;
     database_entity MaturityAge         ;
     database_entity LapseIgnoresSurrChg ;
     database_entity DefaultProcessOrder ;
-    database_entity NominallyPar        ;
-    database_entity TableYTable         ;
-    database_entity Gam83Table          ;
+    database_entity GroupProxyRateTable ;
+    // SOMEDAY !! This support request:
+    //   http://savannah.nongnu.org/support/?105593
+    // would move the choice of partial mortality table to the GUI and
+    // make this entity superfluous. 'GroupProxyRateTable' could be
+    // treated the same way.
+    database_entity PartialMortTable    ;
     database_entity WeightClass         ;
     database_entity WeightGender        ;
     database_entity WeightSmoking       ;
