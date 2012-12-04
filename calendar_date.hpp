@@ -203,7 +203,7 @@ calendar_date add_years_and_months
 int attained_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
-    ,bool                 use_age_nearest_birthday
+    ,bool                 alb_anb
     );
 
 std::pair<int,int> years_and_months_since
@@ -229,13 +229,13 @@ calendar_date minimum_as_of_date
 calendar_date minimum_birthdate
     (int                  age
     ,calendar_date const& as_of_date
-    ,bool                 use_age_nearest_birthday
+    ,bool                 alb_anb
     );
 
 calendar_date maximum_birthdate
     (int                  age
     ,calendar_date const& as_of_date
-    ,bool                 use_age_nearest_birthday
+    ,bool                 alb_anb
     );
 
 std::string month_name(int);

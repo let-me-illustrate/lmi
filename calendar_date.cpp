@@ -453,7 +453,7 @@ std::pair<calendar_date,calendar_date> bracketing_anniversaries
 int notional_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
-    ,bool                 use_age_nearest_birthday
+    ,bool                 alb_anb
     )
 {
     typedef std::pair<calendar_date,calendar_date> date_pair;
@@ -476,7 +476,7 @@ int notional_age
 
     int age_last_birthday = last_birthday.year() - birthdate.year();
 
-    if(!use_age_nearest_birthday)
+    if(!alb_anb)
         {
         return age_last_birthday;
         }
@@ -499,7 +499,7 @@ int notional_age
 int attained_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
-    ,bool                 use_age_nearest_birthday
+    ,bool                 alb_anb
     )
 {
     if(as_of_date < birthdate)
@@ -514,7 +514,7 @@ int attained_age
             ;
         }
 
-    return notional_age(birthdate, as_of_date, use_age_nearest_birthday);
+    return notional_age(birthdate, as_of_date, alb_anb);
 }
 
 /// Full curtate years and months by which 'other_date' follows 'base_date'.
@@ -677,12 +677,12 @@ class birthdate_limit
     birthdate_limit
         (calendar_date as_of_date
         ,int           limit_age
-        ,bool          use_anb
+        ,bool          alb_anb
         ,root_bias     bias
         )
         :as_of_date_       (as_of_date)
         ,limit_age_        (limit_age)
-        ,use_anb_          (use_anb)
+        ,alb_anb_          (alb_anb)
         ,bias_             (bias)
         ,a_priori_minimum_ (calendar_date::gregorian_epoch_jdn)
         ,a_priori_maximum_ (calendar_date::last_yyyy_date_jdn)
@@ -705,7 +705,7 @@ class birthdate_limit
         {
         // Double parentheses circumvent the most vexing parse.
         calendar_date z((jdn_t(numeric_value_cast<int>(candidate))));
-        return offset_ + notional_age(z, as_of_date_, use_anb_) - limit_age_;
+        return offset_ + notional_age(z, as_of_date_, alb_anb_) - limit_age_;
         }
 
     calendar_date operator()()
@@ -728,7 +728,7 @@ class birthdate_limit
   private:
     calendar_date as_of_date_;
     int           limit_age_;
-    bool          use_anb_;
+    bool          alb_anb_;
     root_bias     bias_;
     int           a_priori_minimum_;
     int           a_priori_maximum_;
@@ -741,10 +741,10 @@ class birthdate_limit
 calendar_date minimum_birthdate
     (int                  minimum_age
     ,calendar_date const& as_of_date
-    ,bool                 anb
+    ,bool                 alb_anb
     )
 {
-    return birthdate_limit(as_of_date, minimum_age, anb, bias_lower)();
+    return birthdate_limit(as_of_date, minimum_age, alb_anb, bias_lower)();
 }
 
 /// Latest birthdate consonant with a given age and as-of date.
@@ -752,10 +752,10 @@ calendar_date minimum_birthdate
 calendar_date maximum_birthdate
     (int                  maximum_age
     ,calendar_date const& as_of_date
-    ,bool                 anb
+    ,bool                 alb_anb
     )
 {
-    return birthdate_limit(as_of_date, maximum_age, anb, bias_higher)();
+    return birthdate_limit(as_of_date, maximum_age, alb_anb, bias_higher)();
 }
 
 std::string month_name(int month)
