@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-  <xs:include schemaLocation="cell.xsd"/>
-  <!--
-    RELAX NG schema for '.ill' files (class single_cell_document).
+
+<!--
+    Sort subelements of a <cell> element.
 
     Copyright (C) 2012 Gregory W. Chicares.
 
@@ -22,8 +21,27 @@
     http://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
-  -->
-  <!-- $Id$ -->
-  <!-- Use file extension '.ill' for single-life xml documents. -->
-  <xs:element name="single_cell_document" type="cell_element"/>
-</xs:schema>
+-->
+<!-- $Id$ -->
+
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+
+    <xsl:strip-space elements="*"/>
+    <xsl:output method="xml" indent="yes"/>
+
+    <xsl:template match="@*|node()">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="cell">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:apply-templates select="node()">
+                <xsl:sort select="local-name()"/>
+            </xsl:apply-templates>
+        </xsl:copy>
+    </xsl:template>
+</xsl:stylesheet>
+

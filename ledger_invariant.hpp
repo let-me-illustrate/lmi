@@ -190,7 +190,6 @@ class LMI_SO LedgerInvariant
     double          NoLapseAlwaysActive;
     double          NoLapseMinDur;
     double          NoLapseMinAge;
-    double          NominallyPar;
     double          Has1035ExchCharge;
     double          EffDateJdn;
     double          GenAcctAllocation;

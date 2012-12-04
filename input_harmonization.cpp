@@ -28,18 +28,17 @@
 
 #include "input.hpp"
 
+#include "actuarial_table.hpp"          // e_reenter_upon_rate_reset
 #include "alert.hpp"
-#include "assert_lmi.hpp"
 #include "calendar_date.hpp"
-#include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
-#include "mc_enum_types_aux.hpp"
-#include "value_cast.hpp"
+#include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg(), is_three_rate_nasd()
 
-#include <algorithm> // std::min(), std::max()
+#include <algorithm>                    // std::min(), std::max()
+#include <utility>                      // std::pair
 
 // Harmonization is physically separated for no better reason than to
 // facilitate its development at a time when it frequently changes.
@@ -110,6 +109,49 @@ void Input::DoAdaptExternalities()
 
 void Input::DoCustomizeInitialValues()
 {
+    // First of all, initialize obsolete variables exactly as the
+    // schema prescribes, to accommodate admin extracts that don't
+    // necessarily do so.
+
+    // INPUT !! These are ready to expunge.
+    DeathBenefitOptionFromIssue      = "A";
+    DeathBenefitOptionFromRetirement = "A";
+    IndividualPaymentAmount          = 0.0;
+    IndividualPaymentMode            = "Annual";
+    IndividualPaymentToAge           = 0;
+    IndividualPaymentToAlternative   = "Retirement";
+    IndividualPaymentToDuration      = 0;
+    LoanAmount                       = 0.0;
+    LoanFromAge                      = 0;
+    LoanFromAlternative              = "Issue";
+    LoanFromDuration                 = 0;
+    LoanToAge                        = 0;
+    LoanToAlternative                = "Retirement";
+    LoanToDuration                   = 0;
+    SpecifiedAmountFromIssue         = 0.0;
+    SpecifiedAmountFromRetirement    = 0.0;
+    WithdrawalAmount                 = 0.0;
+    WithdrawalFromAge                = 0;
+    WithdrawalFromAlternative        = "Issue";
+    WithdrawalFromDuration           = 0;
+    WithdrawalToAge                  = 0;
+    WithdrawalToAlternative          = "Retirement";
+    WithdrawalToDuration             = 0;
+
+    // These are kept because their conditional-enablement code may be
+    // useful someday.
+    IndividualPaymentStrategy        = "PmtInputScalar";
+    SpecifiedAmountStrategyFromIssue = "SAInputScalar";
+
+    // These require special treatment. Initialize them to zero, as
+    // the schema prescribes, just to be sure that prescription works;
+    // then set them from the applicable date variables.
+    InforceContractMonth             = 0;
+    InforceContractYear              = 0;
+    InforceMonth                     = 0;
+    InforceYear                      = 0;
+    set_inforce_durations_from_dates();
+
     if(mce_yes == UseCurrentDeclaredRate)
         {
         GeneralAccountRate = current_credited_rate(*database_);
@@ -260,16 +302,17 @@ void Input::DoHarmonize()
             )
         );
 
-    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
+    oenum_alb_or_anb const alb_anb =
+        static_cast<oenum_alb_or_anb>
+            (static_cast<int>
+                (database_->Query(DB_AgeLastOrNearest)
+                )
+            );
     DateOfBirth.minimum_and_maximum
-        (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), use_anb)
-        ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
+        (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), alb_anb)
+        ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), alb_anb)
         );
 
-    // DATABASE !! DB_MaxIllusAge might be more appropriate here than
-    // DB_MaturityAge, but it's not yet implemented, and perhaps there
-    // is no good reason for it even to exist--aren't DB_MaturityAge
-    // and DB_MaxIssAge sufficient?
     int max_age = static_cast<int>(database_->Query(DB_MaturityAge));
     InforceAsOfDate.minimum_and_maximum
         (EffectiveDate.value()
@@ -302,7 +345,10 @@ void Input::DoHarmonize()
     InforceAvBeforeLastMc   .enable(non_mec);
     InforceLeastDeathBenefit.enable(non_mec);
 
-    // These will soon be removed from the GUI:
+    // These four variables, formerly independent, are now dependent:
+    // set_inforce_durations_from_dates() calculates them from dates.
+    // They're retained in the GUI (always disabled) only because some
+    // end users have grown accustomed to them and want them kept.
     InforceYear         .enable(false);
     InforceMonth        .enable(false);
     InforceContractYear .enable(false);
@@ -389,14 +435,14 @@ if(!egregious_kludge)
         ,InforceYear  .value()
         ,true
         );
-    LastCoiReentryDate.maximum(most_recent_anniversary);
-    // DATABASE !! Here, 'e_reenter_upon_rate_reset' would be better
-    // than the hardcoded '2'. However, '2' is already hardcoded in
-    // the 'dbnames.xpp' explanation of 'LastCoiReentryDate', so
-    // hardcoding it here doesn't introduce a new kind of defect.
-    // Ultimately, the product database should probably use mc_enum
-    // types instead; until then, this will do.
-    LastCoiReentryDate.enable(2 == database_->Query(DB_CoiInforceReentry));
+    calendar_date reset_min(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMinDate))));
+    calendar_date reset_max(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMaxDate))));
+    reset_max = std::min(reset_max, most_recent_anniversary);
+    if(!global_settings::instance().regression_testing())
+        {
+        LastCoiReentryDate.minimum_and_maximum(reset_min, reset_max);
+        }
+    LastCoiReentryDate.enable(e_reenter_upon_rate_reset == database_->Query(DB_CoiInforceReentry));
 
     BlendGender.enable(database_->Query(DB_AllowMortBlendSex));
     bool blend_mortality_by_gender = mce_yes == BlendGender;
@@ -462,7 +508,7 @@ true // Silly workaround for now.
     // Strategies based on glp and gsp are permitted even for
     // contracts that don't use gpt. One might want to select such a
     // strategy, then toggle back and forth between gpt and cvat to
-    // see what difference that makes.
+    // see what difference that makes. TAXATION !! Rethink that.
 
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_input_scalar, !specamt_solve && !specamt_from_term_proportion);
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_salary      , !specamt_solve && !specamt_from_term_proportion);
@@ -474,86 +520,8 @@ true // Silly workaround for now.
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_corridor    , !inhibit_premium_based_strategies);
     SpecifiedAmountStrategyFromIssue.enable(!specamt_solve && !specamt_from_term_proportion && mce_sa_input_scalar == SpecifiedAmountStrategyFromIssue);
 
-    SpecifiedAmountFromIssue.enable(!specamt_solve && !specamt_from_term_proportion && mce_sa_input_scalar == SpecifiedAmountStrategyFromIssue);
-
     bool inhibit_sequence = specamt_solve || specamt_from_term_proportion;
     SpecifiedAmount.enable(!inhibit_sequence);
-
-    bool never_retire = database_->Query(DB_MaturityAge) <= RetirementAge.value();
-/*
-// TODO ?? WX PORT !! Figure out how to handle the next line:
-    if(!is_specamt_simply_representable)
-        {
-        SCALAR              ->EnableWindow(false);
-        AMOUNT              ->EnableWindow(false);
-        IS_SALARY_PCT       ->EnableWindow(false);
-
-        MAX                 ->EnableWindow(false);
-        TGT                 ->EnableWindow(false);
-        MEC                 ->EnableWindow(false);
-        GLP                 ->EnableWindow(false);
-        GSP                 ->EnableWindow(false);
-        CORRIDOR            ->EnableWindow(false);
-        }
-*/
-
-/* TODO ?? WX PORT !! Post-retirment specamt strategy not ported.
-    POSTRET_SAME_AS     ->EnableWindow(!specamt_solve && !specamt_from_term_proportion);
-    POSTRET_SCALAR      ->EnableWindow(!specamt_solve && !specamt_from_term_proportion);
-    POSTRET_IS_PCT      ->EnableWindow(!specamt_solve && !specamt_from_term_proportion);
-
-    POSTRET_AMOUNT      ->EnableWindow
-        (   !specamt_solve
-        &&  !specamt_from_term_proportion
-        &&  BF_CHECKED == POSTRET_SCALAR->GetCheck()
-        );
-    POSTRET_PCT         ->EnableWindow
-        (   !specamt_solve
-        &&  !specamt_from_term_proportion
-        &&  BF_CHECKED == POSTRET_IS_PCT->GetCheck()
-        );
-
-    if(!is_specamt_simply_representable)
-        {
-        POSTRET_SAME_AS     ->EnableWindow(false);
-        POSTRET_SCALAR      ->EnableWindow(false);
-        POSTRET_IS_PCT      ->EnableWindow(false);
-        POSTRET_AMOUNT      ->EnableWindow(false);
-        POSTRET_PCT         ->EnableWindow(false);
-        }
-
-    if(never_retire)
-        {
-        POSTRET_SAME_AS     ->EnableWindow(false);
-        POSTRET_SCALAR      ->EnableWindow(false);
-        POSTRET_AMOUNT      ->EnableWindow(false);
-        }
-*/
-
-    // TODO ?? WX PORT !! Figure out how to do this properly.
-    bool is_dbopt_simply_representable = true;
-
-    DeathBenefitOptionFromRetirement.allow(mce_option1, is_dbopt_simply_representable);
-    DeathBenefitOptionFromRetirement.allow(mce_option2, is_dbopt_simply_representable);
-    DeathBenefitOptionFromRetirement.allow(mce_rop    , is_dbopt_simply_representable && database_->Query(DB_AllowDbo3));
-    DeathBenefitOptionFromIssue     .allow(mce_option1, is_dbopt_simply_representable && !never_retire);
-    DeathBenefitOptionFromIssue     .allow(mce_option2, is_dbopt_simply_representable && !never_retire && (database_->Query(DB_AllowChangeToDbo2) || mce_option2 == DeathBenefitOptionFromRetirement));
-    DeathBenefitOptionFromIssue     .allow(mce_rop    , is_dbopt_simply_representable && !never_retire && database_->Query(DB_AllowDbo3));
-
-/*
-    // TODO ?? WX PORT !! Figure out how to do this properly.
-    if(is_dbopt_sequence_empty)
-        {
-        // Input sequence governs, and if it's empty, defaults
-        // are used, so make radiobuttons reflect that.
-        DBOPT_INIT_1        ->SetCheck(BF_CHECKED);
-        DBOPT_INIT_2        ->SetCheck(BF_UNCHECKED);
-        DBOPT_INIT_ROP      ->SetCheck(BF_UNCHECKED);
-        DBOPT_POSTRET_1     ->SetCheck(BF_CHECKED);
-        DBOPT_POSTRET_2     ->SetCheck(BF_UNCHECKED);
-        DBOPT_POSTRET_ROP   ->SetCheck(BF_UNCHECKED);
-        }
-*/
 
     bool prem_solve = mce_solve_ee_prem == SolveType;
 
@@ -574,12 +542,6 @@ false // Silly workaround for now.
         || mce_solve_ee_prem == SolveType
         ;
 
-    IndividualPaymentToAlternative.allow(mce_to_retirement, !inhibit_prem_simple && !prem_solve);
-    IndividualPaymentToAlternative.allow(mce_to_year      , !inhibit_prem_simple && !prem_solve);
-    IndividualPaymentToAlternative.allow(mce_to_age       , !inhibit_prem_simple && !prem_solve);
-    IndividualPaymentToAlternative.allow(mce_to_maturity  , !inhibit_prem_simple && !prem_solve);
-    IndividualPaymentToAlternative.enable(!prem_solve);
-
     IndividualPaymentStrategy.allow(mce_pmt_input_scalar, !inhibit_prem_simple && !prem_solve);
     IndividualPaymentStrategy.allow(mce_pmt_minimum     , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
     IndividualPaymentStrategy.allow(mce_pmt_target      , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
@@ -589,10 +551,6 @@ false // Silly workaround for now.
     IndividualPaymentStrategy.allow(mce_pmt_corridor    , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
     IndividualPaymentStrategy.allow(mce_pmt_table       , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
     IndividualPaymentStrategy.enable(!inhibit_prem_simple && !prem_solve);
-
-    IndividualPaymentAmount    .enable(mce_pmt_input_scalar == IndividualPaymentStrategy);
-    IndividualPaymentToAge     .enable(mce_to_age  == IndividualPaymentToAlternative);
-    IndividualPaymentToDuration.enable(mce_to_year == IndividualPaymentToAlternative);
 
 //    InsuredPremiumTableNumber.enable(mce_pmt_table == IndividualPaymentStrategy); // // INPUT !! Obsolete scalar alternative control.
 // In the legacy system, that control, 'InsuredPremiumTableFactor',
@@ -618,34 +576,6 @@ false // Silly workaround for now.
 
     Payment           .enable(mce_solve_ee_prem != SolveType);
     CorporationPayment.enable(mce_solve_er_prem != SolveType);
-
-    IndividualPaymentMode.allow_all(true);
-    // TODO ?? Should the following be permitted? If so, then either
-    // enumerators must always be simple zero-based ordinals, or
-    // arguments to allow() must be values instead of ordinals.
-//    IndividualPaymentMode.allow(mce_annual    , true);
-//    IndividualPaymentMode.allow(mce_semiannual, true);
-//    IndividualPaymentMode.allow(mce_quarterly , true);
-//    IndividualPaymentMode.allow(mce_monthly   , true);
-
-/*
-    // TODO ?? WX PORT !! Figure out how to do this properly:
-
-    if(is_indv_mode_sequence_empty)
-        {
-        MODE_ANNUAL     ->SetCheck(BF_CHECKED);
-        MODE_SEMI       ->SetCheck(BF_UNCHECKED);
-        MODE_QUARTERLY  ->SetCheck(BF_UNCHECKED);
-        MODE_MONTHLY    ->SetCheck(BF_UNCHECKED);
-        }
-    if(!is_indv_mode_simply_representable)
-        {
-        MODE_ANNUAL     ->EnableWindow(false);
-        MODE_SEMI       ->EnableWindow(false);
-        MODE_QUARTERLY  ->EnableWindow(false);
-        MODE_MONTHLY    ->EnableWindow(false);
-        }
-*/
 
     GeneralAccountRateType .allow(mce_credited_rate , true);
     GeneralAccountRateType .allow(mce_earned_rate, mce_no == UseCurrentDeclaredRate && (anything_goes || database_->Query(DB_AllowGenAcctEarnRate)));
@@ -705,7 +635,7 @@ false // Silly workaround for now.
 //
 // TODO ?? WX PORT !! But for now, use this workaround: products that have no
 // general account can't select non-custom funds--there's no GUI for
-// that anyway. DATABASE !! Consider adding an 'allow fund choice' entity.
+// that anyway. INPUT !! See: http://savannah.nongnu.org/support/?104481
 //
     FundChoiceType.allow(mce_fund_selection, !sepacct_only);
 
@@ -723,29 +653,9 @@ false // Silly workaround for now.
     bool wd_solve = (mce_solve_wd == SolveType);
     bool wd_forbidden = !wd_allowed;
 
-    Withdrawal.enable(!wd_forbidden && !wd_solve);
-
     bool wd_inhibit = wd_solve || wd_forbidden;
-// TODO ?? WX PORT !! Figure out how to do this properly:
-    bool wd_inhibit_simple = wd_inhibit; // || !is_wd_simply_representable;
 
-    WithdrawalFromAlternative.allow(mce_from_issue     , !wd_inhibit_simple);
-    WithdrawalFromAlternative.allow(mce_from_year      , !wd_inhibit_simple);
-    WithdrawalFromAlternative.allow(mce_from_age       , !wd_inhibit_simple);
-    WithdrawalFromAlternative.allow(mce_from_retirement, !wd_inhibit_simple);
-    WithdrawalFromAlternative.enable(!wd_inhibit_simple);
-
-    WithdrawalToAlternative  .allow(mce_to_retirement  , !wd_inhibit_simple);
-    WithdrawalToAlternative  .allow(mce_to_year        , !wd_inhibit_simple);
-    WithdrawalToAlternative  .allow(mce_to_age         , !wd_inhibit_simple);
-    WithdrawalToAlternative  .allow(mce_to_maturity    , !wd_inhibit_simple);
-    WithdrawalToAlternative  .enable(!wd_inhibit_simple);
-
-    WithdrawalAmount         .enable(!wd_inhibit_simple);
-    WithdrawalFromAge        .enable(!wd_inhibit_simple && mce_from_age  == WithdrawalFromAlternative);
-    WithdrawalFromDuration   .enable(!wd_inhibit_simple && mce_from_year == WithdrawalFromAlternative);
-    WithdrawalToAge          .enable(!wd_inhibit_simple && mce_to_age    == WithdrawalToAlternative);
-    WithdrawalToDuration     .enable(!wd_inhibit_simple && mce_to_year   == WithdrawalToAlternative);
+    Withdrawal.enable(!wd_inhibit);
 
     bool loan_solve = mce_solve_loan == SolveType;
     bool loan_forbidden = !loan_allowed;
@@ -753,8 +663,6 @@ false // Silly workaround for now.
     WithdrawToBasisThenLoan.enable(!wd_forbidden && !loan_forbidden);
 
     bool loan_inhibit = loan_solve || loan_forbidden;
-// TODO ?? WX PORT !! Figure out how to do this properly:
-    bool loan_inhibit_simple = loan_inhibit; // !is_loan_simply_representable;
 
     NewLoan.enable(!loan_inhibit);
 
@@ -762,24 +670,6 @@ false // Silly workaround for now.
     InforcePreferredLoanValue  .enable(pref_loan_allowed);
     InforceRegularLoanBalance  .enable(loan_allowed);
     InforcePreferredLoanBalance.enable(pref_loan_allowed);
-
-    LoanFromAlternative.allow(mce_from_issue     , !loan_inhibit_simple);
-    LoanFromAlternative.allow(mce_from_year      , !loan_inhibit_simple);
-    LoanFromAlternative.allow(mce_from_age       , !loan_inhibit_simple);
-    LoanFromAlternative.allow(mce_from_retirement, !loan_inhibit_simple);
-    LoanFromAlternative.enable(!loan_inhibit_simple);
-
-    LoanToAlternative  .allow(mce_to_retirement  , !loan_inhibit_simple);
-    LoanToAlternative  .allow(mce_to_year        , !loan_inhibit_simple);
-    LoanToAlternative  .allow(mce_to_age         , !loan_inhibit_simple);
-    LoanToAlternative  .allow(mce_to_maturity    , !loan_inhibit_simple);
-    LoanToAlternative  .enable(!loan_inhibit_simple);
-
-    LoanAmount         .enable(!loan_inhibit_simple);
-    LoanFromAge        .enable(!loan_inhibit_simple && mce_from_age  == LoanFromAlternative);
-    LoanFromDuration   .enable(!loan_inhibit_simple && mce_from_year == LoanFromAlternative);
-    LoanToAge          .enable(!loan_inhibit_simple && mce_to_age    == LoanToAlternative);
-    LoanToDuration     .enable(!loan_inhibit_simple && mce_to_year   == LoanToAlternative);
 
     TermRider.enable(database_->Query(DB_AllowTerm));
     TermRider.allow(mce_yes, database_->Query(DB_AllowTerm));
@@ -1011,19 +901,7 @@ void Input::DoTransmogrify()
         return;
         }
 
-    std::pair<int,int> ym0 = years_and_months_since
-        (EffectiveDate  .value()
-        ,InforceAsOfDate.value()
-        );
-    InforceYear  = ym0.first;
-    InforceMonth = ym0.second;
-
-    std::pair<int,int> ym1 = years_and_months_since
-        (LastMaterialChangeDate.value()
-        ,InforceAsOfDate       .value()
-        );
-    InforceContractYear  = ym1.first;
-    InforceContractMonth = ym1.second;
+    set_inforce_durations_from_dates();
 
     // USER !! This is the credited rate as of the database date,
     // regardless of the date of illustration, because the database
@@ -1033,12 +911,17 @@ void Input::DoTransmogrify()
         GeneralAccountRate = current_credited_rate(*database_);
         }
 
-    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
+    oenum_alb_or_anb const alb_anb =
+        static_cast<oenum_alb_or_anb>
+            (static_cast<int>
+                (database_->Query(DB_AgeLastOrNearest)
+                )
+            );
 
     int apparent_age = attained_age
         (DateOfBirth.value()
         ,EffectiveDate.value()
-        ,use_anb
+        ,alb_anb
         );
     if(mce_no == UseDOB)
         {
@@ -1074,10 +957,10 @@ if(!egregious_kludge)
         ;
   } // end if(!egregious_kludge)
 
-    SetSolveDurations();
+    set_solve_durations();
 }
 
-void Input::SetSolveDurations()
+void Input::set_solve_durations()
 {
     switch(SolveTgtAtWhich.value())
         {
@@ -1187,5 +1070,22 @@ void Input::SetSolveDurations()
     SolveTargetTime = issue_age() + SolveTargetYear.value();
     SolveBeginTime  = issue_age() + SolveBeginYear .value();
     SolveEndTime    = issue_age() + SolveEndYear   .value();
+}
+
+void Input::set_inforce_durations_from_dates()
+{
+    std::pair<int,int> ym0 = years_and_months_since
+        (EffectiveDate  .value()
+        ,InforceAsOfDate.value()
+        );
+    InforceYear  = ym0.first;
+    InforceMonth = ym0.second;
+
+    std::pair<int,int> ym1 = years_and_months_since
+        (LastMaterialChangeDate.value()
+        ,InforceAsOfDate       .value()
+        );
+    InforceContractYear  = ym1.first;
+    InforceContractMonth = ym1.second;
 }
 

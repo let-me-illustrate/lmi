@@ -48,12 +48,21 @@ popd
   #   bindkey "\e[1~" beginning-of-line
   #   bindkey "\e[4~" end-of-line
   #
+  # Using UCT avoids problems such as this:
+  #   http://lists.gnu.org/archive/html/make-w32/2006-04/msg00010.html
+  # 'TZ' must be manually specified here because Cygwin sets it to
+  # 'Europe/London' (with daylight saving) when it's specified in
+  # msw-xp as 'GMT' without daylight saving. Comment that setting out
+  # if you want to have such problems.
+  #
   # Adjust $coefficiency to suit the machine.
 
 /bin/cat >~/.zshrc <<\EOF
 PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
-export coefficiency='--jobs=12'
+export TZ=UCT
+export LC_COLLATE=C.UTF-8
+export coefficiency='--jobs=16'
 
 bindkey "\e[3~" delete-char      # Del
 bindkey '\e[H' beginning-of-line # Home

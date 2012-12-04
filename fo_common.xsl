@@ -904,7 +904,7 @@
     </fo:static-content>
   </xsl:template>
 
-<xsl:template name="print-franchise-and-policynumber">
+<xsl:template name="print-mastercontractnumber-and-contractnumber">
   <xsl:param name="omit_policynumber" select="$is_composite"/>
     <!--
     This monstrosity truncates 'MasterContractNumber' and 'ContractNumber' to:

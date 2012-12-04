@@ -76,7 +76,7 @@ class MortalityRates
     std::vector<double> const& TargetPremiumRates  () const;
 
     std::vector<double> const& Irc7702Q            () const;
-    std::vector<double> const& TableYRates         () const;
+    std::vector<double> const& GroupProxyRates     () const;
     std::vector<double> const& PartialMortalityQ   () const;
     std::vector<double> const& CvatCorridorFactors () const;
     std::vector<double> const& SevenPayRates       () const;
@@ -157,7 +157,7 @@ class MortalityRates
     std::vector<double> TargetPremiumRates_;
 
     std::vector<double> Irc7702Q_;
-    std::vector<double> TableYRates_;
+    std::vector<double> GroupProxyRates_;
     std::vector<double> PartialMortalityQ_;
     std::vector<double> CvatCorridorFactors_;
     std::vector<double> SevenPayRates_;
@@ -189,9 +189,9 @@ inline std::vector<double> const& MortalityRates::Irc7702Q() const
     return Irc7702Q_;
 }
 
-inline std::vector<double> const& MortalityRates::TableYRates() const
+inline std::vector<double> const& MortalityRates::GroupProxyRates() const
 {
-    return TableYRates_;
+    return GroupProxyRates_;
 }
 
 inline std::vector<double> const& MortalityRates::PartialMortalityQ() const

@@ -41,16 +41,16 @@
 #include "ihs_irc7702a.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
-#include "mc_enum_types_aux.hpp"     // mc_state_from_string()
+#include "mc_enum_types_aux.hpp"        // mc_state_from_string()
 #include "mec_input.hpp"
 #include "mec_xml_document.hpp"
-#include "miscellany.hpp"            // ios_out_trunc_binary()
+#include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
-#include "path_utility.hpp"          // fs::path inserter
-#include "premium_tax.hpp"           // lowest_premium_tax_load()
+#include "path_utility.hpp"             // fs::path inserter
+#include "premium_tax.hpp"              // lowest_premium_tax_load()
 #include "product_data.hpp"
 #include "round_to.hpp"
-#include "stratified_algorithms.hpp" // TieredGrossToNet()
+#include "stratified_algorithms.hpp"    // TieredGrossToNet()
 #include "stratified_charges.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
@@ -58,7 +58,7 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-#include <algorithm>                 // std::min()
+#include <algorithm>                    // std::min()
 #include <iostream>
 #include <limits>
 #include <string>
@@ -145,7 +145,7 @@ mec_state test_one_days_7702A_transactions
         }
 
     std::vector<double> const CvatCorridorFactors = actuarial_table_rates
-        (AddDataDir(product_filenames.datum("CorridorFilename"))
+        (AddDataDir(product_filenames.datum("CvatCorridorFilename"))
         ,static_cast<long int>(database.Query(DB_CorridorTable))
         ,input.issue_age()
         ,input.years_to_maturity()
@@ -160,14 +160,14 @@ mec_state test_one_days_7702A_transactions
     tabular_Ax.push_back(1.0);
 
     std::vector<double> const tabular_7Px = actuarial_table_rates
-        (AddDataDir(product_filenames.datum("TAMRA7PayFilename"))
+        (AddDataDir(product_filenames.datum("SevenPayFilename"))
         ,static_cast<long int>(database.Query(DB_SevenPayTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
 
     std::vector<double> Mly7702qc = actuarial_table_rates
-        (AddDataDir(product_filenames.datum("IRC7702Filename"))
+        (AddDataDir(product_filenames.datum("Irc7702QFilename"))
         ,static_cast<long int>(database.Query(DB_Irc7702QTable))
         ,input.issue_age()
         ,input.years_to_maturity()
@@ -514,18 +514,7 @@ bool mec_server::operator()(fs::path const& file_path)
     if(".mec" == extension)
         {
         Timer timer;
-        fs::ifstream ifs(file_path);
-        if(!ifs)
-            {
-            fatal_error()
-                << "Unable to read file '"
-                << file_path
-                << "'."
-                << LMI_FLUSH
-                ;
-            }
-        mec_xml_document doc;
-        doc.read(ifs);
+        mec_xml_document doc(file_path.string());
         seconds_for_input_ = timer.stop().elapsed_seconds();
         return operator()(file_path, doc.input_data());
         }

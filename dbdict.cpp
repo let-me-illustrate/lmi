@@ -31,6 +31,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "calendar_date.hpp"            // gregorian_epoch(), last_yyyy_date()
 #include "data_directory.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -125,7 +126,6 @@ void DBDictionary::ascribe_members()
     ascribe("AllowSimpUw"         , &DBDictionary::AllowSimpUw         );
     ascribe("AllowGuarUw"         , &DBDictionary::AllowGuarUw         );
     ascribe("SmokeOrTobacco"      , &DBDictionary::SmokeOrTobacco      );
-    ascribe("PrefOrSelect"        , &DBDictionary::PrefOrSelect        );
     ascribe("AllowPreferredClass" , &DBDictionary::AllowPreferredClass );
     ascribe("AllowUltraPrefClass" , &DBDictionary::AllowUltraPrefClass );
     ascribe("AllowSubstdTable"    , &DBDictionary::AllowSubstdTable    );
@@ -173,6 +173,8 @@ void DBDictionary::ascribe_members()
     ascribe("SubstdTableMultTable", &DBDictionary::SubstdTableMultTable);
     ascribe("CoiUpper12Method"    , &DBDictionary::CoiUpper12Method    );
     ascribe("CoiInforceReentry"   , &DBDictionary::CoiInforceReentry   );
+    ascribe("CoiResetMinDate"     , &DBDictionary::CoiResetMinDate     );
+    ascribe("CoiResetMaxDate"     , &DBDictionary::CoiResetMaxDate     );
     ascribe("AllowMortBlendSex"   , &DBDictionary::AllowMortBlendSex   );
     ascribe("AllowMortBlendSmoke" , &DBDictionary::AllowMortBlendSmoke );
     ascribe("GuarInt"             , &DBDictionary::GuarInt             );
@@ -362,13 +364,11 @@ void DBDictionary::ascribe_members()
     ascribe("ExpRatAmortPeriod"   , &DBDictionary::ExpRatAmortPeriod   );
     ascribe("LedgerType"          , &DBDictionary::LedgerType          );
     ascribe("AgeLastOrNearest"    , &DBDictionary::AgeLastOrNearest    );
-    ascribe("MaxIllusAge"         , &DBDictionary::MaxIllusAge         );
     ascribe("MaturityAge"         , &DBDictionary::MaturityAge         );
     ascribe("LapseIgnoresSurrChg" , &DBDictionary::LapseIgnoresSurrChg );
     ascribe("DefaultProcessOrder" , &DBDictionary::DefaultProcessOrder );
-    ascribe("NominallyPar"        , &DBDictionary::NominallyPar        );
-    ascribe("TableYTable"         , &DBDictionary::TableYTable         );
-    ascribe("Gam83Table"          , &DBDictionary::Gam83Table          );
+    ascribe("GroupProxyRateTable" , &DBDictionary::GroupProxyRateTable );
+    ascribe("PartialMortTable"    , &DBDictionary::PartialMortTable    );
     ascribe("WeightClass"         , &DBDictionary::WeightClass         );
     ascribe("WeightGender"        , &DBDictionary::WeightGender        );
     ascribe("WeightSmoking"       , &DBDictionary::WeightSmoking       );
@@ -524,6 +524,10 @@ void DBDictionary::InitDB()
     Add(database_entity(DB_SurrChgSpecAmtSlope , 1.0));
     Add(database_entity(DB_SurrChgAcctValSlope , 1.0));
 
+    // These are the same as class date_trammel's nominal limits.
+    Add(database_entity(DB_CoiResetMinDate     , gregorian_epoch().julian_day_number()));
+    Add(database_entity(DB_CoiResetMaxDate     , last_yyyy_date ().julian_day_number()));
+
     // Usually the maximum is a reciprocal, e.g., 1/11 or 1/12; for
     // greatest precision, store the reciprocal of that reciprocal,
     // e.g., 11 or 12.
@@ -653,7 +657,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_CurrCoiIsAnnual     , true));
     Add(database_entity(DB_GuarCoiIsAnnual     , true));
     Add(database_entity(DB_MdptCoiIsAnnual     , true));
-    Add(database_entity(DB_AgeLastOrNearest    , 0, "0 = ALB")); // ALB
+    Add(database_entity(DB_AgeLastOrNearest    , oe_age_last_birthday));
     Add(database_entity(DB_AllowRetirees       , true));
     Add(database_entity(DB_MinSpecAmt          , 100000.0));
     Add(database_entity(DB_AllowSubstdTable    , true));
@@ -810,31 +814,25 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_LedgerType          , mce_ill_reg));
     Add(database_entity(DB_AllowExpRating      , false));
 
-    // These aren't really NY Table Y group rates--in fact, they're
-    // US 65-70 male ALB. Though NY Table Y is occasionally
-    // encountered in the group-carveout market, it's not included
-    // in the SOA's databases; for default initialization, a widely-
-    // available table is preferred.
-    //
-    // DATABASE !! Hence, the entity is misnamed; it really means
-    // something like "group proxy rate". However, what's really
-    // wanted is a choice among tables. The same can be said of
-    // 'DB_Gam83Table', which really means "partial-mortality table";
-    // this support request:
-    //   http://savannah.nongnu.org/support/?105593
-    // would offer a choice and make that database entity unnecessary.
-    Add(database_entity(DB_TableYTable         , 358));
+    // 1960 CSG (which does not distinguish gender).
+    Add(database_entity(DB_GroupProxyRateTable , 305));
 
-    // Use male rates for unisex--1983 GAM seems to have no unisex version.
     double T83Gam[3] = {825, 826, 826,};
-    Add(database_entity(DB_Gam83Table, e_number_of_axes, dims311, T83Gam, "Use male rates for unisex--1983 GAM seems to have no unisex version."));
+    Add
+        (database_entity
+            (DB_PartialMortTable
+            ,e_number_of_axes
+            ,dims311
+            ,T83Gam
+            ,"1983 GAM, using male rates for unisex because no unisex table was published."
+            )
+        );
 
     Add(database_entity(DB_AllowWd             , true));
     Add(database_entity(DB_AllowLoan           , true));
     Add(database_entity(DB_AllowChangeToDbo2   , true));
     Add(database_entity(DB_AllowSpecAmtIncr    , true));
     Add(database_entity(DB_NoLapseAlwaysActive , false));
-    Add(database_entity(DB_PrefOrSelect        , oe_called_select));
     Add(database_entity(DB_ExpRatStdDevMult    , 0.0));
     Add(database_entity(DB_ExpRatIbnrMult      , 0.0));
     Add(database_entity(DB_ExpRatCoiRetention  , 0.0));
@@ -910,6 +908,11 @@ void DBDictionary::InitAntediluvian()
         Add(database_entity(db_key_from_name(*i), 0.0));
         }
 
+    // These are the same as class date_trammel's nominal limits.
+    // They mustn't be zero.
+    Add(database_entity(DB_CoiResetMinDate     , gregorian_epoch().julian_day_number()));
+    Add(database_entity(DB_CoiResetMaxDate     , last_yyyy_date ().julian_day_number()));
+
     Add(database_entity(DB_GuarInt, 0.03));
 
     Add(database_entity(DB_FixedLoanRate, 0.06));
@@ -956,7 +959,7 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_WpTable, 8));
     Add(database_entity(DB_AdbTable, 9));
     Add(database_entity(DB_MaturityAge, 100));
-    Add(database_entity(DB_AgeLastOrNearest, 1.0));
+    Add(database_entity(DB_AgeLastOrNearest, oe_age_nearest_birthday_ties_older));
     Add(database_entity(DB_MinSpecAmt, 10000.0));
 
     Add(database_entity(DB_AllowGenAcct, 1.0));
@@ -981,7 +984,6 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_NoLapseMinDur, 0.0));
     Add(database_entity(DB_NoLapseMinAge, 0.0));
 
-    Add(database_entity(DB_NominallyPar, 0.0));
     Add(database_entity(DB_Has1035ExchCharge, 0.0));
     Add(database_entity(DB_SmokeOrTobacco, 0.0));
     Add(database_entity(DB_DacTaxFundCharge, 0.0));

@@ -510,12 +510,17 @@ void Input::redintegrate_ex_post
         InforceCumulativeNoLapsePayments = map_lookup(detritus_map, "InforceCumulativePayments");
         Internal1035ExchangeTaxBasis     = map_lookup(detritus_map, "Internal1035ExchangeBasis");
         MasterContractNumber             = map_lookup(detritus_map, "Franchise");
-        // Version 0 lacked 'PremiumHistory', as do "deficient" extracts.
-        if(0 < file_version && !deficient_extract)
+        // Some (but not all) variants of version 0 lacked
+        // 'PremiumHistory'; all later versions should include it.
+        if(!contains(detritus_map, "PremiumHistory"))
+            {
+            LMI_ASSERT(0 == file_version);
+            }
+        else
             {
             Inforce7702AAmountsPaidHistory  = map_lookup(detritus_map, "PremiumHistory");
             }
-        // "Deficient" extracts also lack 'SolveBasis'.
+        // "Deficient" extracts lack 'SolveBasis'.
         if(!deficient_extract)
             {
             SolveExpenseGeneralAccountBasis = map_lookup(detritus_map, "SolveBasis");

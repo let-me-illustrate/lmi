@@ -21,6 +21,8 @@
 
 # $Id$
 
+# Use file extension '.ill' for single-life xml documents.
+
 start = element single_cell_document {cell_element}
 
 include "cell.rnc"

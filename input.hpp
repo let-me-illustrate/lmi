@@ -184,7 +184,8 @@ class LMI_SO Input
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
 
-    void SetSolveDurations();
+    void set_solve_durations();
+    void set_inforce_durations_from_dates();
 
     std::map<std::string,std::string> const permissible_specified_amount_strategy_keywords(); // Obsolete.
 

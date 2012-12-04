@@ -30720,3 +30720,292 @@ Guard against a perilous command-line override.
   workhorse.make
 Tune gcc.
 
+20120907T1029Z <gchicares@sbcglobal.net> [567]
+
+  ihs_avmly.cpp
+Improve documentation and concinnity.
+
+20120908T0150Z <wboutin@massmutual.com> [567]
+
+  fo_common.xsl
+  illustration_reg.xsl
+  nasd.xsl
+  reg_d_group.xsl
+  reg_d_individual.xsl
+  reg_d_offshore.xsl
+  variable_annuity.xsl
+Rename a variable.
+
+20120908T0913Z <gchicares@sbcglobal.net> [567]
+
+  test_coding_rules.cpp
+Restrict non-binary files to ISO-8859-15 and whitespace.
+
+20120908T0918Z <gchicares@sbcglobal.net> [567]
+
+  ihs_avmly.cpp
+  test_coding_rules.cpp
+Replace characters forbidden 20120908T0913Z.
+
+20120916T2317Z <wboutin@massmutual.com> [567]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Add several new inforce fields.
+
+20120918T0209Z <gchicares@sbcglobal.net> [567]
+
+  multiple_cell_document.cpp
+Work around defects in certain admin-system extracts.
+
+20120918T0210Z <gchicares@sbcglobal.net> [567]
+
+  version.hpp
+Designate release candidate.
+
+20121004T1049Z <gchicares@sbcglobal.net> [567]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Move comments, rephrasing some.
+
+20121004T1130Z <gchicares@sbcglobal.net> [567]
+
+  xml_lmi.cpp
+Improve diagnostics. A missing file should not be diagnosed as an
+"unknown XML parsing error". Testcase:
+  lmi_cli_shared.exe --accept --file=nonexistent.cns
+
+20121004T1215Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+Improve documentation.
+
+20121004T1902Z <gchicares@sbcglobal.net> [567]
+
+  mec_server.cpp
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+Refactor for simplicity.
+
+20121006T1059Z <gchicares@sbcglobal.net> [567]
+
+  ihs_acctval.cpp
+Improve documentation.
+
+20121008T1344Z <gchicares@sbcglobal.net> [567]
+
+  input_harmonization.cpp
+Improve documentation. There's no point in adding a database entity to
+control a feature that's not yet implemented.
+
+20121019T1213Z <gchicares@sbcglobal.net> [567]
+
+  cell.rnc
+  cell.xsd
+Improve documentation.
+
+20121023T0008Z <gchicares@sbcglobal.net> [567]
+
+  sort_cell_subelements.xsl [new file]
+Sort <cell> subelements.
+
+20121024T1650Z <gchicares@sbcglobal.net> [567]
+
+  input_harmonization.cpp
+Refactor.
+
+20121024T1841Z <gchicares@sbcglobal.net> [567]
+
+  input_harmonization.cpp
+Prototype a constant COI-reentry date.
+
+20121024T2205Z <gchicares@sbcglobal.net> [567]
+
+  version.hpp
+Designate release candidate.
+
+20121025T0930Z <gchicares@sbcglobal.net> [567]
+
+  input.hpp
+  input_harmonization.cpp
+Refactor.
+
+20121026T1310Z <gchicares@sbcglobal.net> [565]
+
+  input_harmonization.cpp
+  mc_enum.cpp
+Remove obsolete code; move and improve documentation.
+
+20121027T1009Z <gchicares@sbcglobal.net> [563]
+
+  input_harmonization.cpp
+Remove obsolete code. Input::RealizeDeathBenefitOption() already
+contains equivalent logic.
+
+20121027T1153Z <gchicares@sbcglobal.net> [561]
+
+  input.cpp
+  input_harmonization.cpp
+  yare_input.hpp
+Remove obsolete code involving ready-to-expunge member variables.
+
+20121028T1041Z <gchicares@sbcglobal.net> [561]
+
+  input_harmonization.cpp
+Don't enforce schema-prescribed defaults for fields marked "obsolete".
+
+20121029T1030Z <gchicares@sbcglobal.net> [559]
+
+  input_harmonization.cpp
+Improve documentation; remove some obsolete commented-out code.
+
+20121108T1253Z <gchicares@sbcglobal.net> [559]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  oecumenic_enumerations.hpp
+Eradicate dead code.
+
+20121109T1311Z <gchicares@sbcglobal.net> [559]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  input_harmonization.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+Eradicate dead code.
+
+20121110T1333Z <gchicares@sbcglobal.net> [559]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Rename certain database entities.
+
+20121111T1341Z <gchicares@sbcglobal.net> [556]
+
+  ihs_avstrtgy.cpp
+  mortality_rates_fetch.cpp
+Note a defect; expunge redundant or mistaken comments.
+
+20121112T1307Z <gchicares@sbcglobal.net> [556]
+
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_mortal.cpp
+  interest_rates.cpp
+  loads_impl.hpp
+  premium_tax.cpp
+Mark some taxation issues.
+
+20121113T1109Z <gchicares@sbcglobal.net> [556]
+
+  ihs_basicval.cpp
+Refactor for simplicity.
+
+20121113T1240Z <gchicares@sbcglobal.net> [556]
+
+  multiple_cell_document.rnc
+  multiple_cell_document.xsd
+  single_cell_document.rnc
+  single_cell_document.xsd
+Improve documentation, noting desired file extensions for xml input.
+
+20121113T1357Z <gchicares@sbcglobal.net> [556]
+
+  test_schemata.sh
+Report scripted actions more verbosely.
+
+20121114T1331Z <gchicares@sbcglobal.net> [556]
+
+  input_xml_io.cpp
+Accommodate deficient admin-system extracts more selectively.
+
+20121116T1239Z <gchicares@sbcglobal.net> [556]
+
+  basic_values.hpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+  ihs_mortal.cpp
+  mortality_rates.hpp
+  mortality_rates_fetch.cpp
+Rename certain members for clarity and consistency.
+
+20121116T1506Z <gchicares@sbcglobal.net> [556]
+
+  ihs_basicval.cpp
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+  product_data.cpp
+  product_data.hpp
+Rename certain members for clarity and consistency.
+
+20121116T1510Z <gchicares@sbcglobal.net> [556]
+
+  dbdict.cpp
+Improve documentation.
+
+20121116T1513Z <gchicares@sbcglobal.net> [556]
+
+  illustration_reg.xsl
+Correct the name of a statute. See:
+  http://www.finance.senate.gov/library/reports/conference/download/?id=45731c69-929b-47ae-ab07-0b171333092d
+
+20121116T2339Z <gchicares@sbcglobal.net> [556]
+
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+  product_data.cpp
+  product_data.hpp
+Expunge a disused member.
+
+20121116T2347Z <gchicares@sbcglobal.net> [557]
+
+  product_data.hpp
+Mark a defect.
+
+20121117T0407Z <gchicares@sbcglobal.net> [557]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  mec_server.cpp
+  mortality_rates_fetch.cpp
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+  product_data.cpp
+  product_data.hpp
+Rename certain members for clarity and consistency.
+
+20121118T1252Z <gchicares@sbcglobal.net> [556]
+
+  dbdict.cpp
+  ihs_avstrtgy.cpp
+Resolve a marked defect.
+
+20121127T2350Z <gchicares@sbcglobal.net> [556]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  input_harmonization.cpp
+Set limits on COI-reentry date, replacing 20121024T1841Z prototype.
+
+20121128T0037Z <gchicares@sbcglobal.net> [556]
+
+  version.hpp
+Designate release candidate.
+

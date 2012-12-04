@@ -217,9 +217,10 @@ cell_element = element cell
      ## is paid.
      element InforceCumulativeNoLapsePremium  {nonnegative_double}
     ,## Inforce cumulative payments for return of premium death
-     ## benefit option: sum of all gross premiums, including dump-ins
-     ## and 1035 exchange proceeds, minus withdrawals and premiums
-     ## refunded or forced out.
+     ## benefit option and for loads banded by cumulative premium:
+     ## sum of all gross premiums, including dump-ins and 1035
+     ## exchange proceeds, minus withdrawals and premiums refunded
+     ## or forced out.
      element InforceCumulativeRopPayments     {nonnegative_double}
     ,## Inforce cumulative refundable sales load.
      element InforceCumulativeSalesLoad       {nonnegative_double}
@@ -269,11 +270,11 @@ cell_element = element cell
      element InforceTaxBasis                  {xsd:double}
     ,## * [obsolete]
      element InforceYear                      {duration_int}
-    ,## Year-to-date payments counted toward target premium.
+    ,## Policy-year-to-date payments counted toward target premium.
      element InforceYtdGrossPremium           {nonnegative_double}
-    ,## Inforce year-to-date "net" COI charge for experience rating.
+    ,## Policy-year-to-date "net" COI charge for experience rating.
      element InforceYtdNetCoiCharge           {nonnegative_double}
-    ,## Year-to-date payments subject to premium tax.
+    ,## Policy-year-to-date payments subject to premium tax.
      element InforceYtdTaxablePremium         {nonnegative_double}
     ,## * Investment management fee of a custom fund.
      element InputFundManagementFee           {nonnegative_double}

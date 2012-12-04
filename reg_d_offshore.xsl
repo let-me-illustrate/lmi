@@ -730,7 +730,7 @@
                   </fo:block>
                 </xsl:if>
 
-                <xsl:call-template name="print-franchise-and-policynumber"/>
+                <xsl:call-template name="print-mastercontractnumber-and-contractnumber"/>
               </fo:block>
             </fo:table-cell>
 

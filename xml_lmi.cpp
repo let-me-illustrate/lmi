@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "istream_to_string.hpp"
+#include "platform_dependent.hpp"       // access()
 #include "value_cast.hpp"
 
 #include <xmlwrapp/attributes.h>
@@ -62,6 +63,10 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
         if(filename.empty())
             {
             throw std::runtime_error("File name is empty.");
+            }
+        if(0 != access(filename.c_str(), F_OK))
+            {
+            throw std::runtime_error("File does not exist.");
             }
         parser_.reset(new DomParser(filename.c_str()));
         if(0 == parser_.get())
@@ -282,6 +287,8 @@ void xml_lmi::xml_document::add_comment(std::string const& s)
     fatal_error() << "Cannot add comment to rootless document." << LMI_FLUSH;
 }
 
+/// Find an element subnode by name, throwing if it is not found.
+
 xml::node::const_iterator retrieve_element
     (xml::element const& parent
     ,std::string  const& name
@@ -299,6 +306,13 @@ xml::node::const_iterator retrieve_element
         }
     return i;
 }
+
+/// Retrieve an xml element's full text-node contents.
+///
+/// The contents of all text-node children are concatenated.
+///
+/// Only direct children are considered: children of child nodes
+/// are not.
 
 std::string get_content(xml::element const& element)
 {
@@ -326,6 +340,8 @@ std::string get_content(xml::element const& element)
         }
 }
 
+/// Retrieve an xml element's name.
+
 std::string get_name(xml::element const& element)
 {
     try
@@ -339,6 +355,11 @@ std::string get_name(xml::element const& element)
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }
+
+/// Get a named attribute of an xml element.
+///
+/// If the element has no such attribute, then return false and
+/// guarantee not to modify 'value'.
 
 bool get_attr
     (xml::element const& element
@@ -367,6 +388,11 @@ bool get_attr
         }
 }
 
+/// Get a named attribute of an xml element; convert it to integer.
+///
+/// If the element has no such attribute, then return false and
+/// guarantee not to modify 'value'.
+
 bool get_attr
     (xml::element const& element
     ,std::string const&  name
@@ -385,6 +411,8 @@ bool get_attr
         }
 }
 
+/// Set a named attribute of an xml element.
+
 void set_attr
     (xml::element&      element
     ,std::string const& name
@@ -401,6 +429,8 @@ void set_attr
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }
+
+/// Set a named attribute of an xml element.
 
 void set_attr
     (xml::element&      element

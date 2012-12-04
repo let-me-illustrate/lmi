@@ -23,7 +23,7 @@
 
 # $Id$
 
-echo "Testing schemata."
+echo "  Test schemata..."
 
 # Directory where this script resides.
 
@@ -50,7 +50,7 @@ cp --preserve $src_dir/sample.cns $src_dir/sample.ill .
 
 cp --preserve $src_dir/cell.rnc $src_dir/multiple_cell_document.rnc $src_dir/single_cell_document.rnc $src_dir/types.rnc .
 
-# Test RNC files with 'jing'.
+echo "  Test RNC files with 'jing'."
 
 java -jar $jar_dir/jing.jar -c multiple_cell_document.rnc sample.cns
 java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample.ill
@@ -66,12 +66,12 @@ java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample.ill
 
 cp --preserve $src_dir/cell.xsd $src_dir/multiple_cell_document.xsd $src_dir/single_cell_document.xsd .
 
-# Test XSD files with 'jing'.
+echo "  Test XSD files with 'jing'."
 
 java -jar $jar_dir/jing.jar multiple_cell_document.xsd sample.cns
 java -jar $jar_dir/jing.jar single_cell_document.xsd   sample.ill
 
-# Test XSD files with 'xmllint'.
+echo "  Test XSD files with 'xmllint'."
 
 xmllint --noout --schema multiple_cell_document.xsd sample.cns
 xmllint --noout --schema single_cell_document.xsd   sample.ill
@@ -85,25 +85,25 @@ xmllint --noout --schema single_cell_document.xsd   sample.ill
 # RNG is generated extemporaneously for testing only, against the day
 # when better implementations may come into wider use.
 
-# Generate RNG from RNC with 'trang'.
-#
+echo "  Generate RNG from RNC with 'trang'."
+
 # Alternatively, 'jing -sc' might be used, but would result in
 # excessive duplication.
 
 java -jar $jar_dir/trang.jar multiple_cell_document.rnc multiple_cell_document.rng
 java -jar $jar_dir/trang.jar single_cell_document.rnc   single_cell_document.rng
 
-# Test RNG files with 'jing'.
+echo "  Test RNG files with 'jing'."
 
 java -jar $jar_dir/jing.jar multiple_cell_document.rng sample.cns
 java -jar $jar_dir/jing.jar single_cell_document.rng   sample.ill
 
-# Test RNG files with 'xmllint'.
+echo "  Test RNG files with 'xmllint'."
 
 xmllint --noout --relaxng multiple_cell_document.rng sample.cns
 xmllint --noout --relaxng single_cell_document.rng   sample.ill
 
-# Test invalid input.
+echo "  Test invalid input..."
 
 cat >touchstone.eraseme <<EOF
   invalid input, jing, .rnc:
@@ -149,7 +149,8 @@ cat >eraseme.sed <<EOF
   }
 EOF
 
-# Test invalid input: '.cns'.
+echo "  Test invalid input: '.cns'."
+
 <sample.cns >sample_bad.cns sed --file=eraseme.sed
 rm --force cns.eraseme
 echo "  invalid input, jing, .rnc:"                                      >> cns.eraseme 2>&1
@@ -165,7 +166,8 @@ xmllint --noout --relaxng multiple_cell_document.rng      sample_bad.cns >> cns.
 sed -e 's/^.*error: //;s/\.cns fails/ fails/;s/  *$//' -i cns.eraseme
 diff --unified=0 touchstone.eraseme cns.eraseme
 
-# Test invalid input: '.ill'.
+echo "  Test invalid input: '.ill'."
+
 <sample.ill >sample_bad.ill sed --file=eraseme.sed
 rm --force ill.eraseme
 echo "  invalid input, jing, .rnc:"                                      >> ill.eraseme 2>&1
@@ -181,8 +183,8 @@ xmllint --noout --relaxng single_cell_document.rng        sample_bad.ill >> ill.
 sed -e 's/^.*error: //;s/\.ill fails/ fails/;s/  *$//' -i ill.eraseme
 diff --unified=0 touchstone.eraseme ill.eraseme
 
-# Regenerate XSD files as they should appear in the repository.
-#
+echo "  Regenerate XSD files as they should appear in the repository."
+
 # Reversing the order of the 'trang' commands produces a different
 # 'cell.xsd', which lacks <xs:complexType name="cell_element">.
 
@@ -192,5 +194,5 @@ sed -e 's/  *$//' -i *.xsd
 diff --unified=0 --ignore-matching-lines='<!-- [$]Id:.*[$] -->' --from-file=$src_dir *.xsd \
     || echo "Dubious '*.xsd' in repository."
 
-echo "Done."
+echo "  Done."
 

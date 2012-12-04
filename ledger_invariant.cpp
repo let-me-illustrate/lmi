@@ -177,7 +177,6 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["NoLapseAlwaysActive"   ] = &NoLapseAlwaysActive    ;
     OtherScalars    ["NoLapseMinDur"         ] = &NoLapseMinDur          ;
     OtherScalars    ["NoLapseMinAge"         ] = &NoLapseMinAge          ;
-    OtherScalars    ["NominallyPar"          ] = &NominallyPar           ;
     OtherScalars    ["Has1035ExchCharge"     ] = &Has1035ExchCharge      ;
     OtherScalars    ["EffDateJdn"            ] = &EffDateJdn             ;
     OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
@@ -384,7 +383,6 @@ void LedgerInvariant::Init()
     NoLapseMinDur       = 100;
     NoLapseMinAge       = 100;
     NoLapseAlwaysActive = false;
-    NominallyPar        = false;
     Has1035ExchCharge   = false;
 
     SupplementalReport  = false;
@@ -522,7 +520,6 @@ void LedgerInvariant::Init(BasicValues* b)
     NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
     NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
     NoLapseMinAge           = b->Database_->Query(DB_NoLapseMinAge);
-    NominallyPar            = b->Database_->Query(DB_NominallyPar);
     Has1035ExchCharge       = b->Database_->Query(DB_Has1035ExchCharge);
 
     InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
@@ -1007,7 +1004,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
     NoLapseAlwaysActive= a_Addend.NoLapseAlwaysActive|| NoLapseAlwaysActive;
-    NominallyPar       = a_Addend.NominallyPar       || NominallyPar;
     Has1035ExchCharge  = a_Addend.Has1035ExchCharge  || Has1035ExchCharge;
 
     // Logical OR because IsInforce is a taint that prevents us from

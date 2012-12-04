@@ -30,6 +30,11 @@
 
 enum {methuselah = 969};
 
+enum oenum_alb_or_anb
+    {oe_age_last_birthday
+    ,oe_age_nearest_birthday_ties_older
+    };
+
 enum oenum_allocation_method
     {oe_input_allocation
     ,oe_override_allocation
@@ -67,11 +72,6 @@ enum oenum_mvc_dv_rc
     {oe_mvc_dv_cancelled
     ,oe_mvc_dv_unchanged
     ,oe_mvc_dv_changed
-    };
-
-enum oenum_preferred_class_name
-    {oe_called_preferred
-    ,oe_called_select
     };
 
 /// Used only for backward compatibility with old versions that didn't

@@ -995,7 +995,7 @@ void InterestRates::Initialize7702Rates()
 // loan rate determination period, or simply by forbidding loans
 // during that period.
 
-// TODO ?? Calculate both:
+// TODO ?? TAXATION !! Calculate both:
 //    std::vector<double> MlyGlpRate_;
 //    std::vector<double> MlyGspRate_;
 
@@ -1014,12 +1014,13 @@ void InterestRates::Initialize7702Rates()
 #if 0
 // TODO ?? Here's the implementation actually used, elsewhere--it needs work.
 // Eventually this should be rewritten. It still lives here because it
-// really belongs here, not in class BasicValues.
+// really belongs here, not in class BasicValues. TAXATION !! Resolve this.
 
 {
     // Monthly guar net int for 7702, with 4 or 6% min, is
     //   greater of {4%, 6%} and annual guar int rate
     //   less 7702 spread
+    // TAXATION !! Resolve this:
     // TODO ?? We need to subtract other things too, e.g. comp (sometimes)...
     //   transformed to monthly (simple subtraction?).
     // These interest rates belong here because they're used by
@@ -1034,14 +1035,14 @@ void InterestRates::Initialize7702Rates()
             {
             // ET !! std::vector<double> guar_loan_rate = PublishedLoanRate_ - RegLoanSpread_[mce_gen_guar];
             // ET !! guar_int = max(guar_int, RegLoanSpread_[mce_gen_guar]);
-            // TODO ?? But that looks incorrect when written clearly!
+            // TODO ?? TAXATION !! But that looks incorrect when written clearly!
             // Perhaps this old comment:
             //   APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
             // suggests the actual intention.
 
-            // TODO ?? Need loan rates for 7702 whenever loans are allowed.
+            // TODO ?? TAXATION !! Need loan rates for 7702 whenever loans are allowed.
             std::vector<double> gross_loan_rate = PublishedLoanRate_;
-            // TODO ?? Should at least assert that preferred <= regular spread.
+            // TODO ?? TAXATION !! Should at least assert that preferred <= regular spread.
             std::vector<double> guar_loan_spread = RegLoanSpread_[mce_gen_guar];
             std::vector<double> guar_loan_rate(Length);
             std::transform

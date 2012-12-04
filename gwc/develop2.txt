@@ -18,6 +18,8 @@ cd    /lmi/src/products/src/tmp/working_copy_tmp_20120403
 svn checkout file:///lmi/src/products/src/repository-20120403T1557Z/repository
 
   # Test concinnity (before every commit)
+  # (rerun after committing changes in test/ to regenerate 'md5sums',
+  # because committing files with an RCS Id changes their contents)
 
 cd repository/data/
 cd ../data; make src_dir=/lmi/src/lmi -f /lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S

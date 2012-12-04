@@ -111,8 +111,7 @@ enum e_database_key
         ,DB_AllowNonmedUw
         ,DB_AllowSimpUw
         ,DB_AllowGuarUw
-        ,DB_SmokeOrTobacco       // DATABASE !! Move to '.policy'
-        ,DB_PrefOrSelect         // DATABASE !! Move to '.policy'
+        ,DB_SmokeOrTobacco       // DATABASE !! Move to '.policy' (cf. product_data::AvName)
         ,DB_AllowPreferredClass
         ,DB_AllowUltraPrefClass
 
@@ -177,6 +176,8 @@ enum e_database_key
 
         ,DB_CoiUpper12Method
         ,DB_CoiInforceReentry
+        ,DB_CoiResetMinDate
+        ,DB_CoiResetMaxDate
 
         ,DB_AllowMortBlendSex
         ,DB_AllowMortBlendSmoke
@@ -446,15 +447,13 @@ enum e_database_key
         ,DB_LedgerType
 
         ,DB_AgeLastOrNearest     // DATABASE !! Add more options...
-        ,DB_MaxIllusAge
         ,DB_MaturityAge
 
         ,DB_LapseIgnoresSurrChg
         ,DB_DefaultProcessOrder
-        ,DB_NominallyPar         // DATABASE !! Use a footnote instead.
 
-        ,DB_TableYTable
-        ,DB_Gam83Table
+        ,DB_GroupProxyRateTable
+        ,DB_PartialMortTable
 
     ,DB_Topic_Weights
 

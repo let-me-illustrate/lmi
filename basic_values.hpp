@@ -161,11 +161,11 @@ class LMI_SO BasicValues
     std::vector<double> GetGuaranteedSpouseRiderRates() const;
     std::vector<double> GetCurrentTermRates()           const;
     std::vector<double> GetGuaranteedTermRates()        const;
-    std::vector<double> GetTableYRates()                const;
-    std::vector<double> GetTAMRA7PayRates()             const;
+    std::vector<double> GetGroupProxyRates()            const;
+    std::vector<double> GetSevenPayRates()              const;
     std::vector<double> GetTgtPremRates()               const;
-    std::vector<double> GetIRC7702Rates()               const;
-    std::vector<double> Get83GamRates()                 const;
+    std::vector<double> GetIrc7702QRates()              const;
+    std::vector<double> GetPartialMortalityRates()      const;
     std::vector<double> GetSubstdTblMultTable()         const;
     std::vector<double> GetCurrSpecAmtLoadTable()       const;
     std::vector<double> GetGuarSpecAmtLoadTable()       const;

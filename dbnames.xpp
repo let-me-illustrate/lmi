@@ -33,7 +33,6 @@
 {DB_AllowSimpUw,DB_Topic_Underwriting,"AllowSimpUw","Allow simplified underwriting: 0=no, 1=yes",}, \
 {DB_AllowGuarUw,DB_Topic_Underwriting,"AllowGuarUw","Allow guaranteed underwriting: 0=no, 1=yes",}, \
 {DB_SmokeOrTobacco,DB_Topic_Underwriting,"SmokeOrTobacco","Distinguish mortality by: 0=smoking, 1=tobacco use",}, \
-{DB_PrefOrSelect,DB_Topic_Underwriting,"PrefOrSelect","Underwriting class more restrictive than standard is called: 0=preferred, 1=select",}, \
 {DB_AllowPreferredClass,DB_Topic_Underwriting,"AllowPreferredClass","Allow preferred class: 0=no, 1=yes",}, \
 {DB_AllowUltraPrefClass,DB_Topic_Underwriting,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
 {DB_AllowSubstdTable,DB_Topic_Underwriting,"AllowSubstdTable","Allow substandard table ratings: 0=no, 1=yes",}, \
@@ -83,6 +82,8 @@
 {DB_SubstdTableMultTable,DB_Topic_MortalityCharges,"SubstdTableMultTable","Substandard table-rating multiplier applied to both guaranteed and current cost of insurance and term rider charges (index in mortality table database)",}, \
 {DB_CoiUpper12Method,DB_Topic_MortalityCharges,"CoiUpper12Method","Method to derive monthly from annual COI rates: 0=exponential, 1=linear [not yet implemented]",}, \
 {DB_CoiInforceReentry,DB_Topic_MortalityCharges,"CoiInforceReentry","Reenter COI table: 0=never, 1=at beginning of inforce year, 2=on anniversary >= input reset date",}, \
+{DB_CoiResetMinDate,DB_Topic_MortalityCharges,"CoiResetMinDate","Earliest permissible COI reset date",}, \
+{DB_CoiResetMaxDate,DB_Topic_MortalityCharges,"CoiResetMaxDate","Latest permissible COI reset date",}, \
 {DB_AllowMortBlendSex,DB_Topic_MortalityCharges,"AllowMortBlendSex","Mortality rating can be blended by gender: 0=no, 1=yes",}, \
 {DB_AllowMortBlendSmoke,DB_Topic_MortalityCharges,"AllowMortBlendSmoke","Mortality rating can be blended by smoking/tobacco use: 0=no, 1=yes",}, \
 {DB_Topic_Interest,DB_FIRST,"Interest","Interest rates, limits, spreads, and bonuses",}, \
@@ -287,13 +288,11 @@
 {DB_Topic_Miscellanea,DB_FIRST,"Miscellanea","Parameters that don't fit tidily into other categories",}, \
 {DB_LedgerType,DB_Topic_Miscellanea,"LedgerType","Ledger type: 0=illustration reg, 1=NASD, 2=prospectus illustration, 3=group private placement, 4=offshore private placement, 5=private placement subject to illustration reg, 6=individual private placement, 7=variable annuity",}, \
 {DB_AgeLastOrNearest,DB_Topic_Miscellanea,"AgeLastOrNearest","Age calculated as of last or nearest birthday: 0=ALB, 1=ANB (ties --> older), 2=ANB (ties --> younger)",}, \
-{DB_MaxIllusAge,DB_Topic_Miscellanea,"MaxIllusAge","Highest attained age illustrated [not yet implemented]",}, \
 {DB_MaturityAge,DB_Topic_Miscellanea,"MaturityAge","Normal maturity age",}, \
 {DB_LapseIgnoresSurrChg,DB_Topic_Miscellanea,"LapseIgnoresSurrChg","Ignore tabular surrender charge for lapse processing",}, \
 {DB_DefaultProcessOrder,DB_Topic_Miscellanea,"DefaultProcessOrder","Default processing order: 0=life by life, 1=month by month [not yet implemented]",}, \
-{DB_NominallyPar,DB_Topic_Miscellanea,"NominallyPar","Nominally participating, but dividends expected to be zero",}, \
-{DB_TableYTable,DB_Topic_Miscellanea,"TableYTable","New York table Y (index in mortality table database)",}, \
-{DB_Gam83Table,DB_Topic_Miscellanea,"Gam83Table","1983 Group Annuitant Mortality table (index in mortality table database)",}, \
+{DB_GroupProxyRateTable,DB_Topic_Miscellanea,"GroupProxyRateTable","Group-term proxy rate (index in mortality table database)",}, \
+{DB_PartialMortTable,DB_Topic_Miscellanea,"PartialMortTable","Partial mortality table (index in mortality table database)",}, \
 {DB_Topic_Weights,DB_FIRST,"Weights","Weights for profit analysis cells [not yet implemented]",}, \
 {DB_WeightClass,DB_Topic_Weights,"WeightClass","Weight by underwriting class [not yet implemented]",}, \
 {DB_WeightGender,DB_Topic_Weights,"WeightGender","Weight by gender [not yet implemented]",}, \

@@ -963,17 +963,18 @@ void AccountValue::InitializeSpecAmt()
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
-    // Target premium is annual only. Using a different mode seems
-    // conceivable, but if the ee and er both pay, and on different
-    // modes, then it would be unclear which mode to choose.
+    // No-lapse premium generally changes whenever specamt changes for
+    // any reason (e.g., elective increases or decreases, DBO changes,
+    // and withdrawals). Target premium may change similarly, or may
+    // be fixed immutably at issue. For illustrations, these premium
+    // changes occur only on anniversary, because triggering events
+    // are allowed only on anniversary.
     //
-    // SOMEDAY !! DATABASE !! Add code to recalculate minimum and
-    // target premiums as needed--e.g., after specamt increases,
-    // specamt decreases, withdrawals, and DBO changes--and database
-    // rules to govern which such events trigger recalculation. Until
-    // that's done, such changes affect these premiums only at the
-    // next anniversary. Minimum no-lapse premium is likely to require
-    // recalculation even if target is set immutably at issue.
+    // Target premium is annual by its nature: commission is earned
+    // immediately if the full target is paid on anniversary.
+    // Conversely, no-lapse premium by its nature is on the most
+    // frequent mode (monthly for lmi), because no-lapse guarantees
+    // are offered for all modes.
     int const target_year = TgtPremFixedAtIssue ? 0 : Year;
     MlyNoLapsePrem = GetModalMinPrem
         (target_year
