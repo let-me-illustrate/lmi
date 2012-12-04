@@ -453,7 +453,7 @@ std::pair<calendar_date,calendar_date> bracketing_anniversaries
 int notional_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
-    ,bool                 alb_anb
+    ,oenum_alb_or_anb     alb_anb
     )
 {
     typedef std::pair<calendar_date,calendar_date> date_pair;
@@ -499,7 +499,7 @@ int notional_age
 int attained_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
-    ,bool                 alb_anb
+    ,oenum_alb_or_anb     alb_anb
     )
 {
     if(as_of_date < birthdate)
@@ -675,10 +675,10 @@ class birthdate_limit
 {
   public:
     birthdate_limit
-        (calendar_date as_of_date
-        ,int           limit_age
-        ,bool          alb_anb
-        ,root_bias     bias
+        (calendar_date    as_of_date
+        ,int              limit_age
+        ,oenum_alb_or_anb alb_anb
+        ,root_bias        bias
         )
         :as_of_date_       (as_of_date)
         ,limit_age_        (limit_age)
@@ -726,13 +726,13 @@ class birthdate_limit
         }
 
   private:
-    calendar_date as_of_date_;
-    int           limit_age_;
-    bool          alb_anb_;
-    root_bias     bias_;
-    int           a_priori_minimum_;
-    int           a_priori_maximum_;
-    double        offset_;
+    calendar_date    as_of_date_;
+    int              limit_age_;
+    oenum_alb_or_anb alb_anb_;
+    root_bias        bias_;
+    int              a_priori_minimum_;
+    int              a_priori_maximum_;
+    double           offset_;
 };
 } // Unnamed namespace.
 
@@ -741,7 +741,7 @@ class birthdate_limit
 calendar_date minimum_birthdate
     (int                  minimum_age
     ,calendar_date const& as_of_date
-    ,bool                 alb_anb
+    ,oenum_alb_or_anb     alb_anb
     )
 {
     return birthdate_limit(as_of_date, minimum_age, alb_anb, bias_lower)();
@@ -752,7 +752,7 @@ calendar_date minimum_birthdate
 calendar_date maximum_birthdate
     (int                  maximum_age
     ,calendar_date const& as_of_date
-    ,bool                 alb_anb
+    ,oenum_alb_or_anb     alb_anb
     )
 {
     return birthdate_limit(as_of_date, maximum_age, alb_anb, bias_higher)();

@@ -657,7 +657,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_CurrCoiIsAnnual     , true));
     Add(database_entity(DB_GuarCoiIsAnnual     , true));
     Add(database_entity(DB_MdptCoiIsAnnual     , true));
-    Add(database_entity(DB_AgeLastOrNearest    , 0, "0 = ALB"));
+    Add(database_entity(DB_AgeLastOrNearest    , oe_age_last_birthday));
     Add(database_entity(DB_AllowRetirees       , true));
     Add(database_entity(DB_MinSpecAmt          , 100000.0));
     Add(database_entity(DB_AllowSubstdTable    , true));
@@ -959,7 +959,7 @@ void DBDictionary::InitAntediluvian()
     Add(database_entity(DB_WpTable, 8));
     Add(database_entity(DB_AdbTable, 9));
     Add(database_entity(DB_MaturityAge, 100));
-    Add(database_entity(DB_AgeLastOrNearest, 1, "1 = ANB (ties --> older)"));
+    Add(database_entity(DB_AgeLastOrNearest, oe_age_nearest_birthday_ties_older));
     Add(database_entity(DB_MinSpecAmt, 10000.0));
 
     Add(database_entity(DB_AllowGenAcct, 1.0));
