@@ -728,7 +728,7 @@
     </fo:table>
 
     <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
-      <xsl:call-template name="print-franchise-and-policynumber"/>
+      <xsl:call-template name="print-mastercontractnumber-and-contractnumber"/>
     </fo:block>
   </xsl:template>
 

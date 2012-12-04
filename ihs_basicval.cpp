@@ -84,7 +84,7 @@ BasicValues::BasicValues(Input const& input)
     Init();
 }
 
-// Temporary kludge for ancient GPT server.
+// Temporary kludge for ancient GPT server. TAXATION !! Remove along with that ancient stuff.
 template<typename T>
 std::string mc_str(T t)
 {
@@ -450,7 +450,7 @@ double BasicValues::InvestmentManagementFee() const
 ///   - at least one known product uses GLP as a handy proxy for a
 ///     minimum no-lapse premium, even when the GPT is not elected.
 /// TAXATION !! OTOH, such strategies need not always be offered, and
-/// the cited product's implementation actually uses 7pp, not GLP.
+/// the cited product was simplified to use a table lookup.
 ///
 /// To conform to the practices of certain admin systems, DCV COI
 /// rates are stored in a rounded table, but calculations from first
@@ -462,7 +462,7 @@ double BasicValues::InvestmentManagementFee() const
 
 void BasicValues::Init7702()
 {
-    Mly7702qc = GetIRC7702Rates();
+    Mly7702qc = GetIrc7702QRates();
     double max_coi_rate = Database_->Query(DB_MaxMonthlyCoiRate);
     LMI_ASSERT(0.0 != max_coi_rate);
     max_coi_rate = 1.0 / max_coi_rate;
@@ -1662,6 +1662,7 @@ std::vector<double> BasicValues::GetTable
 }
 
 //============================================================================
+// TAXATION !! Resolve these issues:
 // TODO ?? This might be reworked to go through class Irc7702 all the time;
 // at least it shouldn't refer to the input class.
 // TODO ?? The profusion of similar names should be trimmed.
@@ -1673,18 +1674,15 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
             {
             return MortalityRates_->CvatCorridorFactors();
             }
-            // break;
         case mce_gpt:
             {
             return Irc7702_->Corridor();
             }
-            // break;
         case mce_noncompliant:
             {
             Non7702CompliantCorridor = std::vector<double>(Length, 1.0);
             return Non7702CompliantCorridor;
             }
-            // break;
         default:
             {
             fatal_error()
@@ -1694,11 +1692,8 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
                 << LMI_FLUSH
                 ;
             }
-            break;
         }
-
-    static std::vector<double> z;
-    return z;
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 // potential inlines
@@ -1726,7 +1721,7 @@ std::vector<double> const& BasicValues::GetMlyDcvqc() const
 std::vector<double> BasicValues::GetCvatCorridorFactors() const
 {
     return GetTable
-        (ProductData_->datum("CorridorFilename")
+        (ProductData_->datum("CvatCorridorFilename")
         ,DB_CorridorTable
         );
 }
@@ -1882,18 +1877,18 @@ std::vector<double> BasicValues::GetGuaranteedTermRates() const
         );
 }
 
-std::vector<double> BasicValues::GetTableYRates() const
+std::vector<double> BasicValues::GetGroupProxyRates() const
 {
     return GetTable
-        (ProductData_->datum("TableYFilename")
-        ,DB_TableYTable
+        (ProductData_->datum("GroupProxyFilename")
+        ,DB_GroupProxyRateTable
         );
 }
 
-std::vector<double> BasicValues::GetTAMRA7PayRates() const
+std::vector<double> BasicValues::GetSevenPayRates() const
 {
     return GetTable
-        (ProductData_->datum("TAMRA7PayFilename")
+        (ProductData_->datum("SevenPayFilename")
         ,DB_SevenPayTable
         );
 }
@@ -1907,19 +1902,19 @@ std::vector<double> BasicValues::GetTgtPremRates() const
         );
 }
 
-std::vector<double> BasicValues::GetIRC7702Rates() const
+std::vector<double> BasicValues::GetIrc7702QRates() const
 {
     return GetTable
-        (ProductData_->datum("IRC7702Filename")
+        (ProductData_->datum("Irc7702QFilename")
         ,DB_Irc7702QTable
         );
 }
 
-std::vector<double> BasicValues::Get83GamRates() const
+std::vector<double> BasicValues::GetPartialMortalityRates() const
 {
     return GetTable
-        (ProductData_->datum("Gam83Filename")
-        ,DB_Gam83Table
+        (ProductData_->datum("PartialMortalityFilename")
+        ,DB_PartialMortTable
         ,true
         ,CannotBlend
         ,CanBlend

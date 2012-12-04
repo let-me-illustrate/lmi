@@ -87,44 +87,26 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
 // temporarily in some other manner, e.g. using a handle-body idiom?
 
 // TODO ?? These are delicate: they get modified downstream.
-    MonthlyGuaranteedCoiRates_   = basic_values.GetGuarCOIRates();
-    MonthlyCurrentCoiRatesBand0_ = basic_values.GetCurrCOIRates0();
-    MonthlyCurrentCoiRatesBand1_ = basic_values.GetCurrCOIRates1();
-    MonthlyCurrentCoiRatesBand2_ = basic_values.GetCurrCOIRates2();
+    MonthlyGuaranteedCoiRates_     = basic_values.GetGuarCOIRates();
+    MonthlyCurrentCoiRatesBand0_   = basic_values.GetCurrCOIRates0();
+    MonthlyCurrentCoiRatesBand1_   = basic_values.GetCurrCOIRates1();
+    MonthlyCurrentCoiRatesBand2_   = basic_values.GetCurrCOIRates2();
 
 // TODO ?? These are delicate: they are needed only conditionally.
     MonthlyGuaranteedTermCoiRates_ = basic_values.GetGuaranteedTermRates();
     MonthlyCurrentTermCoiRates_    = basic_values.GetCurrentTermRates();
-    AdbRates_                   = basic_values.GetAdbRates();
-    WpRates_                    = basic_values.GetWpRates();
-    ChildRiderRates_            = basic_values.GetChildRiderRates();
-    GuaranteedSpouseRiderRates_ = basic_values.GetGuaranteedSpouseRiderRates();
-    CurrentSpouseRiderRates_    = basic_values.GetCurrentSpouseRiderRates();
-    TargetPremiumRates_         = basic_values.GetTgtPremRates();
+    AdbRates_                      = basic_values.GetAdbRates();
+    WpRates_                       = basic_values.GetWpRates();
+    ChildRiderRates_               = basic_values.GetChildRiderRates();
+    GuaranteedSpouseRiderRates_    = basic_values.GetGuaranteedSpouseRiderRates();
+    CurrentSpouseRiderRates_       = basic_values.GetCurrentSpouseRiderRates();
+    TargetPremiumRates_            = basic_values.GetTgtPremRates();
 
-    // TODO ?? Why have these here, since they're already in the
-    // basic-values class? Same question for 'TableYRates_' too.
-
-    Irc7702Q_ = basic_values.GetIRC7702Rates();
-    TableYRates_ = basic_values.GetTableYRates();
-// TODO ?? 83 GAM and table Y should instead be something like
-//   term cost table
-//   partial mortality table
-// should both permit a choice from among numerous and tables.
-// We could offer the whole SOA database, but it lacks table Y,
-// and some choices would be inappropriate (e.g. lapse factors).
-
-// TODO ?? Is this correct or not?
-/*
-    for(int j = 0; j < Length_; j++)
-        {
-        TableYRates_[j] *= 12.0;  // stored as monthly
-        }
-*/
-
-    PartialMortalityQ_   = basic_values.Get83GamRates();
-    CvatCorridorFactors_ = basic_values.GetCvatCorridorFactors();
-    SevenPayRates_       = basic_values.GetTAMRA7PayRates();
+    Irc7702Q_                      = basic_values.GetIrc7702QRates();
+    GroupProxyRates_               = basic_values.GetGroupProxyRates();
+    PartialMortalityQ_             = basic_values.GetPartialMortalityRates();
+    CvatCorridorFactors_           = basic_values.GetCvatCorridorFactors();
+    SevenPayRates_                 = basic_values.GetSevenPayRates();
 
     std::transform
         (SubstdTblMult_.begin()
@@ -133,8 +115,5 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
         ,SubstdTblMult_.begin()
         ,std::multiplies<double>()
         );
-
-// TODO ?? Move this up here?
-//    CvatNspRates_;
 }
 

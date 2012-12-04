@@ -31,6 +31,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "calendar_date.hpp"            // attained_age()
 #include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -364,10 +365,15 @@ void mec_input::DoHarmonize()
             )
         );
 
-    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
+    oenum_alb_or_anb const alb_anb =
+        static_cast<oenum_alb_or_anb>
+            (static_cast<int>
+                (database_->Query(DB_AgeLastOrNearest)
+                )
+            );
     DateOfBirth.minimum_and_maximum
-        (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), use_anb)
-        ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
+        (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), alb_anb)
+        ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), alb_anb)
         );
 
     int max_age = static_cast<int>(database_->Query(DB_MaturityAge));
@@ -483,12 +489,17 @@ void mec_input::DoTransmogrify()
     InforceContractYear  = ym1.first;
     InforceContractMonth = ym1.second;
 
-    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
+    oenum_alb_or_anb const alb_anb =
+        static_cast<oenum_alb_or_anb>
+            (static_cast<int>
+                (database_->Query(DB_AgeLastOrNearest)
+                )
+            );
 
     int apparent_age = attained_age
         (DateOfBirth.value()
         ,EffectiveDate.value()
-        ,use_anb
+        ,alb_anb
         );
     if(mce_no == UseDOB)
         {

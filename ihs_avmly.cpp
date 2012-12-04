@@ -1144,7 +1144,7 @@ void AccountValue::TxTestGPT()
     // SOMEDAY !! Actually, forceouts reduce basis only to the extent
     // they're nontaxable. For now, tax basis is used only as a limit
     // (if requested) on withdrawals, and it is conservative for that
-    // purpose to underestimate basis.
+    // purpose to underestimate basis. TAXATION !! 7702(f)(7)(B-E).
 
     CumPmts     -= GptForceout;
     TaxBasis    -= GptForceout;
@@ -1175,7 +1175,7 @@ Decide whether we need to do anything
     no pmt this month due to mode
     zero pmt
 Perform strategy
-Test 7702, 7702A
+Test 7702, 7702A // TAXATION !! Resolve these issues:
     apportion limited prem across ee, er,...dumpin?
     need to limit pmt here, but other events e.g. WD affect limits
     pmts must be the same on all bases
@@ -2622,7 +2622,7 @@ void AccountValue::TxTakeWD()
         {
         if(!SolvingForGuarPremium)
             {
-            double fake_cum_pmt = 0.0; // TODO ?? Needs work.
+            double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
             double premiums_paid_increment = -GrossWD;
             Irc7702_->ProcessGptPmt(Year, premiums_paid_increment, fake_cum_pmt);
             }
@@ -2819,7 +2819,7 @@ void AccountValue::TxTestLapse()
     lapse_test_csv = std::max(lapse_test_csv, HoneymoonValue);
 
     // Perform no-lapse test.
-    if(NoLapseActive && ! NoLapseAlwaysActive)
+    if(NoLapseActive && !NoLapseAlwaysActive)
         {
         CumNoLapsePrem += MlyNoLapsePrem + RiderCharges;
         if
@@ -2916,7 +2916,7 @@ void AccountValue::FinalizeMonth()
             InvariantValues().Dumpin = Dumpin;
             }
 
-        // We could also capture MEC status on other bases here.
+        // TAXATION !! We could also capture MEC status on other bases here.
         if(true == Irc7702A_->UpdateEOM7702A())
             {
             if(!InvariantValues().IsMec)

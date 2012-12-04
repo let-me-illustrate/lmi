@@ -187,7 +187,27 @@ void multiple_cell_document::parse_v0(xml::element const& root)
             << LMI_FLUSH
             ;
         }
-    *i >> temp;
+    // In some old extracts, case and class defaults were defectively
+    // empty except for a version-attribute node, which should always
+    // name exact version 5.
+    if(i->size() <= 1)
+        {
+        int version = 0;
+        xml_lmi::get_attr(*i, "version", version);
+        if(5 != version)
+            {
+            fatal_error()
+                << "Case-default 'cell' element is empty, but is version "
+                << version
+                << " where version 5 was expected."
+                << LMI_FLUSH
+                ;
+            }
+        }
+    else
+        {
+        *i >> temp;
+        }
     case_parms_.push_back(temp);
 
     // Number of classes.
@@ -215,7 +235,34 @@ void multiple_cell_document::parse_v0(xml::element const& root)
     ++i;
     for(; i != elements.end(); ++i)
         {
-        *i >> temp;
+        // See comment on defective extracts above.
+        if(i->size() <= 1)
+            {
+            if(1 != number_of_classes)
+                {
+                fatal_error()
+                    << "Class-default 'cell' element is empty, and there are "
+                    << number_of_classes
+                    << " classes where 1 was expected."
+                    << LMI_FLUSH
+                    ;
+                }
+            int version = 0;
+            xml_lmi::get_attr(*i, "version", version);
+            if(5 != version)
+                {
+                fatal_error()
+                    << "Class-default 'cell' element is empty, but is version "
+                    << version
+                    << " where version 5 was expected."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        else
+            {
+            *i >> temp;
+            }
         class_parms_.push_back(temp);
         if(class_parms_.size() == number_of_classes)
             {
