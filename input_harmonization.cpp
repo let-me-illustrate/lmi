@@ -302,10 +302,10 @@ void Input::DoHarmonize()
             )
         );
 
-    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
+    bool const alb_anb = database_->Query(DB_AgeLastOrNearest);
     DateOfBirth.minimum_and_maximum
-        (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), use_anb)
-        ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
+        (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), alb_anb)
+        ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), alb_anb)
         );
 
     int max_age = static_cast<int>(database_->Query(DB_MaturityAge));
@@ -906,12 +906,12 @@ void Input::DoTransmogrify()
         GeneralAccountRate = current_credited_rate(*database_);
         }
 
-    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
+    bool const alb_anb = database_->Query(DB_AgeLastOrNearest);
 
     int apparent_age = attained_age
         (DateOfBirth.value()
         ,EffectiveDate.value()
-        ,use_anb
+        ,alb_anb
         );
     if(mce_no == UseDOB)
         {

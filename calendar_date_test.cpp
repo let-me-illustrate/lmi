@@ -70,7 +70,7 @@ struct CalendarDateTest
     static void TestIntegralDuration();
     static void TestYearAndMonthDifferenceExhaustively();
     static void TestBirthdateLimits();
-    static void TestBirthdateLimitsExhaustively(bool anb);
+    static void TestBirthdateLimitsExhaustively(bool alb_anb);
     static void TestIo();
     static void TestSpeed();
 };
@@ -801,7 +801,7 @@ void CalendarDateTest::TestBirthdateLimits()
         );
 }
 
-void CalendarDateTest::TestBirthdateLimitsExhaustively(bool anb)
+void CalendarDateTest::TestBirthdateLimitsExhaustively(bool alb_anb)
 {
     for
         (calendar_date d  (ymd_t(19991231))
@@ -811,14 +811,14 @@ void CalendarDateTest::TestBirthdateLimitsExhaustively(bool anb)
         {
         for(int y = 0; y < 5; ++y)
             {
-            calendar_date b0 = minimum_birthdate(y, d, anb);
-            BOOST_TEST_EQUAL(y, attained_age(b0, d, anb));
+            calendar_date b0 = minimum_birthdate(y, d, alb_anb);
+            BOOST_TEST_EQUAL(y, attained_age(b0, d, alb_anb));
 
             --b0;
-            BOOST_TEST_UNEQUAL(y, attained_age(b0, d, anb));
+            BOOST_TEST_UNEQUAL(y, attained_age(b0, d, alb_anb));
 
-            calendar_date b1 = maximum_birthdate(y, d, anb);
-            BOOST_TEST_EQUAL(y, attained_age(b1, d, anb));
+            calendar_date b1 = maximum_birthdate(y, d, alb_anb);
+            BOOST_TEST_EQUAL(y, attained_age(b1, d, alb_anb));
 
             ++b1;
             if(0 == y) // Age would be negative.
@@ -830,7 +830,7 @@ void CalendarDateTest::TestBirthdateLimitsExhaustively(bool anb)
                 }
             else
                 {
-                BOOST_TEST_UNEQUAL(y, attained_age(b1, d, anb));
+                BOOST_TEST_UNEQUAL(y, attained_age(b1, d, alb_anb));
                 }
             }
         }
