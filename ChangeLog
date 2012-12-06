@@ -31009,3 +31009,46 @@ Set limits on COI-reentry date, replacing 20121024T1841Z prototype.
   version.hpp
 Designate release candidate.
 
+20121130T2040Z <gchicares@sbcglobal.net> [556]
+
+  dbdict.cpp
+Improve documentation.
+
+20121201T1046Z <gchicares@sbcglobal.net> [556]
+
+  ihs_irc7702.cpp
+Improve documentation.
+
+20121204T1055Z <gchicares@sbcglobal.net> [556]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+  input_harmonization.cpp
+  mec_input.cpp
+Refactor, renaming certain arguments for concinnity.
+
+20121204T1412Z <gchicares@sbcglobal.net> [556]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+  dbdict.cpp
+  input_harmonization.cpp
+  mec_input.cpp
+  oecumenic_enumerations.hpp
+Refactor, replacing a bool with an enum.
+
+20121205T0043Z <gchicares@sbcglobal.net> [556]
+
+  calendar_date_test.cpp
+Rearrange tests to follow enumeration order.
+
+20121206T1203Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date.cpp
+  calendar_date_test.cpp
+  dbnames.hpp
+  oecumenic_enumerations.hpp
+Add an enumerator, temporarily leaving a unit-test issue open.
+

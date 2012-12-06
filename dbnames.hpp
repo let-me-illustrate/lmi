@@ -446,7 +446,7 @@ enum e_database_key
 
         ,DB_LedgerType
 
-        ,DB_AgeLastOrNearest     // DATABASE !! Add more options...
+        ,DB_AgeLastOrNearest
         ,DB_MaturityAge
 
         ,DB_LapseIgnoresSurrChg

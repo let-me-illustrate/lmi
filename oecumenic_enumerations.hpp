@@ -33,6 +33,7 @@ enum {methuselah = 969};
 enum oenum_alb_or_anb
     {oe_age_last_birthday
     ,oe_age_nearest_birthday_ties_older
+    ,oe_age_nearest_birthday_ties_younger
     };
 
 enum oenum_allocation_method
