@@ -33,7 +33,7 @@
 #include "value_cast.hpp"
 #include "zero.hpp"
 
-#include <algorithm> // std::max(), std::min()
+#include <algorithm>                    // std::max(), std::min()
 #include <ctime>
 #include <iomanip>
 #include <ios>
@@ -42,6 +42,7 @@
 #include <locale>
 #include <ostream>
 #include <sstream>
+#include <stdexcept>                    // std::runtime_error
 
 namespace
 {
@@ -457,15 +458,15 @@ int notional_age
     )
 {
     typedef std::pair<calendar_date,calendar_date> date_pair;
-    date_pair z = bracketing_anniversaries(birthdate, as_of_date);
-    calendar_date last_birthday = z.first;
-    calendar_date next_birthday = z.second;
+    date_pair const z = bracketing_anniversaries(birthdate, as_of_date);
+    calendar_date const last_birthday = z.first;
+    calendar_date const next_birthday = z.second;
 
-    int days_since_last_birthday =
+    int const days_since_last_birthday =
             as_of_date   .julian_day_number()
         -   last_birthday.julian_day_number()
         ;
-    int days_until_next_birthday =
+    int const days_until_next_birthday =
             next_birthday.julian_day_number()
         -   as_of_date   .julian_day_number()
         ;
@@ -474,21 +475,15 @@ int notional_age
         &&  0 <= days_until_next_birthday && days_until_next_birthday <= 366
         );
 
-    int age_last_birthday = last_birthday.year() - birthdate.year();
+    int const age_last_birthday = last_birthday.year() - birthdate.year();
 
-    if(!alb_anb)
-        {
-        return age_last_birthday;
-        }
-// TODO ?? DATABASE !! The way ties are resolved should be configurable.
-    else if(days_since_last_birthday < days_until_next_birthday)
-        {
-        return age_last_birthday;
-        }
-    else
-        {
-        return 1 + age_last_birthday;
-        }
+    int const delta =
+          (oe_age_last_birthday                 == alb_anb) ? 0
+        : (oe_age_nearest_birthday_ties_older   == alb_anb) ? (days_until_next_birthday <= days_since_last_birthday)
+        : (oe_age_nearest_birthday_ties_younger == alb_anb) ? (days_until_next_birthday <  days_since_last_birthday)
+        : throw std::runtime_error("Unknown method to determine age.")
+        ;
+    return age_last_birthday + delta;
 }
 } // Unnamed namespace.
 
