@@ -31052,3 +31052,21 @@ Rearrange tests to follow enumeration order.
   oecumenic_enumerations.hpp
 Add an enumerator, temporarily leaving a unit-test issue open.
 
+20121207T0943Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date_test.cpp
+Augment unit test, demonstrating the issue noted 20121206T1203Z.
+
+20121208T1049Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date.cpp
+Refactor, adding one local variable and renaming another.
+
+20121208T1115Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date.cpp
+Fix defect introduced 20060919T0301Z. Given a base date, one of its
+adjacent anniversaries was inappropriately calculated from the other,
+by adding or subtracting one year--causing both anniversaries of a
+leap-year day to fall on March first, even in a leap year.
+
