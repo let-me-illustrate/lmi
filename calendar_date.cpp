@@ -426,20 +426,17 @@ std::pair<calendar_date,calendar_date> bracketing_anniversaries
     ,calendar_date const& other_date
     )
 {
-    calendar_date some_neighboring_anniversary = add_years
-        (base_date
-        ,other_date.year() - base_date.year()
-        ,false
-        );
+    int const offset = other_date.year() - base_date.year();
+    calendar_date an_adjacent_anniversary = add_years(base_date, offset, false);
     calendar_date last_anniversary =
-        other_date < some_neighboring_anniversary
-        ?   add_years(some_neighboring_anniversary, -1, false)
-        :   some_neighboring_anniversary
+        other_date < an_adjacent_anniversary
+        ? add_years(an_adjacent_anniversary, -1, false)
+        : an_adjacent_anniversary
         ;
     calendar_date next_anniversary =
-        other_date < some_neighboring_anniversary
-        ?   some_neighboring_anniversary
-        :   add_years(some_neighboring_anniversary,  1, false)
+        other_date < an_adjacent_anniversary
+        ? an_adjacent_anniversary
+        : add_years(an_adjacent_anniversary,  1, false)
         ;
     LMI_ASSERT(last_anniversary <= other_date && other_date < next_anniversary);
     LMI_ASSERT(1 == next_anniversary.year() - last_anniversary.year());
