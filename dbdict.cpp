@@ -314,7 +314,7 @@ void DBDictionary::ascribe_members()
     ascribe("WdCanDecrSpecAmtDbo1", &DBDictionary::WdCanDecrSpecAmtDbo1);
     ascribe("WdCanDecrSpecAmtDbo2", &DBDictionary::WdCanDecrSpecAmtDbo2);
     ascribe("WdCanDecrSpecAmtDbo3", &DBDictionary::WdCanDecrSpecAmtDbo3);
-    ascribe("FirstWdYear"         , &DBDictionary::FirstWdYear         );
+    ascribe("FirstWdMonth"        , &DBDictionary::FirstWdMonth        );
     ascribe("AllowLoan"           , &DBDictionary::AllowLoan           );
     ascribe("AllowPrefLoan"       , &DBDictionary::AllowPrefLoan       );
     ascribe("AllowFixedLoan"      , &DBDictionary::AllowFixedLoan      );
@@ -328,7 +328,7 @@ void DBDictionary::ascribe_members()
     ascribe("GuarRegLoanSpread"   , &DBDictionary::GuarRegLoanSpread   );
     ascribe("CurrPrefLoanSpread"  , &DBDictionary::CurrPrefLoanSpread  );
     ascribe("CurrRegLoanSpread"   , &DBDictionary::CurrRegLoanSpread   );
-    ascribe("FirstLoanYear"       , &DBDictionary::FirstLoanYear       );
+    ascribe("FirstLoanMonth"      , &DBDictionary::FirstLoanMonth      );
     ascribe("MinPremType"         , &DBDictionary::MinPremType         );
     ascribe("MinPremIntSpread"    , &DBDictionary::MinPremIntSpread    );
     ascribe("TgtPremType"         , &DBDictionary::TgtPremType         );
@@ -591,7 +591,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_PremTaxFundCharge   , 0.0));
     Add(database_entity(DB_DacTaxFundCharge    , 0.0));
     Add(database_entity(DB_WaivePremTaxInt1035 , true));
-    Add(database_entity(DB_FirstWdYear         , 0.0));
+    Add(database_entity(DB_FirstWdMonth        , 0.0));
     Add(database_entity(DB_MaxWdAcctValMult    , 1.0));
     Add(database_entity(DB_MaxWdDed            , mce_to_next_anniversary));
     Add(database_entity(DB_MinWd               , 100.0));
@@ -600,7 +600,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_WdCanDecrSpecAmtDbo1, true));
     Add(database_entity(DB_WdCanDecrSpecAmtDbo2, true));
     Add(database_entity(DB_WdCanDecrSpecAmtDbo3, true));
-    Add(database_entity(DB_FirstLoanYear       , 0.0));
+    Add(database_entity(DB_FirstLoanMonth      , 0.0));
     Add(database_entity(DB_AllowPrefLoan       , false));
     Add(database_entity(DB_AllowFixedLoan      , true));
     Add(database_entity(DB_FixedLoanRate       , 0.06));
