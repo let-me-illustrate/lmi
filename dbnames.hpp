@@ -370,7 +370,7 @@ enum e_database_key
         ,DB_WdCanDecrSpecAmtDbo2
         ,DB_WdCanDecrSpecAmtDbo3
 
-        ,DB_FirstWdYear
+        ,DB_FirstWdMonth
 
     ,DB_Topic_Loans
 
@@ -391,7 +391,7 @@ enum e_database_key
         ,DB_CurrPrefLoanSpread
         ,DB_CurrRegLoanSpread
 
-        ,DB_FirstLoanYear
+        ,DB_FirstLoanMonth
 
     ,DB_Topic_Premiums
 

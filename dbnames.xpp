@@ -231,7 +231,7 @@
 {DB_WdCanDecrSpecAmtDbo1,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo1","Withdrawals decrease specified amount for level death benefit option",}, \
 {DB_WdCanDecrSpecAmtDbo2,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo2","Withdrawals decrease specified amount for increasing death benefit option",}, \
 {DB_WdCanDecrSpecAmtDbo3,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo3","Withdrawals decrease specified amount for return of premium death benefit option",}, \
-{DB_FirstWdYear,DB_Topic_Withdrawals,"FirstWdYear","Number of years withdrawals not allowed [not supported yet; should be months instead]",}, \
+{DB_FirstWdMonth,DB_Topic_Withdrawals,"FirstWdMonth","Number of months withdrawals not allowed [not supported yet]",}, \
 {DB_Topic_Loans,DB_FIRST,"Loans","Loan rates, spreads, options, and restrictions",}, \
 {DB_AllowLoan,DB_Topic_Loans,"AllowLoan","Allow loans: 0=no, 1=yes",}, \
 {DB_AllowPrefLoan,DB_Topic_Loans,"AllowPrefLoan","Preferred loans permitted: 0=no, 1=yes [preferred loans not yet supported]",}, \
@@ -246,7 +246,7 @@
 {DB_GuarRegLoanSpread,DB_Topic_Loans,"GuarRegLoanSpread","Guaranteed interest spread for regular loans",}, \
 {DB_CurrPrefLoanSpread,DB_Topic_Loans,"CurrPrefLoanSpread","Current interest spread for preferred loans [preferred loans not yet supported]",}, \
 {DB_CurrRegLoanSpread,DB_Topic_Loans,"CurrRegLoanSpread","Current interest spread for regular loans",}, \
-{DB_FirstLoanYear,DB_Topic_Loans,"FirstLoanYear","Number of years loans not allowed [not supported yet; should be months instead]",}, \
+{DB_FirstLoanMonth,DB_Topic_Loans,"FirstLoanMonth","Number of months loans not allowed [not supported yet]",}, \
 {DB_Topic_Premiums,DB_FIRST,"Premiums","Minimum and target premiums",}, \
 {DB_MinPremType,DB_Topic_Premiums,"MinPremType","Minimum premium: 0=based on monthly deductions, 1=7702A seven-pay premium",}, \
 {DB_MinPremIntSpread,DB_Topic_Premiums,"MinPremIntSpread","Interest spread from general-account rate used to capitalize monthly deductions for minimum premium calculation",}, \

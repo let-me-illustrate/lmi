@@ -290,7 +290,7 @@ class LMI_SO DBDictionary
     database_entity WdCanDecrSpecAmtDbo1;
     database_entity WdCanDecrSpecAmtDbo2;
     database_entity WdCanDecrSpecAmtDbo3;
-    database_entity FirstWdYear         ;
+    database_entity FirstWdMonth        ;
     database_entity AllowLoan           ;
     database_entity AllowPrefLoan       ;
     database_entity AllowFixedLoan      ;
@@ -304,7 +304,7 @@ class LMI_SO DBDictionary
     database_entity GuarRegLoanSpread   ;
     database_entity CurrPrefLoanSpread  ;
     database_entity CurrRegLoanSpread   ;
-    database_entity FirstLoanYear       ;
+    database_entity FirstLoanMonth      ;
     database_entity MinPremType         ;
     database_entity MinPremIntSpread    ;
     database_entity TgtPremType         ;
