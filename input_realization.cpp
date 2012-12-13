@@ -869,7 +869,7 @@ std::string Input::RealizeFlatExtra()
 
     if(!each_equal(FlatExtraRealized_.begin(), FlatExtraRealized_.end(), 0.0))
         {
-        return "Flat extras may not be illustrated on this policy form.";
+        return "Flat extras not permitted.";
         }
 
     return "";

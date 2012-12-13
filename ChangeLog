@@ -31070,3 +31070,32 @@ adjacent anniversaries was inappropriately calculated from the other,
 by adding or subtracting one year--causing both anniversaries of a
 leap-year day to fall on March first, even in a leap year.
 
+20121208T1711Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date_test.cpp
+  oecumenic_enumerations.hpp
+Refactor, writing insurance-age enumerators in logical order.
+
+20121210T2003Z <gchicares@sbcglobal.net> [555]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Express earliest loan and withdrawal durations as months, not years.
+
+20121211T1359Z <gchicares@sbcglobal.net> [554]
+
+  input_harmonization.cpp
+Remove a toxic kludge reinstated 20081214T1434Z.
+
+20121213T2315Z <gchicares@sbcglobal.net> [554]
+
+  dbnames.xpp
+  ihs_mortal.cpp
+  input_realization.cpp
+Improve documentation and error messages. Not all flat extras are
+substandard: e.g., aviation flats may apply to standard or even
+preferred risks. A policy form may permit flat extras in certain
+circumstances, and forbid them in others.
+

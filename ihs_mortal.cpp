@@ -311,7 +311,7 @@ void MortalityRates::MakeCoiRateSubstandard
     if(!(AllowFlatExtras_ || AllowSubstdTable_))
         {
         fatal_error()
-            << "Substandard not available for this policy form."
+            << "Flat extras and table ratings not permitted."
             << LMI_FLUSH
             ;
         }

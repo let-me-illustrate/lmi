@@ -36,7 +36,7 @@
 {DB_AllowPreferredClass,DB_Topic_Underwriting,"AllowPreferredClass","Allow preferred class: 0=no, 1=yes",}, \
 {DB_AllowUltraPrefClass,DB_Topic_Underwriting,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
 {DB_AllowSubstdTable,DB_Topic_Underwriting,"AllowSubstdTable","Allow substandard table ratings: 0=no, 1=yes",}, \
-{DB_AllowFlatExtras,DB_Topic_Underwriting,"AllowFlatExtras","Allow substandard flat extra ratings: 0=no, 1=yes",}, \
+{DB_AllowFlatExtras,DB_Topic_Underwriting,"AllowFlatExtras","Allow flat extra ratings: 0=no, 1=yes",}, \
 {DB_AllowRatedWp,DB_Topic_Underwriting,"AllowRatedWp","Waiver benefit can be rated: 0=no, 1=yes",}, \
 {DB_AllowRatedAdb,DB_Topic_Underwriting,"AllowRatedAdb","Accidental death benefit can be rated: 0=no, 1=yes",}, \
 {DB_AllowRatedTerm,DB_Topic_Underwriting,"AllowRatedTerm","Term rider can be rated: 0=no, 1=yes",}, \
