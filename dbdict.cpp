@@ -660,7 +660,11 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AgeLastOrNearest    , oe_age_last_birthday));
     Add(database_entity(DB_AllowRetirees       , true));
     Add(database_entity(DB_MinSpecAmt          , 100000.0));
-    Add(database_entity(DB_AllowSubstdTable    , true));
+    // Forbid substandard table ratings with simplified or guaranteed issue.
+    int dim_uw_basis[e_number_of_axes] = {1, 1, 1, 1, 5, 1, 1};
+    //                              med  para nonmed   SI     GI
+    double allow_substd_table[] = {true, true, true, false, false};
+    Add(database_entity(DB_AllowSubstdTable, e_number_of_axes, dim_uw_basis, allow_substd_table));
     Add(database_entity(DB_AllowFlatExtras     , true));
     Add(database_entity(DB_MinIssAge           , 15));
     Add(database_entity(DB_MaxIssAge           , 70));
