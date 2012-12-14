@@ -606,8 +606,12 @@ false // Silly workaround for now.
 // TODO ?? WX PORT !! But for now, use this workaround: products that have no
 // general account can't select non-custom funds--there's no GUI for
 // that anyway. INPUT !! See: http://savannah.nongnu.org/support/?104481
-//
-    FundChoiceType.allow(mce_fund_selection, !sepacct_only);
+// However, don't impose that restriction on regression tests that
+// cover the once and future ability to choose funds.
+    if(!global_settings::instance().regression_testing())
+        {
+        FundChoiceType.allow(mce_fund_selection, !sepacct_only);
+        }
 
 /* TODO ?? WX PORT !! Not ported:
     SELECTED_FUND_ALLOC->EnableWindow
@@ -910,17 +914,12 @@ void Input::DoTransmogrify()
         IssueAge = apparent_age;
         }
 
-bool egregious_kludge = global_settings::instance().regression_testing();
-// TODO ?? Nomen est omen.
-if(!egregious_kludge)
-  {
     // TODO ?? WX PORT !! Icky kludge.
     UseAverageOfAllFunds =
         (mce_fund_average  == FundChoiceType)
         ? mce_yes
         : mce_no
         ;
-  } // end if(!egregious_kludge)
     OverrideFundManagementFee =
         (mce_fund_override == FundChoiceType)
         ? mce_yes
