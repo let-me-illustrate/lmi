@@ -920,12 +920,12 @@ if(!egregious_kludge)
         ? mce_yes
         : mce_no
         ;
+  } // end if(!egregious_kludge)
     OverrideFundManagementFee =
         (mce_fund_override == FundChoiceType)
         ? mce_yes
         : mce_no
         ;
-  } // end if(!egregious_kludge)
 
     set_solve_durations();
 }
