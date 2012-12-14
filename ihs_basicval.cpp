@@ -40,7 +40,7 @@
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt_specamt.hpp"
-#include "ieee754.hpp"           // ldbl_eps_plus_one()
+#include "ieee754.hpp"                  // ldbl_eps_plus_one()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ihs_x_type.hpp"
@@ -48,8 +48,8 @@
 #include "interest_rates.hpp"
 #include "loads.hpp"
 #include "math_functors.hpp"
-#include "mc_enum_types_aux.hpp" // mc_str()
-#include "miscellany.hpp"        // ios_out_trunc_binary()
+#include "mc_enum_types_aux.hpp"        // mc_str()
+#include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
@@ -60,8 +60,8 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cmath>                 // std::pow()
-#include <cstring>               // std::strlen(), std::strncmp()
+#include <cmath>                        // std::pow()
+#include <cstring>                      // std::strlen(), std::strncmp()
 #include <fstream>
 #include <limits>
 #include <numeric>
@@ -777,16 +777,43 @@ void BasicValues::SetPermanentInvariants()
     HOPEFULLY(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
     HOPEFULLY(!(UseUnusualCOIBanding && AllowTerm));
 
-    // Table ratings can arise only from medical underwriting.
-    // However, flat extras can be used even with guaranteed issue,
-    // e.g. for aviation, occupation, avocation, or foreign travel.
+    // Flat extras can be used even with guaranteed issue, e.g., for
+    // aviation, occupation, avocation, or foreign travel. Admin
+    // systems typically don't distinguish these from medical flats,
+    // so neither does lmi--that information wouldn't be available for
+    // inforce illustrations.
+    //
+    // However, table ratings may be restricted, e.g., to medically-
+    // underwritten contracts, by setting 'DB_AllowSubstdTable' in a
+    // product's database. See the example in 'dbdict.cpp', which
+    // varies by yare_input_.GroupUnderwritingType; no restriction is
+    // expressly coded here in terms of that field because it is a
+    // database axis across which 'DB_AllowSubstdTable' already can
+    // vary. Even a rule as apparently reasonable as forbidding table
+    // ratings with simplified issue would thus be out of place here:
+    // the database can express such a rule handily, and at least one
+    // real-world product is known not to follow it. It is important
+    // to put aside prior notions of what SI and GI might connote, and
+    // realize that for lmi underwriting class is predominantly a
+    // database-lookup axis.
+    //
+    // Table ratings are used only with COI rates for the "Rated"
+    // class, so that table multipliers can be applied to a set of COI
+    // rates distinct from standard (as is the practice of at least
+    // one company). If no such distinction is wanted, then "Rated"
+    // and "Standard" can simply point to the same rate table (as
+    // happens by default if rates don't vary by underwriting class).
+    // The additional "Rated" class induces an extra "Rated" choice in
+    // the GUI, which must be selected to enable table ratings; this
+    // may be seen as a surprising complication, or as a useful safety
+    // feature, but either way no end user has ever objected to it.
     if
         (   mce_table_none != yare_input_.SubstandardTable
-        &&  mce_medical    != yare_input_.GroupUnderwritingType
+        &&  !(Database_->Query(DB_AllowSubstdTable) && mce_rated == yare_input_.UnderwritingClass)
         )
         {
         fatal_error()
-            << "Substandard table ratings require medical underwriting."
+            << "Substandard table ratings not permitted."
             << LMI_FLUSH
             ;
         }
