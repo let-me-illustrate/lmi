@@ -818,8 +818,15 @@ void BasicValues::SetPermanentInvariants()
             ;
         }
 
-    // Spouse and child riders are not similarly tested because
-    // their rates shouldn't depend on the main insured's health.
+    // SOMEDAY !! WP and ADB shouldn't always be forbidden with table
+    // ratings and flat extras. For now, they're not supported due to
+    // lack of demand and complexity. These riders are likely to
+    // require their own ratings that differ from the base policy's
+    // because the insured contingencies differ.
+    //
+    // Spouse and child riders are not similarly restricted because
+    // their rates don't depend on the main insured's health, and the
+    // people they cover are unlikely to be underwritten.
     if(is_policy_rated(yare_input_) && yare_input_.WaiverOfPremiumBenefit)
         {
         fatal_error()

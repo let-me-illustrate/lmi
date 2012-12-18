@@ -244,13 +244,13 @@ void MortalityRates::SetOtherRates()
 
     if(AllowAdb_)
         {
-// TODO ?? No substandard support yet for this rider.
+// SOMEDAY !! Add substandard support for this rider (blocked upstream for now).
 //        MakeCoiRateSubstandard(AdbRates_);
         }
 
     if(AllowWp_)
         {
-// TODO ?? No substandard support yet for this rider.
+// SOMEDAY !! Add substandard support for this rider (blocked upstream for now).
 //        MakeCoiRateSubstandard(WpRates_);
         }
 

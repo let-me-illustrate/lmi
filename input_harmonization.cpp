@@ -665,10 +665,15 @@ false // Silly workaround for now.
     TermAdjustmentMethod.allow(mce_adjust_term, enable_term);
     TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
 
-    WaiverOfPremiumBenefit.enable(        database_->Query(DB_AllowWp));
-    WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWp));
-    AccidentalDeathBenefit.enable(        database_->Query(DB_AllowAdb));
-    AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowAdb));
+    // Analysis of database vector quantities is generally avoided
+    // in this function, in the interest of simplicity and speed.
+    // Otherwise, this condition would include flat extras. But
+    // this WP and ADB restriction is incidental, not essential.
+    bool contract_is_rated(mce_rated == UnderwritingClass);
+    WaiverOfPremiumBenefit.enable(        database_->Query(DB_AllowWp ) && !contract_is_rated);
+    WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWp ) && !contract_is_rated);
+    AccidentalDeathBenefit.enable(        database_->Query(DB_AllowAdb) && !contract_is_rated);
+    AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowAdb) && !contract_is_rated);
 
     ChildRider       .enable(        database_->Query(DB_AllowChildRider));
     ChildRider       .allow(mce_yes, database_->Query(DB_AllowChildRider));
