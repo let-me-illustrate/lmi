@@ -31121,3 +31121,15 @@ Remove part of a toxic kludge reinstated 20081214T1434Z.
   input_harmonization.cpp
 Remove remainder of toxic kludges reinstated 20081214T1434Z.
 
+20121218T0859Z <gchicares@sbcglobal.net> [549]
+
+  ihs_basicval.cpp
+  ihs_mortal.cpp
+  input_harmonization.cpp
+Improve enablement and documentation of rated WP and ADB.
+
+20121218T1024Z <gchicares@sbcglobal.net> [549]
+
+  version.hpp
+Designate release candidate.
+
