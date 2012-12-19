@@ -33,9 +33,9 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "math_functors.hpp" // mean()
+#include "math_functors.hpp"            // assign_midpoint()
 
-#include <algorithm> // std::min()
+#include <algorithm>                    // std::min()
 
 //============================================================================
 MortalityRates::MortalityRates(BasicValues const& basic_values)
@@ -73,17 +73,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
             );
         }
 
-    MonthlyMidpointCoiRatesBand0_.resize(length);
-    // Calculate midpoint as mean of current and guaranteed.
-    // A different average might be used instead.
-    // ET !! MonthlyMidpointCoiRatesBand0_ = mean(MonthlyCurrentCoiRatesBand0_, MonthlyGuaranteedCoiRates_);
-    std::transform
-        (MonthlyCurrentCoiRatesBand0_.begin()
-        ,MonthlyCurrentCoiRatesBand0_.end()
-        ,MonthlyGuaranteedCoiRates_.begin()
-        ,MonthlyMidpointCoiRatesBand0_.begin()
-        ,mean<double>()
-        );
+    assign_midpoint(MonthlyMidpointCoiRatesBand0_, MonthlyGuaranteedCoiRates_, MonthlyCurrentCoiRatesBand0_);
 
     CvatCorridorFactors_ = actuarial_table_rates
         (CurrentTableFile()
