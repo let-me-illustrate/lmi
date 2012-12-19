@@ -31133,3 +31133,18 @@ Improve enablement and documentation of rated WP and ADB.
   version.hpp
 Designate release candidate.
 
+20121219T0047Z <gchicares@sbcglobal.net> [549]
+
+  lmi.cpp
+  lmi.hpp
+Eliminate dead code.
+
+20121219T1409Z <gchicares@sbcglobal.net> [546]
+
+  ihs_mortal.cpp
+  interest_rates.cpp
+  loads.cpp
+  math_functors.hpp
+  mortality_rates.cpp
+Refactor for concinnity.
+
