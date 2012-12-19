@@ -563,7 +563,13 @@ false // Silly workaround for now.
     InforceGeneralAccountValue .enable(allow_gen_acct);
     InforceSeparateAccountValue.enable(allow_sep_acct);
 
-    // TODO ?? VLR not yet implemented.
+    // TODO ?? VLR not yet implemented. When it is, limit the rate to
+    // [DB_MinVlrRate,DB_MaxVlrRate]. For DB_MinVlrRate, see the NAIC
+    // model policy loan interest rate bill at 3(B)(2), which requires
+    // "the rate used to compute the cash surrender values under the
+    // policy during the applicable period plus one percent per annum"
+    // if that exceeds the published index--enacted, e.g., here:
+    //   http://apps.leg.wa.gov/rcw/default.aspx?cite=48.23.085
     bool allow_vlr =
         (   loan_allowed
         &&  (   database_->Query(DB_AllowVlr)
