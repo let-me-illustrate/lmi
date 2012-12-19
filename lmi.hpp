@@ -28,15 +28,9 @@
 
 #include "so_attributes.hpp"
 
-#include <string>
-
 /// Distinguish the antediluvian fork from production.
 
 bool LMI_SO is_antediluvian_fork();
-
-/// Timestamp of production release.
-
-std::string const& LMI_SO timestamp_of_production_release();
 
 #endif // lmi_hpp
 

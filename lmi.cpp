@@ -28,16 +28,8 @@
 
 #include "lmi.hpp"
 
-#include "version.hpp"
-
 bool is_antediluvian_fork()
 {
     return false;
-}
-
-std::string const& timestamp_of_production_release()
-{
-    static std::string const s(LMI_VERSION);
-    return s;
 }
 
