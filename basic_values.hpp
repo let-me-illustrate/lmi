@@ -301,7 +301,8 @@ class LMI_SO BasicValues
     double                       CurrCoiTable1Limit;
     e_actuarial_table_method     CoiInforceReentry;
     mcenum_anticipated_deduction MaxWDDed_;
-    double                       MaxWDAVMult;
+    double                       MaxWdGenAcctValMult;
+    double                       MaxWdSepAcctValMult;
     mcenum_anticipated_deduction MaxLoanDed_;
     double                       MaxLoanAVMult;
     int                          NoLapseMinDur;

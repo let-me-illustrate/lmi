@@ -226,7 +226,8 @@
 {DB_WdFeeRate,DB_Topic_Withdrawals,"WdFeeRate","Maximum fee per withdrawal as percent of net withdrawal",}, \
 {DB_FreeWdProportion,DB_Topic_Withdrawals,"FreeWdProportion","Yearly free partial surrender as a proportion of account value",}, \
 {DB_MinWd,DB_Topic_Withdrawals,"MinWd","Minimum withdrawal amount",}, \
-{DB_MaxWdAcctValMult,DB_Topic_Withdrawals,"MaxWdAcctValMult","Maximum withdrawal as proportion of account value, e.g. 1=100%",}, \
+{DB_MaxWdGenAcctValMult,DB_Topic_Withdrawals,"MaxWdGenAcctValMult","Maximum withdrawal as proportion of general-account value, e.g. 1=100%",}, \
+{DB_MaxWdSepAcctValMult,DB_Topic_Withdrawals,"MaxWdSepAcctValMult","Maximum withdrawal as proportion of separate-account value, e.g. 1=100%",}, \
 {DB_MaxWdDed,DB_Topic_Withdrawals,"MaxWdDed","Monthiversary deductions reflected in maximum withdrawal: 0=12 times most recent, 1=to next anniversary, 2=to next modal premium due date, 3=18 times most recent",}, \
 {DB_WdCanDecrSpecAmtDbo1,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo1","Withdrawals decrease specified amount for level death benefit option",}, \
 {DB_WdCanDecrSpecAmtDbo2,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo2","Withdrawals decrease specified amount for increasing death benefit option",}, \

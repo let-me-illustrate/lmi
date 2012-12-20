@@ -731,7 +731,8 @@ void BasicValues::SetPermanentInvariants()
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
     CoiInforceReentry   = static_cast<e_actuarial_table_method>(static_cast<int>(Database_->Query(DB_CoiInforceReentry)));
     MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWdDed)));
-    MaxWDAVMult         = Database_->Query(DB_MaxWdAcctValMult     );
+    MaxWdGenAcctValMult = Database_->Query(DB_MaxWdGenAcctValMult  );
+    MaxWdSepAcctValMult = Database_->Query(DB_MaxWdSepAcctValMult  );
     MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
     MaxLoanAVMult       = Database_->Query(DB_MaxLoanAcctValMult   );
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));

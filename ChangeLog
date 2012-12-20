@@ -31148,3 +31148,19 @@ Eliminate dead code.
   mortality_rates.cpp
 Refactor for concinnity.
 
+20121219T2312Z <gchicares@sbcglobal.net> [546]
+
+  input_harmonization.cpp
+Improve documentation.
+
+20121220T1206Z <gchicares@sbcglobal.net> [546]
+
+  basic_values.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Distinguish general- and separate-account withdrawal limits.
+
