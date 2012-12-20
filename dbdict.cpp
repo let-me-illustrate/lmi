@@ -309,7 +309,8 @@ void DBDictionary::ascribe_members()
     ascribe("WdFeeRate"           , &DBDictionary::WdFeeRate           );
     ascribe("FreeWdProportion"    , &DBDictionary::FreeWdProportion    );
     ascribe("MinWd"               , &DBDictionary::MinWd               );
-    ascribe("MaxWdAcctValMult"    , &DBDictionary::MaxWdAcctValMult    );
+    ascribe("MaxWdGenAcctValMult" , &DBDictionary::MaxWdGenAcctValMult );
+    ascribe("MaxWdSepAcctValMult" , &DBDictionary::MaxWdSepAcctValMult );
     ascribe("MaxWdDed"            , &DBDictionary::MaxWdDed            );
     ascribe("WdCanDecrSpecAmtDbo1", &DBDictionary::WdCanDecrSpecAmtDbo1);
     ascribe("WdCanDecrSpecAmtDbo2", &DBDictionary::WdCanDecrSpecAmtDbo2);
@@ -523,6 +524,8 @@ void DBDictionary::InitDB()
     Add(database_entity(DB_SubstdTableMult     , 1.0));
     Add(database_entity(DB_SurrChgSpecAmtSlope , 1.0));
     Add(database_entity(DB_SurrChgAcctValSlope , 1.0));
+    Add(database_entity(DB_MaxWdGenAcctValMult , 1.0));
+    Add(database_entity(DB_MaxWdSepAcctValMult , 1.0));
 
     // These are the same as class date_trammel's nominal limits.
     Add(database_entity(DB_CoiResetMinDate     , gregorian_epoch().julian_day_number()));
@@ -592,7 +595,6 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_DacTaxFundCharge    , 0.0));
     Add(database_entity(DB_WaivePremTaxInt1035 , true));
     Add(database_entity(DB_FirstWdMonth        , 0.0));
-    Add(database_entity(DB_MaxWdAcctValMult    , 1.0));
     Add(database_entity(DB_MaxWdDed            , mce_to_next_anniversary));
     Add(database_entity(DB_MinWd               , 100.0));
     Add(database_entity(DB_WdFee               , 25.0));

@@ -363,7 +363,8 @@ enum e_database_key
 
         ,DB_FreeWdProportion
         ,DB_MinWd
-        ,DB_MaxWdAcctValMult
+        ,DB_MaxWdGenAcctValMult
+        ,DB_MaxWdSepAcctValMult
         ,DB_MaxWdDed
 
         ,DB_WdCanDecrSpecAmtDbo1

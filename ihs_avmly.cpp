@@ -2323,15 +2323,14 @@ double AccountValue::anticipated_deduction
 /// policy year.
 ///
 /// Some contracts make only a portion of account value eligible for
-/// withdrawal, say 80% or 90%. Some apply such a multiple only to
-/// separate-account value--a refinement not yet implemented.
-/// DATABASE !! Add a database item to restrict the multiple to the
-/// separate account only.
+/// withdrawal, say 80% or 90%. Some apply different proportions to
+/// general- and separate-account values.
 
 void AccountValue::SetMaxWD()
 {
     MaxWD =
-          (AVGenAcct + AVSepAcct) * MaxWDAVMult
+          AVGenAcct * MaxWdGenAcctValMult
+        + AVSepAcct * MaxWdSepAcctValMult
         + (AVRegLn  + AVPrfLn)
         - (RegLnBal + PrfLnBal)
         - anticipated_deduction(MaxWDDed_)

@@ -285,7 +285,8 @@ class LMI_SO DBDictionary
     database_entity WdFeeRate           ;
     database_entity FreeWdProportion    ;
     database_entity MinWd               ;
-    database_entity MaxWdAcctValMult    ;
+    database_entity MaxWdGenAcctValMult ;
+    database_entity MaxWdSepAcctValMult ;
     database_entity MaxWdDed            ;
     database_entity WdCanDecrSpecAmtDbo1;
     database_entity WdCanDecrSpecAmtDbo2;
