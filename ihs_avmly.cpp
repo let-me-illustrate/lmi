@@ -1712,11 +1712,9 @@ void AccountValue::TxSetTermAmt()
         return;
         }
 
-    // TODO ?? Assumes that term rider lasts exactly as long as no-lapse guarantee.
-    // DATABASE !! Similar entities should be established for term.
     if
-        (  (BasicValues::NoLapseMinDur <= Year)
-        && (BasicValues::NoLapseMinAge <= Year + BasicValues::GetIssueAge())
+        (  (TermForcedConvDur <= Year)
+        && (TermForcedConvAge <= Year + BasicValues::GetIssueAge())
         )
         {
         EndTermRider();

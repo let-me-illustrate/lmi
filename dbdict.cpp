@@ -279,6 +279,7 @@ void DBDictionary::ascribe_members()
     ascribe("TermMinIssAge"       , &DBDictionary::TermMinIssAge       );
     ascribe("TermMaxIssAge"       , &DBDictionary::TermMaxIssAge       );
     ascribe("TermForcedConvAge"   , &DBDictionary::TermForcedConvAge   );
+    ascribe("TermForcedConvDur"   , &DBDictionary::TermForcedConvDur   );
     ascribe("MaxTermProportion"   , &DBDictionary::MaxTermProportion   );
     ascribe("TermCoiRate"         , &DBDictionary::TermCoiRate         );
     ascribe("TermPremRate"        , &DBDictionary::TermPremRate        );
@@ -761,6 +762,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_TermMinIssAge       , 0.0));
     Add(database_entity(DB_TermMaxIssAge       , 0.0));
     Add(database_entity(DB_TermForcedConvAge   , 0.0));
+    Add(database_entity(DB_TermForcedConvDur   , 0.0));
     Add(database_entity(DB_MaxTermProportion   , 0.0));
     Add(database_entity(DB_TermCoiRate         , 0.0));
     Add(database_entity(DB_TermPremRate        , 0.0));
