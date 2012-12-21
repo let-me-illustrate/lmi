@@ -713,6 +713,8 @@ void BasicValues::SetPermanentInvariants()
     MaxIncrAge          = static_cast<int>(Database_->Query(DB_MaxIncrAge));
     WaivePmTxInt1035    = Database_->Query(DB_WaivePremTaxInt1035  );
     AllowTerm           = Database_->Query(DB_AllowTerm            );
+    TermForcedConvAge   = static_cast<int>(Database_->Query(DB_TermForcedConvAge));
+    TermForcedConvDur   = static_cast<int>(Database_->Query(DB_TermForcedConvDur));
     TermIsDbFor7702     = Database_->Query(DB_TermIsDbFor7702      );
     TermIsDbFor7702A    = Database_->Query(DB_TermIsDbFor7702A     );
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );

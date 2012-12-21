@@ -255,6 +255,7 @@ class LMI_SO DBDictionary
     database_entity TermMinIssAge       ;
     database_entity TermMaxIssAge       ;
     database_entity TermForcedConvAge   ;
+    database_entity TermForcedConvDur   ;
     database_entity MaxTermProportion   ;
     database_entity TermCoiRate         ;
     database_entity TermPremRate        ;

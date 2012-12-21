@@ -194,7 +194,8 @@
 {DB_TermTable,DB_Topic_Riders,"TermTable","Term rider current mortality charge table (index in mortality table database)",}, \
 {DB_TermMinIssAge,DB_Topic_Riders,"TermMinIssAge","Term rider minimum issue age",}, \
 {DB_TermMaxIssAge,DB_Topic_Riders,"TermMaxIssAge","Term rider maximum issue age",}, \
-{DB_TermForcedConvAge,DB_Topic_Riders,"TermForcedConvAge","Age at which term rider converts to base policy with no positive election required",}, \
+{DB_TermForcedConvAge,DB_Topic_Riders,"TermForcedConvAge","Minimum age at which term rider converts to base policy with no positive election required",}, \
+{DB_TermForcedConvDur,DB_Topic_Riders,"TermForcedConvDur","Minimum number of years after which term rider converts to base policy with no positive election required",}, \
 {DB_MaxTermProportion,DB_Topic_Riders,"MaxTermProportion","Term rider as maximum proportion of total coverage [not yet implemented]",}, \
 {DB_TermCoiRate,DB_Topic_Riders,"TermCoiRate","[not yet implemented--use external table instead]",}, \
 {DB_TermPremRate,DB_Topic_Riders,"TermPremRate","[not yet implemented--use external table instead]",}, \

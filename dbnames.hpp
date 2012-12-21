@@ -325,6 +325,7 @@ enum e_database_key
         ,DB_TermMinIssAge
         ,DB_TermMaxIssAge
         ,DB_TermForcedConvAge
+        ,DB_TermForcedConvDur
         ,DB_MaxTermProportion
         ,DB_TermCoiRate
         ,DB_TermPremRate
