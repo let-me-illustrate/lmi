@@ -277,9 +277,15 @@ class LMI_SO DBDictionary
     database_entity AdbCoiRate          ;
     database_entity AdbPremRate         ;
     database_entity AllowSpouseRider    ;
+    database_entity SpouseRiderMinAmt   ;
+    database_entity SpouseRiderMaxAmt   ;
+    database_entity SpouseRiderMinIssAge;
+    database_entity SpouseRiderMaxIssAge;
     database_entity SpouseRiderGuarTable;
     database_entity SpouseRiderTable    ;
     database_entity AllowChildRider     ;
+    database_entity ChildRiderMinAmt    ;
+    database_entity ChildRiderMaxAmt    ;
     database_entity ChildRiderTable     ;
     database_entity AllowWd             ;
     database_entity WdFee               ;

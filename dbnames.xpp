@@ -217,9 +217,15 @@
 {DB_AdbCoiRate,DB_Topic_Riders,"AdbCoiRate","[not yet implemented--use external table instead]",}, \
 {DB_AdbPremRate,DB_Topic_Riders,"AdbPremRate","[not yet implemented--use external table instead]",}, \
 {DB_AllowSpouseRider,DB_Topic_Riders,"AllowSpouseRider","Allow spouse rider: 0=no, 1=yes",}, \
+{DB_SpouseRiderMinAmt,DB_Topic_Riders,"SpouseRiderMinAmt","Spouse rider minimum amount",}, \
+{DB_SpouseRiderMaxAmt,DB_Topic_Riders,"SpouseRiderMaxAmt","Spouse rider maximum amount",}, \
+{DB_SpouseRiderMinIssAge,DB_Topic_Riders,"SpouseRiderMinIssAge","Spouse rider minimum issue age",}, \
+{DB_SpouseRiderMaxIssAge,DB_Topic_Riders,"SpouseRiderMaxIssAge","Spouse rider maximum issue age",}, \
 {DB_SpouseRiderGuarTable,DB_Topic_Riders,"SpouseRiderGuarTable","Spouse rider guaranteed charge table (index in mortality table database)",}, \
 {DB_SpouseRiderTable,DB_Topic_Riders,"SpouseRiderTable","Spouse rider current charge table (index in mortality table database)",}, \
 {DB_AllowChildRider,DB_Topic_Riders,"AllowChildRider","Allow child rider: 0=no, 1=yes",}, \
+{DB_ChildRiderMinAmt,DB_Topic_Riders,"ChildRiderMinAmt","Child rider minimum amount",}, \
+{DB_ChildRiderMaxAmt,DB_Topic_Riders,"ChildRiderMaxAmt","Child rider maximum amount",}, \
 {DB_ChildRiderTable,DB_Topic_Riders,"ChildRiderTable","Child rider charge table (index in mortality table database)",}, \
 {DB_Topic_Withdrawals,DB_FIRST,"Withdrawals","Withdrawal fees, options, and restrictions; effect on specified amount",}, \
 {DB_AllowWd,DB_Topic_Withdrawals,"AllowWd","Allow withdrawals: 0=no, 1=yes",}, \

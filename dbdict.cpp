@@ -50,6 +50,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <limits>
 #include <vector>
 
 template class xml_serializable<DBDictionary>;
@@ -301,9 +302,15 @@ void DBDictionary::ascribe_members()
     ascribe("AdbCoiRate"          , &DBDictionary::AdbCoiRate          );
     ascribe("AdbPremRate"         , &DBDictionary::AdbPremRate         );
     ascribe("AllowSpouseRider"    , &DBDictionary::AllowSpouseRider    );
+    ascribe("SpouseRiderMinAmt"   , &DBDictionary::SpouseRiderMinAmt   );
+    ascribe("SpouseRiderMaxAmt"   , &DBDictionary::SpouseRiderMaxAmt   );
+    ascribe("SpouseRiderMinIssAge", &DBDictionary::SpouseRiderMinIssAge);
+    ascribe("SpouseRiderMaxIssAge", &DBDictionary::SpouseRiderMaxIssAge);
     ascribe("SpouseRiderGuarTable", &DBDictionary::SpouseRiderGuarTable);
     ascribe("SpouseRiderTable"    , &DBDictionary::SpouseRiderTable    );
     ascribe("AllowChildRider"     , &DBDictionary::AllowChildRider     );
+    ascribe("ChildRiderMinAmt"    , &DBDictionary::ChildRiderMinAmt    );
+    ascribe("ChildRiderMaxAmt"    , &DBDictionary::ChildRiderMaxAmt    );
     ascribe("ChildRiderTable"     , &DBDictionary::ChildRiderTable     );
     ascribe("AllowWd"             , &DBDictionary::AllowWd             );
     ascribe("WdFee"               , &DBDictionary::WdFee               );
@@ -511,6 +518,7 @@ void DBDictionary::Add(database_entity const& e)
 void DBDictionary::InitDB()
 {
     static double const dbl_inf = infinity<double>();
+    static double const bignum = std::numeric_limits<double>::max();
 
     typedef std::vector<std::string>::const_iterator svci;
     for(svci i = member_names().begin(); i != member_names().end(); ++i)
@@ -548,13 +556,7 @@ void DBDictionary::InitDB()
     std::vector<int> max_vlr_dimensions(mvd, mvd + e_number_of_axes);
     std::vector<double> max_vlr(e_max_dim_state);
     max_vlr[mce_s_TX] = 0.15;
-    Add
-        (database_entity
-            (DB_MaxVlrRate
-            ,max_vlr_dimensions
-            ,max_vlr
-            )
-        );
+    Add(database_entity(DB_MaxVlrRate, max_vlr_dimensions, max_vlr));
 
     Add(database_entity(DB_GuarIntSpread       , dbl_inf));
 
@@ -567,6 +569,12 @@ void DBDictionary::InitDB()
     Add(database_entity(DB_DynSepAcctLoadLimit , dbl_inf));
     Add(database_entity(DB_AdbLimit            , dbl_inf));
     Add(database_entity(DB_ExpSpecAmtLimit     , dbl_inf));
+
+    // These are the same as the nominal limits of the associated
+    // members of class Input.
+    Add(database_entity(DB_SpouseRiderMaxAmt   , bignum));
+    Add(database_entity(DB_SpouseRiderMaxIssAge, 99));
+    Add(database_entity(DB_ChildRiderMaxAmt    , bignum));
 }
 
 void DBDictionary::WriteSampleDBFile()
