@@ -350,10 +350,16 @@ enum e_database_key
         ,DB_AdbPremRate
 
         ,DB_AllowSpouseRider
+        ,DB_SpouseRiderMinAmt
+        ,DB_SpouseRiderMaxAmt
+        ,DB_SpouseRiderMinIssAge
+        ,DB_SpouseRiderMaxIssAge
         ,DB_SpouseRiderGuarTable
         ,DB_SpouseRiderTable
 
         ,DB_AllowChildRider
+        ,DB_ChildRiderMinAmt
+        ,DB_ChildRiderMaxAmt
         ,DB_ChildRiderTable
 
     ,DB_Topic_Withdrawals
