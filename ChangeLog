@@ -31164,3 +31164,22 @@ Improve documentation.
   ihs_basicval.cpp
 Distinguish general- and separate-account withdrawal limits.
 
+20121221T0851Z <gchicares@sbcglobal.net> [545]
+
+  basic_values.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Convert term rider at a given age or duration.
+
+20121223T1315Z <gchicares@sbcglobal.net> [545]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Establish limits for spouse and child riders.
+
