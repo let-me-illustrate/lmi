@@ -374,8 +374,8 @@ unutterable := Copyright
 
 .PHONY: happy_new_year
 happy_new_year: source_clean
+	$(MKDIR) $(backup_directory)
 	$(TOUCH) --date=$(old_year)0101 BOY
-	$(MKDIR) --parents $(backup_directory)
 	for z in *; \
 	  do \
 	       [ $$z -nt BOY ] \
