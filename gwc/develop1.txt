@@ -71,6 +71,24 @@ for z in * ; do grep --quiet --files-with-matches '$Id:' $z && touch "--date=$(<
 
 for z in * ; do grep --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.*\([0-9]\{4\}[0-9\/: ]*\) .*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
 
+  # If svn wrongly guesses that a file is binary, as indicated by
+  # "(bin)" here...
+
+svn add sort_cell_subelements.xsl
+A  (bin)  sort_cell_subelements.xsl
+
+  # ...fix it by removing mime-type:
+
+svn proplist sort_cell_subelements.xsl
+Properties on 'sort_cell_subelements.xsl':
+  svn:mime-type
+  svn:keywords
+svn propdel svn:mime-type sort_cell_subelements.xsl
+property 'svn:mime-type' deleted from 'sort_cell_subelements.xsl'.
+svn proplist sort_cell_subelements.xsl
+Properties on 'sort_cell_subelements.xsl':
+  svn:keywords
+
   # Second screen: only for updating local shadow copy of repository
   #
   # I use the last line repeatedly to keep my local shadow copy current
