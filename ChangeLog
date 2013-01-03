@@ -31697,3 +31697,9 @@ Establish limits for spouse and child riders.
   zero_test.cpp
 Update copyright notices.
 
+20130103T2217Z <gchicares@sbcglobal.net> [545]
+
+  license.cpp
+Write copyright notice on one line, so it'll be updated automatically.
+This precludes oversights such as the one fixed 20110323T1518Z.
+
