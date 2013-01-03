@@ -392,7 +392,7 @@ happy_new_year: source_clean
 	@$(GREP) '$(old_year)[, ]*$(old_year)' * || true
 	@$(GREP) '$(new_year)[, ]*$(old_year)' * || true
 	@$(GREP) '$(new_year)[, ]*$(new_year)' * || true
-	@[ -z $(wildcard *.?pp) ] || $(GREP) '$(old_year)' *.?pp \
+	@[ -z '$(wildcard *.?pp)' ] || $(GREP) '$(old_year)' *.?pp \
 	  | $(SED) \
 	    -e '/$(old_year)[, ]*$(new_year)/d' \
 	    -e'/[$$]Id: .* $(old_year)-.*[$$]/d' \
