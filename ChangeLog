@@ -31717,3 +31717,8 @@ Fix defect introduced 20120508T1347Z: missing quotes in shell command.
 Code added to work around an empty argument was itself defective,
 producing "[: too many arguments".
 
+20130103T2353Z <gchicares@sbcglobal.net> [545]
+
+  GNUmakefile
+Filter odd cases more aggressively, making new-year updates easier.
+

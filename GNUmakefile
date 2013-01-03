@@ -397,6 +397,7 @@ happy_new_year: source_clean
 	    -e '/$(old_year)[, ]*$(new_year)/d' \
 	    -e'/[$$]Id: .* $(old_year)-.*[$$]/d' \
 	    -e'/http:\/\/lists.nongnu.org\/archive\/html\/lmi\/$(old_year)/d' \
+	    -e'/\(VERSION\|version\).*$(old_year)[0-9]\{4\}T[0-9]\{4\}Z/d' \
 	  || true
 	@$(GREP) $(unutterable) * \
 	  | $(SED) \
@@ -432,7 +433,13 @@ happy_new_year: source_clean
 	    -e '/:good_copyright=/d' \
 	    -e '/:$(unutterable) (C)$$/d' \
 	    -e '/$(unutterable) (C) 1900/d' \
+	    -e '/$(unutterable).*`date -u +.%Y.`/d' \
+	    -e '/http:\/\/www.gnu.org\/prep\/maintain\/maintain.html#$(unutterable)-Notices/d' \
+	    -e '/year appears on the same line as the word "$(unutterable)"/d' \
+	    -e '/document.add_comment("$(unutterable) (C) " + y + " Gregory W. Chicares.");/d' \
+	    -e '/oss << "$(unutterable) .*" << year;/d' \
 	  || true
+	@$(ECHO) "Done."
 
 ################################################################################
 
