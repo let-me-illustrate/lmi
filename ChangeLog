@@ -31703,3 +31703,10 @@ Update copyright notices.
 Write copyright notice on one line, so it'll be updated automatically.
 This precludes oversights such as the one fixed 20110323T1518Z.
 
+20130103T2243Z <gchicares@sbcglobal.net> [545]
+
+  GNUmakefile
+Don't create new-year backup directory if it already exists. This
+prevents overwriting the contents of last year's backup directory when
+the 'happy_new_year' target's instructions are overlooked.
+
