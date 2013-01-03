@@ -31710,3 +31710,10 @@ Don't create new-year backup directory if it already exists. This
 prevents overwriting the contents of last year's backup directory when
 the 'happy_new_year' target's instructions are overlooked.
 
+20130103T2311Z <gchicares@sbcglobal.net> [545]
+
+  GNUmakefile
+Fix defect introduced 20120508T1347Z: missing quotes in shell command.
+Code added to work around an empty argument was itself defective,
+producing "[: too many arguments".
+
