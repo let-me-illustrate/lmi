@@ -312,12 +312,11 @@ void Input::DoHarmonize()
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), alb_anb)
         );
 
-    int max_age = static_cast<int>(database_->Query(DB_MaturityAge));
     InforceAsOfDate.minimum_and_maximum
         (EffectiveDate.value()
         ,add_years_and_months
             (EffectiveDate.value()
-            ,-1 + max_age - IssueAge.value()
+            ,-1 + GleanedMaturityAge_ - IssueAge.value()
             ,11
             ,true
             )
