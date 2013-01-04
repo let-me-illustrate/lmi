@@ -31722,3 +31722,19 @@ producing "[: too many arguments".
   GNUmakefile
 Filter odd cases more aggressively, making new-year updates easier.
 
+20130104T1731Z <gchicares@sbcglobal.net> [544]
+
+  ihs_avmly.cpp
+Resolve a marked defect; improve documentation.
+
+20130104T1732Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+Set reasonable rider limits for sample product.
+
+20130104T1733Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Rearrange. Work with riders before specamt, because term rider can
+affect some specamt fields.
+
