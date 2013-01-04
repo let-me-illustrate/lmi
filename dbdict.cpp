@@ -767,10 +767,10 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_TermTable, e_number_of_axes, dims313, TgCOI));
     Add(database_entity(DB_GuarTermTable, e_number_of_axes, dims313, TgCOI));
     Add(database_entity(DB_AllowTerm           , true));
-    Add(database_entity(DB_TermMinIssAge       , 0.0));
-    Add(database_entity(DB_TermMaxIssAge       , 0.0));
-    Add(database_entity(DB_TermForcedConvAge   , 0.0));
-    Add(database_entity(DB_TermForcedConvDur   , 0.0));
+    Add(database_entity(DB_TermMinIssAge       , 15));
+    Add(database_entity(DB_TermMaxIssAge       , 65));
+    Add(database_entity(DB_TermForcedConvAge   , 0.0)); // Immediate forced conversion is absurd. Try 70 instead.
+    Add(database_entity(DB_TermForcedConvDur   , 0.0)); // Immediate forced conversion is absurd. Try 10 instead.
     Add(database_entity(DB_MaxTermProportion   , 0.0));
     Add(database_entity(DB_TermCoiRate         , 0.0));
     Add(database_entity(DB_TermPremRate        , 0.0));
@@ -778,16 +778,18 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_TermIsDbFor7702A    , true));
     Add(database_entity(DB_WpTable             , 8));
     Add(database_entity(DB_AllowWp             , true));
-    Add(database_entity(DB_WpMinIssAge         , 0.0));
-    Add(database_entity(DB_WpMaxIssAge         , 0.0));
+    Add(database_entity(DB_WpMinIssAge         , 18));
+    Add(database_entity(DB_WpMaxIssAge         , 64));
+    // DB_WpMax is irrelevant because DB_WpChargeMethod is
+    // oe_waiver_times_deductions, to which no maximum applies.
     Add(database_entity(DB_WpMax               , 0.0));
     Add(database_entity(DB_WpCoiRate           , 0.0));
     Add(database_entity(DB_WpPremRate          , 0.0));
     // SOA qx_ins table 708 is 70-75 US ADB experience.
     Add(database_entity(DB_AdbTable            , 708));
     Add(database_entity(DB_AllowAdb            , true));
-    Add(database_entity(DB_AdbMinIssAge        , 0.0));
-    Add(database_entity(DB_AdbMaxIssAge        , 0.0));
+    Add(database_entity(DB_AdbMinIssAge        , 15));
+    Add(database_entity(DB_AdbMaxIssAge        , 70));
     Add(database_entity(DB_AdbLimit            , 1000000.0));
     Add(database_entity(DB_AdbCoiRate          , 0.0));
     Add(database_entity(DB_AdbPremRate         , 0.0));
