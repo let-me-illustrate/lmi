@@ -1859,13 +1859,15 @@ void AccountValue::TxSetRiderDed()
             {
             case oe_waiver_times_naar:
                 {
+                // Misnomer: this actually uses specamt, not NAAR.
                 WpCharge = YearsWpRate * std::min(ActualSpecAmt, WpLimit);
                 DcvWpCharge = WpCharge;
                 }
                 break;
             case oe_waiver_times_deductions:
                 {
-                // TODO ?? Should the separate-account load be waived?
+                // Premium load and M&E charges are not waived.
+                // The amount waived is subject to no maximum.
                 WpCharge =
                     YearsWpRate
                     *   (
