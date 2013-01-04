@@ -440,6 +440,58 @@ void Input::DoHarmonize()
     // TODO ?? WX PORT !! Perhaps those rules leave no choice allowed
     // for gender or smoker.
 
+    TermRider.enable(database_->Query(DB_AllowTerm));
+    TermRider.allow(mce_yes, database_->Query(DB_AllowTerm));
+
+    bool enable_term = mce_yes == TermRider;
+    bool specamt_indeterminate_for_term =
+           mce_solve_specamt == SolveType
+        || mce_sa_input_scalar != SpecifiedAmountStrategyFromIssue
+        ;
+
+    TermRiderUseProportion.enable(enable_term && !specamt_indeterminate_for_term);
+    TermRiderUseProportion.allow(mce_yes, !specamt_indeterminate_for_term);
+    bool term_is_proportional = mce_yes == TermRiderUseProportion;
+    TermRiderAmount     .enable(enable_term && !term_is_proportional);
+    TotalSpecifiedAmount.enable(enable_term &&  term_is_proportional);
+    TermRiderProportion .enable(enable_term &&  term_is_proportional);
+
+    TermAdjustmentMethod.allow(mce_adjust_base, enable_term);
+    TermAdjustmentMethod.allow(mce_adjust_term, enable_term);
+    TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
+
+    // Analysis of database vector quantities is generally avoided
+    // in this function, in the interest of simplicity and speed.
+    // Otherwise, this condition would include flat extras. But
+    // this WP and ADB restriction is incidental, not essential.
+    bool contract_is_rated(mce_rated == UnderwritingClass);
+    WaiverOfPremiumBenefit.enable(        database_->Query(DB_AllowWp ) && !contract_is_rated);
+    WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWp ) && !contract_is_rated);
+    AccidentalDeathBenefit.enable(        database_->Query(DB_AllowAdb) && !contract_is_rated);
+    AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowAdb) && !contract_is_rated);
+
+    ChildRider       .enable(        database_->Query(DB_AllowChildRider));
+    ChildRider       .allow(mce_yes, database_->Query(DB_AllowChildRider));
+    ChildRiderAmount .enable(mce_yes == ChildRider);
+    SpouseRider      .enable(        database_->Query(DB_AllowSpouseRider));
+    SpouseRider      .allow(mce_yes, database_->Query(DB_AllowSpouseRider));
+    SpouseRiderAmount.enable(mce_yes == SpouseRider);
+    SpouseIssueAge   .enable(mce_yes == SpouseRider);
+#if 0
+// DATABASE !! Add spouse minimum and maximum issue ages, as well as
+// minimum and maximum amounts for both spouse and child.
+    SpouseIssueAge.minimum_and_maximum
+        (static_cast<int>(database_->Query(DB_MinIssAge))
+        ,static_cast<int>(database_->Query(DB_MaxIssAge))
+        );
+#endif // 0
+
+    HoneymoonEndorsement .enable(        database_->Query(DB_AllowHoneymoon));
+    HoneymoonEndorsement .allow(mce_yes, database_->Query(DB_AllowHoneymoon));
+    PostHoneymoonSpread  .enable(mce_yes == HoneymoonEndorsement);
+    HoneymoonValueSpread .enable(mce_yes == HoneymoonEndorsement);
+    InforceHoneymoonValue.enable(mce_yes == HoneymoonEndorsement);
+
     // Many SA strategies forbidden if premium is a function of SA.
     bool prem_indeterminate =
         (
@@ -650,58 +702,6 @@ false // Silly workaround for now.
     InforcePreferredLoanValue  .enable(pref_loan_allowed);
     InforceRegularLoanBalance  .enable(loan_allowed);
     InforcePreferredLoanBalance.enable(pref_loan_allowed);
-
-    TermRider.enable(database_->Query(DB_AllowTerm));
-    TermRider.allow(mce_yes, database_->Query(DB_AllowTerm));
-
-    bool enable_term = mce_yes == TermRider;
-    bool specamt_indeterminate_for_term =
-           mce_solve_specamt == SolveType
-        || mce_sa_input_scalar != SpecifiedAmountStrategyFromIssue
-        ;
-
-    TermRiderUseProportion.enable(enable_term && !specamt_indeterminate_for_term);
-    TermRiderUseProportion.allow(mce_yes, !specamt_indeterminate_for_term);
-    bool term_is_proportional = mce_yes == TermRiderUseProportion;
-    TermRiderAmount     .enable(enable_term && !term_is_proportional);
-    TotalSpecifiedAmount.enable(enable_term &&  term_is_proportional);
-    TermRiderProportion .enable(enable_term &&  term_is_proportional);
-
-    TermAdjustmentMethod.allow(mce_adjust_base, enable_term);
-    TermAdjustmentMethod.allow(mce_adjust_term, enable_term);
-    TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
-
-    // Analysis of database vector quantities is generally avoided
-    // in this function, in the interest of simplicity and speed.
-    // Otherwise, this condition would include flat extras. But
-    // this WP and ADB restriction is incidental, not essential.
-    bool contract_is_rated(mce_rated == UnderwritingClass);
-    WaiverOfPremiumBenefit.enable(        database_->Query(DB_AllowWp ) && !contract_is_rated);
-    WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWp ) && !contract_is_rated);
-    AccidentalDeathBenefit.enable(        database_->Query(DB_AllowAdb) && !contract_is_rated);
-    AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowAdb) && !contract_is_rated);
-
-    ChildRider       .enable(        database_->Query(DB_AllowChildRider));
-    ChildRider       .allow(mce_yes, database_->Query(DB_AllowChildRider));
-    ChildRiderAmount .enable(mce_yes == ChildRider);
-    SpouseRider      .enable(        database_->Query(DB_AllowSpouseRider));
-    SpouseRider      .allow(mce_yes, database_->Query(DB_AllowSpouseRider));
-    SpouseRiderAmount.enable(mce_yes == SpouseRider);
-    SpouseIssueAge   .enable(mce_yes == SpouseRider);
-#if 0
-// DATABASE !! Add spouse minimum and maximum issue ages, as well as
-// minimum and maximum amounts for both spouse and child.
-    SpouseIssueAge.minimum_and_maximum
-        (static_cast<int>(database_->Query(DB_MinIssAge))
-        ,static_cast<int>(database_->Query(DB_MaxIssAge))
-        );
-#endif // 0
-
-    HoneymoonEndorsement .enable(        database_->Query(DB_AllowHoneymoon));
-    HoneymoonEndorsement .allow(mce_yes, database_->Query(DB_AllowHoneymoon));
-    PostHoneymoonSpread  .enable(mce_yes == HoneymoonEndorsement);
-    HoneymoonValueSpread .enable(mce_yes == HoneymoonEndorsement);
-    InforceHoneymoonValue.enable(mce_yes == HoneymoonEndorsement);
 
     bool solves_allowed = mce_life_by_life == RunOrder;
 
