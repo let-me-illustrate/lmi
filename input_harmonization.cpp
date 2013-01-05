@@ -439,8 +439,9 @@ void Input::DoHarmonize()
     // TODO ?? WX PORT !! Perhaps those rules leave no choice allowed
     // for gender or smoker.
 
-    TermRider.enable(database_->Query(DB_AllowTerm));
-    TermRider.allow(mce_yes, database_->Query(DB_AllowTerm));
+    bool allow_term = database_->Query(DB_AllowTerm);
+    TermRider.enable(        allow_term);
+    TermRider.allow(mce_yes, allow_term);
 
     bool enable_term = mce_yes == TermRider;
     bool specamt_indeterminate_for_term =
@@ -464,16 +465,21 @@ void Input::DoHarmonize()
     // Otherwise, this condition would include flat extras. But
     // this WP and ADB restriction is incidental, not essential.
     bool contract_is_rated(mce_rated == UnderwritingClass);
-    WaiverOfPremiumBenefit.enable(        database_->Query(DB_AllowWp ) && !contract_is_rated);
-    WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWp ) && !contract_is_rated);
-    AccidentalDeathBenefit.enable(        database_->Query(DB_AllowAdb) && !contract_is_rated);
-    AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowAdb) && !contract_is_rated);
 
-    ChildRider       .enable(        database_->Query(DB_AllowChildRider));
-    ChildRider       .allow(mce_yes, database_->Query(DB_AllowChildRider));
+    bool allow_wp = database_->Query(DB_AllowWp) && !contract_is_rated;
+    WaiverOfPremiumBenefit.enable(        allow_wp);
+    WaiverOfPremiumBenefit.allow(mce_yes, allow_wp);
+    bool allow_adb = database_->Query(DB_AllowAdb) && !contract_is_rated;
+    AccidentalDeathBenefit.enable(        allow_adb);
+    AccidentalDeathBenefit.allow(mce_yes, allow_adb);
+
+    bool allow_child_rider = database_->Query(DB_AllowChildRider);
+    ChildRider       .enable(        allow_child_rider);
+    ChildRider       .allow(mce_yes, allow_child_rider);
     ChildRiderAmount .enable(mce_yes == ChildRider);
-    SpouseRider      .enable(        database_->Query(DB_AllowSpouseRider));
-    SpouseRider      .allow(mce_yes, database_->Query(DB_AllowSpouseRider));
+    bool allow_spouse_rider = database_->Query(DB_AllowSpouseRider);
+    SpouseRider      .enable(        allow_spouse_rider);
+    SpouseRider      .allow(mce_yes, allow_spouse_rider);
     SpouseRiderAmount.enable(mce_yes == SpouseRider);
     SpouseIssueAge   .enable(mce_yes == SpouseRider);
 #if 0
@@ -485,8 +491,9 @@ void Input::DoHarmonize()
         );
 #endif // 0
 
-    HoneymoonEndorsement .enable(        database_->Query(DB_AllowHoneymoon));
-    HoneymoonEndorsement .allow(mce_yes, database_->Query(DB_AllowHoneymoon));
+    bool allow_honeymoon = database_->Query(DB_AllowHoneymoon);
+    HoneymoonEndorsement .enable(        allow_honeymoon);
+    HoneymoonEndorsement .allow(mce_yes, allow_honeymoon);
     PostHoneymoonSpread  .enable(mce_yes == HoneymoonEndorsement);
     HoneymoonValueSpread .enable(mce_yes == HoneymoonEndorsement);
     InforceHoneymoonValue.enable(mce_yes == HoneymoonEndorsement);
@@ -504,7 +511,7 @@ void Input::DoHarmonize()
     bool specamt_solve = mce_solve_specamt == SolveType;
 
     bool specamt_from_term_proportion =
-           database_->Query(DB_AllowTerm)
+           allow_term
         && mce_yes == TermRiderUseProportion
         && mce_yes == TermRider
         ;
