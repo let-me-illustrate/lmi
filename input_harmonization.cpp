@@ -448,6 +448,8 @@ void Input::DoHarmonize()
     bool allow_term =
            database_->Query(DB_AllowTerm)
         && (database_->Query(DB_AllowRatedTerm) || !contract_is_rated)
+        && database_->Query(DB_TermMinIssAge) <= IssueAge.value()
+        &&                                       IssueAge.value() <= database_->Query(DB_TermMaxIssAge)
         ;
     TermRider.enable(        allow_term);
     TermRider.allow(mce_yes, allow_term);
@@ -472,12 +474,16 @@ void Input::DoHarmonize()
     bool allow_wp =
            database_->Query(DB_AllowWp)
         && (database_->Query(DB_AllowRatedWp) || !contract_is_rated)
+        && database_->Query(DB_WpMinIssAge) <= IssueAge.value()
+        &&                                     IssueAge.value() <= database_->Query(DB_WpMaxIssAge)
         ;
     WaiverOfPremiumBenefit.enable(        allow_wp);
     WaiverOfPremiumBenefit.allow(mce_yes, allow_wp);
     bool allow_adb =
            database_->Query(DB_AllowAdb)
         && (database_->Query(DB_AllowRatedAdb) || !contract_is_rated)
+        && database_->Query(DB_AdbMinIssAge) <= IssueAge.value()
+        &&                                      IssueAge.value() <= database_->Query(DB_AdbMaxIssAge)
         ;
     AccidentalDeathBenefit.enable(        allow_adb);
     AccidentalDeathBenefit.allow(mce_yes, allow_adb);
@@ -491,14 +497,17 @@ void Input::DoHarmonize()
     SpouseRider      .allow(mce_yes, allow_spouse_rider);
     SpouseRiderAmount.enable(mce_yes == SpouseRider);
     SpouseIssueAge   .enable(mce_yes == SpouseRider);
-#if 0
 // DATABASE !! Add spouse minimum and maximum issue ages, as well as
 // minimum and maximum amounts for both spouse and child.
+    // If 'SpouseIssueAge' were always enabled, then it might make
+    // sense to enable 'SpouseRider' only if the issue age is in the
+    // allowable range (as is done above for ADB and WP). However,
+    // 'SpouseIssueAge' is useful only if the spouse rider is elected,
+    // so it makes more sense to constrain its value this way.
     SpouseIssueAge.minimum_and_maximum
-        (static_cast<int>(database_->Query(DB_MinIssAge))
-        ,static_cast<int>(database_->Query(DB_MaxIssAge))
+        (static_cast<int>(database_->Query(DB_SpouseRiderMinIssAge))
+        ,static_cast<int>(database_->Query(DB_SpouseRiderMaxIssAge))
         );
-#endif // 0
 
     bool allow_honeymoon = database_->Query(DB_AllowHoneymoon);
     HoneymoonEndorsement .enable(        allow_honeymoon);
