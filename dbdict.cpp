@@ -700,8 +700,8 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AllowGuarUw         , true));
     Add(database_entity(DB_AllowMortBlendSex   , true));
     Add(database_entity(DB_AllowMortBlendSmoke , true));
-    Add(database_entity(DB_AllowRatedWp        , true));
-    Add(database_entity(DB_AllowRatedAdb       , true));
+    Add(database_entity(DB_AllowRatedWp        , false));
+    Add(database_entity(DB_AllowRatedAdb       , false));
     Add(database_entity(DB_AllowRatedTerm      , true));
     Add(database_entity(DB_Allowable           , true));
     Add(database_entity(DB_AllowPreferredClass , true));
