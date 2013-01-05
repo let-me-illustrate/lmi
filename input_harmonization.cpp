@@ -439,7 +439,16 @@ void Input::DoHarmonize()
     // TODO ?? WX PORT !! Perhaps those rules leave no choice allowed
     // for gender or smoker.
 
-    bool allow_term = database_->Query(DB_AllowTerm);
+    // Analysis of database vector quantities is generally avoided
+    // in this function, in the interest of simplicity and speed.
+    // Otherwise, this condition would include flat extras. But
+    // this rider restriction is incidental, not essential.
+    bool contract_is_rated(mce_rated == UnderwritingClass);
+
+    bool allow_term =
+           database_->Query(DB_AllowTerm)
+        && (database_->Query(DB_AllowRatedTerm) || !contract_is_rated)
+        ;
     TermRider.enable(        allow_term);
     TermRider.allow(mce_yes, allow_term);
 
@@ -460,16 +469,16 @@ void Input::DoHarmonize()
     TermAdjustmentMethod.allow(mce_adjust_term, enable_term);
     TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
 
-    // Analysis of database vector quantities is generally avoided
-    // in this function, in the interest of simplicity and speed.
-    // Otherwise, this condition would include flat extras. But
-    // this WP and ADB restriction is incidental, not essential.
-    bool contract_is_rated(mce_rated == UnderwritingClass);
-
-    bool allow_wp = database_->Query(DB_AllowWp) && !contract_is_rated;
+    bool allow_wp =
+           database_->Query(DB_AllowWp)
+        && (database_->Query(DB_AllowRatedWp) || !contract_is_rated)
+        ;
     WaiverOfPremiumBenefit.enable(        allow_wp);
     WaiverOfPremiumBenefit.allow(mce_yes, allow_wp);
-    bool allow_adb = database_->Query(DB_AllowAdb) && !contract_is_rated;
+    bool allow_adb =
+           database_->Query(DB_AllowAdb)
+        && (database_->Query(DB_AllowRatedAdb) || !contract_is_rated)
+        ;
     AccidentalDeathBenefit.enable(        allow_adb);
     AccidentalDeathBenefit.allow(mce_yes, allow_adb);
 
