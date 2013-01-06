@@ -31738,3 +31738,33 @@ Set reasonable rider limits for sample product.
 Rearrange. Work with riders before specamt, because term rider can
 affect some specamt fields.
 
+20130104T1738Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Use cached value instead of querying database unnecessarily.
+
+20130105T0109Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Save and reuse results of database queries.
+
+20130105T1303Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+Forbid sample-product rated riders where unsupported by calculations.
+
+20130105T1304Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Allow rated term, ADB, and WP in GUI iff allowed by database.
+
+20130105T2207Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Enforce rider age restrictions.
+
+20130106T0844Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Enforce spouse and child rider amount limits.
+

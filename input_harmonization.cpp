@@ -492,19 +492,30 @@ void Input::DoHarmonize()
     ChildRider       .enable(        allow_child_rider);
     ChildRider       .allow(mce_yes, allow_child_rider);
     ChildRiderAmount .enable(mce_yes == ChildRider);
+    // Child and spouse riders generally have a nonzero minimum amount
+    // if elected, but zero must be allowed if not elected (e.g., for
+    // inforce). Given that the amount field is enabled only when the
+    // rider is elected, it could never be set back to zero manually
+    // when unelected--so it's forced to zero when unelected.
+    ChildRiderAmount .minimum_and_maximum
+        ((mce_yes == ChildRider) ? database_->Query(DB_ChildRiderMinAmt) : 0.0
+        ,(mce_yes == ChildRider) ? database_->Query(DB_ChildRiderMaxAmt) : 0.0
+        );
     bool allow_spouse_rider = database_->Query(DB_AllowSpouseRider);
     SpouseRider      .enable(        allow_spouse_rider);
     SpouseRider      .allow(mce_yes, allow_spouse_rider);
     SpouseRiderAmount.enable(mce_yes == SpouseRider);
+    SpouseRiderAmount.minimum_and_maximum
+        ((mce_yes == SpouseRider) ? database_->Query(DB_SpouseRiderMinAmt) : 0.0
+        ,(mce_yes == SpouseRider) ? database_->Query(DB_SpouseRiderMaxAmt) : 0.0
+        );
     SpouseIssueAge   .enable(mce_yes == SpouseRider);
-// DATABASE !! Add spouse minimum and maximum issue ages, as well as
-// minimum and maximum amounts for both spouse and child.
     // If 'SpouseIssueAge' were always enabled, then it might make
     // sense to enable 'SpouseRider' only if the issue age is in the
     // allowable range (as is done above for ADB and WP). However,
     // 'SpouseIssueAge' is useful only if the spouse rider is elected,
     // so it makes more sense to constrain its value this way.
-    SpouseIssueAge.minimum_and_maximum
+    SpouseIssueAge   .minimum_and_maximum
         (static_cast<int>(database_->Query(DB_SpouseRiderMinIssAge))
         ,static_cast<int>(database_->Query(DB_SpouseRiderMaxIssAge))
         );
