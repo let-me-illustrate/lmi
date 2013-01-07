@@ -56,7 +56,6 @@
 {DB_CorridorTable,DB_Topic_7702And7702A,"CorridorTable","Cash value accumulation test 'corridor' factor (index in mortality table database)",}, \
 {DB_SevenPayTable,DB_Topic_7702And7702A,"SevenPayTable","7702A table of annual seven-pay premium rates per $1 (index in mortality table database)",}, \
 {DB_Irc7702QTable,DB_Topic_7702And7702A,"Irc7702QTable","7702 and 7702A annual mortality rate (index in mortality table database)",}, \
-{DB_PremLoad7702,DB_Topic_7702And7702A,"PremLoad7702","Premium load for 7702 and 7702A (may be lower than current premium load for simplicity)",}, \
 {DB_Equiv7702Dbo3,DB_Topic_7702And7702A,"Equiv7702Dbo3","For 7702, treat return of premium death benefit option same as: 0=level 1=increasing",}, \
 {DB_Topic_MortalityCharges,DB_FIRST,"Mortality charges","Mortality rates, limits, conversions, and reentry",}, \
 {DB_GuarCoiTable,DB_Topic_MortalityCharges,"GuarCoiTable","Guaranteed mortality charge table (index in mortality table database)",}, \

@@ -149,7 +149,6 @@ void DBDictionary::ascribe_members()
     ascribe("CorridorTable"       , &DBDictionary::CorridorTable       );
     ascribe("SevenPayTable"       , &DBDictionary::SevenPayTable       );
     ascribe("Irc7702QTable"       , &DBDictionary::Irc7702QTable       );
-    ascribe("PremLoad7702"        , &DBDictionary::PremLoad7702        );
     ascribe("Equiv7702Dbo3"       , &DBDictionary::Equiv7702Dbo3       );
     ascribe("GuarCoiTable"        , &DBDictionary::GuarCoiTable        );
     ascribe("GuarCoiIsAnnual"     , &DBDictionary::GuarCoiIsAnnual     );
@@ -725,7 +724,6 @@ void DBDictionary::WriteSampleDBFile()
     double T7702q[9] = {35, 41, 107,}; // Female, male, unisex.
     Add(database_entity(DB_Irc7702QTable, e_number_of_axes, dims311, T7702q));
 
-    Add(database_entity(DB_PremLoad7702        , 0.02));
     Add(database_entity(DB_AllowDbo1           , true));
     Add(database_entity(DB_AllowDbo2           , true));
     Add(database_entity(DB_AllowDbo3           , true));

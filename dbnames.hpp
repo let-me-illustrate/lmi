@@ -143,7 +143,6 @@ enum e_database_key
         ,DB_SevenPayTable
         ,DB_Irc7702QTable
 
-        ,DB_PremLoad7702
         ,DB_Equiv7702Dbo3
 
     ,DB_Topic_MortalityCharges

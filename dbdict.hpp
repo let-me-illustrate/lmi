@@ -124,7 +124,6 @@ class LMI_SO DBDictionary
     database_entity CorridorTable       ;
     database_entity SevenPayTable       ;
     database_entity Irc7702QTable       ;
-    database_entity PremLoad7702        ;
     database_entity Equiv7702Dbo3       ;
     database_entity GuarCoiTable        ;
     database_entity GuarCoiIsAnnual     ;
