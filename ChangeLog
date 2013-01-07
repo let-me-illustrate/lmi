@@ -31768,3 +31768,14 @@ Enforce rider age restrictions.
   input_harmonization.cpp
 Enforce spouse and child rider amount limits.
 
+20130107T2149Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Remove unused 'PremLoad7702' database entity. Combining premium-based
+loads actually used for calculating current account value makes it
+harder to overlook subtleties. Any 7702-specific load component should
+be handled explicitly--as premium tax is, for now at least.
+
