@@ -1857,9 +1857,8 @@ void AccountValue::TxSetRiderDed()
         {
         switch(WaiverChargeMethod)
             {
-            case oe_waiver_times_naar:
+            case oe_waiver_times_specamt:
                 {
-                // Misnomer: this actually uses specamt, not NAAR.
                 WpCharge = YearsWpRate * std::min(ActualSpecAmt, WpLimit);
                 DcvWpCharge = WpCharge;
                 }
