@@ -363,7 +363,7 @@ enum e_database_key
         ,DB_WpTable
         ,DB_WpMinIssAge
         ,DB_WpMaxIssAge
-        ,DB_WpMax
+        ,DB_WpLimit
         ,DB_WpCoiRate
         ,DB_WpPremRate
         ,DB_WpChargeMethod

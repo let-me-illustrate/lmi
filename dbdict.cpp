@@ -299,7 +299,7 @@ void DBDictionary::ascribe_members()
     ascribe("WpTable"             , &DBDictionary::WpTable             );
     ascribe("WpMinIssAge"         , &DBDictionary::WpMinIssAge         );
     ascribe("WpMaxIssAge"         , &DBDictionary::WpMaxIssAge         );
-    ascribe("WpMax"               , &DBDictionary::WpMax               );
+    ascribe("WpLimit"             , &DBDictionary::WpLimit             );
     ascribe("WpCoiRate"           , &DBDictionary::WpCoiRate           );
     ascribe("WpPremRate"          , &DBDictionary::WpPremRate          );
     ascribe("WpChargeMethod"      , &DBDictionary::WpChargeMethod      );
@@ -793,9 +793,6 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AllowWp             , true));
     Add(database_entity(DB_WpMinIssAge         , 18));
     Add(database_entity(DB_WpMaxIssAge         , 64));
-    // DB_WpMax is irrelevant because DB_WpChargeMethod is
-    // oe_waiver_times_deductions, to which no maximum applies.
-    Add(database_entity(DB_WpMax               , 0.0));
     Add(database_entity(DB_WpCoiRate           , 0.0));
     Add(database_entity(DB_WpPremRate          , 0.0));
     // SOA qx_ins table 708 is 70-75 US ADB experience.

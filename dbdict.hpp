@@ -274,7 +274,7 @@ class LMI_SO DBDictionary
     database_entity WpTable             ;
     database_entity WpMinIssAge         ;
     database_entity WpMaxIssAge         ;
-    database_entity WpMax               ;
+    database_entity WpLimit             ;
     database_entity WpCoiRate           ;
     database_entity WpPremRate          ;
     database_entity WpChargeMethod      ;

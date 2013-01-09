@@ -214,7 +214,7 @@
 {DB_WpTable,DB_Topic_Riders,"WpTable","Waiver benefit charge (index in mortality table database)",}, \
 {DB_WpMinIssAge,DB_Topic_Riders,"WpMinIssAge","Waiver benefit minimum issue age",}, \
 {DB_WpMaxIssAge,DB_Topic_Riders,"WpMaxIssAge","Waiver benefit maximum issue age",}, \
-{DB_WpMax,DB_Topic_Riders,"WpMax","Maximum specified amount to which waiver benefit can apply",}, \
+{DB_WpLimit,DB_Topic_Riders,"WpLimit","Maximum specified amount to which waiver benefit can apply",}, \
 {DB_WpCoiRate,DB_Topic_Riders,"WpCoiRate","[not yet implemented--use external table instead]",}, \
 {DB_WpPremRate,DB_Topic_Riders,"WpPremRate","[not yet implemented--use external table instead]",}, \
 {DB_WpChargeMethod,DB_Topic_Riders,"WpChargeMethod","Waiver benefit charge is multiple of: 0=monthly deductions, 1=NAAR",}, \
