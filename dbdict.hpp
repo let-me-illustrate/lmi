@@ -335,7 +335,7 @@ class LMI_SO DBDictionary
     database_entity ErPremAcct          ;
     database_entity CompTarget          ;
     database_entity CompExcess          ;
-    database_entity CompChargeBack      ;
+    database_entity CompChargeback      ;
     database_entity AssetComp           ;
     database_entity AllowExtraAssetComp ;
     database_entity AllowExtraPremComp  ;
@@ -381,7 +381,7 @@ class LMI_SO DBDictionary
     database_entity TaxVxInt            ;
     database_entity StatVxQ             ;
     database_entity TaxVxQ              ;
-    database_entity DefVxQ              ;
+    database_entity DeficVxQ            ;
     database_entity SnflQ               ;
     database_entity LapseRate           ;
     database_entity ReqSurpNaar         ;
