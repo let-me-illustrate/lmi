@@ -281,7 +281,7 @@
 {DB_Topic_Compensation,DB_FIRST,"Compensation","Commissions, asset-based compensation, and chargebacks",}, \
 {DB_CompTarget,DB_Topic_Compensation,"CompTarget","Producer-only compensation on premium up to target",}, \
 {DB_CompExcess,DB_Topic_Compensation,"CompExcess","Producer-only compensation on premium in excess of target",}, \
-{DB_CompChargeBack,DB_Topic_Compensation,"CompChargeBack","Compensation chargeback for early termination",}, \
+{DB_CompChargeback,DB_Topic_Compensation,"CompChargeback","Compensation chargeback for early termination",}, \
 {DB_AssetComp,DB_Topic_Compensation,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets",}, \
 {DB_AllowExtraAssetComp,DB_Topic_Compensation,"AllowExtraAssetComp","Allow input extra asset-based compensation: 0=no, 1=yes",}, \
 {DB_AllowExtraPremComp,DB_Topic_Compensation,"AllowExtraPremComp","Allow input extra premium-based compensation: 0=no, 1=yes",}, \
@@ -327,7 +327,7 @@
 {DB_TaxVxInt,DB_Topic_Reserves,"TaxVxInt","Tax reserve annual interest rate [not yet implemented]",}, \
 {DB_StatVxQ,DB_Topic_Reserves,"StatVxQ","[not used]",}, \
 {DB_TaxVxQ,DB_Topic_Reserves,"TaxVxQ","[not used]",}, \
-{DB_DefVxQ,DB_Topic_Reserves,"DefVxQ","[not used]",}, \
+{DB_DeficVxQ,DB_Topic_Reserves,"DeficVxQ","[not used]",}, \
 {DB_SnflQ,DB_Topic_Reserves,"SnflQ","[not used]",}, \
 {DB_Topic_OtherAssumptions,DB_FIRST,"Other assumptions","Other assumptions [not yet implemented]",}, \
 {DB_LapseRate,DB_Topic_OtherAssumptions,"LapseRate","Lapse rate [not yet implemented]",}, \

@@ -453,7 +453,7 @@ enum e_database_key
 
         ,DB_CompTarget
         ,DB_CompExcess
-        ,DB_CompChargeBack
+        ,DB_CompChargeback
         ,DB_AssetComp
         ,DB_AllowExtraAssetComp
         ,DB_AllowExtraPremComp
@@ -517,7 +517,7 @@ enum e_database_key
 
         ,DB_StatVxQ
         ,DB_TaxVxQ
-        ,DB_DefVxQ
+        ,DB_DeficVxQ
         ,DB_SnflQ
 
     ,DB_Topic_OtherAssumptions

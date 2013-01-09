@@ -360,7 +360,7 @@ void DBDictionary::ascribe_members()
     ascribe("ErPremAcct"          , &DBDictionary::ErPremAcct          );
     ascribe("CompTarget"          , &DBDictionary::CompTarget          );
     ascribe("CompExcess"          , &DBDictionary::CompExcess          );
-    ascribe("CompChargeBack"      , &DBDictionary::CompChargeBack      );
+    ascribe("CompChargeback"      , &DBDictionary::CompChargeback      );
     ascribe("AssetComp"           , &DBDictionary::AssetComp           );
     ascribe("AllowExtraAssetComp" , &DBDictionary::AllowExtraAssetComp );
     ascribe("AllowExtraPremComp"  , &DBDictionary::AllowExtraPremComp  );
@@ -401,7 +401,7 @@ void DBDictionary::ascribe_members()
     ascribe("TaxVxInt"            , &DBDictionary::TaxVxInt            );
     ascribe("StatVxQ"             , &DBDictionary::StatVxQ             );
     ascribe("TaxVxQ"              , &DBDictionary::TaxVxQ              );
-    ascribe("DefVxQ"              , &DBDictionary::DefVxQ              );
+    ascribe("DeficVxQ"            , &DBDictionary::DeficVxQ            );
     ascribe("SnflQ"               , &DBDictionary::SnflQ               );
     ascribe("LapseRate"           , &DBDictionary::LapseRate           );
     ascribe("ReqSurpNaar"         , &DBDictionary::ReqSurpNaar         );
@@ -814,11 +814,11 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_TaxVxInt            , 0.0));
     Add(database_entity(DB_StatVxQ             , 0.0));
     Add(database_entity(DB_TaxVxQ              , 0.0));
-    Add(database_entity(DB_DefVxQ              , 0.0));
+    Add(database_entity(DB_DeficVxQ            , 0.0));
     Add(database_entity(DB_SnflQ               , 0.0));
     Add(database_entity(DB_CompTarget          , 0.0));
     Add(database_entity(DB_CompExcess          , 0.0));
-    Add(database_entity(DB_CompChargeBack      , 0.0));
+    Add(database_entity(DB_CompChargeback      , 0.0));
     Add(database_entity(DB_LapseRate           , 0.0));
     Add(database_entity(DB_ReqSurpNaar         , 0.0));
     Add(database_entity(DB_ReqSurpVx           , 0.0));
