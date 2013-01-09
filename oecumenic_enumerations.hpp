@@ -98,7 +98,7 @@ enum oenum_smoking_or_tobacco
 
 enum oenum_waiver_charge_method
     {oe_waiver_times_deductions
-    ,oe_waiver_times_naar
+    ,oe_waiver_times_specamt
     };
 
 #endif // oecumenic_enumerations_hpp
