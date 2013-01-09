@@ -31779,3 +31779,29 @@ loads actually used for calculating current account value makes it
 harder to overlook subtleties. Any 7702-specific load component should
 be handled explicitly--as premium tax is, for now at least.
 
+20130109T1256Z <gchicares@sbcglobal.net> [544]
+
+  dbnames.hpp
+Improve documentation.
+
+20130109T1304Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Improve names of certain database entities.
+
+20130109T1309Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+Clarify by using a more generic table number for unused tables.
+
+20130109T1402Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add numerous database entities for 7702 and 7702A.
+

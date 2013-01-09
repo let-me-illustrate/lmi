@@ -146,9 +146,19 @@ void DBDictionary::ascribe_members()
     ascribe("AllowCvat"           , &DBDictionary::AllowCvat           );
     ascribe("AllowGpt"            , &DBDictionary::AllowGpt            );
     ascribe("AllowNo7702"         , &DBDictionary::AllowNo7702         );
+    ascribe("CorridorWhence"      , &DBDictionary::CorridorWhence      );
+    ascribe("Irc7702NspWhence"    , &DBDictionary::Irc7702NspWhence    );
+    ascribe("SevenPayWhence"      , &DBDictionary::SevenPayWhence      );
     ascribe("CorridorTable"       , &DBDictionary::CorridorTable       );
+    ascribe("Irc7702NspTable"     , &DBDictionary::Irc7702NspTable     );
     ascribe("SevenPayTable"       , &DBDictionary::SevenPayTable       );
     ascribe("Irc7702QTable"       , &DBDictionary::Irc7702QTable       );
+    ascribe("RatingsAffect7702"   , &DBDictionary::RatingsAffect7702   );
+    ascribe("CvatMatChangeDefn"   , &DBDictionary::CvatMatChangeDefn   );
+    ascribe("CorrHidesIncreases"  , &DBDictionary::CorrHidesIncreases  );
+    ascribe("Irc7702BftIsSpecAmt" , &DBDictionary::Irc7702BftIsSpecAmt );
+    ascribe("Initial7702BftIsDb"  , &DBDictionary::Initial7702BftIsDb  );
+    ascribe("Irc7702Endowment"    , &DBDictionary::Irc7702Endowment    );
     ascribe("Equiv7702Dbo3"       , &DBDictionary::Equiv7702Dbo3       );
     ascribe("GuarCoiTable"        , &DBDictionary::GuarCoiTable        );
     ascribe("GuarCoiIsAnnual"     , &DBDictionary::GuarCoiIsAnnual     );
@@ -707,10 +717,15 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AllowCvat           , true));
     Add(database_entity(DB_AllowGpt            , true));
 
-    // This is just a sample product, so we make do with plausible
+    Add(database_entity(DB_CorridorWhence      , 1));
+    Add(database_entity(DB_Irc7702NspWhence    , 2));
+    Add(database_entity(DB_SevenPayWhence      , 1));
+    // This is just a sample product, so make do with plausible
     // all-male seven-pay premiums, and use GPT corridor factors for
-    // CVAT.
+    // CVAT. 'Irc7702NspWhence' specifies that NSP is calculated as
+    // the reciprocal of corridor, so no NSP table is needed.
     Add(database_entity(DB_CorridorTable       , 7));
+    Add(database_entity(DB_Irc7702NspTable     , 0));
     Add(database_entity(DB_SevenPayTable       , 10));
 
     // Following IRS Notice 88-128, use only the male and female
@@ -890,6 +905,12 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_EnforceNaarLimit    , true));
     Add(database_entity(DB_DynamicSepAcctLoad  , false));
     Add(database_entity(DB_SpecAmtLoadLimit    , 10000000.0));
+    Add(database_entity(DB_RatingsAffect7702   , false));
+    Add(database_entity(DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium));
+    Add(database_entity(DB_CorrHidesIncreases  , false));
+    Add(database_entity(DB_Irc7702BftIsSpecAmt , 0));
+    Add(database_entity(DB_Initial7702BftIsDb  , false));
+    Add(database_entity(DB_Irc7702Endowment    , 0));
     Add(database_entity(DB_Equiv7702Dbo3       , 0));
     Add(database_entity(DB_ExpRatRiskCoiMult   , 0));
     Add(database_entity(DB_SurrChgSpecAmtMult  , 0.0));
