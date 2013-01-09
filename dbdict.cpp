@@ -576,6 +576,8 @@ void DBDictionary::InitDB()
 
     Add(database_entity(DB_SpecAmtLoadLimit    , dbl_inf));
     Add(database_entity(DB_DynSepAcctLoadLimit , dbl_inf));
+    Add(database_entity(DB_PremTaxRetalLimit   , dbl_inf));
+    Add(database_entity(DB_WpLimit             , dbl_inf));
     Add(database_entity(DB_AdbLimit            , dbl_inf));
     Add(database_entity(DB_ExpSpecAmtLimit     , dbl_inf));
 

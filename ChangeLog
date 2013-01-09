@@ -31822,3 +31822,8 @@ Rename an entity to improve concinnity. This makes it more obvious
 that DBDictionary::InitDB() dangerously initializes the WP limit to
 zero.
 
+20130109T2330Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+Remove the danger noted 20130109T2317Z, and a congener.
+
