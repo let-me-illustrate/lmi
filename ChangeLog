@@ -31805,3 +31805,20 @@ Clarify by using a more generic table number for unused tables.
   dbnames.xpp
 Add numerous database entities for 7702 and 7702A.
 
+20130109T2233Z <gchicares@sbcglobal.net> [544]
+
+  ihs_avmly.cpp
+  oecumenic_enumerations.hpp
+Correct a misnomer noted 20130104T1731Z.
+
+20130109T2317Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Rename an entity to improve concinnity. This makes it more obvious
+that DBDictionary::InitDB() dangerously initializes the WP limit to
+zero.
+

@@ -740,7 +740,7 @@ void BasicValues::SetPermanentInvariants()
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
     NoLapseMinAge       = static_cast<int>(Database_->Query(DB_NoLapseMinAge));
     AdbLimit            = Database_->Query(DB_AdbLimit             );
-    WpLimit             = Database_->Query(DB_WpMax                );
+    WpLimit             = Database_->Query(DB_WpLimit              );
     SpecAmtLoadLimit    = Database_->Query(DB_SpecAmtLoadLimit     );
     MinWD               = Database_->Query(DB_MinWd                );
     WDFee               = Database_->Query(DB_WdFee                );
