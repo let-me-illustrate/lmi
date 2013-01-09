@@ -34,68 +34,86 @@
 /// See 'dbnames.xpp' for the definition of each entity.
 ///
 /// Partial lexicon:
-///  - Adb   Accidental death benefit
-///  - Acct  Account
-///  - Amort Amortization
-///  - Amt   Amount
-///  - Chg   Charge
-///  - Coi   Cost of insurance
-///  - Comp  Compensation
-///  - Conv  Conversion
-///  - Curr  Current
-///  - Dac   Deferred acquisition cost
-///  - Dbo   Death benefit option
-///  - Decr  Decrease
-///  - Ded   Deduction
-///  - Dur   Duration
-///  - Dyn   Dynamic
-///  - Ea    Expense allowance (SNFL)
-///  - Ee    Employee
-///  - Endt  Endowment
-///  - Er    Employer
-///  - Exc   Excess (over target)
-///  - Exch  Exchange
-///  - Exp   Expense or experience
-///  - Ext   Extended (as in 'extended endowment')
-///  - Fit   Federal income tax
-///  - Gdb   Guaranteed death benefit
-///  - Gen   General (as in 'general account')
-///  - Guar  Guaranteed
-///  - Ibnr  Incurred but not reported (reserve)
-///  - Imf   Investment management fee
-///  - Incr  Increase
-///  - Int   Interest; more rarely, internal
-///  - Irc   Internal revenue code
-///  - Iss   Issue
-///  - Lic   Life insurance company
-///  - MandE Mortality and expense charge
-///  - Max   Maximum
-///  - Mdpt  Midpoint
-///  - Min   Minimum
-///  - Mort  Mortality
-///  - Mult  Multiplier
-///  - Naar  Net amount at risk
-///  - Nlp   Net level premium
-///  - Ny    New York
-///  - Pmt   Payment
-///  - Pol   Policy
-///  - Pref  Preferred
-///  - Prem  Premium
-///  - Q     Death rate
-///  - Reg   Regular or regulation
-///  - Renl  Renewal
-///  - Retal Retaliation
-///  - Rfd   Refund or refundable
-///  - Sep   Separate (as in 'separate account')
-///  - Snfl  Standard nonforfeiture law
-///  - Spec  Specified (as in 'specified amount')
-///  - Tgt   Target
-///  - Uw    Underwriting
-///  - Val   Value
-///  - Vlr   Variable loan rate
-///  - Vx    Reserve
-///  - Wd    Withdrawal
-///  - Wp    Waiver of premium
+///  - Adb     Accidental death benefit
+///  - Acct    Account
+///  - Admin   Administration
+///  - Amort   Amortization or amortized
+///  - Amt     Amount
+///  - Bft     Benefit
+///  - Chg     Charge; more rarely, change (as in 'material change')
+///  - Coi     Cost of insurance
+///  - Comp    Compensation
+///  - Conv    Conversion
+///  - Curr    Current
+///  - Cvat    Cash value accumulation test
+///  - Dac     Deferred acquisition cost
+///  - Db      Death benefit
+///  - Dbo     Death benefit option
+///  - Decr    Decrease
+///  - Ded     Deduction
+///  - Def     Deficiency (as in 'deficiency reserve')
+///  - Defn    Definition
+///  - Dev     Deviation (as in 'standard deviation')
+///  - Dur     Duration
+///  - Dyn     Dynamic
+///  - Ea      Expense allowance (SNFL)
+///  - Ee      Employee
+///  - Endt    Endowment
+///  - Equiv   Equivalent
+///  - Er      Employer
+///  - Exc     Excess (over target)
+///  - Exch    Exchange
+///  - Exp     Expense or experience
+///  - Ext     Extended (as in 'extended endowment')
+///  - Fit     Federal income tax
+///  - Gdb     Guaranteed death benefit
+///  - Gen     General (as in 'general account')
+///  - Gpt     Guideline premium test
+///  - Guar    Guaranteed
+///  - Ibnr    Incurred but not reported (reserve)
+///  - Imf     Investment management fee
+///  - Incr    Increase
+///  - Int     Interest; more rarely, internal
+///  - Irc     Internal revenue code
+///  - Iss     Issue
+///  - Lic     Life insurance company
+///  - MandE   Mortality and expense charge
+///  - Mat     Material (as in 'material change')
+///  - Max     Maximum
+///  - Mdpt    Midpoint
+///  - Min     Minimum
+///  - Mort    Mortality
+///  - Mult    Multiplier
+///  - Naar    Net amount at risk
+///  - Nlp     Net level premium
+///  - Nsp     Net single premium
+///  - Ny      New York
+///  - Pmt     Payment
+///  - Pol     Policy
+///  - Pref    Preferred
+///  - Prem    Premium
+///  - Q       Death rate
+///  - Rat     Rating (as in 'experience rating')
+///  - Reg     Regular or regulation
+///  - Renl    Renewal
+///  - Req     Required (as in 'required surplus')
+///  - Retal   Retaliation
+///  - Rfd     Refund or refundable
+///  - Sep     Separate (as in 'separate account')
+///  - Simp    Simplified (as in 'simplified underwriting')
+///  - Snfl    Standard nonforfeiture law
+///  - Spec    Specified (as in 'specified amount')
+///  - Std     Standard
+///  - Substd  Substandard
+///  - Surp    Surplus
+///  - Surr    Surrender
+///  - Tgt     Target
+///  - Uw      Underwriting
+///  - Val     Value (as in 'account value')
+///  - Vlr     Variable loan rate
+///  - Vx      Reserve
+///  - Wd      Withdrawal
+///  - Wp      Waiver of premium
 
 enum e_database_key
     {DB_FIRST
