@@ -157,10 +157,20 @@ enum e_database_key
         ,DB_AllowGpt
         ,DB_AllowNo7702
 
+        ,DB_CorridorWhence
+        ,DB_Irc7702NspWhence
+        ,DB_SevenPayWhence
         ,DB_CorridorTable
+        ,DB_Irc7702NspTable
         ,DB_SevenPayTable
         ,DB_Irc7702QTable
 
+        ,DB_RatingsAffect7702
+        ,DB_CvatMatChangeDefn
+        ,DB_CorrHidesIncreases
+        ,DB_Irc7702BftIsSpecAmt
+        ,DB_Initial7702BftIsDb
+        ,DB_Irc7702Endowment
         ,DB_Equiv7702Dbo3
 
     ,DB_Topic_MortalityCharges
