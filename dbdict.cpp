@@ -897,9 +897,9 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_AllowChildRider     , false));
 
     // Spouse and child riders unavailable, so it doesn't matter
-    // what table we specify.
-    Add(database_entity(DB_SpouseRiderTable    , 708));
-    Add(database_entity(DB_ChildRiderTable     , 708));
+    // what table is specified.
+    Add(database_entity(DB_SpouseRiderTable    , 0));
+    Add(database_entity(DB_ChildRiderTable     , 0));
 
     Add(database_entity(DB_GenAcctIntBonus     , 0.0));
 
