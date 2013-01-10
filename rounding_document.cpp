@@ -55,6 +55,7 @@ RoundingDocument::RoundingDocument()
     values_["interest_credit"   ] = &rounding_rules_.round_interest_credit_;
     values_["withdrawal"        ] = &rounding_rules_.round_withdrawal_;
     values_["loan"              ] = &rounding_rules_.round_loan_;
+    values_["interest_rate_7702"] = &rounding_rules_.round_interest_rate_7702_;
     values_["corridor_factor"   ] = &rounding_rules_.round_corridor_factor_;
     values_["surrender_charge"  ] = &rounding_rules_.round_surrender_charge_;
     values_["irr"               ] = &rounding_rules_.round_irr_;
@@ -62,7 +63,6 @@ RoundingDocument::RoundingDocument()
     values_["max_specamt"       ] = &rounding_rules_.round_max_specamt_;
     values_["min_premium"       ] = &rounding_rules_.round_min_premium_;
     values_["max_premium"       ] = &rounding_rules_.round_max_premium_;
-    values_["interest_rate_7702"] = &rounding_rules_.round_interest_rate_7702_;
 }
 
 RoundingDocument::~RoundingDocument()

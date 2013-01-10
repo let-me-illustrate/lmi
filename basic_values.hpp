@@ -181,6 +181,7 @@ class LMI_SO BasicValues
     round_to<double> const& round_interest_credit   () const {return round_interest_credit_   ;}
     round_to<double> const& round_withdrawal        () const {return round_withdrawal_        ;}
     round_to<double> const& round_loan              () const {return round_loan_              ;}
+    round_to<double> const& round_interest_rate_7702() const {return round_interest_rate_7702_;}
     round_to<double> const& round_corridor_factor   () const {return round_corridor_factor_   ;}
     round_to<double> const& round_surrender_charge  () const {return round_surrender_charge_  ;}
     round_to<double> const& round_irr               () const {return round_irr_               ;}
@@ -188,7 +189,6 @@ class LMI_SO BasicValues
     round_to<double> const& round_max_specamt       () const {return round_max_specamt_       ;}
     round_to<double> const& round_min_premium       () const {return round_min_premium_       ;}
     round_to<double> const& round_max_premium       () const {return round_max_premium_       ;}
-    round_to<double> const& round_interest_rate_7702() const {return round_interest_rate_7702_;}
 
   protected:
     double GetModalMinPrem
@@ -414,6 +414,7 @@ class LMI_SO BasicValues
     round_to<double> round_interest_credit_   ;
     round_to<double> round_withdrawal_        ;
     round_to<double> round_loan_              ;
+    round_to<double> round_interest_rate_7702_;
     round_to<double> round_corridor_factor_   ;
     round_to<double> round_surrender_charge_  ;
     round_to<double> round_irr_               ;
@@ -421,7 +422,6 @@ class LMI_SO BasicValues
     round_to<double> round_max_specamt_       ;
     round_to<double> round_min_premium_       ;
     round_to<double> round_max_premium_       ;
-    round_to<double> round_interest_rate_7702_;
 };
 
 inline int BasicValues::GetLength() const

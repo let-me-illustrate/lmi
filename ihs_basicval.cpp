@@ -874,6 +874,7 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_interest_credit_   , RoundingRules_->datum("RoundIntCredit"  ));
     set_rounding_rule(round_withdrawal_        , RoundingRules_->datum("RoundWithdrawal" ));
     set_rounding_rule(round_loan_              , RoundingRules_->datum("RoundLoan"       ));
+    set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
     set_rounding_rule(round_corridor_factor_   , RoundingRules_->datum("RoundCorrFactor" ));
     set_rounding_rule(round_surrender_charge_  , RoundingRules_->datum("RoundSurrCharge" ));
     set_rounding_rule(round_irr_               , RoundingRules_->datum("RoundIrr"        ));
@@ -881,7 +882,6 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_max_specamt_       , RoundingRules_->datum("RoundMaxSpecamt" ));
     set_rounding_rule(round_min_premium_       , RoundingRules_->datum("RoundMinPrem"    ));
     set_rounding_rule(round_max_premium_       , RoundingRules_->datum("RoundMaxPrem"    ));
-    set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
 }
 
 /// Establish maximum survivorship duration.
