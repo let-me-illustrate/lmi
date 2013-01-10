@@ -54,7 +54,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>specamt</label>
+                                        <label>Specified amount</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -65,7 +65,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>death benefit</label>
+                                        <label>Death benefit</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -77,7 +77,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>naar</label>
+                                        <label>Net amount at risk</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -89,7 +89,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>coi rate</label>
+                                        <label>COI rate</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -101,7 +101,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>coi charge</label>
+                                        <label>COI charge</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -113,7 +113,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>gross premium</label>
+                                        <label>Gross premium</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -125,7 +125,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>net premium</label>
+                                        <label>Net premium</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -137,7 +137,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>interest rate</label>
+                                        <label>Interest rate</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -149,7 +149,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>interest credit</label>
+                                        <label>Interest credit</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -161,7 +161,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>withdrawal</label>
+                                        <label>Withdrawal</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -189,7 +189,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>loan</label>
+                                        <label>Loan</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -201,7 +201,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>corridor factor</label>
+                                        <label>Corridor factor</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -213,7 +213,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>surrender charge</label>
+                                        <label>Surrender charge</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -225,7 +225,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>irr</label>
+                                        <label>IRR</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -237,7 +237,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>min specamt</label>
+                                        <label>Minimum specified amount</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -249,7 +249,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>max specamt</label>
+                                        <label>Maximum specified amount</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -261,7 +261,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>min premium</label>
+                                        <label>Minimum premium</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -273,7 +273,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>max premium</label>
+                                        <label>Maximum premium</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -285,7 +285,7 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>interest rate 7702</label>
+                                        <label>7702 interest rate</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
