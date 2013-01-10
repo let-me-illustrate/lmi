@@ -145,6 +145,7 @@ class LMI_SO rounding_rules
     rounding_parameters round_interest_credit_   ;
     rounding_parameters round_withdrawal_        ;
     rounding_parameters round_loan_              ;
+    rounding_parameters round_interest_rate_7702_;
     rounding_parameters round_corridor_factor_   ;
     rounding_parameters round_surrender_charge_  ;
     rounding_parameters round_irr_               ;
@@ -152,7 +153,6 @@ class LMI_SO rounding_rules
     rounding_parameters round_max_specamt_       ;
     rounding_parameters round_min_premium_       ;
     rounding_parameters round_max_premium_       ;
-    rounding_parameters round_interest_rate_7702_;
 };
 
 void LMI_SO load(rounding_rules      &, fs::path const&);

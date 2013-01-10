@@ -170,6 +170,18 @@
                                         <size>-1,-1</size>
                                     </object>
                                 </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Loan</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="loan">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
                             </object>
                         </object>
                     </object>
@@ -189,12 +201,12 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
-                                        <label>Loan</label>
+                                        <label>7702 interest rate</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT</flag>
-                                    <object class="RoundingButtons" name="loan">
+                                    <object class="RoundingButtons" name="interest_rate_7702">
                                         <size>-1,-1</size>
                                     </object>
                                 </object>
@@ -279,18 +291,6 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT</flag>
                                     <object class="RoundingButtons" name="max_premium">
-                                        <size>-1,-1</size>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-                                    <object class="wxStaticText">
-                                        <label>7702 interest rate</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT</flag>
-                                    <object class="RoundingButtons" name="interest_rate_7702">
                                         <size>-1,-1</size>
                                     </object>
                                 </object>

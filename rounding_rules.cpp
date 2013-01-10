@@ -158,6 +158,7 @@ rounding_rules::rounding_rules()
     ,round_interest_credit_   (2, r_to_nearest, "")
     ,round_withdrawal_        (2, r_to_nearest, "")
     ,round_loan_              (2, r_to_nearest, "")
+    ,round_interest_rate_7702_(0, r_not_at_all, "")
     ,round_corridor_factor_   (2, r_to_nearest, "")
     ,round_surrender_charge_  (2, r_to_nearest, "")
     ,round_irr_               (5, r_downward  , "")
@@ -165,7 +166,6 @@ rounding_rules::rounding_rules()
     ,round_max_specamt_       (0, r_downward  , "")
     ,round_min_premium_       (2, r_upward    , "")
     ,round_max_premium_       (2, r_downward  , "")
-    ,round_interest_rate_7702_(0, r_not_at_all, "")
 {
     ascribe_members();
 }
@@ -197,11 +197,11 @@ rounding_rules::rounding_rules(std::string const& filename)
 
     load(filename);
 
+    LMI_ASSERT(r_not_at_all == round_interest_rate_7702_.style() || r_upward   == round_interest_rate_7702_.style());
     LMI_ASSERT(r_not_at_all == round_min_specamt_       .style() || r_upward   == round_min_specamt_       .style());
     LMI_ASSERT(r_not_at_all == round_max_specamt_       .style() || r_downward == round_max_specamt_       .style());
     LMI_ASSERT(r_not_at_all == round_min_premium_       .style() || r_upward   == round_min_premium_       .style());
     LMI_ASSERT(r_not_at_all == round_max_premium_       .style() || r_downward == round_max_premium_       .style());
-    LMI_ASSERT(r_not_at_all == round_interest_rate_7702_.style() || r_upward   == round_interest_rate_7702_.style());
 }
 
 rounding_rules::~rounding_rules()
@@ -230,6 +230,7 @@ void rounding_rules::ascribe_members()
     ascribe("RoundIntCredit"  , &rounding_rules::round_interest_credit_   );
     ascribe("RoundWithdrawal" , &rounding_rules::round_withdrawal_        );
     ascribe("RoundLoan"       , &rounding_rules::round_loan_              );
+    ascribe("RoundIntRate7702", &rounding_rules::round_interest_rate_7702_);
     ascribe("RoundCorrFactor" , &rounding_rules::round_corridor_factor_   );
     ascribe("RoundSurrCharge" , &rounding_rules::round_surrender_charge_  );
     ascribe("RoundIrr"        , &rounding_rules::round_irr_               );
@@ -237,7 +238,6 @@ void rounding_rules::ascribe_members()
     ascribe("RoundMaxSpecamt" , &rounding_rules::round_max_specamt_       );
     ascribe("RoundMinPrem"    , &rounding_rules::round_min_premium_       );
     ascribe("RoundMaxPrem"    , &rounding_rules::round_max_premium_       );
-    ascribe("RoundIntRate7702", &rounding_rules::round_interest_rate_7702_);
 }
 
 /// Backward-compatibility serial number of this class's xml version.

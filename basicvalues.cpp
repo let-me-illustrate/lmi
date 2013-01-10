@@ -70,6 +70,7 @@ BasicValues::BasicValues(Input const& input)
     ,round_interest_credit_   (2, r_to_nearest)
     ,round_withdrawal_        (2, r_to_nearest)
     ,round_loan_              (2, r_to_nearest)
+    ,round_interest_rate_7702_(0, r_not_at_all)
     ,round_corridor_factor_   (2, r_to_nearest)
     ,round_surrender_charge_  (2, r_to_nearest)
     ,round_irr_               (5, r_downward  )
@@ -77,7 +78,6 @@ BasicValues::BasicValues(Input const& input)
     ,round_max_specamt_       (0, r_downward  )
     ,round_min_premium_       (2, r_upward    )
     ,round_max_premium_       (2, r_downward  )
-    ,round_interest_rate_7702_(0, r_not_at_all)
 {
     Init();
 }
