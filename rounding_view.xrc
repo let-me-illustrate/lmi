@@ -225,6 +225,30 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
                                     <object class="wxStaticText">
+                                        <label>7702 NSP rate</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="nsp_rate_7702">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Seven-pay rate</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="seven_pay_rate">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
                                         <label>Surrender charge</label>
                                     </object>
                                 </object>

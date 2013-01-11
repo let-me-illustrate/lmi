@@ -57,6 +57,8 @@ RoundingDocument::RoundingDocument()
     values_["loan"              ] = &rounding_rules_.round_loan_              ;
     values_["interest_rate_7702"] = &rounding_rules_.round_interest_rate_7702_;
     values_["corridor_factor"   ] = &rounding_rules_.round_corridor_factor_   ;
+    values_["nsp_rate_7702"     ] = &rounding_rules_.round_nsp_rate_7702_     ;
+    values_["seven_pay_rate"    ] = &rounding_rules_.round_seven_pay_rate_    ;
     values_["surrender_charge"  ] = &rounding_rules_.round_surrender_charge_  ;
     values_["irr"               ] = &rounding_rules_.round_irr_               ;
     values_["min_specamt"       ] = &rounding_rules_.round_min_specamt_       ;
