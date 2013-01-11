@@ -67,6 +67,7 @@ void product_data::WriteProprietaryPolFiles()
     z.TierFilename             = glossed_string("sample.strata");
 
     z.CvatCorridorFilename     = glossed_string("sample");
+    z.Irc7702NspFilename       = glossed_string("sample");
     z.CurrCOIFilename          = glossed_string("qx_cso");
     z.GuarCOIFilename          = glossed_string("qx_cso");
     z.WPFilename               = glossed_string("sample");

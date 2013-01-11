@@ -121,6 +121,19 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
+                                            <label>Irc7702NspFilename</label>
+                                        </object>
+                                        <option>0</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
+                                        <object class="wxTextCtrl" name="Irc7702NspFilename"/>
+                                        <minsize>160,-1</minsize>
+                                        <option>1</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
                                             <label>CurrCOIFilename</label>
                                         </object>
                                         <option>0</option>

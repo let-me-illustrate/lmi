@@ -147,6 +147,7 @@ class LMI_SO product_data
 
     // Names of rate-table files.
     glossed_string CvatCorridorFilename;
+    glossed_string Irc7702NspFilename;
     glossed_string CurrCOIFilename;
     glossed_string GuarCOIFilename;
     glossed_string WPFilename;
