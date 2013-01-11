@@ -219,25 +219,25 @@ rounding_parameters const& rounding_rules::datum(std::string const& name) const
 
 void rounding_rules::ascribe_members()
 {
-    ascribe("RoundSpecAmt"    , &rounding_rules::round_specamt_           );
-    ascribe("RoundDeathBft"   , &rounding_rules::round_death_benefit_     );
-    ascribe("RoundNaar"       , &rounding_rules::round_naar_              );
-    ascribe("RoundCoiRate"    , &rounding_rules::round_coi_rate_          );
-    ascribe("RoundCoiCharge"  , &rounding_rules::round_coi_charge_        );
-    ascribe("RoundGrossPrem"  , &rounding_rules::round_gross_premium_     );
-    ascribe("RoundNetPrem"    , &rounding_rules::round_net_premium_       );
-    ascribe("RoundIntRate"    , &rounding_rules::round_interest_rate_     );
-    ascribe("RoundIntCredit"  , &rounding_rules::round_interest_credit_   );
-    ascribe("RoundWithdrawal" , &rounding_rules::round_withdrawal_        );
-    ascribe("RoundLoan"       , &rounding_rules::round_loan_              );
-    ascribe("RoundIntRate7702", &rounding_rules::round_interest_rate_7702_);
-    ascribe("RoundCorrFactor" , &rounding_rules::round_corridor_factor_   );
-    ascribe("RoundSurrCharge" , &rounding_rules::round_surrender_charge_  );
-    ascribe("RoundIrr"        , &rounding_rules::round_irr_               );
-    ascribe("RoundMinSpecamt" , &rounding_rules::round_min_specamt_       );
-    ascribe("RoundMaxSpecamt" , &rounding_rules::round_max_specamt_       );
-    ascribe("RoundMinPrem"    , &rounding_rules::round_min_premium_       );
-    ascribe("RoundMaxPrem"    , &rounding_rules::round_max_premium_       );
+    ascribe("RoundSpecAmt"     , &rounding_rules::round_specamt_           );
+    ascribe("RoundDeathBft"    , &rounding_rules::round_death_benefit_     );
+    ascribe("RoundNaar"        , &rounding_rules::round_naar_              );
+    ascribe("RoundCoiRate"     , &rounding_rules::round_coi_rate_          );
+    ascribe("RoundCoiCharge"   , &rounding_rules::round_coi_charge_        );
+    ascribe("RoundGrossPrem"   , &rounding_rules::round_gross_premium_     );
+    ascribe("RoundNetPrem"     , &rounding_rules::round_net_premium_       );
+    ascribe("RoundIntRate"     , &rounding_rules::round_interest_rate_     );
+    ascribe("RoundIntCredit"   , &rounding_rules::round_interest_credit_   );
+    ascribe("RoundWithdrawal"  , &rounding_rules::round_withdrawal_        );
+    ascribe("RoundLoan"        , &rounding_rules::round_loan_              );
+    ascribe("RoundIntRate7702" , &rounding_rules::round_interest_rate_7702_);
+    ascribe("RoundCorrFactor"  , &rounding_rules::round_corridor_factor_   );
+    ascribe("RoundSurrCharge"  , &rounding_rules::round_surrender_charge_  );
+    ascribe("RoundIrr"         , &rounding_rules::round_irr_               );
+    ascribe("RoundMinSpecamt"  , &rounding_rules::round_min_specamt_       );
+    ascribe("RoundMaxSpecamt"  , &rounding_rules::round_max_specamt_       );
+    ascribe("RoundMinPrem"     , &rounding_rules::round_min_premium_       );
+    ascribe("RoundMaxPrem"     , &rounding_rules::round_max_premium_       );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
