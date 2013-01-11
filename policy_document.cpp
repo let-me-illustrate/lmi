@@ -46,6 +46,7 @@ PolicyDocument::PolicyDocument()
     values_["DatabaseFilename"        ] = &product_data_.DatabaseFilename        .datum_;
     values_["FundFilename"            ] = &product_data_.FundFilename            .datum_;
     values_["CvatCorridorFilename"    ] = &product_data_.CvatCorridorFilename    .datum_;
+    values_["Irc7702NspFilename"      ] = &product_data_.Irc7702NspFilename      .datum_;
     values_["CurrCOIFilename"         ] = &product_data_.CurrCOIFilename         .datum_;
     values_["GuarCOIFilename"         ] = &product_data_.GuarCOIFilename         .datum_;
     values_["WPFilename"              ] = &product_data_.WPFilename              .datum_;

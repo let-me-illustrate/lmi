@@ -31827,3 +31827,57 @@ zero.
   dbdict.cpp
 Remove the danger noted 20130109T2317Z, and a congener.
 
+20130110T1318Z <gchicares@sbcglobal.net> [544]
+
+  rounding_view.xrc
+Regularize indentation.
+
+20130110T1939Z <gchicares@sbcglobal.net> [544]
+
+  rounding_view.xrc
+Improve labels.
+
+20130110T2352Z <gchicares@sbcglobal.net> [544]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+  rounding_document.cpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view.xrc
+Permute to bring 7702 items together.
+
+20130111T1113Z <gchicares@sbcglobal.net> [544]
+
+  rounding_document.cpp
+Refactor for concinnity.
+
+20130111T1123Z <gchicares@sbcglobal.net> [544]
+
+  ihs_basicval.cpp
+  rounding_document.cpp
+  rounding_rules.cpp
+Reformat.
+
+20130111T1207Z <gchicares@sbcglobal.net> [544]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  rounding_document.cpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view.xrc
+Add rounding rules for 7702 and 7702A premium rates.
+
+20130111T1254Z <gchicares@sbcglobal.net> [544]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+  product_data.cpp
+  product_data.hpp
+Support external 7702 NSP tables.
+
