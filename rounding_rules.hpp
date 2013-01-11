@@ -147,6 +147,8 @@ class LMI_SO rounding_rules
     rounding_parameters round_loan_              ;
     rounding_parameters round_interest_rate_7702_;
     rounding_parameters round_corridor_factor_   ;
+    rounding_parameters round_nsp_rate_7702_     ;
+    rounding_parameters round_seven_pay_rate_    ;
     rounding_parameters round_surrender_charge_  ;
     rounding_parameters round_irr_               ;
     rounding_parameters round_min_specamt_       ;

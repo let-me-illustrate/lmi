@@ -160,6 +160,8 @@ rounding_rules::rounding_rules()
     ,round_loan_              (2, r_to_nearest, "")
     ,round_interest_rate_7702_(0, r_not_at_all, "")
     ,round_corridor_factor_   (2, r_to_nearest, "")
+    ,round_nsp_rate_7702_     (6, r_downward  , "")
+    ,round_seven_pay_rate_    (6, r_downward  , "")
     ,round_surrender_charge_  (2, r_to_nearest, "")
     ,round_irr_               (5, r_downward  , "")
     ,round_min_specamt_       (0, r_upward    , "")
@@ -232,6 +234,8 @@ void rounding_rules::ascribe_members()
     ascribe("RoundLoan"        , &rounding_rules::round_loan_              );
     ascribe("RoundIntRate7702" , &rounding_rules::round_interest_rate_7702_);
     ascribe("RoundCorrFactor"  , &rounding_rules::round_corridor_factor_   );
+    ascribe("RoundNspRate7702" , &rounding_rules::round_nsp_rate_7702_     );
+    ascribe("RoundSevenPayRate", &rounding_rules::round_seven_pay_rate_    );
     ascribe("RoundSurrCharge"  , &rounding_rules::round_surrender_charge_  );
     ascribe("RoundIrr"         , &rounding_rules::round_irr_               );
     ascribe("RoundMinSpecamt"  , &rounding_rules::round_min_specamt_       );

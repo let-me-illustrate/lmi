@@ -183,6 +183,8 @@ class LMI_SO BasicValues
     round_to<double> const& round_loan              () const {return round_loan_              ;}
     round_to<double> const& round_interest_rate_7702() const {return round_interest_rate_7702_;}
     round_to<double> const& round_corridor_factor   () const {return round_corridor_factor_   ;}
+    round_to<double> const& round_nsp_rate_7702     () const {return round_nsp_rate_7702_     ;}
+    round_to<double> const& round_seven_pay_rate    () const {return round_seven_pay_rate_    ;}
     round_to<double> const& round_surrender_charge  () const {return round_surrender_charge_  ;}
     round_to<double> const& round_irr               () const {return round_irr_               ;}
     round_to<double> const& round_min_specamt       () const {return round_min_specamt_       ;}
@@ -416,6 +418,8 @@ class LMI_SO BasicValues
     round_to<double> round_loan_              ;
     round_to<double> round_interest_rate_7702_;
     round_to<double> round_corridor_factor_   ;
+    round_to<double> round_nsp_rate_7702_     ;
+    round_to<double> round_seven_pay_rate_    ;
     round_to<double> round_surrender_charge_  ;
     round_to<double> round_irr_               ;
     round_to<double> round_min_specamt_       ;

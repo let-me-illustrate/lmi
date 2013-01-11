@@ -876,6 +876,8 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_loan_              , RoundingRules_->datum("RoundLoan"        ));
     set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702" ));
     set_rounding_rule(round_corridor_factor_   , RoundingRules_->datum("RoundCorrFactor"  ));
+    set_rounding_rule(round_nsp_rate_7702_     , RoundingRules_->datum("RoundNspRate7702" ));
+    set_rounding_rule(round_seven_pay_rate_    , RoundingRules_->datum("RoundSevenPayRate"));
     set_rounding_rule(round_surrender_charge_  , RoundingRules_->datum("RoundSurrCharge"  ));
     set_rounding_rule(round_irr_               , RoundingRules_->datum("RoundIrr"         ));
     set_rounding_rule(round_min_specamt_       , RoundingRules_->datum("RoundMinSpecamt"  ));
