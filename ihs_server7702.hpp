@@ -38,7 +38,6 @@ extern "C"
 {
     void LMI_SO InitializeServer7702();
     Server7702Output LMI_SO RunServer7702FromStruct(Server7702Input a_Input);
-    void LMI_SO RunServer7702FromString(char* i, char* o);
 }
 
 class Server7702

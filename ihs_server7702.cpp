@@ -47,7 +47,6 @@
 #include <cstdlib>
 #include <exception>
 #include <iostream>
-#include <sstream>
 #include <string>
 
 //============================================================================
@@ -172,35 +171,6 @@ Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
     Server7702 contract(a_Input);
     contract.Process();
     return contract.GetOutput();
-}
-
-//============================================================================
-// Read from C string, and put result in a C string.
-// The caller must allocate sufficient space for the result; at present,
-// that means 444 bytes.
-void RunServer7702FromString(char* i, char* o)
-{
-    EnterServer();
-    Server7702Input input;
-    try
-        {
-        std::istringstream is(i);
-        is >> input;
-        Server7702 contract(input);
-        contract.Process();
-        std::ostringstream os;
-        os << contract.GetOutput();
-        std::strcpy(o, os.str().c_str());
-        }
-    // Catch exceptions that are thrown during input
-    catch(std::exception const& e)
-        {
-        std::cerr << input.UniqueIdentifier << " error: " << e.what() << '\n';
-        }
-    catch(...)
-        {
-        std::cerr << "Untrapped exception" << '\n';
-        }
 }
 
 //============================================================================
