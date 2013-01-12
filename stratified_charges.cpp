@@ -432,9 +432,10 @@ double stratified_charges::tiered_guar_sepacct_load(double assets, double /* pre
 /// pattern in general, with the inadvertent effect of reducing future
 /// compensation on a particular contract.
 ///
-/// TODO ?? Missing:
-///   - "CurrSepAcctLoadBandedByPrem"
-///   - "CurrSepAcctLoadBandedByAssets"
+/// TODO ?? TAXATION !! Missing "CurrSepAcctLoadBandedByAssets".
+/// But "CurrSepAcctLoadBandedByPrem" is deliberately excluded,
+/// because it's not based on assets. Elsewhere, "DB_CurrAcctValLoad"
+/// should be added to the result.
 
 double stratified_charges::minimum_tiered_spread_for_7702() const
 {
