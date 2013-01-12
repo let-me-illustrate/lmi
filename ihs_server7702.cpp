@@ -69,52 +69,10 @@ int main()
 }
 
 //============================================================================
-// TODO ?? It seems this never gets called. Would DllMain() work?
-#ifndef LMI_MSW
-int main()
-#else // LMI_MSW
-extern "C" int LMI_SO __stdcall DllEntryPoint(HINSTANCE, DWORD reason, LPVOID)
-#endif // LMI_MSW
-{
-#ifndef LMI_MSW
-    std::cout << "main() called\n";
-#else // LMI_MSW
-    std::cout << "DllEntryPoint() called\n";
-    switch(reason)
-        {
-        case DLL_PROCESS_ATTACH:
-            {
-            fenv_initialize();
-            InitializeServer7702();
-            std::cout << "DllEntryPoint() called with DLL_PROCESS_ATTACH\n";
-            }
-            break;
-        case DLL_PROCESS_DETACH:
-            {
-            fenv_validate();
-            }
-            break;
-        default:
-            ;   // do nothing
-        }
-#endif // LMI_MSW
-    return true;
-}
-
-//============================================================================
 void EnterServer()
 {
     fenv_initialize();
 }
-
-/* erase
-//============================================================================
-bool LeaveServer()
-{
-    VerifyPrecision();
-    return fenv_validate();
-}
-*/
 
 //============================================================================
 // TODO ?? Should we make the directory an optional argument?
