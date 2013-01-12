@@ -428,11 +428,7 @@ gpt_objects := \
   xml_lmi.o \
   yare_input.o \
 
-libgpt.a libgpt$(SHREXT): EXTRA_LDFLAGS =
-libgpt.a libgpt$(SHREXT): $(gpt_objects)
 gpt_server$(EXEEXT)     : $(gpt_objects)
-
-gpt_so_test$(EXEEXT): ihs_server7702test.o libgpt$(SHREXT)
 
 ################################################################################
 

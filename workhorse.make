@@ -115,9 +115,7 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     elapsed_time$(EXEEXT) \
     generate_passkey$(EXEEXT) \
     gpt_server$(EXEEXT) \
-    gpt_so_test$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
-    libgpt$(SHREXT) \
 
   ifneq (mpatrol,$(findstring mpatrol,$(build_type)))
     default_targets += \
@@ -1218,8 +1216,7 @@ cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 # replaced by a set of '.gpt' files for use with 'make system_test'.
 
 .PHONY: gpt_server_tests
-gpt_server_tests: gpt_server$(EXEEXT) gpt_so_test$(EXEEXT)
-	@cd $(data_dir) && $(CURDIR)/gpt_so_test$(EXEEXT)
+gpt_server_tests: gpt_server$(EXEEXT)
 	@cd $(data_dir) && $(CURDIR)/gpt_server$(EXEEXT) \
 	  <$(test_dir)/gpt_server.test.in \
 	  >$(CURDIR)/gpt_server.test.out
