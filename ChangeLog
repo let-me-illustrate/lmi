@@ -31881,3 +31881,26 @@ Add rounding rules for 7702 and 7702A premium rates.
   product_data.hpp
 Support external 7702 NSP tables.
 
+20130112T1124Z <gchicares@sbcglobal.net> [544]
+
+  stratified_charges.cpp
+Mark and clarify a taxation issue.
+
+20130112T1404Z <gchicares@sbcglobal.net> [544]
+
+  ihs_server7702test.cpp [expunged]
+  objects.make
+  workhorse.make
+Remove a demonstration that's no longer useful.
+
+20130112T1406Z <gchicares@sbcglobal.net> [544]
+
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+Remove code that became dead 20130112T1404Z.
+
+20130112T1437Z <gchicares@sbcglobal.net> [543]
+
+  ihs_server7702.cpp
+Remove dead code.
+
