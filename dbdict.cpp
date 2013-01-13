@@ -155,6 +155,7 @@ void DBDictionary::ascribe_members()
     ascribe("Irc7702QTable"       , &DBDictionary::Irc7702QTable       );
     ascribe("RatingsAffect7702"   , &DBDictionary::RatingsAffect7702   );
     ascribe("CvatMatChangeDefn"   , &DBDictionary::CvatMatChangeDefn   );
+    ascribe("GptMatChangeDefn"    , &DBDictionary::GptMatChangeDefn    );
     ascribe("CorrHidesIncreases"  , &DBDictionary::CorrHidesIncreases  );
     ascribe("Irc7702BftIsSpecAmt" , &DBDictionary::Irc7702BftIsSpecAmt );
     ascribe("Initial7702BftIsDb"  , &DBDictionary::Initial7702BftIsDb  );
@@ -906,6 +907,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_SpecAmtLoadLimit    , 10000000.0));
     Add(database_entity(DB_RatingsAffect7702   , false));
     Add(database_entity(DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium));
+    Add(database_entity(DB_GptMatChangeDefn    , 0));
     Add(database_entity(DB_CorrHidesIncreases  , false));
     Add(database_entity(DB_Irc7702BftIsSpecAmt , 0));
     Add(database_entity(DB_Initial7702BftIsDb  , false));
