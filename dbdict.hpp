@@ -130,6 +130,7 @@ class LMI_SO DBDictionary
     database_entity Irc7702QTable       ;
     database_entity RatingsAffect7702   ;
     database_entity CvatMatChangeDefn   ;
+    database_entity GptMatChangeDefn    ;
     database_entity CorrHidesIncreases  ;
     database_entity Irc7702BftIsSpecAmt ;
     database_entity Initial7702BftIsDb  ;

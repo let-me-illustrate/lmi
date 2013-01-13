@@ -31904,3 +31904,11 @@ Remove code that became dead 20130112T1404Z.
   ihs_server7702.cpp
 Remove dead code.
 
+20130113T1250Z <gchicares@sbcglobal.net> [543]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add another database entity for 7702A.
+
