@@ -1,6 +1,6 @@
 // Calendar dates--unit test.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -55,6 +55,7 @@ struct CalendarDateTest
         TestYearAndMonthDifferenceExhaustively();
         TestBirthdateLimits();
         TestBirthdateLimitsExhaustively(oe_age_last_birthday);
+        TestBirthdateLimitsExhaustively(oe_age_nearest_birthday_ties_younger);
         TestBirthdateLimitsExhaustively(oe_age_nearest_birthday_ties_older);
         TestIo();
         TestSpeed();
@@ -460,94 +461,150 @@ void CalendarDateTest::TestAgeCalculations()
     calendar_date birth_date;
 
     birth_date     = calendar_date(1958,  7,  2);
-    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(44, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     // If birthdate is one day later, then ANB is one year less.
 
     birth_date     = calendar_date(1958,  7,  3);
-    BOOST_TEST_EQUAL(44, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(44, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(44, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(44, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     // In a leap year, effective date can be an equal number of days
-    // away from the two birthdays that bracket it. We arbitrarily
-    // choose the higher age in this case for ANB, although we might
-    // equally well choose the lower age.
+    // away from the two birthdays that bracket it. For ANB, either
+    // the older or the younger age is chosen, depending on the value
+    // of the oenum_alb_or_anb argument.
     //
-    // Thus, if
+    // Thus, suppose
     //   1958-07-02 is my birthdate
     //   2004-01-01 is the effective date (in a leap year)
     // Counting the days,
     //   2003-07-02, my age-45 birthday, is 183 days away
     //   2004-07-02, my age-46 birthday, is 183 days away
-    // so I'm forty-six (ANB) under this arbitrary choice, although an
-    // equally good argument could be made that I'm forty-five.
+    // so I'm forty-six (ANB) if ties are resolved to the older age,
+    // or forty-five (ANB) if ties are resolved to the younger age.
 
     effective_date = calendar_date(2004,  1,  1);
 
     birth_date     = calendar_date(1958,  7,  2);
-    BOOST_TEST_EQUAL(46, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(46, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     // If birthdate is one day earlier,
     // then ANB is unambiguously forty-six.
 
     birth_date     = calendar_date(1958,  7,  1);
-    BOOST_TEST_EQUAL(46, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(46, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(46, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     // If birthdate is one day later,
     // then ANB is unambiguously forty-five.
 
     birth_date     = calendar_date(1958,  7,  3);
-    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     // Test leap-year-day birthdate.
+    //
+    // If I was born on a leap-year day in the last millenium, then I
+    // have birthdays on
+    //   2003-03-01
+    //   2004-02-29 (365 days later)
+    //   2005-03-01 (366 days later)
+    // Then
+    //   2004-08-30
+    // is equidistant between those last two birthdays, and on that
+    // date my age (ANB) depends on how ties are resolved. On similar
+    // dates in non-leap years, ties cannot occur.
 
     birth_date     = calendar_date(1956,  2, 29);
 
     effective_date = calendar_date(2003,  8, 30);
-    BOOST_TEST_EQUAL(47, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(47, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(47, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(47, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     effective_date = calendar_date(2003,  8, 31);
-    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(47, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     effective_date = calendar_date(2004,  2, 28);
-    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(47, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     effective_date = calendar_date(2004,  2, 29);
-    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     effective_date = calendar_date(2004,  3,  1);
-    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
+
+    effective_date = calendar_date(2004,  8, 29);
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
+
+    effective_date = calendar_date(2004,  8, 30);
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
+
+    effective_date = calendar_date(2004,  8, 31);
+    BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     effective_date = calendar_date(2005,  2, 28);
-    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(48, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     effective_date = calendar_date(2005,  3,  1);
-    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(49, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
-    // Test leap-year-day effective date, even though business custom
-    // would probably forbid using it as the basis for a series of
-    // annual transactions.
+    // Test leap-year-day effective date. Business custom would forbid
+    // using it as the basis for a series of annual transactions, yet
+    // ill-advised exceptions are occasionally made to sound rules.
+    //
+    // If I was born on August thirtieth in the last millenium, then I
+    // have birthdays on
+    //   2003-08-30
+    //   2004-08-30 (366 days later)
+    //   2005-08-30 (365 days later)
+    // Then
+    //   2004-02-29
+    // is equidistant between those first two birthdays, and on that
+    // date my age (ANB) depends on how ties are resolved. On similar
+    // dates in non-leap years, ties cannot occur.
 
     effective_date = calendar_date(2004,  2, 29);
 
-    birth_date     = calendar_date(1958,  8, 30);
-    BOOST_TEST_EQUAL(46, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
+    birth_date     = calendar_date(1958,  8, 29);
     BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(46, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(46, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
+
+    birth_date     = calendar_date(1958,  8, 30);
+    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(46, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     birth_date     = calendar_date(1958,  8, 31);
-    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
     BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_last_birthday));
+    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_younger));
+    BOOST_TEST_EQUAL(45, attained_age(birth_date, effective_date, oe_age_nearest_birthday_ties_older));
 
     // Effective date mustn't precede birthdate--this should throw:
     birth_date     = calendar_date(2003,  1,  2);
@@ -758,6 +815,8 @@ void CalendarDateTest::TestYearAndMonthDifferenceExhaustively()
 
 void CalendarDateTest::TestBirthdateLimits()
 {
+    // Test extrema.
+
     BOOST_TEST_EQUAL
         (minimum_birthdate(99, calendar_date(1852,  9, 13), oe_age_last_birthday)
         ,                      calendar_date(1752,  9, 14)
@@ -775,6 +834,31 @@ void CalendarDateTest::TestBirthdateLimits()
         (maximum_birthdate( 0, calendar_date(9999, 12, 31), oe_age_last_birthday)
         ,                      calendar_date(9999, 12, 31)
         );
+
+    // Test ANB limits, including equidistant birthdate candidates,
+    // resolving ties to the younger age.
+
+    BOOST_TEST_EQUAL
+        (minimum_birthdate(44, calendar_date(2003,  1,  1), oe_age_nearest_birthday_ties_younger)
+        ,                      calendar_date(1958,  7,  3)
+        );
+    BOOST_TEST_EQUAL
+        (maximum_birthdate(45, calendar_date(2003,  1,  1), oe_age_nearest_birthday_ties_younger)
+        ,                      calendar_date(1958,  7,  2)
+        );
+
+    BOOST_TEST_EQUAL
+        (minimum_birthdate(45, calendar_date(2004,  1,  1), oe_age_nearest_birthday_ties_younger)
+        ,                      calendar_date(1958,  7,  2)
+        );
+    BOOST_TEST_EQUAL
+        (maximum_birthdate(46, calendar_date(2004,  1,  1), oe_age_nearest_birthday_ties_younger)
+        ,                      calendar_date(1958,  7,  1)
+        );
+
+    // Repeat the ANB tests, resolving ties to the older age.
+    // As expected, results change only in the "equidistant" case
+    // (which can arise only in a leap year).
 
     BOOST_TEST_EQUAL
         (minimum_birthdate(44, calendar_date(2003,  1,  1), oe_age_nearest_birthday_ties_older)

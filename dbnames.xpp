@@ -1,6 +1,6 @@
 // Database entity names.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -36,7 +36,7 @@
 {DB_AllowPreferredClass,DB_Topic_Underwriting,"AllowPreferredClass","Allow preferred class: 0=no, 1=yes",}, \
 {DB_AllowUltraPrefClass,DB_Topic_Underwriting,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
 {DB_AllowSubstdTable,DB_Topic_Underwriting,"AllowSubstdTable","Allow substandard table ratings: 0=no, 1=yes",}, \
-{DB_AllowFlatExtras,DB_Topic_Underwriting,"AllowFlatExtras","Allow substandard flat extra ratings: 0=no, 1=yes",}, \
+{DB_AllowFlatExtras,DB_Topic_Underwriting,"AllowFlatExtras","Allow flat extra ratings: 0=no, 1=yes",}, \
 {DB_AllowRatedWp,DB_Topic_Underwriting,"AllowRatedWp","Waiver benefit can be rated: 0=no, 1=yes",}, \
 {DB_AllowRatedAdb,DB_Topic_Underwriting,"AllowRatedAdb","Accidental death benefit can be rated: 0=no, 1=yes",}, \
 {DB_AllowRatedTerm,DB_Topic_Underwriting,"AllowRatedTerm","Term rider can be rated: 0=no, 1=yes",}, \
@@ -53,10 +53,20 @@
 {DB_AllowCvat,DB_Topic_7702And7702A,"AllowCvat","Allow cash value accumulation test: 0=no, 1=yes",}, \
 {DB_AllowGpt,DB_Topic_7702And7702A,"AllowGpt","Allow guideline premium test: 0=no, 1=yes",}, \
 {DB_AllowNo7702,DB_Topic_7702And7702A,"AllowNo7702","Allow 7702 to be ignored (foreign): 0=no, 1=yes",}, \
-{DB_CorridorTable,DB_Topic_7702And7702A,"CorridorTable","Cash value accumulation test 'corridor' factor (index in mortality table database)",}, \
-{DB_SevenPayTable,DB_Topic_7702And7702A,"SevenPayTable","7702A table of annual seven-pay premium rates per $1 (index in mortality table database)",}, \
+{DB_CorridorWhence,DB_Topic_7702And7702A,"CorridorWhence","Source of CVAT 'corridor' factors: 0=first principles, 1=table",}, \
+{DB_Irc7702NspWhence,DB_Topic_7702And7702A,"Irc7702NspWhence","Source of 7702 and 7702A net single premium rates: 0=first principles, 1=table, 2=reciprocal of CVAT corridor",}, \
+{DB_SevenPayWhence,DB_Topic_7702And7702A,"SevenPayWhence","Source of 7702A seven-pay premium rates: 0=first principles, 1=table",}, \
+{DB_CorridorTable,DB_Topic_7702And7702A,"CorridorTable","CVAT 'corridor' factors (index in mortality table database)",}, \
+{DB_Irc7702NspTable,DB_Topic_7702And7702A,"Irc7702NspTable","7702 and 7702A net single premium rates per $1 (index in mortality table database)",}, \
+{DB_SevenPayTable,DB_Topic_7702And7702A,"SevenPayTable","7702A annual seven-pay premium rates per $1 (index in mortality table database)",}, \
 {DB_Irc7702QTable,DB_Topic_7702And7702A,"Irc7702QTable","7702 and 7702A annual mortality rate (index in mortality table database)",}, \
-{DB_PremLoad7702,DB_Topic_7702And7702A,"PremLoad7702","Premium load for 7702 and 7702A (may be lower than current premium load for simplicity)",}, \
+{DB_RatingsAffect7702,DB_Topic_7702And7702A,"RatingsAffect7702","Flat extras and table ratings affect 7702 and 7702A calculations: 0=no, 1=yes",}, \
+{DB_CvatMatChangeDefn,DB_Topic_7702And7702A,"CvatMatChangeDefn","Definition of 7702A material change for CVAT: 0=unnec prem, 1=increase, 2=increase after unnec prem, 3=any unnec prem or increase",}, \
+{DB_GptMatChangeDefn,DB_Topic_7702And7702A,"GptMatChangeDefn","Definition of 7702A material change for GPT: 0=any adjustment event, 1=any adjustment event that increases the guideline limit",}, \
+{DB_CorrHidesIncreases,DB_Topic_7702And7702A,"CorrHidesIncreases","For 7702 and 7702A, ignore specified-amount increases that don't affect DB due to corridor: 0=no, 1=yes",}, \
+{DB_Irc7702BftIsSpecAmt,DB_Topic_7702And7702A,"Irc7702BftIsSpecAmt","7702(f)(3) 'death benefit' is specamt rather than DB: 0=no, 1=yes",}, \
+{DB_Initial7702BftIsDb,DB_Topic_7702And7702A,"Initial7702BftIsDb","For DBO 2, riskily reflect 1035 and initial payment in initial 7702(f)(3) 'death benefit': 0=no, 1=yes",}, \
+{DB_Irc7702Endowment,DB_Topic_7702And7702A,"Irc7702Endowment","7702(e)(1)(D) endowment amount for 7702 and 7702A calculations: 0=specamt, 1=initial specamt (LDB), 2=none",}, \
 {DB_Equiv7702Dbo3,DB_Topic_7702And7702A,"Equiv7702Dbo3","For 7702, treat return of premium death benefit option same as: 0=level 1=increasing",}, \
 {DB_Topic_MortalityCharges,DB_FIRST,"Mortality charges","Mortality rates, limits, conversions, and reentry",}, \
 {DB_GuarCoiTable,DB_Topic_MortalityCharges,"GuarCoiTable","Guaranteed mortality charge table (index in mortality table database)",}, \
@@ -194,7 +204,8 @@
 {DB_TermTable,DB_Topic_Riders,"TermTable","Term rider current mortality charge table (index in mortality table database)",}, \
 {DB_TermMinIssAge,DB_Topic_Riders,"TermMinIssAge","Term rider minimum issue age",}, \
 {DB_TermMaxIssAge,DB_Topic_Riders,"TermMaxIssAge","Term rider maximum issue age",}, \
-{DB_TermForcedConvAge,DB_Topic_Riders,"TermForcedConvAge","Age at which term rider converts to base policy with no positive election required",}, \
+{DB_TermForcedConvAge,DB_Topic_Riders,"TermForcedConvAge","Minimum age at which term rider converts to base policy with no positive election required",}, \
+{DB_TermForcedConvDur,DB_Topic_Riders,"TermForcedConvDur","Minimum number of years after which term rider converts to base policy with no positive election required",}, \
 {DB_MaxTermProportion,DB_Topic_Riders,"MaxTermProportion","Term rider as maximum proportion of total coverage [not yet implemented]",}, \
 {DB_TermCoiRate,DB_Topic_Riders,"TermCoiRate","[not yet implemented--use external table instead]",}, \
 {DB_TermPremRate,DB_Topic_Riders,"TermPremRate","[not yet implemented--use external table instead]",}, \
@@ -204,7 +215,7 @@
 {DB_WpTable,DB_Topic_Riders,"WpTable","Waiver benefit charge (index in mortality table database)",}, \
 {DB_WpMinIssAge,DB_Topic_Riders,"WpMinIssAge","Waiver benefit minimum issue age",}, \
 {DB_WpMaxIssAge,DB_Topic_Riders,"WpMaxIssAge","Waiver benefit maximum issue age",}, \
-{DB_WpMax,DB_Topic_Riders,"WpMax","Maximum specified amount to which waiver benefit can apply",}, \
+{DB_WpLimit,DB_Topic_Riders,"WpLimit","Maximum specified amount to which waiver benefit can apply",}, \
 {DB_WpCoiRate,DB_Topic_Riders,"WpCoiRate","[not yet implemented--use external table instead]",}, \
 {DB_WpPremRate,DB_Topic_Riders,"WpPremRate","[not yet implemented--use external table instead]",}, \
 {DB_WpChargeMethod,DB_Topic_Riders,"WpChargeMethod","Waiver benefit charge is multiple of: 0=monthly deductions, 1=NAAR",}, \
@@ -216,9 +227,15 @@
 {DB_AdbCoiRate,DB_Topic_Riders,"AdbCoiRate","[not yet implemented--use external table instead]",}, \
 {DB_AdbPremRate,DB_Topic_Riders,"AdbPremRate","[not yet implemented--use external table instead]",}, \
 {DB_AllowSpouseRider,DB_Topic_Riders,"AllowSpouseRider","Allow spouse rider: 0=no, 1=yes",}, \
+{DB_SpouseRiderMinAmt,DB_Topic_Riders,"SpouseRiderMinAmt","Spouse rider minimum amount",}, \
+{DB_SpouseRiderMaxAmt,DB_Topic_Riders,"SpouseRiderMaxAmt","Spouse rider maximum amount",}, \
+{DB_SpouseRiderMinIssAge,DB_Topic_Riders,"SpouseRiderMinIssAge","Spouse rider minimum issue age",}, \
+{DB_SpouseRiderMaxIssAge,DB_Topic_Riders,"SpouseRiderMaxIssAge","Spouse rider maximum issue age",}, \
 {DB_SpouseRiderGuarTable,DB_Topic_Riders,"SpouseRiderGuarTable","Spouse rider guaranteed charge table (index in mortality table database)",}, \
 {DB_SpouseRiderTable,DB_Topic_Riders,"SpouseRiderTable","Spouse rider current charge table (index in mortality table database)",}, \
 {DB_AllowChildRider,DB_Topic_Riders,"AllowChildRider","Allow child rider: 0=no, 1=yes",}, \
+{DB_ChildRiderMinAmt,DB_Topic_Riders,"ChildRiderMinAmt","Child rider minimum amount",}, \
+{DB_ChildRiderMaxAmt,DB_Topic_Riders,"ChildRiderMaxAmt","Child rider maximum amount",}, \
 {DB_ChildRiderTable,DB_Topic_Riders,"ChildRiderTable","Child rider charge table (index in mortality table database)",}, \
 {DB_Topic_Withdrawals,DB_FIRST,"Withdrawals","Withdrawal fees, options, and restrictions; effect on specified amount",}, \
 {DB_AllowWd,DB_Topic_Withdrawals,"AllowWd","Allow withdrawals: 0=no, 1=yes",}, \
@@ -226,12 +243,13 @@
 {DB_WdFeeRate,DB_Topic_Withdrawals,"WdFeeRate","Maximum fee per withdrawal as percent of net withdrawal",}, \
 {DB_FreeWdProportion,DB_Topic_Withdrawals,"FreeWdProportion","Yearly free partial surrender as a proportion of account value",}, \
 {DB_MinWd,DB_Topic_Withdrawals,"MinWd","Minimum withdrawal amount",}, \
-{DB_MaxWdAcctValMult,DB_Topic_Withdrawals,"MaxWdAcctValMult","Maximum withdrawal as proportion of account value, e.g. 1=100%",}, \
+{DB_MaxWdGenAcctValMult,DB_Topic_Withdrawals,"MaxWdGenAcctValMult","Maximum withdrawal as proportion of general-account value, e.g. 1=100%",}, \
+{DB_MaxWdSepAcctValMult,DB_Topic_Withdrawals,"MaxWdSepAcctValMult","Maximum withdrawal as proportion of separate-account value, e.g. 1=100%",}, \
 {DB_MaxWdDed,DB_Topic_Withdrawals,"MaxWdDed","Monthiversary deductions reflected in maximum withdrawal: 0=12 times most recent, 1=to next anniversary, 2=to next modal premium due date, 3=18 times most recent",}, \
 {DB_WdCanDecrSpecAmtDbo1,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo1","Withdrawals decrease specified amount for level death benefit option",}, \
 {DB_WdCanDecrSpecAmtDbo2,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo2","Withdrawals decrease specified amount for increasing death benefit option",}, \
 {DB_WdCanDecrSpecAmtDbo3,DB_Topic_Withdrawals,"WdCanDecrSpecAmtDbo3","Withdrawals decrease specified amount for return of premium death benefit option",}, \
-{DB_FirstWdYear,DB_Topic_Withdrawals,"FirstWdYear","Number of years withdrawals not allowed [not supported yet; should be months instead]",}, \
+{DB_FirstWdMonth,DB_Topic_Withdrawals,"FirstWdMonth","Number of months withdrawals not allowed [not supported yet]",}, \
 {DB_Topic_Loans,DB_FIRST,"Loans","Loan rates, spreads, options, and restrictions",}, \
 {DB_AllowLoan,DB_Topic_Loans,"AllowLoan","Allow loans: 0=no, 1=yes",}, \
 {DB_AllowPrefLoan,DB_Topic_Loans,"AllowPrefLoan","Preferred loans permitted: 0=no, 1=yes [preferred loans not yet supported]",}, \
@@ -246,7 +264,7 @@
 {DB_GuarRegLoanSpread,DB_Topic_Loans,"GuarRegLoanSpread","Guaranteed interest spread for regular loans",}, \
 {DB_CurrPrefLoanSpread,DB_Topic_Loans,"CurrPrefLoanSpread","Current interest spread for preferred loans [preferred loans not yet supported]",}, \
 {DB_CurrRegLoanSpread,DB_Topic_Loans,"CurrRegLoanSpread","Current interest spread for regular loans",}, \
-{DB_FirstLoanYear,DB_Topic_Loans,"FirstLoanYear","Number of years loans not allowed [not supported yet; should be months instead]",}, \
+{DB_FirstLoanMonth,DB_Topic_Loans,"FirstLoanMonth","Number of months loans not allowed [not supported yet]",}, \
 {DB_Topic_Premiums,DB_FIRST,"Premiums","Minimum and target premiums",}, \
 {DB_MinPremType,DB_Topic_Premiums,"MinPremType","Minimum premium: 0=based on monthly deductions, 1=7702A seven-pay premium",}, \
 {DB_MinPremIntSpread,DB_Topic_Premiums,"MinPremIntSpread","Interest spread from general-account rate used to capitalize monthly deductions for minimum premium calculation",}, \
@@ -274,7 +292,7 @@
 {DB_Topic_Compensation,DB_FIRST,"Compensation","Commissions, asset-based compensation, and chargebacks",}, \
 {DB_CompTarget,DB_Topic_Compensation,"CompTarget","Producer-only compensation on premium up to target",}, \
 {DB_CompExcess,DB_Topic_Compensation,"CompExcess","Producer-only compensation on premium in excess of target",}, \
-{DB_CompChargeBack,DB_Topic_Compensation,"CompChargeBack","Compensation chargeback for early termination",}, \
+{DB_CompChargeback,DB_Topic_Compensation,"CompChargeback","Compensation chargeback for early termination",}, \
 {DB_AssetComp,DB_Topic_Compensation,"AssetComp","Producer-only compensation on separate-account assets--not tiered by assets",}, \
 {DB_AllowExtraAssetComp,DB_Topic_Compensation,"AllowExtraAssetComp","Allow input extra asset-based compensation: 0=no, 1=yes",}, \
 {DB_AllowExtraPremComp,DB_Topic_Compensation,"AllowExtraPremComp","Allow input extra premium-based compensation: 0=no, 1=yes",}, \
@@ -320,7 +338,7 @@
 {DB_TaxVxInt,DB_Topic_Reserves,"TaxVxInt","Tax reserve annual interest rate [not yet implemented]",}, \
 {DB_StatVxQ,DB_Topic_Reserves,"StatVxQ","[not used]",}, \
 {DB_TaxVxQ,DB_Topic_Reserves,"TaxVxQ","[not used]",}, \
-{DB_DefVxQ,DB_Topic_Reserves,"DefVxQ","[not used]",}, \
+{DB_DeficVxQ,DB_Topic_Reserves,"DeficVxQ","[not used]",}, \
 {DB_SnflQ,DB_Topic_Reserves,"SnflQ","[not used]",}, \
 {DB_Topic_OtherAssumptions,DB_FIRST,"Other assumptions","Other assumptions [not yet implemented]",}, \
 {DB_LapseRate,DB_Topic_OtherAssumptions,"LapseRate","Lapse rate [not yet implemented]",}, \

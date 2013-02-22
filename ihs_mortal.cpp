@@ -1,6 +1,6 @@
 // Mortality rates.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -31,9 +31,9 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
-#include "math_functors.hpp"
+#include "math_functors.hpp"            // assign_midpoint()
 
-#include <algorithm>
+#include <algorithm>                    // std::min()
 #include <functional>
 
 //============================================================================
@@ -80,27 +80,9 @@ void MortalityRates::initialize()
         MakeCoiRateSubstandard(MonthlyGuaranteedCoiRates_);
         }
 
-    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand0_.size());
-    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand1_.size());
-    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand2_.size());
-    for(int j = 0; j < Length_; ++j)
-        {
-        // Here we take midpoint as average of monthly curr and guar.
-        // Other approaches are possible.
-        // TODO ?? Use mean() instead.
-        MonthlyMidpointCoiRatesBand0_.push_back
-            (  0.5
-            * (MonthlyCurrentCoiRatesBand0_[j] + MonthlyGuaranteedCoiRates_[j])
-            );
-        MonthlyMidpointCoiRatesBand1_.push_back
-            (  0.5
-            * (MonthlyCurrentCoiRatesBand1_[j] + MonthlyGuaranteedCoiRates_[j])
-            );
-        MonthlyMidpointCoiRatesBand2_.push_back
-            (  0.5
-            * (MonthlyCurrentCoiRatesBand2_[j] + MonthlyGuaranteedCoiRates_[j])
-            );
-        }
+    assign_midpoint(MonthlyMidpointCoiRatesBand0_, MonthlyGuaranteedCoiRates_, MonthlyCurrentCoiRatesBand0_);
+    assign_midpoint(MonthlyMidpointCoiRatesBand1_, MonthlyGuaranteedCoiRates_, MonthlyCurrentCoiRatesBand1_);
+    assign_midpoint(MonthlyMidpointCoiRatesBand2_, MonthlyGuaranteedCoiRates_, MonthlyCurrentCoiRatesBand2_);
 
 /*
     input from database and input classes
@@ -222,20 +204,7 @@ void MortalityRates::SetOtherRates()
         {
         MakeCoiRateSubstandard(MonthlyCurrentTermCoiRates_);
         MakeCoiRateSubstandard(MonthlyGuaranteedTermCoiRates_);
-
-        LMI_ASSERT(0 == MonthlyMidpointTermCoiRates_.size());
-        for(int j = 0; j < Length_; ++j)
-            {
-            // Here we take midpoint as average of monthly curr and guar.
-            // Other approaches are possible.
-            // TODO ?? Use mean() instead.
-            MonthlyMidpointTermCoiRates_.push_back
-                (   0.5
-                *   (   MonthlyCurrentTermCoiRates_[j]
-                    +   MonthlyGuaranteedTermCoiRates_[j]
-                    )
-                );
-            }
+        assign_midpoint(MonthlyMidpointTermCoiRates_, MonthlyGuaranteedTermCoiRates_, MonthlyCurrentTermCoiRates_);
         }
     else
         {
@@ -244,32 +213,20 @@ void MortalityRates::SetOtherRates()
 
     if(AllowAdb_)
         {
-// TODO ?? No substandard support yet for this rider.
+// SOMEDAY !! Add substandard support for this rider (blocked upstream for now).
 //        MakeCoiRateSubstandard(AdbRates_);
         }
 
     if(AllowWp_)
         {
-// TODO ?? No substandard support yet for this rider.
+// SOMEDAY !! Add substandard support for this rider (blocked upstream for now).
 //        MakeCoiRateSubstandard(WpRates_);
         }
 
     if(AllowSpouse_)
         {
         // Spouse rider can't be substandard--spouse not underwritten.
-        LMI_ASSERT(0 == MidpointSpouseRiderRates_.size());
-        for(int j = 0; j < Length_; ++j)
-            {
-            // Here we take midpoint as average of monthly curr and guar.
-            // Other approaches are possible.
-            // TODO ?? Use mean() instead.
-            MidpointSpouseRiderRates_.push_back
-                (   0.5
-                *   (   CurrentSpouseRiderRates_[j]
-                    +   GuaranteedSpouseRiderRates_[j]
-                    )
-                );
-            }
+        assign_midpoint(MidpointSpouseRiderRates_, GuaranteedSpouseRiderRates_, CurrentSpouseRiderRates_);
         }
     else
         {
@@ -279,6 +236,7 @@ void MortalityRates::SetOtherRates()
     if(AllowChild_)
         {
         // Child rider can't be substandard--child not underwritten.
+        // Midpoint needn't be calculated--guaranteed equals current.
         }
 
     if(IsTgtPremTabular_)
@@ -311,7 +269,7 @@ void MortalityRates::MakeCoiRateSubstandard
     if(!(AllowFlatExtras_ || AllowSubstdTable_))
         {
         fatal_error()
-            << "Substandard not available for this policy form."
+            << "Flat extras and table ratings not permitted."
             << LMI_FLUSH
             ;
         }

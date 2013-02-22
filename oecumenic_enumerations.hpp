@@ -1,6 +1,6 @@
 // Enumerative types used sparsim across subsystems.
 //
-// Copyright (C) 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -32,6 +32,7 @@ enum {methuselah = 969};
 
 enum oenum_alb_or_anb
     {oe_age_last_birthday
+    ,oe_age_nearest_birthday_ties_younger
     ,oe_age_nearest_birthday_ties_older
     };
 
@@ -97,7 +98,7 @@ enum oenum_smoking_or_tobacco
 
 enum oenum_waiver_charge_method
     {oe_waiver_times_deductions
-    ,oe_waiver_times_naar
+    ,oe_waiver_times_specamt
     };
 
 #endif // oecumenic_enumerations_hpp

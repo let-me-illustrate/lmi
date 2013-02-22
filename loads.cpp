@@ -1,6 +1,6 @@
 // Loads and expense charges.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -35,12 +35,9 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "et_vector.hpp"
-#include "math_functors.hpp"
-#include "mc_enum_types_aux.hpp" // mc_n_ enumerators
+#include "math_functors.hpp"            // assign_midpoint()
+#include "mc_enum_types_aux.hpp"        // mc_n_ enumerators
 #include "premium_tax.hpp"
-
-#include <algorithm>
-#include <functional>
 
 /// Ctor for unit testing.
 
@@ -303,20 +300,18 @@ void Loads::Calculate(load_details const& details)
             }
         }
 
-    // Calculate midpoint as mean of current and guaranteed.
-    // A different average might be used instead.
     if(details.NeedMidpointRates_)
         {
-        assign(monthly_policy_fee_   [mce_gen_mdpt], apply_binary(mean<double>(), monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]));
-        assign(annual_policy_fee_    [mce_gen_mdpt], apply_binary(mean<double>(), annual_policy_fee_    [mce_gen_guar], annual_policy_fee_    [mce_gen_curr]));
-        assign(specified_amount_load_[mce_gen_mdpt], apply_binary(mean<double>(), specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]));
-        assign(separate_account_load_[mce_gen_mdpt], apply_binary(mean<double>(), separate_account_load_[mce_gen_guar], separate_account_load_[mce_gen_curr]));
-        assign(target_premium_load_  [mce_gen_mdpt], apply_binary(mean<double>(), target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]));
-        assign(excess_premium_load_  [mce_gen_mdpt], apply_binary(mean<double>(), excess_premium_load_  [mce_gen_guar], excess_premium_load_  [mce_gen_curr]));
-        assign(target_sales_load_    [mce_gen_mdpt], apply_binary(mean<double>(), target_sales_load_    [mce_gen_guar], target_sales_load_    [mce_gen_curr]));
-        assign(excess_sales_load_    [mce_gen_mdpt], apply_binary(mean<double>(), excess_sales_load_    [mce_gen_guar], excess_sales_load_    [mce_gen_curr]));
-        assign(target_total_load_    [mce_gen_mdpt], apply_binary(mean<double>(), target_total_load_    [mce_gen_guar], target_total_load_    [mce_gen_curr]));
-        assign(excess_total_load_    [mce_gen_mdpt], apply_binary(mean<double>(), excess_total_load_    [mce_gen_guar], excess_total_load_    [mce_gen_curr]));
+        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]);
+        assign_midpoint(annual_policy_fee_    [mce_gen_mdpt], annual_policy_fee_    [mce_gen_guar], annual_policy_fee_    [mce_gen_curr]);
+        assign_midpoint(specified_amount_load_[mce_gen_mdpt], specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]);
+        assign_midpoint(separate_account_load_[mce_gen_mdpt], separate_account_load_[mce_gen_guar], separate_account_load_[mce_gen_curr]);
+        assign_midpoint(target_premium_load_  [mce_gen_mdpt], target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]);
+        assign_midpoint(excess_premium_load_  [mce_gen_mdpt], excess_premium_load_  [mce_gen_guar], excess_premium_load_  [mce_gen_curr]);
+        assign_midpoint(target_sales_load_    [mce_gen_mdpt], target_sales_load_    [mce_gen_guar], target_sales_load_    [mce_gen_curr]);
+        assign_midpoint(excess_sales_load_    [mce_gen_mdpt], excess_sales_load_    [mce_gen_guar], excess_sales_load_    [mce_gen_curr]);
+        assign_midpoint(target_total_load_    [mce_gen_mdpt], target_total_load_    [mce_gen_guar], target_total_load_    [mce_gen_curr]);
+        assign_midpoint(excess_total_load_    [mce_gen_mdpt], excess_total_load_    [mce_gen_guar], excess_total_load_    [mce_gen_curr]);
         }
 }
 
@@ -364,18 +359,12 @@ Loads::Loads(product_database const& database, bool NeedMidpointRates)
 
     // This ctor ignores tabular specified-amount loads.
 
-    // Calculate midpoint as mean of current and guaranteed.
-    // A different average might be used instead.
     if(NeedMidpointRates)
         {
-        monthly_policy_fee_   [mce_gen_mdpt].resize(database.length());
-        assign(monthly_policy_fee_   [mce_gen_mdpt], apply_binary(mean<double>(), monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]));
-        target_premium_load_  [mce_gen_mdpt].resize(database.length());
-        assign(target_premium_load_  [mce_gen_mdpt], apply_binary(mean<double>(), target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]));
-        excess_premium_load_  [mce_gen_mdpt].resize(database.length());
-        assign(excess_premium_load_  [mce_gen_mdpt], apply_binary(mean<double>(), excess_premium_load_  [mce_gen_guar], excess_premium_load_  [mce_gen_curr]));
-        specified_amount_load_[mce_gen_mdpt].resize(database.length());
-        assign(specified_amount_load_[mce_gen_mdpt], apply_binary(mean<double>(), specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]));
+        assign_midpoint(monthly_policy_fee_   [mce_gen_mdpt], monthly_policy_fee_   [mce_gen_guar], monthly_policy_fee_   [mce_gen_curr]);
+        assign_midpoint(target_premium_load_  [mce_gen_mdpt], target_premium_load_  [mce_gen_guar], target_premium_load_  [mce_gen_curr]);
+        assign_midpoint(excess_premium_load_  [mce_gen_mdpt], excess_premium_load_  [mce_gen_guar], excess_premium_load_  [mce_gen_curr]);
+        assign_midpoint(specified_amount_load_[mce_gen_mdpt], specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]);
         }
 
     premium_tax_load_.push_back(0.0);

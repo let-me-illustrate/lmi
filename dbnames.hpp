@@ -1,6 +1,6 @@
 // Product database entity names.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -34,68 +34,86 @@
 /// See 'dbnames.xpp' for the definition of each entity.
 ///
 /// Partial lexicon:
-///  - Adb   Accidental death benefit
-///  - Acct  Account
-///  - Amort Amortization
-///  - Amt   Amount
-///  - Chg   Charge
-///  - Coi   Cost of insurance
-///  - Comp  Compensation
-///  - Conv  Conversion
-///  - Curr  Current
-///  - Dac   Deferred acquisition cost
-///  - Dbo   Death benefit option
-///  - Decr  Decrease
-///  - Ded   Deduction
-///  - Dur   Duration
-///  - Dyn   Dynamic
-///  - Ea    Expense allowance (SNFL)
-///  - Ee    Employee
-///  - Endt  Endowment
-///  - Er    Employer
-///  - Exc   Excess (over target)
-///  - Exch  Exchange
-///  - Exp   Expense or experience
-///  - Ext   Extended (as in 'extended endowment')
-///  - Fit   Federal income tax
-///  - Gdb   Guaranteed death benefit
-///  - Gen   General (as in 'general account')
-///  - Guar  Guaranteed
-///  - Ibnr  Incurred but not reported (reserve)
-///  - Imf   Investment management fee
-///  - Incr  Increase
-///  - Int   Interest; more rarely, internal
-///  - Irc   Internal revenue code
-///  - Iss   Issue
-///  - Lic   Life insurance company
-///  - MandE Mortality and expense charge
-///  - Max   Maximum
-///  - Mdpt  Midpoint
-///  - Min   Minimum
-///  - Mort  Mortality
-///  - Mult  Multiplier
-///  - Naar  Net amount at risk
-///  - Nlp   Net level premium
-///  - Ny    New York
-///  - Pmt   Payment
-///  - Pol   Policy
-///  - Pref  Preferred
-///  - Prem  Premium
-///  - Q     Death rate
-///  - Reg   Regular or regulation
-///  - Renl  Renewal
-///  - Retal Retaliation
-///  - Rfd   Refund or refundable
-///  - Sep   Separate (as in 'separate account')
-///  - Snfl  Standard nonforfeiture law
-///  - Spec  Specified (as in 'specified amount')
-///  - Tgt   Target
-///  - Uw    Underwriting
-///  - Val   Value
-///  - Vlr   Variable loan rate
-///  - Vx    Reserve
-///  - Wd    Withdrawal
-///  - Wp    Waiver of premium
+///  - Adb     Accidental death benefit
+///  - Acct    Account
+///  - Admin   Administration
+///  - Amort   Amortization or amortized
+///  - Amt     Amount
+///  - Bft     Benefit
+///  - Chg     Charge; more rarely, change (as in 'material change')
+///  - Coi     Cost of insurance
+///  - Comp    Compensation
+///  - Conv    Conversion
+///  - Curr    Current
+///  - Cvat    Cash value accumulation test
+///  - Dac     Deferred acquisition cost
+///  - Db      Death benefit
+///  - Dbo     Death benefit option
+///  - Decr    Decrease
+///  - Ded     Deduction
+///  - Def     Deficiency (as in 'deficiency reserve')
+///  - Defn    Definition
+///  - Dev     Deviation (as in 'standard deviation')
+///  - Dur     Duration
+///  - Dyn     Dynamic
+///  - Ea      Expense allowance (SNFL)
+///  - Ee      Employee
+///  - Endt    Endowment
+///  - Equiv   Equivalent
+///  - Er      Employer
+///  - Exc     Excess (over target)
+///  - Exch    Exchange
+///  - Exp     Expense or experience
+///  - Ext     Extended (as in 'extended endowment')
+///  - Fit     Federal income tax
+///  - Gdb     Guaranteed death benefit
+///  - Gen     General (as in 'general account')
+///  - Gpt     Guideline premium test
+///  - Guar    Guaranteed
+///  - Ibnr    Incurred but not reported (reserve)
+///  - Imf     Investment management fee
+///  - Incr    Increase
+///  - Int     Interest; more rarely, internal
+///  - Irc     Internal revenue code
+///  - Iss     Issue
+///  - Lic     Life insurance company
+///  - MandE   Mortality and expense charge
+///  - Mat     Material (as in 'material change')
+///  - Max     Maximum
+///  - Mdpt    Midpoint
+///  - Min     Minimum
+///  - Mort    Mortality
+///  - Mult    Multiplier
+///  - Naar    Net amount at risk
+///  - Nlp     Net level premium
+///  - Nsp     Net single premium
+///  - Ny      New York
+///  - Pmt     Payment
+///  - Pol     Policy
+///  - Pref    Preferred
+///  - Prem    Premium
+///  - Q       Death rate
+///  - Rat     Rating (as in 'experience rating')
+///  - Reg     Regular or regulation
+///  - Renl    Renewal
+///  - Req     Required (as in 'required surplus')
+///  - Retal   Retaliation
+///  - Rfd     Refund or refundable
+///  - Sep     Separate (as in 'separate account')
+///  - Simp    Simplified (as in 'simplified underwriting')
+///  - Snfl    Standard nonforfeiture law
+///  - Spec    Specified (as in 'specified amount')
+///  - Std     Standard
+///  - Substd  Substandard
+///  - Surp    Surplus
+///  - Surr    Surrender
+///  - Tgt     Target
+///  - Uw      Underwriting
+///  - Val     Value (as in 'account value')
+///  - Vlr     Variable loan rate
+///  - Vx      Reserve
+///  - Wd      Withdrawal
+///  - Wp      Waiver of premium
 
 enum e_database_key
     {DB_FIRST
@@ -139,11 +157,21 @@ enum e_database_key
         ,DB_AllowGpt
         ,DB_AllowNo7702
 
+        ,DB_CorridorWhence
+        ,DB_Irc7702NspWhence
+        ,DB_SevenPayWhence
         ,DB_CorridorTable
+        ,DB_Irc7702NspTable
         ,DB_SevenPayTable
         ,DB_Irc7702QTable
 
-        ,DB_PremLoad7702
+        ,DB_RatingsAffect7702
+        ,DB_CvatMatChangeDefn
+        ,DB_GptMatChangeDefn
+        ,DB_CorrHidesIncreases
+        ,DB_Irc7702BftIsSpecAmt
+        ,DB_Initial7702BftIsDb
+        ,DB_Irc7702Endowment
         ,DB_Equiv7702Dbo3
 
     ,DB_Topic_MortalityCharges
@@ -325,6 +353,7 @@ enum e_database_key
         ,DB_TermMinIssAge
         ,DB_TermMaxIssAge
         ,DB_TermForcedConvAge
+        ,DB_TermForcedConvDur
         ,DB_MaxTermProportion
         ,DB_TermCoiRate
         ,DB_TermPremRate
@@ -335,7 +364,7 @@ enum e_database_key
         ,DB_WpTable
         ,DB_WpMinIssAge
         ,DB_WpMaxIssAge
-        ,DB_WpMax
+        ,DB_WpLimit
         ,DB_WpCoiRate
         ,DB_WpPremRate
         ,DB_WpChargeMethod
@@ -349,10 +378,16 @@ enum e_database_key
         ,DB_AdbPremRate
 
         ,DB_AllowSpouseRider
+        ,DB_SpouseRiderMinAmt
+        ,DB_SpouseRiderMaxAmt
+        ,DB_SpouseRiderMinIssAge
+        ,DB_SpouseRiderMaxIssAge
         ,DB_SpouseRiderGuarTable
         ,DB_SpouseRiderTable
 
         ,DB_AllowChildRider
+        ,DB_ChildRiderMinAmt
+        ,DB_ChildRiderMaxAmt
         ,DB_ChildRiderTable
 
     ,DB_Topic_Withdrawals
@@ -363,14 +398,15 @@ enum e_database_key
 
         ,DB_FreeWdProportion
         ,DB_MinWd
-        ,DB_MaxWdAcctValMult
+        ,DB_MaxWdGenAcctValMult
+        ,DB_MaxWdSepAcctValMult
         ,DB_MaxWdDed
 
         ,DB_WdCanDecrSpecAmtDbo1
         ,DB_WdCanDecrSpecAmtDbo2
         ,DB_WdCanDecrSpecAmtDbo3
 
-        ,DB_FirstWdYear
+        ,DB_FirstWdMonth
 
     ,DB_Topic_Loans
 
@@ -391,7 +427,7 @@ enum e_database_key
         ,DB_CurrPrefLoanSpread
         ,DB_CurrRegLoanSpread
 
-        ,DB_FirstLoanYear
+        ,DB_FirstLoanMonth
 
     ,DB_Topic_Premiums
 
@@ -428,7 +464,7 @@ enum e_database_key
 
         ,DB_CompTarget
         ,DB_CompExcess
-        ,DB_CompChargeBack
+        ,DB_CompChargeback
         ,DB_AssetComp
         ,DB_AllowExtraAssetComp
         ,DB_AllowExtraPremComp
@@ -446,7 +482,7 @@ enum e_database_key
 
         ,DB_LedgerType
 
-        ,DB_AgeLastOrNearest     // DATABASE !! Add more options...
+        ,DB_AgeLastOrNearest
         ,DB_MaturityAge
 
         ,DB_LapseIgnoresSurrChg
@@ -492,7 +528,7 @@ enum e_database_key
 
         ,DB_StatVxQ
         ,DB_TaxVxQ
-        ,DB_DefVxQ
+        ,DB_DeficVxQ
         ,DB_SnflQ
 
     ,DB_Topic_OtherAssumptions

@@ -1,6 +1,6 @@
 // Product data representable as strings.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -180,6 +180,7 @@ void product_data::ascribe_members()
     ascribe("RoundingFilename"              , &product_data::RoundingFilename              );
     ascribe("TierFilename"                  , &product_data::TierFilename                  );
     ascribe("CvatCorridorFilename"          , &product_data::CvatCorridorFilename          );
+    ascribe("Irc7702NspFilename"            , &product_data::Irc7702NspFilename            );
     ascribe("CurrCOIFilename"               , &product_data::CurrCOIFilename               );
     ascribe("GuarCOIFilename"               , &product_data::GuarCOIFilename               );
     ascribe("WPFilename"                    , &product_data::WPFilename                    );
@@ -405,6 +406,7 @@ void product_data::WritePolFiles()
     z.TierFilename             = glossed_string("sample.strata");
 
     z.CvatCorridorFilename     = glossed_string("sample");
+    z.Irc7702NspFilename       = glossed_string("sample");
     z.CurrCOIFilename          = glossed_string("qx_cso");
     z.GuarCOIFilename          = glossed_string("qx_cso");
     z.WPFilename               = glossed_string("sample");

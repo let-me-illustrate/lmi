@@ -1,6 +1,6 @@
 // Rates that depend on the amount they're muliplied by.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -432,9 +432,10 @@ double stratified_charges::tiered_guar_sepacct_load(double assets, double /* pre
 /// pattern in general, with the inadvertent effect of reducing future
 /// compensation on a particular contract.
 ///
-/// TODO ?? Missing:
-///   - "CurrSepAcctLoadBandedByPrem"
-///   - "CurrSepAcctLoadBandedByAssets"
+/// TODO ?? TAXATION !! Missing "CurrSepAcctLoadBandedByAssets".
+/// But "CurrSepAcctLoadBandedByPrem" is deliberately excluded,
+/// because it's not based on assets. Elsewhere, "DB_CurrAcctValLoad"
+/// should be added to the result.
 
 double stratified_charges::minimum_tiered_spread_for_7702() const
 {

@@ -1,6 +1,6 @@
 // Product-database map.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -121,10 +121,20 @@ class LMI_SO DBDictionary
     database_entity AllowCvat           ;
     database_entity AllowGpt            ;
     database_entity AllowNo7702         ;
+    database_entity CorridorWhence      ;
+    database_entity Irc7702NspWhence    ;
+    database_entity SevenPayWhence      ;
     database_entity CorridorTable       ;
+    database_entity Irc7702NspTable     ;
     database_entity SevenPayTable       ;
     database_entity Irc7702QTable       ;
-    database_entity PremLoad7702        ;
+    database_entity RatingsAffect7702   ;
+    database_entity CvatMatChangeDefn   ;
+    database_entity GptMatChangeDefn    ;
+    database_entity CorrHidesIncreases  ;
+    database_entity Irc7702BftIsSpecAmt ;
+    database_entity Initial7702BftIsDb  ;
+    database_entity Irc7702Endowment    ;
     database_entity Equiv7702Dbo3       ;
     database_entity GuarCoiTable        ;
     database_entity GuarCoiIsAnnual     ;
@@ -255,6 +265,7 @@ class LMI_SO DBDictionary
     database_entity TermMinIssAge       ;
     database_entity TermMaxIssAge       ;
     database_entity TermForcedConvAge   ;
+    database_entity TermForcedConvDur   ;
     database_entity MaxTermProportion   ;
     database_entity TermCoiRate         ;
     database_entity TermPremRate        ;
@@ -264,7 +275,7 @@ class LMI_SO DBDictionary
     database_entity WpTable             ;
     database_entity WpMinIssAge         ;
     database_entity WpMaxIssAge         ;
-    database_entity WpMax               ;
+    database_entity WpLimit             ;
     database_entity WpCoiRate           ;
     database_entity WpPremRate          ;
     database_entity WpChargeMethod      ;
@@ -276,21 +287,28 @@ class LMI_SO DBDictionary
     database_entity AdbCoiRate          ;
     database_entity AdbPremRate         ;
     database_entity AllowSpouseRider    ;
+    database_entity SpouseRiderMinAmt   ;
+    database_entity SpouseRiderMaxAmt   ;
+    database_entity SpouseRiderMinIssAge;
+    database_entity SpouseRiderMaxIssAge;
     database_entity SpouseRiderGuarTable;
     database_entity SpouseRiderTable    ;
     database_entity AllowChildRider     ;
+    database_entity ChildRiderMinAmt    ;
+    database_entity ChildRiderMaxAmt    ;
     database_entity ChildRiderTable     ;
     database_entity AllowWd             ;
     database_entity WdFee               ;
     database_entity WdFeeRate           ;
     database_entity FreeWdProportion    ;
     database_entity MinWd               ;
-    database_entity MaxWdAcctValMult    ;
+    database_entity MaxWdGenAcctValMult ;
+    database_entity MaxWdSepAcctValMult ;
     database_entity MaxWdDed            ;
     database_entity WdCanDecrSpecAmtDbo1;
     database_entity WdCanDecrSpecAmtDbo2;
     database_entity WdCanDecrSpecAmtDbo3;
-    database_entity FirstWdYear         ;
+    database_entity FirstWdMonth        ;
     database_entity AllowLoan           ;
     database_entity AllowPrefLoan       ;
     database_entity AllowFixedLoan      ;
@@ -304,7 +322,7 @@ class LMI_SO DBDictionary
     database_entity GuarRegLoanSpread   ;
     database_entity CurrPrefLoanSpread  ;
     database_entity CurrRegLoanSpread   ;
-    database_entity FirstLoanYear       ;
+    database_entity FirstLoanMonth      ;
     database_entity MinPremType         ;
     database_entity MinPremIntSpread    ;
     database_entity TgtPremType         ;
@@ -328,7 +346,7 @@ class LMI_SO DBDictionary
     database_entity ErPremAcct          ;
     database_entity CompTarget          ;
     database_entity CompExcess          ;
-    database_entity CompChargeBack      ;
+    database_entity CompChargeback      ;
     database_entity AssetComp           ;
     database_entity AllowExtraAssetComp ;
     database_entity AllowExtraPremComp  ;
@@ -374,7 +392,7 @@ class LMI_SO DBDictionary
     database_entity TaxVxInt            ;
     database_entity StatVxQ             ;
     database_entity TaxVxQ              ;
-    database_entity DefVxQ              ;
+    database_entity DeficVxQ            ;
     database_entity SnflQ               ;
     database_entity LapseRate           ;
     database_entity ReqSurpNaar         ;

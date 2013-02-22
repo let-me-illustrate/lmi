@@ -1,6 +1,6 @@
 // Product data representable as strings.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -147,6 +147,7 @@ class LMI_SO product_data
 
     // Names of rate-table files.
     glossed_string CvatCorridorFilename;
+    glossed_string Irc7702NspFilename;
     glossed_string CurrCOIFilename;
     glossed_string GuarCOIFilename;
     glossed_string WPFilename;

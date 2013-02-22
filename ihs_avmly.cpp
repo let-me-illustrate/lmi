@@ -1,6 +1,6 @@
 // Account value: monthiversary processing.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -1712,11 +1712,9 @@ void AccountValue::TxSetTermAmt()
         return;
         }
 
-    // TODO ?? Assumes that term rider lasts exactly as long as no-lapse guarantee.
-    // DATABASE !! Similar entities should be established for term.
     if
-        (  (BasicValues::NoLapseMinDur <= Year)
-        && (BasicValues::NoLapseMinAge <= Year + BasicValues::GetIssueAge())
+        (  (TermForcedConvDur <= Year)
+        && (TermForcedConvAge <= Year + BasicValues::GetIssueAge())
         )
         {
         EndTermRider();
@@ -1859,7 +1857,7 @@ void AccountValue::TxSetRiderDed()
         {
         switch(WaiverChargeMethod)
             {
-            case oe_waiver_times_naar:
+            case oe_waiver_times_specamt:
                 {
                 WpCharge = YearsWpRate * std::min(ActualSpecAmt, WpLimit);
                 DcvWpCharge = WpCharge;
@@ -1867,7 +1865,8 @@ void AccountValue::TxSetRiderDed()
                 break;
             case oe_waiver_times_deductions:
                 {
-                // TODO ?? Should the separate-account load be waived?
+                // Premium load and M&E charges are not waived.
+                // The amount waived is subject to no maximum.
                 WpCharge =
                     YearsWpRate
                     *   (
@@ -2323,15 +2322,14 @@ double AccountValue::anticipated_deduction
 /// policy year.
 ///
 /// Some contracts make only a portion of account value eligible for
-/// withdrawal, say 80% or 90%. Some apply such a multiple only to
-/// separate-account value--a refinement not yet implemented.
-/// DATABASE !! Add a database item to restrict the multiple to the
-/// separate account only.
+/// withdrawal, say 80% or 90%. Some apply different proportions to
+/// general- and separate-account values.
 
 void AccountValue::SetMaxWD()
 {
     MaxWD =
-          (AVGenAcct + AVSepAcct) * MaxWDAVMult
+          AVGenAcct * MaxWdGenAcctValMult
+        + AVSepAcct * MaxWdSepAcctValMult
         + (AVRegLn  + AVPrfLn)
         - (RegLnBal + PrfLnBal)
         - anticipated_deduction(MaxWDDed_)

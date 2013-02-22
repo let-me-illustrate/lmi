@@ -1,6 +1,6 @@
 @REM Cygwin installation.
 @REM
-@REM Copyright (C) 2010, 2011, 2012 Gregory W. Chicares.
+@REM Copyright (C) 2010, 2011, 2012, 2013 Gregory W. Chicares.
 @REM
 @REM This program is free software; you can redistribute it and/or modify
 @REM it under the terms of the GNU General Public License version 2 as

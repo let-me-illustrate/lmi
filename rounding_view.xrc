@@ -5,7 +5,7 @@
 <!--
     Let me illustrate...: wxWindows xml resources for rounding rules editor.
 
-    Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+    Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -28,335 +28,319 @@
 -->
 
 <object class="wxPanel" name="rounding_view_panel">
-
-<object class="wxBoxSizer">
-    <orient>wxHORIZONTAL</orient>
-    <object class="spacer">
-        <option>1</option>
+    <object class="wxBoxSizer">
+        <orient>wxHORIZONTAL</orient>
+        <object class="spacer">
+            <option>1</option>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL</flag>
+            <option>0</option>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT</flag>
+                    <border>6</border>
+                    <object class="wxStaticBoxSizer">
+                        <orient>wxVERTICAL</orient>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <border>4</border>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <rows>0</rows>
+                                <hgap>8</hgap>
+                                <vgap>4</vgap>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Specified amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="specamt">
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Death benefit</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="death_benefit">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Net amount at risk</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="naar">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>COI rate</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="coi_rate">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>COI charge</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="coi_charge">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Gross premium</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="gross_premium">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Net premium</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="net_premium">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Interest rate</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="interest_rate">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Interest credit</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="interest_credit">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Withdrawal</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="withdrawal">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Loan</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="loan">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+                    <border>6</border>
+                    <object class="wxStaticBoxSizer">
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <border>4</border>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <rows>0</rows>
+                                <hgap>8</hgap>
+                                <vgap>4</vgap>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>7702 interest rate</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="interest_rate_7702">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Corridor factor</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="corridor_factor">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>7702 NSP rate</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="nsp_rate_7702">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Seven-pay rate</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="seven_pay_rate">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Surrender charge</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="surrender_charge">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>IRR</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="irr">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Minimum specified amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="min_specamt">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Maximum specified amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="max_specamt">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Minimum premium</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="min_premium">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Maximum premium</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="max_premium">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="spacer">
+            <option>1</option>
+        </object>
     </object>
-    <object class="sizeritem">
-        <flag>wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL</flag>
-        <option>0</option>
-
-<object class="wxBoxSizer">
-    <orient>wxHORIZONTAL</orient>
-    <object class="sizeritem">
-        <flag>wxALIGN_LEFT|wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT</flag>
-        <border>6</border>
-        <object class="wxStaticBoxSizer">
-            <orient>wxVERTICAL</orient>
-            <object class="sizeritem">
-                <flag>wxALL</flag>
-                <border>4</border>
-    <object class="wxFlexGridSizer">
-        <cols>2</cols>
-        <rows>0</rows>
-        <hgap>8</hgap>
-        <vgap>4</vgap>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>specamt</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="specamt">
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>death benefit</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="death_benefit">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>naar</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="naar">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>coi rate</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="coi_rate">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>coi charge</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="coi_charge">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>gross premium</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="gross_premium">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>net premium</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="net_premium">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>interest rate</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="interest_rate">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>interest credit</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="interest_credit">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>withdrawal</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="withdrawal">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-    </object><!-- wxFlexGridSizer -->
-            </object><!-- sizeritem -->
-        </object><!-- wxStaticBoxSizer -->
-    </object><!-- sizeritem -->
-
-    <object class="sizeritem">
-        <flag>wxALIGN_LEFT|wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
-        <border>6</border>
-        <object class="wxStaticBoxSizer">
-            <object class="sizeritem">
-                <flag>wxALL</flag>
-                <border>4</border>
-    <object class="wxFlexGridSizer">
-        <cols>2</cols>
-        <rows>0</rows>
-        <hgap>8</hgap>
-        <vgap>4</vgap>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>loan</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="loan">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>corridor factor</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="corridor_factor">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>surrender charge</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="surrender_charge">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>irr</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="irr">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>min specamt</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="min_specamt">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>max specamt</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="max_specamt">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>min premium</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="min_premium">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>max premium</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="max_premium">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-        <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-            <object class="wxStaticText">
-                <label>interest rate 7702</label>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxALIGN_LEFT</flag>
-            <object class="RoundingButtons" name="interest_rate_7702">
-                <size>-1,-1</size>
-            </object>
-        </object>
-
-    </object><!-- wxFlexGridSizer -->
-            </object><!-- sizeritem -->
-        </object><!-- wxStaticBoxSizer -->
-    </object><!-- sizeritem -->
-
-</object><!-- wxBoxSizer -->
-
-</object><!-- sizeritem -->
-
-<object class="spacer">
-    <option>1</option>
 </object>
 
-</object><!-- wxBoxSizer -->
-
-</object><!-- wxPanel -->
-
 <object class="wxBitmap" name="round_not_at_all">round_not_at_all.png</object>
-
 <object class="wxBitmap" name="round_not_at_all_hover">round_not_at_all_hover.png</object>
-
 <object class="wxBitmap" name="round_not_at_all_selected">round_not_at_all_selected.png</object>
-
 <object class="wxBitmap" name="round_to_nearest">round_to_nearest.png</object>
-
 <object class="wxBitmap" name="round_to_nearest_hover">round_to_nearest_hover.png</object>
-
 <object class="wxBitmap" name="round_to_nearest_selected">round_to_nearest_selected.png</object>
-
 <object class="wxBitmap" name="round_upward">round_upward.png</object>
-
 <object class="wxBitmap" name="round_upward_hover">round_upward_hover.png</object>
-
 <object class="wxBitmap" name="round_upward_selected">round_upward_selected.png</object>
-
 <object class="wxBitmap" name="round_downward">round_downward.png</object>
-
 <object class="wxBitmap" name="round_downward_hover">round_downward_hover.png</object>
-
 <object class="wxBitmap" name="round_downward_selected">round_downward_selected.png</object>
 
 </resource>
