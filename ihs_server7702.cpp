@@ -1,6 +1,6 @@
 // GPT server.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -47,7 +47,6 @@
 #include <cstdlib>
 #include <exception>
 #include <iostream>
-#include <sstream>
 #include <string>
 
 //============================================================================
@@ -70,52 +69,10 @@ int main()
 }
 
 //============================================================================
-// TODO ?? It seems this never gets called. Would DllMain() work?
-#ifndef LMI_MSW
-int main()
-#else // LMI_MSW
-extern "C" int LMI_SO __stdcall DllEntryPoint(HINSTANCE, DWORD reason, LPVOID)
-#endif // LMI_MSW
-{
-#ifndef LMI_MSW
-    std::cout << "main() called\n";
-#else // LMI_MSW
-    std::cout << "DllEntryPoint() called\n";
-    switch(reason)
-        {
-        case DLL_PROCESS_ATTACH:
-            {
-            fenv_initialize();
-            InitializeServer7702();
-            std::cout << "DllEntryPoint() called with DLL_PROCESS_ATTACH\n";
-            }
-            break;
-        case DLL_PROCESS_DETACH:
-            {
-            fenv_validate();
-            }
-            break;
-        default:
-            ;   // do nothing
-        }
-#endif // LMI_MSW
-    return true;
-}
-
-//============================================================================
 void EnterServer()
 {
     fenv_initialize();
 }
-
-/* erase
-//============================================================================
-bool LeaveServer()
-{
-    VerifyPrecision();
-    return fenv_validate();
-}
-*/
 
 //============================================================================
 // TODO ?? Should we make the directory an optional argument?
@@ -172,35 +129,6 @@ Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
     Server7702 contract(a_Input);
     contract.Process();
     return contract.GetOutput();
-}
-
-//============================================================================
-// Read from C string, and put result in a C string.
-// The caller must allocate sufficient space for the result; at present,
-// that means 444 bytes.
-void RunServer7702FromString(char* i, char* o)
-{
-    EnterServer();
-    Server7702Input input;
-    try
-        {
-        std::istringstream is(i);
-        is >> input;
-        Server7702 contract(input);
-        contract.Process();
-        std::ostringstream os;
-        os << contract.GetOutput();
-        std::strcpy(o, os.str().c_str());
-        }
-    // Catch exceptions that are thrown during input
-    catch(std::exception const& e)
-        {
-        std::cerr << input.UniqueIdentifier << " error: " << e.what() << '\n';
-        }
-    catch(...)
-        {
-        std::cerr << "Untrapped exception" << '\n';
-        }
 }
 
 //============================================================================

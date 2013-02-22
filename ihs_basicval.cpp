@@ -1,6 +1,6 @@
 // Basic values.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -40,7 +40,7 @@
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt_specamt.hpp"
-#include "ieee754.hpp"           // ldbl_eps_plus_one()
+#include "ieee754.hpp"                  // ldbl_eps_plus_one()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ihs_x_type.hpp"
@@ -48,8 +48,8 @@
 #include "interest_rates.hpp"
 #include "loads.hpp"
 #include "math_functors.hpp"
-#include "mc_enum_types_aux.hpp" // mc_str()
-#include "miscellany.hpp"        // ios_out_trunc_binary()
+#include "mc_enum_types_aux.hpp"        // mc_str()
+#include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
@@ -60,8 +60,8 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cmath>                 // std::pow()
-#include <cstring>               // std::strlen(), std::strncmp()
+#include <cmath>                        // std::pow()
+#include <cstring>                      // std::strlen(), std::strncmp()
 #include <fstream>
 #include <limits>
 #include <numeric>
@@ -713,6 +713,8 @@ void BasicValues::SetPermanentInvariants()
     MaxIncrAge          = static_cast<int>(Database_->Query(DB_MaxIncrAge));
     WaivePmTxInt1035    = Database_->Query(DB_WaivePremTaxInt1035  );
     AllowTerm           = Database_->Query(DB_AllowTerm            );
+    TermForcedConvAge   = static_cast<int>(Database_->Query(DB_TermForcedConvAge));
+    TermForcedConvDur   = static_cast<int>(Database_->Query(DB_TermForcedConvDur));
     TermIsDbFor7702     = Database_->Query(DB_TermIsDbFor7702      );
     TermIsDbFor7702A    = Database_->Query(DB_TermIsDbFor7702A     );
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
@@ -731,13 +733,14 @@ void BasicValues::SetPermanentInvariants()
     LMI_ASSERT(CurrCoiTable0Limit <= CurrCoiTable1Limit);
     CoiInforceReentry   = static_cast<e_actuarial_table_method>(static_cast<int>(Database_->Query(DB_CoiInforceReentry)));
     MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWdDed)));
-    MaxWDAVMult         = Database_->Query(DB_MaxWdAcctValMult     );
+    MaxWdGenAcctValMult = Database_->Query(DB_MaxWdGenAcctValMult  );
+    MaxWdSepAcctValMult = Database_->Query(DB_MaxWdSepAcctValMult  );
     MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
     MaxLoanAVMult       = Database_->Query(DB_MaxLoanAcctValMult   );
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
     NoLapseMinAge       = static_cast<int>(Database_->Query(DB_NoLapseMinAge));
     AdbLimit            = Database_->Query(DB_AdbLimit             );
-    WpLimit             = Database_->Query(DB_WpMax                );
+    WpLimit             = Database_->Query(DB_WpLimit              );
     SpecAmtLoadLimit    = Database_->Query(DB_SpecAmtLoadLimit     );
     MinWD               = Database_->Query(DB_MinWd                );
     WDFee               = Database_->Query(DB_WdFee                );
@@ -777,22 +780,56 @@ void BasicValues::SetPermanentInvariants()
     HOPEFULLY(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
     HOPEFULLY(!(UseUnusualCOIBanding && AllowTerm));
 
-    // Table ratings can arise only from medical underwriting.
-    // However, flat extras can be used even with guaranteed issue,
-    // e.g. for aviation, occupation, avocation, or foreign travel.
+    // Flat extras can be used even with guaranteed issue, e.g., for
+    // aviation, occupation, avocation, or foreign travel. Admin
+    // systems typically don't distinguish these from medical flats,
+    // so neither does lmi--that information wouldn't be available for
+    // inforce illustrations.
+    //
+    // However, table ratings may be restricted, e.g., to medically-
+    // underwritten contracts, by setting 'DB_AllowSubstdTable' in a
+    // product's database. See the example in 'dbdict.cpp', which
+    // varies by yare_input_.GroupUnderwritingType; no restriction is
+    // expressly coded here in terms of that field because it is a
+    // database axis across which 'DB_AllowSubstdTable' already can
+    // vary. Even a rule as apparently reasonable as forbidding table
+    // ratings with simplified issue would thus be out of place here:
+    // the database can express such a rule handily, and at least one
+    // real-world product is known not to follow it. It is important
+    // to put aside prior notions of what SI and GI might connote, and
+    // realize that for lmi underwriting class is predominantly a
+    // database-lookup axis.
+    //
+    // Table ratings are used only with COI rates for the "Rated"
+    // class, so that table multipliers can be applied to a set of COI
+    // rates distinct from standard (as is the practice of at least
+    // one company). If no such distinction is wanted, then "Rated"
+    // and "Standard" can simply point to the same rate table (as
+    // happens by default if rates don't vary by underwriting class).
+    // The additional "Rated" class induces an extra "Rated" choice in
+    // the GUI, which must be selected to enable table ratings; this
+    // may be seen as a surprising complication, or as a useful safety
+    // feature, but either way no end user has ever objected to it.
     if
         (   mce_table_none != yare_input_.SubstandardTable
-        &&  mce_medical    != yare_input_.GroupUnderwritingType
+        &&  !(Database_->Query(DB_AllowSubstdTable) && mce_rated == yare_input_.UnderwritingClass)
         )
         {
         fatal_error()
-            << "Substandard table ratings require medical underwriting."
+            << "Substandard table ratings not permitted."
             << LMI_FLUSH
             ;
         }
 
-    // Spouse and child riders are not similarly tested because
-    // their rates shouldn't depend on the main insured's health.
+    // SOMEDAY !! WP and ADB shouldn't always be forbidden with table
+    // ratings and flat extras. For now, they're not supported due to
+    // lack of demand and complexity. These riders are likely to
+    // require their own ratings that differ from the base policy's
+    // because the insured contingencies differ.
+    //
+    // Spouse and child riders are not similarly restricted because
+    // their rates don't depend on the main insured's health, and the
+    // people they cover are unlikely to be underwritten.
     if(is_policy_rated(yare_input_) && yare_input_.WaiverOfPremiumBenefit)
         {
         fatal_error()
@@ -826,25 +863,27 @@ void set_rounding_rule(round_to<double>& functor, rounding_parameters const& z)
 
 void BasicValues::SetRoundingFunctors()
 {
-    set_rounding_rule(round_specamt_           , RoundingRules_->datum("RoundSpecAmt"    ));
-    set_rounding_rule(round_death_benefit_     , RoundingRules_->datum("RoundDeathBft"   ));
-    set_rounding_rule(round_naar_              , RoundingRules_->datum("RoundNaar"       ));
-    set_rounding_rule(round_coi_rate_          , RoundingRules_->datum("RoundCoiRate"    ));
-    set_rounding_rule(round_coi_charge_        , RoundingRules_->datum("RoundCoiCharge"  ));
-    set_rounding_rule(round_gross_premium_     , RoundingRules_->datum("RoundGrossPrem"  ));
-    set_rounding_rule(round_net_premium_       , RoundingRules_->datum("RoundNetPrem"    ));
-    set_rounding_rule(round_interest_rate_     , RoundingRules_->datum("RoundIntRate"    ));
-    set_rounding_rule(round_interest_credit_   , RoundingRules_->datum("RoundIntCredit"  ));
-    set_rounding_rule(round_withdrawal_        , RoundingRules_->datum("RoundWithdrawal" ));
-    set_rounding_rule(round_loan_              , RoundingRules_->datum("RoundLoan"       ));
-    set_rounding_rule(round_corridor_factor_   , RoundingRules_->datum("RoundCorrFactor" ));
-    set_rounding_rule(round_surrender_charge_  , RoundingRules_->datum("RoundSurrCharge" ));
-    set_rounding_rule(round_irr_               , RoundingRules_->datum("RoundIrr"        ));
-    set_rounding_rule(round_min_specamt_       , RoundingRules_->datum("RoundMinSpecamt" ));
-    set_rounding_rule(round_max_specamt_       , RoundingRules_->datum("RoundMaxSpecamt" ));
-    set_rounding_rule(round_min_premium_       , RoundingRules_->datum("RoundMinPrem"    ));
-    set_rounding_rule(round_max_premium_       , RoundingRules_->datum("RoundMaxPrem"    ));
-    set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702"));
+    set_rounding_rule(round_specamt_           , RoundingRules_->datum("RoundSpecAmt"     ));
+    set_rounding_rule(round_death_benefit_     , RoundingRules_->datum("RoundDeathBft"    ));
+    set_rounding_rule(round_naar_              , RoundingRules_->datum("RoundNaar"        ));
+    set_rounding_rule(round_coi_rate_          , RoundingRules_->datum("RoundCoiRate"     ));
+    set_rounding_rule(round_coi_charge_        , RoundingRules_->datum("RoundCoiCharge"   ));
+    set_rounding_rule(round_gross_premium_     , RoundingRules_->datum("RoundGrossPrem"   ));
+    set_rounding_rule(round_net_premium_       , RoundingRules_->datum("RoundNetPrem"     ));
+    set_rounding_rule(round_interest_rate_     , RoundingRules_->datum("RoundIntRate"     ));
+    set_rounding_rule(round_interest_credit_   , RoundingRules_->datum("RoundIntCredit"   ));
+    set_rounding_rule(round_withdrawal_        , RoundingRules_->datum("RoundWithdrawal"  ));
+    set_rounding_rule(round_loan_              , RoundingRules_->datum("RoundLoan"        ));
+    set_rounding_rule(round_interest_rate_7702_, RoundingRules_->datum("RoundIntRate7702" ));
+    set_rounding_rule(round_corridor_factor_   , RoundingRules_->datum("RoundCorrFactor"  ));
+    set_rounding_rule(round_nsp_rate_7702_     , RoundingRules_->datum("RoundNspRate7702" ));
+    set_rounding_rule(round_seven_pay_rate_    , RoundingRules_->datum("RoundSevenPayRate"));
+    set_rounding_rule(round_surrender_charge_  , RoundingRules_->datum("RoundSurrCharge"  ));
+    set_rounding_rule(round_irr_               , RoundingRules_->datum("RoundIrr"         ));
+    set_rounding_rule(round_min_specamt_       , RoundingRules_->datum("RoundMinSpecamt"  ));
+    set_rounding_rule(round_max_specamt_       , RoundingRules_->datum("RoundMaxSpecamt"  ));
+    set_rounding_rule(round_min_premium_       , RoundingRules_->datum("RoundMinPrem"     ));
+    set_rounding_rule(round_max_premium_       , RoundingRules_->datum("RoundMaxPrem"     ));
 }
 
 /// Establish maximum survivorship duration.
@@ -1722,6 +1761,14 @@ std::vector<double> BasicValues::GetCvatCorridorFactors() const
 {
     return GetTable
         (ProductData_->datum("CvatCorridorFilename")
+        ,DB_CorridorTable
+        );
+}
+
+std::vector<double> BasicValues::GetIrc7702NspRates() const
+{
+    return GetTable
+        (ProductData_->datum("Irc7702NspFilename")
         ,DB_CorridorTable
         );
 }

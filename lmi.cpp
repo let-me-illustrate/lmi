@@ -1,6 +1,6 @@
 // Production versus the antediluvian fork.
 //
-// Copyright (C) 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -28,16 +28,8 @@
 
 #include "lmi.hpp"
 
-#include "version.hpp"
-
 bool is_antediluvian_fork()
 {
     return false;
-}
-
-std::string const& timestamp_of_production_release()
-{
-    static std::string const s(LMI_VERSION);
-    return s;
 }
 

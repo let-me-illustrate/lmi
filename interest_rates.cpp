@@ -1,6 +1,6 @@
 // Interest rates.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -33,15 +33,13 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "math_functors.hpp"
-#include "miscellany.hpp" // each_equal()
+#include "math_functors.hpp"            // assign_midpoint()
+#include "miscellany.hpp"               // each_equal()
 #include "yare_input.hpp"
 
-#include <algorithm>
-#include <cmath>
+#include <algorithm>                    // std::max(), std::copy()
 #include <functional>
-#include <iterator>
-#include <utility>
+#include <iterator>                     // std::back_inserter()
 #include <vector>
 
 // TODO ?? Future enhancements:
@@ -473,14 +471,7 @@ void InterestRates::InitializeGeneralAccountRates()
     GenAcctGrossRate_[mce_gen_mdpt] = Zero_;
     if(NeedMidpointRates_)
         {
-        // ET !! GenAcctGrossRate_[mce_gen_mdpt] = mean(GenAcctGrossRate_[mce_gen_guar], GenAcctGrossRate_[mce_gen_curr]);
-        std::transform
-            (GenAcctGrossRate_[mce_gen_guar].begin()
-            ,GenAcctGrossRate_[mce_gen_guar].end()
-            ,GenAcctGrossRate_[mce_gen_curr].begin()
-            ,GenAcctGrossRate_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
+        assign_midpoint(GenAcctGrossRate_[mce_gen_mdpt], GenAcctGrossRate_[mce_gen_guar], GenAcctGrossRate_[mce_gen_curr]);
         }
     else
         {
@@ -641,22 +632,8 @@ void InterestRates::InitializeLoanRates()
     PrfLoanSpread_[mce_gen_mdpt] = Zero_;
     if(NeedMidpointRates_)
         {
-        // ET !! RegLoanSpread_[mce_gen_mdpt] = mean(RegLoanSpread_[mce_gen_guar], RegLoanSpread_[mce_gen_curr]);
-        std::transform
-            (RegLoanSpread_[mce_gen_guar].begin()
-            ,RegLoanSpread_[mce_gen_guar].end()
-            ,RegLoanSpread_[mce_gen_curr].begin()
-            ,RegLoanSpread_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
-        // ET !! PrfLoanSpread_[mce_gen_mdpt] = mean(PrfLoanSpread_[mce_gen_guar], PrfLoanSpread_[mce_gen_curr]);
-        std::transform
-            (PrfLoanSpread_[mce_gen_guar].begin()
-            ,PrfLoanSpread_[mce_gen_guar].end()
-            ,PrfLoanSpread_[mce_gen_curr].begin()
-            ,PrfLoanSpread_[mce_gen_mdpt].begin()
-            ,mean<double>()
-            );
+        assign_midpoint(RegLoanSpread_[mce_gen_mdpt], RegLoanSpread_[mce_gen_guar], RegLoanSpread_[mce_gen_curr]);
+        assign_midpoint(PrfLoanSpread_[mce_gen_mdpt], PrfLoanSpread_[mce_gen_guar], PrfLoanSpread_[mce_gen_curr]);
         }
 
     for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
@@ -714,18 +691,25 @@ void InterestRates::InitializeLoanRates()
             }
         }
 
-        // RegLnDueRate_ cannot vary by basis for fixed loan rate, but
-        // may for VLR--in which case these assertions will fire,
-        // indicating that this code should be reviewed.
-        //
-        LMI_ASSERT
-            (   RegLnDueRate_[mce_annual_rate ][mce_gen_guar]
-            ==  RegLnDueRate_[mce_annual_rate ][mce_gen_curr]
-            );
-        LMI_ASSERT
-            (   RegLnDueRate_[mce_monthly_rate][mce_gen_guar]
-            ==  RegLnDueRate_[mce_monthly_rate][mce_gen_curr]
-            );
+    // RegLnDueRate_ cannot vary by basis for fixed loan rate, but
+    // may for VLR--in which case these assertions will fire,
+    // indicating that this code should be reviewed.
+    //
+    // PETE causes an 'ambiguous overload' error for vector 'v0==v1',
+    // but not if std::operator==(v0,v1) is called explicitly.
+
+    LMI_ASSERT
+        (std::operator==
+            (RegLnDueRate_[mce_annual_rate ][mce_gen_guar]
+            ,RegLnDueRate_[mce_annual_rate ][mce_gen_curr]
+            )
+        );
+    LMI_ASSERT
+        (std::operator==
+            (RegLnDueRate_[mce_monthly_rate][mce_gen_guar]
+            ,RegLnDueRate_[mce_monthly_rate][mce_gen_curr]
+            )
+        );
 }
 
 void InterestRates::InitializeHoneymoonRates()

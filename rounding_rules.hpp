@@ -1,6 +1,6 @@
 // Rounding rules.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -145,14 +145,16 @@ class LMI_SO rounding_rules
     rounding_parameters round_interest_credit_   ;
     rounding_parameters round_withdrawal_        ;
     rounding_parameters round_loan_              ;
+    rounding_parameters round_interest_rate_7702_;
     rounding_parameters round_corridor_factor_   ;
+    rounding_parameters round_nsp_rate_7702_     ;
+    rounding_parameters round_seven_pay_rate_    ;
     rounding_parameters round_surrender_charge_  ;
     rounding_parameters round_irr_               ;
     rounding_parameters round_min_specamt_       ;
     rounding_parameters round_max_specamt_       ;
     rounding_parameters round_min_premium_       ;
     rounding_parameters round_max_premium_       ;
-    rounding_parameters round_interest_rate_7702_;
 };
 
 void LMI_SO load(rounding_rules      &, fs::path const&);

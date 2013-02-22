@@ -1,6 +1,6 @@
 // Life-insurance illustration input--control harmonization.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -162,7 +162,6 @@ void Input::DoHarmonize()
 {
     bool anything_goes    = global_settings::instance().ash_nazg();
     bool home_office_only = global_settings::instance().mellon();
-    bool egregious_kludge = global_settings::instance().regression_testing();
 
     bool allow_sep_acct = database_->Query(DB_AllowSepAcct);
     bool allow_gen_acct = database_->Query(DB_AllowGenAcct);
@@ -313,12 +312,11 @@ void Input::DoHarmonize()
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), alb_anb)
         );
 
-    int max_age = static_cast<int>(database_->Query(DB_MaturityAge));
     InforceAsOfDate.minimum_and_maximum
         (EffectiveDate.value()
         ,add_years_and_months
             (EffectiveDate.value()
-            ,-1 + max_age - IssueAge.value()
+            ,-1 + GleanedMaturityAge_ - IssueAge.value()
             ,11
             ,true
             )
@@ -374,38 +372,10 @@ void Input::DoHarmonize()
     // more complicated: it would require inspecting not only the
     // database, but also a rate table.
 
-// TODO ?? Nomen est omen.
-if(!egregious_kludge)
-  {
     UnderwritingClass.allow(mce_ultrapreferred, database_->Query(DB_AllowUltraPrefClass));
     UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
-
-    // It would seem generally reasonable to forbid table ratings on
-    // guaranteed-issue contracts. No such principle is hardcoded here
-    // because the database is the proper place to express such a
-    // judgment.
-    //
-    // TODO ?? OTOH, the basic-values class allows table ratings only
-    // if the group underwriting type is full medical underwriting,
-    // i.e. if
-    //   GroupUnderwritingType is mce_medical
-    // and enablement here is inconsistent with that, which is bad.
-    // The real question is: to which rate table should table ratings
-    // be applied? Probably the rule in the basic-values class is
-    // overbroad and should be removed, with very careful attention
-    // paid to databases. One could conceive of a product that has
-    // only SI rates and allows table ratings to be applied to them.
-    // Another product might offer GI, SI, and full underwriting, but
-    // allow table ratings only with a full-underwriting rate table.
-    // It is important to put aside prior notions of what GI or SI
-    // might connote, and realize that to the table-access code they
-    // are simply lookup axes.
-    //
-    UnderwritingClass.allow(mce_rated, database_->Query(DB_AllowSubstdTable));
-
-    // TODO ?? WX PORT !! Nasty interaction here.
+    UnderwritingClass.allow(mce_rated         , database_->Query(DB_AllowSubstdTable   ));
     SubstandardTable.enable(mce_rated == UnderwritingClass);
-
     SubstandardTable.allow(mce_table_a, mce_rated == UnderwritingClass);
     SubstandardTable.allow(mce_table_b, mce_rated == UnderwritingClass);
     SubstandardTable.allow(mce_table_c, mce_rated == UnderwritingClass);
@@ -416,7 +386,6 @@ if(!egregious_kludge)
     SubstandardTable.allow(mce_table_j, mce_rated == UnderwritingClass);
     SubstandardTable.allow(mce_table_l, mce_rated == UnderwritingClass);
     SubstandardTable.allow(mce_table_p, mce_rated == UnderwritingClass);
-  } // end if(!egregious_kludge)
 
     // Can't have a non-US country multiplier other than unity in a US state.
     bool allow_custom_coi_multiplier =
@@ -470,6 +439,94 @@ if(!egregious_kludge)
     // TODO ?? WX PORT !! Perhaps those rules leave no choice allowed
     // for gender or smoker.
 
+    // Analysis of database vector quantities is generally avoided
+    // in this function, in the interest of simplicity and speed.
+    // Otherwise, this condition would include flat extras. But
+    // this rider restriction is incidental, not essential.
+    bool contract_is_rated(mce_rated == UnderwritingClass);
+
+    bool allow_term =
+           database_->Query(DB_AllowTerm)
+        && (database_->Query(DB_AllowRatedTerm) || !contract_is_rated)
+        && database_->Query(DB_TermMinIssAge) <= IssueAge.value()
+        &&                                       IssueAge.value() <= database_->Query(DB_TermMaxIssAge)
+        ;
+    TermRider.enable(        allow_term);
+    TermRider.allow(mce_yes, allow_term);
+
+    bool enable_term = mce_yes == TermRider;
+    bool specamt_indeterminate_for_term =
+           mce_solve_specamt == SolveType
+        || mce_sa_input_scalar != SpecifiedAmountStrategyFromIssue
+        ;
+
+    TermRiderUseProportion.enable(enable_term && !specamt_indeterminate_for_term);
+    TermRiderUseProportion.allow(mce_yes, !specamt_indeterminate_for_term);
+    bool term_is_proportional = mce_yes == TermRiderUseProportion;
+    TermRiderAmount     .enable(enable_term && !term_is_proportional);
+    TotalSpecifiedAmount.enable(enable_term &&  term_is_proportional);
+    TermRiderProportion .enable(enable_term &&  term_is_proportional);
+
+    TermAdjustmentMethod.allow(mce_adjust_base, enable_term);
+    TermAdjustmentMethod.allow(mce_adjust_term, enable_term);
+    TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
+
+    bool allow_wp =
+           database_->Query(DB_AllowWp)
+        && (database_->Query(DB_AllowRatedWp) || !contract_is_rated)
+        && database_->Query(DB_WpMinIssAge) <= IssueAge.value()
+        &&                                     IssueAge.value() <= database_->Query(DB_WpMaxIssAge)
+        ;
+    WaiverOfPremiumBenefit.enable(        allow_wp);
+    WaiverOfPremiumBenefit.allow(mce_yes, allow_wp);
+    bool allow_adb =
+           database_->Query(DB_AllowAdb)
+        && (database_->Query(DB_AllowRatedAdb) || !contract_is_rated)
+        && database_->Query(DB_AdbMinIssAge) <= IssueAge.value()
+        &&                                      IssueAge.value() <= database_->Query(DB_AdbMaxIssAge)
+        ;
+    AccidentalDeathBenefit.enable(        allow_adb);
+    AccidentalDeathBenefit.allow(mce_yes, allow_adb);
+
+    bool allow_child_rider = database_->Query(DB_AllowChildRider);
+    ChildRider       .enable(        allow_child_rider);
+    ChildRider       .allow(mce_yes, allow_child_rider);
+    ChildRiderAmount .enable(mce_yes == ChildRider);
+    // Child and spouse riders generally have a nonzero minimum amount
+    // if elected, but zero must be allowed if not elected (e.g., for
+    // inforce). Given that the amount field is enabled only when the
+    // rider is elected, it could never be set back to zero manually
+    // when unelected--so it's forced to zero when unelected.
+    ChildRiderAmount .minimum_and_maximum
+        ((mce_yes == ChildRider) ? database_->Query(DB_ChildRiderMinAmt) : 0.0
+        ,(mce_yes == ChildRider) ? database_->Query(DB_ChildRiderMaxAmt) : 0.0
+        );
+    bool allow_spouse_rider = database_->Query(DB_AllowSpouseRider);
+    SpouseRider      .enable(        allow_spouse_rider);
+    SpouseRider      .allow(mce_yes, allow_spouse_rider);
+    SpouseRiderAmount.enable(mce_yes == SpouseRider);
+    SpouseRiderAmount.minimum_and_maximum
+        ((mce_yes == SpouseRider) ? database_->Query(DB_SpouseRiderMinAmt) : 0.0
+        ,(mce_yes == SpouseRider) ? database_->Query(DB_SpouseRiderMaxAmt) : 0.0
+        );
+    SpouseIssueAge   .enable(mce_yes == SpouseRider);
+    // If 'SpouseIssueAge' were always enabled, then it might make
+    // sense to enable 'SpouseRider' only if the issue age is in the
+    // allowable range (as is done above for ADB and WP). However,
+    // 'SpouseIssueAge' is useful only if the spouse rider is elected,
+    // so it makes more sense to constrain its value this way.
+    SpouseIssueAge   .minimum_and_maximum
+        (static_cast<int>(database_->Query(DB_SpouseRiderMinIssAge))
+        ,static_cast<int>(database_->Query(DB_SpouseRiderMaxIssAge))
+        );
+
+    bool allow_honeymoon = database_->Query(DB_AllowHoneymoon);
+    HoneymoonEndorsement .enable(        allow_honeymoon);
+    HoneymoonEndorsement .allow(mce_yes, allow_honeymoon);
+    PostHoneymoonSpread  .enable(mce_yes == HoneymoonEndorsement);
+    HoneymoonValueSpread .enable(mce_yes == HoneymoonEndorsement);
+    InforceHoneymoonValue.enable(mce_yes == HoneymoonEndorsement);
+
     // Many SA strategies forbidden if premium is a function of SA.
     bool prem_indeterminate =
         (
@@ -483,7 +540,7 @@ if(!egregious_kludge)
     bool specamt_solve = mce_solve_specamt == SolveType;
 
     bool specamt_from_term_proportion =
-           database_->Query(DB_AllowTerm)
+           allow_term
         && mce_yes == TermRiderUseProportion
         && mce_yes == TermRider
         ;
@@ -593,7 +650,13 @@ false // Silly workaround for now.
     InforceGeneralAccountValue .enable(allow_gen_acct);
     InforceSeparateAccountValue.enable(allow_sep_acct);
 
-    // TODO ?? VLR not yet implemented.
+    // TODO ?? VLR not yet implemented. When it is, limit the rate to
+    // [DB_MinVlrRate,DB_MaxVlrRate]. For DB_MinVlrRate, see the NAIC
+    // model policy loan interest rate bill at 3(B)(2), which requires
+    // "the rate used to compute the cash surrender values under the
+    // policy during the applicable period plus one percent per annum"
+    // if that exceeds the published index--enacted, e.g., here:
+    //   http://apps.leg.wa.gov/rcw/default.aspx?cite=48.23.085
     bool allow_vlr =
         (   loan_allowed
         &&  (   database_->Query(DB_AllowVlr)
@@ -636,8 +699,12 @@ false // Silly workaround for now.
 // TODO ?? WX PORT !! But for now, use this workaround: products that have no
 // general account can't select non-custom funds--there's no GUI for
 // that anyway. INPUT !! See: http://savannah.nongnu.org/support/?104481
-//
-    FundChoiceType.allow(mce_fund_selection, !sepacct_only);
+// However, don't impose that restriction on regression tests that
+// cover the once and future ability to choose funds.
+    if(!global_settings::instance().regression_testing())
+        {
+        FundChoiceType.allow(mce_fund_selection, !sepacct_only);
+        }
 
 /* TODO ?? WX PORT !! Not ported:
     SELECTED_FUND_ALLOC->EnableWindow
@@ -670,53 +737,6 @@ false // Silly workaround for now.
     InforcePreferredLoanValue  .enable(pref_loan_allowed);
     InforceRegularLoanBalance  .enable(loan_allowed);
     InforcePreferredLoanBalance.enable(pref_loan_allowed);
-
-    TermRider.enable(database_->Query(DB_AllowTerm));
-    TermRider.allow(mce_yes, database_->Query(DB_AllowTerm));
-
-    bool enable_term = mce_yes == TermRider;
-    bool specamt_indeterminate_for_term =
-           mce_solve_specamt == SolveType
-        || mce_sa_input_scalar != SpecifiedAmountStrategyFromIssue
-        ;
-
-    TermRiderUseProportion.enable(enable_term && !specamt_indeterminate_for_term);
-    TermRiderUseProportion.allow(mce_yes, !specamt_indeterminate_for_term);
-    bool term_is_proportional = mce_yes == TermRiderUseProportion;
-    TermRiderAmount     .enable(enable_term && !term_is_proportional);
-    TotalSpecifiedAmount.enable(enable_term &&  term_is_proportional);
-    TermRiderProportion .enable(enable_term &&  term_is_proportional);
-
-    TermAdjustmentMethod.allow(mce_adjust_base, enable_term);
-    TermAdjustmentMethod.allow(mce_adjust_term, enable_term);
-    TermAdjustmentMethod.allow(mce_adjust_both, enable_term);
-
-    WaiverOfPremiumBenefit.enable(        database_->Query(DB_AllowWp));
-    WaiverOfPremiumBenefit.allow(mce_yes, database_->Query(DB_AllowWp));
-    AccidentalDeathBenefit.enable(        database_->Query(DB_AllowAdb));
-    AccidentalDeathBenefit.allow(mce_yes, database_->Query(DB_AllowAdb));
-
-    ChildRider       .enable(        database_->Query(DB_AllowChildRider));
-    ChildRider       .allow(mce_yes, database_->Query(DB_AllowChildRider));
-    ChildRiderAmount .enable(mce_yes == ChildRider);
-    SpouseRider      .enable(        database_->Query(DB_AllowSpouseRider));
-    SpouseRider      .allow(mce_yes, database_->Query(DB_AllowSpouseRider));
-    SpouseRiderAmount.enable(mce_yes == SpouseRider);
-    SpouseIssueAge   .enable(mce_yes == SpouseRider);
-#if 0
-// DATABASE !! Add spouse minimum and maximum issue ages, as well as
-// minimum and maximum amounts for both spouse and child.
-    SpouseIssueAge.minimum_and_maximum
-        (static_cast<int>(database_->Query(DB_MinIssAge))
-        ,static_cast<int>(database_->Query(DB_MaxIssAge))
-        );
-#endif // 0
-
-    HoneymoonEndorsement .enable(        database_->Query(DB_AllowHoneymoon));
-    HoneymoonEndorsement .allow(mce_yes, database_->Query(DB_AllowHoneymoon));
-    PostHoneymoonSpread  .enable(mce_yes == HoneymoonEndorsement);
-    HoneymoonValueSpread .enable(mce_yes == HoneymoonEndorsement);
-    InforceHoneymoonValue.enable(mce_yes == HoneymoonEndorsement);
 
     bool solves_allowed = mce_life_by_life == RunOrder;
 
@@ -940,10 +960,6 @@ void Input::DoTransmogrify()
         IssueAge = apparent_age;
         }
 
-bool egregious_kludge = global_settings::instance().regression_testing();
-// TODO ?? Nomen est omen.
-if(!egregious_kludge)
-  {
     // TODO ?? WX PORT !! Icky kludge.
     UseAverageOfAllFunds =
         (mce_fund_average  == FundChoiceType)
@@ -955,7 +971,6 @@ if(!egregious_kludge)
         ? mce_yes
         : mce_no
         ;
-  } // end if(!egregious_kludge)
 
     set_solve_durations();
 }

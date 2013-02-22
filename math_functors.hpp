@@ -1,6 +1,6 @@
 // Miscellaneous mathematical operations as function objects.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -26,6 +26,9 @@
 
 #include "config.hpp"
 
+#include "assert_lmi.hpp"
+#include "et_vector.hpp"
+
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits/is_float.hpp>
@@ -39,6 +42,7 @@
 #include <algorithm>
 #include <functional>
 #include <stdexcept>
+#include <vector>
 
 // For Comeau, implement expm1l() and log1pl() using type double, not
 // long double, because of an apparent incompatibility in the way
@@ -88,6 +92,8 @@ struct lesser_of
         }
 };
 
+/// Arithmetic mean.
+///
 /// Calculate mean as
 ///   (half of x) plus (half of y)
 /// instead of
@@ -333,6 +339,26 @@ struct coi_rate_from_q
             }
         }
 };
+
+/// Midpoint for illustration reg.
+///
+/// Section 7(C)(1)(c)(ii) prescribes an "average" without specifying
+/// which average to use. The arithmetic mean is used here because
+/// that seems to be the most common practice. On the other hand, a
+/// strong case can be made for using the geometric mean, at least
+/// with interest and mortality rates.
+
+template<typename T>
+void assign_midpoint
+    (std::vector<T>      & out
+    ,std::vector<T> const& in_0
+    ,std::vector<T> const& in_1
+    )
+{
+    LMI_ASSERT(in_0.size() == in_1.size());
+    out.resize(in_0.size());
+    assign(out, apply_binary(mean<T>(), in_0, in_1));
+}
 
 #endif // math_functors_hpp
 

@@ -1,6 +1,6 @@
 // Guideline-premium-test server.
 //
-// Copyright (C) 1998, 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -38,7 +38,6 @@ extern "C"
 {
     void LMI_SO InitializeServer7702();
     Server7702Output LMI_SO RunServer7702FromStruct(Server7702Input a_Input);
-    void LMI_SO RunServer7702FromString(char* i, char* o);
 }
 
 class Server7702

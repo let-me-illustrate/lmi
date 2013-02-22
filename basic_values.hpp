@@ -1,6 +1,6 @@
 // Rates and unprojected values.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -144,6 +144,7 @@ class LMI_SO BasicValues
     // consequence.
 
     std::vector<double> GetCvatCorridorFactors() const;
+    std::vector<double> GetIrc7702NspRates() const;
     std::vector<double> GetCurrCOIRates0()   const;
     std::vector<double> GetCurrCOIRates1()   const;
     std::vector<double> GetCurrCOIRates2()   const;
@@ -181,14 +182,16 @@ class LMI_SO BasicValues
     round_to<double> const& round_interest_credit   () const {return round_interest_credit_   ;}
     round_to<double> const& round_withdrawal        () const {return round_withdrawal_        ;}
     round_to<double> const& round_loan              () const {return round_loan_              ;}
+    round_to<double> const& round_interest_rate_7702() const {return round_interest_rate_7702_;}
     round_to<double> const& round_corridor_factor   () const {return round_corridor_factor_   ;}
+    round_to<double> const& round_nsp_rate_7702     () const {return round_nsp_rate_7702_     ;}
+    round_to<double> const& round_seven_pay_rate    () const {return round_seven_pay_rate_    ;}
     round_to<double> const& round_surrender_charge  () const {return round_surrender_charge_  ;}
     round_to<double> const& round_irr               () const {return round_irr_               ;}
     round_to<double> const& round_min_specamt       () const {return round_min_specamt_       ;}
     round_to<double> const& round_max_specamt       () const {return round_max_specamt_       ;}
     round_to<double> const& round_min_premium       () const {return round_min_premium_       ;}
     round_to<double> const& round_max_premium       () const {return round_max_premium_       ;}
-    round_to<double> const& round_interest_rate_7702() const {return round_interest_rate_7702_;}
 
   protected:
     double GetModalMinPrem
@@ -290,6 +293,8 @@ class LMI_SO BasicValues
     int                          MaxIncrAge;
     bool                         WaivePmTxInt1035;
     bool                         AllowTerm;
+    int                          TermForcedConvAge;
+    int                          TermForcedConvDur;
     bool                         TermIsDbFor7702;
     bool                         TermIsDbFor7702A;
     double                       ExpPerKLimit;
@@ -301,7 +306,8 @@ class LMI_SO BasicValues
     double                       CurrCoiTable1Limit;
     e_actuarial_table_method     CoiInforceReentry;
     mcenum_anticipated_deduction MaxWDDed_;
-    double                       MaxWDAVMult;
+    double                       MaxWdGenAcctValMult;
+    double                       MaxWdSepAcctValMult;
     mcenum_anticipated_deduction MaxLoanDed_;
     double                       MaxLoanAVMult;
     int                          NoLapseMinDur;
@@ -411,14 +417,16 @@ class LMI_SO BasicValues
     round_to<double> round_interest_credit_   ;
     round_to<double> round_withdrawal_        ;
     round_to<double> round_loan_              ;
+    round_to<double> round_interest_rate_7702_;
     round_to<double> round_corridor_factor_   ;
+    round_to<double> round_nsp_rate_7702_     ;
+    round_to<double> round_seven_pay_rate_    ;
     round_to<double> round_surrender_charge_  ;
     round_to<double> round_irr_               ;
     round_to<double> round_min_specamt_       ;
     round_to<double> round_max_specamt_       ;
     round_to<double> round_min_premium_       ;
     round_to<double> round_max_premium_       ;
-    round_to<double> round_interest_rate_7702_;
 };
 
 inline int BasicValues::GetLength() const

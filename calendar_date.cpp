@@ -1,6 +1,6 @@
 // Calendar dates.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -33,7 +33,7 @@
 #include "value_cast.hpp"
 #include "zero.hpp"
 
-#include <algorithm> // std::max(), std::min()
+#include <algorithm>                    // std::max(), std::min()
 #include <ctime>
 #include <iomanip>
 #include <ios>
@@ -42,6 +42,7 @@
 #include <locale>
 #include <ostream>
 #include <sstream>
+#include <stdexcept>                    // std::runtime_error
 
 namespace
 {
@@ -425,20 +426,17 @@ std::pair<calendar_date,calendar_date> bracketing_anniversaries
     ,calendar_date const& other_date
     )
 {
-    calendar_date some_neighboring_anniversary = add_years
-        (base_date
-        ,other_date.year() - base_date.year()
-        ,false
-        );
+    int const offset = other_date.year() - base_date.year();
+    calendar_date an_adjacent_anniversary = add_years(base_date, offset, false);
     calendar_date last_anniversary =
-        other_date < some_neighboring_anniversary
-        ?   add_years(some_neighboring_anniversary, -1, false)
-        :   some_neighboring_anniversary
+        other_date < an_adjacent_anniversary
+        ? add_years(base_date, offset - 1, false)
+        : an_adjacent_anniversary
         ;
     calendar_date next_anniversary =
-        other_date < some_neighboring_anniversary
-        ?   some_neighboring_anniversary
-        :   add_years(some_neighboring_anniversary,  1, false)
+        other_date < an_adjacent_anniversary
+        ? an_adjacent_anniversary
+        : add_years(base_date, offset + 1, false)
         ;
     LMI_ASSERT(last_anniversary <= other_date && other_date < next_anniversary);
     LMI_ASSERT(1 == next_anniversary.year() - last_anniversary.year());
@@ -457,15 +455,15 @@ int notional_age
     )
 {
     typedef std::pair<calendar_date,calendar_date> date_pair;
-    date_pair z = bracketing_anniversaries(birthdate, as_of_date);
-    calendar_date last_birthday = z.first;
-    calendar_date next_birthday = z.second;
+    date_pair const z = bracketing_anniversaries(birthdate, as_of_date);
+    calendar_date const last_birthday = z.first;
+    calendar_date const next_birthday = z.second;
 
-    int days_since_last_birthday =
+    int const days_since_last_birthday =
             as_of_date   .julian_day_number()
         -   last_birthday.julian_day_number()
         ;
-    int days_until_next_birthday =
+    int const days_until_next_birthday =
             next_birthday.julian_day_number()
         -   as_of_date   .julian_day_number()
         ;
@@ -474,21 +472,15 @@ int notional_age
         &&  0 <= days_until_next_birthday && days_until_next_birthday <= 366
         );
 
-    int age_last_birthday = last_birthday.year() - birthdate.year();
+    int const age_last_birthday = last_birthday.year() - birthdate.year();
 
-    if(!alb_anb)
-        {
-        return age_last_birthday;
-        }
-// TODO ?? DATABASE !! The way ties are resolved should be configurable.
-    else if(days_since_last_birthday < days_until_next_birthday)
-        {
-        return age_last_birthday;
-        }
-    else
-        {
-        return 1 + age_last_birthday;
-        }
+    int const delta =
+          (oe_age_last_birthday                 == alb_anb) ? 0
+        : (oe_age_nearest_birthday_ties_older   == alb_anb) ? (days_until_next_birthday <= days_since_last_birthday)
+        : (oe_age_nearest_birthday_ties_younger == alb_anb) ? (days_until_next_birthday <  days_since_last_birthday)
+        : throw std::runtime_error("Unknown method to determine age.")
+        ;
+    return age_last_birthday + delta;
 }
 } // Unnamed namespace.
 

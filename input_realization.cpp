@@ -1,6 +1,6 @@
 // Realize sequence-string input as vectors.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -869,7 +869,7 @@ std::string Input::RealizeFlatExtra()
 
     if(!each_equal(FlatExtraRealized_.begin(), FlatExtraRealized_.end(), 0.0))
         {
-        return "Flat extras may not be illustrated on this policy form.";
+        return "Flat extras not permitted.";
         }
 
     return "";

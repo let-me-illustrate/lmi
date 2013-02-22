@@ -1,6 +1,6 @@
 // Document class for product data.
 //
-// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -46,6 +46,7 @@ PolicyDocument::PolicyDocument()
     values_["DatabaseFilename"        ] = &product_data_.DatabaseFilename        .datum_;
     values_["FundFilename"            ] = &product_data_.FundFilename            .datum_;
     values_["CvatCorridorFilename"    ] = &product_data_.CvatCorridorFilename    .datum_;
+    values_["Irc7702NspFilename"      ] = &product_data_.Irc7702NspFilename      .datum_;
     values_["CurrCOIFilename"         ] = &product_data_.CurrCOIFilename         .datum_;
     values_["GuarCOIFilename"         ] = &product_data_.GuarCOIFilename         .datum_;
     values_["WPFilename"              ] = &product_data_.WPFilename              .datum_;

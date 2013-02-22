@@ -1,6 +1,6 @@
 // ChangeLog for "Let me illustrate...". See 'MAINTENANCE' after license.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -31008,4 +31008,907 @@ Set limits on COI-reentry date, replacing 20121024T1841Z prototype.
 
   version.hpp
 Designate release candidate.
+
+20121130T2040Z <gchicares@sbcglobal.net> [556]
+
+  dbdict.cpp
+Improve documentation.
+
+20121201T1046Z <gchicares@sbcglobal.net> [556]
+
+  ihs_irc7702.cpp
+Improve documentation.
+
+20121204T1055Z <gchicares@sbcglobal.net> [556]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+  input_harmonization.cpp
+  mec_input.cpp
+Refactor, renaming certain arguments for concinnity.
+
+20121204T1412Z <gchicares@sbcglobal.net> [556]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+  dbdict.cpp
+  input_harmonization.cpp
+  mec_input.cpp
+  oecumenic_enumerations.hpp
+Refactor, replacing a bool with an enum.
+
+20121205T0043Z <gchicares@sbcglobal.net> [556]
+
+  calendar_date_test.cpp
+Rearrange tests to follow enumeration order.
+
+20121206T1203Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date.cpp
+  calendar_date_test.cpp
+  dbnames.hpp
+  oecumenic_enumerations.hpp
+Add an enumerator, temporarily leaving a unit-test issue open.
+
+20121207T0943Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date_test.cpp
+Augment unit test, demonstrating the issue noted 20121206T1203Z.
+
+20121208T1049Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date.cpp
+Refactor, adding one local variable and renaming another.
+
+20121208T1115Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date.cpp
+Fix defect introduced 20060919T0301Z. Given a base date, one of its
+adjacent anniversaries was inappropriately calculated from the other,
+by adding or subtracting one year--causing both anniversaries of a
+leap-year day to fall on March first, even in a leap year.
+
+20121208T1711Z <gchicares@sbcglobal.net> [555]
+
+  calendar_date_test.cpp
+  oecumenic_enumerations.hpp
+Refactor, writing insurance-age enumerators in logical order.
+
+20121210T2003Z <gchicares@sbcglobal.net> [555]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Express earliest loan and withdrawal durations as months, not years.
+
+20121211T1359Z <gchicares@sbcglobal.net> [554]
+
+  input_harmonization.cpp
+Remove a toxic kludge reinstated 20081214T1434Z.
+
+20121213T2315Z <gchicares@sbcglobal.net> [554]
+
+  dbnames.xpp
+  ihs_mortal.cpp
+  input_realization.cpp
+Improve documentation and error messages. Not all flat extras are
+substandard: e.g., aviation flats may apply to standard or even
+preferred risks. A policy form may permit flat extras in certain
+circumstances, and forbid them in others.
+
+20121213T2353Z <gchicares@sbcglobal.net> [554]
+
+  dbdict.cpp
+Demonstrate a conditional restriction on table ratings.
+
+20121214T0159Z <gchicares@sbcglobal.net> [552]
+
+  ihs_basicval.cpp
+  input_harmonization.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch, and noted 20050601T1449Z.
+
+20121214T1057Z <gchicares@sbcglobal.net> [552]
+
+  input_harmonization.cpp
+Remove part of a toxic kludge reinstated 20081214T1434Z.
+
+20121214T1354Z <gchicares@sbcglobal.net> [551]
+
+  input_harmonization.cpp
+Remove remainder of toxic kludges reinstated 20081214T1434Z.
+
+20121218T0859Z <gchicares@sbcglobal.net> [549]
+
+  ihs_basicval.cpp
+  ihs_mortal.cpp
+  input_harmonization.cpp
+Improve enablement and documentation of rated WP and ADB.
+
+20121218T1024Z <gchicares@sbcglobal.net> [549]
+
+  version.hpp
+Designate release candidate.
+
+20121219T0047Z <gchicares@sbcglobal.net> [549]
+
+  lmi.cpp
+  lmi.hpp
+Eliminate dead code.
+
+20121219T1409Z <gchicares@sbcglobal.net> [546]
+
+  ihs_mortal.cpp
+  interest_rates.cpp
+  loads.cpp
+  math_functors.hpp
+  mortality_rates.cpp
+Refactor for concinnity.
+
+20121219T2312Z <gchicares@sbcglobal.net> [546]
+
+  input_harmonization.cpp
+Improve documentation.
+
+20121220T1206Z <gchicares@sbcglobal.net> [546]
+
+  basic_values.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Distinguish general- and separate-account withdrawal limits.
+
+20121221T0851Z <gchicares@sbcglobal.net> [545]
+
+  basic_values.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Convert term rider at a given age or duration.
+
+20121223T1315Z <gchicares@sbcglobal.net> [545]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Establish limits for spouse and child riders.
+
+20130103T1902Z <gchicares@sbcglobal.net> [545]
+
+  COPYING.html
+  ChangeLog
+  DefectLog
+  GNUmakefile
+  INSTALL
+  Makefile.am
+  README
+  README.auto
+  about_dialog.cpp
+  about_dialog.hpp
+  account_value.hpp
+  account_value_test.cpp
+  accountvalue.cpp
+  acinclude.m4
+  actuarial_table.cpp
+  actuarial_table.hpp
+  actuarial_table.rnc
+  actuarial_table_test.cpp
+  alert.cpp
+  alert.hpp
+  alert_cgi.cpp
+  alert_cli.cpp
+  alert_test.cpp
+  alert_wx.cpp
+  antediluvian_stubs.cpp
+  any_entity.hpp
+  any_member.hpp
+  any_member_test.cpp
+  assert_lmi.hpp
+  assert_lmi_test.cpp
+  authenticity.cpp
+  authenticity.hpp
+  authenticity_test.cpp
+  autodependency.make
+  autogen.sh
+  basic_values.hpp
+  basicvalues.cpp
+  bcc_5_5_1.make
+  bcc_ar.cpp
+  bcc_cc.cpp
+  bcc_ld.cpp
+  bcc_rc.cpp
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+  callback.hpp
+  callback_test.cpp
+  catch_exceptions.hpp
+  ce_product_name.cpp
+  ce_product_name.hpp
+  cell.rnc
+  cell.xsd
+  census_document.cpp
+  census_document.hpp
+  census_view.cpp
+  census_view.hpp
+  census_view_old.cpp
+  census_view_old.hpp
+  check_std_names.sed
+  comma_punct.hpp
+  comma_punct_test.cpp
+  commutation_functions.cpp
+  commutation_functions.hpp
+  commutation_functions_test.cpp
+  como.make
+  config.hpp
+  config_bc551.hpp
+  config_como_mingw.hpp
+  config_ming323.hpp
+  configurable_settings.cpp
+  configurable_settings.hpp
+  configurable_settings_test.cpp
+  configuration.make
+  configure.ac
+  contains.hpp
+  contains_test.cpp
+  cpp_main.cpp
+  crc32.cpp
+  crc32.hpp
+  crc32_test.cpp
+  custom_io_0.cpp
+  custom_io_0.hpp
+  data_directory.cpp
+  data_directory.hpp
+  database.cpp
+  database.hpp
+  database_document.cpp
+  database_document.hpp
+  database_view.cpp
+  database_view.hpp
+  database_view_editor.cpp
+  database_view_editor.hpp
+  datum_base.cpp
+  datum_base.hpp
+  datum_boolean.cpp
+  datum_boolean.hpp
+  datum_sequence.cpp
+  datum_sequence.hpp
+  datum_string.cpp
+  datum_string.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbindex.hpp
+  dbnames.cpp
+  dbnames.hpp
+  dbnames.xpp
+  dbvalue.cpp
+  dbvalue.hpp
+  death_benefits.cpp
+  death_benefits.hpp
+  default_view.cpp
+  default_view.hpp
+  diagnostics.sed
+  docmanager_ex.cpp
+  docmanager_ex.hpp
+  docmdichildframe_ex.cpp
+  docmdichildframe_ex.hpp
+  edit_mvc_docview_parameters.hpp
+  elapsed_time.cpp
+  emit_ledger.cpp
+  emit_ledger.hpp
+  errors.sed
+  exit_codes.hpp
+  expm1.c
+  expm1.h
+  expression_template_0_test.cpp
+  facets.cpp
+  facets.hpp
+  fancy.make
+  faq.html
+  fenv_guard.cpp
+  fenv_guard.hpp
+  fenv_lmi.cpp
+  fenv_lmi.hpp
+  fenv_lmi_test.cpp
+  fenv_lmi_x86.hpp
+  file_command.cpp
+  file_command.hpp
+  file_command_cgi.cpp
+  file_command_cli.cpp
+  file_command_test.cpp
+  file_command_wx.cpp
+  financial.hpp
+  financial_test.cpp
+  fo_common.xsl
+  fund_data.cpp
+  fund_data.hpp
+  generate_passkey.cpp
+  generate_product_files.cpp
+  getopt.cpp
+  getopt.hpp
+  getopt_test.cpp
+  global_settings.cpp
+  global_settings.hpp
+  global_settings_test.cpp
+  gpt_specamt.cpp
+  gpt_specamt.hpp
+  group_tutorial.html
+  group_values.cpp
+  group_values.hpp
+  handle_exceptions.hpp
+  handle_exceptions_test.cpp
+  icon_monger.cpp
+  icon_monger.hpp
+  ieee754.hpp
+  ieee754_test.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+  ihs_crc_comp.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+  ihs_mortal.cpp
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+  ihs_server7702test.cpp
+  ihs_x_type.hpp
+  illustration_document.cpp
+  illustration_document.hpp
+  illustration_reg.xsl
+  illustration_view.cpp
+  illustration_view.hpp
+  illustrator.cpp
+  illustrator.hpp
+  individual_tutorial.html
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_realization.cpp
+  input_seq_helpers.cpp
+  input_seq_helpers.hpp
+  input_seq_test.cpp
+  input_sequence.cpp
+  input_sequence.hpp
+  input_sequence_entry.cpp
+  input_sequence_entry.hpp
+  input_test.cpp
+  input_xml_io.cpp
+  install_como.sh
+  install_cygwin.bat
+  install_libxml2_libxslt.make
+  install_mingw.make
+  install_miscellanea.make
+  install_mpatrol.make
+  install_msw.sh
+  install_wx.make
+  interest_rates.cpp
+  interest_rates.hpp
+  irc7702a_test.cpp
+  istream_to_string.hpp
+  istream_to_string_test.cpp
+  ledger.cpp
+  ledger.hpp
+  ledger_base.cpp
+  ledger_base.hpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+  ledger_xsl.hpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+  license.cpp
+  license.hpp
+  lmi.cpp
+  lmi.hpp
+  lmi_msw_res.rc
+  loads.cpp
+  loads.hpp
+  loads_impl.hpp
+  loads_test.cpp
+  local_options.sh
+  main_cgi.cpp
+  main_cli.cpp
+  main_common.cpp
+  main_common.hpp
+  main_common_non_wx.cpp
+  main_wx.cpp
+  main_wx.hpp
+  map_lookup.hpp
+  map_lookup_test.cpp
+  materially_equal.hpp
+  materially_equal_test.cpp
+  math_functors.hpp
+  math_functors_test.cpp
+  max_stream_precision.hpp
+  mc_enum.cpp
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_aux.hpp
+  mc_enum_fwd.hpp
+  mc_enum_metadata.hpp
+  mc_enum_test.cpp
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_test_aux_enums.hpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  mc_enum_types_aux.cpp
+  mc_enum_types_aux.hpp
+  md5.cpp
+  md5.hpp
+  mec.xrc
+  mec_document.cpp
+  mec_document.hpp
+  mec_input.cpp
+  mec_input.hpp
+  mec_server.cpp
+  mec_server.hpp
+  mec_state.cpp
+  mec_state.hpp
+  mec_view.cpp
+  mec_view.hpp
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+  menu_commands.html
+  menus.xrc
+  miscellany.cpp
+  miscellany.hpp
+  miscellany_test.cpp
+  mortality_rates.cpp
+  mortality_rates.hpp
+  mortality_rates_fetch.cpp
+  mortality_rates_test.cpp
+  mpatrol-mingw-GNUmakefile
+  mpatrol_patch_test.cpp
+  msw_common.make
+  msw_cygwin.make
+  msw_generic.make
+  msw_msys.make
+  msw_workarounds.cpp
+  msw_workarounds.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  multidimgrid_tools.cpp
+  multidimgrid_tools.hpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  multiple_cell_document.rnc
+  multiple_cell_document.xsd
+  mvc_controller.cpp
+  mvc_controller.hpp
+  mvc_controller.tpp
+  mvc_model.cpp
+  mvc_model.hpp
+  mvc_view.cpp
+  mvc_view.hpp
+  my_db.cpp
+  my_fund.cpp
+  my_prod.cpp
+  my_proem.cpp
+  my_proem.hpp
+  my_rnd.cpp
+  my_test_coding_rules.cpp
+  my_tier.cpp
+  name_value_pairs.cpp
+  name_value_pairs.hpp
+  name_value_pairs_test.cpp
+  nasd.xsl
+  ncnnnpnn.hpp
+  ncnnnpnn_test.cpp
+  null_stream.cpp
+  null_stream.hpp
+  numeric_io_cast.hpp
+  numeric_io_test.cpp
+  numeric_io_traits.hpp
+  objects.make
+  obstruct_slicing.hpp
+  obstruct_slicing_test.cpp
+  oecumenic_enumerations.hpp
+  outlay.cpp
+  outlay.hpp
+  pasting_to_a_census.html
+  path_utility.cpp
+  path_utility.hpp
+  path_utility_test.cpp
+  pchfile.hpp
+  platform_dependent.hpp
+  policy_document.cpp
+  policy_document.hpp
+  policy_view.cpp
+  policy_view.hpp
+  policy_view.xrc
+  posix_fhs.make
+  preferences_model.cpp
+  preferences_model.hpp
+  preferences_view.cpp
+  preferences_view.hpp
+  preferences_view.xrc
+  premium_tax.cpp
+  premium_tax.hpp
+  premium_tax_test.cpp
+  previewframe_ex.cpp
+  previewframe_ex.hpp
+  print_matrix.hpp
+  print_matrix_test.cpp
+  product_data.cpp
+  product_data.hpp
+  product_editor.cpp
+  product_editor.hpp
+  product_file_test.cpp
+  product_names.cpp
+  product_names.hpp
+  progress_meter.cpp
+  progress_meter.hpp
+  progress_meter_cgi.cpp
+  progress_meter_cli.cpp
+  progress_meter_test.cpp
+  progress_meter_wx.cpp
+  reg_d_group.xsl
+  reg_d_individual.xsl
+  reg_d_offshore.xsl
+  regex_test.cpp
+  round_test.cpp
+  round_to.hpp
+  round_to_test.cpp
+  rounding_document.cpp
+  rounding_document.hpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view.cpp
+  rounding_view.hpp
+  rounding_view.xrc
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  rtti_lmi.hpp
+  rtti_lmi_test.cpp
+  safely_dereference_as.hpp
+  safely_dereference_as_test.cpp
+  sandbox_test.cpp
+  sequence_input.html
+  sigfpe.cpp
+  sigfpe.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  single_cell_document.rnc
+  single_cell_document.xsd
+  single_choice_popup_menu.cpp
+  single_choice_popup_menu.hpp
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+  snprintf_test.cpp
+  so_attributes.hpp
+  soa2xml.cpp
+  soa_helpers.hpp
+  soa_stress_test.cpp
+  solve.cpp
+  sort_cell_subelements.xsl
+  stl_extensions.hpp
+  stratified_algorithms.cpp
+  stratified_algorithms.hpp
+  stratified_algorithms_test.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  stratified_charges.xpp
+  stream_cast.hpp
+  stream_cast_test.cpp
+  surrchg_rates.cpp
+  surrchg_rates.hpp
+  system_command.cpp
+  system_command.hpp
+  system_command_non_wx.cpp
+  system_command_test.cpp
+  system_command_wx.cpp
+  test_coding_rules.cpp
+  test_coding_rules_test.sh
+  test_main.cpp
+  test_schemata.sh
+  test_tools.hpp
+  test_tools_test.cpp
+  text_doc.cpp
+  text_doc.hpp
+  text_to_html_strings.sed
+  text_to_strings.sed
+  text_view.cpp
+  text_view.hpp
+  tier_document.cpp
+  tier_document.hpp
+  tier_view.cpp
+  tier_view.hpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_fwd.hpp
+  tn_range_test.cpp
+  tn_range_test_aux.cpp
+  tn_range_test_aux.hpp
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+  toolbar.xrc
+  transferor.cpp
+  transferor.hpp
+  types.rnc
+  types.xsd
+  uncopyable_lmi.hpp
+  user_manual.html
+  value_cast.hpp
+  value_cast_test.cpp
+  variable_annuity.xsl
+  vector_test.cpp
+  version.hpp
+  view_ex.cpp
+  view_ex.hpp
+  view_ex.tpp
+  workhorse.make
+  wx_checks.cpp
+  wx_checks.hpp
+  wx_new.cpp
+  wx_new.hpp
+  wx_new_test.cpp
+  wx_utility.cpp
+  wx_utility.hpp
+  wx_workarounds.hpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+  xml_lmi_fwd.hpp
+  xml_serializable.hpp
+  xml_serializable.tpp
+  xml_serialize.hpp
+  xml_serialize_test.cpp
+  xml_xslt_wrapp.cpp
+  yare_input.cpp
+  yare_input.hpp
+  zero.hpp
+  zero_test.cpp
+Update copyright notices.
+
+20130103T2217Z <gchicares@sbcglobal.net> [545]
+
+  license.cpp
+Write copyright notice on one line, so it'll be updated automatically.
+This precludes oversights such as the one fixed 20110323T1518Z.
+
+20130103T2243Z <gchicares@sbcglobal.net> [545]
+
+  GNUmakefile
+Don't create new-year backup directory if it already exists. This
+prevents overwriting the contents of last year's backup directory when
+the 'happy_new_year' target's instructions are overlooked.
+
+20130103T2311Z <gchicares@sbcglobal.net> [545]
+
+  GNUmakefile
+Fix defect introduced 20120508T1347Z: missing quotes in shell command.
+Code added to work around an empty argument was itself defective,
+producing "[: too many arguments".
+
+20130103T2353Z <gchicares@sbcglobal.net> [545]
+
+  GNUmakefile
+Filter odd cases more aggressively, making new-year updates easier.
+
+20130104T1731Z <gchicares@sbcglobal.net> [544]
+
+  ihs_avmly.cpp
+Resolve a marked defect; improve documentation.
+
+20130104T1732Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+Set reasonable rider limits for sample product.
+
+20130104T1733Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Rearrange. Work with riders before specamt, because term rider can
+affect some specamt fields.
+
+20130104T1738Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Use cached value instead of querying database unnecessarily.
+
+20130105T0109Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Save and reuse results of database queries.
+
+20130105T1303Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+Forbid sample-product rated riders where unsupported by calculations.
+
+20130105T1304Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Allow rated term, ADB, and WP in GUI iff allowed by database.
+
+20130105T2207Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Enforce rider age restrictions.
+
+20130106T0844Z <gchicares@sbcglobal.net> [544]
+
+  input_harmonization.cpp
+Enforce spouse and child rider amount limits.
+
+20130107T2149Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Remove unused 'PremLoad7702' database entity. Combining premium-based
+loads actually used for calculating current account value makes it
+harder to overlook subtleties. Any 7702-specific load component should
+be handled explicitly--as premium tax is, for now at least.
+
+20130109T1256Z <gchicares@sbcglobal.net> [544]
+
+  dbnames.hpp
+Improve documentation.
+
+20130109T1304Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Improve names of certain database entities.
+
+20130109T1309Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+Clarify by using a more generic table number for unused tables.
+
+20130109T1402Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add numerous database entities for 7702 and 7702A.
+
+20130109T2233Z <gchicares@sbcglobal.net> [544]
+
+  ihs_avmly.cpp
+  oecumenic_enumerations.hpp
+Correct a misnomer noted 20130104T1731Z.
+
+20130109T2317Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Rename an entity to improve concinnity. This makes it more obvious
+that DBDictionary::InitDB() dangerously initializes the WP limit to
+zero.
+
+20130109T2330Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.cpp
+Remove the danger noted 20130109T2317Z, and a congener.
+
+20130110T1318Z <gchicares@sbcglobal.net> [544]
+
+  rounding_view.xrc
+Regularize indentation.
+
+20130110T1939Z <gchicares@sbcglobal.net> [544]
+
+  rounding_view.xrc
+Improve labels.
+
+20130110T2352Z <gchicares@sbcglobal.net> [544]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+  rounding_document.cpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view.xrc
+Permute to bring 7702 items together.
+
+20130111T1113Z <gchicares@sbcglobal.net> [544]
+
+  rounding_document.cpp
+Refactor for concinnity.
+
+20130111T1123Z <gchicares@sbcglobal.net> [544]
+
+  ihs_basicval.cpp
+  rounding_document.cpp
+  rounding_rules.cpp
+Reformat.
+
+20130111T1207Z <gchicares@sbcglobal.net> [544]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  rounding_document.cpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view.xrc
+Add rounding rules for 7702 and 7702A premium rates.
+
+20130111T1254Z <gchicares@sbcglobal.net> [544]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+  product_data.cpp
+  product_data.hpp
+Support external 7702 NSP tables.
+
+20130112T1124Z <gchicares@sbcglobal.net> [544]
+
+  stratified_charges.cpp
+Mark and clarify a taxation issue.
+
+20130112T1404Z <gchicares@sbcglobal.net> [544]
+
+  ihs_server7702test.cpp [expunged]
+  objects.make
+  workhorse.make
+Remove a demonstration that's no longer useful.
+
+20130112T1406Z <gchicares@sbcglobal.net> [544]
+
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+Remove code that became dead 20130112T1404Z.
+
+20130112T1437Z <gchicares@sbcglobal.net> [543]
+
+  ihs_server7702.cpp
+Remove dead code.
+
+20130113T1250Z <gchicares@sbcglobal.net> [543]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add another database entity for 7702A.
 

@@ -1,6 +1,6 @@
 // Production versus the antediluvian fork.
 //
-// Copyright (C) 2010, 2011, 2012 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -28,15 +28,9 @@
 
 #include "so_attributes.hpp"
 
-#include <string>
-
 /// Distinguish the antediluvian fork from production.
 
 bool LMI_SO is_antediluvian_fork();
-
-/// Timestamp of production release.
-
-std::string const& LMI_SO timestamp_of_production_release();
 
 #endif // lmi_hpp
 
