@@ -31912,3 +31912,8 @@ Remove dead code.
   dbnames.xpp
 Add another database entity for 7702A.
 
+20130326T1321Z <gchicares@sbcglobal.net> [543]
+
+  version.hpp
+Designate release candidate.
+
