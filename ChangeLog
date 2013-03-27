@@ -31917,3 +31917,9 @@ Add another database entity for 7702A.
   version.hpp
 Designate release candidate.
 
+20130327T1453Z <gchicares@sbcglobal.net> [543]
+
+  cell.rnc
+  cell.xsd
+Clarify inforce loan entities.
+
