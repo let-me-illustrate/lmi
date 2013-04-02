@@ -113,7 +113,7 @@ class yare_input
     bool                              UseExperienceRating             ;
     bool                              UsePartialMortality             ;
 //    mcenum_part_mort_table            PartialMortalityTable           ;
-//    std::string                       InsuredName                     ;
+    std::string                       InsuredName                     ;
 //    std::string                       Address                         ;
 //    std::string                       City                            ;
 //    mcenum_state                      State                           ;
