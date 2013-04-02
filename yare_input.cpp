@@ -83,6 +83,7 @@ yare_input::yare_input(Input const& z)
     NumberOfIdenticalLives           = z.NumberOfIdenticalLives          .value();
     UseExperienceRating              = z.UseExperienceRating             .value();
     UsePartialMortality              = z.UsePartialMortality             .value();
+    InsuredName                      = z.InsuredName                     .value();
     InsuredPremiumTableFactor        = z.InsuredPremiumTableFactor       .value();
     CorporationPremiumTableFactor    = z.CorporationPremiumTableFactor   .value();
     EffectiveDate                    = z.EffectiveDate                   .value();
