@@ -31923,3 +31923,24 @@ Designate release candidate.
   cell.xsd
 Clarify inforce loan entities.
 
+20130402T0838Z <gchicares@sbcglobal.net> [543]
+
+  ihs_irc7702.cpp
+Make a dubious diagnostic less severe and more informative.
+
+20130402T0841Z <gchicares@sbcglobal.net> [543]
+
+  yare_input.cpp
+  yare_input.hpp
+Expose 'InsuredName' for diagnostic messages.
+
+20130402T0843Z <gchicares@sbcglobal.net> [543]
+
+  ihs_avstrtgy.cpp
+Warn when increasing specified amount on an inforce case.
+
+20130402T0901Z <gchicares@sbcglobal.net> [543]
+
+  version.hpp
+Designate release candidate.
+
