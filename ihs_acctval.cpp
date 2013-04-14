@@ -954,7 +954,6 @@ void AccountValue::InitializeYear()
 }
 
 //============================================================================
-// MEC avoidance may require issuing a contract at a higher specamt than input.
 void AccountValue::InitializeSpecAmt()
 {
     YearsSpecAmt        = DeathBfts_->specamt()[Year];
