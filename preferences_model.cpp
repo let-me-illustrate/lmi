@@ -197,6 +197,13 @@ bool PreferencesModel::IsModified() const
     return false;
 }
 
+// Defect: if any column field contains an invalid name, e.g.:
+//   <calculation_summary_columns>invalid</calculation_summary_columns>
+// then this assignment:
+//   operator[](name) = columns[i];
+// throws an exception; in that case, running an illustration appears
+// to fail, and the preferences GUI cannot fix the problem.
+
 void PreferencesModel::Load()
 {
     configurable_settings const& z = configurable_settings::instance();
