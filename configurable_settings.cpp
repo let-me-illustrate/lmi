@@ -31,17 +31,17 @@
 
 #include "alert.hpp"
 #include "contains.hpp"
-#include "data_directory.hpp"     // AddDataDir()
+#include "data_directory.hpp"           // AddDataDir()
 #include "handle_exceptions.hpp"
-#include "miscellany.hpp"         // lmi_array_size()
-#include "path_utility.hpp"       // validate_directory(), validate_filepath()
-#include "platform_dependent.hpp" // access()
+#include "miscellany.hpp"               // lmi_array_size()
+#include "path_utility.hpp"             // validate_directory(), validate_filepath()
+#include "platform_dependent.hpp"       // access()
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm> // std::copy()
+#include <algorithm>                    // std::copy()
 #include <iterator>
 #include <sstream>
 #include <stdexcept>
@@ -417,7 +417,7 @@ std::string const& configurable_settings::xsl_fo_command() const
     return xsl_fo_command_;
 }
 
-std::vector<std::string> effective_calculation_summary_columns()
+std::vector<std::string> parsed_calculation_summary_columns()
 {
     configurable_settings const& z = configurable_settings::instance();
     std::istringstream iss
