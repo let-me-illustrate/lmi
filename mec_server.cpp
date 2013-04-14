@@ -397,6 +397,7 @@ mec_state test_one_days_7702A_transactions
             );
         InforceDcv          += net_necessary_premium;
         InforceAccountValue += net_necessary_premium;
+        // TAXATION !! update DB also
         }
 
     if(0.0 < unnecessary_premium)
