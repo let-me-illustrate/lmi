@@ -31944,3 +31944,35 @@ Warn when increasing specified amount on an inforce case.
   version.hpp
 Designate release candidate.
 
+20130414T1227Z <gchicares@sbcglobal.net> [543]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  mec_server.cpp
+Improve documentation.
+
+20130414T1341Z <gchicares@sbcglobal.net> [543]
+
+  preferences_model.cpp
+Document a defect.
+
+20130414T1400Z <gchicares@sbcglobal.net> [543]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  ledger_text_formats.cpp
+Improve a misleading function name.
+
+20130414T1506Z <gchicares@sbcglobal.net> [543]
+
+  Makefile.am
+  configurable_settings.cpp
+  objects.make
+Diagnose the defect noted 20130414T1341Z.
+
+20130414T1847Z <gchicares@sbcglobal.net> [543]
+
+  preferences_model.cpp
+  preferences_model.hpp
+Fix defect noted 20130414T1341Z.
+
