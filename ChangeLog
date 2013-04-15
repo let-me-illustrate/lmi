@@ -31994,3 +31994,11 @@ Improve documentation.
 Fix defect introduced 20121127T2350Z: minimum can exceed maximum when
 loading a case saved years ago.
 
+20130415T1628Z <gchicares@sbcglobal.net> [543]
+
+  illustration_view.cpp
+  main_wx.cpp
+  mec_view.cpp
+  toolbar.xrc
+Add a "Print case to disk" toolbar button.
+
