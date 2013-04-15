@@ -163,6 +163,7 @@ void AccountValue::PerformSpecAmtStrategy()
             && !(0 == InforceYear && 0 == InforceMonth)
             && mce_sa_input_scalar == yare_input_.SpecifiedAmountStrategy[j]
             && inforce_specamt < m
+            && !Solving
             )
             {
             warning()
