@@ -228,7 +228,7 @@ cell_element = element cell
      element InforceDataSource                {xsd:nonNegativeInteger}
     ,## Inforce 7702A deemed cash value.
      element InforceDcv                       {nonnegative_double}
-    ,## Inforce account value in the general account.
+    ,## Inforce unloaned account value in the general account.
      element InforceGeneralAccountValue       {nonnegative_double}
     ,## Inforce 7702 guideline level premium.
      element InforceGlp                       {xsd:double}

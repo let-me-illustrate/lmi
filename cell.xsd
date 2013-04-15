@@ -698,7 +698,7 @@ or forced out.</xs:documentation>
   </xs:element>
   <xs:element name="InforceGeneralAccountValue" type="nonnegative_double">
     <xs:annotation>
-      <xs:documentation>Inforce account value in the general account.</xs:documentation>
+      <xs:documentation>Inforce unloaned account value in the general account.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceGlp" type="xs:double">
