@@ -31976,3 +31976,21 @@ Diagnose the defect noted 20130414T1341Z.
   preferences_model.hpp
 Fix defect noted 20130414T1341Z.
 
+20130415T1500Z <gchicares@sbcglobal.net> [543]
+
+  ihs_avstrtgy.cpp
+Fix defect introduced 20130402T0843Z: multiple warnings during solve.
+
+20130415T1502Z <gchicares@sbcglobal.net> [543]
+
+  accountvalue.cpp
+  cell.rnc
+  cell.xsd
+Improve documentation.
+
+20130415T1504Z <gchicares@sbcglobal.net> [543]
+
+  input_harmonization.cpp
+Fix defect introduced 20121127T2350Z: minimum can exceed maximum when
+loading a case saved years ago.
+
