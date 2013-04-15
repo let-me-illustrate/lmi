@@ -406,6 +406,7 @@ void Input::DoHarmonize()
         );
     calendar_date reset_min(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMinDate))));
     calendar_date reset_max(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMaxDate))));
+    reset_min = std::min(reset_min, most_recent_anniversary);
     reset_max = std::min(reset_max, most_recent_anniversary);
     if(!global_settings::instance().regression_testing())
         {
