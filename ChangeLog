@@ -32002,3 +32002,19 @@ loading a case saved years ago.
   toolbar.xrc
 Add a "Print case to disk" toolbar button.
 
+20130416T1213Z <gchicares@sbcglobal.net> [543]
+
+  dbdict.hpp
+Improve documentation.
+
+20130416T1214Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax_test.cpp
+Test premium-tax rates.
+
+20130416T1215Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Rearrange and improve documentation.
+
