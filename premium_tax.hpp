@@ -124,6 +124,14 @@ class premium_tax
   private:
     void test_consistency(product_database const& db) const;
 
+    double lowest_premium_tax_load
+        (mcenum_state              tax_state
+        ,mcenum_state              domicile
+        ,bool                      amortize_premium_load
+        ,product_database   const& db
+        ,stratified_charges const& strata
+        ) const;
+
     // Ctor value-arguments.
     mcenum_state tax_state_;
     mcenum_state domicile_;
@@ -146,14 +154,6 @@ class premium_tax
 std::vector<double> const& premium_tax_rates_for_life_insurance();
 
 std::vector<double> const& premium_tax_rates_for_annuities();
-
-double lowest_premium_tax_load
-    (mcenum_state              tax_state
-    ,mcenum_state              domicile
-    ,bool                      amortize_premium_load
-    ,product_database   const& db
-    ,stratified_charges const& strata
-    );
 
 #endif // premium_tax_hpp
 
