@@ -122,7 +122,7 @@ class premium_tax
     bool   is_tiered              () const;
 
   private:
-    void test_consistency() const;
+    void test_consistency(product_database const& db) const;
 
     // Ctor value-arguments.
     mcenum_state tax_state_;
