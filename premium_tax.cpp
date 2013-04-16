@@ -144,7 +144,7 @@ premium_tax::premium_tax
         }
     }
 
-    test_consistency();
+    test_consistency(db);
 }
 
 /// Antediluvian ctor.
@@ -177,6 +177,13 @@ premium_tax::~premium_tax()
 
 /// Test consistency of premium-tax loads.
 ///
+/// If the scalar premium-tax load varies by state, then it must be
+/// identical to the premium-tax rate, so that premium tax is passed
+/// through exactly--and, therefore, tiered tax rates determine loads
+/// where applicable and implemented. It would be possible to design a
+/// product otherwise, but in practice this limitation is generally
+/// respected, and it does simplify the code.
+///
 /// If the tiered premium-tax load isn't zero, then the corresponding
 /// non-tiered load must be zero, so that the sum of the tiered and
 /// non-tiered portions is the actual load.
@@ -193,8 +200,21 @@ premium_tax::~premium_tax()
 /// attention. If premium tax is not passed through as a load, then
 /// there's no problem at all.
 
-void premium_tax::test_consistency() const
+void premium_tax::test_consistency(product_database const& db) const
 {
+    if
+        (  db.varies_by_state(DB_PremTaxLoad)
+        && !db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate)
+        )
+        {
+        fatal_error()
+            << "Premium-tax load varies by state, but differs"
+            << " from premium-tax rates. Probably the database"
+            << " is incorrect.\n"
+            << LMI_FLUSH
+            ;
+        }
+
     if(is_tiered_in_tax_state_)
         {
         if(0.0 != load_rate())
@@ -411,8 +431,7 @@ std::vector<double> const& premium_tax_rates_for_annuities()
 /// TAXATION !! No contemporary authority seems to believe that a
 /// change in the premium-tax rate, even if passed through to the
 /// policyowner, is a 7702A material change or a GPT adjustment event.
-/// Therefore, this function will be expunged; but any unique
-/// commentary or consistency test should be preserved.
+/// Therefore, this function will be expunged.
 
 double lowest_premium_tax_load
     (mcenum_state              tax_state
@@ -440,20 +459,6 @@ double lowest_premium_tax_load
     if(!db.varies_by_state(DB_PremTaxLoad))
         {
         return z;
-        }
-
-    // If premium-tax load varies by state, we're assuming that
-    // it equals premium-tax rate--i.e. that premium tax is passed
-    // through exactly--and that therefore tiered tax rates determine
-    // loads where applicable and implemented.
-    if(!db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate))
-        {
-        fatal_error()
-            << "Premium-tax load varies by state, but differs"
-            << " from premium-tax rates. Probably the database"
-            << " is incorrect.\n"
-            << LMI_FLUSH
-            ;
         }
 
     if(strata.premium_tax_is_tiered(tax_state))
