@@ -458,18 +458,6 @@ double lowest_premium_tax_load
 
     if(strata.premium_tax_is_tiered(tax_state))
         {
-        if(0.0 != z)
-            {
-            fatal_error()
-                << "Premium-tax load is tiered in state "
-                << mc_str(tax_state)
-                << ", but the product database specifies a scalar load of "
-                << z
-                << " instead of zero as expected. Probably the database"
-                << " is incorrect."
-                << LMI_FLUSH
-                ;
-            }
         z = strata.minimum_tiered_premium_tax_rate(tax_state);
         }
 
