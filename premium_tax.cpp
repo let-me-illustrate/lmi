@@ -433,13 +433,13 @@ std::vector<double> const& premium_tax_rates_for_annuities()
 /// policyowner, is a 7702A material change or a GPT adjustment event.
 /// Therefore, this function will be expunged.
 
-double lowest_premium_tax_load
+double premium_tax::lowest_premium_tax_load
     (mcenum_state              tax_state
     ,mcenum_state              domicile
     ,bool                      amortize_premium_load
     ,product_database   const& db
     ,stratified_charges const& strata
-    )
+    ) const
 {
     double z = 0.0;
     if(amortize_premium_load)
