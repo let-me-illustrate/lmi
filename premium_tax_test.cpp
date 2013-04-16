@@ -28,7 +28,10 @@
 
 #include "premium_tax.hpp"
 
-#include "path_utility.hpp" // initialize_filesystem()
+#include "database.hpp"
+#include "dbdict.hpp"
+#include "path_utility.hpp"             // initialize_filesystem()
+#include "stratified_charges.hpp"
 #include "test_tools.hpp"
 
 class premium_tax_test
@@ -36,17 +39,73 @@ class premium_tax_test
   public:
     static void test()
         {
-        test_something();
+        write_prerequisite_files();
+        test_rates();
         }
 
   private:
-    static void test_something();
+    static void write_prerequisite_files();
+    static void test_rates();
 };
 
-/// Placeholder.
-
-void premium_tax_test::test_something()
+void premium_tax_test::write_prerequisite_files()
 {
+    DBDictionary::instance() .WriteSampleDBFile      ();
+    stratified_charges      ::write_stratified_files ();
+}
+
+/// Test premium-tax rates.
+
+void premium_tax_test::test_rates()
+{
+    product_database db
+        ("sample"
+        ,mce_female
+        ,mce_standard
+        ,mce_nonsmoker
+        ,45
+        ,mce_nonmedical
+        ,mce_s_CT
+        );
+    stratified_charges strata("sample.strata");
+
+    // Tax state = domicile; not tiered.
+    {
+    // arguments: tax_state, domicile, amortize_premium_load, db, strata
+    premium_tax z(mce_s_CT, mce_s_CT, false, db, strata);
+    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0175);
+    BOOST_TEST_EQUAL(z.load_rate      (), 0.0175);
+    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0175);
+    BOOST_TEST_EQUAL(z.is_tiered      (), false );
+    }
+
+    // Retaliation.
+    {
+    premium_tax z(mce_s_CT, mce_s_MA, false, db, strata);
+    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0200);
+    BOOST_TEST_EQUAL(z.load_rate      (), 0.0200);
+    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0200);
+    BOOST_TEST_EQUAL(z.is_tiered      (), false );
+    }
+
+    // Tiered.
+    {
+    premium_tax z(mce_s_AK, mce_s_CT, false, db, strata);
+    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0000);
+    BOOST_TEST_EQUAL(z.load_rate      (), 0.0000);
+    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0010);
+    BOOST_TEST_EQUAL(z.is_tiered      (), true  );
+    }
+
+    // Amortized.
+    {
+    premium_tax z(mce_s_CT, mce_s_MA, true , db, strata);
+    // TODO ?? Don't the suppressed tests indicate a defect?
+//    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0000);
+//    BOOST_TEST_EQUAL(z.load_rate      (), 0.0000);
+    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0000);
+    BOOST_TEST_EQUAL(z.is_tiered      (), false );
+    }
 }
 
 int test_main(int, char*[])
