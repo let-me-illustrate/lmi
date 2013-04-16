@@ -33,10 +33,10 @@
 #include "contains.hpp"
 #include "database.hpp"
 #include "materially_equal.hpp"
-#include "mc_enum_types_aux.hpp" // mc_str()
+#include "mc_enum_types_aux.hpp"        // mc_str()
 #include "stratified_charges.hpp"
 
-#include <algorithm>             // std::max()
+#include <algorithm>                    // std::max()
 
 namespace {
 /// Determine whether premium tax is retaliatory.
@@ -177,8 +177,9 @@ premium_tax::~premium_tax()
 
 /// Test consistency of premium-tax loads.
 ///
-/// In particular, if the tiered premium-tax load isn't zero, then the
-/// corresponding non-tiered load must be zero.
+/// If the tiered premium-tax load isn't zero, then the corresponding
+/// non-tiered load must be zero, so that the sum of the tiered and
+/// non-tiered portions is the actual load.
 ///
 /// Premium-tax pass-through for AK, DE, and SD insurers is not
 /// supported. If the state of domicile has a tiered rate, then most
@@ -409,8 +410,8 @@ std::vector<double> const& premium_tax_rates_for_annuities()
 ///
 /// TAXATION !! No contemporary authority seems to believe that a
 /// change in the premium-tax rate, even if passed through to the
-/// policyowner, is a 7702A material change or a GPT adjustment
-/// event. Therefore, this function will be expunged; but any unique
+/// policyowner, is a 7702A material change or a GPT adjustment event.
+/// Therefore, this function will be expunged; but any unique
 /// commentary or consistency test should be preserved.
 
 double lowest_premium_tax_load
@@ -421,24 +422,6 @@ double lowest_premium_tax_load
     ,stratified_charges const& strata
     )
 {
-    // TRICKY !! Here, we use 'DB_PremTaxLoad', not 'DB_PremTaxRate',
-    // to determine the lowest premium-tax load. Premium-tax loads
-    // (charged by the insurer to the contract) and rates (charged by
-    // the state to the insurer) really shouldn't be mixed. The
-    // intention is to support products that pass actual premium tax
-    // through as a load, taking into account retaliation and tiered
-    // premium-tax rates.
-    //
-    // While a more complicated model would be more aesthetically
-    // satisfying, this gives the right answer in practice for the
-    // two cases we believe will arise in practice. In the first case,
-    // premium-tax load doesn't vary by state--perhaps a flat load
-    // such as two percent might be used, or maybe zero percent with
-    // premium-tax expense covered elsewhere in pricing--and tiering
-    // is ignored, so this implementation just returns the flat load.
-    // In the second case, the exact premium tax is passed through,
-    // so the tax rate equals the tax load.
-
     double z = 0.0;
     if(amortize_premium_load)
         {
