@@ -115,10 +115,7 @@ premium_tax::premium_tax
     is_retaliatory_ = premium_tax_is_retaliatory(tax_state_, domicile_);
 
     least_load_rate_ = lowest_premium_tax_load
-        (tax_state_
-        ,domicile_
-        ,amortize_premium_load_
-        ,db
+        (db
         ,strata
         );
 
@@ -434,25 +431,22 @@ std::vector<double> const& premium_tax_rates_for_annuities()
 /// Therefore, this function will be expunged.
 
 double premium_tax::lowest_premium_tax_load
-    (mcenum_state              tax_state
-    ,mcenum_state              domicile
-    ,bool                      amortize_premium_load
-    ,product_database   const& db
+    (product_database   const& db
     ,stratified_charges const& strata
     ) const
 {
     double z = 0.0;
-    if(amortize_premium_load)
+    if(amortize_premium_load_)
         {
         return z;
         }
 
-    database_index index = db.index().state(tax_state);
+    database_index index = db.index().state(tax_state_);
     z = db.Query(DB_PremTaxLoad, index);
 
-    if(premium_tax_is_retaliatory(tax_state, domicile))
+    if(premium_tax_is_retaliatory(tax_state_, domicile_))
         {
-        index = db.index().state(domicile);
+        index = db.index().state(domicile_);
         z = std::max(z, db.Query(DB_PremTaxLoad, index));
         }
 
@@ -461,9 +455,9 @@ double premium_tax::lowest_premium_tax_load
         return z;
         }
 
-    if(strata.premium_tax_is_tiered(tax_state))
+    if(strata.premium_tax_is_tiered(tax_state_))
         {
-        z = strata.minimum_tiered_premium_tax_rate(tax_state);
+        z = strata.minimum_tiered_premium_tax_rate(tax_state_);
         }
 
     return z;
