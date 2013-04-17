@@ -45,7 +45,7 @@ class LMI_SO product_database
     :        private lmi::uncopyable <product_database>
     ,virtual private obstruct_slicing<product_database>
 {
-    friend class input_test;
+    friend class input_test; // For test_product_database().
 
   public:
     product_database
