@@ -73,33 +73,36 @@ void premium_tax_test::test_rates()
     {
     // arguments: tax_state, domicile, amortize_premium_load, db, strata
     premium_tax z(mce_s_CT, mce_s_CT, false, db, strata);
-    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0175);
-    BOOST_TEST_EQUAL(z.load_rate      (), 0.0175);
-    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0175);
-    BOOST_TEST_EQUAL(z.is_tiered      (), false );
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0175);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0175);
+    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0175);
+    BOOST_TEST_EQUAL(z.is_tiered                (), false );
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0175);
     }
 
     // Retaliation.
     {
     premium_tax z(mce_s_CT, mce_s_MA, false, db, strata);
-    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0200);
-    BOOST_TEST_EQUAL(z.load_rate      (), 0.0200);
-    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0200);
-    BOOST_TEST_EQUAL(z.is_tiered      (), false );
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0200);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0200);
+    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0200);
+    BOOST_TEST_EQUAL(z.is_tiered                (), false );
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0200);
     }
 
     // Tiered.
     {
     premium_tax z(mce_s_AK, mce_s_CT, false, db, strata);
-    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0000);
-    BOOST_TEST_EQUAL(z.load_rate      (), 0.0000);
-    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0010);
-    BOOST_TEST_EQUAL(z.is_tiered      (), true  );
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0010);
+    BOOST_TEST_EQUAL(z.is_tiered                (), true  );
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0270);
     }
 
     // Tiered in premium-tax state, but load uniformly zero.
-    // A uniform but nonzero load elicits a runtime error, because
-    // the tiered load is not zero.
+    // A uniform but nonzero load would elicit a runtime error,
+    // because the tiered load is not zero.
     {
     database_entity const original = DBDictionary::instance().datum("PremTaxLoad");
     database_entity const scalar(DB_PremTaxLoad, 0.0000);
@@ -107,10 +110,15 @@ void premium_tax_test::test_rates()
     DBDictionary::instance().datum("PremTaxLoad") = scalar;
 
     premium_tax z(mce_s_AK, mce_s_CT, false, db, strata);
-    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0000);
-    BOOST_TEST_EQUAL(z.load_rate      (), 0.0000);
-    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0000);
-    BOOST_TEST_EQUAL(z.is_tiered      (), true  );
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0000);
+    BOOST_TEST_EQUAL(z.is_tiered                (), true  );
+    // TODO ?? This is a pitfall--at least it should be diagnosed.
+    // The tiered load is 2.7% on the first dollar, but the '0.027'
+    // answer is surprising and inconsistent with the behavior of
+    // least_load_rate() above.
+//    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
 
     DBDictionary::instance().datum("PremTaxLoad") = original;
     }
@@ -119,10 +127,11 @@ void premium_tax_test::test_rates()
     {
     premium_tax z(mce_s_CT, mce_s_MA, true , db, strata);
     // TODO ?? Don't the suppressed tests indicate a defect?
-//    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0000);
-//    BOOST_TEST_EQUAL(z.load_rate      (), 0.0000);
-    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0000);
-    BOOST_TEST_EQUAL(z.is_tiered      (), false );
+//    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
+//    BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0000);
+    BOOST_TEST_EQUAL(z.is_tiered                (), false );
+//    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
     }
 }
 

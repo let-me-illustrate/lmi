@@ -32018,3 +32018,44 @@ Test premium-tax rates.
   premium_tax.hpp
 Rearrange and improve documentation.
 
+20130416T1230Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+Remove a duplicative test.
+
+20130416T1523Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Aggroup consistency tests.
+
+20130416T1726Z <gchicares@sbcglobal.net> [544]
+
+  mec_server.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor, making a misbegotten free function a member.
+
+20130417T1015Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor.
+
+20130417T1309Z <gchicares@sbcglobal.net> [544]
+
+  database.hpp
+Improve documentation.
+
+20130417T1313Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.hpp
+  premium_tax.hpp
+  premium_tax_test.cpp
+Demonstrate and document a requirement that's not necessarily obvious.
+
+20130417T2025Z <gchicares@sbcglobal.net> [545]
+
+  premium_tax_test.cpp
+Augment unit tests; demonstrate a latent defect.
+
