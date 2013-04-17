@@ -63,6 +63,9 @@ class stratified_charges;
 /// expense covered elsewhere in pricing--and tiering is ignored, so
 /// the tax load is simply that scalar. In the second case, the exact
 /// premium tax is passed through, so the load equals the tax rate.
+/// For now, in the first case--because the '.strata' files do not yet
+/// distinguish tax loads from tax rates--the tiered premium tax must
+/// be set equal to the scalar load, for all amounts up to infinity.
 ///
 /// Known shortcomings.
 ///

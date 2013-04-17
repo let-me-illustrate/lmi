@@ -97,6 +97,24 @@ void premium_tax_test::test_rates()
     BOOST_TEST_EQUAL(z.is_tiered      (), true  );
     }
 
+    // Tiered in premium-tax state, but load uniformly zero.
+    // A uniform but nonzero load elicits a runtime error, because
+    // the tiered load is not zero.
+    {
+    database_entity const original = DBDictionary::instance().datum("PremTaxLoad");
+    database_entity const scalar(DB_PremTaxLoad, 0.0000);
+
+    DBDictionary::instance().datum("PremTaxLoad") = scalar;
+
+    premium_tax z(mce_s_AK, mce_s_CT, false, db, strata);
+    BOOST_TEST_EQUAL(z.levy_rate      (), 0.0000);
+    BOOST_TEST_EQUAL(z.load_rate      (), 0.0000);
+    BOOST_TEST_EQUAL(z.least_load_rate(), 0.0000);
+    BOOST_TEST_EQUAL(z.is_tiered      (), true  );
+
+    DBDictionary::instance().datum("PremTaxLoad") = original;
+    }
+
     // Amortized.
     {
     premium_tax z(mce_s_CT, mce_s_MA, true , db, strata);
