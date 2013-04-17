@@ -125,10 +125,7 @@ class premium_tax
     void test_consistency(product_database const& db) const;
 
     double lowest_premium_tax_load
-        (mcenum_state              tax_state
-        ,mcenum_state              domicile
-        ,bool                      amortize_premium_load
-        ,product_database   const& db
+        (product_database   const& db
         ,stratified_charges const& strata
         ) const;
 
