@@ -122,9 +122,6 @@ premium_tax::premium_tax
 
     minimum_load_rate_ = ascertain_minimum_load_rate(db, strata);
 
-    // TODO ?? It would be better not to constrain so many things
-    // not to vary by duration by using Query(enumerator).
-
     database_index index = db.index().state(tax_state_);
     levy_rate_ = db.Query(DB_PremTaxRate, index);
     load_rate_ = db.Query(DB_PremTaxLoad, index);
