@@ -99,7 +99,7 @@ premium_tax::premium_tax
     ,amortize_premium_load_  (amortize_premium_load)
     ,levy_rate_              (0.0)   // Reset below.
     ,load_rate_              (0.0)   // Reset below.
-    ,least_load_rate_        (0.0)   // Reset below.
+    ,minimum_load_rate_      (0.0)   // Reset below.
     ,domiciliary_load_rate_  (0.0)   // Reset below.
     ,is_tiered_in_tax_state_ (false) // Reset below.
     ,is_tiered_in_domicile_  (false) // Reset below.
@@ -114,10 +114,7 @@ premium_tax::premium_tax
 
     is_retaliatory_ = premium_tax_is_retaliatory(tax_state_, domicile_);
 
-    least_load_rate_ = lowest_premium_tax_load
-        (db
-        ,strata
-        );
+    minimum_load_rate_ = ascertain_minimum_load_rate(db, strata);
 
     // TODO ?? It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
@@ -155,7 +152,7 @@ premium_tax::premium_tax
     ,amortize_premium_load_  (false)
     ,levy_rate_              (0.0) // Reset below.
     ,load_rate_              (0.0)
-    ,least_load_rate_        (0.0)
+    ,minimum_load_rate_      (0.0)
     ,domiciliary_load_rate_  (0.0)
     ,is_tiered_in_tax_state_ (false)
     ,is_tiered_in_domicile_  (false)
@@ -425,7 +422,7 @@ std::vector<double> const& premium_tax_rates_for_annuities()
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
 
-double premium_tax::lowest_premium_tax_load
+double premium_tax::ascertain_minimum_load_rate
     (product_database   const& db
     ,stratified_charges const& strata
     ) const
@@ -473,9 +470,9 @@ double premium_tax::load_rate() const
     return load_rate_;
 }
 
-double premium_tax::least_load_rate() const
+double premium_tax::minimum_load_rate() const
 {
-    return least_load_rate_;
+    return minimum_load_rate_;
 }
 
 bool premium_tax::is_tiered() const

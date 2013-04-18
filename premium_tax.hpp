@@ -121,13 +121,13 @@ class premium_tax
 
     double levy_rate              () const;
     double load_rate              () const;
-    double least_load_rate        () const;
+    double minimum_load_rate      () const;
     bool   is_tiered              () const;
 
   private:
     void test_consistency(product_database const& db) const;
 
-    double lowest_premium_tax_load
+    double ascertain_minimum_load_rate
         (product_database   const& db
         ,stratified_charges const& strata
         ) const;
@@ -139,7 +139,7 @@ class premium_tax
 
     double levy_rate_;
     double load_rate_;
-    double least_load_rate_;
+    double minimum_load_rate_;
     double domiciliary_load_rate_;
     bool   is_tiered_in_tax_state_;
     bool   is_tiered_in_domicile_;

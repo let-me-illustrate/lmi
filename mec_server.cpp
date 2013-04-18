@@ -308,7 +308,7 @@ mec_state test_one_days_7702A_transactions
         ,false // Assume load is not amortized.
         ,database
         ,stratified
-        ).least_load_rate();
+        ).minimum_load_rate();
 
     std::vector<double> target_sales_load  ;
     std::vector<double> excess_sales_load  ;

@@ -56,7 +56,7 @@ Loads::Loads(BasicValues& V)
         (length
         ,V.yare_input_.AmortizePremiumLoad
         ,V.PremiumTax_->load_rate()
-        ,V.PremiumTax_->least_load_rate()
+        ,V.PremiumTax_->minimum_load_rate()
         ,V.PremiumTax_->levy_rate()
         ,V.Database_->Query(DB_PremTaxAmortIntRate)
         ,V.Database_->Query(DB_PremTaxAmortPeriod)
