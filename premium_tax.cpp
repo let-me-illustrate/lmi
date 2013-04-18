@@ -309,6 +309,8 @@ void premium_tax::start_new_year()
 
 double premium_tax::calculate_load(double payment, stratified_charges const& strata)
 {
+    // TODO ?? Incorrect: load_rate() isn't just the rate in the tax
+    // state: it already reflects retaliation.
     double tax_in_tax_state = load_rate() * payment;
     if(is_tiered_in_tax_state_)
         {
