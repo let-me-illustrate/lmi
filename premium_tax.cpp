@@ -104,6 +104,8 @@ premium_tax::premium_tax
     ,is_tiered_in_tax_state_ (false) // Reset below.
     ,is_tiered_in_domicile_  (false) // Reset below.
     ,is_retaliatory_         (false) // Reset below.
+    ,varies_by_state_        (false) // Reset below.
+    ,load_rate_is_levy_rate_ (false) // Reset below.
     ,ytd_taxable_premium_    (0.0)
     ,ytd_load_               (0.0)
     ,ytd_load_in_tax_state_  (0.0)
@@ -113,6 +115,10 @@ premium_tax::premium_tax
     is_tiered_in_domicile_  = strata.premium_tax_is_tiered(domicile_ );
 
     is_retaliatory_ = premium_tax_is_retaliatory(tax_state_, domicile_);
+
+    varies_by_state_ = db.varies_by_state(DB_PremTaxLoad);
+
+    load_rate_is_levy_rate_ = db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate);
 
     minimum_load_rate_ = ascertain_minimum_load_rate(db, strata);
 
@@ -138,7 +144,7 @@ premium_tax::premium_tax
         }
     }
 
-    test_consistency(db);
+    test_consistency();
 }
 
 /// Antediluvian ctor.
@@ -157,6 +163,8 @@ premium_tax::premium_tax
     ,is_tiered_in_tax_state_ (false)
     ,is_tiered_in_domicile_  (false)
     ,is_retaliatory_         (false)
+    ,varies_by_state_        (false)
+    ,load_rate_is_levy_rate_ (false)
     ,ytd_taxable_premium_    (0.0)
     ,ytd_load_               (0.0)
     ,ytd_load_in_tax_state_  (0.0)
@@ -194,12 +202,9 @@ premium_tax::~premium_tax()
 /// attention. If premium tax is not passed through as a load, then
 /// there's no problem at all.
 
-void premium_tax::test_consistency(product_database const& db) const
+void premium_tax::test_consistency() const
 {
-    if
-        (  db.varies_by_state(DB_PremTaxLoad)
-        && !db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate)
-        )
+    if(varies_by_state_ && !load_rate_is_levy_rate_)
         {
         fatal_error()
             << "Premium-tax load varies by state, but differs"
@@ -442,7 +447,7 @@ double premium_tax::ascertain_minimum_load_rate
         z = std::max(z, db.Query(DB_PremTaxLoad, index));
         }
 
-    if(!db.varies_by_state(DB_PremTaxLoad))
+    if(!varies_by_state_)
         {
         return z;
         }
