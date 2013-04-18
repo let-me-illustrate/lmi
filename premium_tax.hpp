@@ -125,7 +125,7 @@ class premium_tax
     bool   is_tiered              () const;
 
   private:
-    void test_consistency(product_database const& db) const;
+    void test_consistency() const;
 
     double ascertain_minimum_load_rate
         (product_database   const& db
@@ -144,6 +144,8 @@ class premium_tax
     bool   is_tiered_in_tax_state_;
     bool   is_tiered_in_domicile_;
     bool   is_retaliatory_;
+    bool   varies_by_state_;
+    bool   load_rate_is_levy_rate_;
 
     double ytd_taxable_premium_;
     double ytd_load_;
