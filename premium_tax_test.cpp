@@ -75,7 +75,7 @@ void premium_tax_test::test_rates()
     premium_tax z(mce_s_CT, mce_s_CT, false, db, strata);
     BOOST_TEST_EQUAL(z.levy_rate                (), 0.0175);
     BOOST_TEST_EQUAL(z.load_rate                (), 0.0175);
-    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0175);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0175);
     BOOST_TEST_EQUAL(z.is_tiered                (), false );
     BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0175);
     }
@@ -85,7 +85,7 @@ void premium_tax_test::test_rates()
     premium_tax z(mce_s_CT, mce_s_MA, false, db, strata);
     BOOST_TEST_EQUAL(z.levy_rate                (), 0.0200);
     BOOST_TEST_EQUAL(z.load_rate                (), 0.0200);
-    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0200);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0200);
     BOOST_TEST_EQUAL(z.is_tiered                (), false );
     BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0200);
     }
@@ -95,7 +95,7 @@ void premium_tax_test::test_rates()
     premium_tax z(mce_s_AK, mce_s_CT, false, db, strata);
     BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
     BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
-    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0010);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0010);
     BOOST_TEST_EQUAL(z.is_tiered                (), true  );
     BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0270);
     }
@@ -112,12 +112,12 @@ void premium_tax_test::test_rates()
     premium_tax z(mce_s_AK, mce_s_CT, false, db, strata);
     BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
     BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
-    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0000);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0000);
     BOOST_TEST_EQUAL(z.is_tiered                (), true  );
     // TODO ?? This is a pitfall--at least it should be diagnosed.
     // The tiered load is 2.7% on the first dollar, but the '0.027'
     // answer is surprising and inconsistent with the behavior of
-    // least_load_rate() above.
+    // minimum_load_rate() above.
 //    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
 
     DBDictionary::instance().datum("PremTaxLoad") = original;
@@ -129,7 +129,7 @@ void premium_tax_test::test_rates()
     // TODO ?? Don't the suppressed tests indicate a defect?
 //    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
 //    BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
-    BOOST_TEST_EQUAL(z.least_load_rate          (), 0.0000);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0000);
     BOOST_TEST_EQUAL(z.is_tiered                (), false );
 //    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
     }
