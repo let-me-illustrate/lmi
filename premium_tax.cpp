@@ -312,7 +312,7 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
     // TODO ?? Incorrect: load_rate() isn't just the rate in the tax
     // state: it already reflects retaliation.
     double tax_in_tax_state = load_rate() * payment;
-    if(is_tiered_in_tax_state_)
+    if(varies_by_state_ && is_tiered_in_tax_state_)
         {
         LMI_ASSERT(0.0 == tax_in_tax_state);
         tax_in_tax_state = strata.tiered_premium_tax
@@ -327,7 +327,7 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
     if(is_retaliatory_)
         {
         tax_in_domicile = domiciliary_load_rate_ * payment;
-        if(is_tiered_in_domicile_)
+        if(varies_by_state_ && is_tiered_in_domicile_)
             {
             LMI_ASSERT(0.0 == tax_in_domicile);
             tax_in_domicile = strata.tiered_premium_tax

@@ -32090,3 +32090,34 @@ for premium-tax loads to vary by duration. One state has announced its
 intention to decrease its loads over time, but there has been no call
 to reflect that prospectively.
 
+20130418T1350Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor.
+
+20130418T1504Z <gchicares@sbcglobal.net> [544]
+
+  antediluvian_stubs.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+  premium_tax_test.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+Calculate maximum premium tax.
+
+20130418T2222Z <gchicares@sbcglobal.net> [545]
+
+  premium_tax.cpp
+Mark a defect.
+
+20130418T2307Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+  premium_tax_test.cpp
+Fix defect noted 20130417T2025Z. When the product database's scalar
+premium-tax load is zero in all states, tiering should be disregarded
+in AK and SD: no product would pass premium tax through as a load in
+those two states only.
+

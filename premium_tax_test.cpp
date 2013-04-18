@@ -118,11 +118,7 @@ void premium_tax_test::test_rates()
     BOOST_TEST_EQUAL(z.maximum_load_rate        (), 0.0000);
     BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0000);
     BOOST_TEST_EQUAL(z.is_tiered                (), true  );
-    // TODO ?? This is a pitfall--at least it should be diagnosed.
-    // The tiered load is 2.7% on the first dollar, but the '0.027'
-    // answer is surprising and inconsistent with the behavior of
-    // minimum_load_rate() above.
-//    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
 
     DBDictionary::instance().datum("PremTaxLoad") = original;
     }
