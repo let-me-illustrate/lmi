@@ -44,13 +44,11 @@ class product_database;
 ///
 /// length_: Number of elements in any vector of loads.
 ///
-/// premium_tax_load_: Rate of passed-through premium tax, assumed to
-/// be a scalar.
+/// premium_tax_load_: Scalar premium-tax load (zero if tiered).
 ///
 /// LowestPremiumTaxLoadRate_: The lowest rate of premium tax, which
 /// products that pass through premium tax need for 7702 calculations.
-/// The actual rate may vary if it is tiered. TAXATION !! Obsolete:
-/// see commentary on lowest_premium_tax_load().
+/// The actual rate may vary if it is tiered.
 ///
 /// asset_charge_type_: Determines whether input extra asset loads
 /// should be treated as a load or as an interest-rate decrement.
