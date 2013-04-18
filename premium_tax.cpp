@@ -73,7 +73,8 @@ bool premium_tax_is_retaliatory(mcenum_state tax_state, mcenum_state domicile)
 
 /// Production ctor.
 ///
-/// These database entities should be looked up by premium-tax state:
+/// These database entities should be looked up by premium-tax state,
+/// and also by domicile:
 ///  - DB_PremTaxLoad
 ///  - DB_PremTaxRate
 /// These probably (for inchoate amortization) shouldn't:
@@ -120,8 +121,6 @@ premium_tax::premium_tax
 
     load_rate_is_levy_rate_ = db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate);
 
-    minimum_load_rate_ = ascertain_minimum_load_rate(db, strata);
-
     database_index index = db.index().state(tax_state_);
     levy_rate_ = db.Query(DB_PremTaxRate, index);
     load_rate_ = db.Query(DB_PremTaxLoad, index);
@@ -140,6 +139,8 @@ premium_tax::premium_tax
             }
         }
     }
+
+    minimum_load_rate_ = ascertain_minimum_load_rate(strata);
 
     test_consistency();
 }
@@ -424,37 +425,24 @@ std::vector<double> const& premium_tax_rates_for_annuities()
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
 
-double premium_tax::ascertain_minimum_load_rate
-    (product_database   const& db
-    ,stratified_charges const& strata
-    ) const
+double premium_tax::ascertain_minimum_load_rate(stratified_charges const& strata) const
 {
-    double z = 0.0;
     if(amortize_premium_load_)
         {
-        return z;
+        return 0.0;
         }
-
-    database_index index = db.index().state(tax_state_);
-    z = db.Query(DB_PremTaxLoad, index);
-
-    if(premium_tax_is_retaliatory(tax_state_, domicile_))
+    else if(!varies_by_state_)
         {
-        index = db.index().state(domicile_);
-        z = std::max(z, db.Query(DB_PremTaxLoad, index));
+        return load_rate_;
         }
-
-    if(!varies_by_state_)
+    else if(is_tiered_in_tax_state_)
         {
-        return z;
+        return strata.minimum_tiered_premium_tax_rate(tax_state_);
         }
-
-    if(strata.premium_tax_is_tiered(tax_state_))
+    else
         {
-        z = strata.minimum_tiered_premium_tax_rate(tax_state_);
+        return load_rate_;
         }
-
-    return z;
 }
 
 double premium_tax::ytd_load() const

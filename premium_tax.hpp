@@ -127,10 +127,7 @@ class premium_tax
   private:
     void test_consistency() const;
 
-    double ascertain_minimum_load_rate
-        (product_database   const& db
-        ,stratified_charges const& strata
-        ) const;
+    double ascertain_minimum_load_rate(stratified_charges const& strata) const;
 
     // Ctor value-arguments.
     mcenum_state tax_state_;
