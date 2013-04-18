@@ -62,7 +62,9 @@ enum e_stratified
     ,e_stratified_last
     };
 
-// Implicitly-declared special member functions do the right thing.
+/// A tiered or banded datum.
+///
+/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO stratified_entity
     :virtual private obstruct_slicing<stratified_entity>
@@ -143,8 +145,7 @@ class LMI_SO stratified_charges
         ) const;
     bool premium_tax_is_tiered(mcenum_state) const;
 
-    // Lowest rate for conservatism in complicated formulas that
-    // don't yet reflect tiering.
+    double maximum_tiered_premium_tax_rate(mcenum_state) const;
     double minimum_tiered_premium_tax_rate(mcenum_state) const;
 
     static void write_stratified_files();

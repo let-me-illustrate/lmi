@@ -26,7 +26,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "lmi.hpp"          // is_antediluvian_fork()
+#include "lmi.hpp"                      // is_antediluvian_fork()
 #include "mec_server.hpp"
 #include "product_data.hpp"
 #include "stratified_charges.hpp"
@@ -156,6 +156,11 @@ void product_data::redintegrate_ex_post
 std::string const& product_data::datum(std::string const&) const
 {
     return empty_string;
+}
+
+double stratified_charges::maximum_tiered_premium_tax_rate(mcenum_state) const
+{
+    return 0.0;
 }
 
 double stratified_charges::minimum_tiered_premium_tax_rate(mcenum_state) const

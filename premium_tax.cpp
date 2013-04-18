@@ -100,6 +100,7 @@ premium_tax::premium_tax
     ,amortize_premium_load_  (amortize_premium_load)
     ,levy_rate_              (0.0)   // Reset below.
     ,load_rate_              (0.0)   // Reset below.
+    ,maximum_load_rate_      (0.0)   // Reset below.
     ,minimum_load_rate_      (0.0)   // Reset below.
     ,domiciliary_load_rate_  (0.0)   // Reset below.
     ,is_tiered_in_tax_state_ (false) // Reset below.
@@ -140,6 +141,7 @@ premium_tax::premium_tax
         }
     }
 
+    maximum_load_rate_ = ascertain_maximum_load_rate(strata);
     minimum_load_rate_ = ascertain_minimum_load_rate(strata);
 
     test_consistency();
@@ -156,6 +158,7 @@ premium_tax::premium_tax
     ,amortize_premium_load_  (false)
     ,levy_rate_              (0.0) // Reset below.
     ,load_rate_              (0.0)
+    ,maximum_load_rate_      (0.0)
     ,minimum_load_rate_      (0.0)
     ,domiciliary_load_rate_  (0.0)
     ,is_tiered_in_tax_state_ (false)
@@ -423,7 +426,29 @@ std::vector<double> const& premium_tax_rates_for_annuities()
 }
 #endif // 0
 
-/// Lowest premium-tax load, for 7702 and 7702A purposes.
+/// Highest premium-tax load, for calculating pay-as-you-go premium.
+
+double premium_tax::ascertain_maximum_load_rate(stratified_charges const& strata) const
+{
+    if(amortize_premium_load_)
+        {
+        return 0.0;
+        }
+    else if(!varies_by_state_)
+        {
+        return load_rate_;
+        }
+    else if(is_tiered_in_tax_state_)
+        {
+        return strata.maximum_tiered_premium_tax_rate(tax_state_);
+        }
+    else
+        {
+        return load_rate_;
+        }
+}
+
+/// Lowest premium-tax load, for conservative 7702 and 7702A calculations.
 
 double premium_tax::ascertain_minimum_load_rate(stratified_charges const& strata) const
 {
@@ -458,6 +483,11 @@ double premium_tax::levy_rate() const
 double premium_tax::load_rate() const
 {
     return load_rate_;
+}
+
+double premium_tax::maximum_load_rate() const
+{
+    return maximum_load_rate_;
 }
 
 double premium_tax::minimum_load_rate() const

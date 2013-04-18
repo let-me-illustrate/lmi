@@ -88,11 +88,6 @@ class stratified_charges;
 /// and SD contracts is not supported, so premium tax is understated
 /// for a few domiciles.
 ///
-/// A greatest-premium-tax-load function is wanted for the approximate
-/// "pay as you go" modal premium (BasicValues::GetModalPremMlyDed()).
-/// At present, that premium is insufficient to prevent instant lapse
-/// in AK and SD when premium tax is passed through as a load.
-///
 /// start_new_year() should be improved as noted in its documentation.
 ///
 /// premium_tax_rates_for_annuities() should be implemented.
@@ -121,12 +116,14 @@ class premium_tax
 
     double levy_rate              () const;
     double load_rate              () const;
+    double maximum_load_rate      () const;
     double minimum_load_rate      () const;
     bool   is_tiered              () const;
 
   private:
     void test_consistency() const;
 
+    double ascertain_maximum_load_rate(stratified_charges const& strata) const;
     double ascertain_minimum_load_rate(stratified_charges const& strata) const;
 
     // Ctor value-arguments.
@@ -136,6 +133,7 @@ class premium_tax
 
     double levy_rate_;
     double load_rate_;
+    double maximum_load_rate_;
     double minimum_load_rate_;
     double domiciliary_load_rate_;
     bool   is_tiered_in_tax_state_;
