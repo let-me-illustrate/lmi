@@ -424,11 +424,6 @@ std::vector<double> const& premium_tax_rates_for_annuities()
 #endif // 0
 
 /// Lowest premium-tax load, for 7702 and 7702A purposes.
-///
-/// TAXATION !! No contemporary authority seems to believe that a
-/// change in the premium-tax rate, even if passed through to the
-/// policyowner, is a 7702A material change or a GPT adjustment event.
-/// Therefore, this function will be expunged.
 
 double premium_tax::lowest_premium_tax_load
     (product_database   const& db
