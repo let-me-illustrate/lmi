@@ -122,24 +122,22 @@ premium_tax::premium_tax
 
     load_rate_is_levy_rate_ = db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate);
 
-    database_index index = db.index().state(tax_state_);
-    levy_rate_ = db.Query(DB_PremTaxRate, index);
-    load_rate_ = db.Query(DB_PremTaxLoad, index);
+    database_index index0 = db.index().state(tax_state_);
+    levy_rate_ = db.Query(DB_PremTaxRate, index0);
+    load_rate_ = db.Query(DB_PremTaxLoad, index0);
 
-    {
-    database_index index = db.index().state(domicile_);
-    domiciliary_load_rate_ = 0.0;
+    database_index index1 = db.index().state(domicile_);
+    domiciliary_load_rate_ = 0.0; // Pointless: duplicates ctor-initializer.
     if(!amortize_premium_load_)
         {
-        double domiciliary_levy_rate = db.Query(DB_PremTaxRate, index);
-        domiciliary_load_rate_       = db.Query(DB_PremTaxLoad, index);
+        double domiciliary_levy_rate = db.Query(DB_PremTaxRate, index1);
+        domiciliary_load_rate_       = db.Query(DB_PremTaxLoad, index1);
         if(is_retaliatory_)
             {
             levy_rate_ = std::max(levy_rate_, domiciliary_levy_rate );
             load_rate_ = std::max(load_rate_, domiciliary_load_rate_);
             }
         }
-    }
 
     maximum_load_rate_ = ascertain_maximum_load_rate(strata);
     minimum_load_rate_ = ascertain_minimum_load_rate(strata);
