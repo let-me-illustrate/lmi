@@ -130,9 +130,10 @@ class premium_tax
 
     double levy_rate_;
     double load_rate_;
+    double tax_state_load_rate_;
+    double domiciliary_load_rate_;
     double maximum_load_rate_;
     double minimum_load_rate_;
-    double domiciliary_load_rate_;
     bool   is_tiered_in_tax_state_;
     bool   is_tiered_in_domicile_;
     bool   is_retaliatory_;

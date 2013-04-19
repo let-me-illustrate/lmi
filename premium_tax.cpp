@@ -100,9 +100,10 @@ premium_tax::premium_tax
     ,amortize_premium_load_  (amortize_premium_load)
     ,levy_rate_              (0.0)   // Reset below.
     ,load_rate_              (0.0)   // Reset below.
+    ,tax_state_load_rate_    (0.0)   // Reset below.
+    ,domiciliary_load_rate_  (0.0)   // Reset below.
     ,maximum_load_rate_      (0.0)   // Reset below.
     ,minimum_load_rate_      (0.0)   // Reset below.
-    ,domiciliary_load_rate_  (0.0)   // Reset below.
     ,is_tiered_in_tax_state_ (false) // Reset below.
     ,is_tiered_in_domicile_  (false) // Reset below.
     ,is_retaliatory_         (false) // Reset below.
@@ -122,12 +123,13 @@ premium_tax::premium_tax
 
     load_rate_is_levy_rate_ = db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate);
 
+    double tax_state_levy_rate   = 0.0;
     double domiciliary_levy_rate = 0.0;
     if(!amortize_premium_load_)
         {
         database_index index0 = db.index().state(tax_state_);
-        levy_rate_             = db.Query(DB_PremTaxRate, index0);
-        load_rate_             = db.Query(DB_PremTaxLoad, index0);
+        tax_state_levy_rate    = db.Query(DB_PremTaxRate, index0);
+        tax_state_load_rate_   = db.Query(DB_PremTaxLoad, index0);
         database_index index1 = db.index().state(domicile_);
         domiciliary_levy_rate  = db.Query(DB_PremTaxRate, index1);
         domiciliary_load_rate_ = db.Query(DB_PremTaxLoad, index1);
@@ -135,8 +137,13 @@ premium_tax::premium_tax
 
     if(is_retaliatory_)
         {
-        levy_rate_ = std::max(levy_rate_, domiciliary_levy_rate );
-        load_rate_ = std::max(load_rate_, domiciliary_load_rate_);
+        levy_rate_ = std::max(tax_state_levy_rate , domiciliary_levy_rate );
+        load_rate_ = std::max(tax_state_load_rate_, domiciliary_load_rate_);
+        }
+    else
+        {
+        levy_rate_ = tax_state_levy_rate ;
+        load_rate_ = tax_state_load_rate_;
         }
 
     maximum_load_rate_ = ascertain_maximum_load_rate(strata);
@@ -156,9 +163,10 @@ premium_tax::premium_tax
     ,amortize_premium_load_  (false)
     ,levy_rate_              (0.0) // Reset below.
     ,load_rate_              (0.0)
+    ,tax_state_load_rate_    (0.0)
+    ,domiciliary_load_rate_  (0.0)
     ,maximum_load_rate_      (0.0)
     ,minimum_load_rate_      (0.0)
-    ,domiciliary_load_rate_  (0.0)
     ,is_tiered_in_tax_state_ (false)
     ,is_tiered_in_domicile_  (false)
     ,is_retaliatory_         (false)
@@ -215,13 +223,13 @@ void premium_tax::test_consistency() const
 
     if(is_tiered_in_tax_state_)
         {
-        if(0.0 != load_rate())
+        if(0.0 != tax_state_load_rate_)
             {
             fatal_error()
                 << "Premium-tax load is tiered in premium-tax state "
                 << mc_str(tax_state_)
                 << ", but the product database specifies a scalar load of "
-                << load_rate()
+                << tax_state_load_rate_
                 << " instead of zero as expected. Probably the database"
                 << " is incorrect."
                 << LMI_FLUSH
@@ -307,9 +315,7 @@ void premium_tax::start_new_year()
 
 double premium_tax::calculate_load(double payment, stratified_charges const& strata)
 {
-    // TODO ?? Incorrect: load_rate() isn't just the rate in the tax
-    // state: it already reflects retaliation.
-    double tax_in_tax_state = load_rate() * payment;
+    double tax_in_tax_state = tax_state_load_rate_ * payment;
     if(varies_by_state_ && is_tiered_in_tax_state_)
         {
         LMI_ASSERT(0.0 == tax_in_tax_state);
