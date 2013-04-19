@@ -46,6 +46,10 @@ class product_database;
 ///
 /// premium_tax_load_: Scalar premium-tax load (zero if tiered).
 ///
+/// maximum_premium_tax_load_rate_: The highest rate of premium tax.
+/// Products that pass premium tax through as a load need this for
+/// pay-as-you-go premiums. The actual rate may differ if tiered.
+///
 /// minimum_premium_tax_load_rate_: The lowest rate of premium tax.
 /// Products that pass premium tax through as a load need this for
 /// 7702 calculations. The actual rate may differ if tiered.
@@ -84,6 +88,7 @@ struct load_details
         (int                        length
         ,bool                       AmortizePremLoad
         ,double                     premium_tax_load
+        ,double                     maximum_premium_tax_load_rate
         ,double                     minimum_premium_tax_load_rate
         ,double                     premium_tax_rate
         ,double                     premium_tax_amortization_rate
@@ -100,6 +105,7 @@ struct load_details
         :length_                          (length)
         ,AmortizePremLoad_                (AmortizePremLoad)
         ,premium_tax_load_                (premium_tax_load)
+        ,maximum_premium_tax_load_rate_   (maximum_premium_tax_load_rate)
         ,minimum_premium_tax_load_rate_   (minimum_premium_tax_load_rate)
         ,premium_tax_rate_                (premium_tax_rate)
         ,premium_tax_amortization_rate_   (premium_tax_amortization_rate)
@@ -117,6 +123,7 @@ struct load_details
     int                        length_;
     bool                       AmortizePremLoad_;
     double                     premium_tax_load_;
+    double                     maximum_premium_tax_load_rate_;
     double                     minimum_premium_tax_load_rate_;
     double                     premium_tax_rate_;
     double                     premium_tax_amortization_rate_;
