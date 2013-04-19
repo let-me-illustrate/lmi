@@ -56,6 +56,7 @@ Loads::Loads(BasicValues& V)
         (length
         ,V.yare_input_.AmortizePremiumLoad
         ,V.PremiumTax_->load_rate()
+        ,V.PremiumTax_->maximum_load_rate()
         ,V.PremiumTax_->minimum_load_rate()
         ,V.PremiumTax_->levy_rate()
         ,V.Database_->Query(DB_PremTaxAmortIntRate)
@@ -115,6 +116,8 @@ void Loads::Allocate(int length)
 
     target_premium_load_excluding_premium_tax_.resize(length);
     excess_premium_load_excluding_premium_tax_.resize(length);
+    target_premium_load_maximum_premium_tax_  .resize(length);
+    excess_premium_load_maximum_premium_tax_  .resize(length);
     target_premium_load_minimum_premium_tax_  .resize(length);
     excess_premium_load_minimum_premium_tax_  .resize(length);
 }
@@ -251,6 +254,8 @@ void Loads::Calculate(load_details const& details)
         if(mce_gen_curr == j)
             {
             target_premium_load_excluding_premium_tax_ = target_total_load_[j];
+            target_premium_load_maximum_premium_tax_   = target_total_load_[j];
+            target_premium_load_maximum_premium_tax_  += details.maximum_premium_tax_load_rate_;
             target_premium_load_minimum_premium_tax_   = target_total_load_[j];
             target_premium_load_minimum_premium_tax_  += details.minimum_premium_tax_load_rate_;
             }
@@ -262,6 +267,8 @@ void Loads::Calculate(load_details const& details)
         if(mce_gen_curr == j)
             {
             excess_premium_load_excluding_premium_tax_ = excess_total_load_[j];
+            excess_premium_load_maximum_premium_tax_   = excess_total_load_[j];
+            excess_premium_load_maximum_premium_tax_  += details.maximum_premium_tax_load_rate_;
             excess_premium_load_minimum_premium_tax_   = excess_total_load_[j];
             excess_premium_load_minimum_premium_tax_  += details.minimum_premium_tax_load_rate_;
             }
