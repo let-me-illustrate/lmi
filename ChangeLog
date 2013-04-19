@@ -32121,3 +32121,25 @@ premium-tax load is zero in all states, tiering should be disregarded
 in AK and SD: no product would pass premium tax through as a load in
 those two states only.
 
+20130419T1046Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+Refactor.
+
+20130419T1100Z <gchicares@sbcglobal.net> [543]
+
+  premium_tax.cpp
+  premium_tax_test.cpp
+Fix defect noted 20130416T1214Z.
+
+20130419T1107Z <gchicares@sbcglobal.net> [543]
+
+  premium_tax.cpp
+Refactor.
+
+20130419T1225Z <gchicares@sbcglobal.net> [542]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Fix defect noted 20130418T2222Z.
+
