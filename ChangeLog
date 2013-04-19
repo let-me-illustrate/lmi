@@ -32143,3 +32143,32 @@ Refactor.
   premium_tax.hpp
 Fix defect noted 20130418T2222Z.
 
+20130419T1315Z <gchicares@sbcglobal.net> [542]
+
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  loads.cpp
+  loads.hpp
+  loads_test.cpp
+Rename certain members.
+
+20130419T1346Z <gchicares@sbcglobal.net> [542]
+
+  loads.cpp
+  loads_impl.hpp
+  loads_test.cpp
+Rename certain members.
+
+20130419T1409Z <gchicares@sbcglobal.net> [542]
+
+  loads.cpp
+  loads.hpp
+  loads_impl.hpp
+  loads_test.cpp
+Calculate loads with maximum as well as minimum premium tax.
+
+20130419T1658Z <gchicares@sbcglobal.net> [542]
+
+  ihs_basicval.cpp
+Use highest tiered AK and SD premium tax for pay-as-you-go premium.
+

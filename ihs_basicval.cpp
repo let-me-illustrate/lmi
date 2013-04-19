@@ -1188,7 +1188,7 @@ double BasicValues::GetModalPremMlyDed
         annual_charge *= 1.0 + r;
         }
 
-    z /= 1.0 - Loads_->target_total_load(mce_gen_curr)[a_year];
+    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
 
     z *= GetAnnuityValueMlyDed(a_year, a_mode);
     z += annual_charge;
