@@ -126,13 +126,12 @@ void premium_tax_test::test_rates()
     // Amortized.
     {
     premium_tax z(mce_s_CT, mce_s_MA, true , db, strata);
-    // TODO ?? Don't the suppressed tests indicate a defect?
-//    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
-//    BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
     BOOST_TEST_EQUAL(z.maximum_load_rate        (), 0.0000);
     BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0000);
     BOOST_TEST_EQUAL(z.is_tiered                (), false );
-//    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
     }
 }
 

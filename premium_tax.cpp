@@ -122,14 +122,16 @@ premium_tax::premium_tax
 
     load_rate_is_levy_rate_ = db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate);
 
-    database_index index0 = db.index().state(tax_state_);
-    levy_rate_ = db.Query(DB_PremTaxRate, index0);
-    load_rate_ = db.Query(DB_PremTaxLoad, index0);
-
-    database_index index1 = db.index().state(domicile_);
-    domiciliary_load_rate_ = 0.0; // Pointless: duplicates ctor-initializer.
     if(!amortize_premium_load_)
         {
+        database_index index0 = db.index().state(tax_state_);
+        levy_rate_ = db.Query(DB_PremTaxRate, index0);
+        load_rate_ = db.Query(DB_PremTaxLoad, index0);
+        }
+
+    if(!amortize_premium_load_)
+        {
+        database_index index1 = db.index().state(domicile_);
         double domiciliary_levy_rate = db.Query(DB_PremTaxRate, index1);
         domiciliary_load_rate_       = db.Query(DB_PremTaxLoad, index1);
         if(is_retaliatory_)
