@@ -653,8 +653,8 @@ void BasicValues::Init7702()
 /// change in the premium-tax rate, even if passed through to the
 /// policyowner, is a 7702A material change or a GPT adjustment event.
 /// These loads should instead reflect the lowest premium-tax rate.
-            ,Loads_->target_premium_load_7702_excluding_premium_tax()
-            ,Loads_->excess_premium_load_7702_excluding_premium_tax()
+            ,Loads_->target_premium_load_excluding_premium_tax()
+            ,Loads_->excess_premium_load_excluding_premium_tax()
             ,InitialTargetPremium
             ,round_min_premium()
             ,round_max_premium()
