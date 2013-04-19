@@ -205,7 +205,7 @@ int test_main(int, char*[])
         (length                 // length_
         ,false                  // AmortizePremLoad_
         ,0.021                  // premium_tax_load_
-        ,0.02                   // LowestPremiumTaxLoadRate_
+        ,0.02                   // minimum_premium_tax_load_rate_
         ,999.999                // premium_tax_rate_                [unused]
         ,999.999                // premium_tax_amortization_rate_   [unused]
         ,999.999                // premium_tax_amortization_period_ [unused]

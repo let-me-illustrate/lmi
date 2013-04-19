@@ -46,9 +46,9 @@ class product_database;
 ///
 /// premium_tax_load_: Scalar premium-tax load (zero if tiered).
 ///
-/// LowestPremiumTaxLoadRate_: The lowest rate of premium tax, which
-/// products that pass through premium tax need for 7702 calculations.
-/// The actual rate may vary if it is tiered.
+/// minimum_premium_tax_load_rate_: The lowest rate of premium tax.
+/// Products that pass premium tax through as a load need this for
+/// 7702 calculations. The actual rate may differ if tiered.
 ///
 /// asset_charge_type_: Determines whether input extra asset loads
 /// should be treated as a load or as an interest-rate decrement.
@@ -84,7 +84,7 @@ struct load_details
         (int                        length
         ,bool                       AmortizePremLoad
         ,double                     premium_tax_load
-        ,double                     LowestPremiumTaxLoadRate
+        ,double                     minimum_premium_tax_load_rate
         ,double                     premium_tax_rate
         ,double                     premium_tax_amortization_rate
         ,double                     premium_tax_amortization_period
@@ -100,7 +100,7 @@ struct load_details
         :length_                          (length)
         ,AmortizePremLoad_                (AmortizePremLoad)
         ,premium_tax_load_                (premium_tax_load)
-        ,LowestPremiumTaxLoadRate_        (LowestPremiumTaxLoadRate)
+        ,minimum_premium_tax_load_rate_   (minimum_premium_tax_load_rate)
         ,premium_tax_rate_                (premium_tax_rate)
         ,premium_tax_amortization_rate_   (premium_tax_amortization_rate)
         ,premium_tax_amortization_period_ (premium_tax_amortization_period)
@@ -117,7 +117,7 @@ struct load_details
     int                        length_;
     bool                       AmortizePremLoad_;
     double                     premium_tax_load_;
-    double                     LowestPremiumTaxLoadRate_;
+    double                     minimum_premium_tax_load_rate_;
     double                     premium_tax_rate_;
     double                     premium_tax_amortization_rate_;
     double                     premium_tax_amortization_period_;

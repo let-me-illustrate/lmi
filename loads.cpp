@@ -252,7 +252,7 @@ void Loads::Calculate(load_details const& details)
             {
             target_premium_load_excluding_premium_tax_ = target_total_load_[j];
             target_premium_load_minimum_premium_tax_   = target_total_load_[j];
-            target_premium_load_minimum_premium_tax_  += details.LowestPremiumTaxLoadRate_;
+            target_premium_load_minimum_premium_tax_  += details.minimum_premium_tax_load_rate_;
             }
         target_total_load_[j] += premium_tax_load_;
 
@@ -263,7 +263,7 @@ void Loads::Calculate(load_details const& details)
             {
             excess_premium_load_excluding_premium_tax_ = excess_total_load_[j];
             excess_premium_load_minimum_premium_tax_   = excess_total_load_[j];
-            excess_premium_load_minimum_premium_tax_  += details.LowestPremiumTaxLoadRate_;
+            excess_premium_load_minimum_premium_tax_  += details.minimum_premium_tax_load_rate_;
             }
         excess_total_load_[j] += premium_tax_load_;
         }
