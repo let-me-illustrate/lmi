@@ -113,10 +113,10 @@ void Loads::Allocate(int length)
     premium_tax_load_                              .resize(length);
     dac_tax_load_                                  .resize(length);
 
-    target_premium_load_7702_excluding_premium_tax_.resize(length);
-    excess_premium_load_7702_excluding_premium_tax_.resize(length);
-    target_premium_load_7702_lowest_premium_tax_   .resize(length);
-    excess_premium_load_7702_lowest_premium_tax_   .resize(length);
+    target_premium_load_excluding_premium_tax_.resize(length);
+    excess_premium_load_excluding_premium_tax_.resize(length);
+    target_premium_load_minimum_premium_tax_  .resize(length);
+    excess_premium_load_minimum_premium_tax_  .resize(length);
 }
 
 /// Set various data members from product database.
@@ -250,9 +250,9 @@ void Loads::Calculate(load_details const& details)
         target_total_load_[j] += target_premium_load_[j] + dac_tax_load_;
         if(mce_gen_curr == j)
             {
-            target_premium_load_7702_excluding_premium_tax_ = target_total_load_[j];
-            target_premium_load_7702_lowest_premium_tax_    = target_total_load_[j];
-            target_premium_load_7702_lowest_premium_tax_   += details.LowestPremiumTaxLoadRate_;
+            target_premium_load_excluding_premium_tax_ = target_total_load_[j];
+            target_premium_load_minimum_premium_tax_   = target_total_load_[j];
+            target_premium_load_minimum_premium_tax_  += details.LowestPremiumTaxLoadRate_;
             }
         target_total_load_[j] += premium_tax_load_;
 
@@ -261,9 +261,9 @@ void Loads::Calculate(load_details const& details)
         excess_total_load_[j] += excess_premium_load_[j] + dac_tax_load_;
         if(mce_gen_curr == j)
             {
-            excess_premium_load_7702_excluding_premium_tax_ = excess_total_load_[j];
-            excess_premium_load_7702_lowest_premium_tax_    = excess_total_load_[j];
-            excess_premium_load_7702_lowest_premium_tax_   += details.LowestPremiumTaxLoadRate_;
+            excess_premium_load_excluding_premium_tax_ = excess_total_load_[j];
+            excess_premium_load_minimum_premium_tax_   = excess_total_load_[j];
+            excess_premium_load_minimum_premium_tax_  += details.LowestPremiumTaxLoadRate_;
             }
         excess_total_load_[j] += premium_tax_load_;
         }

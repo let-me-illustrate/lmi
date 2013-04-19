@@ -116,14 +116,14 @@ void LoadsTest::TestVectorLengths(char const* file, int line)
 {
     std::size_t const z = details_.length_;
 
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.refundable_sales_load_proportion              ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.premium_tax_load                              ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.amortized_premium_tax_load                    ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.dac_tax_load                                  ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_7702_excluding_premium_tax().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_7702_excluding_premium_tax().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_7702_lowest_premium_tax   ().size(), file, line);
-    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_7702_lowest_premium_tax   ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.refundable_sales_load_proportion         ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.premium_tax_load                         ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.amortized_premium_tax_load               ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.dac_tax_load                             ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_excluding_premium_tax().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_excluding_premium_tax().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_minimum_premium_tax  ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_minimum_premium_tax  ().size(), file, line);
 
     INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (mce_gen_curr).size(), file, line);
     INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (mce_gen_curr).size(), file, line);
@@ -186,10 +186,10 @@ void LoadsTest::TestCalculations(char const* file, int line)
 
     INVOKE_BOOST_TEST(materially_equal(0.163000, loads_.target_total_load     (mce_gen_curr)[0]), file, line);
     INVOKE_BOOST_TEST(materially_equal(0.103000, loads_.excess_total_load     (mce_gen_curr)[0]), file, line);
-    INVOKE_BOOST_TEST(materially_equal(0.142000, loads_.target_premium_load_7702_excluding_premium_tax()[0]), file, line);
-    INVOKE_BOOST_TEST(materially_equal(0.082000, loads_.excess_premium_load_7702_excluding_premium_tax()[0]), file, line);
-    INVOKE_BOOST_TEST(materially_equal(0.162000, loads_.target_premium_load_7702_lowest_premium_tax   ()[0]), file, line);
-    INVOKE_BOOST_TEST(materially_equal(0.102000, loads_.excess_premium_load_7702_lowest_premium_tax   ()[0]), file, line);
+    INVOKE_BOOST_TEST(materially_equal(0.142000, loads_.target_premium_load_excluding_premium_tax()[0]), file, line);
+    INVOKE_BOOST_TEST(materially_equal(0.082000, loads_.excess_premium_load_excluding_premium_tax()[0]), file, line);
+    INVOKE_BOOST_TEST(materially_equal(0.162000, loads_.target_premium_load_minimum_premium_tax  ()[0]), file, line);
+    INVOKE_BOOST_TEST(materially_equal(0.102000, loads_.excess_premium_load_minimum_premium_tax  ()[0]), file, line);
 }
 
 int test_main(int, char*[])
