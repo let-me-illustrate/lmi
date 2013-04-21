@@ -113,6 +113,8 @@ census_run_result run_census_in_series::operator()
             )
         );
 
+    result.seconds_for_output_ += pre_emit_ledger(file, emission);
+
     for(unsigned int j = 0; j < cells.size(); ++j)
         {
         if(!cell_should_be_ignored(cells[j]))
@@ -597,6 +599,8 @@ census_run_result run_census_in_parallel::operator()
         (*i)->FinalizeLifeAllBases();
         composite.PlusEq(*(*i)->ledger_from_av());
         }
+
+    result.seconds_for_output_ += pre_emit_ledger(file, emission);
 
     {
     int j = 0;

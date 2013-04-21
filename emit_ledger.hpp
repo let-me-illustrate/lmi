@@ -33,6 +33,11 @@
 
 class Ledger;
 
+double LMI_SO pre_emit_ledger
+    (fs::path const& tsv_filepath
+    ,mcenum_emission emission
+    );
+
 double LMI_SO emit_ledger
     (fs::path const& filepath
     ,fs::path const& tsv_filepath

@@ -34,14 +34,37 @@
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
-#include "miscellany.hpp"          // ios_out_trunc_binary()
+#include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "timer.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 
+#include <cstdio>                       // std::remove()
 #include <iostream>
 #include <string>
+
+/// Prepare to emit ledger(s) in various guises.
+
+double pre_emit_ledger
+    (fs::path const& tsv_filepath
+    ,mcenum_emission emission
+    )
+{
+    Timer timer;
+
+    if(emission & mce_emit_spreadsheet)
+        {
+        LMI_ASSERT(!tsv_filepath.empty());
+        std::string spreadsheet_filename =
+                tsv_filepath.string()
+            +   configurable_settings::instance().spreadsheet_file_extension()
+            ;
+        std::remove(spreadsheet_filename.c_str());
+        }
+
+    return timer.stop().elapsed_seconds();
+}
 
 /// Emit a ledger in various guises.
 ///
