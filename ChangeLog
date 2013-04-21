@@ -32190,3 +32190,44 @@ Reformat.
 Fix defect introduced 20050212T1259Z, from an original file predating
 the lmi epoch: 'PostHoneymoonSpread', being a rate, is not additive.
 
+20130421T2211Z <gchicares@sbcglobal.net> [542]
+
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  loads.cpp
+  yare_input.cpp
+  yare_input.hpp
+Add data needed for group roster to ledger.
+
+20130421T2248Z <gchicares@sbcglobal.net> [542]
+
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+Specify formats for columns added or renamed 20130421T2211Z.
+
+20130421T2249Z <gchicares@sbcglobal.net> [542]
+
+  mc_enum_types.cpp
+  mc_enum_types.xpp
+Offer modal minimum premium column on configurable reports.
+
+20130421T2324Z <gchicares@sbcglobal.net> [542]
+
+  emit_ledger.cpp
+  illustration_view.cpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+Improve a function name.
+
+20130421T2352Z <gchicares@sbcglobal.net> [542]
+
+  census_view.cpp
+  census_view_old.cpp
+  emit_ledger.cpp
+  emit_ledger.hpp
+  group_values.cpp
+Refactor.
+
