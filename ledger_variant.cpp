@@ -33,6 +33,7 @@
 #include "database.hpp" // Used only for initial loan rate.
 #include "dbnames.hpp"  // Used only for initial loan rate.
 #include "interest_rates.hpp"
+#include "loads.hpp"
 #include "mc_enum_types_aux.hpp" // mc_str()
 #include "outlay.hpp"
 
@@ -151,6 +152,8 @@ void LedgerVariant::Alloc(int len)
     OtherScalars    ["InitAnnGenAcctInt"      ] = &InitAnnGenAcctInt      ;
     OtherScalars    ["InitAnnSepAcctGrossInt" ] = &InitAnnSepAcctGrossInt ;
     OtherScalars    ["InitAnnSepAcctNetInt"   ] = &InitAnnSepAcctNetInt   ;
+    OtherScalars    ["InitTgtPremHiLoadRate"  ] = &InitTgtPremHiLoadRate  ;
+    OtherScalars    ["InitMlyPolFee"          ] = &InitMlyPolFee          ;
 
     LedgerBase::Alloc();
 
@@ -273,6 +276,9 @@ void LedgerVariant::Init
         [0]
         ;
 
+    InitTgtPremHiLoadRate = bv.Loads_->target_premium_load_maximum_premium_tax()[bv.yare_input_.InforceYear];
+    InitMlyPolFee         = bv.Loads_->monthly_policy_fee(GenBasis_)            [bv.yare_input_.InforceYear];
+
     FullyInitialized = true;
 }
 
@@ -297,6 +303,8 @@ LedgerVariant& LedgerVariant::PlusEq
     InitAnnGenAcctInt           = a_Addend.InitAnnGenAcctInt;
     InitAnnSepAcctGrossInt      = a_Addend.InitAnnSepAcctGrossInt;
     InitAnnSepAcctNetInt        = a_Addend.InitAnnSepAcctNetInt;
+    InitTgtPremHiLoadRate       = std::max(InitTgtPremHiLoadRate, a_Addend.InitTgtPremHiLoadRate);
+    InitMlyPolFee               = std::max(InitMlyPolFee        , a_Addend.InitMlyPolFee        );
     InitAnnLoanCredRate         = a_Addend.InitAnnLoanCredRate;
     // ET !! This is of the form 'x = (lengthof x) take y'.
     for(int j = 0; j < a_Addend.Length; j++)

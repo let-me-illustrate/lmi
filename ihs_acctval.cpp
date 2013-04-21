@@ -962,6 +962,15 @@ void AccountValue::InitializeSpecAmt()
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
+    // Most other yearly values are posted to InvariantValues() in
+    // FinalizeYear(), but it seems clearer to post this one here
+    // where it's calculated along with 'MlyNoLapsePrem'.
+    InvariantValues().ModalMinimumPremium[Year] = GetModalMinPrem
+        (Year
+        ,InvariantValues().ErMode[Year].value()
+        ,InvariantValues().SpecAmt[Year]
+        );
+
     // No-lapse premium generally changes whenever specamt changes for
     // any reason (e.g., elective increases or decreases, DBO changes,
     // and withdrawals). Target premium may change similarly, or may
