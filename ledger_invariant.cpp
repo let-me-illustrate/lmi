@@ -457,7 +457,14 @@ void LedgerInvariant::Init(BasicValues* b)
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
 
-    CountryCOIMultiplier = b->yare_input_.CountryCoiMultiplier;
+    std::vector<double> coimult;
+    b->Database_->Query(coimult, DB_CurrCoiMultiplier);
+    // This will soon be renamed:
+    CountryCOIMultiplier =
+          coimult                            [b->yare_input_.InforceYear]
+        * b->yare_input_.CurrentCoiMultiplier[b->yare_input_.InforceYear]
+        * b->yare_input_.CountryCoiMultiplier
+        ;
 
     CountryIso3166Abbrev = (*b->Input_)["Country"].str();
     Comments             = b->yare_input_.Comments;
