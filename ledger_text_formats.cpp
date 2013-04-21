@@ -86,6 +86,7 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["Outlay"                     ] = ledger_metadata(0, oe_format_normal    , "Net Outlay"                            );
         m["EeGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "EE Gross Payment"                      ); // "Employee Gross Payment"
         m["ErGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "ER Gross Payment"                      ); // "Employer Gross Payment"
+        m["ModalMinimumPremium"        ] = ledger_metadata(0, oe_format_normal    , "Modal Minimum Premium"                 );
         m["NetWD"                      ] = ledger_metadata(0, oe_format_normal    , "Withdrawal"                            );
         m["NewCashLoan"                ] = ledger_metadata(0, oe_format_normal    , "Annual Loan"                           ); // "New Cash Loan"
         m["TotalLoanBalance_Current"   ] = ledger_metadata(0, oe_format_normal    , "Curr Total Loan Balance"               ); // "Current Total Loan Balance"
