@@ -101,7 +101,7 @@ double emit_ledger
     if(emission & mce_emit_spreadsheet)
         {
         LMI_ASSERT(!tsv_filepath.empty());
-        PrintFormTabDelimited
+        PrintCellTabDelimited
             (ledger
             ,   tsv_filepath.string()
             +   configurable_settings::instance().spreadsheet_file_extension()

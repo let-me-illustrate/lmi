@@ -203,7 +203,7 @@ void IllustrationView::UponCopyFull(wxCommandEvent&)
         +   c.spreadsheet_file_extension()
         ;
     std::remove(spreadsheet_filename.c_str());
-    PrintFormTabDelimited(*ledger_values_, spreadsheet_filename);
+    PrintCellTabDelimited(*ledger_values_, spreadsheet_filename);
     std::ifstream ifs(spreadsheet_filename.c_str());
     std::string s;
     istream_to_string(ifs, s);
