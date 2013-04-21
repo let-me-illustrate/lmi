@@ -46,6 +46,7 @@
 #include "mc_enum_types_aux.hpp" // mc_str()
 #include "miscellany.hpp"
 #include "outlay.hpp"
+#include "premium_tax.hpp"
 #include "product_data.hpp"
 
 #include <algorithm>
@@ -108,9 +109,11 @@ void LedgerInvariant::Alloc(int len)
     BegYearVectors  ["Outlay"                ] = &Outlay                 ;
     BegYearVectors  ["GptForceout"           ] = &GptForceout            ;
     BegYearVectors  ["NaarForceout"          ] = &NaarForceout           ;
+    BegYearVectors  ["ModalMinimumPremium"   ] = &ModalMinimumPremium    ;
 
     EndYearVectors  ["TermSpecAmt"           ] = &TermSpecAmt            ;
     EndYearVectors  ["SpecAmt"               ] = &SpecAmt                ;
+    // SOMEDAY !! This contradicts the "ProducerCompensation" comment in the header.
     BegYearVectors  ["ProducerCompensation"  ] = &ProducerCompensation   ;
 
     OtherVectors    ["IndvTaxBracket"        ] = &IndvTaxBracket         ;
@@ -140,10 +143,14 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["Dumpin"                ] = &Dumpin                 ;
     ScalableScalars ["External1035Amount"    ] = &External1035Amount     ;
     ScalableScalars ["Internal1035Amount"    ] = &Internal1035Amount     ;
+    ScalableScalars ["InforceUnloanedAV"     ] = &InforceUnloanedAV      ;
+    ScalableScalars ["InforceTaxBasis"       ] = &InforceTaxBasis        ;
 
     OtherScalars    ["MaleProportion"        ] = &MaleProportion         ;
     OtherScalars    ["NonsmokerProportion"   ] = &NonsmokerProportion    ;
     OtherScalars    ["GuarMaxMandE"          ] = &GuarMaxMandE           ;
+    OtherScalars    ["InitDacTaxRate"        ] = &InitDacTaxRate         ;
+    OtherScalars    ["InitPremTaxRate"       ] = &InitPremTaxRate        ;
     OtherScalars    ["GenderDistinct"        ] = &GenderDistinct         ;
     OtherScalars    ["GenderBlended"         ] = &GenderBlended          ;
     OtherScalars    ["SmokerDistinct"        ] = &SmokerDistinct         ;
@@ -173,17 +180,19 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["AllowDbo3"             ] = &AllowDbo3              ;
     OtherScalars    ["InitAnnLoanDueRate"    ] = &InitAnnLoanDueRate     ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
-    OtherScalars    ["CountryCOIMultiplier"  ] = &CountryCOIMultiplier   ;
+    OtherScalars    ["CurrentCoiMultiplier"  ] = &CurrentCoiMultiplier   ;
     OtherScalars    ["NoLapseAlwaysActive"   ] = &NoLapseAlwaysActive    ;
     OtherScalars    ["NoLapseMinDur"         ] = &NoLapseMinDur          ;
     OtherScalars    ["NoLapseMinAge"         ] = &NoLapseMinAge          ;
     OtherScalars    ["Has1035ExchCharge"     ] = &Has1035ExchCharge      ;
     OtherScalars    ["EffDateJdn"            ] = &EffDateJdn             ;
+    OtherScalars    ["DateOfBirthJdn"        ] = &DateOfBirthJdn         ;
     OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
     OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
 
     Strings         ["PolicyMktgName"        ] = &PolicyMktgName         ;
     Strings         ["PolicyLegalName"       ] = &PolicyLegalName        ;
+    Strings         ["ProductName"           ] = &ProductName            ;
     Strings         ["PolicyForm"            ] = &PolicyForm             ;
     Strings         ["InsCoShortName"        ] = &InsCoShortName         ;
     Strings         ["InsCoName"             ] = &InsCoName              ;
@@ -351,6 +360,7 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
 
     // Scalars of type not compatible with double.
     EffDate                = obj.EffDate               ;
+    DateOfBirth            = obj.DateOfBirth           ;
 
     FullyInitialized       = obj.FullyInitialized      ;
 }
@@ -416,16 +426,23 @@ void LedgerInvariant::Init(BasicValues* b)
 //    Internal1035Amount;
 //    Dumpin               =
 
+    InforceUnloanedAV =
+          b->yare_input_.InforceGeneralAccountValue
+        + b->yare_input_.InforceSeparateAccountValue
+        ;
+    InforceTaxBasis      = b->yare_input_.InforceTaxBasis           ;
+
     // Certain data members, including but almost certainly not
     // limited to these, should not be initialized to any non-zero
     // value here. Actual values are inserted in account-value
     // processing, subject to various restrictions that often cause
     // them to differ from input values. Notably, values need to be
     // zero after lapse.
-//    NetWD           =
-//    NewCashLoan     =
-//    GptForceout     =
-//    NaarForceout    =
+//    NetWD                =
+//    NewCashLoan          =
+//    GptForceout          =
+//    NaarForceout         =
+//    ModalMinimumPremium  =
 //    ProducerCompensation =
 
     if(b->yare_input_.TermRider)
@@ -459,8 +476,7 @@ void LedgerInvariant::Init(BasicValues* b)
 
     std::vector<double> coimult;
     b->Database_->Query(coimult, DB_CurrCoiMultiplier);
-    // This will soon be renamed:
-    CountryCOIMultiplier =
+    CurrentCoiMultiplier =
           coimult                            [b->yare_input_.InforceYear]
         * b->yare_input_.CurrentCoiMultiplier[b->yare_input_.InforceYear]
         * b->yare_input_.CountryCoiMultiplier
@@ -529,6 +545,7 @@ void LedgerInvariant::Init(BasicValues* b)
     NoLapseMinAge           = b->Database_->Query(DB_NoLapseMinAge);
     Has1035ExchCharge       = b->Database_->Query(DB_Has1035ExchCharge);
 
+    // SOMEDAY !! Things indexed with '[0]' should probably use inforce year instead.
     InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
     InitTermSpecAmt         = TermSpecAmt[0];
     ChildRiderAmount        = b->yare_input_.ChildRiderAmount;
@@ -537,7 +554,7 @@ void LedgerInvariant::Init(BasicValues* b)
 //  InitPrem                = 0;
 //  GuarPrem                = 0;
 //  InitSevenPayPrem        =
-//  InitTgtPrem     =
+//  InitTgtPrem             =
 
     MaleProportion          = b->yare_input_.MaleProportion;
     NonsmokerProportion     = b->yare_input_.NonsmokerProportion;
@@ -556,6 +573,8 @@ void LedgerInvariant::Init(BasicValues* b)
             )
         );
     GuarMaxMandE            = guar_m_and_e_rate[0];
+    InitDacTaxRate          = b->Loads_->dac_tax_load()[b->yare_input_.InforceYear];
+    InitPremTaxRate         = b->PremiumTax_->maximum_load_rate();
 //  GenderDistinct          = 0;
     GenderBlended           = b->yare_input_.BlendGender;
 //  SmokerDistinct          = 0;
@@ -587,6 +606,7 @@ void LedgerInvariant::Init(BasicValues* b)
     if(b->ProductData_)
         {
         product_data const& p = *b->ProductData_;
+        ProductName                    = b->yare_input_.ProductName                ;
         PolicyMktgName                 = p.datum("PolicyMktgName"                 );
         PolicyLegalName                = p.datum("PolicyLegalName"                );
         PolicyForm                     = p.datum("PolicyForm"                     );
@@ -746,6 +766,8 @@ void LedgerInvariant::Init(BasicValues* b)
 
     EffDate                 = calendar_date(b->yare_input_.EffectiveDate).str();
     EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate).julian_day_number();
+    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth).str();
+    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth).julian_day_number();
     DefnLifeIns             = (*b->Input_)["DefinitionOfLifeInsurance"].str();
     DefnMaterialChange      = (*b->Input_)["DefinitionOfMaterialChange"].str();
     AvoidMec                = (*b->Input_)["AvoidMecMethod"].str();
@@ -835,6 +857,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     EffDate                 = a_Addend.EffDate;
     EffDateJdn              = a_Addend.EffDateJdn;
+    DateOfBirth             = a_Addend.DateOfBirth;
+    DateOfBirthJdn          = a_Addend.DateOfBirthJdn;
     Age                     = std::min(Age, a_Addend.Age);
     RetAge                  = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
     EndtAge                 = std::max(EndtAge, a_Addend.EndtAge);
@@ -855,6 +879,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // This would necessarily vary by life:
 //  ContractNumber              = "";
 
+    ProductName                 = a_Addend.ProductName;
     PolicyForm                  = a_Addend.PolicyForm;
     PolicyMktgName              = a_Addend.PolicyMktgName;
     PolicyLegalName             = a_Addend.PolicyLegalName;
@@ -949,7 +974,9 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     UseExperienceRating         = a_Addend.UseExperienceRating;
     UsePartialMort              = a_Addend.UsePartialMort;
     PartMortTableName           = a_Addend.PartMortTableName;
-    GuarMaxMandE                = a_Addend.GuarMaxMandE;
+    GuarMaxMandE                = std::max(GuarMaxMandE   , a_Addend.GuarMaxMandE   );
+    InitDacTaxRate              = std::max(InitDacTaxRate , a_Addend.InitDacTaxRate );
+    InitPremTaxRate             = std::max(InitPremTaxRate, a_Addend.InitPremTaxRate);
     AvgFund                     = a_Addend.AvgFund;
     CustomFund                  = a_Addend.CustomFund;
     FundNumbers                 = a_Addend.FundNumbers;

@@ -74,7 +74,7 @@ class yare_input
 //    double                            TotalSpecifiedAmount            ;
 //    double                            TermRiderProportion             ;
 //    bool                              TermRiderUseProportion          ;
-//    calendar_date                     DateOfBirth                     ;
+    calendar_date                     DateOfBirth                     ;
     mcenum_table_rating               SubstandardTable                ;
     std::string                       ProductName                     ;
     double                            Dumpin                          ;

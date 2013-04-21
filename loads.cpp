@@ -374,7 +374,8 @@ Loads::Loads(product_database const& database, bool NeedMidpointRates)
         assign_midpoint(specified_amount_load_[mce_gen_mdpt], specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]);
         }
 
-    premium_tax_load_.push_back(0.0);
-    dac_tax_load_    .push_back(0.0);
+    premium_tax_load_                       .resize(database.length());
+    dac_tax_load_                           .resize(database.length());
+    target_premium_load_maximum_premium_tax_.resize(database.length());
 }
 

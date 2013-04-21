@@ -51,6 +51,7 @@ yare_input::yare_input(Input const& z)
     AccidentalDeathBenefit           = z.AccidentalDeathBenefit          .value();
     TermRider                        = z.TermRider                       .value();
     TermRiderAmount                  = z.TermRiderAmount                 .value();
+    DateOfBirth                      = z.DateOfBirth                     .value();
     SubstandardTable                 = z.SubstandardTable                .value();
     ProductName                      = z.ProductName                     .value();
     Dumpin                           = z.Dumpin                          .value();
