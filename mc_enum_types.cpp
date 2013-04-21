@@ -155,7 +155,7 @@ MC_DEFINE(part_mort_table,1)
 MC_DEFINE(premium_table,1)
 MC_DEFINE(from_point,4)
 MC_DEFINE(to_point,4)
-MC_DEFINE(report_column,57)
+MC_DEFINE(report_column,58)
 
 #undef MC_DEFINE
 
