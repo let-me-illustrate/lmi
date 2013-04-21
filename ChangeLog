@@ -32178,3 +32178,15 @@ Use highest tiered AK and SD premium tax for pay-as-you-go premium.
 Use product of all COI multipliers in ledger. Retain the old name for
 the nonce to avoid affecting every regression test.
 
+20130421T0850Z <gchicares@sbcglobal.net> [542]
+
+  ledger_variant.cpp
+Reformat.
+
+20130421T0946Z <gchicares@sbcglobal.net> [542]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Fix defect introduced 20050212T1259Z, from an original file predating
+the lmi epoch: 'PostHoneymoonSpread', being a rate, is not additive.
+

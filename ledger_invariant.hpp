@@ -150,7 +150,6 @@ class LMI_SO LedgerInvariant
     double          InitGSP;
     double          InitGLP;
     double          InitTgtPrem;
-    double          PostHoneymoonSpread;
     double          Dumpin;
     double          External1035Amount;
     double          Internal1035Amount;
@@ -184,6 +183,7 @@ class LMI_SO LedgerInvariant
     double          HasSpouseRider;
     double          SpouseIssueAge;
     double          HasHoneymoon;
+    double          PostHoneymoonSpread;
     double          AllowDbo3;
     double          IsInforce;
     double          CountryCOIMultiplier;

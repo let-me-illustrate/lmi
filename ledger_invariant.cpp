@@ -137,7 +137,6 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["InitGSP"               ] = &InitGSP                ;
     ScalableScalars ["InitGLP"               ] = &InitGLP                ;
     ScalableScalars ["InitTgtPrem"           ] = &InitTgtPrem            ;
-    ScalableScalars ["PostHoneymoonSpread"   ] = &PostHoneymoonSpread    ;
     ScalableScalars ["Dumpin"                ] = &Dumpin                 ;
     ScalableScalars ["External1035Amount"    ] = &External1035Amount     ;
     ScalableScalars ["Internal1035Amount"    ] = &Internal1035Amount     ;
@@ -170,6 +169,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["HasSpouseRider"        ] = &HasSpouseRider         ;
     OtherScalars    ["SpouseIssueAge"        ] = &SpouseIssueAge         ;
     OtherScalars    ["HasHoneymoon"          ] = &HasHoneymoon           ;
+    OtherScalars    ["PostHoneymoonSpread"   ] = &PostHoneymoonSpread    ;
     OtherScalars    ["AllowDbo3"             ] = &AllowDbo3              ;
     OtherScalars    ["InitAnnLoanDueRate"    ] = &InitAnnLoanDueRate     ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
@@ -580,8 +580,8 @@ void LedgerInvariant::Init(BasicValues* b)
     SpouseIssueAge          = b->yare_input_.SpouseIssueAge;
 
     HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
-    AllowDbo3               = b->Database_->Query(DB_AllowDbo3);
     PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
+    AllowDbo3               = b->Database_->Query(DB_AllowDbo3);
 
     // The antediluvian branch has a null ProductData_ object.
     if(b->ProductData_)
@@ -1005,8 +1005,9 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 // TODO ?? For some ages, we use min; for others, max; how about this one?
 //    SpouseIssueAge     =
 
-    HasHoneymoon = HasHoneymoon || a_Addend.HasHoneymoon ;
-    AllowDbo3    = AllowDbo3    || a_Addend.AllowDbo3    ;
+    HasHoneymoon       = HasHoneymoon || a_Addend.HasHoneymoon ;
+    PostHoneymoonSpread= a_Addend.PostHoneymoonSpread          ;
+    AllowDbo3          = AllowDbo3    || a_Addend.AllowDbo3    ;
 
     NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);
