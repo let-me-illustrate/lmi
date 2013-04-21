@@ -458,7 +458,7 @@ std::string FormatSelectedValuesAsTsv(Ledger const& ledger_values)
 /// The file is appended to, rather than replaced, so that all cells
 /// in a census can be written to the same file.
 
-void PrintFormTabDelimited
+void PrintCellTabDelimited
     (Ledger const& ledger_values
     ,std::string const& file_name
     )
@@ -745,7 +745,7 @@ namespace
         os << '\n';
         return os;
         }
-}
+} // Unnamed namespace.
 
 FlatTextLedgerPrinter::FlatTextLedgerPrinter
     (Ledger const& ledger
