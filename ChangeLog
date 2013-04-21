@@ -32172,3 +32172,9 @@ Calculate loads with maximum as well as minimum premium tax.
   ihs_basicval.cpp
 Use highest tiered AK and SD premium tax for pay-as-you-go premium.
 
+20130421T0147Z <gchicares@sbcglobal.net> [542]
+
+  ledger_invariant.cpp
+Use product of all COI multipliers in ledger. Retain the old name for
+the nonce to avoid affecting every regression test.
+
