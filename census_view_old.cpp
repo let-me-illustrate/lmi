@@ -95,6 +95,7 @@ BEGIN_EVENT_TABLE(CensusViewOld, ViewEx)
     EVT_MENU(XRCID("print_case"            ),CensusViewOld::UponPrintCase)
     EVT_MENU(XRCID("print_case_to_disk"    ),CensusViewOld::UponPrintCaseToDisk)
     EVT_MENU(XRCID("print_spreadsheet"     ),CensusViewOld::UponRunCaseToSpreadsheet)
+    EVT_MENU(XRCID("print_group_roster"    ),CensusViewOld::UponRunCaseToGroupRoster)
     EVT_MENU(XRCID("paste_census"          ),CensusViewOld::UponPasteCensus)
     EVT_MENU(XRCID("add_cell"              ),CensusViewOld::UponAddCell)
     EVT_MENU(XRCID("delete_cells"          ),CensusViewOld::UponDeleteCells)
@@ -111,6 +112,7 @@ BEGIN_EVENT_TABLE(CensusViewOld, ViewEx)
     EVT_UPDATE_UI(XRCID("print_case"           ),CensusViewOld::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusViewOld::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusViewOld::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusViewOld::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusViewOld::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusViewOld::UponUpdateApplicable)
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusViewOld::UponUpdateApplicable)
@@ -943,6 +945,13 @@ void CensusViewOld::UponDeleteCells(wxCommandEvent&)
 void CensusViewOld::UponRunCaseToSpreadsheet(wxCommandEvent&)
 {
     DoAllCells(mce_emit_spreadsheet);
+}
+
+/// Print tab-delimited roster to file loadable in spreadsheet programs.
+
+void CensusViewOld::UponRunCaseToGroupRoster(wxCommandEvent&)
+{
+    DoAllCells(mce_emit_group_roster);
 }
 
 /// Paste a census from the clipboard.

@@ -32231,3 +32231,21 @@ Improve a function name.
   group_values.cpp
 Refactor.
 
+20130423T0219Z <gchicares@sbcglobal.net> [542]
+
+  census_view.cpp
+  census_view.hpp
+  census_view_old.cpp
+  census_view_old.hpp
+  emit_ledger.cpp
+  illustration_view.cpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  main_wx.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mec_view.cpp
+  menus.xrc
+  toolbar.xrc
+Write tab-delimited group roster file.
+
