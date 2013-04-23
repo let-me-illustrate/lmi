@@ -32249,3 +32249,8 @@ Refactor.
   toolbar.xrc
 Write tab-delimited group roster file.
 
+20130423T1148Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate.
+
