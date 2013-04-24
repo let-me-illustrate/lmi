@@ -844,6 +844,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_max_dble"
         ,"_streams"
     // Compiler specific: ms.
+        ,"__VISUALC__"
         ,"_MCW_EM"
         ,"_MCW_IC"
         ,"_MCW_PC"

@@ -51,7 +51,7 @@ jing_archive     := jing-20091111.zip
 md5sum_msw_exe   := md5sum.exe
 sample_archive   := lmi-data-20050618T1440Z.tar.bz2
 trang_archive    := trang-20091111.zip
-xmlwrapp_archive := xmlwrapp-0.6.0.tar.gz
+xmlwrapp_archive := xmlwrapp-0.7.0.tar.gz
 
 file_list := \
   $(boost_archive) \
@@ -87,7 +87,7 @@ $(jing_archive)-md5     := 13eef193921409a1636377d1efbf9843
 $(md5sum_msw_exe)-md5   := eb574b236133e60c989c6f472f07827b
 $(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
 $(trang_archive)-md5    := 9d31799b948c350850eb9dd14e5b832d
-$(xmlwrapp_archive)-md5 := 331369a1b0e0539b1ce95a67e4c2bec4
+$(xmlwrapp_archive)-md5 := 971ec4241044b1f53ba860b1f9e38783
 
 # Utilities ####################################################################
 
