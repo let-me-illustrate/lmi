@@ -32254,3 +32254,20 @@ Write tab-delimited group roster file.
   version.hpp
 Designate release candidate.
 
+20130424T1536Z <gchicares@sbcglobal.net> [542]
+
+  INSTALL
+  install_cygwin.bat
+Adapt to the demise of Cygwin's legacy version. See:
+  http://cygwin.com/ml/cygwin-apps/2013-02/msg00053.html
+
+20130424T1541Z <gchicares@sbcglobal.net> [542]
+
+  install_miscellanea.make
+  test_coding_rules.cpp
+  xml_lmi_fwd.hpp
+  xml_xslt_wrapp.cpp
+  xmlwrapp-0.7.0.md5sums [new file]
+  xmlwrapp-0.7.0.patch   [new file]
+Upgrade to xmlwrapp-0.7.0 .
+
