@@ -33,6 +33,8 @@
 
 start = element multiple_cell_document
     {attribute version {"1"}
+    ,## Optional for now; to be required in the future.
+     attribute data_source {xsd:nonNegativeInteger}?
 
     ,element case_default     {cell_element  }
     ,element class_defaults   {cell_element +}

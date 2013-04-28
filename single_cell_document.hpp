@@ -55,6 +55,8 @@ class LMI_SO single_cell_document
 
   private:
     void parse(xml::element const&);
+
+    int                class_version() const;
     std::string const& xml_root_name() const;
 
     Input input_data_;
