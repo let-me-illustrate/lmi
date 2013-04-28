@@ -32271,3 +32271,18 @@ Adapt to the demise of Cygwin's legacy version. See:
   xmlwrapp-0.7.0.patch   [new file]
 Upgrade to xmlwrapp-0.7.0 .
 
+20130428T1828Z <gchicares@sbcglobal.net> [542]
+
+  multiple_cell_document.cpp
+  multiple_cell_document.rnc
+  multiple_cell_document.xsd
+  sample.ill
+  sample.cns
+  single_cell_document.cpp
+  single_cell_document.hpp
+  single_cell_document.rnc
+  single_cell_document.xsd
+Add a top-level 'data_source' attribute. This has the same type and
+meaning as cell element 'InforceDataSource', but is handier for
+applying an xml schema only to files from external systems.
+

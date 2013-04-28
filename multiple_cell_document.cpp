@@ -363,6 +363,7 @@ void multiple_cell_document::write(std::ostream& os) const
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
     xml_lmi::set_attr(root, "version", class_version());
+    xml_lmi::set_attr(root, "data_source", 1); // "1" means lmi.
 
     xml::element case_default("case_default");
     xml::node::iterator case_i = root.insert(case_default);

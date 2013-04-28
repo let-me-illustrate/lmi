@@ -62,6 +62,18 @@ single_cell_document::~single_cell_document()
 {
 }
 
+/// Backward-compatibility serial number of this class's xml version.
+///
+/// What is now called version 0 had no "version" attribute.
+///
+/// version 0: [prior to the lmi epoch]
+/// version 1: 20130428T1828Z
+
+int single_cell_document::class_version() const
+{
+    return 1;
+}
+
 //============================================================================
 std::string const& single_cell_document::xml_root_name() const
 {
@@ -94,6 +106,8 @@ void single_cell_document::write(std::ostream& os) const
 {
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
+    xml_lmi::set_attr(root, "version", class_version());
+    xml_lmi::set_attr(root, "data_source", 1); // "1" means lmi.
     root << input_data_;
     os << document;
 }
