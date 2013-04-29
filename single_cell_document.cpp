@@ -54,7 +54,7 @@ single_cell_document::single_cell_document(std::string const& filename)
     :input_data_()
 {
     xml_lmi::dom_parser parser(filename);
-    parse(parser.root_node(xml_root_name()));
+    parse(parser);
 }
 
 //============================================================================
@@ -82,8 +82,10 @@ std::string const& single_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void single_cell_document::parse(xml::element const& root)
+void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
+    xml::element const& root(parser.root_node(xml_root_name()));
+
     xml::const_nodes_view const elements(root.elements());
     LMI_ASSERT(!elements.empty());
     xml::const_nodes_view::const_iterator i(elements.begin());
@@ -98,7 +100,7 @@ void single_cell_document::parse(xml::element const& root)
 void single_cell_document::read(std::istream const& is)
 {
     xml_lmi::dom_parser parser(is);
-    parse(parser.root_node(xml_root_name()));
+    parse(parser);
 }
 
 //============================================================================

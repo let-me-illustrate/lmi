@@ -58,8 +58,8 @@ class LMI_SO multiple_cell_document
     void write(std::ostream&) const;
 
   private:
-    void parse   (xml::element const&);
-    void parse_v0(xml::element const&);
+    void parse   (xml_lmi::dom_parser const&);
+    void parse_v0(xml_lmi::dom_parser const&);
 
     void assert_vector_sizes_are_sane() const;
 

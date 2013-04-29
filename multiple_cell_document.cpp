@@ -53,7 +53,7 @@ multiple_cell_document::multiple_cell_document()
 multiple_cell_document::multiple_cell_document(std::string const& filename)
 {
     xml_lmi::dom_parser parser(filename);
-    parse(parser.root_node(xml_root_name()));
+    parse(parser);
     assert_vector_sizes_are_sane();
 }
 
@@ -115,12 +115,14 @@ T& hurl(std::string const& s)
 
 /// Read xml into vectors of class Input.
 
-void multiple_cell_document::parse(xml::element const& root)
+void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
+    xml::element const& root(parser.root_node(xml_root_name()));
+
     int file_version = 0;
     if(!xml_lmi::get_attr(root, "version", file_version))
         {
-        parse_v0(root);
+        parse_v0(parser);
         return;
         }
 
@@ -163,8 +165,10 @@ void multiple_cell_document::parse(xml::element const& root)
 
 /// Parse obsolete version 0 xml (for backward compatibility).
 
-void multiple_cell_document::parse_v0(xml::element const& root)
+void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
 {
+    xml::element const& root(parser.root_node(xml_root_name()));
+
     Input temp;
 
     xml::const_nodes_view const elements(root.elements());
@@ -352,7 +356,7 @@ void multiple_cell_document::parse_v0(xml::element const& root)
 void multiple_cell_document::read(std::istream const& is)
 {
     xml_lmi::dom_parser parser(is);
-    parse(parser.root_node(xml_root_name()));
+    parse(parser);
 }
 
 //============================================================================
