@@ -32286,3 +32286,33 @@ Add a top-level 'data_source' attribute. This has the same type and
 meaning as cell element 'InforceDataSource', but is handier for
 applying an xml schema only to files from external systems.
 
+20130429T2022Z <gchicares@sbcglobal.net> [542]
+
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Refactor to retain the xml parser object a little longer.
+
+20130430T0013Z <gchicares@sbcglobal.net> [542]
+
+  input_test.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Prepare to validate input files with xsd schemata.
+
+20130430T1102Z <gchicares@sbcglobal.net> [542]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Validate external input files with xsd schemata.
+
+20130430T1125Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate.
+
