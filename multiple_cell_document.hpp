@@ -44,6 +44,7 @@ class LMI_SO multiple_cell_document
     friend class CensusDocument;
     friend class CensusView;
     friend class CensusViewOld; // Obsolescent listview version.
+    friend class input_test;    // For mete_cns_xsd().
 
   public:
     multiple_cell_document();
@@ -65,6 +66,11 @@ class LMI_SO multiple_cell_document
 
     int                class_version() const;
     std::string const& xml_root_name() const;
+
+    bool data_source_is_external(xml::document const&) const;
+    void validate_with_xsd_schema(xml::document const&) const;
+    xslt::stylesheet& cell_sorter() const;
+    xml::schema const& xsd_schema() const;
 
     // Default parameters for the whole case, stored as a vector for
     // parallelism with class_parms_ and cell_parms_. Naturally, this

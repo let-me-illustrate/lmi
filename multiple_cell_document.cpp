@@ -30,10 +30,15 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "data_directory.hpp"           // AddDataDir()
+#include "handle_exceptions.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
+#include <xmlwrapp/document.h>
 #include <xmlwrapp/nodes_view.h>
+#include <xmlwrapp/schema.h>
+#include <xsltwrapp/stylesheet.h>
 
 #include <istream>
 #include <iterator>                     // std::distance()
@@ -124,6 +129,11 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
         {
         parse_v0(parser);
         return;
+        }
+
+    if(data_source_is_external(parser.document()))
+        {
+        validate_with_xsd_schema(parser.document());
         }
 
     // Version 0 should have been handled above.
@@ -350,6 +360,46 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
         }
 
     assert_vector_sizes_are_sane();
+}
+
+//============================================================================
+bool multiple_cell_document::data_source_is_external(xml::document const&) const
+{
+    return false; // Actual implementation coming soon.
+}
+
+//============================================================================
+void multiple_cell_document::validate_with_xsd_schema(xml::document const& d) const
+{
+    try
+        {
+        xsd_schema().validate(cell_sorter().apply(d));
+        }
+    catch(...)
+        {
+        warning() << "Schema validation failed--diagnostics follow." << std::flush;
+        report_exception();
+        }
+}
+
+/// Stylesheet to sort <cell> elements.
+///
+/// This is needed for an external system that cannot economically
+/// provide xml with alphabetically-sorted elements.
+
+xslt::stylesheet& multiple_cell_document::cell_sorter() const
+{
+    static std::string const f("sort_cell_subelements.xsl");
+    static xslt::stylesheet z(xml_lmi::dom_parser(AddDataDir(f)).document());
+    return z;
+}
+
+//============================================================================
+xml::schema const& multiple_cell_document::xsd_schema() const
+{
+    static std::string const f("multiple_cell_document.xsd");
+    static xml::schema const z(xml_lmi::dom_parser(AddDataDir(f)).document());
+    return z;
 }
 
 //============================================================================
