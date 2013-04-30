@@ -362,10 +362,55 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
     assert_vector_sizes_are_sane();
 }
 
-//============================================================================
-bool multiple_cell_document::data_source_is_external(xml::document const&) const
+/// Ascertain whether input file comes from a system other than lmi.
+///
+/// External files are validated with an xml schema. This validation,
+/// which imposes an overhead of about twenty percent, is skipped for
+/// files produced by lmi itself, which are presumptively valid.
+///
+/// Regrettably, as this is written in 2013-04, external files
+/// represent the data source in <cell> element <InforceDataSource>
+/// rather than in root attribute "data_source", so for now it is
+/// necessary to look for the lower-level element. Both represent the
+/// data source the same way: "0" is reserved, "1" means lmi, and
+/// each external system is assigned a higher integer.
+
+bool multiple_cell_document::data_source_is_external(xml::document const& d) const
 {
-    return false; // Actual implementation coming soon.
+    xml::element const& root(d.get_root_node());
+
+    int data_source = 0;
+    if(xml_lmi::get_attr(root, "data_source", data_source))
+        {
+        return 1 < data_source;
+        }
+
+    // INPUT !! Remove "InforceDataSource" and the following code when
+    // external systems are updated to use the "data_source" attribute.
+
+    typedef xml::const_nodes_view::const_iterator cnvi;
+
+    // Tag names vary: {"case_default", "class_defaults", "particular_cells"}.
+    xml::const_nodes_view const i_nodes(root.elements());
+    LMI_ASSERT(3 == i_nodes.size());
+    for(cnvi i = i_nodes.begin(); i != i_nodes.end(); ++i)
+        {
+        xml::const_nodes_view const j_nodes(i->elements("cell"));
+        for(cnvi j = j_nodes.begin(); j != j_nodes.end(); ++j)
+            {
+            xml::const_nodes_view const k_nodes(j->elements("InforceDataSource"));
+            for(cnvi k = k_nodes.begin(); k != k_nodes.end(); ++k)
+                {
+                std::string s(xml_lmi::get_content(*k));
+                if("0" != s && "1" != s)
+                    {
+                    return true;
+                    }
+                }
+            }
+        }
+
+    return false;
 }
 
 //============================================================================
