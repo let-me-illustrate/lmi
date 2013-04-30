@@ -28,10 +28,16 @@
 
 #include "single_cell_document.hpp"
 
+#include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "data_directory.hpp"           // AddDataDir()
+#include "handle_exceptions.hpp"
 #include "xml_lmi.hpp"
 
+#include <xmlwrapp/document.h>
 #include <xmlwrapp/nodes_view.h>
+#include <xmlwrapp/schema.h>
+#include <xsltwrapp/stylesheet.h>
 
 #include <istream>
 #include <ostream>
@@ -84,6 +90,11 @@ std::string const& single_cell_document::xml_root_name() const
 //============================================================================
 void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
+    if(data_source_is_external(parser.document()))
+        {
+        validate_with_xsd_schema(parser.document());
+        }
+
     xml::element const& root(parser.root_node(xml_root_name()));
 
     xml::const_nodes_view const elements(root.elements());
@@ -94,6 +105,46 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
     // iterator class, and to write this check above as
     //   LMI_ASSERT(elements.end() == 1 + i);
     LMI_ASSERT(elements.end() == ++i);
+}
+
+//============================================================================
+bool single_cell_document::data_source_is_external(xml::document const&) const
+{
+    return false; // Actual implementation coming soon.
+}
+
+//============================================================================
+void single_cell_document::validate_with_xsd_schema(xml::document const& d) const
+{
+    try
+        {
+        xsd_schema().validate(cell_sorter().apply(d));
+        }
+    catch(...)
+        {
+        warning() << "Schema validation failed--diagnostics follow." << std::flush;
+        report_exception();
+        }
+}
+
+/// Stylesheet to sort <cell> elements.
+///
+/// This is needed for an external system that cannot economically
+/// provide xml with alphabetically-sorted elements.
+
+xslt::stylesheet& single_cell_document::cell_sorter() const
+{
+    static std::string const f("sort_cell_subelements.xsl");
+    static xslt::stylesheet z(xml_lmi::dom_parser(AddDataDir(f)).document());
+    return z;
+}
+
+//============================================================================
+xml::schema const& single_cell_document::xsd_schema() const
+{
+    static std::string const f("single_cell_document.xsd");
+    static xml::schema const z(xml_lmi::dom_parser(AddDataDir(f)).document());
+    return z;
 }
 
 //============================================================================
