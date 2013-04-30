@@ -107,10 +107,50 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
     LMI_ASSERT(elements.end() == ++i);
 }
 
-//============================================================================
-bool single_cell_document::data_source_is_external(xml::document const&) const
+/// Ascertain whether input file comes from a system other than lmi.
+///
+/// External files are validated with an xml schema. This validation,
+/// which imposes an overhead of about twenty percent, is skipped for
+/// files produced by lmi itself, which are presumptively valid.
+///
+/// Regrettably, as this is written in 2013-04, external files
+/// represent the data source in <cell> element <InforceDataSource>
+/// rather than in root attribute "data_source", so for now it is
+/// necessary to look for the lower-level element. Both represent the
+/// data source the same way: "0" is reserved, "1" means lmi, and
+/// each external system is assigned a higher integer.
+
+bool single_cell_document::data_source_is_external(xml::document const& d) const
 {
-    return false; // Actual implementation coming soon.
+    xml::element const& root(d.get_root_node());
+
+    int data_source = 0;
+    if(xml_lmi::get_attr(root, "data_source", data_source))
+        {
+        return 1 < data_source;
+        }
+
+    // INPUT !! Remove "InforceDataSource" and the following code when
+    // external systems are updated to use the "data_source" attribute.
+
+    typedef xml::const_nodes_view::const_iterator cnvi;
+
+    xml::const_nodes_view const i_nodes(root.elements("cell"));
+    LMI_ASSERT(1 == i_nodes.size());
+    for(cnvi i = i_nodes.begin(); i != i_nodes.end(); ++i)
+        {
+        xml::const_nodes_view const j_nodes(i->elements("InforceDataSource"));
+        for(cnvi j = j_nodes.begin(); j != j_nodes.end(); ++j)
+            {
+            std::string s(xml_lmi::get_content(*j));
+            if("0" != s && "1" != s)
+                {
+                return true;
+                }
+            }
+        }
+
+    return false;
 }
 
 //============================================================================
