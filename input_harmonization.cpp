@@ -184,11 +184,19 @@ void Input::DoHarmonize()
         }
     else if(mce_cvat == DefinitionOfLifeInsurance)
         {
+// Temporarily allow every implemented option, for an extraordinary release.
+        DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,true         );
+        DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,true         );
+        DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,false        ); // Not implemented.
+        DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,true         );
+        DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,false        );
+#if 0
         DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,anything_goes);
         DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,anything_goes);
         DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,anything_goes);
         DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,true         );
         DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,false        );
+#endif // 0
         }
     else if(mce_gpt == DefinitionOfLifeInsurance)
         {
