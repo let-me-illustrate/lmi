@@ -177,6 +177,10 @@ void Input::DoHarmonize()
     DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCvat));
     DefinitionOfLifeInsurance.allow(mce_noncompliant, database_->Query(DB_AllowNo7702));
 
+    DefinitionOfMaterialChange.enable(anything_goes);
+    // INPUT !! TAXATION !! This old code will be useful when
+    // 'DefinitionOfMaterialChange' is replaced.
+#if 0
     DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
     if(mce_noncompliant == DefinitionOfLifeInsurance)
         {
@@ -184,19 +188,11 @@ void Input::DoHarmonize()
         }
     else if(mce_cvat == DefinitionOfLifeInsurance)
         {
-// Temporarily allow every implemented option, for an extraordinary release.
-        DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,true         );
-        DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,true         );
-        DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,false        ); // Not implemented.
-        DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,true         );
-        DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,false        );
-#if 0
         DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,anything_goes);
         DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,anything_goes);
         DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,anything_goes);
         DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,true         );
         DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,false        );
-#endif // 0
         }
     else if(mce_gpt == DefinitionOfLifeInsurance)
         {
@@ -213,6 +209,7 @@ void Input::DoHarmonize()
             << LMI_FLUSH
             ;
         }
+#endif // 0
 
     MaximumNaar.enable(anything_goes);
 
