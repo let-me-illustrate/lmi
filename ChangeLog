@@ -32326,3 +32326,15 @@ Temporarily allow every implemented material-change definition.
   version.hpp
 Designate release candidate.
 
+20130510T2251Z <gchicares@sbcglobal.net> [542]
+
+  ihs_basicval.cpp
+  input.cpp
+  input_harmonization.cpp
+Disable material-change-definition control in GUI.
+
+20130510T2253Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate.
+
