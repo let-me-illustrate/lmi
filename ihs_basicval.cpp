@@ -851,6 +851,15 @@ void BasicValues::SetPermanentInvariants()
 
     DefnLifeIns_        = yare_input_.DefinitionOfLifeInsurance;
     DefnMaterialChange_ = yare_input_.DefinitionOfMaterialChange;
+    // TAXATION !! For the nonce, input 'DefinitionOfMaterialChange'
+    // is ignored without the most-privileged password. In the future,
+    // the input class will distinguish CVAT from GPT material-change
+    // definitions, and 'DefinitionOfMaterialChange' will be removed.
+    if(!global_settings::instance().ash_nazg())
+        {
+        mcenum_defn_material_change const z = static_cast<mcenum_defn_material_change>(static_cast<int>(Database_->Query(DB_CvatMatChangeDefn)));
+        DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
+        }
     Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702Dbo3)));
     MaxNAAR             = yare_input_.MaximumNaar;
 
