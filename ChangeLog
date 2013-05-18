@@ -32338,3 +32338,24 @@ Disable material-change-definition control in GUI.
   version.hpp
 Designate release candidate.
 
+20130518T1104Z <gchicares@sbcglobal.net> [542]
+
+  ihs_basicval.cpp
+Mark some taxation issues.
+
+20130518T1111Z <gchicares@sbcglobal.net> [541]
+
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+Resolve a marked defect.
+
+20130518T1157Z <gchicares@sbcglobal.net> [541]
+
+  ihs_basicval.cpp
+Respect 'DB_WpChargeMethod' in GetModalPremMlyDed().
+
+20130518T1551Z <gchicares@sbcglobal.net> [541]
+
+  version.hpp
+Designate release candidate.
+
