@@ -1020,6 +1020,7 @@ double BasicValues::GetModalPremMaxNonMec
     ,double      a_specamt
     ) const
 {
+    // TAXATION !! No table available if 7PP calculated from first principles.
     double temp = MortalityRates_->SevenPayRates()[0];
     return round_max_premium()(temp * ldbl_eps_plus_one() * a_specamt / a_mode);
 }
@@ -1089,6 +1090,8 @@ double BasicValues::GetModalPremGLP
     ,double      a_specamt
     ) const
 {
+    // TAXATION !! Use GetAnnualTgtPrem() to get target here if needed
+    // for GPT reimplementation.
     double z = Irc7702_->CalculateGLP
         (a_duration
         ,a_bft_amt
@@ -1270,6 +1273,7 @@ double BasicValues::GetModalSpecAmt
 
 double BasicValues::GetModalSpecAmtMinNonMec(double annualized_pmt) const
 {
+    // TAXATION !! No table available if 7PP calculated from first principles.
     return round_min_specamt()(annualized_pmt / MortalityRates_->SevenPayRates()[0]);
 }
 
@@ -1950,6 +1954,8 @@ std::vector<double> BasicValues::GetSevenPayRates() const
     return GetTable
         (ProductData_->datum("SevenPayFilename")
         ,DB_SevenPayTable
+    // TAXATION !! No table available if 7PP calculated from first principles.
+//        ,1 == Database_->Query(DB_SevenPayWhence)
         );
 }
 
