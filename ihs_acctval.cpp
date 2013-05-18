@@ -965,6 +965,8 @@ void AccountValue::InitializeSpecAmt()
     // Most other yearly values are posted to InvariantValues() in
     // FinalizeYear(), but it seems clearer to post this one here
     // where it's calculated along with 'MlyNoLapsePrem'.
+    // SOMEDAY !! It is arbitrarily assumed that the employer's mode
+    // governs; this could be made more flexible.
     InvariantValues().ModalMinimumPremium[Year] = GetModalMinPrem
         (Year
         ,InvariantValues().ErMode[Year].value()
