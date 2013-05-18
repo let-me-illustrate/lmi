@@ -1138,7 +1138,6 @@ double BasicValues::GetModalPremGSP
 /// sufficiency over minimality, but simplicity most of all.
 ///
 /// For simplicity, certain details are disregarded:
-///   - waiver benefits are generally subject to a maximum
 ///   - premium loads are often stratified--the rate used here is
 ///     likely to be the highest that might apply, but deductions at
 ///     age 99 may well exceed target
@@ -1192,9 +1191,30 @@ double BasicValues::GetModalPremMlyDed
 
     if(yare_input_.WaiverOfPremiumBenefit)
         {
-        double r = MortalityRates_->WpRates()[a_year];
-        z *= 1.0 + r;
-        annual_charge *= 1.0 + r;
+        double const r = MortalityRates_->WpRates()[a_year];
+        switch(WaiverChargeMethod)
+            {
+            case oe_waiver_times_specamt:
+                {
+                z += r * std::min(a_specamt, WpLimit);
+                }
+                break;
+            case oe_waiver_times_deductions:
+                {
+                z *= 1.0 + r;
+                annual_charge *= 1.0 + r;
+                }
+                break;
+            default:
+                {
+                fatal_error()
+                    << "Case '"
+                    << WaiverChargeMethod
+                    << "' not found."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
         }
 
     z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
