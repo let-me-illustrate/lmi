@@ -1152,9 +1152,6 @@ double BasicValues::GetModalPremGSP
 ///     rider amount
 ///   - any term rider included as specified amount is treated as
 ///     though its charges equal the base policy's COI rates
-///
-/// TODO ?? What should be the behavior if ee and er both pay and their
-/// modes differ?
 
 double BasicValues::GetModalPremMlyDed
     (int         a_year
