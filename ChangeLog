@@ -32359,3 +32359,8 @@ Respect 'DB_WpChargeMethod' in GetModalPremMlyDed().
   version.hpp
 Designate release candidate.
 
+20130519T1131Z <gchicares@sbcglobal.net> [541]
+
+  ihs_basicval.cpp
+Refactor for concinnity.
+

@@ -1753,7 +1753,7 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
             }
         case mce_noncompliant:
             {
-            Non7702CompliantCorridor = std::vector<double>(Length, 1.0);
+            Non7702CompliantCorridor = std::vector<double>(GetLength(), 1.0);
             return Non7702CompliantCorridor;
             }
         default:
@@ -1822,38 +1822,24 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
-    if(CurrCoiTable0Limit < std::numeric_limits<double>::max())
-        {
-        return GetTable
-            (ProductData_->datum("CurrCOIFilename")
-            ,DB_CurrCoiTable1
-            ,true
-            ,CanBlend
-            ,CanBlend
-            );
-        }
-    else
-        {
-        return std::vector<double>(Length);
-        }
+    return GetTable
+        (ProductData_->datum("CurrCOIFilename")
+        ,DB_CurrCoiTable1
+        ,CurrCoiTable0Limit < std::numeric_limits<double>::max()
+        ,CanBlend
+        ,CanBlend
+        );
 }
 
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
-    if(CurrCoiTable1Limit < std::numeric_limits<double>::max())
-        {
-        return GetTable
-            (ProductData_->datum("CurrCOIFilename")
-            ,DB_CurrCoiTable2
-            ,true
-            ,CanBlend
-            ,CanBlend
-            );
-        }
-    else
-        {
-        return std::vector<double>(Length);
-        }
+    return GetTable
+        (ProductData_->datum("CurrCOIFilename")
+        ,DB_CurrCoiTable2
+        ,CurrCoiTable1Limit < std::numeric_limits<double>::max()
+        ,CanBlend
+        ,CanBlend
+        );
 }
 
 std::vector<double> BasicValues::GetGuarCOIRates() const
@@ -2019,27 +2005,19 @@ std::vector<double> BasicValues::GetSubstdTblMultTable() const
 
 std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
 {
-    if(0 == Database_->Query(DB_CurrSpecAmtLoadTable))
-        {
-        return std::vector<double>(GetLength());
-        }
-
     return GetTable
         (ProductData_->datum("CurrSpecAmtLoadFilename")
         ,DB_CurrSpecAmtLoadTable
+        ,0 != Database_->Query(DB_CurrSpecAmtLoadTable)
         );
 }
 
 std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
 {
-    if(0 == Database_->Query(DB_GuarSpecAmtLoadTable))
-        {
-        return std::vector<double>(GetLength());
-        }
-
     return GetTable
         (ProductData_->datum("GuarSpecAmtLoadFilename")
         ,DB_GuarSpecAmtLoadTable
+        ,0 != Database_->Query(DB_GuarSpecAmtLoadTable)
         );
 }
 
