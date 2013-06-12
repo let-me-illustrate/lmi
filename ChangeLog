@@ -32375,3 +32375,8 @@ having already occurred, causing an assertion to fire when it did
 subsequently occur. Prior to 20120821T0957Z, this had not happened
 because historical and future values had been separate inputs.
 
+20130612T1128Z <gchicares@sbcglobal.net> [541]
+
+  version.hpp
+Designate release candidate 5736.
+
