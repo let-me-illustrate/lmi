@@ -522,25 +522,15 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         {
         int length_7702a = std::min(7, BasicValues::GetLength());
         // Premium history starts at contract year zero.
+        // TAXATION !! nonstd::copy_n() is used nowhere else, and
+        // may be expunged if this line becomes unnecessary.
         nonstd::copy_n
             (yare_input_.Inforce7702AAmountsPaidHistory.begin()
             ,length_7702a
             ,std::back_inserter(pmts_7702a)
             );
-        // Specamt history starts at policy year zero and must be offset.
-        // TAXATION !! That's wrong, because contract-year history cannot
-        // generally be obtained from policy-year history by any integral
-        // offset; but doesn't LDB provide all the information required,
-        // if only it were used in preference to this?
-        int const offset = duration_ceiling
-            (yare_input_.EffectiveDate
-            ,yare_input_.LastMaterialChangeDate
-            );
-        nonstd::copy_n
-            (yare_input_.SpecifiedAmount.begin() + offset
-            ,length_7702a
-            ,std::back_inserter(bfts_7702a)
-            );
+        // Specamt history is irrelevant except for LDB.
+        bfts_7702a = std::vector<double>(length_7702a, yare_input_.InforceLeastDeathBenefit);
         }
     double lowest_death_benefit = yare_input_.InforceLeastDeathBenefit;
     if(0 == InforceYear && 0 == InforceMonth)
