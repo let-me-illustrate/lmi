@@ -32364,3 +32364,14 @@ Designate release candidate.
   ihs_basicval.cpp
 Refactor for concinnity.
 
+20130612T1126Z <gchicares@sbcglobal.net> [541]
+
+  ihs_acctval.cpp
+Fix defect introduced 20120821T0957Z. Pass lowest death benefit to
+7702A routines instead of complete specamt vector. Only the lowest
+death benefit is relevant anyway. For one particular inforce case,
+soon-to-be-replaced 7702A code had treated an impending decrease as
+having already occurred, causing an assertion to fire when it did
+subsequently occur. Prior to 20120821T0957Z, this had not happened
+because historical and future values had been separate inputs.
+
