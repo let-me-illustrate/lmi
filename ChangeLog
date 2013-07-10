@@ -32380,3 +32380,19 @@ because historical and future values had been separate inputs.
   version.hpp
 Designate release candidate 5736.
 
+20130710T1441Z <gchicares@sbcglobal.net> [541]
+
+  test_schemata.sh
+Fix defect introduced 20120526T1023Z: copy all tested '.xsd' files.
+
+20130710T1442Z <gchicares@sbcglobal.net> [541]
+
+  types.rnc
+  types.xsd
+Fix defect introduced 20130421T2249Z: add new column to schemata.
+
+20130710T1445Z <gchicares@sbcglobal.net> [541]
+
+  version.hpp
+Designate release candidate 5740.
+
