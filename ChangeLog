@@ -32396,3 +32396,14 @@ Fix defect introduced 20130421T2249Z: add new column to schemata.
   version.hpp
 Designate release candidate 5740.
 
+20130712T1126Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+Tune gcc to use less memory.
+
+20130712T1225Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+  wx-2.9.5.patch [new file]
+Use 2013-07-11 wx-2.9.5 snapshot.
+
