@@ -68,6 +68,11 @@ build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00004.html
 # and override wxApp::OnAssertFailure() before experimenting with
 # '--enable-debug_flag'.
+#
+# Pass gcc options in $CC and $CXX, not $*FLAGS--explanation here:
+#   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00001.html
+
+ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
 
 config_options = \
   --prefix=$(prefix) \
@@ -89,9 +94,9 @@ config_options = \
   --without-regex \
        AR='$(mingw_bin_dir)/ar' \
        AS='$(mingw_bin_dir)/as' \
-       CC='$(mingw_bin_dir)/gcc' \
+       CC='$(mingw_bin_dir)/gcc $(ggc_flags)' \
       CPP='$(mingw_bin_dir)/cpp' \
-      CXX='$(mingw_bin_dir)/g++' \
+      CXX='$(mingw_bin_dir)/g++ $(ggc_flags)' \
   DLLTOOL='$(mingw_bin_dir)/dlltool' \
        LD='$(mingw_bin_dir)/ld' \
        NM='$(mingw_bin_dir)/nm' \
