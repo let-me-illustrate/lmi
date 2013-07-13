@@ -154,6 +154,8 @@ class LMI_SO LedgerVariant
     double  InitAnnGenAcctInt;
     double  InitAnnSepAcctGrossInt;
     double  InitAnnSepAcctNetInt;
+    double  InitTgtPremHiLoadRate; // Rate on first dollar, at maximum premium tax rate.
+    double  InitMlyPolFee;         // Nonscalable: policy parameter (unlike 'PolicyFee').
 
     // Special cases.
     int              Length;

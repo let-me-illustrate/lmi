@@ -41,6 +41,7 @@ class LMI_SO single_cell_document
 {
     friend class IllustrationDocument;
     friend class IllustrationView;
+    friend class input_test; // For mete_ill_xsd().
 
   public:
     single_cell_document();
@@ -54,8 +55,15 @@ class LMI_SO single_cell_document
     void write(std::ostream&) const;
 
   private:
-    void parse(xml::element const&);
+    void parse(xml_lmi::dom_parser const&);
+
+    int                class_version() const;
     std::string const& xml_root_name() const;
+
+    bool data_source_is_external(xml::document const&) const;
+    void validate_with_xsd_schema(xml::document const&) const;
+    xslt::stylesheet& cell_sorter() const;
+    xml::schema const& xsd_schema() const;
 
     Input input_data_;
 };

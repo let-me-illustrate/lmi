@@ -44,8 +44,9 @@ class LMI_SO DBDictionary
     ,        public  MemberSymbolTable <DBDictionary>
 {
     friend class DatabaseDocument;
-    friend class input_test;
-    friend class product_file_test;
+    friend class input_test;        // For test_product_database().
+    friend class product_file_test; // Uses InvalidateCache() for timing.
+    friend class premium_tax_test;  // For test_rates().
 
   public:
     static DBDictionary& instance();

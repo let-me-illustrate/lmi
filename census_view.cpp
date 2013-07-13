@@ -31,7 +31,6 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "census_document.hpp"
-#include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
@@ -61,7 +60,6 @@
 #include <algorithm>
 #include <cctype>
 #include <cstddef>                      // std::size_t
-#include <cstdio>                       // std::remove()
 #include <istream>                      // std::ws
 #include <iterator>
 #include <sstream>
@@ -820,6 +818,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("print_case"            ),CensusView::UponPrintCase)
     EVT_MENU(XRCID("print_case_to_disk"    ),CensusView::UponPrintCaseToDisk)
     EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::UponRunCaseToSpreadsheet)
+    EVT_MENU(XRCID("print_group_roster"    ),CensusView::UponRunCaseToGroupRoster)
     EVT_MENU(XRCID("paste_census"          ),CensusView::UponPasteCensus)
     EVT_MENU(XRCID("add_cell"              ),CensusView::UponAddCell)
     EVT_MENU(XRCID("delete_cells"          ),CensusView::UponDeleteCells)
@@ -835,6 +834,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
@@ -1605,16 +1605,18 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     document().Modify(true);
 }
 
-/// Print tab-delimited output to file loadable in spreadsheet programs.
+/// Print tab-delimited details to file loadable in spreadsheet programs.
 
 void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 {
-    std::string spreadsheet_filename =
-            base_filename()
-        +   configurable_settings::instance().spreadsheet_file_extension()
-        ;
-    std::remove(spreadsheet_filename.c_str());
     DoAllCells(mce_emit_spreadsheet);
+}
+
+/// Print tab-delimited roster to file loadable in spreadsheet programs.
+
+void CensusView::UponRunCaseToGroupRoster(wxCommandEvent&)
+{
+    DoAllCells(mce_emit_group_roster);
 }
 
 /// Paste a census from the clipboard.

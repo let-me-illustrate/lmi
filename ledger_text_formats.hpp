@@ -39,9 +39,12 @@ class Ledger;
 std::string LMI_SO FormatSelectedValuesAsHtml(Ledger const&);
 std::string LMI_SO FormatSelectedValuesAsTsv (Ledger const&);
 
-void LMI_SO PrintFormTabDelimited(Ledger const&, std::string const& file_name);
+void LMI_SO PrintCellTabDelimited  (Ledger const&, std::string const& file_name);
 
-void LMI_SO PrintLedgerFlatText(Ledger const&, std::ostream&);
+void LMI_SO PrintRosterHeaders     (               std::string const& file_name);
+void LMI_SO PrintRosterTabDelimited(Ledger const&, std::string const& file_name);
+
+void LMI_SO PrintLedgerFlatText    (Ledger const&, std::ostream&);
 
 std::string ledger_format
     (double                            d

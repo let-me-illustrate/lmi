@@ -54,7 +54,7 @@ class LMI_SO mec_xml_document
     void write(std::ostream&) const;
 
   private:
-    void parse(xml::element const&);
+    void parse(xml_lmi::dom_parser const&);
     std::string const& xml_root_name() const;
 
     mec_input input_data_;

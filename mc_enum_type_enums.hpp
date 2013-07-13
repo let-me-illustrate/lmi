@@ -50,8 +50,9 @@ enum mcenum_emission
     ,mce_emit_pdf_to_viewer  =   32 // GUI only.
     ,mce_emit_test_data      =   64
     ,mce_emit_spreadsheet    =  128
-    ,mce_emit_text_stream    =  256
-    ,mce_emit_custom_0       =  512
+    ,mce_emit_group_roster   =  256
+    ,mce_emit_text_stream    =  512
+    ,mce_emit_custom_0       = 1024
     };
 
 /// Rounding styles.

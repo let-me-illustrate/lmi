@@ -39,6 +39,7 @@
 #include "assert_lmi.hpp"
 #include "dbdict.hpp"
 #include "dbnames.hpp"
+#include "global_settings.hpp"
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -46,10 +47,12 @@
 
 #include <boost/bind.hpp>
 
+#include <xmlwrapp/document.h>
+
 #if defined BOOST_MSVC || defined __BORLANDC__
-#   include <cfloat> // floating-point hardware control
+#   include <cfloat>                    // floating-point hardware control
 #endif // defined BOOST_MSVC || defined __BORLANDC__
-#include <cstdio> // std::remove()
+#include <cstdio>                       // std::remove()
 #include <fstream>
 #include <ios>
 #include <string>
@@ -90,6 +93,8 @@ class input_test
     static void mete_write();
     static void mete_cns_io();
     static void mete_ill_io();
+    static void mete_cns_xsd();
+    static void mete_ill_xsd();
 };
 
 void input_test::test_product_database()
@@ -411,6 +416,8 @@ void input_test::assay_speed()
         << "\n  Write    : " << TimeAnAliquot(mete_write               )
         << "\n  'cns' io : " << TimeAnAliquot(mete_cns_io              )
         << "\n  'ill' io : " << TimeAnAliquot(mete_ill_io              )
+        << "\n  'cns' xsd: " << TimeAnAliquot(mete_cns_xsd             )
+        << "\n  'ill' xsd: " << TimeAnAliquot(mete_ill_xsd             )
         << '\n'
         ;
 }
@@ -505,8 +512,25 @@ void input_test::mete_ill_io()
     test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, true);
 }
 
+void input_test::mete_cns_xsd()
+{
+    static xml::document const cns = xml_lmi::dom_parser("sample.cns").document();
+    static multiple_cell_document const mcd;
+    mcd.validate_with_xsd_schema(cns);
+}
+
+void input_test::mete_ill_xsd()
+{
+    static xml::document const ill = xml_lmi::dom_parser("sample.ill").document();
+    static single_cell_document const scd;
+    scd.validate_with_xsd_schema(ill);
+}
+
 int test_main(int, char*[])
 {
+    // Location of '*.xsd' files.
+    global_settings::instance().set_data_directory("/opt/lmi/data");
+
     input_test::test();
     return EXIT_SUCCESS;
 }

@@ -31,17 +31,18 @@
 
 #include "alert.hpp"
 #include "contains.hpp"
-#include "data_directory.hpp"     // AddDataDir()
+#include "data_directory.hpp"           // AddDataDir()
 #include "handle_exceptions.hpp"
-#include "miscellany.hpp"         // lmi_array_size()
-#include "path_utility.hpp"       // validate_directory(), validate_filepath()
-#include "platform_dependent.hpp" // access()
+#include "mc_enum.hpp"                  // all_strings<>()
+#include "mc_enum_type_enums.hpp"       // mcenum_report_column
+#include "miscellany.hpp"               // lmi_array_size()
+#include "path_utility.hpp"             // validate_directory(), validate_filepath()
+#include "platform_dependent.hpp"       // access()
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm> // std::copy()
 #include <iterator>
 #include <sstream>
 #include <stdexcept>
@@ -424,7 +425,7 @@ std::string const& configurable_settings::xsl_fo_command() const
     return xsl_fo_command_;
 }
 
-std::vector<std::string> effective_calculation_summary_columns()
+std::vector<std::string> parsed_calculation_summary_columns()
 {
     configurable_settings const& z = configurable_settings::instance();
     std::istringstream iss
@@ -432,12 +433,26 @@ std::vector<std::string> effective_calculation_summary_columns()
         ? default_calculation_summary_columns()
         : z.calculation_summary_columns()
         );
+    std::vector<std::string> const& allowable = all_strings<mcenum_report_column>();
     std::vector<std::string> columns;
-    std::copy
-        (std::istream_iterator<std::string>(iss)
-        ,std::istream_iterator<std::string>()
-        ,std::back_inserter(columns)
-        );
+    std::istream_iterator<std::string> i(iss);
+    std::istream_iterator<std::string> const eos;
+    for(; i != eos; ++i)
+        {
+        if(contains(allowable, *i))
+            {
+            columns.push_back(*i);
+            }
+        else
+            {
+            warning()
+                << "Disregarding unrecognized calculation-summary column '"
+                << *i
+                << "'. Use 'Preferences' to remove it permanently."
+                << std::flush
+                ;
+            }
+        }
     return columns;
 }
 

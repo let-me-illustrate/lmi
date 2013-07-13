@@ -32,6 +32,7 @@
 #include "assert_lmi.hpp"
 #include "commutation_functions.hpp"
 #include "materially_equal.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -211,7 +212,7 @@ Irc7702::~Irc7702()
 
 //============================================================================
 void Irc7702::ProcessGptPmt
-    (int     // a_Duration
+    (int     a_Duration
     ,double& a_Pmt
     ,double& // a_CumPmt
     )
@@ -222,7 +223,23 @@ void Irc7702::ProcessGptPmt
         {
         return;
         }
-    LMI_ASSERT(CumPmts <= GptLimit);
+    // This assertion seems like a good idea:
+//    LMI_ASSERT(CumPmts <= GptLimit);
+    // but it's incorrect when this function is called by
+    // AccountValue::TxTakeWD(): in that case, the cumulative GLP
+    // has been improperly updated by calling UpdateBOY7702() before
+    // ProcessAdjustableEvent().
+    if(GptLimit < CumPmts)
+        {
+        warning()
+            << "Apparent GPT violation before applying a "
+            << value_cast<std::string>(a_Pmt)
+            << " payment at duration " << a_Duration << ":"
+            << "\n  " << value_cast<std::string>(GptLimit) << " limit is less than"
+            << "\n  " << value_cast<std::string>(CumPmts ) << " cumulative premiums paid."
+            << LMI_FLUSH
+            ;
+        }
     a_Pmt = std::min(a_Pmt ,round_max_premium(GptLimit - CumPmts));
     CumPmts += a_Pmt;
 }

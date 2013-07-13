@@ -28,7 +28,10 @@
 
 #include "premium_tax.hpp"
 
-#include "path_utility.hpp" // initialize_filesystem()
+#include "database.hpp"
+#include "dbdict.hpp"
+#include "path_utility.hpp"             // initialize_filesystem()
+#include "stratified_charges.hpp"
 #include "test_tools.hpp"
 
 class premium_tax_test
@@ -36,17 +39,100 @@ class premium_tax_test
   public:
     static void test()
         {
-        test_something();
+        write_prerequisite_files();
+        test_rates();
         }
 
   private:
-    static void test_something();
+    static void write_prerequisite_files();
+    static void test_rates();
 };
 
-/// Placeholder.
-
-void premium_tax_test::test_something()
+void premium_tax_test::write_prerequisite_files()
 {
+    DBDictionary::instance() .WriteSampleDBFile      ();
+    stratified_charges      ::write_stratified_files ();
+}
+
+/// Test premium-tax rates.
+
+void premium_tax_test::test_rates()
+{
+    product_database db
+        ("sample"
+        ,mce_female
+        ,mce_standard
+        ,mce_nonsmoker
+        ,45
+        ,mce_nonmedical
+        ,mce_s_CT
+        );
+    stratified_charges strata("sample.strata");
+
+    // Tax state = domicile; not tiered.
+    {
+    // arguments: tax_state, domicile, amortize_premium_load, db, strata
+    premium_tax z(mce_s_CT, mce_s_CT, false, db, strata);
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0175);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0175);
+    BOOST_TEST_EQUAL(z.maximum_load_rate        (), 0.0175);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0175);
+    BOOST_TEST_EQUAL(z.is_tiered                (), false );
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0175);
+    }
+
+    // Retaliation.
+    {
+    premium_tax z(mce_s_CT, mce_s_MA, false, db, strata);
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0200);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0200);
+    BOOST_TEST_EQUAL(z.maximum_load_rate        (), 0.0200);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0200);
+    BOOST_TEST_EQUAL(z.is_tiered                (), false );
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0200);
+    }
+
+    // Tiered.
+    {
+    premium_tax z(mce_s_AK, mce_s_CT, false, db, strata);
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.maximum_load_rate        (), 0.0270);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0010);
+    BOOST_TEST_EQUAL(z.is_tiered                (), true  );
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0270);
+    }
+
+    // Tiered in premium-tax state, but load uniformly zero.
+    // A uniform but nonzero load would elicit a runtime error,
+    // because the tiered load is not zero.
+    {
+    database_entity const original = DBDictionary::instance().datum("PremTaxLoad");
+    database_entity const scalar(DB_PremTaxLoad, 0.0000);
+
+    DBDictionary::instance().datum("PremTaxLoad") = scalar;
+
+    premium_tax z(mce_s_AK, mce_s_CT, false, db, strata);
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.maximum_load_rate        (), 0.0000);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0000);
+    BOOST_TEST_EQUAL(z.is_tiered                (), true  );
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
+
+    DBDictionary::instance().datum("PremTaxLoad") = original;
+    }
+
+    // Amortized.
+    {
+    premium_tax z(mce_s_CT, mce_s_MA, true , db, strata);
+    BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
+    BOOST_TEST_EQUAL(z.maximum_load_rate        (), 0.0000);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0000);
+    BOOST_TEST_EQUAL(z.is_tiered                (), false );
+    BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
+    }
 }
 
 int test_main(int, char*[])

@@ -760,6 +760,7 @@ proved unworkable (e.g., because of underwriting).</xs:documentation>
       <xs:enumeration value="Outlay"/>
       <xs:enumeration value="EeGrossPmt"/>
       <xs:enumeration value="ErGrossPmt"/>
+      <xs:enumeration value="ModalMinimumPremium"/>
       <xs:enumeration value="NetWD"/>
       <xs:enumeration value="NewCashLoan"/>
       <xs:enumeration value="TotalLoanBalance_Current"/>

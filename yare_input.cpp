@@ -51,6 +51,7 @@ yare_input::yare_input(Input const& z)
     AccidentalDeathBenefit           = z.AccidentalDeathBenefit          .value();
     TermRider                        = z.TermRider                       .value();
     TermRiderAmount                  = z.TermRiderAmount                 .value();
+    DateOfBirth                      = z.DateOfBirth                     .value();
     SubstandardTable                 = z.SubstandardTable                .value();
     ProductName                      = z.ProductName                     .value();
     Dumpin                           = z.Dumpin                          .value();
@@ -83,6 +84,7 @@ yare_input::yare_input(Input const& z)
     NumberOfIdenticalLives           = z.NumberOfIdenticalLives          .value();
     UseExperienceRating              = z.UseExperienceRating             .value();
     UsePartialMortality              = z.UsePartialMortality             .value();
+    InsuredName                      = z.InsuredName                     .value();
     InsuredPremiumTableFactor        = z.InsuredPremiumTableFactor       .value();
     CorporationPremiumTableFactor    = z.CorporationPremiumTableFactor   .value();
     EffectiveDate                    = z.EffectiveDate                   .value();

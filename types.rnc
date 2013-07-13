@@ -330,6 +330,7 @@ report_column =
     | "Outlay"
     | "EeGrossPmt"
     | "ErGrossPmt"
+    | "ModalMinimumPremium"
     | "NetWD"
     | "NewCashLoan"
     | "TotalLoanBalance_Current"

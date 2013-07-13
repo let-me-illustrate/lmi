@@ -345,6 +345,10 @@
         <bitmap stock_id="write-spreadsheet"/>
         <help>Run and print all cells to a spreadsheet file</help>
     </object>
+    <object class="wxMenuItem" name="print_group_roster">
+        <label>Print r_oster to spreadsheet\tCtrl-Shift-O</label>
+        <help>Run and print group roster to a spreadsheet file</help>
+    </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="paste_census">
         <label>Pa_ste census data\tCtrl-Shift-S</label>

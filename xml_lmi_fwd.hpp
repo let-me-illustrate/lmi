@@ -32,6 +32,7 @@ namespace xml // This is xmlwrapp's namespace.
     class document;
     class init;
     class node;
+    class schema;
     class tree_parser;
 
     /// XMLWRAPP !! It is useful to distinguish elements from DOM
@@ -39,6 +40,11 @@ namespace xml // This is xmlwrapp's namespace.
     /// distinction, but a future replacement might.
     typedef xml::node element;
 } // namespace xml
+
+namespace xslt // This is xsltwrapp's namespace.
+{
+    class stylesheet;
+} // namespace xslt
 
 /// Interface to xmlwrapp.
 

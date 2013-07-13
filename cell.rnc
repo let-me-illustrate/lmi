@@ -228,7 +228,7 @@ cell_element = element cell
      element InforceDataSource                {xsd:nonNegativeInteger}
     ,## Inforce 7702A deemed cash value.
      element InforceDcv                       {nonnegative_double}
-    ,## Inforce account value in the general account.
+    ,## Inforce unloaned account value in the general account.
      element InforceGeneralAccountValue       {nonnegative_double}
     ,## Inforce 7702 guideline level premium.
      element InforceGlp                       {xsd:double}
@@ -249,15 +249,21 @@ cell_element = element cell
      element InforceNetExperienceReserve      {xsd:double}
     ,## No-lapse guarantee is in effect.
      element InforceNoLapseActive             {yes_or_no}
-    ,## Inforce balance (total indebtedness) for preferred loans.
+    ,## Inforce balance (total indebtedness) for preferred loans:
+     ## the amount that must be repaid to liquidate the loan.
      element InforcePreferredLoanBalance      {nonnegative_double}
-    ,## Inforce loaned account value (excluding accrued interest) for
-     ## preferred loans.
+    ,## Inforce loaned account value for preferred loans, including
+     ## principal and interest credited, but excluding interest
+     ## accrued: the portion of account value held in the loan
+     ## division of the general account with respect to the loan.
      element InforcePreferredLoanValue        {nonnegative_double}
-    ,## Inforce balance (total indebtedness) for regular loans.
+    ,## Inforce balance (total indebtedness) for regular loans:
+     ## the amount that must be repaid to liquidate the loan.
      element InforceRegularLoanBalance        {nonnegative_double}
-    ,## Inforce loaned account value (excluding accrued interest) for
-     ## regular loans.
+    ,## Inforce loaned account value for regular loans, including
+     ## principal and interest credited, but excluding interest
+     ## accrued: the portion of account value held in the loan
+     ## division of the general account with respect to the loan.
      element InforceRegularLoanValue          {nonnegative_double}
     ,## Inforce account value in all separate accounts, combined.
      element InforceSeparateAccountValue      {nonnegative_double}

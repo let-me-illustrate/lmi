@@ -518,6 +518,25 @@ bool stratified_charges::premium_tax_is_tiered(mcenum_state state) const
     return !premium_tax_table(state).empty();
 }
 
+/// Highest rate, for calculating pay-as-you-go premium.
+
+double stratified_charges::maximum_tiered_premium_tax_rate(mcenum_state state) const
+{
+    std::string const table = premium_tax_table(state);
+    if(table.empty())
+        {
+        return 0.0;
+        }
+    else
+        {
+        stratified_entity const& z = datum(table);
+        LMI_ASSERT(!z.values().empty());
+        return *std::max_element(z.values().begin(), z.values().end());
+        }
+}
+
+/// Lowest rate, for conservative 7702 and 7702A calculations.
+
 double stratified_charges::minimum_tiered_premium_tax_rate(mcenum_state state) const
 {
     std::string const table = premium_tax_table(state);

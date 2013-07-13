@@ -560,6 +560,7 @@
     ,mce_net_outlay \
     ,mce_employee_gross_payment \
     ,mce_employer_gross_payment \
+    ,mce_modal_minimum_premium \
     ,mce_withdrawal \
     ,mce_new_cash_loan \
     ,mce_current_total_loan_balance \
@@ -619,6 +620,7 @@
     ,"Outlay" \
     ,"EeGrossPmt" \
     ,"ErGrossPmt" \
+    ,"ModalMinimumPremium" \
     ,"NetWD" \
     ,"NewCashLoan" \
     ,"TotalLoanBalance_Current" \
@@ -680,6 +682,7 @@
     ,"Net Outlay" \
     ,"Employee Gross Payment" \
     ,"Employer Gross Payment" \
+    ,"Modal Minimum Premium" \
     ,"Withdrawal" \
     ,"New Cash Loan" \
     ,"Current Total Loan Balance" \

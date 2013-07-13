@@ -23,7 +23,14 @@
 
 # Use file extension '.ill' for single-life xml documents.
 
-start = element single_cell_document {cell_element}
+start = element single_cell_document
+    {## Optional for now; to be required in the future.
+     attribute version {"1"}?
+    ,## Optional for now; to be required in the future.
+     attribute data_source {xsd:nonNegativeInteger}?
+
+    ,cell_element
+    }
 
 include "cell.rnc"
 

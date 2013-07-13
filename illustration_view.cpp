@@ -87,7 +87,9 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_cell"           ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("print_class"          ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("print_case"           ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_group_roster"   ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("paste_census"         ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("add_cell"             ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("delete_cells"         ),IllustrationView::UponUpdateInapplicable)
@@ -202,7 +204,7 @@ void IllustrationView::UponCopyFull(wxCommandEvent&)
         +   c.spreadsheet_file_extension()
         ;
     std::remove(spreadsheet_filename.c_str());
-    PrintFormTabDelimited(*ledger_values_, spreadsheet_filename);
+    PrintCellTabDelimited(*ledger_values_, spreadsheet_filename);
     std::ifstream ifs(spreadsheet_filename.c_str());
     std::string s;
     istream_to_string(ifs, s);

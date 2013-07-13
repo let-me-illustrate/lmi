@@ -99,7 +99,7 @@ svn update
 
   # Similarly, for webpages repository
 
-cd /lmi/checkouts/current/web
+cd /lmi/mirror/web
 cvs -z3 update -l lmi
 
   # Third screen: only for building and testing

@@ -62,12 +62,27 @@ vendor        := $(subst .,,$(compiler))-$(wx_md5)
 
 build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 
+# Begin ad-hockery. See:
+#   http://lists.nongnu.org/archive/html/lmi/2011-03/msg00008.html
+wx_version    := 2.9.5
+wx_md5            := da8081875d664e5329909142b3c38deb
+wx_archive        := wxWidgets-2013-07-11.tar.gz
+$(wx_archive)-md5 := $(wx_md5)
+$(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/Daily_HEAD/files/$(wx_archive)
+build_dir     := $(wx_dir)/wxWidgets/$(vendor)
+# End ad-hockery.
+
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
 # SOMEDAY !! But see the last paragraph of
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00004.html
 # and override wxApp::OnAssertFailure() before experimenting with
 # '--enable-debug_flag'.
+#
+# Pass gcc options in $CC and $CXX, not $*FLAGS--explanation here:
+#   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00001.html
+
+ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
 
 config_options = \
   --prefix=$(prefix) \
@@ -89,9 +104,9 @@ config_options = \
   --without-regex \
        AR='$(mingw_bin_dir)/ar' \
        AS='$(mingw_bin_dir)/as' \
-       CC='$(mingw_bin_dir)/gcc' \
+       CC='$(mingw_bin_dir)/gcc $(ggc_flags)' \
       CPP='$(mingw_bin_dir)/cpp' \
-      CXX='$(mingw_bin_dir)/g++' \
+      CXX='$(mingw_bin_dir)/g++ $(ggc_flags)' \
   DLLTOOL='$(mingw_bin_dir)/dlltool' \
        LD='$(mingw_bin_dir)/ld' \
        NM='$(mingw_bin_dir)/nm' \

@@ -277,6 +277,7 @@ void Ledger::write(xml::element& x) const
     title_map["MlyPostHoneymoonRate_Guaranteed" ] = "Guar Monthly Post Honeymoon Rate";
     title_map["MlySAIntRate_Current"            ] = "Curr Monthly Sep Acct Int Rate";
     title_map["MlySAIntRate_Guaranteed"         ] = "Guar Monthly Sep Acct Int Rate";
+    title_map["ModalMinimumPremium"             ] = "Modal Minimum Premium";
     title_map["MonthlyFlatExtra"                ] = " _____________ Monthly Flat Extra";
 //    title_map["NaarForceout"                    ] = "Forced Withdrawal due to NAAR Limit";
     title_map["NetCOICharge_Current"            ] = "Experience _______Rating _______Net COI Charge";
@@ -394,7 +395,7 @@ void Ledger::write(xml::element& x) const
 // F2: two decimals, commas
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
 // >
-    format_map["CountryCOIMultiplier"              ] = f2;
+    format_map["CurrentCoiMultiplier"              ] = f2;
     format_map["GuarPrem"                          ] = f2;
     format_map["InitGLP"                           ] = f2;
     format_map["InitGSP"                           ] = f2;
@@ -548,6 +549,7 @@ void Ledger::write(xml::element& x) const
     format_map["Loads"                             ] = f1;
     format_map["LoanInt"                           ] = f1;
     format_map["LoanIntAccrued"                    ] = f1;
+    format_map["ModalMinimumPremium"               ] = f1;
     format_map["NaarForceout"                      ] = f1;
     format_map["NetClaims"                         ] = f1;
     format_map["NetCOICharge"                      ] = f1;

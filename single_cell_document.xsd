@@ -25,5 +25,27 @@
   -->
   <!-- $Id$ -->
   <!-- Use file extension '.ill' for single-life xml documents. -->
-  <xs:element name="single_cell_document" type="cell_element"/>
+  <xs:element name="single_cell_document">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="cell_element">
+          <xs:attribute name="version">
+            <xs:annotation>
+              <xs:documentation>Optional for now; to be required in the future.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="1"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="data_source" type="xs:nonNegativeInteger">
+            <xs:annotation>
+              <xs:documentation>Optional for now; to be required in the future.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

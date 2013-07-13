@@ -31,9 +31,7 @@
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 
-#include <cstddef> // std::size_t
-#include <iterator>
-#include <stdexcept>
+#include <cstddef>                      // std::size_t
 #include <sstream>
 #include <vector>
 
@@ -181,11 +179,24 @@ void PreferencesModel::DoTransmogrify()
 bool PreferencesModel::IsModified() const
 {
     PreferencesModel unchanged;
-    unchanged.Load();
+// CALCULATION_SUMMARY Apparently unneeded: ctor calls Load().
+//    unchanged.Load();
+// Unfortunately, construction of 'unchanged' therefore causes any
+// parsed_calculation_summary_columns() diagnostics to be repeated.
+// It would seem better to permit copying, and then use a copy.
     if(unchanged.UseBuiltinCalculationSummary != UseBuiltinCalculationSummary)
         {
         return true;
         }
+    configurable_settings const& z = configurable_settings::instance();
+    if(string_of_column_names() != z.calculation_summary_columns())
+        {
+        return true;
+        }
+    // This test duplicates the preceding one. This one may be what
+    // is ultimately wanted, but for now at least it doesn't detect
+    // parsed_calculation_summary_columns()'s removal of invalid
+    // substrings.
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
@@ -199,15 +210,9 @@ bool PreferencesModel::IsModified() const
 
 void PreferencesModel::Load()
 {
-    configurable_settings const& z = configurable_settings::instance();
-    std::istringstream iss(z.calculation_summary_columns());
-    std::vector<std::string> columns;
-    std::copy
-        (std::istream_iterator<std::string>(iss)
-        ,std::istream_iterator<std::string>()
-        ,std::back_inserter(columns)
-        );
+    std::vector<std::string> columns(parsed_calculation_summary_columns());
 
+    configurable_settings const& z = configurable_settings::instance();
     bool b = z.use_builtin_calculation_summary();
     UseBuiltinCalculationSummary = b ? "Yes" : "No";
 
@@ -227,7 +232,7 @@ void PreferencesModel::Load()
         }
 }
 
-void PreferencesModel::Save() const
+std::string PreferencesModel::string_of_column_names() const
 {
     std::ostringstream oss;
     std::vector<std::string>::const_iterator i;
@@ -244,7 +249,13 @@ void PreferencesModel::Save() const
             oss << column << " ";
             }
         }
-    if(oss.str().empty() && "Yes" != UseBuiltinCalculationSummary)
+    return oss.str();
+}
+
+void PreferencesModel::Save() const
+{
+    std::string s(string_of_column_names());
+    if(s.empty() && "Yes" != UseBuiltinCalculationSummary)
         {
         warning()
             << "Calculation summary will be empty: no columns chosen."
@@ -252,7 +263,7 @@ void PreferencesModel::Save() const
             ;
         }
     configurable_settings& z = configurable_settings::instance();
-    z.calculation_summary_columns(oss.str());
+    z.calculation_summary_columns(s);
     z.use_builtin_calculation_summary("Yes" == UseBuiltinCalculationSummary);
 }
 

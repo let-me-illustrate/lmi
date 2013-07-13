@@ -30,13 +30,13 @@
 
 #include "input.hpp"
 #include "ledger.hpp"
-#include "mc_enum_type_enums.hpp" // enum mcenum_emission
+#include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
 
-#include <wx/defs.h> // wx shared-library 'attributes'
+#include <wx/defs.h>                    // wx shared-library 'attributes'
 
 #include <string>
 #include <vector>
@@ -81,6 +81,7 @@ class CensusViewOld
     void UponRunCell                (wxCommandEvent&);
     void UponRunCase                (wxCommandEvent&);
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
+    void UponRunCaseToGroupRoster   (wxCommandEvent&);
     void UponUpdateApplicable       (wxUpdateUIEvent&);
 
     bool DoAllCells(mcenum_emission);

@@ -805,7 +805,8 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         ActualSpecAmt += delta;
         }
 
-    // If the minimum isn't met, then force it.
+    // If specamt would be reduced below the minimum (e.g., by a large
+    // withdrawal), then force it to the minimum.
     ActualSpecAmt = std::max
         (ActualSpecAmt
         ,minimum_specified_amount(0 == Year && 0 == Month, TermRiderActive)
@@ -2614,7 +2615,9 @@ void AccountValue::TxTakeWD()
     CumPmts     -= NetWD;
     TaxBasis    -= NetWD; // TODO ?? TAXATION !! This should be gross, not net; how about the line above and the line below?
     CumWD       += NetWD;
-    // TAXATION !! What about 7702A "amounts paid"?
+    // TAXATION !! What about 7702A "amounts paid"? --That's handled
+    // in DoMonthDR() instead. Probably both should be handled in the
+    // same place.
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {

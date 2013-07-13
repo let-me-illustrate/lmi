@@ -66,10 +66,12 @@ class Loads
     std::vector<double> const& amortized_premium_tax_load () const;
     std::vector<double> const& dac_tax_load               () const;
 
-    std::vector<double> const& target_premium_load_7702_excluding_premium_tax() const;
-    std::vector<double> const& excess_premium_load_7702_excluding_premium_tax() const;
-    std::vector<double> const& target_premium_load_7702_lowest_premium_tax() const;
-    std::vector<double> const& excess_premium_load_7702_lowest_premium_tax() const;
+    std::vector<double> const& target_premium_load_excluding_premium_tax() const;
+    std::vector<double> const& excess_premium_load_excluding_premium_tax() const;
+    std::vector<double> const& target_premium_load_maximum_premium_tax() const;
+    std::vector<double> const& excess_premium_load_maximum_premium_tax() const;
+    std::vector<double> const& target_premium_load_minimum_premium_tax() const;
+    std::vector<double> const& excess_premium_load_minimum_premium_tax() const;
 
   private:
     Loads(); // Ctor for unit testing.
@@ -97,10 +99,12 @@ class Loads
     std::vector<double> amortized_premium_tax_load_;
     std::vector<double> dac_tax_load_;
 
-    std::vector<double> target_premium_load_7702_excluding_premium_tax_;
-    std::vector<double> excess_premium_load_7702_excluding_premium_tax_;
-    std::vector<double> target_premium_load_7702_lowest_premium_tax_;
-    std::vector<double> excess_premium_load_7702_lowest_premium_tax_;
+    std::vector<double> target_premium_load_excluding_premium_tax_;
+    std::vector<double> excess_premium_load_excluding_premium_tax_;
+    std::vector<double> target_premium_load_maximum_premium_tax_;
+    std::vector<double> excess_premium_load_maximum_premium_tax_;
+    std::vector<double> target_premium_load_minimum_premium_tax_;
+    std::vector<double> excess_premium_load_minimum_premium_tax_;
 };
 
 inline std::vector<double> const&
@@ -188,27 +192,39 @@ Loads::dac_tax_load() const
 }
 
 inline std::vector<double> const&
-Loads::target_premium_load_7702_excluding_premium_tax() const
+Loads::target_premium_load_excluding_premium_tax() const
 {
-    return target_premium_load_7702_excluding_premium_tax_;
+    return target_premium_load_excluding_premium_tax_;
 }
 
 inline std::vector<double> const&
-Loads::excess_premium_load_7702_excluding_premium_tax() const
+Loads::excess_premium_load_excluding_premium_tax() const
 {
-    return excess_premium_load_7702_excluding_premium_tax_;
+    return excess_premium_load_excluding_premium_tax_;
 }
 
 inline std::vector<double> const&
-Loads::target_premium_load_7702_lowest_premium_tax() const
+Loads::target_premium_load_maximum_premium_tax() const
 {
-    return target_premium_load_7702_lowest_premium_tax_;
+    return target_premium_load_maximum_premium_tax_;
 }
 
 inline std::vector<double> const&
-Loads::excess_premium_load_7702_lowest_premium_tax() const
+Loads::excess_premium_load_maximum_premium_tax() const
 {
-    return excess_premium_load_7702_lowest_premium_tax_;
+    return excess_premium_load_maximum_premium_tax_;
+}
+
+inline std::vector<double> const&
+Loads::target_premium_load_minimum_premium_tax() const
+{
+    return target_premium_load_minimum_premium_tax_;
+}
+
+inline std::vector<double> const&
+Loads::excess_premium_load_minimum_premium_tax() const
+{
+    return excess_premium_load_minimum_premium_tax_;
 }
 
 #endif // loads_hpp
