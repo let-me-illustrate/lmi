@@ -571,7 +571,11 @@ test_configurable_settings_SOURCES = \
   configurable_settings.cpp \
   configurable_settings_test.cpp \
   data_directory.cpp \
+  datum_base.cpp \
+  facets.cpp \
   global_settings.cpp \
+  mc_enum.cpp \
+  mc_enum_types.cpp \
   miscellany.cpp \
   path_utility.cpp \
   xml_lmi.cpp

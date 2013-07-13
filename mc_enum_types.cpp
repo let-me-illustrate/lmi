@@ -67,6 +67,7 @@ extern mcenum_emission const emission_enums[] =
     ,mce_emit_pdf_to_viewer
     ,mce_emit_test_data
     ,mce_emit_spreadsheet
+    ,mce_emit_group_roster
     ,mce_emit_text_stream
     ,mce_emit_custom_0
     };
@@ -80,11 +81,12 @@ extern char const*const emission_strings[] =
     ,"emit_pdf_to_viewer"
     ,"emit_test_data"
     ,"emit_spreadsheet"
+    ,"emit_group_roster"
     ,"emit_text_stream"
     ,"emit_custom_0"
     };
 template<> struct mc_enum_key<mcenum_emission>
-  :public mc_enum_data<mcenum_emission, 11, emission_enums, emission_strings> {};
+  :public mc_enum_data<mcenum_emission, 12, emission_enums, emission_strings> {};
 template class mc_enum<mcenum_emission>;
 
 extern rounding_style const rounding_style_enums[] =
@@ -155,7 +157,7 @@ MC_DEFINE(part_mort_table,1)
 MC_DEFINE(premium_table,1)
 MC_DEFINE(from_point,4)
 MC_DEFINE(to_point,4)
-MC_DEFINE(report_column,57)
+MC_DEFINE(report_column,58)
 
 #undef MC_DEFINE
 

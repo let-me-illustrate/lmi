@@ -31912,3 +31912,498 @@ Remove dead code.
   dbnames.xpp
 Add another database entity for 7702A.
 
+20130326T1321Z <gchicares@sbcglobal.net> [543]
+
+  version.hpp
+Designate release candidate.
+
+20130327T1453Z <gchicares@sbcglobal.net> [543]
+
+  cell.rnc
+  cell.xsd
+Clarify inforce loan entities.
+
+20130402T0838Z <gchicares@sbcglobal.net> [543]
+
+  ihs_irc7702.cpp
+Make a dubious diagnostic less severe and more informative.
+
+20130402T0841Z <gchicares@sbcglobal.net> [543]
+
+  yare_input.cpp
+  yare_input.hpp
+Expose 'InsuredName' for diagnostic messages.
+
+20130402T0843Z <gchicares@sbcglobal.net> [543]
+
+  ihs_avstrtgy.cpp
+Warn when increasing specified amount on an inforce case.
+
+20130402T0901Z <gchicares@sbcglobal.net> [543]
+
+  version.hpp
+Designate release candidate.
+
+20130414T1227Z <gchicares@sbcglobal.net> [543]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  mec_server.cpp
+Improve documentation.
+
+20130414T1341Z <gchicares@sbcglobal.net> [543]
+
+  preferences_model.cpp
+Document a defect.
+
+20130414T1400Z <gchicares@sbcglobal.net> [543]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  ledger_text_formats.cpp
+Improve a misleading function name.
+
+20130414T1506Z <gchicares@sbcglobal.net> [543]
+
+  Makefile.am
+  configurable_settings.cpp
+  objects.make
+Diagnose the defect noted 20130414T1341Z.
+
+20130414T1847Z <gchicares@sbcglobal.net> [543]
+
+  preferences_model.cpp
+  preferences_model.hpp
+Fix defect noted 20130414T1341Z.
+
+20130415T1500Z <gchicares@sbcglobal.net> [543]
+
+  ihs_avstrtgy.cpp
+Fix defect introduced 20130402T0843Z: multiple warnings during solve.
+
+20130415T1502Z <gchicares@sbcglobal.net> [543]
+
+  accountvalue.cpp
+  cell.rnc
+  cell.xsd
+Improve documentation.
+
+20130415T1504Z <gchicares@sbcglobal.net> [543]
+
+  input_harmonization.cpp
+Fix defect introduced 20121127T2350Z: minimum can exceed maximum when
+loading a case saved years ago.
+
+20130415T1628Z <gchicares@sbcglobal.net> [543]
+
+  illustration_view.cpp
+  main_wx.cpp
+  mec_view.cpp
+  toolbar.xrc
+Add a "Print case to disk" toolbar button.
+
+20130416T1213Z <gchicares@sbcglobal.net> [543]
+
+  dbdict.hpp
+Improve documentation.
+
+20130416T1214Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax_test.cpp
+Test premium-tax rates.
+
+20130416T1215Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Rearrange and improve documentation.
+
+20130416T1230Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+Remove a duplicative test.
+
+20130416T1523Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Aggroup consistency tests.
+
+20130416T1726Z <gchicares@sbcglobal.net> [544]
+
+  mec_server.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor, making a misbegotten free function a member.
+
+20130417T1015Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor.
+
+20130417T1309Z <gchicares@sbcglobal.net> [544]
+
+  database.hpp
+Improve documentation.
+
+20130417T1313Z <gchicares@sbcglobal.net> [544]
+
+  dbdict.hpp
+  premium_tax.hpp
+  premium_tax_test.cpp
+Demonstrate and document a requirement that's not necessarily obvious.
+
+20130417T2025Z <gchicares@sbcglobal.net> [545]
+
+  premium_tax_test.cpp
+Augment unit tests; demonstrate a latent defect.
+
+20130418T0852Z <gchicares@sbcglobal.net> [545]
+
+  ihs_basicval.cpp
+  loads_impl.hpp
+  premium_tax.cpp
+Correct misleading documentation.
+
+20130418T0924Z <gchicares@sbcglobal.net> [545]
+
+  loads.cpp
+  loads_test.cpp
+  mec_server.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+  premium_tax_test.cpp
+Rename two member functions.
+
+20130418T1153Z <gchicares@sbcglobal.net> [545]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor.
+
+20130418T1218Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+Remove a defect marker that now seems pointless. No need has arisen
+for premium-tax loads to vary by duration. One state has announced its
+intention to decrease its loads over time, but there has been no call
+to reflect that prospectively.
+
+20130418T1350Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Refactor.
+
+20130418T1504Z <gchicares@sbcglobal.net> [544]
+
+  antediluvian_stubs.cpp
+  premium_tax.cpp
+  premium_tax.hpp
+  premium_tax_test.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+Calculate maximum premium tax.
+
+20130418T2222Z <gchicares@sbcglobal.net> [545]
+
+  premium_tax.cpp
+Mark a defect.
+
+20130418T2307Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+  premium_tax.hpp
+  premium_tax_test.cpp
+Fix defect noted 20130417T2025Z. When the product database's scalar
+premium-tax load is zero in all states, tiering should be disregarded
+in AK and SD: no product would pass premium tax through as a load in
+those two states only.
+
+20130419T1046Z <gchicares@sbcglobal.net> [544]
+
+  premium_tax.cpp
+Refactor.
+
+20130419T1100Z <gchicares@sbcglobal.net> [543]
+
+  premium_tax.cpp
+  premium_tax_test.cpp
+Fix defect noted 20130416T1214Z.
+
+20130419T1107Z <gchicares@sbcglobal.net> [543]
+
+  premium_tax.cpp
+Refactor.
+
+20130419T1225Z <gchicares@sbcglobal.net> [542]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Fix defect noted 20130418T2222Z.
+
+20130419T1315Z <gchicares@sbcglobal.net> [542]
+
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  loads.cpp
+  loads.hpp
+  loads_test.cpp
+Rename certain members.
+
+20130419T1346Z <gchicares@sbcglobal.net> [542]
+
+  loads.cpp
+  loads_impl.hpp
+  loads_test.cpp
+Rename certain members.
+
+20130419T1409Z <gchicares@sbcglobal.net> [542]
+
+  loads.cpp
+  loads.hpp
+  loads_impl.hpp
+  loads_test.cpp
+Calculate loads with maximum as well as minimum premium tax.
+
+20130419T1658Z <gchicares@sbcglobal.net> [542]
+
+  ihs_basicval.cpp
+Use highest tiered AK and SD premium tax for pay-as-you-go premium.
+
+20130421T0147Z <gchicares@sbcglobal.net> [542]
+
+  ledger_invariant.cpp
+Use product of all COI multipliers in ledger. Retain the old name for
+the nonce to avoid affecting every regression test.
+
+20130421T0850Z <gchicares@sbcglobal.net> [542]
+
+  ledger_variant.cpp
+Reformat.
+
+20130421T0946Z <gchicares@sbcglobal.net> [542]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Fix defect introduced 20050212T1259Z, from an original file predating
+the lmi epoch: 'PostHoneymoonSpread', being a rate, is not additive.
+
+20130421T2211Z <gchicares@sbcglobal.net> [542]
+
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  loads.cpp
+  yare_input.cpp
+  yare_input.hpp
+Add data needed for group roster to ledger.
+
+20130421T2248Z <gchicares@sbcglobal.net> [542]
+
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+Specify formats for columns added or renamed 20130421T2211Z.
+
+20130421T2249Z <gchicares@sbcglobal.net> [542]
+
+  mc_enum_types.cpp
+  mc_enum_types.xpp
+Offer modal minimum premium column on configurable reports.
+
+20130421T2324Z <gchicares@sbcglobal.net> [542]
+
+  emit_ledger.cpp
+  illustration_view.cpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+Improve a function name.
+
+20130421T2352Z <gchicares@sbcglobal.net> [542]
+
+  census_view.cpp
+  census_view_old.cpp
+  emit_ledger.cpp
+  emit_ledger.hpp
+  group_values.cpp
+Refactor.
+
+20130423T0219Z <gchicares@sbcglobal.net> [542]
+
+  census_view.cpp
+  census_view.hpp
+  census_view_old.cpp
+  census_view_old.hpp
+  emit_ledger.cpp
+  illustration_view.cpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  main_wx.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mec_view.cpp
+  menus.xrc
+  toolbar.xrc
+Write tab-delimited group roster file.
+
+20130423T1148Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate.
+
+20130424T1536Z <gchicares@sbcglobal.net> [542]
+
+  INSTALL
+  install_cygwin.bat
+Adapt to the demise of Cygwin's legacy version. See:
+  http://cygwin.com/ml/cygwin-apps/2013-02/msg00053.html
+
+20130424T1541Z <gchicares@sbcglobal.net> [542]
+
+  install_miscellanea.make
+  test_coding_rules.cpp
+  xml_lmi_fwd.hpp
+  xml_xslt_wrapp.cpp
+  xmlwrapp-0.7.0.md5sums [new file]
+  xmlwrapp-0.7.0.patch   [new file]
+Upgrade to xmlwrapp-0.7.0 .
+
+20130428T1828Z <gchicares@sbcglobal.net> [542]
+
+  multiple_cell_document.cpp
+  multiple_cell_document.rnc
+  multiple_cell_document.xsd
+  sample.ill
+  sample.cns
+  single_cell_document.cpp
+  single_cell_document.hpp
+  single_cell_document.rnc
+  single_cell_document.xsd
+Add a top-level 'data_source' attribute. This has the same type and
+meaning as cell element 'InforceDataSource', but is handier for
+applying an xml schema only to files from external systems.
+
+20130429T2022Z <gchicares@sbcglobal.net> [542]
+
+  mec_xml_document.cpp
+  mec_xml_document.hpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Refactor to retain the xml parser object a little longer.
+
+20130430T0013Z <gchicares@sbcglobal.net> [542]
+
+  input_test.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Prepare to validate input files with xsd schemata.
+
+20130430T1102Z <gchicares@sbcglobal.net> [542]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Validate external input files with xsd schemata.
+
+20130430T1125Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate.
+
+20130509T2121Z <gchicares@sbcglobal.net> [542]
+
+  input_harmonization.cpp
+Temporarily allow every implemented material-change definition.
+
+20130509T2123Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate.
+
+20130510T2251Z <gchicares@sbcglobal.net> [542]
+
+  ihs_basicval.cpp
+  input.cpp
+  input_harmonization.cpp
+Disable material-change-definition control in GUI.
+
+20130510T2253Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate.
+
+20130518T1104Z <gchicares@sbcglobal.net> [542]
+
+  ihs_basicval.cpp
+Mark some taxation issues.
+
+20130518T1111Z <gchicares@sbcglobal.net> [541]
+
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+Resolve a marked defect.
+
+20130518T1157Z <gchicares@sbcglobal.net> [541]
+
+  ihs_basicval.cpp
+Respect 'DB_WpChargeMethod' in GetModalPremMlyDed().
+
+20130518T1551Z <gchicares@sbcglobal.net> [541]
+
+  version.hpp
+Designate release candidate.
+
+20130519T1131Z <gchicares@sbcglobal.net> [541]
+
+  ihs_basicval.cpp
+Refactor for concinnity.
+
+20130612T1126Z <gchicares@sbcglobal.net> [541]
+
+  ihs_acctval.cpp
+Fix defect introduced 20120821T0957Z. Pass lowest death benefit to
+7702A routines instead of complete specamt vector. Only the lowest
+death benefit is relevant anyway. For one particular inforce case,
+soon-to-be-replaced 7702A code had treated an impending decrease as
+having already occurred, causing an assertion to fire when it did
+subsequently occur. Prior to 20120821T0957Z, this had not happened
+because historical and future values had been separate inputs.
+
+20130612T1128Z <gchicares@sbcglobal.net> [541]
+
+  version.hpp
+Designate release candidate 5736.
+
+20130710T1441Z <gchicares@sbcglobal.net> [541]
+
+  test_schemata.sh
+Fix defect introduced 20120526T1023Z: copy all tested '.xsd' files.
+
+20130710T1442Z <gchicares@sbcglobal.net> [541]
+
+  types.rnc
+  types.xsd
+Fix defect introduced 20130421T2249Z: add new column to schemata.
+
+20130710T1445Z <gchicares@sbcglobal.net> [541]
+
+  version.hpp
+Designate release candidate 5740.
+
+20130712T1126Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+Tune gcc to use less memory.
+
+20130712T1225Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+  wx-2.9.5.patch [new file]
+Use 2013-07-11 wx-2.9.5 snapshot.
+

@@ -89,6 +89,7 @@ class LMI_SO LedgerInvariant
     std::vector<double> Outlay;
     std::vector<double> GptForceout;
     std::vector<double> NaarForceout;
+    std::vector<double> ModalMinimumPremium;
 
     // EOY vectors.
     std::vector<double> TermSpecAmt;
@@ -150,15 +151,18 @@ class LMI_SO LedgerInvariant
     double          InitGSP;
     double          InitGLP;
     double          InitTgtPrem;
-    double          PostHoneymoonSpread;
     double          Dumpin;
     double          External1035Amount;
     double          Internal1035Amount;
+    double          InforceUnloanedAV;
+    double          InforceTaxBasis;
 
     // Nonscalable scalars.
     double          MaleProportion;
     double          NonsmokerProportion;
     double          GuarMaxMandE;
+    double          InitDacTaxRate;
+    double          InitPremTaxRate;
     double          GenderDistinct;
     double          GenderBlended;
     double          SmokerDistinct;
@@ -184,17 +188,20 @@ class LMI_SO LedgerInvariant
     double          HasSpouseRider;
     double          SpouseIssueAge;
     double          HasHoneymoon;
+    double          PostHoneymoonSpread;
     double          AllowDbo3;
     double          IsInforce;
-    double          CountryCOIMultiplier;
+    double          CurrentCoiMultiplier;
     double          NoLapseAlwaysActive;
     double          NoLapseMinDur;
     double          NoLapseMinAge;
     double          Has1035ExchCharge;
     double          EffDateJdn;
+    double          DateOfBirthJdn;
     double          GenAcctAllocation;
     double          SupplementalReport;
 
+    std::string     ProductName;
     std::string     PolicyForm;
     std::string     PolicyMktgName;
     std::string     PolicyLegalName;
@@ -318,11 +325,12 @@ class LMI_SO LedgerInvariant
 
     // Special-case strings.
 
-    // 'Effdate' is special because date formatting might be
+    // Calendar dates are special because date formatting might be
     // customized or treated differently by different platforms.
-    // Therefore, for CRC checking, data member 'EffDateJdn' holds
-    // the corresponding unformatted julian day number.
+    // Therefore, they are represented elsewhere as JDNs, and only the
+    // JDNs are used in UpdateCRC() and Spew().
     std::string     EffDate;
+    std::string     DateOfBirth;
 
   private:
     void Alloc(int len);
@@ -330,7 +338,7 @@ class LMI_SO LedgerInvariant
     void Destroy();
     void Init();
 
-    std::string     StatePostalAbbrev;
+    std::string     StatePostalAbbrev; // SOMEDAY !! Rename to 'StateOfJurisdiction'.
     std::string     PremiumTaxState;
 
     // Nonscalable scalars.

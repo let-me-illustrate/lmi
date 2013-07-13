@@ -100,18 +100,23 @@
         <bitmap stock_id="print-case"/>
         <longhelp>Run and print all cells</longhelp>
     </object>
-<!-- SOMEDAY !! Perhaps this merits a toolbar button.
     <object class="tool" name="print_case_to_disk">
         <tooltip>Print case to disk</tooltip>
-        <bitmap stock_id="print-case-to-disk"/>
+        <bitmap stock_id="save-pdf"/>
         <longhelp>Run and print all cells to disk instead of printer</longhelp>
     </object>
--->
     <object class="tool" name="print_spreadsheet">
         <tooltip>Print case to spreadsheet</tooltip>
         <bitmap stock_id="write-spreadsheet"/>
         <longhelp>Run and print all cells to a spreadsheet file</longhelp>
     </object>
+<!-- SOMEDAY !! One might imagine wanting this on the toolbar.
+    <object class="tool" name="print_group_roster">
+        <tooltip>Print roster to spreadsheet</tooltip>
+        <bitmap stock_id="NO ICON DESIGNED YET"/>
+        <longhelp>Run and print group roster to a spreadsheet file</longhelp>
+    </object>
+-->
     <object class="separator"/>
     <object class="tool" name="paste_census">
         <tooltip>Paste census</tooltip>

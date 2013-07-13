@@ -649,8 +649,12 @@ void BasicValues::Init7702()
             ,SpecAmtLoadLimit
             ,local_mly_charge_add
             ,AdbLimit
-            ,Loads_->target_premium_load_7702_excluding_premium_tax()
-            ,Loads_->excess_premium_load_7702_excluding_premium_tax()
+/// TAXATION !! No contemporary authority seems to believe that a
+/// change in the premium-tax rate, even if passed through to the
+/// policyowner, is a 7702A material change or a GPT adjustment event.
+/// These loads should instead reflect the lowest premium-tax rate.
+            ,Loads_->target_premium_load_excluding_premium_tax()
+            ,Loads_->excess_premium_load_excluding_premium_tax()
             ,InitialTargetPremium
             ,round_min_premium()
             ,round_max_premium()
@@ -847,6 +851,15 @@ void BasicValues::SetPermanentInvariants()
 
     DefnLifeIns_        = yare_input_.DefinitionOfLifeInsurance;
     DefnMaterialChange_ = yare_input_.DefinitionOfMaterialChange;
+    // TAXATION !! For the nonce, input 'DefinitionOfMaterialChange'
+    // is ignored without the most-privileged password. In the future,
+    // the input class will distinguish CVAT from GPT material-change
+    // definitions, and 'DefinitionOfMaterialChange' will be removed.
+    if(!global_settings::instance().ash_nazg())
+        {
+        mcenum_defn_material_change const z = static_cast<mcenum_defn_material_change>(static_cast<int>(Database_->Query(DB_CvatMatChangeDefn)));
+        DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
+        }
     Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702Dbo3)));
     MaxNAAR             = yare_input_.MaximumNaar;
 
@@ -1007,6 +1020,7 @@ double BasicValues::GetModalPremMaxNonMec
     ,double      a_specamt
     ) const
 {
+    // TAXATION !! No table available if 7PP calculated from first principles.
     double temp = MortalityRates_->SevenPayRates()[0];
     return round_max_premium()(temp * ldbl_eps_plus_one() * a_specamt / a_mode);
 }
@@ -1076,6 +1090,8 @@ double BasicValues::GetModalPremGLP
     ,double      a_specamt
     ) const
 {
+    // TAXATION !! Use GetAnnualTgtPrem() to get target here if needed
+    // for GPT reimplementation.
     double z = Irc7702_->CalculateGLP
         (a_duration
         ,a_bft_amt
@@ -1122,7 +1138,6 @@ double BasicValues::GetModalPremGSP
 /// sufficiency over minimality, but simplicity most of all.
 ///
 /// For simplicity, certain details are disregarded:
-///   - waiver benefits are generally subject to a maximum
 ///   - premium loads are often stratified--the rate used here is
 ///     likely to be the highest that might apply, but deductions at
 ///     age 99 may well exceed target
@@ -1136,9 +1151,6 @@ double BasicValues::GetModalPremGSP
 ///     rider amount
 ///   - any term rider included as specified amount is treated as
 ///     though its charges equal the base policy's COI rates
-///
-/// TODO ?? What should be the behavior if ee and er both pay and their
-/// modes differ?
 
 double BasicValues::GetModalPremMlyDed
     (int         a_year
@@ -1179,12 +1191,33 @@ double BasicValues::GetModalPremMlyDed
 
     if(yare_input_.WaiverOfPremiumBenefit)
         {
-        double r = MortalityRates_->WpRates()[a_year];
-        z *= 1.0 + r;
-        annual_charge *= 1.0 + r;
+        double const r = MortalityRates_->WpRates()[a_year];
+        switch(WaiverChargeMethod)
+            {
+            case oe_waiver_times_specamt:
+                {
+                z += r * std::min(a_specamt, WpLimit);
+                }
+                break;
+            case oe_waiver_times_deductions:
+                {
+                z *= 1.0 + r;
+                annual_charge *= 1.0 + r;
+                }
+                break;
+            default:
+                {
+                fatal_error()
+                    << "Case '"
+                    << WaiverChargeMethod
+                    << "' not found."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
         }
 
-    z /= 1.0 - Loads_->target_total_load(mce_gen_curr)[a_year];
+    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
 
     z *= GetAnnuityValueMlyDed(a_year, a_mode);
     z += annual_charge;
@@ -1257,6 +1290,7 @@ double BasicValues::GetModalSpecAmt
 
 double BasicValues::GetModalSpecAmtMinNonMec(double annualized_pmt) const
 {
+    // TAXATION !! No table available if 7PP calculated from first principles.
     return round_min_specamt()(annualized_pmt / MortalityRates_->SevenPayRates()[0]);
 }
 
@@ -1719,7 +1753,7 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
             }
         case mce_noncompliant:
             {
-            Non7702CompliantCorridor = std::vector<double>(Length, 1.0);
+            Non7702CompliantCorridor = std::vector<double>(GetLength(), 1.0);
             return Non7702CompliantCorridor;
             }
         default:
@@ -1788,38 +1822,24 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
-    if(CurrCoiTable0Limit < std::numeric_limits<double>::max())
-        {
-        return GetTable
-            (ProductData_->datum("CurrCOIFilename")
-            ,DB_CurrCoiTable1
-            ,true
-            ,CanBlend
-            ,CanBlend
-            );
-        }
-    else
-        {
-        return std::vector<double>(Length);
-        }
+    return GetTable
+        (ProductData_->datum("CurrCOIFilename")
+        ,DB_CurrCoiTable1
+        ,CurrCoiTable0Limit < std::numeric_limits<double>::max()
+        ,CanBlend
+        ,CanBlend
+        );
 }
 
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
-    if(CurrCoiTable1Limit < std::numeric_limits<double>::max())
-        {
-        return GetTable
-            (ProductData_->datum("CurrCOIFilename")
-            ,DB_CurrCoiTable2
-            ,true
-            ,CanBlend
-            ,CanBlend
-            );
-        }
-    else
-        {
-        return std::vector<double>(Length);
-        }
+    return GetTable
+        (ProductData_->datum("CurrCOIFilename")
+        ,DB_CurrCoiTable2
+        ,CurrCoiTable1Limit < std::numeric_limits<double>::max()
+        ,CanBlend
+        ,CanBlend
+        );
 }
 
 std::vector<double> BasicValues::GetGuarCOIRates() const
@@ -1937,6 +1957,8 @@ std::vector<double> BasicValues::GetSevenPayRates() const
     return GetTable
         (ProductData_->datum("SevenPayFilename")
         ,DB_SevenPayTable
+    // TAXATION !! No table available if 7PP calculated from first principles.
+//        ,1 == Database_->Query(DB_SevenPayWhence)
         );
 }
 
@@ -1983,27 +2005,19 @@ std::vector<double> BasicValues::GetSubstdTblMultTable() const
 
 std::vector<double> BasicValues::GetCurrSpecAmtLoadTable() const
 {
-    if(0 == Database_->Query(DB_CurrSpecAmtLoadTable))
-        {
-        return std::vector<double>(GetLength());
-        }
-
     return GetTable
         (ProductData_->datum("CurrSpecAmtLoadFilename")
         ,DB_CurrSpecAmtLoadTable
+        ,0 != Database_->Query(DB_CurrSpecAmtLoadTable)
         );
 }
 
 std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const
 {
-    if(0 == Database_->Query(DB_GuarSpecAmtLoadTable))
-        {
-        return std::vector<double>(GetLength());
-        }
-
     return GetTable
         (ProductData_->datum("GuarSpecAmtLoadFilename")
         ,DB_GuarSpecAmtLoadTable
+        ,0 != Database_->Query(DB_GuarSpecAmtLoadTable)
         );
 }
 

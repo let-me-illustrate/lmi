@@ -28,10 +28,16 @@
 
 #include "single_cell_document.hpp"
 
+#include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "data_directory.hpp"           // AddDataDir()
+#include "handle_exceptions.hpp"
 #include "xml_lmi.hpp"
 
+#include <xmlwrapp/document.h>
 #include <xmlwrapp/nodes_view.h>
+#include <xmlwrapp/schema.h>
+#include <xsltwrapp/stylesheet.h>
 
 #include <istream>
 #include <ostream>
@@ -54,12 +60,24 @@ single_cell_document::single_cell_document(std::string const& filename)
     :input_data_()
 {
     xml_lmi::dom_parser parser(filename);
-    parse(parser.root_node(xml_root_name()));
+    parse(parser);
 }
 
 //============================================================================
 single_cell_document::~single_cell_document()
 {
+}
+
+/// Backward-compatibility serial number of this class's xml version.
+///
+/// What is now called version 0 had no "version" attribute.
+///
+/// version 0: [prior to the lmi epoch]
+/// version 1: 20130428T1828Z
+
+int single_cell_document::class_version() const
+{
+    return 1;
 }
 
 //============================================================================
@@ -70,8 +88,15 @@ std::string const& single_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void single_cell_document::parse(xml::element const& root)
+void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
+    if(data_source_is_external(parser.document()))
+        {
+        validate_with_xsd_schema(parser.document());
+        }
+
+    xml::element const& root(parser.root_node(xml_root_name()));
+
     xml::const_nodes_view const elements(root.elements());
     LMI_ASSERT(!elements.empty());
     xml::const_nodes_view::const_iterator i(elements.begin());
@@ -82,11 +107,91 @@ void single_cell_document::parse(xml::element const& root)
     LMI_ASSERT(elements.end() == ++i);
 }
 
+/// Ascertain whether input file comes from a system other than lmi.
+///
+/// External files are validated with an xml schema. This validation,
+/// which imposes an overhead of about twenty percent, is skipped for
+/// files produced by lmi itself, which are presumptively valid.
+///
+/// Regrettably, as this is written in 2013-04, external files
+/// represent the data source in <cell> element <InforceDataSource>
+/// rather than in root attribute "data_source", so for now it is
+/// necessary to look for the lower-level element. Both represent the
+/// data source the same way: "0" is reserved, "1" means lmi, and
+/// each external system is assigned a higher integer.
+
+bool single_cell_document::data_source_is_external(xml::document const& d) const
+{
+    xml::element const& root(d.get_root_node());
+
+    int data_source = 0;
+    if(xml_lmi::get_attr(root, "data_source", data_source))
+        {
+        return 1 < data_source;
+        }
+
+    // INPUT !! Remove "InforceDataSource" and the following code when
+    // external systems are updated to use the "data_source" attribute.
+
+    typedef xml::const_nodes_view::const_iterator cnvi;
+
+    xml::const_nodes_view const i_nodes(root.elements("cell"));
+    LMI_ASSERT(1 == i_nodes.size());
+    for(cnvi i = i_nodes.begin(); i != i_nodes.end(); ++i)
+        {
+        xml::const_nodes_view const j_nodes(i->elements("InforceDataSource"));
+        for(cnvi j = j_nodes.begin(); j != j_nodes.end(); ++j)
+            {
+            std::string s(xml_lmi::get_content(*j));
+            if("0" != s && "1" != s)
+                {
+                return true;
+                }
+            }
+        }
+
+    return false;
+}
+
+//============================================================================
+void single_cell_document::validate_with_xsd_schema(xml::document const& d) const
+{
+    try
+        {
+        xsd_schema().validate(cell_sorter().apply(d));
+        }
+    catch(...)
+        {
+        warning() << "Schema validation failed--diagnostics follow." << std::flush;
+        report_exception();
+        }
+}
+
+/// Stylesheet to sort <cell> elements.
+///
+/// This is needed for an external system that cannot economically
+/// provide xml with alphabetically-sorted elements.
+
+xslt::stylesheet& single_cell_document::cell_sorter() const
+{
+    static std::string const f("sort_cell_subelements.xsl");
+    static xslt::stylesheet z(xml_lmi::dom_parser(AddDataDir(f)).document());
+    return z;
+}
+
+//============================================================================
+xml::schema const& single_cell_document::xsd_schema() const
+{
+    static std::string const f("single_cell_document.xsd");
+    static xml::schema const z(xml_lmi::dom_parser(AddDataDir(f)).document());
+    return z;
+}
+
 //============================================================================
 void single_cell_document::read(std::istream const& is)
 {
     xml_lmi::dom_parser parser(is);
-    parse(parser.root_node(xml_root_name()));
+    parse(parser);
 }
 
 //============================================================================
@@ -94,6 +199,8 @@ void single_cell_document::write(std::ostream& os) const
 {
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
+    xml_lmi::set_attr(root, "version", class_version());
+    xml_lmi::set_attr(root, "data_source", 1); // "1" means lmi.
     root << input_data_;
     os << document;
 }

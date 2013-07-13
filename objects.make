@@ -603,7 +603,11 @@ configurable_settings_test$(EXEEXT): \
   configurable_settings.o \
   configurable_settings_test.o \
   data_directory.o \
+  datum_base.o \
+  facets.o \
   global_settings.o \
+  mc_enum.o \
+  mc_enum_types.o \
   miscellany.o \
   path_utility.o \
   xml_lmi.o \

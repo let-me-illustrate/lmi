@@ -47,7 +47,7 @@
 #include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"             // fs::path inserter
-#include "premium_tax.hpp"              // lowest_premium_tax_load()
+#include "premium_tax.hpp"
 #include "product_data.hpp"
 #include "round_to.hpp"
 #include "stratified_algorithms.hpp"    // TieredGrossToNet()
@@ -302,13 +302,13 @@ mec_state test_one_days_7702A_transactions
             ;
         }
 
-    double const premium_tax_load = lowest_premium_tax_load
+    double const premium_tax_load = premium_tax
         (PremiumTaxState
         ,mc_state_from_string(product_filenames.datum("InsCoDomicile"))
         ,false // Assume load is not amortized.
         ,database
         ,stratified
-        );
+        ).minimum_load_rate();
 
     std::vector<double> target_sales_load  ;
     std::vector<double> excess_sales_load  ;
@@ -397,6 +397,7 @@ mec_state test_one_days_7702A_transactions
             );
         InforceDcv          += net_necessary_premium;
         InforceAccountValue += net_necessary_premium;
+        // TAXATION !! update DB also
         }
 
     if(0.0 < unnecessary_premium)

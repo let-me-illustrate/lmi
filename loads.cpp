@@ -56,7 +56,8 @@ Loads::Loads(BasicValues& V)
         (length
         ,V.yare_input_.AmortizePremiumLoad
         ,V.PremiumTax_->load_rate()
-        ,V.PremiumTax_->least_load_rate()
+        ,V.PremiumTax_->maximum_load_rate()
+        ,V.PremiumTax_->minimum_load_rate()
         ,V.PremiumTax_->levy_rate()
         ,V.Database_->Query(DB_PremTaxAmortIntRate)
         ,V.Database_->Query(DB_PremTaxAmortPeriod)
@@ -113,10 +114,12 @@ void Loads::Allocate(int length)
     premium_tax_load_                              .resize(length);
     dac_tax_load_                                  .resize(length);
 
-    target_premium_load_7702_excluding_premium_tax_.resize(length);
-    excess_premium_load_7702_excluding_premium_tax_.resize(length);
-    target_premium_load_7702_lowest_premium_tax_   .resize(length);
-    excess_premium_load_7702_lowest_premium_tax_   .resize(length);
+    target_premium_load_excluding_premium_tax_.resize(length);
+    excess_premium_load_excluding_premium_tax_.resize(length);
+    target_premium_load_maximum_premium_tax_  .resize(length);
+    excess_premium_load_maximum_premium_tax_  .resize(length);
+    target_premium_load_minimum_premium_tax_  .resize(length);
+    excess_premium_load_minimum_premium_tax_  .resize(length);
 }
 
 /// Set various data members from product database.
@@ -250,9 +253,11 @@ void Loads::Calculate(load_details const& details)
         target_total_load_[j] += target_premium_load_[j] + dac_tax_load_;
         if(mce_gen_curr == j)
             {
-            target_premium_load_7702_excluding_premium_tax_ = target_total_load_[j];
-            target_premium_load_7702_lowest_premium_tax_    = target_total_load_[j];
-            target_premium_load_7702_lowest_premium_tax_   += details.LowestPremiumTaxLoadRate_;
+            target_premium_load_excluding_premium_tax_ = target_total_load_[j];
+            target_premium_load_maximum_premium_tax_   = target_total_load_[j];
+            target_premium_load_maximum_premium_tax_  += details.maximum_premium_tax_load_rate_;
+            target_premium_load_minimum_premium_tax_   = target_total_load_[j];
+            target_premium_load_minimum_premium_tax_  += details.minimum_premium_tax_load_rate_;
             }
         target_total_load_[j] += premium_tax_load_;
 
@@ -261,9 +266,11 @@ void Loads::Calculate(load_details const& details)
         excess_total_load_[j] += excess_premium_load_[j] + dac_tax_load_;
         if(mce_gen_curr == j)
             {
-            excess_premium_load_7702_excluding_premium_tax_ = excess_total_load_[j];
-            excess_premium_load_7702_lowest_premium_tax_    = excess_total_load_[j];
-            excess_premium_load_7702_lowest_premium_tax_   += details.LowestPremiumTaxLoadRate_;
+            excess_premium_load_excluding_premium_tax_ = excess_total_load_[j];
+            excess_premium_load_maximum_premium_tax_   = excess_total_load_[j];
+            excess_premium_load_maximum_premium_tax_  += details.maximum_premium_tax_load_rate_;
+            excess_premium_load_minimum_premium_tax_   = excess_total_load_[j];
+            excess_premium_load_minimum_premium_tax_  += details.minimum_premium_tax_load_rate_;
             }
         excess_total_load_[j] += premium_tax_load_;
         }
@@ -367,7 +374,8 @@ Loads::Loads(product_database const& database, bool NeedMidpointRates)
         assign_midpoint(specified_amount_load_[mce_gen_mdpt], specified_amount_load_[mce_gen_guar], specified_amount_load_[mce_gen_curr]);
         }
 
-    premium_tax_load_.push_back(0.0);
-    dac_tax_load_    .push_back(0.0);
+    premium_tax_load_                       .resize(database.length());
+    dac_tax_load_                           .resize(database.length());
+    target_premium_load_maximum_premium_tax_.resize(database.length());
 }
 

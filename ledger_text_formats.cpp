@@ -33,7 +33,7 @@
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
-#include "configurable_settings.hpp"    // effective_calculation_summary_columns()
+#include "configurable_settings.hpp"    // parsed_calculation_summary_columns()
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "ledger.hpp"
@@ -86,6 +86,7 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["Outlay"                     ] = ledger_metadata(0, oe_format_normal    , "Net Outlay"                            );
         m["EeGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "EE Gross Payment"                      ); // "Employee Gross Payment"
         m["ErGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "ER Gross Payment"                      ); // "Employer Gross Payment"
+        m["ModalMinimumPremium"        ] = ledger_metadata(0, oe_format_normal    , "Modal Minimum Premium"                 );
         m["NetWD"                      ] = ledger_metadata(0, oe_format_normal    , "Withdrawal"                            );
         m["NewCashLoan"                ] = ledger_metadata(0, oe_format_normal    , "Annual Loan"                           ); // "New Cash Loan"
         m["TotalLoanBalance_Current"   ] = ledger_metadata(0, oe_format_normal    , "Curr Total Loan Balance"               ); // "Current Total Loan Balance"
@@ -166,13 +167,13 @@ calculation_summary_formatter::calculation_summary_formatter
     ,invar_     (ledger_values.GetLedgerInvariant())
     ,max_length_(ledger_values.GetMaxLength())
 {
-    columns_ = effective_calculation_summary_columns();
+    columns_ = parsed_calculation_summary_columns();
     std::vector<std::string>::iterator p = std::find
         (columns_.begin()
         ,columns_.end()
         ,"PolicyYear"
         );
-    // TODO ?? This should be done in effective_calculation_summary_columns(),
+    // TODO ?? This should be done in parsed_calculation_summary_columns(),
     // but that requires a difficult-to-test change in 'ledger_xml_io2.cpp'.
     // As long as "PolicyYear" is always the first column, it shouldn't be
     // offered for selection anyway.
@@ -457,7 +458,7 @@ std::string FormatSelectedValuesAsTsv(Ledger const& ledger_values)
 /// The file is appended to, rather than replaced, so that all cells
 /// in a census can be written to the same file.
 
-void PrintFormTabDelimited
+void PrintCellTabDelimited
     (Ledger const& ledger_values
     ,std::string const& file_name
     )
@@ -681,6 +682,137 @@ void PrintFormTabDelimited
     LMI_ASSERT(os.good());
 }
 
+/// Write group-roster headers to a tab-delimited file suitable for spreadsheets.
+
+void PrintRosterHeaders(std::string const& file_name)
+{
+    std::ofstream os(file_name.c_str(), ios_out_app_binary());
+
+    os << "FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS.\n\n";
+
+    // Skip authentication for non-interactive regression testing.
+    // Surround the date in single quotes because one popular
+    // spreadsheet would otherwise interpret it as a date, which
+    // is likely not to fit in a default-width cell.
+    if(!global_settings::instance().regression_testing())
+        {
+        authenticate_system();
+        os << "DatePrepared\t\t'" << calendar_date().str() << "'\n\n";
+        }
+    else
+        {
+        // For regression tests, write an arbitrary constant as
+        // date prepared, in order to avoid gratuitous failures.
+        os << "DatePrepared\t\t'" << calendar_date(2000, 1, 1).str() << "'\n\n";
+        }
+
+    char const* cheaders[] =
+        {"Insured1"
+        ,"ContractNumber"
+        ,"DateOfBirth"
+        ,"IssueAge"
+        ,"CurrentAge"
+        ,"UWClass"
+        ,"Smoker"
+        ,"SpecifiedAmount"
+        ,"ModalMinimumPremium"
+        ,"ErMode"
+        ,"CorpName"
+        ,"EffDate"
+        ,"PremiumTaxState"
+        ,"StateOfJurisdiction"
+        ,"CurrentGeneralAccountInterestRate"
+        ,"PolicyFee"
+        ,"DacTaxLoad"
+        ,"MaxPremiumTaxLoad"
+        ,"MaxTargetPremiumLoad"
+        ,"ProductName"
+        ,"PolicyForm"
+        ,"CurrentCoiMultiplier"
+        ,"Waiver"
+        ,"AccidentalDeath"
+        ,"TermRider"
+        ,"ChildRider"
+        ,"SpouseRider"
+        };
+
+    std::vector<std::string> const sheaders
+        (cheaders
+        ,cheaders + lmi_array_size(cheaders)
+        );
+    typedef std::vector<std::string>::const_iterator vsi;
+    for(vsi i = sheaders.begin(); i != sheaders.end(); ++i)
+        {
+        os << *i << '\t';
+        }
+    os << "\n\n";
+
+    LMI_ASSERT(os.good());
+}
+
+/// Write group roster to a tab-delimited file suitable for spreadsheets.
+///
+/// The file is appended to, rather than replaced, so that all cells
+/// in a census can be written to the same file.
+///
+/// The composite is deliberately skipped. For an inforce census with
+/// varying issue years, no year in the composite would match the sum
+/// of inforce-year cell values, because the composite is summed by
+/// policy year.
+
+void PrintRosterTabDelimited
+    (Ledger const& ledger_values
+    ,std::string const& file_name
+    )
+{
+    if(ledger_values.GetIsComposite())
+        {
+        return;
+        }
+
+    LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
+    LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
+
+    std::ofstream os(file_name.c_str(), ios_out_app_binary());
+
+    int d = static_cast<int>(Invar.InforceYear);
+    LMI_ASSERT(d < Invar.GetLength());
+    LMI_ASSERT(d < Curr_.GetLength());
+
+    os
+        << Invar.value_str("Insured1"               ) << '\t'
+        << Invar.value_str("ContractNumber"         ) << '\t'
+        << "'" << Invar.DateOfBirth                   << "'\t"
+        << Invar.value_str("Age"                    ) << '\t'
+        << Invar.Age + Invar.InforceYear              << '\t'
+        << Invar.value_str("UWClass"                ) << '\t'
+        << Invar.value_str("Smoker"                 ) << '\t'
+        << Invar.value_str("SpecAmt"              ,d) << '\t'
+        << Invar.value_str("ModalMinimumPremium"  ,d) << '\t'
+        << Invar.ErMode                           [d] << '\t'
+        << Invar.value_str("CorpName"               ) << '\t'
+        << "'" << Invar.EffDate                       << "'\t"
+        << Invar.value_str("PremiumTaxState"        ) << '\t'
+        << Invar.value_str("StatePostalAbbrev"      ) << '\t'
+        << Curr_.value_str("AnnGAIntRate"         ,d) << '\t'
+        << Curr_.value_str("InitMlyPolFee"          ) << '\t'
+        << Invar.value_str("InitDacTaxRate"         ) << '\t'
+        << Invar.value_str("InitPremTaxRate"        ) << '\t'
+        << Curr_.value_str("InitTgtPremHiLoadRate"  ) << '\t'
+        << Invar.value_str("ProductName"            ) << '\t'
+        << Invar.value_str("PolicyForm"             ) << '\t'
+        << Invar.value_str("CurrentCoiMultiplier"   ) << '\t'
+        << Invar.value_str("HasWP"                  ) << '\t'
+        << Invar.value_str("HasADD"                 ) << '\t'
+        << Invar.value_str("HasTerm"                ) << '\t'
+        << Invar.value_str("HasChildRider"          ) << '\t'
+        << Invar.value_str("HasSpouseRider"         ) << '\t'
+        << '\n'
+        ;
+
+    LMI_ASSERT(os.good());
+}
+
 class FlatTextLedgerPrinter
     :        private lmi::uncopyable <FlatTextLedgerPrinter>
     ,virtual private obstruct_slicing<FlatTextLedgerPrinter>
@@ -744,7 +876,7 @@ namespace
         os << '\n';
         return os;
         }
-}
+} // Unnamed namespace.
 
 FlatTextLedgerPrinter::FlatTextLedgerPrinter
     (Ledger const& ledger

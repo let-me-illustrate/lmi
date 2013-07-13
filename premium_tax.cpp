@@ -33,10 +33,10 @@
 #include "contains.hpp"
 #include "database.hpp"
 #include "materially_equal.hpp"
-#include "mc_enum_types_aux.hpp" // mc_str()
+#include "mc_enum_types_aux.hpp"        // mc_str()
 #include "stratified_charges.hpp"
 
-#include <algorithm>             // std::max()
+#include <algorithm>                    // std::max()
 
 namespace {
 /// Determine whether premium tax is retaliatory.
@@ -73,7 +73,8 @@ bool premium_tax_is_retaliatory(mcenum_state tax_state, mcenum_state domicile)
 
 /// Production ctor.
 ///
-/// These database entities should be looked up by premium-tax state:
+/// These database entities should be looked up by premium-tax state,
+/// and also by domicile:
 ///  - DB_PremTaxLoad
 ///  - DB_PremTaxRate
 /// These probably (for inchoate amortization) shouldn't:
@@ -99,11 +100,15 @@ premium_tax::premium_tax
     ,amortize_premium_load_  (amortize_premium_load)
     ,levy_rate_              (0.0)   // Reset below.
     ,load_rate_              (0.0)   // Reset below.
-    ,least_load_rate_        (0.0)   // Reset below.
+    ,tax_state_load_rate_    (0.0)   // Reset below.
     ,domiciliary_load_rate_  (0.0)   // Reset below.
+    ,maximum_load_rate_      (0.0)   // Reset below.
+    ,minimum_load_rate_      (0.0)   // Reset below.
     ,is_tiered_in_tax_state_ (false) // Reset below.
     ,is_tiered_in_domicile_  (false) // Reset below.
     ,is_retaliatory_         (false) // Reset below.
+    ,varies_by_state_        (false) // Reset below.
+    ,load_rate_is_levy_rate_ (false) // Reset below.
     ,ytd_taxable_premium_    (0.0)
     ,ytd_load_               (0.0)
     ,ytd_load_in_tax_state_  (0.0)
@@ -114,35 +119,35 @@ premium_tax::premium_tax
 
     is_retaliatory_ = premium_tax_is_retaliatory(tax_state_, domicile_);
 
-    least_load_rate_ = lowest_premium_tax_load
-        (tax_state_
-        ,domicile_
-        ,amortize_premium_load_
-        ,db
-        ,strata
-        );
+    varies_by_state_ = db.varies_by_state(DB_PremTaxLoad);
 
-    // TODO ?? It would be better not to constrain so many things
-    // not to vary by duration by using Query(enumerator).
+    load_rate_is_levy_rate_ = db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate);
 
-    database_index index = db.index().state(tax_state_);
-    levy_rate_ = db.Query(DB_PremTaxRate, index);
-    load_rate_ = db.Query(DB_PremTaxLoad, index);
-
-    {
-    database_index index = db.index().state(domicile_);
-    domiciliary_load_rate_ = 0.0;
+    double tax_state_levy_rate   = 0.0;
+    double domiciliary_levy_rate = 0.0;
     if(!amortize_premium_load_)
         {
-        double domiciliary_levy_rate = db.Query(DB_PremTaxRate, index);
-        domiciliary_load_rate_       = db.Query(DB_PremTaxLoad, index);
-        if(is_retaliatory_)
-            {
-            levy_rate_ = std::max(levy_rate_, domiciliary_levy_rate );
-            load_rate_ = std::max(load_rate_, domiciliary_load_rate_);
-            }
+        database_index index0 = db.index().state(tax_state_);
+        tax_state_levy_rate    = db.Query(DB_PremTaxRate, index0);
+        tax_state_load_rate_   = db.Query(DB_PremTaxLoad, index0);
+        database_index index1 = db.index().state(domicile_);
+        domiciliary_levy_rate  = db.Query(DB_PremTaxRate, index1);
+        domiciliary_load_rate_ = db.Query(DB_PremTaxLoad, index1);
         }
-    }
+
+    if(is_retaliatory_)
+        {
+        levy_rate_ = std::max(tax_state_levy_rate , domiciliary_levy_rate );
+        load_rate_ = std::max(tax_state_load_rate_, domiciliary_load_rate_);
+        }
+    else
+        {
+        levy_rate_ = tax_state_levy_rate ;
+        load_rate_ = tax_state_load_rate_;
+        }
+
+    maximum_load_rate_ = ascertain_maximum_load_rate(strata);
+    minimum_load_rate_ = ascertain_minimum_load_rate(strata);
 
     test_consistency();
 }
@@ -158,11 +163,15 @@ premium_tax::premium_tax
     ,amortize_premium_load_  (false)
     ,levy_rate_              (0.0) // Reset below.
     ,load_rate_              (0.0)
-    ,least_load_rate_        (0.0)
+    ,tax_state_load_rate_    (0.0)
     ,domiciliary_load_rate_  (0.0)
+    ,maximum_load_rate_      (0.0)
+    ,minimum_load_rate_      (0.0)
     ,is_tiered_in_tax_state_ (false)
     ,is_tiered_in_domicile_  (false)
     ,is_retaliatory_         (false)
+    ,varies_by_state_        (false)
+    ,load_rate_is_levy_rate_ (false)
     ,ytd_taxable_premium_    (0.0)
     ,ytd_load_               (0.0)
     ,ytd_load_in_tax_state_  (0.0)
@@ -177,8 +186,16 @@ premium_tax::~premium_tax()
 
 /// Test consistency of premium-tax loads.
 ///
-/// In particular, if the tiered premium-tax load isn't zero, then the
-/// corresponding non-tiered load must be zero.
+/// If the scalar premium-tax load varies by state, then it must be
+/// identical to the premium-tax rate, so that premium tax is passed
+/// through exactly--and, therefore, tiered tax rates determine loads
+/// where applicable and implemented. It would be possible to design a
+/// product otherwise, but in practice this limitation is generally
+/// respected, and it does simplify the code.
+///
+/// If the tiered premium-tax load isn't zero, then the corresponding
+/// non-tiered load must be zero, so that the sum of the tiered and
+/// non-tiered portions is the actual load.
 ///
 /// Premium-tax pass-through for AK, DE, and SD insurers is not
 /// supported. If the state of domicile has a tiered rate, then most
@@ -194,15 +211,25 @@ premium_tax::~premium_tax()
 
 void premium_tax::test_consistency() const
 {
+    if(varies_by_state_ && !load_rate_is_levy_rate_)
+        {
+        fatal_error()
+            << "Premium-tax load varies by state, but differs"
+            << " from premium-tax rates. Probably the database"
+            << " is incorrect.\n"
+            << LMI_FLUSH
+            ;
+        }
+
     if(is_tiered_in_tax_state_)
         {
-        if(0.0 != load_rate())
+        if(0.0 != tax_state_load_rate_)
             {
             fatal_error()
                 << "Premium-tax load is tiered in premium-tax state "
                 << mc_str(tax_state_)
                 << ", but the product database specifies a scalar load of "
-                << load_rate()
+                << tax_state_load_rate_
                 << " instead of zero as expected. Probably the database"
                 << " is incorrect."
                 << LMI_FLUSH
@@ -288,8 +315,8 @@ void premium_tax::start_new_year()
 
 double premium_tax::calculate_load(double payment, stratified_charges const& strata)
 {
-    double tax_in_tax_state = load_rate() * payment;
-    if(is_tiered_in_tax_state_)
+    double tax_in_tax_state = tax_state_load_rate_ * payment;
+    if(varies_by_state_ && is_tiered_in_tax_state_)
         {
         LMI_ASSERT(0.0 == tax_in_tax_state);
         tax_in_tax_state = strata.tiered_premium_tax
@@ -304,7 +331,7 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
     if(is_retaliatory_)
         {
         tax_in_domicile = domiciliary_load_rate_ * payment;
-        if(is_tiered_in_domicile_)
+        if(varies_by_state_ && is_tiered_in_domicile_)
             {
             LMI_ASSERT(0.0 == tax_in_domicile);
             tax_in_domicile = strata.tiered_premium_tax
@@ -405,92 +432,48 @@ std::vector<double> const& premium_tax_rates_for_annuities()
 }
 #endif // 0
 
-/// Lowest premium-tax load, for 7702 and 7702A purposes.
-///
-/// TAXATION !! No contemporary authority seems to believe that a
-/// change in the premium-tax rate, even if passed through to the
-/// policyowner, is a 7702A material change or a GPT adjustment
-/// event. Therefore, this function will be expunged; but any unique
-/// commentary or consistency test should be preserved.
+/// Highest premium-tax load, for calculating pay-as-you-go premium.
 
-double lowest_premium_tax_load
-    (mcenum_state              tax_state
-    ,mcenum_state              domicile
-    ,bool                      amortize_premium_load
-    ,product_database   const& db
-    ,stratified_charges const& strata
-    )
+double premium_tax::ascertain_maximum_load_rate(stratified_charges const& strata) const
 {
-    // TRICKY !! Here, we use 'DB_PremTaxLoad', not 'DB_PremTaxRate',
-    // to determine the lowest premium-tax load. Premium-tax loads
-    // (charged by the insurer to the contract) and rates (charged by
-    // the state to the insurer) really shouldn't be mixed. The
-    // intention is to support products that pass actual premium tax
-    // through as a load, taking into account retaliation and tiered
-    // premium-tax rates.
-    //
-    // While a more complicated model would be more aesthetically
-    // satisfying, this gives the right answer in practice for the
-    // two cases we believe will arise in practice. In the first case,
-    // premium-tax load doesn't vary by state--perhaps a flat load
-    // such as two percent might be used, or maybe zero percent with
-    // premium-tax expense covered elsewhere in pricing--and tiering
-    // is ignored, so this implementation just returns the flat load.
-    // In the second case, the exact premium tax is passed through,
-    // so the tax rate equals the tax load.
-
-    double z = 0.0;
-    if(amortize_premium_load)
+    if(amortize_premium_load_)
         {
-        return z;
+        return 0.0;
         }
-
-    database_index index = db.index().state(tax_state);
-    z = db.Query(DB_PremTaxLoad, index);
-
-    if(premium_tax_is_retaliatory(tax_state, domicile))
+    else if(!varies_by_state_)
         {
-        index = db.index().state(domicile);
-        z = std::max(z, db.Query(DB_PremTaxLoad, index));
+        return load_rate_;
         }
-
-    if(!db.varies_by_state(DB_PremTaxLoad))
+    else if(is_tiered_in_tax_state_)
         {
-        return z;
+        return strata.maximum_tiered_premium_tax_rate(tax_state_);
         }
-
-    // If premium-tax load varies by state, we're assuming that
-    // it equals premium-tax rate--i.e. that premium tax is passed
-    // through exactly--and that therefore tiered tax rates determine
-    // loads where applicable and implemented.
-    if(!db.are_equivalent(DB_PremTaxLoad, DB_PremTaxRate))
+    else
         {
-        fatal_error()
-            << "Premium-tax load varies by state, but differs"
-            << " from premium-tax rates. Probably the database"
-            << " is incorrect.\n"
-            << LMI_FLUSH
-            ;
+        return load_rate_;
         }
+}
 
-    if(strata.premium_tax_is_tiered(tax_state))
+/// Lowest premium-tax load, for conservative 7702 and 7702A calculations.
+
+double premium_tax::ascertain_minimum_load_rate(stratified_charges const& strata) const
+{
+    if(amortize_premium_load_)
         {
-        if(0.0 != z)
-            {
-            fatal_error()
-                << "Premium-tax load is tiered in state "
-                << mc_str(tax_state)
-                << ", but the product database specifies a scalar load of "
-                << z
-                << " instead of zero as expected. Probably the database"
-                << " is incorrect."
-                << LMI_FLUSH
-                ;
-            }
-        z = strata.minimum_tiered_premium_tax_rate(tax_state);
+        return 0.0;
         }
-
-    return z;
+    else if(!varies_by_state_)
+        {
+        return load_rate_;
+        }
+    else if(is_tiered_in_tax_state_)
+        {
+        return strata.minimum_tiered_premium_tax_rate(tax_state_);
+        }
+    else
+        {
+        return load_rate_;
+        }
 }
 
 double premium_tax::ytd_load() const
@@ -508,9 +491,14 @@ double premium_tax::load_rate() const
     return load_rate_;
 }
 
-double premium_tax::least_load_rate() const
+double premium_tax::maximum_load_rate() const
 {
-    return least_load_rate_;
+    return maximum_load_rate_;
+}
+
+double premium_tax::minimum_load_rate() const
+{
+    return minimum_load_rate_;
 }
 
 bool premium_tax::is_tiered() const

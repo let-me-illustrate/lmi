@@ -48,7 +48,7 @@ cp --preserve $src_dir/sample.cns $src_dir/sample.ill .
 #
 # Only RNC is to be edited; XSD and RNG are generated from it.
 
-cp --preserve $src_dir/cell.rnc $src_dir/multiple_cell_document.rnc $src_dir/single_cell_document.rnc $src_dir/types.rnc .
+cp --preserve $src_dir/types.rnc $src_dir/cell.rnc $src_dir/multiple_cell_document.rnc $src_dir/single_cell_document.rnc .
 
 echo "  Test RNC files with 'jing'."
 
@@ -64,7 +64,7 @@ java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample.ill
 # XSD, generated from RNG, is stored in the repository because it's
 # widely used.
 
-cp --preserve $src_dir/cell.xsd $src_dir/multiple_cell_document.xsd $src_dir/single_cell_document.xsd .
+cp --preserve $src_dir/types.xsd $src_dir/cell.xsd $src_dir/multiple_cell_document.xsd $src_dir/single_cell_document.xsd .
 
 echo "  Test XSD files with 'jing'."
 

@@ -177,6 +177,10 @@ void Input::DoHarmonize()
     DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCvat));
     DefinitionOfLifeInsurance.allow(mce_noncompliant, database_->Query(DB_AllowNo7702));
 
+    DefinitionOfMaterialChange.enable(anything_goes);
+    // INPUT !! TAXATION !! This old code will be useful when
+    // 'DefinitionOfMaterialChange' is replaced.
+#if 0
     DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
     if(mce_noncompliant == DefinitionOfLifeInsurance)
         {
@@ -205,6 +209,7 @@ void Input::DoHarmonize()
             << LMI_FLUSH
             ;
         }
+#endif // 0
 
     MaximumNaar.enable(anything_goes);
 
@@ -406,6 +411,7 @@ void Input::DoHarmonize()
         );
     calendar_date reset_min(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMinDate))));
     calendar_date reset_max(jdn_t(static_cast<int>(database_->Query(DB_CoiResetMaxDate))));
+    reset_min = std::min(reset_min, most_recent_anniversary);
     reset_max = std::min(reset_max, most_recent_anniversary);
     if(!global_settings::instance().regression_testing())
         {

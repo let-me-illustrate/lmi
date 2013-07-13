@@ -74,7 +74,7 @@ class yare_input
 //    double                            TotalSpecifiedAmount            ;
 //    double                            TermRiderProportion             ;
 //    bool                              TermRiderUseProportion          ;
-//    calendar_date                     DateOfBirth                     ;
+    calendar_date                     DateOfBirth                     ;
     mcenum_table_rating               SubstandardTable                ;
     std::string                       ProductName                     ;
     double                            Dumpin                          ;
@@ -113,7 +113,7 @@ class yare_input
     bool                              UseExperienceRating             ;
     bool                              UsePartialMortality             ;
 //    mcenum_part_mort_table            PartialMortalityTable           ;
-//    std::string                       InsuredName                     ;
+    std::string                       InsuredName                     ;
 //    std::string                       Address                         ;
 //    std::string                       City                            ;
 //    mcenum_state                      State                           ;

@@ -136,15 +136,47 @@ double AccountValue::CalculateSpecAmtFromStrategy
 /// The actual minimum, set elsewhere, is ascertainable only during
 /// monthiversary processing because, e.g., it may depend on whether
 /// cash value is sufficient to keep a term rider in force.
+///
+/// For inforce, warn before increasing specamt to the minimum in the
+/// first inforce year: either an underwriting exception was made, or
+/// input is erroneous; but apply the minimum silently if specamt is
+/// to be calculated from a strategy, or if a lower amount is given in
+/// any other year (which doesn't represent the present state of the
+/// contract, and presumably results from manual editing).
 
 void AccountValue::PerformSpecAmtStrategy()
 {
+    // Store original input specamt for first inforce year, for
+    // comparison below. Using DeathBfts_->specamt() here instead of
+    // yare_input_.SpecifiedAmount means that the inforce warning
+    // appears only once, because the former is overwritten but the
+    // latter is not.
+    double const inforce_specamt = DeathBfts_->specamt().at(InforceYear);
     for(int j = 0; j < BasicValues::Length; ++j)
         {
         bool t = yare_input_.TermRider && 0.0 != yare_input_.TermRiderAmount;
         double m = minimum_specified_amount(0 == j, t);
         double z = CalculateSpecAmtFromStrategy(j, 0);
         DeathBfts_->set_specamt(round_specamt()(std::max(m, z)), j, 1 + j);
+        if
+            (  j == InforceYear
+            && !(0 == InforceYear && 0 == InforceMonth)
+            && mce_sa_input_scalar == yare_input_.SpecifiedAmountStrategy[j]
+            && inforce_specamt < m
+            && !Solving
+            )
+            {
+            warning()
+                << "Inforce specified amount "
+                << inforce_specamt
+                << " increased to the "
+                << m
+                << " minimum for '"
+                << yare_input_.InsuredName
+                << "'."
+                << std::flush
+                ;
+            }
         }
 }
 

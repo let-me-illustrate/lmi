@@ -52,6 +52,8 @@ class LMI_SO PreferencesModel
   private:
     void AscribeMembers();
 
+    std::string string_of_column_names() const;
+
     // MvcModel required implementation.
     virtual void DoAdaptExternalities();
     virtual datum_base const* DoBaseDatumPointer(std::string const&) const;

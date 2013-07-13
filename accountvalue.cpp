@@ -247,7 +247,9 @@ double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
     AVRegLn          = 0.0;
     AVPrfLn          = 0.0;
 
-    AVUnloaned = InforceAVGenAcct - (AVRegLn + AVPrfLn);
+    // 'InforceAVGenAcct' is unloaned only; this branch wasn't
+    // designed to allow inforce loans.
+    AVUnloaned = InforceAVGenAcct;
 
     PerformSpecAmtStrategy();
 
