@@ -92,6 +92,7 @@ config_options = \
   --disable-compat24 \
   --disable-fswatcher \
   --disable-gif \
+  --disable-stc \
   --disable-threads \
   --disable-vararg_macros \
   --enable-monolithic \
