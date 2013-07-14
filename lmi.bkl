@@ -96,6 +96,14 @@
         </set>
         <define>$(LMI_PCH_HEADER_DEFINE)</define>
 
+        <!--
+            When using Boost 1.46 or 1.47 we must define this to use Boost
+            Filesystem library v2, instead of the incompatible v3. Notice that
+            later versions of Boost don't provide v2 at all any more and can't
+            be used with LMI.
+         -->
+        <define>BOOST_FILESYSTEM_VERSION=2</define>
+
         <set var="LMI_USE_XML_TABLES_DEFINE">
             <if cond="USE_XML_TABLES=='1'">LMI_USE_XML_TABLES</if>
         </set>
