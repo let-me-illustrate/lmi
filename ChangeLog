@@ -32407,3 +32407,14 @@ Tune gcc to use less memory.
   wx-2.9.5.patch [new file]
 Use 2013-07-11 wx-2.9.5 snapshot.
 
+20130714T1707Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+Don't use warning-ridden third-party code. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00010.html
+
+20130715T0022Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+Use 2013-07-14 wx-2.9.5 snapshot.
+
