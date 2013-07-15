@@ -32418,3 +32418,9 @@ Don't use warning-ridden third-party code. See:
   install_wx.make
 Use 2013-07-14 wx-2.9.5 snapshot.
 
+20130715T1143Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+Use 2013-07-15 wx-2.9.5 snapshot, updating $(vendor). But see:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00030.html
+
