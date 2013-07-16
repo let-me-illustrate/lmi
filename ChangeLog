@@ -32429,3 +32429,11 @@ Use 2013-07-15 wx-2.9.5 snapshot, updating $(vendor). But see:
   install_wx.make
 Use wxWidgets-2.9.5-rc1.
 
+20130716T2250Z <gchicares@sbcglobal.net> [541]
+
+  preferences_model.cpp
+Revert two defective hunks of revision 5678 committed 20130414T1847Z.
+Load() should always read the selected columns even if default columns
+are to be used instead. This change temporarily reintroduces the
+defect noted 20130414T1341Z.
+

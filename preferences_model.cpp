@@ -210,9 +210,15 @@ bool PreferencesModel::IsModified() const
 
 void PreferencesModel::Load()
 {
-    std::vector<std::string> columns(parsed_calculation_summary_columns());
-
     configurable_settings const& z = configurable_settings::instance();
+    std::istringstream iss(z.calculation_summary_columns());
+    std::vector<std::string> columns;
+    std::copy
+        (std::istream_iterator<std::string>(iss)
+        ,std::istream_iterator<std::string>()
+        ,std::back_inserter(columns)
+        );
+
     bool b = z.use_builtin_calculation_summary();
     UseBuiltinCalculationSummary = b ? "Yes" : "No";
 
