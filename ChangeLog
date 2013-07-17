@@ -32437,3 +32437,15 @@ Load() should always read the selected columns even if default columns
 are to be used instead. This change temporarily reintroduces the
 defect noted 20130414T1341Z.
 
+20130717T1228Z <gchicares@sbcglobal.net> [541]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  ledger_text_formats.cpp
+  preferences_model.cpp
+Fix defect committed 20130414T1847Z, while fixing another defect.
+Checking "Use built-in calculation summary" defectively caused the
+built-in defaults to overwrite the columns selected in the GUI, so
+that careful selections were irretrievably lost. Now, as before, the
+selections are preserved when grayed out.
+
