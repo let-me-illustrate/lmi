@@ -93,6 +93,9 @@ fs::path const& configuration_filepath()
     std::string filename = "/etc/opt/lmi/" + configuration_filename();
     if(0 != access(filename.c_str(), R_OK))
         {
+        // TODO ?? At this point, AddDataDir() refers to the directory
+        // where the wx binary resides. A configurable_settings object
+        // apparently exists before ProcessCommandLine() is called.
         filename = AddDataDir(configuration_filename());
         if(0 != access(filename.c_str(), R_OK))
             {
