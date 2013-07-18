@@ -32449,3 +32449,18 @@ built-in defaults to overwrite the columns selected in the GUI, so
 that careful selections were irretrievably lost. Now, as before, the
 selections are preserved when grayed out.
 
+20130718T0143Z <gchicares@sbcglobal.net> [542]
+
+  configurable_settings.cpp
+Mark a defect.
+
+20130718T0144Z <gchicares@sbcglobal.net> [542]
+
+  illustration_view.cpp
+Reverse a change made 20110814T1416Z. That change caused "OK" to
+behave like "Cancel" when ending an input dialog with no input change.
+However, sometimes it is convenient to rerun the illustration even if
+input did not change--for instance, to check repeated timings, or to
+see diagnostics again--and the "Cancel" behavior is always available
+by pressing "Cancel".
+
