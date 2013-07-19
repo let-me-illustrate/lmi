@@ -32470,3 +32470,8 @@ by pressing "Cancel".
 Temporarily revert to wx-2.9.3, so that recent lmi changes can be
 released prior to testing the final wx-2.9.5 library.
 
+20130719T1951Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5752.
+
