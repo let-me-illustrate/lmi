@@ -32482,3 +32482,9 @@ Designate release candidate 5752.
 Upgrade to wx-2.9.5, enabling vararg macros. See:
   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00045.html
 
+20130720T0121Z <gchicares@sbcglobal.net> [542]
+
+  skin.xrc
+Remove or adjust impossibly low control widths. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00021.html
+
