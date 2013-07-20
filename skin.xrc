@@ -601,7 +601,6 @@ demonstrate a defect in the wx library. See
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="SurviveToAge">
                                         <help>Partial mortality survival age limit</help>
-                                        <size>10,-1</size>
                                         <max>100</max>
                                     </object>
                                 </object>
@@ -615,7 +614,6 @@ demonstrate a defect in the wx library. See
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="SurviveToYear">
                                         <help>Partial mortality survival year limit</help>
-                                        <size>10,-1</size>
                                         <max>100</max>
                                         <value>99</value>
                                     </object>
@@ -1101,7 +1099,6 @@ demonstrate a defect in the wx library. See
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="IssueAge">
                                         <help>Insurance age on date of issue</help>
-                                        <size>10,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -1141,7 +1138,6 @@ demonstrate a defect in the wx library. See
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="RetirementAge">
                                         <help>Insurance age on date of retirement</help>
-                                        <size>10,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -1966,7 +1962,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveBeginYear">
                                                         <help>Solve beginning duration</help>
-                                                        <size>10,-1</size>
+                                                        <size>20,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -1982,7 +1978,7 @@ here, but it looks weird if we don't make this look like its siblings.
 <!-- Really want something like "SolveFromAge"; this is a temporary kludge. -->
                                                     <object class="wxSpinCtrl" name="SolveBeginTime">
                                                         <help>Solve beginning age</help>
-                                                        <size>10,-1</size>
+                                                        <size>20,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -2026,7 +2022,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveEndYear">
                                                         <help>Solve ending duration</help>
-                                                        <size>10,-1</size>
+                                                        <size>20,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -2042,7 +2038,7 @@ here, but it looks weird if we don't make this look like its siblings.
 <!-- Really want something like "SolveToAge"; this is a temporary kludge. -->
                                                     <object class="wxSpinCtrl" name="SolveEndTime">
                                                         <help>Solve ending age</help>
-                                                        <size>10,-1</size>
+                                                        <size>20,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -2086,7 +2082,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <flag>wxGROW</flag>
                                                     <object class="wxSpinCtrl" name="SolveTargetYear">
                                                         <help>Duration to achieve target surrender value</help>
-                                                        <size>10,-1</size>
+                                                        <size>20,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -2102,7 +2098,7 @@ here, but it looks weird if we don't make this look like its siblings.
 <!-- Really want something like "SolveAtAge"; this is a temporary kludge. -->
                                                     <object class="wxSpinCtrl" name="SolveTargetTime">
                                                         <help>Attained age to achieve target surrender value</help>
-                                                        <size>10,-1</size>
+                                                        <size>20,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
