@@ -32475,3 +32475,10 @@ released prior to testing the final wx-2.9.5 library.
   version.hpp
 Designate release candidate 5752.
 
+20130720T0118Z <gchicares@sbcglobal.net> [542]
+
+  install_wx.make
+  wx-2.9.5.patch
+Upgrade to wx-2.9.5, enabling vararg macros. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00045.html
+
