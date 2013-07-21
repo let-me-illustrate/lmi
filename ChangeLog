@@ -32488,3 +32488,9 @@ Upgrade to wx-2.9.5, enabling vararg macros. See:
 Remove or adjust impossibly low control widths. See:
   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00021.html
 
+20130721T2352Z <gchicares@sbcglobal.net> [542]
+
+  mvc_controller.cpp
+Recurse through children--e.g., group boxes. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00038.html
+
