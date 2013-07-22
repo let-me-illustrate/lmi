@@ -33,7 +33,7 @@
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
-#include "configurable_settings.hpp"    // parsed_calculation_summary_columns()
+#include "configurable_settings.hpp"    // effective_calculation_summary_columns()
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "ledger.hpp"
@@ -167,13 +167,13 @@ calculation_summary_formatter::calculation_summary_formatter
     ,invar_     (ledger_values.GetLedgerInvariant())
     ,max_length_(ledger_values.GetMaxLength())
 {
-    columns_ = parsed_calculation_summary_columns();
+    columns_ = effective_calculation_summary_columns();
     std::vector<std::string>::iterator p = std::find
         (columns_.begin()
         ,columns_.end()
         ,"PolicyYear"
         );
-    // TODO ?? This should be done in parsed_calculation_summary_columns(),
+    // TODO ?? This should be done in effective_calculation_summary_columns(),
     // but that requires a difficult-to-test change in 'ledger_xml_io2.cpp'.
     // As long as "PolicyYear" is always the first column, it shouldn't be
     // offered for selection anyway.

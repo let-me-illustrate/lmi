@@ -118,7 +118,8 @@ class LMI_SO configurable_settings
     ~configurable_settings();
 };
 
-std::vector<std::string> parsed_calculation_summary_columns();
+std::vector<std::string> input_calculation_summary_columns();
+std::vector<std::string> effective_calculation_summary_columns();
 
 #endif // configurable_settings_hpp
 

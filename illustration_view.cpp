@@ -240,7 +240,7 @@ void IllustrationView::UponProperties(wxCommandEvent&)
 //        return;
         }
 
-    if(oe_mvc_dv_changed == edit_parameters())
+    if(oe_mvc_dv_cancelled != edit_parameters())
         {
         Run();
         }
