@@ -100,6 +100,9 @@ fs::path const& configuration_filepath()
                             + configuration_filename();
     if(0 != access(filename.c_str(), R_OK))
         {
+        // TODO ?? At this point, AddDataDir() refers to the directory
+        // where the wx binary resides. A configurable_settings object
+        // apparently exists before ProcessCommandLine() is called.
         filename = AddDataDir(configuration_filename());
         if(0 != access(filename.c_str(), R_OK))
             {
@@ -425,14 +428,11 @@ std::string const& configurable_settings::xsl_fo_command() const
     return xsl_fo_command_;
 }
 
-std::vector<std::string> parsed_calculation_summary_columns()
+namespace
 {
-    configurable_settings const& z = configurable_settings::instance();
-    std::istringstream iss
-        (z.use_builtin_calculation_summary()
-        ? default_calculation_summary_columns()
-        : z.calculation_summary_columns()
-        );
+std::vector<std::string> parse_calculation_summary_columns(std::string const& s)
+{
+    std::istringstream iss(s);
     std::vector<std::string> const& allowable = all_strings<mcenum_report_column>();
     std::vector<std::string> columns;
     std::istream_iterator<std::string> i(iss);
@@ -454,5 +454,22 @@ std::vector<std::string> parsed_calculation_summary_columns()
             }
         }
     return columns;
+}
+} // Unnamed namespace.
+
+std::vector<std::string> input_calculation_summary_columns()
+{
+    configurable_settings const& z = configurable_settings::instance();
+    return parse_calculation_summary_columns(z.calculation_summary_columns());
+}
+
+std::vector<std::string> effective_calculation_summary_columns()
+{
+    configurable_settings const& z = configurable_settings::instance();
+    return parse_calculation_summary_columns
+        (z.use_builtin_calculation_summary()
+        ? default_calculation_summary_columns()
+        : z.calculation_summary_columns()
+        );
 }
 

@@ -25,7 +25,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
-wx_version    := 2.9.3
+wx_version    := 2.9.5
 
 mingw_dir     := /MinGW_
 
@@ -44,6 +44,7 @@ wx-2.8.10-md5 := 0461c2085ac1ad7e648aa84c4ba51dd1
 wx-2.9.0-md5  := 09058928eeb72853142c062bdec056ce
 wx-2.9.2-md5  := d6cec5bd331ba90b74c1e2fcb0563620
 wx-2.9.3-md5  := 6b6003713289ea4d3cd9b49c5db5b721
+wx-2.9.5-md5  := e98c5f92805493f150656403ffef3bb0
 
 wx_md5            := $(wx-$(wx_version)-md5)
 
@@ -61,16 +62,6 @@ compiler      := gcc-$(shell $(mingw_bin_dir)/gcc -dumpversion)
 vendor        := $(subst .,,$(compiler))-$(wx_md5)
 
 build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
-
-# Begin ad-hockery. See:
-#   http://lists.nongnu.org/archive/html/lmi/2011-03/msg00008.html
-wx_version    := 2.9.5
-wx_md5            := da8081875d664e5329909142b3c38deb
-wx_archive        := wxWidgets-2013-07-11.tar.gz
-$(wx_archive)-md5 := $(wx_md5)
-$(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/Daily_HEAD/files/$(wx_archive)
-build_dir     := $(wx_dir)/wxWidgets/$(vendor)
-# End ad-hockery.
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -92,8 +83,8 @@ config_options = \
   --disable-compat24 \
   --disable-fswatcher \
   --disable-gif \
+  --disable-stc \
   --disable-threads \
-  --disable-vararg_macros \
   --enable-monolithic \
   --enable-shared \
   --enable-std_iostreams \

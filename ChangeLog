@@ -32407,3 +32407,90 @@ Tune gcc to use less memory.
   wx-2.9.5.patch [new file]
 Use 2013-07-11 wx-2.9.5 snapshot.
 
+20130714T1707Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+Don't use warning-ridden third-party code. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00010.html
+
+20130715T0022Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+Use 2013-07-14 wx-2.9.5 snapshot.
+
+20130715T1143Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+Use 2013-07-15 wx-2.9.5 snapshot, updating $(vendor). But see:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00030.html
+
+20130715T1622Z <gchicares@sbcglobal.net> [541]
+
+  install_wx.make
+Use wxWidgets-2.9.5-rc1.
+
+20130716T2250Z <gchicares@sbcglobal.net> [541]
+
+  preferences_model.cpp
+Revert two defective hunks of revision 5678 committed 20130414T1847Z.
+Load() should always read the selected columns even if default columns
+are to be used instead. This change temporarily reintroduces the
+defect noted 20130414T1341Z.
+
+20130717T1228Z <gchicares@sbcglobal.net> [541]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  ledger_text_formats.cpp
+  preferences_model.cpp
+Fix defect committed 20130414T1847Z, while fixing another defect.
+Checking "Use built-in calculation summary" defectively caused the
+built-in defaults to overwrite the columns selected in the GUI, so
+that careful selections were irretrievably lost. Now, as before, the
+selections are preserved when grayed out.
+
+20130718T0143Z <gchicares@sbcglobal.net> [542]
+
+  configurable_settings.cpp
+Mark a defect.
+
+20130718T0144Z <gchicares@sbcglobal.net> [542]
+
+  illustration_view.cpp
+Reverse a change made 20110814T1416Z. That change caused "OK" to
+behave like "Cancel" when ending an input dialog with no input change.
+However, sometimes it is convenient to rerun the illustration even if
+input did not change--for instance, to check repeated timings, or to
+see diagnostics again--and the "Cancel" behavior is always available
+by pressing "Cancel".
+
+20130719T1948Z <gchicares@sbcglobal.net> [542]
+
+  install_wx.make
+Temporarily revert to wx-2.9.3, so that recent lmi changes can be
+released prior to testing the final wx-2.9.5 library.
+
+20130719T1951Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5752.
+
+20130720T0118Z <gchicares@sbcglobal.net> [542]
+
+  install_wx.make
+  wx-2.9.5.patch
+Upgrade to wx-2.9.5, enabling vararg macros. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00045.html
+
+20130720T0121Z <gchicares@sbcglobal.net> [542]
+
+  skin.xrc
+Remove or adjust impossibly low control widths. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00021.html
+
+20130721T2352Z <gchicares@sbcglobal.net> [542]
+
+  mvc_controller.cpp
+Recurse through children--e.g., group boxes. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-07/msg00038.html
+

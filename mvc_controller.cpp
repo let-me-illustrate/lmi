@@ -217,8 +217,9 @@ wxBookCtrlBase const& MvcController::BookControl() const
 
 void MvcController::ConditionallyEnable()
 {
-    wxWindowList const& wl = CurrentPage().GetChildren();
-    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+    typedef std::vector<wxWindow*>::const_iterator wvci;
+    std::vector<wxWindow*> page_lineage = Lineage(&CurrentPage());
+    for(wvci i = page_lineage.begin(); i != page_lineage.end(); ++i)
         {
         wxWindow* pw = *i;
         LMI_ASSERT(0 != pw);
@@ -248,7 +249,6 @@ void MvcController::ConditionallyEnable()
     // date ranges fail to work, and the observable symptom is quite
     // spectacular.
 
-    typedef std::vector<wxWindow*>::const_iterator wvci;
     for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
         {
         wxWindow* pw = *i;
@@ -429,8 +429,9 @@ void MvcController::EnsureOptimalFocus()
         }
 
     SetFocus();
-    wxWindowList const& wl = CurrentPage().GetChildren();
-    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+    typedef std::vector<wxWindow*>::const_iterator wvci;
+    std::vector<wxWindow*> page_lineage = Lineage(&CurrentPage());
+    for(wvci i = page_lineage.begin(); i != page_lineage.end(); ++i)
         {
         wxWindow* w = *i;
         if(w && w->IsEnabled() && w->AcceptsFocus())
