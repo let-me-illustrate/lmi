@@ -32494,3 +32494,13 @@ Remove or adjust impossibly low control widths. See:
 Recurse through children--e.g., group boxes. See:
   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00038.html
 
+20130723T2241Z <gchicares@sbcglobal.net> [542]
+
+  wx-2.9.5.patch
+Apply various post-release patches:
+  http://trac.wxwidgets.org/changeset/74582
+  http://trac.wxwidgets.org/changeset/74583
+  http://trac.wxwidgets.org/changeset/74585
+  http://trac.wxwidgets.org/changeset/74586
+  http://trac.wxwidgets.org/changeset/74588
+
