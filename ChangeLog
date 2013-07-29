@@ -32504,3 +32504,14 @@ Apply various post-release patches:
   http://trac.wxwidgets.org/changeset/74586
   http://trac.wxwidgets.org/changeset/74588
 
+20130729T2106Z <gchicares@sbcglobal.net> [542]
+
+  INSTALL
+  install_cygwin.bat
+Use Cygwin's renamed installer.
+
+20130729T2107Z <gchicares@sbcglobal.net> [542]
+
+  ledger_text_formats.cpp
+Improve error messages.
+
