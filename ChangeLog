@@ -32515,3 +32515,10 @@ Use Cygwin's renamed installer.
   ledger_text_formats.cpp
 Improve error messages.
 
+20130810T0058Z <wboutin@massmutual.com> [542]
+
+  illustration_reg.xsl
+  ledger_xml_io.cpp
+  nasd.xsl
+Display two inforce values to output.
+
