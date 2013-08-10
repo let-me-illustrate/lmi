@@ -32522,3 +32522,8 @@ Improve error messages.
   nasd.xsl
 Display two inforce values to output.
 
+20130810T0110Z <wboutin@massmutual.com> [542]
+
+  ledger_xml_io.cpp
+Remove unnecessary extra line added 20130810T0058Z.
+
