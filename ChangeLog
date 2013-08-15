@@ -32527,3 +32527,18 @@ Display two inforce values to output.
   ledger_xml_io.cpp
 Remove unnecessary extra line added 20130810T0058Z.
 
+20130815T1207Z <gchicares@sbcglobal.net> [542]
+
+  GNUmakefile
+Cite a release candidate's revision number.
+
+20130815T1244Z <gchicares@sbcglobal.net> [542]
+
+  GNUmakefile
+Handle mixed svn revisions more gracefully.
+
+20130815T1257Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5765.
+
