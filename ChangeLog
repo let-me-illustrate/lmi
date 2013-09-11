@@ -32542,3 +32542,10 @@ Handle mixed svn revisions more gracefully.
   version.hpp
 Designate release candidate 5765.
 
+20130911T2327Z <gchicares@sbcglobal.net> [542]
+
+  ihs_irc7702a.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. For inforce, cached NSP (used for reductions) should be
+as of last material change date, not inforce reillustration date.
+

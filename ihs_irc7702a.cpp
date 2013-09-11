@@ -296,7 +296,10 @@ void Irc7702A::Initialize7702A
     SavedNecPrem    = 0.0;
     UnnecPrem       = 0.0;
     Ax                         = NSPVec[PolicyYear];
-    SavedNSP                   = Ax;
+    SavedNSP                   = NSPVec[duration_of_last_mc];
+    // TAXATION !! Arguably this should equal 'SavedNSP'; OTOH, both
+    // 'SavedNSP' and 'Ax' should probably be shown, for decreases and
+    // material changes respectively.
     state_.B3_deduced_nsp_rate = Ax;
 
     Determine7PP
