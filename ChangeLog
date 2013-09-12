@@ -32554,3 +32554,8 @@ as of last material change date, not inforce reillustration date.
   version.hpp
 Designate release candidate 5767.
 
+20130912T1247Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp [new file]
+Add special commutation functions for GPT.
+
