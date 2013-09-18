@@ -443,7 +443,7 @@ void Irc7702::InitCommFns()
             (Qc
             ,GLPic
             ,glp_naar_disc_rate
-            ,mce_option1
+            ,mce_option1_for_7702
             ,mce_monthly
             )
         );
@@ -454,7 +454,7 @@ void Irc7702::InitCommFns()
             (Qc
             ,GLPic
             ,glp_naar_disc_rate
-            ,mce_option2
+            ,mce_option2_for_7702
             ,mce_monthly
             )
         );
@@ -466,7 +466,7 @@ void Irc7702::InitCommFns()
             (Qc
             ,GSPic
             ,gsp_naar_disc_rate
-            ,mce_option1
+            ,mce_option1_for_7702
             ,mce_monthly
             )
         );

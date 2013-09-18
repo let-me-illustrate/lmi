@@ -32559,3 +32559,13 @@ Designate release candidate 5767.
   gpt_commutation_functions.hpp [new file]
 Add special commutation functions for GPT.
 
+20130918T1250Z <gchicares@sbcglobal.net> [542]
+
+  commutation_functions.cpp
+  commutation_functions.hpp
+  commutation_functions_test.cpp
+  gpt_commutation_functions.hpp
+  ihs_irc7702.cpp
+  mec_server.cpp
+Use 7702-specific DBO enumerations as appropriate.
+

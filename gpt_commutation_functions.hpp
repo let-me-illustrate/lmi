@@ -26,7 +26,7 @@
 
 #include "config.hpp"
 
-#include "oecumenic_enumerations.hpp"   // oenum_dbo_1_or_2
+#include "mc_enum_type_enums.hpp"       // mcenum_dbopt_7702
 
 #include <vector>
 
@@ -67,7 +67,7 @@ struct GPTCommFns
         ,std::vector<double> const& qc
         ,std::vector<double> const& ic
         ,std::vector<double> const& ig
-        ,oenum_dbo_1_or_2    const  dbo
+        ,mcenum_dbopt_7702   const  dbo
         ,std::vector<double> const& prem_load_target
         ,std::vector<double> const& prem_load_excess
         ,std::vector<double> const& policy_fee_monthly
