@@ -214,7 +214,7 @@ mec_state test_one_days_7702A_transactions
         (Mly7702qc
         ,Mly7702iGlp
         ,naar_disc_rate
-        ,mce_option1
+        ,mce_option1_for_7702
         ,mce_monthly
         );
 

@@ -91,7 +91,7 @@ class LMI_SO ULCommFns
         (std::vector<double> const& a_qc
         ,std::vector<double> const& a_ic
         ,std::vector<double> const& a_ig
-        ,mcenum_dbopt               dbo
+        ,mcenum_dbopt_7702          dbo
         ,mcenum_mode                mode
         );
 
@@ -106,13 +106,13 @@ class LMI_SO ULCommFns
     std::vector<double> const&  kM() const {return  km;}
 
   private:
-    std::vector<double>        qc;
-    std::vector<double>        ic;
-    std::vector<double>        ig;
+    std::vector<double> qc;
+    std::vector<double> ic;
+    std::vector<double> ig;
 
     // SOMEDAY !! It would be nice to let dbo_ vary by year.
-    mcenum_dbopt dbo_;
-    mcenum_mode mode_;
+    mcenum_dbopt_7702   dbo_;
+    mcenum_mode         mode_;
 
     int Length;
 

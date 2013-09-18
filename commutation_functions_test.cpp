@@ -81,7 +81,7 @@ void mete_ulcf
     ,std::vector<double> const& ig
     )
 {
-    ULCommFns(q, ic, ig, mce_option1, mce_monthly);
+    ULCommFns(q, ic, ig, mce_option1_for_7702, mce_monthly);
 }
 
 void mete_reserve
@@ -165,13 +165,7 @@ void TestEckleyTable2()
     std::vector<double>ic  (coi.size(), 0.10);
     std::vector<double>ig  (coi.size(), 0.04);
 
-    ULCommFns CF
-        (coi
-        ,ic
-        ,ig
-        ,mce_option1
-        ,mce_annual
-        );
+    ULCommFns CF(coi, ic, ig, mce_option1_for_7702, mce_annual);
 
     std::vector<double> nsp    (coi.size());
     nsp     += (CF.aDomega() + CF.kM()) / CF.aD();
@@ -300,13 +294,7 @@ void TestEckleyTables3and4()
     std::vector<double>ic  (coi.size(), 0.10);
     std::vector<double>ig  (coi.size(), 0.04);
 
-    ULCommFns CF
-        (coi
-        ,ic
-        ,ig
-        ,mce_option2
-        ,mce_annual
-        );
+    ULCommFns CF(coi, ic, ig, mce_option2_for_7702, mce_annual);
 
     std::vector<double> premium(coi.size());
     premium += (2.0 * CF.aDomega() + CF.kM()) / CF.aN();
@@ -397,13 +385,7 @@ void TestEckleyTable5()
     std::vector<double>ic  (coi.size(), i_upper_12_over_12_from_i<double>()(0.10));
     std::vector<double>ig  (coi.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
-    ULCommFns CF
-        (coi
-        ,ic
-        ,ig
-        ,mce_option2
-        ,mce_monthly
-        );
+    ULCommFns CF(coi, ic, ig, mce_option2_for_7702, mce_monthly);
 
     double tolerance = 0.0000005;
     double worst_discrepancy = 0.0;
@@ -667,13 +649,7 @@ void Test_1980_CSO_Male_ANB()
     std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.07));
     std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.03));
 
-    ULCommFns ulcf
-        (q
-        ,ic
-        ,ig
-        ,mce_option2
-        ,mce_monthly
-        );
+    ULCommFns ulcf(q, ic, ig, mce_option2_for_7702, mce_monthly);
 
     double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
     std::vector<double> reserve(q.size());
@@ -757,7 +733,7 @@ void Test_1980_CSO_Male_ANB()
 void TestLimits()
 {
     std::vector<double> zero(10, 0.0);
-    ULCommFns ulcf(zero, zero, zero, mce_option1, mce_monthly);
+    ULCommFns ulcf(zero, zero, zero, mce_option1_for_7702, mce_monthly);
     BOOST_TEST_EQUAL(1.0, ulcf.aDomega());
     BOOST_TEST_EQUAL(0.0, ulcf.kC().back());
 }
