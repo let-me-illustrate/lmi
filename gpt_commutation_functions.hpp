@@ -48,8 +48,8 @@
 ///
 /// QABs are enumerated in 7702(f)(5)(i-iv). The benefit amounts by
 /// which their rates are multiplied are all specified explicitly.
-/// This uniform approach is the most general, and requires little
-/// extra work in the case that the QAB rate is multiplied by the
+/// This uniform approach is the most general, and entails little
+/// duplication in the case that the QAB rate is multiplied by the
 /// specified amount, as frequently occurs with accident and waiver
 /// benefits. A waiver benefit whose charge depends on actual monthly
 /// deductions cannot be treated as a QAB--see section 11/7 here:
