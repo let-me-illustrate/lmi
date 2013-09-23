@@ -30,6 +30,34 @@
 
 #include <vector>
 
+/// Loads, fees, and monthly QAB rates used in GPT calculations.
+///
+/// It is simpler to pass these data around as one "parameter object"
+/// than as separate parameters.
+///
+/// Copying vectors into this struct doesn't cost much. The cost could
+/// be avoided by making them reference members.
+///
+/// Mortality and interest rates could have been included. However,
+/// unlike other parameters, they may need various adjustments--e.g.,
+/// conversion from annual to monthly, subject to some maximum or
+/// minimum.
+
+struct gpt_charges
+{
+    std::vector<double> prem_load_target     ;
+    std::vector<double> prem_load_excess     ;
+    std::vector<double> policy_fee_monthly   ;
+    std::vector<double> policy_fee_annual    ;
+    std::vector<double> specamt_load_monthly ;
+    std::vector<double> qab_rate_gio         ;
+    std::vector<double> qab_rate_adb         ;
+    std::vector<double> qab_rate_term        ;
+    std::vector<double> qab_rate_spouse      ;
+    std::vector<double> qab_rate_child       ;
+    std::vector<double> qab_rate_waiver      ;
+};
+
 /// Commutation functions specialized for GPT calculations.
 ///
 /// See section 14.3 here:
@@ -68,17 +96,7 @@ struct GPTCommFns
         ,std::vector<double> const& ic
         ,std::vector<double> const& ig
         ,mcenum_dbopt_7702   const  dbo
-        ,std::vector<double> const& prem_load_target
-        ,std::vector<double> const& prem_load_excess
-        ,std::vector<double> const& policy_fee_monthly
-        ,std::vector<double> const& policy_fee_annual
-        ,std::vector<double> const& specamt_load_monthly
-        ,std::vector<double> const& qab_rate_gio
-        ,std::vector<double> const& qab_rate_adb
-        ,std::vector<double> const& qab_rate_term
-        ,std::vector<double> const& qab_rate_spouse
-        ,std::vector<double> const& qab_rate_child
-        ,std::vector<double> const& qab_rate_waiver
+        ,gpt_charges         const& charges
         );
     ~GPTCommFns();
 
