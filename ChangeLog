@@ -32569,3 +32569,18 @@ Add special commutation functions for GPT.
   mec_server.cpp
 Use 7702-specific DBO enumerations as appropriate.
 
+20130918T1459Z <gchicares@sbcglobal.net> [542]
+
+  expression_template_0_test.cpp
+Enforce a precondition; improve documentation.
+
+20130923T1329Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Improve documentation.
+
+20130923T2233Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Refactor.
+
