@@ -32584,3 +32584,29 @@ Improve documentation.
   gpt_commutation_functions.hpp
 Refactor.
 
+20130930T2042Z <gchicares@sbcglobal.net> [542]
+
+  mc_enum_types.xpp
+Improve documentation.
+
+20130930T2043Z <gchicares@sbcglobal.net> [542]
+
+  oecumenic_enumerations.hpp
+Add an enumerator for GPT use.
+
+20130930T2044Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Rename classes and members.
+
+20130930T2051Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Improve documentation.
+
+20130930T2119Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp [new file]
+  gpt_commutation_functions.hpp
+Implement special commutation functions for GPT.
+
