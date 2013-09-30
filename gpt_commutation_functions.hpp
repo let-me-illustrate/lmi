@@ -41,7 +41,8 @@
 /// Mortality and interest rates could have been included. However,
 /// unlike other parameters, they may need various adjustments--e.g.,
 /// conversion from annual to monthly, subject to some maximum or
-/// minimum.
+/// minimum--so leaving them out makes const objects of this class
+/// potentially more useful.
 
 struct gpt_vector_parms
 {
@@ -71,8 +72,10 @@ struct gpt_vector_parms
 /// it could be subsumed into M, but it is always multiplied by the
 /// specified amount, whereas M may be multiplied by death benefit.
 ///
-/// Ctor arguments are assumed to include any applicable rating, such
-/// as an occupational extra on an accident benefit.
+/// Vector parameters run from issue age through the 7702(e)(1)(B)
+/// maturity age (thus, neither issue nor maturity age is needed).
+/// They are assumed to include any applicable rating, such as an
+/// occupational extra on an accident benefit.
 ///
 /// QABs are enumerated in 7702(f)(5)(i-iv). The benefit amounts by
 /// which their rates are multiplied are all specified explicitly.
