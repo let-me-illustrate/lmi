@@ -43,19 +43,19 @@
 /// conversion from annual to monthly, subject to some maximum or
 /// minimum.
 
-struct gpt_charges
+struct gpt_vector_parms
 {
     std::vector<double> prem_load_target     ;
     std::vector<double> prem_load_excess     ;
     std::vector<double> policy_fee_monthly   ;
     std::vector<double> policy_fee_annual    ;
     std::vector<double> specamt_load_monthly ;
-    std::vector<double> qab_rate_gio         ;
-    std::vector<double> qab_rate_adb         ;
-    std::vector<double> qab_rate_term        ;
-    std::vector<double> qab_rate_spouse      ;
-    std::vector<double> qab_rate_child       ;
-    std::vector<double> qab_rate_waiver      ;
+    std::vector<double> qab_gio_rate         ;
+    std::vector<double> qab_adb_rate         ;
+    std::vector<double> qab_term_rate        ;
+    std::vector<double> qab_spouse_rate      ;
+    std::vector<double> qab_child_rate       ;
+    std::vector<double> qab_waiver_rate      ;
 };
 
 /// Commutation functions specialized for GPT calculations.
@@ -88,17 +88,17 @@ struct gpt_charges
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-struct GPTCommFns
+class gpt_commfns
 {
-    GPTCommFns
+    gpt_commfns
         (unsigned int        const  length
         ,std::vector<double> const& qc
         ,std::vector<double> const& ic
         ,std::vector<double> const& ig
         ,mcenum_dbopt_7702   const  dbo
-        ,gpt_charges         const& charges
+        ,gpt_vector_parms    const& charges
         );
-    ~GPTCommFns();
+    ~gpt_commfns();
 
     std::vector<double> M_;
     double              D_endt_;
