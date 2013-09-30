@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"       // mcenum_dbopt_7702
+#include "oecumenic_enumerations.hpp"   // oenum_glp_or_gsp
 
 #include <vector>
 
@@ -59,7 +60,38 @@ struct gpt_vector_parms
     std::vector<double> qab_waiver_rate      ;
 };
 
+/// Arguments used identically for calculating both GLP and GSP.
+///
+/// The 'oenum_glp_or_gsp' argument is excluded here because it
+/// differs between GLP and GSP. The 'mcenum_dbopt_7702' argument
+/// is excluded here because it's irrelevant for GSP.
+///
+/// 'chg_sa_amt' is the base for any specified-amount load. It may
+/// differ from 'specamt', e.g., by being limited to a scalar maximum,
+/// by including a term amount, or by being set immutably at issue.
+
+struct gpt_scalar_parms
+{
+    int    duration       ;
+    double target         ;
+    double f3bft          ;
+    double endt_bft       ;
+    double chg_sa_amt     ;
+    double qab_gio_amt    ;
+    double qab_adb_amt    ;
+    double qab_term_amt   ;
+    double qab_spouse_amt ;
+    double qab_child_amt  ;
+    double qab_waiver_amt ;
+};
+
 /// Commutation functions specialized for GPT calculations.
+///
+/// All members are private: only its one friend can use this class.
+/// It could have been written as a nested class enclosed in that
+/// friend, but that would have given it access to the friend's
+/// private members, without protecting it better against accidental
+/// (mis)use.
 ///
 /// See section 14.3 here:
 ///   http://www.nongnu.org/lmi/7702.html
@@ -89,13 +121,18 @@ struct gpt_vector_parms
 /// any QAB that is not offered or not elected, or that the insurer
 /// chooses not to treat as a QAB.
 ///
+/// Data member 'length_' is a dispensable convenience that makes
+/// initialization and precondition checks a little clearer.
+///
 /// Implicitly-declared special member functions do the right thing.
 
 class gpt_commfns
 {
+    friend class gpt_cf_triad;
+
+  private:
     gpt_commfns
-        (unsigned int        const  length
-        ,std::vector<double> const& qc
+        (std::vector<double> const& qc
         ,std::vector<double> const& ic
         ,std::vector<double> const& ig
         ,mcenum_dbopt_7702   const  dbo
@@ -103,6 +140,9 @@ class gpt_commfns
         );
     ~gpt_commfns();
 
+    double calculate_premium(oenum_glp_or_gsp, gpt_scalar_parms const&) const;
+
+    unsigned int const  length_;
     std::vector<double> M_;
     double              D_endt_;
     std::vector<double> D_net_tgt_;
@@ -117,6 +157,35 @@ class gpt_commfns
     std::vector<double> N_qab_spouse_;
     std::vector<double> N_qab_child_;
     std::vector<double> N_qab_waiver_;
+};
+
+/// Specialized GPT commutation functions on the three required bases.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+class gpt_cf_triad
+{
+  public:
+    gpt_cf_triad
+        (std::vector<double> const& qc
+        ,std::vector<double> const& glp_ic
+        ,std::vector<double> const& glp_ig
+        ,std::vector<double> const& gsp_ic
+        ,std::vector<double> const& gsp_ig
+        ,gpt_vector_parms    const& charges
+        );
+    ~gpt_cf_triad();
+
+    double calculate_premium
+        (oenum_glp_or_gsp
+        ,mcenum_dbopt_7702
+        ,gpt_scalar_parms const&
+        ) const;
+
+  private:
+    gpt_commfns cf_glp_dbo_1;
+    gpt_commfns cf_glp_dbo_2;
+    gpt_commfns cf_gsp;
 };
 
 #endif // gpt_commutation_functions_hpp
