@@ -44,6 +44,15 @@
 /// conversion from annual to monthly, subject to some maximum or
 /// minimum--so leaving them out makes const objects of this class
 /// potentially more useful.
+///
+/// Vector parameters run from issue age through the 7702(e)(1)(B)
+/// maturity age (thus, neither issue nor maturity age is needed).
+/// They are assumed to include any applicable rating, such as an
+/// occupational extra on an accident benefit.
+///
+/// Term rates on the main insured ('qab_term_rate') apply only to
+/// coverage not treated as "death benefit"; decreasing term is
+/// treated here as level.
 
 struct gpt_vector_parms
 {
@@ -160,6 +169,10 @@ class gpt_commfns
 };
 
 /// Specialized GPT commutation functions on the three required bases.
+///
+/// '*_ig' (monthly effective death-benefit discount rate for NAAR) is
+/// distinct for GLP and GSP. Often it is the monthly equivalent of
+/// four and six percent, respectively.
 ///
 /// Implicitly-declared special member functions do the right thing.
 

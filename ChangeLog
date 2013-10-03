@@ -32610,3 +32610,9 @@ Improve documentation.
   gpt_commutation_functions.hpp
 Implement special commutation functions for GPT.
 
+20131003T0807Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+  gpt_commutation_functions.hpp
+Improve documentation.
+
