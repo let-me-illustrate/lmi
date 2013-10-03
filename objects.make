@@ -467,6 +467,7 @@ unit_test_targets := \
   financial_test \
   getopt_test \
   global_settings_test \
+  gpt_test \
   handle_exceptions_test \
   ieee754_test \
   input_seq_test \
@@ -653,6 +654,14 @@ global_settings_test$(EXEEXT): \
   global_settings_test.o \
   miscellany.o \
   path_utility.o \
+
+gpt_test$(EXEEXT): \
+  $(common_test_objects) \
+  commutation_functions.o \
+  expm1.o \
+  gpt_commutation_functions.o \
+  gpt_test.o \
+  timer.o \
 
 handle_exceptions_test$(EXEEXT): \
   $(common_test_objects) \
