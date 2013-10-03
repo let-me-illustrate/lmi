@@ -62,6 +62,10 @@ std::vector<T>& back_sum(std::vector<T>& vt, E e)
 /// effect belong upstream; however, writing them in the body of
 /// gpt_cf_triad::gpt_cf_triad() would cause them to be executed
 /// after the present ctor is called.
+///
+/// We are aware of one old UL policy form that accumulates values
+/// quarterly instead of monthly. This could be accommodated by adding
+/// an extra parameter, but doesn't seem worth the trouble.
 
 gpt_commfns::gpt_commfns
     (std::vector<double> const& qc
@@ -173,7 +177,14 @@ gpt_cf_triad::~gpt_cf_triad()
 
 /// Calculate GLP or GSP.
 ///
-/// For GSP, 'dbo' is disregarded.
+/// For GSP, 'dbo' is disregarded because it is irrelevant. That
+/// argument might instead have been written last and defaulted for
+/// calls that calculate GSP, but that's needlessly complicated.
+/// Alternatively, distinct functions might have been provided for
+/// GLP and GSP calculations, but that's not worth the bother; or
+/// a single function might calculate and return a {GLP,GSP} pair,
+/// but then sometimes one would need to be thrown away (as when
+/// specified amount is determined by a GLP or GSP strategy).
 
 double gpt_cf_triad::calculate_premium
     (oenum_glp_or_gsp        glp_or_gsp
