@@ -36,8 +36,10 @@
 /// It is simpler to pass these data around as one "parameter object"
 /// than as separate parameters.
 ///
-/// Copying vectors into this struct doesn't cost much. The cost could
-/// be avoided by making them reference members.
+/// Copying vectors into this struct costs about four percent as much
+/// as constructing a gpt_cf_triad object (as the unit test shows).
+/// That cost could be avoided by making vector members references,
+/// but some flexibility and robustness would be lost.
 ///
 /// Mortality and interest rates could have been included. However,
 /// unlike other parameters, they may need various adjustments--e.g.,
