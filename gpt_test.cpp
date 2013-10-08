@@ -29,7 +29,6 @@
 #include "gpt_commutation_functions.hpp"
 
 #include "math_functors.hpp"
-#include "miscellany.hpp"               // stifle_warning_for_unused_value()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -68,6 +67,8 @@ std::vector<double> const& sample_q(int age)
 }
 } // Unnamed namespace.
 
+/// Implicitly-declared special member functions do the right thing.
+
 class gpt_test
 {
   public:
@@ -86,11 +87,10 @@ void gpt_test::test_premium_calculations()
 {
 }
 
-void mete_gpt_vector_parms()
+gpt_vector_parms v_parms()
 {
     static std::vector<double> zero(sample_q(0).size(), 0.0);
-    // This is not static: its construction speed is being measured.
-    volatile gpt_vector_parms z =
+    gpt_vector_parms z =
         {zero // prem_load_target
         ,zero // prem_load_excess
         ,zero // policy_fee_monthly
@@ -103,38 +103,26 @@ void mete_gpt_vector_parms()
         ,zero // qab_child_rate
         ,zero // qab_waiver_rate
         };
-    stifle_warning_for_unused_value(z);
+    return z;
 }
 
-void mete_gpt_cf_triad()
+/// Instantiate GPT commutation functions.
+
+gpt_cf_triad instantiate_cf()
 {
     static std::vector<double> zero(sample_q(0).size(), 0.0);
-    static gpt_vector_parms parms =
-        {zero // prem_load_target
-        ,zero // prem_load_excess
-        ,zero // policy_fee_monthly
-        ,zero // policy_fee_annual
-        ,zero // specamt_load_monthly
-        ,zero // qab_gio_rate
-        ,zero // qab_adb_rate
-        ,zero // qab_term_rate
-        ,zero // qab_spouse_rate
-        ,zero // qab_child_rate
-        ,zero // qab_waiver_rate
-        };
     static unsigned int length = sample_q(0).size();
     static std::vector<double> ic(length, i_upper_12_over_12_from_i<double>()(0.07));
     static std::vector<double> ig(length, i_upper_12_over_12_from_i<double>()(0.07));
-    volatile gpt_cf_triad z(sample_q(0), ic, ig, ic, ig, parms);
-    stifle_warning_for_unused_value(z);
+    return gpt_cf_triad(sample_q(0), ic, ig, ic, ig, v_parms());
 }
 
 void gpt_test::assay_speed()
 {
     std::cout
         << "\n  Speed tests..."
-        << "\n  Init parms: " << TimeAnAliquot(mete_gpt_vector_parms)
-        << "\n  Triad     : " << TimeAnAliquot(mete_gpt_cf_triad    )
+        << "\n  Init parms: " << TimeAnAliquot(v_parms             )
+        << "\n  Triad     : " << TimeAnAliquot(instantiate_cf      )
         << std::endl
         ;
 }
