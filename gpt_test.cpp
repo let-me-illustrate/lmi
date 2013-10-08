@@ -86,6 +86,26 @@ void gpt_test::test_premium_calculations()
 {
 }
 
+void mete_gpt_vector_parms()
+{
+    static std::vector<double> zero(sample_q(0).size(), 0.0);
+    // This is not static: its construction speed is being measured.
+    volatile gpt_vector_parms z =
+        {zero // prem_load_target
+        ,zero // prem_load_excess
+        ,zero // policy_fee_monthly
+        ,zero // policy_fee_annual
+        ,zero // specamt_load_monthly
+        ,zero // qab_gio_rate
+        ,zero // qab_adb_rate
+        ,zero // qab_term_rate
+        ,zero // qab_spouse_rate
+        ,zero // qab_child_rate
+        ,zero // qab_waiver_rate
+        };
+    stifle_warning_for_unused_value(z);
+}
+
 void mete_gpt_cf_triad()
 {
     static std::vector<double> zero(sample_q(0).size(), 0.0);
@@ -109,32 +129,12 @@ void mete_gpt_cf_triad()
     stifle_warning_for_unused_value(z);
 }
 
-void mete_gpt_vector_parms()
-{
-    static std::vector<double> zero(sample_q(0).size(), 0.0);
-    // This is not static: its construction speed is being measured.
-    volatile gpt_vector_parms z =
-        {zero // prem_load_target
-        ,zero // prem_load_excess
-        ,zero // policy_fee_monthly
-        ,zero // policy_fee_annual
-        ,zero // specamt_load_monthly
-        ,zero // qab_gio_rate
-        ,zero // qab_adb_rate
-        ,zero // qab_term_rate
-        ,zero // qab_spouse_rate
-        ,zero // qab_child_rate
-        ,zero // qab_waiver_rate
-        };
-    stifle_warning_for_unused_value(z);
-}
-
 void gpt_test::assay_speed()
 {
     std::cout
         << "\n  Speed tests..."
-        << "\n  Commfns   : " << TimeAnAliquot(mete_gpt_cf_triad    )
         << "\n  Init parms: " << TimeAnAliquot(mete_gpt_vector_parms)
+        << "\n  Triad     : " << TimeAnAliquot(mete_gpt_cf_triad    )
         << std::endl
         ;
 }
