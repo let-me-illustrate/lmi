@@ -83,10 +83,6 @@ class gpt_test
     static void assay_speed();
 };
 
-void gpt_test::test_premium_calculations()
-{
-}
-
 gpt_vector_parms v_parms()
 {
     static std::vector<double> zero(sample_q(0).size(), 0.0);
@@ -115,6 +111,10 @@ gpt_cf_triad instantiate_cf()
     static std::vector<double> ic(length, i_upper_12_over_12_from_i<double>()(0.07));
     static std::vector<double> ig(length, i_upper_12_over_12_from_i<double>()(0.07));
     return gpt_cf_triad(sample_q(0), ic, ig, ic, ig, v_parms());
+}
+
+void gpt_test::test_premium_calculations()
+{
 }
 
 void gpt_test::assay_speed()
