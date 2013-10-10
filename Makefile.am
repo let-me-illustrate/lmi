@@ -628,6 +628,7 @@ test_gpt_SOURCES = \
   expm1.c \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
+  ihs_irc7702.cpp \
   timer.cpp
 test_gpt_CXXFLAGS = $(AM_CXXFLAGS)
 

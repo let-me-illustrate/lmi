@@ -32616,3 +32616,56 @@ Implement special commutation functions for GPT.
   gpt_commutation_functions.hpp
 Improve documentation.
 
+20131003T2105Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp [new file]
+  objects.make
+Add GPT unit tests.
+
+20131003T2302Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Improve documentation.
+
+20131008T2211Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Rearrange.
+
+20131008T2224Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Refactor to facilitate reuse.
+
+20131009T2229Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Rearrange.
+
+20131010T0017Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Refactor for flexibility.
+
+20131010T1042Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+List all "headers".
+
+20131010T1121Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+Refactor for concinnity with 'objects.make'.
+
+20131010T1211Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+Add numerous missing pieces.
+
+20131010T2257Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  gpt_test.cpp
+  objects.make
+Augment unit tests.
+
