@@ -661,6 +661,7 @@ gpt_test$(EXEEXT): \
   expm1.o \
   gpt_commutation_functions.o \
   gpt_test.o \
+  ihs_irc7702.o \
   timer.o \
 
 handle_exceptions_test$(EXEEXT): \
