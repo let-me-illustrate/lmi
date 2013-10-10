@@ -994,6 +994,7 @@ noinst_HEADERS = \
     fund_data.hpp \
     getopt.hpp \
     global_settings.hpp \
+    gpt_commutation_functions.hpp \
     gpt_specamt.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
@@ -1094,6 +1095,7 @@ noinst_HEADERS = \
     single_cell_document.hpp \
     single_choice_popup_menu.hpp \
     so_attributes.hpp \
+    soa_helpers.hpp \
     stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \
@@ -1115,6 +1117,7 @@ noinst_HEADERS = \
     tn_range_type_trammels.hpp \
     tn_range_types.hpp \
     transferor.hpp \
+    uncopyable_lmi.hpp \
     value_cast.hpp \
     version.hpp \
     view_ex.hpp \
