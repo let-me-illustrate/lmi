@@ -28,9 +28,12 @@
 
 #include "gpt_commutation_functions.hpp"
 
+#include "assert_lmi.hpp"
 #include "math_functors.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
+
+#include <vector>
 
 namespace
 {
@@ -48,6 +51,7 @@ std::vector<double> a_to_m(std::vector<double> const& q_a)
 std::vector<double> const& sample_q(int age)
 {
     static int const n = 100;
+    LMI_ASSERT(0 <= age && age < n);
     static double const q[n] =
         //     0        1        2        3        4        5        6        7        8        9
         {0.00418, 0.00107, 0.00099, 0.00098, 0.00095, 0.00090, 0.00086, 0.00080, 0.00076, 0.00074 // 00
@@ -65,6 +69,27 @@ std::vector<double> const& sample_q(int age)
     static std::vector<double> const q_m(a_to_m(q_a));
     return q_m;
 }
+
+// These could be made static members of class gpt_test, but this way
+// is more convenient; see also:
+//   https://www.securecoding.cert.org/confluence/display/cplusplus/MSC22-CPP.+Do+not+define+static+private+members
+
+std::vector<double> q_m                  ;
+std::vector<double> glp_ic               ;
+std::vector<double> glp_ig               ;
+std::vector<double> gsp_ic               ;
+std::vector<double> gsp_ig               ;
+std::vector<double> prem_load_target     ;
+std::vector<double> prem_load_excess     ;
+std::vector<double> policy_fee_monthly   ;
+std::vector<double> policy_fee_annual    ;
+std::vector<double> specamt_load_monthly ;
+std::vector<double> qab_gio_rate         ;
+std::vector<double> qab_adb_rate         ;
+std::vector<double> qab_term_rate        ;
+std::vector<double> qab_spouse_rate      ;
+std::vector<double> qab_child_rate       ;
+std::vector<double> qab_waiver_rate      ;
 } // Unnamed namespace.
 
 /// Implicitly-declared special member functions do the right thing.
@@ -81,36 +106,85 @@ class gpt_test
   private:
     static void test_premium_calculations();
     static void assay_speed();
+
+    static void initialize(int issue_age);
+    static gpt_vector_parms v_parms();
+    static gpt_cf_triad instantiate_cf();
 };
 
-gpt_vector_parms v_parms()
+/// Initialize GPT vector parameters.
+///
+/// Loads and charges are initialized with decimal-power multiples of
+/// distinct primes, to make it easier to track down any discrepancy.
+///
+/// In order to expose problems that uniform values would mask, each
+/// vector's first element is altered if necessary.
+
+void gpt_test::initialize(int issue_age)
 {
-    static std::vector<double> zero(sample_q(0).size(), 0.0);
+    static double const i_m_4 = i_upper_12_over_12_from_i<double>()(0.04);
+    static double const i_m_6 = i_upper_12_over_12_from_i<double>()(0.06);
+    q_m = sample_q(issue_age);
+    int const length = q_m.size();
+    glp_ic               .assign(length,   i_m_4);
+    glp_ig               .assign(length,   i_m_4);
+    gsp_ic               .assign(length,   i_m_6);
+    gsp_ig               .assign(length,   i_m_6);
+    prem_load_target     .assign(length,  0.03  );
+    prem_load_excess     .assign(length,  0.02  );
+    policy_fee_monthly   .assign(length,  5.0   );
+    policy_fee_annual    .assign(length, 37.0   );
+    specamt_load_monthly .assign(length,  0.0007);
+    qab_gio_rate         .assign(length,  0.0011);
+    qab_adb_rate         .assign(length,  0.0013);
+    qab_term_rate        .assign(length,  0.0017);
+    qab_spouse_rate      .assign(length,  0.0019);
+    qab_child_rate       .assign(length,  0.0023);
+    qab_waiver_rate      .assign(length,  0.0029);
+
+    LMI_ASSERT(0 < length);
+    glp_ic               [0] *= 1.01;
+    glp_ig               [0] *= 1.01;
+    gsp_ic               [0] *= 1.01;
+    gsp_ig               [0] *= 1.01;
+    prem_load_target     [0] *= 1.01;
+    prem_load_excess     [0] *= 1.01;
+    policy_fee_monthly   [0] *= 1.01;
+    policy_fee_annual    [0] *= 1.01;
+    specamt_load_monthly [0] *= 1.01;
+    qab_gio_rate         [0] *= 1.01;
+    qab_adb_rate         [0] *= 1.01;
+    qab_term_rate        [0] *= 1.01;
+    qab_spouse_rate      [0] *= 1.01;
+    qab_child_rate       [0] *= 1.01;
+    qab_waiver_rate      [0] *= 1.01;
+}
+
+/// Instantiate vector parameters from globals set by initialize().
+
+gpt_vector_parms gpt_test::v_parms()
+{
     gpt_vector_parms z =
-        {zero // prem_load_target
-        ,zero // prem_load_excess
-        ,zero // policy_fee_monthly
-        ,zero // policy_fee_annual
-        ,zero // specamt_load_monthly
-        ,zero // qab_gio_rate
-        ,zero // qab_adb_rate
-        ,zero // qab_term_rate
-        ,zero // qab_spouse_rate
-        ,zero // qab_child_rate
-        ,zero // qab_waiver_rate
+        {prem_load_target
+        ,prem_load_excess
+        ,policy_fee_monthly
+        ,policy_fee_annual
+        ,specamt_load_monthly
+        ,qab_gio_rate
+        ,qab_adb_rate
+        ,qab_term_rate
+        ,qab_spouse_rate
+        ,qab_child_rate
+        ,qab_waiver_rate
         };
     return z;
 }
 
 /// Instantiate GPT commutation functions.
 
-gpt_cf_triad instantiate_cf()
+gpt_cf_triad gpt_test::instantiate_cf()
 {
-    static std::vector<double> zero(sample_q(0).size(), 0.0);
-    static unsigned int length = sample_q(0).size();
-    static std::vector<double> ic(length, i_upper_12_over_12_from_i<double>()(0.07));
-    static std::vector<double> ig(length, i_upper_12_over_12_from_i<double>()(0.07));
-    return gpt_cf_triad(sample_q(0), ic, ig, ic, ig, v_parms());
+    return gpt_cf_triad(q_m, glp_ic, glp_ig, gsp_ic, gsp_ig, v_parms());
 }
 
 void gpt_test::test_premium_calculations()
@@ -119,6 +193,7 @@ void gpt_test::test_premium_calculations()
 
 void gpt_test::assay_speed()
 {
+    initialize(0);
     std::cout
         << "\n  Speed tests..."
         << "\n  Init parms: " << TimeAnAliquot(v_parms             )
