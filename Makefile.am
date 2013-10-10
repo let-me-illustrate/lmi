@@ -465,8 +465,7 @@ common_test_objects = \
     alert_cli.cpp \
     fenv_lmi.cpp \
     getopt.cpp \
-    license.cpp \
-    timer.cpp
+    license.cpp
 
 test_account_value_SOURCES = \
   $(common_test_objects) \
@@ -476,7 +475,8 @@ test_account_value_CXXFLAGS = $(AM_CXXFLAGS)
 test_actuarial_table_SOURCES = \
   $(common_test_objects) \
   actuarial_table.cpp \
-  actuarial_table_test.cpp
+  actuarial_table_test.cpp \
+  timer.cpp
 test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
 test_actuarial_table_LDADD = \
   $(BOOST_LIBS)
@@ -517,7 +517,8 @@ test_calendar_date_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
   calendar_date_test.cpp \
-  null_stream.cpp
+  null_stream.cpp \
+  timer.cpp
 test_calendar_date_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_callback_SOURCES = \
@@ -533,7 +534,8 @@ test_comma_punct_CXXFLAGS = $(AM_CXXFLAGS)
 test_commutation_functions_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
-  commutation_functions_test.cpp
+  commutation_functions_test.cpp \
+  timer.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_configurable_settings_SOURCES = \
@@ -567,7 +569,8 @@ test_crc32_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_expression_template_0_SOURCES = \
   $(common_test_objects) \
-  expression_template_0_test.cpp
+  expression_template_0_test.cpp \
+  timer.cpp
 test_expression_template_0_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_fenv_lmi_SOURCES = \
@@ -587,7 +590,8 @@ test_financial_SOURCES = \
   $(common_test_objects) \
   financial_test.cpp \
   null_stream.cpp \
-  stratified_algorithms.cpp
+  stratified_algorithms.cpp \
+  timer.cpp
 test_financial_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_global_settings_SOURCES = \
@@ -651,6 +655,7 @@ test_input_SOURCES = \
   premium_tax.cpp \
   product_names.cpp \
   single_cell_document.cpp \
+  timer.cpp \
   tn_range_types.cpp \
   xml_lmi.cpp \
   yare_input.cpp
@@ -672,14 +677,16 @@ test_irc7702a_LDADD = \
 
 test_istream_to_string_SOURCES = \
   $(common_test_objects) \
-  istream_to_string_test.cpp
+  istream_to_string_test.cpp \
+  timer.cpp
 test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_loads_SOURCES = \
   $(common_test_objects) \
+  expm1.c \
   loads.cpp \
   loads_test.cpp \
-  expm1.c
+  timer.cpp
 test_loads_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_map_lookup_SOURCES = \
@@ -694,7 +701,8 @@ test_materially_equal_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_math_functors_SOURCES = \
   $(common_test_objects) \
-  math_functors_test.cpp
+  math_functors_test.cpp \
+  timer.cpp
 test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_mc_enum_SOURCES = \
@@ -743,12 +751,14 @@ test_ncnnnpnn_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_numeric_io_SOURCES = \
   $(common_test_objects) \
-  numeric_io_test.cpp
+  numeric_io_test.cpp \
+  timer.cpp
 test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_obstruct_slicing_SOURCES = \
   $(common_test_objects) \
-  obstruct_slicing_test.cpp
+  obstruct_slicing_test.cpp \
+  timer.cpp
 test_obstruct_slicing_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_path_utility_SOURCES = \
@@ -821,6 +831,7 @@ test_product_file_SOURCES = \
   product_file_test.cpp \
   rounding_rules.cpp \
   stratified_charges.cpp \
+  timer.cpp \
   xml_lmi.cpp
 test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
 test_product_file_LDADD = \
@@ -892,6 +903,7 @@ test_test_tools_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_timer_SOURCES = \
   $(common_test_objects) \
+  timer.cpp \
   timer_test.cpp
 test_timer_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -911,6 +923,7 @@ test_value_cast_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_vector_SOURCES = \
   $(common_test_objects) \
+  timer.cpp \
   vector_test.cpp
 test_vector_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -922,6 +935,7 @@ test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
 test_xml_serialize_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  timer.cpp \
   xml_lmi.cpp \
   xml_serialize_test.cpp
 test_xml_serialize_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
