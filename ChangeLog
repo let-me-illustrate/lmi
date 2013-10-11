@@ -32669,3 +32669,9 @@ Add numerous missing pieces.
   objects.make
 Augment unit tests.
 
+20131011T1213Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Measure speed of guideline premium calculations. Clearly the new
+implementation takes far too much longer than the old.
+
