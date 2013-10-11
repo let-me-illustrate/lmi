@@ -114,7 +114,9 @@ class gpt_test
     static gpt_cf_triad instantiate_cf();
     static Irc7702& instantiate_old(int issue_age);
     static void compare_premiums(int issue_age, double target);
+    static void mete_premiums();
     static void mete_instantiate_old();
+    static void mete_premiums_old();
 };
 
 /// Initialize GPT vector parameters.
@@ -228,7 +230,8 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
             ,1000000000.0                    // a_ADDLimit [in effect, no limit]
             ,prem_load_target                // a_LoadTgt
             ,prem_load_excess                // a_LoadExc
-            ,0.0                             // a_TargetPremium [ignored here]
+            // Plausible low default target (overridden by compare_premiums()):
+            ,1000.0                          // a_TargetPremium
             ,round_to<double>(2, r_upward)   // a_round_min_premium
             ,round_to<double>(2, r_downward) // a_round_max_premium
             ,round_to<double>(0, r_upward)   // a_round_min_specamt
@@ -333,6 +336,27 @@ void gpt_test::test_premium_calculations()
         }
 }
 
+void gpt_test::mete_premiums()
+{
+    static gpt_scalar_parms const parms =
+        {     0   // duration
+        ,  1000.0 // target
+        ,120000.0 // f3bft
+        ,100000.0 // endt_bft
+        ,100000.0 // chg_sa_amt
+        ,     0.0 // qab_gio_amt
+        ,100000.0 // qab_adb_amt
+        ,     0.0 // qab_term_amt
+        ,     0.0 // qab_spouse_amt
+        ,     0.0 // qab_child_amt
+        ,     0.0 // qab_waiver_amt
+        };
+    static gpt_cf_triad const z = instantiate_cf();
+    z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
+    z.calculate_premium(oe_glp, mce_option1_for_7702, parms);
+    z.calculate_premium(oe_glp, mce_option2_for_7702, parms);
+}
+
 /// Measure instantiation speed of old GPT class.
 ///
 /// This simple pass-through function could have been written inline
@@ -343,6 +367,17 @@ void gpt_test::mete_instantiate_old()
     instantiate_old(0);
 }
 
+void gpt_test::mete_premiums_old()
+{
+    static int    const duration =      0  ;
+    static double const f3bft    = 120000.0;
+    static double const endt_bft = 100000.0;
+    static Irc7702 const& z = instantiate_old(duration);
+    z.CalculateGSP(duration, f3bft, endt_bft, endt_bft                      );
+    z.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option1_for_7702);
+    z.CalculateGLP(duration, f3bft, endt_bft, endt_bft, mce_option2_for_7702);
+}
+
 void gpt_test::assay_speed()
 {
     initialize(0);
@@ -350,8 +385,10 @@ void gpt_test::assay_speed()
         << "\n  Speed tests..."
         << "\n  Init parms: " << TimeAnAliquot(v_parms             )
         << "\n  Triad     : " << TimeAnAliquot(instantiate_cf      )
+        << "\n  Prems     : " << TimeAnAliquot(mete_premiums       )
 #if !defined LMI_COMO_WITH_MINGW
         << "\n  Triad old : " << TimeAnAliquot(mete_instantiate_old)
+        << "\n  Prems old : " << TimeAnAliquot(mete_premiums_old   )
 #endif // !defined LMI_COMO_WITH_MINGW
         << std::endl
         ;
