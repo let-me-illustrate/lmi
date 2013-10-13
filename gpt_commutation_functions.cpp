@@ -185,6 +185,12 @@ gpt_cf_triad::~gpt_cf_triad()
 /// a single function might calculate and return a {GLP,GSP} pair,
 /// but then sometimes one would need to be thrown away (as when
 /// specified amount is determined by a GLP or GSP strategy).
+///
+/// It would seem more natural to use a reference as in revision 5778,
+/// instead of a pointer. However, that alternative is more than an
+/// order of magnitude slower with both gcc-3.4.5 and como-4.3.10.1,
+/// as though they invoke the gpt_commfns copy ctor due to the throw-
+/// expression in the conditional-expression.
 
 double gpt_cf_triad::calculate_premium
     (oenum_glp_or_gsp        glp_or_gsp
@@ -192,12 +198,13 @@ double gpt_cf_triad::calculate_premium
     ,gpt_scalar_parms const& args
     ) const
 {
-    gpt_commfns const& cf =
-          (oe_glp == glp_or_gsp && mce_option1_for_7702 == dbo) ? cf_glp_dbo_1
-        : (oe_glp == glp_or_gsp && mce_option2_for_7702 == dbo) ? cf_glp_dbo_2
-        : (oe_gsp == glp_or_gsp                               ) ? cf_gsp
+    gpt_commfns const*const pcf =
+          (oe_glp == glp_or_gsp && mce_option1_for_7702 == dbo) ? &cf_glp_dbo_1
+        : (oe_glp == glp_or_gsp && mce_option2_for_7702 == dbo) ? &cf_glp_dbo_2
+        : (oe_gsp == glp_or_gsp                               ) ? &cf_gsp
         : throw std::runtime_error("Cannot determine GPT assumptions.")
         ;
-    return cf.calculate_premium(glp_or_gsp, args);
+    LMI_ASSERT(0 != pcf); // Redundant: demonstrably cannot fail.
+    return pcf->calculate_premium(glp_or_gsp, args);
 }
 
