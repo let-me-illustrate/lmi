@@ -32675,3 +32675,19 @@ Augment unit tests.
 Measure speed of guideline premium calculations. Clearly the new
 implementation takes far too much longer than the old.
 
+20131013T1537Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+Resolve issue noted 20131011T1213Z.
+
+20131015T0916Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Test untrapped precondition failures.
+
+20131015T1113Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+  gpt_commutation_functions.cpp
+Assert more preconditions.
+

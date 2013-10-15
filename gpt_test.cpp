@@ -216,13 +216,18 @@ void gpt_test::test_invariants()
     gpt_cf_triad const z = instantiate_cf();
 
     parms.duration = -1;
-    double const x0 = z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
+    BOOST_TEST_THROW
+        (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
+        ,std::runtime_error
+        ,""
+        );
 
     parms.duration = q_m.size();
-    double const x1 = z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
-
-    // Values are bogus, if this line is even reached:
-    std::cout << x0 << ' ' << x1 << std::endl;
+    BOOST_TEST_THROW
+        (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
+        ,std::runtime_error
+        ,""
+        );
 }
 
 /// The obsolescent GPT class more or less requires this ugliness.
