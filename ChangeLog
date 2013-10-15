@@ -32691,3 +32691,14 @@ Test untrapped precondition failures.
   gpt_commutation_functions.cpp
 Assert more preconditions.
 
+20131015T1132Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+  gpt_commutation_functions.hpp
+Move assertions to improve speed.
+
+20131015T1338Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+Refactor for clarity and speed.
+

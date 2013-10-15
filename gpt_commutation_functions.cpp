@@ -148,28 +148,28 @@ double gpt_commfns::calculate_premium
     ,gpt_scalar_parms const& args
     ) const
 {
-    double endowment = D_endt_ * args.endt_bft;
-    double charges =
-          M_           [args.duration] * args.f3bft
-        + N_chg_pol_   [args.duration]
-        + N_chg_sa_    [args.duration] * args.chg_sa_amt
-        + N_qab_gio_   [args.duration] * args.qab_gio_amt
-        + N_qab_adb_   [args.duration] * args.qab_adb_amt
-        + N_qab_term_  [args.duration] * args.qab_term_amt
-        + N_qab_spouse_[args.duration] * args.qab_spouse_amt
-        + N_qab_child_ [args.duration] * args.qab_child_amt
-        + N_qab_waiver_[args.duration] * args.qab_waiver_amt
+    int const j = args.duration;
+    double numerator =
+          D_endt_          * args.endt_bft
+        + M_           [j] * args.f3bft
+        + N_chg_pol_   [j]
+        + N_chg_sa_    [j] * args.chg_sa_amt
+        + N_qab_gio_   [j] * args.qab_gio_amt
+        + N_qab_adb_   [j] * args.qab_adb_amt
+        + N_qab_term_  [j] * args.qab_term_amt
+        + N_qab_spouse_[j] * args.qab_spouse_amt
+        + N_qab_child_ [j] * args.qab_child_amt
+        + N_qab_waiver_[j] * args.qab_waiver_amt
         ;
-    double den_tgt = (glp_or_gsp ? D_net_tgt_ : N_net_tgt_)[args.duration];
-    double den_exc = (glp_or_gsp ? D_net_exc_ : N_net_exc_)[args.duration];
-    double z = (endowment + charges) / den_tgt;
+    double denom_tgt = glp_or_gsp ? D_net_tgt_[j] : N_net_tgt_[j];
+    double z = numerator / denom_tgt;
     if(z <= args.target)
         {
         return z;
         }
 
-    charges += args.target * (den_exc - den_tgt);
-    return (endowment + charges) / den_exc;
+    double denom_exc = glp_or_gsp ? D_net_exc_[j] : N_net_exc_[j];
+    return (numerator + args.target * (denom_exc - denom_tgt)) / denom_exc;
 }
 
 gpt_cf_triad::gpt_cf_triad
