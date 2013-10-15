@@ -140,12 +140,6 @@ gpt_commfns::~gpt_commfns()
 
 /// Calculate GLP or GSP.
 ///
-/// With both gcc-3.4.5 and como-4.3.10.1, writing any assertion(s)
-/// here makes this function about twenty percent slower. However,
-/// the difference is only about a hundred machine cycles, presumably
-/// due to the overhead of exception handling; that's no reason to
-/// avoid asserting preconditions.
-///
 /// Divisions are safe because denominators are asserted upstream to
 /// be greater than zero.
 
@@ -154,8 +148,6 @@ double gpt_commfns::calculate_premium
     ,gpt_scalar_parms const& args
     ) const
 {
-    LMI_ASSERT(0 <= args.duration);
-    LMI_ASSERT(static_cast<unsigned int>(args.duration) < length_);
     double endowment = D_endt_ * args.endt_bft;
     double charges =
           M_           [args.duration] * args.f3bft
@@ -188,7 +180,8 @@ gpt_cf_triad::gpt_cf_triad
     ,std::vector<double> const& gsp_ig
     ,gpt_vector_parms    const& charges
     )
-    :cf_glp_dbo_1(qc, glp_ic, glp_ig, mce_option1_for_7702, charges)
+    :length_     (qc.size())
+    ,cf_glp_dbo_1(qc, glp_ic, glp_ig, mce_option1_for_7702, charges)
     ,cf_glp_dbo_2(qc, glp_ic, glp_ig, mce_option2_for_7702, charges)
     ,cf_gsp      (qc, gsp_ic, gsp_ig, mce_option1_for_7702, charges)
 {
@@ -220,6 +213,8 @@ double gpt_cf_triad::calculate_premium
     ,gpt_scalar_parms const& args
     ) const
 {
+    LMI_ASSERT(0 <= args.duration);
+    LMI_ASSERT(static_cast<unsigned int>(args.duration) < length_);
     gpt_commfns const*const pcf =
           (oe_glp == glp_or_gsp && mce_option1_for_7702 == dbo) ? &cf_glp_dbo_1
         : (oe_glp == glp_or_gsp && mce_option2_for_7702 == dbo) ? &cf_glp_dbo_2
