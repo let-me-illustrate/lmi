@@ -32,6 +32,7 @@
 #include "commutation_functions.hpp"
 #include "et_vector.hpp"
 
+#include <algorithm>                    // std::min_element()
 #include <numeric>                      // std::partial_sum()
 #include <stdexcept>
 
@@ -57,11 +58,16 @@ std::vector<T>& back_sum(std::vector<T>& vt, E e)
 
 /// Constructor.
 ///
-/// All vectors, including those in the parameter object, must have
-/// the same length. It may at first appear that assertions to this
-/// effect belong upstream; however, writing them in the body of
-/// gpt_cf_triad::gpt_cf_triad() would cause them to be executed
-/// after the present ctor is called.
+/// Asserted preconditions: all argument vectors, including those in
+/// the parameter object, have the same length. It may at first appear
+/// that assertions to this effect belong upstream; however, writing
+/// them in the body of gpt_cf_triad::gpt_cf_triad() would cause them
+/// to be executed after the present ctor is called.
+///
+/// Asserted postconditions: all Dx+t (thus, implicitly, all Nx+t) are
+/// greater than zero, including those multiplied by the complement of
+/// premium loads, so that they may safely be used as denominators in
+/// premium formulas.
 ///
 /// We are aware of one old UL policy form that accumulates values
 /// quarterly instead of monthly. This could be accommodated by adding
@@ -90,6 +96,7 @@ gpt_commfns::gpt_commfns
     ,N_qab_child_  (length_)
     ,N_qab_waiver_ (length_)
 {
+    LMI_ASSERT(0 < length_ && length_ < methuselah);
     LMI_ASSERT(length_ == qc                          .size());
     LMI_ASSERT(length_ == ic                          .size());
     LMI_ASSERT(length_ == ig                          .size());
@@ -122,18 +129,33 @@ gpt_commfns::gpt_commfns
     back_sum(N_qab_spouse_, cf.kD() * charges.qab_spouse_rate);
     back_sum(N_qab_child_ , cf.kD() * charges.qab_child_rate);
     back_sum(N_qab_waiver_, cf.kD() * charges.qab_waiver_rate);
+
+    LMI_ASSERT(0.0 < D_endt_);
+    LMI_ASSERT(0.0 < *std::min_element(D_net_tgt_.begin(), D_net_tgt_.end()));
+    LMI_ASSERT(0.0 < *std::min_element(D_net_exc_.begin(), D_net_exc_.end()));
 }
 
 gpt_commfns::~gpt_commfns()
 {}
 
 /// Calculate GLP or GSP.
+///
+/// With both gcc-3.4.5 and como-4.3.10.1, writing any assertion(s)
+/// here makes this function about twenty percent slower. However,
+/// the difference is only about a hundred machine cycles, presumably
+/// due to the overhead of exception handling; that's no reason to
+/// avoid asserting preconditions.
+///
+/// Divisions are safe because denominators are asserted upstream to
+/// be greater than zero.
 
 double gpt_commfns::calculate_premium
     (oenum_glp_or_gsp        glp_or_gsp
     ,gpt_scalar_parms const& args
     ) const
 {
+    LMI_ASSERT(0 <= args.duration);
+    LMI_ASSERT(static_cast<unsigned int>(args.duration) < length_);
     double endowment = D_endt_ * args.endt_bft;
     double charges =
           M_           [args.duration] * args.f3bft
