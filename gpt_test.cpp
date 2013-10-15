@@ -113,6 +113,7 @@ class gpt_test
 
     static void initialize(int issue_age);
     static gpt_vector_parms v_parms();
+    static gpt_scalar_parms s_parms();
     static gpt_cf_triad instantiate_cf();
     static Irc7702& instantiate_old(int issue_age);
     static void compare_premiums(int issue_age, double target);
@@ -189,16 +190,11 @@ gpt_vector_parms gpt_test::v_parms()
     return z;
 }
 
-/// Instantiate GPT commutation functions.
+/// Instantiate plausible specimen scalar parameters.
 
-gpt_cf_triad gpt_test::instantiate_cf()
+gpt_scalar_parms gpt_test::s_parms()
 {
-    return gpt_cf_triad(q_m, glp_ic, glp_ig, gsp_ic, gsp_ig, v_parms());
-}
-
-void gpt_test::test_invariants()
-{
-    gpt_scalar_parms parms =
+    gpt_scalar_parms z =
         {     0   // duration
         ,  1000.0 // target
         ,120000.0 // f3bft
@@ -211,7 +207,19 @@ void gpt_test::test_invariants()
         ,     0.0 // qab_child_amt
         ,     0.0 // qab_waiver_amt
         };
+    return z;
+}
 
+/// Instantiate GPT commutation functions.
+
+gpt_cf_triad gpt_test::instantiate_cf()
+{
+    return gpt_cf_triad(q_m, glp_ic, glp_ig, gsp_ic, gsp_ig, v_parms());
+}
+
+void gpt_test::test_invariants()
+{
+    gpt_scalar_parms parms = s_parms();
     initialize(0);
     gpt_cf_triad const z = instantiate_cf();
 
@@ -296,35 +304,16 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
 
 void gpt_test::compare_premiums(int issue_age, double target)
 {
-    double const f3bft          = 120000.0;
-    double const endt_bft       = 100000.0;
-    double const chg_sa_amt     = 100000.0;
-    double const qab_gio_amt    =      0.0;
-    double const qab_adb_amt    = 100000.0;
-    double const qab_term_amt   =      0.0;
-    double const qab_spouse_amt =      0.0;
-    double const qab_child_amt  =      0.0;
-    double const qab_waiver_amt =      0.0;
-
-    gpt_scalar_parms parms =
-        {0 // duration: reset below
-        ,target
-        ,f3bft
-        ,endt_bft
-        ,chg_sa_amt
-        ,qab_gio_amt
-        ,qab_adb_amt
-        ,qab_term_amt
-        ,qab_spouse_amt
-        ,qab_child_amt
-        ,qab_waiver_amt
-        };
+    gpt_scalar_parms parms = s_parms();
+    parms.target = target;
 
     initialize(issue_age);
 
     gpt_cf_triad const z = instantiate_cf();
 
 #if !defined LMI_COMO_WITH_MINGW
+    double const f3bft    = parms.f3bft   ;
+    double const endt_bft = parms.endt_bft;
     // This test of the obsolescent class segfaults with como.
     Irc7702& z_old = instantiate_old(issue_age);
     // Set target (the other arguments don't matter here).
@@ -374,19 +363,7 @@ void gpt_test::test_premium_calculations()
 
 void gpt_test::mete_premiums()
 {
-    static gpt_scalar_parms const parms =
-        {     0   // duration
-        ,  1000.0 // target
-        ,120000.0 // f3bft
-        ,100000.0 // endt_bft
-        ,100000.0 // chg_sa_amt
-        ,     0.0 // qab_gio_amt
-        ,100000.0 // qab_adb_amt
-        ,     0.0 // qab_term_amt
-        ,     0.0 // qab_spouse_amt
-        ,     0.0 // qab_child_amt
-        ,     0.0 // qab_waiver_amt
-        };
+    static gpt_scalar_parms const parms = s_parms();
     static gpt_cf_triad const z = instantiate_cf();
     z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
     z.calculate_premium(oe_glp, mce_option1_for_7702, parms);
