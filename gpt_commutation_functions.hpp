@@ -176,6 +176,9 @@ class gpt_commfns
 /// distinct for GLP and GSP. Often it is the monthly equivalent of
 /// four and six percent, respectively.
 ///
+/// Data member 'length_' is a dispensable convenience that makes
+/// precondition checks a little clearer.
+///
 /// Implicitly-declared special member functions do the right thing.
 
 class gpt_cf_triad
@@ -198,6 +201,7 @@ class gpt_cf_triad
         ) const;
 
   private:
+    unsigned int const length_;
     gpt_commfns cf_glp_dbo_1;
     gpt_commfns cf_glp_dbo_2;
     gpt_commfns cf_gsp;
