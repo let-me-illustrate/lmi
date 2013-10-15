@@ -101,11 +101,13 @@ class gpt_test
   public:
     static void test()
         {
+        test_invariants();
         test_premium_calculations();
         assay_speed();
         }
 
   private:
+    static void test_invariants();
     static void test_premium_calculations();
     static void assay_speed();
 
@@ -192,6 +194,35 @@ gpt_vector_parms gpt_test::v_parms()
 gpt_cf_triad gpt_test::instantiate_cf()
 {
     return gpt_cf_triad(q_m, glp_ic, glp_ig, gsp_ic, gsp_ig, v_parms());
+}
+
+void gpt_test::test_invariants()
+{
+    gpt_scalar_parms parms =
+        {     0   // duration
+        ,  1000.0 // target
+        ,120000.0 // f3bft
+        ,100000.0 // endt_bft
+        ,100000.0 // chg_sa_amt
+        ,     0.0 // qab_gio_amt
+        ,100000.0 // qab_adb_amt
+        ,     0.0 // qab_term_amt
+        ,     0.0 // qab_spouse_amt
+        ,     0.0 // qab_child_amt
+        ,     0.0 // qab_waiver_amt
+        };
+
+    initialize(0);
+    gpt_cf_triad const z = instantiate_cf();
+
+    parms.duration = -1;
+    double const x0 = z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
+
+    parms.duration = q_m.size();
+    double const x1 = z.calculate_premium(oe_gsp, mce_option1_for_7702, parms);
+
+    // Values are bogus, if this line is even reached:
+    std::cout << x0 << ' ' << x1 << std::endl;
 }
 
 /// The obsolescent GPT class more or less requires this ugliness.
