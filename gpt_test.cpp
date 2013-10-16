@@ -200,12 +200,12 @@ gpt_scalar_parms gpt_test::s_parms()
         ,120000.0 // f3bft
         ,100000.0 // endt_bft
         ,100000.0 // chg_sa_amt
-        ,     0.0 // qab_gio_amt
+        , 20000.0 // qab_gio_amt
         ,100000.0 // qab_adb_amt
-        ,     0.0 // qab_term_amt
-        ,     0.0 // qab_spouse_amt
-        ,     0.0 // qab_child_amt
-        ,     0.0 // qab_waiver_amt
+        , 25000.0 // qab_term_amt
+        , 10000.0 // qab_spouse_amt
+        ,  5000.0 // qab_child_amt
+        , 50000.0 // qab_waiver_amt
         };
     return z;
 }
@@ -251,6 +251,23 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
 #else // !defined LMI_COMO_WITH_MINGW
     int const length = q_m.size();
     std::vector<double> const zero(length, 0.0);
+    // The old class recognizes only one QAB: ADB. So that all QABs
+    // can be exercised with the new class, use a linear combination
+    // of all QAB rates as the ADB rate here. Copying literal values
+    // elsewhence is brittle, but no great effort is justified for
+    // temporary code that tests a class slated for expunction.
+    double const adj =
+        (   20000.0 * 0.0011
+        +  100000.0 * 0.0013
+        +   25000.0 * 0.0017
+        +   10000.0 * 0.0019
+        +    5000.0 * 0.0023
+        +   50000.0 * 0.0029
+        )
+        / (100000.0 * 0.0013)
+        ;
+    std::vector<double> adj_qab_adb_rate(length);
+    assign(adj_qab_adb_rate, qab_adb_rate * adj);
     delete ugliness;
     ugliness =
         (new Irc7702
@@ -270,7 +287,7 @@ Irc7702& gpt_test::instantiate_old(int issue_age)
             ,policy_fee_monthly              // a_MlyChgPol
             ,specamt_load_monthly            // a_MlyChgSpecAmt
             ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
-            ,qab_adb_rate                    // a_MlyChgADD
+            ,adj_qab_adb_rate                // a_MlyChgADD
             ,1000000000.0                    // a_ADDLimit [in effect, no limit]
             ,prem_load_target                // a_LoadTgt
             ,prem_load_excess                // a_LoadExc
