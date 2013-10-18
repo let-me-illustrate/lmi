@@ -50,7 +50,7 @@ std::vector<double> a_to_m(std::vector<double> const& q_a)
 
 /// SOA database table 42: "1980 US CSO Male Age nearest".
 
-std::vector<double> const& sample_q(int age)
+std::vector<double> sample_q(int age)
 {
     static int const n = 100;
     LMI_ASSERT(0 <= age && age < n);
@@ -67,10 +67,9 @@ std::vector<double> const& sample_q(int age)
         ,0.09884, 0.10748, 0.11725, 0.12826, 0.14025, 0.15295, 0.16609, 0.17955, 0.19327, 0.20729 // 80
         ,0.22177, 0.23698, 0.25345, 0.27211, 0.29590, 0.32996, 0.38455, 0.48020, 0.65798, 1.00000 // 90
         };
-    static std::vector<double> const q_a(q + age, q + n);
+    static std::vector<double> const q_a(q, q + n);
     static std::vector<double> const q_m(a_to_m(q_a));
-    LMI_ASSERT(q_m.size() == static_cast<unsigned int>(n - age));
-    return q_m;
+    return std::vector<double>(q_m.begin() + age, q_m.end());
 }
 
 // These could be made static members of class gpt_test, but this way
@@ -339,6 +338,7 @@ void gpt_test::compare_premiums(int issue_age, double target)
 #endif // !defined LMI_COMO_WITH_MINGW
 
     int const omega = sample_q(0).size();
+    LMI_ASSERT(qab_waiver_rate.size() == static_cast<unsigned int>(omega - issue_age));
     for(int duration = 0; duration < omega - issue_age; ++duration)
         {
         parms.duration = duration;

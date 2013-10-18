@@ -32702,3 +32702,24 @@ Move assertions to improve speed.
   gpt_commutation_functions.cpp
 Refactor for clarity and speed.
 
+20131015T2329Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Refactor for flexibility and simplicity.
+
+20131016T1117Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Exercise all QABs.
+
+20131018T1109Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Demonstrate defect introduced 20131003T2105Z.
+
+20131018T1143Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Fix defect introduced 20131003T2105Z: misplaced 'static' caused an
+argument to be ignored, weakening downstream tests.
+
