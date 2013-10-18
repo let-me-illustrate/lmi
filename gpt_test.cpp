@@ -32,6 +32,7 @@
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
+#include "stl_extensions.hpp"           // nonstd::iota()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -128,7 +129,8 @@ class gpt_test
 /// distinct primes, to make it easier to track down any discrepancy.
 ///
 /// In order to expose problems that uniform values would mask, each
-/// vector's first element is altered if necessary.
+/// vector is altered if necessary--such that v[x]+t == v[x+t], so
+/// that the same invariant may be tested for premiums.
 
 void gpt_test::initialize(int issue_age)
 {
@@ -152,22 +154,25 @@ void gpt_test::initialize(int issue_age)
     qab_child_rate       .assign(length,  0.000023);
     qab_waiver_rate      .assign(length,  0.000029);
 
-    LMI_ASSERT(0 < length);
-    glp_ic               [0] *= 1.01;
-    glp_ig               [0] *= 1.01;
-    gsp_ic               [0] *= 1.01;
-    gsp_ig               [0] *= 1.01;
-    prem_load_target     [0] *= 1.01;
-    prem_load_excess     [0] *= 1.01;
-    policy_fee_monthly   [0] *= 1.01;
-    policy_fee_annual    [0] *= 1.01;
-    specamt_load_monthly [0] *= 1.01;
-    qab_gio_rate         [0] *= 1.01;
-    qab_adb_rate         [0] *= 1.01;
-    qab_term_rate        [0] *= 1.01;
-    qab_spouse_rate      [0] *= 1.01;
-    qab_child_rate       [0] *= 1.01;
-    qab_waiver_rate      [0] *= 1.01;
+    std::vector<int>    iota_i(length);
+    nonstd::iota(iota_i.begin(), iota_i.end(), issue_age);
+    std::vector<double> iota_d(length, 0.0);
+    iota_d += 1.0 + 0.001 * iota_i;
+    glp_ic               *= iota_d;
+    glp_ig               *= iota_d;
+    gsp_ic               *= iota_d;
+    gsp_ig               *= iota_d;
+    prem_load_target     *= iota_d;
+    prem_load_excess     *= iota_d;
+    policy_fee_monthly   *= iota_d;
+    policy_fee_annual    *= iota_d;
+    specamt_load_monthly *= iota_d;
+    qab_gio_rate         *= iota_d;
+    qab_adb_rate         *= iota_d;
+    qab_term_rate        *= iota_d;
+    qab_spouse_rate      *= iota_d;
+    qab_child_rate       *= iota_d;
+    qab_waiver_rate      *= iota_d;
 }
 
 /// Instantiate vector parameters from globals set by initialize().
