@@ -69,6 +69,7 @@ std::vector<double> const& sample_q(int age)
         };
     static std::vector<double> const q_a(q + age, q + n);
     static std::vector<double> const q_m(a_to_m(q_a));
+    LMI_ASSERT(q_m.size() == static_cast<unsigned int>(n - age));
     return q_m;
 }
 
