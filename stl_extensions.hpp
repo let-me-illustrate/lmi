@@ -119,6 +119,19 @@ bool is_sorted
 
     return true;
 }
+
+template<typename ForwardIterator, typename T>
+void iota
+    (ForwardIterator first
+    ,ForwardIterator last
+    ,T               value
+    )
+{
+    while(first != last)
+        {
+        *first++ = value++;
+        }
+}
 } // namespace nonstd
 
 #endif // stl_extensions_hpp
