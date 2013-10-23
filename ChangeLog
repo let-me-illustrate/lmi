@@ -32739,3 +32739,15 @@ Introduce a valuable invariant.
   gpt_test.cpp
 Augment unit tests.
 
+20131023T1834Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  census_document.cpp
+  census_document.hpp
+  census_view_old.cpp [expunged]
+  census_view_old.hpp [expunged]
+  main_wx.cpp
+  multiple_cell_document.hpp
+  objects.make
+Always use wxDVC census manager; expunge old wxListView version.
+
