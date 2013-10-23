@@ -302,7 +302,6 @@ lmi_wx_objects := \
   alert_wx.o \
   census_document.o \
   census_view.o \
-  census_view_old.o \
   database_document.o \
   database_view.o \
   database_view_editor.o \
