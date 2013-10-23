@@ -32751,3 +32751,8 @@ Augment unit tests.
   objects.make
 Always use wxDVC census manager; expunge old wxListView version.
 
+20131023T1837Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5803.
+
