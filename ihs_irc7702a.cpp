@@ -37,13 +37,13 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
-#include "miscellany.hpp"            // minmax<T>()
-#include "stratified_algorithms.hpp" // TieredNetToGross()
+#include "miscellany.hpp"               // minmax
+#include "stratified_algorithms.hpp"    // TieredNetToGross()
 
 #include <algorithm>
 #include <cmath>
 #include <limits>
-#include <numeric>                   // std::accumulate()
+#include <numeric>                      // std::accumulate()
 #include <stdexcept>
 
 namespace

@@ -27,10 +27,10 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
-#include "miscellany.hpp"     // minmax<T>()
-#include "stl_extensions.hpp" // nonstd::is_sorted()
+#include "miscellany.hpp"               // minmax
+#include "stl_extensions.hpp"           // nonstd::is_sorted()
 
-#include <algorithm>          // std::upper_bound()
+#include <algorithm>                    // std::upper_bound()
 #include <functional>
 #include <vector>
 
