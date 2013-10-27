@@ -32756,3 +32756,34 @@ Always use wxDVC census manager; expunge old wxListView version.
   version.hpp
 Designate release candidate 5803.
 
+20131025T2217Z <gchicares@sbcglobal.net> [542]
+
+  ihs_irc7702a.cpp
+  input_realization.cpp
+  ledger_base.cpp
+  stratified_algorithms.hpp
+  stratified_charges.cpp
+Improve documentation.
+
+20131025T2315Z <gchicares@sbcglobal.net> [542]
+
+  miscellany.hpp
+Add relational operators for class minmax.
+
+20131027T1132Z <gchicares@sbcglobal.net> [542]
+
+  miscellany_test.cpp
+Test relational operators for class minmax.
+
+20131027T1143Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+  gpt_test.cpp
+Assert and unit-test more invariants.
+
+20131027T2200Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+  gpt_test.cpp
+Assert and unit-test even more invariants.
+

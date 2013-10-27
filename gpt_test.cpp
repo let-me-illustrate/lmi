@@ -368,6 +368,49 @@ void gpt_test::test_invariants()
         ,""
         );
     parms = s_parms(); // Reset.
+
+    // Monthly q shorter than other vector parameters.
+    q_m.resize(99);
+    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    initialize(0); // Reset.
+
+    // Monthly q equal to unity: probably a bad idea, but permitted.
+    q_m[q_m.size() - 1] = 1.0;
+    instantiate_cf();
+    initialize(0); // Reset.
+
+    // Monthly q greater than unity.
+    q_m[q_m.size() - 1] = 1.001;
+    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    initialize(0); // Reset.
+
+    // Negative monthly q.
+    q_m[0] = -0.001;
+    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    initialize(0); // Reset.
+
+    // Premium load equal to unity.
+    prem_load_target[0] = 1.0;
+    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    initialize(0); // Reset.
+
+    // Monthly specamt load equal to unity.
+    specamt_load_monthly[0] = 1.0;
+    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    initialize(0); // Reset.
+
+    // Monthly QAB rate equal to unity.
+    qab_adb_rate[0] = 1.0;
+    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    initialize(0); // Reset.
+
+    // Negative premium loads are trapped. They are known to have been
+    // used, if rarely, and presumably just reduce guidelines; but
+    // it's not worth the trouble to validate premium calculations
+    // in advance under rare and questionable circumstances.
+    prem_load_excess[0] = -0.01;
+    BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
+    initialize(0); // Reset.
 }
 
 /// The obsolescent GPT class more or less requires this ugliness.

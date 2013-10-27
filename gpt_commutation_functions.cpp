@@ -31,6 +31,7 @@
 #include "assert_lmi.hpp"
 #include "commutation_functions.hpp"
 #include "et_vector.hpp"
+#include "miscellany.hpp"               // minmax
 
 #include <algorithm>                    // std::min_element()
 #include <numeric>                      // std::partial_sum()
@@ -58,13 +59,22 @@ std::vector<T>& back_sum(std::vector<T>& vt, E e)
 
 /// Constructor.
 ///
-/// Asserted preconditions: all argument vectors, including those in
-/// the parameter object, have the same length. It may at first appear
-/// that assertions to this effect belong upstream; however, writing
-/// them in the body of gpt_cf_triad::gpt_cf_triad() would cause them
-/// to be executed after the present ctor is called.
+/// Asserted preconditions: All argument vectors, including those in
+/// the parameter object, have the same length, and that length is a
+/// plausible human age. All these vectors' elements must be within a
+/// plausible range, most often [0.0, 1.0). Upper limits (except on q)
+/// are arbitrary, though liberal; they're intended only to detect
+/// probable errors such as might arise from misplaced decimal point.
+/// Particular bounds might be loosened p.r.n.--if negative loads must
+/// be supported, for example. These range tests impose an overhead of
+/// about twenty percent; it is assumed that a few extra microseconds
+/// are affordable.
 ///
-/// Asserted postconditions: all Dx+t (thus, implicitly, all Nx+t) are
+/// It may at first seem that precondition assertions belong upstream;
+/// however, writing them in the body of gpt_cf_triad::gpt_cf_triad()
+/// would cause them to be executed after the present ctor is called.
+///
+/// Asserted postconditions: All Dx+t (thus, implicitly, all Nx+t) are
 /// greater than zero, including those multiplied by the complement of
 /// premium loads, so that they may safely be used as denominators in
 /// premium formulas.
@@ -111,6 +121,27 @@ gpt_commfns::gpt_commfns
     LMI_ASSERT(length_ == charges.qab_spouse_rate     .size());
     LMI_ASSERT(length_ == charges.qab_child_rate      .size());
     LMI_ASSERT(length_ == charges.qab_waiver_rate     .size());
+
+    typedef minmax<double> mm;
+    mm a(        qc                  ); LMI_ASSERT(0.0 <= a && a <= 1.0);
+    mm b(        ic                  ); LMI_ASSERT(0.0 <= b && b <  1.0);
+    mm c(        ig                  ); LMI_ASSERT(0.0 <= c && c <  1.0);
+    // Assertions on the next line are required by section B.8 here:
+    //   http://www.nongnu.org/lmi/7702.html
+    // and therefore must not blithely be weakened, even if there's
+    // a good reason for loosening the assertions above.
+    LMI_ASSERT(0.0 <= a && 0.0 <= b && -1.0 < c);
+    mm d(charges.prem_load_target    ); LMI_ASSERT(0.0 <= d && d <  1.0);
+    mm e(charges.prem_load_excess    ); LMI_ASSERT(0.0 <= e && e <  1.0);
+    mm f(charges.policy_fee_monthly  ); LMI_ASSERT(0.0 <= f            );
+    mm g(charges.policy_fee_annual   ); LMI_ASSERT(0.0 <= g            );
+    mm h(charges.specamt_load_monthly); LMI_ASSERT(0.0 <= h && h <  1.0);
+    mm i(charges.qab_gio_rate        ); LMI_ASSERT(0.0 <= i && i <  1.0);
+    mm j(charges.qab_adb_rate        ); LMI_ASSERT(0.0 <= j && j <  1.0);
+    mm k(charges.qab_term_rate       ); LMI_ASSERT(0.0 <= k && k <  1.0);
+    mm l(charges.qab_spouse_rate     ); LMI_ASSERT(0.0 <= l && l <  1.0);
+    mm m(charges.qab_child_rate      ); LMI_ASSERT(0.0 <= m && m <  1.0);
+    mm n(charges.qab_waiver_rate     ); LMI_ASSERT(0.0 <= n && n <  1.0);
 
     ULCommFns const cf(qc, ic, ig, dbo, mce_monthly);
 
