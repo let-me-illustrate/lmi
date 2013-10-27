@@ -341,19 +341,33 @@ void gpt_test::test_invariants()
     initialize(0);
     gpt_cf_triad const z = instantiate_cf();
 
+    // Negative duration.
     parms.duration = -1;
     BOOST_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
         ,""
         );
+    parms = s_parms(); // Reset.
 
+    // Duration greater than omega minus one.
     parms.duration = q_m.size();
     BOOST_TEST_THROW
         (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
         ,std::runtime_error
         ,""
         );
+    parms = s_parms(); // Reset.
+
+    // Negative target. (Identical preconditions for other scalar
+    // parameters are not redundantly tested here.)
+    parms.target = -0.01;
+    BOOST_TEST_THROW
+        (z.calculate_premium(oe_gsp, mce_option1_for_7702, parms)
+        ,std::runtime_error
+        ,""
+        );
+    parms = s_parms(); // Reset.
 }
 
 /// The obsolescent GPT class more or less requires this ugliness.
