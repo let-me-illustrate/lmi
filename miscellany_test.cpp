@@ -30,7 +30,7 @@
 
 #include "test_tools.hpp"
 
-#include <cstdio> // std::remove()
+#include <cstdio>                       // std::remove()
 #include <fstream>
 
 void test_files_are_identical()
@@ -75,9 +75,34 @@ void test_files_are_identical()
     BOOST_TEST(!files_are_identical(f0, f1));
 }
 
+void test_minmax()
+{
+    double const zero = 0.0;
+    double const one  = 1.0;
+
+    std::vector<double> w;
+    w.push_back(one );
+    w.push_back(zero);
+
+    // Test const-correctness.
+    std::vector<double> const v = w;
+    minmax<double> const m(v);
+    BOOST_TEST(zero == m.minimum());
+    BOOST_TEST(one  == m.maximum());
+
+    // Motivation for relational operators: to write this...
+    BOOST_TEST(zero <= m.minimum() && m.maximum() <= one);
+    // ...more compactly:
+#if !defined __BORLANDC__
+    BOOST_TEST(  zero <= m && m <= one );
+    BOOST_TEST(!(zero <  m || m <  one));
+#endif // !defined __BORLANDC__
+}
+
 int test_main(int, char*[])
 {
     test_files_are_identical();
+    test_minmax();
 
     return 0;
 }
