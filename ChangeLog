@@ -32787,3 +32787,13 @@ Assert and unit-test more invariants.
   gpt_test.cpp
 Assert and unit-test even more invariants.
 
+20131029T1654Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+Trap negative premium.
+
+20131029T1656Z <gchicares@sbcglobal.net> [542]
+
+  group_tutorial.html
+Update user manual for direct census editing.
+
