@@ -240,6 +240,10 @@ gpt_cf_triad::~gpt_cf_triad()
 ///
 /// Asserted preconditions: Duration is within its natural bounds, and
 /// other members of 'args' are nonnegative.
+///
+/// Asserted postcondition: Returned GLP or GSP is nonnegative; thus,
+/// while adjusted premium 'A+B-C' may be negative, {A,B,C} are all
+/// individually nonnegative.
 
 double gpt_cf_triad::calculate_premium
     (oenum_glp_or_gsp        glp_or_gsp
@@ -267,6 +271,8 @@ double gpt_cf_triad::calculate_premium
         : throw std::runtime_error("Cannot determine GPT assumptions.")
         ;
     LMI_ASSERT(0 != pcf); // Redundant: demonstrably cannot fail.
-    return pcf->calculate_premium(glp_or_gsp, args);
+    double const z = pcf->calculate_premium(glp_or_gsp, args);
+    LMI_ASSERT(0.0 <= z);
+    return z;
 }
 
