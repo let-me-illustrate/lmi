@@ -32797,3 +32797,15 @@ Trap negative premium.
   group_tutorial.html
 Update user manual for direct census editing.
 
+20131030T1308Z <gchicares@sbcglobal.net> [542]
+
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+Add a cross-platform sleep function.
+
+20131030T1415Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Experimentally pause between printouts.
+
