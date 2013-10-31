@@ -640,9 +640,7 @@ census_run_result run_census_in_parallel::operator()
 
     result.seconds_for_output_ += pre_emit_ledger(file, emission);
 
-    {
-    int j = 0;
-    for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
+    for(j = 0, i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
         std::string const name(cells[j]["InsuredName"].str());
         result.seconds_for_output_ += emit_ledger
@@ -653,7 +651,6 @@ census_run_result run_census_in_parallel::operator()
             );
         dawdle(emission);
         }
-    }
 
     result.seconds_for_output_ += emit_ledger
         (serial_file_path(file, "composite", -1, "hastur")
