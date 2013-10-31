@@ -283,6 +283,9 @@ census_run_result run_census_in_parallel::operator()
     cell_values.reserve(cells.size());
     for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
         {
+        // This condition need be written only once, here, because
+        // subsequently 'cell_values' (which reflects the condition)
+        // is iterated across instead of 'cells'.
         if(!cell_should_be_ignored(cells[j]))
             {
             { // Begin fenv_guard scope.
