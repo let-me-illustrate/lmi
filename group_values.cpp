@@ -631,15 +631,31 @@ census_run_result run_census_in_parallel::operator()
         } // End fenv_guard scope.
         } // End for.
 
+    meter = create_progress_meter
+        (cell_values.size()
+        ,"Finalizing all cells"
+        ,progress_meter_mode(emission)
+        );
     for(i = cell_values.begin(); i != cell_values.end(); ++i)
         {
         fenv_guard fg;
         (*i)->FinalizeLifeAllBases();
         composite.PlusEq(*(*i)->ledger_from_av());
+        if(!meter->reflect_progress())
+            {
+            result.completed_normally_ = false;
+            goto done;
+            }
         }
+    meter->culminate();
 
     result.seconds_for_output_ += pre_emit_ledger(file, emission);
 
+    meter = create_progress_meter
+        (cell_values.size()
+        ,"Writing output for all cells"
+        ,progress_meter_mode(emission)
+        );
     for(j = 0, i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
         std::string const name(cells[j]["InsuredName"].str());
@@ -650,7 +666,13 @@ census_run_result run_census_in_parallel::operator()
             ,emission
             );
         dawdle(emission);
+        if(!meter->reflect_progress())
+            {
+            result.completed_normally_ = false;
+            goto done;
+            }
         }
+    meter->culminate();
 
     result.seconds_for_output_ += emit_ledger
         (serial_file_path(file, "composite", -1, "hastur")
