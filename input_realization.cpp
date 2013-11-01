@@ -36,7 +36,7 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "input_seq_helpers.hpp"
-#include "miscellany.hpp"               // minmax<T>()
+#include "miscellany.hpp"               // minmax
 #include "round_to.hpp"
 #include "stl_extensions.hpp"           // nonstd::is_sorted()
 #include "value_cast.hpp"

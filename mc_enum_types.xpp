@@ -76,6 +76,8 @@
     ,"ROP" \
     };
 
+/// 7702 recognizes only the canonical death benefit options 1 and 2.
+
 #define dbopt_7702_VALUES \
     {mce_option1_for_7702 \
     ,mce_option2_for_7702 \
@@ -358,15 +360,15 @@
     ,"Adjust base and term proportionately" \
     };
 
-// USPS two-letter abbreviations for the fifty US states, plus
-//   'DC' (District of Columbia)
-//   'PR' (Puerto Rico)
-// and 'XX', a fictitious state that can be used for special purposes:
-// e.g., 'XX' may be given a premium-tax rate of zero, and then used
-// for business subject to US federal regulation but issued offshore
-// in such a way that no state premium tax is actually due, for a
-// product that passes premium tax through directly.
-//
+/// USPS two-letter abbreviations for the fifty US states, plus
+///   'DC' (District of Columbia),
+///   'PR' (Puerto Rico), and
+///   'XX', a fictitious state that can be used for special purposes:
+/// e.g., 'XX' may be given a premium-tax rate of zero, and then used
+/// for business subject to US federal regulation but issued offshore
+/// in such a way that no state premium tax is actually due, for a
+/// product that passes premium tax through directly.
+
 #define state_VALUES \
     {mce_s_AL,mce_s_AK,mce_s_AZ,mce_s_AR,mce_s_CA,mce_s_CO,mce_s_CT,mce_s_DE,mce_s_DC,mce_s_FL \
     ,mce_s_GA,mce_s_HI,mce_s_ID,mce_s_IL,mce_s_IN,mce_s_IA,mce_s_KS,mce_s_KY,mce_s_LA,mce_s_ME \
@@ -386,8 +388,8 @@
     ,"XX" \
     };
 
-// ISO 3166-1-Alpha-2 as of 2000-08-21.
-//
+/// ISO 3166-1-Alpha-2 as of 2000-08-21.
+
 #define country_VALUES \
     {mce_c_AD,mce_c_AE,mce_c_AF,mce_c_AG,mce_c_AI,mce_c_AL,mce_c_AM,mce_c_AN,mce_c_AO,mce_c_AQ \
     ,mce_c_AR,mce_c_AS,mce_c_AT,mce_c_AU,mce_c_AW,mce_c_AZ,mce_c_BA,mce_c_BB,mce_c_BD,mce_c_BE \

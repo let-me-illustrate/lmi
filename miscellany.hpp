@@ -30,10 +30,11 @@
 
 #include <algorithm>
 #include <cctype>
-#include <climits>  // UCHAR_MAX
-#include <cstddef>  // std::size_t
+#include <climits>                      // UCHAR_MAX
+#include <cstddef>                      // std::size_t
+#include <cstdio>                       // EOF
 #include <ios>
-#include <iterator> // std::distance()
+#include <iterator>                     // std::distance()
 #include <string>
 #include <utility>
 #include <vector>
@@ -52,6 +53,8 @@ bool files_are_identical(std::string const&, std::string const&);
 
 /// Ascertain vector minimum and maximum efficiently.
 ///
+/// Heterogeneous relational operators are necessarily free functions.
+///
 /// Implicitly-declared special member functions do the right thing.
 
 template<typename T>
@@ -68,13 +71,18 @@ class minmax
         maximum_ = *extrema.second;
         }
 
-    T minimum() {return minimum_;}
-    T maximum() {return maximum_;}
+    T minimum() const {return minimum_;}
+    T maximum() const {return maximum_;}
 
   private:
     T minimum_;
     T maximum_;
 };
+
+template<typename T> bool operator< (T t, minmax<T> m) {return t <  m.minimum();}
+template<typename T> bool operator<=(T t, minmax<T> m) {return t <= m.minimum();}
+template<typename T> bool operator< (minmax<T> m, T t) {return m.maximum() <  t;}
+template<typename T> bool operator<=(minmax<T> m, T t) {return m.maximum() <= t;}
 
 std::string htmlize(std::string const&);
 

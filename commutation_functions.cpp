@@ -126,7 +126,7 @@ ULCommFns::ULCommFns
     (std::vector<double> const& a_qc
     ,std::vector<double> const& a_ic
     ,std::vector<double> const& a_ig
-    ,mcenum_dbopt               dbo
+    ,mcenum_dbopt_7702          dbo
     ,mcenum_mode                mode
     )
     :qc    (a_qc)
@@ -163,7 +163,7 @@ ULCommFns::ULCommFns
         // Eckley equation (12).
         double q = f * g;
         // Eckley equation (19).
-        if(mce_option2 == dbo_)
+        if(mce_option2_for_7702 == dbo_)
             {
             i = i - q;
             }

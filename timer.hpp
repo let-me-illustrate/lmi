@@ -30,7 +30,7 @@
 #include "uncopyable_lmi.hpp"
 
 #if defined LMI_POSIX
-#   include <sys/time.h> // gettimeofday()
+#   include <sys/time.h>                // gettimeofday()
     typedef double elapsed_t;
 #elif defined LMI_MSW
     // Compilers for this platform use various types for its high-
@@ -56,6 +56,8 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+
+void lmi_sleep(unsigned int seconds);
 
 /// Why another timer class?
 ///

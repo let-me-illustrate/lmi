@@ -34,7 +34,7 @@
 #include "contains.hpp"
 #include "data_directory.hpp"
 #include "ieee754.hpp"                  // infinity<>()
-#include "miscellany.hpp"               // minmax<>()
+#include "miscellany.hpp"               // minmax
 #include "my_proem.hpp"                 // ::write_proem()
 #include "stratified_algorithms.hpp"
 #include "xml_lmi.hpp"

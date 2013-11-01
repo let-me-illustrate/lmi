@@ -397,6 +397,8 @@ void Ledger::write(xml::element& x) const
 // >
     format_map["CurrentCoiMultiplier"              ] = f2;
     format_map["GuarPrem"                          ] = f2;
+    format_map["InforceTaxBasis"                   ] = f2;
+    format_map["InforceUnloanedAV"                 ] = f2;
     format_map["InitGLP"                           ] = f2;
     format_map["InitGSP"                           ] = f2;
     format_map["InitPrem"                          ] = f2;

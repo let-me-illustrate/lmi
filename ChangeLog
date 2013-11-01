@@ -32494,3 +32494,318 @@ Remove or adjust impossibly low control widths. See:
 Recurse through children--e.g., group boxes. See:
   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00038.html
 
+20130723T2241Z <gchicares@sbcglobal.net> [542]
+
+  wx-2.9.5.patch
+Apply various post-release patches:
+  http://trac.wxwidgets.org/changeset/74582
+  http://trac.wxwidgets.org/changeset/74583
+  http://trac.wxwidgets.org/changeset/74585
+  http://trac.wxwidgets.org/changeset/74586
+  http://trac.wxwidgets.org/changeset/74588
+
+20130729T2106Z <gchicares@sbcglobal.net> [542]
+
+  INSTALL
+  install_cygwin.bat
+Use Cygwin's renamed installer.
+
+20130729T2107Z <gchicares@sbcglobal.net> [542]
+
+  ledger_text_formats.cpp
+Improve error messages.
+
+20130810T0058Z <wboutin@massmutual.com> [542]
+
+  illustration_reg.xsl
+  ledger_xml_io.cpp
+  nasd.xsl
+Display two inforce values to output.
+
+20130810T0110Z <wboutin@massmutual.com> [542]
+
+  ledger_xml_io.cpp
+Remove unnecessary extra line added 20130810T0058Z.
+
+20130815T1207Z <gchicares@sbcglobal.net> [542]
+
+  GNUmakefile
+Cite a release candidate's revision number.
+
+20130815T1244Z <gchicares@sbcglobal.net> [542]
+
+  GNUmakefile
+Handle mixed svn revisions more gracefully.
+
+20130815T1257Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5765.
+
+20130911T2327Z <gchicares@sbcglobal.net> [542]
+
+  ihs_irc7702a.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. For inforce, cached NSP (used for reductions) should be
+as of last material change date, not inforce reillustration date.
+
+20130911T2337Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5767.
+
+20130912T1247Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp [new file]
+Add special commutation functions for GPT.
+
+20130918T1250Z <gchicares@sbcglobal.net> [542]
+
+  commutation_functions.cpp
+  commutation_functions.hpp
+  commutation_functions_test.cpp
+  gpt_commutation_functions.hpp
+  ihs_irc7702.cpp
+  mec_server.cpp
+Use 7702-specific DBO enumerations as appropriate.
+
+20130918T1459Z <gchicares@sbcglobal.net> [542]
+
+  expression_template_0_test.cpp
+Enforce a precondition; improve documentation.
+
+20130923T1329Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Improve documentation.
+
+20130923T2233Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Refactor.
+
+20130930T2042Z <gchicares@sbcglobal.net> [542]
+
+  mc_enum_types.xpp
+Improve documentation.
+
+20130930T2043Z <gchicares@sbcglobal.net> [542]
+
+  oecumenic_enumerations.hpp
+Add an enumerator for GPT use.
+
+20130930T2044Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Rename classes and members.
+
+20130930T2051Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Improve documentation.
+
+20130930T2119Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp [new file]
+  gpt_commutation_functions.hpp
+Implement special commutation functions for GPT.
+
+20131003T0807Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+  gpt_commutation_functions.hpp
+Improve documentation.
+
+20131003T2105Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp [new file]
+  objects.make
+Add GPT unit tests.
+
+20131003T2302Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.hpp
+Improve documentation.
+
+20131008T2211Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Rearrange.
+
+20131008T2224Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Refactor to facilitate reuse.
+
+20131009T2229Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Rearrange.
+
+20131010T0017Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Refactor for flexibility.
+
+20131010T1042Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+List all "headers".
+
+20131010T1121Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+Refactor for concinnity with 'objects.make'.
+
+20131010T1211Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+Add numerous missing pieces.
+
+20131010T2257Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  gpt_test.cpp
+  objects.make
+Augment unit tests.
+
+20131011T1213Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Measure speed of guideline premium calculations. Clearly the new
+implementation takes far too much longer than the old.
+
+20131013T1537Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+Resolve issue noted 20131011T1213Z.
+
+20131015T0916Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Test untrapped precondition failures.
+
+20131015T1113Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+  gpt_commutation_functions.cpp
+Assert more preconditions.
+
+20131015T1132Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+  gpt_commutation_functions.hpp
+Move assertions to improve speed.
+
+20131015T1338Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+Refactor for clarity and speed.
+
+20131015T2329Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Refactor for flexibility and simplicity.
+
+20131016T1117Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Exercise all QABs.
+
+20131018T1109Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Demonstrate defect introduced 20131003T2105Z.
+
+20131018T1143Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Fix defect introduced 20131003T2105Z: misplaced 'static' caused an
+argument to be ignored, weakening downstream tests.
+
+20131018T1152Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Reduce QAB rates and specamt load to more plausible values.
+
+20131018T1208Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+  stl_extensions.hpp
+Introduce a valuable invariant.
+
+20131018T2358Z <gchicares@sbcglobal.net> [542]
+
+  gpt_test.cpp
+Augment unit tests.
+
+20131023T1834Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  census_document.cpp
+  census_document.hpp
+  census_view_old.cpp [expunged]
+  census_view_old.hpp [expunged]
+  main_wx.cpp
+  multiple_cell_document.hpp
+  objects.make
+Always use wxDVC census manager; expunge old wxListView version.
+
+20131023T1837Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5803.
+
+20131025T2217Z <gchicares@sbcglobal.net> [542]
+
+  ihs_irc7702a.cpp
+  input_realization.cpp
+  ledger_base.cpp
+  stratified_algorithms.hpp
+  stratified_charges.cpp
+Improve documentation.
+
+20131025T2315Z <gchicares@sbcglobal.net> [542]
+
+  miscellany.hpp
+Add relational operators for class minmax.
+
+20131027T1132Z <gchicares@sbcglobal.net> [542]
+
+  miscellany_test.cpp
+Test relational operators for class minmax.
+
+20131027T1143Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+  gpt_test.cpp
+Assert and unit-test more invariants.
+
+20131027T2200Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+  gpt_test.cpp
+Assert and unit-test even more invariants.
+
+20131029T1654Z <gchicares@sbcglobal.net> [542]
+
+  gpt_commutation_functions.cpp
+Trap negative premium.
+
+20131029T1656Z <gchicares@sbcglobal.net> [542]
+
+  group_tutorial.html
+Update user manual for direct census editing.
+
+20131030T1308Z <gchicares@sbcglobal.net> [542]
+
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+Add a cross-platform sleep function.
+
+20131030T1415Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Experimentally pause between printouts.
+

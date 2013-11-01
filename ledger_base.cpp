@@ -31,11 +31,11 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
-#include "miscellany.hpp" // minmax<T>()
+#include "miscellany.hpp"               // minmax
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cmath>          // std::pow()
+#include <cmath>                        // std::pow()
 #include <functional>
 #include <numeric>
 #include <string>

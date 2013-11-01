@@ -49,8 +49,6 @@ CensusDocument::~CensusDocument()
 {
 }
 
-// Not used at present; restore when obsolescent class CensusView is expunged.
-#if 0
 wxDataViewCtrl& CensusDocument::PredominantViewWindow() const
 {
     return ::PredominantViewWindow<CensusView,wxDataViewCtrl>
@@ -58,7 +56,6 @@ wxDataViewCtrl& CensusDocument::PredominantViewWindow() const
         ,&CensusView::list_window_
         );
 }
-#endif // 0
 
 bool CensusDocument::OnCreate(wxString const& filename, long int flags)
 {
