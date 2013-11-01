@@ -51,6 +51,20 @@
 #   endif // LMI_MS_HEADER_INCLUDED
 #endif // LMI_MSW
 
+/// Suspend execution for a given number of seconds.
+
+#if defined LMI_POSIX
+#   include <unistd.h>                  // sleep()
+void lmi_sleep(unsigned int seconds) {sleep(seconds);}
+#elif defined LMI_MSW
+#   if !defined LMI_MS_HEADER_INCLUDED
+extern "C" void __stdcall Sleep(unsigned int);
+#   endif // !defined LMI_MS_HEADER_INCLUDED
+void lmi_sleep(unsigned int seconds) {Sleep(1000 * seconds);}
+#else // Unknown platform.
+#   error Unknown platform.
+#endif // Unknown platform.
+
 /// Create, calibrate, and start a timer.
 ///
 /// Postcondition: 0 < frequency_. Throws if a positive frequency_

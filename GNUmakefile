@@ -207,7 +207,10 @@ release_candidate:
 	  > version.hpp
 	@$(ECHO) Version is "'$(yyyymmddhhmm)'".
 	@$(ECHO) "  To designate a release candidate:"
-	@$(ECHO) "svn commit -m\"Designate release candidate\" version.hpp ChangeLog"
+	@$(ECHO) \
+	  "svn commit -m'Designate release candidate" \
+	  "$(shell expr 1 + `svnversion` : '.*:\([0-9]*\)')'" \
+	  "version.hpp ChangeLog"
 
 ################################################################################
 

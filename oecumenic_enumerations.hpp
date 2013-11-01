@@ -51,6 +51,11 @@ enum oenum_format_style
     ,oe_format_percentage
     };
 
+enum oenum_glp_or_gsp
+    {oe_glp
+    ,oe_gsp
+    };
+
 enum oenum_increment_account_preference
     {oe_prefer_general_account
     ,oe_prefer_separate_account

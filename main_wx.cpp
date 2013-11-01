@@ -44,7 +44,6 @@
 #include "authenticity.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
-#include "census_view_old.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
@@ -335,34 +334,17 @@ void Skeleton::InitDocManager()
     doc_manager_ = new DocManagerEx;
     doc_manager_->FileHistoryLoad(*config_);
 
-    if(global_settings::instance().ash_nazg())
-        {
-        new(wx) wxDocTemplate
-            (doc_manager_
-            ,"Census"
-            ,"*.cns"
-            ,""
-            ,"cns"
-            ,"Census document"
-            ,"Census view"
-            ,CLASSINFO(CensusDocument)
-            ,CLASSINFO(CensusView)
-            );
-        }
-    else
-        {
-        new(wx) wxDocTemplate
-            (doc_manager_
-            ,"Census"
-            ,"*.cns"
-            ,""
-            ,"cns"
-            ,"Census document"
-            ,"Census view"
-            ,CLASSINFO(CensusDocument)
-            ,CLASSINFO(CensusViewOld)
-            );
-        }
+    new(wx) wxDocTemplate
+        (doc_manager_
+        ,"Census"
+        ,"*.cns"
+        ,""
+        ,"cns"
+        ,"Census document"
+        ,"Census view"
+        ,CLASSINFO(CensusDocument)
+        ,CLASSINFO(CensusView)
+        );
 
     new(wx) wxDocTemplate
         (doc_manager_

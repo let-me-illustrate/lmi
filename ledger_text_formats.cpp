@@ -679,7 +679,10 @@ void PrintCellTabDelimited
 
         os << '\n';
         }
-    LMI_ASSERT(os.good());
+    if(!os)
+        {
+        fatal_error() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        }
 }
 
 /// Write group-roster headers to a tab-delimited file suitable for spreadsheets.
@@ -747,7 +750,10 @@ void PrintRosterHeaders(std::string const& file_name)
         }
     os << "\n\n";
 
-    LMI_ASSERT(os.good());
+    if(!os)
+        {
+        fatal_error() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        }
 }
 
 /// Write group roster to a tab-delimited file suitable for spreadsheets.
@@ -810,7 +816,10 @@ void PrintRosterTabDelimited
         << '\n'
         ;
 
-    LMI_ASSERT(os.good());
+    if(!os)
+        {
+        fatal_error() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        }
 }
 
 class FlatTextLedgerPrinter

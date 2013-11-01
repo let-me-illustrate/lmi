@@ -113,7 +113,6 @@ if LMI_WITH_CGI
 endif
 
 # tests
-# SOMEDAY !! The 'getopt' and 'regex' tests in 'objects.make' are missing here.
 TESTS = \
     test_account_value \
     test_actuarial_table \
@@ -132,7 +131,9 @@ TESTS = \
     test_fenv_lmi \
     test_file_command \
     test_financial \
+    test_getopt \
     test_global_settings \
+    test_gpt \
     test_handle_exceptions \
     test_ieee754 \
     test_input_seq \
@@ -156,6 +157,7 @@ TESTS = \
     test_print_matrix \
     test_product_file \
     test_progress_meter \
+    test_regex \
     test_round \
     test_round_to \
     test_rtti_lmi \
@@ -186,7 +188,6 @@ lmi_wx_SOURCES = \
     alert_wx.cpp \
     census_document.cpp \
     census_view.cpp \
-    census_view_old.cpp \
     database_document.cpp \
     database_view.cpp \
     database_view_editor.cpp \
@@ -478,8 +479,13 @@ product_files_LDADD = \
     $(XMLWRAPP_LIBS)
 
 test_coding_rules_SOURCES = \
-  $(common_test_objects) \
+  alert.cpp \
+  alert_cli.cpp \
+  fenv_lmi.cpp \
+  main_common.cpp \
+  main_common_non_wx.cpp \
   my_test_coding_rules.cpp \
+  sigfpe.cpp \
   test_coding_rules.cpp
 test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 test_coding_rules_LDADD = \
@@ -495,8 +501,7 @@ common_test_objects = \
     alert_cli.cpp \
     fenv_lmi.cpp \
     getopt.cpp \
-    license.cpp \
-    timer.cpp
+    license.cpp
 
 test_account_value_SOURCES = \
   $(common_test_objects) \
@@ -506,10 +511,13 @@ test_account_value_CXXFLAGS = $(AM_CXXFLAGS)
 test_actuarial_table_SOURCES = \
   $(common_test_objects) \
   actuarial_table.cpp \
-  actuarial_table_test.cpp
+  actuarial_table_test.cpp \
+  timer.cpp \
+  xml_lmi.cpp
 test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
 test_actuarial_table_LDADD = \
   $(BOOST_LIBS)
+  $(XMLWRAPP_LIBS)
 
 test_alert_SOURCES = \
   $(common_test_objects) \
@@ -547,7 +555,9 @@ test_calendar_date_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
   calendar_date_test.cpp \
-  null_stream.cpp
+  facets.cpp \
+  null_stream.cpp \
+  timer.cpp
 test_calendar_date_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_callback_SOURCES = \
@@ -563,7 +573,9 @@ test_comma_punct_CXXFLAGS = $(AM_CXXFLAGS)
 test_commutation_functions_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
-  commutation_functions_test.cpp
+  commutation_functions_test.cpp \
+  expm1.c \
+  timer.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_configurable_settings_SOURCES = \
@@ -597,7 +609,8 @@ test_crc32_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_expression_template_0_SOURCES = \
   $(common_test_objects) \
-  expression_template_0_test.cpp
+  expression_template_0_test.cpp \
+  timer.cpp
 test_expression_template_0_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_fenv_lmi_SOURCES = \
@@ -615,10 +628,18 @@ test_file_command_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_financial_SOURCES = \
   $(common_test_objects) \
+  facets.cpp \
   financial_test.cpp \
   null_stream.cpp \
-  stratified_algorithms.cpp
+  stratified_algorithms.cpp \
+  timer.cpp
 test_financial_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_getopt_SOURCES = \
+  $(common_test_objects) \
+  getopt.cpp \
+  getopt_test.cpp
+test_getopt_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_global_settings_SOURCES = \
   $(common_test_objects) \
@@ -629,6 +650,16 @@ test_global_settings_SOURCES = \
 test_global_settings_CXXFLAGS = $(AM_CXXFLAGS)
 test_global_settings_LDADD = \
   $(BOOST_LIBS)
+
+test_gpt_SOURCES = \
+  $(common_test_objects) \
+  commutation_functions.cpp \
+  expm1.c \
+  gpt_commutation_functions.cpp \
+  gpt_test.cpp \
+  ihs_irc7702.cpp \
+  timer.cpp
+test_gpt_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_handle_exceptions_SOURCES = \
   $(common_test_objects) \
@@ -660,6 +691,7 @@ test_input_SOURCES = \
   dbdict.cpp \
   dbnames.cpp \
   dbvalue.cpp \
+  expm1.c \
   facets.cpp \
   global_settings.cpp \
   input.cpp \
@@ -681,6 +713,7 @@ test_input_SOURCES = \
   premium_tax.cpp \
   product_names.cpp \
   single_cell_document.cpp \
+  timer.cpp \
   tn_range_types.cpp \
   xml_lmi.cpp \
   yare_input.cpp
@@ -693,7 +726,10 @@ test_irc7702a_SOURCES = \
   $(common_test_objects) \
   ihs_irc7702a.cpp \
   irc7702a_test.cpp \
-  stratified_algorithms.cpp
+  mec_state.cpp \
+  miscellany.cpp \
+  stratified_algorithms.cpp \
+  xml_lmi.cpp
 test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 test_irc7702a_LDADD = \
   liblmi.la \
@@ -702,13 +738,16 @@ test_irc7702a_LDADD = \
 
 test_istream_to_string_SOURCES = \
   $(common_test_objects) \
-  istream_to_string_test.cpp
+  istream_to_string_test.cpp \
+  timer.cpp
 test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_loads_SOURCES = \
   $(common_test_objects) \
+  expm1.c \
   loads.cpp \
-  loads_test.cpp
+  loads_test.cpp \
+  timer.cpp
 test_loads_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_map_lookup_SOURCES = \
@@ -723,7 +762,9 @@ test_materially_equal_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_math_functors_SOURCES = \
   $(common_test_objects) \
-  math_functors_test.cpp
+  expm1.c \
+  math_functors_test.cpp \
+  timer.cpp
 test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_mc_enum_SOURCES = \
@@ -748,6 +789,7 @@ test_miscellany_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_mortality_rates_SOURCES = \
   $(common_test_objects) \
+  expm1.c \
   ihs_mortal.cpp \
   mortality_rates_test.cpp
 test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
@@ -759,6 +801,7 @@ test_mpatrol_patch_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_name_value_pairs_SOURCES = \
   $(common_test_objects) \
+  facets.cpp \
   name_value_pairs.cpp \
   name_value_pairs_test.cpp
 test_name_value_pairs_CXXFLAGS = $(AM_CXXFLAGS)
@@ -772,12 +815,14 @@ test_ncnnnpnn_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_numeric_io_SOURCES = \
   $(common_test_objects) \
-  numeric_io_test.cpp
+  numeric_io_test.cpp \
+  timer.cpp
 test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_obstruct_slicing_SOURCES = \
   $(common_test_objects) \
-  obstruct_slicing_test.cpp
+  obstruct_slicing_test.cpp \
+  timer.cpp
 test_obstruct_slicing_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_path_utility_SOURCES = \
@@ -821,6 +866,7 @@ test_premium_tax_LDADD = \
 
 test_print_matrix_SOURCES = \
   $(common_test_objects) \
+  facets.cpp \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -849,6 +895,7 @@ test_product_file_SOURCES = \
   product_file_test.cpp \
   rounding_rules.cpp \
   stratified_charges.cpp \
+  timer.cpp \
   xml_lmi.cpp
 test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
 test_product_file_LDADD = \
@@ -864,6 +911,14 @@ test_progress_meter_SOURCES = \
 test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
 test_progress_meter_LDADD = \
   liblmi.la
+
+test_regex_SOURCES = \
+  $(common_test_objects) \
+  regex_test.cpp \
+  timer.cpp
+test_regex_CXXFLAGS = $(AM_CXXFLAGS)
+test_regex_LDADD = \
+  $(BOOST_LIBS) \
 
 test_round_SOURCES = \
   $(common_test_objects) \
@@ -920,6 +975,7 @@ test_test_tools_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_timer_SOURCES = \
   $(common_test_objects) \
+  timer.cpp \
   timer_test.cpp
 test_timer_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -939,6 +995,7 @@ test_value_cast_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_vector_SOURCES = \
   $(common_test_objects) \
+  timer.cpp \
   vector_test.cpp
 test_vector_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -950,6 +1007,7 @@ test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
 test_xml_serialize_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  timer.cpp \
   xml_lmi.cpp \
   xml_serialize_test.cpp
 test_xml_serialize_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
@@ -958,6 +1016,7 @@ test_xml_serialize_LDADD = \
 
 test_zero_SOURCES = \
   $(common_test_objects) \
+  facets.cpp \
   null_stream.cpp \
   zero_test.cpp
 test_zero_CXXFLAGS = $(AM_CXXFLAGS)
@@ -980,7 +1039,6 @@ noinst_HEADERS = \
     ce_product_name.hpp \
     census_document.hpp \
     census_view.hpp \
-    census_view_old.hpp \
     comma_punct.hpp \
     commutation_functions.hpp \
     config.hpp \
@@ -1021,6 +1079,7 @@ noinst_HEADERS = \
     fund_data.hpp \
     getopt.hpp \
     global_settings.hpp \
+    gpt_commutation_functions.hpp \
     gpt_specamt.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
@@ -1121,6 +1180,7 @@ noinst_HEADERS = \
     single_cell_document.hpp \
     single_choice_popup_menu.hpp \
     so_attributes.hpp \
+    soa_helpers.hpp \
     stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \
@@ -1142,6 +1202,7 @@ noinst_HEADERS = \
     tn_range_type_trammels.hpp \
     tn_range_types.hpp \
     transferor.hpp \
+    uncopyable_lmi.hpp \
     value_cast.hpp \
     version.hpp \
     view_ex.hpp \

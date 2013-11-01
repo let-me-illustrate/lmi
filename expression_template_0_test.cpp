@@ -316,26 +316,29 @@ void mete_ublas_typical()
 }
 #endif // defined USE_UBLAS
 
-// See comment in mete_pete_typical().
-//
-// operator^=() or operator<<=() would probably be better, but would
-// require changing the PETE sources, whereas the normally-undefined
-// macro PETE_ALLOW_SCALAR_SHIFT leaves operator<<() available without
-// any such change. But is this syntactic sugar sweet enough?
+/// Syntactic sugar: "assignment" operator for expression templates.
+///
+/// PETE doesn't support this:
+///    std::vector<double> v2 = v0 - v1;
+/// because it's impossible to intrude a copy-assignment operator into
+/// the standard class template.
+///
+/// operator^=() or operator<<=() would probably be better, but would
+/// require changing the PETE sources, whereas the normally-undefined
+/// macro PETE_ALLOW_SCALAR_SHIFT leaves operator<<() available without
+/// any such change. But is this syntactic sugar sweet enough?
 
 template<typename T, typename V>
 std::vector<T>& operator<<(std::vector<T>& t, V v)
 {
+#if defined PETE_ALLOW_SCALAR_SHIFT
+#   error PETE_ALLOW_SCALAR_SHIFT must not be defined.
+#endif // defined PETE_ALLOW_SCALAR_SHIFT
     return assign(t, v);
 }
 
 void mete_pete_typical()
 {
-// PETE doesn't support this:
-//    std::vector<double> pv8 = pv0 - pv1;
-// because it's impossible to intrude a copy-assignment operator into
-// the standard class template.
-//
 // With the operator<<() above, this:
 //    std::vector<double> pv7a(pv0.size()); assign(pv7a, pv0 - pv1);
 // could be written thus:

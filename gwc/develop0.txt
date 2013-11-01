@@ -1,12 +1,8 @@
   # Set up working environment for development
   # Do this after running 'install_cygwin.bat' and 'install_msw.sh'
 
-  # To make sure Cygwin-1.5 and -1.7 both work, perform all steps
-  # in this file, for Cygwin-1.5 first; then remove the "C:\lmi"
-  # directory and perform them all again for Cygwin-1.7
-
-  # First of all, start bash to set up '~' directory
-  # (this might not have been done yet for Cygwin-1.5)
+  # First of all, start bash to set up '~' directory, as required for
+  # older Cygwin versions
 
   # Optionally mount an archive directory (assumed below--adjust prn)
 
@@ -30,17 +26,16 @@ popd
 
   # Configure zsh (while still in bash)
 
-  # Use 'compinit -u' to avoid a "security" warning with Cygwin-1.5
-  # (securing shell history doesn't make msw secure)
+  # Use 'compinit -u' to avoid a "security" warning with older Cygwin
+  # versions (securing shell history doesn't make msw secure, though)
   #
   # For bash, Cygwin's '/etc/profile' prepends this:
-  #   /usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin: [1.5]
-  #   /usr/local/bin:/usr/bin:/bin:                [1.7]
-  # to $PATH. Here, the (unnecessary) X directory is omitted,
-  #   /usr/sbin:/sbin:
+  #   /usr/local/bin:/usr/bin:
+  # to $PATH. Here,
+  #   /bin:/usr/sbin:/sbin:
   # is added (inadvertently omitted from '/etc/profile'?), and
   #   /opt/lmi/local/bin:/opt/lmi/local/lib
-  # is added to support lmi development.
+  # is prepended to support lmi development.
   #
   # Key bindings are for mintty:
   #   https://groups.google.com/forum/?fromgroups#!topic/mintty-discuss/v4b86DBNI80
@@ -55,14 +50,15 @@ popd
   # msw-xp as 'GMT' without daylight saving. Comment that setting out
   # if you want to have such problems.
   #
-  # Adjust $coefficiency to suit the machine.
+  # Adjust $coefficiency to suit the machine, and $TZ as you like.
 
 /bin/cat >~/.zshrc <<\EOF
 PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
+export coefficiency='--jobs=16'
+
 export TZ=UCT
 export LC_COLLATE=C.UTF-8
-export coefficiency='--jobs=16'
 
 bindkey "\e[3~" delete-char      # Del
 bindkey '\e[H' beginning-of-line # Home
@@ -87,10 +83,9 @@ EOF
   # Create a zsh-mintty shortcut--e.g., in:
   #   C:\Documents and Settings\All Users\Start Menu
   # Target:
-  #   C:\cygwin-1_7\bin\mintty.exe /bin/zsh --login
+  #   C:\cygwin-lmi\bin\mintty.exe /bin/zsh --login
   # Start in:
-  #   C:\cygwin-1_7\bin
-  # and similarly for Cygwin 1.5
+  #   C:\cygwin-lmi\bin
 
   # Close bash; open zsh
 
@@ -148,10 +143,7 @@ sed -i ~/.subversion/config \
 
   # Mirror online repositories
   #
-  # 'install_cygwin.bat' already mounted /lmi/ for Cygwin-1.7;
-  # execute this command...
-mount -f -s -b "C:/lmi" "/lmi"
-  # ...for Cygwin-1.5 only
+  # 'install_cygwin.bat' already mounted /lmi/
 
 mkdir --parents /lmi/mirror
 cd /lmi/mirror

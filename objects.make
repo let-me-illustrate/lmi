@@ -308,7 +308,6 @@ lmi_wx_objects := \
   alert_wx.o \
   census_document.o \
   census_view.o \
-  census_view_old.o \
   database_document.o \
   database_view.o \
   database_view_editor.o \
@@ -472,6 +471,7 @@ unit_test_targets := \
   financial_test \
   getopt_test \
   global_settings_test \
+  gpt_test \
   handle_exceptions_test \
   ieee754_test \
   input_seq_test \
@@ -657,6 +657,15 @@ global_settings_test$(EXEEXT): \
   global_settings_test.o \
   miscellany.o \
   path_utility.o \
+
+gpt_test$(EXEEXT): \
+  $(common_test_objects) \
+  commutation_functions.o \
+  expm1.o \
+  gpt_commutation_functions.o \
+  gpt_test.o \
+  ihs_irc7702.o \
+  timer.o \
 
 handle_exceptions_test$(EXEEXT): \
   $(common_test_objects) \

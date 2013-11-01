@@ -34,6 +34,7 @@
 #include "contains.hpp"
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
+#include "global_settings.hpp"
 #include "illustrator.hpp"       // assert_consistency()
 #include "input.hpp"
 #include "ledger.hpp"
@@ -57,6 +58,39 @@ bool cell_should_be_ignored(Input const& cell)
             0     == value_cast<int>(cell["NumberOfIdenticalLives"].str())
         ||  "Yes" !=                 cell["IncludeInComposite"    ].str()
         ;
+}
+
+/// Eat the bread of idleness between printouts.
+///
+/// Rationale: lmi sends illustrations to a printer in census order,
+/// but end users have complained that they are printed in a different
+/// order. Pausing briefly between printouts may fix that problem.
+///
+/// This experimental implementation inserts a delay when sending PDF
+/// output not only to a printer, but also to a file, so that testing
+/// can be performed without clogging a printer. For experimentation,
+/// it has no effect without the innermost password; the header
+/// "global_settings.hpp" is included above only for this purpose,
+/// and should be removed after testing.
+///
+/// Emission of output should be monitored by a progress meter in the
+/// "parallel" case. Testing makes this latent defect even more
+/// painfully obvious.
+///
+/// The delay should probably be moved to class progress_meter. That
+/// class ought to be used for any series of operations that takes a
+/// long time, anyway. And the progress_meter implementation varies
+/// by platform, making it possible to use a wx delay function that
+/// is readily interrupted by pressing "Cancel" (as is not the case
+/// here).
+
+void dawdle(mcenum_emission emission)
+{
+    if(!global_settings::instance().ash_nazg()) return;
+    if((emission & mce_emit_pdf_to_printer) || (emission & mce_emit_pdf_file))
+        {
+        lmi_sleep(10);
+        }
 }
 
 progress_meter::enum_display_mode progress_meter_mode(mcenum_emission emission)
@@ -129,6 +163,7 @@ census_run_result run_census_in_series::operator()
                 ,*IV.ledger()
                 ,emission
                 );
+            dawdle(emission);
             }
         if(!meter->reflect_progress())
             {
@@ -248,6 +283,9 @@ census_run_result run_census_in_parallel::operator()
     cell_values.reserve(cells.size());
     for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
         {
+        // This condition need be written only once, here, because
+        // subsequently 'cell_values' (which reflects the condition)
+        // is iterated across instead of 'cells'.
         if(!cell_should_be_ignored(cells[j]))
             {
             { // Begin fenv_guard scope.
@@ -593,18 +631,32 @@ census_run_result run_census_in_parallel::operator()
         } // End fenv_guard scope.
         } // End for.
 
+    meter = create_progress_meter
+        (cell_values.size()
+        ,"Finalizing all cells"
+        ,progress_meter_mode(emission)
+        );
     for(i = cell_values.begin(); i != cell_values.end(); ++i)
         {
         fenv_guard fg;
         (*i)->FinalizeLifeAllBases();
         composite.PlusEq(*(*i)->ledger_from_av());
+        if(!meter->reflect_progress())
+            {
+            result.completed_normally_ = false;
+            goto done;
+            }
         }
+    meter->culminate();
 
     result.seconds_for_output_ += pre_emit_ledger(file, emission);
 
-    {
-    int j = 0;
-    for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
+    meter = create_progress_meter
+        (cell_values.size()
+        ,"Writing output for all cells"
+        ,progress_meter_mode(emission)
+        );
+    for(j = 0, i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
         std::string const name(cells[j]["InsuredName"].str());
         result.seconds_for_output_ += emit_ledger
@@ -613,8 +665,14 @@ census_run_result run_census_in_parallel::operator()
             ,*(*i)->ledger_from_av()
             ,emission
             );
+        dawdle(emission);
+        if(!meter->reflect_progress())
+            {
+            result.completed_normally_ = false;
+            goto done;
+            }
         }
-    }
+    meter->culminate();
 
     result.seconds_for_output_ += emit_ledger
         (serial_file_path(file, "composite", -1, "hastur")

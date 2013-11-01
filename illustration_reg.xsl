@@ -464,6 +464,22 @@ to the xsl files first.
               The state of issue
               is <xsl:value-of select="$scalars/StatePostalAbbrev"/>.
             </fo:block>
+            <xsl:if test="$scalars/IsInforce='1'">
+              <fo:block padding-top="1em">
+                This illustration assumes a beginning account value of
+                $<xsl:value-of select="$scalars/InforceUnloanedAV"/> as
+                of the date of this illustration.
+              </fo:block>
+            </xsl:if>
+            <xsl:if test="$scalars/IsInforce='1'">
+              <fo:block padding-top="1em">
+                This illustration assumes a beginning cost basis of
+                $<xsl:value-of select="$scalars/InforceTaxBasis"/> as
+                of the date of this illustration; the actual cost basis
+                may be higher or lower. Consult the Home Office for cost
+                basis information.
+              </fo:block>
+            </xsl:if>
             <xsl:if test="$is_composite">
               <fo:block padding-top="1em">
                 Please see the attached census, listing the face amounts,

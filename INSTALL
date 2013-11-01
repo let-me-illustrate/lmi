@@ -43,7 +43,7 @@ Copy and paste the following lines into the "Command Prompt" window:
 
 Save the following files into the 'C:\cache_for_lmi' directory:
 
-  http://www.cygwin.com/setup.exe
+  http://cygwin.com/setup-x86.exe
   http://svn.sv.nongnu.org/svn/lmi/lmi/trunk/install_cygwin.bat
 
 Copy and paste the following lines into the "Command prompt" window:

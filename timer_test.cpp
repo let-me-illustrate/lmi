@@ -67,6 +67,7 @@ void goo(int i, X, X const&, X*)
 struct TimerTest
 {
     static void WaitTenMsec();
+    static void SleepOneSec();
     static void TestResolution();
     static void TestExceptions();
     static void TestAliquotTimer();
@@ -77,6 +78,13 @@ void TimerTest::WaitTenMsec()
     Timer timer;
     double limit = 0.01 * static_cast<double>(timer.frequency_);
     for(;timer.inspect() - timer.time_when_started_ <= limit;) {}
+}
+
+/// Test lmi_sleep().
+
+void TimerTest::SleepOneSec()
+{
+    lmi_sleep(1);
 }
 
 /// Roughly validate accuracy of high-resolution timer.
@@ -170,6 +178,8 @@ void TimerTest::TestAliquotTimer()
     BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  1.0e-100), std::invalid_argument, "");
     BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  0.0     ), std::invalid_argument, "");
     BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec, -1.0     ), std::invalid_argument, "");
+
+    std::cout << "  " << TimeAnAliquot(SleepOneSec, 2.000) << '\n';
 }
 
 int test_main(int, char*[])
