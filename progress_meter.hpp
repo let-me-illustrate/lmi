@@ -113,8 +113,6 @@
 /// incrementing the counter. Thus, it enforces the invariant expected
 /// in the canonical 'for' statement
 ///   for(int i = 0; i < maximum; ++i) {assert(i < maximum);}
-/// Arguably this is useless, but it's quite inexpensive, and it's
-/// worth the cost if it ever finds a problem.
 ///
 /// culminate() warns if the iteration counter hasn't been incremented
 /// exactly to its maximum, unless the operation was cancelled. This

@@ -78,11 +78,6 @@ void progress_meter_test::test_normal_usage()
         ("Some title...\n"
         ,progress_meter_unit_test_stream().str()
         );
-    BOOST_TEST_THROW
-        (meter->reflect_progress()
-        ,std::runtime_error
-        ,"Progress meter maximum count exceeded."
-        );
 }
 
 void progress_meter_test::test_quiet_display_mode()
@@ -159,11 +154,6 @@ void progress_meter_test::test_empty_title_and_zero_max_count()
         ("\n"
         ,progress_meter_unit_test_stream().str()
         );
-    BOOST_TEST_THROW
-        (meter->reflect_progress()
-        ,std::runtime_error
-        ,"Progress meter maximum count exceeded."
-        );
 }
 
 void progress_meter_test::test_invalid_display_mode()
@@ -219,6 +209,13 @@ void progress_meter_test::test_postcondition_failure()
         << std::endl
         ;
     meter->culminate();
+
+    meter->reflect_progress();
+    BOOST_TEST_THROW
+        (meter->reflect_progress()
+        ,std::runtime_error
+        ,"Progress meter maximum count exceeded."
+        );
 }
 
 int test_main(int, char*[])
