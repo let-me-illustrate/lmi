@@ -52,8 +52,8 @@ class concrete_progress_meter
             |   wxPD_CAN_ABORT
             |   wxPD_ELAPSED_TIME
             |   wxPD_ESTIMATED_TIME
-            |   wxPD_SMOOTH
             |   wxPD_REMAINING_TIME
+            |   wxPD_SMOOTH
         };
 
   public:
