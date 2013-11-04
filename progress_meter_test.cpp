@@ -115,6 +115,7 @@ void progress_meter_test::test_distinct_metered_operations()
         }
     meter0->culminate();
 
+    // Use a different shared pointer.
     boost::shared_ptr<progress_meter> meter1
         (create_progress_meter
             (max_count
@@ -128,8 +129,20 @@ void progress_meter_test::test_distinct_metered_operations()
         }
     meter1->culminate();
 
+    // Reuse a shared pointer.
+    meter0 = create_progress_meter
+        (max_count
+        ,"Operation 2"
+        ,progress_meter::e_unit_test_mode
+        );
+    for(int i = 0; i < max_count; ++i)
+        {
+        BOOST_TEST(meter0->reflect_progress());
+        }
+    meter0->culminate();
+
     BOOST_TEST_EQUAL
-        ("Operation 0...\nOperation 1...\n"
+        ("Operation 0...\nOperation 1...\nOperation 2...\n"
         ,progress_meter_unit_test_stream().str()
         );
 }
