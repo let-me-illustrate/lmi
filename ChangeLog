@@ -32809,3 +32809,42 @@ Add a cross-platform sleep function.
   group_values.cpp
 Experimentally pause between printouts.
 
+20131031T1243Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Improve documentation.
+
+20131031T1256Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Refactor.
+
+20131031T1343Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Add progress meters for potentially lengthy operations.
+
+20131104T1343Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter_wx.cpp
+Alphabetize options.
+
+20131104T1823Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter.hpp
+  progress_meter_test.cpp
+Test invariants in one place.
+
+20131104T1829Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter_test.cpp
+Test shared-pointer reuse.
+
+20131107T1408Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+  group_values.hpp
+Enforce constness of an enum value argument...in the implementation,
+though not in declarations. Although it's of a primitive type, it is
+important that its value not be changed.
+

@@ -35,19 +35,19 @@
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
 #include "global_settings.hpp"
-#include "illustrator.hpp"       // assert_consistency()
+#include "illustrator.hpp"              // assert_consistency()
 #include "input.hpp"
 #include "ledger.hpp"
 #include "ledgervalues.hpp"
 #include "materially_equal.hpp"
-#include "mc_enum_types_aux.hpp" // mc_str()
+#include "mc_enum_types_aux.hpp"        // mc_str()
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>             // std::max()
-#include <iterator>              // std::back_inserter()
+#include <algorithm>                    // std::max()
+#include <iterator>                     // std::back_inserter()
 #include <string>
 
 namespace
@@ -112,10 +112,10 @@ class run_census_in_series
 {
   public:
     census_run_result operator()
-        (fs::path const&           file
+        (fs::path           const& file
         ,mcenum_emission           emission
         ,std::vector<Input> const& cells
-        ,Ledger&                   composite
+        ,Ledger                  & composite
         );
 };
 
@@ -123,18 +123,18 @@ class run_census_in_parallel
 {
   public:
     census_run_result operator()
-        (fs::path const&           file
+        (fs::path           const& file
         ,mcenum_emission           emission
         ,std::vector<Input> const& cells
-        ,Ledger&                   composite
+        ,Ledger                  & composite
         );
 };
 
 census_run_result run_census_in_series::operator()
-    (fs::path const&           file
-    ,mcenum_emission           emission
+    (fs::path           const& file
+    ,mcenum_emission    const  emission
     ,std::vector<Input> const& cells
-    ,Ledger&                   composite
+    ,Ledger                  & composite
     )
 {
     Timer timer;
@@ -256,10 +256,10 @@ census_run_result run_census_in_series::operator()
 /// on an illustration.
 
 census_run_result run_census_in_parallel::operator()
-    (fs::path const&           file
-    ,mcenum_emission           emission
+    (fs::path           const& file
+    ,mcenum_emission    const  emission
     ,std::vector<Input> const& cells
-    ,Ledger&                   composite
+    ,Ledger                  & composite
     )
 {
     Timer timer;
@@ -697,8 +697,8 @@ run_census::~run_census()
 }
 
 census_run_result run_census::operator()
-    (fs::path const&           file
-    ,mcenum_emission           emission
+    (fs::path           const& file
+    ,mcenum_emission    const  emission
     ,std::vector<Input> const& cells
     )
 {
