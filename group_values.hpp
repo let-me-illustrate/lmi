@@ -26,7 +26,7 @@
 
 #include "config.hpp"
 
-#include "mc_enum_type_enums.hpp" // enum mcenum_emission
+#include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
@@ -82,7 +82,7 @@ class LMI_SO run_census
     ~run_census();
 
     census_run_result operator()
-        (fs::path const&           file
+        (fs::path           const& file
         ,mcenum_emission           emission
         ,std::vector<Input> const& cells
         );
