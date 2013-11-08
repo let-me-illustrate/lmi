@@ -60,11 +60,12 @@ bool cell_should_be_ignored(Input const& cell)
         ;
 }
 
-/// Eat the bread of idleness between printouts.
+/// Number of seconds to pause between printouts.
 ///
 /// Rationale: lmi sends illustrations to a printer in census order,
 /// but end users have complained that they are printed in a different
-/// order. Pausing briefly between printouts may fix that problem.
+/// order. Pausing briefly between printouts seems to forestall that
+/// problem.
 ///
 /// This experimental implementation inserts a delay when sending PDF
 /// output not only to a printer, but also to a file, so that testing
@@ -72,25 +73,14 @@ bool cell_should_be_ignored(Input const& cell)
 /// it has no effect without the innermost password; the header
 /// "global_settings.hpp" is included above only for this purpose,
 /// and should be removed after testing.
-///
-/// Emission of output should be monitored by a progress meter in the
-/// "parallel" case. Testing makes this latent defect even more
-/// painfully obvious.
-///
-/// The delay should probably be moved to class progress_meter. That
-/// class ought to be used for any series of operations that takes a
-/// long time, anyway. And the progress_meter implementation varies
-/// by platform, making it possible to use a wx delay function that
-/// is readily interrupted by pressing "Cancel" (as is not the case
-/// here).
 
-void dawdle(mcenum_emission emission)
+int intermission_between_printouts(mcenum_emission emission)
 {
-    if(!global_settings::instance().ash_nazg()) return;
-    if((emission & mce_emit_pdf_to_printer) || (emission & mce_emit_pdf_file))
-        {
-        lmi_sleep(10);
-        }
+    return
+          (emission & mce_emit_pdf_to_printer) ? 10
+        : ((emission & mce_emit_pdf_file) && global_settings::instance().ash_nazg()) ? 5
+        : 0
+        ;
 }
 
 progress_meter::enum_display_mode progress_meter_mode(mcenum_emission emission)
@@ -163,7 +153,7 @@ census_run_result run_census_in_series::operator()
                 ,*IV.ledger()
                 ,emission
                 );
-            dawdle(emission);
+            meter->dawdle(intermission_between_printouts(emission));
             }
         if(!meter->reflect_progress())
             {
@@ -665,7 +655,7 @@ census_run_result run_census_in_parallel::operator()
             ,*(*i)->ledger_from_av()
             ,emission
             );
-        dawdle(emission);
+        meter->dawdle(intermission_between_printouts(emission));
         if(!meter->reflect_progress())
             {
             result.completed_normally_ = false;
