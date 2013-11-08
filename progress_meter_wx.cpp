@@ -28,9 +28,10 @@
 
 #include "progress_meter.hpp"
 
-#include "wx_utility.hpp"
+#include "wx_utility.hpp"               // TopWindow()
 
 #include <wx/progdlg.h>
+#include <wx/utils.h>                   // wxSleep()
 
 #include <sstream>
 
@@ -66,6 +67,8 @@ class concrete_progress_meter
     virtual ~concrete_progress_meter();
 
   private:
+    // progress_meter overrides.
+    virtual void do_dawdle(int seconds) const;
     // progress_meter required implementation.
     virtual std::string progress_message() const;
     virtual bool show_progress_message();
@@ -102,6 +105,11 @@ concrete_progress_meter::concrete_progress_meter
 
 concrete_progress_meter::~concrete_progress_meter()
 {
+}
+
+void concrete_progress_meter::do_dawdle(int seconds) const
+{
+    wxSleep(seconds);
 }
 
 std::string concrete_progress_meter::progress_message() const
