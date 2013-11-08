@@ -28,10 +28,11 @@
 
 #include "progress_meter.hpp"
 
-#include "wx_utility.hpp"               // TopWindow()
+#include "wx_utility.hpp"               // TheApp(), TopWindow()
 
+#include <wx/app.h>                     // Required for TheApp().
 #include <wx/progdlg.h>
-#include <wx/utils.h>                   // wxSleep()
+#include <wx/utils.h>                   // wxMilliSleep()
 
 #include <sstream>
 
@@ -109,7 +110,11 @@ concrete_progress_meter::~concrete_progress_meter()
 
 void concrete_progress_meter::do_dawdle(int seconds) const
 {
-    wxSleep(seconds);
+    for(int i = 0; i < 10 * seconds; ++i)
+        {
+        wxMilliSleep(100);
+        TheApp().Yield(true);
+        }
 }
 
 std::string concrete_progress_meter::progress_message() const
