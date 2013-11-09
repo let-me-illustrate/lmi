@@ -32868,3 +32868,11 @@ Use the delay function just added.
 Sleep wakefully between printouts. See:
   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00005.html
 
+20131109T0029Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter.cpp
+  progress_meter.hpp
+  progress_meter_wx.cpp
+Process pending events more cautiously during a pause. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
+

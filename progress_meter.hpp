@@ -120,9 +120,12 @@
 ///     reflect_progress(seconds_to_dawdle);
 /// because no pause is wanted when the condition is false. It cannot
 /// be static, because it must call virtual do_dawdle() to distinguish
-/// behavior by user interface. It's a member of this class only for
-/// convenience; if it turns out to be useful outside this context,
-/// then it should become a standalone function in a different module.
+/// behavior by user interface. It's a member of this class because
+/// the motivating use case involves a progress meter--so, for the wx
+/// interface, do_dawdle() should call wxProgressDialog::Update(),
+/// as explained here:
+///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
+/// It is not const because wxProgressDialog::Update() is not.
 ///
 /// reflect_progress() throws an exception if the iteration counter
 /// equals or exceeds its maximum. This condition is tested before
@@ -207,7 +210,7 @@ class LMI_SO progress_meter
         ,e_unit_test_mode
         };
 
-    void dawdle(int seconds) const;
+    void dawdle(int seconds);
     bool reflect_progress();
     void culminate();
 
@@ -223,7 +226,7 @@ class LMI_SO progress_meter
     int count() const;
     int max_count() const;
 
-    virtual void        do_dawdle(int seconds)  const    ;
+    virtual void        do_dawdle            (int seconds);
     virtual std::string progress_message     () const = 0;
     virtual bool        show_progress_message()       = 0;
     virtual void        culminate_ui         ()       = 0;

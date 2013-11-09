@@ -28,9 +28,8 @@
 
 #include "progress_meter.hpp"
 
-#include "wx_utility.hpp"               // TheApp(), TopWindow()
+#include "wx_utility.hpp"               // TopWindow()
 
-#include <wx/app.h>                     // Required for TheApp().
 #include <wx/progdlg.h>
 #include <wx/utils.h>                   // wxMilliSleep()
 
@@ -69,7 +68,7 @@ class concrete_progress_meter
 
   private:
     // progress_meter overrides.
-    virtual void do_dawdle(int seconds) const;
+    virtual void do_dawdle(int seconds);
     // progress_meter required implementation.
     virtual std::string progress_message() const;
     virtual bool show_progress_message();
@@ -108,12 +107,12 @@ concrete_progress_meter::~concrete_progress_meter()
 {
 }
 
-void concrete_progress_meter::do_dawdle(int seconds) const
+void concrete_progress_meter::do_dawdle(int seconds)
 {
     for(int i = 0; i < 10 * seconds; ++i)
         {
         wxMilliSleep(100);
-        TheApp().Yield(true);
+        progress_dialog_.Update(count());
         }
 }
 
