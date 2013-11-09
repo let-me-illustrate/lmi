@@ -86,7 +86,7 @@ progress_meter::~progress_meter()
 {
 }
 
-void progress_meter::dawdle(int seconds) const
+void progress_meter::dawdle(int seconds)
 {
     do_dawdle(seconds);
 }
@@ -137,7 +137,7 @@ int progress_meter::max_count() const
 /// implementation for a GUI library would naturally use a more
 /// sophisticated technique.
 
-void progress_meter::do_dawdle(int seconds) const
+void progress_meter::do_dawdle(int seconds)
 {
     lmi_sleep(seconds);
 }
