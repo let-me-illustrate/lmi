@@ -736,6 +736,18 @@ census_run_result run_census::operator()
             }
         }
 
+    // Indicate cancellation on the statusbar. This may be of little
+    // importance to end users, yet quite helpful for testing.
+    //
+    // It might seem like a good idea to write this statusbar message
+    // in progress_meter::culminate(), but that function is bypassed
+    // upon cancellation in this translation unit; and writing it in
+    // ~progress_meter() seems to be a poor idea because it may throw.
+    //
+    if(!result.completed_normally_)
+        {
+        status() << "Cancelled." << std::flush;
+        }
     return result;
 }
 
