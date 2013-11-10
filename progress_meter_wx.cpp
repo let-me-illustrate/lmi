@@ -121,7 +121,7 @@ void concrete_progress_meter::do_dawdle(int seconds)
     std::ostringstream oss;
     oss.precision(1);
     oss << std::fixed;
-    for(int i = 10 * seconds; 0 < i; --i)
+    for(int i = 10 * seconds; 0 < i && !progress_dialog_.WasCancelled(); --i)
         {
         wxMilliSleep(100);
         oss.str("");
