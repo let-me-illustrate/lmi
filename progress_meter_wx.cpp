@@ -33,6 +33,7 @@
 #include <wx/progdlg.h>
 #include <wx/utils.h>                   // wxMilliSleep()
 
+#include <ios>                          // std::fixed, std::ios_base::precision()
 #include <sstream>
 
 namespace
@@ -107,12 +108,25 @@ concrete_progress_meter::~concrete_progress_meter()
 {
 }
 
+/// Sleep for the number of seconds given in the argument.
+///
+/// Sleep only for a tenth of a second at a time, to ensure that the
+/// application remains responsive--see:
+///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
+/// Count down the remaining delay to reassure end users that activity
+/// is taking place.
+
 void concrete_progress_meter::do_dawdle(int seconds)
 {
-    for(int i = 0; i < 10 * seconds; ++i)
+    std::ostringstream oss;
+    oss.precision(1);
+    oss << std::fixed;
+    for(int i = 10 * seconds; 0 < i; --i)
         {
         wxMilliSleep(100);
-        progress_dialog_.Update(count());
+        oss.str("");
+        oss << "Waiting " << 0.1 * i << " seconds for printer";
+        progress_dialog_.Update(count(), oss.str());
         }
 }
 
