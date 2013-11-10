@@ -123,9 +123,11 @@
 /// behavior by user interface. It's a member of this class because
 /// the motivating use case involves a progress meter--so, for the wx
 /// interface, do_dawdle() should call wxProgressDialog::Update(),
-/// as explained here:
+/// for the reasons explained here:
 ///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
-/// It is not const because wxProgressDialog::Update() is not.
+/// and also so that pressing Cancel interrupts the delay. Because
+/// wxProgressDialog::Update() is not const, do_dawdle() and dawdle()
+/// cannot be const.
 ///
 /// reflect_progress() throws an exception if the iteration counter
 /// equals or exceeds its maximum. This condition is tested before

@@ -32876,3 +32876,19 @@ Sleep wakefully between printouts. See:
 Process pending events more cautiously during a pause. See:
   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
 
+20131110T1401Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Indicate cancellation on statusbar.
+
+20131110T2058Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter_wx.cpp
+Count down remaining delay on progress dialog.
+
+20131110T2302Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter.hpp
+  progress_meter_wx.cpp
+When Cancel pressed, eftsoons stop dawdling.
+
