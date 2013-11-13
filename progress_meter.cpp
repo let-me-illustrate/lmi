@@ -29,6 +29,7 @@
 #include "progress_meter.hpp"
 
 #include "alert.hpp"
+#include "timer.hpp"                    // lmi_sleep()
 
 #include <sstream>
 
@@ -85,6 +86,11 @@ progress_meter::~progress_meter()
 {
 }
 
+void progress_meter::dawdle(int seconds)
+{
+    do_dawdle(seconds);
+}
+
 bool progress_meter::reflect_progress()
 {
     if(max_count_ <= count_)
@@ -123,5 +129,16 @@ int progress_meter::count() const
 int progress_meter::max_count() const
 {
     return max_count_;
+}
+
+/// Pause for the number of seconds given in the argument.
+///
+/// This default implementation calls lmi_sleep(). The overriding
+/// implementation for a GUI library would naturally use a more
+/// sophisticated technique.
+
+void progress_meter::do_dawdle(int seconds)
+{
+    lmi_sleep(seconds);
 }
 

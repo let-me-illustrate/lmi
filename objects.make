@@ -883,6 +883,7 @@ progress_meter_test$(EXEEXT): \
   progress_meter.o \
   progress_meter_cli.o \
   progress_meter_test.o \
+  timer.o \
 
 regex_test$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 regex_test$(EXEEXT): \
