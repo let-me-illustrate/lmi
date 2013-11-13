@@ -32892,3 +32892,8 @@ Count down remaining delay on progress dialog.
   progress_meter_wx.cpp
 When Cancel pressed, eftsoons stop dawdling.
 
+20131113T1502Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Remove temporary testing support.
+

@@ -34,7 +34,6 @@
 #include "contains.hpp"
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
-#include "global_settings.hpp"
 #include "illustrator.hpp"              // assert_consistency()
 #include "input.hpp"
 #include "ledger.hpp"
@@ -62,25 +61,17 @@ bool cell_should_be_ignored(Input const& cell)
 
 /// Number of seconds to pause between printouts.
 ///
-/// Rationale: lmi sends illustrations to a printer in census order,
+/// Motivation: lmi sends illustrations to a printer in census order,
 /// but end users have complained that they are printed in a different
 /// order. Pausing briefly between printouts seems to forestall that
-/// problem.
-///
-/// This experimental implementation inserts a delay when sending PDF
-/// output not only to a printer, but also to a file, so that testing
-/// can be performed without clogging a printer. For experimentation,
-/// it has no effect without the innermost password; the header
-/// "global_settings.hpp" is included above only for this purpose,
-/// and should be removed after testing.
+/// problem. Cf.:
+///   http://www.traction-software.co.uk/batchprint/kb/KB0027.html
+/// Heuristic testing suggests that ten seconds is enough, but two
+/// seconds is not.
 
 int intermission_between_printouts(mcenum_emission emission)
 {
-    return
-          (emission & mce_emit_pdf_to_printer) ? 10
-        : ((emission & mce_emit_pdf_file) && global_settings::instance().ash_nazg()) ? 5
-        : 0
-        ;
+    return (emission & mce_emit_pdf_to_printer) ? 10 : 0;
 }
 
 progress_meter::enum_display_mode progress_meter_mode(mcenum_emission emission)
