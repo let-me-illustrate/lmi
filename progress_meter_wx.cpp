@@ -28,10 +28,12 @@
 
 #include "progress_meter.hpp"
 
-#include "wx_utility.hpp"
+#include "wx_utility.hpp"               // TopWindow()
 
 #include <wx/progdlg.h>
+#include <wx/utils.h>                   // wxMilliSleep()
 
+#include <ios>                          // std::fixed, std::ios_base::precision()
 #include <sstream>
 
 namespace
@@ -52,8 +54,8 @@ class concrete_progress_meter
             |   wxPD_CAN_ABORT
             |   wxPD_ELAPSED_TIME
             |   wxPD_ESTIMATED_TIME
-            |   wxPD_SMOOTH
             |   wxPD_REMAINING_TIME
+            |   wxPD_SMOOTH
         };
 
   public:
@@ -66,6 +68,8 @@ class concrete_progress_meter
     virtual ~concrete_progress_meter();
 
   private:
+    // progress_meter overrides.
+    virtual void do_dawdle(int seconds);
     // progress_meter required implementation.
     virtual std::string progress_message() const;
     virtual bool show_progress_message();
@@ -102,6 +106,28 @@ concrete_progress_meter::concrete_progress_meter
 
 concrete_progress_meter::~concrete_progress_meter()
 {
+}
+
+/// Sleep for the number of seconds given in the argument.
+///
+/// Sleep only for a tenth of a second at a time, to ensure that the
+/// application remains responsive--see:
+///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
+/// Count down the remaining delay to reassure end users that activity
+/// is taking place.
+
+void concrete_progress_meter::do_dawdle(int seconds)
+{
+    std::ostringstream oss;
+    oss.precision(1);
+    oss << std::fixed;
+    for(int i = 10 * seconds; 0 < i && !progress_dialog_.WasCancelled(); --i)
+        {
+        wxMilliSleep(100);
+        oss.str("");
+        oss << "Waiting " << 0.1 * i << " seconds for printer";
+        progress_dialog_.Update(count(), oss.str());
+        }
 }
 
 std::string concrete_progress_meter::progress_message() const

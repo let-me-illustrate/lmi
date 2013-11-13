@@ -907,7 +907,8 @@ test_progress_meter_SOURCES = \
   null_stream.cpp \
   progress_meter.cpp \
   progress_meter_cli.cpp \
-  progress_meter_test.cpp
+  progress_meter_test.cpp \
+  timer.cpp
 test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
 test_progress_meter_LDADD = \
   liblmi.la

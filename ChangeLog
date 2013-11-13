@@ -32809,3 +32809,91 @@ Add a cross-platform sleep function.
   group_values.cpp
 Experimentally pause between printouts.
 
+20131031T1243Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Improve documentation.
+
+20131031T1256Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Refactor.
+
+20131031T1343Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Add progress meters for potentially lengthy operations.
+
+20131104T1343Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter_wx.cpp
+Alphabetize options.
+
+20131104T1823Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter.hpp
+  progress_meter_test.cpp
+Test invariants in one place.
+
+20131104T1829Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter_test.cpp
+Test shared-pointer reuse.
+
+20131107T1408Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+  group_values.hpp
+Enforce constness of an enum value argument...in the implementation,
+though not in declarations. Although it's of a primitive type, it is
+important that its value not be changed.
+
+20131108T1306Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  objects.make
+  progress_meter.cpp
+  progress_meter.hpp
+  progress_meter_wx.cpp
+Add a delay function.
+
+20131108T1308Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Use the delay function just added.
+
+20131108T2328Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter_wx.cpp
+Sleep wakefully between printouts. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00005.html
+
+20131109T0029Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter.cpp
+  progress_meter.hpp
+  progress_meter_wx.cpp
+Process pending events more cautiously during a pause. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00006.html
+
+20131110T1401Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Indicate cancellation on statusbar.
+
+20131110T2058Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter_wx.cpp
+Count down remaining delay on progress dialog.
+
+20131110T2302Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter.hpp
+  progress_meter_wx.cpp
+When Cancel pressed, eftsoons stop dawdling.
+
+20131113T1502Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Remove temporary testing support.
+
