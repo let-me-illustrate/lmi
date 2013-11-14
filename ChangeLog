@@ -32897,3 +32897,14 @@ When Cancel pressed, eftsoons stop dawdling.
   group_values.cpp
 Remove temporary testing support.
 
+20131114T1237Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Remove a superfluous header.
+
+20131114T1317Z <gchicares@sbcglobal.net> [542]
+
+  progress_meter_wx.cpp
+Make do_dawdle() message generic. It's not necessarily only for
+printing.
+
