@@ -32908,3 +32908,8 @@ Remove a superfluous header.
 Make do_dawdle() message generic. It's not necessarily only for
 printing.
 
+20131114T1431Z <gchicares@sbcglobal.net> [542]
+
+  system_command_wx.cpp
+Yield to Cancel before calling wxExecute().
+
