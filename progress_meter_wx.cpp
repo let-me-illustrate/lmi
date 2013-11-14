@@ -125,7 +125,7 @@ void concrete_progress_meter::do_dawdle(int seconds)
         {
         wxMilliSleep(100);
         oss.str("");
-        oss << "Waiting " << 0.1 * i << " seconds for printer";
+        oss << "Waiting " << 0.1 * i << " seconds";
         progress_dialog_.Update(count(), oss.str());
         }
 }
