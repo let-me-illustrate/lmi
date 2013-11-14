@@ -34,7 +34,6 @@
 #include "contains.hpp"
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
-#include "illustrator.hpp"              // assert_consistency()
 #include "input.hpp"
 #include "ledger.hpp"
 #include "ledgervalues.hpp"
