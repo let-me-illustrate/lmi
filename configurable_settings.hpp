@@ -67,6 +67,7 @@ class LMI_SO configurable_settings
     std::string const& libraries_to_preload               () const;
     bool               offer_hobsons_choice               () const;
     std::string const& print_directory                    () const;
+    int                seconds_to_pause_between_printouts () const;
     std::string const& skin_filename                      () const;
     std::string const& spreadsheet_file_extension         () const;
     bool               use_builtin_calculation_summary    () const;
@@ -104,6 +105,7 @@ class LMI_SO configurable_settings
     std::string libraries_to_preload_;
     bool        offer_hobsons_choice_;
     std::string print_directory_;
+    int         seconds_to_pause_between_printouts_;
     std::string skin_filename_;
     std::string spreadsheet_file_extension_;
     bool        use_builtin_calculation_summary_;
