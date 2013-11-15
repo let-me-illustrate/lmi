@@ -145,6 +145,7 @@ configurable_settings::configurable_settings()
     ,libraries_to_preload_               (""                                   )
     ,offer_hobsons_choice_               (false                                )
     ,print_directory_                    ("/var/opt/lmi/spool"                 )
+    ,seconds_to_pause_between_printouts_ (10                                   )
     ,skin_filename_                      ("skin.xrc"                           )
     ,spreadsheet_file_extension_         (".gnumeric"                          )
     ,use_builtin_calculation_summary_    (false                                )
@@ -202,6 +203,7 @@ void configurable_settings::ascribe_members()
     ascribe("libraries_to_preload"               ,&configurable_settings::libraries_to_preload_               );
     ascribe("offer_hobsons_choice"               ,&configurable_settings::offer_hobsons_choice_               );
     ascribe("print_directory"                    ,&configurable_settings::print_directory_                    );
+    ascribe("seconds_to_pause_between_printouts" ,&configurable_settings::seconds_to_pause_between_printouts_ );
     ascribe("skin_filename"                      ,&configurable_settings::skin_filename_                      );
     ascribe("spreadsheet_file_extension"         ,&configurable_settings::spreadsheet_file_extension_         );
     ascribe("use_builtin_calculation_summary"    ,&configurable_settings::use_builtin_calculation_summary_    );
@@ -385,6 +387,13 @@ bool configurable_settings::offer_hobsons_choice() const
 std::string const& configurable_settings::print_directory() const
 {
     return print_directory_;
+}
+
+/// Number of seconds to pause between batched printouts.
+
+int configurable_settings::seconds_to_pause_between_printouts() const
+{
+    return seconds_to_pause_between_printouts_;
 }
 
 /// Name of '.xrc' interface skin.

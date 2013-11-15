@@ -166,6 +166,7 @@ cat >/opt/lmi/bin/configurable_settings.xml <<EOF
   <libraries_to_preload/>
   <offer_hobsons_choice>0</offer_hobsons_choice>
   <print_directory>C:/opt/lmi/bin</print_directory>
+  <seconds_to_pause_between_printouts>10</seconds_to_pause_between_printouts>
   <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
   <use_builtin_calculation_summary>1</use_builtin_calculation_summary>

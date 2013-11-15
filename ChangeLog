@@ -32919,3 +32919,17 @@ Yield to Cancel before calling wxExecute().
 Specify installation drive to make msw default directories absolute.
 This enables printing from a 'fardel' archived on another drive.
 
+20131115T0036Z <gchicares@sbcglobal.net> [542]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Reformat for expansion.
+
+20131115T0103Z <gchicares@sbcglobal.net> [542]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  group_values.cpp
+  install_msw.sh
+Make pause between printouts configurable.
+
