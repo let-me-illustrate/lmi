@@ -32,11 +32,12 @@
 #include "null_stream.hpp"
 #include "timer.hpp"
 
-#include <wx/app.h> // wxTheApp
+#include <wx/app.h>                     // wxTheApp
+#include <wx/evtloop.h>                 // class wxEventLoopBase
 #include <wx/frame.h>
 #include <wx/utils.h>
 
-#include <cstddef>  // std::size_t
+#include <cstddef>                      // std::size_t
 #include <ostream>
 
 namespace
@@ -74,6 +75,11 @@ void assemble_console_lines
 /// exit code and the command itself.
 ///
 /// Show elapsed time on statusbar iff statusbar is available.
+///
+/// Before calling wxExecute(), yield for UI events so that Cancel is
+/// recognized when this function is called from a wxProgressDialog
+/// loop. See the discussion thread starting here:
+///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00009.html
 
 void concrete_system_command(std::string const& command_line)
 {
@@ -85,13 +91,12 @@ void concrete_system_command(std::string const& command_line)
         && dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())
         && dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())->GetStatusBar()
         ;
-    std::ostream& statusbar_if_available =
-        b
-        ? status()
-        : null_stream()
-        ;
-
+    std::ostream& statusbar_if_available = b ? status() : null_stream();
     statusbar_if_available << "Running..." << std::flush;
+
+    wxEventLoopBase* e = wxEventLoopBase::GetActive();
+    e && e->YieldFor(wxEVT_CATEGORY_UI);
+
     wxArrayString output;
     wxArrayString errors;
     long int exit_code = wxExecute(command_line, output, errors);
