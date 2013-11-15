@@ -59,18 +59,18 @@ class LMI_SO configurable_settings
     void calculation_summary_columns(std::string const&);
     void use_builtin_calculation_summary(bool);
 
-    std::string const& calculation_summary_columns      () const;
-    std::string const& cgi_bin_log_filename             () const;
-    std::string const& custom_input_filename            () const;
-    std::string const& custom_output_filename           () const;
-    std::string const& default_input_filename           () const;
-    std::string const& libraries_to_preload             () const;
-    bool               offer_hobsons_choice             () const;
-    std::string const& print_directory                  () const;
-    std::string const& skin_filename                    () const;
-    std::string const& spreadsheet_file_extension       () const;
-    bool               use_builtin_calculation_summary  () const;
-    std::string const& xsl_fo_command                   () const;
+    std::string const& calculation_summary_columns        () const;
+    std::string const& cgi_bin_log_filename               () const;
+    std::string const& custom_input_filename              () const;
+    std::string const& custom_output_filename             () const;
+    std::string const& default_input_filename             () const;
+    std::string const& libraries_to_preload               () const;
+    bool               offer_hobsons_choice               () const;
+    std::string const& print_directory                    () const;
+    std::string const& skin_filename                      () const;
+    std::string const& spreadsheet_file_extension         () const;
+    bool               use_builtin_calculation_summary    () const;
+    std::string const& xsl_fo_command                     () const;
 
   private:
     configurable_settings();
