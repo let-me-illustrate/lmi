@@ -74,6 +74,11 @@ void assemble_console_lines
 /// exit code and the command itself.
 ///
 /// Show elapsed time on statusbar iff statusbar is available.
+///
+/// See:
+///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00017.html
+/// for the wxEXEC_NODISABLE rationale. This is potentially dangerous,
+/// and could be inhibited (by an extra argument) if ever needed.
 
 void concrete_system_command(std::string const& command_line)
 {
@@ -90,7 +95,7 @@ void concrete_system_command(std::string const& command_line)
     statusbar_if_available << "Running..." << std::flush;
     wxArrayString output;
     wxArrayString errors;
-    long int exit_code = wxExecute(command_line, output, errors);
+    long int exit_code = wxExecute(command_line, output, errors, wxEXEC_NODISABLE);
     statusbar_if_available << timer.stop().elapsed_msec_str() << std::flush;
 
     if(0L == exit_code)
