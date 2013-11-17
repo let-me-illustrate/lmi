@@ -32945,3 +32945,8 @@ Abandon the 20131114T1431Z experiment. See:
 Make "Census | Print case to disk" cancellable. See:
   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00017.html
 
+20131117T1453Z <gchicares@sbcglobal.net> [542]
+
+  authenticity.cpp
+Show detailed diagnostics upon authentication failure.
+
