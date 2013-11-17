@@ -32933,3 +32933,9 @@ Reformat for expansion.
   install_msw.sh
 Make pause between printouts configurable.
 
+20131117T1211Z <gchicares@sbcglobal.net> [542]
+
+  system_command_wx.cpp
+Abandon the 20131114T1431Z experiment. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00015.html
+
