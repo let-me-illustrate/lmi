@@ -32939,3 +32939,9 @@ Make pause between printouts configurable.
 Abandon the 20131114T1431Z experiment. See:
   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00015.html
 
+20131117T1403Z <gchicares@sbcglobal.net> [542]
+
+  system_command_wx.cpp
+Make "Census | Print case to disk" cancellable. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00017.html
+
