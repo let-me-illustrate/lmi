@@ -32950,3 +32950,9 @@ Make "Census | Print case to disk" cancellable. See:
   authenticity.cpp
 Show detailed diagnostics upon authentication failure.
 
+20131118T2210Z <wboutin@massmutual.com> [542]
+
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+Add two controls.
+
