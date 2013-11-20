@@ -615,8 +615,15 @@ bool Skeleton::OnExceptionInMainLoop()
 
 int Skeleton::OnExit()
 {
-    doc_manager_->FileHistorySave(*config_);
-    delete doc_manager_;
+    try
+        {
+        doc_manager_->FileHistorySave(*config_);
+        delete doc_manager_;
+        }
+    catch(...)
+        {
+        report_exception();
+        }
     return wxApp::OnExit(); // Deletes config_.
 }
 
