@@ -608,12 +608,16 @@ bool Skeleton::OnExceptionInMainLoop()
     return true;
 }
 
+/// wxApp::OnExit() override.
+///
+/// Call the base class's implementation--see:
+///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
+
 int Skeleton::OnExit()
 {
     doc_manager_->FileHistorySave(*config_);
     delete doc_manager_;
-    delete config_;
-    return 0;
+    return wxApp::OnExit(); // Deletes config_.
 }
 
 // WX !! An exception thrown anywhere in this function, even right
