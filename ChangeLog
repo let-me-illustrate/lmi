@@ -32972,3 +32972,20 @@ Initialize all data members in ctor-initializer for safety.
 Call base class's OnExit() in override. See:
   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
 
+20131120T1916Z <gchicares@sbcglobal.net> [542]
+
+  main_wx.cpp
+Handle and report exceptions in overridden OnExit().
+
+20131121T0002Z <gchicares@sbcglobal.net> [542]
+
+  xml_lmi.cpp
+Replace deprecated get_error_message(). See:
+  http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
+
+20131121T0004Z <gchicares@sbcglobal.net> [542]
+
+  xml_lmi.cpp
+Replace deprecated document(char const*). See:
+  http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
+
