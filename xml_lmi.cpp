@@ -76,7 +76,7 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
         if(true == parser_->operator!())
             {
             throw std::runtime_error
-                ("Parser failed: " + parser_->get_error_message()
+                ("Parser failed: " + parser_->messages().print()
                 );
             }
         }
@@ -110,7 +110,7 @@ xml_lmi::dom_parser::dom_parser(char const* data, std::size_t length)
         if(true == parser_->operator!())
             {
             throw std::runtime_error
-                ("Parser failed: " + parser_->get_error_message()
+                ("Parser failed: " + parser_->messages().print()
                 );
             }
         }
@@ -156,7 +156,7 @@ xml_lmi::dom_parser::dom_parser(std::istream const& is)
         if(true == parser_->operator!())
             {
             throw std::runtime_error
-                ("Parser failed: " + parser_->get_error_message()
+                ("Parser failed: " + parser_->messages().print()
                 );
             }
         }
