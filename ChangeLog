@@ -32989,3 +32989,15 @@ Replace deprecated get_error_message(). See:
 Replace deprecated document(char const*). See:
   http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
 
+20131121T1319Z <gchicares@sbcglobal.net> [542]
+
+  xml_lmi.cpp
+Remove otiose checks. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
+
+20131121T1417Z <gchicares@sbcglobal.net> [542]
+
+  install_miscellanea.make
+  xmlwrapp-0.7.1.md5sums [new file]
+Upgrade to xmlwrapp-0.7.1 .
+
