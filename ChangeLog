@@ -32980,13 +32980,13 @@ Handle and report exceptions in overridden OnExit().
 20131121T0002Z <gchicares@sbcglobal.net> [542]
 
   xml_lmi.cpp
-Replace deprecated get_error_message(). See:
+Replace deprecated get_error_message() (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
 
 20131121T0004Z <gchicares@sbcglobal.net> [542]
 
   xml_lmi.cpp
-Replace deprecated document(char const*). See:
+Replace deprecated document(char const*) (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
 
 20131121T1319Z <gchicares@sbcglobal.net> [542]
@@ -33000,4 +33000,12 @@ Remove otiose checks. See:
   install_miscellanea.make
   xmlwrapp-0.7.1.md5sums [new file]
 Upgrade to xmlwrapp-0.7.1 .
+
+20131122T2003Z <gchicares@sbcglobal.net> [542]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Show all schema diagnostics, not just the first (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
+Identify problems this uncovers in old code.
 
