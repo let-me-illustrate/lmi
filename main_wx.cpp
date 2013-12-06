@@ -574,10 +574,11 @@ void Skeleton::UponHelp(wxCommandEvent&)
 
 /// Rethrow an exception caught by wx into a local catch clause.
 ///
-/// This virtual function exists only to be overridden. Calling the
-/// base-class implementation would be pointless.
+/// Report the exception, then return 'true' to continue processing.
 ///
-/// For MinGW gcc-3.4.4 and earlier
+/// This virtual function exists only to be overridden. Calling the
+/// base-class implementation would normally be pointless. However,
+/// for MinGW gcc-3.4.4 and earlier
 ///   http://article.gmane.org/gmane.comp.gnu.mingw.user/18594
 ///     [2006-01-10T22:00:24Z from Danny Smith]
 /// it is crucial that the exception be rethrown from the same shared
@@ -962,6 +963,12 @@ void Skeleton::UponTestLibArbitraryException(wxCommandEvent&)
 {
     test_arbitrary_exception();
 }
+
+/// Test catastrophic-error report.
+///
+/// This error occurs only when normal error reporting is impossible;
+/// it is internal to 'alert.cpp', so no corresponding application-
+/// level UponTestAppCatastropheReport() can be written.
 
 void Skeleton::UponTestLibCatastropheReport(wxCommandEvent&)
 {
