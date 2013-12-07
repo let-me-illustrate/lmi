@@ -49,7 +49,7 @@
 #include "data_directory.hpp"
 #include "database_document.hpp"
 #include "database_view.hpp"
-#include "dbdict.hpp"               // print_databases()
+#include "dbdict.hpp"                   // print_databases()
 #include "default_view.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
@@ -61,7 +61,7 @@
 #include "icon_monger.hpp"
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
-#include "input_sequence_entry.hpp" // InputSequenceEntryXmlHandler
+#include "input_sequence_entry.hpp"     // InputSequenceEntryXmlHandler
 #include "license.hpp"
 #include "main_common.hpp"
 #include "mec_document.hpp"
@@ -77,14 +77,14 @@
 #include "progress_meter.hpp"
 #include "rounding_document.hpp"
 #include "rounding_view.hpp"
-#include "rounding_view_editor.hpp" // RoundingButtonsXmlHandler
+#include "rounding_view_editor.hpp"     // RoundingButtonsXmlHandler
 #include "system_command.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
 #include "tier_document.hpp"
 #include "tier_view.hpp"
 #include "wx_new.hpp"
-#include "wx_utility.hpp"           // class ClipboardEx
+#include "wx_utility.hpp"               // class ClipboardEx
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -94,12 +94,12 @@
 #include <wx/cshelp.h>
 #include <wx/docmdi.h>
 #include <wx/image.h>
-#include <wx/log.h>                 // wxSafeShowMessage()
+#include <wx/log.h>                     // wxSafeShowMessage()
 #include <wx/menu.h>
 #include <wx/textctrl.h>
-#include <wx/textdlg.h>             // wxGetTextFromUser()
+#include <wx/textdlg.h>                 // wxGetTextFromUser()
 #include <wx/toolbar.h>
-#include <wx/utils.h>               // wxMilliSleep(), wxSafeYield()
+#include <wx/utils.h>                   // wxMilliSleep(), wxSafeYield()
 #include <wx/xrc/xmlres.h>
 
 #include <iterator>
@@ -225,9 +225,9 @@ int WINAPI WinMain
     return result;
 }
 
-/// 'config_' can't be initialized in the initializer list, because
-/// wxConfigBase::Get() must be called after SetAppName() and
-/// SetVendorName(). Otherwise, the configuration object wouldn't
+/// 'config_' can't be initialized in the initializer list with
+/// wxConfigBase::Get(), which must be called after SetAppName() and
+/// SetVendorName(): otherwise, the configuration object wouldn't
 /// reflect the vendor and application name; on the msw platform,
 /// for instance, that would prevent writing to a registry key based
 /// on the application's name.
@@ -242,7 +242,8 @@ int WINAPI WinMain
 ///     the "AppName" (but not the "AppDisplayName").
 
 Skeleton::Skeleton()
-    :doc_manager_     (0)
+    :config_          (0)
+    ,doc_manager_     (0)
     ,frame_           (0)
     ,timer_           (this)
 {
@@ -573,10 +574,11 @@ void Skeleton::UponHelp(wxCommandEvent&)
 
 /// Rethrow an exception caught by wx into a local catch clause.
 ///
-/// This virtual function exists only to be overridden. Calling the
-/// base-class implementation would be pointless.
+/// Report the exception, then return 'true' to continue processing.
 ///
-/// For MinGW gcc-3.4.4 and earlier
+/// This virtual function exists only to be overridden. Calling the
+/// base-class implementation would normally be pointless. However,
+/// for MinGW gcc-3.4.4 and earlier
 ///   http://article.gmane.org/gmane.comp.gnu.mingw.user/18594
 ///     [2006-01-10T22:00:24Z from Danny Smith]
 /// it is crucial that the exception be rethrown from the same shared
@@ -607,12 +609,23 @@ bool Skeleton::OnExceptionInMainLoop()
     return true;
 }
 
+/// wxApp::OnExit() override.
+///
+/// Call the base class's implementation--see:
+///   http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
+
 int Skeleton::OnExit()
 {
-    doc_manager_->FileHistorySave(*config_);
-    delete doc_manager_;
-    delete config_;
-    return 0;
+    try
+        {
+        doc_manager_->FileHistorySave(*config_);
+        delete doc_manager_;
+        }
+    catch(...)
+        {
+        report_exception();
+        }
+    return wxApp::OnExit(); // Deletes config_.
 }
 
 // WX !! An exception thrown anywhere in this function, even right
@@ -950,6 +963,12 @@ void Skeleton::UponTestLibArbitraryException(wxCommandEvent&)
 {
     test_arbitrary_exception();
 }
+
+/// Test catastrophic-error report.
+///
+/// This error occurs only when normal error reporting is impossible;
+/// it is internal to 'alert.cpp', so no corresponding application-
+/// level UponTestAppCatastropheReport() can be written.
 
 void Skeleton::UponTestLibCatastropheReport(wxCommandEvent&)
 {

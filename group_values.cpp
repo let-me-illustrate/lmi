@@ -31,6 +31,7 @@
 #include "account_value.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
@@ -70,7 +71,9 @@ bool cell_should_be_ignored(Input const& cell)
 
 int intermission_between_printouts(mcenum_emission emission)
 {
-    return (emission & mce_emit_pdf_to_printer) ? 10 : 0;
+    configurable_settings const& c = configurable_settings::instance();
+    int const pause = c.seconds_to_pause_between_printouts();
+    return (emission & mce_emit_pdf_to_printer) ? pause : 0;
 }
 
 progress_meter::enum_display_mode progress_meter_mode(mcenum_emission emission)

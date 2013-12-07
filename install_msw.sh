@@ -157,19 +157,20 @@ echo -n "8fa614e38dde6f7ab0f9fade87dfa2e3"         >/opt/lmi/data/passkey
 
 cat >/opt/lmi/bin/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
-<configurable_settings>
+<configurable_settings version="1">
   <calculation_summary_columns/>
   <cgi_bin_log_filename>cgi_bin.log</cgi_bin_log_filename>
   <custom_input_filename>sample.ini</custom_input_filename>
   <custom_output_filename>sample.out</custom_output_filename>
-  <default_input_filename>/etc/opt/lmi/default.ill</default_input_filename>
+  <default_input_filename>C:/etc/opt/lmi/default.ill</default_input_filename>
   <libraries_to_preload/>
   <offer_hobsons_choice>0</offer_hobsons_choice>
-  <print_directory>.</print_directory>
+  <print_directory>C:/opt/lmi/bin</print_directory>
+  <seconds_to_pause_between_printouts>10</seconds_to_pause_between_printouts>
   <skin_filename>skin.xrc</skin_filename>
   <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
   <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
-  <xsl_fo_command>CMD /c /opt/lmi/third_party/fop-0.20.5/fop</xsl_fo_command>
+  <xsl_fo_command>CMD /c C:/opt/lmi/third_party/fop-0.20.5/fop</xsl_fo_command>
 </configurable_settings>
 EOF
 

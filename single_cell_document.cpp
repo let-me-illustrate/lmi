@@ -158,10 +158,22 @@ void single_cell_document::validate_with_xsd_schema(xml::document const& d) cons
 {
     try
         {
-        xsd_schema().validate(cell_sorter().apply(d));
+        xml::error_messages e;
+        if(!xsd_schema().validate(cell_sorter().apply(d), e))
+            {
+            throw xml::exception(e);
+            }
         }
     catch(...)
         {
+// Known shortcomings:
+//  - Two separate messageboxes are displayed; one would be better.
+//  - If the diagnostics are too lengthy, then they're truncated
+//    when displayed. The messagebox is not scrollable--see:
+//      http://lists.nongnu.org/archive/html/lmi/2009-05/msg00032.html
+// Rethrowing the exception has the same effect, because it's caught
+// by OnExceptionInMainLoop(), which (like report_exception()) calls
+// safely_show_message().
         warning() << "Schema validation failed--diagnostics follow." << std::flush;
         report_exception();
         }

@@ -89,7 +89,46 @@
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablerows>0,1,2,3</growablerows>
-                        <growablecols>0</growablecols>
+                            <object class="sizeritem">
+                            <flag>wxALIGN_LEFT|wxGROW|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxStaticBoxSizer">
+                                <orient>wxVERTICAL</orient>
+                                <label>Cell</label>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <border>4</border>
+                                    <object class="wxFlexGridSizer">
+                                        <cols>0</cols>
+                                        <rows>1</rows>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM</flag>
+                                            <border>4</border>
+                                            <object class="wxStaticText">
+                                                <label># identical lives</label>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+                                            <border>2</border>
+                                            <object class="wxTextCtrl" name="NumberOfIdenticalLives">
+                                                <help>Number of identical lives represented by this cell</help>
+                                                <size>50,-1</size>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxLEFT|wxTOP</flag>
+                                    <border>2</border>
+                                    <object class="wxCheckBox" name="IncludeInComposite">
+                                        <help>Include this individual in any group composite</help>
+                                        <label>Include in composite</label>
+                                        <checked>0</checked>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
