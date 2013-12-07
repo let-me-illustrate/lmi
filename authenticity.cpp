@@ -34,16 +34,16 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "md5.hpp"
-#include "path_utility.hpp"       // fs::path inserter
-#include "platform_dependent.hpp" // chdir()
+#include "path_utility.hpp"             // fs::path inserter
+#include "platform_dependent.hpp"       // chdir()
 #include "system_command.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
-#include <cstdio>  // std::fclose(), std::fopen()
-#include <cstdlib> // std::exit(), EXIT_FAILURE
-#include <cstring> // std::memcpy()
+#include <cstdio>                       // std::fclose(), std::fopen()
+#include <cstdlib>                      // std::exit(), EXIT_FAILURE
+#include <cstring>                      // std::memcpy()
 #include <iomanip>
 #include <sstream>
 
@@ -220,6 +220,7 @@ std::string Authenticity::Assay
         }
     catch(...)
         {
+        report_exception();
         oss
             << "At least one required file is missing, altered, or invalid."
             << " Try reinstalling."

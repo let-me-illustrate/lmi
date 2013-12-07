@@ -418,7 +418,11 @@ void multiple_cell_document::validate_with_xsd_schema(xml::document const& d) co
 {
     try
         {
-        xsd_schema().validate(cell_sorter().apply(d));
+        xml::error_messages e;
+        if(!xsd_schema().validate(cell_sorter().apply(d), e))
+            {
+            throw xml::exception(e);
+            }
         }
     catch(...)
         {

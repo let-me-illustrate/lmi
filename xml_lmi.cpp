@@ -48,8 +48,7 @@ namespace xml_lmi
 ///
 /// Precondition: argument names an accessible xml file.
 ///
-/// Postconditions: member parser_ is a non-null pointer; the object
-/// it points to is valid in that its operator!() returns false.
+/// Postconditions: member parser_ is valid.
 ///
 /// Throws: std::runtime_error, via fatal_error(), if a precondition
 /// is violated, or if xml-library calls throw an exception derived
@@ -69,16 +68,6 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
             throw std::runtime_error("File does not exist.");
             }
         parser_.reset(new DomParser(filename.c_str()));
-        if(0 == parser_.get())
-            {
-            throw std::runtime_error("Parser not initialized.");
-            }
-        if(true == parser_->operator!())
-            {
-            throw std::runtime_error
-                ("Parser failed: " + parser_->get_error_message()
-                );
-            }
         }
     catch(std::exception const& e)
         {
@@ -90,8 +79,7 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
 ///
 /// Precondition: arguments describe an xml string.
 ///
-/// Postconditions: member parser_ is a non-null pointer; the object
-/// it points to is valid in that its operator!() returns false.
+/// Postconditions: member parser_ is valid.
 ///
 /// Throws: std::runtime_error, via fatal_error(), if a precondition
 /// is violated, or if xml-library calls throw an exception derived
@@ -103,16 +91,6 @@ xml_lmi::dom_parser::dom_parser(char const* data, std::size_t length)
         {
         error_context_ = "Unable to parse xml data: ";
         parser_.reset(new DomParser(data, length));
-        if(0 == parser_.get())
-            {
-            throw std::runtime_error("Parser not initialized.");
-            }
-        if(true == parser_->operator!())
-            {
-            throw std::runtime_error
-                ("Parser failed: " + parser_->get_error_message()
-                );
-            }
         }
     catch(std::exception const& e)
         {
@@ -130,8 +108,7 @@ xml_lmi::dom_parser::dom_parser(char const* data, std::size_t length)
 ///
 /// Precondition: argument is an xml stream for which 0 == rdstate().
 ///
-/// Postconditions: member parser_ is a non-null pointer; the object
-/// it points to is valid in that its operator!() returns false.
+/// Postconditions: member parser_ is valid.
 ///
 /// Throws: std::runtime_error, via fatal_error(), if a precondition
 /// is violated, or if xml-library calls throw an exception derived
@@ -149,16 +126,6 @@ xml_lmi::dom_parser::dom_parser(std::istream const& is)
         std::string s;
         istream_to_string(is, s);
         parser_.reset(new DomParser(s.c_str(), 1 + s.size()));
-        if(0 == parser_.get())
-            {
-            throw std::runtime_error("Parser not initialized.");
-            }
-        if(true == parser_->operator!())
-            {
-            throw std::runtime_error
-                ("Parser failed: " + parser_->get_error_message()
-                );
-            }
         }
     catch(std::exception const& e)
         {
@@ -235,7 +202,7 @@ xml::element const& xml_lmi::dom_parser::root_node
 }
 
 xml_lmi::xml_document::xml_document(std::string const& root_node_name)
-    :document_(new xml_lmi::Document(root_node_name.c_str()))
+    :document_(new xml_lmi::Document(xml::element(root_node_name.c_str())))
 {
 }
 

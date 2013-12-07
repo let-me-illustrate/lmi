@@ -144,18 +144,19 @@ std::string const& default_calculation_summary_columns()
 } // Unnamed namespace.
 
 configurable_settings::configurable_settings()
-    :calculation_summary_columns_      (default_calculation_summary_columns())
-    ,cgi_bin_log_filename_             ("cgi_bin.log"                 )
-    ,custom_input_filename_            ("custom.ini"                  )
-    ,custom_output_filename_           ("custom.out"                  )
-    ,default_input_filename_           ("etc/opt/default.ill"         )
-    ,libraries_to_preload_             (""                            )
-    ,offer_hobsons_choice_             (false                         )
-    ,print_directory_                  ("/var/opt/lmi/spool"          )
-    ,skin_filename_                    ("skin.xrc"                    )
-    ,spreadsheet_file_extension_       (".gnumeric"                   )
-    ,use_builtin_calculation_summary_  (false                         )
-    ,xsl_fo_command_                   ("fo"                          )
+    :calculation_summary_columns_        (default_calculation_summary_columns())
+    ,cgi_bin_log_filename_               ("cgi_bin.log"                        )
+    ,custom_input_filename_              ("custom.ini"                         )
+    ,custom_output_filename_             ("custom.out"                         )
+    ,default_input_filename_             ("/etc/opt/lmi/default.ill"           )
+    ,libraries_to_preload_               (""                                   )
+    ,offer_hobsons_choice_               (false                                )
+    ,print_directory_                    ("/var/opt/lmi/spool"                 )
+    ,seconds_to_pause_between_printouts_ (10                                   )
+    ,skin_filename_                      ("skin.xrc"                           )
+    ,spreadsheet_file_extension_         (".gnumeric"                          )
+    ,use_builtin_calculation_summary_    (false                                )
+    ,xsl_fo_command_                     ("fo"                                 )
 {
     ascribe_members();
     load();
@@ -201,18 +202,19 @@ configurable_settings& configurable_settings::instance()
 
 void configurable_settings::ascribe_members()
 {
-    ascribe("calculation_summary_columns"      ,&configurable_settings::calculation_summary_columns_      );
-    ascribe("cgi_bin_log_filename"             ,&configurable_settings::cgi_bin_log_filename_             );
-    ascribe("custom_input_filename"            ,&configurable_settings::custom_input_filename_            );
-    ascribe("custom_output_filename"           ,&configurable_settings::custom_output_filename_           );
-    ascribe("default_input_filename"           ,&configurable_settings::default_input_filename_           );
-    ascribe("libraries_to_preload"             ,&configurable_settings::libraries_to_preload_             );
-    ascribe("offer_hobsons_choice"             ,&configurable_settings::offer_hobsons_choice_             );
-    ascribe("print_directory"                  ,&configurable_settings::print_directory_                  );
-    ascribe("skin_filename"                    ,&configurable_settings::skin_filename_                    );
-    ascribe("spreadsheet_file_extension"       ,&configurable_settings::spreadsheet_file_extension_       );
-    ascribe("use_builtin_calculation_summary"  ,&configurable_settings::use_builtin_calculation_summary_  );
-    ascribe("xsl_fo_command"                   ,&configurable_settings::xsl_fo_command_                   );
+    ascribe("calculation_summary_columns"        ,&configurable_settings::calculation_summary_columns_        );
+    ascribe("cgi_bin_log_filename"               ,&configurable_settings::cgi_bin_log_filename_               );
+    ascribe("custom_input_filename"              ,&configurable_settings::custom_input_filename_              );
+    ascribe("custom_output_filename"             ,&configurable_settings::custom_output_filename_             );
+    ascribe("default_input_filename"             ,&configurable_settings::default_input_filename_             );
+    ascribe("libraries_to_preload"               ,&configurable_settings::libraries_to_preload_               );
+    ascribe("offer_hobsons_choice"               ,&configurable_settings::offer_hobsons_choice_               );
+    ascribe("print_directory"                    ,&configurable_settings::print_directory_                    );
+    ascribe("seconds_to_pause_between_printouts" ,&configurable_settings::seconds_to_pause_between_printouts_ );
+    ascribe("skin_filename"                      ,&configurable_settings::skin_filename_                      );
+    ascribe("spreadsheet_file_extension"         ,&configurable_settings::spreadsheet_file_extension_         );
+    ascribe("use_builtin_calculation_summary"    ,&configurable_settings::use_builtin_calculation_summary_    );
+    ascribe("xsl_fo_command"                     ,&configurable_settings::xsl_fo_command_                     );
 }
 
 void configurable_settings::load()
@@ -392,6 +394,13 @@ bool configurable_settings::offer_hobsons_choice() const
 std::string const& configurable_settings::print_directory() const
 {
     return print_directory_;
+}
+
+/// Number of seconds to pause between batched printouts.
+
+int configurable_settings::seconds_to_pause_between_printouts() const
+{
+    return seconds_to_pause_between_printouts_;
 }
 
 /// Name of '.xrc' interface skin.

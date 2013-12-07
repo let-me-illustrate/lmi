@@ -32913,3 +32913,99 @@ printing.
   system_command_wx.cpp
 Yield to Cancel before calling wxExecute().
 
+20131115T0001Z <gchicares@sbcglobal.net> [542]
+
+  install_msw.sh
+Specify installation drive to make msw default directories absolute.
+This enables printing from a 'fardel' archived on another drive.
+
+20131115T0036Z <gchicares@sbcglobal.net> [542]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Reformat for expansion.
+
+20131115T0103Z <gchicares@sbcglobal.net> [542]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  group_values.cpp
+  install_msw.sh
+Make pause between printouts configurable.
+
+20131117T1211Z <gchicares@sbcglobal.net> [542]
+
+  system_command_wx.cpp
+Abandon the 20131114T1431Z experiment. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00015.html
+
+20131117T1403Z <gchicares@sbcglobal.net> [542]
+
+  system_command_wx.cpp
+Make "Census | Print case to disk" cancellable. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00017.html
+
+20131117T1453Z <gchicares@sbcglobal.net> [542]
+
+  authenticity.cpp
+Show detailed diagnostics upon authentication failure.
+
+20131118T2210Z <wboutin@massmutual.com> [542]
+
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+Add two controls.
+
+20131120T1553Z <wboutin@massmutual.com> [542]
+
+  version.hpp
+Designate release candidate 5838.
+
+20131120T1751Z <gchicares@sbcglobal.net> [542]
+
+  main_wx.cpp
+Initialize all data members in ctor-initializer for safety.
+
+20131120T1759Z <gchicares@sbcglobal.net> [542]
+
+  main_wx.cpp
+Call base class's OnExit() in override. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
+
+20131120T1916Z <gchicares@sbcglobal.net> [542]
+
+  main_wx.cpp
+Handle and report exceptions in overridden OnExit().
+
+20131121T0002Z <gchicares@sbcglobal.net> [542]
+
+  xml_lmi.cpp
+Replace deprecated get_error_message() (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
+
+20131121T0004Z <gchicares@sbcglobal.net> [542]
+
+  xml_lmi.cpp
+Replace deprecated document(char const*) (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
+
+20131121T1319Z <gchicares@sbcglobal.net> [542]
+
+  xml_lmi.cpp
+Remove otiose checks. See:
+  http://lists.nongnu.org/archive/html/lmi/2013-11/msg00020.html
+
+20131121T1417Z <gchicares@sbcglobal.net> [542]
+
+  install_miscellanea.make
+  xmlwrapp-0.7.1.md5sums [new file]
+Upgrade to xmlwrapp-0.7.1 .
+
+20131122T2003Z <gchicares@sbcglobal.net> [542]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Show all schema diagnostics, not just the first (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
+Identify problems this uncovers in old code.
+

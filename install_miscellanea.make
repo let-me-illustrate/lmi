@@ -51,7 +51,7 @@ jing_archive     := jing-20091111.zip
 md5sum_msw_exe   := md5sum.exe
 sample_archive   := lmi-data-20050618T1440Z.tar.bz2
 trang_archive    := trang-20091111.zip
-xmlwrapp_archive := xmlwrapp-0.7.0.tar.gz
+xmlwrapp_archive := xmlwrapp-0.7.1.tar.gz
 
 file_list := \
   $(boost_archive) \
@@ -78,7 +78,7 @@ $(jing_archive)-url     := http://jing-trang.googlecode.com/files/$(jing_archive
 $(md5sum_msw_exe)-url   := http://etree.org/cgi-bin/counter.cgi/software/md5sum.exe#!md5!eb574b236133e60c989c6f472f07827b
 $(sample_archive)-url   := http://download.savannah.gnu.org/releases/lmi/$(sample_archive)
 $(trang_archive)-url    := http://jing-trang.googlecode.com/files/$(trang_archive)
-$(xmlwrapp_archive)-url := $(sf_mirror)/xmlwrapp/$(xmlwrapp_archive)
+$(xmlwrapp_archive)-url := http://github.com/vslavik/xmlwrapp/releases/download/v0.7.1/$(xmlwrapp_archive)
 
 $(boost_archive)-md5    := 5eca2116d39d61382b8f8235915cb267
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
@@ -87,7 +87,7 @@ $(jing_archive)-md5     := 13eef193921409a1636377d1efbf9843
 $(md5sum_msw_exe)-md5   := eb574b236133e60c989c6f472f07827b
 $(sample_archive)-md5   := e7f07133abfc3b9c2252dfa3b61191bc
 $(trang_archive)-md5    := 9d31799b948c350850eb9dd14e5b832d
-$(xmlwrapp_archive)-md5 := 971ec4241044b1f53ba860b1f9e38783
+$(xmlwrapp_archive)-md5 := d35f49e45cffaeb77bddda833bdd6c43
 
 # Utilities ####################################################################
 
