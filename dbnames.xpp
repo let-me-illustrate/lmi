@@ -33,6 +33,7 @@
 {DB_AllowSimpUw,DB_Topic_Underwriting,"AllowSimpUw","Allow simplified underwriting: 0=no, 1=yes",}, \
 {DB_AllowGuarUw,DB_Topic_Underwriting,"AllowGuarUw","Allow guaranteed underwriting: 0=no, 1=yes",}, \
 {DB_SmokeOrTobacco,DB_Topic_Underwriting,"SmokeOrTobacco","Distinguish mortality by: 0=smoking, 1=tobacco use",}, \
+{DB_UsePolicyFormAlt,DB_Topic_Underwriting,"UsePolicyFormAlt","Use alternative policy-form name: 0=no, 1=yes",}, \
 {DB_AllowPreferredClass,DB_Topic_Underwriting,"AllowPreferredClass","Allow preferred class: 0=no, 1=yes",}, \
 {DB_AllowUltraPrefClass,DB_Topic_Underwriting,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
 {DB_AllowSubstdTable,DB_Topic_Underwriting,"AllowSubstdTable","Allow substandard table ratings: 0=no, 1=yes",}, \

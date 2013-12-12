@@ -379,6 +379,19 @@
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                         <object class="wxStaticText">
+                                            <label>PolicyFormAlternative</label>
+                                        </object>
+                                        <option>0</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
+                                        <object class="wxTextCtrl" name="PolicyFormAlternative"/>
+                                        <minsize>160,-1</minsize>
+                                        <option>1</option>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <object class="wxStaticText">
                                             <label>PolicyMktgName</label>
                                         </object>
                                         <option>0</option>

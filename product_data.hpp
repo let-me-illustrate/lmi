@@ -168,6 +168,7 @@ class LMI_SO product_data
 
     // Essential strings describing the policy and company.
     glossed_string PolicyForm;
+    glossed_string PolicyFormAlternative;
     glossed_string PolicyMktgName;
     glossed_string PolicyLegalName;
     glossed_string InsCoShortName;

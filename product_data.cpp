@@ -198,6 +198,7 @@ void product_data::ascribe_members()
     ascribe("CurrSpecAmtLoadFilename"       , &product_data::CurrSpecAmtLoadFilename       );
     ascribe("GuarSpecAmtLoadFilename"       , &product_data::GuarSpecAmtLoadFilename       );
     ascribe("PolicyForm"                    , &product_data::PolicyForm                    );
+    ascribe("PolicyFormAlternative"         , &product_data::PolicyFormAlternative         );
     ascribe("PolicyMktgName"                , &product_data::PolicyMktgName                );
     ascribe("PolicyLegalName"               , &product_data::PolicyLegalName               );
     ascribe("InsCoShortName"                , &product_data::InsCoShortName                );
@@ -424,6 +425,7 @@ void product_data::WritePolFiles()
     z.CurrSpecAmtLoadFilename  = glossed_string("sample");
     z.GuarSpecAmtLoadFilename  = glossed_string("sample");
     z.PolicyForm               = glossed_string("UL32768-NY");
+    z.PolicyFormAlternative    = glossed_string("UL32768-X");
     z.PolicyMktgName           = glossed_string("UL Supreme");
     z.PolicyLegalName          = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
     z.InsCoShortName           = glossed_string("Superior Life");
