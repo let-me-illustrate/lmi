@@ -607,9 +607,14 @@ void LedgerInvariant::Init(BasicValues* b)
         {
         product_data const& p = *b->ProductData_;
         ProductName                    = b->yare_input_.ProductName                ;
+        // Accommodate one alternative policy-form name.
+        // DATABASE !! It would be much better, of course, to let all
+        // strings in class product_data vary across the same axes as
+        // database_entity objects.
+        bool alt_form = b->Database_->Query(DB_UsePolicyFormAlt);
+        PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
         PolicyMktgName                 = p.datum("PolicyMktgName"                 );
         PolicyLegalName                = p.datum("PolicyLegalName"                );
-        PolicyForm                     = p.datum("PolicyForm"                     );
         InsCoShortName                 = p.datum("InsCoShortName"                 );
         InsCoName                      = p.datum("InsCoName"                      );
         InsCoAddr                      = p.datum("InsCoAddr"                      );

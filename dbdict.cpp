@@ -127,6 +127,7 @@ void DBDictionary::ascribe_members()
     ascribe("AllowSimpUw"         , &DBDictionary::AllowSimpUw         );
     ascribe("AllowGuarUw"         , &DBDictionary::AllowGuarUw         );
     ascribe("SmokeOrTobacco"      , &DBDictionary::SmokeOrTobacco      );
+    ascribe("UsePolicyFormAlt"    , &DBDictionary::UsePolicyFormAlt    );
     ascribe("AllowPreferredClass" , &DBDictionary::AllowPreferredClass );
     ascribe("AllowUltraPrefClass" , &DBDictionary::AllowUltraPrefClass );
     ascribe("AllowSubstdTable"    , &DBDictionary::AllowSubstdTable    );
@@ -764,6 +765,18 @@ void DBDictionary::WriteSampleDBFile()
             (DB_PremTaxRate
             ,premium_tax_dimensions
             ,premium_tax_rates_for_life_insurance()
+            )
+        );
+
+    // Use alternative policy form name in states beginning with "K".
+    std::vector<double> alt_form(e_max_dim_state);
+    alt_form[mce_s_KS] = true;
+    alt_form[mce_s_KY] = true;
+    Add
+        (database_entity
+            (DB_UsePolicyFormAlt
+            ,premium_tax_dimensions
+            ,alt_form
             )
         );
 

@@ -33009,3 +33009,22 @@ Show all schema diagnostics, not just the first (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2013-05/msg00002.html
 Identify problems this uncovers in old code.
 
+20131206T1811Z <gchicares@sbcglobal.net> [542]
+
+  main_wx.cpp
+Improve documentation.
+
+20131212T2146Z <gchicares@sbcglobal.net> [542]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ledger_invariant.cpp
+  my_prod.cpp
+  policy_document.cpp
+  policy_view.xrc
+  product_data.cpp
+  product_data.hpp
+Allow one alternative 'PolicyForm'.
+
