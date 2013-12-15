@@ -1967,7 +1967,18 @@ std::vector<double> BasicValues::GetTgtPremRates() const
     return GetTable
         (ProductData_->datum("TgtPremFilename")
         ,DB_TgtPremTable
-        ,oe_modal_table == TgtPremType
+// Use this line instead:
+//      ,oe_modal_table == TgtPremType
+// once the comment concerning GetModalPremMinFromTable()
+// in GetModalPremTgtFromTable() is addressed. Meanwhile, this kludge
+// permits table-drive minimum premiums in certain circumstances.
+        ,oe_modal_table == TgtPremType || oe_modal_table == MinPremType
+// To fix this properly, implement a new GetModalPremTgtFromTable();
+// separate 'oe_modal_table' into distinct enumerators such as
+// 'oe_modal_min_table' and 'oe_modal_tgt_table'; and add a minimum-
+// premium rate table. More attention should be paid to the conditions
+// under which minimum and target premiums are recalculated--e.g.,
+// they might change iff specamt changes.
         );
 }
 
