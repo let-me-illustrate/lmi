@@ -33028,3 +33028,13 @@ Improve documentation.
   product_data.hpp
 Allow one alternative 'PolicyForm'.
 
+20131215T1656Z <gchicares@sbcglobal.net> [542]
+
+  dbnames.xpp
+Improve documentation.
+
+20131215T1657Z <gchicares@sbcglobal.net> [542]
+
+  ihs_basicval.cpp
+Allow target-premium table to be used for minimum premium.
+
