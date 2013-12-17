@@ -33038,3 +33038,8 @@ Improve documentation.
   ihs_basicval.cpp
 Allow target-premium table to be used for minimum premium.
 
+20131217T1258Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5852.
+
