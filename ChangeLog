@@ -33557,3 +33557,8 @@ Designate release candidate 5852.
   zero_test.cpp
 Update copyright notices.
 
+20140123T1414Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5854.
+
