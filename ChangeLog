@@ -33562,3 +33562,14 @@ Update copyright notices.
   version.hpp
 Designate release candidate 5854.
 
+20140129T1739Z <gchicares@sbcglobal.net> [542]
+
+  census_view.cpp
+Display a busy cursor when applying changes to groups of cells.
+
+20140129T1740Z <gchicares@sbcglobal.net> [542]
+
+  group_values.cpp
+Fix defect introduced 20050807T1553Z: a cell must be initialized at
+the beginning of any partial inforce year in which it's illustrated.
+

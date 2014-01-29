@@ -408,7 +408,9 @@ census_run_result run_census_in_parallel::operator()
 
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
-                if((*i)->PrecedesInforceDuration(year, 0))
+                // A cell must be initialized at the beginning of any
+                // partial inforce year in which it's illustrated.
+                if((*i)->PrecedesInforceDuration(year, 11))
                     {
                     continue;
                     }
