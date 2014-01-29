@@ -53,6 +53,7 @@
 #include <wx/msgdlg.h>
 #include <wx/settings.h>
 #include <wx/spinctrl.h>
+#include <wx/utils.h>                   // wxBusyCursor
 #include <wx/valnum.h>
 #include <wx/wupdlock.h>
 #include <wx/xrc/xmlres.h>
@@ -1125,6 +1126,8 @@ void CensusView::apply_changes
     ,bool         for_this_class_only
     )
 {
+    wxBusyCursor wait;
+
     // Case or class default parameters were edited and changed.
     // Compare the default parameters before and after editing;
     // for every parameter that was changed, assign the new value
