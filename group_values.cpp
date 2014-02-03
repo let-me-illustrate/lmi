@@ -1,6 +1,6 @@
 // Distinct and composite values for cells in a group.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -408,7 +408,9 @@ census_run_result run_census_in_parallel::operator()
 
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
-                if((*i)->PrecedesInforceDuration(year, 0))
+                // A cell must be initialized at the beginning of any
+                // partial inforce year in which it's illustrated.
+                if((*i)->PrecedesInforceDuration(year, 11))
                     {
                     continue;
                     }

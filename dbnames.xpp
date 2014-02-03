@@ -1,6 +1,6 @@
 // Database entity names.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -33,6 +33,7 @@
 {DB_AllowSimpUw,DB_Topic_Underwriting,"AllowSimpUw","Allow simplified underwriting: 0=no, 1=yes",}, \
 {DB_AllowGuarUw,DB_Topic_Underwriting,"AllowGuarUw","Allow guaranteed underwriting: 0=no, 1=yes",}, \
 {DB_SmokeOrTobacco,DB_Topic_Underwriting,"SmokeOrTobacco","Distinguish mortality by: 0=smoking, 1=tobacco use",}, \
+{DB_UsePolicyFormAlt,DB_Topic_Underwriting,"UsePolicyFormAlt","Use alternative policy-form name: 0=no, 1=yes",}, \
 {DB_AllowPreferredClass,DB_Topic_Underwriting,"AllowPreferredClass","Allow preferred class: 0=no, 1=yes",}, \
 {DB_AllowUltraPrefClass,DB_Topic_Underwriting,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
 {DB_AllowSubstdTable,DB_Topic_Underwriting,"AllowSubstdTable","Allow substandard table ratings: 0=no, 1=yes",}, \
@@ -269,7 +270,7 @@
 {DB_MinPremType,DB_Topic_Premiums,"MinPremType","Minimum premium: 0=based on monthly deductions, 1=7702A seven-pay premium",}, \
 {DB_MinPremIntSpread,DB_Topic_Premiums,"MinPremIntSpread","Interest spread from general-account rate used to capitalize monthly deductions for minimum premium calculation",}, \
 {DB_TgtPremType,DB_Topic_Premiums,"TgtPremType","Target premium: 0=based on monthly deductions, 1=7702A seven-pay premium, 2=read from table",}, \
-{DB_TgtPremTable,DB_Topic_Premiums,"TgtPremTable","Target premium table (index in mortality table database)",}, \
+{DB_TgtPremTable,DB_Topic_Premiums,"TgtPremTable","Annual target premium rates per $1 (index in mortality table database)",}, \
 {DB_TgtPremFixedAtIssue,DB_Topic_Premiums,"TgtPremFixedAtIssue","Target premium set forever at issue: 0=no, 1=yes",}, \
 {DB_TgtPremIgnoreSubstd,DB_Topic_Premiums,"TgtPremIgnoreSubstd","Target premium ignores substandard rating: 0=no, 1=yes",}, \
 {DB_MinPmt,DB_Topic_Premiums,"MinPmt","Minimum initial payment",}, \

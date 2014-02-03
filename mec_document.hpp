@@ -1,6 +1,6 @@
 // Document class for MEC testing.
 //
-// Copyright (C) 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
+// Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
