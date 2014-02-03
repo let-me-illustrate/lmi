@@ -1,6 +1,6 @@
 // Product-specific string data.
 //
-// Copyright (C) 2001, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
+// Copyright (C) 2001, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -86,6 +86,7 @@ void product_data::WriteProprietaryPolFiles()
     z.CurrSpecAmtLoadFilename  = glossed_string("sample");
     z.GuarSpecAmtLoadFilename  = glossed_string("sample");
     z.PolicyForm               = glossed_string("UL32768-NY");
+    z.PolicyFormAlternative    = glossed_string("UL32768-X");
     z.PolicyMktgName           = glossed_string("UL Supreme");
     z.PolicyLegalName          = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
     z.InsCoShortName           = glossed_string("Superior Life");

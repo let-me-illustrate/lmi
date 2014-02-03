@@ -1,6 +1,6 @@
 // Census manager.
 //
-// Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
+// Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -53,6 +53,7 @@
 #include <wx/msgdlg.h>
 #include <wx/settings.h>
 #include <wx/spinctrl.h>
+#include <wx/utils.h>                   // wxBusyCursor
 #include <wx/valnum.h>
 #include <wx/wupdlock.h>
 #include <wx/xrc/xmlres.h>
@@ -1125,6 +1126,8 @@ void CensusView::apply_changes
     ,bool         for_this_class_only
     )
 {
+    wxBusyCursor wait;
+
     // Case or class default parameters were edited and changed.
     // Compare the default parameters before and after editing;
     // for every parameter that was changed, assign the new value

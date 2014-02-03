@@ -1,6 +1,6 @@
 // Ledger data that do not vary by basis.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -607,9 +607,14 @@ void LedgerInvariant::Init(BasicValues* b)
         {
         product_data const& p = *b->ProductData_;
         ProductName                    = b->yare_input_.ProductName                ;
+        // Accommodate one alternative policy-form name.
+        // DATABASE !! It would be much better, of course, to let all
+        // strings in class product_data vary across the same axes as
+        // database_entity objects.
+        bool alt_form = b->Database_->Query(DB_UsePolicyFormAlt);
+        PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
         PolicyMktgName                 = p.datum("PolicyMktgName"                 );
         PolicyLegalName                = p.datum("PolicyLegalName"                );
-        PolicyForm                     = p.datum("PolicyForm"                     );
         InsCoShortName                 = p.datum("InsCoShortName"                 );
         InsCoName                      = p.datum("InsCoName"                      );
         InsCoAddr                      = p.datum("InsCoAddr"                      );

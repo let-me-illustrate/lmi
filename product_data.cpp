@@ -1,6 +1,6 @@
 // Product data representable as strings.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -199,6 +199,7 @@ void product_data::ascribe_members()
     ascribe("CurrSpecAmtLoadFilename"       , &product_data::CurrSpecAmtLoadFilename       );
     ascribe("GuarSpecAmtLoadFilename"       , &product_data::GuarSpecAmtLoadFilename       );
     ascribe("PolicyForm"                    , &product_data::PolicyForm                    );
+    ascribe("PolicyFormAlternative"         , &product_data::PolicyFormAlternative         );
     ascribe("PolicyMktgName"                , &product_data::PolicyMktgName                );
     ascribe("PolicyLegalName"               , &product_data::PolicyLegalName               );
     ascribe("InsCoShortName"                , &product_data::InsCoShortName                );
@@ -425,6 +426,7 @@ void product_data::WritePolFiles()
     z.CurrSpecAmtLoadFilename  = glossed_string("sample");
     z.GuarSpecAmtLoadFilename  = glossed_string("sample");
     z.PolicyForm               = glossed_string("UL32768-NY");
+    z.PolicyFormAlternative    = glossed_string("UL32768-X");
     z.PolicyMktgName           = glossed_string("UL Supreme");
     z.PolicyLegalName          = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
     z.InsCoShortName           = glossed_string("Superior Life");
