@@ -33578,3 +33578,10 @@ the beginning of any partial inforce year in which it's illustrated.
   version.hpp
 Designate release candidate 5857.
 
+20140223T0043Z <gchicares@sbcglobal.net> [542]
+
+  docmanager_ex.hpp
+  multidimgrid_any.cpp
+Prepare for wx-3.0 (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00000.html
+

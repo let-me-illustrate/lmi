@@ -157,7 +157,7 @@ wxSize MultiDimGridGrid::DoGetBestSize() const
     MultiDimGridGrid * const self = const_cast<MultiDimGridGrid *>(this);
 
     // 100 is the default minimal size of a widget - taken from wx headers.
-    int width  = std::max(self->GetRowLabelSize() + self->GetColumnWidth(0), 100);
+    int width  = std::max(self->GetRowLabelSize() + self->GetColSize(0), 100);
     int height = std::max(self->GetColLabelSize() + self->GetRowHeight(0), 100);
 
     // The following is from the wx header file for wxScrollWindow:
