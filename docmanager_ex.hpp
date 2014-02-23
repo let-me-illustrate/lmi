@@ -42,7 +42,7 @@ class DocManagerEx
 {
   public:
     explicit DocManagerEx
-        (long int flags  = wxDEFAULT_DOCMAN_FLAGS
+        (long int flags  = 0
         ,bool initialize = true
         );
     // WX !! Base class wxDocManager's dtor is virtual, but isn't
