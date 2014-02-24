@@ -486,7 +486,7 @@ test_actuarial_table_SOURCES = \
   xml_lmi.cpp
 test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
 test_actuarial_table_LDADD = \
-  $(BOOST_LIBS)
+  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 test_alert_SOURCES = \
@@ -890,7 +890,7 @@ test_regex_SOURCES = \
   timer.cpp
 test_regex_CXXFLAGS = $(AM_CXXFLAGS)
 test_regex_LDADD = \
-  $(BOOST_LIBS) \
+  $(BOOST_LIBS)
 
 test_round_SOURCES = \
   $(common_test_objects) \

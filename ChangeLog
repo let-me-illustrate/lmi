@@ -33591,3 +33591,9 @@ Prepare for wx-3.0 (VS). See:
 Refine wx-3.0 preparation. See:
   http://lists.nongnu.org/archive/html/lmi/2014-02/msg00009.html
 
+20140224T0209Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+Fix defects introduced 20131010T1211Z (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00003.html
+
