@@ -33585,3 +33585,9 @@ Designate release candidate 5857.
 Prepare for wx-3.0 (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2014-02/msg00000.html
 
+20140224T0202Z <gchicares@sbcglobal.net> [542]
+
+  multidimgrid_any.cpp
+Refine wx-3.0 preparation. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00009.html
+
