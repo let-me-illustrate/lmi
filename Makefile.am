@@ -62,7 +62,8 @@ EXTRA_PROGRAMS = \
 
 # libtool libraries installed in lib
 lib_LTLIBRARIES = \
-    liblmi.la
+    liblmi.la \
+    liblmi_wx_lib.la
 
 # libtool convenience libraries which are not installed at all
 noinst_LTLIBRARIES = \
@@ -153,8 +154,8 @@ check_PROGRAMS = $(TESTS)
 # Targets definitions
 ##############################################################################
 
-# main program executables
-lmi_wx_SOURCES = \
+# wx GUI's files are in a library to be shared with the tests
+liblmi_wx_lib_la_SOURCES = \
     about_dialog.cpp \
     alert_wx.cpp \
     census_document.cpp \
@@ -171,7 +172,6 @@ lmi_wx_SOURCES = \
     illustration_view.cpp \
     input_sequence_entry.cpp \
     main_common.cpp \
-    main_wx.cpp \
     mec_document.cpp \
     mec_view.cpp \
     msw_workarounds.cpp \
@@ -189,6 +189,7 @@ lmi_wx_SOURCES = \
     rounding_view.cpp \
     rounding_view_editor.cpp \
     single_choice_popup_menu.cpp \
+    skeleton.cpp \
     system_command_wx.cpp \
     text_doc.cpp \
     text_view.cpp \
@@ -200,6 +201,21 @@ lmi_wx_SOURCES = \
     wx_checks.cpp \
     wx_utility.cpp
 
+# main program executables
+lmi_wx_SOURCES = \
+    main_wx.cpp
+
+liblmi_wx_lib_la_CXXFLAGS =
+     $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
+
+liblmi_wx_lib_la_LIBADD = \
+    liblmi.la \
+    libwx_new.la \
+    $(XMLWRAPP_LIBS) \
+    $(GTK_LIBS) \
+    $(BOOST_LIBS) \
+    $(WX_LIBS)
+
 lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
 # $(CGICC_INCLUDE_FLAGS)
 
@@ -210,6 +226,7 @@ if LMI_MSW
 	$(WINDRES) -I $(top_srcdir) $(WX_CPPFLAGS) $< $@
 endif
 lmi_wx_LDADD = \
+    liblmi_wx_lib.la \
     liblmi.la \
     libwx_new.la \
     $(XMLWRAPP_LIBS) \

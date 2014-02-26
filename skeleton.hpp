@@ -31,8 +31,8 @@
 // implementation, modifying it in 2002 and the later years given in
 // the copyright notice above.
 
-#ifndef main_wx_hpp
-#define main_wx_hpp
+#ifndef skeleton_hpp
+#define skeleton_hpp
 
 #include "config.hpp"
 
@@ -130,5 +130,5 @@ class Skeleton
 
 DECLARE_APP(Skeleton)
 
-#endif // main_wx_hpp
+#endif // skeleton_hpp
 
