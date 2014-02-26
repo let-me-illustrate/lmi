@@ -128,7 +128,5 @@ class Skeleton
     DECLARE_EVENT_TABLE()
 };
 
-DECLARE_APP(Skeleton)
-
 #endif // skeleton_hpp
 

@@ -47,6 +47,9 @@
 
 #include <wx/defs.h> // for wx_dependent_objects in workhorse.make
 
+IMPLEMENT_APP_NO_MAIN(Skeleton)
+IMPLEMENT_WX_THEME_SUPPORT
+
 #ifndef LMI_MSW
 int main(int argc, char* argv[])
 #else // LMI_MSW defined.
