@@ -48,7 +48,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "docmanager_ex.hpp"
-#include "skeleton.hpp" // wxGetApp()
+#include "skeleton.hpp" // Skeleton::CreateChildFrame()
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
@@ -152,7 +152,10 @@ bool ViewEx::OnClose(bool delete_window)
 //
 bool ViewEx::OnCreate(wxDocument* doc, long int)
 {
-    wxGetApp().CreateChildFrame(doc, this);
+    Skeleton* app = dynamic_cast<Skeleton*>(wxApp::GetInstance());
+    LMI_ASSERT(app);
+    app->CreateChildFrame(doc, this);
+
     DocManager().AssociateFileHistoryWithFileMenu(FrameWindow().GetMenuBar());
     GetFrame()->SetLabel("Loading document...");
 

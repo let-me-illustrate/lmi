@@ -33610,3 +33610,12 @@ Fix defects introduced 20131010T1211Z (VS). See:
 Split lmi_wx_shared into a DLL and a small executable (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2014-02/msg00007.html
 
+20140226T2103Z <gchicares@sbcglobal.net> [542]
+
+  main_wx.cpp
+  skeleton.cpp
+  skeleton.hpp
+  view_ex.cpp
+Move wxApp implementation (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
+

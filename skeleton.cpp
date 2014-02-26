@@ -107,9 +107,6 @@
 #   include <gtk/gtk.h>
 #endif
 
-IMPLEMENT_APP_NO_MAIN(Skeleton)
-IMPLEMENT_WX_THEME_SUPPORT
-
 // Where a builtin wxID_X identifier exists, use it as such, even if
 // it's used as the 'name=' attribute of an entity in an '.xrc' file.
 // For example, write 'wxID_SAVE' here, not 'XRCID("wxID_SAVE")'.
