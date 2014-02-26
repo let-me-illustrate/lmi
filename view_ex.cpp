@@ -48,7 +48,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "docmanager_ex.hpp"
-#include "main_wx.hpp" // wxGetApp()
+#include "skeleton.hpp" // wxGetApp()
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 

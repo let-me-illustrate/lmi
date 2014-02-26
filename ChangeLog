@@ -33597,3 +33597,16 @@ Refine wx-3.0 preparation. See:
 Fix defects introduced 20131010T1211Z (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2014-02/msg00003.html
 
+20140226T1537Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  main_wx.cpp
+  main_wx.hpp  [expunged]
+  objects.make
+  skeleton.cpp [new file]
+  skeleton.hpp [new file]
+  view_ex.cpp
+  workhorse.make
+Split lmi_wx_shared into a DLL and a small executable (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00007.html
+

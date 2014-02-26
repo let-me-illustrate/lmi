@@ -296,7 +296,7 @@ lmi_common_objects := \
   stratified_algorithms.o \
   stratified_charges.o \
 
-lmi_wx_objects := \
+lmi_wx_lib_objects := \
   $(duplicated_objects) \
   about_dialog.o \
   alert_wx.o \
@@ -314,7 +314,6 @@ lmi_wx_objects := \
   illustration_view.o \
   input_sequence_entry.o \
   main_common.o \
-  main_wx.o \
   mec_document.o \
   mec_view.o \
   msw_workarounds.o \
@@ -332,6 +331,7 @@ lmi_wx_objects := \
   rounding_view.o \
   rounding_view_editor.o \
   single_choice_popup_menu.o \
+  skeleton.o \
   system_command_wx.o \
   text_doc.o \
   text_view.o \
@@ -342,6 +342,9 @@ lmi_wx_objects := \
   view_ex.o \
   wx_checks.o \
   wx_utility.o \
+
+lmi_wx_objects := \
+  main_wx.o \
 
 ifneq (,$(RC))
   lmi_wx_objects += lmi_msw_res.o
