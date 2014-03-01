@@ -33619,3 +33619,13 @@ Split lmi_wx_shared into a DLL and a small executable (VS). See:
 Move wxApp implementation (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
 
+20140301T1416Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  main_wx_test.cpp [new file]
+  objects.make
+  skeleton.hpp
+  workhorse.make
+Add inchoate GUI test (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
+

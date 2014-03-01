@@ -96,6 +96,7 @@ default_targets := \
 ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
   default_targets += \
     lmi_wx_shared$(EXEEXT) \
+    lmi_wx_test$(EXEEXT) \
     lmi_wx_lib_shared$(SHREXT) \
     wx_new$(SHREXT) \
 
@@ -832,6 +833,10 @@ lmi_wx_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 lmi_wx_shared$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) lmi_wx_lib_shared$(SHREXT) liblmi$(SHREXT) wx_new$(SHREXT)
 
+lmi_wx_test$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
+lmi_wx_test$(EXEEXT): EXTRA_LDFLAGS := $(platform_wx_libraries)
+lmi_wx_test$(EXEEXT): $(lmi_wx_test_objects) lmi_wx_lib_shared$(SHREXT) liblmi$(SHREXT) wx_new$(SHREXT)
+
 lmi_wx_static$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_static$(EXEEXT): $(lmi_wx_objects) $(lmi_wx_lib_objects) liblmi.a wx_new$(SHREXT)
 
@@ -973,6 +978,7 @@ fardel_binaries := \
   $(bin_dir)/liblmi$(SHREXT) \
   $(bin_dir)/lmi_cli_shared$(EXEEXT) \
   $(bin_dir)/lmi_wx_shared$(EXEEXT) \
+  $(bin_dir)/lmi_wx_test$(EXEEXT) \
   $(bin_dir)/wx_new$(SHREXT) \
   $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
   $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
