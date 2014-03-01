@@ -54,7 +54,6 @@ class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 class Skeleton
     :        public  wxApp
     ,        private lmi::uncopyable <Skeleton>
-    ,virtual private obstruct_slicing<Skeleton>
 {
   public:
     Skeleton();
@@ -62,6 +61,13 @@ class Skeleton
 
     // Called by view classes when they are instantiated.
     wxMDIChildFrame* CreateChildFrame(wxDocument*, ViewEx*);
+
+  protected:
+    // wxApp overrides.
+    virtual bool OnExceptionInMainLoop ();
+    virtual int  OnExit                ();
+    virtual bool OnInit                ();
+    virtual void OnUnhandledException  ();
 
   private:
     wxMenuBar* AdjustMenus(wxMenuBar*);
@@ -110,12 +116,6 @@ class Skeleton
     void UponWindowPrevious               (wxCommandEvent&);
     void UponWindowTileHorizontally       (wxCommandEvent&);
     void UponWindowTileVertically         (wxCommandEvent&);
-
-    // wxApp overrides.
-    virtual bool OnExceptionInMainLoop ();
-    virtual int  OnExit                ();
-    virtual bool OnInit                ();
-    virtual void OnUnhandledException  ();
 
     bool ProcessCommandLine(int argc, char* argv[]);
     void UpdateViews();

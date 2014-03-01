@@ -112,6 +112,7 @@ TESTS = \
     test_input \
     test_irc7702a \
     test_istream_to_string \
+    test_lmi_wx \
     test_loads \
     test_map_lookup \
     test_materially_equal \
@@ -728,6 +729,13 @@ test_istream_to_string_SOURCES = \
   istream_to_string_test.cpp \
   timer.cpp
 test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_lmi_wx_SOURCES = \
+  main_wx_test.cpp
+test_lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS)
+test_lmi_wx_LDADD = \
+  liblmi_wx_lib.la \
+  $(WX_LIBS)
 
 test_loads_SOURCES = \
   $(common_test_objects) \
