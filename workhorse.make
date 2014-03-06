@@ -838,7 +838,7 @@ lmi_wx_shared$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) skeleton$(SHREXT) liblmi$(SHREXT) wx_new$(SHREXT)
 
 lmi_wx_test$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
-lmi_wx_test$(EXEEXT): EXTRA_LDFLAGS := $(platform_wx_libraries)
+lmi_wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_test$(EXEEXT): $(lmi_wx_test_objects) skeleton$(SHREXT) liblmi$(SHREXT) wx_new$(SHREXT)
 
 lmi_wx_static$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
