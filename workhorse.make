@@ -825,6 +825,10 @@ libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 lmi_wx_monolithic$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHREXT)
 
+# '-DLMI_BUILD_SO' would be incorrect here, even though a shared
+# library is being built. The 'LMI_*_SO' macros are used only in
+# source files that are unrelated to wx, and that are therefore not
+# part of $(skeleton_objects).
 skeleton$(SHREXT): lmi_so_attributes := -DLMI_USE_SO
 skeleton$(SHREXT): EXTRA_LDFLAGS := $(wx_ldflags)
 skeleton$(SHREXT): $(skeleton_objects) liblmi$(SHREXT) wx_new$(SHREXT)
