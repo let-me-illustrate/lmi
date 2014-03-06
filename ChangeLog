@@ -33629,3 +33629,25 @@ Move wxApp implementation (VS). See:
 Add inchoate GUI test (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
 
+20140306T2306Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  objects.make
+  workhorse.make
+Rename 'lmi_wx_lib' -> 'skeleton'.
+
+20140306T2319Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Improve documentation.
+
+20140306T2328Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Make sure '-mwindows' is specified for GUI test.
+
+20140306T2339Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Avoid linking a superfluous library.
+
