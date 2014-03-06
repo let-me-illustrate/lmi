@@ -97,7 +97,7 @@ ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
   default_targets += \
     lmi_wx_shared$(EXEEXT) \
     lmi_wx_test$(EXEEXT) \
-    lmi_wx_lib_shared$(SHREXT) \
+    skeleton$(SHREXT) \
     wx_new$(SHREXT) \
 
 endif
@@ -825,20 +825,20 @@ libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 lmi_wx_monolithic$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHREXT)
 
-lmi_wx_lib_shared$(SHREXT): lmi_so_attributes := -DLMI_USE_SO
-lmi_wx_lib_shared$(SHREXT): EXTRA_LDFLAGS := $(wx_ldflags)
-lmi_wx_lib_shared$(SHREXT): $(lmi_wx_lib_objects) liblmi$(SHREXT) wx_new$(SHREXT)
+skeleton$(SHREXT): lmi_so_attributes := -DLMI_USE_SO
+skeleton$(SHREXT): EXTRA_LDFLAGS := $(wx_ldflags)
+skeleton$(SHREXT): $(skeleton_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
 lmi_wx_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 lmi_wx_shared$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
-lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) lmi_wx_lib_shared$(SHREXT) liblmi$(SHREXT) wx_new$(SHREXT)
+lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) skeleton$(SHREXT) liblmi$(SHREXT) wx_new$(SHREXT)
 
 lmi_wx_test$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 lmi_wx_test$(EXEEXT): EXTRA_LDFLAGS := $(platform_wx_libraries)
-lmi_wx_test$(EXEEXT): $(lmi_wx_test_objects) lmi_wx_lib_shared$(SHREXT) liblmi$(SHREXT) wx_new$(SHREXT)
+lmi_wx_test$(EXEEXT): $(lmi_wx_test_objects) skeleton$(SHREXT) liblmi$(SHREXT) wx_new$(SHREXT)
 
 lmi_wx_static$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
-lmi_wx_static$(EXEEXT): $(lmi_wx_objects) $(lmi_wx_lib_objects) liblmi.a wx_new$(SHREXT)
+lmi_wx_static$(EXEEXT): $(lmi_wx_objects) $(skeleton_objects) liblmi.a wx_new$(SHREXT)
 
 lmi_cli_monolithic$(EXEEXT): $(cli_objects) $(lmi_common_objects)
 

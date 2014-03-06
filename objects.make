@@ -296,7 +296,7 @@ lmi_common_objects := \
   stratified_algorithms.o \
   stratified_charges.o \
 
-lmi_wx_lib_objects := \
+skeleton_objects := \
   $(duplicated_objects) \
   about_dialog.o \
   alert_wx.o \

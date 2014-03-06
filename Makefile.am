@@ -63,7 +63,7 @@ EXTRA_PROGRAMS = \
 # libtool libraries installed in lib
 lib_LTLIBRARIES = \
     liblmi.la \
-    liblmi_wx_lib.la
+    libskeleton.la
 
 # libtool convenience libraries which are not installed at all
 noinst_LTLIBRARIES = \
@@ -156,7 +156,7 @@ check_PROGRAMS = $(TESTS)
 ##############################################################################
 
 # wx GUI's files are in a library to be shared with the tests
-liblmi_wx_lib_la_SOURCES = \
+libskeleton_la_SOURCES = \
     about_dialog.cpp \
     alert_wx.cpp \
     census_document.cpp \
@@ -206,10 +206,10 @@ liblmi_wx_lib_la_SOURCES = \
 lmi_wx_SOURCES = \
     main_wx.cpp
 
-liblmi_wx_lib_la_CXXFLAGS =
+libskeleton_la_CXXFLAGS =
      $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
 
-liblmi_wx_lib_la_LIBADD = \
+libskeleton_la_LIBADD = \
     liblmi.la \
     libwx_new.la \
     $(XMLWRAPP_LIBS) \
@@ -227,8 +227,8 @@ if LMI_MSW
 	$(WINDRES) -I $(top_srcdir) $(WX_CPPFLAGS) $< $@
 endif
 lmi_wx_LDADD = \
-    liblmi_wx_lib.la \
     liblmi.la \
+    libskeleton.la \
     libwx_new.la \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
@@ -734,7 +734,7 @@ test_lmi_wx_SOURCES = \
   main_wx_test.cpp
 test_lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS)
 test_lmi_wx_LDADD = \
-  liblmi_wx_lib.la \
+  libskeleton.la \
   $(WX_LIBS)
 
 test_loads_SOURCES = \
@@ -1216,3 +1216,4 @@ noinst_HEADERS = \
     xml_serialize.hpp \
     yare_input.hpp \
     zero.hpp
+
