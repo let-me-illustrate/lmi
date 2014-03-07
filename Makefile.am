@@ -50,7 +50,8 @@ bin_PROGRAMS = \
     antediluvian_cli \
     ihs_crc_comp \
     product_files \
-    test_coding_rules
+    test_coding_rules \
+    wx_test
 
 # other programs which may or not be built depending on configure arguments
 EXTRA_PROGRAMS = \
@@ -112,7 +113,6 @@ TESTS = \
     test_input \
     test_irc7702a \
     test_istream_to_string \
-    test_lmi_wx \
     test_loads \
     test_map_lookup \
     test_materially_equal \
@@ -255,6 +255,13 @@ lmi_cli_LDADD = \
     liblmi.la \
     $(XMLWRAPP_LIBS) \
     $(BOOST_LIBS)
+
+wx_test_SOURCES = \
+  main_wx_test.cpp
+wx_test_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS)
+wx_test_LDADD = \
+  libskeleton.la \
+  $(WX_LIBS)
 
 # libraries
 
@@ -729,13 +736,6 @@ test_istream_to_string_SOURCES = \
   istream_to_string_test.cpp \
   timer.cpp
 test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
-
-test_lmi_wx_SOURCES = \
-  main_wx_test.cpp
-test_lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS)
-test_lmi_wx_LDADD = \
-  libskeleton.la \
-  $(WX_LIBS)
 
 test_loads_SOURCES = \
   $(common_test_objects) \
