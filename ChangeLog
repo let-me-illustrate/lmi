@@ -33667,3 +33667,33 @@ Rename 'lmi_wx_test' -> 'wx_test'.
   Makefile.am
 Separate gui test from unit tests.
 
+20140307T1545Z <gchicares@sbcglobal.net> [542]
+
+  main_wx.cpp
+  main_wx_test.cpp
+  skeleton.hpp
+  view_ex.cpp
+Canonicalize #include directives.
+
+20140307T1553Z <gchicares@sbcglobal.net> [542]
+
+  view_ex.cpp
+Use safely_dereference_as<>(), for concinnity.
+
+20140307T1605Z <gchicares@sbcglobal.net> [542]
+
+  multidimgrid_any.cpp
+  multidimgrid_tools.hpp
+Remove superfluous #include directives.
+
+20140307T1607Z <gchicares@sbcglobal.net> [542]
+
+  main_wx_test.cpp
+  skeleton.hpp
+Prefer to keep members private.
+
+20140307T1629Z <gchicares@sbcglobal.net> [542]
+
+  skeleton.cpp
+Change from UTF-8 back to Latin-1 for concinnity with other files.
+
