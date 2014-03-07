@@ -153,9 +153,8 @@ bool ViewEx::OnClose(bool delete_window)
 //
 bool ViewEx::OnCreate(wxDocument* doc, long int)
 {
-    Skeleton* app = dynamic_cast<Skeleton*>(wxApp::GetInstance());
-    LMI_ASSERT(app);
-    app->CreateChildFrame(doc, this);
+    Skeleton& app = safely_dereference_as<Skeleton>(wxApp::GetInstance());
+    app.CreateChildFrame(doc, this);
 
     DocManager().AssociateFileHistoryWithFileMenu(FrameWindow().GetMenuBar());
     GetFrame()->SetLabel("Loading document...");
