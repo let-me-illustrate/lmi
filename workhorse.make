@@ -982,7 +982,6 @@ fardel_binaries := \
   $(bin_dir)/liblmi$(SHREXT) \
   $(bin_dir)/lmi_cli_shared$(EXEEXT) \
   $(bin_dir)/lmi_wx_shared$(EXEEXT) \
-  $(bin_dir)/lmi_wx_test$(EXEEXT) \
   $(bin_dir)/wx_new$(SHREXT) \
   $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
   $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
