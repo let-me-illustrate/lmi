@@ -29,7 +29,6 @@
 #include "multidimgrid_any.hpp"
 
 #include "alert.hpp"
-#include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
 #include <wx/checkbox.h>
