@@ -33651,3 +33651,19 @@ Make sure '-mwindows' is specified for GUI test.
   workhorse.make
 Avoid linking a superfluous library.
 
+20140307T1341Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Do not archive gui-test binary.
+
+20140307T1355Z <gchicares@sbcglobal.net> [542]
+
+  objects.make
+  workhorse.make
+Rename 'lmi_wx_test' -> 'wx_test'.
+
+20140307T1502Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+Separate gui test from unit tests.
+
