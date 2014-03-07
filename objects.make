@@ -346,12 +346,12 @@ skeleton_objects := \
 lmi_wx_objects := \
   main_wx.o \
 
-lmi_wx_test_objects := \
+wx_test_objects := \
   main_wx_test.o \
 
 ifneq (,$(RC))
-  lmi_wx_objects += lmi_msw_res.o
-  lmi_wx_test_objects += lmi_msw_res.o
+  lmi_wx_objects  += lmi_msw_res.o
+  wx_test_objects += lmi_msw_res.o
 endif
 
 ################################################################################
