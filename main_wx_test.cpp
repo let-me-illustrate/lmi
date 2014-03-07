@@ -26,18 +26,13 @@
 #   pragma hdrstop
 #endif
 
+#include "main_common.hpp"              // initialize_application()
+#include "msw_workarounds.hpp"
+#include "path_utility.hpp"             // initialize_filesystem()
+#include "skeleton.hpp"
 #include "test_tools.hpp"
 
-#include "skeleton.hpp"
-
-#include "fenv_guard.hpp"
-#include "fenv_lmi.hpp"
-#include "handle_exceptions.hpp"
-#include "main_common.hpp"
-#include "msw_workarounds.hpp"
-#include "path_utility.hpp"
-
-#include <wx/defs.h>
+#include <wx/init.h>                    // wxEntry()
 
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)

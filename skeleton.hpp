@@ -36,7 +36,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <wx/app.h>
