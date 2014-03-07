@@ -96,9 +96,9 @@ default_targets := \
 ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
   default_targets += \
     lmi_wx_shared$(EXEEXT) \
-    lmi_wx_test$(EXEEXT) \
     skeleton$(SHREXT) \
     wx_new$(SHREXT) \
+    wx_test$(EXEEXT) \
 
 endif
 
@@ -837,10 +837,6 @@ lmi_wx_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 lmi_wx_shared$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) skeleton$(SHREXT) liblmi$(SHREXT)
 
-lmi_wx_test$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
-lmi_wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
-lmi_wx_test$(EXEEXT): $(lmi_wx_test_objects) skeleton$(SHREXT) liblmi$(SHREXT)
-
 lmi_wx_static$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_static$(EXEEXT): $(lmi_wx_objects) $(skeleton_objects) liblmi.a wx_new$(SHREXT)
 
@@ -860,6 +856,10 @@ antediluvian_cli$(EXEEXT): $(cli_objects) libantediluvian$(SHREXT)
 antediluvian_cli_monolithic$(EXEEXT): $(cli_objects) $(antediluvian_common_objects)
 
 wx_new$(SHREXT): wx_new.o
+
+wx_test$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
+wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
+wx_test$(EXEEXT): $(wx_test_objects) skeleton$(SHREXT) liblmi$(SHREXT)
 
 # TODO ?? This needs a corresponding test target.
 lmi_cgi$(EXEEXT): $(cgi_objects) $(lmi_common_objects)
