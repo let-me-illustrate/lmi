@@ -36,16 +36,16 @@
 #   pragma hdrstop
 #endif
 
-#include "skeleton.hpp"
-
-#include "fenv_guard.hpp"
 #include "fenv_lmi.hpp"
 #include "handle_exceptions.hpp"
-#include "main_common.hpp"
+#include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
-#include "path_utility.hpp"
+#include "path_utility.hpp"             // initialize_filesystem()
+#include "skeleton.hpp"
 
-#include <wx/defs.h> // for wx_dependent_objects in workhorse.make
+#include <wx/init.h>                    // wxEntry()
+
+#include <string>
 
 IMPLEMENT_APP_NO_MAIN(Skeleton)
 IMPLEMENT_WX_THEME_SUPPORT
