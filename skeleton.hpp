@@ -62,11 +62,8 @@ class Skeleton
     wxMDIChildFrame* CreateChildFrame(wxDocument*, ViewEx*);
 
   protected:
-    // wxApp overrides.
-    virtual bool OnExceptionInMainLoop ();
-    virtual int  OnExit                ();
-    virtual bool OnInit                ();
-    virtual void OnUnhandledException  ();
+    // wxApp overrides that are further overridden in gui test.
+    virtual bool OnInit();
 
   private:
     wxMenuBar* AdjustMenus(wxMenuBar*);
@@ -115,6 +112,11 @@ class Skeleton
     void UponWindowPrevious               (wxCommandEvent&);
     void UponWindowTileHorizontally       (wxCommandEvent&);
     void UponWindowTileVertically         (wxCommandEvent&);
+
+    // wxApp overrides.
+    virtual bool OnExceptionInMainLoop ();
+    virtual int  OnExit                ();
+    virtual void OnUnhandledException  ();
 
     bool ProcessCommandLine(int argc, char* argv[]);
     void UpdateViews();

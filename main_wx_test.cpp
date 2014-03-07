@@ -50,10 +50,12 @@ class SkeletonTest : public Skeleton
 {
   public:
     SkeletonTest() {}
-    virtual bool OnInit();
 
   private:
     void RunTheTests();
+
+    // wxApp overrides.
+    virtual bool OnInit();
 };
 
 IMPLEMENT_APP_NO_MAIN(SkeletonTest)
