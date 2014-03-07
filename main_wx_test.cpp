@@ -51,11 +51,12 @@ class SkeletonTest : public Skeleton
   public:
     SkeletonTest() {}
 
-  private:
-    void RunTheTests();
-
+  protected:
     // wxApp overrides.
     virtual bool OnInit();
+
+  private:
+    void RunTheTests();
 };
 
 IMPLEMENT_APP_NO_MAIN(SkeletonTest)
