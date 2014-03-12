@@ -949,10 +949,7 @@ void enforce_taboos(file const& f)
     taboo(f, "Microsoft Word");
     taboo(f, "Stylus Studio");
     taboo(f, "Sonic Software");
-    // Temporarily suppress this taboo for html. See:
-    //   http://lists.nongnu.org/archive/html/lmi/2008-03/msg00019.html
-    // Unsuppress it with wx-3.
-    // taboo(f, "windows-1252");
+    // This IANA-approved charset is still useful for html.
     if(!f.is_of_phylum(e_html))
         {
         taboo(f, "windows-1252");
