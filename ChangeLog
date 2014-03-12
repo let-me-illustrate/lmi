@@ -33700,6 +33700,23 @@ Change from UTF-8 back to Latin-1 for concinnity with other files.
 20140307T1805Z <gchicares@sbcglobal.net> [542]
 
   main_wx_test.cpp
-Regularize access control (VZ). See:
+Regularize access control (VZ).
+
+20140312T2313Z <gchicares@sbcglobal.net> [542]
+
+  license.cpp
+Improve documentation.
+
+20140312T2318Z <gchicares@sbcglobal.net> [542]
+
+  test_coding_rules.cpp
+  wx_checks.cpp
+Don't change html charset. See:
   http://lists.nongnu.org/archive/html/lmi/2014-03/msg00001.html
+
+20140312T2337Z <gchicares@sbcglobal.net> [542]
+
+  install_wx.make
+  wx-3.0.0.patch [new file]
+Upgrade to wx-3.0.0 .
 
