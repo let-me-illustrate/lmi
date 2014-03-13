@@ -1,3 +1,14 @@
+diff --recursive '--unified=3' original/wxWidgets-3.0.0/Makefile.in modified/wxWidgets-3.0.0/Makefile.in
+--- original/wxWidgets-3.0.0/Makefile.in	2013-11-11 13:10:40.000000000 +0000
++++ modified/wxWidgets-3.0.0/Makefile.in	2014-03-13 20:22:04.437923700 +0000
+@@ -4154,6 +4154,7 @@
+ 	wx/statbox.h \
+ 	wx/stattext.h \
+ 	wx/statusbr.h \
++	wx/testing.h \
+ 	wx/textcompleter.h \
+ 	wx/textctrl.h \
+ 	wx/textdlg.h \
 diff --recursive '--unified=3' original/wxWidgets-3.0.0/include/wx/cpp.h modified/wxWidgets-3.0.0/include/wx/cpp.h
 --- original/wxWidgets-3.0.0/include/wx/cpp.h	2013-11-11 13:10:40.000000000 +0000
 +++ modified/wxWidgets-3.0.0/include/wx/cpp.h	2014-03-11 20:08:58.000000000 +0000
