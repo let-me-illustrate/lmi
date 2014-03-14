@@ -33720,3 +33720,21 @@ Don't change html charset. See:
   wx-3.0.0.patch [new file]
 Upgrade to wx-3.0.0 .
 
+20140313T2143Z <gchicares@sbcglobal.net> [542]
+
+  wx-3.0.0.patch
+Install 'testing.h' header. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00006.html
+
+20140314T1341Z <gchicares@sbcglobal.net> [542]
+
+  wx-3.0.0.patch
+Suppress an apparently bogus error message. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00008.html
+
+20140314T1345Z <gchicares@sbcglobal.net> [542]
+
+  main_wx_test.cpp
+Test version shown in title of "about" dialog (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00008.html
+
