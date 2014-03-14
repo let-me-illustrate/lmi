@@ -26,13 +26,18 @@
 #   pragma hdrstop
 #endif
 
+#include "assert_lmi.hpp"
 #include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
 #include "test_tools.hpp"
+#include "version.hpp"
 
+#include <wx/dialog.h>
 #include <wx/init.h>                    // wxEntry()
+#include <wx/testing.h>
+#include <wx/uiaction.h>
 
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
@@ -42,8 +47,35 @@ class application_test
   public:
     static void test()
         {
+        test_about_dialog_version();
         }
+
+  private:
+    static void test_about_dialog_version();
 };
+
+void application_test::test_about_dialog_version()
+{
+    struct expect_about_dialog : public wxExpectModalBase<wxDialog>
+    {
+        virtual int OnInvoked(wxDialog* d) const
+            {
+            LMI_ASSERT(0 != d);
+            BOOST_TEST(d->GetTitle().EndsWith(LMI_VERSION));
+            return wxID_OK;
+            }
+    };
+
+    wxUIActionSimulator z;
+    z.KeyDown('h', wxMOD_ALT);
+    z.KeyUp  ('h', wxMOD_ALT);
+    z.KeyDown('a'           );
+    z.KeyUp  ('a'           );
+    wxTEST_DIALOG
+        (wxYield()
+        ,expect_about_dialog()
+        );
+}
 
 // Application to drive the tests
 class SkeletonTest : public Skeleton
@@ -65,7 +97,9 @@ IMPLEMENT_WX_THEME_SUPPORT
 bool SkeletonTest::OnInit()
 {
     if(!Skeleton::OnInit())
+        {
         return false;
+        }
 
     // Run the tests at idle time, when the main loop is running, in order to
     // do it in as realistic conditions as possible.
