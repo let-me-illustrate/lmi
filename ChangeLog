@@ -33738,9 +33738,9 @@ Suppress an apparently bogus error message. See:
 Test version shown in title of "about" dialog (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2014-03/msg00008.html
 
-20140316T1537Z <gchicares@sbcglobal.net> [542]
+20140316T1540Z <gchicares@sbcglobal.net> [542]
 
-  main_wx_test.cpp
+  workhorse.make
 Fix defect introduced 20140226T1537Z: new shared library must be
 included in archive.
 
