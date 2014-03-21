@@ -31,7 +31,6 @@
 #include "msw_workarounds.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
-#include "test_tools.hpp"
 #include "version.hpp"
 
 #include <wx/dialog.h>
@@ -61,7 +60,7 @@ void application_test::test_about_dialog_version()
         virtual int OnInvoked(wxDialog* d) const
             {
             LMI_ASSERT(0 != d);
-            BOOST_TEST(d->GetTitle().EndsWith(LMI_VERSION));
+            LMI_ASSERT(d->GetTitle().EndsWith(LMI_VERSION));
             return wxID_OK;
             }
     };
@@ -114,7 +113,7 @@ void SkeletonTest::RunTheTests()
     ExitMainLoop();
 }
 
-int test_main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     initialize_application();
     initialize_filesystem();

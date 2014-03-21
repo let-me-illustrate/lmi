@@ -33744,3 +33744,9 @@ Test version shown in title of "about" dialog (VS). See:
 Fix defect introduced 20140226T1537Z: new shared library must be
 included in archive.
 
+20140321T1351Z <gchicares@sbcglobal.net> [542]
+
+  main_wx_test.cpp
+Separate GUI test from command-line unit-test framework. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00012.html
+
