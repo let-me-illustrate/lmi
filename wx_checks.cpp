@@ -34,10 +34,6 @@
 #   error Outdated library: wx-2.5.4 or greater is required.
 #endif // wx prior to version 2.5.4 .
 
-#if wxCHECK_VERSION(3,0,0)
-#   error Remove the "1252" html exception in 'test_coding_rules.cpp'.
-#endif // wxCHECK_VERSION(3,0,0)
-
 // Require certain optional wx components.
 
 #if !wxUSE_DOC_VIEW_ARCHITECTURE

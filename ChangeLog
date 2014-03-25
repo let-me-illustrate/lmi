@@ -33573,3 +33573,180 @@ Display a busy cursor when applying changes to groups of cells.
 Fix defect introduced 20050807T1553Z: a cell must be initialized at
 the beginning of any partial inforce year in which it's illustrated.
 
+20140222T2332Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5857.
+
+20140223T0043Z <gchicares@sbcglobal.net> [542]
+
+  docmanager_ex.hpp
+  multidimgrid_any.cpp
+Prepare for wx-3.0 (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00000.html
+
+20140224T0202Z <gchicares@sbcglobal.net> [542]
+
+  multidimgrid_any.cpp
+Refine wx-3.0 preparation. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00009.html
+
+20140224T0209Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+Fix defects introduced 20131010T1211Z (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00003.html
+
+20140226T1537Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  main_wx.cpp
+  main_wx.hpp  [expunged]
+  objects.make
+  skeleton.cpp [new file]
+  skeleton.hpp [new file]
+  view_ex.cpp
+  workhorse.make
+Split lmi_wx_shared into a DLL and a small executable (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00007.html
+
+20140226T2103Z <gchicares@sbcglobal.net> [542]
+
+  main_wx.cpp
+  skeleton.cpp
+  skeleton.hpp
+  view_ex.cpp
+Move wxApp implementation (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
+
+20140301T1416Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  main_wx_test.cpp [new file]
+  objects.make
+  skeleton.hpp
+  workhorse.make
+Add inchoate GUI test (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-02/msg00004.html
+
+20140306T2306Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  objects.make
+  workhorse.make
+Rename 'lmi_wx_lib' -> 'skeleton'.
+
+20140306T2319Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Improve documentation.
+
+20140306T2328Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Make sure '-mwindows' is specified for GUI test.
+
+20140306T2339Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Avoid linking a superfluous library.
+
+20140307T1341Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Do not archive gui-test binary.
+
+20140307T1355Z <gchicares@sbcglobal.net> [542]
+
+  objects.make
+  workhorse.make
+Rename 'lmi_wx_test' -> 'wx_test'.
+
+20140307T1502Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+Separate gui test from unit tests.
+
+20140307T1545Z <gchicares@sbcglobal.net> [542]
+
+  main_wx.cpp
+  main_wx_test.cpp
+  skeleton.hpp
+  view_ex.cpp
+Canonicalize #include directives.
+
+20140307T1553Z <gchicares@sbcglobal.net> [542]
+
+  view_ex.cpp
+Use safely_dereference_as<>(), for concinnity.
+
+20140307T1605Z <gchicares@sbcglobal.net> [542]
+
+  multidimgrid_any.cpp
+  multidimgrid_tools.hpp
+Remove superfluous #include directives.
+
+20140307T1607Z <gchicares@sbcglobal.net> [542]
+
+  main_wx_test.cpp
+  skeleton.hpp
+Prefer to keep members private.
+
+20140307T1629Z <gchicares@sbcglobal.net> [542]
+
+  skeleton.cpp
+Change from UTF-8 back to Latin-1 for concinnity with other files.
+
+20140307T1805Z <gchicares@sbcglobal.net> [542]
+
+  main_wx_test.cpp
+Regularize access control (VZ).
+
+20140312T2313Z <gchicares@sbcglobal.net> [542]
+
+  license.cpp
+Improve documentation.
+
+20140312T2318Z <gchicares@sbcglobal.net> [542]
+
+  test_coding_rules.cpp
+  wx_checks.cpp
+Don't change html charset. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00001.html
+
+20140312T2337Z <gchicares@sbcglobal.net> [542]
+
+  install_wx.make
+  wx-3.0.0.patch [new file]
+Upgrade to wx-3.0.0 .
+
+20140313T2143Z <gchicares@sbcglobal.net> [542]
+
+  wx-3.0.0.patch
+Install 'testing.h' header. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00006.html
+
+20140314T1341Z <gchicares@sbcglobal.net> [542]
+
+  wx-3.0.0.patch
+Suppress an apparently bogus error message. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00008.html
+
+20140314T1345Z <gchicares@sbcglobal.net> [542]
+
+  main_wx_test.cpp
+Test version shown in title of "about" dialog (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00008.html
+
+20140316T1540Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Fix defect introduced 20140226T1537Z: new shared library must be
+included in archive.
+
+20140321T1351Z <gchicares@sbcglobal.net> [542]
+
+  main_wx_test.cpp
+Separate GUI test from command-line unit-test framework. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-03/msg00012.html
+

@@ -31,12 +31,11 @@
 // implementation, modifying it in 2002 and the later years given in
 // the copyright notice above.
 
-#ifndef main_wx_hpp
-#define main_wx_hpp
+#ifndef skeleton_hpp
+#define skeleton_hpp
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <wx/app.h>
@@ -54,7 +53,6 @@ class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 class Skeleton
     :        public  wxApp
     ,        private lmi::uncopyable <Skeleton>
-    ,virtual private obstruct_slicing<Skeleton>
 {
   public:
     Skeleton();
@@ -62,6 +60,10 @@ class Skeleton
 
     // Called by view classes when they are instantiated.
     wxMDIChildFrame* CreateChildFrame(wxDocument*, ViewEx*);
+
+  protected:
+    // wxApp overrides that are further overridden in gui test.
+    virtual bool OnInit();
 
   private:
     wxMenuBar* AdjustMenus(wxMenuBar*);
@@ -114,7 +116,6 @@ class Skeleton
     // wxApp overrides.
     virtual bool OnExceptionInMainLoop ();
     virtual int  OnExit                ();
-    virtual bool OnInit                ();
     virtual void OnUnhandledException  ();
 
     bool ProcessCommandLine(int argc, char* argv[]);
@@ -128,7 +129,5 @@ class Skeleton
     DECLARE_EVENT_TABLE()
 };
 
-DECLARE_APP(Skeleton)
-
-#endif // main_wx_hpp
+#endif // skeleton_hpp
 

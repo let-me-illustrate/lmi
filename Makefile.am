@@ -79,7 +79,8 @@ bin_PROGRAMS = \
     antediluvian_cli \
     ihs_crc_comp \
     product_files \
-    test_coding_rules
+    test_coding_rules \
+    wx_test
 
 # other programs which may or not be built depending on configure arguments
 EXTRA_PROGRAMS = \
@@ -91,7 +92,8 @@ EXTRA_PROGRAMS = \
 
 # libtool libraries installed in lib
 lib_LTLIBRARIES = \
-    liblmi.la
+    liblmi.la \
+    libskeleton.la
 
 # libtool convenience libraries which are not installed at all
 noinst_LTLIBRARIES = \
@@ -182,8 +184,8 @@ check_PROGRAMS = $(TESTS)
 # Targets definitions
 ##############################################################################
 
-# main program executables
-lmi_wx_SOURCES = \
+# wx GUI's files are in a library to be shared with the tests
+libskeleton_la_SOURCES = \
     about_dialog.cpp \
     alert_wx.cpp \
     census_document.cpp \
@@ -200,7 +202,6 @@ lmi_wx_SOURCES = \
     illustration_view.cpp \
     input_sequence_entry.cpp \
     main_common.cpp \
-    main_wx.cpp \
     mec_document.cpp \
     mec_view.cpp \
     msw_workarounds.cpp \
@@ -218,6 +219,7 @@ lmi_wx_SOURCES = \
     rounding_view.cpp \
     rounding_view_editor.cpp \
     single_choice_popup_menu.cpp \
+    skeleton.cpp \
     system_command_wx.cpp \
     text_doc.cpp \
     text_view.cpp \
@@ -229,9 +231,22 @@ lmi_wx_SOURCES = \
     wx_checks.cpp \
     wx_utility.cpp
 
-lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) \
-                  $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS) \
-                  -ULMI_PCH_HEADER -DLMI_PCH_HEADER="<pchfile_wx.hpp>"
+# main program executables
+lmi_wx_SOURCES = \
+    main_wx.cpp
+
+libskeleton_la_CXXFLAGS =
+     $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS) -ULMI_PCH_HEADER -DLMI_PCH_HEADER="<pchfile_wx.hpp>"
+
+libskeleton_la_LIBADD = \
+    liblmi.la \
+    libwx_new.la \
+    $(XMLWRAPP_LIBS) \
+    $(GTK_LIBS) \
+    $(BOOST_LIBS) \
+    $(WX_LIBS)
+
+lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
 # $(CGICC_INCLUDE_FLAGS)
 
 if LMI_MSW
@@ -242,6 +257,7 @@ if LMI_MSW
 endif
 lmi_wx_LDADD = \
     liblmi.la \
+    libskeleton.la \
     libwx_new.la \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
@@ -268,6 +284,13 @@ lmi_cli_LDADD = \
     liblmi.la \
     $(XMLWRAPP_LIBS) \
     $(BOOST_LIBS)
+
+wx_test_SOURCES = \
+  main_wx_test.cpp
+wx_test_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS)
+wx_test_LDADD = \
+  libskeleton.la \
+  $(WX_LIBS)
 
 # libraries
 
@@ -516,7 +539,7 @@ test_actuarial_table_SOURCES = \
   xml_lmi.cpp
 test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
 test_actuarial_table_LDADD = \
-  $(BOOST_LIBS)
+  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 test_alert_SOURCES = \
@@ -919,7 +942,7 @@ test_regex_SOURCES = \
   timer.cpp
 test_regex_CXXFLAGS = $(AM_CXXFLAGS)
 test_regex_LDADD = \
-  $(BOOST_LIBS) \
+  $(BOOST_LIBS)
 
 test_round_SOURCES = \
   $(common_test_objects) \
@@ -1219,3 +1242,4 @@ noinst_HEADERS = \
     xml_serialize.hpp \
     yare_input.hpp \
     zero.hpp
+
