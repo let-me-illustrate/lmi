@@ -1,0 +1,47 @@
+diff --recursive '--unified=3' original/wxWidgets-3.0.0/Makefile.in modified/wxWidgets-3.0.0/Makefile.in
+--- original/wxWidgets-3.0.0/Makefile.in	2013-11-11 13:10:40.000000000 +0000
++++ modified/wxWidgets-3.0.0/Makefile.in	2014-03-13 20:22:04.437923700 +0000
+@@ -4154,6 +4154,7 @@
+ 	wx/statbox.h \
+ 	wx/stattext.h \
+ 	wx/statusbr.h \
++	wx/testing.h \
+ 	wx/textcompleter.h \
+ 	wx/textctrl.h \
+ 	wx/textdlg.h \
+diff --recursive '--unified=3' original/wxWidgets-3.0.0/include/wx/cpp.h modified/wxWidgets-3.0.0/include/wx/cpp.h
+--- original/wxWidgets-3.0.0/include/wx/cpp.h	2013-11-11 13:10:40.000000000 +0000
++++ modified/wxWidgets-3.0.0/include/wx/cpp.h	2014-03-11 20:08:58.000000000 +0000
+@@ -143,6 +143,14 @@
+ 
+ 
+ #ifdef HAVE_VARIADIC_MACROS
++/* There is no other way to suppress the
++ *   "anonymous variadic macros were introduced in C99"
++ * diagnostic with gcc-3.x . See:
++ *   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00002.html
++ */
++#  if defined(__GNUC__) && __GNUC__ == 3
++#    pragma GCC system_header
++#  endif /* gcc-3.x */
+ /*
+    wxCALL_FOR_EACH(what, ...) calls the macro from its first argument, what(pos, x),
+    for every remaining argument 'x', with 'pos' being its 1-based index in
+diff --recursive '--unified=3' original/wxWidgets-3.0.0/include/wx/testing.h modified/wxWidgets-3.0.0/include/wx/testing.h
+--- original/wxWidgets-3.0.0/include/wx/testing.h	2013-11-11 13:10:40.000000000 +0000
++++ modified/wxWidgets-3.0.0/include/wx/testing.h	2014-03-13 21:37:54.000000000 +0000
+@@ -337,6 +337,14 @@
+           method.
+  */
+ #ifdef HAVE_VARIADIC_MACROS
++/* There is no other way to suppress the
++ *   "anonymous variadic macros were introduced in C99"
++ * diagnostic with gcc-3.x . See:
++ *   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00002.html
++ */
++#  if defined(__GNUC__) && __GNUC__ == 3
++#    pragma GCC system_header
++#  endif /* gcc-3.x */
+ #define wxTEST_DIALOG(codeToRun, ...)                                          \
+     {                                                                          \
+         wxTEST_DIALOG_HOOK_CLASS wx_hook;                                      \

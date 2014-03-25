@@ -102,6 +102,9 @@ std::string htmlize_licence_text(std::string const& s)
         "</html>"
         );
 
+    // The copyright symbol (which is included in iso-8859-1) is
+    // strongly preferred to its ASCII representation, but it's not
+    // worth the trouble to replace the ellipsis.
     static std::string const ascii_copyright("(C)");
     static std::string const html_copyright("&copy;");
     std::string::size_type r_pos = r.find(ascii_copyright);

@@ -48,18 +48,19 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "docmanager_ex.hpp"
-#include "main_wx.hpp" // wxGetApp()
 #include "safely_dereference_as.hpp"
+#include "skeleton.hpp"                 // Skeleton::CreateChildFrame()
 #include "wx_new.hpp"
 
 #include <boost/filesystem/path.hpp>
 
+#include <wx/app.h>                     // GetInstance()
 #include <wx/dc.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
-#include <cstdlib>     // std::exit(), EXIT_FAILURE
+#include <cstdlib>                      // std::exit(), EXIT_FAILURE
 
 IMPLEMENT_ABSTRACT_CLASS(ViewEx, wxView)
 
@@ -152,7 +153,9 @@ bool ViewEx::OnClose(bool delete_window)
 //
 bool ViewEx::OnCreate(wxDocument* doc, long int)
 {
-    wxGetApp().CreateChildFrame(doc, this);
+    Skeleton& app = safely_dereference_as<Skeleton>(wxApp::GetInstance());
+    app.CreateChildFrame(doc, this);
+
     DocManager().AssociateFileHistoryWithFileMenu(FrameWindow().GetMenuBar());
     GetFrame()->SetLabel("Loading document...");
 

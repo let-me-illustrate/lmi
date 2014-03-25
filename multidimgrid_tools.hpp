@@ -29,7 +29,6 @@
 #include "multidimgrid_safe.hpp"
 
 #include "alert.hpp"
-#include "safely_dereference_as.hpp"
 #include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
