@@ -165,6 +165,12 @@
     main_wx.cpp
 </set>
 
+<set var="LMI_WX_TEST_SOURCES" hint="files">
+    alert_wx.cpp
+    skeleton.cpp
+    main_wx_test.cpp
+</set>
+
 <!-- product_files_SOURCES -->
 <set var="PRODUCT_FILES_SOURCES" hint="files">
     alert_cli.cpp
