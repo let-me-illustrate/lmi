@@ -115,7 +115,6 @@
 <!-- lmi_wx_SOURCES -->
 <set var="LMI_WX_SOURCES" hint="files">
     about_dialog.cpp
-    alert_wx.cpp
     census_document.cpp
     census_view.cpp
     database_document.cpp
@@ -131,7 +130,6 @@
     illustration_view.cpp
     input_sequence_entry.cpp
     main_common.cpp
-    main_wx.cpp
     mec_document.cpp
     mec_view.cpp
     msw_workarounds.cpp
@@ -159,6 +157,12 @@
     view_ex.cpp
     wx_checks.cpp
     wx_utility.cpp
+</set>
+
+<set var="LMI_WX_MAIN_SOURCES" hint="files">
+    alert_wx.cpp
+    skeleton.cpp
+    main_wx.cpp
 </set>
 
 <!-- product_files_SOURCES -->
