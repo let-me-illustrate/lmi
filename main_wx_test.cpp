@@ -27,11 +27,14 @@
 #endif
 
 #include "assert_lmi.hpp"
+#include "configurable_settings.hpp"
 #include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
 #include "version.hpp"
+
+#include <boost/filesystem/operations.hpp>
 
 #include <wx/dialog.h>
 #include <wx/init.h>                    // wxEntry()
@@ -47,10 +50,12 @@ class application_test
     static void test()
         {
         test_about_dialog_version();
+        test_configurable_settings();
         }
 
   private:
     static void test_about_dialog_version();
+    static void test_configurable_settings();
 };
 
 void application_test::test_about_dialog_version()
@@ -74,6 +79,38 @@ void application_test::test_about_dialog_version()
         (wxYield()
         ,expect_about_dialog()
         );
+}
+
+void application_test::test_configurable_settings()
+{
+    LMI_ASSERT(fs::exists("/etc/opt/lmi/configurable_settings.xml"));
+
+    configurable_settings const& settings = configurable_settings::instance();
+    LMI_ASSERT("" == settings.libraries_to_preload());
+    LMI_ASSERT("CMD /c c:/fop-0.20.5/fop" == settings.xsl_fo_command());
+
+    std::string skin = settings.skin_filename();
+    std::string default_input = settings.default_input_filename();
+    LMI_ASSERT(   "skin_coli_boli.xrc" == skin
+               || "skin_group_carveout.xrc" == skin
+               || "skin_group_carveout2.xrc" == skin
+               || "reg_d.xrc" == skin);
+    if ("skin_coli_boli.xrc" == skin)
+        {
+        LMI_ASSERT("c:/fop-0.20.5/coli_boli_default.ill" == default_input);
+        }
+    if ("skin_group_carveout.xrc" == skin)
+        {
+        LMI_ASSERT("c:/fop-0.20.5/group_carveout_default.ill" == default_input);
+        }
+    if ("skin_group_carveout2.xrc" == skin)
+        {
+        LMI_ASSERT("c:/fop-0.20.5/group_carveout_default.ill" == default_input);
+        }
+    if ("reg_d.xrc" == skin)
+        {
+        LMI_ASSERT("c:/fop-0.20.5/private_placement_default.ill" == default_input);
+        }
 }
 
 // Application to drive the tests
