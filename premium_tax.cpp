@@ -394,7 +394,7 @@ std::vector<double> const& premium_tax_rates_for_life_insurance()
         //   NC       ND       OH       OK       OR       PA
         ,0.0190,  0.0200,  0.0140,  0.0225,  0.0002,  0.0200
         //   PR       RI       SC       SD       TN       TX       UT
-        ,0.0400,  0.0200,  0.0075,  tiered,  0.0175,  0.0175,  0.0225
+        ,0.0500,  0.0200,  0.0075,  tiered,  0.0175,  0.0175,  0.0225
         //   VT       VA       WA       WV       WI       WY       XX
         ,0.0200,  0.0225,  0.0200,  0.0300,  0.0200,  0.0075,  0.0000
         };
@@ -402,35 +402,35 @@ std::vector<double> const& premium_tax_rates_for_life_insurance()
     return v;
 }
 
-// Placeholder for annuity rates--for now, just a commented-out copy
-// of the life-insurance implementation.
-#if 0
+/// Premium-tax rates for annuities without retaliation.
+///
+/// Comments on premium_tax_rates_for_life_insurance() apply here too.
+
 std::vector<double> const& premium_tax_rates_for_annuities()
 {
     static double const tiered = 0.0;
     static int const n = 53;
     static double const d[n] =
         //   AL       AK       AZ       AR       CA       CO       CT
-        {0.0230,  tiered,  0.0200,  0.0250,  0.0235,  0.0200,  0.0175
+        {0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000
         //   DE       DC       FL       GA       HI       ID
-        ,0.0200,  0.0200,  0.0175,  0.0225,  0.0275,  0.0150
+        ,0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000
         //   IL       IN       IA       KS       KY       LA       ME
-        ,0.0050,  0.0130,  0.0100,  0.0200,  0.0150,  0.0225,  0.0200
+        ,0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0200
         //   MD       MA       MI       MN       MS       MO
-        ,0.0200,  0.0200,  0.0125,  0.0150,  0.0300,  0.0200
+        ,0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000
         //   MT       NE       NV       NH       NJ       NM       NY
-        ,0.0275,  0.0100,  0.0350,  0.0125,  0.0210,  0.03003, 0.0150
+        ,0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000
         //   NC       ND       OH       OK       OR       PA
-        ,0.0190,  0.0200,  0.0140,  0.0225,  0.0002,  0.0200
+        ,0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000
         //   PR       RI       SC       SD       TN       TX       UT
-        ,0.0400,  0.0200,  0.0075,  tiered,  0.0175,  0.0175,  0.0225
+        ,0.0100,  0.0000,  0.0000,  tiered,  0.0000,  0.0000,  0.0000
         //   VT       VA       WA       WV       WI       WY       XX
-        ,0.0200,  0.0225,  0.0200,  0.0300,  0.0200,  0.0075,  0.0000
+        ,0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0100,  0.0000
         };
     static std::vector<double> const v(d, d + n);
     return v;
 }
-#endif // 0
 
 /// Highest premium-tax load, for calculating pay-as-you-go premium.
 

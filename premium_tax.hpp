@@ -86,8 +86,6 @@ class stratified_charges;
 /// for a few domiciles.
 ///
 /// start_new_year() should be improved as noted in its documentation.
-///
-/// premium_tax_rates_for_annuities() should be implemented.
 
 class premium_tax
   :        private lmi::uncopyable <premium_tax>
