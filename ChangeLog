@@ -33750,3 +33750,9 @@ included in archive.
 Separate GUI test from command-line unit-test framework. See:
   http://lists.nongnu.org/archive/html/lmi/2014-03/msg00012.html
 
+20140422T2340Z <gchicares@sbcglobal.net> [542]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Update premium-tax rates, for annuities as well as life insurance.
+
