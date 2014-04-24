@@ -33756,3 +33756,8 @@ Separate GUI test from command-line unit-test framework. See:
   premium_tax.hpp
 Update premium-tax rates, for annuities as well as life insurance.
 
+20140424T1420Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5888.
+
