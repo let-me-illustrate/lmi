@@ -169,7 +169,6 @@ enum e_database_key
         ,DB_RatingsAffect7702
         ,DB_CvatMatChangeDefn
         ,DB_GptMatChangeDefn
-        ,DB_CorrHidesIncreases
         ,DB_Irc7702BftIsSpecAmt
         ,DB_Initial7702BftIsDb
         ,DB_Irc7702Endowment
