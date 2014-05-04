@@ -33792,3 +33792,8 @@ has only a single flag for both sections of the tax code.
   dbnames.xpp
 Remove an inutile database entity.
 
+20140504T1657Z <gchicares@sbcglobal.net> [542]
+
+  dbnames.xpp
+Remove or deprecate inutile database suboptions.
+
