@@ -719,8 +719,6 @@ void BasicValues::SetPermanentInvariants()
     AllowTerm           = Database_->Query(DB_AllowTerm            );
     TermForcedConvAge   = static_cast<int>(Database_->Query(DB_TermForcedConvAge));
     TermForcedConvDur   = static_cast<int>(Database_->Query(DB_TermForcedConvDur));
-    TermIsDbFor7702     = Database_->Query(DB_TermIsDbFor7702      );
-    TermIsDbFor7702A    = Database_->Query(DB_TermIsDbFor7702A     );
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
     MinPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
     TgtPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
@@ -861,6 +859,8 @@ void BasicValues::SetPermanentInvariants()
         DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
         }
     Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702Dbo3)));
+    TermIsDbFor7702     = 1.0 == Database_->Query(DB_TermIsQABOrDb7702 );
+    TermIsDbFor7702A    = 1.0 == Database_->Query(DB_TermIsQABOrDb7702A);
     MaxNAAR             = yare_input_.MaximumNaar;
 
     Database_->Query(MinPremIntSpread_, DB_MinPremIntSpread);

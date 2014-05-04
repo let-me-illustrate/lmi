@@ -33761,3 +33761,15 @@ Update premium-tax rates, for annuities as well as life insurance.
   version.hpp
 Designate release candidate 5888.
 
+20140504T1559Z <gchicares@sbcglobal.net> [542]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Rearrange and refactor, indicating whether term is a QAB. Combine this
+with the death-benefit flag, because those two ways of treating a term
+rider are mutually exclusive. Rearrange to show that QAB treatment for
+this and other riders is more a 7702 than a rider parameter.
+

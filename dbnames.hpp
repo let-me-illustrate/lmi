@@ -175,6 +175,9 @@ enum e_database_key
         ,DB_Irc7702Endowment
         ,DB_Equiv7702Dbo3
 
+        ,DB_TermIsQABOrDb7702
+        ,DB_TermIsQABOrDb7702A
+
     ,DB_Topic_MortalityCharges
 
         ,DB_GuarCoiTable
@@ -358,8 +361,6 @@ enum e_database_key
         ,DB_MaxTermProportion
         ,DB_TermCoiRate
         ,DB_TermPremRate
-        ,DB_TermIsDbFor7702
-        ,DB_TermIsDbFor7702A
 
         ,DB_AllowWp
         ,DB_WpTable
