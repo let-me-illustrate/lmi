@@ -140,6 +140,11 @@ class LMI_SO DBDictionary
     database_entity Equiv7702Dbo3       ;
     database_entity TermIsQABOrDb7702   ;
     database_entity TermIsQABOrDb7702A  ;
+    database_entity GioIsQAB            ;
+    database_entity AdbIsQAB            ;
+    database_entity SpouseRiderIsQAB    ;
+    database_entity ChildRiderIsQAB     ;
+    database_entity WpIsQAB             ;
     database_entity GuarCoiTable        ;
     database_entity GuarCoiIsAnnual     ;
     database_entity GuarCoiMultiplier   ;

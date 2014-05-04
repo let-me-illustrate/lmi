@@ -33773,3 +33773,14 @@ with the death-benefit flag, because those two ways of treating a term
 rider are mutually exclusive. Rearrange to show that QAB treatment for
 this and other riders is more a 7702 than a rider parameter.
 
+20140504T1633Z <gchicares@sbcglobal.net> [542]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add database flags to indicate which riders are QABs. It is considered
+unlikely that a rider other than term on the main insured would be
+treated as a QAB for either 7702 or 7702A but not for both, so each
+has only a single flag for both sections of the tax code.
+
