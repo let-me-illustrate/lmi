@@ -164,6 +164,11 @@ void DBDictionary::ascribe_members()
     ascribe("Equiv7702Dbo3"       , &DBDictionary::Equiv7702Dbo3       );
     ascribe("TermIsQABOrDb7702"   , &DBDictionary::TermIsQABOrDb7702   );
     ascribe("TermIsQABOrDb7702A"  , &DBDictionary::TermIsQABOrDb7702A  );
+    ascribe("GioIsQAB"            , &DBDictionary::GioIsQAB            );
+    ascribe("AdbIsQAB"            , &DBDictionary::AdbIsQAB            );
+    ascribe("SpouseRiderIsQAB"    , &DBDictionary::SpouseRiderIsQAB    );
+    ascribe("ChildRiderIsQAB"     , &DBDictionary::ChildRiderIsQAB     );
+    ascribe("WpIsQAB"             , &DBDictionary::WpIsQAB             );
     ascribe("GuarCoiTable"        , &DBDictionary::GuarCoiTable        );
     ascribe("GuarCoiIsAnnual"     , &DBDictionary::GuarCoiIsAnnual     );
     ascribe("GuarCoiMultiplier"   , &DBDictionary::GuarCoiMultiplier   );
@@ -926,6 +931,11 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_Equiv7702Dbo3       , 0));
     Add(database_entity(DB_TermIsQABOrDb7702   , 1));
     Add(database_entity(DB_TermIsQABOrDb7702A  , 1));
+    Add(database_entity(DB_GioIsQAB            , false));
+    Add(database_entity(DB_AdbIsQAB            , false));
+    Add(database_entity(DB_SpouseRiderIsQAB    , false));
+    Add(database_entity(DB_ChildRiderIsQAB     , false));
+    Add(database_entity(DB_WpIsQAB             , false));
     Add(database_entity(DB_ExpRatRiskCoiMult   , 0));
     Add(database_entity(DB_SurrChgSpecAmtMult  , 0.0));
     Add(database_entity(DB_AllowSpouseRider    , false));

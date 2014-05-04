@@ -177,6 +177,11 @@ enum e_database_key
 
         ,DB_TermIsQABOrDb7702
         ,DB_TermIsQABOrDb7702A
+        ,DB_GioIsQAB
+        ,DB_AdbIsQAB
+        ,DB_SpouseRiderIsQAB
+        ,DB_ChildRiderIsQAB
+        ,DB_WpIsQAB
 
     ,DB_Topic_MortalityCharges
 
