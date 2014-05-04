@@ -162,6 +162,8 @@ void DBDictionary::ascribe_members()
     ascribe("Initial7702BftIsDb"  , &DBDictionary::Initial7702BftIsDb  );
     ascribe("Irc7702Endowment"    , &DBDictionary::Irc7702Endowment    );
     ascribe("Equiv7702Dbo3"       , &DBDictionary::Equiv7702Dbo3       );
+    ascribe("TermIsQABOrDb7702"   , &DBDictionary::TermIsQABOrDb7702   );
+    ascribe("TermIsQABOrDb7702A"  , &DBDictionary::TermIsQABOrDb7702A  );
     ascribe("GuarCoiTable"        , &DBDictionary::GuarCoiTable        );
     ascribe("GuarCoiIsAnnual"     , &DBDictionary::GuarCoiIsAnnual     );
     ascribe("GuarCoiMultiplier"   , &DBDictionary::GuarCoiMultiplier   );
@@ -295,8 +297,6 @@ void DBDictionary::ascribe_members()
     ascribe("MaxTermProportion"   , &DBDictionary::MaxTermProportion   );
     ascribe("TermCoiRate"         , &DBDictionary::TermCoiRate         );
     ascribe("TermPremRate"        , &DBDictionary::TermPremRate        );
-    ascribe("TermIsDbFor7702"     , &DBDictionary::TermIsDbFor7702     );
-    ascribe("TermIsDbFor7702A"    , &DBDictionary::TermIsDbFor7702A    );
     ascribe("AllowWp"             , &DBDictionary::AllowWp             );
     ascribe("WpTable"             , &DBDictionary::WpTable             );
     ascribe("WpMinIssAge"         , &DBDictionary::WpMinIssAge         );
@@ -803,8 +803,6 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_MaxTermProportion   , 0.0));
     Add(database_entity(DB_TermCoiRate         , 0.0));
     Add(database_entity(DB_TermPremRate        , 0.0));
-    Add(database_entity(DB_TermIsDbFor7702     , true));
-    Add(database_entity(DB_TermIsDbFor7702A    , true));
     Add(database_entity(DB_WpTable             , 8));
     Add(database_entity(DB_AllowWp             , true));
     Add(database_entity(DB_WpMinIssAge         , 18));
@@ -926,6 +924,8 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_Initial7702BftIsDb  , false));
     Add(database_entity(DB_Irc7702Endowment    , 0));
     Add(database_entity(DB_Equiv7702Dbo3       , 0));
+    Add(database_entity(DB_TermIsQABOrDb7702   , 1));
+    Add(database_entity(DB_TermIsQABOrDb7702A  , 1));
     Add(database_entity(DB_ExpRatRiskCoiMult   , 0));
     Add(database_entity(DB_SurrChgSpecAmtMult  , 0.0));
     Add(database_entity(DB_AllowSpouseRider    , false));
