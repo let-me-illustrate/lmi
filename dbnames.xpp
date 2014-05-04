@@ -64,7 +64,6 @@
 {DB_RatingsAffect7702,DB_Topic_7702And7702A,"RatingsAffect7702","Flat extras and table ratings affect 7702 and 7702A calculations: 0=no, 1=yes",}, \
 {DB_CvatMatChangeDefn,DB_Topic_7702And7702A,"CvatMatChangeDefn","Definition of 7702A material change for CVAT: 0=unnec prem, 1=increase, 2=increase after unnec prem, 3=any unnec prem or increase",}, \
 {DB_GptMatChangeDefn,DB_Topic_7702And7702A,"GptMatChangeDefn","Definition of 7702A material change for GPT: 0=any adjustment event, 1=any adjustment event that increases the guideline limit",}, \
-{DB_CorrHidesIncreases,DB_Topic_7702And7702A,"CorrHidesIncreases","For 7702 and 7702A, ignore specified-amount increases that don't affect DB due to corridor: 0=no, 1=yes",}, \
 {DB_Irc7702BftIsSpecAmt,DB_Topic_7702And7702A,"Irc7702BftIsSpecAmt","7702(f)(3) 'death benefit' is specamt rather than DB: 0=no, 1=yes",}, \
 {DB_Initial7702BftIsDb,DB_Topic_7702And7702A,"Initial7702BftIsDb","For DBO 2, riskily reflect 1035 and initial payment in initial 7702(f)(3) 'death benefit': 0=no, 1=yes",}, \
 {DB_Irc7702Endowment,DB_Topic_7702And7702A,"Irc7702Endowment","7702(e)(1)(D) endowment amount for 7702 and 7702A calculations: 0=specamt, 1=initial specamt (LDB), 2=none",}, \
