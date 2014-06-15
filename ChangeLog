@@ -33797,3 +33797,21 @@ Remove an inutile database entity.
   dbnames.xpp
 Remove or deprecate inutile database suboptions.
 
+20140615T1717Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc              [new file]
+  gpt_document.cpp     [new file]
+  gpt_document.hpp     [new file]
+  gpt_input.cpp        [new file]
+  gpt_input.hpp        [new file]
+  gpt_server.cpp       [new file]
+  gpt_server.hpp       [new file]
+  gpt_state.cpp        [new file]
+  gpt_state.hpp        [new file]
+  gpt_view.cpp         [new file]
+  gpt_view.hpp         [new file]
+  gpt_view.png         [new file]
+  gpt_xml_document.cpp [new file]
+  gpt_xml_document.hpp [new file]
+Clone 'mec*' source files for GPT.
+
