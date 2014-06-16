@@ -168,6 +168,8 @@ libskeleton_la_SOURCES = \
     docmanager_ex.cpp \
     docmdichildframe_ex.cpp \
     file_command_wx.cpp \
+    gpt_document.cpp \
+    gpt_view.cpp \
     icon_monger.cpp \
     illustration_document.cpp \
     illustration_view.cpp \
@@ -359,7 +361,11 @@ liblmi_la_SOURCES = \
     authenticity.cpp \
     commutation_functions.cpp \
     fund_data.cpp \
+    gpt_input.cpp \
+    gpt_server.cpp \
     gpt_specamt.cpp \
+    gpt_state.cpp \
+    gpt_xml_document.cpp \
     ihs_acctval.cpp \
     ihs_avdebug.cpp \
     ihs_avmly.cpp \
@@ -1078,7 +1084,13 @@ noinst_HEADERS = \
     getopt.hpp \
     global_settings.hpp \
     gpt_commutation_functions.hpp \
+    gpt_document.hpp \
+    gpt_input.hpp \
+    gpt_server.hpp \
     gpt_specamt.hpp \
+    gpt_state.hpp \
+    gpt_view.hpp \
+    gpt_xml_document.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \

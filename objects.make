@@ -273,7 +273,11 @@ lmi_common_objects := \
   authenticity.o \
   commutation_functions.o \
   fund_data.o \
+  gpt_input.o \
+  gpt_server.o \
   gpt_specamt.o \
+  gpt_state.o \
+  gpt_xml_document.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
@@ -309,6 +313,8 @@ skeleton_objects := \
   docmanager_ex.o \
   docmdichildframe_ex.o \
   file_command_wx.o \
+  gpt_document.o \
+  gpt_view.o \
   icon_monger.o \
   illustration_document.o \
   illustration_view.o \
@@ -367,6 +373,8 @@ gpt_objects_unique_to_server := \
 # Only these files are directly concerned with the GPT:
 
 gpt_objects_directly_concerned_with_gpt := \
+  gpt_input.o \
+  gpt_xml_document.o \
   ihs_irc7702.o \
   ihs_irc7702a.o \
   mec_state.o \
