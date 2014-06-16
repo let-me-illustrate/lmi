@@ -493,7 +493,8 @@ gpt_state test_one_days_7702A_transactions
             ;
         }
 
-    return z.state();
+//    return z.state();
+    return gpt_state(); // Only a dummy for now.
 }
 } // Unnamed namespace.
 
