@@ -33815,3 +33815,24 @@ Remove or deprecate inutile database suboptions.
   gpt_xml_document.hpp [new file]
 Clone 'mec*' source files for GPT.
 
+20140616T2140Z <gchicares@sbcglobal.net> [542]
+
+  menus.xrc
+Clone MEC-testing menu for GPT.
+
+20140616T2141Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  objects.make
+Build files added 20140615T1717Z.
+
+20140616T2320Z <gchicares@sbcglobal.net> [542]
+
+  gpt_server.cpp
+Adjust a function's return type for GPT.
+
+20140616T2323Z <gchicares@sbcglobal.net> [542]
+
+  skeleton.cpp
+Add GPT to GUI.
+
