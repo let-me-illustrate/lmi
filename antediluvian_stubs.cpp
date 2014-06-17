@@ -26,6 +26,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "gpt_server.hpp"
 #include "lmi.hpp"                      // is_antediluvian_fork()
 #include "mec_server.hpp"
 #include "product_data.hpp"
@@ -50,6 +51,46 @@ glossed_string::~glossed_string()
 bool is_antediluvian_fork()
 {
     return true;
+}
+
+gpt_server::gpt_server(mcenum_emission)
+{}
+
+gpt_server::~gpt_server()
+{}
+
+bool gpt_server::operator()(fs::path const&)
+{
+    return false;
+}
+
+template class xml_serializable<gpt_state>;
+
+gpt_state::gpt_state()
+{}
+
+gpt_state::gpt_state(gpt_state const&)
+    :obstruct_slicing  <gpt_state>()
+    ,xml_serializable  <gpt_state>()
+    ,MemberSymbolTable <gpt_state>()
+{}
+
+gpt_state::~gpt_state()
+{}
+
+int gpt_state::class_version() const
+{
+    return 0;
+}
+
+std::string const& gpt_state::xml_root_name() const
+{
+    return empty_string;
+}
+
+bool gpt_state::is_detritus(std::string const&) const
+{
+    return false;
 }
 
 mec_server::mec_server(mcenum_emission)
