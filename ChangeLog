@@ -33836,3 +33836,14 @@ Adjust a function's return type for GPT.
   skeleton.cpp
 Add GPT to GUI.
 
+20140617T2342Z <gchicares@sbcglobal.net> [542]
+
+  antediluvian_stubs.cpp
+  main_cli.cpp
+Add GPT to CLI.
+
+20140617T2343Z <gchicares@sbcglobal.net> [542]
+
+  test_coding_rules.cpp
+Apply coding rules to GPT xml files.
+
