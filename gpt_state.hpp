@@ -41,6 +41,10 @@
 /// For design discussion, see:
 ///   http://lists.nongnu.org/archive/html/lmi/2009-07/msg00002.html
 ///
+/// When any GPT work is to be done, some 7702A work is probably
+/// needed as well. Therefore, this class is more a superset than a
+/// sibling of the corresponding 'mec_' class.
+///
 /// Variables are prefixed '[A-Z][0-9]_' so that they sort by groups:
 /// in particular, when their names are used to nominate xml elements.
 /// 'A*_' is reserved in case it's wanted later--e.g., for arguments.
@@ -136,6 +140,15 @@ class LMI_SO gpt_state
     double Q4_cum_px7;
     double Q5_cum_amt_pd;
     double Q6_max_non_mec_prem;
+
+    double X0_glp;
+    double X1_gsp;
+    double X2_glp_a;
+    double X3_gsp_a;
+    double X4_glp_b;
+    double X5_gsp_b;
+    double X6_glp_c;
+    double X7_gsp_c;
 };
 
 #endif // gpt_state_hpp

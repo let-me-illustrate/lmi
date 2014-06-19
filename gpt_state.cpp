@@ -118,7 +118,7 @@ std::string gpt_state::format_as_html(std::string const& heading) const
         ;
 
     oss << "<p>" << htmlize(heading) << "</p>\n";
-
+#if 0
     oss
         << "<hr>\n"
         << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
@@ -273,6 +273,44 @@ std::string gpt_state::format_as_html(std::string const& heading) const
         << "</tr>\n"
         << "</table>\n"
         ;
+#endif // 0
+    oss
+        << "<hr>\n"
+        << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "glp"                          << "</td>\n"
+        << "<td nowrap>" << f(X0_glp               ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "gsp"                          << "</td>\n"
+        << "<td nowrap>" << f(X1_gsp               ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "glp A"                        << "</td>\n"
+        << "<td nowrap>" << f(X2_glp_a             ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "gsp A"                        << "</td>\n"
+        << "<td nowrap>" << f(X3_gsp_a             ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "glp B"                        << "</td>\n"
+        << "<td nowrap>" << f(X4_glp_b             ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "gsp B"                        << "</td>\n"
+        << "<td nowrap>" << f(X5_gsp_b             ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "glp C"                        << "</td>\n"
+        << "<td nowrap>" << f(X6_glp_c             ) << "</td>\n"
+        << "</tr>\n"
+        << "<tr align=\"right\">\n"
+        << "<td nowrap>" << "gsp C"                        << "</td>\n"
+        << "<td nowrap>" << f(X7_gsp_c             ) << "</td>\n"
+        << "</tr>\n"
+        << "</table>\n"
+        ;
 
     oss
         << "</body>\n"
@@ -284,6 +322,7 @@ std::string gpt_state::format_as_html(std::string const& heading) const
 
 void gpt_state::AscribeMembers()
 {
+#if 0
     ascribe("B0_deduced_policy_year"   , &gpt_state::B0_deduced_policy_year   );
     ascribe("B1_deduced_contract_year" , &gpt_state::B1_deduced_contract_year );
     ascribe("B2_deduced_px7_rate"      , &gpt_state::B2_deduced_px7_rate      );
@@ -347,6 +386,15 @@ void gpt_state::AscribeMembers()
     ascribe("Q4_cum_px7"               , &gpt_state::Q4_cum_px7               );
     ascribe("Q5_cum_amt_pd"            , &gpt_state::Q5_cum_amt_pd            );
     ascribe("Q6_max_non_mec_prem"      , &gpt_state::Q6_max_non_mec_prem      );
+#endif // 0
+    ascribe("X0_glp"                   , &gpt_state::X0_glp                   );
+    ascribe("X1_gsp"                   , &gpt_state::X1_gsp                   );
+    ascribe("X2_glp_a"                 , &gpt_state::X2_glp_a                 );
+    ascribe("X3_gsp_a"                 , &gpt_state::X3_gsp_a                 );
+    ascribe("X4_glp_b"                 , &gpt_state::X4_glp_b                 );
+    ascribe("X5_gsp_b"                 , &gpt_state::X5_gsp_b                 );
+    ascribe("X6_glp_c"                 , &gpt_state::X6_glp_c                 );
+    ascribe("X7_gsp_c"                 , &gpt_state::X7_gsp_c                 );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
