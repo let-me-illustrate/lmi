@@ -34,7 +34,7 @@
 
 struct Server7702Input
 {
-    int              UniqueIdentifier;           // an arbitrary number that identifies the contract uniquely. The contract number may be used, but remember that the server maintains no database of actual contracts.
+    std::string      UniqueIdentifier;           // an arbitrary number that identifies the contract uniquely. The contract number may be used, but remember that the server maintains no database of actual contracts.
     bool             IsIssuedToday;              // true if the contract is issued or reissued today. Used to prevent adjustable events at issue, which must not occur.
     int              Duration;                   // number of policy years completed since issue (so it starts at 0).
     double           GrossNontaxableWithdrawal;  // the nontaxable portion of partial surrenders, including any withdrawal fees, plus involuntary withdrawals to restrict NAAR for reinsurance, plus amounts returned to preserve §7702A status.
@@ -117,7 +117,7 @@ std::ostream& operator<< (std::ostream& os, Server7702Input const& z);
 
 struct Server7702Output
 {
-    int              UniqueIdentifier;              // the same identifier supplied as input.
+    std::string      UniqueIdentifier;              // the same identifier supplied as input.
     int              Status;
     bool             AdjustableEventOccurred;
     double           GuidelineLevelPremium;         // the new GLP.
