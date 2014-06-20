@@ -33858,3 +33858,15 @@ Add some GPT fields.
   ihs_server7702io.hpp
 Reformat.
 
+20140619T2242Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702io.hpp
+Change a datum's type, to increase flexibility.
+
+20140620T1541Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702io.hpp
+Improve documentation by marking historically unused fields. The
+immediate goal is to add a GUI that supports all fields actually
+exercised by an old testdeck.
+
