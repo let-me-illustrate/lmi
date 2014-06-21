@@ -53,6 +53,13 @@ class product_database;
 ///
 /// See general notes on class Input.
 ///
+/// When any GPT work is to be done, some 7702A work is probably
+/// needed as well. Therefore, this class is more a superset than a
+/// sibling of the corresponding 'mec_' class.
+///
+/// Data represent one day's combined transactions. They're held as a
+/// flat record, whose simplicity makes it handy for GUI and XML use.
+///
 /// These variables:
 ///   InforceContractYear
 ///   InforceYear
@@ -148,6 +155,7 @@ class LMI_SO gpt_input
     mcenum_state             CachedStateOfJurisdiction_  ;
     int                      GleanedMaturityAge_         ;
 
+    datum_string             ContractNumber                  ;
     mce_yes_or_no            Use7702ATables                  ;
     tnr_age                  IssueAge                        ;
     mce_gender               OldGender                       ;
@@ -173,6 +181,10 @@ class LMI_SO gpt_input
     tnr_month                InforceMonth                    ;
     tnr_nonnegative_double   InforceTargetSpecifiedAmount    ;
     tnr_nonnegative_double   InforceAccountValue             ;
+    tnr_unrestricted_double  InforceGlp                      ;
+    tnr_unrestricted_double  InforceCumulativeGlp            ;
+    tnr_unrestricted_double  InforceGsp                      ;
+    tnr_unrestricted_double  InforceCumulativeGptPremiumsPaid;
     mce_yes_or_no            InforceIsMec                    ;
     tnr_date                 LastMaterialChangeDate          ;
     tnr_duration             InforceContractYear             ;
@@ -188,6 +200,17 @@ class LMI_SO gpt_input
     numeric_sequence         NewFlatExtra                    ;
     mce_yes_or_no            UseDOB                          ;
     tnr_nonnegative_double   Payment                         ;
+    tnr_nonnegative_double   PremsPaidDecrement              ;
+    tnr_nonnegative_double   OldTarget                       ;
+    tnr_nonnegative_double   NewTarget                       ;
+    mce_dbopt_7702           OldDbo                          ;
+    mce_dbopt_7702           NewDbo                          ;
+    tnr_nonnegative_double   OldDeathBft                     ;
+    tnr_nonnegative_double   NewDeathBft                     ;
+    tnr_nonnegative_double   OldSpecAmt                      ;
+    tnr_nonnegative_double   NewSpecAmt                      ;
+    tnr_nonnegative_double   OldQabTermAmt                   ;
+    tnr_nonnegative_double   NewQabTermAmt                   ;
     tnr_nonnegative_double   BenefitAmount                   ;
 
     std::vector<tnr_unrestricted_double> OldFlatExtraRealized_  ;
@@ -211,6 +234,7 @@ template<> struct reconstitutor<datum_base, gpt_input>
         z = exact_cast<numeric_sequence        >(m); if(z) return z;
         // mc- types.
         z = exact_cast<mce_class               >(m); if(z) return z;
+        z = exact_cast<mce_dbopt_7702          >(m); if(z) return z;
         z = exact_cast<mce_defn_life_ins       >(m); if(z) return z;
         z = exact_cast<mce_defn_material_change>(m); if(z) return z;
         z = exact_cast<mce_gender              >(m); if(z) return z;

@@ -117,6 +117,12 @@ gpt_input::gpt_input()
     ,NewFlatExtra                     ("0")
 //    ,UseDOB                           ("")
     ,Payment                          ("0")
+    ,OldDbo                           ("A")
+    ,NewDbo                           ("A")
+    ,OldDeathBft                      ("1000000")
+    ,NewDeathBft                      ("1000000")
+    ,OldSpecAmt                       ("1000000")
+    ,NewSpecAmt                       ("1000000")
     ,BenefitAmount                    ("1000000")
 {
     AscribeMembers();
@@ -160,6 +166,7 @@ int gpt_input::effective_year     () const {return EffectiveDate.value().year();
 
 void gpt_input::AscribeMembers()
 {
+    ascribe("ContractNumber"                        , &gpt_input::ContractNumber                        );
     ascribe("Use7702ATables"                        , &gpt_input::Use7702ATables                        );
     ascribe("IssueAge"                              , &gpt_input::IssueAge                              );
     ascribe("OldGender"                             , &gpt_input::OldGender                             );
@@ -185,6 +192,10 @@ void gpt_input::AscribeMembers()
     ascribe("InforceMonth"                          , &gpt_input::InforceMonth                          );
     ascribe("InforceTargetSpecifiedAmount"          , &gpt_input::InforceTargetSpecifiedAmount          );
     ascribe("InforceAccountValue"                   , &gpt_input::InforceAccountValue                   );
+    ascribe("InforceGlp"                            , &gpt_input::InforceGlp                            );
+    ascribe("InforceCumulativeGlp"                  , &gpt_input::InforceCumulativeGlp                  );
+    ascribe("InforceGsp"                            , &gpt_input::InforceGsp                            );
+    ascribe("InforceCumulativeGptPremiumsPaid"      , &gpt_input::InforceCumulativeGptPremiumsPaid      );
     ascribe("InforceIsMec"                          , &gpt_input::InforceIsMec                          );
     ascribe("LastMaterialChangeDate"                , &gpt_input::LastMaterialChangeDate                );
     ascribe("InforceContractYear"                   , &gpt_input::InforceContractYear                   );
@@ -200,6 +211,17 @@ void gpt_input::AscribeMembers()
     ascribe("NewFlatExtra"                          , &gpt_input::NewFlatExtra                          );
     ascribe("UseDOB"                                , &gpt_input::UseDOB                                );
     ascribe("Payment"                               , &gpt_input::Payment                               );
+    ascribe("PremsPaidDecrement"                    , &gpt_input::PremsPaidDecrement                    );
+    ascribe("OldTarget"                             , &gpt_input::OldTarget                             );
+    ascribe("NewTarget"                             , &gpt_input::NewTarget                             );
+    ascribe("OldDbo"                                , &gpt_input::OldDbo                                );
+    ascribe("NewDbo"                                , &gpt_input::NewDbo                                );
+    ascribe("OldDeathBft"                           , &gpt_input::OldDeathBft                           );
+    ascribe("NewDeathBft"                           , &gpt_input::NewDeathBft                           );
+    ascribe("OldSpecAmt"                            , &gpt_input::OldSpecAmt                            );
+    ascribe("NewSpecAmt"                            , &gpt_input::NewSpecAmt                            );
+    ascribe("OldQabTermAmt"                         , &gpt_input::OldQabTermAmt                         );
+    ascribe("NewQabTermAmt"                         , &gpt_input::NewQabTermAmt                         );
     ascribe("BenefitAmount"                         , &gpt_input::BenefitAmount                         );
 }
 
