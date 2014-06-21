@@ -89,7 +89,8 @@ class LMI_SO gpt_input
 
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
-    std::vector<double> FlatExtraRealized     () const;
+    std::vector<double> OldFlatExtraRealized  () const;
+    std::vector<double> NewFlatExtraRealized  () const;
     std::vector<double> PaymentHistoryRealized() const;
     std::vector<double> BenefitHistoryRealized() const;
 
@@ -127,7 +128,8 @@ class LMI_SO gpt_input
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
 
-    std::string RealizeFlatExtra     ();
+    std::string RealizeOldFlatExtra  ();
+    std::string RealizeNewFlatExtra  ();
     std::string RealizePaymentHistory();
     std::string RealizeBenefitHistory();
 
@@ -148,11 +150,14 @@ class LMI_SO gpt_input
 
     mce_yes_or_no            Use7702ATables                  ;
     tnr_age                  IssueAge                        ;
-    mce_gender               Gender                          ;
-    mce_smoking              Smoking                         ;
+    mce_gender               OldGender                       ;
+    mce_gender               NewGender                       ;
+    mce_smoking              OldSmoking                      ;
+    mce_smoking              NewSmoking                      ;
     mce_class                UnderwritingClass               ;
     tnr_date                 DateOfBirth                     ;
-    mce_table_rating         SubstandardTable                ;
+    mce_table_rating         OldSubstandardTable             ;
+    mce_table_rating         NewSubstandardTable             ;
     ce_product_name          ProductName                     ;
     tnr_nonnegative_double   External1035ExchangeAmount      ;
     mce_yes_or_no            External1035ExchangeFromMec     ;
@@ -179,12 +184,14 @@ class LMI_SO gpt_input
     numeric_sequence         BenefitHistory                  ;
     mce_state                StateOfJurisdiction             ;
     mce_state                PremiumTaxState                 ;
-    numeric_sequence         FlatExtra                       ;
+    numeric_sequence         OldFlatExtra                    ;
+    numeric_sequence         NewFlatExtra                    ;
     mce_yes_or_no            UseDOB                          ;
     tnr_nonnegative_double   Payment                         ;
     tnr_nonnegative_double   BenefitAmount                   ;
 
-    std::vector<tnr_unrestricted_double> FlatExtraRealized_     ;
+    std::vector<tnr_unrestricted_double> OldFlatExtraRealized_  ;
+    std::vector<tnr_unrestricted_double> NewFlatExtraRealized_  ;
     std::vector<tnr_unrestricted_double> PaymentHistoryRealized_;
     std::vector<tnr_unrestricted_double> BenefitHistoryRealized_;
 };
