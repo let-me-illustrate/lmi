@@ -73,11 +73,14 @@ gpt_state test_one_days_7702A_transactions
 {
     bool                        Use7702ATables               = exact_cast<mce_yes_or_no           >(input["Use7702ATables"              ])->value();
 //  int                         IssueAge                     = exact_cast<tnr_age                 >(input["IssueAge"                    ])->value();
-    mcenum_gender               Gender                       = exact_cast<mce_gender              >(input["Gender"                      ])->value();
-    mcenum_smoking              Smoking                      = exact_cast<mce_smoking             >(input["Smoking"                     ])->value();
+//  mcenum_gender               OldGender                    = exact_cast<mce_gender              >(input["OldGender"                   ])->value();
+    mcenum_gender               NewGender                    = exact_cast<mce_gender              >(input["NewGender"                   ])->value();
+//  mcenum_smoking              OldSmoking                   = exact_cast<mce_smoking             >(input["OldSmoking"                  ])->value();
+    mcenum_smoking              NewSmoking                   = exact_cast<mce_smoking             >(input["NewSmoking"                  ])->value();
     mcenum_class                UnderwritingClass            = exact_cast<mce_class               >(input["UnderwritingClass"           ])->value();
 //  calendar_date               DateOfBirth                  = exact_cast<tnr_date                >(input["DateOfBirth"                 ])->value();
-//  mcenum_table_rating         SubstandardTable             = exact_cast<mce_table_rating        >(input["SubstandardTable"            ])->value();
+//  mcenum_table_rating         OldSubstandardTable          = exact_cast<mce_table_rating        >(input["OldSubstandardTable"         ])->value();
+//  mcenum_table_rating         NewSubstandardTable          = exact_cast<mce_table_rating        >(input["NewSubstandardTable"         ])->value();
     std::string                 ProductName                  = exact_cast<ce_product_name         >(input["ProductName"                 ])->value();
     double                      External1035ExchangeAmount   = exact_cast<tnr_nonnegative_double  >(input["External1035ExchangeAmount"  ])->value();
 //  bool                        External1035ExchangeFromMec  = exact_cast<mce_yes_or_no           >(input["External1035ExchangeFromMec" ])->value();
@@ -102,7 +105,8 @@ gpt_state test_one_days_7702A_transactions
     double                      InforceLeastDeathBenefit     = exact_cast<tnr_nonnegative_double  >(input["InforceLeastDeathBenefit"    ])->value();
     mcenum_state                StateOfJurisdiction          = exact_cast<mce_state               >(input["StateOfJurisdiction"         ])->value();
     mcenum_state                PremiumTaxState              = exact_cast<mce_state               >(input["PremiumTaxState"             ])->value();
-//  std::string                 FlatExtra                    = exact_cast<numeric_sequence        >(input["FlatExtra"                   ])->value();
+//  std::string                 OldFlatExtra                 = exact_cast<numeric_sequence        >(input["OldFlatExtra"                ])->value();
+//  std::string                 NewFlatExtra                 = exact_cast<numeric_sequence        >(input["NewFlatExtra"                ])->value();
 //  std::string                 PaymentHistory               = exact_cast<numeric_sequence        >(input["PaymentHistory"              ])->value();
 //  std::string                 BenefitHistory               = exact_cast<numeric_sequence        >(input["BenefitHistory"              ])->value();
 //  bool                        UseDOB                       = exact_cast<mce_yes_or_no           >(input["UseDOB"                      ])->value();
@@ -113,9 +117,9 @@ gpt_state test_one_days_7702A_transactions
 
     product_database database
         (ProductName
-        ,Gender
+        ,NewGender
         ,UnderwritingClass
-        ,Smoking
+        ,NewSmoking
         ,input.issue_age()
         ,GroupUnderwritingType
         ,StateOfJurisdiction

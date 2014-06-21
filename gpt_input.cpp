@@ -79,11 +79,14 @@ std::string realize_sequence_string
 gpt_input::gpt_input()
     :Use7702ATables                   ("No")
     ,IssueAge                         ("45")
-    ,Gender                           ("Male")
-    ,Smoking                          ("Nonsmoker")
+    ,OldGender                        ("Male")
+    ,NewGender                        ("Male")
+    ,OldSmoking                       ("Nonsmoker")
+    ,NewSmoking                       ("Nonsmoker")
     ,UnderwritingClass                ("Standard")
 //    ,DateOfBirth                      ("")
-//    ,SubstandardTable                 ("")
+//    ,OldSubstandardTable              ("")
+//    ,NewSubstandardTable              ("")
 //    ,ProductName                      ("")
 //    ,External1035ExchangeAmount       ("")
 //    ,External1035ExchangeFromMec      ("")
@@ -110,7 +113,8 @@ gpt_input::gpt_input()
     ,BenefitHistory                   ("1000000")
     ,StateOfJurisdiction              ("CT")
     ,PremiumTaxState                  ("CT")
-    ,FlatExtra                        ("0")
+    ,OldFlatExtra                     ("0")
+    ,NewFlatExtra                     ("0")
 //    ,UseDOB                           ("")
     ,Payment                          ("0")
     ,BenefitAmount                    ("1000000")
@@ -158,11 +162,14 @@ void gpt_input::AscribeMembers()
 {
     ascribe("Use7702ATables"                        , &gpt_input::Use7702ATables                        );
     ascribe("IssueAge"                              , &gpt_input::IssueAge                              );
-    ascribe("Gender"                                , &gpt_input::Gender                                );
-    ascribe("Smoking"                               , &gpt_input::Smoking                               );
+    ascribe("OldGender"                             , &gpt_input::OldGender                             );
+    ascribe("NewGender"                             , &gpt_input::NewGender                             );
+    ascribe("OldSmoking"                            , &gpt_input::OldSmoking                            );
+    ascribe("NewSmoking"                            , &gpt_input::NewSmoking                            );
     ascribe("UnderwritingClass"                     , &gpt_input::UnderwritingClass                     );
     ascribe("DateOfBirth"                           , &gpt_input::DateOfBirth                           );
-    ascribe("SubstandardTable"                      , &gpt_input::SubstandardTable                      );
+    ascribe("OldSubstandardTable"                   , &gpt_input::OldSubstandardTable                   );
+    ascribe("NewSubstandardTable"                   , &gpt_input::NewSubstandardTable                   );
     ascribe("ProductName"                           , &gpt_input::ProductName                           );
     ascribe("External1035ExchangeAmount"            , &gpt_input::External1035ExchangeAmount            );
     ascribe("External1035ExchangeFromMec"           , &gpt_input::External1035ExchangeFromMec           );
@@ -189,7 +196,8 @@ void gpt_input::AscribeMembers()
     ascribe("BenefitHistory"                        , &gpt_input::BenefitHistory                        );
     ascribe("StateOfJurisdiction"                   , &gpt_input::StateOfJurisdiction                   );
     ascribe("PremiumTaxState"                       , &gpt_input::PremiumTaxState                       );
-    ascribe("FlatExtra"                             , &gpt_input::FlatExtra                             );
+    ascribe("OldFlatExtra"                          , &gpt_input::OldFlatExtra                          );
+    ascribe("NewFlatExtra"                          , &gpt_input::NewFlatExtra                          );
     ascribe("UseDOB"                                , &gpt_input::UseDOB                                );
     ascribe("Payment"                               , &gpt_input::Payment                               );
     ascribe("BenefitAmount"                         , &gpt_input::BenefitAmount                         );
@@ -197,6 +205,9 @@ void gpt_input::AscribeMembers()
 
 /// Reset database_ if necessary, i.e., if the product or any database
 /// axis changed.
+///
+/// To avoid multiple database objects, presume that "Old" axes are
+/// valid, and set the database from "New" parameters.
 
 void gpt_input::DoAdaptExternalities()
 {
@@ -206,9 +217,9 @@ void gpt_input::DoAdaptExternalities()
         (
             database_.get()
         &&  CachedProductName_           == ProductName
-        &&  CachedGender_                == Gender
+        &&  CachedGender_                == NewGender
         &&  CachedUnderwritingClass_     == UnderwritingClass
-        &&  CachedSmoking_               == Smoking
+        &&  CachedSmoking_               == NewSmoking
         &&  CachedIssueAge_              == IssueAge
         &&  CachedGroupUnderwritingType_ == GroupUnderwritingType
         &&  CachedStateOfJurisdiction_   == StateOfJurisdiction
@@ -218,9 +229,9 @@ void gpt_input::DoAdaptExternalities()
         }
 
     CachedProductName_           = ProductName          .value();
-    CachedGender_                = Gender               .value();
+    CachedGender_                = NewGender            .value();
     CachedUnderwritingClass_     = UnderwritingClass    .value();
-    CachedSmoking_               = Smoking              .value();
+    CachedSmoking_               = NewSmoking           .value();
     CachedIssueAge_              = IssueAge             .value();
     CachedGroupUnderwritingType_ = GroupUnderwritingType.value();
     CachedStateOfJurisdiction_   = StateOfJurisdiction  .value();
@@ -438,20 +449,32 @@ void gpt_input::DoHarmonize()
     UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
     UnderwritingClass.allow(mce_rated, database_->Query(DB_AllowSubstdTable));
 
-    SubstandardTable.enable(mce_rated == UnderwritingClass);
+    OldSubstandardTable.enable(mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_a, mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_b, mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_c, mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_d, mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_e, mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_f, mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_h, mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_j, mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_l, mce_rated == UnderwritingClass);
+    OldSubstandardTable.allow(mce_table_p, mce_rated == UnderwritingClass);
 
-    SubstandardTable.allow(mce_table_a, mce_rated == UnderwritingClass);
-    SubstandardTable.allow(mce_table_b, mce_rated == UnderwritingClass);
-    SubstandardTable.allow(mce_table_c, mce_rated == UnderwritingClass);
-    SubstandardTable.allow(mce_table_d, mce_rated == UnderwritingClass);
-    SubstandardTable.allow(mce_table_e, mce_rated == UnderwritingClass);
-    SubstandardTable.allow(mce_table_f, mce_rated == UnderwritingClass);
-    SubstandardTable.allow(mce_table_h, mce_rated == UnderwritingClass);
-    SubstandardTable.allow(mce_table_j, mce_rated == UnderwritingClass);
-    SubstandardTable.allow(mce_table_l, mce_rated == UnderwritingClass);
-    SubstandardTable.allow(mce_table_p, mce_rated == UnderwritingClass);
+    NewSubstandardTable.enable(mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_a, mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_b, mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_c, mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_d, mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_e, mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_f, mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_h, mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_j, mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_l, mce_rated == UnderwritingClass);
+    NewSubstandardTable.allow(mce_table_p, mce_rated == UnderwritingClass);
 
-    FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
+    OldFlatExtra.enable(database_->Query(DB_AllowFlatExtras));
+    NewFlatExtra.enable(database_->Query(DB_AllowFlatExtras));
 
     bool blend_mortality_by_gender  = false;
     bool blend_mortality_by_smoking = false;
@@ -459,16 +482,24 @@ void gpt_input::DoHarmonize()
     bool allow_gender_distinct = database_->Query(DB_AllowSexDistinct);
     bool allow_unisex          = database_->Query(DB_AllowUnisex);
 
-    Gender.allow(mce_female, !blend_mortality_by_gender && allow_gender_distinct);
-    Gender.allow(mce_male  , !blend_mortality_by_gender && allow_gender_distinct);
-    Gender.allow(mce_unisex,  blend_mortality_by_gender || allow_unisex);
+    OldGender.allow(mce_female, !blend_mortality_by_gender && allow_gender_distinct);
+    OldGender.allow(mce_male  , !blend_mortality_by_gender && allow_gender_distinct);
+    OldGender.allow(mce_unisex,  blend_mortality_by_gender || allow_unisex);
+
+    NewGender.allow(mce_female, !blend_mortality_by_gender && allow_gender_distinct);
+    NewGender.allow(mce_male  , !blend_mortality_by_gender && allow_gender_distinct);
+    NewGender.allow(mce_unisex,  blend_mortality_by_gender || allow_unisex);
 
     bool allow_smoker_distinct = database_->Query(DB_AllowSmokeDistinct);
     bool allow_unismoke        = database_->Query(DB_AllowUnismoke);
 
-    Smoking.allow(mce_smoker,    !blend_mortality_by_smoking && allow_smoker_distinct);
-    Smoking.allow(mce_nonsmoker, !blend_mortality_by_smoking && allow_smoker_distinct);
-    Smoking.allow(mce_unismoke,   blend_mortality_by_smoking || allow_unismoke);
+    OldSmoking.allow(mce_smoker,    !blend_mortality_by_smoking && allow_smoker_distinct);
+    OldSmoking.allow(mce_nonsmoker, !blend_mortality_by_smoking && allow_smoker_distinct);
+    OldSmoking.allow(mce_unismoke,   blend_mortality_by_smoking || allow_unismoke);
+
+    NewSmoking.allow(mce_smoker,    !blend_mortality_by_smoking && allow_smoker_distinct);
+    NewSmoking.allow(mce_nonsmoker, !blend_mortality_by_smoking && allow_smoker_distinct);
+    NewSmoking.allow(mce_unismoke,   blend_mortality_by_smoking || allow_unismoke);
 }
 
 /// Change values as required for consistency.
@@ -524,7 +555,8 @@ std::vector<std::string> gpt_input::RealizeAllSequenceInput(bool report_errors)
     LMI_ASSERT(years_to_maturity() == database_->length());
 
     std::vector<std::string> s;
-    s.push_back(RealizeFlatExtra                  ());
+    s.push_back(RealizeOldFlatExtra               ());
+    s.push_back(RealizeNewFlatExtra               ());
     s.push_back(RealizePaymentHistory             ());
     s.push_back(RealizeBenefitHistory             ());
 
@@ -557,14 +589,14 @@ std::vector<std::string> gpt_input::RealizeAllSequenceInput(bool report_errors)
     return s;
 }
 
-std::string gpt_input::RealizeFlatExtra()
+std::string gpt_input::RealizeOldFlatExtra()
 {
 // We could enforce a maximum of the monthly equivalent of unity,
 // and a minimum of zero; is that worth the bother though?
     std::string s = realize_sequence_string
         (*this
-        ,FlatExtraRealized_
-        ,FlatExtra
+        ,OldFlatExtraRealized_
+        ,OldFlatExtra
         );
     if(s.size())
         {
@@ -576,7 +608,34 @@ std::string gpt_input::RealizeFlatExtra()
         return "";
         }
 
-    if(!each_equal(FlatExtraRealized_.begin(), FlatExtraRealized_.end(), 0.0))
+    if(!each_equal(OldFlatExtraRealized_.begin(), OldFlatExtraRealized_.end(), 0.0))
+        {
+        return "Flat extras may not be illustrated on this policy form.";
+        }
+
+    return "";
+}
+
+std::string gpt_input::RealizeNewFlatExtra()
+{
+// We could enforce a maximum of the monthly equivalent of unity,
+// and a minimum of zero; is that worth the bother though?
+    std::string s = realize_sequence_string
+        (*this
+        ,NewFlatExtraRealized_
+        ,NewFlatExtra
+        );
+    if(s.size())
+        {
+        return s;
+        }
+
+    if(database_->Query(DB_AllowFlatExtras))
+        {
+        return "";
+        }
+
+    if(!each_equal(NewFlatExtraRealized_.begin(), NewFlatExtraRealized_.end(), 0.0))
         {
         return "Flat extras may not be illustrated on this policy form.";
         }
@@ -660,9 +719,14 @@ void gpt_input::redintegrate_ad_terminum()
     RealizeAllSequenceInput(false);
 }
 
-std::vector<double> gpt_input::FlatExtraRealized() const
+std::vector<double> gpt_input::OldFlatExtraRealized() const
 {
-    return convert_vector_type<double>(FlatExtraRealized_);
+    return convert_vector_type<double>(OldFlatExtraRealized_);
+}
+
+std::vector<double> gpt_input::NewFlatExtraRealized() const
+{
+    return convert_vector_type<double>(NewFlatExtraRealized_);
 }
 
 std::vector<double> gpt_input::PaymentHistoryRealized() const
