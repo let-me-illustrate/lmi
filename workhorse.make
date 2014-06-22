@@ -1265,8 +1265,8 @@ $(touchstone_md5sums): $(touchstone_files)
 	@cd $(touchstone_dir) && $(MD5SUM) $(notdir $^) > $@
 	@$(SORT) --key=2 --output=$@ $@
 
-testdeck_suffixes    := cns ill ini mec
-test_result_suffixes := test test0 monthly_trace.* mec.tsv mec.xml
+testdeck_suffixes    := cns ill ini mec gpt
+test_result_suffixes := test test0 monthly_trace.* mec.tsv mec.xml gpt.tsv gpt.xml
 
 # These files summarize system-test results and their differences from
 # results saved in $(touchstone_dir). Datestamps are embedded in their
@@ -1284,6 +1284,7 @@ system_test_md5sums2 := $(test_dir)/md5sums
 %.ill: test_emission := emit_quietly,emit_test_data
 %.ini: test_emission := emit_quietly,emit_custom_0
 %.mec: test_emission := emit_quietly,emit_test_data
+%.gpt: test_emission := emit_quietly,emit_test_data
 
 dot_test_files =
 %.cns: dot_test_files = $(basename $(notdir $@)).*test
