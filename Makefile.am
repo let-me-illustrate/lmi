@@ -375,6 +375,8 @@ liblmi_la_SOURCES = \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
+    ihs_server7702.cpp \
+    ihs_server7702io.cpp \
     lmi.cpp \
     md5.cpp \
     mec_input.cpp \

@@ -41,6 +41,7 @@
 #include "gpt_input.hpp"
 #include "gpt_xml_document.hpp"
 #include "ihs_irc7702a.hpp"
+#include "ihs_server7702.hpp"           // RunServer7702FromStruct()
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
@@ -66,11 +67,24 @@
 
 namespace
 {
-gpt_state test_one_days_7702A_transactions
+gpt_state test_one_days_gpt_transactions
     (fs::path  const& file_path
     ,gpt_input const& input
     )
 {
+    Server7702Input i(input);
+    Server7702Output o = RunServer7702FromStruct(i);
+    gpt_state s;
+    s["X0_glp"  ] = value_cast<std::string>(o.GuidelineLevelPremium        );
+    s["X1_gsp"  ] = value_cast<std::string>(o.GuidelineSinglePremium       );
+    s["X2_glp_a"] = value_cast<std::string>(o.GuidelineLevelPremiumPolicyA );
+    s["X3_gsp_a"] = value_cast<std::string>(o.GuidelineSinglePremiumPolicyA);
+    s["X4_glp_b"] = value_cast<std::string>(o.GuidelineLevelPremiumPolicyB );
+    s["X5_gsp_b"] = value_cast<std::string>(o.GuidelineSinglePremiumPolicyB);
+    s["X6_glp_c"] = value_cast<std::string>(o.GuidelineLevelPremiumPolicyC );
+    s["X7_gsp_c"] = value_cast<std::string>(o.GuidelineSinglePremiumPolicyC);
+    return s;
+
     bool                        Use7702ATables               = exact_cast<mce_yes_or_no           >(input["Use7702ATables"              ])->value();
 //  int                         IssueAge                     = exact_cast<tnr_age                 >(input["IssueAge"                    ])->value();
 //  mcenum_gender               OldGender                    = exact_cast<mce_gender              >(input["OldGender"                   ])->value();
@@ -541,7 +555,7 @@ bool gpt_server::operator()(fs::path const& file_path)
 bool gpt_server::operator()(fs::path const& file_path, gpt_input const& z)
 {
     Timer timer;
-    state_ = test_one_days_7702A_transactions(file_path, z);
+    state_ = test_one_days_gpt_transactions(file_path, z);
     seconds_for_calculations_ = timer.stop().elapsed_seconds();
     timer.restart();
     if(mce_emit_test_data && emission_)
