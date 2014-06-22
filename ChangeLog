@@ -33899,3 +33899,25 @@ Convert between old and new GPT input.
   ihs_server7702.cpp
 Validate conversion between old and new GPT input.
 
+20140622T1434Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  gpt_server.cpp
+  objects.make
+Call old GPT calculations from new GPT interface.
+
+20140622T1510Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702.cpp
+Display diagnostics appropriately for each interface.
+
+20140622T1608Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702.cpp
+Translate old testdeck to distinct xml input files.
+
+20140622T1610Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Add '.gpt' files to system test.
+
