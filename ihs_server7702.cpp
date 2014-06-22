@@ -31,6 +31,7 @@
 
 #include "ihs_server7702.hpp"
 
+#include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "fenv_lmi.hpp"
@@ -38,11 +39,7 @@
 #include "ihs_irc7702.hpp"
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
-#include "path_utility.hpp" // initialize_filesystem()
-
-#if defined LMI_MSW
-#   include <windows.h> // HINSTANCE etc.
-#endif // defined LMI_MSW
+#include "path_utility.hpp"             // initialize_filesystem()
 
 #include <cstdlib>
 #include <exception>
@@ -115,11 +112,11 @@ int RunServer7702()
     // Catch exceptions that are thrown during input
     catch(std::exception const& e)
         {
-        std::cerr << input.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << input.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         }
     catch(...)
         {
-        std::cerr << "Untrapped exception" << '\n';
+        warning() << "Untrapped exception" << LMI_FLUSH;
         }
     return EXIT_FAILURE;
 }
@@ -176,49 +173,49 @@ void Server7702::Process()
         // TODO ?? Perhaps the control word should be changed and
         // processing restarted.
         Output.Status |= precision_changed;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_implausible_input const& e)
         {
         Output.Status |= implausible_input;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_inconsistent_input const& e)
         {
         Output.Status |= inconsistent_input;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         }
     catch(x_product_rule_violated const& e)
         {
         Output.Status |= product_rule_violated;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_adjustable_event_forbidden_at_issue const& e)
         {
         Output.Status |= adjustable_event_forbidden_at_issue;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_guideline_negative const& e)
         {
         Output.Status |= guideline_negative;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_misstatement_of_age_or_gender const& e)
         {
         Output.Status |= misstatement_of_age_or_gender;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         }
     catch(std::range_error const& e)
         {
         Output.Status |= implausible_input; // TODO ?? can we be more specific?
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         }
 
     // Unknown error
     catch(std::exception const& e)
         {
         Output.Status |= unknown_error;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
         // Since we don't know what the error is, we propagate
         // it back to the caller; we put a message on standard error,
         // but don't try to emit anything to standard output.
