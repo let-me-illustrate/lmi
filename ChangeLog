@@ -33870,3 +33870,32 @@ Improve documentation by marking historically unused fields. The
 immediate goal is to add a GUI that supports all fields actually
 exercised by an old testdeck.
 
+20140621T0059Z <gchicares@sbcglobal.net> [542]
+
+  gpt_input.cpp
+  gpt_input.hpp
+  gpt_server.cpp
+Split certain fields into "old" and "new" variants.
+
+20140621T1613Z <gchicares@sbcglobal.net> [542]
+
+  gpt_input.cpp
+  gpt_input.hpp
+Add some fields for GPT support.
+
+20140621T1619Z <gchicares@sbcglobal.net> [542]
+
+  gpt_input.cpp
+Improve certain defaults.
+
+20140622T1352Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Convert between old and new GPT input.
+
+20140622T1353Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702.cpp
+Validate conversion between old and new GPT input.
+
