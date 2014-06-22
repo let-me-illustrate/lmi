@@ -35,6 +35,7 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "fenv_lmi.hpp"
+#include "gpt_xml_document.hpp"
 #include "handle_exceptions.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_server7702io.hpp"
@@ -43,6 +44,7 @@
 
 #include <cstdlib>
 #include <exception>
+#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -94,11 +96,18 @@ int RunServer7702()
             {
             // Run testdeck to validate this chain of conversions:
             //   Server7702Input --> gpt_input --> Server7702Input
+            std::string f = input.UniqueIdentifier + ".gpt";
+            std::ofstream ofs_input(f.c_str());
             gpt_input z = input.operator gpt_input();
+            gpt_xml_document x(z);
+            x.write(ofs_input);
             Server7702Input y(z);
             Server7702 contract(y);
             contract.Process();
             std::cout << contract.GetOutput();
+            f += ".txt";
+            std::ofstream ofs_output(f.c_str());
+            ofs_output << contract.GetOutput();
             while('\n' == std::cin.peek())
                 {
                 std::cin.get();
