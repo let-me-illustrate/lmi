@@ -95,8 +95,11 @@ int RunServer7702()
         {
         while(std::cin >> input)
             {
-            // Separate construction from initialization
-            Server7702 contract(input);
+            // Run testdeck to validate this chain of conversions:
+            //   Server7702Input --> gpt_input --> Server7702Input
+            gpt_input z = input.operator gpt_input();
+            Server7702Input y(z);
+            Server7702 contract(y);
             contract.Process();
             std::cout << contract.GetOutput();
             while('\n' == std::cin.peek())
