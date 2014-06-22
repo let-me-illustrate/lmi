@@ -26,6 +26,7 @@
 
 #include "config.hpp"
 
+#include "gpt_input.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 
@@ -34,6 +35,10 @@
 
 struct Server7702Input
 {
+    Server7702Input();
+    Server7702Input(gpt_input const&);
+    operator gpt_input() const;
+
     std::string      UniqueIdentifier;           //  an arbitrary string that identifies the contract uniquely. The contract number may be used, but remember that the server maintains no database of actual contracts.
     bool             IsIssuedToday;              //  true if the contract is issued or reissued today. Used to prevent adjustable events at issue, which must not occur.
     int              Duration;                   //  number of policy years completed since issue (so it starts at 0).
