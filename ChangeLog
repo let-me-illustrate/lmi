@@ -33921,3 +33921,33 @@ Translate old testdeck to distinct xml input files.
   workhorse.make
 Add '.gpt' files to system test.
 
+20140623T1401Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Remove an obsolete field.
+
+20140623T1410Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Remove an obsolete field; add a new field in its place.
+
+20140623T1418Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Add two new inforce fields.
+
+20140623T1653Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Add a new tab.
+
+20140623T1853Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Split some fields, and move them to the tab just added.
+
+20140623T1917Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Add more "old" and "new" fields.
+
