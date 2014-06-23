@@ -157,7 +157,7 @@ demonstrate a defect in the wx library. See
             <flag>wxGROW|wxALL</flag>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
-                <growablecols>0,1,2,3</growablecols>
+                <growablecols>0,1</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
@@ -191,38 +191,6 @@ demonstrate a defect in the wx library. See
                             <item helptext="Standard class">Standard</item>
                             <item helptext="Table rated">Rated</item>
                             <item helptext="Ultra-preferred class">Ultra</item>
-                        </content>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
-                    <border>2</border>
-                    <object class="wxRadioBox" name="Gender">
-                        <help>Gender</help>
-                        <style>wxRA_SPECIFY_COLS</style>
-                        <label>Gender</label>
-                        <dimension>1</dimension>
-                        <selection>0</selection>
-                        <content>
-                            <item helptext="Female rates">Female</item>
-                            <item helptext="Male rates">Male</item>
-                            <item helptext="Rates not differentiated by gender">Unisex</item>
-                        </content>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
-                    <border>2</border>
-                    <object class="wxRadioBox" name="Smoking">
-                        <help>Smoking</help>
-                        <style>wxRA_SPECIFY_COLS</style>
-                        <label>Smoker</label>
-                        <dimension>1</dimension>
-                        <selection>0</selection>
-                        <content>
-                            <item helptext="Smoker or tobacco user, as applicable">Smoker</item>
-                            <item helptext="Nonsmoker or non-tobacco-user, as applicable">Nonsmoker</item>
-                            <item helptext="Rates not differentiated by smoking">Unismoke</item>
                         </content>
                     </object>
                 </object>
@@ -613,6 +581,111 @@ here, but it looks weird if we don't make this look like its siblings.
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
                 <growablecols>0,1</growablecols>
+                <growablerows>0</growablerows>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>Old</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Gender</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="OldGender">
+                                        <help>Gender</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Smoking</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="OldSmoking">
+                                        <help>Smoking</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>New</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Gender</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="NewGender">
+                                        <help>Gender</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Smoking</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="NewSmoking">
+                                        <help>Smoking</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
             </object>
         </object>
     </object>
