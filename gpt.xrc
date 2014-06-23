@@ -395,6 +395,36 @@ here, but it looks weird if we don't make this look like its siblings.
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                     </object>
                                 </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Inforce GLP</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceGlp">
+                                        <help>Inforce guideline level premium</help>
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Inforce GSP</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceGsp">
+                                        <help>Inforce guideline single premium</help>
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
                             </object>
                         </object>
                     </object>
