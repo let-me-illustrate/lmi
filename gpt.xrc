@@ -664,14 +664,14 @@ here, but it looks weird if we don't make this look like its siblings.
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
                     <object class="wxStaticText">
-                        <label>Benefit amount</label>
+                        <label>Premiums-paid decrement</label>
                     </object>
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                     <border>4</border>
-                    <object class="wxTextCtrl" name="BenefitAmount">
-                        <help>7702A "benefit" (either specified amount or death benefit)</help>
+                    <object class="wxTextCtrl" name="PremsPaidDecrement">
+                        <help>Decrement to 7702(f)(1) 'premiums paid'</help>
                         <size>80,-1</size>
                     </object>
                 </object>
