@@ -33951,3 +33951,8 @@ Split some fields, and move them to the tab just added.
   gpt.xrc
 Add more "old" and "new" fields.
 
+20140623T1925Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5919.
+
