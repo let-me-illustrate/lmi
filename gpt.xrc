@@ -602,6 +602,22 @@ here, but it looks weird if we don't make this look like its siblings.
     </object>
 </object>
 
+<object class="wxPanel" name="changes_gpt_panel">
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <growablecols>0</growablecols>
+        <growablerows>0</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>2</cols>
+                <growablecols>0,1</growablecols>
+            </object>
+        </object>
+    </object>
+</object>
+
 <object class="wxPanel" name="transactions_gpt_panel">
     <object class="wxFlexGridSizer">
         <cols>1</cols>
@@ -737,6 +753,10 @@ here, but it looks weird if we don't make this look like its siblings.
                 <object class="notebookpage">
                     <label>Status</label>
                     <object_ref ref="status_gpt_panel"/>
+                </object>
+                <object class="notebookpage">
+                    <label>Changes</label>
+                    <object_ref ref="changes_gpt_panel"/>
                 </object>
                 <object class="notebookpage">
                     <label>Transactions</label>
