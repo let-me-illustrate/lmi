@@ -550,7 +550,7 @@ here, but it looks weird if we don't make this look like its siblings.
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
                         <growablecols>1</growablecols>
-                        <growablerows>0,1</growablerows>
+                        <growablerows>0</growablerows>
                         <object class="sizeritem">
                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                             <border>4</border>
@@ -562,20 +562,6 @@ here, but it looks weird if we don't make this look like its siblings.
                             <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="PaymentHistory">
                                 <help>7702A "Amounts paid" for each contract year since beginning of last seven-pay period--zero if not in a seven-pay period</help>
-                                <size>180,-1</size>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                            <border>4</border>
-                            <object class="wxStaticText">
-                                <label>Benefit history for current 7-pay period</label>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW</flag>
-                            <object class="wxTextCtrl" name="BenefitHistory">
-                                <help>7702A "Benefits" for each contract year since beginning of last seven-pay period--zero if not in a seven-pay period</help>
                                 <size>180,-1</size>
                             </object>
                         </object>
