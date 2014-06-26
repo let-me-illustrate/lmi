@@ -107,7 +107,7 @@ cvs -z3 update -l lmi
 cd /lmi/src/lmi
 
 make $coefficiency install check_physical_closure >../log 2>&1
-make $coefficiency cgi_tests cli_tests gpt_server_tests >../log 2>&1
+make $coefficiency cgi_tests cli_tests >../log 2>&1
 make $coefficiency system_test >../log 2>&1
 make $coefficiency unit_tests >../log 2>&1
 
