@@ -40,6 +40,7 @@
 #include "ihs_irc7702.hpp"
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
+#include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "path_utility.hpp"             // initialize_filesystem()
 
 #include <cstdlib>
@@ -97,7 +98,7 @@ int RunServer7702()
             // Run testdeck to validate this chain of conversions:
             //   Server7702Input --> gpt_input --> Server7702Input
             std::string f = input.UniqueIdentifier + ".gpt";
-            std::ofstream ofs_input(f.c_str());
+            std::ofstream ofs_input(f.c_str(), ios_out_trunc_binary());
             gpt_input z = input.operator gpt_input();
             gpt_xml_document x(z);
             x.write(ofs_input);
@@ -106,7 +107,7 @@ int RunServer7702()
             contract.Process();
             std::cout << contract.GetOutput();
             f += ".txt";
-            std::ofstream ofs_output(f.c_str());
+            std::ofstream ofs_output(f.c_str(), ios_out_trunc_binary());
             ofs_output << contract.GetOutput();
             while('\n' == std::cin.peek())
                 {
