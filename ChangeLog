@@ -33956,3 +33956,17 @@ Add more "old" and "new" fields.
   version.hpp
 Designate release candidate 5919.
 
+20140626T1508Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702.cpp
+Fix defect introduced 20140622T1608Z: files written in text mode. See
+the comment on _CRT_fmode in 'test_coding_rules.cpp'.
+
+20140627T1703Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  objects.make
+  workhorse.make
+Eradicate the 'gpt_server' binary. Its associated tests have recently
+been rendered merely duplicative.
+

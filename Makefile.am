@@ -55,11 +55,7 @@ bin_PROGRAMS = \
 
 # other programs which may or not be built depending on configure arguments
 EXTRA_PROGRAMS = \
-    antediluvian_cgi \
-    gpt_server
-#    gpt_server - does not contain main() function, bug?..
-#      answer: its main() is in 'ihs_server7702.cpp'
-#    lmi_cgi - restore the target in the future
+    antediluvian_cgi
 
 # libtool libraries installed in lib
 lib_LTLIBRARIES = \
@@ -430,11 +426,6 @@ generate_passkey_CXXFLAGS = $(AM_CXXFLAGS)
 generate_passkey_LDADD = \
     $(BOOST_LIBS) \
     libmain_auxiliary_common.la
-
-gpt_server_SOURCES = $(top_builddir)/dummy.cpp
-gpt_server_CXXFLAGS = $(AM_CXXFLAGS)
-gpt_server_LDADD = \
-    liblmi.la
 
 elapsed_time_SOURCES = \
     elapsed_time.cpp \
