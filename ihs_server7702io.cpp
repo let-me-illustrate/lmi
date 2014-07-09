@@ -38,37 +38,37 @@ Server7702Input::Server7702Input()
 
 Server7702Input::Server7702Input(gpt_input const& z)
 {
-    UniqueIdentifier           = z["ContractNumber"].str();
-    Duration                   = exact_cast<tnr_duration>(z["InforceYear"])->value();
-    IsIssuedToday              = 0 == Duration; // Casual, but strictly correct for all testdeck cases.
-    GrossNontaxableWithdrawal  = exact_cast<tnr_nonnegative_double>(z["PremsPaidDecrement"])->value();
-    Premium                    = exact_cast<tnr_nonnegative_double>(z["Payment"])->value();
+    ContractNumber             = z["ContractNumber"].str();
+    InforceYear                = exact_cast<tnr_duration>(z["InforceYear"])->value();
+    IsIssuedToday              = 0 == InforceYear; // Casual, but strictly correct for all testdeck cases.
+    PremsPaidDecrement         = exact_cast<tnr_nonnegative_double>(z["PremsPaidDecrement"])->value();
+    Payment                    = exact_cast<tnr_nonnegative_double>(z["Payment"])->value();
     DecreaseRequiredByContract = 0.0;
     ProductName                = z["ProductName"].str();
-    UnderwritingBasis          = exact_cast<mce_uw_basis>(z["GroupUnderwritingType"])->value();
+    GroupUnderwritingType      = exact_cast<mce_uw_basis>(z["GroupUnderwritingType"])->value();
     PremTaxLoadRate            = 0.0;
     TieredAssetChargeRate      = 0.0;
     LeastBenefitAmountEver     = 0.0;
-    OldGuidelineLevelPremium   = exact_cast<tnr_unrestricted_double>(z["InforceGlp"])->value();
-    OldGuidelineSinglePremium  = exact_cast<tnr_unrestricted_double>(z["InforceGsp"])->value();
+    InforceGlp                 = exact_cast<tnr_unrestricted_double>(z["InforceGlp"])->value();
+    InforceGsp                 = exact_cast<tnr_unrestricted_double>(z["InforceGsp"])->value();
     NewIssueAge                = exact_cast<tnr_age>(z["IssueAge"])->value();
     OldIssueAge                = NewIssueAge;
     NewGender                  = exact_cast<mce_gender>(z["NewGender"])->value();
     OldGender                  = exact_cast<mce_gender>(z["OldGender"])->value();
-    NewSmoker                  = exact_cast<mce_smoking>(z["NewSmoking"])->value();
-    OldSmoker                  = exact_cast<mce_smoking>(z["OldSmoking"])->value();
+    NewSmoking                 = exact_cast<mce_smoking>(z["NewSmoking"])->value();
+    OldSmoking                 = exact_cast<mce_smoking>(z["OldSmoking"])->value();
     NewUnderwritingClass       = exact_cast<mce_class>(z["UnderwritingClass"])->value();
     OldUnderwritingClass       = NewUnderwritingClass;
     NewStateOfJurisdiction     = exact_cast<mce_state>(z["StateOfJurisdiction"])->value();
     OldStateOfJurisdiction     = NewStateOfJurisdiction;
-    NewDeathBenefitOption      = exact_cast<mce_dbopt_7702>(z["NewDbo"])->value();
-    OldDeathBenefitOption      = exact_cast<mce_dbopt_7702>(z["OldDbo"])->value();
+    NewDbo                     = exact_cast<mce_dbopt_7702>(z["NewDbo"])->value();
+    OldDbo                     = exact_cast<mce_dbopt_7702>(z["OldDbo"])->value();
     NewBenefitAmount           = exact_cast<tnr_nonnegative_double>(z["NewDeathBft"])->value();
     OldBenefitAmount           = exact_cast<tnr_nonnegative_double>(z["OldDeathBft"])->value();
-    NewSpecifiedAmount         = exact_cast<tnr_nonnegative_double>(z["NewSpecAmt"])->value();
-    OldSpecifiedAmount         = exact_cast<tnr_nonnegative_double>(z["OldSpecAmt"])->value();
-    NewTermAmount              = exact_cast<tnr_nonnegative_double>(z["NewQabTermAmt"])->value();
-    OldTermAmount              = exact_cast<tnr_nonnegative_double>(z["OldQabTermAmt"])->value();
+    NewSpecAmt                 = exact_cast<tnr_nonnegative_double>(z["NewSpecAmt"])->value();
+    OldSpecAmt                 = exact_cast<tnr_nonnegative_double>(z["OldSpecAmt"])->value();
+    NewQabTermAmt              = exact_cast<tnr_nonnegative_double>(z["NewQabTermAmt"])->value();
+    OldQabTermAmt              = exact_cast<tnr_nonnegative_double>(z["OldQabTermAmt"])->value();
     NewWaiverOfPremiumInForce  = false;
     OldWaiverOfPremiumInForce  = false;
     NewPremiumsWaived          = false;
@@ -79,8 +79,8 @@ Server7702Input::Server7702Input(gpt_input const& z)
     OldAccidentalDeathInForce  = false;
     NewAccidentalDeathRating   = "None";
     OldAccidentalDeathRating   = "None";
-    NewTableRating             = exact_cast<mce_table_rating>(z["NewSubstandardTable"])->value();
-    OldTableRating             = exact_cast<mce_table_rating>(z["OldSubstandardTable"])->value();
+    NewSubstandardTable        = exact_cast<mce_table_rating>(z["NewSubstandardTable"])->value();
+    OldSubstandardTable        = exact_cast<mce_table_rating>(z["OldSubstandardTable"])->value();
     NewPermanentFlatAmount0    = 0.0;
     OldPermanentFlatAmount0    = 0.0;
     NewPermanentFlatAmount1    = 0.0;
@@ -107,8 +107,8 @@ Server7702Input::operator gpt_input() const
 {
     gpt_input z;
 
-    z["ContractNumber"]        = UniqueIdentifier;
-    z["InforceYear"]           = value_cast<std::string>(Duration);
+    z["ContractNumber"]        = ContractNumber;
+    z["InforceYear"]           = value_cast<std::string>(InforceYear);
     // For class gpt_input, 'InforceAsOfDate' is primary by default,
     // so it needs to be set here.
     calendar_date d = add_years
@@ -117,36 +117,36 @@ Server7702Input::operator gpt_input() const
         ,true
         );
     z["InforceAsOfDate"] = value_cast<std::string>(d);
-    z["PremsPaidDecrement"]    = value_cast<std::string>(GrossNontaxableWithdrawal);
-    z["Payment"]               = value_cast<std::string>(Premium);
+    z["PremsPaidDecrement"]    = value_cast<std::string>(PremsPaidDecrement);
+    z["Payment"]               = value_cast<std::string>(Payment);
     z["ProductName"]           = ProductName;
-    z["GroupUnderwritingType"] = UnderwritingBasis.str();
-    z["InforceGlp"]            = value_cast<std::string>(OldGuidelineLevelPremium);
-    z["InforceGsp"]            = value_cast<std::string>(OldGuidelineSinglePremium);
+    z["GroupUnderwritingType"] = GroupUnderwritingType.str();
+    z["InforceGlp"]            = value_cast<std::string>(InforceGlp);
+    z["InforceGsp"]            = value_cast<std::string>(InforceGsp);
     z["IssueAge"]              = value_cast<std::string>(NewIssueAge);
     LMI_ASSERT(OldIssueAge == NewIssueAge);
     z["NewGender"]             = NewGender.str();
     z["OldGender"]             = OldGender.str();
-    z["NewSmoking"]            = NewSmoker.str();
-    z["OldSmoking"]            = OldSmoker.str();
+    z["NewSmoking"]            = NewSmoking.str();
+    z["OldSmoking"]            = OldSmoking.str();
     z["UnderwritingClass"]     = NewUnderwritingClass.str();
     LMI_ASSERT(OldUnderwritingClass == NewUnderwritingClass);
     z["StateOfJurisdiction"]   = NewStateOfJurisdiction.str();
     LMI_ASSERT(OldStateOfJurisdiction == NewStateOfJurisdiction);
-    z["NewDbo"]                = NewDeathBenefitOption.str();
-    z["OldDbo"]                = OldDeathBenefitOption.str();
+    z["NewDbo"]                = NewDbo.str();
+    z["OldDbo"]                = OldDbo.str();
     z["NewDeathBft"]           = value_cast<std::string>(NewBenefitAmount);
     z["OldDeathBft"]           = value_cast<std::string>(OldBenefitAmount);
-    z["NewSpecAmt"]            = value_cast<std::string>(NewSpecifiedAmount);
-    z["OldSpecAmt"]            = value_cast<std::string>(OldSpecifiedAmount);
-    // It's unclear whether Server7702Input's [Old|New]TermAmount
+    z["NewSpecAmt"]            = value_cast<std::string>(NewSpecAmt);
+    z["OldSpecAmt"]            = value_cast<std::string>(OldSpecAmt);
+    // It's unclear whether Server7702Input's [Old|New]QabTermAmt
     // members were intended to represent an integrated term rider or
     // a QAB. That doesn't really matter, because these amounts were
     // never used in the old GPT calculations.
-    z["NewQabTermAmt"]         = value_cast<std::string>(NewTermAmount);
-    z["OldQabTermAmt"]         = value_cast<std::string>(OldTermAmount);
-    z["NewSubstandardTable"]   = NewTableRating.str();
-    z["OldSubstandardTable"]   = OldTableRating.str();
+    z["NewQabTermAmt"]         = value_cast<std::string>(NewQabTermAmt);
+    z["OldQabTermAmt"]         = value_cast<std::string>(OldQabTermAmt);
+    z["NewSubstandardTable"]   = NewSubstandardTable.str();
+    z["OldSubstandardTable"]   = OldSubstandardTable.str();
     // 'TargetPremium' should have had "old" and "new" variants.
     z["OldTarget"]             = value_cast<std::string>(TargetPremium);
     z["NewTarget"]             = value_cast<std::string>(TargetPremium);

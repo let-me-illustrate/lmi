@@ -100,49 +100,49 @@ void Server7702::Process()
         // TODO ?? Perhaps the control word should be changed and
         // processing restarted.
         Output.Status |= precision_changed;
-        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_implausible_input const& e)
         {
         Output.Status |= implausible_input;
-        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_inconsistent_input const& e)
         {
         Output.Status |= inconsistent_input;
-        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(x_product_rule_violated const& e)
         {
         Output.Status |= product_rule_violated;
-        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_adjustable_event_forbidden_at_issue const& e)
         {
         Output.Status |= adjustable_event_forbidden_at_issue;
-        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_guideline_negative const& e)
         {
         Output.Status |= guideline_negative;
-        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_misstatement_of_age_or_gender const& e)
         {
         Output.Status |= misstatement_of_age_or_gender;
-        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(std::range_error const& e)
         {
         Output.Status |= implausible_input; // TODO ?? can we be more specific?
-        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
 
     // Unknown error
     catch(std::exception const& e)
         {
         Output.Status |= unknown_error;
-        warning() << Output.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         // Since we don't know what the error is, we propagate
         // it back to the caller; we put a message on standard error,
         // but don't try to emit anything to standard output.
@@ -153,11 +153,11 @@ void Server7702::Process()
 //============================================================================
 void Server7702::PerformProcessing()
 {
-    Output.UniqueIdentifier                 = Input.UniqueIdentifier;
+    Output.ContractNumber                   = Input.ContractNumber;
     Output.Status                           = 0;
     Output.AdjustableEventOccurred          = false;
-    Output.GuidelineLevelPremium            = Input.OldGuidelineLevelPremium;
-    Output.GuidelineSinglePremium           = Input.OldGuidelineSinglePremium;
+    Output.GuidelineLevelPremium            = Input.InforceGlp;
+    Output.GuidelineSinglePremium           = Input.InforceGsp;
     Output.GuidelineLevelPremiumPolicyA     = 0.0;
     Output.GuidelineSinglePremiumPolicyA    = 0.0;
     Output.GuidelineLevelPremiumPolicyB     = 0.0;
@@ -248,14 +248,14 @@ void Server7702::VerifyPlausibilityOfInput() const
             "Old benefit amount less than least benefit amount ever"
             );
         }
-    if(Input.NewSpecifiedAmount < Input.LeastBenefitAmountEver)
+    if(Input.NewSpecAmt < Input.LeastBenefitAmountEver)
         {
         throw server7702_implausible_input
             (
             "New specified amount less than least benefit amount ever"
             );
         }
-    if(Input.OldSpecifiedAmount < Input.LeastBenefitAmountEver)
+    if(Input.OldSpecAmt < Input.LeastBenefitAmountEver)
         {
         throw server7702_implausible_input
             (
@@ -285,17 +285,17 @@ void Server7702::DecideWhatToCalculate()
 
     IsPossibleAdjustableEvent =
 // TODO ?? Why treat a taxable withdrawal as an adjustment event?
-//            0.0                             != Input.GrossNontaxableWithdrawal
+//            0.0                             != Input.PremsPaidDecrement
             true                            == Input.DecreaseRequiredByContract
-        ||  Input.NewDeathBenefitOption     != Input.OldDeathBenefitOption
-        ||  (   Input.NewSpecifiedAmount    != Input.OldSpecifiedAmount
+        ||  Input.NewDbo                    != Input.OldDbo
+        ||  (   Input.NewSpecAmt            != Input.OldSpecAmt
             &&  Input.NewBenefitAmount      != Input.OldBenefitAmount
             )
 // TODO ?? NEED DECISION whether it's a SA or DB change that causes adj event
-        ||  Input.NewTermAmount             != Input.OldTermAmount
+        ||  Input.NewQabTermAmt             != Input.OldQabTermAmt
 // TODO ?? No adj event if term and SA change but DB remains constant, but
 // TODO ?? NEED DECISION whether it's a SA or DB change that causes adj event
-        ||  Input.NewSmoker                 != Input.OldSmoker
+        ||  Input.NewSmoking                != Input.OldSmoking
 // 7702 mortality basis is the same for preferred vs. standard
 // Assume nothing else (e.g. loads) varies by that either
 //      ||  Input.NewUnderwritingClass      != Input.OldUnderwritingClass
@@ -309,11 +309,11 @@ void Server7702::DecideWhatToCalculate()
 // Assume ADD rating is ignored
 //      ||  Input.NewAccidentalDeathRating  != Input.OldAccidentalDeathRating
 // Assume table rating is ignored
-//      ||  Input.NewTableRating            != Input.OldTableRating
+//      ||  Input.NewSubstandardTable       != Input.OldSubstandardTable
 // Assume flat extras are ignored
 //      ||  Input.NewPermanentFlatAmount0   != Input.OldPermanentFlatAmount0
 //      ||  Input.NewTemporaryFlatAmount0   != Input.OldTemporaryFlatAmount0
-//      ||  Input.NewTemporaryFlatDuration0 != Input.OldTemporaryFlatDuration0
+//      ||  Input.NewTemporaryFlatInforceYear0 != Input.OldTemporaryFlatInforceYear0
         ;
 
     if(IsIssuedToday && IsPossibleAdjustableEvent)
@@ -327,16 +327,16 @@ void Server7702::DecideWhatToCalculate()
 void Server7702::ProcessNewIssue()
 {
     bool okay =
-            Input.Duration                  == 0
-        &&  Input.OldGuidelineLevelPremium  == 0.0
-        &&  Input.OldGuidelineSinglePremium == 0.0
+            Input.InforceYear               == 0
+        &&  Input.InforceGlp                == 0.0
+        &&  Input.InforceGsp                == 0.0
         &&  Input.OldGender                 == Input.NewGender
         &&  Input.OldUnderwritingClass      == Input.NewUnderwritingClass
-        &&  Input.OldSmoker                 == Input.NewSmoker
+        &&  Input.OldSmoking                == Input.NewSmoking
         &&  Input.OldIssueAge               == Input.NewIssueAge
         &&  Input.OldStateOfJurisdiction    == Input.NewStateOfJurisdiction
-        &&  Input.OldSpecifiedAmount        == Input.NewSpecifiedAmount
-        &&  Input.OldDeathBenefitOption     == Input.NewDeathBenefitOption
+        &&  Input.OldSpecAmt                == Input.NewSpecAmt
+        &&  Input.OldDbo                    == Input.NewDbo
         ;
 
     // TODO ?? It would be better to spell them all out.
@@ -375,8 +375,8 @@ void Server7702::ProcessAdjustableEvent()
             );
         }
 
-    Output.GuidelineLevelPremiumPolicyA = Input.OldGuidelineLevelPremium;
-    Output.GuidelineSinglePremiumPolicyA = Input.OldGuidelineSinglePremium;
+    Output.GuidelineLevelPremiumPolicyA  = Input.InforceGlp;
+    Output.GuidelineSinglePremiumPolicyA = Input.InforceGsp;
 
     SetDoleBentsenValuesBC();
     Output.GuidelineLevelPremium =
@@ -399,12 +399,12 @@ void Server7702::SetDoleBentsenValuesA()
         (Input.ProductName
         ,Input.OldGender                .value()
         ,Input.OldUnderwritingClass     .value()
-        ,Input.OldSmoker                .value()
+        ,Input.OldSmoking               .value()
         ,Input.OldIssueAge
-        ,Input.UnderwritingBasis        .value()
+        ,Input.GroupUnderwritingType    .value()
         ,Input.OldStateOfJurisdiction   .value()
-        ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption    .value()
+        ,Input.OldSpecAmt
+        ,Input.OldDbo                   .value()
         ,Input.OldAccidentalDeathInForce
         ,Input.TargetPremium
         );
@@ -412,16 +412,16 @@ void Server7702::SetDoleBentsenValuesA()
     Output.GuidelineLevelPremiumPolicyA = basic_values_A.Irc7702_->CalculateGLP
         (0
         ,Input.OldBenefitAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption.value()
+        ,Input.OldSpecAmt
+        ,Input.OldSpecAmt
+        ,Input.OldDbo.value()
         );
 
     Output.GuidelineSinglePremiumPolicyA = basic_values_A.Irc7702_->CalculateGSP
         (0
         ,Input.OldBenefitAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldSpecifiedAmount
+        ,Input.OldSpecAmt
+        ,Input.OldSpecAmt
         );
 }
 
@@ -432,58 +432,58 @@ void Server7702::SetDoleBentsenValuesBC()
         (Input.ProductName
         ,Input.NewGender                .value()
         ,Input.NewUnderwritingClass     .value()
-        ,Input.NewSmoker                .value()
+        ,Input.NewSmoking               .value()
         ,Input.NewIssueAge
-        ,Input.UnderwritingBasis        .value()
+        ,Input.GroupUnderwritingType    .value()
         ,Input.NewStateOfJurisdiction   .value()
-        ,Input.NewSpecifiedAmount
-        ,Input.NewDeathBenefitOption    .value()
+        ,Input.NewSpecAmt
+        ,Input.NewDbo                   .value()
         ,Input.NewAccidentalDeathInForce
         ,Input.TargetPremium
         );
 
     Output.GuidelineLevelPremiumPolicyB = basic_values_B.Irc7702_->CalculateGLP
-        (Input.Duration
+        (Input.InforceYear
         ,Input.NewBenefitAmount
-        ,Input.NewSpecifiedAmount
-        ,Input.NewSpecifiedAmount
-        ,Input.NewDeathBenefitOption.value()
+        ,Input.NewSpecAmt
+        ,Input.NewSpecAmt
+        ,Input.NewDbo.value()
         );
 
     Output.GuidelineSinglePremiumPolicyB = basic_values_B.Irc7702_->CalculateGSP
-        (Input.Duration
+        (Input.InforceYear
         ,Input.NewBenefitAmount
-        ,Input.NewSpecifiedAmount
-        ,Input.NewSpecifiedAmount
+        ,Input.NewSpecAmt
+        ,Input.NewSpecAmt
         );
 
     BasicValues basic_values_C
         (Input.ProductName
         ,Input.OldGender                .value()
         ,Input.OldUnderwritingClass     .value()
-        ,Input.OldSmoker                .value()
+        ,Input.OldSmoking               .value()
         ,Input.OldIssueAge
-        ,Input.UnderwritingBasis        .value()
+        ,Input.GroupUnderwritingType    .value()
         ,Input.OldStateOfJurisdiction   .value()
-        ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption    .value()
+        ,Input.OldSpecAmt
+        ,Input.OldDbo                   .value()
         ,Input.OldAccidentalDeathInForce
         ,Input.TargetPremium
         );
 
     Output.GuidelineLevelPremiumPolicyC = basic_values_C.Irc7702_->CalculateGLP
-        (Input.Duration
+        (Input.InforceYear
         ,Input.OldBenefitAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption.value()
+        ,Input.OldSpecAmt
+        ,Input.OldSpecAmt
+        ,Input.OldDbo.value()
         );
 
     Output.GuidelineSinglePremiumPolicyC = basic_values_C.Irc7702_->CalculateGSP
-        (Input.Duration
+        (Input.InforceYear
         ,Input.OldBenefitAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldSpecifiedAmount
+        ,Input.OldSpecAmt
+        ,Input.OldSpecAmt
         );
 }
 
