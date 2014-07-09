@@ -33970,3 +33970,16 @@ the comment on _CRT_fmode in 'test_coding_rules.cpp'.
 Eradicate the 'gpt_server' binary. Its associated tests have recently
 been rendered merely duplicative.
 
+20140709T1232Z <gchicares@sbcglobal.net> [537]
+
+  ihs_server7702io.cpp
+Resolve several marked defects in obsolescent code.
+
+20140709T1437Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Expunge disused code.
+

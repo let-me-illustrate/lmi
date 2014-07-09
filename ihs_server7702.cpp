@@ -36,99 +36,16 @@
 #include "basic_values.hpp"
 #include "fenv_lmi.hpp"
 #include "gpt_xml_document.hpp"
-#include "handle_exceptions.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
-#include "miscellany.hpp"               // ios_out_trunc_binary()
-#include "path_utility.hpp"             // initialize_filesystem()
 
-#include <cstdlib>
 #include <exception>
-#include <fstream>
-#include <iostream>
-#include <string>
-
-//============================================================================
-int main()
-{
-    std::set_terminate(lmi_terminate_handler);
-    try
-        {
-        // Absolute paths require "native" name-checking policy for msw.
-        initialize_filesystem();
-        InitializeServer7702();
-        // Read from std input, process, and write to std output
-        return RunServer7702();
-// TODO ?? NEED DECISION What should this return?
-        }
-    catch(...)
-        {
-        report_exception();
-        }
-}
 
 //============================================================================
 void EnterServer()
 {
     fenv_initialize();
-}
-
-//============================================================================
-// TODO ?? Should we make the directory an optional argument?
-void InitializeServer7702()
-{
-    // Data directory where tables etc. are stored
-// TODO ?? This is obsolete; need a replacement. Either let main()
-// take care of it, or copy main()'s initialization code here.
-//    DataDir::Get("./");
-}
-
-//============================================================================
-// Read from std input, process, and write to std output
-int RunServer7702()
-{
-    EnterServer();
-    // Input record (we'll use it over and over)
-    Server7702Input input;
-    try
-        {
-        while(std::cin >> input)
-            {
-            // Run testdeck to validate this chain of conversions:
-            //   Server7702Input --> gpt_input --> Server7702Input
-            std::string f = input.UniqueIdentifier + ".gpt";
-            std::ofstream ofs_input(f.c_str(), ios_out_trunc_binary());
-            gpt_input z = input.operator gpt_input();
-            gpt_xml_document x(z);
-            x.write(ofs_input);
-            Server7702Input y(z);
-            Server7702 contract(y);
-            contract.Process();
-            std::cout << contract.GetOutput();
-            f += ".txt";
-            std::ofstream ofs_output(f.c_str(), ios_out_trunc_binary());
-            ofs_output << contract.GetOutput();
-            while('\n' == std::cin.peek())
-                {
-                std::cin.get();
-                }
-            if(std::cin.eof())
-                {
-                return EXIT_SUCCESS;
-                }
-            }
-        }
-    // Catch exceptions that are thrown during input
-    catch(std::exception const& e)
-        {
-        warning() << input.UniqueIdentifier << " error: " << e.what() << LMI_FLUSH;
-        }
-    catch(...)
-        {
-        warning() << "Untrapped exception" << LMI_FLUSH;
-        }
-    return EXIT_FAILURE;
 }
 
 //============================================================================
