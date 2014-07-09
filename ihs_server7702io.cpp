@@ -38,7 +38,8 @@
 #include <sstream>
 #include <string>
 
-// TODO ?? NEED DECISION on i/o representation.
+// NEED DECISION on i/o representation. (New code writes as many
+// decimal digits as are significant.)
 //#include <limits>
 namespace
 {
@@ -50,7 +51,8 @@ namespace
 // 123456789 1 0 0 0 10000 0 .02 0 1000000 1000000 0 0 0 1000000
 // 45 45 0 0 0 0 0 0 1000000 1000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
-// TODO ?? It would be better to perform range checking on bool input.
+// It would be better to perform range checking on bool input. (New
+// code accomplishes that by using enumerative types.)
 
 //============================================================================
 std::istream& operator>> (std::istream& is, Server7702Input& z)
@@ -108,7 +110,8 @@ std::istream& operator>> (std::istream& is, Server7702Input& z)
     // I give the names with a suffix "0" here,
     // but they need to be repeated with "1", "2",
     // and so on for as many flats as permitted.
-    // TODO ?? NEED DECISION how many is that? --assume it's 3
+    // NEED DECISION how many is that? --assume it's 3 (New code more
+    // flexibly uses input sequences.)
     is >> z.NewPermanentFlatAmount0;
     is >> z.OldPermanentFlatAmount0;
     is >> z.NewPermanentFlatAmount1;
@@ -359,8 +362,8 @@ std::ostream& operator<< (std::ostream& os, Server7702Output const& z)
 //      << setfill('0')
 //  os.width(prec + 1 + prec);
 //  os.fill('0');
-// TODO ?? NEED DECISION Do they want everything aligned?
-// TODO ?? NEED DECISION If so, what width for each item?
+// NEED DECISION Do they want everything aligned? (New code uses xml.)
+// NEED DECISION If so, what width for each item? (New code uses xml.)
 
     os << std::setiosflags(std::ios_base::fixed) << std::setprecision(prec);
 
