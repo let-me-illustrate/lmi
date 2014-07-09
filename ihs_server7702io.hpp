@@ -30,7 +30,6 @@
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 
-#include <iosfwd>
 #include <string>
 
 struct Server7702Input
@@ -117,9 +116,6 @@ struct Server7702Input
     double           TargetPremium; // the target premium. The client will always calculate and store it.
 };
 
-std::istream& operator>> (std::istream& is, Server7702Input& z);
-std::ostream& operator<< (std::ostream& os, Server7702Input const& z);
-
 struct Server7702Output
 {
     std::string      UniqueIdentifier;              // the same identifier supplied as input.
@@ -134,9 +130,6 @@ struct Server7702Output
     double           GuidelineLevelPremiumPolicyC;  // the GLP for notional policy C; 0.0 at issue or if there has been no adjustable event.
     double           GuidelineSinglePremiumPolicyC; // the GSP for notional policy C; 0.0 at issue or if there has been no adjustable event.
 };
-
-std::istream& operator>> (std::istream& is, Server7702Output& z);
-std::ostream& operator<< (std::ostream& os, Server7702Output const& z);
 
 #endif // ihs_server7702io_hpp
 

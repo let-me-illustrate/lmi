@@ -32,11 +32,8 @@
 #include <stdexcept>
 #include <string>
 
-int RunServer7702();
-
 extern "C"
 {
-    void LMI_SO InitializeServer7702();
     Server7702Output LMI_SO RunServer7702FromStruct(Server7702Input a_Input);
 }
 
