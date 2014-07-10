@@ -33983,3 +33983,17 @@ Resolve several marked defects in obsolescent code.
   ihs_server7702io.hpp
 Expunge disused code.
 
+20140709T2300Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Rectify names.
+
+20140710T1500Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Purge some disused members of an obsolescent class.
+
