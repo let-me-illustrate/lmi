@@ -35,7 +35,6 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "fenv_lmi.hpp"
-#include "gpt_xml_document.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
@@ -226,42 +225,6 @@ void Server7702::VerifyPlausibilityOfInput() const
             "New gender different from old gender"
             );
         }
-
-    if(0.0 != Input.DecreaseRequiredByContract)
-        {
-        throw std::logic_error
-            (
-            "Contractually required decrease not implemented"
-            );
-        }
-    if(Input.NewBenefitAmount < Input.LeastBenefitAmountEver)
-        {
-        throw server7702_implausible_input
-            (
-            "New benefit amount less than least benefit amount ever"
-            );
-        }
-    if(Input.OldBenefitAmount < Input.LeastBenefitAmountEver)
-        {
-        throw server7702_implausible_input
-            (
-            "Old benefit amount less than least benefit amount ever"
-            );
-        }
-    if(Input.NewSpecAmt < Input.LeastBenefitAmountEver)
-        {
-        throw server7702_implausible_input
-            (
-            "New specified amount less than least benefit amount ever"
-            );
-        }
-    if(Input.OldSpecAmt < Input.LeastBenefitAmountEver)
-        {
-        throw server7702_implausible_input
-            (
-            "Old specified amount less than least benefit amount ever"
-            );
-        }
 }
 
 //============================================================================
@@ -281,13 +244,13 @@ void Server7702::DecideWhatToCalculate()
             );
         }
 
-    IsIssuedToday = Input.IsIssuedToday;
+    // Casual, but strictly correct for all testdeck cases:
+    IsIssuedToday = 0 == Input.InforceYear;
 
     IsPossibleAdjustableEvent =
 // TODO ?? Why treat a taxable withdrawal as an adjustment event?
 //            0.0                             != Input.PremsPaidDecrement
-            true                            == Input.DecreaseRequiredByContract
-        ||  Input.NewDbo                    != Input.OldDbo
+            Input.NewDbo                    != Input.OldDbo
         ||  (   Input.NewSpecAmt            != Input.OldSpecAmt
             &&  Input.NewBenefitAmount      != Input.OldBenefitAmount
             )
@@ -303,7 +266,6 @@ void Server7702::DecideWhatToCalculate()
 //      ||  Input.NewStateOfJurisdiction    != Input.OldStateOfJurisdiction
 // Assume WP is completely ignored
 //      ||  Input.NewWaiverOfPremiumInForce != Input.OldWaiverOfPremiumInForce
-//      ||  Input.NewPremiumsWaived         != Input.OldPremiumsWaived
 //      ||  Input.NewWaiverOfPremiumRating  != Input.OldWaiverOfPremiumRating
         ||  Input.NewAccidentalDeathInForce != Input.OldAccidentalDeathInForce
 // Assume ADD rating is ignored
@@ -311,9 +273,7 @@ void Server7702::DecideWhatToCalculate()
 // Assume table rating is ignored
 //      ||  Input.NewSubstandardTable       != Input.OldSubstandardTable
 // Assume flat extras are ignored
-//      ||  Input.NewPermanentFlatAmount0   != Input.OldPermanentFlatAmount0
-//      ||  Input.NewTemporaryFlatAmount0   != Input.OldTemporaryFlatAmount0
-//      ||  Input.NewTemporaryFlatInforceYear0 != Input.OldTemporaryFlatInforceYear0
+//      ||  Input.NewFlatExtra              != Input.OldFlatExtra
         ;
 
     if(IsIssuedToday && IsPossibleAdjustableEvent)

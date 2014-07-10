@@ -40,15 +40,10 @@ Server7702Input::Server7702Input(gpt_input const& z)
 {
     ContractNumber             = z["ContractNumber"].str();
     InforceYear                = exact_cast<tnr_duration>(z["InforceYear"])->value();
-    IsIssuedToday              = 0 == InforceYear; // Casual, but strictly correct for all testdeck cases.
     PremsPaidDecrement         = exact_cast<tnr_nonnegative_double>(z["PremsPaidDecrement"])->value();
     Payment                    = exact_cast<tnr_nonnegative_double>(z["Payment"])->value();
-    DecreaseRequiredByContract = 0.0;
     ProductName                = z["ProductName"].str();
     GroupUnderwritingType      = exact_cast<mce_uw_basis>(z["GroupUnderwritingType"])->value();
-    PremTaxLoadRate            = 0.0;
-    TieredAssetChargeRate      = 0.0;
-    LeastBenefitAmountEver     = 0.0;
     InforceGlp                 = exact_cast<tnr_unrestricted_double>(z["InforceGlp"])->value();
     InforceGsp                 = exact_cast<tnr_unrestricted_double>(z["InforceGsp"])->value();
     NewIssueAge                = exact_cast<tnr_age>(z["IssueAge"])->value();
@@ -71,8 +66,6 @@ Server7702Input::Server7702Input(gpt_input const& z)
     OldQabTermAmt              = exact_cast<tnr_nonnegative_double>(z["OldQabTermAmt"])->value();
     NewWaiverOfPremiumInForce  = false;
     OldWaiverOfPremiumInForce  = false;
-    NewPremiumsWaived          = false;
-    OldPremiumsWaived          = false;
     NewWaiverOfPremiumRating   = "None";
     OldWaiverOfPremiumRating   = "None";
     NewAccidentalDeathInForce  = false;
@@ -81,24 +74,6 @@ Server7702Input::Server7702Input(gpt_input const& z)
     OldAccidentalDeathRating   = "None";
     NewSubstandardTable        = exact_cast<mce_table_rating>(z["NewSubstandardTable"])->value();
     OldSubstandardTable        = exact_cast<mce_table_rating>(z["OldSubstandardTable"])->value();
-    NewPermanentFlatAmount0    = 0.0;
-    OldPermanentFlatAmount0    = 0.0;
-    NewPermanentFlatAmount1    = 0.0;
-    OldPermanentFlatAmount1    = 0.0;
-    NewPermanentFlatAmount2    = 0.0;
-    OldPermanentFlatAmount2    = 0.0;
-    NewTemporaryFlatAmount0    = 0.0;
-    OldTemporaryFlatAmount0    = 0.0;
-    NewTemporaryFlatAmount1    = 0.0;
-    OldTemporaryFlatAmount1    = 0.0;
-    NewTemporaryFlatAmount2    = 0.0;
-    OldTemporaryFlatAmount2    = 0.0;
-    NewTemporaryFlatDuration0  = 0;
-    OldTemporaryFlatDuration0  = 0;
-    NewTemporaryFlatDuration1  = 0;
-    OldTemporaryFlatDuration1  = 0;
-    NewTemporaryFlatDuration2  = 0;
-    OldTemporaryFlatDuration2  = 0;
     LMI_ASSERT(z["OldTarget"] == z["NewTarget"]);
     TargetPremium              = exact_cast<tnr_nonnegative_double>(z["NewTarget"])->value();
 }

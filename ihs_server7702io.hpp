@@ -39,16 +39,11 @@ struct Server7702Input
     operator gpt_input() const;
 
     std::string      ContractNumber;             //  an arbitrary string that identifies the contract uniquely. The contract number may be used, but remember that the server maintains no database of actual contracts.
-    bool             IsIssuedToday;              //  true if the contract is issued or reissued today. Used to prevent adjustable events at issue, which must not occur.
     int              InforceYear;                //  number of policy years completed since issue (so it starts at 0).
     double           PremsPaidDecrement;         // UNUSED IN OLD TESTDECK the nontaxable portion of partial surrenders, including any withdrawal fees, plus involuntary withdrawals to restrict NAAR for reinsurance, plus amounts returned to preserve §7702A status.
     double           Payment;                    // UNUSED IN OLD TESTDECK gross payments, including those paid by a waiver benefit, before subtracting any "PremsPaidDecrement" on the same date, but net of any charges for non-qualified additional benefits that are not prefunded.
-    double           DecreaseRequiredByContract; // UNUSED amount of decrease in specified amount required by the contract's terms, as for example in a decreasing term contract: unsupported, so use 0.0 for now.
     std::string      ProductName;                //  the only permissible values are those for which data files exist.
     mce_uw_basis     GroupUnderwritingType;      //  permissible values are Medical, Paramedical, Nonmedical, Simplified_issue, and Guaranteed_issue, and I assume this is set at issue and can never change.
-    double           PremTaxLoadRate;            //  the rate actually charged as a premium load. Example: 0.02 means a 2% load. Used to determine whether any load reflected in §7702 calculations has changed.
-    double           TieredAssetChargeRate;      // UNUSED the tiered rate actually charged against assets, reflecting the current tier. Example: 0.0050 means fifty basis points. Used to determine whether any load reflected in §7702 calculations has changed.
-    double           LeastBenefitAmountEver;     // UNUSED the lowest face amount ever used in §7702 calculations since the contract was issued; equal at issue to DB. The server will always calculate this but never store it. The client will always store it but never calculate it, except to set it equal to DB at issue.
 
     // The names of the next several parameters begin with the prefix "Old" to indicate that they are evaluated before the day's transactions. Should an adjustable event occur, they describe the state of the contract before any transaction that might have caused the adjustable event. At issue, "Old" values are the contract's issue parameters.
     double           InforceGlp;                 //  as previously calculated by the server; 0.0 at issue.
@@ -77,8 +72,6 @@ struct Server7702Input
     double           OldQabTermAmt;
     bool             NewWaiverOfPremiumInForce;  // UNUSED true if waiver benefit in force, otherwise false.
     bool             OldWaiverOfPremiumInForce;  // UNUSED
-    bool             NewPremiumsWaived;          // UNUSED true if waiver benefit in disability status, otherwise false.
-    bool             OldPremiumsWaived;          // UNUSED
     mce_table_rating NewWaiverOfPremiumRating;   // UNUSED substandard rating for premium waiver; I don't know what the permissible values are.
     mce_table_rating OldWaiverOfPremiumRating;   // UNUSED
     bool             NewAccidentalDeathInForce;  //  true if accidental death benefit in force, otherwise false.
@@ -87,32 +80,6 @@ struct Server7702Input
     mce_table_rating OldAccidentalDeathRating;   // UNUSED
     mce_table_rating NewSubstandardTable;        // UNUSED
     mce_table_rating OldSubstandardTable;        // UNUSED
-
-    // The remaining parameters specify flat extras.
-    // The distinction between temporary and permanent flats is important. I give the names with a suffix "0" here, but they need to be repeated with "1", "2", and so on for as many flats as permitted (how many is that?). As noted above, each has both an "old" and a "new" flavor.
-    //
-    // amount of the flat extra, expressed as dollars per thousand per year to conform to universal usage.
-    double           NewPermanentFlatAmount0;    // UNUSED
-    double           OldPermanentFlatAmount0;    // UNUSED
-    double           NewPermanentFlatAmount1;    // UNUSED
-    double           OldPermanentFlatAmount1;    // UNUSED
-    double           NewPermanentFlatAmount2;    // UNUSED
-    double           OldPermanentFlatAmount2;    // UNUSED
-    // amount of the flat extra, expressed as dollars per thousand per year to conform to universal usage.
-    double           NewTemporaryFlatAmount0;    // UNUSED
-    double           OldTemporaryFlatAmount0;    // UNUSED
-    double           NewTemporaryFlatAmount1;    // UNUSED
-    double           OldTemporaryFlatAmount1;    // UNUSED
-    double           NewTemporaryFlatAmount2;    // UNUSED
-    double           OldTemporaryFlatAmount2;    // UNUSED
-    // number of years the flat extra applies, measured from the issue date.
-    int              NewTemporaryFlatDuration0;  // UNUSED
-    int              OldTemporaryFlatDuration0;  // UNUSED
-    int              NewTemporaryFlatDuration1;  // UNUSED
-    int              OldTemporaryFlatDuration1;  // UNUSED
-    int              NewTemporaryFlatDuration2;  // UNUSED
-    int              OldTemporaryFlatDuration2;  // UNUSED
-
     double           TargetPremium; // the target premium. The client will always calculate and store it.
 };
 
