@@ -80,7 +80,8 @@ struct Server7702Input
     mce_table_rating OldAccidentalDeathRating;   // UNUSED
     mce_table_rating NewSubstandardTable;        // UNUSED
     mce_table_rating OldSubstandardTable;        // UNUSED
-    double           TargetPremium; // the target premium. The client will always calculate and store it.
+    double           NewTarget;                  // the target premium. The client will always calculate and store it.
+    double           OldTarget;
 };
 
 struct Server7702Output
