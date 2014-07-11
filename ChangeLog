@@ -33997,3 +33997,32 @@ Rectify names.
   ihs_server7702io.hpp
 Purge some disused members of an obsolescent class.
 
+20140711T1157Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Dichotomize a member datum into "old" and "new".
+
+20140711T2221Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+Abjure obsolescent server's "C" linkage.
+
+20140711T2328Z <gchicares@sbcglobal.net> [534]
+
+  gpt_input.hpp
+  gpt_server.cpp
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+Render class Server7702Input obsolete.
+
+20140711T2356Z <gchicares@sbcglobal.net> [534]
+
+  Makefile.am
+  ihs_server7702io.cpp [expunged]
+  ihs_server7702io.hpp [expunged]
+  objects.make
+Eradicate obsolete class Server7702Input.
+

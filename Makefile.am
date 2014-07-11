@@ -372,7 +372,6 @@ liblmi_la_SOURCES = \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
     ihs_server7702.cpp \
-    ihs_server7702io.cpp \
     lmi.cpp \
     md5.cpp \
     mec_input.cpp \
@@ -1091,7 +1090,6 @@ noinst_HEADERS = \
     ihs_irc7702.hpp \
     ihs_irc7702a.hpp \
     ihs_server7702.hpp \
-    ihs_server7702io.hpp \
     ihs_x_type.hpp \
     illustration_document.hpp \
     illustration_view.hpp \

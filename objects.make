@@ -288,7 +288,6 @@ lmi_common_objects := \
   ihs_irc7702a.o \
   ihs_mortal.o \
   ihs_server7702.o \
-  ihs_server7702io.o \
   lmi.o \
   md5.o \
   mec_input.o \
