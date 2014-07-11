@@ -366,7 +366,7 @@ void Server7702::SetDoleBentsenValuesA()
         ,Input.OldSpecAmt
         ,Input.OldDbo                   .value()
         ,Input.OldAccidentalDeathInForce
-        ,Input.TargetPremium
+        ,Input.OldTarget
         );
 
     Output.GuidelineLevelPremiumPolicyA = basic_values_A.Irc7702_->CalculateGLP
@@ -399,7 +399,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.NewSpecAmt
         ,Input.NewDbo                   .value()
         ,Input.NewAccidentalDeathInForce
-        ,Input.TargetPremium
+        ,Input.NewTarget
         );
 
     Output.GuidelineLevelPremiumPolicyB = basic_values_B.Irc7702_->CalculateGLP
@@ -428,7 +428,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.OldSpecAmt
         ,Input.OldDbo                   .value()
         ,Input.OldAccidentalDeathInForce
-        ,Input.TargetPremium
+        ,Input.OldTarget
         );
 
     Output.GuidelineLevelPremiumPolicyC = basic_values_C.Irc7702_->CalculateGLP

@@ -74,8 +74,8 @@ Server7702Input::Server7702Input(gpt_input const& z)
     OldAccidentalDeathRating   = "None";
     NewSubstandardTable        = exact_cast<mce_table_rating>(z["NewSubstandardTable"])->value();
     OldSubstandardTable        = exact_cast<mce_table_rating>(z["OldSubstandardTable"])->value();
-    LMI_ASSERT(z["OldTarget"] == z["NewTarget"]);
-    TargetPremium              = exact_cast<tnr_nonnegative_double>(z["NewTarget"])->value();
+    NewTarget                  = exact_cast<tnr_nonnegative_double>(z["NewTarget"])->value();
+    OldTarget                  = exact_cast<tnr_nonnegative_double>(z["OldTarget"])->value();
 }
 
 Server7702Input::operator gpt_input() const
@@ -122,9 +122,8 @@ Server7702Input::operator gpt_input() const
     z["OldQabTermAmt"]         = value_cast<std::string>(OldQabTermAmt);
     z["NewSubstandardTable"]   = NewSubstandardTable.str();
     z["OldSubstandardTable"]   = OldSubstandardTable.str();
-    // 'TargetPremium' should have had "old" and "new" variants.
-    z["OldTarget"]             = value_cast<std::string>(TargetPremium);
-    z["NewTarget"]             = value_cast<std::string>(TargetPremium);
+    z["NewTarget"]             = value_cast<std::string>(NewTarget);
+    z["OldTarget"]             = value_cast<std::string>(OldTarget);
 
     return z;
 }
