@@ -32,10 +32,7 @@
 #include <stdexcept>
 #include <string>
 
-extern "C"
-{
-    Server7702Output LMI_SO RunServer7702FromStruct(Server7702Input a_Input);
-}
+Server7702Output LMI_SO RunServer7702FromStruct(Server7702Input a_Input);
 
 class Server7702
 {

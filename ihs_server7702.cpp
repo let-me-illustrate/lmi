@@ -48,7 +48,6 @@ void EnterServer()
 }
 
 //============================================================================
-// Read from C struct, and return a different C struct
 Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
 {
     EnterServer();
