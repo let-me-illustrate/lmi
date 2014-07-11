@@ -79,6 +79,8 @@ class LMI_SO gpt_input
     ,        public  MemberSymbolTable          <gpt_input>
     ,        private boost::equality_comparable <gpt_input>
 {
+    friend class Server7702;
+
   public:
     gpt_input();
     gpt_input(gpt_input const&);
