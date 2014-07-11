@@ -35,8 +35,8 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "fenv_lmi.hpp"
+#include "gpt_input.hpp"
 #include "ihs_irc7702.hpp"
-#include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
 
 #include <exception>
@@ -48,7 +48,7 @@ void EnterServer()
 }
 
 //============================================================================
-Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
+Server7702Output RunServer7702FromStruct(gpt_input a_Input)
 {
     EnterServer();
     Server7702 contract(a_Input);
@@ -57,7 +57,7 @@ Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
 }
 
 //============================================================================
-Server7702::Server7702(Server7702Input& a_Input)
+Server7702::Server7702(gpt_input& a_Input)
     :Input(a_Input)
     ,IsIssuedToday(false)
     ,IsPossibleAdjustableEvent(false)
@@ -151,11 +151,11 @@ void Server7702::Process()
 //============================================================================
 void Server7702::PerformProcessing()
 {
-    Output.ContractNumber                   = Input.ContractNumber;
+    Output.ContractNumber                   = Input.ContractNumber.value();
     Output.Status                           = 0;
     Output.AdjustableEventOccurred          = false;
-    Output.GuidelineLevelPremium            = Input.InforceGlp;
-    Output.GuidelineSinglePremium           = Input.InforceGsp;
+    Output.GuidelineLevelPremium            = Input.InforceGlp    .value();
+    Output.GuidelineSinglePremium           = Input.InforceGsp    .value();
     Output.GuidelineLevelPremiumPolicyA     = 0.0;
     Output.GuidelineSinglePremiumPolicyA    = 0.0;
     Output.GuidelineLevelPremiumPolicyB     = 0.0;
@@ -182,41 +182,21 @@ void Server7702::PerformProcessing()
 // TODO ?? We can add many similar conditions here.
 void Server7702::VerifyPlausibilityOfInput() const
 {
-    if(Input.OldIssueAge < 0)
+    if(Input.IssueAge.value() < 0)
         {
         throw server7702_implausible_input
             (
-            "Old issue age less than zero"
+            "Issue age less than zero"
             );
         }
-    if(99 < Input.OldIssueAge)
+    if(99 < Input.IssueAge.value())
         {
         throw server7702_implausible_input
             (
-            "Old issue age greater than 99"
+            "Issue age greater than 99"
             );
         }
-    if(Input.NewIssueAge < 0)
-        {
-        throw server7702_implausible_input
-            (
-            "New issue age less than zero"
-            );
-        }
-    if(99 < Input.NewIssueAge)
-        {
-        throw server7702_implausible_input
-            (
-            "New issue age greater than 99"
-            );
-        }
-    if(Input.NewIssueAge != Input.OldIssueAge)
-        {
-        throw server7702_misstatement_of_age_or_gender
-            (
-            "New issue age different from old issue age"
-            );
-        }
+//  if(Input.NewIssueAge != Input.OldIssueAge) // Not differentiated.
     if(Input.NewGender != Input.OldGender)
         {
         throw server7702_misstatement_of_age_or_gender
@@ -232,8 +212,8 @@ void Server7702::DecideWhatToCalculate()
     // TODO ?? Is this not superfluous?
     if
         (
-            Input.NewIssueAge               != Input.OldIssueAge
-        ||  Input.NewGender                 != Input.OldGender
+//          Input.NewIssueAge               != Input.OldIssueAge // Not differentiated.
+            Input.NewGender                 != Input.OldGender
         )
         {
         // Consider change of insured as a reissue that probably violates.
@@ -251,7 +231,7 @@ void Server7702::DecideWhatToCalculate()
 //            0.0                             != Input.PremsPaidDecrement
             Input.NewDbo                    != Input.OldDbo
         ||  (   Input.NewSpecAmt            != Input.OldSpecAmt
-            &&  Input.NewBenefitAmount      != Input.OldBenefitAmount
+            &&  Input.NewDeathBft           != Input.OldDeathBft
             )
 // TODO ?? NEED DECISION whether it's a SA or DB change that causes adj event
         ||  Input.NewQabTermAmt             != Input.OldQabTermAmt
@@ -266,7 +246,8 @@ void Server7702::DecideWhatToCalculate()
 // Assume WP is completely ignored
 //      ||  Input.NewWaiverOfPremiumInForce != Input.OldWaiverOfPremiumInForce
 //      ||  Input.NewWaiverOfPremiumRating  != Input.OldWaiverOfPremiumRating
-        ||  Input.NewAccidentalDeathInForce != Input.OldAccidentalDeathInForce
+// Ignore ADD for now
+//      ||  Input.NewAccidentalDeathInForce != Input.OldAccidentalDeathInForce
 // Assume ADD rating is ignored
 //      ||  Input.NewAccidentalDeathRating  != Input.OldAccidentalDeathRating
 // Assume table rating is ignored
@@ -290,10 +271,10 @@ void Server7702::ProcessNewIssue()
         &&  Input.InforceGlp                == 0.0
         &&  Input.InforceGsp                == 0.0
         &&  Input.OldGender                 == Input.NewGender
-        &&  Input.OldUnderwritingClass      == Input.NewUnderwritingClass
+//      &&  Input.OldUnderwritingClass      == Input.NewUnderwritingClass   // Not differentiated.
         &&  Input.OldSmoking                == Input.NewSmoking
-        &&  Input.OldIssueAge               == Input.NewIssueAge
-        &&  Input.OldStateOfJurisdiction    == Input.NewStateOfJurisdiction
+//      &&  Input.OldIssueAge               == Input.NewIssueAge            // Not differentiated.
+//      &&  Input.OldStateOfJurisdiction    == Input.NewStateOfJurisdiction // Not differentiated.
         &&  Input.OldSpecAmt                == Input.NewSpecAmt
         &&  Input.OldDbo                    == Input.NewDbo
         ;
@@ -317,15 +298,15 @@ void Server7702::ProcessNewIssue()
 // Set new GLP and GSP following an adjustable event, after validating input.
 void Server7702::ProcessAdjustableEvent()
 {
-// TODO ??  Input.OldBenefitAmount = ?;
+// TODO ??  Input.OldDeathBft = ?;
 //  GuidelineLevelPremium
 //  GuidelineSinglePremium
 
     // ? Is this not superfluous?
     if
         (
-            Input.NewIssueAge               != Input.OldIssueAge
-        ||  Input.NewGender                 != Input.OldGender
+//          Input.NewIssueAge               != Input.OldIssueAge // Not differentiated.
+            Input.NewGender                 != Input.OldGender
         )
         {
         throw std::logic_error
@@ -334,8 +315,8 @@ void Server7702::ProcessAdjustableEvent()
             );
         }
 
-    Output.GuidelineLevelPremiumPolicyA  = Input.InforceGlp;
-    Output.GuidelineSinglePremiumPolicyA = Input.InforceGsp;
+    Output.GuidelineLevelPremiumPolicyA  = Input.InforceGlp.value();
+    Output.GuidelineSinglePremiumPolicyA = Input.InforceGsp.value();
 
     SetDoleBentsenValuesBC();
     Output.GuidelineLevelPremium =
@@ -355,32 +336,32 @@ void Server7702::ProcessAdjustableEvent()
 void Server7702::SetDoleBentsenValuesA()
 {
     BasicValues basic_values_A
-        (Input.ProductName
+        (Input.ProductName              .value()
         ,Input.OldGender                .value()
-        ,Input.OldUnderwritingClass     .value()
+        ,Input.UnderwritingClass        .value()
         ,Input.OldSmoking               .value()
-        ,Input.OldIssueAge
+        ,Input.IssueAge                 .value()
         ,Input.GroupUnderwritingType    .value()
-        ,Input.OldStateOfJurisdiction   .value()
-        ,Input.OldSpecAmt
+        ,Input.StateOfJurisdiction      .value()
+        ,Input.OldSpecAmt               .value()
         ,Input.OldDbo                   .value()
-        ,Input.OldAccidentalDeathInForce
-        ,Input.OldTarget
+        ,false // Input.OldAccidentalDeathInForce
+        ,Input.OldTarget                .value()
         );
 
     Output.GuidelineLevelPremiumPolicyA = basic_values_A.Irc7702_->CalculateGLP
         (0
-        ,Input.OldBenefitAmount
-        ,Input.OldSpecAmt
-        ,Input.OldSpecAmt
-        ,Input.OldDbo.value()
+        ,Input.OldDeathBft .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldDbo      .value()
         );
 
     Output.GuidelineSinglePremiumPolicyA = basic_values_A.Irc7702_->CalculateGSP
         (0
-        ,Input.OldBenefitAmount
-        ,Input.OldSpecAmt
-        ,Input.OldSpecAmt
+        ,Input.OldDeathBft .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldSpecAmt  .value()
         );
 }
 
@@ -388,61 +369,61 @@ void Server7702::SetDoleBentsenValuesA()
 void Server7702::SetDoleBentsenValuesBC()
 {
     BasicValues basic_values_B
-        (Input.ProductName
+        (Input.ProductName              .value()
         ,Input.NewGender                .value()
-        ,Input.NewUnderwritingClass     .value()
+        ,Input.UnderwritingClass        .value()
         ,Input.NewSmoking               .value()
-        ,Input.NewIssueAge
+        ,Input.IssueAge                 .value()
         ,Input.GroupUnderwritingType    .value()
-        ,Input.NewStateOfJurisdiction   .value()
-        ,Input.NewSpecAmt
+        ,Input.StateOfJurisdiction      .value()
+        ,Input.NewSpecAmt               .value()
         ,Input.NewDbo                   .value()
-        ,Input.NewAccidentalDeathInForce
-        ,Input.NewTarget
+        ,false // Input.NewAccidentalDeathInForce
+        ,Input.NewTarget                .value()
         );
 
     Output.GuidelineLevelPremiumPolicyB = basic_values_B.Irc7702_->CalculateGLP
-        (Input.InforceYear
-        ,Input.NewBenefitAmount
-        ,Input.NewSpecAmt
-        ,Input.NewSpecAmt
-        ,Input.NewDbo.value()
+        (Input.InforceYear .value()
+        ,Input.NewDeathBft .value()
+        ,Input.NewSpecAmt  .value()
+        ,Input.NewSpecAmt  .value()
+        ,Input.NewDbo      .value()
         );
 
     Output.GuidelineSinglePremiumPolicyB = basic_values_B.Irc7702_->CalculateGSP
-        (Input.InforceYear
-        ,Input.NewBenefitAmount
-        ,Input.NewSpecAmt
-        ,Input.NewSpecAmt
+        (Input.InforceYear .value()
+        ,Input.NewDeathBft .value()
+        ,Input.NewSpecAmt  .value()
+        ,Input.NewSpecAmt  .value()
         );
 
     BasicValues basic_values_C
-        (Input.ProductName
+        (Input.ProductName              .value()
         ,Input.OldGender                .value()
-        ,Input.OldUnderwritingClass     .value()
+        ,Input.UnderwritingClass        .value()
         ,Input.OldSmoking               .value()
-        ,Input.OldIssueAge
+        ,Input.IssueAge                 .value()
         ,Input.GroupUnderwritingType    .value()
-        ,Input.OldStateOfJurisdiction   .value()
-        ,Input.OldSpecAmt
+        ,Input.StateOfJurisdiction      .value()
+        ,Input.OldSpecAmt               .value()
         ,Input.OldDbo                   .value()
-        ,Input.OldAccidentalDeathInForce
-        ,Input.OldTarget
+        ,false // Input.OldAccidentalDeathInForce
+        ,Input.OldTarget                .value()
         );
 
     Output.GuidelineLevelPremiumPolicyC = basic_values_C.Irc7702_->CalculateGLP
-        (Input.InforceYear
-        ,Input.OldBenefitAmount
-        ,Input.OldSpecAmt
-        ,Input.OldSpecAmt
-        ,Input.OldDbo.value()
+        (Input.InforceYear .value()
+        ,Input.OldDeathBft .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldDbo      .value()
         );
 
     Output.GuidelineSinglePremiumPolicyC = basic_values_C.Irc7702_->CalculateGSP
-        (Input.InforceYear
-        ,Input.OldBenefitAmount
-        ,Input.OldSpecAmt
-        ,Input.OldSpecAmt
+        (Input.InforceYear .value()
+        ,Input.OldDeathBft .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldSpecAmt  .value()
         );
 }
 

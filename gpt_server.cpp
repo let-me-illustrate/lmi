@@ -72,8 +72,7 @@ gpt_state test_one_days_gpt_transactions
     ,gpt_input const& input
     )
 {
-    Server7702Input i(input);
-    Server7702Output o = RunServer7702FromStruct(i);
+    Server7702Output o = RunServer7702FromStruct(input);
     gpt_state s;
     s["X0_glp"  ] = value_cast<std::string>(o.GuidelineLevelPremium        );
     s["X1_gsp"  ] = value_cast<std::string>(o.GuidelineSinglePremium       );
