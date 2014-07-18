@@ -43,7 +43,6 @@
 #include "ieee754.hpp"                  // ldbl_eps_plus_one()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_x_type.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
 #include "loads.hpp"
@@ -210,17 +209,25 @@ void BasicValues::Init()
 
     if(IssueAge < Database_->Query(DB_MinIssAge))
         {
-        throw x_product_rule_violated
-            (
-            std::string("Issue age less than minimum")
-            );
+        fatal_error()
+            << "Issue age "
+            << IssueAge
+            << " less than minimum "
+            << Database_->Query(DB_MinIssAge)
+            << '.'
+            << LMI_FLUSH
+            ;
         }
     if(Database_->Query(DB_MaxIssAge) < IssueAge)
         {
-        throw x_product_rule_violated
-            (
-            std::string("Issue age greater than maximum")
-            );
+        fatal_error()
+            << "Issue age "
+            << IssueAge
+            << " greater than maximum "
+            << Database_->Query(DB_MaxIssAge)
+            << '.'
+            << LMI_FLUSH
+            ;
         }
     FundData_.reset(new FundData(AddDataDir(ProductData_->datum("FundFilename"))));
     RoundingRules_.reset
@@ -264,6 +271,7 @@ void BasicValues::Init()
 }
 
 //============================================================================
+#include "ihs_x_type.hpp" // x_product_rule_violated TAXATION !! remove later
 // TODO ??  Not for general use--use for GPT server only, for now. TAXATION !! refactor later
 void BasicValues::GPTServerInit()
 {
