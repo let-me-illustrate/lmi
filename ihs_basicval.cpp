@@ -31,7 +31,6 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
-#include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
@@ -48,7 +47,6 @@
 #include "loads.hpp"
 #include "math_functors.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
-#include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
@@ -61,10 +59,8 @@
 #include <algorithm>
 #include <cmath>                        // std::pow()
 #include <cstring>                      // std::strlen(), std::strncmp()
-#include <fstream>
 #include <limits>
 #include <numeric>
-#include <sstream>
 #include <stdexcept>
 
 //============================================================================
@@ -483,38 +479,6 @@ void BasicValues::Init7702()
         ,MlyDcvqc.begin()
         ,round_coi_rate()
         );
-    if(contains(yare_input_.Comments, "idiosyncrasy_dcvq"))
-        {
-        std::ostringstream oss;
-        oss
-            << yare_input_.ProductName
-            << '_'
-            << mc_str(yare_input_.Gender)
-            << '_'
-            << mc_str(yare_input_.Smoking)
-            << ".dcvq"
-            << configurable_settings::instance().spreadsheet_file_extension()
-            ;
-        std::ofstream os(oss.str().c_str(), ios_out_trunc_binary());
-        int const minimum_age  = static_cast<int>(Database_->Query(DB_MinIssAge  ));
-        int const maturity_age = static_cast<int>(Database_->Query(DB_MaturityAge));
-        if(minimum_age != yare_input_.IssueAge)
-            {
-            warning()
-                << "Issue age is "
-                << yare_input_.IssueAge
-                << ", but the minimum is "
-                << minimum_age
-                << ". Use the minimum instead."
-                << LMI_FLUSH
-                ;
-            }
-        for(int j = 0; j < maturity_age - minimum_age; ++j)
-            {
-            std::string s = value_cast<std::string>(MlyDcvqc[j]);
-            os << j + minimum_age << '\t' << s << '\n';
-            }
-        }
 
     // Monthly guar net int for 7702, with 4 or 6% min, is
     //   greater of {4%, 6%} and annual guar int rate

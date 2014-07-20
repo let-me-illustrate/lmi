@@ -34026,3 +34026,14 @@ Render class Server7702Input obsolete.
   objects.make
 Eradicate obsolete class Server7702Input.
 
+20140718T2144Z <gchicares@sbcglobal.net> [534]
+
+  ihs_basicval.cpp
+Restrict an old exception class to obsolescent code.
+
+20140720T1434Z <gchicares@sbcglobal.net> [534]
+
+  ihs_basicval.cpp
+  input_xml_io.cpp
+Expunge some idiosyncratic code that is no longer useful.
+
