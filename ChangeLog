@@ -34037,3 +34037,13 @@ Restrict an old exception class to obsolescent code.
   input_xml_io.cpp
 Expunge some idiosyncratic code that is no longer useful.
 
+20140806T1312Z <gchicares@sbcglobal.net> [534]
+
+  loads.cpp
+Improve documentation.
+
+20140806T1313Z <gchicares@sbcglobal.net> [534]
+
+  ihs_basicval.cpp
+Refactor, favoring expression templates.
+
