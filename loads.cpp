@@ -186,14 +186,19 @@ void Loads::Calculate(load_details const& details)
                 )
             );
 
-        // ET !! As for rounding, we do want an expression-template library
-        // to apply a scalar function like rounding to all elements of a
-        // matrix, with some natural syntax like
-        //   separate_account_load_ = details.round_interest_rate_(separate_account_load_);
         for(int j = mce_gen_curr; j != mc_n_gen_bases; j++)
             {
 #if 0
-// ET !! This crashes:
+// ET !! As for rounding, we do want an expression-template library
+// to apply a scalar function like rounding to all elements of a
+// matrix, ideally with some natural syntax like
+//   separate_account_load_ = details.round_interest_rate_(separate_account_load_);
+// However, this throws an "Erroneous rounding function" exception,
+// because apply_unary() and apply_binary() use a default-constructed
+// function object:
+//   http://svn.savannah.nongnu.org/viewvc/lmi/trunk/tools/pete-2.1.1/PETE/Tools/PeteOps.in?root=lmi&r1=4151&r2=4150&pathrev=4151
+// but round_to<> is stateful, and deliberately throws that exception
+// when a default-constructed object is used.
             assign
                 (separate_account_load_[j]
                 ,apply_unary
