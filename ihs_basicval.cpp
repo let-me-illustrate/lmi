@@ -544,50 +544,22 @@ void BasicValues::Init7702()
         }
 */
 
-    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.04, guar_int) - SpreadFor7702_);
-    Mly7702iGlp.assign(Length, 0.04);
-    std::transform
-        (guar_int.begin()
-        ,guar_int.end()
-        ,Mly7702iGlp.begin()
-        ,Mly7702iGlp.begin()
-        ,greater_of<double>()
-        );
-    std::transform
-        (Mly7702iGlp.begin()
-        ,Mly7702iGlp.end()
-        ,SpreadFor7702_.begin()
-        ,Mly7702iGlp.begin()
-        ,std::minus<double>()
-        );
-    std::transform
-        (Mly7702iGlp.begin()
-        ,Mly7702iGlp.end()
-        ,Mly7702iGlp.begin()
-        ,i_upper_12_over_12_from_i<double>()
+    Mly7702iGlp.assign(Length, 0.0);
+    assign
+        (Mly7702iGlp
+        ,apply_unary
+            (i_upper_12_over_12_from_i<double>()
+            ,apply_binary(greater_of<double>(), 0.04, guar_int) - SpreadFor7702_
+            )
         );
 
-    // ET !! Mly7702iGsp = i_upper_12_over_12_from_i(max(.06, guar_int) - SpreadFor7702_);
-    Mly7702iGsp.assign(Length, 0.06);
-    std::transform
-        (guar_int.begin()
-        ,guar_int.end()
-        ,Mly7702iGsp.begin()
-        ,Mly7702iGsp.begin()
-        ,greater_of<double>()
-        );
-    std::transform
-        (Mly7702iGsp.begin()
-        ,Mly7702iGsp.end()
-        ,SpreadFor7702_.begin()
-        ,Mly7702iGsp.begin()
-        ,std::minus<double>()
-        );
-    std::transform
-        (Mly7702iGsp.begin()
-        ,Mly7702iGsp.end()
-        ,Mly7702iGsp.begin()
-        ,i_upper_12_over_12_from_i<double>()
+    Mly7702iGsp.assign(Length, 0.0);
+    assign
+        (Mly7702iGsp
+        ,apply_unary
+            (i_upper_12_over_12_from_i<double>()
+            ,apply_binary(greater_of<double>(), 0.06, guar_int) - SpreadFor7702_
+            )
         );
 
     Database_->Query(Mly7702ig, DB_NaarDiscount);
@@ -896,14 +868,8 @@ void BasicValues::SetMaxSurvivalDur()
             break;
         case mce_survive_to_expectancy:
             {
-            std::vector<double> z(MortalityRates_->PartialMortalityQ());
-            // ET !! z = 1.0 - z;
-            std::transform
-                (z.begin()
-                ,z.end()
-                ,z.begin()
-                ,std::bind1st(std::minus<double>(), 1.0)
-                );
+            std::vector<double> z(Length);
+            assign(z, 1.0 - MortalityRates_->PartialMortalityQ());
             // ET !! In APL, this would be [writing multiplication as '*']
             //   +/*\1-z
             // It would be nice to have a concise representation for that.
