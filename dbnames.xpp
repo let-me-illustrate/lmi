@@ -62,13 +62,19 @@
 {DB_SevenPayTable,DB_Topic_7702And7702A,"SevenPayTable","7702A annual seven-pay premium rates per $1 (index in mortality table database)",}, \
 {DB_Irc7702QTable,DB_Topic_7702And7702A,"Irc7702QTable","7702 and 7702A annual mortality rate (index in mortality table database)",}, \
 {DB_RatingsAffect7702,DB_Topic_7702And7702A,"RatingsAffect7702","Flat extras and table ratings affect 7702 and 7702A calculations: 0=no, 1=yes",}, \
-{DB_CvatMatChangeDefn,DB_Topic_7702And7702A,"CvatMatChangeDefn","Definition of 7702A material change for CVAT: 0=unnec prem, 1=increase, 2=increase after unnec prem, 3=any unnec prem or increase",}, \
+{DB_CvatMatChangeDefn,DB_Topic_7702And7702A,"CvatMatChangeDefn","Definition of 7702A material change for CVAT: 0=unnec prem, 1=increase, 2=increase after unnec prem [not implemented], 3=any unnec prem or increase",}, \
 {DB_GptMatChangeDefn,DB_Topic_7702And7702A,"GptMatChangeDefn","Definition of 7702A material change for GPT: 0=any adjustment event, 1=any adjustment event that increases the guideline limit",}, \
-{DB_CorrHidesIncreases,DB_Topic_7702And7702A,"CorrHidesIncreases","For 7702 and 7702A, ignore specified-amount increases that don't affect DB due to corridor: 0=no, 1=yes",}, \
 {DB_Irc7702BftIsSpecAmt,DB_Topic_7702And7702A,"Irc7702BftIsSpecAmt","7702(f)(3) 'death benefit' is specamt rather than DB: 0=no, 1=yes",}, \
 {DB_Initial7702BftIsDb,DB_Topic_7702And7702A,"Initial7702BftIsDb","For DBO 2, riskily reflect 1035 and initial payment in initial 7702(f)(3) 'death benefit': 0=no, 1=yes",}, \
-{DB_Irc7702Endowment,DB_Topic_7702And7702A,"Irc7702Endowment","7702(e)(1)(D) endowment amount for 7702 and 7702A calculations: 0=specamt, 1=initial specamt (LDB), 2=none",}, \
+{DB_Irc7702Endowment,DB_Topic_7702And7702A,"Irc7702Endowment","7702(e)(1)(D) endowment amount for 7702 and 7702A calculations: 0=specamt, 1=none",}, \
 {DB_Equiv7702Dbo3,DB_Topic_7702And7702A,"Equiv7702Dbo3","For 7702, treat return of premium death benefit option same as: 0=level 1=increasing",}, \
+{DB_TermIsQABOrDb7702,DB_Topic_7702And7702A,"TermIsQABOrDb7702","Treat term rider as QAB or death benefit for 7702: 0=neither, 1=DB, 2=QAB",}, \
+{DB_TermIsQABOrDb7702A,DB_Topic_7702And7702A,"TermIsQABOrDb7702A","Treat term rider as QAB or death benefit for 7702A: 0=neither, 1=DB, 2=QAB",}, \
+{DB_GioIsQAB,DB_Topic_7702And7702A,"GioIsQAB","Treat guaranteed insurability option as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
+{DB_AdbIsQAB,DB_Topic_7702And7702A,"AdbIsQAB","Treat accidental death benefit as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
+{DB_SpouseRiderIsQAB,DB_Topic_7702And7702A,"SpouseRiderIsQAB","Treat spouse term rider as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
+{DB_ChildRiderIsQAB,DB_Topic_7702And7702A,"ChildRiderIsQAB","Treat child term rider as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
+{DB_WpIsQAB,DB_Topic_7702And7702A,"WpIsQAB","Treat waiver benefit as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
 {DB_Topic_MortalityCharges,DB_FIRST,"Mortality charges","Mortality rates, limits, conversions, and reentry",}, \
 {DB_GuarCoiTable,DB_Topic_MortalityCharges,"GuarCoiTable","Guaranteed mortality charge table (index in mortality table database)",}, \
 {DB_GuarCoiIsAnnual,DB_Topic_MortalityCharges,"GuarCoiIsAnnual","Guaranteed cost of insurance table rates are: 0=monthly, 1=annual",}, \
@@ -210,8 +216,6 @@
 {DB_MaxTermProportion,DB_Topic_Riders,"MaxTermProportion","Term rider as maximum proportion of total coverage [not yet implemented]",}, \
 {DB_TermCoiRate,DB_Topic_Riders,"TermCoiRate","[not yet implemented--use external table instead]",}, \
 {DB_TermPremRate,DB_Topic_Riders,"TermPremRate","[not yet implemented--use external table instead]",}, \
-{DB_TermIsDbFor7702,DB_Topic_Riders,"TermIsDbFor7702","Term rider qualifies as death benefit for 7702: 0=no, 1=yes",}, \
-{DB_TermIsDbFor7702A,DB_Topic_Riders,"TermIsDbFor7702A","Term rider qualifies as death benefit for 7702A: 0=no, 1=yes",}, \
 {DB_AllowWp,DB_Topic_Riders,"AllowWp","Allow waiver benefit: 0=no, 1=yes",}, \
 {DB_WpTable,DB_Topic_Riders,"WpTable","Waiver benefit charge (index in mortality table database)",}, \
 {DB_WpMinIssAge,DB_Topic_Riders,"WpMinIssAge","Waiver benefit minimum issue age",}, \

@@ -169,11 +169,18 @@ enum e_database_key
         ,DB_RatingsAffect7702
         ,DB_CvatMatChangeDefn
         ,DB_GptMatChangeDefn
-        ,DB_CorrHidesIncreases
         ,DB_Irc7702BftIsSpecAmt
         ,DB_Initial7702BftIsDb
         ,DB_Irc7702Endowment
         ,DB_Equiv7702Dbo3
+
+        ,DB_TermIsQABOrDb7702
+        ,DB_TermIsQABOrDb7702A
+        ,DB_GioIsQAB
+        ,DB_AdbIsQAB
+        ,DB_SpouseRiderIsQAB
+        ,DB_ChildRiderIsQAB
+        ,DB_WpIsQAB
 
     ,DB_Topic_MortalityCharges
 
@@ -358,8 +365,6 @@ enum e_database_key
         ,DB_MaxTermProportion
         ,DB_TermCoiRate
         ,DB_TermPremRate
-        ,DB_TermIsDbFor7702
-        ,DB_TermIsDbFor7702A
 
         ,DB_AllowWp
         ,DB_WpTable

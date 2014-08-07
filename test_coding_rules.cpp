@@ -212,6 +212,7 @@ file::file(std::string const& file_path)
         : ".touchstone" == extension() ? e_touchstone
         : ".cns"        == extension() ? e_xml_input
         : ".ill"        == extension() ? e_xml_input
+        : ".gpt"        == extension() ? e_xml_input
         : ".mec"        == extension() ? e_xml_input
         : ".database"   == extension() ? e_xml_other
         : ".funds"      == extension() ? e_xml_other

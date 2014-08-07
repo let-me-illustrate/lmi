@@ -454,18 +454,18 @@ void Input::redintegrate_ex_post
                     ;
                 }
 
-            bool swap = contains(Comments.value(), "idiosyncrasy_swap_old_tax_state");
-            mce_state state;
             switch(static_cast<int>(db.Query(DB_PremTaxState)))
                 {
                 case oe_ee_state:
                     {
-                    state = swap ? CorporationState : State;
+                    StateOfJurisdiction = State;
+                    PremiumTaxState     = State;
                     }
                     break;
                 case oe_er_state:
                     {
-                    state = swap ? State : CorporationState;
+                    StateOfJurisdiction = CorporationState;
+                    PremiumTaxState     = CorporationState;
                     }
                     break;
                 default:
@@ -477,8 +477,6 @@ void Input::redintegrate_ex_post
                     }
                     break;
                 }
-            StateOfJurisdiction = state;
-            PremiumTaxState     = state;
             }
         }
 

@@ -33750,3 +33750,300 @@ included in archive.
 Separate GUI test from command-line unit-test framework. See:
   http://lists.nongnu.org/archive/html/lmi/2014-03/msg00012.html
 
+20140422T2340Z <gchicares@sbcglobal.net> [542]
+
+  premium_tax.cpp
+  premium_tax.hpp
+Update premium-tax rates, for annuities as well as life insurance.
+
+20140424T1420Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5888.
+
+20140504T1559Z <gchicares@sbcglobal.net> [542]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Rearrange and refactor, indicating whether term is a QAB. Combine this
+with the death-benefit flag, because those two ways of treating a term
+rider are mutually exclusive. Rearrange to show that QAB treatment for
+this and other riders is more a 7702 than a rider parameter.
+
+20140504T1633Z <gchicares@sbcglobal.net> [542]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add database flags to indicate which riders are QABs. It is considered
+unlikely that a rider other than term on the main insured would be
+treated as a QAB for either 7702 or 7702A but not for both, so each
+has only a single flag for both sections of the tax code.
+
+20140504T1642Z <gchicares@sbcglobal.net> [542]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Remove an inutile database entity.
+
+20140504T1657Z <gchicares@sbcglobal.net> [542]
+
+  dbnames.xpp
+Remove or deprecate inutile database suboptions.
+
+20140615T1717Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc              [new file]
+  gpt_document.cpp     [new file]
+  gpt_document.hpp     [new file]
+  gpt_input.cpp        [new file]
+  gpt_input.hpp        [new file]
+  gpt_server.cpp       [new file]
+  gpt_server.hpp       [new file]
+  gpt_state.cpp        [new file]
+  gpt_state.hpp        [new file]
+  gpt_view.cpp         [new file]
+  gpt_view.hpp         [new file]
+  gpt_view.png         [new file]
+  gpt_xml_document.cpp [new file]
+  gpt_xml_document.hpp [new file]
+Clone 'mec*' source files for GPT.
+
+20140616T2140Z <gchicares@sbcglobal.net> [542]
+
+  menus.xrc
+Clone MEC-testing menu for GPT.
+
+20140616T2141Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  objects.make
+Build files added 20140615T1717Z.
+
+20140616T2320Z <gchicares@sbcglobal.net> [542]
+
+  gpt_server.cpp
+Adjust a function's return type for GPT.
+
+20140616T2323Z <gchicares@sbcglobal.net> [542]
+
+  skeleton.cpp
+Add GPT to GUI.
+
+20140617T2342Z <gchicares@sbcglobal.net> [542]
+
+  antediluvian_stubs.cpp
+  main_cli.cpp
+Add GPT to CLI.
+
+20140617T2343Z <gchicares@sbcglobal.net> [542]
+
+  test_coding_rules.cpp
+Apply coding rules to GPT xml files.
+
+20140619T2117Z <gchicares@sbcglobal.net> [542]
+
+  gpt_state.cpp
+  gpt_state.hpp
+Add some GPT fields.
+
+20140619T2118Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702io.hpp
+Reformat.
+
+20140619T2242Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702io.hpp
+Change a datum's type, to increase flexibility.
+
+20140620T1541Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702io.hpp
+Improve documentation by marking historically unused fields. The
+immediate goal is to add a GUI that supports all fields actually
+exercised by an old testdeck.
+
+20140621T0059Z <gchicares@sbcglobal.net> [542]
+
+  gpt_input.cpp
+  gpt_input.hpp
+  gpt_server.cpp
+Split certain fields into "old" and "new" variants.
+
+20140621T1613Z <gchicares@sbcglobal.net> [542]
+
+  gpt_input.cpp
+  gpt_input.hpp
+Add some fields for GPT support.
+
+20140621T1619Z <gchicares@sbcglobal.net> [542]
+
+  gpt_input.cpp
+Improve certain defaults.
+
+20140622T1352Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Convert between old and new GPT input.
+
+20140622T1353Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702.cpp
+Validate conversion between old and new GPT input.
+
+20140622T1434Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  gpt_server.cpp
+  objects.make
+Call old GPT calculations from new GPT interface.
+
+20140622T1510Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702.cpp
+Display diagnostics appropriately for each interface.
+
+20140622T1608Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702.cpp
+Translate old testdeck to distinct xml input files.
+
+20140622T1610Z <gchicares@sbcglobal.net> [542]
+
+  workhorse.make
+Add '.gpt' files to system test.
+
+20140623T1401Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Remove an obsolete field.
+
+20140623T1410Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Remove an obsolete field; add a new field in its place.
+
+20140623T1418Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Add two new inforce fields.
+
+20140623T1653Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Add a new tab.
+
+20140623T1853Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Split some fields, and move them to the tab just added.
+
+20140623T1917Z <gchicares@sbcglobal.net> [542]
+
+  gpt.xrc
+Add more "old" and "new" fields.
+
+20140623T1925Z <gchicares@sbcglobal.net> [542]
+
+  version.hpp
+Designate release candidate 5919.
+
+20140626T1508Z <gchicares@sbcglobal.net> [542]
+
+  ihs_server7702.cpp
+Fix defect introduced 20140622T1608Z: files written in text mode. See
+the comment on _CRT_fmode in 'test_coding_rules.cpp'.
+
+20140627T1703Z <gchicares@sbcglobal.net> [542]
+
+  Makefile.am
+  objects.make
+  workhorse.make
+Eradicate the 'gpt_server' binary. Its associated tests have recently
+been rendered merely duplicative.
+
+20140709T1232Z <gchicares@sbcglobal.net> [537]
+
+  ihs_server7702io.cpp
+Resolve several marked defects in obsolescent code.
+
+20140709T1437Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Expunge disused code.
+
+20140709T2300Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Rectify names.
+
+20140710T1500Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Purge some disused members of an obsolescent class.
+
+20140711T1157Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702io.cpp
+  ihs_server7702io.hpp
+Dichotomize a member datum into "old" and "new".
+
+20140711T2221Z <gchicares@sbcglobal.net> [534]
+
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+Abjure obsolescent server's "C" linkage.
+
+20140711T2328Z <gchicares@sbcglobal.net> [534]
+
+  gpt_input.hpp
+  gpt_server.cpp
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+Render class Server7702Input obsolete.
+
+20140711T2356Z <gchicares@sbcglobal.net> [534]
+
+  Makefile.am
+  ihs_server7702io.cpp [expunged]
+  ihs_server7702io.hpp [expunged]
+  objects.make
+Eradicate obsolete class Server7702Input.
+
+20140718T2144Z <gchicares@sbcglobal.net> [534]
+
+  ihs_basicval.cpp
+Restrict an old exception class to obsolescent code.
+
+20140720T1434Z <gchicares@sbcglobal.net> [534]
+
+  ihs_basicval.cpp
+  input_xml_io.cpp
+Expunge some idiosyncratic code that is no longer useful.
+
+20140806T1312Z <gchicares@sbcglobal.net> [534]
+
+  loads.cpp
+Improve documentation.
+
+20140806T1313Z <gchicares@sbcglobal.net> [534]
+
+  ihs_basicval.cpp
+Refactor, favoring expression templates.
+

@@ -116,7 +116,6 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     bcc_rc$(EXEEXT) \
     elapsed_time$(EXEEXT) \
     generate_passkey$(EXEEXT) \
-    gpt_server$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
 
   ifneq (mpatrol,$(findstring mpatrol,$(build_type)))
@@ -1273,22 +1272,6 @@ cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 
 ################################################################################
 
-# Test GPT server.
-
-# Eventually the gpt_server$(EXEEXT) part of this recipe will be
-# replaced by a set of '.gpt' files for use with 'make system_test'.
-
-.PHONY: gpt_server_tests
-gpt_server_tests: gpt_server$(EXEEXT)
-	@cd $(data_dir) && $(CURDIR)/gpt_server$(EXEEXT) \
-	  <$(test_dir)/gpt_server.test.in \
-	  >$(CURDIR)/gpt_server.test.out
-	@$(DIFF) gpt_server.test.out $(test_dir)/gpt_server.test.touchstone \
-	  && $(ECHO) GPT server test succeeded. \
-	  || $(ECHO) GPT server test FAILED.
-
-################################################################################
-
 # System test.
 
 # Output is compared with $(DIFF), which reports all textual
@@ -1313,8 +1296,8 @@ $(touchstone_md5sums): $(touchstone_files)
 	@cd $(touchstone_dir) && $(MD5SUM) $(notdir $^) > $@
 	@$(SORT) --key=2 --output=$@ $@
 
-testdeck_suffixes    := cns ill ini mec
-test_result_suffixes := test test0 monthly_trace.* mec.tsv mec.xml
+testdeck_suffixes    := cns ill ini mec gpt
+test_result_suffixes := test test0 monthly_trace.* mec.tsv mec.xml gpt.tsv gpt.xml
 
 # These files summarize system-test results and their differences from
 # results saved in $(touchstone_dir). Datestamps are embedded in their
@@ -1332,6 +1315,7 @@ system_test_md5sums2 := $(test_dir)/md5sums
 %.ill: test_emission := emit_quietly,emit_test_data
 %.ini: test_emission := emit_quietly,emit_custom_0
 %.mec: test_emission := emit_quietly,emit_test_data
+%.gpt: test_emission := emit_quietly,emit_test_data
 
 dot_test_files =
 %.cns: dot_test_files = $(basename $(notdir $@)).*test

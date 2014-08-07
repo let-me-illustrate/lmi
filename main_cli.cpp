@@ -32,6 +32,7 @@
 #include "dbdict.hpp"            // print_databases()
 #include "getopt.hpp"
 #include "global_settings.hpp"
+#include "gpt_server.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
@@ -190,6 +191,7 @@ void process_command_line(int argc, char* argv[])
 
     std::vector<std::string> illustrator_names;
     std::vector<std::string> mec_server_names;
+    std::vector<std::string> gpt_server_names;
 
     int digit_optind = 0;
     int this_option_optind = 1;
@@ -317,6 +319,10 @@ void process_command_line(int argc, char* argv[])
                     {
                     mec_server_names.push_back(getopt_long.optarg);
                     }
+                else if(".gpt" == e)
+                    {
+                    gpt_server_names.push_back(getopt_long.optarg);
+                    }
                 else
                     {
                     warning()
@@ -443,6 +449,12 @@ void process_command_line(int argc, char* argv[])
         (mec_server_names.begin()
         ,mec_server_names.end()
         ,mec_server(emission)
+        );
+
+    std::for_each
+        (gpt_server_names.begin()
+        ,gpt_server_names.end()
+        ,gpt_server(emission)
         );
 }
 

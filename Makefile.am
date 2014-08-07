@@ -84,11 +84,7 @@ bin_PROGRAMS = \
 
 # other programs which may or not be built depending on configure arguments
 EXTRA_PROGRAMS = \
-    antediluvian_cgi \
-    gpt_server
-#    gpt_server - does not contain main() function, bug?..
-#      answer: its main() is in 'ihs_server7702.cpp'
-#    lmi_cgi - restore the target in the future
+    antediluvian_cgi
 
 # libtool libraries installed in lib
 lib_LTLIBRARIES = \
@@ -197,6 +193,8 @@ libskeleton_la_SOURCES = \
     docmanager_ex.cpp \
     docmdichildframe_ex.cpp \
     file_command_wx.cpp \
+    gpt_document.cpp \
+    gpt_view.cpp \
     icon_monger.cpp \
     illustration_document.cpp \
     illustration_view.cpp \
@@ -387,7 +385,11 @@ liblmi_la_SOURCES = \
     authenticity.cpp \
     commutation_functions.cpp \
     fund_data.cpp \
+    gpt_input.cpp \
+    gpt_server.cpp \
     gpt_specamt.cpp \
+    gpt_state.cpp \
+    gpt_xml_document.cpp \
     ihs_acctval.cpp \
     ihs_avdebug.cpp \
     ihs_avmly.cpp \
@@ -397,6 +399,7 @@ liblmi_la_SOURCES = \
     ihs_irc7702.cpp \
     ihs_irc7702a.cpp \
     ihs_mortal.cpp \
+    ihs_server7702.cpp \
     lmi.cpp \
     md5.cpp \
     mec_input.cpp \
@@ -450,11 +453,6 @@ generate_passkey_CXXFLAGS = $(AM_CXXFLAGS)
 generate_passkey_LDADD = \
     $(BOOST_LIBS) \
     libmain_auxiliary_common.la
-
-gpt_server_SOURCES = $(top_builddir)/dummy.cpp
-gpt_server_CXXFLAGS = $(AM_CXXFLAGS)
-gpt_server_LDADD = \
-    liblmi.la
 
 elapsed_time_SOURCES = \
     elapsed_time.cpp \
@@ -1104,7 +1102,13 @@ noinst_HEADERS = \
     getopt.hpp \
     global_settings.hpp \
     gpt_commutation_functions.hpp \
+    gpt_document.hpp \
+    gpt_input.hpp \
+    gpt_server.hpp \
     gpt_specamt.hpp \
+    gpt_state.hpp \
+    gpt_view.hpp \
+    gpt_xml_document.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \
@@ -1112,7 +1116,6 @@ noinst_HEADERS = \
     ihs_irc7702.hpp \
     ihs_irc7702a.hpp \
     ihs_server7702.hpp \
-    ihs_server7702io.hpp \
     ihs_x_type.hpp \
     illustration_document.hpp \
     illustration_view.hpp \

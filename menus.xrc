@@ -523,5 +523,25 @@
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
 
+<!-- GPT menu -->
+
+<object class="wxIcon" name="gpt_view_icon">gpt_view.png</object>
+
+<object class="wxMenuBar" name="gpt_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object_ref name="file_menu" ref="file_menu_with_print_ref"/>
+    <object class="wxMenu" name="gpt_menu">
+        <label>_GPT</label>
+        <object class="wxMenuItem" name="edit_cell">
+            <label>_Edit\tCtrl-E</label>
+            <bitmap stock_id="edit-cell"/>
+            <help>Edit this file</help>
+        </object>
+    </object>
+    <object_ref name="test_menu" ref="test_menu_ref"/>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
 </resource>
 

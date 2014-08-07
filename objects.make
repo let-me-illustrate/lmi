@@ -279,7 +279,11 @@ lmi_common_objects := \
   authenticity.o \
   commutation_functions.o \
   fund_data.o \
+  gpt_input.o \
+  gpt_server.o \
   gpt_specamt.o \
+  gpt_state.o \
+  gpt_xml_document.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
@@ -289,6 +293,7 @@ lmi_common_objects := \
   ihs_irc7702.o \
   ihs_irc7702a.o \
   ihs_mortal.o \
+  ihs_server7702.o \
   lmi.o \
   md5.o \
   mec_input.o \
@@ -315,6 +320,8 @@ skeleton_objects := \
   docmanager_ex.o \
   docmdichildframe_ex.o \
   file_command_wx.o \
+  gpt_document.o \
+  gpt_view.o \
   icon_monger.o \
   illustration_document.o \
   illustration_view.o \
@@ -359,87 +366,6 @@ ifneq (,$(RC))
   lmi_wx_objects  += lmi_msw_res.o
   wx_test_objects += lmi_msw_res.o
 endif
-
-################################################################################
-
-# GPT server. This has not been maintained and may not work.
-
-# Only these files are unique to the server application:
-
-gpt_objects_unique_to_server := \
-  ihs_server7702.o \
-  ihs_server7702io.o \
-
-# Only these files are directly concerned with the GPT:
-
-gpt_objects_directly_concerned_with_gpt := \
-  ihs_irc7702.o \
-  ihs_irc7702a.o \
-  mec_state.o \
-
-# These files provide general product support:
-
-gpt_objects := \
-  $(boost_common_objects) \
-  $(gpt_objects_unique_to_server) \
-  $(gpt_objects_directly_concerned_with_gpt) \
-  $(xmlwrapp_objects) \
-  actuarial_table.o \
-  alert.o \
-  alert_cli.o \
-  calendar_date.o \
-  ce_product_name.o \
-  commutation_functions.o \
-  configurable_settings.o \
-  crc32.o \
-  data_directory.o \
-  database.o \
-  datum_base.o \
-  datum_sequence.o \
-  datum_string.o \
-  dbdict.o \
-  dbnames.o \
-  dbvalue.o \
-  death_benefits.o \
-  facets.o \
-  fenv_lmi.o \
-  fund_data.o \
-  global_settings.o \
-  gpt_specamt.o \
-  ihs_basicval.o \
-  ihs_mortal.o \
-  input.o \
-  input_harmonization.o \
-  input_realization.o \
-  input_seq_helpers.o \
-  input_sequence.o \
-  input_xml_io.o \
-  interest_rates.o \
-  lmi.o \
-  loads.o \
-  mc_enum.o \
-  mc_enum_types.o \
-  mc_enum_types_aux.o \
-  miscellany.o \
-  mortality_rates_fetch.o \
-  mvc_model.o \
-  my_proem.o \
-  null_stream.o \
-  outlay.o \
-  path_utility.o \
-  premium_tax.o \
-  product_data.o \
-  product_names.o \
-  rounding_rules.o \
-  stratified_algorithms.o \
-  stratified_charges.o \
-  surrchg_rates.o \
-  tn_range_types.o \
-  timer.o \
-  xml_lmi.o \
-  yare_input.o \
-
-gpt_server$(EXEEXT)     : $(gpt_objects)
 
 ################################################################################
 

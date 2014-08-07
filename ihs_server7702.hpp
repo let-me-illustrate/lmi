@@ -26,24 +26,34 @@
 
 #include "config.hpp"
 
-#include "ihs_server7702io.hpp"
 #include "so_attributes.hpp"
 
 #include <stdexcept>
 #include <string>
 
-int RunServer7702();
+class gpt_input;
 
-extern "C"
+struct Server7702Output
 {
-    void LMI_SO InitializeServer7702();
-    Server7702Output LMI_SO RunServer7702FromStruct(Server7702Input a_Input);
-}
+    std::string      ContractNumber;                // the same identifier supplied as input.
+    int              Status;
+    bool             AdjustableEventOccurred;
+    double           GuidelineLevelPremium;         // the new GLP.
+    double           GuidelineSinglePremium;        // the new GSP.
+    double           GuidelineLevelPremiumPolicyA;  // the GLP for notional policy A-the policy as it was at the last adjustable event, or at issue if there has been no adjustable event.
+    double           GuidelineSinglePremiumPolicyA; // the GSP for notional policy A-the policy as it was at the last adjustable event, or at issue if there has been no adjustable event.
+    double           GuidelineLevelPremiumPolicyB;  // the GLP for notional policy B; 0.0 at issue or if there has been no adjustable event.
+    double           GuidelineSinglePremiumPolicyB; // the GSP for notional policy B; 0.0 at issue or if there has been no adjustable event.
+    double           GuidelineLevelPremiumPolicyC;  // the GLP for notional policy C; 0.0 at issue or if there has been no adjustable event.
+    double           GuidelineSinglePremiumPolicyC; // the GSP for notional policy C; 0.0 at issue or if there has been no adjustable event.
+};
+
+Server7702Output LMI_SO RunServer7702FromStruct(gpt_input a_Input);
 
 class Server7702
 {
   public:
-    Server7702(Server7702Input& a_Input);
+    Server7702(gpt_input& a_Input);
     void Process();
     Server7702Output const& GetOutput() const   {return Output;}
 
@@ -71,7 +81,7 @@ class Server7702
     void SetDoleBentsenValuesA();
     void SetDoleBentsenValuesBC();
 
-    Server7702Input const& Input;
+    gpt_input const& Input;
     Server7702Output Output;
 
     bool IsIssuedToday;

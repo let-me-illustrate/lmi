@@ -57,6 +57,8 @@
 #include "fenv_lmi.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
+#include "gpt_document.hpp"
+#include "gpt_view.hpp"
 #include "handle_exceptions.hpp"
 #include "icon_monger.hpp"
 #include "illustration_document.hpp"
@@ -367,6 +369,18 @@ void Skeleton::InitDocManager()
         ,CLASSINFO(mec_view)
         );
 
+    new(wx) wxDocTemplate
+        (doc_manager_
+        ,"Guideline premium test"
+        ,"*.gpt"
+        ,""
+        ,"gpt"
+        ,"GPT document"
+        ,"GPT view"
+        ,CLASSINFO(gpt_document)
+        ,CLASSINFO(gpt_view)
+        );
+
     if(!global_settings::instance().ash_nazg())
         {
         return;
@@ -627,6 +641,16 @@ bool Skeleton::OnInit()
         if(!xml_resources.LoadFile(wxFileName(AddDataDir(v2.ResourceFileName()))))
 #else  // !wxCHECK_VERSION(2,9,0)
         if(!xml_resources.Load(AddDataDir(v2.ResourceFileName())))
+#endif // !wxCHECK_VERSION(2,9,0)
+            {
+            fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
+            }
+
+        gpt_mvc_view const v3;
+#if wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.LoadFile(wxFileName(AddDataDir(v3.ResourceFileName()))))
+#else  // !wxCHECK_VERSION(2,9,0)
+        if(!xml_resources.Load(AddDataDir(v3.ResourceFileName())))
 #endif // !wxCHECK_VERSION(2,9,0)
             {
             fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
