@@ -80,7 +80,11 @@
     datum_string.cpp
     dbdict.cpp
     fund_data.cpp
+    gpt_input.cpp
+    gpt_server.cpp
     gpt_specamt.cpp
+    gpt_state.cpp
+    gpt_xml_document.cpp
     ihs_acctval.cpp
     ihs_avdebug.cpp
     ihs_avmly.cpp
@@ -90,6 +94,7 @@
     ihs_irc7702.cpp
     ihs_irc7702a.cpp
     ihs_mortal.cpp
+    ihs_server7702.cpp
     lmi.cpp
     mc_enum.cpp
     mc_enum_types.cpp
@@ -125,6 +130,8 @@
     docmdichildframe_ex.cpp
     facets.cpp
     file_command_wx.cpp
+    gpt_document.cpp
+    gpt_view.cpp
     icon_monger.cpp
     illustration_document.cpp
     illustration_view.cpp
