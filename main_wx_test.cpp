@@ -42,6 +42,7 @@
 #include <wx/dialog.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
+#include <wx/stopwatch.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -247,7 +248,10 @@ void SkeletonTest::RunTheTests()
     wxWindow *mainWin = GetTopWindow();
     mainWin->SetFocus();
 
+    wxStopWatch sw;
+    wxLogMessage("Starting automatic tests.");
     application_test::test();
+    wxLogMessage("Tests successfully completed in %ldms.", sw.Time());
 
     // We want to show log output after the tests finished running and hide the
     // app window, which is no longer in use. This doesn't work out of the box,
