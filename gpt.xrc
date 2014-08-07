@@ -1,0 +1,1028 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
+
+<!--
+    wxWindows xml input-notebook resources for guideline premium test.
+
+    Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id$
+-->
+
+<object class="wxPanel" name="plan_gpt_panel">
+    <object class="wxFlexGridSizer">
+        <cols>2</cols>
+        <growablecols>0,1</growablecols>
+        <growablerows>0</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>1</cols>
+                <growablecols>0</growablecols>
+                <growablerows>1</growablerows>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Policy</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxListBox" name="ProductName">
+                        <help>Product</help>
+<!-- WX !! If this "size" line... -->
+                        <size>-1,0</size>
+<!--
+...is deleted, then the dialog is displayed incorrectly: at least with
+msw, at the bottom of the screen, the 'Cancel' button's bottom border
+is not shown, and the 'Help' button isn't shown at all. This seems to
+demonstrate a defect in the wx library. See
+  https://savannah.nongnu.org/bugs/?func=detailitem&item_id=13415
+-->
+                        <style>wxLB_SINGLE</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxCheckBox" name="Use7702ATables">
+                        <help>For net single premium and seven-pay premium, use table lookup instead of first principles</help>
+                        <label>Use Ax and 7Px tables</label>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALL</flag>
+            <object class="wxFlexGridSizer">
+                <rows>2</rows>
+                <growablecols>0</growablecols>
+                <growablerows>0,1</growablerows>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxRadioBox" name="DefinitionOfLifeInsurance">
+                                <help>Definition of life insurance</help>
+                                <style>wxRA_SPECIFY_COLS</style>
+                                <label>Definition of life insurance</label>
+                                <dimension>1</dimension>
+                                <selection>0</selection>
+                                <content>
+                                    <item helptext="Definition of life insurance is cash value accumulation test">CVAT</item>
+                                    <item helptext="Definition of life insurance is guideline premium test">GPT</item>
+                                    <item helptext="Do not comply with US definition of life insurance">Not 7702 compliant</item>
+                                </content>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxRadioBox" name="DefinitionOfMaterialChange">
+                                <help>Definition of material change</help>
+                                <style>wxRA_SPECIFY_COLS</style>
+                                <label>Definition of material change</label>
+                                <dimension>1</dimension>
+                                <selection>0</selection>
+                                <content>
+                                    <item helptext="Recognize material change whenever unnecessary premium is paid">Unnecessary premium</item>
+                                    <item helptext="Recognize material change whenever benefit increases">Benefit increase</item>
+                                    <item helptext="Recognize material change upon the later of unnecessary premium or benefit increase">Later of increase or unnecessary premium</item>
+                                    <item helptext="Recognize material change upon the earlier of unnecessary premium or benefit increase">Earlier of increase or unnecessary premium</item>
+                                    <item helptext="Recognize material change at each guideline premium adjustment event">GPT adjustment event</item>
+                                </content>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+            <border>4</border>
+            <object class="wxStaticText">
+                <label>Comments</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW</flag>
+            <object class="wxTextCtrl" name="Comments">
+                <help>Freeform comments</help>
+                <size>180,-1</size>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxPanel" name="underwriting_gpt_panel">
+    <object class="wxFlexGridSizer">
+        <rows>2</rows>
+        <growablecols>0</growablecols>
+        <growablerows>0,1</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALL</flag>
+            <object class="wxFlexGridSizer">
+                <rows>1</rows>
+                <growablecols>0,1</growablecols>
+                <growablerows>0</growablerows>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+                    <border>2</border>
+                    <object class="wxRadioBox" name="GroupUnderwritingType">
+                        <help>Group underwriting</help>
+                        <style>wxRA_SPECIFY_COLS</style>
+                        <label>Group underwriting</label>
+                        <dimension>1</dimension>
+                        <selection>0</selection>
+                        <content>
+                            <item>Medical</item>
+                            <item>Paramedical</item>
+                            <item>Nonmedical</item>
+                            <item>Simplified issue</item>
+                            <item>Guaranteed issue</item>
+                        </content>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+                    <border>2</border>
+                    <object class="wxRadioBox" name="UnderwritingClass">
+                        <help>Underwriting class</help>
+                        <style>wxRA_SPECIFY_COLS</style>
+                        <label>Class</label>
+                        <dimension>1</dimension>
+                        <selection>0</selection>
+                        <content>
+                            <item helptext="Preferred class">Preferred</item>
+                            <item helptext="Standard class">Standard</item>
+                            <item helptext="Table rated">Rated</item>
+                            <item helptext="Ultra-preferred class">Ultra</item>
+                        </content>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALL</flag>
+            <object class="wxFlexGridSizer">
+                <cols>1</cols>
+                <growablecols>0</growablecols>
+                <growablerows>0,1</growablerows>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>1</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>Substandard table</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW</flag>
+                            <object class="wxComboBox" name="SubstandardTable">
+                                <help>Substandard table rating</help>
+                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>1</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>Flat extra</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW</flag>
+                            <object class="wxTextCtrl" name="FlatExtra">
+                                <help>Annual flat extra per thousand</help>
+                                <size>10,-1</size>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxPanel" name="status_gpt_panel">
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <growablecols>0</growablecols>
+        <growablerows>0</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>3</cols>
+                <growablecols>0,1,2</growablecols>
+                <growablerows>0</growablerows>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Effective date</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxDatePickerCtrl" name="EffectiveDate">
+                                        <help>Effective date</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Birthdate overrides issue age</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxCheckBox" name="UseDOB">
+                                        <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
+<!--
+It's unusual to place a checkbox's "label" on the left, as is simulated
+here, but it looks weird if we don't make this look like its siblings.
+-->
+                                        <size>80,20</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Birthdate</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxDatePickerCtrl" name="DateOfBirth">
+                                        <help>Date of birth</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Issue age</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxSpinCtrl" name="IssueAge">
+                                        <help>Insurance age on date of issue</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>State of jurisdiction</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="StateOfJurisdiction">
+                                        <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Premium tax state</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="PremiumTaxState">
+                                        <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Inforce GLP</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceGlp">
+                                        <help>Inforce guideline level premium</help>
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Inforce GSP</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceGsp">
+                                        <help>Inforce guideline single premium</help>
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Inforce as-of date</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxDatePickerCtrl" name="InforceAsOfDate">
+                                        <help>Monthiversary as of which inforce data is provided</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Already a MEC</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxCheckBox" name="InforceIsMec">
+                                        <help>Contract is already a MEC</help>
+<!--
+It's unusual to place a checkbox's "label" on the left, as is simulated
+here, but it looks weird if we don't make this look like its siblings.
+-->
+                                        <size>80,20</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Last MC date</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxDatePickerCtrl" name="LastMaterialChangeDate">
+                                        <help>Beginning of most recent seven-pay period</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Target-premium SA</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceTargetSpecifiedAmount">
+                                        <help>Target-premium specified amount</help>
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>DCV</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceDcv">
+                                        <help>Inforce deemed cash value</help>
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Current AV</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceAccountValue">
+                                        <help>Current inforce account value</help>
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>AV before last MC</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceAvBeforeLastMc">
+                                        <help>Account value immediately before the last material change</help>
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Least death benefit</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="InforceLeastDeathBenefit">
+                                        <help>Inforce least death benefit since beginning of last seven-pay period</help>
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>1</cols>
+                <growablecols>0</growablecols>
+                <growablerows>0</growablerows>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <cols>2</cols>
+                        <growablecols>1</growablecols>
+                        <growablerows>0</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>Amounts-paid history for current 7-pay period</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW</flag>
+                            <object class="wxTextCtrl" name="PaymentHistory">
+                                <help>7702A "Amounts paid" for each contract year since beginning of last seven-pay period--zero if not in a seven-pay period</help>
+                                <size>180,-1</size>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxPanel" name="changes_gpt_panel">
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <growablecols>0</growablecols>
+        <growablerows>0</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>2</cols>
+                <growablecols>0,1</growablecols>
+                <growablerows>0</growablerows>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>Old</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Gender</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="OldGender">
+                                        <help>Gender</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Smoking</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="OldSmoking">
+                                        <help>Smoking</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>DBO</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="OldDbo">
+                                        <help>Death benefit option</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Death benefit</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="OldDeathBft">
+                                        <help>Death benefit</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Specified amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="OldSpecAmt">
+                                        <help>Specified amount</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>QAB term amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="OldQabTermAmt">
+                                        <help>Amount of QAB term rider</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Target</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="OldTarget">
+                                        <help>Target premium</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>New</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Gender</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="NewGender">
+                                        <help>Gender</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Smoking</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="NewSmoking">
+                                        <help>Smoking</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>DBO</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxComboBox" name="NewDbo">
+                                        <help>Death benefit option</help>
+                                        <size>80,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Death benefit</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="NewDeathBft">
+                                        <help>Death benefit</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Specified amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="NewSpecAmt">
+                                        <help>Specified amount</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>QAB term amount</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="NewQabTermAmt">
+                                        <help>Amount of QAB term rider</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Target</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="NewTarget">
+                                        <help>Target premium</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxPanel" name="transactions_gpt_panel">
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <growablecols>0</growablecols>
+        <growablerows>0</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>2</cols>
+                <growablecols>0</growablecols>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>External 1035 exchange</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                    <border>4</border>
+                    <object class="wxTextCtrl" name="External1035ExchangeAmount">
+                        <help>External 1035 exchange amount</help>
+                        <size>80,-1</size>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>External 1035 exchange</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxCheckBox" name="External1035ExchangeFromMec">
+                        <help>External 1035 exchange is from a MEC</help>
+                        <label>from MEC</label>
+                        <size>80,-1</size>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Internal 1035 exchange</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                    <border>4</border>
+                    <object class="wxTextCtrl" name="Internal1035ExchangeAmount">
+                        <help>Internal 1035 exchange amount</help>
+                        <size>80,-1</size>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Internal 1035 exchange</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxCheckBox" name="Internal1035ExchangeFromMec">
+                        <help>Internal 1035 exchange is from a MEC</help>
+                        <label>from MEC</label>
+                        <size>80,-1</size>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Payment</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                    <border>4</border>
+                    <object class="wxTextCtrl" name="Payment">
+                        <help>Payment</help>
+                        <size>80,-1</size>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Premiums-paid decrement</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                    <border>4</border>
+                    <object class="wxTextCtrl" name="PremsPaidDecrement">
+                        <help>Decrement to 7702(f)(1) 'premiums paid'</help>
+                        <size>80,-1</size>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxDialog" name="dialog_containing_gpt_notebook">
+    <title>Let me illustrate...</title>
+    <style>wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU</style>
+    <exstyle>wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY</exstyle>
+    <centered>1</centered>
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <rows>0</rows>
+        <vgap>0</vgap>
+        <hgap>0</hgap>
+        <growablecols>0</growablecols>
+        <growablerows>0</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxNotebook" name="gpt_notebook">
+                <object class="notebookpage">
+                    <label>Plan</label>
+                    <object_ref ref="plan_gpt_panel"/>
+                </object>
+                <object class="notebookpage">
+                    <label>Underwriting</label>
+                    <object_ref ref="underwriting_gpt_panel"/>
+                </object>
+                <object class="notebookpage">
+                    <label>Status</label>
+                    <object_ref ref="status_gpt_panel"/>
+                </object>
+                <object class="notebookpage">
+                    <label>Changes</label>
+                    <object_ref ref="changes_gpt_panel"/>
+                </object>
+                <object class="notebookpage">
+                    <label>Transactions</label>
+                    <object_ref ref="transactions_gpt_panel"/>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>2</cols>
+                <growablecols>0</growablecols>
+                <growablerows>0</growablerows>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText" name="diagnostics">
+                        <style>wxSUNKEN_BORDER|wxST_NO_AUTORESIZE</style>
+                        <label>[diagnostics]</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT</flag>
+                    <object class="wxBoxSizer">
+                        <orient>wxVERTICAL</orient>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <object class="wxButton" name="wxID_OK">
+                                <label>OK</label>
+                                <default>1</default>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <object class="wxButton" name="wxID_CANCEL">
+                                <label>Cancel</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <object class="wxButton" name="wxID_HELP">
+                                <label>Help</label>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+
+</resource>
+

@@ -31,42 +31,15 @@
 
 #include "ihs_server7702.hpp"
 
+#include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "fenv_lmi.hpp"
-#include "handle_exceptions.hpp"
+#include "gpt_input.hpp"
 #include "ihs_irc7702.hpp"
-#include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
-#include "path_utility.hpp" // initialize_filesystem()
 
-#if defined LMI_MSW
-#   include <windows.h> // HINSTANCE etc.
-#endif // defined LMI_MSW
-
-#include <cstdlib>
 #include <exception>
-#include <iostream>
-#include <string>
-
-//============================================================================
-int main()
-{
-    std::set_terminate(lmi_terminate_handler);
-    try
-        {
-        // Absolute paths require "native" name-checking policy for msw.
-        initialize_filesystem();
-        InitializeServer7702();
-        // Read from std input, process, and write to std output
-        return RunServer7702();
-// TODO ?? NEED DECISION What should this return?
-        }
-    catch(...)
-        {
-        report_exception();
-        }
-}
 
 //============================================================================
 void EnterServer()
@@ -75,55 +48,7 @@ void EnterServer()
 }
 
 //============================================================================
-// TODO ?? Should we make the directory an optional argument?
-void InitializeServer7702()
-{
-    // Data directory where tables etc. are stored
-// TODO ?? This is obsolete; need a replacement. Either let main()
-// take care of it, or copy main()'s initialization code here.
-//    DataDir::Get("./");
-}
-
-//============================================================================
-// Read from std input, process, and write to std output
-int RunServer7702()
-{
-    EnterServer();
-    // Input record (we'll use it over and over)
-    Server7702Input input;
-    try
-        {
-        while(std::cin >> input)
-            {
-            // Separate construction from initialization
-            Server7702 contract(input);
-            contract.Process();
-            std::cout << contract.GetOutput();
-            while('\n' == std::cin.peek())
-                {
-                std::cin.get();
-                }
-            if(std::cin.eof())
-                {
-                return EXIT_SUCCESS;
-                }
-            }
-        }
-    // Catch exceptions that are thrown during input
-    catch(std::exception const& e)
-        {
-        std::cerr << input.UniqueIdentifier << " error: " << e.what() << '\n';
-        }
-    catch(...)
-        {
-        std::cerr << "Untrapped exception" << '\n';
-        }
-    return EXIT_FAILURE;
-}
-
-//============================================================================
-// Read from C struct, and return a different C struct
-Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
+Server7702Output RunServer7702FromStruct(gpt_input a_Input)
 {
     EnterServer();
     Server7702 contract(a_Input);
@@ -132,7 +57,7 @@ Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
 }
 
 //============================================================================
-Server7702::Server7702(Server7702Input& a_Input)
+Server7702::Server7702(gpt_input& a_Input)
     :Input(a_Input)
     ,IsIssuedToday(false)
     ,IsPossibleAdjustableEvent(false)
@@ -173,49 +98,49 @@ void Server7702::Process()
         // TODO ?? Perhaps the control word should be changed and
         // processing restarted.
         Output.Status |= precision_changed;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_implausible_input const& e)
         {
         Output.Status |= implausible_input;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_inconsistent_input const& e)
         {
         Output.Status |= inconsistent_input;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(x_product_rule_violated const& e)
         {
         Output.Status |= product_rule_violated;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_adjustable_event_forbidden_at_issue const& e)
         {
         Output.Status |= adjustable_event_forbidden_at_issue;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_guideline_negative const& e)
         {
         Output.Status |= guideline_negative;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(server7702_misstatement_of_age_or_gender const& e)
         {
         Output.Status |= misstatement_of_age_or_gender;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
     catch(std::range_error const& e)
         {
         Output.Status |= implausible_input; // TODO ?? can we be more specific?
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         }
 
     // Unknown error
     catch(std::exception const& e)
         {
         Output.Status |= unknown_error;
-        std::cerr << Output.UniqueIdentifier << " error: " << e.what() << '\n';
+        warning() << Output.ContractNumber << " error: " << e.what() << LMI_FLUSH;
         // Since we don't know what the error is, we propagate
         // it back to the caller; we put a message on standard error,
         // but don't try to emit anything to standard output.
@@ -226,11 +151,11 @@ void Server7702::Process()
 //============================================================================
 void Server7702::PerformProcessing()
 {
-    Output.UniqueIdentifier                 = Input.UniqueIdentifier;
+    Output.ContractNumber                   = Input.ContractNumber.value();
     Output.Status                           = 0;
     Output.AdjustableEventOccurred          = false;
-    Output.GuidelineLevelPremium            = Input.OldGuidelineLevelPremium;
-    Output.GuidelineSinglePremium           = Input.OldGuidelineSinglePremium;
+    Output.GuidelineLevelPremium            = Input.InforceGlp    .value();
+    Output.GuidelineSinglePremium           = Input.InforceGsp    .value();
     Output.GuidelineLevelPremiumPolicyA     = 0.0;
     Output.GuidelineSinglePremiumPolicyA    = 0.0;
     Output.GuidelineLevelPremiumPolicyB     = 0.0;
@@ -257,82 +182,26 @@ void Server7702::PerformProcessing()
 // TODO ?? We can add many similar conditions here.
 void Server7702::VerifyPlausibilityOfInput() const
 {
-    if(Input.OldIssueAge < 0)
+    if(Input.IssueAge.value() < 0)
         {
         throw server7702_implausible_input
             (
-            "Old issue age less than zero"
+            "Issue age less than zero"
             );
         }
-    if(99 < Input.OldIssueAge)
+    if(99 < Input.IssueAge.value())
         {
         throw server7702_implausible_input
             (
-            "Old issue age greater than 99"
+            "Issue age greater than 99"
             );
         }
-    if(Input.NewIssueAge < 0)
-        {
-        throw server7702_implausible_input
-            (
-            "New issue age less than zero"
-            );
-        }
-    if(99 < Input.NewIssueAge)
-        {
-        throw server7702_implausible_input
-            (
-            "New issue age greater than 99"
-            );
-        }
-    if(Input.NewIssueAge != Input.OldIssueAge)
-        {
-        throw server7702_misstatement_of_age_or_gender
-            (
-            "New issue age different from old issue age"
-            );
-        }
+//  if(Input.NewIssueAge != Input.OldIssueAge) // Not differentiated.
     if(Input.NewGender != Input.OldGender)
         {
         throw server7702_misstatement_of_age_or_gender
             (
             "New gender different from old gender"
-            );
-        }
-
-    if(0.0 != Input.DecreaseRequiredByContract)
-        {
-        throw std::logic_error
-            (
-            "Contractually required decrease not implemented"
-            );
-        }
-    if(Input.NewBenefitAmount < Input.LeastBenefitAmountEver)
-        {
-        throw server7702_implausible_input
-            (
-            "New benefit amount less than least benefit amount ever"
-            );
-        }
-    if(Input.OldBenefitAmount < Input.LeastBenefitAmountEver)
-        {
-        throw server7702_implausible_input
-            (
-            "Old benefit amount less than least benefit amount ever"
-            );
-        }
-    if(Input.NewSpecifiedAmount < Input.LeastBenefitAmountEver)
-        {
-        throw server7702_implausible_input
-            (
-            "New specified amount less than least benefit amount ever"
-            );
-        }
-    if(Input.OldSpecifiedAmount < Input.LeastBenefitAmountEver)
-        {
-        throw server7702_implausible_input
-            (
-            "Old specified amount less than least benefit amount ever"
             );
         }
 }
@@ -343,8 +212,8 @@ void Server7702::DecideWhatToCalculate()
     // TODO ?? Is this not superfluous?
     if
         (
-            Input.NewIssueAge               != Input.OldIssueAge
-        ||  Input.NewGender                 != Input.OldGender
+//          Input.NewIssueAge               != Input.OldIssueAge // Not differentiated.
+            Input.NewGender                 != Input.OldGender
         )
         {
         // Consider change of insured as a reissue that probably violates.
@@ -354,21 +223,21 @@ void Server7702::DecideWhatToCalculate()
             );
         }
 
-    IsIssuedToday = Input.IsIssuedToday;
+    // Casual, but strictly correct for all testdeck cases:
+    IsIssuedToday = 0 == Input.InforceYear;
 
     IsPossibleAdjustableEvent =
 // TODO ?? Why treat a taxable withdrawal as an adjustment event?
-//            0.0                             != Input.GrossNontaxableWithdrawal
-            true                            == Input.DecreaseRequiredByContract
-        ||  Input.NewDeathBenefitOption     != Input.OldDeathBenefitOption
-        ||  (   Input.NewSpecifiedAmount    != Input.OldSpecifiedAmount
-            &&  Input.NewBenefitAmount      != Input.OldBenefitAmount
+//            0.0                             != Input.PremsPaidDecrement
+            Input.NewDbo                    != Input.OldDbo
+        ||  (   Input.NewSpecAmt            != Input.OldSpecAmt
+            &&  Input.NewDeathBft           != Input.OldDeathBft
             )
 // TODO ?? NEED DECISION whether it's a SA or DB change that causes adj event
-        ||  Input.NewTermAmount             != Input.OldTermAmount
+        ||  Input.NewQabTermAmt             != Input.OldQabTermAmt
 // TODO ?? No adj event if term and SA change but DB remains constant, but
 // TODO ?? NEED DECISION whether it's a SA or DB change that causes adj event
-        ||  Input.NewSmoker                 != Input.OldSmoker
+        ||  Input.NewSmoking                != Input.OldSmoking
 // 7702 mortality basis is the same for preferred vs. standard
 // Assume nothing else (e.g. loads) varies by that either
 //      ||  Input.NewUnderwritingClass      != Input.OldUnderwritingClass
@@ -376,17 +245,15 @@ void Server7702::DecideWhatToCalculate()
 //      ||  Input.NewStateOfJurisdiction    != Input.OldStateOfJurisdiction
 // Assume WP is completely ignored
 //      ||  Input.NewWaiverOfPremiumInForce != Input.OldWaiverOfPremiumInForce
-//      ||  Input.NewPremiumsWaived         != Input.OldPremiumsWaived
 //      ||  Input.NewWaiverOfPremiumRating  != Input.OldWaiverOfPremiumRating
-        ||  Input.NewAccidentalDeathInForce != Input.OldAccidentalDeathInForce
+// Ignore ADD for now
+//      ||  Input.NewAccidentalDeathInForce != Input.OldAccidentalDeathInForce
 // Assume ADD rating is ignored
 //      ||  Input.NewAccidentalDeathRating  != Input.OldAccidentalDeathRating
 // Assume table rating is ignored
-//      ||  Input.NewTableRating            != Input.OldTableRating
+//      ||  Input.NewSubstandardTable       != Input.OldSubstandardTable
 // Assume flat extras are ignored
-//      ||  Input.NewPermanentFlatAmount0   != Input.OldPermanentFlatAmount0
-//      ||  Input.NewTemporaryFlatAmount0   != Input.OldTemporaryFlatAmount0
-//      ||  Input.NewTemporaryFlatDuration0 != Input.OldTemporaryFlatDuration0
+//      ||  Input.NewFlatExtra              != Input.OldFlatExtra
         ;
 
     if(IsIssuedToday && IsPossibleAdjustableEvent)
@@ -400,16 +267,16 @@ void Server7702::DecideWhatToCalculate()
 void Server7702::ProcessNewIssue()
 {
     bool okay =
-            Input.Duration                  == 0
-        &&  Input.OldGuidelineLevelPremium  == 0.0
-        &&  Input.OldGuidelineSinglePremium == 0.0
+            Input.InforceYear               == 0
+        &&  Input.InforceGlp                == 0.0
+        &&  Input.InforceGsp                == 0.0
         &&  Input.OldGender                 == Input.NewGender
-        &&  Input.OldUnderwritingClass      == Input.NewUnderwritingClass
-        &&  Input.OldSmoker                 == Input.NewSmoker
-        &&  Input.OldIssueAge               == Input.NewIssueAge
-        &&  Input.OldStateOfJurisdiction    == Input.NewStateOfJurisdiction
-        &&  Input.OldSpecifiedAmount        == Input.NewSpecifiedAmount
-        &&  Input.OldDeathBenefitOption     == Input.NewDeathBenefitOption
+//      &&  Input.OldUnderwritingClass      == Input.NewUnderwritingClass   // Not differentiated.
+        &&  Input.OldSmoking                == Input.NewSmoking
+//      &&  Input.OldIssueAge               == Input.NewIssueAge            // Not differentiated.
+//      &&  Input.OldStateOfJurisdiction    == Input.NewStateOfJurisdiction // Not differentiated.
+        &&  Input.OldSpecAmt                == Input.NewSpecAmt
+        &&  Input.OldDbo                    == Input.NewDbo
         ;
 
     // TODO ?? It would be better to spell them all out.
@@ -431,15 +298,15 @@ void Server7702::ProcessNewIssue()
 // Set new GLP and GSP following an adjustable event, after validating input.
 void Server7702::ProcessAdjustableEvent()
 {
-// TODO ??  Input.OldBenefitAmount = ?;
+// TODO ??  Input.OldDeathBft = ?;
 //  GuidelineLevelPremium
 //  GuidelineSinglePremium
 
     // ? Is this not superfluous?
     if
         (
-            Input.NewIssueAge               != Input.OldIssueAge
-        ||  Input.NewGender                 != Input.OldGender
+//          Input.NewIssueAge               != Input.OldIssueAge // Not differentiated.
+            Input.NewGender                 != Input.OldGender
         )
         {
         throw std::logic_error
@@ -448,8 +315,8 @@ void Server7702::ProcessAdjustableEvent()
             );
         }
 
-    Output.GuidelineLevelPremiumPolicyA = Input.OldGuidelineLevelPremium;
-    Output.GuidelineSinglePremiumPolicyA = Input.OldGuidelineSinglePremium;
+    Output.GuidelineLevelPremiumPolicyA  = Input.InforceGlp.value();
+    Output.GuidelineSinglePremiumPolicyA = Input.InforceGsp.value();
 
     SetDoleBentsenValuesBC();
     Output.GuidelineLevelPremium =
@@ -469,32 +336,32 @@ void Server7702::ProcessAdjustableEvent()
 void Server7702::SetDoleBentsenValuesA()
 {
     BasicValues basic_values_A
-        (Input.ProductName
+        (Input.ProductName              .value()
         ,Input.OldGender                .value()
-        ,Input.OldUnderwritingClass     .value()
-        ,Input.OldSmoker                .value()
-        ,Input.OldIssueAge
-        ,Input.UnderwritingBasis        .value()
-        ,Input.OldStateOfJurisdiction   .value()
-        ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption    .value()
-        ,Input.OldAccidentalDeathInForce
-        ,Input.TargetPremium
+        ,Input.UnderwritingClass        .value()
+        ,Input.OldSmoking               .value()
+        ,Input.IssueAge                 .value()
+        ,Input.GroupUnderwritingType    .value()
+        ,Input.StateOfJurisdiction      .value()
+        ,Input.OldSpecAmt               .value()
+        ,Input.OldDbo                   .value()
+        ,false // Input.OldAccidentalDeathInForce
+        ,Input.OldTarget                .value()
         );
 
     Output.GuidelineLevelPremiumPolicyA = basic_values_A.Irc7702_->CalculateGLP
         (0
-        ,Input.OldBenefitAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption.value()
+        ,Input.OldDeathBft .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldDbo      .value()
         );
 
     Output.GuidelineSinglePremiumPolicyA = basic_values_A.Irc7702_->CalculateGSP
         (0
-        ,Input.OldBenefitAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldSpecifiedAmount
+        ,Input.OldDeathBft .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldSpecAmt  .value()
         );
 }
 
@@ -502,61 +369,61 @@ void Server7702::SetDoleBentsenValuesA()
 void Server7702::SetDoleBentsenValuesBC()
 {
     BasicValues basic_values_B
-        (Input.ProductName
+        (Input.ProductName              .value()
         ,Input.NewGender                .value()
-        ,Input.NewUnderwritingClass     .value()
-        ,Input.NewSmoker                .value()
-        ,Input.NewIssueAge
-        ,Input.UnderwritingBasis        .value()
-        ,Input.NewStateOfJurisdiction   .value()
-        ,Input.NewSpecifiedAmount
-        ,Input.NewDeathBenefitOption    .value()
-        ,Input.NewAccidentalDeathInForce
-        ,Input.TargetPremium
+        ,Input.UnderwritingClass        .value()
+        ,Input.NewSmoking               .value()
+        ,Input.IssueAge                 .value()
+        ,Input.GroupUnderwritingType    .value()
+        ,Input.StateOfJurisdiction      .value()
+        ,Input.NewSpecAmt               .value()
+        ,Input.NewDbo                   .value()
+        ,false // Input.NewAccidentalDeathInForce
+        ,Input.NewTarget                .value()
         );
 
     Output.GuidelineLevelPremiumPolicyB = basic_values_B.Irc7702_->CalculateGLP
-        (Input.Duration
-        ,Input.NewBenefitAmount
-        ,Input.NewSpecifiedAmount
-        ,Input.NewSpecifiedAmount
-        ,Input.NewDeathBenefitOption.value()
+        (Input.InforceYear .value()
+        ,Input.NewDeathBft .value()
+        ,Input.NewSpecAmt  .value()
+        ,Input.NewSpecAmt  .value()
+        ,Input.NewDbo      .value()
         );
 
     Output.GuidelineSinglePremiumPolicyB = basic_values_B.Irc7702_->CalculateGSP
-        (Input.Duration
-        ,Input.NewBenefitAmount
-        ,Input.NewSpecifiedAmount
-        ,Input.NewSpecifiedAmount
+        (Input.InforceYear .value()
+        ,Input.NewDeathBft .value()
+        ,Input.NewSpecAmt  .value()
+        ,Input.NewSpecAmt  .value()
         );
 
     BasicValues basic_values_C
-        (Input.ProductName
+        (Input.ProductName              .value()
         ,Input.OldGender                .value()
-        ,Input.OldUnderwritingClass     .value()
-        ,Input.OldSmoker                .value()
-        ,Input.OldIssueAge
-        ,Input.UnderwritingBasis        .value()
-        ,Input.OldStateOfJurisdiction   .value()
-        ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption    .value()
-        ,Input.OldAccidentalDeathInForce
-        ,Input.TargetPremium
+        ,Input.UnderwritingClass        .value()
+        ,Input.OldSmoking               .value()
+        ,Input.IssueAge                 .value()
+        ,Input.GroupUnderwritingType    .value()
+        ,Input.StateOfJurisdiction      .value()
+        ,Input.OldSpecAmt               .value()
+        ,Input.OldDbo                   .value()
+        ,false // Input.OldAccidentalDeathInForce
+        ,Input.OldTarget                .value()
         );
 
     Output.GuidelineLevelPremiumPolicyC = basic_values_C.Irc7702_->CalculateGLP
-        (Input.Duration
-        ,Input.OldBenefitAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldDeathBenefitOption.value()
+        (Input.InforceYear .value()
+        ,Input.OldDeathBft .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldDbo      .value()
         );
 
     Output.GuidelineSinglePremiumPolicyC = basic_values_C.Irc7702_->CalculateGSP
-        (Input.Duration
-        ,Input.OldBenefitAmount
-        ,Input.OldSpecifiedAmount
-        ,Input.OldSpecifiedAmount
+        (Input.InforceYear .value()
+        ,Input.OldDeathBft .value()
+        ,Input.OldSpecAmt  .value()
+        ,Input.OldSpecAmt  .value()
         );
 }
 

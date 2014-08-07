@@ -31,7 +31,6 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
-#include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
@@ -43,13 +42,11 @@
 #include "ieee754.hpp"                  // ldbl_eps_plus_one()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_x_type.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
 #include "loads.hpp"
 #include "math_functors.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
-#include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
@@ -62,10 +59,8 @@
 #include <algorithm>
 #include <cmath>                        // std::pow()
 #include <cstring>                      // std::strlen(), std::strncmp()
-#include <fstream>
 #include <limits>
 #include <numeric>
-#include <sstream>
 #include <stdexcept>
 
 //============================================================================
@@ -210,17 +205,25 @@ void BasicValues::Init()
 
     if(IssueAge < Database_->Query(DB_MinIssAge))
         {
-        throw x_product_rule_violated
-            (
-            std::string("Issue age less than minimum")
-            );
+        fatal_error()
+            << "Issue age "
+            << IssueAge
+            << " less than minimum "
+            << Database_->Query(DB_MinIssAge)
+            << '.'
+            << LMI_FLUSH
+            ;
         }
     if(Database_->Query(DB_MaxIssAge) < IssueAge)
         {
-        throw x_product_rule_violated
-            (
-            std::string("Issue age greater than maximum")
-            );
+        fatal_error()
+            << "Issue age "
+            << IssueAge
+            << " greater than maximum "
+            << Database_->Query(DB_MaxIssAge)
+            << '.'
+            << LMI_FLUSH
+            ;
         }
     FundData_.reset(new FundData(AddDataDir(ProductData_->datum("FundFilename"))));
     RoundingRules_.reset
@@ -264,6 +267,7 @@ void BasicValues::Init()
 }
 
 //============================================================================
+#include "ihs_x_type.hpp" // x_product_rule_violated TAXATION !! remove later
 // TODO ??  Not for general use--use for GPT server only, for now. TAXATION !! refactor later
 void BasicValues::GPTServerInit()
 {
@@ -475,38 +479,6 @@ void BasicValues::Init7702()
         ,MlyDcvqc.begin()
         ,round_coi_rate()
         );
-    if(contains(yare_input_.Comments, "idiosyncrasy_dcvq"))
-        {
-        std::ostringstream oss;
-        oss
-            << yare_input_.ProductName
-            << '_'
-            << mc_str(yare_input_.Gender)
-            << '_'
-            << mc_str(yare_input_.Smoking)
-            << ".dcvq"
-            << configurable_settings::instance().spreadsheet_file_extension()
-            ;
-        std::ofstream os(oss.str().c_str(), ios_out_trunc_binary());
-        int const minimum_age  = static_cast<int>(Database_->Query(DB_MinIssAge  ));
-        int const maturity_age = static_cast<int>(Database_->Query(DB_MaturityAge));
-        if(minimum_age != yare_input_.IssueAge)
-            {
-            warning()
-                << "Issue age is "
-                << yare_input_.IssueAge
-                << ", but the minimum is "
-                << minimum_age
-                << ". Use the minimum instead."
-                << LMI_FLUSH
-                ;
-            }
-        for(int j = 0; j < maturity_age - minimum_age; ++j)
-            {
-            std::string s = value_cast<std::string>(MlyDcvqc[j]);
-            os << j + minimum_age << '\t' << s << '\n';
-            }
-        }
 
     // Monthly guar net int for 7702, with 4 or 6% min, is
     //   greater of {4%, 6%} and annual guar int rate
@@ -572,50 +544,22 @@ void BasicValues::Init7702()
         }
 */
 
-    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.04, guar_int) - SpreadFor7702_);
-    Mly7702iGlp.assign(Length, 0.04);
-    std::transform
-        (guar_int.begin()
-        ,guar_int.end()
-        ,Mly7702iGlp.begin()
-        ,Mly7702iGlp.begin()
-        ,greater_of<double>()
-        );
-    std::transform
-        (Mly7702iGlp.begin()
-        ,Mly7702iGlp.end()
-        ,SpreadFor7702_.begin()
-        ,Mly7702iGlp.begin()
-        ,std::minus<double>()
-        );
-    std::transform
-        (Mly7702iGlp.begin()
-        ,Mly7702iGlp.end()
-        ,Mly7702iGlp.begin()
-        ,i_upper_12_over_12_from_i<double>()
+    Mly7702iGlp.assign(Length, 0.0);
+    assign
+        (Mly7702iGlp
+        ,apply_unary
+            (i_upper_12_over_12_from_i<double>()
+            ,apply_binary(greater_of<double>(), 0.04, guar_int) - SpreadFor7702_
+            )
         );
 
-    // ET !! Mly7702iGsp = i_upper_12_over_12_from_i(max(.06, guar_int) - SpreadFor7702_);
-    Mly7702iGsp.assign(Length, 0.06);
-    std::transform
-        (guar_int.begin()
-        ,guar_int.end()
-        ,Mly7702iGsp.begin()
-        ,Mly7702iGsp.begin()
-        ,greater_of<double>()
-        );
-    std::transform
-        (Mly7702iGsp.begin()
-        ,Mly7702iGsp.end()
-        ,SpreadFor7702_.begin()
-        ,Mly7702iGsp.begin()
-        ,std::minus<double>()
-        );
-    std::transform
-        (Mly7702iGsp.begin()
-        ,Mly7702iGsp.end()
-        ,Mly7702iGsp.begin()
-        ,i_upper_12_over_12_from_i<double>()
+    Mly7702iGsp.assign(Length, 0.0);
+    assign
+        (Mly7702iGsp
+        ,apply_unary
+            (i_upper_12_over_12_from_i<double>()
+            ,apply_binary(greater_of<double>(), 0.06, guar_int) - SpreadFor7702_
+            )
         );
 
     Database_->Query(Mly7702ig, DB_NaarDiscount);
@@ -719,8 +663,6 @@ void BasicValues::SetPermanentInvariants()
     AllowTerm           = Database_->Query(DB_AllowTerm            );
     TermForcedConvAge   = static_cast<int>(Database_->Query(DB_TermForcedConvAge));
     TermForcedConvDur   = static_cast<int>(Database_->Query(DB_TermForcedConvDur));
-    TermIsDbFor7702     = Database_->Query(DB_TermIsDbFor7702      );
-    TermIsDbFor7702A    = Database_->Query(DB_TermIsDbFor7702A     );
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
     MinPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
     TgtPremType         = static_cast<oenum_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
@@ -861,6 +803,8 @@ void BasicValues::SetPermanentInvariants()
         DefnMaterialChange_ = (mce_gpt == DefnLifeIns_) ? mce_adjustment_event : z;
         }
     Equiv7702DBO3       = static_cast<mcenum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702Dbo3)));
+    TermIsDbFor7702     = 1.0 == Database_->Query(DB_TermIsQABOrDb7702 );
+    TermIsDbFor7702A    = 1.0 == Database_->Query(DB_TermIsQABOrDb7702A);
     MaxNAAR             = yare_input_.MaximumNaar;
 
     Database_->Query(MinPremIntSpread_, DB_MinPremIntSpread);
@@ -924,14 +868,8 @@ void BasicValues::SetMaxSurvivalDur()
             break;
         case mce_survive_to_expectancy:
             {
-            std::vector<double> z(MortalityRates_->PartialMortalityQ());
-            // ET !! z = 1.0 - z;
-            std::transform
-                (z.begin()
-                ,z.end()
-                ,z.begin()
-                ,std::bind1st(std::minus<double>(), 1.0)
-                );
+            std::vector<double> z(Length);
+            assign(z, 1.0 - MortalityRates_->PartialMortalityQ());
             // ET !! In APL, this would be [writing multiplication as '*']
             //   +/*\1-z
             // It would be nice to have a concise representation for that.
