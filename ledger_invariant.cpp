@@ -119,7 +119,7 @@ void LedgerInvariant::Alloc(int len)
     OtherVectors    ["IndvTaxBracket"        ] = &IndvTaxBracket         ;
     OtherVectors    ["CorpTaxBracket"        ] = &CorpTaxBracket         ;
     OtherVectors    ["Salary"                ] = &Salary                 ;
-    OtherVectors    ["MonthlyFlatExtra"      ] = &MonthlyFlatExtra       ;
+    OtherVectors    ["AnnualFlatExtra"       ] = &AnnualFlatExtra        ;
     OtherVectors    ["HoneymoonValueSpread"  ] = &HoneymoonValueSpread   ;
     OtherVectors    ["PartMortTableMult"     ] = &PartMortTableMult      ;
     OtherVectors    ["AddonMonthlyFee"       ] = &AddonMonthlyFee        ;
@@ -464,7 +464,7 @@ void LedgerInvariant::Init(BasicValues* b)
     IndvTaxBracket       = b->yare_input_.TaxBracket                ;
     CorpTaxBracket       = b->yare_input_.CorporationTaxBracket     ;
     Salary               = b->yare_input_.ProjectedSalary           ;
-    MonthlyFlatExtra     = b->yare_input_.FlatExtra                 ;
+    AnnualFlatExtra      = b->yare_input_.FlatExtra                 ;
     HoneymoonValueSpread = b->yare_input_.HoneymoonValueSpread      ;
     AddonMonthlyFee      = b->yare_input_.ExtraMonthlyCustodialFee  ;
     AddonCompOnAssets    = b->yare_input_.ExtraCompensationOnAssets ;

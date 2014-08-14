@@ -819,7 +819,7 @@
       <column composite="0" name="EeMode">|Indiv _Pmt Mode</column>
       <column composite="0" name="ErMode">|Corp _Pmt Mode</column>
       <column composite="0" scalar="InitAnnLoanDueRate">|Assumed _Loan Interest</column>
-      <column composite="0" name="MonthlyFlatExtra">|Flat Extra _Per 1,000</column>
+      <column composite="0" name="AnnualFlatExtra">|Flat Extra _Per 1,000</column>
     </xsl:variable>
     <xsl:variable name="illustration_assumption_columns" select="document('')//xsl:variable[@name='illustration_assumption_columns_raw']/column"/>
     <xsl:variable name="columns" select="$illustration_assumption_columns[not(@composite) or (boolean(@composite='1')=$is_composite)]"/>
