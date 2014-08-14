@@ -280,7 +280,7 @@ void MortalityRates::MakeCoiRateSubstandard
     for(int j = 0; j < Length_; ++j)
         {
         // Flat extra: input as annual per K, want monthly per $.
-        double flat_extra = MonthlyFlatExtra_[j] / 12000.0;
+        double flat_extra = AnnualFlatExtra_[j] / 12000.0;
 
         coi_rates[j] = std::min
             (MaxMonthlyCoiRate_

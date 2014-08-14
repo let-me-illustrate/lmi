@@ -127,7 +127,7 @@ class MortalityRates
     mcenum_table_rating SubstandardTable_;
 
     std::vector<double> CurrentCoiMultiplier_;
-    std::vector<double> MonthlyFlatExtra_;
+    std::vector<double> AnnualFlatExtra_;
     std::vector<double> PartialMortalityMultiplier_;
 
     round_to<double> round_coi_rate_;

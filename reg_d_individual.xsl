@@ -713,9 +713,13 @@
                       Table Rating:
                       <xsl:value-of select="$scalars/SubstandardTable"/>
                     </fo:block>
+                    <!-- Flats don't require "Rated" class; and does this value actually print anyway?
+                    These questions apply as well to the original:
+                      http://svn.savannah.nongnu.org/viewvc/lmi/trunk/individual_private_placement.xsl?annotate=696&root=lmi&pathrev=3585
+                    -->
                     <fo:block>
                       Initial Annual Flat Extra:
-                      <xsl:value-of select="$vectors[@name='MonthlyFlatExtra']/duration[1]/@column_value"/>
+                      <xsl:value-of select="$vectors[@name='AnnualFlatExtra']/duration[1]/@column_value"/>
                       per 1,000
                     </fo:block>
                   </fo:block>
