@@ -44,9 +44,14 @@
 #include <wx/dialog.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
+#include <wx/link.h>
 #include <wx/stopwatch.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
+
+wxFORCE_LINK_MODULE(file_command_wx)
+wxFORCE_LINK_MODULE(progress_meter_wx)
+wxFORCE_LINK_MODULE(system_command_wx)
 
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
