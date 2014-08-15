@@ -30,11 +30,14 @@
 
 #include "wx_utility.hpp"               // TopWindow()
 
+#include <wx/link.h>
 #include <wx/progdlg.h>
 #include <wx/utils.h>                   // wxMilliSleep()
 
 #include <ios>                          // std::fixed, std::ios_base::precision()
 #include <sstream>
+
+wxFORCE_LINK_THIS_MODULE(progress_meter_wx)
 
 namespace
 {

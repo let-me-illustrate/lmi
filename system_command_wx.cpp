@@ -34,10 +34,13 @@
 
 #include <wx/app.h>                     // wxTheApp
 #include <wx/frame.h>
+#include <wx/link.h>
 #include <wx/utils.h>
 
 #include <cstddef>                      // std::size_t
 #include <ostream>
+
+wxFORCE_LINK_THIS_MODULE(system_command_wx)
 
 namespace
 {

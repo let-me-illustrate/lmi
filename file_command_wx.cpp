@@ -34,8 +34,11 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/scoped_ptr.hpp>
 
+#include <wx/link.h>
 #include <wx/mimetype.h>
 #include <wx/utils.h> // wxExecute()
+
+wxFORCE_LINK_THIS_MODULE(file_command_wx)
 
 // Implementing this function in a GUI module means the wx facility
 // can be used. Currently, no other interface needs to implement it.

@@ -44,8 +44,18 @@
 #include "skeleton.hpp"
 
 #include <wx/init.h>                    // wxEntry()
+#include <wx/link.h>
 
 #include <string>
+
+// These lines are required to ensure that the object files containing the
+// corresponding wxFORCE_LINK_THIS_MODULE() macros are not simply discarded by
+// an optimizing linker (such as MSVC one) as otherwise the code setting up the
+// file and system commands and the progress meter creator would simply not be
+// executed at all.
+wxFORCE_LINK_MODULE(file_command_wx)
+wxFORCE_LINK_MODULE(progress_meter_wx)
+wxFORCE_LINK_MODULE(system_command_wx)
 
 IMPLEMENT_APP_NO_MAIN(Skeleton)
 IMPLEMENT_WX_THEME_SUPPORT
