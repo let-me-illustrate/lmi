@@ -30,6 +30,7 @@
 #include "calendar_date.hpp"
 #include "configurable_settings.hpp"
 #include "force_linking.hpp"
+#include "global_settings.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "main_common.hpp"              // initialize_application()
@@ -38,6 +39,7 @@
 #include "skeleton.hpp"
 #include "version.hpp"
 
+#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
 #include <wx/dialog.h>
@@ -62,6 +64,7 @@ class application_test
         test_about_dialog_version();
         test_configurable_settings();
         test_default_input();
+        test_expiry_dates();
         test_new_file_and_save();
         }
 
@@ -69,6 +72,7 @@ class application_test
     static void test_about_dialog_version();
     static void test_configurable_settings();
     static void test_default_input();
+    static void test_expiry_dates();
     static void test_new_file_and_save();
 
     // Helper of test_new_file_and_save() which tests creating a new file of
@@ -151,6 +155,48 @@ void application_test::test_default_input()
     std::string const general_account_date = exact_cast<numeric_sequence>(cell["GeneralAccountRate"])->value();
     LMI_ASSERT(!general_account_date.empty());
     wxLogMessage("GeneralAccountRate is \"%s\"", general_account_date.c_str());
+}
+
+void application_test::test_expiry_dates()
+{
+    fs::path expiry_path(global_settings::instance().data_directory() / "expiry");
+    fs::ifstream is(expiry_path);
+    LMI_ASSERT(is);
+
+    calendar_date begin(last_yyyy_date ());
+    calendar_date end  (gregorian_epoch());
+    is >> begin >> end;
+    LMI_ASSERT(is);
+    LMI_ASSERT(is.eof());
+
+    // The begin date must either be the first of month itself or a date in the
+    // previous month, in which case we're interested in the end of the
+    // following month and not the same one.
+    int year = begin.year();
+    int month = begin.month();
+    int days_in_month;
+
+    if(begin.day() == 1)
+        {
+        days_in_month = begin.days_in_month();
+        }
+    else
+        {
+        if(month == 12)
+            {
+            month = 1;
+            year++;
+            }
+        else
+            {
+            month++;
+            }
+
+        days_in_month = calendar_date(year, month, 1).days_in_month();
+        }
+
+    calendar_date const end_of_month(year, month, days_in_month);
+    LMI_ASSERT(end == end_of_month);
 }
 
 void application_test::do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog)
