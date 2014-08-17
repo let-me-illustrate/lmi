@@ -43,6 +43,7 @@
 #include <algorithm>                    // std::sort()
 #include <cstring>                      // std::strcmp()
 #include <iostream>
+#include <utility>                      // std::pair
 #include <vector>
 
 LMI_FORCE_LINKING_EX_SITU(file_command_wx)
@@ -73,7 +74,10 @@ class application_test
     bool process_command_line(int& argc, char* argv[]);
 
     // Run all the tests that were configured to be executed (all by default).
-    void run();
+    //
+    // Return the number of tests executed as the first pair component and the
+    // number of failed tests as the second component.
+    std::pair<int, int> run();
 
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
     bool add_test(void (*test_func)(), char const* test_name);
@@ -240,21 +244,61 @@ bool application_test::process_command_line(int& argc, char* argv[])
     return true;
 }
 
-void application_test::run()
+std::pair<int, int> application_test::run()
 {
     // Always run the tests in the same, predictable order (we may want to add
     // a "random shuffle" option later, but even then predictable behaviour
     // should arguably remain the default).
     sort_tests();
 
+    std::pair<int, int> results(0, 0);
+
+    // Indent the test status reports to make them stand out.
+    char const* const indent = "    ";
+
     typedef std::vector<test_descriptor>::const_iterator ctdi;
     for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
         {
         if ((run_all_ && i->run != run_no) || i->run == run_yes)
             {
-            (*i->func)();
+            std::string error;
+            results.first++;
+
+            try
+                {
+                wxStopWatch sw;
+                (*i->func)();
+                wxLogMessage("%s%s: ok (%ldms)", indent, i->name, sw.Time());
+                }
+            catch(std::exception const& e)
+                {
+                error = e.what();
+                }
+            catch(...)
+                {
+                error = "unknown exception";
+                }
+
+            if (!error.empty())
+                {
+                results.second++;
+
+                // When logging to a log window, it's better to have everything
+                // on a single line to avoid breaking the output structure.
+                wxString one_line_error(error);
+                one_line_error.Replace("\n", " ");
+
+                wxLogMessage
+                    ("%s%s: ERROR (%s)"
+                    ,indent
+                    ,i->name
+                    ,one_line_error
+                    );
+                }
             }
         }
+
+    return results;
 }
 
 bool application_test::add_test(void (*test_func)(), char const* test_name)
@@ -341,9 +385,28 @@ void SkeletonTest::RunTheTests()
     mainWin->SetFocus();
 
     wxStopWatch sw;
-    wxLogMessage("Starting automatic tests.");
-    application_test::instance().run();
-    wxLogMessage("Tests successfully completed in %ldms.", sw.Time());
+    wxLogMessage("Starting automatic tests:");
+    std::pair<int, int> const results = application_test::instance().run();
+    if (results.first == 0)
+        {
+        wxLogMessage("WARNING: no tests have been executed.");
+        }
+    else if (results.second == 0)
+        {
+        wxLogMessage
+            ("SUCCESS: %d tests successfully completed in %ldms."
+            ,results.first
+            ,sw.Time()
+            );
+        }
+    else
+        {
+        wxLogMessage
+            ("FAILURE: %d out of %d tests failed."
+            ,results.second
+            ,results.first
+            );
+        }
 
     // We want to show log output after the tests finished running and hide the
     // app window, which is no longer in use. This doesn't work out of the box,
