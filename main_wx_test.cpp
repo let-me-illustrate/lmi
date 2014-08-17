@@ -40,6 +40,7 @@
 #include <wx/init.h>                    // wxEntry()
 #include <wx/stopwatch.h>
 
+#include <algorithm>                    // std::sort()
 #include <cstring>                      // std::strcmp()
 #include <iostream>
 #include <vector>
@@ -80,6 +81,9 @@ class application_test
   private:
     application_test();
 
+    // Sort all tests in alphabetical order of their names.
+    void sort_tests();
+
     // List all tests on standard output.
     void list_tests();
 
@@ -107,6 +111,14 @@ class application_test
             ,run(run_default)
         {
         }
+
+        // Comparator used for sorting the tests.
+        static bool Compare
+            (test_descriptor const& t1
+            ,test_descriptor const& t2)
+            {
+            return std::strcmp(t1.name, t2.name) < 0;
+            }
 
         void (*func)();
         char const* name;
@@ -230,6 +242,11 @@ bool application_test::process_command_line(int& argc, char* argv[])
 
 void application_test::run()
 {
+    // Always run the tests in the same, predictable order (we may want to add
+    // a "random shuffle" option later, but even then predictable behaviour
+    // should arguably remain the default).
+    sort_tests();
+
     typedef std::vector<test_descriptor>::const_iterator ctdi;
     for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
         {
@@ -247,8 +264,15 @@ bool application_test::add_test(void (*test_func)(), char const* test_name)
     return true;
 }
 
+void application_test::sort_tests()
+{
+    std::sort(tests_.begin(), tests_.end(), test_descriptor::Compare);
+}
+
 void application_test::list_tests()
 {
+    sort_tests();
+
     std::cerr << "Available tests:\n";
 
     typedef std::vector<test_descriptor>::const_iterator ctdi;
