@@ -27,30 +27,18 @@
 #endif
 
 #include "alert.hpp"
-#include "assert_lmi.hpp"
-#include "calendar_date.hpp"
-#include "configurable_settings.hpp"
-#include "global_settings.hpp"
-#include "illustrator.hpp"
-#include "input.hpp"
 #include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
 #include "obstruct_slicing.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
 #include "uncopyable_lmi.hpp"
-#include "version.hpp"
+#include "wx_test_case.hpp"
 
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
-
-#include <wx/dialog.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
 #include <wx/link.h>
 #include <wx/stopwatch.h>
-#include <wx/testing.h>
-#include <wx/uiaction.h>
 
 #include <cstring>                      // std::strcmp()
 #include <iostream>
@@ -272,188 +260,12 @@ void application_test::list_tests()
     std::cerr << tests_.size() << " test cases.\n";
 }
 
-/// Define a test function and register it with the application tester.
-#define LMI_WX_TEST_CASE(name) \
-void test_##name(); \
-volatile bool register_test_##name = application_test::instance().add_test \
-    (test_##name \
-    ,#name \
-    ); \
-void test_##name()
-
-LMI_WX_TEST_CASE(about_dialog_version)
-{
-    struct expect_about_dialog : public wxExpectModalBase<wxDialog>
-    {
-        virtual int OnInvoked(wxDialog* d) const
-            {
-            LMI_ASSERT(0 != d);
-            LMI_ASSERT(d->GetTitle().EndsWith(LMI_VERSION));
-            return wxID_OK;
-            }
-    };
-
-    wxUIActionSimulator z;
-    z.KeyDown('h', wxMOD_ALT);
-    z.KeyUp  ('h', wxMOD_ALT);
-    z.KeyDown('a'           );
-    z.KeyUp  ('a'           );
-    wxTEST_DIALOG
-        (wxYield()
-        ,expect_about_dialog()
-        );
-}
-
-LMI_WX_TEST_CASE(configurable_settings)
-{
-    LMI_ASSERT(fs::exists("/etc/opt/lmi/configurable_settings.xml"));
-
-    configurable_settings const& settings = configurable_settings::instance();
-    LMI_ASSERT("" == settings.libraries_to_preload());
-    LMI_ASSERT("CMD /c c:/fop-0.20.5/fop" == settings.xsl_fo_command());
-
-    std::string skin = settings.skin_filename();
-    std::string default_input = settings.default_input_filename();
-    LMI_ASSERT(   "skin_coli_boli.xrc" == skin
-               || "skin_group_carveout.xrc" == skin
-               || "skin_group_carveout2.xrc" == skin
-               || "reg_d.xrc" == skin);
-    if ("skin_coli_boli.xrc" == skin)
-        {
-        LMI_ASSERT("c:/fop-0.20.5/coli_boli_default.ill" == default_input);
-        }
-    if ("skin_group_carveout.xrc" == skin)
-        {
-        LMI_ASSERT("c:/fop-0.20.5/group_carveout_default.ill" == default_input);
-        }
-    if ("skin_group_carveout2.xrc" == skin)
-        {
-        LMI_ASSERT("c:/fop-0.20.5/group_carveout_default.ill" == default_input);
-        }
-    if ("reg_d.xrc" == skin)
-        {
-        LMI_ASSERT("c:/fop-0.20.5/private_placement_default.ill" == default_input);
-        }
-}
-
-LMI_WX_TEST_CASE(default_input)
-{
-    calendar_date const today;
-    calendar_date const first_of_month(today.year(), today.month(), 1);
-
-    Input const& cell = default_cell();
-    calendar_date const effective_date = exact_cast<tnr_date>(cell["EffectiveDate"])->value();
-    LMI_ASSERT(first_of_month == effective_date);
-
-    std::string const general_account_date = exact_cast<numeric_sequence>(cell["GeneralAccountRate"])->value();
-    LMI_ASSERT(!general_account_date.empty());
-    wxLogMessage("GeneralAccountRate is \"%s\"", general_account_date.c_str());
-}
-
-LMI_WX_TEST_CASE(expiry_dates)
-{
-    fs::path expiry_path(global_settings::instance().data_directory() / "expiry");
-    fs::ifstream is(expiry_path);
-    LMI_ASSERT(is);
-
-    calendar_date begin(last_yyyy_date ());
-    calendar_date end  (gregorian_epoch());
-    is >> begin >> end;
-    LMI_ASSERT(is);
-    LMI_ASSERT(is.eof());
-
-    // The begin date must either be the first of month itself or a date in the
-    // previous month, in which case we're interested in the end of the
-    // following month and not the same one.
-    int year = begin.year();
-    int month = begin.month();
-    int days_in_month;
-
-    if(begin.day() == 1)
-        {
-        days_in_month = begin.days_in_month();
-        }
-    else
-        {
-        if(month == 12)
-            {
-            month = 1;
-            year++;
-            }
-        else
-            {
-            month++;
-            }
-
-        days_in_month = calendar_date(year, month, 1).days_in_month();
-        }
-
-    calendar_date const end_of_month(year, month, days_in_month);
-    LMI_ASSERT(end == end_of_month);
-}
-
-// Helper of test_new_file_and_save() which tests creating a new file of
-// the type corresponding to the key argument, used to select this type in
-// the "New" popup menu.
-//
-// The last argument indicates whether a dialog is shown when creating a
-// new file of this type (e.g. true for illustrations, false for census).
-// It affects this function behaviour in two ways: first, it needs to be
-// ready for this dialog appearing and, second, "File|Save" menu command is
-// disabled for the files created in this way and "File|Save as" needs to
-// be used instead.
-void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog)
-{
-    struct expect_config_dialog : public wxExpectModalBase<wxDialog>
-    {
-        virtual int OnInvoked(wxDialog* d) const
-            {
-            return wxID_OK;
-            }
-    };
-
-    LMI_ASSERT(!wxFileExists(file));
-
-    wxUIActionSimulator z;
-    z.Char('n', wxMOD_CONTROL); // new file
-    z.Char(key               ); // choose document type
-    if (uses_dialog)
-        {
-        wxTEST_DIALOG
-            (wxYield()
-            ,expect_config_dialog()
-            );
-        }
-    wxYield();
-
-    z.Char(uses_dialog ? 'a' : 's', wxMOD_CONTROL); // save or save as
-    wxTEST_DIALOG
-        (wxYield()
-        ,wxExpectModal<wxFileDialog>(file)
-        );
-    wxYield();
-
-    LMI_ASSERT(wxFileExists(file));
-    wxRemoveFile(file);
-
-    z.Char('l', wxMOD_CONTROL); // close document
-    wxYield();
-}
-
-LMI_WX_TEST_CASE(new_file_and_save)
-{
-    do_test_new_file_and_save('c', "testfile.cns"     , false);
-    do_test_new_file_and_save('i', "testfile.ill"     , true);
-    do_test_new_file_and_save('d', "testfile.database", false);
-    do_test_new_file_and_save('p', "testfile.policy"  , false);
-    do_test_new_file_and_save('r', "testfile.rounding", false);
-    do_test_new_file_and_save('s', "testfile.strata",   false);
-    do_test_new_file_and_save('m', "testfile.mec",      true);
-    do_test_new_file_and_save('g', "testfile.gpt",      true);
-    do_test_new_file_and_save('x', "testfile.txt",      false);
-}
-
 } // Unnamed namespace.
+
+bool add_wx_test_case(void (*test_func)(), char const* test_name)
+{
+    return application_test::instance().add_test(test_func, test_name);
+}
 
 // Application to drive the tests
 class SkeletonTest : public Skeleton

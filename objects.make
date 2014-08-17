@@ -361,6 +361,11 @@ lmi_wx_objects := \
 
 wx_test_objects := \
   main_wx_test.o \
+  wx_test_about_dialog_version.o \
+  wx_test_configurable_settings.o \
+  wx_test_create_open.o \
+  wx_test_default_input.o \
+  wx_test_expiry_dates.o \
 
 ifneq (,$(RC))
   lmi_wx_objects  += lmi_msw_res.o

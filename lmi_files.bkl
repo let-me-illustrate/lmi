@@ -176,6 +176,12 @@
     alert_wx.cpp
     skeleton.cpp
     main_wx_test.cpp
+    wx_test_about_dialog_version.cpp
+    wx_test_case.hpp
+    wx_test_configurable_settings.cpp
+    wx_test_create_open.cpp
+    wx_test_default_input.cpp
+    wx_test_expiry_dates.cpp
 </set>
 
 <!-- product_files_SOURCES -->
