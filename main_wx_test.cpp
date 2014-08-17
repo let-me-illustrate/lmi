@@ -51,6 +51,8 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
+#include <cstring>                      // std::strcmp()
+#include <iostream>
 #include <vector>
 
 wxFORCE_LINK_MODULE(file_command_wx)
@@ -72,13 +74,24 @@ class application_test
   public:
     static application_test& instance();
 
-    // Run all the tests.
+    // Check the command line for the test-specific options, handle them and
+    // remove them from argv.
+    //
+    // Return false if the program execution shouldn't continue, currently this
+    // is only the case if the "list" option was specified requesting just to
+    // list the available tests.
+    bool process_command_line(int& argc, char* argv[]);
+
+    // Run all the tests that were configured to be executed (all by default).
     void run();
 
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
     bool add_test(void (*test_func)(), char const* test_name);
 
   private:
+    // List all tests on standard output.
+    void list_tests();
+
     /// Contains everything we need to store for an individual test.
     struct test_descriptor
     {
@@ -87,13 +100,11 @@ class application_test
         test_descriptor(void (*func)(), char const* name)
             :func(func)
             ,name(name)
-            ,run(true)
         {
         }
 
         void (*func)();
         char const* name;
-        bool run;
     };
 
     std::vector<test_descriptor> tests_;
@@ -105,15 +116,29 @@ application_test& application_test::instance()
     return z;
 }
 
+bool application_test::process_command_line(int& argc, char* argv[])
+{
+    for(int arg = 1; arg < argc; ++arg)
+        {
+        if
+            (  0 == std::strcmp(argv[arg], "-l")
+            || 0 == std::strcmp(argv[arg], "--list")
+            )
+            {
+            list_tests();
+            return false;
+            }
+        }
+
+    return true;
+}
+
 void application_test::run()
 {
     typedef std::vector<test_descriptor>::const_iterator ctdi;
     for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
         {
-        if (i->run)
-            {
-            (*i->func)();
-            }
+        (*i->func)();
         }
 }
 
@@ -122,6 +147,19 @@ bool application_test::add_test(void (*test_func)(), char const* test_name)
     tests_.push_back(test_descriptor(test_func, test_name));
 
     return true;
+}
+
+void application_test::list_tests()
+{
+    std::cerr << "Available tests:\n";
+
+    typedef std::vector<test_descriptor>::const_iterator ctdi;
+    for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
+        {
+        std::cerr << '\t' << i->name << '\n';
+        }
+
+    std::cerr << tests_.size() << " test cases.\n";
 }
 
 /// Define a test function and register it with the application tester.
@@ -381,6 +419,15 @@ int main(int argc, char* argv[])
 #ifdef LMI_MSW
     MswDllPreloader::instance().PreloadDesignatedDlls();
 #endif
+
+    // We need to handle test-specific options and remove them from argv before
+    // letting wxEntry() instantiate Skeleton application object that would
+    // give an error for these, unknown to it, options.
+    if (!application_test::instance().process_command_line(argc, argv))
+        {
+        return 0;
+        }
+
     return wxEntry(argc, argv);
 }
 
