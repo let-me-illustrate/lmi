@@ -26,6 +26,7 @@
 #   pragma hdrstop
 #endif
 
+#include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 #include "configurable_settings.hpp"
@@ -89,8 +90,23 @@ class application_test
     bool add_test(void (*test_func)(), char const* test_name);
 
   private:
+    application_test();
+
     // List all tests on standard output.
     void list_tests();
+
+    // Include of exclude the given test depending on the value given on the
+    // command line.
+    void process_test_name(const char* name);
+
+
+    // A test can be explicitly included, explicitly excluded or not
+    // mentioned, in which case it will run if all tests are ran by default.
+    enum test_run
+        {run_yes
+        ,run_no
+        ,run_default
+        };
 
     /// Contains everything we need to store for an individual test.
     struct test_descriptor
@@ -100,15 +116,24 @@ class application_test
         test_descriptor(void (*func)(), char const* name)
             :func(func)
             ,name(name)
+            ,run(run_default)
         {
         }
 
         void (*func)();
         char const* name;
+        test_run run;
     };
 
     std::vector<test_descriptor> tests_;
+
+    bool run_all_;
 };
+
+application_test::application_test()
+    :run_all_(true)
+{
+}
 
 application_test& application_test::instance()
 {
@@ -116,18 +141,100 @@ application_test& application_test::instance()
     return z;
 }
 
+void application_test::process_test_name(const char* name)
+{
+    // A test can be specified either as "test" to run it, or "-test" to avoid
+    // running it, check which one have we got.
+    test_run run;
+    if (name[0] == '-')
+        {
+        run = run_no;
+        name++; // Skip the leading minus sign.
+        }
+    else
+        {
+        // If some test is explicitly requested, all the other ones are
+        // implicitly disabled, otherwise it wouldn't make sense.
+        run_all_ = false;
+        run = run_yes;
+        }
+
+    typedef std::vector<test_descriptor>::iterator tdi;
+    for(tdi i = tests_.begin(); i != tests_.end(); ++i)
+        {
+        if (std::strcmp(i->name, name) == 0)
+            {
+            i->run = run;
+            return;
+            }
+        }
+
+    warning()
+        << "Unrecognized test name '"
+        << name
+        << "', use --list command line option to list all tests."
+        << std::flush
+        ;
+}
+
+// Remove the argument at the given (assumed valid) position from (argc, argv).
+void remove_arg(int n, int& argc, char* argv[])
+{
+    // We include argv[argc] in the elements being copied, this guarantees that
+    // the array remains 0-terminated.
+    std::memmove(argv + n, argv + n + 1, (argc - n)*sizeof(char*));
+
+    argc--;
+}
+
 bool application_test::process_command_line(int& argc, char* argv[])
 {
-    for(int arg = 1; arg < argc; ++arg)
+    // This variable is used both as a flag indicating that the last option was
+    // the one selecting the test to run and so must be followed by the test
+    // name, but also for the diagnostic message at the end of this function.
+    char const* last_test_option = 0;
+
+    for(int n = 1; n < argc; )
         {
-        if
-            (  0 == std::strcmp(argv[arg], "-l")
-            || 0 == std::strcmp(argv[arg], "--list")
+        char const* const arg = argv[n];
+
+        if (last_test_option)
+            {
+            last_test_option = 0;
+            process_test_name(arg);
+            remove_arg(n, argc, argv);
+            continue;
+            }
+        else if
+            (  0 == std::strcmp(arg, "-l")
+            || 0 == std::strcmp(arg, "--list")
             )
             {
             list_tests();
             return false;
             }
+        else if
+            (  0 == std::strcmp(arg, "-t")
+            || 0 == std::strcmp(arg, "--test")
+            )
+            {
+            last_test_option = arg;
+            remove_arg(n, argc, argv);
+            }
+        else
+            {
+            n++;
+            }
+        }
+
+    if (last_test_option)
+        {
+        warning()
+            << "Option '"
+            << last_test_option
+            << "' must be followed by the test name."
+            << std::flush
+            ;
         }
 
     return true;
@@ -138,7 +245,10 @@ void application_test::run()
     typedef std::vector<test_descriptor>::const_iterator ctdi;
     for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
         {
-        (*i->func)();
+        if ((run_all_ && i->run != run_no) || i->run == run_yes)
+            {
+            (*i->func)();
+            }
         }
 }
 
