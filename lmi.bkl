@@ -199,6 +199,12 @@
         <sys-lib>libexslt</sys-lib>
         <sys-lib>libxslt</sys-lib>
         <sys-lib>libxml2</sys-lib>
+
+        <precomp-headers>on</precomp-headers>
+        <set var="LMI_PCH_HEADER">pchfile_wx.hpp</set>
+        <precomp-headers-header>pchfile_wx.hpp</precomp-headers-header>
+        <!-- generate PCH through arbitrary file, for VC9+: -->
+        <precomp-headers-gen>skeleton.cpp</precomp-headers-gen>
     </exe>
 
     <exe id="product_files" template="wxconsole,lmiapp">
