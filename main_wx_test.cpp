@@ -35,8 +35,10 @@
 #include "input.hpp"
 #include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
+#include "obstruct_slicing.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
+#include "uncopyable_lmi.hpp"
 #include "version.hpp"
 
 #include <boost/filesystem/fstream.hpp>
@@ -56,10 +58,17 @@ LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
 
+/// Run the tests.
+///
+/// This is a simple Meyers singleton.
 class application_test
+    :        private lmi::uncopyable  <application_test>
+    ,virtual private obstruct_slicing <application_test>
 {
   public:
-    static void test()
+    static application_test& instance();
+
+    void test()
         {
         test_about_dialog_version();
         test_configurable_settings();
@@ -69,11 +78,11 @@ class application_test
         }
 
   private:
-    static void test_about_dialog_version();
-    static void test_configurable_settings();
-    static void test_default_input();
-    static void test_expiry_dates();
-    static void test_new_file_and_save();
+    void test_about_dialog_version();
+    void test_configurable_settings();
+    void test_default_input();
+    void test_expiry_dates();
+    void test_new_file_and_save();
 
     // Helper of test_new_file_and_save() which tests creating a new file of
     // the type corresponding to the key argument, used to select this type in
@@ -85,8 +94,14 @@ class application_test
     // ready for this dialog appearing and, second, "File|Save" menu command is
     // disabled for the files created in this way and "File|Save as" needs to
     // be used instead.
-    static void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog);
+    void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog);
 };
+
+application_test& application_test::instance()
+{
+    static application_test z;
+    return z;
+}
 
 void application_test::test_about_dialog_version()
 {
@@ -301,7 +316,7 @@ void SkeletonTest::RunTheTests()
 
     wxStopWatch sw;
     wxLogMessage("Starting automatic tests.");
-    application_test::test();
+    application_test::instance().test();
     wxLogMessage("Tests successfully completed in %ldms.", sw.Time());
 
     // We want to show log output after the tests finished running and hide the
