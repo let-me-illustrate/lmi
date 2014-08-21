@@ -47,7 +47,8 @@
 // be used instead.
 void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog)
 {
-    struct expect_config_dialog : public wxExpectModalBase<wxDialog>
+    struct expect_config_dialog
+        :public wxExpectModalBase<wxDialog>
     {
         virtual int OnInvoked(wxDialog* d) const
             {
