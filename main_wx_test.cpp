@@ -42,7 +42,10 @@
 
 #include <algorithm>                    // std::sort()
 #include <cstring>                      // std::strcmp()
+#include <exception>                    // uncaught_exception()
 #include <iostream>
+#include <sstream>
+#include <stdexcept>
 #include <utility>                      // std::pair
 #include <vector>
 
@@ -75,9 +78,12 @@ class application_test
 
     // Run all the tests that were configured to be executed (all by default).
     //
+    // This function consumes all the exceptions thrown during its execution
+    // and never throws itself.
+    //
     // Return the number of tests executed as the first pair component and the
     // number of failed tests as the second component.
-    std::pair<int, int> run();
+    std::pair<int, int> run() /* noexcept */;
 
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
     bool add_test(void (*test_func)(), char const* test_name);
@@ -339,14 +345,30 @@ bool add_wx_test_case(void (*test_func)(), char const* test_name)
 class SkeletonTest : public Skeleton
 {
   public:
-    SkeletonTest() {}
+    SkeletonTest()
+        :is_running_tests_(false)
+    {
+    }
 
   protected:
     // wxApp overrides.
-    virtual bool OnInit();
+    virtual bool OnInit                 ();
+    virtual bool OnExceptionInMainLoop  ();
+    virtual bool StoreCurrentException  ();
+    virtual void RethrowStoredException ();
+    virtual void OnAssertFailure
+        (const wxChar *file
+        ,int line
+        ,const wxChar *func
+        ,const wxChar *cond
+        ,const wxChar *msg
+        );
 
   private:
     void RunTheTests();
+
+    std::string runtime_error_;
+    bool is_running_tests_;
 };
 
 IMPLEMENT_APP_NO_MAIN(SkeletonTest)
@@ -364,6 +386,74 @@ bool SkeletonTest::OnInit()
     CallAfter(&SkeletonTest::RunTheTests);
 
     return true;
+}
+
+bool SkeletonTest::StoreCurrentException()
+{
+    try
+        {
+        throw;
+        }
+    catch (std::runtime_error const& e)
+        {
+        runtime_error_ = e.what();
+        return true;
+        }
+
+    return false;
+}
+
+void SkeletonTest::RethrowStoredException()
+{
+    if (!runtime_error_.empty())
+        {
+        std::runtime_error const e(runtime_error_);
+        runtime_error_.clear();
+        throw e;
+        }
+}
+
+bool SkeletonTest::OnExceptionInMainLoop()
+{
+    if (is_running_tests_)
+        {
+        // Don't let the base class catch, report and ignore the exceptions
+        // that happen while running the tests, we need to ensure that the test
+        // fails as the result of assert happening during its run.
+        throw;
+        }
+
+    return Skeleton::OnExceptionInMainLoop();
+}
+
+void SkeletonTest::OnAssertFailure
+    (const wxChar *file
+    ,int line
+    ,const wxChar *func
+    ,const wxChar *cond
+    ,const wxChar *msg
+    )
+{
+    // Assertion during a test run counts as test failure but avoid throwing if
+    // another exception is already in flight as this would just result in the
+    // program termination without any useful information about the reason of
+    // the failure whatsoever.
+    if (is_running_tests_ && !std::uncaught_exception())
+        {
+        wxString str;
+        str
+            << "Assertion '" << cond << "' failed. "
+            << "[file " << file
+            << ", line " << line
+            << " in " << func << "()]: "
+            << msg;
+
+        throw std::runtime_error(std::string(str.mb_str()));
+        }
+    else
+        {
+        Skeleton::OnAssertFailure(file, line, func, cond, msg);
+        }
 }
 
 void SkeletonTest::RunTheTests()
@@ -386,7 +476,14 @@ void SkeletonTest::RunTheTests()
 
     wxStopWatch sw;
     wxLogMessage("Starting automatic tests:");
+
+    // Notice that it is safe to use simple variable assignment here instead of
+    // some RAII-based pattern because of application_test::run() noexcept
+    // guarantee.
+    is_running_tests_ = true;
     std::pair<int, int> const results = application_test::instance().run();
+    is_running_tests_ = false;
+
     if (results.first == 0)
         {
         wxLogMessage("WARNING: no tests have been executed.");
