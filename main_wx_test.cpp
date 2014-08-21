@@ -169,22 +169,28 @@ void application_test::process_test_name(const char* name)
         run = run_yes;
         }
 
+    bool any_tests_matched = false;
+
     typedef std::vector<test_descriptor>::iterator tdi;
     for(tdi i = tests_.begin(); i != tests_.end(); ++i)
         {
-        if (std::strcmp(i->name, name) == 0)
+        if (wxString(i->name).Matches(name))
             {
             i->run = run;
-            return;
+            any_tests_matched = true;
             }
         }
 
-    warning()
-        << "Unrecognized test name '"
-        << name
-        << "', use --list command line option to list all tests."
-        << std::flush
-        ;
+    if (!any_tests_matched)
+        {
+        warning()
+            << "Test specification '"
+            << name
+            << "', didn't match any tests.\n"
+            << "Use --list command line option to list all tests."
+            << std::flush
+            ;
+        }
 }
 
 // Remove the argument at the given (assumed valid) position from (argc, argv).
