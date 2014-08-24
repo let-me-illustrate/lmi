@@ -31,6 +31,7 @@
 #include "version.hpp"
 
 #include <wx/dialog.h>
+#include <wx/scopeguard.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -78,7 +79,7 @@ void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog)
     wxYield();
 
     LMI_ASSERT(wxFileExists(file));
-    wxRemoveFile(file);
+    wxON_BLOCK_EXIT1(wxRemoveFile, file);
 
     z.Char('l', wxMOD_CONTROL); // close document
     wxYield();
