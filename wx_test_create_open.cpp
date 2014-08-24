@@ -85,15 +85,47 @@ void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog)
     wxYield();
 }
 
-LMI_WX_TEST_CASE(new_file_and_save)
+LMI_WX_TEST_CASE(create_open_census)
 {
-    do_test_new_file_and_save('c', "testfile.cns"     , false);
-    do_test_new_file_and_save('i', "testfile.ill"     , true);
+    do_test_new_file_and_save('c', "testfile.cns",  false);
+}
+
+LMI_WX_TEST_CASE(create_open_illustration)
+{
+    do_test_new_file_and_save('i', "testfile.ill",  true);
+}
+
+LMI_WX_TEST_CASE(create_open_database)
+{
     do_test_new_file_and_save('d', "testfile.database", false);
-    do_test_new_file_and_save('p', "testfile.policy"  , false);
+}
+
+LMI_WX_TEST_CASE(create_open_policy)
+{
+    do_test_new_file_and_save('p', "testfile.policy",  false);
+}
+
+LMI_WX_TEST_CASE(create_open_rounding)
+{
     do_test_new_file_and_save('r', "testfile.rounding", false);
-    do_test_new_file_and_save('s', "testfile.strata",   false);
-    do_test_new_file_and_save('m', "testfile.mec",      true);
-    do_test_new_file_and_save('g', "testfile.gpt",      true);
-    do_test_new_file_and_save('x', "testfile.txt",      false);
+}
+
+LMI_WX_TEST_CASE(create_open_strata)
+{
+    do_test_new_file_and_save('s', "testfile.strata", false);
+}
+
+LMI_WX_TEST_CASE(create_open_mec)
+{
+    do_test_new_file_and_save('m', "testfile.mec", true);
+}
+
+LMI_WX_TEST_CASE(create_open_gpt)
+{
+    do_test_new_file_and_save('g', "testfile.gpt", true);
+}
+
+LMI_WX_TEST_CASE(create_open_text)
+{
+    do_test_new_file_and_save('x', "testfile.txt", false);
 }
