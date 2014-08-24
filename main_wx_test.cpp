@@ -27,6 +27,7 @@
 #endif
 
 #include "alert.hpp"
+#include "handle_exceptions.hpp"        // undisplayable_exception
 #include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
 #include "obstruct_slicing.hpp"
@@ -58,6 +59,38 @@ DECLARE_APP(SkeletonTest)
 
 namespace
 {
+
+/// Exception thrown if a wxWidgets assertion fails during the test code
+/// execution. It must inherit from undisplayable_exception to avoid this
+/// exception being caught, reported and ignored by well-meaning but harmful in
+/// this case exception handling code elsewhere.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+class test_assertion_failure_exception
+    :public undisplayable_exception
+{
+  public:
+    test_assertion_failure_exception
+        (const wxChar* msg
+        ,const wxChar* file
+        ,int line
+        ,const wxChar* func
+        )
+        :undisplayable_exception
+            (wxString::Format
+                ("Assertion failure: %s [file %s, line %d, in %s()]."
+                ,msg
+                ,file
+                ,line
+                ,func
+                ).ToStdString()
+            )
+        {
+        }
+};
+
+
 /// Run the tests.
 ///
 /// This is a simple Meyers singleton.
@@ -446,15 +479,7 @@ void SkeletonTest::OnAssertFailure
     // the failure whatsoever.
     if (is_running_tests_ && !std::uncaught_exception())
         {
-        wxString str;
-        str
-            << "Assertion '" << cond << "' failed. "
-            << "[file " << file
-            << ", line " << line
-            << " in " << func << "()]: "
-            << msg;
-
-        throw std::runtime_error(std::string(str.mb_str()));
+        throw test_assertion_failure_exception(msg ? msg : cond, file, line, func);
         }
     else
         {
