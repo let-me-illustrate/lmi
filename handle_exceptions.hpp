@@ -30,6 +30,21 @@
 
 #include <cstdlib>   // std::exit()
 #include <exception>
+#include <stdexcept>
+
+/// Base class for the exceptions which should not be reported to the user.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+class undisplayable_exception
+    :public std::runtime_error
+{
+  public:
+    explicit undisplayable_exception(std::string const& what)
+        :std::runtime_error(what)
+        {
+        }
+};
 
 /// This function, of type std::terminate_handler, is intended to be
 /// used as the argument of std::set_terminate().
@@ -67,6 +82,11 @@ inline void lmi_terminate_handler()
 ///  - the safe default action (throwing this exception) was accepted,
 /// in which case it's pointless to repeat the same message.
 ///
+/// Don't handle undisplayable_exception which is the base class for the
+/// exceptions which are not supposed to be ever shown to the user during the
+/// normal program execution -- nor even to arise in this case -- but which may
+/// be generated in special circumstances, e.g. in the testing build.
+///
 /// See
 //   http://article.gmane.org/gmane.comp.gnu.mingw.user/18355
 //     [2005-12-16T09:20:33Z from Greg Chicares]
@@ -84,6 +104,10 @@ inline void report_exception()
         }
     catch(hobsons_choice_exception const&)
         {
+        }
+    catch(undisplayable_exception const&)
+        {
+        throw;
         }
     catch(std::exception const& e)
         {
