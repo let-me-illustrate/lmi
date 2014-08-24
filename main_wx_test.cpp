@@ -28,6 +28,7 @@
 
 #include "alert.hpp"
 #include "force_linking.hpp"
+#include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
 #include "obstruct_slicing.hpp"
@@ -56,8 +57,50 @@ LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
 
+/// Implement this normally unimplemented function.
+///
+/// The implementation of this constructor is not provided to prevent
+/// production code from creating objects of this type, but we do need to use
+/// this exception here, for the special testing purposes, so explicitly opt in
+/// into using it by provide this implementation.
+stealth_exception::stealth_exception(std::string const& what_arg)
+    :std::runtime_error(what_arg)
+{}
+
 namespace
 {
+
+/// Exception thrown if a wxWidgets assertion fails during the test code
+/// execution. It must inherit from stealth_exception to avoid this exception
+/// being caught, reported and ignored by well-meaning but harmful in this case
+/// exception handling code elsewhere.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+class test_assertion_failure_exception
+    :public stealth_exception
+{
+  public:
+    test_assertion_failure_exception
+        (const wxChar* msg
+        ,const wxChar* file
+        ,int line
+        ,const wxChar* func
+        )
+        :stealth_exception
+            (wxString::Format
+                ("Assertion failure: %s [file %s, line %d, in %s()]."
+                ,msg
+                ,file
+                ,line
+                ,func
+                ).ToStdString()
+            )
+        {
+        }
+};
+
+
 /// Run the tests.
 ///
 /// This is a simple Meyers singleton.
@@ -446,15 +489,7 @@ void SkeletonTest::OnAssertFailure
     // the failure whatsoever.
     if (is_running_tests_ && !std::uncaught_exception())
         {
-        wxString str;
-        str
-            << "Assertion '" << cond << "' failed. "
-            << "[file " << file
-            << ", line " << line
-            << " in " << func << "()]: "
-            << msg;
-
-        throw std::runtime_error(std::string(str.mb_str()));
+        throw test_assertion_failure_exception(msg ? msg : cond, file, line, func);
         }
     else
         {
