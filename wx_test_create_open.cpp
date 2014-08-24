@@ -46,7 +46,7 @@
 // ready for this dialog appearing and, second, "File|Save" menu command is
 // disabled for the files created in this way and "File|Save as" needs to
 // be used instead.
-void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog)
+void do_test_create_open(int key, wxString const& file, bool uses_dialog)
 {
     struct expect_config_dialog
         :public wxExpectModalBase<wxDialog>
@@ -83,49 +83,72 @@ void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog)
 
     z.Char('l', wxMOD_CONTROL); // close document
     wxYield();
+
+    z.Char('o', wxMOD_CONTROL); // and open it again
+
+    if (uses_dialog)
+        {
+        wxTEST_DIALOG
+            (wxYield()
+            ,wxExpectModal<wxFileDialog>(file)
+            ,expect_config_dialog()
+            );
+        }
+    else
+        {
+        wxTEST_DIALOG
+            (wxYield()
+            ,wxExpectModal<wxFileDialog>(file)
+            );
+        }
+    wxYield();
+
+    z.Char('l', wxMOD_CONTROL); // close it finally
+    wxYield();
 }
+
 
 LMI_WX_TEST_CASE(create_open_census)
 {
-    do_test_new_file_and_save('c', "testfile.cns",  false);
+    do_test_create_open('c', "testfile.cns",  false);
 }
 
 LMI_WX_TEST_CASE(create_open_illustration)
 {
-    do_test_new_file_and_save('i', "testfile.ill",  true);
+    do_test_create_open('i', "testfile.ill",  true);
 }
 
 LMI_WX_TEST_CASE(create_open_database)
 {
-    do_test_new_file_and_save('d', "testfile.database", false);
+    do_test_create_open('d', "testfile.database", false);
 }
 
 LMI_WX_TEST_CASE(create_open_policy)
 {
-    do_test_new_file_and_save('p', "testfile.policy",  false);
+    do_test_create_open('p', "testfile.policy",  false);
 }
 
 LMI_WX_TEST_CASE(create_open_rounding)
 {
-    do_test_new_file_and_save('r', "testfile.rounding", false);
+    do_test_create_open('r', "testfile.rounding", false);
 }
 
 LMI_WX_TEST_CASE(create_open_strata)
 {
-    do_test_new_file_and_save('s', "testfile.strata", false);
+    do_test_create_open('s', "testfile.strata", false);
 }
 
 LMI_WX_TEST_CASE(create_open_mec)
 {
-    do_test_new_file_and_save('m', "testfile.mec", true);
+    do_test_create_open('m', "testfile.mec", true);
 }
 
 LMI_WX_TEST_CASE(create_open_gpt)
 {
-    do_test_new_file_and_save('g', "testfile.gpt", true);
+    do_test_create_open('g', "testfile.gpt", true);
 }
 
 LMI_WX_TEST_CASE(create_open_text)
 {
-    do_test_new_file_and_save('x', "testfile.txt", false);
+    do_test_create_open('x', "testfile.txt", false);
 }
