@@ -119,7 +119,7 @@ class application_test
     std::pair<int, int> run() /* noexcept */;
 
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
-    bool add_test(void (*test_func)(), char const* test_name);
+    void add_test(wx_base_test_case* test);
 
   private:
     application_test();
@@ -146,25 +146,26 @@ class application_test
     /// Contains everything we need to store for an individual test.
     struct test_descriptor
     {
-        // Notice that the constructor doesn't copy the test name, it's a
-        // literal anyhow, so we just store the pointer.
-        test_descriptor(void (*func)(), char const* name)
-            :func(func)
-            ,name(name)
+        // The pointer must be non-NULL but we don't take ownership of it.
+        test_descriptor(wx_base_test_case* test)
+            :test(test)
             ,run(run_default)
         {
         }
+
+        char const* get_name() const { return test->get_name(); }
+
+        void run_test() const { test->run(); }
 
         // Comparator used for sorting the tests.
         static bool Compare
             (test_descriptor const& t1
             ,test_descriptor const& t2)
             {
-            return std::strcmp(t1.name, t2.name) < 0;
+            return std::strcmp(t1.get_name(), t2.get_name()) < 0;
             }
 
-        void (*func)();
-        char const* name;
+        wx_base_test_case* test;
         test_run run;
     };
 
@@ -207,7 +208,7 @@ void application_test::process_test_name(const char* name)
     typedef std::vector<test_descriptor>::iterator tdi;
     for(tdi i = tests_.begin(); i != tests_.end(); ++i)
         {
-        if (wxString(i->name).Matches(name))
+        if (wxString(i->get_name()).Matches(name))
             {
             i->run = run;
             any_tests_matched = true;
@@ -312,8 +313,8 @@ std::pair<int, int> application_test::run()
             try
                 {
                 wxStopWatch sw;
-                (*i->func)();
-                wxLogMessage("%s%s: ok (%ldms)", indent, i->name, sw.Time());
+                i->run_test();
+                wxLogMessage("%s%s: ok (%ldms)", indent, i->get_name(), sw.Time());
                 }
             catch(std::exception const& e)
                 {
@@ -336,7 +337,7 @@ std::pair<int, int> application_test::run()
                 wxLogMessage
                     ("%s%s: ERROR (%s)"
                     ,indent
-                    ,i->name
+                    ,i->get_name()
                     ,one_line_error
                     );
                 }
@@ -346,11 +347,9 @@ std::pair<int, int> application_test::run()
     return results;
 }
 
-bool application_test::add_test(void (*test_func)(), char const* test_name)
+void application_test::add_test(wx_base_test_case* test)
 {
-    tests_.push_back(test_descriptor(test_func, test_name));
-
-    return true;
+    tests_.push_back(test_descriptor(test));
 }
 
 void application_test::sort_tests()
@@ -367,7 +366,7 @@ void application_test::list_tests()
     typedef std::vector<test_descriptor>::const_iterator ctdi;
     for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
         {
-        std::cerr << '\t' << i->name << '\n';
+        std::cerr << '\t' << i->get_name() << '\n';
         }
 
     std::cerr << tests_.size() << " test cases.\n";
@@ -375,9 +374,10 @@ void application_test::list_tests()
 
 } // Unnamed namespace.
 
-bool add_wx_test_case(void (*test_func)(), char const* test_name)
+wx_base_test_case::wx_base_test_case(char const* name)
+    :m_name(name)
 {
-    return application_test::instance().add_test(test_func, test_name);
+    application_test::instance().add_test(this);
 }
 
 // Application to drive the tests
