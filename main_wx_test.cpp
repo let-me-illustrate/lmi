@@ -54,6 +54,10 @@
 #include <utility>                      // std::pair
 #include <vector>
 
+#if !wxCHECK_VERSION(3,1,0)
+#   error wxWidgets 3.1.0 or later is required for the test suite.
+#endif
+
 wxFORCE_LINK_MODULE(file_command_wx)
 wxFORCE_LINK_MODULE(progress_meter_wx)
 wxFORCE_LINK_MODULE(system_command_wx)
