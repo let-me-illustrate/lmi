@@ -37,9 +37,13 @@
 #include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
 
+#include <wx/fileconf.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
 #include <wx/stopwatch.h>
+#include <wx/wfstream.h>
+
+#include <boost/scoped_ptr.hpp>
 
 #include <algorithm>                    // std::sort()
 #include <cstring>                      // std::strcmp()
@@ -131,6 +135,9 @@ class application_test
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
     void add_test(wx_base_test_case* test);
 
+    // Used by tests to retrieve their configuration parameters.
+    const wxConfigBase& get_config_for(char const* name);
+
   private:
     application_test();
 
@@ -180,6 +187,8 @@ class application_test
     };
 
     std::vector<test_descriptor> tests_;
+
+    boost::scoped_ptr<wxFileConfig> config_;
 
     bool run_all_;
 };
@@ -382,6 +391,19 @@ void application_test::list_tests()
     std::cerr << tests_.size() << " test cases.\n";
 }
 
+wxConfigBase const& application_test::get_config_for(char const* name)
+{
+    if(!config_)
+        {
+        wxFFileInputStream is("wx_test.conf", "r");
+        config_.reset(new wxFileConfig(is));
+        }
+
+    config_->SetPath(wxString("/") + name);
+
+    return *config_;
+}
+
 } // Unnamed namespace.
 
 wx_base_test_case::wx_base_test_case(char const* name)
@@ -389,6 +411,12 @@ wx_base_test_case::wx_base_test_case(char const* name)
 {
     application_test::instance().add_test(this);
 }
+
+const wxConfigBase& wx_base_test_case::config() const
+{
+    return application_test::instance().get_config_for(get_name());
+}
+
 
 // Application to drive the tests
 class SkeletonTest : public Skeleton
