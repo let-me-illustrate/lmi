@@ -544,6 +544,7 @@ void SkeletonTest::RunTheTests()
     // This code (together with LogWindow::OnFrameClose above) does the right
     // thing: close the main window and keep running until the user closes the
     // log window.
+    log->GetFrame()->Maximize();
     log->GetFrame()->SetFocus();
     SetExitOnFrameDelete(false);
     mainWin->Close();
