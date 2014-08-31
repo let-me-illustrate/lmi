@@ -24,11 +24,33 @@
 #ifndef wx_test_case_hpp
 #define wx_test_case_hpp
 
-/// Function responsible for registering test cases with the main tester object.
+#include "uncopyable_lmi.hpp"
+
+/// Base class for the test case objects.
 ///
-/// The boolean return type is a convenience allowing this function to be used
-/// inside LMI_WX_TEST_CASE macro and is not otherwise used.
-bool add_wx_test_case(void (*test_func)(), char const* test_name);
+/// It is only supposed to be used by LMI_WX_TEST_CASE macro and not directly.
+class wx_base_test_case
+    :private lmi::uncopyable<wx_base_test_case>
+{
+  public:
+    /// The function actually executing the test code.
+    ///
+    /// This function should throw an exception to signal any failures.
+    virtual void run() = 0;
+
+    char const* get_name() const { return m_name; }
+
+    // Only required to fix g++ warning about a class having virtual functions
+    // but a non-virtual dtor, as this class is not used polymorphically the
+    // dtor doesn't really need to be virtual.
+    virtual ~wx_base_test_case() { }
+
+  protected:
+    /// The argument must be a literal, as we just store the pointer.
+    explicit wx_base_test_case(char const* name);
+
+    char const* const m_name;
+};
 
 /// Define a test function and register it with the application tester.
 ///
@@ -39,11 +61,18 @@ bool add_wx_test_case(void (*test_func)(), char const* test_name);
 ///         ... code of the test ...
 ///     }
 #define LMI_WX_TEST_CASE(name) \
-static void wx_test_case_##name(); \
-volatile bool register_wx_test_case_##name = add_wx_test_case \
-    (wx_test_case_##name \
-    ,#name \
-    ); \
-static void wx_test_case_##name()
+class wx_test_case_##name \
+    :public wx_base_test_case \
+{ \
+public: \
+    wx_test_case_##name() \
+        :wx_base_test_case(#name) \
+        { \
+        } \
+ \
+    virtual void run(); \
+}; \
+static wx_test_case_##name wx_test_case_##name##_instance; \
+void wx_test_case_##name::run()
 
 #endif // wx_test_case_hpp
