@@ -183,6 +183,7 @@
     wx_test_create_open.cpp
     wx_test_default_input.cpp
     wx_test_expiry_dates.cpp
+    wx_test_paste_census.cpp
     wx_test_pdf_create.cpp
 </set>
 
