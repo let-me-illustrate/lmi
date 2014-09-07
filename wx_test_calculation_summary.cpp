@@ -31,6 +31,8 @@
 #include "wx_test_case.hpp"
 #include "wx_test_mvc_dialog.hpp"
 
+#include <wx/html/htmlpars.h>
+#include <wx/html/htmlwin.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -39,24 +41,43 @@
 namespace
 {
 
-// Names of the columns used when not using the built-in calculation summary.
-char const* const custom_columns_names[] =
-    {"AttainedAge"
-    ,"PolicyYear"
-    ,"Outlay"
-    ,"CSVNet_Current"
-    ,"AcctVal_Current"
-    ,"CSVNet_Guaranteed"
-    ,"AcctVal_Guaranteed"
-    ,"EOYDeathBft_Current"
-    ,"EOYDeathBft_Guaranteed"
-    ,"NetWD"
-    ,"NewCashLoan"
-    ,"LoanIntAccrued_Current"
+struct name_and_title
+{
+    char const* name;
+    char const* title;
+};
+
+// Names and titles of the columns used by default.
+name_and_title const default_columns_info[] =
+    {{ "PolicyYear"             , "Policy Year"                 }
+    ,{ "Outlay"                 , "Net Outlay"                  }
+    ,{ "AcctVal_Current"        , "Curr Account Value"          }
+    ,{ "CSVNet_Current"         , "Curr Net Cash Surr Value"    }
+    ,{ "EOYDeathBft_Current"    , "Curr EOY Death Benefit"      }
+    };
+
+std::size_t const number_of_default_columns
+    = sizeof default_columns_info / sizeof(default_columns_info[0]);
+
+// Names and titles of the columns used when not using the built-in calculation
+// summary.
+name_and_title const custom_columns_info[] =
+    {{ "PolicyYear"             , "Policy Year"                 }
+    ,{ "AttainedAge"            , "Attained Age"                }
+    ,{ "Outlay"                 , "Net Outlay"                  }
+    ,{ "CSVNet_Current"         , "Curr Net Cash Surr Value"    }
+    ,{ "AcctVal_Current"        , "Curr Account Value"          }
+    ,{ "CSVNet_Guaranteed"      , "Guar Net Cash Surr Value"    }
+    ,{ "AcctVal_Guaranteed"     , "Guar Account Value"          }
+    ,{ "EOYDeathBft_Current"    , "Curr EOY Death Benefit"      }
+    ,{ "EOYDeathBft_Guaranteed" , "Guar EOY Death Benefit"      }
+    ,{ "NetWD"                  , "Withdrawal"                  }
+    ,{ "NewCashLoan"            , "Annual Loan"                 }
+    ,{ "LoanIntAccrued_Current" , "Curr Loan Int Accrued"       }
     };
 
 std::size_t const number_of_custom_columns
-    = sizeof custom_columns_names / sizeof(custom_columns_names[0]);
+    = sizeof custom_columns_info / sizeof(custom_columns_info[0]);
 
 // Special name used when the column is not used at all.
 char const* const magic_null_column_name = "[none]";
@@ -103,7 +124,7 @@ void use_builtin_calculation_summary(bool b)
                 wxString const column_name
                     (use_builtin_summary_
                     ? magic_null_column_name
-                    : custom_columns_names[n]
+                    : custom_columns_info[n].name
                     );
 
                 LMI_ASSERT(ui.Select(column_name));
@@ -134,6 +155,74 @@ void use_builtin_calculation_summary(bool b)
         );
 }
 
+void check_calculation_summary_columns
+    (std::size_t number_of_columns
+    ,name_and_title const columns_info[]
+    )
+{
+    // Create a new illustration.
+    wxUIActionSimulator ui;
+    ui.Char('n', wxMOD_CONTROL);    // "File|New"
+    ui.Char('i');                   // "Illustration"
+
+    wxTEST_DIALOG
+        (wxYield()
+        ,wxExpectAny(wxID_OK)
+        );
+
+    // Find the window displaying HTML contents of the illustration view.
+    wxWindow* const focus = wxWindow::FindFocus();
+    LMI_ASSERT(focus);
+
+    wxHtmlWindow* const htmlwin = dynamic_cast<wxHtmlWindow*>(focus);
+    LMI_ASSERT(htmlwin);
+
+    // And get the HTML from it.
+    wxHtmlParser* const parser = htmlwin->GetParser();
+    LMI_ASSERT(parser);
+    LMI_ASSERT(parser->GetSource());
+
+    wxString const html = *parser->GetSource();
+
+    // We don't need the window any more.
+    ui.Char('l', wxMOD_CONTROL);    // "File|Close"
+    wxYield();
+
+    // Find the start of the table after the separating line.
+    size_t pos = html.find("<hr>\n<table");
+    LMI_ASSERT(pos != wxString::npos);
+
+    pos = html.find("\n<td", pos);
+    LMI_ASSERT(pos != wxString::npos);
+
+    pos++;                                          // skip the new line
+
+    // We have found the place where the columns are described in the HTML,
+    // iterate over all of them.
+    for(std::size_t n = 0; n < number_of_columns; ++n)
+        {
+        LMI_ASSERT(wxString(html, pos, 3) == "<td");
+
+        pos = html.find(">", pos);                  // end of the <td> tag
+        LMI_ASSERT(pos != wxString::npos);
+
+        pos++;                                      // <td> tag contents
+
+        size_t const next = html.find("\n", pos);   // the next line start
+        LMI_ASSERT(next != wxString::npos);
+
+        // Extract the column title from the rest of the line.
+        wxString title;
+        LMI_ASSERT(wxString(html, pos, next - pos).EndsWith(" </td>", &title));
+
+        LMI_ASSERT(title == columns_info[n].title);
+
+        pos = next + 1;
+        }
+
+    LMI_ASSERT(wxString(html, pos, 5) == "</tr>");
+}
+
 } // Unnamed namespace.
 
 LMI_WX_TEST_CASE(calculation_summary)
@@ -146,6 +235,11 @@ LMI_WX_TEST_CASE(calculation_summary)
     LMI_ASSERT(settings.calculation_summary_columns().empty());
     LMI_ASSERT(settings.use_builtin_calculation_summary());
 
+    check_calculation_summary_columns
+        (number_of_default_columns
+        ,default_columns_info
+        );
+
 
     use_builtin_calculation_summary(false);
 
@@ -155,10 +249,15 @@ LMI_WX_TEST_CASE(calculation_summary)
     std::string all_custom_columns;
     for(std::size_t n = 0; n < number_of_custom_columns; ++n)
         {
-        all_custom_columns += custom_columns_names[n];
+        all_custom_columns += custom_columns_info[n].name;
         all_custom_columns += ' ';
         }
 
     LMI_ASSERT(settings.calculation_summary_columns() == all_custom_columns);
     LMI_ASSERT(!settings.use_builtin_calculation_summary());
+
+    check_calculation_summary_columns
+        (number_of_custom_columns
+        ,custom_columns_info
+        );
 }
