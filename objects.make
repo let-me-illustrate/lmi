@@ -363,6 +363,7 @@ wx_test_objects := \
   main_wx_test.o \
   wx_test_about_dialog_version.o \
   wx_test_benchmark_census.o \
+  wx_test_calculation_summary.o \
   wx_test_configurable_settings.o \
   wx_test_create_open.o \
   wx_test_default_input.o \

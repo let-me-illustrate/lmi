@@ -178,6 +178,7 @@
     main_wx_test.cpp
     wx_test_about_dialog_version.cpp
     wx_test_benchmark_census.cpp
+    wx_test_calculation_summary.cpp
     wx_test_case.hpp
     wx_test_configurable_settings.cpp
     wx_test_create_open.cpp
