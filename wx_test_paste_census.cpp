@@ -29,6 +29,7 @@
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_mvc_dialog.hpp"
 #include "wx_utility.hpp"
 
 #include <wx/app.h>
@@ -164,14 +165,10 @@ LMI_WX_TEST_CASE(paste_census)
     ui.Char('e', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Edit case defaults"
 
     struct change_class_in_case_defaults_dialog
-        :public wxExpectModalBase<wxDialog>
+        :public ExpectMvcDialog
     {
-        virtual int OnInvoked(wxDialog* d) const
+        virtual void DoRunDialog(MvcController* dialog) const
             {
-            // Bring the dialog up.
-            d->Show();
-            wxYield();
-
             wxUIActionSimulator ui;
 
             // Go to the third page: as the dialog remembers its last opened
@@ -184,8 +181,10 @@ LMI_WX_TEST_CASE(paste_census)
             // We can't find directly the radio button we're interested in,
             // because it's not a real wxWindow, so we need to find the radio
             // box containing it.
-            wxWindow* const
-                class_window = wxWindow::FindWindowByName("UnderwritingClass", d);
+            wxWindow* const class_window = wxWindow::FindWindowByName
+                ("UnderwritingClass"
+                ,dialog
+                );
             LMI_ASSERT(class_window);
 
             wxRadioBox* const
@@ -204,16 +203,6 @@ LMI_WX_TEST_CASE(paste_census)
             wxYield();
 
             LMI_ASSERT(class_radiobox->GetSelection() == 0);
-
-            // MvcController, used in this dialog, updates the associated data
-            // from its wxEVT_UPDATE_UI handler which is unfortunately not
-            // called during unattended testing, so we have to explicitly
-            // trigger it.
-            wxUpdateUIEvent event(d->GetId());
-            event.SetEventObject(d);
-            d->ProcessWindowEvent(event);
-
-            return wxID_OK;
             }
     };
 
