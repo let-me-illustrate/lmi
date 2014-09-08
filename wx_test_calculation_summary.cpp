@@ -30,6 +30,7 @@
 #include "configurable_settings.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_mvc_dialog.hpp"
+#include "wx_test_new.hpp"
 
 #include <wx/html/htmlpars.h>
 #include <wx/html/htmlwin.h>
@@ -161,14 +162,7 @@ void check_calculation_summary_columns
     )
 {
     // Create a new illustration.
-    wxUIActionSimulator ui;
-    ui.Char('n', wxMOD_CONTROL);    // "File|New"
-    ui.Char('i');                   // "Illustration"
-
-    wxTEST_DIALOG
-        (wxYield()
-        ,wxExpectAny(wxID_OK)
-        );
+    wx_test_new_illustration ill;
 
     // Find the window displaying HTML contents of the illustration view.
     wxWindow* const focus = wxWindow::FindFocus();
@@ -185,8 +179,7 @@ void check_calculation_summary_columns
     wxString const html = *parser->GetSource();
 
     // We don't need the window any more.
-    ui.Char('l', wxMOD_CONTROL);    // "File|Close"
-    wxYield();
+    ill.close();
 
     // Find the start of the table after the separating line.
     size_t pos = html.find("<hr>\n<table");
