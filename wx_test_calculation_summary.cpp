@@ -31,7 +31,9 @@
 #include "wx_test_case.hpp"
 #include "wx_test_mvc_dialog.hpp"
 #include "wx_test_new.hpp"
+#include "wx_utility.hpp"
 
+#include <wx/ffile.h>
 #include <wx/html/htmlpars.h>
 #include <wx/html/htmlwin.h>
 #include <wx/testing.h>
@@ -216,6 +218,30 @@ void check_calculation_summary_columns
     LMI_ASSERT(wxString(html, pos, 5) == "</tr>");
 }
 
+// Save the current clipboard contents to a file with the given name,
+// overwriting it if necessary.
+void save_clipboard(wxString const& filename)
+{
+    wxFFile f(filename, "w");
+    LMI_ASSERT(f.IsOpened());
+    LMI_ASSERT(f.Write(wxString(ClipboardEx::GetText())));
+    LMI_ASSERT(f.Close());
+}
+
+// Save the illustration calculation summary and full data to files with the
+// given prefix.
+void save_illustration_data(wxString const& prefix)
+{
+    wxUIActionSimulator ui;
+    ui.Char('c', wxMOD_CONTROL); // "Illustration|Copy calculation summary"
+    wxYield();
+    save_clipboard(prefix + "IllSummary.txt");
+
+    ui.Char('d', wxMOD_CONTROL); // "Illustration|Copy full illustration data"
+    wxYield();
+    save_clipboard(prefix + "IllFull.txt");
+}
+
 } // Unnamed namespace.
 
 LMI_WX_TEST_CASE(calculation_summary)
@@ -253,4 +279,24 @@ LMI_WX_TEST_CASE(calculation_summary)
         (number_of_custom_columns
         ,custom_columns_info
         );
+
+
+    wxUIActionSimulator ui;
+
+    wx_test_new_illustration ill;
+    save_illustration_data("New");
+    ill.close();
+
+
+    wx_test_new_census census;
+    ui.Char('r', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Run case"
+    wxYield();
+
+    save_illustration_data("Calc");
+
+    // Close the illustration opened by "Run case".
+    ui.Char('l', wxMOD_CONTROL);    // "File|Close"
+    wxYield();
+
+    census.close();
 }
