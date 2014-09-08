@@ -29,6 +29,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_new.hpp"
 
 #include <wx/docview.h>
 #include <wx/testing.h>
@@ -72,23 +73,19 @@ std::string fo_suffix(int n)
 LMI_WX_TEST_CASE(pdf_illustration)
 {
     // Create a new illustration.
-    wxUIActionSimulator ui;
-    ui.Char('n', wxMOD_CONTROL);    // "File|New"
-    ui.Char('i');                   // "Illustration"
-
-    wxTEST_DIALOG(wxYield(), wxExpectAny(wxID_OK));
+    wx_test_new_illustration ill;
 
     // Ensure that the output file doesn't exist in the first place.
     fs::path const pdf_path(make_pdf_path(get_current_document_name()));
     fs::remove(pdf_path);
 
     // Launch the PDF creation as side effect of previewing it.
+    wxUIActionSimulator ui;
     ui.Char('v', wxMOD_CONTROL);    // "File|Print preview"
     wxYield();
 
     // Close the illustration, we don't need it any more.
-    ui.Char('l', wxMOD_CONTROL);    // "File|Close"
-    wxYield();
+    ill.close();
 
     // Finally check for the expected output file existence.
     LMI_ASSERT(fs::exists(pdf_path));
@@ -100,12 +97,10 @@ LMI_WX_TEST_CASE(pdf_illustration)
 LMI_WX_TEST_CASE(pdf_census)
 {
     // Create a new census.
-    wxUIActionSimulator ui;
-    ui.Char('n', wxMOD_CONTROL);    // "File|New"
-    ui.Char('c');                   // "Census"
-    wxYield();
+    wx_test_new_census census;
 
     // Add some cells to the census (it starts with one already).
+    wxUIActionSimulator ui;
     static const int num_cells = 3;
     for(int n = 0; n < num_cells - 1; ++n)
         {
@@ -134,8 +129,7 @@ LMI_WX_TEST_CASE(pdf_census)
 
     // Close the census, we don't need it any more, and answer "No" to the
     // message box asking whether it should be saved.
-    ui.Char('l', wxMOD_CONTROL);    // "File|Close"
-    wxTEST_DIALOG(wxYield(), wxExpectModal<wxMessageDialog>(wxID_NO));
+    census.close_discard_changes();
 
     // Check the existence of the files and, unlike in the illustration case,
     // also delete them as they are not opened in any external viewer.

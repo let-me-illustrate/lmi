@@ -30,6 +30,7 @@
 #include "data_directory.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_mvc_dialog.hpp"
+#include "wx_test_new.hpp"
 #include "wx_utility.hpp"
 
 #include <wx/app.h>
@@ -141,12 +142,10 @@ LMI_WX_TEST_CASE(paste_census)
 
 
     // Create a new census.
-    wxUIActionSimulator ui;
-    ui.Char('n', wxMOD_CONTROL);    // "File|New"
-    ui.Char('c');                   // "Census"
-    wxYield();
+    wx_test_new_census census;
 
     // Paste data into it.
+    wxUIActionSimulator ui;
     ui.Char('s', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Paste census data"
     wxYield();
 
@@ -233,5 +232,5 @@ LMI_WX_TEST_CASE(paste_census)
 
     LMI_ASSERT(wxFileExists(census_file_name));
 
-    ui.Char('l', wxMOD_CONTROL);    // "File|Close"
+    census.close();
 }
