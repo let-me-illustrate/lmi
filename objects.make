@@ -363,6 +363,7 @@ wx_test_objects := \
   wx_test_create_open.o \
   wx_test_default_input.o \
   wx_test_expiry_dates.o \
+  wx_test_input_sequences.o \
   wx_test_paste_census.o \
   wx_test_pdf_create.o \
 
