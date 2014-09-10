@@ -28,14 +28,13 @@
 
 #include "assert_lmi.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_statusbar.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <wx/app.h>
 #include <wx/confbase.h>
 #include <wx/dialog.h>
 #include <wx/frame.h>
 #include <wx/log.h>
-#include <wx/statusbr.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -116,20 +115,6 @@ public:
         }
 
 private:
-    static wxStatusBar const& get_main_window_statusbar()
-        {
-            wxWindow* const mainWin = wxTheApp->GetTopWindow();
-            LMI_ASSERT(mainWin);
-
-            wxFrame* const frame = wxDynamicCast(mainWin, wxFrame);
-            LMI_ASSERT(frame);
-
-            wxStatusBar* const status = frame->GetStatusBar();
-            LMI_ASSERT(status);
-
-            return *status;
-        }
-
     wxStatusBar const& status_;
     wxString const name_;
 };
