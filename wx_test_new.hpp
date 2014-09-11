@@ -112,13 +112,28 @@ class wx_test_new_illustration
     :public wx_test_new_document_base
 {
   public:
+    // Default constructor creates an illustration with the default parameters.
     wx_test_new_illustration()
+    {
+        do_new_illustration(wxExpectAny(wxID_OK));
+    }
+
+    // This constructor takes a class responsible for handling the illustration
+    // parameters dialog and may modify it in any desired way before accepting.
+    wx_test_new_illustration(const wxModalExpectation& e)
+    {
+        do_new_illustration(e);
+    }
+
+  private:
+    // Common part of both constructors.
+    void do_new_illustration(const wxModalExpectation& e)
     {
         wxUIActionSimulator ui;
         ui.Char('n', wxMOD_CONTROL);    // "File|New"
         ui.Char('i');                   // "Illustration"
 
-        wxTEST_DIALOG(wxYield(), wxExpectAny(wxID_OK));
+        wxTEST_DIALOG(wxYield(), e);
 
         set_opened();
     }
