@@ -367,6 +367,7 @@ wx_test_objects := \
   wx_test_input_sequences.o \
   wx_test_paste_census.o \
   wx_test_pdf_create.o \
+  wx_test_validate_output.o \
 
 ifneq (,$(RC))
   lmi_wx_objects  += lmi_msw_res.o
