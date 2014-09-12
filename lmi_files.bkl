@@ -188,6 +188,7 @@
     wx_test_input_sequences.cpp
     wx_test_paste_census.cpp
     wx_test_pdf_create.cpp
+    wx_test_validate_output.cpp
 </set>
 
 <!-- product_files_SOURCES -->
