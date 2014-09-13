@@ -68,10 +68,10 @@ LMI_WX_TEST_CASE(input_validation)
         std::string::size_type loc_pos = error_message.find("\n[file");
         LMI_ASSERT(loc_pos != std::string::npos);
 
-        LMI_ASSERT
-            (error_message.substr(0, loc_pos) ==
-                "Input validation problems for '':\n"
-                "COI multiplier entered is '0', but it must contain at least one number other than zero.\n"
+        LMI_ASSERT_EQUAL
+            (error_message.substr(0, loc_pos),
+             "Input validation problems for '':\n"
+             "COI multiplier entered is '0', but it must contain at least one number other than zero.\n"
             );
         }
 

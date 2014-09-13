@@ -196,7 +196,7 @@ void check_calculation_summary_columns
     // iterate over all of them.
     for(std::size_t n = 0; n < number_of_columns; ++n)
         {
-        LMI_ASSERT(wxString(html, pos, 3) == "<td");
+        LMI_ASSERT_EQUAL(wxString(html, pos, 3), "<td");
 
         pos = html.find(">", pos);                  // end of the <td> tag
         LMI_ASSERT(pos != wxString::npos);
@@ -210,12 +210,12 @@ void check_calculation_summary_columns
         wxString title;
         LMI_ASSERT(wxString(html, pos, next - pos).EndsWith(" </td>", &title));
 
-        LMI_ASSERT(title == columns_info[n].title);
+        LMI_ASSERT_EQUAL(title, columns_info[n].title);
 
         pos = next + 1;
         }
 
-    LMI_ASSERT(wxString(html, pos, 5) == "</tr>");
+    LMI_ASSERT_EQUAL(wxString(html, pos, 5), "</tr>");
 }
 
 // Save the current clipboard contents to a file with the given name,
@@ -272,7 +272,7 @@ LMI_WX_TEST_CASE(calculation_summary)
         all_custom_columns += ' ';
         }
 
-    LMI_ASSERT(settings.calculation_summary_columns() == all_custom_columns);
+    LMI_ASSERT_EQUAL(settings.calculation_summary_columns(), all_custom_columns);
     LMI_ASSERT(!settings.use_builtin_calculation_summary());
 
     check_calculation_summary_columns
