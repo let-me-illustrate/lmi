@@ -56,5 +56,37 @@
         }                                                   \
     do {} while(0)
 
+
+/// A version of LMI_ASSERT() allowing to specify additional information to log
+/// in case of assertion failure.
+
+#define LMI_ASSERT_MESSAGE(condition, message)              \
+    if(!(condition))                                        \
+        {                                                   \
+        std::ostringstream oss;                             \
+        oss                                                 \
+            << "Assertion '" << (#condition) << "' failed"  \
+            << "\n(" << message << ")\n"                    \
+            << "\n[file " << __FILE__                       \
+            << ", line " << __LINE__ << "]\n"               \
+            ;                                               \
+        throw std::runtime_error(oss.str());                \
+        }                                                   \
+    do {} while(0)
+
+
+/// A specialized version of LMI_ASSERT() checking for equality of two
+/// expressions.
+///
+/// Passing "a" and "b" separately instead of just using LMI_ASSERT(a == b)
+/// allows to automatically construct an informative error message shown in
+/// case of the assert failure with the values of "a" and "b".
+
+#define LMI_ASSERT_EQUAL(actual, expected)                   \
+    LMI_ASSERT_MESSAGE                                       \
+        (actual == expected                                  \
+        ,"expected " << expected << " but actual " << actual \
+        )
+
 #endif // assert_lmi_hpp
 

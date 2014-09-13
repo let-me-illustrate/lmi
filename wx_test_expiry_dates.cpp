@@ -74,5 +74,5 @@ LMI_WX_TEST_CASE(expiry_dates)
         }
 
     calendar_date const end_of_month(year, month, days_in_month);
-    LMI_ASSERT(end == end_of_month);
+    LMI_ASSERT_EQUAL(end, end_of_month);
 }

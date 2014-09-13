@@ -154,7 +154,7 @@ LMI_WX_TEST_CASE(paste_census)
     // correctly.
     wxDataViewCtrl* const list_window = find_census_list_window();
     wxDataViewListModel* const list_model = get_census_list_model(list_window);
-    LMI_ASSERT(list_model->GetCount() == 7);
+    LMI_ASSERT_EQUAL(list_model->GetCount(), 7);
 
     static char const* column_title = "Underwriting Class";
     LMI_ASSERT(does_list_have_column(list_window, column_title));
@@ -201,7 +201,7 @@ LMI_WX_TEST_CASE(paste_census)
             ui.Char(WXK_UP); // Select the first, "Preferred", radio button.
             wxYield();
 
-            LMI_ASSERT(class_radiobox->GetSelection() == 0);
+            LMI_ASSERT_EQUAL(class_radiobox->GetSelection(), 0);
             }
     };
 
@@ -217,7 +217,7 @@ LMI_WX_TEST_CASE(paste_census)
 
     // Check that we still have the same cells but that now the underwriting
     // class column has disappeared as its value has been fixed.
-    LMI_ASSERT(list_model->GetCount() == 7);
+    LMI_ASSERT_EQUAL(list_model->GetCount(), 7);
     LMI_ASSERT(!does_list_have_column(list_window, column_title));
 
 

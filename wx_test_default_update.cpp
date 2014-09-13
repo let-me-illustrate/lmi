@@ -84,8 +84,10 @@ LMI_WX_TEST_CASE(default_update)
     std::string const
         filename = configurable_settings::instance().default_input_filename();
 
-    wxString const status_text = get_main_window_statusbar_text();
-    LMI_ASSERT(status_text == wxString::Format("Saved '%s'.", filename));
+    LMI_ASSERT_EQUAL
+        (get_main_window_statusbar_text()
+        ,wxString::Format("Saved '%s'.", filename)
+        );
 
     // Close the document now that it's not needed any more.
     ui.Char('l', wxMOD_CONTROL); // "File|Close"

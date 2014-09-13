@@ -37,29 +37,32 @@ LMI_WX_TEST_CASE(configurable_settings)
     LMI_ASSERT(fs::exists("/etc/opt/lmi/configurable_settings.xml"));
 
     configurable_settings const& settings = configurable_settings::instance();
-    LMI_ASSERT("" == settings.libraries_to_preload());
-    LMI_ASSERT("CMD /c c:/fop-0.20.5/fop" == settings.xsl_fo_command());
+    LMI_ASSERT_EQUAL(settings.libraries_to_preload(), "");
+    LMI_ASSERT_EQUAL(settings.xsl_fo_command(), "CMD /c c:/fop-0.20.5/fop");
 
     std::string skin = settings.skin_filename();
     std::string default_input = settings.default_input_filename();
-    LMI_ASSERT(   "skin_coli_boli.xrc" == skin
-               || "skin_group_carveout.xrc" == skin
-               || "skin_group_carveout2.xrc" == skin
-               || "reg_d.xrc" == skin);
+    LMI_ASSERT_MESSAGE
+        (  "skin_coli_boli.xrc" == skin
+        || "skin_group_carveout.xrc" == skin
+        || "skin_group_carveout2.xrc" == skin
+        || "reg_d.xrc" == skin
+        ,"unknown skin " << skin
+        );
     if ("skin_coli_boli.xrc" == skin)
         {
-        LMI_ASSERT("c:/fop-0.20.5/coli_boli_default.ill" == default_input);
+        LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/coli_boli_default.ill");
         }
     if ("skin_group_carveout.xrc" == skin)
         {
-        LMI_ASSERT("c:/fop-0.20.5/group_carveout_default.ill" == default_input);
+        LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/group_carveout_default.ill");
         }
     if ("skin_group_carveout2.xrc" == skin)
         {
-        LMI_ASSERT("c:/fop-0.20.5/group_carveout_default.ill" == default_input);
+        LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/group_carveout_default.ill");
         }
     if ("reg_d.xrc" == skin)
         {
-        LMI_ASSERT("c:/fop-0.20.5/private_placement_default.ill" == default_input);
+        LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/private_placement_default.ill");
         }
 }

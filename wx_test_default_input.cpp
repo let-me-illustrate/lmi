@@ -41,7 +41,7 @@ LMI_WX_TEST_CASE(default_input)
 
     Input const& cell = default_cell();
     calendar_date const effective_date = exact_cast<tnr_date>(cell["EffectiveDate"])->value();
-    LMI_ASSERT(first_of_month == effective_date);
+    LMI_ASSERT_EQUAL(effective_date, first_of_month);
 
     std::string const general_account_date = exact_cast<numeric_sequence>(cell["GeneralAccountRate"])->value();
     LMI_ASSERT(!general_account_date.empty());
