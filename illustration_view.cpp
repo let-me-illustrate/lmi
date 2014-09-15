@@ -360,7 +360,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
             {
             configurable_settings const& c = configurable_settings::instance();
             illustrator z(mce_emit_custom_0);
-            bool close_when_done = z(c.custom_input_filename());
+            bool close_when_done = z(c.custom_input_0_filename());
             if(close_when_done)
                 {
                 return true;
@@ -370,7 +370,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
                 LMI_ASSERT(0 != dm);
                 IllustrationView& illview = MakeNewIllustrationDocAndView
                     (dm
-                    ,(c.custom_output_filename() + ".ill").c_str()
+                    ,(c.custom_output_0_filename() + ".ill").c_str()
                     );
                 illview.SetLedger(z.principal_ledger());
                 illview.DisplaySelectedValuesAsHtml();

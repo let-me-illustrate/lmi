@@ -34083,3 +34083,13 @@ Refactor, favoring expression templates.
 Note a couple of apparent defects. They aren't marked as defects, only
 because this code is no longer used in production.
 
+20140915T1943Z <gchicares@sbcglobal.net> [533]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  configurable_settings_test.cpp
+  custom_io_0.cpp
+  illustration_view.cpp
+  illustrator.cpp
+Add some configurable settings, and rename others.
+

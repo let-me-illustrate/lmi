@@ -52,7 +52,7 @@
 bool custom_io_0_file_exists()
 {
     return 0 == access
-        (configurable_settings::instance().custom_input_filename().c_str()
+        (configurable_settings::instance().custom_input_0_filename().c_str()
         ,F_OK
         );
 }
@@ -204,7 +204,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     std::string actual_filename =
         !filename.empty()
         ? filename
-        : configurable_settings::instance().custom_input_filename()
+        : configurable_settings::instance().custom_input_0_filename()
         ;
     if(0 != access(actual_filename.c_str(), F_OK))
         {
@@ -484,7 +484,7 @@ void custom_io_0_write(Ledger const& ledger_values, std::string const& filename)
     std::string actual_filename =
         !filename.empty()
         ? filename
-        : configurable_settings::instance().custom_output_filename()
+        : configurable_settings::instance().custom_output_0_filename()
         ;
     // Don't specify 'binary' here: the file is to be read by another
     // program that probably expects platform-specific behavior.

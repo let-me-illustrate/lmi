@@ -92,8 +92,8 @@ bool illustrator::operator()(fs::path const& file_path)
         principal_ledger_ = z.ledger();
         seconds_for_calculations_ = timer.stop().elapsed_seconds();
         fs::path out_file =
-            file_path.string() == c.custom_input_filename()
-            ? c.custom_output_filename()
+            file_path.string() == c.custom_input_0_filename()
+            ? c.custom_output_0_filename()
             : fs::change_extension(file_path, ".test0")
             ;
         seconds_for_output_ = emit_ledger

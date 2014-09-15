@@ -61,8 +61,10 @@ class LMI_SO configurable_settings
 
     std::string const& calculation_summary_columns        () const;
     std::string const& cgi_bin_log_filename               () const;
-    std::string const& custom_input_filename              () const;
-    std::string const& custom_output_filename             () const;
+    std::string const& custom_input_0_filename            () const;
+    std::string const& custom_input_1_filename            () const;
+    std::string const& custom_output_0_filename           () const;
+    std::string const& custom_output_1_filename           () const;
     std::string const& default_input_filename             () const;
     std::string const& libraries_to_preload               () const;
     bool               offer_hobsons_choice               () const;
@@ -99,8 +101,10 @@ class LMI_SO configurable_settings
 
     std::string calculation_summary_columns_;
     std::string cgi_bin_log_filename_;
-    std::string custom_input_filename_;
-    std::string custom_output_filename_;
+    std::string custom_input_0_filename_;
+    std::string custom_input_1_filename_;
+    std::string custom_output_0_filename_;
+    std::string custom_output_1_filename_;
     std::string default_input_filename_;
     std::string libraries_to_preload_;
     bool        offer_hobsons_choice_;
