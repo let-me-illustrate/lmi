@@ -34066,3 +34066,9 @@ Correct a misnomer.
   ihs_mortal.cpp
 Refactor, favoring expression templates, resolving a marked defect.
 
+20140915T1725Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_0.cpp
+  skin_single_premium.xrc
+Move a defect marker.
+
