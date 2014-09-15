@@ -362,7 +362,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     // Assume single premium. Although the corporation pays it,
     // treat it, contrary to fact, as paid by the insured; reason:
     // consistency with GUI--see ChangeLog for 20050825T0122Z .
-    // TODO ?? Revisit this later.
+    // SOMEDAY !! Revisit this later.
     z["Payment"]                   = n_v_pairs.string_value("PremiumAmt") + ";0";
 
 // Not yet used, but might be wanted someday:
