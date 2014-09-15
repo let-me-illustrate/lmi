@@ -33,21 +33,20 @@
 #include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "et_vector.hpp"
 #include "global_settings.hpp"
 #include "input.hpp"
 #include "input_sequence.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "miscellany.hpp"
+#include "miscellany.hpp"               // each_equal()
 #include "name_value_pairs.hpp"
-#include "platform_dependent.hpp" // access()
+#include "platform_dependent.hpp"       // access()
 #include "value_cast.hpp"
 #include "yare_input.hpp"
 
-#include <map>
 #include <fstream>
-#include <stdexcept>
 #include <vector>
 
 bool custom_io_0_file_exists()
@@ -511,45 +510,29 @@ void custom_io_0_write(Ledger const& ledger_values, std::string const& filename)
         << "MortCost,Load,MinPrem,SurrCost,PremAmt,IntRate\n"
         ;
 
-    // ET !! std::vector<double> surr_chg = Curr_.AcctVal - Curr_.CSVNet;
-    std::vector<double> surr_chg(Curr_.AcctVal);
-    std::transform
-        (surr_chg.begin()
-        ,surr_chg.end()
-        ,Curr_.CSVNet.begin()
-        ,surr_chg.begin()
-        ,std::minus<double>()
-        );
+    std::vector<double> surr_chg(Invar.GetLength());
+    assign(surr_chg, Curr_.AcctVal - Curr_.CSVNet);
 
-    // ET !! std::vector<double> prem_load = Invar.GrossPmt - Curr_.NetPmt;
-    std::vector<double> prem_load(Invar.GrossPmt);
-    std::transform
-        (prem_load.begin()
-        ,prem_load.end()
-        ,Curr_.NetPmt.begin()
-        ,prem_load.begin()
-        ,std::minus<double>()
-        );
+    std::vector<double> prem_load(Invar.GetLength());
+    assign(prem_load, Invar.GrossPmt - Curr_.NetPmt);
 
     os.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
     int max_duration = static_cast<int>(Invar.EndtAge - Invar.Age);
     for(int j = 0; j < max_duration; j++)
         {
-        // Customer requirement: show interest rate in bp.
-        double gen_acct_int_rate_bp = 10000.0 * Curr_.AnnGAIntRate[j];
         os
             << std::setprecision(0)
-            << Curr_.AcctVal        [j] << ','
-            << Curr_.CSVNet         [j] << ','
-            << Curr_.EOYDeathBft    [j] << ','
-            << Curr_.NetIntCredited [j] << ','
-            << Curr_.COICharge      [j] << ','
-            << 0 << ',' // 'MinPrem' always zero.
-            << prem_load            [j] << ','
-            << surr_chg             [j] << ','
-            << Invar.GrossPmt       [j] << ','
-            << gen_acct_int_rate_bp
+            <<        Curr_.AcctVal        [j]
+            << ',' << Curr_.CSVNet         [j]
+            << ',' << Curr_.EOYDeathBft    [j]
+            << ',' << Curr_.NetIntCredited [j]
+            << ',' << Curr_.COICharge      [j]
+            << ',' << 0                                  // 'MinPrem' always zero.
+            << ',' << prem_load            [j]
+            << ',' << surr_chg             [j]
+            << ',' << Invar.GrossPmt       [j]
+            << ',' << Curr_.AnnGAIntRate   [j] * 10000.0 // 'IntRate' in bp.
             << '\n'
             ;
         }

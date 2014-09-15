@@ -34072,3 +34072,8 @@ Refactor, favoring expression templates, resolving a marked defect.
   skin_single_premium.xrc
 Move a defect marker.
 
+20140915T1737Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_0.cpp
+Refactor, favoring expression templates.
+
