@@ -34077,3 +34077,9 @@ Move a defect marker.
   custom_io_0.cpp
 Refactor, favoring expression templates.
 
+20140915T1744Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_0.cpp
+Note a couple of apparent defects. They aren't marked as defects, only
+because this code is no longer used in production.
+

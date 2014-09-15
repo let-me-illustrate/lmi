@@ -384,7 +384,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
               value_cast<std::string>(permanent_flat + temporary_flat)
             + "[0, @"
             + value_cast<std::string>(temporary_flat_max_age)
-            + "); "
+            + "); " // Apparently this ')' should be ']' for "ThruAge".
             + value_cast<std::string>(permanent_flat)
             ;
         }
@@ -528,6 +528,9 @@ void custom_io_0_write(Ledger const& ledger_values, std::string const& filename)
             << ',' << Curr_.EOYDeathBft    [j]
             << ',' << Curr_.NetIntCredited [j]
             << ',' << Curr_.COICharge      [j]
+// Column headers suggest that 'Load' should precede 'MinPrem',
+// but this order was accepted; perhaps both were always zero
+// in actual practice.
             << ',' << 0                                  // 'MinPrem' always zero.
             << ',' << prem_load            [j]
             << ',' << surr_chg             [j]
