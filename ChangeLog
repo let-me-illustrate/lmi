@@ -34093,3 +34093,11 @@ because this code is no longer used in production.
   illustrator.cpp
 Add some configurable settings, and rename others.
 
+20140916T1418Z <gchicares@sbcglobal.net> [533]
+
+  Makefile.am
+  custom_io_1.cpp [new file]
+  custom_io_1.hpp [new file]
+  objects.make
+Clone 'custom_io_0.?pp' (for further customization soon).
+
