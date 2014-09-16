@@ -42,6 +42,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
+#include "custom_io_1.hpp"
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
 #include "emit_ledger.hpp"
@@ -338,7 +339,7 @@ IllustrationView& MakeNewIllustrationDocAndView
     return illdoc.PredominantView();
 }
 
-/// Run an illustration from "custom" input.
+/// Run an illustration from custom "0" input.
 ///
 /// The return value indicates whether to prevent displaying the GUI.
 ///
@@ -385,5 +386,35 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
         }
 
     return false;
+}
+
+/// Run an illustration from custom "1" input.
+///
+/// The return value indicates whether to prevent displaying the GUI,
+/// for parallelism with custom_io_0_run_if_file_exists(); but this
+/// function always returns 'true'.
+///
+/// Because this function prevents the GUI from being displayed, it
+/// must trap and handle its own exceptions rather than letting them
+/// escape to wx.
+
+bool custom_io_1_run_if_file_exists()
+{
+    try
+        {
+        if(custom_io_1_file_exists())
+            {
+            configurable_settings const& c = configurable_settings::instance();
+            illustrator z(mce_emit_custom_1);
+            z(c.custom_input_1_filename());
+            return true;
+            }
+        }
+    catch(...)
+        {
+        report_exception();
+        }
+
+    return true;
 }
 

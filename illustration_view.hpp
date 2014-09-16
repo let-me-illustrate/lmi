@@ -110,6 +110,7 @@ IllustrationView& MakeNewIllustrationDocAndView
     );
 
 bool custom_io_0_run_if_file_exists(wxDocManager*);
+bool custom_io_1_run_if_file_exists();
 
 #endif // illustration_view_hpp
 
