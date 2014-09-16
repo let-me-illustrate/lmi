@@ -83,11 +83,22 @@ public:
         wxString delta;
         if (time_expected)
             {
-            double const diff =
-                (time_real - time_expected) / static_cast<double>(time_expected);
-            LMI_ASSERT(std::fabs(diff) < 0.1);
+            double const diff_in_percents =
+                100*(time_real - time_expected)
+                    / static_cast<double>(time_expected);
 
-            delta.Printf("%+.2f%%", diff*100);
+            delta.Printf("%+.2f%%", diff_in_percents);
+
+            LMI_ASSERT_WITH_MSG
+                (std::fabs(diff_in_percents) < 10
+                ,wxString::Format
+                    (
+                    "expected %ldms, but actually took %ldms, i.e. %s"
+                    ,time_expected
+                    ,time_real
+                    ,delta
+                    )
+                );
             }
         else
             {
