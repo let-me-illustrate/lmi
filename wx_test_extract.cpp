@@ -28,6 +28,7 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
+#include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
 
 #include <wx/filename.h>
@@ -48,7 +49,7 @@ LMI_WX_TEST_CASE(extract)
          ,wxExpectModal<wxFileDialog>(fn.GetFullPath())
          ,wxExpectModal<wxMessageDialog>(wxOK)  // Dismiss first warning.
          ,wxExpectModal<wxMessageDialog>(wxOK)  // And the second one.
-         ,wxExpectAny(wxOK)                     // Accept default parameters.
+         ,wxExpectDismissableModal<MvcController>(wxID_OK)  // Accept defaults.
         );
 
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"

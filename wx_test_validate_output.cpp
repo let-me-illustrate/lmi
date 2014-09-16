@@ -28,6 +28,7 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
+#include "mvc_controller.hpp"
 #include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_mvc_dialog.hpp"
@@ -142,8 +143,8 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     wxTEST_DIALOG
         (wxYield()
         ,wxExpectModal<wxFileDialog>(fn.GetFullPath())
-        ,wxExpectAny(wxID_OK)       // Warning dialog given for this file.
-        ,wxExpectAny(wxID_OK)       // Accept default illustration parameters.
+        ,wxExpectModal<wxMessageDialog>(wxID_OK)          // Ignore warning.
+        ,wxExpectDismissableModal<MvcController>(wxID_OK) // Accept defaults.
         );
 
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
@@ -164,7 +165,10 @@ LMI_WX_TEST_CASE(validate_output_mec)
     ui.Char('n', wxMOD_CONTROL);    // "File|New"
     ui.Char('m');                   // "MEC testing"
 
-    wxTEST_DIALOG(wxYield(), wxExpectAny(wxID_OK));
+    wxTEST_DIALOG
+        (wxYield()
+        ,wxExpectDismissableModal<MvcController>(wxID_OK)
+        );
 
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
     wxYield();
@@ -182,7 +186,7 @@ LMI_WX_TEST_CASE(validate_output_mec)
     wxTEST_DIALOG
         (wxYield()
          ,wxExpectModal<wxFileDialog>(fn.GetFullPath())
-         ,wxExpectAny(wxID_OK)       // Accept default MEC parameters.
+         ,wxExpectDismissableModal<MvcController>(wxID_OK) // Accept defaults.
         );
 
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"

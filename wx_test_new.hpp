@@ -24,6 +24,7 @@
 #ifndef wx_test_new_hpp
 #define wx_test_new_hpp
 
+#include "mvc_controller.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <wx/log.h>
@@ -115,7 +116,7 @@ class wx_test_new_illustration
     // Default constructor creates an illustration with the default parameters.
     wx_test_new_illustration()
     {
-        do_new_illustration(wxExpectAny(wxID_OK));
+        do_new_illustration(wxExpectDismissableModal<MvcController>(wxID_OK));
     }
 
     // This constructor takes a class responsible for handling the illustration

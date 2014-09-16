@@ -27,6 +27,7 @@
 #endif
 
 #include "assert_lmi.hpp"
+#include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
 #include "version.hpp"
 
@@ -48,15 +49,6 @@
 // be used instead.
 void do_test_create_open(int key, wxString const& file, bool uses_dialog)
 {
-    struct expect_config_dialog
-        :public wxExpectAny
-    {
-        expect_config_dialog()
-            :wxExpectAny(wxID_OK)
-            {
-            }
-    };
-
     LMI_ASSERT(!wxFileExists(file));
 
     wxUIActionSimulator z;
@@ -66,7 +58,7 @@ void do_test_create_open(int key, wxString const& file, bool uses_dialog)
         {
         wxTEST_DIALOG
             (wxYield()
-            ,expect_config_dialog()
+            ,wxExpectDismissableModal<MvcController>(wxID_OK)
             );
         }
     wxYield();
@@ -91,7 +83,7 @@ void do_test_create_open(int key, wxString const& file, bool uses_dialog)
         wxTEST_DIALOG
             (wxYield()
             ,wxExpectModal<wxFileDialog>(file)
-            ,expect_config_dialog()
+            ,wxExpectDismissableModal<MvcController>(wxID_OK)
             );
         }
     else
