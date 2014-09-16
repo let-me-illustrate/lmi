@@ -34101,3 +34101,14 @@ Add some configurable settings, and rename others.
   objects.make
 Clone 'custom_io_0.?pp' (for further customization soon).
 
+20140916T1707Z <gchicares@sbcglobal.net> [533]
+
+  emit_ledger.cpp
+  illustration_view.cpp
+  illustration_view.hpp
+  illustrator.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  skeleton.cpp
+Use both custom IO facilities in parallel.
+
