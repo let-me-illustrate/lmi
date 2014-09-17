@@ -34112,3 +34112,8 @@ Clone 'custom_io_0.?pp' (for further customization soon).
   skeleton.cpp
 Use both custom IO facilities in parallel.
 
+20140917T1455Z <wboutin@massmutual.com> [533]
+
+  illustration_reg.xsl
+Add selected face amount support.
+
