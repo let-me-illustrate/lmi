@@ -49,11 +49,11 @@
 void do_test_create_open(int key, wxString const& file, bool uses_dialog)
 {
     struct expect_config_dialog
-        :public wxExpectModalBase<wxDialog>
+        :public wxExpectAny
     {
-        virtual int OnInvoked(wxDialog* d) const
+        expect_config_dialog()
+            :wxExpectAny(wxID_OK)
             {
-            return wxID_OK;
             }
     };
 

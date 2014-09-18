@@ -58,6 +58,10 @@ LMI_FORCE_LINKING_EX_SITU(file_command_wx)
 LMI_FORCE_LINKING_EX_SITU(progress_meter_wx)
 LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 
+#if !wxCHECK_VERSION(3,1,0)
+#   error wxWidgets 3.1.0 or later is required for the test suite.
+#endif
+
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
 
