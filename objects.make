@@ -193,6 +193,7 @@ common_common_objects := \
   configurable_settings.o \
   crc32.o \
   custom_io_0.o \
+  custom_io_1.o \
   data_directory.o \
   database.o \
   datum_base.o \

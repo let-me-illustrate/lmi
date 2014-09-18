@@ -42,6 +42,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
+#include "custom_io_1.hpp"
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
 #include "emit_ledger.hpp"
@@ -338,7 +339,7 @@ IllustrationView& MakeNewIllustrationDocAndView
     return illdoc.PredominantView();
 }
 
-/// Run an illustration from "custom" input.
+/// Run an illustration from custom "0" input.
 ///
 /// The return value indicates whether to prevent displaying the GUI.
 ///
@@ -360,7 +361,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
             {
             configurable_settings const& c = configurable_settings::instance();
             illustrator z(mce_emit_custom_0);
-            bool close_when_done = z(c.custom_input_filename());
+            bool close_when_done = z(c.custom_input_0_filename());
             if(close_when_done)
                 {
                 return true;
@@ -370,7 +371,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
                 LMI_ASSERT(0 != dm);
                 IllustrationView& illview = MakeNewIllustrationDocAndView
                     (dm
-                    ,(c.custom_output_filename() + ".ill").c_str()
+                    ,(c.custom_output_0_filename() + ".ill").c_str()
                     );
                 illview.SetLedger(z.principal_ledger());
                 illview.DisplaySelectedValuesAsHtml();
@@ -382,6 +383,34 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
         {
         report_exception();
         return true;
+        }
+
+    return false;
+}
+
+/// Run an illustration from custom "1" input.
+///
+/// The return value indicates whether to prevent displaying the GUI.
+///
+/// Because this function prevents the GUI from being displayed, it
+/// must trap and handle its own exceptions rather than letting them
+/// escape to wx.
+
+bool custom_io_1_run_if_file_exists()
+{
+    try
+        {
+        if(custom_io_1_file_exists())
+            {
+            configurable_settings const& c = configurable_settings::instance();
+            illustrator z(mce_emit_custom_1);
+            z(c.custom_input_1_filename());
+            return true;
+            }
+        }
+    catch(...)
+        {
+        report_exception();
         }
 
     return false;

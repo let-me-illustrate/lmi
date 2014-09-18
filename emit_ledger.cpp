@@ -30,6 +30,7 @@
 
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
+#include "custom_io_1.hpp"
 #include "file_command.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
@@ -160,6 +161,10 @@ double emit_ledger
     if(emission & mce_emit_custom_0)
         {
         custom_io_0_write(ledger, filepath.string());
+        }
+    if(emission & mce_emit_custom_1)
+        {
+        custom_io_1_write(ledger, filepath.string());
         }
 
   done:

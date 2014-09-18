@@ -987,6 +987,12 @@ appropriate input.
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
                 <growablecols>1</growablecols>
+<!-- This skin is intended to provide a minimal GUI for BOLI brokers.
+In that sole use case, the bank always pays the premium. However, here
+it's treated, contrary to fact, as paid by the insured. Reason:
+consistency with GUI (see ChangeLog for 20050825T0122Z).
+TODO ?? Revisit this later.
+-->
                 <object class="sizeritem">
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>

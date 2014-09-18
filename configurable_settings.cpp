@@ -33,6 +33,7 @@
 #include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
 #include "handle_exceptions.hpp"
+#include "map_lookup.hpp"
 #include "mc_enum.hpp"                  // all_strings<>()
 #include "mc_enum_type_enums.hpp"       // mcenum_report_column
 #include "miscellany.hpp"               // lmi_array_size()
@@ -146,8 +147,10 @@ std::string const& default_calculation_summary_columns()
 configurable_settings::configurable_settings()
     :calculation_summary_columns_        (default_calculation_summary_columns())
     ,cgi_bin_log_filename_               ("cgi_bin.log"                        )
-    ,custom_input_filename_              ("custom.ini"                         )
-    ,custom_output_filename_             ("custom.out"                         )
+    ,custom_input_0_filename_            ("custom.ini"                         )
+    ,custom_input_1_filename_            ("custom.inix"                        )
+    ,custom_output_0_filename_           ("custom.out0"                        )
+    ,custom_output_1_filename_           ("custom.out1"                        )
     ,default_input_filename_             ("/etc/opt/lmi/default.ill"           )
     ,libraries_to_preload_               (""                                   )
     ,offer_hobsons_choice_               (false                                )
@@ -204,8 +207,10 @@ void configurable_settings::ascribe_members()
 {
     ascribe("calculation_summary_columns"        ,&configurable_settings::calculation_summary_columns_        );
     ascribe("cgi_bin_log_filename"               ,&configurable_settings::cgi_bin_log_filename_               );
-    ascribe("custom_input_filename"              ,&configurable_settings::custom_input_filename_              );
-    ascribe("custom_output_filename"             ,&configurable_settings::custom_output_filename_             );
+    ascribe("custom_input_0_filename"            ,&configurable_settings::custom_input_0_filename_            );
+    ascribe("custom_input_1_filename"            ,&configurable_settings::custom_input_1_filename_            );
+    ascribe("custom_output_0_filename"           ,&configurable_settings::custom_output_0_filename_           );
+    ascribe("custom_output_1_filename"           ,&configurable_settings::custom_output_1_filename_           );
     ascribe("default_input_filename"             ,&configurable_settings::default_input_filename_             );
     ascribe("libraries_to_preload"               ,&configurable_settings::libraries_to_preload_               );
     ascribe("offer_hobsons_choice"               ,&configurable_settings::offer_hobsons_choice_               );
@@ -231,10 +236,11 @@ void configurable_settings::save() const
 ///
 /// version 0: [prior to the lmi epoch]
 /// version 1: 20100612T0139Z
+/// version 2: 20140915T1943Z
 
 int configurable_settings::class_version() const
 {
-    return 1;
+    return 2;
 }
 
 std::string const& configurable_settings::xml_root_name() const
@@ -254,7 +260,9 @@ void configurable_settings::handle_missing_version_attribute() const
 bool configurable_settings::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
-        {"xml_schema_filename"               // Withdrawn.
+        {"custom_input_filename"             // Renamed to 'custom_input_0_filename'.
+        ,"custom_output_filename"            // Renamed to 'custom_output_0_filename'.
+        ,"xml_schema_filename"               // Withdrawn.
         ,"xsl_directory"                     // Withdrawn.
         ,"xslt_format_xml_filename"          // Withdrawn.
         ,"xslt_html_filename"                // Withdrawn.
@@ -298,8 +306,8 @@ void configurable_settings::redintegrate_ex_ante
 
 void configurable_settings::redintegrate_ex_post
     (int                                       file_version
-    ,std::map<std::string, std::string> const& // detritus_map
-    ,std::list<std::string>             const& // residuary_names
+    ,std::map<std::string, std::string> const& detritus_map
+    ,std::list<std::string>             const& residuary_names
     )
 {
     if(class_version() == file_version)
@@ -307,7 +315,14 @@ void configurable_settings::redintegrate_ex_post
         return;
         }
 
-    // Nothing to do for now.
+    if(file_version < 2)
+        {
+        // Version 2 renamed these elements.
+        LMI_ASSERT(contains(residuary_names, "custom_input_0_filename"));
+        LMI_ASSERT(contains(residuary_names, "custom_output_0_filename"));
+        custom_input_0_filename_  = map_lookup(detritus_map, "custom_input_filename");
+        custom_output_0_filename_ = map_lookup(detritus_map, "custom_output_filename");
+        }
 }
 
 // TODO ?? CALCULATION_SUMMARY Address the validation issue:
@@ -348,18 +363,32 @@ std::string const& configurable_settings::cgi_bin_log_filename() const
     return cgi_bin_log_filename_;
 }
 
-/// Static name of custom input file.
+/// Static name of custom "0" input file.
 
-std::string const& configurable_settings::custom_input_filename() const
+std::string const& configurable_settings::custom_input_0_filename() const
 {
-    return custom_input_filename_;
+    return custom_input_0_filename_;
 }
 
-/// Static name of custom output file.
+/// Static name of custom "1" input file.
 
-std::string const& configurable_settings::custom_output_filename() const
+std::string const& configurable_settings::custom_input_1_filename() const
 {
-    return custom_output_filename_;
+    return custom_input_1_filename_;
+}
+
+/// Static name of custom "0" output file.
+
+std::string const& configurable_settings::custom_output_0_filename() const
+{
+    return custom_output_0_filename_;
+}
+
+/// Static name of custom "1" output file.
+
+std::string const& configurable_settings::custom_output_1_filename() const
+{
+    return custom_output_1_filename_;
 }
 
 /// Name of '.ill' file containing default input values for new '.ill'

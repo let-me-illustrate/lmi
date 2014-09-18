@@ -1,4 +1,4 @@
-// Custom interface number zero.
+// Custom interface number one.
 //
 // Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
 //
@@ -21,12 +21,12 @@
 
 // $Id$
 
-#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
+#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "custom_io_0.hpp"
+#include "custom_io_1.hpp"
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
@@ -34,13 +34,10 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "et_vector.hpp"
-#include "global_settings.hpp"
 #include "input.hpp"
-#include "input_sequence.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "miscellany.hpp"               // each_equal()
 #include "name_value_pairs.hpp"
 #include "platform_dependent.hpp"       // access()
 #include "value_cast.hpp"
@@ -49,162 +46,27 @@
 #include <fstream>
 #include <vector>
 
-bool custom_io_0_file_exists()
+bool custom_io_1_file_exists()
 {
     return 0 == access
-        (configurable_settings::instance().custom_input_0_filename().c_str()
+        (configurable_settings::instance().custom_input_1_filename().c_str()
         ,F_OK
         );
 }
 
 namespace
 {
-/// Set interest rates from "special" input.
-
-std::string adjust_interest_rates
-    (double                     first_year_general_account_rate
-    ,double                     renewal_year_general_account_rate
-    ,std::vector<double> const& declared_rate
-    )
-{
-    // The customer's front end provides two interest rates: one for
-    // the first year only, and another for all renewal years. It's
-    // our understanding that the "InterestRateOngoing" is enabled iff
-    // the wire date precedes the rate effective date.
-    //
-    // Some general-account products have a non-level declared-rate
-    // structure that doesn't fit that paradigm.
-
-    bool credited_rates_fit_customer_paradigm = each_equal
-        (1 + declared_rate.begin()
-        ,    declared_rate.end()
-        ,    declared_rate[1]
-        );
-
-    // For products that fit the customer paradigm, respect the
-    // 'ongoing' interest field if anything is entered there;
-    // otherwise, treat it as though
-    //   first-year field + delta
-    // had been entered, where
-    //   delta = (renewal credited rate - initial credited rate).
-    // Thus, entering the declared rate as "InterestRateFirstYr" while
-    // leaving "InterestRateOngoing" empty suffices for illustrating
-    // the declared scale; and entering a lower "InterestRateFirstYr"
-    // preserves the shape of the declared scale, offsetting it by a
-    // constant difference.
-    //
-    // This is always correct for products with a level declared rate.
-    // For products that follow the first-and-renewal paradigm, it's
-    // correct as long as delta doesn't change, and conservative if
-    // delta is understated, which it is if a current release of the
-    // product files (which embody the declared rate) is used to
-    // illustrate a contract issued before the current release's
-    // effective date--as long as delta has not become more positive.
-    // For example:
-    //
-    //   0.07 0.09 0.09 prior   declared rate: delta = 0.02
-    //   0.06 0.07 0.07 current declared rate: delta = 0.01
-    //   0.07 specified, leaving renewal field empty
-    //   0.07 0.08 0.08 illustrated: 0.09, (0.07 + 0.01)...
-    //
-    // This is not conservative, OTOH, if delta has "become more
-    // positive". That expression is used here instead of "increased"
-    // because delta may be either positive or negative, and some may
-    // say that a delta that changed from -0.04 to -0.03 has in their
-    // opinion "decreased" (it became closer to zero, hence smaller in
-    // absolute magnitude), while all should agree that it has become
-    // more positive (closer to +infinity).
-
-    // For products that don't fit the customer pardigm, input in
-    // "InterestRateFirstYr" or "InterestRateOngoing" is ignored,
-    // and the current declared rate is used. It is expected that
-    // this will not be acceptable for long.
-
-    LMI_ASSERT(!declared_rate.empty());
-    std::vector<double> general_account_rate(declared_rate);
-
-    if(credited_rates_fit_customer_paradigm)
-        {
-        if(0.0 == renewal_year_general_account_rate)
-            {
-            renewal_year_general_account_rate =
-                    first_year_general_account_rate
-                +   declared_rate.back()
-                -   declared_rate.front()
-                ;
-            }
-        general_account_rate.resize(2);
-        general_account_rate[0] = first_year_general_account_rate;
-        general_account_rate[1] = renewal_year_general_account_rate;
-        }
-    else
-        {
-        ; // Do nothing.
-        }
-    return InputSequence(general_account_rate).mathematical_representation();
-}
-
-void test_adjust_interest_rates()
-{
-    std::vector<double> declared_rate;
-    declared_rate.push_back(0.06);
-    warning()
-        << "  Expect level 0.06: "
-        << adjust_interest_rates(0.06, 0.00, declared_rate) << '\n'
-        ;
-    warning()
-        << "  Expect 0.06, 0.07...: "
-        << adjust_interest_rates(0.06, 0.07, declared_rate) << '\n'
-        ;
-    declared_rate.push_back(0.07);
-    warning()
-        << "  Expect 0.06, 0.07...: "
-        << adjust_interest_rates(0.06, 0.00, declared_rate) << '\n'
-        ;
-    warning()
-        << "  Expect 0.07, 0.08...: "
-        << adjust_interest_rates(0.07, 0.00, declared_rate) << '\n'
-        ;
-    warning()
-        << "  Expect 0.06, 0.07...: "
-        << adjust_interest_rates(0.06, 0.07, declared_rate) << '\n'
-        ;
-    warning()
-        << "  Expect 0.05, 0.08...: "
-        << adjust_interest_rates(0.05, 0.08, declared_rate) << '\n'
-        ;
-    declared_rate.push_back(0.08);
-    warning()
-        << "  Expect 0.06, 0.07, 0.08...: "
-        << adjust_interest_rates(0.00, 0.00, declared_rate) << '\n'
-        ;
-    warning()
-        << "  Expect 0.06, 0.07, 0.08...: "
-        << adjust_interest_rates(0.00, 0.09, declared_rate) << '\n'
-        ;
-    warning()
-        << "  Expect 0.06, 0.07, 0.08...: "
-        << adjust_interest_rates(0.05, 0.00, declared_rate) << '\n'
-        ;
-    warning()
-        << "  Expect 0.06, 0.07, 0.08...: "
-        << adjust_interest_rates(0.05, 0.09, declared_rate) << '\n'
-        ;
-    warning() << std::flush;
-}
-
+// Empty for the moment.
 } // Unnamed namespace.
 
 /// Read custom input for a particular customer.
 
-bool custom_io_0_read(Input& z, std::string const& filename)
+bool custom_io_1_read(Input& z, std::string const& filename)
 {
-    // Set global flag to liberalize input restrictions slightly.
-    global_settings::instance().set_custom_io_0(true);
     std::string actual_filename =
         !filename.empty()
         ? filename
-        : configurable_settings::instance().custom_input_0_filename()
+        : configurable_settings::instance().custom_input_1_filename()
         ;
     if(0 != access(actual_filename.c_str(), F_OK))
         {
@@ -216,6 +78,13 @@ bool custom_io_0_read(Input& z, std::string const& filename)
             ;
         }
 
+    // Always use the current declared rate.
+    z["UseCurrentDeclaredRate"] = "Yes";
+
+    warning() << "Testing: simulation of reading custom input." << LMI_FLUSH;
+
+    return true;
+#if 0
     name_value_pairs n_v_pairs(actual_filename);
 
     // The list is not complete; other items may be required eventually.
@@ -463,6 +332,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     //   else, leave the GUI active.
     // Ignored for command-line regression testing.
     return "Y" == n_v_pairs.string_value("AutoClose");
+#endif // 0
 }
 
 /// Write custom output for a particular customer.
@@ -479,12 +349,12 @@ bool custom_io_0_read(Input& z, std::string const& filename)
 ///   "surrender cost" is account value minus cash surrender value; if
 ///      there is any refund in the early years, this value can be negative
 
-void custom_io_0_write(Ledger const& ledger_values, std::string const& filename)
+void custom_io_1_write(Ledger const& ledger_values, std::string const& filename)
 {
     std::string actual_filename =
         !filename.empty()
         ? filename
-        : configurable_settings::instance().custom_output_0_filename()
+        : configurable_settings::instance().custom_output_1_filename()
         ;
     // Don't specify 'binary' here: the file is to be read by another
     // program that probably expects platform-specific behavior.

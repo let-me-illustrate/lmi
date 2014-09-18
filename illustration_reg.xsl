@@ -464,6 +464,12 @@ to the xsl files first.
               The state of issue
               is <xsl:value-of select="$scalars/StatePostalAbbrev"/>.
             </fo:block>
+            <fo:block padding-top="1em">
+              This illustration assumes an initial Selected Face Amount of
+              $<xsl:value-of select="$scalars/InitBaseSpecAmt"/>. Selected Face
+              Amount reductions assumed in this illustration (if any) are shown
+              in the Tabular Detail.
+            </fo:block>
             <xsl:if test="$scalars/IsInforce='1'">
               <fo:block padding-top="1em">
                 This illustration assumes a beginning account value of
@@ -557,7 +563,7 @@ to the xsl files first.
                       will be the Percentage of Premium Charge only.
                       The Exchange Charge will potentially reduce
                       the surrender proceeds, but will never increase
-                      the surrender proceeds. Please refer to your contract
+                      the surrender proceeds. Please refer to your policy
                       for details.
                     </fo:block>
                   </xsl:if>
@@ -572,7 +578,7 @@ to the xsl files first.
                     Exchange), we may assess an Exchange Charge. The Exchange
                     Charge will potentially reduce the surrender proceeds,
                     but will never increase the surrender proceeds.
-                    Please refer to your contract for details.
+                    Please refer to your policy for details.
                   </fo:block>
                 </xsl:otherwise>
               </xsl:choose>
@@ -847,6 +853,16 @@ to the xsl files first.
               The amount of premium assumed to be paid by the contract owner
               or other premium payor.
             </fo:block>
+            <fo:block padding-top="1em">
+              <fo:inline font-weight="bold">
+                Selected Face Amount:
+              </fo:inline>
+              The Selected Face Amount may be decreased upon written application
+              satisfactory to <xsl:value-of select="$scalars/InsCoName"/>. A
+              requested decrease is allowed only once per Policy Year, and the
+              resulting Selected Face Amount after decrease must meet the
+              minimum defined in your policy.
+            </fo:block>
             <!-- Single Premium Logic -->
             <xsl:if test="$SinglePremium='1' and $ModifiedSinglePremium0='0' and $ModifiedSinglePremium='0'">
               <fo:block padding-top="1em">
@@ -1016,6 +1032,7 @@ to the xsl files first.
             <column name="PolicyYear">Policy _Year</column>
             <column composite="0" name="AttainedAge">End of _Year Age</column>
             <column name="AnnGAIntRate_Current">Illustrated _Crediting Rate</column>
+            <column name="SpecAmt">Selected_Face Amount</column>
           </xsl:variable>
           <xsl:variable name="tabular-detail-report2-columns-raw" select="document('')//xsl:variable[@name='tabular-detail-report2-columns']/column"/>
           <xsl:variable name="columns" select="$tabular-detail-report2-columns-raw[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
@@ -1230,7 +1247,7 @@ to the xsl files first.
             <fo:table-cell text-align="left">
               <fo:block>
                 Initial <xsl:if test="$scalars/HasTerm!='0'">Total</xsl:if>
-                Face Amount: $<xsl:value-of select="$scalars/InitTotalSA"/>
+                Selected Face Amount: $<xsl:value-of select="$scalars/InitTotalSA"/>
               </fo:block>
               <!-- Remove date prepared....now exists in footer
               <fo:block>

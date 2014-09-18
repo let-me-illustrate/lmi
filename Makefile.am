@@ -300,6 +300,7 @@ liblmi_common_sources = \
     configurable_settings.cpp \
     crc32.cpp \
     custom_io_0.cpp \
+    custom_io_1.cpp \
     data_directory.cpp \
     database.cpp \
     datum_base.cpp \
@@ -1071,6 +1072,7 @@ noinst_HEADERS = \
     contains.hpp \
     crc32.hpp \
     custom_io_0.hpp \
+    custom_io_1.hpp \
     data_directory.hpp \
     database.hpp \
     database_document.hpp \
