@@ -278,7 +278,7 @@ void Ledger::write(xml::element& x) const
     title_map["MlySAIntRate_Current"            ] = "Curr Monthly Sep Acct Int Rate";
     title_map["MlySAIntRate_Guaranteed"         ] = "Guar Monthly Sep Acct Int Rate";
     title_map["ModalMinimumPremium"             ] = "Modal Minimum Premium";
-    title_map["MonthlyFlatExtra"                ] = " _____________ Monthly Flat Extra";
+    title_map["AnnualFlatExtra"                 ] = " _____________ Annual Flat Extra";
 //    title_map["NaarForceout"                    ] = "Forced Withdrawal due to NAAR Limit";
     title_map["NetCOICharge_Current"            ] = "Experience _______Rating _______Net COI Charge";
     title_map["NetClaims_Current"               ] = " _____________ _____________ Curr Net Claims";
@@ -512,7 +512,7 @@ void Ledger::write(xml::element& x) const
 // Is every other format OK?
     format_map["InforceLives"                      ] = f2;
     format_map["KFactor"                           ] = f2;
-    format_map["MonthlyFlatExtra"                  ] = f2;
+    format_map["AnnualFlatExtra"                   ] = f2;
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)

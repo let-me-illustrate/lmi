@@ -718,7 +718,10 @@ bool Skeleton::OnInit()
         frame_->Centre(wxBOTH);
         frame_->Maximize(true);
 
-        if(custom_io_0_run_if_file_exists(doc_manager_))
+        if
+            (  custom_io_0_run_if_file_exists(doc_manager_)
+            || custom_io_1_run_if_file_exists()
+            )
             {
             return false;
             }

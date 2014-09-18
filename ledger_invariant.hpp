@@ -103,7 +103,7 @@ class LMI_SO LedgerInvariant
     std::vector<double> IndvTaxBracket;
     std::vector<double> CorpTaxBracket;
     std::vector<double> Salary;
-    std::vector<double> MonthlyFlatExtra;
+    std::vector<double> AnnualFlatExtra;
     std::vector<double> HoneymoonValueSpread;
     std::vector<double> PartMortTableMult;
     std::vector<double> AddonMonthlyFee;

@@ -76,7 +76,7 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     SubstandardTable_     = basic_values.yare_input_.SubstandardTable;
 
     CurrentCoiMultiplier_ = basic_values.yare_input_.CurrentCoiMultiplier;
-    MonthlyFlatExtra_     = basic_values.yare_input_.FlatExtra;
+    AnnualFlatExtra_      = basic_values.yare_input_.FlatExtra;
 
     // TODO ?? Defectively, this data member is not yet used.
     PartialMortalityMultiplier_ = basic_values.yare_input_.PartialMortalityMultiplier;

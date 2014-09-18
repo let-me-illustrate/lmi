@@ -32,6 +32,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
+#include "custom_io_1.hpp"
 #include "emit_ledger.hpp"
 #include "group_values.hpp"
 #include "handle_exceptions.hpp"
@@ -92,8 +93,8 @@ bool illustrator::operator()(fs::path const& file_path)
         principal_ledger_ = z.ledger();
         seconds_for_calculations_ = timer.stop().elapsed_seconds();
         fs::path out_file =
-            file_path.string() == c.custom_input_filename()
-            ? c.custom_output_filename()
+            file_path.string() == c.custom_input_0_filename()
+            ? c.custom_output_0_filename()
             : fs::change_extension(file_path, ".test0")
             ;
         seconds_for_output_ = emit_ledger
@@ -104,6 +105,33 @@ bool illustrator::operator()(fs::path const& file_path)
             );
         conditionally_show_timings_on_stdout();
         return close_when_done;
+        }
+    else if(".inix" == extension)
+        {
+        configurable_settings const& c = configurable_settings::instance();
+        Timer timer;
+        Input input;
+        bool emit_pdf_too = custom_io_1_read(input, file_path.string());
+        seconds_for_input_ = timer.stop().elapsed_seconds();
+        timer.restart();
+        IllusVal z(file_path.string());
+        z.run(input);
+        principal_ledger_ = z.ledger();
+        seconds_for_calculations_ = timer.stop().elapsed_seconds();
+        fs::path out_file =
+            file_path.string() == c.custom_input_1_filename()
+            ? c.custom_output_1_filename()
+            : fs::change_extension(file_path, ".test1")
+            ;
+        mcenum_emission x = emit_pdf_too ? mce_emit_pdf_file : mce_emit_nothing;
+        seconds_for_output_ = emit_ledger
+            (out_file
+            ,out_file
+            ,*z.ledger()
+            ,static_cast<mcenum_emission>(x | emission_)
+            );
+        conditionally_show_timings_on_stdout();
+        return true;
         }
     else
         {

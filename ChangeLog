@@ -34047,3 +34047,78 @@ Improve documentation.
   ihs_basicval.cpp
 Refactor, favoring expression templates.
 
+20140814T1358Z <gchicares@sbcglobal.net> [534]
+
+  ihs_mortal.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  mortality_rates.hpp
+  mortality_rates_fetch.cpp
+  reg_d_group.xsl
+  reg_d_individual.xsl
+  reg_d_offshore.xsl
+Correct a misnomer.
+
+20140814T1857Z <gchicares@sbcglobal.net> [533]
+
+  ihs_mortal.cpp
+Refactor, favoring expression templates, resolving a marked defect.
+
+20140915T1725Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_0.cpp
+  skin_single_premium.xrc
+Move a defect marker.
+
+20140915T1737Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_0.cpp
+Refactor, favoring expression templates.
+
+20140915T1744Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_0.cpp
+Note a couple of apparent defects. They aren't marked as defects, only
+because this code is no longer used in production.
+
+20140915T1943Z <gchicares@sbcglobal.net> [533]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  configurable_settings_test.cpp
+  custom_io_0.cpp
+  illustration_view.cpp
+  illustrator.cpp
+Add some configurable settings, and rename others.
+
+20140916T1418Z <gchicares@sbcglobal.net> [533]
+
+  Makefile.am
+  custom_io_1.cpp [new file]
+  custom_io_1.hpp [new file]
+  objects.make
+Clone 'custom_io_0.?pp' (for further customization soon).
+
+20140916T1707Z <gchicares@sbcglobal.net> [533]
+
+  emit_ledger.cpp
+  illustration_view.cpp
+  illustration_view.hpp
+  illustrator.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  skeleton.cpp
+Use both custom IO facilities in parallel.
+
+20140917T1543Z <wboutin@massmutual.com> [533]
+
+  illustration_reg.xsl
+Add selected face amount support.
+
+20140918T1518Z <gchicares@sbcglobal.net> [533]
+
+  illustration_view.cpp
+Fix defect introduced 20140916T1707Z: if no custom input, show GUI.
+

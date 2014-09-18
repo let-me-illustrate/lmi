@@ -70,6 +70,7 @@ extern mcenum_emission const emission_enums[] =
     ,mce_emit_group_roster
     ,mce_emit_text_stream
     ,mce_emit_custom_0
+    ,mce_emit_custom_1
     };
 extern char const*const emission_strings[] =
     {"emit_nothing"
@@ -84,9 +85,10 @@ extern char const*const emission_strings[] =
     ,"emit_group_roster"
     ,"emit_text_stream"
     ,"emit_custom_0"
+    ,"emit_custom_1"
     };
 template<> struct mc_enum_key<mcenum_emission>
-  :public mc_enum_data<mcenum_emission, 12, emission_enums, emission_strings> {};
+  :public mc_enum_data<mcenum_emission, 13, emission_enums, emission_strings> {};
 template class mc_enum<mcenum_emission>;
 
 extern rounding_style const rounding_style_enums[] =

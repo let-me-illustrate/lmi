@@ -31,10 +31,10 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
+#include "et_vector.hpp"
 #include "math_functors.hpp"            // assign_midpoint()
 
 #include <algorithm>                    // std::min()
-#include <functional>
 
 //============================================================================
 MortalityRates::MortalityRates(BasicValues const& basic_values)
@@ -91,7 +91,7 @@ void MortalityRates::initialize()
         unisex male proportion curr
         ANB/ALB
         bool use NY COI limits
-        TODO ?? TAXATION !! bool ignore ratings for 7702
+        TODO ?? TAXATION !! DATABASE !! bool ignore ratings for 7702 (tables, flats separately)
         flat extras
         substd table
         uninsurable
@@ -145,42 +145,12 @@ void MortalityRates::SetGuaranteedRates()
 //============================================================================
 void MortalityRates::SetNonguaranteedRates()
 {
-    // ET !! Easier to write as
-    //   std::vector<double> curr_coi_multiplier =
-    //     CCoiMultiplier_ * CountryCoiMultiplier_ * CurrentCoiMultiplier_;
-    std::vector<double> curr_coi_multiplier(CCoiMultiplier_);
-
-    // Multiplier for country affects only nonguaranteed COI rates.
-    std::transform
-        (curr_coi_multiplier.begin()
-        ,curr_coi_multiplier.end()
-        ,curr_coi_multiplier.begin()
-        ,std::bind1st
-            (std::multiplies<double>()
-            ,CountryCoiMultiplier_
-            )
-        );
-    // Input vector current-COI multiplier affects only nonguaranteed COI rates.
-    std::transform
-        (curr_coi_multiplier.begin()
-        ,curr_coi_multiplier.end()
-        ,CurrentCoiMultiplier_.begin()
-        ,curr_coi_multiplier.begin()
-        ,std::multiplies<double>()
-        );
-
-    SetOneNonguaranteedRateBand
-        (MonthlyCurrentCoiRatesBand0_
-        ,curr_coi_multiplier
-        );
-    SetOneNonguaranteedRateBand
-        (MonthlyCurrentCoiRatesBand1_
-        ,curr_coi_multiplier
-        );
-    SetOneNonguaranteedRateBand
-        (MonthlyCurrentCoiRatesBand2_
-        ,curr_coi_multiplier
-        );
+    // These multipliers affect only nonguaranteed COI rates.
+    std::vector<double> z(Length_);
+    assign(z, CCoiMultiplier_ * CountryCoiMultiplier_ * CurrentCoiMultiplier_);
+    SetOneNonguaranteedRateBand(MonthlyCurrentCoiRatesBand0_, z);
+    SetOneNonguaranteedRateBand(MonthlyCurrentCoiRatesBand1_, z);
+    SetOneNonguaranteedRateBand(MonthlyCurrentCoiRatesBand2_, z);
 }
 
 //============================================================================
@@ -255,10 +225,20 @@ void MortalityRates::SetOtherRates()
     CvatNspRates_.push_back(1.0);
 }
 
-//============================================================================
-void MortalityRates::MakeCoiRateSubstandard
-    (std::vector<double>      & coi_rates
-    )
+/// Incorporate flat extras and table ratings into COI rates.
+///
+/// A popular selection {A,B,C,D,E,F,H,J,L,P} of industry-standard
+/// table ratings is hard coded.
+///
+/// Flat extras are entered as annual rates per thousand, to conform
+/// to standard industry usage. Some UL admin systems restrict flat
+/// extras to integral number of cents per thousand per month, e.g.,
+/// mapping five dollars per thousand annually to either forty-one or
+/// forty-two cents per thousand monthly; lmi implicitly accommodates
+/// that by accepting floating-point flat-extra (annual) values, e.g.,
+/// 4.92 or 5.04 in the example given.
+
+void MortalityRates::MakeCoiRateSubstandard(std::vector<double>& coi_rates)
 {
     // Nothing to do if no rating.
     if(!IsPolicyRated_)
@@ -276,23 +256,16 @@ void MortalityRates::MakeCoiRateSubstandard
 
     static double const factors[11] =
         {0.0, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 2.00, 2.50, 3.00, 4.00,};
-    double table_multiple = factors[SubstandardTable_];
-    for(int j = 0; j < Length_; ++j)
-        {
-        // Flat extra: input as annual per K, want monthly per $.
-        double flat_extra = MonthlyFlatExtra_[j] / 12000.0;
-
-        coi_rates[j] = std::min
-            (MaxMonthlyCoiRate_
-            ,   flat_extra
-            +   coi_rates[j] * (1.0 + SubstdTblMult_[j] * table_multiple)
-            );
-        coi_rates[j] = round_coi_rate_(coi_rates[j]);
-
-// TODO ?? Some UL admin systems convert flat extras to an integral
-// number of cents per thousand per month. It would be nice to offer
-// such a behavior here.
-        }
+    assign
+        (coi_rates
+        ,apply_binary
+            (lesser_of<double>()
+            ,MaxMonthlyCoiRate_
+            ,   AnnualFlatExtra_ / 12000.0
+              + coi_rates * (1.0 + SubstdTblMult_ * factors[SubstandardTable_])
+            )
+        );
+    std::transform(coi_rates.begin(), coi_rates.end(), coi_rates.begin(), round_coi_rate_);
 }
 
 //============================================================================

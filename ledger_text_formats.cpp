@@ -546,7 +546,7 @@ void PrintCellTabDelimited
 //   account value released?
         ,"PolicyFee"
         ,"SpecifiedAmountLoad"
-        ,"MonthlyFlatExtra"
+        ,"AnnualFlatExtra"
         ,"MortalityCharge"
         ,"RiderCharges"
         ,"NetMortalityCharge"
@@ -608,7 +608,7 @@ void PrintCellTabDelimited
         os << Curr_.value_str("DacTaxLoad"            ,j) << '\t';
         os << Curr_.value_str("PolicyFee"             ,j) << '\t';
         os << Curr_.value_str("SpecAmtLoad"           ,j) << '\t';
-        os << Invar.value_str("MonthlyFlatExtra"      ,j) << '\t';
+        os << Invar.value_str("AnnualFlatExtra"       ,j) << '\t';
         os << Curr_.value_str("COICharge"             ,j) << '\t';
         os << Curr_.value_str("RiderCharges"          ,j) << '\t';
         os << Curr_.value_str("NetCOICharge"          ,j) << '\t';
