@@ -51,6 +51,8 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
+#include <vector>
+
 LMI_FORCE_LINKING_EX_SITU(file_command_wx)
 LMI_FORCE_LINKING_EX_SITU(progress_meter_wx)
 LMI_FORCE_LINKING_EX_SITU(system_command_wx)
@@ -58,6 +60,8 @@ LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
 
+namespace
+{
 /// Run the tests.
 ///
 /// This is a simple Meyers singleton.
@@ -68,33 +72,31 @@ class application_test
   public:
     static application_test& instance();
 
-    void test()
-        {
-        test_about_dialog_version();
-        test_configurable_settings();
-        test_default_input();
-        test_expiry_dates();
-        test_new_file_and_save();
-        }
+    // Run all the tests.
+    void run();
+
+    // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
+    bool add_test(void (*test_func)(), char const* test_name);
 
   private:
-    void test_about_dialog_version();
-    void test_configurable_settings();
-    void test_default_input();
-    void test_expiry_dates();
-    void test_new_file_and_save();
+    /// Contains everything we need to store for an individual test.
+    struct test_descriptor
+    {
+        // Notice that the constructor doesn't copy the test name, it's a
+        // literal anyhow, so we just store the pointer.
+        test_descriptor(void (*func)(), char const* name)
+            :func(func)
+            ,name(name)
+            ,run(true)
+        {
+        }
 
-    // Helper of test_new_file_and_save() which tests creating a new file of
-    // the type corresponding to the key argument, used to select this type in
-    // the "New" popup menu.
-    //
-    // The last argument indicates whether a dialog is shown when creating a
-    // new file of this type (e.g. true for illustrations, false for census).
-    // It affects this function behaviour in two ways: first, it needs to be
-    // ready for this dialog appearing and, second, "File|Save" menu command is
-    // disabled for the files created in this way and "File|Save as" needs to
-    // be used instead.
-    void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog);
+        void (*func)();
+        char const* name;
+        bool run;
+    };
+
+    std::vector<test_descriptor> tests_;
 };
 
 application_test& application_test::instance()
@@ -103,7 +105,35 @@ application_test& application_test::instance()
     return z;
 }
 
-void application_test::test_about_dialog_version()
+void application_test::run()
+{
+    typedef std::vector<test_descriptor>::const_iterator ctdi;
+    for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
+        {
+        if (i->run)
+            {
+            (*i->func)();
+            }
+        }
+}
+
+bool application_test::add_test(void (*test_func)(), char const* test_name)
+{
+    tests_.push_back(test_descriptor(test_func, test_name));
+
+    return true;
+}
+
+/// Define a test function and register it with the application tester.
+#define LMI_WX_TEST_CASE(name) \
+void test_##name(); \
+volatile bool register_test_##name = application_test::instance().add_test \
+    (test_##name \
+    ,#name \
+    ); \
+void test_##name()
+
+LMI_WX_TEST_CASE(about_dialog_version)
 {
     struct expect_about_dialog : public wxExpectModalBase<wxDialog>
     {
@@ -126,7 +156,7 @@ void application_test::test_about_dialog_version()
         );
 }
 
-void application_test::test_configurable_settings()
+LMI_WX_TEST_CASE(configurable_settings)
 {
     LMI_ASSERT(fs::exists("/etc/opt/lmi/configurable_settings.xml"));
 
@@ -158,7 +188,7 @@ void application_test::test_configurable_settings()
         }
 }
 
-void application_test::test_default_input()
+LMI_WX_TEST_CASE(default_input)
 {
     calendar_date const today;
     calendar_date const first_of_month(today.year(), today.month(), 1);
@@ -172,7 +202,7 @@ void application_test::test_default_input()
     wxLogMessage("GeneralAccountRate is \"%s\"", general_account_date.c_str());
 }
 
-void application_test::test_expiry_dates()
+LMI_WX_TEST_CASE(expiry_dates)
 {
     fs::path expiry_path(global_settings::instance().data_directory() / "expiry");
     fs::ifstream is(expiry_path);
@@ -214,7 +244,17 @@ void application_test::test_expiry_dates()
     LMI_ASSERT(end == end_of_month);
 }
 
-void application_test::do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog)
+// Helper of test_new_file_and_save() which tests creating a new file of
+// the type corresponding to the key argument, used to select this type in
+// the "New" popup menu.
+//
+// The last argument indicates whether a dialog is shown when creating a
+// new file of this type (e.g. true for illustrations, false for census).
+// It affects this function behaviour in two ways: first, it needs to be
+// ready for this dialog appearing and, second, "File|Save" menu command is
+// disabled for the files created in this way and "File|Save as" needs to
+// be used instead.
+void do_test_new_file_and_save(int key, wxString const& file, bool uses_dialog)
 {
     struct expect_config_dialog : public wxExpectModalBase<wxDialog>
     {
@@ -252,7 +292,7 @@ void application_test::do_test_new_file_and_save(int key, wxString const& file, 
     wxYield();
 }
 
-void application_test::test_new_file_and_save()
+LMI_WX_TEST_CASE(new_file_and_save)
 {
     do_test_new_file_and_save('c', "testfile.cns"     , false);
     do_test_new_file_and_save('i', "testfile.ill"     , true);
@@ -264,6 +304,8 @@ void application_test::test_new_file_and_save()
     do_test_new_file_and_save('g', "testfile.gpt",      true);
     do_test_new_file_and_save('x', "testfile.txt",      false);
 }
+
+} // Unnamed namespace.
 
 // Application to drive the tests
 class SkeletonTest : public Skeleton
@@ -316,7 +358,7 @@ void SkeletonTest::RunTheTests()
 
     wxStopWatch sw;
     wxLogMessage("Starting automatic tests.");
-    application_test::instance().test();
+    application_test::instance().run();
     wxLogMessage("Tests successfully completed in %ldms.", sw.Time());
 
     // We want to show log output after the tests finished running and hide the
