@@ -390,9 +390,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
 
 /// Run an illustration from custom "1" input.
 ///
-/// The return value indicates whether to prevent displaying the GUI,
-/// for parallelism with custom_io_0_run_if_file_exists(); but this
-/// function always returns 'true'.
+/// The return value indicates whether to prevent displaying the GUI.
 ///
 /// Because this function prevents the GUI from being displayed, it
 /// must trap and handle its own exceptions rather than letting them
@@ -415,6 +413,6 @@ bool custom_io_1_run_if_file_exists()
         report_exception();
         }
 
-    return true;
+    return false;
 }
 
