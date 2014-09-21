@@ -34122,3 +34122,8 @@ Add selected face amount support.
   illustration_view.cpp
 Fix defect introduced 20140916T1707Z: if no custom input, show GUI.
 
+20140921T1522Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Read and write new input and output formats.
+
