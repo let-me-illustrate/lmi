@@ -34132,3 +34132,8 @@ Read and write new input and output formats.
   custom_io_1.cpp
 Fix defect introduced 20140921T1522Z: no table rating if preferred.
 
+20140925T0003Z <gchicares@sbcglobal.net> [533]
+
+  version.hpp
+Designate release candidate 5947.
+
