@@ -160,7 +160,7 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     // Unused: <AgentCompanyName>
 
     // For certain fields, empty strings are taken to imply default values.
-    if(ApplicantRating          .empty()) ApplicantRating           = "None";
+    if(ApplicantRating          .empty()) ApplicantRating           = "[EMPTY]";
     if(ApplicantPermFlatExtraAmt.empty()) ApplicantPermFlatExtraAmt = "0.0";
     if(ApplicantTempFlatExtraAmt.empty()) ApplicantTempFlatExtraAmt = "0.0";
 
@@ -208,7 +208,28 @@ bool custom_io_1_read(Input& z, std::string const& filename)
         : throw std::runtime_error(ApplicantTobacco + ": ApplicantTobacco not in {Y,N,U}.")
         ;
     z["State"                      ] = ApplicantState;
-    z["SubstandardTable"           ] = ApplicantRating; // ?! Need to know range of values.
+    // lmi's 'UnderwritingClass' and 'SubstandardTable' are conflated
+    // into the client system's <ApplicantRating>.
+    z["UnderwritingClass"] =
+          ("[EMPTY]" == ApplicantRating) ? "Standard"
+        : ("PF"      == ApplicantRating) ? "Preferred"
+        :                                  "Rated"
+        ;
+    z["SubstandardTable"] = // ?! Need to know range of values.
+          ("[EMPTY]" == ApplicantRating) ? "None"
+        : ("PF"      == ApplicantRating) ? "None"
+        : ("?0?"     == ApplicantRating) ? "A=+25%"
+        : ("?1?"     == ApplicantRating) ? "B=+50%"
+        : ("?2?"     == ApplicantRating) ? "C=+75%"
+        : ("?3?"     == ApplicantRating) ? "D=+100%"
+        : ("?4?"     == ApplicantRating) ? "E=+125%"
+        : ("?5?"     == ApplicantRating) ? "F=+150%"
+        : ("?6?"     == ApplicantRating) ? "H=+200%"
+        : ("?7?"     == ApplicantRating) ? "J=+250%"
+        : ("?8?"     == ApplicantRating) ? "L=+300%"
+        : ("?9?"     == ApplicantRating) ? "P=+400%"
+        : throw std::runtime_error(ApplicantRating + ": ApplicantRating unrecognized.")
+        ;
     double permanent_flat         = value_cast<double>(ApplicantPermFlatExtraAmt);
     double temporary_flat         = value_cast<double>(ApplicantTempFlatExtraAmt);
     int    temporary_flat_max_age = value_cast<int   >(ApplicantTempFlatExtraThruAge);
@@ -242,18 +263,9 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     z["GroupUnderwritingType"] =
           "SI" == Underwriting ? "Simplified issue"
         : "GI" == Underwriting ? "Guaranteed issue"
-        : "UW" == Underwriting ? "Medical" // ?! Does "UW" mean "underwritten"?
-        : throw std::runtime_error(Underwriting + ": Underwriting not in {SI,GI}.")
+        : "UW" == Underwriting ? "Medical"
+        : throw std::runtime_error(Underwriting + ": Underwriting not in {SI,GI,UW}.")
         ;
-    z["UnderwritingClass"] = "Standard"; // Default.
-    if("None" != z["SubstandardTable"].str())
-        {
-        z["UnderwritingClass"]     = "Rated";
-        }
-    else if("PF" == ApplicantRating)
-        {
-        z["UnderwritingClass"] = "Preferred"; // ?! Are there any other values?
-        }
     z["AgentName"                  ] = AgentName;
     z["AgentAddress"               ] = AgentAddress;
     z["AgentCity"                  ] = AgentCity;
