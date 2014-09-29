@@ -42,7 +42,7 @@
 int test_main(int, char*[])
 {
 #if !defined __BORLANDC__
-    fs::path const tmpdir(fs::complete("/tmp"));
+    fs::path const tmpdir(fs::absolute("/tmp", fs::initial_path()));
     fs::create_directory(tmpdir);
 #endif // !defined __BORLANDC__
 

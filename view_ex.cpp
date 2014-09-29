@@ -195,6 +195,6 @@ std::string ViewEx::base_filename() const
 {
     std::string t(GetDocument()->GetUserReadableName());
     fs::path path(t);
-    return path.has_leaf() ? path.leaf() : std::string("Hastur");
+    return path.has_leaf() ? path.leaf().string() : std::string("Hastur");
 }
 
