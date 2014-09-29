@@ -1102,7 +1102,7 @@ void print_databases()
             }
         try
             {
-            DBDictionary::instance().Init(i->string());
+            DBDictionary::instance().Init(i->path().string());
             }
         catch(...)
             {

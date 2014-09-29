@@ -106,7 +106,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 
     fs::path print_dir(configurable_settings::instance().print_directory());
 
-    fs::path real_filepath(orthodox_filename(filepath.leaf()));
+    fs::path real_filepath(orthodox_filename(filepath.filename().string()));
     LMI_ASSERT(fs::portable_name(real_filepath.string()));
 
     if(contains(global_settings::instance().pyx(), "xml"))
