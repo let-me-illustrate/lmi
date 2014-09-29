@@ -74,7 +74,7 @@ void concrete_file_command
         okay = ft->GetOpenCommand
             (&cmd
             ,wxFileType::MessageParameters
-                (path.native_file_string()
+                (path.string()
                 ,""
                 )
             );
@@ -84,7 +84,7 @@ void concrete_file_command
         okay = ft->GetPrintCommand
             (&cmd
             ,wxFileType::MessageParameters
-                (path.native_file_string()
+                (path.string()
                 ,""
                 )
             );
@@ -106,7 +106,7 @@ void concrete_file_command
             << "Unable to determine command to '"
             << action
             << "' file '"
-            << path.native_file_string()
+            << path.string()
             << "'."
             << LMI_FLUSH
             ;
@@ -118,7 +118,7 @@ void concrete_file_command
             << "Unable to '"
             << action
             << "' file '"
-            << path.native_file_string()
+            << path.string()
             << "'. Return code: '"
             << okay
             << "'."

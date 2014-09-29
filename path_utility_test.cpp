@@ -141,7 +141,7 @@ void test_serial_file_path()
 
 void test_unique_filepath_with_normal_filenames()
 {
-    fs::path const tmpdir(fs::complete("/tmp"));
+    fs::path const tmpdir(fs::absolute("/tmp", fs::initial_path()));
     fs::create_directory(tmpdir);
 
     // These tests would fail if read-only files with the following

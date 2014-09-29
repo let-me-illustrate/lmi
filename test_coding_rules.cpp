@@ -163,7 +163,7 @@ class file
 file::file(std::string const& file_path)
     :path_     (file_path)
     ,full_name_(file_path)
-    ,leaf_name_(path_.leaf())
+    ,leaf_name_(path_.filename().string())
     ,extension_(fs::extension(path_))
     ,phylum_   (e_no_phylum)
 {

@@ -51,13 +51,13 @@ class census_benchmark
   public:
     explicit census_benchmark(fs::path const& path)
         :status_(get_main_window_statusbar())
-        ,name_(path.leaf())
+        ,name_(path.leaf().string())
         {
         wxUIActionSimulator z;
         z.Char('o', wxMOD_CONTROL); // "File|Open"
         wxTEST_DIALOG
             (wxYield()
-            ,wxExpectModal<wxFileDialog>(path.native_file_string())
+            ,wxExpectModal<wxFileDialog>(path.string())
             );
         wxYield();
         }
@@ -140,7 +140,7 @@ LMI_WX_TEST_CASE(benchmark_census)
     fs::directory_iterator const end_i;
     for(fs::directory_iterator i(get_test_files_path()); i != end_i; ++i)
         {
-        if(!wxString(i->leaf()).Matches("MSEC*.cns"))
+        if(!wxString(i->path().string()).Matches("MSEC*.cns"))
             {
             continue;
             }
