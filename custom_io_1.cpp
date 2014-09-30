@@ -217,19 +217,19 @@ bool custom_io_1_read(Input& z, std::string const& filename)
         : ("PF"      == ApplicantRating) ? "Preferred"
         :                                  "Rated"
         ;
-    z["SubstandardTable"] = // ?! Need to know range of values.
+    z["SubstandardTable"] =
           ("[EMPTY]" == ApplicantRating) ? "None"
         : ("PF"      == ApplicantRating) ? "None"
-        : ("?0?"     == ApplicantRating) ? "A=+25%"
-        : ("?1?"     == ApplicantRating) ? "B=+50%"
-        : ("?2?"     == ApplicantRating) ? "C=+75%"
-        : ("?3?"     == ApplicantRating) ? "D=+100%"
-        : ("?4?"     == ApplicantRating) ? "E=+125%"
-        : ("?5?"     == ApplicantRating) ? "F=+150%"
-        : ("?6?"     == ApplicantRating) ? "H=+200%"
-        : ("?7?"     == ApplicantRating) ? "J=+250%"
-        : ("?8?"     == ApplicantRating) ? "L=+300%"
-        : ("?9?"     == ApplicantRating) ? "P=+400%"
+        : ("A"       == ApplicantRating) ? "A=+25%"
+        : ("B"       == ApplicantRating) ? "B=+50%"
+        : ("C"       == ApplicantRating) ? "C=+75%"
+        : ("D"       == ApplicantRating) ? "D=+100%"
+        : ("E"       == ApplicantRating) ? "E=+125%"
+        : ("F"       == ApplicantRating) ? "F=+150%"
+        : ("H"       == ApplicantRating) ? "H=+200%"
+        : ("J"       == ApplicantRating) ? "J=+250%"
+        : ("L"       == ApplicantRating) ? "L=+300%"
+        : ("P"       == ApplicantRating) ? "P=+400%"
         : throw std::runtime_error(ApplicantRating + ": ApplicantRating unrecognized.")
         ;
     double permanent_flat         = value_cast<double>(ApplicantPermFlatExtraAmt);
