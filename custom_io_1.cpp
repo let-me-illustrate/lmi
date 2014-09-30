@@ -36,7 +36,9 @@
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
+#include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "platform_dependent.hpp"       // access()
+#include "single_cell_document.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
@@ -273,6 +275,14 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     z["AgentZipCode"               ] = AgentZip;
     z["AgentPhone"                 ] = AgentPhone;
     z["AgentId"                    ] = AgentLicense;
+
+    // For internal testing only, if "AutoClose" has this special
+    // value, then write input in lmi's usual format.
+    if("X" == AutoClose)
+        {
+        std::ofstream ofs("custom_io_1.ill", ios_out_trunc_binary());
+        single_cell_document(z).write(ofs);
+        }
 
     // Meaning of return code based on "AutoClose":
     //   if "N", then write both PDF and custom output file;
