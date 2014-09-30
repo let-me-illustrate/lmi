@@ -261,7 +261,10 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     z["External1035ExchangeAmount" ] = ExchangeAmt;
     // Assume that any 1035 exchange is from a MEC (for single-premium BOLI).
     z["External1035ExchangeFromMec"] = "Yes";
-    z["EffectiveDate"              ] = convert_date(WireDate);
+    std::string wire_date = convert_date(WireDate);
+    z["EffectiveDate"              ] = wire_date;
+    z["InforceAsOfDate"            ] = wire_date;
+    z["LastMaterialChangeDate"     ] = wire_date;
     z["GroupUnderwritingType"] =
           "SI" == Underwriting ? "Simplified issue"
         : "GI" == Underwriting ? "Guaranteed issue"
