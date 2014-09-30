@@ -155,13 +155,17 @@ echo -n "2450449 2458849"                          >/opt/lmi/data/expiry
 echo    "0efd124fac6b15e6a9cd0b3dd718eea5  expiry" >/opt/lmi/data/validated.md5
 echo -n "8fa614e38dde6f7ab0f9fade87dfa2e3"         >/opt/lmi/data/passkey
 
+# Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
+
 cat >/opt/lmi/bin/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
-<configurable_settings version="1">
+<configurable_settings version="2">
   <calculation_summary_columns/>
   <cgi_bin_log_filename>cgi_bin.log</cgi_bin_log_filename>
-  <custom_input_filename>sample.ini</custom_input_filename>
-  <custom_output_filename>sample.out</custom_output_filename>
+  <custom_input_0_filename>custom.ini</custom_input_0_filename>
+  <custom_input_1_filename>custom.inix</custom_input_1_filename>
+  <custom_output_0_filename>custom.out0</custom_output_0_filename>
+  <custom_output_1_filename>custom.out1</custom_output_1_filename>
   <default_input_filename>C:/etc/opt/lmi/default.ill</default_input_filename>
   <libraries_to_preload/>
   <offer_hobsons_choice>0</offer_hobsons_choice>
