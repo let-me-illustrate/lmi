@@ -34165,3 +34165,26 @@ Set 'InforceAsOfDate' and 'LastMaterialChangeDate' to wire date.
   custom_io_1.cpp
 Recognize client system's values for table ratings.
 
+20141003T0019Z <gchicares@sbcglobal.net> [533]
+
+  actuarial_table.cpp
+  custom_io_0.cpp
+  interest_rates.cpp
+  istream_to_string.hpp
+Avoid g++-4.9.1 warnings about unused functions and typedefs. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-09/msg00000.html
+
+20141003T0020Z <gchicares@sbcglobal.net> [533]
+
+  census_view.cpp
+Avoid certain g++-4.9.1 warnings about unused variables. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-09/msg00001.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00001.html
+
+20141003T0021Z <gchicares@sbcglobal.net> [533]
+
+  multidimgrid_tools.hpp
+Fix defect introduced 20070221T0307Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-09/msg00002.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00004.html
+
