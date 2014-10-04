@@ -46,10 +46,10 @@ void istream_to_string
     ,std::basic_string<Char_t,Traits,Allocator>& s
     )
 {
-    typedef std::basic_string<Char_t,Traits,Allocator> string_type;
 #if 0
     // Requires <iterator>.
     typedef std::istreambuf_iterator<Char_t,Traits> bisbi;
+    typedef std::basic_string<Char_t,Traits,Allocator> string_type;
     string_type((bisbi(is)), bisbi()).swap(s);
     if(!is)
         {

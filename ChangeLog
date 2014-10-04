@@ -34122,3 +34122,81 @@ Add selected face amount support.
   illustration_view.cpp
 Fix defect introduced 20140916T1707Z: if no custom input, show GUI.
 
+20140921T1522Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Read and write new input and output formats.
+
+20140925T0001Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Fix defect introduced 20140921T1522Z: no table rating if preferred.
+
+20140925T0003Z <gchicares@sbcglobal.net> [533]
+
+  version.hpp
+Designate release candidate 5947.
+
+20140930T1103Z <gchicares@sbcglobal.net> [533]
+
+  GNUmakefile
+  main_cli.cpp
+  test_coding_rules.cpp
+  workhorse.make
+Support automated testing of new custom IO.
+
+20140930T1106Z <gchicares@sbcglobal.net> [533]
+
+  install_msw.sh
+Update makefile-generated configurable-settings file.
+
+20140930T1117Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+For testing, optionally emit an '.ill' file translated from '.inix'.
+
+20140930T1120Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Set 'InforceAsOfDate' and 'LastMaterialChangeDate' to wire date.
+
+20140930T1347Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Recognize client system's values for table ratings.
+
+20141003T0019Z <gchicares@sbcglobal.net> [533]
+
+  actuarial_table.cpp
+  custom_io_0.cpp
+  interest_rates.cpp
+  istream_to_string.hpp
+Avoid g++-4.9.1 warnings about unused functions and typedefs. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-09/msg00000.html
+
+20141003T0020Z <gchicares@sbcglobal.net> [533]
+
+  census_view.cpp
+Avoid certain g++-4.9.1 warnings about unused variables. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-09/msg00001.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00001.html
+
+20141003T0021Z <gchicares@sbcglobal.net> [533]
+
+  multidimgrid_tools.hpp
+Fix defect introduced 20070221T0307Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-09/msg00002.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00004.html
+
+20141004T1318Z <gchicares@sbcglobal.net> [533]
+
+  objects.make
+Improve documentation.
+
+20141004T1320Z <gchicares@sbcglobal.net> [533]
+
+  force_linking.hpp [new file]
+Force linking despite overly-aggressive linker "optimization". See:
+  http://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
+

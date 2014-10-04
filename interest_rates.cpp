@@ -227,9 +227,16 @@ void convert_interest_rates
         }
 }
 
+#if 0
 /// Determine whether loan rates are needed; else they can be zero.
 ///
 /// Loan rates can potentially affect GPT calculations.
+///
+/// SOMEDAY !! Is this function worthwhile, or should it be expunged?
+/// An error in its implementation could have severe consequences, and
+/// the benefit seems slight. At present, it's never called anyway,
+/// because BasicValues::Init7702() is called unconditionally--so the
+/// test for 'DefinitionOfLifeInsurance' is incorrect.
 
 bool need_loan_rates(yare_input const& yi)
 {
@@ -244,6 +251,7 @@ bool need_loan_rates(yare_input const& yi)
         ||  !each_equal(yi.NewLoan.begin(), yi.NewLoan.end(), 0.0)
         ;
 }
+#endif // 0
 } // Unnamed namespace.
 
 InterestRates::~InterestRates()
