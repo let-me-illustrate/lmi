@@ -214,6 +214,7 @@ file::file(std::string const& file_path)
         : ".ill"        == extension() ? e_xml_input
         : ".gpt"        == extension() ? e_xml_input
         : ".mec"        == extension() ? e_xml_input
+        : ".inix"       == extension() ? e_xml_input
         : ".database"   == extension() ? e_xml_other
         : ".funds"      == extension() ? e_xml_other
         : ".policy"     == extension() ? e_xml_other

@@ -144,6 +144,8 @@ std::string adjust_interest_rates
     return InputSequence(general_account_rate).mathematical_representation();
 }
 
+#if 0
+// This unit test is not routinely run.
 void test_adjust_interest_rates()
 {
     std::vector<double> declared_rate;
@@ -192,7 +194,7 @@ void test_adjust_interest_rates()
         ;
     warning() << std::flush;
 }
-
+#endif // 0
 } // Unnamed namespace.
 
 /// Read custom input for a particular customer.

@@ -360,7 +360,7 @@ void AdjustableMaxBoundAxis<Integral>::UpdateChoiceControl
 
     while(choice.GetCount() < new_count)
         {
-        choice.Append(GetLabel(choice.GetCount() + min_value));
+        choice.Append(this->GetLabel(choice.GetCount() + min_value));
         }
 
     if(selection == wxNOT_FOUND)

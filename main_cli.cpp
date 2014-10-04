@@ -311,7 +311,7 @@ void process_command_line(int argc, char* argv[])
                 LMI_ASSERT(NULL != getopt_long.optarg);
                 std::string const s(getopt_long.optarg);
                 std::string const e = fs::extension(s);
-                if(".cns" == e || ".ill" == e || ".ini" == e)
+                if(".cns" == e || ".ill" == e || ".ini" == e || ".inix" == e)
                     {
                     illustrator_names.push_back(getopt_long.optarg);
                     }

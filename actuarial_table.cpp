@@ -907,6 +907,7 @@ std::vector<double> soa_actuarial_table::specific_values
     return v;
 }
 
+#if defined LMI_USE_XML_TABLES
 namespace
 {
     bool almost_equal_doubles(std::vector<double> const& a, std::vector<double> const& b)
@@ -936,6 +937,7 @@ namespace
         return true;
     }
 } // Unnamed namespace.
+#endif // defined LMI_USE_XML_TABLES
 
 std::vector<double> actuarial_table_rates
     (std::string const& table_filename

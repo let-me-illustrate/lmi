@@ -139,8 +139,8 @@ endif
 
 ################################################################################
 
-# All non-wx auxiliary programs built here (other than illustration
-# systems) share a common main() implementation that performs certain
+# All non-wx auxiliary programs built here (that don't link 'liblmi'
+# already) share a common main() implementation that performs certain
 # default initialization and catches and handles exceptions. They
 # should use this variable in their object lists unless some of these
 # objects are included in libraries they already use.

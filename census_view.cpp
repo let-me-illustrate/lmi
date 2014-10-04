@@ -651,10 +651,6 @@ class renderer_fallback_convertor : public renderer_type_convertor
 
 renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> const& value)
 {
-    mc_enum_base const* as_enum = NULL;
-    datum_sequence const* as_sequence = NULL;
-    tn_range_base const* as_range = NULL;
-
     any_member<Input>& nonconst_value = const_cast<any_member<Input>&>(value);
 
     if(typeid(mce_yes_or_no Input::*) == value.type())
@@ -663,17 +659,15 @@ renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> co
         }
     else if(0 != reconstitutor<mc_enum_base  ,Input>::reconstitute(nonconst_value))
         {
-        as_enum = member_cast<mc_enum_base>(value);
         return get_impl<renderer_enum_convertor>();
         }
     else if(0 != reconstitutor<datum_sequence,Input>::reconstitute(nonconst_value))
         {
-        as_sequence = member_cast<datum_sequence>(value);
         return get_impl<renderer_sequence_convertor>();
         }
     else if(0 != reconstitutor<tn_range_base ,Input>::reconstitute(nonconst_value))
         {
-        as_range = member_cast<tn_range_base>(value);
+        tn_range_base const* as_range = member_cast<tn_range_base>(value);
         if(typeid(int) == as_range->value_type())
             return get_impl<renderer_int_range_convertor>();
         else if(typeid(double) == as_range->value_type())
