@@ -17,6 +17,7 @@
     configurable_settings.cpp
     crc32.cpp
     custom_io_0.cpp
+    custom_io_1.cpp
     data_directory.cpp
     dbnames.cpp
     dbvalue.cpp
