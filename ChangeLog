@@ -34188,3 +34188,15 @@ Fix defect introduced 20070221T0307Z. See:
   http://lists.nongnu.org/archive/html/lmi/2014-09/msg00002.html
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00004.html
 
+20141004T1318Z <gchicares@sbcglobal.net> [533]
+
+  objects.make
+Improve documentation.
+
+20141004T1320Z <gchicares@sbcglobal.net> [533]
+
+  force_linking.hpp [new file]
+Force linking despite overly-aggressive linker "optimization". See:
+  http://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
+
