@@ -31,7 +31,7 @@ IF EXIST C:\cygwin-lmi\NUL GOTO FoundOldInstallation
 C:
 cd C:\cache_for_lmi
 START "Installing Cygwin" /WAIT setup-x86 ^
-  --quiet-mode ^
+  --wait --quiet-mode ^
   --site ftp://mirror.mcs.anl.gov/pub/cygwin/ ^
   --root C:/cygwin-lmi --packages ^
   cvs,doxygen,gdb,libtool,make,openssh,patch,rsync,subversion,unzip,wget,zsh

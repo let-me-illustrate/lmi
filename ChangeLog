@@ -34206,3 +34206,9 @@ Force linking despite overly-aggressive linker "optimization". See:
 Improve concinnity. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00007.html
 
+20141005T1742Z <gchicares@sbcglobal.net> [533]
+
+  install_cygwin.bat
+Work around a Cygwin workaround for an msw snafu. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00013.html
+
