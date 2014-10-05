@@ -32,14 +32,8 @@ set -v
 # To remove lmi prior to reinstalling with this script:
 #
 # rm --force --recursive /opt/lmi
-#
-# Downloaded archives are kept in /cache_for_lmi/downloads/ because
-# they are costly to download and some host might be temporarily
-# unavailable.
 
 date -u +'%Y%m%dT%H%MZ'
-
-mkdir --parents /cache_for_lmi/downloads
 
 mount
 
@@ -114,6 +108,12 @@ restore_cache_mount=`mount --mount-commands 2>/dev/null | grep '"/cache_for_lmi"
   || echo $restore_cache_mount | grep --silent '"C:/cache_for_lmi"' \
   || echo -e "Replacing former cache mount:\n  $restore_cache_mount" >/dev/tty
 mount --force "C:/cache_for_lmi" "/cache_for_lmi"
+
+# Downloaded archives are kept in /cache_for_lmi/downloads/ because
+# they are costly to download and some host might be temporarily
+# unavailable.
+
+mkdir --parents /cache_for_lmi/downloads
 
 mount
 
