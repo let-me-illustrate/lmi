@@ -34200,3 +34200,9 @@ Force linking despite overly-aggressive linker "optimization". See:
   http://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
 
+20141005T1713Z <gchicares@sbcglobal.net> [533]
+
+  force_linking.hpp
+Improve concinnity. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00007.html
+

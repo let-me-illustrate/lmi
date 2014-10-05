@@ -58,7 +58,7 @@
         {                                                      \
             lmi_link_dummy_func_##translation_unit_name();     \
         }                                                      \
-    } lmi_link_dummy_var_##translation_unit_name;
+    } lmi_link_dummy_var_##translation_unit_name
 
 #endif // force_linking_hpp
 
