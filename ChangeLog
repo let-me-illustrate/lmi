@@ -34218,3 +34218,15 @@ Work around a Cygwin workaround for an msw snafu. See:
 Robustify. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00008.html
 
+20141005T2318Z <gchicares@sbcglobal.net> [533]
+
+  assert_lmi_test.cpp
+Demonstrate a latent problem.
+
+20141005T2320Z <gchicares@sbcglobal.net> [533]
+
+  alert.hpp
+  assert_lmi.hpp
+Remove the problem identified 20141005T2318Z, and a congener. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00009.html
+
