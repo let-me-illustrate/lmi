@@ -266,15 +266,18 @@ void LMI_SO test_catastrophe_report();
 /// TODO ?? It is generally a bad idea to let users bypass assertions.
 /// Any apparent need to do this probably masks a logic error.
 
-#define HOPEFULLY(condition)                                \
-    if(!(condition))                                        \
-        {                                                   \
-        hobsons_choice()                                    \
-            << "Assertion '" << (#condition) << "' failed." \
-            << LMI_FLUSH                                    \
-            ;                                               \
-        }                                                   \
-    do {} while(0)
+#define HOPEFULLY(condition)                                    \
+    do                                                          \
+        {                                                       \
+        if(!(condition))                                        \
+            {                                                   \
+            hobsons_choice()                                    \
+                << "Assertion '" << (#condition) << "' failed." \
+                << LMI_FLUSH                                    \
+                ;                                               \
+            }                                                   \
+        }                                                       \
+    while(0)
 
 #endif // alert_hpp
 
