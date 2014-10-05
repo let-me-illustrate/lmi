@@ -34212,3 +34212,9 @@ Improve concinnity. See:
 Work around a Cygwin workaround for an msw snafu. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00013.html
 
+20141005T1955Z <gchicares@sbcglobal.net> [533]
+
+  install_msw.sh
+Robustify. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00008.html
+
