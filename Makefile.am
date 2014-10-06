@@ -257,8 +257,13 @@ wx_test_SOURCES = \
   main_wx_test.cpp
 wx_test_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS)
 wx_test_LDADD = \
-  libskeleton.la \
-  $(WX_LIBS)
+    liblmi.la \
+    libskeleton.la \
+    libwx_new.la \
+    $(XMLWRAPP_LIBS) \
+    $(GTK_LIBS) \
+    $(BOOST_LIBS) \
+    $(WX_LIBS)
 
 # libraries
 
