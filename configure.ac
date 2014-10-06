@@ -142,12 +142,6 @@ if test "$USE_WINDOWS" = "1"; then
     AC_CHECK_TOOL([WINDRES], [windres], no)
 fi
 
-dnl Until the ihs_pios.*pp facilities are made portable use explicit flag to GCC
-dnl to ensure that sizeof(long double) is 12 bytes for binary compatibility.
-if test "x$GXX" == "xyes"; then
-    CPPFLAGS="$CPPFLAGS -m96bit-long-double"
-fi
-
 dnl add debug option if necessary
 if test "$debug_option" = "yes"; then
     case "$CC" in
