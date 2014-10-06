@@ -34230,3 +34230,11 @@ Demonstrate a latent problem.
 Remove the problem identified 20141005T2318Z, and a congener. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00009.html
 
+20141006T1350Z <gchicares@sbcglobal.net> [533]
+
+  main_cgi.cpp
+  premium_tax_test.cpp
+  workhorse.make
+Rectify data dependencies of certain test targets. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00018.html
+
