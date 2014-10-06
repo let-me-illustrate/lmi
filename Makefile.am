@@ -1116,7 +1116,6 @@ noinst_HEADERS = \
     loads.hpp \
     loads_impl.hpp \
     main_common.hpp \
-    main_wx.hpp \
     map_lookup.hpp \
     materially_equal.hpp \
     math_functors.hpp \
