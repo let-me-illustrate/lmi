@@ -204,7 +204,7 @@ libskeleton_la_SOURCES = \
 lmi_wx_SOURCES = \
     main_wx.cpp
 
-libskeleton_la_CXXFLAGS =
+libskeleton_la_CXXFLAGS = \
      $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
 
 libskeleton_la_LIBADD = \
