@@ -199,7 +199,6 @@ libskeleton_la_SOURCES = \
     tier_view_editor.cpp \
     transferor.cpp \
     view_ex.cpp \
-    wx_checks.cpp \
     wx_utility.cpp
 
 # main program executables
@@ -1211,7 +1210,6 @@ noinst_HEADERS = \
     version.hpp \
     view_ex.hpp \
     view_ex.tpp \
-    wx_checks.hpp \
     wx_new.hpp \
     wx_utility.hpp \
     wx_workarounds.hpp \
