@@ -34248,3 +34248,14 @@ Rectify data dependencies of certain test targets. See:
 Force linking despite overly-aggressive linker "optimization". See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00007.html
 
+20141007T1135Z <gchicares@sbcglobal.net> [533]
+
+  file_command_wx.cpp
+  force_linking.hpp
+  main_wx.cpp
+  main_wx_test.cpp
+  progress_meter_wx.cpp
+  system_command_wx.cpp
+Revert the 20141005T1713Z change; remove extraneous semicolons. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00027.html
+

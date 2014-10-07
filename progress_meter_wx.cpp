@@ -37,7 +37,7 @@
 #include <ios>                          // std::fixed, std::ios_base::precision()
 #include <sstream>
 
-LMI_FORCE_LINKING_IN_SITU(progress_meter_wx);
+LMI_FORCE_LINKING_IN_SITU(progress_meter_wx)
 
 namespace
 {
