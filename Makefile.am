@@ -70,7 +70,8 @@ noinst_LTLIBRARIES = \
 
 # data files
 xrcdir = $(pkgdatadir)
-dist_xrc_DATA = $(shell ls -1 $(srcdir)/*.png $(srcdir)/*.xrc)
+dist_xrc_DATA = $(shell ls -1 $(srcdir)/*.png $(srcdir)/*.xrc) \
+    lmi.ico
 
 xsldir = $(pkgdatadir)
 dist_xsl_DATA = $(shell ls -1 $(srcdir)/*.xsl)
