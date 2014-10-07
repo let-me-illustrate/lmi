@@ -38,7 +38,7 @@
 #include <wx/mimetype.h>
 #include <wx/utils.h> // wxExecute()
 
-LMI_FORCE_LINKING_IN_SITU(file_command_wx);
+LMI_FORCE_LINKING_IN_SITU(file_command_wx)
 
 // Implementing this function in a GUI module means the wx facility
 // can be used. Currently, no other interface needs to implement it.

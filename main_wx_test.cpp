@@ -39,9 +39,9 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-LMI_FORCE_LINKING_EX_SITU(file_command_wx);
-LMI_FORCE_LINKING_EX_SITU(progress_meter_wx);
-LMI_FORCE_LINKING_EX_SITU(system_command_wx);
+LMI_FORCE_LINKING_EX_SITU(file_command_wx)
+LMI_FORCE_LINKING_EX_SITU(progress_meter_wx)
+LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
