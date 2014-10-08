@@ -266,10 +266,10 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     z["InforceAsOfDate"            ] = wire_date;
     z["LastMaterialChangeDate"     ] = wire_date;
     z["GroupUnderwritingType"] =
-          "SI" == Underwriting ? "Simplified issue"
-        : "GI" == Underwriting ? "Guaranteed issue"
-        : "UW" == Underwriting ? "Medical"
-        : throw std::runtime_error(Underwriting + ": Underwriting not in {SI,GI,UW}.")
+          "SI"  == Underwriting ? "Simplified issue"
+        : "GI"  == Underwriting ? "Guaranteed issue"
+        : "FUW" == Underwriting ? "Medical"
+        : throw std::runtime_error(Underwriting + ": Underwriting not in {SI,GI,FUW}.")
         ;
     z["AgentName"                  ] = AgentName;
     z["AgentAddress"               ] = AgentAddress;

@@ -37,6 +37,7 @@
 #endif // __BORLANDC__
 
 #include "fenv_lmi.hpp"
+#include "force_linking.hpp"
 #include "handle_exceptions.hpp"
 #include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
@@ -46,6 +47,10 @@
 #include <wx/init.h>                    // wxEntry()
 
 #include <string>
+
+LMI_FORCE_LINKING_EX_SITU(file_command_wx)
+LMI_FORCE_LINKING_EX_SITU(progress_meter_wx)
+LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 
 IMPLEMENT_APP_NO_MAIN(Skeleton)
 IMPLEMENT_WX_THEME_SUPPORT

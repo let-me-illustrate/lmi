@@ -31,6 +31,7 @@
 #include "database.hpp"
 #include "dbdict.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
+#include "product_data.hpp"
 #include "stratified_charges.hpp"
 #include "test_tools.hpp"
 
@@ -51,6 +52,9 @@ class premium_tax_test
 void premium_tax_test::write_prerequisite_files()
 {
     DBDictionary::instance() .WriteSampleDBFile      ();
+    // product_database::initialize() requires a real '.product' file,
+    // even though it's not otherwise used in this TU.
+    product_data            ::WritePolFiles          ();
     stratified_charges      ::write_stratified_files ();
 }
 

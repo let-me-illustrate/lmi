@@ -35,7 +35,7 @@ fi
 # use --copy to allow simultaneous use on windows under mingw and cygwin platforms.
 # Symlinking of files under mingw does not work out for cygwin and vice-versa.
 echo "Setting up build system for lmi:"
-echo " - aclocal " && aclocal -I aclocal ${wx+-I $wx} && \
+echo " - aclocal " && aclocal -I aclocal && \
 echo " - libtoolize " && libtoolize --copy --automake && \
 echo " - autoconf " && autoconf && \
 echo " - autoheader " && autoheader && \

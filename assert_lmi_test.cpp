@@ -41,6 +41,13 @@ int test_main(int, char*[])
         ,"Assertion 'not_true' failed."
         );
 
+    // The LMI_ASSERT macro is intended to "swallow the semicolon":
+    //   https://gcc.gnu.org/onlinedocs/cpp/Swallowing-the-Semicolon.html
+    if(not_true)
+        LMI_ASSERT(not_true);
+    else
+        LMI_ASSERT(!not_true);
+
     return 0;
 }
 

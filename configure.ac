@@ -67,9 +67,6 @@ AC_ARG_WITH(boost-libs,
 AC_ARG_WITH(boost-toolkit,
             [AC_HELP_STRING([--with-boost-toolkit=dir], [Boost installation toolkit (gcc, mgw, etc.)])],
             lmi_boost_toolkit=$withval)
-AC_ARG_WITH(boost-filesystem-src,
-            [AC_HELP_STRING([--with-boost-filesystem-src=dir], [Boost filesystem library sources directory (./libs/filesystem/src directory in the boost default package). That option is only useful for the in-project boost::filesystem library compilation])],
-            lmi_boost_filesystem_src=$withval)
 
 dnl add support for --wxdir, --wx-config, --wx-prefix, ----wx-exec-prefix
 WX_CONFIG_OPTIONS
@@ -167,12 +164,6 @@ AC_PROG_LD
 
 if test "$USE_WINDOWS" = "1"; then
     AC_CHECK_TOOL([WINDRES], [windres], no)
-fi
-
-dnl Until the ihs_pios.*pp facilities are made portable use explicit flag to GCC
-dnl to ensure that sizeof(long double) is 12 bytes for binary compatibility.
-if test "x$GXX" == "xyes"; then
-    CPPFLAGS="$CPPFLAGS -m96bit-long-double"
 fi
 
 dnl add debug option if necessary
@@ -413,12 +404,10 @@ dnl but since under mingw with -pedantic and -std= options test does not pass
 dnl we are forced to use a bit more sophisticated construct
 
 LIBS="$LIBS $BOOST_LIBS -l$boost_libfs"
-LMI_BOOSTFS_BUILD=0
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/filesystem/operations.hpp>]],
     [[boost::filesystem::current_path()]])],
     [],
-    [LMI_BOOSTFS_BUILD=1
-    AC_MSG_WARN([Boost filesystem library $boost_libfs not found, $errmsg])]
+    [AC_MSG_ERROR([Boost filesystem library $boost_libfs not found, $errmsg])]
 )
 
 LIBS="$save_LIBS -l$boost_libregex"
@@ -431,45 +420,11 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
 LDFLAGS=$save_LDFLAGS
 LIBS=$save_LIBS
 
-if test "x$LMI_BOOSTFS_BUILD" == "x1"; then
-
-dnl we have no boost::filesystem library available on the machine - lets check for its sources
-LMI_BOOSTFS_SRC=$lmi_boost_filesystem_src
-dnl if the user has not specified --with-boost-filesystem-src then guess it using --with-boost-headers
-if test "x$LMI_BOOSTFS_SRC" == "x"; then
-    if test "x$lmi_boost_headers" != "x"; then
-        LMI_BOOSTFS_SRC="$lmi_boost_headers/../libs/filesystem/src"
-    fi
-fi
-if test "x$LMI_BOOSTFS_SRC" == "x"; then
-    LMI_BOOSTFS_SRC="."
-fi
-
-for f in convenience.cpp exception.cpp operations_posix_windows.cpp path_posix_windows.cpp; do
-  if ! test -r $LMI_BOOSTFS_SRC/$f; then
-    no_boost_fs=1
-  fi
-done
-
-if test "x$no_boost_fs" == "x1"; then
-    AC_MSG_ERROR([no boost::filesystem source files found in ($LMI_BOOSTFS_SRC)])
-fi
-
-BOOST_LIBS=third_party/boostfs/libboost_filesystem.la
-else
-BOOST_LIBS="$BOOST_LDFLAGS $BOOST_LIBS -l$boost_libfs"
-fi
-
-BOOST_LIBS="$BOOST_LIBS -l$boost_libregex"
+BOOST_LIBS="-l$boost_libfs -l$boost_libregex -l$boost_libsystem"
 
 dnl contains flags needed to link to externally or internally built
 dnl boost libraries
 AC_SUBST(BOOST_LIBS)
-
-dnl indicates weither do we need to build internally boost::filesystem library
-AM_CONDITIONAL([LMI_BOOSTFS_BUILD], [test "x$LMI_BOOSTFS_BUILD" == "x1"])
-dnl indicates the directory path where sources could be found
-AC_SUBST(LMI_BOOSTFS_SRC)
 
 dnl check for the other required libraries: under Unix we use pkg-config which
 dnl is easily available for (and often already installed under) any Linux
@@ -478,7 +433,7 @@ dnl pkg-config under Windows is unfortunately not trivial and so we can't rely
 dnl on its presence on the target system
 if test "$USE_LINUX" = "1"; then
     PKG_CHECK_MODULES(GTK, gtk+-2.0)
-    PKG_CHECK_MODULES(XMLWRAPP, xmlwrapp >= 0.6.0 xsltwrapp)
+    PKG_CHECK_MODULES(XMLWRAPP, xmlwrapp >= 0.7.0 xsltwrapp)
 else
     if test -z "$XMLWRAPP_CFLAGS" -o -z "$XMLWRAPP_LIBS"; then
         dnl --- XMLWRAPP (required) -------------------
@@ -583,6 +538,7 @@ CFLAGS_gcc_common="\
     -Wimport \
     -Wmultichar \
     -Wno-long-long \
+    -Wno-variadic-macros \
     -Wpacked \
     -Wpointer-arith \
     -Wsign-compare \
@@ -602,15 +558,6 @@ if test "x$GXX" == "xyes"; then
         -Wpmf-conversions \
         -Wsynth"
 
-    dnl g++ 4.4 doesn't compile wxWidgets code that relies on use of empty
-    dnl macro arguments, because it's behavior undefined by the standard
-    dnl prior to C++0x or C99; if the compiler is too old to understand
-    dnl -std=c++0x, it's also too old to complain about this and so we can
-    dnl use -std=c++98
-    AX_CXX_CHECK_FLAG([-std=c++0x],[],[],
-                      [CXXFLAGS="$CXXFLAGS -std=c++0x"],
-                      [CXXFLAGS="$CXXFLAGS -std=c++98"])
-
     dnl we need to use this option with g++ 4.3 to prevent its complaints
     dnl about "-funit-at-a-time is required for inlining of functions that are
     dnl only called once" in debug builds
@@ -626,5 +573,5 @@ if test "x$GXX" == "xyes"; then
 fi
 
 dnl === Generate output files ===
-AC_CONFIG_FILES([Makefile third_party/Makefile third_party/boostfs/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -43,18 +43,21 @@
 ///
 /// For a more-elaborate runtime-error facility, see 'alert*.?pp'.
 
-#define LMI_ASSERT(condition)                               \
-    if(!(condition))                                        \
-        {                                                   \
-        std::ostringstream oss;                             \
-        oss                                                 \
-            << "Assertion '" << (#condition) << "' failed." \
-            << "\n[file " << __FILE__                       \
-            << ", line " << __LINE__ << "]\n"               \
-            ;                                               \
-        throw std::runtime_error(oss.str());                \
-        }                                                   \
-    do {} while(0)
+#define LMI_ASSERT(condition)                                   \
+    do                                                          \
+        {                                                       \
+        if(!(condition))                                        \
+            {                                                   \
+            std::ostringstream oss;                             \
+            oss                                                 \
+                << "Assertion '" << (#condition) << "' failed." \
+                << "\n[file " << __FILE__                       \
+                << ", line " << __LINE__ << "]\n"               \
+                ;                                               \
+            throw std::runtime_error(oss.str());                \
+            }                                                   \
+        }                                                       \
+    while(0)
 
 #endif // assert_lmi_hpp
 

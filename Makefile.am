@@ -22,8 +22,6 @@
 
 # $Id$
 
-SUBDIRS = third_party
-
 ##############################################################################
 # Common compilation flags
 ##############################################################################
@@ -36,6 +34,8 @@ if LMI_MSW
 else
     AM_LDFLAGS=
 endif
+
+ACLOCAL_AMFLAGS = -I aclocal
 
 ##############################################################################
 # Precompiled headers support
@@ -99,7 +99,8 @@ noinst_LTLIBRARIES = \
 
 # data files
 xrcdir = $(pkgdatadir)
-dist_xrc_DATA = $(shell ls -1 $(srcdir)/*.png $(srcdir)/*.xrc)
+dist_xrc_DATA = $(shell ls -1 $(srcdir)/*.png $(srcdir)/*.xrc) \
+    lmi.ico
 
 xsldir = $(pkgdatadir)
 dist_xsl_DATA = $(shell ls -1 $(srcdir)/*.xsl)
@@ -226,14 +227,13 @@ libskeleton_la_SOURCES = \
     tier_view_editor.cpp \
     transferor.cpp \
     view_ex.cpp \
-    wx_checks.cpp \
     wx_utility.cpp
 
 # main program executables
 lmi_wx_SOURCES = \
     main_wx.cpp
 
-libskeleton_la_CXXFLAGS =
+libskeleton_la_CXXFLAGS = \
      $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS) -ULMI_PCH_HEADER -DLMI_PCH_HEADER="<pchfile_wx.hpp>"
 
 libskeleton_la_LIBADD = \
@@ -287,8 +287,13 @@ wx_test_SOURCES = \
   main_wx_test.cpp
 wx_test_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS)
 wx_test_LDADD = \
-  libskeleton.la \
-  $(WX_LIBS)
+    liblmi.la \
+    libskeleton.la \
+    libwx_new.la \
+    $(XMLWRAPP_LIBS) \
+    $(GTK_LIBS) \
+    $(BOOST_LIBS) \
+    $(WX_LIBS)
 
 # libraries
 
@@ -1140,7 +1145,6 @@ noinst_HEADERS = \
     loads.hpp \
     loads_impl.hpp \
     main_common.hpp \
-    main_wx.hpp \
     map_lookup.hpp \
     materially_equal.hpp \
     math_functors.hpp \
@@ -1236,7 +1240,6 @@ noinst_HEADERS = \
     version.hpp \
     view_ex.hpp \
     view_ex.tpp \
-    wx_checks.hpp \
     wx_new.hpp \
     wx_utility.hpp \
     wx_workarounds.hpp \

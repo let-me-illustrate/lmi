@@ -27,6 +27,7 @@
 #endif
 
 #include "assert_lmi.hpp"
+#include "force_linking.hpp"
 #include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
@@ -37,6 +38,10 @@
 #include <wx/init.h>                    // wxEntry()
 #include <wx/testing.h>
 #include <wx/uiaction.h>
+
+LMI_FORCE_LINKING_EX_SITU(file_command_wx)
+LMI_FORCE_LINKING_EX_SITU(progress_meter_wx)
+LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)

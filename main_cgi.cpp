@@ -43,6 +43,7 @@
 #include "configurable_settings.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
+#include "lmi.hpp"                      // is_antediluvian_fork()
 #include "main_common.hpp"
 #include "mc_enum_type_enums.hpp"       // mcenum_emission
 #include "miscellany.hpp"
@@ -491,7 +492,10 @@ void ShowOutput(cgicc::Cgicc const& data)
     input["UseCurrentDeclaredRate"]          = "No";
 
     // Read input values.
-    input["ProductName"]                     = GetValue(data, "ProductName"                    );
+    if(!is_antediluvian_fork())
+        {
+        input["ProductName"]                 = GetValue(data, "ProductName"                    );
+        }
     input["IssueAge"]                        = GetValue(data, "IssueAge"                       );
     input["RetirementAge"]                   = GetValue(data, "RetirementAge"                  );
     input["Gender"]                          = GetValue(data, "Gender"                         );

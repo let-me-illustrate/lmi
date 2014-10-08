@@ -29,6 +29,7 @@
 #include "file_command.hpp"
 
 #include "alert.hpp"
+#include "force_linking.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
@@ -36,6 +37,8 @@
 
 #include <wx/mimetype.h>
 #include <wx/utils.h> // wxExecute()
+
+LMI_FORCE_LINKING_IN_SITU(file_command_wx)
 
 // Implementing this function in a GUI module means the wx facility
 // can be used. Currently, no other interface needs to implement it.

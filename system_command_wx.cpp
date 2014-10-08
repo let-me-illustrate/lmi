@@ -29,6 +29,7 @@
 #include "system_command.hpp"
 
 #include "alert.hpp"
+#include "force_linking.hpp"
 #include "null_stream.hpp"
 #include "timer.hpp"
 
@@ -38,6 +39,8 @@
 
 #include <cstddef>                      // std::size_t
 #include <ostream>
+
+LMI_FORCE_LINKING_IN_SITU(system_command_wx)
 
 namespace
 {
