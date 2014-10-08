@@ -1103,12 +1103,12 @@ wrap_fardel:
 .PHONY: test
 test: $(test_targets)
 
-# Some test targets require 'sample.policy' to exist even though they
-# don't actually read its contents.
+# Some 'antediluvian' test targets require a '.policy' to exist even
+# though they don't actually read its contents.
 
-$(test_targets): sample.policy
+$(test_targets): eraseme.policy
 
-sample.policy:
+eraseme.policy:
 	@$(TOUCH) $@
 
 ################################################################################

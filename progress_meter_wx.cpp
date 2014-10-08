@@ -28,6 +28,7 @@
 
 #include "progress_meter.hpp"
 
+#include "force_linking.hpp"
 #include "wx_utility.hpp"               // TopWindow()
 
 #include <wx/progdlg.h>
@@ -35,6 +36,8 @@
 
 #include <ios>                          // std::fixed, std::ios_base::precision()
 #include <sstream>
+
+LMI_FORCE_LINKING_IN_SITU(progress_meter_wx)
 
 namespace
 {

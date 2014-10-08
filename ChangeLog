@@ -34200,3 +34200,77 @@ Force linking despite overly-aggressive linker "optimization". See:
   http://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
 
+20141005T1713Z <gchicares@sbcglobal.net> [533]
+
+  force_linking.hpp
+Improve concinnity. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00007.html
+
+20141005T1742Z <gchicares@sbcglobal.net> [533]
+
+  install_cygwin.bat
+Work around a Cygwin workaround for an msw snafu. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00013.html
+
+20141005T1955Z <gchicares@sbcglobal.net> [533]
+
+  install_msw.sh
+Robustify. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00008.html
+
+20141005T2318Z <gchicares@sbcglobal.net> [533]
+
+  assert_lmi_test.cpp
+Demonstrate a latent problem.
+
+20141005T2320Z <gchicares@sbcglobal.net> [533]
+
+  alert.hpp
+  assert_lmi.hpp
+Remove the problem identified 20141005T2318Z, and a congener. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00009.html
+
+20141006T1350Z <gchicares@sbcglobal.net> [533]
+
+  main_cgi.cpp
+  premium_tax_test.cpp
+  workhorse.make
+Rectify data dependencies of certain test targets. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00018.html
+
+20141006T1728Z <gchicares@sbcglobal.net> [533]
+
+  file_command_wx.cpp
+  main_wx.cpp
+  main_wx_test.cpp
+  progress_meter_wx.cpp
+  system_command_wx.cpp
+Force linking despite overly-aggressive linker "optimization". See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00007.html
+
+20141006T1738Z <zeitlin> [533]
+
+  Makefile.am
+  autogen.sh
+  configure.ac
+  aclocal/wxwin.m4                [new file]
+  third_party/Makefile.am         [expunged]
+  third_party/boostfs/Makefile.am [expunged]
+Prepare for forthcoming automated GUI-testing changes.
+
+20141007T1135Z <gchicares@sbcglobal.net> [533]
+
+  file_command_wx.cpp
+  force_linking.hpp
+  main_wx.cpp
+  main_wx_test.cpp
+  progress_meter_wx.cpp
+  system_command_wx.cpp
+Revert the 20141005T1713Z change; remove extraneous semicolons. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00027.html
+
+20141007T1457Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Recognize updated value for "full underwriting".
+
