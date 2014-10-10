@@ -68,7 +68,7 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (LMI_ASSERT_EQUAL(not_true,true)
         ,std::runtime_error
-        ,"Assertion 'not_true == true' failed\n(expected 1 vs observed 0)." LMI_LOCATION
+        ,"Assertion '(not_true) == (true)' failed\n(expected 1 vs observed 0)." LMI_LOCATION
         );
 
     // It does seem wrong that this fails to compile:

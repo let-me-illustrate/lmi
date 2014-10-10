@@ -84,10 +84,10 @@
 
 /// This LMI_ASSERT variant displays both its parameters if unequal.
 
-#define LMI_ASSERT_EQUAL(observed,expected)                     \
-    LMI_ASSERT_WITH_MSG                                         \
-        (observed == expected                                   \
-        ,"expected " << expected << " vs observed " << observed \
+#define LMI_ASSERT_EQUAL(observed,expected)                         \
+    LMI_ASSERT_WITH_MSG                                             \
+        ((observed) == (expected)                                   \
+        ,"expected " << (expected) << " vs observed " << (observed) \
         )
 
 #endif // assert_lmi_hpp
