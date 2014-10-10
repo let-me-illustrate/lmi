@@ -34293,3 +34293,9 @@ the lmi epoch: messagebox title swapped with message. See:
 Add some new macros, with a unit test that fails to compile. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00023.html
 
+20141010T1722Z <gchicares@sbcglobal.net> [533]
+
+  assert_lmi.hpp
+  assert_lmi_test.cpp
+Resolve failure noted 20141010T1713Z.
+
