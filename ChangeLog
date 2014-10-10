@@ -34274,3 +34274,15 @@ Revert the 20141005T1713Z change; remove extraneous semicolons. See:
   custom_io_1.cpp
 Recognize updated value for "full underwriting".
 
+20141010T1547Z <gchicares@sbcglobal.net> [533]
+
+  install_cygwin.bat
+Install a few more packages.
+
+20141010T1551Z <gchicares@sbcglobal.net> [533]
+
+  skeleton.cpp
+Fix defect introduced 20050312T0301Z, from an original file predating
+the lmi epoch: messagebox title swapped with message. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00032.html
+

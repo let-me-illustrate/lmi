@@ -1105,7 +1105,7 @@ void Skeleton::UponTimer(wxTimerEvent&)
 //
 void Skeleton::OnUnhandledException()
 {
-    wxSafeShowMessage("Terminating due to unhandled exception.", "Fatal error");
+    wxSafeShowMessage("Fatal error", "Terminating due to unhandled exception.");
 }
 
 // TODO ?? An unsuccessful experiment.
