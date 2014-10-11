@@ -30,6 +30,7 @@
 
 #include <cstdlib>   // std::exit()
 #include <exception>
+#include <string>
 
 /// This function, of type std::terminate_handler, is intended to be
 /// used as the argument of std::set_terminate().
@@ -41,6 +42,29 @@ inline void lmi_terminate_handler()
         );
     std::exit(EXIT_FAILURE);
 }
+
+/// An extraordinary exception used only for testing the GUI.
+///
+/// The production system (distributed to end users) is tested by
+/// running its code under the supervision of the 'wx_test' program
+/// (which is for developer use only)--in which case 'wx_test'
+/// invokes the production code (replacing only its main() function)
+/// and tests simulated GUI events. For this sole, exclusive purpose,
+/// wx_test_exception is needed--and must pass through the production
+/// code's exception traps as a neutrino through a fishing net. In any
+/// other situation, it undermines the
+///   catch(...) {report_exception();}
+/// idiom, potentially causing great harm; to forestall that, a ctor
+/// is declared here, but implemented only in the 'wx_test' code.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+class wx_test_exception
+  :public std::exception
+{
+  public:
+    explicit wx_test_exception(std::string const& what_arg);
+};
 
 /// Handle an uncaught exception, showing a description if available
 /// readily through what(), with the following idiomatic usage:
@@ -55,11 +79,14 @@ inline void lmi_terminate_handler()
 ///   "Before the try-block in report_exception, query
 ///   std::uncaught_exception() to determine if an exception is
 ///   active. If it is not, throw std::logic_error or some exception
-//    that you know that your framework will catch."
+///   that you know that your framework will catch."
 /// but actually that's invalid--see:
 ///   http://groups.google.com/group/comp.lang.c++.moderated/msg/aa7ce713ee90c044
 ///   "The only problem with uncaught_exception is that it doesn't
 ///   tell you when you're in a catch(...) { ... throw; } block"
+///
+/// Simply rethrow when wx_test_exception is caught: see the comments
+/// accompanying its declaration.
 ///
 /// Show no message when hobsons_choice_exception is caught. It's
 /// thrown only when
@@ -68,17 +95,21 @@ inline void lmi_terminate_handler()
 /// in which case it's pointless to repeat the same message.
 ///
 /// See
-//   http://article.gmane.org/gmane.comp.gnu.mingw.user/18355
-//     [2005-12-16T09:20:33Z from Greg Chicares]
+///  http://article.gmane.org/gmane.comp.gnu.mingw.user/18355
+///    [2005-12-16T09:20:33Z from Greg Chicares]
 /// for a grave gcc problem with msw dlls, which is fixed
-//   http://article.gmane.org/gmane.comp.gnu.mingw.user/18594
-//     [2006-01-10T22:00:24Z from Danny Smith]
+///  http://article.gmane.org/gmane.comp.gnu.mingw.user/18594
+///    [2006-01-10T22:00:24Z from Danny Smith]
 /// in MinGW gcc-3.4.5; it is avoided altogether by writing this
 /// function inline, so this code works with earlier versions, too.
 
 inline void report_exception()
 {
     try
+        {
+        throw;
+        }
+    catch(wx_test_exception const&)
         {
         throw;
         }
