@@ -146,9 +146,8 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     // Unused: <DefinitionOfLifeInsurance>
     std::string WireDate                      = fetch(BenefitData, "WireDate"          );
     // Unused: <Mortality>
-    // Unused: <CompReduction>
+    // Unused: <Commission>
     std::string Underwriting                  = fetch(BenefitData, "Underwriting"      );
-    // Unused: <HedgedRate>
 
     // Unused: <InterestRateData> (all subelements)
 

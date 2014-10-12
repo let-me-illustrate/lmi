@@ -34319,3 +34319,8 @@ Improve exception class added 20141011T1234Z. See:
 Increase safety. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00041.html
 
+20141012T1525Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Reflect latest input format.
+
