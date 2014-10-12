@@ -35,6 +35,7 @@
 #include <wx/dialog.h>
 #include <wx/frame.h>
 #include <wx/log.h>
+#include <wx/scopeguard.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -138,13 +139,18 @@ LMI_WX_TEST_CASE(benchmark_census)
         {
         census_benchmark b(name, c.Read(name + "/path"));
 
+        {
+        // Ensure that the window doesn't stay opened (and possibly affects
+        // negatively the subsequent tests) even if this test fails.
+        wxON_BLOCK_EXIT_OBJ0(b, census_benchmark::close_window);
+
         b.time_operation
             ("Run case"
             ,time_run
             ,'r'
             ,wxMOD_CONTROL | wxMOD_SHIFT
             );
-        b.close_window(); // the illustration one
+        }
 
         b.time_operation
             ("Print to disk"
