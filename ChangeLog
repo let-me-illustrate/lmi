@@ -34311,3 +34311,11 @@ Add a GUI-testing exception class. See:
 Improve exception class added 20141011T1234Z. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00043.html
 
+20141012T1509Z <gchicares@sbcglobal.net> [533]
+
+  handle_exceptions.hpp
+  handle_exceptions_test.cpp
+  main_wx.cpp
+Increase safety. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00041.html
+
