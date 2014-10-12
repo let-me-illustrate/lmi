@@ -34274,3 +34274,53 @@ Revert the 20141005T1713Z change; remove extraneous semicolons. See:
   custom_io_1.cpp
 Recognize updated value for "full underwriting".
 
+20141010T1547Z <gchicares@sbcglobal.net> [533]
+
+  install_cygwin.bat
+Install a few more packages.
+
+20141010T1551Z <gchicares@sbcglobal.net> [533]
+
+  skeleton.cpp
+Fix defect introduced 20050312T0301Z, from an original file predating
+the lmi epoch: messagebox title swapped with message. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00032.html
+
+20141010T1713Z <gchicares@sbcglobal.net> [533]
+
+  assert_lmi.hpp
+  assert_lmi_test.cpp
+Add some new macros, with a unit test that fails to compile. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00023.html
+
+20141010T1722Z <gchicares@sbcglobal.net> [533]
+
+  assert_lmi.hpp
+  assert_lmi_test.cpp
+Resolve failure noted 20141010T1713Z.
+
+20141011T1234Z <gchicares@sbcglobal.net> [533]
+
+  handle_exceptions.hpp
+Add a GUI-testing exception class. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00036.html
+
+20141012T0136Z <gchicares@sbcglobal.net> [533]
+
+  handle_exceptions.hpp
+Improve exception class added 20141011T1234Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00043.html
+
+20141012T1509Z <gchicares@sbcglobal.net> [533]
+
+  handle_exceptions.hpp
+  handle_exceptions_test.cpp
+  main_wx.cpp
+Increase safety. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00041.html
+
+20141012T1525Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Reflect latest input format.
+

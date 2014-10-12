@@ -34,7 +34,7 @@ START "Installing Cygwin" /WAIT setup-x86 ^
   --wait --quiet-mode ^
   --site ftp://mirror.mcs.anl.gov/pub/cygwin/ ^
   --root C:/cygwin-lmi --packages ^
-  cvs,doxygen,gdb,libtool,make,openssh,patch,rsync,subversion,unzip,wget,zsh
+  cvs,dos2unix,doxygen,exif,gdb,libtool,make,openssh,patch,rsync,subversion,unzip,wget,zip,zsh
 cd C:\cygwin-lmi\etc
 echo # >> fstab
 echo C:/opt/lmi/MinGW-20090203 /MinGW_        lmi_specific binary,user 0 0 >> fstab

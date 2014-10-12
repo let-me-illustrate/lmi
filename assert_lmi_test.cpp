@@ -30,6 +30,12 @@
 
 #include "test_tools.hpp"
 
+#define SINGLY_STRINGIFY(Z) #Z
+#define DOUBLY_STRINGIFY(Z) SINGLY_STRINGIFY(Z)
+
+#define LMI_LOCATION \
+    "\n[file " __FILE__ ", line " DOUBLY_STRINGIFY(__LINE__) "]\n"
+
 int test_main(int, char*[])
 {
     LMI_ASSERT(true);
@@ -47,6 +53,26 @@ int test_main(int, char*[])
         LMI_ASSERT(not_true);
     else
         LMI_ASSERT(!not_true);
+
+    // This use-case demonstrates why LMI_ASSERT_WITH_MSG's second
+    // parameter is not token-pasted. This is a deliberate tradeoff,
+    // with the consequence that this:
+    //   LMI_ASSERT_WITH_MSG(1&1,1&1);
+    // fails to compile.
+    BOOST_TEST_THROW
+        (LMI_ASSERT_WITH_MSG(not_true,"<" << not_true << ">")
+        ,std::runtime_error
+        ,"Assertion 'not_true' failed\n(<0>)." LMI_LOCATION
+        );
+
+    BOOST_TEST_THROW
+        (LMI_ASSERT_EQUAL(not_true,true)
+        ,std::runtime_error
+        ,"Assertion '(not_true) == (true)' failed\n(expected 1 vs observed 0)." LMI_LOCATION
+        );
+
+    // It does seem wrong that this fails to compile:
+    LMI_ASSERT_EQUAL(1&1,1&1);
 
     return 0;
 }
