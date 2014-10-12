@@ -34305,3 +34305,9 @@ Resolve failure noted 20141010T1713Z.
 Add a GUI-testing exception class. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00036.html
 
+20141012T0136Z <gchicares@sbcglobal.net> [533]
+
+  handle_exceptions.hpp
+Improve exception class added 20141011T1234Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00043.html
+
