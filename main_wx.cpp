@@ -36,6 +36,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "alert.hpp"                    // safely_show_message()
 #include "fenv_lmi.hpp"
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"
@@ -100,7 +101,14 @@ int WINAPI WinMain
         }
     catch(...)
         {
-        report_exception();
+        try
+            {
+            report_exception();
+            }
+        catch(...)
+            {
+            safely_show_message("Logic error: untrapped exception.");
+            }
         }
 
     fenv_validate();

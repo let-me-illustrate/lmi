@@ -59,5 +59,36 @@
         }                                                       \
     while(0)
 
+/// This LMI_ASSERT variant displays an extra message on failure.
+///
+/// The 'message' parameter is deliberately not token-pasted, so
+/// that it can include streaming operators, e.g.:
+///   "value is " << value
+
+#define LMI_ASSERT_WITH_MSG(condition,message)                 \
+    do                                                         \
+        {                                                      \
+        if(!(condition))                                       \
+            {                                                  \
+            std::ostringstream oss;                            \
+            oss                                                \
+                << "Assertion '" << (#condition) << "' failed" \
+                << "\n(" << message << ")."                    \
+                << "\n[file " << __FILE__                      \
+                << ", line " << __LINE__ << "]\n"              \
+                ;                                              \
+            throw std::runtime_error(oss.str());               \
+            }                                                  \
+        }                                                      \
+    while(0)
+
+/// This LMI_ASSERT variant displays both its parameters if unequal.
+
+#define LMI_ASSERT_EQUAL(observed,expected)                         \
+    LMI_ASSERT_WITH_MSG                                             \
+        ((observed) == (expected)                                   \
+        ,"expected " << (expected) << " vs observed " << (observed) \
+        )
+
 #endif // assert_lmi_hpp
 
