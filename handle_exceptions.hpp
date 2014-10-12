@@ -30,7 +30,7 @@
 
 #include <cstdlib>   // std::exit()
 #include <exception>
-#include <string>
+#include <stdexcept>
 
 /// This function, of type std::terminate_handler, is intended to be
 /// used as the argument of std::set_terminate().
@@ -43,8 +43,9 @@ inline void lmi_terminate_handler()
     std::exit(EXIT_FAILURE);
 }
 
-/// An extraordinary exception used only for testing the GUI.
+/// An extraordinary exception designed to elude report_exception().
 ///
+/// Motivating example: wx_test_exception derives from this class.
 /// The production system (distributed to end users) is tested by
 /// running its code under the supervision of the 'wx_test' program
 /// (which is for developer use only)--in which case 'wx_test'
@@ -59,11 +60,11 @@ inline void lmi_terminate_handler()
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class wx_test_exception
-  :public std::exception
+class stealth_exception
+  :public std::runtime_error
 {
   public:
-    explicit wx_test_exception(std::string const& what_arg);
+    explicit stealth_exception(std::string const& what_arg);
 };
 
 /// Handle an uncaught exception, showing a description if available
@@ -85,7 +86,7 @@ class wx_test_exception
 ///   "The only problem with uncaught_exception is that it doesn't
 ///   tell you when you're in a catch(...) { ... throw; } block"
 ///
-/// Simply rethrow when wx_test_exception is caught: see the comments
+/// Simply rethrow when stealth_exception is caught: see the comments
 /// accompanying its declaration.
 ///
 /// Show no message when hobsons_choice_exception is caught. It's
@@ -109,7 +110,7 @@ inline void report_exception()
         {
         throw;
         }
-    catch(wx_test_exception const&)
+    catch(stealth_exception const&)
         {
         throw;
         }
