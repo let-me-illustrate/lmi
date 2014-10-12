@@ -32,16 +32,54 @@
 
 #include <stdexcept>
 
+/// This function is normally unimplemented.
+
+stealth_exception::stealth_exception(std::string const& what_arg)
+    :std::runtime_error(what_arg)
+{}
+
+class sneaky_exception
+    :public stealth_exception
+{
+  public:
+    explicit sneaky_exception(std::string const& what_arg)
+        :stealth_exception(what_arg)
+    {}
+};
+
 int test_main(int, char*[])
 {
     try
         {
-        BOOST_TEST(true);
         throw std::runtime_error("  This message should appear on stderr.");
         }
     catch(...)
         {
         report_exception();
+        BOOST_TEST(true);
+        }
+
+    // Test the
+    //   catch(...) { try{report_exception();} catch(...){/*warning*/} }
+    // technique to trap every exception--even stealth_exception or an
+    // exception derived from it.
+    try
+        {
+        std::cout << "Expect a success message..." << std::endl;
+        throw sneaky_exception("ERROR");
+        }
+    catch(...)
+        {
+        try
+            {
+            report_exception(); // Should rethrow.
+            BOOST_TEST(false);
+            }
+        catch(...)
+            {
+            std::cout << "...Success: caught elusive exception." << std::endl;
+            BOOST_TEST(true);
+            }
         }
 
     return 0;

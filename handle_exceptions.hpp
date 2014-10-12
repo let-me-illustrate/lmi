@@ -61,7 +61,7 @@ inline void lmi_terminate_handler()
 /// Implicitly-declared special member functions do the right thing.
 
 class stealth_exception
-  :public std::runtime_error
+    :public std::runtime_error
 {
   public:
     explicit stealth_exception(std::string const& what_arg);
@@ -74,6 +74,18 @@ class stealth_exception
 /// once and only once. See:
 ///   http://groups.google.com/group/comp.lang.c++.moderated/msg/7ac8db2c59c34103
 ///
+/// Simply rethrow when stealth_exception is caught: see the comments
+/// accompanying its declaration. To catch even stealth_exception and
+/// classes derived from it--for instance, in a main() function, where
+/// an untrapped exception would cause a crash--write:
+///   catch(...) { try{report_exception();} catch(...){/*warning*/} }
+///
+/// Show no message when hobsons_choice_exception is caught--just
+/// swallow it silently. It's thrown only when
+///  - an appropriate message was just shown, and then
+///  - the safe default action (throwing this exception) was accepted,
+/// in which case it's pointless to repeat the same message.
+///
 /// It may seem like a good idea to test std::uncaught_exception()
 /// right before the try block, as recommended here:
 ///   http://groups.google.com/group/comp.lang.c++.moderated/msg/ec0ef69dd3949955
@@ -85,15 +97,6 @@ class stealth_exception
 ///   http://groups.google.com/group/comp.lang.c++.moderated/msg/aa7ce713ee90c044
 ///   "The only problem with uncaught_exception is that it doesn't
 ///   tell you when you're in a catch(...) { ... throw; } block"
-///
-/// Simply rethrow when stealth_exception is caught: see the comments
-/// accompanying its declaration.
-///
-/// Show no message when hobsons_choice_exception is caught. It's
-/// thrown only when
-///  - an appropriate message was just shown, and then
-///  - the safe default action (throwing this exception) was accepted,
-/// in which case it's pointless to repeat the same message.
 ///
 /// See
 ///  http://article.gmane.org/gmane.comp.gnu.mingw.user/18355
