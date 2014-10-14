@@ -27,8 +27,11 @@
 #endif
 
 #include "assert_lmi.hpp"
+#include "calendar_date.hpp"
 #include "configurable_settings.hpp"
 #include "force_linking.hpp"
+#include "illustrator.hpp"
+#include "input.hpp"
 #include "main_common.hpp"              // initialize_application()
 #include "msw_workarounds.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
@@ -57,11 +60,13 @@ class application_test
         {
         test_about_dialog_version();
         test_configurable_settings();
+        test_default_input();
         }
 
   private:
     static void test_about_dialog_version();
     static void test_configurable_settings();
+    static void test_default_input();
 };
 
 void application_test::test_about_dialog_version()
@@ -117,6 +122,20 @@ void application_test::test_configurable_settings()
         {
         LMI_ASSERT("c:/fop-0.20.5/private_placement_default.ill" == default_input);
         }
+}
+
+void application_test::test_default_input()
+{
+    calendar_date const today;
+    calendar_date const first_of_month(today.year(), today.month(), 1);
+
+    Input const& cell = default_cell();
+    calendar_date const effective_date = exact_cast<tnr_date>(cell["EffectiveDate"])->value();
+    LMI_ASSERT(first_of_month == effective_date);
+
+    std::string const general_account_date = exact_cast<numeric_sequence>(cell["GeneralAccountRate"])->value();
+    LMI_ASSERT(!general_account_date.empty());
+    wxLogMessage("GeneralAccountRate is \"%s\"", general_account_date.c_str());
 }
 
 // Application to drive the tests
