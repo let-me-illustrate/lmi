@@ -38,6 +38,7 @@
 #include <boost/filesystem/operations.hpp>
 
 #include <wx/dialog.h>
+#include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
 #include <wx/testing.h>
 #include <wx/uiaction.h>
@@ -151,8 +152,35 @@ bool SkeletonTest::OnInit()
 
 void SkeletonTest::RunTheTests()
 {
+    // Create log window for output that should be checked by the user.
+    class LogWindow : public wxLogWindow
+    {
+      public:
+        LogWindow() : wxLogWindow(NULL, "Log Messages", true, false) {}
+        virtual bool OnFrameClose(wxFrame* frame)
+        {
+            wxTheApp->ExitMainLoop();
+            return wxLogWindow::OnFrameClose(frame);
+        }
+    };
+    LogWindow *log = new LogWindow();
+
+    wxWindow *mainWin = GetTopWindow();
+    mainWin->SetFocus();
+
     application_test::test();
-    ExitMainLoop();
+
+    // We want to show log output after the tests finished running and hide the
+    // app window, which is no longer in use. This doesn't work out of the box,
+    // because the main window is set application's top window and closing it
+    // terminates the app. LogWindow's window, on the other hand, doesn't keep
+    // the app running because it returns false from ShouldPreventAppExit().
+    // This code (together with LogWindow::OnFrameClose above) does the right
+    // thing: close the main window and keep running until the user closes the
+    // log window.
+    log->GetFrame()->SetFocus();
+    SetExitOnFrameDelete(false);
+    mainWin->Close();
 }
 
 int main(int argc, char* argv[])
