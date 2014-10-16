@@ -275,6 +275,10 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["FundRateFootnote"              ] = &FundRateFootnote               ;
     Strings         ["FundRateFootnote0"             ] = &FundRateFootnote0              ;
     Strings         ["FundRateFootnote1"             ] = &FundRateFootnote1              ;
+    Strings         ["IssuingCompanyFootnote"        ] = &IssuingCompanyFootnote         ;
+    Strings         ["SubsidiaryFootnote"            ] = &SubsidiaryFootnote             ;
+    Strings         ["PlacementAgentFootnote"        ] = &PlacementAgentFootnote         ;
+    Strings         ["MarketingNameFootnote"         ] = &MarketingNameFootnote          ;
 
     Strings         ["ProducerName"          ] = &ProducerName           ;
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
@@ -697,6 +701,10 @@ void LedgerInvariant::Init(BasicValues* b)
         FundRateFootnote               = p.datum("FundRateFootnote"               );
         FundRateFootnote0              = p.datum("FundRateFootnote0"              );
         FundRateFootnote1              = p.datum("FundRateFootnote1"              );
+        IssuingCompanyFootnote         = p.datum("IssuingCompanyFootnote"         );
+        SubsidiaryFootnote             = p.datum("SubsidiaryFootnote"             );
+        PlacementAgentFootnote         = p.datum("PlacementAgentFootnote"         );
+        MarketingNameFootnote          = p.datum("MarketingNameFootnote"          );
         }
 
     ProducerName            = (*b->Input_)["AgentName"].str();
@@ -970,6 +978,10 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     FundRateFootnote               = a_Addend.FundRateFootnote;
     FundRateFootnote0              = a_Addend.FundRateFootnote0;
     FundRateFootnote1              = a_Addend.FundRateFootnote1;
+    IssuingCompanyFootnote         = a_Addend.IssuingCompanyFootnote;
+    SubsidiaryFootnote             = a_Addend.SubsidiaryFootnote;
+    PlacementAgentFootnote         = a_Addend.PlacementAgentFootnote;
+    MarketingNameFootnote          = a_Addend.MarketingNameFootnote;
 
     Comments                    = a_Addend.Comments;
 

@@ -34324,3 +34324,17 @@ Increase safety. See:
   custom_io_1.cpp
 Reflect latest input format.
 
+20141016T1215Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Facilitate regression testing.
+
+20141016T1440Z <gchicares@sbcglobal.net> [533]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+  reg_d_individual.xsl
+Add certain footnotes.
+
