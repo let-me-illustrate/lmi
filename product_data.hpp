@@ -262,6 +262,10 @@ class LMI_SO product_data
     glossed_string FundRateFootnote;
     glossed_string FundRateFootnote0;
     glossed_string FundRateFootnote1;
+    glossed_string IssuingCompanyFootnote;
+    glossed_string SubsidiaryFootnote;
+    glossed_string PlacementAgentFootnote;
+    glossed_string MarketingNameFootnote;
 };
 
 void LMI_SO load(product_data      &, fs::path const&);

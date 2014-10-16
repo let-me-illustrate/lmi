@@ -38,7 +38,7 @@
         <fo:simple-page-master master-name="cover">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="1.4in 0 1.2in"/>
+          <fo:region-body margin="1.3in 0 1.2in"/>
           <!-- Footer -->
           <fo:region-after extent=".75in"/>
         </fo:simple-page-master>
@@ -47,7 +47,7 @@
         <fo:simple-page-master master-name="irr-guaranteed-illustration">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="2.6in 0 1.1in"/>
+          <fo:region-body margin="2.7in 0 1.1in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -58,7 +58,7 @@
         <fo:simple-page-master master-name="irr-current-illustration">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="2.6in 0 1.1in"/>
+          <fo:region-body margin="2.7in 0 1.1in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -69,7 +69,7 @@
         <fo:simple-page-master master-name="current-illustration">
           <xsl:call-template name="set-page-size"/>
           <!-- Central part of page -->
-          <fo:region-body margin="2.6in 0 1.2in"/>
+          <fo:region-body margin="2.7in 0 1.2in"/>
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
@@ -163,7 +163,7 @@
                 </xsl:with-param>
               </xsl:call-template>
             </fo:block>
-            <fo:block padding-after="120.0pt">
+            <fo:block padding-after="110.0pt">
               Date Prepared: <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:block>
@@ -180,7 +180,8 @@
               This material must be preceded or accompanied by the current
               Confidential Private Placement Memorandum for
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              and the current prospectuses and private placement memoranda
+              and the current prospectuses (or summary prospectuses,
+              if available) and private placement memoranda
               for its underlying investment choices. Investors should
               carefully consider the investment objectives, risks,
               charges and expenses of the policy and its underlying investment
@@ -189,35 +190,17 @@
             </fo:block>
             <fo:block padding-after="10.0pt">
               <xsl:value-of select="$scalars/PolicyMktgName"/>
-              is a flexible premium variable adjustable life insurance policy
-              issued by <xsl:value-of select="$scalars/InsCoName"/>
-              (<xsl:value-of select="$scalars/InsCoShortName"/>),
-              <xsl:value-of select="$scalars/InsCoStreet"/>.
+              &nbsp;<xsl:value-of select="$scalars/IssuingCompanyFootnote"/>
             </fo:block>
             <fo:block padding-after="10.0pt">
               Placement Agents:
-              <xsl:value-of select="$scalars/CoUnderwriter"/> serves as the
-              placement agent for contracts sold by its registered
-              representatives.
-              &nbsp;<xsl:value-of select="$scalars/MainUnderwriter"/>
-              serves as the placement agent for contracts sold by registered
-              representatives of other broker-dealers that have entered into
-              distribution agreements with
-              &nbsp;<xsl:value-of select="$scalars/MainUnderwriter"/>.
+              &nbsp;<xsl:value-of select="$scalars/PlacementAgentFootnote"/>
             </fo:block>
             <fo:block padding-after="10.0pt">
-              <xsl:value-of select="$scalars/CoUnderwriter"/> and
-              &nbsp;<xsl:value-of select="$scalars/MainUnderwriter"/> are
-              subsidiaries of <xsl:value-of select="$scalars/InsCoName"/>
-              (<xsl:value-of select="$scalars/InsCoShortName"/>) and are
-              located at <xsl:value-of select="$scalars/InsCoStreet"/>.
+              <xsl:value-of select="$scalars/SubsidiaryFootnote"/>
             </fo:block>
             <fo:block padding-after="10.0pt">
-              <xsl:value-of select="$scalars/InsCoShortName"/> Financial Group
-              is a marketing designation
-              for <xsl:value-of select="$scalars/InsCoName"/>
-              (<xsl:value-of select="$scalars/InsCoShortName"/>)
-              and its affiliate companies and sales representatives.
+              <xsl:value-of select="$scalars/MarketingNameFootnote"/>
             </fo:block>
             <fo:block>
               Compliance tracking number:
@@ -522,41 +505,43 @@
           </fo:block>
 
           <!-- Certification Statements -->
-          <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center" padding-top="2em">
-            Certification Statements
-          </fo:block>
-          <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left" padding-top="1em">
-            <fo:block padding-top="1em">
-              POLICY OWNER / APPLICANT
+          <xsl:if test="$scalars/IsInforce!='1'">
+            <fo:block font-weight="bold" font-size="11pt" font-family="sans-serif" text-align="center" padding-top="2em">
+              Certification Statements
             </fo:block>
-            <fo:block padding-bottom="1em">
-              I have received a copy of this illustration, and I understand
-              that any non-guaranteed charges illustrated are subject
-              to change and could be either higher or lower. Additionally,
-              I have been informed by my agent that these values
-              are not guaranteed.
+            <fo:block font-weight="normal" font-size="9pt" font-family="sans-serif" text-align="left" padding-top="1em">
+              <fo:block padding-top="1em">
+                POLICY OWNER / APPLICANT
+              </fo:block>
+              <fo:block padding-bottom="1em">
+                I have received a copy of this illustration, and I understand
+                that any non-guaranteed charges illustrated are subject
+                to change and could be either higher or lower. Additionally,
+                I have been informed by my agent that these values
+                are not guaranteed.
+              </fo:block>
+              <fo:block text-decoration="overline" padding="2em">
+                POLICY OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
+                <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </fo:block>
+              <fo:block padding-top="2em">
+                AGENT / AUTHORIZED REPRESENTATIVE
+              </fo:block>
+              <fo:block padding-bottom="1em">
+                I certify that this illustration has been presented
+                to the applicant, and that I have explained that any
+                non-guaranteed charges illustrated are subject to change. I have
+                made no statements that are inconsistent with the illustration.
+              </fo:block>
+              <fo:block text-decoration="overline" padding="2em">
+                AGENT OR AUTHORIZED REPRESENTATIVE
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </fo:block>
             </fo:block>
-            <fo:block text-decoration="overline" padding="2em">
-              POLICY OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
-              <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </fo:block>
-            <fo:block padding-top="2em">
-              AGENT / AUTHORIZED REPRESENTATIVE
-            </fo:block>
-            <fo:block padding-bottom="1em">
-              I certify that this illustration has been presented
-              to the applicant, and that I have explained that any
-              non-guaranteed charges illustrated are subject to change. I have
-              made no statements that are inconsistent with the illustration.
-            </fo:block>
-            <fo:block text-decoration="overline" padding="2em">
-              AGENT OR AUTHORIZED REPRESENTATIVE
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </fo:block>
-          </fo:block>
+          </xsl:if>
           <xsl:if test="not($has_supplemental_report)">
             <fo:block id="endofdoc"/>
           </xsl:if>
