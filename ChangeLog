@@ -34338,3 +34338,8 @@ Facilitate regression testing.
   reg_d_individual.xsl
 Add certain footnotes.
 
+20141016T2306Z <gchicares@sbcglobal.net> [533]
+
+  version.hpp
+Designate release candidate 5992.
+
