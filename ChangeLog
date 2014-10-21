@@ -34348,3 +34348,8 @@ Designate release candidate 5992.
   install_cygwin.bat
 Install git.
 
+20141021T1358Z <gchicares@sbcglobal.net> [533]
+
+  expression_template_0_test.cpp
+Improve documentation.
+
