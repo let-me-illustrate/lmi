@@ -63,8 +63,8 @@ class Skeleton
 
   protected:
     // wxApp overrides that are further overridden in gui test.
-    virtual bool OnInit                ();
     virtual bool OnExceptionInMainLoop ();
+    virtual bool OnInit                ();
 
   private:
     wxMenuBar* AdjustMenus(wxMenuBar*);
