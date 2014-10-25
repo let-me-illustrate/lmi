@@ -280,6 +280,10 @@ void product_data::ascribe_members()
     ascribe("FundRateFootnote"              , &product_data::FundRateFootnote              );
     ascribe("FundRateFootnote0"             , &product_data::FundRateFootnote0             );
     ascribe("FundRateFootnote1"             , &product_data::FundRateFootnote1             );
+    ascribe("IssuingCompanyFootnote"        , &product_data::IssuingCompanyFootnote        );
+    ascribe("SubsidiaryFootnote"            , &product_data::SubsidiaryFootnote            );
+    ascribe("PlacementAgentFootnote"        , &product_data::PlacementAgentFootnote        );
+    ascribe("MarketingNameFootnote"         , &product_data::MarketingNameFootnote         );
 }
 
 /// Backward-compatibility serial number of this class's xml version.
@@ -396,6 +400,10 @@ void product_data::redintegrate_ex_post
 ///
 /// Only the most crucial members are explicitly initialized. For the
 /// rest, default (empty) strings are good enough for 'sample'.
+///
+/// The '*Footnote' members in particular are left empty here, which
+/// makes the 'sample' product less complete. SOMEDAY !! Add them,
+/// here and in 'my_prod.cpp'.
 
 void product_data::WritePolFiles()
 {

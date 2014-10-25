@@ -289,6 +289,10 @@ class LMI_SO LedgerInvariant
     std::string     FundRateFootnote;
     std::string     FundRateFootnote0;
     std::string     FundRateFootnote1;
+    std::string     IssuingCompanyFootnote;
+    std::string     SubsidiaryFootnote;
+    std::string     PlacementAgentFootnote;
+    std::string     MarketingNameFootnote;
 
     std::string     ProducerName;
     std::string     ProducerStreet;

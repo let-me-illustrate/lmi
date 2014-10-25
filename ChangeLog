@@ -34324,3 +34324,64 @@ Increase safety. See:
   custom_io_1.cpp
 Reflect latest input format.
 
+20141016T1215Z <gchicares@sbcglobal.net> [533]
+
+  custom_io_1.cpp
+Facilitate regression testing.
+
+20141016T1440Z <gchicares@sbcglobal.net> [533]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+  reg_d_individual.xsl
+Add certain footnotes.
+
+20141016T2306Z <gchicares@sbcglobal.net> [533]
+
+  version.hpp
+Designate release candidate 5992.
+
+20141021T1053Z <gchicares@sbcglobal.net> [533]
+
+  install_cygwin.bat
+Install git.
+
+20141021T1358Z <gchicares@sbcglobal.net> [533]
+
+  expression_template_0_test.cpp
+Improve documentation.
+
+20141025T1442Z <gchicares@sbcglobal.net> [533]
+
+  Makefile.am
+  main_wx_test.cpp
+  objects.make
+  skeleton.hpp
+  wx_test_about_version.cpp       [new file]
+  wx_test_benchmark_census.cpp    [new file]
+  wx_test_calculation_summary.cpp [new file]
+  wx_test_case.hpp                [new file]
+  wx_test_config_settings.cpp     [new file]
+  wx_test_create_open.cpp         [new file]
+  wx_test_default_input.cpp       [new file]
+  wx_test_default_update.cpp      [new file]
+  wx_test_expiry_dates.cpp        [new file]
+  wx_test_extract.cpp             [new file]
+  wx_test_input_sequences.cpp     [new file]
+  wx_test_input_validation.cpp    [new file]
+  wx_test_mvc_dialog.hpp          [new file]
+  wx_test_new.hpp                 [new file]
+  wx_test_paste_census.cpp        [new file]
+  wx_test_pdf_create.cpp          [new file]
+  wx_test_statusbar.hpp           [new file]
+  wx_test_validate_output.cpp     [new file]
+Augment automated GUI test.
+
+20141025T1506Z <gchicares@sbcglobal.net> [533]
+
+  main_wx_test.cpp
+Close "Help | About" dialog if initially open. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00059.html
+

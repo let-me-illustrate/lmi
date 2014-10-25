@@ -362,6 +362,20 @@ lmi_wx_objects := \
 
 wx_test_objects := \
   main_wx_test.o \
+  wx_test_about_version.o \
+  wx_test_benchmark_census.o \
+  wx_test_calculation_summary.o \
+  wx_test_config_settings.o \
+  wx_test_create_open.o \
+  wx_test_default_input.o \
+  wx_test_default_update.o \
+  wx_test_expiry_dates.o \
+  wx_test_extract.o \
+  wx_test_input_sequences.o \
+  wx_test_input_validation.o \
+  wx_test_paste_census.o \
+  wx_test_pdf_create.o \
+  wx_test_validate_output.o \
 
 ifneq (,$(RC))
   lmi_wx_objects  += lmi_msw_res.o
