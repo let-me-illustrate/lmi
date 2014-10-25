@@ -34,7 +34,8 @@
 // that suppresses assertions in other libraries, which it might be
 // desirable to leave in production code. It would have been easy to
 // accommodate programmers who never want to turn off assertions by
-// using a library-specific macro instead.
+// using a library-specific macro instead. Cf.:
+//   http://lists.boost.org/Archives/boost/2003/10/55518.php
 #   define NDEBUG 1
 #endif // defined USE_UBLAS
 

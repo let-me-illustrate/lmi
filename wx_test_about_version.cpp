@@ -1,3 +1,5 @@
+// Version number test case for the GUI test suite.
+//
 // Copyright (C) 2014 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
@@ -19,12 +21,38 @@
 
 // $Id$
 
-#ifndef version_hpp
-#define version_hpp
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif
 
-#include "config.hpp"
+#include "assert_lmi.hpp"
+#include "wx_test_case.hpp"
+#include "version.hpp"
 
-#define LMI_VERSION "20141016T2306Z"
+#include <wx/dialog.h>
+#include <wx/testing.h>
+#include <wx/uiaction.h>
 
-#endif // version_hpp
+LMI_WX_TEST_CASE(about_dialog_version)
+{
+    struct expect_about_dialog : public wxExpectModalBase<wxDialog>
+    {
+        virtual int OnInvoked(wxDialog* d) const
+            {
+            LMI_ASSERT(0 != d);
+            LMI_ASSERT(d->GetTitle().EndsWith(LMI_VERSION));
+            return wxID_OK;
+            }
+    };
 
+    wxUIActionSimulator z;
+    z.KeyDown('h', wxMOD_ALT);
+    z.KeyUp  ('h', wxMOD_ALT);
+    z.KeyDown('a'           );
+    z.KeyUp  ('a'           );
+    wxTEST_DIALOG
+        (wxYield()
+        ,expect_about_dialog()
+        );
+}

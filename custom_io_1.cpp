@@ -262,6 +262,13 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     z["External1035ExchangeFromMec"] = "Yes";
     std::string wire_date = convert_date(WireDate);
     z["EffectiveDate"              ] = wire_date;
+    // For consistency, set other dates the same way, as would be done
+    // by default for new business in our GUI. Do this even for
+    // 'LastCoiReentryDate', which doesn't affect single-premium BOLI
+    // calculations, because it does affect regression testing with
+    // ("X" == AutoClose). ('DateOfBirth' is already set above to a
+    // value that should be appropriate.)
+    z["LastCoiReentryDate"         ] = wire_date;
     z["InforceAsOfDate"            ] = wire_date;
     z["LastMaterialChangeDate"     ] = wire_date;
     z["GroupUnderwritingType"] =

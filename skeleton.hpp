@@ -63,7 +63,8 @@ class Skeleton
 
   protected:
     // wxApp overrides that are further overridden in gui test.
-    virtual bool OnInit();
+    virtual bool OnExceptionInMainLoop ();
+    virtual bool OnInit                ();
 
   private:
     wxMenuBar* AdjustMenus(wxMenuBar*);
@@ -114,9 +115,8 @@ class Skeleton
     void UponWindowTileVertically         (wxCommandEvent&);
 
     // wxApp overrides.
-    virtual bool OnExceptionInMainLoop ();
-    virtual int  OnExit                ();
-    virtual void OnUnhandledException  ();
+    virtual int  OnExit               ();
+    virtual void OnUnhandledException ();
 
     bool ProcessCommandLine(int argc, char* argv[]);
     void UpdateViews();

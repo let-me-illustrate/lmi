@@ -284,7 +284,21 @@ lmi_cli_LDADD = \
     $(BOOST_LIBS)
 
 wx_test_SOURCES = \
-  main_wx_test.cpp
+  main_wx_test.cpp \
+  wx_test_about_version.cpp \
+  wx_test_benchmark_census.cpp \
+  wx_test_calculation_summary.cpp \
+  wx_test_config_settings.cpp \
+  wx_test_create_open.cpp \
+  wx_test_default_input.cpp \
+  wx_test_default_update.cpp \
+  wx_test_expiry_dates.cpp \
+  wx_test_extract.cpp \
+  wx_test_input_sequences.cpp \
+  wx_test_input_validation.cpp \
+  wx_test_paste_census.cpp \
+  wx_test_pdf_create.cpp \
+  wx_test_validate_output.cpp
 wx_test_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS)
 wx_test_LDADD = \
     liblmi.la \
