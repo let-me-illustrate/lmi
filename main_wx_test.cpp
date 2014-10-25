@@ -41,6 +41,7 @@
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
 #include <wx/stopwatch.h>
+#include <wx/uiaction.h>
 #include <wx/wfstream.h>
 
 #include <boost/scoped_ptr.hpp>
@@ -539,9 +540,32 @@ void SkeletonTest::RunTheTests()
             return wxLogWindow::OnFrameClose(frame);
         }
     };
-    LogWindow* const log = new LogWindow();
 
     wxWindow* const mainWin = GetTopWindow();
+
+    // Close any initially opened dialogs (e.g. "About" dialog shown unless a
+    // special command line option is specified).
+    for (;;)
+        {
+        wxWindow* const activeWin = wxGetActiveWindow();
+        if (!activeWin || activeWin == mainWin)
+            break;
+
+        // Try to close the dialog.
+        wxUIActionSimulator ui;
+        ui.Char(WXK_ESCAPE);
+        wxYield();
+
+        // But stop trying if it didn't work.
+        if (wxGetActiveWindow() == activeWin)
+            {
+            wxLogError("Failed to close the currently opened window, "
+                       "please ensure it doesn't appear on program startup.");
+            return;
+            }
+        }
+
+    LogWindow* const log = new LogWindow();
     mainWin->SetFocus();
 
     wxStopWatch sw;
