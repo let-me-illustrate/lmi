@@ -34379,3 +34379,9 @@ Improve documentation.
   wx_test_validate_output.cpp     [new file]
 Augment automated GUI test.
 
+20141025T1506Z <gchicares@sbcglobal.net> [533]
+
+  main_wx_test.cpp
+Close "Help | About" dialog if initially open. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00059.html
+
