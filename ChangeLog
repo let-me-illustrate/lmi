@@ -34385,3 +34385,16 @@ Augment automated GUI test.
 Close "Help | About" dialog if initially open. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00059.html
 
+20141025T1534Z <gchicares@sbcglobal.net> [533]
+
+  Makefile.am
+  skeleton.hpp
+Alphabetize where there's no more compelling order.
+
+20141026T0104Z <gchicares@sbcglobal.net> [533]
+
+  install_wx.make
+  skeleton.cpp
+  skeleton.hpp
+Override OnAssertFailure().
+
