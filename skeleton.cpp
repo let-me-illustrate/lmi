@@ -102,6 +102,7 @@
 #include <wx/xrc/xmlres.h>
 
 #include <iterator>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
@@ -525,6 +526,38 @@ void Skeleton::UponHelp(wxCommandEvent&)
         }
 
     fenv_validate(e_fenv_indulge_0x027f);
+}
+
+/// Handle wx assertion failure.
+///
+/// By default, wx displays a "Do you want to stop the program?"
+/// messagebox, with MB_YESNOCANCEL buttons. The first choice traps to
+/// a debugger; end users who pick it will be startled by the ensuing
+/// behavior. This overriding implementation essentially forces the
+/// choice "No", which lets the program attempt to continue.
+///
+/// Ignore the 'func' argument: it is superfluous.
+///
+/// Ignore the 'msg' argument iff it represents an empty string.
+
+void Skeleton::OnAssertFailure
+    (wxChar const* file
+    ,int           line
+    ,wxChar const* // func
+    ,wxChar const* cond
+    ,wxChar const* msg
+    )
+{
+    wxString m(msg);
+    if(!m.IsEmpty()) {m = "\n(" + m + ")";}
+    std::ostringstream oss;
+    oss
+        << "Assertion '" << wxString(cond) << "' failed"
+        <<                           m     << "."
+        << "\n[file "    << wxString(file)
+        << ", line "     <<          line  << "]\n"
+        ;
+    safe_message_alert(oss.str().c_str());
 }
 
 /// Rethrow an exception caught by wx into a local catch clause.
