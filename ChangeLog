@@ -34398,3 +34398,11 @@ Alphabetize where there's no more compelling order.
   skeleton.hpp
 Override OnAssertFailure().
 
+20141026T2211Z <gchicares@sbcglobal.net> [532]
+
+  census_view.cpp
+  census_view.hpp
+Disable general print commands for censuses. See:
+  https://savannah.nongnu.org/support/?104490
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00054.html
+
