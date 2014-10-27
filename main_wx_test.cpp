@@ -446,6 +446,10 @@ class SkeletonTest : public Skeleton
   private:
     void RunTheTests();
 
+    // This event handler only exists to prevent the base class from handling
+    // this event, see the comment near its use.
+    void ConsumeMenuOpen(wxMenuEvent&) {}
+
     std::string runtime_error_;
     bool is_running_tests_;
 };
@@ -610,6 +614,13 @@ void SkeletonTest::RunTheTests()
     log->GetFrame()->Maximize();
     log->GetFrame()->SetFocus();
     SetExitOnFrameDelete(false);
+
+    // Before closing the main window, ensure that the base class event handler
+    // relying on it being alive is not called any more, otherwise dereferencing
+    // the pointer to the main frame inside it would simply crash on any attempt
+    // to open the log frame menu.
+    Bind(wxEVT_MENU_OPEN, &SkeletonTest::ConsumeMenuOpen, this);
+
     mainWin->Close();
 }
 

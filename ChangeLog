@@ -34412,3 +34412,14 @@ Disable general print commands for censuses. See:
 Avoid unnecessary copying. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
 
+20141027T1434Z <gchicares@sbcglobal.net> [532]
+
+  skeleton.cpp
+Prefer not to call safe_message_alert() directly.
+
+20141027T1435Z <gchicares@sbcglobal.net> [532]
+
+  main_wx_test.cpp
+Don't use base class handler for log frame menu. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
+
