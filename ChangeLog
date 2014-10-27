@@ -34406,3 +34406,9 @@ Disable general print commands for censuses. See:
   https://savannah.nongnu.org/support/?104490
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00054.html
 
+20141027T1211Z <gchicares@sbcglobal.net> [532]
+
+  skeleton.cpp
+Avoid unnecessary copying. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
+
