@@ -807,7 +807,7 @@ void Skeleton::UponMenuOpen(wxMenuEvent& event)
     event.Skip();
 
     int child_frame_count = 0;
-    wxWindowList wl = frame_->GetChildren();
+    wxWindowList const& wl = frame_->GetChildren();
     for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
         child_frame_count += !!dynamic_cast<wxMDIChildFrame*>(*i);
@@ -1323,7 +1323,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
 void Skeleton::UpdateViews()
 {
-    wxWindowList wl = frame_->GetChildren();
+    wxWindowList const& wl = frame_->GetChildren();
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
             (wl.size()
