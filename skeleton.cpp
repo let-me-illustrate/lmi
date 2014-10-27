@@ -557,7 +557,7 @@ void Skeleton::OnAssertFailure
         << "\n[file "    << wxString(file)
         << ", line "     <<          line  << "]\n"
         ;
-    safe_message_alert(oss.str().c_str());
+    safely_show_message(oss.str().c_str());
 }
 
 /// Rethrow an exception caught by wx into a local catch clause.
