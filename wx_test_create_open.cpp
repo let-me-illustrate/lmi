@@ -28,8 +28,8 @@
 
 #include "assert_lmi.hpp"
 #include "mvc_controller.hpp"
-#include "wx_test_case.hpp"
 #include "version.hpp"
+#include "wx_test_case.hpp"
 
 #include <wx/dialog.h>
 #include <wx/scopeguard.h>
@@ -46,8 +46,14 @@
 // ready for this dialog appearing and, second, "File|Save" menu command is
 // disabled for the files created in this way and "File|Save as" needs to
 // be used instead.
-void do_test_create_open(int key, wxString const& file, bool uses_dialog)
+void do_test_create_open
+        (wx_base_test_case& test
+        ,int key
+        ,wxString const& file
+        ,bool uses_dialog)
 {
+    test.skip_if_not_supported(file.c_str());
+
     LMI_ASSERT(!wxFileExists(file));
 
     wxUIActionSimulator z;
@@ -100,45 +106,45 @@ void do_test_create_open(int key, wxString const& file, bool uses_dialog)
 
 LMI_WX_TEST_CASE(create_open_census)
 {
-    do_test_create_open('c', "testfile.cns",  false);
+    do_test_create_open(*this, 'c', "testfile.cns",  false);
 }
 
 LMI_WX_TEST_CASE(create_open_illustration)
 {
-    do_test_create_open('i', "testfile.ill",  true);
+    do_test_create_open(*this, 'i', "testfile.ill",  true);
 }
 
 LMI_WX_TEST_CASE(create_open_database)
 {
-    do_test_create_open('d', "testfile.database", false);
+    do_test_create_open(*this, 'd', "testfile.database", false);
 }
 
 LMI_WX_TEST_CASE(create_open_policy)
 {
-    do_test_create_open('p', "testfile.policy",  false);
+    do_test_create_open(*this, 'p', "testfile.policy",  false);
 }
 
 LMI_WX_TEST_CASE(create_open_rounding)
 {
-    do_test_create_open('r', "testfile.rounding", false);
+    do_test_create_open(*this, 'r', "testfile.rounding", false);
 }
 
 LMI_WX_TEST_CASE(create_open_strata)
 {
-    do_test_create_open('s', "testfile.strata", false);
+    do_test_create_open(*this, 's', "testfile.strata", false);
 }
 
 LMI_WX_TEST_CASE(create_open_mec)
 {
-    do_test_create_open('m', "testfile.mec", true);
+    do_test_create_open(*this, 'm', "testfile.mec", true);
 }
 
 LMI_WX_TEST_CASE(create_open_gpt)
 {
-    do_test_create_open('g', "testfile.gpt", true);
+    do_test_create_open(*this, 'g', "testfile.gpt", true);
 }
 
 LMI_WX_TEST_CASE(create_open_text)
 {
-    do_test_create_open('x', "testfile.txt", false);
+    do_test_create_open(*this, 'x', "testfile.txt", false);
 }

@@ -37,6 +37,7 @@
 #include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
 
+#include <wx/docview.h>
 #include <wx/fileconf.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
@@ -52,7 +53,6 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
-#include <utility>                      // std::pair
 #include <vector>
 
 LMI_FORCE_LINKING_EX_SITU(file_command_wx)
@@ -109,6 +109,41 @@ class test_assertion_failure_exception
         }
 };
 
+/// Exception thrown if the test needs to be skipped.
+///
+/// This exception doesn't carry any extra information but just needs to have a
+/// distinct type to allow treating it differently in run().
+class test_skipped_exception
+    :public stealth_exception
+{
+  public:
+    test_skipped_exception(std::string const& what)
+        :stealth_exception(what)
+        {
+        }
+};
+
+/// Simple struct collecting the statistics about the tests we ran.
+///
+/// Implicitly-declared special member functions do the right thing.
+struct TestsResults
+{
+    TestsResults()
+        :total(0)
+        ,passed(0)
+        ,skipped(0)
+        ,failed(0)
+    {
+    }
+
+    // The sum of passed, skipped and failed is the same as total (except when
+    // a test is in process of execution and its result is yet unknown).
+    int total,
+        passed,
+        skipped,
+        failed;
+};
+
 /// Run the tests.
 ///
 /// This is a simple Meyers singleton.
@@ -131,10 +166,7 @@ class application_test
     //
     // This function consumes all the exceptions thrown during its execution
     // and never throws itself.
-    //
-    // Return the number of tests executed as the first pair component and the
-    // number of failed tests as the second component.
-    std::pair<int, int> run() /* noexcept */;
+    TestsResults run() /* noexcept */;
 
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
     void add_test(wx_base_test_case* test);
@@ -312,14 +344,14 @@ bool application_test::process_command_line(int& argc, char* argv[])
     return true;
 }
 
-std::pair<int, int> application_test::run()
+TestsResults application_test::run()
 {
     // Always run the tests in the same, predictable order (we may want to add
     // a "random shuffle" option later, but even then predictable behaviour
     // should arguably remain the default).
     sort_tests();
 
-    std::pair<int, int> results(0, 0);
+    TestsResults results;
 
     // Indent the test status reports to make them stand out.
     char const* const indent = "    ";
@@ -330,13 +362,19 @@ std::pair<int, int> application_test::run()
         if ((run_all_ && i->run != run_no) || i->run == run_yes)
             {
             std::string error;
-            results.first++;
+            results.total++;
 
             try
                 {
                 wxStopWatch sw;
                 i->run_test();
                 wxLogMessage("%s%s: ok (%ldms)", indent, i->get_name(), sw.Time());
+                results.passed++;
+                }
+            catch(test_skipped_exception const& e)
+                {
+                wxLogMessage("%s%s: skipped (%s)", indent, i->get_name(), e.what());
+                results.skipped++;
                 }
             catch(std::exception const& e)
                 {
@@ -349,7 +387,7 @@ std::pair<int, int> application_test::run()
 
             if (!error.empty())
                 {
-                results.second++;
+                results.failed++;
 
                 // When logging to a log window, it's better to have everything
                 // on a single line to avoid breaking the output structure.
@@ -420,6 +458,20 @@ wxConfigBase const& wx_base_test_case::config() const
     return application_test::instance().get_config_for(get_name());
 }
 
+void wx_base_test_case::skip_if_not_supported(char const* file)
+{
+    const wxString p(file);
+    if(!wxDocManager::GetDocumentManager()->FindTemplateForPath(p))
+        {
+        throw test_skipped_exception
+                (wxString::Format
+                    ("documents with extension \"%s\" not supported"
+                    ,p.AfterLast('.')
+                    ).ToStdString()
+                );
+        }
+}
+
 // Application to drive the tests
 class SkeletonTest : public Skeleton
 {
@@ -445,6 +497,10 @@ class SkeletonTest : public Skeleton
 
   private:
     void RunTheTests();
+
+    // This event handler only exists to prevent the base class from handling
+    // this event, see the comment near its use.
+    void ConsumeMenuOpen(wxMenuEvent&) {}
 
     std::string runtime_error_;
     bool is_running_tests_;
@@ -575,27 +631,42 @@ void SkeletonTest::RunTheTests()
     // some RAII-based pattern because of application_test::run() noexcept
     // guarantee.
     is_running_tests_ = true;
-    std::pair<int, int> const results = application_test::instance().run();
+    TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
-    if (results.first == 0)
+    if(results.failed == 0)
         {
-        wxLogMessage("WARNING: no tests have been executed.");
-        }
-    else if (results.second == 0)
-        {
-        wxLogMessage
-            ("SUCCESS: %d tests successfully completed in %ldms."
-            ,results.first
-            ,sw.Time()
-            );
+        if(results.passed == 0)
+            {
+            wxLogMessage("WARNING: no tests have been executed.");
+            }
+        else
+            {
+            wxLogMessage
+                ("SUCCESS: %d test%s successfully completed in %ldms."
+                ,results.passed
+                ,results.passed == 1 ? "" : "s"
+                ,sw.Time()
+                );
+            }
         }
     else
         {
         wxLogMessage
-            ("FAILURE: %d out of %d tests failed."
-            ,results.second
-            ,results.first
+            ("FAILURE: %d out of %d test%s failed."
+            ,results.failed
+            ,results.total
+            ,results.total == 1 ? "" : "s"
+            );
+        }
+
+    if(results.skipped)
+        {
+        wxLogMessage
+            ("(%s skipped)"
+            ,results.skipped == 1
+                ? wxString("1 test was")
+                : wxString::Format("%d tests were", results.skipped)
             );
         }
 
@@ -610,6 +681,13 @@ void SkeletonTest::RunTheTests()
     log->GetFrame()->Maximize();
     log->GetFrame()->SetFocus();
     SetExitOnFrameDelete(false);
+
+    // Before closing the main window, ensure that the base class event handler
+    // relying on it being alive is not called any more, otherwise dereferencing
+    // the pointer to the main frame inside it would simply crash on any attempt
+    // to open the log frame menu.
+    Bind(wxEVT_MENU_OPEN, &SkeletonTest::ConsumeMenuOpen, this);
+
     mainWin->Close();
 }
 

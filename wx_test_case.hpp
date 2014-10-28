@@ -49,6 +49,22 @@ class wx_base_test_case
     // dtor doesn't really need to be virtual.
     virtual ~wx_base_test_case() { }
 
+    /// Skip the test if the specified file is not supported.
+    ///
+    /// Check if the possibility to open such files is provided by the program
+    /// in its current configuration: some file types are conditionally enabled
+    /// only if special command line arguments are provided, so it is normal
+    /// for them to not be available and this shouldn't result in the test
+    /// errors.
+    ///
+    /// Notice that this method needs to be public to be usable from helpers of
+    /// the tests and not just from the test code itself.
+    ///
+    /// The file doesn't need to exist, but must have the correct extension.
+    ///
+    /// Throws test_skipped_exception if the file is not supported.
+    void skip_if_not_supported(char const* file);
+
   protected:
     /// The argument must be a literal, as we just store the pointer.
     explicit wx_base_test_case(char const* name);

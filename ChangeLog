@@ -34385,3 +34385,62 @@ Augment automated GUI test.
 Close "Help | About" dialog if initially open. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00059.html
 
+20141025T1534Z <gchicares@sbcglobal.net> [533]
+
+  Makefile.am
+  skeleton.hpp
+Alphabetize where there's no more compelling order.
+
+20141026T0104Z <gchicares@sbcglobal.net> [533]
+
+  install_wx.make
+  skeleton.cpp
+  skeleton.hpp
+Override OnAssertFailure().
+
+20141026T2211Z <gchicares@sbcglobal.net> [532]
+
+  census_view.cpp
+  census_view.hpp
+Disable general print commands for censuses. See:
+  https://savannah.nongnu.org/support/?104490
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00054.html
+
+20141027T1211Z <gchicares@sbcglobal.net> [532]
+
+  skeleton.cpp
+Avoid unnecessary copying. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
+
+20141027T1434Z <gchicares@sbcglobal.net> [532]
+
+  skeleton.cpp
+Prefer not to call safe_message_alert() directly.
+
+20141027T1435Z <gchicares@sbcglobal.net> [532]
+
+  main_wx_test.cpp
+Don't use base class handler for log frame menu. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
+
+20141028T1149Z <gchicares@sbcglobal.net> [532]
+
+  main_wx_test.cpp
+Refactor, replacing std::pair with a test-results class. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
+
+20141028T1151Z <gchicares@sbcglobal.net> [532]
+
+  wx_test_create_open.cpp
+Alphabetize headers. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
+
+20141028T1217Z <gchicares@sbcglobal.net> [532]
+
+  main_wx_test.cpp
+  wx_test_case.hpp
+  wx_test_create_open.cpp
+  wx_test_validate_output.cpp
+Skip tests for document types unsupported in context. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
+
