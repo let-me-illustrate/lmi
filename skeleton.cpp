@@ -105,6 +105,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #if defined __WXGTK__
 #   include <gtk/gtk.h>
@@ -1312,10 +1313,6 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
 // TODO ?? CALCULATION_SUMMARY It would probably be in much better
 // taste to use wxView::OnUpdate() for this purpose.
-
-// TODO ?? CALCULATION_SUMMARY The progress meter's count is wrong.
-// Consider writing a function to get a container of pointers to
-// children of a given type.
 //
 // TODO ?? CALCULATION_SUMMARY Instead, why not just update the
 // topmost window first, then update other windows, putting some
@@ -1323,13 +1320,8 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
 void Skeleton::UpdateViews()
 {
+    std::vector<IllustrationView*> ivv;
     wxWindowList const& wl = frame_->GetChildren();
-    boost::shared_ptr<progress_meter> meter
-        (create_progress_meter
-            (wl.size()
-            ,"Updating calculation summaries"
-            )
-        );
     for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
         wxDocMDIChildFrame const* c = dynamic_cast<wxDocMDIChildFrame*>(*i);
@@ -1338,9 +1330,21 @@ void Skeleton::UpdateViews()
             IllustrationView* v = dynamic_cast<IllustrationView*>(c->GetView());
             if(v)
                 {
-                v->DisplaySelectedValuesAsHtml();
+                ivv.push_back(v);
                 }
             }
+        }
+
+    boost::shared_ptr<progress_meter> meter
+        (create_progress_meter
+            (ivv.size()
+            ,"Updating calculation summaries"
+            )
+        );
+    typedef std::vector<IllustrationView*>::const_iterator vvci;
+    for(vvci i = ivv.begin(); i != ivv.end(); ++i)
+        {
+        (*i)->DisplaySelectedValuesAsHtml();
         if(!meter->reflect_progress())
             {
             break;
