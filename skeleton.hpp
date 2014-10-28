@@ -63,6 +63,13 @@ class Skeleton
 
   protected:
     // wxApp overrides that are further overridden in gui test.
+    virtual void OnAssertFailure
+        (wxChar const* file
+        ,int           line
+        ,wxChar const* func
+        ,wxChar const* cond
+        ,wxChar const* msg
+        );
     virtual bool OnExceptionInMainLoop ();
     virtual bool OnInit                ();
 

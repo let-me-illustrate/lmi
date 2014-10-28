@@ -66,10 +66,6 @@ build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
-# SOMEDAY !! But see the last paragraph of
-#   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00004.html
-# and override wxApp::OnAssertFailure() before experimenting with
-# '--enable-debug_flag'.
 #
 # Pass gcc options in $CC and $CXX, not $*FLAGS--explanation here:
 #   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00001.html

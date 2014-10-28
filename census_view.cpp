@@ -65,9 +65,6 @@
 #include <iterator>
 #include <sstream>
 
-// TODO ?? Can't this macro be dispensed with?
-#define ID_LISTWINDOW 12345
-
 namespace
 {
 // TODO ?? Add description and unit tests; consider relocating,
@@ -803,7 +800,7 @@ inline std::vector<std::string> const& CensusViewDataViewModel::all_headers() co
 IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
 
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
-    EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_LISTWINDOW, CensusView::UponRightClick)
+    EVT_DATAVIEW_ITEM_CONTEXT_MENU(wxID_ANY ,CensusView::UponRightClick)
     EVT_MENU(XRCID("edit_cell"             ),CensusView::UponEditCell )
     EVT_MENU(XRCID("edit_class"            ),CensusView::UponEditClass)
     EVT_MENU(XRCID("edit_case"             ),CensusView::UponEditCase )
@@ -835,6 +832,12 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
     EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateAlwaysEnabled)
+
+    // Disable these printing commands on the "File" menu: specialized
+    // printing commands are offered on the "Census" menu.
+    EVT_UPDATE_UI(wxID_PRINT                    ,CensusView::UponUpdateAlwaysDisabled)
+    EVT_UPDATE_UI(wxID_PREVIEW                  ,CensusView::UponUpdateAlwaysDisabled)
+    EVT_UPDATE_UI(wxID_PAGE_SETUP               ,CensusView::UponUpdateAlwaysDisabled)
 END_EVENT_TABLE()
 
 CensusView::CensusView()
@@ -951,7 +954,7 @@ wxWindow* CensusView::CreateChildWindow()
 {
     list_window_ = new(wx) wxDataViewCtrl
         (GetFrame()
-        ,ID_LISTWINDOW
+        ,wxID_ANY
         ,wxDefaultPosition
         ,wxDefaultSize
         ,wxDV_ROW_LINES | wxDV_MULTIPLE
@@ -1358,12 +1361,25 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
         }
 }
 
-void CensusView::UponRightClick(wxDataViewEvent&)
+void CensusView::UponRightClick(wxDataViewEvent& e)
 {
+    if(e.GetEventObject() != list_window_)
+        {
+        // This event should come only from the window pointed to by
+        // list_window_. Ignore it if it happens to come elsewhence.
+        e.Skip();
+        return;
+        }
+
     wxMenu* census_menu = wxXmlResource::Get()->LoadMenu("census_menu_ref");
     LMI_ASSERT(census_menu);
     list_window_->PopupMenu(census_menu);
     delete census_menu;
+}
+
+void CensusView::UponUpdateAlwaysDisabled(wxUpdateUIEvent& e)
+{
+    e.Enable(false);
 }
 
 void CensusView::UponUpdateAlwaysEnabled(wxUpdateUIEvent& e)
