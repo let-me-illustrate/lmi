@@ -34444,3 +34444,9 @@ Alphabetize headers. See:
 Skip tests for document types unsupported in context. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
 
+20141028T2246Z <gchicares@sbcglobal.net> [531]
+
+  skeleton.cpp
+Fix defect introduced 20141027T1211Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00103.html
+
