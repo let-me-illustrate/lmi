@@ -153,6 +153,8 @@ LMI_WX_TEST_CASE(validate_output_illustration)
 
 LMI_WX_TEST_CASE(validate_output_mec)
 {
+    skip_if_not_supported("unnamed.mec");
+
     std::string const&
         ext = configurable_settings::instance().spreadsheet_file_extension();
 

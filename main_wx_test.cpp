@@ -37,6 +37,7 @@
 #include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
 
+#include <wx/docview.h>
 #include <wx/fileconf.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
@@ -108,6 +109,20 @@ class test_assertion_failure_exception
         }
 };
 
+/// Exception thrown if the test needs to be skipped.
+///
+/// This exception doesn't carry any extra information but just needs to have a
+/// distinct type to allow treating it differently in run().
+class test_skipped_exception
+    :public stealth_exception
+{
+  public:
+    test_skipped_exception(std::string const& what)
+        :stealth_exception(what)
+        {
+        }
+};
+
 /// Simple struct collecting the statistics about the tests we ran.
 ///
 /// Implicitly-declared special member functions do the right thing.
@@ -115,11 +130,17 @@ struct TestsResults
 {
     TestsResults()
         :total(0)
+        ,passed(0)
+        ,skipped(0)
         ,failed(0)
     {
     }
 
+    // The sum of passed, skipped and failed is the same as total (except when
+    // a test is in process of execution and its result is yet unknown).
     int total,
+        passed,
+        skipped,
         failed;
 };
 
@@ -348,6 +369,12 @@ TestsResults application_test::run()
                 wxStopWatch sw;
                 i->run_test();
                 wxLogMessage("%s%s: ok (%ldms)", indent, i->get_name(), sw.Time());
+                results.passed++;
+                }
+            catch(test_skipped_exception const& e)
+                {
+                wxLogMessage("%s%s: skipped (%s)", indent, i->get_name(), e.what());
+                results.skipped++;
                 }
             catch(std::exception const& e)
                 {
@@ -429,6 +456,20 @@ wx_base_test_case::wx_base_test_case(char const* name)
 wxConfigBase const& wx_base_test_case::config() const
 {
     return application_test::instance().get_config_for(get_name());
+}
+
+void wx_base_test_case::skip_if_not_supported(char const* file)
+{
+    const wxString p(file);
+    if(!wxDocManager::GetDocumentManager()->FindTemplateForPath(p))
+        {
+        throw test_skipped_exception
+                (wxString::Format
+                    ("documents with extension \"%s\" not supported"
+                    ,p.AfterLast('.')
+                    ).ToStdString()
+                );
+        }
 }
 
 // Application to drive the tests
@@ -593,24 +634,39 @@ void SkeletonTest::RunTheTests()
     TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
-    if (results.total == 0)
+    if(results.failed == 0)
         {
-        wxLogMessage("WARNING: no tests have been executed.");
-        }
-    else if (results.failed == 0)
-        {
-        wxLogMessage
-            ("SUCCESS: %d tests successfully completed in %ldms."
-            ,results.total
-            ,sw.Time()
-            );
+        if(results.passed == 0)
+            {
+            wxLogMessage("WARNING: no tests have been executed.");
+            }
+        else
+            {
+            wxLogMessage
+                ("SUCCESS: %d test%s successfully completed in %ldms."
+                ,results.passed
+                ,results.passed == 1 ? "" : "s"
+                ,sw.Time()
+                );
+            }
         }
     else
         {
         wxLogMessage
-            ("FAILURE: %d out of %d tests failed."
+            ("FAILURE: %d out of %d test%s failed."
             ,results.failed
             ,results.total
+            ,results.total == 1 ? "" : "s"
+            );
+        }
+
+    if(results.skipped)
+        {
+        wxLogMessage
+            ("(%s skipped)"
+            ,results.skipped == 1
+                ? wxString("1 test was")
+                : wxString::Format("%d tests were", results.skipped)
             );
         }
 
