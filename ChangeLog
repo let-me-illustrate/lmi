@@ -34435,3 +34435,12 @@ Refactor, replacing std::pair with a test-results class. See:
 Alphabetize headers. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
 
+20141028T1217Z <gchicares@sbcglobal.net> [532]
+
+  main_wx_test.cpp
+  wx_test_case.hpp
+  wx_test_create_open.cpp
+  wx_test_validate_output.cpp
+Skip tests for document types unsupported in context. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
+
