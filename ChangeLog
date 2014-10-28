@@ -34429,3 +34429,9 @@ Don't use base class handler for log frame menu. See:
 Refactor, replacing std::pair with a test-results class. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
 
+20141028T1151Z <gchicares@sbcglobal.net> [532]
+
+  wx_test_create_open.cpp
+Alphabetize headers. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
+
