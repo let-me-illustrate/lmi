@@ -52,7 +52,6 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
-#include <utility>                      // std::pair
 #include <vector>
 
 LMI_FORCE_LINKING_EX_SITU(file_command_wx)
@@ -109,6 +108,21 @@ class test_assertion_failure_exception
         }
 };
 
+/// Simple struct collecting the statistics about the tests we ran.
+///
+/// Implicitly-declared special member functions do the right thing.
+struct TestsResults
+{
+    TestsResults()
+        :total(0)
+        ,failed(0)
+    {
+    }
+
+    int total,
+        failed;
+};
+
 /// Run the tests.
 ///
 /// This is a simple Meyers singleton.
@@ -131,10 +145,7 @@ class application_test
     //
     // This function consumes all the exceptions thrown during its execution
     // and never throws itself.
-    //
-    // Return the number of tests executed as the first pair component and the
-    // number of failed tests as the second component.
-    std::pair<int, int> run() /* noexcept */;
+    TestsResults run() /* noexcept */;
 
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
     void add_test(wx_base_test_case* test);
@@ -312,14 +323,14 @@ bool application_test::process_command_line(int& argc, char* argv[])
     return true;
 }
 
-std::pair<int, int> application_test::run()
+TestsResults application_test::run()
 {
     // Always run the tests in the same, predictable order (we may want to add
     // a "random shuffle" option later, but even then predictable behaviour
     // should arguably remain the default).
     sort_tests();
 
-    std::pair<int, int> results(0, 0);
+    TestsResults results;
 
     // Indent the test status reports to make them stand out.
     char const* const indent = "    ";
@@ -330,7 +341,7 @@ std::pair<int, int> application_test::run()
         if ((run_all_ && i->run != run_no) || i->run == run_yes)
             {
             std::string error;
-            results.first++;
+            results.total++;
 
             try
                 {
@@ -349,7 +360,7 @@ std::pair<int, int> application_test::run()
 
             if (!error.empty())
                 {
-                results.second++;
+                results.failed++;
 
                 // When logging to a log window, it's better to have everything
                 // on a single line to avoid breaking the output structure.
@@ -579,18 +590,18 @@ void SkeletonTest::RunTheTests()
     // some RAII-based pattern because of application_test::run() noexcept
     // guarantee.
     is_running_tests_ = true;
-    std::pair<int, int> const results = application_test::instance().run();
+    TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
-    if (results.first == 0)
+    if (results.total == 0)
         {
         wxLogMessage("WARNING: no tests have been executed.");
         }
-    else if (results.second == 0)
+    else if (results.failed == 0)
         {
         wxLogMessage
             ("SUCCESS: %d tests successfully completed in %ldms."
-            ,results.first
+            ,results.total
             ,sw.Time()
             );
         }
@@ -598,8 +609,8 @@ void SkeletonTest::RunTheTests()
         {
         wxLogMessage
             ("FAILURE: %d out of %d tests failed."
-            ,results.second
-            ,results.first
+            ,results.failed
+            ,results.total
             );
         }
 

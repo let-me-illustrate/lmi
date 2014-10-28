@@ -34423,3 +34423,9 @@ Prefer not to call safe_message_alert() directly.
 Don't use base class handler for log frame menu. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00086.html
 
+20141028T1149Z <gchicares@sbcglobal.net> [532]
+
+  main_wx_test.cpp
+Refactor, replacing std::pair with a test-results class. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
+
