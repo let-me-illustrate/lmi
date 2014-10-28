@@ -28,8 +28,8 @@
 
 #include "assert_lmi.hpp"
 #include "mvc_controller.hpp"
-#include "wx_test_case.hpp"
 #include "version.hpp"
+#include "wx_test_case.hpp"
 
 #include <wx/dialog.h>
 #include <wx/scopeguard.h>
