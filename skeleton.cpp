@@ -91,6 +91,7 @@
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
+#include <wx/debug.h>                   // wxIsDebuggerRunning()
 #include <wx/docmdi.h>
 #include <wx/image.h>
 #include <wx/log.h>                     // wxSafeShowMessage()
@@ -627,6 +628,11 @@ bool Skeleton::OnInit()
 {
     try
         {
+        if(!wxIsDebuggerRunning())
+            {
+            wxLog::SetActiveTarget(new wxLogStderr);
+            }
+
         if(false == ProcessCommandLine(argc, argv))
             {
             return false;
