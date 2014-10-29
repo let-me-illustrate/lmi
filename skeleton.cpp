@@ -1317,9 +1317,6 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
     return true;
 }
 
-// TODO ?? CALCULATION_SUMMARY It would probably be in much better
-// taste to use wxView::OnUpdate() for this purpose.
-//
 // TODO ?? CALCULATION_SUMMARY Instead, why not just update the
 // topmost window first, then update other windows, putting some
 // progress indication on the statusbar?
