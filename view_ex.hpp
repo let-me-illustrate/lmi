@@ -71,9 +71,6 @@
 // through wxView::GetFrame() without casting because it returns a
 // wxWindow*.
 
-// TODO ?? No provision is yet made here for updating views when
-// document data changes; wx provides some functions for that.
-
 #ifndef view_ex_hpp
 #define view_ex_hpp
 

@@ -34456,3 +34456,10 @@ Fix defect introduced 20141027T1211Z. See:
 Write wx debug messages to stderr. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00097.html
 
+20141029T1847Z <gchicares@sbcglobal.net> [529]
+
+  skeleton.cpp
+  view_ex.hpp
+wxView::OnUpdate(): just say "no". See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00105.html
+
