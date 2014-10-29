@@ -34450,3 +34450,9 @@ Skip tests for document types unsupported in context. See:
 Fix defect introduced 20141027T1211Z. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00103.html
 
+20141029T1839Z <gchicares@sbcglobal.net> [531]
+
+  skeleton.cpp
+Write wx debug messages to stderr. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00097.html
+
