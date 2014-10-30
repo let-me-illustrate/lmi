@@ -73,7 +73,6 @@
 #include "policy_view.hpp"
 #include "preferences_model.hpp"
 #include "preferences_view.hpp"
-#include "progress_meter.hpp"
 #include "rounding_document.hpp"
 #include "rounding_view.hpp"
 #include "rounding_view_editor.hpp"     // RoundingButtonsXmlHandler
@@ -106,7 +105,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
 #if defined __WXGTK__
 #   include <gtk/gtk.h>
@@ -1317,13 +1315,9 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
     return true;
 }
 
-// TODO ?? CALCULATION_SUMMARY Instead, why not just update the
-// topmost window first, then update other windows, putting some
-// progress indication on the statusbar?
-
 void Skeleton::UpdateViews()
 {
-    std::vector<IllustrationView*> ivv;
+    wxBusyCursor wait;
     wxWindowList const& wl = frame_->GetChildren();
     for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
@@ -1333,26 +1327,9 @@ void Skeleton::UpdateViews()
             IllustrationView* v = dynamic_cast<IllustrationView*>(c->GetView());
             if(v)
                 {
-                ivv.push_back(v);
+                v->DisplaySelectedValuesAsHtml();
                 }
             }
         }
-
-    boost::shared_ptr<progress_meter> meter
-        (create_progress_meter
-            (ivv.size()
-            ,"Updating calculation summaries"
-            )
-        );
-    typedef std::vector<IllustrationView*>::const_iterator vvci;
-    for(vvci i = ivv.begin(); i != ivv.end(); ++i)
-        {
-        (*i)->DisplaySelectedValuesAsHtml();
-        if(!meter->reflect_progress())
-            {
-            break;
-            }
-        }
-    meter->culminate();
 }
 
