@@ -34468,5 +34468,12 @@ wxView::OnUpdate(): just say "no". See:
   skeleton.cpp
 Remove a too-fleeting progress meter. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00103.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00112.html
+
+20141031T0141Z <gchicares@sbcglobal.net> [528]
+
+  census_view.cpp
+Fix defect introduced 20050312T0301Z, from an original file predating
+the lmi epoch: unable to rename employee class. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00117.html
 

@@ -1184,7 +1184,7 @@ void CensusView::apply_changes
                 ;++j
                 )
                 {
-                if((*j)["EmployeeClass"] == new_parms["EmployeeClass"])
+                if((*j)["EmployeeClass"] == old_parms["EmployeeClass"])
                     {
                     (*j)[*i] = new_parms[*i].str();
                     }
