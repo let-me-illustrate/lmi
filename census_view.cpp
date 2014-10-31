@@ -1707,7 +1707,8 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 // TODO ?? It would be better to use fatal_error() instead of
 // warning() followed by fatal_error() with a short string, but
 // apparently that can segfault with very long strings. Is there
-// a limit on exception size that should be tested here?
+// a limit on exception size that should be tested here? See:
+//   http://savannah.nongnu.org/bugs/?20240
                 fatal_error() << "Invalid input." << LMI_FLUSH;
                 }
             values.push_back(token);
