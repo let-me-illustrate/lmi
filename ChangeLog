@@ -34510,3 +34510,13 @@ Refactor for concinnity.
 Call Update() when a column-width style is chosen. See:
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00000.html
 
+20141101T2228Z <gchicares@sbcglobal.net> [522]
+
+  census_view.cpp
+Explain why certain defect markers will soon be removed.
+
+20141101T2230Z <gchicares@sbcglobal.net> [520]
+
+  census_view.cpp
+Remove markers deemed nugatory 20141101T2228Z.
+
