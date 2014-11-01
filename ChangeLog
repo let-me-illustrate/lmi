@@ -34444,3 +34444,79 @@ Alphabetize headers. See:
 Skip tests for document types unsupported in context. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00087.html
 
+20141028T2246Z <gchicares@sbcglobal.net> [531]
+
+  skeleton.cpp
+Fix defect introduced 20141027T1211Z. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00103.html
+
+20141029T1839Z <gchicares@sbcglobal.net> [531]
+
+  skeleton.cpp
+Write wx debug messages to stderr. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00097.html
+
+20141029T1847Z <gchicares@sbcglobal.net> [529]
+
+  skeleton.cpp
+  view_ex.hpp
+wxView::OnUpdate(): just say "no". See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00105.html
+
+20141030T1210Z <gchicares@sbcglobal.net> [528]
+
+  skeleton.cpp
+Remove a too-fleeting progress meter. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00103.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00112.html
+
+20141031T0141Z <gchicares@sbcglobal.net> [528]
+
+  census_view.cpp
+Fix defect introduced 20050312T0301Z, from an original file predating
+the lmi epoch: unable to rename employee class. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00117.html
+
+20141031T1249Z <gchicares@sbcglobal.net> [528]
+
+  census_view.cpp
+Improve documentation.
+
+20141101T1219Z <gchicares@sbcglobal.net> [528]
+
+  census_view.cpp
+  census_view.hpp
+Explain why some code and certain defect markers will soon be removed.
+
+20141101T1237Z <gchicares@sbcglobal.net> [522]
+
+  census_view.cpp
+  census_view.hpp
+Remove dead code and markers as explained 20141101T1219Z.
+
+20141101T1737Z <gchicares@sbcglobal.net> [522]
+
+  census_view.cpp
+Show busy cursor and timings for some potentially-costly operations.
+
+20141101T2023Z <gchicares@sbcglobal.net> [522]
+
+  census_view.cpp
+Refactor for concinnity.
+
+20141101T2157Z <gchicares@sbcglobal.net> [522]
+
+  census_view.cpp
+Call Update() when a column-width style is chosen. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00000.html
+
+20141101T2228Z <gchicares@sbcglobal.net> [522]
+
+  census_view.cpp
+Explain why certain defect markers will soon be removed.
+
+20141101T2230Z <gchicares@sbcglobal.net> [520]
+
+  census_view.cpp
+Remove markers deemed nugatory 20141101T2228Z.
+

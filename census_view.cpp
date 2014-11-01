@@ -43,6 +43,7 @@
 #include "miscellany.hpp"               // is_ok_for_cctype()
 #include "path_utility.hpp"
 #include "safely_dereference_as.hpp"
+#include "timer.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
 
@@ -67,8 +68,6 @@
 
 namespace
 {
-// TODO ?? Add description and unit tests; consider relocating,
-// and include "miscellany.hpp" only in ultimate location.
 std::string insert_spaces_between_words(std::string const& s)
 {
     std::string r;
@@ -842,10 +841,7 @@ END_EVENT_TABLE()
 
 CensusView::CensusView()
     :ViewEx                          ()
-    ,all_changes_have_been_validated_(true)
     ,autosize_columns_               (false)
-    ,composite_is_available_         (false)
-    ,was_cancelled_                  (false)
     ,list_window_                    (0)
     ,list_model_                     (new(wx) CensusViewDataViewModel(*this))
 {
@@ -920,7 +916,6 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
     std::vector<Input>::iterator i = class_parms().begin();
     while(i != class_parms().end())
         {
-        // TODO ?? Add an any_member operator== instead.
         if(class_name == (*i)["EmployeeClass"].str())
             {
             return &*i;
@@ -939,8 +934,8 @@ bool CensusView::column_value_varies_across_cells
     ,std::vector<Input> const& cells
     ) const
 {
-    std::vector<Input>::const_iterator j;
-    for(j = cells.begin(); j != cells.end(); ++j)
+    typedef std::vector<Input>::const_iterator ici;
+    for(ici j = cells.begin(); j != cells.end(); ++j)
         {
         if(!((*j)[header] == case_parms()[0][header]))
             {
@@ -984,40 +979,12 @@ oenum_mvc_dv_rc CensusView::edit_parameters
     ,std::string const& title
     )
 {
-    if(is_invalid())
-        {
-        return oe_mvc_dv_cancelled;
-        }
-
     return edit_mvc_docview_parameters<DefaultView>
         (parameters
         ,document()
         ,GetFrame()
         ,title
         );
-}
-
-bool CensusView::is_invalid()
-{
-    if(!all_changes_have_been_validated_)
-        {
-        int z = wxMessageBox
-            ("Cannot proceed without first validating changes."
-            ,"Validate changes now?"
-            ,wxYES_NO | wxICON_QUESTION
-            );
-        if(wxYES == z)
-            {
-            // TODO ?? Reserved for grid implementation.
-            }
-        }
-    return false;
-}
-
-// TODO ?? Reserved for a grid implementation.
-int CensusView::selected_column()
-{
-    return 0;
 }
 
 int CensusView::selected_row()
@@ -1037,11 +1004,8 @@ void CensusView::update_class_names()
     // Extract names and add them even if they might be duplicates.
     std::vector<std::string> all_class_names;
 
-    for
-        (std::vector<Input>::iterator i = cell_parms().begin()
-        ;i != cell_parms().end()
-        ;++i
-        )
+    typedef std::vector<Input>::const_iterator ici;
+    for(ici i = cell_parms().begin(); i != cell_parms().end(); ++i)
         {
         all_class_names.push_back((*i)["EmployeeClass"].str());
         }
@@ -1054,13 +1018,6 @@ void CensusView::update_class_names()
         );
     std::sort(all_class_names.begin(), all_class_names.end());
     std::unique_copy(all_class_names.begin(), all_class_names.end(), iin);
-
-// TODO ?? need parms for each?
-//    if find name in class array
-//        OK
-//    else
-//        create: copy from first matching individual
-// TODO ?? and if unmatching element in class array: delete it?
 
     // Rebuild vector of class parameters so that it contains
     // an element for each class in use.
@@ -1132,59 +1089,36 @@ void CensusView::apply_changes
     //   if case  defaults changed: all cells and all class defaults;
     //   if class defaults changed: all cells in the class.
 
-    // TODO ?? temp string for new value, eeclass?
-    // TODO ?? combine class and indv vectors for case changes?
-
     std::vector<std::string> headers_of_changed_parameters;
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
-    std::vector<std::string>::const_iterator i;
-    for
-        (i  = all_headers.begin()
-        ;i != all_headers.end  ()
-        ;++i
-        )
+    typedef std::vector<std::string>::const_iterator sci;
+    for(sci i = all_headers.begin(); i != all_headers.end(); ++i)
         {
         if(!(old_parms[*i] == new_parms[*i]))
             {
             headers_of_changed_parameters.push_back(*i);
             }
         }
-    for
-        (i  = headers_of_changed_parameters.begin()
-        ;i != headers_of_changed_parameters.end  ()
-        ;++i
-        )
+    for(sci i = headers_of_changed_parameters.begin(); i != headers_of_changed_parameters.end(); ++i)
         {
         if(!for_this_class_only)
             {
-            std::vector<Input>::iterator j;
-            for
-                (j  = class_parms().begin()
-                ;j != class_parms().end  ()
-                ;++j
-                )
+            typedef std::vector<Input>::iterator ii;
+            for(ii j = class_parms().begin(); j != class_parms().end(); ++j)
                 {
                 (*j)[*i] = new_parms[*i].str();
                 }
-            for
-                (j  = cell_parms().begin()
-                ;j != cell_parms().end  ()
-                ;++j
-                )
+            for(ii j = cell_parms ().begin(); j != cell_parms ().end(); ++j)
                 {
                 (*j)[*i] = new_parms[*i].str();
                 }
             }
         else
             {
-            std::vector<Input>::iterator j;
-            for
-                (j  = cell_parms().begin()
-                ;j != cell_parms().end  ()
-                ;++j
-                )
+            typedef std::vector<Input>::iterator ii;
+            for(ii j = cell_parms().begin(); j != cell_parms().end(); ++j)
                 {
-                if((*j)["EmployeeClass"] == new_parms["EmployeeClass"])
+                if((*j)["EmployeeClass"] == old_parms["EmployeeClass"])
                     {
                     (*j)[*i] = new_parms[*i].str();
                     }
@@ -1200,16 +1134,15 @@ void CensusView::apply_changes
     // discipline isn't sufficiently strict. For now, applying the
     // present technique elsewhere might well exacerbate crosstalk
     // in a census that comprises more than one product.
-    std::vector<Input>::iterator j;
-    for(j = class_parms().begin(); j != class_parms().end(); ++j)
+    typedef std::vector<Input>::iterator ii;
+    for(ii j = class_parms().begin(); j != class_parms().end(); ++j)
         {
         j->Reconcile();
         }
-    for(j = cell_parms() .begin(); j != cell_parms() .end(); ++j)
+    for(ii j = cell_parms() .begin(); j != cell_parms() .end(); ++j)
         {
         j->Reconcile();
         }
-    composite_is_available_ = false;
 }
 
 void CensusView::update_visible_columns()
@@ -1346,6 +1279,7 @@ void CensusView::UponColumnWidthVarying(wxCommandEvent&)
         {
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_AUTOSIZE);
         }
+    Update();
 }
 
 /// Shrink all nonfrozen columns to default width.
@@ -1359,6 +1293,7 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
         {
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_DEFAULT);
         }
+    Update();
 }
 
 void CensusView::UponRightClick(wxDataViewEvent& e)
@@ -1417,9 +1352,6 @@ void CensusView::Update()
 
     update_class_names();
     update_visible_columns();
-
-    // All displayed data is valid when this function ends.
-    all_changes_have_been_validated_ = true;
 }
 
 void CensusView::UponPrintCase(wxCommandEvent&)
@@ -1434,21 +1366,11 @@ void CensusView::UponPrintCaseToDisk(wxCommandEvent&)
 
 void CensusView::UponRunCase(wxCommandEvent&)
 {
-    if(is_invalid())
-        {
-        return;
-        }
-
     ViewComposite();
 }
 
 void CensusView::UponRunCell(wxCommandEvent&)
 {
-    if(is_invalid())
-        {
-        return;
-        }
-
     int cell_number = selected_row();
     ViewOneCell(cell_number);
 }
@@ -1465,28 +1387,21 @@ void CensusView::ViewOneCell(int index)
 
 void CensusView::ViewComposite()
 {
-    // Run all cells if necessary to (re)generate composite numbers.
-    if(!composite_is_available_)
+    if(!DoAllCells(mce_emit_nothing))
         {
-        if(!DoAllCells(mce_emit_nothing))
-            {
-            return;
-            }
+        return;
         }
 
-    if(!was_cancelled_)
-        {
-        std::string const name("composite");
-        IllustrationView& illview = MakeNewIllustrationDocAndView
-            (document().GetDocumentManager()
-            ,serial_file_path(base_filename(), name, -1, "ill").string().c_str()
-            );
+    std::string const name("composite");
+    IllustrationView& illview = MakeNewIllustrationDocAndView
+        (document().GetDocumentManager()
+        ,serial_file_path(base_filename(), name, -1, "ill").string().c_str()
+        );
 
-        // This is necessary for the view to be able to print.
-        illview.SetLedger(composite_ledger_);
+    // This is necessary for the view to be able to print.
+    illview.SetLedger(composite_ledger_);
 
-        illview.DisplaySelectedValuesAsHtml();
-        }
+    illview.DisplaySelectedValuesAsHtml();
 }
 
 bool CensusView::DoAllCells(mcenum_emission emission)
@@ -1496,6 +1411,7 @@ bool CensusView::DoAllCells(mcenum_emission emission)
     illustrator z(emission);
     if(!z(base_filename(), cell_parms()))
         {
+        // Cancelled during run_census::operator().
         return false;
         }
 
@@ -1505,10 +1421,8 @@ bool CensusView::DoAllCells(mcenum_emission emission)
 
 void CensusView::UponAddCell(wxCommandEvent&)
 {
-    if(is_invalid())
-        {
-        return;
-        }
+    wxBusyCursor wait;
+    Timer timer;
 
     cell_parms().push_back(case_parms()[0]);
     list_model_->RowAppended();
@@ -1520,15 +1434,13 @@ void CensusView::UponAddCell(wxCommandEvent&)
     list_window_->UnselectAll();
     list_window_->Select(z);
     list_window_->EnsureVisible(z);
+
+    double total_seconds = timer.stop().elapsed_seconds();
+    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
 }
 
 void CensusView::UponDeleteCells(wxCommandEvent&)
 {
-    if(is_invalid())
-        {
-        return;
-        }
-
     unsigned int n_items = list_model_->GetCount();
     wxDataViewItemArray selection;
     unsigned int n_sel_items = list_window_->GetSelections(selection);
@@ -1565,6 +1477,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         {
         return;
         }
+
+    wxBusyCursor wait;
+    Timer timer;
 
     wxArrayInt erasures;
     typedef wxDataViewItemArray::const_iterator dvci;
@@ -1604,7 +1519,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     // accordingly.
     list_model_->RowsDeleted(erasures);
     for(unsigned int j = erasures.front(); j < cell_parms().size(); ++j)
+        {
         list_model_->RowValueChanged(j, CensusViewDataViewModel::Col_CellNum);
+        }
 
     unsigned int const newsel = std::min
         (static_cast<std::size_t>(erasures.front())
@@ -1616,6 +1533,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     Update();
     document().Modify(true);
+
+    double total_seconds = timer.stop().elapsed_seconds();
+    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
 }
 
 /// Print tab-delimited details to file loadable in spreadsheet programs.
@@ -1707,7 +1627,8 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 // TODO ?? It would be better to use fatal_error() instead of
 // warning() followed by fatal_error() with a short string, but
 // apparently that can segfault with very long strings. Is there
-// a limit on exception size that should be tested here?
+// a limit on exception size that should be tested here? See:
+//   http://savannah.nongnu.org/bugs/?20240
                 fatal_error() << "Invalid input." << LMI_FLUSH;
                 }
             values.push_back(token);
