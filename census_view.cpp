@@ -67,11 +67,6 @@
 
 namespace
 {
-// TODO ?? Add description and unit tests; consider relocating,
-// and include "miscellany.hpp" only in ultimate location.
-// ^ Remove comment. The function name is already descriptive enough,
-// and there's no good reason to move it to a "library" because it's
-// wanted only in this TU.
 std::string insert_spaces_between_words(std::string const& s)
 {
     std::string r;
@@ -845,10 +840,7 @@ END_EVENT_TABLE()
 
 CensusView::CensusView()
     :ViewEx                          ()
-    ,all_changes_have_been_validated_(true)
     ,autosize_columns_               (false)
-    ,composite_is_available_         (false)
-    ,was_cancelled_                  (false)
     ,list_window_                    (0)
     ,list_model_                     (new(wx) CensusViewDataViewModel(*this))
 {
@@ -923,10 +915,6 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
     std::vector<Input>::iterator i = class_parms().begin();
     while(i != class_parms().end())
         {
-        // TODO ?? Add an any_member operator== instead.
-// ^ Remove comment. At one time, adding operator==(std::string)
-// seemed like a good idea, but that suggestion was discarded here:
-//   http://svn.savannah.nongnu.org/viewvc/lmi/trunk/any_member.hpp?root=lmi&r1=1593&r2=1758
         if(class_name == (*i)["EmployeeClass"].str())
             {
             return &*i;
@@ -990,42 +978,12 @@ oenum_mvc_dv_rc CensusView::edit_parameters
     ,std::string const& title
     )
 {
-    if(is_invalid())
-        {
-        return oe_mvc_dv_cancelled;
-        }
-
     return edit_mvc_docview_parameters<DefaultView>
         (parameters
         ,document()
         ,GetFrame()
         ,title
         );
-}
-
-bool CensusView::is_invalid()
-{
-    if(!all_changes_have_been_validated_)
-        {
-        int z = wxMessageBox
-            ("Cannot proceed without first validating changes."
-            ,"Validate changes now?"
-            ,wxYES_NO | wxICON_QUESTION
-            );
-        if(wxYES == z)
-            {
-            // TODO ?? Reserved for grid implementation.
-// ^ Remove comment. See header: this whole function will be removed.
-            }
-        }
-    return false;
-}
-
-// TODO ?? Reserved for a grid implementation.
-// ^ Remove comment. See header.
-int CensusView::selected_column()
-{
-    return 0;
 }
 
 int CensusView::selected_row()
@@ -1140,13 +1098,6 @@ void CensusView::apply_changes
     //   if case  defaults changed: all cells and all class defaults;
     //   if class defaults changed: all cells in the class.
 
-    // TODO ?? temp string for new value, eeclass?
-// ^ Remove comment. This is a dubious micro-optimization.
-    // TODO ?? combine class and indv vectors for case changes?
-// ^ Remove comment. Merging those two vectors might make a small part
-// of the code more concise, but would cost too much, and there's no
-// convenient way to merge their iterators.
-
     std::vector<std::string> headers_of_changed_parameters;
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
     std::vector<std::string>::const_iterator i;
@@ -1221,7 +1172,6 @@ void CensusView::apply_changes
         {
         j->Reconcile();
         }
-    composite_is_available_ = false;
 }
 
 void CensusView::update_visible_columns()
@@ -1429,9 +1379,6 @@ void CensusView::Update()
 
     update_class_names();
     update_visible_columns();
-
-    // All displayed data is valid when this function ends.
-    all_changes_have_been_validated_ = true;
 }
 
 void CensusView::UponPrintCase(wxCommandEvent&)
@@ -1446,21 +1393,11 @@ void CensusView::UponPrintCaseToDisk(wxCommandEvent&)
 
 void CensusView::UponRunCase(wxCommandEvent&)
 {
-    if(is_invalid())
-        {
-        return;
-        }
-
     ViewComposite();
 }
 
 void CensusView::UponRunCell(wxCommandEvent&)
 {
-    if(is_invalid())
-        {
-        return;
-        }
-
     int cell_number = selected_row();
     ViewOneCell(cell_number);
 }
@@ -1477,28 +1414,21 @@ void CensusView::ViewOneCell(int index)
 
 void CensusView::ViewComposite()
 {
-    // Run all cells if necessary to (re)generate composite numbers.
-    if(!composite_is_available_)
+    if(!DoAllCells(mce_emit_nothing))
         {
-        if(!DoAllCells(mce_emit_nothing))
-            {
-            return;
-            }
+        return;
         }
 
-    if(!was_cancelled_)
-        {
-        std::string const name("composite");
-        IllustrationView& illview = MakeNewIllustrationDocAndView
-            (document().GetDocumentManager()
-            ,serial_file_path(base_filename(), name, -1, "ill").string().c_str()
-            );
+    std::string const name("composite");
+    IllustrationView& illview = MakeNewIllustrationDocAndView
+        (document().GetDocumentManager()
+        ,serial_file_path(base_filename(), name, -1, "ill").string().c_str()
+        );
 
-        // This is necessary for the view to be able to print.
-        illview.SetLedger(composite_ledger_);
+    // This is necessary for the view to be able to print.
+    illview.SetLedger(composite_ledger_);
 
-        illview.DisplaySelectedValuesAsHtml();
-        }
+    illview.DisplaySelectedValuesAsHtml();
 }
 
 bool CensusView::DoAllCells(mcenum_emission emission)
@@ -1518,11 +1448,6 @@ bool CensusView::DoAllCells(mcenum_emission emission)
 
 void CensusView::UponAddCell(wxCommandEvent&)
 {
-    if(is_invalid())
-        {
-        return;
-        }
-
     cell_parms().push_back(case_parms()[0]);
     list_model_->RowAppended();
 
@@ -1537,11 +1462,6 @@ void CensusView::UponAddCell(wxCommandEvent&)
 
 void CensusView::UponDeleteCells(wxCommandEvent&)
 {
-    if(is_invalid())
-        {
-        return;
-        }
-
     unsigned int n_items = list_model_->GetCount();
     wxDataViewItemArray selection;
     unsigned int n_sel_items = list_window_->GetSelections(selection);
