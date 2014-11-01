@@ -1286,6 +1286,7 @@ void CensusView::UponColumnWidthVarying(wxCommandEvent&)
         {
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_AUTOSIZE);
         }
+    Update();
 }
 
 /// Shrink all nonfrozen columns to default width.
@@ -1299,6 +1300,7 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
         {
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_DEFAULT);
         }
+    Update();
 }
 
 void CensusView::UponRightClick(wxDataViewEvent& e)

@@ -34504,3 +34504,9 @@ Show busy cursor and timings for some potentially-costly operations.
   census_view.cpp
 Refactor for concinnity.
 
+20141101T2157Z <gchicares@sbcglobal.net> [522]
+
+  census_view.cpp
+Call Update() when a column-width style is chosen. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00000.html
+
