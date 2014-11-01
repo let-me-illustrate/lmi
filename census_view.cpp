@@ -1019,18 +1019,6 @@ void CensusView::update_class_names()
     std::sort(all_class_names.begin(), all_class_names.end());
     std::unique_copy(all_class_names.begin(), all_class_names.end(), iin);
 
-// TODO ?? need parms for each?
-//    if find name in class array
-//        OK
-//    else
-//        create: copy from first matching individual
-// TODO ?? and if unmatching element in class array: delete it?
-// ^ Remove comment block. The first defect marker seems to ask
-// whether it's necessary to have default parameters for each class.
-// The other asks whether parameters for a class to which no cell
-// belongs should be deleted. The answer to both is affirmative.
-// The code below takes care of both.
-
     // Rebuild vector of class parameters so that it contains
     // an element for each class in use.
     std::vector<Input> rebuilt_class_parms;
