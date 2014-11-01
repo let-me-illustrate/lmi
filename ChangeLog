@@ -34494,3 +34494,8 @@ Explain why some code and certain defect markers will soon be removed.
   census_view.hpp
 Remove dead code and markers as explained 20141101T1219Z.
 
+20141101T1737Z <gchicares@sbcglobal.net> [522]
+
+  census_view.cpp
+Show busy cursor and timings for some potentially-costly operations.
+

@@ -43,6 +43,7 @@
 #include "miscellany.hpp"               // is_ok_for_cctype()
 #include "path_utility.hpp"
 #include "safely_dereference_as.hpp"
+#include "timer.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
 
@@ -1448,6 +1449,9 @@ bool CensusView::DoAllCells(mcenum_emission emission)
 
 void CensusView::UponAddCell(wxCommandEvent&)
 {
+    wxBusyCursor wait;
+    Timer timer;
+
     cell_parms().push_back(case_parms()[0]);
     list_model_->RowAppended();
 
@@ -1458,6 +1462,9 @@ void CensusView::UponAddCell(wxCommandEvent&)
     list_window_->UnselectAll();
     list_window_->Select(z);
     list_window_->EnsureVisible(z);
+
+    double total_seconds = timer.stop().elapsed_seconds();
+    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
 }
 
 void CensusView::UponDeleteCells(wxCommandEvent&)
@@ -1498,6 +1505,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         {
         return;
         }
+
+    wxBusyCursor wait;
+    Timer timer;
 
     wxArrayInt erasures;
     typedef wxDataViewItemArray::const_iterator dvci;
@@ -1549,6 +1559,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     Update();
     document().Modify(true);
+
+    double total_seconds = timer.stop().elapsed_seconds();
+    status() << Timer::elapsed_msec_str(total_seconds) << std::flush;
 }
 
 /// Print tab-delimited details to file loadable in spreadsheet programs.
