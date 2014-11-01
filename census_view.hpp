@@ -124,21 +124,38 @@ class CensusView
         );
 
     bool is_invalid();
+// ^ Remove. Purpose was to prevent operations that shouldn't be
+// allowed when all_changes_have_been_validated_ (q.v.) is false.
 
     int selected_column();
+// ^ Remove. Might have been useful for a grid implementation, but
+// the dataview implementation does not provide column editing.
     int selected_row();
 
     void update_class_names();
 
     bool all_changes_have_been_validated_;
+// ^ Remove. While lmi uses MVC, its predecessor used doc-view, which
+// didn't distinguish View from Controller; worse, it performed
+// validation in the View when it should have been done in the Model.
+// Even worse, validation only occurred in a tabbed dialog akin to
+// lmi's IllustrationView--but direct drill-down editing was provided
+// in an interface similar to lmi's CensusView, where validation was
+// performed only by opening a tabbed dialog for each cell and cycling
+// through its tabs, after which this flag was set.
 
     bool autosize_columns_;
 
     bool composite_is_available_;
+// ^ Remove. Purpose was to cache composite result so that it would
+// be cheap to view. However, it is produced exactly when it is to be
+// viewed; and there's no reason to create an identical second view.
 
     boost::shared_ptr<Ledger const> composite_ledger_;
 
     bool was_cancelled_;
+// ^ Remove. Always false. Purpose was to prevent showing composite if
+// composite run had been cancelled.
 
     wxDataViewCtrl* list_window_;
     wxObjectDataPtr<CensusViewDataViewModel> list_model_;
