@@ -34499,3 +34499,8 @@ Remove dead code and markers as explained 20141101T1219Z.
   census_view.cpp
 Show busy cursor and timings for some potentially-costly operations.
 
+20141101T2023Z <gchicares@sbcglobal.net> [522]
+
+  census_view.cpp
+Refactor for concinnity.
+
