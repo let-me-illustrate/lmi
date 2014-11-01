@@ -69,6 +69,9 @@ namespace
 {
 // TODO ?? Add description and unit tests; consider relocating,
 // and include "miscellany.hpp" only in ultimate location.
+// ^ Remove comment. The function name is already descriptive enough,
+// and there's no good reason to move it to a "library" because it's
+// wanted only in this TU.
 std::string insert_spaces_between_words(std::string const& s)
 {
     std::string r;
@@ -921,6 +924,9 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
     while(i != class_parms().end())
         {
         // TODO ?? Add an any_member operator== instead.
+// ^ Remove comment. At one time, adding operator==(std::string)
+// seemed like a good idea, but that suggestion was discarded here:
+//   http://svn.savannah.nongnu.org/viewvc/lmi/trunk/any_member.hpp?root=lmi&r1=1593&r2=1758
         if(class_name == (*i)["EmployeeClass"].str())
             {
             return &*i;
@@ -1009,12 +1015,14 @@ bool CensusView::is_invalid()
         if(wxYES == z)
             {
             // TODO ?? Reserved for grid implementation.
+// ^ Remove comment. See header: this whole function will be removed.
             }
         }
     return false;
 }
 
 // TODO ?? Reserved for a grid implementation.
+// ^ Remove comment. See header.
 int CensusView::selected_column()
 {
     return 0;
@@ -1133,7 +1141,11 @@ void CensusView::apply_changes
     //   if class defaults changed: all cells in the class.
 
     // TODO ?? temp string for new value, eeclass?
+// ^ Remove comment. This is a dubious micro-optimization.
     // TODO ?? combine class and indv vectors for case changes?
+// ^ Remove comment. Merging those two vectors might make a small part
+// of the code more concise, but would cost too much, and there's no
+// convenient way to merge their iterators.
 
     std::vector<std::string> headers_of_changed_parameters;
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
@@ -1496,6 +1508,7 @@ bool CensusView::DoAllCells(mcenum_emission emission)
     illustrator z(emission);
     if(!z(base_filename(), cell_parms()))
         {
+        // Cancelled during run_census::operator().
         return false;
         }
 
