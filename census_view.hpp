@@ -123,22 +123,13 @@ class CensusView
         ,std::string const& title
         );
 
-    bool is_invalid();
-
-    int selected_column();
     int selected_row();
 
     void update_class_names();
 
-    bool all_changes_have_been_validated_;
-
     bool autosize_columns_;
 
-    bool composite_is_available_;
-
     boost::shared_ptr<Ledger const> composite_ledger_;
-
-    bool was_cancelled_;
 
     wxDataViewCtrl* list_window_;
     wxObjectDataPtr<CensusViewDataViewModel> list_model_;

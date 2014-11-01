@@ -73,7 +73,6 @@
 #include "policy_view.hpp"
 #include "preferences_model.hpp"
 #include "preferences_view.hpp"
-#include "progress_meter.hpp"
 #include "rounding_document.hpp"
 #include "rounding_view.hpp"
 #include "rounding_view_editor.hpp"     // RoundingButtonsXmlHandler
@@ -91,6 +90,7 @@
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
+#include <wx/debug.h>                   // wxIsDebuggerRunning()
 #include <wx/docmdi.h>
 #include <wx/image.h>
 #include <wx/log.h>                     // wxSafeShowMessage()
@@ -626,6 +626,11 @@ bool Skeleton::OnInit()
 {
     try
         {
+        if(!wxIsDebuggerRunning())
+            {
+            wxLog::SetActiveTarget(new wxLogStderr);
+            }
+
         if(false == ProcessCommandLine(argc, argv))
             {
             return false;
@@ -1310,26 +1315,10 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
     return true;
 }
 
-// TODO ?? CALCULATION_SUMMARY It would probably be in much better
-// taste to use wxView::OnUpdate() for this purpose.
-
-// TODO ?? CALCULATION_SUMMARY The progress meter's count is wrong.
-// Consider writing a function to get a container of pointers to
-// children of a given type.
-//
-// TODO ?? CALCULATION_SUMMARY Instead, why not just update the
-// topmost window first, then update other windows, putting some
-// progress indication on the statusbar?
-
 void Skeleton::UpdateViews()
 {
+    wxBusyCursor wait;
     wxWindowList const& wl = frame_->GetChildren();
-    boost::shared_ptr<progress_meter> meter
-        (create_progress_meter
-            (wl.size()
-            ,"Updating calculation summaries"
-            )
-        );
     for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
         wxDocMDIChildFrame const* c = dynamic_cast<wxDocMDIChildFrame*>(*i);
@@ -1341,11 +1330,6 @@ void Skeleton::UpdateViews()
                 v->DisplaySelectedValuesAsHtml();
                 }
             }
-        if(!meter->reflect_progress())
-            {
-            break;
-            }
         }
-    meter->culminate();
 }
 
