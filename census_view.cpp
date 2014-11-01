@@ -934,8 +934,8 @@ bool CensusView::column_value_varies_across_cells
     ,std::vector<Input> const& cells
     ) const
 {
-    std::vector<Input>::const_iterator j;
-    for(j = cells.begin(); j != cells.end(); ++j)
+    typedef std::vector<Input>::const_iterator ici;
+    for(ici j = cells.begin(); j != cells.end(); ++j)
         {
         if(!((*j)[header] == case_parms()[0][header]))
             {
@@ -1004,11 +1004,8 @@ void CensusView::update_class_names()
     // Extract names and add them even if they might be duplicates.
     std::vector<std::string> all_class_names;
 
-    for
-        (std::vector<Input>::iterator i = cell_parms().begin()
-        ;i != cell_parms().end()
-        ;++i
-        )
+    typedef std::vector<Input>::const_iterator ici;
+    for(ici i = cell_parms().begin(); i != cell_parms().end(); ++i)
         {
         all_class_names.push_back((*i)["EmployeeClass"].str());
         }
@@ -1101,52 +1098,32 @@ void CensusView::apply_changes
 
     std::vector<std::string> headers_of_changed_parameters;
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
-    std::vector<std::string>::const_iterator i;
-    for
-        (i  = all_headers.begin()
-        ;i != all_headers.end  ()
-        ;++i
-        )
+    typedef std::vector<std::string>::const_iterator sci;
+    for(sci i = all_headers.begin(); i != all_headers.end(); ++i)
         {
         if(!(old_parms[*i] == new_parms[*i]))
             {
             headers_of_changed_parameters.push_back(*i);
             }
         }
-    for
-        (i  = headers_of_changed_parameters.begin()
-        ;i != headers_of_changed_parameters.end  ()
-        ;++i
-        )
+    for(sci i = headers_of_changed_parameters.begin(); i != headers_of_changed_parameters.end(); ++i)
         {
         if(!for_this_class_only)
             {
-            std::vector<Input>::iterator j;
-            for
-                (j  = class_parms().begin()
-                ;j != class_parms().end  ()
-                ;++j
-                )
+            typedef std::vector<Input>::iterator ii;
+            for(ii j = class_parms().begin(); j != class_parms().end(); ++j)
                 {
                 (*j)[*i] = new_parms[*i].str();
                 }
-            for
-                (j  = cell_parms().begin()
-                ;j != cell_parms().end  ()
-                ;++j
-                )
+            for(ii j = cell_parms ().begin(); j != cell_parms ().end(); ++j)
                 {
                 (*j)[*i] = new_parms[*i].str();
                 }
             }
         else
             {
-            std::vector<Input>::iterator j;
-            for
-                (j  = cell_parms().begin()
-                ;j != cell_parms().end  ()
-                ;++j
-                )
+            typedef std::vector<Input>::iterator ii;
+            for(ii j = cell_parms().begin(); j != cell_parms().end(); ++j)
                 {
                 if((*j)["EmployeeClass"] == old_parms["EmployeeClass"])
                     {
@@ -1164,12 +1141,12 @@ void CensusView::apply_changes
     // discipline isn't sufficiently strict. For now, applying the
     // present technique elsewhere might well exacerbate crosstalk
     // in a census that comprises more than one product.
-    std::vector<Input>::iterator j;
-    for(j = class_parms().begin(); j != class_parms().end(); ++j)
+    typedef std::vector<Input>::iterator ii;
+    for(ii j = class_parms().begin(); j != class_parms().end(); ++j)
         {
         j->Reconcile();
         }
-    for(j = cell_parms() .begin(); j != cell_parms() .end(); ++j)
+    for(ii j = cell_parms() .begin(); j != cell_parms() .end(); ++j)
         {
         j->Reconcile();
         }
@@ -1547,7 +1524,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     // accordingly.
     list_model_->RowsDeleted(erasures);
     for(unsigned int j = erasures.front(); j < cell_parms().size(); ++j)
+        {
         list_model_->RowValueChanged(j, CensusViewDataViewModel::Col_CellNum);
+        }
 
     unsigned int const newsel = std::min
         (static_cast<std::size_t>(erasures.front())
