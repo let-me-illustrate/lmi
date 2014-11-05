@@ -34520,3 +34520,9 @@ Explain why certain defect markers will soon be removed.
   census_view.cpp
 Remove markers deemed nugatory 20141101T2228Z.
 
+20141105T1807Z <gchicares@sbcglobal.net> [519]
+
+  census_view.cpp
+Improve cell-deletion speed. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00004.html
+
