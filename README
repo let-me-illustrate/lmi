@@ -48,6 +48,7 @@ and 16x16):
   paste-case[-16].png               from stock_paste.png
   preferences[-16].png              from gnome-settings.png
   print-case[-16].png               from stock_print.png
+  print-case-pdf[-16].png           from stock_print.png
   print-options[-16].png            from stock_print-options.png
   print-preview[-16].png            from stock_print-preview.png
   print[-16].png                    from stock_print.png
