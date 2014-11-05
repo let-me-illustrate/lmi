@@ -1491,22 +1491,11 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     LMI_ASSERT(cell_parms().size() == n_items);
 
-    std::vector<Input> expurgated_cell_parms;
-    expurgated_cell_parms.reserve
-        (n_items - n_sel_items
-        );
-
-    for(unsigned int j = 0; j < cell_parms().size(); ++j)
+    for(int j = erasures.size() - 1; 0 <= j; --j)
         {
-        if(!contains(erasures, j))
-            {
-            expurgated_cell_parms.push_back(cell_parms()[j]);
-            }
+        cell_parms().erase(erasures[j] + cell_parms().begin());
         }
-    LMI_ASSERT(expurgated_cell_parms.size() == n_items - n_sel_items);
-
-//    cell_parms().swap(expurgated_cell_parms); // TODO ?? Would this be better?
-    cell_parms() = expurgated_cell_parms;
+    LMI_ASSERT(cell_parms().size() == n_items - n_sel_items);
 
 #if !wxCHECK_VERSION(2,9,3)
     // Remove selection to work around wx-2.9.2 bug in GetSelections()
