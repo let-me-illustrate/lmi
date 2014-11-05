@@ -78,7 +78,6 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_UPDATE_UI(wxID_SAVE                     ,IllustrationView::UponUpdateFileSave    )
     EVT_UPDATE_UI(wxID_SAVEAS                   ,IllustrationView::UponUpdateFileSaveAs  )
     EVT_UPDATE_UI(XRCID("edit_cell"            ),IllustrationView::UponUpdateProperties  )
-// There has to be a better way to inhibit these inapplicable ids.
     EVT_UPDATE_UI(XRCID("edit_class"           ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("edit_case"            ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("run_cell"             ),IllustrationView::UponUpdateInapplicable)
