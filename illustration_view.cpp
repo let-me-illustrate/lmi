@@ -70,15 +70,14 @@
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
-    EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
-    EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
-    EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
-    EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopySummary)
-    EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyFull)
-    EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
-    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
-    EVT_UPDATE_UI(XRCID("edit_cell"        ),IllustrationView::UponUpdateProperties)
-
+    EVT_MENU(wxID_PRINT                         ,IllustrationView::UponPrintPdf          )
+    EVT_MENU(wxID_PREVIEW                       ,IllustrationView::UponPreviewPdf        )
+    EVT_MENU(XRCID("edit_cell"                 ),IllustrationView::UponProperties        )
+    EVT_MENU(XRCID("copy_summary"              ),IllustrationView::UponCopySummary       )
+    EVT_MENU(wxID_COPY                          ,IllustrationView::UponCopyFull          )
+    EVT_UPDATE_UI(wxID_SAVE                     ,IllustrationView::UponUpdateFileSave    )
+    EVT_UPDATE_UI(wxID_SAVEAS                   ,IllustrationView::UponUpdateFileSaveAs  )
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),IllustrationView::UponUpdateProperties  )
 // There has to be a better way to inhibit these inapplicable ids.
     EVT_UPDATE_UI(XRCID("edit_class"           ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("edit_case"            ),IllustrationView::UponUpdateInapplicable)
