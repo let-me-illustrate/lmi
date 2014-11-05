@@ -147,8 +147,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("window_tile_horizontally"        ),Skeleton::UponWindowTileHorizontally       )
     EVT_MENU(XRCID("window_tile_vertically"          ),Skeleton::UponWindowTileVertically         )
     EVT_MENU_OPEN(                                     Skeleton::UponMenuOpen                     )
-// TODO ?? There has to be a better way.
-/*
     EVT_UPDATE_UI(XRCID("edit_cell"                  ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("edit_class"                 ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("edit_case"                  ),Skeleton::UponUpdateInapplicable           )
@@ -166,7 +164,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_UPDATE_UI(XRCID("delete_cells"               ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("column_width_varying"       ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("column_width_fixed"         ),Skeleton::UponUpdateInapplicable           )
-*/
 END_EVENT_TABLE()
 
 /// 'config_' can't be initialized in the initializer list with
@@ -1146,22 +1143,9 @@ void Skeleton::OnUnhandledException()
     wxSafeShowMessage("Fatal error", "Terminating due to unhandled exception.");
 }
 
-// TODO ?? An unsuccessful experiment.
-void Skeleton::UponUpdateInapplicable(wxUpdateUIEvent& event)
+void Skeleton::UponUpdateInapplicable(wxUpdateUIEvent& e)
 {
-// This handler seems to override mdi childrens'.
-//    e.Enable(0 != frame_->GetChildren().GetCount());
-
-/*
-This doesn't undo that override.
     e.Enable(false);
-    if(0 != frame_->GetChildren().GetCount())
-        {
-        e.Skip();
-        }
-*/
-
-// Presumably we need to use ProcessEvent(), somehow.
 }
 
 void Skeleton::UponWindowCascade(wxCommandEvent&)

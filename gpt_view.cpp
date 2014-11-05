@@ -72,7 +72,6 @@ BEGIN_EVENT_TABLE(gpt_view, ViewEx)
     EVT_UPDATE_UI(wxID_SAVE                     ,gpt_view::UponUpdateFileSave    )
     EVT_UPDATE_UI(wxID_SAVEAS                   ,gpt_view::UponUpdateFileSaveAs  )
     EVT_UPDATE_UI(XRCID("edit_cell"            ),gpt_view::UponUpdateProperties  )
-// There has to be a better way to inhibit these inapplicable ids.
     EVT_UPDATE_UI(XRCID("edit_class"           ),gpt_view::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("edit_case"            ),gpt_view::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("run_cell"             ),gpt_view::UponUpdateInapplicable)

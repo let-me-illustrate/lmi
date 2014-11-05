@@ -34526,3 +34526,21 @@ Remove markers deemed nugatory 20141101T2228Z.
 Improve cell-deletion speed. See:
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00004.html
 
+20141105T1834Z <gchicares@sbcglobal.net> [519]
+
+  census_view.cpp
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  skeleton.cpp
+Reformat.
+
+20141105T1850Z <gchicares@sbcglobal.net> [517]
+
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  skeleton.cpp
+Gray out inapplicable toolbar buttons when no view is open. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-09/msg00036.html
+
