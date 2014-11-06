@@ -68,12 +68,10 @@ char const* mec_mvc_view::DoResourceFileName() const
 IMPLEMENT_DYNAMIC_CLASS(mec_view, ViewEx)
 
 BEGIN_EVENT_TABLE(mec_view, ViewEx)
-    EVT_MENU(XRCID("edit_cell"             ),mec_view::UponProperties)
-    EVT_UPDATE_UI(wxID_SAVE                 ,mec_view::UponUpdateFileSave)
-    EVT_UPDATE_UI(wxID_SAVEAS               ,mec_view::UponUpdateFileSaveAs)
-    EVT_UPDATE_UI(XRCID("edit_cell"        ),mec_view::UponUpdateProperties)
-
-// There has to be a better way to inhibit these inapplicable ids.
+    EVT_MENU(XRCID("edit_cell"                 ),mec_view::UponProperties        )
+    EVT_UPDATE_UI(wxID_SAVE                     ,mec_view::UponUpdateFileSave    )
+    EVT_UPDATE_UI(wxID_SAVEAS                   ,mec_view::UponUpdateFileSaveAs  )
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),mec_view::UponUpdateProperties  )
     EVT_UPDATE_UI(XRCID("edit_class"           ),mec_view::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("edit_case"            ),mec_view::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("run_cell"             ),mec_view::UponUpdateInapplicable)

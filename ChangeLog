@@ -34520,3 +34520,49 @@ Explain why certain defect markers will soon be removed.
   census_view.cpp
 Remove markers deemed nugatory 20141101T2228Z.
 
+20141105T1807Z <gchicares@sbcglobal.net> [519]
+
+  census_view.cpp
+Improve cell-deletion speed. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00004.html
+
+20141105T1834Z <gchicares@sbcglobal.net> [519]
+
+  census_view.cpp
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  skeleton.cpp
+Reformat.
+
+20141105T1850Z <gchicares@sbcglobal.net> [517]
+
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  skeleton.cpp
+Gray out inapplicable toolbar buttons when no view is open. See:
+  http://lists.nongnu.org/archive/html/lmi/2008-09/msg00036.html
+
+20141105T2147Z <gchicares@sbcglobal.net> [517]
+
+  README
+  group_tutorial.html
+  icon_monger.cpp
+  menu_commands.html
+  menus.xrc
+  print-case-pdf-16.png [new file]
+  print-case-pdf.png    [new file]
+  toolbar.xrc
+Add a new icon, reserving the old for another use.
+
+20141105T2210Z <gchicares@sbcglobal.net> [517]
+
+  fixed-width-16.png
+  fixed-width.png
+  icon_monger.cpp
+  varying-width-16.png
+  varying-width.png
+Make grayed icons less ugly (VZ). Cf.:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00071.html
+

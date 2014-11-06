@@ -337,8 +337,8 @@
     </object>
     <object class="wxMenuItem" name="print_case_to_disk">
         <label>Print case to dis_k\tCtrl-Shift-K</label>
-        <bitmap stock_id="save-pdf"/>
-        <help>Run and print all cells to disk rather than to printer</help>
+        <bitmap stock_id="print-case-pdf"/>
+        <help>Run and print all cells to PDF files on disk rather than to printer</help>
     </object>
     <object class="wxMenuItem" name="print_spreadsheet">
         <label>Print case to spreads_heet\tCtrl-Shift-H</label>

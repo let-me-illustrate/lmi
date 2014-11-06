@@ -799,44 +799,42 @@ inline std::vector<std::string> const& CensusViewDataViewModel::all_headers() co
 IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
 
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
-    EVT_DATAVIEW_ITEM_CONTEXT_MENU(wxID_ANY ,CensusView::UponRightClick)
-    EVT_MENU(XRCID("edit_cell"             ),CensusView::UponEditCell )
-    EVT_MENU(XRCID("edit_class"            ),CensusView::UponEditClass)
-    EVT_MENU(XRCID("edit_case"             ),CensusView::UponEditCase )
-    EVT_MENU(XRCID("run_cell"              ),CensusView::UponRunCell)
-//    EVT_MENU(XRCID("run_class"             ),CensusView::UponRunClass)   // SOMEDAY !! This may be useful for large cases.
-    EVT_MENU(XRCID("run_case"              ),CensusView::UponRunCase)
-    EVT_MENU(XRCID("print_case"            ),CensusView::UponPrintCase)
-    EVT_MENU(XRCID("print_case_to_disk"    ),CensusView::UponPrintCaseToDisk)
-    EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::UponRunCaseToSpreadsheet)
-    EVT_MENU(XRCID("print_group_roster"    ),CensusView::UponRunCaseToGroupRoster)
-    EVT_MENU(XRCID("paste_census"          ),CensusView::UponPasteCensus)
-    EVT_MENU(XRCID("add_cell"              ),CensusView::UponAddCell)
-    EVT_MENU(XRCID("delete_cells"          ),CensusView::UponDeleteCells)
-    EVT_MENU(XRCID("column_width_varying"  ),CensusView::UponColumnWidthVarying)
-    EVT_MENU(XRCID("column_width_fixed"    ),CensusView::UponColumnWidthFixed)
-
-    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleSelection)
-    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleSelection)
-    EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateSingleSelection)
-    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateSingleSelection)
-    EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled)
+    EVT_DATAVIEW_ITEM_CONTEXT_MENU(wxID_ANY     ,CensusView::UponRightClick             )
+    EVT_MENU(XRCID("edit_cell"                 ),CensusView::UponEditCell               )
+    EVT_MENU(XRCID("edit_class"                ),CensusView::UponEditClass              )
+    EVT_MENU(XRCID("edit_case"                 ),CensusView::UponEditCase               )
+    EVT_MENU(XRCID("run_cell"                  ),CensusView::UponRunCell                )
+//  EVT_MENU(XRCID("run_class"                 ),CensusView::UponRunClass               )   // SOMEDAY !! This may be useful for large cases.
+    EVT_MENU(XRCID("run_case"                  ),CensusView::UponRunCase                )
+    EVT_MENU(XRCID("print_case"                ),CensusView::UponPrintCase              )
+    EVT_MENU(XRCID("print_case_to_disk"        ),CensusView::UponPrintCaseToDisk        )
+    EVT_MENU(XRCID("print_spreadsheet"         ),CensusView::UponRunCaseToSpreadsheet   )
+    EVT_MENU(XRCID("print_group_roster"        ),CensusView::UponRunCaseToGroupRoster   )
+    EVT_MENU(XRCID("paste_census"              ),CensusView::UponPasteCensus            )
+    EVT_MENU(XRCID("add_cell"                  ),CensusView::UponAddCell                )
+    EVT_MENU(XRCID("delete_cells"              ),CensusView::UponDeleteCells            )
+    EVT_MENU(XRCID("column_width_varying"      ),CensusView::UponColumnWidthVarying     )
+    EVT_MENU(XRCID("column_width_fixed"        ),CensusView::UponColumnWidthFixed       )
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateSingleSelection  )
+    EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
-    EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateAlwaysEnabled)
-    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateAlwaysEnabled)
-
+    EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateAlwaysEnabled    )
     // Disable these printing commands on the "File" menu: specialized
     // printing commands are offered on the "Census" menu.
-    EVT_UPDATE_UI(wxID_PRINT                    ,CensusView::UponUpdateAlwaysDisabled)
-    EVT_UPDATE_UI(wxID_PREVIEW                  ,CensusView::UponUpdateAlwaysDisabled)
-    EVT_UPDATE_UI(wxID_PAGE_SETUP               ,CensusView::UponUpdateAlwaysDisabled)
+    EVT_UPDATE_UI(wxID_PRINT                    ,CensusView::UponUpdateAlwaysDisabled   )
+    EVT_UPDATE_UI(wxID_PREVIEW                  ,CensusView::UponUpdateAlwaysDisabled   )
+    EVT_UPDATE_UI(wxID_PAGE_SETUP               ,CensusView::UponUpdateAlwaysDisabled   )
 END_EVENT_TABLE()
 
 CensusView::CensusView()
@@ -1491,22 +1489,11 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     LMI_ASSERT(cell_parms().size() == n_items);
 
-    std::vector<Input> expurgated_cell_parms;
-    expurgated_cell_parms.reserve
-        (n_items - n_sel_items
-        );
-
-    for(unsigned int j = 0; j < cell_parms().size(); ++j)
+    for(int j = erasures.size() - 1; 0 <= j; --j)
         {
-        if(!contains(erasures, j))
-            {
-            expurgated_cell_parms.push_back(cell_parms()[j]);
-            }
+        cell_parms().erase(erasures[j] + cell_parms().begin());
         }
-    LMI_ASSERT(expurgated_cell_parms.size() == n_items - n_sel_items);
-
-//    cell_parms().swap(expurgated_cell_parms); // TODO ?? Would this be better?
-    cell_parms() = expurgated_cell_parms;
+    LMI_ASSERT(cell_parms().size() == n_items - n_sel_items);
 
 #if !wxCHECK_VERSION(2,9,3)
     // Remove selection to work around wx-2.9.2 bug in GetSelections()
