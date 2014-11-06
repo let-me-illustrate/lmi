@@ -73,6 +73,11 @@
         <bitmap platform="win" stock_id="print-preview"/>
         <help>See what this document will look like when printed</help>
     </object>
+    <object class="wxMenuItem" name="print_pdf">
+        <label>Pr_int to PDF\tCtrl-I</label>
+        <bitmap platform="win" stock_id="save-pdf"/>
+        <help>Print this document to a PDF file</help>
+    </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
         <label>Defaul_t\tCtrl-T</label>

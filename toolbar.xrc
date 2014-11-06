@@ -55,6 +55,11 @@
         <bitmap stock_id="print-preview"/>
         <longhelp>See what this document will look like when printed</longhelp>
     </object>
+    <object class="tool" name="print_pdf">
+        <tooltip>Print to PDF</tooltip>
+        <bitmap stock_id="save-pdf"/>
+        <longhelp>Print this document to a PDF file</longhelp>
+    </object>
     <object class="tool" name="wxID_PREFERENCES">
         <tooltip>Preferences</tooltip>
         <bitmap stock_id="preferences"/>

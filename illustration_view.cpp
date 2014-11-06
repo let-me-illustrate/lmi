@@ -70,13 +70,15 @@
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
-    EVT_MENU(wxID_PRINT                         ,IllustrationView::UponPrintPdf           )
+    EVT_MENU(wxID_PRINT                         ,IllustrationView::UponPrint              )
     EVT_MENU(wxID_PREVIEW                       ,IllustrationView::UponPreviewPdf         )
+    EVT_MENU(XRCID("print_pdf"                 ),IllustrationView::UponPrintPdf           )
     EVT_MENU(XRCID("edit_cell"                 ),IllustrationView::UponProperties         )
     EVT_MENU(XRCID("copy_summary"              ),IllustrationView::UponCopySummary        )
     EVT_MENU(wxID_COPY                          ,IllustrationView::UponCopyFull           )
     EVT_UPDATE_UI(wxID_SAVE                     ,IllustrationView::UponUpdateFileSave     )
     EVT_UPDATE_UI(wxID_SAVEAS                   ,IllustrationView::UponUpdateFileSaveAs   )
+    EVT_UPDATE_UI(XRCID("print_pdf"            ),IllustrationView::UponUpdateAlwaysEnabled)
     EVT_UPDATE_UI(XRCID("edit_cell"            ),IllustrationView::UponUpdateProperties   )
     EVT_UPDATE_UI(XRCID("edit_class"           ),IllustrationView::UponUpdateInapplicable )
     EVT_UPDATE_UI(XRCID("edit_case"            ),IllustrationView::UponUpdateInapplicable )
@@ -225,10 +227,16 @@ void IllustrationView::UponPreviewPdf(wxCommandEvent&)
     emit_ledger(base_filename(), "", *ledger_values_, mce_emit_pdf_to_viewer);
 }
 
-void IllustrationView::UponPrintPdf(wxCommandEvent&)
+void IllustrationView::UponPrint(wxCommandEvent&)
 {
     LMI_ASSERT(ledger_values_.get());
     emit_ledger(base_filename(), "", *ledger_values_, mce_emit_pdf_to_printer);
+}
+
+void IllustrationView::UponPrintPdf(wxCommandEvent&)
+{
+    LMI_ASSERT(ledger_values_.get());
+    emit_ledger(base_filename(), "", *ledger_values_, mce_emit_pdf_file);
 }
 
 void IllustrationView::UponProperties(wxCommandEvent&)
@@ -243,6 +251,11 @@ void IllustrationView::UponProperties(wxCommandEvent&)
         {
         Run();
         }
+}
+
+void IllustrationView::UponUpdateAlwaysEnabled(wxUpdateUIEvent& e)
+{
+    e.Enable(true);
 }
 
 /// This complete replacement for wxDocManager::OnUpdateFileSave()

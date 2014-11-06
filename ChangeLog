@@ -34566,3 +34566,34 @@ Add a new icon, reserving the old for another use.
 Make grayed icons less ugly (VZ). Cf.:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00071.html
 
+20141105T2353Z <gchicares@sbcglobal.net> [517]
+
+  illustration_view.cpp
+Reformat.
+
+20141106T0021Z <gchicares@sbcglobal.net> [517]
+
+  illustration_view.hpp
+Reformat.
+
+20141106T1452Z <gchicares@sbcglobal.net> [517]
+
+  menus.xrc
+Use "platform" consistently. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00012.html
+
+20141106T1624Z <gchicares@sbcglobal.net> [516]
+
+  census_view.cpp
+  gpt_view.cpp
+  illustration_view.cpp
+  illustration_view.hpp
+  individual_tutorial.html
+  mec_view.cpp
+  menu_commands.html
+  menus.xrc
+  skeleton.cpp
+  toolbar.xrc
+Add a useful save-as-pdf command. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00005.html
+
