@@ -214,12 +214,12 @@
         <help>Cascade windows</help>
     </object>
     <object class="wxMenuItem" name="window_next">
-        <label>_Next</label>
+        <label>_Next\tCtrl-Tab</label>
         <bitmap platform="win" stock_id="window-next"/>
         <help>Go to next window</help>
     </object>
     <object class="wxMenuItem" name="window_previous">
-        <label>_Previous</label>
+        <label>_Previous\tCtrl-Shift-Tab</label>
         <bitmap platform="win" stock_id="window-previous"/>
         <help>Go to previous window</help>
     </object>
@@ -341,9 +341,9 @@
         <help>Run and print all cells</help>
     </object>
     <object class="wxMenuItem" name="print_case_to_disk">
-        <label>Print case to dis_k\tCtrl-Shift-K</label>
+        <label>Pr_int case to PDF\tCtrl-Shift-I</label>
         <bitmap platform="win" stock_id="print-case-pdf"/>
-        <help>Run and print all cells to PDF files on disk rather than to printer</help>
+        <help>Run and print all cells to PDF files rather than to printer</help>
     </object>
     <object class="wxMenuItem" name="print_spreadsheet">
         <label>Print case to spreads_heet\tCtrl-Shift-H</label>

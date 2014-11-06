@@ -34597,3 +34597,11 @@ Use "platform" consistently. See:
 Add a useful save-as-pdf command. See:
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00005.html
 
+20141106T1655Z <gchicares@sbcglobal.net> [516]
+
+  group_tutorial.html
+  menu_commands.html
+  menus.xrc
+  toolbar.xrc
+Improve concinnity; add shortcuts.
+

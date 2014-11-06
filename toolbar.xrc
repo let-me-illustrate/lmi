@@ -106,9 +106,9 @@
         <longhelp>Run and print all cells</longhelp>
     </object>
     <object class="tool" name="print_case_to_disk">
-        <tooltip>Print case to disk</tooltip>
+        <tooltip>Print case to PDF</tooltip>
         <bitmap stock_id="print-case-pdf"/>
-        <longhelp>Run and print all cells to PDF files on disk rather than to printer</longhelp>
+        <longhelp>Run and print all cells to PDF files rather than to printer</longhelp>
     </object>
     <object class="tool" name="print_spreadsheet">
         <tooltip>Print case to spreadsheet</tooltip>
