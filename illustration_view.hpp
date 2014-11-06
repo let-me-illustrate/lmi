@@ -84,15 +84,15 @@ class IllustrationView
     // ViewEx overrides.
     virtual bool OnCreate(wxDocument*, long int);
 
-    void UponCopyFull          (wxCommandEvent&);
-    void UponCopySummary       (wxCommandEvent&);
-    void UponPreviewPdf        (wxCommandEvent&);
-    void UponPrintPdf          (wxCommandEvent&);
-    void UponProperties        (wxCommandEvent&);
-    void UponUpdateFileSave    (wxUpdateUIEvent&);
-    void UponUpdateFileSaveAs  (wxUpdateUIEvent&);
-    void UponUpdateInapplicable(wxUpdateUIEvent&);
-    void UponUpdateProperties  (wxUpdateUIEvent&);
+    void UponCopyFull           (wxCommandEvent&);
+    void UponCopySummary        (wxCommandEvent&);
+    void UponPreviewPdf         (wxCommandEvent&);
+    void UponPrintPdf           (wxCommandEvent&);
+    void UponProperties         (wxCommandEvent&);
+    void UponUpdateFileSave     (wxUpdateUIEvent&);
+    void UponUpdateFileSaveAs   (wxUpdateUIEvent&);
+    void UponUpdateInapplicable (wxUpdateUIEvent&);
+    void UponUpdateProperties   (wxUpdateUIEvent&);
 
     Input& input_data();
 
