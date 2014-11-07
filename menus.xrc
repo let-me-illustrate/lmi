@@ -33,8 +33,8 @@
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
         <label>_New\tCtrl-N</label>
-        <help>Create a new document</help>
         <bitmap platform="win" stock_id="wxART_NEW"/>
+        <help>Create a new document</help>
     </object>
     <object class="wxMenuItem" name="wxID_OPEN">
         <label>_Open...\tCtrl-O</label>
@@ -101,8 +101,8 @@
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
         <label>_New\tCtrl-N</label>
-        <help>Create a new document</help>
         <bitmap platform="win" stock_id="wxART_NEW"/>
+        <help>Create a new document</help>
     </object>
     <object class="wxMenuItem" name="wxID_OPEN">
         <label>_Open...\tCtrl-O</label>
@@ -265,8 +265,8 @@
         <label>_File</label>
         <object class="wxMenuItem" name="wxID_NEW">
             <label>_New\tCtrl-N</label>
-            <help>Create a new document</help>
             <bitmap platform="win" stock_id="wxART_NEW"/>
+            <help>Create a new document</help>
         </object>
         <object class="wxMenuItem" name="wxID_OPEN">
             <label>_Open...\tCtrl-O</label>

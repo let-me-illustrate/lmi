@@ -34624,3 +34624,13 @@ Fix a problem with 'USE_SO_ATTRIBUTES=1'. See:
 Refactor to facilitate GUI-test automation. See:
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00010.html
 
+20141107T1252Z <gchicares@sbcglobal.net> [516]
+
+  docmanager_ex.cpp
+Improve concinnity.
+
+20141107T2257Z <gchicares@sbcglobal.net> [516]
+
+  menus.xrc
+Regularize leaf-element order.
+
