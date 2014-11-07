@@ -34617,3 +34617,10 @@ Improve a variable name. See:
 Fix a problem with 'USE_SO_ATTRIBUTES=1'. See:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00118.html
 
+20141107T1205Z <gchicares@sbcglobal.net> [516]
+
+  skeleton.cpp
+  skeleton.hpp
+Refactor to facilitate GUI-test automation. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00010.html
+
