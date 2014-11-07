@@ -34605,3 +34605,9 @@ Add a useful save-as-pdf command. See:
   toolbar.xrc
 Improve concinnity; add shortcuts.
 
+20141107T0056Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_input.cpp
+Improve a variable name. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00118.html
+

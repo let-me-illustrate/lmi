@@ -43,7 +43,7 @@ LMI_WX_TEST_CASE(default_input)
     calendar_date const effective_date = exact_cast<tnr_date>(cell["EffectiveDate"])->value();
     LMI_ASSERT_EQUAL(effective_date, first_of_month);
 
-    std::string const general_account_date = exact_cast<numeric_sequence>(cell["GeneralAccountRate"])->value();
-    LMI_ASSERT(!general_account_date.empty());
-    wxLogMessage("GeneralAccountRate is \"%s\"", general_account_date.c_str());
+    std::string const general_account_rate = exact_cast<numeric_sequence>(cell["GeneralAccountRate"])->value();
+    LMI_ASSERT(!general_account_rate.empty());
+    wxLogMessage("GeneralAccountRate is \"%s\"", general_account_rate.c_str());
 }
