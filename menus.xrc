@@ -59,12 +59,12 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_PRINT">
-        <label>_Print\tCtrl-P</label>
+        <label>_Print...\tCtrl-P</label>
         <bitmap platform="win" stock_id="wxART_PRINT"/>
         <help>Print this document</help>
     </object>
     <object class="wxMenuItem" name="wxID_PAGE_SETUP">
-        <label>Page set_up\tCtrl-U</label>
+        <label>Page set_up...\tCtrl-U</label>
         <bitmap platform="win" stock_id="print-options"/>
         <help>Choose printing options for this session</help>
     </object>
@@ -201,7 +201,7 @@
         <label>Test _pasting</label>
     </object>
     <object class="wxMenuItem" name="test_system_command">
-        <label>Test s_ystem command</label>
+        <label>Test s_ystem command...</label>
     </object>
 </object>
 
@@ -239,9 +239,9 @@
     <label>_Help</label>
     <help>Help</help>
     <object class="wxMenuItem" name="wxID_HELP">
-        <label>_Contents\tF1</label>
+        <label>_User manual\tF1</label>
         <bitmap platform="win" stock_id="wxART_HELP"/>
-        <help>Read documentation</help>
+        <help>Browse user manual</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_ABOUT">
@@ -318,13 +318,13 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="run_cell">
-        <label>_Run selected cell\tCtrl-R</label>
+        <label>_Run cell\tCtrl-R</label>
         <bitmap platform="win" stock_id="run-cell"/>
         <help>Run selected cell</help>
     </object>
 <!-- SOMEDAY !! This may be useful for large cases.
     <object class="wxMenuItem" name="run_class">
-        <label>Run class of selected cell\tCtrl-Alt-R</label>
+        <label>Run class\tCtrl-Alt-R</label>
         <bitmap platform="win" stock_id="run-class"/>
         <help>Run all cells in selected cell's class</help>
     </object>
@@ -356,7 +356,7 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="paste_census">
-        <label>Pa_ste census data\tCtrl-Shift-S</label>
+        <label>Pa_ste census\tCtrl-Shift-S</label>
         <bitmap platform="win" stock_id="paste-case"/>
         <help>Paste census data from clipboard</help>
     </object>

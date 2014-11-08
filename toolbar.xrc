@@ -33,22 +33,22 @@
     <object class="tool" name="wxID_NEW">
         <tooltip>New</tooltip>
         <bitmap stock_id="wxART_NEW"/>
-        <longhelp>Open a new file</longhelp>
+        <longhelp>Create a new document</longhelp>
     </object>
     <object class="tool" name="wxID_OPEN">
         <tooltip>Open</tooltip>
         <bitmap stock_id="wxART_FILE_OPEN"/>
-        <longhelp>Open a file</longhelp>
+        <longhelp>Open an existing document</longhelp>
     </object>
     <object class="tool" name="wxID_SAVE">
         <tooltip>Save</tooltip>
         <bitmap stock_id="wxART_FILE_SAVE"/>
-        <longhelp>Save file</longhelp>
+        <longhelp>Save this document</longhelp>
     </object>
     <object class="tool" name="wxID_PRINT">
         <tooltip>Print</tooltip>
         <bitmap stock_id="wxART_PRINT"/>
-        <longhelp>Print</longhelp>
+        <longhelp>Print this document</longhelp>
     </object>
     <object class="tool" name="wxID_PREVIEW">
         <tooltip>Print preview</tooltip>
@@ -134,7 +134,7 @@
         <longhelp>Add a new cell with case default parameters</longhelp>
     </object>
     <object class="tool" name="delete_cells">
-        <tooltip>Delete selected cell(s)</tooltip>
+        <tooltip>Delete cell(s)</tooltip>
         <bitmap stock_id="delete-row"/>
         <longhelp>Delete selected cell(s)</longhelp>
     </object>
@@ -153,7 +153,7 @@
     <object class="tool" name="wxID_HELP">
         <tooltip>Help</tooltip>
         <bitmap stock_id="wxART_HELP"/>
-        <longhelp>Help</longhelp>
+        <longhelp>Browse user manual</longhelp>
     </object>
 </object>
 
