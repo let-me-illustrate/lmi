@@ -58,6 +58,11 @@
     #undef putchar
 #endif
 
+#if _MSC_VER >= 1800
+    #define LMI_COMPILER_PROVIDES_EXPM1L
+    #define LMI_COMPILER_PROVIDES_LOG1PL
+#endif
+
 // MSVC does not define these constants from fcntl.h however, amazingly enough,
 // uses the same values as Unix systems do with its _access() function (except
 // that it doesn't support X_OK as files have no "executable" attribute under
