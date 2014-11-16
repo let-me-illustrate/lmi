@@ -1,6 +1,6 @@
-*.vcproj
-*.vcproj.*.user
-*.sln
+*.vcxproj
+*.vcxproj.filters
+lmi.sln
 *.ncb
 *.suo
 Makefile.in
