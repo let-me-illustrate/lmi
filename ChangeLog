@@ -34649,3 +34649,8 @@ Fix defect introduced 20120527T1615Z: error using unnecessary library.
 See:
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00048.html
 
+20141121T2252Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_pdf_create.cpp
+Conform to 20141106T1655Z accelerator change.
+
