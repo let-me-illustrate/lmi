@@ -34654,3 +34654,8 @@ See:
   wx_test_pdf_create.cpp
 Conform to 20141106T1655Z accelerator change.
 
+20141121T2354Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_pdf_create.cpp
+Improve documentation.
+

@@ -122,8 +122,8 @@ LMI_WX_TEST_CASE(pdf_census)
         fs::remove(cell_pdf_paths[n]);
         }
 
-    // Print the census to disk.
-    ui.Char('i', wxMOD_CONTROL | wxMOD_SHIFT);  // "Census|Print case to disk"
+    // Print the census to PDF.
+    ui.Char('i', wxMOD_CONTROL | wxMOD_SHIFT);  // "Census|Print case to PDF"
     wxYield();
 
     // Close the census, we don't need it any more, and answer "No" to the
