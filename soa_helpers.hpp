@@ -27,33 +27,22 @@
 #include "config.hpp"
 
 #include "actuarial_table.hpp"
+#include "alert.hpp"
 #include "miscellany.hpp"
-#include "path_utility.hpp" // fs::path inserter
+#include "path_utility.hpp"             // fs::path inserter
 
 #include <boost/cstdint.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/format.hpp>
 #include <boost/static_assert.hpp>
 
-#include <climits>   // CHAR_BIT
+#include <climits>                      // CHAR_BIT
 #include <exception>
 #include <string>
 #include <vector>
 
-/************************************************************************
- misc helpers
- ************************************************************************/
-
-inline void error(boost::format const& fmt)
-{
-    throw std::runtime_error(fmt.str());
-}
-
-/************************************************************************
- SOA actuarial table format helpers
- ************************************************************************/
+// SOA actuarial table format helpers.
 
 struct soa_record_info
 {
@@ -70,7 +59,12 @@ std::vector<soa_record_info> list_soa_file_tables(char const* filename)
     fs::ifstream index_ifs(index_path, ios_in_binary());
     if(!index_ifs)
         {
-        error(boost::format("File '%1%' is required but could not be found.") % index_path.string());
+        fatal_error()
+            << "File '"
+            << index_path
+            << "' is required but could not be found. Try reinstalling."
+            << LMI_FLUSH
+            ;
         }
 
     // Index records have fixed length:
@@ -96,13 +90,19 @@ std::vector<soa_record_info> list_soa_file_tables(char const* filename)
         if(index_record_length != index_ifs.gcount())
             {
             if(!index_ifs)
+                {
                 break;
-            error(
-                boost::format("Table index file file '%1%': attempted to read %2% bytes, but got %3% bytes instead.")
-                % index_path.string()
-                % index_record_length
-                % index_ifs
-                );
+                }
+            fatal_error()
+                << "Index file '"
+                << index_path.string()
+                << "': attempted to read "
+                << index_record_length
+                << " bytes, but got "
+                << index_ifs.gcount()
+                << " bytes instead."
+                << LMI_FLUSH
+                ;
             }
 
         soa_record_info rec;

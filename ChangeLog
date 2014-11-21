@@ -34640,3 +34640,12 @@ Regularize leaf-element order.
   toolbar.xrc
 Improve concinnity.
 
+20141121T1521Z <gchicares@sbcglobal.net> [516]
+
+  soa2xml.cpp
+  soa_helpers.hpp
+  soa_stress_test.cpp
+Fix defect introduced 20120527T1615Z: error using unnecessary library.
+See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00048.html
+

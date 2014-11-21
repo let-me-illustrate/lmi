@@ -26,13 +26,13 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "soa_helpers.hpp"
-
 #include "actuarial_table.hpp"
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
+#include "soa_helpers.hpp"
 
 #include <cmath>
+#include <iomanip>                      // std::setprecision(), std::setw()
 #include <ios>
 #include <iostream>
 #include <istream>
@@ -42,6 +42,10 @@ inline bool almost_equal_doubles(double a, double b)
 {
     return materially_equal(a, b, 2.0E-15L);
 }
+
+// Functions almost_equal_doubles() and report_vector_difference()
+// here differ gratuitously from function almost_equal_doubles()
+// in 'actuarial_table.cpp'. SOMEDAY !! Rectify this.
 
 inline bool almost_equal_doubles(std::vector<double> const& a, std::vector<double> const& b)
 {
@@ -64,22 +68,30 @@ void report_vector_difference
     ,std::vector<double> const& data_soa
     )
 {
-    std::cerr << boost::format("Results differ for %1% values starting at %2%:")
-               % data_xml.size()
-               % start
-              << std::endl;
+    std::cerr
+        << "Results differ for "
+        << data_xml.size()
+        << " values starting at "
+        << start
+        << ":"
+        << std::endl
+        ;
 
-    std::cerr << boost::format("   \t%|25|\t%|25|") % "xml" % "soa" << std::endl;
+    std::cerr
+        << "   \t" << std::setw(25) << "xml"
+        << "   \t" << std::setw(25) << "soa"
+        << std::endl;
     for(unsigned int i = 0; i < data_xml.size(); i++)
         {
-            if(!almost_equal_doubles(data_xml[i], data_soa[i]))
-                {
-                std::cerr << boost::format("[%d]\t%|25.20|\t%|25.20|")
-                           % i
-                           % data_xml[i]
-                           % data_soa[i]
-                          << std::endl;
-                }
+        if(!almost_equal_doubles(data_xml[i], data_soa[i]))
+            {
+            std::cerr
+                << std::setw(3) << i
+                << std::setprecision(20) << std::setw(25) << data_xml[i]
+                << std::setprecision(20) << std::setw(25) << data_soa[i]
+                << std::endl
+                ;
+            }
         }
     throw std::runtime_error("XML table data are incorrect");
 }
@@ -132,10 +144,15 @@ void stress_test(char const* filename)
             }
         catch(std::exception const& e)
             {
-            error(boost::format("In file %1%, table %2%:\n%3%")
-                % filename
-                % i->index
-                % e.what());
+            fatal_error()
+                << "In file '"
+                << filename
+                << "', table "
+                << i->index
+                << ":\n"
+                << e.what()
+                << LMI_FLUSH
+                ;
             }
         }
 }
