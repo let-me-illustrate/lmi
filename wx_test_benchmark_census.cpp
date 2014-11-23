@@ -68,6 +68,9 @@ class census_benchmark
         ,int mod
         )
         {
+        // Clear any status text left over from the previous run.
+        status_.SetStatusText(wxString());
+
         wxUIActionSimulator z;
         z.Char(key, mod);
         wxYield();
@@ -127,7 +130,7 @@ class census_benchmark
         }
 
   private:
-    wxStatusBar const& status_;
+    wxStatusBar& status_;
     wxString const name_;
 };
 
