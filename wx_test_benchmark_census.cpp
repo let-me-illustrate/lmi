@@ -167,9 +167,9 @@ LMI_WX_TEST_CASE(benchmark_census)
         }
 
         b.time_operation
-            ("Print to disk"
+            ("Print to PDF"
             ,time_disk
-            ,'k'
+            ,'i'
             ,wxMOD_CONTROL | wxMOD_SHIFT
             );
 
