@@ -34659,3 +34659,10 @@ Conform to 20141106T1655Z accelerator change.
   wx_test_pdf_create.cpp
 Improve documentation.
 
+ <gchicares@sbcglobal.net> [516]
+
+  wx_test_benchmark_census.cpp
+  wx_test_statusbar.hpp
+Clear statusbar before timing each "benchmark" census. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00058.html
+
