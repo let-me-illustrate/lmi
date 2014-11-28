@@ -88,14 +88,6 @@ class DocMDIChildFrameEx
         );
 
   private:
-    // WX !! Shouldn't OnMenuHighlight() be virtual?
-    void UponMenuHighlight(wxMenuEvent&);
-
-    // wxDocMDIChildFrame overrides.
-    virtual wxStatusBar* GetStatusBar() const;
-
-    bool status_bar_sought_from_menu_highlight_handler_;
-
     DECLARE_CLASS(DocMDIChildFrameEx)
     DECLARE_EVENT_TABLE()
 };
