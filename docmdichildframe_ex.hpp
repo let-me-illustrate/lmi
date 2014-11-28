@@ -86,11 +86,6 @@ class DocMDIChildFrameEx
         ,long int          style  = wxDEFAULT_FRAME_STYLE
         ,wxString   const& name   = "child frame"
         );
-    // WX !! Base class wxDocMDIChildFrame's dtor is virtual, but isn't
-    // explicitly marked that way--though it seems that it should be,
-    // for consistency with the style of the rest of the library.
-    //
-    virtual ~DocMDIChildFrameEx();
 
   private:
     // WX !! Shouldn't OnMenuHighlight() be virtual?
