@@ -60,7 +60,7 @@ class CensusView
     CensusView();
 
   private:
-    void update_visible_columns();
+    bool update_visible_columns();
 
     CensusDocument& document() const;
 
@@ -91,7 +91,7 @@ class CensusView
 
     bool DoAllCells(mcenum_emission);
 
-    void Update();
+    bool Update();
     void ViewOneCell(int);
     void ViewComposite();
 
@@ -133,6 +133,9 @@ class CensusView
 
     wxDataViewCtrl* list_window_;
     wxObjectDataPtr<CensusViewDataViewModel> list_model_;
+
+    std::vector<std::string> all_headers_;
+    std::vector<bool> headers_show_;
 
     DECLARE_DYNAMIC_CLASS(CensusView)
     DECLARE_EVENT_TABLE()
