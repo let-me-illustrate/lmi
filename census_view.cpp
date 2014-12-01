@@ -1268,8 +1268,66 @@ void CensusView::apply_changes
         }
 }
 
-void CensusView::update_visible_columns()
+bool CensusView::update_visible_columns()
 {
+    // Check if we really need to update the columns, it takes a relatively
+    // long time and is done directly in response to the user actions, so it
+    // makes a lot of sense to avoid doing it completely as long as possible.
+    bool must_update_columns;
+
+    auto const& all_header_names(case_parms()[0].member_names());
+    if(all_header_names.size() != current_headers_.size())
+        {
+        must_update_columns = true;
+        }
+    else
+        {
+        must_update_columns =
+            !std::equal
+                (all_header_names.begin()
+                ,all_header_names.end()
+                ,current_headers_.begin()
+                ,[](auto const& name, auto const& header)
+                    {
+                    return name == header.name;
+                    }
+                );
+        }
+
+    if(must_update_columns)
+        {
+        // The entire set of columns has changed, we have no choice but to
+        // reexamine all of them to check which ones should be shown.
+        current_headers_.resize(all_header_names.size());
+        for(int i = 0; i < lmi::ssize(all_header_names); ++i)
+            {
+            auto& header = current_headers_[i];
+            header.name = all_header_names[i];
+            header.visibility = oe_hidden;
+            }
+        }
+
+    for(auto& header : current_headers_)
+        {
+        auto const visibility =
+            column_value_varies_across_cells(header.name)
+            ? oe_shown
+            : oe_hidden
+            ;
+        if(visibility != header.visibility)
+            {
+            header.visibility = visibility;
+            must_update_columns = true;
+            }
+        }
+
+    if (!must_update_columns)
+        {
+        return false;
+        }
+
+    wxWindowUpdateLocker u(list_window_);
+
     int width = autosize_columns_ ? wxCOL_WIDTH_AUTOSIZE : wxCOL_WIDTH_DEFAULT;
 
     list_window_->ClearColumns();
@@ -1292,29 +1350,37 @@ void CensusView::update_visible_columns()
     // Reason: although the case and class defaults are hidden, they're
     // still information--so if the user made them different from any cell
     // wrt some column, we respect that conscious decision.
-    std::vector<std::string> const& all_headers(case_parms()[0].member_names());
     int column = 0;
-    for(auto const& header : all_headers)
+    for(auto const& header : current_headers_)
         {
         ++column;
-        if(column_value_varies_across_cells(header))
+        switch(header.visibility)
             {
-            any_member<Input> const& exemplar = list_model_->cell_at(0, column);
-            renderer_type_converter const& conv = renderer_type_converter::get(exemplar);
-            wxDataViewRenderer* renderer = conv.create_renderer(exemplar);
-            LMI_ASSERT(renderer);
-            list_window_->AppendColumn
-                (new(wx) wxDataViewColumn
-                    (insert_spaces_between_words(header)
-                    ,renderer
-                    ,column
-                    ,width
-                    ,wxALIGN_LEFT
-                    ,wxDATAVIEW_COL_RESIZABLE
-                    )
-                );
+            case oe_shown:
+                {
+                any_member<Input> const& exemplar = list_model_->cell_at(0, column);
+                renderer_type_converter const& conv = renderer_type_converter::get(exemplar);
+                wxDataViewRenderer* renderer = conv.create_renderer(exemplar);
+                LMI_ASSERT(renderer);
+                list_window_->AppendColumn
+                    (new(wx) wxDataViewColumn
+                        (insert_spaces_between_words(header.name)
+                        ,renderer
+                        ,column
+                        ,width
+                        ,wxALIGN_LEFT
+                        ,wxDATAVIEW_COL_RESIZABLE
+                        )
+                    );
+                }
+                break;
+            case oe_hidden:
+                // Do nothing.
+                break;
             }
         }
+
+    return true;
 }
 
 char const* CensusView::icon_xrc_resource() const
@@ -1393,12 +1459,14 @@ void CensusView::UponColumnWidthVarying(wxCommandEvent&)
 {
     autosize_columns_ = true;
 
-    wxWindowUpdateLocker u(list_window_);
-    for(int j = 0; j < bourn_cast<int>(list_window_->GetColumnCount()); ++j)
+    if(!Update())
         {
-        list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_AUTOSIZE);
+        wxWindowUpdateLocker u(list_window_);
+        for(int j = 0; j < bourn_cast<int>(list_window_->GetColumnCount()); ++j)
+            {
+            list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_AUTOSIZE);
+            }
         }
-    Update();
 }
 
 /// Shrink all nonfrozen columns to default width.
@@ -1407,12 +1475,14 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
 {
     autosize_columns_ = false;
 
-    wxWindowUpdateLocker u(list_window_);
-    for(int j = 0; j < bourn_cast<int>(list_window_->GetColumnCount()); ++j)
+    if(!Update())
         {
-        list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_DEFAULT);
+        wxWindowUpdateLocker u(list_window_);
+        for(int j = 0; j < bourn_cast<int>(list_window_->GetColumnCount()); ++j)
+            {
+            list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_DEFAULT);
+            }
         }
-    Update();
 }
 
 void CensusView::UponRightClick(wxDataViewEvent& e)
@@ -1494,15 +1564,17 @@ void CensusView::UponUpdateColumnValuesVary(wxUpdateUIEvent& e)
 ///  due to editing, then display it no longer.
 /// Similarly, if an old employee class is no longer used, remove it; and
 ///  if a new one comes into use, display it.
+///
+/// Return true if the columns were updated or false if they didn't change.
 
-void CensusView::Update()
+bool CensusView::Update()
 {
     LMI_ASSERT(list_model_->GetCount() == cell_parms().size());
 
     wxWindowUpdateLocker u(list_window_);
 
     update_class_names();
-    update_visible_columns();
+    return update_visible_columns();
 }
 
 void CensusView::UponPrintCase(wxCommandEvent&)
