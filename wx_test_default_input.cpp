@@ -36,6 +36,17 @@
 
 #include <sstream>
 
+/*
+    Test default input.
+
+    2. Inspect '*default.ill' for the following variable data:
+
+     A. This date differs each month
+        <EffectiveDate>2456598</EffectiveDate>
+
+     B. Rates can change each month and differ among each distribution
+        <GeneralAccountRate>0.042 [0, 1); 0.037 [1, maturity)</GeneralAccountRate>
+ */
 LMI_WX_TEST_CASE(default_input)
 {
     calendar_date const today;

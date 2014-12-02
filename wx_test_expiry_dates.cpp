@@ -35,6 +35,18 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
+/*
+    Test expiry dates validity.
+
+    3. Inspect dates in 'expiry'. The values change every month and
+       the first value can differ among each distribution.
+
+      A. Distributions beginning before the first of the month:
+          2456596 2456628
+
+      B. Distributions beginning on the first of the month:
+          2456598 2456628
+ */
 LMI_WX_TEST_CASE(expiry_dates)
 {
     fs::path expiry_path(global_settings::instance().data_directory() / "expiry");

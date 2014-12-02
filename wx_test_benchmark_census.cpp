@@ -136,6 +136,21 @@ class census_benchmark
 
 } // Unnamed namespace.
 
+/*
+    Add GUI test collecting the census operations timings.
+
+    This implements the item
+
+        5. Collect time statistics from the status bar.
+
+    from the testing specification. Differences compared to the specification:
+
+     - Commands are only performed emulating keyboard entry, not mouse.
+     - Commands are only done once, not twice, to reduce the test running time.
+
+    The names of the censuses to be tested are taken from the configuration file
+    which is required by this test.
+ */
 LMI_WX_TEST_CASE(benchmark_census)
 {
     wxConfigBase const& c = config();
