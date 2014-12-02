@@ -37,6 +37,24 @@
 
 #include <boost/filesystem/operations.hpp>
 
+/*
+    Test that the default file can be opened and modified.
+
+    This implements the following item of the testing specification:
+
+        11. Ensure default file can be opened and modified.
+          A. File | Default | change a parameter | OK
+             File | Save
+             Expected results:
+               Status bar reads "Saved 'c:/fop-0.20.5/default.ill'."
+               'default.ill' exists in 'c:/fop-0.20.5/'
+
+    except that the currently configured default input filename is used instead of
+    the hard coded "default.ill".
+
+    The parameter currently being changed is the "MEC avoidance" choice, this is
+    arbitrary and could be replaced with changing another parameter in the future.
+ */
 LMI_WX_TEST_CASE(default_update)
 {
     wxUIActionSimulator ui;
