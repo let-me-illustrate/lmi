@@ -159,7 +159,7 @@ class application_test
     //
     // Return false if the program execution shouldn't continue, currently this
     // is only the case if the "list" option was specified requesting just to
-    // list the available tests.
+    // list the available tests or if the standard "help" option was given.
     bool process_command_line(int& argc, char* argv[]);
 
     // Run all the tests that were configured to be executed (all by default).
@@ -324,6 +324,28 @@ bool application_test::process_command_line(int& argc, char* argv[])
             {
             last_test_option = arg;
             remove_arg(n, argc, argv);
+            }
+        else if
+            (
+               0 == std::strcmp(arg, "-h")
+            || 0 == std::strcmp(arg, "--help")
+            )
+            {
+            warning()
+                << "Run automated GUI tests.\n"
+                   "\n"
+                   "Usage: "
+                << argv[0]
+                << "\n"
+                   "  -h,\t--help  \tdisplay this help and exit\n"
+                   "  -l,\t--list  \tlist all available tests and exit\n"
+                   "  -t <name> or \trun only the specified test (may occur\n"
+                   "  --test <name>\tmultiple times); default: run all tests\n"
+                   "\n"
+                   "Additionally, all command line options supported by the\n"
+                   "main lmi executable are also supported."
+                << std::flush;
+            return false;
             }
         else
             {
