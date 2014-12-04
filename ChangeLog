@@ -34690,3 +34690,9 @@ Conform to 20141106T1655Z accelerator change. See:
   wx_test_validate_output.cpp
 Document each automated GUI test (VZ).
 
+20141204T0240Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Improve '--help' output. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00050.html
+
