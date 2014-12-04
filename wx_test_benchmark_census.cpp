@@ -96,7 +96,10 @@ class census_benchmark
                 (std::fabs(diff_in_percents) < 10
                 ,wxString::Format
                     (
-                    "expected %ldms, but actually took %ldms, i.e. %s"
+                    "%s for %s was expected to take %ldms, "
+                    "but actually took %ldms, i.e. %s"
+                    ,operation
+                    ,name_
                     ,time_expected
                     ,time_real
                     ,delta

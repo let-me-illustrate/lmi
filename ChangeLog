@@ -34708,3 +34708,9 @@ Write all test output to stderr. See:
 Make test output more greppable. See:
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
 
+20141204T0436Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_benchmark_census.cpp
+Provide more information when a test fails. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
+
