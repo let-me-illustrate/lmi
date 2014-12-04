@@ -26,9 +26,8 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "soa_helpers.hpp"
-
 #include "actuarial_table.hpp"
+#include "soa_helpers.hpp"
 #include "value_cast.hpp"
 
 #include <xmlwrapp/attributes.h>
@@ -165,8 +164,13 @@ void export_single_table(char const* filename, int index, char const* descriptio
             break;
 
         default:
-            error(boost::format("Unknown table type '%1%'.") % table.table_type());
-       }
+            fatal_error()
+                << "Unknown table type '"
+                << table.table_type()
+                << "'."
+                << LMI_FLUSH
+                ;
+        }
 
     xml::document doc(root);
 

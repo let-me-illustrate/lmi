@@ -33,8 +33,8 @@
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
         <label>_New\tCtrl-N</label>
-        <help>Create a new document</help>
         <bitmap platform="win" stock_id="wxART_NEW"/>
+        <help>Create a new document</help>
     </object>
     <object class="wxMenuItem" name="wxID_OPEN">
         <label>_Open...\tCtrl-O</label>
@@ -59,12 +59,12 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_PRINT">
-        <label>_Print\tCtrl-P</label>
+        <label>_Print...\tCtrl-P</label>
         <bitmap platform="win" stock_id="wxART_PRINT"/>
         <help>Print this document</help>
     </object>
     <object class="wxMenuItem" name="wxID_PAGE_SETUP">
-        <label>Page set_up\tCtrl-U</label>
+        <label>Page set_up...\tCtrl-U</label>
         <bitmap platform="win" stock_id="print-options"/>
         <help>Choose printing options for this session</help>
     </object>
@@ -73,10 +73,15 @@
         <bitmap platform="win" stock_id="print-preview"/>
         <help>See what this document will look like when printed</help>
     </object>
+    <object class="wxMenuItem" name="print_pdf">
+        <label>Pr_int to PDF\tCtrl-I</label>
+        <bitmap platform="win" stock_id="save-pdf"/>
+        <help>Print this document to a PDF file</help>
+    </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
         <label>Defaul_t\tCtrl-T</label>
-        <bitmap stock_id="default-cell"/>
+        <bitmap platform="win" stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREFERENCES">
@@ -96,8 +101,8 @@
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
         <label>_New\tCtrl-N</label>
-        <help>Create a new document</help>
         <bitmap platform="win" stock_id="wxART_NEW"/>
+        <help>Create a new document</help>
     </object>
     <object class="wxMenuItem" name="wxID_OPEN">
         <label>_Open...\tCtrl-O</label>
@@ -123,7 +128,7 @@
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
         <label>Defaul_t\tCtrl-T</label>
-        <bitmap stock_id="default-cell"/>
+        <bitmap platform="win" stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREFERENCES">
@@ -196,7 +201,7 @@
         <label>Test _pasting</label>
     </object>
     <object class="wxMenuItem" name="test_system_command">
-        <label>Test s_ystem command</label>
+        <label>Test s_ystem command...</label>
     </object>
 </object>
 
@@ -209,12 +214,12 @@
         <help>Cascade windows</help>
     </object>
     <object class="wxMenuItem" name="window_next">
-        <label>_Next</label>
+        <label>_Next\tCtrl-Tab</label>
         <bitmap platform="win" stock_id="window-next"/>
         <help>Go to next window</help>
     </object>
     <object class="wxMenuItem" name="window_previous">
-        <label>_Previous</label>
+        <label>_Previous\tCtrl-Shift-Tab</label>
         <bitmap platform="win" stock_id="window-previous"/>
         <help>Go to previous window</help>
     </object>
@@ -234,9 +239,9 @@
     <label>_Help</label>
     <help>Help</help>
     <object class="wxMenuItem" name="wxID_HELP">
-        <label>_Contents\tF1</label>
+        <label>_User manual\tF1</label>
         <bitmap platform="win" stock_id="wxART_HELP"/>
-        <help>Read documentation</help>
+        <help>Browse user manual</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_ABOUT">
@@ -260,8 +265,8 @@
         <label>_File</label>
         <object class="wxMenuItem" name="wxID_NEW">
             <label>_New\tCtrl-N</label>
-            <help>Create a new document</help>
             <bitmap platform="win" stock_id="wxART_NEW"/>
+            <help>Create a new document</help>
         </object>
         <object class="wxMenuItem" name="wxID_OPEN">
             <label>_Open...\tCtrl-O</label>
@@ -271,7 +276,7 @@
         <object class="separator"/>
         <object class="wxMenuItem" name="edit_default_cell">
             <label>Defaul_t\tCtrl-T</label>
-            <bitmap stock_id="default-cell"/>
+            <bitmap platform="win" stock_id="default-cell"/>
             <help>Edit default cell</help>
         </object>
         <object class="wxMenuItem" name="wxID_PREFERENCES">
@@ -298,51 +303,51 @@
     <label>_Census</label>
     <object class="wxMenuItem" name="edit_cell">
         <label>_Edit cell\tCtrl-E</label>
-        <bitmap stock_id="edit-cell"/>
+        <bitmap platform="win" stock_id="edit-cell"/>
         <help>Edit selected cell</help>
     </object>
     <object class="wxMenuItem" name="edit_class">
         <label>Edit class defaults\tCtrl-Alt-E</label>
-        <bitmap stock_id="edit-class"/>
+        <bitmap platform="win" stock_id="edit-class"/>
         <help>Edit selected cell's class defaults</help>
     </object>
     <object class="wxMenuItem" name="edit_case">
         <label>Edit case defaults\tCtrl-Shift-E</label>
-        <bitmap stock_id="edit-case"/>
+        <bitmap platform="win" stock_id="edit-case"/>
         <help>Edit case defaults</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="run_cell">
-        <label>_Run selected cell\tCtrl-R</label>
-        <bitmap stock_id="run-cell"/>
+        <label>_Run cell\tCtrl-R</label>
+        <bitmap platform="win" stock_id="run-cell"/>
         <help>Run selected cell</help>
     </object>
 <!-- SOMEDAY !! This may be useful for large cases.
     <object class="wxMenuItem" name="run_class">
-        <label>Run class of selected cell\tCtrl-Alt-R</label>
-        <bitmap stock_id="run-class"/>
+        <label>Run class\tCtrl-Alt-R</label>
+        <bitmap platform="win" stock_id="run-class"/>
         <help>Run all cells in selected cell's class</help>
     </object>
 -->
     <object class="wxMenuItem" name="run_case">
         <label>Run case\tCtrl-Shift-R</label>
-        <bitmap stock_id="run-case"/>
+        <bitmap platform="win" stock_id="run-case"/>
         <help>Run all cells</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="print_case">
         <label>Print case\tCtrl-Shift-P</label>
-        <bitmap stock_id="print-case"/>
+        <bitmap platform="win" stock_id="print-case"/>
         <help>Run and print all cells</help>
     </object>
     <object class="wxMenuItem" name="print_case_to_disk">
-        <label>Print case to dis_k\tCtrl-Shift-K</label>
-        <bitmap stock_id="print-case-pdf"/>
-        <help>Run and print all cells to PDF files on disk rather than to printer</help>
+        <label>Pr_int case to PDF\tCtrl-Shift-I</label>
+        <bitmap platform="win" stock_id="print-case-pdf"/>
+        <help>Run and print all cells to PDF files rather than to printer</help>
     </object>
     <object class="wxMenuItem" name="print_spreadsheet">
         <label>Print case to spreads_heet\tCtrl-Shift-H</label>
-        <bitmap stock_id="write-spreadsheet"/>
+        <bitmap platform="win" stock_id="write-spreadsheet"/>
         <help>Run and print all cells to a spreadsheet file</help>
     </object>
     <object class="wxMenuItem" name="print_group_roster">
@@ -351,29 +356,29 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="paste_census">
-        <label>Pa_ste census data\tCtrl-Shift-S</label>
-        <bitmap stock_id="paste-case"/>
+        <label>Pa_ste census\tCtrl-Shift-S</label>
+        <bitmap platform="win" stock_id="paste-case"/>
         <help>Paste census data from clipboard</help>
     </object>
     <object class="wxMenuItem" name="add_cell">
         <label>_Add cell\tCtrl-+</label>
-        <bitmap stock_id="insert-rows"/>
+        <bitmap platform="win" stock_id="insert-rows"/>
         <help>Add a new cell with case default parameters</help>
     </object>
     <object class="wxMenuItem" name="delete_cells">
         <label>_Delete cell(s)\tCtrl--</label>
-        <bitmap stock_id="delete-row"/>
+        <bitmap platform="win" stock_id="delete-row"/>
         <help>Delete selected cell(s)</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="column_width_varying">
         <label>_Varying column width\tCtrl-]</label>
-        <bitmap stock_id="varying-width"/>
+        <bitmap platform="win" stock_id="varying-width"/>
         <help>Vary each column's width to show its entire contents</help>
     </object>
     <object class="wxMenuItem" name="column_width_fixed">
         <label>Fixed col_umn width\tCtrl-[</label>
-        <bitmap stock_id="fixed-width"/>
+        <bitmap platform="win" stock_id="fixed-width"/>
         <help>Display all columns with the same fixed width</help>
     </object>
 </object>
@@ -398,7 +403,7 @@
         <label>_Illustration</label>
         <object class="wxMenuItem" name="edit_cell">
             <label>_Edit cell\tCtrl-E</label>
-            <bitmap stock_id="edit-cell"/>
+            <bitmap platform="win" stock_id="edit-cell"/>
             <help>Edit this cell</help>
         </object>
         <object class="separator"/>
@@ -514,7 +519,7 @@
         <label>_MEC</label>
         <object class="wxMenuItem" name="edit_cell">
             <label>_Edit\tCtrl-E</label>
-            <bitmap stock_id="edit-cell"/>
+            <bitmap platform="win" stock_id="edit-cell"/>
             <help>Edit this file</help>
         </object>
     </object>
@@ -534,7 +539,7 @@
         <label>_GPT</label>
         <object class="wxMenuItem" name="edit_cell">
             <label>_Edit\tCtrl-E</label>
-            <bitmap stock_id="edit-cell"/>
+            <bitmap platform="win" stock_id="edit-cell"/>
             <help>Edit this file</help>
         </object>
     </object>

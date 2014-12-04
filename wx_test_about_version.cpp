@@ -34,6 +34,14 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
+/*
+    Test about dialog title.
+
+    4. Confirm version number exists, which can change monthly.
+        'Help | About' contains a date in the dialog's title bar,
+         which is always identical to this date in 'version.hpp':
+         #define LMI_VERSION "20131023T1837Z"
+ */
 LMI_WX_TEST_CASE(about_dialog_version)
 {
     struct expect_about_dialog : public wxExpectModalBase<wxDialog>

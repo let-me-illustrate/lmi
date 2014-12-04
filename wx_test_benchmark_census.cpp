@@ -68,6 +68,9 @@ class census_benchmark
         ,int mod
         )
         {
+        // Clear any status text left over from the previous run.
+        status_.SetStatusText(wxString());
+
         wxUIActionSimulator z;
         z.Char(key, mod);
         wxYield();
@@ -93,7 +96,10 @@ class census_benchmark
                 (std::fabs(diff_in_percents) < 10
                 ,wxString::Format
                     (
-                    "expected %ldms, but actually took %ldms, i.e. %s"
+                    "%s for %s was expected to take %ldms, "
+                    "but actually took %ldms, i.e. %s"
+                    ,operation
+                    ,name_
                     ,time_expected
                     ,time_real
                     ,delta
@@ -127,12 +133,27 @@ class census_benchmark
         }
 
   private:
-    wxStatusBar const& status_;
+    wxStatusBar& status_;
     wxString const name_;
 };
 
 } // Unnamed namespace.
 
+/*
+    Add GUI test collecting the census operations timings.
+
+    This implements the item
+
+        5. Collect time statistics from the status bar.
+
+    from the testing specification. Differences compared to the specification:
+
+     - Commands are only performed emulating keyboard entry, not mouse.
+     - Commands are only done once, not twice, to reduce the test running time.
+
+    The names of the censuses to be tested are taken from the configuration file
+    which is required by this test.
+ */
 LMI_WX_TEST_CASE(benchmark_census)
 {
     wxConfigBase const& c = config();
@@ -164,9 +185,9 @@ LMI_WX_TEST_CASE(benchmark_census)
         }
 
         b.time_operation
-            ("Print to disk"
+            ("Print to PDF"
             ,time_disk
-            ,'k'
+            ,'i'
             ,wxMOD_CONTROL | wxMOD_SHIFT
             );
 

@@ -35,7 +35,7 @@
 /// Return the status bar of the main window throwing an exception if anything
 /// goes wrong.
 
-inline wxStatusBar const& get_main_window_statusbar()
+inline wxStatusBar& get_main_window_statusbar()
 {
     wxWindow* const mainWin = wxTheApp->GetTopWindow();
     LMI_ASSERT(mainWin);

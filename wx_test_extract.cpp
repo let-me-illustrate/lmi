@@ -37,6 +37,29 @@
 
 #include <stdexcept>
 
+/*
+    Test extract file formats.
+
+    This implements the following item of the testing specification:
+
+        16. Open and run a variety of extract file formats; Close
+             files and the program.
+
+          A. File | Open | 'ExtractV6.ill' | press 'OK' twice [to
+              dismiss input validation message boxes] | press 'OK' to
+              run illustration
+             File | Close | No [do not save changes]
+
+          B. File | Open | 'ExtractV5.cns' | press 'OK' thrice [to
+              dismiss input validation message boxes]
+             Census | Run case
+             File | Close
+             File | Exit
+
+    The only difference with the specification is that "File | Exit" is not tested
+    as the program currently needs to remain running in order to display the test
+    results to the user.
+ */
 LMI_WX_TEST_CASE(extract)
 {
     wxUIActionSimulator ui;

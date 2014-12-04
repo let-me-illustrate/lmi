@@ -62,6 +62,9 @@ class Skeleton
     wxMDIChildFrame* CreateChildFrame(wxDocument*, ViewEx*);
 
   protected:
+    // Virtual functions that are overridden in gui test.
+    virtual DocManagerEx* CreateDocManager();
+
     // wxApp overrides that are further overridden in gui test.
     virtual void OnAssertFailure
         (wxChar const* file

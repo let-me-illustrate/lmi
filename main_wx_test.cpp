@@ -41,6 +41,7 @@
 #include <wx/fileconf.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
+#include <wx/scopeguard.h>
 #include <wx/stopwatch.h>
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
@@ -62,6 +63,8 @@ LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 #if !wxCHECK_VERSION(3,1,0)
 #   error wxWidgets 3.1.0 or later is required for the test suite.
 #endif
+
+static char const* const LOG_PREFIX = "[TEST] ";
 
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
@@ -159,7 +162,7 @@ class application_test
     //
     // Return false if the program execution shouldn't continue, currently this
     // is only the case if the "list" option was specified requesting just to
-    // list the available tests.
+    // list the available tests or if the standard "help" option was given.
     bool process_command_line(int& argc, char* argv[]);
 
     // Run all the tests that were configured to be executed (all by default).
@@ -325,6 +328,28 @@ bool application_test::process_command_line(int& argc, char* argv[])
             last_test_option = arg;
             remove_arg(n, argc, argv);
             }
+        else if
+            (
+               0 == std::strcmp(arg, "-h")
+            || 0 == std::strcmp(arg, "--help")
+            )
+            {
+            warning()
+                << "Run automated GUI tests.\n"
+                   "\n"
+                   "Usage: "
+                << argv[0]
+                << "\n"
+                   "  -h,\t--help  \tdisplay this help and exit\n"
+                   "  -l,\t--list  \tlist all available tests and exit\n"
+                   "  -t <name> or \trun only the specified test (may occur\n"
+                   "  --test <name>\tmultiple times); default: run all tests\n"
+                   "\n"
+                   "Additionally, all command line options supported by the\n"
+                   "main lmi executable are also supported."
+                << std::flush;
+            return false;
+            }
         else
             {
             n++;
@@ -353,9 +378,6 @@ TestsResults application_test::run()
 
     TestsResults results;
 
-    // Indent the test status reports to make them stand out.
-    char const* const indent = "    ";
-
     typedef std::vector<test_descriptor>::const_iterator ctdi;
     for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
         {
@@ -364,16 +386,20 @@ TestsResults application_test::run()
             std::string error;
             results.total++;
 
+            char const* const name = i->get_name();
+
             try
                 {
+                wxLogMessage("%s%s: started", LOG_PREFIX, name);
                 wxStopWatch sw;
                 i->run_test();
-                wxLogMessage("%s%s: ok (%ldms)", indent, i->get_name(), sw.Time());
+                wxLogMessage("%stime=%ldms (for %s)", LOG_PREFIX, sw.Time(), name);
+                wxLogMessage("%s%s: ok", LOG_PREFIX, name);
                 results.passed++;
                 }
             catch(test_skipped_exception const& e)
                 {
-                wxLogMessage("%s%s: skipped (%s)", indent, i->get_name(), e.what());
+                wxLogMessage("%s%s: skipped (%s)", LOG_PREFIX, name, e.what());
                 results.skipped++;
                 }
             catch(std::exception const& e)
@@ -389,15 +415,16 @@ TestsResults application_test::run()
                 {
                 results.failed++;
 
-                // When logging to a log window, it's better to have everything
-                // on a single line to avoid breaking the output structure.
+                // Keep everything on a single line to ensure the full text of
+                // the error appears if the output is filtered by the test name
+                // using standard line-oriented tools such as grep.
                 wxString one_line_error(error);
                 one_line_error.Replace("\n", " ");
 
                 wxLogMessage
                     ("%s%s: ERROR (%s)"
-                    ,indent
-                    ,i->get_name()
+                    ,LOG_PREFIX
+                    ,name
                     ,one_line_error
                     );
                 }
@@ -498,10 +525,6 @@ class SkeletonTest : public Skeleton
   private:
     void RunTheTests();
 
-    // This event handler only exists to prevent the base class from handling
-    // this event, see the comment near its use.
-    void ConsumeMenuOpen(wxMenuEvent&) {}
-
     std::string runtime_error_;
     bool is_running_tests_;
 };
@@ -511,6 +534,15 @@ IMPLEMENT_WX_THEME_SUPPORT
 
 bool SkeletonTest::OnInit()
 {
+    // The test output should be reproducible, so disable the time
+    // stamps in the logs to avoid spurious differences due to them.
+    wxLog::DisableTimestamp();
+
+    // Log everything to stderr, both to avoid interacting with the user (who
+    // might not even be present) and to allow redirecting the test output to a
+    // file which may subsequently be compared with the previous test runs.
+    delete wxLog::SetActiveTarget(new wxLogStderr);
+
     if(!Skeleton::OnInit())
         {
         return false;
@@ -585,19 +617,17 @@ void SkeletonTest::OnAssertFailure
 
 void SkeletonTest::RunTheTests()
 {
-    // Create log window for output that should be checked by the user.
-    class LogWindow : public wxLogWindow
-    {
-      public:
-        LogWindow() : wxLogWindow(NULL, "Log Messages", true, false) {}
-        virtual bool OnFrameClose(wxFrame* frame)
-        {
-            wxTheApp->ExitMainLoop();
-            return wxLogWindow::OnFrameClose(frame);
-        }
-    };
-
     wxWindow* const mainWin = GetTopWindow();
+    if (!mainWin)
+        {
+        wxLogError("Failed to find the application main window.");
+        ExitMainLoop();
+        return;
+        }
+
+    // Whatever happens, ensure that the main window is closed and thus the
+    // main loop terminated and the application exits at the end of the tests.
+    wxON_BLOCK_EXIT_OBJ1(*mainWin, wxWindow::Close, true /* force close */);
 
     // Close any initially opened dialogs (e.g. "About" dialog shown unless a
     // special command line option is specified).
@@ -621,11 +651,10 @@ void SkeletonTest::RunTheTests()
             }
         }
 
-    LogWindow* const log = new LogWindow();
     mainWin->SetFocus();
 
+    wxLogMessage("%sNOTE: starting the test suite", LOG_PREFIX);
     wxStopWatch sw;
-    wxLogMessage("Starting automatic tests:");
 
     // Notice that it is safe to use simple variable assignment here instead of
     // some RAII-based pattern because of application_test::run() noexcept
@@ -634,26 +663,29 @@ void SkeletonTest::RunTheTests()
     TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
+    wxLogMessage("%stime=%ldms (for all tests)", LOG_PREFIX, sw.Time());
+
     if(results.failed == 0)
         {
         if(results.passed == 0)
             {
-            wxLogMessage("WARNING: no tests have been executed.");
+            wxLogMessage("%sWARNING: no tests have been executed.", LOG_PREFIX);
             }
         else
             {
             wxLogMessage
-                ("SUCCESS: %d test%s successfully completed in %ldms."
+                ("%sSUCCESS: %d test%s successfully completed."
+                ,LOG_PREFIX
                 ,results.passed
                 ,results.passed == 1 ? "" : "s"
-                ,sw.Time()
                 );
             }
         }
     else
         {
         wxLogMessage
-            ("FAILURE: %d out of %d test%s failed."
+            ("%sFAILURE: %d out of %d test%s failed."
+            ,LOG_PREFIX
             ,results.failed
             ,results.total
             ,results.total == 1 ? "" : "s"
@@ -663,32 +695,13 @@ void SkeletonTest::RunTheTests()
     if(results.skipped)
         {
         wxLogMessage
-            ("(%s skipped)"
+            ("%sNOTE: %s skipped"
+            ,LOG_PREFIX
             ,results.skipped == 1
                 ? wxString("1 test was")
                 : wxString::Format("%d tests were", results.skipped)
             );
         }
-
-    // We want to show log output after the tests finished running and hide the
-    // app window, which is no longer in use. This doesn't work out of the box,
-    // because the main window is set application's top window and closing it
-    // terminates the app. LogWindow's window, on the other hand, doesn't keep
-    // the app running because it returns false from ShouldPreventAppExit().
-    // This code (together with LogWindow::OnFrameClose above) does the right
-    // thing: close the main window and keep running until the user closes the
-    // log window.
-    log->GetFrame()->Maximize();
-    log->GetFrame()->SetFocus();
-    SetExitOnFrameDelete(false);
-
-    // Before closing the main window, ensure that the base class event handler
-    // relying on it being alive is not called any more, otherwise dereferencing
-    // the pointer to the main frame inside it would simply crash on any attempt
-    // to open the log frame menu.
-    Bind(wxEVT_MENU_OPEN, &SkeletonTest::ConsumeMenuOpen, this);
-
-    mainWin->Close();
 }
 
 int main(int argc, char* argv[])

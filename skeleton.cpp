@@ -147,6 +147,7 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("window_tile_horizontally"        ),Skeleton::UponWindowTileHorizontally       )
     EVT_MENU(XRCID("window_tile_vertically"          ),Skeleton::UponWindowTileVertically         )
     EVT_MENU_OPEN(                                     Skeleton::UponMenuOpen                     )
+    EVT_UPDATE_UI(XRCID("print_pdf"                  ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("edit_cell"                  ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("edit_class"                 ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("edit_case"                  ),Skeleton::UponUpdateInapplicable           )
@@ -267,13 +268,24 @@ wxMenuBar* Skeleton::AdjustMenus(wxMenuBar* argument)
     return argument;
 }
 
+/// Create the MDI document manager.
+///
+/// This uses 'new' rather than 'new(wx)' because the object is
+/// explicitly deleted in OnExit().
+
+DocManagerEx* Skeleton::CreateDocManager()
+{
+    return new DocManagerEx;
+}
+
 void Skeleton::InitDocManager()
 {
-    // WX !! At least in wx-2.5.1, this can't be created in the
-    // constructor, because that would try to create an instance of
-    // class wxPageSetupDialogData, which apparently mustn't be done
-    // before the application object is constructed.
-    doc_manager_ = new DocManagerEx;
+    // WX !! At least in wx-2.5.1, the DocManagerEx instance must be
+    // created here. It can't be instantiated in the constructor
+    // because it creates a wxPageSetupDialogData instance, which
+    // apparently mustn't be done before the application object has
+    // been constructed.
+    doc_manager_ = CreateDocManager();
     doc_manager_->FileHistoryLoad(*config_);
 
     new(wx) wxDocTemplate

@@ -243,6 +243,64 @@ void save_illustration_data(wxString const& prefix)
 
 } // Unnamed namespace.
 
+/*
+    Start of the calculation summary unit test.
+
+    This partially implements the first half of the item 8 of the
+    testing specification:
+
+        8. Validate Calculation summary and a few of its features.
+
+          A. File | Preferences | check 'Use built-in calculation summary'
+             File | New | Illustration | Ok
+             Expected results:
+               These columns display in the calculation summary view:
+                 Policy Year
+                 Net Outlay
+                 Curr Account Value
+                 Curr Net Cash Surr Value
+                 Curr EOY Death Benefit
+               Inspect 'configurable_settings.xml' for:
+                 <calculation_summary_columns></calculation_summary_columns>
+
+          B. File | Preferences | uncheck 'Use built-in calculation summary'
+             select twelve different columns | inspect display for those columns
+             Expected results:
+               These columns display in the calculation summary view:
+                 Policy Year
+                 Attained Age
+                 Net Outlay
+                 Curr Net Cash Surr Value
+                 Curr Account Value
+                 Guar Net Cash Surr Value
+                 Guar Account Value
+                 Curr EOY Death Benefit
+                 Guar EOY Death Benefit
+                 Withdrawal
+                 Annual Loan
+                 Curr Loan Int Accrued
+               Inspect 'configurable_settings.xml' for:
+                 <calculation_summary_columns>AttainedAge PolicyYear Outlay \
+                  CSVNet_Current AcctVal_Current CSVNet_Guaranteed \
+                  AcctVal_Guaranteed EOYDeathBft_Current EOYDeathBft_Guaranteed \
+                  NetWD NewCashLoan LoanIntAccrued_Current </calculation_summary_columns>
+
+          C. File | New | Illustration
+             Illustration | Copy calculation summary
+             paste the output for inspection, then
+             Illustration | Copy full illustration data
+             paste the output for inspection
+
+          D. File | New | Census
+             Census | Run case
+             Illustration | Copy calculation summary
+             paste the output for inspection, then
+             Illustration | Copy full illustration data
+             paste the output for inspection
+
+    The output is pasted into 4 files called {New,Calc}Ill{Summary,Full}.txt in
+    the current working directory.
+ */
 LMI_WX_TEST_CASE(calculation_summary)
 {
     configurable_settings const& settings = configurable_settings::instance();
