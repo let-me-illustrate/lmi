@@ -41,6 +41,7 @@
 #include <wx/fileconf.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
+#include <wx/scopeguard.h>
 #include <wx/stopwatch.h>
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
@@ -520,10 +521,6 @@ class SkeletonTest : public Skeleton
   private:
     void RunTheTests();
 
-    // This event handler only exists to prevent the base class from handling
-    // this event, see the comment near its use.
-    void ConsumeMenuOpen(wxMenuEvent&) {}
-
     std::string runtime_error_;
     bool is_running_tests_;
 };
@@ -533,6 +530,15 @@ IMPLEMENT_WX_THEME_SUPPORT
 
 bool SkeletonTest::OnInit()
 {
+    // The test output should be reproducible, so disable the time
+    // stamps in the logs to avoid spurious differences due to them.
+    wxLog::DisableTimestamp();
+
+    // Log everything to stderr, both to avoid interacting with the user (who
+    // might not even be present) and to allow redirecting the test output to a
+    // file which may subsequently be compared with the previous test runs.
+    delete wxLog::SetActiveTarget(new wxLogStderr);
+
     if(!Skeleton::OnInit())
         {
         return false;
@@ -607,19 +613,17 @@ void SkeletonTest::OnAssertFailure
 
 void SkeletonTest::RunTheTests()
 {
-    // Create log window for output that should be checked by the user.
-    class LogWindow : public wxLogWindow
-    {
-      public:
-        LogWindow() : wxLogWindow(NULL, "Log Messages", true, false) {}
-        virtual bool OnFrameClose(wxFrame* frame)
-        {
-            wxTheApp->ExitMainLoop();
-            return wxLogWindow::OnFrameClose(frame);
-        }
-    };
-
     wxWindow* const mainWin = GetTopWindow();
+    if (!mainWin)
+        {
+        wxLogError("Failed to find the application main window.");
+        ExitMainLoop();
+        return;
+        }
+
+    // Whatever happens, ensure that the main window is closed and thus the
+    // main loop terminated and the application exits at the end of the tests.
+    wxON_BLOCK_EXIT_OBJ1(*mainWin, wxWindow::Close, true /* force close */);
 
     // Close any initially opened dialogs (e.g. "About" dialog shown unless a
     // special command line option is specified).
@@ -643,7 +647,6 @@ void SkeletonTest::RunTheTests()
             }
         }
 
-    LogWindow* const log = new LogWindow();
     mainWin->SetFocus();
 
     wxStopWatch sw;
@@ -691,26 +694,6 @@ void SkeletonTest::RunTheTests()
                 : wxString::Format("%d tests were", results.skipped)
             );
         }
-
-    // We want to show log output after the tests finished running and hide the
-    // app window, which is no longer in use. This doesn't work out of the box,
-    // because the main window is set application's top window and closing it
-    // terminates the app. LogWindow's window, on the other hand, doesn't keep
-    // the app running because it returns false from ShouldPreventAppExit().
-    // This code (together with LogWindow::OnFrameClose above) does the right
-    // thing: close the main window and keep running until the user closes the
-    // log window.
-    log->GetFrame()->Maximize();
-    log->GetFrame()->SetFocus();
-    SetExitOnFrameDelete(false);
-
-    // Before closing the main window, ensure that the base class event handler
-    // relying on it being alive is not called any more, otherwise dereferencing
-    // the pointer to the main frame inside it would simply crash on any attempt
-    // to open the log frame menu.
-    Bind(wxEVT_MENU_OPEN, &SkeletonTest::ConsumeMenuOpen, this);
-
-    mainWin->Close();
 }
 
 int main(int argc, char* argv[])

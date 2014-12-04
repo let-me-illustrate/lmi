@@ -34696,3 +34696,9 @@ Document each automated GUI test (VZ).
 Improve '--help' output. See:
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00050.html
 
+20141204T0420Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Write all test output to stderr. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
+
