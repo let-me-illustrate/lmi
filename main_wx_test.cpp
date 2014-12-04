@@ -64,6 +64,8 @@ LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 #   error wxWidgets 3.1.0 or later is required for the test suite.
 #endif
 
+static char const* const LOG_PREFIX = "[TEST] ";
+
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
 
@@ -376,9 +378,6 @@ TestsResults application_test::run()
 
     TestsResults results;
 
-    // Indent the test status reports to make them stand out.
-    char const* const indent = "    ";
-
     typedef std::vector<test_descriptor>::const_iterator ctdi;
     for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
         {
@@ -387,16 +386,20 @@ TestsResults application_test::run()
             std::string error;
             results.total++;
 
+            char const* const name = i->get_name();
+
             try
                 {
+                wxLogMessage("%s%s: started", LOG_PREFIX, name);
                 wxStopWatch sw;
                 i->run_test();
-                wxLogMessage("%s%s: ok (%ldms)", indent, i->get_name(), sw.Time());
+                wxLogMessage("%stime=%ldms (for %s)", LOG_PREFIX, sw.Time(), name);
+                wxLogMessage("%s%s: ok", LOG_PREFIX, name);
                 results.passed++;
                 }
             catch(test_skipped_exception const& e)
                 {
-                wxLogMessage("%s%s: skipped (%s)", indent, i->get_name(), e.what());
+                wxLogMessage("%s%s: skipped (%s)", LOG_PREFIX, name, e.what());
                 results.skipped++;
                 }
             catch(std::exception const& e)
@@ -412,15 +415,16 @@ TestsResults application_test::run()
                 {
                 results.failed++;
 
-                // When logging to a log window, it's better to have everything
-                // on a single line to avoid breaking the output structure.
+                // Keep everything on a single line to ensure the full text of
+                // the error appears if the output is filtered by the test name
+                // using standard line-oriented tools such as grep.
                 wxString one_line_error(error);
                 one_line_error.Replace("\n", " ");
 
                 wxLogMessage
                     ("%s%s: ERROR (%s)"
-                    ,indent
-                    ,i->get_name()
+                    ,LOG_PREFIX
+                    ,name
                     ,one_line_error
                     );
                 }
@@ -649,8 +653,8 @@ void SkeletonTest::RunTheTests()
 
     mainWin->SetFocus();
 
+    wxLogMessage("%sNOTE: starting the test suite", LOG_PREFIX);
     wxStopWatch sw;
-    wxLogMessage("Starting automatic tests:");
 
     // Notice that it is safe to use simple variable assignment here instead of
     // some RAII-based pattern because of application_test::run() noexcept
@@ -659,26 +663,29 @@ void SkeletonTest::RunTheTests()
     TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
+    wxLogMessage("%stime=%ldms (for all tests)", LOG_PREFIX, sw.Time());
+
     if(results.failed == 0)
         {
         if(results.passed == 0)
             {
-            wxLogMessage("WARNING: no tests have been executed.");
+            wxLogMessage("%sWARNING: no tests have been executed.", LOG_PREFIX);
             }
         else
             {
             wxLogMessage
-                ("SUCCESS: %d test%s successfully completed in %ldms."
+                ("%sSUCCESS: %d test%s successfully completed."
+                ,LOG_PREFIX
                 ,results.passed
                 ,results.passed == 1 ? "" : "s"
-                ,sw.Time()
                 );
             }
         }
     else
         {
         wxLogMessage
-            ("FAILURE: %d out of %d test%s failed."
+            ("%sFAILURE: %d out of %d test%s failed."
+            ,LOG_PREFIX
             ,results.failed
             ,results.total
             ,results.total == 1 ? "" : "s"
@@ -688,7 +695,8 @@ void SkeletonTest::RunTheTests()
     if(results.skipped)
         {
         wxLogMessage
-            ("(%s skipped)"
+            ("%sNOTE: %s skipped"
+            ,LOG_PREFIX
             ,results.skipped == 1
                 ? wxString("1 test was")
                 : wxString::Format("%d tests were", results.skipped)
