@@ -87,8 +87,10 @@ class IllustrationView
     void UponCopyFull           (wxCommandEvent&);
     void UponCopySummary        (wxCommandEvent&);
     void UponPreviewPdf         (wxCommandEvent&);
+    void UponPrint              (wxCommandEvent&);
     void UponPrintPdf           (wxCommandEvent&);
     void UponProperties         (wxCommandEvent&);
+    void UponUpdateAlwaysEnabled(wxUpdateUIEvent&);
     void UponUpdateFileSave     (wxUpdateUIEvent&);
     void UponUpdateFileSaveAs   (wxUpdateUIEvent&);
     void UponUpdateInapplicable (wxUpdateUIEvent&);

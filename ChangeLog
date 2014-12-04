@@ -34566,3 +34566,151 @@ Add a new icon, reserving the old for another use.
 Make grayed icons less ugly (VZ). Cf.:
   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00071.html
 
+20141105T2353Z <gchicares@sbcglobal.net> [517]
+
+  illustration_view.cpp
+Reformat.
+
+20141106T0021Z <gchicares@sbcglobal.net> [517]
+
+  illustration_view.hpp
+Reformat.
+
+20141106T1452Z <gchicares@sbcglobal.net> [517]
+
+  menus.xrc
+Use "platform" consistently. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00012.html
+
+20141106T1624Z <gchicares@sbcglobal.net> [516]
+
+  census_view.cpp
+  gpt_view.cpp
+  illustration_view.cpp
+  illustration_view.hpp
+  individual_tutorial.html
+  mec_view.cpp
+  menu_commands.html
+  menus.xrc
+  skeleton.cpp
+  toolbar.xrc
+Add a useful save-as-pdf command. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00005.html
+
+20141106T1655Z <gchicares@sbcglobal.net> [516]
+
+  group_tutorial.html
+  menu_commands.html
+  menus.xrc
+  toolbar.xrc
+Improve concinnity; add shortcuts.
+
+20141107T0056Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_input.cpp
+Improve a variable name. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00118.html
+
+20141107T0122Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_input.cpp
+Fix a problem with 'USE_SO_ATTRIBUTES=1'. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00118.html
+
+20141107T1205Z <gchicares@sbcglobal.net> [516]
+
+  skeleton.cpp
+  skeleton.hpp
+Refactor to facilitate GUI-test automation. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00010.html
+
+20141107T1252Z <gchicares@sbcglobal.net> [516]
+
+  docmanager_ex.cpp
+Improve concinnity.
+
+20141107T2257Z <gchicares@sbcglobal.net> [516]
+
+  menus.xrc
+Regularize leaf-element order.
+
+20141108T0049Z <gchicares@sbcglobal.net> [516]
+
+  menus.xrc
+  toolbar.xrc
+Improve concinnity.
+
+20141121T1521Z <gchicares@sbcglobal.net> [516]
+
+  soa2xml.cpp
+  soa_helpers.hpp
+  soa_stress_test.cpp
+Fix defect introduced 20120527T1615Z: error using unnecessary library.
+See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00048.html
+
+20141121T2252Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_pdf_create.cpp
+Conform to 20141106T1655Z accelerator change.
+
+20141121T2354Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_pdf_create.cpp
+Improve documentation.
+
+20141123T2020Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_benchmark_census.cpp
+  wx_test_statusbar.hpp
+Clear statusbar before timing each "benchmark" census. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00058.html
+
+20141123T2024Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_benchmark_census.cpp
+Conform to 20141106T1655Z accelerator change. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00058.html
+
+20141202T1200Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_about_version.cpp
+  wx_test_benchmark_census.cpp
+  wx_test_calculation_summary.cpp
+  wx_test_config_settings.cpp
+  wx_test_create_open.cpp
+  wx_test_default_input.cpp
+  wx_test_default_update.cpp
+  wx_test_expiry_dates.cpp
+  wx_test_extract.cpp
+  wx_test_input_sequences.cpp
+  wx_test_input_validation.cpp
+  wx_test_paste_census.cpp
+  wx_test_pdf_create.cpp
+  wx_test_validate_output.cpp
+Document each automated GUI test (VZ).
+
+20141204T0240Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Improve '--help' output. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00050.html
+
+20141204T0421Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Write all test output to stderr. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
+
+20141204T0431Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Make test output more greppable. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
+
+20141204T0436Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_benchmark_census.cpp
+Provide more information when a test fails. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
+

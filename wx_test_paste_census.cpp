@@ -135,6 +135,56 @@ bool does_list_have_column(wxDataViewCtrl* dvc, wxString const& name)
 
 } // Unnamed namespace.
 
+/*
+    Test for pasting data into a census.
+
+    This implements the following item of the testing specification:
+
+        7. Verify help file sample works, using the paste census feature.
+           Confirm 'Edit case' and 'Save as' work.
+
+          A. Press 'F1' for help file. Select 'Pasting a census from a
+             spreadsheet'. Copy this sample from the help file webpage:
+
+        Gender  UnderwritingClass       IssueAge        Payment DeathBenefitOption
+        Female  Preferred       30      sevenpay,7;0    b,7;a
+        Male    Preferred       35      sevenpay,7;0    b,7;a
+        Female  Standard        40      sevenpay,7;0    b,7;a
+        Male    Standard        45      sevenpay,7;0    b,7;a
+        Female  Preferred       50      sevenpay,7;0    b,7;a
+        Male    Preferred       55      sevenpay,7;0    b,7;a
+        Female  Standard        60      sevenpay,7;0    b,7;a
+
+             Then do:
+             File | New | Census
+             Census | Paste census data
+             Expected result:
+               Seven new cells are populated with the individual data
+
+          B. Census | Edit case defaults | Change 'UnderwritingClass'
+             to 'Preferred' | OK
+             This message box appears:
+
+               ---------------------------
+               Confirm changes
+               ---------------------------
+               Apply all changes to every cell?
+               ---------------------------
+               Yes   No
+               ---------------------------
+             Select 'Yes'. The 'UnderwritingClass' column should disappear
+             from the census editor.
+
+          C. File | 'Save as'
+             Name the file 'PasteCensus.cns' and press 'Save' button.
+             The working directory will be the default location.
+             Expected result:
+               A file named 'PasteCensus.cns' exists in default directory.
+
+    All checks are implemented exactly as specified, but the data to be pasted
+    into the census is extracted from pasting_to_a_census.html file itself instead
+    of being copied from an on-screen window showing it.
+ */
 LMI_WX_TEST_CASE(paste_census)
 {
     // Put the data to paste on clipboard.

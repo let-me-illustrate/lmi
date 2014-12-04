@@ -69,6 +69,26 @@ std::string fo_suffix(int n)
 
 } // Unnamed namespace.
 
+/*
+    Test for correct creation of PDF from an illustration.
+
+    This implements the first half of the item (6) of the testing specification:
+
+        6. Produce PDF's for two input file types.
+
+          A. File | New | Illustration | OK
+             File | Print
+             Expected result:
+               One 'unnamed*.pdf' exists in 'fop-0.20.5/'
+
+    The differences compared to the specification:
+
+    - "File | Print preview" is used instead of "File | Print" to avoid actually
+      producing output on paper unnecessarily.
+
+    - Check for the file existence in the print directory configured in
+      configurable_settings.xml and do not hardcode "fop-0.20.5/".
+ */
 LMI_WX_TEST_CASE(pdf_illustration)
 {
     // Create a new illustration.
@@ -93,6 +113,19 @@ LMI_WX_TEST_CASE(pdf_illustration)
     // can't be removed before it is closed.
 }
 
+/*
+    Test for correct creation of PDF from a census.
+
+    This implements the second half of the item (6) of the testing specification:
+
+        6. Produce PDF's for two input file types.
+
+          B. File | New | Census
+             Census | Add cell (2x)
+             Census | Print case to disk
+             Expected result:
+               Three pdf's plus the composite with "unnamed" prefix.
+ */
 LMI_WX_TEST_CASE(pdf_census)
 {
     // Create a new census.
@@ -122,8 +155,8 @@ LMI_WX_TEST_CASE(pdf_census)
         fs::remove(cell_pdf_paths[n]);
         }
 
-    // Print the census to disk.
-    ui.Char('k', wxMOD_CONTROL | wxMOD_SHIFT);  // "Census|Print case to disk"
+    // Print the census to PDF.
+    ui.Char('i', wxMOD_CONTROL | wxMOD_SHIFT);  // "Census|Print case to PDF"
     wxYield();
 
     // Close the census, we don't need it any more, and answer "No" to the

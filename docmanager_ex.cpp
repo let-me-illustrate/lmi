@@ -81,6 +81,7 @@ DocManagerEx::~DocManagerEx()
 
 // WX !! Perhaps xrc could support a menu-use-file-history tag,
 // and this stuff could be made available by default in the library.
+
 void DocManagerEx::AssociateFileHistoryWithFileMenu(wxMenuBar* menu_bar)
 {
     if(menu_bar)
@@ -200,16 +201,16 @@ void DocManagerEx::UponPrint(wxCommandEvent&)
     delete printout;
 }
 
-// Use a popup menu, instead of wxGetSingleChoiceData with strings
-// that are not generally appropriate. Our users don't understand
-// "Select a document template", they'd rather not have to hit
-// Enter after typing the initial letter of the template, and they
-// find the dialog frame distracting.
-//
-// GWC replaced 'wxGetSingleChoiceData', but elsewhere made only
-// trivial changes (using const accessors instead of data members)
-// to get this to compile in a translation unit outside the library.
-//
+/// Use a popup menu, instead of wxGetSingleChoiceData with strings
+/// that are not generally appropriate. Our users don't understand
+/// "Select a document template", they'd rather not have to hit
+/// Enter after typing the initial letter of the template, and they
+/// find the dialog frame distracting.
+///
+/// GWC replaced 'wxGetSingleChoiceData', but elsewhere made only
+/// trivial changes (using const accessors instead of data members)
+/// to get this to compile in a translation unit outside the library.
+
 wxDocTemplate* DocManagerEx::SelectDocumentType
     (wxDocTemplate** templates
     ,int             noTemplates

@@ -34,6 +34,18 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
+/*
+    Test that the input sequences census can be run.
+
+    This implements the following item of the testing specification:
+
+        10. Confirm Help file input sequences remain valid.
+
+          A. File | Open | 'InputSequences.cns'
+             Census | Run case
+             Expected result:
+               Case runs without any warnings or errors.
+ */
 LMI_WX_TEST_CASE(input_sequences)
 {
     // Construct the path of the file to open, it's supposed to be in the same

@@ -36,6 +36,28 @@
 
 #include <stdexcept>
 
+/*
+    Test for the expected validation errors.
+
+    This commit implements the following item of the testing specification:
+
+        15. Validate input ranges and anticipate error for
+            'CurrentCoiMultiplier' input.
+
+          A. File | Open | 'CoiMultiplier.cns'
+             Census | run case
+             Expected result:
+              Error message for last life with a zero multiplier:
+
+              Input validation problems for '':
+              COI multiplier entered is '0', but it must
+               contain at least one number other than zero.
+
+    However it doesn't check for the message box being displayed, because of
+    significant difficulty of doing it due to the fact that this message box is
+    shown from the global OnExceptionInMainLoop() function, but just checks for
+    the expected exception being thrown.
+ */
 LMI_WX_TEST_CASE(input_validation)
 {
     wxUIActionSimulator ui;

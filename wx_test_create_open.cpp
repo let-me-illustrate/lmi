@@ -104,6 +104,18 @@ void do_test_create_open
     wxYield();
 }
 
+/*
+    These tests implement the following item of the testing specification:
+
+    9. Confirm all file types can be created and opened.
+
+      A. File | New |
+          [Census, Illustration, Database, Policy, Rounding, Strata, MEC testing]
+         push 'OK' button for only 'Illustration' and 'MEC testing'
+         File | Save
+
+      B. File | Open | each new saved file from the last test
+ */
 LMI_WX_TEST_CASE(create_open_census)
 {
     do_test_create_open(*this, 'c', "testfile.cns",  false);

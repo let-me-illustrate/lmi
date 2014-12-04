@@ -81,6 +81,35 @@ class output_file_existence_checker
 
 } // Unnamed namespace.
 
+/*
+    Add test to validate existence of the expected output files.
+
+    This implements the following item of the testing specification:
+
+        14. Validate existence and naming conventions of output for
+            named and unnamed files.
+
+          A. File | New | Illustration | enter 'idiosyncrasyZ' in
+             'Comments' | OK
+             Expected results:
+               file 'unnamed.monthly_trace.tsv' exists
+
+          B. File | Open | 'MonthlyTrace.ill' | press 'OK' to
+              [dismiss message box] | press 'OK' to run illustration
+             Expected results:
+               file 'MonthlyTrace.monthly_trace.tsv' exists
+
+          C. File | New | MEC testing | OK
+             Expected results:
+               file 'unnamed.mec.tsv' exists
+
+          D. File | Open | 'MecTesting.mec' | OK
+             Expected results:
+               file 'MecTesting.mec.tsv' exists
+
+    The currently configured spreadsheet file extension is used instead of the
+    hard-coded "tsv", otherwise the tests are implemented exactly as specified.
+ */
 LMI_WX_TEST_CASE(validate_output_illustration)
 {
     std::string const&

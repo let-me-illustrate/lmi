@@ -32,6 +32,38 @@
 
 #include <boost/filesystem/operations.hpp>
 
+/*
+    Test configurable_settings.xml file.
+
+    Implement the following verifications from the official specification:
+
+    1. Inspect 'configurable_settings.xml' for the following:
+
+     A. The file exists in '/etc/opt/lmi'
+
+     B. These lines always exist like this:
+         <libraries_to_preload/>
+         <xsl_fo_command>CMD /c /fop-0.20.5/fop</xsl_fo_command>
+
+     C. We package several distributions each month that have their
+        own "skin" and "default" files. Each time this test is run,
+        only one pair of the following lines exists at a time:
+
+          <skin_filename>skin_coli_boli.xrc</skin_filename>
+          <default_input_filename>c:/fop-0.20.5/coli_boli_default.ill</default_input_filename>
+
+          <skin_filename>skin_group_carveout.xrc</skin_filename>
+          <default_input_filename>c:/fop-0.20.5/group_carveout_default.ill</default_input_filename>
+
+          <skin_filename>skin_group_carveout2.xrc</skin_filename>
+          <default_input_filename>c:/fop-0.20.5/group_carveout_default.ill</default_input_filename>
+
+          <skin_filename>reg_d.xrc</skin_filename>
+          <default_input_filename>c:/fop-0.20.5/private_placement_default.ill</default_input_filename>
+
+    The only change is that the xsl_fo_command is checked to contain the volume,
+    i.e. is c:/fop-0.20.5/fop, and not just the path.
+ */
 LMI_WX_TEST_CASE(configurable_settings)
 {
     LMI_ASSERT(fs::exists("/etc/opt/lmi/configurable_settings.xml"));
