@@ -538,15 +538,15 @@ bool SkeletonTest::OnInit()
     // stamps in the logs to avoid spurious differences due to them.
     wxLog::DisableTimestamp();
 
-    // Log everything to stderr, both to avoid interacting with the user (who
-    // might not even be present) and to allow redirecting the test output to a
-    // file which may subsequently be compared with the previous test runs.
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-
     if(!Skeleton::OnInit())
         {
         return false;
         }
+
+    // Log everything to stdout, both to avoid interacting with the user (who
+    // might not even be present) and to allow redirecting the test output to a
+    // file which may subsequently be compared with the previous test runs.
+    delete wxLog::SetActiveTarget(new wxLogStderr(stdout));
 
     // Run the tests at idle time, when the main loop is running, in order to
     // do it in as realistic conditions as possible.
