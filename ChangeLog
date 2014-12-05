@@ -34714,3 +34714,9 @@ Make test output more greppable. See:
 Provide more information when a test fails. See:
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
 
+20141205T1720Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Write all test output to stdout, not stderr. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00004.html
+
