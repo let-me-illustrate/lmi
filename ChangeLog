@@ -34753,3 +34753,9 @@ Eliminate log-message prefix. See:
 Improve title of '--help' messagebox. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00013.html
 
+20141206T2004Z <gchicares@sbcglobal.net> [516]
+
+  alert_wx.cpp
+Simplify thanks to a welcome wx enhancement. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00013.html
+
