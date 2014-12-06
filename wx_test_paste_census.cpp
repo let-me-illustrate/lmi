@@ -28,8 +28,8 @@
 
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
+#include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
-#include "wx_test_mvc_dialog.hpp"
 #include "wx_test_new.hpp"
 #include "wx_utility.hpp"
 
@@ -211,10 +211,13 @@ LMI_WX_TEST_CASE(paste_census)
     ui.Char('e', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Edit case defaults"
 
     struct change_class_in_case_defaults_dialog
-        :public ExpectMvcDialog
+        :public wxExpectModalBase<MvcController>
     {
-        virtual void DoRunDialog(MvcController* dialog) const
+        virtual int OnInvoked(MvcController* dialog) const
             {
+            dialog->Show();
+            wxYield();
+
             wxUIActionSimulator ui;
 
             // Go to the third page: as the dialog remembers its last opened
@@ -249,6 +252,8 @@ LMI_WX_TEST_CASE(paste_census)
             wxYield();
 
             LMI_ASSERT_EQUAL(class_radiobox->GetSelection(), 0);
+
+            return wxID_OK;
             }
     };
 
