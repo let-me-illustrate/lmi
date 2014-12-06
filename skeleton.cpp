@@ -95,6 +95,7 @@
 #include <wx/image.h>
 #include <wx/log.h>                     // wxSafeShowMessage()
 #include <wx/menu.h>
+#include <wx/msgdlg.h>
 #include <wx/textctrl.h>
 #include <wx/textdlg.h>                 // wxGetTextFromUser()
 #include <wx/toolbar.h>
@@ -1303,8 +1304,9 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
     if(show_help)
         {
-        getopt_long.usage(warning());
-        warning() << std::flush;
+        std::ostringstream oss;
+        getopt_long.usage(oss);
+        wxMessageBox(oss.str(), "Command-line options");
         return false;
         }
 

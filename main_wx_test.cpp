@@ -41,6 +41,7 @@
 #include <wx/fileconf.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
+#include <wx/msgdlg.h>
 #include <wx/scopeguard.h>
 #include <wx/stopwatch.h>
 #include <wx/uiaction.h>
@@ -332,7 +333,8 @@ bool application_test::process_command_line(int& argc, char* argv[])
             || 0 == std::strcmp(arg, "--help")
             )
             {
-            warning()
+            std::ostringstream oss;
+            oss
                 << "Run automated GUI tests.\n"
                    "\n"
                    "Usage: "
@@ -345,7 +347,8 @@ bool application_test::process_command_line(int& argc, char* argv[])
                    "\n"
                    "Additionally, all command line options supported by the\n"
                    "main lmi executable are also supported."
-                << std::flush;
+                ;
+            wxMessageBox(oss.str(), "Command-line options");
             return false;
             }
         else
