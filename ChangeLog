@@ -34720,3 +34720,23 @@ Provide more information when a test fails. See:
 Write all test output to stdout, not stderr. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00004.html
 
+20141206T1140Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_about_version.cpp
+Rectify test specification.
+
+20141206T1453Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_expiry_dates.cpp
+Rectify test specification.
+
+20141206T1811Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_calculation_summary.cpp
+  wx_test_default_update.cpp
+  wx_test_mvc_dialog.hpp [expunged]
+  wx_test_paste_census.cpp
+  wx_test_validate_output.cpp
+Don't send wxEVT_UPDATE_UI events manually in GUI tests. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00014.html
+

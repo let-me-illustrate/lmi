@@ -31,7 +31,6 @@
 #include "mvc_controller.hpp"
 #include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
-#include "wx_test_mvc_dialog.hpp"
 #include "wx_test_new.hpp"
 
 #include <wx/filename.h>
@@ -120,10 +119,13 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     output_file_existence_checker unnamed_trace("unnamed.monthly_trace" + ext);
 
     struct enter_comment_in_illustration_dialog
-        :public ExpectMvcDialog
+        :public wxExpectModalBase<MvcController>
     {
-        virtual void DoRunDialog(MvcController* dialog) const
+        virtual int OnInvoked(MvcController* dialog) const
             {
+            dialog->Show();
+            wxYield();
+
             wxUIActionSimulator ui;
 
             // Go to the first page: as the dialog remembers its last opened
@@ -145,6 +147,8 @@ LMI_WX_TEST_CASE(validate_output_illustration)
 
             ui.Text("idiosyncrasyZ");
             wxYield();
+
+            return wxID_OK;
             }
     };
 
