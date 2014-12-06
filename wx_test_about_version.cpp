@@ -34,14 +34,29 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-/*
-    Test about dialog title.
+/// Validate version string (timestamp) from "About" dialog title.
+///
+/// Test that the version string matches the timestamp specified in
+/// 'version.hpp'. That's not a really useful test because it can
+/// hardly fail, but it's so inexpensive that there's no reason to
+/// delete it.
+///
+/// Write the version string to stdout (along with other test output)
+/// for comparison with previously-saved results.
+///
+/// Find the last copyright year listed in the dialog's client area,
+/// and compare it to the year in the version string, and also to the
+/// current calendar year: it should match both. (This means that
+/// running a 2014 GUI test in 2015 will fail; that's okay.) Monthly
+/// releases sometimes update only the 'expiry' file, but reuse the
+/// last month's binaries with an unchanged version string; therefore,
+/// only the version string's year is compared to the current date,
+/// whereas month, day, and time are not.
+///
+/// Press the pushbutton to read the license, and check that the
+/// license's dialog box is scrollable--to guard against this problem:
+///   http://lists.nongnu.org/archive/html/lmi/2010-01/msg00001.html
 
-    4. Confirm version number exists, which can change monthly.
-        'Help | About' contains a date in the dialog's title bar,
-         which is always identical to this date in 'version.hpp':
-         #define LMI_VERSION "20131023T1837Z"
- */
 LMI_WX_TEST_CASE(about_dialog_version)
 {
     struct expect_about_dialog : public wxExpectModalBase<wxDialog>
@@ -64,3 +79,4 @@ LMI_WX_TEST_CASE(about_dialog_version)
         ,expect_about_dialog()
         );
 }
+
