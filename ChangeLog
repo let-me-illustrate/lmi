@@ -34740,3 +34740,9 @@ Rectify test specification.
 Don't send wxEVT_UPDATE_UI events manually in GUI tests. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00014.html
 
+20141206T1847Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Eliminate log-message prefix. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00012.html
+

@@ -64,8 +64,6 @@ LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 #   error wxWidgets 3.1.0 or later is required for the test suite.
 #endif
 
-static char const* const LOG_PREFIX = "[TEST] ";
-
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
 
@@ -390,16 +388,16 @@ TestsResults application_test::run()
 
             try
                 {
-                wxLogMessage("%s%s: started", LOG_PREFIX, name);
+                wxLogMessage("%s: started", name);
                 wxStopWatch sw;
                 i->run_test();
-                wxLogMessage("%stime=%ldms (for %s)", LOG_PREFIX, sw.Time(), name);
-                wxLogMessage("%s%s: ok", LOG_PREFIX, name);
+                wxLogMessage("time=%ldms (for %s)", sw.Time(), name);
+                wxLogMessage("%s: ok", name);
                 results.passed++;
                 }
             catch(test_skipped_exception const& e)
                 {
-                wxLogMessage("%s%s: skipped (%s)", LOG_PREFIX, name, e.what());
+                wxLogMessage("%s: skipped (%s)", name, e.what());
                 results.skipped++;
                 }
             catch(std::exception const& e)
@@ -421,12 +419,7 @@ TestsResults application_test::run()
                 wxString one_line_error(error);
                 one_line_error.Replace("\n", " ");
 
-                wxLogMessage
-                    ("%s%s: ERROR (%s)"
-                    ,LOG_PREFIX
-                    ,name
-                    ,one_line_error
-                    );
+                wxLogMessage("%s: ERROR (%s)", name, one_line_error);
                 }
             }
         }
@@ -653,7 +646,7 @@ void SkeletonTest::RunTheTests()
 
     mainWin->SetFocus();
 
-    wxLogMessage("%sNOTE: starting the test suite", LOG_PREFIX);
+    wxLogMessage("NOTE: starting the test suite");
     wxStopWatch sw;
 
     // Notice that it is safe to use simple variable assignment here instead of
@@ -663,19 +656,18 @@ void SkeletonTest::RunTheTests()
     TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
-    wxLogMessage("%stime=%ldms (for all tests)", LOG_PREFIX, sw.Time());
+    wxLogMessage("time=%ldms (for all tests)", sw.Time());
 
     if(results.failed == 0)
         {
         if(results.passed == 0)
             {
-            wxLogMessage("%sWARNING: no tests have been executed.", LOG_PREFIX);
+            wxLogMessage("WARNING: no tests have been executed.");
             }
         else
             {
             wxLogMessage
-                ("%sSUCCESS: %d test%s successfully completed."
-                ,LOG_PREFIX
+                ("SUCCESS: %d test%s successfully completed."
                 ,results.passed
                 ,results.passed == 1 ? "" : "s"
                 );
@@ -684,8 +676,7 @@ void SkeletonTest::RunTheTests()
     else
         {
         wxLogMessage
-            ("%sFAILURE: %d out of %d test%s failed."
-            ,LOG_PREFIX
+            ("FAILURE: %d out of %d test%s failed."
             ,results.failed
             ,results.total
             ,results.total == 1 ? "" : "s"
@@ -695,8 +686,7 @@ void SkeletonTest::RunTheTests()
     if(results.skipped)
         {
         wxLogMessage
-            ("%sNOTE: %s skipped"
-            ,LOG_PREFIX
+            ("NOTE: %s skipped"
             ,results.skipped == 1
                 ? wxString("1 test was")
                 : wxString::Format("%d tests were", results.skipped)
