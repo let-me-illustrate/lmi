@@ -34759,3 +34759,11 @@ Improve title of '--help' messagebox. See:
 Simplify thanks to a welcome wx enhancement. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00013.html
 
+20141207T0157Z <gchicares@sbcglobal.net> [516]
+
+  objects.make
+  workhorse.make
+  wx_test_about_version.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00030.html
+
