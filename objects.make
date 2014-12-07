@@ -355,6 +355,7 @@ lmi_wx_objects := \
   main_wx.o \
 
 wx_test_objects := \
+  $(boost_regex_objects) \
   main_wx_test.o \
   wx_test_about_version.o \
   wx_test_benchmark_census.o \
