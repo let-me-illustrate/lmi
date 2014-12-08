@@ -176,6 +176,9 @@ class application_test
     // Used by tests to retrieve their configuration parameters.
     wxConfigBase const& get_config_for(char const* name);
 
+    // Used to check if distribution tests should be enabled.
+    bool is_distribution_test() const { return is_distribution_test_; }
+
   private:
     application_test();
 
@@ -228,10 +231,13 @@ class application_test
     boost::scoped_ptr<wxFileConfig> config_;
 
     bool run_all_;
+
+    bool is_distribution_test_;
 };
 
 application_test::application_test()
     :run_all_(true)
+    ,is_distribution_test_(false)
 {
 }
 
@@ -327,6 +333,11 @@ bool application_test::process_command_line(int& argc, char* argv[])
             last_test_option = arg;
             remove_arg(n, argc, argv);
             }
+        else if(0 == std::strcmp(arg, "--distribution"))
+            {
+            is_distribution_test_ = true;
+            remove_arg(n, argc, argv);
+            }
         else if
             (
                0 == std::strcmp(arg, "-h")
@@ -340,10 +351,11 @@ bool application_test::process_command_line(int& argc, char* argv[])
                    "Usage: "
                 << argv[0]
                 << "\n"
-                   "  -h,\t--help  \tdisplay this help and exit\n"
-                   "  -l,\t--list  \tlist all available tests and exit\n"
-                   "  -t <name> or \trun only the specified test (may occur\n"
-                   "  --test <name>\tmultiple times); default: run all tests\n"
+                   "  -h,\t--help     \tdisplay this help and exit\n"
+                   "  -l,\t--list     \tlist all available tests and exit\n"
+                   "  -t <name> or    \trun only the specified test (may occur\n"
+                   "  --test <name>   \tmultiple times); default: run all tests\n"
+                   "  --distribution  \tenable distribution-specific tests\n"
                    "\n"
                    "Additionally, all command line options supported by the\n"
                    "main lmi executable are also supported."
@@ -493,6 +505,11 @@ void wx_base_test_case::skip_if_not_supported(char const* file)
                     ).ToStdString()
                 );
         }
+}
+
+bool wx_base_test_case::is_distribution_test() const
+{
+    return application_test::instance().is_distribution_test();
 }
 
 // Application to drive the tests

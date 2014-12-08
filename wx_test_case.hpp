@@ -65,6 +65,12 @@ class wx_base_test_case
     /// Throws test_skipped_exception if the file is not supported.
     void skip_if_not_supported(char const* file);
 
+    /// Return true if running in distribution testing mode.
+    ///
+    /// This method is used to restrict execution of the tests that are
+    /// specific to the binary program distribution.
+    bool is_distribution_test() const;
+
   protected:
     /// The argument must be a literal, as we just store the pointer.
     explicit wx_base_test_case(char const* name);
