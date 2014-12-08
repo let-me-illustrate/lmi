@@ -34767,3 +34767,16 @@ Simplify thanks to a welcome wx enhancement. See:
 Implement rectified test specification. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00030.html
 
+20141208T0048Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_case.hpp
+Add a '--distribution' flag for use in future test revisions. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00038.html
+
+20141208T0049Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_expiry_dates.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00038.html
+
