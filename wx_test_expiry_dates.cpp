@@ -32,8 +32,56 @@
 #include "wx_test_case.hpp"
 #include "version.hpp"
 
+#include <wx/log.h>
+
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
+
+#include <sstream>
+
+namespace
+{
+
+// Return a string containing both the JDN and a string representation of the
+// given date.
+//
+// This provides as much information as possible for the diagnostics.
+std::string dump_date(calendar_date const& date)
+{
+    std::ostringstream oss;
+    oss << date << " (" << date.str() << ")";
+    return oss.str();
+}
+
+// Return the date corresponding to the first day of the month following the
+// month of the given date.
+calendar_date get_first_next_month(calendar_date const& date)
+{
+    int year = date.year();
+    int month = date.month();
+    if(month == 12)
+        {
+        month = 1;
+        year++;
+        }
+    else
+        {
+        month++;
+        }
+
+    return calendar_date(year, month, 1);
+}
+
+} // Unnamed namespace.
+
+// A variant of LMI_ASSERT_EQUAL which provides more information about dates in
+// case of assertion failure.
+#define LMI_ASSERT_DATES_EQUAL(observed,expected)                   \
+    LMI_ASSERT_WITH_MSG                                             \
+        ((observed) == (expected)                                   \
+        ,"expected " << (dump_date(expected))                       \
+            << " vs observed " << (dump_date(observed))             \
+        )
 
 /// Validate dates in the 'expiry' file.
 ///
@@ -68,46 +116,32 @@
 
 LMI_WX_TEST_CASE(expiry_dates)
 {
+    // Check that the expiry file can be read and is in valid format.
     fs::path expiry_path(global_settings::instance().data_directory() / "expiry");
     fs::ifstream is(expiry_path);
-    LMI_ASSERT(is);
+    LMI_ASSERT_WITH_MSG(is, "Failed to open \"expiry\" file for reading");
 
     calendar_date begin(last_yyyy_date ());
     calendar_date end  (gregorian_epoch());
     is >> begin >> end;
-    LMI_ASSERT(is);
-    LMI_ASSERT(is.eof());
+    LMI_ASSERT_WITH_MSG(is, "Failed to read dates from \"expiry\" file");
 
-// This comment is no longer applicable in light of the revised specification:
-    // The begin date must either be the first of month itself or a date in the
-    // previous month, in which case we're interested in the end of the
-    // following month and not the same one.
-    int year = begin.year();
-    int month = begin.month();
-    int days_in_month;
+    wxLogMessage
+        ("Expiry dates: begin=%s, end=%s"
+        ,dump_date(begin)
+        ,dump_date(end)
+        );
 
-    if(begin.day() == 1)
+    LMI_ASSERT_WITH_MSG(is.eof(), "Unexpected extra data in \"expiry\" file");
+
+    if(is_distribution_test())
         {
-        days_in_month = begin.days_in_month();
-        }
-    else
-        {
-        if(month == 12)
-            {
-            month = 1;
-            year++;
-            }
-        else
-            {
-            month++;
-            }
+        calendar_date const first_next_month = get_first_next_month(today());
+        LMI_ASSERT_DATES_EQUAL(begin, first_next_month);
 
-        days_in_month = calendar_date(year, month, 1).days_in_month();
+        calendar_date const
+            first_after_next_month = get_first_next_month(first_next_month);
+        LMI_ASSERT_DATES_EQUAL(end, first_after_next_month);
         }
-
-// code below uses last day of month
-// instead, use first day of the month after next
-    calendar_date const end_of_month(year, month, days_in_month);
-    LMI_ASSERT_EQUAL(end, end_of_month);
 }
 
