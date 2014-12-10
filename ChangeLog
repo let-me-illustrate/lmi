@@ -34780,3 +34780,11 @@ Add a '--distribution' flag for use in future test revisions. See:
 Implement rectified test specification. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00038.html
 
+20141210T1236Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_extract.cpp
+  wx_test_input_sequences.cpp
+  wx_test_validate_output.cpp
+Mark lines needing '--gui_test_path'.
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00002.html
+

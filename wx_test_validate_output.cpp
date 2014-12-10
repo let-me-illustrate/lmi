@@ -167,7 +167,7 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     output_file_existence_checker
         existing_trace("MonthlyTrace.monthly_trace" + ext);
 
-    wxFileName fn(configurable_settings::instance().default_input_filename());
+    wxFileName fn(configurable_settings::instance().default_input_filename()); // Instead use '--gui_test_path'.
     fn.SetFullName("MonthlyTrace.ill");
 
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
@@ -211,7 +211,7 @@ LMI_WX_TEST_CASE(validate_output_mec)
     // And when opening an existing one.
     output_file_existence_checker existing_output("MecTesting.mec" + ext);
 
-    wxFileName fn(configurable_settings::instance().default_input_filename());
+    wxFileName fn(configurable_settings::instance().default_input_filename()); // Instead use '--gui_test_path'.
     fn.SetFullName("MecTesting.mec");
 
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
