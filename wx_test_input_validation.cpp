@@ -63,7 +63,7 @@ LMI_WX_TEST_CASE(input_validation)
     wxUIActionSimulator ui;
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
 
-    wxFileName fn(configurable_settings::instance().default_input_filename());
+    wxFileName fn(configurable_settings::instance().default_input_filename()); // Instead use '--gui_test_path'.
     fn.SetFullName("CoiMultiplier.cns");
     wxTEST_DIALOG
         (wxYield()
