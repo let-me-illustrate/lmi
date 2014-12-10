@@ -70,7 +70,7 @@ LMI_WX_TEST_CASE(configurable_settings)
 
     configurable_settings const& settings = configurable_settings::instance();
     LMI_ASSERT_EQUAL(settings.libraries_to_preload(), "");
-    LMI_ASSERT_EQUAL(settings.xsl_fo_command(), "CMD /c c:/fop-0.20.5/fop");
+    LMI_ASSERT_EQUAL(settings.xsl_fo_command(), "CMD /c /fop-0.20.5/fop");
 
     std::string skin = settings.skin_filename();
     std::string default_input = settings.default_input_filename();
