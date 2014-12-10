@@ -34785,6 +34785,22 @@ Implement rectified test specification. See:
   wx_test_extract.cpp
   wx_test_input_sequences.cpp
   wx_test_validate_output.cpp
-Mark lines needing '--gui_test_path'.
+Mark lines needing '--gui_test_path'. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00002.html
+
+20141210T1521Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_input_validation.cpp
+Mark another line needing '--gui_test_path'. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00040.html
+
+20141210T1525Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_config_settings.cpp
+Test the exact 'fop' command actually used in distributions.
+
+20141210T1528Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_config_settings.cpp
+Correct a specification error.
 
