@@ -50,7 +50,7 @@ LMI_WX_TEST_CASE(input_sequences)
 {
     // Construct the path of the file to open, it's supposed to be in the same
     // directory as the default input filename.
-    wxFileName fn(configurable_settings::instance().default_input_filename());
+    wxFileName fn(configurable_settings::instance().default_input_filename()); // Instead use '--gui_test_path'.
     fn.SetFullName("InputSequences.cns");
 
     wxUIActionSimulator ui;

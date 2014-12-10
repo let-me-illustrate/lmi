@@ -65,7 +65,7 @@ LMI_WX_TEST_CASE(extract)
     wxUIActionSimulator ui;
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
 
-    wxFileName fn(configurable_settings::instance().default_input_filename());
+    wxFileName fn(configurable_settings::instance().default_input_filename()); // Instead use '--gui_test_path'.
     fn.SetFullName("ExtractV6.ill");
     wxTEST_DIALOG
         (wxYield()
