@@ -1,4 +1,4 @@
-// Test benchmarking census operations.
+// Measure the speed of various operations on certain census files.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -39,7 +39,7 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-#include <cmath>                    // std::fabs()
+#include <cmath>                        // std::fabs()
 
 namespace
 {
@@ -139,21 +139,41 @@ class census_benchmark
 
 } // Unnamed namespace.
 
-/*
-    Add GUI test collecting the census operations timings.
+// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
+// comment below changes the original specification, and does not
+// yet describe the present code. Desired changes:
+//  - use "gui_test_path/MSEC*.cns", not a config file list
+//  - write timings to stdout only; perform no relative-error
+//    calculation, and do not use times stored in a config file
+// With these changes, the test should no longer use the config file
+// in any way.
 
-    This implements the item
+/// Measure the speed of various operations on certain census files.
+///
+/// Comparing the results of this test to a stored touchstone makes it
+/// easy to see speed changes, and hence to guard against performance
+/// regressions that might otherwise escape timely notice.
+///
+/// Write timing data to stdout. We had considered storing touchstone
+/// timings in a configuration file and calculating relative error
+/// here, but found that it's simpler just to print the timings and
+/// compare to the results of prior runs.
+///
+/// These operations are measured because they are the most important:
+///   Census | Run case
+///   Census | Print case to PDF
+///   Census | Print case to spreadsheet
+/// We had considered running at least the "Run case" test several
+/// times, discarding the first run and reporting an average (probably
+/// the mode) of the others; that can be done at a later date if
+/// experience demonstrates that it would be useful.
+///
+/// This test uses all files matching "gui_test_path/MSEC*.cns", which
+/// may include proprietary products and should be designed to cover
+/// different paths through the code. We had considered specifying the
+/// input files in a configuration file, but the chosen way is simpler
+/// and makes it even easier to change to change the input set.
 
-        5. Collect time statistics from the status bar.
-
-    from the testing specification. Differences compared to the specification:
-
-     - Commands are only performed emulating keyboard entry, not mouse.
-     - Commands are only done once, not twice, to reduce the test running time.
-
-    The names of the censuses to be tested are taken from the configuration file
-    which is required by this test.
- */
 LMI_WX_TEST_CASE(benchmark_census)
 {
     wxConfigBase const& c = config();
@@ -185,17 +205,18 @@ LMI_WX_TEST_CASE(benchmark_census)
         }
 
         b.time_operation
-            ("Print to PDF"
+            ("Print case to PDF"
             ,time_disk
             ,'i'
             ,wxMOD_CONTROL | wxMOD_SHIFT
             );
 
         b.time_operation
-            ("Print to spreadsheet"
+            ("Print case to spreadsheet"
             ,time_spreadsheet
             ,'h'
             ,wxMOD_CONTROL | wxMOD_SHIFT
             );
         }
 }
+
