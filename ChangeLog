@@ -34815,3 +34815,41 @@ Rectify test specification.
 Preserve file history. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00047.html
 
+20141212T1246Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_benchmark_census.cpp
+Rectify test specification.
+
+20141212T1317Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_config_settings.cpp
+Rectify test specification.
+
+20141212T1355Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_pdf_create.cpp
+Rectify test specification.
+
+20141212T1449Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_create_open.cpp
+Rectify test specification.
+
+20141212T1517Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_input_sequences.cpp
+Rectify test specification.
+
+20141212T1813Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_input.cpp
+Rectify test specification.
+
+20141212T1929Z <gchicares@sbcglobal.net> [516]
+
+  Makefile.am
+  objects.make
+  wx_test_extract.cpp [expunged]
+Expunge 'wx_test_extract.cpp' because it is no longer useful. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00055.html
+
