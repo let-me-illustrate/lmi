@@ -54,14 +54,20 @@
 /// product's general-account rate is a crucial parameter that often
 /// varies from one month to the next, so a spot check seems wise.
 ///
-/// Write "EffectiveDate" to stdout, as JDN and as YYYYMMDD,
-/// all on a single line, e.g.:
-///   EffectiveDate: 2457024 2015-01-01
+/// The expected value of "EffectiveDate" is normally the first day
+/// of the next month. (For example, to prepare a distribution that
+/// is to be used beginning January first, we must run this test in
+/// December, as validation should precede dissemination.)
 ///
-/// Validate "EffectiveDate": when a binary distribution is prepared,
-/// this is normally the first day of the next month. Perform this
-/// test after writing parameters to stdout, so that they're still
-/// written even if this test fails.
+/// Write both "EffectiveDate" and its expected value to stdout, both
+/// as JDN and as YYYYMMDD, all on a single line, e.g.:
+///   EffectiveDate: 2457024 2015-01-01  expected: 2457024 2015-01-01
+/// Then print a warning on a separate line iff these two dates do not
+/// match; do this after writing parameters to stdout, so that they're
+/// still written even if this test abends. Inequality is an unusual
+/// condition requiring attention, but not necessarily an error, so a
+/// mere warning suffices; program flow should not be interrupted as
+/// for an assertion failure.
 
 LMI_WX_TEST_CASE(default_input)
 {

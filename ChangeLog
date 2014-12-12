@@ -34853,3 +34853,8 @@ Rectify test specification.
 Expunge 'wx_test_extract.cpp' because it is no longer useful. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00055.html
 
+20141212T2107Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_input.cpp
+Further rectify test specification.
+
