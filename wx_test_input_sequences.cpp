@@ -1,4 +1,4 @@
-// Test running the input sequences case.
+// Validate a variety of input sequences in the GUI input dialog.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -34,18 +34,31 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-/*
-    Test that the input sequences census can be run.
+// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
+// comment below changes the original specification, and does not
+// yet describe the present code. Desired changes:
+//  - Hard code the sequences; get rid of 'InputSequences.cns'.
+//  - Paste each test sequence into a temporary input dialog.
+//  - Validate with ellipsis button and then with OK.
 
-    This implements the following item of the testing specification:
+/// Validate a variety of input sequences in the GUI input dialog.
+///
+/// Test a broad variety of input sequences. For now, use the set in
+/// the user manual:
+///   file:///C:/lmi/src/web/lmi/sequence_input.html
+/// but hard code them here--later they might differ, e.g. if we
+/// decide to add extra tests here.
+///
+/// First, create a temporary '.ill' document:
+///   File | New | Illustration
+/// Then paste each input sequence into the appropriate field and test
+/// it thus:
+///  - Click the ellipsis button; press OK to close its dialog.
+///  - Click OK to run the illustration. This step is tested because
+///    it triggers downstream validation.
+/// Reopen the tabbed dialog for each subsequent test. When done,
+/// close the illustration without saving it.
 
-        10. Confirm Help file input sequences remain valid.
-
-          A. File | Open | 'InputSequences.cns'
-             Census | Run case
-             Expected result:
-               Case runs without any warnings or errors.
- */
 LMI_WX_TEST_CASE(input_sequences)
 {
     // Construct the path of the file to open, it's supposed to be in the same
@@ -72,3 +85,4 @@ LMI_WX_TEST_CASE(input_sequences)
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
     wxYield();
 }
+
