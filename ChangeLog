@@ -34804,3 +34804,14 @@ Test the exact 'fop' command actually used in distributions.
   wx_test_config_settings.cpp
 Correct a specification error.
 
+20141210T2116Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_update.cpp
+Rectify test specification.
+
+20141212T1142Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Preserve file history. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00047.html
+
