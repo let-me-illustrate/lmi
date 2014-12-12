@@ -27,6 +27,7 @@
 #endif
 
 #include "alert.hpp"
+#include "docmanager_ex.hpp"
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
@@ -522,6 +523,9 @@ class SkeletonTest : public Skeleton
     }
 
   protected:
+    // Override base class virtual method.
+    virtual DocManagerEx* CreateDocManager();
+
     // wxApp overrides.
     virtual bool OnInit                 ();
     virtual bool OnExceptionInMainLoop  ();
@@ -544,6 +548,36 @@ class SkeletonTest : public Skeleton
 
 IMPLEMENT_APP_NO_MAIN(SkeletonTest)
 IMPLEMENT_WX_THEME_SUPPORT
+
+DocManagerEx* SkeletonTest::CreateDocManager()
+{
+    // Custom document manager allowing to intercept the behaviour of the
+    // program for testing purposes.
+    //
+    // Currently it is used to prevent the files opened during testing from
+    // being saved.
+    class DocManagerTest : public DocManagerEx
+    {
+      public:
+        virtual void FileHistoryLoad(wxConfigBase const&)
+            {
+            // We could call the base class method here, but it doesn't seem
+            // useful to do it and doing nothing here makes it more symmetric
+            // with FileHistorySave().
+            }
+
+        virtual void FileHistorySave(wxConfigBase&)
+            {
+            // Do not save the history to persistent storage: we don't want the
+            // files opened during testing replace the files actually opened by
+            // the user interactively.
+            }
+    };
+
+    // As in the base class version, notice that we must not use 'new(wx)' here
+    // as this object is deleted by wxWidgets itself.
+    return new DocManagerTest;
+}
 
 bool SkeletonTest::OnInit()
 {
