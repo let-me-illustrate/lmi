@@ -1,4 +1,4 @@
-// Test case for creating new files of all types and opening them.
+// Create, save, and reopen a file of each available type.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -104,18 +104,21 @@ void do_test_create_open
     wxYield();
 }
 
-/*
-    These tests implement the following item of the testing specification:
+// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
+// comment below changes the original specification, and does not
+// yet describe the present code. Desired changes:
+//  - Put all files in 'gui_test_path'.
 
-    9. Confirm all file types can be created and opened.
+/// Create, save, and reopen a file of each available type.
+///
+/// Validate each tested operation, then erase the file.
+///
+/// Put all files in 'gui_test_path'. In theory, they'll all be
+/// deleted automatically, but in practice the program could crash.
+///
+/// Skip file types that are unavailable in context. For example,
+/// '.txt' is available only with '--ash_nazg'.
 
-      A. File | New |
-          [Census, Illustration, Database, Policy, Rounding, Strata, MEC testing]
-         push 'OK' button for only 'Illustration' and 'MEC testing'
-         File | Save
-
-      B. File | Open | each new saved file from the last test
- */
 LMI_WX_TEST_CASE(create_open_census)
 {
     do_test_create_open(*this, 'c', "testfile.cns",  false);
@@ -160,3 +163,4 @@ LMI_WX_TEST_CASE(create_open_text)
 {
     do_test_create_open(*this, 'x', "testfile.txt", false);
 }
+
