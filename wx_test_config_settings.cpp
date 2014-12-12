@@ -1,4 +1,4 @@
-// Configurable settings test case for the GUI test suite.
+// Validate configurable-settings file for binary distributions.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -64,6 +64,27 @@
     The only change is that the xsl_fo_command is checked to contain the volume,
     i.e. is c:/fop-0.20.5/fop, and not just the path.
  */
+
+// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
+// comment below changes the original specification, and does not
+// yet describe the present code. Desired changes:
+//  - Run this test only when the '--distribution' option is given.
+
+/// Validate configurable-settings file for binary distributions.
+///
+/// Run this test only when the '--distribution' option is given.
+/// The invariants it tests are not universally appropriate.
+///
+/// This test may someday be replaced by a shell script, which would
+/// be a better fit for its intended purpose. In particular, we want
+/// to run the GUI-test suite only once, and then combine the lmi
+/// binaries with selected input skins and default-input files; these
+/// tests check the combinations, and thus must be run once for each
+/// combination, but we don't want to repeat all the GUI tests for
+/// each combination. Of course, this individual test can be run in
+/// isolation for each combination, but for that use case a script
+/// would be simpler solution. We'll reconsider this later.
+
 LMI_WX_TEST_CASE(configurable_settings)
 {
     LMI_ASSERT(fs::exists("/etc/opt/lmi/configurable_settings.xml"));
@@ -98,3 +119,4 @@ LMI_WX_TEST_CASE(configurable_settings)
         LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/private_placement_default.ill");
         }
 }
+
