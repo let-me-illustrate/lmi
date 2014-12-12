@@ -1,4 +1,4 @@
-// Default input test case for the GUI test suite.
+// Test selected parameters in the user-customizable default cell.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -36,17 +36,33 @@
 
 #include <sstream>
 
-/*
-    Test default input.
+// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
+// comment below changes the original specification, and does not
+// yet describe the present code. Desired changes:
+//  - Run this test only when the '--distribution' option is given.
+//  - Write selected parameters to stdout as prescribed.
+//  - "EffectiveDate" is now compared to the first day of the current
+//    month, but should instead equal the first day of the next month.
 
-    2. Inspect '*default.ill' for the following variable data:
+/// Test selected parameters in the user-customizable default cell.
+///
+/// Run this test only when the '--distribution' option is given.
+///
+/// Write "ProductName" and "GeneralAccountRate" to stdout in that
+/// order on a single line. We maintain several different binary
+/// distributions, each with a specific default product, and that
+/// product's general-account rate is a crucial parameter that often
+/// varies from one month to the next, so a spot check seems wise.
+///
+/// Write "EffectiveDate" to stdout, as JDN and as YYYYMMDD,
+/// all on a single line, e.g.:
+///   EffectiveDate: 2457024 2015-01-01
+///
+/// Validate "EffectiveDate": when a binary distribution is prepared,
+/// this is normally the first day of the next month. Perform this
+/// test after writing parameters to stdout, so that they're still
+/// written even if this test fails.
 
-     A. This date differs each month
-        <EffectiveDate>2456598</EffectiveDate>
-
-     B. Rates can change each month and differ among each distribution
-        <GeneralAccountRate>0.042 [0, 1); 0.037 [1, maturity)</GeneralAccountRate>
- */
 LMI_WX_TEST_CASE(default_input)
 {
     calendar_date const today;
@@ -62,3 +78,4 @@ LMI_WX_TEST_CASE(default_input)
     LMI_ASSERT(!general_account_rate.empty());
     wxLogMessage("GeneralAccountRate is \"%s\"", general_account_rate.c_str());
 }
+
