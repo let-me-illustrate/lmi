@@ -30,61 +30,73 @@
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_date.hpp"
 #include "version.hpp"
+
+#include <wx/log.h>
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
-/*
-    Test expiry dates validity.
+/// Validate dates in the 'expiry' file.
+///
+/// Write the begin and end dates to stdout, as JDN and as YYYYMMDD,
+/// all on a single line, e.g.:
+///   begin: 2457024 2015-01-01  end: 2457055 2015-02-01
+/// (Those are the dates that would normally be expected for a
+/// distribution prepared in December 2014.)
+///
+/// Validate dates only when the '--distribution' option is given.
+///  - The begin date should be the first day of the next month.
+///  - The end date should be the first day of the month after next.
+/// Binaries are normally distributed toward the end of a month for
+/// use throughout the following month. Consequently, these tests will
+/// pass if run when a regular distribution is prepared, but they will
+/// fail if rerun on the begin date--and that's exactly as desired:
+/// such "failure" is not an error. (Incidentally, this illuminates
+/// our decision to write all GUI-test output to stdout, not stderr.)
+///
+/// (When '--distribution' is not given, we had considered writing a
+/// line to stdout saying that the tests had been skipped. But that is
+/// not necessary, because in our normal workflow we'll compare each
+/// '--distribution' run to a previously-saved '--distribution' run,
+/// and diffs will make it obvious that the tests have been skipped.)
+///
+/// Occasionally "interim" distributions are issued, e.g., to add an
+/// urgently-needed feature or to fix a critical mistake. They are
+/// to be tested in the same way as regular distributions. All regular
+/// distributions resemble each other; each "interim" distribution is
+/// irregular in its own way, and its validation "failures" are not
+/// errors, but may indeed convey useful information.
 
-    3. Inspect dates in 'expiry'. The values change every month and
-       the first value can differ among each distribution.
-
-      A. Distributions beginning before the first of the month:
-          2456596 2456628
-
-      B. Distributions beginning on the first of the month:
-          2456598 2456628
- */
 LMI_WX_TEST_CASE(expiry_dates)
 {
+    // Check that the expiry file can be read and is in valid format.
     fs::path expiry_path(global_settings::instance().data_directory() / "expiry");
     fs::ifstream is(expiry_path);
-    LMI_ASSERT(is);
+    LMI_ASSERT_WITH_MSG(is, "Failed to open \"expiry\" file for reading");
 
     calendar_date begin(last_yyyy_date ());
     calendar_date end  (gregorian_epoch());
     is >> begin >> end;
-    LMI_ASSERT(is);
-    LMI_ASSERT(is.eof());
+    LMI_ASSERT_WITH_MSG(is, "Failed to read dates from \"expiry\" file");
 
-    // The begin date must either be the first of month itself or a date in the
-    // previous month, in which case we're interested in the end of the
-    // following month and not the same one.
-    int year = begin.year();
-    int month = begin.month();
-    int days_in_month;
+    wxLogMessage
+        ("Expiry dates: begin=%s, end=%s"
+        ,dump_date(begin)
+        ,dump_date(end)
+        );
 
-    if(begin.day() == 1)
+    LMI_ASSERT_WITH_MSG(is.eof(), "Unexpected extra data in \"expiry\" file");
+
+    if(is_distribution_test())
         {
-        days_in_month = begin.days_in_month();
-        }
-    else
-        {
-        if(month == 12)
-            {
-            month = 1;
-            year++;
-            }
-        else
-            {
-            month++;
-            }
+        calendar_date const first_next_month = get_first_next_month(today());
+        LMI_ASSERT_DATES_EQUAL(begin, first_next_month);
 
-        days_in_month = calendar_date(year, month, 1).days_in_month();
+        calendar_date const
+            first_after_next_month = get_first_next_month(first_next_month);
+        LMI_ASSERT_DATES_EQUAL(end, first_after_next_month);
         }
-
-    calendar_date const end_of_month(year, month, days_in_month);
-    LMI_ASSERT_EQUAL(end, end_of_month);
 }
+

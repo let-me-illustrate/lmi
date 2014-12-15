@@ -361,6 +361,7 @@ lmi_wx_objects := \
   main_wx.o \
 
 wx_test_objects := \
+  $(boost_regex_objects) \
   main_wx_test.o \
   wx_test_about_version.o \
   wx_test_benchmark_census.o \
@@ -370,7 +371,6 @@ wx_test_objects := \
   wx_test_default_input.o \
   wx_test_default_update.o \
   wx_test_expiry_dates.o \
-  wx_test_extract.o \
   wx_test_input_sequences.o \
   wx_test_input_validation.o \
   wx_test_paste_census.o \

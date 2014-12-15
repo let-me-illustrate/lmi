@@ -70,14 +70,7 @@ void status_alert(std::string const& s)
 
 void warning_alert(std::string const& s)
 {
-    if(wxTheApp && wxTheApp->GetTopWindow())
-        {
-        wxMessageBox(s, "Warning", wxOK, wxTheApp->GetTopWindow());
-        }
-    else
-        {
-        safely_show_message("Untimely warning:\n" + s);
-        }
+    wxMessageBox(s, "Warning", wxOK, wxTheApp ? wxTheApp->GetTopWindow() : 0);
 }
 
 /// It seems silly to offer an option that should never be declined,
@@ -91,14 +84,9 @@ void warning_alert(std::string const& s)
 void hobsons_choice_alert(std::string const& s)
 {
     wxWindow* w = 0;
-    if(wxTheApp && wxTheApp->GetTopWindow())
+    if(wxTheApp)
         {
         w = wxTheApp->GetTopWindow();
-        }
-    else
-        {
-        safely_show_message("Untimely error:\n" + s);
-        throw hobsons_choice_exception();
         }
 
     if(configurable_settings::instance().offer_hobsons_choice())
@@ -131,10 +119,6 @@ void hobsons_choice_alert(std::string const& s)
 
 void fatal_error_alert(std::string const& s)
 {
-    if(!wxTheApp)
-        {
-        safely_show_message("Untimely error message:\n" + s);
-        }
     throw std::runtime_error(s);
 }
 

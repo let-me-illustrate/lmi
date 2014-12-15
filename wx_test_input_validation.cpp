@@ -30,7 +30,6 @@
 #include "configurable_settings.hpp"
 #include "wx_test_case.hpp"
 
-#include <wx/filename.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -63,11 +62,9 @@ LMI_WX_TEST_CASE(input_validation)
     wxUIActionSimulator ui;
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
 
-    wxFileName fn(configurable_settings::instance().default_input_filename());
-    fn.SetFullName("CoiMultiplier.cns");
     wxTEST_DIALOG
         (wxYield()
-         ,wxExpectModal<wxFileDialog>(fn.GetFullPath())
+         ,wxExpectModal<wxFileDialog>(get_test_file_path_for("CoiMultiplier.cns"))
         );
 
     ui.Char('r', wxMOD_CONTROL | wxMOD_SHIFT);  // "Census|Run case"

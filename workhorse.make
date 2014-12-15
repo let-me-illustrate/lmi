@@ -905,7 +905,7 @@ antediluvian_cli_monolithic$(EXEEXT): $(cli_objects) $(antediluvian_common_objec
 wx_new$(SHREXT): wx_new.o
 
 wx_test$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
-wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
+wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags) -Wl,--allow-multiple-definition
 wx_test$(EXEEXT): $(wx_test_objects) skeleton$(SHREXT) liblmi$(SHREXT)
 
 # TODO ?? This needs a corresponding test target.

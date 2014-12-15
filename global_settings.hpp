@@ -26,6 +26,7 @@
 
 #include "config.hpp"
 
+#include "calendar_date.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
@@ -80,13 +81,15 @@ class LMI_SO global_settings
     void set_custom_io_0              (bool);
     void set_regression_testing       (bool);
     void set_data_directory           (std::string const&);
+    void set_prospicience_date        (calendar_date const&);
 
-    bool               mellon                   () const;
-    bool               ash_nazg                 () const;
-    std::string const& pyx                      () const;
-    bool               custom_io_0              () const;
-    bool               regression_testing       () const;
-    fs::path const&    data_directory           () const;
+    bool                 mellon                   () const;
+    bool                 ash_nazg                 () const;
+    std::string const&   pyx                      () const;
+    bool                 custom_io_0              () const;
+    bool                 regression_testing       () const;
+    fs::path const&      data_directory           () const;
+    calendar_date const& prospicience_date        () const;
 
   private:
     global_settings();
@@ -97,6 +100,7 @@ class LMI_SO global_settings
     bool custom_io_0_;
     bool regression_testing_;
     fs::path data_directory_;
+    calendar_date prospicience_date_;
 
 #ifdef __BORLANDC__
 // COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:

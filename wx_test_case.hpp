@@ -28,7 +28,7 @@
 
 #include "uncopyable_lmi.hpp"
 
-class wxConfigBase;
+#include <boost/filesystem/path.hpp>
 
 /// Base class for the test case objects.
 ///
@@ -65,15 +65,37 @@ class wx_base_test_case
     /// Throws test_skipped_exception if the file is not supported.
     void skip_if_not_supported(char const* file);
 
+    /// Return the base directory containing the test files.
+    ///
+    /// This is the same directory as is used by get_test_file_path_for(),
+    /// prefer to use that function if possible.
+    fs::path get_test_files_path() const;
+
+    /// Return the full path for the file with the given base name (which
+    /// should include the extension, but no path components).
+    ///
+    /// The directory of the returned path can be changed by using the command
+    /// line --gui_test_path option when running the test.
+    std::string get_test_file_path_for(std::string const& basename) const;
+
+    /// Return true if running in distribution testing mode.
+    ///
+    /// This method is used to partially skip execution of the tests that are
+    /// specific to the binary program distribution. If the entire test should
+    /// be skipped, prefer to use skip_if_not_distribution() instead.
+    bool is_distribution_test() const;
+
+    /// Skip the test if not running in distribution testing mode.
+    ///
+    /// This method can be used to skip execution of a test entirely unless
+    /// --distribution command line option was specified.
+    ///
+    /// Throws test_skipped_exception if the distribution option was not given.
+    void skip_if_not_distribution();
+
   protected:
     /// The argument must be a literal, as we just store the pointer.
     explicit wx_base_test_case(char const* name);
-
-    /// Get the object containing test configuration.
-    ///
-    /// The returned object will have the group containing the options for this
-    /// test as its current path for convenience.
-    wxConfigBase const& config() const;
 
     char const* const m_name;
 };

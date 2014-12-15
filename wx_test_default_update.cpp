@@ -1,4 +1,4 @@
-// Check that the default file can be opened and modified.
+// Make sure the default input file can be opened, modified, and saved.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -28,8 +28,8 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
+#include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
-#include "wx_test_mvc_dialog.hpp"
 #include "wx_test_statusbar.hpp"
 
 #include <wx/testing.h>
@@ -37,37 +37,32 @@
 
 #include <boost/filesystem/operations.hpp>
 
-/*
-    Test that the default file can be opened and modified.
+/// Make sure the default input file can be opened, modified, and saved.
+///
+/// Load the default input file, using its special command.
+///
+/// Change its "MEC avoidance" option. This particular option is used
+/// because it is available for almost any life insurance product.
+/// Save the changed file; make sure the appropriate message appears
+/// on the status bar. Make sure the saved file exists in its
+/// configured directory.
 
-    This implements the following item of the testing specification:
-
-        11. Ensure default file can be opened and modified.
-          A. File | Default | change a parameter | OK
-             File | Save
-             Expected results:
-               Status bar reads "Saved 'c:/fop-0.20.5/default.ill'."
-               'default.ill' exists in 'c:/fop-0.20.5/'
-
-    except that the currently configured default input filename is used instead of
-    the hard coded "default.ill".
-
-    The parameter currently being changed is the "MEC avoidance" choice, this is
-    arbitrary and could be replaced with changing another parameter in the future.
- */
 LMI_WX_TEST_CASE(default_update)
 {
     wxUIActionSimulator ui;
 
-    // Change the "MEC Avoidance" option in the first page of the defaults
+    // Change the "MEC avoidance" option in the first page of the defaults
     // dialog.
     ui.Char('t', wxMOD_CONTROL); // "File|Default"
 
-    struct change_mac_in_defaults_dialog
-        :public ExpectMvcDialog
+    struct change_mec_avoidance_in_defaults_dialog
+        :public wxExpectModalBase<MvcController>
     {
-        virtual void DoRunDialog(MvcController* dialog) const
+        virtual int OnInvoked(MvcController* dialog) const
             {
+            dialog->Show();
+            wxYield();
+
             wxUIActionSimulator ui;
 
             // Go to the first page: as the dialog remembers its last opened
@@ -75,7 +70,7 @@ LMI_WX_TEST_CASE(default_update)
             ui.Char(WXK_HOME);
             wxYield();
 
-            // Select the first button of the "MEC Avoidance" radio box.
+            // Select the first button of the "MEC avoidance" radio box.
             ui.Char(WXK_TAB);
             ui.Char(WXK_TAB);
             wxYield();
@@ -85,12 +80,14 @@ LMI_WX_TEST_CASE(default_update)
             // radio box with two buttons.
             ui.Char(WXK_DOWN);
             wxYield();
+
+            return wxID_OK;
             }
     };
 
     wxTEST_DIALOG
         (wxYield()
-        ,change_mac_in_defaults_dialog()
+        ,change_mec_avoidance_in_defaults_dialog()
         );
 
     // Save the default document.

@@ -1,4 +1,4 @@
-// Test pasting data into a census.
+// Test pasting spreadsheet data into a census.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -28,8 +28,8 @@
 
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"
+#include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
-#include "wx_test_mvc_dialog.hpp"
 #include "wx_test_new.hpp"
 #include "wx_utility.hpp"
 
@@ -135,56 +135,50 @@ bool does_list_have_column(wxDataViewCtrl* dvc, wxString const& name)
 
 } // Unnamed namespace.
 
-/*
-    Test for pasting data into a census.
+// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
+// comment below changes the original specification, and does not
+// yet describe the present code. Desired changes:
+//  - Save pastable data inline; don't extract from user manual.
+//  - Validate all columns after each step (after initial pasting).
+//  - Test change in class defaults (in addition to case defaults).
 
-    This implements the following item of the testing specification:
+/// Test pasting spreadsheet data into a census.
+///
+/// Create a set of data that might reasonably be copied from a
+/// spreadsheet. Initially at least, use the data in the user manual:
+///   file:///C:/lmi/src/web/lmi/pasting_to_a_census.html
+/// Hardcode the data here; don't read them from the user manual.
+/// (That didactic example was designed mainly to fit on a web page
+/// and to make sense to end users. Some day we might want to make
+/// this automated test more comprehensive, without changing the web
+/// page.)
+///
+/// Place that data set on the clipboard and simulate
+///   File | New | Census
+///   Census | Paste census
+/// Make sure it has the expected number of rows. Also check that all
+/// the columns pasted are shown by verifying each header: some time
+/// ago, the "Payment" and "Death Benefit Option" columns were lost
+/// due to a defect. All pasted columns should be shown, along with
+/// several others that vary in step with issue-age differences.
+///
+/// The census manager shows only columns that vary across cells,
+/// notably taking into account the case and class default cells.
+/// Test this in two ways. First:
+///   Census | Edit class defaults [requires focusing a row]
+///   change gender to "Unisex"
+///   apply to every cell: Yes
+/// Verify the expected result: the gender column is still shown
+/// (because "Unisex" is not yet the class default), and its value is
+/// "Unisex" in every row. Second:
+///   Census | Edit case defaults
+///   change underwriting class to any different value
+///   apply to every cell: Yes
+/// Verify the expected result: the underwriting-class column is no
+/// longer shown.
+///
+/// Then save the file in 'gui_test_path'; verify that it exists.
 
-        7. Verify help file sample works, using the paste census feature.
-           Confirm 'Edit case' and 'Save as' work.
-
-          A. Press 'F1' for help file. Select 'Pasting a census from a
-             spreadsheet'. Copy this sample from the help file webpage:
-
-        Gender  UnderwritingClass       IssueAge        Payment DeathBenefitOption
-        Female  Preferred       30      sevenpay,7;0    b,7;a
-        Male    Preferred       35      sevenpay,7;0    b,7;a
-        Female  Standard        40      sevenpay,7;0    b,7;a
-        Male    Standard        45      sevenpay,7;0    b,7;a
-        Female  Preferred       50      sevenpay,7;0    b,7;a
-        Male    Preferred       55      sevenpay,7;0    b,7;a
-        Female  Standard        60      sevenpay,7;0    b,7;a
-
-             Then do:
-             File | New | Census
-             Census | Paste census data
-             Expected result:
-               Seven new cells are populated with the individual data
-
-          B. Census | Edit case defaults | Change 'UnderwritingClass'
-             to 'Preferred' | OK
-             This message box appears:
-
-               ---------------------------
-               Confirm changes
-               ---------------------------
-               Apply all changes to every cell?
-               ---------------------------
-               Yes   No
-               ---------------------------
-             Select 'Yes'. The 'UnderwritingClass' column should disappear
-             from the census editor.
-
-          C. File | 'Save as'
-             Name the file 'PasteCensus.cns' and press 'Save' button.
-             The working directory will be the default location.
-             Expected result:
-               A file named 'PasteCensus.cns' exists in default directory.
-
-    All checks are implemented exactly as specified, but the data to be pasted
-    into the census is extracted from pasting_to_a_census.html file itself instead
-    of being copied from an on-screen window showing it.
- */
 LMI_WX_TEST_CASE(paste_census)
 {
     // Put the data to paste on clipboard.
@@ -195,7 +189,7 @@ LMI_WX_TEST_CASE(paste_census)
 
     // Paste data into it.
     wxUIActionSimulator ui;
-    ui.Char('s', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Paste census data"
+    ui.Char('s', wxMOD_CONTROL | wxMOD_SHIFT); // "Census | Paste census"
     wxYield();
 
     // Find the model containing the cells and check that it was filled in
@@ -211,10 +205,13 @@ LMI_WX_TEST_CASE(paste_census)
     ui.Char('e', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Edit case defaults"
 
     struct change_class_in_case_defaults_dialog
-        :public ExpectMvcDialog
+        :public wxExpectModalBase<MvcController>
     {
-        virtual void DoRunDialog(MvcController* dialog) const
+        virtual int OnInvoked(MvcController* dialog) const
             {
+            dialog->Show();
+            wxYield();
+
             wxUIActionSimulator ui;
 
             // Go to the third page: as the dialog remembers its last opened
@@ -249,6 +246,8 @@ LMI_WX_TEST_CASE(paste_census)
             wxYield();
 
             LMI_ASSERT_EQUAL(class_radiobox->GetSelection(), 0);
+
+            return wxID_OK;
             }
     };
 
@@ -268,7 +267,7 @@ LMI_WX_TEST_CASE(paste_census)
     LMI_ASSERT(!does_list_have_column(list_window, column_title));
 
     // Finally save the census with the pasted data for later inspection.
-    static char const* census_file_name = "PasteCensus.cns";
+    wxString const census_file_name = get_test_file_path_for("PasteCensus.cns");
 
     ui.Char('a', wxMOD_CONTROL);    // "File|Save as"
     wxTEST_DIALOG
@@ -280,3 +279,4 @@ LMI_WX_TEST_CASE(paste_census)
 
     census.close();
 }
+

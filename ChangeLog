@@ -34714,3 +34714,232 @@ Make test output more greppable. See:
 Provide more information when a test fails. See:
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00061.html
 
+20141205T1720Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Write all test output to stdout, not stderr. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00004.html
+
+20141206T1140Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_about_version.cpp
+Rectify test specification.
+
+20141206T1453Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_expiry_dates.cpp
+Rectify test specification.
+
+20141206T1811Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_calculation_summary.cpp
+  wx_test_default_update.cpp
+  wx_test_mvc_dialog.hpp [expunged]
+  wx_test_paste_census.cpp
+  wx_test_validate_output.cpp
+Don't send wxEVT_UPDATE_UI events manually in GUI tests. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00014.html
+
+20141206T1847Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Eliminate log-message prefix. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00012.html
+
+20141206T1915Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  skeleton.cpp
+Improve title of '--help' messagebox. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00013.html
+
+20141206T2004Z <gchicares@sbcglobal.net> [516]
+
+  alert_wx.cpp
+Simplify thanks to a welcome wx enhancement. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00013.html
+
+20141207T0157Z <gchicares@sbcglobal.net> [516]
+
+  objects.make
+  workhorse.make
+  wx_test_about_version.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00030.html
+
+20141208T0048Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_case.hpp
+Add a '--distribution' flag for use in future test revisions. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00038.html
+
+20141208T0049Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_expiry_dates.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00038.html
+
+20141210T1236Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_extract.cpp
+  wx_test_input_sequences.cpp
+  wx_test_validate_output.cpp
+Mark lines needing '--gui_test_path'. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00002.html
+
+20141210T1521Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_input_validation.cpp
+Mark another line needing '--gui_test_path'. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00040.html
+
+20141210T1525Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_config_settings.cpp
+Test the exact 'fop' command actually used in distributions.
+
+20141210T1528Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_config_settings.cpp
+Correct a specification error.
+
+20141210T2116Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_update.cpp
+Rectify test specification.
+
+20141212T1142Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Preserve file history. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00047.html
+
+20141212T1246Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_benchmark_census.cpp
+Rectify test specification.
+
+20141212T1317Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_config_settings.cpp
+Rectify test specification.
+
+20141212T1355Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_pdf_create.cpp
+Rectify test specification.
+
+20141212T1449Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_create_open.cpp
+Rectify test specification.
+
+20141212T1517Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_input_sequences.cpp
+Rectify test specification.
+
+20141212T1813Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_input.cpp
+Rectify test specification.
+
+20141212T1929Z <gchicares@sbcglobal.net> [516]
+
+  Makefile.am
+  objects.make
+  wx_test_extract.cpp [expunged]
+Expunge 'wx_test_extract.cpp' because it is no longer useful. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00055.html
+
+20141212T2107Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_input.cpp
+Further rectify test specification.
+
+20141212T2336Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_paste_census.cpp
+Rectify test specification.
+
+20141215T1203Z <gchicares@sbcglobal.net> [516]
+
+  alert_wx.cpp
+Further simplify in the spirit of the 20141206T2004Z change. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00029.html
+
+20141215T1220Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Improve failure reporting. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
+
+20141215T1239Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_case.hpp
+  wx_test_create_open.cpp
+  wx_test_input_sequences.cpp
+  wx_test_input_validation.cpp
+  wx_test_paste_census.cpp
+  wx_test_validate_output.cpp
+Add '--gui_test_path'. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
+
+20141215T1250Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_benchmark_census.cpp
+Print only observed time, not relative error. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00073.html
+
+20141215T1255Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_case.hpp
+Remove configuration file. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
+
+20141215T1353Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_config_settings.cpp
+Run only with '--distribution' flag. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00074.html
+
+20141215T1400Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_date.hpp [new file]
+  wx_test_expiry_dates.cpp
+Refactor. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
+
+20141215T1406Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_input.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
+
+20141215T1416Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_case.hpp
+  wx_test_config_settings.cpp
+  wx_test_default_input.cpp
+Skip distribution tests more elegantly. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00076.html
+
+20141215T1454Z <gchicares@sbcglobal.net> [516]
+
+  authenticity.cpp
+  global_settings.cpp
+  global_settings.hpp
+  skeleton.cpp
+Add a deliberately obscure option. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00077.html
+
+20141215T1522Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Add a default 'gui_test_path'. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00079.html
+

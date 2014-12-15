@@ -42,6 +42,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "authenticity.hpp"
+#include "calendar_date.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
 #include "configurable_settings.hpp"
@@ -90,11 +91,14 @@
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
+#include <wx/datetime.h>
 #include <wx/debug.h>                   // wxIsDebuggerRunning()
 #include <wx/docmdi.h>
 #include <wx/image.h>
 #include <wx/log.h>                     // wxSafeShowMessage()
+#include <wx/math.h>                    // wxRound()
 #include <wx/menu.h>
+#include <wx/msgdlg.h>
 #include <wx/textctrl.h>
 #include <wx/textdlg.h>                 // wxGetTextFromUser()
 #include <wx/toolbar.h>
@@ -1197,15 +1201,16 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
-        {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
-        {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"pyx"       ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
-        {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
-        {0           ,NO_ARG   ,0 ,0   ,0 ,""}
+        {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_naz"      ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
+        {"mello"        ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
+        {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
+        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
+        {"prospicience" ,REQD_ARG ,0 ,004 ,0 ,"validation date"},
+        {0              ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 
     bool show_help        = false;
@@ -1234,6 +1239,32 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
             case 002:
                 {
                 global_settings::instance().set_mellon(true);
+                }
+                break;
+
+            case 004:
+                {
+                wxString const date_string(getopt_long.optarg);
+                wxDateTime dt;
+                wxString::const_iterator date_end;
+                if(  !dt.ParseFormat(date_string, "%Y%m%d", &date_end)
+                  || date_end != date_string.end()
+                  )
+                    {
+                    warning() << "Invalid prospicience option value '"
+                              << date_string
+                              << "' (must be in YYYYMMDD format)."
+                              << std::flush
+                              ;
+                    }
+                else
+                    {
+                    // wxDateTime JDN corresponds to the noon, not the
+                    // midnight, and so requires half a day adjustment.
+                    global_settings::instance().set_prospicience_date
+                        (calendar_date(jdn_t(wxRound(dt.GetJDN() + 0.5)))
+                        );
+                    }
                 }
                 break;
 
@@ -1303,8 +1334,9 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
     if(show_help)
         {
-        getopt_long.usage(warning());
-        warning() << std::flush;
+        std::ostringstream oss;
+        getopt_long.usage(oss);
+        wxMessageBox(oss.str(), "Command-line options");
         return false;
         }
 

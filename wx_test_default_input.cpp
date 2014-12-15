@@ -1,4 +1,4 @@
-// Default input test case for the GUI test suite.
+// Test selected parameters in the user-customizable default cell.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -31,34 +31,67 @@
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_date.hpp"
 
 #include <wx/log.h>
 
 #include <sstream>
 
-/*
-    Test default input.
+/// Test selected parameters in the user-customizable default cell.
+///
+/// Run this test only when the '--distribution' option is given.
+///
+/// Write "ProductName" and "GeneralAccountRate" to stdout in that
+/// order on a single line. We maintain several different binary
+/// distributions, each with a specific default product, and that
+/// product's general-account rate is a crucial parameter that often
+/// varies from one month to the next, so a spot check seems wise.
+///
+/// The expected value of "EffectiveDate" is normally the first day
+/// of the next month. (For example, to prepare a distribution that
+/// is to be used beginning January first, we must run this test in
+/// December, as validation should precede dissemination.)
+///
+/// Write both "EffectiveDate" and its expected value to stdout, both
+/// as JDN and as YYYYMMDD, all on a single line, e.g.:
+///   EffectiveDate: 2457024 2015-01-01  expected: 2457024 2015-01-01
+/// Then print a warning on a separate line iff these two dates do not
+/// match; do this after writing parameters to stdout, so that they're
+/// still written even if this test abends. Inequality is an unusual
+/// condition requiring attention, but not necessarily an error, so a
+/// mere warning suffices; program flow should not be interrupted as
+/// for an assertion failure.
 
-    2. Inspect '*default.ill' for the following variable data:
-
-     A. This date differs each month
-        <EffectiveDate>2456598</EffectiveDate>
-
-     B. Rates can change each month and differ among each distribution
-        <GeneralAccountRate>0.042 [0, 1); 0.037 [1, maturity)</GeneralAccountRate>
- */
 LMI_WX_TEST_CASE(default_input)
 {
-    calendar_date const today;
-    calendar_date const first_of_month(today.year(), today.month(), 1);
+    skip_if_not_distribution();
 
     Input const& cell = default_cell();
     calendar_date effective_date;
     std::istringstream is(cell["EffectiveDate"].str());
     LMI_ASSERT(is >> effective_date);
-    LMI_ASSERT_EQUAL(effective_date, first_of_month);
+
+    calendar_date const first_of_next_month = get_first_next_month(today());
+
+    wxLogMessage
+        ("EffectiveDate: %s; expected: %s"
+        ,dump_date(effective_date)
+        ,dump_date(first_of_next_month)
+        );
+    if(effective_date != first_of_next_month)
+        {
+        wxLogWarning("Effective date is different from the expected date.");
+        }
 
     std::string const general_account_rate = cell["GeneralAccountRate"].str();
     LMI_ASSERT(!general_account_rate.empty());
-    wxLogMessage("GeneralAccountRate is \"%s\"", general_account_rate.c_str());
+
+    std::string const product_name = cell["ProductName"].str();
+
+    wxLogMessage
+        ("ProductName=\"%s\"; GeneralAccountRate=\"%s\""
+        ,product_name
+        ,general_account_rate
+        );
 }
+

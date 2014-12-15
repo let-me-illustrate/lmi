@@ -55,6 +55,7 @@ global_settings::global_settings()
     ,custom_io_0_               (false)
     ,regression_testing_        (false)
     ,data_directory_            (fs::system_complete("."))
+    ,prospicience_date_         (last_yyyy_date())
 {}
 
 global_settings::~global_settings()
@@ -111,6 +112,11 @@ void global_settings::set_data_directory(std::string const& s)
     data_directory_ = fs::system_complete(s);
 }
 
+void global_settings::set_prospicience_date(calendar_date const& d)
+{
+    prospicience_date_ = d;
+}
+
 bool global_settings::mellon() const
 {
     return mellon_;
@@ -141,3 +147,7 @@ fs::path const& global_settings::data_directory() const
     return data_directory_;
 }
 
+calendar_date const& global_settings::prospicience_date() const
+{
+    return prospicience_date_;
+}

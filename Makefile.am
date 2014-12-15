@@ -293,7 +293,6 @@ wx_test_SOURCES = \
   wx_test_default_input.cpp \
   wx_test_default_update.cpp \
   wx_test_expiry_dates.cpp \
-  wx_test_extract.cpp \
   wx_test_input_sequences.cpp \
   wx_test_input_validation.cpp \
   wx_test_paste_census.cpp \
