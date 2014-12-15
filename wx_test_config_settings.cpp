@@ -82,10 +82,7 @@
 
 LMI_WX_TEST_CASE(configurable_settings)
 {
-    if(!is_distribution_test())
-        {
-        return;
-        }
+    skip_if_not_distribution();
 
     LMI_ASSERT(fs::exists("/etc/opt/lmi/configurable_settings.xml"));
 

@@ -64,10 +64,7 @@
 
 LMI_WX_TEST_CASE(default_input)
 {
-    if(!is_distribution_test())
-        {
-        return;
-        }
+    skip_if_not_distribution();
 
     Input const& cell = default_cell();
     calendar_date effective_date;
