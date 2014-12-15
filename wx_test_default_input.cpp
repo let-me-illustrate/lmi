@@ -31,18 +31,11 @@
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_date.hpp"
 
 #include <wx/log.h>
 
 #include <sstream>
-
-// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
-// comment below changes the original specification, and does not
-// yet describe the present code. Desired changes:
-//  - Run this test only when the '--distribution' option is given.
-//  - Write selected parameters to stdout as prescribed.
-//  - "EffectiveDate" is now compared to the first day of the current
-//    month, but should instead equal the first day of the next month.
 
 /// Test selected parameters in the user-customizable default cell.
 ///
@@ -71,17 +64,37 @@
 
 LMI_WX_TEST_CASE(default_input)
 {
-    calendar_date const today;
-    calendar_date const first_of_month(today.year(), today.month(), 1);
+    if(!is_distribution_test())
+        {
+        return;
+        }
 
     Input const& cell = default_cell();
     calendar_date effective_date;
     std::istringstream is(cell["EffectiveDate"].str());
     LMI_ASSERT(is >> effective_date);
-    LMI_ASSERT_EQUAL(effective_date, first_of_month);
+
+    calendar_date const first_of_next_month = get_first_next_month(today());
+
+    wxLogMessage
+        ("EffectiveDate: %s; expected: %s"
+        ,dump_date(effective_date)
+        ,dump_date(first_of_next_month)
+        );
+    if(effective_date != first_of_next_month)
+        {
+        wxLogWarning("Effective date is different from the expected date.");
+        }
 
     std::string const general_account_rate = cell["GeneralAccountRate"].str();
     LMI_ASSERT(!general_account_rate.empty());
-    wxLogMessage("GeneralAccountRate is \"%s\"", general_account_rate.c_str());
+
+    std::string const product_name = cell["ProductName"].str();
+
+    wxLogMessage
+        ("ProductName=\"%s\"; GeneralAccountRate=\"%s\""
+        ,product_name
+        ,general_account_rate
+        );
 }
 

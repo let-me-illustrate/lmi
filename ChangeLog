@@ -34913,3 +34913,9 @@ Run only with '--distribution' flag. See:
 Refactor. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
 
+20141215T1406Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_input.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
+
