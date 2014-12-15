@@ -30,8 +30,6 @@
 
 #include <boost/filesystem/path.hpp>
 
-class wxConfigBase;
-
 /// Base class for the test case objects.
 ///
 /// It is only supposed to be used by LMI_WX_TEST_CASE macro and not directly.
@@ -89,12 +87,6 @@ class wx_base_test_case
   protected:
     /// The argument must be a literal, as we just store the pointer.
     explicit wx_base_test_case(char const* name);
-
-    /// Get the object containing test configuration.
-    ///
-    /// The returned object will have the group containing the options for this
-    /// test as its current path for convenience.
-    wxConfigBase const& config() const;
 
     char const* const m_name;
 };
