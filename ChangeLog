@@ -34893,3 +34893,10 @@ Add '--gui_test_path'. See:
 Print only observed time, not relative error. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00073.html
 
+20141215T1255Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_case.hpp
+Remove configuration file. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
+

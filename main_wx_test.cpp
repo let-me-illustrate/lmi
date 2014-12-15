@@ -176,9 +176,6 @@ class application_test
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
     void add_test(wx_base_test_case* test);
 
-    // Used by tests to retrieve their configuration parameters.
-    wxConfigBase const& get_config_for(char const* name);
-
     // Return the configured directory (current one by default) to use for the
     // test files.
     fs::path const& get_test_files_path() const { return test_files_path_; }
@@ -234,8 +231,6 @@ class application_test
     };
 
     std::vector<test_descriptor> tests_;
-
-    boost::scoped_ptr<wxFileConfig> config_;
 
     fs::path test_files_path_;
 
@@ -533,30 +528,12 @@ void application_test::list_tests()
     std::cerr << tests_.size() << " test cases.\n";
 }
 
-wxConfigBase const& application_test::get_config_for(char const* name)
-{
-    if(!config_)
-        {
-        wxFFileInputStream is("wx_test.conf", "r");
-        config_.reset(new wxFileConfig(is));
-        }
-
-    config_->SetPath(wxString("/") + name);
-
-    return *config_;
-}
-
 } // Unnamed namespace.
 
 wx_base_test_case::wx_base_test_case(char const* name)
     :m_name(name)
 {
     application_test::instance().add_test(this);
-}
-
-wxConfigBase const& wx_base_test_case::config() const
-{
-    return application_test::instance().get_config_for(get_name());
 }
 
 void wx_base_test_case::skip_if_not_supported(char const* file)
