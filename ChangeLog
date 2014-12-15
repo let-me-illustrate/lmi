@@ -34937,3 +34937,9 @@ Skip distribution tests more elegantly. See:
 Add a deliberately obscure option. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00077.html
 
+20141215T1522Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Add a default 'gui_test_path'. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00079.html
+
