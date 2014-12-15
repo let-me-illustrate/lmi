@@ -422,17 +422,19 @@ bool application_test::process_command_line(int& argc, char* argv[])
     // Ensure that the path used for the test files is always valid and
     // absolute, so that it doesn't change even if the program current
     // directory changes for whatever reason.
-    if(test_files_path_.empty() || !fs::exists(test_files_path_))
+    if(test_files_path_.empty())
         {
-        if(!test_files_path_.empty())
-            {
-            warning()
-                << "Test files path '"
-                << test_files_path_.native_file_string()
-                << "' doesn't exist."
-                << std::flush
-                ;
-            }
+        test_files_path_ = "/opt/lmi/gui_test";
+        }
+
+    if (!fs::exists(test_files_path_))
+        {
+        warning()
+            << "Test files path '"
+            << test_files_path_.native_file_string()
+            << "' doesn't exist."
+            << std::flush
+            ;
         test_files_path_ = fs::current_path();
         }
     else
