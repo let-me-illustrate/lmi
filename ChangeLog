@@ -34928,3 +34928,12 @@ Implement rectified test specification. See:
 Skip distribution tests more elegantly. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00076.html
 
+20141215T1454Z <gchicares@sbcglobal.net> [516]
+
+  authenticity.cpp
+  global_settings.cpp
+  global_settings.hpp
+  skeleton.cpp
+Add a deliberately obscure option. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00077.html
+
