@@ -30,58 +30,13 @@
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_date.hpp"
 #include "version.hpp"
 
 #include <wx/log.h>
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
-
-#include <sstream>
-
-namespace
-{
-
-// Return a string containing both the JDN and a string representation of the
-// given date.
-//
-// This provides as much information as possible for the diagnostics.
-std::string dump_date(calendar_date const& date)
-{
-    std::ostringstream oss;
-    oss << date << " (" << date.str() << ")";
-    return oss.str();
-}
-
-// Return the date corresponding to the first day of the month following the
-// month of the given date.
-calendar_date get_first_next_month(calendar_date const& date)
-{
-    int year = date.year();
-    int month = date.month();
-    if(month == 12)
-        {
-        month = 1;
-        year++;
-        }
-    else
-        {
-        month++;
-        }
-
-    return calendar_date(year, month, 1);
-}
-
-} // Unnamed namespace.
-
-// A variant of LMI_ASSERT_EQUAL which provides more information about dates in
-// case of assertion failure.
-#define LMI_ASSERT_DATES_EQUAL(observed,expected)                   \
-    LMI_ASSERT_WITH_MSG                                             \
-        ((observed) == (expected)                                   \
-        ,"expected " << (dump_date(expected))                       \
-            << " vs observed " << (dump_date(observed))             \
-        )
 
 /// Validate dates in the 'expiry' file.
 ///

@@ -34906,3 +34906,10 @@ Remove configuration file. See:
 Run only with '--distribution' flag. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00074.html
 
+20141215T1400Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_date.hpp [new file]
+  wx_test_expiry_dates.cpp
+Refactor. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
+
