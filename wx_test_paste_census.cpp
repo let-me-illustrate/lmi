@@ -141,7 +141,6 @@ bool does_list_have_column(wxDataViewCtrl* dvc, wxString const& name)
 //  - Save pastable data inline; don't extract from user manual.
 //  - Validate all columns after each step (after initial pasting).
 //  - Test change in class defaults (in addition to case defaults).
-//  - Place the saved file in 'gui_test_path'.
 
 /// Test pasting spreadsheet data into a census.
 ///
@@ -268,7 +267,7 @@ LMI_WX_TEST_CASE(paste_census)
     LMI_ASSERT(!does_list_have_column(list_window, column_title));
 
     // Finally save the census with the pasted data for later inspection.
-    static char const* census_file_name = "PasteCensus.cns";
+    wxString const census_file_name = get_test_file_path_for("PasteCensus.cns");
 
     ui.Char('a', wxMOD_CONTROL);    // "File|Save as"
     wxTEST_DIALOG

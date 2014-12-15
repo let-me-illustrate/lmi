@@ -48,6 +48,8 @@
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <algorithm>                    // std::sort()
@@ -177,6 +179,10 @@ class application_test
     // Used by tests to retrieve their configuration parameters.
     wxConfigBase const& get_config_for(char const* name);
 
+    // Return the configured directory (current one by default) to use for the
+    // test files.
+    fs::path const& get_test_files_path() const { return test_files_path_; }
+
     // Used to check if distribution tests should be enabled.
     bool is_distribution_test() const { return is_distribution_test_; }
 
@@ -230,6 +236,8 @@ class application_test
     std::vector<test_descriptor> tests_;
 
     boost::scoped_ptr<wxFileConfig> config_;
+
+    fs::path test_files_path_;
 
     bool run_all_;
 
@@ -302,10 +310,19 @@ void remove_arg(int n, int& argc, char* argv[])
 
 bool application_test::process_command_line(int& argc, char* argv[])
 {
+    // THIRD_PARTY !! We have this long and error-prone code to parse the
+    // command line manually here only because getopt_long() is not composable
+    // and so we can't use it with our own options here while still leaving the
+    // standard options for the base class to handle. It would be better to use
+    // a standard command line parsing mechanism if it ever becomes possible.
+
     // This variable is used both as a flag indicating that the last option was
     // the one selecting the test to run and so must be followed by the test
     // name, but also for the diagnostic message at the end of this function.
     char const* last_test_option = 0;
+
+    char const* opt_gui_test_path = "--gui_test_path";
+    int const opt_gui_test_path_length = strlen(opt_gui_test_path);
 
     for(int n = 1; n < argc; )
         {
@@ -339,6 +356,32 @@ bool application_test::process_command_line(int& argc, char* argv[])
             is_distribution_test_ = true;
             remove_arg(n, argc, argv);
             }
+        else if(0 == std::strncmp(arg, opt_gui_test_path, opt_gui_test_path_length))
+            {
+            if (arg[opt_gui_test_path_length]=='=')
+                {
+                test_files_path_ = arg + opt_gui_test_path_length + 1;
+                }
+            else
+                {
+                if (n == argc - 1)
+                    {
+                    warning()
+                        << "Option '"
+                        << opt_gui_test_path
+                        << "' must be followed by the path to use."
+                        << std::flush
+                        ;
+                    }
+                else
+                    {
+                    remove_arg(n, argc, argv);
+                    test_files_path_ = argv[n];
+                    }
+                }
+
+            remove_arg(n, argc, argv);
+            }
         else if
             (
                0 == std::strcmp(arg, "-h")
@@ -352,11 +395,12 @@ bool application_test::process_command_line(int& argc, char* argv[])
                    "Usage: "
                 << argv[0]
                 << "\n"
-                   "  -h,\t--help     \tdisplay this help and exit\n"
-                   "  -l,\t--list     \tlist all available tests and exit\n"
-                   "  -t <name> or    \trun only the specified test (may occur\n"
-                   "  --test <name>   \tmultiple times); default: run all tests\n"
-                   "  --distribution  \tenable distribution-specific tests\n"
+                   "  -h,\t--help           \tdisplay this help and exit\n"
+                   "  -l,\t--list           \tlist all available tests and exit\n"
+                   "  -t <name> or          \trun only the specified test (may occur\n"
+                   "  --test <name>         \tmultiple times); default: run all tests\n"
+                   "  --gui_test_path <path>\tpath to use for test files\n"
+                   "  --distribution        \tenable distribution-specific tests\n"
                    "\n"
                    "Additionally, all command line options supported by the\n"
                    "main lmi executable are also supported."
@@ -378,6 +422,27 @@ bool application_test::process_command_line(int& argc, char* argv[])
             << "' must be followed by the test name."
             << std::flush
             ;
+        }
+
+    // Ensure that the path used for the test files is always valid and
+    // absolute, so that it doesn't change even if the program current
+    // directory changes for whatever reason.
+    if(test_files_path_.empty() || !fs::exists(test_files_path_))
+        {
+        if(!test_files_path_.empty())
+            {
+            warning()
+                << "Test files path '"
+                << test_files_path_.native_file_string()
+                << "' doesn't exist."
+                << std::flush
+                ;
+            }
+        test_files_path_ = fs::current_path();
+        }
+    else
+        {
+        test_files_path_ = fs::system_complete(test_files_path_);
         }
 
     return true;
@@ -506,6 +571,17 @@ void wx_base_test_case::skip_if_not_supported(char const* file)
                     ).ToStdString()
                 );
         }
+}
+
+fs::path wx_base_test_case::get_test_files_path() const
+{
+    return application_test::instance().get_test_files_path();
+}
+
+std::string
+wx_base_test_case::get_test_file_path_for(std::string const& basename) const
+{
+    return (get_test_files_path() / basename).native_file_string();
 }
 
 bool wx_base_test_case::is_distribution_test() const
