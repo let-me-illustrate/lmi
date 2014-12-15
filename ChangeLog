@@ -34887,3 +34887,9 @@ Improve failure reporting. See:
 Add '--gui_test_path'. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
 
+20141215T1250Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_benchmark_census.cpp
+Print only observed time, not relative error. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00073.html
+

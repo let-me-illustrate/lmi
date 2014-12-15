@@ -31,13 +31,14 @@
 #include "wx_test_statusbar.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <wx/confbase.h>
 #include <wx/dialog.h>
 #include <wx/frame.h>
 #include <wx/log.h>
 #include <wx/scopeguard.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
+
+#include <boost/filesystem/operations.hpp>
 
 #include <cmath>                        // std::fabs()
 
@@ -48,22 +49,21 @@ class census_benchmark
     :private lmi::uncopyable<census_benchmark>
 {
   public:
-    explicit census_benchmark(wxString const& name, wxString const& path)
+    explicit census_benchmark(fs::path const& path)
         :status_(get_main_window_statusbar())
-        ,name_(name)
+        ,name_(path.leaf())
         {
         wxUIActionSimulator z;
         z.Char('o', wxMOD_CONTROL); // "File|Open"
         wxTEST_DIALOG
             (wxYield()
-            ,wxExpectModal<wxFileDialog>(path)
+            ,wxExpectModal<wxFileDialog>(path.native_file_string())
             );
         wxYield();
         }
 
     void time_operation
         (char const* operation
-        ,long time_expected
         ,char key
         ,int mod
         )
@@ -82,41 +82,11 @@ class census_benchmark
         long time_real;
         LMI_ASSERT(ms_text.ToLong(&time_real));
 
-        // Compare the difference with the expected time if it's specified.
-        wxString delta;
-        if (time_expected)
-            {
-            double const diff_in_percents =
-                100*(time_real - time_expected)
-                    / static_cast<double>(time_expected);
-
-            delta.Printf("%+.2f%%", diff_in_percents);
-
-            LMI_ASSERT_WITH_MSG
-                (std::fabs(diff_in_percents) < 10
-                ,wxString::Format
-                    (
-                    "%s for %s was expected to take %ldms, "
-                    "but actually took %ldms, i.e. %s"
-                    ,operation
-                    ,name_
-                    ,time_expected
-                    ,time_real
-                    ,delta
-                    )
-                );
-            }
-        else
-            {
-            delta = "not specified";
-            }
-
         wxLogMessage
-            ("%s for %s: %ldms elapsed (expected %s)"
+            ("%s for %s: %ldms elapsed"
             ,operation
             ,name_
             ,time_real
-            ,delta
             );
         }
 
@@ -138,15 +108,6 @@ class census_benchmark
 };
 
 } // Unnamed namespace.
-
-// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
-// comment below changes the original specification, and does not
-// yet describe the present code. Desired changes:
-//  - use "gui_test_path/MSEC*.cns", not a config file list
-//  - write timings to stdout only; perform no relative-error
-//    calculation, and do not use times stored in a config file
-// With these changes, the test should no longer use the config file
-// in any way.
 
 /// Measure the speed of various operations on certain census files.
 ///
@@ -176,20 +137,15 @@ class census_benchmark
 
 LMI_WX_TEST_CASE(benchmark_census)
 {
-    wxConfigBase const& c = config();
-
-    // Read the timing parameters.
-    long const time_run = c.ReadLong("time_run", 0);
-    long const time_disk = c.ReadLong("time_disk", 0);
-    long const time_spreadsheet = c.ReadLong("time_spreadsheet", 0);
-
-    // The censuses to benchmark are specified by the subgroups of the config
-    // file, so iterate over all of them.
-    wxString name;
-    long z;
-    for(bool ok = c.GetFirstGroup(name, z); ok; ok = c.GetNextGroup(name, z))
+    fs::directory_iterator const end_i;
+    for(fs::directory_iterator i(get_test_files_path()); i != end_i; ++i)
         {
-        census_benchmark b(name, c.Read(name + "/path"));
+        if(!wxString(i->leaf()).Matches("MSEC*.cns"))
+            {
+            continue;
+            }
+
+        census_benchmark b(*i);
 
         {
         // Ensure that the window doesn't stay opened (and possibly affects
@@ -198,7 +154,6 @@ LMI_WX_TEST_CASE(benchmark_census)
 
         b.time_operation
             ("Run case"
-            ,time_run
             ,'r'
             ,wxMOD_CONTROL | wxMOD_SHIFT
             );
@@ -206,14 +161,12 @@ LMI_WX_TEST_CASE(benchmark_census)
 
         b.time_operation
             ("Print case to PDF"
-            ,time_disk
             ,'i'
             ,wxMOD_CONTROL | wxMOD_SHIFT
             );
 
         b.time_operation
             ("Print case to spreadsheet"
-            ,time_spreadsheet
             ,'h'
             ,wxMOD_CONTROL | wxMOD_SHIFT
             );
