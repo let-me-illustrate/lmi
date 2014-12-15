@@ -80,9 +80,18 @@ class wx_base_test_case
 
     /// Return true if running in distribution testing mode.
     ///
-    /// This method is used to restrict execution of the tests that are
-    /// specific to the binary program distribution.
+    /// This method is used to partially skip execution of the tests that are
+    /// specific to the binary program distribution. If the entire test should
+    /// be skipped, prefer to use skip_if_not_distribution() instead.
     bool is_distribution_test() const;
+
+    /// Skip the test if not running in distribution testing mode.
+    ///
+    /// This method can be used to skip execution of a test entirely unless
+    /// --distribution command line option was specified.
+    ///
+    /// Throws test_skipped_exception if the distribution option was not given.
+    void skip_if_not_distribution();
 
   protected:
     /// The argument must be a literal, as we just store the pointer.

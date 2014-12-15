@@ -34919,3 +34919,12 @@ Refactor. See:
 Implement rectified test specification. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00075.html
 
+20141215T1416Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_case.hpp
+  wx_test_config_settings.cpp
+  wx_test_default_input.cpp
+Skip distribution tests more elegantly. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00076.html
+

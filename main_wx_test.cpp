@@ -566,6 +566,14 @@ bool wx_base_test_case::is_distribution_test() const
     return application_test::instance().is_distribution_test();
 }
 
+void wx_base_test_case::skip_if_not_distribution()
+{
+    if(!is_distribution_test())
+        {
+        throw test_skipped_exception("not running distribution tests");
+        }
+}
+
 // Application to drive the tests
 class SkeletonTest : public Skeleton
 {
