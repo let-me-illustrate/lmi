@@ -65,11 +65,6 @@
     i.e. is c:/fop-0.20.5/fop, and not just the path.
  */
 
-// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
-// comment below changes the original specification, and does not
-// yet describe the present code. Desired changes:
-//  - Run this test only when the '--distribution' option is given.
-
 /// Validate configurable-settings file for binary distributions.
 ///
 /// Run this test only when the '--distribution' option is given.
@@ -87,6 +82,11 @@
 
 LMI_WX_TEST_CASE(configurable_settings)
 {
+    if(!is_distribution_test())
+        {
+        return;
+        }
+
     LMI_ASSERT(fs::exists("/etc/opt/lmi/configurable_settings.xml"));
 
     configurable_settings const& settings = configurable_settings::instance();

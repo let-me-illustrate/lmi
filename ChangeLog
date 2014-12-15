@@ -34900,3 +34900,9 @@ Print only observed time, not relative error. See:
 Remove configuration file. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
 
+20141215T1353Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_config_settings.cpp
+Run only with '--distribution' flag. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00074.html
+
