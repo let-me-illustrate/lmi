@@ -34863,3 +34863,9 @@ Further rectify test specification.
   wx_test_paste_census.cpp
 Rectify test specification.
 
+20141215T1203Z <gchicares@sbcglobal.net> [516]
+
+  alert_wx.cpp
+Further simplify in the spirit of the 20141206T2004Z change. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00029.html
+

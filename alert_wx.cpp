@@ -119,10 +119,6 @@ void hobsons_choice_alert(std::string const& s)
 
 void fatal_error_alert(std::string const& s)
 {
-    if(!wxTheApp)
-        {
-        safely_show_message("Untimely error message:\n" + s);
-        }
     throw std::runtime_error(s);
 }
 
