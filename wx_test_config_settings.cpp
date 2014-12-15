@@ -1,4 +1,4 @@
-// Configurable settings test case for the GUI test suite.
+// Validate configurable-settings file for binary distributions.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -58,19 +58,37 @@
           <skin_filename>skin_group_carveout2.xrc</skin_filename>
           <default_input_filename>c:/fop-0.20.5/group_carveout_default.ill</default_input_filename>
 
-          <skin_filename>reg_d.xrc</skin_filename>
+          <skin_filename>skin_reg_d.xrc</skin_filename>
           <default_input_filename>c:/fop-0.20.5/private_placement_default.ill</default_input_filename>
 
     The only change is that the xsl_fo_command is checked to contain the volume,
     i.e. is c:/fop-0.20.5/fop, and not just the path.
  */
+
+/// Validate configurable-settings file for binary distributions.
+///
+/// Run this test only when the '--distribution' option is given.
+/// The invariants it tests are not universally appropriate.
+///
+/// This test may someday be replaced by a shell script, which would
+/// be a better fit for its intended purpose. In particular, we want
+/// to run the GUI-test suite only once, and then combine the lmi
+/// binaries with selected input skins and default-input files; these
+/// tests check the combinations, and thus must be run once for each
+/// combination, but we don't want to repeat all the GUI tests for
+/// each combination. Of course, this individual test can be run in
+/// isolation for each combination, but for that use case a script
+/// would be simpler solution. We'll reconsider this later.
+
 LMI_WX_TEST_CASE(configurable_settings)
 {
+    skip_if_not_distribution();
+
     LMI_ASSERT(fs::exists("/etc/opt/lmi/configurable_settings.xml"));
 
     configurable_settings const& settings = configurable_settings::instance();
     LMI_ASSERT_EQUAL(settings.libraries_to_preload(), "");
-    LMI_ASSERT_EQUAL(settings.xsl_fo_command(), "CMD /c c:/fop-0.20.5/fop");
+    LMI_ASSERT_EQUAL(settings.xsl_fo_command(), "CMD /c /fop-0.20.5/fop");
 
     std::string skin = settings.skin_filename();
     std::string default_input = settings.default_input_filename();
@@ -78,7 +96,7 @@ LMI_WX_TEST_CASE(configurable_settings)
         (  "skin_coli_boli.xrc" == skin
         || "skin_group_carveout.xrc" == skin
         || "skin_group_carveout2.xrc" == skin
-        || "reg_d.xrc" == skin
+        || "skin_reg_d.xrc" == skin
         ,"unknown skin " << skin
         );
     if ("skin_coli_boli.xrc" == skin)
@@ -93,8 +111,9 @@ LMI_WX_TEST_CASE(configurable_settings)
         {
         LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/group_carveout_default.ill");
         }
-    if ("reg_d.xrc" == skin)
+    if ("skin_reg_d.xrc" == skin)
         {
         LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/private_placement_default.ill");
         }
 }
+

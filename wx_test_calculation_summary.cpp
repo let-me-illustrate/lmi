@@ -28,8 +28,8 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
+#include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
-#include "wx_test_mvc_dialog.hpp"
 #include "wx_test_new.hpp"
 #include "wx_utility.hpp"
 
@@ -93,7 +93,7 @@ void use_builtin_calculation_summary(bool b)
     ui.Char('f', wxMOD_CONTROL);    // "File|Preferences"
 
     class ChangeCalculationSummaryInPreferencesDialog
-        :public ExpectMvcDialog
+        :public wxExpectModalBase<MvcController>
     {
       public:
         ChangeCalculationSummaryInPreferencesDialog
@@ -102,8 +102,11 @@ void use_builtin_calculation_summary(bool b)
             {
             }
 
-        virtual void DoRunDialog(MvcController* dialog) const
+        virtual int OnInvoked(MvcController* dialog) const
             {
+            dialog->Show();
+            wxYield();
+
             wxUIActionSimulator ui;
 
             // Go to the "Use built-in calculation summary" checkbox.
@@ -114,8 +117,6 @@ void use_builtin_calculation_summary(bool b)
             // change the values of the column controls.
             ui.Char('-');
             wxYield();
-
-            DoUpdateDialogUI(dialog);
 
             // Update the columns controls when using them.
             for(std::size_t n = 0; n < number_of_custom_columns; ++n)
@@ -131,7 +132,7 @@ void use_builtin_calculation_summary(bool b)
 
                 LMI_ASSERT(ui.Select(column_name));
 
-                DoUpdateDialogUI(dialog);
+                wxYield();
                 }
 
             // Finally return to the initial checkbox.
@@ -145,6 +146,8 @@ void use_builtin_calculation_summary(bool b)
             // And set it to the desired value.
             ui.Char(use_builtin_summary_ ? '+' : '-');
             wxYield();
+
+            return wxID_OK;
             }
 
       private:

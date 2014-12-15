@@ -275,8 +275,12 @@ void authenticate_system()
         return;
         }
 
+    calendar_date const
+        prospicience_date = global_settings::instance().prospicience_date();
     std::string const diagnostic_message = Authenticity::Assay
-        (calendar_date()
+        (prospicience_date == last_yyyy_date()
+            ? today()
+            : prospicience_date
         ,global_settings::instance().data_directory()
         );
     if

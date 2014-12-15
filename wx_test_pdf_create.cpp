@@ -1,4 +1,4 @@
-// Test creating PDF output for census and illustration documents.
+// Test printing census and illustration documents to PDF.
 //
 // Copyright (C) 2014 Gregory W. Chicares.
 //
@@ -41,7 +41,7 @@ namespace
 {
 
 // Get the name used for the last created document: it depends on the tests
-// that had been ran previously, so get it from the document itself.
+// that had been run previously, so get it from the document itself.
 std::string get_current_document_name()
 {
     wxDocManager const* const docm = wxDocManager::GetDocumentManager();
@@ -69,26 +69,19 @@ std::string fo_suffix(int n)
 
 } // Unnamed namespace.
 
-/*
-    Test for correct creation of PDF from an illustration.
+// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
+// comment below changes the original specification, and does not
+// yet describe the present code. Desired changes:
+//  - Use "Print to PDF", not "Print preview".
+//  - Erase the PDF file after verifying that it was created.
 
-    This implements the first half of the item (6) of the testing specification:
+/// Test printing an illustration document to PDF.
+///
+/// Run these commands:
+///   File | New | Illustration
+///   File | Print to PDF
+/// and verify that the PDF file was created; then erase it.
 
-        6. Produce PDF's for two input file types.
-
-          A. File | New | Illustration | OK
-             File | Print
-             Expected result:
-               One 'unnamed*.pdf' exists in 'fop-0.20.5/'
-
-    The differences compared to the specification:
-
-    - "File | Print preview" is used instead of "File | Print" to avoid actually
-      producing output on paper unnecessarily.
-
-    - Check for the file existence in the print directory configured in
-      configurable_settings.xml and do not hardcode "fop-0.20.5/".
- */
 LMI_WX_TEST_CASE(pdf_illustration)
 {
     // Create a new illustration.
@@ -100,7 +93,7 @@ LMI_WX_TEST_CASE(pdf_illustration)
 
     // Launch the PDF creation as side effect of previewing it.
     wxUIActionSimulator ui;
-    ui.Char('v', wxMOD_CONTROL);    // "File|Print preview"
+    ui.Char('v', wxMOD_CONTROL);    // "File | Print preview"
     wxYield();
 
     // Close the illustration, we don't need it any more.
@@ -113,19 +106,24 @@ LMI_WX_TEST_CASE(pdf_illustration)
     // can't be removed before it is closed.
 }
 
-/*
-    Test for correct creation of PDF from a census.
+// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
+// comment below changes the original specification, and does not
+// yet describe the present code. Desired changes:
+//  - Do not add any cells to the census. Creating a PDF file for
+//    each of three identical cells takes considerable time and
+//    accomplishes nothing useful.
 
-    This implements the second half of the item (6) of the testing specification:
+/// Test printing a census document to PDF.
+///
+/// Run these commands:
+///   File | New | Census
+///   Census | Print case to PDF
+/// and verify that two PDF files were created, one for the (single)
+/// cell and one for the composite; then erase both files.
+///
+/// Once other tests have been specified and implemented, we may find
+/// that this test is duplicative and consequently remove it.
 
-        6. Produce PDF's for two input file types.
-
-          B. File | New | Census
-             Census | Add cell (2x)
-             Census | Print case to disk
-             Expected result:
-               Three pdf's plus the composite with "unnamed" prefix.
- */
 LMI_WX_TEST_CASE(pdf_census)
 {
     // Create a new census.
@@ -156,15 +154,14 @@ LMI_WX_TEST_CASE(pdf_census)
         }
 
     // Print the census to PDF.
-    ui.Char('i', wxMOD_CONTROL | wxMOD_SHIFT);  // "Census|Print case to PDF"
+    ui.Char('i', wxMOD_CONTROL | wxMOD_SHIFT);  // "Census | Print case to PDF"
     wxYield();
 
     // Close the census, we don't need it any more, and answer "No" to the
     // message box asking whether it should be saved.
     census.close_discard_changes();
 
-    // Check the existence of the files and, unlike in the illustration case,
-    // also delete them as they are not opened in any external viewer.
+    // Check the existence of the files, and then delete them.
     LMI_ASSERT(fs::exists(composite_pdf_path));
     fs::remove(composite_pdf_path);
     for(int n = 0; n < num_cells; ++n)
@@ -173,3 +170,4 @@ LMI_WX_TEST_CASE(pdf_census)
         fs::remove(cell_pdf_paths[n]);
         }
 }
+

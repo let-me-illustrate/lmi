@@ -31,10 +31,8 @@
 #include "mvc_controller.hpp"
 #include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
-#include "wx_test_mvc_dialog.hpp"
 #include "wx_test_new.hpp"
 
-#include <wx/filename.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -59,9 +57,9 @@ class output_file_existence_checker
         fs::remove(path_);
         }
 
-    void assert_exists() const
+    bool exists() const
         {
-        LMI_ASSERT(fs::exists(path_));
+        return fs::exists(path_);
         }
 
     ~output_file_existence_checker()
@@ -120,10 +118,13 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     output_file_existence_checker unnamed_trace("unnamed.monthly_trace" + ext);
 
     struct enter_comment_in_illustration_dialog
-        :public ExpectMvcDialog
+        :public wxExpectModalBase<MvcController>
     {
-        virtual void DoRunDialog(MvcController* dialog) const
+        virtual int OnInvoked(MvcController* dialog) const
             {
+            dialog->Show();
+            wxYield();
+
             wxUIActionSimulator ui;
 
             // Go to the first page: as the dialog remembers its last opened
@@ -145,6 +146,8 @@ LMI_WX_TEST_CASE(validate_output_illustration)
 
             ui.Text("idiosyncrasyZ");
             wxYield();
+
+            return wxID_OK;
             }
     };
 
@@ -155,7 +158,7 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     ill.close_discard_changes();
 
     // And check that this resulted in the creation of the expected file.
-    unnamed_trace.assert_exists();
+    LMI_ASSERT(unnamed_trace.exists());
 
     // Open an existing illustration already containing the same comment.
     wxUIActionSimulator ui;
@@ -163,13 +166,10 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     output_file_existence_checker
         existing_trace("MonthlyTrace.monthly_trace" + ext);
 
-    wxFileName fn(configurable_settings::instance().default_input_filename());
-    fn.SetFullName("MonthlyTrace.ill");
-
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
     wxTEST_DIALOG
         (wxYield()
-        ,wxExpectModal<wxFileDialog>(fn.GetFullPath())
+        ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MonthlyTrace.ill"))
         ,wxExpectModal<wxMessageDialog>(wxID_OK)          // Ignore warning.
         ,wxExpectDismissableModal<MvcController>(wxID_OK) // Accept defaults.
         );
@@ -177,7 +177,7 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
     wxTEST_DIALOG(wxYield(), wxExpectModal<wxMessageDialog>(wxNO));
 
-    existing_trace.assert_exists();
+    LMI_ASSERT(existing_trace.exists());
 }
 
 LMI_WX_TEST_CASE(validate_output_mec)
@@ -202,23 +202,20 @@ LMI_WX_TEST_CASE(validate_output_mec)
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
     wxYield();
 
-    unnamed_output.assert_exists();
+    LMI_ASSERT(unnamed_output.exists());
 
     // And when opening an existing one.
     output_file_existence_checker existing_output("MecTesting.mec" + ext);
 
-    wxFileName fn(configurable_settings::instance().default_input_filename());
-    fn.SetFullName("MecTesting.mec");
-
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
     wxTEST_DIALOG
         (wxYield()
-         ,wxExpectModal<wxFileDialog>(fn.GetFullPath())
+         ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MecTesting.mec"))
          ,wxExpectDismissableModal<MvcController>(wxID_OK) // Accept defaults.
         );
 
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
     wxYield();
 
-    existing_output.assert_exists();
+    LMI_ASSERT(existing_output.exists());
 }

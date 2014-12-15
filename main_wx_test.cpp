@@ -27,6 +27,7 @@
 #endif
 
 #include "alert.hpp"
+#include "docmanager_ex.hpp"
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
@@ -41,11 +42,14 @@
 #include <wx/fileconf.h>
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
+#include <wx/msgdlg.h>
 #include <wx/scopeguard.h>
 #include <wx/stopwatch.h>
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <algorithm>                    // std::sort()
@@ -63,8 +67,6 @@ LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 #if !wxCHECK_VERSION(3,1,0)
 #   error wxWidgets 3.1.0 or later is required for the test suite.
 #endif
-
-static char const* const LOG_PREFIX = "[TEST] ";
 
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
@@ -174,8 +176,12 @@ class application_test
     // Used by LMI_WX_TEST_CASE() macro to register the individual test cases.
     void add_test(wx_base_test_case* test);
 
-    // Used by tests to retrieve their configuration parameters.
-    wxConfigBase const& get_config_for(char const* name);
+    // Return the configured directory (current one by default) to use for the
+    // test files.
+    fs::path const& get_test_files_path() const { return test_files_path_; }
+
+    // Used to check if distribution tests should be enabled.
+    bool is_distribution_test() const { return is_distribution_test_; }
 
   private:
     application_test();
@@ -226,13 +232,16 @@ class application_test
 
     std::vector<test_descriptor> tests_;
 
-    boost::scoped_ptr<wxFileConfig> config_;
+    fs::path test_files_path_;
 
     bool run_all_;
+
+    bool is_distribution_test_;
 };
 
 application_test::application_test()
     :run_all_(true)
+    ,is_distribution_test_(false)
 {
 }
 
@@ -296,10 +305,19 @@ void remove_arg(int n, int& argc, char* argv[])
 
 bool application_test::process_command_line(int& argc, char* argv[])
 {
+    // THIRD_PARTY !! We have this long and error-prone code to parse the
+    // command line manually here only because getopt_long() is not composable
+    // and so we can't use it with our own options here while still leaving the
+    // standard options for the base class to handle. It would be better to use
+    // a standard command line parsing mechanism if it ever becomes possible.
+
     // This variable is used both as a flag indicating that the last option was
     // the one selecting the test to run and so must be followed by the test
     // name, but also for the diagnostic message at the end of this function.
     char const* last_test_option = 0;
+
+    char const* opt_gui_test_path = "--gui_test_path";
+    int const opt_gui_test_path_length = strlen(opt_gui_test_path);
 
     for(int n = 1; n < argc; )
         {
@@ -328,26 +346,61 @@ bool application_test::process_command_line(int& argc, char* argv[])
             last_test_option = arg;
             remove_arg(n, argc, argv);
             }
+        else if(0 == std::strcmp(arg, "--distribution"))
+            {
+            is_distribution_test_ = true;
+            remove_arg(n, argc, argv);
+            }
+        else if(0 == std::strncmp(arg, opt_gui_test_path, opt_gui_test_path_length))
+            {
+            if (arg[opt_gui_test_path_length]=='=')
+                {
+                test_files_path_ = arg + opt_gui_test_path_length + 1;
+                }
+            else
+                {
+                if (n == argc - 1)
+                    {
+                    warning()
+                        << "Option '"
+                        << opt_gui_test_path
+                        << "' must be followed by the path to use."
+                        << std::flush
+                        ;
+                    }
+                else
+                    {
+                    remove_arg(n, argc, argv);
+                    test_files_path_ = argv[n];
+                    }
+                }
+
+            remove_arg(n, argc, argv);
+            }
         else if
             (
                0 == std::strcmp(arg, "-h")
             || 0 == std::strcmp(arg, "--help")
             )
             {
-            warning()
+            std::ostringstream oss;
+            oss
                 << "Run automated GUI tests.\n"
                    "\n"
                    "Usage: "
                 << argv[0]
                 << "\n"
-                   "  -h,\t--help  \tdisplay this help and exit\n"
-                   "  -l,\t--list  \tlist all available tests and exit\n"
-                   "  -t <name> or \trun only the specified test (may occur\n"
-                   "  --test <name>\tmultiple times); default: run all tests\n"
+                   "  -h,\t--help           \tdisplay this help and exit\n"
+                   "  -l,\t--list           \tlist all available tests and exit\n"
+                   "  -t <name> or          \trun only the specified test (may occur\n"
+                   "  --test <name>         \tmultiple times); default: run all tests\n"
+                   "  --gui_test_path <path>\tpath to use for test files\n"
+                   "  --distribution        \tenable distribution-specific tests\n"
                    "\n"
                    "Additionally, all command line options supported by the\n"
                    "main lmi executable are also supported."
-                << std::flush;
+                ;
+            wxMessageBox(oss.str(), "Command-line options");
             return false;
             }
         else
@@ -364,6 +417,29 @@ bool application_test::process_command_line(int& argc, char* argv[])
             << "' must be followed by the test name."
             << std::flush
             ;
+        }
+
+    // Ensure that the path used for the test files is always valid and
+    // absolute, so that it doesn't change even if the program current
+    // directory changes for whatever reason.
+    if(test_files_path_.empty())
+        {
+        test_files_path_ = "/opt/lmi/gui_test";
+        }
+
+    if (!fs::exists(test_files_path_))
+        {
+        warning()
+            << "Test files path '"
+            << test_files_path_.native_file_string()
+            << "' doesn't exist."
+            << std::flush
+            ;
+        test_files_path_ = fs::current_path();
+        }
+    else
+        {
+        test_files_path_ = fs::system_complete(test_files_path_);
         }
 
     return true;
@@ -390,16 +466,16 @@ TestsResults application_test::run()
 
             try
                 {
-                wxLogMessage("%s%s: started", LOG_PREFIX, name);
+                wxLogMessage("%s: started", name);
                 wxStopWatch sw;
                 i->run_test();
-                wxLogMessage("%stime=%ldms (for %s)", LOG_PREFIX, sw.Time(), name);
-                wxLogMessage("%s%s: ok", LOG_PREFIX, name);
+                wxLogMessage("time=%ldms (for %s)", sw.Time(), name);
+                wxLogMessage("%s: ok", name);
                 results.passed++;
                 }
             catch(test_skipped_exception const& e)
                 {
-                wxLogMessage("%s%s: skipped (%s)", LOG_PREFIX, name, e.what());
+                wxLogMessage("%s: skipped (%s)", name, e.what());
                 results.skipped++;
                 }
             catch(std::exception const& e)
@@ -421,12 +497,7 @@ TestsResults application_test::run()
                 wxString one_line_error(error);
                 one_line_error.Replace("\n", " ");
 
-                wxLogMessage
-                    ("%s%s: ERROR (%s)"
-                    ,LOG_PREFIX
-                    ,name
-                    ,one_line_error
-                    );
+                wxLogMessage("%s: ERROR (%s)", name, one_line_error);
                 }
             }
         }
@@ -459,30 +530,12 @@ void application_test::list_tests()
     std::cerr << tests_.size() << " test cases.\n";
 }
 
-wxConfigBase const& application_test::get_config_for(char const* name)
-{
-    if(!config_)
-        {
-        wxFFileInputStream is("wx_test.conf", "r");
-        config_.reset(new wxFileConfig(is));
-        }
-
-    config_->SetPath(wxString("/") + name);
-
-    return *config_;
-}
-
 } // Unnamed namespace.
 
 wx_base_test_case::wx_base_test_case(char const* name)
     :m_name(name)
 {
     application_test::instance().add_test(this);
-}
-
-wxConfigBase const& wx_base_test_case::config() const
-{
-    return application_test::instance().get_config_for(get_name());
 }
 
 void wx_base_test_case::skip_if_not_supported(char const* file)
@@ -499,6 +552,30 @@ void wx_base_test_case::skip_if_not_supported(char const* file)
         }
 }
 
+fs::path wx_base_test_case::get_test_files_path() const
+{
+    return application_test::instance().get_test_files_path();
+}
+
+std::string
+wx_base_test_case::get_test_file_path_for(std::string const& basename) const
+{
+    return (get_test_files_path() / basename).native_file_string();
+}
+
+bool wx_base_test_case::is_distribution_test() const
+{
+    return application_test::instance().is_distribution_test();
+}
+
+void wx_base_test_case::skip_if_not_distribution()
+{
+    if(!is_distribution_test())
+        {
+        throw test_skipped_exception("not running distribution tests");
+        }
+}
+
 // Application to drive the tests
 class SkeletonTest : public Skeleton
 {
@@ -509,6 +586,9 @@ class SkeletonTest : public Skeleton
     }
 
   protected:
+    // Override base class virtual method.
+    virtual DocManagerEx* CreateDocManager();
+
     // wxApp overrides.
     virtual bool OnInit                 ();
     virtual bool OnExceptionInMainLoop  ();
@@ -532,21 +612,51 @@ class SkeletonTest : public Skeleton
 IMPLEMENT_APP_NO_MAIN(SkeletonTest)
 IMPLEMENT_WX_THEME_SUPPORT
 
+DocManagerEx* SkeletonTest::CreateDocManager()
+{
+    // Custom document manager allowing to intercept the behaviour of the
+    // program for testing purposes.
+    //
+    // Currently it is used to prevent the files opened during testing from
+    // being saved.
+    class DocManagerTest : public DocManagerEx
+    {
+      public:
+        virtual void FileHistoryLoad(wxConfigBase const&)
+            {
+            // We could call the base class method here, but it doesn't seem
+            // useful to do it and doing nothing here makes it more symmetric
+            // with FileHistorySave().
+            }
+
+        virtual void FileHistorySave(wxConfigBase&)
+            {
+            // Do not save the history to persistent storage: we don't want the
+            // files opened during testing replace the files actually opened by
+            // the user interactively.
+            }
+    };
+
+    // As in the base class version, notice that we must not use 'new(wx)' here
+    // as this object is deleted by wxWidgets itself.
+    return new DocManagerTest;
+}
+
 bool SkeletonTest::OnInit()
 {
     // The test output should be reproducible, so disable the time
     // stamps in the logs to avoid spurious differences due to them.
     wxLog::DisableTimestamp();
 
-    // Log everything to stderr, both to avoid interacting with the user (who
-    // might not even be present) and to allow redirecting the test output to a
-    // file which may subsequently be compared with the previous test runs.
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-
     if(!Skeleton::OnInit())
         {
         return false;
         }
+
+    // Log everything to stdout, both to avoid interacting with the user (who
+    // might not even be present) and to allow redirecting the test output to a
+    // file which may subsequently be compared with the previous test runs.
+    delete wxLog::SetActiveTarget(new wxLogStderr(stdout));
 
     // Run the tests at idle time, when the main loop is running, in order to
     // do it in as realistic conditions as possible.
@@ -653,7 +763,7 @@ void SkeletonTest::RunTheTests()
 
     mainWin->SetFocus();
 
-    wxLogMessage("%sNOTE: starting the test suite", LOG_PREFIX);
+    wxLogMessage("NOTE: starting the test suite");
     wxStopWatch sw;
 
     // Notice that it is safe to use simple variable assignment here instead of
@@ -663,19 +773,18 @@ void SkeletonTest::RunTheTests()
     TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
-    wxLogMessage("%stime=%ldms (for all tests)", LOG_PREFIX, sw.Time());
+    wxLogMessage("time=%ldms (for all tests)", sw.Time());
 
     if(results.failed == 0)
         {
         if(results.passed == 0)
             {
-            wxLogMessage("%sWARNING: no tests have been executed.", LOG_PREFIX);
+            wxLogMessage("WARNING: no tests have been executed.");
             }
         else
             {
             wxLogMessage
-                ("%sSUCCESS: %d test%s successfully completed."
-                ,LOG_PREFIX
+                ("SUCCESS: %d test%s successfully completed."
                 ,results.passed
                 ,results.passed == 1 ? "" : "s"
                 );
@@ -684,8 +793,7 @@ void SkeletonTest::RunTheTests()
     else
         {
         wxLogMessage
-            ("%sFAILURE: %d out of %d test%s failed."
-            ,LOG_PREFIX
+            ("FAILURE: %d out of %d test%s failed."
             ,results.failed
             ,results.total
             ,results.total == 1 ? "" : "s"
@@ -695,8 +803,7 @@ void SkeletonTest::RunTheTests()
     if(results.skipped)
         {
         wxLogMessage
-            ("%sNOTE: %s skipped"
-            ,LOG_PREFIX
+            ("NOTE: %s skipped"
             ,results.skipped == 1
                 ? wxString("1 test was")
                 : wxString::Format("%d tests were", results.skipped)
