@@ -34869,3 +34869,9 @@ Rectify test specification.
 Further simplify in the spirit of the 20141206T2004Z change. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00029.html
 
+20141215T1220Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Improve failure reporting. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00068.html
+
