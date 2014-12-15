@@ -33,7 +33,6 @@
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 
-#include <wx/filename.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -167,13 +166,10 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     output_file_existence_checker
         existing_trace("MonthlyTrace.monthly_trace" + ext);
 
-    wxFileName fn(configurable_settings::instance().default_input_filename()); // Instead use '--gui_test_path'.
-    fn.SetFullName("MonthlyTrace.ill");
-
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
     wxTEST_DIALOG
         (wxYield()
-        ,wxExpectModal<wxFileDialog>(fn.GetFullPath())
+        ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MonthlyTrace.ill"))
         ,wxExpectModal<wxMessageDialog>(wxID_OK)          // Ignore warning.
         ,wxExpectDismissableModal<MvcController>(wxID_OK) // Accept defaults.
         );
@@ -211,13 +207,10 @@ LMI_WX_TEST_CASE(validate_output_mec)
     // And when opening an existing one.
     output_file_existence_checker existing_output("MecTesting.mec" + ext);
 
-    wxFileName fn(configurable_settings::instance().default_input_filename()); // Instead use '--gui_test_path'.
-    fn.SetFullName("MecTesting.mec");
-
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
     wxTEST_DIALOG
         (wxYield()
-         ,wxExpectModal<wxFileDialog>(fn.GetFullPath())
+         ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MecTesting.mec"))
          ,wxExpectDismissableModal<MvcController>(wxID_OK) // Accept defaults.
         );
 

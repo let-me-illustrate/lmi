@@ -49,11 +49,12 @@
 void do_test_create_open
         (wx_base_test_case& test
         ,int key
-        ,wxString const& file
+        ,char const* basename
         ,bool uses_dialog)
 {
-    test.skip_if_not_supported(file.c_str());
+    test.skip_if_not_supported(basename);
 
+    wxString const file = test.get_test_file_path_for(basename);
     LMI_ASSERT(!wxFileExists(file));
 
     wxUIActionSimulator z;
@@ -103,11 +104,6 @@ void do_test_create_open
     z.Char('l', wxMOD_CONTROL); // close it finally
     wxYield();
 }
-
-// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
-// comment below changes the original specification, and does not
-// yet describe the present code. Desired changes:
-//  - Put all files in 'gui_test_path'.
 
 /// Create, save, and reopen a file of each available type.
 ///

@@ -28,6 +28,8 @@
 
 #include "uncopyable_lmi.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 class wxConfigBase;
 
 /// Base class for the test case objects.
@@ -64,6 +66,19 @@ class wx_base_test_case
     ///
     /// Throws test_skipped_exception if the file is not supported.
     void skip_if_not_supported(char const* file);
+
+    /// Return the base directory containing the test files.
+    ///
+    /// This is the same directory as is used by get_test_file_path_for(),
+    /// prefer to use that function if possible.
+    fs::path get_test_files_path() const;
+
+    /// Return the full path for the file with the given base name (which
+    /// should include the extension, but no path components).
+    ///
+    /// The directory of the returned path can be changed by using the command
+    /// line --gui_test_path option when running the test.
+    std::string get_test_file_path_for(std::string const& basename) const;
 
     /// Return true if running in distribution testing mode.
     ///

@@ -30,7 +30,6 @@
 #include "configurable_settings.hpp"
 #include "wx_test_case.hpp"
 
-#include <wx/filename.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -61,17 +60,12 @@
 
 LMI_WX_TEST_CASE(input_sequences)
 {
-    // Construct the path of the file to open, it's supposed to be in the same
-    // directory as the default input filename.
-    wxFileName fn(configurable_settings::instance().default_input_filename()); // Instead use '--gui_test_path'.
-    fn.SetFullName("InputSequences.cns");
-
     wxUIActionSimulator ui;
 
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
     wxTEST_DIALOG
         (wxYield()
-        ,wxExpectModal<wxFileDialog>(fn.GetFullPath())
+        ,wxExpectModal<wxFileDialog>(get_test_file_path_for("InputSequences.cns"))
         );
 
     ui.Char('r', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Run case"
