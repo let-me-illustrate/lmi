@@ -58,9 +58,9 @@ class output_file_existence_checker
         fs::remove(path_);
         }
 
-    void assert_exists() const
+    bool exists() const
         {
-        LMI_ASSERT(fs::exists(path_));
+        return fs::exists(path_);
         }
 
     ~output_file_existence_checker()
@@ -159,7 +159,7 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     ill.close_discard_changes();
 
     // And check that this resulted in the creation of the expected file.
-    unnamed_trace.assert_exists();
+    LMI_ASSERT(unnamed_trace.exists());
 
     // Open an existing illustration already containing the same comment.
     wxUIActionSimulator ui;
@@ -181,7 +181,7 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
     wxTEST_DIALOG(wxYield(), wxExpectModal<wxMessageDialog>(wxNO));
 
-    existing_trace.assert_exists();
+    LMI_ASSERT(existing_trace.exists());
 }
 
 LMI_WX_TEST_CASE(validate_output_mec)
@@ -206,7 +206,7 @@ LMI_WX_TEST_CASE(validate_output_mec)
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
     wxYield();
 
-    unnamed_output.assert_exists();
+    LMI_ASSERT(unnamed_output.exists());
 
     // And when opening an existing one.
     output_file_existence_checker existing_output("MecTesting.mec" + ext);
@@ -224,5 +224,5 @@ LMI_WX_TEST_CASE(validate_output_mec)
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
     wxYield();
 
-    existing_output.assert_exists();
+    LMI_ASSERT(existing_output.exists());
 }
