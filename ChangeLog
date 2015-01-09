@@ -35490,3 +35490,19 @@ Add a default 'gui_test_path'. See:
   zero_test.cpp
 Update copyright notices.
 
+20150109T1545Z <gchicares@sbcglobal.net> [516]
+
+  INSTALL
+Specify a more recent java version that supports 'jing'.
+
+20150109T1546Z <gchicares@sbcglobal.net> [516]
+
+  objects.make
+Fix defect introduced 20141215T1454Z: some unit tests didn't link.
+
+20150109T2213Z <gchicares@sbcglobal.net> [516]
+
+  input_sequence_entry.cpp
+Refocus parent when editing stops (VZ). With recent wx changes, this
+had stopped working implicitly inside the census manager.
+
