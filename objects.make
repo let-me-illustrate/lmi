@@ -543,6 +543,7 @@ configurable_settings_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
+  calendar_date.o \
   configurable_settings.o \
   configurable_settings_test.o \
   data_directory.o \
@@ -552,6 +553,7 @@ configurable_settings_test$(EXEEXT): \
   mc_enum.o \
   mc_enum_types.o \
   miscellany.o \
+  null_stream.o \
   path_utility.o \
   xml_lmi.o \
 
@@ -596,9 +598,11 @@ getopt_test$(EXEEXT): \
 global_settings_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
   global_settings.o \
   global_settings_test.o \
   miscellany.o \
+  null_stream.o \
   path_utility.o \
 
 gpt_test$(EXEEXT): \
@@ -706,6 +710,7 @@ math_functors_test$(EXEEXT): \
 mc_enum_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
   datum_base.o \
   facets.o \
   global_settings.o \
@@ -713,6 +718,7 @@ mc_enum_test$(EXEEXT): \
   mc_enum_test.o \
   mc_enum_test_aux.o \
   miscellany.o \
+  null_stream.o \
   path_utility.o \
 
 miscellany_test$(EXEEXT): \
@@ -754,8 +760,10 @@ obstruct_slicing_test$(EXEEXT): \
 path_utility_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
+  calendar_date.o \
   global_settings.o \
   miscellany.o \
+  null_stream.o \
   path_utility.o \
   path_utility_test.o \
 
