@@ -35506,3 +35506,8 @@ Fix defect introduced 20141215T1454Z: some unit tests didn't link.
 Refocus parent when editing stops (VZ). With recent wx changes, this
 had stopped working implicitly inside the census manager.
 
+20150115T0021Z <gchicares@sbcglobal.net> [516]
+
+  custom_io_1.cpp
+Add specified-amount load to "MiscFees".
+

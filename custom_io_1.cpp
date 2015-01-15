@@ -369,7 +369,7 @@ void custom_io_1_write(Ledger const& ledger_values, std::string const& filename)
             << ',' << Curr_.AnnGAIntRate   [j] * 10000.0 // 'IntRate' in bp.
             << ',' << Curr_.NetIntCredited [j]
             << ',' << Curr_.COICharge      [j]
-            << ',' << 0                                  // 'MiscFees' always zero.
+            << ',' << Curr_.SpecAmtLoad    [j]           // 'MiscFees' = spec amt load.
             << ',' << prem_load            [j]
             << ',' << 0                                  // 'MinPrem' always zero.
             << ',' << surr_chg             [j]
