@@ -35511,3 +35511,8 @@ had stopped working implicitly inside the census manager.
   custom_io_1.cpp
 Add specified-amount load to "MiscFees".
 
+20150116T2017Z <gchicares@sbcglobal.net> [516]
+
+  version.hpp
+Designate release candidate 6086.
+
