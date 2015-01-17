@@ -40,7 +40,7 @@
 // standard clearly does not reserve.]
 //
 // However, ISO 9945:2002 (POSIX) declares putenv() in <stdlib.h>. In
-// light of the present header's raison d'être, it is sensible to
+// light of the present header's raison d'Ãªtre, it is sensible to
 // suspend the operation of the __STRICT_ANSI__ mechanism, taking care
 // to restore it after including other headers here.
 //

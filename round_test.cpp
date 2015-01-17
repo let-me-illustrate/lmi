@@ -443,7 +443,7 @@ void test_rounding()
     test_various_float_types(-1 +  M53,  9007199254740990.0L);
     test_various_float_types(-1 + -M53, -9007199254740992.0L);
 
-    // Here is a similar testcase from François-Xavier Coudert,
+    // Here is a similar testcase from FranÃ§ois-Xavier Coudert,
     // who refers to:
     //   http://gcc.gnu.org/ml/gcc-patches/2006-10/msg00917.html
     // | 0.499999999999999944488848768742172978818416595458984375

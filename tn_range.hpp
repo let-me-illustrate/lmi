@@ -109,7 +109,7 @@ class trammel_base
 
 /// Design notes for class template tn_range_base.
 ///
-/// This class's raison d'être is to permit its member functions to be
+/// This class's raison d'Ãªtre is to permit its member functions to be
 /// called across a shared-library boundary, and through a base-class
 /// pointer without knowing the template arguments of a concrete
 /// instance of derived class tn_range_base.

@@ -137,7 +137,7 @@ namespace fs = boost::filesystem;
 #   include "config.h"
 #else // Not using autoconf.
 
-// Redundant include guards are passé: with modern tools, the benefit
+// Redundant include guards are passÃ©: with modern tools, the benefit
 // is not worth the ugliness. The guards here, however, are intended
 // not to speed up compilation with antique tools that don't recognize
 // normal include guards, but rather to insulate compiler-specific

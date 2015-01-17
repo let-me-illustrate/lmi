@@ -48,7 +48,7 @@
 /// ash_nazg_: 'One password to rule them all' given--enable everything
 /// 'mellon' does (by forcing the latter member's value), along with
 /// other features--some of which may be experimental or perilous.
-/// (LOTR: 'ash nazg durbatulûk'.)
+/// (LOTR: 'ash nazg durbatulÃ»k'.)
 ///
 /// pyx_: Enable experimental behaviors that vary from time to time.
 ///
