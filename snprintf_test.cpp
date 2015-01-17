@@ -79,7 +79,7 @@ int test_main(int, char*[])
 
     // See:
     //   http://www.nabble.com/forum/PrintPost.jtp?post=17172711
-    //     [2008-05-11T11:46Z from François-Xavier Coudert]
+    //     [2008-05-11T11:46Z from FranÃ§ois-Xavier Coudert]
     double g = 39.0;
     len = snprintf(buf,       0, "%9.0e", g);
     BOOST_TEST_EQUAL(9, len);

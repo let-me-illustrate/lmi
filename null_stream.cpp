@@ -35,7 +35,7 @@
 
 /// Redirect output as though to a null device.
 ///
-/// This class is a derived work based on Dietmar Kühl's article
+/// This class is a derived work based on Dietmar KÃ¼hl's article
 ///   http://groups.google.com/groups?selm=82mbke$l5c$1@nnrp1.deja.com
 /// which bears no copyright notice, as is usual in usenet.
 ///

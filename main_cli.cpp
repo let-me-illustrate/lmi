@@ -163,7 +163,7 @@ void process_command_line(int argc, char* argv[])
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulÃ»k"},
         {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
         {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
         {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},

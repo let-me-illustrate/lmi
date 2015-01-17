@@ -1201,7 +1201,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulÃ»k"},
         {"ash_naz"      ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
         {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
         {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},

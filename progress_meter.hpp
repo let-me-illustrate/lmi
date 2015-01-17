@@ -154,7 +154,7 @@
 /// this class isn't ideally suited.
 ///
 /// Virtual function progress_message() could be seen as needless: its
-/// raison d'être is only to be called by show_progress_message(),
+/// raison d'Ãªtre is only to be called by show_progress_message(),
 /// which is already virtual. The rationale for separating them is that
 /// two interfaces might use the same strings but display them by
 /// different means. Perhaps this is rococo.

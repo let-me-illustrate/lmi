@@ -181,7 +181,7 @@ void Ledger::write(xml::element& x) const
 // No good:    title_map["AttainedAge"                     ] = " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End of &nbsp;&nbsp;Year Age";
 // No good:    title_map["AttainedAge"                     ] = " &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; End of &amp;nbsp;&amp;nbsp;Year Age";
 // No good:    title_map["AttainedAge"                     ] = "<![CDATA[ &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; End of &#xA0;&#xA0;Year Age]]>";
-// No good:    title_map["AttainedAge"                     ] = " ············· End of ··Year Age";
+// No good:    title_map["AttainedAge"                     ] = " √°√°√°√°√°√°√°√°√°√°√°√°√° End of √°√°Year Age";
 // No good:    title_map["AttainedAge"                     ] = " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; End of &#160;&#160;Year Age";
 
 //  Here are the columns to be listed in the user interface

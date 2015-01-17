@@ -7358,7 +7358,7 @@ The problem needs to be understood generally before it can be solved.
   ledger_xml_io.cpp
 Clarify two columns' titles to conform to a compliance requirement.
 This is intended to conform to the interpretation under
-  "§21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
+  "Â§21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
 in the 1998-09-25 Texas Register, however counterintuitive its reading
 of "out-of-pocket" may be.
 
@@ -11159,8 +11159,8 @@ Abstract the output stream buffer.
 
   progress_meter_cli.cpp
 Provide a soon-to-be-needed stream buffer akin to /dev/null . This is
-derived from Dietmar Kühl's work: a class he posted to usenet has been
-renamed, made noncopyable, and given an explicit dtor.
+derived from Dietmar KÃ¼hl's work: a class he posted to usenet has
+been renamed, made noncopyable, and given an explicit dtor.
 
 20070512T1421Z <chicares@cox.net> [1255]
 
@@ -35515,4 +35515,22 @@ Add specified-amount load to "MiscFees".
 
   version.hpp
 Designate release candidate 6086.
+
+20150117T2156Z <gchicares@sbcglobal.net> [516]
+
+  ChangeLog
+  config.hpp
+  global_settings.hpp
+  interest_rates.cpp
+  ledger_xml_io.cpp
+  main_cli.cpp
+  null_stream.cpp
+  platform_dependent.hpp
+  progress_meter.hpp
+  round_test.cpp
+  skeleton.cpp
+  snprintf_test.cpp
+  tn_range.hpp
+  value_cast_test.cpp
+Convert from ISO-8859-15 to UTF-8.
 
