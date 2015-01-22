@@ -519,15 +519,15 @@ void application_test::list_tests()
 {
     sort_tests();
 
-    std::cerr << "Available tests:\n";
+    std::cout << "Available tests:\n";
 
     typedef std::vector<test_descriptor>::const_iterator ctdi;
     for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
         {
-        std::cerr << '\t' << i->get_name() << '\n';
+        std::cout << '\t' << i->get_name() << '\n';
         }
 
-    std::cerr << tests_.size() << " test cases.\n";
+    std::cout << tests_.size() << " test cases.\n";
 }
 
 } // Unnamed namespace.
