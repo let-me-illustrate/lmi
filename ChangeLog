@@ -35534,3 +35534,13 @@ Designate release candidate 6086.
   value_cast_test.cpp
 Convert from ISO-8859-15 to UTF-8.
 
+20150122T1940Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Prefer stdout to stderr for '--help' output (VZ).
+
+20150122T1941Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_config_settings.cpp
+Add an overlooked skin (KMM).
+
