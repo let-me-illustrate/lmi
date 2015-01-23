@@ -35599,3 +35599,9 @@ Refactor: use output_file_existence_checker. See:
 Fail if an unexpected modal dialog is about to be shown. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00097.html
 
+20150123T1537Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_new.hpp
+Don't complain about unclosed documents during stack unwinding. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00097.html
+
