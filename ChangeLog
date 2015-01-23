@@ -35550,3 +35550,10 @@ Add an overlooked skin (KMM).
 Prefer calendar_date to wxDateTime. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00085.html
 
+20150123T0235Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_output.hpp [new file]
+  wx_test_validate_output.cpp
+Extract output_file_existence_checker into a separate header. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
+
