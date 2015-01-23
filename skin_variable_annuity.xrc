@@ -64,7 +64,6 @@
                             <border>2</border>
                             <object class="wxListBox" name="ProductName">
                                 <help>Product</help>
-                                <size>-1,0</size>
                                 <style>wxLB_SINGLE</style>
                             </object>
                         </object>
@@ -90,7 +89,6 @@ useful in the future.
                             <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
                             <border>4</border>
                             <object class="wxComboBox" name="StateOfJurisdiction">
-                                <size>-1,0</size>
                                 <style>wxCB_READONLY</style>
                             </object>
                         </object>
