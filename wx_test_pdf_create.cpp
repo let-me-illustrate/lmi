@@ -53,20 +53,35 @@ std::string get_current_document_name()
     return doc->GetUserReadableName().ToStdString();
 }
 
-// Build the path for the output PDF with the given base name.
-fs::path make_pdf_path(std::string const& base_name)
-{
-    fs::path pdf_path(configurable_settings::instance().print_directory());
-    pdf_path /= base_name + ".pdf";
-
-    return pdf_path;
-}
-
 // Return the suffix used for the FO files created by printing the census.
 std::string fo_suffix(int n)
 {
     return wxString::Format(".%09d", n).ToStdString();
 }
+
+// Specialized version of output_file_existence_checker for the output PDF
+// files: it takes just the base name of the file, without neither the
+// directory part nor the .pdf extension, in its ctor.
+class output_pdf_existence_checker :public output_file_existence_checker
+{
+  public:
+    explicit output_pdf_existence_checker(std::string const& base_name)
+        :output_file_existence_checker
+            (make_full_print_path(base_name + ".pdf")
+            )
+        {
+        }
+
+  private:
+    // Return the full path in the print directory for the file with the given
+    // leaf name.
+    static fs::path make_full_print_path(std::string const& leaf)
+        {
+        fs::path p(configurable_settings::instance().print_directory());
+        p /= leaf;
+        return p;
+        }
+};
 
 } // Unnamed namespace.
 
@@ -83,8 +98,7 @@ LMI_WX_TEST_CASE(pdf_illustration)
     wx_test_new_illustration ill;
 
     // Ensure that the output file doesn't exist in the first place.
-    output_file_existence_checker
-        output_pdf(make_pdf_path(get_current_document_name()));
+    output_pdf_existence_checker output_pdf(get_current_document_name());
 
     wxUIActionSimulator ui;
     ui.Char('i', wxMOD_CONTROL);    // "File | Print to PDF"
@@ -117,11 +131,11 @@ LMI_WX_TEST_CASE(pdf_census)
     // already present and not created by the test.
     std::string const name = get_current_document_name();
 
-    output_file_existence_checker
-        composite_pdf(make_pdf_path(name + ".composite" + fo_suffix(0)));
+    output_pdf_existence_checker
+        composite_pdf(name + ".composite" + fo_suffix(0));
 
-    output_file_existence_checker
-        cell_pdf(make_pdf_path(name + fo_suffix(1)));
+    output_pdf_existence_checker
+        cell_pdf(name + fo_suffix(1));
 
     // Print the census to PDF.
     wxUIActionSimulator ui;
