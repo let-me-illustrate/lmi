@@ -35575,3 +35575,9 @@ Update PDF output tests to the revised specification. See:
 Use output_pdf_existence_checker helper in PDF creation test. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
 
+20150123T0302Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_pdf_create.cpp
+Clean up .fo.xml files created during PDF generation. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
+

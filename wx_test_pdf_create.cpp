@@ -61,7 +61,9 @@ std::string fo_suffix(int n)
 
 // Specialized version of output_file_existence_checker for the output PDF
 // files: it takes just the base name of the file, without neither the
-// directory part nor the .pdf extension, in its ctor.
+// directory part nor the .pdf extension, in its ctor and also takes care of
+// deleting the .fo.xml created as a side effect of PDF generation when the PDF
+// file itself is removed.
 class output_pdf_existence_checker :public output_file_existence_checker
 {
   public:
@@ -69,7 +71,26 @@ class output_pdf_existence_checker :public output_file_existence_checker
         :output_file_existence_checker
             (make_full_print_path(base_name + ".pdf")
             )
+        ,fo_xml_path_
+            (make_full_print_path(base_name + ".fo.xml")
+            )
         {
+        // We do not remove .fo.xml file here, this is unnecessary as we don't
+        // particularly care whether it exists or not because we never check
+        // for its existence.
+        }
+
+    ~output_pdf_existence_checker()
+        {
+        // Do remove the .fo.xml file to avoid littering the print directory
+        // with the files generated during the test run.
+        try
+            {
+            fs::remove(fo_xml_path_);
+            }
+        catch(...)
+            {
+            }
         }
 
   private:
@@ -81,6 +102,8 @@ class output_pdf_existence_checker :public output_file_existence_checker
         p /= leaf;
         return p;
         }
+
+    fs::path fo_xml_path_;
 };
 
 } // Unnamed namespace.
