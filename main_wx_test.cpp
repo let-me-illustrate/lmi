@@ -45,6 +45,7 @@
 #include <wx/msgdlg.h>
 #include <wx/scopeguard.h>
 #include <wx/stopwatch.h>
+#include <wx/testing.h>
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
 
@@ -760,6 +761,13 @@ void SkeletonTest::RunTheTests()
             return;
             }
         }
+
+    // Any dialog shown during the tests should be accounted for and dismissed
+    // before it gets to this outer hook by the testing hook expecting it, so
+    // this hook should never be invoked and we install it to ensure that it
+    // prevents any unexpected modal dialogs from being shown if they do
+    // happen, this is important for the test to really run unattended.
+    wxTestingModalHook expect_no_dialogs;
 
     mainWin->SetFocus();
 

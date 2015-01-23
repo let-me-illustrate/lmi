@@ -35593,3 +35593,9 @@ Implement rectified test specification. See:
 Refactor: use output_file_existence_checker. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00096.html
 
+20150123T1526Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Fail if an unexpected modal dialog is about to be shown. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00097.html
+
