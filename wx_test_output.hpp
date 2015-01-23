@@ -40,7 +40,7 @@ class output_file_existence_checker
     :private lmi::uncopyable<output_file_existence_checker>
 {
   public:
-    output_file_existence_checker(std::string const& path)
+    output_file_existence_checker(fs::path const& path)
         :path_(path)
         {
         fs::remove(path_);
