@@ -35544,3 +35544,9 @@ Prefer stdout to stderr for '--help' output (VZ).
   wx_test_config_settings.cpp
 Add an overlooked skin (KMM).
 
+20150123T0213Z <gchicares@sbcglobal.net> [516]
+
+  skeleton.cpp
+Prefer calendar_date to wxDateTime. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00085.html
+

@@ -91,7 +91,6 @@
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
-#include <wx/datetime.h>
 #include <wx/debug.h>                   // wxIsDebuggerRunning()
 #include <wx/docmdi.h>
 #include <wx/image.h>
@@ -1244,25 +1243,21 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
             case 004:
                 {
-                wxString const date_string(getopt_long.optarg);
-                wxDateTime dt;
-                wxString::const_iterator date_end;
-                if(  !dt.ParseFormat(date_string, "%Y%m%d", &date_end)
-                  || date_end != date_string.end()
-                  )
+                std::istringstream iss(getopt_long.optarg);
+                int ymd_as_int;
+                iss >> ymd_as_int;
+                if(!iss || !iss.eof())
                     {
                     warning() << "Invalid prospicience option value '"
-                              << date_string
+                              << getopt_long.optarg
                               << "' (must be in YYYYMMDD format)."
                               << std::flush
                               ;
                     }
                 else
                     {
-                    // wxDateTime JDN corresponds to the noon, not the
-                    // midnight, and so requires half a day adjustment.
                     global_settings::instance().set_prospicience_date
-                        (calendar_date(jdn_t(wxRound(dt.GetJDN() + 0.5)))
+                        (calendar_date(ymd_t(ymd_as_int))
                         );
                     }
                 }
