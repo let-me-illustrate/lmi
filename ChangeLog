@@ -35563,3 +35563,9 @@ Extract output_file_existence_checker into a separate header. See:
 Change output_file_existence_checker ctor to take fs::path. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
 
+20150123T0246Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_pdf_create.cpp
+Update PDF output tests to the revised specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00089.html
+
