@@ -31,6 +31,7 @@
 #include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
+#include "wx_test_output.hpp"
 #include "wx_utility.hpp"
 
 #include <wx/app.h>
@@ -425,7 +426,8 @@ LMI_WX_TEST_CASE(paste_census)
         );
 
     // Finally save the census with the pasted data for later inspection.
-    wxString const census_file_name = get_test_file_path_for("PasteCensus.cns");
+    std::string const census_file_name = get_test_file_path_for("PasteCensus.cns");
+    output_file_existence_checker output_cns(census_file_name);
 
     ui.Char('a', wxMOD_CONTROL);    // "File|Save as"
     wxTEST_DIALOG
@@ -433,7 +435,7 @@ LMI_WX_TEST_CASE(paste_census)
         ,wxExpectModal<wxFileDialog>(census_file_name)
         );
 
-    LMI_ASSERT(wxFileExists(census_file_name));
+    LMI_ASSERT(output_cns.exists());
 
     census.close();
 }
