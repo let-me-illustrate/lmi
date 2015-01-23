@@ -35605,3 +35605,13 @@ Fail if an unexpected modal dialog is about to be shown. See:
 Don't complain about unclosed documents during stack unwinding. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00097.html
 
+20150123T1613Z <gchicares@sbcglobal.net> [516]
+
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+  skin_variable_annuity.xrc
+Remove a bizarre zero-height workaround. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00099.html
+
