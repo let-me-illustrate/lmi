@@ -1,6 +1,6 @@
 // Main file for life insurance illustrations with wx interface.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -91,7 +91,6 @@
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
-#include <wx/datetime.h>
 #include <wx/debug.h>                   // wxIsDebuggerRunning()
 #include <wx/docmdi.h>
 #include <wx/image.h>
@@ -1201,7 +1200,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulÃ»k"},
         {"ash_naz"      ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
         {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
         {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
@@ -1244,25 +1243,21 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
             case 004:
                 {
-                wxString const date_string(getopt_long.optarg);
-                wxDateTime dt;
-                wxString::const_iterator date_end;
-                if(  !dt.ParseFormat(date_string, "%Y%m%d", &date_end)
-                  || date_end != date_string.end()
-                  )
+                std::istringstream iss(getopt_long.optarg);
+                int ymd_as_int;
+                iss >> ymd_as_int;
+                if(!iss || !iss.eof())
                     {
                     warning() << "Invalid prospicience option value '"
-                              << date_string
+                              << getopt_long.optarg
                               << "' (must be in YYYYMMDD format)."
                               << std::flush
                               ;
                     }
                 else
                     {
-                    // wxDateTime JDN corresponds to the noon, not the
-                    // midnight, and so requires half a day adjustment.
                     global_settings::instance().set_prospicience_date
-                        (calendar_date(jdn_t(wxRound(dt.GetJDN() + 0.5)))
+                        (calendar_date(ymd_t(ymd_as_int))
                         );
                     }
                 }

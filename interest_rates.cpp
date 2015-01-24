@@ -1,6 +1,6 @@
 // Interest rates.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -851,14 +851,14 @@ void InterestRates::DynamicMlySepAcctRate
 void InterestRates::Initialize7702Rates()
 {
 
-// ง7702 prescribes the interest basis for all ง7702 and ง7702A
+// ยง7702 prescribes the interest basis for all ยง7702 and ยง7702A
 // calculations as the interest rate actually guaranteed in the
 // contract, or a statutory rate if greater. The statutory rate is 4%
-// for GLP and 6% for GSP. It is 4% for all ง7702A calculations,
+// for GLP and 6% for GSP. It is 4% for all ยง7702A calculations,
 // except that the necessary premium for guideline contracts is
 // defined in terms of the guideline limit.
 
-// The ง7702 net rate is determined in two steps. First, the
+// The ยง7702 net rate is determined in two steps. First, the
 // guaranteed interest rate is determined from the contract, and the
 // statutory rate is used instead if it is greater. This operation is
 // performed separately for all periods with different guaranteed
@@ -872,15 +872,15 @@ void InterestRates::Initialize7702Rates()
 // guaranteed rate.
 
 // Even short-term guarantees at issue must be reflected in the GSP,
-// the CVAT NSP, and the ง7702A NSP, seven-pay premium, and DCV. They
-// may be ignored as de minimis in calculating the ง7702 GLP [DEFRA
+// the CVAT NSP, and the ยง7702A NSP, seven-pay premium, and DCV. They
+// may be ignored as de minimis in calculating the ยง7702 GLP [DEFRA
 // Blue Book, page 649], but only as long as they last no longer than
 // one year. Only guarantees that either last longer than one year or
 // are present on the issue date are taken into account: a guarantee
 // subsequently added for a future period lasting no longer than one
 // year is a dividend, not an adjustment event. Here, "issue" excludes
 // cases where the contract is merely deemed by statute to be reissued
-// [for example, by ง7702A(c)(3)(A)(i)].
+// [for example, by ยง7702A(c)(3)(A)(i)].
 
 // Second, any current asset based charges specified in the contract
 // are deducted if we wish. The interest rate remains what it is; the
@@ -888,19 +888,19 @@ void InterestRates::Initialize7702Rates()
 // merely a computational convenience that simplifies the formulas.
 // In fact, the full interest rate (never less than statutory) is
 // credited, and then asset based charges are subtracted from the
-// account value. Therefore, this adjustment affects only the ง7702
-// guideline premiums and the ง7702 DCV, because those quantities
+// account value. Therefore, this adjustment affects only the ยง7702
+// guideline premiums and the ยง7702 DCV, because those quantities
 // reflect expenses. It must not be taken into account when
-// calculating the ง7702 CVAT NSP or CVAT corridor factors, or the
-// ง7702A NSP or seven-pay premium, because those quantities do not
+// calculating the ยง7702 CVAT NSP or CVAT corridor factors, or the
+// ยง7702A NSP or seven-pay premium, because those quantities do not
 // reflect expenses.
 
 // Asset based charges can be deducted only if they are specified in
 // the contract itself: charges imposed by separate accounts cannot be
 // deducted unless they are specified in the life insurance contract
 // proper, since any charge not so specified is deemed to be zero
-// [ง7702(c)(3)(D)(i)]. They also must not exceed the charges
-// reasonably expected to be actually imposed [ง7702(c)(3)(B)(ii)].
+// [ยง7702(c)(3)(D)(i)]. They also must not exceed the charges
+// reasonably expected to be actually imposed [ยง7702(c)(3)(B)(ii)].
 // If the schedule page announces a charge of "up to 100 basis points"
 // and we actually charge 50 bp and expect to keep charging that, then
 // we can use 50 bp; but if we ever charge less than 50 bp, an
@@ -914,7 +914,7 @@ void InterestRates::Initialize7702Rates()
 // Special attention must be paid to the exact method the
 // administration system uses (e.g. beginning of period versus end of
 // period), to be sure that the resulting charge is what will actually
-// be imposed. A ง7702(f)(8) waiver granted in one actual case that
+// be imposed. A ยง7702(f)(8) waiver granted in one actual case that
 // was pennies over the limit cost tens of thousands of dollars in
 // filing and attorney's fees.
 
@@ -924,7 +924,7 @@ void InterestRates::Initialize7702Rates()
 // load in order to follow the precise contract mechanics, but that
 // would require a significant modification of Eckley's formulas,
 // which do not contemplate a load on AV. Instead, we net the account
-// value load against the ง7702 interest rate; as explained above,
+// value load against the ยง7702 interest rate; as explained above,
 // this is a mere computational convenience that does not change the
 // actual interest rate.
 
@@ -945,7 +945,7 @@ void InterestRates::Initialize7702Rates()
 
 // A higher rate guaranteed in a side letter must be reflected as
 // described above, as though it were written in the contract. For
-// products that guarantee a rate tied to an index, the ง7702 interest
+// products that guarantee a rate tied to an index, the ยง7702 interest
 // rates in the first guarantee period must be at least as high as the
 // rate determined by the index when the contract is issued. Such
 // guarantees must be taken into account even if they arise indirectly
@@ -957,7 +957,7 @@ void InterestRates::Initialize7702Rates()
 
 // For calculating mortality charges, most UL products discount the
 // NAAR for one month's interest at a rate specified in the contract.
-// ง7702 and ง7702A calculations must use the ง7702 rate instead
+// ยง7702 and ยง7702A calculations must use the ยง7702 rate instead
 // whenever that is higher than the contractual rate. This affects all
 // premium rates and also the CVAT DCV and corridor factors. Whenever
 // this rate is converted to a monthly equivalent, the result must be
@@ -971,7 +971,7 @@ void InterestRates::Initialize7702Rates()
 // credited rate, if not stated explicitly, is the fixed rate charged
 // on loans minus the guaranteed loan spread if any. If the contract
 // guarantees neither the loan credited rate nor the loan spread, then
-// a fixed loan rate has no ง7702 or ง7702A effect.
+// a fixed loan rate has no ยง7702 or ยง7702A effect.
 
 // There is a concern if a variable loan rate (VLR) is elected.
 // Section 3.D of the VLR model regulation provides that "the maximum
@@ -983,7 +983,7 @@ void InterestRates::Initialize7702Rates()
 // there is a short-term guarantee that must be reflected as explained
 // above if the rate actually credited on loans is too high. The
 // complications that ensue may be avoided by actually crediting a
-// loan rate no higher than ง7702 otherwise requires during the first
+// loan rate no higher than ยง7702 otherwise requires during the first
 // loan rate determination period, or simply by forbidding loans
 // during that period.
 

@@ -1,6 +1,6 @@
 // Pop-up input-sequence editor.
 //
-// Copyright (C) 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -1407,6 +1407,13 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
     editor.CentreOnParent();
 
     editor.ShowModal();
+
+    // If this editor is used inside wxDataViewCtrl, don't keep focus after
+    // showing the dialog but give it to the parent to ensure that the editor
+    // is closed by it. Notice that there is no need to check if we actually
+    // are inside wxDataViewCtrl before doing it as otherwise our parent (e.g.
+    // a wxPanel) will just give focus back to us and nothing really happens.
+    GetParent()->SetFocus();
 }
 
 IMPLEMENT_DYNAMIC_CLASS(InputSequenceEntryXmlHandler, wxXmlResourceHandler)

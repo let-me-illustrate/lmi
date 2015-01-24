@@ -1,6 +1,6 @@
 // Helper for creating new documents in unattended GUI tests.
 //
-// Copyright (C) 2014 Gregory W. Chicares.
+// Copyright (C) 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -33,6 +33,8 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
+#include <exception>
+
 /// Helper base class for classes testing creation of specific new documents.
 ///
 /// This class provides methods for closing the current document, optionally
@@ -55,15 +57,32 @@ class wx_test_new_document_base
 
     ~wx_test_new_document_base()
     {
-        // As we don't want to throw an exception from the dtor, all we can do
-        // is to complain to the user directly.
+        // Normally either close() or close_discard_changes() should be called,
+        // so complain about forgetting to do this if neither was. Except that
+        // we shouldn't do this if we're unwinding due to an exception from a
+        // test failure, as this is not a bug in the test code then.
         if(opened_)
             {
-            wxSafeShowMessage
-                ("Programming error"
-                ,"A document created during unattended test hasn't been closed, "
-                 "please report this."
-                );
+            if(std::uncaught_exception())
+                {
+                // Moreover, in case of exception, try to close the window to
+                // avoid showing message boxes asking the user if it should be
+                // saved: this is undesirable in an unattended test.
+                do_close();
+
+                wxTEST_DIALOG
+                    (wxYield()
+                    ,wxExpectModal<wxMessageDialog>(wxNO).Optional()
+                    );
+                }
+            else
+                {
+                wxSafeShowMessage
+                    ("Programming error"
+                    ,"A document created during unattended test hasn't been closed, "
+                     "please report this."
+                    );
+                }
             }
     }
 

@@ -1,6 +1,6 @@
 // Main file for automated testing of wx interface.
 //
-// Copyright (C) 2014 Gregory W. Chicares.
+// Copyright (C) 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -45,6 +45,7 @@
 #include <wx/msgdlg.h>
 #include <wx/scopeguard.h>
 #include <wx/stopwatch.h>
+#include <wx/testing.h>
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
 
@@ -519,15 +520,15 @@ void application_test::list_tests()
 {
     sort_tests();
 
-    std::cerr << "Available tests:\n";
+    std::cout << "Available tests:\n";
 
     typedef std::vector<test_descriptor>::const_iterator ctdi;
     for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
         {
-        std::cerr << '\t' << i->get_name() << '\n';
+        std::cout << '\t' << i->get_name() << '\n';
         }
 
-    std::cerr << tests_.size() << " test cases.\n";
+    std::cout << tests_.size() << " test cases.\n";
 }
 
 } // Unnamed namespace.
@@ -760,6 +761,13 @@ void SkeletonTest::RunTheTests()
             return;
             }
         }
+
+    // Any dialog shown during the tests should be accounted for and dismissed
+    // before it gets to this outer hook by the testing hook expecting it, so
+    // this hook should never be invoked and we install it to ensure that it
+    // prevents any unexpected modal dialogs from being shown if they do
+    // happen, this is important for the test to really run unattended.
+    wxTestingModalHook expect_no_dialogs;
 
     mainWin->SetFocus();
 

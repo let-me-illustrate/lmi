@@ -1,6 +1,6 @@
 // General conversion between types--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -440,7 +440,7 @@ int extra_tests1()
 ///   http://www.boost.org/libs/conversion/lexical_cast_test.cpp
 /// which bears the following copyright and permissions notice:
 /// [boost 'lexical_cast_test.cpp' notice begins]
-///  Copyright Terje Slettebø and Kevlin Henney, 2005.
+///  Copyright Terje SlettebÃ¸ and Kevlin Henney, 2005.
 ///
 ///  Distributed under the Boost
 ///  Software License, Version 1.0. (See accompanying file
@@ -457,7 +457,7 @@ int extra_tests1()
 ///  - reflect value_cast()'s treatment of char types
 /// and in the same or any later year shown above as described in
 /// 'ChangeLog'); any defect here should not reflect on Terje
-/// Slettebø's or Kevlin Henney's reputation.
+/// SlettebÃ¸'s or Kevlin Henney's reputation.
 ///
 /// Important note on char types.
 ///

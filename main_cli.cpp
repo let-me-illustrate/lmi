@@ -1,6 +1,6 @@
 // Life insurance illustrations: command-line interface.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -163,7 +163,7 @@ void process_command_line(int argc, char* argv[])
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulÃ»k"},
         {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
         {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
         {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
