@@ -1,6 +1,6 @@
 // Global settings.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -48,7 +48,7 @@
 /// ash_nazg_: 'One password to rule them all' given--enable everything
 /// 'mellon' does (by forcing the latter member's value), along with
 /// other features--some of which may be experimental or perilous.
-/// (LOTR: 'ash nazg durbatulûk'.)
+/// (LOTR: 'ash nazg durbatulÃ»k'.)
 ///
 /// pyx_: Enable experimental behaviors that vary from time to time.
 ///

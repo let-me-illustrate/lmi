@@ -1,6 +1,6 @@
 // Functions not in C++98 but available in a platform-dependent way.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -40,7 +40,7 @@
 // standard clearly does not reserve.]
 //
 // However, ISO 9945:2002 (POSIX) declares putenv() in <stdlib.h>. In
-// light of the present header's raison d'être, it is sensible to
+// light of the present header's raison d'Ãªtre, it is sensible to
 // suspend the operation of the __STRICT_ANSI__ mechanism, taking care
 // to restore it after including other headers here.
 //

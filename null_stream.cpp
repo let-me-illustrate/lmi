@@ -1,6 +1,6 @@
 // Stream and stream buffer that discard output like the null device.
 //
-// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -35,7 +35,7 @@
 
 /// Redirect output as though to a null device.
 ///
-/// This class is a derived work based on Dietmar Kühl's article
+/// This class is a derived work based on Dietmar KÃ¼hl's article
 ///   http://groups.google.com/groups?selm=82mbke$l5c$1@nnrp1.deja.com
 /// which bears no copyright notice, as is usual in usenet.
 ///

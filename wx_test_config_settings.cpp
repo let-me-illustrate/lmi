@@ -1,6 +1,6 @@
 // Validate configurable-settings file for binary distributions.
 //
-// Copyright (C) 2014 Gregory W. Chicares.
+// Copyright (C) 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -61,6 +61,14 @@
           <skin_filename>skin_reg_d.xrc</skin_filename>
           <default_input_filename>c:/fop-0.20.5/private_placement_default.ill</default_input_filename>
 
+          <skin_filename>skin_single_premium.xrc</skin_filename>
+          <default_input_filename>c:/fop-0.20.5/default.ill</default_input_filename>
+          [Something like "single_premium_default.ill" might be expected,
+          but "default.ill" really is wanted here for historical reasons.]
+
+          ['skin.xrc' and 'skin_variable_annuity.xrc' deliberately omitted
+          because those are not currently distributed.]
+
     The only change is that the xsl_fo_command is checked to contain the volume,
     i.e. is c:/fop-0.20.5/fop, and not just the path.
  */
@@ -97,6 +105,7 @@ LMI_WX_TEST_CASE(configurable_settings)
         || "skin_group_carveout.xrc" == skin
         || "skin_group_carveout2.xrc" == skin
         || "skin_reg_d.xrc" == skin
+        || "skin_single_premium.xrc" == skin
         ,"unknown skin " << skin
         );
     if ("skin_coli_boli.xrc" == skin)
@@ -114,6 +123,10 @@ LMI_WX_TEST_CASE(configurable_settings)
     if ("skin_reg_d.xrc" == skin)
         {
         LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/private_placement_default.ill");
+        }
+    if ("skin_single_premium.xrc" == skin)
+        {
+        LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/default.ill");
         }
 }
 

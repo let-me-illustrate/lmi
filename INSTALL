@@ -1,6 +1,6 @@
 // INSTALL for "Let me illustrate...".
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -85,9 +85,7 @@ You should see lmi's GUI. Try "File | New | Illustration", then press
 should see an illustration in your 'pdf' viewer. But if you see
   'java' is not recognized as an internal or external command,
   operable program or batch file
-then (for printing only) you need 'java'. You can get a version
-that's been tested with lmi here:
-  http://java.sun.com/products/archive/j2se/1.4.2_06/index.html
-Click "Download J2RE", then download and run this file:
-  j2re-1_4_2_06-windows-i586-p.exe
+then (for printing only) you need 'java'. You can install a version
+that's been tested with lmi by running this file:
+  http://download.java.net/jdk/jre-1_5_0-windows-i586.exe
 

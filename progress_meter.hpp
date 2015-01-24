@@ -1,6 +1,6 @@
 // Show progress on lengthy operations, optionally letting users cancel them.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -154,7 +154,7 @@
 /// this class isn't ideally suited.
 ///
 /// Virtual function progress_message() could be seen as needless: its
-/// raison d'être is only to be called by show_progress_message(),
+/// raison d'Ãªtre is only to be called by show_progress_message(),
 /// which is already virtual. The rationale for separating them is that
 /// two interfaces might use the same strings but display them by
 /// different means. Perhaps this is rococo.

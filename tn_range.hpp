@@ -1,6 +1,6 @@
 // Trammeled Numeric range type: class template declaration.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -109,7 +109,7 @@ class trammel_base
 
 /// Design notes for class template tn_range_base.
 ///
-/// This class's raison d'être is to permit its member functions to be
+/// This class's raison d'Ãªtre is to permit its member functions to be
 /// called across a shared-library boundary, and through a base-class
 /// pointer without knowing the template arguments of a concrete
 /// instance of derived class tn_range_base.

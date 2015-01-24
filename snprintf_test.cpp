@@ -1,6 +1,6 @@
 // Test snprintf() implementations against ISO/IEC 9899 7.19.6.5 .
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -79,7 +79,7 @@ int test_main(int, char*[])
 
     // See:
     //   http://www.nabble.com/forum/PrintPost.jtp?post=17172711
-    //     [2008-05-11T11:46Z from François-Xavier Coudert]
+    //     [2008-05-11T11:46Z from FranÃ§ois-Xavier Coudert]
     double g = 39.0;
     len = snprintf(buf,       0, "%9.0e", g);
     BOOST_TEST_EQUAL(9, len);

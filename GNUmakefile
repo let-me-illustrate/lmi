@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -368,8 +368,8 @@ check_concinnity: source_clean custom_tools
 # either in the last days of the old year or the first days of the
 # new, so they can't be derived dynamically from the current date.
 
-old_year := 2013
-new_year := 2014
+old_year := 2014
+new_year := 2015
 
 backup_directory := saved_$(old_year)
 
@@ -392,17 +392,17 @@ happy_new_year: source_clean
 	  done;
 	$(RM) --force BOY
 	@$(ECHO) "Check these potential issues:"
-	@$(GREP) '$(old_year)[, ]*$(old_year)' * || true
-	@$(GREP) '$(new_year)[, ]*$(old_year)' * || true
-	@$(GREP) '$(new_year)[, ]*$(new_year)' * || true
-	@[ -z '$(wildcard *.?pp)' ] || $(GREP) '$(old_year)' *.?pp \
+	$(GREP) --directories=skip '$(old_year)[, ]*$(old_year)' * || true
+	$(GREP) --directories=skip '$(new_year)[, ]*$(old_year)' * || true
+	$(GREP) --directories=skip '$(new_year)[, ]*$(new_year)' * || true
+	[ -z '$(wildcard *.?pp)' ] || $(GREP) '$(old_year)' *.?pp \
 	  | $(SED) \
 	    -e '/$(old_year)[, ]*$(new_year)/d' \
 	    -e'/[$$]Id: .* $(old_year)-.*[$$]/d' \
 	    -e'/http:\/\/lists.nongnu.org\/archive\/html\/lmi\/$(old_year)/d' \
 	    -e'/\(VERSION\|version\).*$(old_year)[0-9]\{4\}T[0-9]\{4\}Z/d' \
 	  || true
-	@$(GREP) $(unutterable) * \
+	$(GREP) --directories=skip $(unutterable) * \
 	  | $(SED) \
 	    -e '/$(unutterable).*$(new_year) Gregory W. Chicares/d' \
 	    -e '/$(unutterable).*$(new_year) Vadim Zeitlin/d' \
