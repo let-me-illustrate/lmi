@@ -43,6 +43,7 @@
 #include <wx/uiaction.h>
 
 #include <algorithm>
+#include <cstring>
 #include <set>
 #include <sstream>
 
