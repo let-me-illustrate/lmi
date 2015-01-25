@@ -35615,3 +35615,9 @@ Don't complain about unclosed documents during stack unwinding. See:
 Remove a bizarre zero-height workaround. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00099.html
 
+20150125T0053Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_calculation_summary.cpp
+  wx_test_validate_output.cpp
+Rectify test specifications.
+

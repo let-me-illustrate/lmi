@@ -1,4 +1,4 @@
-// Test calculation summary features.
+// Test calculation summary.
 //
 // Copyright (C) 2014, 2015 Gregory W. Chicares.
 //
@@ -300,10 +300,84 @@ void save_illustration_data(wxString const& prefix)
              paste the output for inspection, then
              Illustration | Copy full illustration data
              paste the output for inspection
+             [note--apparently this creates a file automatically]
 
     The output is pasted into 4 files called {New,Calc}Ill{Summary,Full}.txt in
     the current working directory.
+    [note--we'd rather write them to the gui-test directory; but, as
+    noted above, (D) already writes its own file...and, as noted below,
+    it may be better to remove (C) and (D) from this file altogether.]
  */
+
+// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
+// comment below changes the original specification, and does not
+// yet describe the present code. Desired changes:
+//  - Make sure default columns are used with '--distribution'.
+//  - Remove comment block (A) above: it's incorporated below.
+//  - Remove comment block (B) above: it's incorporated below, with
+//    only one column selected (twelve is overkill).
+//  - Code the additional tests specified below.
+//  - Don't bother reading 'configurable_settings' directly: it cannot
+//    be wrong if all columns on the screen are correct.
+// ERASABLE BLOCK COMMENT ENDS.
+
+// Deferred ideas:
+//
+// Remove comment blocks (C) and (D) above: spreadsheet output is
+// tested elsewhere.
+//
+// Someday, test supplemental-report column selections similarly.
+//
+// To test backward compatibility, modify 'configurable_settings'
+// directly, adding a field that was formerly removed, and setting
+// the version number to a version that offered that field.
+//
+// Columns whose names end with "Zero" are available iff inforce
+// general and separate account value are both nonzero. This could be
+// tested here; however, it would be a vastly better use of limited
+// time to generate the special report that uses them automatically
+// rather than manually, and then to expunge those columns from
+// 'mc_enum_types.?pp'.
+
+/// Test calculation summary.
+///
+/// Iff the '--distribution' option is specified, then:
+///   File | Preferences
+/// make sure "Use built-in calculation summary" is checked.
+///
+/// Display an illustration, to see calculation-summary effects:
+/// File | New | Illustration | OK
+///
+/// File | Preferences
+/// uncheck "Use built-in calculation summary"
+/// set all "Column" controls to "[none]"
+///   do this by simulating {Tab Home} repeatedly because that is
+///   much faster and is what a smart user does
+/// in "Column 2" (two, not zero), select "NewCashLoan"
+/// OK
+/// Verify that the columns shown in the open illustration are exactly
+///   Policy Year
+///   Annual Loan
+///
+/// File | Preferences
+/// Verify that "NewCashLoan" has moved from "Column 2" to "Column 0"
+/// check "Use built-in calculation summary"
+/// OK
+/// Verify that the columns shown in the open illustration are exactly
+///   Policy Year
+///   Net Outlay
+///   Curr Account Value
+///   Curr Net Cash Surr Value
+///   Curr EOY Death Benefit
+///
+/// File | Preferences
+/// uncheck "Use built-in calculation summary"
+/// Verify that "Column 0" is "NewCashLoan" and the rest are "[none]"
+/// OK
+/// Verify that the columns shown in the open illustration are exactly
+///   Policy Year
+///   Annual Loan
+
 LMI_WX_TEST_CASE(calculation_summary)
 {
     configurable_settings const& settings = configurable_settings::instance();
