@@ -84,67 +84,67 @@ endif
 
 # tests
 TESTS = \
-    test_account_value \
-    test_actuarial_table \
-    test_alert \
-    test_any_member \
-    test_assert_lmi \
-    test_authenticity \
-    test_calendar_date \
-    test_callback \
-    test_comma_punct \
-    test_commutation_functions \
-    test_configurable_settings \
-    test_contains \
-    test_crc32 \
-    test_expression_template_0 \
-    test_fenv_lmi \
-    test_file_command \
-    test_financial \
-    test_getopt \
-    test_global_settings \
-    test_gpt \
-    test_handle_exceptions \
-    test_ieee754 \
-    test_input_seq \
-    test_input \
-    test_irc7702a \
-    test_istream_to_string \
-    test_loads \
-    test_map_lookup \
-    test_materially_equal \
-    test_math_functors \
-    test_mc_enum \
-    test_miscellany \
-    test_mortality_rates \
-    test_mpatrol_patch \
-    test_name_value_pairs \
-    test_ncnnnpnn \
-    test_numeric_io \
-    test_obstruct_slicing \
-    test_path_utility \
-    test_premium_tax \
-    test_print_matrix \
-    test_product_file \
-    test_progress_meter \
-    test_regex \
-    test_round \
-    test_round_to \
-    test_rtti_lmi \
-    test_safely_dereference_as \
-    test_sandbox \
-    test_snprintf \
-    test_stratified_algorithms \
-    test_stream_cast \
-    test_system_command \
-    test_test_tools \
-    test_timer \
-    test_tn_range \
-    test_value_cast \
-    test_vector \
-    test_wx_new \
-    test_xml_serialize \
-    test_zero
+    account_value_test \
+    actuarial_table_test \
+    alert_test \
+    any_member_test \
+    assert_lmi_test \
+    authenticity_test \
+    calendar_date_test \
+    callback_test \
+    comma_punct_test \
+    commutation_functions_test \
+    configurable_settings_test \
+    contains_test \
+    crc32_test \
+    expression_template_0_test \
+    fenv_lmi_test \
+    file_command_test \
+    financial_test \
+    getopt_test \
+    global_settings_test \
+    gpt_test \
+    handle_exceptions_test \
+    ieee754_test \
+    input_seq_test \
+    input_test \
+    irc7702a_test \
+    istream_to_string_test \
+    loads_test \
+    map_lookup_test \
+    materially_equal_test \
+    math_functors_test \
+    mc_enum_test \
+    miscellany_test \
+    mortality_rates_test \
+    mpatrol_patch_test \
+    name_value_pairs_test \
+    ncnnnpnn_test \
+    numeric_io_test \
+    obstruct_slicing_test \
+    path_utility_test \
+    premium_tax_test \
+    print_matrix_test \
+    product_file_test \
+    progress_meter_test \
+    regex_test \
+    round_test \
+    round_to_test \
+    rtti_lmi_test \
+    safely_dereference_as_test \
+    sandbox_test \
+    snprintf_test \
+    stratified_algorithms_test \
+    stream_cast_test \
+    system_command_test \
+    test_tools_test \
+    timer_test \
+    tn_range_test \
+    value_cast_test \
+    vector_test \
+    wx_new_test \
+    xml_serialize_test \
+    zero_test
 
 check_PROGRAMS = $(TESTS)
 
@@ -515,39 +515,39 @@ common_test_objects = \
     getopt.cpp \
     license.cpp
 
-test_account_value_SOURCES = \
+account_value_test_SOURCES = \
   $(common_test_objects) \
   account_value_test.cpp
-test_account_value_CXXFLAGS = $(AM_CXXFLAGS)
+account_value_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_actuarial_table_SOURCES = \
+actuarial_table_test_SOURCES = \
   $(common_test_objects) \
   actuarial_table.cpp \
   actuarial_table_test.cpp \
   timer.cpp \
   xml_lmi.cpp
-test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
-test_actuarial_table_LDADD = \
+actuarial_table_test_CXXFLAGS = $(AM_CXXFLAGS)
+actuarial_table_test_LDADD = \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_alert_SOURCES = \
+alert_test_SOURCES = \
   $(common_test_objects) \
   alert_test.cpp
-test_alert_CXXFLAGS = $(AM_CXXFLAGS)
+alert_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_any_member_SOURCES = \
+any_member_test_SOURCES = \
   $(common_test_objects) \
   any_member_test.cpp \
   facets.cpp
-test_any_member_CXXFLAGS = $(AM_CXXFLAGS)
+any_member_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_assert_lmi_SOURCES = \
+assert_lmi_test_SOURCES = \
   $(common_test_objects) \
   assert_lmi_test.cpp
-test_assert_lmi_CXXFLAGS = $(AM_CXXFLAGS)
+assert_lmi_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_authenticity_SOURCES = \
+authenticity_test_SOURCES = \
   $(common_test_objects) \
   authenticity.cpp \
   authenticity_test.cpp \
@@ -559,38 +559,38 @@ test_authenticity_SOURCES = \
   path_utility.cpp \
   system_command.cpp \
   system_command_non_wx.cpp
-test_authenticity_CXXFLAGS = $(AM_CXXFLAGS)
-test_authenticity_LDADD = \
+authenticity_test_CXXFLAGS = $(AM_CXXFLAGS)
+authenticity_test_LDADD = \
   $(BOOST_LIBS)
 
-test_calendar_date_SOURCES = \
+calendar_date_test_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
   calendar_date_test.cpp \
   facets.cpp \
   null_stream.cpp \
   timer.cpp
-test_calendar_date_CXXFLAGS = $(AM_CXXFLAGS)
+calendar_date_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_callback_SOURCES = \
+callback_test_SOURCES = \
   $(common_test_objects) \
   callback_test.cpp
-test_callback_CXXFLAGS = $(AM_CXXFLAGS)
+callback_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_comma_punct_SOURCES = \
+comma_punct_test_SOURCES = \
   $(common_test_objects) \
   comma_punct_test.cpp
-test_comma_punct_CXXFLAGS = $(AM_CXXFLAGS)
+comma_punct_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_commutation_functions_SOURCES = \
+commutation_functions_test_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
   expm1.c \
   timer.cpp
-test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
+commutation_functions_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_configurable_settings_SOURCES = \
+configurable_settings_test_SOURCES = \
   $(common_test_objects) \
   configurable_settings.cpp \
   configurable_settings_test.cpp \
@@ -603,66 +603,66 @@ test_configurable_settings_SOURCES = \
   miscellany.cpp \
   path_utility.cpp \
   xml_lmi.cpp
-test_configurable_settings_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_configurable_settings_LDADD = \
+configurable_settings_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+configurable_settings_test_LDADD = \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_contains_SOURCES = \
+contains_test_SOURCES = \
   $(common_test_objects) \
   contains_test.cpp
-test_contains_CXXFLAGS = $(AM_CXXFLAGS)
+contains_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_crc32_SOURCES = \
+crc32_test_SOURCES = \
   $(common_test_objects) \
   crc32.cpp \
   crc32_test.cpp
-test_crc32_CXXFLAGS = $(AM_CXXFLAGS)
+crc32_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_expression_template_0_SOURCES = \
+expression_template_0_test_SOURCES = \
   $(common_test_objects) \
   expression_template_0_test.cpp \
   timer.cpp
-test_expression_template_0_CXXFLAGS = $(AM_CXXFLAGS)
+expression_template_0_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_fenv_lmi_SOURCES = \
+fenv_lmi_test_SOURCES = \
   $(common_test_objects) \
   fenv_guard.cpp \
   fenv_lmi_test.cpp
-test_fenv_lmi_CXXFLAGS = $(AM_CXXFLAGS)
+fenv_lmi_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_file_command_SOURCES = \
+file_command_test_SOURCES = \
   $(common_test_objects) \
   file_command.cpp \
   file_command_cli.cpp \
   file_command_test.cpp
-test_file_command_CXXFLAGS = $(AM_CXXFLAGS)
+file_command_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_financial_SOURCES = \
+financial_test_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
   financial_test.cpp \
   null_stream.cpp \
   stratified_algorithms.cpp \
   timer.cpp
-test_financial_CXXFLAGS = $(AM_CXXFLAGS)
+financial_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_getopt_SOURCES = \
+getopt_test_SOURCES = \
   $(common_test_objects) \
   getopt_test.cpp
-test_getopt_CXXFLAGS = $(AM_CXXFLAGS)
+getopt_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_global_settings_SOURCES = \
+global_settings_test_SOURCES = \
   $(common_test_objects) \
   global_settings.cpp \
   global_settings_test.cpp \
   miscellany.cpp \
   path_utility.cpp
-test_global_settings_CXXFLAGS = $(AM_CXXFLAGS)
-test_global_settings_LDADD = \
+global_settings_test_CXXFLAGS = $(AM_CXXFLAGS)
+global_settings_test_LDADD = \
   $(BOOST_LIBS)
 
-test_gpt_SOURCES = \
+gpt_test_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
   expm1.c \
@@ -670,25 +670,25 @@ test_gpt_SOURCES = \
   gpt_test.cpp \
   ihs_irc7702.cpp \
   timer.cpp
-test_gpt_CXXFLAGS = $(AM_CXXFLAGS)
+gpt_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_handle_exceptions_SOURCES = \
+handle_exceptions_test_SOURCES = \
   $(common_test_objects) \
   handle_exceptions_test.cpp
-test_handle_exceptions_CXXFLAGS = $(AM_CXXFLAGS)
+handle_exceptions_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_ieee754_SOURCES = \
+ieee754_test_SOURCES = \
   $(common_test_objects) \
   ieee754_test.cpp
-test_ieee754_CXXFLAGS = $(AM_CXXFLAGS)
+ieee754_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_input_seq_SOURCES = \
+input_seq_test_SOURCES = \
   $(common_test_objects) \
   input_seq_test.cpp \
   input_sequence.cpp
-test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
+input_seq_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_input_SOURCES = \
+input_test_SOURCES = \
   $(common_test_objects) \
   antediluvian_stubs.cpp \
   calendar_date.cpp \
@@ -728,12 +728,12 @@ test_input_SOURCES = \
   tn_range_types.cpp \
   xml_lmi.cpp \
   yare_input.cpp
-test_input_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_input_LDADD = \
+input_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+input_test_LDADD = \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_irc7702a_SOURCES = \
+irc7702a_test_SOURCES = \
   $(common_test_objects) \
   ihs_irc7702a.cpp \
   irc7702a_test.cpp \
@@ -741,44 +741,44 @@ test_irc7702a_SOURCES = \
   miscellany.cpp \
   stratified_algorithms.cpp \
   xml_lmi.cpp
-test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_irc7702a_LDADD = \
+irc7702a_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+irc7702a_test_LDADD = \
   liblmi.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_istream_to_string_SOURCES = \
+istream_to_string_test_SOURCES = \
   $(common_test_objects) \
   istream_to_string_test.cpp \
   timer.cpp
-test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
+istream_to_string_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_loads_SOURCES = \
+loads_test_SOURCES = \
   $(common_test_objects) \
   expm1.c \
   loads.cpp \
   loads_test.cpp \
   timer.cpp
-test_loads_CXXFLAGS = $(AM_CXXFLAGS)
+loads_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_map_lookup_SOURCES = \
+map_lookup_test_SOURCES = \
   $(common_test_objects) \
   map_lookup_test.cpp
-test_map_lookup_CXXFLAGS = $(AM_CXXFLAGS)
+map_lookup_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_materially_equal_SOURCES = \
+materially_equal_test_SOURCES = \
   $(common_test_objects) \
   materially_equal_test.cpp
-test_materially_equal_CXXFLAGS = $(AM_CXXFLAGS)
+materially_equal_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_math_functors_SOURCES = \
+math_functors_test_SOURCES = \
   $(common_test_objects) \
   expm1.c \
   math_functors_test.cpp \
   timer.cpp
-test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
+math_functors_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_mc_enum_SOURCES = \
+mc_enum_test_SOURCES = \
   $(common_test_objects) \
   datum_base.cpp \
   facets.cpp \
@@ -788,65 +788,65 @@ test_mc_enum_SOURCES = \
   mc_enum_test_aux.cpp \
   miscellany.cpp \
   path_utility.cpp
-test_mc_enum_CXXFLAGS = $(AM_CXXFLAGS)
-test_mc_enum_LDADD = \
+mc_enum_test_CXXFLAGS = $(AM_CXXFLAGS)
+mc_enum_test_LDADD = \
   $(BOOST_LIBS)
 
-test_miscellany_SOURCES = \
+miscellany_test_SOURCES = \
   $(common_test_objects) \
   miscellany.cpp \
   miscellany_test.cpp
-test_miscellany_CXXFLAGS = $(AM_CXXFLAGS)
+miscellany_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_mortality_rates_SOURCES = \
+mortality_rates_test_SOURCES = \
   $(common_test_objects) \
   expm1.c \
   ihs_mortal.cpp \
   mortality_rates_test.cpp
-test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
+mortality_rates_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_mpatrol_patch_SOURCES = \
+mpatrol_patch_test_SOURCES = \
   $(common_test_objects) \
   mpatrol_patch_test.cpp
-test_mpatrol_patch_CXXFLAGS = $(AM_CXXFLAGS)
+mpatrol_patch_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_name_value_pairs_SOURCES = \
+name_value_pairs_test_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
   name_value_pairs.cpp \
   name_value_pairs_test.cpp
-test_name_value_pairs_CXXFLAGS = $(AM_CXXFLAGS)
-test_name_value_pairs_LDADD = \
+name_value_pairs_test_CXXFLAGS = $(AM_CXXFLAGS)
+name_value_pairs_test_LDADD = \
   $(BOOST_LIBS)
 
-test_ncnnnpnn_SOURCES = \
+ncnnnpnn_test_SOURCES = \
   $(common_test_objects) \
   ncnnnpnn_test.cpp
-test_ncnnnpnn_CXXFLAGS = $(AM_CXXFLAGS)
+ncnnnpnn_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_numeric_io_SOURCES = \
+numeric_io_test_SOURCES = \
   $(common_test_objects) \
   numeric_io_test.cpp \
   timer.cpp
-test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
+numeric_io_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_obstruct_slicing_SOURCES = \
+obstruct_slicing_test_SOURCES = \
   $(common_test_objects) \
   obstruct_slicing_test.cpp \
   timer.cpp
-test_obstruct_slicing_CXXFLAGS = $(AM_CXXFLAGS)
+obstruct_slicing_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_path_utility_SOURCES = \
+path_utility_test_SOURCES = \
   $(common_test_objects) \
   global_settings.cpp \
   miscellany.cpp \
   path_utility.cpp \
   path_utility_test.cpp
-test_path_utility_CXXFLAGS = $(AM_CXXFLAGS)
-test_path_utility_LDADD = \
+path_utility_test_CXXFLAGS = $(AM_CXXFLAGS)
+path_utility_test_LDADD = \
   $(BOOST_LIBS)
 
-test_premium_tax_SOURCES = \
+premium_tax_test_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
   data_directory.cpp \
@@ -870,18 +870,18 @@ test_premium_tax_SOURCES = \
   product_data.cpp \
   stratified_charges.cpp \
   xml_lmi.cpp
-test_premium_tax_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_premium_tax_LDADD = \
+premium_tax_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+premium_tax_test_LDADD = \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_print_matrix_SOURCES = \
+print_matrix_test_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
   print_matrix_test.cpp
-test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
+print_matrix_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_product_file_SOURCES = \
+product_file_test_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
   data_directory.cpp \
@@ -909,130 +909,130 @@ test_product_file_SOURCES = \
   stratified_charges.cpp \
   timer.cpp \
   xml_lmi.cpp
-test_product_file_CXXFLAGS = $(AM_CXXFLAGS)
-test_product_file_LDADD = \
+product_file_test_CXXFLAGS = $(AM_CXXFLAGS)
+product_file_test_LDADD = \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
-test_progress_meter_SOURCES = \
+progress_meter_test_SOURCES = \
   $(common_test_objects) \
   null_stream.cpp \
   progress_meter.cpp \
   progress_meter_cli.cpp \
   progress_meter_test.cpp \
   timer.cpp
-test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
-test_progress_meter_LDADD = \
+progress_meter_test_CXXFLAGS = $(AM_CXXFLAGS)
+progress_meter_test_LDADD = \
   liblmi.la
 
-test_regex_SOURCES = \
+regex_test_SOURCES = \
   $(common_test_objects) \
   regex_test.cpp \
   timer.cpp
-test_regex_CXXFLAGS = $(AM_CXXFLAGS)
-test_regex_LDADD = \
+regex_test_CXXFLAGS = $(AM_CXXFLAGS)
+regex_test_LDADD = \
   $(BOOST_LIBS)
 
-test_round_SOURCES = \
+round_test_SOURCES = \
   $(common_test_objects) \
   round_test.cpp
-test_round_CXXFLAGS = $(AM_CXXFLAGS)
+round_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_round_to_SOURCES = \
+round_to_test_SOURCES = \
   $(common_test_objects) \
   round_to_test.cpp
-test_round_to_CXXFLAGS = $(AM_CXXFLAGS)
+round_to_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_rtti_lmi_SOURCES = \
+rtti_lmi_test_SOURCES = \
   $(common_test_objects) \
   rtti_lmi_test.cpp
-test_rtti_lmi_CXXFLAGS = $(AM_CXXFLAGS)
+rtti_lmi_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_safely_dereference_as_SOURCES = \
+safely_dereference_as_test_SOURCES = \
   $(common_test_objects) \
   safely_dereference_as_test.cpp
-test_safely_dereference_as_CXXFLAGS = $(AM_CXXFLAGS)
+safely_dereference_as_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_sandbox_SOURCES = \
+sandbox_test_SOURCES = \
   $(common_test_objects) \
   sandbox_test.cpp
-test_sandbox_CXXFLAGS = $(AM_CXXFLAGS)
+sandbox_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_snprintf_SOURCES = \
+snprintf_test_SOURCES = \
   $(common_test_objects) \
   snprintf_test.cpp
-test_snprintf_CXXFLAGS = $(AM_CXXFLAGS)
+snprintf_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_stratified_algorithms_SOURCES = \
+stratified_algorithms_test_SOURCES = \
   $(common_test_objects) \
   stratified_algorithms_test.cpp
-test_stratified_algorithms_CXXFLAGS = $(AM_CXXFLAGS)
+stratified_algorithms_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_stream_cast_SOURCES = \
+stream_cast_test_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
   stream_cast_test.cpp
-test_stream_cast_CXXFLAGS = $(AM_CXXFLAGS)
+stream_cast_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_system_command_SOURCES = \
+system_command_test_SOURCES = \
   $(common_test_objects) \
   system_command.cpp \
   system_command_non_wx.cpp \
   system_command_test.cpp
-test_system_command_CXXFLAGS = $(AM_CXXFLAGS)
+system_command_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_test_tools_SOURCES = \
+test_tools_test_SOURCES = \
   $(common_test_objects) \
   test_tools_test.cpp
-test_test_tools_CXXFLAGS = $(AM_CXXFLAGS)
+test_tools_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_timer_SOURCES = \
+timer_test_SOURCES = \
   $(common_test_objects) \
   timer.cpp \
   timer_test.cpp
-test_timer_CXXFLAGS = $(AM_CXXFLAGS)
+timer_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_tn_range_SOURCES = \
+tn_range_test_SOURCES = \
   $(common_test_objects) \
   datum_base.cpp \
   facets.cpp \
   tn_range_test.cpp \
   tn_range_test_aux.cpp
-test_tn_range_CXXFLAGS = $(AM_CXXFLAGS)
+tn_range_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_value_cast_SOURCES = \
+value_cast_test_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
   value_cast_test.cpp
-test_value_cast_CXXFLAGS = $(AM_CXXFLAGS)
+value_cast_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_vector_SOURCES = \
+vector_test_SOURCES = \
   $(common_test_objects) \
   timer.cpp \
   vector_test.cpp
-test_vector_CXXFLAGS = $(AM_CXXFLAGS)
+vector_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_wx_new_SOURCES = \
+wx_new_test_SOURCES = \
   $(common_test_objects) \
   wx_new_test.cpp
-test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
+wx_new_test_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_xml_serialize_SOURCES = \
+xml_serialize_test_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
   timer.cpp \
   xml_lmi.cpp \
   xml_serialize_test.cpp
-test_xml_serialize_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
-test_xml_serialize_LDADD = \
+xml_serialize_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
+xml_serialize_test_LDADD = \
   $(XMLWRAPP_LIBS)
 
-test_zero_SOURCES = \
+zero_test_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
   null_stream.cpp \
   zero_test.cpp
-test_zero_CXXFLAGS = $(AM_CXXFLAGS)
+zero_test_CXXFLAGS = $(AM_CXXFLAGS)
 
 # headers: we need to include them or they wouldn't appear in the distribution
 # this list should contain everything in `ls *.h *.hpp *.tpp *.xpp`
