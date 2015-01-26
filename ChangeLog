@@ -35621,3 +35621,13 @@ Remove a bizarre zero-height workaround. See:
   wx_test_validate_output.cpp
 Rectify test specifications.
 
+20150125T2320Z <zeitlin> [516]
+
+  wx_test_paste_census.cpp
+Add a missing header: std::strlen() requires <cstring>.
+
+20150126T0143Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_paste_census.cpp
+Add a missing header: std::runtime_error requires <stdexcept>.
+
