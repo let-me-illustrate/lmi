@@ -316,15 +316,14 @@ void save_illustration_data(wxString const& prefix)
 //  - Remove comment block (A) above: it's incorporated below.
 //  - Remove comment block (B) above: it's incorporated below, with
 //    only one column selected (twelve is overkill).
+//  - Remove comment blocks (C) and (D) above and their associated
+//    code: cf. 'wx_test_validate_output.cpp'.
 //  - Code the additional tests specified below.
 //  - Don't bother reading 'configurable_settings' directly: it cannot
 //    be wrong if all columns on the screen are correct.
 // ERASABLE BLOCK COMMENT ENDS.
 
 // Deferred ideas:
-//
-// Remove comment blocks (C) and (D) above: spreadsheet output is
-// tested elsewhere.
 //
 // Someday, test supplemental-report column selections similarly.
 //
@@ -343,7 +342,10 @@ void save_illustration_data(wxString const& prefix)
 ///
 /// Iff the '--distribution' option is specified, then:
 ///   File | Preferences
-/// make sure "Use built-in calculation summary" is checked.
+/// make sure that "Use built-in calculation summary" is checked, and
+/// that the saved selections (those that would become active if the
+/// checkbox were unchecked) exactly match the default selctions given
+/// by default_calculation_summary_columns().
 ///
 /// Display an illustration, to see calculation-summary effects:
 /// File | New | Illustration | OK

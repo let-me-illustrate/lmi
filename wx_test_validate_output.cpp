@@ -142,6 +142,21 @@ OMIT           file 'MecTesting.mec.tsv' exists
 /// Verify that this file was created:
 ///   values.tsv
 ///
+/// select the "John Brown" cell
+/// Census | Run cell
+/// Illustration | Copy full illustration data [Ctrl-D]
+/// Verify that this file was created:
+///   ABC.John_Brown.000000001.ill.tsv
+/// and that its contents have been placed on the clipboard.
+///
+/// [These two functions:
+///   IllustrationView::UponCopyFull()    [Ctrl-D]
+///   IllustrationView::UponCopySummary() [Ctrl-C]
+/// are very similar, the former being almost a superset of the
+/// latter. Testing both seems unnecessary; and it would be less
+/// convenient to test the latter because it does not create a file.
+/// The (tested) Ctrl-D option is much likelier to be used.]
+///
 /// Finally, delete all files created directly or indirectly above
 /// that happen not to have been deleted already.
 
