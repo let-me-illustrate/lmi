@@ -198,6 +198,7 @@ libskeleton_la_SOURCES = \
     tier_view_editor.cpp \
     transferor.cpp \
     view_ex.cpp \
+    wx_checks.cpp \
     wx_utility.cpp
 
 # main program executables
@@ -491,13 +492,7 @@ product_files_LDADD = \
     $(XMLWRAPP_LIBS)
 
 test_coding_rules_SOURCES = \
-  alert.cpp \
-  alert_cli.cpp \
-  fenv_lmi.cpp \
-  main_common.cpp \
-  main_common_non_wx.cpp \
   my_test_coding_rules.cpp \
-  sigfpe.cpp \
   test_coding_rules.cpp
 test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 test_coding_rules_LDADD = \
@@ -592,6 +587,7 @@ commutation_functions_test_CXXFLAGS = $(AM_CXXFLAGS)
 
 configurable_settings_test_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   configurable_settings.cpp \
   configurable_settings_test.cpp \
   data_directory.cpp \
@@ -601,6 +597,7 @@ configurable_settings_test_SOURCES = \
   mc_enum.cpp \
   mc_enum_types.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   path_utility.cpp \
   xml_lmi.cpp
 configurable_settings_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
@@ -654,9 +651,11 @@ getopt_test_CXXFLAGS = $(AM_CXXFLAGS)
 
 global_settings_test_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   global_settings.cpp \
   global_settings_test.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   path_utility.cpp
 global_settings_test_CXXFLAGS = $(AM_CXXFLAGS)
 global_settings_test_LDADD = \
@@ -780,6 +779,7 @@ math_functors_test_CXXFLAGS = $(AM_CXXFLAGS)
 
 mc_enum_test_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   datum_base.cpp \
   facets.cpp \
   global_settings.cpp \
@@ -787,6 +787,7 @@ mc_enum_test_SOURCES = \
   mc_enum_test.cpp \
   mc_enum_test_aux.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   path_utility.cpp
 mc_enum_test_CXXFLAGS = $(AM_CXXFLAGS)
 mc_enum_test_LDADD = \
@@ -838,8 +839,10 @@ obstruct_slicing_test_CXXFLAGS = $(AM_CXXFLAGS)
 
 path_utility_test_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   global_settings.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   path_utility.cpp \
   path_utility_test.cpp
 path_utility_test_CXXFLAGS = $(AM_CXXFLAGS)
