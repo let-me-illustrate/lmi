@@ -35631,3 +35631,9 @@ Add a missing header: std::strlen() requires <cstring>.
   wx_test_paste_census.cpp
 Add a missing header: std::runtime_error requires <stdexcept>.
 
+20150126T1656Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_calculation_summary.cpp
+  wx_test_validate_output.cpp
+Further rectify test specifications.
+
