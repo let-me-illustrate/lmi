@@ -649,7 +649,6 @@ test_financial_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_getopt_SOURCES = \
   $(common_test_objects) \
-  getopt.cpp \
   getopt_test.cpp
 test_getopt_CXXFLAGS = $(AM_CXXFLAGS)
 
