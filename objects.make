@@ -592,7 +592,6 @@ financial_test$(EXEEXT): \
 
 getopt_test$(EXEEXT): \
   $(common_test_objects) \
-  getopt.o \
   getopt_test.o \
 
 global_settings_test$(EXEEXT): \

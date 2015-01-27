@@ -35637,3 +35637,10 @@ Add a missing header: std::runtime_error requires <stdexcept>.
   wx_test_validate_output.cpp
 Further rectify test specifications.
 
+20150127T0019Z <gchicares@sbcglobal.net> [516]
+
+  Makefile.am
+  objects.make
+Remove duplicative object file from makefiles. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-01/msg00033.html
+
