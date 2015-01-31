@@ -325,6 +325,11 @@ LMI_WX_TEST_CASE(paste_census)
 
             return wxID_OK;
             }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "class defaults dialog";
+            }
     };
 
     // The menu command above should have opened the "Class defaults" dialog and
@@ -334,7 +339,8 @@ LMI_WX_TEST_CASE(paste_census)
     wxTEST_DIALOG
         (wxYield()
         ,change_gender_in_class_defaults_dialog()
-        ,wxExpectModal<wxMessageDialog>(wxYES)
+        ,wxExpectModal<wxMessageDialog>(wxYES).
+            Describe("message box asking whether to apply gender changes to all")
         );
 
     // Check that all columns, including the "Gender" one, are still shown.
@@ -403,6 +409,11 @@ LMI_WX_TEST_CASE(paste_census)
 
             return wxID_OK;
             }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "case defaults dialog";
+            }
     };
 
     // The menu command above should have opened the "Case defaults" dialog and
@@ -412,7 +423,8 @@ LMI_WX_TEST_CASE(paste_census)
     wxTEST_DIALOG
         (wxYield()
         ,change_class_in_case_defaults_dialog()
-        ,wxExpectModal<wxMessageDialog>(wxYES)
+        ,wxExpectModal<wxMessageDialog>(wxYES).
+            Describe("message box asking whether to apply class changes to all")
         );
 
     // Check that we still have the same cells but that now the underwriting
@@ -434,7 +446,8 @@ LMI_WX_TEST_CASE(paste_census)
     ui.Char('a', wxMOD_CONTROL);    // "File|Save as"
     wxTEST_DIALOG
         (wxYield()
-        ,wxExpectModal<wxFileDialog>(census_file_name)
+        ,wxExpectModal<wxFileDialog>(census_file_name).
+            Describe("census save file dialog")
         );
 
     LMI_ASSERT(output_cns.exists());

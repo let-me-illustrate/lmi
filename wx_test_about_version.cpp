@@ -232,6 +232,11 @@ LMI_WX_TEST_CASE(about_dialog_version)
 
                     return wxID_OK;
                     }
+
+                virtual wxString GetDefaultDescription() const
+                    {
+                    return "license dialog";
+                    }
             };
 
             wxUIActionSimulator z;
@@ -242,6 +247,11 @@ LMI_WX_TEST_CASE(about_dialog_version)
                 );
 
             return wxID_OK;
+            }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "about dialog";
             }
     };
 

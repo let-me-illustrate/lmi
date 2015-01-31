@@ -201,6 +201,11 @@ LMI_WX_TEST_CASE(validate_output_illustration)
 
             return wxID_OK;
             }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "illustration properties dialog";
+            }
     };
 
     // Create a new illustration with the special comment.
@@ -221,13 +226,20 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
     wxTEST_DIALOG
         (wxYield()
-        ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MonthlyTrace.ill"))
-        ,wxExpectModal<wxMessageDialog>(wxID_OK)          // Ignore warning.
-        ,wxExpectDismissableModal<MvcController>(wxID_OK) // Accept defaults.
+        ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MonthlyTrace.ill")).
+            Describe("illustration open file dialog")
+        ,wxExpectModal<wxMessageDialog>(wxID_OK).
+            Describe("warning message box after opening the illustration")
+        ,wxExpectDismissableModal<MvcController>(wxID_OK).
+            Describe("illustration parameters dialog")
         );
 
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
-    wxTEST_DIALOG(wxYield(), wxExpectModal<wxMessageDialog>(wxNO));
+    wxTEST_DIALOG
+        (wxYield()
+        ,wxExpectModal<wxMessageDialog>(wxNO).
+            Describe("message box confirming closing modified illustration")
+        );
 
     LMI_ASSERT(existing_trace.exists());
 }
@@ -256,7 +268,8 @@ LMI_WX_TEST_CASE(validate_output_mec)
 
     wxTEST_DIALOG
         (wxYield()
-        ,wxExpectDismissableModal<MvcController>(wxID_OK)
+        ,wxExpectDismissableModal<MvcController>(wxID_OK).
+            Describe("new MEC parameters dialog")
         );
 
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
@@ -270,8 +283,10 @@ LMI_WX_TEST_CASE(validate_output_mec)
     ui.Char('o', wxMOD_CONTROL);    // "File|Open"
     wxTEST_DIALOG
         (wxYield()
-         ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MecTesting.mec"))
-         ,wxExpectDismissableModal<MvcController>(wxID_OK) // Accept defaults.
+         ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MecTesting.mec")).
+            Describe("MEC open file dialog")
+         ,wxExpectDismissableModal<MvcController>(wxID_OK).
+            Describe("MEC parameters dialog")
         );
 
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
