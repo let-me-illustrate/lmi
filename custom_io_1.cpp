@@ -289,6 +289,7 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     // value, then write input in lmi's usual format.
     if("X" == AutoClose)
         {
+        z["Comments"] = "Automatically generated from custom input.";
         std::ofstream ofs("custom_io_1.ill", ios_out_trunc_binary());
         single_cell_document(z).write(ofs);
         }
