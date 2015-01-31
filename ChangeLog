@@ -35666,3 +35666,8 @@ Exempt automatically generated input files from private taboos.
 Improve GUI-test diagnostics. See:
   http://lists.nongnu.org/archive/html/lmi/2015-01/msg00027.html
 
+20150131T0124Z <gchicares@sbcglobal.net> [516]
+
+  authenticity_test.cpp
+Skip multiple-root test if multiple root not readily found.
+
