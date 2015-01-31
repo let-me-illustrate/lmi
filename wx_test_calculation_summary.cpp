@@ -150,6 +150,11 @@ void use_builtin_calculation_summary(bool b)
             return wxID_OK;
             }
 
+        virtual wxString GetDefaultDescription() const
+            {
+            return "preferences dialog";
+            }
+
       private:
         bool const use_builtin_summary_;
     };

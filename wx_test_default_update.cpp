@@ -83,6 +83,11 @@ LMI_WX_TEST_CASE(default_update)
 
             return wxID_OK;
             }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "defaults dialog";
+            }
     };
 
     wxTEST_DIALOG

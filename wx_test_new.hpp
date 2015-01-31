@@ -100,7 +100,10 @@ class wx_test_new_document_base
     {
         do_close();
 
-        wxTEST_DIALOG(wxYield(), wxExpectModal<wxMessageDialog>(wxNO));
+        wxTEST_DIALOG(wxYield()
+                     ,wxExpectModal<wxMessageDialog>(wxNO).
+                        Describe("message box confirming closing modified file")
+                     );
     }
 
   protected:
@@ -137,7 +140,9 @@ class wx_test_new_illustration
     // Default constructor creates an illustration with the default parameters.
     wx_test_new_illustration()
     {
-        do_new_illustration(wxExpectDismissableModal<MvcController>(wxID_OK));
+        do_new_illustration(wxExpectDismissableModal<MvcController>(wxID_OK).
+                                Describe("new illustration properties")
+                           );
     }
 
     // This constructor takes a class responsible for handling the illustration
