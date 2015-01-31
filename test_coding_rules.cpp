@@ -976,7 +976,10 @@ void enforce_taboos(file const& f)
         taboo(f, "WIN32", boost::regex::icase);
         }
 
-    if(!boost::regex_search(f.data(), boost::regex(my_taboo_indulgence())))
+    if
+        (  !boost::regex_search(f.data(), boost::regex(my_taboo_indulgence()))
+        && !contains(f.data(), "Automatically generated from custom input.")
+        )
         {
         // Unspeakable private taboos.
         std::map<std::string, bool> const z = my_taboos();
