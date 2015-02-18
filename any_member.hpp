@@ -266,7 +266,6 @@ class any_member final
     // any_entity required implementation.
     any_member& assign(std::string const&) override;
 
-    ClassType* object_;
     placeholder* content_;
 };
 
@@ -274,14 +273,12 @@ class any_member final
 
 template<typename ClassType>
 any_member<ClassType>::any_member()
-    :object_  {nullptr}
-    ,content_ {nullptr}
+    :content_ {nullptr}
 {}
 
 template<typename ClassType>
 any_member<ClassType>::any_member(any_member const& other)
     :any_entity {other}
-    ,object_    {other.object_}
     ,content_   {other.content_ ? other.content_->clone() : nullptr}
 {}
 
@@ -294,8 +291,7 @@ any_member<ClassType>::~any_member()
 template<typename ClassType>
 template<typename ValueType>
 any_member<ClassType>::any_member(ClassType* object, ValueType const& value)
-    :object_  {object}
-    ,content_ {new holder<ClassType,ValueType>(object, value)}
+    :content_ {new holder<ClassType,ValueType>(object, value)}
 {}
 
 template<typename ClassType>
@@ -368,9 +364,10 @@ ExactMemberType* any_member<ClassType>::exact_cast()
     typedef holder<ClassType,pmd_type> holder_type;
     LMI_ASSERT(content_);
 #if !defined LMI_MSC
-    pmd_type pmd = static_cast<holder_type*>(content_)->held_;
-    LMI_ASSERT(object_);
-    return &(object_->*pmd);
+    holder_type* const holder = static_cast<holder_type*>(content_);
+    pmd_type pmd = holder->held_;
+    LMI_ASSERT(holder->object_);
+    return &(holder->object_->*pmd);
 #else  // defined LMI_MSC
     return static_cast<ExactMemberType*>(content_->defraud());
 #endif // defined LMI_MSC
