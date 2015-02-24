@@ -108,7 +108,7 @@ std::ostream& operator<<(std::ostream& os, X const& x) {return os << x.str() << 
 class S
     :public MemberSymbolTable<S>
 {
-    friend class any_member_test;
+    friend struct any_member_test;
 
   public:
     S();
