@@ -568,6 +568,9 @@ class MemberSymbolTable
     bool equals(MemberSymbolTable<ClassType> const&) const;
     std::vector<std::string> const& member_names() const;
 
+    size_t get_member_index(std::string const&) const;
+    any_member<ClassType> const& get_member_by_index(size_t) const;
+
   protected:
     MemberSymbolTable();
 
@@ -636,17 +639,30 @@ void MemberSymbolTable<ClassType>::complain_that_no_such_member_is_ascribed
 }
 
 template<typename ClassType>
-any_member<ClassType>& MemberSymbolTable<ClassType>::operator[]
-    (std::string const& s
-    )
+size_t MemberSymbolTable<ClassType>::get_member_index(std::string const& s) const
 {
-    typedef std::vector<std::string>::iterator svi;
-    svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+    typedef std::vector<std::string>::const_iterator svci;
+    svci i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
     if(member_names_.end() == i || s != *i)
         {
         complain_that_no_such_member_is_ascribed(s);
         }
-    return member_values_[i - member_names_.begin()];
+    return i - member_names_.begin();
+}
+
+template<typename ClassType>
+any_member<ClassType> const&
+MemberSymbolTable<ClassType>::get_member_by_index(size_t n) const
+{
+    return member_values_[n];
+}
+
+template<typename ClassType>
+any_member<ClassType>& MemberSymbolTable<ClassType>::operator[]
+    (std::string const& s
+    )
+{
+    return member_values_[get_member_index(s)];
 }
 
 template<typename ClassType>

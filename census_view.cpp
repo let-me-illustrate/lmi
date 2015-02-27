@@ -975,9 +975,12 @@ bool CensusView::column_value_varies_across_cells
     const any_member<Input>& case_value = case_parms()[0][header];
 
     typedef std::vector<Input>::const_iterator ici;
-    for(ici j = cells.begin(); j != cells.end(); ++j)
+    ici j = cells.begin();
+    size_t const header_index = j->get_member_index(header);
+
+    for(; j != cells.end(); ++j)
         {
-        if(!((*j)[header] == case_value))
+        if(!(j->get_member_by_index(header_index) == case_value))
             {
             return true;
             }
