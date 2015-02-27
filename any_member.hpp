@@ -541,8 +541,7 @@ MemberType const* member_cast(any_member<ClassType> const& member)
 template<typename ClassType>
 class MemberSymbolTable
 {
-    typedef std::map<std::string, any_member<ClassType>> member_map_type;
-    typedef typename member_map_type::value_type member_pair_type;
+    using values_vector_type = std::vector<any_member<ClassType>>;
 
   public:
     virtual ~MemberSymbolTable();
@@ -567,7 +566,7 @@ class MemberSymbolTable
     [[noreturn]]
     void complain_that_no_such_member_is_ascribed(std::string const&) const;
 
-    member_map_type map_;
+    values_vector_type member_values_;
     std::vector<std::string> member_names_;
 };
 
@@ -604,12 +603,12 @@ any_member<ClassType>& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     )
 {
-    auto i = map_.find(s);
-    if(map_.end() == i)
+    auto i = std::find(member_names_.begin(), member_names_.end(), s);
+    if(member_names_.end() == i || s != *i)
         {
         complain_that_no_such_member_is_ascribed(s);
         }
-    return i->second;
+    return member_values_[i - member_names_.begin()];
 }
 
 template<typename ClassType>
@@ -617,12 +616,7 @@ any_member<ClassType> const& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     ) const
 {
-    auto const i = map_.find(s);
-    if(map_.end() == i)
-        {
-        complain_that_no_such_member_is_ascribed(s);
-        }
-    return i->second;
+    return (const_cast<MemberSymbolTable<ClassType>&>(*this))[s];
 }
 
 template<typename ClassType>
@@ -647,10 +641,15 @@ void MemberSymbolTable<ClassType>::ascribe
             >::value
         );
 
-    ClassType* class_object = static_cast<ClassType*>(this);
-    map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));
-    // TODO ?? This would appear to be O(N^2).
     auto i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+
+    ClassType* class_object = static_cast<ClassType*>(this);
+
+    auto const index = i - member_names_.begin();
+    member_values_.emplace(member_values_.begin() + index, class_object, p2m);
+
+    // Notice that insert() may invalidate the iterator, so it can only be done
+    // after using "i" for computing the index into member_values_ above.
     member_names_.insert(i, s);
 }
 
