@@ -556,8 +556,7 @@ template<typename ClassType>
 class MemberSymbolTable
     :private lmi::uncopyable<MemberSymbolTable<ClassType> >
 {
-    typedef std::map<std::string, any_member<ClassType> > member_map_type;
-    typedef typename member_map_type::value_type member_pair_type;
+    typedef std::vector<any_member<ClassType> > values_vector_type;
 
   public:
     virtual ~MemberSymbolTable();
@@ -581,12 +580,20 @@ class MemberSymbolTable
     template<typename ValueType, typename SameOrBaseClassType>
     void ascribe(std::string const& s, ValueType SameOrBaseClassType::* p2m)
         {
-        ClassType* class_object = static_cast<ClassType*>(this);
-        map_.insert
-            (member_pair_type(s, any_member<ClassType>(class_object, p2m))
-            );
         typedef std::vector<std::string>::iterator svi;
         svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+
+        ClassType* class_object = static_cast<ClassType*>(this);
+
+        member_values_.push_back(any_member<ClassType>(class_object, p2m));
+        typedef typename values_vector_type::size_type vvs_t;
+        vvs_t const first = i - member_names_.begin();
+        vvs_t const last = member_values_.size() - 1;
+        for(vvs_t n = last; n != first; --n)
+            {
+            swap(member_values_[n - 1], member_values_[n]);
+            }
+
         member_names_.insert(i, s);
         }
 #endif // defined __BORLANDC__
@@ -594,7 +601,7 @@ class MemberSymbolTable
   private:
     void complain_that_no_such_member_is_ascribed(std::string const&) const;
 
-    member_map_type map_;
+    values_vector_type member_values_;
     std::vector<std::string> member_names_;
 };
 
@@ -633,12 +640,13 @@ any_member<ClassType>& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     )
 {
-    typename member_map_type::iterator i = map_.find(s);
-    if(map_.end() == i)
+    typedef std::vector<std::string>::iterator svi;
+    svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+    if(member_names_.end() == i || s != *i)
         {
         complain_that_no_such_member_is_ascribed(s);
         }
-    return i->second;
+    return member_values_[i - member_names_.begin()];
 }
 
 template<typename ClassType>
@@ -646,12 +654,7 @@ any_member<ClassType> const& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     ) const
 {
-    typename member_map_type::const_iterator i = map_.find(s);
-    if(map_.end() == i)
-        {
-        complain_that_no_such_member_is_ascribed(s);
-        }
-    return i->second;
+    return (const_cast<MemberSymbolTable<ClassType>&>(*this))[s];
 }
 
 #if !defined __BORLANDC__
@@ -683,11 +686,25 @@ void MemberSymbolTable<ClassType>::ascribe
                 >::value
         ));
 
-    ClassType* class_object = static_cast<ClassType*>(this);
-    map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));
     typedef std::vector<std::string>::iterator svi;
-    // TODO ?? This would appear to be O(N^2).
     svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+
+    ClassType* class_object = static_cast<ClassType*>(this);
+
+    // Using the usual insert() method relies on vector elements being
+    // assignable in C++98, but this is not the case for any_member<>, so we
+    // append the element at the end and then put it into the right place.
+    member_values_.push_back(any_member<ClassType>(class_object, p2m));
+    typedef typename values_vector_type::size_type vvs_t;
+    vvs_t const first = i - member_names_.begin();
+    vvs_t const last = member_values_.size() - 1;
+    for(vvs_t n = last; n != first; --n)
+        {
+        swap(member_values_[n - 1], member_values_[n]);
+        }
+
+    // Notice that insert() may invalidate the iterator, so it can only be done
+    // after using "i" for computing the index into member_values_ above.
     member_names_.insert(i, s);
 }
 #endif // !defined __BORLANDC__
