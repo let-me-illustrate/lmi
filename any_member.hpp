@@ -403,6 +403,16 @@ any_member<ClassType>& any_member<ClassType>::assign(std::string const& s)
     return *this;
 }
 
+/// The standard implementation of swap() doesn't work for any_member<> as it
+/// doesn't allow swapping the members of different types, so this is more than
+/// optimization: providing this specialization is required for e.g. storing
+/// the objects of this class in standard containers.
+template <typename ClassType>
+void swap(any_member<ClassType>& left, any_member<ClassType>& right)
+{
+    left.swap(right);
+}
+
 /// Definition of class template reconstitutor.
 ///
 /// Class template reconstitutor matches pointer-to-member types.
