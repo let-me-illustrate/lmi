@@ -1075,8 +1075,24 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
 bool CensusView::column_value_varies_across_cells(std::string const& header) const
 {
     auto const z = case_parms()[0][header];
-    for(auto const& j : class_parms()) {if(z != j[header]) return true;}
-    for(auto const& j : cell_parms() ) {if(z != j[header]) return true;}
+
+    auto const class_header_index = class_parms().begin()->get_member_index(header);
+    for(auto const& j : class_parms())
+        {
+        if(z != j.get_member_by_index(class_header_index))
+            {
+            return true;
+            }
+        }
+
+    auto const cell_header_index = cell_parms().begin()->get_member_index(header);
+    for(auto const& j : cell_parms())
+        {
+        if(z != j.get_member_by_index(cell_header_index))
+            {
+            return true;
+            }
+        }
     return false;
 }
 
@@ -1273,41 +1289,50 @@ bool CensusView::update_visible_columns()
     // Check if we really need to update the columns, it takes a relatively
     // long time and is done directly in response to the user actions, so it
     // makes a lot of sense to avoid doing it completely as long as possible.
-    bool must_update_columns = false;
+    bool must_update_columns;
 
     auto const& all_header_names(case_parms()[0].member_names());
-    bool must_update_headers =
-           all_header_names.size() != all_headers_.size()
-        || !std::equal
-            (all_header_names.begin()
-            ,all_header_names.end()
-            ,all_headers_.begin()
-            ,[](auto const& name, auto const& header)
-                {
-                return name == header.name;
-                }
-            );
+    if(all_header_names.size() != current_headers_.size())
+        {
+        must_update_columns = true;
+        }
+    else
+        {
+        must_update_columns =
+            !std::equal
+                (all_header_names.begin()
+                ,all_header_names.end()
+                ,current_headers_.begin()
+                ,[](auto const& name, auto const& header)
+                    {
+                    return name == header.name;
+                    }
+                );
+        }
 
-    if(must_update_headers)
+    if(must_update_columns)
         {
         // The entire set of columns has changed, we have no choice but to
         // reexamine all of them to check which ones should be shown.
-        all_headers_.resize(all_header_names.size());
+        current_headers_.resize(all_header_names.size());
         for(int i = 0; i < lmi::ssize(all_header_names); ++i)
             {
-            auto& header = all_headers_[i];
+            auto& header = current_headers_[i];
             header.name = all_header_names[i];
-            header.show = false;
+            header.visibility = oe_hidden;
             }
-        must_update_columns = true;
         }
 
-    for(auto& header : all_headers_)
+    for(auto& header : current_headers_)
         {
-        bool const show = column_value_varies_across_cells(header.name);
-        if(show != header.show)
+        auto const visibility =
+            column_value_varies_across_cells(header.name)
+            ? oe_shown
+            : oe_hidden
+            ;
+        if(visibility != header.visibility)
             {
-            header.show = show;
+            header.visibility = visibility;
             must_update_columns = true;
             }
         }
@@ -1341,27 +1366,36 @@ bool CensusView::update_visible_columns()
     // Reason: although the case and class defaults are hidden, they're
     // still information--so if the user made them different from any cell
     // wrt some column, we respect that conscious decision.
-    int column = 1;
-    for(auto const& header : all_headers_)
+    int column = 0;
+    for(auto const& header : current_headers_)
         {
-        if(header.show)
-            {
-            any_member<Input> const& exemplar = list_model_->cell_at(0, column);
-            renderer_type_converter const& conv = renderer_type_converter::get(exemplar);
-            wxDataViewRenderer* renderer = conv.create_renderer(exemplar);
-            LMI_ASSERT(renderer);
-            list_window_->AppendColumn
-                (new(wx) wxDataViewColumn
-                    (insert_spaces_between_words(header.name)
-                    ,renderer
-                    ,column
-                    ,width
-                    ,wxALIGN_LEFT
-                    ,wxDATAVIEW_COL_RESIZABLE
-                    )
-                );
-            }
         ++column;
+        switch(header.visibility)
+            {
+            case oe_shown:
+                {
+                any_member<Input> const& exemplar = list_model_->cell_at(0, column);
+                renderer_type_converter const& conv = renderer_type_converter::get(exemplar);
+                wxDataViewRenderer* renderer = conv.create_renderer(exemplar);
+                LMI_ASSERT(renderer);
+                list_window_->AppendColumn
+                    (new(wx) wxDataViewColumn
+                        (insert_spaces_between_words(header.name)
+                        ,renderer
+                        ,column
+                        ,width
+                        ,wxALIGN_LEFT
+                        ,wxDATAVIEW_COL_RESIZABLE
+                        )
+                    );
+                }
+                break;
+            case oe_hidden:
+                {
+                ; // Do nothing.
+                }
+                break;
+            }
         }
 
     return true;

@@ -134,13 +134,13 @@ class CensusView final
     wxDataViewCtrl* list_window_;
     wxObjectDataPtr<CensusViewDataViewModel> list_model_;
 
-    struct header_cache
+    struct header_column
     {
-        std::string name;
-        bool        show;
+        std::string      name;
+        oenum_visibility visibility{oe_shown};
     };
 
-    std::vector<header_cache> all_headers_;
+    std::vector<header_column> current_headers_;
 
     DECLARE_DYNAMIC_CLASS(CensusView)
     DECLARE_EVENT_TABLE()
