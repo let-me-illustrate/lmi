@@ -190,6 +190,7 @@ void mete0()
     x = i_from_i_upper_12_over_12_naive<double>()(0.04);
     x = d_upper_12_from_i_naive        <double>()(0.04);
     x = net_i_from_gross_naive<double,365>()(0.04, 0.007, 0.003);
+    (void)x;
 }
 
 // This implementation uses production functors.
@@ -200,6 +201,7 @@ void mete1()
     x = i_from_i_upper_12_over_12<double>()(0.04);
     x = d_upper_12_from_i        <double>()(0.04);
     x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
+    (void)x;
 }
 
 void assay_speed()
