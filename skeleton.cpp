@@ -109,10 +109,6 @@
 #include <stdexcept>
 #include <string>
 
-#if defined __WXGTK__
-#   include <gtk/gtk.h>
-#endif
-
 // Where a builtin wxID_X identifier exists, use it as such, even if
 // it's used as the 'name=' attribute of an entity in an '.xrc' file.
 // For example, write 'wxID_SAVE' here, not 'XRCID("wxID_SAVE")'.
@@ -1055,25 +1051,6 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
     status() << "End test of floating-point environment." << std::flush;
 }
 
-namespace
-{
-/// Send a paste message to a window.
-///
-/// Design rationale--see:
-///   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00005.html
-
-void send_paste_message_to(wxWindow const& w)
-{
-#if defined __WXGTK__
-    g_signal_emit_by_name(w.m_focusWidget, "paste_clipboard");
-#elif defined __WXMSW__
-    ::SendMessage(reinterpret_cast<HWND>(w.GetHandle()), WM_PASTE, 0, 0);
-#else  // Unsupported platform.
-#   error Platform not yet supported. Consider contributing support.
-#endif // Unsupported platform.
-}
-} // Unnamed namespace.
-
 /// Test custom handler UponPaste().
 ///
 /// See:
@@ -1086,7 +1063,7 @@ void Skeleton::UponTestPasting(wxCommandEvent&)
 
     ClipboardEx::SetText("1\r\n2\r\n3\r\n");
     t->SetSelection(-1L, -1L);
-    send_paste_message_to(*t);
+    t->Paste();
     if("1;2;3" != t->GetValue())
         {
         warning() << "'1;2;3' != '" << t->GetValue() << "'" << LMI_FLUSH;
@@ -1094,7 +1071,7 @@ void Skeleton::UponTestPasting(wxCommandEvent&)
 
     ClipboardEx::SetText("X\tY\tZ\t");
     t->SetSelection(-1L, -1L);
-    send_paste_message_to(*t);
+    t->Paste();
     if("X;Y;Z" != t->GetValue())
         {
         warning() << "'X;Y;Z' != '" << t->GetValue() << "'" << LMI_FLUSH;
