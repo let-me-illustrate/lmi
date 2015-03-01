@@ -35671,3 +35671,14 @@ Improve GUI-test diagnostics. See:
   authenticity_test.cpp
 Skip multiple-root test if multiple root not readily found.
 
+20150301T1632Z <gchicares@sbcglobal.net> [516]
+
+  path_utility.cpp
+Correct a typo in documentation.
+
+20150301T1633Z <gchicares@sbcglobal.net> [516]
+
+  skeleton.cpp
+Remove platform-specific code that has become unnecessary. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00009.html
+
