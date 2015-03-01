@@ -29,6 +29,7 @@
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "mvc_controller.hpp"
+#include "path_utility.hpp"
 #include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
@@ -47,6 +48,241 @@ inline
 std::string const& tsv_ext()
 {
     return configurable_settings::instance().spreadsheet_file_extension();
+}
+
+// Return the suffix with the serial number appended to the file names.
+std::string serial_suffix(int n)
+{
+    return wxString::Format(".%09d", n).ToStdString();
+}
+
+// Return the suffix for monthly trace files: this includes the serial part
+// (with its leading period) and the spreadsheet extension.
+std::string monthly_trace_suffix(int n)
+{
+    return serial_suffix(n) + ".monthly_trace" + tsv_ext();
+}
+
+// Prepare the census for testing using the given corporation and insured names.
+void init_test_census
+        (std::string const& corp_name
+        ,std::string const& insured_name
+        )
+{
+    wxUIActionSimulator ui;
+
+    // Change the case defaults.
+    struct change_corp_in_case_defaults_dialog
+        :public wxExpectModalBase<MvcController>
+    {
+        change_corp_in_case_defaults_dialog(std::string const& corp_name)
+            :corp_name(corp_name)
+            {
+            }
+
+        virtual int OnInvoked(MvcController* dialog) const
+            {
+            dialog->Show();
+            wxYield();
+
+            wx_test_focus_controller_child(*dialog, "Comments");
+
+            wxUIActionSimulator ui;
+            ui.Text("idiosyncrasyZ");
+            wxYield();
+
+            wx_test_focus_controller_child(*dialog, "CorporationName");
+            ui.Text((corp_name + " Inc.").c_str());
+            wxYield();
+
+            return wxID_OK;
+            }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "case defaults dialog";
+            }
+
+        std::string const& corp_name;
+    };
+
+    ui.Char('e', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Edit case defaults"
+    wxTEST_DIALOG
+        (wxYield()
+        ,change_corp_in_case_defaults_dialog(corp_name)
+        ,wxExpectModal<wxMessageDialog>(wxYES).
+            Describe("message box asking whether to apply changes to all cells")
+        );
+
+    // Change the cell.
+    struct change_name_in_cell_dialog
+        :public wxExpectModalBase<MvcController>
+    {
+        change_name_in_cell_dialog(std::string const& insured_name)
+            :insured_name(insured_name)
+            {
+            }
+
+        virtual int OnInvoked(MvcController* dialog) const
+            {
+            dialog->Show();
+            wxYield();
+
+            wx_test_focus_controller_child(*dialog, "InsuredName");
+
+            wxUIActionSimulator ui;
+            ui.Text(insured_name.c_str());
+            wxYield();
+
+            return wxID_OK;
+            }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "census cell dialog";
+            }
+
+        std::string const& insured_name;
+    };
+
+    ui.Char('e', wxMOD_CONTROL); // "Census|Edit cell"
+    wxTEST_DIALOG
+        (wxYield()
+        ,change_name_in_cell_dialog(insured_name)
+        );
+
+    ui.Char('+', wxMOD_CONTROL); // "Census|Add cell"
+    wxYield();
+}
+
+// Helper function for several operations producing monthly trace outputs: runs
+// the specified function actually performing the operation in question and
+// checks that doing this did create the expected files.
+//
+// The "what" argument describes the operation and is only used for diagnostic
+// purposes if the test fails.
+void do_validate_monthly_trace
+        (std::string const& corp_name
+        ,std::string const& insured_name
+        ,void (*operation)()
+        ,char const* what
+        )
+{
+    std::string const cell_trace_file
+        (corp_name + "." + insured_name + monthly_trace_suffix(1)
+        );
+    output_file_existence_checker output_cell_trace(cell_trace_file);
+
+    std::string const census_trace_file
+        (corp_name + monthly_trace_suffix(2)
+        );
+
+    output_file_existence_checker output_census_trace(census_trace_file);
+
+    (*operation)();
+
+    LMI_ASSERT_WITH_MSG
+        (output_cell_trace.exists()
+        ,"file \"" << cell_trace_file << "\" after " << what
+        );
+    LMI_ASSERT_WITH_MSG
+        (output_census_trace.exists()
+        ,"file \"" << census_trace_file << "\" after " << what
+        );
+}
+
+void validate_run_case_output
+        (std::string const& corp_name
+        ,std::string const& insured_name
+        )
+{
+    // This struct is used only as a way to define a local perform() function
+    // and keep all the logic of this test self-contained.
+    struct run_case
+        {
+        static void perform()
+            {
+                wxUIActionSimulator ui;
+                ui.Char('r', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Run case"
+                wxYield();
+
+                // Close the illustration opened by "Run case".
+                ui.Char('l', wxMOD_CONTROL);    // "File|Close"
+                wxYield();
+            }
+        };
+
+    do_validate_monthly_trace
+        (corp_name
+        ,insured_name
+        ,run_case::perform
+        ,"run case"
+        );
+}
+
+void validate_print_case_output
+        (std::string const& corp_name
+        ,std::string const& insured_name
+        )
+{
+    std::string const census_file(corp_name + ".cns" + tsv_ext());
+    output_file_existence_checker output_census(census_file);
+
+    struct print_case
+        {
+        static void perform()
+            {
+                wxUIActionSimulator ui;
+                // "Census|Print case to spreadsheet"
+                ui.Char('h', wxMOD_CONTROL | wxMOD_SHIFT);
+                wxYield();
+            }
+        };
+
+    do_validate_monthly_trace
+        (corp_name
+        ,insured_name
+        ,print_case::perform
+        ,"print case"
+        );
+
+    LMI_ASSERT_WITH_MSG
+        (output_census.exists()
+        ,"file \"" << census_file << "\" after print roster"
+        );
+}
+
+void validate_print_roster_output
+        (std::string const& corp_name
+        ,std::string const& insured_name
+        )
+{
+    std::string const roster_file(corp_name + ".cns.roster" + tsv_ext());
+    output_file_existence_checker output_roster(roster_file);
+
+    struct print_roster
+        {
+        static void perform()
+            {
+                wxUIActionSimulator ui;
+
+                // "Census|Print roster to spreadsheet"
+                ui.Char('o', wxMOD_CONTROL | wxMOD_SHIFT);
+                wxYield();
+            }
+        };
+
+    do_validate_monthly_trace
+        (corp_name
+        ,insured_name
+        ,print_roster::perform
+        ,"print roster"
+        );
+
+    LMI_ASSERT_WITH_MSG
+        (output_roster.exists()
+        ,"file \"" << roster_file << "\" after print roster"
+        );
 }
 
 } // anonymous namespace
@@ -76,8 +312,6 @@ std::string const& tsv_ext()
 ///   OK
 /// Verify that this file was created:
 ///   unnamed.mec.tsv
-///
-/// THE TESTS BELOW ARE NOT IMPLEMENTED YET!
 ///
 /// File | New | Census
 /// Census | Edit case defaults
@@ -111,6 +345,8 @@ std::string const& tsv_ext()
 ///   ABC.000000002.monthly_trace.tsv
 //    ABC.cns.roster.tsv
 /// ...and delete all three now.
+///
+/// THE TESTS BELOW ARE NOT IMPLEMENTED YET!
 ///
 /// Census | Edit case defaults
 ///   Comments: replace contents with "idiosyncrasy_spreadsheet"
@@ -176,6 +412,49 @@ LMI_WX_TEST_CASE(validate_output_illustration)
 
     // And check that this resulted in the creation of the expected file.
     LMI_ASSERT(unnamed_trace.exists());
+}
+
+LMI_WX_TEST_CASE(validate_output_census)
+{
+    // Arbitrary names used for testing.
+    std::string const corp_name = "ABC";
+    std::string const insured_name = "John Brown";
+
+    // A variant of the insured name used to construct the file names.
+    //
+    // It's not really clear whether we should be using orthodox_filename()
+    // here or just hardcode its result corresponding to the insured_name
+    // value: the latter would have the advantage of catching any bugs in
+    // orthodox_filename() itself, but arguably we're not testing this function
+    // here and using it has the advantage of avoiding test breakages if this
+    // function behaviour is intentionally changed in the future.
+    std::string const insured_filename = orthodox_filename(insured_name);
+
+    // Create, initialize and save the test census.
+    wx_test_new_census census;
+
+    init_test_census(corp_name, insured_name);
+
+    std::string const
+        census_file_name = get_test_file_path_for(corp_name + ".cns");
+    output_file_existence_checker output_cns(census_file_name);
+
+    wxUIActionSimulator ui;
+    ui.Char('a', wxMOD_CONTROL); // "File|Save as"
+    wxTEST_DIALOG
+        (wxYield()
+        ,wxExpectModal<wxFileDialog>(census_file_name).
+            Describe("census save file dialog")
+        );
+
+    LMI_ASSERT(output_cns.exists());
+
+    // Check that the expected output files are created by different operations.
+    validate_run_case_output(corp_name, insured_filename);
+    validate_print_case_output(corp_name, insured_filename);
+    validate_print_roster_output(corp_name, insured_filename);
+
+    census.close();
 }
 
 /// Validate spreadsheet output for MEC testing.
