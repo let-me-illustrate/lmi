@@ -34,7 +34,10 @@
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 #include "wx_test_output.hpp"
+#include "wx_test_output_pdf.hpp"
+#include "wx_utility.hpp"
 
+#include <wx/ffile.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -82,6 +85,13 @@ struct enter_comments_in_case_defaults_dialog
         wx_test_focus_controller_child(*dialog, "Comments");
 
         wxUIActionSimulator ui;
+
+        // There could be an existing comment in this field, delete it first.
+        // This does assume MSW-like key bindings.
+        ui.Char(WXK_HOME);
+        ui.Char(WXK_END, wxMOD_SHIFT);
+        ui.Char(WXK_BACK);
+
         ui.Text(comments_.c_str());
         wxYield();
 
@@ -310,6 +320,84 @@ void validate_print_roster_output
         );
 }
 
+void validate_print_case_pdf_output
+        (std::string const& corp_name
+        ,std::string const& insured_name
+        )
+{
+    wxUIActionSimulator ui;
+
+    ui.Char('e', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Edit case defaults"
+    wxTEST_DIALOG
+        (wxYield()
+        ,enter_comments_in_case_defaults_dialog("idiosyncrasy_spreadsheet")
+        ,wxExpectModal<wxMessageDialog>(wxYES).
+            Describe("message box asking whether to apply changes to all cells")
+        );
+
+    ui.Char('s', wxMOD_CONTROL); // "File|Save"
+
+    fs::path values_file(configurable_settings::instance().print_directory());
+    values_file /= "values" + tsv_ext();
+
+    output_file_existence_checker output_values(values_file);
+
+    // We don't really care about these files existence, but we don't want them
+    // to be left over after the end of this test, so use the output existence
+    // checker helper to ensure that they are cleaned up.
+    output_pdf_existence_checker
+         composite_pdf(corp_name + ".composite" + serial_suffix(0))
+        ,first_cell_pdf(corp_name + "." + insured_name + serial_suffix(1))
+        ,second_cell_pdf(corp_name + serial_suffix(2))
+        ;
+
+    ui.Char('i', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Print case to PDF"
+    wxYield();
+
+    LMI_ASSERT_WITH_MSG
+        (output_values.exists()
+        ,"file \"" << values_file << "\" after print case to PDF"
+        );
+}
+
+void validate_run_cell_and_copy_output
+        (std::string const& corp_name
+        ,std::string const& insured_name
+        )
+{
+    wxUIActionSimulator ui;
+
+    ui.Char(WXK_HOME);           // Select the first cell.
+    ui.Char('r', wxMOD_CONTROL); // "Census|Run cell"
+    wxYield();
+
+    std::string const ill_data_file
+        (corp_name + "." + insured_name + serial_suffix(1) + ".ill" + tsv_ext()
+        );
+    output_file_existence_checker output_ill_data(ill_data_file);
+
+    ui.Char('d', wxMOD_CONTROL); // "Illustration|Copy full illustration data"
+    wxYield();
+
+    // Close the illustration window opened by running the cell in any case.
+    ui.Char('l', wxMOD_CONTROL); // "File|Close"
+    wxYield();
+
+    LMI_ASSERT_WITH_MSG
+        (output_ill_data.exists()
+        ,"file \"" << ill_data_file << "\" after copying illustration data"
+        );
+
+    // Also check that the contents of the file was placed on clipboard.
+    wxString contents;
+    LMI_ASSERT(wxFFile(ill_data_file).ReadAll(&contents));
+
+    LMI_ASSERT_EQUAL
+        (wxString(ClipboardEx::GetText())
+        ,contents
+        );
+}
+
 } // anonymous namespace
 
 // Consider renaming this file to 'wx_test_spreadsheet_output.cpp'
@@ -370,8 +458,6 @@ void validate_print_roster_output
 ///   ABC.000000002.monthly_trace.tsv
 //    ABC.cns.roster.tsv
 /// ...and delete all three now.
-///
-/// THE TESTS BELOW ARE NOT IMPLEMENTED YET!
 ///
 /// Census | Edit case defaults
 ///   Comments: replace contents with "idiosyncrasy_spreadsheet"
@@ -478,6 +564,9 @@ LMI_WX_TEST_CASE(validate_output_census)
     validate_run_case_output(corp_name, insured_filename);
     validate_print_case_output(corp_name, insured_filename);
     validate_print_roster_output(corp_name, insured_filename);
+
+    validate_print_case_pdf_output(corp_name, insured_filename);
+    validate_run_cell_and_copy_output(corp_name, insured_filename);
 
     census.close();
 }
