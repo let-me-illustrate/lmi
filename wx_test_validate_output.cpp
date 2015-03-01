@@ -63,6 +63,39 @@ std::string monthly_trace_suffix(int n)
     return serial_suffix(n) + ".monthly_trace" + tsv_ext();
 }
 
+// An expectation class expecting an MvcController dialog shown by the
+// "Census|Edit case defaults" menu item and filling in its "Comments" field
+// with the given string.
+struct enter_comments_in_case_defaults_dialog
+    :public wxExpectModalBase<MvcController>
+{
+    enter_comments_in_case_defaults_dialog(std::string const& comments)
+        :comments_(comments)
+        {
+        }
+
+    virtual int OnInvoked(MvcController* dialog) const
+        {
+        dialog->Show();
+        wxYield();
+
+        wx_test_focus_controller_child(*dialog, "Comments");
+
+        wxUIActionSimulator ui;
+        ui.Text(comments_.c_str());
+        wxYield();
+
+        return wxID_OK;
+        }
+
+    virtual wxString GetDefaultDescription() const
+        {
+        return "case defaults dialog";
+        }
+
+    std::string const comments_;
+};
+
 // Prepare the census for testing using the given corporation and insured names.
 void init_test_census
         (std::string const& corp_name
@@ -71,39 +104,31 @@ void init_test_census
 {
     wxUIActionSimulator ui;
 
-    // Change the case defaults.
+    // Enter the special comment as well as the corporation name into the "case
+    // defaults" dialog.
     struct change_corp_in_case_defaults_dialog
-        :public wxExpectModalBase<MvcController>
+        :public enter_comments_in_case_defaults_dialog
     {
         change_corp_in_case_defaults_dialog(std::string const& corp_name)
-            :corp_name(corp_name)
+            :enter_comments_in_case_defaults_dialog("idiosyncrasyZ")
+            ,corp_name_(corp_name)
             {
             }
 
         virtual int OnInvoked(MvcController* dialog) const
             {
-            dialog->Show();
-            wxYield();
-
-            wx_test_focus_controller_child(*dialog, "Comments");
-
-            wxUIActionSimulator ui;
-            ui.Text("idiosyncrasyZ");
-            wxYield();
+            enter_comments_in_case_defaults_dialog::OnInvoked(dialog);
 
             wx_test_focus_controller_child(*dialog, "CorporationName");
-            ui.Text((corp_name + " Inc.").c_str());
+
+            wxUIActionSimulator ui;
+            ui.Text((corp_name_ + " Inc.").c_str());
             wxYield();
 
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
-            {
-            return "case defaults dialog";
-            }
-
-        std::string const& corp_name;
+        std::string const corp_name_;
     };
 
     ui.Char('e', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Edit case defaults"
