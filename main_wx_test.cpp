@@ -27,6 +27,7 @@
 #endif
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "docmanager_ex.hpp"
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
@@ -37,6 +38,7 @@
 #include "skeleton.hpp"
 #include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_new.hpp"
 
 #include <wx/docview.h>
 #include <wx/fileconf.h>
@@ -575,6 +577,56 @@ void wx_base_test_case::skip_if_not_distribution()
         {
         throw test_skipped_exception("not running distribution tests");
         }
+}
+
+wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name)
+{
+    // First find the window anywhere inside the dialog.
+    wxWindow* const w = wxWindow::FindWindowByName(name, &dialog);
+    LMI_ASSERT_WITH_MSG(w, "window named \"" << name << "\" not found");
+
+    // Then find the book control containing it by walking up the window chain
+    // until we reach it.
+    for (wxWindow* maybe_page = w;;)
+        {
+        wxWindow* const maybe_book = maybe_page->GetParent();
+
+        // As we know that w is a descendant of the dialog, this check ensures
+        // that the loop terminates as sooner or later we must reach the dialog
+        // by walking up the parent chain.
+        LMI_ASSERT_WITH_MSG
+            (maybe_book != &dialog
+            ,"book control containing window \"" << name << "\" not found"
+            );
+
+        if (wxBookCtrlBase* const book = dynamic_cast<wxBookCtrlBase*>(maybe_book))
+            {
+            // We found the notebook, now we can use it to make the page
+            // containing the target window current.
+            size_t const num_pages = book->GetPageCount();
+            for (size_t n = 0; n < num_pages; n++)
+                {
+                if (book->GetPage(n) == maybe_page)
+                    {
+                    book->SetSelection(n);
+                    wxYield();
+
+                    break;
+                    }
+                }
+
+            break;
+            }
+
+        maybe_page = maybe_book;
+        }
+
+    // Finally set the focus to the target window and ensure all events
+    // generated because of this are processed.
+    w->SetFocus();
+    wxYield();
+
+    return w;
 }
 
 // Application to drive the tests

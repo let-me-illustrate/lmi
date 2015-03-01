@@ -141,25 +141,9 @@ LMI_WX_TEST_CASE(validate_output_illustration)
             dialog->Show();
             wxYield();
 
+            wx_test_focus_controller_child(*dialog, "Comments");
+
             wxUIActionSimulator ui;
-
-            // Go to the first page: as the dialog remembers its last opened
-            // page, ensure that we are always on the one we need.
-            ui.Char(WXK_HOME);
-            wxYield();
-
-            // It is difficult to focus the text entry that we're interested
-            // directly from keyboard, so cheat a little and focus it
-            // programmatically.
-            wxWindow* const comments = wxWindow::FindWindowByName
-                ("Comments"
-                ,dialog
-                );
-            LMI_ASSERT(comments);
-
-            comments->SetFocus();
-            wxYield();
-
             ui.Text("idiosyncrasyZ");
             wxYield();
 

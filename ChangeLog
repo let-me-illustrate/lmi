@@ -35688,3 +35688,12 @@ Remove platform-specific code that has become unnecessary. See:
 Remove old code to make way for new. See:
   http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
+20150301T1747Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_new.hpp
+  wx_test_paste_census.cpp
+  wx_test_validate_output.cpp
+Add a helper for finding an MVC window by name. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+

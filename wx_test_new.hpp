@@ -35,6 +35,15 @@
 
 #include <exception>
 
+/// Helper function for finding and focusing a control with the specified name
+/// inside MvcController (actually it could be any top level window containing
+/// a book control).
+///
+/// Returns the never null pointer to the window.
+///
+/// Throws if the control couldn't be found.
+wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name);
+
 /// Helper base class for classes testing creation of specific new documents.
 ///
 /// This class provides methods for closing the current document, optionally
