@@ -37,6 +37,20 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
+namespace
+{
+
+// Return the suffix for the spreadsheet files.
+//
+// This is just a shorter synonym for the existing function.
+inline
+std::string const& tsv_ext()
+{
+    return configurable_settings::instance().spreadsheet_file_extension();
+}
+
+} // anonymous namespace
+
 // Consider renaming this file to 'wx_test_spreadsheet_output.cpp'
 // e.g., because its purpose is to test *spreadsheet* output only.
 // To us at least, to "validate" a file suggests checking its
@@ -126,12 +140,10 @@
 
 LMI_WX_TEST_CASE(validate_output_illustration)
 {
-    std::string const&
-        ext = configurable_settings::instance().spreadsheet_file_extension();
-
     // Build the path existence of which we're going to check and ensure that
     // it doesn't exist before the start of the test.
-    output_file_existence_checker unnamed_trace("unnamed.monthly_trace" + ext);
+    output_file_existence_checker
+        unnamed_trace("unnamed.monthly_trace" + tsv_ext());
 
     struct enter_comment_in_illustration_dialog
         :public wxExpectModalBase<MvcController>
@@ -178,11 +190,8 @@ LMI_WX_TEST_CASE(validate_output_mec)
 {
     skip_if_not_supported("unnamed.mec");
 
-    std::string const&
-        ext = configurable_settings::instance().spreadsheet_file_extension();
-
     // Test creation of the output file when opening a new MEC testing document.
-    output_file_existence_checker unnamed_output("unnamed.mec" + ext);
+    output_file_existence_checker unnamed_output("unnamed.mec" + tsv_ext());
 
     wxUIActionSimulator ui;
     ui.Char('n', wxMOD_CONTROL);    // "File|New"
