@@ -35716,3 +35716,9 @@ Add tests to verify existence of spreadsheet output. See:
 Refactor for reuse. See:
   http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
+20150301T2330Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Refactor for reuse. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+
