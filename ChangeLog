@@ -35682,3 +35682,9 @@ Correct a typo in documentation.
 Remove platform-specific code that has become unnecessary. See:
   http://lists.nongnu.org/archive/html/lmi/2015-02/msg00009.html
 
+20150301T1729Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Remove old code to make way for new. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+

@@ -37,44 +37,6 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-/*
-    This implements the following item of the testing specification:
-
-        14. Validate existence and naming conventions of output for
-            named and unnamed files.
-
-          A. File | New | Illustration | enter 'idiosyncrasyZ' in
-             'Comments' | OK
-             Expected results:
-               file 'unnamed.monthly_trace.tsv' exists
-
-OMIT B: duplicates A above:
-OMIT      B. File | Open | 'MonthlyTrace.ill' | press 'OK' to
-OMIT          [dismiss message box] | press 'OK' to run illustration
-OMIT         Expected results:
-OMIT           file 'MonthlyTrace.monthly_trace.tsv' exists
-
-          C. File | New | MEC testing | OK
-             Expected results:
-               file 'unnamed.mec.tsv' exists
-
-OMIT D: duplicates C above:
-OMIT      D. File | Open | 'MecTesting.mec' | OK
-OMIT         Expected results:
-OMIT           file 'MecTesting.mec.tsv' exists
-
-    The currently configured spreadsheet file extension is used instead of the
-    hard-coded "tsv", otherwise the tests are implemented exactly as specified.
- */
-
-// ERASE THIS BLOCK COMMENT WHEN IMPLEMENTATION COMPLETE. The block
-// comment below changes the original specification, and does not
-// yet describe the present code. Desired changes:
-//  - Remove code corresponding to B and D above.
-//  - Then remove the entire /*...*/ comment block above (its
-//    remaining contents are incorporated in the first two
-//    paragraphs below).
-//  - Code the other tests specified below.
 // Consider renaming this file to 'wx_test_spreadsheet_output.cpp'
 // e.g., because its purpose is to test *spreadsheet* output only.
 // To us at least, to "validate" a file suggests checking its
@@ -100,6 +62,8 @@ OMIT           file 'MecTesting.mec.tsv' exists
 ///   OK
 /// Verify that this file was created:
 ///   unnamed.mec.tsv
+///
+/// THE TESTS BELOW ARE NOT IMPLEMENTED YET!
 ///
 /// File | New | Census
 /// Census | Edit case defaults
@@ -216,32 +180,6 @@ LMI_WX_TEST_CASE(validate_output_illustration)
 
     // And check that this resulted in the creation of the expected file.
     LMI_ASSERT(unnamed_trace.exists());
-
-    // Open an existing illustration already containing the same comment.
-    wxUIActionSimulator ui;
-
-    output_file_existence_checker
-        existing_trace("MonthlyTrace.monthly_trace" + ext);
-
-    ui.Char('o', wxMOD_CONTROL);    // "File|Open"
-    wxTEST_DIALOG
-        (wxYield()
-        ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MonthlyTrace.ill")).
-            Describe("illustration open file dialog")
-        ,wxExpectModal<wxMessageDialog>(wxID_OK).
-            Describe("warning message box after opening the illustration")
-        ,wxExpectDismissableModal<MvcController>(wxID_OK).
-            Describe("illustration parameters dialog")
-        );
-
-    ui.Char('l', wxMOD_CONTROL);    // "File|Close"
-    wxTEST_DIALOG
-        (wxYield()
-        ,wxExpectModal<wxMessageDialog>(wxNO).
-            Describe("message box confirming closing modified illustration")
-        );
-
-    LMI_ASSERT(existing_trace.exists());
 }
 
 /// Validate spreadsheet output for MEC testing.
@@ -276,21 +214,4 @@ LMI_WX_TEST_CASE(validate_output_mec)
     wxYield();
 
     LMI_ASSERT(unnamed_output.exists());
-
-    // And when opening an existing one.
-    output_file_existence_checker existing_output("MecTesting.mec" + ext);
-
-    ui.Char('o', wxMOD_CONTROL);    // "File|Open"
-    wxTEST_DIALOG
-        (wxYield()
-         ,wxExpectModal<wxFileDialog>(get_test_file_path_for("MecTesting.mec")).
-            Describe("MEC open file dialog")
-         ,wxExpectDismissableModal<MvcController>(wxID_OK).
-            Describe("MEC parameters dialog")
-        );
-
-    ui.Char('l', wxMOD_CONTROL);    // "File|Close"
-    wxYield();
-
-    LMI_ASSERT(existing_output.exists());
 }
