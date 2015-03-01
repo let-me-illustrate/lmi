@@ -586,6 +586,11 @@ LMI_WX_TEST_CASE(validate_output_mec)
     // Test creation of the output file when opening a new MEC testing document.
     output_file_existence_checker unnamed_output("unnamed.mec" + tsv_ext());
 
+    // We don't really care about this file existence, but it is created as a
+    // side effect of running this test and we want to ensure it isn't left
+    // over and just creating this object satisfies this requirement.
+    output_file_existence_checker unnamed_xml("unnamed.mec.xml");
+
     wxUIActionSimulator ui;
     ui.Char('n', wxMOD_CONTROL);    // "File|New"
     ui.Char('m');                   // "MEC testing"
