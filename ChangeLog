@@ -35734,3 +35734,9 @@ Add remaining census-output tests. See:
 Clean up a leftover output file. See:
   http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
 
+20150306T1754Z <gchicares@sbcglobal.net> [516]
+
+  install_wx.make
+Don't build wx components that lmi doesn't use. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00006.html
+
