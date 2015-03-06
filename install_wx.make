@@ -80,7 +80,13 @@ config_options = \
   --disable-compat24 \
   --disable-fswatcher \
   --disable-gif \
+  --disable-aui \
+  --disable-mediactrl \
+  --disable-propgrid \
+  --disable-ribbon \
+  --disable-richtext \
   --disable-stc \
+  --disable-webview \
   --disable-threads \
   --enable-monolithic \
   --enable-shared \
@@ -90,6 +96,7 @@ config_options = \
   --without-libjpeg \
   --without-libtiff \
   --without-regex \
+  --without-subdirs \
        AR='$(mingw_bin_dir)/ar' \
        AS='$(mingw_bin_dir)/as' \
        CC='$(mingw_bin_dir)/gcc $(ggc_flags)' \
