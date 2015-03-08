@@ -35767,3 +35767,9 @@ Run only with '--distribution' flag. See:
 Implement rectified test specification. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00009.html
 
+20150308T2306Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_calculation_summary.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00017.html
+
