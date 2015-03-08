@@ -35749,3 +35749,9 @@ Don't build wx components that lmi doesn't use. See:
 Work around a MinGW defect more tidily. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00036.html
 
+20150308T1908Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_update.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
+
