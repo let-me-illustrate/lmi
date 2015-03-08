@@ -35755,3 +35755,9 @@ Work around a MinGW defect more tidily. See:
 Implement rectified test specification. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
 
+20150308T1918Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_update.cpp
+Run only with '--distribution' flag. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
+
