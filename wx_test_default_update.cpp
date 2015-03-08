@@ -43,6 +43,8 @@
 
 /// Make sure the default input file can be opened, modified, and saved.
 ///
+/// Run this test only if the '--distribution' option is given.
+///
 /// Load the default input file, using its special command.
 ///
 /// Change its "DateOfBirth" option. This particular option is used because it
@@ -55,6 +57,8 @@
 
 LMI_WX_TEST_CASE(default_update)
 {
+    skip_if_not_distribution();
+
     wxUIActionSimulator ui;
 
     ui.Char('t', wxMOD_CONTROL); // "File|Default"
