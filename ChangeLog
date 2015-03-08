@@ -35761,3 +35761,9 @@ Implement rectified test specification. See:
 Run only with '--distribution' flag. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
 
+20150308T2301Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_input_sequences.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00009.html
+
