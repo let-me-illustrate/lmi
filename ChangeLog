@@ -35740,3 +35740,12 @@ Clean up a leftover output file. See:
 Don't build wx components that lmi doesn't use. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00006.html
 
+20150308T1823Z <gchicares@sbcglobal.net> [516]
+
+  boost_1_33_1.patch [new file]
+  install_miscellanea.make
+  objects.make
+  workhorse.make
+Work around a MinGW defect more tidily. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00036.html
+

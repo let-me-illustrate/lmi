@@ -837,7 +837,6 @@ progress_meter_test$(EXEEXT): \
   progress_meter_test.o \
   timer.o \
 
-regex_test$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 regex_test$(EXEEXT): \
   $(boost_regex_objects) \
   $(common_test_objects) \
@@ -958,7 +957,6 @@ ihs_crc_comp$(EXEEXT): \
 
 test_coding_rules_test := $(src_dir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
-test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 test_coding_rules$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(boost_regex_objects) \
