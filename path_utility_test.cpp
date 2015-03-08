@@ -169,6 +169,10 @@ void test_unique_filepath_with_normal_filenames()
     write_dummy_file(path1);
     BOOST_TEST_EQUAL(0, access(path1.string().c_str(), R_OK));
 
+    // MSW is the only supported platform under which files can't be deleted
+    // while they are still used, so the tests below only make sense for it and
+    // would be useless and wrong (i.e. would fail) on a POSIX system.
+#ifdef LMI_MSW
     // Open a file for writing, and leave it open, preventing it from
     // being erased and therefore forcing unique_filepath() to use a
     // different name. This behavior isn't guaranteed on toy OS's.
@@ -185,9 +189,11 @@ void test_unique_filepath_with_normal_filenames()
 
     keep_open.close();
 
-    BOOST_TEST(0 == std::remove(p));
-    BOOST_TEST(0 == std::remove(q));
-    BOOST_TEST(0 == std::remove(path2.string().c_str()));
+    BOOST_TEST_EQUAL(0, std::remove(path2.string().c_str()));
+#endif
+
+    BOOST_TEST_EQUAL(0, std::remove(p));
+    BOOST_TEST_EQUAL(0, std::remove(q));
 }
 
 void test_unique_filepath_with_ludicrous_filenames()
