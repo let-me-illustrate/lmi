@@ -1183,6 +1183,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
         {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
         {"mello"        ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
         {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
+        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
         {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
         {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
         {"prospicience" ,REQD_ARG ,0 ,004 ,0 ,"validation date"},
@@ -1190,6 +1191,8 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
       };
 
     bool show_help        = false;
+
+    std::vector<std::string> input_files;
 
     int option_index = 0;
     GetOpt getopt_long
@@ -1245,6 +1248,13 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
                 global_settings::instance().set_data_directory
                     (getopt_long.optarg
                     );
+                }
+                break;
+
+            case 'f':
+                {
+                LMI_ASSERT(NULL != getopt_long.optarg);
+                input_files.push_back(getopt_long.optarg);
                 }
                 break;
 
@@ -1312,7 +1322,32 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
         return false;
         }
 
+    if (!input_files.empty())
+        {
+        // Can't open files until main window is initialized.
+        CallAfter(&Skeleton::OpenCommandLineFiles, input_files);
+        }
+
     return true;
+}
+
+void Skeleton::OpenCommandLineFiles(std::vector<std::string> const& files)
+{
+    LMI_ASSERT(doc_manager_);
+
+    typedef std::vector<std::string>::const_iterator vsci;
+    for(vsci i = files.begin(); i != files.end(); ++i)
+        {
+        if(!doc_manager_->CreateDocument(*i, wxDOC_SILENT))
+            {
+            warning()
+                << "Document '"
+                << *i
+                << "' specified on command line couldn't be opened."
+                << LMI_FLUSH
+                ;
+            }
+        }
 }
 
 void Skeleton::UpdateViews()

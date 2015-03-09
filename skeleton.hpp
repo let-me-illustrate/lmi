@@ -41,6 +41,9 @@
 #include <wx/app.h>
 #include <wx/timer.h>
 
+#include <string>
+#include <vector>
+
 class DocManagerEx;
 class ViewEx;
 
@@ -129,6 +132,7 @@ class Skeleton
     virtual void OnUnhandledException ();
 
     bool ProcessCommandLine(int argc, char* argv[]);
+    void OpenCommandLineFiles(std::vector<std::string> const& files);
     void UpdateViews();
 
     wxConfigBase*         config_;

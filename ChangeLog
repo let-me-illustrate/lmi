@@ -35773,3 +35773,10 @@ Implement rectified test specification. See:
 Implement rectified test specification. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00017.html
 
+20150309T2300Z <gchicares@sbcglobal.net> [516]
+
+  skeleton.cpp
+  skeleton.hpp
+Accept input files as command-line arguments. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00022.html
+
