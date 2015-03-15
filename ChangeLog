@@ -35780,3 +35780,11 @@ Implement rectified test specification. See:
 Accept input files as command-line arguments. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00022.html
 
+20150315T1737Z <gchicares@sbcglobal.net> [516]
+
+  cell_07.rnc                   [new file]
+  multiple_cell_document_01.rnc [new file]
+  single_cell_document_01.rnc   [new file]
+  types_07.rnc                  [new file]
+Preserve obsolescent schemata under new versioned names.
+
