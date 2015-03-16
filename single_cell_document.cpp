@@ -74,10 +74,11 @@ single_cell_document::~single_cell_document()
 ///
 /// version 0: [prior to the lmi epoch]
 /// version 1: 20130428T1828Z
+/// version 2: 20150316T0409Z
 
 int single_cell_document::class_version() const
 {
-    return 1;
+    return 2;
 }
 
 //============================================================================

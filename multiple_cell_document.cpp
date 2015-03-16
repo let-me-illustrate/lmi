@@ -84,10 +84,11 @@ void multiple_cell_document::assert_vector_sizes_are_sane() const
 ///
 /// version 0: [prior to the lmi epoch]
 /// version 1: 20120220T0158Z
+/// version 2: 20150316T0409Z
 
 int multiple_cell_document::class_version() const
 {
-    return 1;
+    return 2;
 }
 
 //============================================================================
