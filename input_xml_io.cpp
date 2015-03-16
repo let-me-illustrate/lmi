@@ -77,6 +77,7 @@ std::string full_name
 /// version 5: 20090526T1331Z
 /// version 6: 20100719T1349Z
 /// version 7: 20120808T2130Z
+/// version 8: 20150316T0422Z
 ///
 /// Important note concerning version 3. On or about 20090311, some
 /// end users were given an off-cycle release that should have used
@@ -85,7 +86,7 @@ std::string full_name
 
 int Input::class_version() const
 {
-    return 7;
+    return 8;
 }
 
 std::string const& Input::xml_root_name() const
