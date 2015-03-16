@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<multiple_cell_document version="1" data_source="1">
+<multiple_cell_document version="2" data_source="1">
   <case_default>
-    <cell version="7">
+    <cell version="8">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
       <Address/>
       <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -74,6 +74,7 @@
       <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
       <InforceContractMonth>0</InforceContractMonth>
       <InforceContractYear>0</InforceContractYear>
+      <InforceCorporationStake>0</InforceCorporationStake>
       <InforceCumulativeGlp>0</InforceCumulativeGlp>
       <InforceCumulativeGptPremiumsPaid>0</InforceCumulativeGptPremiumsPaid>
       <InforceCumulativeNoLapsePayments>0</InforceCumulativeNoLapsePayments>
@@ -165,12 +166,18 @@
       <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
       <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
       <SpecifiedAmountStrategyFromIssue>SAInputScalar</SpecifiedAmountStrategyFromIssue>
+      <SplitDollarAccumulateInterest>No</SplitDollarAccumulateInterest>
+      <SplitDollarLoanRate>0</SplitDollarLoanRate>
+      <SplitDollarRolloutAge>0</SplitDollarRolloutAge>
+      <SplitDollarRolloutAtWhich>Retirement</SplitDollarRolloutAtWhich>
+      <SplitDollarRolloutYear>0</SplitDollarRolloutYear>
       <SpouseIssueAge>45</SpouseIssueAge>
       <SpouseRider>No</SpouseRider>
       <SpouseRiderAmount>0</SpouseRiderAmount>
       <State>CT</State>
       <StateOfJurisdiction>CT</StateOfJurisdiction>
       <SubstandardTable>None</SubstandardTable>
+      <SupplementalIllustrationType>None</SupplementalIllustrationType>
       <SupplementalReportColumn00>[none]</SupplementalReportColumn00>
       <SupplementalReportColumn01>[none]</SupplementalReportColumn01>
       <SupplementalReportColumn02>[none]</SupplementalReportColumn02>
@@ -183,6 +190,7 @@
       <SupplementalReportColumn09>[none]</SupplementalReportColumn09>
       <SupplementalReportColumn10>[none]</SupplementalReportColumn10>
       <SupplementalReportColumn11>[none]</SupplementalReportColumn11>
+      <SupplementalSpecifiedAmount>0</SupplementalSpecifiedAmount>
       <SurviveToAge>99</SurviveToAge>
       <SurviveToType>Survive to age limit</SurviveToType>
       <SurviveToYear>99</SurviveToYear>
@@ -213,7 +221,7 @@
     </cell>
   </case_default>
   <class_defaults>
-    <cell version="7">
+    <cell version="8">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
       <Address/>
       <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -286,6 +294,7 @@
       <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
       <InforceContractMonth>0</InforceContractMonth>
       <InforceContractYear>0</InforceContractYear>
+      <InforceCorporationStake>0</InforceCorporationStake>
       <InforceCumulativeGlp>0</InforceCumulativeGlp>
       <InforceCumulativeGptPremiumsPaid>0</InforceCumulativeGptPremiumsPaid>
       <InforceCumulativeNoLapsePayments>0</InforceCumulativeNoLapsePayments>
@@ -377,12 +386,18 @@
       <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
       <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
       <SpecifiedAmountStrategyFromIssue>SAInputScalar</SpecifiedAmountStrategyFromIssue>
+      <SplitDollarAccumulateInterest>No</SplitDollarAccumulateInterest>
+      <SplitDollarLoanRate>0</SplitDollarLoanRate>
+      <SplitDollarRolloutAge>0</SplitDollarRolloutAge>
+      <SplitDollarRolloutAtWhich>Retirement</SplitDollarRolloutAtWhich>
+      <SplitDollarRolloutYear>0</SplitDollarRolloutYear>
       <SpouseIssueAge>45</SpouseIssueAge>
       <SpouseRider>No</SpouseRider>
       <SpouseRiderAmount>0</SpouseRiderAmount>
       <State>CT</State>
       <StateOfJurisdiction>CT</StateOfJurisdiction>
       <SubstandardTable>None</SubstandardTable>
+      <SupplementalIllustrationType>None</SupplementalIllustrationType>
       <SupplementalReportColumn00>[none]</SupplementalReportColumn00>
       <SupplementalReportColumn01>[none]</SupplementalReportColumn01>
       <SupplementalReportColumn02>[none]</SupplementalReportColumn02>
@@ -395,6 +410,7 @@
       <SupplementalReportColumn09>[none]</SupplementalReportColumn09>
       <SupplementalReportColumn10>[none]</SupplementalReportColumn10>
       <SupplementalReportColumn11>[none]</SupplementalReportColumn11>
+      <SupplementalSpecifiedAmount>0</SupplementalSpecifiedAmount>
       <SurviveToAge>99</SurviveToAge>
       <SurviveToType>Survive to age limit</SurviveToType>
       <SurviveToYear>99</SurviveToYear>
@@ -425,7 +441,7 @@
     </cell>
   </class_defaults>
   <particular_cells>
-    <cell version="7">
+    <cell version="8">
       <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
       <Address/>
       <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -498,6 +514,7 @@
       <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
       <InforceContractMonth>0</InforceContractMonth>
       <InforceContractYear>0</InforceContractYear>
+      <InforceCorporationStake>0</InforceCorporationStake>
       <InforceCumulativeGlp>0</InforceCumulativeGlp>
       <InforceCumulativeGptPremiumsPaid>0</InforceCumulativeGptPremiumsPaid>
       <InforceCumulativeNoLapsePayments>0</InforceCumulativeNoLapsePayments>
@@ -589,12 +606,18 @@
       <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
       <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
       <SpecifiedAmountStrategyFromIssue>SAInputScalar</SpecifiedAmountStrategyFromIssue>
+      <SplitDollarAccumulateInterest>No</SplitDollarAccumulateInterest>
+      <SplitDollarLoanRate>0</SplitDollarLoanRate>
+      <SplitDollarRolloutAge>0</SplitDollarRolloutAge>
+      <SplitDollarRolloutAtWhich>Retirement</SplitDollarRolloutAtWhich>
+      <SplitDollarRolloutYear>0</SplitDollarRolloutYear>
       <SpouseIssueAge>45</SpouseIssueAge>
       <SpouseRider>No</SpouseRider>
       <SpouseRiderAmount>0</SpouseRiderAmount>
       <State>CT</State>
       <StateOfJurisdiction>CT</StateOfJurisdiction>
       <SubstandardTable>None</SubstandardTable>
+      <SupplementalIllustrationType>None</SupplementalIllustrationType>
       <SupplementalReportColumn00>[none]</SupplementalReportColumn00>
       <SupplementalReportColumn01>[none]</SupplementalReportColumn01>
       <SupplementalReportColumn02>[none]</SupplementalReportColumn02>
@@ -607,6 +630,7 @@
       <SupplementalReportColumn09>[none]</SupplementalReportColumn09>
       <SupplementalReportColumn10>[none]</SupplementalReportColumn10>
       <SupplementalReportColumn11>[none]</SupplementalReportColumn11>
+      <SupplementalSpecifiedAmount>0</SupplementalSpecifiedAmount>
       <SurviveToAge>99</SurviveToAge>
       <SurviveToType>Survive to age limit</SurviveToType>
       <SurviveToYear>99</SurviveToYear>
