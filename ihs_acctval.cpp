@@ -457,7 +457,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             }
         }
 
-    // INPUT !! Need inforce tgtprem.
+    // TAXATION !! Input::InforceAnnualTargetPremium should be used here.
     double annual_target_premium = GetModalTgtPrem
         (0
         ,mce_annual
