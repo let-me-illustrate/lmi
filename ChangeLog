@@ -35788,3 +35788,48 @@ Accept input files as command-line arguments. See:
   types_07.rnc                  [new file]
 Preserve obsolescent schemata under new versioned names.
 
+20150315T1745Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.rnc
+  single_cell_document.rnc
+Require attributes that were formerly optional.
+
+20150316T0409Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  multiple_cell_document.rnc
+  multiple_cell_document.xsd
+  single_cell_document.cpp
+  single_cell_document.rnc
+  single_cell_document.xsd
+Increment version.
+
+20150316T0411Z <gchicares@sbcglobal.net> [516]
+
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Add a new enumerative type.
+
+20150316T0422Z <gchicares@sbcglobal.net> [516]
+
+  input.cpp
+  input.hpp
+  input_xml_io.cpp
+Add several fields that will soon be needed.
+
+20150316T0425Z <gchicares@sbcglobal.net> [516]
+
+  sample.cns
+  sample.ill
+Update specimen input files.
+
+20150316T0430Z <gchicares@sbcglobal.net> [516]
+
+  cell.rnc
+  cell.xsd
+  types.rnc
+  types.xsd
+Update input schemata.
+

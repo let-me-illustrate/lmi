@@ -28,7 +28,7 @@
 # elements marked with an asterisk.
 
 cell_element = element cell
-    {attribute version {"7"}
+    {attribute version {"8"}
 
     ,## Accidental death benefit: elected or not.
      element AccidentalDeathBenefit           {yes_or_no}
@@ -203,6 +203,10 @@ cell_element = element cell
      element InforceContractMonth             {month_int}
     ,## * [obsolete]
      element InforceContractYear              {duration_int}
+    ,## Corporation's inforce stake in a benefit plan (e.g., amount of
+     ## a full split-dollar rollout): cumulative corporation payments,
+     ## plus accumulated interest if interest not paid in cash.
+     element InforceCorporationStake          {nonnegative_double}
     ,## Inforce cumulative 7702 guideline level premium.
      element InforceCumulativeGlp             {xsd:double}
     ,## Inforce cumulative 7702(f)(1) 'premiums paid'.
@@ -429,6 +433,17 @@ cell_element = element cell
      element SpecifiedAmountFromRetirement    {nonnegative_double}
     ,## * [obsolete]
      element SpecifiedAmountStrategyFromIssue {sa_strategy}
+    ,## * Accumulate interest at demand-loan rate for split dollar,
+     ## rather than paying it in cash.
+     element SplitDollarAccumulateInterest    {yes_or_no}
+    ,## * Split-dollar annual demand-loan rate (typically the AFR).
+     element SplitDollarLoanRate              {numeric_sequence}
+    ,## * Split-dollar rollout age.
+     element SplitDollarRolloutAge            {duration_int}
+    ,## * Point at which split-dollar rollout is planned.
+     element SplitDollarRolloutAtWhich        {to_point}
+    ,## * Split-dollar rollout duration.
+     element SplitDollarRolloutYear           {duration_int}
     ,## Spouse's insurance age on effective date of spouse rider.
      ## Default: '35' if rider not elected or not offered.
      element SpouseIssueAge                   {age_int}
@@ -443,6 +458,8 @@ cell_element = element cell
      element StateOfJurisdiction              {state}
     ,## Substandard table rating.
      element SubstandardTable                 {table_rating}
+    ,## * Built-in supplemental illustration type.
+     element SupplementalIllustrationType     {suppl_illus_type}
     ,## * User-designed supplemental illustration: first column.
      element SupplementalReportColumn00       {report_column}
     ,## * User-designed supplemental illustration: second column.
@@ -467,6 +484,11 @@ cell_element = element cell
      element SupplementalReportColumn10       {report_column}
     ,## * User-designed supplemental illustration: twelfth column.
      element SupplementalReportColumn11       {report_column}
+    ,## Supplemental specified amount (e.g., individually-elected
+     ## extra coverage on a group plan) for each policy year since
+     ## issue. Inforce extracts require only the current scalar value.
+     ## Default: '0'.
+     element SupplementalSpecifiedAmount      {specamt_sequence}
     ,## * Presumed age at death, for partial mortality. Default: '99'.
      element SurviveToAge                     {age_int}
     ,## * Presumed moment of death, for partial mortality.

@@ -112,6 +112,7 @@
         <xs:element ref="InforceAvBeforeLastMc"/>
         <xs:element ref="InforceContractMonth"/>
         <xs:element ref="InforceContractYear"/>
+        <xs:element ref="InforceCorporationStake"/>
         <xs:element ref="InforceCumulativeGlp"/>
         <xs:element ref="InforceCumulativeGptPremiumsPaid"/>
         <xs:element ref="InforceCumulativeNoLapsePayments"/>
@@ -203,12 +204,18 @@
         <xs:element ref="SpecifiedAmountFromIssue"/>
         <xs:element ref="SpecifiedAmountFromRetirement"/>
         <xs:element ref="SpecifiedAmountStrategyFromIssue"/>
+        <xs:element ref="SplitDollarAccumulateInterest"/>
+        <xs:element ref="SplitDollarLoanRate"/>
+        <xs:element ref="SplitDollarRolloutAge"/>
+        <xs:element ref="SplitDollarRolloutAtWhich"/>
+        <xs:element ref="SplitDollarRolloutYear"/>
         <xs:element ref="SpouseIssueAge"/>
         <xs:element ref="SpouseRider"/>
         <xs:element ref="SpouseRiderAmount"/>
         <xs:element ref="State"/>
         <xs:element ref="StateOfJurisdiction"/>
         <xs:element ref="SubstandardTable"/>
+        <xs:element ref="SupplementalIllustrationType"/>
         <xs:element ref="SupplementalReportColumn00"/>
         <xs:element ref="SupplementalReportColumn01"/>
         <xs:element ref="SupplementalReportColumn02"/>
@@ -221,6 +228,7 @@
         <xs:element ref="SupplementalReportColumn09"/>
         <xs:element ref="SupplementalReportColumn10"/>
         <xs:element ref="SupplementalReportColumn11"/>
+        <xs:element ref="SupplementalSpecifiedAmount"/>
         <xs:element ref="SurviveToAge"/>
         <xs:element ref="SurviveToType"/>
         <xs:element ref="SurviveToYear"/>
@@ -252,7 +260,7 @@
       <xs:attribute name="version" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="7"/>
+            <xs:enumeration value="8"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -645,6 +653,13 @@ preceding day.</xs:documentation>
   <xs:element name="InforceContractYear" type="duration_int">
     <xs:annotation>
       <xs:documentation>* [obsolete]</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="InforceCorporationStake" type="nonnegative_double">
+    <xs:annotation>
+      <xs:documentation>Corporation's inforce stake in a benefit plan (e.g., amount of
+a full split-dollar rollout): cumulative corporation payments,
+plus accumulated interest if interest not paid in cash.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceCumulativeGlp" type="xs:double">
@@ -1146,6 +1161,32 @@ extracts require only the current scalar value. Default: '0'.</xs:documentation>
       <xs:documentation>* [obsolete]</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="SplitDollarAccumulateInterest" type="yes_or_no">
+    <xs:annotation>
+      <xs:documentation>* Accumulate interest at demand-loan rate for split dollar,
+rather than paying it in cash.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SplitDollarLoanRate" type="numeric_sequence">
+    <xs:annotation>
+      <xs:documentation>* Split-dollar annual demand-loan rate (typically the AFR).</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SplitDollarRolloutAge" type="duration_int">
+    <xs:annotation>
+      <xs:documentation>* Split-dollar rollout age.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SplitDollarRolloutAtWhich" type="to_point">
+    <xs:annotation>
+      <xs:documentation>* Point at which split-dollar rollout is planned.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SplitDollarRolloutYear" type="duration_int">
+    <xs:annotation>
+      <xs:documentation>* Split-dollar rollout duration.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="SpouseIssueAge" type="age_int">
     <xs:annotation>
       <xs:documentation>Spouse's insurance age on effective date of spouse rider.
@@ -1176,6 +1217,11 @@ everything else except premium tax.</xs:documentation>
   <xs:element name="SubstandardTable" type="table_rating">
     <xs:annotation>
       <xs:documentation>Substandard table rating.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SupplementalIllustrationType" type="suppl_illus_type">
+    <xs:annotation>
+      <xs:documentation>* Built-in supplemental illustration type.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SupplementalReportColumn00" type="report_column">
@@ -1236,6 +1282,14 @@ everything else except premium tax.</xs:documentation>
   <xs:element name="SupplementalReportColumn11" type="report_column">
     <xs:annotation>
       <xs:documentation>* User-designed supplemental illustration: twelfth column.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="SupplementalSpecifiedAmount" type="specamt_sequence">
+    <xs:annotation>
+      <xs:documentation>Supplemental specified amount (e.g., individually-elected
+extra coverage on a group plan) for each policy year since
+issue. Inforce extracts require only the current scalar value.
+Default: '0'.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="SurviveToAge" type="age_int">
