@@ -30,7 +30,7 @@
     'class_defaults'; but those elements wouldn't be expected to have
     any analogue on an administration system, so it seems best to copy
     them from this document:
-      http://svn.savannah.nongnu.org/viewvc/*checkout*/lmi/trunk/sample.cns?revision=5556&root=lmi
+      http://svn.savannah.nongnu.org/viewvc/*checkout*/lmi/trunk/sample.cns?root=lmi
     overwriting its 'particular_cells' with the individual records of
     all contracts in the group.
   -->
@@ -44,15 +44,11 @@
       <xs:attribute name="version" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="data_source" type="xs:nonNegativeInteger">
-        <xs:annotation>
-          <xs:documentation>Optional for now; to be required in the future.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
+      <xs:attribute name="data_source" use="required" type="xs:nonNegativeInteger"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="case_default">
