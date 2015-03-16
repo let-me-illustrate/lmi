@@ -35833,3 +35833,11 @@ Update specimen input files.
   types.xsd
 Update input schemata.
 
+20150316T2235Z <gchicares@sbcglobal.net> [516]
+
+  GNUmakefile
+  ihs_acctval.cpp
+  illustration_document.cpp
+  premium_tax.cpp
+Improve documentation.
+

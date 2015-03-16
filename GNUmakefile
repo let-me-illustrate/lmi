@@ -475,6 +475,10 @@ checkout:
 	svn co svn://svn.savannah.nongnu.org/lmi/lmi/trunk lmi; \
 	svn co svn://svn.savannah.nongnu.org/lmi/skeleton/trunk skeleton; \
 
+# SOMEDAY !! Add build types for gcov (-fprofile-arcs -ftest-coverage)
+# and for gprof. See:
+#   http://lists.nongnu.org/archive/html/lmi/2014-10/msg00115.html
+
 .PHONY: test_various_build_types
 test_various_build_types: source_clean
 	-$(MAKE) all test build_type=mpatrol
