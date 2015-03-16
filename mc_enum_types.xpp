@@ -733,3 +733,14 @@
     };
 #endif // 0
 
+#define suppl_illus_type_VALUES \
+    {mce_suppl_none \
+    ,mce_suppl_bonus \
+    ,mce_suppl_split_dollar \
+    };
+#define suppl_illus_type_NAMES \
+    {"None" \
+    ,"Bonus" \
+    ,"Split dollar" \
+    };
+

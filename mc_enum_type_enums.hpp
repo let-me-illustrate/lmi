@@ -137,6 +137,7 @@ MC_DEFINE_ENUMS(premium_table)
 MC_DEFINE_ENUMS(from_point)
 MC_DEFINE_ENUMS(to_point)
 MC_DEFINE_ENUMS(report_column)
+MC_DEFINE_ENUMS(suppl_illus_type)
 
 #undef MC_DEFINE_ENUMS
 
