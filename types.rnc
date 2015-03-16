@@ -377,3 +377,9 @@ report_column =
     | "CSVNet_CurrentZero"
     | "CSVNet_GuaranteedZero"
 
+## Built-in supplemental illustration.
+suppl_illus_type =
+      "None"
+    | "Bonus"
+    | "Split dollar"
+
