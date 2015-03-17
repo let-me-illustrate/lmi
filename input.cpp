@@ -479,31 +479,8 @@ void Input::AscribeMembers()
     ascribe("UseDOB"                                , &Input::UseDOB                                );
     ascribe("EffectiveDateToday"                    , &Input::EffectiveDateToday                    );
 
-    ascribe("DeathBenefitOptionFromRetirement"      , &Input::DeathBenefitOptionFromRetirement      );
-    ascribe("DeathBenefitOptionFromIssue"           , &Input::DeathBenefitOptionFromIssue           );
-    ascribe("SpecifiedAmountFromRetirement"         , &Input::SpecifiedAmountFromRetirement         );
-    ascribe("SpecifiedAmountFromIssue"              , &Input::SpecifiedAmountFromIssue              );
     ascribe("SpecifiedAmountStrategyFromIssue"      , &Input::SpecifiedAmountStrategyFromIssue      );
-    ascribe("IndividualPaymentMode"                 , &Input::IndividualPaymentMode                 );
-    ascribe("IndividualPaymentToAlternative"        , &Input::IndividualPaymentToAlternative        );
-    ascribe("IndividualPaymentToAge"                , &Input::IndividualPaymentToAge                );
-    ascribe("IndividualPaymentToDuration"           , &Input::IndividualPaymentToDuration           );
-    ascribe("IndividualPaymentAmount"               , &Input::IndividualPaymentAmount               );
     ascribe("IndividualPaymentStrategy"             , &Input::IndividualPaymentStrategy             );
-    ascribe("LoanAmount"                            , &Input::LoanAmount                            );
-    ascribe("LoanFromAge"                           , &Input::LoanFromAge                           );
-    ascribe("LoanFromAlternative"                   , &Input::LoanFromAlternative                   );
-    ascribe("LoanFromDuration"                      , &Input::LoanFromDuration                      );
-    ascribe("LoanToAge"                             , &Input::LoanToAge                             );
-    ascribe("LoanToAlternative"                     , &Input::LoanToAlternative                     );
-    ascribe("LoanToDuration"                        , &Input::LoanToDuration                        );
-    ascribe("WithdrawalAmount"                      , &Input::WithdrawalAmount                      );
-    ascribe("WithdrawalFromAge"                     , &Input::WithdrawalFromAge                     );
-    ascribe("WithdrawalFromAlternative"             , &Input::WithdrawalFromAlternative             );
-    ascribe("WithdrawalFromDuration"                , &Input::WithdrawalFromDuration                );
-    ascribe("WithdrawalToAge"                       , &Input::WithdrawalToAge                       );
-    ascribe("WithdrawalToAlternative"               , &Input::WithdrawalToAlternative               );
-    ascribe("WithdrawalToDuration"                  , &Input::WithdrawalToDuration                  );
 }
 
 datum_base const* Input::DoBaseDatumPointer

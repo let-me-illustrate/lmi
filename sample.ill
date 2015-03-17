@@ -35,8 +35,6 @@
     <CurrentCoiMultiplier>1</CurrentCoiMultiplier>
     <DateOfBirth>2437604</DateOfBirth>
     <DeathBenefitOption>a</DeathBenefitOption>
-    <DeathBenefitOptionFromIssue>A</DeathBenefitOptionFromIssue>
-    <DeathBenefitOptionFromRetirement>A</DeathBenefitOptionFromRetirement>
     <DefinitionOfLifeInsurance>CVAT</DefinitionOfLifeInsurance>
     <DefinitionOfMaterialChange>Earlier of increase or unnecessary premium</DefinitionOfMaterialChange>
     <Dumpin>0</Dumpin>
@@ -61,12 +59,7 @@
     <HoneymoonEndorsement>No</HoneymoonEndorsement>
     <HoneymoonValueSpread>0</HoneymoonValueSpread>
     <IncludeInComposite>Yes</IncludeInComposite>
-    <IndividualPaymentAmount>0</IndividualPaymentAmount>
-    <IndividualPaymentMode>Annual</IndividualPaymentMode>
     <IndividualPaymentStrategy>PmtInputScalar</IndividualPaymentStrategy>
-    <IndividualPaymentToAge>95</IndividualPaymentToAge>
-    <IndividualPaymentToAlternative>Maturity</IndividualPaymentToAlternative>
-    <IndividualPaymentToDuration>50</IndividualPaymentToDuration>
     <Inforce7702AAmountsPaidHistory>0</Inforce7702AAmountsPaidHistory>
     <InforceAnnualTargetPremium>0</InforceAnnualTargetPremium>
     <InforceAsOfDate>2454040</InforceAsOfDate>
@@ -113,15 +106,8 @@
     <IssueAge>45</IssueAge>
     <LastCoiReentryDate>2454040</LastCoiReentryDate>
     <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
-    <LoanAmount>0</LoanAmount>
-    <LoanFromAge>45</LoanFromAge>
-    <LoanFromAlternative>Retirement</LoanFromAlternative>
-    <LoanFromDuration>20</LoanFromDuration>
     <LoanRate>0.06</LoanRate>
     <LoanRateType>Fixed loan rate</LoanRateType>
-    <LoanToAge>95</LoanToAge>
-    <LoanToAlternative>Maturity</LoanToAlternative>
-    <LoanToDuration>50</LoanToDuration>
     <MaleProportion>1</MaleProportion>
     <MasterContractNumber/>
     <MaximumNaar>1000000000</MaximumNaar>
@@ -162,8 +148,6 @@
     <SolveToWhich>Retirement</SolveToWhich>
     <SolveType>No solve</SolveType>
     <SpecifiedAmount>1000000</SpecifiedAmount>
-    <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
-    <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
     <SpecifiedAmountStrategyFromIssue>SAInputScalar</SpecifiedAmountStrategyFromIssue>
     <SplitDollarAccumulateInterest>No</SplitDollarAccumulateInterest>
     <SplitDollarLoanRate>0</SplitDollarLoanRate>
@@ -209,13 +193,6 @@
     <WaiverOfPremiumBenefit>No</WaiverOfPremiumBenefit>
     <WithdrawToBasisThenLoan>No</WithdrawToBasisThenLoan>
     <Withdrawal>0</Withdrawal>
-    <WithdrawalAmount>0</WithdrawalAmount>
-    <WithdrawalFromAge>45</WithdrawalFromAge>
-    <WithdrawalFromAlternative>Retirement</WithdrawalFromAlternative>
-    <WithdrawalFromDuration>20</WithdrawalFromDuration>
-    <WithdrawalToAge>95</WithdrawalToAge>
-    <WithdrawalToAlternative>Maturity</WithdrawalToAlternative>
-    <WithdrawalToDuration>50</WithdrawalToDuration>
     <ZipCode/>
   </cell>
 </single_cell_document>

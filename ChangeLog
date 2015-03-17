@@ -35841,3 +35841,15 @@ Update input schemata.
   premium_tax.cpp
 Improve documentation.
 
+20150317T1306Z <gchicares@sbcglobal.net> [516]
+
+  cell.rnc
+  cell.xsd
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  sample.cns
+  sample.ill
+Make some obsolete elements optional.
+

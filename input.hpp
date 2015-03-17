@@ -431,31 +431,8 @@ class LMI_SO Input
     mce_to_point             SolveToWhich                    ;
     mce_yes_or_no            UseDOB                          ;
     mce_yes_or_no            EffectiveDateToday              ;
-    mce_dbopt                DeathBenefitOptionFromRetirement;
-    mce_dbopt                DeathBenefitOptionFromIssue     ;
-    tnr_nonnegative_double   SpecifiedAmountFromRetirement   ;
-    tnr_nonnegative_double   SpecifiedAmountFromIssue        ;
     mce_sa_strategy          SpecifiedAmountStrategyFromIssue;
-    mce_mode                 IndividualPaymentMode           ;
-    mce_to_point             IndividualPaymentToAlternative  ;
-    tnr_age                  IndividualPaymentToAge          ;
-    tnr_duration             IndividualPaymentToDuration     ;
-    tnr_nonnegative_double   IndividualPaymentAmount         ;
     mce_pmt_strategy         IndividualPaymentStrategy       ;
-    tnr_nonnegative_double   LoanAmount                      ;
-    tnr_age                  LoanFromAge                     ;
-    mce_from_point           LoanFromAlternative             ;
-    tnr_duration             LoanFromDuration                ;
-    tnr_age                  LoanToAge                       ;
-    mce_to_point             LoanToAlternative               ;
-    tnr_duration             LoanToDuration                  ;
-    tnr_nonnegative_double   WithdrawalAmount                ;
-    tnr_age                  WithdrawalFromAge               ;
-    mce_from_point           WithdrawalFromAlternative       ;
-    tnr_duration             WithdrawalFromDuration          ;
-    tnr_age                  WithdrawalToAge                 ;
-    mce_to_point             WithdrawalToAlternative         ;
-    tnr_duration             WithdrawalToDuration            ;
 
     // TODO ?? For the nonce, only an unrestricted tn_range type is
     // used, because tn_range doesn't permit initialization or
