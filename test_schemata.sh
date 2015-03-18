@@ -186,10 +186,15 @@ diff --unified=0 touchstone.eraseme ill.eraseme
 echo "  Regenerate XSD files as they should appear in the repository."
 
 # Reversing the order of the 'trang' commands produces a different
-# 'cell.xsd', which lacks <xs:complexType name="cell_element">.
+# 'cell.xsd', which lacks <xs:complexType name="cell_element">, so
+# process 'multiple' before 'single'.
 
-java -jar $jar_dir/trang.jar multiple_cell_document.rnc multiple_cell_document.xsd
-java -jar $jar_dir/trang.jar single_cell_document.rnc   single_cell_document.xsd
+cp --preserve $src_dir/types_*.rnc $src_dir/cell_*.rnc $src_dir/multiple_cell_document_*.rnc $src_dir/single_cell_document_*.rnc .
+
+java -jar $jar_dir/trang.jar multiple_cell_document.rnc    multiple_cell_document.xsd
+java -jar $jar_dir/trang.jar single_cell_document.rnc      single_cell_document.xsd
+java -jar $jar_dir/trang.jar multiple_cell_document_01.rnc multiple_cell_document_01.xsd
+java -jar $jar_dir/trang.jar single_cell_document_01.rnc   single_cell_document_01.xsd
 sed -e 's/  *$//' -i *.xsd
 diff --unified=0 --ignore-matching-lines='<!-- [$]Id:.*[$] -->' --from-file=$src_dir *.xsd \
     || echo "Dubious '*.xsd' in repository."
