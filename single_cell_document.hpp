@@ -63,7 +63,7 @@ class LMI_SO single_cell_document
     bool data_source_is_external(xml::document const&) const;
     void validate_with_xsd_schema(xml::document const&) const;
     xslt::stylesheet& cell_sorter() const;
-    xml::schema const& xsd_schema() const;
+    std::string xsd_schema_name() const;
 
     Input input_data_;
 };

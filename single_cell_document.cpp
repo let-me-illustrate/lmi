@@ -156,14 +156,16 @@ bool single_cell_document::data_source_is_external(xml::document const& d) const
 //============================================================================
 void single_cell_document::validate_with_xsd_schema(xml::document const& d) const
 {
-    xml::error_messages e;
-    if(!xsd_schema().validate(cell_sorter().apply(d), e))
+    std::string const s = xsd_schema_name();
+    xml::schema const schema(xml_lmi::dom_parser(AddDataDir(s)).document());
+    xml::error_messages errors;
+    if(!schema.validate(cell_sorter().apply(d), errors))
         {
         warning()
             << "Validation with schema '"
-            << "single_cell_document.xsd" // <-- Soon this will vary.
+            << s
             << "' failed.\n\n"
-            << e.print()
+            << errors.print()
             << std::flush
             ;
         }
@@ -182,11 +184,10 @@ xslt::stylesheet& single_cell_document::cell_sorter() const
 }
 
 //============================================================================
-xml::schema const& single_cell_document::xsd_schema() const
+std::string single_cell_document::xsd_schema_name() const
 {
-    static std::string const f("single_cell_document.xsd");
-    static xml::schema const z(xml_lmi::dom_parser(AddDataDir(f)).document());
-    return z;
+    static std::string const s("single_cell_document.xsd");
+    return s;
 }
 
 //============================================================================
