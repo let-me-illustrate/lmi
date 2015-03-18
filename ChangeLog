@@ -35863,3 +35863,20 @@ Preserve obsolescent schemata under new versioned names. These 'xsd'
 schemata are used by lmi instead of the otherwise preferable 'rnc'
 equivalents that are regrettably not supported by libxml2.
 
+20150318T0046Z <gchicares@sbcglobal.net> [516]
+
+  test_schemata.sh
+Test obsolescent schemata added 20150318T0042Z.
+
+20150318T0208Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document_01.rnc
+  multiple_cell_document_01.xsd
+Refer to a census with the 'data_source' attribute.
+
+20150318T2129Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Improve display of schema diagnostics.
+

@@ -417,18 +417,16 @@ bool multiple_cell_document::data_source_is_external(xml::document const& d) con
 //============================================================================
 void multiple_cell_document::validate_with_xsd_schema(xml::document const& d) const
 {
-    try
+    xml::error_messages e;
+    if(!xsd_schema().validate(cell_sorter().apply(d), e))
         {
-        xml::error_messages e;
-        if(!xsd_schema().validate(cell_sorter().apply(d), e))
-            {
-            throw xml::exception(e);
-            }
-        }
-    catch(...)
-        {
-        warning() << "Schema validation failed--diagnostics follow." << std::flush;
-        report_exception();
+        warning()
+            << "Validation with schema '"
+            << "multiple_cell_document.xsd" // <-- Soon this will vary.
+            << "' failed.\n\n"
+            << e.print()
+            << std::flush
+            ;
         }
 }
 
