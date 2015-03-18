@@ -31,7 +31,6 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"           // AddDataDir()
-#include "handle_exceptions.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 

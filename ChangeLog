@@ -35880,3 +35880,9 @@ Refer to a census with the 'data_source' attribute.
   single_cell_document.cpp
 Improve display of schema diagnostics.
 
+20150318T2147Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Remove disused headers.
+
