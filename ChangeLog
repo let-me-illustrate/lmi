@@ -35853,3 +35853,13 @@ Improve documentation.
   sample.ill
 Make some obsolete elements optional.
 
+20150318T0042Z <gchicares@sbcglobal.net> [516]
+
+  cell_07.xsd                   [new file]
+  multiple_cell_document_01.xsd [new file]
+  single_cell_document_01.xsd   [new file]
+  types_07.xsd                  [new file]
+Preserve obsolescent schemata under new versioned names. These 'xsd'
+schemata are used by lmi instead of the otherwise preferable 'rnc'
+equivalents that are regrettably not supported by libxml2.
+
