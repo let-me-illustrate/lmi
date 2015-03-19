@@ -39,9 +39,11 @@
 #include <xmlwrapp/schema.h>
 #include <xsltwrapp/stylesheet.h>
 
+#include <iomanip>
 #include <istream>
 #include <iterator>                     // std::distance()
 #include <ostream>
+#include <sstream>
 #include <stdexcept>
 
 //============================================================================
@@ -448,9 +450,19 @@ xslt::stylesheet& multiple_cell_document::cell_sorter() const
 //============================================================================
 std::string multiple_cell_document::xsd_schema_name(int version) const
 {
-(void)&version; // Not used yet.
     static std::string const s("multiple_cell_document.xsd");
-    return s;
+    if(class_version() == version)
+        {
+        return s;
+        }
+
+    std::ostringstream oss;
+    oss
+        << "multiple_cell_document"
+        << '_' << std::setfill('0') << std::setw(2) << version
+        << ".xsd"
+        ;
+    return oss.str();
 }
 
 //============================================================================
