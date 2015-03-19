@@ -35886,3 +35886,24 @@ Improve display of schema diagnostics.
   single_cell_document.cpp
 Remove disused headers.
 
+20150319T1427Z <gchicares@sbcglobal.net> [516]
+
+  input_test.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Refactor, preparing for schema to depend on version.
+
+20150319T1510Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Make version available for schema selection.
+
+20150319T2006Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Use versioned schemata.
+

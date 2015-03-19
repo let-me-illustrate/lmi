@@ -38,8 +38,10 @@
 #include <xmlwrapp/schema.h>
 #include <xsltwrapp/stylesheet.h>
 
+#include <iomanip>
 #include <istream>
 #include <ostream>
+#include <sstream>
 
 //============================================================================
 single_cell_document::single_cell_document()
@@ -204,9 +206,19 @@ xslt::stylesheet& single_cell_document::cell_sorter() const
 //============================================================================
 std::string single_cell_document::xsd_schema_name(int version) const
 {
-(void)&version; // Not used yet.
     static std::string const s("single_cell_document.xsd");
-    return s;
+    if(class_version() == version)
+        {
+        return s;
+        }
+    std::ostringstream oss;
+
+    oss
+        << "single_cell_document"
+        << '_' << std::setfill('0') << std::setw(2) << version
+        << ".xsd"
+        ;
+    return oss.str();
 }
 
 //============================================================================
