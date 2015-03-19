@@ -92,7 +92,8 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
     if(data_source_is_external(parser.document()))
         {
-        validate_with_xsd_schema(parser.document());
+        int version = 0; // Not yet available.
+        validate_with_xsd_schema(parser.document(), xsd_schema_name(version));
         }
 
     xml::element const& root(parser.root_node(xml_root_name()));
@@ -154,16 +155,18 @@ bool single_cell_document::data_source_is_external(xml::document const& d) const
 }
 
 //============================================================================
-void single_cell_document::validate_with_xsd_schema(xml::document const& d) const
+void single_cell_document::validate_with_xsd_schema
+    (xml::document const& xml
+    ,std::string const&   xsd
+    ) const
 {
-    std::string const s = xsd_schema_name();
-    xml::schema const schema(xml_lmi::dom_parser(AddDataDir(s)).document());
+    xml::schema const schema(xml_lmi::dom_parser(AddDataDir(xsd)).document());
     xml::error_messages errors;
-    if(!schema.validate(cell_sorter().apply(d), errors))
+    if(!schema.validate(cell_sorter().apply(xml), errors))
         {
         warning()
             << "Validation with schema '"
-            << s
+            << xsd
             << "' failed.\n\n"
             << errors.print()
             << std::flush
@@ -184,8 +187,9 @@ xslt::stylesheet& single_cell_document::cell_sorter() const
 }
 
 //============================================================================
-std::string single_cell_document::xsd_schema_name() const
+std::string single_cell_document::xsd_schema_name(int version) const
 {
+(void)&version; // Not used yet.
     static std::string const s("single_cell_document.xsd");
     return s;
 }
