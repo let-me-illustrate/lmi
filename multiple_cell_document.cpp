@@ -131,17 +131,16 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
         return;
         }
 
-    if(data_source_is_external(parser.document()))
-        {
-        int version = 0; // Not yet available.
-        validate_with_xsd_schema(parser.document(), xsd_schema_name(version));
-        }
-
     // Version 0 should have been handled above.
     LMI_ASSERT(0 < file_version);
     if(class_version() < file_version)
         {
         fatal_error() << "Incompatible file version." << LMI_FLUSH;
+        }
+
+    if(data_source_is_external(parser.document()))
+        {
+        validate_with_xsd_schema(parser.document(), xsd_schema_name(file_version));
         }
 
     case_parms_ .clear();

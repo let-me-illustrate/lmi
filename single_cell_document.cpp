@@ -90,13 +90,28 @@ std::string const& single_cell_document::xml_root_name() const
 //============================================================================
 void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
-    if(data_source_is_external(parser.document()))
+    xml::element const& root(parser.root_node(xml_root_name()));
+
+    int file_version = 0;
+    if(!xml_lmi::get_attr(root, "version", file_version))
         {
-        int version = 0; // Not yet available.
-        validate_with_xsd_schema(parser.document(), xsd_schema_name(version));
+        // Do nothing. Ancient lmi files have no "version" attribute,
+        // and that's okay. Here, 'file_version' is used only for
+        // schema validation, which is performed iff a "data_source"
+        // attribute exists and has a nondefault value--but
+        // "data_source" is a newer attribute than "version", so there
+        // can be no "data_source" without "version".
         }
 
-    xml::element const& root(parser.root_node(xml_root_name()));
+    if(class_version() < file_version)
+        {
+        fatal_error() << "Incompatible file version." << LMI_FLUSH;
+        }
+
+    if(data_source_is_external(parser.document()))
+        {
+        validate_with_xsd_schema(parser.document(), xsd_schema_name(file_version));
+        }
 
     xml::const_nodes_view const elements(root.elements());
     LMI_ASSERT(!elements.empty());
