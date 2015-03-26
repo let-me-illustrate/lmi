@@ -35907,3 +35907,12 @@ Make version available for schema selection.
   single_cell_document.cpp
 Use versioned schemata.
 
+20150326T2250Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_about_version.cpp
+  wx_test_benchmark_census.cpp
+  wx_test_default_input.cpp
+  wx_test_expiry_dates.cpp
+Use wxPrintf() instead of wxLogMessage() for GUI test.
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+
