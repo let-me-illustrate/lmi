@@ -91,13 +91,13 @@
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
-#include <wx/debug.h>                   // wxIsDebuggerRunning()
 #include <wx/docmdi.h>
 #include <wx/image.h>
 #include <wx/log.h>                     // wxSafeShowMessage()
 #include <wx/math.h>                    // wxRound()
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/msgout.h>
 #include <wx/textctrl.h>
 #include <wx/textdlg.h>                 // wxGetTextFromUser()
 #include <wx/toolbar.h>
@@ -634,10 +634,38 @@ bool Skeleton::OnInit()
 {
     try
         {
-        if(!wxIsDebuggerRunning())
-            {
-            wxLog::SetActiveTarget(new wxLogStderr);
-            }
+#if defined __WXMSW__
+        // Send log messages of debug (and trace, which are roughly equivalent
+        // to debug) severity, which are usually not shown at all under MSW, to
+        // stderr.
+        //
+        // The end users wouldn't see them there as they don't run the program
+        // from a terminal, but they could be potentially valuable to the
+        // developers.
+        struct DebugStderrLog : wxLogInterposer
+        {
+            virtual void DoLogTextAtLevel(wxLogLevel level, wxString const& msg)
+                {
+                switch(level)
+                    {
+                    case wxLOG_FatalError:
+                    case wxLOG_Error:
+                    case wxLOG_Warning:
+                    case wxLOG_Message:
+                    case wxLOG_Status:
+                    case wxLOG_Info:
+                        break;
+
+                    case wxLOG_Debug:
+                    case wxLOG_Trace:
+                        wxMessageOutputStderr().Output(msg);
+                        break;
+                    }
+                }
+        };
+
+        wxLog::SetActiveTarget(new DebugStderrLog);
+#endif // defined __WXMSW__
 
         if(false == ProcessCommandLine(argc, argv))
             {
