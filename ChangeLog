@@ -35930,3 +35930,9 @@ Don't redirect all wxLog messages to stderr, just the debug ones. See:
 Add a unit test verifying that wxLog errors are shown. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
 
+20150326T2327Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Flush wxLog after each individual GUI test. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+

@@ -472,6 +472,9 @@ TestsResults application_test::run()
                 wxLogMessage("%s: started", name);
                 wxStopWatch sw;
                 i->run_test();
+                // Check that no messages were unexpectedly logged during this
+                // test execution.
+                wxLog::FlushActive();
                 wxLogMessage("time=%ldms (for %s)", sw.Time(), name);
                 wxLogMessage("%s: ok", name);
                 results.passed++;
