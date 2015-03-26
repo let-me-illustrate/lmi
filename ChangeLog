@@ -35922,3 +35922,11 @@ Use wxPrintf() instead of wxLogMessage() for GUI test. See:
 Don't redirect all wxLog messages to stderr, just the debug ones. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
 
+20150326T2308Z <gchicares@sbcglobal.net> [516]
+
+  Makefile.am
+  objects.make
+  wx_test_log_errors.cpp [new file]
+Add a unit test verifying that wxLog errors are shown. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+

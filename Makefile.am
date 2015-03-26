@@ -266,6 +266,7 @@ wx_test_SOURCES = \
   wx_test_expiry_dates.cpp \
   wx_test_input_sequences.cpp \
   wx_test_input_validation.cpp \
+  wx_test_log_errors.cpp \
   wx_test_paste_census.cpp \
   wx_test_pdf_create.cpp \
   wx_test_validate_output.cpp
