@@ -35936,3 +35936,9 @@ Add a unit test verifying that wxLog errors are shown. See:
 Flush wxLog after each individual GUI test. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
 
+20150326T2349Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_input_sequences.cpp
+Guard against future changes in field names. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00032.html
+

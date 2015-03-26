@@ -28,11 +28,15 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
+#include "input.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 
+#include <wx/crt.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
+
+#include <algorithm>                    // std::find()
 
 /// Validate a variety of input sequences in the GUI input dialog.
 ///
@@ -64,7 +68,7 @@ struct input_sequence_test_data
 
 input_sequence_test_data const test_cases[] =
 {
-    // These sequences correspond to the examples from the manual.
+    // These sequences correspond to the examples from the user manual.
     { "SpecifiedAmount" ,"sevenpay 7; 250000 retirement; 100000 #10; 75000 @95; 50000" },
     { "SpecifiedAmount" ,"100000; 110000; 120000; 130000; 140000; 150000"              },
     { "PaymentMode"     ,"annual; monthly"                                             },
@@ -77,7 +81,7 @@ input_sequence_test_data const test_cases[] =
     { "Withdrawal"      ,"0 retirement; 5000 #10; 0"                                   },
     { "Withdrawal"      ,"0,[0,retirement);10000,[retirement,#10);0"                   },
 
-    // This is an additional sequence used solely for testing.
+    // This is an additional sequence used solely in the present TU.
     { "ProjectedSalary" ,"100000; 105000; 110000 retirement; 0"                        },
 };
 
@@ -98,16 +102,32 @@ LMI_WX_TEST_CASE(input_sequences)
             dialog->Show();
             wxYield();
 
-            if(!wxWindow::FindWindowByName(test_data_.field, dialog))
+            char const* const field_name = test_data_.field;
+            if(!wxWindow::FindWindowByName(field_name, dialog))
                 {
-                // If the field for this input sequence doesn't exist in the
-                // currently used skin at all, skip this particular sequence
-                // silently -- but continue testing the other ones.
+                // Check whether the field name is valid at all. If it
+                // isn't, then the input model must have changed, so
+                // warn that this test must be updated.
+                Input const dummy_input;
+                std::vector<std::string> const& names = dummy_input.member_names();
+                if(std::find(names.begin(), names.end(), field_name) == names.end())
+                    {
+                    wxPrintf
+                        ("WARNING: unknown field name \"%s\", \"test_cases\" "
+                         "array probably needs to be updated.\n"
+                        ,field_name
+                        );
+                    }
+
+                // However, it is not an error if the field used by
+                // this input sequence doesn't exist in the currently-
+                // used skin--not all skins have all the fields--so
+                // just skip it and continue testing the other ones.
                 return wxID_CANCEL;
                 }
 
             // Focus the field in which the sequence should be entered.
-            wx_test_focus_controller_child(*dialog, test_data_.field);
+            wx_test_focus_controller_child(*dialog, field_name);
 
             // Type the sequence into it.
             wxUIActionSimulator ui;
