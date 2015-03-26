@@ -35913,6 +35913,12 @@ Use versioned schemata.
   wx_test_benchmark_census.cpp
   wx_test_default_input.cpp
   wx_test_expiry_dates.cpp
-Use wxPrintf() instead of wxLogMessage() for GUI test.
+Use wxPrintf() instead of wxLogMessage() for GUI test. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+
+20150326T2257Z <gchicares@sbcglobal.net> [516]
+
+  skeleton.cpp
+Don't redirect all wxLog messages to stderr, just the debug ones. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
 
