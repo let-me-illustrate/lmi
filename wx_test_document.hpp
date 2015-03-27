@@ -136,4 +136,31 @@ class wx_test_document_base
     bool opened_;
 };
 
+/// Represents an existing illustration document.
+///
+/// Instantiating an object of this class simulates opening the specified
+/// illustration. Its close() method must be called before destroying an object
+/// of this class to ensure that it doesn't stay open.
+
+class wx_test_existing_illustration
+    :public wx_test_document_base
+{
+  public:
+    // Default constructor opens an illustration without changing the parameters.
+    explicit wx_test_existing_illustration(std::string const& file_ill)
+    {
+        wxUIActionSimulator ui;
+        ui.Char('o', wxMOD_CONTROL);    // "File|Open"
+
+        wxTEST_DIALOG
+            (wxYield()
+            ,wxExpectModal<wxFileDialog>(file_ill)
+            ,wxExpectDismissableModal<MvcController>(wxID_OK)
+                .Describe("illustration properties for " + file_ill)
+            );
+
+        set_opened();
+    }
+};
+
 #endif // wx_test_document_hpp
