@@ -938,6 +938,8 @@ void enforce_taboos(file const& f)
     taboo(f, "\\.gif", boost::regex::icase);
     // Obsolete email address.
     taboo(f, "chicares@mindspring.com");
+    // Obscured email address.
+    taboo(f, "address@hidden");
     // Certain proprietary libraries.
     taboo(f, "\\bowl\\b", boost::regex::icase);
     taboo(f, "vtss", boost::regex::icase);
