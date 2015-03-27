@@ -35954,3 +35954,9 @@ Forbid obscured email addresses.
 Move and rename class wx_test_new_document_base. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
 
+20150327T0032Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_document.hpp
+Add wx_test_existing_illustration helper class. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
+
