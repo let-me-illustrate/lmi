@@ -35967,3 +35967,9 @@ Add wx_test_existing_illustration helper class. See:
 Test all possible 'CurrentCoiMultiplier' validation errors. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
 
+20150327T0252Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Reapply patches that were somehow misapplied. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00046.html
+
