@@ -662,6 +662,7 @@ class SkeletonTest : public Skeleton
     void RunTheTests();
 
     std::string runtime_error_;
+    std::string domain_error_;
     bool is_running_tests_;
 };
 
@@ -723,9 +724,18 @@ bool SkeletonTest::OnInit()
 
 bool SkeletonTest::StoreCurrentException()
 {
+    // We store all the exceptions that are expected to be caught by the tests
+    // here, in order to be able to rethrow them later. Almost all tests need
+    // just std::runtime_error, but the input validation one also can get a
+    // domain_error in some cases, so we need to handle that one as well.
     try
         {
         throw;
+        }
+    catch(std::domain_error& e)
+        {
+        domain_error_ = e.what();
+        return true;
         }
     catch (std::runtime_error const& e)
         {
@@ -738,7 +748,14 @@ bool SkeletonTest::StoreCurrentException()
 
 void SkeletonTest::RethrowStoredException()
 {
-    if (!runtime_error_.empty())
+    if(!domain_error_.empty())
+        {
+        std::domain_error const e(domain_error_);
+        domain_error_.clear();
+        throw e;
+        }
+
+    if(!runtime_error_.empty())
         {
         std::runtime_error const e(runtime_error_);
         runtime_error_.clear();
