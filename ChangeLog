@@ -35942,3 +35942,15 @@ Flush wxLog after each individual GUI test. See:
 Guard against future changes in field names. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00032.html
 
+20150327T0024Z <gchicares@sbcglobal.net> [516]
+
+  test_coding_rules.cpp
+Forbid obscured email addresses.
+
+20150327T0027Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_document.hpp [new file]
+  wx_test_new.hpp
+Move and rename class wx_test_new_document_base. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
+
