@@ -40,6 +40,7 @@
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 
+#include <wx/crt.h>
 #include <wx/docview.h>
 #include <wx/fileconf.h>
 #include <wx/frame.h>
@@ -469,19 +470,19 @@ TestsResults application_test::run()
 
             try
                 {
-                wxLogMessage("%s: started", name);
+                wxPrintf("%s: started\n", name);
                 wxStopWatch sw;
                 i->run_test();
                 // Check that no messages were unexpectedly logged during this
                 // test execution.
                 wxLog::FlushActive();
-                wxLogMessage("time=%ldms (for %s)", sw.Time(), name);
-                wxLogMessage("%s: ok", name);
+                wxPrintf("time=%ldms (for %s)\n", sw.Time(), name);
+                wxPrintf("%s: ok\n", name);
                 results.passed++;
                 }
             catch(test_skipped_exception const& e)
                 {
-                wxLogMessage("%s: skipped (%s)", name, e.what());
+                wxPrintf("%s: skipped (%s)\n", name, e.what());
                 results.skipped++;
                 }
             catch(std::exception const& e)
@@ -503,7 +504,7 @@ TestsResults application_test::run()
                 wxString one_line_error(error);
                 one_line_error.Replace("\n", " ");
 
-                wxLogMessage("%s: ERROR (%s)", name, one_line_error);
+                wxPrintf("%s: ERROR (%s)\n", name, one_line_error);
                 }
             }
         }
@@ -701,19 +702,10 @@ DocManagerEx* SkeletonTest::CreateDocManager()
 
 bool SkeletonTest::OnInit()
 {
-    // The test output should be reproducible, so disable the time
-    // stamps in the logs to avoid spurious differences due to them.
-    wxLog::DisableTimestamp();
-
     if(!Skeleton::OnInit())
         {
         return false;
         }
-
-    // Log everything to stdout, both to avoid interacting with the user (who
-    // might not even be present) and to allow redirecting the test output to a
-    // file which may subsequently be compared with the previous test runs.
-    delete wxLog::SetActiveTarget(new wxLogStderr(stdout));
 
     // Run the tests at idle time, when the main loop is running, in order to
     // do it in as realistic conditions as possible.
@@ -843,7 +835,7 @@ void SkeletonTest::RunTheTests()
 
     mainWin->SetFocus();
 
-    wxLogMessage("NOTE: starting the test suite");
+    wxPuts("NOTE: starting the test suite");
     wxStopWatch sw;
 
     // Notice that it is safe to use simple variable assignment here instead of
@@ -853,18 +845,18 @@ void SkeletonTest::RunTheTests()
     TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
-    wxLogMessage("time=%ldms (for all tests)", sw.Time());
+    wxPrintf("time=%ldms (for all tests)\n", sw.Time());
 
     if(results.failed == 0)
         {
         if(results.passed == 0)
             {
-            wxLogMessage("WARNING: no tests have been executed.");
+            wxPuts("WARNING: no tests have been executed.");
             }
         else
             {
-            wxLogMessage
-                ("SUCCESS: %d test%s successfully completed."
+            wxPrintf
+                ("SUCCESS: %d test%s successfully completed.\n"
                 ,results.passed
                 ,results.passed == 1 ? "" : "s"
                 );
@@ -872,8 +864,8 @@ void SkeletonTest::RunTheTests()
         }
     else
         {
-        wxLogMessage
-            ("FAILURE: %d out of %d test%s failed."
+        wxPrintf
+            ("FAILURE: %d out of %d test%s failed.\n"
             ,results.failed
             ,results.total
             ,results.total == 1 ? "" : "s"
@@ -882,8 +874,8 @@ void SkeletonTest::RunTheTests()
 
     if(results.skipped)
         {
-        wxLogMessage
-            ("NOTE: %s skipped"
+        wxPrintf
+            ("NOTE: %s skipped\n"
             ,results.skipped == 1
                 ? wxString("1 test was")
                 : wxString::Format("%d tests were", results.skipped)
