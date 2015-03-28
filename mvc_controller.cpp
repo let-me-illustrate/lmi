@@ -32,6 +32,8 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
+#include "contains.hpp"
+#include "global_settings.hpp"
 #include "map_lookup.hpp"
 #include "mc_enum.hpp"
 #include "mvc_model.hpp"
@@ -737,6 +739,14 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
         ,&MvcController::UponUpdateUI
         ,wxXmlResource::GetXRCID(view_.MainDialogName())
         );
+
+    if(contains(global_settings::instance().pyx(), "show_mvc_dims"))
+        {
+        int width  = 0;
+        int height = 0;
+        GetSize(&width, &height);
+        status() << width << " by " << height << std::flush;
+        }
 }
 
 void MvcController::UponPageChanged(wxBookCtrlBaseEvent& event)
