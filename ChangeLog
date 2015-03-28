@@ -35973,3 +35973,8 @@ Test all possible 'CurrentCoiMultiplier' validation errors. See:
 Reapply patches that were somehow misapplied. See:
   http://lists.nongnu.org/archive/html/lmi/2015-03/msg00046.html
 
+20150328T1252Z <gchicares@sbcglobal.net> [516]
+
+  mvc_controller.cpp
+Show tabbed-dialog dimensions if requested.
+
