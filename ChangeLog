@@ -35983,3 +35983,8 @@ Show tabbed-dialog dimensions if requested.
   custom_io_1.cpp
 Increase output precision.
 
+20150330T1657Z <gchicares@sbcglobal.net> [516]
+
+  version.hpp
+Designate release candidate 6158.
+
