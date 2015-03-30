@@ -35978,3 +35978,8 @@ Reapply patches that were somehow misapplied. See:
   mvc_controller.cpp
 Show tabbed-dialog dimensions if requested.
 
+20150330T1559Z <gchicares@sbcglobal.net> [516]
+
+  custom_io_1.cpp
+Increase output precision.
+
