@@ -36009,3 +36009,8 @@ Make sure "Comments" field was updated correctly. See:
 Add spaces to make an error message more readable. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
 
+20150409T1812Z <gchicares@sbcglobal.net> [516]
+
+  version.hpp
+Designate release candidate 6162.
+
