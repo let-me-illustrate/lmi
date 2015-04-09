@@ -109,7 +109,7 @@ std::string build_not_found_message(std::set<std::string> const& remaining)
         message << " '" << *i << "'";
         }
 
-    message << (only_one ? "was" : "were") << " not found";
+    message << " " << (only_one ? "was" : "were") << " not found" << " ";
 
     return message.str();
 }
