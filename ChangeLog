@@ -35997,3 +35997,9 @@ Designate release candidate 6158.
   roster.png    [new file]
 Add a group-roster toolbar button.
 
+20150409T1756Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Make sure "Comments" field was updated correctly. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
+
