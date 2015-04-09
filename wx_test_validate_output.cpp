@@ -39,6 +39,7 @@
 
 #include <wx/ffile.h>
 #include <wx/testing.h>
+#include <wx/textctrl.h>
 #include <wx/uiaction.h>
 
 namespace
@@ -82,7 +83,14 @@ struct enter_comments_in_case_defaults_dialog
         dialog->Show();
         wxYield();
 
-        wx_test_focus_controller_child(*dialog, "Comments");
+        wxWindow* const comments_window = wx_test_focus_controller_child
+            (*dialog
+            ,"Comments"
+            );
+
+        wxTextCtrl* const
+            comments_text = dynamic_cast<wxTextCtrl*>(comments_window);
+        LMI_ASSERT(comments_text);
 
         wxUIActionSimulator ui;
 
@@ -94,6 +102,8 @@ struct enter_comments_in_case_defaults_dialog
 
         ui.Text(comments_.c_str());
         wxYield();
+
+        LMI_ASSERT_EQUAL(comments_text->GetValue(), comments_);
 
         return wxID_OK;
         }
