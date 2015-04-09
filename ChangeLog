@@ -35988,3 +35988,12 @@ Increase output precision.
   version.hpp
 Designate release candidate 6158.
 
+20150409T1634Z <gchicares@sbcglobal.net> [516]
+
+  README
+  menus.xrc
+  toolbar.xrc
+  roster-16.png [new file]
+  roster.png    [new file]
+Add a group-roster toolbar button.
+
