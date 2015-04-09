@@ -36003,3 +36003,9 @@ Add a group-roster toolbar button.
 Make sure "Comments" field was updated correctly. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
 
+20150409T1759Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_paste_census.cpp
+Add spaces to make an error message more readable. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
+
