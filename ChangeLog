@@ -36014,3 +36014,18 @@ Add spaces to make an error message more readable. See:
   version.hpp
 Designate release candidate 6162.
 
+20150410T0029Z <gchicares@sbcglobal.net> [516]
+
+  menu_commands.html
+Fix defect introduced 20141108T0049Z: subcommand name was not updated.
+
+20150410T1059Z <gchicares@sbcglobal.net> [516]
+
+  menu_commands.html
+Fix defect introduced 20130423T0219Z: group roster was not mentioned.
+
+20150410T1101Z <gchicares@sbcglobal.net> [516]
+
+  version.hpp
+Designate release candidate 6165.
+
