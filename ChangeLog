@@ -36126,3 +36126,14 @@ Fix incorrect uses of wxGROW. See:
 Let wx determine the size of date-picker controls. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
+20150417T2315Z <gchicares@sbcglobal.net> [516]
+
+  gpt.xrc
+  mec.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Grow controls prn to align columns containing date pickers. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
