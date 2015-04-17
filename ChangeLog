@@ -36073,3 +36073,19 @@ Forswear feckless flags. See:
 Remove disregarded "option". See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
+20150417T2235Z <gchicares@sbcglobal.net> [516]
+
+  gpt.xrc
+  mec.xrc
+  policy_view.xrc
+  preferences_view.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Remove alignment options that have been ignored due to wxGROW. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
