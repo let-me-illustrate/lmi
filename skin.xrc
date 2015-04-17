@@ -2160,7 +2160,7 @@ here, but it looks weird if we don't make this look like its siblings.
                         <orient>wxVERTICAL</orient>
                         <label>Salary-based specified amount</label>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>4</border>
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
@@ -2282,7 +2282,7 @@ here, but it looks weird if we don't make this look like its siblings.
                         <orient>wxVERTICAL</orient>
                         <label>Table</label>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>4</border>
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
@@ -2339,7 +2339,7 @@ here, but it looks weird if we don't make this look like its siblings.
                         <orient>wxHORIZONTAL</orient>
                         <label>First-year extra</label>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>4</border>
                             <object class="wxFlexGridSizer">
                                 <cols>3</cols>
@@ -2552,7 +2552,6 @@ the other is perforce ignored.
                 <orient>wxVERTICAL</orient>
                 <label>Funds</label>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxRadioBox" name="FundChoiceType">
                         <help>Fund allocation</help>
                         <style>wxRA_SPECIFY_COLS</style>
@@ -2564,7 +2563,6 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>

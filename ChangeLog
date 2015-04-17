@@ -36055,3 +36055,15 @@ Fix first tranche of XRC validation errors. See:
 Use only one of a pair of synonymous constants. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
+20150417T2143Z <gchicares@sbcglobal.net> [516]
+
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Forswear feckless flags. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+

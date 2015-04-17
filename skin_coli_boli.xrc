@@ -373,7 +373,7 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxLEFT|wxTOP</flag>
+                            <flag>wxALIGN_LEFT|wxLEFT|wxTOP</flag>
                             <border>2</border>
                             <object class="wxCheckBox" name="IncludeInComposite">
                                 <help>Include this individual in any group composite</help>
@@ -517,7 +517,7 @@
                                 <orient>wxHORIZONTAL</orient>
                                 <label>Partial mortality</label>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALL</flag>
+                                    <flag>wxALL</flag>
                                     <border>4</border>
                                     <object class="wxCheckBox" name="UsePartialMortality">
                                         <help>Use partial mortality (for group composite only)</help>
@@ -526,7 +526,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT</flag>
+                                    <flag>wxALL</flag>
                                     <border>4</border>
                                     <object class="wxComboBox" name="PartialMortalityTable">
                                         <help>Partial mortality table</help>
@@ -3368,7 +3368,7 @@ here, but it looks weird if we don't make this look like its siblings.
                 <orient>wxVERTICAL</orient>
                 <label>Select columns</label>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>

@@ -1550,7 +1550,7 @@
                                 <orient>wxVERTICAL</orient>
                                 <label>Inforce values</label>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <flag>wxGROW|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
@@ -1695,7 +1695,7 @@
                             <object class="wxStaticBoxSizer">
                                 <orient>wxVERTICAL</orient>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
@@ -1984,7 +1984,7 @@
                 <orient>wxVERTICAL</orient>
                 <label>Select columns</label>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
