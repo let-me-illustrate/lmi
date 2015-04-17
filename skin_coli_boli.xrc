@@ -1002,7 +1002,6 @@
                             <border>2</border>
                             <object class="wxStaticBoxSizer">
                                 <orient>wxHORIZONTAL</orient>
-                                <border>2</border>
                                 <label>Substandard</label>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_TOP|wxALL</flag>
@@ -1510,7 +1509,7 @@ It's unusual to place a checkbox's "label" on the left, as is simulated
 here, but it looks weird if we don't make this look like its siblings.
 -->
                                         <size>80,20</size>
-                                        <value>0</value>
+                                        <checked>0</checked>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1863,7 +1862,7 @@ It's unusual to place a checkbox's "label" on the left, as is simulated
 here, but it looks weird if we don't make this look like its siblings.
 -->
                                         <size>80,20</size>
-                                        <value>0</value>
+                                        <checked>0</checked>
                                     </object>
                                 </object>
                                 <object class="sizeritem">

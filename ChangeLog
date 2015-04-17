@@ -36029,3 +36029,22 @@ Fix defect introduced 20130423T0219Z: group roster was not mentioned.
   version.hpp
 Designate release candidate 6165.
 
+20150417T2001Z <gchicares@sbcglobal.net> [516]
+
+  xrc.rnc [new file]
+Add schema for XRC validation.
+
+20150417T2049Z <gchicares@sbcglobal.net> [516]
+
+  gpt.xrc
+  mec.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Fix first tranche of XRC validation errors. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00002.html
+

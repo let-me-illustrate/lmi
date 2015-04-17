@@ -32,8 +32,6 @@
 -->
 
 <object class="wxPanel" name="plan_panel">
-    <title>Plan</title>
-    <centered>1</centered>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablecols>0</growablecols>
@@ -497,7 +495,6 @@ useful in the future.
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Owner</label>
                 <object class="sizeritem">
@@ -527,7 +524,6 @@ useful in the future.
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Agent</label>
                 <object class="sizeritem">
