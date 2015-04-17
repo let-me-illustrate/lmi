@@ -140,7 +140,6 @@
                                     <border>4</border>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
-                                        <size>90,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -518,7 +517,6 @@
                                             <border>4</border>
                                             <object class="wxDatePickerCtrl" name="EffectiveDate">
                                                 <help>Effective date</help>
-                                                <size>90,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -1504,7 +1502,6 @@
                                             <border>4</border>
                                             <object class="wxDatePickerCtrl" name="InforceAsOfDate">
                                                 <help>Monthiversary as of which inforce data is provided</help>
-                                                <size>80,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -1834,7 +1831,6 @@
                                             <border>2</border>
                                             <object class="wxDatePickerCtrl" name="LastMaterialChangeDate">
                                                 <help>Beginning of most recent seven-pay period</help>
-                                                <size>80,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">

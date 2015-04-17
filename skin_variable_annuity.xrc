@@ -164,7 +164,6 @@ useful in the future.
                                     <flag>wxGROW</flag>
                                     <object class="wxDatePickerCtrl" name="EffectiveDate">
                                         <help>Effective date</help>
-                                        <size>80,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -194,7 +193,6 @@ useful in the future.
                                     <border>2</border>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
-                                        <size>80,-1</size>
                                     </object>
                                 </object>
                             </object>
