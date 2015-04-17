@@ -36,7 +36,7 @@
         <growablecols>0,1</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>1</cols>
@@ -615,7 +615,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
@@ -1233,21 +1233,21 @@
         <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>2</border>
             <object class="wxFlexGridSizer">
                 <cols>3</cols>
                 <growablecols>0,1</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablecols>0</growablecols>
                         <growablerows>0</growablerows>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
                                 <cols>2</cols>
                                 <growablecols>1</growablecols>
@@ -1425,14 +1425,14 @@ here, but it looks weird if we don't make this look like its siblings.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablecols>0</growablecols>
                         <growablerows>0</growablerows>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
                                 <cols>2</cols>
                                 <growablecols>1</growablecols>
@@ -1607,14 +1607,14 @@ here, but it looks weird if we don't make this look like its siblings.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablecols>0</growablecols>
                         <growablerows>0</growablerows>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
                                 <cols>2</cols>
                                 <growablecols>1</growablecols>
@@ -1794,14 +1794,14 @@ here, but it looks weird if we don't make this look like its siblings.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>1</cols>
                 <growablecols>0</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
                         <growablecols>1</growablecols>
@@ -1834,14 +1834,14 @@ here, but it looks weird if we don't make this look like its siblings.
         <growablecols>2</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
                 <growablecols>0</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <object class="wxRadioBox" name="SolveType">
                         <help>What to solve for</help>
                         <style>wxRA_SPECIFY_COLS</style>
@@ -1861,7 +1861,7 @@ here, but it looks weird if we don't make this look like its siblings.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxRadioBox" name="SolveTarget">
                 <help>Target to solve for</help>
@@ -1876,7 +1876,7 @@ here, but it looks weird if we don't make this look like its siblings.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
@@ -1915,7 +1915,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <growablecols>0,1</growablecols>
                                 <growablerows>0</growablerows>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
                                         <object class="sizeritem">
@@ -1975,7 +1975,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
                                         <object class="sizeritem">
@@ -2035,7 +2035,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
                                         <object class="sizeritem">
@@ -2097,13 +2097,13 @@ here, but it looks weird if we don't make this look like its siblings.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
                                 <rows>1</rows>
                                 <growablecols>0,1</growablecols>
                                 <growablerows>0</growablerows>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <object class="wxRadioBox" name="SolveExpenseGeneralAccountBasis">
                                         <help>Expense, mortality, and general-account basis for solve</help>
                                         <style>wxRA_SPECIFY_COLS</style>
@@ -2118,7 +2118,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <object class="wxRadioBox" name="SolveSeparateAccountBasis">
                                         <help>Separate-account basis for solve</help>
                                         <style>wxRA_SPECIFY_COLS</style>
@@ -2147,14 +2147,14 @@ here, but it looks weird if we don't make this look like its siblings.
         <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
                 <growablecols>0</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -2167,7 +2167,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <growablecols>0</growablecols>
                                 <growablerows>0</growablerows>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
@@ -2223,7 +2223,7 @@ here, but it looks weird if we don't make this look like its siblings.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
@@ -2269,14 +2269,14 @@ here, but it looks weird if we don't make this look like its siblings.
         <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
                 <growablecols>0,1</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -2289,7 +2289,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <growablecols>0</growablecols>
                                 <growablerows>0</growablerows>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
@@ -2333,7 +2333,7 @@ here, but it looks weird if we don't make this look like its siblings.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxHORIZONTAL</orient>
@@ -2367,7 +2367,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <flag>wxGROW|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="Dumpin">
                                         <help>First-year lump-sum payment other than 1035 exchange</help>
@@ -2403,7 +2403,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <flag>wxGROW|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="External1035ExchangeAmount">
                                         <help>External 1035 exchange amount</help>
@@ -2411,7 +2411,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <flag>wxGROW|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="Internal1035ExchangeAmount">
                                         <help>Internal 1035 exchange amount</help>
@@ -2426,7 +2426,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <flag>wxGROW|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="External1035ExchangeTaxBasis">
                                         <help>Tax basis for external 1035 exchange</help>
@@ -2434,7 +2434,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <flag>wxGROW|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="Internal1035ExchangeTaxBasis">
                                         <help>Tax basis for internal 1035 exchange</help>
@@ -2471,7 +2471,7 @@ the other is perforce ignored.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
@@ -2574,7 +2574,7 @@ the other is perforce ignored.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                            <flag>wxGROW</flag>
                             <object class="wxTextCtrl" name="InputFundManagementFee">
                                 <help>Investment management fee for custom fund</help>
                             </object>
@@ -2591,7 +2591,7 @@ the other is perforce ignored.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP</flag>
+            <flag>wxGROW|wxTOP</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
@@ -2604,7 +2604,7 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxGROW</flag>
                     <object class="InputSequenceEntry" name="CashValueEnhancementRate">
                         <title>Cash-value enhancement rate</title>
                         <help>Cash-value enhancement rate (negative surrender charge)</help>
@@ -2619,7 +2619,7 @@ the other is perforce ignored.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_LEFT</flag>
+            <flag>wxGROW</flag>
             <border>8</border>
             <object class="wxCheckBox" name="UseCurrentDeclaredRate">
                 <help>Use current general-account declared rate</help>
@@ -2627,7 +2627,7 @@ the other is perforce ignored.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+            <flag>wxGROW</flag>
             <object class="wxFlexGridSizer">
                 <cols>3</cols>
                 <growablecols>1</growablecols>
@@ -2639,12 +2639,12 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxGROW</flag>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>0</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>8</border>
                             <object class="InputSequenceEntry" name="GeneralAccountRate">
                                 <title>General-account interest rate</title>
@@ -2654,7 +2654,7 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxGROW</flag>
                     <object class="wxRadioBox" name="GeneralAccountRateType">
                         <help>General-account rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
@@ -2672,12 +2672,12 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxGROW</flag>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>0</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>8</border>
                             <object class="InputSequenceEntry" name="SeparateAccountRate">
                                 <title>Separate-account interest rate</title>
@@ -2687,7 +2687,7 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxGROW</flag>
                     <object class="wxRadioBox" name="SeparateAccountRateType">
                         <help>Separate-account rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
@@ -2705,12 +2705,12 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxGROW</flag>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>0</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>8</border>
                             <object class="wxTextCtrl" name="LoanRate">
                                 <help>Loan interest rate</help>
@@ -2719,7 +2719,7 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxGROW</flag>
                     <object class="wxRadioBox" name="LoanRateType">
                         <help>Loan rate type</help>
                         <style>wxRA_SPECIFY_ROWS</style>
@@ -2740,14 +2740,14 @@ the other is perforce ignored.
         <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <object class="wxCheckBox" name="WithdrawToBasisThenLoan">
                 <help>Switch withdrawals to loans after tax basis has been recovered</help>
                 <label>Change withdrawals to loans after basis</label>
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
@@ -2793,14 +2793,14 @@ the other is perforce ignored.
         <growablecols>0,1</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <object class="wxFlexGridSizer">
                 <cols>1</cols>
                 <growablecols>0</growablecols>
                 <growablerows>0,1,2,3</growablerows>
                 <!-- waiver -->
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -2844,7 +2844,7 @@ the other is perforce ignored.
                 </object>
                 <!-- accident benefit -->
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -2888,7 +2888,7 @@ the other is perforce ignored.
                 </object>
                 <!-- spouse rider -->
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -2943,7 +2943,7 @@ the other is perforce ignored.
                 </object>
                 <!-- child rider -->
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -2984,14 +2984,14 @@ the other is perforce ignored.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <object class="wxFlexGridSizer">
                 <cols>1</cols>
                 <growablecols>0</growablecols>
                 <growablerows>0,1</growablerows>
                 <!-- term rider -->
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -3091,7 +3091,7 @@ the other is perforce ignored.
                 </object>
                 <!-- honeymoon endorsement -->
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -3169,7 +3169,7 @@ the other is perforce ignored.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
@@ -3372,7 +3372,7 @@ the other is perforce ignored.
         <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxNotebook" name="input_notebook">
                 <object class="notebookpage">

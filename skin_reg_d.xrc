@@ -115,7 +115,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxBOTTOM</flag>
+                                    <flag>wxGROW|wxLEFT|wxBOTTOM</flag>
                                     <border>4</border>
                                     <object class="wxRadioBox" name="UseDOB">
                                         <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
@@ -136,7 +136,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
+                                    <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
                                     <border>4</border>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
@@ -172,7 +172,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxGROW</flag>
+                    <flag>wxGROW</flag>
                     <border>4</border>
                     <object class="wxRadioBox" name="Gender">
                         <help>Gender</help>
@@ -188,7 +188,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT|wxGROW|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
@@ -216,7 +216,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxGROW|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxComboBox" name="UnderwritingClass">
                                         <help>Underwriting class</help>
@@ -286,7 +286,7 @@
         <rows>3</rows>
         <growablecols>0</growablecols>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_TOP|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>2</border>
             <object class="wxFlexGridSizer">
                 <cols>0</cols>
@@ -421,14 +421,14 @@
         <growablecols>0</growablecols>
         <growablerows>0,1</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
                 <growablecols>1,2</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxTOP</flag>
+                    <flag>wxGROW|wxLEFT|wxTOP</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
@@ -453,7 +453,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxGROW|wxTOP</flag>
+                    <flag>wxGROW|wxTOP</flag>
                     <border>15</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
@@ -475,7 +475,7 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxRadioBox" name="DefinitionOfMaterialChange">
                                 <help>Definition of material change</help>
@@ -596,7 +596,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+            <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
@@ -604,7 +604,7 @@
                 <growablecols>0,1</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_TOP|wxLEFT</flag>
+                    <flag>wxGROW|wxLEFT</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
@@ -744,7 +744,7 @@
         <growablecols>0</growablecols>
         <growablerows>0,1,2</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
@@ -846,7 +846,7 @@
                 <rows>1</rows>
                 <growablecols>0,1</growablecols>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+                    <flag>wxGROW|wxLEFT|wxRIGHT|wxTOP</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -994,7 +994,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>4</border>
                                     <object class="InputSequenceEntry" name="SeparateAccountRate">
                                         <title>Separate-account interest rate</title>
@@ -1029,7 +1029,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                            <flag>wxGROW|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxTextCtrl" name="InputFundManagementFee">
                                                 <help>Investment management fee for custom fund</help>
@@ -1135,7 +1135,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT|wxGROW|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
@@ -1312,7 +1312,7 @@
                         <growablecols>0</growablecols>
                         <growablerows>0,1</growablerows>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_TOP|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxRadioBox" name="SolveTarget">
                                 <help>Target to solve for</help>
@@ -1333,7 +1333,7 @@
                                 <rows>2</rows>
                                 <growablecols>0</growablecols>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxGROW|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>0</cols>
@@ -1357,7 +1357,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
+                                    <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                                     <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
@@ -1544,7 +1544,7 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_TOP|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticBoxSizer">
                                 <orient>wxVERTICAL</orient>
@@ -1683,14 +1683,14 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <rows>0</rows>
                         <growablecols>0</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticBoxSizer">
                                 <orient>wxVERTICAL</orient>
@@ -1937,7 +1937,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_TOP|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
@@ -1978,7 +1978,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
@@ -2200,7 +2200,7 @@
         <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW | wxALIGN_CENTER_VERTICAL | wxALL</flag>
+            <flag>wxGROW | wxALL</flag>
             <border>4</border>
             <object class="wxNotebook" name="input_notebook">
                 <object class="notebookpage">
