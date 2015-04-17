@@ -327,7 +327,6 @@
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Insured</label>
                 <object class="sizeritem">
@@ -438,7 +437,6 @@
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Corporation</label>
                 <object class="sizeritem">
@@ -559,7 +557,6 @@ appropriate input.
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Agent</label>
                 <object class="sizeritem">
@@ -873,7 +870,6 @@ appropriate input.
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
-                        <flag>wxGROW|wxALL</flag>
                         <orient>wxVERTICAL</orient>
                         <label>1035 exchange</label>
                         <object class="sizeritem">

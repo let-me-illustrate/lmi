@@ -415,8 +415,6 @@
 </object>
 
 <object class="wxPanel" name="plan_panel">
-    <title>Plan</title>
-    <centered>1</centered>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <rows>2</rows>
@@ -740,8 +738,6 @@
 </object>
 
 <object class="wxPanel" name="assumptions_panel">
-    <title>Assumptions</title>
-    <centered>1</centered>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <rows>3</rows>

@@ -937,7 +937,6 @@
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>2</border>
                     <object class="wxStaticBoxSizer">
-                        <flag>wxGROW|wxALL</flag>
                         <orient>wxVERTICAL</orient>
                         <label>Salary-based specified amount</label>
                         <object class="sizeritem">
@@ -1649,7 +1648,6 @@
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Participant</label>
                 <object class="sizeritem">
@@ -1773,7 +1771,6 @@
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Sponsor</label>
                 <object class="sizeritem">
@@ -1885,7 +1882,6 @@
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Agent</label>
                 <object class="sizeritem">

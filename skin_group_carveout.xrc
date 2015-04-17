@@ -682,7 +682,7 @@ It's unusual to place a checkbox's "label" on the left, as is simulated
 here, but it looks weird if we don't make this look like its siblings.
 -->
                                         <size>80,20</size>
-                                        <value>0</value>
+                                        <checked>0</checked>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1035,7 +1035,7 @@ It's unusual to place a checkbox's "label" on the left, as is simulated
 here, but it looks weird if we don't make this look like its siblings.
 -->
                                         <size>80,20</size>
-                                        <value>0</value>
+                                        <checked>0</checked>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1616,7 +1616,6 @@ here, but it looks weird if we don't make this look like its siblings.
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>2</border>
                     <object class="wxStaticBoxSizer">
-                        <flag>wxGROW|wxALL</flag>
                         <orient>wxVERTICAL</orient>
                         <label>Salary-based specified amount</label>
                         <object class="sizeritem">
@@ -2329,7 +2328,6 @@ here, but it looks weird if we don't make this look like its siblings.
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Participant</label>
                 <object class="sizeritem">
@@ -2453,7 +2451,6 @@ here, but it looks weird if we don't make this look like its siblings.
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Sponsor</label>
                 <object class="sizeritem">
@@ -2565,7 +2562,6 @@ here, but it looks weird if we don't make this look like its siblings.
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Agent</label>
                 <object class="sizeritem">
