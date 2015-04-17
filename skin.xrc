@@ -181,7 +181,6 @@
                                             <flag>wxGROW</flag>
                                             <object class="wxDatePickerCtrl" name="EffectiveDate">
                                                 <help>Effective date</help>
-                                                <size>80,-1</size>
                                             </object>
                                         </object>
                                     </object>
@@ -427,7 +426,6 @@
                                     <flag>wxGROW</flag>
                                     <object class="wxDatePickerCtrl" name="LastCoiReentryDate">
                                         <help>Last COI reentry date</help>
-                                        <size>80,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -1105,7 +1103,6 @@
                                     <flag>wxGROW</flag>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
-                                        <size>80,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -1293,7 +1290,6 @@
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="InforceAsOfDate">
                                         <help>Monthiversary date as of which inforce data is provided</help>
-                                        <size>80,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1739,7 +1735,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="LastMaterialChangeDate">
                                         <help>Beginning of most recent seven-pay period</help>
-                                        <size>80,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
