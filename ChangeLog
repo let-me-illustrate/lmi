@@ -36067,3 +36067,9 @@ Use only one of a pair of synonymous constants. See:
 Forswear feckless flags. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
+20150417T2155Z <gchicares@sbcglobal.net> [516]
+
+  policy_view.xrc
+Remove disregarded "option". See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
