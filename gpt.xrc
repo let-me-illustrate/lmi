@@ -852,7 +852,7 @@ here, but it looks weird if we don't make this look like its siblings.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxLEFT</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                     <border>4</border>
                     <object class="wxTextCtrl" name="External1035ExchangeAmount">
                         <help>External 1035 exchange amount</help>
@@ -883,7 +883,7 @@ here, but it looks weird if we don't make this look like its siblings.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxLEFT</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                     <border>4</border>
                     <object class="wxTextCtrl" name="Internal1035ExchangeAmount">
                         <help>Internal 1035 exchange amount</help>
@@ -914,7 +914,7 @@ here, but it looks weird if we don't make this look like its siblings.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxLEFT</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                     <border>4</border>
                     <object class="wxTextCtrl" name="Payment">
                         <help>Payment</help>
@@ -929,7 +929,7 @@ here, but it looks weird if we don't make this look like its siblings.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxLEFT</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                     <border>4</border>
                     <object class="wxTextCtrl" name="PremsPaidDecrement">
                         <help>Decrement to 7702(f)(1) 'premiums paid'</help>

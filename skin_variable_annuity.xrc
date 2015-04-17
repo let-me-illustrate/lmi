@@ -114,7 +114,7 @@ useful in the future.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxComboBox" name="StateOfJurisdiction">
                                         <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
@@ -130,7 +130,7 @@ useful in the future.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxComboBox" name="PremiumTaxState">
                                         <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
@@ -141,7 +141,7 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxCheckBox" name="EffectiveDateToday">
                                 <help>Set effective date to current date</help>
@@ -348,14 +348,14 @@ useful in the future.
                         <cols>2</cols>
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Amount</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="Payment">
                                 <title>Individual payment amount</title>
@@ -363,14 +363,14 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Mode</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="PaymentMode">
                                 <title>Individual payment mode</title>
@@ -393,14 +393,14 @@ useful in the future.
                         <cols>2</cols>
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Premium based</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="ExtraCompensationOnPremium">
                                 <title>Additional premium load</title>
@@ -408,14 +408,14 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Asset based</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="ExtraCompensationOnAssets">
                                 <title>Additional separate-account asset charge</title>
@@ -437,14 +437,14 @@ useful in the future.
                         <cols>2</cols>
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Separate account rate</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="SeparateAccountRate">
                                 <title>Separate-account interest rate</title>
@@ -452,14 +452,14 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Withdrawal</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="Withdrawal">
                                 <title>Withdrawal amount</title>
@@ -467,14 +467,14 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Comments</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="Comments">
                                 <help>Freeform comments</help>

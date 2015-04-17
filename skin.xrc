@@ -2367,7 +2367,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="Dumpin">
                                         <help>First-year lump-sum payment other than 1035 exchange</help>
@@ -2403,7 +2403,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="External1035ExchangeAmount">
                                         <help>External 1035 exchange amount</help>
@@ -2411,7 +2411,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="Internal1035ExchangeAmount">
                                         <help>Internal 1035 exchange amount</help>
@@ -2426,7 +2426,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="External1035ExchangeTaxBasis">
                                         <help>Tax basis for external 1035 exchange</help>
@@ -2434,7 +2434,7 @@ the other is perforce ignored.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxTextCtrl" name="Internal1035ExchangeTaxBasis">
                                         <help>Tax basis for internal 1035 exchange</help>
@@ -2574,7 +2574,7 @@ the other is perforce ignored.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                             <object class="wxTextCtrl" name="InputFundManagementFee">
                                 <help>Investment management fee for custom fund</help>
                             </object>
@@ -2604,7 +2604,7 @@ the other is perforce ignored.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                     <object class="InputSequenceEntry" name="CashValueEnhancementRate">
                         <title>Cash-value enhancement rate</title>
                         <help>Cash-value enhancement rate (negative surrender charge)</help>
@@ -2619,7 +2619,7 @@ the other is perforce ignored.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW</flag>
+            <flag>wxALIGN_LEFT</flag>
             <border>8</border>
             <object class="wxCheckBox" name="UseCurrentDeclaredRate">
                 <help>Use current general-account declared rate</help>
@@ -2644,7 +2644,7 @@ the other is perforce ignored.
                         <rows>1</rows>
                         <growablecols>0</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>8</border>
                             <object class="InputSequenceEntry" name="GeneralAccountRate">
                                 <title>General-account interest rate</title>
@@ -2677,7 +2677,7 @@ the other is perforce ignored.
                         <rows>1</rows>
                         <growablecols>0</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>8</border>
                             <object class="InputSequenceEntry" name="SeparateAccountRate">
                                 <title>Separate-account interest rate</title>
@@ -2710,7 +2710,7 @@ the other is perforce ignored.
                         <rows>1</rows>
                         <growablecols>0</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>8</border>
                             <object class="wxTextCtrl" name="LoanRate">
                                 <help>Loan interest rate</help>
@@ -2740,7 +2740,7 @@ the other is perforce ignored.
         <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALL</flag>
+            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <object class="wxCheckBox" name="WithdrawToBasisThenLoan">
                 <help>Switch withdrawals to loans after tax basis has been recovered</help>
                 <label>Change withdrawals to loans after basis</label>

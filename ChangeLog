@@ -36097,3 +36097,18 @@ Remove alignment options that have been ignored due to wxGROW. See:
 Add missing border flags. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
+20150417T2252Z <gchicares@sbcglobal.net> [516]
+
+  gpt.xrc
+  mec.xrc
+  policy_view.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Fix incorrect uses of wxGROW. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
