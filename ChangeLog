@@ -36048,3 +36048,10 @@ Add schema for XRC validation.
 Fix first tranche of XRC validation errors. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00002.html
 
+20150417T2124Z <gchicares@sbcglobal.net> [516]
+
+  policy_view.xrc
+  rounding_view.xrc
+Use only one of a pair of synonymous constants. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
