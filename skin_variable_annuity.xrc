@@ -70,7 +70,7 @@
 <!-- This doesn't actually do anything today, but it'll probably be
 useful in the future.
                 <object class="sizeritem">
-                    <flag>wxGROW</flag>
+                    <flag>wxGROW|wxLEFT|wxTOP</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>0</cols>
