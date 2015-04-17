@@ -1147,7 +1147,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>

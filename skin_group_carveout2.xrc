@@ -1238,7 +1238,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW</flag>
+                    <flag>wxGROW|wxBOTTOM</flag>
                     <border>2</border>
                     <object class="InputSequenceEntry" name="DeathBenefitOption">
                         <title>Death benefit option</title>
