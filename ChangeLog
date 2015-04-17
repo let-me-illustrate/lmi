@@ -36137,3 +36137,9 @@ Let wx determine the size of date-picker controls. See:
 Grow controls prn to align columns containing date pickers. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
 
+20150417T2338Z <gchicares@sbcglobal.net> [516]
+
+  about_dialog.cpp
+Improve "Help | About" layout with high DPI. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00006.html
+
