@@ -541,7 +541,7 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxALIGN_CENTER|wxALL</flag>
                             <border>4</border>
                             <object class="wxCheckBox" name="UseExperienceRating">
                                 <help>Use experience rating (composite only)--available only with both partial mortality and month-by-month</help>
@@ -550,7 +550,7 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
+                            <flag>wxALIGN_CENTER|wxALL</flag>
                             <border>4</border>
                             <object class="wxCheckBox" name="OverrideExperienceReserveRate">
                                 <help>Override experience-rating reserve rate</help>
@@ -564,14 +564,14 @@
                                 <cols>2</cols>
                                 <rows>2</rows>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxTOP|wxRIGHT</flag>
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
                                         <label>Experience-rating reserve rate</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxTextCtrl" name="ExperienceReserveRate">
                                         <help>Experience-rating reserve rate</help>
@@ -579,14 +579,14 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxTOP|wxRIGHT</flag>
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
                                         <label>Experience-rating initial k factor</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxTextCtrl" name="ExperienceRatingInitialKFactor">
                                         <help>Initial k factor for experience rating</help>
@@ -933,7 +933,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM</flag>
                                     <border>4</border>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
@@ -1138,7 +1138,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>2</border>
                     <object class="wxTextCtrl" name="CorporationName">
                         <help>Corporation name</help>
@@ -2794,7 +2794,7 @@ here, but it looks weird if we don't make this look like its siblings.
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxTOP|wxLEFT</flag>
+                    <flag>wxALIGN_LEFT|wxTOP|wxLEFT</flag>
                     <border>8</border>
                     <object class="wxCheckBox" name="UseCurrentDeclaredRate">
                         <help>Use current general-account declared rate</help>
@@ -2823,7 +2823,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxTOP|wxBOTTOM</flag>
+                                    <flag>wxGROW|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
                                     <border>4</border>
                                     <object class="InputSequenceEntry" name="GeneralAccountRate">
                                         <title>General-account interest rate</title>
@@ -3124,7 +3124,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxGROW|wxLEFT|wxRIGHT|wxTOP</flag>
+                                            <flag>wxALIGN_RIGHT|wxLEFT|wxRIGHT|wxTOP</flag>
                                             <border>0</border>
                                             <object class="wxStaticText">
                                                 <size>-1,20</size>
