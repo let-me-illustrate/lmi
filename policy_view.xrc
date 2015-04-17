@@ -31,14 +31,14 @@
     <object class="wxBoxSizer">
         <object class="sizeritem">
             <option>1</option>
-            <flag>wxEXPAND|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <object class="wxScrolledWindow">
                 <scrollrate>0,10</scrollrate>
                 <style>wxTAB_TRAVERSAL</style>
                 <object class="wxBoxSizer">
                     <object class="sizeritem">
                         <option>1</option>
-                        <flag>wxEXPAND</flag>
+                        <flag>wxGROW</flag>
                         <object class="wxFlexGridSizer">
                             <cols>2</cols>
                             <rows>1</rows>
@@ -61,7 +61,7 @@
                                         <option>0</option>
                                     </object>
                                     <object class="sizeritem">
-                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW|wxEXPAND</flag>
+                                        <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxGROW</flag>
                                         <object class="wxTextCtrl" name="DatabaseFilename"/>
                                         <minsize>160,-1</minsize>
                                         <option>1</option>
