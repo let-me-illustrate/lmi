@@ -143,7 +143,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxLEFT|wxTOP</flag>
+                                    <flag>wxALIGN_LEFT|wxLEFT|wxTOP</flag>
                                     <border>2</border>
                                     <object class="wxCheckBox" name="IncludeInComposite">
                                         <help>Include this individual in any group composite</help>
@@ -392,7 +392,7 @@
                                 <orient>wxVERTICAL</orient>
                                 <label>Issue age</label>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_LEFT|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>0</cols>
@@ -1619,7 +1619,7 @@ here, but it looks weird if we don't make this look like its siblings.
                         <orient>wxVERTICAL</orient>
                         <label>Salary-based specified amount</label>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>4</border>
                             <object class="wxFlexGridSizer">
                                 <cols>1</cols>
@@ -2692,7 +2692,7 @@ here, but it looks weird if we don't make this look like its siblings.
                 <orient>wxVERTICAL</orient>
                 <label>Select columns</label>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>

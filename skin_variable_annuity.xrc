@@ -342,7 +342,7 @@ useful in the future.
                 <orient>wxVERTICAL</orient>
                 <label>Premium</label>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
@@ -387,7 +387,7 @@ useful in the future.
                 <orient>wxVERTICAL</orient>
                 <label>Extra compensation</label>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
@@ -431,7 +431,7 @@ useful in the future.
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
@@ -653,7 +653,7 @@ useful in the future.
                 <orient>wxVERTICAL</orient>
                 <label>Select columns</label>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>

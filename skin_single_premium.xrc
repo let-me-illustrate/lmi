@@ -873,7 +873,7 @@ appropriate input.
                         <orient>wxVERTICAL</orient>
                         <label>1035 exchange</label>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>4</border>
                             <object class="wxFlexGridSizer">
                                 <cols>3</cols>
