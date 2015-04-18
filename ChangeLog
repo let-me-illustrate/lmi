@@ -36143,3 +36143,9 @@ Grow controls prn to align columns containing date pickers. See:
 Improve "Help | About" layout with high DPI. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00006.html
 
+20150418T0008Z <gchicares@sbcglobal.net> [516]
+
+  rounding_view.xrc
+Remove redundant wxALIGN_LEFT flags from horizontal wxBoxSizer. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00012.html
+
