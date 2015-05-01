@@ -1849,6 +1849,10 @@ void AccountValue::TxSetRiderDed()
     if(TermRiderActive && yare_input_.TermRider)
         {
         TermCharge    = YearsTermRate   * TermDB * DBDiscountRate[Year];
+        // TAXATION !! Integrated term: s/TermDB/TermSpecAmt/ because
+        // it can't go into the corridor under tax assumptions.
+        // TAXATION !! Use a distinct discount rate for taxation? Or
+        // the policy's rate, as used for DcvNaar?
         DcvTermCharge = YearsDcvCoiRate * TermDB * DBDiscountRate[Year];
         }
 
