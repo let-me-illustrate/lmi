@@ -40,7 +40,6 @@
 #include <algorithm>                    // std::max(), std::copy()
 #include <functional>
 #include <iterator>                     // std::back_inserter()
-#include <vector>
 
 // TODO ?? Future enhancements:
 //
@@ -674,9 +673,9 @@ void InterestRates::InitializeLoanRates()
                 ,PrfLnDueRate_[mce_annual_rate ][j]
                 ,PrfLnDueRate_[mce_monthly_rate][j]
                 ,RoundIntRate_
-                ,PrfLoanSpread_[j]
-                ,mce_spread_is_effective_annual
                 ,Zero_
+                ,mce_spread_is_effective_annual
+                ,GenAcctGrossRate_[mce_gen_guar]
                 ,0.0
                 );
             convert_interest_rates

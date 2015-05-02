@@ -370,7 +370,7 @@ inline std::vector<double> const& InterestRates::PrfLnDueRate
     ,mcenum_rate_period rate_period
     ) const
 {
-    return RegLnCredRate_[rate_period][gen_basis];
+    return PrfLnDueRate_[rate_period][gen_basis];
 }
 
 inline std::vector<double> const& InterestRates::HoneymoonValueRate
