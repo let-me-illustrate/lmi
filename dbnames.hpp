@@ -426,6 +426,8 @@ enum e_database_key
 
         ,DB_MaxLoanAcctValMult
         ,DB_MaxLoanDed
+        ,DB_FirstPrefLoanYear
+        ,DB_PrefLoanRateDecr
 
         ,DB_GuarPrefLoanSpread
         ,DB_GuarRegLoanSpread
