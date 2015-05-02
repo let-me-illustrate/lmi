@@ -1526,9 +1526,6 @@ void AccountValue::TxLoanRepay()
         return;
         }
 
-// TODO ?? ActualLoan should be eliminated. It's used only in two functions,
-// one that takes a loan, and one that repays a loan.
-
     // TODO ?? This idiom seems too cute. And it can return -0.0 .
     // Maximum repayment is total debt.
     ActualLoan = -std::min(-RequestedLoan, RegLnBal);
