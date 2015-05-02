@@ -265,6 +265,8 @@
 {DB_MinVlrRate,DB_Topic_Loans,"MinVlrRate","Minimum variable loan rate",}, \
 {DB_MaxLoanAcctValMult,DB_Topic_Loans,"MaxLoanAcctValMult","Maximum loan as proportion of account value, e.g. 1=100%",}, \
 {DB_MaxLoanDed,DB_Topic_Loans,"MaxLoanDed","Monthiversary deductions reflected in maximum loan: 0=12 times most recent, 1=to next anniversary, 2=to next modal premium due date, 3=18 times most recent",}, \
+{DB_FirstPrefLoanYear,DB_Topic_Loans,"FirstPrefLoanYear","Duration after which new cash loans are preferred",}, \
+{DB_PrefLoanRateDecr,DB_Topic_Loans,"PrefLoanRateDecr","Decrement to fixed loan rate for preferred loans",}, \
 {DB_GuarPrefLoanSpread,DB_Topic_Loans,"GuarPrefLoanSpread","Guaranteed interest spread for preferred loans",}, \
 {DB_GuarRegLoanSpread,DB_Topic_Loans,"GuarRegLoanSpread","Guaranteed interest spread for regular loans",}, \
 {DB_CurrPrefLoanSpread,DB_Topic_Loans,"CurrPrefLoanSpread","Current interest spread for preferred loans",}, \
