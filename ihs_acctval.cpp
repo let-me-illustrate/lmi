@@ -952,11 +952,14 @@ void AccountValue::InitializeSpecAmt()
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
+    // This "modal minimum" premium is designed for group plans. It is
+    // intended roughly to approximate the minimum payment (at a modal
+    // frequency chosen by the employer) necessary to prevent lapse if
+    // no other premium is paid.
+    //
     // Most other yearly values are posted to InvariantValues() in
     // FinalizeYear(), but it seems clearer to post this one here
     // where it's calculated along with 'MlyNoLapsePrem'.
-    // SOMEDAY !! It is arbitrarily assumed that the employer's mode
-    // governs; this could be made more flexible.
     InvariantValues().ModalMinimumPremium[Year] = GetModalMinPrem
         (Year
         ,InvariantValues().ErMode[Year].value()
