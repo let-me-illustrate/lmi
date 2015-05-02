@@ -36181,3 +36181,16 @@ matter much: the intention is to prevent lapse, which wouldn't occur
 anyway because of the ee payment, so the admin system would simply
 have an unneeded extra margin of conservatism.
 
+20150502T1429Z <gchicares@sbcglobal.net> [513]
+
+  interest_rates.cpp
+  interest_rates.hpp
+Remove latent defects in as-yet-unreachable code.
+
+20150502T1522Z <gchicares@sbcglobal.net> [513]
+
+  dbnames.xpp
+  ihs_avmly.cpp
+  interest_rates.cpp
+Remove warnings about preferred loans: they'll be supported soon.
+

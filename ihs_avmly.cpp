@@ -2734,9 +2734,6 @@ void AccountValue::TxTakeLoan()
         return;
         }
 
-    // SOMEDAY !! Preferred loan calculations not yet implemented.
-    LMI_ASSERT(0.0 == AVPrfLn);
-
     double max_loan_increment = MaxLoan - (AVRegLn + AVPrfLn);
 
     // When performing a solve, let it become overloaned--otherwise

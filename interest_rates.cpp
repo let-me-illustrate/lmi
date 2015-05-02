@@ -667,7 +667,6 @@ void InterestRates::InitializeLoanRates()
             );
         if(NeedPrefLoanRates_)
             {
-            fatal_error() << "Preferred loans not implemented." << LMI_FLUSH;
             convert_interest_rates
                 (PrfLnDueRate_[mce_annual_rate ][j]
                 ,PrfLnDueRate_[mce_annual_rate ][j]
