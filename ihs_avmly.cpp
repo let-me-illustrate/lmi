@@ -2238,7 +2238,12 @@ void AccountValue::TxCreditInt()
 
 void AccountValue::TxLoanInt()
 {
-    // Nothing to do if there's no loan outstanding.
+    // Reinitialize to zero before potential early exit, to sweep away
+    // any leftover values (e.g., after a loan has been paid off).
+    RegLnIntCred = 0.0;
+    PrfLnIntCred = 0.0;
+
+    // Nothing more to do if there's no loan outstanding.
     if(0.0 == RegLnBal && 0.0 == PrfLnBal)
         {
         return;
