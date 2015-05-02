@@ -36149,3 +36149,35 @@ Improve "Help | About" layout with high DPI. See:
 Remove redundant wxALIGN_LEFT flags from horizontal wxBoxSizer. See:
   http://lists.nongnu.org/archive/html/lmi/2015-04/msg00012.html
 
+20150501T2349Z <gchicares@sbcglobal.net> [516]
+
+  ihs_avmly.cpp
+Mark some taxation issues.
+
+20150502T0025Z <gchicares@sbcglobal.net> [516]
+
+  ihs_acctval.cpp
+Improve documentation.
+
+20150502T0036Z <gchicares@sbcglobal.net> [514]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Resolve two marked defects: improve initialization and documentation.
+
+20150502T0042Z <gchicares@sbcglobal.net> [514]
+
+  ihs_avmly.cpp
+Remove a latent defect.
+
+20150502T1409Z <gchicares@sbcglobal.net> [513]
+
+  ihs_avmly.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. Maximum loan and withdrawal were overstated for group
+UL plans when ee mode was more frequent than er mode. This situation
+is unlikely to arise. If it ever did arise, the distortion would not
+matter much: the intention is to prevent lapse, which wouldn't occur
+anyway because of the ee payment, so the admin system would simply
+have an unneeded extra margin of conservatism.
+
