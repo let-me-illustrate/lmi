@@ -932,8 +932,12 @@ void AccountValue::InitializeYear()
 
     DacTaxRsv                   = 0.0;
 
-    RequestedLoan       = Outlay_->new_cash_loans()[Year];
-    ActualLoan          = RequestedLoan; // TODO ?? Why not zero?
+    RequestedLoan               = Outlay_->new_cash_loans()[Year];
+    // ActualLoan is set in TxTakeLoan() and TxLoanRepay(). A local
+    // variable in each function might have sufficed, except that this
+    // quantity is used in the optional monthly detail report. Its
+    // value depends on the maximum loan, so it cannot be known here.
+    ActualLoan                  = 0.0;
 
     GrossPmts   .assign(12, 0.0);
     EeGrossPmts .assign(12, 0.0);
