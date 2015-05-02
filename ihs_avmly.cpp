@@ -704,12 +704,14 @@ bool AccountValue::IsModalPmtDate(mcenum_mode mode) const
     return 0 == Month % (12 / mode);
 }
 
-//============================================================================
+/// Number of monthiversaries before next billing date, counting today.
+///
+/// This is intended for use only with group UL plans, so it reflects
+/// the group billing mode chosen by the employer.
+
 int AccountValue::MonthsToNextModalPmtDate() const
 {
-    // TODO ?? Answer is in terms of *ee* mode only, but it seems
-    // wrong to ignore *er* mode.
-    return 1 + (11 - Month) % (12 / InvariantValues().EeMode[Year].value());
+    return 1 + (11 - Month) % (12 / InvariantValues().ErMode[Year].value());
 }
 
 /// Determine instantaneous base-policy minimum specified amount.
