@@ -1530,14 +1530,11 @@ void AccountValue::TxLoanRepay()
 
     // TODO ?? This idiom seems too cute. And it can return -0.0 .
     // Maximum repayment is total debt.
-    ActualLoan = -std::min(-RequestedLoan, RegLnBal);
+    ActualLoan = -std::min(-RequestedLoan, RegLnBal + PrfLnBal);
 
     process_distribution(ActualLoan);
-    AVRegLn  += ActualLoan;
-    RegLnBal += ActualLoan;
-// TODO ?? First repay regular loan, then apply excess to preferred.
-//  AVPrfLn  += ActualLoan;
-//  PrfLnBal += ActualLoan;
+    LMI_ASSERT(0.0 == progressively_reduce(AVRegLn , AVPrfLn , -ActualLoan));
+    LMI_ASSERT(0.0 == progressively_reduce(RegLnBal, PrfLnBal, -ActualLoan));
 
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
@@ -2777,9 +2774,16 @@ void AccountValue::TxTakeLoan()
     // Transfer new cash loan from the appropriate unloaned account(s).
     process_distribution(ActualLoan);
 
-    // SOMEDAY !! Also handle preferred loan.
-    AVRegLn += ActualLoan;
-    RegLnBal += ActualLoan;
+    if(!AllowPrefLoan || Year < FirstPrefLoanYear)
+        {
+        AVRegLn  += ActualLoan;
+        RegLnBal += ActualLoan;
+        }
+    else
+        {
+        AVPrfLn  += ActualLoan;
+        PrfLnBal += ActualLoan;
+        }
 }
 
 //============================================================================
