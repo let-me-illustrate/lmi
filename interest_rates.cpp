@@ -396,6 +396,8 @@ void InterestRates::Initialize(BasicValues const& v)
             }
         }
 
+    v.Database_->Query(PrefLoanRateDecr_, DB_PrefLoanRateDecr);
+
     v.Database_->Query(RegLoanSpread_[mce_gen_guar], DB_GuarRegLoanSpread);
     v.Database_->Query(RegLoanSpread_[mce_gen_curr], DB_CurrRegLoanSpread);
     v.Database_->Query(PrfLoanSpread_[mce_gen_guar], DB_GuarPrefLoanSpread);
@@ -629,10 +631,36 @@ void InterestRates::InitializeLoanRates()
         return;
         }
 
+    // Historically, lmi has charged a singular published rate on all
+    // loans, which necessarily differs for fixed vs. variable loans,
+    // but was the same for both regular and preferred. In 2015, it
+    // became necessary to support a new product that charges a lower
+    // (fixed) rate on preferred loans (and doesn't offer VLR). To
+    // accommodate this with minimal violence to existing code, a new
+    // 'PrefLoanRateDecr' entity has been added to the database.
+    // SOMEDAY !! It might be better to replace the current paradigm
+    // (due-rate minus spread) with a new set of database entities
+    // that map directly to the present class's public accessors:
+    //   (Reg|Reg)Ln(Due|Cred)Rate
+    // For now, it is uncertain whether a nonzero 'PrefLoanRateDecr'
+    // should be deducted for VLR, so that case is asserted not to
+    // arise:
+    LMI_ASSERT
+        (  mce_fixed_loan_rate == LoanRateType_
+        || each_equal(PrefLoanRateDecr_.begin(), PrefLoanRateDecr_.end(), 0.0)
+        );
     for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {
         RegLnDueRate_[mce_annual_rate][j] = PublishedLoanRate_;
         PrfLnDueRate_[mce_annual_rate][j] = PublishedLoanRate_;
+        // ET !! PrfLnDueRate_[...] = PublishedLoanRate_ - PrefLoanRateDecr_;
+        std::transform
+            (PrfLnDueRate_[mce_annual_rate][j].begin()
+            ,PrfLnDueRate_[mce_annual_rate][j].end()
+            ,PrefLoanRateDecr_.begin()
+            ,PrfLnDueRate_[mce_annual_rate][j].begin()
+            ,std::minus<double>()
+            );
         }
 
     RegLoanSpread_[mce_gen_mdpt] = Zero_;
