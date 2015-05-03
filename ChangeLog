@@ -36194,3 +36194,24 @@ Remove latent defects in as-yet-unreachable code.
   interest_rates.cpp
 Remove warnings about preferred loans: they'll be supported soon.
 
+20150502T1557Z <gchicares@sbcglobal.net> [513]
+
+  basic_values.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Establish new database entities for preferred loans.
+
+20150503T1629Z <gchicares@sbcglobal.net> [513]
+
+  interest_rates.cpp
+  interest_rates.hpp
+Set preferred loan rates reflecting the 20150502T1557Z change.
+
+20150503T1639Z <gchicares@sbcglobal.net> [512]
+
+  ihs_avmly.cpp
+Implement preferred loans.
+
