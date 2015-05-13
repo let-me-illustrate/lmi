@@ -28,7 +28,7 @@
 # elements marked with an asterisk.
 
 cell_element = element cell
-    {attribute version {"7"}
+    {attribute version {"8"}
 
     ,## Accidental death benefit: elected or not.
      element AccidentalDeathBenefit           {yes_or_no}
@@ -101,9 +101,9 @@ cell_element = element cell
     ,## Death benefit option. Default: 'a'.
      element DeathBenefitOption               {dbo_sequence}
     ,## * [obsolete]
-     element DeathBenefitOptionFromIssue      {dbopt}
+     element DeathBenefitOptionFromIssue      {dbopt}?
     ,## * [obsolete]
-     element DeathBenefitOptionFromRetirement {dbopt}
+     element DeathBenefitOptionFromRetirement {dbopt}?
     ,## 7702 definitional test.
      element DefinitionOfLifeInsurance        {defn_life_ins}
     ,## * 7702A definition of material change. Default:
@@ -173,17 +173,17 @@ cell_element = element cell
      ## Default: 'Yes'.
      element IncludeInComposite               {yes_or_no}
     ,## * [obsolete]
-     element IndividualPaymentAmount          {nonnegative_double}
+     element IndividualPaymentAmount          {nonnegative_double}?
     ,## * [obsolete]
-     element IndividualPaymentMode            {mode}
+     element IndividualPaymentMode            {mode}?
     ,## * [obsolete]
      element IndividualPaymentStrategy        {pmt_strategy}
     ,## * [obsolete]
-     element IndividualPaymentToAge           {age_int}
+     element IndividualPaymentToAge           {age_int}?
     ,## * [obsolete]
-     element IndividualPaymentToAlternative   {to_point}
+     element IndividualPaymentToAlternative   {to_point}?
     ,## * [obsolete]
-     element IndividualPaymentToDuration      {duration_int}
+     element IndividualPaymentToDuration      {duration_int}?
     ,## 7702A "amounts paid" for each "contract year" since beginning
      ## of most recent seven-pay period. Default: '0' if not in a
      ## seven-pay period.
@@ -203,6 +203,10 @@ cell_element = element cell
      element InforceContractMonth             {month_int}
     ,## * [obsolete]
      element InforceContractYear              {duration_int}
+    ,## Corporation's inforce stake in a benefit plan (e.g., amount of
+     ## a full split-dollar rollout): cumulative corporation payments,
+     ## plus accumulated interest if interest not paid in cash.
+     element InforceCorporationStake          {nonnegative_double}
     ,## Inforce cumulative 7702 guideline level premium.
      element InforceCumulativeGlp             {xsd:double}
     ,## Inforce cumulative 7702(f)(1) 'premiums paid'.
@@ -307,23 +311,23 @@ cell_element = element cell
      ## date, for contracts that have never had a material change.
      element LastMaterialChangeDate           {calendar_date_int}
     ,## * [obsolete]
-     element LoanAmount                       {nonnegative_double}
+     element LoanAmount                       {nonnegative_double}?
     ,## * [obsolete]
-     element LoanFromAge                      {age_int}
+     element LoanFromAge                      {age_int}?
     ,## * [obsolete]
-     element LoanFromAlternative              {from_point}
+     element LoanFromAlternative              {from_point}?
     ,## * [obsolete]
-     element LoanFromDuration                 {duration_int}
+     element LoanFromDuration                 {duration_int}?
     ,## Loan interest rate, if it is variable. Default: '0' otherwise.
      element LoanRate                         {proportion_double}
     ,## Loan rate: fixed or variable.
      element LoanRateType                     {loan_rate_type}
     ,## * [obsolete]
-     element LoanToAge                        {age_int}
+     element LoanToAge                        {age_int}?
     ,## * [obsolete]
-     element LoanToAlternative                {to_point}
+     element LoanToAlternative                {to_point}?
     ,## * [obsolete]
-     element LoanToDuration                   {duration_int}
+     element LoanToDuration                   {duration_int}?
     ,## Proportion of males when rates are custom-blended by gender.
      ## Default: '0' otherwise.
      element MaleProportion                   {proportion_double}
@@ -424,11 +428,22 @@ cell_element = element cell
      ## extracts require only the current scalar value. Default: '0'.
      element SpecifiedAmount                  {specamt_sequence}
     ,## * [obsolete]
-     element SpecifiedAmountFromIssue         {nonnegative_double}
+     element SpecifiedAmountFromIssue         {nonnegative_double}?
     ,## * [obsolete]
-     element SpecifiedAmountFromRetirement    {nonnegative_double}
+     element SpecifiedAmountFromRetirement    {nonnegative_double}?
     ,## * [obsolete]
      element SpecifiedAmountStrategyFromIssue {sa_strategy}
+    ,## * Accumulate interest at demand-loan rate for split dollar,
+     ## rather than paying it in cash.
+     element SplitDollarAccumulateInterest    {yes_or_no}
+    ,## * Split-dollar annual demand-loan rate (typically the AFR).
+     element SplitDollarLoanRate              {numeric_sequence}
+    ,## * Split-dollar rollout age.
+     element SplitDollarRolloutAge            {duration_int}
+    ,## * Point at which split-dollar rollout is planned.
+     element SplitDollarRolloutAtWhich        {to_point}
+    ,## * Split-dollar rollout duration.
+     element SplitDollarRolloutYear           {duration_int}
     ,## Spouse's insurance age on effective date of spouse rider.
      ## Default: '35' if rider not elected or not offered.
      element SpouseIssueAge                   {age_int}
@@ -443,6 +458,8 @@ cell_element = element cell
      element StateOfJurisdiction              {state}
     ,## Substandard table rating.
      element SubstandardTable                 {table_rating}
+    ,## * Built-in supplemental illustration type.
+     element SupplementalIllustrationType     {suppl_illus_type}
     ,## * User-designed supplemental illustration: first column.
      element SupplementalReportColumn00       {report_column}
     ,## * User-designed supplemental illustration: second column.
@@ -467,6 +484,11 @@ cell_element = element cell
      element SupplementalReportColumn10       {report_column}
     ,## * User-designed supplemental illustration: twelfth column.
      element SupplementalReportColumn11       {report_column}
+    ,## Supplemental specified amount (e.g., individually-elected
+     ## extra coverage on a group plan) for each policy year since
+     ## issue. Inforce extracts require only the current scalar value.
+     ## Default: '0'.
+     element SupplementalSpecifiedAmount      {specamt_sequence}
     ,## * Presumed age at death, for partial mortality. Default: '99'.
      element SurviveToAge                     {age_int}
     ,## * Presumed moment of death, for partial mortality.
@@ -510,19 +532,19 @@ cell_element = element cell
     ,## * Partial surrender. Default: '0'.
      element Withdrawal                       {numeric_sequence}
     ,## * [obsolete]
-     element WithdrawalAmount                 {nonnegative_double}
+     element WithdrawalAmount                 {nonnegative_double}?
     ,## * [obsolete]
-     element WithdrawalFromAge                {age_int}
+     element WithdrawalFromAge                {age_int}?
     ,## * [obsolete]
-     element WithdrawalFromAlternative        {from_point}
+     element WithdrawalFromAlternative        {from_point}?
     ,## * [obsolete]
-     element WithdrawalFromDuration           {duration_int}
+     element WithdrawalFromDuration           {duration_int}?
     ,## * [obsolete]
-     element WithdrawalToAge                  {age_int}
+     element WithdrawalToAge                  {age_int}?
     ,## * [obsolete]
-     element WithdrawalToAlternative          {to_point}
+     element WithdrawalToAlternative          {to_point}?
     ,## * [obsolete]
-     element WithdrawalToDuration             {duration_int}
+     element WithdrawalToDuration             {duration_int}?
     ,## Insured's address: zip code.
      element ZipCode                          {text}
     }

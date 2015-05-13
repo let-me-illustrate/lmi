@@ -27,6 +27,7 @@
 #endif
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "docmanager_ex.hpp"
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
@@ -37,7 +38,9 @@
 #include "skeleton.hpp"
 #include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_new.hpp"
 
+#include <wx/crt.h>
 #include <wx/docview.h>
 #include <wx/fileconf.h>
 #include <wx/frame.h>
@@ -467,16 +470,19 @@ TestsResults application_test::run()
 
             try
                 {
-                wxLogMessage("%s: started", name);
+                wxPrintf("%s: started\n", name);
                 wxStopWatch sw;
                 i->run_test();
-                wxLogMessage("time=%ldms (for %s)", sw.Time(), name);
-                wxLogMessage("%s: ok", name);
+                // Check that no messages were unexpectedly logged during this
+                // test execution.
+                wxLog::FlushActive();
+                wxPrintf("time=%ldms (for %s)\n", sw.Time(), name);
+                wxPrintf("%s: ok\n", name);
                 results.passed++;
                 }
             catch(test_skipped_exception const& e)
                 {
-                wxLogMessage("%s: skipped (%s)", name, e.what());
+                wxPrintf("%s: skipped (%s)\n", name, e.what());
                 results.skipped++;
                 }
             catch(std::exception const& e)
@@ -498,7 +504,7 @@ TestsResults application_test::run()
                 wxString one_line_error(error);
                 one_line_error.Replace("\n", " ");
 
-                wxLogMessage("%s: ERROR (%s)", name, one_line_error);
+                wxPrintf("%s: ERROR (%s)\n", name, one_line_error);
                 }
             }
         }
@@ -577,6 +583,56 @@ void wx_base_test_case::skip_if_not_distribution()
         }
 }
 
+wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name)
+{
+    // First find the window anywhere inside the dialog.
+    wxWindow* const w = wxWindow::FindWindowByName(name, &dialog);
+    LMI_ASSERT_WITH_MSG(w, "window named \"" << name << "\" not found");
+
+    // Then find the book control containing it by walking up the window chain
+    // until we reach it.
+    for (wxWindow* maybe_page = w;;)
+        {
+        wxWindow* const maybe_book = maybe_page->GetParent();
+
+        // As we know that w is a descendant of the dialog, this check ensures
+        // that the loop terminates as sooner or later we must reach the dialog
+        // by walking up the parent chain.
+        LMI_ASSERT_WITH_MSG
+            (maybe_book != &dialog
+            ,"book control containing window \"" << name << "\" not found"
+            );
+
+        if (wxBookCtrlBase* const book = dynamic_cast<wxBookCtrlBase*>(maybe_book))
+            {
+            // We found the notebook, now we can use it to make the page
+            // containing the target window current.
+            size_t const num_pages = book->GetPageCount();
+            for (size_t n = 0; n < num_pages; n++)
+                {
+                if (book->GetPage(n) == maybe_page)
+                    {
+                    book->SetSelection(n);
+                    wxYield();
+
+                    break;
+                    }
+                }
+
+            break;
+            }
+
+        maybe_page = maybe_book;
+        }
+
+    // Finally set the focus to the target window and ensure all events
+    // generated because of this are processed.
+    w->SetFocus();
+    wxYield();
+
+    return w;
+}
+
 // Application to drive the tests
 class SkeletonTest : public Skeleton
 {
@@ -607,6 +663,7 @@ class SkeletonTest : public Skeleton
     void RunTheTests();
 
     std::string runtime_error_;
+    std::string domain_error_;
     bool is_running_tests_;
 };
 
@@ -645,19 +702,10 @@ DocManagerEx* SkeletonTest::CreateDocManager()
 
 bool SkeletonTest::OnInit()
 {
-    // The test output should be reproducible, so disable the time
-    // stamps in the logs to avoid spurious differences due to them.
-    wxLog::DisableTimestamp();
-
     if(!Skeleton::OnInit())
         {
         return false;
         }
-
-    // Log everything to stdout, both to avoid interacting with the user (who
-    // might not even be present) and to allow redirecting the test output to a
-    // file which may subsequently be compared with the previous test runs.
-    delete wxLog::SetActiveTarget(new wxLogStderr(stdout));
 
     // Run the tests at idle time, when the main loop is running, in order to
     // do it in as realistic conditions as possible.
@@ -668,9 +716,18 @@ bool SkeletonTest::OnInit()
 
 bool SkeletonTest::StoreCurrentException()
 {
+    // We store all the exceptions that are expected to be caught by the tests
+    // here, in order to be able to rethrow them later. Almost all tests need
+    // just std::runtime_error, but the input validation one also can get a
+    // domain_error in some cases, so we need to handle that one as well.
     try
         {
         throw;
+        }
+    catch(std::domain_error& e)
+        {
+        domain_error_ = e.what();
+        return true;
         }
     catch (std::runtime_error const& e)
         {
@@ -683,7 +740,14 @@ bool SkeletonTest::StoreCurrentException()
 
 void SkeletonTest::RethrowStoredException()
 {
-    if (!runtime_error_.empty())
+    if(!domain_error_.empty())
+        {
+        std::domain_error const e(domain_error_);
+        domain_error_.clear();
+        throw e;
+        }
+
+    if(!runtime_error_.empty())
         {
         std::runtime_error const e(runtime_error_);
         runtime_error_.clear();
@@ -771,7 +835,7 @@ void SkeletonTest::RunTheTests()
 
     mainWin->SetFocus();
 
-    wxLogMessage("NOTE: starting the test suite");
+    wxPuts("NOTE: starting the test suite");
     wxStopWatch sw;
 
     // Notice that it is safe to use simple variable assignment here instead of
@@ -781,18 +845,18 @@ void SkeletonTest::RunTheTests()
     TestsResults const results = application_test::instance().run();
     is_running_tests_ = false;
 
-    wxLogMessage("time=%ldms (for all tests)", sw.Time());
+    wxPrintf("time=%ldms (for all tests)\n", sw.Time());
 
     if(results.failed == 0)
         {
         if(results.passed == 0)
             {
-            wxLogMessage("WARNING: no tests have been executed.");
+            wxPuts("WARNING: no tests have been executed.");
             }
         else
             {
-            wxLogMessage
-                ("SUCCESS: %d test%s successfully completed."
+            wxPrintf
+                ("SUCCESS: %d test%s successfully completed.\n"
                 ,results.passed
                 ,results.passed == 1 ? "" : "s"
                 );
@@ -800,8 +864,8 @@ void SkeletonTest::RunTheTests()
         }
     else
         {
-        wxLogMessage
-            ("FAILURE: %d out of %d test%s failed."
+        wxPrintf
+            ("FAILURE: %d out of %d test%s failed.\n"
             ,results.failed
             ,results.total
             ,results.total == 1 ? "" : "s"
@@ -810,8 +874,8 @@ void SkeletonTest::RunTheTests()
 
     if(results.skipped)
         {
-        wxLogMessage
-            ("NOTE: %s skipped"
+        wxPrintf
+            ("NOTE: %s skipped\n"
             ,results.skipped == 1
                 ? wxString("1 test was")
                 : wxString::Format("%d tests were", results.skipped)

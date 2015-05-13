@@ -28,74 +28,241 @@
 
 #include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
+#include "global_settings.hpp"
+#include "mvc_controller.hpp"
 #include "wx_test_case.hpp"
+#include "wx_test_document.hpp"
 
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
+#include <cstring>
 #include <stdexcept>
 
-/*
-    Test for the expected validation errors.
+/// Test validation of the COI multiplier input field.
+///
+/// Open the file CoiMultiplier.ill provided with the distribution and test
+/// various values of the "CurrentCoiMultiplier" field in the dialog invoked by
+///     Illustration | Edit cell
+///
+/// The following inputs must result in an error:
+///     (a) Empty string value.
+///     (b) Negative value.
+///     (c) Zero value.
+///
+/// The following input must result in an error in the normal execution case
+/// but not when one of the special back door command line arguments is
+/// specified:
+///     (d) Positive value less than the minimum (which is 0.9).
+///
+/// Finally, these inputs must not trigger any errors:
+///     (e) Exactly the minimum value.
+///     (f) Value of 1.
+///     (g) Value greater than 1.
+///
+/// Errors are tested by catching the exceptions and examining their associated
+/// messages and not by checking for the message boxes displayed by the program
+/// because these message boxes are shown from OnExceptionInMainLoop() method
+/// of the application object which behaves differently in the test suite.
 
-    This commit implements the following item of the testing specification:
+namespace
+{
 
-        15. Validate input ranges and anticipate error for
-            'CurrentCoiMultiplier' input.
+// The field value with the expected error message (or at least its variable
+// part, see below for how the full error message is constructed) or NULL if no
+// error should be given.
+struct coi_multiplier_test_data
+{
+    char const* value;
+    char const* error;
+};
 
-          A. File | Open | 'CoiMultiplier.cns'
-             Census | run case
-             Expected result:
-              Error message for last life with a zero multiplier:
+coi_multiplier_test_data const test_cases[] =
+{
+    { ""    ,"COI multiplier entered is '', but it must contain at least one number other than zero." },
+    { "-1"  ,"Lowest COI multiplier entered is -1, but 0.9 is the lowest multiplier allowed." },
+    { "0"   ,"COI multiplier entered is '0', but it must contain at least one number other than zero." },
+    { "0.8" ,"Lowest COI multiplier entered is 0.8, but 0.9 is the lowest multiplier allowed." },
+    { "0.9" ,NULL },
+    { "1"   ,NULL },
+    { "1.1" ,NULL },
+};
 
-              Input validation problems for '':
-              COI multiplier entered is '0', but it must
-               contain at least one number other than zero.
+} // anonymous namespace
 
-    However it doesn't check for the message box being displayed, because of
-    significant difficulty of doing it due to the fact that this message box is
-    shown from the global OnExceptionInMainLoop() function, but just checks for
-    the expected exception being thrown.
- */
 LMI_WX_TEST_CASE(input_validation)
 {
-    wxUIActionSimulator ui;
-    ui.Char('o', wxMOD_CONTROL);    // "File|Open"
+    skip_if_not_distribution();
 
-    wxTEST_DIALOG
-        (wxYield()
-         ,wxExpectModal<wxFileDialog>(get_test_file_path_for("CoiMultiplier.cns"))
-        );
+    wx_test_existing_illustration ill(get_test_file_path_for("CoiMultiplier.ill"));
 
-    ui.Char('r', wxMOD_CONTROL | wxMOD_SHIFT);  // "Census|Run case"
+    struct test_coi_multiplier_dialog : public wxExpectModalBase<MvcController>
+    {
+        explicit test_coi_multiplier_dialog(char const* value)
+            :value_(value)
+        {}
 
-    // Test that the expected exception is generated.
-    bool error_detected = false;
-    try
+        virtual int OnInvoked(MvcController* dialog) const
+            {
+            dialog->Show();
+            wxYield();
+
+            wx_test_focus_controller_child(*dialog, "CurrentCoiMultiplier");
+
+            wxUIActionSimulator ui;
+            if(*value_ == '\0')
+                {
+                // Special case of the empty value: we must clear the entry
+                // contents in this case, but emulating the input of "nothing"
+                // wouldn't be enough to do it, so do it manually instead.
+                ui.Char(WXK_SPACE);
+                ui.Char(WXK_BACK);
+                }
+            else
+                {
+                ui.Text(value_);
+                }
+            wxYield();
+
+            return wxID_OK;
+            }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return wxString::Format
+                ("edit cell dialog for testing COI multiplier \"%s\""
+                ,value_
+                );
+            }
+
+        char const* const value_;
+    };
+
+    for(std::size_t n = 0; n < sizeof test_cases / sizeof(test_cases[0]); n++)
         {
-        wxYield();
+        coi_multiplier_test_data const& td = test_cases[n];
+
+        // This flag is used to assert that all expected exceptions were
+        // generated at the end of the loop. The reason for using it instead of
+        // just asserting directly inside the "try" statement is that failing
+        // assert also throws an exception which would have been caught by our
+        // own "catch" clause and while we could test for it and rethrow the
+        // exception if we recognize it as ours, it is finally simpler to just
+        // avoid catching it in the first place.
+        bool check_for_expected_exception = false;
+        try
+            {
+            wxUIActionSimulator ui;
+            ui.Char('e', wxMOD_CONTROL); // "Illustration|Edit Cell"
+            wxTEST_DIALOG
+                (wxYield()
+                ,test_coi_multiplier_dialog(td.value)
+                );
+
+            // A special case: when using one of the special command line back
+            // door options, the test for the minimal COI multiplier value is
+            // skipped and doesn't result in the expected error -- which is
+            // itself expected, so don't fail the test in this case.
+            if
+                (
+                    !global_settings::instance().mellon()
+                ||  std::strcmp(td.value, "0.8") != 0
+                )
+                {
+                // Outside of this special case, do verify that we didn't miss
+                // an expected exception below.
+                check_for_expected_exception = true;
+                }
+            }
+        catch(std::domain_error& e)
+            {
+            // This is another special case: normally a negative value would
+            // fail the check comparing it with the lowest multiplier allowed,
+            // however this check is disabled when one of the special command
+            // line back door options is used. In this case the negative value
+            // still doesn't pass a subsequent check in coi_rate_from_q(),
+            // which is expected and doesn't constitute a test failure.
+            // Anything else does however.
+            LMI_ASSERT_WITH_MSG
+                (
+                    global_settings::instance().mellon()
+                &&  td.value
+                &&  td.value[0] == '-'
+                &&  std::strcmp(e.what(), "q is negative.") == 0
+                ,"COI multiplier value \""
+                    << td.value
+                    << "\" resulted in an unexpected domain error ("
+                    << e.what()
+                    << ")"
+                );
+            }
+        catch(std::runtime_error& e)
+            {
+            std::string const error_message = e.what();
+
+            LMI_ASSERT_WITH_MSG
+                (td.error
+                ,"COI multiplier value \""
+                    << td.value
+                    << "\" unexpectedly resulted in an error ("
+                    << error_message
+                    << ")"
+                );
+
+            // The error message always starts with the same prefix, discard it
+            // to make the failure messages below in case of a difference
+            // between the expected and actual errors more concise.
+            char const* const
+                error_prefix = "Input validation problems for '':\n";
+            std::size_t error_prefix_len = std::strlen(error_prefix);
+
+            LMI_ASSERT_WITH_MSG
+                (error_message.substr(0, error_prefix_len) == error_prefix
+                ,"Error message for COI multiplier value \""
+                    << td.value
+                    << "\" doesn't contain the expected prefix ("
+                    << e.what()
+                    << ")"
+                );
+
+            // The error message contains a line of the form "[file %s, line
+            // %d]" at the end which we want to ignore, as the line number and
+            // possibly the file name can change and are irrelevant to this
+            // check anyhow, so find this line presence and ignore it in
+            // comparison.
+            std::string::size_type const
+                loc_pos = error_message.find("\n\n[file", error_prefix_len);
+            LMI_ASSERT_WITH_MSG
+                (loc_pos != std::string::npos
+                ,"Error message for COI multiplier value \""
+                    << td.value
+                    << "\" unexpectedly doesn't contain location information ("
+                    << e.what()
+                    << ")"
+                );
+
+            // Finally check that what remains, i.e. the real error message,
+            // conforms to the expected one.
+            std::string const validation_error = error_message.substr
+                (error_prefix_len
+                ,loc_pos - error_prefix_len
+                );
+
+            LMI_ASSERT_EQUAL(validation_error, td.error);
+            }
+
+        if(check_for_expected_exception)
+            {
+            LMI_ASSERT_WITH_MSG
+                (!td.error
+                ,"COI multiplier value \""
+                    << td.value
+                    << "\" didn't generate the expected error ("
+                    << td.error
+                    << ")"
+                );
+            }
         }
-    catch(std::runtime_error& e)
-        {
-        error_detected = true;
 
-        // The error message contains a line of the form "[file %s, line %d]"
-        // at the end which we want to ignore, as the line number and possibly
-        // the file name can change and are irrelevant to this check anyhow, so
-        // find this line presence and ignore it in comparison.
-        std::string const error_message = e.what();
-        std::string::size_type loc_pos = error_message.find("\n[file");
-        LMI_ASSERT(loc_pos != std::string::npos);
-
-        LMI_ASSERT_EQUAL
-            (error_message.substr(0, loc_pos),
-             "Input validation problems for '':\n"
-             "COI multiplier entered is '0', but it must contain at least one number other than zero.\n"
-            );
-        }
-
-    ui.Char('l', wxMOD_CONTROL);    // "File|Close"
-    wxYield();
-
-    LMI_ASSERT(error_detected);
+    ill.close_discard_changes();
 }

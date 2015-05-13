@@ -139,6 +139,8 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
 bool IllustrationDocument::OnNewDocument()
 {
     Modify(true);
+// SOMEDAY !! Search for "SetDocumentSaved" on the mailing list and
+// resolve the issues discussed there.
     SetDocumentSaved(false);
 
 #if wxCHECK_VERSION(2,8,8)

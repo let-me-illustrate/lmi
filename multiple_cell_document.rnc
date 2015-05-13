@@ -27,14 +27,13 @@
 # 'class_defaults'; but those elements wouldn't be expected to have
 # any analogue on an administration system, so it seems best to copy
 # them from this document:
-#   http://svn.savannah.nongnu.org/viewvc/*checkout*/lmi/trunk/sample.cns?revision=5556&root=lmi
+#   http://svn.savannah.nongnu.org/viewvc/*checkout*/lmi/trunk/sample.cns?root=lmi
 # overwriting its 'particular_cells' with the individual records of
 # all contracts in the group.
 
 start = element multiple_cell_document
-    {attribute version {"1"}
-    ,## Optional for now; to be required in the future.
-     attribute data_source {xsd:nonNegativeInteger}?
+    {attribute version {"2"}
+    ,attribute data_source {xsd:nonNegativeInteger}
 
     ,element case_default     {cell_element  }
     ,element class_defaults   {cell_element +}

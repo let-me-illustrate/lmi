@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<single_cell_document version="1" data_source="1">
-  <cell version="7">
+<single_cell_document version="2" data_source="1">
+  <cell version="8">
     <AccidentalDeathBenefit>No</AccidentalDeathBenefit>
     <Address/>
     <AgentAddress>*** REQUIRED FIELD MISSING ***</AgentAddress>
@@ -35,8 +35,6 @@
     <CurrentCoiMultiplier>1</CurrentCoiMultiplier>
     <DateOfBirth>2437604</DateOfBirth>
     <DeathBenefitOption>a</DeathBenefitOption>
-    <DeathBenefitOptionFromIssue>A</DeathBenefitOptionFromIssue>
-    <DeathBenefitOptionFromRetirement>A</DeathBenefitOptionFromRetirement>
     <DefinitionOfLifeInsurance>CVAT</DefinitionOfLifeInsurance>
     <DefinitionOfMaterialChange>Earlier of increase or unnecessary premium</DefinitionOfMaterialChange>
     <Dumpin>0</Dumpin>
@@ -61,18 +59,14 @@
     <HoneymoonEndorsement>No</HoneymoonEndorsement>
     <HoneymoonValueSpread>0</HoneymoonValueSpread>
     <IncludeInComposite>Yes</IncludeInComposite>
-    <IndividualPaymentAmount>0</IndividualPaymentAmount>
-    <IndividualPaymentMode>Annual</IndividualPaymentMode>
     <IndividualPaymentStrategy>PmtInputScalar</IndividualPaymentStrategy>
-    <IndividualPaymentToAge>95</IndividualPaymentToAge>
-    <IndividualPaymentToAlternative>Maturity</IndividualPaymentToAlternative>
-    <IndividualPaymentToDuration>50</IndividualPaymentToDuration>
     <Inforce7702AAmountsPaidHistory>0</Inforce7702AAmountsPaidHistory>
     <InforceAnnualTargetPremium>0</InforceAnnualTargetPremium>
     <InforceAsOfDate>2454040</InforceAsOfDate>
     <InforceAvBeforeLastMc>0</InforceAvBeforeLastMc>
     <InforceContractMonth>0</InforceContractMonth>
     <InforceContractYear>0</InforceContractYear>
+    <InforceCorporationStake>0</InforceCorporationStake>
     <InforceCumulativeGlp>0</InforceCumulativeGlp>
     <InforceCumulativeGptPremiumsPaid>0</InforceCumulativeGptPremiumsPaid>
     <InforceCumulativeNoLapsePayments>0</InforceCumulativeNoLapsePayments>
@@ -112,15 +106,8 @@
     <IssueAge>45</IssueAge>
     <LastCoiReentryDate>2454040</LastCoiReentryDate>
     <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
-    <LoanAmount>0</LoanAmount>
-    <LoanFromAge>45</LoanFromAge>
-    <LoanFromAlternative>Retirement</LoanFromAlternative>
-    <LoanFromDuration>20</LoanFromDuration>
     <LoanRate>0.06</LoanRate>
     <LoanRateType>Fixed loan rate</LoanRateType>
-    <LoanToAge>95</LoanToAge>
-    <LoanToAlternative>Maturity</LoanToAlternative>
-    <LoanToDuration>50</LoanToDuration>
     <MaleProportion>1</MaleProportion>
     <MasterContractNumber/>
     <MaximumNaar>1000000000</MaximumNaar>
@@ -161,15 +148,19 @@
     <SolveToWhich>Retirement</SolveToWhich>
     <SolveType>No solve</SolveType>
     <SpecifiedAmount>1000000</SpecifiedAmount>
-    <SpecifiedAmountFromIssue>1000000</SpecifiedAmountFromIssue>
-    <SpecifiedAmountFromRetirement>1000000</SpecifiedAmountFromRetirement>
     <SpecifiedAmountStrategyFromIssue>SAInputScalar</SpecifiedAmountStrategyFromIssue>
+    <SplitDollarAccumulateInterest>No</SplitDollarAccumulateInterest>
+    <SplitDollarLoanRate>0</SplitDollarLoanRate>
+    <SplitDollarRolloutAge>0</SplitDollarRolloutAge>
+    <SplitDollarRolloutAtWhich>Retirement</SplitDollarRolloutAtWhich>
+    <SplitDollarRolloutYear>0</SplitDollarRolloutYear>
     <SpouseIssueAge>45</SpouseIssueAge>
     <SpouseRider>No</SpouseRider>
     <SpouseRiderAmount>0</SpouseRiderAmount>
     <State>CT</State>
     <StateOfJurisdiction>CT</StateOfJurisdiction>
     <SubstandardTable>None</SubstandardTable>
+    <SupplementalIllustrationType>None</SupplementalIllustrationType>
     <SupplementalReportColumn00>[none]</SupplementalReportColumn00>
     <SupplementalReportColumn01>[none]</SupplementalReportColumn01>
     <SupplementalReportColumn02>[none]</SupplementalReportColumn02>
@@ -182,6 +173,7 @@
     <SupplementalReportColumn09>[none]</SupplementalReportColumn09>
     <SupplementalReportColumn10>[none]</SupplementalReportColumn10>
     <SupplementalReportColumn11>[none]</SupplementalReportColumn11>
+    <SupplementalSpecifiedAmount>0</SupplementalSpecifiedAmount>
     <SurviveToAge>99</SurviveToAge>
     <SurviveToType>Survive to age limit</SurviveToType>
     <SurviveToYear>99</SurviveToYear>
@@ -201,13 +193,6 @@
     <WaiverOfPremiumBenefit>No</WaiverOfPremiumBenefit>
     <WithdrawToBasisThenLoan>No</WithdrawToBasisThenLoan>
     <Withdrawal>0</Withdrawal>
-    <WithdrawalAmount>0</WithdrawalAmount>
-    <WithdrawalFromAge>45</WithdrawalFromAge>
-    <WithdrawalFromAlternative>Retirement</WithdrawalFromAlternative>
-    <WithdrawalFromDuration>20</WithdrawalFromDuration>
-    <WithdrawalToAge>95</WithdrawalToAge>
-    <WithdrawalToAlternative>Maturity</WithdrawalToAlternative>
-    <WithdrawalToDuration>50</WithdrawalToDuration>
     <ZipCode/>
   </cell>
 </single_cell_document>

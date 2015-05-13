@@ -39,7 +39,7 @@
             <object class="wxBoxSizer">
                 <orient>wxHORIZONTAL</orient>
                 <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT</flag>
+                    <flag>wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT</flag>
                     <border>6</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -187,7 +187,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
+                    <flag>wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT</flag>
                     <border>6</border>
                     <object class="wxStaticBoxSizer">
                         <object class="sizeritem">

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:include schemaLocation="cell_07.xsd"/>
+  <!--
+    RELAX NG schema for '.cns' files (class multiple_cell_document).
+
+    Copyright (C) 2012, 2013, 2014, 2015 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+  -->
+  <!-- $Id$ -->
+  <!-- Use file extension '.cns' for multiple-life xml documents. -->
+  <!-- This schema corresponds to version 1 of class multiple_cell_document. -->
+  <!--
+    Inforce data from external systems must include 'case_default' and
+    'class_defaults'; but those elements wouldn't be expected to have
+    any analogue on an administration system, so it seems best to copy
+    them from this document:
+      http://svn.savannah.nongnu.org/viewvc/*checkout*/lmi/trunk/sample.cns?revision=5721&root=lmi
+    overwriting its 'particular_cells' with the individual records of
+    all contracts in the group.
+  -->
+  <xs:element name="multiple_cell_document">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="case_default"/>
+        <xs:element ref="class_defaults"/>
+        <xs:element ref="particular_cells"/>
+      </xs:sequence>
+      <xs:attribute name="version" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="data_source" type="xs:nonNegativeInteger">
+        <xs:annotation>
+          <xs:documentation>Optional for now; to be required in the future.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="case_default">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="cell"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="class_defaults">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="cell"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="particular_cells">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="cell"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -33,7 +33,7 @@
 #include "wx_test_date.hpp"
 #include "version.hpp"
 
-#include <wx/log.h>
+#include <wx/crt.h>
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -81,8 +81,8 @@ LMI_WX_TEST_CASE(expiry_dates)
     is >> begin >> end;
     LMI_ASSERT_WITH_MSG(is, "Failed to read dates from \"expiry\" file");
 
-    wxLogMessage
-        ("Expiry dates: begin=%s, end=%s"
+    wxPrintf
+        ("Expiry dates: begin=%s, end=%s\n"
         ,dump_date(begin)
         ,dump_date(end)
         );

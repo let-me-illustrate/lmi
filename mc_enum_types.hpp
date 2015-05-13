@@ -75,6 +75,7 @@ typedef mc_enum<mcenum_premium_table        > mce_premium_table        ;
 typedef mc_enum<mcenum_from_point           > mce_from_point           ;
 typedef mc_enum<mcenum_to_point             > mce_to_point             ;
 typedef mc_enum<mcenum_report_column        > mce_report_column        ;
+typedef mc_enum<mcenum_suppl_illus_type     > mce_suppl_illus_type     ;
 
 #endif // mc_enum_types_hpp
 

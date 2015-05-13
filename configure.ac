@@ -432,7 +432,6 @@ dnl system but when using MSYS we do the checks manually as installing
 dnl pkg-config under Windows is unfortunately not trivial and so we can't rely
 dnl on its presence on the target system
 if test "$USE_LINUX" = "1"; then
-    PKG_CHECK_MODULES(GTK, gtk+-2.0)
     PKG_CHECK_MODULES(XMLWRAPP, xmlwrapp >= 0.7.0 xsltwrapp)
 else
     if test -z "$XMLWRAPP_CFLAGS" -o -z "$XMLWRAPP_LIBS"; then

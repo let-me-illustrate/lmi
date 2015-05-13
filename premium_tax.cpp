@@ -270,8 +270,8 @@ void premium_tax::test_consistency() const
 /// TODO ?? This is incorrect for inforce. Suppose the tax state has
 /// a tiered rate with a breakpoint that has already been met for an
 /// off-anniversary inforce illustration. Any further payment in the
-/// same year should be taxed at a lower rate. INPUT !! YTD taxable
-/// premium needs to be passed from the admin system; it is not
+/// same year should be taxed at a lower rate. YTD taxable premium is
+/// now available as Input::InforceYtdTaxablePremium; it is not
 /// necessary to pass the other variables, because they can be
 /// calculated here.
 

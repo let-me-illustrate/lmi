@@ -64,7 +64,8 @@ void do_test_create_open
         {
         wxTEST_DIALOG
             (wxYield()
-            ,wxExpectDismissableModal<MvcController>(wxID_OK)
+            ,wxExpectDismissableModal<MvcController>(wxID_OK).
+                Describe("new file properties")
             );
         }
     wxYield();
@@ -72,7 +73,7 @@ void do_test_create_open
     z.Char(uses_dialog ? 'a' : 's', wxMOD_CONTROL); // save or save as
     wxTEST_DIALOG
         (wxYield()
-        ,wxExpectModal<wxFileDialog>(file)
+        ,wxExpectModal<wxFileDialog>(file).Describe("save file dialog")
         );
     wxYield();
 
@@ -88,15 +89,16 @@ void do_test_create_open
         {
         wxTEST_DIALOG
             (wxYield()
-            ,wxExpectModal<wxFileDialog>(file)
-            ,wxExpectDismissableModal<MvcController>(wxID_OK)
+            ,wxExpectModal<wxFileDialog>(file).Describe("open file dialog")
+            ,wxExpectDismissableModal<MvcController>(wxID_OK).
+                Describe("existing file properties")
             );
         }
     else
         {
         wxTEST_DIALOG
             (wxYield()
-            ,wxExpectModal<wxFileDialog>(file)
+            ,wxExpectModal<wxFileDialog>(file).Describe("open file dialog")
             );
         }
     wxYield();

@@ -67,9 +67,12 @@ class LMI_SO multiple_cell_document
     std::string const& xml_root_name() const;
 
     bool data_source_is_external(xml::document const&) const;
-    void validate_with_xsd_schema(xml::document const&) const;
+    void validate_with_xsd_schema
+        (xml::document const& xml
+        ,std::string const&   xsd
+        ) const;
     xslt::stylesheet& cell_sorter() const;
-    xml::schema const& xsd_schema() const;
+    std::string xsd_schema_name(int version) const;
 
     // Default parameters for the whole case, stored as a vector for
     // parallelism with class_parms_ and cell_parms_. Naturally, this

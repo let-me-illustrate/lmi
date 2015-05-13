@@ -115,13 +115,11 @@
         <bitmap stock_id="write-spreadsheet"/>
         <longhelp>Run and print all cells to a spreadsheet file</longhelp>
     </object>
-<!-- SOMEDAY !! One might imagine wanting this on the toolbar.
     <object class="tool" name="print_group_roster">
         <tooltip>Print roster to spreadsheet</tooltip>
-        <bitmap stock_id="NO ICON DESIGNED YET"/>
+        <bitmap stock_id="roster"/>
         <longhelp>Run and print group roster to a spreadsheet file</longhelp>
     </object>
--->
     <object class="separator"/>
     <object class="tool" name="paste_census">
         <tooltip>Paste census</tooltip>

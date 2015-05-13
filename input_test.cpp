@@ -516,14 +516,14 @@ void input_test::mete_cns_xsd()
 {
     static xml::document const cns = xml_lmi::dom_parser("sample.cns").document();
     static multiple_cell_document const mcd;
-    mcd.validate_with_xsd_schema(cns);
+    mcd.validate_with_xsd_schema(cns, mcd.xsd_schema_name(mcd.class_version()));
 }
 
 void input_test::mete_ill_xsd()
 {
     static xml::document const ill = xml_lmi::dom_parser("sample.ill").document();
     static single_cell_document const scd;
-    scd.validate_with_xsd_schema(ill);
+    scd.validate_with_xsd_schema(ill, scd.xsd_schema_name(scd.class_version()));
 }
 
 int test_main(int, char*[])

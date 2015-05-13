@@ -289,6 +289,7 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     // value, then write input in lmi's usual format.
     if("X" == AutoClose)
         {
+        z["Comments"] = "Automatically generated from custom input.";
         std::ofstream ofs("custom_io_1.ill", ios_out_trunc_binary());
         single_cell_document(z).write(ofs);
         }
@@ -306,6 +307,18 @@ bool custom_io_1_read(Input& z, std::string const& filename)
 }
 
 /// Write custom output for a particular customer.
+///
+/// Rounding rationale: For interest rates, general industry practice
+/// is to use eight decimals (e.g., 3% = 0.03000000, or 300.0000 bp)
+/// at most. The other quantities written here are typically treated
+/// as real-world currency amounts, and accordingly rounded to whole
+/// cents each month. It seems better to write values rounded this way
+/// than to give all possible precision, because the difference would
+/// be false precision (e.g., 434.9999999999999 instead of 435.00).
+/// Fixed point is preferred for uniformity, so that a value of zero
+/// in a two-decimal column is shown as "0.00"; "0" would convey the
+/// same information in less space, but would use a visibly different
+/// format than "123.45" in another row of the same column.
 ///
 /// Assumptions:
 ///   values are all as of EOY
@@ -362,11 +375,13 @@ void custom_io_1_write(Ledger const& ledger_values, std::string const& filename)
     for(int j = 0; j < max_duration; j++)
         {
         os
-            << std::setprecision(0)
+            << std::setprecision(2)
             <<        Curr_.AcctVal        [j]
             << ',' << Curr_.CSVNet         [j]
             << ',' << Curr_.EOYDeathBft    [j]
+            << std::setprecision(4)
             << ',' << Curr_.AnnGAIntRate   [j] * 10000.0 // 'IntRate' in bp.
+            << std::setprecision(2)
             << ',' << Curr_.NetIntCredited [j]
             << ',' << Curr_.COICharge      [j]
             << ',' << Curr_.SpecAmtLoad    [j]           // 'MiscFees' = spec amt load.

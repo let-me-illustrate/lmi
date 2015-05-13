@@ -127,12 +127,14 @@
 //   Ann-     annual
 //   Guar-    guaranteed
 //   Curr-    current
-//   Prf-     preferred (loan)
+//   Pref-    preferred (loan)
+//   Prf-     preferred (loan) [three chars for {Prf|Reg} alternation]
 //   Reg-     regular (loan--as opposed to preferred)
 //   Cred-    credited (loan)
 //   Due-     due (loan)
 //   Ln-      loan
 //   -Int     interest rate
+//   -Decr    decrement
 
 class BasicValues;
 
@@ -259,6 +261,7 @@ class InterestRates
     bool NeedLoanRates_;
     mcenum_loan_rate_type LoanRateType_;
     std::vector<double> PublishedLoanRate_;
+    std::vector<double> PrefLoanRateDecr_;
     std::vector<double> RegLnCredRate_
         [mc_n_rate_periods]
         [mc_n_gen_bases]
@@ -370,7 +373,7 @@ inline std::vector<double> const& InterestRates::PrfLnDueRate
     ,mcenum_rate_period rate_period
     ) const
 {
-    return RegLnCredRate_[rate_period][gen_basis];
+    return PrfLnDueRate_[rate_period][gen_basis];
 }
 
 inline std::vector<double> const& InterestRates::HoneymoonValueRate

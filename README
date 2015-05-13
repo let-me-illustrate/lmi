@@ -52,6 +52,7 @@ and 16x16):
   print-options[-16].png            from stock_print-options.png
   print-preview[-16].png            from stock_print-preview.png
   print[-16].png                    from stock_print.png
+  roster[-16].png                   from stock_edit.png
   run-case[-16].png                 from stock_print-layout.png
   run-cell[-16].png                 from stock_print-layout.png
   save[-16].png                     from stock_save.png

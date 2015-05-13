@@ -160,6 +160,7 @@ MC_DEFINE(premium_table,1)
 MC_DEFINE(from_point,4)
 MC_DEFINE(to_point,4)
 MC_DEFINE(report_column,58)
+MC_DEFINE(suppl_illus_type,3)
 
 #undef MC_DEFINE
 

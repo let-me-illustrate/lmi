@@ -111,35 +111,8 @@ void Input::DoCustomizeInitialValues()
 {
     // First of all, initialize obsolete variables exactly as the
     // schema prescribes, to accommodate admin extracts that don't
-    // necessarily do so.
-
-    // INPUT !! These are ready to expunge.
-    DeathBenefitOptionFromIssue      = "A";
-    DeathBenefitOptionFromRetirement = "A";
-    IndividualPaymentAmount          = 0.0;
-    IndividualPaymentMode            = "Annual";
-    IndividualPaymentToAge           = 0;
-    IndividualPaymentToAlternative   = "Retirement";
-    IndividualPaymentToDuration      = 0;
-    LoanAmount                       = 0.0;
-    LoanFromAge                      = 0;
-    LoanFromAlternative              = "Issue";
-    LoanFromDuration                 = 0;
-    LoanToAge                        = 0;
-    LoanToAlternative                = "Retirement";
-    LoanToDuration                   = 0;
-    SpecifiedAmountFromIssue         = 0.0;
-    SpecifiedAmountFromRetirement    = 0.0;
-    WithdrawalAmount                 = 0.0;
-    WithdrawalFromAge                = 0;
-    WithdrawalFromAlternative        = "Issue";
-    WithdrawalFromDuration           = 0;
-    WithdrawalToAge                  = 0;
-    WithdrawalToAlternative          = "Retirement";
-    WithdrawalToDuration             = 0;
-
-    // These are kept because their conditional-enablement code may be
-    // useful someday.
+    // necessarily do so. These are kept because their conditional-
+    // enablement code may be useful someday.
     IndividualPaymentStrategy        = "PmtInputScalar";
     SpecifiedAmountStrategyFromIssue = "SAInputScalar";
 

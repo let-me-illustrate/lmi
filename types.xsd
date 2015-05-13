@@ -808,4 +808,14 @@ proved unworkable (e.g., because of underwriting).</xs:documentation>
       <xs:enumeration value="CSVNet_GuaranteedZero"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="suppl_illus_type">
+    <xs:annotation>
+      <xs:documentation>Built-in supplemental illustration.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Bonus"/>
+      <xs:enumeration value="Split dollar"/>
+    </xs:restriction>
+  </xs:simpleType>
 </xs:schema>

@@ -347,6 +347,7 @@ class LMI_SO Input
     tnr_nonnegative_double   InforceCumulativeSalesLoad      ;
     tnr_nonnegative_double   InforceSpecAmtLoadBase          ;
     tnr_nonnegative_double   InforceHoneymoonValue           ;
+    tnr_nonnegative_double   InforceCorporationStake         ;
     tnr_unrestricted_double  InforceNetExperienceReserve     ;
     tnr_nonnegative_double   InforceYtdNetCoiCharge          ;
     tnr_unrestricted_double  InforceTaxBasis                 ;
@@ -391,6 +392,7 @@ class LMI_SO Input
     numeric_sequence         TaxBracket                      ;
     numeric_sequence         ProjectedSalary                 ;
     specamt_sequence         SpecifiedAmount                 ;
+    specamt_sequence         SupplementalSpecifiedAmount     ;
     dbo_sequence             DeathBenefitOption              ;
     payment_sequence         Payment                         ;
     mode_sequence            PaymentMode                     ;
@@ -405,6 +407,12 @@ class LMI_SO Input
     numeric_sequence         HoneymoonValueSpread            ;
     datum_string             FundAllocations                 ; // INPUT !! http://savannah.nongnu.org/support/?104481
     numeric_sequence         CashValueEnhancementRate        ;
+    mce_suppl_illus_type     SupplementalIllustrationType    ;
+    mce_yes_or_no            SplitDollarAccumulateInterest   ;
+    numeric_sequence         SplitDollarLoanRate             ;
+    tnr_duration             SplitDollarRolloutAge           ;
+    mce_to_point             SplitDollarRolloutAtWhich       ;
+    tnr_duration             SplitDollarRolloutYear          ;
     mce_yes_or_no            CreateSupplementalReport        ;
     mce_report_column        SupplementalReportColumn00      ;
     mce_report_column        SupplementalReportColumn01      ;
@@ -423,31 +431,8 @@ class LMI_SO Input
     mce_to_point             SolveToWhich                    ;
     mce_yes_or_no            UseDOB                          ;
     mce_yes_or_no            EffectiveDateToday              ;
-    mce_dbopt                DeathBenefitOptionFromRetirement;
-    mce_dbopt                DeathBenefitOptionFromIssue     ;
-    tnr_nonnegative_double   SpecifiedAmountFromRetirement   ;
-    tnr_nonnegative_double   SpecifiedAmountFromIssue        ;
     mce_sa_strategy          SpecifiedAmountStrategyFromIssue;
-    mce_mode                 IndividualPaymentMode           ;
-    mce_to_point             IndividualPaymentToAlternative  ;
-    tnr_age                  IndividualPaymentToAge          ;
-    tnr_duration             IndividualPaymentToDuration     ;
-    tnr_nonnegative_double   IndividualPaymentAmount         ;
     mce_pmt_strategy         IndividualPaymentStrategy       ;
-    tnr_nonnegative_double   LoanAmount                      ;
-    tnr_age                  LoanFromAge                     ;
-    mce_from_point           LoanFromAlternative             ;
-    tnr_duration             LoanFromDuration                ;
-    tnr_age                  LoanToAge                       ;
-    mce_to_point             LoanToAlternative               ;
-    tnr_duration             LoanToDuration                  ;
-    tnr_nonnegative_double   WithdrawalAmount                ;
-    tnr_age                  WithdrawalFromAge               ;
-    mce_from_point           WithdrawalFromAlternative       ;
-    tnr_duration             WithdrawalFromDuration          ;
-    tnr_age                  WithdrawalToAge                 ;
-    mce_to_point             WithdrawalToAlternative         ;
-    tnr_duration             WithdrawalToDuration            ;
 
     // TODO ?? For the nonce, only an unrestricted tn_range type is
     // used, because tn_range doesn't permit initialization or
@@ -537,6 +522,7 @@ template<> struct reconstitutor<mc_enum_base, Input>
         z = exact_cast<mce_solve_target        >(m); if(z) return z;
         z = exact_cast<mce_solve_type          >(m); if(z) return z;
         z = exact_cast<mce_state               >(m); if(z) return z;
+        z = exact_cast<mce_suppl_illus_type    >(m); if(z) return z;
         z = exact_cast<mce_survival_limit      >(m); if(z) return z;
         z = exact_cast<mce_table_rating        >(m); if(z) return z;
         z = exact_cast<mce_term_adj_method     >(m); if(z) return z;

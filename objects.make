@@ -373,6 +373,7 @@ wx_test_objects := \
   wx_test_expiry_dates.o \
   wx_test_input_sequences.o \
   wx_test_input_validation.o \
+  wx_test_log_errors.o \
   wx_test_paste_census.o \
   wx_test_pdf_create.o \
   wx_test_validate_output.o \
@@ -597,7 +598,6 @@ financial_test$(EXEEXT): \
 
 getopt_test$(EXEEXT): \
   $(common_test_objects) \
-  getopt.o \
   getopt_test.o \
 
 global_settings_test$(EXEEXT): \
@@ -841,7 +841,6 @@ progress_meter_test$(EXEEXT): \
   progress_meter_test.o \
   timer.o \
 
-regex_test$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 regex_test$(EXEEXT): \
   $(boost_regex_objects) \
   $(common_test_objects) \
@@ -962,7 +961,6 @@ ihs_crc_comp$(EXEEXT): \
 
 test_coding_rules_test := $(src_dir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
-test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = -Wl,--allow-multiple-definition
 test_coding_rules$(EXEEXT): \
   $(boost_common_objects) \
   $(boost_regex_objects) \

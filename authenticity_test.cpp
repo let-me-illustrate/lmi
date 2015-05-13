@@ -275,7 +275,8 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
 /// Authenticate also from the root directory on a different drive, on
 /// a multiple-root system. This is perforce platform specific; msw is
 /// used because it happens to be common. This test assumes that an
-/// 'F:' drive exists and is not the "current" drive.
+/// 'F:' drive exists and is not the "current" drive; it is skipped
+/// if no 'F:' drive exists.
 ///
 /// BOOST !! This test traps an exception that boost-1.33.1 can throw
 /// if exists("F:/") returns true but ::GetFileAttributesA() fails.
@@ -303,7 +304,11 @@ void PasskeyTest::TestFromAfar() const
     CheckNominal(__FILE__, __LINE__);
 
     fs::path const remote_dir_1(fs::complete(fs::path("F:/", fs::native)));
-    BOOST_TEST(fs::exists(remote_dir_1));
+    if(!fs::exists(remote_dir_1))
+        {
+        goto done;
+        }
+
     try
         {
         BOOST_TEST(fs::is_directory(remote_dir_1));

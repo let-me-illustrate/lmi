@@ -70,7 +70,7 @@ int AboutDialog::ShowModal()
         );
     html_window->SetBorders(0);
     html_window->SetPage(license_notices_as_html());
-    html_window->GetInternalRepresentation()->Layout(450);
+    html_window->GetInternalRepresentation()->Layout(65*html_window->GetCharWidth());
     int const width  = html_window->GetInternalRepresentation()->GetWidth ();
     int const height = html_window->GetInternalRepresentation()->GetHeight();
     html_window->SetMinSize(wxSize(width, height));

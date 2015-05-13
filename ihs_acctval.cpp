@@ -457,7 +457,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
             }
         }
 
-    // INPUT !! Need inforce tgtprem.
+    // TAXATION !! Input::InforceAnnualTargetPremium should be used here.
     double annual_target_premium = GetModalTgtPrem
         (0
         ,mce_annual
@@ -932,8 +932,12 @@ void AccountValue::InitializeYear()
 
     DacTaxRsv                   = 0.0;
 
-    RequestedLoan       = Outlay_->new_cash_loans()[Year];
-    ActualLoan          = RequestedLoan; // TODO ?? Why not zero?
+    RequestedLoan               = Outlay_->new_cash_loans()[Year];
+    // ActualLoan is set in TxTakeLoan() and TxLoanRepay(). A local
+    // variable in each function might have sufficed, except that this
+    // quantity is used in the optional monthly detail report. Its
+    // value depends on the maximum loan, so it cannot be known here.
+    ActualLoan                  = 0.0;
 
     GrossPmts   .assign(12, 0.0);
     EeGrossPmts .assign(12, 0.0);
@@ -952,11 +956,14 @@ void AccountValue::InitializeSpecAmt()
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
+    // This "modal minimum" premium is designed for group plans. It is
+    // intended roughly to approximate the minimum payment (at a modal
+    // frequency chosen by the employer) necessary to prevent lapse if
+    // no other premium is paid.
+    //
     // Most other yearly values are posted to InvariantValues() in
     // FinalizeYear(), but it seems clearer to post this one here
     // where it's calculated along with 'MlyNoLapsePrem'.
-    // SOMEDAY !! It is arbitrarily assumed that the employer's mode
-    // governs; this could be made more flexible.
     InvariantValues().ModalMinimumPremium[Year] = GetModalMinPrem
         (Year
         ,InvariantValues().ErMode[Year].value()

@@ -31,9 +31,9 @@
 #include "wx_test_case.hpp"
 #include "version.hpp"
 
+#include <wx/crt.h>
 #include <wx/dialog.h>
 #include <wx/html/htmlwin.h>
-#include <wx/log.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
@@ -179,7 +179,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
 
             // Extract the last word of the dialog title.
             wxString const last_word = d->GetTitle().AfterLast(' ');
-            wxLogMessage("About dialog version string is \"%s\".", last_word);
+            wxPrintf("About dialog version string is \"%s\".\n", last_word);
             LMI_ASSERT_EQUAL(last_word, LMI_VERSION);
 
             // Find the wxHtmlWindow showing the license notices.
@@ -232,6 +232,11 @@ LMI_WX_TEST_CASE(about_dialog_version)
 
                     return wxID_OK;
                     }
+
+                virtual wxString GetDefaultDescription() const
+                    {
+                    return "license dialog";
+                    }
             };
 
             wxUIActionSimulator z;
@@ -242,6 +247,11 @@ LMI_WX_TEST_CASE(about_dialog_version)
                 );
 
             return wxID_OK;
+            }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "about dialog";
             }
     };
 

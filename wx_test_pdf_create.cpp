@@ -31,12 +31,11 @@
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 #include "wx_test_output.hpp"
+#include "wx_test_output_pdf.hpp"
 
 #include <wx/docview.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
-
-#include <boost/filesystem/operations.hpp>
 
 namespace
 {
@@ -58,53 +57,6 @@ std::string fo_suffix(int n)
 {
     return wxString::Format(".%09d", n).ToStdString();
 }
-
-// Specialized version of output_file_existence_checker for the output PDF
-// files: it takes just the base name of the file, without neither the
-// directory part nor the .pdf extension, in its ctor and also takes care of
-// deleting the .fo.xml created as a side effect of PDF generation when the PDF
-// file itself is removed.
-class output_pdf_existence_checker :public output_file_existence_checker
-{
-  public:
-    explicit output_pdf_existence_checker(std::string const& base_name)
-        :output_file_existence_checker
-            (make_full_print_path(base_name + ".pdf")
-            )
-        ,fo_xml_path_
-            (make_full_print_path(base_name + ".fo.xml")
-            )
-        {
-        // We do not remove .fo.xml file here, this is unnecessary as we don't
-        // particularly care whether it exists or not because we never check
-        // for its existence.
-        }
-
-    ~output_pdf_existence_checker()
-        {
-        // Do remove the .fo.xml file to avoid littering the print directory
-        // with the files generated during the test run.
-        try
-            {
-            fs::remove(fo_xml_path_);
-            }
-        catch(...)
-            {
-            }
-        }
-
-  private:
-    // Return the full path in the print directory for the file with the given
-    // leaf name.
-    static fs::path make_full_print_path(std::string const& leaf)
-        {
-        fs::path p(configurable_settings::instance().print_directory());
-        p /= leaf;
-        return p;
-        }
-
-    fs::path fo_xml_path_;
-};
 
 } // Unnamed namespace.
 

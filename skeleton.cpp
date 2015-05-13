@@ -91,13 +91,13 @@
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
-#include <wx/debug.h>                   // wxIsDebuggerRunning()
 #include <wx/docmdi.h>
 #include <wx/image.h>
 #include <wx/log.h>                     // wxSafeShowMessage()
 #include <wx/math.h>                    // wxRound()
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/msgout.h>
 #include <wx/textctrl.h>
 #include <wx/textdlg.h>                 // wxGetTextFromUser()
 #include <wx/toolbar.h>
@@ -108,10 +108,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-
-#if defined __WXGTK__
-#   include <gtk/gtk.h>
-#endif
 
 // Where a builtin wxID_X identifier exists, use it as such, even if
 // it's used as the 'name=' attribute of an entity in an '.xrc' file.
@@ -638,10 +634,38 @@ bool Skeleton::OnInit()
 {
     try
         {
-        if(!wxIsDebuggerRunning())
-            {
-            wxLog::SetActiveTarget(new wxLogStderr);
-            }
+#if defined __WXMSW__
+        // Send log messages of debug (and trace, which are roughly equivalent
+        // to debug) severity, which are usually not shown at all under MSW, to
+        // stderr.
+        //
+        // The end users wouldn't see them there as they don't run the program
+        // from a terminal, but they could be potentially valuable to the
+        // developers.
+        struct DebugStderrLog : wxLogInterposer
+        {
+            virtual void DoLogTextAtLevel(wxLogLevel level, wxString const& msg)
+                {
+                switch(level)
+                    {
+                    case wxLOG_FatalError:
+                    case wxLOG_Error:
+                    case wxLOG_Warning:
+                    case wxLOG_Message:
+                    case wxLOG_Status:
+                    case wxLOG_Info:
+                        break;
+
+                    case wxLOG_Debug:
+                    case wxLOG_Trace:
+                        wxMessageOutputStderr().Output(msg);
+                        break;
+                    }
+                }
+        };
+
+        wxLog::SetActiveTarget(new DebugStderrLog);
+#endif // defined __WXMSW__
 
         if(false == ProcessCommandLine(argc, argv))
             {
@@ -1055,25 +1079,6 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
     status() << "End test of floating-point environment." << std::flush;
 }
 
-namespace
-{
-/// Send a paste message to a window.
-///
-/// Design rationale--see:
-///   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00005.html
-
-void send_paste_message_to(wxWindow const& w)
-{
-#if defined __WXGTK__
-    g_signal_emit_by_name(w.m_focusWidget, "paste_clipboard");
-#elif defined __WXMSW__
-    ::SendMessage(reinterpret_cast<HWND>(w.GetHandle()), WM_PASTE, 0, 0);
-#else  // Unsupported platform.
-#   error Platform not yet supported. Consider contributing support.
-#endif // Unsupported platform.
-}
-} // Unnamed namespace.
-
 /// Test custom handler UponPaste().
 ///
 /// See:
@@ -1086,7 +1091,7 @@ void Skeleton::UponTestPasting(wxCommandEvent&)
 
     ClipboardEx::SetText("1\r\n2\r\n3\r\n");
     t->SetSelection(-1L, -1L);
-    send_paste_message_to(*t);
+    t->Paste();
     if("1;2;3" != t->GetValue())
         {
         warning() << "'1;2;3' != '" << t->GetValue() << "'" << LMI_FLUSH;
@@ -1094,7 +1099,7 @@ void Skeleton::UponTestPasting(wxCommandEvent&)
 
     ClipboardEx::SetText("X\tY\tZ\t");
     t->SetSelection(-1L, -1L);
-    send_paste_message_to(*t);
+    t->Paste();
     if("X;Y;Z" != t->GetValue())
         {
         warning() << "'X;Y;Z' != '" << t->GetValue() << "'" << LMI_FLUSH;
@@ -1206,6 +1211,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
         {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
         {"mello"        ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
         {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
+        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
         {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
         {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
         {"prospicience" ,REQD_ARG ,0 ,004 ,0 ,"validation date"},
@@ -1213,6 +1219,8 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
       };
 
     bool show_help        = false;
+
+    std::vector<std::string> input_files;
 
     int option_index = 0;
     GetOpt getopt_long
@@ -1268,6 +1276,13 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
                 global_settings::instance().set_data_directory
                     (getopt_long.optarg
                     );
+                }
+                break;
+
+            case 'f':
+                {
+                LMI_ASSERT(NULL != getopt_long.optarg);
+                input_files.push_back(getopt_long.optarg);
                 }
                 break;
 
@@ -1335,7 +1350,32 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
         return false;
         }
 
+    if (!input_files.empty())
+        {
+        // Can't open files until main window is initialized.
+        CallAfter(&Skeleton::OpenCommandLineFiles, input_files);
+        }
+
     return true;
+}
+
+void Skeleton::OpenCommandLineFiles(std::vector<std::string> const& files)
+{
+    LMI_ASSERT(doc_manager_);
+
+    typedef std::vector<std::string>::const_iterator vsci;
+    for(vsci i = files.begin(); i != files.end(); ++i)
+        {
+        if(!doc_manager_->CreateDocument(*i, wxDOC_SILENT))
+            {
+            warning()
+                << "Document '"
+                << *i
+                << "' specified on command line couldn't be opened."
+                << LMI_FLUSH
+                ;
+            }
+        }
 }
 
 void Skeleton::UpdateViews()
