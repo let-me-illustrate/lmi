@@ -348,6 +348,8 @@ void DBDictionary::ascribe_members()
     ascribe("MinVlrRate"          , &DBDictionary::MinVlrRate          );
     ascribe("MaxLoanAcctValMult"  , &DBDictionary::MaxLoanAcctValMult  );
     ascribe("MaxLoanDed"          , &DBDictionary::MaxLoanDed          );
+    ascribe("FirstPrefLoanYear"   , &DBDictionary::FirstPrefLoanYear   );
+    ascribe("PrefLoanRateDecr"    , &DBDictionary::PrefLoanRateDecr    );
     ascribe("GuarPrefLoanSpread"  , &DBDictionary::GuarPrefLoanSpread  );
     ascribe("GuarRegLoanSpread"   , &DBDictionary::GuarRegLoanSpread   );
     ascribe("CurrPrefLoanSpread"  , &DBDictionary::CurrPrefLoanSpread  );
@@ -572,6 +574,8 @@ void DBDictionary::InitDB()
     std::vector<double> max_vlr(e_max_dim_state);
     max_vlr[mce_s_TX] = 0.15;
     Add(database_entity(DB_MaxVlrRate, max_vlr_dimensions, max_vlr));
+
+    Add(database_entity(DB_FirstPrefLoanYear   , 100));
 
     Add(database_entity(DB_GuarIntSpread       , dbl_inf));
 

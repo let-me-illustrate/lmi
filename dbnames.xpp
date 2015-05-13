@@ -257,7 +257,7 @@
 {DB_FirstWdMonth,DB_Topic_Withdrawals,"FirstWdMonth","Number of months withdrawals not allowed [not supported yet]",}, \
 {DB_Topic_Loans,DB_FIRST,"Loans","Loan rates, spreads, options, and restrictions",}, \
 {DB_AllowLoan,DB_Topic_Loans,"AllowLoan","Allow loans: 0=no, 1=yes",}, \
-{DB_AllowPrefLoan,DB_Topic_Loans,"AllowPrefLoan","Preferred loans permitted: 0=no, 1=yes [preferred loans not yet supported]",}, \
+{DB_AllowPrefLoan,DB_Topic_Loans,"AllowPrefLoan","Preferred loans permitted: 0=no, 1=yes",}, \
 {DB_AllowFixedLoan,DB_Topic_Loans,"AllowFixedLoan","Fixed-rate loans permitted: 0=no, 1=yes",}, \
 {DB_AllowVlr,DB_Topic_Loans,"AllowVlr","Variable-rate loans permitted: 0=no, 1=yes",}, \
 {DB_FixedLoanRate,DB_Topic_Loans,"FixedLoanRate","Fixed loan rate, e.g. .06 = 6%",}, \
@@ -265,9 +265,11 @@
 {DB_MinVlrRate,DB_Topic_Loans,"MinVlrRate","Minimum variable loan rate",}, \
 {DB_MaxLoanAcctValMult,DB_Topic_Loans,"MaxLoanAcctValMult","Maximum loan as proportion of account value, e.g. 1=100%",}, \
 {DB_MaxLoanDed,DB_Topic_Loans,"MaxLoanDed","Monthiversary deductions reflected in maximum loan: 0=12 times most recent, 1=to next anniversary, 2=to next modal premium due date, 3=18 times most recent",}, \
-{DB_GuarPrefLoanSpread,DB_Topic_Loans,"GuarPrefLoanSpread","Guaranteed interest spread for preferred loans [preferred loans not yet supported]",}, \
+{DB_FirstPrefLoanYear,DB_Topic_Loans,"FirstPrefLoanYear","Duration after which new cash loans are preferred",}, \
+{DB_PrefLoanRateDecr,DB_Topic_Loans,"PrefLoanRateDecr","Decrement to fixed loan rate for preferred loans",}, \
+{DB_GuarPrefLoanSpread,DB_Topic_Loans,"GuarPrefLoanSpread","Guaranteed interest spread for preferred loans",}, \
 {DB_GuarRegLoanSpread,DB_Topic_Loans,"GuarRegLoanSpread","Guaranteed interest spread for regular loans",}, \
-{DB_CurrPrefLoanSpread,DB_Topic_Loans,"CurrPrefLoanSpread","Current interest spread for preferred loans [preferred loans not yet supported]",}, \
+{DB_CurrPrefLoanSpread,DB_Topic_Loans,"CurrPrefLoanSpread","Current interest spread for preferred loans",}, \
 {DB_CurrRegLoanSpread,DB_Topic_Loans,"CurrRegLoanSpread","Current interest spread for regular loans",}, \
 {DB_FirstLoanMonth,DB_Topic_Loans,"FirstLoanMonth","Number of months loans not allowed [not supported yet]",}, \
 {DB_Topic_Premiums,DB_FIRST,"Premiums","Minimum and target premiums",}, \

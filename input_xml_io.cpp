@@ -77,6 +77,7 @@ std::string full_name
 /// version 5: 20090526T1331Z
 /// version 6: 20100719T1349Z
 /// version 7: 20120808T2130Z
+/// version 8: 20150316T0422Z
 ///
 /// Important note concerning version 3. On or about 20090311, some
 /// end users were given an off-cycle release that should have used
@@ -85,7 +86,7 @@ std::string full_name
 
 int Input::class_version() const
 {
-    return 7;
+    return 8;
 }
 
 std::string const& Input::xml_root_name() const
@@ -104,45 +105,68 @@ std::string const& Input::xml_root_name() const
 bool Input::is_detritus(std::string const& s) const
 {
     static std::string const a[] =
-        {"AgentFirstName"                // Single name instead.
-        ,"AgentLastName"                 // Single name instead.
-        ,"AgentMiddleName"               // Single name instead.
-        ,"AssumedCaseNumberOfLives"      // Withdrawn.
-        ,"CaseAssumedAssets"             // Withdrawn.
-        ,"CorporationPremiumTableNumber" // Never implemented.
-        ,"CorporationTaxpayerId"         // Would violate privacy.
-        ,"CurrentCoiGrading"             // Withdrawn.
-        ,"DateOfRetirement"              // Withdrawn.
-        ,"DeprecatedSolveFromWhich"      // Renamed (without 'Deprecated'-).
-        ,"DeprecatedSolveTgtAtWhich"     // Renamed (without 'Deprecated'-).
-        ,"DeprecatedSolveToWhich"        // Renamed (without 'Deprecated'-).
-        ,"DeprecatedUseDOB"              // Renamed (without 'Deprecated'-).
-        ,"DeprecatedUseDOR"              // Withdrawn.
-        ,"External1035ExchangeBasis"     // Renamed to 'External1035ExchangeTaxBasis'.
-        ,"FilingApprovalState"           // Alias for 'StateOfJurisdiction'.
-        ,"FirstName"                     // Single name instead.
-        ,"Franchise"                     // Renamed to 'MasterContractNumber'.
-        ,"InforceCumulativePayments"     // Renamed to 'InforceCumulativeNoLapsePayments'.
-        ,"InforceDcvDeathBenefit"        // Misbegotten.
-        ,"InforceExperienceReserve"      // Renamed before implementation.
-        ,"InsuredPremiumTableNumber"     // Never implemented.
-        ,"Internal1035ExchangeBasis"     // Renamed to 'Internal1035ExchangeTaxBasis'.
-        ,"LastName"                      // Single name instead.
-        ,"MiddleName"                    // Single name instead.
-        ,"NetMortalityChargeHistory"     // Renamed before implementation.
-        ,"OffshoreCorridorFactor"        // Withdrawn.
-        ,"PartialMortalityTable"         // Never implemented.
-        ,"PayLoanInterestInCash"         // Never implemented.
-        ,"PolicyDate"                    // Never implemented.
-        ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
-        ,"PolicyNumber"                  // Renamed to 'ContractNumber'.
-        ,"PremiumHistory"                // Renamed to 'Inforce7702AAmountsPaidHistory'.
-        ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
-        ,"SolveBasis"                    // Renamed to 'SolveExpenseGeneralAccountBasis'.
-        ,"SpecamtHistory"                // Merged into 'SpecifiedAmount'.
-        ,"TermProportion"                // Disused: cf. 'TermRiderProportion'.
-        ,"UseOffshoreCorridorFactor"     // Withdrawn.
-        ,"YearsOfZeroDeaths"             // Withdrawn.
+        {"AgentFirstName"                   // Single name instead.
+        ,"AgentLastName"                    // Single name instead.
+        ,"AgentMiddleName"                  // Single name instead.
+        ,"AssumedCaseNumberOfLives"         // Withdrawn.
+        ,"CaseAssumedAssets"                // Withdrawn.
+        ,"CorporationPremiumTableNumber"    // Never implemented.
+        ,"CorporationTaxpayerId"            // Would violate privacy.
+        ,"CurrentCoiGrading"                // Withdrawn.
+        ,"DateOfRetirement"                 // Withdrawn.
+        ,"DeathBenefitOptionFromIssue"      // Withdrawn.
+        ,"DeathBenefitOptionFromRetirement" // Withdrawn.
+        ,"DeprecatedSolveFromWhich"         // Renamed (without 'Deprecated'-).
+        ,"DeprecatedSolveTgtAtWhich"        // Renamed (without 'Deprecated'-).
+        ,"DeprecatedSolveToWhich"           // Renamed (without 'Deprecated'-).
+        ,"DeprecatedUseDOB"                 // Renamed (without 'Deprecated'-).
+        ,"DeprecatedUseDOR"                 // Withdrawn.
+        ,"External1035ExchangeBasis"        // Renamed to 'External1035ExchangeTaxBasis'.
+        ,"FilingApprovalState"              // Alias for 'StateOfJurisdiction'.
+        ,"FirstName"                        // Single name instead.
+        ,"Franchise"                        // Renamed to 'MasterContractNumber'.
+        ,"IndividualPaymentAmount"          // Withdrawn.
+        ,"IndividualPaymentMode"            // Withdrawn.
+        ,"IndividualPaymentToAge"           // Withdrawn.
+        ,"IndividualPaymentToAlternative"   // Withdrawn.
+        ,"IndividualPaymentToDuration"      // Withdrawn.
+        ,"InforceCumulativePayments"        // Renamed to 'InforceCumulativeNoLapsePayments'.
+        ,"InforceDcvDeathBenefit"           // Misbegotten.
+        ,"InforceExperienceReserve"         // Renamed before implementation.
+        ,"InsuredPremiumTableNumber"        // Never implemented.
+        ,"Internal1035ExchangeBasis"        // Renamed to 'Internal1035ExchangeTaxBasis'.
+        ,"LastName"                         // Single name instead.
+        ,"LoanAmount"                       // Withdrawn.
+        ,"LoanFromAge"                      // Withdrawn.
+        ,"LoanFromAlternative"              // Withdrawn.
+        ,"LoanFromDuration"                 // Withdrawn.
+        ,"LoanToAge"                        // Withdrawn.
+        ,"LoanToAlternative"                // Withdrawn.
+        ,"LoanToDuration"                   // Withdrawn.
+        ,"MiddleName"                       // Single name instead.
+        ,"NetMortalityChargeHistory"        // Renamed before implementation.
+        ,"OffshoreCorridorFactor"           // Withdrawn.
+        ,"PartialMortalityTable"            // Never implemented.
+        ,"PayLoanInterestInCash"            // Never implemented.
+        ,"PolicyDate"                       // Never implemented.
+        ,"PolicyLevelFlatExtra"             // Never implemented; poor name.
+        ,"PolicyNumber"                     // Renamed to 'ContractNumber'.
+        ,"PremiumHistory"                   // Renamed to 'Inforce7702AAmountsPaidHistory'.
+        ,"SocialSecurityNumber"             // Withdrawn: would violate privacy.
+        ,"SolveBasis"                       // Renamed to 'SolveExpenseGeneralAccountBasis'.
+        ,"SpecamtHistory"                   // Merged into 'SpecifiedAmount'.
+        ,"SpecifiedAmountFromIssue"         // Withdrawn.
+        ,"SpecifiedAmountFromRetirement"    // Withdrawn.
+        ,"TermProportion"                   // Disused: cf. 'TermRiderProportion'.
+        ,"UseOffshoreCorridorFactor"        // Withdrawn.
+        ,"WithdrawalAmount"                 // Withdrawn.
+        ,"WithdrawalFromAge"                // Withdrawn.
+        ,"WithdrawalFromAlternative"        // Withdrawn.
+        ,"WithdrawalFromDuration"           // Withdrawn.
+        ,"WithdrawalToAge"                  // Withdrawn.
+        ,"WithdrawalToAlternative"          // Withdrawn.
+        ,"WithdrawalToDuration"             // Withdrawn.
+        ,"YearsOfZeroDeaths"                // Withdrawn.
         };
     static std::vector<std::string> const v(a, a + lmi_array_size(a));
     return contains(v, s);

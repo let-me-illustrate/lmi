@@ -32,8 +32,6 @@
 -->
 
 <object class="wxPanel" name="plan_panel">
-    <title>Plan</title>
-    <centered>1</centered>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablecols>0</growablecols>
@@ -72,7 +70,7 @@
 <!-- This doesn't actually do anything today, but it'll probably be
 useful in the future.
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_RIGHT</flag>
+                    <flag>wxGROW|wxLEFT|wxTOP</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>0</cols>
@@ -86,7 +84,7 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>4</border>
                             <object class="wxComboBox" name="StateOfJurisdiction">
                                 <style>wxCB_READONLY</style>
@@ -96,7 +94,7 @@ useful in the future.
                 </object>
 -->
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP</flag>
+                    <flag>wxGROW|wxLEFT|wxTOP</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
@@ -116,7 +114,7 @@ useful in the future.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxComboBox" name="StateOfJurisdiction">
                                         <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
@@ -132,7 +130,7 @@ useful in the future.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxComboBox" name="PremiumTaxState">
                                         <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
@@ -143,7 +141,7 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxCheckBox" name="EffectiveDateToday">
                                 <help>Set effective date to current date</help>
@@ -166,7 +164,6 @@ useful in the future.
                                     <flag>wxGROW</flag>
                                     <object class="wxDatePickerCtrl" name="EffectiveDate">
                                         <help>Effective date</help>
-                                        <size>80,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -196,7 +193,6 @@ useful in the future.
                                     <border>2</border>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
-                                        <size>80,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -225,14 +221,14 @@ useful in the future.
                      </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                    <flag>wxGROW|wxLEFT</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>0</growablecols>
                         <growablerows>0</growablerows>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                            <flag>wxGROW</flag>
                             <object class="wxStaticBoxSizer">
                                 <orient>wxVERTICAL</orient>
                                 <label>First-year premium</label>
@@ -339,25 +335,25 @@ useful in the future.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+            <flag>wxGROW</flag>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
                 <label>Premium</label>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
+                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Amount</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="Payment">
                                 <title>Individual payment amount</title>
@@ -365,14 +361,14 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Mode</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="PaymentMode">
                                 <title>Individual payment mode</title>
@@ -384,25 +380,25 @@ useful in the future.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+            <flag>wxGROW</flag>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
                 <label>Extra compensation</label>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Premium based</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="ExtraCompensationOnPremium">
                                 <title>Additional premium load</title>
@@ -410,14 +406,14 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Asset based</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="ExtraCompensationOnAssets">
                                 <title>Additional separate-account asset charge</title>
@@ -429,24 +425,24 @@ useful in the future.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+            <flag>wxGROW</flag>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Separate account rate</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="SeparateAccountRate">
                                 <title>Separate-account interest rate</title>
@@ -454,14 +450,14 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Withdrawal</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="InputSequenceEntry" name="Withdrawal">
                                 <title>Withdrawal amount</title>
@@ -469,14 +465,14 @@ useful in the future.
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_RIGHT|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
                                 <label>Comments</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxTextCtrl" name="Comments">
                                 <help>Freeform comments</help>
@@ -497,7 +493,6 @@ useful in the future.
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Owner</label>
                 <object class="sizeritem">
@@ -527,7 +522,6 @@ useful in the future.
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
-                <flag>wxGROW|wxALL</flag>
                 <orient>wxVERTICAL</orient>
                 <label>Agent</label>
                 <object class="sizeritem">
@@ -652,12 +646,12 @@ useful in the future.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
                 <label>Select columns</label>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
@@ -873,7 +867,7 @@ useful in the future.
         <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW | wxALIGN_CENTER_VERTICAL | wxALL</flag>
+            <flag>wxGROW | wxALL</flag>
             <border>4</border>
             <object class="wxNotebook" name="input_notebook">
                 <object class="notebookpage">

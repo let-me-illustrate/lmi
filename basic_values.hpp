@@ -308,8 +308,10 @@ class LMI_SO BasicValues
     mcenum_anticipated_deduction MaxWDDed_;
     double                       MaxWdGenAcctValMult;
     double                       MaxWdSepAcctValMult;
+    bool                         AllowPrefLoan;
     mcenum_anticipated_deduction MaxLoanDed_;
     double                       MaxLoanAVMult;
+    int                          FirstPrefLoanYear;
     int                          NoLapseMinDur;
     int                          NoLapseMinAge;
     oenum_waiver_charge_method   WaiverChargeMethod;

@@ -155,6 +155,7 @@ all: boost cgicc fop jing md5sum_msw sample trang xmlwrapp
 
 .PHONY: boost
 boost: $(file_list)
+	-[ -e $(stem).patch ] && $(PATCH) --directory=scratch --strip=1 < $(stem).patch
 	@$(MKDIR) $(third_party_include_dir)/boost/
 	$(CP) --force --preserve --recursive scratch/$(stem)/boost/* $(third_party_include_dir)/boost/
 	@$(MKDIR) $(third_party_source_dir)/boost/

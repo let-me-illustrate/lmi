@@ -235,7 +235,7 @@ fs::path serial_file_path
 /// name for the pdf file would be 'foo.pdf'. If a file with that
 /// exact name already exists, it should normally be erased, and its
 /// name reused: that's what an end user would expect. But that's not
-/// possible of 'foo.pdf' is already open in some viewer that locks it
+/// possible if 'foo.pdf' is already open in some viewer that locks it
 /// against modification; in that case, a distinct new name must be
 /// devised.
 ///

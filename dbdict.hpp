@@ -324,6 +324,8 @@ class LMI_SO DBDictionary
     database_entity MinVlrRate          ;
     database_entity MaxLoanAcctValMult  ;
     database_entity MaxLoanDed          ;
+    database_entity FirstPrefLoanYear   ;
+    database_entity PrefLoanRateDecr    ;
     database_entity GuarPrefLoanSpread  ;
     database_entity GuarRegLoanSpread   ;
     database_entity CurrPrefLoanSpread  ;

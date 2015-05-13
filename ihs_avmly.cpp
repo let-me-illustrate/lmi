@@ -704,12 +704,14 @@ bool AccountValue::IsModalPmtDate(mcenum_mode mode) const
     return 0 == Month % (12 / mode);
 }
 
-//============================================================================
+/// Number of monthiversaries before next billing date, counting today.
+///
+/// This is intended for use only with group UL plans, so it reflects
+/// the group billing mode chosen by the employer.
+
 int AccountValue::MonthsToNextModalPmtDate() const
 {
-    // TODO ?? Answer is in terms of *ee* mode only, but it seems
-    // wrong to ignore *er* mode.
-    return 1 + (11 - Month) % (12 / InvariantValues().EeMode[Year].value());
+    return 1 + (11 - Month) % (12 / InvariantValues().ErMode[Year].value());
 }
 
 /// Determine instantaneous base-policy minimum specified amount.
@@ -1526,19 +1528,13 @@ void AccountValue::TxLoanRepay()
         return;
         }
 
-// TODO ?? ActualLoan should be eliminated. It's used only in two functions,
-// one that takes a loan, and one that repays a loan.
-
     // TODO ?? This idiom seems too cute. And it can return -0.0 .
     // Maximum repayment is total debt.
-    ActualLoan = -std::min(-RequestedLoan, RegLnBal);
+    ActualLoan = -std::min(-RequestedLoan, RegLnBal + PrfLnBal);
 
     process_distribution(ActualLoan);
-    AVRegLn  += ActualLoan;
-    RegLnBal += ActualLoan;
-// TODO ?? First repay regular loan, then apply excess to preferred.
-//  AVPrfLn  += ActualLoan;
-//  PrfLnBal += ActualLoan;
+    LMI_ASSERT(0.0 == progressively_reduce(AVRegLn , AVPrfLn , -ActualLoan));
+    LMI_ASSERT(0.0 == progressively_reduce(RegLnBal, PrfLnBal, -ActualLoan));
 
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
@@ -1849,6 +1845,10 @@ void AccountValue::TxSetRiderDed()
     if(TermRiderActive && yare_input_.TermRider)
         {
         TermCharge    = YearsTermRate   * TermDB * DBDiscountRate[Year];
+        // TAXATION !! Integrated term: s/TermDB/TermSpecAmt/ because
+        // it can't go into the corridor under tax assumptions.
+        // TAXATION !! Use a distinct discount rate for taxation? Or
+        // the policy's rate, as used for DcvNaar?
         DcvTermCharge = YearsDcvCoiRate * TermDB * DBDiscountRate[Year];
         }
 
@@ -2237,7 +2237,12 @@ void AccountValue::TxCreditInt()
 
 void AccountValue::TxLoanInt()
 {
-    // Nothing to do if there's no loan outstanding.
+    // Reinitialize to zero before potential early exit, to sweep away
+    // any leftover values (e.g., after a loan has been paid off).
+    RegLnIntCred = 0.0;
+    PrfLnIntCred = 0.0;
+
+    // Nothing more to do if there's no loan outstanding.
     if(0.0 == RegLnBal && 0.0 == PrfLnBal)
         {
         return;
@@ -2726,9 +2731,6 @@ void AccountValue::TxTakeLoan()
         return;
         }
 
-    // SOMEDAY !! Preferred loan calculations not yet implemented.
-    LMI_ASSERT(0.0 == AVPrfLn);
-
     double max_loan_increment = MaxLoan - (AVRegLn + AVPrfLn);
 
     // When performing a solve, let it become overloaned--otherwise
@@ -2772,9 +2774,16 @@ void AccountValue::TxTakeLoan()
     // Transfer new cash loan from the appropriate unloaned account(s).
     process_distribution(ActualLoan);
 
-    // SOMEDAY !! Also handle preferred loan.
-    AVRegLn += ActualLoan;
-    RegLnBal += ActualLoan;
+    if(!AllowPrefLoan || Year < FirstPrefLoanYear)
+        {
+        AVRegLn  += ActualLoan;
+        RegLnBal += ActualLoan;
+        }
+    else
+        {
+        AVPrfLn  += ActualLoan;
+        PrfLnBal += ActualLoan;
+        }
 }
 
 //============================================================================

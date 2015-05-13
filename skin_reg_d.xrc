@@ -115,7 +115,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxBOTTOM</flag>
+                                    <flag>wxGROW|wxLEFT|wxBOTTOM</flag>
                                     <border>4</border>
                                     <object class="wxRadioBox" name="UseDOB">
                                         <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
@@ -136,11 +136,10 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM</flag>
                                     <border>4</border>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
-                                        <size>90,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -172,7 +171,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxGROW</flag>
+                    <flag>wxGROW</flag>
                     <border>4</border>
                     <object class="wxRadioBox" name="Gender">
                         <help>Gender</help>
@@ -188,7 +187,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT|wxGROW|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
@@ -216,7 +215,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxGROW|wxALL</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxComboBox" name="UnderwritingClass">
                                         <help>Underwriting class</help>
@@ -286,7 +285,7 @@
         <rows>3</rows>
         <growablecols>0</growablecols>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_TOP|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>2</border>
             <object class="wxFlexGridSizer">
                 <cols>0</cols>
@@ -415,22 +414,20 @@
 </object>
 
 <object class="wxPanel" name="plan_panel">
-    <title>Plan</title>
-    <centered>1</centered>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <rows>2</rows>
         <growablecols>0</growablecols>
         <growablerows>0,1</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
                 <growablecols>1,2</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxTOP</flag>
+                    <flag>wxGROW|wxLEFT|wxTOP</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
@@ -455,7 +452,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxGROW|wxTOP</flag>
+                    <flag>wxGROW|wxTOP</flag>
                     <border>15</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
@@ -477,7 +474,7 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxRadioBox" name="DefinitionOfMaterialChange">
                                 <help>Definition of material change</help>
@@ -520,7 +517,6 @@
                                             <border>4</border>
                                             <object class="wxDatePickerCtrl" name="EffectiveDate">
                                                 <help>Effective date</help>
-                                                <size>90,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -598,7 +594,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+            <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
@@ -606,7 +602,7 @@
                 <growablecols>0,1</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_TOP|wxLEFT</flag>
+                    <flag>wxGROW|wxLEFT</flag>
                     <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
@@ -740,15 +736,13 @@
 </object>
 
 <object class="wxPanel" name="assumptions_panel">
-    <title>Assumptions</title>
-    <centered>1</centered>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <rows>3</rows>
         <growablecols>0</growablecols>
         <growablerows>0,1,2</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
@@ -850,7 +844,7 @@
                 <rows>1</rows>
                 <growablecols>0,1</growablecols>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+                    <flag>wxGROW|wxLEFT|wxRIGHT|wxTOP</flag>
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -998,7 +992,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>4</border>
                                     <object class="InputSequenceEntry" name="SeparateAccountRate">
                                         <title>Separate-account interest rate</title>
@@ -1139,7 +1133,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT|wxGROW|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
@@ -1316,7 +1310,7 @@
                         <growablecols>0</growablecols>
                         <growablerows>0,1</growablerows>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_TOP|wxLEFT|wxRIGHT</flag>
+                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxRadioBox" name="SolveTarget">
                                 <help>Target to solve for</help>
@@ -1337,7 +1331,7 @@
                                 <rows>2</rows>
                                 <growablecols>0</growablecols>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxGROW|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>0</cols>
@@ -1361,7 +1355,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
+                                    <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                                     <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
@@ -1489,7 +1483,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>4</border>
                                             <object class="wxTextCtrl" name="ContractNumber">
                                                 <help>Contract number</help>
@@ -1504,11 +1498,10 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>4</border>
                                             <object class="wxDatePickerCtrl" name="InforceAsOfDate">
                                                 <help>Monthiversary as of which inforce data is provided</help>
-                                                <size>80,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -1519,7 +1512,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>4</border>
                                             <object class="wxSpinCtrl" name="InforceYear">
                                                 <help>Years elapsed since issue</help>
@@ -1535,7 +1528,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>4</border>
                                             <object class="wxSpinCtrl" name="InforceMonth">
                                                 <help>Months elapsed since issue</help>
@@ -1548,13 +1541,13 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_TOP|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticBoxSizer">
                                 <orient>wxVERTICAL</orient>
                                 <label>Inforce values</label>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <flag>wxGROW|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
@@ -1687,19 +1680,19 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <rows>0</rows>
                         <growablecols>0</growablecols>
                         <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <flag>wxGROW|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticBoxSizer">
                                 <orient>wxVERTICAL</orient>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxGROW|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
@@ -1713,7 +1706,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InforceTaxBasis">
                                                 <help>Inforce tax basis</help>
@@ -1728,7 +1721,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InforceCumulativeGlp">
                                                 <help>Cumulative guideline level premium since issue</help>
@@ -1743,7 +1736,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InforceGlp">
                                                 <help>Inforce guideline level premium</help>
@@ -1758,7 +1751,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InforceGsp">
                                                 <help>Inforce guideline single premium</help>
@@ -1773,7 +1766,8 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <border>2</border>
                                             <object class="wxTextCtrl" name="InforceCumulativeGptPremiumsPaid">
                                                 <help>Cumulative 7702(f)(1) 'premiums paid'</help>
                                                 <size>80,-1</size>
@@ -1788,7 +1782,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InforceSevenPayPremium">
                                                 <help>Inforce seven pay premium</help>
@@ -1819,7 +1813,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InforceDcv">
                                                 <help>Inforce deemed cash value</help>
@@ -1834,11 +1828,10 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxDatePickerCtrl" name="LastMaterialChangeDate">
                                                 <help>Beginning of most recent seven-pay period</help>
-                                                <size>80,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -1849,7 +1842,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxSpinCtrl" name="InforceContractMonth">
                                                 <help>Months elapsed since beginning of most recent seven-pay period</help>
@@ -1865,7 +1858,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxSpinCtrl" name="InforceContractYear">
                                                 <help>Years elapsed since beginning of most recent seven-pay period</help>
@@ -1881,7 +1874,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InforceAvBeforeLastMc">
                                                 <size>80,-1</size>
@@ -1895,7 +1888,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InforceLeastDeathBenefit">
                                                 <help>Inforce least death benefit since beginning of last seven-pay period</help>
@@ -1910,7 +1903,8 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <border>2</border>
                                             <object class="wxTextCtrl" name="InforceSpecAmtLoadBase">
                                                 <help>Amount on which specified-amount load is charged--generally the specified amount at issue</help>
                                                 <size>80,-1</size>
@@ -1925,7 +1919,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>2</border>
                                             <object class="wxTextCtrl" name="InforceHoneymoonValue">
                                                 <help>Inforce honeymoon value</help>
@@ -1941,7 +1935,7 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_TOP|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
@@ -1982,13 +1976,13 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
                 <label>Select columns</label>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <flag>wxALL</flag>
                     <border>2</border>
                     <object class="wxFlexGridSizer">
                         <cols>2</cols>
@@ -2204,7 +2198,7 @@
         <growablecols>0</growablecols>
         <growablerows>0</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW | wxALIGN_CENTER_VERTICAL | wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxNotebook" name="input_notebook">
                 <object class="notebookpage">

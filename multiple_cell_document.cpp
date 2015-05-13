@@ -31,7 +31,6 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"           // AddDataDir()
-#include "handle_exceptions.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
@@ -40,9 +39,11 @@
 #include <xmlwrapp/schema.h>
 #include <xsltwrapp/stylesheet.h>
 
+#include <iomanip>
 #include <istream>
 #include <iterator>                     // std::distance()
 #include <ostream>
+#include <sstream>
 #include <stdexcept>
 
 //============================================================================
@@ -84,10 +85,11 @@ void multiple_cell_document::assert_vector_sizes_are_sane() const
 ///
 /// version 0: [prior to the lmi epoch]
 /// version 1: 20120220T0158Z
+/// version 2: 20150316T0409Z
 
 int multiple_cell_document::class_version() const
 {
-    return 1;
+    return 2;
 }
 
 //============================================================================
@@ -131,16 +133,16 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
         return;
         }
 
-    if(data_source_is_external(parser.document()))
-        {
-        validate_with_xsd_schema(parser.document());
-        }
-
     // Version 0 should have been handled above.
     LMI_ASSERT(0 < file_version);
     if(class_version() < file_version)
         {
         fatal_error() << "Incompatible file version." << LMI_FLUSH;
+        }
+
+    if(data_source_is_external(parser.document()))
+        {
+        validate_with_xsd_schema(parser.document(), xsd_schema_name(file_version));
         }
 
     case_parms_ .clear();
@@ -414,20 +416,22 @@ bool multiple_cell_document::data_source_is_external(xml::document const& d) con
 }
 
 //============================================================================
-void multiple_cell_document::validate_with_xsd_schema(xml::document const& d) const
+void multiple_cell_document::validate_with_xsd_schema
+    (xml::document const& xml
+    ,std::string const&   xsd
+    ) const
 {
-    try
+    xml::schema const schema(xml_lmi::dom_parser(AddDataDir(xsd)).document());
+    xml::error_messages errors;
+    if(!schema.validate(cell_sorter().apply(xml), errors))
         {
-        xml::error_messages e;
-        if(!xsd_schema().validate(cell_sorter().apply(d), e))
-            {
-            throw xml::exception(e);
-            }
-        }
-    catch(...)
-        {
-        warning() << "Schema validation failed--diagnostics follow." << std::flush;
-        report_exception();
+        warning()
+            << "Validation with schema '"
+            << xsd
+            << "' failed.\n\n"
+            << errors.print()
+            << std::flush
+            ;
         }
 }
 
@@ -444,11 +448,21 @@ xslt::stylesheet& multiple_cell_document::cell_sorter() const
 }
 
 //============================================================================
-xml::schema const& multiple_cell_document::xsd_schema() const
+std::string multiple_cell_document::xsd_schema_name(int version) const
 {
-    static std::string const f("multiple_cell_document.xsd");
-    static xml::schema const z(xml_lmi::dom_parser(AddDataDir(f)).document());
-    return z;
+    static std::string const s("multiple_cell_document.xsd");
+    if(class_version() == version)
+        {
+        return s;
+        }
+
+    std::ostringstream oss;
+    oss
+        << "multiple_cell_document"
+        << '_' << std::setfill('0') << std::setw(2) << version
+        << ".xsd"
+        ;
+    return oss.str();
 }
 
 //============================================================================

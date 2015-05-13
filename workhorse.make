@@ -475,9 +475,6 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
 # at least in version 1.33.1, and there seems to be no easy workaround
 # except to blow away all warning options and let a warning appear.
-# This library also seems to require
-#   -Wl,--allow-multiple-definition
-# for reasons unknown, at least with MinGW gcc-3.4.5 .
 
 static_mutex.o: gcc_common_extra_warnings :=
 static_mutex.o:          gcc_cxx_warnings :=
@@ -905,7 +902,7 @@ antediluvian_cli_monolithic$(EXEEXT): $(cli_objects) $(antediluvian_common_objec
 wx_new$(SHREXT): wx_new.o
 
 wx_test$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
-wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags) -Wl,--allow-multiple-definition
+wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 wx_test$(EXEEXT): $(wx_test_objects) skeleton$(SHREXT) liblmi$(SHREXT)
 
 # TODO ?? This needs a corresponding test target.

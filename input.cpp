@@ -149,6 +149,7 @@ Input::Input()
 //    ,InforceCumulativeSalesLoad       ("")
 //    ,InforceSpecAmtLoadBase           ("")
 //    ,InforceHoneymoonValue            ("")
+//    ,InforceCorporationStake          ("")
 //    ,InforceNetExperienceReserve      ("")
 //    ,InforceYtdNetCoiCharge           ("")
 //    ,InforceTaxBasis                  ("")
@@ -193,6 +194,7 @@ Input::Input()
 //    ,TaxBracket                       ("")
     ,ProjectedSalary                  ("100000")
     ,SpecifiedAmount                  ("1000000")
+    ,SupplementalSpecifiedAmount      ("0")
     ,DeathBenefitOption               ("a")
     ,Payment                          ("20000")
     ,PaymentMode                      ("annual")
@@ -207,6 +209,12 @@ Input::Input()
     ,HoneymoonValueSpread             ("0")
     ,FundAllocations                  ("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0")
     ,CashValueEnhancementRate         ("0")
+//    ,SupplementalIllustrationType
+//    ,SplitDollarAccumulateInterest
+    ,SplitDollarLoanRate              ("0")
+//    ,SplitDollarRolloutAge
+//    ,SplitDollarRolloutAtWhich
+//    ,SplitDollarRolloutYear
 //    ,CreateSupplementalReport         ("")
 //    ,SupplementalReportColumn00       ("")
 //    ,SupplementalReportColumn01       ("")
@@ -383,6 +391,7 @@ void Input::AscribeMembers()
     ascribe("InforceCumulativeSalesLoad"            , &Input::InforceCumulativeSalesLoad            );
     ascribe("InforceSpecAmtLoadBase"                , &Input::InforceSpecAmtLoadBase                );
     ascribe("InforceHoneymoonValue"                 , &Input::InforceHoneymoonValue                 );
+    ascribe("InforceCorporationStake"               , &Input::InforceCorporationStake               );
     ascribe("InforceNetExperienceReserve"           , &Input::InforceNetExperienceReserve           );
     ascribe("InforceYtdNetCoiCharge"                , &Input::InforceYtdNetCoiCharge                );
     ascribe("InforceTaxBasis"                       , &Input::InforceTaxBasis                       );
@@ -427,6 +436,7 @@ void Input::AscribeMembers()
     ascribe("TaxBracket"                            , &Input::TaxBracket                            );
     ascribe("ProjectedSalary"                       , &Input::ProjectedSalary                       );
     ascribe("SpecifiedAmount"                       , &Input::SpecifiedAmount                       );
+    ascribe("SupplementalSpecifiedAmount"           , &Input::SupplementalSpecifiedAmount           );
     ascribe("DeathBenefitOption"                    , &Input::DeathBenefitOption                    );
     ascribe("Payment"                               , &Input::Payment                               );
     ascribe("PaymentMode"                           , &Input::PaymentMode                           );
@@ -441,6 +451,13 @@ void Input::AscribeMembers()
     ascribe("HoneymoonValueSpread"                  , &Input::HoneymoonValueSpread                  );
     ascribe("FundAllocations"                       , &Input::FundAllocations                       );
     ascribe("CashValueEnhancementRate"              , &Input::CashValueEnhancementRate              );
+
+    ascribe("SupplementalIllustrationType"          , &Input::SupplementalIllustrationType          );
+    ascribe("SplitDollarAccumulateInterest"         , &Input::SplitDollarAccumulateInterest         );
+    ascribe("SplitDollarLoanRate"                   , &Input::SplitDollarLoanRate                   );
+    ascribe("SplitDollarRolloutAge"                 , &Input::SplitDollarRolloutAge                 );
+    ascribe("SplitDollarRolloutAtWhich"             , &Input::SplitDollarRolloutAtWhich             );
+    ascribe("SplitDollarRolloutYear"                , &Input::SplitDollarRolloutYear                );
 
     ascribe("CreateSupplementalReport"              , &Input::CreateSupplementalReport              );
     ascribe("SupplementalReportColumn00"            , &Input::SupplementalReportColumn00            );
@@ -462,31 +479,8 @@ void Input::AscribeMembers()
     ascribe("UseDOB"                                , &Input::UseDOB                                );
     ascribe("EffectiveDateToday"                    , &Input::EffectiveDateToday                    );
 
-    ascribe("DeathBenefitOptionFromRetirement"      , &Input::DeathBenefitOptionFromRetirement      );
-    ascribe("DeathBenefitOptionFromIssue"           , &Input::DeathBenefitOptionFromIssue           );
-    ascribe("SpecifiedAmountFromRetirement"         , &Input::SpecifiedAmountFromRetirement         );
-    ascribe("SpecifiedAmountFromIssue"              , &Input::SpecifiedAmountFromIssue              );
     ascribe("SpecifiedAmountStrategyFromIssue"      , &Input::SpecifiedAmountStrategyFromIssue      );
-    ascribe("IndividualPaymentMode"                 , &Input::IndividualPaymentMode                 );
-    ascribe("IndividualPaymentToAlternative"        , &Input::IndividualPaymentToAlternative        );
-    ascribe("IndividualPaymentToAge"                , &Input::IndividualPaymentToAge                );
-    ascribe("IndividualPaymentToDuration"           , &Input::IndividualPaymentToDuration           );
-    ascribe("IndividualPaymentAmount"               , &Input::IndividualPaymentAmount               );
     ascribe("IndividualPaymentStrategy"             , &Input::IndividualPaymentStrategy             );
-    ascribe("LoanAmount"                            , &Input::LoanAmount                            );
-    ascribe("LoanFromAge"                           , &Input::LoanFromAge                           );
-    ascribe("LoanFromAlternative"                   , &Input::LoanFromAlternative                   );
-    ascribe("LoanFromDuration"                      , &Input::LoanFromDuration                      );
-    ascribe("LoanToAge"                             , &Input::LoanToAge                             );
-    ascribe("LoanToAlternative"                     , &Input::LoanToAlternative                     );
-    ascribe("LoanToDuration"                        , &Input::LoanToDuration                        );
-    ascribe("WithdrawalAmount"                      , &Input::WithdrawalAmount                      );
-    ascribe("WithdrawalFromAge"                     , &Input::WithdrawalFromAge                     );
-    ascribe("WithdrawalFromAlternative"             , &Input::WithdrawalFromAlternative             );
-    ascribe("WithdrawalFromDuration"                , &Input::WithdrawalFromDuration                );
-    ascribe("WithdrawalToAge"                       , &Input::WithdrawalToAge                       );
-    ascribe("WithdrawalToAlternative"               , &Input::WithdrawalToAlternative               );
-    ascribe("WithdrawalToDuration"                  , &Input::WithdrawalToDuration                  );
 }
 
 datum_base const* Input::DoBaseDatumPointer

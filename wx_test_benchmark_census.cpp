@@ -31,9 +31,9 @@
 #include "wx_test_statusbar.hpp"
 #include "uncopyable_lmi.hpp"
 
+#include <wx/crt.h>
 #include <wx/dialog.h>
 #include <wx/frame.h>
-#include <wx/log.h>
 #include <wx/scopeguard.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
@@ -82,8 +82,8 @@ class census_benchmark
         long time_real;
         LMI_ASSERT(ms_text.ToLong(&time_real));
 
-        wxLogMessage
-            ("%s for %s: %ldms elapsed"
+        wxPrintf
+            ("%s for %s: %ldms elapsed\n"
             ,operation
             ,name_
             ,time_real

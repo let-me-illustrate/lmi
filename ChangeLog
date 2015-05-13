@@ -35615,3 +35615,603 @@ Don't complain about unclosed documents during stack unwinding. See:
 Remove a bizarre zero-height workaround. See:
   http://lists.nongnu.org/archive/html/lmi/2014-12/msg00099.html
 
+20150125T0053Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_calculation_summary.cpp
+  wx_test_validate_output.cpp
+Rectify test specifications.
+
+20150125T2320Z <zeitlin> [516]
+
+  wx_test_paste_census.cpp
+Add a missing header: std::strlen() requires <cstring>.
+
+20150126T0143Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_paste_census.cpp
+Add a missing header: std::runtime_error requires <stdexcept>.
+
+20150126T1656Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_calculation_summary.cpp
+  wx_test_validate_output.cpp
+Further rectify test specifications.
+
+20150127T0019Z <gchicares@sbcglobal.net> [516]
+
+  Makefile.am
+  objects.make
+Remove duplicative object file from makefiles. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-01/msg00033.html
+
+20150131T0012Z <gchicares@sbcglobal.net> [516]
+
+  custom_io_1.cpp
+Mark automatically generated input files as such.
+
+20150131T0013Z <gchicares@sbcglobal.net> [516]
+
+  test_coding_rules.cpp
+Exempt automatically generated input files from private taboos.
+
+20150131T0015Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_about_version.cpp
+  wx_test_calculation_summary.cpp
+  wx_test_create_open.cpp
+  wx_test_default_update.cpp
+  wx_test_new.hpp
+  wx_test_paste_census.cpp
+  wx_test_validate_output.cpp
+Improve GUI-test diagnostics. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-01/msg00027.html
+
+20150131T0124Z <gchicares@sbcglobal.net> [516]
+
+  authenticity_test.cpp
+Skip multiple-root test if multiple root not readily found.
+
+20150301T1632Z <gchicares@sbcglobal.net> [516]
+
+  path_utility.cpp
+Correct a typo in documentation.
+
+20150301T1633Z <gchicares@sbcglobal.net> [516]
+
+  skeleton.cpp
+Remove platform-specific code that has become unnecessary. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00009.html
+
+20150301T1729Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Remove old code to make way for new. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+
+20150301T1747Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_new.hpp
+  wx_test_paste_census.cpp
+  wx_test_validate_output.cpp
+Add a helper for finding an MVC window by name. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+
+20150301T1755Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Refactor to simplify planned reuse. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+
+20150301T2202Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Add tests to verify existence of spreadsheet output. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+
+20150301T2325Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_output_pdf.hpp [new file]
+  wx_test_pdf_create.cpp
+Refactor for reuse. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+
+20150301T2330Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Refactor for reuse. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+
+20150301T2340Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Add remaining census-output tests. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+
+20150301T2343Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Clean up a leftover output file. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-02/msg00012.html
+
+20150306T1754Z <gchicares@sbcglobal.net> [516]
+
+  install_wx.make
+Don't build wx components that lmi doesn't use. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00006.html
+
+20150308T1823Z <gchicares@sbcglobal.net> [516]
+
+  boost_1_33_1.patch [new file]
+  install_miscellanea.make
+  objects.make
+  workhorse.make
+Work around a MinGW defect more tidily. See:
+  http://lists.nongnu.org/archive/html/lmi/2014-12/msg00036.html
+
+20150308T1908Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_update.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
+
+20150308T1918Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_default_update.cpp
+Run only with '--distribution' flag. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00007.html
+
+20150308T2301Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_input_sequences.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00009.html
+
+20150308T2306Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_calculation_summary.cpp
+Implement rectified test specification. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00017.html
+
+20150309T2300Z <gchicares@sbcglobal.net> [516]
+
+  skeleton.cpp
+  skeleton.hpp
+Accept input files as command-line arguments. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00022.html
+
+20150315T1737Z <gchicares@sbcglobal.net> [516]
+
+  cell_07.rnc                   [new file]
+  multiple_cell_document_01.rnc [new file]
+  single_cell_document_01.rnc   [new file]
+  types_07.rnc                  [new file]
+Preserve obsolescent schemata under new versioned names.
+
+20150315T1745Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.rnc
+  single_cell_document.rnc
+Require attributes that were formerly optional.
+
+20150316T0409Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  multiple_cell_document.rnc
+  multiple_cell_document.xsd
+  single_cell_document.cpp
+  single_cell_document.rnc
+  single_cell_document.xsd
+Increment version.
+
+20150316T0411Z <gchicares@sbcglobal.net> [516]
+
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Add a new enumerative type.
+
+20150316T0422Z <gchicares@sbcglobal.net> [516]
+
+  input.cpp
+  input.hpp
+  input_xml_io.cpp
+Add several fields that will soon be needed.
+
+20150316T0425Z <gchicares@sbcglobal.net> [516]
+
+  sample.cns
+  sample.ill
+Update specimen input files.
+
+20150316T0430Z <gchicares@sbcglobal.net> [516]
+
+  cell.rnc
+  cell.xsd
+  types.rnc
+  types.xsd
+Update input schemata.
+
+20150316T2235Z <gchicares@sbcglobal.net> [516]
+
+  GNUmakefile
+  ihs_acctval.cpp
+  illustration_document.cpp
+  premium_tax.cpp
+Improve documentation.
+
+20150317T1306Z <gchicares@sbcglobal.net> [516]
+
+  cell.rnc
+  cell.xsd
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  input_xml_io.cpp
+  sample.cns
+  sample.ill
+Make some obsolete elements optional.
+
+20150318T0042Z <gchicares@sbcglobal.net> [516]
+
+  cell_07.xsd                   [new file]
+  multiple_cell_document_01.xsd [new file]
+  single_cell_document_01.xsd   [new file]
+  types_07.xsd                  [new file]
+Preserve obsolescent schemata under new versioned names. These 'xsd'
+schemata are used by lmi instead of the otherwise preferable 'rnc'
+equivalents that are regrettably not supported by libxml2.
+
+20150318T0046Z <gchicares@sbcglobal.net> [516]
+
+  test_schemata.sh
+Test obsolescent schemata added 20150318T0042Z.
+
+20150318T0208Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document_01.rnc
+  multiple_cell_document_01.xsd
+Refer to a census with the 'data_source' attribute.
+
+20150318T2129Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Improve display of schema diagnostics.
+
+20150318T2147Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Remove disused headers.
+
+20150319T1427Z <gchicares@sbcglobal.net> [516]
+
+  input_test.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Refactor, preparing for schema to depend on version.
+
+20150319T1510Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Make version available for schema selection.
+
+20150319T2006Z <gchicares@sbcglobal.net> [516]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Use versioned schemata.
+
+20150326T2250Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_about_version.cpp
+  wx_test_benchmark_census.cpp
+  wx_test_default_input.cpp
+  wx_test_expiry_dates.cpp
+Use wxPrintf() instead of wxLogMessage() for GUI test. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+
+20150326T2257Z <gchicares@sbcglobal.net> [516]
+
+  skeleton.cpp
+Don't redirect all wxLog messages to stderr, just the debug ones. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+
+20150326T2308Z <gchicares@sbcglobal.net> [516]
+
+  Makefile.am
+  objects.make
+  wx_test_log_errors.cpp [new file]
+Add a unit test verifying that wxLog errors are shown. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+
+20150326T2327Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Flush wxLog after each individual GUI test. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00026.html
+
+20150326T2349Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_input_sequences.cpp
+Guard against future changes in field names. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00032.html
+
+20150327T0024Z <gchicares@sbcglobal.net> [516]
+
+  test_coding_rules.cpp
+Forbid obscured email addresses.
+
+20150327T0027Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_document.hpp [new file]
+  wx_test_new.hpp
+Move and rename class wx_test_new_document_base. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
+
+20150327T0032Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_document.hpp
+Add wx_test_existing_illustration helper class. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
+
+20150327T0041Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+  wx_test_input_validation.cpp
+Test all possible 'CurrentCoiMultiplier' validation errors. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00043.html
+
+20150327T0252Z <gchicares@sbcglobal.net> [516]
+
+  main_wx_test.cpp
+Reapply patches that were somehow misapplied. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-03/msg00046.html
+
+20150328T1252Z <gchicares@sbcglobal.net> [516]
+
+  mvc_controller.cpp
+Show tabbed-dialog dimensions if requested.
+
+20150330T1559Z <gchicares@sbcglobal.net> [516]
+
+  custom_io_1.cpp
+Increase output precision.
+
+20150330T1657Z <gchicares@sbcglobal.net> [516]
+
+  version.hpp
+Designate release candidate 6158.
+
+20150409T1634Z <gchicares@sbcglobal.net> [516]
+
+  README
+  menus.xrc
+  toolbar.xrc
+  roster-16.png [new file]
+  roster.png    [new file]
+Add a group-roster toolbar button.
+
+20150409T1756Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_validate_output.cpp
+Make sure "Comments" field was updated correctly. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
+
+20150409T1759Z <gchicares@sbcglobal.net> [516]
+
+  wx_test_paste_census.cpp
+Add spaces to make an error message more readable. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00001.html
+
+20150409T1812Z <gchicares@sbcglobal.net> [516]
+
+  version.hpp
+Designate release candidate 6162.
+
+20150410T0029Z <gchicares@sbcglobal.net> [516]
+
+  menu_commands.html
+Fix defect introduced 20141108T0049Z: subcommand name was not updated.
+
+20150410T1059Z <gchicares@sbcglobal.net> [516]
+
+  menu_commands.html
+Fix defect introduced 20130423T0219Z: group roster was not mentioned.
+
+20150410T1101Z <gchicares@sbcglobal.net> [516]
+
+  version.hpp
+Designate release candidate 6165.
+
+20150417T2001Z <gchicares@sbcglobal.net> [516]
+
+  xrc.rnc [new file]
+Add schema for XRC validation.
+
+20150417T2049Z <gchicares@sbcglobal.net> [516]
+
+  gpt.xrc
+  mec.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Fix first tranche of XRC validation errors. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00002.html
+
+20150417T2124Z <gchicares@sbcglobal.net> [516]
+
+  policy_view.xrc
+  rounding_view.xrc
+Use only one of a pair of synonymous constants. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
+20150417T2143Z <gchicares@sbcglobal.net> [516]
+
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Forswear feckless flags. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
+20150417T2155Z <gchicares@sbcglobal.net> [516]
+
+  policy_view.xrc
+Remove disregarded "option". See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
+20150417T2235Z <gchicares@sbcglobal.net> [516]
+
+  gpt.xrc
+  mec.xrc
+  policy_view.xrc
+  preferences_view.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Remove alignment options that have been ignored due to wxGROW. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
+20150417T2245Z <gchicares@sbcglobal.net> [516]
+
+  skin_coli_boli.xrc
+  skin_group_carveout2.xrc
+  skin_variable_annuity.xrc
+Add missing border flags. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
+20150417T2252Z <gchicares@sbcglobal.net> [516]
+
+  gpt.xrc
+  mec.xrc
+  policy_view.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Fix incorrect uses of wxGROW. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
+20150417T2304Z <gchicares@sbcglobal.net> [516]
+
+  gpt.xrc
+  mec.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout2.xrc
+  skin_reg_d.xrc
+  skin_single_premium.xrc
+  skin_variable_annuity.xrc
+Let wx determine the size of date-picker controls. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
+20150417T2315Z <gchicares@sbcglobal.net> [516]
+
+  gpt.xrc
+  mec.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_reg_d.xrc
+Grow controls prn to align columns containing date pickers. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00004.html
+
+20150417T2338Z <gchicares@sbcglobal.net> [516]
+
+  about_dialog.cpp
+Improve "Help | About" layout with high DPI. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00006.html
+
+20150418T0008Z <gchicares@sbcglobal.net> [516]
+
+  rounding_view.xrc
+Remove redundant wxALIGN_LEFT flags from horizontal wxBoxSizer. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-04/msg00012.html
+
+20150501T2349Z <gchicares@sbcglobal.net> [516]
+
+  ihs_avmly.cpp
+Mark some taxation issues.
+
+20150502T0025Z <gchicares@sbcglobal.net> [516]
+
+  ihs_acctval.cpp
+Improve documentation.
+
+20150502T0036Z <gchicares@sbcglobal.net> [514]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Resolve two marked defects: improve initialization and documentation.
+
+20150502T0042Z <gchicares@sbcglobal.net> [514]
+
+  ihs_avmly.cpp
+Remove a latent defect.
+
+20150502T1409Z <gchicares@sbcglobal.net> [513]
+
+  ihs_avmly.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch. Maximum loan and withdrawal were overstated for group
+UL plans when ee mode was more frequent than er mode. This situation
+is unlikely to arise. If it ever did arise, the distortion would not
+matter much: the intention is to prevent lapse, which wouldn't occur
+anyway because of the ee payment, so the admin system would simply
+have an unneeded extra margin of conservatism.
+
+20150502T1429Z <gchicares@sbcglobal.net> [513]
+
+  interest_rates.cpp
+  interest_rates.hpp
+Remove latent defects in as-yet-unreachable code.
+
+20150502T1522Z <gchicares@sbcglobal.net> [513]
+
+  dbnames.xpp
+  ihs_avmly.cpp
+  interest_rates.cpp
+Remove warnings about preferred loans: they'll be supported soon.
+
+20150502T1557Z <gchicares@sbcglobal.net> [513]
+
+  basic_values.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Establish new database entities for preferred loans.
+
+20150503T1629Z <gchicares@sbcglobal.net> [513]
+
+  interest_rates.cpp
+  interest_rates.hpp
+Set preferred loan rates reflecting the 20150502T1557Z change.
+
+20150503T1639Z <gchicares@sbcglobal.net> [512]
+
+  ihs_avmly.cpp
+Implement preferred loans.
+

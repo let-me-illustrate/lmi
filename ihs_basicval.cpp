@@ -681,8 +681,10 @@ void BasicValues::SetPermanentInvariants()
     MaxWDDed_           = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWdDed)));
     MaxWdGenAcctValMult = Database_->Query(DB_MaxWdGenAcctValMult  );
     MaxWdSepAcctValMult = Database_->Query(DB_MaxWdSepAcctValMult  );
+    AllowPrefLoan       = static_cast<bool>(Database_->Query(DB_AllowPrefLoan));
     MaxLoanDed_         = static_cast<mcenum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
     MaxLoanAVMult       = Database_->Query(DB_MaxLoanAcctValMult   );
+    FirstPrefLoanYear   = static_cast<int>(Database_->Query(DB_FirstPrefLoanYear));
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
     NoLapseMinAge       = static_cast<int>(Database_->Query(DB_NoLapseMinAge));
     AdbLimit            = Database_->Query(DB_AdbLimit             );

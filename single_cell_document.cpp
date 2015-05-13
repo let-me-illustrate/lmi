@@ -31,7 +31,6 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "data_directory.hpp"           // AddDataDir()
-#include "handle_exceptions.hpp"
 #include "xml_lmi.hpp"
 
 #include <xmlwrapp/document.h>
@@ -39,8 +38,10 @@
 #include <xmlwrapp/schema.h>
 #include <xsltwrapp/stylesheet.h>
 
+#include <iomanip>
 #include <istream>
 #include <ostream>
+#include <sstream>
 
 //============================================================================
 single_cell_document::single_cell_document()
@@ -74,10 +75,11 @@ single_cell_document::~single_cell_document()
 ///
 /// version 0: [prior to the lmi epoch]
 /// version 1: 20130428T1828Z
+/// version 2: 20150316T0409Z
 
 int single_cell_document::class_version() const
 {
-    return 1;
+    return 2;
 }
 
 //============================================================================
@@ -90,12 +92,28 @@ std::string const& single_cell_document::xml_root_name() const
 //============================================================================
 void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
-    if(data_source_is_external(parser.document()))
+    xml::element const& root(parser.root_node(xml_root_name()));
+
+    int file_version = 0;
+    if(!xml_lmi::get_attr(root, "version", file_version))
         {
-        validate_with_xsd_schema(parser.document());
+        // Do nothing. Ancient lmi files have no "version" attribute,
+        // and that's okay. Here, 'file_version' is used only for
+        // schema validation, which is performed iff a "data_source"
+        // attribute exists and has a nondefault value--but
+        // "data_source" is a newer attribute than "version", so there
+        // can be no "data_source" without "version".
         }
 
-    xml::element const& root(parser.root_node(xml_root_name()));
+    if(class_version() < file_version)
+        {
+        fatal_error() << "Incompatible file version." << LMI_FLUSH;
+        }
+
+    if(data_source_is_external(parser.document()))
+        {
+        validate_with_xsd_schema(parser.document(), xsd_schema_name(file_version));
+        }
 
     xml::const_nodes_view const elements(root.elements());
     LMI_ASSERT(!elements.empty());
@@ -154,28 +172,22 @@ bool single_cell_document::data_source_is_external(xml::document const& d) const
 }
 
 //============================================================================
-void single_cell_document::validate_with_xsd_schema(xml::document const& d) const
+void single_cell_document::validate_with_xsd_schema
+    (xml::document const& xml
+    ,std::string const&   xsd
+    ) const
 {
-    try
+    xml::schema const schema(xml_lmi::dom_parser(AddDataDir(xsd)).document());
+    xml::error_messages errors;
+    if(!schema.validate(cell_sorter().apply(xml), errors))
         {
-        xml::error_messages e;
-        if(!xsd_schema().validate(cell_sorter().apply(d), e))
-            {
-            throw xml::exception(e);
-            }
-        }
-    catch(...)
-        {
-// Known shortcomings:
-//  - Two separate messageboxes are displayed; one would be better.
-//  - If the diagnostics are too lengthy, then they're truncated
-//    when displayed. The messagebox is not scrollable--see:
-//      http://lists.nongnu.org/archive/html/lmi/2009-05/msg00032.html
-// Rethrowing the exception has the same effect, because it's caught
-// by OnExceptionInMainLoop(), which (like report_exception()) calls
-// safely_show_message().
-        warning() << "Schema validation failed--diagnostics follow." << std::flush;
-        report_exception();
+        warning()
+            << "Validation with schema '"
+            << xsd
+            << "' failed.\n\n"
+            << errors.print()
+            << std::flush
+            ;
         }
 }
 
@@ -192,11 +204,21 @@ xslt::stylesheet& single_cell_document::cell_sorter() const
 }
 
 //============================================================================
-xml::schema const& single_cell_document::xsd_schema() const
+std::string single_cell_document::xsd_schema_name(int version) const
 {
-    static std::string const f("single_cell_document.xsd");
-    static xml::schema const z(xml_lmi::dom_parser(AddDataDir(f)).document());
-    return z;
+    static std::string const s("single_cell_document.xsd");
+    if(class_version() == version)
+        {
+        return s;
+        }
+    std::ostringstream oss;
+
+    oss
+        << "single_cell_document"
+        << '_' << std::setfill('0') << std::setw(2) << version
+        << ".xsd"
+        ;
+    return oss.str();
 }
 
 //============================================================================

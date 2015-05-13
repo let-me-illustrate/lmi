@@ -43,8 +43,10 @@
 #include <wx/uiaction.h>
 
 #include <algorithm>
+#include <cstring>
 #include <set>
 #include <sstream>
+#include <stdexcept>
 
 namespace
 {
@@ -107,7 +109,7 @@ std::string build_not_found_message(std::set<std::string> const& remaining)
         message << " '" << *i << "'";
         }
 
-    message << (only_one ? "was" : "were") << " not found";
+    message << " " << (only_one ? "was" : "were") << " not found" << " ";
 
     return message.str();
 }
@@ -286,42 +288,30 @@ LMI_WX_TEST_CASE(paste_census)
             dialog->Show();
             wxYield();
 
-            wxUIActionSimulator ui;
-
-            // Go to the third page: as the dialog remembers its last opened
-            // page, ensure that we start from the first one.
-            ui.Char(WXK_HOME);
-            ui.Char(WXK_RIGHT);
-            ui.Char(WXK_RIGHT);
-            wxYield();
-
             // We can't find directly the radio button we're interested in,
             // because it's not a real wxWindow, so we need to find the radio
             // box containing it.
-            wxWindow* const gender_window = wxWindow::FindWindowByName
-                ("Gender"
-                ,dialog
+            wxWindow* const gender_window = wx_test_focus_controller_child
+                (*dialog
+                ,"Gender"
                 );
-            LMI_ASSERT(gender_window);
 
             wxRadioBox* const
                 gender_radiobox = dynamic_cast<wxRadioBox*>(gender_window);
             LMI_ASSERT(gender_radiobox);
 
-            // It's difficult to select the radiobox using just
-            // wxUIActionSimulator as there is no keyboard shortcut to navigate
-            // to it and emulating a mouse click on it is tricky as we don't
-            // want to change its selection by clicking on the item, so do it
-            // programmatically, the effect should be absolutely the same.
-            gender_radiobox->SetFocus();
-            wxYield();
-
+            wxUIActionSimulator ui;
             ui.Char(WXK_DOWN); // Select the last, "Unisex", radio button.
             wxYield();
 
             LMI_ASSERT_EQUAL(gender_radiobox->GetSelection(), 2);
 
             return wxID_OK;
+            }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "class defaults dialog";
             }
     };
 
@@ -332,7 +322,8 @@ LMI_WX_TEST_CASE(paste_census)
     wxTEST_DIALOG
         (wxYield()
         ,change_gender_in_class_defaults_dialog()
-        ,wxExpectModal<wxMessageDialog>(wxYES)
+        ,wxExpectModal<wxMessageDialog>(wxYES).
+            Describe("message box asking whether to apply gender changes to all")
         );
 
     // Check that all columns, including the "Gender" one, are still shown.
@@ -364,42 +355,30 @@ LMI_WX_TEST_CASE(paste_census)
             dialog->Show();
             wxYield();
 
-            wxUIActionSimulator ui;
-
-            // Go to the third page: as the dialog remembers its last opened
-            // page, ensure that we start from the first one.
-            ui.Char(WXK_HOME);
-            ui.Char(WXK_RIGHT);
-            ui.Char(WXK_RIGHT);
-            wxYield();
-
             // We can't find directly the radio button we're interested in,
             // because it's not a real wxWindow, so we need to find the radio
             // box containing it.
-            wxWindow* const class_window = wxWindow::FindWindowByName
-                ("UnderwritingClass"
-                ,dialog
+            wxWindow* const class_window = wx_test_focus_controller_child
+                (*dialog
+                ,"UnderwritingClass"
                 );
-            LMI_ASSERT(class_window);
 
             wxRadioBox* const
                 class_radiobox = dynamic_cast<wxRadioBox*>(class_window);
             LMI_ASSERT(class_radiobox);
 
-            // It's difficult to select the radiobox using just
-            // wxUIActionSimulator as there is no keyboard shortcut to navigate
-            // to it and emulating a mouse click on it is tricky as we don't
-            // want to change its selection by clicking on the item, so do it
-            // programmatically, the effect should be absolutely the same.
-            class_radiobox->SetFocus();
-            wxYield();
-
+            wxUIActionSimulator ui;
             ui.Char(WXK_UP); // Select the first, "Preferred", radio button.
             wxYield();
 
             LMI_ASSERT_EQUAL(class_radiobox->GetSelection(), 0);
 
             return wxID_OK;
+            }
+
+        virtual wxString GetDefaultDescription() const
+            {
+            return "case defaults dialog";
             }
     };
 
@@ -410,7 +389,8 @@ LMI_WX_TEST_CASE(paste_census)
     wxTEST_DIALOG
         (wxYield()
         ,change_class_in_case_defaults_dialog()
-        ,wxExpectModal<wxMessageDialog>(wxYES)
+        ,wxExpectModal<wxMessageDialog>(wxYES).
+            Describe("message box asking whether to apply class changes to all")
         );
 
     // Check that we still have the same cells but that now the underwriting
@@ -432,7 +412,8 @@ LMI_WX_TEST_CASE(paste_census)
     ui.Char('a', wxMOD_CONTROL);    // "File|Save as"
     wxTEST_DIALOG
         (wxYield()
-        ,wxExpectModal<wxFileDialog>(census_file_name)
+        ,wxExpectModal<wxFileDialog>(census_file_name).
+            Describe("census save file dialog")
         );
 
     LMI_ASSERT(output_cns.exists());

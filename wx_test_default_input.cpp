@@ -33,7 +33,7 @@
 #include "wx_test_case.hpp"
 #include "wx_test_date.hpp"
 
-#include <wx/log.h>
+#include <wx/crt.h>
 
 #include <sstream>
 
@@ -73,14 +73,14 @@ LMI_WX_TEST_CASE(default_input)
 
     calendar_date const first_of_next_month = get_first_next_month(today());
 
-    wxLogMessage
-        ("EffectiveDate: %s; expected: %s"
+    wxPrintf
+        ("EffectiveDate: %s; expected: %s\n"
         ,dump_date(effective_date)
         ,dump_date(first_of_next_month)
         );
     if(effective_date != first_of_next_month)
         {
-        wxLogWarning("Effective date is different from the expected date.");
+        wxPuts("WARNING: Effective date is different from the expected date.");
         }
 
     std::string const general_account_rate = cell["GeneralAccountRate"].str();
@@ -88,8 +88,8 @@ LMI_WX_TEST_CASE(default_input)
 
     std::string const product_name = cell["ProductName"].str();
 
-    wxLogMessage
-        ("ProductName=\"%s\"; GeneralAccountRate=\"%s\""
+    wxPrintf
+        ("ProductName=\"%s\"; GeneralAccountRate=\"%s\"\n"
         ,product_name
         ,general_account_rate
         );
