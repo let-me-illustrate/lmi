@@ -945,21 +945,28 @@ void InputSequenceEditor::adjust_duration_num_range(int row)
     int const prev_duration = (row > 0) ? duration_scalars_[row - 1] : 0;
     wxSpinCtrl& duration = duration_num_field(row);
 
+    int
+        range_min = -1,
+        range_max = -1;
+
     switch(duration_mode_field(row).value())
         {
         case e_attained_age:
             {
-            duration.SetRange(input_.issue_age() + 1 + prev_duration, input_.maturity_age() - 1);
+            range_min = input_.issue_age() + 1 + prev_duration;
+            range_max = input_.maturity_age() - 1;
             break;
             }
         case e_duration:
             {
-            duration.SetRange(1 + prev_duration, input_.years_to_maturity() - 1);
+            range_min = 1 + prev_duration;
+            range_max = input_.years_to_maturity() - 1;
             break;
             }
         case e_number_of_years:
             {
-            duration.SetRange(1, input_.years_to_maturity() - prev_duration - 1);
+            range_min = 1;
+            range_max = input_.years_to_maturity() - prev_duration - 1;
             break;
             }
         case e_maturity:
@@ -971,6 +978,15 @@ void InputSequenceEditor::adjust_duration_num_range(int row)
             fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
             break;
             }
+        }
+    if(range_min <= range_max)
+        {
+        duration.Enable();
+        duration.SetRange(range_min, range_max);
+        }
+    else
+        {
+        duration.Disable();
         }
 }
 
