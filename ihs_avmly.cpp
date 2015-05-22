@@ -773,7 +773,13 @@ void AccountValue::ChangeSpecAmtBy(double delta)
             }
 
         if(!yare_input_.TermRider || !TermRiderActive)
+        // This is unreachable. If (!yare_input_.TermRider), then
+        // TxSetTermAmt() would already have been called by
+        // InitializeMonth(), and would already have ensured that
+        // (!TermRiderActive), so the condition 'if(TermRiderActive)'
+        // above would have failed.
             {
+            throw "Unreachable.";
             TermSpecAmt = 0.0;
             ProportionAppliedToTerm = 0.0;
             TermRiderActive = false;
