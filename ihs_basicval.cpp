@@ -660,7 +660,6 @@ void BasicValues::SetPermanentInvariants()
     WDCanDecrSADBO3     = Database_->Query(DB_WdCanDecrSpecAmtDbo3 );
     MaxIncrAge          = static_cast<int>(Database_->Query(DB_MaxIncrAge));
     WaivePmTxInt1035    = Database_->Query(DB_WaivePremTaxInt1035  );
-    AllowTerm           = Database_->Query(DB_AllowTerm            );
     TermForcedConvAge   = static_cast<int>(Database_->Query(DB_TermForcedConvAge));
     TermForcedConvDur   = static_cast<int>(Database_->Query(DB_TermForcedConvDur));
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
@@ -726,7 +725,7 @@ void BasicValues::SetPermanentInvariants()
     // rating, so we assert those preconditions and write simple code
     // for 'unusual' COI banding that ignores those features.
     HOPEFULLY(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
-    HOPEFULLY(!(UseUnusualCOIBanding && AllowTerm));
+    HOPEFULLY(!(UseUnusualCOIBanding && Database_->Query(DB_AllowTerm)));
 
     // Flat extras can be used even with guaranteed issue, e.g., for
     // aviation, occupation, avocation, or foreign travel. Admin
