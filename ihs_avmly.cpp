@@ -772,7 +772,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
                 }
             }
 
-        if(!AllowTerm || !yare_input_.TermRider || !TermRiderActive)
+        if(!yare_input_.TermRider || !TermRiderActive)
             {
             TermSpecAmt = 0.0;
             ProportionAppliedToTerm = 0.0;
@@ -1703,7 +1703,7 @@ void AccountValue::TxSetTermAmt()
         {
         return;
         }
-    if(!AllowTerm || !yare_input_.TermRider)
+    if(!yare_input_.TermRider)
         {
         TermRiderActive = false;
         return;
