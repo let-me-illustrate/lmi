@@ -292,7 +292,6 @@ class LMI_SO BasicValues
     bool                         WDCanDecrSADBO3;
     int                          MaxIncrAge;
     bool                         WaivePmTxInt1035;
-    bool                         AllowTerm;
     int                          TermForcedConvAge;
     int                          TermForcedConvDur;
     bool                         TermIsDbFor7702;
