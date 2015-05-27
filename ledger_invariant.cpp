@@ -110,6 +110,8 @@ void LedgerInvariant::Alloc(int len)
     BegYearVectors  ["GptForceout"           ] = &GptForceout            ;
     BegYearVectors  ["NaarForceout"          ] = &NaarForceout           ;
     BegYearVectors  ["ModalMinimumPremium"   ] = &ModalMinimumPremium    ;
+    BegYearVectors  ["EeModalMinimumPremium" ] = &EeModalMinimumPremium  ;
+    BegYearVectors  ["ErModalMinimumPremium" ] = &ErModalMinimumPremium  ;
 
     EndYearVectors  ["TermSpecAmt"           ] = &TermSpecAmt            ;
     EndYearVectors  ["SpecAmt"               ] = &SpecAmt                ;
@@ -442,12 +444,14 @@ void LedgerInvariant::Init(BasicValues* b)
     // processing, subject to various restrictions that often cause
     // them to differ from input values. Notably, values need to be
     // zero after lapse.
-//    NetWD                =
-//    NewCashLoan          =
-//    GptForceout          =
-//    NaarForceout         =
-//    ModalMinimumPremium  =
-//    ProducerCompensation =
+//    NetWD                 =
+//    NewCashLoan           =
+//    GptForceout           =
+//    NaarForceout          =
+//    ModalMinimumPremium   =
+//    EeModalMinimumPremium =
+//    ErModalMinimumPremium =
+//    ProducerCompensation  =
 
     if(b->yare_input_.TermRider)
         {
