@@ -36215,3 +36215,33 @@ Set preferred loan rates reflecting the 20150502T1557Z change.
   ihs_avmly.cpp
 Implement preferred loans.
 
+20150522T2030Z <gchicares@sbcglobal.net> [512]
+
+  ihs_avmly.cpp
+Remove redundancy: (!AllowTerm) implies (!yare_input_.TermRider).
+
+20150522T2031Z <gchicares@sbcglobal.net> [512]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Remove disused member 'AllowTerm'.
+
+20150522T2055Z <gchicares@sbcglobal.net> [512]
+
+  ihs_avmly.cpp
+Mark unreachable code for later elimination.
+
+20150527T1348Z <gchicares@sbcglobal.net> [512]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Add two new fields.
+
+20150527T1350Z <gchicares@sbcglobal.net> [512]
+
+  multidimgrid_any.cpp
+  rounding_view.xrc
+  rounding_view_editor.cpp
+Fix XRC assertion failures. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-05/msg00009.html
+
