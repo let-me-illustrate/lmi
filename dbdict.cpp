@@ -296,6 +296,8 @@ void DBDictionary::ascribe_members()
     ascribe("TermTable"           , &DBDictionary::TermTable           );
     ascribe("TermMinIssAge"       , &DBDictionary::TermMinIssAge       );
     ascribe("TermMaxIssAge"       , &DBDictionary::TermMaxIssAge       );
+    ascribe("TermIsNotRider"      , &DBDictionary::TermIsNotRider      );
+    ascribe("TermCanLapse"        , &DBDictionary::TermCanLapse        );
     ascribe("TermForcedConvAge"   , &DBDictionary::TermForcedConvAge   );
     ascribe("TermForcedConvDur"   , &DBDictionary::TermForcedConvDur   );
     ascribe("MaxTermProportion"   , &DBDictionary::MaxTermProportion   );

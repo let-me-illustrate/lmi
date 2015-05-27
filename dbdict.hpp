@@ -272,6 +272,8 @@ class LMI_SO DBDictionary
     database_entity TermTable           ;
     database_entity TermMinIssAge       ;
     database_entity TermMaxIssAge       ;
+    database_entity TermIsNotRider      ;
+    database_entity TermCanLapse        ;
     database_entity TermForcedConvAge   ;
     database_entity TermForcedConvDur   ;
     database_entity MaxTermProportion   ;
