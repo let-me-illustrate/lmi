@@ -660,6 +660,7 @@ void BasicValues::SetPermanentInvariants()
     WDCanDecrSADBO3     = Database_->Query(DB_WdCanDecrSpecAmtDbo3 );
     MaxIncrAge          = static_cast<int>(Database_->Query(DB_MaxIncrAge));
     WaivePmTxInt1035    = Database_->Query(DB_WaivePremTaxInt1035  );
+    TermIsNotRider      = Database_->Query(DB_TermIsNotRider       );
     TermForcedConvAge   = static_cast<int>(Database_->Query(DB_TermForcedConvAge));
     TermForcedConvDur   = static_cast<int>(Database_->Query(DB_TermForcedConvDur));
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );

@@ -669,6 +669,7 @@ void AccountValue::SetInitialValues()
         NoLapseActive           = false;
         }
 
+    TermCanLapse                = Database_->Query(DB_TermCanLapse);
     TermRiderActive             = true;
     TermDB                      = 0.0;
 

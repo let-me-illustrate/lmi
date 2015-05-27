@@ -360,6 +360,8 @@ enum e_database_key
         ,DB_TermTable
         ,DB_TermMinIssAge
         ,DB_TermMaxIssAge
+        ,DB_TermIsNotRider
+        ,DB_TermCanLapse
         ,DB_TermForcedConvAge
         ,DB_TermForcedConvDur
         ,DB_MaxTermProportion
