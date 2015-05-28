@@ -80,6 +80,7 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["InforceLives"               ] = ledger_metadata(4, oe_format_normal    , "BOY Lives Inforce"                     ); // "Inforce Lives BOY"
         m["SpecAmt"                    ] = ledger_metadata(0, oe_format_normal    , "Specified Amount"                      ); // "Base Specified Amount"
         m["TermSpecAmt"                ] = ledger_metadata(0, oe_format_normal    , "Term Specified Amount"                 );
+        m["SupplSpecAmt"               ] = ledger_metadata(0, oe_format_normal    , "Suppl Specified Amount"                ); // "Supplemental Specified Amount"
         m["CorridorFactor"             ] = ledger_metadata(0, oe_format_percentage, "Corridor Factor"                       );
         m["AnnGAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "Curr Ann Gen Acct Int Rate"            ); // "General Account Crediting Rate"
         m["AnnSAIntRate_Current"       ] = ledger_metadata(2, oe_format_percentage, "Curr Ann Sep Acct Int Rate"            ); // "Separate Account Net Rate"
@@ -87,6 +88,8 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["EeGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "EE Gross Payment"                      ); // "Employee Gross Payment"
         m["ErGrossPmt"                 ] = ledger_metadata(0, oe_format_normal    , "ER Gross Payment"                      ); // "Employer Gross Payment"
         m["ModalMinimumPremium"        ] = ledger_metadata(0, oe_format_normal    , "Modal Minimum Premium"                 );
+        m["EeModalMinimumPremium"      ] = ledger_metadata(0, oe_format_normal    , "EE Modal Minimum Premium"              );
+        m["ErModalMinimumPremium"      ] = ledger_metadata(0, oe_format_normal    , "ER Modal Minimum Premium"              );
         m["NetWD"                      ] = ledger_metadata(0, oe_format_normal    , "Withdrawal"                            );
         m["NewCashLoan"                ] = ledger_metadata(0, oe_format_normal    , "Annual Loan"                           ); // "New Cash Loan"
         m["TotalLoanBalance_Current"   ] = ledger_metadata(0, oe_format_normal    , "Curr Total Loan Balance"               ); // "Current Total Loan Balance"
@@ -101,6 +104,8 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
         m["BaseDeathBft_Guaranteed"    ] = ledger_metadata(0, oe_format_normal    , "Guar Base Death Benefit"               ); // "Guaranteed Base Death Benefit"
         m["TermPurchased_Current"      ] = ledger_metadata(0, oe_format_normal    , "Curr Term Amt Purchased"               ); // "Current Term Purchased"
         m["TermPurchased_Guaranteed"   ] = ledger_metadata(0, oe_format_normal    , "Guar Term Amt Purchased"               ); // "Guaranteed Term Purchased"
+        m["SupplDeathBft_Current"      ] = ledger_metadata(0, oe_format_normal    , "Curr Suppl Death Benefit"              ); // "Current Supplemental Death Benefit"
+        m["SupplDeathBft_Guaranteed"   ] = ledger_metadata(0, oe_format_normal    , "Guar Suppl Death Benefit"              ); // "Guaranteed Supplemental Death Benefit"
         m["COICharge_Current"          ] = ledger_metadata(0, oe_format_normal    , "Curr COI Charge"                       ); // "Current Mortality Charge"
         m["COICharge_Guaranteed"       ] = ledger_metadata(0, oe_format_normal    , "Guar COI Charge"                       ); // "Guaranteed Mortality Charge"
         m["RiderCharges_Current"       ] = ledger_metadata(0, oe_format_normal    , "Curr Rider Charges"                    ); // "Current Rider Charges"
@@ -717,8 +722,12 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"CurrentAge"
         ,"UWClass"
         ,"Smoker"
+        ,"Salary"
         ,"SpecifiedAmount"
+        ,"SupplSpecAmt"
         ,"ModalMinimumPremium"
+        ,"EeModalMinimumPremium"
+        ,"ErModalMinimumPremium"
         ,"ErMode"
         ,"CorpName"
         ,"EffDate"
@@ -793,8 +802,12 @@ void PrintRosterTabDelimited
         << Invar.Age + Invar.InforceYear              << '\t'
         << Invar.value_str("UWClass"                ) << '\t'
         << Invar.value_str("Smoker"                 ) << '\t'
+        << Invar.value_str("Salary"               ,d) << '\t'
         << Invar.value_str("SpecAmt"              ,d) << '\t'
+        << Invar.value_str("TermSpecAmt"          ,d) << '\t'
         << Invar.value_str("ModalMinimumPremium"  ,d) << '\t'
+        << Invar.value_str("EeModalMinimumPremium",d) << '\t'
+        << Invar.value_str("ErModalMinimumPremium",d) << '\t'
         << Invar.ErMode                           [d] << '\t'
         << Invar.value_str("CorpName"               ) << '\t'
         << "'" << Invar.EffDate                       << "'\t"
