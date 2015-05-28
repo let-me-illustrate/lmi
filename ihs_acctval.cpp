@@ -680,7 +680,6 @@ void AccountValue::SetInitialValues()
     ItLapsed                    = false;
     VariantValues().LapseMonth  = 11;
     VariantValues().LapseYear   = BasicValues::GetLength();
-// TODO ?? Length should be Database_->Query(DB_MaturityAge);
 
     InvariantValues().IsMec     = false;
     InvariantValues().MecMonth  = 11;
