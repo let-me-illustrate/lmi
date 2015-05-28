@@ -36245,3 +36245,29 @@ Add two new fields.
 Fix XRC assertion failures. See:
   http://lists.nongnu.org/archive/html/lmi/2015-05/msg00009.html
 
+20150527T1643Z <gchicares@sbcglobal.net> [512]
+
+  account_value.hpp
+  basic_values.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+Add new database entities.
+
+20150528T1714Z <gchicares@sbcglobal.net> [511]
+
+  ihs_acctval.cpp
+Remove a defect marker that is now invalid.
+
+20150528T1715Z <gchicares@sbcglobal.net> [511]
+
+  ledger.cpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  mc_enum_types.cpp
+  mc_enum_types.xpp
+Add several ledger columns.
+

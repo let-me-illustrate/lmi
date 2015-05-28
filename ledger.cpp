@@ -529,6 +529,8 @@ std::vector<double> numeric_vector
         : "IrrDb_Guaranteed"  == compound_name ? invar.IrrDbGuarInput
         : "NetDeathBenefit"   == compound_name ? net_death_benefit
         : "PolicyYear"        == compound_name ? policy_year
+        : "SupplSpecAmt"      == compound_name ? invar.TermSpecAmt
+        : "SupplDeathBft"     == base_name ? *map_lookup(z.all_vectors(), "TermPurchased")
         : *map_lookup(z.all_vectors(), base_name)
         ;
 }
