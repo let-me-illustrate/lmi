@@ -61,34 +61,23 @@
 /// No minimum is imposed here; see PerformSpecAmtStrategy().
 
 double AccountValue::CalculateSpecAmtFromStrategy
-    (int actual_year
-    ,int reference_year
+    (int                actual_year
+    ,int                reference_year
+    ,double             explicit_value
+    ,mcenum_sa_strategy strategy
     ) const
 {
-    double r = DeathBfts_->specamt()[actual_year];
-
-    // Don't override a specamt that's being solved for.
-    if
-        (
-            mce_solve_specamt == yare_input_.SolveType
-        &&  yare_input_.SolveBeginYear <= actual_year
-        &&  actual_year < std::min(yare_input_.SolveEndYear, BasicValues::Length)
-        )
-        {
-        return r;
-        }
-
     double annualized_pmt =
             InvariantValues().EeMode[reference_year].value()
           * InvariantValues().EePmt [reference_year]
         +   InvariantValues().ErMode[reference_year].value()
           * InvariantValues().ErPmt [reference_year]
         ;
-    switch(yare_input_.SpecifiedAmountStrategy[actual_year])
+    switch(strategy)
         {
         case mce_sa_input_scalar:
             {
-            return r;
+            return explicit_value;
             }
         case mce_sa_maximum:
             {
@@ -120,12 +109,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
             }
         default:
             {
-            fatal_error()
-                << "Case "
-                << yare_input_.SpecifiedAmountStrategy[actual_year]
-                << " not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "Case " << strategy << " not found." << LMI_FLUSH;
             throw "Unreachable--silences a compiler diagnostic.";
             }
         }
@@ -156,12 +140,24 @@ void AccountValue::PerformSpecAmtStrategy()
         {
         bool t = yare_input_.TermRider && 0.0 != yare_input_.TermRiderAmount;
         double m = minimum_specified_amount(0 == j, t);
-        double z = CalculateSpecAmtFromStrategy(j, 0);
+        double explicit_value = DeathBfts_->specamt()[j];
+        mcenum_sa_strategy strategy = yare_input_.SpecifiedAmountStrategy[j];
+        // Don't override a specamt that's being solved for.
+        if
+            (
+                mce_solve_specamt == yare_input_.SolveType
+            &&  yare_input_.SolveBeginYear <= j
+            &&  j < std::min(yare_input_.SolveEndYear, BasicValues::Length)
+            )
+            {
+            strategy = mce_sa_input_scalar;
+            }
+        double z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
         DeathBfts_->set_specamt(round_specamt()(std::max(m, z)), j, 1 + j);
         if
             (  j == InforceYear
             && !(0 == InforceYear && 0 == InforceMonth)
-            && mce_sa_input_scalar == yare_input_.SpecifiedAmountStrategy[j]
+            && mce_sa_input_scalar == strategy
             && inforce_specamt < m
             && !Solving
             )

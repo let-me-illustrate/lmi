@@ -212,8 +212,10 @@ class LMI_SO AccountValue
 
     void PerformSpecAmtStrategy();
     double CalculateSpecAmtFromStrategy
-        (int actual_year
-        ,int reference_year
+        (int                actual_year
+        ,int                reference_year
+        ,double             explicit_value
+        ,mcenum_sa_strategy strategy
         ) const;
 
     void PerformPmtStrategy(double* a_Pmt); // Antediluvian.
