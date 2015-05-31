@@ -222,6 +222,7 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
     s.push_back(RealizeTaxBracket                 ());
     s.push_back(RealizeProjectedSalary            ());
     s.push_back(RealizeSpecifiedAmount            ());
+    s.push_back(RealizeSupplementalAmount         ());
     s.push_back(RealizeDeathBenefitOption         ());
     s.push_back(RealizePayment                    ());
     s.push_back(RealizePaymentMode                ());
@@ -518,6 +519,19 @@ std::string Input::RealizeSpecifiedAmount()
         ,SpecifiedAmount
         ,SpecifiedAmount.allowed_keywords()
         ,SpecifiedAmount.default_keyword()
+        );
+}
+
+//============================================================================
+std::string Input::RealizeSupplementalAmount()
+{
+    return realize_sequence_string
+        (*this
+        ,SupplementalAmountRealized_
+        ,SupplementalAmountStrategyRealized_
+        ,SupplementalSpecifiedAmount
+        ,SupplementalSpecifiedAmount.allowed_keywords()
+        ,SupplementalSpecifiedAmount.default_keyword()
         );
 }
 
