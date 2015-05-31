@@ -457,6 +457,10 @@ void LedgerInvariant::Init(BasicValues* b)
         {
         TermSpecAmt     .assign(Length, b->yare_input_.TermRiderAmount);
         }
+    else if(b->Database_->Query(DB_TermIsNotRider))
+        {
+        TermSpecAmt      = b->DeathBfts_->supplamt();
+        }
     else
         {
         TermSpecAmt     .assign(Length, 0.0);
