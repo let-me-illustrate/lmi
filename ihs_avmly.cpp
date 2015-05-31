@@ -739,7 +739,8 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 {
     double ProportionAppliedToTerm = 0.0;
     double prior_specamt = ActualSpecAmt;
-    if(TermRiderActive)
+    // Adjust term here only if it's formally a rider.
+    if(TermRiderActive && !TermIsNotRider)
         {
         switch(yare_input_.TermAdjustmentMethod)
             {
@@ -830,7 +831,12 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 // that the ledger object is used for working storage, where it should
 // probably be write-only instead.
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
-        InvariantValues().TermSpecAmt[j] = TermSpecAmt;
+        // Adjust term here only if it's formally a rider.
+        // Otherwise, its amount should not have been changed.
+        if(!TermIsNotRider)
+            {
+            InvariantValues().TermSpecAmt[j] = TermSpecAmt;
+            }
 // Term specamt is a vector in class LedgerInvariant, but a scalar in
 // the input classes, e.g.:
 //   yare_input_.TermRiderAmount
@@ -1586,7 +1592,7 @@ void AccountValue::TxSetBOMAV()
     // and includes term rider.
     if(Year == InforceYear && Month == InforceMonth)
         {
-        if(!yare_input_.TermRider)
+        if(!yare_input_.TermRider && !TermIsNotRider)
             {
             LMI_ASSERT(0.0 == InvariantValues().TermSpecAmt[0]);
             }
@@ -1735,12 +1741,15 @@ void AccountValue::TxSetTermAmt()
         {
         return;
         }
-    if(!yare_input_.TermRider)
+    // If term is not formally a rider, then it's always active for
+    // the entire illustrated duration. Its amount may be reduced to
+    // zero, but might later be increased; at any rate, illustrations
+    // do not "remove" it.
+    if(!yare_input_.TermRider && !TermIsNotRider)
         {
         TermRiderActive = false;
         return;
         }
-
     if
         (  (TermForcedConvDur <= Year)
         && (TermForcedConvAge <= Year + BasicValues::GetIssueAge())
@@ -1890,7 +1899,7 @@ void AccountValue::TxSetRiderDed()
 
     TermCharge = 0.0;
     DcvTermCharge = 0.0;
-    if(TermRiderActive && yare_input_.TermRider)
+    if(TermRiderActive)
         {
         TermCharge    = YearsTermRate   * TermDB * DBDiscountRate[Year];
         // TAXATION !! Integrated term: s/TermDB/TermSpecAmt/ because

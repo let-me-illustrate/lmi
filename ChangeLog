@@ -36288,3 +36288,41 @@ Establish input for supplemental specified amount.
   ledger_invariant.cpp
 Establish storage for supplemental specified amount.
 
+20150531T1443Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_avmly.cpp
+Convert optionally when term rider ends.
+
+20150531T1726Z <gchicares@sbcglobal.net> [511]
+
+  basic_values.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+Calculate special minimum premiums.
+
+20150531T1803Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_avstrtgy.cpp
+Refactor.
+
+20150531T1837Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+Offer strategies for supplemental specified amount.
+
+20150531T2002Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_avmly.cpp
+Support yearly changes in supplemental specified amount.
+
+20150531T2323Z <gchicares@sbcglobal.net> [511]
+
+  ihs_avmly.cpp
+Conditionalize rider vs. non-rider term behaviors.
+
