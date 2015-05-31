@@ -215,8 +215,35 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_minimum:
             {
-            double sa = ActualSpecAmt + TermSpecAmt;
-            return GetModalMinPrem(Year, a_CurrentMode, sa);
+            if(TermIsNotRider)
+                {
+                if(mce_solve_ee_prem == a_SolveForWhichPrem)
+                    {
+                    // Normally, ee mode is entered to match ee mode,
+                    // which represents the payment mode chosen by the
+                    // plan sponsor; but lmi has the extra flexibility
+                    // to behave reasonably if it's not so entered.
+                    return GetModalPremMlyDedEe(Year, a_CurrentMode, TermSpecAmt);
+                    }
+                else if(mce_solve_er_prem == a_SolveForWhichPrem)
+                    {
+                    return GetModalPremMlyDedEr(Year, a_CurrentMode, ActualSpecAmt);
+                    }
+                else
+                    {
+                    fatal_error()
+                        << "Type "
+                        << a_SolveForWhichPrem
+                        << " not allowed here."
+                        << LMI_FLUSH
+                        ;
+                    }
+                }
+            else
+                {
+                double sa = ActualSpecAmt + TermSpecAmt;
+                return GetModalMinPrem(Year, a_CurrentMode, sa);
+                }
             }
         case mce_pmt_target:
             {

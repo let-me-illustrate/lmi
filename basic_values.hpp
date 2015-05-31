@@ -231,6 +231,16 @@ class LMI_SO BasicValues
         ,double      a_bft_amt
         ,double      a_specamt
         ) const;
+    double GetModalPremMlyDedEe
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
+        ) const;
+    double GetModalPremMlyDedEr
+        (int         a_year
+        ,mcenum_mode a_mode
+        ,double      a_specamt
+        ) const;
     double GetModalSpecAmtMax      (double annualized_pmt) const;
     double GetModalSpecAmtTgt      (double annualized_pmt) const;
     double GetModalSpecAmtMinNonMec(double annualized_pmt) const;
