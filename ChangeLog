@@ -36271,3 +36271,20 @@ Remove a defect marker that is now invalid.
   mc_enum_types.xpp
 Add several ledger columns.
 
+20150531T0256Z <gchicares@sbcglobal.net> [511]
+
+  input.hpp
+  input_harmonization.cpp
+  input_realization.cpp
+  skin.xrc
+  yare_input.cpp
+  yare_input.hpp
+Establish input for supplemental specified amount.
+
+20150531T0259Z <gchicares@sbcglobal.net> [511]
+
+  death_benefits.cpp
+  death_benefits.hpp
+  ledger_invariant.cpp
+Establish storage for supplemental specified amount.
+
