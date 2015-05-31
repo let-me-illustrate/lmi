@@ -217,6 +217,7 @@ class yare_input
     std::vector<double>               TaxBracket                      ;
     std::vector<double>               ProjectedSalary                 ;
     std::vector<double>               SpecifiedAmount                 ;
+    std::vector<double>               SupplementalAmount              ;
     std::vector<mcenum_dbopt>         DeathBenefitOption              ;
     std::vector<double>               Payment                         ;
     std::vector<mcenum_mode>          PaymentMode                     ;
@@ -255,6 +256,7 @@ class yare_input
 //    mcenum_pmt_strategy               IndividualPaymentStrategy       ;
 
     std::vector<mcenum_sa_strategy  > SpecifiedAmountStrategy         ;
+    std::vector<mcenum_sa_strategy  > SupplementalAmountStrategy      ;
     std::vector<mcenum_pmt_strategy > PaymentStrategy                 ;
     std::vector<mcenum_pmt_strategy > CorporationPaymentStrategy      ;
 };
