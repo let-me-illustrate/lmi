@@ -211,6 +211,7 @@ class LMI_SO AccountValue
     double GetPartMortQ            (int year) const;
 
     void PerformSpecAmtStrategy();
+    void PerformSupplAmtStrategy();
     double CalculateSpecAmtFromStrategy
         (int                actual_year
         ,int                reference_year

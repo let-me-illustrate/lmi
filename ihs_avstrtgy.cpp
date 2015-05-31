@@ -176,6 +176,18 @@ void AccountValue::PerformSpecAmtStrategy()
         }
 }
 
+void AccountValue::PerformSupplAmtStrategy()
+{
+    for(int j = 0; j < BasicValues::Length; ++j)
+        {
+        double m = 0.0; // No minimum other than zero is defined.
+        double explicit_value = DeathBfts_->supplamt()[j];
+        mcenum_sa_strategy strategy = yare_input_.SupplementalAmountStrategy[j];
+        double z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
+        DeathBfts_->set_supplamt(round_specamt()(std::max(m, z)), j, 1 + j);
+        }
+}
+
 /// Set payment according to selected strategy in a non-solve year.
 
 double AccountValue::DoPerformPmtStrategy

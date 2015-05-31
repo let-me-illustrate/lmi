@@ -412,6 +412,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         // This is a crock to suppress an observed symptom.
         InvariantValues().Init(this);
         PerformSpecAmtStrategy();
+        PerformSupplAmtStrategy();
         }
 
     // TODO ?? It seems wrong to initialize the ledger values here.
