@@ -297,7 +297,7 @@ class LMI_SO AccountValue
     void   DebugPrintInit();
     void   DebugEndBasis();
 
-    void   EndTermRider();
+    void   EndTermRider(bool convert);
 
     void   CoordinateCounters();
 
