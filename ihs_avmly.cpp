@@ -49,10 +49,9 @@
 #include "stratified_algorithms.hpp"
 #include "stratified_charges.hpp"
 
-#include <cmath>   // std::pow()
+#include <algorithm>                    // std::min(), std::max()
+#include <cmath>                        // std::pow()
 #include <limits>
-#include <stdexcept>
-#include <utility>
 
 // Each month, process all transactions in order.
 
@@ -789,7 +788,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         TermSpecAmt += delta * ProportionAppliedToTerm;
         if(TermSpecAmt < 0.0)
             {
-            EndTermRider();
+            EndTermRider(false);
             }
         else
             {
@@ -1720,7 +1719,7 @@ void AccountValue::TxSetTermAmt()
         && (TermForcedConvAge <= Year + BasicValues::GetIssueAge())
         )
         {
-        EndTermRider();
+        EndTermRider(true);
         return;
         }
 
@@ -1728,9 +1727,22 @@ void AccountValue::TxSetTermAmt()
     TermDB = round_death_benefit()(TermDB);
 }
 
-//============================================================================
-// Terminate the term rider
-void AccountValue::EndTermRider()
+/// Terminate the term rider, optionally converting it to base.
+///
+/// Conversion may be required in a state that imposes an age limit
+/// (e.g., attained age seventy) on term riders.
+///
+/// For at least one supported product, the term rider terminates if
+/// the AV is insufficient to pay the term charge. In that case:
+///  - the base policy might in principle continue for some time; and
+///  - the admin system would keep the term coverage in force until
+/// the next monthiversary by grace; therefore, it would not recognize
+/// a material change or adjustment event until the following month.
+/// Illustrations recognize the tax event immediately: they show no
+/// gratis continuation of benefits in the hope that charges may later
+/// be recouped.
+
+void AccountValue::EndTermRider(bool convert)
 {
     if(!TermRiderActive)
         {
@@ -1748,7 +1760,10 @@ void AccountValue::EndTermRider()
     // the anniversary month only.
 
     TermRiderActive = false;
-    ChangeSpecAmtBy(TermSpecAmt);
+    if(convert)
+        {
+        ChangeSpecAmtBy(TermSpecAmt);
+        }
     TermSpecAmt = 0.0;
     TermDB = 0.0;
     // Carry the new term spec amt forward into all future years.
@@ -1917,9 +1932,12 @@ void AccountValue::TxDoMlyDed()
 {
     // Subtract mortality and rider deductions from unloaned account value.
     // Policy fee was already subtracted in NAAR calculation.
-    if(TermRiderActive && (AVGenAcct + AVSepAcct - CoiCharge) < TermCharge)
+    if(TermRiderActive && TermCanLapse && (AVGenAcct + AVSepAcct - CoiCharge) < TermCharge)
         {
-        EndTermRider();
+// Probably 'false' is intended. This can be changed later when it is
+// convenient to validate its effect on system testing.
+//        EndTermRider(false);
+        EndTermRider(true);
         TermCharge = 0.0;
         }
 
