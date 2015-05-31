@@ -284,6 +284,7 @@ class LMI_SO AccountValue
 
     double minimum_specified_amount(bool issuing_now, bool term_rider) const;
     void   ChangeSpecAmtBy         (double delta);
+    void   ChangeSupplAmtBy        (double delta);
     void   ChangeSurrChgSpecAmtBy  (double delta);
     void   AddSurrChgLayer         (int year, double delta_specamt);
     void   ReduceSurrChg           (int year, double partial_surrchg);

@@ -835,7 +835,28 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 // the input classes, e.g.:
 //   yare_input_.TermRiderAmount
 // as is appropriate for a 7702-integrated term rider. Another sort of
-// term rider might call for vector input.
+// term rider might call for vector input: SupplementalAmount is thus
+// handled by ChangeSupplAmtBy().
+        }
+    // Reset DB whenever SA changes.
+    TxSetDeathBft();
+}
+
+void AccountValue::ChangeSupplAmtBy(double delta)
+{
+    TermSpecAmt += delta;
+
+    TermSpecAmt = std::max
+        (TermSpecAmt
+        ,0.0 // No minimum other than zero is defined.
+        );
+    TermSpecAmt = round_specamt()(TermSpecAmt);
+    // At least for now, there is no effect on surrender charges.
+
+    // Carry the new supplemental amount forward into all future years.
+    for(int j = Year; j < BasicValues::GetLength(); j++)
+        {
+        InvariantValues().TermSpecAmt[j] = TermSpecAmt;
         }
     // Reset DB whenever SA changes.
     TxSetDeathBft();
@@ -1021,6 +1042,12 @@ void AccountValue::TxSpecAmtChange()
         }
 
     LMI_ASSERT(0 < Year);
+
+    if(TermIsNotRider && DeathBfts_->supplamt()[Year] != TermSpecAmt)
+        {
+        ChangeSupplAmtBy(DeathBfts_->supplamt()[Year] - TermSpecAmt);
+        }
+
     double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
