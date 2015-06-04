@@ -34,12 +34,14 @@
 
 #include <ostream>
 
-/// Namespace containing classes working with databases in SOA binary format.
+/// Namespace containing classes working with databases in version 3 of the SOA
+/// format.
 ///
-/// Support for other versions of the format, such as XML-based XTbML, could be
-/// added in the future and this namespace exists to facilitate replacing the
-/// binary format with another one by just changing the name of the namespace.
-namespace soa_binary_format
+/// Support for other versions of the format, such as XML-based XTbML in
+/// version 4, could be added in the future and this namespace exists to
+/// facilitate replacing the binary format with another one by just changing
+/// the name of the namespace.
+namespace soa_v3_format
 {
 
 class table_impl;
@@ -68,20 +70,27 @@ class table
         int number_;
     };
 
-    // Read a table from a text file, throws on failure.
+    // Read a table from text or text file, throws on failure.
     static table read_from_text(fs::path const& file);
+    static table read_from_text(std::string const& text);
 
     // Save the table in the format understood by read_from_text().
     void save_as_text(fs::path const& file) const;
+    std::string save_as_text() const;
 
     // The only currently defined mutating operation: change table name.
     void name(std::string const& n);
 
-    // Observers for all the table fields.
+    // Observers for some table fields.
     Number number() const;
     std::string const& name() const;
 
+    // Method computing the hash value as used in the original SOA format.
     unsigned long compute_hash_value() const;
+
+    // Comparison with another table: all fields are compared.
+    bool operator==(table const& other) const;
+    bool operator!=(table const& other) const { return !(*this == other); }
 
   private:
     // Private ctor used only by database.
@@ -159,6 +168,6 @@ inline std::ostream& operator<<(std::ostream& os, table::Number const& number)
     return os;
 }
 
-} // namespace soa_binary_format
+} // namespace soa_v3_format
 
 #endif // soa_database_hpp

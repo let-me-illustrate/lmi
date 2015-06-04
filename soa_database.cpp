@@ -60,10 +60,10 @@ BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_iec559);
 namespace
 {
 
-// Defining this NOP function allows to call from_little_endian() in template
+// Defining this NOP function allows to call swap_bytes_if_big_endian() in template
 // code for numbers of any size.
 inline
-uint8_t from_little_endian(uint8_t val)
+uint8_t swap_bytes_if_big_endian(uint8_t val)
 {
     return val;
 }
@@ -73,7 +73,7 @@ uint8_t from_little_endian(uint8_t val)
 // on little endian machines.
 #ifdef WORDS_BIGENDIAN
 inline
-uint16_t from_little_endian(uint16_t val)
+uint16_t swap_bytes_if_big_endian(uint16_t val)
 {
     return ((val & 0x00ffU) << 8)
          | ((val & 0xff00U) >> 8)
@@ -81,7 +81,7 @@ uint16_t from_little_endian(uint16_t val)
 }
 
 inline
-uint32_t from_little_endian(uint32_t val)
+uint32_t swap_bytes_if_big_endian(uint32_t val)
 {
     return ((val & 0x000000ffU) << 24)
          | ((val & 0x0000ff00U) <<  8)
@@ -91,7 +91,7 @@ uint32_t from_little_endian(uint32_t val)
 }
 
 inline
-uint64_t from_little_endian(uint64_t val)
+uint64_t swap_bytes_if_big_endian(uint64_t val)
 {
     return ((val & 0x00000000000000ffULL) << 56)
          | ((val & 0x000000000000ff00ULL) << 40)
@@ -105,30 +105,30 @@ uint64_t from_little_endian(uint64_t val)
 }
 
 inline
-double from_little_endian(double val)
+double swap_bytes_if_big_endian(double val)
 {
     // When using IEEE 754 (as checked in the beginning of this file), we can
     // treat a double value as a 64 bit integer.
-    uint64_t const ui64 = from_little_endian(*reinterpret_cast<uint64_t*>(&val));
+    uint64_t const ui64 = swap_bytes_if_big_endian(*reinterpret_cast<uint64_t*>(&val));
 
     // And vice versa.
     return *reinterpret_cast<double*>(&ui64);
 }
 #else // !WORDS_BIGENDIAN
 inline
-uint16_t from_little_endian(uint16_t val)
+uint16_t swap_bytes_if_big_endian(uint16_t val)
 {
     return val;
 }
 
 inline
-uint32_t from_little_endian(uint32_t val)
+uint32_t swap_bytes_if_big_endian(uint32_t val)
 {
     return val;
 }
 
 inline
-double from_little_endian(double val)
+double swap_bytes_if_big_endian(double val)
 {
     return val;
 }
@@ -138,7 +138,14 @@ template<typename T>
 inline
 T from_bytes(char const* bytes)
 {
-    return from_little_endian(*reinterpret_cast<T const*>(bytes));
+    return swap_bytes_if_big_endian(*reinterpret_cast<T const*>(bytes));
+}
+
+template<typename T>
+inline
+void to_bytes(char* bytes, T value)
+{
+    *reinterpret_cast<T*>(bytes) = swap_bytes_if_big_endian(value);
 }
 
 // BOOST !! Replace the use of this function with member value_or() present in
@@ -150,9 +157,363 @@ T get_value_or(boost::optional<T> const& o, U v)
     return o ? *o : v;
 }
 
+template<typename T>
+struct open_file_traits;
+
+template<>
+struct open_file_traits<fs::ifstream>
+{
+    static std::ios_base::openmode get_mode() { return std::ios_base::in; }
+    static char const* describe_access() { return "reading"; }
+};
+
+template<>
+struct open_file_traits<fs::ofstream>
+{
+    static std::ios_base::openmode get_mode() { return std::ios_base::out; }
+    static char const* describe_access() { return "writing"; }
+};
+
+// Helper function opening the stream for reading or writing the given file and
+// throwing an exception on error. It shouldn't be used directly, prefer to use
+// the more readable open_{text,binary}_file() helpers below.
+template<typename T>
+void open_file(T& ifs, fs::path const& path, std::ios_base::openmode mode)
+{
+    ifs.open(path, open_file_traits<T>::get_mode() | mode);
+    if(!ifs)
+        {
+        std::ostringstream oss;
+        oss << "File '" << path << "' could not be opened for "
+            << open_file_traits<T>::describe_access() << ".";
+        throw std::runtime_error(oss.str());
+        }
+}
+
+template<typename T>
+inline void open_text_file(T& fs, fs::path const& path)
+{
+    open_file(fs, path, 0);
+}
+
+template<typename T>
+inline void open_binary_file(T& fs, fs::path const& path)
+{
+    open_file(fs, path, std::ios_base::binary);
+}
+
+// Description of all the SOA fields for both formats.
+struct soa_field
+{
+    boost::uint16_t record_type;    // Field record type in the binary format.
+    char const* name;               // Field name in the text format.
+};
+
+// This enum defines the indices of all the known fields in soa_fields array,
+// its elements are consecutive.
+enum enum_soa_field
+    {e_field_table_name
+    ,e_field_table_number
+    ,e_field_table_type
+    ,e_field_contributor
+    ,e_field_data_source
+    ,e_field_data_volume
+    ,e_field_obs_period
+    ,e_field_unit_of_obs
+    ,e_field_construction_method
+    ,e_field_published_reference
+    ,e_field_comments
+    ,e_field_min_age
+    ,e_field_max_age
+    ,e_field_select_period
+    ,e_field_max_select_age
+    ,e_field_num_decimals
+    ,e_field_values
+    ,e_field_hash_value
+    ,e_field_end_table
+    };
+
+// This enum defines the field record types used in the binary SOA format and
+// exists mostly to allow writing a switch on the record type in a readable way.
+enum
+    {e_record_table_name          =  1
+    ,e_record_table_number        =  2
+    ,e_record_table_type          =  3
+    ,e_record_contributor         =  4
+    ,e_record_data_source         =  5
+    ,e_record_data_volume         =  6
+    ,e_record_obs_period          =  7
+    ,e_record_unit_of_obs         =  8
+    ,e_record_construction_method =  9
+    ,e_record_published_reference = 10
+    ,e_record_comments            = 11
+    ,e_record_min_age             = 12
+    ,e_record_max_age             = 13
+    ,e_record_select_period       = 14
+    ,e_record_max_select_age      = 15
+    ,e_record_num_decimals        = 16
+    ,e_record_values              = 17
+    ,e_record_hash_value          = 18
+    ,e_record_end_table           = 9999
+    };
+
+// This array is indexed by enum_soa_field.
+static soa_field const soa_fields[] =
+{
+    { e_record_table_name         , "Table name"               }
+   ,{ e_record_table_number       , "Table number"             }
+   ,{ e_record_table_type         , "Table type"               }
+   ,{ e_record_contributor        , "Contributor"              }
+   ,{ e_record_data_source        , "Source of data"           }
+   ,{ e_record_data_volume        , "Volume of data"           }
+   ,{ e_record_obs_period         , "Observation period"       }
+   ,{ e_record_unit_of_obs        , "Unit of observation"      }
+   ,{ e_record_construction_method, "Construction method"      }
+   ,{ e_record_published_reference, "Published reference"      }
+   ,{ e_record_comments           , "Comments"                 }
+   ,{ e_record_min_age            , "Minimum age"              }
+   ,{ e_record_max_age            , "Maximum age"              }
+   ,{ e_record_select_period      , "Select period"            }
+   ,{ e_record_max_select_age     , "Maximum select age"       }
+   ,{ e_record_num_decimals       , "Number of decimal places" }
+   ,{ e_record_values             , "Table values"             }
+   ,{ e_record_hash_value         , "Hash value"               }
+   ,{ e_record_end_table          , NULL                       }
+};
+
 } // anonymous namespace
 
-namespace soa_binary_format
+// Classes abstracting the difference between text and binary formats: both
+// namespaces define the same classes inside them, but the first one works with
+// the data in binary format while the second one uses the text format.
+namespace binary_format
+{
+
+class writer
+{
+  public:
+    explicit writer(std::ostream& os) : os_(os) {}
+
+    template<typename T>
+    void write(enum_soa_field field, boost::optional<T> const& onum);
+    void write(enum_soa_field field, boost::optional<std::string> const& ostr);
+
+    void write_values
+            (std::vector<double> const& values
+            ,boost::optional<uint16_t> const& num_decimals
+            ,boost::optional<uint16_t> const& min_age
+            ,boost::optional<uint16_t> const& max_age
+            ,boost::optional<uint16_t> const& select_period
+            ,boost::optional<uint16_t> const& max_select_age
+            );
+
+    void end();
+
+  private:
+    void do_write_record_header(uint16_t record_type, uint16_t length);
+
+    std::ostream& os_;
+};
+
+void writer::write_values
+        (std::vector<double> const& values
+        ,boost::optional<uint16_t> const& num_decimals
+        ,boost::optional<uint16_t> const& min_age
+        ,boost::optional<uint16_t> const& max_age
+        ,boost::optional<uint16_t> const& select_period
+        ,boost::optional<uint16_t> const& max_select_age
+        )
+{
+    // Notice that to keep things more interesting, number of decimals comes
+    // before the other parameters in binary format, but after them in the text
+    // one.
+    write(e_field_num_decimals       , num_decimals        );
+    write(e_field_min_age            , min_age             );
+    write(e_field_max_age            , max_age             );
+    write(e_field_select_period      , select_period       );
+    write(e_field_max_select_age     , max_select_age      );
+
+#ifdef WORDS_BIGENDIAN
+    // Convert the values to their on disk representation.
+    std::vector<double> little_endian_values;
+    little_endian_values.reserve(values.size());
+
+    typedef std::vector<double>::const_iterator cdvit;
+    for(cdvit it = values.begin(); it != values.end(); ++it)
+        {
+        little_endian_values.push_back(swap_bytes_if_big_endian(*it));
+        }
+#else // !WORDS_BIGENDIAN
+    // No conversion necessary, don't create an extra vector needlessly, just
+    // alias the existing one.
+    std::vector<double> const& little_endian_values = values;
+#endif // WORDS_BIGENDIAN/!WORDS_BIGENDIAN
+
+    std::size_t const length = values.size()*sizeof(double);
+
+    // As explained in table_impl::read_values(), length field is too small to
+    // store the length of this record in general, but we still write the data
+    // even in this case as this code, at least, can still read it. We set the
+    // length to the maximal representable value instead of some random junk
+    // that would result if we simply truncated it to 16 bits however.
+    do_write_record_header
+        (e_record_values
+        ,length > std::numeric_limits<uint16_t>::max()
+            ? std::numeric_limits<uint16_t>::max()
+            : static_cast<uint16_t>(length)
+        );
+    os_.write
+        (reinterpret_cast<char const*>(&little_endian_values[0])
+        ,length
+        );
+
+    // Normally we don't check the stream state after each write as it is
+    // enough to check it once at the end, however this write, being much
+    // bigger than others, has probably bigger chance of failing, so do check
+    // for its success, exceptionally, in order to detect the error a.s.a.p.
+    if(!os_)
+        {
+        throw std::runtime_error("writing values failed");
+        }
+}
+
+void writer::do_write_record_header(uint16_t record_type, uint16_t length)
+{
+    enum
+        {e_header_pos_type = 0
+        ,e_header_pos_len  = 2
+        ,e_header_pos_max  = 4
+        };
+
+    char header[e_header_pos_max];
+
+    *reinterpret_cast<uint16_t*>(header + e_header_pos_type)
+        = swap_bytes_if_big_endian(record_type);
+    *reinterpret_cast<uint16_t*>(header + e_header_pos_len)
+        = swap_bytes_if_big_endian(length);
+
+    os_.write(header, sizeof(header));
+}
+
+template<typename T>
+void writer::write(enum_soa_field field, boost::optional<T> const& onum)
+{
+    if(onum)
+        {
+        T const num = swap_bytes_if_big_endian(*onum);
+        do_write_record_header(soa_fields[field].record_type, sizeof(num));
+        os_.write(reinterpret_cast<char const*>(&num), sizeof(num));
+        }
+}
+
+void writer::write(enum_soa_field field, boost::optional<std::string> const& ostr)
+{
+    if(ostr)
+        {
+        std::string::size_type const length = ostr->size();
+        if(length > std::numeric_limits<uint16_t>::max())
+            {
+            std::ostringstream oss;
+            oss << "the value of the field '"
+                << soa_fields[field].name
+                << "' is too long to be represented in the SOA binary format";
+            throw std::runtime_error(oss.str());
+            }
+
+        do_write_record_header(soa_fields[field].record_type, length);
+        os_.write(ostr->c_str(), length);
+        }
+}
+
+void writer::end()
+{
+    uint16_t record_type = e_record_end_table;
+    record_type = swap_bytes_if_big_endian(record_type);
+    os_.write(reinterpret_cast<char const*>(&record_type), sizeof(record_type));
+}
+
+} // namespace binary_format
+
+namespace text_format
+{
+
+class writer
+{
+  public:
+    explicit writer(std::ostream& os) : os_(os) {}
+
+    template<typename T>
+    void write(enum_soa_field field, boost::optional<T> const& oval);
+
+    void write_values
+            (std::vector<double> const& values
+            ,boost::optional<uint16_t> const& num_decimals
+            ,boost::optional<uint16_t> const& min_age
+            ,boost::optional<uint16_t> const& max_age
+            ,boost::optional<uint16_t> const& select_period
+            ,boost::optional<uint16_t> const& max_select_age
+            );
+
+    void end();
+
+  private:
+    std::ostream& os_;
+};
+
+template<typename T>
+void writer::write(enum_soa_field field, boost::optional<T> const& oval)
+{
+    if(oval)
+        {
+        os_ << soa_fields[field].name << ": " << *oval << "\n";
+        }
+}
+
+void writer::write_values
+        (std::vector<double> const& values
+        ,boost::optional<uint16_t> const& num_decimals
+        ,boost::optional<uint16_t> const& min_age
+        ,boost::optional<uint16_t> const& max_age
+        ,boost::optional<uint16_t> const& select_period
+        ,boost::optional<uint16_t> const& max_select_age
+        )
+{
+    write(e_field_min_age            , min_age             );
+    write(e_field_max_age            , max_age             );
+    write(e_field_select_period      , select_period       );
+    write(e_field_max_select_age     , max_select_age      );
+    write(e_field_num_decimals       , num_decimals        );
+
+    os_ << soa_fields[e_field_values].name << ":\n";
+    if(get_value_or(select_period, 0))
+        {
+        throw std::runtime_error("NIY");
+        }
+    else
+        {
+        os_ << std::fixed << std::setprecision(*num_decimals);
+
+        unsigned const value_width = *num_decimals + 2;
+
+        uint16_t age = *min_age;
+        typedef std::vector<double>::const_iterator cdvit;
+        for(cdvit it = values.begin(); it != values.end(); ++it, ++age)
+            {
+            os_ << std::setw(3) << age << "  "
+                << std::setw(value_width) << *it << "\n";
+            }
+        }
+}
+
+void writer::end()
+{
+    // There is no table end marker in the text format, it is indicated simply
+    // by the end of the file itself.
+}
+
+} // namespace text_format
+
+namespace soa_v3_format
 {
 
 class table_impl
@@ -160,41 +521,28 @@ class table_impl
     ,virtual private obstruct_slicing<table_impl>
 {
   public:
-    // Load the table data from the specified offset of the given stream.
+    // Load the table data from the stream containing the table data in either
+    // binary or text representation.
     //
     // Throws std::runtime_error on error.
-    table_impl(std::ifstream& ifs, uint32_t offset);
+    static boost::shared_ptr<table_impl> create_from_binary
+        (std::istream& is
+        ,uint32_t offset
+        );
+    static boost::shared_ptr<table_impl> create_from_text(std::istream& is);
 
-    void save_as_text(fs::path const& file) const;
+    void write_as_binary(std::ostream& os) const { do_write<binary_format::writer>(os); }
+    void write_as_text(std::ostream& os) const { do_write<text_format::writer>(os); }
+
+    bool is_equal(table_impl const& other) const;
+
+    // Public class method implementations.
     void name(std::string const& name) { name_ = name; }
-    table::Number number() const { return table::Number(*number_); }
+    uint32_t number() const { return *number_; }
     std::string const& name() const { return *name_; }
     unsigned long compute_hash_value() const;
 
   private:
-    // All field types in the binary SOA format.
-    enum
-        {e_field_table_name          =  1
-        ,e_field_table_number        =  2
-        ,e_field_table_type          =  3
-        ,e_field_contributor         =  4
-        ,e_field_data_source         =  5
-        ,e_field_data_volume         =  6
-        ,e_field_obs_period          =  7
-        ,e_field_unit_of_obs         =  8
-        ,e_field_construction_method =  9
-        ,e_field_published_reference = 10
-        ,e_field_comments            = 11
-        ,e_field_min_age             = 12
-        ,e_field_max_age             = 13
-        ,e_field_select_period       = 14
-        ,e_field_max_select_age      = 15
-        ,e_field_num_decimals        = 16
-        ,e_field_values              = 17
-        ,e_field_hash_value          = 18
-        ,e_field_end_table           = 9999
-        };
-
     // Helper methods for IO: all of them throw std::runtime_error on failure
     // and mention the field name in the error message.
     //
@@ -206,20 +554,20 @@ class table_impl
     void read_string
             (boost::optional<std::string>& ostr
             ,char const* name
-            ,std::ifstream& ifs
+            ,std::istream& ifs
             ,uint16_t length
             );
 
     template<typename T>
     static
-    T do_read_number(char const* name, std::ifstream& ifs);
+    T do_read_number(char const* name, std::istream& ifs);
 
     template<typename T>
     static
     void read_number
             (boost::optional<T>& onum
             ,char const* name
-            ,std::ifstream& ifs
+            ,std::istream& ifs
             ,uint16_t length
             );
 
@@ -232,13 +580,13 @@ class table_impl
     void read_number_before_values
             (boost::optional<uint16_t>& onum
             ,char const* name
-            ,std::ifstream& ifs
+            ,std::istream& ifs
             ,uint16_t length
             );
 
     // This one is different from the generic methods above as it's only used
     // for the specific values_ field and not any arbitrary vector.
-    void read_values(std::ifstream& ifs, uint16_t length);
+    void read_values(std::istream& ifs, uint16_t length);
 
     // Compute the expected number of values from minimum and maximum age
     // values and the select period and max select age if specified.
@@ -246,8 +594,16 @@ class table_impl
     // Throws if minimum or maximum ares are not defined or are invalid.
     unsigned get_expected_number_of_values() const;
 
+    // Implementations of the public factory functions.
+    void read_from_binary(std::istream& is, uint32_t offset);
+    void read_from_text(std::istream& is);
+
     // Validate all the fields, throw an exception if any are invalid.
     void validate();
+
+    // Write out the table contents in the given format.
+    template<typename T>
+    void do_write(std::ostream& os) const;
 
     // The values are not represented by boost::optional<>, the emptiness of
     // the vector signals if we have any values or not.
@@ -285,7 +641,7 @@ namespace
 // Throw an error indicating duplicate occurrence of some field if the first
 // argument is true.
 inline
-void throw_if_duplicate_field(bool do_throw, char const* name)
+void throw_if_duplicate_record(bool do_throw, char const* name)
 {
     if(do_throw)
         {
@@ -314,11 +670,11 @@ void throw_if_missing_field(boost::optional<T> const& o, char const* name)
 void table_impl::read_string
         (boost::optional<std::string>& ostr
         ,char const* name
-        ,std::ifstream& ifs
+        ,std::istream& ifs
         ,uint16_t length
         )
 {
-    throw_if_duplicate_field(ostr.is_initialized(), name);
+    throw_if_duplicate_record(ostr.is_initialized(), name);
 
     std::string str;
     str.resize(length);
@@ -335,7 +691,7 @@ void table_impl::read_string
 }
 
 template<typename T>
-T table_impl::do_read_number(char const* name, std::ifstream& ifs)
+T table_impl::do_read_number(char const* name, std::istream& ifs)
 {
     T num;
     ifs.read(reinterpret_cast<char*>(&num), sizeof(T));
@@ -346,18 +702,18 @@ T table_impl::do_read_number(char const* name, std::ifstream& ifs)
         throw std::runtime_error(oss.str());
         }
 
-    return from_little_endian(num);
+    return swap_bytes_if_big_endian(num);
 }
 
 template<typename T>
 void table_impl::read_number
         (boost::optional<T>& onum
         ,char const* name
-        ,std::ifstream& ifs
+        ,std::istream& ifs
         ,uint16_t length
         )
 {
-    throw_if_duplicate_field(onum.is_initialized(), name);
+    throw_if_duplicate_record(onum.is_initialized(), name);
 
     if(length != sizeof(T))
         {
@@ -373,7 +729,7 @@ void table_impl::read_number
 void table_impl::read_number_before_values
         (boost::optional<uint16_t>& onum
         ,char const* name
-        ,std::ifstream& ifs
+        ,std::istream& ifs
         ,uint16_t length
         )
 {
@@ -461,9 +817,9 @@ unsigned table_impl::get_expected_number_of_values() const
     return num_values;
 }
 
-void table_impl::read_values(std::ifstream& ifs, uint16_t /* length */)
+void table_impl::read_values(std::istream& ifs, uint16_t /* length */)
 {
-    throw_if_duplicate_field(!values_.empty(), "values");
+    throw_if_duplicate_record(!values_.empty(), "values");
 
     // 2 byte length field can only represent values up to 2^16, i.e. only up
     // to 2^16/2^3 == 8192 double-sized elements, which is not enough for the
@@ -482,7 +838,7 @@ void table_impl::read_values(std::ifstream& ifs, uint16_t /* length */)
     typedef std::vector<double>::iterator dvit;
     for(dvit it = values_.begin(); it != values_.end(); ++it)
         {
-        *it = from_little_endian(*it);
+        *it = swap_bytes_if_big_endian(*it);
         }
 }
 
@@ -547,7 +903,7 @@ void table_impl::validate()
         }
 }
 
-table_impl::table_impl(std::ifstream& ifs, uint32_t offset)
+void table_impl::read_from_binary(std::istream& ifs, uint32_t offset)
 {
     ifs.seekg(offset, std::ios::beg);
     if(!ifs)
@@ -563,9 +919,9 @@ table_impl::table_impl(std::ifstream& ifs, uint32_t offset)
         // Check for the special case of the end table record type as it's the
         // only one without any contents following it (this also explains why
         // we can't read both the record type and length in one go as we'd
-        // prefer to do for efficiency: this would fail at the very end of the
-        // file).
-        if(record_type == e_field_end_table)
+        // prefer to do for efficiency: this would fail for the last table of
+        // the file).
+        if(record_type == e_record_end_table)
             {
             validate();
             return;
@@ -576,58 +932,58 @@ table_impl::table_impl(std::ifstream& ifs, uint32_t offset)
 
         switch(record_type)
             {
-            case e_field_table_name:
+            case e_record_table_name:
                 read_string(name_, "name", ifs, length);
                 break;
-            case e_field_table_number:
+            case e_record_table_number:
                 read_number(number_, "table number", ifs, length);
                 break;
-            case e_field_table_type:
+            case e_record_table_type:
                 read_number(type_, "table type", ifs, length);
                 break;
-            case e_field_contributor:
+            case e_record_contributor:
                 read_string(contributor_, "contributor", ifs, length);
                 break;
-            case e_field_data_source:
+            case e_record_data_source:
                 read_string(data_source_, "data source", ifs, length);
                 break;
-            case e_field_data_volume:
+            case e_record_data_volume:
                 read_string(data_volume_, "data volume", ifs, length);
                 break;
-            case e_field_obs_period:
+            case e_record_obs_period:
                 read_string(obs_period_, "observation period", ifs, length);
                 break;
-            case e_field_unit_of_obs:
+            case e_record_unit_of_obs:
                 read_string(unit_of_obs_, "unit of observation", ifs, length);
                 break;
-            case e_field_construction_method:
+            case e_record_construction_method:
                 read_string(construction_method_, "construction method", ifs, length);
                 break;
-            case e_field_published_reference:
+            case e_record_published_reference:
                 read_string(published_reference_, "published reference", ifs, length);
                 break;
-            case e_field_comments:
+            case e_record_comments:
                 read_string(comments_, "comments", ifs, length);
                 break;
-            case e_field_min_age:
+            case e_record_min_age:
                 read_number(min_age_, "minimum age", ifs, length);
                 break;
-            case e_field_max_age:
+            case e_record_max_age:
                 read_number(max_age_, "maximum age", ifs, length);
                 break;
-            case e_field_select_period:
+            case e_record_select_period:
                 read_number_before_values(select_period_, "select period", ifs, length);
                 break;
-            case e_field_max_select_age:
+            case e_record_max_select_age:
                 read_number_before_values(max_select_age_, "maximum select age", ifs, length);
                 break;
-            case e_field_num_decimals:
+            case e_record_num_decimals:
                 read_number(num_decimals_, "number of decimal places", ifs, length);
                 break;
-            case e_field_values:
+            case e_record_values:
                 read_values(ifs, length);
                 break;
-            case e_field_hash_value:
+            case e_record_hash_value:
                 read_number(hash_value_, "hash value", ifs, length);
                 break;
             default:
@@ -638,9 +994,81 @@ table_impl::table_impl(std::ifstream& ifs, uint32_t offset)
         }
 }
 
-void table_impl::save_as_text(fs::path const& file) const
+boost::shared_ptr<table_impl> table_impl::create_from_binary
+    (std::istream& is
+    ,uint32_t offset
+    )
+{
+    // BOOST !! Use make_shared() to avoid double heap allocation pessimization
+    // when a version of Boost new enough to have it is available.
+    boost::shared_ptr<table_impl> table(new table_impl);
+    table->read_from_binary(is, offset);
+    return table;
+}
+
+void table_impl::read_from_text(std::istream& is)
 {
     throw std::runtime_error("NIY");
+}
+
+boost::shared_ptr<table_impl> table_impl::create_from_text(std::istream& is)
+{
+    // BOOST !! Use make_shared() to avoid double heap allocation pessimization
+    // when a version of Boost new enough to have it is available.
+    boost::shared_ptr<table_impl> table(new table_impl);
+    table->read_from_text(is);
+    return table;
+}
+
+template<typename T>
+void table_impl::do_write(std::ostream& os) const
+{
+    T w(os);
+
+    w.write(e_field_table_name         , name_                );
+    w.write(e_field_table_number       , number_              );
+    w.write(e_field_table_type         , type_                );
+    w.write(e_field_contributor        , contributor_         );
+    w.write(e_field_data_source        , data_source_         );
+    w.write(e_field_data_volume        , data_volume_         );
+    w.write(e_field_obs_period         , obs_period_          );
+    w.write(e_field_unit_of_obs        , unit_of_obs_         );
+    w.write(e_field_construction_method, construction_method_ );
+    w.write(e_field_published_reference, published_reference_ );
+    w.write(e_field_comments           , comments_            );
+    w.write_values
+        (values_
+        ,num_decimals_
+        ,min_age_
+        ,max_age_
+        ,select_period_
+        ,max_select_age_
+        );
+    w.write(e_field_hash_value         , hash_value_          );
+    w.end();
+}
+
+bool table_impl::is_equal(table_impl const& other) const
+{
+    return values_ == other.values_
+        && name_ == other.name_
+        && contributor_ == other.contributor_
+        && data_source_ == other.data_source_
+        && data_volume_ == other.data_volume_
+        && obs_period_ == other.obs_period_
+        && unit_of_obs_ == other.unit_of_obs_
+        && construction_method_ == other.construction_method_
+        && published_reference_ == other.published_reference_
+        && comments_ == other.comments_
+        && number_ == other.number_
+        && hash_value_ == other.hash_value_
+        && num_decimals_ == other.num_decimals_
+        && min_age_ == other.min_age_
+        && max_age_ == other.max_age_
+        && select_period_ == other.select_period_
+        && max_select_age_ == other.max_select_age_
+        && type_ == other.type_
+        ;
 }
 
 unsigned long table_impl::compute_hash_value() const
@@ -679,12 +1107,34 @@ unsigned long table_impl::compute_hash_value() const
 
 table table::read_from_text(fs::path const& file)
 {
-    throw std::runtime_error("NIY");
+    fs::ifstream ifs;
+    open_text_file(ifs, file);
+
+    return table(table_impl::create_from_text(ifs));
+}
+
+table table::read_from_text(std::string const& text)
+{
+    std::istringstream iss(text);
+
+    return table(table_impl::create_from_text(iss));
 }
 
 void table::save_as_text(fs::path const& file) const
 {
-    impl_->save_as_text(file);
+    fs::ofstream ofs;
+    open_text_file(ofs, file);
+
+    impl_->write_as_text(ofs);
+}
+
+std::string table::save_as_text() const
+{
+    std::ostringstream oss;
+
+    impl_->write_as_text(oss);
+
+    return oss.str();
 }
 
 void table::name(std::string const& n)
@@ -694,7 +1144,7 @@ void table::name(std::string const& n)
 
 table::Number table::number() const
 {
-    return impl_->number();
+    return table::Number(impl_->number());
 }
 
 std::string const& table::name() const
@@ -705,6 +1155,11 @@ std::string const& table::name() const
 unsigned long table::compute_hash_value() const
 {
     return impl_->compute_hash_value();
+}
+
+bool table::operator==(table const& other) const
+{
+    return impl_->is_equal(*other.impl_);
 }
 
 class database_impl
@@ -723,6 +1178,20 @@ class database_impl
     void save(fs::path const& path);
 
   private:
+    // An index record is composed of:
+    //
+    //  -  4 byte table number
+    //  - 50 byte table name (ignored here)
+    //  -  4 byte offset of the table in the database file
+    //
+    // The numbers are in little endian format.
+    enum
+        {e_index_pos_number = 0
+        ,e_index_pos_name   = 4
+        ,e_index_pos_offset = 54
+        ,e_index_pos_max    = 58
+        };
+
     void read_index(fs::path const& path);
 
     // We don't currently use the name stored in the index, so this struct
@@ -734,13 +1203,13 @@ class database_impl
             ,uint32_t offset
             ,boost::shared_ptr<table_impl> table
             )
-            :number_(number)
+            :number_(number.value())
             ,offset_(offset)
             ,table_(table)
         {
         }
 
-        table::Number number_;
+        uint32_t number_;
 
         // This field is ignored for the tables added to the database after
         // reading the original index file and is only used for loading the
@@ -766,7 +1235,11 @@ class database_impl
 
     // Return the table corresponding to the given index entry, loading it from
     // the database file if this hadn't been done yet.
-    table do_get_table(IndexEntry const& entry) const;
+    boost::shared_ptr<table_impl> do_get_table_impl(IndexEntry const& entry) const;
+    table do_get_table(IndexEntry const& entry) const
+        {
+        return table(do_get_table_impl(entry));
+        }
 
     // Return the pointer to the index entry with the given table number or
     // null if no such entry could be found.
@@ -794,19 +1267,6 @@ class database_impl
     // once.
     mutable fs::ifstream database_ifs_;
 };
-
-// Helper function opening the stream for reading the given file in binary
-// mode and throwing an exception on error.
-void open_binary_file(fs::ifstream& ifs, fs::path const& path)
-{
-    ifs.open(path, std::ios_base::in | std::ios_base::binary);
-    if(!ifs)
-        {
-        std::ostringstream oss;
-        oss << "File '" << path << "' could not be opened for reading.";
-        throw std::runtime_error(oss.str());
-        }
-}
 
 database_impl::database_impl()
 {
@@ -850,26 +1310,12 @@ void database_impl::read_index(fs::path const& path)
     fs::ifstream index_ifs;
     open_binary_file(index_ifs, index_path);
 
-    // An index record is composed of:
-    //
-    //  -  4 byte table number
-    //  - 50 byte table name (ignored here)
-    //  -  4 byte offset of the table in the database file
-    //
-    // The numbers are in little endian format.
-    enum
-        {e_pos_number = 0
-        ,e_pos_name   = 4
-        ,e_pos_offset = 54
-        ,e_pos_max    = 58
-        };
-
-    char index_record[e_pos_max] = {0};
+    char index_record[e_index_pos_max] = {0};
 
     for(;;)
         {
-        index_ifs.read(index_record, e_pos_max);
-        if(index_ifs.gcount() != e_pos_max)
+        index_ifs.read(index_record, e_index_pos_max);
+        if(index_ifs.gcount() != e_index_pos_max)
             {
             if(index_ifs.eof() && !index_ifs.gcount())
                 {
@@ -883,9 +1329,9 @@ void database_impl::read_index(fs::path const& path)
             }
 
         uint32_t const
-            number = from_bytes<uint32_t>(&index_record[e_pos_number]);
+            number = from_bytes<uint32_t>(&index_record[e_index_pos_number]);
         uint32_t const
-            offset = from_bytes<uint32_t>(&index_record[e_pos_offset]);
+            offset = from_bytes<uint32_t>(&index_record[e_index_pos_offset]);
 
         // Check that the cast to int below is safe.
         if(number >= static_cast<unsigned>(std::numeric_limits<int>::max()))
@@ -916,18 +1362,23 @@ table database_impl::get_nth_table(int idx) const
     return do_get_table(index_.at(idx));
 }
 
-table database_impl::do_get_table(IndexEntry const& entry) const
+boost::shared_ptr<table_impl> database_impl::do_get_table_impl
+    (IndexEntry const& entry
+    ) const
 {
     if(!entry.table_)
         {
         try
             {
-            entry.table_.reset(new table_impl(database_ifs_, entry.offset_));
+            entry.table_ = table_impl::create_from_binary
+                (database_ifs_
+                ,entry.offset_
+                );
             }
         catch(std::runtime_error const& e)
             {
             std::ostringstream oss;
-            oss << "Error reading table " << entry.number_.value()
+            oss << "Error reading table " << entry.number_
                 << " from the offset " << entry.offset_
                 << " in the database '" << path_ << "': " << e.what();
             throw std::runtime_error(oss.str());
@@ -937,14 +1388,14 @@ table database_impl::do_get_table(IndexEntry const& entry) const
             {
             std::ostringstream oss;
             oss << "database '" << path_ << "' is corrupt: "
-                   "table number " << entry.table_->number().value()
+                   "table number " << entry.table_->number()
                 << " is inconsistent with its number in the index ("
-                << entry.number_.value() << ")";
+                << entry.number_ << ")";
             throw std::runtime_error(oss.str());
             }
         }
 
-    return table(entry.table_);
+    return entry.table_;
 }
 
 database_impl::IndexEntry* database_impl::do_find_table_entry(table::Number number)
@@ -1008,7 +1459,62 @@ void database_impl::add_or_replace_table(table const& table)
 
 void database_impl::save(fs::path const& path)
 {
-    throw std::runtime_error("NIY");
+    fs::ofstream index_ofs;
+    open_binary_file(index_ofs, fs::change_extension(path, ".ndx"));
+
+    fs::ofstream database_ofs;
+    open_binary_file(database_ofs, fs::change_extension(path, ".dat"));
+
+    char index_record[e_index_pos_max] = {0};
+
+    typedef std::vector<IndexEntry>::const_iterator cieit;
+    for(cieit it = index_.begin(); it != index_.end(); ++it)
+        {
+        boost::shared_ptr<table_impl> const t = do_get_table_impl(*it);
+
+        // The offset of this table is just the current position of the output
+        // stream, so get it before it changes and check that it is still
+        // representable as a 4 byte offset (i.e. the file is less than 4GiB).
+        std::streamoff const offset = database_ofs.tellp();
+        uint32_t const offset32 = static_cast<uint32_t>(offset);
+        if(static_cast<std::streamoff>(offset32) != offset)
+            {
+            throw std::runtime_error
+                    ("Database is too large to be stored in SOA v3 format."
+                    );
+            }
+
+        to_bytes(&index_record[e_index_pos_number], t->number());
+
+        // We need to pad the name with NUL bytes if it's shorter than maximum
+        // length, so use strncpy() to do it.
+        strncpy
+            (&index_record[e_index_pos_name]
+            ,t->name().c_str()
+            ,e_index_pos_offset - e_index_pos_name - 1
+            );
+
+        // However (mainly for compatibility with the existing files as this
+        // code doesn't rely on it) the name still has to be NUL-terminated, in
+        // spite of being fixed size, so ensure this is the case.
+        index_record[e_index_pos_offset - 1] = '\0';
+
+        to_bytes(&index_record[e_index_pos_offset], offset32);
+
+        index_ofs.write(index_record, sizeof(index_record));
+
+        t->write_as_binary(database_ofs);
+        }
+
+    index_ofs.close();
+    database_ofs.close();
+
+    if(!database_ofs || !index_ofs)
+        {
+        std::ostringstream oss;
+        oss << "Writing database data to '" << path << "' failed.";
+        throw std::runtime_error(oss.str());
+        }
 }
 
 database::database()
@@ -1056,4 +1562,4 @@ void database::save(fs::path const& path)
     return impl_->save(path);
 }
 
-} // namespace soa_binary_format
+} // namespace soa_v3_format

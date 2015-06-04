@@ -31,8 +31,138 @@
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"
 #include "test_tools.hpp"
+#include "uncopyable_lmi.hpp"
 
-using namespace soa_binary_format;
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
+
+using namespace soa_v3_format;
+
+// Unit test helpers for working with files.
+namespace
+{
+
+// Class ensuring that the file with the given name is removed when the test
+// ends, whether it succeeds or fails.
+class test_file_eraser
+    :private lmi::uncopyable<test_file_eraser>
+{
+  public:
+    explicit test_file_eraser(fs::path const& path)
+        :path_(path)
+        {
+        }
+
+    ~test_file_eraser()
+        {
+        try
+            {
+            fs::remove(path_);
+            }
+        catch(...)
+            {
+            // Failing to remove a temporary test file is not fatal and should
+            // not result in abnormal program termination as would be the case
+            // if we allowed the exception to escape from this dtor which
+            // could, itself, be executing during the stack unwinding due to a
+            // previous test failure. Do nothing here.
+            }
+        }
+
+  private:
+    fs::path path_;
+};
+
+// Check that the two binary files contents is identical, failing the current
+// test if it isn't.
+//
+// BOOST !! We could use BOOST_CHECK_EQUAL_COLLECTIONS if we could use the
+// full Boost.Test framework.
+void check_files_equal
+    (fs::path const& path1
+    ,fs::path const& path2
+    ,char const* file
+    ,int line
+    )
+{
+    fs::ifstream ifs1(path1, std::ios_base::in | std::ios_base::binary);
+    INVOKE_BOOST_TEST(!ifs1.bad(), file, line);
+
+    fs::ifstream ifs2(path2, std::ios_base::in | std::ios_base::binary);
+    INVOKE_BOOST_TEST(!ifs2.bad(), file, line);
+
+    // Compare the file sizes.
+    ifs1.seekg(0, std::ios_base::end);
+    ifs2.seekg(0, std::ios_base::end);
+    INVOKE_BOOST_TEST_EQUAL(ifs1.tellg(), ifs2.tellg(), file, line);
+    if(ifs1.tellg() != ifs2.tellg())
+        {
+        lmi_test::record_error();
+        lmi_test::error_stream()
+            << "Files '" << path1 << "' and '" << path2 << "' "
+            << "have different sizes: " << ifs1.tellg() << " and "
+            << ifs2.tellg() << " respectively."
+            << BOOST_TEST_FLUSH
+            ;
+        return;
+        }
+
+    // Rewind back to the beginning.
+    ifs1.seekg(0, std::ios_base::beg);
+    ifs2.seekg(0, std::ios_base::beg);
+
+    // Look for differences: using istream_iterator<char> here would be simpler
+    // but also much less efficient, so read the file by larger blocks instead.
+    const int buffer_size = 4096;
+    char buf1[buffer_size];
+    char buf2[buffer_size];
+    for(std::streamsize offset = 0;;)
+        {
+        ifs1.read(buf1, buffer_size);
+        INVOKE_BOOST_TEST(!ifs1.bad(), file, line);
+
+        ifs2.read(buf2, buffer_size);
+        INVOKE_BOOST_TEST(!ifs2.bad(), file, line);
+
+        std::streamsize const count = ifs1.gcount();
+        INVOKE_BOOST_TEST_EQUAL(count, ifs2.gcount(), file, line);
+
+        if(!count)
+            {
+            return;
+            }
+
+        for(std::streamsize pos = 0; pos < count; ++pos)
+            {
+            if(buf1[pos] != buf2[pos])
+                {
+                lmi_test::record_error();
+                lmi_test::error_stream()
+                    << "Files '" << path1 << "' and '" << path2 << "' "
+                    << "differ at offset " << offset + pos << ": "
+                    << std::hex << std::setfill('0')
+                    << std::setw(2)
+                    << static_cast<int>(static_cast<unsigned char>(buf1[pos]))
+                    << " != "
+                    << std::setw(2)
+                    << static_cast<int>(static_cast<unsigned char>(buf2[pos]))
+                    << std::dec
+                    << BOOST_TEST_FLUSH
+                    ;
+                return;
+                }
+            }
+
+        offset += count;
+        }
+}
+
+// Macro allowing to easily pass the correct file name and line number to
+// check_files_equal().
+#define TEST_FILES_EQUAL(path1, path2) \
+    check_files_equal(path1, path2, __FILE__, __LINE__)
+
+} // Unnamed namespace.
 
 namespace
 {
@@ -216,6 +346,7 @@ void test_database_open()
         ,"File 'nonexistent.ndx' could not be opened for reading."
         );
 
+    test_file_eraser erase("eraseme.ndx");
     std::ifstream ifs((qx_cso_path + ".ndx").c_str(), ios_in_binary());
     std::ofstream ofs("eraseme.ndx", ios_out_trunc_binary());
     ofs << ifs.rdbuf();
@@ -225,7 +356,6 @@ void test_database_open()
         ,std::runtime_error
         ,"File 'eraseme.dat' could not be opened for reading."
         );
-    BOOST_TEST_EQUAL(std::remove("eraseme.ndx"), 0);
 }
 
 void test_table_access_by_index()
@@ -269,6 +399,48 @@ void test_table_access_by_number()
         ,std::invalid_argument
         ,"table number 0 not found."
         );
+
+    BOOST_TEST_THROW
+        (qx_cso.find_table(table::Number(0xbadf00d))
+        ,std::invalid_argument
+        ,"table number 195948557 not found."
+        );
+}
+
+void test_to_from_text()
+{
+    database qx_cso(qx_cso_path);
+
+    table const table_42 = qx_cso.find_table(table::Number(42));
+    std::string const text_42 = table_42.save_as_text();
+    table const copy_42 = table::read_from_text(text_42);
+
+    BOOST_TEST(table_42 == copy_42);
+}
+
+void test_save()
+{
+    database qx_ins(qx_ins_path);
+
+    test_file_eraser erase_ndx("eraseme.ndx");
+    test_file_eraser erase_dat("eraseme.dat");
+    qx_ins.save("eraseme");
+
+    TEST_FILES_EQUAL("eraseme.ndx", qx_ins_path + ".ndx");
+    TEST_FILES_EQUAL("eraseme.dat", qx_ins_path + ".dat");
+}
+
+void test_add_table()
+{
+#if 0
+    database qx_cso(qx_cso_path);
+
+    BOOST_TEST_THROW
+        (qx_cso.append_table(table::read_from_text(std::string("")))
+        ,std::invalid_argument
+        ,""
+        );
+#endif
 }
 
 int test_main(int, char*[])
@@ -276,6 +448,9 @@ int test_main(int, char*[])
     test_database_open();
     test_table_access_by_index();
     test_table_access_by_number();
+    test_save();
+    test_to_from_text();
+    test_add_table();
 
     return EXIT_SUCCESS;
 }

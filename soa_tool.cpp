@@ -42,7 +42,7 @@
 #include <sstream>
 #include <vector>
 
-using namespace soa_binary_format;
+using namespace soa_v3_format;
 
 std::map<table::Number, std::string> name_map;
 
