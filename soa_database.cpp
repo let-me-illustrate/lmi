@@ -202,6 +202,21 @@ inline void open_binary_file(T& fs, fs::path const& path)
     open_file(fs, path, std::ios_base::binary);
 }
 
+// Functions doing the same thing as istream::read() and ostream::write()
+// respectively, but taking void pointers and this allowing to avoid ugly casts
+// to char in the calling code.
+inline bool stream_write(std::ostream& os, void const* data, std::size_t length)
+{
+    os.write(static_cast<char const*>(data), length);
+    return !!os;
+}
+
+inline bool stream_read(std::istream& is, void* data, std::size_t length)
+{
+    is.read(static_cast<char*>(data), length);
+    return is.gcount() == length;
+}
+
 // Description of all the SOA fields for both formats.
 struct soa_field
 {
@@ -362,16 +377,12 @@ void writer::write_values
             ? std::numeric_limits<uint16_t>::max()
             : static_cast<uint16_t>(length)
         );
-    os_.write
-        (reinterpret_cast<char const*>(&little_endian_values[0])
-        ,length
-        );
 
     // Normally we don't check the stream state after each write as it is
     // enough to check it once at the end, however this write, being much
     // bigger than others, has probably bigger chance of failing, so do check
     // for its success, exceptionally, in order to detect the error a.s.a.p.
-    if(!os_)
+    if(!stream_write(os_, &little_endian_values[0], length))
         {
         throw std::runtime_error("writing values failed");
         }
@@ -392,7 +403,7 @@ void writer::do_write_record_header(uint16_t record_type, uint16_t length)
     *reinterpret_cast<uint16_t*>(header + e_header_pos_len)
         = swap_bytes_if_big_endian(length);
 
-    os_.write(header, sizeof(header));
+    stream_write(os_, header, sizeof(header));
 }
 
 template<typename T>
@@ -402,7 +413,7 @@ void writer::write(enum_soa_field field, boost::optional<T> const& onum)
         {
         T const num = swap_bytes_if_big_endian(*onum);
         do_write_record_header(soa_fields[field].record_type, sizeof(num));
-        os_.write(reinterpret_cast<char const*>(&num), sizeof(num));
+        stream_write(os_, &num, sizeof(num));
         }
 }
 
@@ -421,7 +432,7 @@ void writer::write(enum_soa_field field, boost::optional<std::string> const& ost
             }
 
         do_write_record_header(soa_fields[field].record_type, length);
-        os_.write(ostr->c_str(), length);
+        stream_write(os_, ostr->c_str(), length);
         }
 }
 
@@ -429,7 +440,7 @@ void writer::end()
 {
     uint16_t record_type = e_record_end_table;
     record_type = swap_bytes_if_big_endian(record_type);
-    os_.write(reinterpret_cast<char const*>(&record_type), sizeof(record_type));
+    stream_write(os_, &record_type, sizeof(record_type));
 }
 
 } // namespace binary_format
@@ -678,8 +689,7 @@ void table_impl::read_string
 
     std::string str;
     str.resize(length);
-    ifs.read(&str[0], length);
-    if(ifs.gcount() != length)
+    if(!stream_read(ifs, &str[0], length))
         {
         std::ostringstream oss;
         oss << "failed to read all " << length << " bytes of the field '"
@@ -694,8 +704,7 @@ template<typename T>
 T table_impl::do_read_number(char const* name, std::istream& ifs)
 {
     T num;
-    ifs.read(reinterpret_cast<char*>(&num), sizeof(T));
-    if(ifs.gcount() != sizeof(T))
+    if(!stream_read(ifs, &num, sizeof(T)))
         {
         std::ostringstream oss;
         oss << "failed to read field '" << name << "'";
@@ -829,8 +838,7 @@ void table_impl::read_values(std::istream& ifs, uint16_t /* length */)
     unsigned const num_values = get_expected_number_of_values();
 
     values_.resize(num_values);
-    ifs.read(reinterpret_cast<char*>(&values_[0]), num_values*sizeof(double));
-    if(ifs.gcount() != num_values*sizeof(double))
+    if(!stream_read(ifs, &values_[0], num_values*sizeof(double)))
         {
         throw std::runtime_error("failed to read the values");
         }
@@ -1314,8 +1322,7 @@ void database_impl::read_index(fs::path const& path)
 
     for(;;)
         {
-        index_ifs.read(index_record, e_index_pos_max);
-        if(index_ifs.gcount() != e_index_pos_max)
+        if(!stream_read(index_ifs, index_record, e_index_pos_max))
             {
             if(index_ifs.eof() && !index_ifs.gcount())
                 {
@@ -1501,7 +1508,7 @@ void database_impl::save(fs::path const& path)
 
         to_bytes(&index_record[e_index_pos_offset], offset32);
 
-        index_ofs.write(index_record, sizeof(index_record));
+        stream_write(index_ofs, index_record, sizeof(index_record));
 
         t->write_as_binary(database_ofs);
         }
