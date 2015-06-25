@@ -443,6 +443,8 @@ enum e_database_key
 
         ,DB_MinPremType
         ,DB_MinPremIntSpread
+        ,DB_SplitMinPrem
+        ,DB_UnsplitSplitMinPrem
         ,DB_TgtPremType
         ,DB_TgtPremTable
         ,DB_TgtPremFixedAtIssue
