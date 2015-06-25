@@ -36356,3 +36356,13 @@ Add new database entities.
   ihs_avstrtgy.cpp
 Exercise finer control over minimum premiums.
 
+20150625T1723Z <gchicares@sbcglobal.net> [511]
+
+  skin_group_carveout.xrc
+Add a field for 7702 definitional test.
+
+20150625T1725Z <gchicares@sbcglobal.net> [511]
+
+  version.hpp
+Designate release candidate 6211.
+
