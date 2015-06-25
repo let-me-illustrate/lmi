@@ -359,6 +359,8 @@ void DBDictionary::ascribe_members()
     ascribe("FirstLoanMonth"      , &DBDictionary::FirstLoanMonth      );
     ascribe("MinPremType"         , &DBDictionary::MinPremType         );
     ascribe("MinPremIntSpread"    , &DBDictionary::MinPremIntSpread    );
+    ascribe("SplitMinPrem"        , &DBDictionary::SplitMinPrem        );
+    ascribe("UnsplitSplitMinPrem" , &DBDictionary::UnsplitSplitMinPrem );
     ascribe("TgtPremType"         , &DBDictionary::TgtPremType         );
     ascribe("TgtPremTable"        , &DBDictionary::TgtPremTable        );
     ascribe("TgtPremFixedAtIssue" , &DBDictionary::TgtPremFixedAtIssue );
