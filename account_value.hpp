@@ -534,6 +534,9 @@ class LMI_SO AccountValue
     double  case_k_factor;
     double  ActualCoiRate;
 
+    bool    SplitMinPrem;
+    bool    UnsplitSplitMinPrem;
+
     bool    TermCanLapse;
     bool    TermRiderActive;
     double  ActualSpecAmt;

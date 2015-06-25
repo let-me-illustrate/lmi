@@ -670,6 +670,9 @@ void AccountValue::SetInitialValues()
         NoLapseActive           = false;
         }
 
+    SplitMinPrem                = Database_->Query(DB_SplitMinPrem);
+    UnsplitSplitMinPrem         = Database_->Query(DB_UnsplitSplitMinPrem);
+
     TermCanLapse                = Database_->Query(DB_TermCanLapse);
     TermRiderActive             = true;
     TermDB                      = 0.0;
@@ -965,7 +968,7 @@ void AccountValue::InitializeSpecAmt()
     // Most other yearly values are posted to InvariantValues() in
     // FinalizeYear(), but it seems clearer to post these here where
     // they're calculated along with 'MlyNoLapsePrem'.
-    if(!TermIsNotRider)
+    if(!SplitMinPrem)
         {
         InvariantValues().ModalMinimumPremium[Year] = GetModalMinPrem
             (Year

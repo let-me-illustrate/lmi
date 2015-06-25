@@ -223,8 +223,15 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_minimum:
             {
-            if(TermIsNotRider)
+            if(SplitMinPrem)
                 {
+                if(UnsplitSplitMinPrem)
+                    {
+                    return
+                          GetModalPremMlyDedEe(Year, a_CurrentMode, TermSpecAmt)
+                        + GetModalPremMlyDedEr(Year, a_CurrentMode, ActualSpecAmt)
+                        ;
+                    }
                 if(mce_solve_ee_prem == a_SolveForWhichPrem)
                     {
                     // Normally, ee mode is entered to match ee mode,
