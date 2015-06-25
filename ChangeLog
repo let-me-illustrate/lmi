@@ -36336,3 +36336,23 @@ Add a field for supplemental specified amount.
   version.hpp
 Designate release candidate 6206.
 
+20150625T0301Z <gchicares@sbcglobal.net> [511]
+
+  ihs_basicval.cpp
+Note an interesting fact.
+
+20150625T0421Z <gchicares@sbcglobal.net> [511]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add new database entities.
+
+20150625T0424Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+Exercise finer control over minimum premiums.
+
