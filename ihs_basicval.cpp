@@ -1091,6 +1091,10 @@ double BasicValues::GetModalPremGSP
 ///     rider amount
 ///   - any term rider included as specified amount is treated as
 ///     though its charges equal the base policy's COI rates
+///
+/// If annual_policy_fee is not zero, then level premium on any mode
+/// other than annual cannot precisely cover monthly deductions due
+/// to the fee's uneven incidence.
 
 double BasicValues::GetModalPremMlyDed
     (int         a_year
