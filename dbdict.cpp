@@ -296,6 +296,8 @@ void DBDictionary::ascribe_members()
     ascribe("TermTable"           , &DBDictionary::TermTable           );
     ascribe("TermMinIssAge"       , &DBDictionary::TermMinIssAge       );
     ascribe("TermMaxIssAge"       , &DBDictionary::TermMaxIssAge       );
+    ascribe("TermIsNotRider"      , &DBDictionary::TermIsNotRider      );
+    ascribe("TermCanLapse"        , &DBDictionary::TermCanLapse        );
     ascribe("TermForcedConvAge"   , &DBDictionary::TermForcedConvAge   );
     ascribe("TermForcedConvDur"   , &DBDictionary::TermForcedConvDur   );
     ascribe("MaxTermProportion"   , &DBDictionary::MaxTermProportion   );
@@ -357,6 +359,8 @@ void DBDictionary::ascribe_members()
     ascribe("FirstLoanMonth"      , &DBDictionary::FirstLoanMonth      );
     ascribe("MinPremType"         , &DBDictionary::MinPremType         );
     ascribe("MinPremIntSpread"    , &DBDictionary::MinPremIntSpread    );
+    ascribe("SplitMinPrem"        , &DBDictionary::SplitMinPrem        );
+    ascribe("UnsplitSplitMinPrem" , &DBDictionary::UnsplitSplitMinPrem );
     ascribe("TgtPremType"         , &DBDictionary::TgtPremType         );
     ascribe("TgtPremTable"        , &DBDictionary::TgtPremTable        );
     ascribe("TgtPremFixedAtIssue" , &DBDictionary::TgtPremFixedAtIssue );

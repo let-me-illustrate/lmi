@@ -206,11 +206,13 @@
 {DB_DboChgCanDecrSpecAmt,DB_Topic_DeathBenefits,"DboChgCanDecrSpecAmt","Option changes can decrease specified amount to preserve net amount at risk",}, \
 {DB_AllowExtEndt,DB_Topic_DeathBenefits,"AllowExtEndt","Allow coverage beyond normal maturity ('extended endowment') [not yet implemented]",}, \
 {DB_Topic_Riders,DB_FIRST,"Riders","Riders and other additional benefits",}, \
-{DB_AllowTerm,DB_Topic_Riders,"AllowTerm","Allow term rider: 0=no, 1=yes",}, \
-{DB_GuarTermTable,DB_Topic_Riders,"GuarTermTable","Term rider guaranteed mortality charge table (index in mortality table database)",}, \
-{DB_TermTable,DB_Topic_Riders,"TermTable","Term rider current mortality charge table (index in mortality table database)",}, \
-{DB_TermMinIssAge,DB_Topic_Riders,"TermMinIssAge","Term rider minimum issue age",}, \
-{DB_TermMaxIssAge,DB_Topic_Riders,"TermMaxIssAge","Term rider maximum issue age",}, \
+{DB_AllowTerm,DB_Topic_Riders,"AllowTerm","Allow term: 0=no, 1=yes",}, \
+{DB_GuarTermTable,DB_Topic_Riders,"GuarTermTable","Term guaranteed mortality charge table (index in mortality table database)",}, \
+{DB_TermTable,DB_Topic_Riders,"TermTable","Term current mortality charge table (index in mortality table database)",}, \
+{DB_TermMinIssAge,DB_Topic_Riders,"TermMinIssAge","Term minimum issue age",}, \
+{DB_TermMaxIssAge,DB_Topic_Riders,"TermMaxIssAge","Term maximum issue age",}, \
+{DB_TermIsNotRider,DB_Topic_Riders,"TermIsNotRider","Term benefit is not formally a rider",}, \
+{DB_TermCanLapse,DB_Topic_Riders,"TermCanLapse","Term rider can lapse independently",}, \
 {DB_TermForcedConvAge,DB_Topic_Riders,"TermForcedConvAge","Minimum age at which term rider converts to base policy with no positive election required",}, \
 {DB_TermForcedConvDur,DB_Topic_Riders,"TermForcedConvDur","Minimum number of years after which term rider converts to base policy with no positive election required",}, \
 {DB_MaxTermProportion,DB_Topic_Riders,"MaxTermProportion","Term rider as maximum proportion of total coverage [not yet implemented]",}, \
@@ -275,6 +277,8 @@
 {DB_Topic_Premiums,DB_FIRST,"Premiums","Minimum and target premiums",}, \
 {DB_MinPremType,DB_Topic_Premiums,"MinPremType","Minimum premium: 0=based on monthly deductions, 1=7702A seven-pay premium",}, \
 {DB_MinPremIntSpread,DB_Topic_Premiums,"MinPremIntSpread","Interest spread from general-account rate used to capitalize monthly deductions for minimum premium calculation",}, \
+{DB_SplitMinPrem,DB_Topic_Premiums,"SplitMinPrem","Split monthly-deductions minimum premium by payor: 0=no, 1=yes",}, \
+{DB_UnsplitSplitMinPrem,DB_Topic_Premiums,"UnsplitSplitMinPrem","Payment strategies recombine split minimum premium: 0=no, 1=yes",}, \
 {DB_TgtPremType,DB_Topic_Premiums,"TgtPremType","Target premium: 0=based on monthly deductions, 1=7702A seven-pay premium, 2=read from table",}, \
 {DB_TgtPremTable,DB_Topic_Premiums,"TgtPremTable","Annual target premium rates per $1 (index in mortality table database)",}, \
 {DB_TgtPremFixedAtIssue,DB_Topic_Premiums,"TgtPremFixedAtIssue","Target premium set forever at issue: 0=no, 1=yes",}, \

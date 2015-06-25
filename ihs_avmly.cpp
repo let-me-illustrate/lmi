@@ -49,10 +49,9 @@
 #include "stratified_algorithms.hpp"
 #include "stratified_charges.hpp"
 
-#include <cmath>   // std::pow()
+#include <algorithm>                    // std::min(), std::max()
+#include <cmath>                        // std::pow()
 #include <limits>
-#include <stdexcept>
-#include <utility>
 
 // Each month, process all transactions in order.
 
@@ -740,7 +739,8 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 {
     double ProportionAppliedToTerm = 0.0;
     double prior_specamt = ActualSpecAmt;
-    if(TermRiderActive)
+    // Adjust term here only if it's formally a rider.
+    if(TermRiderActive && !TermIsNotRider)
         {
         switch(yare_input_.TermAdjustmentMethod)
             {
@@ -772,8 +772,14 @@ void AccountValue::ChangeSpecAmtBy(double delta)
                 }
             }
 
-        if(!AllowTerm || !yare_input_.TermRider || !TermRiderActive)
+        if(!yare_input_.TermRider || !TermRiderActive)
+        // This is unreachable. If (!yare_input_.TermRider), then
+        // TxSetTermAmt() would already have been called by
+        // InitializeMonth(), and would already have ensured that
+        // (!TermRiderActive), so the condition 'if(TermRiderActive)'
+        // above would have failed.
             {
+            throw "Unreachable.";
             TermSpecAmt = 0.0;
             ProportionAppliedToTerm = 0.0;
             TermRiderActive = false;
@@ -783,7 +789,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         TermSpecAmt += delta * ProportionAppliedToTerm;
         if(TermSpecAmt < 0.0)
             {
-            EndTermRider();
+            EndTermRider(false);
             }
         else
             {
@@ -825,12 +831,38 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 // that the ledger object is used for working storage, where it should
 // probably be write-only instead.
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
-        InvariantValues().TermSpecAmt[j] = TermSpecAmt;
+        // Adjust term here only if it's formally a rider.
+        // Otherwise, its amount should not have been changed.
+        if(!TermIsNotRider)
+            {
+            InvariantValues().TermSpecAmt[j] = TermSpecAmt;
+            }
 // Term specamt is a vector in class LedgerInvariant, but a scalar in
 // the input classes, e.g.:
 //   yare_input_.TermRiderAmount
 // as is appropriate for a 7702-integrated term rider. Another sort of
-// term rider might call for vector input.
+// term rider might call for vector input: SupplementalAmount is thus
+// handled by ChangeSupplAmtBy().
+        }
+    // Reset DB whenever SA changes.
+    TxSetDeathBft();
+}
+
+void AccountValue::ChangeSupplAmtBy(double delta)
+{
+    TermSpecAmt += delta;
+
+    TermSpecAmt = std::max
+        (TermSpecAmt
+        ,0.0 // No minimum other than zero is defined.
+        );
+    TermSpecAmt = round_specamt()(TermSpecAmt);
+    // At least for now, there is no effect on surrender charges.
+
+    // Carry the new supplemental amount forward into all future years.
+    for(int j = Year; j < BasicValues::GetLength(); j++)
+        {
+        InvariantValues().TermSpecAmt[j] = TermSpecAmt;
         }
     // Reset DB whenever SA changes.
     TxSetDeathBft();
@@ -1016,6 +1048,12 @@ void AccountValue::TxSpecAmtChange()
         }
 
     LMI_ASSERT(0 < Year);
+
+    if(TermIsNotRider && DeathBfts_->supplamt()[Year] != TermSpecAmt)
+        {
+        ChangeSupplAmtBy(DeathBfts_->supplamt()[Year] - TermSpecAmt);
+        }
+
     double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
@@ -1554,7 +1592,7 @@ void AccountValue::TxSetBOMAV()
     // and includes term rider.
     if(Year == InforceYear && Month == InforceMonth)
         {
-        if(!yare_input_.TermRider)
+        if(!yare_input_.TermRider && !TermIsNotRider)
             {
             LMI_ASSERT(0.0 == InvariantValues().TermSpecAmt[0]);
             }
@@ -1703,18 +1741,21 @@ void AccountValue::TxSetTermAmt()
         {
         return;
         }
-    if(!AllowTerm || !yare_input_.TermRider)
+    // If term is not formally a rider, then it's always active for
+    // the entire illustrated duration. Its amount may be reduced to
+    // zero, but might later be increased; at any rate, illustrations
+    // do not "remove" it.
+    if(!yare_input_.TermRider && !TermIsNotRider)
         {
         TermRiderActive = false;
         return;
         }
-
     if
         (  (TermForcedConvDur <= Year)
         && (TermForcedConvAge <= Year + BasicValues::GetIssueAge())
         )
         {
-        EndTermRider();
+        EndTermRider(true);
         return;
         }
 
@@ -1722,9 +1763,22 @@ void AccountValue::TxSetTermAmt()
     TermDB = round_death_benefit()(TermDB);
 }
 
-//============================================================================
-// Terminate the term rider
-void AccountValue::EndTermRider()
+/// Terminate the term rider, optionally converting it to base.
+///
+/// Conversion may be required in a state that imposes an age limit
+/// (e.g., attained age seventy) on term riders.
+///
+/// For at least one supported product, the term rider terminates if
+/// the AV is insufficient to pay the term charge. In that case:
+///  - the base policy might in principle continue for some time; and
+///  - the admin system would keep the term coverage in force until
+/// the next monthiversary by grace; therefore, it would not recognize
+/// a material change or adjustment event until the following month.
+/// Illustrations recognize the tax event immediately: they show no
+/// gratis continuation of benefits in the hope that charges may later
+/// be recouped.
+
+void AccountValue::EndTermRider(bool convert)
 {
     if(!TermRiderActive)
         {
@@ -1742,7 +1796,10 @@ void AccountValue::EndTermRider()
     // the anniversary month only.
 
     TermRiderActive = false;
-    ChangeSpecAmtBy(TermSpecAmt);
+    if(convert)
+        {
+        ChangeSpecAmtBy(TermSpecAmt);
+        }
     TermSpecAmt = 0.0;
     TermDB = 0.0;
     // Carry the new term spec amt forward into all future years.
@@ -1842,7 +1899,7 @@ void AccountValue::TxSetRiderDed()
 
     TermCharge = 0.0;
     DcvTermCharge = 0.0;
-    if(TermRiderActive && yare_input_.TermRider)
+    if(TermRiderActive)
         {
         TermCharge    = YearsTermRate   * TermDB * DBDiscountRate[Year];
         // TAXATION !! Integrated term: s/TermDB/TermSpecAmt/ because
@@ -1911,9 +1968,12 @@ void AccountValue::TxDoMlyDed()
 {
     // Subtract mortality and rider deductions from unloaned account value.
     // Policy fee was already subtracted in NAAR calculation.
-    if(TermRiderActive && (AVGenAcct + AVSepAcct - CoiCharge) < TermCharge)
+    if(TermRiderActive && TermCanLapse && (AVGenAcct + AVSepAcct - CoiCharge) < TermCharge)
         {
-        EndTermRider();
+// Probably 'false' is intended. This can be changed later when it is
+// convenient to validate its effect on system testing.
+//        EndTermRider(false);
+        EndTermRider(true);
         TermCharge = 0.0;
         }
 

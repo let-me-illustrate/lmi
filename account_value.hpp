@@ -211,9 +211,12 @@ class LMI_SO AccountValue
     double GetPartMortQ            (int year) const;
 
     void PerformSpecAmtStrategy();
+    void PerformSupplAmtStrategy();
     double CalculateSpecAmtFromStrategy
-        (int actual_year
-        ,int reference_year
+        (int                actual_year
+        ,int                reference_year
+        ,double             explicit_value
+        ,mcenum_sa_strategy strategy
         ) const;
 
     void PerformPmtStrategy(double* a_Pmt); // Antediluvian.
@@ -281,6 +284,7 @@ class LMI_SO AccountValue
 
     double minimum_specified_amount(bool issuing_now, bool term_rider) const;
     void   ChangeSpecAmtBy         (double delta);
+    void   ChangeSupplAmtBy        (double delta);
     void   ChangeSurrChgSpecAmtBy  (double delta);
     void   AddSurrChgLayer         (int year, double delta_specamt);
     void   ReduceSurrChg           (int year, double partial_surrchg);
@@ -297,7 +301,7 @@ class LMI_SO AccountValue
     void   DebugPrintInit();
     void   DebugEndBasis();
 
-    void   EndTermRider();
+    void   EndTermRider(bool convert);
 
     void   CoordinateCounters();
 
@@ -530,6 +534,10 @@ class LMI_SO AccountValue
     double  case_k_factor;
     double  ActualCoiRate;
 
+    bool    SplitMinPrem;
+    bool    UnsplitSplitMinPrem;
+
+    bool    TermCanLapse;
     bool    TermRiderActive;
     double  ActualSpecAmt;
     double  TermSpecAmt;

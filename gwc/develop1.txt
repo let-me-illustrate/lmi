@@ -120,6 +120,10 @@ make $coefficiency unit_tests unit_test_targets=regex_test.exe >../log 2>&1
 make -f bcc_5_5_1.make $coefficiency unit_tests >../log 2>&1
 make -f como.make $coefficiency unit_tests >../log 2>&1
 
+  # Shift differing system-test files among directories:
+cd /opt/lmi/touchstone
+for z in *; do cmp --quiet $z ../test/$z || ( mv $z ../touchstone_intermediate_eraseme/$z; mv ../test/$z ./$z; ) ; done
+
   # Test xml schemata
 
 pushd /tmp; /lmi/src/lmi/test_schemata.sh >/lmi/src/log 2>&1; popd
@@ -139,4 +143,8 @@ date -u +'%Y%m%dT%H%MZ' |tr -d '\n' >/dev/clipboard
 
 cd /opt/lmi/bin
 ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data
+
+  # Show tabbed-dialog dimensions on statusbar
+
+./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data --pyx=show_mvc_dims
 

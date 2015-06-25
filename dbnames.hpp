@@ -360,6 +360,8 @@ enum e_database_key
         ,DB_TermTable
         ,DB_TermMinIssAge
         ,DB_TermMaxIssAge
+        ,DB_TermIsNotRider
+        ,DB_TermCanLapse
         ,DB_TermForcedConvAge
         ,DB_TermForcedConvDur
         ,DB_MaxTermProportion
@@ -441,6 +443,8 @@ enum e_database_key
 
         ,DB_MinPremType
         ,DB_MinPremIntSpread
+        ,DB_SplitMinPrem
+        ,DB_UnsplitSplitMinPrem
         ,DB_TgtPremType
         ,DB_TgtPremTable
         ,DB_TgtPremFixedAtIssue

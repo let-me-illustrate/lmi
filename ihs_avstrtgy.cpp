@@ -61,34 +61,23 @@
 /// No minimum is imposed here; see PerformSpecAmtStrategy().
 
 double AccountValue::CalculateSpecAmtFromStrategy
-    (int actual_year
-    ,int reference_year
+    (int                actual_year
+    ,int                reference_year
+    ,double             explicit_value
+    ,mcenum_sa_strategy strategy
     ) const
 {
-    double r = DeathBfts_->specamt()[actual_year];
-
-    // Don't override a specamt that's being solved for.
-    if
-        (
-            mce_solve_specamt == yare_input_.SolveType
-        &&  yare_input_.SolveBeginYear <= actual_year
-        &&  actual_year < std::min(yare_input_.SolveEndYear, BasicValues::Length)
-        )
-        {
-        return r;
-        }
-
     double annualized_pmt =
             InvariantValues().EeMode[reference_year].value()
           * InvariantValues().EePmt [reference_year]
         +   InvariantValues().ErMode[reference_year].value()
           * InvariantValues().ErPmt [reference_year]
         ;
-    switch(yare_input_.SpecifiedAmountStrategy[actual_year])
+    switch(strategy)
         {
         case mce_sa_input_scalar:
             {
-            return r;
+            return explicit_value;
             }
         case mce_sa_maximum:
             {
@@ -120,12 +109,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
             }
         default:
             {
-            fatal_error()
-                << "Case "
-                << yare_input_.SpecifiedAmountStrategy[actual_year]
-                << " not found."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "Case " << strategy << " not found." << LMI_FLUSH;
             throw "Unreachable--silences a compiler diagnostic.";
             }
         }
@@ -156,12 +140,24 @@ void AccountValue::PerformSpecAmtStrategy()
         {
         bool t = yare_input_.TermRider && 0.0 != yare_input_.TermRiderAmount;
         double m = minimum_specified_amount(0 == j, t);
-        double z = CalculateSpecAmtFromStrategy(j, 0);
+        double explicit_value = DeathBfts_->specamt()[j];
+        mcenum_sa_strategy strategy = yare_input_.SpecifiedAmountStrategy[j];
+        // Don't override a specamt that's being solved for.
+        if
+            (
+                mce_solve_specamt == yare_input_.SolveType
+            &&  yare_input_.SolveBeginYear <= j
+            &&  j < std::min(yare_input_.SolveEndYear, BasicValues::Length)
+            )
+            {
+            strategy = mce_sa_input_scalar;
+            }
+        double z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
         DeathBfts_->set_specamt(round_specamt()(std::max(m, z)), j, 1 + j);
         if
             (  j == InforceYear
             && !(0 == InforceYear && 0 == InforceMonth)
-            && mce_sa_input_scalar == yare_input_.SpecifiedAmountStrategy[j]
+            && mce_sa_input_scalar == strategy
             && inforce_specamt < m
             && !Solving
             )
@@ -177,6 +173,18 @@ void AccountValue::PerformSpecAmtStrategy()
                 << std::flush
                 ;
             }
+        }
+}
+
+void AccountValue::PerformSupplAmtStrategy()
+{
+    for(int j = 0; j < BasicValues::Length; ++j)
+        {
+        double m = 0.0; // No minimum other than zero is defined.
+        double explicit_value = DeathBfts_->supplamt()[j];
+        mcenum_sa_strategy strategy = yare_input_.SupplementalAmountStrategy[j];
+        double z = CalculateSpecAmtFromStrategy(j, 0, explicit_value, strategy);
+        DeathBfts_->set_supplamt(round_specamt()(std::max(m, z)), j, 1 + j);
         }
 }
 
@@ -215,8 +223,42 @@ double AccountValue::DoPerformPmtStrategy
             }
         case mce_pmt_minimum:
             {
-            double sa = ActualSpecAmt + TermSpecAmt;
-            return GetModalMinPrem(Year, a_CurrentMode, sa);
+            if(SplitMinPrem)
+                {
+                if(UnsplitSplitMinPrem)
+                    {
+                    return
+                          GetModalPremMlyDedEe(Year, a_CurrentMode, TermSpecAmt)
+                        + GetModalPremMlyDedEr(Year, a_CurrentMode, ActualSpecAmt)
+                        ;
+                    }
+                if(mce_solve_ee_prem == a_SolveForWhichPrem)
+                    {
+                    // Normally, ee mode is entered to match ee mode,
+                    // which represents the payment mode chosen by the
+                    // plan sponsor; but lmi has the extra flexibility
+                    // to behave reasonably if it's not so entered.
+                    return GetModalPremMlyDedEe(Year, a_CurrentMode, TermSpecAmt);
+                    }
+                else if(mce_solve_er_prem == a_SolveForWhichPrem)
+                    {
+                    return GetModalPremMlyDedEr(Year, a_CurrentMode, ActualSpecAmt);
+                    }
+                else
+                    {
+                    fatal_error()
+                        << "Type "
+                        << a_SolveForWhichPrem
+                        << " not allowed here."
+                        << LMI_FLUSH
+                        ;
+                    }
+                }
+            else
+                {
+                double sa = ActualSpecAmt + TermSpecAmt;
+                return GetModalMinPrem(Year, a_CurrentMode, sa);
+                }
             }
         case mce_pmt_target:
             {
