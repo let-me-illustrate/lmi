@@ -36326,3 +36326,13 @@ Support yearly changes in supplemental specified amount.
   ihs_avmly.cpp
 Conditionalize rider vs. non-rider term behaviors.
 
+20150625T0251Z <gchicares@sbcglobal.net> [511]
+
+  skin_group_carveout.xrc
+Add a field for supplemental specified amount.
+
+20150625T0255Z <gchicares@sbcglobal.net> [511]
+
+  version.hpp
+Designate release candidate 6206.
+
