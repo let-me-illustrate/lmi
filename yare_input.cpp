@@ -163,6 +163,7 @@ yare_input::yare_input(Input const& z)
     TaxBracket                       = convert_vector_type<double              >(z.TaxBracketRealized_                 );
     ProjectedSalary                  = convert_vector_type<double              >(z.ProjectedSalaryRealized_            );
     SpecifiedAmount                  = convert_vector_type<double              >(z.SpecifiedAmountRealized_            );
+    SupplementalAmount               = convert_vector_type<double              >(z.SupplementalAmountRealized_         );
     DeathBenefitOption               = convert_vector_type<mcenum_dbopt        >(z.DeathBenefitOptionRealized_         );
     Payment                          = convert_vector_type<double              >(z.PaymentRealized_                    );
     PaymentMode                      = convert_vector_type<mcenum_mode         >(z.PaymentModeRealized_                );
@@ -177,6 +178,7 @@ yare_input::yare_input(Input const& z)
     FundAllocations                  = convert_vector_type<double              >(z.FundAllocationsRealized_            ); // INPUT !! Not yet implemented.
     CashValueEnhancementRate         = convert_vector_type<double              >(z.CashValueEnhancementRateRealized_   );
     SpecifiedAmountStrategy          = convert_vector_type<mcenum_sa_strategy  >(z.SpecifiedAmountStrategyRealized_    );
+    SupplementalAmountStrategy       = convert_vector_type<mcenum_sa_strategy  >(z.SupplementalAmountStrategyRealized_ );
     PaymentStrategy                  = convert_vector_type<mcenum_pmt_strategy >(z.PaymentStrategyRealized_            );
     CorporationPaymentStrategy       = convert_vector_type<mcenum_pmt_strategy >(z.CorporationPaymentStrategyRealized_ );
 }

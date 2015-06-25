@@ -42,15 +42,18 @@ class death_benefits
     death_benefits(int, yare_input const&);
     ~death_benefits();
 
-    void set_specamt(double z, int from_year, int to_year);
+    void set_specamt (double z, int from_year, int to_year);
+    void set_supplamt(double z, int from_year, int to_year);
 
-    std::vector<mcenum_dbopt> const& dbopt()   const;
-    std::vector<double>       const& specamt() const;
+    std::vector<mcenum_dbopt> const& dbopt   () const;
+    std::vector<double>       const& specamt () const;
+    std::vector<double>       const& supplamt() const;
 
   private:
     int length_;
-    std::vector<mcenum_dbopt> dbopt_;
-    std::vector<double>       specamt_;
+    std::vector<mcenum_dbopt> dbopt_   ;
+    std::vector<double>       specamt_ ;
+    std::vector<double>       supplamt_;
 };
 
 inline std::vector<mcenum_dbopt> const& death_benefits::dbopt() const
@@ -61,6 +64,11 @@ inline std::vector<mcenum_dbopt> const& death_benefits::dbopt() const
 inline std::vector<double> const& death_benefits::specamt() const
 {
     return specamt_;
+}
+
+inline std::vector<double> const& death_benefits::supplamt() const
+{
+    return supplamt_;
 }
 
 #endif // death_benefits_hpp

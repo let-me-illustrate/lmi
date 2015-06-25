@@ -660,7 +660,7 @@ void BasicValues::SetPermanentInvariants()
     WDCanDecrSADBO3     = Database_->Query(DB_WdCanDecrSpecAmtDbo3 );
     MaxIncrAge          = static_cast<int>(Database_->Query(DB_MaxIncrAge));
     WaivePmTxInt1035    = Database_->Query(DB_WaivePremTaxInt1035  );
-    AllowTerm           = Database_->Query(DB_AllowTerm            );
+    TermIsNotRider      = Database_->Query(DB_TermIsNotRider       );
     TermForcedConvAge   = static_cast<int>(Database_->Query(DB_TermForcedConvAge));
     TermForcedConvDur   = static_cast<int>(Database_->Query(DB_TermForcedConvDur));
     ExpPerKLimit        = Database_->Query(DB_ExpSpecAmtLimit      );
@@ -726,7 +726,7 @@ void BasicValues::SetPermanentInvariants()
     // rating, so we assert those preconditions and write simple code
     // for 'unusual' COI banding that ignores those features.
     HOPEFULLY(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
-    HOPEFULLY(!(UseUnusualCOIBanding && AllowTerm));
+    HOPEFULLY(!(UseUnusualCOIBanding && Database_->Query(DB_AllowTerm)));
 
     // Flat extras can be used even with guaranteed issue, e.g., for
     // aviation, occupation, avocation, or foreign travel. Admin
@@ -1091,6 +1091,10 @@ double BasicValues::GetModalPremGSP
 ///     rider amount
 ///   - any term rider included as specified amount is treated as
 ///     though its charges equal the base policy's COI rates
+///
+/// If annual_policy_fee is not zero, then level premium on any mode
+/// other than annual cannot precisely cover monthly deductions due
+/// to the fee's uneven incidence.
 
 double BasicValues::GetModalPremMlyDed
     (int         a_year
@@ -1160,6 +1164,168 @@ double BasicValues::GetModalPremMlyDed
     z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
 
     z *= GetAnnuityValueMlyDed(a_year, a_mode);
+
+    z += annual_charge;
+
+    return round_min_premium()(z);
+}
+
+// The "-Ee" and "-Er" variants are written with preprocessor
+// conditionals for ease of comparison to the unsuffixed original.
+
+double BasicValues::GetModalPremMlyDedEe
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
+    ) const
+{
+    double z = a_specamt * DBDiscountRate[a_year];
+    z *= GetCurrentTermRates()[a_year];
+#if 0
+    if(yare_input_.AccidentalDeathBenefit)
+        {
+        double r = MortalityRates_->AdbRates()[a_year];
+        z += r * std::min(a_specamt, AdbLimit);
+        }
+#endif // 0
+    if(yare_input_.SpouseRider)
+        {
+        double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
+        z += r * yare_input_.SpouseRiderAmount;
+        }
+
+    if(yare_input_.ChildRider)
+        {
+        double r = MortalityRates_->ChildRiderRates()[a_year];
+        z += r * yare_input_.ChildRiderAmount;
+        }
+
+#if 0
+    if(true) // Written thus for parallelism and to keep 'r' local.
+        {
+        double r = Loads_->specified_amount_load(mce_gen_curr)[a_year];
+        z += r * std::min(a_specamt, SpecAmtLoadLimit);
+        }
+
+    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
+
+    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
+#endif // 0
+
+    if(yare_input_.WaiverOfPremiumBenefit)
+        {
+        double const r = MortalityRates_->WpRates()[a_year];
+        switch(WaiverChargeMethod)
+            {
+            case oe_waiver_times_specamt:
+                {
+                z += r * std::min(a_specamt, WpLimit);
+                }
+                break;
+            case oe_waiver_times_deductions:
+                {
+                z *= 1.0 + r;
+#if 0
+                annual_charge *= 1.0 + r;
+#endif // 0
+                }
+                break;
+            default:
+                {
+                fatal_error()
+                    << "Case '"
+                    << WaiverChargeMethod
+                    << "' not found."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        }
+
+    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
+
+    double u = DBDiscountRate[a_year];
+    z *= (1.0 - std::pow(u, 12.0 / a_mode)) / (1.0 - u);
+
+#if 0
+    z += annual_charge;
+#endif // 0
+
+    return round_min_premium()(z);
+}
+
+double BasicValues::GetModalPremMlyDedEr
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
+    ) const
+{
+    double z = a_specamt * DBDiscountRate[a_year];
+    z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
+
+    if(yare_input_.AccidentalDeathBenefit)
+        {
+        double r = MortalityRates_->AdbRates()[a_year];
+        z += r * std::min(a_specamt, AdbLimit);
+        }
+
+#if 0
+    if(yare_input_.SpouseRider)
+        {
+        double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
+        z += r * yare_input_.SpouseRiderAmount;
+        }
+
+    if(yare_input_.ChildRider)
+        {
+        double r = MortalityRates_->ChildRiderRates()[a_year];
+        z += r * yare_input_.ChildRiderAmount;
+        }
+#endif // 0
+
+    if(true) // Written thus for parallelism and to keep 'r' local.
+        {
+        double r = Loads_->specified_amount_load(mce_gen_curr)[a_year];
+        z += r * std::min(a_specamt, SpecAmtLoadLimit);
+        }
+
+    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
+
+    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
+
+    if(yare_input_.WaiverOfPremiumBenefit)
+        {
+        double const r = MortalityRates_->WpRates()[a_year];
+        switch(WaiverChargeMethod)
+            {
+            case oe_waiver_times_specamt:
+                {
+                z += r * std::min(a_specamt, WpLimit);
+                }
+                break;
+            case oe_waiver_times_deductions:
+                {
+                z *= 1.0 + r;
+                annual_charge *= 1.0 + r;
+                }
+                break;
+            default:
+                {
+                fatal_error()
+                    << "Case '"
+                    << WaiverChargeMethod
+                    << "' not found."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        }
+
+    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
+
+    double u = DBDiscountRate[a_year];
+    z *= (1.0 - std::pow(u, 12.0 / a_mode)) / (1.0 - u);
+
     z += annual_charge;
 
     return round_min_premium()(z);

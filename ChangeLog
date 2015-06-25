@@ -36215,3 +36215,144 @@ Set preferred loan rates reflecting the 20150502T1557Z change.
   ihs_avmly.cpp
 Implement preferred loans.
 
+20150522T2030Z <gchicares@sbcglobal.net> [512]
+
+  ihs_avmly.cpp
+Remove redundancy: (!AllowTerm) implies (!yare_input_.TermRider).
+
+20150522T2031Z <gchicares@sbcglobal.net> [512]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Remove disused member 'AllowTerm'.
+
+20150522T2055Z <gchicares@sbcglobal.net> [512]
+
+  ihs_avmly.cpp
+Mark unreachable code for later elimination.
+
+20150527T1348Z <gchicares@sbcglobal.net> [512]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Add two new fields.
+
+20150527T1350Z <gchicares@sbcglobal.net> [512]
+
+  multidimgrid_any.cpp
+  rounding_view.xrc
+  rounding_view_editor.cpp
+Fix XRC assertion failures. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-05/msg00009.html
+
+20150527T1643Z <gchicares@sbcglobal.net> [512]
+
+  account_value.hpp
+  basic_values.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+Add new database entities.
+
+20150528T1714Z <gchicares@sbcglobal.net> [511]
+
+  ihs_acctval.cpp
+Remove a defect marker that is now invalid.
+
+20150528T1715Z <gchicares@sbcglobal.net> [511]
+
+  ledger.cpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  mc_enum_types.cpp
+  mc_enum_types.xpp
+Add several ledger columns.
+
+20150531T0256Z <gchicares@sbcglobal.net> [511]
+
+  input.hpp
+  input_harmonization.cpp
+  input_realization.cpp
+  skin.xrc
+  yare_input.cpp
+  yare_input.hpp
+Establish input for supplemental specified amount.
+
+20150531T0259Z <gchicares@sbcglobal.net> [511]
+
+  death_benefits.cpp
+  death_benefits.hpp
+  ledger_invariant.cpp
+Establish storage for supplemental specified amount.
+
+20150531T1443Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_avmly.cpp
+Convert optionally when term rider ends.
+
+20150531T1726Z <gchicares@sbcglobal.net> [511]
+
+  basic_values.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+Calculate special minimum premiums.
+
+20150531T1803Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_avstrtgy.cpp
+Refactor.
+
+20150531T1837Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+Offer strategies for supplemental specified amount.
+
+20150531T2002Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_avmly.cpp
+Support yearly changes in supplemental specified amount.
+
+20150531T2323Z <gchicares@sbcglobal.net> [511]
+
+  ihs_avmly.cpp
+Conditionalize rider vs. non-rider term behaviors.
+
+20150625T0251Z <gchicares@sbcglobal.net> [511]
+
+  skin_group_carveout.xrc
+Add a field for supplemental specified amount.
+
+20150625T0255Z <gchicares@sbcglobal.net> [511]
+
+  version.hpp
+Designate release candidate 6206.
+
+20150625T0301Z <gchicares@sbcglobal.net> [511]
+
+  ihs_basicval.cpp
+Note an interesting fact.
+
+20150625T0421Z <gchicares@sbcglobal.net> [511]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add new database entities.
+
+20150625T0424Z <gchicares@sbcglobal.net> [511]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+Exercise finer control over minimum premiums.
+

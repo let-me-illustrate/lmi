@@ -272,6 +272,8 @@ class LMI_SO DBDictionary
     database_entity TermTable           ;
     database_entity TermMinIssAge       ;
     database_entity TermMaxIssAge       ;
+    database_entity TermIsNotRider      ;
+    database_entity TermCanLapse        ;
     database_entity TermForcedConvAge   ;
     database_entity TermForcedConvDur   ;
     database_entity MaxTermProportion   ;
@@ -333,6 +335,8 @@ class LMI_SO DBDictionary
     database_entity FirstLoanMonth      ;
     database_entity MinPremType         ;
     database_entity MinPremIntSpread    ;
+    database_entity SplitMinPrem        ;
+    database_entity UnsplitSplitMinPrem ;
     database_entity TgtPremType         ;
     database_entity TgtPremTable        ;
     database_entity TgtPremFixedAtIssue ;

@@ -245,10 +245,12 @@ void Ledger::write(xml::element& x) const
     title_map["EOYDeathBft_Current"             ] = " _____________ Curr EOY Death Benefit";
     title_map["EOYDeathBft_Guaranteed"          ] = " _____________ Guar EOY Death Benefit";
     title_map["EeGrossPmt"                      ] = " _____________ ______ EE Gross Payment";
+    title_map["EeModalMinimumPremium"           ] = "EE Modal Minimum Premium";
     title_map["EeMode"                          ] = "EE Payment Mode";
 // TODO ?? This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
     title_map["EePmt"                           ] = "EE Payment Mode";
     title_map["ErGrossPmt"                      ] = " _____________ ______ ER Gross Payment";
+    title_map["ErModalMinimumPremium"           ] = "ER Modal Minimum Premium";
     title_map["ErMode"                          ] = "ER Payment Mode";
 // TODO ?? This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
     title_map["ErPmt"                           ] = "ER Payment Mode";
@@ -536,10 +538,12 @@ void Ledger::write(xml::element& x) const
     format_map["DacTaxRsv"                         ] = f1;
     format_map["DeathProceedsPaid"                 ] = f1;
     format_map["EeGrossPmt"                        ] = f1;
+    format_map["EeModalMinimumPremium"             ] = f1;
 //    format_map["EeMode"                            ] = f1; // Not numeric.
     format_map["EePmt"                             ] = f1;
     format_map["EOYDeathBft"                       ] = f1;
     format_map["ErGrossPmt"                        ] = f1;
+    format_map["ErModalMinimumPremium"             ] = f1;
 //    format_map["ErMode"                            ] = f1; // Not numeric.
     format_map["ErPmt"                             ] = f1;
     format_map["ExpenseCharges"                    ] = f1;
@@ -649,7 +653,9 @@ void Ledger::write(xml::element& x) const
     // however, code changes are required, and this is as appropriate
     // a place as any to make them.
 
-    LedgerVariant const& Curr_ = GetCurrFull();
+    LedgerInvariant const& Invar = GetLedgerInvariant();
+    LedgerVariant   const& Curr_ = GetCurrFull();
+    LedgerVariant   const& Guar_ = GetGuarFull();
 
     // ET !! Easier to write as
     //   std::vector<double> NetDeathBenefit =
@@ -662,10 +668,23 @@ void Ledger::write(xml::element& x) const
         ,NetDeathBenefit.begin()
         ,std::minus<double>()
         );
-
-    vectors   ["NetDeathBenefit"] = &NetDeathBenefit ;
+    vectors   ["NetDeathBenefit"] = &NetDeathBenefit;
     title_map ["NetDeathBenefit"] = " _____________ __Net __Death Benefit";
     format_map["NetDeathBenefit"] = f1;
+
+    std::vector<double> SupplDeathBft_Current   (Curr_.TermPurchased);
+    std::vector<double> SupplDeathBft_Guaranteed(Guar_.TermPurchased);
+    vectors   ["SupplDeathBft_Current"   ] = &SupplDeathBft_Current;
+    vectors   ["SupplDeathBft_Guaranteed"] = &SupplDeathBft_Guaranteed;
+    title_map ["SupplDeathBft_Current"   ] = " _____________ Curr Suppl Death Benefit";
+    title_map ["SupplDeathBft_Guaranteed"] = " _____________ Guar Suppl Death Benefit";
+    format_map["SupplDeathBft_Current"   ] = f1;
+    format_map["SupplDeathBft_Guaranteed"] = f1;
+
+    std::vector<double> SupplSpecAmt(Invar.TermSpecAmt);
+    vectors   ["SupplSpecAmt"            ] = &SupplSpecAmt;
+    title_map ["SupplSpecAmt"            ] = " _____________ Suppl Specified Amount";
+    format_map["SupplSpecAmt"            ] = f1;
 
     // [End of derived columns.]
 

@@ -430,8 +430,10 @@ void Input::DoHarmonize()
         && database_->Query(DB_TermMinIssAge) <= IssueAge.value()
         &&                                       IssueAge.value() <= database_->Query(DB_TermMaxIssAge)
         ;
-    TermRider.enable(        allow_term);
-    TermRider.allow(mce_yes, allow_term);
+    bool term_is_a_rider = !database_->Query(DB_TermIsNotRider);
+    bool allow_term_rider = allow_term && term_is_a_rider;
+    TermRider.enable(        allow_term_rider);
+    TermRider.allow(mce_yes, allow_term_rider);
 
     bool enable_term = mce_yes == TermRider;
     bool specamt_indeterminate_for_term =
@@ -519,7 +521,7 @@ void Input::DoHarmonize()
     bool specamt_solve = mce_solve_specamt == SolveType;
 
     bool specamt_from_term_proportion =
-           allow_term
+           allow_term_rider
         && mce_yes == TermRiderUseProportion
         && mce_yes == TermRider
         ;
@@ -558,6 +560,9 @@ true // Silly workaround for now.
 
     bool inhibit_sequence = specamt_solve || specamt_from_term_proportion;
     SpecifiedAmount.enable(!inhibit_sequence);
+
+    // Unaffected by solves: no solve offered for supplemental specamt.
+    SupplementalSpecifiedAmount.enable(allow_term && !term_is_a_rider);
 
     bool prem_solve = mce_solve_ee_prem == SolveType;
 

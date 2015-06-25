@@ -34,7 +34,7 @@
             <option>1</option>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_CENTER|wxALIGN_CENTER_VERTICAL</flag>
+            <flag>wxALIGN_CENTER</flag>
             <option>0</option>
             <object class="wxBoxSizer">
                 <orient>wxHORIZONTAL</orient>

@@ -1908,6 +1908,21 @@ here, but it looks weird if we don't make this look like its siblings.
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
                     <object class="wxStaticText">
+                        <label>Supplemental amount</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxBOTTOM</flag>
+                    <border>2</border>
+                    <object class="InputSequenceEntry" name="SupplementalSpecifiedAmount">
+                        <title>Supplemental amount</title>
+                        <help>Supplemental amount, or corridor, glp, gsp, maximum, salary, sevenpay, target</help>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
                         <label>Death benefit option</label>
                     </object>
                 </object>

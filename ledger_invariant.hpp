@@ -90,6 +90,8 @@ class LMI_SO LedgerInvariant
     std::vector<double> GptForceout;
     std::vector<double> NaarForceout;
     std::vector<double> ModalMinimumPremium;
+    std::vector<double> EeModalMinimumPremium;
+    std::vector<double> ErModalMinimumPremium;
 
     // EOY vectors.
     std::vector<double> TermSpecAmt;

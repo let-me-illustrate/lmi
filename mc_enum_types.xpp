@@ -556,6 +556,7 @@
     ,mce_inforce_lives_boy \
     ,mce_specified_amount \
     ,mce_term_specified_amount \
+    ,mce_supplemental_specified_amount \
     ,mce_corridor_factor \
     ,mce_general_account_crediting_rate \
     ,mce_separate_account_net_rate \
@@ -563,6 +564,8 @@
     ,mce_employee_gross_payment \
     ,mce_employer_gross_payment \
     ,mce_modal_minimum_premium \
+    ,mce_employee_modal_minimum_premium \
+    ,mce_employer_modal_minimum_premium \
     ,mce_withdrawal \
     ,mce_new_cash_loan \
     ,mce_current_total_loan_balance \
@@ -577,6 +580,8 @@
     ,mce_guaranteed_base_death_benefit \
     ,mce_current_term_purchased \
     ,mce_guaranteed_term_purchased \
+    ,mce_current_supplemental_death_benefit \
+    ,mce_guaranteed_supplemental_death_benefit \
     ,mce_current_mortality_charge \
     ,mce_guaranteed_mortality_charge \
     ,mce_current_rider_charges \
@@ -616,6 +621,7 @@
     ,"InforceLives" \
     ,"SpecAmt" \
     ,"TermSpecAmt" \
+    ,"SupplSpecAmt" \
     ,"CorridorFactor" \
     ,"AnnGAIntRate_Current" \
     ,"AnnSAIntRate_Current" \
@@ -623,6 +629,8 @@
     ,"EeGrossPmt" \
     ,"ErGrossPmt" \
     ,"ModalMinimumPremium" \
+    ,"EeModalMinimumPremium" \
+    ,"ErModalMinimumPremium" \
     ,"NetWD" \
     ,"NewCashLoan" \
     ,"TotalLoanBalance_Current" \
@@ -637,6 +645,8 @@
     ,"BaseDeathBft_Guaranteed" \
     ,"TermPurchased_Current" \
     ,"TermPurchased_Guaranteed" \
+    ,"SupplDeathBft_Current" \
+    ,"SupplDeathBft_Guaranteed" \
     ,"COICharge_Current" \
     ,"COICharge_Guaranteed" \
     ,"RiderCharges_Current" \
@@ -678,6 +688,7 @@
     ,"Inforce Lives BOY" \
     ,"Base Specified Amount" \
     ,"Term Specified Amount" \
+    ,"Supplemental Specified Amount" \
     ,"Corridor Factor" \
     ,"General Account Crediting Rate" \
     ,"Separate Account Net Rate" \
@@ -685,6 +696,8 @@
     ,"Employee Gross Payment" \
     ,"Employer Gross Payment" \
     ,"Modal Minimum Premium" \
+    ,"Employee Modal Minimum Premium" \
+    ,"Employer Modal Minimum Premium" \
     ,"Withdrawal" \
     ,"New Cash Loan" \
     ,"Current Total Loan Balance" \
@@ -699,6 +712,8 @@
     ,"Guaranteed Base Death Benefit" \
     ,"Current Term Purchased" \
     ,"Guaranteed Term Purchased" \
+    ,"Current Supplemental Death Benefit" \
+    ,"Guaranteed Supplemental Death Benefit" \
     ,"Current Mortality Charge" \
     ,"Guaranteed Mortality Charge" \
     ,"Current Rider Charges" \

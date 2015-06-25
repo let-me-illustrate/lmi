@@ -216,7 +216,6 @@ void RoundingButtons::Create
     wxSizerFlags flags = wxSizerFlags()
         .Proportion(0)
         .Expand()
-        .Center()
         .Border(wxLEFT|wxRIGHT, 2)
         ;
 

@@ -41,14 +41,17 @@ death_benefits::death_benefits(int length, yare_input const& yi)
     // is padded to a greater length.
     LMI_ASSERT(length_ <= static_cast<int>(yi.DeathBenefitOption.size()));
     LMI_ASSERT(length_ <= static_cast<int>(yi.SpecifiedAmount   .size()));
+    LMI_ASSERT(length_ <= static_cast<int>(yi.SupplementalAmount.size()));
 
     // SOMEDAY !! Can't use std::copy() because lengths differ?
-    dbopt_  .resize(length_);
-    specamt_.resize(length_);
+    dbopt_   .resize(length_);
+    specamt_ .resize(length_);
+    supplamt_.resize(length_);
     for(int j = 0; j < length_; ++j)
         {
-        dbopt_  [j] = yi.DeathBenefitOption[j];
-        specamt_[j] = yi.SpecifiedAmount   [j];
+        dbopt_   [j] = yi.DeathBenefitOption[j];
+        specamt_ [j] = yi.SpecifiedAmount   [j];
+        supplamt_[j] = yi.SupplementalAmount[j];
         }
 }
 
@@ -65,6 +68,17 @@ void death_benefits::set_specamt(double z, int from_year, int to_year)
     for(int j = from_year; j < std::min(length_, to_year); ++j)
         {
         specamt_[j] = z;
+        }
+}
+
+//============================================================================
+void death_benefits::set_supplamt(double z, int from_year, int to_year)
+{
+//    std::fill_n(supplamt_.begin() + from_year, to_year - from_year, z);
+    // SOMEDAY !! Can't use a standard algorithm?
+    for(int j = from_year; j < std::min(length_, to_year); ++j)
+        {
+        supplamt_[j] = z;
         }
 }
 

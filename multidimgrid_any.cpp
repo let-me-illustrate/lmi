@@ -415,7 +415,6 @@ bool MultiDimGrid::Create
         (grid_
         ,wxSizerFlags()
             .Proportion(1)
-            .Right()
             .Expand()
             .Border(wxALL, 1)
         );

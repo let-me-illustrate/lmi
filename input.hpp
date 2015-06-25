@@ -199,6 +199,7 @@ class LMI_SO Input
     std::string RealizeTaxBracket                 ();
     std::string RealizeProjectedSalary            ();
     std::string RealizeSpecifiedAmount            ();
+    std::string RealizeSupplementalAmount         ();
     std::string RealizeDeathBenefitOption         ();
     std::string RealizePayment                    ();
     std::string RealizePaymentMode                ();
@@ -392,6 +393,7 @@ class LMI_SO Input
     numeric_sequence         TaxBracket                      ;
     numeric_sequence         ProjectedSalary                 ;
     specamt_sequence         SpecifiedAmount                 ;
+    // For brevity, "SupplementalAmount" would seem better.
     specamt_sequence         SupplementalSpecifiedAmount     ;
     dbo_sequence             DeathBenefitOption              ;
     payment_sequence         Payment                         ;
@@ -454,6 +456,8 @@ class LMI_SO Input
     std::vector<tnr_unrestricted_double> ProjectedSalaryRealized_           ; // tnr_nonnegative_double
     std::vector<tnr_unrestricted_double> SpecifiedAmountRealized_           ; // [permit negative for term adjustment?]
     std::vector<mce_sa_strategy>         SpecifiedAmountStrategyRealized_   ;
+    std::vector<tnr_unrestricted_double> SupplementalAmountRealized_        ;
+    std::vector<mce_sa_strategy>         SupplementalAmountStrategyRealized_;
     std::vector<mce_dbopt>               DeathBenefitOptionRealized_        ;
     std::vector<tnr_unrestricted_double> PaymentRealized_                   ; // tnr_nonnegative_double
     std::vector<mce_pmt_strategy>        PaymentStrategyRealized_           ;

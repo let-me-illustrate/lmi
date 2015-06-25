@@ -412,6 +412,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         // This is a crock to suppress an observed symptom.
         InvariantValues().Init(this);
         PerformSpecAmtStrategy();
+        PerformSupplAmtStrategy();
         }
 
     // TODO ?? It seems wrong to initialize the ledger values here.
@@ -669,6 +670,10 @@ void AccountValue::SetInitialValues()
         NoLapseActive           = false;
         }
 
+    SplitMinPrem                = Database_->Query(DB_SplitMinPrem);
+    UnsplitSplitMinPrem         = Database_->Query(DB_UnsplitSplitMinPrem);
+
+    TermCanLapse                = Database_->Query(DB_TermCanLapse);
     TermRiderActive             = true;
     TermDB                      = 0.0;
 
@@ -679,7 +684,6 @@ void AccountValue::SetInitialValues()
     ItLapsed                    = false;
     VariantValues().LapseMonth  = 11;
     VariantValues().LapseYear   = BasicValues::GetLength();
-// TODO ?? Length should be Database_->Query(DB_MaturityAge);
 
     InvariantValues().IsMec     = false;
     InvariantValues().MecMonth  = 11;
@@ -956,19 +960,39 @@ void AccountValue::InitializeSpecAmt()
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
-    // This "modal minimum" premium is designed for group plans. It is
-    // intended roughly to approximate the minimum payment (at a modal
-    // frequency chosen by the employer) necessary to prevent lapse if
-    // no other premium is paid.
+    // These "modal minimum" premiums are designed for group plans.
+    // They are intended roughly to approximate the minimum payment
+    // (at a modal frequency chosen by the employer) necessary to
+    // prevent lapse if no other premium is paid.
     //
     // Most other yearly values are posted to InvariantValues() in
-    // FinalizeYear(), but it seems clearer to post this one here
-    // where it's calculated along with 'MlyNoLapsePrem'.
-    InvariantValues().ModalMinimumPremium[Year] = GetModalMinPrem
-        (Year
-        ,InvariantValues().ErMode[Year].value()
-        ,InvariantValues().SpecAmt[Year]
-        );
+    // FinalizeYear(), but it seems clearer to post these here where
+    // they're calculated along with 'MlyNoLapsePrem'.
+    if(!SplitMinPrem)
+        {
+        InvariantValues().ModalMinimumPremium[Year] = GetModalMinPrem
+            (Year
+            ,InvariantValues().ErMode[Year].value()
+            ,InvariantValues().SpecAmt[Year]
+            );
+        }
+    else
+        {
+        InvariantValues().EeModalMinimumPremium[Year] = GetModalPremMlyDedEe
+            (Year
+            ,InvariantValues().ErMode[Year].value()
+            ,InvariantValues().TermSpecAmt[Year]
+            );
+        InvariantValues().ErModalMinimumPremium[Year] = GetModalPremMlyDedEr
+            (Year
+            ,InvariantValues().ErMode[Year].value()
+            ,InvariantValues().SpecAmt[Year]
+            );
+        InvariantValues().ModalMinimumPremium[Year] =
+              InvariantValues().EeModalMinimumPremium[Year]
+            + InvariantValues().ErModalMinimumPremium[Year]
+            ;
+        }
 
     // No-lapse premium generally changes whenever specamt changes for
     // any reason (e.g., elective increases or decreases, DBO changes,
