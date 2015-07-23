@@ -1963,10 +1963,7 @@ void AccountValue::TxDoMlyDed()
     // Policy fee was already subtracted in NAAR calculation.
     if(TermRiderActive && TermCanLapse && (AVGenAcct + AVSepAcct - CoiCharge) < TermCharge)
         {
-// Probably 'false' is intended. This can be changed later when it is
-// convenient to validate its effect on system testing.
-//        EndTermRider(false);
-        EndTermRider(true);
+        EndTermRider(false);
         TermCharge = 0.0;
         }
 
