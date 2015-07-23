@@ -789,6 +789,9 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         TermSpecAmt += delta * ProportionAppliedToTerm;
         if(TermSpecAmt < 0.0)
             {
+            // Reducing the term rider's specified amount to a value
+            // less than zero is taken as a request to terminate the
+            // rider altogether.
             EndTermRider(false);
             }
         else
