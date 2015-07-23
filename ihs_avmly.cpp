@@ -1787,16 +1787,6 @@ void AccountValue::EndTermRider(bool convert)
         {
         return;
         }
-    // TODO ?? Not yet implemented.
-    // If insufficient AV for termchg, then term rider terminates.
-    // In that case, assume that the owner has an opportunity to pay
-    // the term charge in cash, and that term coverage continues by
-    // grace until the next monthiversary even if it is not so paid.
-    // Thus, termination of the term rider is not an adjustable event
-    // until that next monthiversary when DB actually changes. But
-    // illustrations show no such gratis continuation of the term
-    // benefit, since they depict death benefits as at the end of
-    // the anniversary month only.
 
     TermRiderActive = false;
     if(convert)
