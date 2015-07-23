@@ -36366,3 +36366,39 @@ Add a field for 7702 definitional test.
   version.hpp
 Designate release candidate 6211.
 
+20150723T0941Z <gchicares@sbcglobal.net> [511]
+
+  input_harmonization.cpp
+Fix defect introduced 20080724T1545Z: misleading comment.
+
+20150723T0942Z <gchicares@sbcglobal.net> [509]
+
+  crc32.hpp
+Resolve two marked defects.
+
+20150723T0945Z <gchicares@sbcglobal.net> [509]
+
+  skin_reg_d.xrc [expunged]
+Expunge a disused skin.
+
+20150723T1313Z <gchicares@sbcglobal.net> [509]
+
+  ihs_avmly.cpp
+Explain a reasonable assumption.
+
+20150723T1355Z <gchicares@sbcglobal.net> [508]
+
+  ihs_avmly.cpp
+Resolve a marked defect: no grace period on illustrations.
+
+20150723T2305Z <gchicares@sbcglobal.net> [508]
+
+  ihs_avmly.cpp
+Fix issue noted 20150531T1443Z: do not convert term when it "lapses".
+
+20150723T2306Z <gchicares@sbcglobal.net> [508]
+
+  dbdict.cpp
+  product_data.cpp
+Make sample product's term parameters more plausible.
+
