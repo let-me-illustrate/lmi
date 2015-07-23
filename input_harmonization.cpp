@@ -929,10 +929,9 @@ void Input::DoTransmogrify()
         );
     if(mce_no == UseDOB)
         {
-        // If no DOB is supplied, assume a birthday occurs on the
-        // issue date--as good an assumption as any, and the simplest.
-        // It may need to be a day earlier for a contract issued on a
-        // leap-year day.
+        // If DOB does not govern, adjust the birthdate appropriately,
+        // with particular caution on February twenty-ninth. See:
+        //   http://lists.nongnu.org/archive/html/lmi/2008-07/msg00006.html
         DateOfBirth = add_years
             (DateOfBirth.value()
             ,apparent_age - IssueAge.value()
