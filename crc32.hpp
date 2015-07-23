@@ -28,7 +28,7 @@
 
 #include "so_attributes.hpp"
 
-#include <cstring> // std::strlen()
+#include <cstring>                      // std::strlen()
 #include <string>
 #include <vector>
 
@@ -69,7 +69,8 @@ class LMI_SO CRC
 };
 
 // operator+=() inline implementations.
-// TODO ?? Try to use one template for the bodies of these implementations.
+// SOMEDAY !! Use one template for the bodies of these implementations
+// (C++11 will make that easier).
 
 inline CRC& CRC::operator+=(                    bool    z)
     {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
@@ -109,8 +110,8 @@ inline CRC& CRC::operator+=(signed              char const* z)
     }
 inline CRC& CRC::operator+=(unsigned            char const* z)
     {
-    // TODO ?? std::strlen() is defined only for char const* arguments;
-    // does that mean that this reinterpret_cast is required?
+    // std::strlen() is defined only for char const* arguments, so the
+    // cast is required.
     return update(z, std::strlen(reinterpret_cast<char const*>(z)));
     }
 

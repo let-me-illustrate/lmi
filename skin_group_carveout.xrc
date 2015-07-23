@@ -105,6 +105,22 @@
                                 </content>
                             </object>
                         </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxRadioBox" name="DefinitionOfLifeInsurance">
+                                <help>Definition of life insurance</help>
+                                <style>wxRA_SPECIFY_COLS</style>
+                                <label>Definition of life insurance</label>
+                                <dimension>1</dimension>
+                                <selection>0</selection>
+                                <content>
+                                    <item helptext="Definition of life insurance is cash value accumulation test">CVAT</item>
+                                    <item helptext="Definition of life insurance is guideline premium test">GPT</item>
+                                    <item helptext="Do not comply with US definition of life insurance">Not 7702 compliant</item>
+                                </content>
+                            </object>
+                        </object>
                     </object>
                 </object>
                 <object class="sizeritem">
