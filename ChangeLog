@@ -36402,3 +36402,9 @@ Fix issue noted 20150531T1443Z: do not convert term when it "lapses".
   product_data.cpp
 Make sample product's term parameters more plausible.
 
+20150724T0121Z <gchicares@sbcglobal.net> [508]
+
+  install_cygwin.bat
+Replace mirror. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00018.html
+
