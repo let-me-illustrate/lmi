@@ -854,8 +854,9 @@ void AccountValue::ChangeSupplAmtBy(double delta)
         {
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
         }
-    // Reset DB whenever SA changes.
-    TxSetDeathBft();
+    // Reset term DB whenever term SA changes. It's not obviously
+    // necessary to do this here, but neither should it do any harm.
+    TxSetTermAmt();
 }
 
 //============================================================================

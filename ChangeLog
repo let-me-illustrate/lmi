@@ -36408,3 +36408,13 @@ Make sample product's term parameters more plausible.
 Replace mirror. See:
   http://lists.nongnu.org/archive/html/lmi/2015-07/msg00018.html
 
+20150724T2120Z <gchicares@sbcglobal.net> [508]
+
+  ihs_avmly.cpp
+Remove dead code.
+
+20150724T2337Z <gchicares@sbcglobal.net> [508]
+
+  ihs_avmly.cpp
+Fix defect introduced 20150531T2002Z: wrong DB adjusted.
+
