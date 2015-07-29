@@ -36418,3 +36418,22 @@ Remove dead code.
   ihs_avmly.cpp
 Fix defect introduced 20150531T2002Z: wrong DB adjusted.
 
+20150729T1434Z <gchicares@sbcglobal.net> [508]
+
+  skin_group_carveout2.xrc  [expunged]
+  skin_variable_annuity.xrc [expunged]
+Expunge two disused skins.
+
+20150729T1435Z <gchicares@sbcglobal.net> [508]
+
+  configurable_settings.cpp
+  configurable_settings_test.cpp
+  wx_test_config_settings.cpp
+Eradicate references to expunged skins.
+
+20150729T1436Z <gchicares@sbcglobal.net> [508]
+
+  test_coding_rules.cpp
+Silently ignore any 'tags' file. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00009.html
+
