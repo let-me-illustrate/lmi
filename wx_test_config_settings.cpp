@@ -55,19 +55,12 @@
           <skin_filename>skin_group_carveout.xrc</skin_filename>
           <default_input_filename>c:/fop-0.20.5/group_carveout_default.ill</default_input_filename>
 
-          <skin_filename>skin_group_carveout2.xrc</skin_filename>
-          <default_input_filename>c:/fop-0.20.5/group_carveout_default.ill</default_input_filename>
-
-          <skin_filename>skin_reg_d.xrc</skin_filename>
-          <default_input_filename>c:/fop-0.20.5/private_placement_default.ill</default_input_filename>
-
           <skin_filename>skin_single_premium.xrc</skin_filename>
           <default_input_filename>c:/fop-0.20.5/default.ill</default_input_filename>
           [Something like "single_premium_default.ill" might be expected,
           but "default.ill" really is wanted here for historical reasons.]
 
-          ['skin.xrc' and 'skin_variable_annuity.xrc' deliberately omitted
-          because those are not currently distributed.]
+          ['skin.xrc' deliberately omitted--not currently distributed.]
 
     The only change is that the xsl_fo_command is checked to contain the volume,
     i.e. is c:/fop-0.20.5/fop, and not just the path.
@@ -101,10 +94,8 @@ LMI_WX_TEST_CASE(configurable_settings)
     std::string skin = settings.skin_filename();
     std::string default_input = settings.default_input_filename();
     LMI_ASSERT_WITH_MSG
-        (  "skin_coli_boli.xrc" == skin
+        (  "skin_coli_boli.xrc"      == skin
         || "skin_group_carveout.xrc" == skin
-        || "skin_group_carveout2.xrc" == skin
-        || "skin_reg_d.xrc" == skin
         || "skin_single_premium.xrc" == skin
         ,"unknown skin " << skin
         );
@@ -115,14 +106,6 @@ LMI_WX_TEST_CASE(configurable_settings)
     if ("skin_group_carveout.xrc" == skin)
         {
         LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/group_carveout_default.ill");
-        }
-    if ("skin_group_carveout2.xrc" == skin)
-        {
-        LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/group_carveout_default.ill");
-        }
-    if ("skin_reg_d.xrc" == skin)
-        {
-        LMI_ASSERT_EQUAL(default_input, "c:/fop-0.20.5/private_placement_default.ill");
         }
     if ("skin_single_premium.xrc" == skin)
         {
