@@ -86,18 +86,18 @@ void configurable_settings_test::test_backward_compatibility()
         << "<custom_input_filename>[renamed]</custom_input_filename>\n"
         << "<custom_output_filename>[renamed]</custom_output_filename>\n"
         << "<xml_schema_filename>[withdrawn]</xml_schema_filename>\n"
-        << "<skin_filename>xml_notebook_private_placement.xrc</skin_filename>\n"
+        << "<skin_filename>xml_notebook.xrc</skin_filename>\n"
         << "</configurable_settings>\n"
         ;
     ofs.close();
 
     configurable_settings& c = configurable_settings::instance();
     c.xml_serializable<configurable_settings>::load(filename);
-    BOOST_TEST_EQUAL("[renamed]"     , c.custom_input_0_filename());
-    BOOST_TEST_EQUAL("custom.inix"   , c.custom_input_1_filename());
-    BOOST_TEST_EQUAL("[renamed]"     , c.custom_output_0_filename());
-    BOOST_TEST_EQUAL("custom.out1"   , c.custom_output_1_filename());
-    BOOST_TEST_EQUAL("skin_reg_d.xrc", c.skin_filename());
+    BOOST_TEST_EQUAL("[renamed]"   , c.custom_input_0_filename());
+    BOOST_TEST_EQUAL("custom.inix" , c.custom_input_1_filename());
+    BOOST_TEST_EQUAL("[renamed]"   , c.custom_output_0_filename());
+    BOOST_TEST_EQUAL("custom.out1" , c.custom_output_1_filename());
+    BOOST_TEST_EQUAL("skin.xrc"    , c.skin_filename());
 }
 
 int test_main(int, char*[])
