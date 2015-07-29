@@ -225,6 +225,7 @@ file::file(std::string const& file_path)
         : ".xsd"        == extension() ? e_xml_other
         : ".xsl"        == extension() ? e_xml_other
         : phyloanalyze("^ChangeLog-")  ? e_binary
+        : phyloanalyze("^tags$")       ? e_expungible
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl
         : phyloanalyze("Log$")         ? e_log
