@@ -36437,3 +36437,11 @@ Eradicate references to expunged skins.
 Silently ignore any 'tags' file. See:
   http://lists.nongnu.org/archive/html/lmi/2015-07/msg00009.html
 
+20150731T0013Z <gchicares@sbcglobal.net> [508]
+
+  gpt_server.cpp
+  mec_server.cpp
+Fix defect introduced 20090730T2312Z: logical operator on bitfield.
+See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00029.html
+
