@@ -223,20 +223,26 @@ void IllustrationView::UponCopySummary(wxCommandEvent&)
 
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)
 {
+    mcenum_emission e = mce_emit_pdf_to_viewer;
     LMI_ASSERT(ledger_values_.get());
-    emit_ledger(base_filename(), "", *ledger_values_, mce_emit_pdf_to_viewer);
+    double s = emit_ledger(base_filename(), "", *ledger_values_, e);
+    status() << "Output: " << Timer::elapsed_msec_str(s) << std::flush;
 }
 
 void IllustrationView::UponPrint(wxCommandEvent&)
 {
+    mcenum_emission e = mce_emit_pdf_to_printer;
     LMI_ASSERT(ledger_values_.get());
-    emit_ledger(base_filename(), "", *ledger_values_, mce_emit_pdf_to_printer);
+    double s = emit_ledger(base_filename(), "", *ledger_values_, e);
+    status() << "Output: " << Timer::elapsed_msec_str(s) << std::flush;
 }
 
 void IllustrationView::UponPrintPdf(wxCommandEvent&)
 {
+    mcenum_emission e = mce_emit_pdf_file;
     LMI_ASSERT(ledger_values_.get());
-    emit_ledger(base_filename(), "", *ledger_values_, mce_emit_pdf_file);
+    double s = emit_ledger(base_filename(), "", *ledger_values_, e);
+    status() << "Output: " << Timer::elapsed_msec_str(s) << std::flush;
 }
 
 void IllustrationView::UponProperties(wxCommandEvent&)
