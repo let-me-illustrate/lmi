@@ -36452,3 +36452,9 @@ Report total time for PDF operations on statusbar. Formerly, time for
 FO was reported (as a side effect of system_command()), and time for
 XSL and for file_command() was excluded.
 
+20150801T1426Z <gchicares@sbcglobal.net> [508]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Refactor for concision.
+
