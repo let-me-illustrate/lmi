@@ -221,28 +221,26 @@ void IllustrationView::UponCopySummary(wxCommandEvent&)
     status() << "Copy: " << timer.stop().elapsed_msec_str() << std::flush;
 }
 
-void IllustrationView::UponPreviewPdf(wxCommandEvent&)
+void IllustrationView::emit_pdf(mcenum_emission e)
 {
-    mcenum_emission e = mce_emit_pdf_to_viewer;
     LMI_ASSERT(ledger_values_.get());
     double s = emit_ledger(base_filename(), "", *ledger_values_, e);
     status() << "Output: " << Timer::elapsed_msec_str(s) << std::flush;
+}
+
+void IllustrationView::UponPreviewPdf(wxCommandEvent&)
+{
+    emit_pdf(mce_emit_pdf_to_viewer);
 }
 
 void IllustrationView::UponPrint(wxCommandEvent&)
 {
-    mcenum_emission e = mce_emit_pdf_to_printer;
-    LMI_ASSERT(ledger_values_.get());
-    double s = emit_ledger(base_filename(), "", *ledger_values_, e);
-    status() << "Output: " << Timer::elapsed_msec_str(s) << std::flush;
+    emit_pdf(mce_emit_pdf_to_printer);
 }
 
 void IllustrationView::UponPrintPdf(wxCommandEvent&)
 {
-    mcenum_emission e = mce_emit_pdf_file;
-    LMI_ASSERT(ledger_values_.get());
-    double s = emit_ledger(base_filename(), "", *ledger_values_, e);
-    status() << "Output: " << Timer::elapsed_msec_str(s) << std::flush;
+    emit_pdf(mce_emit_pdf_file);
 }
 
 void IllustrationView::UponProperties(wxCommandEvent&)
