@@ -36458,3 +36458,15 @@ XSL and for file_command() was excluded.
   illustration_view.hpp
 Refactor for concision.
 
+20150803T1626Z <gchicares@sbcglobal.net> [508]
+
+  illustration_document.cpp
+Improve documentation.
+
+20150803T1704Z <gchicares@sbcglobal.net> [508]
+
+  emit_ledger.cpp
+  illustrator.cpp
+Don't overwrite input file. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00030.html
+
