@@ -112,12 +112,8 @@ bool illustrator::operator()(fs::path const& file_path)
         principal_ledger_ = z.ledger();
         seconds_for_calculations_ = timer.stop().elapsed_seconds();
         mcenum_emission x = emit_pdf_too ? mce_emit_pdf_file : mce_emit_nothing;
-        seconds_for_output_ = emit_ledger
-            (file_path
-            ,file_path
-            ,*z.ledger()
-            ,static_cast<mcenum_emission>(x | emission_)
-            );
+        mcenum_emission y = static_cast<mcenum_emission>(x | emission_);
+        seconds_for_output_ = emit_ledger(file_path, file_path, *z.ledger(), y);
         conditionally_show_timings_on_stdout();
         return true;
         }
