@@ -160,11 +160,23 @@ double emit_ledger
         }
     if(emission & mce_emit_custom_0)
         {
-        custom_io_0_write(ledger, filepath.string());
+        configurable_settings const& c = configurable_settings::instance();
+        fs::path out_file =
+            filepath.string() == c.custom_input_0_filename()
+            ? c.custom_output_0_filename()
+            : fs::change_extension(filepath, ".test0")
+            ;
+        custom_io_0_write(ledger, out_file.string());
         }
     if(emission & mce_emit_custom_1)
         {
-        custom_io_1_write(ledger, filepath.string());
+        configurable_settings const& c = configurable_settings::instance();
+        fs::path out_file =
+            filepath.string() == c.custom_input_1_filename()
+            ? c.custom_output_1_filename()
+            : fs::change_extension(filepath, ".test1")
+            ;
+        custom_io_1_write(ledger, out_file.string());
         }
 
   done:
