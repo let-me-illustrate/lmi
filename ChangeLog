@@ -36468,5 +36468,20 @@ Improve documentation.
   emit_ledger.cpp
   illustrator.cpp
 Don't overwrite input file. See:
-  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00030.html
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00000.html
+
+20150803T2343Z <gchicares@sbcglobal.net> [508]
+
+  illustrator.cpp
+Refactor.
+
+20150804T1558Z <gchicares@sbcglobal.net> [508]
+
+  emit_ledger.cpp
+  emit_ledger.hpp
+  group_values.cpp
+  illustration_view.cpp
+  illustrator.cpp
+Refactor. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00001.html
 
