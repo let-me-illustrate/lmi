@@ -224,7 +224,7 @@ void IllustrationView::UponCopySummary(wxCommandEvent&)
 void IllustrationView::emit_pdf(mcenum_emission e)
 {
     LMI_ASSERT(ledger_values_.get());
-    double s = emit_ledger(base_filename(), "", *ledger_values_, e);
+    double s = emit_ledger(base_filename(), *ledger_values_, e);
     status() << "Output: " << Timer::elapsed_msec_str(s) << std::flush;
 }
 

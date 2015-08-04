@@ -130,7 +130,8 @@ census_run_result run_census_in_series::operator()
             )
         );
 
-    result.seconds_for_output_ += pre_emit_ledger(file, emission);
+    ledger_emitter emitter(file, emission);
+    result.seconds_for_output_ += emitter.initiate();
 
     for(unsigned int j = 0; j < cells.size(); ++j)
         {
@@ -140,11 +141,9 @@ census_run_result run_census_in_series::operator()
             IllusVal IV(serial_file_path(file, name, j, "hastur").string());
             IV.run(cells[j]);
             composite.PlusEq(*IV.ledger());
-            result.seconds_for_output_ += emit_ledger
+            result.seconds_for_output_ += emitter.emit_cell
                 (serial_file_path(file, name, j, "hastur")
-                ,file
                 ,*IV.ledger()
-                ,emission
                 );
             meter->dawdle(intermission_between_printouts(emission));
             }
@@ -156,12 +155,11 @@ census_run_result run_census_in_series::operator()
         }
     meter->culminate();
 
-    result.seconds_for_output_ += emit_ledger
+    result.seconds_for_output_ += emitter.emit_cell
         (serial_file_path(file, "composite", -1, "hastur")
-        ,file
         ,composite
-        ,emission
         );
+    result.seconds_for_output_ += emitter.finish();
 
   done:
     double total_seconds = timer.stop().elapsed_seconds();
@@ -247,12 +245,6 @@ census_run_result run_census_in_parallel::operator()
 {
     Timer timer;
     census_run_result result;
-
-    std::vector<Input>::const_iterator ip;
-    std::vector<boost::shared_ptr<AccountValue> > cell_values;
-    std::vector<boost::shared_ptr<AccountValue> >::iterator i;
-    std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
-
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
             (cells.size()
@@ -260,6 +252,14 @@ census_run_result run_census_in_parallel::operator()
             ,progress_meter_mode(emission)
             )
         );
+
+    ledger_emitter emitter(file, emission);
+
+    std::vector<Input>::const_iterator ip;
+    std::vector<boost::shared_ptr<AccountValue> > cell_values;
+    std::vector<boost::shared_ptr<AccountValue> >::iterator i;
+    std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
+
     int j = 0;
     int const first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
     int const first_cell_inforce_month = value_cast<int>((*cells.begin())["InforceMonth"].str());
@@ -634,7 +634,7 @@ census_run_result run_census_in_parallel::operator()
         }
     meter->culminate();
 
-    result.seconds_for_output_ += pre_emit_ledger(file, emission);
+    result.seconds_for_output_ += emitter.initiate();
 
     meter = create_progress_meter
         (cell_values.size()
@@ -644,11 +644,9 @@ census_run_result run_census_in_parallel::operator()
     for(j = 0, i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
         std::string const name(cells[j]["InsuredName"].str());
-        result.seconds_for_output_ += emit_ledger
+        result.seconds_for_output_ += emitter.emit_cell
             (serial_file_path(file, name, j, "hastur")
-            ,file
             ,*(*i)->ledger_from_av()
-            ,emission
             );
         meter->dawdle(intermission_between_printouts(emission));
         if(!meter->reflect_progress())
@@ -659,12 +657,11 @@ census_run_result run_census_in_parallel::operator()
         }
     meter->culminate();
 
-    result.seconds_for_output_ += emit_ledger
+    result.seconds_for_output_ += emitter.emit_cell
         (serial_file_path(file, "composite", -1, "hastur")
-        ,file
         ,composite
-        ,emission
         );
+    result.seconds_for_output_ += emitter.finish();
 
   done:
     double total_seconds = timer.stop().elapsed_seconds();
