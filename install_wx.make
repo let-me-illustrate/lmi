@@ -55,6 +55,26 @@ $(wx_archive)-md5 := $(wx_md5)
 
 $(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
 
+# Enable this conditional section to use a github archive as of a
+# particular commit by specifying its sha1sum.
+
+use_git := Y
+
+ifneq ($(use_git), N)
+
+  wx_commit_sha     := b6ab81584f49a1997e6d6236fcb65d1b5c58a5bd
+  wx_md5            := 13fd2b383bc0ff8cba9cc76f0e6d3877
+
+  wx_version        := $(wx_commit_sha)
+
+  wx_archive        := wxWidgets-$(wx_commit_sha).zip
+
+  $(wx_archive)-md5 := $(wx_md5)
+
+  $(wx_archive)-url := https://github.com/wxWidgets/wxWidgets/archive/$(wx_commit_sha).zip
+
+endif
+
 # Variables that normally should be left alone #################################
 
 mingw_bin_dir := $(mingw_dir)/bin
@@ -119,6 +139,7 @@ MKDIR  := mkdir
 PATCH  := patch
 RM     := rm
 TAR    := tar
+UNZIP  := unzip
 WGET   := wget
 
 # Targets ######################################################################
@@ -153,6 +174,19 @@ TARFLAGS := --keep-old-files
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(TAR) --extract $(TARFLAGS) --directory=$(wx_dir) --file=$(cache_dir)/$@
+
+# This archive is dynamically created by github, as of a commit
+# specified by the sha1sum embedded in the URL; '--output-document'
+# is used to add 'wxWidgets-' to its name. Not being a static file,
+# it doesn't bear a historical timestamp corresponding to the commit
+# date. See:
+#   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00012.html
+
+.PHONY: %.zip
+%.zip:
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) --output-document=$@ $($@-url)
+	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
+	-$(UNZIP) $(cache_dir)/$@ -d $(wx_dir)
 
 .PHONY: wx
 wx:
