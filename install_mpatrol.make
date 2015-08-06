@@ -117,7 +117,7 @@ initial_setup:
 	@$(MKDIR) --parents $(cache_dir)
 	@$(MKDIR) --parents $(mpatrol_dir)
 
-WGETFLAGS := '--timestamping'
+WGETFLAGS :=
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
