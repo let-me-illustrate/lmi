@@ -36495,3 +36495,9 @@ Refactor. See:
 Remove unused or needless wget flags. See the thread centered here:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00010.html
 
+20150806T1529Z <gchicares@sbcglobal.net> [508]
+
+  install_wx.make
+Retrieve wx archives from github by sha1sum. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00019.html
+
