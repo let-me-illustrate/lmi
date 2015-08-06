@@ -36485,3 +36485,13 @@ Refactor.
 Refactor. See:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00001.html
 
+20150806T1443Z <gchicares@sbcglobal.net> [508]
+
+  install_libxml2_libxslt.make
+  install_mingw.make
+  install_miscellanea.make
+  install_mpatrol.make
+  install_wx.make
+Remove unused or needless wget flags. See the thread centered here:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00010.html
+
