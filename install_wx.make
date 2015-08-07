@@ -115,7 +115,6 @@ config_options = \
   --enable-vendor='$(vendor)' \
   --without-libjpeg \
   --without-libtiff \
-  --without-regex \
   --without-subdirs \
        AR='$(mingw_bin_dir)/ar' \
        AS='$(mingw_bin_dir)/as' \
