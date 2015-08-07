@@ -134,6 +134,7 @@ make $coefficiency -f install_miscellanea.make
 make $coefficiency -f install_libxml2_libxslt.make
 
 make $coefficiency -f install_wx.make
+make $coefficiency -f install_wxpdfdoc.make
 
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
