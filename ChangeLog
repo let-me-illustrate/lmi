@@ -36501,3 +36501,30 @@ Remove unused or needless wget flags. See the thread centered here:
 Retrieve wx archives from github by sha1sum. See:
   http://lists.nongnu.org/archive/html/lmi/2015-07/msg00019.html
 
+20150807T0003Z <gchicares@sbcglobal.net> [508]
+
+  install_wx.make
+Don't disable wxRegEx when building wx. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
+20150807T0007Z <gchicares@sbcglobal.net> [508]
+
+  install_wx.make
+Handle more options in portable wx-config. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
+20150807T0025Z <gchicares@sbcglobal.net> [508]
+
+  install_msw.sh
+  install_wxpdfdoc.make [new file]
+Install wxPdfDocument library as part of lmi installation. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
+20150807T0037Z <gchicares@sbcglobal.net> [508]
+
+  objects.make
+  workhorse.make
+  wx_pdfdoc_test.cpp [new file]
+Add a simple unit test for wxPdfDocument. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
