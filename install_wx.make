@@ -202,9 +202,7 @@ wx:
 # of our time; though we can't pinpoint the exact cause, we have never
 # encountered any such problem except with 'wx-config'. Therefore, we
 # run 'wx-config' only here (in bash, in the present makefile) and
-# write the results of the only two commands we actually need:
-#   wx-config --cxxflags
-#   wx-config --libs
+# write the results of the only commands actually used during lmi build
 # into a portable script.
 #
 # Even if a forgiving shell is used, this portable script runs an
@@ -213,14 +211,41 @@ wx:
 
 .PHONY: portable_script
 portable_script:
-	$(ECHO) '#!/bin/sh'                          >wx-config-portable
-	$(ECHO) 'if   [ "--cxxflags" = $$1 ]; then' >>wx-config-portable
-	$(ECHO) "echo `./wx-config --cxxflags`"     >>wx-config-portable
-	$(ECHO) 'elif [ "--libs"     = $$1 ]; then' >>wx-config-portable
-	$(ECHO) "echo `./wx-config --libs`"         >>wx-config-portable
-	$(ECHO) 'else'                              >>wx-config-portable
-	$(ECHO) 'echo Bad argument $$1'             >>wx-config-portable
-	$(ECHO) 'fi'                                >>wx-config-portable
+	$(ECHO) '#!/bin/sh'                                              >wx-config-portable
+	$(ECHO) 'last_with_arg=0'                                       >>wx-config-portable
+	$(ECHO) 'while [ $$# -gt 0 ]; do'                               >>wx-config-portable
+	$(ECHO) '    case "$$1" in'                                     >>wx-config-portable
+	$(ECHO) '        --basename)'                                   >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --basename`"             >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --cflags | --cppflags | --cxxflags)'           >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --cxxflags`"             >>wx-config-portable
+	$(ECHO) '            this_with_arg=1'                           >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --host*)'                                      >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --libs)'                                       >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --libs`"                 >>wx-config-portable
+	$(ECHO) '            this_with_arg=1'                           >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --rescomp)'                                    >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --rescomp`"              >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --selected_config)'                            >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --selected_config`"      >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --version)'                                    >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --version`"              >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        *)'                                            >>wx-config-portable
+	$(ECHO) '            if [ "$$last_with_arg" -ne 1 ]; then'      >>wx-config-portable
+	$(ECHO) '                echo Bad argument $$1'                 >>wx-config-portable
+	$(ECHO) '                exit 1'                                >>wx-config-portable
+	$(ECHO) '            fi'                                        >>wx-config-portable
+	$(ECHO) '    esac'                                              >>wx-config-portable
+	$(ECHO) '    last_with_arg=$$this_with_arg'                     >>wx-config-portable
+	$(ECHO) '    shift'                                             >>wx-config-portable
+	$(ECHO) 'done'                                                  >>wx-config-portable
 	$(CHMOD) 755 wx-config-portable
 
 .PHONY: clobber
