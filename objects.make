@@ -454,6 +454,7 @@ unit_test_targets := \
   value_cast_test \
   vector_test \
   wx_new_test \
+  wx_pdfdoc_test \
   xml_serialize_test \
   zero_test \
 
@@ -912,6 +913,10 @@ vector_test$(EXEEXT): \
 wx_new_test$(EXEEXT): \
   $(common_test_objects) \
   wx_new_test.o \
+
+wx_pdfdoc_test$(EXEEXT): \
+  $(common_test_objects) \
+  wx_pdfdoc_test.o \
 
 xml_serialize_test$(EXEEXT): \
   $(common_test_objects) \
