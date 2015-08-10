@@ -36528,3 +36528,20 @@ Install wxPdfDocument library as part of lmi installation. See:
 Add a simple unit test for wxPdfDocument. See:
   http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
 
+20150810T1608Z <gchicares@sbcglobal.net> [508]
+
+  install_msw.sh
+Avoid virtual-memory exhaustion building wxPdfDoc under 32-bit msw.
+
+20150810T1613Z <gchicares@sbcglobal.net> [508]
+
+  install_wx.make
+Improve documentation.
+
+20150810T1621Z <gchicares@sbcglobal.net> [508]
+
+  objects.make
+  workhorse.make
+Move 'wx_pdfdoc_test' out of $(unit_test_targets). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
