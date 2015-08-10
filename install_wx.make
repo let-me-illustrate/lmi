@@ -56,7 +56,9 @@ $(wx_archive)-md5 := $(wx_md5)
 $(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
 
 # Enable this conditional section to use a github archive as of a
-# particular commit by specifying its sha1sum.
+# particular commit by specifying its sha1sum--the "latest commit"
+# shown here, for example:
+#   https://github.com/wxWidgets/wxWidgets
 
 use_git := Y
 
