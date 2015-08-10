@@ -1006,6 +1006,12 @@ void AccountValue::InitializeSpecAmt()
     // Conversely, no-lapse premium by its nature is on the most
     // frequent mode (monthly for lmi), because no-lapse guarantees
     // are offered for all modes.
+    //
+    // Arguably InvariantValues().TermSpecAmt should be used in the
+    // target or even the minimum calculation in the TermIsNotRider
+    // case; but that's used only with one family of exotic products
+    // for which these quantities don't matter anyway.
+    //
     int const target_year = TgtPremFixedAtIssue ? 0 : Year;
     MlyNoLapsePrem = GetModalMinPrem
         (target_year
