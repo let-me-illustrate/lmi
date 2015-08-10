@@ -134,7 +134,10 @@ make $coefficiency -f install_miscellanea.make
 make $coefficiency -f install_libxml2_libxslt.make
 
 make $coefficiency -f install_wx.make
-make $coefficiency -f install_wxpdfdoc.make
+
+# Avoid msw virtual-memory exhaustion--see:
+#   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00020.html
+make ggc_flags= -f install_wxpdfdoc.make
 
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
