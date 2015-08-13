@@ -32,7 +32,7 @@ C:
 cd C:\cache_for_lmi
 START "Installing Cygwin" /WAIT setup-x86 ^
   --wait --quiet-mode ^
-  --site ftp://mirror.mcs.anl.gov/pub/cygwin/ ^
+  --site http://mirrors.kernel.org/sourceware/cygwin/ ^
   --root C:/cygwin-lmi --packages ^
    cvs,dos2unix,doxygen,exif,gdb,git,git-cvs,git-svn,libtool,make,openssh,patch,rsync,subversion,unzip,wget,zip,zsh
 cd C:\cygwin-lmi\etc

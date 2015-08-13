@@ -37,7 +37,7 @@
 #include "death_benefits.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "input.hpp" // Magic static function.
+#include "input.hpp"                    // magically_rectify()
 #include "interest_rates.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -1006,6 +1006,12 @@ void AccountValue::InitializeSpecAmt()
     // Conversely, no-lapse premium by its nature is on the most
     // frequent mode (monthly for lmi), because no-lapse guarantees
     // are offered for all modes.
+    //
+    // Arguably InvariantValues().TermSpecAmt should be used in the
+    // target or even the minimum calculation in the TermIsNotRider
+    // case; but that's used only with one family of exotic products
+    // for which these quantities don't matter anyway.
+    //
     int const target_year = TgtPremFixedAtIssue ? 0 : Year;
     MlyNoLapsePrem = GetModalMinPrem
         (target_year
@@ -1024,11 +1030,85 @@ void AccountValue::InitializeSpecAmt()
         InvariantValues().InitTgtPrem = AnnualTargetPrem;
         }
 
+    // Calculate special initial premiums for premium-quote PDF only.
+    // Four premiums are calculated, for base and "supplemental"
+    // coverage combined:
+    //   without riders; with ADB only; with WP only; with ADB and WP
+    // This is intended for presale use only; for inforce cells, these
+    // premiums retain their default initial values of zero. There
+    // seems to be no compelling argument for further restrictions
+    // such as (DB_MinPremType == oe_monthly_deduction).
+    if(0 == Year)
+        {
+        InvariantValues().InitModalPrem00 = SuppositiveModalPremium(0, 0);
+        InvariantValues().InitModalPrem01 = SuppositiveModalPremium(0, 1);
+        InvariantValues().InitModalPrem10 = SuppositiveModalPremium(1, 0);
+        InvariantValues().InitModalPrem11 = SuppositiveModalPremium(1, 1);
+        }
+
     SurrChgSpecAmt = InvariantValues().SpecAmt[0];
     HOPEFULLY(0.0 <= SurrChgSpecAmt);
     // TODO ?? SurrChgSpecAmt is not used yet.
 
     // TODO ?? Perform specamt strategy here?
+}
+
+double AccountValue::SuppositiveModalPremium
+    (bool        with_adb
+    ,bool        with_wp
+    ) const
+{
+    LMI_ASSERT(0 == Year);
+    return SuppositiveModalPremium
+        (Year
+        ,InvariantValues().ErMode[Year].value()
+        ,InvariantValues().SpecAmt[Year]
+        ,InvariantValues().TermSpecAmt[Year]
+        ,with_adb
+        ,with_wp
+        );
+}
+
+/// Determine modal premium on a basis possibly differing from input.
+///
+/// Motivation: to provide premiums with and without certain riders,
+/// for use with group premium quotes.
+///
+/// For now at least, only that narrow purpose is addressed. If, for
+/// that purpose, input is inappropriate, then output may be as well.
+/// For example, this function doesn't ascertain whether the riders it
+/// toggles are available for the product selected. Other riders are
+/// not inhibited here: all input is taken as deliberate, as an end
+/// user might reasonably wish to show the effect of other riders; if
+/// assertions as to input are to be made at all, then they should be
+/// made in the function that creates the group premium report.
+
+double AccountValue::SuppositiveModalPremium
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
+    ,double      termamt
+    ,bool        with_adb
+    ,bool        with_wp
+    ) const
+{
+    LMI_ASSERT(0 != Input_);
+    yare_input yi(*Input_);
+
+    yi.AccidentalDeathBenefit = with_adb;
+    yi.WaiverOfPremiumBenefit = with_wp;
+
+    if(!SplitMinPrem)
+        {
+        return GetModalPremMlyDed(year, mode, specamt, yi);
+        }
+    else
+        {
+        return
+              GetModalPremMlyDedEe(year, mode, termamt, yi)
+            + GetModalPremMlyDedEr(year, mode, specamt, yi)
+            ;
+        }
 }
 
 //============================================================================

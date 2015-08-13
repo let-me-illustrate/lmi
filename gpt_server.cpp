@@ -557,7 +557,7 @@ bool gpt_server::operator()(fs::path const& file_path, gpt_input const& z)
     state_ = test_one_days_gpt_transactions(file_path, z);
     seconds_for_calculations_ = timer.stop().elapsed_seconds();
     timer.restart();
-    if(mce_emit_test_data && emission_)
+    if(mce_emit_test_data & emission_)
         {
         state_.save(fs::change_extension(file_path, ".gpt.xml"));
         }

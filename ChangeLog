@@ -36366,3 +36366,206 @@ Add a field for 7702 definitional test.
   version.hpp
 Designate release candidate 6211.
 
+20150723T0941Z <gchicares@sbcglobal.net> [511]
+
+  input_harmonization.cpp
+Fix defect introduced 20080724T1545Z: misleading comment.
+
+20150723T0942Z <gchicares@sbcglobal.net> [509]
+
+  crc32.hpp
+Resolve two marked defects.
+
+20150723T0945Z <gchicares@sbcglobal.net> [509]
+
+  skin_reg_d.xrc [expunged]
+Expunge a disused skin.
+
+20150723T1313Z <gchicares@sbcglobal.net> [509]
+
+  ihs_avmly.cpp
+Explain a reasonable assumption.
+
+20150723T1355Z <gchicares@sbcglobal.net> [508]
+
+  ihs_avmly.cpp
+Resolve a marked defect: no grace period on illustrations.
+
+20150723T2305Z <gchicares@sbcglobal.net> [508]
+
+  ihs_avmly.cpp
+Fix issue noted 20150531T1443Z: do not convert term when it "lapses".
+
+20150723T2306Z <gchicares@sbcglobal.net> [508]
+
+  dbdict.cpp
+  product_data.cpp
+Make sample product's term parameters more plausible.
+
+20150724T0121Z <gchicares@sbcglobal.net> [508]
+
+  install_cygwin.bat
+Replace mirror. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00018.html
+
+20150724T2120Z <gchicares@sbcglobal.net> [508]
+
+  ihs_avmly.cpp
+Remove dead code.
+
+20150724T2337Z <gchicares@sbcglobal.net> [508]
+
+  ihs_avmly.cpp
+Fix defect introduced 20150531T2002Z: wrong DB adjusted.
+
+20150729T1434Z <gchicares@sbcglobal.net> [508]
+
+  skin_group_carveout2.xrc  [expunged]
+  skin_variable_annuity.xrc [expunged]
+Expunge two disused skins.
+
+20150729T1435Z <gchicares@sbcglobal.net> [508]
+
+  configurable_settings.cpp
+  configurable_settings_test.cpp
+  wx_test_config_settings.cpp
+Eradicate references to expunged skins.
+
+20150729T1436Z <gchicares@sbcglobal.net> [508]
+
+  test_coding_rules.cpp
+Silently ignore any 'tags' file. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00009.html
+
+20150731T0013Z <gchicares@sbcglobal.net> [508]
+
+  gpt_server.cpp
+  mec_server.cpp
+Fix defect introduced 20090730T2312Z: logical operator on bitfield.
+See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00029.html
+
+20150801T1412Z <gchicares@sbcglobal.net> [508]
+
+  illustration_view.cpp
+Report total time for PDF operations on statusbar. Formerly, time for
+FO was reported (as a side effect of system_command()), and time for
+XSL and for file_command() was excluded.
+
+20150801T1426Z <gchicares@sbcglobal.net> [508]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Refactor for concision.
+
+20150803T1626Z <gchicares@sbcglobal.net> [508]
+
+  illustration_document.cpp
+Improve documentation.
+
+20150803T1704Z <gchicares@sbcglobal.net> [508]
+
+  emit_ledger.cpp
+  illustrator.cpp
+Don't overwrite input file. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00000.html
+
+20150803T2343Z <gchicares@sbcglobal.net> [508]
+
+  illustrator.cpp
+Refactor.
+
+20150804T1558Z <gchicares@sbcglobal.net> [508]
+
+  emit_ledger.cpp
+  emit_ledger.hpp
+  group_values.cpp
+  illustration_view.cpp
+  illustrator.cpp
+Refactor. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00001.html
+
+20150806T1443Z <gchicares@sbcglobal.net> [508]
+
+  install_libxml2_libxslt.make
+  install_mingw.make
+  install_miscellanea.make
+  install_mpatrol.make
+  install_wx.make
+Remove unused or needless wget flags. See the thread centered here:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00010.html
+
+20150806T1529Z <gchicares@sbcglobal.net> [508]
+
+  install_wx.make
+Retrieve wx archives from github by sha1sum. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00019.html
+
+20150807T0003Z <gchicares@sbcglobal.net> [508]
+
+  install_wx.make
+Don't disable wxRegEx when building wx. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
+20150807T0007Z <gchicares@sbcglobal.net> [508]
+
+  install_wx.make
+Handle more options in portable wx-config. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
+20150807T0025Z <gchicares@sbcglobal.net> [508]
+
+  install_msw.sh
+  install_wxpdfdoc.make [new file]
+Install wxPdfDocument library as part of lmi installation. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
+20150807T0037Z <gchicares@sbcglobal.net> [508]
+
+  objects.make
+  workhorse.make
+  wx_pdfdoc_test.cpp [new file]
+Add a simple unit test for wxPdfDocument. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
+20150810T1608Z <gchicares@sbcglobal.net> [508]
+
+  install_msw.sh
+Avoid virtual-memory exhaustion building wxPdfDoc under 32-bit msw.
+
+20150810T1613Z <gchicares@sbcglobal.net> [508]
+
+  install_wx.make
+Improve documentation.
+
+20150810T1621Z <gchicares@sbcglobal.net> [508]
+
+  objects.make
+  workhorse.make
+Move 'wx_pdfdoc_test' out of $(unit_test_targets). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
+
+20150810T1639Z <gchicares@sbcglobal.net> [508]
+
+  ihs_acctval.cpp
+Improve documentation.
+
+20150812T2320Z <gchicares@sbcglobal.net> [508]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Refactor to accommodate group premium quotes.
+
+20150813T0019Z <gchicares@sbcglobal.net> [508]
+
+  account_value.hpp
+  ihs_acctval.cpp
+Calculate premiums for group premium quotes.
+
+20150813T0039Z <gchicares@sbcglobal.net> [508]
+
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Add group premium quote data to ledger.
+

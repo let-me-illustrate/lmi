@@ -161,9 +161,7 @@ class LMI_SO AccountValue
     double GetCurtateNetCoiChargeInforce () const;
     void   SetProjectedCoiCharge         ();
     double GetProjectedCoiChargeInforce  () const;
-    double ApportionNetMortalityReserve
-        (double reserve_per_life_inforce
-        );
+    double ApportionNetMortalityReserve(double reserve_per_life_inforce);
     double experience_rating_amortization_years() const;
     double ibnr_as_months_of_mortality_charges() const;
 
@@ -289,6 +287,19 @@ class LMI_SO AccountValue
     void   AddSurrChgLayer         (int year, double delta_specamt);
     void   ReduceSurrChg           (int year, double partial_surrchg);
     double SurrChg                 ();
+
+    double SuppositiveModalPremium
+        (bool        with_adb
+        ,bool        with_wp
+        ) const;
+    double SuppositiveModalPremium
+        (int         year
+        ,mcenum_mode mode
+        ,double      specamt
+        ,double      termamt
+        ,bool        with_adb
+        ,bool        with_wp
+        ) const;
 
     void   SetMaxLoan              ();
     void   SetMaxWD                ();

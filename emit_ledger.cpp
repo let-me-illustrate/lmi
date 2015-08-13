@@ -1,4 +1,4 @@
-// Emit a ledger in various guises.
+// Emit a ledger or a group of ledgers in various guises.
 //
 // Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
@@ -45,29 +45,42 @@
 #include <iostream>
 #include <string>
 
-/// Prepare to emit ledger(s) in various guises.
+/// Emit a group of ledgers in various guises.
+///
+/// The ledgers constitute a 'case' consisting of 'cells' as those
+/// concepts are defined for class multiple_cell_document.
 
-double pre_emit_ledger
-    (fs::path const& tsv_filepath
+ledger_emitter::ledger_emitter
+    (fs::path const& case_filepath
     ,mcenum_emission emission
     )
+    :case_filepath_ (case_filepath)
+    ,emission_      (emission)
+{}
+
+ledger_emitter::~ledger_emitter()
+{}
+
+/// Perform initial case-level steps such as writing headers.
+
+double ledger_emitter::initiate()
 {
     Timer timer;
 
-    if(emission & mce_emit_spreadsheet)
+    if(emission_ & mce_emit_spreadsheet)
         {
-        LMI_ASSERT(!tsv_filepath.empty());
+        LMI_ASSERT(!case_filepath_.empty());
         std::string spreadsheet_filename =
-                tsv_filepath.string()
+                case_filepath_.string()
             +   configurable_settings::instance().spreadsheet_file_extension()
             ;
         std::remove(spreadsheet_filename.c_str());
         }
-    if(emission & mce_emit_group_roster)
+    if(emission_ & mce_emit_group_roster)
         {
-        LMI_ASSERT(!tsv_filepath.empty());
+        LMI_ASSERT(!case_filepath_.empty());
         std::string spreadsheet_filename =
-                tsv_filepath.string()
+                case_filepath_.string()
             +   ".roster"
             +   configurable_settings::instance().spreadsheet_file_extension()
             ;
@@ -78,96 +91,111 @@ double pre_emit_ledger
     return timer.stop().elapsed_seconds();
 }
 
-/// Emit a ledger in various guises.
-///
-/// The commands for
-///   mce_emit_pdf_file
-///   mce_emit_pdf_to_printer
-///   mce_emit_pdf_to_viewer
-/// are spelled out separately and in full, which is redundant.
-/// Reason: in the future, they may be implemented differently.
-/// In particular, mce_emit_pdf_to_printer might pass '-print' to
-/// 'fop' instead of using wxTheMimeTypesManager, which would make
-/// it available with the command-line interface. That interface
-/// doesn't support mce_emit_pdf_to_viewer at all: it could be
-/// supported in a platform-dependent way, but it would be strange
-/// to require a command-line program to invoke an external GUI
-/// program.
-///
-/// The 'tsv_filepath' argument is used only for
-///   mce_emit_spreadsheet
-///   mce_emit_group_roster
-/// for which a single output file encompasses all cells in a census,
-/// whereas other output types produce a separate file for each cell.
+/// Perform cell-level steps.
 
-double emit_ledger
-    (fs::path const& filepath
-    ,fs::path const& tsv_filepath
-    ,Ledger const&   ledger
-    ,mcenum_emission emission
+double ledger_emitter::emit_cell
+    (fs::path const& cell_filepath
+    ,Ledger const& ledger
     )
 {
     Timer timer;
-    if((emission & mce_emit_composite_only) && !ledger.GetIsComposite())
+    if((emission_ & mce_emit_composite_only) && !ledger.GetIsComposite())
         {
         goto done;
         }
 
-    if(emission & mce_emit_pdf_file)
+    if(emission_ & mce_emit_pdf_file)
         {
-        write_ledger_as_pdf(ledger, filepath);
+        write_ledger_as_pdf(ledger, cell_filepath);
         }
-    if(emission & mce_emit_pdf_to_printer)
+    if(emission_ & mce_emit_pdf_to_printer)
         {
-        std::string pdf_out_file = write_ledger_as_pdf(ledger, filepath);
+        std::string pdf_out_file = write_ledger_as_pdf(ledger, cell_filepath);
         file_command()(pdf_out_file, "print");
         }
-    if(emission & mce_emit_pdf_to_viewer)
+    if(emission_ & mce_emit_pdf_to_viewer)
         {
-        std::string pdf_out_file = write_ledger_as_pdf(ledger, filepath);
+        std::string pdf_out_file = write_ledger_as_pdf(ledger, cell_filepath);
         file_command()(pdf_out_file, "open");
         }
-    if(emission & mce_emit_test_data)
+    if(emission_ & mce_emit_test_data)
         {
         fs::ofstream ofs
-            (fs::change_extension(filepath, ".test")
+            (fs::change_extension(cell_filepath, ".test")
             ,ios_out_trunc_binary()
             );
         ledger.Spew(ofs);
         }
-    if(emission & mce_emit_spreadsheet)
+    if(emission_ & mce_emit_spreadsheet)
         {
-        LMI_ASSERT(!tsv_filepath.empty());
+        LMI_ASSERT(!case_filepath_.empty());
         PrintCellTabDelimited
             (ledger
-            ,   tsv_filepath.string()
+            ,   case_filepath_.string()
             +   configurable_settings::instance().spreadsheet_file_extension()
             );
         }
-    if(emission & mce_emit_group_roster)
+    if(emission_ & mce_emit_group_roster)
         {
-        LMI_ASSERT(!tsv_filepath.empty());
+        LMI_ASSERT(!case_filepath_.empty());
         PrintRosterTabDelimited
             (ledger
-            ,   tsv_filepath.string()
+            ,   case_filepath_.string()
             +   ".roster"
             +   configurable_settings::instance().spreadsheet_file_extension()
             );
         }
-    if(emission & mce_emit_text_stream)
+    if(emission_ & mce_emit_text_stream)
         {
         PrintLedgerFlatText(ledger, std::cout);
         }
-    if(emission & mce_emit_custom_0)
+    if(emission_ & mce_emit_custom_0)
         {
-        custom_io_0_write(ledger, filepath.string());
+        configurable_settings const& c = configurable_settings::instance();
+        fs::path out_file =
+            cell_filepath.string() == c.custom_input_0_filename()
+            ? c.custom_output_0_filename()
+            : fs::change_extension(cell_filepath, ".test0")
+            ;
+        custom_io_0_write(ledger, out_file.string());
         }
-    if(emission & mce_emit_custom_1)
+    if(emission_ & mce_emit_custom_1)
         {
-        custom_io_1_write(ledger, filepath.string());
+        configurable_settings const& c = configurable_settings::instance();
+        fs::path out_file =
+            cell_filepath.string() == c.custom_input_1_filename()
+            ? c.custom_output_1_filename()
+            : fs::change_extension(cell_filepath, ".test1")
+            ;
+        custom_io_1_write(ledger, out_file.string());
         }
 
   done:
     return timer.stop().elapsed_seconds();
+}
+
+/// Perform final case-level steps such as numbering output pages.
+
+double ledger_emitter::finish()
+{
+    Timer timer;
+
+    ; // Nothing to do for now.
+
+    return timer.stop().elapsed_seconds();
+}
+
+/// Emit a single ledger in various guises.
+///
+/// Return time spent, which is almost always wanted.
+
+double emit_ledger
+    (fs::path const& cell_filepath
+    ,Ledger const&   ledger
+    ,mcenum_emission emission
+    )
+{
+    ledger_emitter emitter("", emission);
+    return emitter.emit_cell(cell_filepath, ledger);
 }
 

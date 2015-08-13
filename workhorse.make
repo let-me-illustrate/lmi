@@ -172,6 +172,12 @@ wx_config_script := \
 ifeq (gcc,$(toolset))
   wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
   wx_config_libs     := $(shell $(wx_config_script) --libs)
+  wx_config_basename := $(shell $(wx_config_script) --basename)
+  wx_config_version  := $(shell $(wx_config_script) --version)
+
+  # Define the variables used to construct the names of wxCode libraries.
+  wxcode_basename := $(shell echo $(wx_config_basename) | sed 's/^wx/wxcode/')
+  wxcode_version  := $(shell echo $(wx_config_version) | sed 's/\.[0-9]*$$//')
 endif
 # ...combines options that we prefer to keep separate.
 
@@ -615,6 +621,9 @@ wx_ldflags = \
   $(platform_wx_libraries) \
   $(platform_gui_ldflags) \
 
+wx_pdfdoc_ldflags := \
+  -l$(wxcode_basename)_pdfdoc-$(wxcode_version)
+
 ################################################################################
 
 # Flags.
@@ -900,6 +909,12 @@ antediluvian_cli$(EXEEXT): $(cli_objects) libantediluvian$(SHREXT)
 antediluvian_cli_monolithic$(EXEEXT): $(cli_objects) $(antediluvian_common_objects)
 
 wx_new$(SHREXT): wx_new.o
+
+# 'wx_pdfdoc_test' is a temporary test that will be removed when lmi
+# uses wxPdfDoc, and an operation that uses it is added to 'wx_test'.
+#
+wx_pdfdoc_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_pdfdoc_ldflags) $(wx_ldflags)
+wx_pdfdoc_test$(EXEEXT): $(common_test_objects) wx_pdfdoc_test.o
 
 wx_test$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)

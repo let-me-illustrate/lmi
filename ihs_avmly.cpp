@@ -772,19 +772,6 @@ void AccountValue::ChangeSpecAmtBy(double delta)
                 }
             }
 
-        if(!yare_input_.TermRider || !TermRiderActive)
-        // This is unreachable. If (!yare_input_.TermRider), then
-        // TxSetTermAmt() would already have been called by
-        // InitializeMonth(), and would already have ensured that
-        // (!TermRiderActive), so the condition 'if(TermRiderActive)'
-        // above would have failed.
-            {
-            throw "Unreachable.";
-            TermSpecAmt = 0.0;
-            ProportionAppliedToTerm = 0.0;
-            TermRiderActive = false;
-            }
-
         ActualSpecAmt += delta * (1.0 - ProportionAppliedToTerm);
         TermSpecAmt += delta * ProportionAppliedToTerm;
         if(TermSpecAmt < 0.0)
@@ -867,8 +854,9 @@ void AccountValue::ChangeSupplAmtBy(double delta)
         {
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
         }
-    // Reset DB whenever SA changes.
-    TxSetDeathBft();
+    // Reset term DB whenever term SA changes. It's not obviously
+    // necessary to do this here, but neither should it do any harm.
+    TxSetTermAmt();
 }
 
 //============================================================================
@@ -1787,16 +1775,6 @@ void AccountValue::EndTermRider(bool convert)
         {
         return;
         }
-    // TODO ?? Not yet implemented.
-    // If insufficient AV for termchg, then term rider terminates.
-    // In that case, assume that the owner has an opportunity to pay
-    // the term charge in cash, and that term coverage continues by
-    // grace until the next monthiversary even if it is not so paid.
-    // Thus, termination of the term rider is not an adjustable event
-    // until that next monthiversary when DB actually changes. But
-    // illustrations show no such gratis continuation of the term
-    // benefit, since they depict death benefits as at the end of
-    // the anniversary month only.
 
     TermRiderActive = false;
     if(convert)
@@ -1973,10 +1951,7 @@ void AccountValue::TxDoMlyDed()
     // Policy fee was already subtracted in NAAR calculation.
     if(TermRiderActive && TermCanLapse && (AVGenAcct + AVSepAcct - CoiCharge) < TermCharge)
         {
-// Probably 'false' is intended. This can be changed later when it is
-// convenient to validate its effect on system testing.
-//        EndTermRider(false);
-        EndTermRider(true);
+        EndTermRider(false);
         TermCharge = 0.0;
         }
 

@@ -55,6 +55,28 @@ $(wx_archive)-md5 := $(wx_md5)
 
 $(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
 
+# Enable this conditional section to use a github archive as of a
+# particular commit by specifying its sha1sum--the "latest commit"
+# shown here, for example:
+#   https://github.com/wxWidgets/wxWidgets
+
+use_git := Y
+
+ifneq ($(use_git), N)
+
+  wx_commit_sha     := b6ab81584f49a1997e6d6236fcb65d1b5c58a5bd
+  wx_md5            := 13fd2b383bc0ff8cba9cc76f0e6d3877
+
+  wx_version        := $(wx_commit_sha)
+
+  wx_archive        := wxWidgets-$(wx_commit_sha).zip
+
+  $(wx_archive)-md5 := $(wx_md5)
+
+  $(wx_archive)-url := https://github.com/wxWidgets/wxWidgets/archive/$(wx_commit_sha).zip
+
+endif
+
 # Variables that normally should be left alone #################################
 
 mingw_bin_dir := $(mingw_dir)/bin
@@ -95,7 +117,6 @@ config_options = \
   --enable-vendor='$(vendor)' \
   --without-libjpeg \
   --without-libtiff \
-  --without-regex \
   --without-subdirs \
        AR='$(mingw_bin_dir)/ar' \
        AS='$(mingw_bin_dir)/as' \
@@ -119,6 +140,7 @@ MKDIR  := mkdir
 PATCH  := patch
 RM     := rm
 TAR    := tar
+UNZIP  := unzip
 WGET   := wget
 
 # Targets ######################################################################
@@ -142,7 +164,7 @@ initial_setup:
 	@$(MKDIR) --parents $(cache_dir)
 	@$(MKDIR) --parents $(build_dir)
 
-WGETFLAGS := '--timestamping'
+WGETFLAGS :=
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
@@ -153,6 +175,19 @@ TARFLAGS := --keep-old-files
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(TAR) --extract $(TARFLAGS) --directory=$(wx_dir) --file=$(cache_dir)/$@
+
+# This archive is dynamically created by github, as of a commit
+# specified by the sha1sum embedded in the URL; '--output-document'
+# is used to add 'wxWidgets-' to its name. Not being a static file,
+# it doesn't bear a historical timestamp corresponding to the commit
+# date. See:
+#   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00012.html
+
+.PHONY: %.zip
+%.zip:
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) --output-document=$@ $($@-url)
+	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
+	-$(UNZIP) $(cache_dir)/$@ -d $(wx_dir)
 
 .PHONY: wx
 wx:
@@ -169,9 +204,7 @@ wx:
 # of our time; though we can't pinpoint the exact cause, we have never
 # encountered any such problem except with 'wx-config'. Therefore, we
 # run 'wx-config' only here (in bash, in the present makefile) and
-# write the results of the only two commands we actually need:
-#   wx-config --cxxflags
-#   wx-config --libs
+# write the results of the only commands actually used during lmi build
 # into a portable script.
 #
 # Even if a forgiving shell is used, this portable script runs an
@@ -180,14 +213,41 @@ wx:
 
 .PHONY: portable_script
 portable_script:
-	$(ECHO) '#!/bin/sh'                          >wx-config-portable
-	$(ECHO) 'if   [ "--cxxflags" = $$1 ]; then' >>wx-config-portable
-	$(ECHO) "echo `./wx-config --cxxflags`"     >>wx-config-portable
-	$(ECHO) 'elif [ "--libs"     = $$1 ]; then' >>wx-config-portable
-	$(ECHO) "echo `./wx-config --libs`"         >>wx-config-portable
-	$(ECHO) 'else'                              >>wx-config-portable
-	$(ECHO) 'echo Bad argument $$1'             >>wx-config-portable
-	$(ECHO) 'fi'                                >>wx-config-portable
+	$(ECHO) '#!/bin/sh'                                              >wx-config-portable
+	$(ECHO) 'last_with_arg=0'                                       >>wx-config-portable
+	$(ECHO) 'while [ $$# -gt 0 ]; do'                               >>wx-config-portable
+	$(ECHO) '    case "$$1" in'                                     >>wx-config-portable
+	$(ECHO) '        --basename)'                                   >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --basename`"             >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --cflags | --cppflags | --cxxflags)'           >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --cxxflags`"             >>wx-config-portable
+	$(ECHO) '            this_with_arg=1'                           >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --host*)'                                      >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --libs)'                                       >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --libs`"                 >>wx-config-portable
+	$(ECHO) '            this_with_arg=1'                           >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --rescomp)'                                    >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --rescomp`"              >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --selected_config)'                            >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --selected_config`"      >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        --version)'                                    >>wx-config-portable
+	$(ECHO) "            echo `./wx-config --version`"              >>wx-config-portable
+	$(ECHO) '            ;;'                                        >>wx-config-portable
+	$(ECHO) '        *)'                                            >>wx-config-portable
+	$(ECHO) '            if [ "$$last_with_arg" -ne 1 ]; then'      >>wx-config-portable
+	$(ECHO) '                echo Bad argument $$1'                 >>wx-config-portable
+	$(ECHO) '                exit 1'                                >>wx-config-portable
+	$(ECHO) '            fi'                                        >>wx-config-portable
+	$(ECHO) '    esac'                                              >>wx-config-portable
+	$(ECHO) '    last_with_arg=$$this_with_arg'                     >>wx-config-portable
+	$(ECHO) '    shift'                                             >>wx-config-portable
+	$(ECHO) 'done'                                                  >>wx-config-portable
 	$(CHMOD) 755 wx-config-portable
 
 .PHONY: clobber

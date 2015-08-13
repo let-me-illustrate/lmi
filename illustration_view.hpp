@@ -36,6 +36,7 @@
 
 #include "view_ex.hpp"
 
+#include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "obstruct_slicing.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
@@ -75,6 +76,8 @@ class IllustrationView
     IllustrationDocument& document() const;
 
     oenum_mvc_dv_rc edit_parameters();
+
+    void emit_pdf(mcenum_emission);
 
     // ViewEx required implementation.
     virtual wxWindow* CreateChildWindow();
