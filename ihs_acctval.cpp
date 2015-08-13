@@ -196,7 +196,7 @@ Then run other bases.
     for profit testing we want to avoid their overhead
     for solves we want only one run
         if solving on guar basis...does *that* basis determine pmts & specamt?
-        it prolly should, so that the guar columns will show what's wanted
+        it probably should, so that the guar columns will show what's wanted
             otherwise the solve lacks meaning
         although I wonder how other illustration systems handle this
         it should also be possible to solve on a midpt basis as well
@@ -1092,8 +1092,7 @@ double AccountValue::SuppositiveModalPremium
     ,bool        with_wp
     ) const
 {
-    LMI_ASSERT(0 != Input_);
-    yare_input yi(*Input_);
+    yare_input yi(yare_input_);
 
     yi.AccidentalDeathBenefit = with_adb;
     yi.WaiverOfPremiumBenefit = with_wp;
