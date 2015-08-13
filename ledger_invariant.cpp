@@ -35,15 +35,15 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
-#include "financial.hpp"  // TODO ?? For IRRs--prolly don't blong here.
+#include "financial.hpp"                // for CalculateIrrs()
 #include "fund_data.hpp"
 #include "input.hpp"
 #include "interest_rates.hpp"
-#include "ledger.hpp" // TODO ?? For IRRs--prolly don't blong here.
-#include "ledger_variant.hpp" // TODO ?? For IRRs--prolly don't blong here.
+#include "ledger.hpp"                   // for CalculateIrrs()
+#include "ledger_variant.hpp"           // for CalculateIrrs()
 #include "loads.hpp"
-#include "mc_enum_aux.hpp" // mc_e_vector_to_string_vector()
-#include "mc_enum_types_aux.hpp" // mc_str()
+#include "mc_enum_aux.hpp"              // mc_e_vector_to_string_vector()
+#include "mc_enum_types_aux.hpp"        // mc_str()
 #include "miscellany.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
@@ -52,10 +52,6 @@
 #include <algorithm>
 #include <ostream>
 #include <stdexcept>
-
-// TODO ?? It is extraordinary that this 'invariant' class includes
-// some data that vary by basis. Perhaps they should be in the
-// complementary 'variant' class.
 
 //============================================================================
 LedgerInvariant::LedgerInvariant(int len)
@@ -1102,7 +1098,10 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 }
 
 //============================================================================
-// TODO ?? Prolly don't blong here.
+// TODO ?? It is extraordinary that this "invariant" class uses and
+// even sets some data that vary by basis and therefore seem to belong
+// in the complementary "variant" class.
+
 void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
     int max_length = LedgerValues.GetMaxLength();
@@ -1150,10 +1149,8 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
     // matter not of efficiency but of validity: values for unused
     // bases are not dependably initialized.
     //
-    // TODO ?? This calculation really needs to be distributed among
-    // the variant ledgers, so that it gets run for every basis
-    // actually used.
-    //
+    // This calculation should be distributed among the variant
+    // ledgers, so that it gets run for every basis actually used.
     if
         (0 == std::count
             (LedgerValues.GetRunBases().begin()
