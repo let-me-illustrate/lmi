@@ -499,7 +499,7 @@ inline bool BasicValues::IsSubjectToIllustrationReg() const
     return IsSubjectToIllustrationReg_;
 }
 
-// TODO ?? Use a configuration file instead. These deprecated
+// IHS !! Use a configuration file instead. These deprecated
 // functions are used only by the antediluvian branch.
 char const* CurrentTableFile();
 char const* GuaranteedTableFile();
