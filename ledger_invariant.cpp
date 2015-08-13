@@ -157,7 +157,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["GenderBlended"         ] = &GenderBlended          ;
     OtherScalars    ["SmokerDistinct"        ] = &SmokerDistinct         ;
     OtherScalars    ["SmokerBlended"         ] = &SmokerBlended          ;
-    OtherScalars    ["SubstdTable"           ] = &SubstdTable            ; // Prefer string 'b->Input_->SubstandardTable'.
+    OtherScalars    ["SubstdTable"           ] = &SubstdTable            ;
     OtherScalars    ["Age"                   ] = &Age                    ;
     OtherScalars    ["RetAge"                ] = &RetAge                 ;
     OtherScalars    ["EndtAge"               ] = &EndtAge                ;
@@ -494,7 +494,7 @@ void LedgerInvariant::Init(BasicValues* b)
         * b->yare_input_.CountryCoiMultiplier
         ;
 
-    CountryIso3166Abbrev = (*b->Input_)["Country"].str();
+    CountryIso3166Abbrev = mc_str(b->yare_input_.Country);
     Comments             = b->yare_input_.Comments;
 
     FundNumbers           .resize(0);
@@ -596,7 +596,7 @@ void LedgerInvariant::Init(BasicValues* b)
 //  SmokerDistinct          = 0;
     SmokerBlended           = b->yare_input_.BlendSmoking;
 
-    SubstdTable             = b->yare_input_.SubstandardTable; // Prefer string 'b->Input_->SubstandardTable'.
+    SubstdTable             = b->yare_input_.SubstandardTable;
 
     Age                     = b->yare_input_.IssueAge;
     RetAge                  = b->yare_input_.RetirementAge;
@@ -719,11 +719,11 @@ void LedgerInvariant::Init(BasicValues* b)
         MarketingNameFootnote          = p.datum("MarketingNameFootnote"          );
         }
 
-    ProducerName            = (*b->Input_)["AgentName"].str();
+    ProducerName            = b->yare_input_.AgentName;
 
-    std::string agent_city     = (*b->Input_)["AgentCity"   ].str();
-    std::string agent_state    = (*b->Input_)["AgentState"  ].str();
-    std::string agent_zip_code = (*b->Input_)["AgentZipCode"].str();
+    std::string agent_city     = b->yare_input_.AgentCity;
+    std::string agent_state    = mc_str(b->yare_input_.AgentState);
+    std::string agent_zip_code = b->yare_input_.AgentZipCode;
     std::string agent_city_etc(agent_city + ", " + agent_state);
     if(!agent_zip_code.empty())
         {
@@ -731,16 +731,16 @@ void LedgerInvariant::Init(BasicValues* b)
         }
     agent_city_etc += agent_zip_code;
 
-    ProducerStreet          = (*b->Input_)["AgentAddress"].str();
+    ProducerStreet          = b->yare_input_.AgentAddress;
     ProducerCity            = agent_city_etc;
-    CorpName                = (*b->Input_)["CorporationName"].str();
+    CorpName                = b->yare_input_.CorporationName;
 
-    MasterContractNumber    = (*b->Input_)["MasterContractNumber"].str();
-    ContractNumber          = (*b->Input_)["ContractNumber"].str();
+    MasterContractNumber    = b->yare_input_.MasterContractNumber;
+    ContractNumber          = b->yare_input_.ContractNumber;
 
-    Insured1                = (*b->Input_)["InsuredName"].str();
-    Gender                  = (*b->Input_)["Gender"].str();
-    UWType                  = (*b->Input_)["GroupUnderwritingType"].str();
+    Insured1                = b->yare_input_.InsuredName;
+    Gender                  = mc_str(b->yare_input_.Gender);
+    UWType                  = mc_str(b->yare_input_.GroupUnderwritingType);
 
     oenum_smoking_or_tobacco smoke_or_tobacco =
         static_cast<oenum_smoking_or_tobacco>
@@ -779,23 +779,23 @@ void LedgerInvariant::Init(BasicValues* b)
         }
     else if(oe_smoker_nonsmoker == smoke_or_tobacco)
         {
-        Smoker = (*b->Input_)["Smoking"].str();
+        Smoker = mc_str(b->yare_input_.Smoking);
         }
     else
         {
         throw std::logic_error("Unknown oe_smoker_nonsmoker convention.");
         }
 
-    UWClass                 = (*b->Input_)["UnderwritingClass"].str();
-    SubstandardTable        = (*b->Input_)["SubstandardTable"].str();
+    UWClass                 = mc_str(b->yare_input_.UnderwritingClass);
+    SubstandardTable        = mc_str(b->yare_input_.SubstandardTable);
 
     EffDate                 = calendar_date(b->yare_input_.EffectiveDate).str();
     EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate).julian_day_number();
     DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth).str();
     DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth).julian_day_number();
-    DefnLifeIns             = (*b->Input_)["DefinitionOfLifeInsurance"].str();
-    DefnMaterialChange      = (*b->Input_)["DefinitionOfMaterialChange"].str();
-    AvoidMec                = (*b->Input_)["AvoidMecMethod"].str();
+    DefnLifeIns             = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
+    DefnMaterialChange      = mc_str(b->yare_input_.DefinitionOfMaterialChange);
+    AvoidMec                = mc_str(b->yare_input_.AvoidMecMethod);
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
     StatePostalAbbrev       = mc_str(b->GetStateOfJurisdiction());
     PremiumTaxState         = mc_str(b->GetPremiumTaxState());
@@ -807,19 +807,19 @@ void LedgerInvariant::Init(BasicValues* b)
 
     IsInforce = 0 != b->yare_input_.InforceYear || 0 != b->yare_input_.InforceMonth;
 
-    SupplementalReport         = "Yes" == (*b->Input_)["CreateSupplementalReport"].str();
-    SupplementalReportColumn00 = (*b->Input_)["SupplementalReportColumn00"].str();
-    SupplementalReportColumn01 = (*b->Input_)["SupplementalReportColumn01"].str();
-    SupplementalReportColumn02 = (*b->Input_)["SupplementalReportColumn02"].str();
-    SupplementalReportColumn03 = (*b->Input_)["SupplementalReportColumn03"].str();
-    SupplementalReportColumn04 = (*b->Input_)["SupplementalReportColumn04"].str();
-    SupplementalReportColumn05 = (*b->Input_)["SupplementalReportColumn05"].str();
-    SupplementalReportColumn06 = (*b->Input_)["SupplementalReportColumn06"].str();
-    SupplementalReportColumn07 = (*b->Input_)["SupplementalReportColumn07"].str();
-    SupplementalReportColumn08 = (*b->Input_)["SupplementalReportColumn08"].str();
-    SupplementalReportColumn09 = (*b->Input_)["SupplementalReportColumn09"].str();
-    SupplementalReportColumn10 = (*b->Input_)["SupplementalReportColumn10"].str();
-    SupplementalReportColumn11 = (*b->Input_)["SupplementalReportColumn11"].str();
+    SupplementalReport         = b->yare_input_.CreateSupplementalReport;
+    SupplementalReportColumn00 = mc_str(b->yare_input_.SupplementalReportColumn00);
+    SupplementalReportColumn01 = mc_str(b->yare_input_.SupplementalReportColumn01);
+    SupplementalReportColumn02 = mc_str(b->yare_input_.SupplementalReportColumn02);
+    SupplementalReportColumn03 = mc_str(b->yare_input_.SupplementalReportColumn03);
+    SupplementalReportColumn04 = mc_str(b->yare_input_.SupplementalReportColumn04);
+    SupplementalReportColumn05 = mc_str(b->yare_input_.SupplementalReportColumn05);
+    SupplementalReportColumn06 = mc_str(b->yare_input_.SupplementalReportColumn06);
+    SupplementalReportColumn07 = mc_str(b->yare_input_.SupplementalReportColumn07);
+    SupplementalReportColumn08 = mc_str(b->yare_input_.SupplementalReportColumn08);
+    SupplementalReportColumn09 = mc_str(b->yare_input_.SupplementalReportColumn09);
+    SupplementalReportColumn10 = mc_str(b->yare_input_.SupplementalReportColumn10);
+    SupplementalReportColumn11 = mc_str(b->yare_input_.SupplementalReportColumn11);
 
     FullyInitialized = true;
 }
