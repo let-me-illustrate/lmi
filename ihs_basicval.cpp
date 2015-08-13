@@ -79,16 +79,6 @@ BasicValues::BasicValues(Input const& input)
     Init();
 }
 
-// Temporary kludge for ancient GPT server. TAXATION !! Remove along with that ancient stuff.
-template<typename T>
-std::string mc_str(T t)
-{
-    return mc_enum<T>(t).str();
-}
-
-template std::string mc_str(mcenum_class   );
-template std::string mc_str(mcenum_uw_basis);
-
 //============================================================================
 // TODO ?? Not for general use--use for GPT server only. This is bad design. TAXATION !! Eliminate this.
 BasicValues::BasicValues
