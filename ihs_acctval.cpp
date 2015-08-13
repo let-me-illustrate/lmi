@@ -1030,6 +1030,22 @@ void AccountValue::InitializeSpecAmt()
         InvariantValues().InitTgtPrem = AnnualTargetPrem;
         }
 
+    // Calculate special initial premiums for premium-quote PDF only.
+    // Four premiums are calculated, for base and "supplemental"
+    // coverage combined:
+    //   without riders; with ADB only; with WP only; with ADB and WP
+    // This is intended for presale use only; for inforce cells, these
+    // premiums retain their default initial values of zero. There
+    // seems to be no compelling argument for further restrictions
+    // such as (DB_MinPremType == oe_monthly_deduction).
+    if(0 == Year)
+        {
+        InvariantValues().InitModalPrem00 = SuppositiveModalPremium(0, 0);
+        InvariantValues().InitModalPrem01 = SuppositiveModalPremium(0, 1);
+        InvariantValues().InitModalPrem10 = SuppositiveModalPremium(1, 0);
+        InvariantValues().InitModalPrem11 = SuppositiveModalPremium(1, 1);
+        }
+
     SurrChgSpecAmt = InvariantValues().SpecAmt[0];
     HOPEFULLY(0.0 <= SurrChgSpecAmt);
     // TODO ?? SurrChgSpecAmt is not used yet.
