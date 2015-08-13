@@ -37,7 +37,7 @@
 #include "death_benefits.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "input.hpp" // Magic static function.
+#include "input.hpp"                    // magically_rectify()
 #include "interest_rates.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -1035,6 +1035,64 @@ void AccountValue::InitializeSpecAmt()
     // TODO ?? SurrChgSpecAmt is not used yet.
 
     // TODO ?? Perform specamt strategy here?
+}
+
+double AccountValue::SuppositiveModalPremium
+    (bool        with_adb
+    ,bool        with_wp
+    ) const
+{
+    LMI_ASSERT(0 == Year);
+    return SuppositiveModalPremium
+        (Year
+        ,InvariantValues().ErMode[Year].value()
+        ,InvariantValues().SpecAmt[Year]
+        ,InvariantValues().TermSpecAmt[Year]
+        ,with_adb
+        ,with_wp
+        );
+}
+
+/// Determine modal premium on a basis possibly differing from input.
+///
+/// Motivation: to provide premiums with and without certain riders,
+/// for use with group premium quotes.
+///
+/// For now at least, only that narrow purpose is addressed. If, for
+/// that purpose, input is inappropriate, then output may be as well.
+/// For example, this function doesn't ascertain whether the riders it
+/// toggles are available for the product selected. Other riders are
+/// not inhibited here: all input is taken as deliberate, as an end
+/// user might reasonably wish to show the effect of other riders; if
+/// assertions as to input are to be made at all, then they should be
+/// made in the function that creates the group premium report.
+
+double AccountValue::SuppositiveModalPremium
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
+    ,double      termamt
+    ,bool        with_adb
+    ,bool        with_wp
+    ) const
+{
+    LMI_ASSERT(0 != Input_);
+    yare_input yi(*Input_);
+
+    yi.AccidentalDeathBenefit = with_adb;
+    yi.WaiverOfPremiumBenefit = with_wp;
+
+    if(!SplitMinPrem)
+        {
+        return GetModalPremMlyDed(year, mode, specamt, yi);
+        }
+    else
+        {
+        return
+              GetModalPremMlyDedEe(year, mode, termamt, yi)
+            + GetModalPremMlyDedEr(year, mode, specamt, yi)
+            ;
+        }
 }
 
 //============================================================================
