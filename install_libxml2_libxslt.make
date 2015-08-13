@@ -120,7 +120,6 @@ WGETFLAGS := \
   --cut-dirs=$(words $(subst /, ,$(host_path))) \
   --force-directories \
   --no-host-directories \
-  --timestamping \
 
 wget_whence := $(host)/$(host_path)
 

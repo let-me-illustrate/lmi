@@ -142,6 +142,10 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["InitGSP"               ] = &InitGSP                ;
     ScalableScalars ["InitGLP"               ] = &InitGLP                ;
     ScalableScalars ["InitTgtPrem"           ] = &InitTgtPrem            ;
+    ScalableScalars ["InitModalPrem00"       ] = &InitModalPrem00        ;
+    ScalableScalars ["InitModalPrem01"       ] = &InitModalPrem01        ;
+    ScalableScalars ["InitModalPrem10"       ] = &InitModalPrem10        ;
+    ScalableScalars ["InitModalPrem11"       ] = &InitModalPrem11        ;
     ScalableScalars ["Dumpin"                ] = &Dumpin                 ;
     ScalableScalars ["External1035Amount"    ] = &External1035Amount     ;
     ScalableScalars ["Internal1035Amount"    ] = &Internal1035Amount     ;
@@ -567,6 +571,10 @@ void LedgerInvariant::Init(BasicValues* b)
 //  GuarPrem                = 0;
 //  InitSevenPayPrem        =
 //  InitTgtPrem             =
+    InitModalPrem00         = 0.0;
+    InitModalPrem01         = 0.0;
+    InitModalPrem10         = 0.0;
+    InitModalPrem11         = 0.0;
 
     MaleProportion          = b->yare_input_.MaleProportion;
     NonsmokerProportion     = b->yare_input_.NonsmokerProportion;

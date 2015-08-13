@@ -31,7 +31,7 @@
 
 #include "alert.hpp"
 #include "illustration_view.hpp"
-#include "illustrator.hpp"
+#include "illustrator.hpp"              // default_cell()
 #include "miscellany.hpp"
 #include "wx_utility.hpp"
 

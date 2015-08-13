@@ -804,14 +804,25 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_NoLapseUnratedOnly  , false));
     Add(database_entity(DB_NoLapseDbo1Only     , false));
     Add(database_entity(DB_LoadRfdProportion   , 0.0));
-    // Reuse current COI rates as current and guaranteed term rates.
-    Add(database_entity(DB_TermTable, e_number_of_axes, dims313, TgCOI));
-    Add(database_entity(DB_GuarTermTable, e_number_of_axes, dims313, TgCOI));
+
+    // uw_class, smoker
+    int dims143[e_number_of_axes] = {1, 4, 3, 1, 1, 1, 1};
+
+    double TtCOI[12] =
+        {
+        3, 2, 1, // pref:  sm ns us
+        6, 5, 4, // std:   sm ns us
+        6, 5, 4, // rated: sm ns us [same as std]
+        0, 0, 0, // ultra: sm ns us [zero: error message--no ultrapref class]
+        };
+
+    Add(database_entity(DB_TermTable    , e_number_of_axes, dims143, TtCOI));
+    Add(database_entity(DB_GuarTermTable, e_number_of_axes, dims143, TtCOI));
     Add(database_entity(DB_AllowTerm           , true));
     Add(database_entity(DB_TermMinIssAge       , 15));
     Add(database_entity(DB_TermMaxIssAge       , 65));
-    Add(database_entity(DB_TermForcedConvAge   , 0.0)); // Immediate forced conversion is absurd. Try 70 instead.
-    Add(database_entity(DB_TermForcedConvDur   , 0.0)); // Immediate forced conversion is absurd. Try 10 instead.
+    Add(database_entity(DB_TermForcedConvAge   , 70));
+    Add(database_entity(DB_TermForcedConvDur   , 10));
     Add(database_entity(DB_MaxTermProportion   , 0.0));
     Add(database_entity(DB_TermCoiRate         , 0.0));
     Add(database_entity(DB_TermPremRate        , 0.0));

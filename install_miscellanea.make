@@ -254,14 +254,7 @@ TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
 %.tar.gz:  TARFLAGS += --gzip
 
-# New spelling '--no-verbose' has replaced original '--non-verbose':
-#   http://sourceware.org/ml/cygwin-apps/2005-10/msg00140.html
-# However, don't use
-#   WGETFLAGS := '--no-verbose --timestamping'
-# because, as this is written in 2007-08, sourceforge's mirror system
-# is behaving in anomalous ways that '--no-verbose' would mask.
-
-WGETFLAGS := '--timestamping'
+WGETFLAGS :=
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:

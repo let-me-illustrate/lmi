@@ -1,4 +1,4 @@
-// Emit a ledger in various guises.
+// Emit a ledger or a group of ledgers in various guises.
 //
 // Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
 //
@@ -26,21 +26,39 @@
 
 #include "config.hpp"
 
-#include "mc_enum_type_enums.hpp" // enum mcenum_emission
+#include "mc_enum_type_enums.hpp"       // enum mcenum_emission
+#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/path.hpp>
 
 class Ledger;
 
-double LMI_SO pre_emit_ledger
-    (fs::path const& tsv_filepath
-    ,mcenum_emission emission
-    );
+/// Emit a group of ledgers in various guises.
+///
+/// Each member function (except the lightweight ctor and dtor)
+/// returns time spent, which is almost always wanted.
+
+class LMI_SO ledger_emitter
+    :        private lmi::uncopyable <ledger_emitter>
+    ,virtual private obstruct_slicing<ledger_emitter>
+{
+  public:
+    ledger_emitter(fs::path const& case_filepath, mcenum_emission emission);
+    ~ledger_emitter();
+
+    double initiate ();
+    double emit_cell(fs::path const& cell_filepath, Ledger const& ledger);
+    double finish   ();
+
+  private:
+    fs::path const& case_filepath_;
+    mcenum_emission emission_;
+};
 
 double LMI_SO emit_ledger
-    (fs::path const& filepath
-    ,fs::path const& tsv_filepath
+    (fs::path const& cell_filepath
     ,Ledger const&   ledger
     ,mcenum_emission emission
     );

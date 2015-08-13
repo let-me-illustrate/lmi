@@ -423,8 +423,8 @@ void product_data::WritePolFiles()
     z.ChildRiderFilename       = glossed_string("qx_ins");
     z.CurrSpouseRiderFilename  = glossed_string("qx_ins");
     z.GuarSpouseRiderFilename  = glossed_string("qx_ins");
-    z.CurrTermFilename         = glossed_string("qx_cso");
-    z.GuarTermFilename         = glossed_string("qx_cso");
+    z.CurrTermFilename         = glossed_string("sample");
+    z.GuarTermFilename         = glossed_string("sample");
     z.GroupProxyFilename       = glossed_string("qx_ins");
     z.SevenPayFilename         = glossed_string("sample");
     z.TgtPremFilename          = glossed_string("sample");

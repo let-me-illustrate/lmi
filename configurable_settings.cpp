@@ -294,10 +294,7 @@ void configurable_settings::redintegrate_ex_ante
                   "xml_notebook.xrc"                   == value ? "skin.xrc"
                 : "xml_notebook_coli_boli.xrc"         == value ? "skin_coli_boli.xrc"
                 : "xml_notebook_group_carveout.xrc"    == value ? "skin_group_carveout.xrc"
-                : "xml_notebook_group_carveout2.xrc"   == value ? "skin_group_carveout2.xrc"
-                : "xml_notebook_private_placement.xrc" == value ? "skin_reg_d.xrc"
                 : "xml_notebook_single_premium.xrc"    == value ? "skin_single_premium.xrc"
-                : "xml_notebook_variable_annuity.xrc"  == value ? "skin_variable_annuity.xrc"
                 : throw std::runtime_error(value + ": unexpected skin filename.")
                 ;
             }

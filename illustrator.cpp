@@ -39,14 +39,14 @@
 #include "input.hpp"
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
-#include "path_utility.hpp"       // fs::path inserter
-#include "platform_dependent.hpp" // access()
+#include "path_utility.hpp"             // fs::path inserter
+#include "platform_dependent.hpp"       // access()
 #include "single_cell_document.hpp"
 #include "timer.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 
-#include <cstdio>                 // std::remove()
+#include <cstdio>                       // std::remove()
 #include <iostream>
 #include <string>
 
@@ -82,7 +82,6 @@ bool illustrator::operator()(fs::path const& file_path)
         }
     else if(".ini" == extension)
         {
-        configurable_settings const& c = configurable_settings::instance();
         Timer timer;
         Input input;
         bool close_when_done = custom_io_0_read(input, file_path.string());
@@ -92,23 +91,12 @@ bool illustrator::operator()(fs::path const& file_path)
         z.run(input);
         principal_ledger_ = z.ledger();
         seconds_for_calculations_ = timer.stop().elapsed_seconds();
-        fs::path out_file =
-            file_path.string() == c.custom_input_0_filename()
-            ? c.custom_output_0_filename()
-            : fs::change_extension(file_path, ".test0")
-            ;
-        seconds_for_output_ = emit_ledger
-            (out_file
-            ,out_file
-            ,*z.ledger()
-            ,emission_
-            );
+        seconds_for_output_ = emit_ledger(file_path, *z.ledger(), emission_);
         conditionally_show_timings_on_stdout();
         return close_when_done;
         }
     else if(".inix" == extension)
         {
-        configurable_settings const& c = configurable_settings::instance();
         Timer timer;
         Input input;
         bool emit_pdf_too = custom_io_1_read(input, file_path.string());
@@ -118,18 +106,9 @@ bool illustrator::operator()(fs::path const& file_path)
         z.run(input);
         principal_ledger_ = z.ledger();
         seconds_for_calculations_ = timer.stop().elapsed_seconds();
-        fs::path out_file =
-            file_path.string() == c.custom_input_1_filename()
-            ? c.custom_output_1_filename()
-            : fs::change_extension(file_path, ".test1")
-            ;
         mcenum_emission x = emit_pdf_too ? mce_emit_pdf_file : mce_emit_nothing;
-        seconds_for_output_ = emit_ledger
-            (out_file
-            ,out_file
-            ,*z.ledger()
-            ,static_cast<mcenum_emission>(x | emission_)
-            );
+        mcenum_emission y = static_cast<mcenum_emission>(x | emission_);
+        seconds_for_output_ = emit_ledger(file_path, *z.ledger(), y);
         conditionally_show_timings_on_stdout();
         return true;
         }
@@ -154,12 +133,7 @@ bool illustrator::operator()(fs::path const& file_path, Input const& z)
     IV.run(z);
     principal_ledger_ = IV.ledger();
     seconds_for_calculations_ = timer.stop().elapsed_seconds();
-    seconds_for_output_ = emit_ledger
-        (file_path
-        ,file_path
-        ,*IV.ledger()
-        ,emission_
-        );
+    seconds_for_output_ = emit_ledger(file_path, *IV.ledger(), emission_);
     conditionally_show_timings_on_stdout();
     return true;
 }
