@@ -36545,3 +36545,27 @@ Improve documentation.
 Move 'wx_pdfdoc_test' out of $(unit_test_targets). See:
   http://lists.nongnu.org/archive/html/lmi/2015-07/msg00020.html
 
+20150810T1639Z <gchicares@sbcglobal.net> [508]
+
+  ihs_acctval.cpp
+Improve documentation.
+
+20150812T2320Z <gchicares@sbcglobal.net> [508]
+
+  basic_values.hpp
+  ihs_basicval.cpp
+Refactor to accommodate group premium quotes.
+
+20150813T0019Z <gchicares@sbcglobal.net> [508]
+
+  account_value.hpp
+  ihs_acctval.cpp
+Calculate premiums for group premium quotes.
+
+20150813T0039Z <gchicares@sbcglobal.net> [508]
+
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Add group premium quote data to ledger.
+
