@@ -898,9 +898,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     ProducerName                = a_Addend.ProducerName;
     ProducerStreet              = a_Addend.ProducerStreet;
     ProducerCity                = a_Addend.ProducerCity;
-    DefnLifeIns                 = a_Addend.DefnLifeIns;
-    DefnMaterialChange          = a_Addend.DefnMaterialChange;
-    AvoidMec                    = a_Addend.AvoidMec;
     // This would necessarily vary by life:
 //  ContractNumber              = "";
 
