@@ -114,7 +114,6 @@ class LMI_SO BasicValues
     bool                  IsSubjectToIllustrationReg() const;
     double                InvestmentManagementFee()    const;
 
-    boost::shared_ptr<Input const>        Input_;
     yare_input                            yare_input_;
     boost::shared_ptr<product_data>       ProductData_;
     boost::shared_ptr<product_database>   Database_;

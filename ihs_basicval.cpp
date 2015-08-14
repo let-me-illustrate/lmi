@@ -65,8 +65,7 @@
 
 //============================================================================
 BasicValues::BasicValues(Input const& input)
-    :Input_              (new Input(input))
-    ,yare_input_         (input)
+    :yare_input_         (input)
     ,DefnLifeIns_        (mce_cvat)
     ,DefnMaterialChange_ (mce_unnecessary_premium)
     ,Equiv7702DBO3       (mce_option1_for_7702)
@@ -95,8 +94,7 @@ BasicValues::BasicValues
     ,double              a_TargetPremium
     // TODO ?? Need loan rate type here?
     )
-    :Input_              (new Input)
-    ,yare_input_         (*Input_)
+    :yare_input_         (Input())
     ,DefnLifeIns_        (mce_cvat)
     ,DefnMaterialChange_ (mce_unnecessary_premium)
     ,Equiv7702DBO3       (a_DBOptFor7702)
@@ -1656,7 +1654,7 @@ std::vector<double> BasicValues::GetTable
     std::string const file_name = AddDataDir(TableFile);
 
     // To blend by either smoking or gender, both the input must allow
-    // it (Input_ member), and the table must allow it (arg: CanBlend);
+    // it (yare_input_), and the table must allow it (arg: CanBlend);
     // or it must be required by (arg: MustBlend).
     bool BlendSmoking = false;
     switch(CanBlendSmoking)
