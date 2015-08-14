@@ -36569,3 +36569,64 @@ Calculate premiums for group premium quotes.
   ledger_invariant.hpp
 Add group premium quote data to ledger.
 
+20150813T2206Z <gchicares@sbcglobal.net> [487]
+
+  accountvalue.cpp
+  solve.cpp
+Demote defects marked only in the antediluvian branch.
+
+20150813T2212Z <gchicares@sbcglobal.net> [486]
+
+  basic_values.hpp
+Demote a defect pertaining only to the antediluvian branch.
+
+20150813T2220Z <gchicares@sbcglobal.net> [483]
+
+  input_sequence.hpp
+Demote some quibbling defect markers.
+
+20150813T2304Z <gchicares@sbcglobal.net> [478]
+
+  ledger_invariant.cpp
+Merge duplicative defect markers.
+
+20150813T2323Z <gchicares@sbcglobal.net> [478]
+
+  yare_input.cpp
+  yare_input.hpp
+Provide additional fields for class LedgerInvariant's use.
+
+20150813T2337Z <gchicares@sbcglobal.net> [478]
+
+  ihs_basicval.cpp
+  mc_enum_types_aux.cpp
+Provide conversions for classes LedgerInvariant and BasicValues.
+
+20150813T2345Z <gchicares@sbcglobal.net> [478]
+
+  ledger_invariant.cpp
+Prefer class yare_input to class Input.
+
+20150813T2348Z <gchicares@sbcglobal.net> [478]
+
+  ledger_invariant.cpp
+Purge duplicative fragment.
+
+20150813T2357Z <gchicares@sbcglobal.net> [478]
+
+  ihs_acctval.cpp
+  yare_input.hpp
+Implicitly define, and use, yare_input copy ctor.
+
+20150814T0006Z <gchicares@sbcglobal.net> [477]
+
+  ihs_basicval.cpp
+Remove pointless assignment to an elsewhere-unused member.
+
+20150814T0009Z <gchicares@sbcglobal.net> [477]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+Remove an ugly disused data member.
+
