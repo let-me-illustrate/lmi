@@ -39,13 +39,13 @@ wxpdfdoc_dir  := /opt/lmi/wxpdfdoc-scratch
 # archive name because we don't want to use the bare commit SHA-1 as the file
 # name, so we need a separate "urlbase" variable.
 
-wxpdfdoc_commit             := acd7a8210e4b1cc688458b73b612370392ff5d39
+wxpdfdoc_commit             := 5ac28a73e74916cf44d0ce286976e21d948e9bd8
 wxpdfdoc_basename           := wxpdfdoc-$(wxpdfdoc_commit)
 wxpdfdoc_archive            := $(wxpdfdoc_basename).zip
 $(wxpdfdoc_archive)-urlbase := $(wxpdfdoc_commit).zip
 $(wxpdfdoc_archive)-root    := https://github.com/vadz/wxpdfdoc/archive
 $(wxpdfdoc_archive)-url     := $($(wxpdfdoc_archive)-root)/$($(wxpdfdoc_archive)-urlbase)
-$(wxpdfdoc_archive)-md5     := e94fed47eb638d1dea1e55e6ae49c302
+$(wxpdfdoc_archive)-md5     := 8e3c4d6cd1df9c7f91426c8c4723cb6e
 
 # Variables that normally should be left alone #################################
 
