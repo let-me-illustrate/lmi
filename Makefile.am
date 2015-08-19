@@ -167,6 +167,7 @@ libskeleton_la_SOURCES = \
     file_command_wx.cpp \
     gpt_document.cpp \
     gpt_view.cpp \
+    group_quote_pdf_generator_wx.cpp \
     icon_monger.cpp \
     illustration_document.cpp \
     illustration_view.cpp \
@@ -198,6 +199,7 @@ libskeleton_la_SOURCES = \
     tier_view_editor.cpp \
     transferor.cpp \
     view_ex.cpp \
+    wx_table_generator.cpp \
     wx_utility.cpp
 
 # main program executables
@@ -310,6 +312,7 @@ liblmi_common_sources = \
     getopt.cpp \
     global_settings.cpp \
     group_values.cpp \
+    group_quote_pdf_generator.cpp \
     illustrator.cpp \
     input.cpp \
     input_harmonization.cpp \
@@ -1103,6 +1106,7 @@ noinst_HEADERS = \
     gpt_state.hpp \
     gpt_view.hpp \
     gpt_xml_document.hpp \
+    group_quote_pdf_gen.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \
@@ -1228,6 +1232,7 @@ noinst_HEADERS = \
     view_ex.hpp \
     view_ex.tpp \
     wx_new.hpp \
+    wx_table_generator.hpp \
     wx_utility.hpp \
     wx_workarounds.hpp \
     xml_lmi.hpp \

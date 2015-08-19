@@ -32,7 +32,9 @@
 #include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/path.hpp>
+#include <boost/shared_ptr.hpp>
 
+class group_quote_pdf_generator;
 class Ledger;
 
 /// Emit a group of ledgers in various guises.
@@ -55,6 +57,9 @@ class LMI_SO ledger_emitter
   private:
     fs::path const& case_filepath_;
     mcenum_emission emission_;
+
+    // Used only if emission includes mce_emit_group_quote; empty otherwise.
+    boost::shared_ptr<group_quote_pdf_generator> group_quote_gen_;
 };
 
 double LMI_SO emit_ledger

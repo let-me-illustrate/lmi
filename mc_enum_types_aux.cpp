@@ -44,6 +44,7 @@ void constrain_values(e_emission& z)
 {
     z.allow(z.ordinal("emit_pdf_to_printer"), false);
     z.allow(z.ordinal("emit_pdf_to_viewer" ), false);
+    z.allow(z.ordinal("emit_group_quote"   ), false);
 }
 
 /// Validate mc_n_gen_bases, mc_n_sep_bases, and mc_n_rate_periods.

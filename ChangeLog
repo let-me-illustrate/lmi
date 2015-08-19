@@ -36630,3 +36630,37 @@ Remove pointless assignment to an elsewhere-unused member.
   ihs_basicval.cpp
 Remove an ugly disused data member.
 
+20150818T1840Z <gchicares@sbcglobal.net> [477]
+
+  workhorse.make
+  wx_pdfdoc_test.cpp [expunged]
+Expunge a temporary test that has served its purpose.
+
+20150819T1702Z <gchicares@sbcglobal.net> [477]
+
+  Makefile.am
+  census_view.cpp
+  census_view.hpp
+  emit_ledger.cpp
+  emit_ledger.hpp
+  gpt_view.cpp
+  group_quote_pdf_gen.cpp    [new file]
+  group_quote_pdf_gen.hpp    [new file]
+  group_quote_pdf_gen_wx.cpp [new file]
+  ihs_acctval.cpp
+  illustration_view.cpp
+  main_wx.cpp
+  main_wx_test.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types_aux.cpp
+  mec_view.cpp
+  menus.xrc
+  objects.make
+  skeleton.cpp
+  toolbar.xrc
+  workhorse.make
+  wx_table_generator.cpp     [new file]
+  wx_table_generator.hpp     [new file]
+Implement new "group premium quote" report.
+
