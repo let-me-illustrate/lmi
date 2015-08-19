@@ -205,6 +205,7 @@ common_common_objects := \
   file_command.o \
   getopt.o \
   global_settings.o \
+  group_quote_pdf_gen.o \
   group_values.o \
   illustrator.o \
   input.o \
@@ -317,6 +318,7 @@ skeleton_objects := \
   file_command_wx.o \
   gpt_document.o \
   gpt_view.o \
+  group_quote_pdf_gen_wx.o \
   icon_monger.o \
   illustration_document.o \
   illustration_view.o \
@@ -349,6 +351,7 @@ skeleton_objects := \
   transferor.o \
   view_ex.o \
   wx_checks.o \
+  wx_table_generator.o \
   wx_utility.o \
 
 lmi_wx_objects := \

@@ -1081,7 +1081,7 @@ double AccountValue::SuppositiveModalPremium
 /// not inhibited here: all input is taken as deliberate, as an end
 /// user might reasonably wish to show the effect of other riders; if
 /// assertions as to input are to be made at all, then they should be
-/// made in the function that creates the group premium report.
+/// made in the function that creates the group premium quote report.
 
 double AccountValue::SuppositiveModalPremium
     (int         year
