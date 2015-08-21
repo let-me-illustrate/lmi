@@ -64,8 +64,8 @@ use_git := Y
 
 ifneq ($(use_git), N)
 
-  wx_commit_sha     := b6ab81584f49a1997e6d6236fcb65d1b5c58a5bd
-  wx_md5            := 13fd2b383bc0ff8cba9cc76f0e6d3877
+  wx_commit_sha     := 0b821adf903872b6d8b56630d2191c5b9c3362e5
+  wx_md5            := ac28a959aabe36e26ea039ed78a51b54
 
   wx_version        := $(wx_commit_sha)
 
