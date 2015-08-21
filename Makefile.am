@@ -1095,6 +1095,7 @@ noinst_HEADERS = \
     fenv_lmi_x86.hpp \
     file_command.hpp \
     financial.hpp \
+    force_linking.hpp \
     fund_data.hpp \
     getopt.hpp \
     global_settings.hpp \
@@ -1203,6 +1204,7 @@ noinst_HEADERS = \
     sigfpe.hpp \
     single_cell_document.hpp \
     single_choice_popup_menu.hpp \
+    skeleton.hpp \
     so_attributes.hpp \
     soa_helpers.hpp \
     stl_extensions.hpp \
@@ -1231,8 +1233,16 @@ noinst_HEADERS = \
     version.hpp \
     view_ex.hpp \
     view_ex.tpp \
+    wx_checks.hpp \
     wx_new.hpp \
     wx_table_generator.hpp \
+    wx_test_case.hpp \
+    wx_test_date.hpp \
+    wx_test_document.hpp \
+    wx_test_new.hpp \
+    wx_test_output.hpp \
+    wx_test_output_pdf.hpp \
+    wx_test_statusbar.hpp \
     wx_utility.hpp \
     wx_workarounds.hpp \
     xml_lmi.hpp \
