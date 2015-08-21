@@ -36664,3 +36664,18 @@ Expunge a temporary test that has served its purpose.
   wx_table_generator.hpp     [new file]
 Implement new "group premium quote" report.
 
+20150821T1942Z <gchicares@sbcglobal.net> [477]
+
+  Makefile.am
+Update list of headers.
+
+20150821T1943Z <gchicares@sbcglobal.net> [477]
+
+  install_wx.make
+Upgrade wx.
+
+20150821T1944Z <gchicares@sbcglobal.net> [477]
+
+  premium_tax.cpp
+Update DC premium tax rate for release 2015-10-01.
+
