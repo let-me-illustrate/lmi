@@ -36679,3 +36679,30 @@ Upgrade wx.
   premium_tax.cpp
 Update DC premium tax rate for release 2015-10-01.
 
+20150826T1233Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen.cpp
+  group_quote_pdf_gen.hpp
+Implement ctor and dtor in same TU.
+
+20150826T1251Z <gchicares@sbcglobal.net> [477]
+
+  wx_table_generator.cpp
+Make a diagnostic more generic; improve documentation.
+
+20150826T1254Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Regularize switch statements.
+
+20150826T1546Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Exclude composite from participant count in summary.
+
+20150826T1628Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Simplify the way PDF file name is set (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00035.html
+
