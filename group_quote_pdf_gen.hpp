@@ -58,7 +58,8 @@ class LMI_SO group_quote_pdf_generator
     virtual void save(std::string const& output_filename) = 0;
 
   protected:
-    group_quote_pdf_generator() {}
+    group_quote_pdf_generator();
 };
 
 #endif // group_quote_pdf_gen_hpp
+
