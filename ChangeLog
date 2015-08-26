@@ -36569,3 +36569,157 @@ Calculate premiums for group premium quotes.
   ledger_invariant.hpp
 Add group premium quote data to ledger.
 
+20150813T2206Z <gchicares@sbcglobal.net> [487]
+
+  accountvalue.cpp
+  solve.cpp
+Demote defects marked only in the antediluvian branch.
+
+20150813T2212Z <gchicares@sbcglobal.net> [486]
+
+  basic_values.hpp
+Demote a defect pertaining only to the antediluvian branch.
+
+20150813T2220Z <gchicares@sbcglobal.net> [483]
+
+  input_sequence.hpp
+Demote some quibbling defect markers.
+
+20150813T2304Z <gchicares@sbcglobal.net> [478]
+
+  ledger_invariant.cpp
+Merge duplicative defect markers.
+
+20150813T2323Z <gchicares@sbcglobal.net> [478]
+
+  yare_input.cpp
+  yare_input.hpp
+Provide additional fields for class LedgerInvariant's use.
+
+20150813T2337Z <gchicares@sbcglobal.net> [478]
+
+  ihs_basicval.cpp
+  mc_enum_types_aux.cpp
+Provide conversions for classes LedgerInvariant and BasicValues.
+
+20150813T2345Z <gchicares@sbcglobal.net> [478]
+
+  ledger_invariant.cpp
+Prefer class yare_input to class Input.
+
+20150813T2348Z <gchicares@sbcglobal.net> [478]
+
+  ledger_invariant.cpp
+Purge duplicative fragment.
+
+20150813T2357Z <gchicares@sbcglobal.net> [478]
+
+  ihs_acctval.cpp
+  yare_input.hpp
+Implicitly define, and use, yare_input copy ctor.
+
+20150814T0006Z <gchicares@sbcglobal.net> [477]
+
+  ihs_basicval.cpp
+Remove pointless assignment to an elsewhere-unused member.
+
+20150814T0009Z <gchicares@sbcglobal.net> [477]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+Remove an ugly disused data member.
+
+20150818T1840Z <gchicares@sbcglobal.net> [477]
+
+  workhorse.make
+  wx_pdfdoc_test.cpp [expunged]
+Expunge a temporary test that has served its purpose.
+
+20150819T1702Z <gchicares@sbcglobal.net> [477]
+
+  Makefile.am
+  census_view.cpp
+  census_view.hpp
+  emit_ledger.cpp
+  emit_ledger.hpp
+  gpt_view.cpp
+  group_quote_pdf_gen.cpp    [new file]
+  group_quote_pdf_gen.hpp    [new file]
+  group_quote_pdf_gen_wx.cpp [new file]
+  ihs_acctval.cpp
+  illustration_view.cpp
+  main_wx.cpp
+  main_wx_test.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types_aux.cpp
+  mec_view.cpp
+  menus.xrc
+  objects.make
+  skeleton.cpp
+  toolbar.xrc
+  workhorse.make
+  wx_table_generator.cpp     [new file]
+  wx_table_generator.hpp     [new file]
+Implement new "group premium quote" report.
+
+20150821T1942Z <gchicares@sbcglobal.net> [477]
+
+  Makefile.am
+Update list of headers.
+
+20150821T1943Z <gchicares@sbcglobal.net> [477]
+
+  install_wx.make
+Upgrade wx.
+
+20150821T1944Z <gchicares@sbcglobal.net> [477]
+
+  premium_tax.cpp
+Update DC premium tax rate for release 2015-10-01.
+
+20150826T1233Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen.cpp
+  group_quote_pdf_gen.hpp
+Implement ctor and dtor in same TU.
+
+20150826T1251Z <gchicares@sbcglobal.net> [477]
+
+  wx_table_generator.cpp
+Make a diagnostic more generic; improve documentation.
+
+20150826T1254Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Regularize switch statements.
+
+20150826T1546Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Exclude composite from participant count in summary.
+
+20150826T1628Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Simplify the way PDF file name is set (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00035.html
+
+20150826T1702Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Refined formatting of totals. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
+
+20150826T1714Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Attempt to widen columns. See thread beginning here:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
+
+20150826T1906Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Add a footer, which will soon be augmented.
+

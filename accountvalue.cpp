@@ -33,7 +33,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
-#include "input.hpp" // Magic static function.
+#include "input.hpp"                    // magically_rectify()
 #include "interest_rates.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -42,9 +42,9 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 
-#include <algorithm> // std::max(), std::min()
-#include <cmath>     // std::pow()
-#include <numeric>   // std::accumulate()
+#include <algorithm>                    // std::max(), std::min()
+#include <cmath>                        // std::pow()
+#include <numeric>                      // std::accumulate()
 
 namespace
 {
@@ -89,7 +89,7 @@ namespace
 } // Unnamed namespace.
 
 /*
-TODO ??
+IHS !!
 We want transaction functions to be reorderable. That means each must be
 atomic--reentrant, if you will. Is this feasible?
 
@@ -159,7 +159,7 @@ double AccountValue::RunOneBasis(mcenum_run_basis TheBasis)
     double z;
     if(Solving)
         {
-        // TODO ?? Isn't this unreachable?
+        // IHS !! Isn't this unreachable?
         throw std::logic_error("This line had seemed to be unreachable.");
 //        LMI_ASSERT(TheBasis corresponds to yare_input_.SolveExpenseGeneralAccountBasis);
 //        z = Solve();
@@ -220,7 +220,7 @@ double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 {
     if(Solving)
         {
-        // TODO ?? This seems wasteful. Track down the reason for doing it.
+        // IHS !! This seems wasteful. Track down the reason for doing it.
         InvariantValues().Init(this);
         }
 
@@ -271,14 +271,14 @@ void AccountValue::DoYear
     ,int              a_InforceMonth
     )
 {
-    Year = a_Year; // TODO ?? expunge?
+    Year = a_Year; // IHS !! expunge?
 
     RunBasis_ = a_TheBasis;
     set_cloven_bases_from_run_basis(RunBasis_, GenBasis_, SepBasis_);
 
-// TODO ?? Solve...() should reset not inputs but...?
+// IHS !! Solve...() should reset not inputs but...?
 
-    // TODO ?? These variables are set in current run and used in
+    // IHS !! These variables are set in current run and used in
     // guaranteed and midpoint runs.
     YearsCoiRate0   = MortalityRates_->MonthlyCoiRates(GenBasis_)[Year];
 
@@ -340,7 +340,7 @@ void AccountValue::DoYear
     GrossPmts  .assign(12, 0.0);
     NetPmts    .assign(12, 0.0);
 
-    // TODO ?? Strategy here?
+    // IHS !! Strategy here?
 
     for(Month = a_InforceMonth; Month < 12; Month++)
         {
@@ -359,7 +359,7 @@ void AccountValue::DoYear
     TxSetDeathBft();
     VariantValues().EOYDeathBft[Year] = deathbft;
 
-    // TODO ?? Change one of these names, which differ only in the terminal 's'.
+    // IHS !! Change one of these names, which differ only in the terminal 's'.
     InvariantValues().GrossPmt[Year] += std::accumulate(GrossPmts.begin(), GrossPmts.end(), 0.0);
     InvariantValues().Outlay[Year] =
             InvariantValues().GrossPmt   [Year]
@@ -673,7 +673,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
 // Ignores strategies such as pay guideline max--see PerformPmtStrategy().
 // Ignores no-lapse periods and other death benefit guarantees.
 // Some systems force monthly premium to be integral cents even though
-//   mode is not monthly; TODO ?? is this something we need to do here?
+//   mode is not monthly; IHS !! is this something we need to do here?
 // IHS !! Tiered premium implemented in lmi, but not here.
 void AccountValue::TxPmt()
 {
@@ -698,7 +698,7 @@ void AccountValue::TxPmt()
         GrossPmts[Month] += TotalDumpin;
         }
 
-    // TODO ?? Test maximum premium. Round it with Rounding.RoundMAXP .
+    // IHS !! Test maximum premium. Round it with Rounding.RoundMAXP .
 //            (DB-AV)/YearsCorridorFactor - AV
 
     // Subtract premium load from gross premium yielding net premium.
@@ -907,17 +907,17 @@ void AccountValue::TxTakeWD()
         {
         case mce_option1:
             {
-            // TODO ?? Spec amt reduced for option 1 even if in corridor?
+            // IHS !! Spec amt reduced for option 1 even if in corridor?
             //   --taken care of by max WD formula
-            // TODO ?? If WD causes spec amt < min spec amt, do we:
+            // IHS !! If WD causes spec amt < min spec amt, do we:
             //   set spec amt = min spec amt?
             //   reduce the WD?
             //   lapse the policy?
-// TODO ??            ActualSpecAmt = std::min(ActualSpecAmt, deathbft - wd);
+// IHS !!            ActualSpecAmt = std::min(ActualSpecAmt, deathbft - wd);
             ActualSpecAmt -= wd;
             ActualSpecAmt = std::max(ActualSpecAmt, MinSpecAmt);
             ActualSpecAmt = round_specamt()(ActualSpecAmt);
-            // TODO ?? If WD causes AV < min AV, do we:
+            // IHS !! If WD causes AV < min AV, do we:
             //   reduce the WD?
             //   lapse the policy?
             // Maybe it can't happen because of max WD defn?
@@ -940,7 +940,7 @@ void AccountValue::TxTakeWD()
 
     // Deduct withdrawal fee.
     wd -= std::min(WDFee, wd * WDFeeRate);
-    // IHS !! This treats input WD as gross; it prolly should be net. But compare lmi.
+    // IHS !! This treats input WD as gross; it probably should be net. But compare lmi.
 
     InvariantValues().NetWD[Year] = wd;
 // IHS !!    TaxBasis -= wd; // Withdrawals are subtracted from basis in lmi.

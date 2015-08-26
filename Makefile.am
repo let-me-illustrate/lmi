@@ -196,6 +196,7 @@ libskeleton_la_SOURCES = \
     file_command_wx.cpp \
     gpt_document.cpp \
     gpt_view.cpp \
+    group_quote_pdf_generator_wx.cpp \
     icon_monger.cpp \
     illustration_document.cpp \
     illustration_view.cpp \
@@ -227,6 +228,7 @@ libskeleton_la_SOURCES = \
     tier_view_editor.cpp \
     transferor.cpp \
     view_ex.cpp \
+    wx_table_generator.cpp \
     wx_utility.cpp
 
 # main program executables
@@ -338,6 +340,7 @@ liblmi_common_sources = \
     getopt.cpp \
     global_settings.cpp \
     group_values.cpp \
+    group_quote_pdf_generator.cpp \
     illustrator.cpp \
     input.cpp \
     input_harmonization.cpp \
@@ -1118,6 +1121,7 @@ noinst_HEADERS = \
     fenv_lmi_x86.hpp \
     file_command.hpp \
     financial.hpp \
+    force_linking.hpp \
     fund_data.hpp \
     getopt.hpp \
     global_settings.hpp \
@@ -1129,6 +1133,7 @@ noinst_HEADERS = \
     gpt_state.hpp \
     gpt_view.hpp \
     gpt_xml_document.hpp \
+    group_quote_pdf_gen.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
     icon_monger.hpp \
@@ -1225,6 +1230,7 @@ noinst_HEADERS = \
     sigfpe.hpp \
     single_cell_document.hpp \
     single_choice_popup_menu.hpp \
+    skeleton.hpp \
     so_attributes.hpp \
     soa_helpers.hpp \
     stl_extensions.hpp \
@@ -1253,7 +1259,16 @@ noinst_HEADERS = \
     version.hpp \
     view_ex.hpp \
     view_ex.tpp \
+    wx_checks.hpp \
     wx_new.hpp \
+    wx_table_generator.hpp \
+    wx_test_case.hpp \
+    wx_test_date.hpp \
+    wx_test_document.hpp \
+    wx_test_new.hpp \
+    wx_test_output.hpp \
+    wx_test_output_pdf.hpp \
+    wx_test_statusbar.hpp \
     wx_utility.hpp \
     wx_workarounds.hpp \
     xml_lmi.hpp \

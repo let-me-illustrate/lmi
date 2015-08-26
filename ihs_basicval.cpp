@@ -65,8 +65,7 @@
 
 //============================================================================
 BasicValues::BasicValues(Input const& input)
-    :Input_              (new Input(input))
-    ,yare_input_         (input)
+    :yare_input_         (input)
     ,DefnLifeIns_        (mce_cvat)
     ,DefnMaterialChange_ (mce_unnecessary_premium)
     ,Equiv7702DBO3       (mce_option1_for_7702)
@@ -78,16 +77,6 @@ BasicValues::BasicValues(Input const& input)
 {
     Init();
 }
-
-// Temporary kludge for ancient GPT server. TAXATION !! Remove along with that ancient stuff.
-template<typename T>
-std::string mc_str(T t)
-{
-    return mc_enum<T>(t).str();
-}
-
-template std::string mc_str(mcenum_class   );
-template std::string mc_str(mcenum_uw_basis);
 
 //============================================================================
 // TODO ?? Not for general use--use for GPT server only. This is bad design. TAXATION !! Eliminate this.
@@ -105,8 +94,7 @@ BasicValues::BasicValues
     ,double              a_TargetPremium
     // TODO ?? Need loan rate type here?
     )
-    :Input_              (new Input)
-    ,yare_input_         (*Input_)
+    :yare_input_         (Input())
     ,DefnLifeIns_        (mce_cvat)
     ,DefnMaterialChange_ (mce_unnecessary_premium)
     ,Equiv7702DBO3       (a_DBOptFor7702)
@@ -117,38 +105,33 @@ BasicValues::BasicValues
     ,PremiumTaxState_    (a_StateOfJurisdiction)
     ,InitialTargetPremium(a_TargetPremium)
 {
-    Input* kludge_input = new Input;
-
-    (*kludge_input)["IssueAge"         ] = value_cast<std::string>(a_IssueAge);    yare_input_.IssueAge                   = a_IssueAge           ;
-    (*kludge_input)["RetirementAge"    ] = value_cast<std::string>(a_IssueAge);    yare_input_.RetirementAge              = a_IssueAge           ;
-    (*kludge_input)["Gender"           ] = mc_str(a_Gender)                   ;    yare_input_.Gender                     = a_Gender             ;
-    (*kludge_input)["Smoking"          ] = mc_str(a_Smoker)                   ;    yare_input_.Smoking                    = a_Smoker             ;
-    (*kludge_input)["UnderwritingClass"] = mc_str(a_UnderwritingClass)        ;    yare_input_.UnderwritingClass          = a_UnderwritingClass  ;
+    yare_input_.IssueAge                   = a_IssueAge           ;
+    yare_input_.RetirementAge              = a_IssueAge           ;
+    yare_input_.Gender                     = a_Gender             ;
+    yare_input_.Smoking                    = a_Smoker             ;
+    yare_input_.UnderwritingClass          = a_UnderwritingClass  ;
     if(a_AdbInForce)
         {
-        (*kludge_input)["AccidentalDeathBenefit"] = "Yes";                         yare_input_.AccidentalDeathBenefit     = mce_yes              ;
+        yare_input_.AccidentalDeathBenefit     = mce_yes          ;
         }
     else
         {
-        (*kludge_input)["AccidentalDeathBenefit"] = "No";                          yare_input_.AccidentalDeathBenefit     = mce_no               ;
+        yare_input_.AccidentalDeathBenefit     = mce_no           ;
         }
-    (*kludge_input)["GroupUnderwritingType"     ] = mc_str(a_UnderwritingBasis);   yare_input_.GroupUnderwritingType      = a_UnderwritingBasis  ;
-    (*kludge_input)["ProductName"               ] = a_ProductName;                 yare_input_.ProductName                = a_ProductName        ;
-    (*kludge_input)["PremiumTaxState"           ] = mc_str(a_StateOfJurisdiction); yare_input_.PremiumTaxState            = a_StateOfJurisdiction;
-    (*kludge_input)["DefinitionOfLifeInsurance" ] = "GPT";                         yare_input_.DefinitionOfLifeInsurance  = mce_gpt              ;
-    (*kludge_input)["DefinitionOfMaterialChange"] = "GPT adjustment event";        yare_input_.DefinitionOfMaterialChange = mce_adjustment_event ;
+    yare_input_.GroupUnderwritingType      = a_UnderwritingBasis  ;
+    yare_input_.ProductName                = a_ProductName        ;
+    yare_input_.PremiumTaxState            = a_StateOfJurisdiction;
+    yare_input_.DefinitionOfLifeInsurance  = mce_gpt              ;
+    yare_input_.DefinitionOfMaterialChange = mce_adjustment_event ;
 
-    (*kludge_input)["SpecifiedAmount"   ] = value_cast<std::string>(a_FaceAmount); yare_input_.SpecifiedAmount            .assign(1, a_FaceAmount);
+    yare_input_.SpecifiedAmount            .assign(1, a_FaceAmount);
 
     mce_dbopt const z
         (mce_option1_for_7702 == a_DBOptFor7702 ? mce_option1
         :mce_option2_for_7702 == a_DBOptFor7702 ? mce_option2
         :throw std::runtime_error("Unexpected DB option.")
         );
-    (*kludge_input)["DeathBenefitOption"] = mce_dbopt(z).str();                    yare_input_.DeathBenefitOption         .assign(1, z.value());
-
-    // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
-    const_cast<Input&>(*Input_) = *kludge_input;
+    yare_input_.DeathBenefitOption         .assign(1, z.value());
 
     GPTServerInit();
 }
@@ -1671,7 +1654,7 @@ std::vector<double> BasicValues::GetTable
     std::string const file_name = AddDataDir(TableFile);
 
     // To blend by either smoking or gender, both the input must allow
-    // it (Input_ member), and the table must allow it (arg: CanBlend);
+    // it (yare_input_), and the table must allow it (arg: CanBlend);
     // or it must be required by (arg: MustBlend).
     bool BlendSmoking = false;
     switch(CanBlendSmoking)

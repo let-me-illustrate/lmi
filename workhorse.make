@@ -883,7 +883,7 @@ lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHRE
 # source files that are unrelated to wx, and that are therefore not
 # part of $(skeleton_objects).
 skeleton$(SHREXT): lmi_so_attributes := -DLMI_USE_SO
-skeleton$(SHREXT): EXTRA_LDFLAGS := $(wx_ldflags)
+skeleton$(SHREXT): EXTRA_LDFLAGS := $(wx_pdfdoc_ldflags) $(wx_ldflags)
 skeleton$(SHREXT): $(skeleton_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
 lmi_wx_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
@@ -909,12 +909,6 @@ antediluvian_cli$(EXEEXT): $(cli_objects) libantediluvian$(SHREXT)
 antediluvian_cli_monolithic$(EXEEXT): $(cli_objects) $(antediluvian_common_objects)
 
 wx_new$(SHREXT): wx_new.o
-
-# 'wx_pdfdoc_test' is a temporary test that will be removed when lmi
-# uses wxPdfDoc, and an operation that uses it is added to 'wx_test'.
-#
-wx_pdfdoc_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_pdfdoc_ldflags) $(wx_ldflags)
-wx_pdfdoc_test$(EXEEXT): $(common_test_objects) wx_pdfdoc_test.o
 
 wx_test$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 wx_test$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)

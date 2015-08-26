@@ -44,6 +44,7 @@ void constrain_values(e_emission& z)
 {
     z.allow(z.ordinal("emit_pdf_to_printer"), false);
     z.allow(z.ordinal("emit_pdf_to_viewer" ), false);
+    z.allow(z.ordinal("emit_group_quote"   ), false);
 }
 
 /// Validate mc_n_gen_bases, mc_n_sep_bases, and mc_n_rate_periods.
@@ -131,11 +132,19 @@ std::string mc_str(T t)
     return mc_enum<T>(t).str();
 }
 
-template std::string mc_str(mcenum_dbopt    );
-template std::string mc_str(mcenum_gender   );
-template std::string mc_str(mcenum_run_basis);
-template std::string mc_str(mcenum_smoking  );
-template std::string mc_str(mcenum_state    );
+template std::string mc_str(mcenum_class               );
+template std::string mc_str(mcenum_country             );
+template std::string mc_str(mcenum_dbopt               );
+template std::string mc_str(mcenum_defn_life_ins       );
+template std::string mc_str(mcenum_defn_material_change);
+template std::string mc_str(mcenum_gender              );
+template std::string mc_str(mcenum_mec_avoid_method    );
+template std::string mc_str(mcenum_report_column       );
+template std::string mc_str(mcenum_run_basis           );
+template std::string mc_str(mcenum_smoking             );
+template std::string mc_str(mcenum_state               );
+template std::string mc_str(mcenum_table_rating        );
+template std::string mc_str(mcenum_uw_basis            );
 
 mcenum_emission mc_emission_from_string(std::string const& s)
 {
