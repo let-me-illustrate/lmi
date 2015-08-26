@@ -242,6 +242,7 @@ class group_quote_pdf_generator_wx
         std::string plan_type_;
         std::string premium_mode_;
         std::string contract_state_;
+        std::string footer_;
         };
     header_data header_;
 
@@ -309,15 +310,16 @@ void group_quote_pdf_generator_wx::header_data::fill_header_data
     (LedgerInvariant const& ledger
     )
 {
-    company_ = ledger.CorpName;
-
-    prepared_by_ = ledger.ProducerName;
-    guarantee_issue_max_ = "$500,000"; // FIXME
-    product_ = ledger.ProductName;
+    company_          = ledger.CorpName;
+    prepared_by_      = ledger.ProducerName;
+    product_          = ledger.ProductName;
     available_riders_ = "Waiver, ADB, ABR, Spouse or Child"; // FIXME
+    premium_mode_     = ledger.ErMode.at(0).str();
+    contract_state_   = ledger.GetStatePostalAbbrev();
+    footer_           = ledger.MarketingNameFootnote;
+    // Input::Comments will replace these two:
+    guarantee_issue_max_ = "$500,000"; // FIXME
     plan_type_ = "Mandatory"; // FIXME
-    premium_mode_ = ledger.ErMode.at(0).str();
-    contract_state_ = ledger.GetStatePostalAbbrev();
 }
 
 void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
@@ -911,11 +913,7 @@ void group_quote_pdf_generator_wx::output_footer
         *pos_y += logo_image.GetSize().y + vert_skip;
         }
 
-    wxString const footer_html =
-        "<p>"
-        "...footnotes such as LedgerInvariant::MarketingNameFootnote..."
-        "</p>"
-        ;
+    wxString const footer_html = "<p>" + header_.footer_ + "</p>";
 
     *pos_y += output_html
         (html_parser
