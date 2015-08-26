@@ -153,13 +153,13 @@ column_definition const column_definitions[] =
     ,{"Issue Age"                        ,              "999"   }
     ,{"Date of Birth"                    ,       "9999-99-99"   }
     ,{"Income"                           ,      "$99,999,999"   }
-    ,{"Face Amount"                      ,   "$99,999,999.00"   }
+    ,{"Face Amount"                      ,  "$999,999,999.00"   }
     // All the subsequent columns use dynamically determined "premium mode" in
     // their title, so their labels are actually format strings.
-    ,{"%s\nPremium"                      ,      "$999,999.00"   }
-    ,{"%s\nPremium with\nWaiver"         ,      "$999,999.00"   }
-    ,{"%s\nPremium with\nADB"            ,      "$999,999.00"   }
-    ,{"%s\nPremium with\nWaiver &\nADB"  ,      "$999,999.00"   }
+    ,{"%s\nPremium"                      ,    "$9,999,999.00"   }
+    ,{"%s\nPremium with\nWaiver"         ,    "$9,999,999.00"   }
+    ,{"%s\nPremium with\nADB"            ,    "$9,999,999.00"   }
+    ,{"%s\nPremium with\nWaiver &\nADB"  ,    "$9,999,999.00"   }
     };
 
 BOOST_STATIC_ASSERT(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max);
