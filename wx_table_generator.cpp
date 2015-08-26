@@ -36,13 +36,20 @@
 namespace
 {
 
-// Return the number of lines in a possibly multiline string.
+/// Return the number of lines in a possibly multiline string.
+///
+/// Actually returns one plus the number of newlines in the string.
+/// If, say, a trailing '\n' is found, the count is one greater than
+/// the number of lines--which might be useful, e.g., for adding an
+/// extra blank line to a column header.
+
 std::size_t count_lines(std::string const& s)
 {
     return 1u + std::count(s.begin(), s.end(), '\n');
 }
 
-// Split a string into lines separated by new line characters.
+/// Split a string into lines separated by new line characters.
+
 std::vector<std::string> split_in_lines(std::string const& s)
 {
     // BOOST !! Unfortunately boost::split() can't be easily used with the
@@ -65,7 +72,8 @@ std::vector<std::string> split_in_lines(std::string const& s)
     return lines;
 }
 
-// Increase the first argument to the second one if it's smaller.
+/// Increase the first argument to the second one if it's smaller.
+
 template<typename T>
 void increase_to_if_smaller(T& first, T second)
 {
@@ -192,11 +200,7 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
 
     if(total_width_ < total_fixed)
         {
-        warning()
-            << "Not enough space for all fixed columns "
-               "in group premium quote."
-            << LMI_FLUSH
-            ;
+        warning() << "Not enough space for all fixed columns." << LMI_FLUSH;
         return;
         }
 
@@ -350,3 +354,4 @@ void wx_table_generator::output_row
 
     do_output_horz_separator(left_margin_, x, *pos_y);
 }
+
