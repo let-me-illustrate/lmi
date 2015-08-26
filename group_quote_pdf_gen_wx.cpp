@@ -115,8 +115,12 @@ int output_html
             }
             break;
         case e_output_measure_only:
-            // Nothing else to do.
+            // Do nothing.
             break;
+        default:
+            {
+            fatal_error() << "Case " << output_mode << " not found." << LMI_FLUSH;
+            }
         }
 
     return cell->GetHeight();
@@ -342,22 +346,32 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
         switch(static_cast<enum_group_quote_columns>(col))
             {
             case e_col_number:
+                {
                 rd.values[col] = wxString::Format("%d", ++row_num_).ToStdString();
-                continue;
+                }
+                break;
             case e_col_name:
+                {
                 rd.values[col] = Invar.Insured1;
-                continue;
+                }
+                break;
             case e_col_age:
+                {
                 rd.values[col] = wxString::Format("%.0f", Invar.Age).ToStdString();
-                continue;
+                }
+                break;
             case e_col_dob:
+                {
                 rd.values[col] = ConvertDateToWx
                     (jdn_t(static_cast<int>(Invar.DateOfBirthJdn))
                     ).FormatDate();
-                continue;
+                }
+                break;
             case e_col_salary:
+                {
                 rd.values[col] = '$' + ledger_format(Invar.Salary.at(year), f0);
-                continue;
+                }
+                break;
             case e_col_face_amount:
                 {
                 double const z = Invar.SpecAmt.at(year);
@@ -367,7 +381,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     totals_.total(col, z);
                     }
                 }
-                continue;
+                break;
             case e_col_premium:
                 {
                 double const z = Invar.InitModalPrem00;
@@ -377,7 +391,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     totals_.total(col, z);
                     }
                 }
-                continue;
+                break;
             case e_col_premium_with_waiver:
                 {
                 double const z = Invar.InitModalPrem01;
@@ -387,7 +401,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     totals_.total(col, z);
                     }
                 }
-                continue;
+                break;
             case e_col_premium_with_adb:
                 {
                 double const z = Invar.InitModalPrem10;
@@ -397,7 +411,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     totals_.total(col, z);
                     }
                 }
-                continue;
+                break;
             case e_col_premium_with_waiver_and_adb:
                 {
                 double const z = Invar.InitModalPrem11;
@@ -407,12 +421,17 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     totals_.total(col, z);
                     }
                 }
-                continue;
-            case e_col_max:
                 break;
+            case e_col_max:
+                {
+                fatal_error() << "Unreachable." << LMI_FLUSH;
+                }
+                break;
+            default:
+                {
+                fatal_error() << "Case " << col << " not found." << LMI_FLUSH;
+                }
             }
-
-        LMI_ASSERT(!"Unknown group premium quote column.");
         }
 
     // The last, composite, ledger is only used for the totals, it shouldn't be
@@ -508,7 +527,6 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
             case e_col_face_amount:
                 // Nothing to do for these columns, their labels are literal.
                 break;
-
             case e_col_premium:
             case e_col_premium_with_waiver:
             case e_col_premium_with_adb:
@@ -523,9 +541,15 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
                             ).ToStdString();
                 }
                 break;
-
             case e_col_max:
-                LMI_ASSERT(!"unreachable");
+                {
+                fatal_error() << "Unreachable." << LMI_FLUSH;
+                }
+                break;
+            default:
+                {
+                fatal_error() << "Case " << col << " not found." << LMI_FLUSH;
+                }
             }
 
         table_gen.add_column(header.c_str(), cd.widest_text_);
@@ -872,10 +896,17 @@ void group_quote_pdf_generator_wx::output_footer
         switch(output_mode)
             {
             case e_output_normal:
+                {
                 pdf_dc.DrawBitmap(logo_image, horz_margin, *pos_y);
+                }
                 break;
             case e_output_measure_only:
+                // Do nothing.
                 break;
+            default:
+                {
+                fatal_error() << "Case " << output_mode << " not found." << LMI_FLUSH;
+                }
             }
         *pos_y += logo_image.GetSize().y + vert_skip;
         }
@@ -901,3 +932,4 @@ volatile bool ensure_setup = group_quote_pdf_generator_wx::set_creator
     );
 
 } // Unnamed namespace.
+
