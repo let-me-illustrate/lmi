@@ -49,6 +49,7 @@
 #include <wx/pdfdc.h>
 
 #include <limits>
+#include <stdexcept>
 #include <utility>                      // std::pair
 #include <vector>
 
@@ -836,9 +837,18 @@ void group_quote_pdf_generator_wx::output_table_totals
         ,wxALIGN_RIGHT
         );
 
-    std::pair<int, oenum_format_style> const f2(2, oe_format_normal);
     for(int col = e_col_face_amount; col < e_col_max; ++col)
         {
+        int const num_dec =
+            ((e_col_face_amount                 == col) ? 0
+            :(e_col_premium                     == col) ? 2
+            :(e_col_premium_with_waiver         == col) ? 2
+            :(e_col_premium_with_adb            == col) ? 2
+            :(e_col_premium_with_waiver_and_adb == col) ? 2
+            :throw std::logic_error("Invalid column type.")
+            );
+        std::pair<int, oenum_format_style> const f(num_dec, oe_format_normal);
+
         wxRect const cell_rect = table_gen.cell_rect(col, y);
             {
             wxDCPenChanger set_transparent_pen(pdf_dc, *wxTRANSPARENT_PEN);
@@ -859,7 +869,7 @@ void group_quote_pdf_generator_wx::output_table_totals
             ,wxALIGN_LEFT
             );
         pdf_dc.DrawLabel
-            (ledger_format(totals_.total(col), f2)
+            (ledger_format(totals_.total(col), f)
             ,text_rect
             ,wxALIGN_RIGHT
             );
