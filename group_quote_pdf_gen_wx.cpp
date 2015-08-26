@@ -759,22 +759,22 @@ void group_quote_pdf_generator_wx::output_document_header
          "<td align=\"center\" colspan=\"4\"><font size=\"+1\">Plan Details Summary</font></td>"
          "</tr>"
          "<tr>"
-         "<td align=\"right\"><b>Effective Data:&nbsp;&nbsp;</b></td><td>%s</td>"
-         "<td align=\"right\"><b>Plan Type(s):&nbsp;&nbsp;</b></td><td>%s</td>"
+         "<td align=\"right\"><b>Effective Date:&nbsp;&nbsp;</b></td><td>%s</td>"
+         "<td align=\"right\"><b>Plan Type:&nbsp;&nbsp;</b></td><td>%s</td>"
          "</tr>"
          "<tr>"
          "<td align=\"right\"><b>Guarantee Issue Max:&nbsp;&nbsp;</b></td><td>%s</td>"
          "<td align=\"right\"><b>Premium Mode:&nbsp;&nbsp;</b></td><td>%s</td>"
          "</tr>"
          "<tr>"
-         "<td align=\"right\"><b>Product(s):&nbsp;&nbsp;</b></td><td>%s</td>"
+         "<td align=\"right\"><b>Product:&nbsp;&nbsp;</b></td><td>%s</td>"
          "<td align=\"right\"><b>Contract State:&nbsp;&nbsp;</b></td><td>%s</td>"
          "</tr>"
          "<tr>"
          "<td align=\"right\"><b>Available Riders:&nbsp;&nbsp;</b></td><td>%s</td>"
          "</tr>"
          "<tr>"
-         "<td align=\"right\"><b>Number of eligibles:&nbsp;&nbsp;</b></td><td>%d</td>"
+         "<td align=\"right\"><b>Number of participants:&nbsp;&nbsp;</b></td><td>%d</td>"
          "</tr>"
          "</table>"
         ,wxDateTime::Today().FormatDate()
@@ -784,7 +784,7 @@ void group_quote_pdf_generator_wx::output_document_header
         ,header_.product_
         ,header_.contract_state_
         ,header_.available_riders_
-        ,row_num_
+        ,row_num_ - 1 // "- 1": don't count the composite.
         );
 
     int const summary_height = output_html
