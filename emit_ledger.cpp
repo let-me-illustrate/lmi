@@ -32,6 +32,7 @@
 #include "custom_io_0.hpp"
 #include "custom_io_1.hpp"
 #include "file_command.hpp"
+#include "group_quote_pdf_gen.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
@@ -86,6 +87,13 @@ double ledger_emitter::initiate()
             ;
         std::remove(spreadsheet_filename.c_str());
         PrintRosterHeaders(spreadsheet_filename);
+        }
+    if(emission_ & mce_emit_group_quote)
+        {
+        LMI_ASSERT(!case_filepath_.empty());
+        std::string const pdf_filename = case_filepath_.string() + ".quote.pdf";
+        std::remove(pdf_filename.c_str());
+        group_quote_gen_ = group_quote_pdf_generator::create();
         }
 
     return timer.stop().elapsed_seconds();
@@ -145,6 +153,10 @@ double ledger_emitter::emit_cell
             +   configurable_settings::instance().spreadsheet_file_extension()
             );
         }
+    if(emission_ & mce_emit_group_quote)
+        {
+        group_quote_gen_->add_ledger(ledger);
+        }
     if(emission_ & mce_emit_text_stream)
         {
         PrintLedgerFlatText(ledger, std::cout);
@@ -180,7 +192,12 @@ double ledger_emitter::finish()
 {
     Timer timer;
 
-    ; // Nothing to do for now.
+    if(emission_ & mce_emit_group_quote)
+        {
+        LMI_ASSERT(!case_filepath_.empty());
+        std::string const pdf_filename = case_filepath_.string() + ".quote.pdf";
+        group_quote_gen_->save(pdf_filename);
+        }
 
     return timer.stop().elapsed_seconds();
 }

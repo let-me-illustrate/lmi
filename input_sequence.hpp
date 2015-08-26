@@ -204,7 +204,6 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <iosfwd>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -272,13 +271,12 @@ class LMI_SO InputSequence
 
     void realize_vector();
 
-    // TODO ?? This prolly ought to return a reference; first, let's see
-    // how we'll use it, though.
+    // SOMEDAY !! This probably ought to return a reference.
     std::vector<double> linear_number_representation() const;
     std::vector<std::string> linear_keyword_representation() const;
     std::string element_by_element_representation() const;
 
-    // TODO ?? The two following 'regularized representation' functions
+    // SOMEDAY !! These two 'regularized representation' functions
     // are probably not useful. The representation we care about is a
     // std::vector<double>.
     std::string mathematical_representation() const;
@@ -326,8 +324,8 @@ class LMI_SO InputSequence
 
     void mark_diagnostic_context();
 
-    // TODO ?? Something like this may be part of a solution
-    // if we decide to permit specification of intervals in random order.
+    // SOMEDAY !! Something like this may be part of a solution if we
+    // decide to permit specification of intervals in random order.
     void sort_intervals();
 
     std::istringstream input_stream;

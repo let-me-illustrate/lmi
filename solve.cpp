@@ -32,11 +32,11 @@
 #include "death_benefits.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "mc_enum_types_aux.hpp" // set_run_basis_from_cloven_bases()
+#include "mc_enum_types_aux.hpp"        // set_run_basis_from_cloven_bases()
 #include "outlay.hpp"
 #include "zero.hpp"
 
-#include <algorithm>     // std::min(), std::max()
+#include <algorithm>                    // std::max(), std::min()
 
 /*
 IHS !! These issues have been addressed in lmi, but not here:
@@ -53,7 +53,7 @@ IHS !! These issues have been addressed in lmi, but not here:
 namespace
 {
     AccountValue*       That;
-    // TODO ?? Use a struct for these?
+    // IHS !! Use a struct for these?
     double              ThatSolveTargetCSV;
     mcenum_solve_target ThatSolveTarget;
     int                 ThatSolveTgtYear;
@@ -159,7 +159,7 @@ double SolveTest()
 //============================================================================
 inline static double SolveSpecAmt(double CandidateValue)
 {
-// TODO ?? Change surrchg when SA changes?
+// IHS !! Change surrchg when SA changes?
     That->SolveSetSpecAmt(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
     return only_set_values ? 0.0 : SolveTest();
 }
@@ -249,7 +249,7 @@ double AccountValue::Solve()
     ThatSolveTgtYear = std::min(ThatSolveTgtYear, BasicValues::GetLength());
     // ... or before the beginning
     ThatSolveTgtYear = std::max(ThatSolveTgtYear, 1);
-    // We should do the same for these I guess...TODO ?? but here?
+    // We should do the same for these I guess...IHS !! but here?
     ThatSolveBegYear = yare_input_.SolveBeginYear;
     ThatSolveEndYear = yare_input_.SolveEndYear;
 
@@ -276,7 +276,7 @@ double AccountValue::Solve()
             UpperBound = 1000000.0 * Outlay_->ee_modal_premiums()[0];
             Decimals   = 0;
             SolveFn    = SolveSpecAmt;
-            // TODO ?? Respect minimum premium?
+            // IHS !! Respect minimum premium?
             }
             break;
         case mce_solve_ee_prem:
@@ -284,7 +284,7 @@ double AccountValue::Solve()
             // We aren't interested in negative premiums.
             LowerBound = 0.0;
             // If solved premium exceeds specified amount, there's a problem.
-            // TODO ?? Better to use the maximum SA, not the first SA?
+            // IHS !! Better to use the maximum SA, not the first SA?
             UpperBound = DeathBfts_->specamt()[0];
             Decimals   = 2;
             SolveFn    = SolvePrem;
@@ -294,7 +294,7 @@ double AccountValue::Solve()
             {
             // We aren't interested in negative loans.
             LowerBound = 0.0;
-            // TODO ?? Not satisfactory.
+            // IHS !! Not satisfactory.
             UpperBound = 1000000.0 * Outlay_->ee_modal_premiums()[0];
             Decimals   = 2;
             SolveFn    = SolveLoan;
@@ -304,7 +304,7 @@ double AccountValue::Solve()
             {
             // We aren't interested in negative withdrawals.
             LowerBound = 0.0;
-            // TODO ?? Not satisfactory.
+            // IHS !! Not satisfactory.
             UpperBound = 1000000.0 * Outlay_->ee_modal_premiums()[0];
             Decimals   = 2;
             SolveFn    = SolveWD;

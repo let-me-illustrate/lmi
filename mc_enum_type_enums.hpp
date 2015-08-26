@@ -54,6 +54,7 @@ enum mcenum_emission
     ,mce_emit_text_stream    =  512
     ,mce_emit_custom_0       = 1024
     ,mce_emit_custom_1       = 2048
+    ,mce_emit_group_quote    = 4096
     };
 
 /// Rounding styles.

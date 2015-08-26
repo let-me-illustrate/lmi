@@ -29,7 +29,6 @@
 #include "calendar_date.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <string>
 #include <vector>
@@ -55,8 +54,7 @@ class Input;
 /// (mc_enum and tn_range classes) designed for interactive input.
 
 class yare_input
-    :        private lmi::uncopyable <yare_input>
-    ,virtual private obstruct_slicing<yare_input>
+    :virtual private obstruct_slicing<yare_input>
 {
   public:
     explicit yare_input(Input const&);
@@ -119,16 +117,16 @@ class yare_input
 //    mcenum_state                      State                           ;
 //    std::string                       ZipCode                         ;
 //    std::string                       EmployeeClass                   ;
-//    std::string                       CorporationName                 ;
+    std::string                       CorporationName                 ;
 //    std::string                       CorporationAddress              ;
 //    std::string                       CorporationCity                 ;
 //    mcenum_state                      CorporationState                ;
 //    std::string                       CorporationZipCode              ;
-//    std::string                       AgentName                       ;
-//    std::string                       AgentAddress                    ;
-//    std::string                       AgentCity                       ;
-//    mcenum_state                      AgentState                      ;
-//    std::string                       AgentZipCode                    ;
+    std::string                       AgentName                       ;
+    std::string                       AgentAddress                    ;
+    std::string                       AgentCity                       ;
+    mcenum_state                      AgentState                      ;
+    std::string                       AgentZipCode                    ;
 //    std::string                       AgentPhone                      ;
 //    std::string                       AgentId                         ;
 //    mcenum_premium_table              InsuredPremiumTableNumber       ;
@@ -151,8 +149,8 @@ class yare_input
     std::string                       Comments                        ;
     bool                              AmortizePremiumLoad             ;
 //    std::string                       InforceDataSource               ;
-//    std::string                       ContractNumber                  ;
-//    std::string                       MasterContractNumber            ;
+    std::string                       ContractNumber                  ;
+    std::string                       MasterContractNumber            ;
 //    calendar_date                     InforceAsOfDate                 ;
     int                               InforceYear                     ;
     int                               InforceMonth                    ;
@@ -189,7 +187,7 @@ class yare_input
     double                            InforceDcv                      ;
     double                            InforceLeastDeathBenefit        ;
     std::vector<double>               Inforce7702AAmountsPaidHistory  ;
-//    mcenum_country                    Country                         ;
+    mcenum_country                    Country                         ;
 //    bool                              OverrideCoiMultiplier           ;
     double                            CountryCoiMultiplier            ;
     mcenum_survival_limit             SurviveToType                   ;
@@ -233,19 +231,19 @@ class yare_input
     std::vector<double>               FundAllocations                 ;
     std::vector<double>               CashValueEnhancementRate        ;
 //
-//    bool                              CreateSupplementalReport        ;
-//    mcenum_report_column              SupplementalReportColumn00      ;
-//    mcenum_report_column              SupplementalReportColumn01      ;
-//    mcenum_report_column              SupplementalReportColumn02      ;
-//    mcenum_report_column              SupplementalReportColumn03      ;
-//    mcenum_report_column              SupplementalReportColumn04      ;
-//    mcenum_report_column              SupplementalReportColumn05      ;
-//    mcenum_report_column              SupplementalReportColumn06      ;
-//    mcenum_report_column              SupplementalReportColumn07      ;
-//    mcenum_report_column              SupplementalReportColumn08      ;
-//    mcenum_report_column              SupplementalReportColumn09      ;
-//    mcenum_report_column              SupplementalReportColumn10      ;
-//    mcenum_report_column              SupplementalReportColumn11      ;
+    bool                              CreateSupplementalReport        ;
+    mcenum_report_column              SupplementalReportColumn00      ;
+    mcenum_report_column              SupplementalReportColumn01      ;
+    mcenum_report_column              SupplementalReportColumn02      ;
+    mcenum_report_column              SupplementalReportColumn03      ;
+    mcenum_report_column              SupplementalReportColumn04      ;
+    mcenum_report_column              SupplementalReportColumn05      ;
+    mcenum_report_column              SupplementalReportColumn06      ;
+    mcenum_report_column              SupplementalReportColumn07      ;
+    mcenum_report_column              SupplementalReportColumn08      ;
+    mcenum_report_column              SupplementalReportColumn09      ;
+    mcenum_report_column              SupplementalReportColumn10      ;
+    mcenum_report_column              SupplementalReportColumn11      ;
 //
 //    mcenum_to_point                   SolveTgtAtWhich                 ;
 //    mcenum_from_point                 SolveFromWhich                  ;

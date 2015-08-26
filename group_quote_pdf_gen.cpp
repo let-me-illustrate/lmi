@@ -1,4 +1,4 @@
-// wxPdfDocument library unit test.
+// Generate group premium quote PDF file.
 //
 // Copyright (C) 2015 Gregory W. Chicares.
 //
@@ -21,35 +21,40 @@
 
 // $Id$
 
-// This unit test checks that linking with wxPdfDocument library and
-// generating the simplest possible document with it works.
-
+#include LMI_PCH_HEADER
 #ifdef __BORLANDC__
-#   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
-#include "platform_dependent.hpp"       // access()
-#include "test_tools.hpp"
+#include "group_quote_pdf_gen.hpp"
 
-#include <wx/pdfdoc.h>
+#include "callback.hpp"
 
-#include <wx/init.h>
-
-int test_main(int argc, char* argv[])
+namespace
 {
-    wxInitializer init(argc, argv);
-    BOOST_TEST( init );
+callback<group_quote_pdf_generator::creator_type>
+    group_quote_pdf_generator_create_callback;
+} // Unnnamed namespace.
 
-    wxPdfDocument pdf_doc(wxLANDSCAPE, "pt", wxPAPER_LETTER);
-    pdf_doc.AddPage();
-    pdf_doc.SetFont("Helvetica", "", 16);
-    pdf_doc.Text(20, 20, "Hello PDF!");
+typedef group_quote_pdf_generator::creator_type FunctionPointer;
+template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = 0;
 
-    char const* const p = "/tmp/eraseme.pdf";
-    pdf_doc.SaveAsFile(p);
-    BOOST_TEST_EQUAL(0, access(p, R_OK));
-    BOOST_TEST(0 == std::remove(p));
-
-    return 0;
+bool group_quote_pdf_generator::set_creator(creator_type f)
+{
+    group_quote_pdf_generator_create_callback.initialize(f);
+    return true;
 }
+
+boost::shared_ptr<group_quote_pdf_generator> group_quote_pdf_generator::create()
+{
+    return group_quote_pdf_generator_create_callback()();
+}
+
+group_quote_pdf_generator::group_quote_pdf_generator()
+{
+}
+
+group_quote_pdf_generator::~group_quote_pdf_generator()
+{
+}
+

@@ -114,7 +114,6 @@ class LMI_SO BasicValues
     bool                  IsSubjectToIllustrationReg() const;
     double                InvestmentManagementFee()    const;
 
-    boost::shared_ptr<Input const>        Input_;
     yare_input                            yare_input_;
     boost::shared_ptr<product_data>       ProductData_;
     boost::shared_ptr<product_database>   Database_;
@@ -499,7 +498,7 @@ inline bool BasicValues::IsSubjectToIllustrationReg() const
     return IsSubjectToIllustrationReg_;
 }
 
-// TODO ?? Use a configuration file instead. These deprecated
+// IHS !! Use a configuration file instead. These deprecated
 // functions are used only by the antediluvian branch.
 char const* CurrentTableFile();
 char const* GuaranteedTableFile();

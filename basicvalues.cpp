@@ -54,8 +54,7 @@ char const* GuaranteedTableFile() {return "/opt/lmi/data/qx_cso";}
 
 //============================================================================
 BasicValues::BasicValues(Input const& input)
-    :Input_                   (new Input(input))
-    ,yare_input_              (input)
+    :yare_input_              (input)
     ,StateOfJurisdiction_     (mce_s_CT)
     ,StateOfDomicile_         (mce_s_CT)
     ,PremiumTaxState_         (mce_s_CT)
