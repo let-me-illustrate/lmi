@@ -36718,3 +36718,8 @@ Refined formatting of totals. See:
 Attempt to widen columns. See thread beginning here:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
 
+20150826T1906Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Add a footer, which will soon be augmented.
+
