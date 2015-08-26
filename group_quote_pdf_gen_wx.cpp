@@ -448,21 +448,11 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     wxPrintData print_data;
     print_data.SetOrientation(wxLANDSCAPE);
     print_data.SetPaperId(wxPAPER_LETTER);
+    print_data.SetFilename(output_filename);
 
     wxPdfDC pdf_dc(print_data);
-
     page_.initialize(pdf_dc);
-
     do_generate_pdf(pdf_dc);
-
-    // This is pretty baroque: to specify the name of the file after wxPdfDC
-    // creation, we need to poke print data stored inside it.
-    wxPdfDCImpl* const impl = dynamic_cast<wxPdfDCImpl*>(pdf_dc.GetImpl());
-    LMI_ASSERT(impl);
-
-    impl->GetPrintData().SetFilename(output_filename);
-
-    // After the above, EndDoc() will produce output in the specified file.
     pdf_dc.EndDoc();
 }
 
