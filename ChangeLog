@@ -36712,3 +36712,9 @@ Simplify the way PDF file name is set (VZ). See:
 Refined formatting of totals. See:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
 
+20150826T1714Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Attempt to widen columns. See thread beginning here:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
+
