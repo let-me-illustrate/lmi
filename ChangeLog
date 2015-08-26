@@ -36706,3 +36706,9 @@ Exclude composite from participant count in summary.
 Simplify the way PDF file name is set (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00035.html
 
+20150826T1702Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Refined formatting of totals. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00034.html
+
