@@ -36729,3 +36729,9 @@ Add a footer, which will soon be augmented.
 Fix defect introduced 20150819T1702Z: last header line missing. See:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00054.html
 
+20150828T1541Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Improve divers names. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00055.html
+
