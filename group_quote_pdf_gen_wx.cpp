@@ -374,7 +374,8 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             {
             case e_col_number:
                 {
-                rd.values[col] = wxString::Format("%d", ++row_num_).ToStdString();
+                // Row numbers shown to human beings should be 1-based.
+                rd.values[col] = wxString::Format("%d", row_num_ + 1).ToStdString();
                 }
                 break;
             case e_col_name:
@@ -462,10 +463,11 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
         }
 
     // The last, composite, ledger is only used for the totals, it shouldn't be
-    // shown in the main table.
+    // shown in the main table nor counted as a row.
     if(!is_composite)
         {
         rows_.push_back(rd);
+        row_num_++;
         }
 }
 
@@ -802,7 +804,7 @@ void group_quote_pdf_generator_wx::output_document_header
         ,escape_for_html_elem(report_data_.product_)
         ,escape_for_html_elem(report_data_.contract_state_)
         ,escape_for_html_elem(report_data_.available_riders_)
-        ,row_num_ - 1 // "- 1": don't count the composite.
+        ,row_num_
         );
 
     int const summary_height = output_html
