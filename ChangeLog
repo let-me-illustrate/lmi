@@ -36741,3 +36741,9 @@ Improve divers names. See:
 Escape XML special characters. See:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00056.html
 
+20150828T1704Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Improve comprehensibility. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00053.html
+
