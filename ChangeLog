@@ -36747,3 +36747,13 @@ Escape XML special characters. See:
 Improve comprehensibility. See:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00053.html
 
+20150828T1717Z <gchicares@sbcglobal.net> [477]
+
+  census_view.cpp
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  skeleton.cpp
+Improve toolbar enablement. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00057.html
+
