@@ -36723,3 +36723,9 @@ Attempt to widen columns. See thread beginning here:
   group_quote_pdf_gen_wx.cpp
 Add a footer, which will soon be augmented.
 
+20150828T1520Z <gchicares@sbcglobal.net> [477]
+
+  wx_table_generator.cpp
+Fix defect introduced 20150819T1702Z: last header line missing. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00054.html
+

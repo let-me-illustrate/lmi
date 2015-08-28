@@ -57,11 +57,15 @@ std::vector<std::string> split_in_lines(std::string const& s)
     // here.
     std::vector<std::string> lines;
     std::string line;
-    for(std::string::const_iterator i = s.begin(); i != s.end(); ++i)
+    for(std::string::const_iterator i = s.begin(); ; ++i)
         {
-        if('\n' == *i)
+        if(i == s.end() || '\n' == *i)
             {
             lines.push_back(line);
+            if(i == s.end())
+                {
+                break;
+                }
             line.clear();
             }
         else
@@ -69,6 +73,7 @@ std::vector<std::string> split_in_lines(std::string const& s)
             line += *i;
             }
         }
+    LMI_ASSERT(lines.size() == count_lines(s));
     return lines;
 }
 
@@ -315,7 +320,7 @@ void wx_table_generator::output_header(int* pos_y)
         std::vector<std::string> const lines(split_in_lines(ci.header_));
 
         // Fill the elements from the bottom line to the top one, so that a
-        // single line header is shown on the last line, as per the spec.
+        // single line header is shown on the last line.
         std::size_t const first_line = max_header_lines_ - lines.size();
         for(std::size_t line = 0; line < lines.size(); ++line)
             {
