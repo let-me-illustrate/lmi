@@ -229,10 +229,10 @@ class group_quote_pdf_generator_wx
         ,enum_output_mode output_mode = e_output_normal
         );
 
-    struct header_data
+    struct global_report_data
         {
-        // Extract header fields from a ledger.
-        void fill_header_data(LedgerInvariant const& ledger);
+        // Extract header and footer fields from a ledger.
+        void fill_global_report_data(LedgerInvariant const& ledger);
 
         std::string company_;
         std::string prepared_by_;
@@ -244,7 +244,7 @@ class group_quote_pdf_generator_wx
         std::string contract_state_;
         std::string footer_;
         };
-    header_data header_;
+    global_report_data report_data_;
 
     struct row_data
         {
@@ -306,7 +306,7 @@ group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
 {
 }
 
-void group_quote_pdf_generator_wx::header_data::fill_header_data
+void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     (LedgerInvariant const& ledger
     )
 {
@@ -326,11 +326,11 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 {
     LedgerInvariant const& Invar = ledger.GetLedgerInvariant();
 
-    // We suppose that header data is the same for all ledgers, so only fill it
-    // once.
-    if(header_.company_.empty())
+    // Header and footer data must be the same for all ledgers.
+    // FIXME This needs to be asserted.
+    if(report_data_.company_.empty())
         {
-        header_.fill_header_data(Invar);
+        report_data_.fill_global_report_data(Invar);
         }
 
     int const year = 0;
@@ -530,7 +530,7 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
                 LMI_ASSERT(header.find("%s") != std::string::npos);
 
                 header = wxString::Format
-                            (wxString(header), header_.premium_mode_
+                            (wxString(header), report_data_.premium_mode_
                             ).ToStdString();
                 }
                 break;
@@ -697,7 +697,7 @@ void group_quote_pdf_generator_wx::output_image_header
     wxDCTextColourChanger set_white_text(pdf_dc, *wxWHITE);
 
     wxString const image_text
-        (header_.company_
+        (report_data_.company_
          + "\nPremium & Benefit Summary"
         );
 
@@ -731,9 +731,9 @@ void group_quote_pdf_generator_wx::output_document_header
          "<td align=\"center\"><i>Prepared By: %s</i></td>"
          "</tr>"
          "</table>"
-        ,header_.company_
+        ,report_data_.company_
         ,wxDateTime::Today().FormatDate()
-        ,header_.prepared_by_
+        ,report_data_.prepared_by_
         );
 
     output_html(html_parser, horz_margin, *pos_y, page_.width_ / 2, title_html);
@@ -771,12 +771,12 @@ void group_quote_pdf_generator_wx::output_document_header
          "</tr>"
          "</table>"
         ,wxDateTime::Today().FormatDate()
-        ,header_.plan_type_
-        ,header_.guarantee_issue_max_
-        ,header_.premium_mode_
-        ,header_.product_
-        ,header_.contract_state_
-        ,header_.available_riders_
+        ,report_data_.plan_type_
+        ,report_data_.guarantee_issue_max_
+        ,report_data_.premium_mode_
+        ,report_data_.product_
+        ,report_data_.contract_state_
+        ,report_data_.available_riders_
         ,row_num_ - 1 // "- 1": don't count the composite.
         );
 
@@ -913,7 +913,7 @@ void group_quote_pdf_generator_wx::output_footer
         *pos_y += logo_image.GetSize().y + vert_skip;
         }
 
-    wxString const footer_html = "<p>" + header_.footer_ + "</p>";
+    wxString const footer_html = "<p>" + report_data_.footer_ + "</p>";
 
     *pos_y += output_html
         (html_parser
