@@ -63,6 +63,28 @@ enum enum_output_mode
     ,e_output_measure_only
     };
 
+/// Escape special XML characters in the given string, ensuring that it appears
+/// correctly inside HTML element contents. Notice that we don't need to escape
+/// quotes here as we never use the result of this function inside an HTML
+/// attribute, only inside HTML elements.
+
+wxString escape_for_html_elem(std::string const& s)
+{
+    wxString z;
+    z.reserve(s.length());
+    for(std::string::const_iterator i = s.begin(); i != s.end(); ++i)
+        {
+        switch(*i)
+            {
+            case '<': z += "&lt;" ; break;
+            case '>': z += "&gt;" ; break;
+            case '&': z += "&amp;"; break;
+            default : z += *i     ;
+            }
+        }
+    return z;
+}
+
 /// Load the image from the given file. Throw on failure.
 
 wxImage load_image(char const* file)
@@ -327,7 +349,9 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     LedgerInvariant const& Invar = ledger.GetLedgerInvariant();
 
     // Header and footer data must be the same for all ledgers.
-    // FIXME This needs to be asserted.
+    // FIXME This needs to be asserted. And leaving "Company"
+    // empty is a plausible user error that should be protected
+    // against by an assertion.
     if(report_data_.company_.empty())
         {
         report_data_.fill_global_report_data(Invar);
@@ -530,8 +554,8 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
                 LMI_ASSERT(header.find("%s") != std::string::npos);
 
                 header = wxString::Format
-                            (wxString(header), report_data_.premium_mode_
-                            ).ToStdString();
+                    (wxString(header), report_data_.premium_mode_
+                    ).ToStdString();
                 }
                 break;
             case e_col_max:
@@ -696,6 +720,7 @@ void group_quote_pdf_generator_wx::output_image_header
     wxDCFontChanger set_bigger_font(pdf_dc, pdf_dc.GetFont().Scaled(1.5));
     wxDCTextColourChanger set_white_text(pdf_dc, *wxWHITE);
 
+    // FIXME Specification change: use product description here, not company_.
     wxString const image_text
         (report_data_.company_
          + "\nPremium & Benefit Summary"
@@ -731,9 +756,9 @@ void group_quote_pdf_generator_wx::output_document_header
          "<td align=\"center\"><i>Prepared By: %s</i></td>"
          "</tr>"
          "</table>"
-        ,report_data_.company_
+        ,escape_for_html_elem(report_data_.company_)
         ,wxDateTime::Today().FormatDate()
-        ,report_data_.prepared_by_
+        ,escape_for_html_elem(report_data_.prepared_by_)
         );
 
     output_html(html_parser, horz_margin, *pos_y, page_.width_ / 2, title_html);
@@ -771,12 +796,12 @@ void group_quote_pdf_generator_wx::output_document_header
          "</tr>"
          "</table>"
         ,wxDateTime::Today().FormatDate()
-        ,report_data_.plan_type_
-        ,report_data_.guarantee_issue_max_
-        ,report_data_.premium_mode_
-        ,report_data_.product_
-        ,report_data_.contract_state_
-        ,report_data_.available_riders_
+        ,escape_for_html_elem(report_data_.plan_type_)
+        ,escape_for_html_elem(report_data_.guarantee_issue_max_)
+        ,escape_for_html_elem(report_data_.premium_mode_)
+        ,escape_for_html_elem(report_data_.product_)
+        ,escape_for_html_elem(report_data_.contract_state_)
+        ,escape_for_html_elem(report_data_.available_riders_)
         ,row_num_ - 1 // "- 1": don't count the composite.
         );
 
@@ -913,7 +938,7 @@ void group_quote_pdf_generator_wx::output_footer
         *pos_y += logo_image.GetSize().y + vert_skip;
         }
 
-    wxString const footer_html = "<p>" + report_data_.footer_ + "</p>";
+    wxString const footer_html = "<p>" + escape_for_html_elem(report_data_.footer_) + "</p>";
 
     *pos_y += output_html
         (html_parser
