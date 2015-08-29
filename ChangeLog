@@ -36757,3 +36757,9 @@ Improve comprehensibility. See:
 Improve toolbar enablement. See:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00057.html
 
+20150829T0005Z <gchicares@sbcglobal.net> [477]
+
+  census_view.cpp
+Fix defect introduced 20110802T1517Z: wrong data-renderer type. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00064.html
+
