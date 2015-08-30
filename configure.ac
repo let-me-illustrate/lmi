@@ -282,8 +282,8 @@ WX_CONFIG_CHECK([3.0.0], [wx="yes"],
                          [AC_MSG_ERROR([No wxWidgets headers libs were found!])],
                          [],[$WXCONFIG_FLAGS])
 
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
+save_CPPFLAGS=$CPPFLAGS
+CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
 
 dnl check that the library options allow to build lmi
 AC_TRY_COMPILE([#include <wx/setup.h>],
@@ -315,7 +315,7 @@ AC_TRY_COMPILE([#include <wx/setup.h>],
     AC_MSG_WARN([Inappropriate wxWidgets build options detected but continuing.])
 )
 
-CXXFLAGS=$save_CXXFLAGS
+CPPFLAGS=$save_CPPFLAGS
 
 WX_STANDARD_OPTIONS_SUMMARY_MSG
 
