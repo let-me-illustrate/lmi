@@ -313,6 +313,7 @@ AC_TRY_COMPILE([#include <wx/setup.h>],
 
 CPPFLAGS=$save_CPPFLAGS
 
+WX_DETECT_STANDARD_OPTION_VALUES
 WX_STANDARD_OPTIONS_SUMMARY_MSG
 
 dnl --- Boost (required) ---
