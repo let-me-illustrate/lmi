@@ -31,14 +31,18 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"            // jdn_t()
+#include "data_directory.hpp"           // AddDataDir()
 #include "force_linking.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
 #include "oecumenic_enumerations.hpp"   // oenum_format_style
+#include "path_utility.hpp"             // fs::path inserter
 #include "wx_table_generator.hpp"
 #include "wx_utility.hpp"               // ConvertDateToWx()
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/static_assert.hpp>
 
@@ -85,19 +89,46 @@ wxString escape_for_html_elem(std::string const& s)
     return z;
 }
 
-/// Load the image from the given file. Throw on failure.
+/// Load the image from the given file.
+///
+/// Look for the file in the current working directory, or, if that
+/// fails, in lmi's data directory. Warn if it's not found in either
+/// of those locations, or if it's found but cannot be loaded.
+///
+/// Diagnosed failures are presented merely as warnings so that quotes
+/// can be produced even with a generic system built from svn only,
+/// with no (proprietary) images.
 
 wxImage load_image(char const* file)
 {
-    wxImage image(file);
-    if(!image.IsOk())
+    fs::path image_path(file);
+    if(!fs::exists(image_path))
         {
-        fatal_error()
-            << "File '"
-            << file
-            << "' is required but could not be found. Try reinstalling."
+        image_path = AddDataDir(file);
+        }
+    if(!fs::exists(image_path))
+        {
+        warning()
+            << "Unable to find image '"
+            << image_path
+            << "'. Try reinstalling."
+            << "\nA blank image will be used instead."
             << LMI_FLUSH
             ;
+        return wxImage();
+        }
+
+    wxImage image(image_path.string().c_str(), wxBITMAP_TYPE_PNG);
+    if(!image.IsOk())
+        {
+        warning()
+            << "Unable to load image '"
+            << image_path
+            << "'. Try reinstalling."
+            << "\nA blank image will be used instead."
+            << LMI_FLUSH
+            ;
+        return wxImage();
         }
 
     return image;

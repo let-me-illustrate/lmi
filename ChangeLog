@@ -36763,3 +36763,18 @@ Improve toolbar enablement. See:
 Fix defect introduced 20110802T1517Z: wrong data-renderer type. See:
   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00064.html
 
+20150916T2040Z <gchicares@sbcglobal.net> [477]
+
+  icon_monger.cpp
+Add a diagnostic message.
+
+20150916T2041Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Rename graphics files.
+
+20150916T2107Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Keep the system usable even without proprietary graphics files.
+
