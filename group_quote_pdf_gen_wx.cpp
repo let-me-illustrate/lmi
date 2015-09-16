@@ -694,8 +694,8 @@ void group_quote_pdf_generator_wx::output_image_header
     ,int* pos_y
     )
 {
-    wxImage background_image(load_image("background.png"));
-    if(!background_image.IsOk())
+    wxImage banner_image(load_image("group_quote_banner.png"));
+    if(!banner_image.IsOk())
         {
         return;
         }
@@ -707,13 +707,13 @@ void group_quote_pdf_generator_wx::output_image_header
     wxPdfDocument* const pdf_doc = pdf_dc.GetPdfDocument();
     LMI_ASSERT(pdf_doc);
 
-    wxSize const image_size = background_image.GetSize();
+    wxSize const image_size = banner_image.GetSize();
 
     // Set the scale to fit the image to the document width.
     pdf_doc->SetImageScale
         (static_cast<double>(image_size.x) / page_.total_size_.x
         );
-    pdf_doc->Image("background", background_image, 0, *pos_y);
+    pdf_doc->Image("banner", banner_image, 0, *pos_y);
 
     int const y = wxRound(image_size.y / pdf_doc->GetImageScale());
 
@@ -919,7 +919,7 @@ void group_quote_pdf_generator_wx::output_footer
     ,enum_output_mode output_mode
     )
 {
-    wxImage logo_image(load_image("logo.png"));
+    wxImage logo_image(load_image("company_logo.png"));
     if(logo_image.IsOk())
         {
         switch(output_mode)
