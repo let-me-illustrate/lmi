@@ -39,7 +39,7 @@
 
 #include <limits>
 
-// TODO ?? Move this one to a 'test' file.
+// SOMEDAY !! Move this one to a 'test' file.
 
 template<typename T>
 class percentage_trammel
