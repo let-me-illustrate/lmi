@@ -342,6 +342,13 @@ class LMI_SO LedgerInvariant
     std::string     EffDate;
     std::string     DateOfBirth;
 
+    // Arguably enumerative members such as 'ErMode' should be of type
+    // std::string instead, because strings would be more useful for
+    // generating reports from this class's data, and mc_enum::str()
+    // is not visible across a shared-library boundary. For now, this
+    // kludge solves an immediate problem for premium quotes.
+    std::string     InitErMode;
+
   private:
     void Alloc(int len);
     void Copy(LedgerInvariant const&);
