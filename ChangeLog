@@ -36778,3 +36778,11 @@ Rename graphics files.
   group_quote_pdf_gen_wx.cpp
 Keep the system usable even without proprietary graphics files.
 
+20150918T0036Z <gchicares@sbcglobal.net> [477]
+
+  alert_cgi.cpp
+  alert_cli.cpp
+  alert_wx.cpp
+Resolve gcc-5 issues (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+
