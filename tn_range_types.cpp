@@ -48,3 +48,12 @@ template class tn_range<int          , month_trammel          <int          > >;
 template class tn_range<double       , corridor_factor_trammel<double       > >;
 template class tn_range<calendar_date, date_trammel           <calendar_date> >;
 
+// Explicitly instantiate trammel_base for every type actually used.
+// Otherwise, its specialized members (minimum_minimorum(), e.g.)
+// cause linker problems with gcc-5. See:
+//   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+
+template class trammel_base<calendar_date>;
+template class trammel_base<double       >;
+template class trammel_base<int          >;
+
