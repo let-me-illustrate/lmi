@@ -367,7 +367,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     prepared_by_      = ledger.ProducerName;
     product_          = ledger.ProductName;
     available_riders_ = "Waiver, ADB, ABR, Spouse or Child"; // FIXME
-    premium_mode_     = ledger.ErMode.at(0).str();
+    premium_mode_     = ledger.InitErMode;
     contract_state_   = ledger.GetStatePostalAbbrev();
     footer_           = ledger.MarketingNameFootnote;
     // Input::Comments will replace these two:

@@ -36799,3 +36799,13 @@ Demote several not-so-important defect markers.
 Resolve gcc-5 issues (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
 
+20150918T2355Z <gchicares@sbcglobal.net> [474]
+
+  configurable_settings.hpp
+  group_quote_pdf_gen_wx.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.hpp
+  mc_enum_types_aux.cpp
+Reduce physical dependency by fixing 'build_type=so_test' erosion.
+

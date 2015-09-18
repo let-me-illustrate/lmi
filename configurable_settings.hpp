@@ -124,8 +124,9 @@ class LMI_SO configurable_settings
     ~configurable_settings();
 };
 
-std::vector<std::string> input_calculation_summary_columns();
-std::vector<std::string> effective_calculation_summary_columns();
+std::vector<std::string>        input_calculation_summary_columns();
+// This function must be visible to 'wx_test_calculation_summary.cpp'.
+std::vector<std::string> LMI_SO effective_calculation_summary_columns();
 
 #endif // configurable_settings_hpp
 
