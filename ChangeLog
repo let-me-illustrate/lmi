@@ -36786,3 +36786,16 @@ Keep the system usable even without proprietary graphics files.
 Resolve gcc-5 issues (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
 
+20150918T0044Z <gchicares@sbcglobal.net> [474]
+
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+Demote several not-so-important defect markers.
+
+20150918T0051Z <gchicares@sbcglobal.net> [474]
+
+  tn_range_types.cpp
+Resolve gcc-5 issues (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+
