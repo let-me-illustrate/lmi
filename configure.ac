@@ -122,9 +122,6 @@ AC_ARG_ENABLE(cgicc,
              esac],
              lmi_cgicc_option=no)
 
-dnl Pass standard options to wx.
-WX_STANDARD_OPTIONS([debug,shared,toolkit,wxshared])
-
 dnl === Program checks ===
 
 dnl this magic incantation is needed to prevent AC_PROG_CC from setting the
@@ -277,7 +274,6 @@ AC_LANG(C++)
 
 dnl --- wxWidgets ---
 
-WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
 WX_CONFIG_CHECK([3.0.0], [wx="yes"],
                          [AC_MSG_ERROR([No wxWidgets headers libs were found!])],
                          [],[$WXCONFIG_FLAGS])
