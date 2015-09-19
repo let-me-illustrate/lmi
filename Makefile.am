@@ -215,6 +215,7 @@ libskeleton_la_LIBADD = \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
     $(BOOST_LIBS) \
+    $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
 
 lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
@@ -233,6 +234,7 @@ lmi_wx_LDADD = \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
     $(BOOST_LIBS) \
+    $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
 if LMI_MSW
     lmi_wx_SOURCES += lmi_msw_res.rc
@@ -280,6 +282,7 @@ wx_test_LDADD = \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
     $(BOOST_LIBS) \
+    $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
 
 # libraries
