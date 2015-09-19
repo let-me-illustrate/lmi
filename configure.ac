@@ -277,10 +277,8 @@ AC_LANG(C++)
 
 dnl --- wxWidgets ---
 
-WX_UNICODE=no
-
 WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
-WX_CONFIG_CHECK([2.8.0], [wx="yes"],
+WX_CONFIG_CHECK([3.0.0], [wx="yes"],
                          [AC_MSG_ERROR([No wxWidgets headers libs were found!])],
                          [],[$WXCONFIG_FLAGS])
 
