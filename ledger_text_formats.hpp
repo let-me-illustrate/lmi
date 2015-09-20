@@ -46,12 +46,12 @@ void LMI_SO PrintRosterTabDelimited(Ledger const&, std::string const& file_name)
 
 void LMI_SO PrintLedgerFlatText    (Ledger const&, std::ostream&);
 
-std::string ledger_format
+std::string LMI_SO ledger_format
     (double                            d
     ,std::pair<int,oenum_format_style> f
     );
 
-std::vector<std::string> ledger_format
+std::vector<std::string> LMI_SO ledger_format
     (std::vector<double>               dv
     ,std::pair<int,oenum_format_style> f
     );

@@ -31,14 +31,18 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"            // jdn_t()
+#include "data_directory.hpp"           // AddDataDir()
 #include "force_linking.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
 #include "oecumenic_enumerations.hpp"   // oenum_format_style
+#include "path_utility.hpp"             // fs::path inserter
 #include "wx_table_generator.hpp"
 #include "wx_utility.hpp"               // ConvertDateToWx()
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/static_assert.hpp>
 
@@ -63,19 +67,68 @@ enum enum_output_mode
     ,e_output_measure_only
     };
 
-/// Load the image from the given file. Throw on failure.
+/// Escape special XML characters in the given string, ensuring that it appears
+/// correctly inside HTML element contents. Notice that we don't need to escape
+/// quotes here as we never use the result of this function inside an HTML
+/// attribute, only inside HTML elements.
+
+wxString escape_for_html_elem(std::string const& s)
+{
+    wxString z;
+    z.reserve(s.length());
+    for(std::string::const_iterator i = s.begin(); i != s.end(); ++i)
+        {
+        switch(*i)
+            {
+            case '<': z += "&lt;" ; break;
+            case '>': z += "&gt;" ; break;
+            case '&': z += "&amp;"; break;
+            default : z += *i     ;
+            }
+        }
+    return z;
+}
+
+/// Load the image from the given file.
+///
+/// Look for the file in the current working directory, or, if that
+/// fails, in lmi's data directory. Warn if it's not found in either
+/// of those locations, or if it's found but cannot be loaded.
+///
+/// Diagnosed failures are presented merely as warnings so that quotes
+/// can be produced even with a generic system built from svn only,
+/// with no (proprietary) images.
 
 wxImage load_image(char const* file)
 {
-    wxImage image(file);
-    if(!image.IsOk())
+    fs::path image_path(file);
+    if(!fs::exists(image_path))
         {
-        fatal_error()
-            << "File '"
-            << file
-            << "' is required but could not be found. Try reinstalling."
+        image_path = AddDataDir(file);
+        }
+    if(!fs::exists(image_path))
+        {
+        warning()
+            << "Unable to find image '"
+            << image_path
+            << "'. Try reinstalling."
+            << "\nA blank image will be used instead."
             << LMI_FLUSH
             ;
+        return wxImage();
+        }
+
+    wxImage image(image_path.string().c_str(), wxBITMAP_TYPE_PNG);
+    if(!image.IsOk())
+        {
+        warning()
+            << "Unable to load image '"
+            << image_path
+            << "'. Try reinstalling."
+            << "\nA blank image will be used instead."
+            << LMI_FLUSH
+            ;
+        return wxImage();
         }
 
     return image;
@@ -229,10 +282,10 @@ class group_quote_pdf_generator_wx
         ,enum_output_mode output_mode = e_output_normal
         );
 
-    struct header_data
+    struct global_report_data
         {
-        // Extract header fields from a ledger.
-        void fill_header_data(LedgerInvariant const& ledger);
+        // Extract header and footer fields from a ledger.
+        void fill_global_report_data(LedgerInvariant const& ledger);
 
         std::string company_;
         std::string prepared_by_;
@@ -244,7 +297,7 @@ class group_quote_pdf_generator_wx
         std::string contract_state_;
         std::string footer_;
         };
-    header_data header_;
+    global_report_data report_data_;
 
     struct row_data
         {
@@ -306,7 +359,7 @@ group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
 {
 }
 
-void group_quote_pdf_generator_wx::header_data::fill_header_data
+void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     (LedgerInvariant const& ledger
     )
 {
@@ -314,7 +367,7 @@ void group_quote_pdf_generator_wx::header_data::fill_header_data
     prepared_by_      = ledger.ProducerName;
     product_          = ledger.ProductName;
     available_riders_ = "Waiver, ADB, ABR, Spouse or Child"; // FIXME
-    premium_mode_     = ledger.ErMode.at(0).str();
+    premium_mode_     = ledger.InitErMode;
     contract_state_   = ledger.GetStatePostalAbbrev();
     footer_           = ledger.MarketingNameFootnote;
     // Input::Comments will replace these two:
@@ -326,11 +379,13 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 {
     LedgerInvariant const& Invar = ledger.GetLedgerInvariant();
 
-    // We suppose that header data is the same for all ledgers, so only fill it
-    // once.
-    if(header_.company_.empty())
+    // Header and footer data must be the same for all ledgers.
+    // FIXME This needs to be asserted. And leaving "Company"
+    // empty is a plausible user error that should be protected
+    // against by an assertion.
+    if(report_data_.company_.empty())
         {
-        header_.fill_header_data(Invar);
+        report_data_.fill_global_report_data(Invar);
         }
 
     int const year = 0;
@@ -350,7 +405,8 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             {
             case e_col_number:
                 {
-                rd.values[col] = wxString::Format("%d", ++row_num_).ToStdString();
+                // Row numbers shown to human beings should be 1-based.
+                rd.values[col] = wxString::Format("%d", row_num_ + 1).ToStdString();
                 }
                 break;
             case e_col_name:
@@ -438,10 +494,11 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
         }
 
     // The last, composite, ledger is only used for the totals, it shouldn't be
-    // shown in the main table.
+    // shown in the main table nor counted as a row.
     if(!is_composite)
         {
         rows_.push_back(rd);
+        row_num_++;
         }
 }
 
@@ -530,8 +587,8 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
                 LMI_ASSERT(header.find("%s") != std::string::npos);
 
                 header = wxString::Format
-                            (wxString(header), header_.premium_mode_
-                            ).ToStdString();
+                    (wxString(header), report_data_.premium_mode_
+                    ).ToStdString();
                 }
                 break;
             case e_col_max:
@@ -668,8 +725,8 @@ void group_quote_pdf_generator_wx::output_image_header
     ,int* pos_y
     )
 {
-    wxImage background_image(load_image("background.png"));
-    if(!background_image.IsOk())
+    wxImage banner_image(load_image("group_quote_banner.png"));
+    if(!banner_image.IsOk())
         {
         return;
         }
@@ -681,13 +738,13 @@ void group_quote_pdf_generator_wx::output_image_header
     wxPdfDocument* const pdf_doc = pdf_dc.GetPdfDocument();
     LMI_ASSERT(pdf_doc);
 
-    wxSize const image_size = background_image.GetSize();
+    wxSize const image_size = banner_image.GetSize();
 
     // Set the scale to fit the image to the document width.
     pdf_doc->SetImageScale
         (static_cast<double>(image_size.x) / page_.total_size_.x
         );
-    pdf_doc->Image("background", background_image, 0, *pos_y);
+    pdf_doc->Image("banner", banner_image, 0, *pos_y);
 
     int const y = wxRound(image_size.y / pdf_doc->GetImageScale());
 
@@ -696,8 +753,9 @@ void group_quote_pdf_generator_wx::output_image_header
     wxDCFontChanger set_bigger_font(pdf_dc, pdf_dc.GetFont().Scaled(1.5));
     wxDCTextColourChanger set_white_text(pdf_dc, *wxWHITE);
 
+    // FIXME Specification change: use product description here, not company_.
     wxString const image_text
-        (header_.company_
+        (report_data_.company_
          + "\nPremium & Benefit Summary"
         );
 
@@ -731,9 +789,9 @@ void group_quote_pdf_generator_wx::output_document_header
          "<td align=\"center\"><i>Prepared By: %s</i></td>"
          "</tr>"
          "</table>"
-        ,header_.company_
+        ,escape_for_html_elem(report_data_.company_)
         ,wxDateTime::Today().FormatDate()
-        ,header_.prepared_by_
+        ,escape_for_html_elem(report_data_.prepared_by_)
         );
 
     output_html(html_parser, horz_margin, *pos_y, page_.width_ / 2, title_html);
@@ -771,13 +829,13 @@ void group_quote_pdf_generator_wx::output_document_header
          "</tr>"
          "</table>"
         ,wxDateTime::Today().FormatDate()
-        ,header_.plan_type_
-        ,header_.guarantee_issue_max_
-        ,header_.premium_mode_
-        ,header_.product_
-        ,header_.contract_state_
-        ,header_.available_riders_
-        ,row_num_ - 1 // "- 1": don't count the composite.
+        ,escape_for_html_elem(report_data_.plan_type_)
+        ,escape_for_html_elem(report_data_.guarantee_issue_max_)
+        ,escape_for_html_elem(report_data_.premium_mode_)
+        ,escape_for_html_elem(report_data_.product_)
+        ,escape_for_html_elem(report_data_.contract_state_)
+        ,escape_for_html_elem(report_data_.available_riders_)
+        ,row_num_
         );
 
     int const summary_height = output_html
@@ -892,7 +950,7 @@ void group_quote_pdf_generator_wx::output_footer
     ,enum_output_mode output_mode
     )
 {
-    wxImage logo_image(load_image("logo.png"));
+    wxImage logo_image(load_image("company_logo.png"));
     if(logo_image.IsOk())
         {
         switch(output_mode)
@@ -913,7 +971,7 @@ void group_quote_pdf_generator_wx::output_footer
         *pos_y += logo_image.GetSize().y + vert_skip;
         }
 
-    wxString const footer_html = "<p>" + header_.footer_ + "</p>";
+    wxString const footer_html = "<p>" + escape_for_html_elem(report_data_.footer_) + "</p>";
 
     *pos_y += output_html
         (html_parser

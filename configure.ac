@@ -136,9 +136,6 @@ AC_ARG_ENABLE(pch,
              esac], lmi_use_pch=no)
 AM_CONDITIONAL(LMI_USE_PCH, [ test "x$lmi_use_pch" = "xyes" ])
 
-dnl Pass standard options to wx.
-WX_STANDARD_OPTIONS([debug,shared,toolkit,wxshared])
-
 dnl make the installation prefix available to C++ code
 if test "x$prefix" != "xNONE"; then
     lmi_prefix=$prefix
@@ -299,15 +296,12 @@ AC_LANG(C++)
 
 dnl --- wxWidgets ---
 
-WX_UNICODE=no
-
-WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
-WX_CONFIG_CHECK([2.8.0], [wx="yes"],
+WX_CONFIG_CHECK([3.0.0], [wx="yes"],
                          [AC_MSG_ERROR([No wxWidgets headers libs were found!])],
                          [],[$WXCONFIG_FLAGS])
 
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
+save_CPPFLAGS=$CPPFLAGS
+CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
 
 dnl check that the library options allow to build lmi
 AC_TRY_COMPILE([#include <wx/setup.h>],
@@ -339,9 +333,26 @@ AC_TRY_COMPILE([#include <wx/setup.h>],
     AC_MSG_WARN([Inappropriate wxWidgets build options detected but continuing.])
 )
 
-CXXFLAGS=$save_CXXFLAGS
-
+WX_DETECT_STANDARD_OPTION_VALUES
 WX_STANDARD_OPTIONS_SUMMARY_MSG
+
+dnl --- wxPdfDocument ---
+AC_CHECK_HEADER([wx/pdfdc.h],
+    [],
+    [AC_MSG_ERROR([wxPdfDocument header not found.])])
+
+dnl Defer to the same macro used by wxPdfDocument itself for constructing its
+dnl library name.
+WX_LIKE_LIBNAME([pdfdoc_lib], [wxcode], [pdfdoc])
+AC_CHECK_LIB([$pdfdoc_lib], [main],
+    [WXPDFDOC_LIBS="-l$pdfdoc_lib"],
+    [AC_MSG_ERROR([wxPdfDocument library $pdfdoc_lib not found.])])
+
+AC_SUBST(WXPDFDOC_LIBS)
+
+dnl Restore pre-wx CPPFLAGS value only now, we needed wx flags for
+dnl wxPdfDocument checks.
+CPPFLAGS=$save_CPPFLAGS
 
 dnl --- Boost (required) ---
 if test "x$lmi_boost_headers" != "x"; then

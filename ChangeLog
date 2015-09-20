@@ -36723,3 +36723,89 @@ Attempt to widen columns. See thread beginning here:
   group_quote_pdf_gen_wx.cpp
 Add a footer, which will soon be augmented.
 
+20150828T1520Z <gchicares@sbcglobal.net> [477]
+
+  wx_table_generator.cpp
+Fix defect introduced 20150819T1702Z: last header line missing. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00054.html
+
+20150828T1541Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Improve divers names. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00055.html
+
+20150828T1645Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Escape XML special characters. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00056.html
+
+20150828T1704Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Improve comprehensibility. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00053.html
+
+20150828T1717Z <gchicares@sbcglobal.net> [477]
+
+  census_view.cpp
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  skeleton.cpp
+Improve toolbar enablement. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00057.html
+
+20150829T0005Z <gchicares@sbcglobal.net> [477]
+
+  census_view.cpp
+Fix defect introduced 20110802T1517Z: wrong data-renderer type. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-08/msg00064.html
+
+20150916T2040Z <gchicares@sbcglobal.net> [477]
+
+  icon_monger.cpp
+Add a diagnostic message.
+
+20150916T2041Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Rename graphics files.
+
+20150916T2107Z <gchicares@sbcglobal.net> [477]
+
+  group_quote_pdf_gen_wx.cpp
+Keep the system usable even without proprietary graphics files.
+
+20150918T0036Z <gchicares@sbcglobal.net> [477]
+
+  alert_cgi.cpp
+  alert_cli.cpp
+  alert_wx.cpp
+Resolve gcc-5 issues (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+
+20150918T0044Z <gchicares@sbcglobal.net> [474]
+
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+Demote several not-so-important defect markers.
+
+20150918T0051Z <gchicares@sbcglobal.net> [474]
+
+  tn_range_types.cpp
+Resolve gcc-5 issues (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+
+20150918T2355Z <gchicares@sbcglobal.net> [474]
+
+  configurable_settings.hpp
+  group_quote_pdf_gen_wx.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.hpp
+  mc_enum_types_aux.cpp
+Reduce physical dependency by fixing 'build_type=so_test' erosion.
+

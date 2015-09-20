@@ -26,10 +26,10 @@
 
 #include "config.hpp"
 
-#include "tn_range_fwd.hpp"           // Template class forward declaration.
-#include "tn_range_type_trammels.hpp" // Trammels for specific tn_range types.
+#include "tn_range_fwd.hpp"             // Template class forward declaration.
+#include "tn_range_type_trammels.hpp"   // Trammels for specific tn_range types.
 
-// TODO ?? Move these two to a 'test' file.
+// SOMEDAY !! Move these two to a 'test' file.
 
 typedef tn_range<int          , percentage_trammel     <int          > > r_int_percentage;
 typedef tn_range<double       , percentage_trammel     <double       > > r_double_percentage;

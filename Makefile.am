@@ -196,7 +196,7 @@ libskeleton_la_SOURCES = \
     file_command_wx.cpp \
     gpt_document.cpp \
     gpt_view.cpp \
-    group_quote_pdf_generator_wx.cpp \
+    group_quote_pdf_gen_wx.cpp \
     icon_monger.cpp \
     illustration_document.cpp \
     illustration_view.cpp \
@@ -244,6 +244,7 @@ libskeleton_la_LIBADD = \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
     $(BOOST_LIBS) \
+    $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
 
 lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
@@ -262,6 +263,7 @@ lmi_wx_LDADD = \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
     $(BOOST_LIBS) \
+    $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
 if LMI_MSW
     lmi_wx_SOURCES += lmi_msw_res.rc
@@ -309,6 +311,7 @@ wx_test_LDADD = \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
     $(BOOST_LIBS) \
+    $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
 
 # libraries
@@ -340,7 +343,7 @@ liblmi_common_sources = \
     getopt.cpp \
     global_settings.cpp \
     group_values.cpp \
-    group_quote_pdf_generator.cpp \
+    group_quote_pdf_gen.cpp \
     illustrator.cpp \
     input.cpp \
     input_harmonization.cpp \
