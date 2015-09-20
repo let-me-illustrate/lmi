@@ -36826,3 +36826,12 @@ Use wxPdfDocument.
 Resolve gcc-5 issues (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
 
+20150920T1758Z <gchicares@sbcglobal.net> [474]
+
+  Makefile.am
+  actuarial_table.cpp
+  deserialize_cast.hpp [new file]
+  soa_helpers.hpp
+Resolve gcc-5 issues (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00010.html
+
