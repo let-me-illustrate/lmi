@@ -206,7 +206,7 @@ column_definition const column_definitions[] =
     ,{"Issue Age"                        ,              "999"   }
     ,{"Date of Birth"                    ,       "9999-99-99"   }
     ,{"Income"                           ,      "$99,999,999"   }
-    ,{"Face Amount"                      ,  "$999,999,999.00"   }
+    ,{"Face Amount"                      ,     "$999,999,999"   }
     // All the subsequent columns use dynamically determined "premium mode" in
     // their title, so their labels are actually format strings.
     ,{"%s\nPremium"                      ,    "$9,999,999.00"   }
