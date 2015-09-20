@@ -36809,3 +36809,20 @@ Resolve gcc-5 issues (VZ). See:
   mc_enum_types_aux.cpp
 Reduce physical dependency by fixing 'build_type=so_test' erosion.
 
+20150919T2345 <zeitlin> [474]
+
+  aclocal/wxwin.m4
+Update from wxwidgets.org .
+
+20150919T2346 <zeitlin> [474]
+
+  configure.ac
+  Makefile.am
+Use wxPdfDocument.
+
+20150920T1548Z <gchicares@sbcglobal.net> [474]
+
+  md5.cpp
+Resolve gcc-5 issues (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+
