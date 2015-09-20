@@ -30,11 +30,11 @@
 
 #include "configurable_settings.hpp"
 
-#include <wx/app.h>                              // wxTheApp
+#include <wx/app.h>                     // wxTheApp
 #include <wx/frame.h>
 #include <wx/msgdlg.h>
 #if defined LMI_MSW
-#   include <wx/msw/wrapwin.h>                   // HWND etc.
+#   include <wx/msw/wrapwin.h>          // HWND etc.
 #endif // defined LMI_MSW
 
 #include <cstdio>
@@ -42,7 +42,7 @@
 
 namespace
 {
-bool ensure_setup = set_alert_functions
+volatile bool ensure_setup = set_alert_functions
     (status_alert
     ,warning_alert
     ,hobsons_choice_alert

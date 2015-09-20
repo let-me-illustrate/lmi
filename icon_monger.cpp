@@ -184,6 +184,13 @@ wxBitmap icon_monger::CreateBitmap
         {
         if(!contains(lmi_specific_icon_names_, icon_name))
             {
+            warning()
+                << "Unable to find icon '"
+                << icon_name
+                << "' for current theme. Please report this problem."
+                << "\nA blank icon will be used instead."
+                << LMI_FLUSH
+                ;
             return wxNullBitmap;
             }
         else if(is_builtin)

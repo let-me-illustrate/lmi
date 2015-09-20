@@ -26,14 +26,14 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "tn_range.tpp"               // Template class implementation.
-#include "tn_range_type_trammels.hpp" // Trammels for specific tn_range types.
+#include "tn_range.tpp"                 // Template class implementation.
+#include "tn_range_type_trammels.hpp"   // Trammels for specific tn_range types.
 
 // This header need not be included:
 //   #include "tn_range_types.hpp"
 // because it merely declares typedefs that aren't needed here.
 
-// TODO ?? Move these two to a 'test' file.
+// SOMEDAY !! Move these two to a 'test' file.
 
 template class tn_range<int          , percentage_trammel     <int          > >;
 template class tn_range<double       , percentage_trammel     <double       > >;
@@ -47,4 +47,13 @@ template class tn_range<int          , duration_trammel       <int          > >;
 template class tn_range<int          , month_trammel          <int          > >;
 template class tn_range<double       , corridor_factor_trammel<double       > >;
 template class tn_range<calendar_date, date_trammel           <calendar_date> >;
+
+// Explicitly instantiate trammel_base for every type actually used.
+// Otherwise, its specialized members (minimum_minimorum(), e.g.)
+// cause linker problems with gcc-5. See:
+//   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+
+template class trammel_base<calendar_date>;
+template class trammel_base<double       >;
+template class trammel_base<int          >;
 

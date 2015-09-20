@@ -367,6 +367,7 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     // Scalars of type not compatible with double.
     EffDate                = obj.EffDate               ;
     DateOfBirth            = obj.DateOfBirth           ;
+    InitErMode             = obj.InitErMode            ;
 
     FullyInitialized       = obj.FullyInitialized      ;
 }
@@ -793,6 +794,7 @@ void LedgerInvariant::Init(BasicValues* b)
     EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate).julian_day_number();
     DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth).str();
     DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth).julian_day_number();
+    InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
     DefnLifeIns             = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
     DefnMaterialChange      = mc_str(b->yare_input_.DefinitionOfMaterialChange);
     AvoidMec                = mc_str(b->yare_input_.AvoidMecMethod);
@@ -884,6 +886,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     EffDateJdn              = a_Addend.EffDateJdn;
     DateOfBirth             = a_Addend.DateOfBirth;
     DateOfBirthJdn          = a_Addend.DateOfBirthJdn;
+    InitErMode              = a_Addend.InitErMode;
     Age                     = std::min(Age, a_Addend.Age);
     RetAge                  = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
     EndtAge                 = std::max(EndtAge, a_Addend.EndtAge);

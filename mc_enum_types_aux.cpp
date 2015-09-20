@@ -33,7 +33,7 @@
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 
-#include <cstddef> // std::size_t
+#include <cstddef>                      // std::size_t
 #include <stdexcept>
 
 namespace
@@ -139,6 +139,7 @@ template std::string mc_str(mcenum_defn_life_ins       );
 template std::string mc_str(mcenum_defn_material_change);
 template std::string mc_str(mcenum_gender              );
 template std::string mc_str(mcenum_mec_avoid_method    );
+template std::string mc_str(mcenum_mode                );
 template std::string mc_str(mcenum_report_column       );
 template std::string mc_str(mcenum_run_basis           );
 template std::string mc_str(mcenum_smoking             );

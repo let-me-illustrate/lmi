@@ -827,6 +827,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_group_quote"    ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("print_group"          ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
@@ -1156,7 +1157,7 @@ void CensusView::update_visible_columns()
     list_window_->AppendColumn
         (new(wx) wxDataViewColumn
             ("Cell"
-            ,new(wx) wxDataViewTextRenderer("string", wxDATAVIEW_CELL_INERT)
+            ,new(wx) wxDataViewTextRenderer("long", wxDATAVIEW_CELL_INERT)
             ,CensusViewDataViewModel::Col_CellNum
             ,width
             ,wxALIGN_LEFT

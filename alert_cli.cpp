@@ -28,7 +28,7 @@
 
 #include "alert.hpp"
 
-#include <cstdio> // std::fputs()
+#include <cstdio>                       // std::fputs()
 #include <iostream>
 #include <stdexcept>
 
@@ -38,35 +38,35 @@ extern "C" int getch();
 
 namespace
 {
-    bool ensure_setup = set_alert_functions
-        (status_alert
-        ,warning_alert
-        ,hobsons_choice_alert
-        ,fatal_error_alert
-        ,safe_message_alert
-        );
+volatile bool ensure_setup = set_alert_functions
+    (status_alert
+    ,warning_alert
+    ,hobsons_choice_alert
+    ,fatal_error_alert
+    ,safe_message_alert
+    );
 
-    bool continue_anyway()
-    {
-        int c;
+bool continue_anyway()
+{
+    int c;
   ask:
-        c = getch();
-        if('y' == c || 'Y' == c)
-            {
-            std::cout << std::endl;
-            return true;
-            }
-        else if('n' == c || 'N' == c)
-            {
-            std::cout << std::endl;
-            return false;
-            }
-        else
-            {
-            std::cerr << "\nPlease type 'y' or 'n'." << std::endl;
-            }
-    goto ask;
-    }
+    c = getch();
+    if('y' == c || 'Y' == c)
+        {
+        std::cout << std::endl;
+        return true;
+        }
+    else if('n' == c || 'N' == c)
+        {
+        std::cout << std::endl;
+        return false;
+        }
+    else
+        {
+        std::cerr << "\nPlease type 'y' or 'n'." << std::endl;
+        }
+goto ask;
+}
 } // Unnamed namespace.
 
 void status_alert(std::string const&)

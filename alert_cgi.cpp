@@ -28,19 +28,18 @@
 
 #include "alert.hpp"
 
-#include <cstdio> // std::fputs()
+#include <cstdio>                       // std::fputs()
 #include <stdexcept>
 
 namespace
 {
-    bool ensure_setup = set_alert_functions
-        (status_alert
-        ,warning_alert
-        ,hobsons_choice_alert
-        ,fatal_error_alert
-        ,safe_message_alert
-        );
-
+volatile bool ensure_setup = set_alert_functions
+    (status_alert
+    ,warning_alert
+    ,hobsons_choice_alert
+    ,fatal_error_alert
+    ,safe_message_alert
+    );
 } // Unnamed namespace.
 
 void status_alert(std::string const&)
