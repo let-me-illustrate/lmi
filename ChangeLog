@@ -36847,3 +36847,9 @@ Forestall an msvc warning (VZ). See:
 Adjust 20150826T1714Z fix (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
 
+20150921T0051Z <gchicares@sbcglobal.net> [474]
+
+  wx_table_generator.cpp
+Resolve column-width issue by adding margins unconditionally. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
+
