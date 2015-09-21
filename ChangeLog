@@ -36835,3 +36835,9 @@ Resolve gcc-5 issues (VZ). See:
 Resolve gcc-5 issues (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00010.html
 
+20150921T0005Z <gchicares@sbcglobal.net> [474]
+
+  group_quote_pdf_gen_wx.cpp
+Forestall an msvc warning (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
+

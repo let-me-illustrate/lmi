@@ -196,8 +196,8 @@ enum enum_group_quote_columns
 
 struct column_definition
 {
-    char const* const header_;
-    char const* const widest_text_; // Empty string means variable width.
+    char const* header_;
+    char const* widest_text_; // Empty string means variable width.
 };
 
 column_definition const column_definitions[] =
