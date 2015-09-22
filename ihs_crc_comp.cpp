@@ -317,11 +317,13 @@ void f_3(std::string const& line1, std::string const& line2)
     std::cout
         << current_name
         << '\n';
+    std::streamsize const original_precision = std::cout.precision();
     std::cout
         << std::setprecision(20)
         << rel_err
         << "  " << d1
         << " vs. " << d2
+        << std::setprecision(original_precision)
         << '\n';
 }
 
