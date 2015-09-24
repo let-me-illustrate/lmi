@@ -807,6 +807,8 @@ void LedgerInvariant::Init(BasicValues* b)
         ,mce_annual_rate
         )[0];
 
+    // Dubious--see:
+    //   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
     IsInforce = 0 != b->yare_input_.InforceYear || 0 != b->yare_input_.InforceMonth;
 
     SupplementalReport         = b->yare_input_.CreateSupplementalReport;
