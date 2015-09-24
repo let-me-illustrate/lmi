@@ -28,6 +28,7 @@
 
 #include "actuarial_table.hpp"
 #include "alert.hpp"
+#include "deserialize_cast.hpp"
 #include "miscellany.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 
@@ -106,7 +107,7 @@ std::vector<soa_record_info> list_soa_file_tables(char const* filename)
             }
 
         soa_record_info rec;
-        rec.index = *reinterpret_cast<boost::int32_t*>(index_record);
+        rec.index = deserialize_cast<boost::int32_t>(index_record);
         rec.name.assign(index_record + 4);
         v.push_back(rec);
         }

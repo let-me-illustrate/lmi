@@ -126,14 +126,13 @@ void wx_table_generator::add_column
     increase_to_if_smaller(max_header_lines_, count_lines(header));
 
     // Also increase the column width to be sufficiently wide to fit
-    // this header line (with roughly 1 em margins on either side) if it has
-    // fixed width.
+    // this header line if it has fixed width.
     if(0 != width)
         {
-        increase_to_if_smaller
-            (width
-            ,dc_.GetMultiLineTextExtent(header).x + dc_.GetTextExtent("MM").x
-            );
+        increase_to_if_smaller(width, dc_.GetMultiLineTextExtent(header).x);
+
+        // Add roughly 1 em margins on both sides.
+        width += dc_.GetTextExtent("MM").x;
         }
 
     columns_.push_back(column_info(header, width));
