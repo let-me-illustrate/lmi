@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "deserialize_cast.hpp"
 #include "materially_equal.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"   // methuselah
@@ -84,7 +85,7 @@ namespace
         t = invalid;
         char z[sizeof(T)];
         is.read(z, sizeof(T));
-        t = *reinterpret_cast<T*>(z);
+        t = deserialize_cast<T>(z);
         LMI_ASSERT(invalid != t);
         return t;
     }
@@ -574,13 +575,13 @@ void soa_actuarial_table::find_table()
     while(index_ifs)
         {
         int index_table_number =
-            *reinterpret_cast<boost::int32_t*>(index_record)
+            deserialize_cast<boost::int32_t>(index_record)
             ;
         if(table_number_ == index_table_number)
             {
             char* p = 54 + index_record;
-            boost::int32_t z = *reinterpret_cast<boost::int32_t*>(p);
-            table_offset_ = std::streampos(static_cast<int>(z));
+            int z = deserialize_cast<boost::int32_t>(p);
+            table_offset_ = std::streampos(z);
             break;
             }
         index_ifs.read(index_record, index_record_length);
@@ -810,7 +811,7 @@ void soa_actuarial_table::read_values(std::istream& is, int nominal_length)
     for(int j = 0; j < number_of_values; ++j)
         {
         is.read(z, sizeof(double));
-        data_[j] = *reinterpret_cast<double*>(z);
+        data_[j] = deserialize_cast<double>(z);
         }
 }
 

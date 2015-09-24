@@ -36809,3 +36809,47 @@ Resolve gcc-5 issues (VZ). See:
   mc_enum_types_aux.cpp
 Reduce physical dependency by fixing 'build_type=so_test' erosion.
 
+20150919T2345 <zeitlin> [474]
+
+  aclocal/wxwin.m4
+Update from wxwidgets.org .
+
+20150919T2346 <zeitlin> [474]
+
+  configure.ac
+  Makefile.am
+Use wxPdfDocument.
+
+20150920T1548Z <gchicares@sbcglobal.net> [474]
+
+  md5.cpp
+Resolve gcc-5 issues (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00000.html
+
+20150920T1758Z <gchicares@sbcglobal.net> [474]
+
+  Makefile.am
+  actuarial_table.cpp
+  deserialize_cast.hpp [new file]
+  soa_helpers.hpp
+Resolve gcc-5 issues (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00010.html
+
+20150921T0005Z <gchicares@sbcglobal.net> [474]
+
+  group_quote_pdf_gen_wx.cpp
+Forestall an msvc warning (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
+
+20150921T0035Z <gchicares@sbcglobal.net> [474]
+
+  group_quote_pdf_gen_wx.cpp
+Adjust 20150826T1714Z fix (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
+
+20150921T0051Z <gchicares@sbcglobal.net> [474]
+
+  wx_table_generator.cpp
+Resolve column-width issue by adding margins unconditionally. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
+

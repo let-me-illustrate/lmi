@@ -1113,6 +1113,7 @@ noinst_HEADERS = \
     dbvalue.hpp \
     death_benefits.hpp \
     default_view.hpp \
+    deserialize_cast.hpp \
     docmanager_ex.hpp \
     docmdichildframe_ex.hpp \
     edit_mvc_docview_parameters.hpp \
