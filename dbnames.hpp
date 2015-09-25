@@ -492,6 +492,8 @@ enum e_database_key
     ,DB_Topic_Miscellanea
 
         ,DB_LedgerType
+        ,DB_Nonillustrated
+        ,DB_NoLongerIssued
 
         ,DB_AgeLastOrNearest
         ,DB_MaturityAge

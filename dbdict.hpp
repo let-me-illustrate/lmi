@@ -368,6 +368,8 @@ class LMI_SO DBDictionary
     database_entity ExpRatRiskCoiMult   ;
     database_entity ExpRatAmortPeriod   ;
     database_entity LedgerType          ;
+    database_entity Nonillustrated      ;
+    database_entity NoLongerIssued      ;
     database_entity AgeLastOrNearest    ;
     database_entity MaturityAge         ;
     database_entity LapseIgnoresSurrChg ;

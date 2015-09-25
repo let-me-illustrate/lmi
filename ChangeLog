@@ -36871,3 +36871,42 @@ Provide an additional field.
 Mark a defect: in force even one single day implies inforce. See:
   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
 
+20150925T0221Z <gchicares@sbcglobal.net> [475]
+
+  emit_ledger.cpp
+  group_quote_pdf_gen_wx.cpp
+  ledger.cpp
+  ledger.hpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+Rename certain members.
+
+20150925T0237Z <gchicares@sbcglobal.net> [475]
+
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+Rename certain members.
+
+20150925T0246Z <gchicares@sbcglobal.net> [475]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Rearrange database entitites.
+
+20150925T1731Z <gchicares@sbcglobal.net> [475]
+
+  basic_values.hpp
+  basicvalues.cpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Establish new database entities for regulatory restrictions.
+

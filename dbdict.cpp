@@ -392,6 +392,8 @@ void DBDictionary::ascribe_members()
     ascribe("ExpRatRiskCoiMult"   , &DBDictionary::ExpRatRiskCoiMult   );
     ascribe("ExpRatAmortPeriod"   , &DBDictionary::ExpRatAmortPeriod   );
     ascribe("LedgerType"          , &DBDictionary::LedgerType          );
+    ascribe("Nonillustrated"      , &DBDictionary::Nonillustrated      );
+    ascribe("NoLongerIssued"      , &DBDictionary::NoLongerIssued      );
     ascribe("AgeLastOrNearest"    , &DBDictionary::AgeLastOrNearest    );
     ascribe("MaturityAge"         , &DBDictionary::MaturityAge         );
     ascribe("LapseIgnoresSurrChg" , &DBDictionary::LapseIgnoresSurrChg );
