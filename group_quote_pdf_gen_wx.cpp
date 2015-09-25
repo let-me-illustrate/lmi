@@ -36,6 +36,7 @@
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
+#include "miscellany.hpp"               // split_into_lines()
 #include "oecumenic_enumerations.hpp"   // oenum_format_style
 #include "path_utility.hpp"             // fs::path inserter
 #include "wx_table_generator.hpp"
@@ -89,6 +90,97 @@ wxString escape_for_html_elem(std::string const& s)
             }
         }
     return z;
+}
+
+/// Append the given tag to the string and ensure that the matching closing tag
+/// will be appended to it later.
+///
+/// This helper class helps with not forgetting the closing tags in the
+/// generated HTML. It doesn't actually make it impossible to forget them (this
+/// would require much heavier API and seems not to be worth it), but makes it
+/// less likely.
+
+class open_and_ensure_closing_tag
+    :private lmi::uncopyable<open_and_ensure_closing_tag>
+{
+public:
+    open_and_ensure_closing_tag(wxString& html, char const* tag)
+        :html_(html)
+        ,tag_(tag)
+    {
+        html_ << "<" << tag_ << ">";
+    }
+
+    ~open_and_ensure_closing_tag()
+    {
+        html_ << "</" << tag_ << ">";
+    }
+
+private:
+    wxString& html_;
+    wxString const tag_;
+};
+
+/// Simple description of a custom field, consisting of a non-empty name and a
+/// possibly empty string value.
+///
+/// Objects of this class have value semantics.
+
+struct extra_summary_field
+    {
+    std::string name;
+    std::string value;
+    };
+
+/// Function parsing a multiline string of the form "name: value" as an array
+/// of extra summary fields.
+
+std::vector<extra_summary_field> parse_extra_report_fields(std::string const& s)
+{
+    std::vector<std::string> const lines = split_into_lines(s);
+
+    std::vector<extra_summary_field> fields;
+    fields.reserve(lines.size());
+
+    typedef std::vector<std::string>::const_iterator vsci;
+    for(vsci i = lines.begin(); i != lines.end(); ++i)
+        {
+        // Ignore the empty or blank lines, they could be added for readability
+        // reasons and this also deals with the problem of split_into_lines()
+        // returning a vector of a single empty line even if the source string
+        // is entirely empty.
+        if(i->find_first_not_of(' ') == std::string::npos)
+            {
+            continue;
+            }
+
+        extra_summary_field field;
+
+        std::string::size_type const pos_colon = i->find(':');
+
+        // Notice that substr() call is correct even if there is no colon in
+        // this line, i.e. pos_colon == npos.
+        field.name = i->substr(0, pos_colon);
+
+        if(pos_colon != std::string::npos)
+            {
+            // Skip any spaces after the colon as this is what would be
+            // normally expected by the user.
+            std::string::size_type const
+                pos_value = i->find_first_not_of(' ', pos_colon + 1);
+
+            if(pos_value != std::string::npos)
+                {
+                field.value = i->substr(pos_value);
+                }
+            }
+        // else: If there is no colon or nothing but space after it, just leave
+        // the value empty, this is unusual, but not considered to be an error.
+
+        fields.push_back(field);
+        }
+
+    return fields;
 }
 
 /// Load the image from the given file.
@@ -289,17 +381,19 @@ class group_quote_pdf_generator_wx
         // Extract header and footer fields from a ledger.
         void fill_global_report_data(LedgerInvariant const& ledger);
 
+        // Fixed fields that are always defined.
         std::string company_;
         std::string prepared_by_;
-        std::string guarantee_issue_max_;
         std::string product_;
         std::string short_product_;
         std::string available_riders_;
-        std::string plan_type_;
         std::string premium_mode_;
         std::string contract_state_;
         std::string effective_date_;
         std::string footer_;
+
+        // Optional supplementary fields.
+        std::vector<extra_summary_field> extra_fields_;
         };
     global_report_data report_data_;
 
@@ -387,9 +481,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
         + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteBrokerDealer   )
         ;
 
-    // Input::Comments will replace these two:
-    guarantee_issue_max_ = "$500,000"; // FIXME
-    plan_type_ = "Mandatory"; // FIXME
+    extra_fields_     = parse_extra_report_fields(ledger.Comments);
 }
 
 void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
@@ -814,7 +906,8 @@ void group_quote_pdf_generator_wx::output_document_header
 
     output_html(html_parser, horz_margin, *pos_y, page_.width_ / 2, title_html);
 
-    wxString const summary_html = wxString::Format
+    // Build the summary table with all the mandatory fields.
+    wxString summary_html = wxString::Format
         ("<table width=\"100%%\" cellspacing=\"0\" cellpadding=\"0\">"
          // This extra top empty row works around a bug in wxHTML
          // table positioning code: it uses the provided ordinate
@@ -829,32 +922,52 @@ void group_quote_pdf_generator_wx::output_document_header
          "</tr>"
          "<tr>"
          "<td align=\"right\"><b>Effective Date:&nbsp;&nbsp;</b></td><td>%s</td>"
-         "<td align=\"right\"><b>Plan Type:&nbsp;&nbsp;</b></td><td>%s</td>"
-         "</tr>"
-         "<tr>"
-         "<td align=\"right\"><b>Guarantee Issue Max:&nbsp;&nbsp;</b></td><td>%s</td>"
-         "<td align=\"right\"><b>Premium Mode:&nbsp;&nbsp;</b></td><td>%s</td>"
-         "</tr>"
-         "<tr>"
          "<td align=\"right\"><b>Product:&nbsp;&nbsp;</b></td><td>%s</td>"
-         "<td align=\"right\"><b>Contract State:&nbsp;&nbsp;</b></td><td>%s</td>"
          "</tr>"
          "<tr>"
          "<td align=\"right\"><b>Available Riders:&nbsp;&nbsp;</b></td><td>%s</td>"
+         "<td align=\"right\"><b>Contract State:&nbsp;&nbsp;</b></td><td>%s</td>"
          "</tr>"
          "<tr>"
          "<td align=\"right\"><b>Number of participants:&nbsp;&nbsp;</b></td><td>%d</td>"
+         "<td align=\"right\"><b>Premium Mode:&nbsp;&nbsp;</b></td><td>%s</td>"
          "</tr>"
-         "</table>"
         ,escape_for_html_elem(report_data_.effective_date_)
-        ,escape_for_html_elem(report_data_.plan_type_)
-        ,escape_for_html_elem(report_data_.guarantee_issue_max_)
-        ,escape_for_html_elem(report_data_.premium_mode_)
         ,escape_for_html_elem(report_data_.product_)
-        ,escape_for_html_elem(report_data_.contract_state_)
         ,escape_for_html_elem(report_data_.available_riders_)
+        ,escape_for_html_elem(report_data_.contract_state_)
         ,row_num_
+        ,escape_for_html_elem(report_data_.premium_mode_)
         );
+
+    // Then add any additional fields in left-to-right top-to-bottom order.
+    std::vector<extra_summary_field> const& fields = report_data_.extra_fields_;
+
+    typedef std::vector<extra_summary_field>::const_iterator esfci;
+    for(esfci i = fields.begin(); i != fields.end(); )
+        {
+        // Start a new table row and ensure it will be closed.
+        open_and_ensure_closing_tag tag_tr(summary_html, "tr");
+
+        // Add one, if there are no more, or two fields to it.
+        for(int col = 0; col < 2; ++col)
+            {
+            summary_html += wxString::Format
+                ("<td align=\"right\"><b>%s%s&nbsp;&nbsp;</b></td><td>%s</td>"
+                ,escape_for_html_elem(i->name)
+                ,(i->value.empty() ? "" : ":")
+                ,escape_for_html_elem(i->value)
+                );
+
+            if(++i == fields.end())
+                {
+                break;
+                }
+            }
+        }
+
+    // Finally close the summary table.
+    summary_html += "</table>";
 
     int const summary_height = output_html
         (html_parser
