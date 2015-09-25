@@ -113,13 +113,13 @@ void BasicValues::Init()
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
 
-    LedgerType_ =
+    ledger_type_ =
         static_cast<mcenum_ledger_type>
             (static_cast<int>
                 (Database_->Query(DB_LedgerType))
             )
         ;
-    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(GetLedgerType());
+    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
 
     // IHS !! Just a dummy initialization here--implemented in lmi.
     SpreadFor7702_.assign(Length, 0.0);
