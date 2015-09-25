@@ -683,7 +683,7 @@ void Ledger::write(xml::element& x) const
 
     // [End of derived columns.]
 
-    double Composite = GetIsComposite();
+    double Composite = is_composite();
     scalars["Composite"] = &Composite;
 
     double NoLapse =
@@ -962,7 +962,7 @@ void Ledger::write(xml::element& x) const
     x.push_back(supplementalreport);
 
     if
-        (   GetIsComposite()
+        (   is_composite()
         &&  contains(ledger_invariant_->Comments, "idiosyncrasy_spreadsheet")
         )
         {

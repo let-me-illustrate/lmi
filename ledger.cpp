@@ -215,7 +215,7 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
     // Perhaps these distinctions should be expressed not as named
     // subcollections of containers but rather as enumerators.
 
-    if(ledger_type_ != a_Addend.GetLedgerType())
+    if(ledger_type_ != a_Addend.ledger_type())
         {
         fatal_error()
             << "Cannot add ledgers for products with different"
@@ -232,8 +232,8 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
 
     ledger_invariant_->PlusEq(*a_Addend.ledger_invariant_);
 
-    LMI_ASSERT(GetIsComposite());
-    LMI_ASSERT(!a_Addend.GetIsComposite());
+    LMI_ASSERT(is_composite());
+    LMI_ASSERT(!a_Addend.is_composite());
 
     while(this_i != l_map_rep.end() || addend_i != lm_addend.end())
         {
@@ -386,19 +386,19 @@ LedgerInvariant const& Ledger::GetLedgerInvariant() const
 }
 
 //============================================================================
-mcenum_ledger_type Ledger::GetLedgerType() const
-{
-    return ledger_type_;
-}
-
-//============================================================================
 std::vector<mcenum_run_basis> const& Ledger::GetRunBases() const
 {
     return run_bases_;
 }
 
 //============================================================================
-bool Ledger::GetIsComposite() const
+mcenum_ledger_type Ledger::ledger_type() const
+{
+    return ledger_type_;
+}
+
+//============================================================================
+bool Ledger::is_composite() const
 {
     return is_composite_;
 }

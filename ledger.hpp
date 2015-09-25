@@ -89,20 +89,21 @@ class LMI_SO Ledger
 
     void AutoScale();
 
-    ledger_map_holder const&             GetLedgerMap()       const;
-    LedgerInvariant const&               GetLedgerInvariant() const;
-    LedgerVariant const&                 GetCurrFull()        const;
-    LedgerVariant const&                 GetGuarFull()        const;
-    LedgerVariant const&                 GetMdptFull()        const;
-    LedgerVariant const&                 GetCurrZero()        const;
-    LedgerVariant const&                 GetGuarZero()        const;
-    LedgerVariant const&                 GetCurrHalf()        const;
-    LedgerVariant const&                 GetGuarHalf()        const;
+    ledger_map_holder const&             GetLedgerMap       () const;
+    LedgerInvariant const&               GetLedgerInvariant () const;
+    LedgerVariant const&                 GetCurrFull        () const;
+    LedgerVariant const&                 GetGuarFull        () const;
+    LedgerVariant const&                 GetMdptFull        () const;
+    LedgerVariant const&                 GetCurrZero        () const;
+    LedgerVariant const&                 GetGuarZero        () const;
+    LedgerVariant const&                 GetCurrHalf        () const;
+    LedgerVariant const&                 GetGuarHalf        () const;
 
-    mcenum_ledger_type                   GetLedgerType()      const;
-    int                                  GetMaxLength()       const;
-    std::vector<mcenum_run_basis> const& GetRunBases()        const;
-    bool                                 GetIsComposite()     const;
+    int                                  GetMaxLength       () const;
+    std::vector<mcenum_run_basis> const& GetRunBases        () const;
+
+    mcenum_ledger_type                   ledger_type        () const;
+    bool                                 is_composite       () const;
 
     unsigned int CalculateCRC() const;
     void Spew(std::ostream& os) const;
