@@ -120,6 +120,7 @@ class LMI_SO Ledger
     LedgerVariant const& GetOneVariantLedger(mcenum_run_basis) const;
     void SetRunBases(int a_Length);
 
+    mcenum_ledger_type ledger_type_;
     bool is_composite_;
 
     // TODO ?? This is either badly named or badly implemented. Every
@@ -129,8 +130,6 @@ class LMI_SO Ledger
     // composites, yet it is not evident why that is desirable for
     // composites but not for all cells.
     double composite_lapse_year_;
-
-    mcenum_ledger_type ledger_type_;
 
     boost::shared_ptr<ledger_map_holder> ledger_map_;
     boost::shared_ptr<LedgerInvariant>   ledger_invariant_;

@@ -70,9 +70,9 @@ Ledger::Ledger
     ,int                a_Length
     ,bool               a_IsComposite
     )
-    :is_composite_         (a_IsComposite)
+    :ledger_type_          (a_LedgerType)
+    ,is_composite_         (a_IsComposite)
     ,composite_lapse_year_ (0.0)
-    ,ledger_type_          (a_LedgerType)
     ,ledger_map_           (new ledger_map_holder)
     ,ledger_invariant_     (new LedgerInvariant)
 {
