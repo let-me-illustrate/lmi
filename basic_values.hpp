@@ -107,7 +107,7 @@ class LMI_SO BasicValues
     int                   GetLength()                  const;
     int                   GetIssueAge()                const;
     int                   GetRetAge()                  const;
-    mcenum_ledger_type    GetLedgerType()              const;
+    mcenum_ledger_type    ledger_type               () const;
     mcenum_state          GetStateOfJurisdiction()     const;
     mcenum_state          GetStateOfDomicile()         const;
     mcenum_state          GetPremiumTaxState()         const;
@@ -417,7 +417,7 @@ class LMI_SO BasicValues
         ,mcenum_smoking     smoking
         ) const;
 
-    mcenum_ledger_type  LedgerType_;
+    mcenum_ledger_type  ledger_type_;
     bool                IsSubjectToIllustrationReg_;
     mcenum_state        StateOfJurisdiction_;
     mcenum_state        StateOfDomicile_;
@@ -473,9 +473,9 @@ inline int BasicValues::GetRetAge() const
     return RetAge;
 }
 
-inline mcenum_ledger_type BasicValues::GetLedgerType() const
+inline mcenum_ledger_type BasicValues::ledger_type() const
 {
-    return LedgerType_;
+    return ledger_type_;
 }
 
 inline mcenum_state BasicValues::GetStateOfJurisdiction() const
