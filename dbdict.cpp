@@ -127,7 +127,6 @@ void DBDictionary::ascribe_members()
     ascribe("AllowSimpUw"         , &DBDictionary::AllowSimpUw         );
     ascribe("AllowGuarUw"         , &DBDictionary::AllowGuarUw         );
     ascribe("SmokeOrTobacco"      , &DBDictionary::SmokeOrTobacco      );
-    ascribe("UsePolicyFormAlt"    , &DBDictionary::UsePolicyFormAlt    );
     ascribe("AllowPreferredClass" , &DBDictionary::AllowPreferredClass );
     ascribe("AllowUltraPrefClass" , &DBDictionary::AllowUltraPrefClass );
     ascribe("AllowSubstdTable"    , &DBDictionary::AllowSubstdTable    );
@@ -399,6 +398,7 @@ void DBDictionary::ascribe_members()
     ascribe("DefaultProcessOrder" , &DBDictionary::DefaultProcessOrder );
     ascribe("GroupProxyRateTable" , &DBDictionary::GroupProxyRateTable );
     ascribe("PartialMortTable"    , &DBDictionary::PartialMortTable    );
+    ascribe("UsePolicyFormAlt"    , &DBDictionary::UsePolicyFormAlt    );
     ascribe("WeightClass"         , &DBDictionary::WeightClass         );
     ascribe("WeightGender"        , &DBDictionary::WeightGender        );
     ascribe("WeightSmoking"       , &DBDictionary::WeightSmoking       );
