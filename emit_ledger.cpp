@@ -107,7 +107,7 @@ double ledger_emitter::emit_cell
     )
 {
     Timer timer;
-    if((emission_ & mce_emit_composite_only) && !ledger.GetIsComposite())
+    if((emission_ & mce_emit_composite_only) && !ledger.is_composite())
         {
         goto done;
         }

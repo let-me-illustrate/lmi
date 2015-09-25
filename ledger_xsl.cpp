@@ -47,7 +47,7 @@ namespace
 {
 std::string xsl_filename(Ledger const& ledger)
 {
-    mcenum_ledger_type const z = ledger.GetLedgerType();
+    mcenum_ledger_type const z = ledger.ledger_type();
     switch(z)
         {
         case mce_ill_reg:                      return "illustration_reg.xsl";
@@ -77,7 +77,7 @@ fs::path xsl_filepath(Ledger const& ledger)
             << "Unable to read file '"
             << xsl_file
             << "' required for ledger type '"
-            << ledger.GetLedgerType()
+            << ledger.ledger_type()
             << "'."
             << LMI_FLUSH
             ;

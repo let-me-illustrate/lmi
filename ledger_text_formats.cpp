@@ -224,7 +224,7 @@ std::string calculation_summary_formatter::top_note
     std::ostringstream oss;
     oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
-    if(ledger_.GetIsComposite())
+    if(ledger_.is_composite())
         {
         oss << "Composite calculation summary\n";
         }
@@ -276,10 +276,10 @@ std::string calculation_summary_formatter::format_as_html() const
 
     oss << "<p>\n" << top_note("<br>\n") << "</p>\n";
 
-    if(!ledger_.GetIsComposite())
+    if(!ledger_.is_composite())
         {
         oss << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
-        if(is_subject_to_ill_reg(ledger_.GetLedgerType()))
+        if(is_subject_to_ill_reg(ledger_.ledger_type()))
             {
             oss
             << "<tr>\n"
@@ -381,9 +381,9 @@ std::string calculation_summary_formatter::format_as_tsv() const
 
     oss << top_note("\n") << '\n';
 
-    if(!ledger_.GetIsComposite())
+    if(!ledger_.is_composite())
         {
-        if(is_subject_to_ill_reg(ledger_.GetLedgerType()))
+        if(is_subject_to_ill_reg(ledger_.ledger_type()))
             {
             oss
             << std::setprecision(2)
@@ -780,7 +780,7 @@ void PrintRosterTabDelimited
     ,std::string const& file_name
     )
 {
-    if(ledger_values.GetIsComposite())
+    if(ledger_values.is_composite())
         {
         return;
         }
@@ -940,7 +940,7 @@ void FlatTextLedgerPrinter::PrintHeader() const
     os_ << center(invar().ProducerName) << endrow;
     os_ << center(invar().ProducerStreet) << endrow;
     os_ << center(invar().ProducerCity) << endrow;
-    if(ledger_.GetIsComposite())
+    if(ledger_.is_composite())
         {
         os_ << "Composite" << endrow;
         }
@@ -1111,7 +1111,7 @@ void FlatTextLedgerPrinter::PrintTabularDetail() const
 
         os_ << std::setw( 7) << (1 + j      )         ;
 
-        if(ledger_.GetIsComposite())
+        if(ledger_.is_composite())
             {
             os_ << std::setw(12) << ' '               ;
             }

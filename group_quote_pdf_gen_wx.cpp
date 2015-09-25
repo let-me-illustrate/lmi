@@ -393,7 +393,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     std::pair<int, oenum_format_style> const f0(0, oe_format_normal);
     std::pair<int, oenum_format_style> const f2(2, oe_format_normal);
 
-    bool const is_composite = ledger.GetIsComposite();
+    bool const is_composite = ledger.is_composite();
 
     row_data rd;
     for(int col = 0; col < e_col_max; ++col)
