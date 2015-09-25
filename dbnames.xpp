@@ -33,7 +33,6 @@
 {DB_AllowSimpUw,DB_Topic_Underwriting,"AllowSimpUw","Allow simplified underwriting: 0=no, 1=yes",}, \
 {DB_AllowGuarUw,DB_Topic_Underwriting,"AllowGuarUw","Allow guaranteed underwriting: 0=no, 1=yes",}, \
 {DB_SmokeOrTobacco,DB_Topic_Underwriting,"SmokeOrTobacco","Distinguish mortality by: 0=smoking, 1=tobacco use",}, \
-{DB_UsePolicyFormAlt,DB_Topic_Underwriting,"UsePolicyFormAlt","Use alternative policy-form name: 0=no, 1=yes",}, \
 {DB_AllowPreferredClass,DB_Topic_Underwriting,"AllowPreferredClass","Allow preferred class: 0=no, 1=yes",}, \
 {DB_AllowUltraPrefClass,DB_Topic_Underwriting,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
 {DB_AllowSubstdTable,DB_Topic_Underwriting,"AllowSubstdTable","Allow substandard table ratings: 0=no, 1=yes",}, \
@@ -322,6 +321,7 @@
 {DB_DefaultProcessOrder,DB_Topic_Miscellanea,"DefaultProcessOrder","Default processing order: 0=life by life, 1=month by month [not yet implemented]",}, \
 {DB_GroupProxyRateTable,DB_Topic_Miscellanea,"GroupProxyRateTable","Group-term proxy rate (index in mortality table database)",}, \
 {DB_PartialMortTable,DB_Topic_Miscellanea,"PartialMortTable","Partial mortality table (index in mortality table database)",}, \
+{DB_UsePolicyFormAlt,DB_Topic_Miscellanea,"UsePolicyFormAlt","Use alternative policy-form name: 0=no, 1=yes",}, \
 {DB_Topic_Weights,DB_FIRST,"Weights","Weights for profit analysis cells [not yet implemented]",}, \
 {DB_WeightClass,DB_Topic_Weights,"WeightClass","Weight by underwriting class [not yet implemented]",}, \
 {DB_WeightGender,DB_Topic_Weights,"WeightGender","Weight by gender [not yet implemented]",}, \
