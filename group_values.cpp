@@ -688,8 +688,8 @@ census_run_result run_census::operator()
 
     composite_.reset
         (new Ledger
-            (cells[0].ledger_type()
-            ,100
+            (100
+            ,cells[0].ledger_type()
             ,true
             )
         );
