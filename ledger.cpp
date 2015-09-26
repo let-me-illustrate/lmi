@@ -383,12 +383,14 @@ void Ledger::Spew(std::ostream& os) const
 //============================================================================
 ledger_map_holder const& Ledger::GetLedgerMap() const
 {
+    LMI_ASSERT(ledger_map_.get());
     return *ledger_map_;
 }
 
 //============================================================================
 LedgerInvariant const& Ledger::GetLedgerInvariant() const
 {
+    LMI_ASSERT(ledger_invariant_.get());
     return *ledger_invariant_;
 }
 
