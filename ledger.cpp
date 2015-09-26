@@ -66,17 +66,17 @@
 
 //============================================================================
 Ledger::Ledger
-    (mcenum_ledger_type a_LedgerType
-    ,int                a_Length
-    ,bool               a_IsComposite
+    (int                length
+    ,mcenum_ledger_type ledger_type
+    ,bool               is_composite
     )
-    :ledger_type_          (a_LedgerType)
-    ,is_composite_         (a_IsComposite)
+    :ledger_type_          (ledger_type)
+    ,is_composite_         (is_composite)
     ,composite_lapse_year_ (0.0)
     ,ledger_map_           (new ledger_map_holder)
     ,ledger_invariant_     (new LedgerInvariant)
 {
-    SetRunBases(a_Length);
+    SetRunBases(length);
 }
 
 //============================================================================
@@ -85,16 +85,16 @@ Ledger::~Ledger()
 }
 
 //============================================================================
-void Ledger::SetRunBases(int a_Length)
+void Ledger::SetRunBases(int length)
 {
     ledger_map_t& l_map_rep = ledger_map_->held_;
     switch(ledger_type_)
         {
         case mce_ill_reg:
             {
-            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_mdpt_sep_full] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_mdpt_sep_full] = LedgerVariant(length);
             }
             break;
         case mce_group_private_placement:      // Deliberately fall through.
@@ -103,10 +103,10 @@ void Ledger::SetRunBases(int a_Length)
         case mce_variable_annuity:             // Deliberately fall through.
         case mce_nasd:
             {
-            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(length);
             }
             break;
 #if 0
@@ -117,12 +117,12 @@ void Ledger::SetRunBases(int a_Length)
         //
         case nonexistent:  // {current, 0% int, 1/2 int%} X {guar, curr}
             {
-            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_curr_sep_half] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_half] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_curr_sep_half] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_half] = LedgerVariant(length);
             }
             break;
 #endif

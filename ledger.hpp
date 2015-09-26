@@ -73,9 +73,9 @@ class LMI_SO Ledger
     // for endt age. Yet 100 won't work for issue age 0 if coverage
     // beyond age 100 is to be shown.
     explicit Ledger
-        (mcenum_ledger_type a_LedgerType
-        ,int                a_Length        = 100
-        ,bool               a_IsComposite   = false
+        (int                length
+        ,mcenum_ledger_type ledger_type
+        ,bool               is_composite
         );
     virtual ~Ledger();
 
@@ -118,7 +118,7 @@ class LMI_SO Ledger
 
   private:
     LedgerVariant const& GetOneVariantLedger(mcenum_run_basis) const;
-    void SetRunBases(int a_Length);
+    void SetRunBases(int length);
 
     mcenum_ledger_type ledger_type_;
     bool is_composite_;
