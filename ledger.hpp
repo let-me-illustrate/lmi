@@ -68,6 +68,8 @@ class LMI_SO Ledger
     explicit Ledger
         (int                length
         ,mcenum_ledger_type ledger_type
+        ,bool               nonillustrated
+        ,bool               no_can_issue
         ,bool               is_composite
         );
     virtual ~Ledger();
@@ -96,6 +98,8 @@ class LMI_SO Ledger
     std::vector<mcenum_run_basis> const& GetRunBases        () const;
 
     mcenum_ledger_type                   ledger_type        () const;
+    bool                                 nonillustrated     () const;
+    bool                                 no_can_issue       () const;
     bool                                 is_composite       () const;
 
     unsigned int CalculateCRC() const;
@@ -113,8 +117,10 @@ class LMI_SO Ledger
     LedgerVariant const& GetOneVariantLedger(mcenum_run_basis) const;
     void SetRunBases(int length);
 
-    mcenum_ledger_type ledger_type_;
-    bool is_composite_;
+    mcenum_ledger_type ledger_type_   ;
+    bool               nonillustrated_;
+    bool               no_can_issue_  ;
+    bool               is_composite_  ;
 
     // TODO ?? This is either badly named or badly implemented. Every
     // instance of this class, even an instance for a single cell, has
