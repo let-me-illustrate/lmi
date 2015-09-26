@@ -68,9 +68,13 @@
 Ledger::Ledger
     (int                length
     ,mcenum_ledger_type ledger_type
+    ,bool               nonillustrated
+    ,bool               no_can_issue
     ,bool               is_composite
     )
     :ledger_type_          (ledger_type)
+    ,nonillustrated_       (nonillustrated)
+    ,no_can_issue_         (no_can_issue)
     ,is_composite_         (is_composite)
     ,composite_lapse_year_ (0.0)
     ,ledger_map_           (new ledger_map_holder)
@@ -224,6 +228,12 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
             ;
         }
 
+    nonillustrated_ = nonillustrated_ || a_Addend.nonillustrated();
+    no_can_issue_   = no_can_issue_   || a_Addend.no_can_issue  ();
+
+    LMI_ASSERT(is_composite());
+    LMI_ASSERT(!a_Addend.is_composite());
+
     ledger_map_t& l_map_rep = ledger_map_->held_;
     ledger_map_t::iterator this_i = l_map_rep.begin();
 
@@ -231,9 +241,6 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
     ledger_map_t::const_iterator addend_i = lm_addend.begin();
 
     ledger_invariant_->PlusEq(*a_Addend.ledger_invariant_);
-
-    LMI_ASSERT(is_composite());
-    LMI_ASSERT(!a_Addend.is_composite());
 
     while(this_i != l_map_rep.end() || addend_i != lm_addend.end())
         {
@@ -395,6 +402,18 @@ std::vector<mcenum_run_basis> const& Ledger::GetRunBases() const
 mcenum_ledger_type Ledger::ledger_type() const
 {
     return ledger_type_;
+}
+
+//============================================================================
+bool Ledger::nonillustrated() const
+{
+    return nonillustrated_;
+}
+
+//============================================================================
+bool Ledger::no_can_issue() const
+{
+    return no_can_issue_;
 }
 
 //============================================================================

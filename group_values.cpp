@@ -703,6 +703,8 @@ census_run_result run_census::operator()
         (new Ledger
             (100
             ,cells[0].ledger_type()
+            ,false
+            ,false
             ,true
             )
         );
