@@ -103,6 +103,8 @@ fs::path xsl_filepath(Ledger const& ledger)
 
 std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 {
+    throw_if_interdicted(ledger);
+
     fs::path print_dir(configurable_settings::instance().print_directory());
 
     fs::path real_filepath(orthodox_filename(filepath.leaf()));

@@ -554,3 +554,36 @@ std::vector<double> numeric_vector
         ;
 }
 
+namespace
+{
+std::string reason_to_interdict(Ledger const& z)
+{
+    if(z.nonillustrated())
+        {
+        return "Illustrations are forbidden for this policy form.";
+        }
+    else if(z.no_can_issue()) // Don't even think about it, say no go.
+        {
+        return "New-business illustrations are forbidden for this policy form.";
+        }
+    else
+        {
+        return "";
+        }
+}
+} // Unnamed namespace.
+
+bool is_interdicted(Ledger const& z)
+{
+    return !reason_to_interdict(z).empty();
+}
+
+void throw_if_interdicted(Ledger const& z)
+{
+    std::string s = reason_to_interdict(z);
+    if(!s.empty())
+        {
+        fatal_error() << s << LMI_FLUSH;
+        }
+}
+

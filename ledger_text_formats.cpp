@@ -468,6 +468,8 @@ void PrintCellTabDelimited
     ,std::string const& file_name
     )
 {
+    throw_if_interdicted(ledger_values);
+
     LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
     LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
     LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
@@ -869,6 +871,8 @@ void PrintLedgerFlatText
     ,std::ostream& os
     )
 {
+    throw_if_interdicted(ledger);
+
     FlatTextLedgerPrinter(ledger, os).Print();
 }
 

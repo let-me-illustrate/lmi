@@ -36910,3 +36910,43 @@ Rearrange database entitites.
   ihs_basicval.cpp
 Establish new database entities for regulatory restrictions.
 
+20150925T2322Z <gchicares@sbcglobal.net> [475]
+
+  ledger.cpp
+  ledger.hpp
+Rearrange data members in order of ctor arguments.
+
+20150926T0050Z <gchicares@sbcglobal.net> [475]
+
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger.cpp
+  ledger.hpp
+Rearrange and rename args used in Ledger ctor; remove default values.
+
+20150926T0146Z <gchicares@sbcglobal.net> [474]
+
+  group_values.cpp
+  ledger.hpp
+Demote, rewrite, and move a not-so-important defect marker.
+
+20150926T1118Z <gchicares@sbcglobal.net> [474]
+
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger.cpp
+  ledger.hpp
+Pass regulatory prohibitions to class Ledger.
+
+20150926T1232Z <gchicares@sbcglobal.net> [474]
+
+  custom_io_0.cpp
+  custom_io_1.cpp
+  ledger.cpp
+  ledger.hpp
+  ledger_text_formats.cpp
+  ledger_xsl.cpp
+Effect regulatory prohibitions.
+
