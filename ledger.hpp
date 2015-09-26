@@ -117,6 +117,15 @@ class LMI_SO Ledger
     LedgerVariant const& GetOneVariantLedger(mcenum_run_basis) const;
     void SetRunBases(int length);
 
+    // These members store ctor arguments whose values cannot be set
+    // otherwise. The rationale for storing them here (rather than in
+    // class LedgerInvariant, e.g.) is that they are not data from
+    // which reports are generated--rather, they govern how reports
+    // are generated, and which reports are permitted.
+    //
+    // Naming: "is_composite_" because "composite" could be taken as a
+    // noun, suggesting a composite ledger; "nonillustrated_" without
+    // "is_" because it's unambiguously adjectival.
     mcenum_ledger_type ledger_type_   ;
     bool               nonillustrated_;
     bool               no_can_issue_  ;
