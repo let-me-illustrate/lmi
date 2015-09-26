@@ -65,13 +65,6 @@ class ledger_map_holder;
 class LMI_SO Ledger
 {
   public:
-    // TODO ?? It's pretty weak to use 100 as a default max length.
-    // But when running a composite, life by life, we don't know the max
-    // length until we've initialized all lives. We could get the min age
-    // by inspecting the input parms for all lives, but to get the age at
-    // endt requires initializing each life and doing a database lookup
-    // for endt age. Yet 100 won't work for issue age 0 if coverage
-    // beyond age 100 is to be shown.
     explicit Ledger
         (int                length
         ,mcenum_ledger_type ledger_type
