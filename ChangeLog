@@ -36950,3 +36950,14 @@ Pass regulatory prohibitions to class Ledger.
   ledger_xsl.cpp
 Effect regulatory prohibitions.
 
+20150926T1915Z <gchicares@sbcglobal.net> [474]
+
+  ledger.cpp
+Assert trivial-accessor preconditions.
+
+20150926T1916Z <gchicares@sbcglobal.net> [474]
+
+  input_harmonization.cpp
+  ledger.hpp
+Improve documentation.
+
