@@ -455,6 +455,8 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
 
 std::string FormatSelectedValuesAsTsv(Ledger const& ledger_values)
 {
+    throw_if_interdicted(ledger_values);
+
     return calculation_summary_formatter(ledger_values).format_as_tsv();
 }
 
