@@ -96,6 +96,7 @@ class IllustrationView
     void UponUpdateAlwaysEnabled(wxUpdateUIEvent&);
     void UponUpdateFileSave     (wxUpdateUIEvent&);
     void UponUpdateFileSaveAs   (wxUpdateUIEvent&);
+    void UponUpdateIllustration (wxUpdateUIEvent&);
     void UponUpdateInapplicable (wxUpdateUIEvent&);
     void UponUpdateProperties   (wxUpdateUIEvent&);
 

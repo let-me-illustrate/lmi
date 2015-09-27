@@ -78,10 +78,15 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(wxID_COPY                          ,IllustrationView::UponCopyFull           )
     EVT_UPDATE_UI(wxID_SAVE                     ,IllustrationView::UponUpdateFileSave     )
     EVT_UPDATE_UI(wxID_SAVEAS                   ,IllustrationView::UponUpdateFileSaveAs   )
-    EVT_UPDATE_UI(XRCID("print_pdf"            ),IllustrationView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(wxID_PRINT                    ,IllustrationView::UponUpdateIllustration )
+    EVT_UPDATE_UI(wxID_PAGE_SETUP               ,IllustrationView::UponUpdateIllustration )
+    EVT_UPDATE_UI(wxID_PREVIEW                  ,IllustrationView::UponUpdateIllustration )
+    EVT_UPDATE_UI(XRCID("print_pdf"            ),IllustrationView::UponUpdateIllustration )
     EVT_UPDATE_UI(XRCID("edit_cell"            ),IllustrationView::UponUpdateProperties   )
     EVT_UPDATE_UI(XRCID("edit_class"           ),IllustrationView::UponUpdateInapplicable )
     EVT_UPDATE_UI(XRCID("edit_case"            ),IllustrationView::UponUpdateInapplicable )
+    EVT_UPDATE_UI(XRCID("copy_summary"         ),IllustrationView::UponUpdateIllustration )
+    EVT_UPDATE_UI(wxID_COPY                     ,IllustrationView::UponUpdateIllustration )
     EVT_UPDATE_UI(XRCID("run_cell"             ),IllustrationView::UponUpdateInapplicable )
     EVT_UPDATE_UI(XRCID("run_class"            ),IllustrationView::UponUpdateInapplicable )
     EVT_UPDATE_UI(XRCID("run_case"             ),IllustrationView::UponUpdateInapplicable )
@@ -277,6 +282,11 @@ void IllustrationView::UponUpdateFileSave(wxUpdateUIEvent& e)
 void IllustrationView::UponUpdateFileSaveAs(wxUpdateUIEvent& e)
 {
     e.Enable(!is_phony_);
+}
+
+void IllustrationView::UponUpdateIllustration(wxUpdateUIEvent& e)
+{
+    e.Enable(ledger_values_.get() && !is_interdicted(*ledger_values_));
 }
 
 void IllustrationView::UponUpdateInapplicable(wxUpdateUIEvent& e)
