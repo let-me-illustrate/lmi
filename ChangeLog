@@ -36961,3 +36961,8 @@ Assert trivial-accessor preconditions.
   ledger.hpp
 Improve documentation.
 
+20150927T1241Z <gchicares@sbcglobal.net> [474]
+
+  ledger_text_formats.cpp
+Fix defect introduced 20150926T1232Z: missing prohibition.
+
