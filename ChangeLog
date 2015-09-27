@@ -36966,3 +36966,9 @@ Improve documentation.
   ledger_text_formats.cpp
 Fix defect introduced 20150926T1232Z: missing prohibition.
 
+20150927T1419Z <gchicares@sbcglobal.net> [474]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Disable commands that would produce prohibited illustrations.
+
