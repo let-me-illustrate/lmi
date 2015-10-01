@@ -207,7 +207,9 @@ class LMI_SO LedgerInvariant
     double          GenAcctAllocation;
     double          SupplementalReport;
 
+    // Essential strings describing the policy and company.
     std::string     PolicyForm;
+    // Ledger needs no member like product_data::PolicyFormAlternative;
     std::string     PolicyMktgName;
     std::string     PolicyLegalName;
     std::string     InsCoShortName;
@@ -215,10 +217,14 @@ class LMI_SO LedgerInvariant
     std::string     InsCoAddr;
     std::string     InsCoStreet;
     std::string     InsCoPhone;
+    // Ledger needs no member like product_data::InsCoDomicile;
     std::string     MainUnderwriter;
     std::string     MainUnderwriterAddress;
     std::string     CoUnderwriter;
     std::string     CoUnderwriterAddress;
+
+    // Terms defined in the contract, which must be used for column
+    // headers according to the illustration reg.
     std::string     AvName;
     std::string     CsvName;
     std::string     CsvHeaderName;
@@ -245,6 +251,7 @@ class LMI_SO LedgerInvariant
     std::string     MinimumPremiumFootnote;
     std::string     PremAllocationFootnote;
 
+    // Miscellaneous other footnotes.
     std::string     InterestDisclaimer;
     std::string     GuarMortalityFootnote;
     std::string     ProductDescription;
@@ -298,6 +305,8 @@ class LMI_SO LedgerInvariant
     std::string     SubsidiaryFootnote;
     std::string     PlacementAgentFootnote;
     std::string     MarketingNameFootnote;
+
+    // Strings from class Input.
 
     std::string     ProductName;
     std::string     ProducerName;
