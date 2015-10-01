@@ -191,7 +191,7 @@ class LMI_SO product_data
 
     // TODO ?? Most of the following are missing from the GUI.
 
-    // Footnotes that describe various ledger columns.
+    // Ledger column definitions.
     glossed_string AccountValueFootnote;
     glossed_string AttainedAgeFootnote;
     glossed_string CashSurrValueFootnote;
