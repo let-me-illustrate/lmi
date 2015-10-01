@@ -194,7 +194,6 @@ void LedgerInvariant::Alloc(int len)
 
     Strings         ["PolicyMktgName"        ] = &PolicyMktgName         ;
     Strings         ["PolicyLegalName"       ] = &PolicyLegalName        ;
-    Strings         ["ProductName"           ] = &ProductName            ;
     Strings         ["PolicyForm"            ] = &PolicyForm             ;
     Strings         ["InsCoShortName"        ] = &InsCoShortName         ;
     Strings         ["InsCoName"             ] = &InsCoName              ;
@@ -210,8 +209,6 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["CsvName"               ] = &CsvName                ;
     Strings         ["CsvHeaderName"         ] = &CsvHeaderName          ;
     Strings         ["NoLapseProvisionName"  ] = &NoLapseProvisionName   ;
-    Strings         ["InterestDisclaimer"    ] = &InterestDisclaimer     ;
-    Strings         ["GuarMortalityFootnote" ] = &GuarMortalityFootnote  ;
 
     Strings         ["AccountValueFootnote"  ] = &AccountValueFootnote   ;
     Strings         ["AttainedAgeFootnote"   ] = &AttainedAgeFootnote    ;
@@ -230,6 +227,8 @@ void LedgerInvariant::Alloc(int len)
 
     Strings         ["MinimumPremiumFootnote"        ] = &MinimumPremiumFootnote         ;
     Strings         ["PremAllocationFootnote"        ] = &PremAllocationFootnote         ;
+    Strings         ["InterestDisclaimer"            ] = &InterestDisclaimer             ;
+    Strings         ["GuarMortalityFootnote"         ] = &GuarMortalityFootnote          ;
     Strings         ["ProductDescription"            ] = &ProductDescription             ;
     Strings         ["StableValueFootnote"           ] = &StableValueFootnote            ;
     Strings         ["NoVanishPremiumFootnote"       ] = &NoVanishPremiumFootnote        ;
@@ -282,6 +281,7 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["PlacementAgentFootnote"        ] = &PlacementAgentFootnote         ;
     Strings         ["MarketingNameFootnote"         ] = &MarketingNameFootnote          ;
 
+    Strings         ["ProductName"           ] = &ProductName            ;
     Strings         ["ProducerName"          ] = &ProducerName           ;
     Strings         ["ProducerStreet"        ] = &ProducerStreet         ;
     Strings         ["ProducerCity"          ] = &ProducerCity           ;
@@ -623,7 +623,6 @@ void LedgerInvariant::Init(BasicValues* b)
     if(b->ProductData_)
         {
         product_data const& p = *b->ProductData_;
-        ProductName                    = b->yare_input_.ProductName                ;
         // Accommodate one alternative policy-form name.
         // DATABASE !! It would be much better, of course, to let all
         // strings in class product_data vary across the same axes as
@@ -646,8 +645,6 @@ void LedgerInvariant::Init(BasicValues* b)
         CsvName                        = p.datum("CsvName"                        );
         CsvHeaderName                  = p.datum("CsvHeaderName"                  );
         NoLapseProvisionName           = p.datum("NoLapseProvisionName"           );
-        InterestDisclaimer             = p.datum("InterestDisclaimer"             );
-        GuarMortalityFootnote          = p.datum("GuarMortalityFootnote"          );
 
         AccountValueFootnote           = p.datum("AccountValueFootnote"           );
         AttainedAgeFootnote            = p.datum("AttainedAgeFootnote"            );
@@ -667,6 +664,8 @@ void LedgerInvariant::Init(BasicValues* b)
         MinimumPremiumFootnote         = p.datum("MinimumPremiumFootnote"         );
         PremAllocationFootnote         = p.datum("PremAllocationFootnote"         );
 
+        InterestDisclaimer             = p.datum("InterestDisclaimer"             );
+        GuarMortalityFootnote          = p.datum("GuarMortalityFootnote"          );
         ProductDescription             = p.datum("ProductDescription"             );
         StableValueFootnote            = p.datum("StableValueFootnote"            );
         NoVanishPremiumFootnote        = p.datum("NoVanishPremiumFootnote"        );
@@ -720,6 +719,7 @@ void LedgerInvariant::Init(BasicValues* b)
         MarketingNameFootnote          = p.datum("MarketingNameFootnote"          );
         }
 
+    ProductName             = b->yare_input_.ProductName;
     ProducerName            = b->yare_input_.AgentName;
 
     std::string agent_city     = b->yare_input_.AgentCity;
@@ -900,13 +900,13 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // TODO ?? Probably we should assert that these don't vary by life.
     CorpName                    = a_Addend.CorpName;
     MasterContractNumber        = a_Addend.MasterContractNumber;
+    ProductName                 = a_Addend.ProductName;
     ProducerName                = a_Addend.ProducerName;
     ProducerStreet              = a_Addend.ProducerStreet;
     ProducerCity                = a_Addend.ProducerCity;
     // This would necessarily vary by life:
 //  ContractNumber              = "";
 
-    ProductName                 = a_Addend.ProductName;
     PolicyForm                  = a_Addend.PolicyForm;
     PolicyMktgName              = a_Addend.PolicyMktgName;
     PolicyLegalName             = a_Addend.PolicyLegalName;
@@ -924,8 +924,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     CsvName                     = a_Addend.CsvName;
     CsvHeaderName               = a_Addend.CsvHeaderName;
     NoLapseProvisionName        = a_Addend.NoLapseProvisionName;
-    InterestDisclaimer          = a_Addend.InterestDisclaimer;
-    GuarMortalityFootnote       = a_Addend.GuarMortalityFootnote;
 
     AccountValueFootnote        = a_Addend.AccountValueFootnote;
     AttainedAgeFootnote         = a_Addend.AttainedAgeFootnote;
@@ -945,6 +943,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     MinimumPremiumFootnote      = a_Addend.MinimumPremiumFootnote;
     PremAllocationFootnote      = a_Addend.PremAllocationFootnote;
 
+    InterestDisclaimer             = a_Addend.InterestDisclaimer;
+    GuarMortalityFootnote          = a_Addend.GuarMortalityFootnote;
     ProductDescription             = a_Addend.ProductDescription;
     StableValueFootnote            = a_Addend.StableValueFootnote;
     NoVanishPremiumFootnote        = a_Addend.NoVanishPremiumFootnote;

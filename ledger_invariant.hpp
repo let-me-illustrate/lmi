@@ -207,7 +207,6 @@ class LMI_SO LedgerInvariant
     double          GenAcctAllocation;
     double          SupplementalReport;
 
-    std::string     ProductName;
     std::string     PolicyForm;
     std::string     PolicyMktgName;
     std::string     PolicyLegalName;
@@ -224,8 +223,6 @@ class LMI_SO LedgerInvariant
     std::string     CsvName;
     std::string     CsvHeaderName;
     std::string     NoLapseProvisionName;
-    std::string     InterestDisclaimer;
-    std::string     GuarMortalityFootnote;
 
     // Ledger column definitions.
     std::string     AccountValueFootnote;
@@ -248,6 +245,8 @@ class LMI_SO LedgerInvariant
     std::string     MinimumPremiumFootnote;
     std::string     PremAllocationFootnote;
 
+    std::string     InterestDisclaimer;
+    std::string     GuarMortalityFootnote;
     std::string     ProductDescription;
     std::string     StableValueFootnote;
     std::string     NoVanishPremiumFootnote;
@@ -300,6 +299,7 @@ class LMI_SO LedgerInvariant
     std::string     PlacementAgentFootnote;
     std::string     MarketingNameFootnote;
 
+    std::string     ProductName;
     std::string     ProducerName;
     std::string     ProducerStreet;
     std::string     ProducerCity;
