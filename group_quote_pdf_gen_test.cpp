@@ -60,12 +60,10 @@ int test_main(int argc, char* argv[])
     // Skip system authentication.
     global_settings::instance().set_regression_testing(true);
 
-    multiple_cell_document
-        doc("sample.cns");
-    illustrator ill(mce_emit_group_quote);
-    ill("eraseme.cns", doc.cell_parms());
+    illustrator ill(static_cast<mcenum_emission>(mce_emit_group_quote | mce_emit_timings));
+    ill("sample.cns");
 
-    // TODO: remove eraseme.cns.roster.pdf
+    // TODO: remove sample.cns.quote.pdf
 
     return 0;
 }
