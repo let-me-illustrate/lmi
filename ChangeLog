@@ -36972,3 +36972,32 @@ Fix defect introduced 20150926T1232Z: missing prohibition.
   illustration_view.hpp
 Disable commands that would produce prohibited illustrations.
 
+20151001T1704Z <gchicares@sbcglobal.net> [474]
+
+  product_data.hpp
+Rewrite a comment for concinnity with class Ledger.
+
+20151001T1706Z <gchicares@sbcglobal.net> [474]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Rearrange members to match order in class product_data.
+
+20151001T1714Z <gchicares@sbcglobal.net> [474]
+
+  ledger_invariant.hpp
+Elaborate comments for concinnity with class Ledger.
+
+20151001T2219Z <gchicares@sbcglobal.net> [474]
+
+  ledger_invariant.cpp
+Regularize inconcinnous layout.
+
+20151003T0126Z <gchicares@sbcglobal.net> [474]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+Add new product-data and ledger fields.
+
