@@ -191,7 +191,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["Has1035ExchCharge"     ] = &Has1035ExchCharge      ;
     OtherScalars    ["EffDateJdn"            ] = &EffDateJdn             ;
     OtherScalars    ["DateOfBirthJdn"        ] = &DateOfBirthJdn         ;
-    OtherScalars    ["SplitFundAllocaction"  ] = &SplitFundAllocaction   ;
+    OtherScalars    ["SplitFundAllocation"   ] = &SplitFundAllocation    ;
     OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
     OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
 
@@ -579,7 +579,7 @@ void LedgerInvariant::Init(BasicValues* b)
 
     GenAcctAllocation = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
 
-    SplitFundAllocaction =
+    SplitFundAllocation =
             (0.0 != GenAcctAllocation && 1.0 != GenAcctAllocation)
         ||
             (  0.0 != b->yare_input_.InforceGeneralAccountValue
@@ -1084,7 +1084,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     FundNames                     = a_Addend.FundNames;
     FundAllocs                    = a_Addend.FundAllocs;
     FundAllocations               = a_Addend.FundAllocations;
-    SplitFundAllocaction          = SplitFundAllocaction  || a_Addend.SplitFundAllocaction;
+    SplitFundAllocation           = SplitFundAllocation   || a_Addend.SplitFundAllocation;
     GenAcctAllocation             = a_Addend.GenAcctAllocation;
     GenderDistinct                = a_Addend.GenderDistinct;
     GenderBlended                 = a_Addend.GenderBlended;

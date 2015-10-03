@@ -206,7 +206,7 @@ class LMI_SO LedgerInvariant
     double          Has1035ExchCharge;
     double          EffDateJdn;
     double          DateOfBirthJdn;
-    double          SplitFundAllocaction;
+    double          SplitFundAllocation;
     double          GenAcctAllocation;
     double          SupplementalReport;
 
