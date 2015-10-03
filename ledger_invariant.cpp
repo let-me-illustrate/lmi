@@ -44,7 +44,7 @@
 #include "loads.hpp"
 #include "mc_enum_aux.hpp"              // mc_e_vector_to_string_vector()
 #include "mc_enum_types_aux.hpp"        // mc_str()
-#include "miscellany.hpp"
+#include "miscellany.hpp"               // each_equal()
 #include "outlay.hpp"
 #include "premium_tax.hpp"
 #include "product_data.hpp"
@@ -174,11 +174,13 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["HasWP"                 ] = &HasWP                  ;
     OtherScalars    ["HasADD"                ] = &HasADD                 ;
     OtherScalars    ["HasTerm"               ] = &HasTerm                ;
+    OtherScalars    ["HasSupplSpecAmt"       ] = &HasSupplSpecAmt        ;
     OtherScalars    ["HasChildRider"         ] = &HasChildRider          ;
     OtherScalars    ["HasSpouseRider"        ] = &HasSpouseRider         ;
     OtherScalars    ["SpouseIssueAge"        ] = &SpouseIssueAge         ;
     OtherScalars    ["HasHoneymoon"          ] = &HasHoneymoon           ;
     OtherScalars    ["PostHoneymoonSpread"   ] = &PostHoneymoonSpread    ;
+    OtherScalars    ["SplitMinPrem"          ] = &SplitMinPrem           ;
     OtherScalars    ["AllowDbo3"             ] = &AllowDbo3              ;
     OtherScalars    ["InitAnnLoanDueRate"    ] = &InitAnnLoanDueRate     ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
@@ -189,6 +191,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["Has1035ExchCharge"     ] = &Has1035ExchCharge      ;
     OtherScalars    ["EffDateJdn"            ] = &EffDateJdn             ;
     OtherScalars    ["DateOfBirthJdn"        ] = &DateOfBirthJdn         ;
+    OtherScalars    ["SplitFundAllocaction"  ] = &SplitFundAllocaction   ;
     OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
     OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
 
@@ -209,6 +212,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["CsvName"                       ] = &CsvName                       ;
     Strings["CsvHeaderName"                 ] = &CsvHeaderName                 ;
     Strings["NoLapseProvisionName"          ] = &NoLapseProvisionName          ;
+    Strings["ContractName"                  ] = &ContractName                  ;
 
     Strings["AccountValueFootnote"          ] = &AccountValueFootnote          ;
     Strings["AttainedAgeFootnote"           ] = &AttainedAgeFootnote           ;
@@ -224,6 +228,18 @@ void LedgerInvariant::Alloc(int len)
     Strings["SpouseFootnote"                ] = &SpouseFootnote                ;
     Strings["TermFootnote"                  ] = &TermFootnote                  ;
     Strings["WaiverFootnote"                ] = &WaiverFootnote                ;
+    Strings["AccelBftRiderFootnote"         ] = &AccelBftRiderFootnote         ;
+    Strings["OverloanRiderFootnote"         ] = &OverloanRiderFootnote         ;
+
+    Strings["GroupQuoteShortProductName"    ] = &GroupQuoteShortProductName    ;
+    Strings["GroupQuoteIsNotAnOffer"        ] = &GroupQuoteIsNotAnOffer        ;
+    Strings["GroupQuoteRidersHeader"        ] = &GroupQuoteRidersHeader        ;
+    Strings["GroupQuoteRidersFooter"        ] = &GroupQuoteRidersFooter        ;
+    Strings["GroupQuotePolicyFormId"        ] = &GroupQuotePolicyFormId        ;
+    Strings["GroupQuoteStateVariations"     ] = &GroupQuoteStateVariations     ;
+    Strings["GroupQuoteProspectus"          ] = &GroupQuoteProspectus          ;
+    Strings["GroupQuoteUnderwriter"         ] = &GroupQuoteUnderwriter         ;
+    Strings["GroupQuoteBrokerDealer"        ] = &GroupQuoteBrokerDealer        ;
 
     Strings["MinimumPremiumFootnote"        ] = &MinimumPremiumFootnote        ;
     Strings["PremAllocationFootnote"        ] = &PremAllocationFootnote        ;
@@ -248,7 +264,10 @@ void LedgerInvariant::Alloc(int len)
     Strings["FlexiblePremiumFootnote"       ] = &FlexiblePremiumFootnote       ;
     Strings["GuaranteedValuesFootnote"      ] = &GuaranteedValuesFootnote      ;
     Strings["CreditingRateFootnote"         ] = &CreditingRateFootnote         ;
+    Strings["GrossRateFootnote"             ] = &GrossRateFootnote             ;
+    Strings["NetRateFootnote"               ] = &NetRateFootnote               ;
     Strings["MecFootnote"                   ] = &MecFootnote                   ;
+    Strings["GptFootnote"                   ] = &GptFootnote                   ;
     Strings["MidpointValuesFootnote"        ] = &MidpointValuesFootnote        ;
     Strings["SinglePremiumFootnote"         ] = &SinglePremiumFootnote         ;
     Strings["MonthlyChargesFootnote"        ] = &MonthlyChargesFootnote        ;
@@ -262,6 +281,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["IrrCsvFootnote"                ] = &IrrCsvFootnote                ;
     Strings["MortalityChargesFootnote"      ] = &MortalityChargesFootnote      ;
     Strings["LoanAndWithdrawalFootnote"     ] = &LoanAndWithdrawalFootnote     ;
+    Strings["LoanFootnote"                  ] = &LoanFootnote                  ;
     Strings["ImprimaturPresale"             ] = &ImprimaturPresale             ;
     Strings["ImprimaturPresaleComposite"    ] = &ImprimaturPresaleComposite    ;
     Strings["ImprimaturInforce"             ] = &ImprimaturInforce             ;
@@ -273,6 +293,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["NonGuaranteedFootnote"         ] = &NonGuaranteedFootnote         ;
     Strings["MonthlyChargesPaymentFootnote" ] = &MonthlyChargesPaymentFootnote ;
     Strings["SurrenderFootnote"             ] = &SurrenderFootnote             ;
+    Strings["PortabilityFootnote"           ] = &PortabilityFootnote           ;
     Strings["FundRateFootnote"              ] = &FundRateFootnote              ;
     Strings["FundRateFootnote0"             ] = &FundRateFootnote0             ;
     Strings["FundRateFootnote1"             ] = &FundRateFootnote1             ;
@@ -454,6 +475,7 @@ void LedgerInvariant::Init(BasicValues* b)
 //    ErModalMinimumPremium =
 //    ProducerCompensation  =
 
+    HasSupplSpecAmt = false;
     if(b->yare_input_.TermRider)
         {
         TermSpecAmt     .assign(Length, b->yare_input_.TermRiderAmount);
@@ -461,6 +483,10 @@ void LedgerInvariant::Init(BasicValues* b)
     else if(b->Database_->Query(DB_TermIsNotRider))
         {
         TermSpecAmt      = b->DeathBfts_->supplamt();
+        if(!each_equal(TermSpecAmt.begin(), TermSpecAmt.end(), 0.0))
+            {
+            HasSupplSpecAmt = true;
+            }
         }
     else
         {
@@ -553,6 +579,14 @@ void LedgerInvariant::Init(BasicValues* b)
 
     GenAcctAllocation = 1.0 - premium_allocation_to_sepacct(b->yare_input_);
 
+    SplitFundAllocaction =
+            (0.0 != GenAcctAllocation && 1.0 != GenAcctAllocation)
+        ||
+            (  0.0 != b->yare_input_.InforceGeneralAccountValue
+            && 0.0 != b->yare_input_.InforceSeparateAccountValue
+            )
+        ;
+
     NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
     NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
     NoLapseMinAge           = b->Database_->Query(DB_NoLapseMinAge);
@@ -610,13 +644,13 @@ void LedgerInvariant::Init(BasicValues* b)
     HasWP                   = b->yare_input_.WaiverOfPremiumBenefit;
     HasADD                  = b->yare_input_.AccidentalDeathBenefit;
     HasTerm                 = b->yare_input_.TermRider;
-
     HasChildRider           = b->yare_input_.ChildRider;
     HasSpouseRider          = b->yare_input_.SpouseRider;
     SpouseIssueAge          = b->yare_input_.SpouseIssueAge;
 
     HasHoneymoon            = b->yare_input_.HoneymoonEndorsement;
     PostHoneymoonSpread     = b->yare_input_.PostHoneymoonSpread;
+    SplitMinPrem            = b->Database_->Query(DB_SplitMinPrem);
     AllowDbo3               = b->Database_->Query(DB_AllowDbo3);
 
     // The antediluvian branch has a null ProductData_ object.
@@ -645,6 +679,7 @@ void LedgerInvariant::Init(BasicValues* b)
         CsvName                        = p.datum("CsvName"                        );
         CsvHeaderName                  = p.datum("CsvHeaderName"                  );
         NoLapseProvisionName           = p.datum("NoLapseProvisionName"           );
+        ContractName                   = p.datum("ContractName"                   );
 
         AccountValueFootnote           = p.datum("AccountValueFootnote"           );
         AttainedAgeFootnote            = p.datum("AttainedAgeFootnote"            );
@@ -660,6 +695,18 @@ void LedgerInvariant::Init(BasicValues* b)
         SpouseFootnote                 = p.datum("SpouseFootnote"                 );
         TermFootnote                   = p.datum("TermFootnote"                   );
         WaiverFootnote                 = p.datum("WaiverFootnote"                 );
+        AccelBftRiderFootnote          = p.datum("AccelBftRiderFootnote"          );
+        OverloanRiderFootnote          = p.datum("OverloanRiderFootnote"          );
+
+        GroupQuoteShortProductName     = p.datum("GroupQuoteShortProductName"     );
+        GroupQuoteIsNotAnOffer         = p.datum("GroupQuoteIsNotAnOffer"         );
+        GroupQuoteRidersHeader         = p.datum("GroupQuoteRidersHeader"         );
+        GroupQuoteRidersFooter         = p.datum("GroupQuoteRidersFooter"         );
+        GroupQuotePolicyFormId         = p.datum("GroupQuotePolicyFormId"         );
+        GroupQuoteStateVariations      = p.datum("GroupQuoteStateVariations"      );
+        GroupQuoteProspectus           = p.datum("GroupQuoteProspectus"           );
+        GroupQuoteUnderwriter          = p.datum("GroupQuoteUnderwriter"          );
+        GroupQuoteBrokerDealer         = p.datum("GroupQuoteBrokerDealer"         );
 
         MinimumPremiumFootnote         = p.datum("MinimumPremiumFootnote"         );
         PremAllocationFootnote         = p.datum("PremAllocationFootnote"         );
@@ -685,7 +732,10 @@ void LedgerInvariant::Init(BasicValues* b)
         FlexiblePremiumFootnote        = p.datum("FlexiblePremiumFootnote"        );
         GuaranteedValuesFootnote       = p.datum("GuaranteedValuesFootnote"       );
         CreditingRateFootnote          = p.datum("CreditingRateFootnote"          );
+        GrossRateFootnote              = p.datum("GrossRateFootnote"              );
+        NetRateFootnote                = p.datum("NetRateFootnote"                );
         MecFootnote                    = p.datum("MecFootnote"                    );
+        GptFootnote                    = p.datum("GptFootnote"                    );
         MidpointValuesFootnote         = p.datum("MidpointValuesFootnote"         );
         SinglePremiumFootnote          = p.datum("SinglePremiumFootnote"          );
         MonthlyChargesFootnote         = p.datum("MonthlyChargesFootnote"         );
@@ -699,6 +749,7 @@ void LedgerInvariant::Init(BasicValues* b)
         IrrCsvFootnote                 = p.datum("IrrCsvFootnote"                 );
         MortalityChargesFootnote       = p.datum("MortalityChargesFootnote"       );
         LoanAndWithdrawalFootnote      = p.datum("LoanAndWithdrawalFootnote"      );
+        LoanFootnote                   = p.datum("LoanFootnote"                   );
         ImprimaturPresale              = p.datum("ImprimaturPresale"              );
         ImprimaturPresaleComposite     = p.datum("ImprimaturPresaleComposite"     );
         ImprimaturInforce              = p.datum("ImprimaturInforce"              );
@@ -710,6 +761,7 @@ void LedgerInvariant::Init(BasicValues* b)
         NonGuaranteedFootnote          = p.datum("NonGuaranteedFootnote"          );
         MonthlyChargesPaymentFootnote  = p.datum("MonthlyChargesPaymentFootnote"  );
         SurrenderFootnote              = p.datum("SurrenderFootnote"              );
+        PortabilityFootnote            = p.datum("PortabilityFootnote"            );
         FundRateFootnote               = p.datum("FundRateFootnote"               );
         FundRateFootnote0              = p.datum("FundRateFootnote0"              );
         FundRateFootnote1              = p.datum("FundRateFootnote1"              );
@@ -924,6 +976,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     CsvName                       = a_Addend.CsvName;
     CsvHeaderName                 = a_Addend.CsvHeaderName;
     NoLapseProvisionName          = a_Addend.NoLapseProvisionName;
+    ContractName                  = a_Addend.ContractName;
 
     AccountValueFootnote          = a_Addend.AccountValueFootnote;
     AttainedAgeFootnote           = a_Addend.AttainedAgeFootnote;
@@ -939,6 +992,18 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SpouseFootnote                = a_Addend.SpouseFootnote;
     TermFootnote                  = a_Addend.TermFootnote;
     WaiverFootnote                = a_Addend.WaiverFootnote;
+    AccelBftRiderFootnote         = a_Addend.AccelBftRiderFootnote;
+    OverloanRiderFootnote         = a_Addend.OverloanRiderFootnote;
+
+    GroupQuoteShortProductName    = a_Addend.GroupQuoteShortProductName;
+    GroupQuoteIsNotAnOffer        = a_Addend.GroupQuoteIsNotAnOffer    ;
+    GroupQuoteRidersHeader        = a_Addend.GroupQuoteRidersHeader    ;
+    GroupQuoteRidersFooter        = a_Addend.GroupQuoteRidersFooter    ;
+    GroupQuotePolicyFormId        = a_Addend.GroupQuotePolicyFormId    ;
+    GroupQuoteStateVariations     = a_Addend.GroupQuoteStateVariations ;
+    GroupQuoteProspectus          = a_Addend.GroupQuoteProspectus      ;
+    GroupQuoteUnderwriter         = a_Addend.GroupQuoteUnderwriter     ;
+    GroupQuoteBrokerDealer        = a_Addend.GroupQuoteBrokerDealer    ;
 
     MinimumPremiumFootnote        = a_Addend.MinimumPremiumFootnote;
     PremAllocationFootnote        = a_Addend.PremAllocationFootnote;
@@ -964,7 +1029,10 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     FlexiblePremiumFootnote       = a_Addend.FlexiblePremiumFootnote;
     GuaranteedValuesFootnote      = a_Addend.GuaranteedValuesFootnote;
     CreditingRateFootnote         = a_Addend.CreditingRateFootnote;
+    GrossRateFootnote             = a_Addend.GrossRateFootnote;
+    NetRateFootnote               = a_Addend.NetRateFootnote;
     MecFootnote                   = a_Addend.MecFootnote;
+    GptFootnote                   = a_Addend.GptFootnote;
     MidpointValuesFootnote        = a_Addend.MidpointValuesFootnote;
     SinglePremiumFootnote         = a_Addend.SinglePremiumFootnote;
     MonthlyChargesFootnote        = a_Addend.MonthlyChargesFootnote;
@@ -978,6 +1046,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     IrrCsvFootnote                = a_Addend.IrrCsvFootnote;
     MortalityChargesFootnote      = a_Addend.MortalityChargesFootnote;
     LoanAndWithdrawalFootnote     = a_Addend.LoanAndWithdrawalFootnote;
+    LoanFootnote                  = a_Addend.LoanFootnote;
     ImprimaturPresale             = a_Addend.ImprimaturPresale;
     ImprimaturPresaleComposite    = a_Addend.ImprimaturPresaleComposite;
     ImprimaturInforce             = a_Addend.ImprimaturInforce;
@@ -989,6 +1058,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     NonGuaranteedFootnote         = a_Addend.NonGuaranteedFootnote;
     MonthlyChargesPaymentFootnote = a_Addend.MonthlyChargesPaymentFootnote;
     SurrenderFootnote             = a_Addend.SurrenderFootnote;
+    PortabilityFootnote           = a_Addend.PortabilityFootnote;
     FundRateFootnote              = a_Addend.FundRateFootnote;
     FundRateFootnote0             = a_Addend.FundRateFootnote0;
     FundRateFootnote1             = a_Addend.FundRateFootnote1;
@@ -1014,6 +1084,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     FundNames                     = a_Addend.FundNames;
     FundAllocs                    = a_Addend.FundAllocs;
     FundAllocations               = a_Addend.FundAllocations;
+    SplitFundAllocaction          = SplitFundAllocaction  || a_Addend.SplitFundAllocaction;
     GenAcctAllocation             = a_Addend.GenAcctAllocation;
     GenderDistinct                = a_Addend.GenderDistinct;
     GenderBlended                 = a_Addend.GenderBlended;
@@ -1048,9 +1119,10 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
         }
     MecYear                       = std::min(MecYear, a_Addend.MecYear);
 
-    HasWP        = HasWP        || a_Addend.HasWP        ;
-    HasADD       = HasADD       || a_Addend.HasADD       ;
-    HasTerm      = HasTerm      || a_Addend.HasTerm      ;
+    HasWP           = HasWP           || a_Addend.HasWP          ;
+    HasADD          = HasADD          || a_Addend.HasADD         ;
+    HasTerm         = HasTerm         || a_Addend.HasTerm        ;
+    HasSupplSpecAmt = HasSupplSpecAmt || a_Addend.HasSupplSpecAmt;
 
 // TODO ?? Can these be meaningful on a composite? If totals are desired,
 // then term should be treated the same way.
@@ -1065,6 +1137,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     HasHoneymoon       = HasHoneymoon || a_Addend.HasHoneymoon ;
     PostHoneymoonSpread= a_Addend.PostHoneymoonSpread          ;
+    SplitMinPrem       = SplitMinPrem || a_Addend.SplitMinPrem ;
     AllowDbo3          = AllowDbo3    || a_Addend.AllowDbo3    ;
 
     NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
