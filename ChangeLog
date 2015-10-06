@@ -37007,3 +37007,40 @@ Add new product-data and ledger fields.
   ledger_invariant.hpp
 Fix defect introduced 20151003T0126Z: misspelling.
 
+20151006T1248Z <gchicares@sbcglobal.net> [474]
+
+  path_utility_test.cpp
+Demonstrate a latent problem.
+
+20151006T1302Z <gchicares@sbcglobal.net> [474]
+
+  path_utility.cpp
+  path_utility.hpp
+  path_utility_test.cpp
+Remove the problem identified 20151006T1248Z.
+
+20151006T1309Z <gchicares@sbcglobal.net> [474]
+
+  ihs_avdebug.cpp
+Remove code that became truly superfluous 20151006T1302Z.
+
+20151006T1313Z <gchicares@sbcglobal.net> [474]
+
+  census_document.cpp
+Improve documentation.
+
+20151006T1326Z <gchicares@sbcglobal.net> [474]
+
+  main_cgi.cpp
+  main_cli.cpp
+Supply a nonempty name to illustrator::operator().
+
+20151006T1517Z <gchicares@sbcglobal.net> [474]
+
+  emit_ledger.cpp
+  emit_ledger.hpp
+  gpt_server.cpp
+  illustration_view.cpp
+  mec_server.cpp
+Use unique_filepath() for all PDF and spreadsheet output.
+
