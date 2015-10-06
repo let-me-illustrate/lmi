@@ -74,11 +74,13 @@ enum enum_output_mode
 
 wxString escape_for_html_elem(std::string const& s)
 {
+    wxString const u = wxString::FromUTF8(s.c_str());
+
     wxString z;
-    z.reserve(s.length());
-    for(std::string::const_iterator i = s.begin(); i != s.end(); ++i)
+    z.reserve(u.length());
+    for(wxString::const_iterator i = u.begin(); i != u.end(); ++i)
         {
-        switch(*i)
+        switch((*i).GetValue())
             {
             case '<': z += "&lt;" ; break;
             case '>': z += "&gt;" ; break;
