@@ -212,14 +212,6 @@ void test_unique_filepath_with_normal_filenames()
     fs::path path4 = unique_filepath(fs::path(p), ".abc.def");
     BOOST_TEST(path3.string().size() == std::string(r).size());
     BOOST_TEST(path4.string().size() == std::string(s).size());
-// Temporary code to show a defect in the original implementation:
-std::cout
-  << r              << " " << std::string(r).size() << '\n'
-  << path3.string() << " " << path3.string().size() << '\n'
-  << s              << " " << std::string(s).size() << '\n'
-  << path4.string() << " " << path4.string().size() << '\n'
-  << std::flush
-  ;
 
     keep_open.close();
 
