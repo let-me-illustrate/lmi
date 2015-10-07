@@ -36809,12 +36809,12 @@ Resolve gcc-5 issues (VZ). See:
   mc_enum_types_aux.cpp
 Reduce physical dependency by fixing 'build_type=so_test' erosion.
 
-20150919T2345 <zeitlin> [474]
+20150919T2345Z <zeitlin> [474]
 
   aclocal/wxwin.m4
 Update from wxwidgets.org .
 
-20150919T2346 <zeitlin> [474]
+20150919T2346Z <zeitlin> [474]
 
   configure.ac
   Makefile.am
@@ -36852,4 +36852,195 @@ Adjust 20150826T1714Z fix (VZ). See:
   wx_table_generator.cpp
 Resolve column-width issue by adding margins unconditionally. See:
   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00012.html
+
+20150924T2216Z <zeitlin> [474]
+
+  aclocal/wxwin.m4
+Update from wxwidgets.org .
+
+20150924T2249Z <gchicares@sbcglobal.net> [474]
+
+  yare_input.cpp
+  yare_input.hpp
+Provide an additional field.
+
+20150924T2257Z <gchicares@sbcglobal.net> [475]
+
+  ihs_irc7702.cpp
+  ledger_invariant.cpp
+Mark a defect: in force even one single day implies inforce. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
+
+20150925T0221Z <gchicares@sbcglobal.net> [475]
+
+  emit_ledger.cpp
+  group_quote_pdf_gen_wx.cpp
+  ledger.cpp
+  ledger.hpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+Rename certain members.
+
+20150925T0237Z <gchicares@sbcglobal.net> [475]
+
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+Rename certain members.
+
+20150925T0246Z <gchicares@sbcglobal.net> [475]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Rearrange database entitites.
+
+20150925T1731Z <gchicares@sbcglobal.net> [475]
+
+  basic_values.hpp
+  basicvalues.cpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_basicval.cpp
+Establish new database entities for regulatory restrictions.
+
+20150925T2322Z <gchicares@sbcglobal.net> [475]
+
+  ledger.cpp
+  ledger.hpp
+Rearrange data members in order of ctor arguments.
+
+20150926T0050Z <gchicares@sbcglobal.net> [475]
+
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger.cpp
+  ledger.hpp
+Rearrange and rename args used in Ledger ctor; remove default values.
+
+20150926T0146Z <gchicares@sbcglobal.net> [474]
+
+  group_values.cpp
+  ledger.hpp
+Demote, rewrite, and move a not-so-important defect marker.
+
+20150926T1118Z <gchicares@sbcglobal.net> [474]
+
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger.cpp
+  ledger.hpp
+Pass regulatory prohibitions to class Ledger.
+
+20150926T1232Z <gchicares@sbcglobal.net> [474]
+
+  custom_io_0.cpp
+  custom_io_1.cpp
+  ledger.cpp
+  ledger.hpp
+  ledger_text_formats.cpp
+  ledger_xsl.cpp
+Effect regulatory prohibitions.
+
+20150926T1915Z <gchicares@sbcglobal.net> [474]
+
+  ledger.cpp
+Assert trivial-accessor preconditions.
+
+20150926T1916Z <gchicares@sbcglobal.net> [474]
+
+  input_harmonization.cpp
+  ledger.hpp
+Improve documentation.
+
+20150927T1241Z <gchicares@sbcglobal.net> [474]
+
+  ledger_text_formats.cpp
+Fix defect introduced 20150926T1232Z: missing prohibition.
+
+20150927T1419Z <gchicares@sbcglobal.net> [474]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Disable commands that would produce prohibited illustrations.
+
+20151001T1704Z <gchicares@sbcglobal.net> [474]
+
+  product_data.hpp
+Rewrite a comment for concinnity with class Ledger.
+
+20151001T1706Z <gchicares@sbcglobal.net> [474]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Rearrange members to match order in class product_data.
+
+20151001T1714Z <gchicares@sbcglobal.net> [474]
+
+  ledger_invariant.hpp
+Elaborate comments for concinnity with class Ledger.
+
+20151001T2219Z <gchicares@sbcglobal.net> [474]
+
+  ledger_invariant.cpp
+Regularize inconcinnous layout.
+
+20151003T0126Z <gchicares@sbcglobal.net> [474]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+Add new product-data and ledger fields.
+
+20151003T1957Z <gchicares@sbcglobal.net> [474]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Fix defect introduced 20151003T0126Z: misspelling.
+
+20151006T1248Z <gchicares@sbcglobal.net> [474]
+
+  path_utility_test.cpp
+Demonstrate a latent problem.
+
+20151006T1302Z <gchicares@sbcglobal.net> [474]
+
+  path_utility.cpp
+  path_utility.hpp
+  path_utility_test.cpp
+Remove the problem identified 20151006T1248Z.
+
+20151006T1309Z <gchicares@sbcglobal.net> [474]
+
+  ihs_avdebug.cpp
+Remove code that became truly superfluous 20151006T1302Z.
+
+20151006T1313Z <gchicares@sbcglobal.net> [474]
+
+  census_document.cpp
+Improve documentation.
+
+20151006T1326Z <gchicares@sbcglobal.net> [474]
+
+  main_cgi.cpp
+  main_cli.cpp
+Supply a nonempty name to illustrator::operator().
+
+20151006T1517Z <gchicares@sbcglobal.net> [474]
+
+  emit_ledger.cpp
+  emit_ledger.hpp
+  gpt_server.cpp
+  illustration_view.cpp
+  mec_server.cpp
+Use unique_filepath() for all PDF and spreadsheet output.
 

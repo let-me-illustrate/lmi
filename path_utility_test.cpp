@@ -29,7 +29,7 @@
 #include "path_utility.hpp"
 
 #include "miscellany.hpp"
-#include "platform_dependent.hpp" // access()
+#include "platform_dependent.hpp"       // access()
 #include "test_tools.hpp"
 
 #include <boost/filesystem/exception.hpp>
@@ -37,7 +37,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <cstdio> // std::remove()
+#include <cstdio>                       // std::remove()
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
@@ -180,14 +180,47 @@ void test_unique_filepath_with_normal_filenames()
     BOOST_TEST_EQUAL(0, access(path2.string().c_str(), R_OK));
 
     // There's no easy way to test that unique_filepath() throws the
-    // intended exception if it's reinvoked more rapidly than its
-    // timestamp changes.
+    // exception that it should when it's reinvoked more rapidly than
+    // its timestamp changes.
 
     keep_open.close();
+
+    // Verify that the first function call here is redundant:
+    //   path_b = change_extension(path_a, ext)
+    //   path_c = unique_filepath (path_b, ext)
+    // and this single function call has the same effect:
+    //   path_c = unique_filepath (path_a, ext)
+    // notably without reduplicating any part of 'ext' if 'ext'
+    // contains a noninitial '.'.
+    //
+    // The inserted timestamp is unknown, so this postcondition is
+    // weakly tested by examining the resulting pathname's length.
+    // Even the timestamp's length is implementation dependent, so a
+    // change in implementation may be discovered by a failure here.
+
+    char const* r = "/tmp/eraseme.abc.def";
+    char const* s = "/tmp/eraseme.abc-CCYYMMDDTHHMMSSZ.def";
+//             NOT:  /tmp/eraseme.abc-CCYYMMDDTHHMMSSZ.abc.def
+
+    fs::path path3 = unique_filepath(fs::path(p), ".abc.def");
+    BOOST_TEST_EQUAL(path3.string(), r);
+    write_dummy_file(path3);
+    BOOST_TEST_EQUAL(0, access(path3.string().c_str(), R_OK));
+
+    keep_open.open(path3, ios_out_app_binary());
+
+    fs::path path4 = unique_filepath(fs::path(p), ".abc.def");
+    BOOST_TEST(path3.string().size() == std::string(r).size());
+    BOOST_TEST(path4.string().size() == std::string(s).size());
+
+    keep_open.close();
+
+    // Clean up the files created in this function.
 
     BOOST_TEST(0 == std::remove(p));
     BOOST_TEST(0 == std::remove(q));
     BOOST_TEST(0 == std::remove(path2.string().c_str()));
+    BOOST_TEST(0 == std::remove(path3.string().c_str()));
 }
 
 void test_unique_filepath_with_ludicrous_filenames()

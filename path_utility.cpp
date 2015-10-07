@@ -31,13 +31,13 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "global_settings.hpp"
-#include "miscellany.hpp" // iso_8601_datestamp_terse()
+#include "miscellany.hpp"               // iso_8601_datestamp_terse()
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/operations.hpp>
 
-#include <cctype>         // std::isalnum()
+#include <cctype>                       // std::isalnum()
 #include <exception>
 #include <iomanip>
 #include <sstream>
@@ -209,7 +209,7 @@ std::string serial_extension
 /// fail a boost::filesystem name check.
 
 fs::path serial_file_path
-    (fs::path const&    exemplar
+    (fs::path    const& exemplar
     ,std::string const& personal_name
     ,int                serial_number
     ,std::string const& extension
@@ -245,7 +245,7 @@ fs::path serial_file_path
 /// any, to the given extension. If the resulting file path already
 /// exists, then try to remove it. If that fails, then try to make the
 /// file path unique by inserting a "YYYYMMDDTHHMMSSZ" timestamp right
-/// before the extension: that should suffice because an end user can
+/// before the last dot: that should suffice because an end user can
 /// hardly run illustrations faster than once a second. If even that
 /// fails to establish the postcondition, then throw an exception.
 ///
@@ -260,12 +260,12 @@ fs::path serial_file_path
 /// by another process as in the motivating example above.
 
 fs::path unique_filepath
-    (fs::path const&    original_filepath
-    ,std::string const& extension
+    (fs::path    const& original_filepath
+    ,std::string const& supplied_extension
     )
 {
     fs::path filepath(original_filepath);
-    filepath = fs::change_extension(filepath, extension);
+    filepath = fs::change_extension(filepath, supplied_extension);
     if(!fs::exists(filepath))
         {
         return filepath;
@@ -278,7 +278,8 @@ fs::path unique_filepath
         }
     catch(std::exception const&)
         {
-        std::string basename = fs::basename(filepath);
+        std::string basename  = fs::basename (filepath);
+        std::string extension = fs::extension(filepath);
         basename += '-' + iso_8601_datestamp_terse() + extension;
         filepath = filepath.branch_path() / basename;
         if(fs::exists(filepath))
@@ -287,7 +288,7 @@ fs::path unique_filepath
                 << "Cannot create unique file path from file name '"
                 << original_filepath
                 << "' with extension '"
-                << extension
+                << supplied_extension
                 << "'."
                 << LMI_FLUSH
                 ;

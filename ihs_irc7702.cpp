@@ -192,6 +192,9 @@ Irc7702::Irc7702
     LMI_ASSERT(a_PresentSpecAmt  <= a_PresentBftAmt );
     LMI_ASSERT(a_LeastBftAmtEver <= a_PresentSpecAmt);
     LMI_ASSERT(0.0 <= a_TargetPremium);
+    // TODO ?? TAXATION !! Wrong for a contract in force one day. See:
+    //   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
+    // The same issue arises later in this file, and in other files.
     if(0 == InforceYear && 0 == InforceMonth)
         {
         LMI_ASSERT(0.0 == PresentGLP);

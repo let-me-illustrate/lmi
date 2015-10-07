@@ -29,7 +29,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "contains.hpp"
-#include "dbdict.hpp"            // print_databases()
+#include "dbdict.hpp"                   // print_databases()
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "gpt_server.hpp"
@@ -39,11 +39,11 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "license.hpp"
-#include "lmi.hpp"               // is_antediluvian_fork()
+#include "lmi.hpp"                      // is_antediluvian_fork()
 #include "main_common.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
-#include "mc_enum_types_aux.hpp" // allowed_strings_emission(), mc_emission_from_string()
+#include "mc_enum_types_aux.hpp"        // allowed_strings_emission(), mc_emission_from_string()
 #include "mec_server.hpp"
 #include "miscellany.hpp"
 #include "path_utility.hpp"
@@ -57,8 +57,8 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstddef>               // NULL
-#include <cstdio>                // std::printf()
+#include <cstddef>                      // NULL
+#include <cstdio>                       // std::printf()
 #include <ios>
 #include <iostream>
 #include <iterator>
@@ -93,7 +93,7 @@ void self_test()
 
     IP["SolveType"] = "No solve";
     expected_value = 6305652.52;
-    z("", IP);
+    z("CLI_selftest", IP);
     observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -111,7 +111,7 @@ void self_test()
 
     IP["SolveType"] = "Specified amount";
     expected_value = 1879139.14;
-    z("", IP);
+    z("CLI_selftest", IP);
     observed_value = z.principal_ledger()->GetCurrFull().AcctVal.back();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -127,7 +127,7 @@ void self_test()
 
     IP["SolveType"] = "Employee premium";
     expected_value = 10673.51;
-    z("", IP);
+    z("CLI_selftest", IP);
     observed_value = z.principal_ledger()->GetLedgerInvariant().EeGrossPmt.front();
     if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
@@ -143,7 +143,7 @@ void self_test()
 
     std::cout
         << "Test solve speed: "
-        << TimeAnAliquot(boost::bind(z, "", IP), 0.1)
+        << TimeAnAliquot(boost::bind(z, "CLI_selftest", IP), 0.1)
         << '\n'
         ;
 }

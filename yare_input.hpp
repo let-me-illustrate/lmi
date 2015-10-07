@@ -151,7 +151,7 @@ class yare_input
 //    std::string                       InforceDataSource               ;
     std::string                       ContractNumber                  ;
     std::string                       MasterContractNumber            ;
-//    calendar_date                     InforceAsOfDate                 ;
+    calendar_date                     InforceAsOfDate                 ;
     int                               InforceYear                     ;
     int                               InforceMonth                    ;
     double                            InforceAnnualTargetPremium      ;

@@ -47,7 +47,7 @@ namespace
 {
 std::string xsl_filename(Ledger const& ledger)
 {
-    mcenum_ledger_type const z = ledger.GetLedgerType();
+    mcenum_ledger_type const z = ledger.ledger_type();
     switch(z)
         {
         case mce_ill_reg:                      return "illustration_reg.xsl";
@@ -77,7 +77,7 @@ fs::path xsl_filepath(Ledger const& ledger)
             << "Unable to read file '"
             << xsl_file
             << "' required for ledger type '"
-            << ledger.GetLedgerType()
+            << ledger.ledger_type()
             << "'."
             << LMI_FLUSH
             ;
@@ -103,6 +103,8 @@ fs::path xsl_filepath(Ledger const& ledger)
 
 std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 {
+    throw_if_interdicted(ledger);
+
     fs::path print_dir(configurable_settings::instance().print_directory());
 
     fs::path real_filepath(orthodox_filename(filepath.leaf()));

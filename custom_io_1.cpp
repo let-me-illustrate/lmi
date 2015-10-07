@@ -334,6 +334,8 @@ bool custom_io_1_read(Input& z, std::string const& filename)
 
 void custom_io_1_write(Ledger const& ledger_values, std::string const& filename)
 {
+    throw_if_interdicted(ledger_values);
+
     std::string actual_filename =
         !filename.empty()
         ? filename

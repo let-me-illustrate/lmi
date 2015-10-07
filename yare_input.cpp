@@ -110,6 +110,7 @@ yare_input::yare_input(Input const& z)
     AmortizePremiumLoad              = z.AmortizePremiumLoad             .value();
     ContractNumber                   = z.ContractNumber                  .value();
     MasterContractNumber             = z.MasterContractNumber            .value();
+    InforceAsOfDate                  = z.InforceAsOfDate                 .value();
     InforceYear                      = z.InforceYear                     .value();
     InforceMonth                     = z.InforceMonth                    .value();
     InforceAnnualTargetPremium       = z.InforceAnnualTargetPremium      .value();

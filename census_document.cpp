@@ -32,7 +32,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "census_view.hpp"
-#include "illustrator.hpp"
+#include "illustrator.hpp"              // default_cell()
 #include "miscellany.hpp"
 #include "wx_utility.hpp"
 

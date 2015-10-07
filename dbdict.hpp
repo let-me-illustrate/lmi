@@ -103,7 +103,6 @@ class LMI_SO DBDictionary
     database_entity AllowSimpUw         ;
     database_entity AllowGuarUw         ;
     database_entity SmokeOrTobacco      ;
-    database_entity UsePolicyFormAlt    ;
     database_entity AllowPreferredClass ;
     database_entity AllowUltraPrefClass ;
     database_entity AllowSubstdTable    ;
@@ -369,6 +368,8 @@ class LMI_SO DBDictionary
     database_entity ExpRatRiskCoiMult   ;
     database_entity ExpRatAmortPeriod   ;
     database_entity LedgerType          ;
+    database_entity Nonillustrated      ;
+    database_entity NoLongerIssued      ;
     database_entity AgeLastOrNearest    ;
     database_entity MaturityAge         ;
     database_entity LapseIgnoresSurrChg ;
@@ -380,6 +381,7 @@ class LMI_SO DBDictionary
     // make this entity superfluous. 'GroupProxyRateTable' could be
     // treated the same way.
     database_entity PartialMortTable    ;
+    database_entity UsePolicyFormAlt    ;
     database_entity WeightClass         ;
     database_entity WeightGender        ;
     database_entity WeightSmoking       ;

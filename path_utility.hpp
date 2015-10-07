@@ -40,15 +40,15 @@ std::string LMI_SO orthodox_filename
     );
 
 fs::path LMI_SO serial_file_path
-    (fs::path const&    exemplar
+    (fs::path    const& exemplar
     ,std::string const& personal_name
     ,int                serial_number
     ,std::string const& extension
     );
 
 fs::path LMI_SO unique_filepath
-    (fs::path const&    original_filepath
-    ,std::string const& extension
+    (fs::path    const& original_filepath
+    ,std::string const& supplied_extension
     );
 
 void LMI_SO validate_directory
