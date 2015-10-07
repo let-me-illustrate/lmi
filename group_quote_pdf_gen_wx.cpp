@@ -293,6 +293,7 @@ class group_quote_pdf_generator_wx
         std::string prepared_by_;
         std::string guarantee_issue_max_;
         std::string product_;
+        std::string short_product_;
         std::string available_riders_;
         std::string plan_type_;
         std::string premium_mode_;
@@ -369,6 +370,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     company_          = ledger.CorpName;
     prepared_by_      = ledger.ProducerName;
     product_          = ledger.ProductName;
+    short_product_    = ledger.GroupQuoteShortProductName;
     available_riders_ = "Waiver, ADB, ABR, Spouse or Child"; // FIXME
     premium_mode_     = ledger.InitErMode;
     contract_state_   = ledger.GetStatePostalAbbrev();
@@ -758,9 +760,10 @@ void group_quote_pdf_generator_wx::output_image_header
     wxDCFontChanger set_bigger_font(pdf_dc, pdf_dc.GetFont().Scaled(1.5));
     wxDCTextColourChanger set_white_text(pdf_dc, *wxWHITE);
 
-    // FIXME Specification change: use product description here, not company_.
+    // Don't use escape_for_html_elem() here: instead, call
+    // wxString::FromUTF8() directly, e.g., to preserve literal '&'.
     wxString const image_text
-        (report_data_.company_
+        (wxString::FromUTF8(report_data_.short_product_.c_str())
          + "\nPremium & Benefit Summary"
         );
 
