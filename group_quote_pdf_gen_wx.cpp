@@ -371,12 +371,22 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     prepared_by_      = ledger.ProducerName;
     product_          = ledger.ProductName;
     short_product_    = ledger.GroupQuoteShortProductName;
-    available_riders_ = "Waiver, ADB, ABR, Spouse or Child"; // FIXME
+    available_riders_ = ledger.GroupQuoteRidersHeader;
     premium_mode_     = ledger.InitErMode;
     contract_state_   = ledger.GetStatePostalAbbrev();
     jdn_t eff_date    = jdn_t(static_cast<int>(ledger.EffDateJdn));
     effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
-    footer_           = ledger.MarketingNameFootnote;
+    footer_           =
+                          escape_for_html_elem(ledger.GroupQuoteIsNotAnOffer   )
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteRidersFooter   )
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuotePolicyFormId   )
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteStateVariations)
+        + "<br><br>"    + escape_for_html_elem(ledger.MarketingNameFootnote    )
+        + "<br><br><b>" + escape_for_html_elem(ledger.GroupQuoteProspectus     ) + "</b>"
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteUnderwriter    )
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteBrokerDealer   )
+        ;
+
     // Input::Comments will replace these two:
     guarantee_issue_max_ = "$500,000"; // FIXME
     plan_type_ = "Mandatory"; // FIXME
@@ -979,7 +989,7 @@ void group_quote_pdf_generator_wx::output_footer
         *pos_y += logo_image.GetSize().y + vert_skip;
         }
 
-    wxString const footer_html = "<p>" + escape_for_html_elem(report_data_.footer_) + "</p>";
+    wxString const footer_html = "<p>" + report_data_.footer_ + "</p>";
 
     *pos_y += output_html
         (html_parser
