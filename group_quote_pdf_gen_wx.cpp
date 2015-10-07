@@ -293,10 +293,12 @@ class group_quote_pdf_generator_wx
         std::string prepared_by_;
         std::string guarantee_issue_max_;
         std::string product_;
+        std::string short_product_;
         std::string available_riders_;
         std::string plan_type_;
         std::string premium_mode_;
         std::string contract_state_;
+        std::string effective_date_;
         std::string footer_;
         };
     global_report_data report_data_;
@@ -368,10 +370,23 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     company_          = ledger.CorpName;
     prepared_by_      = ledger.ProducerName;
     product_          = ledger.ProductName;
-    available_riders_ = "Waiver, ADB, ABR, Spouse or Child"; // FIXME
+    short_product_    = ledger.GroupQuoteShortProductName;
+    available_riders_ = ledger.GroupQuoteRidersHeader;
     premium_mode_     = ledger.InitErMode;
     contract_state_   = ledger.GetStatePostalAbbrev();
-    footer_           = ledger.MarketingNameFootnote;
+    jdn_t eff_date    = jdn_t(static_cast<int>(ledger.EffDateJdn));
+    effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
+    footer_           =
+                          escape_for_html_elem(ledger.GroupQuoteIsNotAnOffer   )
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteRidersFooter   )
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuotePolicyFormId   )
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteStateVariations)
+        + "<br><br>"    + escape_for_html_elem(ledger.MarketingNameFootnote    )
+        + "<br><br><b>" + escape_for_html_elem(ledger.GroupQuoteProspectus     ) + "</b>"
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteUnderwriter    )
+        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteBrokerDealer   )
+        ;
+
     // Input::Comments will replace these two:
     guarantee_issue_max_ = "$500,000"; // FIXME
     plan_type_ = "Mandatory"; // FIXME
@@ -755,9 +770,10 @@ void group_quote_pdf_generator_wx::output_image_header
     wxDCFontChanger set_bigger_font(pdf_dc, pdf_dc.GetFont().Scaled(1.5));
     wxDCTextColourChanger set_white_text(pdf_dc, *wxWHITE);
 
-    // FIXME Specification change: use product description here, not company_.
+    // Don't use escape_for_html_elem() here: instead, call
+    // wxString::FromUTF8() directly, e.g., to preserve literal '&'.
     wxString const image_text
-        (report_data_.company_
+        (wxString::FromUTF8(report_data_.short_product_.c_str())
          + "\nPremium & Benefit Summary"
         );
 
@@ -830,7 +846,7 @@ void group_quote_pdf_generator_wx::output_document_header
          "<td align=\"right\"><b>Number of participants:&nbsp;&nbsp;</b></td><td>%d</td>"
          "</tr>"
          "</table>"
-        ,wxDateTime::Today().FormatDate()
+        ,escape_for_html_elem(report_data_.effective_date_)
         ,escape_for_html_elem(report_data_.plan_type_)
         ,escape_for_html_elem(report_data_.guarantee_issue_max_)
         ,escape_for_html_elem(report_data_.premium_mode_)
@@ -973,7 +989,7 @@ void group_quote_pdf_generator_wx::output_footer
         *pos_y += logo_image.GetSize().y + vert_skip;
         }
 
-    wxString const footer_html = "<p>" + escape_for_html_elem(report_data_.footer_) + "</p>";
+    wxString const footer_html = "<p>" + report_data_.footer_ + "</p>";
 
     *pos_y += output_html
         (html_parser
