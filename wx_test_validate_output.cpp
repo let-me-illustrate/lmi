@@ -330,46 +330,6 @@ void validate_print_roster_output
         );
 }
 
-void validate_print_case_pdf_output
-        (std::string const& corp_name
-        ,std::string const& insured_name
-        )
-{
-    wxUIActionSimulator ui;
-
-    ui.Char('e', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Edit case defaults"
-    wxTEST_DIALOG
-        (wxYield()
-        ,enter_comments_in_case_defaults_dialog("idiosyncrasy_spreadsheet")
-        ,wxExpectModal<wxMessageDialog>(wxYES).
-            Describe("message box asking whether to apply changes to all cells")
-        );
-
-    ui.Char('s', wxMOD_CONTROL); // "File|Save"
-
-    fs::path values_file(configurable_settings::instance().print_directory());
-    values_file /= "values" + tsv_ext();
-
-    output_file_existence_checker output_values(values_file);
-
-    // We don't really care about these files existence, but we don't want them
-    // to be left over after the end of this test, so use the output existence
-    // checker helper to ensure that they are cleaned up.
-    output_pdf_existence_checker
-         composite_pdf(corp_name + ".composite" + serial_suffix(0))
-        ,first_cell_pdf(corp_name + "." + insured_name + serial_suffix(1))
-        ,second_cell_pdf(corp_name + serial_suffix(2))
-        ;
-
-    ui.Char('i', wxMOD_CONTROL | wxMOD_SHIFT); // "Census|Print case to PDF"
-    wxYield();
-
-    LMI_ASSERT_WITH_MSG
-        (output_values.exists()
-        ,"file \"" << values_file << "\" after print case to PDF"
-        );
-}
-
 void validate_run_cell_and_copy_output
         (std::string const& corp_name
         ,std::string const& insured_name
@@ -469,14 +429,6 @@ void validate_run_cell_and_copy_output
 //    ABC.cns.roster.tsv
 /// ...and delete all three now.
 ///
-/// Census | Edit case defaults
-///   Comments: replace contents with "idiosyncrasy_spreadsheet"
-///   OK
-///   Yes (apply to all)
-/// Census | Print case to PDF
-/// Verify that this file was created:
-///   values.tsv
-///
 /// select the "John Brown" cell
 /// Census | Run cell
 /// Illustration | Copy full illustration data [Ctrl-D]
@@ -575,7 +527,6 @@ LMI_WX_TEST_CASE(validate_output_census)
     validate_print_case_output(corp_name, insured_filename);
     validate_print_roster_output(corp_name, insured_filename);
 
-    validate_print_case_pdf_output(corp_name, insured_filename);
     validate_run_cell_and_copy_output(corp_name, insured_filename);
 
     census.close();

@@ -966,10 +966,7 @@ void Ledger::write(xml::element& x) const
     x.push_back(data);
     x.push_back(supplementalreport);
 
-    if
-        (   is_composite()
-        &&  contains(ledger_invariant_->Comments, "idiosyncrasy_spreadsheet")
-        )
+    if(is_composite() && contains(global_settings::instance().pyx(), "values_tsv"))
         {
         throw_if_interdicted(*this);
 

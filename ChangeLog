@@ -37044,3 +37044,49 @@ Supply a nonempty name to illustrator::operator().
   mec_server.cpp
 Use unique_filepath() for all PDF and spreadsheet output.
 
+20151006T1648Z <gchicares@sbcglobal.net> [474]
+
+  group_quote_pdf_gen_wx.cpp
+Treat escape_for_html_elem() argument as UTF-8 (VZ).
+
+20151007T0003Z <gchicares@sbcglobal.net> [474]
+
+  census_view.cpp
+Show newline as RETURN SYMBOL in census-manager text subcontrols (VZ).
+
+20151007T1238Z <gchicares@sbcglobal.net> [473]
+
+  ledger_xml_io.cpp
+Remove a duplicative defect marker.
+
+20151007T1243Z <gchicares@sbcglobal.net> [473]
+
+  ledger_xml_io.cpp
+Effect regulatory prohibitions.
+
+20151007T1947Z <gchicares@sbcglobal.net> [473]
+
+  ledger_xml_io.cpp
+  wx_test_validate_output.cpp
+Replace an idiosyncratic interface; remove its unit test.
+
+20151007T1948Z <gchicares@sbcglobal.net> [473]
+
+  ihs_acctval.cpp
+Replace an idiosyncratic interface that is no longer useful.
+
+20151007T2156Z <gchicares@sbcglobal.net> [473]
+
+  group_quote_pdf_gen_wx.cpp
+Use input effective date.
+
+20151007T2212Z <gchicares@sbcglobal.net> [473]
+
+  group_quote_pdf_gen_wx.cpp
+Write new "short" product name over graphic banner.
+
+20151007T2230Z <gchicares@sbcglobal.net> [473]
+
+  group_quote_pdf_gen_wx.cpp
+Use new product-data fields added 20151003T0126Z.
+
