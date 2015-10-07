@@ -36,10 +36,10 @@
 #include "ledger_text_formats.hpp"
 #include "ledger_variant.hpp"
 #include "ledger_xsl.hpp"
-#include "mc_enum_aux.hpp"  // mc_e_vector_to_string_vector()
+#include "mc_enum_aux.hpp"              // mc_e_vector_to_string_vector()
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"
-#include "path_utility.hpp" // fs::path inserter
+#include "path_utility.hpp"             // fs::path inserter
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
@@ -966,6 +966,8 @@ void Ledger::write(xml::element& x) const
         &&  contains(ledger_invariant_->Comments, "idiosyncrasy_spreadsheet")
         )
         {
+        throw_if_interdicted(*this);
+
         configurable_settings const& z = configurable_settings::instance();
         fs::path filepath
             (   z.print_directory()
