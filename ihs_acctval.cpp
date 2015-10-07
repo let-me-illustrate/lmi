@@ -211,11 +211,6 @@ Then run other bases.
     double z = RunAllApplicableBases();
 
     FinalizeLifeAllBases();
-    if(contains(yare_input_.Comments, "idiosyncrasy_spew"))
-        {
-        std::ofstream os("raw_output", ios_out_trunc_binary());
-        ledger_->Spew(os);
-        }
 
     return z;
 }
