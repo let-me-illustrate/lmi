@@ -993,8 +993,6 @@ void Ledger::write(xml::element& x) const
                 )
                 {
                 std::vector<std::string> const& v = j->second;
-// TODO ?? InforceLives shows an extra value past the end; should it
-// be truncated here?
                 if(i < v.size())
                     {
                     ofs << v[i] << '\t';
