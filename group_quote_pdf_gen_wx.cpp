@@ -297,6 +297,7 @@ class group_quote_pdf_generator_wx
         std::string plan_type_;
         std::string premium_mode_;
         std::string contract_state_;
+        std::string effective_date_;
         std::string footer_;
         };
     global_report_data report_data_;
@@ -371,6 +372,8 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     available_riders_ = "Waiver, ADB, ABR, Spouse or Child"; // FIXME
     premium_mode_     = ledger.InitErMode;
     contract_state_   = ledger.GetStatePostalAbbrev();
+    jdn_t eff_date    = jdn_t(static_cast<int>(ledger.EffDateJdn));
+    effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
     footer_           = ledger.MarketingNameFootnote;
     // Input::Comments will replace these two:
     guarantee_issue_max_ = "$500,000"; // FIXME
@@ -830,7 +833,7 @@ void group_quote_pdf_generator_wx::output_document_header
          "<td align=\"right\"><b>Number of participants:&nbsp;&nbsp;</b></td><td>%d</td>"
          "</tr>"
          "</table>"
-        ,wxDateTime::Today().FormatDate()
+        ,escape_for_html_elem(report_data_.effective_date_)
         ,escape_for_html_elem(report_data_.plan_type_)
         ,escape_for_html_elem(report_data_.guarantee_issue_max_)
         ,escape_for_html_elem(report_data_.premium_mode_)
