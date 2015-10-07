@@ -626,12 +626,24 @@ class renderer_fallback_convertor : public renderer_type_convertor
   public:
     virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
     {
-        return wxString(x.str());
+        // Strings containing new line characters are currently not displayed
+        // correctly by wxDataViewCtrl, so display the value on a single line
+        // after converting any optional new lines to the Unicode character
+        // representing them.
+        wxString s(x.str());
+        s.Replace("\n", RETURN_SYMBOL, true);
+        return s;
     }
 
     virtual std::string from_variant(wxVariant const& x) const
     {
-        return x.GetString().ToStdString();
+        // Undo the replacement done above. Notice that this will (wrongly)
+        // translate any RETURN_SYMBOL characters entered by the user into the
+        // string to new lines, but this character is not supposed to be used
+        // in any of the cells values, so just ignore this problem for now.
+        wxString s = x.GetString();
+        s.Replace(RETURN_SYMBOL, "\n", true);
+        return s.ToStdString();
     }
 
     virtual char const* variant_type() const
@@ -643,6 +655,9 @@ class renderer_fallback_convertor : public renderer_type_convertor
     {
         return new(wx) wxDataViewTextRenderer("string", wxDATAVIEW_CELL_EDITABLE);
     }
+
+  private:
+    static const wchar_t RETURN_SYMBOL = 0x23ce;
 };
 
 renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> const& value)
