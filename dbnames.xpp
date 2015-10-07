@@ -33,7 +33,6 @@
 {DB_AllowSimpUw,DB_Topic_Underwriting,"AllowSimpUw","Allow simplified underwriting: 0=no, 1=yes",}, \
 {DB_AllowGuarUw,DB_Topic_Underwriting,"AllowGuarUw","Allow guaranteed underwriting: 0=no, 1=yes",}, \
 {DB_SmokeOrTobacco,DB_Topic_Underwriting,"SmokeOrTobacco","Distinguish mortality by: 0=smoking, 1=tobacco use",}, \
-{DB_UsePolicyFormAlt,DB_Topic_Underwriting,"UsePolicyFormAlt","Use alternative policy-form name: 0=no, 1=yes",}, \
 {DB_AllowPreferredClass,DB_Topic_Underwriting,"AllowPreferredClass","Allow preferred class: 0=no, 1=yes",}, \
 {DB_AllowUltraPrefClass,DB_Topic_Underwriting,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
 {DB_AllowSubstdTable,DB_Topic_Underwriting,"AllowSubstdTable","Allow substandard table ratings: 0=no, 1=yes",}, \
@@ -316,12 +315,15 @@
 {DB_ExpRatAmortPeriod,DB_Topic_ExperienceRating,"ExpRatAmortPeriod","Experience rating amortization period",}, \
 {DB_Topic_Miscellanea,DB_FIRST,"Miscellanea","Parameters that don't fit tidily into other categories",}, \
 {DB_LedgerType,DB_Topic_Miscellanea,"LedgerType","Ledger type: 0=illustration reg, 1=NASD, 2=prospectus illustration, 3=group private placement, 4=offshore private placement, 5=private placement subject to illustration reg, 6=individual private placement, 7=variable annuity",}, \
+{DB_Nonillustrated,DB_Topic_Miscellanea,"Nonillustrated","Forbid all illustrations: 0=no, 1=yes",}, \
+{DB_NoLongerIssued,DB_Topic_Miscellanea,"NoLongerIssued","Forbid new-business illustrations: 0=no, 1=yes",}, \
 {DB_AgeLastOrNearest,DB_Topic_Miscellanea,"AgeLastOrNearest","Age calculated as of last or nearest birthday: 0=ALB, 1=ANB (ties --> older), 2=ANB (ties --> younger)",}, \
 {DB_MaturityAge,DB_Topic_Miscellanea,"MaturityAge","Normal maturity age",}, \
 {DB_LapseIgnoresSurrChg,DB_Topic_Miscellanea,"LapseIgnoresSurrChg","Ignore tabular surrender charge for lapse processing",}, \
 {DB_DefaultProcessOrder,DB_Topic_Miscellanea,"DefaultProcessOrder","Default processing order: 0=life by life, 1=month by month [not yet implemented]",}, \
 {DB_GroupProxyRateTable,DB_Topic_Miscellanea,"GroupProxyRateTable","Group-term proxy rate (index in mortality table database)",}, \
 {DB_PartialMortTable,DB_Topic_Miscellanea,"PartialMortTable","Partial mortality table (index in mortality table database)",}, \
+{DB_UsePolicyFormAlt,DB_Topic_Miscellanea,"UsePolicyFormAlt","Use alternative policy-form name: 0=no, 1=yes",}, \
 {DB_Topic_Weights,DB_FIRST,"Weights","Weights for profit analysis cells [not yet implemented]",}, \
 {DB_WeightClass,DB_Topic_Weights,"WeightClass","Weight by underwriting class [not yet implemented]",}, \
 {DB_WeightGender,DB_Topic_Weights,"WeightGender","Weight by gender [not yet implemented]",}, \

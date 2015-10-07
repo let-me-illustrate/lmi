@@ -1070,6 +1070,11 @@ void Input::set_solve_durations()
     SolveEndTime    = issue_age() + SolveEndYear   .value();
 }
 
+/// Determine number of full years and months since issue.
+///
+/// If the contract has been in force for a nonzero period less than
+/// one full month, then InforceYear and InforceMonth are both zero.
+
 void Input::set_inforce_durations_from_dates()
 {
     std::pair<int,int> ym0 = years_and_months_since

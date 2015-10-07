@@ -118,7 +118,7 @@ showing {accesses, modifies current year, modifies future years}
 AccountValue::AccountValue(Input const& input)
     :BasicValues       (Input::magically_rectify(input))
     ,DebugFilename     ("anonymous.monthly_trace")
-    ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
+    ,ledger_(new Ledger(BasicValues::GetLength(), BasicValues::ledger_type(), BasicValues::nonillustrated(), BasicValues::no_can_issue(), false))
     ,ledger_invariant_ (new LedgerInvariant(BasicValues::GetLength()))
     ,ledger_variant_   (new LedgerVariant  (BasicValues::GetLength()))
     ,RunBasis_         (mce_run_gen_curr_sep_full)

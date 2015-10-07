@@ -66,17 +66,21 @@
 
 //============================================================================
 Ledger::Ledger
-    (mcenum_ledger_type a_LedgerType
-    ,int                a_Length
-    ,bool               a_IsComposite
+    (int                length
+    ,mcenum_ledger_type ledger_type
+    ,bool               nonillustrated
+    ,bool               no_can_issue
+    ,bool               is_composite
     )
-    :is_composite_         (a_IsComposite)
+    :ledger_type_          (ledger_type)
+    ,nonillustrated_       (nonillustrated)
+    ,no_can_issue_         (no_can_issue)
+    ,is_composite_         (is_composite)
     ,composite_lapse_year_ (0.0)
-    ,ledger_type_          (a_LedgerType)
     ,ledger_map_           (new ledger_map_holder)
     ,ledger_invariant_     (new LedgerInvariant)
 {
-    SetRunBases(a_Length);
+    SetRunBases(length);
 }
 
 //============================================================================
@@ -85,16 +89,16 @@ Ledger::~Ledger()
 }
 
 //============================================================================
-void Ledger::SetRunBases(int a_Length)
+void Ledger::SetRunBases(int length)
 {
     ledger_map_t& l_map_rep = ledger_map_->held_;
     switch(ledger_type_)
         {
         case mce_ill_reg:
             {
-            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_mdpt_sep_full] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_mdpt_sep_full] = LedgerVariant(length);
             }
             break;
         case mce_group_private_placement:      // Deliberately fall through.
@@ -103,10 +107,10 @@ void Ledger::SetRunBases(int a_Length)
         case mce_variable_annuity:             // Deliberately fall through.
         case mce_nasd:
             {
-            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(length);
             }
             break;
 #if 0
@@ -117,12 +121,12 @@ void Ledger::SetRunBases(int a_Length)
         //
         case nonexistent:  // {current, 0% int, 1/2 int%} X {guar, curr}
             {
-            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_curr_sep_half] = LedgerVariant(a_Length);
-            l_map_rep[mce_run_gen_guar_sep_half] = LedgerVariant(a_Length);
+            l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_curr_sep_zero] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_zero] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_curr_sep_half] = LedgerVariant(length);
+            l_map_rep[mce_run_gen_guar_sep_half] = LedgerVariant(length);
             }
             break;
 #endif
@@ -215,7 +219,7 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
     // Perhaps these distinctions should be expressed not as named
     // subcollections of containers but rather as enumerators.
 
-    if(ledger_type_ != a_Addend.GetLedgerType())
+    if(ledger_type_ != a_Addend.ledger_type())
         {
         fatal_error()
             << "Cannot add ledgers for products with different"
@@ -224,6 +228,12 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
             ;
         }
 
+    nonillustrated_ = nonillustrated_ || a_Addend.nonillustrated();
+    no_can_issue_   = no_can_issue_   || a_Addend.no_can_issue  ();
+
+    LMI_ASSERT(is_composite());
+    LMI_ASSERT(!a_Addend.is_composite());
+
     ledger_map_t& l_map_rep = ledger_map_->held_;
     ledger_map_t::iterator this_i = l_map_rep.begin();
 
@@ -231,9 +241,6 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
     ledger_map_t::const_iterator addend_i = lm_addend.begin();
 
     ledger_invariant_->PlusEq(*a_Addend.ledger_invariant_);
-
-    LMI_ASSERT(GetIsComposite());
-    LMI_ASSERT(!a_Addend.GetIsComposite());
 
     while(this_i != l_map_rep.end() || addend_i != lm_addend.end())
         {
@@ -376,19 +383,15 @@ void Ledger::Spew(std::ostream& os) const
 //============================================================================
 ledger_map_holder const& Ledger::GetLedgerMap() const
 {
+    LMI_ASSERT(ledger_map_.get());
     return *ledger_map_;
 }
 
 //============================================================================
 LedgerInvariant const& Ledger::GetLedgerInvariant() const
 {
+    LMI_ASSERT(ledger_invariant_.get());
     return *ledger_invariant_;
-}
-
-//============================================================================
-mcenum_ledger_type Ledger::GetLedgerType() const
-{
-    return ledger_type_;
 }
 
 //============================================================================
@@ -398,7 +401,25 @@ std::vector<mcenum_run_basis> const& Ledger::GetRunBases() const
 }
 
 //============================================================================
-bool Ledger::GetIsComposite() const
+mcenum_ledger_type Ledger::ledger_type() const
+{
+    return ledger_type_;
+}
+
+//============================================================================
+bool Ledger::nonillustrated() const
+{
+    return nonillustrated_;
+}
+
+//============================================================================
+bool Ledger::no_can_issue() const
+{
+    return no_can_issue_;
+}
+
+//============================================================================
+bool Ledger::is_composite() const
 {
     return is_composite_;
 }
@@ -533,5 +554,38 @@ std::vector<double> numeric_vector
         : "SupplDeathBft"     == base_name ? *map_lookup(z.all_vectors(), "TermPurchased")
         : *map_lookup(z.all_vectors(), base_name)
         ;
+}
+
+namespace
+{
+std::string reason_to_interdict(Ledger const& z)
+{
+    if(z.nonillustrated())
+        {
+        return "Illustrations are forbidden for this policy form.";
+        }
+    else if(z.no_can_issue()) // Don't even think about it, say no go.
+        {
+        return "New-business illustrations are forbidden for this policy form.";
+        }
+    else
+        {
+        return "";
+        }
+}
+} // Unnamed namespace.
+
+bool is_interdicted(Ledger const& z)
+{
+    return !reason_to_interdict(z).empty();
+}
+
+void throw_if_interdicted(Ledger const& z)
+{
+    std::string s = reason_to_interdict(z);
+    if(!s.empty())
+        {
+        fatal_error() << s << LMI_FLUSH;
+        }
 }
 

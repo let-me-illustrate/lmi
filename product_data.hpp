@@ -188,10 +188,11 @@ class LMI_SO product_data
     glossed_string CsvName;
     glossed_string CsvHeaderName;
     glossed_string NoLapseProvisionName;
+    glossed_string ContractName;
 
     // TODO ?? Most of the following are missing from the GUI.
 
-    // Footnotes that describe various ledger columns.
+    // Ledger column definitions.
     glossed_string AccountValueFootnote;
     glossed_string AttainedAgeFootnote;
     glossed_string CashSurrValueFootnote;
@@ -207,6 +208,19 @@ class LMI_SO product_data
     glossed_string SpouseFootnote;
     glossed_string TermFootnote;
     glossed_string WaiverFootnote;
+    glossed_string AccelBftRiderFootnote;
+    glossed_string OverloanRiderFootnote;
+
+    // Group quote footnotes.
+    glossed_string GroupQuoteShortProductName;
+    glossed_string GroupQuoteIsNotAnOffer    ;
+    glossed_string GroupQuoteRidersHeader    ;
+    glossed_string GroupQuoteRidersFooter    ;
+    glossed_string GroupQuotePolicyFormId    ;
+    glossed_string GroupQuoteStateVariations ;
+    glossed_string GroupQuoteProspectus      ;
+    glossed_string GroupQuoteUnderwriter     ;
+    glossed_string GroupQuoteBrokerDealer    ;
 
     // Premium-specific footnotes.
     glossed_string MinimumPremiumFootnote;
@@ -234,7 +248,10 @@ class LMI_SO product_data
     glossed_string FlexiblePremiumFootnote;
     glossed_string GuaranteedValuesFootnote;
     glossed_string CreditingRateFootnote;
+    glossed_string GrossRateFootnote;
+    glossed_string NetRateFootnote;
     glossed_string MecFootnote;
+    glossed_string GptFootnote;
     glossed_string MidpointValuesFootnote;
     glossed_string SinglePremiumFootnote;
     glossed_string MonthlyChargesFootnote;
@@ -248,6 +265,7 @@ class LMI_SO product_data
     glossed_string IrrCsvFootnote;
     glossed_string MortalityChargesFootnote;
     glossed_string LoanAndWithdrawalFootnote;
+    glossed_string LoanFootnote;
     glossed_string ImprimaturPresale;
     glossed_string ImprimaturPresaleComposite;
     glossed_string ImprimaturInforce;
@@ -259,6 +277,7 @@ class LMI_SO product_data
     glossed_string NonGuaranteedFootnote;
     glossed_string MonthlyChargesPaymentFootnote;
     glossed_string SurrenderFootnote;
+    glossed_string PortabilityFootnote;
     glossed_string FundRateFootnote;
     glossed_string FundRateFootnote0;
     glossed_string FundRateFootnote1;

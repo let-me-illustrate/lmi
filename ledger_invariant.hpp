@@ -190,11 +190,13 @@ class LMI_SO LedgerInvariant
     double          HasWP;
     double          HasADD;
     double          HasTerm;
+    double          HasSupplSpecAmt;
     double          HasChildRider;
     double          HasSpouseRider;
     double          SpouseIssueAge;
     double          HasHoneymoon;
     double          PostHoneymoonSpread;
+    double          SplitMinPrem;
     double          AllowDbo3;
     double          IsInforce;
     double          CurrentCoiMultiplier;
@@ -204,11 +206,13 @@ class LMI_SO LedgerInvariant
     double          Has1035ExchCharge;
     double          EffDateJdn;
     double          DateOfBirthJdn;
+    double          SplitFundAllocation;
     double          GenAcctAllocation;
     double          SupplementalReport;
 
-    std::string     ProductName;
+    // Essential strings describing the policy and company.
     std::string     PolicyForm;
+    // Ledger needs no member like product_data::PolicyFormAlternative;
     std::string     PolicyMktgName;
     std::string     PolicyLegalName;
     std::string     InsCoShortName;
@@ -216,16 +220,19 @@ class LMI_SO LedgerInvariant
     std::string     InsCoAddr;
     std::string     InsCoStreet;
     std::string     InsCoPhone;
+    // Ledger needs no member like product_data::InsCoDomicile;
     std::string     MainUnderwriter;
     std::string     MainUnderwriterAddress;
     std::string     CoUnderwriter;
     std::string     CoUnderwriterAddress;
+
+    // Terms defined in the contract, which must be used for column
+    // headers according to the illustration reg.
     std::string     AvName;
     std::string     CsvName;
     std::string     CsvHeaderName;
     std::string     NoLapseProvisionName;
-    std::string     InterestDisclaimer;
-    std::string     GuarMortalityFootnote;
+    std::string     ContractName;
 
     // Ledger column definitions.
     std::string     AccountValueFootnote;
@@ -243,11 +250,27 @@ class LMI_SO LedgerInvariant
     std::string     SpouseFootnote;
     std::string     TermFootnote;
     std::string     WaiverFootnote;
+    std::string     AccelBftRiderFootnote;
+    std::string     OverloanRiderFootnote;
+
+    // Group quote footnotes.
+    std::string     GroupQuoteShortProductName;
+    std::string     GroupQuoteIsNotAnOffer    ;
+    std::string     GroupQuoteRidersHeader    ;
+    std::string     GroupQuoteRidersFooter    ;
+    std::string     GroupQuotePolicyFormId    ;
+    std::string     GroupQuoteStateVariations ;
+    std::string     GroupQuoteProspectus      ;
+    std::string     GroupQuoteUnderwriter     ;
+    std::string     GroupQuoteBrokerDealer    ;
 
     // Premium-specific footnotes.
     std::string     MinimumPremiumFootnote;
     std::string     PremAllocationFootnote;
 
+    // Miscellaneous other footnotes.
+    std::string     InterestDisclaimer;
+    std::string     GuarMortalityFootnote;
     std::string     ProductDescription;
     std::string     StableValueFootnote;
     std::string     NoVanishPremiumFootnote;
@@ -267,7 +290,10 @@ class LMI_SO LedgerInvariant
     std::string     FlexiblePremiumFootnote;
     std::string     GuaranteedValuesFootnote;
     std::string     CreditingRateFootnote;
+    std::string     GrossRateFootnote;
+    std::string     NetRateFootnote;
     std::string     MecFootnote;
+    std::string     GptFootnote;
     std::string     MidpointValuesFootnote;
     std::string     SinglePremiumFootnote;
     std::string     MonthlyChargesFootnote;
@@ -281,6 +307,7 @@ class LMI_SO LedgerInvariant
     std::string     IrrCsvFootnote;
     std::string     MortalityChargesFootnote;
     std::string     LoanAndWithdrawalFootnote;
+    std::string     LoanFootnote;
     std::string     ImprimaturPresale;
     std::string     ImprimaturPresaleComposite;
     std::string     ImprimaturInforce;
@@ -292,6 +319,7 @@ class LMI_SO LedgerInvariant
     std::string     NonGuaranteedFootnote;
     std::string     MonthlyChargesPaymentFootnote;
     std::string     SurrenderFootnote;
+    std::string     PortabilityFootnote;
     std::string     FundRateFootnote;
     std::string     FundRateFootnote0;
     std::string     FundRateFootnote1;
@@ -300,6 +328,9 @@ class LMI_SO LedgerInvariant
     std::string     PlacementAgentFootnote;
     std::string     MarketingNameFootnote;
 
+    // Strings from class Input.
+
+    std::string     ProductName;
     std::string     ProducerName;
     std::string     ProducerStreet;
     std::string     ProducerCity;

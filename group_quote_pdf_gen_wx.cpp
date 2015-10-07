@@ -74,11 +74,13 @@ enum enum_output_mode
 
 wxString escape_for_html_elem(std::string const& s)
 {
+    wxString const u = wxString::FromUTF8(s.c_str());
+
     wxString z;
-    z.reserve(s.length());
-    for(std::string::const_iterator i = s.begin(); i != s.end(); ++i)
+    z.reserve(u.length());
+    for(wxString::const_iterator i = u.begin(); i != u.end(); ++i)
         {
-        switch(*i)
+        switch((*i).GetValue())
             {
             case '<': z += "&lt;" ; break;
             case '>': z += "&gt;" ; break;
@@ -393,7 +395,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     std::pair<int, oenum_format_style> const f0(0, oe_format_normal);
     std::pair<int, oenum_format_style> const f2(2, oe_format_normal);
 
-    bool const is_composite = ledger.GetIsComposite();
+    bool const is_composite = ledger.is_composite();
 
     row_data rd;
     for(int col = 0; col < e_col_max; ++col)

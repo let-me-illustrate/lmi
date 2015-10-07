@@ -65,17 +65,12 @@ class ledger_map_holder;
 class LMI_SO Ledger
 {
   public:
-    // TODO ?? It's pretty weak to use 100 as a default max length.
-    // But when running a composite, life by life, we don't know the max
-    // length until we've initialized all lives. We could get the min age
-    // by inspecting the input parms for all lives, but to get the age at
-    // endt requires initializing each life and doing a database lookup
-    // for endt age. Yet 100 won't work for issue age 0 if coverage
-    // beyond age 100 is to be shown.
     explicit Ledger
-        (mcenum_ledger_type a_LedgerType
-        ,int                a_Length        = 100
-        ,bool               a_IsComposite   = false
+        (int                length
+        ,mcenum_ledger_type ledger_type
+        ,bool               nonillustrated
+        ,bool               no_can_issue
+        ,bool               is_composite
         );
     virtual ~Ledger();
 
@@ -89,20 +84,23 @@ class LMI_SO Ledger
 
     void AutoScale();
 
-    ledger_map_holder const&             GetLedgerMap()       const;
-    LedgerInvariant const&               GetLedgerInvariant() const;
-    LedgerVariant const&                 GetCurrFull()        const;
-    LedgerVariant const&                 GetGuarFull()        const;
-    LedgerVariant const&                 GetMdptFull()        const;
-    LedgerVariant const&                 GetCurrZero()        const;
-    LedgerVariant const&                 GetGuarZero()        const;
-    LedgerVariant const&                 GetCurrHalf()        const;
-    LedgerVariant const&                 GetGuarHalf()        const;
+    ledger_map_holder const&             GetLedgerMap       () const;
+    LedgerInvariant const&               GetLedgerInvariant () const;
+    LedgerVariant const&                 GetCurrFull        () const;
+    LedgerVariant const&                 GetGuarFull        () const;
+    LedgerVariant const&                 GetMdptFull        () const;
+    LedgerVariant const&                 GetCurrZero        () const;
+    LedgerVariant const&                 GetGuarZero        () const;
+    LedgerVariant const&                 GetCurrHalf        () const;
+    LedgerVariant const&                 GetGuarHalf        () const;
 
-    mcenum_ledger_type                   GetLedgerType()      const;
-    int                                  GetMaxLength()       const;
-    std::vector<mcenum_run_basis> const& GetRunBases()        const;
-    bool                                 GetIsComposite()     const;
+    int                                  GetMaxLength       () const;
+    std::vector<mcenum_run_basis> const& GetRunBases        () const;
+
+    mcenum_ledger_type                   ledger_type        () const;
+    bool                                 nonillustrated     () const;
+    bool                                 no_can_issue       () const;
+    bool                                 is_composite       () const;
 
     unsigned int CalculateCRC() const;
     void Spew(std::ostream& os) const;
@@ -117,9 +115,21 @@ class LMI_SO Ledger
 
   private:
     LedgerVariant const& GetOneVariantLedger(mcenum_run_basis) const;
-    void SetRunBases(int a_Length);
+    void SetRunBases(int length);
 
-    bool is_composite_;
+    // These members store ctor arguments whose values cannot be set
+    // otherwise. The rationale for storing them here (rather than in
+    // class LedgerInvariant, e.g.) is that they are not data from
+    // which reports are generated--rather, they govern how reports
+    // are generated, and which reports are permitted.
+    //
+    // Naming: "is_composite_" because "composite" could be taken as a
+    // noun, suggesting a composite ledger; "nonillustrated_" without
+    // "is_" because it's unambiguously adjectival.
+    mcenum_ledger_type ledger_type_   ;
+    bool               nonillustrated_;
+    bool               no_can_issue_  ;
+    bool               is_composite_  ;
 
     // TODO ?? This is either badly named or badly implemented. Every
     // instance of this class, even an instance for a single cell, has
@@ -128,8 +138,6 @@ class LMI_SO Ledger
     // composites, yet it is not evident why that is desirable for
     // composites but not for all cells.
     double composite_lapse_year_;
-
-    mcenum_ledger_type ledger_type_;
 
     boost::shared_ptr<ledger_map_holder> ledger_map_;
     boost::shared_ptr<LedgerInvariant>   ledger_invariant_;
@@ -145,6 +153,9 @@ std::vector<double> numeric_vector
     (Ledger const&      ledger
     ,std::string const& compound_name
     );
+
+bool LMI_SO is_interdicted      (Ledger const&);
+void LMI_SO throw_if_interdicted(Ledger const&);
 
 #endif // ledger_hpp
 

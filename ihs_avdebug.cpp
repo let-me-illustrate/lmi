@@ -33,13 +33,10 @@
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ledger_invariant.hpp"
-#include "mc_enum_types_aux.hpp" // mc_str()
+#include "mc_enum_types_aux.hpp"        // mc_str()
 #include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "value_cast.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -269,8 +266,7 @@ void AccountValue::SetDebugFilename(std::string const& s)
 {
     configurable_settings const& c = configurable_settings::instance();
     std::string const z = c.spreadsheet_file_extension();
-    fs::path p = fs::change_extension(s, ".monthly_trace" + z);
-    DebugFilename = unique_filepath(p, z).string();
+    DebugFilename = unique_filepath(s, ".monthly_trace" + z).string();
 }
 
 //============================================================================

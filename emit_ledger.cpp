@@ -28,6 +28,7 @@
 
 #include "emit_ledger.hpp"
 
+#include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "custom_io_1.hpp"
@@ -37,12 +38,12 @@
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
 #include "miscellany.hpp"               // ios_out_trunc_binary()
+#include "path_utility.hpp"             // unique_filepath()
 #include "timer.hpp"
 
-#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/convenience.hpp> // change_extension()
 #include <boost/filesystem/fstream.hpp>
 
-#include <cstdio>                       // std::remove()
 #include <iostream>
 #include <string>
 
@@ -55,9 +56,15 @@ ledger_emitter::ledger_emitter
     (fs::path const& case_filepath
     ,mcenum_emission emission
     )
-    :case_filepath_ (case_filepath)
-    ,emission_      (emission)
-{}
+    :case_filepath_              (case_filepath)
+    ,tsv_ext_                    (configurable_settings::instance().spreadsheet_file_extension())
+    ,case_filepath_spreadsheet_  (unique_filepath(case_filepath,             tsv_ext_))
+    ,case_filepath_group_roster_ (unique_filepath(case_filepath, ".roster" + tsv_ext_))
+    ,case_filepath_group_quote_  (unique_filepath(case_filepath, ".quote.pdf"        ))
+    ,emission_                   (emission)
+{
+    LMI_ASSERT(!case_filepath_.empty());
+}
 
 ledger_emitter::~ledger_emitter()
 {}
@@ -68,31 +75,12 @@ double ledger_emitter::initiate()
 {
     Timer timer;
 
-    if(emission_ & mce_emit_spreadsheet)
-        {
-        LMI_ASSERT(!case_filepath_.empty());
-        std::string spreadsheet_filename =
-                case_filepath_.string()
-            +   configurable_settings::instance().spreadsheet_file_extension()
-            ;
-        std::remove(spreadsheet_filename.c_str());
-        }
     if(emission_ & mce_emit_group_roster)
         {
-        LMI_ASSERT(!case_filepath_.empty());
-        std::string spreadsheet_filename =
-                case_filepath_.string()
-            +   ".roster"
-            +   configurable_settings::instance().spreadsheet_file_extension()
-            ;
-        std::remove(spreadsheet_filename.c_str());
-        PrintRosterHeaders(spreadsheet_filename);
+        PrintRosterHeaders(case_filepath_group_roster_.string());
         }
     if(emission_ & mce_emit_group_quote)
         {
-        LMI_ASSERT(!case_filepath_.empty());
-        std::string const pdf_filename = case_filepath_.string() + ".quote.pdf";
-        std::remove(pdf_filename.c_str());
         group_quote_gen_ = group_quote_pdf_generator::create();
         }
 
@@ -107,7 +95,7 @@ double ledger_emitter::emit_cell
     )
 {
     Timer timer;
-    if((emission_ & mce_emit_composite_only) && !ledger.GetIsComposite())
+    if((emission_ & mce_emit_composite_only) && !ledger.is_composite())
         {
         goto done;
         }
@@ -136,22 +124,11 @@ double ledger_emitter::emit_cell
         }
     if(emission_ & mce_emit_spreadsheet)
         {
-        LMI_ASSERT(!case_filepath_.empty());
-        PrintCellTabDelimited
-            (ledger
-            ,   case_filepath_.string()
-            +   configurable_settings::instance().spreadsheet_file_extension()
-            );
+        PrintCellTabDelimited(ledger, case_filepath_spreadsheet_.string());
         }
     if(emission_ & mce_emit_group_roster)
         {
-        LMI_ASSERT(!case_filepath_.empty());
-        PrintRosterTabDelimited
-            (ledger
-            ,   case_filepath_.string()
-            +   ".roster"
-            +   configurable_settings::instance().spreadsheet_file_extension()
-            );
+        PrintRosterTabDelimited(ledger, case_filepath_group_roster_.string());
         }
     if(emission_ & mce_emit_group_quote)
         {
@@ -194,9 +171,7 @@ double ledger_emitter::finish()
 
     if(emission_ & mce_emit_group_quote)
         {
-        LMI_ASSERT(!case_filepath_.empty());
-        std::string const pdf_filename = case_filepath_.string() + ".quote.pdf";
-        group_quote_gen_->save(pdf_filename);
+        group_quote_gen_->save(case_filepath_group_quote_.string());
         }
 
     return timer.stop().elapsed_seconds();
@@ -205,6 +180,14 @@ double ledger_emitter::finish()
 /// Emit a single ledger in various guises.
 ///
 /// Return time spent, which is almost always wanted.
+///
+/// See constrain_values() for emission types not allowed on the
+/// command line.
+///
+/// Argument 'cell_filepath' is forwarded to ledger_emitter's ctor,
+/// which interprets it as a "case" rather than a "cell" filepath.
+/// Repurposing it here does no harm, and allows 'emission' to
+/// include mce_emit_spreadsheet.
 
 double emit_ledger
     (fs::path const& cell_filepath
@@ -212,7 +195,7 @@ double emit_ledger
     ,mcenum_emission emission
     )
 {
-    ledger_emitter emitter("", emission);
+    ledger_emitter emitter  (cell_filepath, emission);
     return emitter.emit_cell(cell_filepath, ledger);
 }
 

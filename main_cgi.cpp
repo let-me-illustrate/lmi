@@ -555,7 +555,7 @@ void ShowIllusOutput(Input const& a_input)
         );
     illustrator run_functor(emission);
     std::cout << "<pre><small>";
-    run_functor("", a_input);
+    run_functor("CGI_illustration", a_input);
     std::cout << "</small></pre>";
     std::cout << "<hr>\n\n";
     std::cout
@@ -665,7 +665,7 @@ void ShowCensusOutput
         );
     illustrator run_functor(emission);
     std::cout << "<pre><small>";
-    run_functor("", lives);
+    run_functor("CGI_census", lives);
     std::cout << "</small></pre>";
     std::cout << "<hr>\n\n";
     std::cout

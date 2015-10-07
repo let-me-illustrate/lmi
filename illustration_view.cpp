@@ -53,6 +53,7 @@
 #include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
+#include "path_utility.hpp"             // unique_filepath()
 #include "safely_dereference_as.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
@@ -63,7 +64,6 @@
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
-#include <cstdio>                       // std::remove()
 #include <fstream>
 #include <string>
 
@@ -78,10 +78,15 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(wxID_COPY                          ,IllustrationView::UponCopyFull           )
     EVT_UPDATE_UI(wxID_SAVE                     ,IllustrationView::UponUpdateFileSave     )
     EVT_UPDATE_UI(wxID_SAVEAS                   ,IllustrationView::UponUpdateFileSaveAs   )
-    EVT_UPDATE_UI(XRCID("print_pdf"            ),IllustrationView::UponUpdateAlwaysEnabled)
+    EVT_UPDATE_UI(wxID_PRINT                    ,IllustrationView::UponUpdateIllustration )
+    EVT_UPDATE_UI(wxID_PAGE_SETUP               ,IllustrationView::UponUpdateIllustration )
+    EVT_UPDATE_UI(wxID_PREVIEW                  ,IllustrationView::UponUpdateIllustration )
+    EVT_UPDATE_UI(XRCID("print_pdf"            ),IllustrationView::UponUpdateIllustration )
     EVT_UPDATE_UI(XRCID("edit_cell"            ),IllustrationView::UponUpdateProperties   )
     EVT_UPDATE_UI(XRCID("edit_class"           ),IllustrationView::UponUpdateInapplicable )
     EVT_UPDATE_UI(XRCID("edit_case"            ),IllustrationView::UponUpdateInapplicable )
+    EVT_UPDATE_UI(XRCID("copy_summary"         ),IllustrationView::UponUpdateIllustration )
+    EVT_UPDATE_UI(wxID_COPY                     ,IllustrationView::UponUpdateIllustration )
     EVT_UPDATE_UI(XRCID("run_cell"             ),IllustrationView::UponUpdateInapplicable )
     EVT_UPDATE_UI(XRCID("run_class"            ),IllustrationView::UponUpdateInapplicable )
     EVT_UPDATE_UI(XRCID("run_case"             ),IllustrationView::UponUpdateInapplicable )
@@ -196,16 +201,25 @@ bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
     return has_view_been_created;
 }
 
+/// Place full illustration data on the clipboard as TSV.
+///
+/// Because this is implemented by calling PrintCellTabDelimited(), it
+/// has the occasionally desirable side effect of writing a TSV file.
+///
+/// The implementation might alternatively call
+///   emit_ledger(base_filename(), *ledger_values_, mce_emit_spreadsheet);
+/// which constructs a suitable filename, calling unique_filepath() if
+/// necessary; but if that filename needed to be made "unique", then
+/// it would be unavailable here for copying to the clipboard.
+
 void IllustrationView::UponCopyFull(wxCommandEvent&)
 {
     LMI_ASSERT(ledger_values_.get());
     Timer timer;
     configurable_settings const& c = configurable_settings::instance();
-    std::string spreadsheet_filename =
-            base_filename()
-        +   c.spreadsheet_file_extension()
-        ;
-    std::remove(spreadsheet_filename.c_str());
+    std::string const b = base_filename();
+    std::string const e = c.spreadsheet_file_extension();
+    std::string spreadsheet_filename = unique_filepath(b, e).string();
     PrintCellTabDelimited(*ledger_values_, spreadsheet_filename);
     std::ifstream ifs(spreadsheet_filename.c_str());
     std::string s;
@@ -277,6 +291,11 @@ void IllustrationView::UponUpdateFileSave(wxUpdateUIEvent& e)
 void IllustrationView::UponUpdateFileSaveAs(wxUpdateUIEvent& e)
 {
     e.Enable(!is_phony_);
+}
+
+void IllustrationView::UponUpdateIllustration(wxUpdateUIEvent& e)
+{
+    e.Enable(ledger_values_.get() && !is_interdicted(*ledger_values_));
 }
 
 void IllustrationView::UponUpdateInapplicable(wxUpdateUIEvent& e)

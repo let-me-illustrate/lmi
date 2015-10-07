@@ -130,7 +130,6 @@ enum e_database_key
         ,DB_AllowSimpUw
         ,DB_AllowGuarUw
         ,DB_SmokeOrTobacco       // DATABASE !! Move to '.policy' (cf. product_data::AvName)
-        ,DB_UsePolicyFormAlt
         ,DB_AllowPreferredClass
         ,DB_AllowUltraPrefClass
 
@@ -493,6 +492,8 @@ enum e_database_key
     ,DB_Topic_Miscellanea
 
         ,DB_LedgerType
+        ,DB_Nonillustrated
+        ,DB_NoLongerIssued
 
         ,DB_AgeLastOrNearest
         ,DB_MaturityAge
@@ -502,6 +503,7 @@ enum e_database_key
 
         ,DB_GroupProxyRateTable
         ,DB_PartialMortTable
+        ,DB_UsePolicyFormAlt
 
     ,DB_Topic_Weights
 

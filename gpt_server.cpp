@@ -47,7 +47,7 @@
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
 #include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
-#include "path_utility.hpp"             // fs::path inserter
+#include "path_utility.hpp"             // unique_filepath(), fs::path inserter
 #include "premium_tax.hpp"
 #include "product_data.hpp"
 #include "round_to.hpp"
@@ -56,7 +56,7 @@
 #include "timer.hpp"
 #include "value_cast.hpp"
 
-#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/convenience.hpp> // extension(), change_extension()
 #include <boost/filesystem/fstream.hpp>
 
 #include <algorithm>                    // std::min()
@@ -451,7 +451,7 @@ gpt_state test_one_days_gpt_transactions
 
     configurable_settings const& c = configurable_settings::instance();
     std::string const extension(".gpt" + c.spreadsheet_file_extension());
-    fs::path spreadsheet_filename = fs::change_extension(file_path, extension);
+    fs::path spreadsheet_filename = unique_filepath(file_path, extension);
     fs::ofstream ofs(spreadsheet_filename, ios_out_trunc_binary());
     ofs << "This temporary output file will be removed in a future release.\n";
     ofs

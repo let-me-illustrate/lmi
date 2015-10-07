@@ -107,11 +107,13 @@ class LMI_SO BasicValues
     int                   GetLength()                  const;
     int                   GetIssueAge()                const;
     int                   GetRetAge()                  const;
-    mcenum_ledger_type    GetLedgerType()              const;
+    mcenum_ledger_type    ledger_type               () const;
+    bool                  nonillustrated            () const;
+    bool                  no_can_issue              () const;
+    bool                  IsSubjectToIllustrationReg() const;
     mcenum_state          GetStateOfJurisdiction()     const;
     mcenum_state          GetStateOfDomicile()         const;
     mcenum_state          GetPremiumTaxState()         const;
-    bool                  IsSubjectToIllustrationReg() const;
     double                InvestmentManagementFee()    const;
 
     yare_input                            yare_input_;
@@ -417,7 +419,9 @@ class LMI_SO BasicValues
         ,mcenum_smoking     smoking
         ) const;
 
-    mcenum_ledger_type  LedgerType_;
+    mcenum_ledger_type  ledger_type_;
+    bool                nonillustrated_;
+    bool                no_can_issue_;
     bool                IsSubjectToIllustrationReg_;
     mcenum_state        StateOfJurisdiction_;
     mcenum_state        StateOfDomicile_;
@@ -473,9 +477,24 @@ inline int BasicValues::GetRetAge() const
     return RetAge;
 }
 
-inline mcenum_ledger_type BasicValues::GetLedgerType() const
+inline mcenum_ledger_type BasicValues::ledger_type() const
 {
-    return LedgerType_;
+    return ledger_type_;
+}
+
+inline bool BasicValues::nonillustrated() const
+{
+    return nonillustrated_;
+}
+
+inline bool BasicValues::no_can_issue() const
+{
+    return no_can_issue_;
+}
+
+inline bool BasicValues::IsSubjectToIllustrationReg() const
+{
+    return IsSubjectToIllustrationReg_;
 }
 
 inline mcenum_state BasicValues::GetStateOfJurisdiction() const
@@ -491,11 +510,6 @@ inline mcenum_state BasicValues::GetStateOfDomicile() const
 inline mcenum_state BasicValues::GetPremiumTaxState() const
 {
     return PremiumTaxState_;
-}
-
-inline bool BasicValues::IsSubjectToIllustrationReg() const
-{
-    return IsSubjectToIllustrationReg_;
 }
 
 // IHS !! Use a configuration file instead. These deprecated
