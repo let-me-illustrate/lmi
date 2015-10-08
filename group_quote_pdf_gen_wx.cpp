@@ -1155,22 +1155,11 @@ void group_quote_pdf_generator_wx::output_footer
     wxImage logo_image(load_image("company_logo.png"));
     if(logo_image.IsOk())
         {
-        switch(output_mode)
-            {
-            case e_output_normal:
-                {
-                pdf_dc.DrawBitmap(logo_image, horz_margin, *pos_y);
-                }
-                break;
-            case e_output_measure_only:
-                // Do nothing.
-                break;
-            default:
-                {
-                fatal_error() << "Case " << output_mode << " not found." << LMI_FLUSH;
-                }
-            }
-        *pos_y += logo_image.GetSize().y + vert_skip;
+        // Arbitrarily scale down the logo by a factor of 2 to avoid making it
+        // too big.
+        output_image(pdf_dc, logo_image, "company_logo", 2.0, horz_margin, pos_y, output_mode);
+
+        *pos_y += vert_skip;
         }
 
     wxString const footer_html = "<p>" + report_data_.footer_ + "</p>";
