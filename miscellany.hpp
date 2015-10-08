@@ -39,6 +39,8 @@
 #include <utility>
 #include <vector>
 
+#include "assert_lmi.hpp"
+
 /// Test whether every element in a range equals the specified constant.
 
 template<typename InputIterator, typename T>
@@ -174,6 +176,47 @@ template<typename T>
 inline void stifle_warning_for_unused_value(T const& t)
 {
     (void)&t;
+}
+
+/// Return the number of lines in a possibly multiline string.
+///
+/// Actually returns one plus the number of newlines in the string.
+/// If, say, a trailing '\n' is found, the count is one greater than
+/// the number of lines--which might be useful, e.g., for adding an
+/// extra blank line to a column header.
+
+inline std::size_t count_lines(std::string const& s)
+{
+    return 1u + std::count(s.begin(), s.end(), '\n');
+}
+
+/// Split a string into lines separated by new line characters.
+
+inline std::vector<std::string> split_into_lines(std::string const& s)
+{
+    // BOOST !! Unfortunately boost::split() can't be easily used with the
+    // current ancient version of the library (1.33), so we reimplement it
+    // here.
+    std::vector<std::string> lines;
+    std::string line;
+    for(std::string::const_iterator i = s.begin(); ; ++i)
+        {
+        if(i == s.end() || '\n' == *i)
+            {
+            lines.push_back(line);
+            if(i == s.end())
+                {
+                break;
+                }
+            line.clear();
+            }
+        else
+            {
+            line += *i;
+            }
+        }
+    LMI_ASSERT(lines.size() == count_lines(s));
+    return lines;
 }
 
 #endif // miscellany_hpp

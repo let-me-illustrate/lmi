@@ -34,7 +34,7 @@
 <object class="wxPanel" name="plan_panel">
     <object class="wxFlexGridSizer">
         <cols>2</cols>
-        <growablerows>0</growablerows>
+        <growablerows>0,1</growablerows>
         <growablecols>1</growablecols>
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
@@ -288,8 +288,9 @@
             <flag>wxGROW</flag>
             <border>4</border>
             <object class="wxTextCtrl" name="Comments">
+                <style>wxTE_MULTILINE</style>
                 <help>Freeform comments</help>
-                <size>180,-1</size>
+                <size>180,60</size>
             </object>
         </object>
         <object class="sizeritem">
