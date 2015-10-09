@@ -26,6 +26,8 @@
 
 #include "config.hpp"
 
+#include "so_attributes.hpp"
+
 #include <boost/algorithm/minmax_element.hpp>
 
 #include <algorithm>
@@ -83,6 +85,16 @@ template<typename T> bool operator< (T t, minmax<T> m) {return t <  m.minimum();
 template<typename T> bool operator<=(T t, minmax<T> m) {return t <= m.minimum();}
 template<typename T> bool operator< (minmax<T> m, T t) {return m.maximum() <  t;}
 template<typename T> bool operator<=(minmax<T> m, T t) {return m.maximum() <= t;}
+
+/// Return the number of lines in a possibly multiline string.
+
+std::size_t LMI_SO count_lines(std::string const&);
+
+/// Split a string into lines separated by newline characters.
+
+std::vector<std::string> LMI_SO split_into_lines(std::string const&);
+
+/// Escape text for html, e.g., "a < b" --> "a &lt; b".
 
 std::string htmlize(std::string const&);
 
