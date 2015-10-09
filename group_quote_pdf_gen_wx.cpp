@@ -105,7 +105,8 @@ void append_name_value_to_html_table
     )
 {
     html_table += wxString::Format
-        ("<td align=\"right\"><b>%s%s&nbsp;&nbsp;</b></td><td>%s</td>"
+        ("<td align=\"right\"><b>%s%s&nbsp;&nbsp;</b></td>"
+         "<td>%s&nbsp;&nbsp;&nbsp;&nbsp;</td>"
         ,escape_for_html_elem(name)
         ,(value.empty() ? "" : ":")
         ,escape_for_html_elem(value)
