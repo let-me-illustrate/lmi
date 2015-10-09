@@ -70,6 +70,47 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
     return streams_are_identical(ifs0, ifs1);
 }
 
+/// Return the number of lines in a possibly multiline string.
+///
+/// Actually returns one plus the number of newlines in the string.
+/// If, say, a trailing '\n' is found, the count is one greater than
+/// the number of lines--which might be useful, e.g., for adding an
+/// extra blank line to a column header.
+
+std::size_t count_lines(std::string const& s)
+{
+    return 1u + std::count(s.begin(), s.end(), '\n');
+}
+
+/// Split a string into lines separated by newline characters.
+
+std::vector<std::string> split_into_lines(std::string const& s)
+{
+    // BOOST !! Unfortunately boost::split() can't be easily used with the
+    // current ancient version of the library (1.33), so we reimplement it
+    // here.
+    std::vector<std::string> lines;
+    std::string line;
+    for(std::string::const_iterator i = s.begin(); ; ++i)
+        {
+        if(i == s.end() || '\n' == *i)
+            {
+            lines.push_back(line);
+            if(i == s.end())
+                {
+                break;
+                }
+            line.clear();
+            }
+        else
+            {
+            line += *i;
+            }
+        }
+    LMI_ASSERT(lines.size() == count_lines(s));
+    return lines;
+}
+
 /// Escape text for html, e.g., "a < b" --> "a &lt; b".
 
 std::string htmlize(std::string const& raw_text)

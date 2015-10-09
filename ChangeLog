@@ -37090,3 +37090,45 @@ Write new "short" product name over graphic banner.
   group_quote_pdf_gen_wx.cpp
 Use new product-data fields added 20151003T0126Z.
 
+20151009T0156Z <gchicares@sbcglobal.net> [473]
+
+  miscellany.cpp
+  miscellany.hpp
+  wx_table_generator.cpp
+Refactor to make two functions reusable elsewhere.
+
+20151009T0200Z <gchicares@sbcglobal.net> [473]
+
+  group_quote_pdf_gen_wx.cpp
+Write "Comments" input to "Summary".
+
+20151009T0255Z <gchicares@sbcglobal.net> [473]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for clarity.
+
+20151009T0257Z <gchicares@sbcglobal.net> [473]
+
+  group_quote_pdf_gen_wx.cpp
+Improve "Summary" layout.
+
+20151009T0259Z <gchicares@sbcglobal.net> [473]
+
+  skin_group_carveout.xrc
+Make "Comments" field multiline.
+
+20151009T0305Z <gchicares@sbcglobal.net> [473]
+
+  skin_group_carveout.xrc
+Improve concinnity.
+
+20151009T0309Z <gchicares@sbcglobal.net> [473]
+
+  group_quote_pdf_gen_wx.cpp
+Improve concinnity and documentation.
+
+20151009T0322Z <gchicares@sbcglobal.net> [473]
+
+  group_quote_pdf_gen_wx.cpp
+Fix defect introduced 20150819T1702Z: wrong product name (KMM).
+

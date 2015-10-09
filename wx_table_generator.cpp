@@ -30,52 +30,10 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-
-#include <algorithm>                    // std::count()
+#include "miscellany.hpp"               // count_lines(), split_into_lines()
 
 namespace
 {
-
-/// Return the number of lines in a possibly multiline string.
-///
-/// Actually returns one plus the number of newlines in the string.
-/// If, say, a trailing '\n' is found, the count is one greater than
-/// the number of lines--which might be useful, e.g., for adding an
-/// extra blank line to a column header.
-
-std::size_t count_lines(std::string const& s)
-{
-    return 1u + std::count(s.begin(), s.end(), '\n');
-}
-
-/// Split a string into lines separated by new line characters.
-
-std::vector<std::string> split_in_lines(std::string const& s)
-{
-    // BOOST !! Unfortunately boost::split() can't be easily used with the
-    // current ancient version of the library (1.33), so we reimplement it
-    // here.
-    std::vector<std::string> lines;
-    std::string line;
-    for(std::string::const_iterator i = s.begin(); ; ++i)
-        {
-        if(i == s.end() || '\n' == *i)
-            {
-            lines.push_back(line);
-            if(i == s.end())
-                {
-                break;
-                }
-            line.clear();
-            }
-        else
-            {
-            line += *i;
-            }
-        }
-    LMI_ASSERT(lines.size() == count_lines(s));
-    return lines;
-}
 
 /// Increase the first argument to the second one if it's smaller.
 
@@ -316,7 +274,7 @@ void wx_table_generator::output_header(int* pos_y)
     for(std::size_t col = 0; col < num_columns; ++col)
         {
         column_info const& ci = columns_.at(col);
-        std::vector<std::string> const lines(split_in_lines(ci.header_));
+        std::vector<std::string> const lines(split_into_lines(ci.header_));
 
         // Fill the elements from the bottom line to the top one, so that a
         // single line header is shown on the last line.

@@ -34,7 +34,7 @@
 <object class="wxPanel" name="plan_panel">
     <object class="wxFlexGridSizer">
         <cols>2</cols>
-        <growablerows>0</growablerows>
+        <growablerows>0,1</growablerows>
         <growablecols>1</growablecols>
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
@@ -289,7 +289,8 @@
             <border>4</border>
             <object class="wxTextCtrl" name="Comments">
                 <help>Freeform comments</help>
-                <size>180,-1</size>
+                <size>180,60</size>
+                <style>wxTE_MULTILINE</style>
             </object>
         </object>
         <object class="sizeritem">
@@ -614,8 +615,8 @@
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="InforceYear">
                                         <help>Years elapsed since issue</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -629,8 +630,8 @@
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="InforceMonth">
                                         <help>Months elapsed since issue</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1089,8 +1090,8 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="InforceContractMonth">
                                         <help>Months elapsed since beginning of most recent seven-pay period</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1104,8 +1105,8 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="InforceContractYear">
                                         <help>Years elapsed since beginning of most recent seven-pay period</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
