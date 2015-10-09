@@ -484,7 +484,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
 {
     company_          = ledger.CorpName;
     prepared_by_      = ledger.ProducerName;
-    product_          = ledger.ProductName;
+    product_          = ledger.PolicyMktgName;
     short_product_    = ledger.GroupQuoteShortProductName;
     available_riders_ = ledger.GroupQuoteRidersHeader;
     premium_mode_     = ledger.InitErMode;
