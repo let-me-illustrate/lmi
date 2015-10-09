@@ -124,7 +124,7 @@ void append_name_value_to_html_table
 class open_and_ensure_closing_tag
     :private lmi::uncopyable<open_and_ensure_closing_tag>
 {
-public:
+  public:
     open_and_ensure_closing_tag(wxString& html, char const* tag)
         :html_(html)
         ,tag_(tag)
@@ -137,7 +137,7 @@ public:
         html_ << "</" << tag_ << ">";
     }
 
-private:
+  private:
     wxString& html_;
     wxString const tag_;
 };
@@ -148,10 +148,10 @@ private:
 /// Objects of this class have value semantics.
 
 struct extra_summary_field
-    {
+{
     std::string name;
     std::string value;
-    };
+};
 
 /// Function parsing a multiline string of the form "name: value" as an array
 /// of extra summary fields.
@@ -983,16 +983,16 @@ void group_quote_pdf_generator_wx::output_document_header
         );
     }
 
-    // Then add any additional fields in left-to-right top-to-bottom order.
+    // Then add any additional fields in left-to-right then top-to-bottom order.
     std::vector<extra_summary_field> const& fields = report_data_.extra_fields_;
 
     typedef std::vector<extra_summary_field>::const_iterator esfci;
-    for(esfci i = fields.begin(); i != fields.end(); )
+    for(esfci i = fields.begin(); i != fields.end();)
         {
         // Start a new table row and ensure it will be closed.
         open_and_ensure_closing_tag tag_tr(summary_html, "tr");
 
-        // Add one, if there are no more, or two fields to it.
+        // Add one (if there is only one) or two fields to this new row.
         for(int col = 0; col < 2; ++col)
             {
             append_name_value_to_html_table(summary_html, i->name, i->value);
