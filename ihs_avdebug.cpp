@@ -265,7 +265,7 @@ inline void AccountValue::SetMonthlyDetail(int enumerator, double d)
 void AccountValue::SetDebugFilename(std::string const& s)
 {
     configurable_settings const& c = configurable_settings::instance();
-    std::string const z = c.spreadsheet_file_extension();
+    std::string const& z = c.spreadsheet_file_extension();
     DebugFilename = unique_filepath(s, ".monthly_trace" + z).string();
 }
 

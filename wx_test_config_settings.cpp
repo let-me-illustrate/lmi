@@ -91,8 +91,8 @@ LMI_WX_TEST_CASE(configurable_settings)
     LMI_ASSERT_EQUAL(settings.libraries_to_preload(), "");
     LMI_ASSERT_EQUAL(settings.xsl_fo_command(), "CMD /c /fop-0.20.5/fop");
 
-    std::string skin = settings.skin_filename();
-    std::string default_input = settings.default_input_filename();
+    std::string const& skin = settings.skin_filename();
+    std::string const& default_input = settings.default_input_filename();
     LMI_ASSERT_WITH_MSG
         (  "skin_coli_boli.xrc"      == skin
         || "skin_group_carveout.xrc" == skin

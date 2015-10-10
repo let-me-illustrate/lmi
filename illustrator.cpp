@@ -69,7 +69,7 @@ bool illustrator::operator()(fs::path const& file_path)
         {
         Timer timer;
         multiple_cell_document doc(file_path.string());
-        assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
+        assert_consistent_run_order(doc.case_parms()[0], doc.cell_parms());
         seconds_for_input_ = timer.stop().elapsed_seconds();
         return operator()(file_path, doc.cell_parms());
         }
@@ -198,7 +198,7 @@ Input const& default_cell()
     static Input       user_default;
 
     configurable_settings const& c = configurable_settings::instance();
-    std::string const default_input_file = c.default_input_filename();
+    std::string const& default_input_file = c.default_input_filename();
     if(0 != access(default_input_file.c_str(), F_OK))
         {
         user_default = builtin_default;
@@ -236,30 +236,31 @@ Input const& default_cell()
     return user_default;
 }
 
-/// Throw if an inconsistency is detected between a cell and its
-/// corresponding case default.
+/// Throw if run order for any cell does not match case default.
 ///
-/// The run order depends on the first cell's parameters and ignores
-/// any conflicting input for any individual cell. It might be cleaner
-/// to offer this field (and certain others) only at the case level.
-///
-/// TODO ?? Instead, this should be enforced when data is entered.
+/// If lmi had case-only input fields, run order would be one of them.
 
-void assert_consistency
-    (Input const& case_default
-    ,Input const& cell
+void assert_consistent_run_order
+    (Input              const& case_default
+    ,std::vector<Input> const& cells
     )
 {
-    if(case_default["RunOrder"] != cell["RunOrder"])
+    typedef std::vector<Input>::size_type svst;
+    for(svst i = 0; i != cells.size(); ++i)
         {
-        fatal_error()
-            << "Case-default run order '"
-            << case_default["RunOrder"]
-            << "' differs from first cell's run order '"
-            << cell["RunOrder"]
-            << "'. Make them consistent before running illustrations."
-            << LMI_FLUSH
-            ;
+        if(case_default["RunOrder"] != cells[i]["RunOrder"])
+            {
+            fatal_error()
+                << "Case-default run order '"
+                << case_default["RunOrder"]
+                << "' differs from run order '"
+                << cells[i]["RunOrder"]
+                << "' of cell number "
+                << 1 + i
+                << ". Make this consistent before running illustrations."
+                << LMI_FLUSH
+                ;
+            }
         }
 }
 

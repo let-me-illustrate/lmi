@@ -55,14 +55,15 @@ class LMI_SO ledger_emitter
     double finish   ();
 
   private:
-    fs::path    const& case_filepath_;
-    std::string const  tsv_ext_;
-    fs::path    const  case_filepath_spreadsheet_;
-    fs::path    const  case_filepath_group_roster_;
-    fs::path    const  case_filepath_group_quote_;
-    mcenum_emission    emission_;
+    fs::path const& case_filepath_;
+    mcenum_emission emission_;
 
-    // Used only if emission includes mce_emit_group_quote; empty otherwise.
+    // Initialized only if required by emission_; empty otherwise.
+    fs::path case_filepath_spreadsheet_;
+    fs::path case_filepath_group_roster_;
+    fs::path case_filepath_group_quote_;
+
+    // Used only if emission_ includes mce_emit_group_quote; empty otherwise.
     boost::shared_ptr<group_quote_pdf_generator> group_quote_gen_;
 };
 

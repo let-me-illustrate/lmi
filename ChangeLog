@@ -37132,3 +37132,46 @@ Improve concinnity and documentation.
   group_quote_pdf_gen_wx.cpp
 Fix defect introduced 20150819T1702Z: wrong product name (KMM).
 
+20151010T0037Z <gchicares@sbcglobal.net> [473]
+
+  miscellany.cpp
+  miscellany.hpp
+  wx_table_generator.cpp
+Refactor for clarity in a fencepost zone.
+
+20151010T1710Z <gchicares@sbcglobal.net> [473]
+
+  miscellany.cpp
+Improve documentation.
+
+20151010T1711Z <gchicares@sbcglobal.net> [473]
+
+  ihs_avdebug.cpp
+  illustration_view.cpp
+  illustrator.cpp
+  wx_test_config_settings.cpp
+Improve concinnity and microefficiency.
+
+20151010T1712Z <gchicares@sbcglobal.net> [473]
+
+  preferences_view.cpp
+  wx_test_input_sequences.cpp
+  wx_test_input_validation.cpp
+  wx_test_pdf_create.cpp
+Remove disused headers.
+
+20151010T1713Z <gchicares@sbcglobal.net> [473]
+
+  emit_ledger.cpp
+  emit_ledger.hpp
+Improve the 20151006T1517Z change. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-10/msg00029.html
+
+20151010T1930Z <gchicares@sbcglobal.net> [472]
+
+  census_view.cpp
+  group_values.cpp
+  illustrator.cpp
+  illustrator.hpp
+Validate run order for all cells.
+
