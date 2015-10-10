@@ -30,7 +30,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "miscellany.hpp"               // count_lines(), split_into_lines()
+#include "miscellany.hpp"               // count_newlines(), split_into_lines()
 
 namespace
 {
@@ -80,8 +80,10 @@ void wx_table_generator::add_column
     int width = widest_text[0] ? dc_.GetTextExtent(widest_text).x : 0;
 
     // Keep track of the maximal number of lines in a header as this determines
-    // the number of lines used for all of them.
-    increase_to_if_smaller(max_header_lines_, count_lines(header));
+    // the number of lines used for all of them. This is one plus the number of
+    // newlines in the anticipated case where there is no newline character at
+    // the beginning or end of the header's string representation.
+    increase_to_if_smaller(max_header_lines_, 1u + count_newlines(header));
 
     // Also increase the column width to be sufficiently wide to fit
     // this header line if it has fixed width.
