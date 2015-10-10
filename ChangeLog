@@ -37167,3 +37167,11 @@ Remove disused headers.
 Improve the 20151006T1517Z change. See:
   http://lists.nongnu.org/archive/html/lmi/2015-10/msg00029.html
 
+20151010T1930Z <gchicares@sbcglobal.net> [472]
+
+  census_view.cpp
+  group_values.cpp
+  illustrator.cpp
+  illustrator.hpp
+Validate run order for all cells.
+
