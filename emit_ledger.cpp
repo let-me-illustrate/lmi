@@ -56,14 +56,26 @@ ledger_emitter::ledger_emitter
     (fs::path const& case_filepath
     ,mcenum_emission emission
     )
-    :case_filepath_              (case_filepath)
-    ,tsv_ext_                    (configurable_settings::instance().spreadsheet_file_extension())
-    ,case_filepath_spreadsheet_  (unique_filepath(case_filepath,             tsv_ext_))
-    ,case_filepath_group_roster_ (unique_filepath(case_filepath, ".roster" + tsv_ext_))
-    ,case_filepath_group_quote_  (unique_filepath(case_filepath, ".quote.pdf"        ))
-    ,emission_                   (emission)
+    :case_filepath_ (case_filepath)
+    ,emission_      (emission)
 {
     LMI_ASSERT(!case_filepath_.empty());
+
+    configurable_settings const& c = configurable_settings::instance();
+    std::string const& tsv_ext = c.spreadsheet_file_extension();
+
+    if(emission_ & mce_emit_spreadsheet)
+        {
+        case_filepath_spreadsheet_  = unique_filepath(case_filepath,             tsv_ext);
+        }
+    if(emission_ & mce_emit_group_roster)
+        {
+        case_filepath_group_roster_ = unique_filepath(case_filepath, ".roster" + tsv_ext);
+        }
+    if(emission_ & mce_emit_group_quote)
+        {
+        case_filepath_group_quote_  = unique_filepath(case_filepath, ".quote.pdf"       );
+        }
 }
 
 ledger_emitter::~ledger_emitter()
