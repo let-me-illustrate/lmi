@@ -27,7 +27,6 @@
 #endif
 
 #include "assert_lmi.hpp"
-#include "configurable_settings.hpp"
 #include "input.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"

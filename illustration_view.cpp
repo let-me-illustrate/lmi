@@ -217,8 +217,8 @@ void IllustrationView::UponCopyFull(wxCommandEvent&)
     LMI_ASSERT(ledger_values_.get());
     Timer timer;
     configurable_settings const& c = configurable_settings::instance();
-    std::string const b = base_filename();
-    std::string const e = c.spreadsheet_file_extension();
+    std::string const  b = base_filename();
+    std::string const& e = c.spreadsheet_file_extension();
     std::string spreadsheet_filename = unique_filepath(b, e).string();
     PrintCellTabDelimited(*ledger_values_, spreadsheet_filename);
     std::ifstream ifs(spreadsheet_filename.c_str());

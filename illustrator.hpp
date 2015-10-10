@@ -73,9 +73,9 @@ class LMI_SO illustrator
 
 Input const& LMI_SO default_cell();
 
-void LMI_SO assert_consistency
-    (Input const& case_default
-    ,Input const& cell
+void LMI_SO assert_consistent_run_order
+    (Input              const& case_default
+    ,std::vector<Input> const& cells
     );
 
 #endif // illustrator_hpp

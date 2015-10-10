@@ -70,19 +70,10 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
     return streams_are_identical(ifs0, ifs1);
 }
 
-/// Return the number of lines in a possibly multiline string.
-///
-/// Actually returns one plus the number of newlines in the string.
-/// If, say, a trailing '\n' is found, the count is one greater than
-/// the number of lines--which might be useful, e.g., for adding an
-/// extra blank line to a column header.
-
-std::size_t count_lines(std::string const& s)
+std::size_t count_newlines(std::string const& s)
 {
-    return 1u + std::count(s.begin(), s.end(), '\n');
+    return std::count(s.begin(), s.end(), '\n');
 }
-
-/// Split a string into lines separated by newline characters.
 
 std::vector<std::string> split_into_lines(std::string const& s)
 {
@@ -107,7 +98,10 @@ std::vector<std::string> split_into_lines(std::string const& s)
             line += *i;
             }
         }
-    LMI_ASSERT(lines.size() == count_lines(s));
+    // Assume that there is no newline at the end (or beginning) of
+    // the string: i.e., that all newline delimiters are internal--
+    // hence "1u + ".
+    LMI_ASSERT(lines.size() == 1u + count_newlines(s));
     return lines;
 }
 
