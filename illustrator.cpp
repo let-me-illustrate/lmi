@@ -198,7 +198,7 @@ Input const& default_cell()
     static Input       user_default;
 
     configurable_settings const& c = configurable_settings::instance();
-    std::string const default_input_file = c.default_input_filename();
+    std::string const& default_input_file = c.default_input_filename();
     if(0 != access(default_input_file.c_str(), F_OK))
         {
         user_default = builtin_default;
