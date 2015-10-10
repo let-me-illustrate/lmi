@@ -75,7 +75,7 @@ Input const& LMI_SO default_cell();
 
 void LMI_SO assert_consistency
     (Input const& case_default
-    ,Input const& cell
+    ,std::vector<Input> const& cells
     );
 
 #endif // illustrator_hpp

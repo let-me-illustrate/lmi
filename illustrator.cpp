@@ -69,7 +69,7 @@ bool illustrator::operator()(fs::path const& file_path)
         {
         Timer timer;
         multiple_cell_document doc(file_path.string());
-        assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
+        assert_consistency(doc.case_parms()[0], doc.cell_parms());
         seconds_for_input_ = timer.stop().elapsed_seconds();
         return operator()(file_path, doc.cell_parms());
         }
@@ -247,19 +247,26 @@ Input const& default_cell()
 
 void assert_consistency
     (Input const& case_default
-    ,Input const& cell
+    ,std::vector<Input> const& cells
     )
 {
-    if(case_default["RunOrder"] != cell["RunOrder"])
+    std::size_t const number_of_cells = cells.size();
+    for(std::size_t n = 0; n < number_of_cells; ++n)
         {
-        fatal_error()
-            << "Case-default run order '"
-            << case_default["RunOrder"]
-            << "' differs from first cell's run order '"
-            << cell["RunOrder"]
-            << "'. Make them consistent before running illustrations."
-            << LMI_FLUSH
-            ;
+        Input const& cell = cells[n];
+        if(case_default["RunOrder"] != cell["RunOrder"])
+            {
+            fatal_error()
+                << "Case-default run order '"
+                << case_default["RunOrder"]
+                << "' differs from the run order '"
+                << cell["RunOrder"]
+                << "' for the cell #"
+                << (n + 1)
+                << ". Make them consistent before running illustrations."
+                << LMI_FLUSH
+                ;
+            }
         }
 }
 
