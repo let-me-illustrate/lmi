@@ -27,7 +27,6 @@
 #endif
 
 #include "assert_lmi.hpp"
-#include "configurable_settings.hpp"
 #include "global_settings.hpp"
 #include "mvc_controller.hpp"
 #include "wx_test_case.hpp"

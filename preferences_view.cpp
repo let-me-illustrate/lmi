@@ -28,8 +28,6 @@
 
 #include "preferences_view.hpp"
 
-#include "configurable_settings.hpp"
-
 PreferencesView::PreferencesView()
 {
 }
