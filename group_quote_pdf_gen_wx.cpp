@@ -973,7 +973,7 @@ void group_quote_pdf_generator_wx::output_document_header
     open_and_ensure_closing_tag tag_tr(summary_html, "tr");
     append_name_value_to_html_table
         (summary_html
-        ,"Number of participants"
+        ,"Number of Participants"
         ,wxString::Format("%d", row_num_).ToStdString()
         );
     append_name_value_to_html_table
