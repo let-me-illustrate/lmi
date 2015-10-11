@@ -530,6 +530,10 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     (LedgerInvariant const& ledger
     )
 {
+    // Note that all the fields used here must be checked for consistency in
+    // assert_consistency_in_context() and that function should be modified
+    // if the code here changes.
+
     company_          = ledger.CorpName;
     prepared_by_      = ledger.ProducerName;
     product_          = ledger.PolicyMktgName;
@@ -557,10 +561,12 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 {
     LedgerInvariant const& Invar = ledger.GetLedgerInvariant();
 
-    // Header and footer data must be the same for all ledgers.
-    // FIXME This needs to be asserted. And leaving "Company"
-    // empty is a plausible user error that should be protected
-    // against by an assertion.
+    // Because we know that assert_consistency_in_context(), which had been
+    // called prior to starting the report generation, verifies that the
+    // company name is not empty, we can use it as a flag indicating that
+    // fill_global_report_data() hasn't been called yet. And we only need to
+    // call it once because assert_consistency_in_context() also ensures that
+    // the values used by it are the same for all ledgers.
     if(report_data_.company_.empty())
         {
         report_data_.fill_global_report_data(Invar);

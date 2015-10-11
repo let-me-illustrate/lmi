@@ -1423,7 +1423,7 @@ void CensusView::ViewComposite()
 
 bool CensusView::DoAllCells(mcenum_emission emission)
 {
-    assert_consistent_run_order(case_parms()[0], cell_parms());
+    assert_consistency_in_context(emission, case_parms()[0], cell_parms());
 
     illustrator z(emission);
     if(!z(base_filename(), cell_parms()))

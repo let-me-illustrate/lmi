@@ -73,8 +73,12 @@ class LMI_SO illustrator
 
 Input const& LMI_SO default_cell();
 
-void LMI_SO assert_consistent_run_order
-    (Input              const& case_default
+/// Throw an exception if the cells data is not sufficiently consistent with
+/// the case default to allow creating an emission of the specified type.
+
+void LMI_SO assert_consistency_in_context
+    (mcenum_emission           emission
+    ,Input              const& case_default
     ,std::vector<Input> const& cells
     );
 
