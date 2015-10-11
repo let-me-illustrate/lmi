@@ -37175,3 +37175,8 @@ Improve the 20151006T1517Z change. See:
   illustrator.hpp
 Validate run order for all cells.
 
+20151010T2353Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Swap two fields to improve layout (KMM).
+

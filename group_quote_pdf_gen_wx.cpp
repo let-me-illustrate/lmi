@@ -947,13 +947,13 @@ void group_quote_pdf_generator_wx::output_document_header
     open_and_ensure_closing_tag tag_tr(summary_html, "tr");
     append_name_value_to_html_table
         (summary_html
-        ,"Effective Date"
-        ,report_data_.effective_date_
+        ,"Product"
+        ,report_data_.product_
         );
     append_name_value_to_html_table
         (summary_html
-        ,"Product"
-        ,report_data_.product_
+        ,"Effective Date"
+        ,report_data_.effective_date_
         );
     }
     {
