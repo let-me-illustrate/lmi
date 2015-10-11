@@ -37183,7 +37183,7 @@ Swap two fields to improve layout (KMM).
 20151011T1607Z <gchicares@sbcglobal.net> [472]
 
   group_quote_pdf_gen_wx.cpp
-In boxed summary, wrap only name, not value (VZ).
+In boxed summary, wrap only value, not name (VZ).
 
 20151011T1608Z <gchicares@sbcglobal.net> [472]
 
@@ -37199,4 +37199,9 @@ Refactor image drawing (VZ).
 
   group_quote_pdf_gen_wx.cpp
 Scale logo (VZ).
+
+20151011T2219Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Remove a needless attribute; fix the 20151011T1607Z commit message.
 
