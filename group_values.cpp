@@ -711,7 +711,7 @@ census_run_result run_census::operator()
 
     // Use the first cell's run order for the entire census, ignoring
     // any conflicting run order for any other cell--which would have
-    // been prevented upstream by assert_consistent_run_order().
+    // been prevented upstream by assert_consistency_in_context().
     mcenum_run_order order = yare_input(cells[0]).RunOrder;
     switch(order)
         {
