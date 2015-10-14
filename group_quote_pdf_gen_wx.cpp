@@ -105,7 +105,7 @@ void append_name_value_to_html_table
     )
 {
     html_table += wxString::Format
-        ("<td align=\"right\"><b>%s%s&nbsp;&nbsp;</b></td>"
+        ("<td nowrap align=\"right\"><b>%s%s&nbsp;&nbsp;</b></td>"
          "<td>%s&nbsp;&nbsp;&nbsp;&nbsp;</td>"
         ,escape_for_html_elem(name)
         ,(value.empty() ? "" : ":")
@@ -247,6 +247,54 @@ wxImage load_image(char const* file)
         }
 
     return image;
+}
+
+/// Output an image at the given scale into the PDF.
+///
+/// The scale specifies how many times the image should be shrunk, i.e. scale >
+/// 1 makes the image smaller while scale < 1 makes it larger.
+///
+/// Updates pos_y by increasing it by the height of the specified image at the
+/// given scale.
+
+void output_image
+    (wxPdfDC&         pdf_dc
+    ,wxImage const&   image
+    ,char const*      image_name
+    ,double           scale
+    ,int              x
+    ,int*             pos_y
+    ,enum_output_mode output_mode = e_output_normal
+    )
+{
+    int const y = wxRound(image.GetHeight() / scale);
+
+    switch(output_mode)
+        {
+        case e_output_normal:
+            {
+            // Use wxPdfDocument API directly as wxDC doesn't provide a way to
+            // set the image scale at PDF level and also because passing via
+            // wxDC wastefully converts wxImage to wxBitmap only to convert it
+            // back to wxImage when embedding it into the PDF.
+            wxPdfDocument* const pdf_doc = pdf_dc.GetPdfDocument();
+            LMI_ASSERT(pdf_doc);
+
+            pdf_doc->SetImageScale(scale);
+            pdf_doc->Image(image_name, image, x, *pos_y);
+            pdf_doc->SetImageScale(1);
+            }
+            break;
+        case e_output_measure_only:
+            // Do nothing.
+            break;
+        default:
+            {
+            fatal_error() << "Case " << output_mode << " not found." << LMI_FLUSH;
+            }
+        }
+
+    *pos_y += y;
 }
 
 /// Render, or just pretend rendering in order to measure it, the given HTML
@@ -861,24 +909,11 @@ void group_quote_pdf_generator_wx::output_image_header
         return;
         }
 
-    // Use wxPdfDocument API directly as wxDC doesn't provide a way to set the
-    // image scale at PDF level and also because passing via wxDC wastefully
-    // converts wxImage to wxBitmap only to convert it back to wxImage when
-    // embedding it into the PDF.
-    wxPdfDocument* const pdf_doc = pdf_dc.GetPdfDocument();
-    LMI_ASSERT(pdf_doc);
-
-    wxSize const image_size = banner_image.GetSize();
-
     // Set the scale to fit the image to the document width.
-    pdf_doc->SetImageScale
-        (static_cast<double>(image_size.x) / page_.total_size_.x
-        );
-    pdf_doc->Image("banner", banner_image, 0, *pos_y);
-
-    int const y = wxRound(image_size.y / pdf_doc->GetImageScale());
-
-    pdf_doc->SetImageScale(1);
+    double const
+        scale = static_cast<double>(banner_image.GetWidth()) / page_.total_size_.x;
+    int const pos_top = *pos_y;
+    output_image(pdf_dc, banner_image, "banner", scale, 0, pos_y);
 
     wxDCFontChanger set_bigger_font(pdf_dc, pdf_dc.GetFont().Scaled(1.5));
     wxDCTextColourChanger set_white_text(pdf_dc, *wxWHITE);
@@ -893,13 +928,11 @@ void group_quote_pdf_generator_wx::output_image_header
     pdf_dc.DrawLabel
         (image_text
         ,wxRect
-            (wxPoint(horz_margin, *pos_y + y / 2),
+            (wxPoint(horz_margin, (pos_top + *pos_y) / 2),
              pdf_dc.GetMultiLineTextExtent(image_text)
             )
         ,wxALIGN_CENTER_HORIZONTAL
         );
-
-    *pos_y += y;
 }
 
 void group_quote_pdf_generator_wx::output_document_header
@@ -973,7 +1006,7 @@ void group_quote_pdf_generator_wx::output_document_header
     open_and_ensure_closing_tag tag_tr(summary_html, "tr");
     append_name_value_to_html_table
         (summary_html
-        ,"Number of participants"
+        ,"Number of Participants"
         ,wxString::Format("%d", row_num_).ToStdString()
         );
     append_name_value_to_html_table
@@ -1122,22 +1155,11 @@ void group_quote_pdf_generator_wx::output_footer
     wxImage logo_image(load_image("company_logo.png"));
     if(logo_image.IsOk())
         {
-        switch(output_mode)
-            {
-            case e_output_normal:
-                {
-                pdf_dc.DrawBitmap(logo_image, horz_margin, *pos_y);
-                }
-                break;
-            case e_output_measure_only:
-                // Do nothing.
-                break;
-            default:
-                {
-                fatal_error() << "Case " << output_mode << " not found." << LMI_FLUSH;
-                }
-            }
-        *pos_y += logo_image.GetSize().y + vert_skip;
+        // Arbitrarily scale down the logo by a factor of 2 to avoid making it
+        // too big.
+        output_image(pdf_dc, logo_image, "company_logo", 2.0, horz_margin, pos_y, output_mode);
+
+        *pos_y += vert_skip;
         }
 
     wxString const footer_html = "<p>" + report_data_.footer_ + "</p>";

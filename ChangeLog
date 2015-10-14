@@ -37180,3 +37180,28 @@ Validate run order for all cells.
   group_quote_pdf_gen_wx.cpp
 Swap two fields to improve layout (KMM).
 
+20151011T1607Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+In boxed summary, wrap only value, not name (VZ).
+
+20151011T1608Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Regularize case (VZ).
+
+20151011T1632Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor image drawing (VZ).
+
+20151011T1633Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Scale logo (VZ).
+
+20151011T2219Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Remove a needless attribute; fix the 20151011T1607Z commit message.
+
