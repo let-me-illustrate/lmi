@@ -46,6 +46,7 @@
 
 #include <boost/filesystem/convenience.hpp>
 
+#include <cstddef>                      // std::size_t
 #include <cstdio>                       // std::remove()
 #include <iostream>
 #include <string>
@@ -69,7 +70,7 @@ bool illustrator::operator()(fs::path const& file_path)
         {
         Timer timer;
         multiple_cell_document doc(file_path.string());
-        assert_consistent_run_order(doc.case_parms()[0], doc.cell_parms());
+        assert_consistency_in_context(emission_, doc.case_parms()[0], doc.cell_parms());
         seconds_for_input_ = timer.stop().elapsed_seconds();
         return operator()(file_path, doc.cell_parms());
         }
@@ -239,28 +240,86 @@ Input const& default_cell()
 /// Throw if run order for any cell does not match case default.
 ///
 /// If lmi had case-only input fields, run order would be one of them.
+///
+/// If emission includes mce_emit_group_quote bit, also throw if any of the
+/// fields used in the group quotes header or footer are not constant across
+/// all cells and the case default and also throw if the company name is empty
+/// as it is a required field for the group quotes.
 
-void assert_consistent_run_order
-    (Input              const& case_default
+void assert_consistency_in_context
+    (mcenum_emission           emission
+    ,Input              const& case_default
     ,std::vector<Input> const& cells
     )
 {
     typedef std::vector<Input>::size_type svst;
     for(svst i = 0; i != cells.size(); ++i)
         {
-        if(case_default["RunOrder"] != cells[i]["RunOrder"])
+        Input const& cell = cells[i];
+
+        if(case_default["RunOrder"] != cell["RunOrder"])
             {
             fatal_error()
                 << "Case-default run order '"
                 << case_default["RunOrder"]
                 << "' differs from run order '"
-                << cells[i]["RunOrder"]
+                << cell["RunOrder"]
                 << "' of cell number "
                 << 1 + i
                 << ". Make this consistent before running illustrations."
                 << LMI_FLUSH
                 ;
             }
+
+        if(emission & mce_emit_group_quote)
+            {
+            // Notice that the fields checked here correspond to the members of
+            // LedgerInvariant class used in fill_global_report_data() function
+            // in the group quote generation code and must be updated whenever
+            // that code changes. The product name field is a proxy for all the
+            // product-specific fields used as asserting that it is the same
+            // for all cells is sufficient to ensure that the values of all
+            // those fields are the same as well.
+            static char const* const fields[] =
+                {"ProductName"
+                ,"CorporationName"
+                ,"AgentName"
+                ,"CorporationPaymentMode"
+                ,"StateOfJurisdiction"
+                ,"EffectiveDate"
+                ,"Comments"
+                };
+            for(std::size_t j = 0; j != sizeof fields / sizeof(fields[0]); ++j)
+                {
+                char const* const field = fields[j];
+                if(case_default[field] != cell[field])
+                    {
+                    fatal_error()
+                        << "Value of the field '"
+                        << field
+                        << "' is '"
+                        << case_default[field]
+                        << "' in the case defaults but '"
+                        << cell[field]
+                        << "' for the cell #"
+                        << 1 + i
+                        << ". Make them identical before creating a group quote report."
+                        << LMI_FLUSH
+                        ;
+                    }
+                }
+            }
+        }
+
+    if(emission & mce_emit_group_quote)
+        {
+        if(case_default["CorporationName"].str().empty())
+            {
+            fatal_error()
+                << "Corporation name field is required in a group quote report."
+                << "Ensure the name is non-empty before generating this report."
+                << LMI_FLUSH
+                ;
+            }
         }
 }
-
