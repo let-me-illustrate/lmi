@@ -526,6 +526,23 @@ group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
 {
 }
 
+namespace
+{
+void assert_nonblank(std::string const& value, std::string const& name)
+{
+    if(std::string::npos == value.find_first_not_of(" \f\n\r\t\v"))
+        {
+        fatal_error() << name << " must not be blank." << LMI_FLUSH;
+        }
+}
+} // Unnamed namespace.
+
+/// Copy global report data from ledger.
+///
+/// All ledger data used here must be checked for consistency upstream
+/// by assert_okay_to_run_group_quote(); therefore, any changes in the
+/// set of data used here should be reflected there.
+
 void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     (LedgerInvariant const& ledger
     )
@@ -539,6 +556,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     contract_state_   = ledger.GetStatePostalAbbrev();
     jdn_t eff_date    = jdn_t(static_cast<int>(ledger.EffDateJdn));
     effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
+    // SOMEDAY !! Suppress <br> elements preceding blank strings.
     footer_           =
                           escape_for_html_elem(ledger.GroupQuoteIsNotAnOffer   )
         + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteRidersFooter   )
@@ -550,6 +568,23 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
         + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteBrokerDealer   )
         ;
 
+    assert_nonblank(company_         , "Sponsor");
+    assert_nonblank(prepared_by_     , "Agent");
+    assert_nonblank(product_         , "Product name");
+    assert_nonblank(short_product_   , "Product ID");
+    assert_nonblank(available_riders_, "Available riders"); // If none, should say "none".
+    assert_nonblank(premium_mode_    , "Mode");
+    assert_nonblank(contract_state_  , "State");
+    assert_nonblank(effective_date_  , "Effective date");
+
+    assert_nonblank(ledger.GroupQuoteIsNotAnOffer   , "First footnote");
+    assert_nonblank(ledger.GroupQuoteRidersFooter   , "Second footnote");
+    assert_nonblank(ledger.GroupQuotePolicyFormId   , "Third footnote");
+    assert_nonblank(ledger.GroupQuoteStateVariations, "Fourth footnote");
+    assert_nonblank(ledger.MarketingNameFootnote    , "Fifth footnote");
+    // The other footnotes may be blank for non-variable products.
+    // In principle this could be discerned by Ledger::ledger_type().
+
     extra_fields_     = parse_extra_report_fields(ledger.Comments);
 }
 
@@ -557,11 +592,10 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 {
     LedgerInvariant const& Invar = ledger.GetLedgerInvariant();
 
-    // Header and footer data must be the same for all ledgers.
-    // FIXME This needs to be asserted. And leaving "Company"
-    // empty is a plausible user error that should be protected
-    // against by an assertion.
-    if(report_data_.company_.empty())
+    // Initialize 'report_data_' the first time this function is
+    // called: i.e., iff its 'contract_state_' field is empty, because
+    // the state postal abbreviation in a ledger can never be empty.
+    if(report_data_.contract_state_.empty())
         {
         report_data_.fill_global_report_data(Invar);
         }

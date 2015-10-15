@@ -153,36 +153,37 @@ void Input::DoHarmonize()
     DefinitionOfMaterialChange.enable(anything_goes);
     // INPUT !! TAXATION !! This old code will be useful when
     // 'DefinitionOfMaterialChange' is replaced.
-#if 0
-    DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
-    if(mce_noncompliant == DefinitionOfLifeInsurance)
+    if(anything_goes)
         {
-        // Nothing to do: all choices ignored because control is disabled.
+        DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
+        if(mce_noncompliant == DefinitionOfLifeInsurance)
+            {
+            // Nothing to do: all choices ignored because control is disabled.
+            }
+        else if(mce_cvat == DefinitionOfLifeInsurance)
+            {
+            DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,anything_goes);
+            DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,anything_goes);
+            DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,anything_goes);
+            DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,true         );
+            DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,false        );
+            }
+        else if(mce_gpt == DefinitionOfLifeInsurance)
+            {
+            DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,false        );
+            DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,false        );
+            DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,false        );
+            DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,false        );
+            DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,true         );
+            }
+        else
+            {
+            fatal_error()
+                << "No option selected for definition of life insurance."
+                << LMI_FLUSH
+                ;
+            }
         }
-    else if(mce_cvat == DefinitionOfLifeInsurance)
-        {
-        DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,anything_goes);
-        DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,anything_goes);
-        DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,anything_goes);
-        DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,true         );
-        DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,false        );
-        }
-    else if(mce_gpt == DefinitionOfLifeInsurance)
-        {
-        DefinitionOfMaterialChange.allow(mce_unnecessary_premium                        ,false        );
-        DefinitionOfMaterialChange.allow(mce_benefit_increase                           ,false        );
-        DefinitionOfMaterialChange.allow(mce_later_of_increase_or_unnecessary_premium   ,false        );
-        DefinitionOfMaterialChange.allow(mce_earlier_of_increase_or_unnecessary_premium ,false        );
-        DefinitionOfMaterialChange.allow(mce_adjustment_event                           ,true         );
-        }
-    else
-        {
-        fatal_error()
-            << "No option selected for definition of life insurance."
-            << LMI_FLUSH
-            ;
-        }
-#endif // 0
 
     MaximumNaar.enable(anything_goes);
 

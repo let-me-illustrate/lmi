@@ -38,6 +38,7 @@
 #include "handle_exceptions.hpp"
 #include "input.hpp"
 #include "ledgervalues.hpp"
+#include "miscellany.hpp"               // lmi_array_size()
 #include "multiple_cell_document.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "platform_dependent.hpp"       // access()
@@ -69,7 +70,7 @@ bool illustrator::operator()(fs::path const& file_path)
         {
         Timer timer;
         multiple_cell_document doc(file_path.string());
-        assert_consistent_run_order(doc.case_parms()[0], doc.cell_parms());
+        test_census_consensus(emission_, doc.case_parms()[0], doc.cell_parms());
         seconds_for_input_ = timer.stop().elapsed_seconds();
         return operator()(file_path, doc.cell_parms());
         }
@@ -236,6 +237,8 @@ Input const& default_cell()
     return user_default;
 }
 
+namespace
+{
 /// Throw if run order for any cell does not match case default.
 ///
 /// If lmi had case-only input fields, run order would be one of them.
@@ -261,6 +264,76 @@ void assert_consistent_run_order
                 << LMI_FLUSH
                 ;
             }
+        }
+}
+
+void assert_okay_to_run_group_quote
+    (Input              const& case_default
+    ,std::vector<Input> const& cells
+    )
+{
+    // There is a surjective mapping of the input fields listed here
+    // onto the members of class LedgerInvariant that are used by
+    // fill_global_report_data() in the group quote code. Whenever
+    // that function changes, this list must be maintained to conserve
+    // this relation.
+    //
+    // The "ProductName" field uniquely determines all ledger values
+    // taken from class product_data, so it maps onto them.
+    static char const*const fields[] =
+        {"ProductName"
+        ,"CorporationName"
+        ,"AgentName"
+        ,"CorporationPaymentMode"
+        ,"StateOfJurisdiction"
+        ,"EffectiveDate"
+        ,"InforceAsOfDate"
+        ,"Comments"
+        };
+    static std::size_t const n = lmi_array_size(fields);
+
+    if(case_default["InforceAsOfDate"] != case_default["EffectiveDate"])
+        {
+        fatal_error() << "Group quotes allowed for new business only." << LMI_FLUSH;
+        }
+
+    typedef std::vector<Input>::size_type svst;
+    for(svst i = 0; i != cells.size(); ++i)
+        {
+        Input const& cell = cells[i];
+        for(std::size_t j = 0; j != n; ++j)
+            {
+            char const*const field = fields[j];
+            if(case_default[field] != cell[field])
+                {
+                fatal_error()
+                    << "Input field '"
+                    << field
+                    << "': value in cell number "
+                    << 1 + i
+                    << " ("
+                    << cell[field]
+                    << ") differs from case default ("
+                    << case_default[field]
+                    << "). Make them the same before running a group quote."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        }
+}
+} // Unnamed namespace.
+
+void test_census_consensus
+    (mcenum_emission           emission
+    ,Input              const& case_default
+    ,std::vector<Input> const& cells
+    )
+{
+    assert_consistent_run_order(case_default, cells);
+    if(emission & mce_emit_group_quote)
+        {
+        assert_okay_to_run_group_quote(case_default, cells);
         }
 }
 

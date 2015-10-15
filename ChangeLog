@@ -37205,3 +37205,22 @@ Scale logo (VZ).
   group_quote_pdf_gen_wx.cpp
 Remove a needless attribute; fix the 20151011T1607Z commit message.
 
+20151015T1401Z <gchicares@sbcglobal.net> [472]
+
+  census_view.cpp
+  group_quote_pdf_gen_wx.cpp
+  illustrator.cpp
+  illustrator.hpp
+Verify census consistency before running a group quote.
+
+20151015T1403Z <gchicares@sbcglobal.net> [472]
+
+  input_harmonization.cpp
+Fix defect introduced 20130510T2251Z: assertion failure when changing
+definition of life insurance with a password never given to end users.
+
+20151015T1457Z <gchicares@sbcglobal.net> [472]
+
+  illustrator.cpp
+Restrict group quotes to new business.
+
