@@ -26,7 +26,7 @@
 
 #include "config.hpp"
 
-#include "mc_enum_type_enums.hpp" // enum mcenum_emission
+#include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
@@ -73,8 +73,11 @@ class LMI_SO illustrator
 
 Input const& LMI_SO default_cell();
 
-void LMI_SO assert_consistent_run_order
-    (Input              const& case_default
+/// Test whether census is consistent wrt emission type; throw if not.
+
+void LMI_SO test_census_consensus
+    (mcenum_emission           emission
+    ,Input              const& case_default
     ,std::vector<Input> const& cells
     );
 
