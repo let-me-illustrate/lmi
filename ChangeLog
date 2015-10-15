@@ -37219,3 +37219,8 @@ Verify census consistency before running a group quote.
 Fix defect introduced 20130510T2251Z: assertion failure when changing
 definition of life insurance with a password never given to end users.
 
+20151015T1457Z <gchicares@sbcglobal.net> [472]
+
+  illustrator.cpp
+Restrict group quotes to new business.
+
