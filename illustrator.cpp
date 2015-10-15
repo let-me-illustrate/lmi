@@ -287,9 +287,15 @@ void assert_okay_to_run_group_quote
         ,"CorporationPaymentMode"
         ,"StateOfJurisdiction"
         ,"EffectiveDate"
+        ,"InforceAsOfDate"
         ,"Comments"
         };
     static std::size_t const n = lmi_array_size(fields);
+
+    if(case_default["InforceAsOfDate"] != case_default["EffectiveDate"])
+        {
+        fatal_error() << "Group quotes allowed for new business only." << LMI_FLUSH;
+        }
 
     typedef std::vector<Input>::size_type svst;
     for(svst i = 0; i != cells.size(); ++i)
