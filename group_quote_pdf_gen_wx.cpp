@@ -35,6 +35,7 @@
 #include "force_linking.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"               // split_into_lines()
@@ -599,6 +600,11 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
 
 void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 {
+    if(0 == ledger.GetCurrFull().LapseYear)
+        {
+        fatal_error() << "Lapsed during first year." << LMI_FLUSH;
+        }
+
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
 
     // Initialize 'report_data_' the first time this function is
