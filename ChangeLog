@@ -37224,3 +37224,28 @@ definition of life insurance with a password never given to end users.
   illustrator.cpp
 Restrict group quotes to new business.
 
+20151017T1257Z <gchicares@sbcglobal.net> [472]
+
+  ledger_xml_io.cpp
+Add some missing formats.
+
+20151017T1259Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Require extra nonblank footnotes if variable.
+
+20151017T1307Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Refuse to run a group quote if any cell lapses in the first year.
+
+20151017T1313Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Widen columns to accommodate larger amounts.
+
+20151017T1323Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Add more space between logo and footnotes.
+
