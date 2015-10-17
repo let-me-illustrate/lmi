@@ -422,6 +422,7 @@ void Ledger::write(xml::element& x) const
     format_map["HasChildRider"                     ] = f1;
     format_map["HasHoneymoon"                      ] = f1;
     format_map["HasSpouseRider"                    ] = f1;
+    format_map["HasSupplSpecAmt"                   ] = f1;
     format_map["HasTerm"                           ] = f1;
     format_map["HasWP"                             ] = f1;
     format_map["InforceIsMec"                      ] = f1;
@@ -445,6 +446,8 @@ void Ledger::write(xml::element& x) const
     format_map["RetAge"                            ] = f1;
     format_map["SmokerBlended"                     ] = f1;
     format_map["SmokerDistinct"                    ] = f1;
+    format_map["SplitFundAllocation"               ] = f1;
+    format_map["SplitMinPrem"                      ] = f1;
     format_map["SpouseIssueAge"                    ] = f1;
     format_map["SupplementalReport"                ] = f1;
     format_map["UseExperienceRating"               ] = f1;
