@@ -560,9 +560,11 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     contract_state_   = invar.GetStatePostalAbbrev();
     jdn_t eff_date    = jdn_t(static_cast<int>(invar.EffDateJdn));
     effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
-    // SOMEDAY !! Suppress <br> elements preceding blank strings.
+    // Deliberately begin the footer with <br> tags, to separate it
+    // from the logo right above it.
+    // SOMEDAY !! Suppress <br> tags preceding blank strings.
     footer_           =
-                          escape_for_html_elem(invar.GroupQuoteIsNotAnOffer   )
+          "<br><br>"    + escape_for_html_elem(invar.GroupQuoteIsNotAnOffer   )
         + "<br><br>"    + escape_for_html_elem(invar.GroupQuoteRidersFooter   )
         + "<br><br>"    + escape_for_html_elem(invar.GroupQuotePolicyFormId   )
         + "<br><br>"    + escape_for_html_elem(invar.GroupQuoteStateVariations)
