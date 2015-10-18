@@ -85,12 +85,12 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
-        <label>Defaul_t\tCtrl-T</label>
+        <label>Defaul_t...\tCtrl-T</label>
         <bitmap platform="win" stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREFERENCES">
-        <label>Pre_ferences\tCtrl-F</label>
+        <label>Pre_ferences...\tCtrl-F</label>
         <bitmap platform="win" stock_id="preferences"/>
         <help>Manage preferences</help>
     </object>
@@ -137,12 +137,12 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
-        <label>Defaul_t\tCtrl-T</label>
+        <label>Defaul_t...\tCtrl-T</label>
         <bitmap platform="win" stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREFERENCES">
-        <label>Pre_ferences\tCtrl-F</label>
+        <label>Pre_ferences...\tCtrl-F</label>
         <bitmap platform="win" stock_id="preferences"/>
         <help>Manage preferences</help>
     </object>
@@ -173,12 +173,12 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
-        <label>Defaul_t\tCtrl-T</label>
+        <label>Defaul_t...\tCtrl-T</label>
         <bitmap platform="win" stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREFERENCES">
-        <label>Pre_ferences\tCtrl-F</label>
+        <label>Pre_ferences...\tCtrl-F</label>
         <bitmap platform="win" stock_id="preferences"/>
         <help>Manage preferences</help>
     </object>
@@ -291,7 +291,7 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_ABOUT">
-        <label>_About...</label>
+        <label>_About</label>
         <bitmap platform="win" stock_id="about"/>
         <help>Read copyright and license</help>
     </object>
