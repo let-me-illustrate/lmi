@@ -37249,3 +37249,29 @@ Widen columns to accommodate larger amounts.
   group_quote_pdf_gen_wx.cpp
 Add more space between logo and footnotes.
 
+20151018T1611Z <gchicares@sbcglobal.net> [472]
+
+  menu_commands.html
+Assimilate documentation to actual menus.
+
+20151018T1612Z <gchicares@sbcglobal.net> [472]
+
+  menus.xrc
+Refactor.
+
+20151018T1621Z <gchicares@sbcglobal.net> [472]
+
+  menu_commands.html
+  menus.xrc
+Improve ellipsis usage.
+
+20151019T0224Z <gchicares@sbcglobal.net> [472]
+
+  menus.xrc
+Further improve ellipsis usage.
+
+20151019T0226Z <gchicares@sbcglobal.net> [472]
+
+  menu_commands.html
+Update list of census commands.
+
