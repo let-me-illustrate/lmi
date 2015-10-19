@@ -313,17 +313,17 @@
 <object class="wxMenu" name="census_menu_ref">
     <label>_Census</label>
     <object class="wxMenuItem" name="edit_cell">
-        <label>_Edit cell\tCtrl-E</label>
+        <label>_Edit cell...\tCtrl-E</label>
         <bitmap platform="win" stock_id="edit-cell"/>
         <help>Edit selected cell</help>
     </object>
     <object class="wxMenuItem" name="edit_class">
-        <label>Edit class defaults\tCtrl-Alt-E</label>
+        <label>Edit class defaults...\tCtrl-Alt-E</label>
         <bitmap platform="win" stock_id="edit-class"/>
         <help>Edit selected cell's class defaults</help>
     </object>
     <object class="wxMenuItem" name="edit_case">
-        <label>Edit case defaults\tCtrl-Shift-E</label>
+        <label>Edit case defaults...\tCtrl-Shift-E</label>
         <bitmap platform="win" stock_id="edit-case"/>
         <help>Edit case defaults</help>
     </object>
@@ -421,7 +421,7 @@
     <object class="wxMenu" name="illustration_menu">
         <label>_Illustration</label>
         <object class="wxMenuItem" name="edit_cell">
-            <label>_Edit cell\tCtrl-E</label>
+            <label>_Edit cell...\tCtrl-E</label>
             <bitmap platform="win" stock_id="edit-cell"/>
             <help>Edit this cell</help>
         </object>
@@ -537,7 +537,7 @@
     <object class="wxMenu" name="mec_menu">
         <label>_MEC</label>
         <object class="wxMenuItem" name="edit_cell">
-            <label>_Edit\tCtrl-E</label>
+            <label>_Edit...\tCtrl-E</label>
             <bitmap platform="win" stock_id="edit-cell"/>
             <help>Edit this file</help>
         </object>
@@ -557,7 +557,7 @@
     <object class="wxMenu" name="gpt_menu">
         <label>_GPT</label>
         <object class="wxMenuItem" name="edit_cell">
-            <label>_Edit\tCtrl-E</label>
+            <label>_Edit...\tCtrl-E</label>
             <bitmap platform="win" stock_id="edit-cell"/>
             <help>Edit this file</help>
         </object>
