@@ -149,7 +149,7 @@
     </object>
     <object class="separator"/>
     <object class="tool" name="wxID_HELP">
-        <tooltip>Help</tooltip>
+        <tooltip>User manual</tooltip>
         <bitmap stock_id="wxART_HELP"/>
         <longhelp>Browse user manual</longhelp>
     </object>
