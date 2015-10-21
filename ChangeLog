@@ -37275,3 +37275,40 @@ Further improve ellipsis usage.
   menu_commands.html
 Update list of census commands.
 
+20151020T2105Z <gchicares@sbcglobal.net> [472]
+
+  census_view.cpp
+  census_view.hpp
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  menus.xrc
+  skeleton.cpp
+  toolbar.xrc
+Redesign group-quote GUI.
+
+20151021T1403Z <gchicares@sbcglobal.net> [472]
+
+  toolbar.xrc
+Assimilate toolbar to menus.
+
+20151021T1405Z <gchicares@sbcglobal.net> [472]
+
+  menus.xrc
+Further improve ellipsis usage.
+
+20151021T1406Z <gchicares@sbcglobal.net> [472]
+
+  census_view.cpp
+Improve documentation.
+
+20151021T1407Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Widen first column to accommodate larger censuses.
+
+20151021T1411Z <gchicares@sbcglobal.net> [472]
+
+  version.hpp
+Designate release candidate 6371.
+
