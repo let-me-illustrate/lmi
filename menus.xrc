@@ -37,7 +37,7 @@
 <object class="wxMenu" name="file_menu_with_print_ref">
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
-        <label>_New\tCtrl-N</label>
+        <label>_New...\tCtrl-N</label>
         <bitmap platform="win" stock_id="wxART_NEW"/>
         <help>Create a new document</help>
     </object>
@@ -64,7 +64,7 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_PRINT">
-        <label>_Print...\tCtrl-P</label>
+        <label>_Print\tCtrl-P</label>
         <bitmap platform="win" stock_id="wxART_PRINT"/>
         <help>Print this document</help>
     </object>
@@ -110,7 +110,7 @@
 <object class="wxMenu" name="file_menu_without_print_ref">
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
-        <label>_New\tCtrl-N</label>
+        <label>_New...\tCtrl-N</label>
         <bitmap platform="win" stock_id="wxART_NEW"/>
         <help>Create a new document</help>
     </object>
@@ -162,7 +162,7 @@
 <object class="wxMenu" name="file_menu_without_child_ref">
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
-        <label>_New\tCtrl-N</label>
+        <label>_New...\tCtrl-N</label>
         <bitmap platform="win" stock_id="wxART_NEW"/>
         <help>Create a new document</help>
     </object>
@@ -362,7 +362,7 @@
         <help>Run and print all cells to a spreadsheet file</help>
     </object>
     <object class="wxMenuItem" name="print_group_roster">
-        <label>Print group r_oster\tCtrl-Shift-O</label>
+        <label>Print group r_oster...\tCtrl-Shift-O</label>
         <bitmap platform="win" stock_id="roster"/>
         <help>Run and print all cells to a group roster</help>
     </object>
