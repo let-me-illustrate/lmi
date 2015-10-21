@@ -366,7 +366,7 @@ struct column_definition
 };
 
 column_definition const column_definitions[] =
-    {{"Part#"                          ,             "9999"   }
+    {{"Part#"                          ,            "99999"   }
     ,{"Participant"                    ,                 ""   }
     ,{"Issue Age"                      ,              "999"   }
     ,{"Date of Birth"                  ,       "9999-99-99"   }
