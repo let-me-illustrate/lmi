@@ -1554,6 +1554,9 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 void CensusView::UponRunCaseToGroupRoster(wxCommandEvent&)
 {
     wxArrayString strings;
+    // Make sure ampersands don't look like references, e.g., in a
+    // string such as "premium quote" with an ampersand preceding 'q',
+    // which 'make check_concinnity' rejects.
     strings.Add("Print r&oster to spreadsheet");
     strings.Add("Print group premium ""&quote to PDF");
     int const selection = SingleChoicePopupMenu(strings).Choose();
