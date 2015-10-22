@@ -37312,3 +37312,18 @@ Widen first column to accommodate larger censuses.
   version.hpp
 Designate release candidate 6371.
 
+20151022T1732Z <gchicares@sbcglobal.net> [472]
+
+  mc_enum_types_aux.hpp
+Add a visibility attribute to a free function.
+
+20151022T1733Z <gchicares@sbcglobal.net> [472]
+
+  menu_commands.html
+Assimilate documentation to latest menu.
+
+20151022T1734Z <gchicares@sbcglobal.net> [472]
+
+  group_tutorial.html
+Discuss recently-added commands.
+
