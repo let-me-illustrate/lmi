@@ -55,7 +55,7 @@ mcenum_dbopt_7702 effective_dbopt_7702
     ,mcenum_dbopt_7702 rop_equivalent
     );
 
-bool is_subject_to_ill_reg(mcenum_ledger_type);
+bool LMI_SO is_subject_to_ill_reg(mcenum_ledger_type);
 
 bool is_three_rate_nasd(mcenum_ledger_type);
 
