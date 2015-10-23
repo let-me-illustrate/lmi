@@ -657,7 +657,11 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_salary:
                 {
-                rd.values[col] = '$' + ledger_format(invar.Salary.at(year), f0);
+                // Blank if zero.
+                if(0.0 != invar.Salary.at(year))
+                    {
+                    rd.values[col] = '$' + ledger_format(invar.Salary.at(year), f0);
+                    }
                 }
                 break;
             case e_col_face_amount:
