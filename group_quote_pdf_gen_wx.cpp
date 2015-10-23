@@ -662,7 +662,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_face_amount:
                 {
-                double const z = invar.SpecAmt.at(year);
+                double const z = invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year);
                 rd.values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
