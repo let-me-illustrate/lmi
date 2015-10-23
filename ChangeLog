@@ -37332,3 +37332,18 @@ Discuss recently-added commands.
   ledger_xml_io.cpp
 Warn about missing formats.
 
+20151023T1618Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Include supplemental specified amount in "Face Amount".
+
+20151023T1621Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Leave "Income" blank if it is given as zero.
+
+20151023T1623Z <gchicares@sbcglobal.net> [472]
+
+  version.hpp
+Designate release candidate 6379.
+
