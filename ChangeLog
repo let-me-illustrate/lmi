@@ -37327,3 +37327,8 @@ Assimilate documentation to latest menu.
   group_tutorial.html
 Discuss recently-added commands.
 
+20151023T1202Z <gchicares@sbcglobal.net> [472]
+
+  ledger_xml_io.cpp
+Warn about missing formats.
+
