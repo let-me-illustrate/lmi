@@ -37347,3 +37347,27 @@ Leave "Income" blank if it is given as zero.
   version.hpp
 Designate release candidate 6379.
 
+20151029T1624Z <gchicares@sbcglobal.net> [472]
+
+  multiple_cell_document.hpp
+Improve documentation.
+
+20151030T0039Z <gchicares@sbcglobal.net> [472]
+
+  dbnames.xpp
+  ledger.cpp
+  ledger_xsl.cpp
+  mc_enum_types.xpp
+  reg_d_offshore.xsl [expunged]
+Eradicate disused offshore private-placement ledger type.
+
+20151030T0040Z <gchicares@sbcglobal.net> [472]
+
+  fo_common.xsl
+  illustration_reg.xsl
+  nasd.xsl
+  reg_d_group.xsl
+  reg_d_individual.xsl
+  variable_annuity.xsl
+Fix spelling errors.
+

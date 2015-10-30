@@ -67,7 +67,7 @@
 
   In such a case inside the loop the root node '/' binds to the root node
   of that external document and we cannot use '/illustration' no longer
-  to acces our current xml data.
+  to access our current xml data.
   Use the global variable '$illustration' to access the data.
   -->
   <xsl:variable name="illustration" select="/illustration"/>
@@ -229,9 +229,9 @@
   <!--
     Print Dollar Units
     This template is common to all the illustration xsl templates.
-    Originally it has appeared in files with minor differencies such as:
+    Originally it has appeared in files with minor differences such as:
       * explicitly specified text alignment, font size or not specified;
-      * paranteses added around the text or omitted;
+      * parentheses added around the text or omitted;
       * an extra space added just before the text.
   -->
   <xsl:template name="dollar-units">
@@ -406,8 +406,8 @@
   </xsl:template>
 
   <!--
-  A generic template that generates a data-table header rows.
-  Simlpy calls 'generate-table-header-row' with initial values.
+  A generic template that generates data-table header rows.
+  Simply calls 'generate-table-header-row' with initial values.
   Additionally adds a blank header row separating the header cells from
   value cells.
   -->
@@ -437,10 +437,10 @@
   </xsl:template>
 
   <!--
-  Output data table header row and recursivly call itself until all rows
-  are produces.
+  Output data table header row and recursively call itself until all rows
+  are produced.
   Table header rows are printed using 'generate-table-header-cell' which
-  does merging of the header-cells when the adjucent cells have the same text.
+  does merging of the header-cells when the adjacent cells have the same text.
   See 'generate-table-header-cell' description for an explanation.
   -->
   <xsl:template name="generate-table-header-row">
@@ -467,7 +467,7 @@
   </xsl:template>
 
   <!--
-  Output cell text (and recursivly continue).
+  Output cell text (and recursively continue).
   The main complexity comes from rendering the common header cell prefix
   spawned over multiple columns. Example:
     <column>Policy |Year</column>
@@ -591,7 +591,7 @@
   </xsl:template>
 
   <!--
-  A single character that indicates that a column title has to be splitted
+  A single character that indicates that a column title has to be split
   in this place into two separate lines.
   For example if a column has title 'Policy _Year', then the output file
   will contain:
@@ -791,7 +791,7 @@
               </xsl:choose>
             </xsl:variable>
             <xsl:variable name="prepared-for" select="normalize-space($prepared-for-raw)"/>
-            <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
+            <!-- Properly adjust for long user input strings: limit output to 140 characters for approximately two lines. -->
             <xsl:call-template name="limitstring">
               <xsl:with-param name="passString" select="$prepared-for"/>
               <xsl:with-param name="length" select="140"/>

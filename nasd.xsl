@@ -123,7 +123,7 @@
         </xsl:if>
       </fo:layout-master-set>
 
-      <!-- The data to be diplayed in the pages, cover page first -->
+      <!-- The data to be displayed in the pages, cover page first. -->
       <xsl:call-template name="generic-cover"/>
 
       <!-- Basic Illustration -->
@@ -571,8 +571,8 @@
               </xsl:if>
               <xsl:if test="$scalars/CustomFund='1'">
                 <fo:block padding-top="1em">
-                  Investment management fees are based on an inital allocation
-                  of 100% of a custom fund selected by the purchaser.
+                  Investment management fees are based on an initial allocation
+                  of 100% to a custom fund selected by the purchaser.
                 </fo:block>
               </xsl:if>
             </xsl:if>
