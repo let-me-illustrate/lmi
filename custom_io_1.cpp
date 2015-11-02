@@ -32,6 +32,7 @@
 #include "calendar_date.hpp"
 #include "configurable_settings.hpp"
 #include "et_vector.hpp"
+#include "global_settings.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -290,7 +291,14 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     if("X" == AutoClose)
         {
         z["Comments"] = "Automatically generated from custom input.";
-        std::ofstream ofs("custom_io_1.ill", ios_out_trunc_binary());
+        // Add ".ill.test1" to prevent regression test from treating
+        // this generated file as a testdeck.
+        std::string f =
+              global_settings::instance().regression_testing()
+            ? actual_filename + ".ill.test1"
+            : "custom_io_1.ill"
+            ;
+        std::ofstream ofs(f.c_str(), ios_out_trunc_binary());
         single_cell_document(z).write(ofs);
         }
 
