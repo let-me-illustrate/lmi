@@ -286,7 +286,7 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     z["AgentPhone"                 ] = AgentPhone;
     z["AgentId"                    ] = AgentLicense;
 
-    z = Input::magically_rectify(z);
+    z = Input::consummate(z);
 
     // For internal testing only, if "AutoClose" has this special
     // value, then write input in lmi's usual format.

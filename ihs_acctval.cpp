@@ -37,7 +37,7 @@
 #include "death_benefits.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "input.hpp"                    // magically_rectify()
+#include "input.hpp"                    // consummate()
 #include "interest_rates.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -92,7 +92,7 @@ showing {accesses, modifies current year, modifies future years}
 
 //============================================================================
 AccountValue::AccountValue(Input const& input)
-    :BasicValues           (Input::magically_rectify(input))
+    :BasicValues           (Input::consummate(input))
     ,DebugFilename         ("anonymous.monthly_trace")
     ,Debugging             (false)
     ,Solving               (mce_solve_none != BasicValues::yare_input_.SolveType)
