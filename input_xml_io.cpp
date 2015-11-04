@@ -572,7 +572,8 @@ void Input::redintegrate_ex_post
         // Function must_overwrite_specamt_with_obsolete_history(),
         // called below, requires 'InforceYear' and 'InforceMonth',
         // which some "deficient" extracts omit. DoTransmogrify()
-        // sets those members downstream, but the "obsolete history"
+        // sets those members downstream (at least before any
+        // illustration is produced), but the "obsolete history"
         // function needs them now. This requires version 5, which
         // introduced 'InforceAsOfDate'; no "deficient" extract
         // should have an earlier version.
