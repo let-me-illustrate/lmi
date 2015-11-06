@@ -31,10 +31,11 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
+#include "global_settings.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "map_lookup.hpp"
-#include "mc_enum_types_aux.hpp" // mc_str()
+#include "mc_enum_types_aux.hpp"        // mc_str()
 
 #include <algorithm>
 #include <ostream>
@@ -563,7 +564,8 @@ std::string reason_to_interdict(Ledger const& z)
         {
         return "Illustrations are forbidden for this policy form.";
         }
-    else if(z.no_can_issue()) // Don't even think about it, say no go.
+    // Don't even think about it, say no go.
+    else if(z.no_can_issue() && !global_settings::instance().regression_testing())
         {
         return "New-business illustrations are forbidden for this policy form.";
         }
