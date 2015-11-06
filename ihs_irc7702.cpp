@@ -714,12 +714,16 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 }
 
 /// For illustrations, we can't initialize everything in the ctor.
+///
 /// For instance, specamt might need to be calculated as a function
 /// of GLP or GSP, so it cannot always be known before the GPT
 /// calculations are available; and guideline premiums cannot be
 /// determined until specamt is set. Therefore, we need this function
 /// to initialize these things after specamt has been set. The server
 /// doesn't use it.
+///
+/// Furthermore, cumulative values must be reinitialized between solve
+/// iterations, and this function is the right place to do that.
 
 void Irc7702::Initialize7702
     (double            a_BftAmt
@@ -762,6 +766,9 @@ void Irc7702::Initialize7702
             ,LeastBftAmtEver
             );
         PriorGSP = PresentGSP;
+        CumGLP     = 0.0;
+        GptLimit   = std::max(CumGLP, PresentGSP);
+        CumPmts    = 0.0;
         }
     else
         {

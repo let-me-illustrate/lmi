@@ -37371,3 +37371,51 @@ Eradicate disused offshore private-placement ledger type.
   variable_annuity.xsl
 Fix spelling errors.
 
+20151102T2345Z <gchicares@sbcglobal.net> [472]
+
+  custom_io_1.cpp
+Stem cell proliferation in regression testing.
+
+20151102T2351Z <gchicares@sbcglobal.net> [472]
+
+  gpt_input.cpp
+  mec_input.cpp
+Propagate the 20150723T0941Z change to parallel code.
+
+20151104T0416Z <gchicares@sbcglobal.net> [472]
+
+  custom_io_1.cpp
+Reconcile generated input file before writing it.
+
+20151104T0510Z <gchicares@sbcglobal.net> [471]
+
+  accountvalue.cpp
+  custom_io_1.cpp
+  ihs_acctval.cpp
+  input.cpp
+  input.hpp
+Rename a function, explaining away what had seemed to be magic.
+
+20151104T1016Z <gchicares@sbcglobal.net> [471]
+
+  input_xml_io.cpp
+Improve documentation.
+
+20151106T1911Z <gchicares@sbcglobal.net> [471]
+
+  input_harmonization.cpp
+Assert certain invariants.
+
+20151106T2118Z <gchicares@sbcglobal.net> [471]
+
+  ledger.cpp
+Permit regression tests for withdrawn products.
+
+20151106T2205Z <gchicares@sbcglobal.net> [471]
+
+  ihs_irc7702.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: cumulative GLP and cumulative 'premiums paid' weren't
+reinitialized where needed, causing their values to become enormous
+after multiple solve iterations.
+
