@@ -444,6 +444,8 @@ void Irc7702A::Update1035Exch7702A
     else
         {
         // For illustrations, allow 1035 only at issue
+        // TAXATION !! Wrong for a contract in force one day. When this is
+        // reimplemented, use 'effective date == inforce date' instead.
         LMI_ASSERT(0 == PolicyYear && 0 == PolicyMonth);
         Bfts[TestPeriodDur] = a_Bft;
 
@@ -1226,6 +1228,8 @@ void Irc7702A::Determine7PP
 // TODO ?? TAXATION !! expunge
 //        LMI_ASSERT
 //            (   a_TriggeredByBftDecrease
+// TAXATION !! Wrong for a contract in force one day. When this is
+// reimplemented, use 'effective date == inforce date' instead.
 //            ||  (0 == PolicyYear && 0 == PolicyMonth)
 //            );
         // When recalculating premium due to a death benefit decrease,
@@ -1233,6 +1237,8 @@ void Irc7702A::Determine7PP
         //  Saved7PPRate, SavedAVBeforeMatChg, SavedNecPrem, and SavedNSP
         // at the last material change. When initializing, those variables
         // should have their proper initial values.
+        // TAXATION !! Wrong for a contract in force one day. When this is
+        // reimplemented, use 'effective date == inforce date' instead.
         if(0 == PolicyYear && 0 == PolicyMonth)
             {
 //          LMI_ASSERT(0.0                == SavedAVBeforeMatChg);
@@ -1252,12 +1258,17 @@ void Irc7702A::Determine7PP
             LMI_ASSERT(materially_equal(NSPVec[0], SavedNSP));
             }
 /* TODO ?? TAXATION !! Expunge this perhaps. Not sure what we should do if someone
-tries running an inforce case as of month 0, year 0.
+tries running an inforce case as of month 0, year 0. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
+and
+  http://svn.savannah.nongnu.org/viewvc/lmi/trunk/input_harmonization.cpp?root=lmi&r1=6354&r2=6391&diff_format=c
         // In either of these two cases--initialization or Bfts reduction--the
         // a_AVBeforeMatChg and a_NecPrem arguments are not used, so give a
         // warning if they were nonzero.
 //        if
 //            (   a_TriggeredByBftDecrease
+// TAXATION !! Wrong for a contract in force one day. When this is
+// reimplemented, use 'effective date == inforce date' instead.
 //            ||  (0 == PolicyYear && 0 == PolicyMonth)
 //            )
 //            {
