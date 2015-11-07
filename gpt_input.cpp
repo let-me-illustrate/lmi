@@ -429,7 +429,7 @@ void gpt_input::DoHarmonize()
         );
 
     double maximum_1035 =
-          InforceAsOfDate == EffectiveDate
+          EffectiveDate == InforceAsOfDate
         ? std::numeric_limits<double>::max()
         : 0.0
         ;
@@ -451,7 +451,7 @@ void gpt_input::DoHarmonize()
     bool non_mec = mce_no == InforceIsMec;
 
     double maximum_7702A_csv_at_issue =
-          InforceAsOfDate == EffectiveDate
+          EffectiveDate == InforceAsOfDate
         ? 0.0
         : std::numeric_limits<double>::max()
         ;
