@@ -79,7 +79,7 @@ Ledger::Ledger
     ,is_composite_         (is_composite)
     ,composite_lapse_year_ (0.0)
     ,ledger_map_           (new ledger_map_holder)
-    ,ledger_invariant_     (new LedgerInvariant)
+    ,ledger_invariant_     (new LedgerInvariant(length))
 {
     SetRunBases(length);
 }

@@ -686,22 +686,16 @@ census_run_result run_census::operator()
 {
     census_run_result result;
 
-    // Use 100 as the presumptive maximum composite length, assuming
-    // that issue age 0 and endowment age 100 is the worst case. Class
-    // Ledger takes length as a constructor argument, but the true
-    // length is inconvenient to determine here--in particular, when
-    // running life by life, individual cells have not yet been
-    // initialized. The minimum age could be determined by inspecting
-    // all cells' input parameters, but the age at endowment would
-    // require a database lookup for each cell, which would probably
-    // cost more than the overhead of carrying superfluous durations
-    // in the composite ledger. OTOH, doing that (perhaps in class
-    // multiple_cell_document) might not be noticeably slow; and it
-    // may be the best way if coverage beyond age 100 is to be
-    // illustrated someday without any presumptively fixed maximum.
+    // 0 is wanted here; 100 prevents system-testing changes for the nonce.
+    int composite_length = 100;
+    typedef std::vector<Input>::const_iterator svii;
+    for(svii i = cells.begin(); i != cells.end(); ++i)
+        {
+        composite_length = std::max(composite_length, i->years_to_maturity());
+        }
     composite_.reset
         (new Ledger
-            (100
+            (composite_length
             ,cells[0].ledger_type()
             ,false
             ,false
@@ -747,7 +741,7 @@ census_run_result run_census::operator()
         }
 
     // Indicate cancellation on the statusbar. This may be of little
-    // importance to end users, yet quite helpful for testing.
+    // importance to end users, but is quite helpful for testing.
     //
     // It might seem like a good idea to write this statusbar message
     // in progress_meter::culminate(), but that function is bypassed

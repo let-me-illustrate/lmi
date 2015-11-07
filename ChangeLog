@@ -37456,3 +37456,12 @@ Plan to regularize idioms to distinguish new business from inforce.
   input_xml_io.cpp
 Improve documentation.
 
+20151107T2110Z <gchicares@sbcglobal.net> [468]
+
+  group_values.cpp
+  ledger.cpp
+  ledger_invariant.hpp
+  ledger_variant.hpp
+Refactor, temporarily preserving excessive composite length. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-10/msg00005.html
+
