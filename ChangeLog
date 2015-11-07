@@ -37419,3 +37419,40 @@ the lmi epoch: cumulative GLP and cumulative 'premiums paid' weren't
 reinitialized where needed, causing their values to become enormous
 after multiple solve iterations.
 
+20151107T1322Z <gchicares@sbcglobal.net> [471]
+
+  input_harmonization.cpp
+Improve documentation.
+
+20151107T1341Z <gchicares@sbcglobal.net> [471]
+
+  gpt_input.cpp
+  illustrator.cpp
+  mec_input.cpp
+Regularize idioms to distinguish new business from inforce.
+
+20151107T1342Z <gchicares@sbcglobal.net> [471]
+
+  basicvalues.cpp
+  ihs_basicval.cpp
+Regularize idioms to distinguish new business from inforce.
+
+20151107T1344Z <gchicares@sbcglobal.net> [471]
+
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+  ihs_server7702.cpp
+  ledger_invariant.cpp
+Regularize idioms to distinguish new business from inforce.
+
+20151107T1346Z <gchicares@sbcglobal.net> [470]
+
+  ihs_irc7702.cpp
+  ihs_irc7702a.cpp
+Plan to regularize idioms to distinguish new business from inforce.
+
+20151107T1347Z <gchicares@sbcglobal.net> [470]
+
+  input_xml_io.cpp
+Improve documentation.
+

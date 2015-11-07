@@ -577,6 +577,9 @@ void Input::redintegrate_ex_post
         // function needs them now. This requires version 5, which
         // introduced 'InforceAsOfDate'; no "deficient" extract
         // should have an earlier version.
+        //
+        // set_inforce_durations_from_dates() does the same and more;
+        // but, because it does more, it can't simply be called here.
         if(deficient_extract && EffectiveDate.value() != InforceAsOfDate.value())
             {
             LMI_ASSERT(4 < file_version);
@@ -590,6 +593,10 @@ void Input::redintegrate_ex_post
         // Requiring 'deficient_extract' here wouldn't be right,
         // because an extract file that has been modified and saved
         // is no longer detectably "deficient".
+        //
+        // This idiom for distinguishing inforce from new business is
+        // avoided in new code, but retained in backward-compatibility
+        // code that, by its nature, should rarely be modernized.
         if(0 != InforceYear || 0 != InforceMonth)
             {
             if
