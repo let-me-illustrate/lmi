@@ -1087,10 +1087,10 @@ void Input::set_solve_durations()
 /// next monthiversary is credited, as one combined atomic operation.
 /// Therefore, any inforce data must be given as of a monthiversary
 /// date, after interest has been credited for the month just ending,
-/// and immediately before a monthiversary deduction. (Admin systems
+/// and immediately before the monthiversary deduction. (Admin systems
 /// might reckon this point to occur one second after midnight on a
 /// monthiversary date, or one second before midnight on the preceding
-/// day, but the InforceAsOfDate they provide to lmi must follow lmi's
+/// day; but the InforceAsOfDate they provide to lmi must follow lmi's
 /// reckoning: it must be the monthiversary date.)
 ///
 /// Preconditions: Neither EffectiveDate nor LastMaterialChangeDate
@@ -1112,7 +1112,7 @@ void Input::set_solve_durations()
 /// because of the quantization of illustration time, so inforce year
 /// and inforce month cannot both equal zero. An exception is thrown
 /// if this postcondition is violated because new business and inforce
-/// illustrations differ categorically: they regulated differently,
+/// illustrations differ categorically: they're regulated differently,
 /// and they're calculated differently (e.g., input inforce values
 /// must be taken into account for inforce, but disregarded (or
 /// asserted to be zero) for new business).
