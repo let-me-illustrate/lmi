@@ -484,10 +484,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     InvariantValues().InforceMonth = yare_input_.InforceMonth;
 
     bool inforce_is_mec =
-           (
-              0 != yare_input_.InforceYear
-           || 0 != yare_input_.InforceMonth
-           )
+           yare_input_.EffectiveDate != yare_input_.InforceAsOfDate
         && yare_input_.InforceIsMec
         ;
     InvariantValues().InforceIsMec = inforce_is_mec;
@@ -506,7 +503,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         }
     std::vector<double> pmts_7702a;
     std::vector<double> bfts_7702a;
-    if(0 == InforceYear && 0 == InforceMonth)
+    if(yare_input_.EffectiveDate == yare_input_.InforceAsOfDate)
         {
         // No need to initialize 'pmts_7702a' in this case.
         bfts_7702a.push_back
@@ -529,7 +526,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         bfts_7702a = std::vector<double>(length_7702a, yare_input_.InforceLeastDeathBenefit);
         }
     double lowest_death_benefit = yare_input_.InforceLeastDeathBenefit;
-    if(0 == InforceYear && 0 == InforceMonth)
+    if(yare_input_.EffectiveDate == yare_input_.InforceAsOfDate)
         {
         lowest_death_benefit = bfts_7702a.front(); // TAXATION !! See above--use input LDB instead.
         }
