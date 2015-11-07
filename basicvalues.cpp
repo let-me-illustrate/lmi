@@ -121,8 +121,8 @@ void BasicValues::Init()
         ;
     nonillustrated_       = static_cast<bool>(Database_->Query(DB_Nonillustrated));
     bool no_longer_issued = static_cast<bool>(Database_->Query(DB_NoLongerIssued));
-    bool is_inforce       = yare_input_.EffectiveDate < yare_input_.InforceAsOfDate;
-    no_can_issue_         = no_longer_issued && !is_inforce;
+    bool is_new_business  = yare_input_.EffectiveDate == yare_input_.InforceAsOfDate;
+    no_can_issue_         = no_longer_issued && is_new_business;
     IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(ledger_type());
 
     // IHS !! Just a dummy initialization here--implemented in lmi.
