@@ -686,8 +686,7 @@ census_run_result run_census::operator()
 {
     census_run_result result;
 
-    // 0 is wanted here; 100 prevents system-testing changes for the nonce.
-    int composite_length = 100;
+    int composite_length = 0;
     typedef std::vector<Input>::const_iterator svii;
     for(svii i = cells.begin(); i != cells.end(); ++i)
         {
