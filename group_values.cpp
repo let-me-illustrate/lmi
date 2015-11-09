@@ -690,8 +690,13 @@ census_run_result run_census::operator()
     typedef std::vector<Input>::const_iterator svii;
     for(svii i = cells.begin(); i != cells.end(); ++i)
         {
-        composite_length = std::max(composite_length, i->years_to_maturity());
+        if(!cell_should_be_ignored(*i))
+            {
+            composite_length = std::max(composite_length, i->years_to_maturity());
+            }
         }
+    // If cell_should_be_ignored() is true for all cells, composite
+    // length is appropriately zero.
     composite_.reset
         (new Ledger
             (composite_length
