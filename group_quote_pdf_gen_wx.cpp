@@ -110,7 +110,7 @@ namespace tag
 struct b;
 struct br;
 
-} // tag namespace
+} // namespace tag
 
 template<typename T>
 struct tag_info;
@@ -129,7 +129,7 @@ struct tag_info<tag::br>
     static bool has_end() { return false; }
 };
 
-} // html namespace
+} // namespace html
 
 /// Wrap the given text in an HTML tag if it is not empty, otherwise just
 /// return an empty string.
@@ -144,17 +144,40 @@ wxString wrap_if_not_empty(wxString const& html)
     wxString result;
     if(!html.empty())
         {
-        result
-            << '<' << html::tag_info<T>::get_name() << '>'
-            << html;
+        result << '<' << html::tag_info<T>::get_name() << '>' << html;
         if(html::tag_info<T>::has_end())
             {
-            result
-                << "</" << html::tag_info<T>::get_name() << '>';
+            result << "</" << html::tag_info<T>::get_name() << '>';
             }
         }
 
     return result;
+}
+
+/// Transform 'html' -> '<br><br>html', but return empty string unchanged.
+
+wxString brbr(wxString const& html)
+{
+    return
+        wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (escape_for_html_elem(html)
+                )
+            );
+}
+
+/// Transform 'html' -> '<br><br><b>html</b>', but return empty string unchanged.
+
+wxString brbrb(wxString const& html)
+{
+    return
+        wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (wrap_if_not_empty<html::tag::b>
+                    (escape_for_html_elem(html)
+                    )
+                )
+            );
 }
 
 /// Generate HTML representation of a field name and value in an HTML table and
@@ -621,51 +644,16 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     jdn_t eff_date    = jdn_t(static_cast<int>(invar.EffDateJdn));
     effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
     // Deliberately begin the footer with <br> tags, to separate it
-    // from the logo right above it, but don't use these tags if the footer is
-    // empty.
-    footer_           =
-          wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (escape_for_html_elem(invar.GroupQuoteIsNotAnOffer)
-                )
-            )
-        + wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (escape_for_html_elem(invar.GroupQuoteRidersFooter)
-                )
-            )
-        + wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (escape_for_html_elem(invar.GroupQuotePolicyFormId)
-                )
-            )
-        + wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (escape_for_html_elem(invar.GroupQuoteStateVariations)
-                )
-            )
-        + wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (escape_for_html_elem(invar.MarketingNameFootnote)
-                )
-            )
-        + wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (wrap_if_not_empty<html::tag::b>
-                    (escape_for_html_elem(invar.GroupQuoteProspectus)
-                    )
-                )
-            )
-        + wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (escape_for_html_elem(invar.GroupQuoteUnderwriter)
-                )
-            )
-        + wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (escape_for_html_elem(invar.GroupQuoteBrokerDealer)
-                )
-            )
+    // from the logo right above it.
+    footer_ =
+          brbr (invar.GroupQuoteIsNotAnOffer)
+        + brbr (invar.GroupQuoteRidersFooter)
+        + brbr (invar.GroupQuotePolicyFormId)
+        + brbr (invar.GroupQuoteStateVariations)
+        + brbr (invar.MarketingNameFootnote)
+        + brbrb(invar.GroupQuoteProspectus)
+        + brbr (invar.GroupQuoteUnderwriter)
+        + brbr (invar.GroupQuoteBrokerDealer)
         ;
 
     assert_nonblank(company_         , "Sponsor");
