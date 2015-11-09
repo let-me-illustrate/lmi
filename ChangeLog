@@ -37481,3 +37481,14 @@ Refine ideal composite length.
 Set composite "age" to that of youngest included cell. See:
   http://lists.nongnu.org/archive/html/lmi/2015-11/msg00008.html
 
+20151109T1410Z <gchicares@sbcglobal.net> [468]
+
+  group_quote_pdf_gen_wx.cpp
+Avoid writing <br> before empty footnotes (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-11/msg00007.html
+
+20151109T1424Z <gchicares@sbcglobal.net> [468]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for concision.
+
