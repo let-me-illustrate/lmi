@@ -37465,3 +37465,19 @@ Improve documentation.
 Refactor, temporarily preserving excessive composite length. See:
   http://lists.nongnu.org/archive/html/lmi/2015-10/msg00005.html
 
+20151108T1257Z <gchicares@sbcglobal.net> [468]
+
+  group_values.cpp
+Use ideal composite length.
+
+20151109T0007Z <gchicares@sbcglobal.net> [468]
+
+  group_values.cpp
+Refine ideal composite length.
+
+20151109T0009Z <gchicares@sbcglobal.net> [468]
+
+  ledger_invariant.cpp
+Set composite "age" to that of youngest included cell. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-11/msg00008.html
+
