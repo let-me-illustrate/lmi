@@ -94,6 +94,69 @@ wxString escape_for_html_elem(std::string const& s)
     return z;
 }
 
+/// Namespace for helpers used for HTML generation.
+
+namespace html
+{
+
+/// Namespace for the support HTML tags.
+///
+/// Tags are only used as template arguments, so they don't need to be defined,
+/// just declared -- and tag_info below specialized for them.
+
+namespace tag
+{
+
+struct b;
+struct br;
+
+} // tag namespace
+
+template<typename T>
+struct tag_info;
+
+template<>
+struct tag_info<tag::b>
+{
+    static char const* get_name() { return "b"; }
+    static bool has_end() { return true; }
+};
+
+template<>
+struct tag_info<tag::br>
+{
+    static char const* get_name() { return "br"; }
+    static bool has_end() { return false; }
+};
+
+} // html namespace
+
+/// Wrap the given text in an HTML tag if it is not empty, otherwise just
+/// return an empty string.
+///
+/// For the tags without matching closing tags, such as e.g. "<br>", wrapping
+/// the text means just prepending the tag to it. This is still done only if
+/// the text is not empty.
+
+template<typename T>
+wxString wrap_if_not_empty(wxString const& html)
+{
+    wxString result;
+    if(!html.empty())
+        {
+        result
+            << '<' << html::tag_info<T>::get_name() << '>'
+            << html;
+        if(html::tag_info<T>::has_end())
+            {
+            result
+                << "</" << html::tag_info<T>::get_name() << '>';
+            }
+        }
+
+    return result;
+}
+
 /// Generate HTML representation of a field name and value in an HTML table and
 /// append it to the specified string, defining the HTML.
 ///
@@ -528,8 +591,6 @@ group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
 {
 }
 
-namespace
-{
 void assert_nonblank(std::string const& value, std::string const& name)
 {
     if(std::string::npos == value.find_first_not_of(" \f\n\r\t\v"))
@@ -537,7 +598,6 @@ void assert_nonblank(std::string const& value, std::string const& name)
         fatal_error() << name << " must not be blank." << LMI_FLUSH;
         }
 }
-} // Unnamed namespace.
 
 /// Copy global report data from ledger.
 ///
@@ -561,17 +621,51 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     jdn_t eff_date    = jdn_t(static_cast<int>(invar.EffDateJdn));
     effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
     // Deliberately begin the footer with <br> tags, to separate it
-    // from the logo right above it.
-    // SOMEDAY !! Suppress <br> tags preceding blank strings.
+    // from the logo right above it, but don't use these tags if the footer is
+    // empty.
     footer_           =
-          "<br><br>"    + escape_for_html_elem(invar.GroupQuoteIsNotAnOffer   )
-        + "<br><br>"    + escape_for_html_elem(invar.GroupQuoteRidersFooter   )
-        + "<br><br>"    + escape_for_html_elem(invar.GroupQuotePolicyFormId   )
-        + "<br><br>"    + escape_for_html_elem(invar.GroupQuoteStateVariations)
-        + "<br><br>"    + escape_for_html_elem(invar.MarketingNameFootnote    )
-        + "<br><br><b>" + escape_for_html_elem(invar.GroupQuoteProspectus     ) + "</b>"
-        + "<br><br>"    + escape_for_html_elem(invar.GroupQuoteUnderwriter    )
-        + "<br><br>"    + escape_for_html_elem(invar.GroupQuoteBrokerDealer   )
+          wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (escape_for_html_elem(invar.GroupQuoteIsNotAnOffer)
+                )
+            )
+        + wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (escape_for_html_elem(invar.GroupQuoteRidersFooter)
+                )
+            )
+        + wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (escape_for_html_elem(invar.GroupQuotePolicyFormId)
+                )
+            )
+        + wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (escape_for_html_elem(invar.GroupQuoteStateVariations)
+                )
+            )
+        + wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (escape_for_html_elem(invar.MarketingNameFootnote)
+                )
+            )
+        + wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (wrap_if_not_empty<html::tag::b>
+                    (escape_for_html_elem(invar.GroupQuoteProspectus)
+                    )
+                )
+            )
+        + wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (escape_for_html_elem(invar.GroupQuoteUnderwriter)
+                )
+            )
+        + wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (escape_for_html_elem(invar.GroupQuoteBrokerDealer)
+                )
+            )
         ;
 
     assert_nonblank(company_         , "Sponsor");
