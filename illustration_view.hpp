@@ -80,6 +80,7 @@ class IllustrationView
     void emit_pdf(mcenum_emission);
 
     // ViewEx required implementation.
+    virtual bool CanBePrinted() const { return true; }
     virtual wxWindow* CreateChildWindow();
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;

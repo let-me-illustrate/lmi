@@ -64,6 +64,7 @@ class TextEditView
 
   private:
     // ViewEx required implementation.
+    virtual bool CanBePrinted() const { return false; }
     virtual wxWindow* CreateChildWindow();
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;

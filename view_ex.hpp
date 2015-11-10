@@ -95,6 +95,12 @@ class ViewEx
   public:
     ViewEx();
 
+    // Return true if the documents shown by this view can be printed.
+    //
+    // As there is no obviously correct default, this method must be explicitly
+    // implemented in every derived class.
+    virtual bool CanBePrinted() const = 0;
+
     // TODO ?? Consider making virtuals nonpublic and public functions
     // nonvirtual.
     virtual wxIcon Icon() const = 0;
