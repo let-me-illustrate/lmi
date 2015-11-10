@@ -121,7 +121,7 @@
 
       </fo:layout-master-set>
 
-      <!-- The data to be diplayed in the pages, cover page first -->
+      <!-- The data to be displayed in the pages, cover page first. -->
       <xsl:call-template name="generic-cover"/>
 
       <!-- Basic Illustration -->

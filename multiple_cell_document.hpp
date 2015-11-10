@@ -36,6 +36,49 @@
 #include <string>
 #include <vector>
 
+/// A census represented as an xml document.
+///
+/// The document is composed of three vectors of class Input.
+///
+/// cell_parms_: parameters for each cell. There are one or more
+/// cells. Each represents one illustration. An illustration depicts
+/// projected values for a particular life-insurance policy. Usually
+/// it corresponds to a concrete person. However, a large, unwieldy
+/// census may for simplicity be approximated by a small number of
+/// representative cells: e.g., 100 35-year-olds, 250 45-year-olds,
+/// and so on, using Input::NumberOfIdenticalLives to specify the
+/// number of people in each subgroup. That is why the abstract name
+/// "cell" is used here.
+///
+/// These cells are what the census manager displays. They encompass
+/// all the particular illustrations that can be produced from the
+/// census. A composite illustration can also be produced: it is the
+/// sum of all particular illustrations, weighted by the number of
+/// identical lives in each cell.
+///
+/// case_parms_: default parameters for the whole census. This is
+/// somewhat artificially stored as a vector for parallelism with
+/// class_parms_ and cell_parms_, but this vector by its nature must
+/// always have exactly one element. It serves as a template embodying
+/// parameters that are common to all cells. When a new cell is added
+/// in the census manager, that new cell is copied from this default.
+/// To change one or more parameters across all cells, users modify
+/// the default cell and propagate the changes to all cells (and to
+/// all class defaults--vide infra).
+///
+/// class_parms_: default parameters for each employee class. A census
+/// may be partitioned into "classes" using Input::EmployeeClass; for
+/// example, it may contain two classes: "Managers" whose specified
+/// amount is two times salary, and "Workers" who get a flat $50,000.
+/// To increase the amount for "Workers" to $75,000, users modify the
+/// appropriate class default and propagate the changes to all cells.
+/// Because Input::EmployeeClass is simply a string, the number of
+/// classes is boundless, and each cell belongs to exactly one class.
+/// When a new cell is added in the census manager, it inherits the
+/// case-default employee class; users have not asked for a command to
+/// add a new cell copied from a selection of class defaults, although
+/// that could of course be implemented.
+
 class LMI_SO multiple_cell_document
     :        private lmi::uncopyable <multiple_cell_document>
     ,virtual private obstruct_slicing<multiple_cell_document>

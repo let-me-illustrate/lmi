@@ -166,8 +166,8 @@
             <fo:block padding-after="25pt">
               Prepared for:
               <!--
-              Properly adjust for long user input strings limit output
-              to 140 characters for appox. 2 lines
+              Properly adjust for long user input strings: limit output
+              to 140 characters for approximately two lines.
               -->
               <xsl:call-template name="limitstring">
                 <xsl:with-param name="length" select="140"/>
@@ -750,8 +750,8 @@
             <fo:block text-align="left">
               Prepared for:
               <!--
-              Properly adjust for long user input strings limit output
-              to 140 characters for appox. 2 lines
+              Properly adjust for long user input strings: limit output
+              to 140 characters for approximately two lines.
               -->
               <xsl:call-template name="limitstring">
                 <xsl:with-param name="length" select="140"/>

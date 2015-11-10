@@ -418,6 +418,7 @@ void LedgerInvariant::Init()
     MecMonth            = 11;
 
     // TODO ?? Probably every member should be initialized.
+    Age                 = 100;
     NoLapseMinDur       = 100;
     NoLapseMinAge       = 100;
     NoLapseAlwaysActive = false;
@@ -859,9 +860,16 @@ void LedgerInvariant::Init(BasicValues* b)
         ,mce_annual_rate
         )[0];
 
-    // Dubious--see:
-    //   http://lists.nongnu.org/archive/html/lmi/2015-09/msg00017.html
-    IsInforce = 0 != b->yare_input_.InforceYear || 0 != b->yare_input_.InforceMonth;
+    IsInforce = b->yare_input_.EffectiveDate != b->yare_input_.InforceAsOfDate;
+    // This test is probably redundant, but it is difficult to prove
+    // that it is actually redundant and will always remain so.
+    if(IsInforce && (0 == b->yare_input_.InforceYear && 0 == b->yare_input_.InforceMonth))
+        {
+        fatal_error()
+            << "Inforce illustrations not permitted during month of issue."
+            << LMI_FLUSH
+            ;
+        }
 
     SupplementalReport         = b->yare_input_.CreateSupplementalReport;
     SupplementalReportColumn00 = mc_str(b->yare_input_.SupplementalReportColumn00);

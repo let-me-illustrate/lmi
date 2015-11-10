@@ -124,6 +124,17 @@ make -f como.make $coefficiency unit_tests >../log 2>&1
 cd /opt/lmi/touchstone
 for z in *; do cmp --quiet $z ../test/$z || ( mv $z ../touchstone_intermediate_eraseme/$z; mv ../test/$z ./$z; ) ; done
 
+  # Validate xrc files
+
+export jar_dir=/opt/lmi/third_party/rng
+java -jar $jar_dir/jing.jar -c xrc.rnc *.xrc 2>&1 |less -S -N
+
+  # Expose menu-toolbar dissimilarities: expect zero lines on stdout
+
+<toolbar.xrc sed -e'/^        /!d' -e'N;N;s/\n//g' -e's/^        //' -e's/tooltip/label/g' -e's/longhelp/help/g' |sort >/tmp/t.txt
+<menus.xrc sed -e'/<label>/s/_//' -e'/<label>/s/\\t.*</</' -e '/^        <\(label\|bitmap\|help\)/!d' -e'N;N;s/\n//g' -e'/object/d' -e's/^        //' -e's/platform="win" //' -e's/Contents/Help/' -e's/\.\.\.</</' |sort | uniq >/tmp/m.txt
+diff --unified=0 /tmp/m.txt /tmp/t.txt |sed -e'/^[+][+][+]/d' -e'/^@/d' -e'/^-/d'
+
   # Test xml schemata
 
 pushd /tmp; /lmi/src/lmi/test_schemata.sh >/lmi/src/log 2>&1; popd
@@ -147,4 +158,24 @@ cd /opt/lmi/bin
   # Show tabbed-dialog dimensions on statusbar
 
 ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data --pyx=show_mvc_dims
+
+  # Test all valid emission types
+
+pushd /opt/lmi/bin
+./lmi_cli_shared --file=sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_pdf_file,emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1  2>&1 |less -S
+./lmi_cli_shared --file=sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_pdf_file,emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1  2>&1 |less -S
+popd
+
+  # Miscellany (no particular screen)
+
+cd /lmi/src/lmi
+
+  # Identify source files not encoded compatibly with UTF-8
+
+for z in *.?pp; (iconv -f UTF-8 -t UTF-8 $z &>/dev/null || echo $z)
+
+  # Convert to UTF-8
+
+cp -a product_data.cpp eraseme
+iconv -f ISO-8859-1 -t UTF-8 eraseme > product_data.cpp
 

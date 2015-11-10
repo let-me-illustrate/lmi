@@ -46,9 +46,7 @@ class LMI_SO LedgerInvariant
     :public LedgerBase
 {
   public:
-    // TODO ?? '100' here is poor. See inline comments on class
-    // Ledger's default ctor.
-    explicit LedgerInvariant(int len = 100);
+    explicit LedgerInvariant(int len);
     LedgerInvariant(LedgerInvariant const&);
     LedgerInvariant& operator=(LedgerInvariant const&);
     virtual ~LedgerInvariant();

@@ -223,8 +223,7 @@ void Server7702::DecideWhatToCalculate()
             );
         }
 
-    // Casual, but strictly correct for all testdeck cases:
-    IsIssuedToday = 0 == Input.InforceYear;
+    IsIssuedToday = Input.EffectiveDate == Input.InforceAsOfDate;
 
     IsPossibleAdjustableEvent =
 // TODO ?? Why treat a taxable withdrawal as an adjustment event?
@@ -268,6 +267,7 @@ void Server7702::ProcessNewIssue()
 {
     bool okay =
             Input.InforceYear               == 0
+        &&  Input.EffectiveDate             == Input.InforceAsOfDate
         &&  Input.InforceGlp                == 0.0
         &&  Input.InforceGsp                == 0.0
         &&  Input.OldGender                 == Input.NewGender

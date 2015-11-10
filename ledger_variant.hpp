@@ -46,11 +46,10 @@ class LMI_SO LedgerVariant
 {
   public:
     // A default ctor is required because this class is used as a
-    // std::map's value_type.
-    //
-    // TODO ?? '100' here is poor. See inline comments on class
-    // Ledger's default ctor.
-    LedgerVariant(int len = 100);
+    // std::map's value_type. It's okay to initialize map contents
+    // with a default argument of zero because they'll be replaced
+    // with new instances created with a nonzero argument.
+    LedgerVariant(int len = 0);
     LedgerVariant(LedgerVariant const&);
     LedgerVariant& operator=(LedgerVariant const&);
     virtual ~LedgerVariant();

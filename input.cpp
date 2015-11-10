@@ -29,7 +29,7 @@
 #include "input.hpp"
 
 #include "alert.hpp"
-#include "database.hpp" // Needed only for database_'s dtor.
+#include "database.hpp"                 // product_database::~product_database()
 #include "timer.hpp"
 
 /// Values are initialized by UDT defaults where appropriate, and here
@@ -533,7 +533,61 @@ void Input::DoEnforceProscription(std::string const& name)
         }
 }
 
-Input Input::magically_rectify(Input const& original)
+/// Make sure input is consistent before using it.
+///
+/// Classes derived from MvcModel permit changing any of their member
+/// data at any time. They provide member functions for maintaining
+/// consistency among such values. When should those member functions
+/// be called, and by whom?
+///
+/// One possible answer is that MvcModel should maintain its own
+/// consistency, by calling those member functions synchronously. But
+/// consider this case:
+///   Input i;
+///   i["ProductName"] = some_product_with_no_term_rider; // initially
+///   i["TermRider"] = "Yes";
+///   i["ProductName"] = some_product_that_offers_a_term_rider;
+/// In the synchronous case, the middle assignment would be rejected;
+/// there would have to be some mechanism for reporting that, because
+/// silent failure is clearly undesirable. It would not be possible to
+/// read values from an input file without sorting them carefully in
+/// advance; but that would be a daunting task.
+///
+/// In the GUI, MvcController calls those member functions frequently
+/// enough to maintain consistency synchronously. That's appropriate
+/// for a GUI: in the example above, an end user would not expect to
+/// elect a term rider without first selecting a product that permits
+/// it. What would be a daunting task for the program is natural and
+/// obvious for an end user familiar with the problem domain who is
+/// guided by active, visual control enablement.
+///
+/// In the asynchronous, non-GUI case, consistency must be ensured by
+/// calling those member functions after the last change to member
+/// data. That has to be the client's responsibility. For example,
+/// AccountValue::AccountValue() calls this function just before it
+/// creates an illustration.
+///
+/// Consider running a "custom_io_1" input file with DOB 1961-12-31,
+/// specifying <AutoClose>X</AutoClose> to generate an equivalent
+/// '.ill' file. For "custom_io_1" input, DOB governs. In this case,
+/// the corresponding issue age has exceeded 45 for as long as lmi
+/// has existed, yet the '.ill' file contains <IssueAge>45</IssueAge>
+/// (as of 20151102T2351Z, revision 6384) because the default age is
+/// inconsistent with the DOB. That's fixed when an illustration is
+/// run: AccountValue::AccountValue() calls this function, which calls
+/// MvcModel::Reconcile(), which calls MvcModel::Transmogrify(), which
+/// calls Input::DoTransmogrify(), which then sets <IssueAge>, so the
+/// illustration is correct--only because this function was called.
+///
+/// That specific issue in "custom_io_1" code was addressed by calling
+/// this function explicitly (20151104T0416Z, revision 6385). However,
+/// similar issues may exist or may arise elsewhere, and are already
+/// present in some old regression-testing files, so the only way to
+/// be sure this function is called before producing an illustration
+/// is to call it at an appropriate chokepoint; that's why it's called
+/// explicitly by AccountValue::AccountValue().
+
+Input Input::consummate(Input const& original)
 {
     Input z(original);
 
@@ -552,7 +606,7 @@ Input Input::magically_rectify(Input const& original)
         z["FundChoiceType"] = "Override fund";
         }
 
-    z.Reconcile(); // TODO ?? Necessary only for problematic old cases.
+    z.Reconcile();
     z.RealizeAllSequenceInput();
     z.make_term_rider_consistent();
 

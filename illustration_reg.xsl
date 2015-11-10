@@ -140,7 +140,7 @@
 
       </fo:layout-master-set>
 
-      <!-- The data to be diplayed in the pages, cover page first -->
+      <!-- The data to be displayed in the pages, cover page first. -->
       <xsl:call-template name="generic-cover"/>
 
       <!-- NARRATIVE SUMMARY - begins here -->
@@ -522,7 +522,7 @@ to the xsl files first.
                 We may assess a Market Value Adjustment upon a surrender
                 of the certificate when the surrender proceeds are intended
                 to be applied to an insurance policy issued by an insurer
-                unaffilliated with
+                unaffiliated with
                 <xsl:value-of select="$scalars/InsCoShortName"/>
                 with an intent to qualify the exchange as a tax free exchange
                 under IRC section 1035.
@@ -1684,7 +1684,7 @@ to the xsl files first.
             <xsl:when test="$scalars/StatePostalAbbrev='IL'">
               I have informed the applicant or policyowner
               that this illustration assumes that the currently illustrated
-              non-guaranted elements will continue unchanged
+              non-guaranteed elements will continue unchanged
               for all years shown. This is not likely to occur,
               and actual results may be more or less favorable than those shown.
             </xsl:when>

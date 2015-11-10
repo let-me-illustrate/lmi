@@ -33,7 +33,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
-#include "input.hpp"                    // magically_rectify()
+#include "input.hpp"                    // consummate()
 #include "interest_rates.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -116,7 +116,7 @@ showing {accesses, modifies current year, modifies future years}
 
 //============================================================================
 AccountValue::AccountValue(Input const& input)
-    :BasicValues       (Input::magically_rectify(input))
+    :BasicValues       (Input::consummate(input))
     ,DebugFilename     ("anonymous.monthly_trace")
     ,ledger_(new Ledger(BasicValues::GetLength(), BasicValues::ledger_type(), BasicValues::nonillustrated(), BasicValues::no_can_issue(), false))
     ,ledger_invariant_ (new LedgerInvariant(BasicValues::GetLength()))

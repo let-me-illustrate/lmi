@@ -156,7 +156,7 @@ void AccountValue::PerformSpecAmtStrategy()
         DeathBfts_->set_specamt(round_specamt()(std::max(m, z)), j, 1 + j);
         if
             (  j == InforceYear
-            && !(0 == InforceYear && 0 == InforceMonth)
+            && yare_input_.EffectiveDate != yare_input_.InforceAsOfDate
             && mce_sa_input_scalar == strategy
             && inforce_specamt < m
             && !Solving

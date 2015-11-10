@@ -292,7 +292,7 @@ void assert_okay_to_run_group_quote
         };
     static std::size_t const n = lmi_array_size(fields);
 
-    if(case_default["InforceAsOfDate"] != case_default["EffectiveDate"])
+    if(case_default["EffectiveDate"] != case_default["InforceAsOfDate"])
         {
         fatal_error() << "Group quotes allowed for new business only." << LMI_FLUSH;
         }
