@@ -80,6 +80,7 @@ class mec_view
     void Run();
 
     // ViewEx required implementation.
+    virtual bool CanBePrinted() const { return true; }
     virtual wxWindow* CreateChildWindow();
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;

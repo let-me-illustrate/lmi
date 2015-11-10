@@ -79,6 +79,10 @@ class ProductEditorView
     ProductEditorView();
     virtual ~ProductEditorView();
 
+    // None of the product documents is currently printable, so provide a
+    // common implementation of this ViewEx method for all our subclasses.
+    virtual bool CanBePrinted() const { return false; }
+
   protected:
     virtual bool IsModified() const = 0;
     virtual void DiscardEdits() = 0;

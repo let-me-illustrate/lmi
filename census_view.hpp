@@ -65,6 +65,7 @@ class CensusView
     CensusDocument& document() const;
 
     // ViewEx required implementation.
+    virtual bool CanBePrinted() const { return true; }
     virtual wxWindow* CreateChildWindow();
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;

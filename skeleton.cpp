@@ -220,7 +220,7 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
         ,frame_
         );
     child_frame->SetIcon(view->Icon());
-    child_frame->SetMenuBar(AdjustMenus(view->MenuBar()));
+    child_frame->SetMenuBar(AdjustMenus(view->MenuBar(), view));
 
     // Style flag wxMAXIMIZE could have been used instead, but that
     // seems to work only with the msw platform.
@@ -231,6 +231,30 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
 
     return child_frame;
 }
+
+namespace
+{
+
+/// Delete the item with the given ID from the menu bar if it exists.
+
+void DeleteItemFromMenuBar(wxMenuBar& menu_bar, int item_id)
+{
+    wxMenuItem* const item = menu_bar.FindItem(item_id);
+    if(!item)
+        {
+        // We could complain about the item not being there, but this doesn't
+        // seem to be all that useful and there is no real harm done in trying
+        // to delete an already non-existent item, so just ignore it silently.
+        return;
+        }
+
+    wxMenu* const menu = item->GetMenu();
+    LMI_ASSERT(menu);
+
+    menu->Delete(item);
+}
+
+} // Unnamed namespace.
 
 /// Adjust menus read from wxxrc resources.
 ///
@@ -244,11 +268,97 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
 /// resource and conditionally inserted here, but that would be less
 /// flexible: e.g., menu order couldn't be controlled completely in
 /// the wxxrc file.
+///
+/// In addition, some items in the common "File" menu don't make sense
+/// for all views. If there is no view at all, as indicated by the
+/// corresponding argument being NULL, commands for closing and saving
+/// it shouldn't be proposed. And if there is a view, but printing it
+/// is not supported, then all printing-related commands are hidden too.
 
-wxMenuBar* Skeleton::AdjustMenus(wxMenuBar* argument)
+wxMenuBar* Skeleton::AdjustMenus(wxMenuBar* argument, ViewEx* view)
 {
     LMI_ASSERT(argument);
     wxMenuBar& menu_bar = *argument;
+
+    // Don't bother doing anything if we don't need to adjust the menu at all.
+    if(!view || !view->CanBePrinted())
+        {
+        // Delete the items pertaining to the current view if we don't have it
+        // at all.
+        if(!view)
+            {
+            // Unlike with the printing items below, we delete just the few
+            // well-known items as it seems unwise to assume that all the items
+            // added after "Close" will always need to be deleted.
+            DeleteItemFromMenuBar(menu_bar, wxID_CLOSE);
+            DeleteItemFromMenuBar(menu_bar, wxID_SAVE);
+            DeleteItemFromMenuBar(menu_bar, wxID_SAVEAS);
+
+            // Notice that after doing the above we can (and currently do) end
+            // up with two consecutive separators, but we rely on the loop
+            // below to clean this up.
+            }
+
+        // Delete all printing-related items in any case. We assume that all
+        // these items are in their own section of the menu, delimited by
+        // separators and starting with the "Print" item, so we just delete
+        // everything from it and up to and including the next separator so
+        // that if any new printing commands are added in the future, they will
+        // still be handled correctly by this code.
+        wxMenuItem* print_item = menu_bar.FindItem(wxID_PRINT);
+        if(!print_item)
+            {
+            warning() << "'Print' menu item not found.";
+            }
+        else
+            {
+            wxMenu* const menu = print_item->GetMenu();
+            LMI_ASSERT(menu);
+
+            bool last_was_separator = false;
+            bool inside_print_section = false;
+            wxMenuItemList& items = menu->GetMenuItems();
+
+            // Notice that the iterator is not incremented in the loop as we
+            // must update it before deleting the item it refers to.
+            for(wxMenuItemList::iterator i = items.begin(); i != items.end(); )
+                {
+                wxMenuItem* const item = *i;
+                bool const is_separator = item->IsSeparator();
+                if(last_was_separator && is_separator)
+                    {
+                    // Eliminate consecutive separators if the code deleting
+                    // the view-related items above created them.
+                    ++i;
+                    menu->Delete(item);
+                    continue;
+                    }
+
+                last_was_separator = is_separator;
+
+                // Check if we found the first item to delete.
+                if(!inside_print_section && *i == print_item)
+                    {
+                    inside_print_section = true;
+                    }
+
+                if(inside_print_section)
+                    {
+                    ++i;
+                    menu->Delete(item);
+                    if (is_separator)
+                        {
+                        // We consider this to be the end of the print section.
+                        break;
+                        }
+                    }
+                else
+                    {
+                    ++i;
+                    }
+                }
+            }
+        }
 
     if(!global_settings::instance().ash_nazg())
         {
