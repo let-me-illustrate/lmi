@@ -155,7 +155,7 @@
     ,mce_nasd \
     ,mce_prospectus_obsolete \
     ,mce_group_private_placement \
-    ,mce_offshore_private_placement \
+    ,mce_offshore_private_placement_obsolete \
     ,mce_ill_reg_private_placement_obsolete \
     ,mce_individual_private_placement \
     ,mce_variable_annuity \
@@ -163,10 +163,10 @@
 #define ledger_type_NAMES \
     {"illustration_reg" \
     ,"nasd" \
-    ,"obsolete ledger type 0--do not use" \
+    ,"obsolete ledger type 2--do not use" \
     ,"group_private_placement" \
-    ,"offshore_private_placement" \
-    ,"obsolete ledger type 1--do not use" \
+    ,"obsolete ledger type 4--do not use" \
+    ,"obsolete ledger type 5--do not use" \
     ,"individual_private_placement" \
     ,"variable_annuity" \
     };

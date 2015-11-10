@@ -31,10 +31,11 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
+#include "global_settings.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "map_lookup.hpp"
-#include "mc_enum_types_aux.hpp" // mc_str()
+#include "mc_enum_types_aux.hpp"        // mc_str()
 
 #include <algorithm>
 #include <ostream>
@@ -78,7 +79,7 @@ Ledger::Ledger
     ,is_composite_         (is_composite)
     ,composite_lapse_year_ (0.0)
     ,ledger_map_           (new ledger_map_holder)
-    ,ledger_invariant_     (new LedgerInvariant)
+    ,ledger_invariant_     (new LedgerInvariant(length))
 {
     SetRunBases(length);
 }
@@ -102,7 +103,6 @@ void Ledger::SetRunBases(int length)
             }
             break;
         case mce_group_private_placement:      // Deliberately fall through.
-        case mce_offshore_private_placement:   // Deliberately fall through.
         case mce_individual_private_placement: // Deliberately fall through.
         case mce_variable_annuity:             // Deliberately fall through.
         case mce_nasd:
@@ -564,7 +564,8 @@ std::string reason_to_interdict(Ledger const& z)
         {
         return "Illustrations are forbidden for this policy form.";
         }
-    else if(z.no_can_issue()) // Don't even think about it, say no go.
+    // Don't even think about it, say no go.
+    else if(z.no_can_issue() && !global_settings::instance().regression_testing())
         {
         return "New-business illustrations are forbidden for this policy form.";
         }

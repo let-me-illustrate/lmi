@@ -148,7 +148,7 @@ class LMI_SO Input
 
     std::vector<std::string> RealizeAllSequenceInput(bool report_errors = true);
 
-    static Input magically_rectify(Input const&);
+    static Input consummate(Input const&);
 
   private:
     void AscribeMembers();
@@ -393,7 +393,7 @@ class LMI_SO Input
     numeric_sequence         TaxBracket                      ;
     numeric_sequence         ProjectedSalary                 ;
     specamt_sequence         SpecifiedAmount                 ;
-    // For brevity, "SupplementalAmount" would seem better.
+    // INPUT !! For brevity, "SupplementalAmount" would seem better.
     specamt_sequence         SupplementalSpecifiedAmount     ;
     dbo_sequence             DeathBenefitOption              ;
     payment_sequence         Payment                         ;

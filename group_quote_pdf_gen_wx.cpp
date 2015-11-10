@@ -35,7 +35,9 @@
 #include "force_linking.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
+#include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"               // split_into_lines()
 #include "oecumenic_enumerations.hpp"   // oenum_format_style
 #include "path_utility.hpp"             // fs::path inserter
@@ -90,6 +92,92 @@ wxString escape_for_html_elem(std::string const& s)
             }
         }
     return z;
+}
+
+/// Namespace for helpers used for HTML generation.
+
+namespace html
+{
+
+/// Namespace for the support HTML tags.
+///
+/// Tags are only used as template arguments, so they don't need to be defined,
+/// just declared -- and tag_info below specialized for them.
+
+namespace tag
+{
+
+struct b;
+struct br;
+
+} // namespace tag
+
+template<typename T>
+struct tag_info;
+
+template<>
+struct tag_info<tag::b>
+{
+    static char const* get_name() { return "b"; }
+    static bool has_end() { return true; }
+};
+
+template<>
+struct tag_info<tag::br>
+{
+    static char const* get_name() { return "br"; }
+    static bool has_end() { return false; }
+};
+
+} // namespace html
+
+/// Wrap the given text in an HTML tag if it is not empty, otherwise just
+/// return an empty string.
+///
+/// For the tags without matching closing tags, such as e.g. "<br>", wrapping
+/// the text means just prepending the tag to it. This is still done only if
+/// the text is not empty.
+
+template<typename T>
+wxString wrap_if_not_empty(wxString const& html)
+{
+    wxString result;
+    if(!html.empty())
+        {
+        result << '<' << html::tag_info<T>::get_name() << '>' << html;
+        if(html::tag_info<T>::has_end())
+            {
+            result << "</" << html::tag_info<T>::get_name() << '>';
+            }
+        }
+
+    return result;
+}
+
+/// Transform 'html' -> '<br><br>html', but return empty string unchanged.
+
+wxString brbr(wxString const& html)
+{
+    return
+        wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (escape_for_html_elem(html)
+                )
+            );
+}
+
+/// Transform 'html' -> '<br><br><b>html</b>', but return empty string unchanged.
+
+wxString brbrb(wxString const& html)
+{
+    return
+        wrap_if_not_empty<html::tag::br>
+            (wrap_if_not_empty<html::tag::br>
+                (wrap_if_not_empty<html::tag::b>
+                    (escape_for_html_elem(html)
+                    )
+                )
+            );
 }
 
 /// Generate HTML representation of a field name and value in an HTML table and
@@ -364,18 +452,18 @@ struct column_definition
 };
 
 column_definition const column_definitions[] =
-    {{"Part#"                            ,             "9999"   }
-    ,{"Participant"                      ,                ""    }
-    ,{"Issue Age"                        ,              "999"   }
-    ,{"Date of Birth"                    ,       "9999-99-99"   }
-    ,{"Income"                           ,      "$99,999,999"   }
-    ,{"Face Amount"                      ,     "$999,999,999"   }
+    {{"Part#"                          ,            "99999"   }
+    ,{"Participant"                    ,                 ""   }
+    ,{"Issue Age"                      ,              "999"   }
+    ,{"Date of Birth"                  ,       "9999-99-99"   }
+    ,{"Income"                         ,     "$999,999,999"   }
+    ,{"Face Amount"                    , "$999,999,999,999"   }
     // All the subsequent columns use dynamically determined "premium mode" in
     // their title, so their labels are actually format strings.
-    ,{"%s\nPremium"                      ,    "$9,999,999.00"   }
-    ,{"%s\nPremium with\nWaiver"         ,    "$9,999,999.00"   }
-    ,{"%s\nPremium with\nADB"            ,    "$9,999,999.00"   }
-    ,{"%s\nPremium with\nWaiver &\nADB"  ,    "$9,999,999.00"   }
+    ,{"%s\nPremium"                    ,   "$9,999,999,999.00"}
+    ,{"%s\nPremium with\nWaiver"       ,   "$9,999,999,999.00"}
+    ,{"%s\nPremium with\nADB"          ,   "$9,999,999,999.00"}
+    ,{"%s\nPremium with\nWaiver &\nADB",   "$9,999,999,999.00"}
     };
 
 BOOST_STATIC_ASSERT(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max);
@@ -448,7 +536,7 @@ class group_quote_pdf_generator_wx
     struct global_report_data
         {
         // Extract header and footer fields from a ledger.
-        void fill_global_report_data(LedgerInvariant const& ledger);
+        void fill_global_report_data(Ledger const& ledger);
 
         // Fixed fields that are always defined.
         std::string company_;
@@ -526,8 +614,6 @@ group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
 {
 }
 
-namespace
-{
 void assert_nonblank(std::string const& value, std::string const& name)
 {
     if(std::string::npos == value.find_first_not_of(" \f\n\r\t\v"))
@@ -535,7 +621,6 @@ void assert_nonblank(std::string const& value, std::string const& name)
         fatal_error() << name << " must not be blank." << LMI_FLUSH;
         }
 }
-} // Unnamed namespace.
 
 /// Copy global report data from ledger.
 ///
@@ -544,28 +629,31 @@ void assert_nonblank(std::string const& value, std::string const& name)
 /// set of data used here should be reflected there.
 
 void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
-    (LedgerInvariant const& ledger
+    (Ledger const& ledger
     )
 {
-    company_          = ledger.CorpName;
-    prepared_by_      = ledger.ProducerName;
-    product_          = ledger.PolicyMktgName;
-    short_product_    = ledger.GroupQuoteShortProductName;
-    available_riders_ = ledger.GroupQuoteRidersHeader;
-    premium_mode_     = ledger.InitErMode;
-    contract_state_   = ledger.GetStatePostalAbbrev();
-    jdn_t eff_date    = jdn_t(static_cast<int>(ledger.EffDateJdn));
+    LedgerInvariant const& invar = ledger.GetLedgerInvariant();
+
+    company_          = invar.CorpName;
+    prepared_by_      = invar.ProducerName;
+    product_          = invar.PolicyMktgName;
+    short_product_    = invar.GroupQuoteShortProductName;
+    available_riders_ = invar.GroupQuoteRidersHeader;
+    premium_mode_     = invar.InitErMode;
+    contract_state_   = invar.GetStatePostalAbbrev();
+    jdn_t eff_date    = jdn_t(static_cast<int>(invar.EffDateJdn));
     effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
-    // SOMEDAY !! Suppress <br> elements preceding blank strings.
-    footer_           =
-                          escape_for_html_elem(ledger.GroupQuoteIsNotAnOffer   )
-        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteRidersFooter   )
-        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuotePolicyFormId   )
-        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteStateVariations)
-        + "<br><br>"    + escape_for_html_elem(ledger.MarketingNameFootnote    )
-        + "<br><br><b>" + escape_for_html_elem(ledger.GroupQuoteProspectus     ) + "</b>"
-        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteUnderwriter    )
-        + "<br><br>"    + escape_for_html_elem(ledger.GroupQuoteBrokerDealer   )
+    // Deliberately begin the footer with <br> tags, to separate it
+    // from the logo right above it.
+    footer_ =
+          brbr (invar.GroupQuoteIsNotAnOffer)
+        + brbr (invar.GroupQuoteRidersFooter)
+        + brbr (invar.GroupQuotePolicyFormId)
+        + brbr (invar.GroupQuoteStateVariations)
+        + brbr (invar.MarketingNameFootnote)
+        + brbrb(invar.GroupQuoteProspectus)
+        + brbr (invar.GroupQuoteUnderwriter)
+        + brbr (invar.GroupQuoteBrokerDealer)
         ;
 
     assert_nonblank(company_         , "Sponsor");
@@ -577,27 +665,38 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     assert_nonblank(contract_state_  , "State");
     assert_nonblank(effective_date_  , "Effective date");
 
-    assert_nonblank(ledger.GroupQuoteIsNotAnOffer   , "First footnote");
-    assert_nonblank(ledger.GroupQuoteRidersFooter   , "Second footnote");
-    assert_nonblank(ledger.GroupQuotePolicyFormId   , "Third footnote");
-    assert_nonblank(ledger.GroupQuoteStateVariations, "Fourth footnote");
-    assert_nonblank(ledger.MarketingNameFootnote    , "Fifth footnote");
-    // The other footnotes may be blank for non-variable products.
-    // In principle this could be discerned by Ledger::ledger_type().
+    assert_nonblank(invar.GroupQuoteIsNotAnOffer   , "First footnote");
+    assert_nonblank(invar.GroupQuoteRidersFooter   , "Second footnote");
+    assert_nonblank(invar.GroupQuotePolicyFormId   , "Third footnote");
+    assert_nonblank(invar.GroupQuoteStateVariations, "Fourth footnote");
+    assert_nonblank(invar.MarketingNameFootnote    , "Fifth footnote");
+    // Somewhat casually, assume a contract is variable if it's not
+    // subject to the NAIC illustration reg.
+    if(!is_subject_to_ill_reg(ledger.ledger_type()))
+        {
+        assert_nonblank(invar.GroupQuoteProspectus  , "Sixth footnote");
+        assert_nonblank(invar.GroupQuoteUnderwriter , "Seventh footnote");
+        assert_nonblank(invar.GroupQuoteBrokerDealer, "Eighth footnote");
+        }
 
-    extra_fields_     = parse_extra_report_fields(ledger.Comments);
+    extra_fields_     = parse_extra_report_fields(invar.Comments);
 }
 
 void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 {
-    LedgerInvariant const& Invar = ledger.GetLedgerInvariant();
+    if(0 == ledger.GetCurrFull().LapseYear)
+        {
+        fatal_error() << "Lapsed during first year." << LMI_FLUSH;
+        }
+
+    LedgerInvariant const& invar = ledger.GetLedgerInvariant();
 
     // Initialize 'report_data_' the first time this function is
     // called: i.e., iff its 'contract_state_' field is empty, because
     // the state postal abbreviation in a ledger can never be empty.
     if(report_data_.contract_state_.empty())
         {
-        report_data_.fill_global_report_data(Invar);
+        report_data_.fill_global_report_data(ledger);
         }
 
     int const year = 0;
@@ -623,29 +722,33 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_name:
                 {
-                rd.values[col] = Invar.Insured1;
+                rd.values[col] = invar.Insured1;
                 }
                 break;
             case e_col_age:
                 {
-                rd.values[col] = wxString::Format("%.0f", Invar.Age).ToStdString();
+                rd.values[col] = wxString::Format("%.0f", invar.Age).ToStdString();
                 }
                 break;
             case e_col_dob:
                 {
                 rd.values[col] = ConvertDateToWx
-                    (jdn_t(static_cast<int>(Invar.DateOfBirthJdn))
+                    (jdn_t(static_cast<int>(invar.DateOfBirthJdn))
                     ).FormatDate();
                 }
                 break;
             case e_col_salary:
                 {
-                rd.values[col] = '$' + ledger_format(Invar.Salary.at(year), f0);
+                // Blank if zero.
+                if(0.0 != invar.Salary.at(year))
+                    {
+                    rd.values[col] = '$' + ledger_format(invar.Salary.at(year), f0);
+                    }
                 }
                 break;
             case e_col_face_amount:
                 {
-                double const z = Invar.SpecAmt.at(year);
+                double const z = invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year);
                 rd.values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
@@ -655,7 +758,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_premium:
                 {
-                double const z = Invar.InitModalPrem00;
+                double const z = invar.InitModalPrem00;
                 rd.values[col] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
@@ -665,7 +768,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_premium_with_waiver:
                 {
-                double const z = Invar.InitModalPrem01;
+                double const z = invar.InitModalPrem01;
                 rd.values[col] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
@@ -675,7 +778,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_premium_with_adb:
                 {
-                double const z = Invar.InitModalPrem10;
+                double const z = invar.InitModalPrem10;
                 rd.values[col] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
@@ -685,7 +788,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_premium_with_waiver_and_adb:
                 {
-                double const z = Invar.InitModalPrem11;
+                double const z = invar.InitModalPrem11;
                 rd.values[col] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {

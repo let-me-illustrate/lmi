@@ -31,6 +31,7 @@
 #include "actuarial_table.hpp"          // e_reenter_upon_rate_reset
 #include "alert.hpp"
 #include "calendar_date.hpp"
+#include "contains.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -1071,10 +1072,50 @@ void Input::set_solve_durations()
     SolveEndTime    = issue_age() + SolveEndYear   .value();
 }
 
-/// Determine number of full years and months since issue.
+/// Set inforce durations (full years and months) from calendar dates.
 ///
-/// If the contract has been in force for a nonzero period less than
-/// one full month, then InforceYear and InforceMonth are both zero.
+/// For illustrations, time has a monthly pulse: a year consists only
+/// of the twelve discrete instants on which monthiversary processing
+/// occurs. The intervals between pulses affect interest crediting
+/// only. To match spreadsheets or other illustration systems, lmi
+/// treats the intervals as though they were of equal length; but its
+/// AccountValue::daily_interest_accounting option uses exact calendar
+/// lengths instead, which more closely models the typical behavior of
+/// admin systems.
+///
+/// At each pulse, the monthly deduction is taken, and interest to the
+/// next monthiversary is credited, as one combined atomic operation.
+/// Therefore, any inforce data must be given as of a monthiversary
+/// date, after interest has been credited for the month just ending,
+/// and immediately before the monthiversary deduction. (Admin systems
+/// might reckon this point to occur one second after midnight on a
+/// monthiversary date, or one second before midnight on the preceding
+/// day; but the InforceAsOfDate they provide to lmi must follow lmi's
+/// reckoning: it must be the monthiversary date.)
+///
+/// Preconditions: Neither EffectiveDate nor LastMaterialChangeDate
+/// can be later than InforceAsOfDate; years_and_months_since() checks
+/// these preconditions, and throws if either is violated.
+///
+/// [The following experimental precondition is asserted, but can be
+/// bypassed in case surprises appear in production.]
+/// Precondition: InforceAsOfDate is an exact monthiversary date.
+/// (LastMaterialChangeDate need not be: material changes may be made
+/// at any time.)
+///
+/// Postcondition: Inforce illustrations are not allowed before the
+/// first monthiversary date after the issue date. This follows from
+/// the explanation above. On the issue date, the policy is not yet in
+/// force; then InforceAsOfDate must equal EffectiveDate, and both the
+/// inforce year and the inforce month must equal zero. Otherwise, the
+/// policy is in force; then InforceAsOfDate can't equal EffectiveDate
+/// because of the quantization of illustration time, so inforce year
+/// and inforce month cannot both equal zero. An exception is thrown
+/// if this postcondition is violated because new business and inforce
+/// illustrations differ categorically: they're regulated differently,
+/// and they're calculated differently (e.g., input inforce values
+/// must be taken into account for inforce, but disregarded (or
+/// asserted to be zero) for new business).
 
 void Input::set_inforce_durations_from_dates()
 {
@@ -1091,5 +1132,47 @@ void Input::set_inforce_durations_from_dates()
         );
     InforceContractYear  = ym1.first;
     InforceContractMonth = ym1.second;
+
+    calendar_date expected = add_years_and_months
+        (EffectiveDate.value()
+        ,InforceYear  .value()
+        ,InforceMonth .value()
+        ,true
+        );
+    // After testing in production, either remove the "pyx" bypass, or
+    // redesign this. Replacing fatal_error() with warning() would cause
+    // multiple messageboxes, which is unavoidable if the diagnostic is
+    // to be given when GUI input enters an invalid state, and also
+    // whenever an illustration is about to be produced.
+    if(expected != InforceAsOfDate.value() && !contains(global_settings::instance().pyx(), "off_monthiversary"))
+        {
+        fatal_error()
+            << "Input inforce-as-of date, "
+            << InforceAsOfDate.value().str()
+            << ", should be an exact monthiversary date."
+            << "\nIt would be interpreted as "
+            << expected.str()
+            << ", which is "
+            << InforceYear
+            << " full years and "
+            << InforceMonth
+            << " full months"
+            << "\nafter the "
+            << EffectiveDate.value().str()
+            << " effective date."
+            << LMI_FLUSH
+            ;
+        }
+
+    if
+        (  EffectiveDate.value() != InforceAsOfDate.value()
+        && (0 == InforceYear && 0 == InforceMonth)
+        )
+        {
+        fatal_error()
+            << "Inforce illustrations not permitted during month of issue."
+            << LMI_FLUSH
+            ;
+        }
 }
 

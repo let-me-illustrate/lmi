@@ -31,18 +31,16 @@
 #include "alert.hpp"
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
-#include "comma_punct.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
-#include "ledger_base.hpp"
 #include "ledger_invariant.hpp"
-#include "ledger_text_formats.hpp"
+#include "ledger_text_formats.hpp"      // ledger_format()
 #include "ledger_variant.hpp"
-#include "ledger_xsl.hpp"
+#include "ledger_xsl.hpp"               // xsl_filepath()
 #include "mc_enum_aux.hpp"              // mc_e_vector_to_string_vector()
-#include "miscellany.hpp"
+#include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary(), lmi_array_size()
 #include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "value_cast.hpp"
@@ -55,11 +53,11 @@
 
 #include <xsltwrapp/xsltwrapp.h>
 
-#include <fstream>
-#include <iomanip>
-#include <numeric>
-#include <string>
-#include <utility>
+#include <algorithm>                    // std::transform()
+#include <functional>                   // std::minus
+#include <map>
+#include <ostream>
+#include <utility>                      // std::pair
 
 namespace
 {
@@ -83,77 +81,49 @@ std::vector<std::string> const suffixes
 typedef std::map<std::string, std::pair<int, oenum_format_style> > format_map_t;
 typedef std::map<std::string, std::string> title_map_t;
 
-// Look at file 'missing_formats'. It's important. You want
-// it to be empty; once it is, you can suppress the code that creates
-// and writes to it.
+// For all numbers (so-called 'scalars' and 'vectors', but not
+// 'strings') grabbed from all ledgers, look for a format. If one
+// is found, use it to turn the number into a string. If not, and
+// the field is named in unavailable(), then it's ignored. Otherwise,
+// format_exists() displays a warning and ignores the field (because
+// throwing an exception would cause only the first warning to be
+// displayed).
 //
-// Here's what it means. For all numbers (so-called 'scalars' and
-// 'vectors', but not 'strings') grabbed from all ledgers, we look
-// for a format. If we find one, we use it to turn the number into
-// a string. If not, we ignore it.
+// Rationale: Silently falling back on some default format can't be
+// right, because it masks defects that should be fixed: no default
+// can be universally appropriate.
 //
-// Some things you probably want are so ignored.
-//
-// Why did I think this reasonble? Because no other reasonable
-// behavior occurs to me, for one thing: silently falling back on
-// some 'default' format can't be right, because it masks defects
-// that we want to fix. For another thing, this gives you a handy
-// way to do the 'subsetting' we'd spoken of. If you want a (numeric)
-// field, then give it a format; if you don't, then don't.
-//
-// Speaking of masked defects--now I'm really glad I did this.
-// Look at that 'missing_formats' file. Not only does it list
-// everything you consciously decided you didn't want, like
-//   EffDateJdn
-// it also shows stuff that I think we never had, but need, like
-//   AllowDbo3
-// which I think is used for some purpose that was important to
-// Compliance.
-//
-// I've designed this to be maintained, except for the ugly parts
-// we aren't talking about here, so I think you'll be able to fix
-// this stuff easily. Where your specs said, e.g.
-//
-// > Format as a number with thousand separators and no decimal places (#,###,##0)
-// >
-// > AcctVal_*
-// > AccumulatedPremium
-//
-// I translated that into
-//
-//    format_map["AcctVal"                           ] = f1;
-//    format_map["AccumulatedPremium"                ] = f1;
-//
-// where 'f1' is one of several formats I abstracted from your specs
-// at the top level. For names formed as
+// For names formed as
 //   basename + '_' + suffix
-// the map needs only the basename, which makes things a lot
-// terser, simpler, and likelier to be right.
+// only the basename is used as a map key. Lookups in the format map
+// are strict, as they must be, else one key like "A" would match
+// anything beginning with that letter.
 //
-// This translation is just text transformations on your specs.
-// I imported your specs and then did regex search-and-replace
-// to write this code.
-//
-// To make a missing (numeric) variable appear in the xml,
-// just add a line like those.
-//
-// Searching for the first occurrence of, say, 'f1' will take you
-// to the section where I analyze your formats. It's marked with
-// your name in caps so that you can find it easily.
-//
-// BTW, part of your specs included suffixes like "_Current", but
-// for the most part you omitted them. I didn't rectify that, so
-// would you please do the honors? For instance:
-//    format_map["AnnHoneymoonValueRate_Current"     ] = f4;
-//    format_map["AnnPostHoneymoonRate"              ] = f4;
-// Right now, the second gets formatted, but the first doesn't.
-// Lookups in the format map are strict, and they have to be,
-// else one key like "A" would match anything beginning with
-// that letter.
+// Some of the unavailable fields could easily be made available
+// someday; perhaps others should be eliminated from class Ledger.
+
+bool unavailable(std::string const& s)
+{
+    static std::string const a[] =
+        {"DateOfBirthJdn"        // used by group quotes
+        ,"EffDateJdn"            // used by group quotes
+        ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
+        ,"InitModalPrem00"       // group quotes only
+        ,"InitModalPrem01"       // group quotes only
+        ,"InitModalPrem10"       // group quotes only
+        ,"InitModalPrem11"       // group quotes only
+        ,"InitPremTaxRate"       // used by PrintRosterTabDelimited(); not cents
+        ,"SubstdTable"           // probably not needed
+        ,"InitMlyPolFee"         // used by PrintRosterTabDelimited()
+        ,"InitTgtPremHiLoadRate" // used by PrintRosterTabDelimited(); not cents
+        };
+    static std::vector<std::string> const v(a, a + lmi_array_size(a));
+    return contains(v, s);
+}
 
 bool format_exists
-    (std::string const&  s
-    ,std::string const&  suffix
+    (std::string  const& s
+    ,std::string  const& suffix
     ,format_map_t const& m
     )
 {
@@ -161,14 +131,13 @@ bool format_exists
         {
         return true;
         }
+    else if(unavailable(s))
+        {
+        return false;
+        }
     else
         {
-#if defined SHOW_MISSING_FORMATS
-        std::ofstream ofs("missing_formats", ios_out_app_binary());
-        ofs << s << suffix << "\n";
-#else  // !defined SHOW_MISSING_FORMATS
-        stifle_warning_for_unused_variable(suffix);
-#endif // !defined SHOW_MISSING_FORMATS
+        warning() << "No format found for " << s << suffix << LMI_FLUSH;
         return false;
         }
 }
@@ -331,14 +300,6 @@ void Ledger::write(xml::element& x) const
     // written in 2006-07. DATABASE !! So consider adding them there
     // when the database is revamped.
 
-    {
-#if defined SHOW_MISSING_FORMATS
-    std::ofstream ofs("missing_formats", ios_out_trunc_binary());
-    ofs << "No format found for the following numeric data.\n";
-    ofs << "These data were therefore not written to xml.\n";
-#endif // defined SHOW_MISSING_FORMATS
-    }
-
 // Here's my top-level analysis of the formatting specification.
 //
 // Formats
@@ -427,6 +388,7 @@ void Ledger::write(xml::element& x) const
     format_map["HasChildRider"                     ] = f1;
     format_map["HasHoneymoon"                      ] = f1;
     format_map["HasSpouseRider"                    ] = f1;
+    format_map["HasSupplSpecAmt"                   ] = f1;
     format_map["HasTerm"                           ] = f1;
     format_map["HasWP"                             ] = f1;
     format_map["InforceIsMec"                      ] = f1;
@@ -450,6 +412,8 @@ void Ledger::write(xml::element& x) const
     format_map["RetAge"                            ] = f1;
     format_map["SmokerBlended"                     ] = f1;
     format_map["SmokerDistinct"                    ] = f1;
+    format_map["SplitFundAllocation"               ] = f1;
+    format_map["SplitMinPrem"                      ] = f1;
     format_map["SpouseIssueAge"                    ] = f1;
     format_map["SupplementalReport"                ] = f1;
     format_map["UseExperienceRating"               ] = f1;

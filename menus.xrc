@@ -29,10 +29,15 @@
 
 <!-- reusable menus -->
 
+<!--
+  This 'File' menu includes commands to save, close, and print documents.
+  Use it when the current document uses these print commands.
+-->
+
 <object class="wxMenu" name="file_menu_with_print_ref">
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
-        <label>_New\tCtrl-N</label>
+        <label>_New...\tCtrl-N</label>
         <bitmap platform="win" stock_id="wxART_NEW"/>
         <help>Create a new document</help>
     </object>
@@ -59,7 +64,7 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_PRINT">
-        <label>_Print...\tCtrl-P</label>
+        <label>_Print\tCtrl-P</label>
         <bitmap platform="win" stock_id="wxART_PRINT"/>
         <help>Print this document</help>
     </object>
@@ -80,12 +85,12 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
-        <label>Defaul_t\tCtrl-T</label>
+        <label>Defaul_t...\tCtrl-T</label>
         <bitmap platform="win" stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREFERENCES">
-        <label>Pre_ferences\tCtrl-F</label>
+        <label>Pre_ferences...\tCtrl-F</label>
         <bitmap platform="win" stock_id="preferences"/>
         <help>Manage preferences</help>
     </object>
@@ -97,10 +102,15 @@
     </object>
 </object>
 
+<!--
+  This 'File' menu excludes commands to print documents.
+  Use it when the current document does not use these print commands.
+-->
+
 <object class="wxMenu" name="file_menu_without_print_ref">
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
-        <label>_New\tCtrl-N</label>
+        <label>_New...\tCtrl-N</label>
         <bitmap platform="win" stock_id="wxART_NEW"/>
         <help>Create a new document</help>
     </object>
@@ -127,12 +137,48 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
-        <label>Defaul_t\tCtrl-T</label>
+        <label>Defaul_t...\tCtrl-T</label>
         <bitmap platform="win" stock_id="default-cell"/>
         <help>Edit default cell</help>
     </object>
     <object class="wxMenuItem" name="wxID_PREFERENCES">
-        <label>Pre_ferences\tCtrl-F</label>
+        <label>Pre_ferences...\tCtrl-F</label>
+        <bitmap platform="win" stock_id="preferences"/>
+        <help>Manage preferences</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="wxID_EXIT">
+        <label>E_xit</label>
+        <bitmap platform="win" stock_id="wxART_QUIT"/>
+        <help>Exit this program</help>
+    </object>
+</object>
+
+<!--
+  This 'File' menu excludes commands to save, close, and print documents.
+  Use it when no document is open in a child window.
+-->
+
+<object class="wxMenu" name="file_menu_without_child_ref">
+    <label>_File</label>
+    <object class="wxMenuItem" name="wxID_NEW">
+        <label>_New...\tCtrl-N</label>
+        <bitmap platform="win" stock_id="wxART_NEW"/>
+        <help>Create a new document</help>
+    </object>
+    <object class="wxMenuItem" name="wxID_OPEN">
+        <label>_Open...\tCtrl-O</label>
+        <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
+        <help>Open an existing document</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="edit_default_cell">
+        <label>Defaul_t...\tCtrl-T</label>
+        <bitmap platform="win" stock_id="default-cell"/>
+        <help>Edit default cell</help>
+    </object>
+    <object class="wxMenuItem" name="wxID_PREFERENCES">
+        <label>Pre_ferences...\tCtrl-F</label>
         <bitmap platform="win" stock_id="preferences"/>
         <help>Manage preferences</help>
     </object>
@@ -245,52 +291,17 @@
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="wxID_ABOUT">
-        <label>_About...</label>
+        <label>_About</label>
         <bitmap platform="win" stock_id="about"/>
         <help>Read copyright and license</help>
     </object>
 </object>
 
-<!-- main menu -->
-
-<!--
-  The 'File' menu here is briefer than the one used elsewhere. For
-  example, it makes no sense to offer a 'Save' option when no child
-  window exists.
--->
+<!-- main menu used when no document is open in a child window -->
 
 <object class="wxMenuBar" name="main_menu">
 <style>wxMB_DOCKABLE</style>
-    <object class="wxMenu">
-        <label>_File</label>
-        <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New\tCtrl-N</label>
-            <bitmap platform="win" stock_id="wxART_NEW"/>
-            <help>Create a new document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...\tCtrl-O</label>
-            <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
-            <help>Open an existing document</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="edit_default_cell">
-            <label>Defaul_t\tCtrl-T</label>
-            <bitmap platform="win" stock_id="default-cell"/>
-            <help>Edit default cell</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_PREFERENCES">
-            <label>Pre_ferences\tCtrl-F</label>
-            <bitmap platform="win" stock_id="preferences"/>
-            <help>Manage preferences</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_EXIT">
-            <label>E_xit</label>
-            <bitmap platform="win" stock_id="wxART_QUIT"/>
-            <help>Exit this program</help>
-        </object>
-    </object>
+    <object_ref name="file_menu" ref="file_menu_without_child_ref"/>
     <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
@@ -302,17 +313,17 @@
 <object class="wxMenu" name="census_menu_ref">
     <label>_Census</label>
     <object class="wxMenuItem" name="edit_cell">
-        <label>_Edit cell\tCtrl-E</label>
+        <label>_Edit cell...\tCtrl-E</label>
         <bitmap platform="win" stock_id="edit-cell"/>
         <help>Edit selected cell</help>
     </object>
     <object class="wxMenuItem" name="edit_class">
-        <label>Edit class defaults\tCtrl-Alt-E</label>
+        <label>Edit class defaults...\tCtrl-Alt-E</label>
         <bitmap platform="win" stock_id="edit-class"/>
         <help>Edit selected cell's class defaults</help>
     </object>
     <object class="wxMenuItem" name="edit_case">
-        <label>Edit case defaults\tCtrl-Shift-E</label>
+        <label>Edit case defaults...\tCtrl-Shift-E</label>
         <bitmap platform="win" stock_id="edit-case"/>
         <help>Edit case defaults</help>
     </object>
@@ -350,17 +361,10 @@
         <bitmap platform="win" stock_id="write-spreadsheet"/>
         <help>Run and print all cells to a spreadsheet file</help>
     </object>
-    <object class="wxMenu">
-        <label>Print r_oster</label>
-        <object class="wxMenuItem" name="print_group_roster">
-            <label>Print r_oster to spreadsheet\tCtrl-Shift-O</label>
-            <bitmap platform="win" stock_id="roster"/>
-            <help>Run and print group roster to a spreadsheet file</help>
-        </object>
-        <object class="wxMenuItem" name="print_group_quote">
-            <label>Print group premium _quote\tCtrl-Shift-Q</label>
-            <help>Run and print group premium quote to a PDF file</help>
-        </object>
+    <object class="wxMenuItem" name="print_group_roster">
+        <label>Print group r_oster...\tCtrl-Shift-O</label>
+        <bitmap platform="win" stock_id="roster"/>
+        <help>Run and print all cells to a group roster</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="paste_census">
@@ -410,7 +414,7 @@
     <object class="wxMenu" name="illustration_menu">
         <label>_Illustration</label>
         <object class="wxMenuItem" name="edit_cell">
-            <label>_Edit cell\tCtrl-E</label>
+            <label>_Edit cell...\tCtrl-E</label>
             <bitmap platform="win" stock_id="edit-cell"/>
             <help>Edit this cell</help>
         </object>
@@ -526,7 +530,7 @@
     <object class="wxMenu" name="mec_menu">
         <label>_MEC</label>
         <object class="wxMenuItem" name="edit_cell">
-            <label>_Edit\tCtrl-E</label>
+            <label>_Edit...\tCtrl-E</label>
             <bitmap platform="win" stock_id="edit-cell"/>
             <help>Edit this file</help>
         </object>
@@ -546,7 +550,7 @@
     <object class="wxMenu" name="gpt_menu">
         <label>_GPT</label>
         <object class="wxMenuItem" name="edit_cell">
-            <label>_Edit\tCtrl-E</label>
+            <label>_Edit...\tCtrl-E</label>
             <bitmap platform="win" stock_id="edit-cell"/>
             <help>Edit this file</help>
         </object>

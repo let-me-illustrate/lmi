@@ -115,21 +115,10 @@
         <bitmap stock_id="write-spreadsheet"/>
         <longhelp>Run and print all cells to a spreadsheet file</longhelp>
     </object>
-    <object class="tool" name="print_group">
-        <tooltip>Print roster</tooltip>
+    <object class="tool" name="print_group_roster">
+        <tooltip>Print group roster</tooltip>
         <bitmap stock_id="roster"/>
-        <dropdown>
-            <object class="wxMenu">
-                <object class="wxMenuItem" name="print_group_roster">
-                    <label>Print r_oster to spreadsheet</label>
-                    <help>Run and print group roster to a spreadsheet file</help>
-                </object>
-                <object class="wxMenuItem" name="print_group_quote">
-                    <label>Print group premium _quote</label>
-                    <help>Run and print group premium quote to a PDF file</help>
-                </object>
-            </object>
-        </dropdown>
+        <longhelp>Run and print all cells to a group roster</longhelp>
     </object>
     <object class="separator"/>
     <object class="tool" name="paste_census">
@@ -160,7 +149,7 @@
     </object>
     <object class="separator"/>
     <object class="tool" name="wxID_HELP">
-        <tooltip>Help</tooltip>
+        <tooltip>User manual</tooltip>
         <bitmap stock_id="wxART_HELP"/>
         <longhelp>Browse user manual</longhelp>
     </object>

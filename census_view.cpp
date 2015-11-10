@@ -43,6 +43,7 @@
 #include "miscellany.hpp"               // is_ok_for_cctype()
 #include "path_utility.hpp"
 #include "safely_dereference_as.hpp"
+#include "single_choice_popup_menu.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
@@ -825,7 +826,6 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("print_case_to_disk"        ),CensusView::UponPrintCaseToDisk        )
     EVT_MENU(XRCID("print_spreadsheet"         ),CensusView::UponRunCaseToSpreadsheet   )
     EVT_MENU(XRCID("print_group_roster"        ),CensusView::UponRunCaseToGroupRoster   )
-    EVT_MENU(XRCID("print_group_quote"         ),CensusView::UponRunCaseToGroupQuote    )
     EVT_MENU(XRCID("paste_census"              ),CensusView::UponPasteCensus            )
     EVT_MENU(XRCID("add_cell"                  ),CensusView::UponAddCell                )
     EVT_MENU(XRCID("delete_cells"              ),CensusView::UponDeleteCells            )
@@ -841,8 +841,6 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusView::UponUpdateAlwaysEnabled    )
-    EVT_UPDATE_UI(XRCID("print_group_quote"    ),CensusView::UponUpdateAlwaysEnabled    )
-    EVT_UPDATE_UI(XRCID("print_group"          ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateNonemptySelection)
@@ -1551,18 +1549,41 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
     DoAllCells(mce_emit_spreadsheet);
 }
 
-/// Print tab-delimited roster to file loadable in spreadsheet programs.
+/// Print group roster in an interactively-chosen format.
 
 void CensusView::UponRunCaseToGroupRoster(wxCommandEvent&)
 {
-    DoAllCells(mce_emit_group_roster);
-}
-
-/// Print group quote to PDF file.
-
-void CensusView::UponRunCaseToGroupQuote(wxCommandEvent&)
-{
-    DoAllCells(mce_emit_group_quote);
+    wxArrayString strings;
+    // Make sure ampersands don't look like references, e.g., in a
+    // string such as "premium quote" with an ampersand preceding 'q',
+    // which 'make check_concinnity' rejects.
+    strings.Add("Print r&oster to spreadsheet");
+    strings.Add("Print group premium ""&quote to PDF");
+    int const selection = SingleChoicePopupMenu(strings).Choose();
+    switch(selection)
+        {
+        case -1:
+            {
+            // No selection: do nothing; let the popup just vanish.
+            }
+            break;
+        case 0:
+            {
+            // Print tab-delimited roster to file loadable in spreadsheet programs.
+            DoAllCells(mce_emit_group_roster);
+            }
+            break;
+        case 1:
+            {
+            // Print group quote to a PDF file.
+            DoAllCells(mce_emit_group_quote);
+            }
+            break;
+        default:
+            {
+            fatal_error() << "Case " << selection << " not found." << LMI_FLUSH;
+            }
+        }
 }
 
 /// Paste a census from the clipboard.

@@ -37224,3 +37224,271 @@ definition of life insurance with a password never given to end users.
   illustrator.cpp
 Restrict group quotes to new business.
 
+20151017T1257Z <gchicares@sbcglobal.net> [472]
+
+  ledger_xml_io.cpp
+Add some missing formats.
+
+20151017T1259Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Require extra nonblank footnotes if variable.
+
+20151017T1307Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Refuse to run a group quote if any cell lapses in the first year.
+
+20151017T1313Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Widen columns to accommodate larger amounts.
+
+20151017T1323Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Add more space between logo and footnotes.
+
+20151018T1611Z <gchicares@sbcglobal.net> [472]
+
+  menu_commands.html
+Assimilate documentation to actual menus.
+
+20151018T1612Z <gchicares@sbcglobal.net> [472]
+
+  menus.xrc
+Refactor.
+
+20151018T1621Z <gchicares@sbcglobal.net> [472]
+
+  menu_commands.html
+  menus.xrc
+Improve ellipsis usage.
+
+20151019T0224Z <gchicares@sbcglobal.net> [472]
+
+  menus.xrc
+Further improve ellipsis usage.
+
+20151019T0226Z <gchicares@sbcglobal.net> [472]
+
+  menu_commands.html
+Update list of census commands.
+
+20151020T2105Z <gchicares@sbcglobal.net> [472]
+
+  census_view.cpp
+  census_view.hpp
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  menus.xrc
+  skeleton.cpp
+  toolbar.xrc
+Redesign group-quote GUI.
+
+20151021T1403Z <gchicares@sbcglobal.net> [472]
+
+  toolbar.xrc
+Assimilate toolbar to menus.
+
+20151021T1405Z <gchicares@sbcglobal.net> [472]
+
+  menus.xrc
+Further improve ellipsis usage.
+
+20151021T1406Z <gchicares@sbcglobal.net> [472]
+
+  census_view.cpp
+Improve documentation.
+
+20151021T1407Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Widen first column to accommodate larger censuses.
+
+20151021T1411Z <gchicares@sbcglobal.net> [472]
+
+  version.hpp
+Designate release candidate 6371.
+
+20151022T1732Z <gchicares@sbcglobal.net> [472]
+
+  mc_enum_types_aux.hpp
+Add a visibility attribute to a free function.
+
+20151022T1733Z <gchicares@sbcglobal.net> [472]
+
+  menu_commands.html
+Assimilate documentation to latest menu.
+
+20151022T1734Z <gchicares@sbcglobal.net> [472]
+
+  group_tutorial.html
+Discuss recently-added commands.
+
+20151023T1202Z <gchicares@sbcglobal.net> [472]
+
+  ledger_xml_io.cpp
+Warn about missing formats.
+
+20151023T1618Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Include supplemental specified amount in "Face Amount".
+
+20151023T1621Z <gchicares@sbcglobal.net> [472]
+
+  group_quote_pdf_gen_wx.cpp
+Leave "Income" blank if it is given as zero.
+
+20151023T1623Z <gchicares@sbcglobal.net> [472]
+
+  version.hpp
+Designate release candidate 6379.
+
+20151029T1624Z <gchicares@sbcglobal.net> [472]
+
+  multiple_cell_document.hpp
+Improve documentation.
+
+20151030T0039Z <gchicares@sbcglobal.net> [472]
+
+  dbnames.xpp
+  ledger.cpp
+  ledger_xsl.cpp
+  mc_enum_types.xpp
+  reg_d_offshore.xsl [expunged]
+Eradicate disused offshore private-placement ledger type.
+
+20151030T0040Z <gchicares@sbcglobal.net> [472]
+
+  fo_common.xsl
+  illustration_reg.xsl
+  nasd.xsl
+  reg_d_group.xsl
+  reg_d_individual.xsl
+  variable_annuity.xsl
+Fix spelling errors.
+
+20151102T2345Z <gchicares@sbcglobal.net> [472]
+
+  custom_io_1.cpp
+Stem cell proliferation in regression testing.
+
+20151102T2351Z <gchicares@sbcglobal.net> [472]
+
+  gpt_input.cpp
+  mec_input.cpp
+Propagate the 20150723T0941Z change to parallel code.
+
+20151104T0416Z <gchicares@sbcglobal.net> [472]
+
+  custom_io_1.cpp
+Reconcile generated input file before writing it.
+
+20151104T0510Z <gchicares@sbcglobal.net> [471]
+
+  accountvalue.cpp
+  custom_io_1.cpp
+  ihs_acctval.cpp
+  input.cpp
+  input.hpp
+Rename a function, explaining away what had seemed to be magic.
+
+20151104T1016Z <gchicares@sbcglobal.net> [471]
+
+  input_xml_io.cpp
+Improve documentation.
+
+20151106T1911Z <gchicares@sbcglobal.net> [471]
+
+  input_harmonization.cpp
+Assert certain invariants.
+
+20151106T2118Z <gchicares@sbcglobal.net> [471]
+
+  ledger.cpp
+Permit regression tests for withdrawn products.
+
+20151106T2205Z <gchicares@sbcglobal.net> [471]
+
+  ihs_irc7702.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: cumulative GLP and cumulative 'premiums paid' weren't
+reinitialized where needed, causing their values to become enormous
+after multiple solve iterations.
+
+20151107T1322Z <gchicares@sbcglobal.net> [471]
+
+  input_harmonization.cpp
+Improve documentation.
+
+20151107T1341Z <gchicares@sbcglobal.net> [471]
+
+  gpt_input.cpp
+  illustrator.cpp
+  mec_input.cpp
+Regularize idioms to distinguish new business from inforce.
+
+20151107T1342Z <gchicares@sbcglobal.net> [471]
+
+  basicvalues.cpp
+  ihs_basicval.cpp
+Regularize idioms to distinguish new business from inforce.
+
+20151107T1344Z <gchicares@sbcglobal.net> [471]
+
+  ihs_acctval.cpp
+  ihs_avstrtgy.cpp
+  ihs_server7702.cpp
+  ledger_invariant.cpp
+Regularize idioms to distinguish new business from inforce.
+
+20151107T1346Z <gchicares@sbcglobal.net> [470]
+
+  ihs_irc7702.cpp
+  ihs_irc7702a.cpp
+Plan to regularize idioms to distinguish new business from inforce.
+
+20151107T1347Z <gchicares@sbcglobal.net> [470]
+
+  input_xml_io.cpp
+Improve documentation.
+
+20151107T2110Z <gchicares@sbcglobal.net> [468]
+
+  group_values.cpp
+  ledger.cpp
+  ledger_invariant.hpp
+  ledger_variant.hpp
+Refactor, temporarily preserving excessive composite length. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-10/msg00005.html
+
+20151108T1257Z <gchicares@sbcglobal.net> [468]
+
+  group_values.cpp
+Use ideal composite length.
+
+20151109T0007Z <gchicares@sbcglobal.net> [468]
+
+  group_values.cpp
+Refine ideal composite length.
+
+20151109T0009Z <gchicares@sbcglobal.net> [468]
+
+  ledger_invariant.cpp
+Set composite "age" to that of youngest included cell. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-11/msg00008.html
+
+20151109T1410Z <gchicares@sbcglobal.net> [468]
+
+  group_quote_pdf_gen_wx.cpp
+Avoid writing <br> before empty footnotes (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-11/msg00007.html
+
+20151109T1424Z <gchicares@sbcglobal.net> [468]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for concision.
+
