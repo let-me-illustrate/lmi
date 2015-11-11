@@ -37492,3 +37492,8 @@ Avoid writing <br> before empty footnotes (VZ). See:
   group_quote_pdf_gen_wx.cpp
 Refactor for concision.
 
+20151111T2057Z <gchicares@sbcglobal.net> [468]
+
+  sample.cns.touchstone
+Include composite "age" 70 values [NAIC Illustration Reg (7)(C)(1)].
+
