@@ -156,7 +156,7 @@ wxString wrap_if_not_empty(wxString const& html)
 
 /// Transform 'html' -> '<br><br>html', but return empty string unchanged.
 
-wxString brbr(wxString const& html)
+wxString brbr(std::string const& html)
 {
     return
         wrap_if_not_empty<html::tag::br>
@@ -168,7 +168,7 @@ wxString brbr(wxString const& html)
 
 /// Transform 'html' -> '<br><br><b>html</b>', but return empty string unchanged.
 
-wxString brbrb(wxString const& html)
+wxString brbrb(std::string const& html)
 {
     return
         wrap_if_not_empty<html::tag::br>
