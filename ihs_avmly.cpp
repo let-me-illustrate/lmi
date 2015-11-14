@@ -135,7 +135,7 @@ void AccountValue::DoMonthDR()
         ,CashValueFor7702()
         );
 
-    NetPmts[Month]   = 0.0; // TODO ?? expunge as being unnecessary
+    NetPmts  [Month] = 0.0; // TODO ?? expunge as being unnecessary
     GrossPmts[Month] = 0.0; // TODO ?? expunge as being unnecessary
     TxExch1035();
     // TODO ?? TAXATION !! Is this where spec amt should be increased by GPT?
@@ -268,7 +268,7 @@ void AccountValue::process_payment(double payment)
     // contracts. We deem net payments to have the same proportion
     // as gross payments, which we do have for ee and er separately.
 
-    HOPEFULLY(0.0 <= GrossPmts[Month]);
+    HOPEFULLY(0.0 <=   GrossPmts[Month]);
     HOPEFULLY(0.0 <= EeGrossPmts[Month]);
     HOPEFULLY(0.0 <= ErGrossPmts[Month]);
 
@@ -549,7 +549,7 @@ void AccountValue::TxExch1035()
 
     HOPEFULLY(Year == InforceYear);
     HOPEFULLY(Month == InforceMonth);
-    HOPEFULLY(0.0 == GrossPmts[Month]);
+    HOPEFULLY(0.0 ==   GrossPmts[Month]);
     HOPEFULLY(0.0 == EeGrossPmts[Month]);
     HOPEFULLY(0.0 == ErGrossPmts[Month]);
 
@@ -1241,40 +1241,8 @@ void AccountValue::TxAscertainDesiredPayment()
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-    if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
-        {
-        if(ee_pay_this_month)
-            {
-            double eepmt = PerformEePmtStrategy();
-            // Don't enforce the GPT premium limit when solving for
-            // illustration-reg guaranteed premium.
-            if(!SolvingForGuarPremium)
-                {
-                double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
-                Irc7702_->ProcessGptPmt(Year, eepmt, fake_cum_pmt);
-                }
-            EeGrossPmts[Month] += eepmt;
-            GrossPmts[Month] += eepmt;
-            }
-        if(er_pay_this_month)
-            {
-            double erpmt = PerformErPmtStrategy();
-            // Don't enforce the GPT premium limit when solving for
-            // illustration-reg guaranteed premium.
-            if(!SolvingForGuarPremium)
-                {
-                double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
-                Irc7702_->ProcessGptPmt(Year, erpmt, fake_cum_pmt);
-                }
-            ErGrossPmts[Month] += erpmt;
-            GrossPmts[Month] += erpmt;
-            }
-        }
-
-    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
-    HOPEFULLY(GrossPmts[Month] < 1.0e100);
-
-    // Guideline limits are imposed in this order:
+    // Guideline limits are imposed in the order in which payments are
+    // applied:
     //   1035 exchanges
     //   employee vector-input premium
     //   employer vector-input premium
@@ -1290,6 +1258,39 @@ void AccountValue::TxAscertainDesiredPayment()
     // unique nature that requires them to be recognized before any
     // premium is paid, and dumpins do not share that nature.
 
+    if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
+        {
+        if(ee_pay_this_month)
+            {
+            double eepmt = PerformEePmtStrategy();
+            // Don't enforce the GPT premium limit when solving for
+            // illustration-reg guaranteed premium.
+            if(!SolvingForGuarPremium)
+                {
+                double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
+                Irc7702_->ProcessGptPmt(Year, eepmt, fake_cum_pmt);
+                }
+            EeGrossPmts[Month] += eepmt;
+            GrossPmts  [Month] += eepmt;
+            }
+        if(er_pay_this_month)
+            {
+            double erpmt = PerformErPmtStrategy();
+            // Don't enforce the GPT premium limit when solving for
+            // illustration-reg guaranteed premium.
+            if(!SolvingForGuarPremium)
+                {
+                double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
+                Irc7702_->ProcessGptPmt(Year, erpmt, fake_cum_pmt);
+                }
+            ErGrossPmts[Month] += erpmt;
+            GrossPmts  [Month] += erpmt;
+            }
+        }
+
+    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    HOPEFULLY(GrossPmts[Month] < 1.0e100);
+
     if(0 == Year && 0 == Month && (Solving || mce_run_gen_curr_sep_full == RunBasis_))
         {
         // Don't enforce the GPT premium limit when solving for
@@ -1300,8 +1301,9 @@ void AccountValue::TxAscertainDesiredPayment()
             Irc7702_->ProcessGptPmt(Year, Dumpin, fake_cum_pmt);
             }
         EeGrossPmts[Month] += Dumpin;
-        GrossPmts[Month] += Dumpin;
+        GrossPmts  [Month] += Dumpin;
         }
+
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 }
 
