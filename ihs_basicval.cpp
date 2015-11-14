@@ -1031,7 +1031,7 @@ double BasicValues::GetModalPremGLP
         ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
         );
 
-// TODO ?? PROBLEMS HERE
+// TODO ?? TAXATION !! PROBLEMS HERE
 // what if a_year != 0 ?
 // term rider, dumpin
 
@@ -1054,7 +1054,7 @@ double BasicValues::GetModalPremGSP
         ,Irc7702_->GetLeastBftAmtEver()
         );
 
-// TODO ?? PROBLEMS HERE
+// TODO ?? TAXATION !! PROBLEMS HERE
 // what if a_year != 0 ?
 // term rider, dumpin
 
