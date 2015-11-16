@@ -29,16 +29,17 @@
 
 #include <wx/bitmap.h>
 #include <wx/bmpbuttn.h>
-#include <wx/dcclient.h> // class wxClientDC
+#include <wx/dcclient.h>                // class wxClientDC
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
 #include <wx/tglbtn.h>
 #include <wx/window.h>
 
+#include <limits>
 #include <map>
 #include <ostream>
 #include <sstream>
-#include <utility>
+#include <utility>                      // std::pair
 
 namespace
 {
@@ -50,20 +51,23 @@ enum enum_rounding_button_id
     ,e_rbi_downward
     };
 
-// toggle button states we are interested in
+/// Toggle-button states we are interested in.
+
 enum enum_bitmap_button_state
     {e_state_normal
     ,e_state_hover
     ,e_state_selected
     };
 
-// bitmap storage
+/// Bitmap storage.
+
 typedef std::map
     <std::pair<rounding_style,enum_bitmap_button_state>
     ,wxBitmap
     > button_bitmaps;
 
-// Returns the bitmap storage. Loads resources when called for the first time.
+/// Return bitmap storage. Load resources when called for the first time.
+
 button_bitmaps const& all_button_bitmaps()
 {
     static button_bitmaps bitmaps;
@@ -120,7 +124,8 @@ std::ostream& operator<<
     return os << "style " << b.first << " state " << b.second;
 }
 
-// return the bitmap corrsponding to the 'button' in the 'state'
+/// Return the bitmap corresponding to the 'button' in the 'state'.
+
 wxBitmap const& get_button_bitmap
     (rounding_style button
     ,enum_bitmap_button_state state
@@ -199,8 +204,13 @@ void RoundingButtons::Create
     button_downward  ().SetToolTip("round downward");
     spin_ = new(wx) wxSpinCtrl(this);
 
-    // adjust widget size to be as small as possible
-    // 6 stands for the digit and its margins, plus the same for spin arrows
+    // Set a reasonable range. Negatives are actually useful, e.g.,
+    // for rounding to thousands.
+    int const digits = std::numeric_limits<double>::digits10;
+    spin().SetRange(-digits, digits);
+
+    // Adjust widget size to be as small as possible: 6 represents the
+    // digit and its margins, plus the same for spin arrows.
     wxSize spin_size = CalculateMinimumTextControlSize(spin_, 6);
     spin_size.SetHeight(spin().GetSize().GetHeight());
     spin().SetMinSize(spin_size);
@@ -232,7 +242,7 @@ wxSize RoundingButtons::CalculateMinimumTextControlSize
     dc.SetFont(window->GetFont());
 
     wxCoord w, h;
-    // consider 'W' to be the widest letter
+    // Assume that 'W' is the widest letter.
     dc.GetTextExtent("W", &w, &h);
 
     wxSize size(w * n, h);
