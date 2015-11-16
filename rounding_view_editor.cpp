@@ -98,7 +98,7 @@ button_bitmaps const& all_button_bitmaps()
                 {
                 std::ostringstream oss;
                 oss
-                    << "round_"
+                    << "rnd_"
                     << li->second
                     << ti->second
                     ;
