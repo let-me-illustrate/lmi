@@ -318,6 +318,18 @@
                                         <size>-1,-1</size>
                                     </object>
                                 </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Minimum initial premium</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT</flag>
+                                    <object class="RoundingButtons" name="min_init_premium">
+                                        <size>-1,-1</size>
+                                    </object>
+                                </object>
                             </object>
                         </object>
                     </object>
@@ -330,18 +342,18 @@
     </object>
 </object>
 
-<object class="wxBitmap" name="round_not_at_all">round_not_at_all.png</object>
-<object class="wxBitmap" name="round_not_at_all_hover">round_not_at_all_hover.png</object>
-<object class="wxBitmap" name="round_not_at_all_selected">round_not_at_all_selected.png</object>
-<object class="wxBitmap" name="round_to_nearest">round_to_nearest.png</object>
-<object class="wxBitmap" name="round_to_nearest_hover">round_to_nearest_hover.png</object>
-<object class="wxBitmap" name="round_to_nearest_selected">round_to_nearest_selected.png</object>
-<object class="wxBitmap" name="round_upward">round_upward.png</object>
-<object class="wxBitmap" name="round_upward_hover">round_upward_hover.png</object>
-<object class="wxBitmap" name="round_upward_selected">round_upward_selected.png</object>
-<object class="wxBitmap" name="round_downward">round_downward.png</object>
-<object class="wxBitmap" name="round_downward_hover">round_downward_hover.png</object>
-<object class="wxBitmap" name="round_downward_selected">round_downward_selected.png</object>
+<object class="wxBitmap" name="rnd_not_at_all">rnd_not_at_all.png</object>
+<object class="wxBitmap" name="rnd_not_at_all_hover">rnd_not_at_all_hover.png</object>
+<object class="wxBitmap" name="rnd_not_at_all_selected">rnd_not_at_all_selected.png</object>
+<object class="wxBitmap" name="rnd_to_nearest">rnd_to_nearest.png</object>
+<object class="wxBitmap" name="rnd_to_nearest_hover">rnd_to_nearest_hover.png</object>
+<object class="wxBitmap" name="rnd_to_nearest_selected">rnd_to_nearest_selected.png</object>
+<object class="wxBitmap" name="rnd_upward">rnd_upward.png</object>
+<object class="wxBitmap" name="rnd_upward_hover">rnd_upward_hover.png</object>
+<object class="wxBitmap" name="rnd_upward_selected">rnd_upward_selected.png</object>
+<object class="wxBitmap" name="rnd_downward">rnd_downward.png</object>
+<object class="wxBitmap" name="rnd_downward_hover">rnd_downward_hover.png</object>
+<object class="wxBitmap" name="rnd_downward_selected">rnd_downward_selected.png</object>
 
 </resource>
 

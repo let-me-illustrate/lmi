@@ -32,7 +32,7 @@
 // a GUI class, is required in a document implementation?
 
 #include "rounding_view.hpp"
-#include "rounding_view_editor.hpp" // class RoundingButtons
+#include "rounding_view_editor.hpp"     // class RoundingButtons
 #include "view_ex.tpp"
 
 // EVGENIY !! Doesn't it seem strange that this wx header appears
@@ -70,6 +70,7 @@ RoundingDocument::RoundingDocument()
     values_["max_specamt"       ] = &rounding_rules_.round_max_specamt_       ;
     values_["min_premium"       ] = &rounding_rules_.round_min_premium_       ;
     values_["max_premium"       ] = &rounding_rules_.round_max_premium_       ;
+    values_["min_init_premium"  ] = &rounding_rules_.round_min_init_premium_  ;
 }
 
 RoundingDocument::~RoundingDocument()

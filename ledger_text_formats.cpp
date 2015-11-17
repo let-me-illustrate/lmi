@@ -540,12 +540,12 @@ void PrintCellTabDelimited
         ,"GrossWithdrawal"
         ,"NewCashLoan"
         ,"LoanBalance"
-// TODO ?? Add loan interest?
+// SOMEDAY !! Add loan interest?
         ,"Outlay"
         ,"NetPremium"
         ,"PremiumTaxLoad"
         ,"DacTaxLoad"
-// TODO ?? Also:
+// SOMEDAY !! Also:
 //   M&E
 //   stable value
 //   DAC- and premium-tax charge
@@ -570,8 +570,8 @@ void PrintCellTabDelimited
         ,"CurrentAccountValue"
         ,"CurrentNetCashSurrenderValue"
         ,"CurrentYearEndDeathBenefit"
-        ,"IrrOnSurrender"
-        ,"IrrOnDeath"
+        ,"CumulativeIrrOnSurrender"
+        ,"CumulativeIrrOnDeath"
         ,"YearEndInforceLives"
         ,"ClaimsPaid"
         ,"NetClaims"
@@ -1069,8 +1069,10 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
         os_ << endrow;
         }
 
-// TODO ?? Print "Age  70" instead of duration for last row. Does the
-// illustration reg require any other ages?
+// TODO ?? Print "Age  70" instead of duration for last row. The NAIC
+// illustration reg (7)(C)(1) requires the numeric summary to show:
+//  - durations 5, 10, and 20; and age 70 if applicable; but
+//  - durations 5, 10, 20, and 30 for multiple-life policies.
     os_ << endrow;
 }
 

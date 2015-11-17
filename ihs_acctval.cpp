@@ -109,6 +109,22 @@ AccountValue::AccountValue(Input const& input)
     ,OldDBOpt              (mce_option1)
     ,YearsDBOpt            (mce_option1)
 {
+    // Explicitly initialize antediluvian members. It's generally
+    // better to do this in the initializer-list, but here they can
+    // all be kept together.
+    LapseMonth               = 0;          // Antediluvian.
+    LapseYear                = 0;          // Antediluvian.
+    AVUnloaned               = 0.0;        // Antediluvian.
+    pmt                      = 0.0;        // Antediluvian.
+    mode                     = mce_annual; // Antediluvian.
+    ModeIndex                = 0;          // Antediluvian.
+    wd                       = 0.0;        // Antediluvian.
+    mlyguarv                 = 0.0;        // Antediluvian.
+    deathbft                 = 0.0;        // Antediluvian.
+    haswp                    = false;      // Antediluvian.
+    hasadb                   = false;      // Antediluvian.
+    mlydedtonextmodalpmtdate = 0.0;        // Antediluvian.
+
     InvariantValues().Init(this);
 // TODO ?? What are the values of the last two arguments here?
     VariantValues().Init(*this, GenBasis_, SepBasis_);
