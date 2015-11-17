@@ -227,12 +227,19 @@ double AccountValue::DoPerformPmtStrategy
                 {
                 if(UnsplitSplitMinPrem)
                     {
+                    // Normally, if min prem is defined separately
+                    // for ee and er ("split"), then each pays only
+                    // its respective piece when its pmt is specified
+                    // as "minimum". When a "split" product has a
+                    // subplan designed for a single payor (e.g.,
+                    // "voluntary" group coverage), "minimum" means
+                    // the total: what was "split" must be "unsplit".
                     return
                           GetModalPremMlyDedEe(Year, a_CurrentMode, TermSpecAmt)
                         + GetModalPremMlyDedEr(Year, a_CurrentMode, ActualSpecAmt)
                         ;
                     }
-                if(mce_solve_ee_prem == a_SolveForWhichPrem)
+                else if(mce_solve_ee_prem == a_SolveForWhichPrem)
                     {
                     // Normally, ee mode is entered to match ee mode,
                     // which represents the payment mode chosen by the

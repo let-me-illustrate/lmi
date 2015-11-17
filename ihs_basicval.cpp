@@ -834,6 +834,7 @@ void BasicValues::SetRoundingFunctors()
     set_rounding_rule(round_max_specamt_       , RoundingRules_->datum("RoundMaxSpecamt"  ));
     set_rounding_rule(round_min_premium_       , RoundingRules_->datum("RoundMinPrem"     ));
     set_rounding_rule(round_max_premium_       , RoundingRules_->datum("RoundMaxPrem"     ));
+    set_rounding_rule(round_min_init_premium_  , RoundingRules_->datum("RoundMinInitPrem" ));
 }
 
 /// Establish maximum survivorship duration.
@@ -1031,7 +1032,7 @@ double BasicValues::GetModalPremGLP
         ,effective_dbopt_7702(DeathBfts_->dbopt()[0], Equiv7702DBO3)
         );
 
-// TODO ?? PROBLEMS HERE
+// TODO ?? TAXATION !! PROBLEMS HERE
 // what if a_year != 0 ?
 // term rider, dumpin
 
@@ -1054,7 +1055,7 @@ double BasicValues::GetModalPremGSP
         ,Irc7702_->GetLeastBftAmtEver()
         );
 
-// TODO ?? PROBLEMS HERE
+// TODO ?? TAXATION !! PROBLEMS HERE
 // what if a_year != 0 ?
 // term rider, dumpin
 

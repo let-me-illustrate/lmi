@@ -37492,3 +37492,19 @@ Avoid writing <br> before empty footnotes (VZ). See:
   group_quote_pdf_gen_wx.cpp
 Refactor for concision.
 
+20151111T2057Z <gchicares@sbcglobal.net> [468]
+
+  sample.cns.touchstone
+Include composite "age" 70 values [NAIC Illustration Reg (7)(C)(1)].
+
+20151114T0522Z <gchicares@sbcglobal.net> [466]
+
+  ledger_text_formats.cpp
+Improve documentation; demote two not-so-important defect markers.
+
+20151114T0525Z <gchicares@sbcglobal.net> [466]
+
+  ledger_text_formats.cpp
+Rename IRR columns, on one report only, to prevent confusion. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-11/msg00015.html
+
