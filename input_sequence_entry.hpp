@@ -57,7 +57,10 @@ class InputSequenceEntry
 
   private:
     void UponChildKillFocus(wxFocusEvent&);
+    void UponEnter(wxCommandEvent&);
     void UponOpenEditor(wxCommandEvent&);
+
+    void DoOpenEditor();
 
     Input const* input_;
     std::string field_name_;
