@@ -1180,7 +1180,6 @@ class InputSequenceTextCtrl
     InputSequenceTextCtrl(wxWindow* parent, wxWindowID id);
 
   private:
-    void UponKillFocus(wxFocusEvent& event);
     void UponChar(wxKeyEvent& event);
 };
 
@@ -1189,23 +1188,9 @@ InputSequenceTextCtrl::InputSequenceTextCtrl(wxWindow* parent, wxWindowID id)
 {
     ::Connect
             (this
-            ,wxEVT_KILL_FOCUS
-            ,&InputSequenceTextCtrl::UponKillFocus
-            );
-    ::Connect
-            (this
             ,wxEVT_CHAR
             ,&InputSequenceTextCtrl::UponChar
             );
-}
-
-void InputSequenceTextCtrl::UponKillFocus(wxFocusEvent& event)
-{
-    // Don't notify the parent (and thus wxDataViewCtrl) of focus change if
-    // it's within this InputSequenceEntry composite control.
-    if(0 == event.GetWindow() || event.GetWindow()->GetParent() != GetParent())
-        GetParent()->ProcessWindowEvent(event);
-    event.Skip();
 }
 
 void InputSequenceTextCtrl::UponChar(wxKeyEvent& event)
@@ -1219,39 +1204,17 @@ class InputSequenceButton
 {
   public:
     InputSequenceButton(wxWindow* parent, wxWindowID id);
-
-  private:
-    void UponKillFocus(wxFocusEvent& event);
 };
 
 InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
     :wxButton(parent, id, "...", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT)
 {
-    ::Connect
-            (this
-            ,wxEVT_KILL_FOCUS
-            ,&InputSequenceButton::UponKillFocus
-            );
-
     SetToolTip("Open sequence editor");
 
     // Set vertical size to 1px - it's ridiculously small, but the sizers will make it as
     // tall as the text control. Use text extent of "..." for width, because standard
     // buttons use more padding.
     SetMinSize(wxSize(8 + GetTextExtent(GetLabel()).x, 1));
-}
-
-void InputSequenceButton::UponKillFocus(wxFocusEvent& event)
-{
-    // Don't notify the parent (and thus wxDataViewCtrl) of focus change if its within this
-    // InputSequenceEntry composite control or a InputSequenceEditor window opened from it.
-    if(0 == event.GetWindow() ||
-       (event.GetWindow()->GetParent() != GetParent() &&
-        wxGetTopLevelParent(event.GetWindow())->GetParent() != this))
-        {
-        GetParent()->ProcessWindowEvent(event);
-        }
-    event.Skip();
 }
 
 } // Unnamed namespace.
@@ -1296,6 +1259,19 @@ bool InputSequenceEntry::Create
 
     SetSizer(sizer);
 
+    text_->Connect
+        (wxEVT_KILL_FOCUS
+        ,wxFocusEventHandler(InputSequenceEntry::UponChildKillFocus)
+        ,NULL
+        ,this
+        );
+
+    button_->Connect
+        (wxEVT_KILL_FOCUS
+        ,wxFocusEventHandler(InputSequenceEntry::UponChildKillFocus)
+        ,NULL
+        ,this
+        );
     button_->Connect
         (wxEVT_COMMAND_BUTTON_CLICKED
         ,wxCommandEventHandler(InputSequenceEntry::UponOpenEditor)
@@ -1351,6 +1327,19 @@ std::string InputSequenceEntry::field_name() const
         // see the explanation in input()
         return std::string(GetName().c_str());
         }
+}
+
+void InputSequenceEntry::UponChildKillFocus(wxFocusEvent& event)
+{
+    // Don't notify the parent (and thus wxDataViewCtrl) of focus change if its within this
+    // InputSequenceEntry composite control or a InputSequenceEditor window opened from it.
+    if(0 == event.GetWindow() ||
+       (event.GetWindow()->GetParent() != GetParent() &&
+        wxGetTopLevelParent(event.GetWindow())->GetParent() != this))
+        {
+        GetParent()->ProcessWindowEvent(event);
+        }
+    event.Skip();
 }
 
 void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
