@@ -1184,7 +1184,14 @@ class InputSequenceTextCtrl
 };
 
 InputSequenceTextCtrl::InputSequenceTextCtrl(wxWindow* parent, wxWindowID id)
-    :wxTextCtrl(parent, id)
+    :wxTextCtrl
+        (parent
+        ,id
+        ,wxString()
+        ,wxDefaultPosition
+        ,wxDefaultSize
+        ,wxTE_PROCESS_ENTER
+        )
 {
     ::Connect
             (this
@@ -1265,6 +1272,12 @@ bool InputSequenceEntry::Create
         ,NULL
         ,this
         );
+    text_->Connect
+        (wxEVT_TEXT_ENTER
+        ,wxCommandEventHandler(InputSequenceEntry::UponEnter)
+        ,NULL
+        ,this
+        );
 
     button_->Connect
         (wxEVT_KILL_FOCUS
@@ -1342,7 +1355,37 @@ void InputSequenceEntry::UponChildKillFocus(wxFocusEvent& event)
     event.Skip();
 }
 
+void InputSequenceEntry::UponEnter(wxCommandEvent& event)
+{
+    // Pressing Enter key without modifiers just accepts the changes, but we
+    // allow using Alt-Enter to open the input sequence editor dialog from
+    // keyboard.
+    if(!wxGetKeyState(WXK_ALT))
+        {
+        event.Skip();
+        return;
+        }
+
+    DoOpenEditor();
+
+    // Put focus back on the control itself as normal focus restoring logic
+    // doesn't work as we block some of the events in UponChildKillFocus().
+    text_->SetFocus();
+}
+
 void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
+{
+    DoOpenEditor();
+
+    // If this editor is used inside wxDataViewCtrl, don't keep focus after
+    // showing the dialog but give it to the parent to ensure that the editor
+    // is closed by it. Notice that there is no need to check if we actually
+    // are inside wxDataViewCtrl before doing it as otherwise our parent (e.g.
+    // a wxPanel) will just give focus back to us and nothing really happens.
+    GetParent()->SetFocus();
+}
+
+void InputSequenceEntry::DoOpenEditor()
 {
     Input const& in = input();
 
@@ -1394,13 +1437,6 @@ void InputSequenceEntry::UponOpenEditor(wxCommandEvent&)
     editor.CentreOnParent();
 
     editor.ShowModal();
-
-    // If this editor is used inside wxDataViewCtrl, don't keep focus after
-    // showing the dialog but give it to the parent to ensure that the editor
-    // is closed by it. Notice that there is no need to check if we actually
-    // are inside wxDataViewCtrl before doing it as otherwise our parent (e.g.
-    // a wxPanel) will just give focus back to us and nothing really happens.
-    GetParent()->SetFocus();
 }
 
 IMPLEMENT_DYNAMIC_CLASS(InputSequenceEntryXmlHandler, wxXmlResourceHandler)
