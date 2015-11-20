@@ -1225,48 +1225,54 @@ void AccountValue::TxAscertainDesiredPayment()
 //     does GPT effect also vary by basis?
 //       e.g. when opt change produces different spec amts
 
-    // Do nothing if this is not a modal payment date.
-    // TODO ?? There has to be a better criterion for early termination.
-    bool ee_pay_this_month  = IsModalPmtDate(InvariantValues().EeMode[Year].value());
-    bool er_pay_this_month  = IsModalPmtDate(InvariantValues().ErMode[Year].value());
+    mcenum_mode const ee_mode = InvariantValues().EeMode[Year].value();
+    mcenum_mode const er_mode = InvariantValues().ErMode[Year].value();
+    bool const ee_pay_this_month = IsModalPmtDate(ee_mode);
+    bool const er_pay_this_month = IsModalPmtDate(er_mode);
+    // Month zero must be a modal payment date for both ee and er.
+    LMI_ASSERT((ee_pay_this_month && er_pay_this_month) || (0 != Month));
 
-    if(!ee_pay_this_month && !er_pay_this_month)
+    // Do nothing if this is not a modal payment date, or if the
+    // present basis reuses payments previously set on another basis.
+    bool const nothing_to_pay = !(ee_pay_this_month || er_pay_this_month);
+    bool const nothing_to_set = !(Solving || mce_run_gen_curr_sep_full == RunBasis_);
+    if(nothing_to_pay || nothing_to_set)
         {
         return;
         }
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-    if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
+    double eepmt = 0.0;
+    if(ee_pay_this_month)
         {
-        if(ee_pay_this_month)
+        eepmt = PerformEePmtStrategy();
+        // Illustration-reg guaranteed premium ignores GPT limit.
+        if(!SolvingForGuarPremium)
             {
-            double eepmt = PerformEePmtStrategy();
-            // Illustration-reg guaranteed premium ignores GPT limit.
-            if(!SolvingForGuarPremium)
-                {
-                Irc7702_->ProcessGptPmt(Year, eepmt);
-                }
-            EeGrossPmts[Month] += eepmt;
-            GrossPmts  [Month] += eepmt;
+            Irc7702_->ProcessGptPmt(Year, eepmt);
             }
-        if(er_pay_this_month)
+        EeGrossPmts[Month] += eepmt;
+        GrossPmts  [Month] += eepmt;
+        }
+
+    double erpmt = 0.0;
+    if(er_pay_this_month)
+        {
+        erpmt = PerformErPmtStrategy();
+        // Illustration-reg guaranteed premium ignores GPT limit.
+        if(!SolvingForGuarPremium)
             {
-            double erpmt = PerformErPmtStrategy();
-            // Illustration-reg guaranteed premium ignores GPT limit.
-            if(!SolvingForGuarPremium)
-                {
-                Irc7702_->ProcessGptPmt(Year, erpmt);
-                }
-            ErGrossPmts[Month] += erpmt;
-            GrossPmts  [Month] += erpmt;
+            Irc7702_->ProcessGptPmt(Year, erpmt);
             }
+        ErGrossPmts[Month] += erpmt;
+        GrossPmts  [Month] += erpmt;
         }
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
     HOPEFULLY(GrossPmts[Month] < 1.0e100);
 
-    if(0 == Year && 0 == Month && (Solving || mce_run_gen_curr_sep_full == RunBasis_))
+    if(0 == Year && 0 == Month)
         {
         // Illustration-reg guaranteed premium ignores GPT limit.
         if(!SolvingForGuarPremium)
