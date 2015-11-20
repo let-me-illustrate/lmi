@@ -1100,22 +1100,39 @@ double AccountValue::SuppositiveModalPremium
     ,bool        with_wp
     ) const
 {
+    LMI_ASSERT(0 == Year);
+
     yare_input yi(yare_input_);
 
     yi.AccidentalDeathBenefit = with_adb;
     yi.WaiverOfPremiumBenefit = with_wp;
 
+    double z;
     if(!SplitMinPrem)
         {
-        return GetModalPremMlyDed(year, mode, specamt, yi);
+        z = GetModalPremMlyDed(year, mode, specamt, yi);
         }
     else
         {
-        return
+        z =
               GetModalPremMlyDedEe(year, mode, termamt, yi)
             + GetModalPremMlyDedEr(year, mode, specamt, yi)
             ;
         }
+
+    // If minimum premiums are of the 'oe_monthly_deduction' type,
+    // then the initial modal minimum premium previously calculated
+    // must equal the "suppositive" result for the same rider choices.
+    if
+        (  oe_monthly_deduction == MinPremType
+        && yi.AccidentalDeathBenefit == yare_input_.AccidentalDeathBenefit
+        && yi.WaiverOfPremiumBenefit == yare_input_.WaiverOfPremiumBenefit
+        )
+        {
+        LMI_ASSERT(z == InvariantValues().ModalMinimumPremium[0]);
+        }
+
+    return z;
 }
 
 //============================================================================
