@@ -1190,40 +1190,41 @@ void AccountValue::TxTestGPT()
     OldDBOpt = YearsDBOpt;
 }
 
-//============================================================================
-// All payments must be made here.
-// Process premium payment reflecting premium load.
-// TODO ?? TAXATION !! Contains hooks for guideline premium test; they need to be
-//   fleshed out.
-// Ignores strategies such as pay guideline premium, which are handled
-//   in PerformE[er]PmtStrategy().
-// Ignores no-lapse periods and other death benefit guarantees.
-//
-// SOMEDAY !! Some systems force monthly premium to be integral cents even
-// though actual mode is not monthly; is that something we need to do here?
+/// Set payments, reflecting strategies and imposing GPT limit.
+///
+/// Payments are set here on the current-full-expense basis (or on the
+/// solve basis if different), and reused on other bases.
+///
+/// 1035 rollovers are handled elsewhere.
+///
+/// Guideline limits are imposed in the order in which payments are
+/// applied:
+///   1035 exchanges
+///   employee vector-input premium
+///   employer vector-input premium
+///   dumpin
+/// This order is pretty much arbitrary, except that 1035 exchanges
+/// really must be processed first. An argument could be made for
+/// changing the order of employee and employer premiums. An
+/// argument could be made for grouping dumpin with employee
+/// premiums, at least as long as we treat dumpin as employee
+/// premium. Even though dumpin and 1035 exchanges are similar in
+/// that both are single payments notionally made at issue, it is
+/// not necessary to group them together: 1035 exchanges have a
+/// unique nature that requires them to be recognized before any
+/// premium is paid, and dumpins do not share that nature.
 
-/*
-Decide whether we need to do anything
-    no pmt this month due to mode
-    zero pmt
-Perform strategy
-Test 7702, 7702A // TAXATION !! Resolve these issues:
-    apportion limited prem across ee, er,...dumpin?
-    need to limit pmt here, but other events e.g. WD affect limits
-    pmts must be the same on all bases
-        7702A effect varies by basis
-        does GPT effect also vary by basis?
-            e.g. when opt change produces different spec amts *
-Handle dumpins
-What to store?
-Deduct load (varies by basis)
-Apportion across gen, sep accounts
-Update cum pmts, tax basis, DCV
-*/
-
-//============================================================================
 void AccountValue::TxAscertainDesiredPayment()
 {
+// SOMEDAY !! Some systems force monthly premium to be integral cents even
+// though actual mode is not monthly; is that something we need to do here?
+//
+// TAXATION !! Resolve these issues:
+//   pmts must be the same on all bases; however:
+//     7702A effect varies by basis
+//     does GPT effect also vary by basis?
+//       e.g. when opt change produces different spec amts
+
     // Do nothing if this is not a modal payment date.
     // TODO ?? There has to be a better criterion for early termination.
     bool ee_pay_this_month  = IsModalPmtDate(InvariantValues().EeMode[Year].value());
@@ -1234,29 +1235,7 @@ void AccountValue::TxAscertainDesiredPayment()
         return;
         }
 
-    //  ForceOut = 0.0;
-    //  double GuidelinePremLimit = 0.0;
-
-    // Pay premium--current basis determines premium for all bases.
-
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
-
-    // Guideline limits are imposed in the order in which payments are
-    // applied:
-    //   1035 exchanges
-    //   employee vector-input premium
-    //   employer vector-input premium
-    //   dumpin
-    // This order is pretty much arbitrary, except that 1035 exchanges
-    // really must be processed first. An argument could be made for
-    // changing the order of employee and employer premiums. An
-    // argument could be made for grouping dumpin with employee
-    // premiums, at least as long as we treat dumpin as employee
-    // premium. Even though dumpin and 1035 exchanges are similar in
-    // that both are single payments notionally made at issue, it is
-    // not necessary to group them together: 1035 exchanges have a
-    // unique nature that requires them to be recognized before any
-    // premium is paid, and dumpins do not share that nature.
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
