@@ -216,11 +216,10 @@ Irc7702::~Irc7702()
 void Irc7702::ProcessGptPmt
     (int     a_Duration
     ,double& a_Pmt
-    ,double& // a_CumPmt
     )
 {
-// TODO ?? Duration and CumPmt args not yet used.
-// TAXATION !! Would Duration somehow be used for verification?
+// TAXATION !! Should Duration somehow be used for verification? and
+// if so, should it be maintained internally in this class?
     if(mce_gpt != Test7702)
         {
         return;
