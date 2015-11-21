@@ -43,6 +43,8 @@
 #include <wx/combobox.h>
 #include <wx/dialog.h>
 #include <wx/display.h>
+#include <wx/scrolwin.h>
+#include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
@@ -287,6 +289,7 @@ class InputSequenceEditor
     std::string default_keyword_;
 
     int rows_count_;
+    wxScrolledWindow* rows_area_;
     wxFlexGridSizer* sizer_;
     wxButton* ok_button_;
     wxButton* cancel_button_;
@@ -316,8 +319,15 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
 {
     wxSizer* top = new(wx) wxBoxSizer(wxVERTICAL);
 
-    sizer_ = new(wx) wxFlexGridSizer(Col_Max, 5, 5);
-    top->Add(sizer_, wxSizerFlags(1).Expand().DoubleBorder());
+    rows_area_ = new(wx) wxScrolledWindow(this);
+    top->Add(rows_area_, wxSizerFlags(1).Expand().DoubleBorder());
+
+    const wxSize sizerGap
+        (wxSizerFlags::GetDefaultBorder()
+        ,wxSizerFlags::GetDefaultBorder()
+        );
+    sizer_ = new(wx) wxFlexGridSizer(Col_Max, sizerGap);
+    rows_area_->SetSizer(sizer_);
 
     diagnostics_ = new(wx) wxStaticText(this, wxID_ANY, "");
     top->Add(diagnostics_, wxSizerFlags().Expand().DoubleBorder(wxLEFT|wxRIGHT));
@@ -333,6 +343,12 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     SetSizerAndFit(top);
 
     add_row();
+
+    // Now that we have a row, set up the row area to scroll by one its height
+    // (as we assume they all have the same size) vertically.
+    wxArrayInt const& row_heights = sizer_->GetRowHeights();
+    LMI_ASSERT(!row_heights.empty());
+    rows_area_->SetScrollRate(0, row_heights[0] + sizerGap.y);
 
     value_field_ctrl(0).SetFocus();
 }
@@ -504,7 +520,7 @@ void InputSequenceEditor::insert_row(int new_row)
     if(!keywords_.empty())
         {
         wxComboBox* combo = new(wx) wxComboBox
-            (this
+            (rows_area_
             ,wxID_ANY
             ,"0"
             ,wxDefaultPosition
@@ -533,20 +549,20 @@ void InputSequenceEditor::insert_row(int new_row)
     else
         {
         // No keywords, only numeric values
-        value_ctrl = new(wx) wxTextCtrl(this, wxID_ANY, "0");
+        value_ctrl = new(wx) wxTextCtrl(rows_area_, wxID_ANY, "0");
         value_ctrl->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
         }
 
     sizer_->wxSizer::Insert(insert_pos++, value_ctrl, wxSizerFlags(flags).TripleBorder(wxRIGHT));
-    wxStaticText* from_label = new(wx) wxStaticText(this, wxID_ANY, LARGEST_FROM_TEXT);
+    wxStaticText* from_label = new(wx) wxStaticText(rows_area_, wxID_ANY, LARGEST_FROM_TEXT);
     SizeWinForText(from_label, LARGEST_FROM_TEXT);
     sizer_->wxSizer::Insert(insert_pos++, from_label, flags);
-    wxChoice* duration_mode = new(wx) DurationModeChoice(this);
+    wxChoice* duration_mode = new(wx) DurationModeChoice(rows_area_);
     sizer_->wxSizer::Insert(insert_pos++, duration_mode, flags);
-    wxSpinCtrl* duration_num = new(wx) wxSpinCtrl(this, wxID_ANY, "");
+    wxSpinCtrl* duration_num = new(wx) wxSpinCtrl(rows_area_, wxID_ANY, "");
     sizer_->wxSizer::Insert(insert_pos++, duration_num, flags);
     SizeWinForText(duration_num, "9999", 20);
-    wxStaticText* then_label = new(wx) wxStaticText(this, wxID_ANY, LARGEST_THEN_TEXT);
+    wxStaticText* then_label = new(wx) wxStaticText(rows_area_, wxID_ANY, LARGEST_THEN_TEXT);
     sizer_->wxSizer::Insert(insert_pos++, then_label, flags);
     SizeWinForText(then_label, LARGEST_THEN_TEXT);
 
@@ -557,7 +573,7 @@ void InputSequenceEditor::insert_row(int new_row)
     // there's more than one of them and the ID is used to distinguish between
     // them. Consequently, we have to add stock graphics manually under wxGTK.
     wxButton* remove = new(wx) wxButton
-        (this
+        (rows_area_
         ,wxID_ANY
         ,"Remove"
         ,wxDefaultPosition
@@ -579,7 +595,7 @@ void InputSequenceEditor::insert_row(int new_row)
     sizer_->wxSizer::Insert(insert_pos++, remove, wxSizerFlags(flags).TripleBorder(wxLEFT));
 
     wxButton* add = new(wx) wxButton
-        (this
+        (rows_area_
         ,wxID_ANY
         ,"Add"
         ,wxDefaultPosition
@@ -662,18 +678,19 @@ void InputSequenceEditor::insert_row(int new_row)
 
 void InputSequenceEditor::set_tab_order()
 {
-    // The desired tab order is as follows:
+    // The desired tab order for the items inside the row area is as follows:
     // 1. data entry fields from left to right, top to bottom:
     //      Col_Value
     //      Col_From
     //      Col_DurationMode
     //      Col_DurationNum
     //      Col_Then
-    // 2. dialog's OK button
-    // 3. then Remove and Add buttons, top to bottom
+    // 2. then Remove and Add buttons, top to bottom
     //      Col_Remove
     //      Col_Add
-    // 4. dialog's Cancel button
+    //
+    // The "OK" and "Cancel" buttons are outside of the rows area and are not
+    // affected by this function.
 
     if(0 == rows_count_)
         return;
@@ -684,13 +701,11 @@ void InputSequenceEditor::set_tab_order()
         for (int col = Col_Value; col <= Col_Then; ++col)
             order.push_back(get_field_win(col, row));
         }
-    order.push_back(ok_button_);
     for(int row = 0; row < rows_count_; ++row)
         {
         order.push_back(get_field_win(Col_Remove, row));
         order.push_back(get_field_win(Col_Add, row));
         }
-    order.push_back(cancel_button_);
 
     for(size_t i = 1; i < order.size(); ++i)
         {
@@ -796,22 +811,42 @@ void InputSequenceEditor::update_row(int row)
 void InputSequenceEditor::redo_layout()
 {
     wxSizer* sizer = GetSizer();
+
+    // Try to avoid showing the vertical scrollbar by making the rows area as
+    // big as it needs to be. An explicit call to SetMinSize() is required for
+    // this because wxScrolledWindow ignores the best size of its contents in
+    // its scrollable direction.
+    //
+    // Notice that if this size is too big and the window wouldn't fit on the
+    // screen when using it, the size of the rows area will be adjusted down by
+    // exactly as much as necessary because it is the only element of the
+    // dialog with non-fixed size (i.e. proportion different from 0) and the
+    // sizer code correctly considers that if there is not enough space for
+    // everything, it's better to reduce the size of the variable size items
+    // rather than of the fixed size ones.
+    wxSize minRowsSize = sizer_->GetMinSize();
+    rows_area_->SetMinSize(minRowsSize);
+
+    // Now check if we're actually going to have a scrollbar or not by
+    // comparing our ideal minimum size with the size we would actually have.
+    if ( sizer->ComputeFittingClientSize(this) != sizer->GetMinSize() )
+        {
+        // The only possible reason for discrepancy is that the window would be
+        // too big to fit on the screen and so the actual size of the rows area
+        // will be smaller than its minimum size and hence the scrollbar will
+        // be shown and we need to account for it in our horizontal size by
+        // allocating enough space for the scrollbar itself and also an extra
+        // border between the controls and this scrollbar as things would look
+        // too cramped otherwise.
+        minRowsSize.x
+            += wxSizerFlags::GetDefaultBorder()
+            +  wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y)
+            ;
+        rows_area_->SetMinSize(minRowsSize);
+        }
+
     sizer->Layout();
     sizer->Fit(this);
-    sizer->SetSizeHints(this);
-
-    // Make sure the editor is still fully visible and doesn't extend
-    // off-screen after being resized:
-    int display = wxDisplay::GetFromWindow(this);
-    wxDisplay dpy(display == wxNOT_FOUND ? 0 : display);
-    wxRect rect_display(dpy.GetClientArea());
-    wxRect rect_win(GetRect());
-
-    if(!rect_display.Contains(rect_win.GetBottomRight()))
-        {
-        rect_win.Offset(0, rect_display.GetBottom() - rect_win.GetBottom());
-        SetSize(rect_win);
-        }
 }
 
 wxString InputSequenceEditor::format_from_text(int row)
