@@ -37574,3 +37574,37 @@ Add a rounding rule for minimum initial premium.
   dbnames.xpp
 Add a database entity for minimum initial premium.
 
+20151120T1843Z <gchicares@sbcglobal.net> [461]
+
+  ihs_avmly.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Eliminate an unused function argument.
+
+20151120T1855Z <gchicares@sbcglobal.net> [460]
+
+  ihs_avmly.cpp
+Improve documentation.
+
+20151120T2110Z <gchicares@sbcglobal.net> [459]
+
+  ihs_avmly.cpp
+Refactor for simplicity and extensibility.
+
+20151120T2111Z <gchicares@sbcglobal.net> [459]
+
+  ihs_acctval.cpp
+Add more assertions.
+
+20151122T0320Z <gchicares@sbcglobal.net> [459]
+
+  dbnames.xpp
+Let 1 signify 1.
+
+20151122T0321Z <gchicares@sbcglobal.net> [459]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Support a one-of-a-kind minimum initial premium.
+
