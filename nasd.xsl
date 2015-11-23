@@ -30,6 +30,10 @@
   <xsl:import href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
+  <xsl:variable name="GroupCarveout">
+    <xsl:call-template name="set_group_carveout"/>
+  </xsl:variable>
+
   <xsl:template match="/">
     <fo:root>
       <fo:layout-master-set>
@@ -173,7 +177,12 @@
         <!-- Define the contents of the footer. -->
         <xsl:call-template name="standardfooter"/>
 
-        <xsl:call-template name="supplemental-illustration-report"/>
+        <xsl:if test="$scalars/SplitMinPrem='1'">
+          <xsl:call-template name="supplemental-illustration-report-split-premiums"/>
+        </xsl:if>
+        <xsl:if test="$scalars/SplitMinPrem='0'">
+          <xsl:call-template name="supplemental-illustration-report"/>
+        </xsl:if>
 
       </fo:page-sequence>
 
@@ -195,24 +204,24 @@
         <fo:flow flow-name="xsl-region-body">
           <fo:block padding="1em 0 5em" text-align="left" font-size="10pt" font-family="sans-serif">
             <fo:block font-weight="bold" text-align="center">
-              Column Definitions
+              Column Definitions and Key Terms
             </fo:block>
 
-            <fo:block font-weight="bold" padding-top="2em">
+            <fo:block font-weight="bold" padding-top="1em">
               Account Value
             </fo:block>
             <fo:block>
               <xsl:value-of select="$scalars/AccountValueFootnote"/>
             </fo:block>
 
-            <fo:block font-weight="bold" padding-top="2em">
+            <fo:block font-weight="bold" padding-top="1em">
               Cash Surrender Value
             </fo:block>
             <fo:block>
               <xsl:value-of select="$scalars/CashSurrValueFootnote"/>
             </fo:block>
 
-            <fo:block font-weight="bold" padding-top="2em">
+            <fo:block font-weight="bold" padding-top="1em">
               Death Benefit
             </fo:block>
             <fo:block>
@@ -220,7 +229,7 @@
             </fo:block>
 
             <xsl:if test="not($is_composite)">
-              <fo:block font-weight="bold" padding-top="2em">
+              <fo:block font-weight="bold" padding-top="1em">
                 End of Year Age
               </fo:block>
               <fo:block>
@@ -228,33 +237,50 @@
               </fo:block>
             </xsl:if>
 
-            <fo:block font-weight="bold" padding-top="2em">
-              Initial Premium
+            <fo:block font-weight="bold" padding-top="1em">
+              Gross Rate
+            </fo:block>
+            <fo:block>
+              <xsl:value-of select="$scalars/GrossRateFootnote"/>
+            </fo:block>
+
+            <fo:block font-weight="bold" padding-top="1em">
+              <xsl:if test="$GroupCarveout='1'">
+                Minimum Premium
+              </xsl:if>
             </fo:block>
             <fo:block>
               <xsl:value-of select="$scalars/InitialPremiumFootnote"/>
             </fo:block>
 
-            <fo:block font-weight="bold" padding-top="2em">
+            <fo:block font-weight="bold" padding-top="1em">
               Net Premium
             </fo:block>
             <fo:block>
               <xsl:value-of select="$scalars/NetPremiumFootnote"/>
             </fo:block>
 
-            <fo:block font-weight="bold" padding-top="2em">
+            <fo:block font-weight="bold" padding-top="1em">
+              Net Rate
+            </fo:block>
+            <fo:block>
+              <xsl:value-of select="$scalars/NetRateFootnote"/>
+            </fo:block>
+
+            <fo:block font-weight="bold" padding-top="1em">
               Policy Year
             </fo:block>
             <fo:block>
               <xsl:value-of select="$scalars/PolicyYearFootnote"/>
             </fo:block>
 
-            <fo:block font-weight="bold" padding-top="2em">
+            <fo:block font-weight="bold" padding-top="1em">
               Premium Outlay
             </fo:block>
             <fo:block>
               <xsl:value-of select="$scalars/OutlayFootnote"/>
             </fo:block>
+
           </fo:block>
         </fo:flow>
       </fo:page-sequence>
@@ -281,7 +307,8 @@
             </fo:block>
 
             <fo:block padding-top="1em">
-              As illustrated, this contract
+              As illustrated, this
+              <xsl:value-of select="$scalars/ContractName"/>
               <xsl:choose>
                 <xsl:when test="$scalars/IsMec='1'">
                   becomes
@@ -295,9 +322,10 @@
               <xsl:if test="$scalars/IsMec='1'">
                 in year <xsl:value-of select="$scalars/MecYear + 1"/>
               </xsl:if>.
-              To the extent of gain in the contract, loans, distributions
-              and withdrawals from a MEC are subject to income tax
-              and may also trigger a penalty tax.
+              To the extent of gain in the
+              <xsl:value-of select="$scalars/ContractName"/>, loans,
+              distributions and withdrawals from a MEC are subject to income
+              tax and may also trigger a penalty tax.
             </fo:block>
 
             <xsl:if test="$scalars/IsInforce!='1'">
@@ -314,12 +342,12 @@
 
             <fo:block font-weight="bold" padding-top="1em">
               The information contained in this illustration is not written
-              or intended as tax or legal advice, and may not be relied upon
-              for purposes of avoiding any federal tax penalties.
+              or intended as tax or legal advice.
               Neither <xsl:value-of select="$scalars/InsCoShortName"/>
               nor any of its employees or representatives are authorized
               to give tax or legal advice. For more information pertaining
-              to the tax consequences of purchasing or owning this policy,
+              to the tax consequences of purchasing or owning this
+              <xsl:value-of select="$scalars/ContractName"/>,
               consult with your own independent tax or legal counsel.
             </fo:block>
 
@@ -335,10 +363,7 @@
             </fo:block>
 
             <fo:block padding-top="1em">
-              Account values may be used to pay contract charges.
-              Contract charges are due during the life of the insured;
-              depending on actual results, the premium payer may need
-              to continue or resume premium outlays.
+              <xsl:value-of select="$scalars/NoVanishPremiumFootnote"/>
             </fo:block>
 
             <xsl:if test="$scalars/NoLapse='1' and $scalars/StatePostalAbbrev!='NY'">
@@ -346,28 +371,33 @@
                 <xsl:value-of select="$scalars/NoLapseProvisionName"/>:
                 The <xsl:value-of select="$scalars/NoLapseProvisionName"/>
                 is a lapse protection feature. If met, this test allows
-                your contract to stay in force for a period of time even
-                if there is insufficient <xsl:value-of select="$scalars/AvName"/>
+                your <xsl:value-of select="$scalars/ContractName"/>
+                to stay in force for a period of time even if there is
+                insufficient <xsl:value-of select="$scalars/AvName"/>
                 Value to cover the <xsl:value-of select="$scalars/AvName"/>
                 Value charges.
-                Refer to your policy for specific requirements of meeting
-                the <xsl:value-of select="$scalars/NoLapseProvisionName"/>.
+                Refer to your <xsl:value-of select="$scalars/ContractName"/>
+                for specific requirements of meeting the
+                <xsl:value-of select="$scalars/NoLapseProvisionName"/>.
               </fo:block>
             </xsl:if>
 
             <xsl:if test="$scalars/NoLapseAlwaysActive='1'">
               <fo:block padding-top="1em">
-                No-Lapse Guarantee: The contract will remain in force
-                after the first premium has been paid, even if
+                No-Lapse Guarantee: The
+                <xsl:value-of select="$scalars/ContractName"/> will remain in
+                force after the first premium has been paid, even if
                 there is insufficient <xsl:value-of select="$scalars/AvName"/>
                 Value to cover the monthly charges provided that the insured
-                is not in a substandard rating class and the policy debt
+                is not in a substandard rating class and the
+                <xsl:value-of select="$scalars/ContractName"/> debt
                 does not exceed <xsl:value-of select="$scalars/AvName"/> Value.
               </fo:block>
             </xsl:if>
 
             <fo:block padding-top="1em">
-              The definition of life insurance elected for this contract is the
+              The definition of life insurance elected for this
+              <xsl:value-of select="$scalars/ContractName"/> is the
               <xsl:choose>
                 <xsl:when test="$scalars/DefnLifeIns='GPT'">
                   guideline premium test. The guideline single premium is
@@ -380,10 +410,17 @@
               </xsl:choose>
             </fo:block>
 
+            <xsl:if test="$scalars/DefnLifeIns='GPT'">
+              <fo:block padding-top="1em">
+                <xsl:value-of select="$scalars/GptFootnote"/>
+              </fo:block>
+            </xsl:if>
+
             <fo:block padding-top="1em">
               <xsl:value-of select="$scalars/InsCoName"/> has the right
-              to promptly refund any amount of premium paid if it will increase
-              the net amount at risk (referred to in the contract
+              to promptly refund any amount of premium paid if it will
+              increase the net amount at risk (referred to in the
+              <xsl:value-of select="$scalars/ContractName"/>
               as the Amount of Insurance that Requires a Charge).
             </fo:block>
 
@@ -442,20 +479,17 @@
               </fo:block>
             </xsl:if>
             <fo:block padding-top="1em">
-              The loan interest rate may be fixed or adjustable
-              as elected by the sponsor.
+              <xsl:value-of select="$scalars/LoanFootnote"/>
             </fo:block>
-            <fo:block font-weight="bold" padding-top="1em">
-              This illustration must be preceded or accompanied by the current
-              prospectuses for <xsl:value-of select="$scalars/PolicyMktgName"/>
-              variable life insurance contract and its underlying
-              investment choices. Before purchasing a variable life insurance
-              contract, investors should carefully consider the investment
-              objectives, risks, charges and expenses of the variable life
-              insurance contract and its underlying investment choices.
-              Please read the prospectuses carefully before investing.
+            <fo:block padding-top="1em">
+              <xsl:value-of select="$scalars/PortabilityFootnote"/>
             </fo:block>
             <xsl:if test="$scalars/HasTerm='1'">
+              <fo:block padding-top="1em">
+              <xsl:value-of select="$scalars/TermFootnote"/>
+              </fo:block>
+            </xsl:if>
+            <xsl:if test="$scalars/HasSupplSpecAmt='1'">
               <fo:block padding-top="1em">
               <xsl:value-of select="$scalars/TermFootnote"/>
               </fo:block>
@@ -463,6 +497,31 @@
             <xsl:if test="$scalars/HasWP='1'">
               <fo:block padding-top="1em">
               <xsl:value-of select="$scalars/WaiverFootnote"/>
+              </fo:block>
+            </xsl:if>
+            <fo:block padding-top="1em">
+              <xsl:value-of select="$scalars/AccelBftRiderFootnote"/>
+            </fo:block>
+            <xsl:if test="$scalars/DefnLifeIns='GPT'">
+              <fo:block padding-top="1em">
+                <xsl:value-of select="$scalars/OverloanRiderFootnote"/>
+              </fo:block>
+            </xsl:if>
+            <xsl:if test="$scalars/HasADD='1'">
+              <fo:block padding-top="1em">
+              <xsl:value-of select="$scalars/ADDFootnote"/>
+              </fo:block>
+            </xsl:if>
+            <xsl:if test="$scalars/HasChildRider='1'">
+              <fo:block padding-top="1em">
+              The $<xsl:value-of select="$scalars/ChildRiderAmount"/>&nbsp;
+              <xsl:value-of select="$scalars/ChildFootnote"/>
+              </fo:block>
+            </xsl:if>
+            <xsl:if test="$scalars/HasSpouseRider='1'">
+              <fo:block padding-top="1em">
+              The $<xsl:value-of select="$scalars/SpouseRiderAmount"/>&nbsp;
+              <xsl:value-of select="$scalars/SpouseFootnote"/>
               </fo:block>
             </xsl:if>
             <xsl:if test="$scalars/UsePartialMort='1'">
@@ -543,19 +602,7 @@
               SEPARATE ACCOUNT
             </fo:block>
             <fo:block padding-top="1em">
-              This illustration shows how the death benefit and account value
-              could vary over an extended period of time, assuming the funds
-              experience hypothetical gross rates of investment return.
-              Actual rates of return may be more or less than those shown
-              and in all likelihood will vary year to year.
-              Timing of premium payments, investment allocations and withdrawals
-              or loans, if taken, may impact investment results.
-              Separate Account Charges are deducted from the gross
-              investment rate to determine the net investment rate.
-              These charges include a mortality and expense charge,
-              and an investment management fee and other fund operating
-              expenses. The total fund operating expenses charged vary by fund.
-              SEE PROSPECTUS.
+              <xsl:value-of select="$scalars/HypotheticalRatesFootnote"/>
             </fo:block>
             <xsl:if test="not($is_composite)">
               <fo:block padding-top="1em">
@@ -576,22 +623,28 @@
                 </fo:block>
               </xsl:if>
             </xsl:if>
+            <fo:block font-weight="bold" padding-top="1em">
+              This illustration must be preceded or accompanied by the current
+              prospectuses for <xsl:value-of select="$scalars/PolicyMktgName"/>
+              variable life insurance
+              <xsl:value-of select="$scalars/ContractName"/> and its underlying
+              investment choices. Before purchasing a variable life insurance
+              <xsl:value-of select="$scalars/ContractName"/>, investors should
+              carefully consider the investment objectives, risks, charges and
+              expenses of the variable life insurance
+              <xsl:value-of select="$scalars/ContractName"/> and its underlying
+              investment choices. Please read the prospectuses carefully before
+              investing.
+            </fo:block>
+            <fo:block padding-top="1em">
+              <xsl:value-of select="$scalars/SubsidiaryFootnote"/>
+            </fo:block>
             <fo:block padding-top="1em">
               Securities offered through registered representatives of
               <xsl:value-of select="$scalars/CoUnderwriter"/>&nbsp;
               <xsl:value-of select="$scalars/CoUnderwriterAddress"/>
-              or of a broker-dealer with a selling agreement with
-              <xsl:value-of select="$scalars/MainUnderwriter"/>&nbsp;
-              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>.
-            </fo:block>
-            <fo:block padding-top="1em">
-              Principal Underwriters:
-              <xsl:value-of select="$scalars/CoUnderwriter"/>
-               and
-              <xsl:value-of select="$scalars/MainUnderwriter"/>
-               are subsidiaries of
-              <xsl:value-of select="$scalars/InsCoName"/>
-              &nbsp;<xsl:value-of select="$scalars/InsCoStreet"/>.
+              or a broker-dealer that has a selling agreement with
+              <xsl:value-of select="$scalars/MainUnderwriter"/>.
             </fo:block>
           </fo:block>
           <xsl:if test="not($has_supplemental_report) and $is_composite">
@@ -655,7 +708,8 @@
     <fo:block text-align="center" font-size="9.75pt">
       <fo:block padding-top="1em">
         The purpose of this illustration is to show how the performance
-        of the underlying investment account could affect the contract
+        of the underlying investment account could affect the
+        <xsl:value-of select="$scalars/ContractName"/>
         account value and death benefit.
         <fo:inline font-weight="bold">
           These hypothetical returns do not reflect past performance
@@ -705,7 +759,7 @@
                 Contract: <xsl:value-of select="$scalars/PolicyMktgName"/>
               </fo:block>
               <fo:block text-align="left">
-                Initial Premium: $<xsl:value-of select="$scalars/InitPrem"/>
+                First Year Premium: $<xsl:value-of select="$scalars/InitPrem"/>
               </fo:block>
               <xsl:if test="not($is_composite)">
                 <fo:block text-align="left">
@@ -725,11 +779,6 @@
                   <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
                 </fo:block>
               </xsl:if>
-              <xsl:if test="$scalars/HasWP='1'">
-                <fo:block text-align="left">
-                  Waiver of Monthly Charges Rider elected
-                </fo:block>
-              </xsl:if>
               <xsl:if test="not($is_composite) and $scalars/UWClass='Rated'">
                 <fo:block text-align="left">
                   Table Rating:
@@ -739,7 +788,7 @@
               <xsl:call-template name="print-mastercontractnumber-and-contractnumber"/>
             </fo:table-cell>
             <fo:table-cell>
-<!-- Keep intact in case its useful to others; however regulators may find
+<!-- Keep intact in case it's useful to others; however, regulators may find
 it confusing if the general account rates aren't included, too.
               <fo:block text-align="left">
                 Assumed Separate Account Rate:
@@ -762,18 +811,24 @@ it confusing if the general account rates aren't included, too.
                 </fo:block>
               <fo:block text-align="left">
                 Initial
-                <xsl:if test="$scalars/HasTerm!='0'">
+                <xsl:if test="$scalars/HasTerm='1' or $scalars/HasSupplSpecAmt='1'">
                   Total
                 </xsl:if>
                 Face Amount: $<xsl:value-of select="$scalars/InitTotalSA"/>
               </fo:block>
-              <xsl:if test="$scalars/HasTerm!='0'">
+              <xsl:if test="$scalars/HasTerm='1' or $scalars/HasSupplSpecAmt='1'">
                 <fo:block text-align="left">
                   Initial Base Face Amount:
                   $<xsl:value-of select="$scalars/InitBaseSpecAmt"/>
                 </fo:block>
                 <fo:block text-align="left">
-                  Initial Term Face Amount:
+                  Initial
+                  <xsl:if test="$scalars/HasTerm='1'">
+                    Term Face Amount:
+                  </xsl:if>
+                  <xsl:if test="$scalars/HasSupplSpecAmt='1'">
+                   Supplemental Face Amount:
+                  </xsl:if>
                   $<xsl:value-of select="$scalars/InitTermSpecAmt"/>
                 </fo:block>
               </xsl:if>
@@ -983,6 +1038,52 @@ it confusing if the general account rates aren't included, too.
     </fo:flow>
   </xsl:template>
 
+  <xsl:template name="supplemental-illustration-report-split-premiums">
+    <xsl:variable name="supplemental_illustration_columns_split_premiums">
+      <column name="PolicyYear">Policy _Year</column>
+      <column composite="0" name="AttainedAge">End of _Year Age</column>
+      <column name="ErGrossPmt">ER Gross _Payment</column>
+      <column composite="1"/>
+      <column name="EeGrossPmt">EE Gross _Payment</column>
+      <column name="GrossPmt">Premium _Outlay</column>
+      <column name="ErModalMinimumPremium">ER Modal _Minimum _Premium</column>
+      <column name="EeModalMinimumPremium">EE Modal _Minimum _Premium</column>
+      <column name="NetPmt_Current">Net _Premium</column>
+      <column name="COICharge_Current">Cost of Insurance _Charges</column>
+      <column name="AcctVal_Current">Current _Account _Value</column>
+      <column name="CSVNet_Current">Current _Cash Surr _Value</column>
+      <column name="EOYDeathBft_Current">Current _Death _Benefit</column>
+    </xsl:variable>
+    <xsl:variable name="supplemental_illustration_columns" select="document('')//xsl:variable[@name='supplemental_illustration_columns_split_premiums']/column"/>
+    <xsl:variable name="columns" select="$supplemental_illustration_columns[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
+
+    <!-- The main contents of the body page -->
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block font-size="9pt" font-family="serif">
+        <fo:table table-layout="fixed" width="100%">
+          <xsl:call-template name="generate-table-columns">
+            <xsl:with-param name="columns" select="$columns"/>
+          </xsl:call-template>
+
+          <fo:table-header>
+            <xsl:call-template name="generate-table-headers">
+              <xsl:with-param name="columns" select="$columns"/>
+            </xsl:call-template>
+          </fo:table-header>
+
+          <fo:table-body>
+            <xsl:call-template name="generate-table-values">
+              <xsl:with-param name="columns" select="$columns"/>
+              <xsl:with-param name="counter" select="$scalars/InforceYear + 1"/>
+              <xsl:with-param name="max-counter" select="$max-lapse-year"/>
+              <xsl:with-param name="inforceyear" select="0 - $scalars/InforceYear"/>
+            </xsl:call-template>
+          </fo:table-body>
+        </fo:table>
+      </fo:block>
+    </fo:flow>
+  </xsl:template>
+
   <xsl:template name="illustration-assumption-report">
     <!-- columns to be included in the table -->
     <xsl:variable name="illustration_assumption_columns_raw">
@@ -1091,7 +1192,8 @@ it confusing if the general account rates aren't included, too.
           ** <xsl:value-of select="$scalars/PremAllocationFootnote"/>
         </fo:block>
         <fo:block padding-top="0.25em">
-          See the Explanatory Notes for important policy information.
+          See the Explanatory Notes for important
+          <xsl:value-of select="$scalars/ContractName"/> information.
           This illustration is not complete without all pages.
         </fo:block>
       </xsl:with-param>
@@ -1128,6 +1230,10 @@ it confusing if the general account rates aren't included, too.
         </fo:block>
       </xsl:with-param>
     </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="set_group_carveout">
+    <xsl:value-of select="number($scalars/PolicyLegalName='Group Flexible Premium Variable Adjustable Life Insurance Certificate')"/>
   </xsl:template>
 
 </xsl:stylesheet>
