@@ -37621,3 +37621,13 @@ For now, inhibit diagnostics added 20151106T1911Z and 20151107T1344Z.
   version.hpp
 Designate release candidate 6423.
 
+20151123T2319Z <gchicares@sbcglobal.net> [459]
+
+  nasd.xsl
+Add numerous footnotes; replace "contract" with a more specific term.
+
+20151123T2326Z <gchicares@sbcglobal.net> [459]
+
+  version.hpp
+Designate release candidate 6425.
+
