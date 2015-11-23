@@ -37608,3 +37608,16 @@ Let 1 signify 1.
   ihs_avmly.cpp
 Support a one-of-a-kind minimum initial premium.
 
+20151123T1647Z <gchicares@sbcglobal.net> [459]
+
+  input_harmonization.cpp
+  ledger_invariant.cpp
+  yare_input.cpp
+  yare_input.hpp
+For now, inhibit diagnostics added 20151106T1911Z and 20151107T1344Z.
+
+20151123T1650Z <gchicares@sbcglobal.net> [459]
+
+  version.hpp
+Designate release candidate 6423.
+
