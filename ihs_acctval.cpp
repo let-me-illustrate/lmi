@@ -662,6 +662,7 @@ void AccountValue::SetInitialValues()
     YearlyTaxBasis.assign(BasicValues::GetLength(), 0.0);
     MlyNoLapsePrem              = 0.0;
     CumNoLapsePrem              = InforceCumNoLapsePrem;
+    InitAnnPlannedPrem_         = 0.0;
 
     // Initialize all elements of this vector to 'false'. Then, when
     // the no-lapse criteria fail to be met, future values are right.
@@ -1042,6 +1043,8 @@ void AccountValue::InitializeSpecAmt()
     // Four premiums are calculated, for base and "supplemental"
     // coverage combined:
     //   without riders; with ADB only; with WP only; with ADB and WP
+    // All reflect MinInitDumpin() (which may be zero).
+    //
     // This is intended for presale use only; for inforce cells, these
     // premiums retain their default initial values of zero. There
     // seems to be no compelling argument for further restrictions
@@ -1059,6 +1062,86 @@ void AccountValue::InitializeSpecAmt()
     // TODO ?? SurrChgSpecAmt is not used yet.
 
     // TODO ?? Perform specamt strategy here?
+}
+
+/// Minimum initial extra premium--zero for most products.
+///
+/// Motivation: to help ensure VUL suitability for products whose
+/// minimum premium alone would generate little if any account value.
+///
+/// Custom MinInitPremType #1: first-year payments must be at least
+/// the pay-as-you-go minimum premium (calculated elsewhere) plus half
+/// the target premium (calculated here, and rounded according to its
+/// own rule). This extra amount is defined only for new business; for
+/// inforce, it is impracticable to calculate because the target may
+/// have changed, and suitability is determined at issue anyway.
+///
+/// Because the result is twelve times a rounded value, it can be
+/// modalized without further rounding.
+
+double AccountValue::MinInitDumpin() const
+{
+    if
+        (  0 == Year
+        && 1 == Database_->Query(DB_MinInitPremType)
+        && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
+        )
+        {
+        double const target = InvariantValues().InitTgtPrem;
+        return 12.0 * round_min_init_premium()(target / 24.0);
+        }
+    else
+        {
+        return 0.0;
+        }
+}
+
+/// Required modal increment to initial planned premium.
+///
+/// If the minimum is not otherwise satisfied, then employee payments
+/// must be increased to fulfill it.
+///
+/// First-year payments from all sources count toward satisfying the
+/// minimum, including dumpins and 1035 proceeds--which are amodal by
+/// their nature. This function is designed to support a product whose
+/// minimum premium reflects only the er mode; yet lmi permits ee and
+/// er modes to differ, so it is necessary to compare the first-year
+/// minimum to the first year's total planned premium, including any
+/// dumpin and 1035 exchange, and modalize any shortfall. Because 1035
+/// and dumpin amounts are arbitrary, modalization could yield a value
+/// in fractional cents; therefore, the result must be rounded up.
+///
+/// Alternative not pursued: The shortfall could be calculated on each
+/// payment date, taking into account the annual incidence of dumpins
+/// and 1035 exchanges. Thus, if the shortfall before a $40 dumpin is
+/// $100, and the ee pays quarterly, an increase of {0, 10, 25, 25}
+/// rather than a level $15 could be calculated. No strong rationale
+/// was found for this exquisite refinement.
+///
+/// Planned payments might be reduced to the guideline or non-MEC
+/// limit, in which case the minimum is deemed to be satisfied. This
+/// case should not arise with the contemplated product, whose minimum
+/// is designed to be lower than those limits.
+
+double AccountValue::ModalMinInitPremShortfall() const
+{
+    if
+        (  0 == Year
+        && 1 == Database_->Query(DB_MinInitPremType)
+        && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
+        )
+        {
+        mcenum_mode const ee_mode = InvariantValues().EeMode[0].value();
+        mcenum_mode const er_mode = InvariantValues().ErMode[0].value();
+        double const modal_min_prem = InvariantValues().ModalMinimumPremium[0];
+        double const required = MinInitDumpin() + modal_min_prem * er_mode;
+        double const shortfall = std::max(0.0, required - InitAnnPlannedPrem_);
+        return round_min_premium()(shortfall / ee_mode);
+        }
+    else
+        {
+        return 0.0;
+        }
 }
 
 double AccountValue::SuppositiveModalPremium
@@ -1090,6 +1173,14 @@ double AccountValue::SuppositiveModalPremium
 /// user might reasonably wish to show the effect of other riders; if
 /// assertions as to input are to be made at all, then they should be
 /// made in the function that creates the group premium quote report.
+///
+/// Consistent with that purpose, deem the modal minimum premium to be
+/// the planned premium, and add modalized MinInitDumpin() for custom
+/// MinInitPremType #1. As a consequence, illustrations may differ
+/// from group premium quotes: for example, an illustration with a
+/// sufficiently large 1035 rollover requires no additional payment,
+/// but a group premium quote generated from the same input file
+/// ignores the 1035 exchange and always reflects MinInitDumpin().
 
 double AccountValue::SuppositiveModalPremium
     (int         year
@@ -1100,22 +1191,41 @@ double AccountValue::SuppositiveModalPremium
     ,bool        with_wp
     ) const
 {
+    LMI_ASSERT(0 == Year);
+
     yare_input yi(yare_input_);
 
     yi.AccidentalDeathBenefit = with_adb;
     yi.WaiverOfPremiumBenefit = with_wp;
 
+    double z;
     if(!SplitMinPrem)
         {
-        return GetModalPremMlyDed(year, mode, specamt, yi);
+        z = GetModalPremMlyDed(year, mode, specamt, yi);
         }
     else
         {
-        return
+        z =
               GetModalPremMlyDedEe(year, mode, termamt, yi)
             + GetModalPremMlyDedEr(year, mode, specamt, yi)
             ;
         }
+
+    // If minimum premiums are of the 'oe_monthly_deduction' type,
+    // then the initial modal minimum premium previously calculated
+    // must equal the "suppositive" result for the same rider choices.
+    if
+        (  oe_monthly_deduction == MinPremType
+        && yi.AccidentalDeathBenefit == yare_input_.AccidentalDeathBenefit
+        && yi.WaiverOfPremiumBenefit == yare_input_.WaiverOfPremiumBenefit
+        )
+        {
+        LMI_ASSERT(z == InvariantValues().ModalMinimumPremium[0]);
+        }
+
+    // The quotient needn't be rounded because MinInitDumpin() is a
+    // multiple of twelve.
+    return z + MinInitDumpin() / mode;
 }
 
 //============================================================================

@@ -288,6 +288,8 @@ class LMI_SO AccountValue
     void   ReduceSurrChg           (int year, double partial_surrchg);
     double SurrChg                 ();
 
+    double MinInitDumpin() const;
+    double ModalMinInitPremShortfall() const;
     double SuppositiveModalPremium
         (bool        with_adb
         ,bool        with_wp
@@ -368,6 +370,8 @@ class LMI_SO AccountValue
     double External1035Amount;
     double Internal1035Amount;
     double Dumpin;
+
+    double InitAnnPlannedPrem_;
 
     double MlyNoLapsePrem;
     double CumNoLapsePrem;

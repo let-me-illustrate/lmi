@@ -36897,7 +36897,7 @@ Rename certain members.
   dbdict.hpp
   dbnames.hpp
   dbnames.xpp
-Rearrange database entitites.
+Rearrange database entities.
 
 20150925T1731Z <gchicares@sbcglobal.net> [475]
 
@@ -37507,4 +37507,127 @@ Improve documentation; demote two not-so-important defect markers.
   ledger_text_formats.cpp
 Rename IRR columns, on one report only, to prevent confusion. See:
   http://lists.nongnu.org/archive/html/lmi/2015-11/msg00015.html
+
+20151114T1226Z <gchicares@sbcglobal.net> [466]
+
+  ihs_acctval.cpp
+Initialize "antediluvian" data members.
+
+20151114T1227Z <gchicares@sbcglobal.net> [466]
+
+  ihs_avmly.cpp
+Regularize layout; move a comment block.
+
+20151114T1228Z <gchicares@sbcglobal.net> [466]
+
+  ihs_avstrtgy.cpp
+Clarify a control construct; improve documentation.
+
+20151114T1229Z <gchicares@sbcglobal.net> [466]
+
+  ihs_basicval.cpp
+Mark more taxation issues as such.
+
+20151116T0327Z <gchicares@sbcglobal.net> [466]
+
+  round_downward.png            [renamed rnd_downward.png           ]
+  round_downward_hover.png      [renamed rnd_downward_hover.png     ]
+  round_downward_selected.png   [renamed rnd_downward_selected.png  ]
+  round_not_at_all.png          [renamed rnd_not_at_all.png         ]
+  round_not_at_all_hover.png    [renamed rnd_not_at_all_hover.png   ]
+  round_not_at_all_selected.png [renamed rnd_not_at_all_selected.png]
+  round_to_nearest.png          [renamed rnd_to_nearest.png         ]
+  round_to_nearest_hover.png    [renamed rnd_to_nearest_hover.png   ]
+  round_to_nearest_selected.png [renamed rnd_to_nearest_selected.png]
+  round_upward.png              [renamed rnd_upward.png             ]
+  round_upward_hover.png        [renamed rnd_upward_hover.png       ]
+  round_upward_selected.png     [renamed rnd_upward_selected.png    ]
+Rename 'round_*.png' to reduce the number of files named 'round*'.
+
+20151116T0329Z <gchicares@sbcglobal.net> [466]
+
+  rounding_view.xrc
+  rounding_view_editor.cpp
+Rename 'round_*.png' to reduce the number of files named 'round*'.
+
+20151116T0350Z <gchicares@sbcglobal.net> [466]
+
+  rounding_view_editor.cpp
+Allow negative number of decimals in GUI rounding editor.
+
+20151116T0416Z <gchicares@sbcglobal.net> [466]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_basicval.cpp
+  rounding_document.cpp
+  rounding_rules.cpp
+  rounding_rules.hpp
+  rounding_view.xrc
+Add a rounding rule for minimum initial premium.
+
+20151119T2147Z <gchicares@sbcglobal.net> [466]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add a database entity for minimum initial premium.
+
+20151120T1843Z <gchicares@sbcglobal.net> [461]
+
+  ihs_avmly.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Eliminate an unused function argument.
+
+20151120T1855Z <gchicares@sbcglobal.net> [460]
+
+  ihs_avmly.cpp
+Improve documentation.
+
+20151120T2110Z <gchicares@sbcglobal.net> [459]
+
+  ihs_avmly.cpp
+Refactor for simplicity and extensibility.
+
+20151120T2111Z <gchicares@sbcglobal.net> [459]
+
+  ihs_acctval.cpp
+Add more assertions.
+
+20151122T0320Z <gchicares@sbcglobal.net> [459]
+
+  dbnames.xpp
+Let 1 signify 1.
+
+20151122T0321Z <gchicares@sbcglobal.net> [459]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Support a one-of-a-kind minimum initial premium.
+
+20151123T1647Z <gchicares@sbcglobal.net> [459]
+
+  input_harmonization.cpp
+  ledger_invariant.cpp
+  yare_input.cpp
+  yare_input.hpp
+For now, inhibit diagnostics added 20151106T1911Z and 20151107T1344Z.
+
+20151123T1650Z <gchicares@sbcglobal.net> [459]
+
+  version.hpp
+Designate release candidate 6423.
+
+20151123T2319Z <gchicares@sbcglobal.net> [459]
+
+  nasd.xsl
+Add numerous footnotes; replace "contract" with a more specific term.
+
+20151123T2326Z <gchicares@sbcglobal.net> [459]
+
+  version.hpp
+Designate release candidate 6425.
 

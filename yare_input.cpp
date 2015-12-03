@@ -108,6 +108,7 @@ yare_input::yare_input(Input const& z)
     IncludeInComposite               = z.IncludeInComposite              .value();
     Comments                         = z.Comments                        .value();
     AmortizePremiumLoad              = z.AmortizePremiumLoad             .value();
+    InforceDataSource                = z.InforceDataSource               .value();
     ContractNumber                   = z.ContractNumber                  .value();
     MasterContractNumber             = z.MasterContractNumber            .value();
     InforceAsOfDate                  = z.InforceAsOfDate                 .value();
