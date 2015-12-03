@@ -278,6 +278,7 @@
 {DB_MinPremIntSpread,DB_Topic_Premiums,"MinPremIntSpread","Interest spread from general-account rate used to capitalize monthly deductions for minimum premium calculation",}, \
 {DB_SplitMinPrem,DB_Topic_Premiums,"SplitMinPrem","Split monthly-deductions minimum premium by payor: 0=no, 1=yes",}, \
 {DB_UnsplitSplitMinPrem,DB_Topic_Premiums,"UnsplitSplitMinPrem","Payment strategies recombine split minimum premium: 0=no, 1=yes",}, \
+{DB_MinInitPremType,DB_Topic_Premiums,"MinInitPremType","Minimum initial premium: 0=none, 1=custom calculation #1",}, \
 {DB_TgtPremType,DB_Topic_Premiums,"TgtPremType","Target premium: 0=based on monthly deductions, 1=7702A seven-pay premium, 2=read from table",}, \
 {DB_TgtPremTable,DB_Topic_Premiums,"TgtPremTable","Annual target premium rates per $1 (index in mortality table database)",}, \
 {DB_TgtPremFixedAtIssue,DB_Topic_Premiums,"TgtPremFixedAtIssue","Target premium set forever at issue: 0=no, 1=yes",}, \

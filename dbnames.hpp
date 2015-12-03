@@ -444,6 +444,7 @@ enum e_database_key
         ,DB_MinPremIntSpread
         ,DB_SplitMinPrem
         ,DB_UnsplitSplitMinPrem
+        ,DB_MinInitPremType
         ,DB_TgtPremType
         ,DB_TgtPremTable
         ,DB_TgtPremFixedAtIssue

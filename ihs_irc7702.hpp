@@ -108,7 +108,6 @@ class Irc7702
     void ProcessGptPmt
         (int                        a_Duration
         ,double&                    a_Pmt
-        ,double&                    a_CumPmt
         );
     // Returns forceout if any, else 0.0 . TAXATION !! But it's void.
     void ProcessAdjustableEvent

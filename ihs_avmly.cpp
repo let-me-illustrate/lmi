@@ -569,10 +569,10 @@ void AccountValue::TxExch1035()
 //    if(!SolvingForGuarPremium && Solving || mce_run_gen_curr_sep_full == RunBasis_)
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
+        // Illustration-reg guaranteed premium ignores GPT limit.
         if(!SolvingForGuarPremium)
             {
-            double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
-            Irc7702_->ProcessGptPmt(Year, GrossPmts[Month], fake_cum_pmt);
+            Irc7702_->ProcessGptPmt(Year, GrossPmts[Month]);
             }
         // Limit external 1035 first, then internal, as necessary to avoid
         // exceeding the guideline limit. This is what the customer would
@@ -1190,115 +1190,124 @@ void AccountValue::TxTestGPT()
     OldDBOpt = YearsDBOpt;
 }
 
-//============================================================================
-// All payments must be made here.
-// Process premium payment reflecting premium load.
-// TODO ?? TAXATION !! Contains hooks for guideline premium test; they need to be
-//   fleshed out.
-// Ignores strategies such as pay guideline premium, which are handled
-//   in PerformE[er]PmtStrategy().
-// Ignores no-lapse periods and other death benefit guarantees.
-//
-// SOMEDAY !! Some systems force monthly premium to be integral cents even
-// though actual mode is not monthly; is that something we need to do here?
+/// Set payments, reflecting strategies and imposing GPT limit.
+///
+/// Payments are set here on the current-full-expense basis (or on the
+/// solve basis if different), and reused on other bases.
+///
+/// 1035 rollovers are handled elsewhere.
+///
+/// Guideline limits are imposed in the order in which payments are
+/// applied:
+///   1035 exchanges
+///   employee vector-input premium
+///   employer vector-input premium
+///   dumpin
+/// This order is pretty much arbitrary, except that 1035 exchanges
+/// really must be processed first. An argument could be made for
+/// changing the order of employee and employer premiums. An
+/// argument could be made for grouping dumpin with employee
+/// premiums, at least as long as we treat dumpin as employee
+/// premium. Even though dumpin and 1035 exchanges are similar in
+/// that both are single payments notionally made at issue, it is
+/// not necessary to group them together: 1035 exchanges have a
+/// unique nature that requires them to be recognized before any
+/// premium is paid, and dumpins do not share that nature.
 
-/*
-Decide whether we need to do anything
-    no pmt this month due to mode
-    zero pmt
-Perform strategy
-Test 7702, 7702A // TAXATION !! Resolve these issues:
-    apportion limited prem across ee, er,...dumpin?
-    need to limit pmt here, but other events e.g. WD affect limits
-    pmts must be the same on all bases
-        7702A effect varies by basis
-        does GPT effect also vary by basis?
-            e.g. when opt change produces different spec amts *
-Handle dumpins
-What to store?
-Deduct load (varies by basis)
-Apportion across gen, sep accounts
-Update cum pmts, tax basis, DCV
-*/
-
-//============================================================================
 void AccountValue::TxAscertainDesiredPayment()
 {
-    // Do nothing if this is not a modal payment date.
-    // TODO ?? There has to be a better criterion for early termination.
-    bool ee_pay_this_month  = IsModalPmtDate(InvariantValues().EeMode[Year].value());
-    bool er_pay_this_month  = IsModalPmtDate(InvariantValues().ErMode[Year].value());
+// SOMEDAY !! Some systems force monthly premium to be integral cents even
+// though actual mode is not monthly; is that something we need to do here?
+//
+// TAXATION !! Resolve these issues:
+//   pmts must be the same on all bases; however:
+//     7702A effect varies by basis
+//     does GPT effect also vary by basis?
+//       e.g. when opt change produces different spec amts
 
-    if(!ee_pay_this_month && !er_pay_this_month)
+    mcenum_mode const ee_mode = InvariantValues().EeMode[Year].value();
+    mcenum_mode const er_mode = InvariantValues().ErMode[Year].value();
+    bool const ee_pay_this_month = IsModalPmtDate(ee_mode);
+    bool const er_pay_this_month = IsModalPmtDate(er_mode);
+    // Month zero must be a modal payment date for both ee and er.
+    LMI_ASSERT((ee_pay_this_month && er_pay_this_month) || (0 != Month));
+
+    // Do nothing if this is not a modal payment date, or if the
+    // present basis reuses payments previously set on another basis.
+    bool const nothing_to_pay = !(ee_pay_this_month || er_pay_this_month);
+    bool const nothing_to_set = !(Solving || mce_run_gen_curr_sep_full == RunBasis_);
+    if(nothing_to_pay || nothing_to_set)
         {
         return;
         }
 
-    //  ForceOut = 0.0;
-    //  double GuidelinePremLimit = 0.0;
-
-    // Pay premium--current basis determines premium for all bases.
-
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-    // Guideline limits are imposed in the order in which payments are
-    // applied:
-    //   1035 exchanges
-    //   employee vector-input premium
-    //   employer vector-input premium
-    //   dumpin
-    // This order is pretty much arbitrary, except that 1035 exchanges
-    // really must be processed first. An argument could be made for
-    // changing the order of employee and employer premiums. An
-    // argument could be made for grouping dumpin with employee
-    // premiums, at least as long as we treat dumpin as employee
-    // premium. Even though dumpin and 1035 exchanges are similar in
-    // that both are single payments notionally made at issue, it is
-    // not necessary to group them together: 1035 exchanges have a
-    // unique nature that requires them to be recognized before any
-    // premium is paid, and dumpins do not share that nature.
-
-    if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
+    double eepmt = 0.0;
+    if(ee_pay_this_month)
         {
-        if(ee_pay_this_month)
+        eepmt = PerformEePmtStrategy();
+        // Illustration-reg guaranteed premium ignores GPT limit.
+        if(!SolvingForGuarPremium)
             {
-            double eepmt = PerformEePmtStrategy();
-            // Don't enforce the GPT premium limit when solving for
-            // illustration-reg guaranteed premium.
-            if(!SolvingForGuarPremium)
-                {
-                double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
-                Irc7702_->ProcessGptPmt(Year, eepmt, fake_cum_pmt);
-                }
-            EeGrossPmts[Month] += eepmt;
-            GrossPmts  [Month] += eepmt;
+            Irc7702_->ProcessGptPmt(Year, eepmt);
             }
-        if(er_pay_this_month)
+        EeGrossPmts[Month] += eepmt;
+        GrossPmts  [Month] += eepmt;
+        }
+
+    double erpmt = 0.0;
+    if(er_pay_this_month)
+        {
+        erpmt = PerformErPmtStrategy();
+        // Illustration-reg guaranteed premium ignores GPT limit.
+        if(!SolvingForGuarPremium)
             {
-            double erpmt = PerformErPmtStrategy();
-            // Don't enforce the GPT premium limit when solving for
-            // illustration-reg guaranteed premium.
-            if(!SolvingForGuarPremium)
-                {
-                double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
-                Irc7702_->ProcessGptPmt(Year, erpmt, fake_cum_pmt);
-                }
-            ErGrossPmts[Month] += erpmt;
-            GrossPmts  [Month] += erpmt;
+            Irc7702_->ProcessGptPmt(Year, erpmt);
             }
+        ErGrossPmts[Month] += erpmt;
+        GrossPmts  [Month] += erpmt;
         }
 
     HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
     HOPEFULLY(GrossPmts[Month] < 1.0e100);
 
-    if(0 == Year && 0 == Month && (Solving || mce_run_gen_curr_sep_full == RunBasis_))
+    // On the issue date (which is always a modal payment date), store
+    // annualized planned premium, including dumpin and 1035 proceeds,
+    // and reflecting the payment strategies just applied (and premium
+    // solves, on the final iteration). Of course, any planned premium
+    // might be reduced to the guideline or non-MEC limit.
+    if(0 == Year && 0 == Month)
         {
-        // Don't enforce the GPT premium limit when solving for
-        // illustration-reg guaranteed premium.
+        InitAnnPlannedPrem_ =
+              Dumpin
+            + External1035Amount
+            + Internal1035Amount
+            + ee_mode * eepmt
+            + er_mode * erpmt
+            ;
+        }
+
+    if(0 == Year && ee_pay_this_month && 1 == Database_->Query(DB_MinInitPremType))
+        {
+        double z = ModalMinInitPremShortfall();
+        // Illustration-reg guaranteed premium ignores GPT limit.
         if(!SolvingForGuarPremium)
             {
-            double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
-            Irc7702_->ProcessGptPmt(Year, Dumpin, fake_cum_pmt);
+            Irc7702_->ProcessGptPmt(Year, z);
+            }
+        EeGrossPmts[Month] += z;
+        GrossPmts  [Month] += z;
+        }
+
+    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+
+    if(0 == Year && 0 == Month)
+        {
+        // Illustration-reg guaranteed premium ignores GPT limit.
+        if(!SolvingForGuarPremium)
+            {
+            Irc7702_->ProcessGptPmt(Year, Dumpin);
             }
         EeGrossPmts[Month] += Dumpin;
         GrossPmts  [Month] += Dumpin;
@@ -2666,11 +2675,13 @@ void AccountValue::TxTakeWD()
 
     if(Solving || mce_run_gen_curr_sep_full == RunBasis_)
         {
+        // Illustration-reg guaranteed premium ignores GPT limit.
         if(!SolvingForGuarPremium)
             {
-            double fake_cum_pmt = 0.0; // TODO ?? TAXATION !! Needs work.
+            // TODO ?? TAXATION !! What if reference argument
+            // 'premiums_paid_increment' is modified?
             double premiums_paid_increment = -GrossWD;
-            Irc7702_->ProcessGptPmt(Year, premiums_paid_increment, fake_cum_pmt);
+            Irc7702_->ProcessGptPmt(Year, premiums_paid_increment);
             }
         }
 

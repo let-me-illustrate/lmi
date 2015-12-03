@@ -1144,6 +1144,16 @@ void Input::set_inforce_durations_from_dates()
     // multiple messageboxes, which is unavoidable if the diagnostic is
     // to be given when GUI input enters an invalid state, and also
     // whenever an illustration is about to be produced.
+// Fails:
+//   File | New | Illustration
+//   subtract one day from "Effective date"
+//   OK
+//   Illustration | Edit cell... [fails irrecoverably]
+// Therefore, these diagnostics are temporarily suppressed for input
+// files created by lmi--but not for extracts from vendor systems,
+// whose dates should not be altered by lmi users.
+if(1 != InforceDataSource.value())
+  {
     if(expected != InforceAsOfDate.value() && !contains(global_settings::instance().pyx(), "off_monthiversary"))
         {
         fatal_error()
@@ -1174,5 +1184,6 @@ void Input::set_inforce_durations_from_dates()
             << LMI_FLUSH
             ;
         }
+  }
 }
 

@@ -336,6 +336,7 @@ class LMI_SO DBDictionary
     database_entity MinPremIntSpread    ;
     database_entity SplitMinPrem        ;
     database_entity UnsplitSplitMinPrem ;
+    database_entity MinInitPremType     ;
     database_entity TgtPremType         ;
     database_entity TgtPremTable        ;
     database_entity TgtPremFixedAtIssue ;

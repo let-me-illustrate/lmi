@@ -861,8 +861,21 @@ void LedgerInvariant::Init(BasicValues* b)
         )[0];
 
     IsInforce = b->yare_input_.EffectiveDate != b->yare_input_.InforceAsOfDate;
-    // This test is probably redundant, but it is difficult to prove
-    // that it is actually redundant and will always remain so.
+    // This test is probably redundant because it is already performed
+    // in class Input. But it's difficult to prove that it is actually
+    // redundant and will always remain so, while repeating it here
+    // costs little and gives a stronger guarantee that illustrations
+    // that would violate this rule cannot be produced.
+// Fails:
+//   File | New | Illustration
+//   subtract one day from "Effective date"
+//   OK
+//   Illustration | Edit cell... [fails irrecoverably]
+// Therefore, these diagnostics are temporarily suppressed for input
+// files created by lmi--but not for extracts from vendor systems,
+// whose dates should not be altered by lmi users.
+if(1 != b->yare_input_.InforceDataSource)
+  {
     if(IsInforce && (0 == b->yare_input_.InforceYear && 0 == b->yare_input_.InforceMonth))
         {
         fatal_error()
@@ -870,6 +883,7 @@ void LedgerInvariant::Init(BasicValues* b)
             << LMI_FLUSH
             ;
         }
+  }
 
     SupplementalReport         = b->yare_input_.CreateSupplementalReport;
     SupplementalReportColumn00 = mc_str(b->yare_input_.SupplementalReportColumn00);
