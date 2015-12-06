@@ -1037,6 +1037,7 @@ void AccountValue::InitializeSpecAmt()
     if(0 == Year)
         {
         InvariantValues().InitTgtPrem = AnnualTargetPrem;
+        InvariantValues().InitMinPrem = MinInitPrem();
         }
 
     // Calculate special initial premiums for premium-quote PDF only.

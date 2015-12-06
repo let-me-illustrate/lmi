@@ -138,6 +138,7 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["InitGSP"               ] = &InitGSP                ;
     ScalableScalars ["InitGLP"               ] = &InitGLP                ;
     ScalableScalars ["InitTgtPrem"           ] = &InitTgtPrem            ;
+    ScalableScalars ["InitMinPrem"           ] = &InitMinPrem            ;
     ScalableScalars ["InitModalPrem00"       ] = &InitModalPrem00        ;
     ScalableScalars ["InitModalPrem01"       ] = &InitModalPrem01        ;
     ScalableScalars ["InitModalPrem10"       ] = &InitModalPrem10        ;
@@ -220,6 +221,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["DeathBenefitFootnote"          ] = &DeathBenefitFootnote          ;
     Strings["InitialPremiumFootnote"        ] = &InitialPremiumFootnote        ;
     Strings["NetPremiumFootnote"            ] = &NetPremiumFootnote            ;
+    Strings["GrossPremiumFootnote"          ] = &GrossPremiumFootnote          ;
     Strings["OutlayFootnote"                ] = &OutlayFootnote                ;
     Strings["PolicyYearFootnote"            ] = &PolicyYearFootnote            ;
 
@@ -603,6 +605,7 @@ void LedgerInvariant::Init(BasicValues* b)
 //  GuarPrem                = 0;
 //  InitSevenPayPrem        =
 //  InitTgtPrem             =
+//  InitMinPrem             =
     InitModalPrem00         = 0.0;
     InitModalPrem01         = 0.0;
     InitModalPrem10         = 0.0;
@@ -688,6 +691,7 @@ void LedgerInvariant::Init(BasicValues* b)
         DeathBenefitFootnote           = p.datum("DeathBenefitFootnote"           );
         InitialPremiumFootnote         = p.datum("InitialPremiumFootnote"         );
         NetPremiumFootnote             = p.datum("NetPremiumFootnote"             );
+        GrossPremiumFootnote           = p.datum("GrossPremiumFootnote"           );
         OutlayFootnote                 = p.datum("OutlayFootnote"                 );
         PolicyYearFootnote             = p.datum("PolicyYearFootnote"             );
 
@@ -1006,6 +1010,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     DeathBenefitFootnote          = a_Addend.DeathBenefitFootnote;
     InitialPremiumFootnote        = a_Addend.InitialPremiumFootnote;
     NetPremiumFootnote            = a_Addend.NetPremiumFootnote;
+    GrossPremiumFootnote          = a_Addend.GrossPremiumFootnote;
     OutlayFootnote                = a_Addend.OutlayFootnote;
     PolicyYearFootnote            = a_Addend.PolicyYearFootnote;
 

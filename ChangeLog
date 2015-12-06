@@ -37631,3 +37631,29 @@ Add numerous footnotes; replace "contract" with a more specific term.
   version.hpp
 Designate release candidate 6425.
 
+20151206T1935Z <gchicares@sbcglobal.net> [458]
+
+  ihs_mortal.cpp
+Improve documentation, resolving one marked defect.
+
+20151206T1940Z <gchicares@sbcglobal.net> [458]
+
+  premium_tax.cpp
+Update AZ premium tax effective 2016-01-01.
+
+20151206T1951Z <gchicares@sbcglobal.net> [458]
+
+  account_value.hpp
+  ihs_acctval.cpp
+Refactor for reusability.
+
+20151206T2005Z <gchicares@sbcglobal.net> [458]
+
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+  product_data.cpp
+  product_data.hpp
+Add 'InitMinPrem' and 'GrossPremiumFootnote' fields.
+

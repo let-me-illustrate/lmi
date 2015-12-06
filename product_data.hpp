@@ -199,6 +199,7 @@ class LMI_SO product_data
     glossed_string DeathBenefitFootnote;
     glossed_string InitialPremiumFootnote;
     glossed_string NetPremiumFootnote;
+    glossed_string GrossPremiumFootnote;
     glossed_string OutlayFootnote;
     glossed_string PolicyYearFootnote;
 
