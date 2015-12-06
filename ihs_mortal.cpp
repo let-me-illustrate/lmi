@@ -214,8 +214,11 @@ void MortalityRates::SetOtherRates()
         // Assume target premium table is never changed for substandard.
         }
 
-    // TODO ?? TAXATION !! Temporary stuff to support NSP for 7702A
-    // TODO ?? TAXATION !! Incorrect if GPT
+    // Use reciprocal of CVAT corridor factor as NSP, for both GPT and
+    // CVAT.
+    // TODO ?? TAXATION !! Do this only if DB_Irc7702NspWhence is 2
+    // (which should be an enum). This probably should have its own
+    // rounding rule.
     LMI_ASSERT(0 == CvatNspRates_.size());
     for(int j = 0; j < Length_; ++j)
         {
