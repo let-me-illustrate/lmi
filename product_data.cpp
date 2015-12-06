@@ -222,6 +222,7 @@ void product_data::ascribe_members()
     ascribe("DeathBenefitFootnote"          , &product_data::DeathBenefitFootnote          );
     ascribe("InitialPremiumFootnote"        , &product_data::InitialPremiumFootnote        );
     ascribe("NetPremiumFootnote"            , &product_data::NetPremiumFootnote            );
+    ascribe("GrossPremiumFootnote"          , &product_data::GrossPremiumFootnote          );
     ascribe("OutlayFootnote"                , &product_data::OutlayFootnote                );
     ascribe("PolicyYearFootnote"            , &product_data::PolicyYearFootnote            );
     ascribe("ADDFootnote"                   , &product_data::ADDFootnote                   );

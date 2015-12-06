@@ -151,6 +151,7 @@ class LMI_SO LedgerInvariant
     double          InitGSP;
     double          InitGLP;
     double          InitTgtPrem;
+    double          InitMinPrem;
     double          InitModalPrem00;
     double          InitModalPrem01;
     double          InitModalPrem10;
@@ -239,6 +240,7 @@ class LMI_SO LedgerInvariant
     std::string     DeathBenefitFootnote;
     std::string     InitialPremiumFootnote;
     std::string     NetPremiumFootnote;
+    std::string     GrossPremiumFootnote;
     std::string     OutlayFootnote;
     std::string     PolicyYearFootnote;
 
