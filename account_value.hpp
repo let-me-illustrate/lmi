@@ -289,6 +289,7 @@ class LMI_SO AccountValue
     double SurrChg                 ();
 
     double MinInitDumpin() const;
+    double MinInitPrem() const;
     double ModalMinInitPremShortfall() const;
     double SuppositiveModalPremium
         (bool        with_adb

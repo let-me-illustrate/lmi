@@ -1096,6 +1096,24 @@ double AccountValue::MinInitDumpin() const
         }
 }
 
+double AccountValue::MinInitPrem() const
+{
+    if
+        (  0 == Year
+        && 1 == Database_->Query(DB_MinInitPremType)
+        && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
+        )
+        {
+        mcenum_mode const er_mode = InvariantValues().ErMode[0].value();
+        double const modal_min_prem = InvariantValues().ModalMinimumPremium[0];
+        return MinInitDumpin() + modal_min_prem * er_mode;
+        }
+    else
+        {
+        return 0.0;
+        }
+}
+
 /// Required modal increment to initial planned premium.
 ///
 /// If the minimum is not otherwise satisfied, then employee payments
@@ -1132,9 +1150,7 @@ double AccountValue::ModalMinInitPremShortfall() const
         )
         {
         mcenum_mode const ee_mode = InvariantValues().EeMode[0].value();
-        mcenum_mode const er_mode = InvariantValues().ErMode[0].value();
-        double const modal_min_prem = InvariantValues().ModalMinimumPremium[0];
-        double const required = MinInitDumpin() + modal_min_prem * er_mode;
+        double const required = MinInitPrem();
         double const shortfall = std::max(0.0, required - InitAnnPlannedPrem_);
         return round_min_premium()(shortfall / ee_mode);
         }
