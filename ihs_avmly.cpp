@@ -1712,7 +1712,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
     DBReflectingCorr = round_death_benefit()(DBReflectingCorr);
     // This overrides the value assigned above. There's more than one
     // way to interpret 7702A "death benefit"; this is just one.
-    // TAXATION !! DATABASE !! Offer a choice of interpretations.
+    // TAXATION !! Use DB_Irc7702BftIsSpecAmt
     DB7702A = DBReflectingCorr + TermDB;
 
     DcvDeathBft = std::max
