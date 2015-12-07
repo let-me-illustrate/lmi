@@ -91,7 +91,7 @@ void MortalityRates::initialize()
         unisex male proportion curr
         ANB/ALB
         bool use NY COI limits
-        TODO ?? TAXATION !! DATABASE !! bool ignore ratings for 7702 (tables, flats separately)
+        TODO ?? TAXATION !! Use DB_RatingsAffect7702 (tables, flats separately?)
         flat extras
         substd table
         uninsurable
