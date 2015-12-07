@@ -703,6 +703,7 @@ void BasicValues::SetPermanentInvariants()
     assign(DBDiscountRate, 1.0 + DBDiscountRate);
     assign(DBDiscountRate, 1.0 / DBDiscountRate);
 
+    CalculateComp       = Database_->Query(DB_CalculateComp        );
     Database_->Query(AssetComp , DB_AssetComp);
     Database_->Query(CompTarget, DB_CompTarget);
     Database_->Query(CompExcess, DB_CompExcess);

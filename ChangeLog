@@ -37657,3 +37657,20 @@ Refactor for reusability.
   product_data.hpp
 Add 'InitMinPrem' and 'GrossPremiumFootnote' fields.
 
+20151207T1118Z <gchicares@sbcglobal.net> [458]
+
+  ihs_avmly.cpp
+  ihs_mortal.cpp
+Improve documentation.
+
+20151207T1205Z <gchicares@sbcglobal.net> [456]
+
+  basic_values.hpp
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+Conditionalize compensation calculation.
+

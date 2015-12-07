@@ -474,6 +474,7 @@ enum e_database_key
 
     ,DB_Topic_Compensation
 
+        ,DB_CalculateComp
         ,DB_CompTarget
         ,DB_CompExcess
         ,DB_CompChargeback

@@ -356,6 +356,7 @@ class LMI_SO DBDictionary
     database_entity EePremAcct          ;
     database_entity ErPremMethod        ;
     database_entity ErPremAcct          ;
+    database_entity CalculateComp       ;
     database_entity CompTarget          ;
     database_entity CompExcess          ;
     database_entity CompChargeback      ;

@@ -380,6 +380,7 @@ void DBDictionary::ascribe_members()
     ascribe("EePremAcct"          , &DBDictionary::EePremAcct          );
     ascribe("ErPremMethod"        , &DBDictionary::ErPremMethod        );
     ascribe("ErPremAcct"          , &DBDictionary::ErPremAcct          );
+    ascribe("CalculateComp"       , &DBDictionary::CalculateComp       );
     ascribe("CompTarget"          , &DBDictionary::CompTarget          );
     ascribe("CompExcess"          , &DBDictionary::CompExcess          );
     ascribe("CompChargeback"      , &DBDictionary::CompChargeback      );
@@ -868,6 +869,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_TaxVxQ              , 0.0));
     Add(database_entity(DB_DeficVxQ            , 0.0));
     Add(database_entity(DB_SnflQ               , 0.0));
+    Add(database_entity(DB_CalculateComp       , false));
     Add(database_entity(DB_CompTarget          , 0.0));
     Add(database_entity(DB_CompExcess          , 0.0));
     Add(database_entity(DB_CompChargeback      , 0.0));
