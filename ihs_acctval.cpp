@@ -1151,8 +1151,8 @@ double AccountValue::ModalMinInitPremShortfall() const
         )
         {
         mcenum_mode const ee_mode = InvariantValues().EeMode[0].value();
-        double const required = MinInitPrem();
-        double const shortfall = std::max(0.0, required - InitAnnPlannedPrem_);
+        double const z = material_difference(MinInitPrem(), InitAnnPlannedPrem_);
+        double const shortfall = std::max(0.0, z);
         return round_min_premium()(shortfall / ee_mode);
         }
     else
