@@ -72,8 +72,8 @@ class ymd_t
     int value_;
 };
 
-ymd_t JdnToYmd(jdn_t);
-jdn_t YmdToJdn(ymd_t);
+ymd_t LMI_SO JdnToYmd(jdn_t);
+jdn_t LMI_SO YmdToJdn(ymd_t);
 
 /// Class calendar_date represents a gregorian-calendar date in the
 /// range [1752-09-14, 9999-12-31]. Date calculations are probably

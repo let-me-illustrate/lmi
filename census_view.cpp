@@ -45,6 +45,7 @@
 #include "safely_dereference_as.hpp"
 #include "single_choice_popup_menu.hpp"
 #include "timer.hpp"
+#include "value_cast.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
 
@@ -1632,6 +1633,38 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         return;
         }
 
+    // Use a modifiable copy of case defaults as an exemplar for new
+    // cells to be created by pasting. Modifications are conditionally
+    // written back to case defaults later.
+    Input exemplar(case_parms()[0]);
+
+    // Force 'UseDOB' prn. Pasting it as a column never makes sense.
+    if(contains(headers, "UseDOB"))
+        {
+        warning() << "'UseDOB' is unnecessary and will be ignored." << std::flush;
+        }
+    bool const dob_pasted = contains(headers, "DateOfBirth");
+    bool const age_pasted = contains(headers, "IssueAge");
+    if(dob_pasted && age_pasted)
+        {
+        fatal_error()
+            << "Cannot paste both 'DateOfBirth' and 'IssueAge'."
+            << LMI_FLUSH
+            ;
+        }
+    else if(dob_pasted)
+        {
+        exemplar["UseDOB"] = "Yes";
+        }
+    else if(age_pasted)
+        {
+        exemplar["UseDOB"] = "No";
+        }
+    else
+        {
+        ; // Do nothing: neither age nor DOB pasted.
+        }
+
     // Read each subsequent line into an input object representing one cell.
     int current_line = 0;
     while(std::getline(iss_census, line, '\n'))
@@ -1640,7 +1673,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         iss_census >> std::ws;
 
-        Input current_cell(case_parms()[0]);
+        Input current_cell(exemplar);
 
         std::istringstream iss_line(line);
         std::string token;
@@ -1682,6 +1715,32 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         for(unsigned int j = 0; j < headers.size(); ++j)
             {
+            if(exact_cast<tnr_date>(current_cell[headers[j]]))
+                {
+                static long int const jdn_min = calendar_date::gregorian_epoch_jdn;
+                static long int const jdn_max = calendar_date::last_yyyy_date_jdn;
+                static long int const ymd_min = JdnToYmd(jdn_t(jdn_min)).value();
+                static long int const ymd_max = JdnToYmd(jdn_t(jdn_max)).value();
+                long int z = value_cast<long int>(values[j]);
+                if(jdn_min <= z && z <= jdn_max)
+                    {
+                    ; // Do nothing: JDN is the default expectation.
+                    }
+                else if(ymd_min <= z && z <= ymd_max)
+                    {
+                    z = YmdToJdn(ymd_t(z)).value();
+                    values[j] = value_cast<std::string>(z);
+                    }
+                else
+                    {
+                    fatal_error()
+                        << "Invalid date " << values[j]
+                        << " for '" << headers[j] << "'"
+                        << " on line " << current_line << "."
+                        << LMI_FLUSH
+                        ;
+                    }
+                }
             current_cell[headers[j]] = values[j];
             }
         current_cell.Reconcile();
@@ -1700,9 +1759,11 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
     if(!document().IsModified() && !document().GetDocumentSaved())
         {
-        cell_parms().clear();
+        case_parms ().clear();
+        case_parms ().push_back(exemplar);
         class_parms().clear();
-        class_parms().push_back(case_parms()[0]);
+        class_parms().push_back(exemplar);
+        cell_parms ().clear();
         }
 
     std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
@@ -1712,7 +1773,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     Update();
     status() << std::flush;
 
-    LMI_ASSERT(!case_parms ().empty());
+    LMI_ASSERT(1 == case_parms().size());
     LMI_ASSERT(!cell_parms ().empty());
     LMI_ASSERT(!class_parms().empty());
 }
