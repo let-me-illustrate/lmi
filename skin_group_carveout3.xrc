@@ -244,7 +244,7 @@
                                     <border>2</border>
                                     <object class="wxComboBox" name="StateOfJurisdiction">
                                         <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
-                                        <size>40,-1</size>
+                                        <size>50,-1</size>
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                     </object>
                                 </object>
@@ -266,7 +266,7 @@
                                     <border>4</border>
                                     <object class="wxComboBox" name="PremiumTaxState">
                                         <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
-                                        <size>40,-1</size>
+                                        <size>50,-1</size>
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                     </object>
                                 </object>
