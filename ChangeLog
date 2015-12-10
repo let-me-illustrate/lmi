@@ -37674,3 +37674,21 @@ Improve documentation.
   ihs_basicval.cpp
 Conditionalize compensation calculation.
 
+20151208T1552Z <gchicares@sbcglobal.net> [456]
+
+  ihs_acctval.cpp
+Ignore immaterial premium shortfalls.
+
+20151210T2022Z <gchicares@sbcglobal.net> [456]
+
+  calendar_date.hpp
+  census_view.cpp
+Allow pasting YYYYMMDD dates into a census.
+
+20151210T2158Z <gchicares@sbcglobal.net> [456]
+
+  any_member.hpp
+  any_member_test.cpp
+  census_view.cpp
+Refactor to improve maintainability.
+
