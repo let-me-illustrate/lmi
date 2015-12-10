@@ -664,21 +664,19 @@ class renderer_fallback_convertor : public renderer_type_convertor
 
 renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> const& value)
 {
-    any_member<Input>& nonconst_value = const_cast<any_member<Input>&>(value);
-
-    if(typeid(mce_yes_or_no Input::*) == value.type())
+    if(exact_cast<mce_yes_or_no>(value))
         {
         return get_impl<renderer_bool_convertor>();
         }
-    else if(0 != reconstitutor<mc_enum_base  ,Input>::reconstitute(nonconst_value))
+    else if(is_reconstitutable_as<mc_enum_base  >(value))
         {
         return get_impl<renderer_enum_convertor>();
         }
-    else if(0 != reconstitutor<datum_sequence,Input>::reconstitute(nonconst_value))
+    else if(is_reconstitutable_as<datum_sequence>(value))
         {
         return get_impl<renderer_sequence_convertor>();
         }
-    else if(0 != reconstitutor<tn_range_base ,Input>::reconstitute(nonconst_value))
+    else if(is_reconstitutable_as<tn_range_base >(value))
         {
         tn_range_base const* as_range = member_cast<tn_range_base>(value);
         if(typeid(int) == as_range->value_type())
@@ -687,7 +685,10 @@ renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> co
             return get_impl<renderer_double_range_convertor>();
         else if(typeid(calendar_date) == as_range->value_type())
             return get_impl<renderer_date_convertor>();
-        // else: fall through
+        }
+    else
+        {
+        ; // Fall through.
         }
 
     return get_impl<renderer_fallback_convertor>();
