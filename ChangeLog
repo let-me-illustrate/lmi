@@ -37692,3 +37692,15 @@ Allow pasting YYYYMMDD dates into a census.
   census_view.cpp
 Refactor to improve maintainability.
 
+20151210T2212Z <wboutin@massmutual.com> [456]
+
+  skin_group_carveout3.xrc [new file]
+Add new input file.
+
+20151210T2226Z <wboutin@massmutual.com> [456]
+
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout3.xrc
+Widen state controls for full display of contents.
+
