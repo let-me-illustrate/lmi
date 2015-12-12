@@ -26,6 +26,12 @@ ssh-agent -k > /dev/null 2>&1
 
 svn commit -m "Modify foo" foo.cpp
 
+  # ...commit a change to cvs repository
+
+export CVS_RSH="ssh"
+export CVSROOT="{USER}{AT_SIGN}cvs.sv.gnu.org:/web/lmi"
+cvs commit -m "Modify foo webpage" bar.html
+
   # ...rename a file [pending--resolved at next 'commit', as for 'add']
   # [for cvs, add and delete--unlike svn, not an atomic operation]
 
@@ -100,6 +106,8 @@ svn update
   # Similarly, for webpages repository
 
 cd /lmi/mirror/web
+export CVS_RSH="ssh"
+export CVSROOT="{USER}{AT_SIGN}cvs.sv.gnu.org:/web/lmi"
 cvs -z3 update -l lmi
 
   # Third screen: only for building and testing
@@ -178,4 +186,9 @@ for z in *.?pp; (iconv -f UTF-8 -t UTF-8 $z &>/dev/null || echo $z)
 
 cp -a product_data.cpp eraseme
 iconv -f ISO-8859-1 -t UTF-8 eraseme > product_data.cpp
+
+  # Compare two local trees using a primitive msw tool
+
+windiff -D -O 'c:/lmi/src/lmi' 'c:/lmi/mirror/lmi' &
+windiff -D -O 'c:/lmi/src/lmi/' 'c:/lmi/src/lmi/a00/' &
 
