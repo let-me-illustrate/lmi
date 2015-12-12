@@ -95,7 +95,7 @@ EOF
 echo "Protocol 2" > ~/.ssh/config
 ssh-keygen -t dsa
   # and register key here:
-  #   http://savannah.gnu.org/account/editsshkeys.php
+  #   https://savannah.gnu.org/my/admin/editsshkeys.php
 
   # Check permissions; make sure they're not too open
 
