@@ -37721,3 +37721,9 @@ Rework the 20151210T2226Z change for robustness.
 Reconstitute 'ce_product_name' from 'mc_enum_base' (VS). See:
   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00010.html
 
+20151212T1600Z <gchicares@sbcglobal.net> [456]
+
+  census_view.cpp
+Revise the 20151210T2158Z change. See:
+  http://lists.nongnu.org/archive/html/lmi/2015-12/msg00006.html
+
