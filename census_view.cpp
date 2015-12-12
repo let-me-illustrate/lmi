@@ -42,6 +42,7 @@
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp"               // is_ok_for_cctype()
 #include "path_utility.hpp"
+#include "rtti_lmi.hpp"                 // lmi::TypeInfo
 #include "safely_dereference_as.hpp"
 #include "single_choice_popup_menu.hpp"
 #include "timer.hpp"
@@ -668,27 +669,47 @@ renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> co
         {
         return get_impl<renderer_bool_convertor>();
         }
-    else if(is_reconstitutable_as<mc_enum_base  >(value))
+    else if(exact_cast<datum_string>(value))
         {
-        return get_impl<renderer_enum_convertor>();
+        return get_impl<renderer_fallback_convertor>();
         }
     else if(is_reconstitutable_as<datum_sequence>(value))
         {
         return get_impl<renderer_sequence_convertor>();
         }
+    else if(is_reconstitutable_as<mc_enum_base  >(value))
+        {
+        return get_impl<renderer_enum_convertor>();
+        }
     else if(is_reconstitutable_as<tn_range_base >(value))
         {
         tn_range_base const* as_range = member_cast<tn_range_base>(value);
         if(typeid(int) == as_range->value_type())
+            {
             return get_impl<renderer_int_range_convertor>();
+            }
         else if(typeid(double) == as_range->value_type())
+            {
             return get_impl<renderer_double_range_convertor>();
+            }
         else if(typeid(calendar_date) == as_range->value_type())
+            {
             return get_impl<renderer_date_convertor>();
+            }
+        else
+            {
+            // Fall through to warn and treat datum as string.
+            }
         }
     else
         {
-        ; // Fall through.
+        warning()
+            << "Type '"
+            << lmi::TypeInfo(value.type())
+            << "' not recognized. Please report this anomaly."
+            << LMI_FLUSH
+            ;
+        // Fall through to treat datum as string.
         }
 
     return get_impl<renderer_fallback_convertor>();
