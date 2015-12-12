@@ -501,6 +501,7 @@ template<> struct reconstitutor<mc_enum_base, Input>
     static DesiredType* reconstitute(any_member<Input>& m)
         {
         DesiredType* z = 0;
+        z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<mce_class               >(m); if(z) return z;
         z = exact_cast<mce_country             >(m); if(z) return z;
         z = exact_cast<mce_dbopt               >(m); if(z) return z;
@@ -568,7 +569,6 @@ template<> struct reconstitutor<datum_base, Input>
     static DesiredType* reconstitute(any_member<Input>& m)
         {
         DesiredType* z = 0;
-        z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<datum_string            >(m); if(z) return z;
         z = reconstitutor<datum_sequence,Input>::reconstitute(m); if(z) return z;
         z = reconstitutor<mc_enum_base  ,Input>::reconstitute(m); if(z) return z;
