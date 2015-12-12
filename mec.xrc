@@ -374,8 +374,8 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxComboBox" name="StateOfJurisdiction">
                                         <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
-                                        <size>80,-1</size>
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                        <content><item>MM</item><item>WW</item></content>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -389,8 +389,8 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxComboBox" name="PremiumTaxState">
                                         <help>State to which premium tax is paid--affects premium load if the tax is passed through</help>
-                                        <size>80,-1</size>
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                        <content><item>MM</item><item>WW</item></content>
                                     </object>
                                 </object>
                             </object>
