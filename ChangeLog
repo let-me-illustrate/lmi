@@ -37702,5 +37702,22 @@ Add new input file.
   skin_coli_boli.xrc
   skin_group_carveout.xrc
   skin_group_carveout3.xrc
-Widen state controls for full display of contents.
+Widen state and country controls that were too narrow with msw7.
+
+20151212T1556Z <gchicares@sbcglobal.net> [456]
+
+  gpt.xrc
+  mec.xrc
+  skin.xrc
+  skin_coli_boli.xrc
+  skin_group_carveout.xrc
+  skin_group_carveout3.xrc
+  skin_single_premium.xrc
+Rework the 20151210T2226Z change for robustness.
+
+20151212T1558Z <gchicares@sbcglobal.net> [456]
+
+  input.hpp
+Reconstitute 'ce_product_name' from 'mc_enum_base' (VS). See:
+  http://lists.nongnu.org/archive/html/lmi/2015-12/msg00010.html
 
