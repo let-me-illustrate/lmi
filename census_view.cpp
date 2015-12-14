@@ -1506,12 +1506,12 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         << n_items
         << " cells?"
         ;
-    int z = wxMessageBox
+    int yes_or_no = wxMessageBox
         (oss.str()
         ,"Confirm deletion"
         ,wxYES_NO | wxICON_QUESTION
         );
-    if(wxYES != z)
+    if(wxYES != yes_or_no)
         {
         return;
         }
@@ -1554,9 +1554,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         (static_cast<std::size_t>(erasures.front())
         ,cell_parms().size() - 1
         );
-    wxDataViewItem const& y = list_model_->GetItem(newsel);
-    list_window_->Select(y);
-    list_window_->EnsureVisible(y);
+    wxDataViewItem const& z = list_model_->GetItem(newsel);
+    list_window_->Select(z);
+    list_window_->EnsureVisible(z);
 
     Update();
     document().Modify(true);
@@ -1788,11 +1788,20 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         cell_parms ().clear();
         }
 
+    unsigned int selection = cell_parms().size();
     std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
     document().Modify(true);
     list_model_->Reset(cell_parms().size());
     Update();
+    // Reset() leaves the listview unreachable from the keyboard
+    // because no row is selected--so select the first added row
+    // if possible, else the row after which no row was inserted.
+    selection = std::min(selection, cell_parms().size());
+    wxDataViewItem const& z = list_model_->GetItem(selection);
+    list_window_->Select(z);
+    list_window_->EnsureVisible(z);
+
     status() << std::flush;
 
     LMI_ASSERT(1 == case_parms().size());
