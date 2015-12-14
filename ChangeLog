@@ -37695,7 +37695,7 @@ Refactor to improve maintainability.
 20151210T2212Z <wboutin@massmutual.com> [456]
 
   skin_group_carveout3.xrc [new file]
-Add new input file.
+Add group-carveout skin without inforce tab.
 
 20151210T2226Z <wboutin@massmutual.com> [456]
 
@@ -38295,4 +38295,24 @@ Draw lessons from recent experience: inforce less than one month.
   zero.hpp
   zero_test.cpp
 Update copyright notices.
+
+20151214T1847Z <gchicares@sbcglobal.net> [456]
+
+  wx_test_validate_output.cpp
+Fix defect introduced 20151006T1517Z: failed to update unit test.
+
+20151214T1903Z <gchicares@sbcglobal.net> [456]
+
+  pasting_to_a_census.html
+Demonstrate pasting YYYYMMDD into a census.
+
+20151214T2349Z <gchicares@sbcglobal.net> [456]
+
+  census_view.cpp
+Select first added cell after pasting, to restore keyboard focus.
+
+20151214T2352Z <gchicares@sbcglobal.net> [456]
+
+  version.hpp
+Designate release candidate 6447.
 
