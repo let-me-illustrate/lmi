@@ -92,8 +92,9 @@ EOF
   # Configure ssh
 
   # Create new credentials if necessary, if not copied elsewhence
+  # (replace my address with yours of course)
 echo "Protocol 2" > ~/.ssh/config
-ssh-keygen -t dsa
+ssh-keygen -t rsa -b 4096 -C "gchicares@sbcglobal.net"
   # and register key here:
   #   https://savannah.gnu.org/my/admin/editsshkeys.php
 
@@ -115,7 +116,7 @@ touch ~/.cvspass
 
 eval `ssh-agent`
 ssh-agent $SHELL
-ssh-add ~/.ssh/id_dsa
+ssh-add ~/.ssh/id_rsa
   [passphrase]
 
   # If you see the following:
