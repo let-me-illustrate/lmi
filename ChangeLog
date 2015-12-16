@@ -38316,3 +38316,13 @@ Select first added cell after pasting, to restore keyboard focus.
   version.hpp
 Designate release candidate 6447.
 
+20151216T1607Z <gchicares@sbcglobal.net> [456]
+
+  install_cygwin.bat
+Prepare to cross compile.
+
+20151216T1608Z <gchicares@sbcglobal.net> [456]
+
+  wx_test_paste_census.cpp
+Update unit test: use new user-manual census-paste example.
+
