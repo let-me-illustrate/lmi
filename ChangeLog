@@ -38332,3 +38332,34 @@ Update unit test: use new user-manual census-paste example.
 Improve boost standard conformance. See:
   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00041.html
 
+20151221T0120Z <gchicares@sbcglobal.net> [456]
+
+  snprintf_test.cpp
+Fix link rot.
+
+20151221T0127Z <gchicares@sbcglobal.net> [456]
+
+  bcc_ld.cpp
+  math_functors_test.cpp
+Forestall gcc-4.9.2 "unused" warnings.
+
+20151221T0138Z <gchicares@sbcglobal.net> [456]
+
+  cpp_main.cpp
+  main_common.cpp
+  wx_new_test.cpp
+Forestall gcc-4.9.2 external attribute warnings.
+
+20151221T0159Z <gchicares@sbcglobal.net> [456]
+
+  database_document.hpp
+  so_attributes.hpp
+  wx_utility.hpp
+Forestall gcc-4.9.2 internal attribute warnings.
+
+20151221T0231Z <gchicares@sbcglobal.net> [456]
+
+  config.hpp
+  test_coding_rules.cpp
+Prepare to use MinGW-w64 gcc.
+

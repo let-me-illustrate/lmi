@@ -826,6 +826,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__MINGW32_MINOR_VERSION"
         ,"__MINGW32_VERSION"
         ,"__MINGW32__"
+        ,"__MINGW64_VERSION_MAJOR"
         ,"__MINGW_H"
         ,"_fmode"
     // Compiler specific: glibc.
