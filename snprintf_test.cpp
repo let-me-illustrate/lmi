@@ -78,7 +78,7 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(std::string(buf, 15), std::string("2.718281828459\0", 15));
 
     // See:
-    //   http://www.nabble.com/forum/PrintPost.jtp?post=17172711
+    //   http://comments.gmane.org/gmane.comp.gnu.mingw.devel/2945
     //     [2008-05-11T11:46Z from François-Xavier Coudert]
     double g = 39.0;
     len = snprintf(buf,       0, "%9.0e", g);
