@@ -41,7 +41,7 @@
 #include <string>
 #include <vector>
 
-class LMI_SO calendar_date;
+class LMI_SO_FWD_DECL calendar_date;
 class WXDLLIMPEXP_FWD_CORE wxApp;
 class WXDLLIMPEXP_FWD_CORE wxBookCtrlBase;
 class WXDLLIMPEXP_FWD_CORE wxDateTime;
