@@ -79,7 +79,14 @@
 /// For the (corrected) return type, see:
 ///   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
 
+#   if defined __GNUC__ && 40600 <= LMI_GCC_VERSION
+#       pragma GCC diagnostic push
+#       pragma GCC diagnostic ignored "-Wattributes"
+#   endif // defined __GNUC__ && 40600 <= LMI_GCC_VERSION
 extern "C" unsigned int _get_output_format(void) {return 1;}
+#   if defined __GNUC__ && 40600 <= LMI_GCC_VERSION
+#       pragma GCC diagnostic pop
+#   endif // defined __GNUC__ && 40600 <= LMI_GCC_VERSION
 #endif // defined __MINGW32__
 
 // main()  ------------------------------------------------------------------//
