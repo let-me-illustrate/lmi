@@ -72,10 +72,12 @@ namespace
         return t;
         }
 
+#if 0 // Potentially useful, yet unused.
     bool begins_with(std::string const& s, std::string const& prefix)
         {
         return prefix == s.substr(0, prefix.size());
         }
+#endif // 0
 
     bool ends_with(std::string const& s, std::string const& suffix)
         {
