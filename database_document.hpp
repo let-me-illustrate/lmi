@@ -34,7 +34,7 @@
 #include <map>
 #include <string>
 
-class LMI_SO database_entity;
+class LMI_SO_FWD_DECL database_entity;
 
 class DatabaseDocument
     :public ProductEditorDocument
