@@ -38363,3 +38363,13 @@ Forestall gcc-4.9.2 internal attribute warnings.
   test_coding_rules.cpp
 Prepare to use MinGW-w64 gcc.
 
+20151223T1519Z <gchicares@sbcglobal.net> [456]
+
+  nasd.xsl
+Conditionally display initial minimum premium.
+
+20151223T1849Z <gchicares@sbcglobal.net> [456]
+
+  version.hpp
+Designate release candidate 6458.
+
