@@ -30,6 +30,9 @@
   <xsl:import href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
+  <xsl:variable name="lowerAZ" select="'abcdefghijklmnopqrstuvwxyz'"/>
+  <xsl:variable name="upperAZ" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
+
   <xsl:variable name="GroupCarveout">
     <xsl:call-template name="set_group_carveout"/>
   </xsl:variable>
@@ -237,6 +240,15 @@
               </fo:block>
             </xsl:if>
 
+            <xsl:if test="$GroupCarveout='1'">
+              <fo:block font-weight="bold" padding-top="1em">
+                Gross Payment
+              </fo:block>
+              <fo:block>
+                <xsl:value-of select="$scalars/GrossPremiumFootnote"/>
+              </fo:block>
+            </xsl:if>
+
             <fo:block font-weight="bold" padding-top="1em">
               Gross Rate
             </fo:block>
@@ -244,14 +256,14 @@
               <xsl:value-of select="$scalars/GrossRateFootnote"/>
             </fo:block>
 
-            <fo:block font-weight="bold" padding-top="1em">
-              <xsl:if test="$GroupCarveout='1'">
+            <xsl:if test="$GroupCarveout='1'">
+              <fo:block font-weight="bold" padding-top="1em">
                 Minimum Premium
-              </xsl:if>
-            </fo:block>
-            <fo:block>
-              <xsl:value-of select="$scalars/InitialPremiumFootnote"/>
-            </fo:block>
+              </fo:block>
+              <fo:block>
+                <xsl:value-of select="$scalars/InitialPremiumFootnote"/>
+              </fo:block>
+            </xsl:if>
 
             <fo:block font-weight="bold" padding-top="1em">
               Net Premium
@@ -666,7 +678,6 @@
             <xsl:call-template name="standardheader">
               <xsl:with-param name="reporttitle" select="'Illustration Assumption Detail'"/>
             </xsl:call-template>
-            <xsl:call-template name="dollar-units"/>
           </fo:static-content>
 
           <!-- Define the contents of the footer. -->
@@ -756,8 +767,15 @@
                 </fo:block>
               </xsl:if>
               <fo:block text-align="left">
-                Contract: <xsl:value-of select="$scalars/PolicyMktgName"/>
+                <xsl:value-of select="concat(translate(substring($scalars/ContractName,1,1), $lowerAZ, $upperAZ), substring($scalars/ContractName,2))"/>: <xsl:value-of select="$scalars/PolicyMktgName"/>
               </fo:block>
+
+              <xsl:if test="$GroupCarveout='1'">
+                <fo:block text-align="left">
+                  Minimum Initial Premium: $<xsl:value-of select="$scalars/InitMinPrem"/>
+                </fo:block>
+              </xsl:if>
+
               <fo:block text-align="left">
                 First Year Premium: $<xsl:value-of select="$scalars/InitPrem"/>
               </fo:block>
