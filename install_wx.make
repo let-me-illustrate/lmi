@@ -104,6 +104,7 @@ config_options = \
   --disable-gif \
   --disable-aui \
   --disable-mediactrl \
+  --disable-precomp-headers \
   --disable-propgrid \
   --disable-ribbon \
   --disable-richtext \
@@ -117,6 +118,7 @@ config_options = \
   --enable-vendor='$(vendor)' \
   --without-libjpeg \
   --without-libtiff \
+  --without-opengl \
   --without-subdirs \
        AR='$(mingw_bin_dir)/ar' \
        AS='$(mingw_bin_dir)/as' \
