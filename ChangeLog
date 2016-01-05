@@ -38383,3 +38383,19 @@ Reword a footnote.
   version.hpp
 Designate release candidate 6460.
 
+20160105T0124Z <gchicares@sbcglobal.net> [456]
+
+  version.hpp
+Update copyright notice.
+
+20160105T0141Z <gchicares@sbcglobal.net> [456]
+
+  license.cpp
+Improve wrapping of copyright notice.
+
+20160105T0146Z <gchicares@sbcglobal.net> [456]
+
+  install_wx.make
+Refine configuration. See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00002.html
+
