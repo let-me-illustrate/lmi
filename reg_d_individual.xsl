@@ -664,7 +664,7 @@
               </fo:block>
               <fo:block>
                 Initial Death Benefit Option:
-                <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
+                <xsl:value-of select="$scalars/InitDBOpt"/>
               </fo:block>
             </fo:block>
           </fo:table-cell>

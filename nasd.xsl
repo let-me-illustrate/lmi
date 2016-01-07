@@ -805,7 +805,7 @@
                   </xsl:choose>
                   <xsl:value-of select="$scalars/UWClass"/>,
                   Initial Death Benefit Option:
-                  <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
+                  <xsl:value-of select="$scalars/InitDBOpt"/>
                 </fo:block>
               </xsl:if>
               <xsl:if test="not($is_composite) and $scalars/UWClass='Rated'">

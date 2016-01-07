@@ -38399,3 +38399,20 @@ Improve wrapping of copyright notice.
 Refine configuration. See:
   http://lists.nongnu.org/archive/html/lmi/2016-01/msg00002.html
 
+20160107T1919Z <gchicares@sbcglobal.net> [456]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+Provide 'InitDBOpt'.
+
+20160107T1931Z <gchicares@sbcglobal.net> [455]
+
+  illustration_reg.xsl
+  ledger_xml_io.cpp
+  nasd.xsl
+  reg_d_group.xsl
+  reg_d_individual.xsl
+Resolve a marked defect: replace 'DBOptInitInteger' with 'InitDBOpt'.
+

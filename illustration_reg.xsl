@@ -721,6 +721,10 @@ to the xsl files first.
               in effect on the date of death, prior to adjustments
               for policy debt and monthly charges payable to the date of death.
             </fo:block>
+<!--
+Presumably the description of death benefit options should be moved into
+'ProductDescription' (as has already been done in other '.xsl' files).
+-->
             <fo:block padding-top="1em">
               <fo:inline font-weight="bold">
                 Death Benefit Option 1:
@@ -1239,7 +1243,7 @@ to the xsl files first.
               <xsl:if test="not($is_composite)">
                 <fo:block>
                   Initial Death Benefit Option:
-                  <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
+                  <xsl:value-of select="$scalars/InitDBOpt"/>
                 </fo:block>
               </xsl:if>
               <xsl:call-template name="print-mastercontractnumber-and-contractnumber"/>
