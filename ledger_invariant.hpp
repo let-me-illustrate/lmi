@@ -379,6 +379,7 @@ class LMI_SO LedgerInvariant
     // is not visible across a shared-library boundary. For now, this
     // kludge solves an immediate problem for premium quotes.
     std::string     InitErMode;
+    std::string     InitDBOpt;
 
   private:
     void Alloc(int len);
