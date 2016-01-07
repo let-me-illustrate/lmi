@@ -248,7 +248,7 @@
             </fo:block>
             <fo:block padding-top="1em">
               This illustration assumes Initial Death Benefit Option
-              <xsl:value-of select="$scalars/DBOptInitInteger+1"/>.
+              <xsl:value-of select="$scalars/InitDBOpt"/>.
             </fo:block>
             <fo:block padding-top="1em">
               This policy is only available to entities that meet the definition
@@ -583,7 +583,7 @@
                   </xsl:choose>
                   <xsl:value-of select="$scalars/UWClass"/>,
                   Initial Death Benefit Option:
-                  <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
+                  <xsl:value-of select="$scalars/InitDBOpt"/>
                 </fo:block>
               </xsl:if>
               <xsl:if test="$scalars/HasWP='1'">

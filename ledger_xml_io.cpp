@@ -372,7 +372,6 @@ void Ledger::write(xml::element& x) const
     format_map["AvgFund"                           ] = f1;
     format_map["ChildRiderAmount"                  ] = f1;
     format_map["CustomFund"                        ] = f1;
-    format_map["DBOptInitInteger"                  ] = f1;
     format_map["Dumpin"                            ] = f1;
     format_map["EndtAge"                           ] = f1;
     format_map["External1035Amount"                ] = f1;
@@ -700,13 +699,6 @@ void Ledger::write(xml::element& x) const
 
     std::string ScaleUnit = ledger_invariant_->ScaleUnit();
     strings["ScaleUnit"] = &ScaleUnit;
-
-    // TODO ?? Presumably this is translated to a string in xsl;
-    // why not use the first element of <DbOpt>, which is already
-    // so formatted? Wouldn't that rule out any possibility of
-    // inconsistency between xsl's and the program's translations?
-    double DBOptInitInteger = ledger_invariant_->DBOpt[0].value();
-    scalars["DBOptInitInteger"] = &DBOptInitInteger;
 
     double InitTotalSA =
             ledger_invariant_->InitBaseSpecAmt
