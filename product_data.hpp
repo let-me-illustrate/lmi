@@ -183,12 +183,15 @@ class LMI_SO product_data
     glossed_string CoUnderwriterAddress;
 
     // Terms defined in the contract, which must be used for column
-    // headers according to the illustration reg.
+    // headers, footnotes, etc. according to the illustration reg.
     glossed_string AvName;
     glossed_string CsvName;
     glossed_string CsvHeaderName;
     glossed_string NoLapseProvisionName;
     glossed_string ContractName;
+    glossed_string DboNameLevel;
+    glossed_string DboNameIncreasing;
+    glossed_string DboNameReturnOfPremium;
 
     // TODO ?? Most of the following are missing from the GUI.
 

@@ -216,6 +216,9 @@ void product_data::ascribe_members()
     ascribe("CsvHeaderName"                 , &product_data::CsvHeaderName                 );
     ascribe("NoLapseProvisionName"          , &product_data::NoLapseProvisionName          );
     ascribe("ContractName"                  , &product_data::ContractName                  );
+    ascribe("DboNameLevel"                  , &product_data::DboNameLevel                  );
+    ascribe("DboNameIncreasing"             , &product_data::DboNameIncreasing             );
+    ascribe("DboNameReturnOfPremium"        , &product_data::DboNameReturnOfPremium        );
     ascribe("AccountValueFootnote"          , &product_data::AccountValueFootnote          );
     ascribe("AttainedAgeFootnote"           , &product_data::AttainedAgeFootnote           );
     ascribe("CashSurrValueFootnote"         , &product_data::CashSurrValueFootnote         );
@@ -469,6 +472,9 @@ void product_data::WritePolFiles()
     z.CsvHeaderName              = glossed_string("Cash Surr");
     z.NoLapseProvisionName       = glossed_string("No-lapse Provision");
     z.ContractName               = glossed_string("contract"); // Alternatively, "policy" or "certificate".
+    z.DboNameLevel               = glossed_string("A");
+    z.DboNameIncreasing          = glossed_string("B");
+    z.DboNameReturnOfPremium     = glossed_string("ROP");
     z.MarketingNameFootnote      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
 
     z.GroupQuoteShortProductName = glossed_string("UL SUPREME®");

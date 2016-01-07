@@ -339,6 +339,10 @@ void LedgerInvariant::Alloc(int len)
     Strings["SupplementalReportColumn10"    ] = &SupplementalReportColumn10    ;
     Strings["SupplementalReportColumn11"    ] = &SupplementalReportColumn11    ;
 
+    // Special-case strings.
+
+    Strings["InitDBOpt"                     ] = &InitDBOpt                     ;
+
     LedgerBase::Alloc();
 
     // Scalar or vector data not compatible with type 'double' can't
@@ -391,6 +395,7 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     EffDate                = obj.EffDate               ;
     DateOfBirth            = obj.DateOfBirth           ;
     InitErMode             = obj.InitErMode            ;
+    InitDBOpt              = obj.InitDBOpt             ;
 
     FullyInitialized       = obj.FullyInitialized      ;
 }
@@ -657,6 +662,11 @@ void LedgerInvariant::Init(BasicValues* b)
     SplitMinPrem            = b->Database_->Query(DB_SplitMinPrem);
     AllowDbo3               = b->Database_->Query(DB_AllowDbo3);
 
+    // These are reassigned below based on product data if available.
+    std::string dbo_name_option1 = mc_str(mce_option1);
+    std::string dbo_name_option2 = mc_str(mce_option2);
+    std::string dbo_name_rop     = mc_str(mce_rop    );
+
     // The antediluvian branch has a null ProductData_ object.
     if(b->ProductData_)
         {
@@ -666,6 +676,9 @@ void LedgerInvariant::Init(BasicValues* b)
         // strings in class product_data vary across the same axes as
         // database_entity objects.
         bool alt_form = b->Database_->Query(DB_UsePolicyFormAlt);
+        dbo_name_option1               = p.datum("DboNameLevel"                   );
+        dbo_name_option2               = p.datum("DboNameIncreasing"              );
+        dbo_name_rop                   = p.datum("DboNameReturnOfPremium"         );
         PolicyForm = p.datum(alt_form ? "PolicyFormAlternative" : "PolicyForm");
         PolicyMktgName                 = p.datum("PolicyMktgName"                 );
         PolicyLegalName                = p.datum("PolicyLegalName"                );
@@ -852,6 +865,15 @@ void LedgerInvariant::Init(BasicValues* b)
     DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth).str();
     DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth).julian_day_number();
     InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
+
+    mcenum_dbopt const init_dbo = b->DeathBfts_->dbopt()[0];
+    InitDBOpt =
+         (mce_option1 == init_dbo) ? dbo_name_option1
+        :(mce_option2 == init_dbo) ? dbo_name_option2
+        :(mce_rop     == init_dbo) ? dbo_name_rop
+        :throw std::logic_error("Unrecognized initial death benefit option.")
+        ;
+
     DefnLifeIns             = mc_str(b->yare_input_.DefinitionOfLifeInsurance);
     DefnMaterialChange      = mc_str(b->yare_input_.DefinitionOfMaterialChange);
     AvoidMec                = mc_str(b->yare_input_.AvoidMecMethod);
@@ -967,6 +989,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     DateOfBirth                   = a_Addend.DateOfBirth;
     DateOfBirthJdn                = a_Addend.DateOfBirthJdn;
     InitErMode                    = a_Addend.InitErMode;
+    InitDBOpt                     = a_Addend.InitDBOpt;
     Age                           = std::min(Age, a_Addend.Age);
     RetAge                        = std::min(RetAge, a_Addend.RetAge); // TODO ?? Does this make sense?
     EndtAge                       = std::max(EndtAge, a_Addend.EndtAge);
