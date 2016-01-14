@@ -38421,3 +38421,13 @@ Resolve a marked defect: replace 'DBOptInitInteger' with 'InitDBOpt'.
   version.hpp
 Designate release candidate 6466.
 
+20160114T1912Z <gchicares@sbcglobal.net> [455]
+
+  group_quote_pdf_gen_wx.cpp
+Show system version on group quotes (VZ).
+
+20160114T1914Z <gchicares@sbcglobal.net> [455]
+
+  version.hpp
+Designate release candidate 6468.
+
