@@ -1,6 +1,6 @@
 // Product data representable as strings.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -217,12 +217,16 @@ void product_data::ascribe_members()
     ascribe("CsvHeaderName"                 , &product_data::CsvHeaderName                 );
     ascribe("NoLapseProvisionName"          , &product_data::NoLapseProvisionName          );
     ascribe("ContractName"                  , &product_data::ContractName                  );
+    ascribe("DboNameLevel"                  , &product_data::DboNameLevel                  );
+    ascribe("DboNameIncreasing"             , &product_data::DboNameIncreasing             );
+    ascribe("DboNameReturnOfPremium"        , &product_data::DboNameReturnOfPremium        );
     ascribe("AccountValueFootnote"          , &product_data::AccountValueFootnote          );
     ascribe("AttainedAgeFootnote"           , &product_data::AttainedAgeFootnote           );
     ascribe("CashSurrValueFootnote"         , &product_data::CashSurrValueFootnote         );
     ascribe("DeathBenefitFootnote"          , &product_data::DeathBenefitFootnote          );
     ascribe("InitialPremiumFootnote"        , &product_data::InitialPremiumFootnote        );
     ascribe("NetPremiumFootnote"            , &product_data::NetPremiumFootnote            );
+    ascribe("GrossPremiumFootnote"          , &product_data::GrossPremiumFootnote          );
     ascribe("OutlayFootnote"                , &product_data::OutlayFootnote                );
     ascribe("PolicyYearFootnote"            , &product_data::PolicyYearFootnote            );
     ascribe("ADDFootnote"                   , &product_data::ADDFootnote                   );
@@ -469,6 +473,9 @@ void product_data::WritePolFiles()
     z.CsvHeaderName              = glossed_string("Cash Surr");
     z.NoLapseProvisionName       = glossed_string("No-lapse Provision");
     z.ContractName               = glossed_string("contract"); // Alternatively, "policy" or "certificate".
+    z.DboNameLevel               = glossed_string("A");
+    z.DboNameIncreasing          = glossed_string("B");
+    z.DboNameReturnOfPremium     = glossed_string("ROP");
     z.MarketingNameFootnote      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
 
     z.GroupQuoteShortProductName = glossed_string("UL SUPREME®");

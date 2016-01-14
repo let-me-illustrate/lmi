@@ -1,6 +1,6 @@
 // Symbolic member names.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -414,7 +414,8 @@ any_member<ClassType>& any_member<ClassType>::assign(std::string const& s)
 /// to member of a class D that is derived from B, particularly in
 /// order to call a virtual function declared in B.
 ///
-/// If the MemberType argument is not an exact match, then it tries
+/// If the MemberType argument is not an exact match (ascertainable
+/// by exact_cast<MemberType>()), then this class template can try
 /// types derived from MemberType, using knowledge embedded in its
 /// reconstitute() member function. A specialization for a base class
 /// B can search derived types for an exact D ClassType::* match.
@@ -449,6 +450,25 @@ struct reconstitutor
         }
 };
 
+/// Implementation of free function template is_reconstitutable_as().
+///
+/// Function template member_cast() throws if a requested conversion
+/// cannot be performed. This convenience function is useful for
+/// testing whether member_cast() can convert to a given base class
+/// without throwing.
+
+template<typename MemberType, typename ClassType>
+bool is_reconstitutable_as(any_member<ClassType>& member)
+{
+    return 0 != reconstitutor<MemberType,ClassType>::reconstitute(member);
+}
+
+template<typename MemberType, typename ClassType>
+bool is_reconstitutable_as(any_member<ClassType> const& member)
+{
+    return is_reconstitutable_as<MemberType>(const_cast<any_member<ClassType>&>(member));
+}
+
 /// Implementation of free function template exact_cast().
 ///
 /// Generally prefer free function template member_cast().
@@ -481,9 +501,9 @@ MemberType const* exact_cast(any_member<ClassType> const& member)
 ///
 /// Throws if the return value would be zero.
 ///
-/// This function template is not intended for testing convertibility,
-/// which can easily be done with member function type(). Instead, it
-/// is intended to perform a conversion that's known to be valid, and
+/// This function template is not intended for testing convertibility
+/// (use is_reconstitutable_as() for that purpose). Instead, it is
+/// intended to perform a conversion that's known to be valid, and
 /// it validates that precondition--so obtaining a null pointer is
 /// treated as failure, and throws an exception.
 

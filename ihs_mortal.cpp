@@ -1,6 +1,6 @@
 // Mortality rates.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -91,7 +91,7 @@ void MortalityRates::initialize()
         unisex male proportion curr
         ANB/ALB
         bool use NY COI limits
-        TODO ?? TAXATION !! DATABASE !! bool ignore ratings for 7702 (tables, flats separately)
+        TODO ?? TAXATION !! Use DB_RatingsAffect7702 (tables, flats separately?)
         flat extras
         substd table
         uninsurable
@@ -214,8 +214,11 @@ void MortalityRates::SetOtherRates()
         // Assume target premium table is never changed for substandard.
         }
 
-    // TODO ?? TAXATION !! Temporary stuff to support NSP for 7702A
-    // TODO ?? TAXATION !! Incorrect if GPT
+    // Use reciprocal of CVAT corridor factor as NSP, for both GPT and
+    // CVAT.
+    // TODO ?? TAXATION !! Do this only if DB_Irc7702NspWhence is 2
+    // (which should be an enum). This probably should have its own
+    // rounding rule.
     LMI_ASSERT(0 == CvatNspRates_.size());
     for(int j = 0; j < Length_; ++j)
         {

@@ -1,6 +1,6 @@
 @REM Cygwin installation.
 @REM
-@REM Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+@REM Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 @REM
 @REM This program is free software; you can redistribute it and/or modify
 @REM it under the terms of the GNU General Public License version 2 as
@@ -34,7 +34,7 @@ START "Installing Cygwin" /WAIT setup-x86 ^
   --wait --quiet-mode ^
   --site http://mirrors.kernel.org/sourceware/cygwin/ ^
   --root C:/cygwin-lmi --packages ^
-   cvs,dos2unix,doxygen,exif,gdb,git,git-cvs,git-svn,libtool,make,openssh,patch,rsync,subversion,unzip,wget,zip,zsh
+   cvs,dos2unix,doxygen,gdb,git,git-cvs,git-svn,libtool,make,mingw64-i686-gcc-g++,mingw64-x86_64-gcc-g++,openssh,patch,rsync,subversion,unzip,wget,zip,zsh
 cd C:\cygwin-lmi\etc
 echo # >> fstab
 echo C:/opt/lmi/MinGW-20090203 /MinGW_        lmi_specific binary,user 0 0 >> fstab

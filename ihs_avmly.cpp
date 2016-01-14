@@ -1,6 +1,6 @@
 // Account value: monthiversary processing.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -1712,7 +1712,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
     DBReflectingCorr = round_death_benefit()(DBReflectingCorr);
     // This overrides the value assigned above. There's more than one
     // way to interpret 7702A "death benefit"; this is just one.
-    // TAXATION !! DATABASE !! Offer a choice of interpretations.
+    // TAXATION !! Use DB_Irc7702BftIsSpecAmt
     DB7702A = DBReflectingCorr + TermDB;
 
     DcvDeathBft = std::max

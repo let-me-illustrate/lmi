@@ -1,6 +1,6 @@
 // Test creation and naming of spreadsheet output files.
 //
-// Copyright (C) 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -270,7 +270,7 @@ void validate_print_case_output
         ,std::string const& insured_name
         )
 {
-    std::string const census_file(corp_name + ".cns" + tsv_ext());
+    std::string const census_file(corp_name + tsv_ext());
     output_file_existence_checker output_census(census_file);
 
     struct print_case
@@ -302,7 +302,7 @@ void validate_print_roster_output
         ,std::string const& insured_name
         )
 {
-    std::string const roster_file(corp_name + ".cns.roster" + tsv_ext());
+    std::string const roster_file(corp_name + ".roster" + tsv_ext());
     output_file_existence_checker output_roster(roster_file);
 
     struct print_roster
@@ -311,8 +311,12 @@ void validate_print_roster_output
             {
                 wxUIActionSimulator ui;
 
-                // "Census|Print roster to spreadsheet"
+                // "Census|Print group roster..."
                 ui.Char('o', wxMOD_CONTROL | wxMOD_SHIFT);
+
+                // Select "Print roster to spreadsheet" from the popup menu.
+                ui.Char('o');
+
                 wxYield();
             }
         };
@@ -342,7 +346,7 @@ void validate_run_cell_and_copy_output
     wxYield();
 
     std::string const ill_data_file
-        (corp_name + "." + insured_name + serial_suffix(1) + ".ill" + tsv_ext()
+        (corp_name + "." + insured_name + serial_suffix(1) + tsv_ext()
         );
     output_file_existence_checker output_ill_data(ill_data_file);
 
@@ -419,21 +423,21 @@ void validate_run_cell_and_copy_output
 /// Verify that these files were created:
 ///   ABC.John_Brown.000000001.monthly_trace.tsv
 ///   ABC.000000002.monthly_trace.tsv
-///   ABC.cns.tsv
+///   ABC.tsv
 /// ...and delete all three now.
 ///
-/// Census | Print roster to spreadsheet
+/// Census | Print group roster... | Print roster to spreadsheet
 /// Verify that these files were created:
 ///   ABC.John_Brown.000000001.monthly_trace.tsv
 ///   ABC.000000002.monthly_trace.tsv
-//    ABC.cns.roster.tsv
+//    ABC.roster.tsv
 /// ...and delete all three now.
 ///
 /// select the "John Brown" cell
 /// Census | Run cell
 /// Illustration | Copy full illustration data [Ctrl-D]
 /// Verify that this file was created:
-///   ABC.John_Brown.000000001.ill.tsv
+///   ABC.John_Brown.000000001.tsv
 /// and that its contents have been placed on the clipboard.
 ///
 /// [These two functions:

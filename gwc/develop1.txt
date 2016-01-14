@@ -13,7 +13,7 @@ cd /lmi/src/lmi
 
 eval `ssh-agent`
 ssh-agent $SHELL
-ssh-add ~/.ssh/id_dsa
+ssh-add ~/.ssh/id_rsa
   [passphrase]
 
   # At end of session, terminate ssh so that no one can impersonate you
@@ -25,6 +25,12 @@ ssh-agent -k > /dev/null 2>&1
   # ...commit a change
 
 svn commit -m "Modify foo" foo.cpp
+
+  # ...commit a change to cvs repository
+
+export CVS_RSH="ssh"
+export CVSROOT="{USER}{AT_SIGN}cvs.sv.gnu.org:/web/lmi"
+cvs commit -m "Modify foo webpage" bar.html
 
   # ...rename a file [pending--resolved at next 'commit', as for 'add']
   # [for cvs, add and delete--unlike svn, not an atomic operation]
@@ -100,6 +106,8 @@ svn update
   # Similarly, for webpages repository
 
 cd /lmi/mirror/web
+export CVS_RSH="ssh"
+export CVSROOT="{USER}{AT_SIGN}cvs.sv.gnu.org:/web/lmi"
 cvs -z3 update -l lmi
 
   # Third screen: only for building and testing
@@ -150,10 +158,18 @@ sed -f diagnostics.sed ../log 2>&1 |less -S
 
 date -u +'%Y%m%dT%H%MZ' |tr -d '\n' >/dev/clipboard
 
-  # Fifth screen: only for running lmi
+  # Fifth screen: only for running lmi and its GUI tests
 
 cd /opt/lmi/bin
 ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data
+
+  # Run GUI tests
+
+./wx_test.exe --ash_nazg --data_path=/opt/lmi/data
+
+  # Run a particular GUI test
+
+./wx_test.exe --ash_nazg --data_path=/opt/lmi/data --test paste_census
 
   # Show tabbed-dialog dimensions on statusbar
 
@@ -178,4 +194,13 @@ for z in *.?pp; (iconv -f UTF-8 -t UTF-8 $z &>/dev/null || echo $z)
 
 cp -a product_data.cpp eraseme
 iconv -f ISO-8859-1 -t UTF-8 eraseme > product_data.cpp
+
+  # Compare two local trees using a primitive msw tool
+
+windiff -D -O 'c:/lmi/src/lmi' 'c:/lmi/mirror/lmi' &
+windiff -D -O 'c:/lmi/src/lmi/' 'c:/lmi/src/lmi/a00/' &
+
+  # Check spelling
+
+http://lists.nongnu.org/archive/html/lmi/2015-10/msg00076.html
 

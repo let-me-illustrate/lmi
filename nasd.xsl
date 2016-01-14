@@ -2,7 +2,7 @@
 <!--
     Life insurance illustrations.
 
-    Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+    Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -29,6 +29,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:import href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
+
+  <xsl:variable name="lowerAZ" select="'abcdefghijklmnopqrstuvwxyz'"/>
+  <xsl:variable name="upperAZ" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
 
   <xsl:variable name="GroupCarveout">
     <xsl:call-template name="set_group_carveout"/>
@@ -237,6 +240,15 @@
               </fo:block>
             </xsl:if>
 
+            <xsl:if test="$GroupCarveout='1'">
+              <fo:block font-weight="bold" padding-top="1em">
+                Gross Payment
+              </fo:block>
+              <fo:block>
+                <xsl:value-of select="$scalars/GrossPremiumFootnote"/>
+              </fo:block>
+            </xsl:if>
+
             <fo:block font-weight="bold" padding-top="1em">
               Gross Rate
             </fo:block>
@@ -244,14 +256,14 @@
               <xsl:value-of select="$scalars/GrossRateFootnote"/>
             </fo:block>
 
-            <fo:block font-weight="bold" padding-top="1em">
-              <xsl:if test="$GroupCarveout='1'">
+            <xsl:if test="$GroupCarveout='1'">
+              <fo:block font-weight="bold" padding-top="1em">
                 Minimum Premium
-              </xsl:if>
-            </fo:block>
-            <fo:block>
-              <xsl:value-of select="$scalars/InitialPremiumFootnote"/>
-            </fo:block>
+              </fo:block>
+              <fo:block>
+                <xsl:value-of select="$scalars/InitialPremiumFootnote"/>
+              </fo:block>
+            </xsl:if>
 
             <fo:block font-weight="bold" padding-top="1em">
               Net Premium
@@ -599,6 +611,16 @@
               </fo:block>
             </xsl:if>
             <fo:block font-weight="bold" text-align="center" padding-top="1em">
+              GUARANTEED PRINCIPAL ACCOUNT
+            </fo:block>
+            <fo:block padding-top="1em">
+              The Guaranteed Principal Account (GPA) has a guaranteed
+              minimum annual interest rate of
+              <xsl:value-of select="$scalars/InitAnnGenAcctInt_Guaranteed"/>.
+              Guarantees are based on the claims-paying ability of the
+              issuing company or companies.
+            </fo:block>
+            <fo:block font-weight="bold" text-align="center" padding-top="1em">
               SEPARATE ACCOUNT
             </fo:block>
             <fo:block padding-top="1em">
@@ -624,17 +646,18 @@
               </xsl:if>
             </xsl:if>
             <fo:block font-weight="bold" padding-top="1em">
-              This illustration must be preceded or accompanied by the current
-              prospectuses for <xsl:value-of select="$scalars/PolicyMktgName"/>
-              variable life insurance
-              <xsl:value-of select="$scalars/ContractName"/> and its underlying
-              investment choices. Before purchasing a variable life insurance
-              <xsl:value-of select="$scalars/ContractName"/>, investors should
-              carefully consider the investment objectives, risks, charges and
-              expenses of the variable life insurance
+              This material must be preceded or accompanied by the current
+              prospectus for the
+              <xsl:value-of select="$scalars/PolicyMktgName"/> Insurance
+              <xsl:value-of select="$scalars/ContractName"/> and the
+              prospectuses (or summary prospectuses, if available) for its
+              underlying investment choices. Before purchasing a
+              <xsl:value-of select="$scalars/ContractName"/>, you should
+              carefully consider the investment objectives, risks, charges
+              and expenses of the
               <xsl:value-of select="$scalars/ContractName"/> and its underlying
               investment choices. Please read the prospectuses carefully before
-              investing.
+              investing or sending money.
             </fo:block>
             <fo:block padding-top="1em">
               <xsl:value-of select="$scalars/SubsidiaryFootnote"/>
@@ -666,7 +689,6 @@
             <xsl:call-template name="standardheader">
               <xsl:with-param name="reporttitle" select="'Illustration Assumption Detail'"/>
             </xsl:call-template>
-            <xsl:call-template name="dollar-units"/>
           </fo:static-content>
 
           <!-- Define the contents of the footer. -->
@@ -756,8 +778,15 @@
                 </fo:block>
               </xsl:if>
               <fo:block text-align="left">
-                Contract: <xsl:value-of select="$scalars/PolicyMktgName"/>
+                <xsl:value-of select="concat(translate(substring($scalars/ContractName,1,1), $lowerAZ, $upperAZ), substring($scalars/ContractName,2))"/>: <xsl:value-of select="$scalars/PolicyMktgName"/>
               </fo:block>
+
+              <xsl:if test="$GroupCarveout='1'">
+                <fo:block text-align="left">
+                  Minimum Initial Premium: $<xsl:value-of select="$scalars/InitMinPrem"/>
+                </fo:block>
+              </xsl:if>
+
               <fo:block text-align="left">
                 First Year Premium: $<xsl:value-of select="$scalars/InitPrem"/>
               </fo:block>
@@ -776,7 +805,7 @@
                   </xsl:choose>
                   <xsl:value-of select="$scalars/UWClass"/>,
                   Initial Death Benefit Option:
-                  <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
+                  <xsl:value-of select="$scalars/InitDBOpt"/>
                 </fo:block>
               </xsl:if>
               <xsl:if test="not($is_composite) and $scalars/UWClass='Rated'">

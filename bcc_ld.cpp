@@ -1,6 +1,6 @@
 // Frontend for borland C++ linkers.
 //
-// Copyright (C) 2001, 2003, 2004, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2001, 2003, 2004, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -72,10 +72,12 @@ namespace
         return t;
         }
 
+#if 0 // Potentially useful, yet unused.
     bool begins_with(std::string const& s, std::string const& prefix)
         {
         return prefix == s.substr(0, prefix.size());
         }
+#endif // 0
 
     bool ends_with(std::string const& s, std::string const& suffix)
         {

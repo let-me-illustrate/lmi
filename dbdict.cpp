@@ -1,6 +1,6 @@
 // Product-database map.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -380,6 +380,7 @@ void DBDictionary::ascribe_members()
     ascribe("EePremAcct"          , &DBDictionary::EePremAcct          );
     ascribe("ErPremMethod"        , &DBDictionary::ErPremMethod        );
     ascribe("ErPremAcct"          , &DBDictionary::ErPremAcct          );
+    ascribe("CalculateComp"       , &DBDictionary::CalculateComp       );
     ascribe("CompTarget"          , &DBDictionary::CompTarget          );
     ascribe("CompExcess"          , &DBDictionary::CompExcess          );
     ascribe("CompChargeback"      , &DBDictionary::CompChargeback      );
@@ -868,6 +869,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_TaxVxQ              , 0.0));
     Add(database_entity(DB_DeficVxQ            , 0.0));
     Add(database_entity(DB_SnflQ               , 0.0));
+    Add(database_entity(DB_CalculateComp       , false));
     Add(database_entity(DB_CompTarget          , 0.0));
     Add(database_entity(DB_CompExcess          , 0.0));
     Add(database_entity(DB_CompChargeback      , 0.0));
