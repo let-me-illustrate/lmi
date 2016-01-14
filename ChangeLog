@@ -38416,3 +38416,8 @@ Provide 'InitDBOpt'.
   reg_d_individual.xsl
 Resolve a marked defect: replace 'DBOptInitInteger' with 'InitDBOpt'.
 
+20160114T1334Z <gchicares@sbcglobal.net> [455]
+
+  version.hpp
+Designate release candidate 6466.
+
