@@ -1,6 +1,6 @@
 // Miscellaneous mathematical operations as function objects--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -30,11 +30,12 @@
 
 #include "fenv_lmi.hpp"
 #include "materially_equal.hpp"
+#include "miscellany.hpp"               // stifle_warning_for_unused_value()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <algorithm> // std::min()
-#include <cmath>     // std::pow()
+#include <algorithm>                    // std::min()
+#include <cmath>                        // std::pow()
 #include <functional>
 #include <iomanip>
 #include <limits>
@@ -186,6 +187,7 @@ void sample_results()
 void mete0()
 {
     volatile double x;
+    stifle_warning_for_unused_value(x);
     x = i_upper_12_over_12_from_i_naive<double>()(0.04);
     x = i_from_i_upper_12_over_12_naive<double>()(0.04);
     x = d_upper_12_from_i_naive        <double>()(0.04);
@@ -196,6 +198,7 @@ void mete0()
 void mete1()
 {
     volatile double x;
+    stifle_warning_for_unused_value(x);
     x = i_upper_12_over_12_from_i<double>()(0.04);
     x = i_from_i_upper_12_over_12<double>()(0.04);
     x = d_upper_12_from_i        <double>()(0.04);

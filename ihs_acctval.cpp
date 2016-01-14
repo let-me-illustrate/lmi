@@ -1,6 +1,6 @@
 // Account value.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -1037,6 +1037,7 @@ void AccountValue::InitializeSpecAmt()
     if(0 == Year)
         {
         InvariantValues().InitTgtPrem = AnnualTargetPrem;
+        InvariantValues().InitMinPrem = MinInitPrem();
         }
 
     // Calculate special initial premiums for premium-quote PDF only.
@@ -1096,6 +1097,24 @@ double AccountValue::MinInitDumpin() const
         }
 }
 
+double AccountValue::MinInitPrem() const
+{
+    if
+        (  0 == Year
+        && 1 == Database_->Query(DB_MinInitPremType)
+        && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
+        )
+        {
+        mcenum_mode const er_mode = InvariantValues().ErMode[0].value();
+        double const modal_min_prem = InvariantValues().ModalMinimumPremium[0];
+        return MinInitDumpin() + modal_min_prem * er_mode;
+        }
+    else
+        {
+        return 0.0;
+        }
+}
+
 /// Required modal increment to initial planned premium.
 ///
 /// If the minimum is not otherwise satisfied, then employee payments
@@ -1132,10 +1151,8 @@ double AccountValue::ModalMinInitPremShortfall() const
         )
         {
         mcenum_mode const ee_mode = InvariantValues().EeMode[0].value();
-        mcenum_mode const er_mode = InvariantValues().ErMode[0].value();
-        double const modal_min_prem = InvariantValues().ModalMinimumPremium[0];
-        double const required = MinInitDumpin() + modal_min_prem * er_mode;
-        double const shortfall = std::max(0.0, required - InitAnnPlannedPrem_);
+        double const z = material_difference(MinInitPrem(), InitAnnPlannedPrem_);
+        double const shortfall = std::max(0.0, z);
         return round_min_premium()(shortfall / ee_mode);
         }
     else
@@ -1627,24 +1644,32 @@ void AccountValue::FinalizeYear()
 // TODO ?? Not yet implemented.
 //        InvariantValues().NaarForceout[Year] = InvariantValues().ErGrossPmt[Year];
 
-        // TODO ?? This should also incorporate:
-        //   asset-tiered compensation
-        //   input 'extra' compensation (on premium and assets)
-        double commission =
-                InvariantValues().GrossPmt[Year]
-            -   TieredGrossToNet
-                    (InvariantValues().GrossPmt[Year]
-                    ,AnnualTargetPrem
-                    ,CompTarget[Year]
-                    ,CompExcess[Year]
-                    )
-            ;
-        InvariantValues().ProducerCompensation[Year] =
-//                AssetComp[Year] * AVSepAcct // original
-                AssetComp[Year] * (AVSepAcct + AVGenAcct) // workaround
-// TODO ?? Rethink this.
-            +   commission
-            ;
+        // Producer compensation is complicated, and generally varies
+        // by producer type (which is unknown to lmi). It was probably
+        // a mistake to attempt to calculate it in "simple" situations
+        // because the result is incorrect otherwise.
+        if(CalculateComp && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate)
+            {
+            // This should also incorporate:
+            //   asset-tiered compensation
+            //   input 'extra' compensation (on premium and assets)
+            double commission =
+                    InvariantValues().GrossPmt[Year]
+                -   TieredGrossToNet
+                        (InvariantValues().GrossPmt[Year]
+                        ,AnnualTargetPrem
+                        ,CompTarget[Year]
+                        ,CompExcess[Year]
+                        )
+                ;
+            InvariantValues().ProducerCompensation[Year] =
+// This would normally be expected:
+//                  AssetComp[Year] * AVSepAcct
+// but some obsolete product needed this instead:
+                    AssetComp[Year] * (AVSepAcct + AVGenAcct)
+                +   commission
+                ;
+            }
         }
 }
 

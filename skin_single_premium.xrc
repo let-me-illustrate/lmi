@@ -5,7 +5,7 @@
 <!--
     Let me illustrate...: wxWindows xml input-notebook resources.
 
-    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -409,6 +409,7 @@
                                             <object class="wxComboBox" name="State">
                                                 <help>Insured state</help>
                                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                                <content><item>MM</item><item>WW</item></content>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -524,11 +525,13 @@ appropriate input.
                                             <object class="wxComboBox" name="CorporationState">
                                                 <help>Corporation state</help>
                                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                                <content><item>MM</item><item>WW</item></content>
                                             </object>
 -->
                                             <object class="wxComboBox" name="StateOfJurisdiction">
                                                 <help>State that approves policy form and rate filing, and governs everything else except premium tax</help>
                                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                                <content><item>MM</item><item>WW</item></content>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -641,6 +644,7 @@ appropriate input.
                                             <object class="wxComboBox" name="AgentState">
                                                 <help>Agent state</help>
                                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                                <content><item>MM</item><item>WW</item></content>
                                             </object>
                                         </object>
                                         <object class="sizeritem">

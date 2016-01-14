@@ -1,6 +1,6 @@
 // Startup code common to all interfaces.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -45,7 +45,14 @@
 /// For the (corrected) return type, see:
 ///   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00040.html
 
+#   if defined __GNUC__ && 40600 <= LMI_GCC_VERSION
+#       pragma GCC diagnostic push
+#       pragma GCC diagnostic ignored "-Wattributes"
+#   endif // defined __GNUC__ && 40600 <= LMI_GCC_VERSION
 extern "C" unsigned int _get_output_format(void) {return 1;}
+#   if defined __GNUC__ && 40600 <= LMI_GCC_VERSION
+#       pragma GCC diagnostic pop
+#   endif // defined __GNUC__ && 40600 <= LMI_GCC_VERSION
 #endif // defined __MINGW32__
 
 /// Common application initialization.

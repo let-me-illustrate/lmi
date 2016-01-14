@@ -1,6 +1,6 @@
 // Premium tax.
 //
-// Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -43,9 +43,11 @@ namespace {
 ///
 /// Here's a general discussion:
 ///   http://leg2.state.va.us/dls/h&sdocs.nsf/fc86c2b17a1cf388852570f9006f1299/461afa310d4d3d528525646500562282/$FILE/HD78_1997.pdf
+/// AZ joined the nonretalization pact on 2016-01-01 (H.B. 2440):
+///   http://www.azleg.gov/legtext/52leg/1r/bills/hb2440s.pdf
 ///
 /// Premium tax is retaliatory in most states. Exceptions:
-///   - MA, MN, NY, and RI are mutually nonretaliatory.
+///   - AZ, MA, MN, NY, and RI are mutually nonretaliatory.
 ///   - HI never retaliates; neither does fictitious state XX.
 ///   - AK and SD retaliate only on the bottom tier; this is best
 ///     implemented by adjusting that tier's rate and treating them
@@ -53,8 +55,8 @@ namespace {
 
 bool premium_tax_is_retaliatory(mcenum_state tax_state, mcenum_state domicile)
 {
-    static int const n = 4;
-    static mcenum_state const d[n] = {mce_s_MA, mce_s_MN, mce_s_NY, mce_s_RI};
+    static int const n = 5;
+    static mcenum_state const d[n] = {mce_s_AZ, mce_s_MA, mce_s_MN, mce_s_NY, mce_s_RI};
     static std::vector<mcenum_state> const reciprocal_nonretaliation_states(d, d + n);
     bool const reciprocally_nonretaliatory =
             contains(reciprocal_nonretaliation_states, tax_state)
@@ -375,6 +377,20 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
 ///
 /// Fictitious state XX may be used where no premium tax applies, as
 /// for offshore business.
+///
+/// AZ rates (H. B. 2568):
+///   http://www.azleg.gov/legtext/52leg/1r/bills/hb2568h.pdf
+///   2016 0.0199
+///   2017 0.0198
+///   2018 0.0195
+///   2019 0.0192
+///   2020 0.0189
+///   2021 0.0186
+///   2022 0.0183
+///   2023 0.0180
+///   2024 0.0177
+///   2025 0.0174
+///   2026 0.0170
 
 std::vector<double> const& premium_tax_rates_for_life_insurance()
 {
@@ -382,7 +398,7 @@ std::vector<double> const& premium_tax_rates_for_life_insurance()
     static int const n = 53;
     static double const d[n] =
         //   AL       AK       AZ       AR       CA       CO       CT
-        {0.0230,  tiered,  0.0200,  0.0250,  0.0235,  0.0200,  0.0175
+        {0.0230,  tiered,  0.0199,  0.0250,  0.0235,  0.0200,  0.0175
         //   DE       DC       FL       GA       HI       ID
         ,0.0200,  0.0175,  0.0175,  0.0225,  0.0275,  0.0150
         //   IL       IN       IA       KS       KY       LA       ME

@@ -1,6 +1,6 @@
 // Ledger xml input and output.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -367,6 +367,7 @@ void Ledger::write(xml::element& x) const
     format_map["InitPrem"                          ] = f2;
     format_map["InitSevenPayPrem"                  ] = f2;
     format_map["InitTgtPrem"                       ] = f2;
+    format_map["InitMinPrem"                       ] = f2;
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,###)
@@ -376,7 +377,6 @@ void Ledger::write(xml::element& x) const
     format_map["AvgFund"                           ] = f1;
     format_map["ChildRiderAmount"                  ] = f1;
     format_map["CustomFund"                        ] = f1;
-    format_map["DBOptInitInteger"                  ] = f1;
     format_map["Dumpin"                            ] = f1;
     format_map["EndtAge"                           ] = f1;
     format_map["External1035Amount"                ] = f1;
@@ -704,13 +704,6 @@ void Ledger::write(xml::element& x) const
 
     std::string ScaleUnit = ledger_invariant_->ScaleUnit();
     strings["ScaleUnit"] = &ScaleUnit;
-
-    // TODO ?? Presumably this is translated to a string in xsl;
-    // why not use the first element of <DbOpt>, which is already
-    // so formatted? Wouldn't that rule out any possibility of
-    // inconsistency between xsl's and the program's translations?
-    double DBOptInitInteger = ledger_invariant_->DBOpt[0].value();
-    scalars["DBOptInitInteger"] = &DBOptInitInteger;
 
     double InitTotalSA =
             ledger_invariant_->InitBaseSpecAmt

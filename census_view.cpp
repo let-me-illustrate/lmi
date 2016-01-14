@@ -1,6 +1,6 @@
 // Census manager.
 //
-// Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -42,9 +42,11 @@
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp"               // is_ok_for_cctype()
 #include "path_utility.hpp"
+#include "rtti_lmi.hpp"                 // lmi::TypeInfo
 #include "safely_dereference_as.hpp"
 #include "single_choice_popup_menu.hpp"
 #include "timer.hpp"
+#include "value_cast.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
 
@@ -663,30 +665,51 @@ class renderer_fallback_convertor : public renderer_type_convertor
 
 renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> const& value)
 {
-    any_member<Input>& nonconst_value = const_cast<any_member<Input>&>(value);
-
-    if(typeid(mce_yes_or_no Input::*) == value.type())
+    if(exact_cast<mce_yes_or_no>(value))
         {
         return get_impl<renderer_bool_convertor>();
         }
-    else if(0 != reconstitutor<mc_enum_base  ,Input>::reconstitute(nonconst_value))
+    else if(exact_cast<datum_string>(value))
         {
-        return get_impl<renderer_enum_convertor>();
+        return get_impl<renderer_fallback_convertor>();
         }
-    else if(0 != reconstitutor<datum_sequence,Input>::reconstitute(nonconst_value))
+    else if(is_reconstitutable_as<datum_sequence>(value))
         {
         return get_impl<renderer_sequence_convertor>();
         }
-    else if(0 != reconstitutor<tn_range_base ,Input>::reconstitute(nonconst_value))
+    else if(is_reconstitutable_as<mc_enum_base  >(value))
+        {
+        return get_impl<renderer_enum_convertor>();
+        }
+    else if(is_reconstitutable_as<tn_range_base >(value))
         {
         tn_range_base const* as_range = member_cast<tn_range_base>(value);
         if(typeid(int) == as_range->value_type())
+            {
             return get_impl<renderer_int_range_convertor>();
+            }
         else if(typeid(double) == as_range->value_type())
+            {
             return get_impl<renderer_double_range_convertor>();
+            }
         else if(typeid(calendar_date) == as_range->value_type())
+            {
             return get_impl<renderer_date_convertor>();
-        // else: fall through
+            }
+        else
+            {
+            // Fall through to warn and treat datum as string.
+            }
+        }
+    else
+        {
+        warning()
+            << "Type '"
+            << lmi::TypeInfo(value.type())
+            << "' not recognized. Please report this anomaly."
+            << LMI_FLUSH
+            ;
+        // Fall through to treat datum as string.
         }
 
     return get_impl<renderer_fallback_convertor>();
@@ -1483,12 +1506,12 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         << n_items
         << " cells?"
         ;
-    int z = wxMessageBox
+    int yes_or_no = wxMessageBox
         (oss.str()
         ,"Confirm deletion"
         ,wxYES_NO | wxICON_QUESTION
         );
-    if(wxYES != z)
+    if(wxYES != yes_or_no)
         {
         return;
         }
@@ -1531,9 +1554,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         (static_cast<std::size_t>(erasures.front())
         ,cell_parms().size() - 1
         );
-    wxDataViewItem const& y = list_model_->GetItem(newsel);
-    list_window_->Select(y);
-    list_window_->EnsureVisible(y);
+    wxDataViewItem const& z = list_model_->GetItem(newsel);
+    list_window_->Select(z);
+    list_window_->EnsureVisible(z);
 
     Update();
     document().Modify(true);
@@ -1632,6 +1655,38 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         return;
         }
 
+    // Use a modifiable copy of case defaults as an exemplar for new
+    // cells to be created by pasting. Modifications are conditionally
+    // written back to case defaults later.
+    Input exemplar(case_parms()[0]);
+
+    // Force 'UseDOB' prn. Pasting it as a column never makes sense.
+    if(contains(headers, "UseDOB"))
+        {
+        warning() << "'UseDOB' is unnecessary and will be ignored." << std::flush;
+        }
+    bool const dob_pasted = contains(headers, "DateOfBirth");
+    bool const age_pasted = contains(headers, "IssueAge");
+    if(dob_pasted && age_pasted)
+        {
+        fatal_error()
+            << "Cannot paste both 'DateOfBirth' and 'IssueAge'."
+            << LMI_FLUSH
+            ;
+        }
+    else if(dob_pasted)
+        {
+        exemplar["UseDOB"] = "Yes";
+        }
+    else if(age_pasted)
+        {
+        exemplar["UseDOB"] = "No";
+        }
+    else
+        {
+        ; // Do nothing: neither age nor DOB pasted.
+        }
+
     // Read each subsequent line into an input object representing one cell.
     int current_line = 0;
     while(std::getline(iss_census, line, '\n'))
@@ -1640,7 +1695,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         iss_census >> std::ws;
 
-        Input current_cell(case_parms()[0]);
+        Input current_cell(exemplar);
 
         std::istringstream iss_line(line);
         std::string token;
@@ -1682,6 +1737,32 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         for(unsigned int j = 0; j < headers.size(); ++j)
             {
+            if(exact_cast<tnr_date>(current_cell[headers[j]]))
+                {
+                static long int const jdn_min = calendar_date::gregorian_epoch_jdn;
+                static long int const jdn_max = calendar_date::last_yyyy_date_jdn;
+                static long int const ymd_min = JdnToYmd(jdn_t(jdn_min)).value();
+                static long int const ymd_max = JdnToYmd(jdn_t(jdn_max)).value();
+                long int z = value_cast<long int>(values[j]);
+                if(jdn_min <= z && z <= jdn_max)
+                    {
+                    ; // Do nothing: JDN is the default expectation.
+                    }
+                else if(ymd_min <= z && z <= ymd_max)
+                    {
+                    z = YmdToJdn(ymd_t(z)).value();
+                    values[j] = value_cast<std::string>(z);
+                    }
+                else
+                    {
+                    fatal_error()
+                        << "Invalid date " << values[j]
+                        << " for '" << headers[j] << "'"
+                        << " on line " << current_line << "."
+                        << LMI_FLUSH
+                        ;
+                    }
+                }
             current_cell[headers[j]] = values[j];
             }
         current_cell.Reconcile();
@@ -1700,19 +1781,30 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
     if(!document().IsModified() && !document().GetDocumentSaved())
         {
-        cell_parms().clear();
+        case_parms ().clear();
+        case_parms ().push_back(exemplar);
         class_parms().clear();
-        class_parms().push_back(case_parms()[0]);
+        class_parms().push_back(exemplar);
+        cell_parms ().clear();
         }
 
+    unsigned int selection = cell_parms().size();
     std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
     document().Modify(true);
     list_model_->Reset(cell_parms().size());
     Update();
+    // Reset() leaves the listview unreachable from the keyboard
+    // because no row is selected--so select the first added row
+    // if possible, else the row after which no row was inserted.
+    selection = std::min(selection, cell_parms().size());
+    wxDataViewItem const& z = list_model_->GetItem(selection);
+    list_window_->Select(z);
+    list_window_->EnsureVisible(z);
+
     status() << std::flush;
 
-    LMI_ASSERT(!case_parms ().empty());
+    LMI_ASSERT(1 == case_parms().size());
     LMI_ASSERT(!cell_parms ().empty());
     LMI_ASSERT(!class_parms().empty());
 }

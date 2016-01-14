@@ -1,6 +1,6 @@
 // Overloaded operator new--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -33,7 +33,19 @@
 // The '.cpp' file is deliberately included here instead of the header
 // because it was probably already compiled for inclusion in a dll,
 // resulting in an object that wouldn't necessarily work here.
+//
+// Explicitly include "wx_new.hpp" first for LMI_GCC_VERSION from
+// "config.hpp".
+
+#include "wx_new.hpp"
+#if defined __GNUC__ && 40600 <= LMI_GCC_VERSION
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wattributes"
+#endif // defined __GNUC__ && 40600 <= LMI_GCC_VERSION
 #include "wx_new.cpp"
+#if defined __GNUC__ && 40600 <= LMI_GCC_VERSION
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__ && 40600 <= LMI_GCC_VERSION
 
 #include "test_tools.hpp"
 

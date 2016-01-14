@@ -1,6 +1,6 @@
 // Product data representable as strings.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -183,12 +183,15 @@ class LMI_SO product_data
     glossed_string CoUnderwriterAddress;
 
     // Terms defined in the contract, which must be used for column
-    // headers according to the illustration reg.
+    // headers, footnotes, etc. according to the illustration reg.
     glossed_string AvName;
     glossed_string CsvName;
     glossed_string CsvHeaderName;
     glossed_string NoLapseProvisionName;
     glossed_string ContractName;
+    glossed_string DboNameLevel;
+    glossed_string DboNameIncreasing;
+    glossed_string DboNameReturnOfPremium;
 
     // TODO ?? Most of the following are missing from the GUI.
 
@@ -199,6 +202,7 @@ class LMI_SO product_data
     glossed_string DeathBenefitFootnote;
     glossed_string InitialPremiumFootnote;
     glossed_string NetPremiumFootnote;
+    glossed_string GrossPremiumFootnote;
     glossed_string OutlayFootnote;
     glossed_string PolicyYearFootnote;
 

@@ -1,6 +1,6 @@
 // Test pasting spreadsheet data into a census.
 //
-// Copyright (C) 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -214,21 +214,20 @@ LMI_WX_TEST_CASE(paste_census)
     // internal column names actually used in the census data below.
     std::set<std::string> column_titles;
     column_titles.insert("Gender");
-    column_titles.insert("Underwriting Class");
-    column_titles.insert("Issue Age");
-    column_titles.insert("Payment");
-    column_titles.insert("Death Benefit Option");
+    column_titles.insert("Date Of Birth");
+    column_titles.insert("Employee Class");
+    column_titles.insert("Specified Amount");
 
     char const* const census_data =
-        "Gender\tUnderwritingClass\tIssueAge\tPayment\tDeathBenefitOption\n"
+        "Gender\tDateOfBirth\tEmployeeClass\tSpecifiedAmount\n"
         "\n"
-        "Female\tPreferred\t30\tsevenpay,7;0\tb,7;a\n"
-        "Male\tPreferred\t35\tsevenpay,7;0\tb,7;a\n"
-        "Female\tStandard\t40\tsevenpay,7;0\tb,7;a\n"
-        "Male\tStandard\t45\tsevenpay,7;0\tb,7;a\n"
-        "Female\tPreferred\t50\tsevenpay,7;0\tb,7;a\n"
-        "Male\tPreferred\t55\tsevenpay,7;0\tb,7;a\n"
-        "Female\tStandard\t60\tsevenpay,7;0\tb,7;a\n"
+        "Female\t19851231\tClerical\t100000, @65; 50000\n"
+        "Male\t19801130\tClerical\t200000, @65; 50000\n"
+        "Female\t19751029\tTechnical\t300000, @65; 50000\n"
+        "Male\t19700928\tTechnical\t400000, @65; 50000\n"
+        "Female\t19650827\tSupervisor\t500000, @65; 50000\n"
+        "Male\t19600726\tAttorney\t600000, @65; 75000\n"
+        "Female\t19550625\tPresident\t700000, @65; 100000\n"
         ;
 
     std::size_t const number_of_rows = std::count
@@ -301,7 +300,11 @@ LMI_WX_TEST_CASE(paste_census)
             LMI_ASSERT(gender_radiobox);
 
             wxUIActionSimulator ui;
-            ui.Char(WXK_DOWN); // Select the last, "Unisex", radio button.
+            // Select the last, "Unisex", radio button, by simulating
+            // down-arrow twice: female --> male, then male --> unisex.
+            ui.Char(WXK_DOWN);
+            wxYield();
+            ui.Char(WXK_DOWN);
             wxYield();
 
             LMI_ASSERT_EQUAL(gender_radiobox->GetSelection(), 2);
@@ -337,7 +340,9 @@ LMI_WX_TEST_CASE(paste_census)
     unsigned int const
         gender_column = find_model_column_by_title(list_window, "Gender");
     LMI_ASSERT_EQUAL(list_model->GetCount(), number_of_rows);
-    for(std::size_t row = 0; row < number_of_rows; ++row)
+    // Only the first two rows are affected, because only they belong
+    // to the first employee class.
+    for(std::size_t row = 0; row < 2; ++row)
         {
         wxVariant value;
         list_model->GetValueByRow(value, row, gender_column);

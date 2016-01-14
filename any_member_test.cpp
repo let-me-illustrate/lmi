@@ -1,6 +1,6 @@
 // Symbolic member names--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -499,6 +499,13 @@ void any_member_test::supplemental_test0()
 
     // Of course, member_cast() should work with the exact type, too.
     BOOST_TEST_EQUAL(1729, member_cast<derived_datum>(s["dd"])->virtual_function());
+
+    // Function template is_reconstitutable_as() ascertains whether
+    // the unknown original type is derived from a given base class.
+    BOOST_TEST(is_reconstitutable_as<base_datum>(s["dd"]));
+
+    // is_reconstitutable_as() should not work with the exact type.
+    BOOST_TEST(!is_reconstitutable_as<derived_datum>(s["dd"]));
     }
 
     {
