@@ -41,6 +41,7 @@
 #include "miscellany.hpp"               // split_into_lines()
 #include "oecumenic_enumerations.hpp"   // oenum_format_style
 #include "path_utility.hpp"             // fs::path inserter
+#include "version.hpp"
 #include "wx_table_generator.hpp"
 #include "wx_utility.hpp"               // ConvertDateToWx()
 
@@ -507,7 +508,7 @@ class group_quote_pdf_generator_wx
         ,int  last_row_y
         );
 
-    void output_page_number
+    void output_page_number_and_version
         (wxPdfDC& pdf_dc
         ,int      total_pages
         ,int      current_page
@@ -958,7 +959,7 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
 
         if(pos_y >= last_row_y)
             {
-            output_page_number(pdf_dc, total_pages, current_page);
+            output_page_number_and_version(pdf_dc, total_pages, current_page);
 
             current_page++;
             pdf_dc.StartPage();
@@ -970,7 +971,7 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
 
     if(footer_on_its_own_page)
         {
-        output_page_number(pdf_dc, total_pages, current_page);
+        output_page_number_and_version(pdf_dc, total_pages, current_page);
 
         current_page++;
         pdf_dc.StartPage();
@@ -985,7 +986,7 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
     output_footer(pdf_dc, html_parser, &pos_y);
 
     LMI_ASSERT(current_page == total_pages);
-    output_page_number(pdf_dc, total_pages, current_page);
+    output_page_number_and_version(pdf_dc, total_pages, current_page);
 }
 
 int group_quote_pdf_generator_wx::compute_pages_for_table_rows
@@ -1017,20 +1018,28 @@ int group_quote_pdf_generator_wx::compute_pages_for_table_rows
     return total_pages;
 }
 
-void group_quote_pdf_generator_wx::output_page_number
+void group_quote_pdf_generator_wx::output_page_number_and_version
     (wxPdfDC& pdf_dc
     ,int total_pages
     ,int current_page
     )
 {
+    wxRect const footer_area
+        (horz_margin
+        ,page_.total_size_.y - vert_margin
+        ,page_.width_
+        ,vert_margin
+        );
+
+    pdf_dc.DrawLabel
+        (wxString::Format("System version: %s", LMI_VERSION)
+        ,footer_area
+        ,wxALIGN_LEFT | wxALIGN_BOTTOM
+        );
+
     pdf_dc.DrawLabel
         (wxString::Format("Page %d of %d", current_page, total_pages)
-        ,wxRect
-            (horz_margin
-            ,page_.total_size_.y - vert_margin
-            ,page_.width_
-            ,vert_margin
-            )
+        ,footer_area
         ,wxALIGN_RIGHT | wxALIGN_BOTTOM
         );
 }
