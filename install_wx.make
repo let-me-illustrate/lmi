@@ -104,7 +104,6 @@ config_options = \
   --disable-gif \
   --disable-aui \
   --disable-mediactrl \
-  --disable-precomp-headers \
   --disable-propgrid \
   --disable-ribbon \
   --disable-richtext \
