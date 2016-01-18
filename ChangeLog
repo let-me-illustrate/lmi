@@ -38469,3 +38469,9 @@ Fix defect introduced 20160118T0304Z: sys-root missing triplet.
   workhorse.make
 Fix defect introduced 20160118T0304Z: sh quoting.
 
+20160118T1521Z <gchicares@sbcglobal.net> [455]
+
+  cgicc-3.1.4.md5sums
+  cgicc-3.1.4.patch
+Repair defects detected by gcc-4.9.2 .
+
