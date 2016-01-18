@@ -38442,3 +38442,20 @@ Revert the PCH part of the 20160105T0146Z change--see:
   install_wx.make
 Alphabetize 'configure' toggles.
 
+20160118T0131Z <gchicares@sbcglobal.net> [455]
+
+  workhorse.make
+Install toolchain runtime libraries in /opt/lmi/local/bin/ .
+
+20160118T0152Z <gchicares@sbcglobal.net> [455]
+
+  workhorse.make
+Support MinGW-w64 cross compiler.
+
+20160118T0304Z <gchicares@sbcglobal.net> [455]
+
+  install_wx.make
+  install_wxpdfdoc.make
+  msw_cygwin.make
+Use MinGW-w64 cross compiler.
+

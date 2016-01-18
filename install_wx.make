@@ -27,7 +27,8 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 wx_version    := 3.0.0
 
-mingw_dir     := /MinGW_
+# mingw_dir     := /MinGW_
+mingw_dir     := /usr
 
 prefix        := /opt/lmi/local
 
@@ -79,12 +80,14 @@ endif
 
 # Variables that normally should be left alone #################################
 
-mingw_bin_dir := $(mingw_dir)/bin
+mingw_bin_dir  := $(mingw_dir)/bin
 
-compiler      := gcc-$(shell $(mingw_bin_dir)/gcc -dumpversion)
-vendor        := $(subst .,,$(compiler))-$(wx_md5)
+triplet_prefix := i686-w64-mingw32-
 
-build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
+compiler       := gcc-$(shell $(mingw_bin_dir)/$(triplet_prefix)gcc -dumpversion)
+vendor         := $(subst .,,$(compiler))-$(wx_md5)
+
+build_dir      := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -92,12 +95,13 @@ build_dir     := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 # Pass gcc options in $CC and $CXX, not $*FLAGS--explanation here:
 #   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00001.html
 
-ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
+wx_cc_flags    :=
+wx_cxx_flags   := -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
   --build=i686-pc-cygwin \
-  --host=i686-pc-mingw32 \
+  --host=i686-w64-mingw32 \
   --disable-apple_ieee \
   --disable-aui \
   --disable-compat24 \
@@ -119,18 +123,18 @@ config_options = \
   --without-libtiff \
   --without-opengl \
   --without-subdirs \
-       AR='$(mingw_bin_dir)/ar' \
-       AS='$(mingw_bin_dir)/as' \
-       CC='$(mingw_bin_dir)/gcc $(ggc_flags)' \
-      CPP='$(mingw_bin_dir)/cpp' \
-      CXX='$(mingw_bin_dir)/g++ $(ggc_flags)' \
-  DLLTOOL='$(mingw_bin_dir)/dlltool' \
-       LD='$(mingw_bin_dir)/ld' \
-       NM='$(mingw_bin_dir)/nm' \
-  OBJDUMP='$(mingw_bin_dir)/objdump' \
-   RANLIB='$(mingw_bin_dir)/ranlib' \
-    STRIP='$(mingw_bin_dir)/strip' \
-  WINDRES='$(mingw_bin_dir)/windres' \
+       AR='$(mingw_bin_dir)/$(triplet_prefix)ar' \
+       AS='$(mingw_bin_dir)/$(triplet_prefix)as' \
+       CC='$(mingw_bin_dir)/$(triplet_prefix)gcc $(wx_cc_flags)' \
+      CPP='$(mingw_bin_dir)/$(triplet_prefix)cpp' \
+      CXX='$(mingw_bin_dir)/$(triplet_prefix)g++ $(wx_cxx_flags)' \
+  DLLTOOL='$(mingw_bin_dir)/$(triplet_prefix)dlltool' \
+       LD='$(mingw_bin_dir)/$(triplet_prefix)ld' \
+       NM='$(mingw_bin_dir)/$(triplet_prefix)nm' \
+  OBJDUMP='$(mingw_bin_dir)/$(triplet_prefix)objdump' \
+   RANLIB='$(mingw_bin_dir)/$(triplet_prefix)ranlib' \
+    STRIP='$(mingw_bin_dir)/$(triplet_prefix)strip' \
+  WINDRES='$(mingw_bin_dir)/$(triplet_prefix)windres' \
 
 # Utilities ####################################################################
 
