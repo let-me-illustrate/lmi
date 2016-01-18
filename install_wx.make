@@ -99,17 +99,17 @@ config_options = \
   --build=i686-pc-cygwin \
   --host=i686-pc-mingw32 \
   --disable-apple_ieee \
+  --disable-aui \
   --disable-compat24 \
   --disable-fswatcher \
   --disable-gif \
-  --disable-aui \
   --disable-mediactrl \
   --disable-propgrid \
   --disable-ribbon \
   --disable-richtext \
   --disable-stc \
-  --disable-webview \
   --disable-threads \
+  --disable-webview \
   --enable-monolithic \
   --enable-shared \
   --enable-std_iostreams \

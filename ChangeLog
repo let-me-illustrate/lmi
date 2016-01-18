@@ -38431,3 +38431,14 @@ Show system version on group quotes (VZ).
   version.hpp
 Designate release candidate 6468.
 
+20160117T2201Z <gchicares@sbcglobal.net> [455]
+
+  install_wx.make
+Revert the PCH part of the 20160105T0146Z change--see:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00007.html
+
+20160118T0052Z <gchicares@sbcglobal.net> [455]
+
+  install_wx.make
+Alphabetize 'configure' toggles.
+
