@@ -933,7 +933,7 @@ install: $(default_targets)
 	@$(CP) --preserve --update $^ $(bin_dir)
 	@$(CP) --preserve --update $(data_files) $(data_dir)
 	@$(CP) --preserve --update $(help_files) $(data_dir)
-	@[ -z $(compiler_runtime_files) ] \
+	@[ -z "$(compiler_runtime_files)" ] \
 	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(data_dir); $(bin_dir)/product_files$(EXEEXT)

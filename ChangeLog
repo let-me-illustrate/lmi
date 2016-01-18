@@ -38459,3 +38459,13 @@ Support MinGW-w64 cross compiler.
   msw_cygwin.make
 Use MinGW-w64 cross compiler.
 
+20160118T0417Z <gchicares@sbcglobal.net> [455]
+
+  msw_cygwin.make
+Fix defect introduced 20160118T0304Z: sys-root missing triplet.
+
+20160118T0419Z <gchicares@sbcglobal.net> [455]
+
+  workhorse.make
+Fix defect introduced 20160118T0304Z: sh quoting.
+
