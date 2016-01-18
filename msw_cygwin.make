@@ -90,7 +90,7 @@ RC      := $(PATH_GCC)$(triplet_prefix)windres
 # Of course manipulating an lmi user's $PATH is out of the question.
 
 compiler_triplet := $(patsubst %-,%,$(triplet_prefix))
-compiler_sysroot := /usr/$(triplet)/sys-root/mingw/bin
+compiler_sysroot := /usr/$(compiler_triplet)/sys-root/mingw/bin
 
 compiler_runtime_files := \
   $(compiler_sysroot)/libstdc++-6.dll \
