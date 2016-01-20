@@ -37,10 +37,10 @@ START "Installing Cygwin" /WAIT setup-x86 ^
    bsdtar,cvs,dos2unix,doxygen,gdb,git,git-cvs,git-svn,libtool,make,openssh,patch,rsync,subversion,unzip,wget,zip,zsh
 cd C:\cygwin-lmi\etc
 echo # >> fstab
-echo C:/opt/lmi/MinGW-20090203 /MinGW_        lmi_specific binary,user 0 0 >> fstab
-echo C:/opt/lmi                /opt/lmi       lmi_specific binary,user 0 0 >> fstab
-echo C:/lmi                    /lmi           lmi_specific binary,user 0 0 >> fstab
-echo C:/cache_for_lmi          /cache_for_lmi lmi_specific binary,user 0 0 >> fstab
+echo C:/opt/lmi/MinGW-4_9_1 /MinGW_        lmi_specific binary,user 0 0 >> fstab
+echo C:/opt/lmi             /opt/lmi       lmi_specific binary,user 0 0 >> fstab
+echo C:/lmi                 /lmi           lmi_specific binary,user 0 0 >> fstab
+echo C:/cache_for_lmi       /cache_for_lmi lmi_specific binary,user 0 0 >> fstab
 echo Cygwin installation seems to have succeeded
 GOTO End
 

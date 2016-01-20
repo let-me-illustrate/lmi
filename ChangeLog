@@ -38475,3 +38475,27 @@ Fix defect introduced 20160118T0304Z: sh quoting.
   cgicc-3.1.4.patch
 Repair defects detected by gcc-4.9.2 .
 
+20160120T1128Z <gchicares@sbcglobal.net> [455]
+
+  workhorse.make
+Allow gcc-4.9.1 .
+
+20160120T1129Z <gchicares@sbcglobal.net> [455]
+
+  install_cygwin.bat
+Remove cross compiler; add 'bsdtar'.
+
+20160120T1131Z <gchicares@sbcglobal.net> [455]
+
+  install_wx.make
+  install_wxpdfdoc.make
+  msw_cygwin.make
+Prefer native to cross MinGW-w64 compiler.
+
+20160120T1135Z <gchicares@sbcglobal.net> [455]
+
+  install_cygwin.bat
+  install_mingw.make
+  install_msw.sh
+Replace mingw.org with MinGW-w64 toolchain.
+
