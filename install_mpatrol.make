@@ -64,7 +64,7 @@ mpatrol_makefile := mpatrol-mingw-GNUmakefile
 config_options = \
   --prefix=$(prefix) \
   --build=i686-pc-cygwin \
-  --host=i686-pc-mingw32 \
+  --host=i686-w64-mingw32 \
   --other_options \
        AR='$(mingw_bin_dir)/ar' \
        AS='$(mingw_bin_dir)/as' \
