@@ -869,6 +869,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"D__WXDEBUG__" // Hapax legomenon.
         ,"__WXGTK__"
         ,"__WXMSW__"
+        ,"__XSLT_LIBXSLT_H__"
         ,"__mp_copymem"
         };
     static int const n = lmi_array_size(y);
