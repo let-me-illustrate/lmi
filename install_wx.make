@@ -27,8 +27,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 wx_version    := 3.0.0
 
-# mingw_dir     := /MinGW_
-mingw_dir     := /usr
+mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
 
@@ -82,7 +81,8 @@ endif
 
 mingw_bin_dir  := $(mingw_dir)/bin
 
-triplet_prefix := i686-w64-mingw32-
+#triplet_prefix := i686-w64-mingw32-
+triplet_prefix :=
 
 compiler       := gcc-$(shell $(mingw_bin_dir)/$(triplet_prefix)gcc -dumpversion)
 vendor         := $(subst .,,$(compiler))-$(wx_md5)
