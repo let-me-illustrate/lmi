@@ -67,8 +67,7 @@ system_root := /cygdrive/c
 
 ifeq (,$(USE_STD_PATHS))
   PATH_BIN     := /bin/
-#  PATH_GCC     := /MinGW_/bin/
-  PATH_GCC     := /usr/bin/
+  PATH_GCC     := /MinGW_/bin/
   PATH_USR_BIN := /usr/bin/
 endif
 
@@ -76,7 +75,8 @@ endif
 
 # Compiler, linker, and so on.
 
-triplet_prefix := i686-w64-mingw32-
+#triplet_prefix := i686-w64-mingw32-
+triplet_prefix :=
 
 AR      := $(PATH_GCC)$(triplet_prefix)ar
 CC      := $(PATH_GCC)$(triplet_prefix)gcc $(cross_compile_flags)
@@ -89,8 +89,7 @@ RC      := $(PATH_GCC)$(triplet_prefix)windres
 #   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
 # Of course manipulating an lmi user's $PATH is out of the question.
 
-compiler_triplet := $(patsubst %-,%,$(triplet_prefix))
-compiler_sysroot := /usr/$(compiler_triplet)/sys-root/mingw/bin
+compiler_sysroot := /MinGW_/i686-w64-mingw32/lib
 
 compiler_runtime_files := \
   $(compiler_sysroot)/libstdc++-6.dll \

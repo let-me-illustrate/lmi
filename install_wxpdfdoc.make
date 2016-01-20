@@ -25,8 +25,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
-# mingw_dir     := /MinGW_
-mingw_dir     := /usr
+mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
 
@@ -52,7 +51,8 @@ $(wxpdfdoc_archive)-md5     := 8e3c4d6cd1df9c7f91426c8c4723cb6e
 
 mingw_bin_dir  := $(mingw_dir)/bin
 
-triplet_prefix := i686-w64-mingw32-
+#triplet_prefix := i686-w64-mingw32-
+triplet_prefix :=
 
 compiler       := gcc-$(shell $(mingw_bin_dir)/$(triplet_prefix)gcc -dumpversion)
 
