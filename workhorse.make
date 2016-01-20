@@ -141,6 +141,7 @@ gnu_cxx_version := $(shell $(GNU_CXX) -dumpversion)
 
 ifeq      (3.4.4,$(gnu_cpp_version))
 else ifeq (3.4.5,$(gnu_cpp_version))
+else ifeq (4.9.1,$(gnu_cpp_version))
 else ifeq (4.9.2,$(gnu_cpp_version))
 else
   $(error Untested $(GNU_CPP) version '$(gnu_cpp_version)')
@@ -148,6 +149,7 @@ endif
 
 ifeq      (3.4.4,$(gnu_cxx_version))
 else ifeq (3.4.5,$(gnu_cxx_version))
+else ifeq (4.9.1,$(gnu_cxx_version))
 else ifeq (4.9.2,$(gnu_cxx_version))
 else
   $(error Untested $(GNU_CXX) version '$(gnu_cxx_version)')
@@ -412,7 +414,7 @@ else ifeq (3.4.5,$(gcc_version))
   # Use a correct snprintf() implementation:
   #   http://article.gmane.org/gmane.comp.gnu.mingw.user/27539
   cxx_standard += -posix
-else ifeq (4.9.2,$(gcc_version))
+else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   # See:
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
