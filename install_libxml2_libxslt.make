@@ -55,7 +55,7 @@ mingw_bin_dir := $(mingw_dir)/bin
 
 common_options := \
   --build=i686-pc-cygwin \
-  --host=i686-pc-mingw32 \
+  --host=i686-w64-mingw32 \
   --disable-dependency-tracking \
   --disable-static \
   --enable-shared \
