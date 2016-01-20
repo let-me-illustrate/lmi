@@ -81,6 +81,7 @@ libxml2-2.6.26_options := \
   --without-iconv \
   --without-modules \
   --without-schematron \
+  --without-threads \
 
 libxslt-1.1.17_options := \
   $(common_options) \
