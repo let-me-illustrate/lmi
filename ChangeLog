@@ -38499,3 +38499,35 @@ Prefer native to cross MinGW-w64 compiler.
   install_msw.sh
 Replace mingw.org with MinGW-w64 toolchain.
 
+20160120T1913Z <gchicares@sbcglobal.net> [455]
+
+  libxslt-1.1.17-lmi.patch
+  test_coding_rules.cpp
+Don't use two-element mkdir() with msw (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+
+20160120T1917Z <gchicares@sbcglobal.net> [455]
+
+  install_libxml2_libxslt.make
+Disable threading to avoid a catastrophic problem (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+
+ <gchicares@sbcglobal.net> [455]
+
+  install_libxml2_libxslt.make
+Disable threading to avoid a catastrophic problem (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+
+20160120T1920Z <gchicares@sbcglobal.net> [455]
+
+  install_libxml2_libxslt.make
+Disable zlib to avoid a catastrophic problem (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+
+20160120T1924Z <gchicares@sbcglobal.net> [455]
+
+  install_libxml2_libxslt.make
+  install_mpatrol.make
+Specify --host consistently (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+
