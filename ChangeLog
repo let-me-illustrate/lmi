@@ -38512,12 +38512,6 @@ Don't use two-element mkdir() with msw (VZ). See:
 Disable threading to avoid a catastrophic problem (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
 
- <gchicares@sbcglobal.net> [455]
-
-  install_libxml2_libxslt.make
-Disable threading to avoid a catastrophic problem (VZ). See:
-  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
-
 20160120T1920Z <gchicares@sbcglobal.net> [455]
 
   install_libxml2_libxslt.make
