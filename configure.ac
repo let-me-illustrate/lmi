@@ -44,12 +44,10 @@ case "${host}" in
         ;;
 
     *-*-cygwin* )
-        USE_CYGWIN=1
         USE_WINDOWS=1
         ;;
 
     *-*-mingw32* )
-        USE_MINGW32=1
         USE_WINDOWS=1
         ;;
 esac
@@ -345,17 +343,6 @@ AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
     [AC_MSG_ERROR([Boost headers not found, $errmsg])]
 )
-
-dnl By default no particular toolkit suffix should be needed when linking
-dnl against boost libraries. Except for mingw where it seems to be
-dnl required. Because under mingw default installation does _not_ create
-dnl a symbolic link without the tollkit suffix (-mgw), at least
-dnl for the version 1.33.1. Therefore explicitly set it if no toolkit specified.
-if test "x$lmi_boost_toolkit" = "x"; then
-    if test "x$USE_MINGW32" = "x1"; then
-        lmi_boost_toolkit=mgw
-    fi
-fi
 
 dnl The default boost library name should be used unless otherwise specified
 dnl via --with-boost-tookit options, in which case we need to add

@@ -38542,3 +38542,10 @@ Force linking despite overly-aggressive linker "optimization". See:
   http://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
   http://lists.nongnu.org/archive/html/lmi/2016-01/msg00026.html
 
+20160121T0045Z <gchicares@sbcglobal.net> [455]
+
+  configure.ac
+No longer add an "mgw" suffix, which interfered with cross compiling
+(VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
+
