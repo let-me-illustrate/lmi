@@ -38531,3 +38531,14 @@ Disable zlib to avoid a catastrophic problem (VZ). See:
 Specify --host consistently (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
 
+20160121T0032Z <gchicares@sbcglobal.net> [455]
+
+  alert_wx.cpp
+  main_wx.cpp
+  mc_enum_types_aux.cpp
+Force linking despite overly-aggressive linker "optimization". See:
+  http://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00026.html
+
