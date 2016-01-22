@@ -38543,3 +38543,10 @@ No longer add an "mgw" suffix, which interfered with cross compiling
 (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
 
+20160122T1530Z <gchicares@sbcglobal.net> [455]
+
+  skeleton.cpp
+Fix defect introduced 20060812T0053Z: dead code. The line removed was
+in 'main_wx.cpp' originally, and moved to the present file here:
+  http://svn.savannah.nongnu.org/viewvc?view=rev&root=lmi&revision=5861
+
