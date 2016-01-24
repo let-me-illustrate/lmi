@@ -98,8 +98,6 @@
 ///
 /// title_: A string suitable (e.g.) as a message-box title.
 ///
-/// display_mode_: enum_display_mode value.
-///
 /// was_cancelled_: True iff the operation was cancelled.
 ///
 /// Nonmember functions.
@@ -237,7 +235,6 @@ class LMI_SO progress_meter
     int               count_;
     int               max_count_;
     std::string       title_;
-    enum_display_mode display_mode_;
     bool              was_cancelled_;
 };
 
