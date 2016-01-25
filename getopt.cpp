@@ -370,11 +370,13 @@ GetOpt::operator()()
       // If we have done all the ARGV-elements, stop the scan.
 
       if (optind == nargc)
+        {
           // Check if first LIST_ARG with no argument.
           if (list_option_first)
             return  List_No_Value ();
           else
             return EOF;
+        }
 
       if (list_option->valid == 0)
         {
