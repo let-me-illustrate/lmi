@@ -341,7 +341,9 @@ WX_STANDARD_OPTIONS_SUMMARY_MSG
 dnl --- wxPdfDocument ---
 AC_CHECK_HEADER([wx/pdfdc.h],
     [],
-    [AC_MSG_ERROR([wxPdfDocument header not found.])])
+    [AC_MSG_ERROR([wxPdfDocument header not found.])],
+    [AC_INCLUDES_DEFAULT()]
+)
 
 dnl Defer to the same macro used by wxPdfDocument itself for constructing its
 dnl library name.
@@ -367,7 +369,8 @@ fi
 
 AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
-    [AC_MSG_ERROR([Boost headers not found, $errmsg])]
+    [AC_MSG_ERROR([Boost headers not found, $errmsg])],
+    [AC_INCLUDES_DEFAULT()]
 )
 
 dnl The default boost library name should be used unless otherwise specified
@@ -474,14 +477,16 @@ LIBS=$save_LIBS
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then
     lmi_found_cgicc=yes
-    AC_CHECK_HEADER("cgicc/CgiDefs.h", [], [lmi_found_cgicc=no])
+    AC_CHECK_HEADER("cgicc/CgiDefs.h", [], [lmi_found_cgicc=no], [AC_INCLUDES_DEFAULT()])
     AC_CHECK_FILE("libcgicc.la", [], [lmi_found_cgicc=no])
     if test "x$lmi_found_cgicc" == "xno"; then
         for m_lmi_cgicc_guess in /usr/include /usr/local/include
         do
             echo "checking with m_lmi_cgicc_guess=$m_lmi_cgicc_guess"
             AC_CHECK_HEADER([$m_lmi_cgicc_guess/cgicc/CgiDefs.h],
-                [ok_lmi_cgicc_include=$m_lmi_cgicc_guess], [])
+                [ok_lmi_cgicc_include=$m_lmi_cgicc_guess], [],
+                [AC_INCLUDES_DEFAULT()]
+            )
             if test "x$ok_lmi_cgicc_include" != "x"; then break; fi
         done
         for m_lmi_cgicc_lib_guess in /usr/lib /usr/local/lib
