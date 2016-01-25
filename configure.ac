@@ -159,6 +159,27 @@ AX_CXX_COMPILE_STDCXX(11, noext)
 
 AC_PROG_LD
 
+AC_CACHE_CHECK([if using clang],
+    lmi_cv_prog_clang,
+    [
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+                [],
+                [[
+                #ifndef __clang__
+                    not clang
+                #endif
+                ]],
+            )],
+            lmi_cv_prog_clang=yes,
+            lmi_cv_prog_clang=no
+        )
+        AC_LANG_POP([C++])
+    ]
+)
+
+CLANG=$lmi_cv_prog_clang
+
 if test "$USE_WINDOWS" = "1"; then
     AC_CHECK_TOOL([WINDRES], [windres], no)
 fi
@@ -528,47 +549,74 @@ AC_SUBST(CGICC_INCLUDE_FLAGS)
 AC_SUBST(CGICC_LIBS)
 AC_SUBST(CGICC_LIB_LDADD)
 
-dnl --- enable all possible warnings for gcc/g++ ----
-CFLAGS_gcc_common="\
-    -pedantic-errors \
-    -Werror \
-    -Wall \
-    -Wcast-align \
-    -Wdeprecated-declarations \
-    -Wdisabled-optimization \
-    -Wimport \
-    -Wmultichar \
-    -Wno-long-long \
-    -Wno-variadic-macros \
-    -Wpacked \
-    -Wpointer-arith \
-    -Wsign-compare \
-    -Wundef \
-    -Wwrite-strings"
+dnl Try to enable as many useful warnings as possible depending on the
+dnl compiler (and its version) used.
+if test "$GCC" == "yes"; then
+    dnl These flags are understood by both gcc and clang and, hopefully, other
+    dnl compatible compilers.
+    c_warnings_flags="\
+        -pedantic-errors \
+        -Werror \
+        -Wall \
+        -Wundef"
 
-if test "x$GCC" == "xyes"; then
-    CFLAGS="$CFLAGS $CFLAGS_gcc_common -std=c99 -Wmissing-prototypes"
+    if test "$CLANG" = "yes"; then
+        :
+    else
+        dnl Assume this is the real gcc.
+        c_warnings_flags="$c_warnings_flags \
+            -Wcast-align \
+            -Wdeprecated-declarations \
+            -Wdisabled-optimization \
+            -Wimport \
+            -Wmultichar \
+            -Wno-long-long \
+            -Wno-variadic-macros \
+            -Wpacked \
+            -Wpointer-arith \
+            -Wsign-compare \
+            -Wwrite-strings"
+    fi
+
+    CFLAGS="$CFLAGS $c_warnings_flags -std=c99 -Wmissing-prototypes"
 fi
 
 if test "x$GXX" == "xyes"; then
-    CXXFLAGS="$CXXFLAGS $CFLAGS_gcc_common \
+    if test "$CLANG" = "yes"; then
+        cxx_warnings_flags="$cxx_warnings_flags \
+            -Wno-inconsistent-missing-override"
+    else
+        cxx_warnings_flags="$cxx_warnings_flags \
         -Wctor-dtor-privacy \
         -Wdeprecated \
         -Wnon-template-friend \
         -Woverloaded-virtual \
         -Wpmf-conversions \
         -Wsynth"
+    fi
+
+    CXXFLAGS="$CXXFLAGS $c_warnings_flags $cxx_warnings_flags"
 
     dnl we need to use this option with g++ 4.3 to prevent its complaints
     dnl about "-funit-at-a-time is required for inlining of functions that are
     dnl only called once" in debug builds
     dnl
     dnl NB: this is needed for expm1.c so we must add it to CFLAGS too
-    LMI_C_CXX_ADD_IF_SUPPORTED(-fno-inline-functions-called-once)
+    if test "$CLANG" != "yes"; then
+        LMI_C_CXX_ADD_IF_SUPPORTED(-fno-inline-functions-called-once)
+    fi
 
-    dnl this one must be disabled with g++ 4.x because there are tons of
-    dnl occurrences of this warning in both wx and LMI sources
-    LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
+    dnl this one must be disabled because there are tons of occurrences of
+    dnl this warning in both wx and LMI sources
+    if test "$CLANG" = "yes"; then
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-logical-op-parentheses)
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-bitwise-op-parentheses)
+    else
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
+    fi
+
+    dnl and this one occurs in older Boost headers
+    LMI_CXX_ADD_IF_SUPPORTED(-Wno-unused-local-typedef)
 
     dnl This makes Boost compile with -Wundef; see workhorse.make for
     dnl more detailed explanation.
