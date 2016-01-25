@@ -150,10 +150,10 @@ bool TierTableAdapter::DoApplyAxisAdjustment
     bool updated = false;
 
     TierBandAxis& ba = static_cast<TierBandAxis&>(axis);
-    if(ba.GetMinValue() != 0 || ba.GetMaxValue() < 0)
+    if(ba.GetMinValue() != 0)
         {
         fatal_error()
-            << "Band-axis adjuster has invalid limits."
+            << "Band-axis adjuster has invalid lower limit."
             << LMI_FLUSH
             ;
         }
