@@ -921,7 +921,7 @@ GetOpt::usage(std::ostream& os)
     str_vec_i d;
     for
         (n  = option_names.begin() ,d  = option_descriptions.begin()
-        ;n != option_names.end()   ,d != option_descriptions.end()
+        ;n != option_names.end()  &&d != option_descriptions.end()
         ;++n, ++d
         )
         {
