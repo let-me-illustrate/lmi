@@ -391,7 +391,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
 LDFLAGS=$save_LDFLAGS
 LIBS=$save_LIBS
 
-BOOST_LIBS="-l$boost_libfs -l$boost_libregex -l$boost_libsystem"
+BOOST_LIBS="-l$boost_libfs -l$boost_libregex $BOOST_LIBS"
 
 dnl contains flags needed to link to externally or internally built
 dnl boost libraries
