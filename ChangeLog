@@ -38550,3 +38550,25 @@ Fix defect introduced 20060812T0053Z: dead code. The line removed was
 in 'main_wx.cpp' originally, and moved to the present file here:
   http://svn.savannah.nongnu.org/viewvc?view=rev&root=lmi&revision=5861
 
+20160129T0231Z <zeitlin> [455]
+
+  configure.ac
+Don't link boost_system library if it's not detected by configure.
+
+20160130T1212Z <gchicares@sbcglobal.net> [455]
+
+  so_attributes.hpp
+Forestall attribute warnings for gcc-4.9.1 as for gcc-4.9.2 .
+
+20160130T1215Z <gchicares@sbcglobal.net> [455]
+
+  main_wx.cpp
+  mc_enum_types_aux.cpp
+Don't attempt to force linking a function that is not visible. See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00087.html
+
+20160130T1257Z <gchicares@sbcglobal.net> [455]
+
+  install_msw.sh
+Try to avoid an antimalware issue.
+
