@@ -80,7 +80,13 @@ mount --force "C:/opt/lmi" "/opt/lmi"
 
 [ -z "$restore_opt_mount" ] || sh -c $restore_opt_mount
 
-cygcheck -s -v -r | tr --delete '\r'
+# Read this entire thread for $CYGCHECK rationale:
+#   https://cygwin.com/ml/cygwin/2012-02/threads.html#00910
+#   https://cygwin.com/ml/cygwin/2012-03/threads.html#00005
+# Cf.:
+#   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
+export CYGCHECK=`cygpath --mixed /usr/bin/cygcheck`
+cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
 
 java -version
 
@@ -151,8 +157,8 @@ make $coefficiency PATH=$minimal_path install
 # No lmi binary should depend on any Cygwin library.
 
 for z in /opt/lmi/bin/*; \
-  do cygcheck $z 2>&1 | grep --silent cygwin \
-    && echo -e "\ncygcheck $z" && cygcheck $z; \
+  do cmd /c $CYGCHECK $z 2>&1 | grep --silent cygwin \
+    && echo -e "\ncygcheck $z" && cmd /c $CYGCHECK $z; \
   done
 
 echo -n "2450449 2458849"                          >/opt/lmi/data/expiry
