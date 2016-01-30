@@ -52,7 +52,6 @@
 LMI_FORCE_LINKING_EX_SITU(alert_wx)
 LMI_FORCE_LINKING_EX_SITU(file_command_wx)
 LMI_FORCE_LINKING_EX_SITU(group_quote_pdf_generator_wx)
-LMI_FORCE_LINKING_EX_SITU(mc_enum_types_aux)
 LMI_FORCE_LINKING_EX_SITU(progress_meter_wx)
 LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 
