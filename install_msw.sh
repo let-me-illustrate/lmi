@@ -35,6 +35,10 @@ set -v
 
 date -u +'%Y%m%dT%H%MZ'
 
+# '--jobs=2': big benefit for multicore, no penalty for single core.
+# '--output-sync=recurse': facilitates log comparison.
+export coefficiency='--jobs=2 --output-sync=recurse'
+
 mount
 
 # Establish mounts carefully.
@@ -126,9 +130,6 @@ mount
 md5sum $0
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
-# $coefficiency is intended for passing a '--jobs' option, e.g.
-#   export coefficiency='--jobs=12'
-
 rm --force --recursive scratch
 rm --force --recursive /MinGW_
 make $coefficiency -f install_mingw.make
@@ -141,9 +142,7 @@ make $coefficiency -f install_libxml2_libxslt.make
 
 make $coefficiency -f install_wx.make
 
-# Avoid msw virtual-memory exhaustion--see:
-#   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00020.html
-make ggc_flags= -f install_wxpdfdoc.make
+make $coefficiency -f install_wxpdfdoc.make
 
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
