@@ -37,7 +37,7 @@ date -u +'%Y%m%dT%H%MZ'
 
 # '--jobs=2': big benefit for multicore, no penalty for single core.
 # '--output-sync=recurse': facilitates log comparison.
-export coefficiency='--jobs=2 --output-sync=recurse'
+export coefficiency='--jobs=4 --output-sync=recurse'
 
 mount
 
