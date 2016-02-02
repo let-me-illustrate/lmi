@@ -38577,3 +38577,8 @@ Try to avoid an antimalware issue.
   install_msw.sh
 Exploit at least minimal parallelism by default.
 
+20160202T1335Z <gchicares@sbcglobal.net> [455]
+
+  install_msw.sh
+Increase default parallelism.
+
