@@ -33,9 +33,10 @@ set -v
 #
 # rm --force --recursive /opt/lmi
 
-date -u +'%Y%m%dT%H%MZ'
+stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+echo "Started: $stamp0"
 
-# '--jobs=2': big benefit for multicore, no penalty for single core.
+# '--jobs=4': big benefit for multicore, no penalty for single core.
 # '--output-sync=recurse': facilitates log comparison.
 export coefficiency='--jobs=4 --output-sync=recurse'
 
@@ -187,7 +188,12 @@ cat >/opt/lmi/bin/configurable_settings.xml <<EOF
 </configurable_settings>
 EOF
 
-date -u +'%Y%m%dT%H%MZ'
+stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+echo "Finished: $stamp1"
+
+seconds=$(expr $(date '+%s' -d $stamp1) - $(date '+%s' -d $stamp0))
+elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
+echo "Elapsed: $elapsed"
 
 echo Finished building lmi. >/dev/tty
 
