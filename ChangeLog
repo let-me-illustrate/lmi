@@ -38582,3 +38582,13 @@ Exploit at least minimal parallelism by default.
   install_msw.sh
 Increase default parallelism.
 
+20160205T1454Z <gchicares@sbcglobal.net> [455]
+
+  install_msw.sh
+Improve timestamping.
+
+20160205T1455Z <gchicares@sbcglobal.net> [454]
+
+  fancy.make
+Resolve a marked defect.
+
