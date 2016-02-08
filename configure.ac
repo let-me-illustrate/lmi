@@ -267,9 +267,11 @@ AM_CONDITIONAL(HAVE_SNPRINTF, [test "x$lmi_cv_func_snprintf" == "xyes"])
 AM_CONDITIONAL(LMI_WITH_CGI, [test "x$lmi_cgicc_option" == "xyes"])
 
 dnl existing code already uses these macros so continue to use them instead of
-dnl the usual HAVE_STRTOF etc.
+dnl the usual HAVE_EXPM1/HAVE_LOG1P
 AC_CHECK_FUNC(strtof, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOF, [1], [Define this if you have strtof() function]))
 AC_CHECK_FUNC(strtold, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOLD, [1], [Define this if you have strtold() function]))
+AC_CHECK_FUNC(expm1l, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1L, [1], [Define this if you have expm1l() function]))
+AC_CHECK_FUNC(log1pl, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1PL, [1], [Define this if you have log1pl() function]))
 AC_CHECK_FUNC(rint, AC_DEFINE(LMI_COMPILER_PROVIDES_RINT, [1], [Define this if you have rint() function]))
 
 dnl === Library checks ===
@@ -364,11 +366,6 @@ fi
 AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
     [AC_MSG_ERROR([Boost headers not found, $errmsg])]
-)
-
-AC_CHECK_HEADER([boost/math/special_functions/expm1.hpp],
-    [],
-    [AC_MSG_ERROR([Boost version with boost::math::expm1() required, $errmsg])]
 )
 
 dnl The default boost library name should be used unless otherwise specified
@@ -558,7 +555,9 @@ if test "x$GXX" == "xyes"; then
     dnl we need to use this option with g++ 4.3 to prevent its complaints
     dnl about "-funit-at-a-time is required for inlining of functions that are
     dnl only called once" in debug builds
-    LMI_CXX_ADD_IF_SUPPORTED(-fno-inline-functions-called-once)
+    dnl
+    dnl NB: this is needed for expm1.c so we must add it to CFLAGS too
+    LMI_C_CXX_ADD_IF_SUPPORTED(-fno-inline-functions-called-once)
 
     dnl this one must be disabled with g++ 4.x because there are tons of
     dnl occurrences of this warning in both wx and LMI sources

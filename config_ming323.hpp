@@ -47,13 +47,13 @@
 #   define LMI_COMPILER_PROVIDES_EXPM1L
 #endif // 308 <= LMI_MINGW_VERSION
 
-#if 202 <= LMI_MINGW_VERSION
-#   define LMI_COMPILER_PROVIDES_LOG1PL
-#endif // 202 <= LMI_MINGW_VERSION
-
 #if 200 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_ISNAN
 #endif // 200 <= LMI_MINGW_VERSION
+
+#if 202 <= LMI_MINGW_VERSION
+#   define LMI_COMPILER_PROVIDES_LOG1PL
+#endif // 202 <= LMI_MINGW_VERSION
 
 #if 200 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_RINT
@@ -66,25 +66,6 @@
 #if 204 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_STRTOLD
 #endif // 204 <= LMI_MINGW_VERSION
-
-// Configure Boost library for this compiler in cases where it lacks
-// features autodetection.
-
-#if defined BOOST_MATH_EXPM1_INCLUDED || defined BOOST_MATH_LOG1P_INCLUDED
-#   error config.hpp must be included before boost::math headers.
-#endif
-
-#if 308 <= LMI_MINGW_VERSION
-#   define BOOST_HAS_EXP1M
-#endif // 308 <= LMI_MINGW_VERSION
-
-#if 202 <= LMI_MINGW_VERSION
-#   define BOOST_HAS_LOG1P
-#endif // 202 <= LMI_MINGW_VERSION
-
-#ifndef BOOST_MATH_USE_C99
-#   define BOOST_MATH_USE_C99
-#endif
 
 #endif // config_ming323_hpp
 

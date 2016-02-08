@@ -160,7 +160,7 @@ void sample_results()
         << "\n  annual rate corresponding to a 0.004 daily spread"
         << ", by various methods\n"
         << std::setprecision(20)
-        << "    long double precision, expm1 and log1p\n      "
+        << "    long double precision, expm1l and log1pl\n      "
         << net_i_from_gross<double,365>()(0.0, 0.004, 0.0) << '\n'
         << "    long double precision, pow\n      "
         << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
@@ -170,7 +170,7 @@ void sample_results()
     fenv_precision(fe_dblprec);
     std::cout
         << std::setprecision(20)
-        << "    double precision, expm1 and log1p\n      "
+        << "    double precision, expm1l and log1pl\n      "
         << net_i_from_gross<double,365>      ()(0.0, 0.004, 0.0) << '\n'
         << "    double precision, pow\n      "
         << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
@@ -183,7 +183,7 @@ void sample_results()
 // different implementations.
 
 // This implementation naively uses std::pow(); it is both slower and
-// less inaccurate than an alternative using expm1() and log1p().
+// less inaccurate than an alternative using expm1l() and log1pl().
 void mete0()
 {
     volatile double x;
@@ -208,7 +208,7 @@ void mete1()
 void assay_speed()
 {
     std::cout << "  Speed test: pow   \n    " << TimeAnAliquot(mete0) << '\n';
-    std::cout << "  Speed test: expm1\n     " << TimeAnAliquot(mete1) << '\n';
+    std::cout << "  Speed test: expm1l\n    " << TimeAnAliquot(mete1) << '\n';
 }
 
 int test_main(int, char*[])

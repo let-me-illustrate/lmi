@@ -100,7 +100,7 @@ namespace
 // For the annual-effective method, transformation from annual to
 // daily and back again by naive methods would lose considerable
 // precision even when the spread and fee are zero, because i is
-// small relative to (1 + i). That is why expm1() and log1p() are
+// small relative to (1 + i). That is why expm1l() and log1pl() are
 // used instead of pow().
 //
 // If both spread and fee are zero, then the net rate should exactly

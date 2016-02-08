@@ -205,6 +205,7 @@ common_common_objects := \
   dbvalue.o \
   death_benefits.o \
   emit_ledger.o \
+  expm1.o \
   facets.o \
   fenv_guard.o \
   fenv_lmi.o \
@@ -546,6 +547,7 @@ commutation_functions_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
   commutation_functions_test.o \
+  expm1.o \
   timer.o \
 
 configurable_settings_test$(EXEEXT): \
@@ -696,6 +698,7 @@ istream_to_string_test$(EXEEXT): \
 
 loads_test$(EXEEXT): \
   $(common_test_objects) \
+  expm1.o \
   loads.o \
   loads_test.o \
   timer.o \
@@ -710,6 +713,7 @@ materially_equal_test$(EXEEXT): \
 
 math_functors_test$(EXEEXT): \
   $(common_test_objects) \
+  expm1.o \
   math_functors_test.o \
   timer.o \
 
