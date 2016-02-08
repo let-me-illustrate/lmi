@@ -99,9 +99,9 @@ cd /opt/lmi/src/lmi
 
 restore_MinGW_mount=`mount --mount-commands 2>/dev/null | grep '"/MinGW_"'`
 [ -z "$restore_MinGW_mount" ] \
-  || echo $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-20090203"' \
+  || echo $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-4_9_1"' \
   || echo -e "Replacing former MinGW_ mount:\n $restore_MinGW_mount" >/dev/tty
-mount --force "C:/opt/lmi/MinGW-20090203" "/MinGW_"
+mount --force "C:/opt/lmi/MinGW-4_9_1" "/MinGW_"
 
 restore_cache_mount=`mount --mount-commands 2>/dev/null | grep '"/cache_for_lmi"'`
 [ -z "$restore_cache_mount" ] \
@@ -125,7 +125,7 @@ find /cache_for_lmi/downloads -type f | xargs md5sum
 
 rm --force --recursive scratch
 rm --force --recursive /MinGW_
-make $coefficiency prefix=/MinGW_ cache_dir=/cache_for_lmi/downloads -f install_mingw.make
+make $coefficiency -f install_mingw.make
 make $coefficiency -f install_mpatrol.make
 
 make $coefficiency -f install_miscellanea.make clobber

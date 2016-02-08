@@ -38421,3 +38421,132 @@ Resolve a marked defect: replace 'DBOptInitInteger' with 'InitDBOpt'.
   version.hpp
 Designate release candidate 6466.
 
+20160114T1912Z <gchicares@sbcglobal.net> [455]
+
+  group_quote_pdf_gen_wx.cpp
+Show system version on group quotes (VZ).
+
+20160114T1914Z <gchicares@sbcglobal.net> [455]
+
+  version.hpp
+Designate release candidate 6468.
+
+20160117T2201Z <gchicares@sbcglobal.net> [455]
+
+  install_wx.make
+Revert the PCH part of the 20160105T0146Z change--see:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00007.html
+
+20160118T0052Z <gchicares@sbcglobal.net> [455]
+
+  install_wx.make
+Alphabetize 'configure' toggles.
+
+20160118T0131Z <gchicares@sbcglobal.net> [455]
+
+  workhorse.make
+Install toolchain runtime libraries in /opt/lmi/local/bin/ .
+
+20160118T0152Z <gchicares@sbcglobal.net> [455]
+
+  workhorse.make
+Support MinGW-w64 cross compiler.
+
+20160118T0304Z <gchicares@sbcglobal.net> [455]
+
+  install_wx.make
+  install_wxpdfdoc.make
+  msw_cygwin.make
+Use MinGW-w64 cross compiler.
+
+20160118T0417Z <gchicares@sbcglobal.net> [455]
+
+  msw_cygwin.make
+Fix defect introduced 20160118T0304Z: sys-root missing triplet.
+
+20160118T0419Z <gchicares@sbcglobal.net> [455]
+
+  workhorse.make
+Fix defect introduced 20160118T0304Z: sh quoting.
+
+20160118T1521Z <gchicares@sbcglobal.net> [455]
+
+  cgicc-3.1.4.md5sums
+  cgicc-3.1.4.patch
+Repair defects detected by gcc-4.9.2 .
+
+20160120T1128Z <gchicares@sbcglobal.net> [455]
+
+  workhorse.make
+Allow gcc-4.9.1 .
+
+20160120T1129Z <gchicares@sbcglobal.net> [455]
+
+  install_cygwin.bat
+Remove cross compiler; add 'bsdtar'.
+
+20160120T1131Z <gchicares@sbcglobal.net> [455]
+
+  install_wx.make
+  install_wxpdfdoc.make
+  msw_cygwin.make
+Prefer native to cross MinGW-w64 compiler.
+
+20160120T1135Z <gchicares@sbcglobal.net> [455]
+
+  install_cygwin.bat
+  install_mingw.make
+  install_msw.sh
+Replace mingw.org with MinGW-w64 toolchain.
+
+20160120T1913Z <gchicares@sbcglobal.net> [455]
+
+  libxslt-1.1.17-lmi.patch
+  test_coding_rules.cpp
+Don't use two-element mkdir() with msw (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+
+20160120T1917Z <gchicares@sbcglobal.net> [455]
+
+  install_libxml2_libxslt.make
+Disable threading to avoid a catastrophic problem (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+
+20160120T1920Z <gchicares@sbcglobal.net> [455]
+
+  install_libxml2_libxslt.make
+Disable zlib to avoid a catastrophic problem (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+
+20160120T1924Z <gchicares@sbcglobal.net> [455]
+
+  install_libxml2_libxslt.make
+  install_mpatrol.make
+Specify --host consistently (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00022.html
+
+20160121T0032Z <gchicares@sbcglobal.net> [455]
+
+  alert_wx.cpp
+  main_wx.cpp
+  mc_enum_types_aux.cpp
+Force linking despite overly-aggressive linker "optimization". See:
+  http://lists.nongnu.org/archive/html/lmi/2014-08/msg00000.html
+  http://lists.nongnu.org/archive/html/lmi/2014-10/msg00006.html
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00026.html
+
+20160121T0045Z <gchicares@sbcglobal.net> [455]
+
+  configure.ac
+No longer add an "mgw" suffix, which interfered with cross compiling
+(VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00006.html
+
+20160122T1530Z <gchicares@sbcglobal.net> [455]
+
+  skeleton.cpp
+Fix defect introduced 20060812T0053Z: dead code. The line removed was
+in 'main_wx.cpp' originally, and moved to the present file here:
+  http://svn.savannah.nongnu.org/viewvc?view=rev&root=lmi&revision=5861
+

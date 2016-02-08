@@ -49,28 +49,34 @@ $(wxpdfdoc_archive)-md5     := 8e3c4d6cd1df9c7f91426c8c4723cb6e
 
 # Variables that normally should be left alone #################################
 
-mingw_bin_dir := $(mingw_dir)/bin
+mingw_bin_dir  := $(mingw_dir)/bin
 
-compiler      := gcc-$(shell $(mingw_bin_dir)/gcc -dumpversion)
+#triplet_prefix := i686-w64-mingw32-
+triplet_prefix :=
+
+compiler       := gcc-$(shell $(mingw_bin_dir)/$(triplet_prefix)gcc -dumpversion)
+
+wx_cc_flags    :=
+wx_cxx_flags   := -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
   --build=i686-pc-cygwin \
-  --host=i686-pc-mingw32 \
+  --host=i686-w64-mingw32 \
   --disable-dependency-tracking \
   --with-wx-config=$(prefix)/bin/wx-config-portable \
-       AR='$(mingw_bin_dir)/ar' \
-       AS='$(mingw_bin_dir)/as' \
-       CC='$(mingw_bin_dir)/gcc' \
-      CPP='$(mingw_bin_dir)/cpp' \
-      CXX='$(mingw_bin_dir)/g++' \
-  DLLTOOL='$(mingw_bin_dir)/dlltool' \
-       LD='$(mingw_bin_dir)/ld' \
-       NM='$(mingw_bin_dir)/nm' \
-  OBJDUMP='$(mingw_bin_dir)/objdump' \
-   RANLIB='$(mingw_bin_dir)/ranlib' \
-    STRIP='$(mingw_bin_dir)/strip' \
-  WINDRES='$(mingw_bin_dir)/windres' \
+       AR='$(mingw_bin_dir)/$(triplet_prefix)ar' \
+       AS='$(mingw_bin_dir)/$(triplet_prefix)as' \
+       CC='$(mingw_bin_dir)/$(triplet_prefix)gcc $(wx_cc_flags)' \
+      CPP='$(mingw_bin_dir)/$(triplet_prefix)cpp' \
+      CXX='$(mingw_bin_dir)/$(triplet_prefix)g++ $(wx_cxx_flags)' \
+  DLLTOOL='$(mingw_bin_dir)/$(triplet_prefix)dlltool' \
+       LD='$(mingw_bin_dir)/$(triplet_prefix)ld' \
+       NM='$(mingw_bin_dir)/$(triplet_prefix)nm' \
+  OBJDUMP='$(mingw_bin_dir)/$(triplet_prefix)objdump' \
+   RANLIB='$(mingw_bin_dir)/$(triplet_prefix)ranlib' \
+    STRIP='$(mingw_bin_dir)/$(triplet_prefix)strip' \
+  WINDRES='$(mingw_bin_dir)/$(triplet_prefix)windres' \
 
 # Utilities ####################################################################
 
