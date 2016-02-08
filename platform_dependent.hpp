@@ -48,8 +48,9 @@
 // that are useful but absent from the standard language: for example,
 // it is difficult to implement cgi-bin without putenv(). Some others:
 //   _wcsdup(), fileno(), strcasecmp(), strdup()
-// should be avoided in general, but are required by wx.; the way their
-// prototypes are provided for gcc varies by platform.
+// should be avoided in general, but are required by wx. Still others,
+// like expm1l(), are in C99 but not C++98; the way their prototypes
+// are provided for gcc varies by platform.
 
 #if defined __GNUC__ && defined __STRICT_ANSI__
 #   define LMI_GNUC_STRICT_ANSI
@@ -95,6 +96,16 @@
 //   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00045.html
 // and therefore a prototype for getch() is instead provided by other
 // means, locally, wherever it's needed.
+
+// GNU/Linux (but not MinGW) requires including certain headers while
+// __STRICT_ANSI__ is not defined in order to get prototypes for
+// certain functions, for C++ with '-std=c++98':
+//   math.h:  expm1l() and log1pl()
+// Use the C instead of the C++ system header so that the present file
+// can be included in C as well as C++ translation units, which is
+// temporarily useful until 'expm1.c' can be removed.
+
+#include <math.h>
 
 // Although gcc may once have defined __STRICT_ANSI__ differently:
 //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=3199

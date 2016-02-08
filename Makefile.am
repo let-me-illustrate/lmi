@@ -336,6 +336,7 @@ liblmi_common_sources = \
     dbvalue.cpp \
     death_benefits.cpp \
     emit_ledger.cpp \
+    expm1.c \
     facets.cpp \
     fenv_guard.cpp \
     fenv_lmi.cpp \
