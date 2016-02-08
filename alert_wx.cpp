@@ -29,6 +29,7 @@
 #include "alert.hpp"
 
 #include "configurable_settings.hpp"
+#include "force_linking.hpp"
 
 #include <wx/app.h>                     // wxTheApp
 #include <wx/frame.h>
@@ -39,6 +40,8 @@
 
 #include <cstdio>
 #include <stdexcept>
+
+LMI_FORCE_LINKING_IN_SITU(alert_wx)
 
 namespace
 {

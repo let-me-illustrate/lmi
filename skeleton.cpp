@@ -996,7 +996,6 @@ namespace
 
         std::insert_iterator<std::string> j(new_text, new_text.begin());
         typedef std::string::const_iterator sci;
-        std::string::const_iterator i = original_text.begin();
         for(sci i = original_text.begin(); i != original_text.end(); ++i)
             {
             switch(*i)

@@ -1,4 +1,4 @@
-# Platform specifics: msw using cygwin.
+# Platform specifics: msw (cygwin) with MinGW-w64 toolchain.
 #
 # Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 #
@@ -28,7 +28,7 @@
 cygdrive_diagnostic := \
   Current working directory '$(CURDIR)' contains '/cygdrive/'. \
   This is likely to cause problems with native tools such as the \
-  MinGW compiler. Build from an identity-mount directory instead
+  MinGW-w64 compiler. Build from an identity-mount directory instead
 
 ifeq (/cygdrive/,$(findstring /cygdrive/,$(CURDIR)))
   $(error $(cygdrive_diagnostic))
@@ -44,9 +44,12 @@ system_root := /cygdrive/c
 
 ################################################################################
 
-# Use cygwin as a quasi-cross-compiler for an i686-pc-mingw32 target.
-
+# Use cygwin as a quasi-cross-compiler for an i686-pc-mingw32 target
+# (no longer supported):
 # cross_compile_flags := -mno-cygwin
+
+# Untested:
+# cross_compile_flags := --build=i686-pc-cygwin --host=i686-w64-mingw32
 
 ################################################################################
 
@@ -72,12 +75,25 @@ endif
 
 # Compiler, linker, and so on.
 
-AR      := $(PATH_GCC)ar
-CC      := $(PATH_GCC)gcc $(cross_compile_flags)
-CPP     := $(PATH_GCC)cpp $(cross_compile_flags)
-CXX     := $(PATH_GCC)g++ $(cross_compile_flags)
-LD      := $(PATH_GCC)g++ $(cross_compile_flags)
-RC      := $(PATH_GCC)windres
+#triplet_prefix := i686-w64-mingw32-
+triplet_prefix :=
+
+AR      := $(PATH_GCC)$(triplet_prefix)ar
+CC      := $(PATH_GCC)$(triplet_prefix)gcc $(cross_compile_flags)
+CPP     := $(PATH_GCC)$(triplet_prefix)cpp $(cross_compile_flags)
+CXX     := $(PATH_GCC)$(triplet_prefix)g++ $(cross_compile_flags)
+LD      := $(PATH_GCC)$(triplet_prefix)g++ $(cross_compile_flags)
+RC      := $(PATH_GCC)$(triplet_prefix)windres
+
+# Identify run-time libraries for redistribution. See:
+#   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
+# Of course manipulating an lmi user's $PATH is out of the question.
+
+compiler_sysroot := /MinGW_/i686-w64-mingw32/lib
+
+compiler_runtime_files := \
+  $(compiler_sysroot)/libstdc++-6.dll \
+  $(compiler_sysroot)/libgcc_s_sjlj-1.dll \
 
 ################################################################################
 

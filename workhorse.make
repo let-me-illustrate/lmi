@@ -141,12 +141,16 @@ gnu_cxx_version := $(shell $(GNU_CXX) -dumpversion)
 
 ifeq      (3.4.4,$(gnu_cpp_version))
 else ifeq (3.4.5,$(gnu_cpp_version))
+else ifeq (4.9.1,$(gnu_cpp_version))
+else ifeq (4.9.2,$(gnu_cpp_version))
 else
   $(error Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
 
 ifeq      (3.4.4,$(gnu_cxx_version))
 else ifeq (3.4.5,$(gnu_cxx_version))
+else ifeq (4.9.1,$(gnu_cxx_version))
+else ifeq (4.9.2,$(gnu_cxx_version))
 else
   $(error Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
@@ -412,6 +416,19 @@ else ifeq (3.4.5,$(gcc_version))
   # Use a correct snprintf() implementation:
   #   http://article.gmane.org/gmane.comp.gnu.mingw.user/27539
   cxx_standard += -posix
+else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
+  # See:
+  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
+  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
+  # XMLWRAPP !! '-Wno-deprecated-declarations' needed for auto_ptr
+  gcc_version_specific_warnings := \
+    -Wno-conversion \
+    -Wno-deprecated-declarations \
+    -Wno-parentheses \
+    -Wno-unused-local-typedefs \
+    -Wno-unused-variable \
+
+  cxx_standard := -std=c++11
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
@@ -520,10 +537,13 @@ CXX_WARNINGS = \
 # As this is written in 2012, lmi is often built on machines with less
 # RAM per core than gcc wants. Experiments show that these flags cut
 # gcc's RAM appetite by fifty percent, in return for a ten-percent
-# speed penalty that can be overcome by increasing parallelism.
+# speed penalty that can be overcome by increasing parallelism. There
+# seems to be no need for them with gcc-4.x, which uses less RAM.
 
 ifeq (gcc,$(toolset))
-  ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
+  ifeq (3.4.5,$(gcc_version))
+    ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
+  endif
 endif
 
 ################################################################################
@@ -686,14 +706,18 @@ CFLAGS = \
 CXXFLAGS = \
   $(ggc_flags) $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
-# Explicitly disable the infelicitous auto-import default. See:
-#   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
-#     [2006-05-18T11:38:01Z from Earnie Boyd]
-
 LDFLAGS = \
   $(gprof_flag) \
   -Wl,-Map,$@.map \
-  -Wl,--disable-auto-import \
+
+# Explicitly disable the infelicitous auto-import default. See:
+#   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
+#     [2006-05-18T11:38:01Z from Earnie Boyd]
+# Do not disable it for MinGW-w64, which seems to require it.
+
+ifeq (3.4.5,$(gcc_version))
+  LDFLAGS += -Wl,--disable-auto-import
+endif
 
 ifneq (,$(USE_SO_ATTRIBUTES))
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
@@ -959,6 +983,8 @@ install: $(default_targets)
 	@$(CP) --preserve --update $^ $(bin_dir)
 	@$(CP) --preserve --update $(data_files) $(data_dir)
 	@$(CP) --preserve --update $(help_files) $(data_dir)
+	@[ -z "$(compiler_runtime_files)" ] \
+	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(data_dir); $(bin_dir)/product_files$(EXEEXT)
 else
@@ -1184,8 +1210,6 @@ mpatrol.log:
 
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run: mpatrol.log
-	@[ -z $(compiler_runtime_files) ] \
-	  || $(CP) --preserve --update $(compiler_runtime_files) .
 	@$(ECHO) -e "\nRunning $*:"
 	@-./$* --accept
 	@[ -f mpatrol.log ] \
