@@ -115,7 +115,9 @@
 #   include <vector>
 
 #   include <boost/config.hpp>
-#   include <boost/filesystem.hpp>
+#   include <boost/filesystem/convenience.hpp>
+#   include <boost/filesystem/operations.hpp>
+#   include <boost/filesystem/path.hpp>
 #   include <boost/iterator.hpp>
 #   include <boost/preprocessor.hpp>
 #   include <boost/shared_ptr.hpp>
