@@ -357,12 +357,10 @@ census_run_result run_census_in_parallel::operator()
             MaxYr = std::max(MaxYr, (*i)->GetLength());
             }
 
-        boost::shared_ptr<progress_meter> meter
-            (create_progress_meter
-                (MaxYr - first_cell_inforce_year
-                ,mc_str(*run_basis)
-                ,progress_meter_mode(emission)
-                )
+        meter = create_progress_meter
+            (MaxYr - first_cell_inforce_year
+            ,mc_str(*run_basis)
+            ,progress_meter_mode(emission)
             );
 
         // Variables to support tiering and experience rating.

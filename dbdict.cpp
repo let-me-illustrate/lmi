@@ -1111,9 +1111,9 @@ void print_databases()
         fs::ofstream os(out_file, ios_out_trunc_binary());
         DBDictionary const& z = DBDictionary::instance();
         typedef std::vector<std::string>::const_iterator svci;
-        for(svci i = z.member_names().begin(); i != z.member_names().end(); ++i)
+        for(svci j = z.member_names().begin(); j != z.member_names().end(); ++j)
             {
-            z.datum(*i).write(os);
+            z.datum(*j).write(os);
             }
         }
 }
