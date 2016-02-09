@@ -722,7 +722,7 @@ void Ledger::write(xml::element& x) const
 
     // First we'll get the invariant stuff--the copy we made,
     // along with all the stuff we plugged into it above.
-
+    {
     std::string suffix = "";
     for
         (scalar_map::const_iterator j = scalars.begin()
@@ -750,6 +750,7 @@ void Ledger::write(xml::element& x) const
         if(format_exists(j->first, suffix, format_map))
             stringvectors[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
         }
+    }
 
 //    stringscalars["GuarMaxMandE"] = ledger_format(*scalars["GuarMaxMandE"], 2, true);
 //    stringvectors["CorridorFactor"] = ledger_format(*vectors["CorridorFactor"], 0, true);
@@ -758,8 +759,8 @@ void Ledger::write(xml::element& x) const
     // That was the tricky part. Now it's all downhill.
 
     ledger_map_t const& l_map_rep = ledger_map_->held();
-    ledger_map_t::const_iterator i = l_map_rep.begin();
-    for(;i != l_map_rep.end(); i++)
+    using lmci = ledger_map_t::const_iterator;
+    for(lmci i = l_map_rep.begin();i != l_map_rep.end(); i++)
         {
         std::string suffix = suffixes[i->first];
         for

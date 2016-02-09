@@ -460,7 +460,7 @@ class LMI_SO AccountValue
 
     // Intermediate values within annual or monthly loop only.
     double      pmt;       // Antediluvian.
-    mcenum_mode mode;      // Antediluvian.
+    mcenum_mode pmt_mode;  // Antediluvian.
     int         ModeIndex; // Antediluvian.
 
     double  GenAcctIntCred;
