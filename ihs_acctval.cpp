@@ -116,7 +116,7 @@ AccountValue::AccountValue(Input const& input)
     LapseYear                = 0;          // Antediluvian.
     AVUnloaned               = 0.0;        // Antediluvian.
     pmt                      = 0.0;        // Antediluvian.
-    mode                     = mce_annual; // Antediluvian.
+    pmt_mode                 = mce_annual; // Antediluvian.
     ModeIndex                = 0;          // Antediluvian.
     wd                       = 0.0;        // Antediluvian.
     mlyguarv                 = 0.0;        // Antediluvian.
