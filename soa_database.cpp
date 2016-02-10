@@ -35,7 +35,9 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/optional.hpp>
 
+#include <cmath>
 #include <cstdint>
+#include <cstdlib>      // for strtoull()
 #include <fstream>
 #include <limits>
 #include <iomanip>
@@ -220,6 +222,44 @@ inline bool stream_read(std::istream& is, void* data, std::size_t length)
     return is.gcount() == static_cast<std::streamsize>(length);
 }
 
+// Helper function wrapping std::strtoull() and hiding its peculiarities:
+//
+//  - It uses base 10 and doesn't handle leading "0x" as hexadecimal nor,
+//    especially perniciously, leading "0"s as octal.
+//  - It checks for all possible errors: failure to parse anything at all or
+//    overflow.
+//  - It doesn't skip leading whitespace.
+//  - It does not accept negative numbers.
+//  - And it doesn't accept plus sign neither, just for consistency.
+//
+// Returns the parse_result struct containing the pointer to the place where
+// parsing of the number stopped or nullptr on failure. On success, the num
+// field of the struct is filled with the parsed value.
+struct parse_result
+{
+    unsigned long long num = 0;
+    const char* end = nullptr;
+};
+
+parse_result strict_parse_number(char const* start)
+{
+    parse_result res;
+
+    // This check catches whitespace and the leading minus sign.
+    if(*start >= '0' && *start <= '9')
+        {
+        char* end = nullptr;
+        res.num = std::strtoull(start, &end, 10);
+
+        if(end != start && res.num != ULLONG_MAX)
+            {
+            res.end = end;
+            }
+        }
+
+    return res;
+}
+
 // Description of all the SOA fields for both formats.
 struct soa_field
 {
@@ -314,6 +354,7 @@ class writer
 
     template<typename T>
     void write(enum_soa_field field, boost::optional<T> const& onum);
+    void write_table_type(boost::optional<uint8_t> const& otype);
     void write(enum_soa_field field, boost::optional<std::string> const& ostr);
 
     void write_values
@@ -419,6 +460,11 @@ void writer::write(enum_soa_field field, boost::optional<T> const& onum)
         }
 }
 
+void writer::write_table_type(boost::optional<uint8_t> const& otype)
+{
+    write(e_field_table_type, otype);
+}
+
 void writer::write(enum_soa_field field, boost::optional<std::string> const& ostr)
 {
     if(ostr)
@@ -457,7 +503,7 @@ class writer
 
     template<typename T>
     void write(enum_soa_field field, boost::optional<T> const& oval);
-
+    void write_table_type(boost::optional<uint8_t> const& otype);
     void write_values
             (std::vector<double> const& values
             ,boost::optional<uint16_t> const& num_decimals
@@ -479,6 +525,34 @@ void writer::write(enum_soa_field field, boost::optional<T> const& oval)
     if(oval)
         {
         os_ << soa_fields[field].name << ": " << *oval << "\n";
+        }
+}
+
+void writer::write_table_type(boost::optional<uint8_t> const& otype)
+{
+    if(otype)
+        {
+        os_ << soa_fields[e_field_table_type].name << ": ";
+
+        switch(char const ch = static_cast<char>(*otype))
+            {
+            case 'A':
+                os_ << "Aggregate";
+                break;
+            case 'D':
+                os_ << "Duration";
+                break;
+            case 'S':
+                os_ << "Select";
+                break;
+
+            default:
+                std::ostringstream oss;
+                oss << "unknown table type '" << ch << "'";
+                throw std::runtime_error(oss.str());
+            }
+
+        os_ << "\n";
         }
 }
 
@@ -523,6 +597,32 @@ void writer::end()
     // by the end of the file itself.
 }
 
+// Return the field corresponding to the given name or throw an exception if
+// none was found (the line number appears in the error message).
+//
+// Notice that e_field_end_table will never be returned by this function as the
+// end of the table is indicated simply by the end of the file in the text
+// format.
+enum_soa_field parse_field_name(std::string const& name, int line_num)
+{
+    int n = 0;
+    for(soa_field const& f: soa_fields)
+        {
+        if(name == f.name)
+            {
+            // Cast is safe because the valid enum values exactly correspond to
+            // the entries of the fields table we iterate over.
+            return static_cast<enum_soa_field>(n);
+            }
+
+        ++n;
+        }
+
+    std::ostringstream oss;
+    oss << "Unrecognized field '" << name << "' at line number " << line_num;
+    throw std::runtime_error(oss.str());
+}
+
 } // namespace text_format
 
 namespace soa_v3_format
@@ -562,6 +662,8 @@ class table_impl
     // for reading data into is not initialized yet as it's an error to have
     // duplicate fields in our format.
 
+    // read_xxx() methods for binary format.
+
     static
     void read_string
             (boost::optional<std::string>& ostr
@@ -599,6 +701,45 @@ class table_impl
     // This one is different from the generic methods above as it's only used
     // for the specific values_ field and not any arbitrary vector.
     void read_values(std::istream& ifs, uint16_t length);
+
+    // parse_xxx() methods for text format.
+
+    // This method returns the pointer to ostr string value to allow further
+    // modifying it later in the caller.
+    static
+    std::string* parse_string
+            (boost::optional<std::string>& ostr
+            ,enum_soa_field field
+            ,int line_num
+            ,std::string const& value
+            );
+
+    // Parse number checking that it is less than the given maximal value.
+    static
+    unsigned long do_parse_number
+            (enum_soa_field field
+            ,int line_num
+            ,unsigned long max_num
+            ,std::string const& value
+            );
+
+    template<typename T>
+    static
+    void parse_number
+            (boost::optional<T>& onum
+            ,enum_soa_field field
+            ,int line_num
+            ,std::string const& value
+            );
+
+    void parse_table_type
+            (int line_num
+            ,std::string const& value
+            );
+
+    // Unlike the other functions, this one reads from the input on its own
+    // (which is also why it takes line number by reference, as it modifies it).
+    void parse_values(std::istream& is, int& line_num);
 
     // Compute the expected number of values from minimum and maximum age
     // values and the select period and max select age if specified.
@@ -652,6 +793,8 @@ namespace
 
 // Throw an error indicating duplicate occurrence of some field if the first
 // argument is true.
+//
+// This version is used for the binary IO.
 inline
 void throw_if_duplicate_record(bool do_throw, char const* name)
 {
@@ -659,6 +802,23 @@ void throw_if_duplicate_record(bool do_throw, char const* name)
         {
         std::ostringstream oss;
         oss << "duplicate occurrence of the field '" << name << "'";
+        throw std::runtime_error(oss.str());
+        }
+}
+
+// An overload for text IO taking the line number which is also used in the
+// error message.
+inline
+void throw_if_duplicate_record(bool do_throw, enum_soa_field field, int line_num)
+{
+    if(do_throw)
+        {
+        std::ostringstream oss;
+        oss << "duplicate occurrence of the field '"
+            << soa_fields[field].name
+            << "' at line "
+            << line_num
+            ;
         throw std::runtime_error(oss.str());
         }
 }
@@ -850,6 +1010,265 @@ void table_impl::read_values(std::istream& ifs, uint16_t /* length */)
         }
 }
 
+std::string* table_impl::parse_string
+        (boost::optional<std::string>& ostr
+        ,enum_soa_field field
+        ,int line_num
+        ,std::string const& value
+        )
+{
+    throw_if_duplicate_record(ostr.is_initialized(), field, line_num);
+
+    if(value.empty())
+        {
+        std::ostringstream oss;
+        oss << "non-empty value must be specified for the field '"
+            << soa_fields[field].name
+            << "' at line"
+            << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    ostr = value;
+
+    return &ostr.get();
+}
+
+unsigned long table_impl::do_parse_number
+        (enum_soa_field field
+        ,int line_num
+        ,unsigned long max_num
+        ,std::string const& value
+        )
+{
+    auto const res = strict_parse_number(value.c_str());
+    if(!res.end || *res.end != '\0')
+        {
+        std::ostringstream oss;
+        oss << "value for numeric field '"
+            << soa_fields[field].name
+            << "' is not a number at line "
+            << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    if(res.num > max_num)
+        {
+        std::ostringstream oss;
+        oss << "value for numeric field '"
+            << soa_fields[field].name
+            << "' is out of range (maximum allowed is "
+            << max_num
+            << ") at line "
+            << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    return static_cast<unsigned long>(res.num);
+}
+
+template<typename T>
+void table_impl::parse_number
+        (boost::optional<T>& onum
+        ,enum_soa_field field
+        ,int line_num
+        ,std::string const& value
+        )
+{
+    throw_if_duplicate_record(onum.is_initialized(), field, line_num);
+
+    onum = do_parse_number(field, line_num, std::numeric_limits<T>::max(), value);
+}
+
+void table_impl::parse_table_type
+        (int line_num
+        ,std::string const& value
+        )
+{
+    throw_if_duplicate_record(type_.is_initialized(), e_field_table_type, line_num);
+
+    if(value == "Aggregate")
+        {
+        type_ = 'A';
+        }
+    else if(value == "Duration")
+        {
+        type_ = 'D';
+        }
+    else if(value == "Select")
+        {
+        type_ = 'S';
+        }
+    else
+        {
+        std::ostringstream oss;
+        oss << "invalid table type value '" << value << "' at line " << line_num
+            << " (\"Aggregate\", \"Duration\" or \"Select\" expected)"
+            ;
+        throw std::runtime_error(oss.str());
+        }
+}
+
+void table_impl::parse_values(std::istream& is, int& line_num)
+{
+    unsigned const num_values = get_expected_number_of_values();
+    values_.resize(num_values);
+
+    if(!num_decimals_)
+        {
+        std::ostringstream oss;
+        oss << "the '" << soa_fields[e_field_num_decimals].name << "' field "
+            << "must be specified before the table values at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    auto const exponent = std::pow(10, *num_decimals_);
+
+    auto const min_age = *min_age_;
+    boost::optional<uint16_t> last_age;
+    for(std::string line; ++line_num, std::getline(is, line);)
+        {
+        // Perform strict format checks: the value must use exactly 3 (space
+        // padded) characters for the age and exactly the given precision with
+        // two spaces between them.
+        static auto const age_width = 3;
+        static auto const gap_length = 2;
+
+        auto const start = line.c_str();
+
+        // We need to manually skip the leading whitespace as
+        // strict_parse_number() doesn't accept it.
+        auto start_num = start;
+        while(*start_num == ' ' || *start_num == '\t')
+            {
+            if(start_num - start == age_width)
+                {
+                std::ostringstream oss;
+                oss << "at most " << age_width - 1 << " spaces allowed "
+                    << "at the beginning of line " << line_num
+                    ;
+                throw std::runtime_error(oss.str());
+                }
+
+            ++start_num;
+            }
+
+        auto const res_age = strict_parse_number(start_num);
+        if(!res_age.end || (res_age.end - start != age_width))
+            {
+            std::ostringstream oss;
+            oss << "expected a number with at most " << age_width << " digits "
+                << "at line " << line_num
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        // There is no need to check for the range, we can't overflow uint16_t
+        // with just 3 digits.
+        auto const age = static_cast<uint16_t>(res_age.num);
+
+        if(line.compare(age_width, gap_length, std::string(gap_length, ' ')) != 0)
+            {
+            std::ostringstream oss;
+            oss << "expected a " << gap_length << " spaces after the age "
+                << "at line " << line_num
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        // We can't impose the exact number of decimal digits using standard
+        // functions for parsing floating point values, so do it manually.
+        auto const res_int_part = strict_parse_number(res_age.end + gap_length);
+        if(!res_int_part.end)
+            {
+            std::ostringstream oss;
+            oss << "expected a valid integer part at position "
+                << age_width + gap_length + 1
+                << " at line " << line_num
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        if(*res_int_part.end != '.')
+            {
+            std::ostringstream oss;
+            oss << "expected decimal point at position "
+                << res_int_part.end - start + 1
+                << " at line " << line_num
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        auto const res_frac_part = strict_parse_number(res_int_part.end + 1);
+        if(!res_frac_part.end)
+            {
+            std::ostringstream oss;
+            oss << "expected a valid fractional part at position "
+                << res_frac_part.end - start + 1
+                << " at line " << line_num
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        if(res_frac_part.end - res_int_part.end - 1 != *num_decimals_)
+            {
+            std::ostringstream oss;
+            oss << "expected " << *num_decimals_ << " decimal digits, not "
+                << res_frac_part.end - res_int_part.end - 1
+                << " in the value at line " << line_num
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        double value = res_frac_part.num;
+        value /= exponent;
+        value += res_int_part.num;
+
+        // Check that we have the correct age: we must start with the minimum
+        // age and each next value must be one greater than the previous one.
+        auto const age_expected = last_age ? *last_age + 1 : min_age;
+        if(age != age_expected)
+            {
+            std::ostringstream oss;
+            oss << "incorrect age value " << age
+                << " at line " << line_num
+                << " (" << age_expected << " expected)"
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        last_age = age;
+
+        // Because of the check above we can be certain that age > min_age.
+        unsigned const n = age - min_age;
+        values_[n] = value;
+
+        if (n == num_values - 1)
+            {
+            return;
+            }
+        }
+
+    // Check for premature input end.
+    std::ostringstream oss;
+    if(last_age)
+        {
+        oss << "only " << (*last_age - min_age + 1) << " values specified, "
+            << "but " << num_values << " expected"
+            ;
+        }
+    else
+        {
+        oss << "table values are missing after line " << line_num;
+        }
+
+    throw std::runtime_error(oss.str());
+}
+
 void table_impl::validate()
 {
     // Check that the fields we absolutely need were specified.
@@ -1014,7 +1433,198 @@ shared_ptr<table_impl> table_impl::create_from_binary
 
 void table_impl::read_from_text(std::istream& is)
 {
-    throw std::runtime_error("NIY");
+    using namespace text_format;
+
+    // The text format is line-oriented with a typical line containing a
+    // colon-separated "key: value" pair, however if a line doesn't contain a
+    // column it's supposed to be a continuation of the value of the previous
+    // line, which allows for multiline values (but without any commas except
+    // on the first line!).
+
+    // Current line number, only used for the error messages.
+    int line_num = 1;
+
+    // Now-owning pointer to the last string field value or null if none (e.g.
+    // no fields parsed at all yet or the last one wasn't a string). This is
+    // used for continuation lines handling.
+    std::string* last_string = nullptr;
+
+    for(std::string line; std::getline(is, line); ++line_num)
+        {
+        auto const pos_colon = line.find(':');
+        if(pos_colon != std::string::npos)
+            {
+            static char const* const whitespace = " \t";
+
+            // Discard trailing whitespace, it is insignificant and would just
+            // complicate the checks below.
+            auto const end_line = line.find_last_not_of(whitespace);
+            if(end_line == std::string::npos)
+                {
+                // Blank line, we only accept (and ignore) them after the end
+                // of the input, so check that nothing more is left.
+                int const blank_line_num = line_num;
+                for(++line_num; std::getline(is, line); ++line_num)
+                    {
+                    if(line.find_first_not_of(whitespace) != std::string::npos)
+                        {
+                        std::ostringstream oss;
+                        oss << "Blank line " << blank_line_num << " "
+                            << "cannot appear in the middle of the input "
+                            << "and be followed by non-blank line " << line_num
+                            ;
+                        throw std::runtime_error(oss.str());
+                        }
+                    }
+                break;
+                }
+
+            std::string const key(line, 0, pos_colon);
+
+            auto const field = parse_field_name(key, line_num);
+
+            // Special case of the table values field which doesn't have any
+            // value on this line itself.
+            if(field == e_field_values)
+                {
+                if(pos_colon + 1 != line.length())
+                    {
+                    std::ostringstream oss;
+                    oss << "Value not allowed after '" << key << ":' "
+                        << "at line " << line_num
+                        ;
+                    throw std::runtime_error(oss.str());
+                    }
+
+                parse_values(is, line_num);
+                continue;
+                }
+
+            // Almost all the other fields may only come before the table
+            // values.
+            if(!values_.empty() && field != e_field_hash_value)
+                {
+                std::ostringstream oss;
+                oss << "Field '" << key << "' is not allowed after the table "
+                    << "values at line " << line_num
+                    ;
+                throw std::runtime_error(oss.str());
+                }
+
+            if(pos_colon + 1 == line.length())
+                {
+                std::ostringstream oss;
+                oss << "Value expected after '" << key << ":' "
+                    << "at line " << line_num
+                    ;
+                throw std::runtime_error(oss.str());
+                }
+
+            if(line[pos_colon + 1] != ' ')
+                {
+                std::ostringstream oss;
+                oss << "Space expected after '" << key << ":' "
+                    << "at line " << line_num
+                    ;
+                throw std::runtime_error(oss.str());
+                }
+
+            std::string const value(line, pos_colon + 2); // +2 to skip ": "
+
+            last_string = nullptr; // reset it for non-string fields
+
+            switch(field)
+                {
+                case e_field_table_name:
+                    last_string = parse_string(name_, field, line_num, value);
+                    break;
+                case e_field_table_number:
+                    parse_number(number_, field, line_num, value);
+                    break;
+                case e_field_table_type:
+                    // This is a string field which is represented as an
+                    // integer internally, so it needs special handling.
+                    parse_table_type(line_num, value);
+                    break;
+                case e_field_contributor:
+                    last_string = parse_string(contributor_, field, line_num, value);
+                    break;
+                case e_field_data_source:
+                    last_string = parse_string(data_source_, field, line_num, value);
+                    break;
+                case e_field_data_volume:
+                    last_string = parse_string(data_volume_, field, line_num, value);
+                    break;
+                case e_field_obs_period:
+                    last_string = parse_string(obs_period_, field, line_num, value);
+                    break;
+                case e_field_unit_of_obs:
+                    last_string = parse_string(unit_of_obs_, field, line_num, value);
+                    break;
+                case e_field_construction_method:
+                    last_string = parse_string(construction_method_, field, line_num, value);
+                    break;
+                case e_field_published_reference:
+                    last_string = parse_string(published_reference_, field, line_num, value);
+                    break;
+                case e_field_comments:
+                    last_string = parse_string(comments_, field, line_num, value);
+                    break;
+                case e_field_min_age:
+                    parse_number(min_age_, field, line_num, value);
+                    break;
+                case e_field_max_age:
+                    parse_number(max_age_, field, line_num, value);
+                    break;
+                case e_field_select_period:
+                    parse_number(select_period_, field, line_num, value);
+                    break;
+                case e_field_max_select_age:
+                    parse_number(max_select_age_, field, line_num, value);
+                    break;
+                case e_field_num_decimals:
+                    parse_number(num_decimals_, field, line_num, value);
+                    break;
+                case e_field_values:
+                    // This field has been handled specially above, but still
+                    // have a case for it here to be warned by the compiler
+                    // about any missing enum values.
+                    throw std::logic_error
+                        ("Internal error: table values field impossible here."
+                        );
+                case e_field_hash_value:
+                    if(values_.empty())
+                        {
+                        std::ostringstream oss;
+                        oss << "'" << key << "' field is only allowed after "
+                            << "the table values, not at line " << line_num
+                            ;
+                        throw std::runtime_error(oss.str());
+                        }
+
+                    parse_number(hash_value_, field, line_num, value);
+                    break;
+                }
+            }
+        else // no colon in this line
+            {
+            // Must be a continuation of the previous line.
+            if(!last_string)
+                {
+                std::ostringstream oss;
+                oss << "Expected a colon on line " << line_num;
+                throw std::runtime_error(oss.str());
+                }
+
+            *last_string += '\n';
+            *last_string += line;
+
+            // Do not change last_string, more continuation lines can follow.
+            }
+        }
+
+    // Verify that all the required fields have been specified.
+    validate();
 }
 
 shared_ptr<table_impl> table_impl::create_from_text(std::istream& is)
@@ -1031,7 +1641,7 @@ void table_impl::do_write(std::ostream& os) const
 
     w.write(e_field_table_name         , name_                );
     w.write(e_field_table_number       , number_              );
-    w.write(e_field_table_type         , type_                );
+    w.write_table_type(type_);
     w.write(e_field_contributor        , contributor_         );
     w.write(e_field_data_source        , data_source_         );
     w.write(e_field_data_volume        , data_volume_         );
