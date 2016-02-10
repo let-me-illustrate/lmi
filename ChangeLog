@@ -38592,3 +38592,25 @@ Improve timestamping.
   fancy.make
 Resolve a marked defect.
 
+20160210T1812Z <gchicares@sbcglobal.net> [454]
+
+  workhorse.make
+Include automated GUI test in fardels.
+
+20160210T1816Z <gchicares@sbcglobal.net> [454]
+
+  install_msw.sh
+Synchronize 'make' output.
+
+20160210T1827Z <gchicares@sbcglobal.net> [454]
+
+  install_miscellanea.make
+  install_wx.make
+  install_wxpdfdoc.make
+Suppress voluminous and uninteresting 'unzip' output.
+
+20160210T1837Z <gchicares@sbcglobal.net> [454]
+
+  install_wx.make
+Upgrade wx.
+
