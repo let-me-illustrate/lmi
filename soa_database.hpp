@@ -48,9 +48,9 @@ class table_impl;
 class database_impl;
 
 /// A single table in SOA database.
+///
+/// This class has value semantics.
 class table
-    :        private lmi::uncopyable <table>
-    ,virtual private obstruct_slicing<table>
 {
   public:
     // table number: just an integer wrapped in a class for type-safety.
