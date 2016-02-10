@@ -32,6 +32,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <ostream>
+
 /// Namespace containing classes working with databases in SOA binary format.
 ///
 /// Support for other versions of the format, such as XML-based XTbML, could be
@@ -149,6 +151,13 @@ class database
   private:
     database_impl* const impl_;
 };
+
+inline std::ostream& operator<<(std::ostream& os, table::Number const& number)
+{
+    os << number.value();
+
+    return os;
+}
 
 } // namespace soa_binary_format
 

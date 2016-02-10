@@ -956,7 +956,7 @@ table database_impl::find_table(table::Number number) const
     if(!entry)
         {
         std::ostringstream oss;
-        oss << "table number " << number.value() << " not found.";
+        oss << "table number " << number << " not found.";
         throw std::invalid_argument(oss.str());
         }
 
@@ -969,7 +969,7 @@ void database_impl::do_append_table(table const& table)
         {
         std::ostringstream oss;
         oss << "Internal program error: unexpectedly duplicate table "
-               "number " << table.number().value();
+               "number " << table.number();
         throw std::logic_error(oss.str());
         }
 }
@@ -980,7 +980,7 @@ void database_impl::append_table(table const& table)
     if(do_find_table_entry(num))
         {
         std::ostringstream oss;
-        oss << "table number " << num.value() << " already exists.";
+        oss << "table number " << num << " already exists.";
         throw std::invalid_argument(oss.str());
         }
 
