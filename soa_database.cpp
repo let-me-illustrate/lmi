@@ -31,11 +31,11 @@
 #include "crc32.hpp"
 #include "path_utility.hpp"
 
-#include <boost/cstdint.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/optional.hpp>
 
+#include <cstdint>
 #include <fstream>
 #include <limits>
 #include <iomanip>
@@ -46,10 +46,10 @@
 #include <utility>      // make_pair()
 #include <vector>
 
-using boost::uint8_t;
-using boost::uint16_t;
-using boost::uint32_t;
-using boost::uint64_t;
+using std::uint8_t;
+using std::uint16_t;
+using std::uint32_t;
+using std::uint64_t;
 
 // The SOA binary format uses IEEE 754 for the floating point values
 // representation and the code in this file won't work correctly if it is
