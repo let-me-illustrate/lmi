@@ -356,10 +356,9 @@ void writer::write_values
     std::vector<double> little_endian_values;
     little_endian_values.reserve(values.size());
 
-    typedef std::vector<double>::const_iterator cdvit;
-    for(cdvit it = values.begin(); it != values.end(); ++it)
+    for(auto v: values)
         {
-        little_endian_values.push_back(swap_bytes_if_big_endian(*it));
+        little_endian_values.push_back(swap_bytes_if_big_endian(v));
         }
 #else // !WORDS_BIGENDIAN
     // No conversion necessary, don't create an extra vector needlessly, just
@@ -510,11 +509,10 @@ void writer::write_values
         unsigned const value_width = *num_decimals + 2;
 
         uint16_t age = *min_age;
-        typedef std::vector<double>::const_iterator cdvit;
-        for(cdvit it = values.begin(); it != values.end(); ++it, ++age)
+        for(auto v: values)
             {
-            os_ << std::setw(3) << age << "  "
-                << std::setw(value_width) << *it << "\n";
+            os_ << std::setw(3) << age++ << "  "
+                << std::setw(value_width) << v << "\n";
             }
         }
 }
@@ -846,10 +844,9 @@ void table_impl::read_values(std::istream& ifs, uint16_t /* length */)
         throw std::runtime_error("failed to read the values");
         }
 
-    typedef std::vector<double>::iterator dvit;
-    for(dvit it = values_.begin(); it != values_.end(); ++it)
+    for(auto& v: values_)
         {
-        *it = swap_bytes_if_big_endian(*it);
+        v = swap_bytes_if_big_endian(v);
         }
 }
 
@@ -1094,10 +1091,9 @@ unsigned long table_impl::compute_hash_value() const
     oss << std::fixed << std::setprecision(*num_decimals_);
     unsigned const value_width = *num_decimals_ + 2;
 
-    typedef std::vector<double>::const_iterator cdvit;
-    for(cdvit it = values_.begin(); it != values_.end(); ++it)
+    for(auto v: values_)
         {
-        oss << std::setw(value_width) << *it;
+        oss << std::setw(value_width) << v;
         }
 
     std::string s = oss.str();
@@ -1473,10 +1469,9 @@ void database_impl::save(fs::path const& path)
 
     char index_record[e_index_pos_max] = {0};
 
-    typedef std::vector<IndexEntry>::const_iterator cieit;
-    for(cieit it = index_.begin(); it != index_.end(); ++it)
+    for(auto const& i: index_)
         {
-        shared_ptr<table_impl> const t = do_get_table_impl(*it);
+        shared_ptr<table_impl> const t = do_get_table_impl(i);
 
         // The offset of this table is just the current position of the output
         // stream, so get it before it changes and check that it is still
