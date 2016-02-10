@@ -29,8 +29,10 @@
 #include "soa_database.hpp"
 
 #include "crc32.hpp"
+#include "path_utility.hpp"
 
 #include <boost/cstdint.hpp>
+#include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/optional.hpp>
 
@@ -40,6 +42,7 @@
 #include <map>
 #include <memory>
 #include <sstream>
+#include <stdexcept>
 #include <utility>      // make_pair()
 #include <vector>
 
