@@ -539,11 +539,11 @@ class table_impl
     // binary or text representation.
     //
     // Throws std::runtime_error on error.
-    static boost::shared_ptr<table_impl> create_from_binary
+    static shared_ptr<table_impl> create_from_binary
         (std::istream& is
         ,uint32_t offset
         );
-    static boost::shared_ptr<table_impl> create_from_text(std::istream& is);
+    static shared_ptr<table_impl> create_from_text(std::istream& is);
 
     void write_as_binary(std::ostream& os) const { do_write<binary_format::writer>(os); }
     void write_as_text(std::ostream& os) const { do_write<text_format::writer>(os); }
@@ -1005,14 +1005,12 @@ void table_impl::read_from_binary(std::istream& ifs, uint32_t offset)
         }
 }
 
-boost::shared_ptr<table_impl> table_impl::create_from_binary
+shared_ptr<table_impl> table_impl::create_from_binary
     (std::istream& is
     ,uint32_t offset
     )
 {
-    // BOOST !! Use make_shared() to avoid double heap allocation pessimization
-    // when a version of Boost new enough to have it is available.
-    boost::shared_ptr<table_impl> table(new table_impl);
+    shared_ptr<table_impl> table = std::make_shared<table_impl>();
     table->read_from_binary(is, offset);
     return table;
 }
@@ -1022,11 +1020,9 @@ void table_impl::read_from_text(std::istream& is)
     throw std::runtime_error("NIY");
 }
 
-boost::shared_ptr<table_impl> table_impl::create_from_text(std::istream& is)
+shared_ptr<table_impl> table_impl::create_from_text(std::istream& is)
 {
-    // BOOST !! Use make_shared() to avoid double heap allocation pessimization
-    // when a version of Boost new enough to have it is available.
-    boost::shared_ptr<table_impl> table(new table_impl);
+    shared_ptr<table_impl> table = std::make_shared<table_impl>();
     table->read_from_text(is);
     return table;
 }
@@ -1212,7 +1208,7 @@ class database_impl
         IndexEntry
             (table::Number number
             ,uint32_t offset
-            ,boost::shared_ptr<table_impl> table
+            ,shared_ptr<table_impl> table
             )
             :number_(number.value())
             ,offset_(offset)
@@ -1229,7 +1225,7 @@ class database_impl
 
         // table pointer may be empty for the tables present in the input
         // database file but not loaded yet.
-        mutable boost::shared_ptr<table_impl> table_;
+        mutable shared_ptr<table_impl> table_;
     };
 
     // Add an entry to the index. This method should be always used instead of
@@ -1241,12 +1237,12 @@ class database_impl
     bool add_index_entry
         (table::Number number
         ,uint32_t offset
-        ,boost::shared_ptr<table_impl> table = boost::shared_ptr<table_impl>()
+        ,shared_ptr<table_impl> table = shared_ptr<table_impl>()
         );
 
     // Return the table corresponding to the given index entry, loading it from
     // the database file if this hadn't been done yet.
-    boost::shared_ptr<table_impl> do_get_table_impl(IndexEntry const& entry) const;
+    shared_ptr<table_impl> do_get_table_impl(IndexEntry const& entry) const;
     table do_get_table(IndexEntry const& entry) const
         {
         return table(do_get_table_impl(entry));
@@ -1297,7 +1293,7 @@ database_impl::database_impl(fs::path const& path)
 bool database_impl::add_index_entry
     (table::Number number
     ,uint32_t offset
-    ,boost::shared_ptr<table_impl> table
+    ,shared_ptr<table_impl> table
     )
 {
     index_.push_back(IndexEntry(number, offset, table));
@@ -1372,7 +1368,7 @@ table database_impl::get_nth_table(int idx) const
     return do_get_table(index_.at(idx));
 }
 
-boost::shared_ptr<table_impl> database_impl::do_get_table_impl
+shared_ptr<table_impl> database_impl::do_get_table_impl
     (IndexEntry const& entry
     ) const
 {
@@ -1480,7 +1476,7 @@ void database_impl::save(fs::path const& path)
     typedef std::vector<IndexEntry>::const_iterator cieit;
     for(cieit it = index_.begin(); it != index_.end(); ++it)
         {
-        boost::shared_ptr<table_impl> const t = do_get_table_impl(*it);
+        shared_ptr<table_impl> const t = do_get_table_impl(*it);
 
         // The offset of this table is just the current position of the output
         // stream, so get it before it changes and check that it is still

@@ -29,9 +29,9 @@
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <memory>
 #include <ostream>
 
 /// Namespace containing classes working with databases in version 3 of the SOA
@@ -46,6 +46,8 @@ namespace soa_v3_format
 
 class table_impl;
 class database_impl;
+
+using std::shared_ptr;
 
 /// A single table in SOA database.
 ///
@@ -94,12 +96,12 @@ class table
 
   private:
     // Private ctor used only by database.
-    explicit table(boost::shared_ptr<table_impl> const& impl)
+    explicit table(shared_ptr<table_impl> const& impl)
         :impl_(impl)
     {
     }
 
-    boost::shared_ptr<table_impl> impl_;
+    shared_ptr<table_impl> impl_;
 
     friend database_impl;
 };
