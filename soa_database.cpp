@@ -196,7 +196,7 @@ void open_file(T& ifs, fs::path const& path, std::ios_base::openmode mode)
 template<typename T>
 inline void open_text_file(T& fs, fs::path const& path)
 {
-    open_file(fs, path, 0);
+    open_file(fs, path, static_cast<std::ios_base::openmode>(0));
 }
 
 template<typename T>
