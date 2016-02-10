@@ -254,6 +254,8 @@ TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
 %.tar.gz:  TARFLAGS += --gzip
 
+UNZIPFLAGS := -q
+
 WGETFLAGS :=
 
 .PHONY: %.tar.bz2 %.tar.gz
@@ -272,7 +274,7 @@ WGETFLAGS :=
 %.zip:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	$(ECHO) "$($@-md5) *$(cache_dir)/$@" | $(MD5SUM) --check
-	-$(UNZIP) $(cache_dir)/$@ -d scratch
+	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d scratch
 
 # Maintenance ##################################################################
 
