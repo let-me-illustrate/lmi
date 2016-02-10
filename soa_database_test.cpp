@@ -40,6 +40,8 @@ namespace
 
 std::string const qx_cso_path("/opt/lmi/data/qx_cso");
 
+int const qx_cso_num_tables = 142;
+
 /// SOA insurance table database.
 
 std::string const qx_ins_path("/opt/lmi/data/qx_ins");
@@ -202,13 +204,11 @@ std::vector<double> table_256(int age, int duration)
 
 } // Unnamed namespace.
 
-/// Test general preconditions.
-///
-/// Table numbers must be positive.
+/// Test opening database files.
 ///
 /// Both '.ndx' and '.dat' files must exist.
 
-void test_precondition_failures()
+void test_database_open()
 {
     BOOST_TEST_THROW
         (database("nonexistent")
@@ -225,9 +225,45 @@ void test_precondition_failures()
         ,std::runtime_error
         ,"File 'eraseme.dat' could not be opened for reading."
         );
-    BOOST_TEST(0 == std::remove("eraseme.ndx"));
+    BOOST_TEST_EQUAL(std::remove("eraseme.ndx"), 0);
+}
 
+void test_table_access_by_index()
+{
     database qx_cso(qx_cso_path);
+    BOOST_TEST(qx_cso_num_tables == qx_cso.tables_count());
+
+    // Just check that using valid indices doesn't throw.
+    qx_cso.get_nth_table(0);
+    qx_cso.get_nth_table(1);
+    qx_cso.get_nth_table(qx_cso_num_tables - 1);
+
+    BOOST_TEST_THROW
+        (qx_cso.get_nth_table(-1)
+        ,std::out_of_range
+        ,""
+        );
+
+    BOOST_TEST_THROW
+        (qx_cso.get_nth_table(qx_cso_num_tables)
+        ,std::out_of_range
+        ,""
+        );
+
+    BOOST_TEST_THROW
+        (qx_cso.get_nth_table(qx_cso_num_tables + 1)
+        ,std::out_of_range
+        ,""
+        );
+}
+
+void test_table_access_by_number()
+{
+    database qx_cso(qx_cso_path);
+
+    table::Number const number(qx_cso.get_nth_table(0).number());
+    BOOST_TEST_EQUAL(qx_cso.find_table(number).number(), number);
+
     BOOST_TEST_THROW
         (qx_cso.find_table(table::Number(0))
         ,std::invalid_argument
@@ -237,7 +273,9 @@ void test_precondition_failures()
 
 int test_main(int, char*[])
 {
-    test_precondition_failures();
+    test_database_open();
+    test_table_access_by_index();
+    test_table_access_by_number();
 
     return EXIT_SUCCESS;
 }
