@@ -37,8 +37,9 @@ stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
 # '--jobs=4': big benefit for multicore, no penalty for single core.
-# '--output-sync=recurse': facilitates log comparison.
-export coefficiency='--jobs=4 --output-sync=recurse'
+# '--output-sync=recurse' is also used, passim, to facilitate log
+# comparison.
+export coefficiency='--jobs=4'
 
 mount
 
@@ -133,26 +134,26 @@ find /cache_for_lmi/downloads -type f | xargs md5sum
 
 rm --force --recursive scratch
 rm --force --recursive /MinGW_
-make $coefficiency -f install_mingw.make
-make $coefficiency -f install_mpatrol.make
+make $coefficiency --output-sync=recurse -f install_mingw.make
+make $coefficiency --output-sync=recurse -f install_mpatrol.make
 
-make $coefficiency -f install_miscellanea.make clobber
-make $coefficiency -f install_miscellanea.make
+make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
+make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
-make $coefficiency -f install_libxml2_libxslt.make
+make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
-make $coefficiency -f install_wx.make
+make $coefficiency --output-sync=recurse -f install_wx.make
 
-make $coefficiency -f install_wxpdfdoc.make
+make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make
 
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
 export         PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 export minimal_path=/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/bin:/bin:/usr/sbin:/sbin
 
-make $coefficiency PATH=$minimal_path wx_config_check
-make $coefficiency PATH=$minimal_path show_flags
-make $coefficiency PATH=$minimal_path install
+make $coefficiency --output-sync=recurse PATH=$minimal_path wx_config_check
+make $coefficiency --output-sync=recurse PATH=$minimal_path show_flags
+make $coefficiency --output-sync=recurse PATH=$minimal_path install
 
 # No lmi binary should depend on any Cygwin library.
 
