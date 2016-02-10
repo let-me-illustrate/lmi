@@ -831,10 +831,16 @@ bool database_impl::add_index_entry
 {
     index_.push_back(IndexEntry(number, offset, table));
 
-    // We expect an insertion to be made as the map shouldn't contain this
-    // number yet, but can't generate the appropriate error message here if it
-    // does, so let the caller do it.
-    return index_by_number_.insert(std::make_pair(number, index_.size())).second;
+    // The index of this entry is the last index of the index_, by construction.
+    if(!index_by_number_.insert(std::make_pair(number, index_.size() - 1)).second)
+        {
+        // We expect an insertion to be made as the map shouldn't contain this
+        // number yet, but can't generate the appropriate error message here if
+        // it does, so let the caller do it.
+        return false;
+        }
+
+    return true;
 }
 
 void database_impl::read_index(fs::path const& path)
