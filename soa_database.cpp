@@ -217,7 +217,7 @@ inline bool stream_write(std::ostream& os, void const* data, std::size_t length)
 inline bool stream_read(std::istream& is, void* data, std::size_t length)
 {
     is.read(static_cast<char*>(data), length);
-    return is.gcount() == length;
+    return is.gcount() == static_cast<std::streamsize>(length);
 }
 
 // Description of all the SOA fields for both formats.
