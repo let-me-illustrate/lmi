@@ -1015,6 +1015,7 @@ fardel_binaries := \
   $(bin_dir)/lmi_wx_shared$(EXEEXT) \
   $(bin_dir)/skeleton$(SHREXT) \
   $(bin_dir)/wx_new$(SHREXT) \
+  $(bin_dir)/wx_test$(EXEEXT) \
   $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
   $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
   $(wildcard $(bin_dir)/product_files$(EXEEXT)) \
