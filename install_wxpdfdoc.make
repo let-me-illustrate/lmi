@@ -88,8 +88,6 @@ RMDIR  := rmdir
 UNZIP  := unzip
 WGET   := wget
 
-WGETFLAGS :=
-
 # Targets ######################################################################
 
 .PHONY: all
@@ -102,11 +100,15 @@ initial_setup:
 	@$(MKDIR) --parents $(cache_dir)
 	@$(MKDIR) --parents $(wxpdfdoc_dir)
 
+UNZIPFLAGS := -q
+
+WGETFLAGS :=
+
 .PHONY: %.zip
 %.zip: initial_setup
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) --output-document=$@ $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	-$(UNZIP) $(cache_dir)/$@ -d $(wxpdfdoc_dir)
+	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wxpdfdoc_dir)
 
 .PHONY: wxpdfdoc
 wxpdfdoc: $(wxpdfdoc_archive)

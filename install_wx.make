@@ -169,11 +169,13 @@ initial_setup:
 	@$(MKDIR) --parents $(cache_dir)
 	@$(MKDIR) --parents $(build_dir)
 
-WGETFLAGS :=
-
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
 %.tar.gz:  TARFLAGS += --gzip
+
+UNZIPFLAGS := -q
+
+WGETFLAGS :=
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
@@ -192,7 +194,7 @@ TARFLAGS := --keep-old-files
 %.zip:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) --output-document=$@ $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	-$(UNZIP) $(cache_dir)/$@ -d $(wx_dir)
+	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wx_dir)
 
 .PHONY: wx
 wx:
