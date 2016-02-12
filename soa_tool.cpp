@@ -323,13 +323,32 @@ int main(int argc, char* argv[])
               }
           }
 
+        // usage() doesn't allow us to specify the arguments directly, so force
+        // it to show it in this ugly way:
+        std::string name_with_arg(argv[0]);
+        name_with_arg += " <database-file>";
+        argv[0] = const_cast<char*>(name_with_arg.c_str());
+
         if((c = getopt_long.optind) < argc)
-          {
-            std::printf ("non-option ARGV-elements: ");
-            while (c < argc)
-              std::printf ("%s ", argv[c++]);
-            std::printf ("\n");
-          }
+            {
+            if(database_filename.string().empty())
+                {
+                database_filename = argv[c];
+                }
+            else
+                {
+                std::cerr << "Either positional argument or --file option can be used, but not both.\n";
+                getopt_long.usage();
+                return EXIT_FAILURE;
+                }
+
+            if(c + 1 != argc)
+                {
+                std::cerr << "Only a single database file argument allowed.\n";
+                getopt_long.usage();
+                return EXIT_FAILURE;
+                }
+            }
 
         if(!license_accepted)
             {
@@ -362,6 +381,13 @@ int main(int argc, char* argv[])
             default:
                 std::cerr << "At most one operation can be selected.\n";
                 return EXIT_FAILURE;
+            }
+
+        if(database_filename.string().empty())
+            {
+            std::cerr << "Database file must be specified.\n";
+            getopt_long.usage();
+            return EXIT_FAILURE;
             }
 
         if(run_crc)
