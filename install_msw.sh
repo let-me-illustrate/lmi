@@ -135,7 +135,6 @@ find /cache_for_lmi/downloads -type f | xargs md5sum
 rm --force --recursive scratch
 rm --force --recursive /MinGW_
 make $coefficiency --output-sync=recurse -f install_mingw.make
-make $coefficiency --output-sync=recurse -f install_mpatrol.make
 
 make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
 make $coefficiency --output-sync=recurse -f install_miscellanea.make

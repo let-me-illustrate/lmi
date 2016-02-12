@@ -182,9 +182,6 @@ REQUIRED_LIBS := \
   \\opt/lmi/local/lib/libxslt.dll.a \
   \\opt/lmi/local/lib/libxml2.dll.a \
 
-# SOMEDAY !! Use mpatrol.
-MPATROL_LIBS :=
-
 excluded_unit_test_targets := \
   regex_test \
   round_test \
@@ -240,7 +237,6 @@ CXX := \
 	                                 LD='$(LD)' \
 	                            LDFLAGS='$(LDFLAGS)' \
 	                      REQUIRED_LIBS='$(REQUIRED_LIBS)' \
-	                       MPATROL_LIBS='$(MPATROL_LIBS)' \
 	                   platform_defines='' \
 	         excluded_unit_test_targets='$(excluded_unit_test_targets)' \
 	                            GNU_CPP='$(GNU_CPP)' \

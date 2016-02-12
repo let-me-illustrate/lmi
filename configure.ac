@@ -98,17 +98,6 @@ AC_ARG_ENABLE(profiling,
                    *) AC_MSG_ERROR(bad value ${enableval} for --enable-profiling) ;;
              esac], [profiling_option=default])
 
-AC_ARG_ENABLE(mpatrol,
-             [AC_HELP_STRING([--with-mpatrol],
-                             [use mpatrol for memory allocation debugging])],
-             [case "x${withvap}" in
-                   x) lmi_mpatrol_option=yes ;;
-                xyes) lmi_mpatrol_option=yes ;;
-                 xno) lmi_mpatrol_option=no ;;
-                   *) AC_MSG_ERROR(bad value ${withvap} for --with-mpatrol) ;;
-             esac], lmi_mpatrol_option=no)
-AM_CONDITIONAL(LMI_WITH_MEMORY_DEBUG, [ test "x$lmi_mpatrol_option" = "xyes" ])
-
 AC_ARG_ENABLE(cgicc,
              [AC_HELP_STRING([--enable-cgicc],
                              [build cgi targets using installed cgicc.])],

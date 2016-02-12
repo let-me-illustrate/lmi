@@ -117,7 +117,6 @@ TESTS = \
     test_mc_enum \
     test_miscellany \
     test_mortality_rates \
-    test_mpatrol_patch \
     test_name_value_pairs \
     test_ncnnnpnn \
     test_numeric_io \
@@ -811,11 +810,6 @@ test_mortality_rates_SOURCES = \
   ihs_mortal.cpp \
   mortality_rates_test.cpp
 test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
-
-test_mpatrol_patch_SOURCES = \
-  $(common_test_objects) \
-  mpatrol_patch_test.cpp
-test_mpatrol_patch_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_name_value_pairs_SOURCES = \
   $(common_test_objects) \

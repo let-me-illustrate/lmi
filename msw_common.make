@@ -48,9 +48,6 @@ platform_gnome_xml_libraries := \
   -lxslt \
   -lxml2 \
 
-platform_mpatrol_libraries := \
-  -limagehlp \
-
 platform_wx_libraries := \
   -lwx_new \
   -lwxmsw25d \
