@@ -661,7 +661,7 @@ class table_impl
     static
     void read_string
             (boost::optional<std::string>& ostr
-            ,char const* name
+            ,enum_soa_field field
             ,std::istream& ifs
             ,uint16_t length
             );
@@ -674,7 +674,7 @@ class table_impl
     static
     void read_number
             (boost::optional<T>& onum
-            ,char const* name
+            ,enum_soa_field field
             ,std::istream& ifs
             ,uint16_t length
             );
@@ -687,7 +687,7 @@ class table_impl
     // error).
     void read_number_before_values
             (boost::optional<uint16_t>& onum
-            ,char const* name
+            ,enum_soa_field field
             ,std::istream& ifs
             ,uint16_t length
             );
@@ -790,12 +790,14 @@ namespace
 //
 // This version is used for the binary IO.
 inline
-void throw_if_duplicate_record(bool do_throw, char const* name)
+void throw_if_duplicate_record(bool do_throw, enum_soa_field field)
 {
     if(do_throw)
         {
         std::ostringstream oss;
-        oss << "duplicate occurrence of the field '" << name << "'";
+        oss << "duplicate occurrence of the field '"
+            << soa_fields[field].name
+            << "'";
         throw std::runtime_error(oss.str());
         }
 }
@@ -821,12 +823,14 @@ void throw_if_duplicate_record(bool do_throw, enum_soa_field field, int line_num
 // is true.
 template<typename T>
 inline
-void throw_if_missing_field(boost::optional<T> const& o, char const* name)
+void throw_if_missing_field(boost::optional<T> const& o, enum_soa_field field)
 {
     if(!o)
         {
         std::ostringstream oss;
-        oss << "required field '" << name << "' was not specified";
+        oss << "required field '"
+            << soa_fields[field].name
+            << "' was not specified";
         throw std::runtime_error(oss.str());
         }
 }
@@ -835,12 +839,12 @@ void throw_if_missing_field(boost::optional<T> const& o, char const* name)
 
 void table_impl::read_string
         (boost::optional<std::string>& ostr
-        ,char const* name
+        ,enum_soa_field field
         ,std::istream& ifs
         ,uint16_t length
         )
 {
-    throw_if_duplicate_record(ostr.is_initialized(), name);
+    throw_if_duplicate_record(ostr.is_initialized(), field);
 
     std::string str;
     str.resize(length);
@@ -848,7 +852,9 @@ void table_impl::read_string
         {
         std::ostringstream oss;
         oss << "failed to read all " << length << " bytes of the field '"
-            << name << "'";
+            << soa_fields[field].name
+            << "'"
+            ;
         throw std::runtime_error(oss.str());
         }
 
@@ -872,27 +878,30 @@ T table_impl::do_read_number(char const* name, std::istream& ifs)
 template<typename T>
 void table_impl::read_number
         (boost::optional<T>& onum
-        ,char const* name
+        ,enum_soa_field field
         ,std::istream& ifs
         ,uint16_t length
         )
 {
-    throw_if_duplicate_record(onum.is_initialized(), name);
+    throw_if_duplicate_record(onum.is_initialized(), field);
 
     if(length != sizeof(T))
         {
         std::ostringstream oss;
         oss << "unexpected length " << length
-            << " for the field '" << name << "', expected " << sizeof(T);
+            << " for the field '"
+            << soa_fields[field].name
+            << "', expected " << sizeof(T)
+            ;
         throw std::runtime_error(oss.str());
         }
 
-    onum = do_read_number<T>(name, ifs);
+    onum = do_read_number<T>(soa_fields[field].name, ifs);
 }
 
 void table_impl::read_number_before_values
         (boost::optional<uint16_t>& onum
-        ,char const* name
+        ,enum_soa_field field
         ,std::istream& ifs
         ,uint16_t length
         )
@@ -900,17 +909,20 @@ void table_impl::read_number_before_values
     if(!values_.empty())
         {
         std::ostringstream oss;
-        oss << "field '" << name << "' must occur before the values";
+        oss << "field '"
+            << soa_fields[field].name
+            << "' must occur before the values"
+            ;
         throw std::runtime_error(oss.str());
         }
 
-    read_number(onum, name, ifs, length);
+    read_number(onum, field, ifs, length);
 }
 
 unsigned table_impl::get_expected_number_of_values() const
 {
-    throw_if_missing_field(min_age_, "minimum age");
-    throw_if_missing_field(max_age_, "maximum age");
+    throw_if_missing_field(min_age_, e_field_min_age);
+    throw_if_missing_field(max_age_, e_field_max_age);
 
     // Compute the expected number of values, checking the consistency of the
     // fields determining this as a side effect.
@@ -983,7 +995,7 @@ unsigned table_impl::get_expected_number_of_values() const
 
 void table_impl::read_values(std::istream& ifs, uint16_t /* length */)
 {
-    throw_if_duplicate_record(!values_.empty(), "values");
+    throw_if_duplicate_record(!values_.empty(), e_field_values);
 
     // 2 byte length field can only represent values up to 2^16, i.e. only up
     // to 2^16/2^3 == 8192 double-sized elements, which is not enough for the
@@ -1266,8 +1278,8 @@ void table_impl::parse_values(std::istream& is, int& line_num)
 void table_impl::validate()
 {
     // Check that the fields we absolutely need were specified.
-    throw_if_missing_field(number_, "table number");
-    throw_if_missing_field(type_, "table type");
+    throw_if_missing_field(number_, e_field_table_number);
+    throw_if_missing_field(type_, e_field_table_type);
 
     // Check that we have the values: this also ensures that we have the
     // correct minimum and maximum age as this is verified when filling in the
@@ -1354,58 +1366,58 @@ void table_impl::read_from_binary(std::istream& ifs, uint32_t offset)
         switch(record_type)
             {
             case e_record_table_name:
-                read_string(name_, "name", ifs, length);
+                read_string(name_, e_field_table_name, ifs, length);
                 break;
             case e_record_table_number:
-                read_number(number_, "table number", ifs, length);
+                read_number(number_, e_field_table_number, ifs, length);
                 break;
             case e_record_table_type:
-                read_number(type_, "table type", ifs, length);
+                read_number(type_, e_field_table_type, ifs, length);
                 break;
             case e_record_contributor:
-                read_string(contributor_, "contributor", ifs, length);
+                read_string(contributor_, e_field_contributor, ifs, length);
                 break;
             case e_record_data_source:
-                read_string(data_source_, "data source", ifs, length);
+                read_string(data_source_, e_field_data_source, ifs, length);
                 break;
             case e_record_data_volume:
-                read_string(data_volume_, "data volume", ifs, length);
+                read_string(data_volume_, e_field_data_volume, ifs, length);
                 break;
             case e_record_obs_period:
-                read_string(obs_period_, "observation period", ifs, length);
+                read_string(obs_period_, e_field_obs_period, ifs, length);
                 break;
             case e_record_unit_of_obs:
-                read_string(unit_of_obs_, "unit of observation", ifs, length);
+                read_string(unit_of_obs_, e_field_unit_of_obs, ifs, length);
                 break;
             case e_record_construction_method:
-                read_string(construction_method_, "construction method", ifs, length);
+                read_string(construction_method_, e_field_construction_method, ifs, length);
                 break;
             case e_record_published_reference:
-                read_string(published_reference_, "published reference", ifs, length);
+                read_string(published_reference_, e_field_published_reference, ifs, length);
                 break;
             case e_record_comments:
-                read_string(comments_, "comments", ifs, length);
+                read_string(comments_, e_field_comments, ifs, length);
                 break;
             case e_record_min_age:
-                read_number(min_age_, "minimum age", ifs, length);
+                read_number(min_age_, e_field_min_age, ifs, length);
                 break;
             case e_record_max_age:
-                read_number(max_age_, "maximum age", ifs, length);
+                read_number(max_age_, e_field_max_age, ifs, length);
                 break;
             case e_record_select_period:
-                read_number_before_values(select_period_, "select period", ifs, length);
+                read_number_before_values(select_period_, e_field_select_period, ifs, length);
                 break;
             case e_record_max_select_age:
-                read_number_before_values(max_select_age_, "maximum select age", ifs, length);
+                read_number_before_values(max_select_age_, e_field_max_select_age, ifs, length);
                 break;
             case e_record_num_decimals:
-                read_number(num_decimals_, "number of decimal places", ifs, length);
+                read_number(num_decimals_, e_field_num_decimals, ifs, length);
                 break;
             case e_record_values:
                 read_values(ifs, length);
                 break;
             case e_record_hash_value:
-                read_number(hash_value_, "hash value", ifs, length);
+                read_number(hash_value_, e_field_hash_value, ifs, length);
                 break;
             default:
                 std::ostringstream oss;
