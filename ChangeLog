@@ -38645,3 +38645,11 @@ Abandon mpatrol.
   workhorse.make
 Abandon MSYS.
 
+20160212T2223Z <gchicares@sbcglobal.net> [454]
+
+  bcc_5_5_1.make
+  main_wx.cpp
+  test_coding_rules.cpp
+  value_cast_test.cpp
+Remove certain mpatrol vestiges.
+
