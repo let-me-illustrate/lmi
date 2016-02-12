@@ -207,6 +207,7 @@ int main(int argc, char* argv[])
     bool run_merge        = false;
     bool run_extract      = false;
     bool run_rename       = false;
+    int  num_to_run       = 0;
 
     fs::path database_filename;
     fs::path new_database_filename;
@@ -266,18 +267,21 @@ int main(int argc, char* argv[])
               case 'c':
                 {
                 run_crc = true;
+                ++num_to_run;
                 }
                 break;
 
               case 't':
                 {
                 run_list = true;
+                ++num_to_run;
                 }
                 break;
 
               case 's':
                 {
                 run_squeeze = true;
+                ++num_to_run;
                 new_database_filename = getopt_long.optarg;
                 }
                 break;
@@ -285,6 +289,7 @@ int main(int argc, char* argv[])
               case 'm':
                 {
                 run_merge = true;
+                ++num_to_run;
                 filename_to_merge = getopt_long.optarg;
                 }
                 break;
@@ -292,6 +297,7 @@ int main(int argc, char* argv[])
               case 'e':
                 {
                 run_extract = true;
+                ++num_to_run;
                 table_number_to_extract = std::atoi(getopt_long.optarg);
                 }
                 break;
@@ -342,6 +348,22 @@ int main(int argc, char* argv[])
             return EXIT_SUCCESS;
             }
 
+        switch(num_to_run)
+            {
+            case 0:
+                std::cerr << "Please use exactly one of --crc, --list, --squeeze, --merge or --extract.\n";
+                getopt_long.usage();
+                return EXIT_FAILURE;
+
+            case 1:
+                // Continue and process the single selected operation below.
+                break;
+
+            default:
+                std::cerr << "At most one operation can be selected.\n";
+                return EXIT_FAILURE;
+            }
+
         if(run_crc)
             {
             calculate_and_display_crcs(database_filename);
@@ -376,15 +398,16 @@ int main(int argc, char* argv[])
             extract(database_filename, table_number_to_extract);
             return EXIT_SUCCESS;
             }
+
+        std::cerr << "Unexpected unknown run mode, nothing done.\n";
         }
     catch(std::exception& e)
         {
         std::cerr << "Fatal exception: " << e.what() << '\n';
-        return EXIT_FAILURE;
         }
     catch(...)
         {
         std::cerr << "Nonspecific fatal exception\n";
-        return EXIT_FAILURE;
         }
+    return EXIT_FAILURE;
 }
