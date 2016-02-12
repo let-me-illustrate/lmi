@@ -288,7 +288,6 @@ enum enum_soa_field
     ,e_field_num_decimals
     ,e_field_values
     ,e_field_hash_value
-    ,e_field_end_table
     };
 
 // This enum defines the field record types used in the binary SOA format and
@@ -336,7 +335,6 @@ static soa_field const soa_fields[] =
    ,{ e_record_num_decimals       , "Number of decimal places" }
    ,{ e_record_values             , "Table values"             }
    ,{ e_record_hash_value         , "Hash value"               }
-   ,{ e_record_end_table          , NULL                       }
 };
 
 } // anonymous namespace
@@ -599,10 +597,6 @@ void writer::end()
 
 // Return the field corresponding to the given name or throw an exception if
 // none was found (the line number appears in the error message).
-//
-// Notice that e_field_end_table will never be returned by this function as the
-// end of the table is indicated simply by the end of the file in the text
-// format.
 enum_soa_field parse_field_name(std::string const& name, int line_num)
 {
     int n = 0;
