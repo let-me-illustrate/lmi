@@ -69,7 +69,7 @@ int WINAPI WinMain
     )
 #endif // LMI_MSW defined.
 {
-    // WX !! and MPATROL !! Using wx-2.5.1 and mpatrol-1.4.8, both
+    // (Historical notes.) Using wx-2.5.1 and mpatrol-1.4.8, both
     // dynamically linked to this application built with gcc-3.2.3,
     // three memory leaks are reported with:
     //   MPATROL_OPTIONS='SHOWUNFREED'
