@@ -38614,3 +38614,9 @@ Suppress voluminous and uninteresting 'unzip' output.
   install_wx.make
 Upgrade wx.
 
+20160212T1246Z <gchicares@sbcglobal.net> [454]
+
+  install_wx.make
+Upgrade wx. See:
+  http://lists.nongnu.org/archive/html/lmi/2016-02/msg00036.html
+

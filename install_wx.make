@@ -66,8 +66,10 @@ ifneq ($(use_git), N)
 
 # wx_commit_sha     := 0b821adf903872b6d8b56630d2191c5b9c3362e5
 # wx_md5            := ac28a959aabe36e26ea039ed78a51b54
-  wx_commit_sha     := 730c1ee79b77b3eab58881492b2de6b659319ba2
-  wx_md5            := 1ce7f42362ba3075eeb4be4679f88dd3
+# wx_commit_sha     := 730c1ee79b77b3eab58881492b2de6b659319ba2
+# wx_md5            := 1ce7f42362ba3075eeb4be4679f88dd3
+  wx_commit_sha     := 4475fe36a54cd62457dcd73c8739b1e7d46e1cde
+  wx_md5            := 47e4a36d8164ec4c69cab68a3d05f951
 
   wx_version        := $(wx_commit_sha)
 
