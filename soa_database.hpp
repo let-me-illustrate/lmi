@@ -86,6 +86,7 @@ class table
     // Observers for some table fields.
     Number number() const;
     std::string const& name() const;
+    char const* type_as_string() const;
 
     // Method computing the hash value as used in the original SOA format.
     unsigned long compute_hash_value() const;

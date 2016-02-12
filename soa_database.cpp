@@ -652,6 +652,7 @@ class table_impl
     void name(std::string const& name) { name_ = name; }
     uint32_t number() const { return *number_; }
     std::string const& name() const { return *name_; }
+    char const* type_as_string() const { return table_type_as_string(*type_); }
     unsigned long compute_hash_value() const;
 
   private:
@@ -1801,6 +1802,11 @@ table::Number table::number() const
 std::string const& table::name() const
 {
     return impl_->name();
+}
+
+char const* table::type_as_string() const
+{
+    return impl_->type_as_string();
 }
 
 unsigned long table::compute_hash_value() const

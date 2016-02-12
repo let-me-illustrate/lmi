@@ -69,6 +69,22 @@ void calculate_and_display_crcs(fs::path const& database_filename)
         }
 }
 
+void list_tables(fs::path const& database_filename)
+{
+    database const table_file(database_filename);
+    for(int i = 0; i != table_file.tables_count(); ++i)
+        {
+        table const& t = table_file.get_nth_table(i);
+        std::cout
+            << std::setw( 5) << std::setfill('0')
+            << t.number().value()
+            << ' '
+            << t.name()
+            << " [" << t.type_as_string() << "]\n"
+            ;
+        }
+}
+
 void squeeze
     (fs::path const& database_filename
     ,fs::path const& new_database_filename
@@ -175,6 +191,7 @@ int main(int argc, char* argv[])
         {"accept"         , NO_ARG,   0, 'a', 0    , "accept license (-l to display)"},
         {"file=FILE"      , REQD_ARG, 0, 'f', 0    , "use database FILE"},
         {"crc"            , NO_ARG,   0, 'c', 0    , "show CRCs of all tables"},
+        {"list"           , NO_ARG,   0, 't', 0    , "list all tables"},
         {"squeeze=NEWFILE", REQD_ARG, 0, 's', 0    , "compress database into NEWFILE"},
         {"merge=TEXTFILE" , REQD_ARG, 0, 'm', 0    , "merge TEXTFILE into database"},
         {"extract=n"      , REQD_ARG, 0, 'e', 0    , "extract table #n into n.txt"},
@@ -185,6 +202,7 @@ int main(int argc, char* argv[])
     bool show_license     = false;
     bool show_help        = false;
     bool run_crc          = false;
+    bool run_list         = false;
     bool run_squeeze      = false;
     bool run_merge        = false;
     bool run_extract      = false;
@@ -248,6 +266,12 @@ int main(int argc, char* argv[])
               case 'c':
                 {
                 run_crc = true;
+                }
+                break;
+
+              case 't':
+                {
+                run_list = true;
                 }
                 break;
 
@@ -321,6 +345,12 @@ int main(int argc, char* argv[])
         if(run_crc)
             {
             calculate_and_display_crcs(database_filename);
+            return EXIT_SUCCESS;
+            }
+
+        if(run_list)
+            {
+            list_tables(database_filename);
             return EXIT_SUCCESS;
             }
 
