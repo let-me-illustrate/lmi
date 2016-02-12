@@ -337,6 +337,25 @@ static soa_field const soa_fields[] =
    ,{ e_record_hash_value         , "Hash value"               }
 };
 
+enum class table_type : uint8_t
+{
+    aggregate = 'A',
+    duration  = 'D',
+    select    = 'S',
+};
+
+char const* table_type_as_string(table_type tt)
+{
+    switch(tt)
+        {
+        case table_type::aggregate: return "Aggregate";
+        case table_type::duration:  return "Duration" ;
+        case table_type::select:    return "Select"   ;
+        }
+
+    return nullptr;
+}
+
 } // anonymous namespace
 
 // Classes abstracting the difference between text and binary formats: both
@@ -352,7 +371,7 @@ class writer
 
     template<typename T>
     void write(enum_soa_field field, boost::optional<T> const& onum);
-    void write_table_type(boost::optional<uint8_t> const& otype);
+    void write_table_type(table_type tt);
     void write(enum_soa_field field, boost::optional<std::string> const& ostr);
 
     void write_values
@@ -368,6 +387,8 @@ class writer
 
   private:
     void do_write_record_header(uint16_t record_type, uint16_t length);
+    template<typename T>
+    void do_write_field(enum_soa_field field, T num);
 
     std::ostream& os_;
 };
@@ -448,19 +469,25 @@ void writer::do_write_record_header(uint16_t record_type, uint16_t length)
 }
 
 template<typename T>
+void writer::do_write_field(enum_soa_field field, T num)
+{
+    num = swap_bytes_if_big_endian(num);
+    do_write_record_header(soa_fields[field].record_type, sizeof(num));
+    stream_write(os_, &num, sizeof(num));
+}
+
+template<typename T>
 void writer::write(enum_soa_field field, boost::optional<T> const& onum)
 {
     if(onum)
         {
-        T const num = swap_bytes_if_big_endian(*onum);
-        do_write_record_header(soa_fields[field].record_type, sizeof(num));
-        stream_write(os_, &num, sizeof(num));
+        do_write_field(field, *onum);
         }
 }
 
-void writer::write_table_type(boost::optional<uint8_t> const& otype)
+void writer::write_table_type(table_type tt)
 {
-    write(e_field_table_type, otype);
+    do_write_field(e_field_table_type, static_cast<uint8_t>(tt));
 }
 
 void writer::write(enum_soa_field field, boost::optional<std::string> const& ostr)
@@ -501,7 +528,7 @@ class writer
 
     template<typename T>
     void write(enum_soa_field field, boost::optional<T> const& oval);
-    void write_table_type(boost::optional<uint8_t> const& otype);
+    void write_table_type(table_type tt);
     void write_values
             (std::vector<double> const& values
             ,boost::optional<uint16_t> const& num_decimals
@@ -526,32 +553,11 @@ void writer::write(enum_soa_field field, boost::optional<T> const& oval)
         }
 }
 
-void writer::write_table_type(boost::optional<uint8_t> const& otype)
+void writer::write_table_type(table_type tt)
 {
-    if(otype)
-        {
-        os_ << soa_fields[e_field_table_type].name << ": ";
-
-        switch(char const ch = static_cast<char>(*otype))
-            {
-            case 'A':
-                os_ << "Aggregate";
-                break;
-            case 'D':
-                os_ << "Duration";
-                break;
-            case 'S':
-                os_ << "Select";
-                break;
-
-            default:
-                std::ostringstream oss;
-                oss << "unknown table type '" << ch << "'";
-                throw std::runtime_error(oss.str());
-            }
-
-        os_ << "\n";
-        }
+    os_ << soa_fields[e_field_table_type].name << ": "
+        << table_type_as_string(tt) << "\n"
+        ;
 }
 
 void writer::write_values
@@ -670,6 +676,8 @@ class table_impl
     static
     T do_read_number(char const* name, std::istream& ifs);
 
+    void read_type(std::istream& ids, uint16_t length);
+
     template<typename T>
     static
     void read_number
@@ -778,7 +786,7 @@ class table_impl
         select_period_,
         max_select_age_;
 
-    boost::optional<uint8_t>
+    boost::optional<table_type>
         type_;
 };
 
@@ -809,6 +817,25 @@ void throw_if_duplicate_record
             {
             oss << " at line " << line_num;
             }
+        throw std::runtime_error(oss.str());
+        }
+}
+
+// Throw an error if the length of a field doesn't have the expected value.
+void throw_if_unexpected_length
+    (uint16_t length
+    ,std::size_t expected_length
+    ,enum_soa_field field
+    )
+{
+    if(length != expected_length)
+        {
+        std::ostringstream oss;
+        oss << "unexpected length " << length
+            << " for the field '"
+            << soa_fields[field].name
+            << "', expected " << expected_length
+            ;
         throw std::runtime_error(oss.str());
         }
 }
@@ -869,6 +896,29 @@ T table_impl::do_read_number(char const* name, std::istream& ifs)
     return swap_bytes_if_big_endian(num);
 }
 
+void table_impl::read_type(std::istream& ifs, uint16_t length)
+{
+    throw_if_duplicate_record(type_.is_initialized(), e_field_table_type);
+
+    throw_if_unexpected_length(length, sizeof(uint8_t), e_field_table_type);
+
+    auto const type
+        = do_read_number<uint8_t>(soa_fields[e_field_table_type].name, ifs);
+    switch(type)
+        {
+        case table_type::aggregate:
+        case table_type::duration:
+        case table_type::select:
+            type_ = static_cast<table_type>(type);
+            break;
+
+        default:
+            std::ostringstream oss;
+            oss << "unknown table type '" << type << "'";
+            throw std::runtime_error(oss.str());
+        }
+}
+
 template<typename T>
 void table_impl::read_number
         (boost::optional<T>& onum
@@ -879,16 +929,7 @@ void table_impl::read_number
 {
     throw_if_duplicate_record(onum.is_initialized(), field);
 
-    if(length != sizeof(T))
-        {
-        std::ostringstream oss;
-        oss << "unexpected length " << length
-            << " for the field '"
-            << soa_fields[field].name
-            << "', expected " << sizeof(T)
-            ;
-        throw std::runtime_error(oss.str());
-        }
+    throw_if_unexpected_length(length, sizeof(T), field);
 
     onum = do_read_number<T>(soa_fields[field].name, ifs);
 }
@@ -1090,23 +1131,25 @@ void table_impl::parse_table_type
 {
     throw_if_duplicate_record(type_.is_initialized(), e_field_table_type, line_num);
 
-    if(value == "Aggregate")
+    if(value == table_type_as_string(table_type::aggregate))
         {
-        type_ = 'A';
+        type_ = table_type::aggregate;
         }
-    else if(value == "Duration")
+    else if(value == table_type_as_string(table_type::duration))
         {
-        type_ = 'D';
+        type_ = table_type::duration;
         }
-    else if(value == "Select")
+    else if(value == table_type_as_string(table_type::select))
         {
-        type_ = 'S';
+        type_ = table_type::select;
         }
     else
         {
         std::ostringstream oss;
         oss << "invalid table type value '" << value << "' at line " << line_num
-            << " (\"Aggregate\", \"Duration\" or \"Select\" expected)"
+            << " (\"" << table_type_as_string(table_type::aggregate) << "\", "
+            << "\"" << table_type_as_string(table_type::duration) << "\" or "
+            << "\"" << table_type_as_string(table_type::select) << "\" expected)"
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1285,15 +1328,15 @@ void table_impl::validate()
 
     // Validate the type and check that the select period has or hasn't been
     // given, depending on it.
-    switch(char const ch = static_cast<char>(*type_))
+    switch(*type_)
         {
-        case 'A':
-        case 'D':
+        case table_type::aggregate:
+        case table_type::duration:
             if(get_value_or(select_period_, 0))
                 {
                 std::ostringstream oss;
                 oss << "select period cannot be specified for a table of type "
-                    << "'" << ch << "'";
+                    << "'" << table_type_as_string(*type_) << "'";
                 throw std::runtime_error(oss.str());
                 }
             if(get_value_or(max_select_age_, 0) && *max_select_age_ != *max_age_)
@@ -1302,12 +1345,12 @@ void table_impl::validate()
                 oss << "maximum select age " << *max_select_age_
                     << " different from the maximum age " << *max_age_
                     << " cannot be specified for a table of type"
-                       " '" << ch << "'";
+                       " '" << table_type_as_string(*type_) << "'";
                 throw std::runtime_error(oss.str());
                 }
             break;
 
-        case 'S':
+        case table_type::select:
             if(!get_value_or(select_period_, 0))
                 {
                 throw std::runtime_error
@@ -1315,11 +1358,6 @@ void table_impl::validate()
                     );
                 }
             break;
-
-        default:
-            std::ostringstream oss;
-            oss << "unknown table type '" << ch << "'";
-            throw std::runtime_error(oss.str());
         }
 
     // We have a reasonable default for this value, so don't complain if it's
@@ -1366,7 +1404,7 @@ void table_impl::read_from_binary(std::istream& ifs, uint32_t offset)
                 read_number(number_, e_field_table_number, ifs, length);
                 break;
             case e_record_table_type:
-                read_number(type_, e_field_table_type, ifs, length);
+                read_type(ifs, length);
                 break;
             case e_record_contributor:
                 read_string(contributor_, e_field_contributor, ifs, length);
@@ -1641,7 +1679,7 @@ void table_impl::do_write(std::ostream& os) const
 
     w.write(e_field_table_name         , name_                );
     w.write(e_field_table_number       , number_              );
-    w.write_table_type(type_);
+    w.write_table_type(*type_);
     w.write(e_field_contributor        , contributor_         );
     w.write(e_field_data_source        , data_source_         );
     w.write(e_field_data_volume        , data_volume_         );
