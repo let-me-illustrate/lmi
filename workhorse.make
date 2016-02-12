@@ -272,7 +272,8 @@ wx_config_check:
 #
 # boost: the build system provided is outlandish.
 #
-# cgicc: './configure && make' fails in the MSYS environment.
+# cgicc: './configure && make' failed in the MSYS environment (though
+# MSYS is no longer supported).
 #
 # xmlwrapp: the autotoolized build system doesn't support Comeau C++
 # (or any other compiler but gcc) on msw.
@@ -1129,9 +1130,6 @@ unit_tests_not_built:
 .PHONY: run_unit_tests
 run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 
-# MSYS !! The initial ';' in the first $(SED) command works around a
-# problem caused by MSYS.
-
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run:
 	@$(ECHO) -e "\nRunning $*:"
@@ -1201,9 +1199,6 @@ cli_test-%:
 # Test common gateway interface.
 
 # This lightweight test emulates what a webserver would do.
-
-# MSYS !! The initial ';' in several $(SED) commands works around a
-# problem caused by MSYS.
 
 .PHONY: cgi_tests
 cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
@@ -1301,7 +1296,7 @@ $(testdecks):
 	@for z in $(dot_test_files); \
 	  do \
 	    $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
-	    | $(SED) -e ';/Summary.*max rel err/!d' -e "s/^ /$$z/" \
+	    | $(SED) -e '/Summary.*max rel err/!d' -e "s/^ /$$z/" \
 	    >> $(system_test_analysis); \
 	  done
 
@@ -1316,9 +1311,9 @@ system_test: $(data_dir)/configurable_settings.xml $(touchstone_md5sums) install
 	@$(SORT) --key=2  --output=$(system_test_md5sums) $(system_test_md5sums)
 	@$(CP) --preserve --update $(system_test_md5sums) $(system_test_md5sums2)
 	@-< $(system_test_analysis) $(SED) \
-	  -e ';/rel err.*e-0*1[5-9]/d' \
-	  -e ';/abs.*0\.00.*rel/d' \
-	  -e ';/abs diff: 0 /d'
+	  -e '/rel err.*e-0*1[5-9]/d' \
+	  -e '/abs.*0\.00.*rel/d' \
+	  -e '/abs diff: 0 /d'
 	@$(DIFF) --brief $(system_test_md5sums) $(touchstone_md5sums) \
 	  && $(ECHO) "All `<$(touchstone_md5sums) $(WC) -l` files match." \
 	  || $(MAKE) --file=$(this_makefile) system_test_discrepancies
@@ -1335,24 +1330,24 @@ system_test_discrepancies:
 	  || true
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Only in/d' \
+	    -e '/^Only in/d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files compared/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Files.*are identical$$/!d' \
+	    -e '/^Files.*are identical$$/!d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files match/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Files.*are identical$$/d' \
-	    -e ';/^Only in/d' \
+	    -e '/^Files.*are identical$$/d' \
+	    -e '/^Only in/d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files differ/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Only in.*touchstone:/!d' \
-	    -e ';/md5sums$$/d' \
+	    -e '/^Only in.*touchstone:/!d' \
+	    -e '/md5sums$$/d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files missing/'
 	@$(ECHO) ...system test completed.

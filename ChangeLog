@@ -38636,3 +38636,12 @@ Upgrade wx. See:
   workhorse.make
 Abandon mpatrol.
 
+20160212T2102Z <gchicares@sbcglobal.net> [454]
+
+  configure.ac
+  msw_msys.make [expunged]
+  path_utility.cpp
+  test_coding_rules.cpp
+  workhorse.make
+Abandon MSYS.
+
