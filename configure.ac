@@ -388,7 +388,7 @@ AC_SUBST(BOOST_LIBS)
 
 dnl check for the other required libraries: under Unix we use pkg-config which
 dnl is easily available for (and often already installed under) any Linux
-dnl system but when using MSYS we do the checks manually as installing
+dnl system but when using Cygwin we do the checks manually as installing
 dnl pkg-config under Windows is unfortunately not trivial and so we can't rely
 dnl on its presence on the target system
 if test "$USE_LINUX" = "1"; then

@@ -62,14 +62,16 @@
 /// although it's unclear whether there's any way to get msw to do
 /// this exactly when end users desire it and not otherwise.
 ///
-/// MSYS !! Call this function during initialization for any program
-/// that could be passed a path argument, even if the argument is a
-/// portable path, because MSYS's bash translates it to a nonportable
-/// one. For example, if this function isn't called, then
+/// Call this function during initialization for any program that
+/// could be passed a path argument, even if the argument is a
+/// portable path. Motivating case: MSYS's bash translated it to a
+/// nonportable path; e.g., if this function wasn't called, then
 ///   --data_path='/opt/lmi/data'
-/// engenders this diagnostic:
+/// engendered this diagnostic:
 ///   boost::filesystem::path: [line split for readability]
 ///     invalid name "C:" in path: "C:/msys/1.0/opt/lmi/data"
+/// Keep doing this for future-proofing even though MSYS is no longer
+/// supported.
 ///
 /// This function is not called in the initialization routine used by
 /// all programs, because simple command-line tools should not be
