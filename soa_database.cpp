@@ -788,33 +788,27 @@ namespace
 // Throw an error indicating duplicate occurrence of some field if the first
 // argument is true.
 //
-// This version is used for the binary IO.
+// If the line number if specified, it is appended to the error message (it
+// should be specified when reading text files, but not when reading from
+// binary files).
 inline
-void throw_if_duplicate_record(bool do_throw, enum_soa_field field)
+void throw_if_duplicate_record
+    (bool do_throw
+    ,enum_soa_field field
+    ,int line_num = 0
+    )
 {
     if(do_throw)
         {
         std::ostringstream oss;
         oss << "duplicate occurrence of the field '"
             << soa_fields[field].name
-            << "'";
-        throw std::runtime_error(oss.str());
-        }
-}
-
-// An overload for text IO taking the line number which is also used in the
-// error message.
-inline
-void throw_if_duplicate_record(bool do_throw, enum_soa_field field, int line_num)
-{
-    if(do_throw)
-        {
-        std::ostringstream oss;
-        oss << "duplicate occurrence of the field '"
-            << soa_fields[field].name
-            << "' at line "
-            << line_num
+            << "'"
             ;
+        if(line_num)
+            {
+            oss << " at line " << line_num;
+            }
         throw std::runtime_error(oss.str());
         }
 }
