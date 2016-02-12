@@ -38620,3 +38620,19 @@ Upgrade wx.
 Upgrade wx. See:
   http://lists.nongnu.org/archive/html/lmi/2016-02/msg00036.html
 
+20160212T2018Z <gchicares@sbcglobal.net> [454]
+
+  GNUmakefile
+  Makefile.am
+  como.make
+  configure.ac
+  install_mpatrol.make      [expunged]
+  install_msw.sh
+  mpatrol-mingw-GNUmakefile [expunged]
+  mpatrol_1.4.8.patch       [expunged]
+  mpatrol_patch_test.cpp    [expunged]
+  msw_common.make
+  objects.make
+  workhorse.make
+Abandon mpatrol.
+

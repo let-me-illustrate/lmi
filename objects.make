@@ -386,16 +386,13 @@ endif
 
 # Override this variable to exclude tests that are inappropriate in
 # context--e.g., tests that don't even compile with a particular
-# toolchain.
+# toolchain. For example:
 #
-# 'calendar_date_test' is excluded for mpatrol builds because it takes
-# too long to run: at least fifteen minutes on my machine in 2009.
+# ifeq (foobar,$(build_type))
+#   excluded_unit_test_targets += calendar_date_test
+# endif
 
 excluded_unit_test_targets :=
-
-ifeq (mpatrol,$(build_type))
-  excluded_unit_test_targets += calendar_date_test
-endif
 
 unit_test_targets := \
   account_value_test \
@@ -431,7 +428,6 @@ unit_test_targets := \
   mc_enum_test \
   miscellany_test \
   mortality_rates_test \
-  mpatrol_patch_test \
   name_value_pairs_test \
   ncnnnpnn_test \
   numeric_io_test \
@@ -734,10 +730,6 @@ mortality_rates_test$(EXEEXT): \
   expm1.o \
   ihs_mortal.o \
   mortality_rates_test.o \
-
-mpatrol_patch_test$(EXEEXT): \
-  $(common_test_objects) \
-  mpatrol_patch_test.o \
 
 name_value_pairs_test$(EXEEXT): \
   $(boost_filesystem_objects) \

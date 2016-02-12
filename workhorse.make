@@ -103,8 +103,7 @@ ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
 endif
 
 # The product_files target doesn't build with shared-library
-# 'attributes'. It can be built with mpatrol, but the resulting binary
-# segfaults. This matters little because that target is deprecated.
+# 'attributes'.
 #
 # TODO ?? The gpt server, however, is important; it needs work anyway.
 
@@ -118,7 +117,7 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     generate_passkey$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
 
-  ifneq (mpatrol,$(findstring mpatrol,$(build_type)))
+  ifneq (so_test,$(findstring so_test,$(build_type)))
     default_targets += \
       product_files$(EXEEXT) \
 
@@ -547,7 +546,6 @@ endif
 
 # Build type governs
 #  - optimization flags
-#  - mpatrol
 #  - gprof
 #  - libstdc++ debugging and concept-checking macros
 
@@ -563,28 +561,17 @@ every_libstdcxx_warning_macro := \
   -D_GLIBCPP_DEBUG -D_GLIBCPP_DEBUG_PEDANTIC -D_GLIBCPP_CONCEPT_CHECKS \
                    -D_GLIBXX_DEBUG_PEDANTIC \
 
-MPATROL_LDFLAGS :=
-MPATROL_LIBS    :=
-
 test_targets := unit_tests cgi_tests cli_tests
 
-ifeq (mpatrol,$(findstring mpatrol,$(build_type)))
-  ifeq (3.4.4,$(gcc_version))
-    MPATROL_LDFLAGS := -Wl,--allow-multiple-definition
-  endif
+ifeq (gprof,$(findstring gprof,$(build_type)))
   optimization_flag := -O0
-  MPATROL_LIBS := -lmpatrol -lbfd -liberty $(platform_mpatrol_libraries)
+  gprof_flag := -pg
 else
-  ifeq (gprof,$(findstring gprof,$(build_type)))
+  ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
     optimization_flag := -O0
-    gprof_flag := -pg
+    libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
   else
-    ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
-      optimization_flag := -O0
-      libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
-    else
-      optimization_flag := -O2
-    endif
+    optimization_flag := -O2
   endif
 endif
 
@@ -732,11 +719,11 @@ REQUIRED_ARFLAGS = \
 # subdirectories seem to be the most popular choices, and usage
 # varies, at least for msw:
 #  - wx-2.7.0 built with autotools puts its dll in lib/
-#  - libxml2 and mpatrol put their dlls in bin/
+#  - libxml2 and libxslt put their dlls in bin/
 # It is crucial to list these two subdirectories in exactly the order
 # given. If they were specified in reverse order, then gnu 'ld' would
 # find a dll before its import library, which latter would therefore
-# be ignored--and that would prevent mpatrol from working correctly.
+# be ignored--and that prevented mpatrol from working correctly.
 
 all_library_directories := \
   . \
@@ -746,13 +733,10 @@ all_library_directories := \
 
 EXTRA_LDFLAGS :=
 
-# Keep mpatrol at the end of the library list.
 REQUIRED_LDFLAGS = \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(REQUIRED_LIBS) \
-  $(MPATROL_LDFLAGS) \
-  $(MPATROL_LIBS) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
 # never harmful. The $(subst) workaround for '-I' isn't needed with
@@ -831,13 +815,6 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 
 lib%.a              : lmi_so_attributes :=
 lib%$(SHREXT)       : lmi_so_attributes := -DLMI_BUILD_SO
-
-# Don't use mpatrol when building a shared library to be used by an
-# application that uses mpatrol. See my postings to the mpatrol
-# mailing list.
-
-lib%$(SHREXT)       : MPATROL_LIBS :=
-wx_new$(SHREXT)     : MPATROL_LIBS :=
 
 wx_new$(SHREXT)     : EXTRA_LDFLAGS :=
 
@@ -1152,23 +1129,13 @@ unit_tests_not_built:
 .PHONY: run_unit_tests
 run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 
-# Create 'mpatrol.log' if it doesn't already exist, so that it can be
-# parsed for diagnostics unconditionally when unit tests are run.
-
-mpatrol.log:
-	@$(TOUCH) $@
-
 # MSYS !! The initial ';' in the first $(SED) command works around a
 # problem caused by MSYS.
 
 .PHONY: %$(EXEEXT)-run
-%$(EXEEXT)-run: mpatrol.log
+%$(EXEEXT)-run:
 	@$(ECHO) -e "\nRunning $*:"
 	@-./$* --accept
-	@[ -f mpatrol.log ] \
-	  && <mpatrol.log $(SED) \
-	    -e ';/^total warnings\|^total errors/!d' \
-	    -e 's/^\(.*$$\)/  mpatrol: \1/' \
 
 ################################################################################
 
