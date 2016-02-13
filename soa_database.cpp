@@ -521,6 +521,12 @@ void writer::end()
 namespace text_format
 {
 
+// Maximum number of digits used for the age column.
+auto const age_width = 3;
+
+// Number of spaces used between columns of the values table.
+auto const gap_length = 2;
+
 class writer
 {
   public:
@@ -576,6 +582,9 @@ void writer::write_values
     write(e_field_num_decimals       , num_decimals        );
 
     os_ << soa_fields[e_field_values].name << ":\n";
+
+    std::string const gap(text_format::gap_length, ' ');
+
     if(get_value_or(select_period, 0))
         {
         throw std::runtime_error("NIY");
@@ -589,7 +598,7 @@ void writer::write_values
         uint16_t age = *min_age;
         for(auto v: values)
             {
-            os_ << std::setw(3) << age++ << "  "
+            os_ << std::setw(text_format::age_width) << age++ << gap
                 << std::setw(value_width) << v << "\n";
             }
         }
@@ -1176,11 +1185,11 @@ void table_impl::parse_values(std::istream& is, int& line_num)
     boost::optional<uint16_t> last_age;
     for(std::string line; ++line_num, std::getline(is, line);)
         {
-        // Perform strict format checks: the value must use exactly 3 (space
-        // padded) characters for the age and exactly the given precision with
-        // two spaces between them.
-        static auto const age_width = 3;
-        static auto const gap_length = 2;
+        // Perform strict format checks: there must be exactly the given number
+        // of (space padded) characters for the age and exactly the given
+        // precision for the value with the given gap between them.
+        using text_format::age_width;
+        using text_format::gap_length;
 
         auto const start = line.c_str();
 
