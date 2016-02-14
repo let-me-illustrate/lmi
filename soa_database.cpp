@@ -527,6 +527,9 @@ auto const age_width = 3;
 // Number of spaces used between columns of the values table.
 auto const gap_length = 2;
 
+// Label used for the ultimate column in the select tables.
+auto const ultimate_header = "Ult.";
+
 class writer
 {
   public:
@@ -583,22 +586,74 @@ void writer::write_values
 
     os_ << soa_fields[e_field_values].name << ":\n";
 
-    std::string const gap(text_format::gap_length, ' ');
+    auto const
+        value_width = *num_decimals + text_format::gap_length + 2; // for "0."
 
     if(get_value_or(select_period, 0))
         {
-        throw std::runtime_error("NIY");
-        }
-    else
-        {
+        auto const period = *select_period;
+
+        // Make a header with the select durations.
+        os_ << std::setw(text_format::age_width) << ' ';
+        for(uint16_t d = 0; d < period; ++d)
+            {
+            os_ << std::setw(value_width) << (d + 1);
+            }
+        os_ << std::setw(text_format::gap_length) << ' '
+            << text_format::ultimate_header << "\n";
+
+        // Use indices and at() in this code as it's not performance-critical,
+        // so perform the index checks in it, which wouldn't be done
+        // automatically with the iterators.
+        auto n = 0u;
+
         os_ << std::fixed << std::setprecision(*num_decimals);
 
-        unsigned const value_width = *num_decimals + 2;
+        // Now print out all "full" lines, with select and ultimate values
+        // which are laid out consecutively in the values array.
+        for(uint16_t age = *min_age; age <= *max_select_age; ++age)
+            {
+            os_ << std::setw(text_format::age_width) << age;
+
+            for(uint16_t d = 0; d <= period; ++d)
+                {
+                os_ << std::setw(value_width) << values.at(n++);
+                }
+
+            os_ << std::setw(text_format::gap_length) << ' '
+                << std::setw(text_format::age_width) << (age + period)
+                << "\n";
+            }
+
+        // And finish with the lines having just the ultimate values.
+        for(uint16_t age = *max_select_age + period + 1; age <= *max_age; ++age)
+            {
+            os_ << std::setw(text_format::age_width) << age;
+
+            for(uint16_t d = 0; d < period; ++d)
+                {
+                os_ << std::setw(value_width) << ' ';
+                }
+
+            os_ << std::setw(value_width) << values.at(n++)
+                << std::setw(text_format::gap_length) << ' '
+                << std::setw(text_format::age_width) << age
+                << "\n";
+            }
+
+        if(n != values.size())
+            {
+            throw std::logic_error("Bug in select table values writing code");
+            }
+        }
+    else // Not a select table, just print out all values.
+        {
+        os_ << std::fixed << std::setprecision(*num_decimals);
 
         uint16_t age = *min_age;
         for(auto v: values)
             {
-            os_ << std::setw(text_format::age_width) << age++ << gap
+            os_ << std::setw(text_format::age_width) << age++
                 << std::setw(value_width) << v << "\n";
             }
         }
