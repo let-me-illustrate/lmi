@@ -342,7 +342,11 @@ int try_main(int argc, char* argv[])
             break;
 
         case 1:
-            // Continue and process the single selected operation below.
+            if(run_rename && !run_squeeze)
+                {
+                std::cerr << "--rename can only be used together with --squeeze.\n";
+                command_line_syntax_error = true;
+                }
             break;
 
         default:
