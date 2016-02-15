@@ -1286,7 +1286,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
         if(actual != expected)
             {
             std::ostringstream oss;
-            oss << "expected column #" << expected
+            oss << "expected duration " << expected
                 << " and not " << actual
                 << " in the select table header at line " << line_num
                 ;
@@ -1303,7 +1303,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
         {
         std::ostringstream oss;
         oss << "expected " << *select_period_
-            << " columns and not " << actual
+            << " duration labels and not " << actual
             << " in the select table header at line " << line_num
             ;
         throw std::runtime_error(oss.str());
@@ -1502,7 +1502,22 @@ void table_impl::parse_values(std::istream& is, int& line_num)
         throw std::runtime_error(oss.str());
         }
 
-    if(*type_ == table_type::select)
+    // Initialize this variable using a lambda with a switch inside just to
+    // make sure this code gets updated if any new table types are added.
+    auto const is_select_table = [=]() {
+        switch(*type_) {
+            case table_type::aggregate:
+            case table_type::duration:
+                break;
+
+            case table_type::select:
+                return true;
+        }
+
+        return false;
+    }();
+
+    if(is_select_table)
         {
         parse_select_header(is, line_num);
         }
@@ -1529,14 +1544,21 @@ void table_impl::parse_values(std::istream& is, int& line_num)
         if(actual_age != age)
             {
             std::ostringstream oss;
-            oss << "incorrect age value " << actual_age
+            oss << "incorrect ";
+            if(is_select_table)
+                {
+                // Distinguish this age from the ultimate age on the right side
+                // of the table.
+                oss << "select ";
+                }
+            oss << "age value " << actual_age
                 << " at line " << line_num
                 << " (" << age << " expected)"
                 ;
             throw std::runtime_error(oss.str());
             }
 
-        if(*type_ == table_type::select)
+        if(is_select_table)
             {
             if(age <= *max_select_age_)
                 {
@@ -1561,7 +1583,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
 
         values_.push_back(parse_single_value(start, current, line_num));
 
-        if(*type_ == table_type::select)
+        if(is_select_table)
             {
             skip_spaces(text_format::gap_length, start, current, line_num);
 
@@ -1574,7 +1596,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
             if(ultimate_age != expected_age)
                 {
                 std::ostringstream oss;
-                oss << "incorrect right hand side age value " << ultimate_age
+                oss << "incorrect ultimate age value " << ultimate_age
                     << " at line " << line_num
                     << " (" << expected_age << " expected)"
                     ;
@@ -1592,7 +1614,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
             throw std::runtime_error(oss.str());
             }
 
-        if(*type_ == table_type::select)
+        if(is_select_table)
             {
             if(age == *max_select_age_)
                 {
