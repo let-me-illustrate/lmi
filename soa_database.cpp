@@ -1581,6 +1581,16 @@ void table_impl::parse_values(std::istream& is, int& line_num)
                 }
             }
 
+        if(current - start < static_cast<int>(line.length()))
+            {
+            std::ostringstream oss;
+            oss << "unexpected characters \"" << current << "\""
+                << " at the position " << current - start + 1
+                << " at line " << line_num
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
         if(*type_ == table_type::select)
             {
             if(age == *max_select_age_)
