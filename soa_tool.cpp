@@ -334,6 +334,28 @@ int try_main(int argc, char* argv[])
             }
         }
 
+    switch(num_to_run)
+        {
+        case 0:
+            std::cerr << "Please use exactly one of --crc, --list, --squeeze, --merge or --extract.\n";
+            command_line_syntax_error = true;
+            break;
+
+        case 1:
+            // Continue and process the single selected operation below.
+            break;
+
+        default:
+            std::cerr << "At most one operation can be selected.\n";
+            command_line_syntax_error = true;
+        }
+
+    if(!command_line_syntax_error && database_filename.string().empty())
+        {
+        std::cerr << "Database file must be specified.\n";
+        command_line_syntax_error = true;
+        }
+
     // usage(), possibly called below, doesn't allow us to specify the
     // arguments directly, so force it to show it in this ugly way:
     std::string name_with_arg(argv[0]);
@@ -361,29 +383,6 @@ int try_main(int argc, char* argv[])
         {
         getopt_long.usage();
         return EXIT_SUCCESS;
-        }
-
-    switch(num_to_run)
-        {
-        case 0:
-            std::cerr << "Please use exactly one of --crc, --list, --squeeze, --merge or --extract.\n";
-            getopt_long.usage();
-            return EXIT_FAILURE;
-
-        case 1:
-            // Continue and process the single selected operation below.
-            break;
-
-        default:
-            std::cerr << "At most one operation can be selected.\n";
-            return EXIT_FAILURE;
-        }
-
-    if(database_filename.string().empty())
-        {
-        std::cerr << "Database file must be specified.\n";
-        getopt_long.usage();
-        return EXIT_FAILURE;
         }
 
     if(run_crc)
