@@ -31,6 +31,7 @@
 #include "soa_database.hpp"
 
 #include <algorithm>
+#include <cstdio>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>
@@ -225,20 +226,12 @@ int try_main(int argc, char* argv[])
         ,1
         );
 
+    bool command_line_syntax_error = false;
+
     while(EOF != (c = getopt_long ()))
       {
         switch (c)
           {
-          case 0:
-            {
-            char const* current_option = long_options[option_index].name;
-            std::printf ("option %s", current_option);
-            if(getopt_long.optarg)
-              std::printf (" with arg %s", getopt_long.optarg);
-            std::printf ("\n");
-            }
-            break;
-
           case 'a':
             {
             license_accepted = true;
@@ -308,25 +301,19 @@ int try_main(int argc, char* argv[])
             }
             break;
 
-          case 'o':
-            {
-            std::printf ("option o");
-            if(getopt_long.optarg)
-              std::printf (" with value '%s'", getopt_long.optarg);
-            std::printf ("\n");
-            }
-            break;
-
           default:
-            std::printf ("? getopt returned character code 0%o ?\n", c);
+            // Error message was already given from getopt() code, so no need
+            // to output anything else here, but do flush its output so that it
+            // appears before the usage message.
+            std::fflush(stderr);
+
+            command_line_syntax_error = true;
+
+            // No need to continue with any other arguments neither, force
+            // exiting from the loop.
+            c = EOF;
           }
       }
-
-    // usage() doesn't allow us to specify the arguments directly, so force
-    // it to show it in this ugly way:
-    std::string name_with_arg(argv[0]);
-    name_with_arg += " <database-file>";
-    argv[0] = const_cast<char*>(name_with_arg.c_str());
 
     if((c = getopt_long.optind) < argc)
         {
@@ -337,16 +324,26 @@ int try_main(int argc, char* argv[])
         else
             {
             std::cerr << "Either positional argument or --file option can be used, but not both.\n";
-            getopt_long.usage();
-            return EXIT_FAILURE;
+            command_line_syntax_error = true;
             }
 
         if(c + 1 != argc)
             {
             std::cerr << "Only a single database file argument allowed.\n";
-            getopt_long.usage();
-            return EXIT_FAILURE;
+            command_line_syntax_error = true;
             }
+        }
+
+    // usage(), possibly called below, doesn't allow us to specify the
+    // arguments directly, so force it to show it in this ugly way:
+    std::string name_with_arg(argv[0]);
+    name_with_arg += " <database-file>";
+    argv[0] = const_cast<char*>(name_with_arg.c_str());
+
+    if(command_line_syntax_error)
+        {
+        getopt_long.usage();
+        return EXIT_FAILURE;
         }
 
     if(!license_accepted)
