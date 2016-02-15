@@ -281,6 +281,13 @@ void test_save()
 
     TEST_FILES_EQUAL("eraseme.ndx", qx_ins_path + ".ndx");
     TEST_FILES_EQUAL("eraseme.dat", qx_ins_path + ".dat");
+
+    database db_tmp("eraseme");
+    BOOST_TEST_EQUAL(qx_ins.tables_count(), db_tmp.tables_count());
+
+    db_tmp.save("eraseme");
+    TEST_FILES_EQUAL("eraseme.ndx", qx_ins_path + ".ndx");
+    TEST_FILES_EQUAL("eraseme.dat", qx_ins_path + ".dat");
 }
 
 void test_add_table()

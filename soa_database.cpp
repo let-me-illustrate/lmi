@@ -32,6 +32,7 @@
 #include "path_utility.hpp"
 
 #include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/optional.hpp>
 
@@ -220,6 +221,25 @@ inline bool stream_read(std::istream& is, void* data, std::size_t length)
 {
     is.read(static_cast<char*>(data), length);
     return is.gcount() == static_cast<std::streamsize>(length);
+}
+
+// This function removes a file ignoring any errors, it should only be used if
+// there is no way to handle these errors anyhow, e.g. when we're trying to
+// clean up while handling a previous exception and so can't let another one
+// propagate.
+//
+// BOOST !! Use "ec" argument with later versions instead of throwing and
+// catching the exception.
+void remove_nothrow(fs::path const& path)
+{
+    try
+        {
+        fs::remove(path);
+        }
+    catch(fs::filesystem_error const&)
+        {
+        // Intentionally ignore.
+        }
 }
 
 // Helper function wrapping std::strtoull() and hiding its peculiarities:
@@ -2434,11 +2454,223 @@ void database_impl::add_or_replace_table(table const& table)
 
 void database_impl::save(fs::path const& path)
 {
-    fs::ofstream index_ofs;
-    open_binary_file(index_ofs, fs::change_extension(path, ".ndx"));
+    // This class ensures that we either overwrite both the output .ndx and
+    // .dat files or don't change either of them if an error happens (unless a
+    // catastrophic failure prevents us from renaming the backup index file
+    // back to its original name after the first renaming of the index
+    // succeeded but the renaming of the data file failed -- but there is
+    // nothing we can do about this without some kind of OS support).
+    class safe_database_output
+    {
+    public:
+        // Try to set up things for saving a database to the given path, throws
+        // on failure.
+        explicit safe_database_output(fs::path const& path)
+            :path_(path)
+            ,index_(path, "index", ".ndx")
+            ,database_(path, "database", ".dat")
+            {
+            }
 
-    fs::ofstream database_ofs;
-    open_binary_file(database_ofs, fs::change_extension(path, ".dat"));
+        safe_database_output(safe_database_output const&) = delete;
+        safe_database_output& operator=(safe_database_output const&) = delete;
+
+        // Accessors for the stream to be used for saving the database.
+        std::ostream& index() { return index_.ofs_; }
+        std::ostream& database() { return database_.ofs_; }
+
+        // The core of this class functionality is in this method: it tries to
+        // atomically rename the files to the real output path and throws,
+        // without changing the (possibly) existing file at the given path, on
+        // failure.
+        void close()
+            {
+            // It's more convenient to just append error information to this
+            // stream as errors happen, so, pessimistically, start by assuming
+            // that an error will happen -- if it doesn't, we'll just never use
+            // this stream.
+            std::ostringstream error_stream;
+            error_stream << "Writing database data to '" << path_ << "' failed";
+
+            bool keep_temp_index_file = false;
+            try
+                {
+                // First close the output files to make [as] sure [as we can]
+                // that everything is written to the disk.
+                index_.close();
+                database_.close();
+
+                fs::path index_backup;
+                if(index_.uses_temp_file())
+                    {
+                    // Make a backup copy of the index to be able to restore it
+                    // later if renaming the data file fails.
+                    index_backup = unique_filepath(path_, ".ndx.backup");
+                    fs::rename(index_.path_, index_backup);
+                    }
+
+                // And put the new version of the index in place.
+                try
+                    {
+                    index_.rename_if_needed();
+                    }
+                catch(...)
+                    {
+                    // We don't need the backup, if rename() failed, the
+                    // original file must have been left in place anyhow.
+                    if(!index_backup.empty())
+                        {
+                        // Ensure that index_backup is empty, so that we don't
+                        // tell the user to restore it manually below.
+                        fs::path z;
+                        std::swap(index_backup, z);
+
+                        remove_nothrow(z);
+                        }
+
+                    throw;
+                    }
+
+                // Now put the database file in place too.
+                try
+                    {
+                    database_.rename_if_needed();
+                    }
+                catch(...)
+                    {
+                    // Undo the index renaming if it had been done.
+                    if(index_backup.empty())
+                        {
+                        if(index_.uses_temp_file())
+                            {
+                            remove_nothrow(index_.temp_path_);
+                            }
+                        }
+                    else
+                        {
+                        try
+                            {
+                            fs::remove(index_.path_);
+                            fs::rename(index_backup, index_.path_);
+
+                            index_backup = fs::path();
+                            }
+                        catch(...)
+                            {
+                            // This is imperfect, but the best we can do and
+                            // hopefully the user will be able to restore the
+                            // original index file contents.
+                            error_stream
+                                << " but the file \"" << index_.path_ << "\""
+                                << " had been modified and this modification"
+                                << " could not be undone, please manually"
+                                << " restore the original file from \""
+                                << index_.temp_path_ << "\""
+                                ;
+
+                            keep_temp_index_file = true;
+                            }
+                        }
+
+                    throw;
+                    }
+
+                if(!index_backup.empty())
+                    {
+                    // Even if we can't remove the index backup for some
+                    // reason, don't fail, this is not really an error as the
+                    // database was saved successfully.
+                    remove_nothrow(index_backup);
+                    }
+
+                // Skip the error below.
+                return;
+                }
+            catch(std::exception const& e)
+                {
+                error_stream << " (" << e.what() << ")";
+                }
+
+            if(!keep_temp_index_file)
+                {
+                index_.cleanup_temp();
+                }
+
+            database_.cleanup_temp();
+
+            error_stream << ".";
+            throw std::runtime_error(error_stream.str());
+            }
+
+    private:
+        fs::path const& path_;
+
+        // This struct collects the final output path for a file, a possibly
+        // (but not necessarily) different temporary output path and the stream
+        // opened on the latter.
+        struct safe_output_file
+        {
+            safe_output_file
+                (fs::path const& path
+                ,char const* description
+                ,char const* extension
+                )
+                :path_(fs::change_extension(path, extension))
+                ,temp_path_
+                    (fs::exists(path_)
+                        ? unique_filepath(path_, extension + std::string(".tmp"))
+                        : path_
+                    )
+                ,description_(description)
+            {
+            open_binary_file(ofs_, temp_path_);
+            }
+
+            void close()
+                {
+                ofs_.close();
+                if(!ofs_)
+                    {
+                    std::ostringstream oss;
+                    oss << "failed to close the output " << description_
+                        << " file \"" << temp_path_ << "\"";
+                    throw std::runtime_error(oss.str());
+                    }
+                }
+
+            bool uses_temp_file() const
+                {
+                return temp_path_ != path_;
+                }
+
+            void rename_if_needed()
+                {
+                if(uses_temp_file())
+                    {
+                    fs::remove(path_);
+                    fs::rename(temp_path_, path_);
+                    }
+                }
+
+            void cleanup_temp()
+                {
+                if(uses_temp_file())
+                    {
+                    remove_nothrow(temp_path_);
+                    }
+                }
+
+            fs::path const path_;
+            fs::path const temp_path_;
+            char const* description_;
+            fs::ofstream ofs_;
+        };
+
+        safe_output_file index_;
+        safe_output_file database_;
+    };
+
+    safe_database_output output(path);
 
     char index_record[e_index_pos_max] = {0};
 
@@ -2449,7 +2681,7 @@ void database_impl::save(fs::path const& path)
         // The offset of this table is just the current position of the output
         // stream, so get it before it changes and check that it is still
         // representable as a 4 byte offset (i.e. the file is less than 4GiB).
-        std::streamoff const offset = database_ofs.tellp();
+        std::streamoff const offset = output.database().tellp();
         uint32_t const offset32 = static_cast<uint32_t>(offset);
         if(static_cast<std::streamoff>(offset32) != offset)
             {
@@ -2475,20 +2707,21 @@ void database_impl::save(fs::path const& path)
 
         to_bytes(&index_record[e_index_pos_offset], offset32);
 
-        stream_write(index_ofs, index_record, sizeof(index_record));
+        stream_write(output.index(), index_record, sizeof(index_record));
 
-        t->write_as_binary(database_ofs);
+        t->write_as_binary(output.database());
         }
 
-    index_ofs.close();
-    database_ofs.close();
+    // Before closing the output, which will ensure that it is really written
+    // to the files with the specified path, close our input stream because we
+    // won't ever need it any more, as we just read all the tables in the loop
+    // above, so it's useless to keep it open. But even more importantly, this
+    // will allow us to write to the same database file we had been reading
+    // from until now, which would fail otherwise because the file would be in
+    // use.
+    database_ifs_.close();
 
-    if(!database_ofs || !index_ofs)
-        {
-        std::ostringstream oss;
-        oss << "Writing database data to '" << path << "' failed.";
-        throw std::runtime_error(oss.str());
-        }
+    output.close();
 }
 
 database::database()
