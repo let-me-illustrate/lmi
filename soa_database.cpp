@@ -819,6 +819,15 @@ class table_impl
     void read_from_text(std::istream& is);
 
     // Validate all the fields, throw an exception if any are invalid.
+    //
+    // After validation the following invariants hold:
+    //  - number_ and type_ are valid, i.e. non-empty
+    //  - min_age_ and max_age_ are valid and *min_age_ <= *max_age_
+    //  - values_ vector is non-empty
+    //  - num_decimals_ is valid
+    //  - select_period_ is valid iff type_ == select
+    //  - if type_ == select, max_select_age_ is valid and otherwise
+    //    max_select_age_ is either invalid of equal to max_age_
     void validate();
 
     // Write out the table contents in the given format.
@@ -1420,6 +1429,12 @@ void table_impl::validate()
                 {
                 throw std::runtime_error
                     ("select period must be specified for a select and ultimate table"
+                    );
+                }
+            if(!get_value_or(max_select_age_, 0))
+                {
+                throw std::runtime_error
+                    ("maximum select age must be specified for a select and ultimate table"
                     );
                 }
             break;
