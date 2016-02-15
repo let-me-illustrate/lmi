@@ -1349,8 +1349,8 @@ uint16_t table_impl::parse_age
         if(start_num - current == age_width)
             {
             std::ostringstream oss;
-            oss << "at most " << age_width - 1 << " spaces allowed "
-                << "at position " << current - start + 1
+            oss << "at most " << age_width - 1 << " spaces allowed"
+                << " at position " << current - start + 1
                 << " at line " << line_num
                 ;
             throw std::runtime_error(oss.str());
@@ -1365,6 +1365,7 @@ uint16_t table_impl::parse_age
         std::ostringstream oss;
         oss << "expected a number with "
             << age_width - (start_num - current) << " digits"
+            << " at position " << start_num - start + 1
             << " at line " << line_num
             ;
         throw std::runtime_error(oss.str());
