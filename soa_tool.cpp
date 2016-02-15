@@ -26,6 +26,7 @@
 
 #include "getopt.hpp"
 #include "license.hpp"
+#include "main_common.hpp"
 #include "path_utility.hpp"
 #include "soa_database.hpp"
 
@@ -179,7 +180,7 @@ void rename_tables
 // Use this only with 'squeeze'.
 }
 
-int main(int argc, char* argv[])
+int try_main(int argc, char* argv[])
 {
     int c;
     int option_index = 0;
@@ -215,225 +216,214 @@ int main(int argc, char* argv[])
     int table_number_to_extract = 0;
     fs::path filename_of_table_names;
 
-    try
-        {
-        GetOpt getopt_long
-            (argc
-            ,argv
-            ,"acf:hls:e:m:"
-            ,long_options
-            ,&option_index
-            ,1
-            );
+    GetOpt getopt_long
+        (argc
+        ,argv
+        ,"acf:hls:e:m:"
+        ,long_options
+        ,&option_index
+        ,1
+        );
 
-        while(EOF != (c = getopt_long ()))
+    while(EOF != (c = getopt_long ()))
+      {
+        switch (c)
           {
-            switch (c)
-              {
-              case 0:
-                {
-                char const* current_option = long_options[option_index].name;
-                std::printf ("option %s", current_option);
-                if(getopt_long.optarg)
-                  std::printf (" with arg %s", getopt_long.optarg);
-                std::printf ("\n");
-                }
-                break;
+          case 0:
+            {
+            char const* current_option = long_options[option_index].name;
+            std::printf ("option %s", current_option);
+            if(getopt_long.optarg)
+              std::printf (" with arg %s", getopt_long.optarg);
+            std::printf ("\n");
+            }
+            break;
 
-              case 'a':
-                {
-                license_accepted = true;
-                }
-                break;
+          case 'a':
+            {
+            license_accepted = true;
+            }
+            break;
 
-              case 'f':
-                {
-                database_filename = getopt_long.optarg;
-                }
-                break;
+          case 'f':
+            {
+            database_filename = getopt_long.optarg;
+            }
+            break;
 
-              case 'h':
-                {
-                show_help = true;
-                }
-                break;
+          case 'h':
+            {
+            show_help = true;
+            }
+            break;
 
-              case 'l':
-                {
-                show_license = true;
-                }
-                break;
+          case 'l':
+            {
+            show_license = true;
+            }
+            break;
 
-              case 'c':
-                {
-                run_crc = true;
-                ++num_to_run;
-                }
-                break;
+          case 'c':
+            {
+            run_crc = true;
+            ++num_to_run;
+            }
+            break;
 
-              case 't':
-                {
-                run_list = true;
-                ++num_to_run;
-                }
-                break;
+          case 't':
+            {
+            run_list = true;
+            ++num_to_run;
+            }
+            break;
 
-              case 's':
-                {
-                run_squeeze = true;
-                ++num_to_run;
-                new_database_filename = getopt_long.optarg;
-                }
-                break;
+          case 's':
+            {
+            run_squeeze = true;
+            ++num_to_run;
+            new_database_filename = getopt_long.optarg;
+            }
+            break;
 
-              case 'm':
-                {
-                run_merge = true;
-                ++num_to_run;
-                filename_to_merge = getopt_long.optarg;
-                }
-                break;
+          case 'm':
+            {
+            run_merge = true;
+            ++num_to_run;
+            filename_to_merge = getopt_long.optarg;
+            }
+            break;
 
-              case 'e':
-                {
-                run_extract = true;
-                ++num_to_run;
-                table_number_to_extract = std::atoi(getopt_long.optarg);
-                }
-                break;
+          case 'e':
+            {
+            run_extract = true;
+            ++num_to_run;
+            table_number_to_extract = std::atoi(getopt_long.optarg);
+            }
+            break;
 
-              case 'r':
-                {
-                run_rename = true;
-                filename_of_table_names = getopt_long.optarg;
-                }
-                break;
+          case 'r':
+            {
+            run_rename = true;
+            filename_of_table_names = getopt_long.optarg;
+            }
+            break;
 
-              case 'o':
-                {
-                std::printf ("option o");
-                if(getopt_long.optarg)
-                  std::printf (" with value '%s'", getopt_long.optarg);
-                std::printf ("\n");
-                }
-                break;
+          case 'o':
+            {
+            std::printf ("option o");
+            if(getopt_long.optarg)
+              std::printf (" with value '%s'", getopt_long.optarg);
+            std::printf ("\n");
+            }
+            break;
 
-              default:
-                std::printf ("? getopt returned character code 0%o ?\n", c);
-              }
+          default:
+            std::printf ("? getopt returned character code 0%o ?\n", c);
           }
+      }
 
-        // usage() doesn't allow us to specify the arguments directly, so force
-        // it to show it in this ugly way:
-        std::string name_with_arg(argv[0]);
-        name_with_arg += " <database-file>";
-        argv[0] = const_cast<char*>(name_with_arg.c_str());
+    // usage() doesn't allow us to specify the arguments directly, so force
+    // it to show it in this ugly way:
+    std::string name_with_arg(argv[0]);
+    name_with_arg += " <database-file>";
+    argv[0] = const_cast<char*>(name_with_arg.c_str());
 
-        if((c = getopt_long.optind) < argc)
-            {
-            if(database_filename.string().empty())
-                {
-                database_filename = argv[c];
-                }
-            else
-                {
-                std::cerr << "Either positional argument or --file option can be used, but not both.\n";
-                getopt_long.usage();
-                return EXIT_FAILURE;
-                }
-
-            if(c + 1 != argc)
-                {
-                std::cerr << "Only a single database file argument allowed.\n";
-                getopt_long.usage();
-                return EXIT_FAILURE;
-                }
-            }
-
-        if(!license_accepted)
-            {
-            std::cerr << license_notices_as_text() << "\n\n";
-            }
-
-        if(show_license)
-            {
-            std::cerr << license_as_text() << "\n\n";
-            return EXIT_SUCCESS;
-            }
-
-        if(show_help)
-            {
-            getopt_long.usage();
-            return EXIT_SUCCESS;
-            }
-
-        switch(num_to_run)
-            {
-            case 0:
-                std::cerr << "Please use exactly one of --crc, --list, --squeeze, --merge or --extract.\n";
-                getopt_long.usage();
-                return EXIT_FAILURE;
-
-            case 1:
-                // Continue and process the single selected operation below.
-                break;
-
-            default:
-                std::cerr << "At most one operation can be selected.\n";
-                return EXIT_FAILURE;
-            }
-
+    if((c = getopt_long.optind) < argc)
+        {
         if(database_filename.string().empty())
             {
-            std::cerr << "Database file must be specified.\n";
+            database_filename = argv[c];
+            }
+        else
+            {
+            std::cerr << "Either positional argument or --file option can be used, but not both.\n";
             getopt_long.usage();
             return EXIT_FAILURE;
             }
 
-        if(run_crc)
+        if(c + 1 != argc)
             {
-            calculate_and_display_crcs(database_filename);
-            return EXIT_SUCCESS;
+            std::cerr << "Only a single database file argument allowed.\n";
+            getopt_long.usage();
+            return EXIT_FAILURE;
             }
-
-        if(run_list)
-            {
-            list_tables(database_filename);
-            return EXIT_SUCCESS;
-            }
-
-        if(run_rename)
-            {
-            rename_tables(filename_of_table_names);
-            }
-
-        if(run_squeeze)
-            {
-            squeeze(database_filename, new_database_filename);
-            return EXIT_SUCCESS;
-            }
-
-        if(run_merge)
-            {
-            merge(database_filename, filename_to_merge);
-            return EXIT_SUCCESS;
-            }
-
-        if(run_extract)
-            {
-            extract(database_filename, table_number_to_extract);
-            return EXIT_SUCCESS;
-            }
-
-        std::cerr << "Unexpected unknown run mode, nothing done.\n";
         }
-    catch(std::exception& e)
+
+    if(!license_accepted)
         {
-        std::cerr << "Fatal exception: " << e.what() << '\n';
+        std::cerr << license_notices_as_text() << "\n\n";
         }
-    catch(...)
+
+    if(show_license)
         {
-        std::cerr << "Nonspecific fatal exception\n";
+        std::cerr << license_as_text() << "\n\n";
+        return EXIT_SUCCESS;
         }
+
+    if(show_help)
+        {
+        getopt_long.usage();
+        return EXIT_SUCCESS;
+        }
+
+    switch(num_to_run)
+        {
+        case 0:
+            std::cerr << "Please use exactly one of --crc, --list, --squeeze, --merge or --extract.\n";
+            getopt_long.usage();
+            return EXIT_FAILURE;
+
+        case 1:
+            // Continue and process the single selected operation below.
+            break;
+
+        default:
+            std::cerr << "At most one operation can be selected.\n";
+            return EXIT_FAILURE;
+        }
+
+    if(database_filename.string().empty())
+        {
+        std::cerr << "Database file must be specified.\n";
+        getopt_long.usage();
+        return EXIT_FAILURE;
+        }
+
+    if(run_crc)
+        {
+        calculate_and_display_crcs(database_filename);
+        return EXIT_SUCCESS;
+        }
+
+    if(run_list)
+        {
+        list_tables(database_filename);
+        return EXIT_SUCCESS;
+        }
+
+    if(run_rename)
+        {
+        rename_tables(filename_of_table_names);
+        }
+
+    if(run_squeeze)
+        {
+        squeeze(database_filename, new_database_filename);
+        return EXIT_SUCCESS;
+        }
+
+    if(run_merge)
+        {
+        merge(database_filename, filename_to_merge);
+        return EXIT_SUCCESS;
+        }
+
+    if(run_extract)
+        {
+        extract(database_filename, table_number_to_extract);
+        return EXIT_SUCCESS;
+        }
+
+    std::cerr << "Unexpected unknown run mode, nothing done.\n";
     return EXIT_FAILURE;
 }
