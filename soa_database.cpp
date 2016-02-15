@@ -527,6 +527,12 @@ auto const age_width = 3;
 // Number of spaces used between columns of the values table.
 auto const gap_length = 2;
 
+// Number of characters taken by a single value using the given precision.
+inline int get_value_width(int num_decimals)
+{
+    return num_decimals + gap_length + 2; // +2 for "0."
+}
+
 // Label used for the ultimate column in the select tables.
 auto const ultimate_header = "Ult.";
 
@@ -586,8 +592,7 @@ void writer::write_values
 
     os_ << soa_fields[e_field_values].name << ":\n";
 
-    auto const
-        value_width = *num_decimals + text_format::gap_length + 2; // for "0."
+    auto const value_width = text_format::get_value_width(*num_decimals);
 
     if(get_value_or(select_period, 0))
         {
@@ -807,6 +812,37 @@ class table_impl
     // Unlike the other functions, this one reads from the input on its own
     // (which is also why it takes line number by reference, as it modifies it).
     void parse_values(std::istream& is, int& line_num);
+
+    // Helper of parse_values() which is only called for select tables and
+    // parses (and mostly ignores) their header line.
+    void parse_select_header(std::istream& is, int& line_num) const;
+
+    // Skip the given number of spaces and throw an exception if they are not
+    // present, otherwise adjust the current pointer to point past them.
+    static void skip_spaces
+        (int num_spaces
+        ,char const* start
+        ,char const*& current
+        ,int& line_num
+        );
+
+    // Helper of parse_values() parsing an integer value of at most age_width
+    // digits. Adjust the current pointer to advance past the parsed age, the
+    // other parameters are only used for diagnostic purposes.
+    uint16_t parse_age
+        (char const* start
+        ,char const*& current
+        ,int& line_num
+        );
+
+    // Helper of parse_values() parsing a single floating point value using the
+    // exactly expected precision. Adjust the current pointer to advance past
+    // the value parsed, the other parameters are only used for diagnostics.
+    double parse_single_value
+        (char const* start
+        ,char const*& current
+        ,int& line_num
+        );
 
     // Compute the expected number of values from minimum and maximum age
     // values and the select period and max select age if specified.
@@ -1229,10 +1265,225 @@ void table_impl::parse_table_type
         }
 }
 
+void table_impl::parse_select_header(std::istream& is, int& line_num) const
+{
+    // There must be a header line in this case, as it's not used for anything,
+    // don't perform strict checks, but still check that it has the expected
+    // values.
+    ++line_num;
+    std::string line;
+    if(!std::getline(is, line))
+        {
+        std::ostringstream oss;
+        oss << "header expected for a select table at line " << line_num;
+        throw std::runtime_error(oss.str());
+        }
+
+    std::istringstream iss(line);
+    unsigned actual;
+    for(unsigned expected = 1; iss >> actual; ++expected)
+        {
+        if(actual != expected)
+            {
+            std::ostringstream oss;
+            oss << "expected column #" << expected
+                << " and not " << actual
+                << " in the select table header at line " << line_num
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        if (actual == *select_period_)
+            {
+            break;
+            }
+        }
+
+    if(actual != *select_period_)
+        {
+        std::ostringstream oss;
+        oss << "expected " << *select_period_
+            << " columns and not " << actual
+            << " in the select table header at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    std::string header;
+    iss >> header;
+    if(!iss)
+        {
+        std::ostringstream oss;
+        oss << "expected the ultimate column label \""
+            << text_format::ultimate_header << "\""
+            << " in the select table header at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    if(header != text_format::ultimate_header)
+        {
+        std::ostringstream oss;
+        oss << "expected the ultimate column label \""
+            << text_format::ultimate_header << "\""
+            << " and not \"" << header << "\""
+            << " in the select table header at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+}
+
+uint16_t table_impl::parse_age
+    (char const* start
+    ,char const*& current
+    ,int& line_num
+    )
+{
+    using text_format::age_width;
+
+    // We need to manually skip the leading whitespace as strict_parse_number()
+    // doesn't accept it.
+    auto start_num = current;
+    while(*start_num == ' ')
+        {
+        if(start_num - current == age_width)
+            {
+            std::ostringstream oss;
+            oss << "at most " << age_width - 1 << " spaces allowed "
+                << "at position " << current - start + 1
+                << " at line " << line_num
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        ++start_num;
+        }
+
+    auto const res_age = strict_parse_number(start_num);
+    if(!res_age.end || (res_age.end - current != age_width))
+        {
+        std::ostringstream oss;
+        oss << "expected a number with "
+            << age_width - (start_num - current) << " digits"
+            << " at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    current = res_age.end;
+
+    // There is no need to check for the range, we can't overflow uint16_t
+    // with just 3 digits.
+    return static_cast<uint16_t>(res_age.num);
+}
+
+double table_impl::parse_single_value
+    (char const* start
+    ,char const*& current
+    ,int& line_num
+    )
+{
+    skip_spaces(text_format::gap_length, start, current, line_num);
+
+    // We can't impose the exact number of decimal digits using standard
+    // functions for parsing floating point values, so do it manually.
+    auto const res_int_part = strict_parse_number(current);
+    if(!res_int_part.end)
+        {
+        std::ostringstream oss;
+        oss << "expected a valid integer part at position "
+            << current - start + 1
+            << " at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    if(*res_int_part.end != '.')
+        {
+        std::ostringstream oss;
+        oss << "expected decimal point at position "
+            << res_int_part.end - start + 1
+            << " at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    auto const res_frac_part = strict_parse_number(res_int_part.end + 1);
+    if(!res_frac_part.end)
+        {
+        std::ostringstream oss;
+        oss << "expected a valid fractional part at position "
+            << res_frac_part.end - start + 1
+            << " at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    if(res_frac_part.end - res_int_part.end - 1 != *num_decimals_)
+        {
+        std::ostringstream oss;
+        oss << "expected " << *num_decimals_ << " decimal digits, not "
+            << res_frac_part.end - res_int_part.end - 1
+            << " in the value at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    current = res_frac_part.end;
+
+    double value = res_frac_part.num;
+    value /= std::pow(10, *num_decimals_);
+    value += res_int_part.num;
+
+    return value;
+}
+
+void table_impl::skip_spaces
+    (int num_spaces
+    ,char const* start
+    ,char const*& current
+    ,int& line_num
+    )
+{
+    if(std::strncmp(current, std::string(num_spaces, ' ').c_str(), num_spaces) != 0)
+        {
+        std::ostringstream oss;
+        oss << "expected " << num_spaces << " spaces at position "
+            << current - start + 1
+            << " at line " << line_num
+            ;
+        throw std::runtime_error(oss.str());
+        }
+
+    current += num_spaces;
+}
+
+// This function parses a text representation of a select and ultimate table
+// consisting of:
+//
+//  - A header with N column labels where N = *select_period_ + 1.
+//  - A number of rows containing N values each.
+//  - Optionally, a number of rows containing just one value in the last column.
+//
+// Additionally, each non header row contains the ages to which it applies on
+// the left and right hand side, so the global structure of the table is:
+//
+//          0    1    2  Ult.
+//    1   x_1  y_1  z_1  w_1      4
+//    2   x_2  y_2  z_2  w_2      5
+//    3   x_3  y_3  z_3  w_3      6
+//    .............................
+//    s   x_s  y_s  z_s  w_s    s+3
+//  s+4                  w_s+1  s+4
+//  s+5                  w_s+2  s+5
+//    .............................
+//    m   x_m  y_m  z_m  w_m      m
+//
+// where "s" is the max select age and "m" is the max age (min age here is 1).
 void table_impl::parse_values(std::istream& is, int& line_num)
 {
     unsigned const num_values = get_expected_number_of_values();
-    values_.resize(num_values);
+    values_.reserve(num_values);
 
     if(!num_decimals_)
         {
@@ -1243,147 +1494,103 @@ void table_impl::parse_values(std::istream& is, int& line_num)
         throw std::runtime_error(oss.str());
         }
 
-    auto const exponent = std::pow(10, *num_decimals_);
-
-    auto const min_age = *min_age_;
-    boost::optional<uint16_t> last_age;
-    for(std::string line; ++line_num, std::getline(is, line);)
+    if(!type_)
         {
-        // Perform strict format checks: there must be exactly the given number
-        // of (space padded) characters for the age and exactly the given
-        // precision for the value with the given gap between them.
-        using text_format::age_width;
-        using text_format::gap_length;
+        std::ostringstream oss;
+        oss << "table type must occur before its values at line " << line_num;
+        throw std::runtime_error(oss.str());
+        }
+
+    if(*type_ == table_type::select)
+        {
+        parse_select_header(is, line_num);
+        }
+
+    for(auto age = *min_age_; age <= *max_age_; ++age)
+        {
+        std::string line;
+        if(!std::getline(is, line))
+            {
+            // Complain about premature input end.
+            std::ostringstream oss;
+            oss << "table values for age " << age
+                << " are missing after line " << line_num
+                ;
+
+            throw std::runtime_error(oss.str());
+            }
+        ++line_num;
 
         auto const start = line.c_str();
+        auto current = start;
 
-        // We need to manually skip the leading whitespace as
-        // strict_parse_number() doesn't accept it.
-        auto start_num = start;
-        while(*start_num == ' ' || *start_num == '\t')
+        auto const actual_age = parse_age(start, current, line_num);
+        if(actual_age != age)
             {
-            if(start_num - start == age_width)
+            std::ostringstream oss;
+            oss << "incorrect age value " << actual_age
+                << " at line " << line_num
+                << " (" << age << " expected)"
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        if(*type_ == table_type::select)
+            {
+            if(age <= *max_select_age_)
+                {
+                // We are still in 2D part of the table
+                for(uint16_t d = 0; d < *select_period_; ++d)
+                    {
+                    values_.push_back(parse_single_value(start, current, line_num));
+                    }
+                }
+            else
+                {
+                // After the max select age only the last column remains, just
+                // skip the spaces until it.
+                skip_spaces
+                    (*select_period_*text_format::get_value_width(*num_decimals_)
+                    ,start
+                    ,current
+                    ,line_num
+                    );
+                }
+            }
+
+        values_.push_back(parse_single_value(start, current, line_num));
+
+        if(*type_ == table_type::select)
+            {
+            skip_spaces(text_format::gap_length, start, current, line_num);
+
+            auto const expected_age = age <= *max_select_age_
+                ? age + *select_period_
+                : age
+                ;
+
+            auto const ultimate_age = parse_age(start, current, line_num);
+            if(ultimate_age != expected_age)
                 {
                 std::ostringstream oss;
-                oss << "at most " << age_width - 1 << " spaces allowed "
-                    << "at the beginning of line " << line_num
+                oss << "incorrect right hand side age value " << ultimate_age
+                    << " at line " << line_num
+                    << " (" << expected_age << " expected)"
                     ;
                 throw std::runtime_error(oss.str());
                 }
-
-            ++start_num;
             }
 
-        auto const res_age = strict_parse_number(start_num);
-        if(!res_age.end || (res_age.end - start != age_width))
+        if(*type_ == table_type::select)
             {
-            std::ostringstream oss;
-            oss << "expected a number with at most " << age_width << " digits "
-                << "at line " << line_num
-                ;
-            throw std::runtime_error(oss.str());
-            }
-
-        // There is no need to check for the range, we can't overflow uint16_t
-        // with just 3 digits.
-        auto const age = static_cast<uint16_t>(res_age.num);
-
-        if(line.compare(age_width, gap_length, std::string(gap_length, ' ')) != 0)
-            {
-            std::ostringstream oss;
-            oss << "expected a " << gap_length << " spaces after the age "
-                << "at line " << line_num
-                ;
-            throw std::runtime_error(oss.str());
-            }
-
-        // We can't impose the exact number of decimal digits using standard
-        // functions for parsing floating point values, so do it manually.
-        auto const res_int_part = strict_parse_number(res_age.end + gap_length);
-        if(!res_int_part.end)
-            {
-            std::ostringstream oss;
-            oss << "expected a valid integer part at position "
-                << age_width + gap_length + 1
-                << " at line " << line_num
-                ;
-            throw std::runtime_error(oss.str());
-            }
-
-        if(*res_int_part.end != '.')
-            {
-            std::ostringstream oss;
-            oss << "expected decimal point at position "
-                << res_int_part.end - start + 1
-                << " at line " << line_num
-                ;
-            throw std::runtime_error(oss.str());
-            }
-
-        auto const res_frac_part = strict_parse_number(res_int_part.end + 1);
-        if(!res_frac_part.end)
-            {
-            std::ostringstream oss;
-            oss << "expected a valid fractional part at position "
-                << res_frac_part.end - start + 1
-                << " at line " << line_num
-                ;
-            throw std::runtime_error(oss.str());
-            }
-
-        if(res_frac_part.end - res_int_part.end - 1 != *num_decimals_)
-            {
-            std::ostringstream oss;
-            oss << "expected " << *num_decimals_ << " decimal digits, not "
-                << res_frac_part.end - res_int_part.end - 1
-                << " in the value at line " << line_num
-                ;
-            throw std::runtime_error(oss.str());
-            }
-
-        double value = res_frac_part.num;
-        value /= exponent;
-        value += res_int_part.num;
-
-        // Check that we have the correct age: we must start with the minimum
-        // age and each next value must be one greater than the previous one.
-        auto const age_expected = last_age ? *last_age + 1 : min_age;
-        if(age != age_expected)
-            {
-            std::ostringstream oss;
-            oss << "incorrect age value " << age
-                << " at line " << line_num
-                << " (" << age_expected << " expected)"
-                ;
-            throw std::runtime_error(oss.str());
-            }
-
-        last_age = age;
-
-        // Because of the check above we can be certain that age > min_age.
-        unsigned const n = age - min_age;
-        values_[n] = value;
-
-        if (n == num_values - 1)
-            {
-            return;
+            if(age == *max_select_age_)
+                {
+                // There is a jump in ages when switching from the 2D to 1D
+                // part of the select and ultimate table after the select age.
+                age += *select_period_;
+                }
             }
         }
-
-    // Check for premature input end.
-    std::ostringstream oss;
-    if(last_age)
-        {
-        oss << "only " << (*last_age - min_age + 1) << " values specified, "
-            << "but " << num_values << " expected"
-            ;
-        }
-    else
-        {
-        oss << "table values are missing after line " << line_num;
-        }
-
-    throw std::runtime_error(oss.str());
 }
 
 void table_impl::validate()

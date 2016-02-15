@@ -407,15 +407,24 @@ void test_table_access_by_number()
         );
 }
 
+void do_test_table_to_from_text(table const& table_orig)
+{
+    std::string const text_orig = table_orig.save_as_text();
+    table const table_copy = table::read_from_text(text_orig);
+    std::string const text_copy = table_copy.save_as_text();
+
+    BOOST_TEST(text_orig == text_copy);
+    BOOST_TEST(table_orig == table_copy);
+}
+
 void test_to_from_text()
 {
-    database qx_cso(qx_cso_path);
+    database qx_ins(qx_ins_path);
 
-    table const table_42 = qx_cso.find_table(table::Number(42));
-    std::string const text_42 = table_42.save_as_text();
-    table const copy_42 = table::read_from_text(text_42);
-
-    BOOST_TEST(table_42 == copy_42);
+    // Test with aggregate, select and duration tables.
+    do_test_table_to_from_text(qx_ins.find_table(table::Number(250)));
+    do_test_table_to_from_text(qx_ins.find_table(table::Number(256)));
+    do_test_table_to_from_text(qx_ins.find_table(table::Number(750)));
 }
 
 void test_save()
