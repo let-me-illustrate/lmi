@@ -441,15 +441,32 @@ void test_save()
 
 void test_add_table()
 {
-#if 0
-    database qx_cso(qx_cso_path);
+    // Notice "1+" to skip the leading new line.
+    table const t = table::read_from_text(std::string(1 + R"table(
+Table number: 1
+Table type: Aggregate
+Minimum age: 0
+Maximum age: 1
+Number of decimal places: 5
+Table values:
+  0  0.12345
+  1  0.23456
+)table"));
+
+    database qx_ins(qx_ins_path);
+    int const count = qx_ins.tables_count();
+
+    qx_ins.append_table(t);
+    BOOST_TEST_EQUAL(qx_ins.tables_count(), count + 1);
 
     BOOST_TEST_THROW
-        (qx_cso.append_table(table::read_from_text(std::string("")))
+        (qx_ins.append_table(t)
         ,std::invalid_argument
-        ,""
+        ,"table number 1 already exists."
         );
-#endif
+
+    qx_ins.add_or_replace_table(t);
+    BOOST_TEST_EQUAL(qx_ins.tables_count(), count + 1);
 }
 
 int test_main(int, char*[])
