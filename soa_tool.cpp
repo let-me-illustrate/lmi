@@ -78,11 +78,11 @@ void list_tables(fs::path const& database_filename)
         {
         table const& t = table_file.get_nth_table(i);
         std::cout
-            << std::setw( 5) << std::setfill('0')
+            << std::setw(5) << std::setfill('0')
             << t.number().value()
             << ' '
             << t.name()
-            << " [" << t.type_as_string() << "]\n"
+            << '\n'
             ;
         }
 }
