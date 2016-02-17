@@ -243,7 +243,9 @@ int try_main(int argc, char* argv[])
     bool run_extract      = false;
     bool run_extract_all  = false;
     bool run_rename       = false;
-    int  num_to_run       = 0;
+
+    int  num_to_do        = 0;      // Number of actions to perform.
+    bool needs_database   = true;
 
     fs::path database_filename;
     fs::path new_database_filename;
@@ -282,33 +284,37 @@ int try_main(int argc, char* argv[])
           case 'h':
             {
             show_help = true;
+            ++num_to_do;
+            needs_database = false;
             }
             break;
 
           case 'l':
             {
             show_license = true;
+            ++num_to_do;
+            needs_database = false;
             }
             break;
 
           case 'c':
             {
             run_crc = true;
-            ++num_to_run;
+            ++num_to_do;
             }
             break;
 
           case 't':
             {
             run_list = true;
-            ++num_to_run;
+            ++num_to_do;
             }
             break;
 
           case 's':
             {
             run_squeeze = true;
-            ++num_to_run;
+            ++num_to_do;
             new_database_filename = getopt_long.optarg;
             }
             break;
@@ -316,7 +322,7 @@ int try_main(int argc, char* argv[])
           case 'm':
             {
             run_merge = true;
-            ++num_to_run;
+            ++num_to_do;
             filename_to_merge = getopt_long.optarg;
             }
             break;
@@ -331,7 +337,7 @@ int try_main(int argc, char* argv[])
           case 'e':
             {
             run_extract = true;
-            ++num_to_run;
+            ++num_to_do;
             table_number_to_extract = std::atoi(getopt_long.optarg);
             }
             break;
@@ -339,7 +345,7 @@ int try_main(int argc, char* argv[])
           case 'x':
             {
             run_extract_all = true;
-            ++num_to_run;
+            ++num_to_do;
             }
             break;
 
@@ -383,7 +389,7 @@ int try_main(int argc, char* argv[])
             }
         }
 
-    switch(num_to_run)
+    switch(num_to_do)
         {
         case 0:
             if(!run_delete)
@@ -411,7 +417,10 @@ int try_main(int argc, char* argv[])
             command_line_syntax_error = true;
         }
 
-    if(!command_line_syntax_error && database_filename.string().empty())
+    if(!command_line_syntax_error
+      && needs_database
+      && database_filename.string().empty()
+      )
         {
         std::cerr << "Database file must be specified.\n";
         command_line_syntax_error = true;
