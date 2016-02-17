@@ -155,6 +155,13 @@ class database
     // The notes for append_table() also apply to this method.
     void add_or_replace_table(table const& table);
 
+    // Delete a table with the given number.
+    //
+    // Throws of there is no table with this number. As with append_table(),
+    // the effect of this function on this object is immediate, but save()
+    // needs to be called to update the disk file.
+    void delete_table(table::Number number);
+
     // Save the current database contents to the specified file.
     void save(fs::path const& path);
 

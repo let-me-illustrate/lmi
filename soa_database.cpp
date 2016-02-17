@@ -2171,6 +2171,7 @@ class database_impl
     table find_table(table::Number number) const;
     void append_table(table const& table);
     void add_or_replace_table(table const& table);
+    void delete_table(table::Number number);
     void save(fs::path const& path);
 
   private:
@@ -2228,6 +2229,12 @@ class database_impl
         ,uint32_t offset
         ,shared_ptr<table_impl> table = shared_ptr<table_impl>()
         );
+
+    // Remove the entry for the table with the given number from the index.
+    // Also updates index_by_number_ map.
+    //
+    // Throws if there is no table with this number.
+    void remove_index_entry(table::Number number);
 
     // Return the table corresponding to the given index entry, loading it from
     // the database file if this hadn't been done yet.
@@ -2297,6 +2304,33 @@ bool database_impl::add_index_entry
         }
 
     return true;
+}
+
+void database_impl::remove_index_entry(table::Number number)
+{
+    auto const it = index_by_number_.find(number);
+
+    if(it == index_by_number_.end())
+        {
+        std::ostringstream oss;
+        oss << "Failed to delete table number " << number << ": not found.";
+        throw std::invalid_argument(oss.str());
+        }
+
+    // Remove the entry corresponding to this table from both the index and the
+    // lookup map.
+    auto const index_deleted = it->second;
+    index_.erase(index_.begin() + index_deleted);
+    index_by_number_.erase(it);
+
+    // But also update the remaining lookup map indices.
+    for(auto& e: index_by_number_)
+        {
+        if(e.second > index_deleted)
+            {
+            --e.second;
+            }
+        }
 }
 
 void database_impl::read_index(fs::path const& path)
@@ -2450,6 +2484,11 @@ void database_impl::add_or_replace_table(table const& table)
         {
         do_append_table(table);
         }
+}
+
+void database_impl::delete_table(table::Number number)
+{
+    remove_index_entry(number);
 }
 
 void database_impl::save(fs::path const& path)
@@ -2762,6 +2801,11 @@ void database::append_table(table const& table)
 void database::add_or_replace_table(table const& table)
 {
     return impl_->add_or_replace_table(table);
+}
+
+void database::delete_table(table::Number number)
+{
+    return impl_->delete_table(number);
 }
 
 void database::save(fs::path const& path)

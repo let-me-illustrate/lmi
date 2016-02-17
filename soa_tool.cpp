@@ -142,6 +142,16 @@ void merge
     table_file.save(database_filename);
 }
 
+void delete_table
+    (fs::path database_filename
+    ,int      table_number_to_delete
+    )
+{
+    database table_file(database_filename);
+    table_file.delete_table(table::Number(table_number_to_delete));
+    table_file.save(database_filename);
+}
+
 void extract
     (fs::path database_filename
     ,int      table_number_to_extract
@@ -188,7 +198,7 @@ int try_main(int argc, char* argv[])
     static struct Option long_options[] =
       {
         {"help"           , NO_ARG,   0, 'h', 0    , "display this help and exit"},
-//        {"delete"         , REQD_ARG, 0,   0, 0    , "delete something"},
+        {"delete"         , REQD_ARG, 0, 'd', 0    , "delete table #n from database"},
         {"license"        , NO_ARG,   0, 'l', 0    , "display license and exit"},
         {"accept"         , NO_ARG,   0, 'a', 0    , "accept license (-l to display)"},
         {"file=FILE"      , REQD_ARG, 0, 'f', 0    , "use database FILE"},
@@ -207,6 +217,7 @@ int try_main(int argc, char* argv[])
     bool run_list         = false;
     bool run_squeeze      = false;
     bool run_merge        = false;
+    bool run_delete       = false;
     bool run_extract      = false;
     bool run_rename       = false;
     int  num_to_run       = 0;
@@ -215,6 +226,7 @@ int try_main(int argc, char* argv[])
     fs::path new_database_filename;
     fs::path filename_to_merge;
     int table_number_to_extract = 0;
+    int table_number_to_delete = 0;
     fs::path filename_of_table_names;
 
     GetOpt getopt_long
@@ -286,6 +298,13 @@ int try_main(int argc, char* argv[])
             }
             break;
 
+          case 'd':
+            {
+            run_delete = true;
+            table_number_to_delete = std::atoi(getopt_long.optarg);
+            }
+            break;
+
           case 'e':
             {
             run_extract = true;
@@ -337,11 +356,19 @@ int try_main(int argc, char* argv[])
     switch(num_to_run)
         {
         case 0:
-            std::cerr << "Please use exactly one of --crc, --list, --squeeze, --merge or --extract.\n";
-            command_line_syntax_error = true;
+            if(!run_delete)
+                {
+                std::cerr << "Please use exactly one of --crc, --list, --squeeze, --merge or --extract.\n";
+                command_line_syntax_error = true;
+                }
             break;
 
         case 1:
+            if(run_delete && !run_extract)
+                {
+                std::cerr << "--delete can only be combined with --extract.\n";
+                command_line_syntax_error = true;
+                }
             if(run_rename && !run_squeeze)
                 {
                 std::cerr << "--rename can only be used together with --squeeze.\n";
@@ -421,6 +448,14 @@ int try_main(int argc, char* argv[])
     if(run_extract)
         {
         extract(database_filename, table_number_to_extract);
+        return EXIT_SUCCESS;
+        }
+
+    // Order matters here: if both --delete and --extract are used, we need to
+    // extract the table before removing it.
+    if(run_delete)
+        {
+        delete_table(database_filename, table_number_to_delete);
         return EXIT_SUCCESS;
         }
 

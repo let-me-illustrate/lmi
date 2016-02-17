@@ -320,6 +320,31 @@ Table values:
     BOOST_TEST_EQUAL(qx_ins.tables_count(), count + 1);
 }
 
+void test_delete()
+{
+    database qx_ins(qx_ins_path);
+    int const initial_count = qx_ins.tables_count();
+
+    BOOST_TEST_THROW
+        (qx_ins.delete_table(table::Number(1))
+        ,std::invalid_argument
+        ,""
+        );
+
+    qx_ins.delete_table(table::Number(250));
+    BOOST_TEST_EQUAL(qx_ins.tables_count(), initial_count - 1);
+
+    qx_ins.delete_table(table::Number(202));
+    BOOST_TEST_EQUAL(qx_ins.tables_count(), initial_count - 2);
+
+    test_file_eraser erase_ndx("eraseme.ndx");
+    test_file_eraser erase_dat("eraseme.dat");
+    qx_ins.save("eraseme");
+
+    database db_tmp("eraseme");
+    BOOST_TEST_EQUAL(db_tmp.tables_count(), initial_count - 2);
+}
+
 int test_main(int, char*[])
 {
     test_database_open();
@@ -328,6 +353,7 @@ int test_main(int, char*[])
     test_save();
     test_to_from_text();
     test_add_table();
+    test_delete();
 
     return EXIT_SUCCESS;
 }
