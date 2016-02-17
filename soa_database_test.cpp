@@ -345,6 +345,47 @@ void test_delete()
     BOOST_TEST_EQUAL(db_tmp.tables_count(), initial_count - 2);
 }
 
+void do_test_copy(std::string const& path)
+{
+    database db_orig(path);
+    auto const tables_count = db_orig.tables_count();
+
+    test_file_eraser erase_ndx("eraseme.ndx");
+    test_file_eraser erase_dat("eraseme.dat");
+
+    // Make a copy of the database under new name.
+    {
+    database db_new;
+    for(int i = 0; i != tables_count; ++i)
+        {
+        db_new.append_table(db_orig.get_nth_table(i));
+        }
+
+    db_new.save("eraseme");
+    }
+
+    // And read it back.
+    database db_new("eraseme");
+
+    // In general, we can't just use TEST_FILES_EQUAL() to compare the files
+    // here because the order of tables in the original .dat file is lost and
+    // it does not need to be the same as the order in the index file, so we
+    // just compare the logical contents.
+    for(int i = 0; i != tables_count; ++i)
+        {
+        BOOST_TEST_EQUAL
+            (db_new.get_nth_table(i).save_as_text()
+            ,db_orig.get_nth_table(i).save_as_text()
+            );
+        }
+}
+
+void test_copy()
+{
+    do_test_copy(qx_cso_path);
+    do_test_copy(qx_ins_path);
+}
+
 int test_main(int, char*[])
 {
     test_database_open();
@@ -354,6 +395,7 @@ int test_main(int, char*[])
     test_to_from_text();
     test_add_table();
     test_delete();
+    test_copy();
 
     return EXIT_SUCCESS;
 }
