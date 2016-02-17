@@ -71,12 +71,30 @@ void calculate_and_display_crcs(fs::path const& database_filename)
         }
 }
 
+// Return a sorted vector of all table numbers.
+std::vector<table::Number> get_all_tables_numbers(database const& table_file)
+{
+    int const tables_count = table_file.tables_count();
+    std::vector<table::Number> numbers;
+    numbers.reserve(tables_count);
+    for(int i = 0; i != tables_count; ++i)
+        {
+        numbers.push_back(table_file.get_nth_table(i).number());
+        }
+
+    std::sort(numbers.begin(), numbers.end());
+
+    return numbers;
+}
+
 void list_tables(fs::path const& database_filename)
 {
     database const table_file(database_filename);
-    for(int i = 0; i != table_file.tables_count(); ++i)
+
+    auto const numbers = get_all_tables_numbers(table_file);
+    for(auto num: numbers)
         {
-        table const& t = table_file.get_nth_table(i);
+        table const& t = table_file.find_table(num);
         std::cout
             << std::setw(5) << std::setfill('0')
             << t.number().value()
@@ -95,22 +113,9 @@ void squeeze
     database const table_file(database_filename);
     database new_file;
 
-    // Build the list of all existing tables numbers.
-    int const tables_count = table_file.tables_count();
-    std::vector<table::Number> numbers;
-    numbers.reserve(tables_count);
-    for(int i = 0; i != tables_count; ++i)
+    auto const numbers = get_all_tables_numbers(table_file);
+    for(auto num: numbers)
         {
-        numbers.push_back(table_file.get_nth_table(i).number());
-        }
-
-    // And now add them to the new database in order of their numbers.
-    std::sort(numbers.begin(), numbers.end());
-
-    for(int i = 0; i != tables_count; ++i)
-        {
-        table::Number const num = numbers[i];
-
         table t = table_file.find_table(num);
 
         // Also adjust the table names if requested.
