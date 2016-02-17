@@ -152,6 +152,17 @@ void delete_table
     table_file.save(database_filename);
 }
 
+// Save the given table in a text file with its number as name, return the name
+// of this file.
+std::string do_save_as_text_file(table const& t)
+{
+    std::ostringstream oss;
+    oss << t.number() << ".txt";
+    std::string const filename = oss.str();
+    t.save_as_text(filename);
+    return filename;
+}
+
 void extract
     (fs::path database_filename
     ,int      table_number_to_extract
@@ -162,10 +173,20 @@ void extract
     table const&
         t = table_file.find_table(table::Number(table_number_to_extract));
 
-    std::ostringstream oss;
-    oss << table_number_to_extract << ".txt";
-    t.save_as_text(oss.str());
-    std::cout << "Extracted: " << oss.str().c_str() << '\n';
+    std::cout << "Extracted: " << do_save_as_text_file(t) << '\n';
+}
+
+void extract_all(fs::path database_filename)
+{
+    database const table_file(database_filename);
+
+    auto const tables_count = table_file.tables_count();
+    for(int i = 0; i != tables_count; ++i)
+        {
+        do_save_as_text_file(table_file.get_nth_table(i));
+        }
+
+    std::cout << "Extracted " << tables_count << " tables.\n";
 }
 
 void rename_tables
@@ -207,6 +228,7 @@ int try_main(int argc, char* argv[])
         {"squeeze=NEWFILE", REQD_ARG, 0, 's', 0    , "compress database into NEWFILE"},
         {"merge=TEXTFILE" , REQD_ARG, 0, 'm', 0    , "merge TEXTFILE into database"},
         {"extract=n"      , REQD_ARG, 0, 'e', 0    , "extract table #n into n.txt"},
+        {"extract-all"    , NO_ARG,   0, 'x', 0    , "extract all tables to text files"},
         {"rename=NAMEFILE", REQD_ARG, 0, 'r', 0    , "rename tables from NAMEFILE"},
         {0                , NO_ARG,   0,   0, 0    , ""}
       };
@@ -219,6 +241,7 @@ int try_main(int argc, char* argv[])
     bool run_merge        = false;
     bool run_delete       = false;
     bool run_extract      = false;
+    bool run_extract_all  = false;
     bool run_rename       = false;
     int  num_to_run       = 0;
 
@@ -310,6 +333,13 @@ int try_main(int argc, char* argv[])
             run_extract = true;
             ++num_to_run;
             table_number_to_extract = std::atoi(getopt_long.optarg);
+            }
+            break;
+
+          case 'x':
+            {
+            run_extract_all = true;
+            ++num_to_run;
             }
             break;
 
@@ -448,6 +478,12 @@ int try_main(int argc, char* argv[])
     if(run_extract)
         {
         extract(database_filename, table_number_to_extract);
+        return EXIT_SUCCESS;
+        }
+
+    if(run_extract_all)
+        {
+        extract_all(database_filename);
         return EXIT_SUCCESS;
         }
 
