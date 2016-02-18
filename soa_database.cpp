@@ -376,6 +376,34 @@ char const* table_type_as_string(table_type tt)
     return nullptr;
 }
 
+// Represents location in the input, possibly invalid if it's not available.
+struct location_info
+{
+    explicit location_info(int line_num = 0, int position = 0)
+        :line_num_(line_num)
+        ,position_(position)
+        {
+        }
+
+    int const line_num_ = 0;
+    int const position_ = 0;
+};
+
+inline
+std::ostream& operator<<(std::ostream& os, location_info const& loc)
+{
+    if(loc.line_num_)
+        {
+        if(loc.position_)
+            {
+            os << " at position " << loc.position_;
+            }
+        os << " at line " << loc.line_num_;
+        }
+
+    return os;
+}
+
 } // anonymous namespace
 
 // Classes abstracting the difference between text and binary formats: both
@@ -708,7 +736,10 @@ enum_soa_field parse_field_name(std::string const& name, int line_num)
         }
 
     std::ostringstream oss;
-    oss << "Unrecognized field '" << name << "' at line number " << line_num;
+    oss
+        << "unrecognized field '" << name << "'"
+        << location_info(line_num)
+        ;
     throw std::runtime_error(oss.str());
 }
 
@@ -941,11 +972,8 @@ void throw_if_duplicate_record
         oss << "duplicate occurrence of the field '"
             << soa_fields[field].name
             << "'"
+            << location_info(line_num)
             ;
-        if(line_num)
-            {
-            oss << " at line " << line_num;
-            }
         throw std::runtime_error(oss.str());
         }
 }
@@ -1194,8 +1222,8 @@ std::string* table_impl::parse_string
         std::ostringstream oss;
         oss << "non-empty value must be specified for the field '"
             << soa_fields[field].name
-            << "' at line"
-            << line_num
+            << "'"
+            << location_info(line_num)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1218,8 +1246,8 @@ unsigned long table_impl::do_parse_number
         std::ostringstream oss;
         oss << "value for numeric field '"
             << soa_fields[field].name
-            << "' is not a number at line "
-            << line_num
+            << "' is not a number"
+            << location_info(line_num)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1231,8 +1259,8 @@ unsigned long table_impl::do_parse_number
             << soa_fields[field].name
             << "' is out of range (maximum allowed is "
             << max_num
-            << ") at line "
-            << line_num
+            << ")"
+            << location_info(line_num)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1275,7 +1303,8 @@ void table_impl::parse_table_type
     else
         {
         std::ostringstream oss;
-        oss << "invalid table type value '" << value << "' at line " << line_num
+        oss << "invalid table type value '" << value << "'"
+            << location_info(line_num)
             << " (\"" << table_type_as_string(table_type::aggregate) << "\", "
             << "\"" << table_type_as_string(table_type::duration) << "\" or "
             << "\"" << table_type_as_string(table_type::select) << "\" expected)"
@@ -1294,7 +1323,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
     if(!std::getline(is, line))
         {
         std::ostringstream oss;
-        oss << "header expected for a select table at line " << line_num;
+        oss << "header expected for a select table" << location_info(line_num);
         throw std::runtime_error(oss.str());
         }
 
@@ -1307,7 +1336,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
             std::ostringstream oss;
             oss << "expected duration " << expected
                 << " and not " << actual
-                << " in the select table header at line " << line_num
+                << " in the select table header" << location_info(line_num)
                 ;
             throw std::runtime_error(oss.str());
             }
@@ -1323,7 +1352,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
         std::ostringstream oss;
         oss << "expected " << *select_period_
             << " duration labels and not " << actual
-            << " in the select table header at line " << line_num
+            << " in the select table header" << location_info(line_num)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1335,7 +1364,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
         std::ostringstream oss;
         oss << "expected the ultimate column label \""
             << text_format::ultimate_header << "\""
-            << " in the select table header at line " << line_num
+            << " in the select table header" << location_info(line_num)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1346,7 +1375,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
         oss << "expected the ultimate column label \""
             << text_format::ultimate_header << "\""
             << " and not \"" << header << "\""
-            << " in the select table header at line " << line_num
+            << " in the select table header" << location_info(line_num)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1369,8 +1398,7 @@ uint16_t table_impl::parse_age
             {
             std::ostringstream oss;
             oss << "at most " << age_width - 1 << " spaces allowed"
-                << " at position " << current - start + 1
-                << " at line " << line_num
+                << location_info(line_num, current - start + 1)
                 ;
             throw std::runtime_error(oss.str());
             }
@@ -1384,8 +1412,7 @@ uint16_t table_impl::parse_age
         std::ostringstream oss;
         oss << "expected a number with "
             << age_width - (start_num - current) << " digits"
-            << " at position " << start_num - start + 1
-            << " at line " << line_num
+            << location_info(line_num, start_num - start + 1)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1411,9 +1438,8 @@ double table_impl::parse_single_value
     if(!res_int_part.end)
         {
         std::ostringstream oss;
-        oss << "expected a valid integer part at position "
-            << current - start + 1
-            << " at line " << line_num
+        oss << "expected a valid integer part"
+            << location_info(line_num, current - start + 1)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1421,9 +1447,8 @@ double table_impl::parse_single_value
     if(*res_int_part.end != '.')
         {
         std::ostringstream oss;
-        oss << "expected decimal point at position "
-            << res_int_part.end - start + 1
-            << " at line " << line_num
+        oss << "expected decimal point"
+            << location_info(line_num, res_int_part.end - start + 1)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1432,9 +1457,8 @@ double table_impl::parse_single_value
     if(!res_frac_part.end)
         {
         std::ostringstream oss;
-        oss << "expected a valid fractional part at position "
-            << res_frac_part.end - start + 1
-            << " at line " << line_num
+        oss << "expected a valid fractional part"
+            << location_info(line_num, res_frac_part.end - start + 1)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1444,7 +1468,8 @@ double table_impl::parse_single_value
         std::ostringstream oss;
         oss << "expected " << *num_decimals_ << " decimal digits, not "
             << res_frac_part.end - res_int_part.end - 1
-            << " in the value at line " << line_num
+            << " in the value"
+            << location_info(line_num)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1468,9 +1493,8 @@ void table_impl::skip_spaces
     if(std::strncmp(current, std::string(num_spaces, ' ').c_str(), num_spaces) != 0)
         {
         std::ostringstream oss;
-        oss << "expected " << num_spaces << " spaces at position "
-            << current - start + 1
-            << " at line " << line_num
+        oss << "expected " << num_spaces << " spaces"
+            << location_info(line_num, current - start + 1)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1509,7 +1533,8 @@ void table_impl::parse_values(std::istream& is, int& line_num)
         {
         std::ostringstream oss;
         oss << "the '" << soa_fields[e_field_num_decimals].name << "' field "
-            << "must be specified before the table values at line " << line_num
+            << "must be specified before the table values"
+            << location_info(line_num)
             ;
         throw std::runtime_error(oss.str());
         }
@@ -1517,7 +1542,9 @@ void table_impl::parse_values(std::istream& is, int& line_num)
     if(!type_)
         {
         std::ostringstream oss;
-        oss << "table type must occur before its values at line " << line_num;
+        oss << "table type must occur before its values"
+            << location_info(line_num)
+            ;
         throw std::runtime_error(oss.str());
         }
 
@@ -1549,7 +1576,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
             // Complain about premature input end.
             std::ostringstream oss;
             oss << "table values for age " << age
-                << " are missing after line " << line_num
+                << " are missing" << location_info(line_num)
                 ;
 
             throw std::runtime_error(oss.str());
@@ -1571,7 +1598,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
                 oss << "select ";
                 }
             oss << "age value " << actual_age
-                << " at line " << line_num
+                << location_info(line_num)
                 << " (" << age << " expected)"
                 ;
             throw std::runtime_error(oss.str());
@@ -1616,7 +1643,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
                 {
                 std::ostringstream oss;
                 oss << "incorrect ultimate age value " << ultimate_age
-                    << " at line " << line_num
+                    << location_info(line_num)
                     << " (" << expected_age << " expected)"
                     ;
                 throw std::runtime_error(oss.str());
@@ -1627,8 +1654,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
             {
             std::ostringstream oss;
             oss << "unexpected characters \"" << current << "\""
-                << " at the position " << current - start + 1
-                << " at line " << line_num
+                << location_info(line_num, current - start + 1)
                 ;
             throw std::runtime_error(oss.str());
             }
@@ -1885,8 +1911,8 @@ void table_impl::read_from_text(std::istream& is)
                 if(pos_colon + 1 != line.length())
                     {
                     std::ostringstream oss;
-                    oss << "Value not allowed after '" << key << ":' "
-                        << "at line " << line_num
+                    oss << "Value not allowed after '" << key << ":'"
+                        << location_info(line_num)
                         ;
                     throw std::runtime_error(oss.str());
                     }
@@ -1901,7 +1927,8 @@ void table_impl::read_from_text(std::istream& is)
                 {
                 std::ostringstream oss;
                 oss << "Field '" << key << "' is not allowed after the table "
-                    << "values at line " << line_num
+                    << "values"
+                    << location_info(line_num)
                     ;
                 throw std::runtime_error(oss.str());
                 }
@@ -1909,8 +1936,8 @@ void table_impl::read_from_text(std::istream& is)
             if(pos_colon + 1 == line.length())
                 {
                 std::ostringstream oss;
-                oss << "Value expected after '" << key << ":' "
-                    << "at line " << line_num
+                oss << "Value expected after '" << key << ":'"
+                    << location_info(line_num)
                     ;
                 throw std::runtime_error(oss.str());
                 }
@@ -1918,8 +1945,8 @@ void table_impl::read_from_text(std::istream& is)
             if(line[pos_colon + 1] != ' ')
                 {
                 std::ostringstream oss;
-                oss << "Space expected after '" << key << ":' "
-                    << "at line " << line_num
+                oss << "Space expected after '" << key << ":'"
+                    << location_info(line_num)
                     ;
                 throw std::runtime_error(oss.str());
                 }
@@ -1992,7 +2019,8 @@ void table_impl::read_from_text(std::istream& is)
                         {
                         std::ostringstream oss;
                         oss << "'" << key << "' field is only allowed after "
-                            << "the table values, not at line " << line_num
+                            << "the table values, not"
+                            << location_info(line_num)
                             ;
                         throw std::runtime_error(oss.str());
                         }
