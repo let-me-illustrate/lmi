@@ -298,6 +298,17 @@ void test_from_bad_text()
         ,std::runtime_error
         ,""
         );
+
+    // Using bad hash value should fail.
+    BOOST_TEST_THROW
+        (db.append_table
+            (table::read_from_text
+                (simple_table_text + "Hash value: 1234567890\n"
+                )
+            )
+        ,std::runtime_error
+        ,""
+        );
 }
 
 void test_save()
