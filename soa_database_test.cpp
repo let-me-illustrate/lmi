@@ -176,6 +176,19 @@ int const qx_cso_num_tables = 142;
 
 std::string const qx_ins_path("/opt/lmi/data/qx_ins");
 
+/// Minimal valid SOA table in text format ("1+" here is just to skip the
+/// leading new line).
+std::string const simple_table_text(1 + R"table(
+Table number: 1
+Table type: Aggregate
+Minimum age: 0
+Maximum age: 1
+Number of decimal places: 5
+Table values:
+  0  0.12345
+  1  0.23456
+)table");
+
 } // Unnamed namespace.
 
 /// Test opening database files.
@@ -271,6 +284,22 @@ void test_to_from_text()
     do_test_table_to_from_text(qx_ins.find_table(table::Number(750)));
 }
 
+void test_from_bad_text()
+{
+    database db;
+
+    // Using unknown header should fail.
+    BOOST_TEST_THROW
+        (db.append_table
+            (table::read_from_text
+                ("Bloordyblop: yes\n" + simple_table_text
+                )
+            )
+        ,std::runtime_error
+        ,""
+        );
+}
+
 void test_save()
 {
     database qx_ins(qx_ins_path);
@@ -292,17 +321,7 @@ void test_save()
 
 void test_add_table()
 {
-    // Notice "1+" to skip the leading new line.
-    table const t = table::read_from_text(std::string(1 + R"table(
-Table number: 1
-Table type: Aggregate
-Minimum age: 0
-Maximum age: 1
-Number of decimal places: 5
-Table values:
-  0  0.12345
-  1  0.23456
-)table"));
+    table const t = table::read_from_text(simple_table_text);
 
     database qx_ins(qx_ins_path);
     int const count = qx_ins.tables_count();
@@ -393,6 +412,7 @@ int test_main(int, char*[])
     test_table_access_by_number();
     test_save();
     test_to_from_text();
+    test_from_bad_text();
     test_add_table();
     test_delete();
     test_copy();
