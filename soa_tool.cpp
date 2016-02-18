@@ -24,6 +24,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "alert.hpp"
 #include "getopt.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
@@ -42,11 +43,10 @@
 #include <ostream>
 #include <string>
 #include <sstream>
+#include <stdexcept>
 #include <vector>
 
 using namespace soa_v3_format;
-
-std::map<table::Number, std::string> name_map;
 
 void calculate_and_display_crcs(fs::path const& database_filename)
 {
@@ -103,37 +103,6 @@ void list_tables(fs::path const& database_filename)
             << '\n'
             ;
         }
-}
-
-void squeeze
-    (fs::path const& database_filename
-    ,fs::path const& new_database_filename
-    )
-{
-    database const table_file(database_filename);
-    database new_file;
-
-    auto const numbers = get_all_tables_numbers(table_file);
-    for(auto num: numbers)
-        {
-        table t = table_file.find_table(num);
-
-        // Also adjust the table names if requested.
-        std::map<table::Number, std::string>::const_iterator n = name_map.find(num);
-        if(n != name_map.end())
-            {
-            t.name(n->second);
-            }
-        new_file.append_table(t);
-        }
-
-    new_file.save(new_database_filename);
-
-    std::cout
-        << "Squeezed database into new file '"
-        << new_database_filename
-        << "'\n"
-        ;
 }
 
 void merge
@@ -195,26 +164,102 @@ void extract_all(fs::path database_filename)
 }
 
 void rename_tables
-    (fs::path const& filename_of_table_names
+    (fs::path const& database_filename
+    ,fs::path const& filename_of_table_names
     )
 {
-    std::ifstream ifs(filename_of_table_names.string().c_str());
-    std::string line;
-    while(std::getline(ifs, line, '\n'))
+    database table_file(database_filename);
+    auto const numbers = get_all_tables_numbers(table_file);
+
+    // This map has all valid table numbers as keys and the value is non-empty
+    // iff the table with the corresponding key needs to be renamed to it.
+    std::map<table::Number, std::string> name_map;
+    for(auto num: numbers)
         {
-        std::string number = line.substr
-            (line.find_first_not_of('0')
-            ,line.find_first_of(' ')
-            );
-        int const index = std::atoi(number.c_str());
-        if(0 == index)
-            {
-            std::cerr << "Invalid line:\n" << line << '\n';
-            return;
-            }
-        name_map[table::Number(index)] = line;
+        name_map.emplace(num, std::string());
         }
-// Use this only with 'squeeze'.
+
+    // Read new names from the provided file in the "number name" format.
+    std::ifstream ifs(filename_of_table_names.string().c_str());
+    if(!ifs)
+        {
+        fatal_error()
+            << "File with the new table names \"" << filename_of_table_names
+            << "\" couldn't be opened."
+            << std::flush
+            ;
+        }
+
+    int line_num = 1;
+    for(std::string line; std::getline(ifs, line); ++line_num)
+        {
+        // Parse the number at the beginning of the line taking care to handle
+        // exceptions from stoi() because we want to throw our own exception,
+        // with more information about the failure location.
+        table::Number num(0);
+        std::string error;
+        try
+            {
+            int const n = std::stoi(line);
+            if(n <= 0)
+                {
+                error = "table number must be strictly positive";
+                }
+            else
+                {
+                num = table::Number(n);
+
+                // Also check that the table number is valid and hasn't
+                // occurred before.
+                auto const it = name_map.find(num);
+                if(it == name_map.end())
+                    {
+                    std::ostringstream oss;
+                    oss << "invalid table number " << num;
+                    error = oss.str();
+                    }
+                else if(!it->second.empty())
+                    {
+                    std::ostringstream oss;
+                    oss << "duplicate table number " << num;
+                    error = oss.str();
+                    }
+                }
+            }
+        catch(std::invalid_argument const&)
+            {
+            error = "number expected at the beginning of the line";
+            }
+        catch(std::out_of_range const&)
+            {
+            error = "table number is too big";
+            }
+
+        if(!error.empty())
+            {
+            fatal_error()
+                << "Error in new table names file \"" << filename_of_table_names
+                << "\": " << error << " at line " << line_num << "."
+                << std::flush
+                ;
+            }
+
+        name_map[num] = line;
+        }
+
+    for(int i = 0; i != table_file.tables_count(); ++i)
+        {
+        table t = table_file.get_nth_table(i);
+
+        auto const it = name_map.find(t.number());
+        if(it != name_map.end())
+            {
+            t.name(it->second);
+            table_file.add_or_replace_table(t);
+            }
+        }
+
+    table_file.save(database_filename);
 }
 
 int try_main(int argc, char* argv[])
@@ -230,7 +275,6 @@ int try_main(int argc, char* argv[])
         {"file=FILE"      , REQD_ARG, 0, 'f', 0    , "use database FILE"},
         {"crc"            , NO_ARG,   0, 'c', 0    , "show CRCs of all tables"},
         {"list"           , NO_ARG,   0, 't', 0    , "list all tables"},
-        {"squeeze=NEWFILE", REQD_ARG, 0, 's', 0    , "compress database into NEWFILE"},
         {"merge=TEXTFILE" , REQD_ARG, 0, 'm', 0    , "merge TEXTFILE into database"},
         {"extract=n"      , REQD_ARG, 0, 'e', 0    , "extract table #n into n.txt"},
         {"extract-all"    , NO_ARG,   0, 'x', 0    , "extract all tables to text files"},
@@ -242,7 +286,6 @@ int try_main(int argc, char* argv[])
     bool show_help        = false;
     bool run_crc          = false;
     bool run_list         = false;
-    bool run_squeeze      = false;
     bool run_merge        = false;
     bool run_delete       = false;
     bool run_extract      = false;
@@ -316,14 +359,6 @@ int try_main(int argc, char* argv[])
             }
             break;
 
-          case 's':
-            {
-            run_squeeze = true;
-            ++num_to_do;
-            new_database_filename = getopt_long.optarg;
-            }
-            break;
-
           case 'm':
             {
             run_merge = true;
@@ -357,6 +392,7 @@ int try_main(int argc, char* argv[])
           case 'r':
             {
             run_rename = true;
+            ++num_to_do;
             filename_of_table_names = getopt_long.optarg;
             }
             break;
@@ -399,7 +435,7 @@ int try_main(int argc, char* argv[])
         case 0:
             if(!run_delete)
                 {
-                std::cerr << "Please use exactly one of --crc, --list, --squeeze, --merge or --extract.\n";
+                std::cerr << "Please use exactly one of --crc, --list, --rename, --merge or --extract.\n";
                 command_line_syntax_error = true;
                 }
             break;
@@ -408,11 +444,6 @@ int try_main(int argc, char* argv[])
             if(run_delete && !run_extract)
                 {
                 std::cerr << "--delete can only be combined with --extract.\n";
-                command_line_syntax_error = true;
-                }
-            if(run_rename && !run_squeeze)
-                {
-                std::cerr << "--rename can only be used together with --squeeze.\n";
                 command_line_syntax_error = true;
                 }
             break;
@@ -474,12 +505,7 @@ int try_main(int argc, char* argv[])
 
     if(run_rename)
         {
-        rename_tables(filename_of_table_names);
-        }
-
-    if(run_squeeze)
-        {
-        squeeze(database_filename, new_database_filename);
+        rename_tables(database_filename, filename_of_table_names);
         return EXIT_SUCCESS;
         }
 
