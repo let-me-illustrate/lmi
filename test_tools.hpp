@@ -110,31 +110,108 @@
             ;                                            \
         }                                                \
 
-/// Make sure 'expression' throws the anticipated exception. Signal an
-/// error if no exception is thrown. Otherwise, compare the exception
-/// actually thrown against the one anticipated: deem them equivalent
-/// iff both
-///  - their types match exactly, and
-///  - either
-///    - 'WHAT' is empty, or
-///    - 'WHAT' exactly matches the actual exception's what(), or
-///    - 'WHAT' matches the actual exception's what() up to but not
+/// This is a base class for different ways to match the exception message.
+///
+/// This class implements the most commonly used matching algorithm, i.e. it
+/// matches the actual exception message when constructed from a string
+/// 'expected' iff
+///    - 'expected' is empty, or
+///    - 'expected' exactly matches the actual exception's what(), or
+///    - 'expected' matches the actual exception's what() up to but not
 ///      including any lmi exception-location string. (Some lmi
 ///      exceptions add a newline and the file name and line number,
 ///      always beginning "\n[file ").
 ///
 /// TODO ?? Probably the first element of the triple condition should
 /// be removed, and tests that rely on it strengthened.
-///
-/// COMPILER !! The borland compiler complains:
-///   std::out_of_range: position beyond end of string in function:
-///   basic_string::compare(size_t,size_t,basic_string [const]&) const
-///   index: -1 is greater than max_index: [size of string]
-/// but that complaint seems incorrect: the second argument is allowed
-/// to be npos, and only an invalid first argument can cause this
-/// exception, but the first argument here is always zero, which is
-/// always permissible. See C++98 21.3.6.8/3 and 21.3.1/4, and cf.
-/// Josuttis, TC++SL, 11.3.4 .
+
+class matcher
+{
+  public:
+    explicit matcher(std::string const& expected)
+        :expected_(expected)
+        {
+        }
+
+    // Compatibility method allowing to check a string against either a literal
+    // string or a matcher object.
+    static bool check(matcher const& m, std::string const& actual)
+        {
+        return m.matches(actual);
+        }
+
+    static bool check(std::string const& expected, std::string const& actual)
+        {
+        return check(matcher(expected), actual);
+        }
+
+    virtual bool matches(std::string const& actual) const
+        {
+        /// COMPILER !! The borland compiler complains:
+        ///   std::out_of_range: position beyond end of string in function:
+        ///   basic_string::compare(size_t,size_t,basic_string [const]&) const
+        ///   index: -1 is greater than max_index: [size of string]
+        /// but that complaint seems incorrect: the second argument is allowed
+        /// to be npos, and only an invalid first argument can cause this
+        /// exception, but the first argument here is always zero, which is
+        /// always permissible. See C++98 21.3.6.8/3 and 21.3.1/4, and cf.
+        /// Josuttis, TC++SL, 11.3.4 .
+        return expected_.empty()
+            || (actual == expected_)
+            || (actual.compare(0, actual.find("\n[file "), expected_) == 0)
+            ;
+        }
+
+    virtual std::ostream& print(std::ostream& os) const
+        {
+        os << "'" << expected_ << "'";
+        return os;
+        }
+
+    // Prevent slicing by forbidding copying these objects.
+    matcher(matcher const&) = delete;
+    matcher& operator=(matcher const&) = delete;
+
+    // This class is not really supposed to be used polymorphically, but
+    // declare a virtual dtor to avoid the compiler warnings.
+    virtual ~matcher() = default;
+
+  protected:
+    std::string const expected_;
+};
+
+/// This class implements a more relaxed exception message matching and just
+/// checks that the specified string appears in the actual exception string as
+/// a substring.
+
+class match_substr : public matcher
+{
+  public:
+    using matcher::matcher;
+
+    bool matches(std::string const& actual) const override
+        {
+        return actual.find(expected_) != std::string::npos;
+        }
+
+    std::ostream& print(std::ostream& os) const override
+        {
+        os << "string with '" << expected_ << "' substring";
+        return os;
+        }
+};
+
+inline std::ostream& operator<<(std::ostream& os, matcher const& m)
+{
+    return m.print(os);
+}
+
+/// Make sure 'expression' throws the anticipated exception. Signal an
+/// error if no exception is thrown. Otherwise, compare the exception
+/// actually thrown against the one anticipated: deem them equivalent
+/// iff both
+///  - their types match exactly, and
+///  - 'WHAT' matches the actual exception's what() for matcher::check()
 
 #define BOOST_TEST_THROW(expression,TYPE,WHAT)                \
     try                                                       \
@@ -167,24 +244,14 @@
                 ;                                             \
             lmi_test::record_error();                         \
             }                                                 \
-        else if                                               \
-            (   std::string(WHAT).size()                      \
-            &&  (   std::string((e).what())                   \
-                !=  std::string(WHAT)                         \
-                )                                             \
-            &&  0 != std::string((e).what()).compare          \
-                    (0                                        \
-                    ,std::string((e).what()).find("\n[file ") \
-                    ,std::string(WHAT)                        \
-                    )                                         \
-            )                                                 \
+        else if(!matcher::check(WHAT, e.what()))              \
             {                                                 \
             lmi_test::error_stream()                          \
                 << "Caught exception\n    '"                  \
                 << (e).what()                                 \
-                << "'\n  when\n    '"                         \
+                << "'\n  when\n    "                          \
                 << (WHAT)                                     \
-                << "'\n  was expected."                       \
+                << "\n  was expected."                        \
                 << BOOST_TEST_FLUSH                           \
                 ;                                             \
             lmi_test::record_error();                         \
