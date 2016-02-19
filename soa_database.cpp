@@ -28,6 +28,7 @@
 
 #include "soa_database.hpp"
 
+#include "alert.hpp"
 #include "crc32.hpp"
 #include "path_utility.hpp"
 
@@ -53,6 +54,20 @@ using std::uint8_t;
 using std::uint16_t;
 using std::uint32_t;
 using std::uint64_t;
+
+// Note about error handling in this code: with a few exceptions (e.g.
+// strict_parse_number), most of the functions in this file throw on error.
+// If the exception is thrown from a low level function, it is caught and
+// re-thrown from a higher level one which called it, after building a more
+// helpful error message containing both the details from the low level
+// function and the information about the context from the higher level one.
+//
+// When throwing an exception which is meant to be caught and re-thrown, the
+// associated message starts with a lower case letter and is terminated by
+// std::flush without a period preceding it, so that it can be incorporated
+// seamlessly into the final message. And when throwing the last exception from
+// a high level function, the message is capitalized and terminated by a period
+// and LMI_FLUSH.
 
 // The SOA binary format uses IEEE 754 for the floating point values
 // representation and the code in this file won't work correctly if it is
@@ -189,10 +204,11 @@ void open_file(T& ifs, fs::path const& path, std::ios_base::openmode mode)
     ifs.open(path, open_file_traits<T>::get_mode() | mode);
     if(!ifs)
         {
-        std::ostringstream oss;
-        oss << "File '" << path << "' could not be opened for "
-            << open_file_traits<T>::describe_access() << ".";
-        throw std::runtime_error(oss.str());
+        fatal_error()
+            << "file '" << path << "' could not be opened for "
+            << open_file_traits<T>::describe_access()
+            << std::flush
+            ;
         }
 }
 
@@ -494,7 +510,7 @@ void writer::write_values
     // for its success, exceptionally, in order to detect the error a.s.a.p.
     if(!stream_write(os_, &little_endian_values[0], length))
         {
-        throw std::runtime_error("writing values failed");
+        fatal_error() << "writing values failed" << std::flush;
         }
 }
 
@@ -545,11 +561,12 @@ void writer::write(enum_soa_field field, boost::optional<std::string> const& ost
         std::string::size_type const length = ostr->size();
         if(length > std::numeric_limits<uint16_t>::max())
             {
-            std::ostringstream oss;
-            oss << "the value of the field '"
+            fatal_error()
+                << "the value of the field '"
                 << soa_fields[field].name
-                << "' is too long to be represented in the SOA binary format";
-            throw std::runtime_error(oss.str());
+                << "' is too long to be represented in the SOA binary format"
+                << std::flush
+                ;
             }
 
         do_write_record_header(soa_fields[field].record_type, length);
@@ -696,7 +713,7 @@ void writer::write_values
 
         if(n != values.size())
             {
-            throw std::logic_error("Bug in select table values writing code");
+            throw std::logic_error("bug in select table values writing code");
             }
         }
     else // Not a select table, just print out all values.
@@ -735,12 +752,12 @@ enum_soa_field parse_field_name(std::string const& name, int line_num)
         ++n;
         }
 
-    std::ostringstream oss;
-    oss
+    fatal_error()
         << "unrecognized field '" << name << "'"
         << location_info(line_num)
+        << std::flush
         ;
-    throw std::runtime_error(oss.str());
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 } // namespace text_format
@@ -968,13 +985,13 @@ void throw_if_duplicate_record
 {
     if(do_throw)
         {
-        std::ostringstream oss;
-        oss << "duplicate occurrence of the field '"
+        fatal_error()
+            << "duplicate occurrence of the field '"
             << soa_fields[field].name
             << "'"
             << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 }
 
@@ -987,13 +1004,13 @@ void throw_if_unexpected_length
 {
     if(length != expected_length)
         {
-        std::ostringstream oss;
-        oss << "unexpected length " << length
+        fatal_error()
+            << "unexpected length " << length
             << " for the field '"
             << soa_fields[field].name
             << "', expected " << expected_length
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 }
 
@@ -1005,11 +1022,11 @@ void throw_if_missing_field(boost::optional<T> const& o, enum_soa_field field)
 {
     if(!o)
         {
-        std::ostringstream oss;
-        oss << "required field '"
+        fatal_error()
+            << "required field '"
             << soa_fields[field].name
-            << "' was not specified";
-        throw std::runtime_error(oss.str());
+            << "' was not specified"
+            ;
         }
 }
 
@@ -1028,12 +1045,12 @@ void table_impl::read_string
     str.resize(length);
     if(!stream_read(ifs, &str[0], length))
         {
-        std::ostringstream oss;
-        oss << "failed to read all " << length << " bytes of the field '"
+        fatal_error()
+            << "failed to read all " << length << " bytes of the field '"
             << soa_fields[field].name
             << "'"
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     ostr = str;
@@ -1045,9 +1062,7 @@ T table_impl::do_read_number(char const* name, std::istream& ifs)
     T num;
     if(!stream_read(ifs, &num, sizeof(T)))
         {
-        std::ostringstream oss;
-        oss << "failed to read field '" << name << "'";
-        throw std::runtime_error(oss.str());
+        fatal_error() << "failed to read field '" << name << "'" << std::flush;
         }
 
     return swap_bytes_if_big_endian(num);
@@ -1067,13 +1082,10 @@ void table_impl::read_type(std::istream& ifs, uint16_t length)
         case table_type::duration:
         case table_type::select:
             type_ = static_cast<table_type>(type);
-            break;
-
-        default:
-            std::ostringstream oss;
-            oss << "unknown table type '" << type << "'";
-            throw std::runtime_error(oss.str());
+            return;
         }
+
+    fatal_error() << "unknown table type '" << type << "'" << std::flush;
 }
 
 template<typename T>
@@ -1100,12 +1112,12 @@ void table_impl::read_number_before_values
 {
     if(!values_.empty())
         {
-        std::ostringstream oss;
-        oss << "field '"
+        fatal_error()
+            << "field '"
             << soa_fields[field].name
             << "' must occur before the values"
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     read_number(onum, field, ifs, length);
@@ -1120,10 +1132,11 @@ unsigned table_impl::get_expected_number_of_values() const
     // fields determining this as a side effect.
     if(*min_age_ > *max_age_)
         {
-        std::ostringstream oss;
-        oss << "minimum age " << *min_age_ << " cannot be greater than the "
-               "maximum age " << *max_age_;
-        throw std::runtime_error(oss.str());
+        fatal_error()
+            << "minimum age " << *min_age_
+            << " cannot be greater than the maximum age " << *max_age_
+            << std::flush
+            ;
         }
 
     // Start from one value per issue age, this is already the total number of
@@ -1144,10 +1157,12 @@ unsigned table_impl::get_expected_number_of_values() const
         // in integer overflow below if it were allowed.
         if(num_values < *select_period_)
             {
-            std::ostringstream oss;
-            oss << "select period " << *select_period_ << " is too big "
-                   "for the age range " << *min_age_ << ".." << *max_age_;
-            throw std::runtime_error(oss.str());
+            fatal_error()
+                << "select period " << *select_period_
+                << " is too big for the age range "
+                << *min_age_ << ".." << *max_age_
+                << std::flush
+                ;
             }
 
         // For 2D select-and-ultimate tables, this gives the number of values
@@ -1171,11 +1186,12 @@ unsigned table_impl::get_expected_number_of_values() const
 
         if(select_range > std::numeric_limits<unsigned>::max() - num_values)
             {
-            std::ostringstream oss;
-            oss << "too many values in the table with maximum age " << *max_age_
+            fatal_error()
+                << "too many values in the table with maximum age " << *max_age_
                 << ", select period " << *select_period_
-                << " and maximum select age " << effective_max_select;
-            throw std::runtime_error(oss.str());
+                << " and maximum select age " << effective_max_select
+                << std::flush
+                ;
             }
 
         // No overflow due to the check above.
@@ -1199,7 +1215,7 @@ void table_impl::read_values(std::istream& ifs, uint16_t /* length */)
     values_.resize(num_values);
     if(!stream_read(ifs, &values_[0], num_values*sizeof(double)))
         {
-        throw std::runtime_error("failed to read the values");
+        fatal_error() << "failed to read the values" << std::flush;
         }
 
     for(auto& v: values_)
@@ -1219,13 +1235,13 @@ std::string* table_impl::parse_string
 
     if(value.empty())
         {
-        std::ostringstream oss;
-        oss << "non-empty value must be specified for the field '"
+        fatal_error()
+            << "non-empty value must be specified for the field '"
             << soa_fields[field].name
             << "'"
             << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     ostr = value;
@@ -1243,26 +1259,26 @@ unsigned long table_impl::do_parse_number
     auto const res = strict_parse_number(value.c_str());
     if(!res.end || *res.end != '\0')
         {
-        std::ostringstream oss;
-        oss << "value for numeric field '"
+        fatal_error()
+            << "value for numeric field '"
             << soa_fields[field].name
             << "' is not a number"
             << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     if(res.num > max_num)
         {
-        std::ostringstream oss;
-        oss << "value for numeric field '"
+        fatal_error()
+            << "value for numeric field '"
             << soa_fields[field].name
             << "' is out of range (maximum allowed is "
             << max_num
             << ")"
             << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     return static_cast<unsigned long>(res.num);
@@ -1302,14 +1318,14 @@ void table_impl::parse_table_type
         }
     else
         {
-        std::ostringstream oss;
-        oss << "invalid table type value '" << value << "'"
+        fatal_error()
+            << "invalid table type value '" << value << "'"
             << location_info(line_num)
             << " (\"" << table_type_as_string(table_type::aggregate) << "\", "
             << "\"" << table_type_as_string(table_type::duration) << "\" or "
             << "\"" << table_type_as_string(table_type::select) << "\" expected)"
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 }
 
@@ -1322,9 +1338,11 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
     std::string line;
     if(!std::getline(is, line))
         {
-        std::ostringstream oss;
-        oss << "header expected for a select table" << location_info(line_num);
-        throw std::runtime_error(oss.str());
+        fatal_error()
+            << "header expected for a select table"
+            << location_info(line_num)
+            << std::flush
+            ;
         }
 
     std::istringstream iss(line);
@@ -1333,12 +1351,12 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
         {
         if(actual != expected)
             {
-            std::ostringstream oss;
-            oss << "expected duration " << expected
+            fatal_error()
+                << "expected duration " << expected
                 << " and not " << actual
                 << " in the select table header" << location_info(line_num)
+                << std::flush
                 ;
-            throw std::runtime_error(oss.str());
             }
 
         if (actual == *select_period_)
@@ -1349,35 +1367,35 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
 
     if(actual != *select_period_)
         {
-        std::ostringstream oss;
-        oss << "expected " << *select_period_
+        fatal_error()
+            << "expected " << *select_period_
             << " duration labels and not " << actual
             << " in the select table header" << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     std::string header;
     iss >> header;
     if(!iss)
         {
-        std::ostringstream oss;
-        oss << "expected the ultimate column label \""
+        fatal_error()
+            << "expected the ultimate column label \""
             << text_format::ultimate_header << "\""
             << " in the select table header" << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     if(header != text_format::ultimate_header)
         {
-        std::ostringstream oss;
-        oss << "expected the ultimate column label \""
+        fatal_error()
+            << "expected the ultimate column label \""
             << text_format::ultimate_header << "\""
             << " and not \"" << header << "\""
             << " in the select table header" << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 }
 
@@ -1396,11 +1414,11 @@ uint16_t table_impl::parse_age
         {
         if(start_num - current == age_width)
             {
-            std::ostringstream oss;
-            oss << "at most " << age_width - 1 << " spaces allowed"
+            fatal_error()
+                << "at most " << age_width - 1 << " spaces allowed"
                 << location_info(line_num, current - start + 1)
+                << std::flush
                 ;
-            throw std::runtime_error(oss.str());
             }
 
         ++start_num;
@@ -1409,12 +1427,12 @@ uint16_t table_impl::parse_age
     auto const res_age = strict_parse_number(start_num);
     if(!res_age.end || (res_age.end - current != age_width))
         {
-        std::ostringstream oss;
-        oss << "expected a number with "
+        fatal_error()
+            << "expected a number with "
             << age_width - (start_num - current) << " digits"
             << location_info(line_num, start_num - start + 1)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     current = res_age.end;
@@ -1437,41 +1455,41 @@ double table_impl::parse_single_value
     auto const res_int_part = strict_parse_number(current);
     if(!res_int_part.end)
         {
-        std::ostringstream oss;
-        oss << "expected a valid integer part"
+        fatal_error()
+            << "expected a valid integer part"
             << location_info(line_num, current - start + 1)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     if(*res_int_part.end != '.')
         {
-        std::ostringstream oss;
-        oss << "expected decimal point"
+        fatal_error()
+            << "expected decimal point"
             << location_info(line_num, res_int_part.end - start + 1)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     auto const res_frac_part = strict_parse_number(res_int_part.end + 1);
     if(!res_frac_part.end)
         {
-        std::ostringstream oss;
-        oss << "expected a valid fractional part"
+        fatal_error()
+            << "expected a valid fractional part"
             << location_info(line_num, res_frac_part.end - start + 1)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     if(res_frac_part.end - res_int_part.end - 1 != *num_decimals_)
         {
-        std::ostringstream oss;
-        oss << "expected " << *num_decimals_ << " decimal digits, not "
+        fatal_error()
+            << "expected " << *num_decimals_ << " decimal digits, not "
             << res_frac_part.end - res_int_part.end - 1
             << " in the value"
             << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     current = res_frac_part.end;
@@ -1492,11 +1510,11 @@ void table_impl::skip_spaces
 {
     if(std::strncmp(current, std::string(num_spaces, ' ').c_str(), num_spaces) != 0)
         {
-        std::ostringstream oss;
-        oss << "expected " << num_spaces << " spaces"
+        fatal_error()
+            << "expected " << num_spaces << " spaces"
             << location_info(line_num, current - start + 1)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     current += num_spaces;
@@ -1531,21 +1549,21 @@ void table_impl::parse_values(std::istream& is, int& line_num)
 
     if(!num_decimals_)
         {
-        std::ostringstream oss;
-        oss << "the '" << soa_fields[e_field_num_decimals].name << "' field "
+        fatal_error()
+            << "the '" << soa_fields[e_field_num_decimals].name << "' field "
             << "must be specified before the table values"
             << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     if(!type_)
         {
-        std::ostringstream oss;
-        oss << "table type must occur before its values"
+        fatal_error()
+            << "table type must occur before its values"
             << location_info(line_num)
+            << std::flush
             ;
-        throw std::runtime_error(oss.str());
         }
 
     // Initialize this variable using a lambda with a switch inside just to
@@ -1574,12 +1592,11 @@ void table_impl::parse_values(std::istream& is, int& line_num)
         if(!std::getline(is, line))
             {
             // Complain about premature input end.
-            std::ostringstream oss;
-            oss << "table values for age " << age
+            fatal_error()
+                << "table values for age " << age
                 << " are missing" << location_info(line_num)
+                << std::flush
                 ;
-
-            throw std::runtime_error(oss.str());
             }
         ++line_num;
 
@@ -1589,19 +1606,16 @@ void table_impl::parse_values(std::istream& is, int& line_num)
         auto const actual_age = parse_age(start, current, line_num);
         if(actual_age != age)
             {
-            std::ostringstream oss;
-            oss << "incorrect ";
-            if(is_select_table)
-                {
-                // Distinguish this age from the ultimate age on the right side
-                // of the table.
-                oss << "select ";
-                }
-            oss << "age value " << actual_age
+            // Distinguish select age at the beginning of the line from the
+            // ultimate age on the right side of the table.
+            fatal_error()
+                << "incorrect "
+                << (is_select_table ? "select " : "")
+                << "age value " << actual_age
                 << location_info(line_num)
                 << " (" << age << " expected)"
+                << std::flush
                 ;
-            throw std::runtime_error(oss.str());
             }
 
         if(is_select_table)
@@ -1641,22 +1655,22 @@ void table_impl::parse_values(std::istream& is, int& line_num)
             auto const ultimate_age = parse_age(start, current, line_num);
             if(ultimate_age != expected_age)
                 {
-                std::ostringstream oss;
-                oss << "incorrect ultimate age value " << ultimate_age
+                fatal_error()
+                    << "incorrect ultimate age value " << ultimate_age
                     << location_info(line_num)
                     << " (" << expected_age << " expected)"
+                    << std::flush
                     ;
-                throw std::runtime_error(oss.str());
                 }
             }
 
         if(current - start < static_cast<int>(line.length()))
             {
-            std::ostringstream oss;
-            oss << "unexpected characters \"" << current << "\""
+            fatal_error()
+                << "unexpected characters \"" << current << "\""
                 << location_info(line_num, current - start + 1)
+                << std::flush
                 ;
-            throw std::runtime_error(oss.str());
             }
 
         if(is_select_table)
@@ -1673,81 +1687,107 @@ void table_impl::parse_values(std::istream& is, int& line_num)
 
 void table_impl::validate()
 {
-    // Check that the fields we absolutely need were specified.
+    // Check for the number first as we use it to construct a more detailed
+    // error message below.
     throw_if_missing_field(number_, e_field_table_number);
-    throw_if_missing_field(type_, e_field_table_type);
 
-    // Check that we have the values: this also ensures that we have the
-    // correct minimum and maximum age as this is verified when filling in the
-    // values.
-    if(values_.empty())
+    try
         {
-        throw std::runtime_error("no values defined");
-        }
+        // All tables must define their type.
+        throw_if_missing_field(type_, e_field_table_type);
 
-    // Validate the type and check that the select period has or hasn't been
-    // given, depending on it.
-    switch(*type_)
-        {
-        case table_type::aggregate:
-        case table_type::duration:
-            if(get_value_or(select_period_, 0))
-                {
-                std::ostringstream oss;
-                oss << "select period cannot be specified for a table of type "
-                    << "'" << table_type_as_string(*type_) << "'";
-                throw std::runtime_error(oss.str());
-                }
-            if(get_value_or(max_select_age_, 0) && *max_select_age_ != *max_age_)
-                {
-                std::ostringstream oss;
-                oss << "maximum select age " << *max_select_age_
-                    << " different from the maximum age " << *max_age_
-                    << " cannot be specified for a table of type"
-                       " '" << table_type_as_string(*type_) << "'";
-                throw std::runtime_error(oss.str());
-                }
-            break;
-
-        case table_type::select:
-            if(!get_value_or(select_period_, 0))
-                {
-                throw std::runtime_error
-                    ("select period must be specified for a select and ultimate table"
-                    );
-                }
-            if(!get_value_or(max_select_age_, 0))
-                {
-                throw std::runtime_error
-                    ("maximum select age must be specified for a select and ultimate table"
-                    );
-                }
-            break;
-        }
-
-    // We have a reasonable default for this value, so don't complain if it's
-    // absent.
-    if(!num_decimals_)
-        {
-        num_decimals_ = 6;
-        }
-
-    // If we don't have the hash, compute it ourselves. If we do, check that it
-    // corresponds to what we should have unless the hash value in input is
-    // just 0 which is equivalent to being not specified (such hashes are
-    // generated by the "--squeeze" option of the legacy table_utilities
-    // program, so we support them for compatibility).
-    auto const correct_hash_value = compute_hash_value();
-    if(hash_value_ && *hash_value_)
-        {
-        if(*hash_value_ != correct_hash_value)
+        // Check that we have the values: this also ensures that we have the
+        // correct minimum and maximum age as this is verified when filling in
+        // the values.
+        if(values_.empty())
             {
-            throw std::runtime_error("hash value mismatch");
+            fatal_error() << "no values defined" << std::flush;
+            }
+
+        // Validate the type and check that the select period has or hasn't
+        // been given, depending on it.
+        switch(*type_)
+            {
+            case table_type::aggregate:
+            case table_type::duration:
+                if(get_value_or(select_period_, 0))
+                    {
+                    fatal_error()
+                        << "select period cannot be specified for a table "
+                        << "of type '" << table_type_as_string(*type_) << "'"
+                        << std::flush
+                        ;
+                    }
+                if(  get_value_or(max_select_age_, 0)
+                  && *max_select_age_ != *max_age_
+                  )
+                    {
+                    fatal_error()
+                        << "maximum select age " << *max_select_age_
+                        << " different from the maximum age " << *max_age_
+                        << " cannot be specified for a table of type '"
+                        << table_type_as_string(*type_) << "'"
+                        << std::flush
+                        ;
+                    }
+                break;
+
+            case table_type::select:
+                if(!get_value_or(select_period_, 0))
+                    {
+                    fatal_error()
+                        << "select period must be specified "
+                        << "for a select and ultimate table"
+                        << std::flush
+                        ;
+                    }
+                if(!get_value_or(max_select_age_, 0))
+                    {
+                    fatal_error()
+                        << "maximum select age must be specified "
+                        << "for a select and ultimate table"
+                        << std::flush
+                        ;
+                    }
+                break;
+            }
+
+        // We have a reasonable default for this field, so don't complain if
+        // it's absent.
+        if(!num_decimals_)
+            {
+            num_decimals_ = 6;
+            }
+
+        // If we don't have the hash, compute it ourselves. If we do, check
+        // that it corresponds to what we should have unless the hash value in
+        // input is just 0 which is equivalent to being not specified (such
+        // hashes are generated by the "--squeeze" option of the legacy
+        // table_utilities program, so we support them for compatibility).
+        auto const correct_hash_value = compute_hash_value();
+        if(hash_value_ && *hash_value_)
+            {
+            if(*hash_value_ != correct_hash_value)
+                {
+                fatal_error()
+                    << "hash value " << *hash_value_ << " doesn't match "
+                    << "the computed hash value " << correct_hash_value
+                    << std::flush
+                    ;
+                }
+            }
+        else
+            {
+            hash_value_ = correct_hash_value;
             }
         }
-    else
+    catch(std::runtime_error const& e)
         {
-        hash_value_ = correct_hash_value;
+        fatal_error()
+            << "bad data for table " << *number_ << ": "
+            << e.what()
+            << std::flush
+            ;
         }
 }
 
@@ -1756,7 +1796,7 @@ void table_impl::read_from_binary(std::istream& ifs, uint32_t offset)
     ifs.seekg(offset, std::ios::beg);
     if(!ifs)
         {
-        throw std::runtime_error("seek error");
+        fatal_error() << "seek error" << std::flush;
         }
 
     for(;;)
@@ -1835,9 +1875,7 @@ void table_impl::read_from_binary(std::istream& ifs, uint32_t offset)
                 read_number(hash_value_, e_field_hash_value, ifs, length);
                 break;
             default:
-                std::ostringstream oss;
-                oss << "unknown field type " << record_type;
-                throw std::runtime_error(oss.str());
+                fatal_error() << "unknown field type " << record_type << std::flush;
             }
         }
 }
@@ -1889,12 +1927,12 @@ void table_impl::read_from_text(std::istream& is)
                     {
                     if(line.find_first_not_of(whitespace) != std::string::npos)
                         {
-                        std::ostringstream oss;
-                        oss << "Blank line " << blank_line_num << " "
+                        fatal_error()
+                            << "blank line " << blank_line_num << " "
                             << "cannot appear in the middle of the input "
                             << "and be followed by non-blank line " << line_num
+                            << std::flush
                             ;
-                        throw std::runtime_error(oss.str());
                         }
                     }
                 break;
@@ -1910,11 +1948,11 @@ void table_impl::read_from_text(std::istream& is)
                 {
                 if(pos_colon + 1 != line.length())
                     {
-                    std::ostringstream oss;
-                    oss << "Value not allowed after '" << key << ":'"
+                    fatal_error()
+                        << "value not allowed after '" << key << ":'"
                         << location_info(line_num)
+                        << std::flush
                         ;
-                    throw std::runtime_error(oss.str());
                     }
 
                 parse_values(is, line_num);
@@ -1925,30 +1963,30 @@ void table_impl::read_from_text(std::istream& is)
             // values.
             if(!values_.empty() && field != e_field_hash_value)
                 {
-                std::ostringstream oss;
-                oss << "Field '" << key << "' is not allowed after the table "
+                fatal_error()
+                    << "field '" << key << "' is not allowed after the table "
                     << "values"
                     << location_info(line_num)
+                    << std::flush
                     ;
-                throw std::runtime_error(oss.str());
                 }
 
             if(pos_colon + 1 == line.length())
                 {
-                std::ostringstream oss;
-                oss << "Value expected after '" << key << ":'"
-                    << location_info(line_num)
+                fatal_error()
+                    << "value expected after '" << key << ":'"
+                    << location_info(line_num, pos_colon + 1)
+                    << std::flush
                     ;
-                throw std::runtime_error(oss.str());
                 }
 
             if(line[pos_colon + 1] != ' ')
                 {
-                std::ostringstream oss;
-                oss << "Space expected after '" << key << ":'"
-                    << location_info(line_num)
+                fatal_error()
+                    << "space expected after '" << key << ":'"
+                    << location_info(line_num, pos_colon + 1)
+                    << std::flush
                     ;
-                throw std::runtime_error(oss.str());
                 }
 
             std::string const value(line, pos_colon + 2); // +2 to skip ": "
@@ -2017,12 +2055,12 @@ void table_impl::read_from_text(std::istream& is)
                 case e_field_hash_value:
                     if(values_.empty())
                         {
-                        std::ostringstream oss;
-                        oss << "'" << key << "' field is only allowed after "
+                        fatal_error()
+                            << "'" << key << "' field is only allowed after "
                             << "the table values, not"
                             << location_info(line_num)
+                            << std::flush
                             ;
-                        throw std::runtime_error(oss.str());
                         }
 
                     parse_number(hash_value_, field, line_num, value);
@@ -2034,9 +2072,10 @@ void table_impl::read_from_text(std::istream& is)
             // Must be a continuation of the previous line.
             if(!last_string)
                 {
-                std::ostringstream oss;
-                oss << "Expected a colon on line " << line_num;
-                throw std::runtime_error(oss.str());
+                fatal_error()
+                    << "Expected a colon on line " << line_num
+                    << std::flush
+                    ;
                 }
 
             *last_string += '\n';
@@ -2060,29 +2099,39 @@ shared_ptr<table_impl> table_impl::create_from_text(std::istream& is)
 template<typename T>
 void table_impl::do_write(std::ostream& os) const
 {
-    T w(os);
+    try
+        {
+        T w(os);
 
-    w.write(e_field_table_name         , name_                );
-    w.write(e_field_table_number       , number_              );
-    w.write_table_type(*type_);
-    w.write(e_field_contributor        , contributor_         );
-    w.write(e_field_data_source        , data_source_         );
-    w.write(e_field_data_volume        , data_volume_         );
-    w.write(e_field_obs_period         , obs_period_          );
-    w.write(e_field_unit_of_obs        , unit_of_obs_         );
-    w.write(e_field_construction_method, construction_method_ );
-    w.write(e_field_published_reference, published_reference_ );
-    w.write(e_field_comments           , comments_            );
-    w.write_values
-        (values_
-        ,num_decimals_
-        ,min_age_
-        ,max_age_
-        ,select_period_
-        ,max_select_age_
-        );
-    w.write(e_field_hash_value         , hash_value_          );
-    w.end();
+        w.write(e_field_table_name         , name_                );
+        w.write(e_field_table_number       , number_              );
+        w.write_table_type(*type_);
+        w.write(e_field_contributor        , contributor_         );
+        w.write(e_field_data_source        , data_source_         );
+        w.write(e_field_data_volume        , data_volume_         );
+        w.write(e_field_obs_period         , obs_period_          );
+        w.write(e_field_unit_of_obs        , unit_of_obs_         );
+        w.write(e_field_construction_method, construction_method_ );
+        w.write(e_field_published_reference, published_reference_ );
+        w.write(e_field_comments           , comments_            );
+        w.write_values
+            (values_
+            ,num_decimals_
+            ,min_age_
+            ,max_age_
+            ,select_period_
+            ,max_select_age_
+            );
+        w.write(e_field_hash_value         , hash_value_          );
+        w.end();
+        }
+    catch(std::runtime_error const& e)
+        {
+        fatal_error()
+            << "saving table " << *number_ << "failed: " << e.what()
+            << std::flush
+            ;
+        }
 }
 
 bool table_impl::is_equal(table_impl const& other) const
@@ -2143,17 +2192,43 @@ unsigned long table_impl::compute_hash_value() const
 
 table table::read_from_text(fs::path const& file)
 {
-    fs::ifstream ifs;
-    open_text_file(ifs, file);
+    try
+        {
+        fs::ifstream ifs;
+        open_text_file(ifs, file);
 
-    return table(table_impl::create_from_text(ifs));
+        return table(table_impl::create_from_text(ifs));
+        }
+    catch(std::runtime_error const& e)
+        {
+        fatal_error()
+            << "Error reading table from file '" << file << "': "
+            << e.what()
+            << "."
+            << LMI_FLUSH
+            ;
+        throw "Unreachable--silences a compiler diagnostic.";
+        }
 }
 
 table table::read_from_text(std::string const& text)
 {
-    std::istringstream iss(text);
+    try
+        {
+        std::istringstream iss(text);
 
-    return table(table_impl::create_from_text(iss));
+        return table(table_impl::create_from_text(iss));
+        }
+    catch(std::runtime_error const& e)
+        {
+        fatal_error()
+            << "Error reading table from string: "
+            << e.what()
+            << "."
+            << LMI_FLUSH
+            ;
+        throw "Unreachable--silences a compiler diagnostic.";
+        }
 }
 
 void table::save_as_text(fs::path const& file) const
@@ -2391,10 +2466,11 @@ void database_impl::read_index(fs::path const& path)
                 break;
                 }
 
-            std::ostringstream oss;
-            oss << "Error reading entry " << index_.size()
-                << " from the database index '" << index_path << "'.";
-            throw std::runtime_error(oss.str());
+            fatal_error()
+                << "error reading entry " << index_.size()
+                << " from the database index '" << index_path << "'"
+                << std::flush
+                ;
             }
 
         uint32_t const
@@ -2405,18 +2481,20 @@ void database_impl::read_index(fs::path const& path)
         // Check that the cast to int below is safe.
         if(number >= static_cast<unsigned>(std::numeric_limits<int>::max()))
             {
-            std::ostringstream oss;
-            oss << "database index '" << index_path << "' is corrupt: "
-                   "table number " << number << " is out of range.";
-            throw std::runtime_error(oss.str());
+            fatal_error()
+                << "database index '" << index_path << "' is corrupt: "
+                << "table number " << number << " is out of range"
+                << std::flush
+                ;
             }
 
         if(!add_index_entry(table::Number(static_cast<int>(number)), offset))
             {
-            std::ostringstream oss;
-            oss << "database index '" << index_path << "' is corrupt: "
-                   "duplicate entries for the table number " << number;
-            throw std::runtime_error(oss.str());
+            fatal_error()
+                << "database index '" << index_path << "' is corrupt: "
+                << "duplicate entries for the table number " << number
+                << std::flush
+                ;
             }
         }
 }
@@ -2446,21 +2524,23 @@ shared_ptr<table_impl> database_impl::do_get_table_impl
             }
         catch(std::runtime_error const& e)
             {
-            std::ostringstream oss;
-            oss << "Error reading table " << entry.number_
+            fatal_error()
+                << "error reading table " << entry.number_
                 << " from the offset " << entry.offset_
-                << " in the database '" << path_ << "': " << e.what();
-            throw std::runtime_error(oss.str());
+                << " in the database '" << path_ << "': " << e.what()
+                << std::flush
+                ;
             }
 
         if(entry.table_->number() != entry.number_)
             {
-            std::ostringstream oss;
-            oss << "database '" << path_ << "' is corrupt: "
-                   "table number " << entry.table_->number()
+            fatal_error()
+                << "database '" << path_ << "' is corrupt: "
+                << "table number " << entry.table_->number()
                 << " is inconsistent with its number in the index ("
-                << entry.number_ << ")";
-            throw std::runtime_error(oss.str());
+                << entry.number_ << ")"
+                << std::flush
+                ;
             }
         }
 
@@ -2569,7 +2649,7 @@ void database_impl::save(fs::path const& path)
             // that an error will happen -- if it doesn't, we'll just never use
             // this stream.
             std::ostringstream error_stream;
-            error_stream << "Writing database data to '" << path_ << "' failed";
+            error_stream << "writing database data to '" << path_ << "' failed";
 
             bool keep_temp_index_file = false;
             try
@@ -2665,7 +2745,7 @@ void database_impl::save(fs::path const& path)
                 // Skip the error below.
                 return;
                 }
-            catch(std::exception const& e)
+            catch(std::runtime_error const& e)
                 {
                 error_stream << " (" << e.what() << ")";
                 }
@@ -2677,8 +2757,7 @@ void database_impl::save(fs::path const& path)
 
             database_.cleanup_temp();
 
-            error_stream << ".";
-            throw std::runtime_error(error_stream.str());
+            fatal_error() << error_stream.str() << std::flush;
             }
 
     private:
@@ -2710,10 +2789,11 @@ void database_impl::save(fs::path const& path)
                 ofs_.close();
                 if(!ofs_)
                     {
-                    std::ostringstream oss;
-                    oss << "failed to close the output " << description_
-                        << " file \"" << temp_path_ << "\"";
-                    throw std::runtime_error(oss.str());
+                    fatal_error()
+                        << "failed to close the output " << description_
+                        << " file \"" << temp_path_ << "\""
+                        << std::flush
+                        ;
                     }
                 }
 
@@ -2764,9 +2844,10 @@ void database_impl::save(fs::path const& path)
         uint32_t const offset32 = static_cast<uint32_t>(offset);
         if(static_cast<std::streamoff>(offset32) != offset)
             {
-            throw std::runtime_error
-                    ("Database is too large to be stored in SOA v3 format."
-                    );
+            fatal_error()
+                << "database is too large to be stored in SOA v3 format."
+                << std::flush
+                ;
             }
 
         to_bytes(&index_record[e_index_pos_number], t->number());
@@ -2809,8 +2890,18 @@ database::database()
 }
 
 database::database(fs::path const& path)
+try
     :impl_(new database_impl(path))
 {
+}
+catch(std::runtime_error const& e)
+{
+    fatal_error()
+        << "Error reading database from '" << path << "': "
+        << e.what()
+        << "."
+        << LMI_FLUSH
+        ;
 }
 
 database::~database()
@@ -2825,32 +2916,107 @@ int database::tables_count() const
 
 table database::get_nth_table(int idx) const
 {
-    return impl_->get_nth_table(idx);
+    try
+        {
+        return impl_->get_nth_table(idx);
+        }
+    catch(std::runtime_error const& e)
+        {
+        fatal_error()
+            << "Error getting table at index " << idx << ": "
+            << e.what()
+            << "."
+            << LMI_FLUSH
+            ;
+        throw "Unreachable--silences a compiler diagnostic.";
+        }
 }
 
 table database::find_table(table::Number number) const
 {
-    return impl_->find_table(number);
+    try
+        {
+        return impl_->find_table(number);
+        }
+    catch(std::runtime_error const& e)
+        {
+        fatal_error()
+            << "Error getting table with number " << number << ": "
+            << e.what()
+            << "."
+            << LMI_FLUSH
+            ;
+        throw "Unreachable--silences a compiler diagnostic.";
+        }
 }
 
 void database::append_table(table const& table)
 {
-    return impl_->append_table(table);
+    try
+        {
+        return impl_->append_table(table);
+        }
+    catch(std::runtime_error const& e)
+        {
+        fatal_error()
+            << "Error appending table number " << table.number()
+            << " to the database: "
+            << e.what()
+            << "."
+            << LMI_FLUSH
+            ;
+        }
 }
 
 void database::add_or_replace_table(table const& table)
 {
-    return impl_->add_or_replace_table(table);
+    try
+        {
+        return impl_->add_or_replace_table(table);
+        }
+    catch(std::runtime_error const& e)
+        {
+        fatal_error()
+            << "Error adding table number " << table.number() << ": "
+            << e.what()
+            << "."
+            << LMI_FLUSH
+            ;
+        }
 }
 
 void database::delete_table(table::Number number)
 {
-    return impl_->delete_table(number);
+    try
+        {
+        return impl_->delete_table(number);
+        }
+    catch(std::runtime_error const& e)
+        {
+        fatal_error()
+            << "Error deleting table number " << number << ": "
+            << e.what()
+            << "."
+            << LMI_FLUSH
+            ;
+        }
 }
 
 void database::save(fs::path const& path)
 {
-    return impl_->save(path);
+    try
+        {
+        return impl_->save(path);
+        }
+    catch(std::runtime_error const& e)
+        {
+        fatal_error()
+            << "Error saving database to '" << path << "': "
+            << e.what()
+            << "."
+            << LMI_FLUSH
+            ;
+        }
 }
 
 } // namespace soa_v3_format

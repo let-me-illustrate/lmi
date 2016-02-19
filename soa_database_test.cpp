@@ -200,7 +200,7 @@ void test_database_open()
     BOOST_TEST_THROW
         (database("nonexistent")
         ,std::runtime_error
-        ,"File 'nonexistent.ndx' could not be opened for reading."
+        ,match_substr("'nonexistent.ndx' could not be opened")
         );
 
     test_file_eraser erase("eraseme.ndx");
@@ -211,7 +211,7 @@ void test_database_open()
     BOOST_TEST_THROW
         (database("eraseme")
         ,std::runtime_error
-        ,"File 'eraseme.dat' could not be opened for reading."
+        ,match_substr("'eraseme.dat' could not be opened")
         );
 }
 
@@ -296,7 +296,7 @@ void test_from_bad_text()
                 )
             )
         ,std::runtime_error
-        ,""
+        ,match_substr("Bloordyblop")
         );
 
     // Using bad hash value should fail.
@@ -307,7 +307,7 @@ void test_from_bad_text()
                 )
             )
         ,std::runtime_error
-        ,""
+        ,match_substr("hash value 1234567890")
         );
 }
 
@@ -358,7 +358,7 @@ void test_delete()
     BOOST_TEST_THROW
         (qx_ins.delete_table(table::Number(1))
         ,std::invalid_argument
-        ,""
+        ,match_substr("not found")
         );
 
     qx_ins.delete_table(table::Number(250));
