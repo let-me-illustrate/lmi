@@ -2278,6 +2278,16 @@ class database_impl
     ,virtual private obstruct_slicing<database_impl>
 {
   public:
+    static fs::path get_index_path(fs::path const& path)
+        {
+        return fs::change_extension(path, ".ndx");
+        }
+
+    static fs::path get_data_path(fs::path const& path)
+        {
+        return fs::change_extension(path, ".dat");
+        }
+
     database_impl();
     explicit database_impl(fs::path const& path);
 
@@ -2398,7 +2408,7 @@ database_impl::database_impl(fs::path const& path)
     // Open the database file right now to ensure that we can do it, even if we
     // don't need it just yet. As it will be used soon anyhow, delaying opening
     // it wouldn't be a useful optimization.
-    open_binary_file(database_ifs_, fs::change_extension(path, ".dat"));
+    open_binary_file(database_ifs_, get_data_path(path));
 }
 
 bool database_impl::add_index_entry
@@ -2450,7 +2460,7 @@ void database_impl::remove_index_entry(table::Number number)
 
 void database_impl::read_index(fs::path const& path)
 {
-    fs::path const index_path = fs::change_extension(path, ".ndx");
+    fs::path const index_path = get_index_path(path);
 
     fs::ifstream index_ifs;
     open_binary_file(index_ifs, index_path);
@@ -2882,6 +2892,17 @@ void database_impl::save(fs::path const& path)
     database_ifs_.close();
 
     output.close();
+}
+
+bool database::exists(fs::path const& path)
+{
+    // Normally either both files exist or none of them does, but we still
+    // return true even if just one of them exists, as we don't want the
+    // caller, who may decide to create a new database if none exists yet, to
+    // overwrite the existing file inadvertently.
+    return fs::exists(database_impl::get_index_path(path))
+        || fs::exists(database_impl::get_data_path(path))
+        ;
 }
 
 database::database()

@@ -119,6 +119,9 @@ class database
     ,virtual private obstruct_slicing<database>
 {
   public:
+    // Check if a database at the given path exists.
+    static bool exists(fs::path const& path);
+
     // Initialize an empty database.
     //
     // Call append_table() or add_or_replace_table() later to add tables to the

@@ -110,10 +110,22 @@ void merge
     ,fs::path const& filename_to_merge
     )
 {
-    database table_file(database_filename);
+    // Allow creating new databases using merge command, as there is no other
+    // way to do it and it doesn't seem to be worth it to have a separate
+    // --create command which would just create two 0-sized files.
+    std::unique_ptr<database> table_file;
+    if(database::exists(database_filename))
+        {
+        table_file.reset(new database(database_filename));
+        }
+    else
+        {
+        table_file.reset(new database);
+        }
+
     table const& t = table::read_from_text(filename_to_merge);
-    table_file.add_or_replace_table(t);
-    table_file.save(database_filename);
+    table_file->add_or_replace_table(t);
+    table_file->save(database_filename);
 }
 
 void delete_table
