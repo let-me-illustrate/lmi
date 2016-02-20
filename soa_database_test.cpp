@@ -400,7 +400,15 @@ void do_test_copy(std::string const& path)
     database db_new;
     for(int i = 0; i != tables_count; ++i)
         {
-        db_new.append_table(db_orig.get_nth_table(i));
+        // Check that each table can be serialized to and deserialized from the
+        // text.
+        auto const& orig_table = db_orig.get_nth_table(i);
+        auto const orig_text = orig_table.save_as_text();
+        table const& new_table = table::read_from_text(orig_text);
+        auto const new_text = new_table.save_as_text();
+        BOOST_TEST_EQUAL(new_text, orig_text);
+
+        db_new.append_table(new_table);
         }
 
     db_new.save("eraseme");
