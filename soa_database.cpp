@@ -2073,7 +2073,8 @@ void table_impl::read_from_text(std::istream& is)
             if(!last_string)
                 {
                 fatal_error()
-                    << "Expected a colon on line " << line_num
+                    << "expected a field name followed by a colon"
+                    << location_info(line_num)
                     << std::flush
                     ;
                 }

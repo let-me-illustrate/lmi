@@ -297,7 +297,7 @@ void test_from_bad_text()
     BOOST_TEST_THROW
         (table::read_from_text(simple_table_text + "  2  0.34567\n")
         ,std::runtime_error
-        ,match_substr("Expected a colon")
+        ,match_substr("expected a field")
         );
 
     // And so should using too few of them: chop of the last line to test.
