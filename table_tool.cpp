@@ -274,6 +274,57 @@ void rename_tables
     table_file.save(database_filename);
 }
 
+// Returns the number of tables that failed the verification.
+int verify(fs::path const& database_filename)
+{
+    database const table_file(database_filename);
+
+    int errors = 0;
+
+    // Make the output ordered by table numbers.
+    auto const numbers = get_all_tables_numbers(table_file);
+    for(auto num: numbers)
+        {
+        try
+            {
+            table const& orig_table = table_file.find_table(num);
+            auto const orig_text = orig_table.save_as_text();
+            table const& new_table = table::read_from_text(orig_text);
+            auto const new_text = new_table.save_as_text();
+            if(new_text != orig_text)
+                {
+                // This is not really fatal, it is only used here to throw an
+                // exception in a convenient way.
+                fatal_error()
+                    << "After loading and saving the original table '\n"
+                    << orig_text
+                    << "' became '\n"
+                    << new_text
+                    << "'\n"
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        catch(std::exception const& e)
+            {
+            std::cout
+                << "Verification failed for table #" << num << ": "
+                << e.what()
+                << std::endl
+                ;
+
+            ++errors;
+            }
+        }
+
+    if(!errors)
+        {
+        std::cout << "All " << numbers.size() << " tables passed.\n";
+        }
+
+    return errors;
+}
+
 int try_main(int argc, char* argv[])
 {
     int c;
@@ -291,6 +342,7 @@ int try_main(int argc, char* argv[])
         {"extract=n"      , REQD_ARG, 0, 'e', 0    , "extract table #n into n.txt"},
         {"extract-all"    , NO_ARG,   0, 'x', 0    , "extract all tables to text files"},
         {"rename=NAMEFILE", REQD_ARG, 0, 'r', 0    , "rename tables from NAMEFILE"},
+        {"verify"         , NO_ARG,   0, 'v', 0    , "verify integrity of all tables"},
         {0                , NO_ARG,   0,   0, 0    , ""}
       };
     bool license_accepted = false;
@@ -303,6 +355,7 @@ int try_main(int argc, char* argv[])
     bool run_extract      = false;
     bool run_extract_all  = false;
     bool run_rename       = false;
+    bool run_verify       = false;
 
     int  num_to_do        = 0;      // Number of actions to perform.
     bool needs_database   = true;
@@ -409,6 +462,13 @@ int try_main(int argc, char* argv[])
             }
             break;
 
+          case 'v':
+            {
+            run_verify = true;
+            ++num_to_do;
+            }
+            break;
+
           default:
             // Error message was already given from getopt() code, so no need
             // to output anything else here, but do flush its output so that it
@@ -447,7 +507,9 @@ int try_main(int argc, char* argv[])
         case 0:
             if(!run_delete)
                 {
-                std::cerr << "Please use exactly one of --crc, --list, --rename, --merge or --extract.\n";
+                std::cerr
+                    << "Please use exactly one of the following options:\n"
+                    << "--crc, --list, --rename, --merge, --extract or --verify.\n";
                 command_line_syntax_error = true;
                 }
             break;
@@ -545,6 +607,11 @@ int try_main(int argc, char* argv[])
         {
         delete_table(database_filename, table_number_to_delete);
         return EXIT_SUCCESS;
+        }
+
+    if(run_verify)
+        {
+        return verify(database_filename) == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
         }
 
     std::cerr << "Unexpected unknown run mode, nothing done.\n";
