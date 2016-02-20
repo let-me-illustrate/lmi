@@ -814,6 +814,20 @@ boost::optional<field_and_value> parse_field_and_value
         ++n;
         }
 
+    // A valid field name can consist of one or two words only, so check for
+    // this and just silently ignore colons in the middle of the line.
+    auto pos_space = line.find(' ');
+    if(pos_space != std::string::npos)
+        {
+        pos_space = line.find(' ', pos_space + 1);
+        if(pos_space < pos_colon)
+            {
+            // There are at least two spaces before the colon, assume it's just
+            // used in the text and not as a field separator.
+            return no_field;
+            }
+        }
+
     fatal_error()
         << "unrecognized field '" << name << "'"
         << location_info(line_num)
