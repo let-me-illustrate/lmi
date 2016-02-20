@@ -1910,34 +1910,34 @@ void table_impl::read_from_text(std::istream& is)
 
     for(std::string line; std::getline(is, line); ++line_num)
         {
+        static char const* const whitespace = " \t";
+
+        // Discard trailing whitespace, it is insignificant and would just
+        // complicate the checks below.
+        auto const end_line = line.find_last_not_of(whitespace);
+        if(end_line == std::string::npos)
+            {
+            // Blank line, we only accept (and ignore) them after the end of
+            // the input, so check that nothing more is left.
+            int const blank_line_num = line_num;
+            for(++line_num; std::getline(is, line); ++line_num)
+                {
+                if(line.find_first_not_of(whitespace) != std::string::npos)
+                    {
+                    fatal_error()
+                        << "blank line " << blank_line_num << " "
+                        << "cannot appear in the middle of the input "
+                        << "and be followed by non-blank line " << line_num
+                        << std::flush
+                        ;
+                    }
+                }
+            break;
+            }
+
         auto const pos_colon = line.find(':');
         if(pos_colon != std::string::npos)
             {
-            static char const* const whitespace = " \t";
-
-            // Discard trailing whitespace, it is insignificant and would just
-            // complicate the checks below.
-            auto const end_line = line.find_last_not_of(whitespace);
-            if(end_line == std::string::npos)
-                {
-                // Blank line, we only accept (and ignore) them after the end
-                // of the input, so check that nothing more is left.
-                int const blank_line_num = line_num;
-                for(++line_num; std::getline(is, line); ++line_num)
-                    {
-                    if(line.find_first_not_of(whitespace) != std::string::npos)
-                        {
-                        fatal_error()
-                            << "blank line " << blank_line_num << " "
-                            << "cannot appear in the middle of the input "
-                            << "and be followed by non-blank line " << line_num
-                            << std::flush
-                            ;
-                        }
-                    }
-                break;
-                }
-
             std::string const key(line, 0, pos_colon);
 
             auto const field = parse_field_name(key, line_num);
