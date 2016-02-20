@@ -735,10 +735,34 @@ void writer::end()
     // by the end of the file itself.
 }
 
-// Return the field corresponding to the given name or throw an exception if
-// none was found (the line number appears in the error message).
-enum_soa_field parse_field_name(std::string const& name, int line_num)
+// Result of parse_field_and_value
+struct field_and_value
 {
+    enum_soa_field field;
+    std::string value;
+};
+
+// Parse the given line as "field: value", making an effort to avoid
+// recognizing colons in the middle of the string as field separators.
+// If the line isn't in this format, simply return an empty result.
+// If the line is almost but not quite in this format, throw an exception
+// explaining the problem.
+boost::optional<field_and_value> parse_field_and_value
+    (std::string const& line
+    ,int line_num
+    )
+{
+    boost::optional<field_and_value> const no_field;
+
+    auto const pos_colon = line.find(':');
+    if(pos_colon == std::string::npos)
+        {
+        // If there are no colons at all, there are definitely no fields.
+        return no_field;
+        }
+
+    std::string const name(line, 0, pos_colon);
+
     int n = 0;
     for(soa_field const& f: soa_fields)
         {
@@ -746,7 +770,45 @@ enum_soa_field parse_field_name(std::string const& name, int line_num)
             {
             // Cast is safe because the valid enum values exactly correspond to
             // the entries of the fields table we iterate over.
-            return static_cast<enum_soa_field>(n);
+            auto const field = static_cast<enum_soa_field>(n);
+
+            // Special case of the table values: they start from the next line,
+            // so there should be nothing else on this one.
+            std::string value;
+            if(field == e_field_values)
+                {
+                if(pos_colon + 1 != line.length())
+                    {
+                    fatal_error()
+                        << "value not allowed after '" << name << ":'"
+                        << location_info(line_num)
+                        << std::flush
+                        ;
+                    }
+                }
+            else
+                {
+                if(pos_colon + 1 == line.length())
+                    {
+                    fatal_error()
+                        << "value expected after '" << name << ":'"
+                        << location_info(line_num, pos_colon + 1)
+                        << std::flush
+                        ;
+                    }
+
+                if(line[pos_colon + 1] != ' ')
+                    {
+                    fatal_error()
+                        << "space expected after '" << name << ":'"
+                        << location_info(line_num, pos_colon + 1)
+                        << std::flush
+                        ;
+                    }
+                value = line.substr(pos_colon + 2); // +2 to skip ": "
+                }
+
+            return field_and_value{field, value};
             }
 
         ++n;
@@ -1935,61 +1997,23 @@ void table_impl::read_from_text(std::istream& is)
             break;
             }
 
-        auto const pos_colon = line.find(':');
-        if(pos_colon != std::string::npos)
+        auto const fv = parse_field_and_value(line, line_num);
+        if (fv)
             {
-            std::string const key(line, 0, pos_colon);
+            // Just to avoid using "fv->" everywhere.
+            auto const field = fv->field;
+            auto const& value = fv->value;
 
-            auto const field = parse_field_name(key, line_num);
-
-            // Special case of the table values field which doesn't have any
-            // value on this line itself.
-            if(field == e_field_values)
-                {
-                if(pos_colon + 1 != line.length())
-                    {
-                    fatal_error()
-                        << "value not allowed after '" << key << ":'"
-                        << location_info(line_num)
-                        << std::flush
-                        ;
-                    }
-
-                parse_values(is, line_num);
-                continue;
-                }
-
-            // Almost all the other fields may only come before the table
-            // values.
+            // Only one field can appear after the table values.
             if(!values_.empty() && field != e_field_hash_value)
                 {
                 fatal_error()
-                    << "field '" << key << "' is not allowed after the table "
-                    << "values"
+                    << "field '" << soa_fields[field].name << "' "
+                    << "is not allowed after the table values"
                     << location_info(line_num)
                     << std::flush
                     ;
                 }
-
-            if(pos_colon + 1 == line.length())
-                {
-                fatal_error()
-                    << "value expected after '" << key << ":'"
-                    << location_info(line_num, pos_colon + 1)
-                    << std::flush
-                    ;
-                }
-
-            if(line[pos_colon + 1] != ' ')
-                {
-                fatal_error()
-                    << "space expected after '" << key << ":'"
-                    << location_info(line_num, pos_colon + 1)
-                    << std::flush
-                    ;
-                }
-
-            std::string const value(line, pos_colon + 2); // +2 to skip ": "
 
             last_string = nullptr; // reset it for non-string fields
 
@@ -2046,18 +2070,14 @@ void table_impl::read_from_text(std::istream& is)
                     parse_number(num_decimals_, field, line_num, value);
                     break;
                 case e_field_values:
-                    // This field has been handled specially above, but still
-                    // have a case for it here to be warned by the compiler
-                    // about any missing enum values.
-                    throw std::logic_error
-                        ("Internal error: table values field impossible here."
-                        );
+                    parse_values(is, line_num);
+                    break;
                 case e_field_hash_value:
                     if(values_.empty())
                         {
                         fatal_error()
-                            << "'" << key << "' field is only allowed after "
-                            << "the table values, not"
+                            << "'" << soa_fields[field].name << "' field "
+                            << "is only allowed after the table values and not "
                             << location_info(line_num)
                             << std::flush
                             ;
@@ -2067,7 +2087,7 @@ void table_impl::read_from_text(std::istream& is)
                     break;
                 }
             }
-        else // no colon in this line
+        else // This line isn't of the form "field: value".
             {
             // Must be a continuation of the previous line.
             if(!last_string)
