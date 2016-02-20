@@ -828,6 +828,20 @@ boost::optional<field_and_value> parse_field_and_value
             }
         }
 
+    // There are also a few strings which are known to occur in the actual
+    // tables followed by a colon in the beginning of the line.
+    char const* const known_not_fields[] =
+        {"Editor"
+        ,"WARNING"
+        };
+    for(auto const& not_field: known_not_fields)
+        {
+        if(name == not_field)
+            {
+            return no_field;
+            }
+        }
+
     fatal_error()
         << "unrecognized field '" << name << "'"
         << location_info(line_num)
