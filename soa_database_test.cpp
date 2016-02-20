@@ -286,26 +286,16 @@ void test_to_from_text()
 
 void test_from_bad_text()
 {
-    database db;
-
     // Using unknown header should fail.
     BOOST_TEST_THROW
-        (db.append_table
-            (table::read_from_text
-                ("Bloordyblop: yes\n" + simple_table_text
-                )
-            )
+        (table::read_from_text("Bloordyblop: yes\n" + simple_table_text)
         ,std::runtime_error
         ,match_substr("Bloordyblop")
         );
 
     // Using bad hash value should fail.
     BOOST_TEST_THROW
-        (db.append_table
-            (table::read_from_text
-                (simple_table_text + "Hash value: 1234567890\n"
-                )
-            )
+        (table::read_from_text(simple_table_text + "Hash value: 1234567890\n")
         ,std::runtime_error
         ,match_substr("hash value 1234567890")
         );
