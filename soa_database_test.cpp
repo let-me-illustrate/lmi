@@ -293,6 +293,28 @@ void test_from_bad_text()
         ,match_substr("Bloordyblop")
         );
 
+    // Using too many values should fail.
+    BOOST_TEST_THROW
+        (table::read_from_text(simple_table_text + "  2  0.34567\n")
+        ,std::runtime_error
+        ,match_substr("Expected a colon")
+        );
+
+    // And so should using too few of them: chop of the last line to test.
+    BOOST_TEST_THROW
+        (table::read_from_text
+            (simple_table_text.substr
+                (0
+                ,simple_table_text.find_last_of
+                    ('\n'
+                    ,simple_table_text.length() - 2
+                    )
+                )
+            )
+        ,std::runtime_error
+        ,match_substr("missing")
+        );
+
     // Using bad hash value should fail.
     BOOST_TEST_THROW
         (table::read_from_text(simple_table_text + "Hash value: 1234567890\n")
