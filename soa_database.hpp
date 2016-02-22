@@ -32,6 +32,7 @@
 #include <boost/filesystem/path.hpp>
 
 #include <memory>
+#include <istream>
 #include <ostream>
 
 /// Namespace containing classes working with databases in version 3 of the SOA
@@ -135,6 +136,16 @@ class database
     // thrown.
     explicit database(fs::path const& path);
 
+    // Constructor takes the streams from which the index and the table data
+    // should be read.
+    //
+    // The index stream is passed by reference because it is only used in the
+    // ctor and can be safely closed/destroyed once it returns, however the
+    // data stream will continue to be used for loading table data on demand
+    // and so is passed by shared_ptr<> to ensure that the database can use it
+    // for as long as it needs it.
+    database(std::istream& index_is, shared_ptr<std::istream> data_is);
+
     // table access by index, only useful for iterating over all of them (using
     // iterators could be an alternative approach, but would be heavier without
     // providing much gain).
@@ -164,8 +175,12 @@ class database
     // needs to be called to update the disk file.
     void delete_table(table::Number number);
 
-    // Save the current database contents to the specified file.
+    // Save the current database contents to the specified file or streams.
+    // Notice that saving to the file provides an extra logic ensuring that an
+    // existing file is not overwritten unless saving fully succeeds, so prefer
+    // to use this overload instead of saving to manually opened file streams.
     void save(fs::path const& path);
+    void save(std::ostream& index_os, std::ostream& data_os);
 
     ~database();
 

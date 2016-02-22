@@ -444,8 +444,8 @@ void do_test_copy(std::string const& path)
     database db_orig(path);
     auto const tables_count = db_orig.tables_count();
 
-    test_file_eraser erase_ndx("eraseme.ndx");
-    test_file_eraser erase_dat("eraseme.dat");
+    std::stringstream index_ss;
+    shared_ptr<std::stringstream> data_ss = std::make_shared<std::stringstream>();
 
     // Make a copy of the database under new name.
     {
@@ -463,11 +463,12 @@ void do_test_copy(std::string const& path)
         db_new.append_table(new_table);
         }
 
-    db_new.save("eraseme");
+    db_new.save(index_ss, *data_ss);
     }
 
     // And read it back.
-    database db_new("eraseme");
+    database db_new(index_ss, data_ss);
+    BOOST_TEST_EQUAL(db_new.tables_count(), tables_count);
 
     // In general, we can't just use TEST_FILES_EQUAL() to compare the files
     // here because the order of tables in the original .dat file is lost and

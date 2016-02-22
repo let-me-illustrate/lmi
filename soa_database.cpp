@@ -2354,6 +2354,7 @@ class database_impl
 
     database_impl();
     explicit database_impl(fs::path const& path);
+    database_impl(std::istream& index_is, shared_ptr<std::istream> data_is);
 
     int tables_count() const;
     table get_nth_table(int idx) const;
@@ -2362,6 +2363,7 @@ class database_impl
     void add_or_replace_table(table const& table);
     void delete_table(table::Number number);
     void save(fs::path const& path);
+    void save(std::ostream& index_os, std::ostream& data_os);
 
   private:
     // An index record is composed of:
@@ -2378,7 +2380,7 @@ class database_impl
         ,e_index_pos_max    = 58
         };
 
-    void read_index(fs::path const& path);
+    void read_index(std::istream& index_is);
 
     // We don't currently use the name stored in the index, so this struct
     // doesn't include it.
@@ -2457,7 +2459,11 @@ class database_impl
     //
     // An alternative approach could be to just load everything into memory at
     // once.
-    mutable fs::ifstream database_ifs_;
+    //
+    // Notice that this pointer may be null if we don't have any input file or
+    // if we had it but closed it because we didn't need it any more after
+    // loading everything from it.
+    shared_ptr<std::istream> data_is_;
 };
 
 database_impl::database_impl()
@@ -2467,12 +2473,28 @@ database_impl::database_impl()
 database_impl::database_impl(fs::path const& path)
     :path_(path)
 {
-    read_index(path);
+    fs::path const index_path = get_index_path(path);
+
+    fs::ifstream index_ifs;
+    open_binary_file(index_ifs, index_path);
+    read_index(index_ifs);
 
     // Open the database file right now to ensure that we can do it, even if we
     // don't need it just yet. As it will be used soon anyhow, delaying opening
     // it wouldn't be a useful optimization.
-    open_binary_file(database_ifs_, get_data_path(path));
+    auto const ifs = std::make_shared<fs::ifstream>();
+    open_binary_file(*ifs, get_data_path(path));
+
+    data_is_ = ifs;
+}
+
+database_impl::database_impl
+    (std::istream& index_is
+    ,shared_ptr<std::istream> data_is
+    )
+    :data_is_(data_is)
+{
+    read_index(index_is);
 }
 
 bool database_impl::add_index_entry
@@ -2522,27 +2544,22 @@ void database_impl::remove_index_entry(table::Number number)
         }
 }
 
-void database_impl::read_index(fs::path const& path)
+void database_impl::read_index(std::istream& index_is)
 {
-    fs::path const index_path = get_index_path(path);
-
-    fs::ifstream index_ifs;
-    open_binary_file(index_ifs, index_path);
-
     char index_record[e_index_pos_max] = {0};
 
     for(;;)
         {
-        if(!stream_read(index_ifs, index_record, e_index_pos_max))
+        if(!stream_read(index_is, index_record, e_index_pos_max))
             {
-            if(index_ifs.eof() && !index_ifs.gcount())
+            if(index_is.eof() && !index_is.gcount())
                 {
                 break;
                 }
 
             fatal_error()
                 << "error reading entry " << index_.size()
-                << " from the database index '" << index_path << "'"
+                << " from the database index"
                 << std::flush
                 ;
             }
@@ -2556,7 +2573,7 @@ void database_impl::read_index(fs::path const& path)
         if(number >= static_cast<unsigned>(std::numeric_limits<int>::max()))
             {
             fatal_error()
-                << "database index '" << index_path << "' is corrupt: "
+                << "database index is corrupt: "
                 << "table number " << number << " is out of range"
                 << std::flush
                 ;
@@ -2565,7 +2582,7 @@ void database_impl::read_index(fs::path const& path)
         if(!add_index_entry(table::Number(static_cast<int>(number)), offset))
             {
             fatal_error()
-                << "database index '" << index_path << "' is corrupt: "
+                << "database index is corrupt: "
                 << "duplicate entries for the table number " << number
                 << std::flush
                 ;
@@ -2592,7 +2609,7 @@ shared_ptr<table_impl> database_impl::do_get_table_impl
         try
             {
             entry.table_ = table_impl::create_from_binary
-                (database_ifs_
+                (*data_is_
                 ,entry.offset_
                 );
             }
@@ -2905,6 +2922,22 @@ void database_impl::save(fs::path const& path)
 
     safe_database_output output(path);
 
+    save(output.index(), output.database());
+
+    // Before closing the output, which will ensure that it is really written
+    // to the files with the specified path, close our input stream because we
+    // won't ever need it any more, as we just read all the tables in the loop
+    // above, so it's useless to keep it open. But even more importantly, this
+    // will allow us to write to the same database file we had been reading
+    // from until now, which would fail otherwise because the file would be in
+    // use.
+    data_is_.reset();
+
+    output.close();
+}
+
+void database_impl::save(std::ostream& index_os, std::ostream& data_os)
+{
     char index_record[e_index_pos_max] = {0};
 
     for(auto const& i: index_)
@@ -2914,7 +2947,7 @@ void database_impl::save(fs::path const& path)
         // The offset of this table is just the current position of the output
         // stream, so get it before it changes and check that it is still
         // representable as a 4 byte offset (i.e. the file is less than 4GiB).
-        std::streamoff const offset = output.database().tellp();
+        std::streamoff const offset = data_os.tellp();
         uint32_t const offset32 = static_cast<uint32_t>(offset);
         if(static_cast<std::streamoff>(offset32) != offset)
             {
@@ -2941,21 +2974,10 @@ void database_impl::save(fs::path const& path)
 
         to_bytes(&index_record[e_index_pos_offset], offset32);
 
-        stream_write(output.index(), index_record, sizeof(index_record));
+        stream_write(index_os, index_record, sizeof(index_record));
 
-        t->write_as_binary(output.database());
+        t->write_as_binary(data_os);
         }
-
-    // Before closing the output, which will ensure that it is really written
-    // to the files with the specified path, close our input stream because we
-    // won't ever need it any more, as we just read all the tables in the loop
-    // above, so it's useless to keep it open. But even more importantly, this
-    // will allow us to write to the same database file we had been reading
-    // from until now, which would fail otherwise because the file would be in
-    // use.
-    database_ifs_.close();
-
-    output.close();
 }
 
 bool database::exists(fs::path const& path)
@@ -2983,6 +3005,24 @@ catch(std::runtime_error const& e)
 {
     fatal_error()
         << "Error reading database from '" << path << "': "
+        << e.what()
+        << "."
+        << LMI_FLUSH
+        ;
+}
+
+database::database
+    (std::istream& index_is
+    ,shared_ptr<std::istream> data_is
+    )
+try
+    :impl_(new database_impl(index_is, data_is))
+{
+}
+catch(std::runtime_error const& e)
+{
+    fatal_error()
+        << "Error reading database: "
         << e.what()
         << "."
         << LMI_FLUSH
@@ -3097,6 +3137,25 @@ void database::save(fs::path const& path)
         {
         fatal_error()
             << "Error saving database to '" << path << "': "
+            << e.what()
+            << "."
+            << LMI_FLUSH
+            ;
+        }
+}
+
+void database::save(std::ostream& index_os, std::ostream& data_os)
+{
+    try
+        {
+        return impl_->save(index_os, data_os);
+        }
+    catch(std::runtime_error const& e)
+        {
+        // We can't really provide any extra information here, but still do it
+        // just for consistency with save() above.
+        fatal_error()
+            << "Error saving database to: "
             << e.what()
             << "."
             << LMI_FLUSH
