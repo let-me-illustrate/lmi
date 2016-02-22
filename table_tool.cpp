@@ -277,17 +277,20 @@ void rename_tables
 // Returns the number of tables that failed the verification.
 int verify(fs::path const& database_filename)
 {
-    database const table_file(database_filename);
+    database const orig_db(database_filename);
 
     int errors = 0;
 
+    // Check that each table can be loaded and converted to/from text
+    // losslessly.
+    //
     // Make the output ordered by table numbers.
-    auto const numbers = get_all_tables_numbers(table_file);
+    auto const numbers = get_all_tables_numbers(orig_db);
     for(auto num: numbers)
         {
         try
             {
-            table const& orig_table = table_file.find_table(num);
+            table const& orig_table = orig_db.find_table(num);
             auto const orig_text = orig_table.save_as_text();
             table const& new_table = table::read_from_text(orig_text);
             auto const new_text = new_table.save_as_text();
@@ -304,6 +307,7 @@ int verify(fs::path const& database_filename)
                     << LMI_FLUSH
                     ;
                 }
+
             }
         catch(std::exception const& e)
             {
@@ -314,6 +318,63 @@ int verify(fs::path const& database_filename)
                 ;
 
             ++errors;
+            }
+        }
+
+    // Also make a copy of the database using our code.
+    std::stringstream index_ss;
+    shared_ptr<std::stringstream> data_ss = std::make_shared<std::stringstream>();
+
+    auto const tables_count = orig_db.tables_count();
+    {
+    database new_db;
+    for(int i = 0; i != orig_db.tables_count(); ++i)
+        {
+        new_db.append_table(orig_db.get_nth_table(i));
+        }
+    new_db.save(index_ss, *data_ss);
+    }
+
+    // Now reload database from it.
+    database new_db(index_ss, data_ss);
+
+    // And check that it's logically the same.
+    //
+    // Notice that index is also physically, i.e. byte-by-byte, identical to
+    // the original index file, but the data file isn't necessarily identical
+    // because the tables are always in the index order in the files we create
+    // but this could have been not the case for the original file, so we can't
+    // just use memcmp() for comparison here.
+    if(new_db.tables_count() != tables_count)
+        {
+        std::cout
+            << "Wrong number of tables " << new_db.tables_count()
+            << " instead of expected " << tables_count
+            << " after making a copy."
+            << std::endl
+            ;
+
+        ++errors;
+        }
+    else
+        {
+        for(int i = 0; i != orig_db.tables_count(); ++i)
+            {
+            table const& orig_table = orig_db.get_nth_table(i);
+            table const& new_table = new_db.get_nth_table(i);
+            if(new_table != orig_table)
+                {
+                std::cout
+                    << "Copy of the table #" << orig_table.number() << "'\n"
+                    << new_table.save_as_text()
+                    << "' differs from the original table '\n"
+                    << orig_table.save_as_text()
+                    << "'"
+                    << std::endl
+                    ;
+
+                ++errors;
+                }
             }
         }
 
