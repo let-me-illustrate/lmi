@@ -42,6 +42,46 @@ using namespace soa_v3_format;
 namespace
 {
 
+// Class temporarily redirecting std::cout to a string: this is useful to check
+// that the expected output appears on cout or just to suppress some output
+// we're not interested in.
+class std_out_redirector
+{
+  public:
+    std_out_redirector()
+        :orig_streambuf_(std::cout.rdbuf(stream_out_.rdbuf()))
+        {
+        }
+
+    ~std_out_redirector()
+        {
+        std::cout.rdbuf(orig_streambuf_);
+        }
+
+    std_out_redirector(std_out_redirector const&) = delete;
+    std_out_redirector& operator=(std_out_redirector const&) = delete;
+
+    // For convenience, this method returns everything output so far and clears
+    // the output, i.e. the next call to it will only return output appearing
+    // after this call. The name is supposed to emphasize this.
+    std::string take_output()
+        {
+        std::string const output = stream_out_.str();
+        stream_out_.str(std::string());
+        return output;
+        }
+
+  private:
+    // The order of declarations here is important: stream_out_ must be
+    // initialzied before orig_streambuf_ whose initialization uses it.
+
+    // The stream where cout is redirected during this object life-time.
+    std::ostringstream stream_out_;
+
+    // The original buffer used by cout before we redirected it.
+    std::streambuf* const orig_streambuf_;
+};
+
 // Class ensuring that the file with the given name is removed when the test
 // ends, whether it succeeds or fails.
 class test_file_eraser
@@ -286,12 +326,24 @@ void test_to_from_text()
 
 void test_from_bad_text()
 {
-    // Using unknown header should fail.
+    // Using unknown header in a place where it can't be parsed as a
+    // continuation of the previous line should fail.
+    {
+    std_out_redirector std_out_redir;
     BOOST_TEST_THROW
         (table::read_from_text("Bloordyblop: yes\n" + simple_table_text)
         ,std::runtime_error
-        ,match_substr("Bloordyblop")
+        ,match_substr("expected a field name")
         );
+    }
+
+    // However using it as part of a multiline field should succeed, albeit
+    // with a warning.
+    {
+    std_out_redirector std_out_redir;
+    table::read_from_text("Comments: no\nBloordyblop: yes\n" + simple_table_text);
+    BOOST_TEST(std_out_redir.take_output().find("Bloordyblop") != std::string::npos);
+    }
 
     // Using too many values should fail.
     BOOST_TEST_THROW

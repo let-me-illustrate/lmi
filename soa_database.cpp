@@ -747,9 +747,12 @@ struct field_and_value
 // If the line isn't in this format, simply return an empty result.
 // If the line is almost but not quite in this format, throw an exception
 // explaining the problem.
+//
+// The line_num and table_number are only used for diagnostics.
 boost::optional<field_and_value> parse_field_and_value
     (std::string const& line
     ,int line_num
+    ,boost::optional<uint32_t> const& table_number
     )
 {
     boost::optional<field_and_value> const no_field;
@@ -814,6 +817,9 @@ boost::optional<field_and_value> parse_field_and_value
         ++n;
         }
 
+    // Not something we recognize, warn about a possible typo in a field name
+    // after accounting for some of the special cases:
+
     // A valid field name can consist of one or two words only, so check for
     // this and just silently ignore colons in the middle of the line.
     auto pos_space = line.find(' ');
@@ -829,7 +835,8 @@ boost::optional<field_and_value> parse_field_and_value
         }
 
     // There are also a few strings which are known to occur in the actual
-    // tables followed by a colon in the beginning of the line.
+    // tables followed by a colon in the beginning of the line, so accept them
+    // silently, we know they're not errors.
     char const* const known_not_fields[] =
         {"Editor"
         ,"WARNING"
@@ -842,12 +849,25 @@ boost::optional<field_and_value> parse_field_and_value
             }
         }
 
-    fatal_error()
-        << "unrecognized field '" << name << "'"
+    // Try to give more context if possible.
+    std::string table_context;
+    if(table_number)
+        {
+        std::ostringstream oss;
+        oss << " while parsing table " << *table_number;
+        table_context = oss.str();
+        }
+
+    warning()
+        << "Possibly unknown field '" << name << "' ignored"
+        << table_context
         << location_info(line_num)
+        << "."
         << std::flush
         ;
-    throw "Unreachable--silences a compiler diagnostic.";
+
+    // Assume it's just a continuation of the previous line.
+    return no_field;
 }
 
 } // namespace text_format
@@ -2025,7 +2045,7 @@ void table_impl::read_from_text(std::istream& is)
             break;
             }
 
-        auto const fv = parse_field_and_value(line, line_num);
+        auto const fv = parse_field_and_value(line, line_num, number_);
         if (fv)
             {
             // Just to avoid using "fv->" everywhere.
