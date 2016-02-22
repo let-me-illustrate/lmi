@@ -37,6 +37,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/optional.hpp>
 
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>      // for strtoull()
@@ -820,18 +821,12 @@ boost::optional<field_and_value> parse_field_and_value
     // Not something we recognize, warn about a possible typo in a field name
     // after accounting for some of the special cases:
 
-    // A valid field name can consist of one or two words only, so check for
-    // this and just silently ignore colons in the middle of the line.
-    auto pos_space = line.find(' ');
-    if(pos_space != std::string::npos)
+    // A valid field name can consist of a few words only, so check for this
+    // to avoid giving warnings about colons appearing in the middle (or even
+    // at the end of) a line.
+    if(std::count(line.begin(), line.begin() + pos_colon, ' ') > 3)
         {
-        pos_space = line.find(' ', pos_space + 1);
-        if(pos_space < pos_colon)
-            {
-            // There are at least two spaces before the colon, assume it's just
-            // used in the text and not as a field separator.
-            return no_field;
-            }
+        return no_field;
         }
 
     // There are also a few strings which are known to occur in the actual
