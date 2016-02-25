@@ -161,14 +161,17 @@ template<typename T>
 inline
 T from_bytes(char const* bytes)
 {
-    return swap_bytes_if_big_endian(*reinterpret_cast<T const*>(bytes));
+    T t;
+    memcpy(&t, bytes, sizeof(T));
+    return swap_bytes_if_big_endian(t);
 }
 
 template<typename T>
 inline
 void to_bytes(char* bytes, T value)
 {
-    *reinterpret_cast<T*>(bytes) = swap_bytes_if_big_endian(value);
+    T const t = swap_bytes_if_big_endian(value);
+    memcpy(bytes, &t, sizeof(T));
 }
 
 // BOOST !! Replace the use of this function with member value_or() present in
