@@ -1135,6 +1135,7 @@ void throw_if_missing_field(boost::optional<T> const& o, enum_soa_field field)
             << "required field '"
             << soa_fields[field].name
             << "' was not specified"
+            << std::flush
             ;
         }
 }
