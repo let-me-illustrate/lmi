@@ -36,6 +36,8 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
+#include <iomanip>
+
 using namespace soa_v3_format;
 
 // Unit test helpers for working with files.

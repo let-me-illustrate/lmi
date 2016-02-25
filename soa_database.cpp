@@ -38,6 +38,7 @@
 #include <boost/optional.hpp>
 
 #include <algorithm>
+#include <climits>      // for ULLONG_MAX
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>      // for strtoull()
@@ -1181,7 +1182,7 @@ void table_impl::read_type(std::istream& ifs, uint16_t length)
 
     auto const type
         = do_read_number<uint8_t>(soa_fields[e_field_table_type].name, ifs);
-    switch(type)
+    switch(static_cast<table_type>(type))
         {
         case table_type::aggregate:
         case table_type::duration:
