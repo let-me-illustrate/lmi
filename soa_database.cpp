@@ -529,10 +529,8 @@ void writer::do_write_record_header(uint16_t record_type, uint16_t length)
 
     char header[e_header_pos_max];
 
-    *reinterpret_cast<uint16_t*>(header + e_header_pos_type)
-        = swap_bytes_if_big_endian(record_type);
-    *reinterpret_cast<uint16_t*>(header + e_header_pos_len)
-        = swap_bytes_if_big_endian(length);
+    to_bytes(header + e_header_pos_type, record_type);
+    to_bytes(header + e_header_pos_len , length     );
 
     stream_write(os_, header, sizeof(header));
 }
