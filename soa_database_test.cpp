@@ -30,6 +30,7 @@
 
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"
+#include "path_utility.hpp"
 #include "test_tools.hpp"
 #include "uncopyable_lmi.hpp"
 
