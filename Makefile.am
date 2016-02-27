@@ -460,7 +460,6 @@ elapsed_time_CXXFLAGS = $(AM_CXXFLAGS)
 elapsed_time_LDADD = \
     libmain_auxiliary_common.la
 
-antediluvian_cgi_SOURCES = $(top_builddir)/dummy.cpp
 antediluvian_cgi_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 antediluvian_cgi_LDADD = \
     libcgi.la \
@@ -509,9 +508,6 @@ test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 test_coding_rules_LDADD = \
   libmain_auxiliary_common.la \
   $(BOOST_LIBS)
-
-dummy.cpp:
-	touch $@
 
 # unit tests
 common_test_objects = \
