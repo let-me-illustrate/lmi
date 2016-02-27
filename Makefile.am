@@ -207,7 +207,7 @@ lmi_wx_SOURCES = \
 
 libskeleton_la_CXXFLAGS = \
      $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
-
+libskeleton_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libskeleton_la_LIBADD = \
     liblmi.la \
     libwx_new.la \
