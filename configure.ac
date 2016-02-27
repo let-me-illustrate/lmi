@@ -544,6 +544,12 @@ if test "x$GXX" == "xyes"; then
     dnl occurrences of this warning in both wx and LMI sources
     LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
 
+    dnl Many instances of these warnings are given in Boost 1.33.1 headers, so
+    dnl we unfortunately have to disable them even if they're potentially
+    dnl useful, especially the latter one.
+    LMI_CXX_ADD_IF_SUPPORTED(-Wno-unused-local-typedefs)
+    LMI_CXX_ADD_IF_SUPPORTED(-Wno-unused-variable)
+
     dnl This makes Boost compile with -Wundef; see workhorse.make for
     dnl more detailed explanation.
     CXXFLAGS="$CXXFLAGS -DBOOST_STRICT_CONFIG"
