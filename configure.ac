@@ -186,7 +186,7 @@ AC_CHECK_HEADERS(curses.h)
 if test "$ac_cv_header_curses_h" != "yes"; then
     AC_CHECK_HEADERS(conio.h)
     if test "$ac_cv_header_conio_h" != "yes"; then
-        AC_MSG_ERROR([Header for getch() not found: neither curses.h nor conio.h are available.])
+        AC_MSG_FAILURE([Header for getch() not found: neither curses.h nor conio.h are available.])
     fi
 fi
 
@@ -227,7 +227,7 @@ if test "x$lmi_cv_func_snprintf" = "xyes"; then
     AC_DEFINE([HAVE_SNPRINTF], [1], [Define this if you have snprintf function])
 else
     dnl TODO: for MSVC support we should check for _snprintf()
-    AC_MSG_ERROR([The snprintf() function not found on your system])
+    AC_MSG_FAILURE([The snprintf() function not found on your system])
 fi
 
 AM_CONDITIONAL(HAVE_SNPRINTF, [test "x$lmi_cv_func_snprintf" == "xyes"])
@@ -273,7 +273,7 @@ AC_LANG(C++)
 dnl --- wxWidgets ---
 
 WX_CONFIG_CHECK([3.0.0], [wx="yes"],
-                         [AC_MSG_ERROR([No wxWidgets headers libs were found!])],
+                         [AC_MSG_FAILURE([No wxWidgets headers libs were found!])],
                          [],[$WXCONFIG_FLAGS])
 
 save_CPPFLAGS=$CPPFLAGS
@@ -290,7 +290,7 @@ AC_TRY_COMPILE([#include <wx/setup.h>],
     #endif
     ],
     [],
-    AC_MSG_ERROR([Please configure wxWidgets using --enable-std_string.])
+    AC_MSG_FAILURE([Please configure wxWidgets using --enable-std_string.])
 )
 
 dnl these options are not fatal but it's better not to use them for various
@@ -315,7 +315,7 @@ WX_STANDARD_OPTIONS_SUMMARY_MSG
 dnl --- wxPdfDocument ---
 AC_CHECK_HEADER([wx/pdfdc.h],
     [],
-    [AC_MSG_ERROR([wxPdfDocument header not found.])],
+    [AC_MSG_FAILURE([wxPdfDocument header not found.])],
     [AC_INCLUDES_DEFAULT()]
 )
 
@@ -324,7 +324,7 @@ dnl library name.
 WX_LIKE_LIBNAME([pdfdoc_lib], [wxcode], [pdfdoc])
 AC_CHECK_LIB([$pdfdoc_lib], [main],
     [WXPDFDOC_LIBS="-l$pdfdoc_lib"],
-    [AC_MSG_ERROR([wxPdfDocument library $pdfdoc_lib not found.])])
+    [AC_MSG_FAILURE([wxPdfDocument library $pdfdoc_lib not found.])])
 
 AC_SUBST(WXPDFDOC_LIBS)
 
@@ -343,7 +343,7 @@ fi
 
 AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
-    [AC_MSG_ERROR([Boost headers not found, $errmsg])],
+    [AC_MSG_FAILURE([Boost headers not found, $errmsg])],
     [AC_INCLUDES_DEFAULT()]
 )
 
@@ -381,14 +381,14 @@ LIBS="$LIBS $BOOST_LIBS -l$boost_libfs"
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/filesystem/operations.hpp>]],
     [[boost::filesystem::current_path()]])],
     [],
-    [AC_MSG_ERROR([Boost filesystem library $boost_libfs not found, $errmsg])]
+    [AC_MSG_FAILURE([Boost filesystem library $boost_libfs not found, $errmsg])]
 )
 
 LIBS="$save_LIBS -l$boost_libregex"
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
     [[boost::regex *r]])],
     [],
-    [AC_MSG_ERROR([Boost regex library $boost_libregex not found, $errmsg])]
+    [AC_MSG_FAILURE([Boost regex library $boost_libregex not found, $errmsg])]
 )
 
 LDFLAGS=$save_LDFLAGS
@@ -442,7 +442,7 @@ dnl check that the library options allow to build lmi
 AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
     [xml::document doc("dummy");],
     [],
-    AC_MSG_ERROR([Unable to find appropriate xmlwrapp configuration. Use --with-xmlwrapp-config to specify the location of xmlwrapp-config.])
+    AC_MSG_FAILURE([Unable to find appropriate xmlwrapp configuration. Use --with-xmlwrapp-config to specify the location of xmlwrapp-config.])
 )
 
 CXXFLAGS=$save_CXXFLAGS
