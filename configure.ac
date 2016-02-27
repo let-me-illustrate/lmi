@@ -246,14 +246,23 @@ AC_SEARCH_LIBS([getch], [ncurses], [], [], [])
 
 dnl === Configure libtool ===
 
+dnl Hack: ensure that libtool doesn't do anything "smart" to determine whether
+dnl it can link MSW DLLs with their dependencies because this is never a
+dnl problem for this platform.
+dnl
+dnl This obviously relies on the details of libtool implementation and can
+dnl break with the future libtool versions (last version tested is 2.4.2).
+if test "$USE_WINDOWS" = "1"; then
+    lt_cv_deplibs_check_method=pass_all
+fi
+
 dnl We can't do this at the end because we need the correct values
 dnl for enable_shared/static variables which appears to be defined
 dnl by AC_PROG_LIBTOOL (for ex. with --disable-shared you get only
 dnl enable_shared=no before this point and enable_static=yes only after)
 dnl Wx configuration part needs exactly that feature to understand
 dnl what library type build we're using.
-AC_DISABLE_STATIC   dnl don't waste time on static build by default
-AC_PROG_LIBTOOL
+LT_INIT([disable-static,win32-dll])
 
 dnl use C++ compiler as we're checking for C++ libraries/headers from now on
 dnl (we couldn't do it before as libtool tests must be done with C compiler)
