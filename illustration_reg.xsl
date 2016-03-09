@@ -508,14 +508,6 @@ to the xsl files first.
                 "Nonstandard Simplified Underwriting".
               </fo:block>
             </xsl:if>
-            <xsl:if test="$scalars/StatePostalAbbrev='TX'">
-              <xsl:if test="$scalars/UWType='Guaranteed issue'">
-                <fo:block padding-top="1em">
-                  * This policy is classified as substandard guaranteed issue
-                  per the requirements of the Texas Insurance Department.
-                </fo:block>
-              </xsl:if>
-            </xsl:if>
             <!-- Group Experience Rating Logic -->
             <xsl:if test="$GroupExperienceRating='1'">
               <fo:block padding-top="1em">
@@ -1308,9 +1300,6 @@ Presumably the description of death benefit options should be moved into
                   <xsl:choose>
                     <xsl:when test="$scalars/UWType='Medical'">
                       Fully underwritten
-                    </xsl:when>
-                    <xsl:when test="($scalars/StatePostalAbbrev='TX') and ($scalars/UWType='Guaranteed issue')">
-                      Substandard *
                     </xsl:when>
                     <xsl:otherwise>
                       <xsl:value-of select="$scalars/UWType"/>

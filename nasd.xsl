@@ -37,6 +37,10 @@
     <xsl:call-template name="set_group_carveout"/>
   </xsl:variable>
 
+  <xsl:variable name="TexasFootnote">
+    <xsl:call-template name="set_texas_footnote"/>
+  </xsl:variable>
+
   <xsl:template match="/">
     <fo:root>
       <fo:layout-master-set>
@@ -610,6 +614,16 @@
                 <xsl:value-of select="$compliance_tracking_number"/>
               </fo:block>
             </xsl:if>
+            <xsl:if test="$scalars/StatePostalAbbrev='TX'">
+              <xsl:if test="$scalars/UWType='Guaranteed issue'">
+                <xsl:if test="$TexasFootnote='1'">
+                    <fo:block padding-top="1em">
+                      *** This policy is classified as substandard guaranteed issue
+                      per the requirements of the Texas Insurance Department.
+                    </fo:block>
+                 </xsl:if>
+              </xsl:if>
+            </xsl:if>
             <fo:block font-weight="bold" text-align="center" padding-top="1em">
               GUARANTEED PRINCIPAL ACCOUNT
             </fo:block>
@@ -780,13 +794,11 @@
               <fo:block text-align="left">
                 <xsl:value-of select="concat(translate(substring($scalars/ContractName,1,1), $lowerAZ, $upperAZ), substring($scalars/ContractName,2))"/>: <xsl:value-of select="$scalars/PolicyMktgName"/>
               </fo:block>
-
               <xsl:if test="$GroupCarveout='1'">
                 <fo:block text-align="left">
                   Minimum Initial Premium: $<xsl:value-of select="$scalars/InitMinPrem"/>
                 </fo:block>
               </xsl:if>
-
               <fo:block text-align="left">
                 First Year Premium: $<xsl:value-of select="$scalars/InitPrem"/>
               </fo:block>
@@ -796,8 +808,8 @@
                     <xsl:when test="$scalars/UWType='Medical'">
                       Fully underwritten,
                     </xsl:when>
-                    <xsl:when test="$scalars/StatePostalAbbrev='TX' and $scalars/UWType='Guaranteed issue'">
-                      Substandard *,
+                    <xsl:when test="$scalars/StatePostalAbbrev='TX' and $scalars/UWType='Guaranteed issue' and $TexasFootnote='1'">
+                      Substandard ***,
                     </xsl:when>
                     <xsl:otherwise>
                       <xsl:value-of select="$scalars/UWType"/>,
@@ -1263,6 +1275,10 @@ it confusing if the general account rates aren't included, too.
 
   <xsl:template name="set_group_carveout">
     <xsl:value-of select="number($scalars/PolicyLegalName='Group Flexible Premium Variable Adjustable Life Insurance Certificate')"/>
+  </xsl:template>
+
+  <xsl:template name="set_texas_footnote">
+    <xsl:value-of select="number($scalars/PolicyLegalName='Flexible Premium Variable Adjustable Life Insurance Policy')"/>
   </xsl:template>
 
 </xsl:stylesheet>
