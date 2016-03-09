@@ -38653,3 +38653,42 @@ Abandon MSYS.
   value_cast_test.cpp
 Remove certain mpatrol vestiges.
 
+20160227T2055Z <zeitlin> [454]
+
+  Makefile.am
+  configure.ac
+Build DLLs, not static libraries, when cross-compiling.
+
+20160227T2059Z <zeitlin> [454]
+
+  configure.ac
+  aclocal/ax_cxx_compile_stdcxx.m4 [new file]
+Use C++11 dialect.
+
+20160227T2104Z <zeitlin> [454]
+
+  configure.ac
+Always use AC_INCLUDES_DEFAULT() with AC_CHECK_HEADER().
+
+ <gchicares@sbcglobal.net> [454]
+
+20160227T2108Z <zeitlin> [454]
+
+  configure.ac
+Prefer AC_MSG_FAILURE() to the less helpful AC_MSG_ERROR().
+
+20160227T2112Z <zeitlin> [454]
+
+  Makefile.am
+Remove unneeded dummy source file.
+
+20160227T2116Z <zeitlin> [454]
+
+  configure.ac
+Disable boost nuisance warnings.
+
+20160309T0040Z <gchicares@sbcglobal.net> [454]
+
+  test_coding_rules.cpp
+Allow a string rms discourages when GNU libtool requires it.
+

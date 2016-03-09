@@ -974,6 +974,7 @@ void enforce_taboos(file const& f)
         (   !f.is_of_phylum(e_make)
         &&  !f.is_of_phylum(e_patch)
         &&  !f.phyloanalyze("config.hpp")
+        &&  !f.phyloanalyze("configure.ac") // GNU libtool uses 'win32-dll'.
         )
         {
         taboo(f, "WIN32", boost::regex::icase);
