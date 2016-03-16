@@ -1,6 +1,6 @@
 // SOA tables represented in binary SOA format--unit test.
 //
-// Copyright (C) 2015 Gregory W. Chicares.
+// Copyright (C) 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as

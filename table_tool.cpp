@@ -12,12 +12,14 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
-// http://groups.yahoo.com/group/actuarialsoftware
-// email: <chicares@mindspring.com>
+// http://savannah.nongnu.org/projects/lmi
+// email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id$
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

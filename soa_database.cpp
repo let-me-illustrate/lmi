@@ -231,7 +231,7 @@ inline void open_binary_file(T& fs, fs::path const& path)
 inline bool stream_write(std::ostream& os, void const* data, std::size_t length)
 {
     os.write(static_cast<char const*>(data), length);
-    return !!os;
+    return !os.fail();
 }
 
 inline bool stream_read(std::istream& is, void* data, std::size_t length)
@@ -275,7 +275,7 @@ void remove_nothrow(fs::path const& path)
 struct parse_result
 {
     unsigned long long num = 0;
-    const char* end = nullptr;
+    char const* end = nullptr;
 };
 
 parse_result strict_parse_number(char const* start)
@@ -1030,7 +1030,7 @@ class table_impl
     //
     // After validation the following invariants hold:
     //  - number_ and type_ are valid, i.e. non-empty
-    //  - min_age_ and max_age_ are valid and *min_age_ <= *max_age_
+    //  - min_age_ and max_age_ are valid and *(min_age_) <= *(max_age_)
     //  - values_ vector is non-empty
     //  - num_decimals_ is valid
     //  - select_period_ is valid iff type_ == select
@@ -2442,7 +2442,6 @@ class database_impl
     // Add a new table with a number not present in the index yet.
     void do_append_table(table const& table);
 
-
     // All entries read from the index file.
     std::vector<IndexEntry> index_;
 
@@ -2712,7 +2711,7 @@ void database_impl::save(fs::path const& path)
     // nothing we can do about this without some kind of OS support).
     class safe_database_output
     {
-    public:
+      public:
         // Try to set up things for saving a database to the given path, throws
         // on failure.
         explicit safe_database_output(fs::path const& path)
@@ -2851,7 +2850,7 @@ void database_impl::save(fs::path const& path)
             fatal_error() << error_stream.str() << std::flush;
             }
 
-    private:
+      private:
         fs::path const& path_;
 
         // This struct collects the final output path for a file, a possibly
