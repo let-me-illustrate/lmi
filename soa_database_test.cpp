@@ -332,7 +332,7 @@ void test_to_from_text()
     do_test_table_to_from_text(qx_ins.find_table(table::Number(750)));
 }
 
-void test_from_bad_text()
+void test_from_text()
 {
     // Using unknown header in a place where it can't be parsed as a
     // continuation of the previous line should fail.
@@ -372,6 +372,13 @@ void test_from_bad_text()
         (table::read_from_text(simple_table_text + "Hash value: 1234567890\n")
         ,std::runtime_error
         ,match_substr("hash value 1234567890")
+        );
+
+    // Using values greater than 1 should be possible.
+    table::read_from_text
+        (simple_table_header
+        +"  0  0.12345\n"
+         "  1 10.98765\n"
         );
 }
 
@@ -496,7 +503,7 @@ int test_main(int, char*[])
     test_table_access_by_number();
     test_save();
     test_to_from_text();
-    test_from_bad_text();
+    test_from_text();
     test_add_table();
     test_delete();
     test_copy();

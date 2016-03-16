@@ -1553,7 +1553,30 @@ double table_impl::parse_single_value
     ,int& line_num
     )
 {
-    skip_spaces(text_format::gap_length, start, current, line_num);
+    // There should be at least one and up to gap_length spaces before the
+    // value.
+    if(*current != ' ')
+        {
+        fatal_error()
+            << "expected a space"
+            << location_info(line_num, current - start + 1)
+            << std::flush
+            ;
+        }
+    int num_spaces = 1;
+    for(++current; *current == ' '; ++current)
+        {
+        ++num_spaces;
+        }
+    if(num_spaces > text_format::gap_length)
+        {
+        fatal_error()
+            << "two many spaces"
+            << location_info(line_num, current - start + 1)
+            << " (at most" << text_format::gap_length << " allowed here)"
+            << std::flush
+            ;
+        }
 
     // We can't impose the exact number of decimal digits using standard
     // functions for parsing floating point values, so do it manually.
