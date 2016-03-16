@@ -216,18 +216,26 @@ int const qx_cso_num_tables = 142;
 
 std::string const qx_ins_path("/opt/lmi/data/qx_ins");
 
-/// Minimal valid SOA table in text format ("1+" here is just to skip the
-/// leading new line).
-std::string const simple_table_text(1 + R"table(
+// NB: "1+" is used here just to allow formatting multiline strings in a
+// natural way and strips the leading new line.
+
+/// Prefix used for the test tables.
+std::string const simple_table_header(1 + R"table(
 Table number: 1
 Table type: Aggregate
 Minimum age: 0
 Maximum age: 1
 Number of decimal places: 5
 Table values:
+)table");
+
+std::string const simple_table_values(1 + R"table(
   0  0.12345
   1  0.23456
 )table");
+
+/// Minimal valid SOA table in text format.
+std::string const simple_table_text(simple_table_header + simple_table_values);
 
 } // Unnamed namespace.
 
@@ -354,15 +362,7 @@ void test_from_bad_text()
 
     // And so should using too few of them: chop of the last line to test.
     BOOST_TEST_THROW
-        (table::read_from_text
-            (simple_table_text.substr
-                (0
-                ,simple_table_text.find_last_of
-                    ('\n'
-                    ,simple_table_text.length() - 2
-                    )
-                )
-            )
+        (table::read_from_text(simple_table_header + "  0  0.12345")
         ,std::runtime_error
         ,match_substr("missing")
         );
