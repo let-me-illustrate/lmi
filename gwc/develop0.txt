@@ -55,7 +55,7 @@ popd
 /bin/cat >~/.zshrc <<\EOF
 PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
-export coefficiency='--jobs=16'
+export coefficiency='--jobs=6'
 
 export TZ=UCT
 export LC_COLLATE=C.UTF-8
@@ -114,10 +114,11 @@ touch ~/.cvspass
 
   # Test ssh
 
+  [paste these lines individually...]
 eval `ssh-agent`
 ssh-agent $SHELL
 ssh-add ~/.ssh/id_rsa
-  [passphrase]
+  [... then enter passphrase]
 
   # If you see the following:
 

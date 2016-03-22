@@ -11,10 +11,11 @@
 
 cd /lmi/src/lmi
 
+  [paste these lines individually...]
 eval `ssh-agent`
 ssh-agent $SHELL
 ssh-add ~/.ssh/id_rsa
-  [passphrase]
+  [... then enter passphrase]
 
   # At end of session, terminate ssh so that no one can impersonate you
 
@@ -71,11 +72,11 @@ svn update
   #
   # ...for svn:
 
-for z in * ; do grep --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.* [0-9][0-9]* \([0-9]\{4\}[-0-9: ]*\).*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
+for z in * ; do grep --directories=skip --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.* [0-9][0-9]* \([0-9]\{4\}[-0-9: ]*\).*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
 
   # ...for cvs:
 
-for z in * ; do grep --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.*\([0-9]\{4\}[0-9\/: ]*\) .*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
+for z in * ; do grep --directories=skip --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.*\([0-9]\{4\}[0-9\/: ]*\) .*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
 
   # If svn wrongly guesses that a file is binary, as indicated by
   # "(bin)" here...
