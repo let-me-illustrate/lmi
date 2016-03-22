@@ -51,58 +51,58 @@
 /// that program itself. Those files are all you need: distributing
 /// the program itself isn't necessary anyway.
 ///
-/// This function is intentionally more or less a duplicate of
-/// product_data::WritePolFiles(), but this one is meant to be
-/// customized.
+/// This function is intentionally a minimal clone of WritePolFiles(),
+/// and is intended only as an examplar for customization to implement
+/// proprietary real-world products.
 
 void product_data::WriteProprietaryPolFiles()
 {
     product_data z;
 
-    // Generic data for the 'sample' product.
+    // Generic data: a partial clone of the 'sample' product.
 
-    z.DatabaseFilename         = glossed_string("sample.database");
-    z.FundFilename             = glossed_string("sample.funds");
-    z.RoundingFilename         = glossed_string("sample.rounding");
-    z.TierFilename             = glossed_string("sample.strata");
+    z.DatabaseFilename           = glossed_string("sample.database");
+    z.FundFilename               = glossed_string("sample.funds");
+    z.RoundingFilename           = glossed_string("sample.rounding");
+    z.TierFilename               = glossed_string("sample.strata");
 
-    z.CvatCorridorFilename     = glossed_string("sample");
-    z.Irc7702NspFilename       = glossed_string("sample");
-    z.CurrCOIFilename          = glossed_string("qx_cso");
-    z.GuarCOIFilename          = glossed_string("qx_cso");
-    z.WPFilename               = glossed_string("sample");
-    z.ADDFilename              = glossed_string("qx_ins", "Specimen gloss.");
-    z.ChildRiderFilename       = glossed_string("qx_ins");
-    z.CurrSpouseRiderFilename  = glossed_string("qx_ins");
-    z.GuarSpouseRiderFilename  = glossed_string("qx_ins");
-    z.CurrTermFilename         = glossed_string("qx_cso");
-    z.GuarTermFilename         = glossed_string("qx_cso");
-    z.GroupProxyFilename       = glossed_string("qx_ins");
-    z.SevenPayFilename         = glossed_string("sample");
-    z.TgtPremFilename          = glossed_string("sample");
-    z.Irc7702QFilename         = glossed_string("qx_cso");
-    z.PartialMortalityFilename = glossed_string("qx_ann");
-    z.SubstdTblMultFilename    = glossed_string("sample");
-    z.CurrSpecAmtLoadFilename  = glossed_string("sample");
-    z.GuarSpecAmtLoadFilename  = glossed_string("sample");
-    z.PolicyForm               = glossed_string("UL32768-NY");
-    z.PolicyFormAlternative    = glossed_string("UL32768-X");
-    z.PolicyMktgName           = glossed_string("UL Supreme");
-    z.PolicyLegalName          = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
-    z.InsCoShortName           = glossed_string("Superior Life");
-    z.InsCoName                = glossed_string("Superior Life Insurance Company");
-    z.InsCoAddr                = glossed_string("Superior, WI 12345");
-    z.InsCoStreet              = glossed_string("246 Main Street");
-    z.InsCoPhone               = glossed_string("(800) 555-1212");
-    z.InsCoDomicile            = glossed_string("WI");
-    z.MainUnderwriter          = glossed_string("Superior Securities");
-    z.MainUnderwriterAddress   = glossed_string("246-M Main Street, Superior, WI 12345");
-    z.CoUnderwriter            = glossed_string("Superior Investors");
-    z.CoUnderwriterAddress     = glossed_string("246-C Main Street, Superior, WI 12345");
-    z.AvName                   = glossed_string("Account");
-    z.CsvName                  = glossed_string("Cash Surrender");
-    z.CsvHeaderName            = glossed_string("Cash Surr");
-    z.NoLapseProvisionName     = glossed_string("No-lapse Provision");
+    z.CvatCorridorFilename       = glossed_string("sample");
+    z.Irc7702NspFilename         = glossed_string("sample");
+    z.CurrCOIFilename            = glossed_string("qx_cso");
+    z.GuarCOIFilename            = glossed_string("qx_cso");
+    z.WPFilename                 = glossed_string("sample");
+    z.ADDFilename                = glossed_string("qx_ins", "Specimen gloss.");
+    z.ChildRiderFilename         = glossed_string("qx_ins");
+    z.CurrSpouseRiderFilename    = glossed_string("qx_ins");
+    z.GuarSpouseRiderFilename    = glossed_string("qx_ins");
+    z.CurrTermFilename           = glossed_string("sample");
+    z.GuarTermFilename           = glossed_string("sample");
+    z.GroupProxyFilename         = glossed_string("qx_ins");
+    z.SevenPayFilename           = glossed_string("sample");
+    z.TgtPremFilename            = glossed_string("sample");
+    z.Irc7702QFilename           = glossed_string("qx_cso");
+    z.PartialMortalityFilename   = glossed_string("qx_ann");
+    z.SubstdTblMultFilename      = glossed_string("sample");
+    z.CurrSpecAmtLoadFilename    = glossed_string("sample");
+    z.GuarSpecAmtLoadFilename    = glossed_string("sample");
+    z.PolicyForm                 = glossed_string("UL32768-NY");
+    z.PolicyFormAlternative      = glossed_string("UL32768-X");
+    z.PolicyMktgName             = glossed_string("UL Supreme");
+    z.PolicyLegalName            = glossed_string("Flexible Premium Adjustable Life Insurance Policy");
+    z.InsCoShortName             = glossed_string("Superior Life");
+    z.InsCoName                  = glossed_string("Superior Life Insurance Company");
+    z.InsCoAddr                  = glossed_string("Superior, WI 12345");
+    z.InsCoStreet                = glossed_string("246 Main Street");
+    z.InsCoPhone                 = glossed_string("(800) 555-1212");
+    z.InsCoDomicile              = glossed_string("WI");
+    z.MainUnderwriter            = glossed_string("Superior Securities");
+    z.MainUnderwriterAddress     = glossed_string("246-M Main Street, Superior, WI 12345");
+    z.CoUnderwriter              = glossed_string("Superior Investors");
+    z.CoUnderwriterAddress       = glossed_string("246-C Main Street, Superior, WI 12345");
+    z.AvName                     = glossed_string("Account");
+    z.CsvName                    = glossed_string("Cash Surrender");
+    z.CsvHeaderName              = glossed_string("Cash Surr");
+    z.NoLapseProvisionName       = glossed_string("No-lapse Provision");
 
 // Not necessary for 'sample' product only, because it's built in.
 //    z.save(AddDataDir("sample.policy"));
