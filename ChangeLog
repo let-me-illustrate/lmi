@@ -38705,3 +38705,13 @@ Fix defect introduced 20050720T1018Z: "substandard standard".
   single_cell_document_00.xsd [new file]
 Work around a vendor failure.
 
+20160322T1539Z <gchicares@sbcglobal.net> [454]
+
+  GNUmakefile
+Revert r5764 of 20130815T1244Z: it fails with current Cygwin.
+
+20160322T1555Z <gchicares@sbcglobal.net> [454]
+
+  version.hpp
+Designate release candidate 6520.
+
