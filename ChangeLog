@@ -38715,3 +38715,13 @@ Revert r5764 of 20130815T1244Z: it fails with current Cygwin.
   version.hpp
 Designate release candidate 6520.
 
+20160322T2112Z <gchicares@sbcglobal.net> [454]
+
+  my_prod.cpp
+Harmonize with 'product_data.cpp'.
+
+20160322T2113Z <gchicares@sbcglobal.net> [454]
+
+  product_data.cpp
+Add an extra specimen product for xsl-to-wxPdfDoc migration.
+
