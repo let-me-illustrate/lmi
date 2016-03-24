@@ -38725,3 +38725,9 @@ Harmonize with 'product_data.cpp'.
   product_data.cpp
 Add an extra specimen product for xsl-to-wxPdfDoc migration.
 
+20160324T2120Z <gchicares@sbcglobal.net> [454]
+
+  tn_range_test.cpp
+Fix a unit test that failed with gcc-4.9.1 . See:
+  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00032.html
+
