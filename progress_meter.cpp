@@ -77,7 +77,6 @@ progress_meter::progress_meter
     :count_         (0)
     ,max_count_     (max_count)
     ,title_         (title)
-    ,display_mode_  (display_mode)
     ,was_cancelled_ (false)
 {
 }

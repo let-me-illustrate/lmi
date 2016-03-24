@@ -370,11 +370,13 @@ GetOpt::operator()()
       // If we have done all the ARGV-elements, stop the scan.
 
       if (optind == nargc)
+        {
           // Check if first LIST_ARG with no argument.
           if (list_option_first)
             return  List_No_Value ();
           else
             return EOF;
+        }
 
       if (list_option->valid == 0)
         {
@@ -919,7 +921,7 @@ GetOpt::usage(std::ostream& os)
     str_vec_i d;
     for
         (n  = option_names.begin() ,d  = option_descriptions.begin()
-        ;n != option_names.end()   ,d != option_descriptions.end()
+        ;n != option_names.end()  &&d != option_descriptions.end()
         ;++n, ++d
         )
         {
