@@ -38731,3 +38731,24 @@ Add an extra specimen product for xsl-to-wxPdfDoc migration.
 Fix a unit test that failed with gcc-4.9.1 . See:
   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00032.html
 
+20160325T1222Z <gchicares@sbcglobal.net> [454]
+
+  census_view.cpp
+Fix clang build: don't define const object without default ctor (VZ).
+
+20160325T1223Z <gchicares@sbcglobal.net> [454]
+
+  config.hpp
+Fix clang build: don't redefine _ISOC99_SOURCE (VZ).
+
+20160325T1224Z <gchicares@sbcglobal.net> [454]
+
+  getopt.cpp
+Correct an obvious cut-and-pasto (VZ).
+
+20160325T1225Z <gchicares@sbcglobal.net> [454]
+
+  configure.ac
+  test_coding_rules.cpp
+Support Clang (VZ).
+

@@ -815,6 +815,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__STRICT_ANSI__"
         ,"__asm__"
         ,"__attribute__"
+        ,"__clang__"
         ,"__cxa_demangle"
     // Compiler specific: gcc, Cygwin.
         ,"__CYGWIN__"
