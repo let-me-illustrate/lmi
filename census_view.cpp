@@ -1788,7 +1788,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         cell_parms ().clear();
         }
 
-    unsigned int selection = cell_parms().size();
+    auto selection = cell_parms().size();
     std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
     document().Modify(true);
