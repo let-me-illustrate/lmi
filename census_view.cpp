@@ -718,7 +718,7 @@ renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> co
 template<typename T>
 renderer_type_convertor const& renderer_type_convertor::get_impl()
 {
-    static const T singleton;
+    static T singleton;
     return singleton;
 }
 
