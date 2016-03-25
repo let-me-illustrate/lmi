@@ -72,7 +72,9 @@ namespace fs = boost::filesystem;
 
 #if defined __GNUC__
 // This selects a correct snprintf() for MinGW-w64.
-#   define _ISOC99_SOURCE
+#   if !defined _ISOC99_SOURCE
+#       define _ISOC99_SOURCE
+#   endif // !defined _ISOC99_SOURCE
 #endif // defined __GNUC__
 
 // 'platform_dependent.hpp' includes standard headers in an unusual
