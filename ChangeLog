@@ -38752,3 +38752,13 @@ Correct an obvious cut-and-pasto (VZ).
   test_coding_rules.cpp
 Support Clang (VZ).
 
+20160325T1437Z <gchicares@sbcglobal.net> [454]
+
+  census_view.cpp
+Fix clang build: don't specify incorrect type (VZ).
+
+20160325T1438Z <gchicares@sbcglobal.net> [454]
+
+  getopt.cpp
+Fix clang build: dangling 'else' (VZ).
+
