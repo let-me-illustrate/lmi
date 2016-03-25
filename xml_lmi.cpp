@@ -241,7 +241,6 @@ std::string xml_lmi::xml_document::str()
 
 void xml_lmi::xml_document::add_comment(std::string const& s)
 {
-    xml::node::iterator i = document_->begin();
     for(xml::node::iterator i = document_->begin(); i != document_->end(); ++i)
         {
         if(xml::node::type_element == i->get_type())

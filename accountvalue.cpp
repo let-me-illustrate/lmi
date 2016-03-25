@@ -124,7 +124,7 @@ AccountValue::AccountValue(Input const& input)
     ,RunBasis_         (mce_run_gen_curr_sep_full)
     ,GenBasis_         (mce_gen_curr)
     ,SepBasis_         (mce_sep_full)
-    ,mode              (mce_annual)
+    ,pmt_mode          (mce_annual)
     ,OldDBOpt          (mce_option1)
     ,YearsDBOpt        (mce_option1)
 {
@@ -299,8 +299,8 @@ void AccountValue::DoYear
     ActualSpecAmt         = InvariantValues().SpecAmt[Year];
 
     // These variables are set for each pass independently.
-    mode            = InvariantValues().EeMode[Year].value();
-    ModeIndex       = get_mode_index(mode);
+    pmt_mode        = InvariantValues().EeMode[Year].value();
+    ModeIndex       = get_mode_index(pmt_mode);
     RequestedLoan   = Outlay_->new_cash_loans()[Year];
     wd              = Outlay_->withdrawals()[Year];
     mlyguarv        =
@@ -621,7 +621,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             {
             *a_Pmt = GetModalMinPrem
                 (Year
-                ,mode
+                ,pmt_mode
                 ,ActualSpecAmt
                 );
             }
@@ -630,7 +630,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             {
             *a_Pmt = GetModalTgtPrem
                 (Year
-                ,mode
+                ,pmt_mode
                 ,ActualSpecAmt
                 );
             }
