@@ -532,6 +532,7 @@ if test "$GCC" == "yes"; then
         -pedantic-errors \
         -Werror \
         -Wall \
+        -Wextra \
         -Wundef"
 
     if test "$CLANG" = "yes"; then
