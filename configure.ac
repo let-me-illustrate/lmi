@@ -532,6 +532,7 @@ if test "$GCC" == "yes"; then
         -pedantic-errors \
         -Werror \
         -Wall \
+        -Wextra \
         -Wundef"
 
     if test "$CLANG" = "yes"; then
@@ -588,9 +589,6 @@ if test "x$GXX" == "xyes"; then
     else
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
     fi
-
-    dnl and this one occurs in older Boost headers
-    LMI_CXX_ADD_IF_SUPPORTED(-Wno-unused-local-typedef)
 
     dnl Many instances of these warnings are given in Boost 1.33.1 headers, so
     dnl we unfortunately have to disable them even if they're potentially

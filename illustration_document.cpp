@@ -161,7 +161,7 @@ bool IllustrationDocument::OnNewDocument()
 /// Override DoOpenDocument() instead of OnOpenDocument(): the latter
 /// doesn't permit customizing its diagnostic messages.
 
-bool IllustrationDocument::DoOpenDocument(wxString const& filename)
+bool IllustrationDocument::DoOpenDocument(wxString const& /* filename */)
 {
     return true;
 }

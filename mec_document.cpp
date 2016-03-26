@@ -111,7 +111,7 @@ bool mec_document::OnNewDocument()
 
 /// See the documentation for similar class IllustrationDocument.
 
-bool mec_document::DoOpenDocument(wxString const& filename)
+bool mec_document::DoOpenDocument(wxString const& /* filename */)
 {
     return true;
 }
