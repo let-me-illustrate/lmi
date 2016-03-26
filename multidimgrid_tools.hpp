@@ -378,7 +378,7 @@ template<typename Integral>
 typename AdjustableMaxBoundAxis<Integral>::Adjuster*
 AdjustableMaxBoundAxis<Integral>::DoCreateAdjustControl
     (MultiDimGrid& grid
-    ,MultiDimTableAny& table
+    ,MultiDimTableAny& // unused: table
     )
 {
     // called only once
@@ -392,7 +392,7 @@ AdjustableMaxBoundAxis<Integral>::DoCreateAdjustControl
 template<typename Integral>
 bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
     (Adjuster& adjust_window
-    ,unsigned int axis_id
+    ,unsigned int // unused: axis_id
     )
 {
     Integral const new_max_value = adjust_window.GetMaximumAxisValue();
@@ -411,7 +411,7 @@ bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
 template<typename Integral>
 bool AdjustableMaxBoundAxis<Integral>::DoRefreshAdjustment
     (Adjuster& adjust_window
-    ,unsigned int axis_id
+    ,unsigned int // unused: axis_id
     )
 {
     Integral const max_value = adjust_window.GetMaximumAxisValue();
