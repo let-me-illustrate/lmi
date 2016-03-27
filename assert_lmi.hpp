@@ -48,13 +48,13 @@
         {                                                       \
         if(!(condition))                                        \
             {                                                   \
-            std::ostringstream oss;                             \
-            oss                                                 \
+            std::ostringstream assert_message;                  \
+            assert_message                                      \
                 << "Assertion '" << (#condition) << "' failed." \
                 << "\n[file " << __FILE__                       \
                 << ", line " << __LINE__ << "]\n"               \
                 ;                                               \
-            throw std::runtime_error(oss.str());                \
+            throw std::runtime_error(assert_message.str());     \
             }                                                   \
         }                                                       \
     while(0)
@@ -70,14 +70,14 @@
         {                                                      \
         if(!(condition))                                       \
             {                                                  \
-            std::ostringstream oss;                            \
-            oss                                                \
+            std::ostringstream assert_message;                 \
+            assert_message                                     \
                 << "Assertion '" << (#condition) << "' failed" \
                 << "\n(" << message << ")."                    \
                 << "\n[file " << __FILE__                      \
                 << ", line " << __LINE__ << "]\n"              \
                 ;                                              \
-            throw std::runtime_error(oss.str());               \
+            throw std::runtime_error(assert_message.str());    \
             }                                                  \
         }                                                      \
     while(0)
