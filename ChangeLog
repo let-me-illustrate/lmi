@@ -38784,3 +38784,8 @@ Avoid comparing signed and unsigned (VZ).
   workhorse.make
 Enable more warnings in more situations.
 
+20160327T1058Z <gchicares@sbcglobal.net> [454]
+
+  group_quote_pdf_gen_wx.cpp
+Avoid needless conversions of std::string to wxString (VZ).
+
