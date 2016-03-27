@@ -26,6 +26,8 @@
 
 #include "config.hpp"
 
+#ifdef LMI_MSW
+
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -66,6 +68,8 @@ class MswDllPreloader
 
     std::deque<std::string> SuccessfullyPreloadedDlls_;
 };
+
+#endif // LMI_MSW defined.
 
 #endif // msw_workarounds_hpp
 
