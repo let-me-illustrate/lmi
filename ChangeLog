@@ -38762,3 +38762,25 @@ Fix clang build: don't specify incorrect type (VZ).
   getopt.cpp
 Fix clang build: dangling 'else' (VZ).
 
+20160326T2340Z <gchicares@sbcglobal.net> [454]
+
+  census_document.cpp
+  gpt_document.cpp
+  illustration_document.cpp
+  mec_document.cpp
+  multidimgrid_any.cpp
+  multidimgrid_tools.hpp
+Remove unused parameters (VZ).
+
+20160327T1021Z <gchicares@sbcglobal.net> [454]
+
+  multidimgrid_any.cpp
+  tier_view_editor.cpp
+Avoid comparing signed and unsigned (VZ).
+
+20160327T1023Z <gchicares@sbcglobal.net> [454]
+
+  configure.ac
+  workhorse.make
+Enable more warnings in more situations.
+

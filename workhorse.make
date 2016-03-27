@@ -438,10 +438,12 @@ gcc_common_warnings := \
   -Wconversion \
   -Wdeprecated-declarations \
   -Wdisabled-optimization \
+  -Wextra \
   -Wimport \
   -Wmultichar \
   -Wpacked \
   -Wpointer-arith \
+  -Wredundant-decls \
   -Wsign-compare \
   -Wundef \
   -Wwrite-strings \
@@ -470,13 +472,10 @@ gcc_cxx_warnings := \
 #  -Wfloat-equal \
 
 # WX !! The wx library triggers many warnings with the following
-# 'extra' flags. (Use '-W' for backward compatibility, instead of the
-# modern equivalent '-Wextra'.)
+# 'extra' flags.
 
 gcc_common_extra_warnings := \
-  -W \
   -Wcast-qual \
-  -Wredundant-decls \
 
 ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   ifeq (3.4.5,$(gcc_version))
@@ -495,9 +494,12 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
 # at least in version 1.33.1, and there seems to be no easy workaround
 # except to blow away all warning options and let a warning appear.
+# This problem seems not to occur with gcc-4.x .
 
-static_mutex.o: gcc_common_extra_warnings :=
-static_mutex.o:          gcc_cxx_warnings :=
+ifeq (3.4.5,$(gcc_version))
+  static_mutex.o: gcc_common_extra_warnings :=
+  static_mutex.o:          gcc_cxx_warnings :=
+endif
 
 # Boost normally makes '-Wundef' give spurious warnings:
 #   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
