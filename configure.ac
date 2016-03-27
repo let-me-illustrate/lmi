@@ -177,7 +177,7 @@ fi
 if test "$optimize_option" = "yes"; then
     case "$CC" in
         cl)     OPT_FLAG="/O";;
-        gcc)    OPT_FLAG="-O2";;
+        *gcc)   OPT_FLAG="-O2";;
         *)      OPT_FLAG="-O";;
     esac
 
