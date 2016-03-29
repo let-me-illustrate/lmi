@@ -30,7 +30,6 @@
 IMPLEMENT_CLASS(DocMDIChildFrameEx, wxDocMDIChildFrame)
 
 BEGIN_EVENT_TABLE(DocMDIChildFrameEx, wxDocMDIChildFrame)
-    EVT_MENU_HIGHLIGHT_ALL(DocMDIChildFrameEx::UponMenuHighlight)
 END_EVENT_TABLE()
 
 DocMDIChildFrameEx::DocMDIChildFrameEx
@@ -45,56 +44,7 @@ DocMDIChildFrameEx::DocMDIChildFrameEx
     ,wxString   const& name
     )
     :wxDocMDIChildFrame(doc, view, parent, id, title, pos, size, style, name)
-    ,status_bar_sought_from_menu_highlight_handler_(false)
 {
-}
-
-DocMDIChildFrameEx::~DocMDIChildFrameEx()
-{
-}
-
-wxStatusBar* DocMDIChildFrameEx::GetStatusBar() const
-{
-    if(!status_bar_sought_from_menu_highlight_handler_)
-        {
-        return wxDocMDIChildFrame::GetStatusBar();
-        }
-
-    wxStatusBar* status_bar = wxDocMDIChildFrame::GetStatusBar();
-    if(status_bar)
-        {
-        return status_bar;
-        }
-
-    wxFrame* parent_frame = dynamic_cast<wxFrame*>(GetParent());
-    if(parent_frame)
-        {
-        return parent_frame->GetStatusBar();
-        }
-
-    return 0;
-}
-
-/// This augments wxDocMDIChildFrame::OnMenuHighlight(), but isn't a
-/// complete replacement. It calls that base-class function explicitly
-/// because Skip() wouldn't work here.
-
-void DocMDIChildFrameEx::UponMenuHighlight(wxMenuEvent& event)
-{
-    try
-        {
-        status_bar_sought_from_menu_highlight_handler_ = true;
-        if(GetStatusBar())
-            {
-            wxDocMDIChildFrame::OnMenuHighlight(event);
-            }
-        status_bar_sought_from_menu_highlight_handler_ = false;
-        }
-    catch(...)
-        {
-        status_bar_sought_from_menu_highlight_handler_ = false;
-        throw;
-        }
 }
 
 #if !wxCHECK_VERSION(2,5,4)
