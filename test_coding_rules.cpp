@@ -700,7 +700,7 @@ void check_logs(file const& f)
         entries = f.data();
         }
 
-    static boost::regex const r("\\n(?!\\|)(?! *http:)([^\\n]{71,})(?=\\n)");
+    static boost::regex const r("\\n(?!\\|)(?! *https?:)([^\\n]{71,})(?=\\n)");
     boost::sregex_iterator i(entries.begin(), entries.end(), r);
     boost::sregex_iterator const omega;
     if(omega == i)
