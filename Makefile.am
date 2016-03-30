@@ -162,7 +162,6 @@ libskeleton_la_SOURCES = \
     database_view_editor.cpp \
     default_view.cpp \
     docmanager_ex.cpp \
-    docmdichildframe_ex.cpp \
     file_command_wx.cpp \
     gpt_document.cpp \
     gpt_view.cpp \
@@ -1078,7 +1077,6 @@ noinst_HEADERS = \
     default_view.hpp \
     deserialize_cast.hpp \
     docmanager_ex.hpp \
-    docmdichildframe_ex.hpp \
     edit_mvc_docview_parameters.hpp \
     emit_ledger.hpp \
     exit_codes.hpp \

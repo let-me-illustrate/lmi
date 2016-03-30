@@ -53,7 +53,6 @@
 #include "dbdict.hpp"                   // print_databases()
 #include "default_view.hpp"
 #include "docmanager_ex.hpp"
-#include "docmdichildframe_ex.hpp"
 #include "fenv_guard.hpp"
 #include "fenv_lmi.hpp"
 #include "getopt.hpp"
@@ -91,7 +90,7 @@
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
-#include <wx/docmdi.h>
+#include <wx/docmdi.h>                  // class wxDocMDIChildFrame
 #include <wx/image.h>
 #include <wx/log.h>                     // wxSafeShowMessage()
 #include <wx/math.h>                    // wxRound()
@@ -214,10 +213,12 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
             frame_->GetActiveChild()
         &&  frame_->GetActiveChild()->IsMaximized()
         ;
-    DocMDIChildFrameEx* child_frame = new DocMDIChildFrameEx
+    wxDocMDIChildFrame* child_frame = new wxDocMDIChildFrame
         (doc
         ,view
         ,frame_
+        ,wxID_ANY
+        ,"Loading..."
         );
     child_frame->SetIcon(view->Icon());
     child_frame->SetMenuBar(AdjustMenus(view->MenuBar()));

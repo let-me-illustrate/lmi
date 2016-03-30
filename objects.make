@@ -314,7 +314,6 @@ skeleton_objects := \
   database_view_editor.o \
   default_view.o \
   docmanager_ex.o \
-  docmdichildframe_ex.o \
   file_command_wx.o \
   gpt_document.o \
   gpt_view.o \
