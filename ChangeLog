@@ -38813,3 +38813,9 @@ Fix defect introduced 20160325T1225Z: invalid warning (VZ).
 Avoid shadowing variable names (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2016-02/msg00017.html
 
+20160330T1945Z <gchicares@sbcglobal.net> [454]
+
+  multidimgrid_any.cpp
+Further improve the 20160327T1021Z improvement (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00042.html
+

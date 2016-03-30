@@ -1419,7 +1419,7 @@ void MultiDimAxisAnyChoice::UponSelectionChange(wxCommandEvent&)
 void MultiDimAxisAnyChoice::SelectionChanged()
 {
     int const sel = GetSelection();
-    if(!(0 <= sel && sel < static_cast<int>(axis_.GetCardinality())))
+    if(!(0 <= sel && static_cast<unsigned int>(sel) < axis_.GetCardinality()))
         {
         fatal_error()
             << "The axis is inconsistent with its choice control."
