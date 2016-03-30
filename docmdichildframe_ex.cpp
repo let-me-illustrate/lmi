@@ -49,10 +49,6 @@ DocMDIChildFrameEx::DocMDIChildFrameEx
 {
 }
 
-DocMDIChildFrameEx::~DocMDIChildFrameEx()
-{
-}
-
 wxStatusBar* DocMDIChildFrameEx::GetStatusBar() const
 {
     if(!status_bar_sought_from_menu_highlight_handler_)
