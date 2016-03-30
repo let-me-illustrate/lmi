@@ -849,22 +849,27 @@ void Skeleton::UponMenuOpen(wxMenuEvent& event)
 {
     event.Skip();
 
-    int child_frame_count = 0;
-    wxWindowList const& wl = frame_->GetChildren();
-    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
-        {
-        child_frame_count += !!dynamic_cast<wxMDIChildFrame*>(*i);
-        }
-
     wxMDIChildFrame* child_frame = frame_->GetActiveChild();
-    if(child_frame)
+    if(dynamic_cast<wxMDIChildFrame*>(child_frame))
         {
+        bool has_multiple_mdi_children = false;
+        wxWindowList const& wl = frame_->GetChildren();
+        for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+            {
+            wxMDIChildFrame const*const child = dynamic_cast<wxMDIChildFrame*>(*i);
+            if(child && child != child_frame)
+                {
+                has_multiple_mdi_children = true;
+                break;
+                }
+            }
+
         wxMenuItem* window_next = child_frame->GetMenuBar()->FindItem
             (XRCID("window_next")
             );
         if(window_next)
             {
-            window_next->Enable(1 < child_frame_count);
+            window_next->Enable(has_multiple_mdi_children);
             }
 
         wxMenuItem* window_previous = child_frame->GetMenuBar()->FindItem
@@ -872,7 +877,7 @@ void Skeleton::UponMenuOpen(wxMenuEvent& event)
             );
         if(window_previous)
             {
-            window_previous->Enable(1 < child_frame_count);
+            window_previous->Enable(has_multiple_mdi_children);
             }
         }
     // (else) Parent menu enablement could be handled here, but, for
