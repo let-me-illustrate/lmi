@@ -144,7 +144,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("window_previous"                 ),Skeleton::UponWindowPrevious               )
     EVT_MENU(XRCID("window_tile_horizontally"        ),Skeleton::UponWindowTileHorizontally       )
     EVT_MENU(XRCID("window_tile_vertically"          ),Skeleton::UponWindowTileVertically         )
-    EVT_MENU_OPEN(                                     Skeleton::UponMenuOpen                     )
     EVT_UPDATE_UI(XRCID("print_pdf"                  ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("edit_cell"                  ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("edit_class"                 ),Skeleton::UponUpdateInapplicable           )
@@ -787,6 +786,8 @@ bool Skeleton::OnInit()
         InitMenuBar();
         InitToolBar();
         frame_->CreateStatusBar();
+
+        frame_->Bind(wxEVT_MENU_OPEN, &Skeleton::UponMenuOpen, this);
 #if defined LMI_MSW || wxCHECK_VERSION(2,8,10)
         frame_->DragAcceptFiles(true);
 #endif // defined LMI_MSW || wxCHECK_VERSION(2,8,10)

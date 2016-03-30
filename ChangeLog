@@ -38847,3 +38847,15 @@ Expunge a module that no longer does anything. See:
   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00054.html
   http://lists.nongnu.org/archive/html/lmi/2014-11/msg00062.html
 
+20160330T2222Z <gchicares@sbcglobal.net> [454]
+
+  test_coding_rules.cpp
+Allow long lines with 'https:' as well as 'http:'.
+
+20160330T2224Z <gchicares@sbcglobal.net> [454]
+
+  skeleton.cpp
+Avoid crashing due to indiscriminate event handling (VZ). See:
+  https://github.com/vadz/lmi/commit/6355bb270241826fa32e151eb197a4b1f5cd5c12.patch
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00062.html
+
