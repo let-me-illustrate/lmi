@@ -38813,9 +38813,37 @@ Fix defect introduced 20160325T1225Z: invalid warning (VZ).
 Avoid shadowing variable names (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2016-02/msg00017.html
 
+20160327T2223Z <zeitlin> [454]
+
+  configure.ac
+Recognize gcc cross-compilers.
+
 20160330T1945Z <gchicares@sbcglobal.net> [454]
 
   multidimgrid_any.cpp
 Further improve the 20160327T1021Z improvement (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00042.html
+
+20160330T2132Z <gchicares@sbcglobal.net> [454]
+
+  docmdichildframe_ex.cpp
+  docmdichildframe_ex.hpp
+Remove unneeded dtor (VZ).
+
+20160330T2135Z <gchicares@sbcglobal.net> [454]
+
+  docmdichildframe_ex.cpp
+  docmdichildframe_ex.hpp
+Remove unneeded statusbar workarounds (VZ).
+
+20160330T2141Z <gchicares@sbcglobal.net> [454]
+
+  Makefile.am
+  docmdichildframe_ex.cpp [expunged]
+  docmdichildframe_ex.hpp [expunged]
+  objects.make
+  skeleton.cpp
+Expunge a module that no longer does anything. See:
+  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00054.html
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00062.html
 
