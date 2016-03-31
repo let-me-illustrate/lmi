@@ -38864,3 +38864,9 @@ Avoid crashing due to indiscriminate event handling (VZ). See:
   skeleton.cpp
 Don't count all children just to see if there are more than one (VZ).
 
+20160331T0956Z <gchicares@sbcglobal.net> [454]
+
+  skeleton.cpp
+Remove a superfluous cast (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00057.html
+

@@ -850,7 +850,7 @@ void Skeleton::UponMenuOpen(wxMenuEvent& event)
     event.Skip();
 
     wxMDIChildFrame* child_frame = frame_->GetActiveChild();
-    if(dynamic_cast<wxMDIChildFrame*>(child_frame))
+    if(child_frame)
         {
         bool has_multiple_mdi_children = false;
         wxWindowList const& wl = frame_->GetChildren();
