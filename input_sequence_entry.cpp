@@ -207,11 +207,58 @@ class InputSequenceEditor
     virtual void EndModal(int retCode);
 
   private:
+    // Helper class ensuring that only one relayout is really done during its
+    // lifetime even if redo_layout() is called multiple times: it is much
+    // simpler to create an object of this class before calling a function
+    // which may or not call redo_layout() than check whether it did or not and
+    // calling it only if it hadn't been already done. With this helper, calls
+    // to redo_layout() can be freely added everywhere where they might be
+    // needed without slowing down the UI to a crawl because just a single
+    // layout will be effectively performed.
+    class LayoutOnceGuard
+    {
+      public:
+        explicit LayoutOnceGuard(InputSequenceEditor* editor)
+            :editor_(editor)
+        {
+            editor_->layout_freeze_count_++;
+        }
+
+        ~LayoutOnceGuard()
+        {
+            if(!--editor_->layout_freeze_count_)
+                {
+                editor_->really_do_layout();
+                }
+        }
+
+        LayoutOnceGuard(LayoutOnceGuard const&) = delete;
+        LayoutOnceGuard& operator=(LayoutOnceGuard const&) = delete;
+
+      private:
+        InputSequenceEditor* const editor_;
+    };
+
+    friend class LayoutOnceGuard;
+
+    // If this is positive, layout is frozen and needs to wait until it's
+    // thawed which will happen when all currently existing LayoutOnceGuards go
+    // out of scope.
+    int layout_freeze_count_;
+
+    // This method may be called multiple times but if a LayoutOnceGuard
+    // currently exists, it does nothing immediately and just requests a
+    // layout at a later time.
+    void redo_layout();
+
+    // This method is only called by LayoutOnceGuard or redo_layout() itself
+    // and really lays out the dialog.
+    void really_do_layout();
+
     void add_row();
     void insert_row(int row);
     void remove_row(int row);
     void update_row(int row);
-    void redo_layout();
     void set_tab_order();
     wxString format_from_text(int row);
 
@@ -315,6 +362,7 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
         ,wxDefaultSize
         ,wxDEFAULT_DIALOG_STYLE
         )
+    ,layout_freeze_count_(1)    // It will be thawed when sequence() is called.
     ,input_        (input)
     ,keywords_only_(false)
     ,rows_count_   (0)
@@ -357,6 +405,8 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
 
 void InputSequenceEditor::sequence(InputSequence const& s)
 {
+    LayoutOnceGuard guard(this);
+
     while(0 < rows_count_)
         {
         remove_row(0);
@@ -429,6 +479,10 @@ void InputSequenceEditor::sequence(InputSequence const& s)
     value_field_ctrl(0).SetFocus();
 
     update_diagnostics();
+
+    // The layout was frozen initially, thaw it now, just once, as we can
+    // determine our really final size.
+    --layout_freeze_count_;
 }
 
 std::string InputSequenceEditor::sequence_string()
@@ -812,6 +866,14 @@ void InputSequenceEditor::update_row(int row)
 
 void InputSequenceEditor::redo_layout()
 {
+    if(layout_freeze_count_ == 0)
+        {
+        really_do_layout();
+        }
+}
+
+void InputSequenceEditor::really_do_layout()
+{
     wxSizer* sizer = GetSizer();
 
     // Try to avoid showing the vertical scrollbar by making the rows area as
@@ -1133,6 +1195,8 @@ void InputSequenceEditor::UponValueChange(wxCommandEvent&)
 
 void InputSequenceEditor::UponDurationModeChange(wxCommandEvent& event)
 {
+    LayoutOnceGuard guard(this);
+
     int row = id_to_row_[event.GetId()];
 
     adjust_duration_num(row);
@@ -1159,6 +1223,8 @@ void InputSequenceEditor::UponDurationModeChange(wxCommandEvent& event)
 
 void InputSequenceEditor::UponDurationNumChange(wxCommandEvent& event)
 {
+    LayoutOnceGuard guard(this);
+
     int row = id_to_row_[event.GetId()];
 
     for(int i = row; i < rows_count_; ++i)
@@ -1171,6 +1237,8 @@ void InputSequenceEditor::UponDurationNumChange(wxCommandEvent& event)
 
 void InputSequenceEditor::UponRemoveRow(wxCommandEvent& event)
 {
+    LayoutOnceGuard guard(this);
+
     int row = id_to_row_[event.GetId()];
     remove_row(row);
 
@@ -1179,6 +1247,8 @@ void InputSequenceEditor::UponRemoveRow(wxCommandEvent& event)
 
 void InputSequenceEditor::UponAddRow(wxCommandEvent& event)
 {
+    LayoutOnceGuard guard(this);
+
     int prev_row = id_to_row_[event.GetId()];
     int new_row = prev_row + 1;
 
