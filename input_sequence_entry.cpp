@@ -49,6 +49,7 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/wupdlock.h>
 #include <wx/valtext.h>
 
 #include <algorithm>              // std::copy()
@@ -92,10 +93,13 @@ DurationModeChoice::DurationModeChoice(wxWindow* parent)
 {
     Create(parent, wxID_ANY);
 
+    {
+    wxWindowUpdateLocker lock(this);
     for(unsigned int i = 0; i < duration_mode_choices; ++i)
         {
         Append(duration_mode_choice_values[i].label);
         }
+    }
 
     // "maturity" is the default
     value(e_maturity);
@@ -587,7 +591,10 @@ void InputSequenceEditor::insert_row(int new_row)
 
         wxArrayString kw;
         std::copy(keywords_.begin(), keywords_.end(), std::back_inserter(kw));
+        {
+        wxWindowUpdateLocker lock_combo(combo);
         combo->Append(kw);
+        }
 
         if(keywords_only_)
             {
