@@ -47,8 +47,8 @@
 /// --------------------------------------
 
 wxWindow* MultiDimAxisAny::CreateAdjustControl
-    (MultiDimGrid& grid
-    ,MultiDimTableAny& table
+    (MultiDimGrid&     // unused: grid
+    ,MultiDimTableAny& // unused: table
     )
 {
     return NULL;
@@ -66,7 +66,7 @@ bool MultiDimAxisAny::RefreshAdjustment(wxWindow&, unsigned int)
 
 MultiDimAxisAnyChoice* MultiDimAxisAny::CreateChoiceControl
     (MultiDimGrid& grid
-    ,MultiDimTableAny& table
+    ,MultiDimTableAny& // unused: table
     )
 {
     return new(wx) MultiDimAxisAnyChoice(*this, grid);
@@ -81,16 +81,16 @@ void MultiDimAxisAny::UpdateChoiceControl(MultiDimAxisAnyChoice& choice) const
 /// ---------------------------------------
 
 bool MultiDimTableAny::DoApplyAxisAdjustment
-    (MultiDimAxisAny& axis
-    ,unsigned int n
+    (MultiDimAxisAny& // unused: axis
+    ,unsigned int     // unused: n
     )
 {
     return false;
 }
 
 bool MultiDimTableAny::DoRefreshAxisAdjustment
-    (MultiDimAxisAny& axis
-    ,unsigned int n
+    (MultiDimAxisAny& // unused: axis
+    ,unsigned int     // unused: n
     )
 {
     return false;
@@ -1106,7 +1106,10 @@ unsigned int MultiDimGrid::DoGetNumberCols() const
     return axis_[first_grid_axis_]->GetCardinality();
 }
 
-bool MultiDimGrid::IsEmptyCell(int row, int col)
+bool MultiDimGrid::IsEmptyCell
+    (int // unused: row
+    ,int // unused: col
+    )
 {
     return false;
 }
@@ -1415,8 +1418,8 @@ void MultiDimAxisAnyChoice::UponSelectionChange(wxCommandEvent&)
 
 void MultiDimAxisAnyChoice::SelectionChanged()
 {
-    unsigned int const sel = GetSelection();
-    if(!(0 <= sel && sel < axis_.GetCardinality()))
+    int const sel = GetSelection();
+    if(!(0 <= sel && static_cast<unsigned int>(sel) < axis_.GetCardinality()))
         {
         fatal_error()
             << "The axis is inconsistent with its choice control."

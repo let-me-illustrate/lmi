@@ -111,7 +111,7 @@ bool gpt_document::OnNewDocument()
 
 /// See the documentation for similar class IllustrationDocument.
 
-bool gpt_document::DoOpenDocument(wxString const& filename)
+bool gpt_document::DoOpenDocument(wxString const&)
 {
     return true;
 }

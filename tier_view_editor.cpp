@@ -155,7 +155,7 @@ bool TierTableAdapter::DoApplyAxisAdjustment
     bool updated = false;
 
     TierBandAxis& ba = static_cast<TierBandAxis&>(axis);
-    if(ba.GetMinValue() != 0 || ba.GetMaxValue() < 0)
+    if(ba.GetMinValue() != 0 || ba.GetMaxValue() < ba.GetMinValue())
         {
         fatal_error()
             << "Band-axis adjuster has invalid limits."

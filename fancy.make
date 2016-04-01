@@ -78,13 +78,10 @@ begin_time:
 end_time:
 	@$(ECHO) Ended at $(volatile_time)
 
-# TODO ?? WENDY Would you please provide a definition of $(SLEEP) for
-# all platforms? For 'msw_generic.make', you can forward to the MSYS
-# implementation this way:
-#   C:/usr/bin[0]$cat sleep
-#   #! /usr/bin/sh
-#   /msys/1.0/bin/sleep "$@"
-SLEEP = /usr/bin/sleep
+# FHS-2.3 does not specify where sleep(1) resides. For opensolaris:
+#   http://www.unix.com/man-page/opensolaris/1/sleep/
+# it's in /usr/bin/ ; but it's in /bin/ for debian-7.
+SLEEP = PATH=/bin:/usr/bin sleep
 
 # This target demonstrates the reason for $(print_end_time).
 #

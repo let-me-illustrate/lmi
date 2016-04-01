@@ -420,7 +420,15 @@ void tn_range_test::test()
     // For IEEE 754's 64-bit double type, C99's footnote 302 seems to
     // suggest that these numbers should be neighbors. In that case,
     // they and their upper and lower neighbors should be the only
-    // four values permitted by range type 'r_surd'.
+    // four values permitted by range type 'r_surd', out of these
+    // five plausible candidates (to DECIMAL_DIG precision):
+    //      000000000011111111112
+    //      123456789012345678901
+    //   0.0699999999999999789058 = 0.07 / (1.0 + 2.0 * epsilon)
+    //   0.0699999999999999927836 = 0.07 / (1.0 + 1.0 * epsilon)
+    //   0.0700000000000000066613 = 0.07
+    //   0.0700000000000000205391 = 0.07 * (1.0 + 1.0 * epsilon)
+    //   0.0700000000000000344169 = 0.07 * (1.0 + 2.0 * epsilon)
 
     double volatile hi = 0.070000000000000001;
     double volatile lo = 0.069999999999999999;
@@ -435,14 +443,14 @@ void tn_range_test::test()
     BOOST_TEST( surd0.is_valid( 0.070000000000000001));
     BOOST_TEST(!surd0.is_valid( 0.0700000000000001  ));
 
-    BOOST_TEST( surd0.is_valid( 0.07 * (1.0 + 1.0 * epsilon)));
-    BOOST_TEST( surd0.is_valid( 0.07 / (1.0 + 1.0 * epsilon)));
+    BOOST_TEST( surd0.is_valid( 0.0700000000000000205391)); // 0.07 * (1+ε)
+    BOOST_TEST( surd0.is_valid( 0.0699999999999999927836)); // 0.07 / (1+ε)
 
     // If exactly four values are permissible, then exactly one of
     // these is permissible.
     BOOST_TEST
-        (   surd0.is_valid( 0.07 * (1.0 + 2.0 * epsilon))
-        ^   surd0.is_valid( 0.07 / (1.0 + 2.0 * epsilon))
+        (   surd0.is_valid( 0.0700000000000000344169) // 0.07 * (1+2ε)
+        ^   surd0.is_valid( 0.0699999999999999789058) // 0.07 / (1+2ε)
         );
 
     BOOST_TEST(!surd0.is_valid( 0.07 * (1.0 + 3.0 * epsilon)));

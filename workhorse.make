@@ -103,8 +103,7 @@ ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
 endif
 
 # The product_files target doesn't build with shared-library
-# 'attributes'. It can be built with mpatrol, but the resulting binary
-# segfaults. This matters little because that target is deprecated.
+# 'attributes'.
 #
 # TODO ?? The gpt server, however, is important; it needs work anyway.
 
@@ -118,7 +117,7 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     generate_passkey$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
 
-  ifneq (mpatrol,$(findstring mpatrol,$(build_type)))
+  ifneq (so_test,$(findstring so_test,$(build_type)))
     default_targets += \
       product_files$(EXEEXT) \
 
@@ -273,7 +272,8 @@ wx_config_check:
 #
 # boost: the build system provided is outlandish.
 #
-# cgicc: './configure && make' fails in the MSYS environment.
+# cgicc: './configure && make' failed in the MSYS environment (though
+# MSYS is no longer supported).
 #
 # xmlwrapp: the autotoolized build system doesn't support Comeau C++
 # (or any other compiler but gcc) on msw.
@@ -440,10 +440,12 @@ gcc_common_warnings := \
   -Wconversion \
   -Wdeprecated-declarations \
   -Wdisabled-optimization \
+  -Wextra \
   -Wimport \
   -Wmultichar \
   -Wpacked \
   -Wpointer-arith \
+  -Wredundant-decls \
   -Wsign-compare \
   -Wundef \
   -Wwrite-strings \
@@ -473,13 +475,10 @@ gcc_cxx_warnings := \
 #  -Wfloat-equal \
 
 # WX !! The wx library triggers many warnings with the following
-# 'extra' flags. (Use '-W' for backward compatibility, instead of the
-# modern equivalent '-Wextra'.)
+# 'extra' flags.
 
 gcc_common_extra_warnings := \
-  -W \
   -Wcast-qual \
-  -Wredundant-decls \
 
 ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   ifeq (3.4.5,$(gcc_version))
@@ -498,9 +497,12 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
 # at least in version 1.33.1, and there seems to be no easy workaround
 # except to blow away all warning options and let a warning appear.
+# This problem seems not to occur with gcc-4.x .
 
-static_mutex.o: gcc_common_extra_warnings :=
-static_mutex.o:          gcc_cxx_warnings :=
+ifeq (3.4.5,$(gcc_version))
+  static_mutex.o: gcc_common_extra_warnings :=
+  static_mutex.o:          gcc_cxx_warnings :=
+endif
 
 # Boost normally makes '-Wundef' give spurious warnings:
 #   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
@@ -550,7 +552,6 @@ endif
 
 # Build type governs
 #  - optimization flags
-#  - mpatrol
 #  - gprof
 #  - libstdc++ debugging and concept-checking macros
 
@@ -566,28 +567,17 @@ every_libstdcxx_warning_macro := \
   -D_GLIBCPP_DEBUG -D_GLIBCPP_DEBUG_PEDANTIC -D_GLIBCPP_CONCEPT_CHECKS \
                    -D_GLIBXX_DEBUG_PEDANTIC \
 
-MPATROL_LDFLAGS :=
-MPATROL_LIBS    :=
-
 test_targets := unit_tests cgi_tests cli_tests
 
-ifeq (mpatrol,$(findstring mpatrol,$(build_type)))
-  ifeq (3.4.4,$(gcc_version))
-    MPATROL_LDFLAGS := -Wl,--allow-multiple-definition
-  endif
+ifeq (gprof,$(findstring gprof,$(build_type)))
   optimization_flag := -O0
-  MPATROL_LIBS := -lmpatrol -lbfd -liberty $(platform_mpatrol_libraries)
+  gprof_flag := -pg
 else
-  ifeq (gprof,$(findstring gprof,$(build_type)))
+  ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
     optimization_flag := -O0
-    gprof_flag := -pg
+    libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
   else
-    ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
-      optimization_flag := -O0
-      libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
-    else
-      optimization_flag := -O2
-    endif
+    optimization_flag := -O2
   endif
 endif
 
@@ -780,11 +770,11 @@ $(boost_filesystem_objects): REQUIRED_CXXFLAGS += -Wno-error
 # subdirectories seem to be the most popular choices, and usage
 # varies, at least for msw:
 #  - wx-2.7.0 built with autotools puts its dll in lib/
-#  - libxml2 and mpatrol put their dlls in bin/
+#  - libxml2 and libxslt put their dlls in bin/
 # It is crucial to list these two subdirectories in exactly the order
 # given. If they were specified in reverse order, then gnu 'ld' would
 # find a dll before its import library, which latter would therefore
-# be ignored--and that would prevent mpatrol from working correctly.
+# be ignored--and that prevented mpatrol from working correctly.
 
 all_library_directories := \
   . \
@@ -794,13 +784,10 @@ all_library_directories := \
 
 EXTRA_LDFLAGS :=
 
-# Keep mpatrol at the end of the library list.
 REQUIRED_LDFLAGS = \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(REQUIRED_LIBS) \
-  $(MPATROL_LDFLAGS) \
-  $(MPATROL_LIBS) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
 # never harmful. The $(subst) workaround for '-I' isn't needed with
@@ -879,13 +866,6 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 
 lib%.a              : lmi_so_attributes :=
 lib%$(SHREXT)       : lmi_so_attributes := -DLMI_BUILD_SO
-
-# Don't use mpatrol when building a shared library to be used by an
-# application that uses mpatrol. See my postings to the mpatrol
-# mailing list.
-
-lib%$(SHREXT)       : MPATROL_LIBS :=
-wx_new$(SHREXT)     : MPATROL_LIBS :=
 
 wx_new$(SHREXT)     : EXTRA_LDFLAGS :=
 
@@ -1063,6 +1043,7 @@ fardel_binaries := \
   $(bin_dir)/lmi_wx_shared$(EXEEXT) \
   $(bin_dir)/skeleton$(SHREXT) \
   $(bin_dir)/wx_new$(SHREXT) \
+  $(bin_dir)/wx_test$(EXEEXT) \
   $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
   $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
   $(wildcard $(bin_dir)/product_files$(EXEEXT)) \
@@ -1199,23 +1180,10 @@ unit_tests_not_built:
 .PHONY: run_unit_tests
 run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 
-# Create 'mpatrol.log' if it doesn't already exist, so that it can be
-# parsed for diagnostics unconditionally when unit tests are run.
-
-mpatrol.log:
-	@$(TOUCH) $@
-
-# MSYS !! The initial ';' in the first $(SED) command works around a
-# problem caused by MSYS.
-
 .PHONY: %$(EXEEXT)-run
-%$(EXEEXT)-run: mpatrol.log
+%$(EXEEXT)-run:
 	@$(ECHO) -e "\nRunning $*:"
 	@-./$* --accept
-	@[ -f mpatrol.log ] \
-	  && <mpatrol.log $(SED) \
-	    -e ';/^total warnings\|^total errors/!d' \
-	    -e 's/^\(.*$$\)/  mpatrol: \1/' \
 
 ################################################################################
 
@@ -1281,9 +1249,6 @@ cli_test-%:
 # Test common gateway interface.
 
 # This lightweight test emulates what a webserver would do.
-
-# MSYS !! The initial ';' in several $(SED) commands works around a
-# problem caused by MSYS.
 
 .PHONY: cgi_tests
 cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
@@ -1381,7 +1346,7 @@ $(testdecks):
 	@for z in $(dot_test_files); \
 	  do \
 	    $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
-	    | $(SED) -e ';/Summary.*max rel err/!d' -e "s/^ /$$z/" \
+	    | $(SED) -e '/Summary.*max rel err/!d' -e "s/^ /$$z/" \
 	    >> $(system_test_analysis); \
 	  done
 
@@ -1396,9 +1361,9 @@ system_test: $(data_dir)/configurable_settings.xml $(touchstone_md5sums) install
 	@$(SORT) --key=2  --output=$(system_test_md5sums) $(system_test_md5sums)
 	@$(CP) --preserve --update $(system_test_md5sums) $(system_test_md5sums2)
 	@-< $(system_test_analysis) $(SED) \
-	  -e ';/rel err.*e-0*1[5-9]/d' \
-	  -e ';/abs.*0\.00.*rel/d' \
-	  -e ';/abs diff: 0 /d'
+	  -e '/rel err.*e-0*1[5-9]/d' \
+	  -e '/abs.*0\.00.*rel/d' \
+	  -e '/abs diff: 0 /d'
 	@$(DIFF) --brief $(system_test_md5sums) $(touchstone_md5sums) \
 	  && $(ECHO) "All `<$(touchstone_md5sums) $(WC) -l` files match." \
 	  || $(MAKE) --file=$(this_makefile) system_test_discrepancies
@@ -1415,24 +1380,24 @@ system_test_discrepancies:
 	  || true
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Only in/d' \
+	    -e '/^Only in/d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files compared/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Files.*are identical$$/!d' \
+	    -e '/^Files.*are identical$$/!d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files match/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Files.*are identical$$/d' \
-	    -e ';/^Only in/d' \
+	    -e '/^Files.*are identical$$/d' \
+	    -e '/^Only in/d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files differ/'
 	@-<$(system_test_diffs) \
 	  $(SED) \
-	    -e ';/^Only in.*touchstone:/!d' \
-	    -e ';/md5sums$$/d' \
+	    -e '/^Only in.*touchstone:/!d' \
+	    -e '/md5sums$$/d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^\(.*\)$$/  \1 system-test files missing/'
 	@$(ECHO) ...system test completed.

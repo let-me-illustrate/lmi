@@ -38550,3 +38550,317 @@ Fix defect introduced 20060812T0053Z: dead code. The line removed was
 in 'main_wx.cpp' originally, and moved to the present file here:
   http://svn.savannah.nongnu.org/viewvc?view=rev&root=lmi&revision=5861
 
+20160129T0231Z <zeitlin> [455]
+
+  configure.ac
+Don't link boost_system library if it's not detected by configure.
+
+20160130T1212Z <gchicares@sbcglobal.net> [455]
+
+  so_attributes.hpp
+Forestall attribute warnings for gcc-4.9.1 as for gcc-4.9.2 .
+
+20160130T1215Z <gchicares@sbcglobal.net> [455]
+
+  main_wx.cpp
+  mc_enum_types_aux.cpp
+Don't attempt to force linking a function that is not visible. See:
+  http://lists.nongnu.org/archive/html/lmi/2016-01/msg00087.html
+
+20160130T1257Z <gchicares@sbcglobal.net> [455]
+
+  install_msw.sh
+Try to avoid an antimalware issue.
+
+20160130T2139Z <gchicares@sbcglobal.net> [455]
+
+  install_msw.sh
+Exploit at least minimal parallelism by default.
+
+20160202T1335Z <gchicares@sbcglobal.net> [455]
+
+  install_msw.sh
+Increase default parallelism.
+
+20160205T1454Z <gchicares@sbcglobal.net> [455]
+
+  install_msw.sh
+Improve timestamping.
+
+20160205T1455Z <gchicares@sbcglobal.net> [454]
+
+  fancy.make
+Resolve a marked defect.
+
+20160210T1812Z <gchicares@sbcglobal.net> [454]
+
+  workhorse.make
+Include automated GUI test in fardels.
+
+20160210T1816Z <gchicares@sbcglobal.net> [454]
+
+  install_msw.sh
+Synchronize 'make' output.
+
+20160210T1827Z <gchicares@sbcglobal.net> [454]
+
+  install_miscellanea.make
+  install_wx.make
+  install_wxpdfdoc.make
+Suppress voluminous and uninteresting 'unzip' output.
+
+20160210T1837Z <gchicares@sbcglobal.net> [454]
+
+  install_wx.make
+Upgrade wx.
+
+20160212T1246Z <gchicares@sbcglobal.net> [454]
+
+  install_wx.make
+Upgrade wx. See:
+  http://lists.nongnu.org/archive/html/lmi/2016-02/msg00036.html
+
+20160212T2018Z <gchicares@sbcglobal.net> [454]
+
+  GNUmakefile
+  Makefile.am
+  como.make
+  configure.ac
+  install_mpatrol.make      [expunged]
+  install_msw.sh
+  mpatrol-mingw-GNUmakefile [expunged]
+  mpatrol_1.4.8.patch       [expunged]
+  mpatrol_patch_test.cpp    [expunged]
+  msw_common.make
+  objects.make
+  workhorse.make
+Abandon mpatrol.
+
+20160212T2102Z <gchicares@sbcglobal.net> [454]
+
+  configure.ac
+  msw_msys.make [expunged]
+  path_utility.cpp
+  test_coding_rules.cpp
+  workhorse.make
+Abandon MSYS.
+
+20160212T2223Z <gchicares@sbcglobal.net> [454]
+
+  bcc_5_5_1.make
+  main_wx.cpp
+  test_coding_rules.cpp
+  value_cast_test.cpp
+Remove certain mpatrol vestiges.
+
+20160227T2055Z <zeitlin> [454]
+
+  Makefile.am
+  configure.ac
+Build DLLs, not static libraries, when cross-compiling.
+
+20160227T2059Z <zeitlin> [454]
+
+  configure.ac
+  aclocal/ax_cxx_compile_stdcxx.m4 [new file]
+Use C++11 dialect.
+
+20160227T2104Z <zeitlin> [454]
+
+  configure.ac
+Always use AC_INCLUDES_DEFAULT() with AC_CHECK_HEADER().
+
+ <gchicares@sbcglobal.net> [454]
+
+20160227T2108Z <zeitlin> [454]
+
+  configure.ac
+Prefer AC_MSG_FAILURE() to the less helpful AC_MSG_ERROR().
+
+20160227T2112Z <zeitlin> [454]
+
+  Makefile.am
+Remove unneeded dummy source file.
+
+20160227T2116Z <zeitlin> [454]
+
+  configure.ac
+Disable boost nuisance warnings.
+
+20160309T0040Z <gchicares@sbcglobal.net> [454]
+
+  test_coding_rules.cpp
+Allow a string rms discourages when GNU libtool requires it.
+
+20160309T0113Z <gchicares@sbcglobal.net> [454]
+
+  illustration_reg.xsl
+  nasd.xsl
+  reg_d_group.xsl
+Fix defect introduced 20050720T1018Z: "substandard standard".
+
+20160318T1511Z <gchicares@sbcglobal.net> [454]
+
+  single_cell_document.cpp
+  single_cell_document_00.xsd [new file]
+Work around a vendor failure.
+
+20160322T1539Z <gchicares@sbcglobal.net> [454]
+
+  GNUmakefile
+Revert r5764 of 20130815T1244Z: it fails with current Cygwin.
+
+20160322T1555Z <gchicares@sbcglobal.net> [454]
+
+  version.hpp
+Designate release candidate 6520.
+
+20160322T2112Z <gchicares@sbcglobal.net> [454]
+
+  my_prod.cpp
+Harmonize with 'product_data.cpp'.
+
+20160322T2113Z <gchicares@sbcglobal.net> [454]
+
+  product_data.cpp
+Add an extra specimen product for xsl-to-wxPdfDoc migration.
+
+20160324T2120Z <gchicares@sbcglobal.net> [454]
+
+  tn_range_test.cpp
+Fix a unit test that failed with gcc-4.9.1 . See:
+  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00032.html
+
+20160325T1222Z <gchicares@sbcglobal.net> [454]
+
+  census_view.cpp
+Fix clang build: don't define const object without default ctor (VZ).
+
+20160325T1223Z <gchicares@sbcglobal.net> [454]
+
+  config.hpp
+Fix clang build: don't redefine _ISOC99_SOURCE (VZ).
+
+20160325T1224Z <gchicares@sbcglobal.net> [454]
+
+  getopt.cpp
+Correct an obvious cut-and-pasto (VZ).
+
+20160325T1225Z <gchicares@sbcglobal.net> [454]
+
+  configure.ac
+  test_coding_rules.cpp
+Support Clang (VZ).
+
+20160325T1437Z <gchicares@sbcglobal.net> [454]
+
+  census_view.cpp
+Fix clang build: don't specify incorrect type (VZ).
+
+20160325T1438Z <gchicares@sbcglobal.net> [454]
+
+  getopt.cpp
+Fix clang build: dangling 'else' (VZ).
+
+20160326T2340Z <gchicares@sbcglobal.net> [454]
+
+  census_document.cpp
+  gpt_document.cpp
+  illustration_document.cpp
+  mec_document.cpp
+  multidimgrid_any.cpp
+  multidimgrid_tools.hpp
+Remove unused parameters (VZ).
+
+20160327T1021Z <gchicares@sbcglobal.net> [454]
+
+  multidimgrid_any.cpp
+  tier_view_editor.cpp
+Avoid comparing signed and unsigned (VZ).
+
+20160327T1023Z <gchicares@sbcglobal.net> [454]
+
+  configure.ac
+  workhorse.make
+Enable more warnings in more situations.
+
+20160327T1058Z <gchicares@sbcglobal.net> [454]
+
+  group_quote_pdf_gen_wx.cpp
+Avoid needless conversions of std::string to wxString (VZ).
+
+20160327T1129Z <gchicares@sbcglobal.net> [454]
+
+  msw_workarounds.cpp
+  msw_workarounds.hpp
+Make this platform-specific code empty for other platforms (VZ).
+
+20160327T1130Z <gchicares@sbcglobal.net> [454]
+
+  configure.ac
+Fix defect introduced 20160325T1225Z: invalid warning (VZ).
+
+20160327T1305Z <gchicares@sbcglobal.net> [454]
+
+  account_value.hpp
+  accountvalue.cpp
+  assert_lmi.hpp
+  dbdict.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger_xml_io.cpp
+  xml_lmi.cpp
+Avoid shadowing variable names (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-02/msg00017.html
+
+20160327T2223Z <zeitlin> [454]
+
+  configure.ac
+Recognize gcc cross-compilers.
+
+20160330T1945Z <gchicares@sbcglobal.net> [454]
+
+  multidimgrid_any.cpp
+Further improve the 20160327T1021Z improvement (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00042.html
+
+20160330T2132Z <gchicares@sbcglobal.net> [454]
+
+  docmdichildframe_ex.cpp
+  docmdichildframe_ex.hpp
+Remove unneeded dtor (VZ).
+
+20160330T2135Z <gchicares@sbcglobal.net> [454]
+
+  docmdichildframe_ex.cpp
+  docmdichildframe_ex.hpp
+Remove unneeded statusbar workarounds (VZ).
+
+20160330T2141Z <gchicares@sbcglobal.net> [454]
+
+  Makefile.am
+  docmdichildframe_ex.cpp [expunged]
+  docmdichildframe_ex.hpp [expunged]
+  objects.make
+  skeleton.cpp
+Expunge a module that no longer does anything. See:
+  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00054.html
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00062.html
+
+20160330T2222Z <gchicares@sbcglobal.net> [454]
+
+  test_coding_rules.cpp
+Allow long lines with 'https:' as well as 'http:'.
+
+20160330T2224Z <gchicares@sbcglobal.net> [454]
+
+  skeleton.cpp
+Avoid crashing due to indiscriminate event handling (VZ). See:
+  https://github.com/vadz/lmi/commit/6355bb270241826fa32e151eb197a4b1f5cd5c12.patch
+  http://lists.nongnu.org/archive/html/lmi/2014-11/msg00062.html
+
+20160330T2344Z <gchicares@sbcglobal.net> [454]
+
+  skeleton.cpp
+Don't count all children just to see if there are more than one (VZ).
+

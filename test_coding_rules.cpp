@@ -607,8 +607,6 @@ void check_defect_markers(file const& f)
             &&  "IHS "         != z[1]
             &&  "INELEGANT "   != z[1]
             &&  "INPUT "       != z[1]
-            &&  "MPATROL "     != z[1]
-            &&  "MSYS "        != z[1]
             &&  "PORT "        != z[1]
             &&  "SOA "         != z[1]
             &&  "SOMEDAY "     != z[1]
@@ -702,7 +700,7 @@ void check_logs(file const& f)
         entries = f.data();
         }
 
-    static boost::regex const r("\\n(?!\\|)(?! *http:)([^\\n]{71,})(?=\\n)");
+    static boost::regex const r("\\n(?!\\|)(?! *https?:)([^\\n]{71,})(?=\\n)");
     boost::sregex_iterator i(entries.begin(), entries.end(), r);
     boost::sregex_iterator const omega;
     if(omega == i)
@@ -817,6 +815,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__STRICT_ANSI__"
         ,"__asm__"
         ,"__attribute__"
+        ,"__clang__"
         ,"__cxa_demangle"
     // Compiler specific: gcc, Cygwin.
         ,"__CYGWIN__"
@@ -976,6 +975,7 @@ void enforce_taboos(file const& f)
         (   !f.is_of_phylum(e_make)
         &&  !f.is_of_phylum(e_patch)
         &&  !f.phyloanalyze("config.hpp")
+        &&  !f.phyloanalyze("configure.ac") // GNU libtool uses 'win32-dll'.
         )
         {
         taboo(f, "WIN32", boost::regex::icase);

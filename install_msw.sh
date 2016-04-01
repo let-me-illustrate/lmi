@@ -33,7 +33,13 @@ set -v
 #
 # rm --force --recursive /opt/lmi
 
-date -u +'%Y%m%dT%H%MZ'
+stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+echo "Started: $stamp0"
+
+# '--jobs=4': big benefit for multicore, no penalty for single core.
+# '--output-sync=recurse' is also used, passim, to facilitate log
+# comparison.
+export coefficiency='--jobs=4'
 
 mount
 
@@ -80,7 +86,13 @@ mount --force "C:/opt/lmi" "/opt/lmi"
 
 [ -z "$restore_opt_mount" ] || sh -c $restore_opt_mount
 
-cygcheck -s -v -r | tr --delete '\r'
+# Read this entire thread for $CYGCHECK rationale:
+#   https://cygwin.com/ml/cygwin/2012-02/threads.html#00910
+#   https://cygwin.com/ml/cygwin/2012-03/threads.html#00005
+# Cf.:
+#   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
+export CYGCHECK=`cygpath --mixed /usr/bin/cygcheck`
+cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
 
 java -version
 
@@ -120,39 +132,33 @@ mount
 md5sum $0
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
-# $coefficiency is intended for passing a '--jobs' option, e.g.
-#   export coefficiency='--jobs=12'
-
 rm --force --recursive scratch
 rm --force --recursive /MinGW_
-make $coefficiency -f install_mingw.make
-make $coefficiency -f install_mpatrol.make
+make $coefficiency --output-sync=recurse -f install_mingw.make
 
-make $coefficiency -f install_miscellanea.make clobber
-make $coefficiency -f install_miscellanea.make
+make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
+make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
-make $coefficiency -f install_libxml2_libxslt.make
+make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
-make $coefficiency -f install_wx.make
+make $coefficiency --output-sync=recurse -f install_wx.make
 
-# Avoid msw virtual-memory exhaustion--see:
-#   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00020.html
-make ggc_flags= -f install_wxpdfdoc.make
+make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make
 
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
 export         PATH=/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH
 export minimal_path=/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/bin:/bin:/usr/sbin:/sbin
 
-make $coefficiency PATH=$minimal_path wx_config_check
-make $coefficiency PATH=$minimal_path show_flags
-make $coefficiency PATH=$minimal_path install
+make $coefficiency --output-sync=recurse PATH=$minimal_path wx_config_check
+make $coefficiency --output-sync=recurse PATH=$minimal_path show_flags
+make $coefficiency --output-sync=recurse PATH=$minimal_path install
 
 # No lmi binary should depend on any Cygwin library.
 
 for z in /opt/lmi/bin/*; \
-  do cygcheck $z 2>&1 | grep --silent cygwin \
-    && echo -e "\ncygcheck $z" && cygcheck $z; \
+  do cmd /c $CYGCHECK $z 2>&1 | grep --silent cygwin \
+    && echo -e "\ncygcheck $z" && cmd /c $CYGCHECK $z; \
   done
 
 echo -n "2450449 2458849"                          >/opt/lmi/data/expiry
@@ -182,7 +188,12 @@ cat >/opt/lmi/bin/configurable_settings.xml <<EOF
 </configurable_settings>
 EOF
 
-date -u +'%Y%m%dT%H%MZ'
+stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+echo "Finished: $stamp1"
+
+seconds=$(expr $(date '+%s' -d $stamp1) - $(date '+%s' -d $stamp0))
+elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
+echo "Elapsed: $elapsed"
 
 echo Finished building lmi. >/dev/tty
 

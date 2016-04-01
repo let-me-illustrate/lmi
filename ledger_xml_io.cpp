@@ -759,8 +759,8 @@ void Ledger::write(xml::element& x) const
     // That was the tricky part. Now it's all downhill.
 
     ledger_map_t const& l_map_rep = ledger_map_->held();
-    using lmci = ledger_map_t::const_iterator;
-    for(lmci i = l_map_rep.begin();i != l_map_rep.end(); i++)
+    typedef ledger_map_t::const_iterator lmci;
+    for(lmci i = l_map_rep.begin(); i != l_map_rep.end(); i++)
         {
         std::string suffix = suffixes[i->first];
         for

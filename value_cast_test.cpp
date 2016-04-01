@@ -353,14 +353,12 @@ int extra_tests0()
         ,static_cast<double>(std::numeric_limits<double>::max_exponent - 1)
         );
 
-    std::cout
-        << "Using libmingwex's strtod() to convert a really big number"
-        << " fails with mpatrol."
-        << std::endl
-        ;
+    // Using libmingwex's strtod() to convert a really big number
+    // fails with mpatrol. This test is retained in case another
+    // implementation suffers from the same problem.
     BOOST_TEST_EQUAL( big, value_cast<double>(value_cast<std::string>( big)));
     BOOST_TEST_EQUAL(-big, value_cast<double>(value_cast<std::string>(-big)));
-    // MPATROL !! This minimal, self-contained testcase produces an
+    // This minimal, self-contained testcase produces an
     // "ILLMEM" error with mpatrol when built with MinGW gcc-3.4.5 and
     // 'mingwrt-3.15.2-mingw32-dev.tar.gz'. The value of 'nptr' is the
     // string representation of 'big', copied from the output of:

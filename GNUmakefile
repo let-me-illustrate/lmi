@@ -126,13 +126,9 @@ $(src_dir)/local_options.make:: ;
 
 # Multiple build directories.
 
-# $(build_type) distinguishes optimized 'ship' builds from 'mpatrol'
-# builds, which may be created by specifying 'build_type=mpatrol' on
-# the make command line. Because 'mpatrol' builds use an invasive
-# malloc debugger, they may run quite sluggishly, and they work poorly
-# with gdb. But 'ship' builds are designed to work with gdb.
-#
-# Of course, other build types may be defined.
+# $(build_type) distinguishes optimized 'ship' builds from 'so_test'
+# and 'safestdlib' builds, which may be created by specifying them on
+# the make command line. Of course, other build types may be defined.
 
 build_type ?= ship
 toolset ?= gcc
@@ -209,7 +205,7 @@ release_candidate:
 	@$(ECHO) "  To designate a release candidate:"
 	@$(ECHO) \
 	  "svn commit -m'Designate release candidate" \
-	  "$(shell expr 1 + `svnversion` : '.*:\([0-9]*\)')'" \
+	  "$(shell expr 1 + `svnversion` : '\([0-9]*\)')'" \
 	  "version.hpp ChangeLog"
 
 ################################################################################
@@ -481,7 +477,6 @@ checkout:
 
 .PHONY: test_various_build_types
 test_various_build_types: source_clean
-	-$(MAKE) all test build_type=mpatrol
 	-$(MAKE) test build_type=safestdlib
 	-$(MAKE) all cgi_tests cli_tests build_type=so_test USE_SO_ATTRIBUTES=1
 	-$(MAKE) check_concinnity

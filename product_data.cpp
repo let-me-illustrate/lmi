@@ -67,37 +67,31 @@ template<> struct xml_io<glossed_string>
 };
 } // namespace xml_serialize
 
-/// Specialize value_cast<>() to throw an exception.
-///
-/// This is required by
-///   any_member::str()
-/// which is not useful here.
+/// Specialize: needed for any_member::str().
 
 template<> std::string value_cast<std::string>(glossed_string const& z)
 {
-    fatal_error()
-        << "Invalid function call. Context:"
-        << '\n' << z.datum()
-        << '\n' << z.gloss()
-        << LMI_FLUSH
-        ;
-    throw "Unreachable--silences a compiler diagnostic.";
+    if(z.gloss().empty())
+        {
+        return z.datum();
+        }
+    else
+        {
+        fatal_error()
+            << "Invalid function call. Context:"
+            << '\n' << z.datum()
+            << '\n' << z.gloss()
+            << LMI_FLUSH
+            ;
+        throw "Unreachable--silences a compiler diagnostic.";
+        }
 }
 
-/// Specialize value_cast<>() to throw an exception.
-///
-/// This is required by
-///   any_member::operator=(std::string const&)
-/// which is not useful here.
+/// Specialize: needed for any_member::operator=(std::string const&).
 
 template<> glossed_string value_cast<glossed_string>(std::string const& z)
 {
-    fatal_error()
-        << "Invalid function call. Context:"
-        << '\n' << z
-        << LMI_FLUSH
-        ;
-    throw "Unreachable--silences a compiler diagnostic.";
+    return glossed_string(z);
 }
 
 glossed_string::glossed_string()
@@ -417,24 +411,40 @@ void product_data::redintegrate_ex_post
         }
 }
 
-/// Create a product file for the 'sample' product.
+/// Create a product file for 'sample' products.
 ///
-/// Only the most crucial members are explicitly initialized. For the
-/// rest, default (empty) strings are good enough for 'sample'.
+/// The 'sample' product DWISOTT. Its values, where specified at all
+/// (rather than defaulted to empty strings), are intended to be
+/// plausible, if perhaps whimsical.
 ///
-/// The '*Footnote' members in particular are left empty here, which
-/// makes the 'sample' product less complete. SOMEDAY !! Add them,
-/// here and in 'my_prod.cpp'.
+/// The 'sample2' product is designed to facilitate replacement of
+/// XSL with wxPdfDoc; it may be removed when that task is complete.
+/// "*Filename" members are names of actual lmi product files, or
+/// basenames of mortality-table databases, and their values must
+/// nominate actual files. Member 'InsCoDomicile' is used to
+/// determine retaliatory premium-tax rates, and must be a two-letter
+/// USPS abbreviation. All other members represent text that is used
+/// for formatting reports; in order to make 'sample2' more useful for
+/// developing and testing reports, each has a nonempty value that is
+/// its member name enclosed in braces ("{}"). Braces aren't otherwise
+/// used in values, so any output substring like "{contract}" here:
+///   "This {contract} provides valuable protection"
+/// necessarily represents a substitutable value, while everything
+/// else in a report is just literal text.
 
 void product_data::WritePolFiles()
 {
     product_data z;
 
+    // 'sample' product
+
+    // Names of lmi product files.
     z.DatabaseFilename           = glossed_string("sample.database");
     z.FundFilename               = glossed_string("sample.funds");
     z.RoundingFilename           = glossed_string("sample.rounding");
     z.TierFilename               = glossed_string("sample.strata");
 
+    // Base names of mortality-table databases.
     z.CvatCorridorFilename       = glossed_string("sample");
     z.Irc7702NspFilename         = glossed_string("sample");
     z.CurrCOIFilename            = glossed_string("qx_cso");
@@ -454,6 +464,11 @@ void product_data::WritePolFiles()
     z.SubstdTblMultFilename      = glossed_string("sample");
     z.CurrSpecAmtLoadFilename    = glossed_string("sample");
     z.GuarSpecAmtLoadFilename    = glossed_string("sample");
+
+    // Other data that affect calculations.
+    z.InsCoDomicile              = glossed_string("WI");
+
+    // Substitutable strings.
     z.PolicyForm                 = glossed_string("UL32768-NY");
     z.PolicyFormAlternative      = glossed_string("UL32768-X");
     z.PolicyMktgName             = glossed_string("UL Supreme");
@@ -463,7 +478,6 @@ void product_data::WritePolFiles()
     z.InsCoAddr                  = glossed_string("Superior, WI 12345");
     z.InsCoStreet                = glossed_string("246 Main Street");
     z.InsCoPhone                 = glossed_string("(800) 555-1212");
-    z.InsCoDomicile              = glossed_string("WI");
     z.MainUnderwriter            = glossed_string("Superior Securities");
     z.MainUnderwriterAddress     = glossed_string("246-M Main Street, Superior, WI 12345");
     z.CoUnderwriter              = glossed_string("Superior Investors");
@@ -489,6 +503,46 @@ void product_data::WritePolFiles()
     z.GroupQuoteBrokerDealer     = glossed_string("Securities offered through Superior Brokerage.");
 
     z.save(AddDataDir("sample.policy"));
+
+    // 'sample2' product
+
+    typedef std::vector<std::string>::const_iterator svci;
+    for(svci i = z.member_names().begin(); i != z.member_names().end(); ++i)
+        {
+        z[*i] = '{' + *i + '}';
+        }
+
+    // Names of lmi product files.
+    z.DatabaseFilename           = glossed_string("sample.database");
+    z.FundFilename               = glossed_string("sample.funds");
+    z.RoundingFilename           = glossed_string("sample.rounding");
+    z.TierFilename               = glossed_string("sample.strata");
+
+    // Base names of mortality-table databases.
+    z.CvatCorridorFilename       = glossed_string("sample");
+    z.Irc7702NspFilename         = glossed_string("sample");
+    z.CurrCOIFilename            = glossed_string("qx_cso");
+    z.GuarCOIFilename            = glossed_string("qx_cso");
+    z.WPFilename                 = glossed_string("sample");
+    z.ADDFilename                = glossed_string("qx_ins", "Specimen gloss.");
+    z.ChildRiderFilename         = glossed_string("qx_ins");
+    z.CurrSpouseRiderFilename    = glossed_string("qx_ins");
+    z.GuarSpouseRiderFilename    = glossed_string("qx_ins");
+    z.CurrTermFilename           = glossed_string("sample");
+    z.GuarTermFilename           = glossed_string("sample");
+    z.GroupProxyFilename         = glossed_string("qx_ins");
+    z.SevenPayFilename           = glossed_string("sample");
+    z.TgtPremFilename            = glossed_string("sample");
+    z.Irc7702QFilename           = glossed_string("qx_cso");
+    z.PartialMortalityFilename   = glossed_string("qx_ann");
+    z.SubstdTblMultFilename      = glossed_string("sample");
+    z.CurrSpecAmtLoadFilename    = glossed_string("sample");
+    z.GuarSpecAmtLoadFilename    = glossed_string("sample");
+
+    // Other data that affect calculations.
+    z.InsCoDomicile              = glossed_string("WI");
+
+    z.save(AddDataDir("sample2.policy"));
 }
 
 /// Load from file. This free function can be invoked across dll

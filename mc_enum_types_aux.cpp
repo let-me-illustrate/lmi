@@ -30,14 +30,11 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "force_linking.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 
 #include <cstddef>                      // std::size_t
 #include <stdexcept>
-
-LMI_FORCE_LINKING_IN_SITU(mc_enum_types_aux)
 
 namespace
 {

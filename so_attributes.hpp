@@ -103,18 +103,18 @@
 //   class ATTRIB foo {}
 // can be forward declared thus:
 //   class ATTRIB foo;
-// That worked for MinGW up to gcc-3.4.5; for MinGW-w64 gcc-4.9.2, it
+// That worked for MinGW up to gcc-3.4.5; for MinGW-w64 gcc-4.9.1, it
 // elicits a warning, and ATTRIB must be dropped from the forward
 // declaration. No knowledge is claimed of the behavior of gcc
 // versions between these two, which lmi did not use.
 
 #if defined LMI_USE_SO_ATTRIBUTES
 #   if defined __GNUC__
-#       if LMI_GCC_VERSION < 40902
+#       if LMI_GCC_VERSION < 40901
 #           define LMI_SO_FWD_DECL LMI_SO
-#       else  // !(LMI_GCC_VERSION < 40902)
+#       else  // !(LMI_GCC_VERSION < 40901)
 #           define LMI_SO_FWD_DECL
-#       endif // !(LMI_GCC_VERSION < 40902)
+#       endif // !(LMI_GCC_VERSION < 40901)
 #   else  // !defined __GNUC__
 #       define LMI_SO_FWD_DECL LMI_SO
 #   endif // !defined __GNUC__

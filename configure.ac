@@ -98,17 +98,6 @@ AC_ARG_ENABLE(profiling,
                    *) AC_MSG_ERROR(bad value ${enableval} for --enable-profiling) ;;
              esac], [profiling_option=default])
 
-AC_ARG_ENABLE(mpatrol,
-             [AC_HELP_STRING([--with-mpatrol],
-                             [use mpatrol for memory allocation debugging])],
-             [case "x${withvap}" in
-                   x) lmi_mpatrol_option=yes ;;
-                xyes) lmi_mpatrol_option=yes ;;
-                 xno) lmi_mpatrol_option=no ;;
-                   *) AC_MSG_ERROR(bad value ${withvap} for --with-mpatrol) ;;
-             esac], lmi_mpatrol_option=no)
-AM_CONDITIONAL(LMI_WITH_MEMORY_DEBUG, [ test "x$lmi_mpatrol_option" = "xyes" ])
-
 AC_ARG_ENABLE(cgicc,
              [AC_HELP_STRING([--enable-cgicc],
                              [build cgi targets using installed cgicc.])],
@@ -155,7 +144,30 @@ AC_PROG_CC
 CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
+AX_CXX_COMPILE_STDCXX(11, noext)
+
 AC_PROG_LD
+
+AC_CACHE_CHECK([if using clang],
+    lmi_cv_prog_clang,
+    [
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+                [],
+                [[
+                #ifndef __clang__
+                    not clang
+                #endif
+                ]],
+            )],
+            lmi_cv_prog_clang=yes,
+            lmi_cv_prog_clang=no
+        )
+        AC_LANG_POP([C++])
+    ]
+)
+
+CLANG=$lmi_cv_prog_clang
 
 if test "$USE_WINDOWS" = "1"; then
     AC_CHECK_TOOL([WINDRES], [windres], no)
@@ -189,7 +201,7 @@ fi
 if test "$optimize_option" = "yes"; then
     case "$CC" in
         cl)     OPT_FLAG="/O";;
-        gcc)    OPT_FLAG="-O2";;
+        *gcc)   OPT_FLAG="-O2";;
         *)      OPT_FLAG="-O";;
     esac
 
@@ -219,7 +231,7 @@ AC_CHECK_HEADERS(curses.h)
 if test "$ac_cv_header_curses_h" != "yes"; then
     AC_CHECK_HEADERS(conio.h)
     if test "$ac_cv_header_conio_h" != "yes"; then
-        AC_MSG_ERROR([Header for getch() not found: neither curses.h nor conio.h are available.])
+        AC_MSG_FAILURE([Header for getch() not found: neither curses.h nor conio.h are available.])
     fi
 fi
 
@@ -260,7 +272,7 @@ if test "x$lmi_cv_func_snprintf" = "xyes"; then
     AC_DEFINE([HAVE_SNPRINTF], [1], [Define this if you have snprintf function])
 else
     dnl TODO: for MSVC support we should check for _snprintf()
-    AC_MSG_ERROR([The snprintf() function not found on your system])
+    AC_MSG_FAILURE([The snprintf() function not found on your system])
 fi
 
 AM_CONDITIONAL(HAVE_SNPRINTF, [test "x$lmi_cv_func_snprintf" == "xyes"])
@@ -281,14 +293,23 @@ AC_SEARCH_LIBS([getch], [ncurses], [], [], [])
 
 dnl === Configure libtool ===
 
+dnl Hack: ensure that libtool doesn't do anything "smart" to determine whether
+dnl it can link MSW DLLs with their dependencies because this is never a
+dnl problem for this platform.
+dnl
+dnl This obviously relies on the details of libtool implementation and can
+dnl break with the future libtool versions (last version tested is 2.4.2).
+if test "$USE_WINDOWS" = "1"; then
+    lt_cv_deplibs_check_method=pass_all
+fi
+
 dnl We can't do this at the end because we need the correct values
 dnl for enable_shared/static variables which appears to be defined
 dnl by AC_PROG_LIBTOOL (for ex. with --disable-shared you get only
 dnl enable_shared=no before this point and enable_static=yes only after)
 dnl Wx configuration part needs exactly that feature to understand
 dnl what library type build we're using.
-AC_DISABLE_STATIC   dnl don't waste time on static build by default
-AC_PROG_LIBTOOL
+LT_INIT([disable-static,win32-dll])
 
 dnl use C++ compiler as we're checking for C++ libraries/headers from now on
 dnl (we couldn't do it before as libtool tests must be done with C compiler)
@@ -297,7 +318,7 @@ AC_LANG(C++)
 dnl --- wxWidgets ---
 
 WX_CONFIG_CHECK([3.0.0], [wx="yes"],
-                         [AC_MSG_ERROR([No wxWidgets headers libs were found!])],
+                         [AC_MSG_FAILURE([No wxWidgets headers libs were found!])],
                          [],[$WXCONFIG_FLAGS])
 
 save_CPPFLAGS=$CPPFLAGS
@@ -314,7 +335,7 @@ AC_TRY_COMPILE([#include <wx/setup.h>],
     #endif
     ],
     [],
-    AC_MSG_ERROR([Please configure wxWidgets using --enable-std_string.])
+    AC_MSG_FAILURE([Please configure wxWidgets using --enable-std_string.])
 )
 
 dnl these options are not fatal but it's better not to use them for various
@@ -339,14 +360,16 @@ WX_STANDARD_OPTIONS_SUMMARY_MSG
 dnl --- wxPdfDocument ---
 AC_CHECK_HEADER([wx/pdfdc.h],
     [],
-    [AC_MSG_ERROR([wxPdfDocument header not found.])])
+    [AC_MSG_FAILURE([wxPdfDocument header not found.])],
+    [AC_INCLUDES_DEFAULT()]
+)
 
 dnl Defer to the same macro used by wxPdfDocument itself for constructing its
 dnl library name.
 WX_LIKE_LIBNAME([pdfdoc_lib], [wxcode], [pdfdoc])
 AC_CHECK_LIB([$pdfdoc_lib], [main],
     [WXPDFDOC_LIBS="-l$pdfdoc_lib"],
-    [AC_MSG_ERROR([wxPdfDocument library $pdfdoc_lib not found.])])
+    [AC_MSG_FAILURE([wxPdfDocument library $pdfdoc_lib not found.])])
 
 AC_SUBST(WXPDFDOC_LIBS)
 
@@ -365,7 +388,8 @@ fi
 
 AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
-    [AC_MSG_ERROR([Boost headers not found, $errmsg])]
+    [AC_MSG_FAILURE([Boost headers not found, $errmsg])],
+    [AC_INCLUDES_DEFAULT()]
 )
 
 dnl The default boost library name should be used unless otherwise specified
@@ -402,14 +426,14 @@ LIBS="$LIBS $BOOST_LIBS -l$boost_libfs"
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/filesystem/operations.hpp>]],
     [[boost::filesystem::current_path()]])],
     [],
-    [AC_MSG_ERROR([Boost filesystem library $boost_libfs not found, $errmsg])]
+    [AC_MSG_FAILURE([Boost filesystem library $boost_libfs not found, $errmsg])]
 )
 
 LIBS="$save_LIBS -l$boost_libregex"
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/regex.hpp>]],
     [[boost::regex *r]])],
     [],
-    [AC_MSG_ERROR([Boost regex library $boost_libregex not found, $errmsg])]
+    [AC_MSG_FAILURE([Boost regex library $boost_libregex not found, $errmsg])]
 )
 
 LDFLAGS=$save_LDFLAGS
@@ -423,7 +447,7 @@ AC_SUBST(BOOST_LIBS)
 
 dnl check for the other required libraries: under Unix we use pkg-config which
 dnl is easily available for (and often already installed under) any Linux
-dnl system but when using MSYS we do the checks manually as installing
+dnl system but when using Cygwin we do the checks manually as installing
 dnl pkg-config under Windows is unfortunately not trivial and so we can't rely
 dnl on its presence on the target system
 if test "$USE_LINUX" = "1"; then
@@ -463,7 +487,7 @@ dnl check that the library options allow to build lmi
 AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
     [xml::document doc("dummy");],
     [],
-    AC_MSG_ERROR([Unable to find appropriate xmlwrapp configuration. Use --with-xmlwrapp-config to specify the location of xmlwrapp-config.])
+    AC_MSG_FAILURE([Unable to find appropriate xmlwrapp configuration. Use --with-xmlwrapp-config to specify the location of xmlwrapp-config.])
 )
 
 CXXFLAGS=$save_CXXFLAGS
@@ -472,14 +496,16 @@ LIBS=$save_LIBS
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then
     lmi_found_cgicc=yes
-    AC_CHECK_HEADER("cgicc/CgiDefs.h", [], [lmi_found_cgicc=no])
+    AC_CHECK_HEADER("cgicc/CgiDefs.h", [], [lmi_found_cgicc=no], [AC_INCLUDES_DEFAULT()])
     AC_CHECK_FILE("libcgicc.la", [], [lmi_found_cgicc=no])
     if test "x$lmi_found_cgicc" == "xno"; then
         for m_lmi_cgicc_guess in /usr/include /usr/local/include
         do
             echo "checking with m_lmi_cgicc_guess=$m_lmi_cgicc_guess"
             AC_CHECK_HEADER([$m_lmi_cgicc_guess/cgicc/CgiDefs.h],
-                [ok_lmi_cgicc_include=$m_lmi_cgicc_guess], [])
+                [ok_lmi_cgicc_include=$m_lmi_cgicc_guess], [],
+                [AC_INCLUDES_DEFAULT()]
+            )
             if test "x$ok_lmi_cgicc_include" != "x"; then break; fi
         done
         for m_lmi_cgicc_lib_guess in /usr/lib /usr/local/lib
@@ -521,47 +547,78 @@ AC_SUBST(CGICC_INCLUDE_FLAGS)
 AC_SUBST(CGICC_LIBS)
 AC_SUBST(CGICC_LIB_LDADD)
 
-dnl --- enable all possible warnings for gcc/g++ ----
-CFLAGS_gcc_common="\
-    -pedantic-errors \
-    -Werror \
-    -Wall \
-    -Wcast-align \
-    -Wdeprecated-declarations \
-    -Wdisabled-optimization \
-    -Wimport \
-    -Wmultichar \
-    -Wno-long-long \
-    -Wno-variadic-macros \
-    -Wpacked \
-    -Wpointer-arith \
-    -Wsign-compare \
-    -Wundef \
-    -Wwrite-strings"
+dnl Try to enable as many useful warnings as possible depending on the
+dnl compiler (and its version) used.
+if test "$GCC" == "yes"; then
+    dnl These flags are understood by both gcc and clang and, hopefully, other
+    dnl compatible compilers.
+    c_warnings_flags="\
+        -pedantic-errors \
+        -Werror \
+        -Wall \
+        -Wextra \
+        -Wundef"
 
-if test "x$GCC" == "xyes"; then
-    CFLAGS="$CFLAGS $CFLAGS_gcc_common -std=c99 -Wmissing-prototypes"
+    if test "$CLANG" = "yes"; then
+        :
+    else
+        dnl Assume this is the real gcc.
+        c_warnings_flags="$c_warnings_flags \
+            -Wcast-align \
+            -Wdeprecated-declarations \
+            -Wdisabled-optimization \
+            -Wimport \
+            -Wmultichar \
+            -Wno-long-long \
+            -Wno-variadic-macros \
+            -Wpacked \
+            -Wpointer-arith \
+            -Wsign-compare \
+            -Wwrite-strings"
+    fi
+
+    CFLAGS="$CFLAGS $c_warnings_flags -std=c99 -Wmissing-prototypes"
 fi
 
 if test "x$GXX" == "xyes"; then
-    CXXFLAGS="$CXXFLAGS $CFLAGS_gcc_common \
+    if test "$CLANG" = "yes"; then
+        cxx_warnings_flags="$cxx_warnings_flags \
+            -Wno-inconsistent-missing-override"
+    else
+        cxx_warnings_flags="$cxx_warnings_flags \
         -Wctor-dtor-privacy \
         -Wdeprecated \
         -Wnon-template-friend \
         -Woverloaded-virtual \
         -Wpmf-conversions \
         -Wsynth"
+    fi
+
+    CXXFLAGS="$CXXFLAGS $c_warnings_flags $cxx_warnings_flags"
 
     dnl we need to use this option with g++ 4.3 to prevent its complaints
     dnl about "-funit-at-a-time is required for inlining of functions that are
     dnl only called once" in debug builds
     dnl
     dnl NB: this is needed for expm1.c so we must add it to CFLAGS too
-    LMI_C_CXX_ADD_IF_SUPPORTED(-fno-inline-functions-called-once)
+    if test "$CLANG" != "yes"; then
+        LMI_C_CXX_ADD_IF_SUPPORTED(-fno-inline-functions-called-once)
+    fi
 
-    dnl this one must be disabled with g++ 4.x because there are tons of
-    dnl occurrences of this warning in both wx and LMI sources
-    LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
+    dnl this one must be disabled because there are tons of occurrences of
+    dnl this warning in both wx and LMI sources
+    if test "$CLANG" = "yes"; then
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-logical-op-parentheses)
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-bitwise-op-parentheses)
+    else
+        LMI_CXX_ADD_IF_SUPPORTED(-Wno-parentheses)
+    fi
+
+    dnl Many instances of these warnings are given in Boost 1.33.1 headers, so
+    dnl we unfortunately have to disable them even if they're potentially
+    dnl useful, especially the latter one.
+    LMI_CXX_ADD_IF_SUPPORTED(-Wno-unused-local-typedefs)
+    LMI_CXX_ADD_IF_SUPPORTED(-Wno-unused-variable)
 
     dnl This makes Boost compile with -Wundef; see workhorse.make for
     dnl more detailed explanation.

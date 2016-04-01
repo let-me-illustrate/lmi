@@ -110,7 +110,7 @@ bool CensusDocument::OnNewDocument()
 
 /// See documentation for IllustrationDocument::DoOpenDocument().
 
-bool CensusDocument::DoOpenDocument(wxString const& filename)
+bool CensusDocument::DoOpenDocument(wxString const&)
 {
     return true;
 }

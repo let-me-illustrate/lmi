@@ -574,9 +574,6 @@
                     <xsl:when test="$scalars/UWType='Medical'">
                       Fully underwritten,
                     </xsl:when>
-                    <xsl:when test="$scalars/StatePostalAbbrev='TX' and $scalars/UWType='Guaranteed issue'">
-                      Substandard *,
-                    </xsl:when>
                     <xsl:otherwise>
                       <xsl:value-of select="$scalars/UWType"/>,
                     </xsl:otherwise>

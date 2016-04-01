@@ -28,6 +28,8 @@
 
 #include "msw_workarounds.hpp"
 
+#ifdef LMI_MSW
+
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "fenv_lmi.hpp"
@@ -35,9 +37,7 @@
 
 #include <boost/functional.hpp>
 
-#ifdef LMI_MSW
-#   include <windows.h>
-#endif // LMI_MSW defined.
+#include <windows.h>
 
 #include <algorithm>
 #include <functional>
@@ -87,7 +87,6 @@ void MswDllPreloader::PreloadDesignatedDlls()
 
 void MswDllPreloader::PreloadOneDll(std::string const& dll_name)
 {
-#ifdef LMI_MSW
     fenv_initialize();
 
     if(0 == ::LoadLibraryA(dll_name.c_str()))
@@ -109,16 +108,14 @@ void MswDllPreloader::PreloadOneDll(std::string const& dll_name)
                 ;
             }
         }
-#endif // LMI_MSW defined.
 }
 
 void MswDllPreloader::UnloadOneDll(std::string const& dll_name)
 {
-#ifdef LMI_MSW
     if(0 == ::FreeLibrary(::GetModuleHandleA(dll_name.c_str())))
         {
         warning() << "Failed to unload '" << dll_name << "'." << LMI_FLUSH;
         }
-#endif // LMI_MSW defined.
 }
 
+#endif // LMI_MSW defined.

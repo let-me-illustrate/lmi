@@ -146,7 +146,6 @@ TESTS = \
     test_mc_enum \
     test_miscellany \
     test_mortality_rates \
-    test_mpatrol_patch \
     test_name_value_pairs \
     test_ncnnnpnn \
     test_numeric_io \
@@ -192,7 +191,6 @@ libskeleton_la_SOURCES = \
     database_view_editor.cpp \
     default_view.cpp \
     docmanager_ex.cpp \
-    docmdichildframe_ex.cpp \
     file_command_wx.cpp \
     gpt_document.cpp \
     gpt_view.cpp \
@@ -238,6 +236,7 @@ lmi_wx_SOURCES = \
 libskeleton_la_CXXFLAGS = \
      $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS) -ULMI_PCH_HEADER -DLMI_PCH_HEADER="<pchfile_wx.hpp>"
 
+libskeleton_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libskeleton_la_LIBADD = \
     liblmi.la \
     libwx_new.la \
@@ -490,7 +489,6 @@ elapsed_time_CXXFLAGS = $(AM_CXXFLAGS)
 elapsed_time_LDADD = \
     libmain_auxiliary_common.la
 
-antediluvian_cgi_SOURCES = $(top_builddir)/dummy.cpp
 antediluvian_cgi_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 antediluvian_cgi_LDADD = \
     libcgi.la \
@@ -539,9 +537,6 @@ test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 test_coding_rules_LDADD = \
   libmain_auxiliary_common.la \
   $(BOOST_LIBS)
-
-dummy.cpp:
-	touch $@
 
 # unit tests
 common_test_objects = \
@@ -841,11 +836,6 @@ test_mortality_rates_SOURCES = \
   mortality_rates_test.cpp
 test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_mpatrol_patch_SOURCES = \
-  $(common_test_objects) \
-  mpatrol_patch_test.cpp
-test_mpatrol_patch_CXXFLAGS = $(AM_CXXFLAGS)
-
 test_name_value_pairs_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
@@ -1116,7 +1106,6 @@ noinst_HEADERS = \
     default_view.hpp \
     deserialize_cast.hpp \
     docmanager_ex.hpp \
-    docmdichildframe_ex.hpp \
     edit_mvc_docview_parameters.hpp \
     emit_ledger.hpp \
     exit_codes.hpp \

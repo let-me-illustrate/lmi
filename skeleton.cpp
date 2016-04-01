@@ -53,7 +53,6 @@
 #include "dbdict.hpp"                   // print_databases()
 #include "default_view.hpp"
 #include "docmanager_ex.hpp"
-#include "docmdichildframe_ex.hpp"
 #include "fenv_guard.hpp"
 #include "fenv_lmi.hpp"
 #include "getopt.hpp"
@@ -91,7 +90,7 @@
 #include <wx/artprov.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
-#include <wx/docmdi.h>
+#include <wx/docmdi.h>                  // class wxDocMDIChildFrame
 #include <wx/image.h>
 #include <wx/log.h>                     // wxSafeShowMessage()
 #include <wx/math.h>                    // wxRound()
@@ -145,7 +144,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("window_previous"                 ),Skeleton::UponWindowPrevious               )
     EVT_MENU(XRCID("window_tile_horizontally"        ),Skeleton::UponWindowTileHorizontally       )
     EVT_MENU(XRCID("window_tile_vertically"          ),Skeleton::UponWindowTileVertically         )
-    EVT_MENU_OPEN(                                     Skeleton::UponMenuOpen                     )
     EVT_UPDATE_UI(XRCID("print_pdf"                  ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("edit_cell"                  ),Skeleton::UponUpdateInapplicable           )
     EVT_UPDATE_UI(XRCID("edit_class"                 ),Skeleton::UponUpdateInapplicable           )
@@ -214,10 +212,12 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
             frame_->GetActiveChild()
         &&  frame_->GetActiveChild()->IsMaximized()
         ;
-    DocMDIChildFrameEx* child_frame = new DocMDIChildFrameEx
+    wxDocMDIChildFrame* child_frame = new wxDocMDIChildFrame
         (doc
         ,view
         ,frame_
+        ,wxID_ANY
+        ,"Loading..."
         );
     child_frame->SetIcon(view->Icon());
     child_frame->SetMenuBar(AdjustMenus(view->MenuBar(), view));
@@ -896,6 +896,8 @@ bool Skeleton::OnInit()
         InitMenuBar();
         InitToolBar();
         frame_->CreateStatusBar();
+
+        frame_->Bind(wxEVT_MENU_OPEN, &Skeleton::UponMenuOpen, this);
 #if defined LMI_MSW || wxCHECK_VERSION(2,8,10)
         frame_->DragAcceptFiles(true);
 #endif // defined LMI_MSW || wxCHECK_VERSION(2,8,10)
@@ -957,22 +959,27 @@ void Skeleton::UponMenuOpen(wxMenuEvent& event)
 {
     event.Skip();
 
-    int child_frame_count = 0;
-    wxWindowList const& wl = frame_->GetChildren();
-    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
-        {
-        child_frame_count += !!dynamic_cast<wxMDIChildFrame*>(*i);
-        }
-
     wxMDIChildFrame* child_frame = frame_->GetActiveChild();
-    if(child_frame)
+    if(dynamic_cast<wxMDIChildFrame*>(child_frame))
         {
+        bool has_multiple_mdi_children = false;
+        wxWindowList const& wl = frame_->GetChildren();
+        for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+            {
+            wxMDIChildFrame const*const child = dynamic_cast<wxMDIChildFrame*>(*i);
+            if(child && child != child_frame)
+                {
+                has_multiple_mdi_children = true;
+                break;
+                }
+            }
+
         wxMenuItem* window_next = child_frame->GetMenuBar()->FindItem
             (XRCID("window_next")
             );
         if(window_next)
             {
-            window_next->Enable(1 < child_frame_count);
+            window_next->Enable(has_multiple_mdi_children);
             }
 
         wxMenuItem* window_previous = child_frame->GetMenuBar()->FindItem
@@ -980,7 +987,7 @@ void Skeleton::UponMenuOpen(wxMenuEvent& event)
             );
         if(window_previous)
             {
-            window_previous->Enable(1 < child_frame_count);
+            window_previous->Enable(has_multiple_mdi_children);
             }
         }
     // (else) Parent menu enablement could be handled here, but, for
