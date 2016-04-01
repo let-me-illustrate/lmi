@@ -381,7 +381,14 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     sizer_ = new(wx) wxFlexGridSizer(Col_Max, sizerGap);
     rows_area_->SetSizer(sizer_);
 
-    diagnostics_ = new(wx) wxStaticText(this, wxID_ANY, "");
+    diagnostics_ = new(wx) wxStaticText
+        (this
+        ,wxID_ANY
+        ,""
+        ,wxDefaultPosition
+        ,wxDefaultSize
+        ,wxST_NO_AUTORESIZE
+        );
     top->Add(diagnostics_, wxSizerFlags().Expand().DoubleBorder(wxLEFT|wxRIGHT));
 
     wxStdDialogButtonSizer* buttons = new(wx) wxStdDialogButtonSizer();
@@ -615,7 +622,14 @@ void InputSequenceEditor::insert_row(int new_row)
         }
 
     sizer_->wxSizer::Insert(insert_pos++, value_ctrl, wxSizerFlags(flags).TripleBorder(wxRIGHT));
-    wxStaticText* from_label = new(wx) wxStaticText(rows_area_, wxID_ANY, LARGEST_FROM_TEXT);
+    wxStaticText* from_label = new(wx) wxStaticText
+        (rows_area_
+        ,wxID_ANY
+        ,LARGEST_FROM_TEXT
+        ,wxDefaultPosition
+        ,wxDefaultSize
+        ,wxST_NO_AUTORESIZE
+        );
     SizeWinForText(from_label, LARGEST_FROM_TEXT);
     sizer_->wxSizer::Insert(insert_pos++, from_label, flags);
     wxChoice* duration_mode = new(wx) DurationModeChoice(rows_area_);
@@ -623,7 +637,14 @@ void InputSequenceEditor::insert_row(int new_row)
     wxSpinCtrl* duration_num = new(wx) wxSpinCtrl(rows_area_, wxID_ANY, "");
     sizer_->wxSizer::Insert(insert_pos++, duration_num, flags);
     SizeWinForText(duration_num, "9999", 20);
-    wxStaticText* then_label = new(wx) wxStaticText(rows_area_, wxID_ANY, LARGEST_THEN_TEXT);
+    wxStaticText* then_label = new(wx) wxStaticText
+        (rows_area_
+        ,wxID_ANY
+        ,LARGEST_THEN_TEXT
+        ,wxDefaultPosition
+        ,wxDefaultSize
+        ,wxST_NO_AUTORESIZE
+        );
     sizer_->wxSizer::Insert(insert_pos++, then_label, flags);
     SizeWinForText(then_label, LARGEST_THEN_TEXT);
 
