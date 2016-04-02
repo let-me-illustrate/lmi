@@ -552,11 +552,9 @@ std::string InputSequenceEditor::sequence_string()
     return s;
 }
 
-void SizeWinForText(wxWindow* win, wxString const& text, int extra = 0)
+void SizeWinForText(wxControl* win, wxString const& text)
 {
-    int x, y;
-    win->GetTextExtent(text, &x, &y);
-    win->SetMinSize(wxSize(x + extra, -1));
+    win->SetMinSize(win->GetSizeFromTextSize(win->GetTextExtent(text).x));
 }
 
 void InputSequenceEditor::add_row()
@@ -636,7 +634,7 @@ void InputSequenceEditor::insert_row(int new_row)
     sizer_->wxSizer::Insert(insert_pos++, duration_mode, flags);
     wxSpinCtrl* duration_num = new(wx) wxSpinCtrl(rows_area_, wxID_ANY, "");
     sizer_->wxSizer::Insert(insert_pos++, duration_num, flags);
-    SizeWinForText(duration_num, "9999", 20);
+    SizeWinForText(duration_num, "9999");
     wxStaticText* then_label = new(wx) wxStaticText
         (rows_area_
         ,wxID_ANY
