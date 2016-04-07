@@ -48,8 +48,8 @@ class TierView
 
   private:
     // ViewEx required implementation.
-    virtual wxIcon Icon() const;
-    virtual wxMenuBar* MenuBar() const;
+    virtual char const* icon_xrc_resource   () const;
+    virtual char const* menubar_xrc_resource() const;
 
     // ProductEditorView required implementation.
     virtual bool IsModified() const;

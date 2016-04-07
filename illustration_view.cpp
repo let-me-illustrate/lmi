@@ -60,8 +60,6 @@
 #include "wx_utility.hpp"               // class ClipboardEx
 
 #include <wx/html/htmlwin.h>
-#include <wx/icon.h>
-#include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
 #include <fstream>
@@ -150,14 +148,14 @@ void IllustrationView::DisplaySelectedValuesAsHtml()
     html_window_->SetPage(FormatSelectedValuesAsHtml(*ledger_values_));
 }
 
-wxIcon IllustrationView::Icon() const
+char const* IllustrationView::icon_xrc_resource() const
 {
-    return IconFromXmlResource("illustration_view_icon");
+    return "illustration_view_icon";
 }
 
-wxMenuBar* IllustrationView::MenuBar() const
+char const* IllustrationView::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("illustration_view_menu");
+    return "illustration_view_menu";
 }
 
 /// This virtual function calls its base-class namesake explicitly.

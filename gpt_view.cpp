@@ -38,8 +38,6 @@
 
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmprint.h>
-#include <wx/icon.h>
-#include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
 gpt_mvc_view::gpt_mvc_view()
@@ -126,14 +124,14 @@ oenum_mvc_dv_rc gpt_view::edit_parameters()
         );
 }
 
-wxIcon gpt_view::Icon() const
+char const* gpt_view::icon_xrc_resource() const
 {
-    return IconFromXmlResource("gpt_view_icon");
+    return "gpt_view_icon";
 }
 
-wxMenuBar* gpt_view::MenuBar() const
+char const* gpt_view::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("gpt_view_menu");
+    return "gpt_view_menu";
 }
 
 /// This virtual function calls its base-class namesake explicitly.

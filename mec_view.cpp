@@ -38,8 +38,6 @@
 
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmprint.h>
-#include <wx/icon.h>
-#include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
 mec_mvc_view::mec_mvc_view()
@@ -126,14 +124,14 @@ oenum_mvc_dv_rc mec_view::edit_parameters()
         );
 }
 
-wxIcon mec_view::Icon() const
+char const* mec_view::icon_xrc_resource() const
 {
-    return IconFromXmlResource("mec_view_icon");
+    return "mec_view_icon";
 }
 
-wxMenuBar* mec_view::MenuBar() const
+char const* mec_view::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("mec_view_menu");
+    return "mec_view_menu";
 }
 
 /// This virtual function calls its base-class namesake explicitly.

@@ -83,6 +83,11 @@ wxFrame& ViewEx::FrameWindow() const
     return safely_dereference_as<wxFrame>(GetFrame());
 }
 
+wxIcon ViewEx::Icon() const
+{
+    return IconFromXmlResource(icon_xrc_resource());
+}
+
 /// Elsewhere, the result of wxXmlResource::Get()->LoadX is checked
 /// before doing anything with it. However, LoadIcon() returns a
 /// reference, not a pointer, because it's a graphics object:
@@ -97,6 +102,11 @@ wxIcon ViewEx::IconFromXmlResource(char const* z) const
         warning() << "Invalid icon; using default." << LMI_FLUSH;
         }
     return icon;
+}
+
+wxMenuBar* ViewEx::MenuBar() const
+{
+    return MenuBarFromXmlResource(menubar_xrc_resource());
 }
 
 /// If 'new(wx) wxMenuBar' fails, then the program would crash except
