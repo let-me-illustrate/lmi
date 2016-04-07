@@ -52,7 +52,6 @@
 
 #include <wx/dataview.h>
 #include <wx/datectrl.h>
-#include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/settings.h>
@@ -1236,14 +1235,14 @@ void CensusView::update_visible_columns()
         }
 }
 
-wxIcon CensusView::Icon() const
+char const* CensusView::icon_xrc_resource() const
 {
-    return IconFromXmlResource("census_view_icon");
+    return "census_view_icon";
 }
 
-wxMenuBar* CensusView::MenuBar() const
+char const* CensusView::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("census_view_menu");
+    return "census_view_menu";
 }
 
 void CensusView::UponEditCell(wxCommandEvent&)

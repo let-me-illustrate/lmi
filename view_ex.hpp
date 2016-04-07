@@ -41,19 +41,15 @@
 // seems to obtain.
 
 // Icon() and MenuBar() return types suitable for passing to wx
-// functions SetIcon() and SetMenuBar() respectively. Because they are
-// expected to be loaded from xml resources, the functions could have
-// been made nonvirtual, with a string argument to distinguish view
-// types, and indeed protected functions IconFromXmlResource() and
-// MenuBarFromXmlResource() are provided to encapsulate that work in
-// this class--with the same return types as the wxxrc functions they
+// functions SetIcon() and SetMenuBar() respectively. These nonvirtual
+// functions call virtuals that load XRC resources. Private functions
+// IconFromXmlResource() and MenuBarFromXmlResource() encapsulate that
+// work; they have the same return types as the wxxrc functions they
 // call. Thus, notably, MenuBarFromXmlResource() returns a pointer,
 // but it never returns a null pointer, which would cause the program
 // to crash--instead, it returns a default object if no menubar can be
-// read from an xml resource. The public functions are pure to allow
-// implementation flexibility. For instance, an overrider may contain
-// a static variable to cache xml resources for better responsiveness,
-// or it may use a different approach altogether.
+// read from an XRC resource. SOMEDAY !! Should these public functions
+// cache XRC resources in a static variable for better responsiveness?
 
 // OnCreate() and OnClose() are implemented here because it is not
 // anticipated that their essential behavior would differ in client
@@ -95,16 +91,11 @@ class ViewEx
   public:
     ViewEx();
 
-    // TODO ?? Consider making virtuals nonpublic and public functions
-    // nonvirtual.
-    virtual wxIcon Icon() const = 0;
-    virtual wxMenuBar* MenuBar() const = 0;
+    wxIcon     Icon   () const;
+    wxMenuBar* MenuBar() const;
 
   protected:
     virtual ~ViewEx();
-
-    wxIcon IconFromXmlResource(char const*) const;
-    wxMenuBar* MenuBarFromXmlResource(char const*) const;
 
     wxFrame& FrameWindow() const;
 
@@ -119,7 +110,13 @@ class ViewEx
     virtual void OnDraw(wxDC*);
 
   private:
+    // Pure virtuals.
     virtual wxWindow* CreateChildWindow() = 0;
+    virtual char const* icon_xrc_resource   () const = 0;
+    virtual char const* menubar_xrc_resource() const = 0;
+
+    wxIcon     IconFromXmlResource   (char const*) const;
+    wxMenuBar* MenuBarFromXmlResource(char const*) const;
 
     DocManagerEx& DocManager() const;
 
