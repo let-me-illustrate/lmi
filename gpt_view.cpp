@@ -134,7 +134,7 @@ char const* gpt_view::menubar_xrc_resource() const
     return "gpt_view_menu";
 }
 
-/// This virtual function calls its base-class namesake explicitly.
+/// Pop up an input dialog; iff it's not cancelled, create a view.
 ///
 /// Trap exceptions to ensure that this function returns 'false' on
 /// failure, lest wx's doc-view framework create a zombie view. See:
@@ -150,7 +150,7 @@ bool gpt_view::OnCreate(wxDocument* doc, long int flags)
             return has_view_been_created;
             }
 
-        has_view_been_created = ViewEx::OnCreate(doc, flags);
+        has_view_been_created = ViewEx::DoOnCreate(doc, flags);
         if(!has_view_been_created)
             {
             return has_view_been_created;
