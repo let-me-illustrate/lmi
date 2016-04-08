@@ -51,12 +51,13 @@
 // read from an XRC resource. SOMEDAY !! Should these public functions
 // cache XRC resources in a static variable for better responsiveness?
 
-// OnCreate() and OnClose() are implemented here because it is not
-// anticipated that their essential behavior would differ in client
-// classes. Small differences can be factored into pure functions:
-// for instance, OnCreate() calls CreateChildWindow().
+// OnClose() is implemented here because it is not anticipated that
+// its essential behavior would differ in client classes.
 
-// TODO ?? Revise the preceding comment.
+// OnCreate() has a default implementation, in DoOnCreate(), which is
+// suitable for many client classes; others call DoOnCreate() in their
+// implementations. DoOnCreate() calls CreateChildWindow(), which is a
+// pure function because clients create different window types.
 
 // OnDraw() is pure in base class wxView. An (empty) implementation is
 // supplied here because no view class in the application this is
@@ -101,19 +102,18 @@ class ViewEx
 
     std::string base_filename() const;
 
-    // TODO ?? Probably better to provide the implementation in
-    // separate functions that can be called by derived classes.
-    //
-    // wxView overrides.
-    virtual bool OnClose(bool delete_window);
-    virtual bool OnCreate(wxDocument* doc, long int flags);
-    virtual void OnDraw(wxDC*);
+    bool DoOnCreate(wxDocument* doc, long int flags);
 
   private:
     // Pure virtuals.
     virtual wxWindow* CreateChildWindow() = 0;
     virtual char const* icon_xrc_resource   () const = 0;
     virtual char const* menubar_xrc_resource() const = 0;
+
+    // wxView overrides.
+    virtual bool OnClose(bool delete_window);
+    virtual bool OnCreate(wxDocument* doc, long int flags);
+    virtual void OnDraw(wxDC*);
 
     wxIcon     IconFromXmlResource   (char const*) const;
     wxMenuBar* MenuBarFromXmlResource(char const*) const;

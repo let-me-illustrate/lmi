@@ -38870,3 +38870,36 @@ Don't count all children just to see if there are more than one (VZ).
 Remove a superfluous cast (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00057.html
 
+20160407T2310Z <gchicares@sbcglobal.net> [453]
+
+  census_view.cpp
+  census_view.hpp
+  database_view.cpp
+  database_view.hpp
+  gpt_view.cpp
+  gpt_view.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  mec_view.cpp
+  mec_view.hpp
+  policy_view.cpp
+  policy_view.hpp
+  rounding_view.cpp
+  rounding_view.hpp
+  text_view.hpp
+  text_view.cpp
+  tier_view.cpp
+  tier_view.hpp
+  view_ex.cpp
+  view_ex.hpp
+Refactor, eliminating public virtuals.
+
+20160408T0125Z <gchicares@sbcglobal.net> [451]
+
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  view_ex.cpp
+  view_ex.hpp
+Refactor, eliminating protected virtuals.
+

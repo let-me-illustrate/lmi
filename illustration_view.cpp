@@ -158,7 +158,7 @@ char const* IllustrationView::menubar_xrc_resource() const
     return "illustration_view_menu";
 }
 
-/// This virtual function calls its base-class namesake explicitly.
+/// Pop up an input dialog; iff it's not cancelled, create a view.
 ///
 /// Trap exceptions to ensure that this function returns 'false' on
 /// failure, lest wx's doc-view framework create a zombie view. See:
@@ -173,7 +173,7 @@ bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
         if(flags & LMI_WX_CHILD_DOCUMENT)
             {
             is_phony_ = true;
-            has_view_been_created = ViewEx::OnCreate(doc, flags);
+            has_view_been_created = ViewEx::DoOnCreate(doc, flags);
             return has_view_been_created;
             }
 
@@ -182,7 +182,7 @@ bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
             return has_view_been_created;
             }
 
-        has_view_been_created = ViewEx::OnCreate(doc, flags);
+        has_view_been_created = ViewEx::DoOnCreate(doc, flags);
         if(!has_view_been_created)
             {
             return has_view_been_created;
