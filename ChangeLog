@@ -38903,3 +38903,9 @@ Refactor, eliminating public virtuals.
   view_ex.hpp
 Refactor, eliminating protected virtuals.
 
+20160420T0017Z <gchicares@sbcglobal.net> [451]
+
+  ihs_basicval.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: the string "Cust" does not begin with "Custom".
+
