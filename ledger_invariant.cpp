@@ -813,6 +813,12 @@ void LedgerInvariant::Init(BasicValues* b)
     Gender                  = mc_str(b->yare_input_.Gender);
     UWType                  = mc_str(b->yare_input_.GroupUnderwritingType);
 
+    // This could be factored out if it ever needs to be reused.
+    //
+    // DATABASE !! It would make sense to handle it in the product
+    // database if class product_data is rewritten to encompass
+    // variation across axes (as class DBDictionary does).
+    //
     oenum_smoking_or_tobacco smoke_or_tobacco =
         static_cast<oenum_smoking_or_tobacco>
             (static_cast<int>(b->Database_->Query(DB_SmokeOrTobacco))
