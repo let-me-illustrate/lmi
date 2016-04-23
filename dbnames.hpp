@@ -129,7 +129,7 @@ enum e_database_key
         ,DB_AllowNonmedUw
         ,DB_AllowSimpUw
         ,DB_AllowGuarUw
-        ,DB_SmokeOrTobacco       // DATABASE !! Move to '.policy' (cf. product_data::AvName)
+        ,DB_SmokeOrTobacco
         ,DB_AllowPreferredClass
         ,DB_AllowUltraPrefClass
 
