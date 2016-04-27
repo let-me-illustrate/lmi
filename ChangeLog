@@ -38914,3 +38914,23 @@ the lmi epoch: the string "Cust" does not begin with "Custom".
   test_coding_rules.cpp
 Remove an old taboo.
 
+20160423T1509Z <gchicares@sbcglobal.net> [451]
+
+  dbnames.hpp
+  ledger_invariant.cpp
+Improve documentation.
+
+20160427T1228Z <gchicares@sbcglobal.net> [451]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add a database entity for individual selection of specified amount.
+
+20160427T1229Z <gchicares@sbcglobal.net> [451]
+
+  product_data.cpp
+  product_data.hpp
+Add new product-data fields for group quotes.
+
