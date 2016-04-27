@@ -222,6 +222,14 @@ void product_data::ascribe_members()
     ascribe("GrossPremiumFootnote"          , &product_data::GrossPremiumFootnote          );
     ascribe("OutlayFootnote"                , &product_data::OutlayFootnote                );
     ascribe("PolicyYearFootnote"            , &product_data::PolicyYearFootnote            );
+    ascribe("ADDTerseName"                  , &product_data::ADDTerseName                  );
+    ascribe("InsurabilityTerseName"         , &product_data::InsurabilityTerseName         );
+    ascribe("ChildTerseName"                , &product_data::ChildTerseName                );
+    ascribe("SpouseTerseName"               , &product_data::SpouseTerseName               );
+    ascribe("TermTerseName"                 , &product_data::TermTerseName                 );
+    ascribe("WaiverTerseName"               , &product_data::WaiverTerseName               );
+    ascribe("AccelBftRiderTerseName"        , &product_data::AccelBftRiderTerseName        );
+    ascribe("OverloanRiderTerseName"        , &product_data::OverloanRiderTerseName        );
     ascribe("ADDFootnote"                   , &product_data::ADDFootnote                   );
     ascribe("ChildFootnote"                 , &product_data::ChildFootnote                 );
     ascribe("SpouseFootnote"                , &product_data::SpouseFootnote                );
@@ -238,6 +246,12 @@ void product_data::ascribe_members()
     ascribe("GroupQuoteProspectus"          , &product_data::GroupQuoteProspectus          );
     ascribe("GroupQuoteUnderwriter"         , &product_data::GroupQuoteUnderwriter         );
     ascribe("GroupQuoteBrokerDealer"        , &product_data::GroupQuoteBrokerDealer        );
+    ascribe("GroupQuoteRubricMandatory"     , &product_data::GroupQuoteRubricMandatory     );
+    ascribe("GroupQuoteRubricVoluntary"     , &product_data::GroupQuoteRubricVoluntary     );
+    ascribe("GroupQuoteRubricFusion"        , &product_data::GroupQuoteRubricFusion        );
+    ascribe("GroupQuoteFooterMandatory"     , &product_data::GroupQuoteFooterMandatory     );
+    ascribe("GroupQuoteFooterVoluntary"     , &product_data::GroupQuoteFooterVoluntary     );
+    ascribe("GroupQuoteFooterFusion"        , &product_data::GroupQuoteFooterFusion        );
     ascribe("MinimumPremiumFootnote"        , &product_data::MinimumPremiumFootnote        );
     ascribe("PremAllocationFootnote"        , &product_data::PremAllocationFootnote        );
     ascribe("InterestDisclaimer"            , &product_data::InterestDisclaimer            );
@@ -283,6 +297,7 @@ void product_data::ascribe_members()
     ascribe("ImprimaturPresaleComposite"    , &product_data::ImprimaturPresaleComposite    );
     ascribe("ImprimaturInforce"             , &product_data::ImprimaturInforce             );
     ascribe("ImprimaturInforceComposite"    , &product_data::ImprimaturInforceComposite    );
+    ascribe("StateMarketingImprimatur"      , &product_data::StateMarketingImprimatur      );
     ascribe("InforceNonGuaranteedFootnote0" , &product_data::InforceNonGuaranteedFootnote0 );
     ascribe("InforceNonGuaranteedFootnote1" , &product_data::InforceNonGuaranteedFootnote1 );
     ascribe("InforceNonGuaranteedFootnote2" , &product_data::InforceNonGuaranteedFootnote2 );
@@ -491,6 +506,15 @@ void product_data::WritePolFiles()
     z.DboNameReturnOfPremium     = glossed_string("ROP");
     z.MarketingNameFootnote      = glossed_string("Policy form UL32768-NY is marketed as 'UL Supreme'.");
 
+    z.ADDTerseName               = glossed_string("Accident");
+    z.InsurabilityTerseName      = glossed_string("Insurability");
+    z.ChildTerseName             = glossed_string("Child");
+    z.SpouseTerseName            = glossed_string("Spouse");
+    z.TermTerseName              = glossed_string("Term");
+    z.WaiverTerseName            = glossed_string("Waiver");
+    z.AccelBftRiderTerseName     = glossed_string("Acceleration");
+    z.OverloanRiderTerseName     = glossed_string("Overloan");
+
     z.GroupQuoteShortProductName = glossed_string("UL SUPREME®");
     z.GroupQuoteIsNotAnOffer     = glossed_string("This is not an offer of insurance.");
     z.GroupQuoteRidersHeader     = glossed_string("ADB & WP");
@@ -500,6 +524,12 @@ void product_data::WritePolFiles()
     z.GroupQuoteProspectus       = glossed_string("Read the prospectus carefully.");
     z.GroupQuoteUnderwriter      = glossed_string("Securities underwritten by Superior Securities.");
     z.GroupQuoteBrokerDealer     = glossed_string("Securities offered through Superior Brokerage.");
+    z.GroupQuoteRubricMandatory  = glossed_string("Mandatory");
+    z.GroupQuoteRubricVoluntary  = glossed_string("Voluntary");
+    z.GroupQuoteRubricFusion     = glossed_string("Fusion");
+    z.GroupQuoteFooterMandatory  = glossed_string("The employer pays all premiums.");
+    z.GroupQuoteFooterVoluntary  = glossed_string("The employee pays all premiums.");
+    z.GroupQuoteFooterFusion     = glossed_string("The employer and employee pay their respective premiums.");
 
     z.save(AddDataDir("sample.policy"));
 
