@@ -149,6 +149,8 @@ enum e_database_key
         ,DB_AllowStateXX
         ,DB_AllowForeign
 
+        ,DB_GroupIndivSelection
+
         ,DB_Allowable
 
     ,DB_Topic_7702And7702A
