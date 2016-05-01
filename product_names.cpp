@@ -57,7 +57,7 @@ std::vector<std::string> fetch_product_names()
         names.push_back(name);
         }
 
-    if(0 == names.size())
+    if(names.empty())
         {
         fatal_error()
             << "Data directory '"
