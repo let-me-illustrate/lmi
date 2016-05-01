@@ -29,6 +29,7 @@
 #include "mvc_model.hpp"
 
 #include "any_member.hpp"
+#include "ce_skin_name.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 #include "obstruct_slicing.hpp"
@@ -80,6 +81,8 @@ class LMI_SO PreferencesModel
     mce_report_column CalculationSummaryColumn09;
     mce_report_column CalculationSummaryColumn10;
     mce_report_column CalculationSummaryColumn11;
+
+    ce_skin_name      SkinFileName;
 };
 
 /// Specialization of struct template reconstitutor for this Model
@@ -91,6 +94,7 @@ template<> struct reconstitutor<datum_base, PreferencesModel>
     static DesiredType* reconstitute(any_member<PreferencesModel>& m)
         {
         DesiredType* z = 0;
+        z = exact_cast<ce_skin_name     >(m); if(z) return z;
         z = exact_cast<mce_report_column>(m); if(z) return z;
         z = exact_cast<mce_yes_or_no    >(m); if(z) return z;
         return z;

@@ -899,8 +899,21 @@ void Skeleton::UponPreferences(wxCommandEvent&)
     int const rc = controller.ShowModal();
     if(wxID_OK == rc && preferences.IsModified())
         {
+        configurable_settings& z = configurable_settings::instance();
+        std::string const orig_skin_filename = z.skin_filename();
         preferences.Save();
-        configurable_settings::instance().save();
+        z.save();
+        if(z.skin_filename() != orig_skin_filename)
+            {
+            // If the default skin file name has changed, we need to explicitly
+            // re-load the corresponding file, otherwise the old definitions of
+            // the objects defined in it would be still used when they're
+            // needed the next time.
+            wxXmlResource& res = *wxXmlResource::Get();
+            res.Unload(AddDataDir(orig_skin_filename));
+            load_xrc_file_from_data_directory(res, DefaultView().ResourceFileName());
+            }
+
         UpdateViews();
         }
 }
