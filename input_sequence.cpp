@@ -708,7 +708,7 @@ void InputSequence::value()
         case e_keyword:
             {
             current_interval.value_is_keyword = true;
-            if(0 == extra_keywords.size())
+            if(extra_keywords.empty())
                 {
                 diagnostics << "Expected number. ";
                 mark_diagnostic_context();

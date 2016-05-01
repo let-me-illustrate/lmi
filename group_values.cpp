@@ -316,7 +316,7 @@ census_run_result run_census_in_parallel::operator()
             }
         } // End for.
     meter->culminate();
-    if(0 == cell_values.size())
+    if(cell_values.empty())
         {
         // Make sure it's safe to dereference cell_values[0] later.
         fatal_error()
