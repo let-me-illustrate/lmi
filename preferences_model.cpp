@@ -54,6 +54,16 @@ namespace
 // whole issue would vanish.
 
 std::string magic_null_column_name("[none]");
+
+// Check if the given PreferencesModel class member name is one of the
+// calculation summary columns.
+bool is_calculation_summary_column_member(std::string const& member)
+{
+    static char const* summary_column_prefix = "CalculationSummaryColumn";
+    static std::size_t summary_column_prefix_len = strlen(summary_column_prefix);
+
+    return member.compare(0, summary_column_prefix_len, summary_column_prefix) == 0;
+}
 }
 
 PreferencesModel::PreferencesModel()
@@ -216,11 +226,14 @@ void PreferencesModel::Load()
     bool b = z.use_builtin_calculation_summary();
     UseBuiltinCalculationSummary = b ? "Yes" : "No";
 
-    // TODO ?? CALCULATION_SUMMARY '-1 +' is a poor way of ignoring
-    // 'UseBuiltinCalculationSummary'.
-    for(std::size_t i = 0; i < -1 + member_names().size(); ++i)
+    for(std::size_t i = 0; i < member_names().size(); ++i)
         {
         std::string const& name = member_names()[i];
+
+        if(!is_calculation_summary_column_member(name))
+            {
+            continue;
+            }
         if(columns.size() <= i)
             {
             operator[](name) = magic_null_column_name;
@@ -238,8 +251,7 @@ std::string PreferencesModel::string_of_column_names() const
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
-        // TODO ?? CALCULATION_SUMMARY This is poor.
-        if("UseBuiltinCalculationSummary" == *i)
+        if(!is_calculation_summary_column_member(*i))
             {
             continue;
             }
