@@ -188,6 +188,7 @@ common_common_objects := \
   alert.o \
   calendar_date.o \
   ce_product_name.o \
+  ce_skin_name.o \
   configurable_settings.o \
   crc32.o \
   custom_io_0.o \

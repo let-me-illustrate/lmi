@@ -320,6 +320,7 @@ liblmi_common_sources = \
     alert.cpp \
     calendar_date.cpp \
     ce_product_name.cpp \
+    ce_skin_name.cpp \
     configurable_settings.cpp \
     crc32.cpp \
     custom_io_0.cpp \
@@ -1101,6 +1102,7 @@ noinst_HEADERS = \
     callback.hpp \
     catch_exceptions.hpp \
     ce_product_name.hpp \
+    ce_skin_name.hpp \
     census_document.hpp \
     census_view.hpp \
     comma_punct.hpp \

@@ -90,6 +90,8 @@ void PreferencesModel::AscribeMembers()
     ascribe("CalculationSummaryColumn09"  , &PreferencesModel::CalculationSummaryColumn09);
     ascribe("CalculationSummaryColumn10"  , &PreferencesModel::CalculationSummaryColumn10);
     ascribe("CalculationSummaryColumn11"  , &PreferencesModel::CalculationSummaryColumn11);
+
+    ascribe("SkinFileName"                , &PreferencesModel::SkinFileName);
 }
 
 void PreferencesModel::DoAdaptExternalities()
@@ -241,6 +243,8 @@ void PreferencesModel::Load()
             operator[](name) = columns[i];
             }
         }
+
+    SkinFileName = z.skin_filename();
 }
 
 std::string PreferencesModel::string_of_column_names() const
@@ -275,5 +279,6 @@ void PreferencesModel::Save() const
     configurable_settings& z = configurable_settings::instance();
     z.calculation_summary_columns(s);
     z.use_builtin_calculation_summary("Yes" == UseBuiltinCalculationSummary);
+    z.skin_filename(SkinFileName.value());
 }
 
