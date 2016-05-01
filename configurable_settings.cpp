@@ -422,6 +422,11 @@ int configurable_settings::seconds_to_pause_between_printouts() const
 
 /// Name of '.xrc' interface skin.
 
+void configurable_settings::skin_filename(std::string const& skin_filename)
+{
+    skin_filename_ = skin_filename;
+}
+
 std::string const& configurable_settings::skin_filename() const
 {
     return skin_filename_;
