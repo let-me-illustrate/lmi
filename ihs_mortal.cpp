@@ -217,7 +217,7 @@ void MortalityRates::SetOtherRates()
     // TODO ?? TAXATION !! Do this only if DB_Irc7702NspWhence is 2
     // (which should be an enum). This probably should have its own
     // rounding rule.
-    LMI_ASSERT(0 == CvatNspRates_.size());
+    LMI_ASSERT(CvatNspRates_.empty());
     for(int j = 0; j < Length_; ++j)
         {
         LMI_ASSERT(0.0 < CvatCorridorFactors_[j]);
