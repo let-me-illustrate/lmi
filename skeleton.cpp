@@ -106,6 +106,26 @@
 #include <stdexcept>
 #include <string>
 
+namespace
+{
+// Load the XRC file with the given base name from the data directory and call
+// fatal_error() if loading it failed.
+void load_xrc_file_from_data_directory
+    (wxXmlResource& xml_resources
+    ,char const* xrc_filename
+    )
+{
+#if wxCHECK_VERSION(2,9,0)
+    if(!xml_resources.LoadFile(wxFileName(AddDataDir(xrc_filename))))
+#else  // !wxCHECK_VERSION(2,9,0)
+    if(!xml_resources.Load(AddDataDir(xrc_filename)))
+#endif // !wxCHECK_VERSION(2,9,0)
+        {
+        fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
+        }
+}
+} // Unnamed namespace.
+
 // Where a builtin wxID_X identifier exists, use it as such, even if
 // it's used as the 'name=' attribute of an entity in an '.xrc' file.
 // For example, write 'wxID_SAVE' here, not 'XRCID("wxID_SAVE")'.
@@ -688,81 +708,14 @@ bool Skeleton::OnInit()
         xml_resources.AddHandler(new(wx) RoundingButtonsXmlHandler);
         xml_resources.AddHandler(new(wx) InputSequenceEntryXmlHandler);
 
-        DefaultView const v0;
-#if wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.LoadFile(wxFileName(AddDataDir(v0.ResourceFileName()))))
-#else  // !wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.Load(AddDataDir(v0.ResourceFileName())))
-#endif // !wxCHECK_VERSION(2,9,0)
-            {
-            fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
-            }
-
-        PreferencesView const v1;
-#if wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.LoadFile(wxFileName(AddDataDir(v1.ResourceFileName()))))
-#else  // !wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.Load(AddDataDir(v1.ResourceFileName())))
-#endif // !wxCHECK_VERSION(2,9,0)
-            {
-            fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
-            }
-
-        mec_mvc_view const v2;
-#if wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.LoadFile(wxFileName(AddDataDir(v2.ResourceFileName()))))
-#else  // !wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.Load(AddDataDir(v2.ResourceFileName())))
-#endif // !wxCHECK_VERSION(2,9,0)
-            {
-            fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
-            }
-
-        gpt_mvc_view const v3;
-#if wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.LoadFile(wxFileName(AddDataDir(v3.ResourceFileName()))))
-#else  // !wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.Load(AddDataDir(v3.ResourceFileName())))
-#endif // !wxCHECK_VERSION(2,9,0)
-            {
-            fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
-            }
-
-#if wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.LoadFile(wxFileName(AddDataDir("menus.xrc"))))
-#else  // !wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.Load(AddDataDir("menus.xrc")))
-#endif // !wxCHECK_VERSION(2,9,0)
-            {
-            fatal_error() << "Unable to load menubar." << LMI_FLUSH;
-            }
-
-#if wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.LoadFile(wxFileName(AddDataDir("toolbar.xrc"))))
-#else  // !wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.Load(AddDataDir("toolbar.xrc")))
-#endif // !wxCHECK_VERSION(2,9,0)
-            {
-            fatal_error() << "Unable to load toolbar." << LMI_FLUSH;
-            }
-
-#if wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.LoadFile(wxFileName(AddDataDir(PolicyView::resource_file_name()))))
-#else  // !wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.Load(AddDataDir(PolicyView::resource_file_name())))
-#endif // !wxCHECK_VERSION(2,9,0)
-            {
-            fatal_error() << "Unable to load Policy resources." << LMI_FLUSH;
-            }
-
-#if wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.LoadFile(wxFileName(AddDataDir(RoundingView::resource_file_name()))))
-#else  // !wxCHECK_VERSION(2,9,0)
-        if(!xml_resources.Load(AddDataDir(RoundingView::resource_file_name())))
-#endif // !wxCHECK_VERSION(2,9,0)
-            {
-            fatal_error() << "Unable to load Rounding resources." << LMI_FLUSH;
-            }
+        load_xrc_file_from_data_directory(xml_resources, DefaultView().ResourceFileName());
+        load_xrc_file_from_data_directory(xml_resources, PreferencesView().ResourceFileName());
+        load_xrc_file_from_data_directory(xml_resources, mec_mvc_view().ResourceFileName());
+        load_xrc_file_from_data_directory(xml_resources, gpt_mvc_view().ResourceFileName());
+        load_xrc_file_from_data_directory(xml_resources, "menus.xrc");
+        load_xrc_file_from_data_directory(xml_resources, "toolbar.xrc");
+        load_xrc_file_from_data_directory(xml_resources, PolicyView::resource_file_name());
+        load_xrc_file_from_data_directory(xml_resources, RoundingView::resource_file_name());
 
         InitDocManager();
 
