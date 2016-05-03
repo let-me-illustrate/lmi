@@ -974,6 +974,9 @@ void AccountValue::InitializeSpecAmt()
     // (at a modal frequency chosen by the employer) necessary to
     // prevent lapse if no other premium is paid.
     //
+    // Some products apportion them explicitly between ee and er. For
+    // those that don't, convention deems the er to pay it all.
+    //
     // Most other yearly values are posted to InvariantValues() in
     // FinalizeYear(), but it seems clearer to post these here where
     // they're calculated along with 'MlyNoLapsePrem'.
@@ -984,6 +987,9 @@ void AccountValue::InitializeSpecAmt()
             ,InvariantValues().ErMode[Year].value()
             ,InvariantValues().SpecAmt[Year]
             );
+        InvariantValues().ErModalMinimumPremium[Year] =
+            InvariantValues().ModalMinimumPremium[Year]
+            ;
         }
     else
         {
