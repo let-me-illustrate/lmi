@@ -38963,3 +38963,9 @@ Refactor to ease maintenance.
   ledger_xml_io.cpp
 Change group-quote columns.
 
+20160504T2004Z <gchicares@sbcglobal.net> [451]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Post recently-added product data to ledger.
+
