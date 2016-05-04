@@ -446,6 +446,8 @@ enum enum_group_quote_columns
     ,e_col_max
     };
 
+enum_group_quote_columns const e_first_totalled_column = e_col_face_amount;
+
 struct column_definition
 {
     char const* header_;
@@ -566,7 +568,7 @@ class group_quote_pdf_generator_wx
       public:
         totals_data()
             {
-            for(int col = e_col_face_amount; col < e_col_max; ++col)
+            for(int col = e_first_totalled_column; col < e_col_max; ++col)
                 {
                 value(col) = 0.0;
                 }
@@ -583,9 +585,9 @@ class group_quote_pdf_generator_wx
             }
 
       private:
-        double& value(int col) { return values_[col - e_col_face_amount]; }
+        double& value(int col) { return values_[col - e_first_totalled_column]; }
 
-        double values_[e_col_max - e_col_face_amount];
+        double values_[e_col_max - e_first_totalled_column];
     };
     totals_data totals_;
 
@@ -1215,8 +1217,8 @@ void group_quote_pdf_generator_wx::output_table_totals
 {
     int& y = *pos_y;
 
-    table_gen.output_horz_separator(e_col_face_amount, e_col_max, y);
-    table_gen.output_vert_separator(e_col_face_amount, y);
+    table_gen.output_horz_separator(e_first_totalled_column, e_col_max, y);
+    table_gen.output_vert_separator(e_first_totalled_column, y);
     table_gen.output_vert_separator(e_col_max, y);
 
     y += table_gen.row_height();
@@ -1239,13 +1241,14 @@ void group_quote_pdf_generator_wx::output_table_totals
     // one just above anyhow.
     pdf_dc.SetFont(pdf_dc.GetFont().Italic());
 
+    LMI_ASSERT(0 < e_first_totalled_column);
     pdf_dc.DrawLabel
         ("Totals:"
-        ,table_gen.cell_rect(e_col_salary, y_text).Deflate(cell_margin_x, 0)
+        ,table_gen.cell_rect(e_first_totalled_column - 1, y_text).Deflate(cell_margin_x, 0)
         ,wxALIGN_RIGHT
         );
 
-    for(int col = e_col_face_amount; col < e_col_max; ++col)
+    for(int col = e_first_totalled_column; col < e_col_max; ++col)
         {
         int const num_dec =
             ((e_col_face_amount                 == col) ? 0
