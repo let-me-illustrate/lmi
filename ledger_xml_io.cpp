@@ -103,10 +103,6 @@ bool unavailable(std::string const& s)
         {"DateOfBirthJdn"        // used by group quotes
         ,"EffDateJdn"            // used by group quotes
         ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
-        ,"InitModalPrem00"       // group quotes only
-        ,"InitModalPrem01"       // group quotes only
-        ,"InitModalPrem10"       // group quotes only
-        ,"InitModalPrem11"       // group quotes only
         ,"InitPremTaxRate"       // used by PrintRosterTabDelimited(); not cents
         ,"SubstdTable"           // probably not needed
         ,"InitMlyPolFee"         // used by PrintRosterTabDelimited()
