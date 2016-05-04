@@ -159,6 +159,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["Age"                   ] = &Age                    ;
     OtherScalars    ["RetAge"                ] = &RetAge                 ;
     OtherScalars    ["EndtAge"               ] = &EndtAge                ;
+    OtherScalars    ["GroupIndivSelection"   ] = &GroupIndivSelection    ;
     OtherScalars    ["UseExperienceRating"   ] = &UseExperienceRating    ;
     OtherScalars    ["UsePartialMort"        ] = &UsePartialMort         ;
     OtherScalars    ["AvgFund"               ] = &AvgFund                ;
@@ -222,6 +223,15 @@ void LedgerInvariant::Alloc(int len)
     Strings["OutlayFootnote"                ] = &OutlayFootnote                ;
     Strings["PolicyYearFootnote"            ] = &PolicyYearFootnote            ;
 
+    Strings["ADDTerseName"                  ] = &ADDTerseName                  ;
+    Strings["InsurabilityTerseName"         ] = &InsurabilityTerseName         ;
+    Strings["ChildTerseName"                ] = &ChildTerseName                ;
+    Strings["SpouseTerseName"               ] = &SpouseTerseName               ;
+    Strings["TermTerseName"                 ] = &TermTerseName                 ;
+    Strings["WaiverTerseName"               ] = &WaiverTerseName               ;
+    Strings["AccelBftRiderTerseName"        ] = &AccelBftRiderTerseName        ;
+    Strings["OverloanRiderTerseName"        ] = &OverloanRiderTerseName        ;
+
     Strings["ADDFootnote"                   ] = &ADDFootnote                   ;
     Strings["ChildFootnote"                 ] = &ChildFootnote                 ;
     Strings["SpouseFootnote"                ] = &SpouseFootnote                ;
@@ -239,6 +249,12 @@ void LedgerInvariant::Alloc(int len)
     Strings["GroupQuoteProspectus"          ] = &GroupQuoteProspectus          ;
     Strings["GroupQuoteUnderwriter"         ] = &GroupQuoteUnderwriter         ;
     Strings["GroupQuoteBrokerDealer"        ] = &GroupQuoteBrokerDealer        ;
+    Strings["GroupQuoteRubricMandatory"     ] = &GroupQuoteRubricMandatory     ;
+    Strings["GroupQuoteRubricVoluntary"     ] = &GroupQuoteRubricVoluntary     ;
+    Strings["GroupQuoteRubricFusion"        ] = &GroupQuoteRubricFusion        ;
+    Strings["GroupQuoteFooterMandatory"     ] = &GroupQuoteFooterMandatory     ;
+    Strings["GroupQuoteFooterVoluntary"     ] = &GroupQuoteFooterVoluntary     ;
+    Strings["GroupQuoteFooterFusion"        ] = &GroupQuoteFooterFusion        ;
 
     Strings["MinimumPremiumFootnote"        ] = &MinimumPremiumFootnote        ;
     Strings["PremAllocationFootnote"        ] = &PremAllocationFootnote        ;
@@ -285,6 +301,7 @@ void LedgerInvariant::Alloc(int len)
     Strings["ImprimaturPresaleComposite"    ] = &ImprimaturPresaleComposite    ;
     Strings["ImprimaturInforce"             ] = &ImprimaturInforce             ;
     Strings["ImprimaturInforceComposite"    ] = &ImprimaturInforceComposite    ;
+    Strings["StateMarketingImprimatur"      ] = &StateMarketingImprimatur      ;
     Strings["InforceNonGuaranteedFootnote0" ] = &InforceNonGuaranteedFootnote0 ;
     Strings["InforceNonGuaranteedFootnote1" ] = &InforceNonGuaranteedFootnote1 ;
     Strings["InforceNonGuaranteedFootnote2" ] = &InforceNonGuaranteedFootnote2 ;
@@ -639,6 +656,7 @@ void LedgerInvariant::Init(BasicValues* b)
     Age                     = b->yare_input_.IssueAge;
     RetAge                  = b->yare_input_.RetirementAge;
     EndtAge                 = b->yare_input_.IssueAge + b->GetLength();
+    GroupIndivSelection     = b->Database_->Query(DB_GroupIndivSelection);
     UseExperienceRating     = b->yare_input_.UseExperienceRating;
     UsePartialMort          = b->yare_input_.UsePartialMortality;
     AvgFund                 = b->yare_input_.UseAverageOfAllFunds;
@@ -702,6 +720,15 @@ void LedgerInvariant::Init(BasicValues* b)
         OutlayFootnote                 = p.datum("OutlayFootnote"                 );
         PolicyYearFootnote             = p.datum("PolicyYearFootnote"             );
 
+        ADDTerseName                   = p.datum("ADDTerseName"                   );
+        InsurabilityTerseName          = p.datum("InsurabilityTerseName"          );
+        ChildTerseName                 = p.datum("ChildTerseName"                 );
+        SpouseTerseName                = p.datum("SpouseTerseName"                );
+        TermTerseName                  = p.datum("TermTerseName"                  );
+        WaiverTerseName                = p.datum("WaiverTerseName"                );
+        AccelBftRiderTerseName         = p.datum("AccelBftRiderTerseName"         );
+        OverloanRiderTerseName         = p.datum("OverloanRiderTerseName"         );
+
         ADDFootnote                    = p.datum("ADDFootnote"                    );
         ChildFootnote                  = p.datum("ChildFootnote"                  );
         SpouseFootnote                 = p.datum("SpouseFootnote"                 );
@@ -719,6 +746,12 @@ void LedgerInvariant::Init(BasicValues* b)
         GroupQuoteProspectus           = p.datum("GroupQuoteProspectus"           );
         GroupQuoteUnderwriter          = p.datum("GroupQuoteUnderwriter"          );
         GroupQuoteBrokerDealer         = p.datum("GroupQuoteBrokerDealer"         );
+        GroupQuoteRubricMandatory      = p.datum("GroupQuoteRubricMandatory"      );
+        GroupQuoteRubricVoluntary      = p.datum("GroupQuoteRubricVoluntary"      );
+        GroupQuoteRubricFusion         = p.datum("GroupQuoteRubricFusion"         );
+        GroupQuoteFooterMandatory      = p.datum("GroupQuoteFooterMandatory"      );
+        GroupQuoteFooterVoluntary      = p.datum("GroupQuoteFooterVoluntary"      );
+        GroupQuoteFooterFusion         = p.datum("GroupQuoteFooterFusion"         );
 
         MinimumPremiumFootnote         = p.datum("MinimumPremiumFootnote"         );
         PremAllocationFootnote         = p.datum("PremAllocationFootnote"         );
@@ -766,6 +799,7 @@ void LedgerInvariant::Init(BasicValues* b)
         ImprimaturPresaleComposite     = p.datum("ImprimaturPresaleComposite"     );
         ImprimaturInforce              = p.datum("ImprimaturInforce"              );
         ImprimaturInforceComposite     = p.datum("ImprimaturInforceComposite"     );
+        StateMarketingImprimatur       = p.datum("StateMarketingImprimatur"       );
         InforceNonGuaranteedFootnote0  = p.datum("InforceNonGuaranteedFootnote0"  );
         InforceNonGuaranteedFootnote1  = p.datum("InforceNonGuaranteedFootnote1"  );
         InforceNonGuaranteedFootnote2  = p.datum("InforceNonGuaranteedFootnote2"  );
@@ -1037,6 +1071,15 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     OutlayFootnote                = a_Addend.OutlayFootnote;
     PolicyYearFootnote            = a_Addend.PolicyYearFootnote;
 
+    ADDTerseName                  = a_Addend.ADDTerseName;
+    InsurabilityTerseName         = a_Addend.InsurabilityTerseName;
+    ChildTerseName                = a_Addend.ChildTerseName;
+    SpouseTerseName               = a_Addend.SpouseTerseName;
+    TermTerseName                 = a_Addend.TermTerseName;
+    WaiverTerseName               = a_Addend.WaiverTerseName;
+    AccelBftRiderTerseName        = a_Addend.AccelBftRiderTerseName;
+    OverloanRiderTerseName        = a_Addend.OverloanRiderTerseName;
+
     ADDFootnote                   = a_Addend.ADDFootnote;
     ChildFootnote                 = a_Addend.ChildFootnote;
     SpouseFootnote                = a_Addend.SpouseFootnote;
@@ -1054,6 +1097,12 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     GroupQuoteProspectus          = a_Addend.GroupQuoteProspectus      ;
     GroupQuoteUnderwriter         = a_Addend.GroupQuoteUnderwriter     ;
     GroupQuoteBrokerDealer        = a_Addend.GroupQuoteBrokerDealer    ;
+    GroupQuoteRubricMandatory     = a_Addend.GroupQuoteRubricMandatory ;
+    GroupQuoteRubricVoluntary     = a_Addend.GroupQuoteRubricVoluntary ;
+    GroupQuoteRubricFusion        = a_Addend.GroupQuoteRubricFusion    ;
+    GroupQuoteFooterMandatory     = a_Addend.GroupQuoteFooterMandatory ;
+    GroupQuoteFooterVoluntary     = a_Addend.GroupQuoteFooterVoluntary ;
+    GroupQuoteFooterFusion        = a_Addend.GroupQuoteFooterFusion    ;
 
     MinimumPremiumFootnote        = a_Addend.MinimumPremiumFootnote;
     PremAllocationFootnote        = a_Addend.PremAllocationFootnote;
@@ -1101,6 +1150,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     ImprimaturPresaleComposite    = a_Addend.ImprimaturPresaleComposite;
     ImprimaturInforce             = a_Addend.ImprimaturInforce;
     ImprimaturInforceComposite    = a_Addend.ImprimaturInforceComposite;
+    StateMarketingImprimatur      = a_Addend.StateMarketingImprimatur;
     InforceNonGuaranteedFootnote0 = a_Addend.InforceNonGuaranteedFootnote0;
     InforceNonGuaranteedFootnote1 = a_Addend.InforceNonGuaranteedFootnote1;
     InforceNonGuaranteedFootnote2 = a_Addend.InforceNonGuaranteedFootnote2;
@@ -1122,6 +1172,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     StatePostalAbbrev             = a_Addend.StatePostalAbbrev;
     PremiumTaxState               = a_Addend.PremiumTaxState;
     InitAnnLoanDueRate            = a_Addend.InitAnnLoanDueRate;
+    GroupIndivSelection           = GroupIndivSelection   || a_Addend.GroupIndivSelection;
     UseExperienceRating           = a_Addend.UseExperienceRating;
     UsePartialMort                = a_Addend.UsePartialMort;
     PartMortTableName             = a_Addend.PartMortTableName;

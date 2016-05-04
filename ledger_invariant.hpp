@@ -173,6 +173,7 @@ class LMI_SO LedgerInvariant
     double          Age;
     double          RetAge;
     double          EndtAge;
+    double          GroupIndivSelection;
     double          UseExperienceRating;
     double          UsePartialMort;
     double          AvgFund;
@@ -241,6 +242,16 @@ class LMI_SO LedgerInvariant
     std::string     OutlayFootnote;
     std::string     PolicyYearFootnote;
 
+    // Terse rider names.
+    std::string     ADDTerseName;
+    std::string     InsurabilityTerseName;
+    std::string     ChildTerseName;
+    std::string     SpouseTerseName;
+    std::string     TermTerseName;
+    std::string     WaiverTerseName;
+    std::string     AccelBftRiderTerseName;
+    std::string     OverloanRiderTerseName;
+
     // Rider footnotes.
     std::string     ADDFootnote;
     std::string     ChildFootnote;
@@ -260,6 +271,12 @@ class LMI_SO LedgerInvariant
     std::string     GroupQuoteProspectus      ;
     std::string     GroupQuoteUnderwriter     ;
     std::string     GroupQuoteBrokerDealer    ;
+    std::string     GroupQuoteRubricMandatory ;
+    std::string     GroupQuoteRubricVoluntary ;
+    std::string     GroupQuoteRubricFusion    ;
+    std::string     GroupQuoteFooterMandatory ;
+    std::string     GroupQuoteFooterVoluntary ;
+    std::string     GroupQuoteFooterFusion    ;
 
     // Premium-specific footnotes.
     std::string     MinimumPremiumFootnote;
@@ -309,6 +326,7 @@ class LMI_SO LedgerInvariant
     std::string     ImprimaturPresaleComposite;
     std::string     ImprimaturInforce;
     std::string     ImprimaturInforceComposite;
+    std::string     StateMarketingImprimatur;
     std::string     InforceNonGuaranteedFootnote0;
     std::string     InforceNonGuaranteedFootnote1;
     std::string     InforceNonGuaranteedFootnote2;
