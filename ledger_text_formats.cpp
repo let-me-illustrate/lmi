@@ -730,8 +730,10 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"SpecifiedAmount"
         ,"SupplSpecAmt"
         ,"ModalMinimumPremium"
+        ,"InitMinDumpin"
         ,"EeModalMinimumPremium"
         ,"ErModalMinimumPremium"
+        ,"EeMode"
         ,"ErMode"
         ,"CorpName"
         ,"EffDate"
@@ -750,6 +752,7 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"TermRider"
         ,"ChildRider"
         ,"SpouseRider"
+        ,"SpouseRiderAmount"
         };
 
     std::vector<std::string> const sheaders
@@ -810,8 +813,10 @@ void PrintRosterTabDelimited
         << Invar.value_str("SpecAmt"              ,d) << '\t'
         << Invar.value_str("TermSpecAmt"          ,d) << '\t'
         << Invar.value_str("ModalMinimumPremium"  ,d) << '\t'
+        << Invar.value_str("InitMinDumpin"          ) << '\t'
         << Invar.value_str("EeModalMinimumPremium",d) << '\t'
         << Invar.value_str("ErModalMinimumPremium",d) << '\t'
+        << Invar.EeMode                           [d] << '\t'
         << Invar.ErMode                           [d] << '\t'
         << Invar.value_str("CorpName"               ) << '\t'
         << "'" << Invar.EffDate                       << "'\t"
@@ -830,6 +835,7 @@ void PrintRosterTabDelimited
         << Invar.value_str("HasTerm"                ) << '\t'
         << Invar.value_str("HasChildRider"          ) << '\t'
         << Invar.value_str("HasSpouseRider"         ) << '\t'
+        << Invar.value_str("SpouseRiderAmount"      ) << '\t'
         << '\n'
         ;
 
