@@ -38934,3 +38934,32 @@ Add a database entity for individual selection of specified amount.
   product_data.hpp
 Add new product-data fields for group quotes.
 
+20160503T2246Z <gchicares@sbcglobal.net> [451]
+
+  ihs_acctval.cpp
+Treat 'ModalMinimumPremium' as paid by er where not paid by ee.
+
+20160504T1050Z <gchicares@sbcglobal.net> [451]
+
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+Add required dumpin and various other data to group roster.
+
+20160504T1448Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor to ease maintenance.
+
+20160504T1459Z <gchicares@sbcglobal.net> [451]
+
+  account_value.hpp
+  group_quote_pdf_gen_wx.cpp
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+Change group-quote columns.
+
