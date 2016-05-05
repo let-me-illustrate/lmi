@@ -695,14 +695,6 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
 
-    // Initialize 'report_data_' the first time this function is
-    // called: i.e., iff its 'contract_state_' field is empty, because
-    // the state postal abbreviation in a ledger can never be empty.
-    if(report_data_.contract_state_.empty())
-        {
-        report_data_.fill_global_report_data(ledger);
-        }
-
     int const year = 0;
 
     std::pair<int, oenum_format_style> const f0(0, oe_format_normal);
@@ -813,9 +805,17 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             }
         }
 
-    // The last, composite, ledger is only used for the totals, it shouldn't be
-    // shown in the main table nor counted as a row.
-    if(!is_composite)
+    // The composite ledger arrives last. It is used only for global
+    // data (which have already been asserted, upstream, not to vary
+    // by cell) and for totals. It is neither shown in the main table
+    // nor counted as a row. Only at this point, after all the other
+    // ledgers have been seen, can all-zero columns (and corresponding
+    // total columns) be suppressed.
+    if(is_composite)
+        {
+        report_data_.fill_global_report_data(ledger);
+        }
+    else
         {
         rows_.push_back(rd);
         row_num_++;
