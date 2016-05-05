@@ -38979,3 +38979,8 @@ Enforce rider consistency.
   group_quote_pdf_gen_wx.cpp
 Refactor to increase flexibility.
 
+20160505T1439Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Deduce plan type.
+
