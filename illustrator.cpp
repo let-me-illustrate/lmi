@@ -280,6 +280,9 @@ void assert_okay_to_run_group_quote
     //
     // The "ProductName" field uniquely determines all ledger values
     // taken from class product_data, so it maps onto them.
+    //
+    // Term rider is permitted to vary because its amount is shown in
+    // a column.
     static char const*const fields[] =
         {"ProductName"
         ,"CorporationName"
@@ -289,6 +292,12 @@ void assert_okay_to_run_group_quote
         ,"EffectiveDate"
         ,"InforceAsOfDate"
         ,"Comments"
+        ,"WaiverOfPremiumBenefit"
+        ,"AccidentalDeathBenefit"
+        ,"ChildRider"
+        ,"ChildRiderAmount"
+        ,"SpouseRider"
+        ,"SpouseRiderAmount"
         };
     static std::size_t const n = lmi_array_size(fields);
 
