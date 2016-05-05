@@ -38969,3 +38969,13 @@ Change group-quote columns.
   ledger_invariant.hpp
 Post recently-added product data to ledger.
 
+20160505T1119Z <gchicares@sbcglobal.net> [451]
+
+  illustrator.cpp
+Enforce rider consistency.
+
+20160505T1120Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor to increase flexibility.
+
