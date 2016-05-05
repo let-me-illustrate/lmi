@@ -553,6 +553,9 @@ class group_quote_pdf_generator_wx
         std::string effective_date_;
         std::string footer_;
 
+        // Dynamically-determined fields.
+        std::string plan_type_footnote_;
+
         // Optional supplementary fields.
         std::vector<extra_summary_field> extra_fields_;
         };
@@ -611,10 +614,15 @@ class group_quote_pdf_generator_wx
     page_metrics page_;
 
     int row_num_;
+
+    bool has_suppl_specamt_;
+
+    std::string plan_type_;
 };
 
 group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
     :row_num_(0)
+    ,has_suppl_specamt_(false)
 {
 }
 
@@ -652,6 +660,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     footer_ =
           brbr (invar.GroupQuoteIsNotAnOffer)
         + brbr (invar.GroupQuoteRidersFooter)
+        + brbr (plan_type_footnote_)
         + brbr (invar.GroupQuotePolicyFormId)
         + brbr (invar.GroupQuoteStateVariations)
         + brbr (invar.MarketingNameFootnote)
@@ -671,6 +680,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
 
     assert_nonblank(invar.GroupQuoteIsNotAnOffer   , "First footnote");
     assert_nonblank(invar.GroupQuoteRidersFooter   , "Second footnote");
+    // treat plan_type_footnote_ similarly, soon
     assert_nonblank(invar.GroupQuotePolicyFormId   , "Third footnote");
     assert_nonblank(invar.GroupQuoteStateVariations, "Fourth footnote");
     assert_nonblank(invar.MarketingNameFootnote    , "Fifth footnote");
@@ -756,6 +766,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_supplemental_face_amount:
                 {
                 double const z = invar.TermSpecAmt.at(year);
+                has_suppl_specamt_ = has_suppl_specamt_ || 0.0 != z;
                 rd.values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
@@ -813,6 +824,16 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     // total columns) be suppressed.
     if(is_composite)
         {
+        plan_type_ =
+            (invar.GroupIndivSelection ? invar.GroupQuoteRubricVoluntary
+            :has_suppl_specamt_        ? invar.GroupQuoteRubricFusion
+            :                            invar.GroupQuoteRubricMandatory
+            );
+        report_data_.plan_type_footnote_ =
+            (invar.GroupIndivSelection ? invar.GroupQuoteFooterVoluntary
+            :has_suppl_specamt_        ? invar.GroupQuoteFooterFusion
+            :                            invar.GroupQuoteFooterMandatory
+            );
         report_data_.fill_global_report_data(ledger);
         }
     else
@@ -1165,8 +1186,12 @@ void group_quote_pdf_generator_wx::output_document_header
         );
     }
 
-    // Then add any additional fields in left-to-right then top-to-bottom order.
-    std::vector<extra_summary_field> const& fields = report_data_.extra_fields_;
+    // Add a "plan type" field, then any additional fields,
+    // in left-to-right then top-to-bottom order.
+    std::vector<extra_summary_field> fields;
+    fields.push_back(extra_summary_field({"Plan Type", plan_type_}));
+    std::vector<extra_summary_field> const& f = report_data_.extra_fields_;
+    fields.insert(fields.end(), f.begin(), f.end());
 
     typedef std::vector<extra_summary_field>::const_iterator esfci;
     for(esfci i = fields.begin(); i != fields.end();)
