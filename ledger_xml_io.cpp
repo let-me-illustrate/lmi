@@ -108,10 +108,6 @@ bool unavailable(std::string const& s)
         {"DateOfBirthJdn"        // used by group quotes
         ,"EffDateJdn"            // used by group quotes
         ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
-        ,"InitModalPrem00"       // group quotes only
-        ,"InitModalPrem01"       // group quotes only
-        ,"InitModalPrem10"       // group quotes only
-        ,"InitModalPrem11"       // group quotes only
         ,"InitPremTaxRate"       // used by PrintRosterTabDelimited(); not cents
         ,"SubstdTable"           // probably not needed
         ,"InitMlyPolFee"         // used by PrintRosterTabDelimited()
@@ -368,6 +364,7 @@ void Ledger::write(xml::element& x) const
     format_map["InitSevenPayPrem"                  ] = f2;
     format_map["InitTgtPrem"                       ] = f2;
     format_map["InitMinPrem"                       ] = f2;
+    format_map["InitMinDumpin"                     ] = f2;
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,###)

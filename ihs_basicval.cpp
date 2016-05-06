@@ -58,7 +58,6 @@
 
 #include <algorithm>
 #include <cmath>                        // std::pow()
-#include <cstring>                      // std::strlen(), std::strncmp()
 #include <limits>
 #include <numeric>
 #include <stdexcept>
@@ -374,13 +373,7 @@ double BasicValues::InvestmentManagementFee() const
         // arithmetic mean is more reasonable than zero.
         if(yare_input_.UseAverageOfAllFunds || 0.0 == premium_allocation_to_sepacct(yare_input_))
             {
-            char const s[] = "Custom";
-            std::size_t n = std::strlen(s);
-            bool ignore = 0 == std::strncmp
-                (s
-                ,Funds.GetFundInfo(j).ShortName().c_str()
-                ,n
-                );
+            bool ignore = 0 == Funds.GetFundInfo(j).ShortName().find("custom");
             weight = ignore ? 0.0 : 1.0;
             }
         // If fund mgmt fee not overridden by average of all funds,

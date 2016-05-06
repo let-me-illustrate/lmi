@@ -974,6 +974,9 @@ void AccountValue::InitializeSpecAmt()
     // (at a modal frequency chosen by the employer) necessary to
     // prevent lapse if no other premium is paid.
     //
+    // Some products apportion them explicitly between ee and er. For
+    // those that don't, convention deems the er to pay it all.
+    //
     // Most other yearly values are posted to InvariantValues() in
     // FinalizeYear(), but it seems clearer to post these here where
     // they're calculated along with 'MlyNoLapsePrem'.
@@ -984,6 +987,9 @@ void AccountValue::InitializeSpecAmt()
             ,InvariantValues().ErMode[Year].value()
             ,InvariantValues().SpecAmt[Year]
             );
+        InvariantValues().ErModalMinimumPremium[Year] =
+            InvariantValues().ModalMinimumPremium[Year]
+            ;
         }
     else
         {
@@ -1036,26 +1042,10 @@ void AccountValue::InitializeSpecAmt()
 
     if(0 == Year)
         {
-        InvariantValues().InitTgtPrem = AnnualTargetPrem;
-        InvariantValues().InitMinPrem = MinInitPrem();
-        }
-
-    // Calculate special initial premiums for premium-quote PDF only.
-    // Four premiums are calculated, for base and "supplemental"
-    // coverage combined:
-    //   without riders; with ADB only; with WP only; with ADB and WP
-    // All reflect MinInitDumpin() (which may be zero).
-    //
-    // This is intended for presale use only; for inforce cells, these
-    // premiums retain their default initial values of zero. There
-    // seems to be no compelling argument for further restrictions
-    // such as (DB_MinPremType == oe_monthly_deduction).
-    if(0 == Year)
-        {
-        InvariantValues().InitModalPrem00 = SuppositiveModalPremium(0, 0);
-        InvariantValues().InitModalPrem01 = SuppositiveModalPremium(0, 1);
-        InvariantValues().InitModalPrem10 = SuppositiveModalPremium(1, 0);
-        InvariantValues().InitModalPrem11 = SuppositiveModalPremium(1, 1);
+        // 'InitMinDumpin' and 'InitMinPrem' depend on 'InitTgtPrem'.
+        InvariantValues().InitTgtPrem   = AnnualTargetPrem;
+        InvariantValues().InitMinDumpin = MinInitDumpin();
+        InvariantValues().InitMinPrem   = MinInitPrem();
         }
 
     SurrChgSpecAmt = InvariantValues().SpecAmt[0];
@@ -1159,90 +1149,6 @@ double AccountValue::ModalMinInitPremShortfall() const
         {
         return 0.0;
         }
-}
-
-double AccountValue::SuppositiveModalPremium
-    (bool        with_adb
-    ,bool        with_wp
-    ) const
-{
-    LMI_ASSERT(0 == Year);
-    return SuppositiveModalPremium
-        (Year
-        ,InvariantValues().ErMode[Year].value()
-        ,InvariantValues().SpecAmt[Year]
-        ,InvariantValues().TermSpecAmt[Year]
-        ,with_adb
-        ,with_wp
-        );
-}
-
-/// Determine modal premium on a basis possibly differing from input.
-///
-/// Motivation: to provide premiums with and without certain riders,
-/// for use with group premium quotes.
-///
-/// For now at least, only that narrow purpose is addressed. If, for
-/// that purpose, input is inappropriate, then output may be as well.
-/// For example, this function doesn't ascertain whether the riders it
-/// toggles are available for the product selected. Other riders are
-/// not inhibited here: all input is taken as deliberate, as an end
-/// user might reasonably wish to show the effect of other riders; if
-/// assertions as to input are to be made at all, then they should be
-/// made in the function that creates the group premium quote report.
-///
-/// Consistent with that purpose, deem the modal minimum premium to be
-/// the planned premium, and add modalized MinInitDumpin() for custom
-/// MinInitPremType #1. As a consequence, illustrations may differ
-/// from group premium quotes: for example, an illustration with a
-/// sufficiently large 1035 rollover requires no additional payment,
-/// but a group premium quote generated from the same input file
-/// ignores the 1035 exchange and always reflects MinInitDumpin().
-
-double AccountValue::SuppositiveModalPremium
-    (int         year
-    ,mcenum_mode mode
-    ,double      specamt
-    ,double      termamt
-    ,bool        with_adb
-    ,bool        with_wp
-    ) const
-{
-    LMI_ASSERT(0 == Year);
-
-    yare_input yi(yare_input_);
-
-    yi.AccidentalDeathBenefit = with_adb;
-    yi.WaiverOfPremiumBenefit = with_wp;
-
-    double z;
-    if(!SplitMinPrem)
-        {
-        z = GetModalPremMlyDed(year, mode, specamt, yi);
-        }
-    else
-        {
-        z =
-              GetModalPremMlyDedEe(year, mode, termamt, yi)
-            + GetModalPremMlyDedEr(year, mode, specamt, yi)
-            ;
-        }
-
-    // If minimum premiums are of the 'oe_monthly_deduction' type,
-    // then the initial modal minimum premium previously calculated
-    // must equal the "suppositive" result for the same rider choices.
-    if
-        (  oe_monthly_deduction == MinPremType
-        && yi.AccidentalDeathBenefit == yare_input_.AccidentalDeathBenefit
-        && yi.WaiverOfPremiumBenefit == yare_input_.WaiverOfPremiumBenefit
-        )
-        {
-        LMI_ASSERT(z == InvariantValues().ModalMinimumPremium[0]);
-        }
-
-    // The quotient needn't be rounded because MinInitDumpin() is a
-    // multiple of twelve.
-    return z + MinInitDumpin() / mode;
 }
 
 //============================================================================

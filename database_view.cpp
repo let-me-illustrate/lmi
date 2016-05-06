@@ -36,7 +36,6 @@
 #include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
-#include <wx/icon.h>
 #include <wx/sizer.h>
 #include <wx/treectrl.h>
 #include <wx/window.h>
@@ -217,14 +216,14 @@ void DatabaseView::SetupControls()
     tree_ctrl.InvalidateBestSize();
 }
 
-wxIcon DatabaseView::Icon() const
+char const* DatabaseView::icon_xrc_resource() const
 {
-    return IconFromXmlResource("database_view_icon");
+    return "database_view_icon";
 }
 
-wxMenuBar* DatabaseView::MenuBar() const
+char const* DatabaseView::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("database_view_menu");
+    return "database_view_menu";
 }
 
 DatabaseDocument& DatabaseView::document() const

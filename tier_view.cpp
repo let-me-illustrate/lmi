@@ -38,7 +38,6 @@
 #include "tier_view_editor.hpp"
 #include "wx_new.hpp"
 
-#include <wx/icon.h>
 #include <wx/sizer.h>
 #include <wx/treectrl.h>
 #include <wx/window.h>
@@ -161,14 +160,14 @@ void TierView::SetupControls()
     tree_ctrl.InvalidateBestSize();
 }
 
-wxIcon TierView::Icon() const
+char const* TierView::icon_xrc_resource() const
 {
-    return IconFromXmlResource("tier_view_icon");
+    return "tier_view_icon";
 }
 
-wxMenuBar* TierView::MenuBar() const
+char const* TierView::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("tier_view_menu");
+    return "tier_view_menu";
 }
 
 bool TierView::IsModified() const

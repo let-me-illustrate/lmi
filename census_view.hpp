@@ -67,8 +67,8 @@ class CensusView
     // ViewEx required implementation.
     virtual bool CanBePrinted() const { return true; }
     virtual wxWindow* CreateChildWindow();
-    virtual wxIcon Icon() const;
-    virtual wxMenuBar* MenuBar() const;
+    virtual char const* icon_xrc_resource   () const;
+    virtual char const* menubar_xrc_resource() const;
 
     void UponAddCell                (wxCommandEvent&);
     void UponDeleteCells            (wxCommandEvent&);

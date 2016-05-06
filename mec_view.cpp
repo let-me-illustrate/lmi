@@ -38,8 +38,6 @@
 
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmprint.h>
-#include <wx/icon.h>
-#include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
 mec_mvc_view::mec_mvc_view()
@@ -126,17 +124,17 @@ oenum_mvc_dv_rc mec_view::edit_parameters()
         );
 }
 
-wxIcon mec_view::Icon() const
+char const* mec_view::icon_xrc_resource() const
 {
-    return IconFromXmlResource("mec_view_icon");
+    return "mec_view_icon";
 }
 
-wxMenuBar* mec_view::MenuBar() const
+char const* mec_view::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("mec_view_menu");
+    return "mec_view_menu";
 }
 
-/// This virtual function calls its base-class namesake explicitly.
+/// Pop up an input dialog; iff it's not cancelled, create a view.
 ///
 /// Trap exceptions to ensure that this function returns 'false' on
 /// failure, lest wx's doc-view framework create a zombie view. See:
@@ -152,7 +150,7 @@ bool mec_view::OnCreate(wxDocument* doc, long int flags)
             return has_view_been_created;
             }
 
-        has_view_been_created = ViewEx::OnCreate(doc, flags);
+        has_view_been_created = ViewEx::DoOnCreate(doc, flags);
         if(!has_view_been_created)
             {
             return has_view_been_created;

@@ -38864,3 +38864,123 @@ Avoid crashing due to indiscriminate event handling (VZ). See:
   skeleton.cpp
 Don't count all children just to see if there are more than one (VZ).
 
+20160331T0956Z <gchicares@sbcglobal.net> [454]
+
+  skeleton.cpp
+Remove a superfluous cast (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-03/msg00057.html
+
+20160407T2310Z <gchicares@sbcglobal.net> [453]
+
+  census_view.cpp
+  census_view.hpp
+  database_view.cpp
+  database_view.hpp
+  gpt_view.cpp
+  gpt_view.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  mec_view.cpp
+  mec_view.hpp
+  policy_view.cpp
+  policy_view.hpp
+  rounding_view.cpp
+  rounding_view.hpp
+  text_view.hpp
+  text_view.cpp
+  tier_view.cpp
+  tier_view.hpp
+  view_ex.cpp
+  view_ex.hpp
+Refactor, eliminating public virtuals.
+
+20160408T0125Z <gchicares@sbcglobal.net> [451]
+
+  gpt_view.cpp
+  illustration_view.cpp
+  mec_view.cpp
+  view_ex.cpp
+  view_ex.hpp
+Refactor, eliminating protected virtuals.
+
+20160420T0017Z <gchicares@sbcglobal.net> [451]
+
+  ihs_basicval.cpp
+Fix defect introduced 20050114T1947Z, from an original file predating
+the lmi epoch: the string "Cust" does not begin with "Custom".
+
+20160420T0022Z <gchicares@sbcglobal.net> [451]
+
+  test_coding_rules.cpp
+Remove an old taboo.
+
+20160423T1509Z <gchicares@sbcglobal.net> [451]
+
+  dbnames.hpp
+  ledger_invariant.cpp
+Improve documentation.
+
+20160427T1228Z <gchicares@sbcglobal.net> [451]
+
+  dbdict.cpp
+  dbdict.hpp
+  dbnames.hpp
+  dbnames.xpp
+Add a database entity for individual selection of specified amount.
+
+20160427T1229Z <gchicares@sbcglobal.net> [451]
+
+  product_data.cpp
+  product_data.hpp
+Add new product-data fields for group quotes.
+
+20160503T2246Z <gchicares@sbcglobal.net> [451]
+
+  ihs_acctval.cpp
+Treat 'ModalMinimumPremium' as paid by er where not paid by ee.
+
+20160504T1050Z <gchicares@sbcglobal.net> [451]
+
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+Add required dumpin and various other data to group roster.
+
+20160504T1448Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor to ease maintenance.
+
+20160504T1459Z <gchicares@sbcglobal.net> [451]
+
+  account_value.hpp
+  group_quote_pdf_gen_wx.cpp
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+Change group-quote columns.
+
+20160504T2004Z <gchicares@sbcglobal.net> [451]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Post recently-added product data to ledger.
+
+20160505T1119Z <gchicares@sbcglobal.net> [451]
+
+  illustrator.cpp
+Enforce rider consistency.
+
+20160505T1120Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor to increase flexibility.
+
+20160505T1439Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Deduce plan type.
+

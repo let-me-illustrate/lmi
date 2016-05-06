@@ -33,7 +33,6 @@
 #include "rounding_view_editor.hpp" // class RoundingButtons
 #include "safely_dereference_as.hpp"
 
-#include <wx/icon.h>
 #include <wx/panel.h>
 #include <wx/window.h>
 #include <wx/xrc/xmlres.h>
@@ -90,14 +89,14 @@ wxWindow* RoundingView::CreateChildWindow()
     return main_panel;
 }
 
-wxIcon RoundingView::Icon() const
+char const* RoundingView::icon_xrc_resource() const
 {
-    return IconFromXmlResource("rounding_view_icon");
+    return "rounding_view_icon";
 }
 
-wxMenuBar* RoundingView::MenuBar() const
+char const* RoundingView::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("rounding_view_menu");
+    return "rounding_view_menu";
 }
 
 RoundingDocument& RoundingView::document() const

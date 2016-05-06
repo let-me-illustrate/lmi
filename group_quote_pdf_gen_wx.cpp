@@ -437,14 +437,16 @@ enum enum_group_quote_columns
     ,e_col_name
     ,e_col_age
     ,e_col_dob
-    ,e_col_salary
-    ,e_col_face_amount
-    ,e_col_premium
-    ,e_col_premium_with_waiver
-    ,e_col_premium_with_adb
-    ,e_col_premium_with_waiver_and_adb
+    ,e_col_basic_face_amount
+    ,e_col_basic_premium
+    ,e_col_supplemental_face_amount
+    ,e_col_additional_premium
+    ,e_col_total_face_amount
+    ,e_col_total_premium
     ,e_col_max
     };
+
+enum_group_quote_columns const e_first_totalled_column = e_col_basic_face_amount;
 
 struct column_definition
 {
@@ -452,19 +454,20 @@ struct column_definition
     char const* widest_text_; // Empty string means variable width.
 };
 
+// Headers of premium columns include dynamically-determined payment
+// mode, so they're actually format strings.
+
 column_definition const column_definitions[] =
-    {{"Part#"                          ,            "99999"   }
-    ,{"Participant"                    ,                 ""   }
-    ,{"Issue Age"                      ,              "999"   }
-    ,{"Date of Birth"                  ,       "9999-99-99"   }
-    ,{"Income"                         ,     "$999,999,999"   }
-    ,{"Face Amount"                    , "$999,999,999,999"   }
-    // All the subsequent columns use dynamically determined "premium mode" in
-    // their title, so their labels are actually format strings.
-    ,{"%s\nPremium"                    ,   "$9,999,999,999.00"}
-    ,{"%s\nPremium with\nWaiver"       ,   "$9,999,999,999.00"}
-    ,{"%s\nPremium with\nADB"          ,   "$9,999,999,999.00"}
-    ,{"%s\nPremium with\nWaiver &\nADB",   "$9,999,999,999.00"}
+    {{"Part#"                          ,            "99999"   } // e_col_number
+    ,{"Participant"                    ,                 ""   } // e_col_name
+    ,{"Issue Age"                      ,              "999"   } // e_col_age
+    ,{"Date of Birth"                  ,       "9999-99-99"   } // e_col_dob
+    ,{"Basic\nFace Amount"             , "$999,999,999,999"   } // e_col_basic_face_amount
+    ,{"Basic\n%s\nPremium"             ,   "$9,999,999,999.00"} // e_col_basic_premium
+    ,{"Supplemental\nFace Amount"      , "$999,999,999,999"   } // e_col_supplemental_face_amount
+    ,{"Additional\n%s\nPremium"        ,   "$9,999,999,999.00"} // e_col_additional_premium
+    ,{"Total\nFace Amount"             , "$999,999,999,999"   } // e_col_total_face_amount
+    ,{"Total\n%s\nPremium"             ,   "$9,999,999,999.00"} // e_col_total_premium
     };
 
 BOOST_STATIC_ASSERT(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max);
@@ -550,6 +553,9 @@ class group_quote_pdf_generator_wx
         std::string effective_date_;
         std::string footer_;
 
+        // Dynamically-determined fields.
+        std::string plan_type_footnote_;
+
         // Optional supplementary fields.
         std::vector<extra_summary_field> extra_fields_;
         };
@@ -566,7 +572,7 @@ class group_quote_pdf_generator_wx
       public:
         totals_data()
             {
-            for(int col = e_col_face_amount; col < e_col_max; ++col)
+            for(int col = e_first_totalled_column; col < e_col_max; ++col)
                 {
                 value(col) = 0.0;
                 }
@@ -583,9 +589,9 @@ class group_quote_pdf_generator_wx
             }
 
       private:
-        double& value(int col) { return values_[col - e_col_face_amount]; }
+        double& value(int col) { return values_[col - e_first_totalled_column]; }
 
-        double values_[e_col_max - e_col_face_amount];
+        double values_[e_col_max - e_first_totalled_column];
     };
     totals_data totals_;
 
@@ -608,10 +614,15 @@ class group_quote_pdf_generator_wx
     page_metrics page_;
 
     int row_num_;
+
+    bool has_suppl_specamt_;
+
+    std::string plan_type_;
 };
 
 group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
     :row_num_(0)
+    ,has_suppl_specamt_(false)
 {
 }
 
@@ -649,6 +660,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     footer_ =
           brbr (invar.GroupQuoteIsNotAnOffer)
         + brbr (invar.GroupQuoteRidersFooter)
+        + brbr (plan_type_footnote_)
         + brbr (invar.GroupQuotePolicyFormId)
         + brbr (invar.GroupQuoteStateVariations)
         + brbr (invar.MarketingNameFootnote)
@@ -668,6 +680,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
 
     assert_nonblank(invar.GroupQuoteIsNotAnOffer   , "First footnote");
     assert_nonblank(invar.GroupQuoteRidersFooter   , "Second footnote");
+    // treat plan_type_footnote_ similarly, soon
     assert_nonblank(invar.GroupQuotePolicyFormId   , "Third footnote");
     assert_nonblank(invar.GroupQuoteStateVariations, "Fourth footnote");
     assert_nonblank(invar.MarketingNameFootnote    , "Fifth footnote");
@@ -691,14 +704,6 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
         }
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
-
-    // Initialize 'report_data_' the first time this function is
-    // called: i.e., iff its 'contract_state_' field is empty, because
-    // the state postal abbreviation in a ledger can never be empty.
-    if(report_data_.contract_state_.empty())
-        {
-        report_data_.fill_global_report_data(ledger);
-        }
 
     int const year = 0;
 
@@ -738,16 +743,48 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     ).FormatDate();
                 }
                 break;
-            case e_col_salary:
+            case e_col_basic_face_amount:
                 {
-                // Blank if zero.
-                if(0.0 != invar.Salary.at(year))
+                double const z = invar.SpecAmt.at(year);
+                rd.values[col] = '$' + ledger_format(z, f0);
+                if(is_composite)
                     {
-                    rd.values[col] = '$' + ledger_format(invar.Salary.at(year), f0);
+                    totals_.total(col, z);
                     }
                 }
                 break;
-            case e_col_face_amount:
+            case e_col_basic_premium:
+                {
+                double const z = invar.ErModalMinimumPremium.at(year);
+                rd.values[col] = '$' + ledger_format(z, f2);
+                if(is_composite)
+                    {
+                    totals_.total(col, z);
+                    }
+                }
+                break;
+            case e_col_supplemental_face_amount:
+                {
+                double const z = invar.TermSpecAmt.at(year);
+                has_suppl_specamt_ = has_suppl_specamt_ || 0.0 != z;
+                rd.values[col] = '$' + ledger_format(z, f0);
+                if(is_composite)
+                    {
+                    totals_.total(col, z);
+                    }
+                }
+                break;
+            case e_col_additional_premium:
+                {
+                double const z = invar.EeModalMinimumPremium.at(year) + invar.InitMinDumpin;
+                rd.values[col] = '$' + ledger_format(z, f2);
+                if(is_composite)
+                    {
+                    totals_.total(col, z);
+                    }
+                }
+                break;
+            case e_col_total_face_amount:
                 {
                 double const z = invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year);
                 rd.values[col] = '$' + ledger_format(z, f0);
@@ -757,39 +794,9 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     }
                 }
                 break;
-            case e_col_premium:
+            case e_col_total_premium:
                 {
-                double const z = invar.InitModalPrem00;
-                rd.values[col] = '$' + ledger_format(z, f2);
-                if(is_composite)
-                    {
-                    totals_.total(col, z);
-                    }
-                }
-                break;
-            case e_col_premium_with_waiver:
-                {
-                double const z = invar.InitModalPrem01;
-                rd.values[col] = '$' + ledger_format(z, f2);
-                if(is_composite)
-                    {
-                    totals_.total(col, z);
-                    }
-                }
-                break;
-            case e_col_premium_with_adb:
-                {
-                double const z = invar.InitModalPrem10;
-                rd.values[col] = '$' + ledger_format(z, f2);
-                if(is_composite)
-                    {
-                    totals_.total(col, z);
-                    }
-                }
-                break;
-            case e_col_premium_with_waiver_and_adb:
-                {
-                double const z = invar.InitModalPrem11;
+                double const z = invar.ModalMinimumPremium.at(year) + invar.InitMinDumpin;
                 rd.values[col] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
@@ -809,9 +816,27 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             }
         }
 
-    // The last, composite, ledger is only used for the totals, it shouldn't be
-    // shown in the main table nor counted as a row.
-    if(!is_composite)
+    // The composite ledger arrives last. It is used only for global
+    // data (which have already been asserted, upstream, not to vary
+    // by cell) and for totals. It is neither shown in the main table
+    // nor counted as a row. Only at this point, after all the other
+    // ledgers have been seen, can all-zero columns (and corresponding
+    // total columns) be suppressed.
+    if(is_composite)
+        {
+        plan_type_ =
+            (invar.GroupIndivSelection ? invar.GroupQuoteRubricVoluntary
+            :has_suppl_specamt_        ? invar.GroupQuoteRubricFusion
+            :                            invar.GroupQuoteRubricMandatory
+            );
+        report_data_.plan_type_footnote_ =
+            (invar.GroupIndivSelection ? invar.GroupQuoteFooterVoluntary
+            :has_suppl_specamt_        ? invar.GroupQuoteFooterFusion
+            :                            invar.GroupQuoteFooterMandatory
+            );
+        report_data_.fill_global_report_data(ledger);
+        }
+    else
         {
         rows_.push_back(rd);
         row_num_++;
@@ -889,19 +914,18 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
             case e_col_name:
             case e_col_age:
             case e_col_dob:
-            case e_col_salary:
-            case e_col_face_amount:
-                // Nothing to do for these columns, their labels are literal.
+            case e_col_basic_face_amount:
+            case e_col_supplemental_face_amount:
+            case e_col_total_face_amount:
+                // Nothing to do for these columns: their labels are literal.
                 break;
-            case e_col_premium:
-            case e_col_premium_with_waiver:
-            case e_col_premium_with_adb:
-            case e_col_premium_with_waiver_and_adb:
+            case e_col_basic_premium:
+            case e_col_additional_premium:
+            case e_col_total_premium:
                 {
                 // Labels of these columns are format strings as they need to
                 // be constructed dynamically.
                 LMI_ASSERT(header.find("%s") != std::string::npos);
-
                 header = wxString::Format
                     (wxString(header), report_data_.premium_mode_
                     ).ToStdString();
@@ -1162,8 +1186,12 @@ void group_quote_pdf_generator_wx::output_document_header
         );
     }
 
-    // Then add any additional fields in left-to-right then top-to-bottom order.
-    std::vector<extra_summary_field> const& fields = report_data_.extra_fields_;
+    // Add a "plan type" field, then any additional fields,
+    // in left-to-right then top-to-bottom order.
+    std::vector<extra_summary_field> fields;
+    fields.push_back(extra_summary_field({"Plan Type", plan_type_}));
+    std::vector<extra_summary_field> const& f = report_data_.extra_fields_;
+    fields.insert(fields.end(), f.begin(), f.end());
 
     typedef std::vector<extra_summary_field>::const_iterator esfci;
     for(esfci i = fields.begin(); i != fields.end();)
@@ -1215,8 +1243,8 @@ void group_quote_pdf_generator_wx::output_table_totals
 {
     int& y = *pos_y;
 
-    table_gen.output_horz_separator(e_col_face_amount, e_col_max, y);
-    table_gen.output_vert_separator(e_col_face_amount, y);
+    table_gen.output_horz_separator(e_first_totalled_column, e_col_max, y);
+    table_gen.output_vert_separator(e_first_totalled_column, y);
     table_gen.output_vert_separator(e_col_max, y);
 
     y += table_gen.row_height();
@@ -1239,20 +1267,22 @@ void group_quote_pdf_generator_wx::output_table_totals
     // one just above anyhow.
     pdf_dc.SetFont(pdf_dc.GetFont().Italic());
 
+    LMI_ASSERT(0 < e_first_totalled_column);
     pdf_dc.DrawLabel
         ("Totals:"
-        ,table_gen.cell_rect(e_col_salary, y_text).Deflate(cell_margin_x, 0)
+        ,table_gen.cell_rect(e_first_totalled_column - 1, y_text).Deflate(cell_margin_x, 0)
         ,wxALIGN_RIGHT
         );
 
-    for(int col = e_col_face_amount; col < e_col_max; ++col)
+    for(int col = e_first_totalled_column; col < e_col_max; ++col)
         {
         int const num_dec =
-            ((e_col_face_amount                 == col) ? 0
-            :(e_col_premium                     == col) ? 2
-            :(e_col_premium_with_waiver         == col) ? 2
-            :(e_col_premium_with_adb            == col) ? 2
-            :(e_col_premium_with_waiver_and_adb == col) ? 2
+            ((e_col_basic_face_amount           == col) ? 0
+            :(e_col_basic_premium               == col) ? 2
+            :(e_col_supplemental_face_amount    == col) ? 0
+            :(e_col_additional_premium          == col) ? 2
+            :(e_col_total_face_amount           == col) ? 0
+            :(e_col_total_premium               == col) ? 2
             :throw std::logic_error("Invalid column type.")
             );
         std::pair<int, oenum_format_style> const f(num_dec, oe_format_normal);

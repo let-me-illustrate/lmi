@@ -83,6 +83,11 @@ wxFrame& ViewEx::FrameWindow() const
     return safely_dereference_as<wxFrame>(GetFrame());
 }
 
+wxIcon ViewEx::Icon() const
+{
+    return IconFromXmlResource(icon_xrc_resource());
+}
+
 /// Elsewhere, the result of wxXmlResource::Get()->LoadX is checked
 /// before doing anything with it. However, LoadIcon() returns a
 /// reference, not a pointer, because it's a graphics object:
@@ -97,6 +102,11 @@ wxIcon ViewEx::IconFromXmlResource(char const* z) const
         warning() << "Invalid icon; using default." << LMI_FLUSH;
         }
     return icon;
+}
+
+wxMenuBar* ViewEx::MenuBar() const
+{
+    return MenuBarFromXmlResource(menubar_xrc_resource());
 }
 
 /// If 'new(wx) wxMenuBar' fails, then the program would crash except
@@ -142,16 +152,34 @@ bool ViewEx::OnClose(bool delete_window)
     return true;
 }
 
-// WX !! The wx documentation for wxDocMDIChildFrame::OnActivate() says
-//   "You may need to override (but still call) this function in order
-//   to set the keyboard focus for your subwindow."
-// At least for msw, creation does not trigger 'activation': more
-// precisely, WM_MDICREATE does not send WM_MDIACTIVATE, and
-// OnActivate() doesn't get called when the window is created, so the
-// documented method doesn't work--whereas setting the focus upon
-// creation here does work.
-//
-bool ViewEx::OnCreate(wxDocument* doc, long int)
+/// Initialize a document view in an MDI window.
+///
+/// Completely replaces wxView::OnCreate(), whose implementation is
+/// merely {return true;} as of wx-3.1 .
+///
+/// This default implementation simply forwards to DoOnCreate().
+///
+/// WX !! The documentation for wxDocMDIChildFrame::OnActivate() says
+///   "You may need to override (but still call) this function in
+///   order to set the keyboard focus for your subwindow."
+/// At least for msw, creation does not trigger 'activation': more
+/// precisely, WM_MDICREATE does not send WM_MDIACTIVATE, and
+/// OnActivate() doesn't get called when the window is created, so the
+/// documented method doesn't work--whereas setting the focus upon
+/// creation here does work.
+
+bool ViewEx::OnCreate(wxDocument* doc, long int flags)
+{
+    return DoOnCreate(doc, flags);
+}
+
+/// Default implementation for OnCreate().
+///
+/// Some derived classes call this function in an OnCreate() override,
+/// e.g. to pop up an input dialog and create a view only if the
+/// dialog is not cancelled.
+
+bool ViewEx::DoOnCreate(wxDocument* doc, long int)
 {
     Skeleton& app = safely_dereference_as<Skeleton>(wxApp::GetInstance());
     app.CreateChildFrame(doc, this);

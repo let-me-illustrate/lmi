@@ -206,6 +206,16 @@ class LMI_SO product_data
     glossed_string OutlayFootnote;
     glossed_string PolicyYearFootnote;
 
+    // Terse rider names.
+    glossed_string ADDTerseName;
+    glossed_string InsurabilityTerseName;
+    glossed_string ChildTerseName;
+    glossed_string SpouseTerseName;
+    glossed_string TermTerseName;
+    glossed_string WaiverTerseName;
+    glossed_string AccelBftRiderTerseName;
+    glossed_string OverloanRiderTerseName;
+
     // Rider footnotes.
     glossed_string ADDFootnote;
     glossed_string ChildFootnote;
@@ -215,7 +225,7 @@ class LMI_SO product_data
     glossed_string AccelBftRiderFootnote;
     glossed_string OverloanRiderFootnote;
 
-    // Group quote footnotes.
+    // Group quotes.
     glossed_string GroupQuoteShortProductName;
     glossed_string GroupQuoteIsNotAnOffer    ;
     glossed_string GroupQuoteRidersHeader    ;
@@ -225,6 +235,20 @@ class LMI_SO product_data
     glossed_string GroupQuoteProspectus      ;
     glossed_string GroupQuoteUnderwriter     ;
     glossed_string GroupQuoteBrokerDealer    ;
+    // Group plan type is one of:
+    //   -Mandatory: no individual selection of amounts; typically,
+    //     the employer pays the entire premium
+    //   -Voluntary: individual selection of amounts; typically, the
+    //      employee pays the premium; may be called "supplemental"
+    //      when it complements a (separate) "mandatory" plan
+    //   -Fusion: mandatory and supplemental combined; typically, the
+    //      employer and employee pay their respective premiums
+    glossed_string GroupQuoteRubricMandatory ;
+    glossed_string GroupQuoteRubricVoluntary ;
+    glossed_string GroupQuoteRubricFusion    ;
+    glossed_string GroupQuoteFooterMandatory ;
+    glossed_string GroupQuoteFooterVoluntary ;
+    glossed_string GroupQuoteFooterFusion    ;
 
     // Premium-specific footnotes.
     glossed_string MinimumPremiumFootnote;
@@ -274,6 +298,7 @@ class LMI_SO product_data
     glossed_string ImprimaturPresaleComposite;
     glossed_string ImprimaturInforce;
     glossed_string ImprimaturInforceComposite;
+    glossed_string StateMarketingImprimatur;
     glossed_string InforceNonGuaranteedFootnote0;
     glossed_string InforceNonGuaranteedFootnote1;
     glossed_string InforceNonGuaranteedFootnote2;

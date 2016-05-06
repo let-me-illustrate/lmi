@@ -41,26 +41,23 @@
 // seems to obtain.
 
 // Icon() and MenuBar() return types suitable for passing to wx
-// functions SetIcon() and SetMenuBar() respectively. Because they are
-// expected to be loaded from xml resources, the functions could have
-// been made nonvirtual, with a string argument to distinguish view
-// types, and indeed protected functions IconFromXmlResource() and
-// MenuBarFromXmlResource() are provided to encapsulate that work in
-// this class--with the same return types as the wxxrc functions they
+// functions SetIcon() and SetMenuBar() respectively. These nonvirtual
+// functions call virtuals that load XRC resources. Private functions
+// IconFromXmlResource() and MenuBarFromXmlResource() encapsulate that
+// work; they have the same return types as the wxxrc functions they
 // call. Thus, notably, MenuBarFromXmlResource() returns a pointer,
 // but it never returns a null pointer, which would cause the program
 // to crash--instead, it returns a default object if no menubar can be
-// read from an xml resource. The public functions are pure to allow
-// implementation flexibility. For instance, an overrider may contain
-// a static variable to cache xml resources for better responsiveness,
-// or it may use a different approach altogether.
+// read from an XRC resource. SOMEDAY !! Should these public functions
+// cache XRC resources in a static variable for better responsiveness?
 
-// OnCreate() and OnClose() are implemented here because it is not
-// anticipated that their essential behavior would differ in client
-// classes. Small differences can be factored into pure functions:
-// for instance, OnCreate() calls CreateChildWindow().
+// OnClose() is implemented here because it is not anticipated that
+// its essential behavior would differ in client classes.
 
-// TODO ?? Revise the preceding comment.
+// OnCreate() has a default implementation, in DoOnCreate(), which is
+// suitable for many client classes; others call DoOnCreate() in their
+// implementations. DoOnCreate() calls CreateChildWindow(), which is a
+// pure function because clients create different window types.
 
 // OnDraw() is pure in base class wxView. An (empty) implementation is
 // supplied here because no view class in the application this is
@@ -101,31 +98,31 @@ class ViewEx
     // implemented in every derived class.
     virtual bool CanBePrinted() const = 0;
 
-    // TODO ?? Consider making virtuals nonpublic and public functions
-    // nonvirtual.
-    virtual wxIcon Icon() const = 0;
-    virtual wxMenuBar* MenuBar() const = 0;
+    wxIcon     Icon   () const;
+    wxMenuBar* MenuBar() const;
 
   protected:
     virtual ~ViewEx();
-
-    wxIcon IconFromXmlResource(char const*) const;
-    wxMenuBar* MenuBarFromXmlResource(char const*) const;
 
     wxFrame& FrameWindow() const;
 
     std::string base_filename() const;
 
-    // TODO ?? Probably better to provide the implementation in
-    // separate functions that can be called by derived classes.
-    //
+    bool DoOnCreate(wxDocument* doc, long int flags);
+
+  private:
+    // Pure virtuals.
+    virtual wxWindow* CreateChildWindow() = 0;
+    virtual char const* icon_xrc_resource   () const = 0;
+    virtual char const* menubar_xrc_resource() const = 0;
+
     // wxView overrides.
     virtual bool OnClose(bool delete_window);
     virtual bool OnCreate(wxDocument* doc, long int flags);
     virtual void OnDraw(wxDC*);
 
-  private:
-    virtual wxWindow* CreateChildWindow() = 0;
+    wxIcon     IconFromXmlResource   (char const*) const;
+    wxMenuBar* MenuBarFromXmlResource(char const*) const;
 
     DocManagerEx& DocManager() const;
 

@@ -142,6 +142,7 @@ void DBDictionary::ascribe_members()
     ascribe("StateApproved"       , &DBDictionary::StateApproved       );
     ascribe("AllowStateXX"        , &DBDictionary::AllowStateXX        );
     ascribe("AllowForeign"        , &DBDictionary::AllowForeign        );
+    ascribe("GroupIndivSelection" , &DBDictionary::GroupIndivSelection );
     ascribe("Allowable"           , &DBDictionary::Allowable           );
     ascribe("AllowCvat"           , &DBDictionary::AllowCvat           );
     ascribe("AllowGpt"            , &DBDictionary::AllowGpt            );
@@ -939,6 +940,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(database_entity(DB_StateApproved       , true));
     Add(database_entity(DB_AllowStateXX        , true));
     Add(database_entity(DB_AllowForeign        , true));
+    Add(database_entity(DB_GroupIndivSelection , false));
     Add(database_entity(DB_AllowImfOverride    , false));
     Add(database_entity(DB_AllowNo7702         , false));
     Add(database_entity(DB_EnforceNaarLimit    , true));

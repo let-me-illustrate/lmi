@@ -38,9 +38,7 @@
 
 #include "wx_new.hpp"
 
-#include <wx/icon.h>
 #include <wx/log.h>
-#include <wx/menu.h>
 #include <wx/textctrl.h>
 #include <wx/xrc/xmlres.h>
 
@@ -68,13 +66,13 @@ wxWindow* TextEditView::CreateChildWindow()
         );
 }
 
-wxIcon TextEditView::Icon() const
+char const* TextEditView::icon_xrc_resource() const
 {
-    return IconFromXmlResource("text_view_icon");
+    return "text_view_icon";
 }
 
-wxMenuBar* TextEditView::MenuBar() const
+char const* TextEditView::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("text_view_menu");
+    return "text_view_menu";
 }
 

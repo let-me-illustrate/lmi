@@ -950,7 +950,6 @@ void enforce_taboos(file const& f)
     taboo(f, "Visual [A-Z]");
     taboo(f, "\\bWIN\\b");
     taboo(f, "\\bExcel\\b");
-    taboo(f, "xls|xl4", boost::regex::icase);
     // Insinuated by certain msw tools.
     taboo(f, "Microsoft Word");
     taboo(f, "Stylus Studio");

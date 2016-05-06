@@ -32,7 +32,6 @@
 #include "policy_document.hpp"
 #include "safely_dereference_as.hpp"
 
-#include <wx/icon.h>
 #include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/window.h>
@@ -91,14 +90,14 @@ wxWindow* PolicyView::CreateChildWindow()
     return main_panel;
 }
 
-wxIcon PolicyView::Icon() const
+char const* PolicyView::icon_xrc_resource() const
 {
-    return IconFromXmlResource("policy_view_icon");
+    return "policy_view_icon";
 }
 
-wxMenuBar* PolicyView::MenuBar() const
+char const* PolicyView::menubar_xrc_resource() const
 {
-    return MenuBarFromXmlResource("policy_view_menu");
+    return "policy_view_menu";
 }
 
 PolicyDocument& PolicyView::document() const

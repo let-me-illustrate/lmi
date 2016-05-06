@@ -291,18 +291,6 @@ class LMI_SO AccountValue
     double MinInitDumpin() const;
     double MinInitPrem() const;
     double ModalMinInitPremShortfall() const;
-    double SuppositiveModalPremium
-        (bool        with_adb
-        ,bool        with_wp
-        ) const;
-    double SuppositiveModalPremium
-        (int         year
-        ,mcenum_mode mode
-        ,double      specamt
-        ,double      termamt
-        ,bool        with_adb
-        ,bool        with_wp
-        ) const;
 
     void   SetMaxLoan              ();
     void   SetMaxWD                ();
