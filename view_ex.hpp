@@ -92,12 +92,6 @@ class ViewEx
   public:
     ViewEx();
 
-    // Return true if the documents shown by this view can be printed.
-    //
-    // As there is no obviously correct default, this method must be explicitly
-    // implemented in every derived class.
-    virtual bool CanBePrinted() const = 0;
-
     wxIcon     Icon   () const;
     wxMenuBar* MenuBar() const;
 

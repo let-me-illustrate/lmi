@@ -80,7 +80,7 @@ class Skeleton
     virtual bool OnInit                ();
 
   private:
-    wxMenuBar* AdjustMenus(wxMenuBar*, ViewEx* = NULL);
+    wxMenuBar* AdjustMenus(wxMenuBar*);
 
     void InitDocManager ();
     void InitHelp       ();

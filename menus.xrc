@@ -30,12 +30,11 @@
 <!-- reusable menus -->
 
 <!--
-  The fill 'File' menu includes commands to save, close, and print documents.
-  Some of these commands are deleted from the menu in the code when it is used
-  with the documents for which they don't make sense.
+  This 'File' menu includes commands to save, close, and print documents.
+  Use it when the current document uses these print commands.
 -->
 
-<object class="wxMenu" name="file_menu_ref">
+<object class="wxMenu" name="file_menu_with_print_ref">
     <label>_File</label>
     <object class="wxMenuItem" name="wxID_NEW">
         <label>_New...\tCtrl-N</label>
@@ -83,6 +82,94 @@
         <label>Pr_int to PDF\tCtrl-I</label>
         <bitmap platform="win" stock_id="save-pdf"/>
         <help>Print this document to a PDF file</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="edit_default_cell">
+        <label>Defaul_t...\tCtrl-T</label>
+        <bitmap platform="win" stock_id="default-cell"/>
+        <help>Edit default cell</help>
+    </object>
+    <object class="wxMenuItem" name="wxID_PREFERENCES">
+        <label>Pre_ferences...\tCtrl-F</label>
+        <bitmap platform="win" stock_id="preferences"/>
+        <help>Manage preferences</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="wxID_EXIT">
+        <label>E_xit</label>
+        <bitmap platform="win" stock_id="wxART_QUIT"/>
+        <help>Exit this program</help>
+    </object>
+</object>
+
+<!--
+  This 'File' menu excludes commands to print documents.
+  Use it when the current document does not use these print commands.
+-->
+
+<object class="wxMenu" name="file_menu_without_print_ref">
+    <label>_File</label>
+    <object class="wxMenuItem" name="wxID_NEW">
+        <label>_New...\tCtrl-N</label>
+        <bitmap platform="win" stock_id="wxART_NEW"/>
+        <help>Create a new document</help>
+    </object>
+    <object class="wxMenuItem" name="wxID_OPEN">
+        <label>_Open...\tCtrl-O</label>
+        <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
+        <help>Open an existing document</help>
+    </object>
+    <object class="wxMenuItem" name="wxID_CLOSE">
+        <label>C_lose\tCtrl-L</label>
+        <bitmap platform="win" stock_id="close"/>
+        <help>Close this document</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="wxID_SAVE">
+        <label>_Save\tCtrl-S</label>
+        <bitmap platform="win" stock_id="wxART_FILE_SAVE"/>
+        <help>Save this document</help>
+    </object>
+    <object class="wxMenuItem" name="wxID_SAVEAS">
+        <label>Save _as...\tCtrl-A</label>
+        <bitmap platform="win" stock_id="wxART_FILE_SAVE_AS"/>
+        <help>Save this document under a new name</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="edit_default_cell">
+        <label>Defaul_t...\tCtrl-T</label>
+        <bitmap platform="win" stock_id="default-cell"/>
+        <help>Edit default cell</help>
+    </object>
+    <object class="wxMenuItem" name="wxID_PREFERENCES">
+        <label>Pre_ferences...\tCtrl-F</label>
+        <bitmap platform="win" stock_id="preferences"/>
+        <help>Manage preferences</help>
+    </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="wxID_EXIT">
+        <label>E_xit</label>
+        <bitmap platform="win" stock_id="wxART_QUIT"/>
+        <help>Exit this program</help>
+    </object>
+</object>
+
+<!--
+  This 'File' menu excludes commands to save, close, and print documents.
+  Use it when no document is open in a child window.
+-->
+
+<object class="wxMenu" name="file_menu_without_child_ref">
+    <label>_File</label>
+    <object class="wxMenuItem" name="wxID_NEW">
+        <label>_New...\tCtrl-N</label>
+        <bitmap platform="win" stock_id="wxART_NEW"/>
+        <help>Create a new document</help>
+    </object>
+    <object class="wxMenuItem" name="wxID_OPEN">
+        <label>_Open...\tCtrl-O</label>
+        <bitmap platform="win" stock_id="wxART_FILE_OPEN"/>
+        <help>Open an existing document</help>
     </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="edit_default_cell">
@@ -214,7 +301,7 @@
 
 <object class="wxMenuBar" name="main_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_without_child_ref"/>
     <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
@@ -310,7 +397,7 @@
 
 <object class="wxMenuBar" name="census_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_with_print_ref"/>
     <object_ref name="census_menu" ref="census_menu_ref"/>
     <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="window_menu" ref="window_menu_ref"/>
@@ -323,7 +410,7 @@
 
 <object class="wxMenuBar" name="illustration_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_with_print_ref"/>
     <object class="wxMenu" name="illustration_menu">
         <label>_Illustration</label>
         <object class="wxMenuItem" name="edit_cell">
@@ -354,7 +441,7 @@
 
 <object class="wxMenuBar" name="database_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
 <!-- No menuitems yet.
     <object class="wxMenu" name="database_menu">
         <label>_Database</label>
@@ -371,7 +458,7 @@
 
 <object class="wxMenuBar" name="policy_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
 <!-- No menuitems yet.
     <object class="wxMenu" name="policy_menu">
         <label>P_olicy</label>
@@ -388,7 +475,7 @@
 
 <object class="wxMenuBar" name="rounding_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
 <!-- No menuitems yet.
     <object class="wxMenu" name="rounding_menu">
         <label>_Rounding</label>
@@ -405,7 +492,7 @@
 
 <object class="wxMenuBar" name="tier_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
 <!-- No menuitems yet.
     <object class="wxMenu" name="tier_menu">
         <label>_Tier</label>
@@ -422,7 +509,7 @@
 
 <object class="wxMenuBar" name="text_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
 <!-- No menuitems yet.
     <object class="wxMenu" name="text_menu">
         <label>Te_xt</label>
@@ -439,7 +526,7 @@
 
 <object class="wxMenuBar" name="mec_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_with_print_ref"/>
     <object class="wxMenu" name="mec_menu">
         <label>_MEC</label>
         <object class="wxMenuItem" name="edit_cell">
@@ -459,7 +546,7 @@
 
 <object class="wxMenuBar" name="gpt_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object_ref name="file_menu" ref="file_menu_ref"/>
+    <object_ref name="file_menu" ref="file_menu_with_print_ref"/>
     <object class="wxMenu" name="gpt_menu">
         <label>_GPT</label>
         <object class="wxMenuItem" name="edit_cell">
