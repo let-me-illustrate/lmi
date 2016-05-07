@@ -139,7 +139,7 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["InitGLP"               ] = &InitGLP                ;
     ScalableScalars ["InitTgtPrem"           ] = &InitTgtPrem            ;
     ScalableScalars ["InitMinPrem"           ] = &InitMinPrem            ;
-    ScalableScalars ["InitMinDumpin"         ] = &InitMinDumpin          ;
+    ScalableScalars ["ModalMinimumDumpin"    ] = &ModalMinimumDumpin     ;
     ScalableScalars ["Dumpin"                ] = &Dumpin                 ;
     ScalableScalars ["External1035Amount"    ] = &External1035Amount     ;
     ScalableScalars ["Internal1035Amount"    ] = &Internal1035Amount     ;
@@ -625,7 +625,7 @@ void LedgerInvariant::Init(BasicValues* b)
 //  InitSevenPayPrem        =
 //  InitTgtPrem             =
 //  InitMinPrem             =
-//  InitMinDumpin           =
+//  ModalMinimumDumpin      =
 
     MaleProportion          = b->yare_input_.MaleProportion;
     NonsmokerProportion     = b->yare_input_.NonsmokerProportion;
