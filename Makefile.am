@@ -97,6 +97,7 @@ TESTS = \
     test_configurable_settings \
     test_contains \
     test_crc32 \
+    test_currency \
     test_expression_template_0 \
     test_fenv_lmi \
     test_file_command \
@@ -619,6 +620,11 @@ test_crc32_SOURCES = \
   crc32.cpp \
   crc32_test.cpp
 test_crc32_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_currency_SOURCES = \
+  $(common_test_objects) \
+  currency_test.cpp
+test_currency_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_expression_template_0_SOURCES = \
   $(common_test_objects) \
