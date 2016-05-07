@@ -38984,3 +38984,18 @@ Refactor to increase flexibility.
   group_quote_pdf_gen_wx.cpp
 Deduce plan type.
 
+20160507T1148Z <gchicares@sbcglobal.net> [451]
+
+  ihs_acctval.cpp
+Modalize required dumpin.
+
+20160507T1354Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+Rename required dumpin, which is now modal.
+

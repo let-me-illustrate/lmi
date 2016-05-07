@@ -359,7 +359,7 @@ void Ledger::write(xml::element& x) const
     format_map["InitSevenPayPrem"                  ] = f2;
     format_map["InitTgtPrem"                       ] = f2;
     format_map["InitMinPrem"                       ] = f2;
-    format_map["InitMinDumpin"                     ] = f2;
+    format_map["ModalMinimumDumpin"                ] = f2;
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,###)

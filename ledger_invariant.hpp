@@ -152,7 +152,7 @@ class LMI_SO LedgerInvariant
     double          InitGLP;
     double          InitTgtPrem;
     double          InitMinPrem;
-    double          InitMinDumpin;
+    double          ModalMinimumDumpin;
     double          Dumpin;
     double          External1035Amount;
     double          Internal1035Amount;
