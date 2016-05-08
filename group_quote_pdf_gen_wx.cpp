@@ -615,13 +615,10 @@ class group_quote_pdf_generator_wx
     page_metrics page_;
 
     int row_num_;
-
-    bool has_suppl_specamt_;
 };
 
 group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
     :row_num_(0)
-    ,has_suppl_specamt_(false)
 {
 }
 
@@ -765,10 +762,6 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_supplemental_face_amount:
                 {
                 double const z = invar.TermSpecAmt.at(year);
-                if(0.0 != z)
-                    {
-                    has_suppl_specamt_ = true;
-                    }
                 rd.values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
@@ -826,6 +819,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     // total columns) be suppressed.
     if(is_composite)
         {
+        bool has_suppl_specamt_ = 0.0 != totals_.total(e_col_supplemental_face_amount);
         report_data_.plan_type_ =
             (invar.GroupIndivSelection ? invar.GroupQuoteRubricVoluntary
             :has_suppl_specamt_        ? invar.GroupQuoteRubricFusion
