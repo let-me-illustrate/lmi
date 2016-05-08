@@ -765,7 +765,10 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_supplemental_face_amount:
                 {
                 double const z = invar.TermSpecAmt.at(year);
-                has_suppl_specamt_ = has_suppl_specamt_ || 0.0 != z;
+                if(0.0 != z)
+                    {
+                    has_suppl_specamt_ = true;
+                    }
                 rd.values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
