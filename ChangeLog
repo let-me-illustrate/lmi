@@ -38999,3 +38999,18 @@ Modalize required dumpin.
   ledger_xml_io.cpp
 Rename required dumpin, which is now modal.
 
+20160508T1503Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Move plan-type member to a more appropriate class.
+
+20160508T1517Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for clarity.
+
+20160508T1530Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for efficiency (VZ).
+
