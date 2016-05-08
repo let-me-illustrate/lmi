@@ -1191,7 +1191,7 @@ void group_quote_pdf_generator_wx::output_document_header
     // Add a "plan type" field, then any additional fields,
     // in left-to-right then top-to-bottom order.
     std::vector<extra_summary_field> fields;
-    fields.push_back(extra_summary_field({"Plan Type", report_data_.plan_type_}));
+    fields.emplace_back(extra_summary_field{"Plan Type", report_data_.plan_type_});
     std::vector<extra_summary_field> const& f = report_data_.extra_fields_;
     fields.insert(fields.end(), f.begin(), f.end());
 
