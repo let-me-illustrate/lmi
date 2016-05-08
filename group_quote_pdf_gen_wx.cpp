@@ -554,6 +554,7 @@ class group_quote_pdf_generator_wx
         std::string footer_;
 
         // Dynamically-determined fields.
+        std::string plan_type_;
         std::string plan_type_footnote_;
 
         // Optional supplementary fields.
@@ -616,8 +617,6 @@ class group_quote_pdf_generator_wx
     int row_num_;
 
     bool has_suppl_specamt_;
-
-    std::string plan_type_;
 };
 
 group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
@@ -824,7 +823,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     // total columns) be suppressed.
     if(is_composite)
         {
-        plan_type_ =
+        report_data_.plan_type_ =
             (invar.GroupIndivSelection ? invar.GroupQuoteRubricVoluntary
             :has_suppl_specamt_        ? invar.GroupQuoteRubricFusion
             :                            invar.GroupQuoteRubricMandatory
@@ -1189,7 +1188,7 @@ void group_quote_pdf_generator_wx::output_document_header
     // Add a "plan type" field, then any additional fields,
     // in left-to-right then top-to-bottom order.
     std::vector<extra_summary_field> fields;
-    fields.push_back(extra_summary_field({"Plan Type", plan_type_}));
+    fields.push_back(extra_summary_field({"Plan Type", report_data_.plan_type_}));
     std::vector<extra_summary_field> const& f = report_data_.extra_fields_;
     fields.insert(fields.end(), f.begin(), f.end());
 
