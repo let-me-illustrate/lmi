@@ -537,10 +537,11 @@ class group_quote_pdf_generator_wx
         ,enum_output_mode output_mode = e_output_normal
         );
 
+    class totals_data; // Fwd decl for fill_global_report_data() argument.
     struct global_report_data
         {
         // Extract header and footer fields from a ledger.
-        void fill_global_report_data(Ledger const& ledger);
+        void fill_global_report_data(Ledger const& ledger, totals_data const& totals);
 
         // Fixed fields that are always defined.
         std::string company_;
@@ -638,9 +639,22 @@ void assert_nonblank(std::string const& value, std::string const& name)
 
 void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     (Ledger const& ledger
+    ,totals_data const& totals
     )
 {
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
+
+    bool has_suppl_specamt_ = 0.0 != totals.total(e_col_supplemental_face_amount);
+    plan_type_ =
+        (invar.GroupIndivSelection ? invar.GroupQuoteRubricVoluntary
+        :has_suppl_specamt_        ? invar.GroupQuoteRubricFusion
+        :                            invar.GroupQuoteRubricMandatory
+        );
+    plan_type_footnote_ =
+        (invar.GroupIndivSelection ? invar.GroupQuoteFooterVoluntary
+        :has_suppl_specamt_        ? invar.GroupQuoteFooterFusion
+        :                            invar.GroupQuoteFooterMandatory
+        );
 
     company_          = invar.CorpName;
     prepared_by_      = invar.ProducerName;
@@ -819,18 +833,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     // total columns) be suppressed.
     if(is_composite)
         {
-        bool has_suppl_specamt_ = 0.0 != totals_.total(e_col_supplemental_face_amount);
-        report_data_.plan_type_ =
-            (invar.GroupIndivSelection ? invar.GroupQuoteRubricVoluntary
-            :has_suppl_specamt_        ? invar.GroupQuoteRubricFusion
-            :                            invar.GroupQuoteRubricMandatory
-            );
-        report_data_.plan_type_footnote_ =
-            (invar.GroupIndivSelection ? invar.GroupQuoteFooterVoluntary
-            :has_suppl_specamt_        ? invar.GroupQuoteFooterFusion
-            :                            invar.GroupQuoteFooterMandatory
-            );
-        report_data_.fill_global_report_data(ledger);
+        report_data_.fill_global_report_data(ledger, totals_);
         }
     else
         {
