@@ -39014,3 +39014,13 @@ Refactor for clarity.
   group_quote_pdf_gen_wx.cpp
 Refactor for efficiency (VZ).
 
+20160508T2139Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for concision.
+
+20160508T2207Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor.
+
