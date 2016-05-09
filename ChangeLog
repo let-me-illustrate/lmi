@@ -39024,3 +39024,13 @@ Refactor for concision.
   group_quote_pdf_gen_wx.cpp
 Refactor.
 
+20160509T1708Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Show elected riders.
+
+20160509T1844Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Improve consistency testing for an odd legacy product.
+
