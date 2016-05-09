@@ -617,10 +617,12 @@ class group_quote_pdf_generator_wx
     page_metrics page_;
 
     int row_num_;
+    int individual_selection_;
 };
 
 group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
     :row_num_(0)
+    ,individual_selection_(99)
 {
 }
 
@@ -752,6 +754,21 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
         }
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
+
+    if(99 == individual_selection_) // no previous ledger processed yet
+        {
+        individual_selection_ = invar.GroupIndivSelection;
+        }
+    else
+        {
+        if(invar.GroupIndivSelection != individual_selection_)
+            {
+            fatal_error()
+                << "Group quotes cannot mix mandatory and voluntary on the same plan."
+                << LMI_FLUSH
+                ;
+            }
+        }
 
     int const year = 0;
 
