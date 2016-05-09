@@ -540,7 +540,7 @@ class group_quote_pdf_generator_wx
     class totals_data; // Fwd decl for fill_global_report_data() argument.
     struct global_report_data
         {
-        // Extract header and footer fields from a ledger.
+        // Extract header and footer fields from composite ledger and totals.
         void fill_global_report_data(Ledger const& ledger, totals_data const& totals);
 
         // Fixed fields that are always defined.
@@ -548,13 +548,14 @@ class group_quote_pdf_generator_wx
         std::string prepared_by_;
         std::string product_;
         std::string short_product_;
-        std::string available_riders_;
         std::string premium_mode_;
         std::string contract_state_;
         std::string effective_date_;
         std::string footer_;
 
         // Dynamically-determined fields.
+        std::string elected_riders_;
+        std::string elected_riders_footnote_;
         std::string plan_type_;
         std::string plan_type_footnote_;
 
@@ -656,11 +657,45 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
         :                            invar.GroupQuoteFooterMandatory
         );
 
+    elected_riders_ += (invar.HasWP         ) ? invar.WaiverTerseName + ", ": "";
+    elected_riders_ += (invar.HasADD        ) ? invar.ADDTerseName    + ", ": "";
+    elected_riders_ += (invar.HasChildRider ) ? invar.ChildTerseName  + ", ": "";
+    elected_riders_ += (invar.HasSpouseRider) ? invar.SpouseTerseName + ", ": "";
+    if(!elected_riders_.empty())
+        {
+        // Remove superfluous trailing comma and blank.
+        elected_riders_.pop_back();
+        elected_riders_.pop_back();
+        // Replace last comma with a conjunction.
+        std::string::size_type pos = elected_riders_.rfind(",");
+        if(std::string::npos != pos)
+            {
+            elected_riders_.replace(pos, 1, " and");
+            }
+        }
+
+    if(!elected_riders_.empty())
+        {
+        elected_riders_footnote_ =
+              "This composite includes "
+            + elected_riders_
+            + "."
+            ;
+        if(invar.HasSpouseRider)
+            {
+            std::pair<int, oenum_format_style> const f0(0, oe_format_normal);
+            elected_riders_footnote_ +=
+                  " The spouse coverage amount is $"
+                + ledger_format(invar.SpouseRiderAmount, f0)
+                + "."
+                ;
+            }
+        }
+
     company_          = invar.CorpName;
     prepared_by_      = invar.ProducerName;
     product_          = invar.PolicyMktgName;
     short_product_    = invar.GroupQuoteShortProductName;
-    available_riders_ = invar.GroupQuoteRidersHeader;
     premium_mode_     = invar.InitErMode;
     contract_state_   = invar.GetStatePostalAbbrev();
     jdn_t eff_date    = jdn_t(static_cast<int>(invar.EffDateJdn));
@@ -670,6 +705,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     footer_ =
           brbr (invar.GroupQuoteIsNotAnOffer)
         + brbr (invar.GroupQuoteRidersFooter)
+        + brbr (elected_riders_footnote_)
         + brbr (plan_type_footnote_)
         + brbr (invar.GroupQuotePolicyFormId)
         + brbr (invar.GroupQuoteStateVariations)
@@ -683,24 +719,26 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     assert_nonblank(prepared_by_     , "Agent");
     assert_nonblank(product_         , "Product name");
     assert_nonblank(short_product_   , "Product ID");
-    assert_nonblank(available_riders_, "Available riders"); // If none, should say "none".
     assert_nonblank(premium_mode_    , "Mode");
     assert_nonblank(contract_state_  , "State");
     assert_nonblank(effective_date_  , "Effective date");
+    // elected_riders_ may be blank.
+    assert_nonblank(plan_type_       , "Plan type");
 
     assert_nonblank(invar.GroupQuoteIsNotAnOffer   , "First footnote");
     assert_nonblank(invar.GroupQuoteRidersFooter   , "Second footnote");
-    // treat plan_type_footnote_ similarly, soon
-    assert_nonblank(invar.GroupQuotePolicyFormId   , "Third footnote");
-    assert_nonblank(invar.GroupQuoteStateVariations, "Fourth footnote");
-    assert_nonblank(invar.MarketingNameFootnote    , "Fifth footnote");
-    // Somewhat casually, assume a contract is variable if it's not
-    // subject to the NAIC illustration reg.
+    // The third footnote (elected riders) may be blank.
+    assert_nonblank(plan_type_footnote_            , "Fourth footnote");
+    assert_nonblank(invar.GroupQuotePolicyFormId   , "Fifth footnote");
+    assert_nonblank(invar.GroupQuoteStateVariations, "Sixth footnote");
+    assert_nonblank(invar.MarketingNameFootnote    , "Seventh footnote");
+    // Somewhat casually, assume that a contract is variable iff it's
+    // not subject to the NAIC illustration reg.
     if(!is_subject_to_ill_reg(ledger.ledger_type()))
         {
-        assert_nonblank(invar.GroupQuoteProspectus  , "Sixth footnote");
-        assert_nonblank(invar.GroupQuoteUnderwriter , "Seventh footnote");
-        assert_nonblank(invar.GroupQuoteBrokerDealer, "Eighth footnote");
+        assert_nonblank(invar.GroupQuoteProspectus  , "Eighth footnote");
+        assert_nonblank(invar.GroupQuoteUnderwriter , "Ninth footnote");
+        assert_nonblank(invar.GroupQuoteBrokerDealer, "Tenth footnote");
         }
 
     extra_fields_     = parse_extra_report_fields(invar.Comments);
@@ -1162,8 +1200,8 @@ void group_quote_pdf_generator_wx::output_document_header
     open_and_ensure_closing_tag tag_tr(summary_html, "tr");
     append_name_value_to_html_table
         (summary_html
-        ,"Available Riders"
-        ,report_data_.available_riders_
+        ,"Riders"
+        ,report_data_.elected_riders_ + " " // " ": force colon if empty
         );
     append_name_value_to_html_table
         (summary_html
