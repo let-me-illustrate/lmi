@@ -39042,3 +39042,13 @@ Improve consistency testing for an odd legacy product.
   product_data.hpp
 Expunge a disused product parameter.
 
+ <gchicares@sbcglobal.net> [451]
+
+  ledger_xml_io.cpp
+Provide a ledger format for 'GroupIndivSelection'.
+
+20160510T2310Z <gchicares@sbcglobal.net> [451]
+
+  illustrator.cpp
+Exempt some riders from group-quote consistency test.
+
