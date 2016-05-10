@@ -283,6 +283,13 @@ void assert_okay_to_run_group_quote
     //
     // Term rider is permitted to vary because its amount is shown in
     // a column.
+    //
+    // ADB and WP are permitted to vary only because they cannot be
+    // consistently elected across a group that includes anyone past
+    // those riders' maximum issue ages. (At least for the particular
+    // products used with group quotes, spouse and child riders have
+    // no maximum issue age.)
+    //
     static char const*const fields[] =
         {"ProductName"
         ,"CorporationName"
@@ -292,8 +299,6 @@ void assert_okay_to_run_group_quote
         ,"EffectiveDate"
         ,"InforceAsOfDate"
         ,"Comments"
-        ,"WaiverOfPremiumBenefit"
-        ,"AccidentalDeathBenefit"
         ,"ChildRider"
         ,"ChildRiderAmount"
         ,"SpouseRider"
