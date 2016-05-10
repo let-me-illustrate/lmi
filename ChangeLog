@@ -39042,7 +39042,7 @@ Improve consistency testing for an odd legacy product.
   product_data.hpp
 Expunge a disused product parameter.
 
- <gchicares@sbcglobal.net> [451]
+20160510T2309Z <gchicares@sbcglobal.net> [451]
 
   ledger_xml_io.cpp
 Provide a ledger format for 'GroupIndivSelection'.
