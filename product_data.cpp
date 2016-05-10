@@ -239,7 +239,6 @@ void product_data::ascribe_members()
     ascribe("OverloanRiderFootnote"         , &product_data::OverloanRiderFootnote         );
     ascribe("GroupQuoteShortProductName"    , &product_data::GroupQuoteShortProductName    );
     ascribe("GroupQuoteIsNotAnOffer"        , &product_data::GroupQuoteIsNotAnOffer        );
-    ascribe("GroupQuoteRidersHeader"        , &product_data::GroupQuoteRidersHeader        );
     ascribe("GroupQuoteRidersFooter"        , &product_data::GroupQuoteRidersFooter        );
     ascribe("GroupQuotePolicyFormId"        , &product_data::GroupQuotePolicyFormId        );
     ascribe("GroupQuoteStateVariations"     , &product_data::GroupQuoteStateVariations     );
@@ -517,7 +516,6 @@ void product_data::WritePolFiles()
 
     z.GroupQuoteShortProductName = glossed_string("UL SUPREME®");
     z.GroupQuoteIsNotAnOffer     = glossed_string("This is not an offer of insurance.");
-    z.GroupQuoteRidersHeader     = glossed_string("ADB & WP");
     z.GroupQuoteRidersFooter     = glossed_string("Available riders: accident and waiver.");
     z.GroupQuotePolicyFormId     = glossed_string("Policy form UL32768-NY is a flexible premium contract.");
     z.GroupQuoteStateVariations  = glossed_string("Not available in all states.");
