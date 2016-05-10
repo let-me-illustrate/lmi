@@ -409,6 +409,7 @@ void Ledger::write(xml::element& x) const
     format_map["SpouseIssueAge"                    ] = f1;
     format_map["SupplementalReport"                ] = f1;
     format_map["UseExperienceRating"               ] = f1;
+    format_map["GroupIndivSelection"               ] = f1;
     format_map["UsePartialMort"                    ] = f1;
 
 // > Vector Formatting
