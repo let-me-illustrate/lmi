@@ -39034,3 +39034,11 @@ Show elected riders.
   group_quote_pdf_gen_wx.cpp
 Improve consistency testing for an odd legacy product.
 
+20160510T0041Z <gchicares@sbcglobal.net> [451]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+Expunge a disused product parameter.
+

@@ -264,7 +264,6 @@ class LMI_SO LedgerInvariant
     // Group quote footnotes.
     std::string     GroupQuoteShortProductName;
     std::string     GroupQuoteIsNotAnOffer    ;
-    std::string     GroupQuoteRidersHeader    ;
     std::string     GroupQuoteRidersFooter    ;
     std::string     GroupQuotePolicyFormId    ;
     std::string     GroupQuoteStateVariations ;

@@ -228,7 +228,6 @@ class LMI_SO product_data
     // Group quotes.
     glossed_string GroupQuoteShortProductName;
     glossed_string GroupQuoteIsNotAnOffer    ;
-    glossed_string GroupQuoteRidersHeader    ;
     glossed_string GroupQuoteRidersFooter    ;
     glossed_string GroupQuotePolicyFormId    ;
     glossed_string GroupQuoteStateVariations ;
