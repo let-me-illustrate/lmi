@@ -904,7 +904,8 @@ namespace
                 }
             }
 
-        new_text.resize(1 + new_text.find_last_not_of(';'));
+        ltrim(new_text, " ;");
+        rtrim(new_text, " ;");
 
         return new_text;
         }

@@ -39087,3 +39087,11 @@ Avoid spurious warnings when loading standard wx icons (VZ).
   skeleton.cpp
 Restrict multiline text-paste handler to input seq entries (VZ).
 
+20160511T2355Z <gchicares@sbcglobal.net> [451]
+
+  miscellany.cpp
+  miscellany.hpp
+  miscellany_test.cpp
+  skeleton.cpp
+Trim pasted strings.
+
