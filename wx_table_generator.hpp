@@ -66,6 +66,17 @@ class wx_table_generator
     // same number of them as the number of columns.
     void output_row(int* pos_y, std::string const* values);
 
+    // Render a single highlighted (by shading its background) cell with the
+    // given strings displayed in it left and right-aligned respectively.
+    // This is used for aggregate amounts display currently, so the LHS string
+    // is always just "$" currently.
+    void output_highlighted_cell
+        (std::size_t        column
+        ,int                y
+        ,std::string const& lhs
+        ,std::string const& rhs
+        );
+
     // Return the height of a single table row.
     int row_height() const {return row_height_;}
 

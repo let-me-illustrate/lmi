@@ -319,3 +319,33 @@ void wx_table_generator::output_row
     do_output_horz_separator(left_margin_, x, *pos_y);
 }
 
+void wx_table_generator::output_highlighted_cell
+    (std::size_t        column
+    ,int                y
+    ,std::string const& lhs
+    ,std::string const& rhs
+    )
+{
+    wxRect const total_rect = cell_rect(column, y);
+    {
+    wxDCPenChanger set_transparent_pen(dc_, *wxTRANSPARENT_PEN);
+    wxDCBrushChanger set_grey_brush(dc_, *wxLIGHT_GREY_BRUSH);
+    dc_.DrawRectangle(total_rect);
+    }
+
+    wxRect text_rect = total_rect.Deflate(dc_.GetCharWidth(), 0);
+    text_rect.Offset(0, char_height_);
+
+    dc_.DrawLabel
+        (lhs
+        ,text_rect
+        ,wxALIGN_LEFT
+        );
+    dc_.DrawLabel
+        (rhs
+        ,text_rect
+        ,wxALIGN_RIGHT
+        );
+
+    output_vert_separator(column, y);
+}

@@ -1341,32 +1341,12 @@ void group_quote_pdf_generator_wx::output_table_totals
             );
         std::pair<int, oenum_format_style> const f(num_dec, oe_format_normal);
 
-        wxRect const cell_rect = table_gen.cell_rect(col, y);
-            {
-            wxDCPenChanger set_transparent_pen(pdf_dc, *wxTRANSPARENT_PEN);
-            wxDCBrushChanger set_grey_brush(pdf_dc, *wxLIGHT_GREY_BRUSH);
-            pdf_dc.DrawRectangle(cell_rect);
-            }
-
-        wxRect const text_rect
-            (cell_rect.x + cell_margin_x
-            ,y_text
-            ,cell_rect.width - 2 * cell_margin_x
-            ,cell_rect.height
+        table_gen.output_highlighted_cell
+            (col
+            ,y
+            ,"$"
+            ,ledger_format(totals_.total(col), f)
             );
-
-        pdf_dc.DrawLabel
-            ("$"
-            ,text_rect
-            ,wxALIGN_LEFT
-            );
-        pdf_dc.DrawLabel
-            (ledger_format(totals_.total(col), f)
-            ,text_rect
-            ,wxALIGN_RIGHT
-            );
-
-        table_gen.output_vert_separator(col, y);
         }
 
     table_gen.output_vert_separator(e_col_max, y);
