@@ -54,9 +54,9 @@ class wx_table_generator
     // Each column must either have a fixed width, specified as the width of
     // the longest text that may appear in this column, or be expandable
     // meaning that the rest of the page width is allocated to it which will be
-    // the case if widest_text is empty (but it shouldn't be null).
+    // the case if widest_text is empty.
     // Notice that column headers may be multiline strings.
-    void add_column(char const* header, char const* widest_text);
+    void add_column(std::string const& header, std::string const& widest_text);
 
     // Render the headers at the given position and update it.
     void output_header(int* pos_y);
@@ -113,7 +113,7 @@ class wx_table_generator
 
     struct column_info
     {
-        column_info(char const* header, int width)
+        column_info(std::string const& header, int width)
             :header_(header)
             ,width_(width)
             // Fixed width columns are centered by default, variable width ones

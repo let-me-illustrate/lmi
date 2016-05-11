@@ -996,7 +996,7 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
                 }
             }
 
-        table_gen.add_column(header.c_str(), cd.widest_text_);
+        table_gen.add_column(header, cd.widest_text_);
         }
 
     output_table_totals(pdf_dc, table_gen, &pos_y);
