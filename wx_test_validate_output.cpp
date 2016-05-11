@@ -430,7 +430,7 @@ void validate_run_cell_and_copy_output
 /// Verify that these files were created:
 ///   ABC.John_Brown.000000001.monthly_trace.tsv
 ///   ABC.000000002.monthly_trace.tsv
-//    ABC.roster.tsv
+///    ABC.roster.tsv
 /// ...and delete all three now.
 ///
 /// select the "John Brown" cell
