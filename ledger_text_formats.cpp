@@ -730,7 +730,7 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"SpecifiedAmount"
         ,"SupplSpecAmt"
         ,"ModalMinimumPremium"
-        ,"InitMinDumpin"
+        ,"ModalMinimumDumpin"
         ,"EeModalMinimumPremium"
         ,"ErModalMinimumPremium"
         ,"EeMode"
@@ -813,7 +813,7 @@ void PrintRosterTabDelimited
         << Invar.value_str("SpecAmt"              ,d) << '\t'
         << Invar.value_str("TermSpecAmt"          ,d) << '\t'
         << Invar.value_str("ModalMinimumPremium"  ,d) << '\t'
-        << Invar.value_str("InitMinDumpin"          ) << '\t'
+        << Invar.value_str("ModalMinimumDumpin"     ) << '\t'
         << Invar.value_str("EeModalMinimumPremium",d) << '\t'
         << Invar.value_str("ErModalMinimumPremium",d) << '\t'
         << Invar.EeMode                           [d] << '\t'

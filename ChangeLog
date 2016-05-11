@@ -38984,3 +38984,71 @@ Refactor to increase flexibility.
   group_quote_pdf_gen_wx.cpp
 Deduce plan type.
 
+20160507T1148Z <gchicares@sbcglobal.net> [451]
+
+  ihs_acctval.cpp
+Modalize required dumpin.
+
+20160507T1354Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+Rename required dumpin, which is now modal.
+
+20160508T1503Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Move plan-type member to a more appropriate class.
+
+20160508T1517Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for clarity.
+
+20160508T1530Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for efficiency (VZ).
+
+20160508T2139Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for concision.
+
+20160508T2207Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor.
+
+20160509T1708Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Show elected riders.
+
+20160509T1844Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Improve consistency testing for an odd legacy product.
+
+20160510T0041Z <gchicares@sbcglobal.net> [451]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  product_data.cpp
+  product_data.hpp
+Expunge a disused product parameter.
+
+20160510T2309Z <gchicares@sbcglobal.net> [451]
+
+  ledger_xml_io.cpp
+Provide a ledger format for 'GroupIndivSelection'.
+
+20160510T2310Z <gchicares@sbcglobal.net> [451]
+
+  illustrator.cpp
+Exempt some riders from group-quote consistency test.
+

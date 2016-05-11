@@ -1042,10 +1042,11 @@ void AccountValue::InitializeSpecAmt()
 
     if(0 == Year)
         {
-        // 'InitMinDumpin' and 'InitMinPrem' depend on 'InitTgtPrem'.
-        InvariantValues().InitTgtPrem   = AnnualTargetPrem;
-        InvariantValues().InitMinDumpin = MinInitDumpin();
-        InvariantValues().InitMinPrem   = MinInitPrem();
+        mcenum_mode const er_mode = InvariantValues().ErMode[0].value();
+        // 'ModalMinimumDumpin' and 'InitMinPrem' depend on 'InitTgtPrem'.
+        InvariantValues().InitTgtPrem        = AnnualTargetPrem;
+        InvariantValues().ModalMinimumDumpin = MinInitDumpin() / er_mode;
+        InvariantValues().InitMinPrem        = MinInitPrem();
         }
 
     SurrChgSpecAmt = InvariantValues().SpecAmt[0];

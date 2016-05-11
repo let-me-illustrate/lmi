@@ -152,7 +152,7 @@ class LMI_SO LedgerInvariant
     double          InitGLP;
     double          InitTgtPrem;
     double          InitMinPrem;
-    double          InitMinDumpin;
+    double          ModalMinimumDumpin;
     double          Dumpin;
     double          External1035Amount;
     double          Internal1035Amount;
@@ -264,7 +264,6 @@ class LMI_SO LedgerInvariant
     // Group quote footnotes.
     std::string     GroupQuoteShortProductName;
     std::string     GroupQuoteIsNotAnOffer    ;
-    std::string     GroupQuoteRidersHeader    ;
     std::string     GroupQuoteRidersFooter    ;
     std::string     GroupQuotePolicyFormId    ;
     std::string     GroupQuoteStateVariations ;

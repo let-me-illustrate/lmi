@@ -139,7 +139,7 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["InitGLP"               ] = &InitGLP                ;
     ScalableScalars ["InitTgtPrem"           ] = &InitTgtPrem            ;
     ScalableScalars ["InitMinPrem"           ] = &InitMinPrem            ;
-    ScalableScalars ["InitMinDumpin"         ] = &InitMinDumpin          ;
+    ScalableScalars ["ModalMinimumDumpin"    ] = &ModalMinimumDumpin     ;
     ScalableScalars ["Dumpin"                ] = &Dumpin                 ;
     ScalableScalars ["External1035Amount"    ] = &External1035Amount     ;
     ScalableScalars ["Internal1035Amount"    ] = &Internal1035Amount     ;
@@ -242,7 +242,6 @@ void LedgerInvariant::Alloc(int len)
 
     Strings["GroupQuoteShortProductName"    ] = &GroupQuoteShortProductName    ;
     Strings["GroupQuoteIsNotAnOffer"        ] = &GroupQuoteIsNotAnOffer        ;
-    Strings["GroupQuoteRidersHeader"        ] = &GroupQuoteRidersHeader        ;
     Strings["GroupQuoteRidersFooter"        ] = &GroupQuoteRidersFooter        ;
     Strings["GroupQuotePolicyFormId"        ] = &GroupQuotePolicyFormId        ;
     Strings["GroupQuoteStateVariations"     ] = &GroupQuoteStateVariations     ;
@@ -625,7 +624,7 @@ void LedgerInvariant::Init(BasicValues* b)
 //  InitSevenPayPrem        =
 //  InitTgtPrem             =
 //  InitMinPrem             =
-//  InitMinDumpin           =
+//  ModalMinimumDumpin      =
 
     MaleProportion          = b->yare_input_.MaleProportion;
     NonsmokerProportion     = b->yare_input_.NonsmokerProportion;
@@ -739,7 +738,6 @@ void LedgerInvariant::Init(BasicValues* b)
 
         GroupQuoteShortProductName     = p.datum("GroupQuoteShortProductName"     );
         GroupQuoteIsNotAnOffer         = p.datum("GroupQuoteIsNotAnOffer"         );
-        GroupQuoteRidersHeader         = p.datum("GroupQuoteRidersHeader"         );
         GroupQuoteRidersFooter         = p.datum("GroupQuoteRidersFooter"         );
         GroupQuotePolicyFormId         = p.datum("GroupQuotePolicyFormId"         );
         GroupQuoteStateVariations      = p.datum("GroupQuoteStateVariations"      );
@@ -1090,7 +1088,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     GroupQuoteShortProductName    = a_Addend.GroupQuoteShortProductName;
     GroupQuoteIsNotAnOffer        = a_Addend.GroupQuoteIsNotAnOffer    ;
-    GroupQuoteRidersHeader        = a_Addend.GroupQuoteRidersHeader    ;
     GroupQuoteRidersFooter        = a_Addend.GroupQuoteRidersFooter    ;
     GroupQuotePolicyFormId        = a_Addend.GroupQuotePolicyFormId    ;
     GroupQuoteStateVariations     = a_Addend.GroupQuoteStateVariations ;
