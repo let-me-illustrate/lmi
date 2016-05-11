@@ -317,11 +317,13 @@ void f_3(std::string const& line1, std::string const& line2)
     std::cout
         << current_name
         << '\n';
+    std::streamsize const original_precision = std::cout.precision();
     std::cout
         << std::setprecision(20)
         << rel_err
         << "  " << d1
         << " vs. " << d2
+        << std::setprecision(original_precision)
         << '\n';
 }
 
@@ -475,11 +477,13 @@ int try_main(int argc, char* argv[])
         return EXIT_FAILURE;
         }
 
+    std::streamsize const original_precision = std::cout.precision();
     std::cout
         << std::setprecision(6) << std::setw(12)
         << "Summary:"
         << " max abs diff: " << max_abs_diff
         << " max rel err:  " << max_rel_err
+        << std::setprecision(original_precision)
         << '\n';
 
     is1.close();
