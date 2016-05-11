@@ -905,18 +905,29 @@ namespace
             }
 
         new_text.resize(1 + new_text.find_last_not_of(';'));
+        // TODO ?? Also remove any leading semicolons.
 
         return new_text;
         }
 
 } // Unnamed namespace.
 
-/// Paste "\n"- or "\r\n"-delimited clipboard contents into a control,
-/// replacing nonterminal delimiters with semicolons to form an input
-/// sequence. The motivation is to permit pasting spreadsheet columns.
+/// Handle 'Text Paste' events for all windows.
 ///
-/// At least for now, this transformation is performed iff the paste
-/// target is a wxTextCtrl.
+/// The behavior depends upon the event-object type.
+///
+/// Type InputSequenceEntry: Paste "\n"-, "\r\n"-, or "\t"-delimited
+/// clipboard contents into the associated text control, replacing
+/// nonterminal delimiters with semicolons to form an input sequence,
+/// and removing any terminal delimiters. The motivation is to permit
+/// pasting spreadsheet columns.
+///
+/// Type wxTextCtrl: Paste literal clipboard contents. Text delimited
+/// with "\n" or "\r\n" is shown on distinct lines in a multiline text
+/// control with all delimiters removed; in single-line text controls,
+/// all delimiters are replaced by RETURN_SYMBOL.
+///
+/// All other types: ignore the paste event.
 
 void Skeleton::UponPaste(wxClipboardTextEvent& event)
 {
@@ -924,6 +935,11 @@ void Skeleton::UponPaste(wxClipboardTextEvent& event)
 
     wxTextCtrl* t = dynamic_cast<wxTextCtrl*>(event.GetEventObject());
     if(!t)
+        {
+        return;
+        }
+
+    if(!dynamic_cast<InputSequenceEntry*>(t->GetParent()))
         {
         return;
         }
@@ -1092,26 +1108,27 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 
 void Skeleton::UponTestPasting(wxCommandEvent&)
 {
-    wxTextCtrl* t = new wxTextCtrl(frame_, wxID_ANY, "Testing...");
-    LMI_ASSERT(t);
+    InputSequenceEntry* z = new InputSequenceEntry(frame_, wxID_ANY, "Testing...");
+    LMI_ASSERT(z);
+    wxTextCtrl& t = z->text_ctrl();
 
     ClipboardEx::SetText("1\r\n2\r\n3\r\n");
-    t->SetSelection(-1L, -1L);
-    t->Paste();
-    if("1;2;3" != t->GetValue())
+    t.SetSelection(-1L, -1L);
+    t.Paste();
+    if("1;2;3" != t.GetValue())
         {
-        warning() << "'1;2;3' != '" << t->GetValue() << "'" << LMI_FLUSH;
+        warning() << "'1;2;3' != '" << t.GetValue() << "'" << LMI_FLUSH;
         }
 
     ClipboardEx::SetText("X\tY\tZ\t");
-    t->SetSelection(-1L, -1L);
-    t->Paste();
-    if("X;Y;Z" != t->GetValue())
+    t.SetSelection(-1L, -1L);
+    t.Paste();
+    if("X;Y;Z" != t.GetValue())
         {
-        warning() << "'X;Y;Z' != '" << t->GetValue() << "'" << LMI_FLUSH;
+        warning() << "'X;Y;Z' != '" << t.GetValue() << "'" << LMI_FLUSH;
         }
 
-    t->Destroy();
+    z->Destroy();
     status() << "Pasting test finished." << std::flush;
 }
 
