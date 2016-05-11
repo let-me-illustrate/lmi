@@ -31,7 +31,6 @@
 #include "alert.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
-#include "map_lookup.hpp"
 #include "path_utility.hpp" // fs::path inserter
 
 #include <boost/filesystem/operations.hpp>
@@ -161,14 +160,16 @@ wxBitmap icon_monger::CreateBitmap
     bool is_builtin = 0 == icon_name.find("wxART_");
     if(is_builtin)
         {
-        try
+        std::map<wxArtID,std::string>::const_iterator const
+            i = icon_names_by_wx_id_.find(icon_name);
+        if(i == icon_names_by_wx_id_.end())
             {
-            icon_name = map_lookup(icon_names_by_wx_id_, icon_name);
+            // This is not an error as not all wxART id's have lmi overrides,
+            // so just let the next art provider deal with it.
+            return wxNullBitmap;
             }
-        catch(...)
-            {
-            ; // Do nothing. Not all wxART id's have lmi overrides.
-            }
+
+        icon_name = i->second;
         }
 
     wxSize const desired_size = desired_icon_size(client, size);
