@@ -526,7 +526,7 @@ class group_quote_pdf_generator_wx
         ,wxHtmlWinParser& html_parser
         ,int*             pos_y
         );
-    void output_table_totals
+    void output_aggregate_values
         (wxPdfDC&            pdf_dc
         ,wx_table_generator& table_gen
         ,int*                pos_y
@@ -598,6 +598,68 @@ class group_quote_pdf_generator_wx
         double values_[e_col_max - e_first_totalled_column];
     };
     totals_data totals_;
+
+    class averages_data
+    {
+      public:
+        averages_data()
+            {
+            for(int col = e_first_totalled_column; col < e_col_max; ++col)
+                {
+                int const n = index_from_col(col);
+                values_counts_[n] = 0;
+                mean_values_[n] = 0.0;
+                }
+            }
+
+        // Adds 1000*premium/face_amount to the values over which the mean
+        // value is computed. The value is silently ignored if the face amount
+        // is zero, which can happen if this column is not used at all in this
+        // quote.
+        void add_data_point(int col, double premium, double face_amount)
+            {
+            if(face_amount == 0.0)
+                {
+                return;
+                }
+
+            double const d = 1000.0*premium / face_amount;
+
+            // Iteratively compute the mean of the sequence of values using the
+            // simplified (as we don't need the standard deviation here)
+            // version of the algorithm described in Knuth's "The Art of
+            // Computer Programming, Volume 2: Seminumerical Algorithms",
+            // section 4.2.2.
+            //
+            // The algorithm defines the sequence M(k)
+            //
+            //  M(1) = x(1), M(k) = M(k-1) + (x(k) - M(k-1)) / k
+            //
+            // where x(k) is the k-th value and the mean value of the sequence
+            // up to the member N is simply the last value M(N).
+            int const n = index_from_col(col);
+            if(values_counts_[n]++ == 0)
+                {
+                mean_values_[n] = d;
+                }
+            else
+                {
+                mean_values_[n] += (d - mean_values_[n]) / values_counts_[n];
+                }
+            }
+
+        double mean(int col) const
+            {
+            return mean_values_[index_from_col(col)];
+            }
+
+      private:
+        static int index_from_col(int col) { return col - e_first_totalled_column; }
+
+        unsigned values_counts_[e_col_max - e_first_totalled_column];
+        double   mean_values_  [e_col_max - e_first_totalled_column];
+    };
+    averages_data averages_;
 
     struct page_metrics
         {
@@ -831,6 +893,10 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     {
                     totals_.total(col, z);
                     }
+                else
+                    {
+                    averages_.add_data_point(col, z, basic_face_amount);
+                    }
                 }
                 break;
             case e_col_supplemental_face_amount:
@@ -850,6 +916,10 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     {
                     totals_.total(col, z);
                     }
+                else
+                    {
+                    averages_.add_data_point(col, z, suppl_face_amount);
+                    }
                 }
                 break;
             case e_col_total_face_amount:
@@ -868,6 +938,10 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 if(is_composite)
                     {
                     totals_.total(col, z);
+                    }
+                else
+                    {
+                    averages_.add_data_point(col, z, total_face_amount);
                     }
                 }
                 break;
@@ -1020,7 +1094,7 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
         table_gen.add_column(header, cd.widest_text_);
         }
 
-    output_table_totals(pdf_dc, table_gen, &pos_y);
+    output_aggregate_values(pdf_dc, table_gen, &pos_y);
 
     int const y_before_header = pos_y;
     table_gen.output_header(&pos_y);
@@ -1310,7 +1384,7 @@ void group_quote_pdf_generator_wx::output_document_header
     *pos_y += summary_height;
 }
 
-void group_quote_pdf_generator_wx::output_table_totals
+void group_quote_pdf_generator_wx::output_aggregate_values
     (wxPdfDC& pdf_dc
     ,wx_table_generator& table_gen
     ,int* pos_y
@@ -1323,8 +1397,10 @@ void group_quote_pdf_generator_wx::output_table_totals
     table_gen.output_vert_separator(e_col_max, y);
 
     y += table_gen.row_height();
+    int const y_next = y + table_gen.row_height();
 
     table_gen.output_vert_separator(e_col_number, y);
+    table_gen.output_vert_separator(e_col_number, y_next);
 
     // Render "Census" in bold.
     wxDCFontChanger set_bold_font(pdf_dc, pdf_dc.GetFont().Bold());
@@ -1334,7 +1410,7 @@ void group_quote_pdf_generator_wx::output_table_totals
         ,wxALIGN_LEFT
         );
 
-    // And the totals in bold italic: notice that there is no need to create
+    // And the aggregates in bold italic: notice that there is no need to create
     // another wxDCFontChanger here, the original font will be restored by the
     // one just above anyhow.
     pdf_dc.SetFont(pdf_dc.GetFont().Italic());
@@ -1343,6 +1419,12 @@ void group_quote_pdf_generator_wx::output_table_totals
     pdf_dc.DrawLabel
         ("Totals:"
         ,table_gen.text_rect(e_first_totalled_column - 1, y)
+        ,wxALIGN_RIGHT
+        );
+
+    pdf_dc.DrawLabel
+        ("Average Cost per $1000:"
+        ,table_gen.text_rect(e_first_totalled_column - 1, y_next)
         ,wxALIGN_RIGHT
         );
 
@@ -1365,12 +1447,27 @@ void group_quote_pdf_generator_wx::output_table_totals
             ,"$"
             ,ledger_format(totals_.total(col), f)
             );
+
+        // Only premium columns have averages, but we must output something for
+        // all cells to ensure that we use homogeneous background.
+        double const average = averages_.mean(col);
+        std::string lhs, rhs;
+        if(average != 0.0)
+            {
+            lhs = "$";
+            rhs = ledger_format(average, f);
+            }
+
+        table_gen.output_highlighted_cell(col, y_next, lhs, rhs);
         }
 
     table_gen.output_vert_separator(e_col_max, y);
     table_gen.output_horz_separator(e_col_number, e_col_max, y);
 
-    y += table_gen.row_height();
+    table_gen.output_vert_separator(e_col_max, y_next);
+    table_gen.output_horz_separator(e_first_totalled_column, e_col_max, y_next);
+
+    y = y_next + table_gen.row_height();
 }
 
 void group_quote_pdf_generator_wx::output_footer
