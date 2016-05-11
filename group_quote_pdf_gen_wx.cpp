@@ -778,6 +778,11 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
     bool const is_composite = ledger.is_composite();
 
+    // Some values which will be used more than once in the loop below.
+    double const basic_face_amount = invar.SpecAmt.at(year);
+    double const suppl_face_amount = invar.TermSpecAmt.at(year);
+    double const total_face_amount = basic_face_amount + suppl_face_amount;
+
     row_data rd;
     for(int col = 0; col < e_col_max; ++col)
         {
@@ -811,11 +816,10 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_basic_face_amount:
                 {
-                double const z = invar.SpecAmt.at(year);
-                rd.values[col] = '$' + ledger_format(z, f0);
+                rd.values[col] = '$' + ledger_format(basic_face_amount, f0);
                 if(is_composite)
                     {
-                    totals_.total(col, z);
+                    totals_.total(col, basic_face_amount);
                     }
                 }
                 break;
@@ -831,11 +835,10 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_supplemental_face_amount:
                 {
-                double const z = invar.TermSpecAmt.at(year);
-                rd.values[col] = '$' + ledger_format(z, f0);
+                rd.values[col] = '$' + ledger_format(suppl_face_amount, f0);
                 if(is_composite)
                     {
-                    totals_.total(col, z);
+                    totals_.total(col, suppl_face_amount);
                     }
                 }
                 break;
@@ -851,11 +854,10 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_total_face_amount:
                 {
-                double const z = invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year);
-                rd.values[col] = '$' + ledger_format(z, f0);
+                rd.values[col] = '$' + ledger_format(total_face_amount, f0);
                 if(is_composite)
                     {
-                    totals_.total(col, z);
+                    totals_.total(col, total_face_amount);
                     }
                 }
                 break;
