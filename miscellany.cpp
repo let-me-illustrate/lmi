@@ -128,6 +128,32 @@ std::string htmlize(std::string const& raw_text)
     return html;
 }
 
+void ltrim(std::string& s, char const* superfluous)
+{
+    std::string::size_type p = s.find_first_not_of(superfluous);
+    if(std::string::npos != p)
+        {
+        s.erase(0, p);
+        }
+    else
+        {
+        s.clear();
+        }
+}
+
+void rtrim(std::string& s, char const* superfluous)
+{
+    std::string::size_type p = s.find_last_not_of(superfluous);
+    if(std::string::npos != p)
+        {
+        s.erase(1 + p);
+        }
+    else
+        {
+        s.clear();
+        }
+}
+
 /// http://groups.google.com/group/borland.public.cpp.borlandcpp/msg/638d1f25e66472d9
 ///   [2001-07-18T22:25:15Z from Greg Chicares]
 

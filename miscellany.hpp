@@ -98,6 +98,14 @@ std::vector<std::string> LMI_SO split_into_lines(std::string const&);
 
 std::string htmlize(std::string const&);
 
+/// Remove superfluous characters from beginning of string.
+
+void ltrim(std::string& s, char const* superfluous);
+
+/// Remove superfluous characters from end of string.
+
+void rtrim(std::string& s, char const* superfluous);
+
 inline std::ios_base::openmode ios_in_binary()
 {
     return

@@ -99,10 +99,44 @@ void test_minmax()
 #endif // !defined __BORLANDC__
 }
 
+void test_trimming()
+{
+    char const*const superfluous = " ;";
+
+    std::string s = "";
+    ltrim(s, superfluous); rtrim(s, superfluous);
+    BOOST_TEST_EQUAL(s, "");
+
+    s = " ";
+    ltrim(s, superfluous); rtrim(s, superfluous);
+    BOOST_TEST_EQUAL(s, "");
+
+    s = " ;; ";
+    ltrim(s, superfluous); rtrim(s, superfluous);
+    BOOST_TEST_EQUAL(s, "");
+
+    s = "a";
+    ltrim(s, superfluous); rtrim(s, superfluous);
+    BOOST_TEST_EQUAL(s, "a");
+
+    s = "; ;a; ;";
+    ltrim(s, superfluous); rtrim(s, superfluous);
+    BOOST_TEST_EQUAL(s, "a");
+
+    s = "a; ;";
+    ltrim(s, superfluous); rtrim(s, superfluous);
+    BOOST_TEST_EQUAL(s, "a");
+
+    s = "; ;a";
+    ltrim(s, superfluous); rtrim(s, superfluous);
+    BOOST_TEST_EQUAL(s, "a");
+}
+
 int test_main(int, char*[])
 {
     test_files_are_identical();
     test_minmax();
+    test_trimming();
 
     return 0;
 }
