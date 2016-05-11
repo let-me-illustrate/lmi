@@ -39052,3 +39052,38 @@ Provide a ledger format for 'GroupIndivSelection'.
   illustrator.cpp
 Exempt some riders from group-quote consistency test.
 
+20160511T1648Z <gchicares@sbcglobal.net> [451]
+
+  wx_test_validate_output.cpp
+Fix a typographical error in a comment.
+
+20160511T1650Z <gchicares@sbcglobal.net> [451]
+
+  path_utility.hpp
+Define operator<<() for fs::path in the right namespace (VZ).
+
+20160511T1700Z <gchicares@sbcglobal.net> [451]
+
+  interest_rates.cpp
+Initialize variables explicitly to avoid warnings (VZ).
+
+20160511T1713Z <gchicares@sbcglobal.net> [451]
+
+  ihs_crc_comp.cpp
+Restore std::cout precision after changing it (VZ).
+
+20160511T2002Z <gchicares@sbcglobal.net> [451]
+
+  wx_test_validate_output.cpp
+Fix defect introduced 20160511T1648Z: extra space (reported by VZ).
+
+20160511T2003Z <gchicares@sbcglobal.net> [451]
+
+  icon_monger.cpp
+Avoid spurious warnings when loading standard wx icons (VZ).
+
+20160511T2238Z <gchicares@sbcglobal.net> [451]
+
+  skeleton.cpp
+Restrict multiline text-paste handler to input seq entries (VZ).
+
