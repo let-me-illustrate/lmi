@@ -1324,14 +1324,11 @@ void group_quote_pdf_generator_wx::output_table_totals
 
     table_gen.output_vert_separator(e_col_number, y);
 
-    int const cell_margin_x = pdf_dc.GetCharWidth();
-    int const y_text = y + pdf_dc.GetCharHeight();
-
     // Render "Census" in bold.
     wxDCFontChanger set_bold_font(pdf_dc, pdf_dc.GetFont().Bold());
     pdf_dc.DrawLabel
         ("Census"
-        ,table_gen.cell_rect(e_col_name, y_text).Deflate(cell_margin_x, 0)
+        ,table_gen.text_rect(e_col_name, y)
         ,wxALIGN_LEFT
         );
 
@@ -1343,7 +1340,7 @@ void group_quote_pdf_generator_wx::output_table_totals
     LMI_ASSERT(0 < e_first_totalled_column);
     pdf_dc.DrawLabel
         ("Totals:"
-        ,table_gen.cell_rect(e_first_totalled_column - 1, y_text).Deflate(cell_margin_x, 0)
+        ,table_gen.text_rect(e_first_totalled_column - 1, y)
         ,wxALIGN_RIGHT
         );
 
