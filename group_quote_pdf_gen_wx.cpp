@@ -56,6 +56,7 @@
 #include <wx/image.h>
 #include <wx/pdfdc.h>
 
+#include <cstring>                      // std::strstr()
 #include <limits>
 #include <stdexcept>
 #include <utility>                      // std::pair
@@ -954,34 +955,52 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
         ,page_.width_
         );
 
+    // Some of the table columns don't need to be shown if all the values in
+    // them are zeroes.
+    bool const has_suppl_amount = totals_.total(e_col_supplemental_face_amount) != 0.0;
+    bool const has_addl_premium = totals_.total(e_col_additional_premium      ) != 0.0;
+
     for(int col = 0; col < e_col_max; ++col)
         {
         column_definition const& cd = column_definitions[col];
-        std::string header(cd.header_);
+        std::string header;
 
         // The cast is only used to ensure that if any new elements are added
         // to the enum, the compiler would warn about their values not being
         // present in this switch.
         switch(static_cast<enum_group_quote_columns>(col))
             {
+            case e_col_supplemental_face_amount:
+            case e_col_total_face_amount:
+                if(!has_suppl_amount)
+                    {
+                    // Leave the header empty to hide this column.
+                    break;
+                    }
+                // Fall through
             case e_col_number:
             case e_col_name:
             case e_col_age:
             case e_col_dob:
             case e_col_basic_face_amount:
-            case e_col_supplemental_face_amount:
-            case e_col_total_face_amount:
-                // Nothing to do for these columns: their labels are literal.
+                // Labels of these columns are simple literals.
+                header = cd.header_;
                 break;
-            case e_col_basic_premium:
             case e_col_additional_premium:
             case e_col_total_premium:
+                if(!has_addl_premium)
+                    {
+                    // Leave the header empty to hide this column.
+                    break;
+                    }
+                // Fall through
+            case e_col_basic_premium:
                 {
                 // Labels of these columns are format strings as they need to
                 // be constructed dynamically.
-                LMI_ASSERT(header.find("%s") != std::string::npos);
+                LMI_ASSERT(std::strstr(cd.header_, "%s"));
                 header = wxString::Format
-                    (wxString(header), report_data_.premium_mode_
+                    (cd.header_, report_data_.premium_mode_
                     ).ToStdString();
                 }
                 break;
