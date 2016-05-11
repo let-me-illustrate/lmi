@@ -1,0 +1,577 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug Legacy_SOA|Win32">
+      <Configuration>Debug Legacy_SOA</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DLL Debug Legacy_SOA|Win32">
+      <Configuration>DLL Debug Legacy_SOA</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DLL Debug|Win32">
+      <Configuration>DLL Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DLL Release Legacy_SOA|Win32">
+      <Configuration>DLL Release Legacy_SOA</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DLL Release|Win32">
+      <Configuration>DLL Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release Legacy_SOA|Win32">
+      <Configuration>Release Legacy_SOA</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>lmi</ProjectName>
+    <ProjectGuid>{30BD55A6-C40F-5756-9B7C-52B307C279E3}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug Legacy_SOA|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release Legacy_SOA|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Legacy_SOA|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Legacy_SOA|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug Legacy_SOA|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release Legacy_SOA|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Legacy_SOA|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Legacy_SOA|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Legacy_SOA|Win32'">
+    <OutDir>ReleaseLegacySOA\</OutDir>
+    <IntDir>ReleaseLegacySOA\lmi\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>Release\</OutDir>
+    <IntDir>Release\lmi\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Legacy_SOA|Win32'">
+    <OutDir>DebugLegacySOA\</OutDir>
+    <IntDir>DebugLegacySOA\lmi\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\lmi\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release Legacy_SOA|Win32'">
+    <OutDir>ReleaseLegacySOA_DLL\</OutDir>
+    <IntDir>ReleaseLegacySOA_DLL\lmi\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
+    <OutDir>Release_DLL\</OutDir>
+    <IntDir>Release_DLL\lmi\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug Legacy_SOA|Win32'">
+    <OutDir>DebugLegacySOA_DLL\</OutDir>
+    <IntDir>DebugLegacySOA_DLL\lmi\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">
+    <OutDir>Debug_DLL\</OutDir>
+    <IntDir>Debug_DLL\lmi\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Legacy_SOA|Win32'">
+    <Midl>
+      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/MP /Zm125 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pchfile.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>ReleaseLegacySOA\lmi\</ObjectFileName>
+      <ProgramDataBaseFileName>ReleaseLegacySOA\lmi.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat />
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>ReleaseLegacySOA\lmi.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>ReleaseLegacySOA\lmi.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/w44062 /w44263 /w44264 /w44265 /w44266 /w44289 /w44296 /w44545 /w44546 /w44547 /w44549 /w44555 /w44574 /w44986</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_LIB_TOOLSET="vc140";WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pchfile.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>Release\lmi\</ObjectFileName>
+      <ProgramDataBaseFileName>Release\lmi.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>Release\lmi.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>Release\lmi.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Legacy_SOA|Win32'">
+    <Midl>
+      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/MP /Zm125 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pchfile.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>DebugLegacySOA\lmi\</ObjectFileName>
+      <ProgramDataBaseFileName>DebugLegacySOA\lmi.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>DebugLegacySOA\lmi.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>DebugLegacySOA\lmi.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/w44062 /w44263 /w44264 /w44265 /w44266 /w44289 /w44296 /w44545 /w44546 /w44547 /w44549 /w44555 /w44574 /w44986</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_LIB_TOOLSET="vc140";WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pchfile.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>Debug\lmi\</ObjectFileName>
+      <ProgramDataBaseFileName>Debug\lmi.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>Debug\lmi.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>Debug\lmi.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release Legacy_SOA|Win32'">
+    <Midl>
+      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/MP /Zm125 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pchfile.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>ReleaseLegacySOA_DLL\lmi\</ObjectFileName>
+      <ProgramDataBaseFileName>ReleaseLegacySOA_DLL\lmi.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat />
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>ReleaseLegacySOA_DLL\lmi.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>ReleaseLegacySOA_DLL\lmi.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
+    <Midl>
+      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/w44061 /w44062 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pchfile.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>Release_DLL\lmi\</ObjectFileName>
+      <ProgramDataBaseFileName>Release_DLL\lmi.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat />
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>Release_DLL\lmi.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>Release_DLL\lmi.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug Legacy_SOA|Win32'">
+    <Midl>
+      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/MP /Zm125 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pchfile.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>DebugLegacySOA_DLL\lmi\</ObjectFileName>
+      <ProgramDataBaseFileName>DebugLegacySOA_DLL\lmi.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>DebugLegacySOA_DLL\lmi.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>DebugLegacySOA_DLL\lmi.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">
+    <Midl>
+      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/w44061 /w44062 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pchfile.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>Debug_DLL\lmi\</ObjectFileName>
+      <ProgramDataBaseFileName>Debug_DLL\lmi.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>Debug_DLL\lmi.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>Debug_DLL\lmi.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="actuarial_table.cpp" />
+    <ClCompile Include="alert.cpp" />
+    <ClCompile Include="authenticity.cpp" />
+    <ClCompile Include="calendar_date.cpp" />
+    <ClCompile Include="ce_product_name.cpp" />
+    <ClCompile Include="commutation_functions.cpp" />
+    <ClCompile Include="configurable_settings.cpp" />
+    <ClCompile Include="crc32.cpp" />
+    <ClCompile Include="custom_io_0.cpp" />
+    <ClCompile Include="custom_io_1.cpp" />
+    <ClCompile Include="data_directory.cpp" />
+    <ClCompile Include="database.cpp" />
+    <ClCompile Include="datum_base.cpp" />
+    <ClCompile Include="datum_boolean.cpp" />
+    <ClCompile Include="datum_sequence.cpp" />
+    <ClCompile Include="datum_string.cpp" />
+    <ClCompile Include="dbdict.cpp" />
+    <ClCompile Include="dbnames.cpp" />
+    <ClCompile Include="dbvalue.cpp" />
+    <ClCompile Include="death_benefits.cpp" />
+    <ClCompile Include="emit_ledger.cpp" />
+    <ClCompile Include="facets.cpp" />
+    <ClCompile Include="fenv_guard.cpp" />
+    <ClCompile Include="fenv_lmi.cpp" />
+    <ClCompile Include="file_command.cpp" />
+    <ClCompile Include="fund_data.cpp" />
+    <ClCompile Include="getopt.cpp" />
+    <ClCompile Include="global_settings.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Debug Legacy_SOA|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Release Legacy_SOA|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug Legacy_SOA|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Legacy_SOA|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="gpt_input.cpp" />
+    <ClCompile Include="gpt_server.cpp" />
+    <ClCompile Include="gpt_specamt.cpp" />
+    <ClCompile Include="gpt_state.cpp" />
+    <ClCompile Include="gpt_xml_document.cpp" />
+    <ClCompile Include="group_quote_pdf_gen.cpp" />
+    <ClCompile Include="group_values.cpp" />
+    <ClCompile Include="ihs_acctval.cpp" />
+    <ClCompile Include="ihs_avdebug.cpp" />
+    <ClCompile Include="ihs_avmly.cpp" />
+    <ClCompile Include="ihs_avsolve.cpp" />
+    <ClCompile Include="ihs_avstrtgy.cpp" />
+    <ClCompile Include="ihs_basicval.cpp" />
+    <ClCompile Include="ihs_irc7702.cpp" />
+    <ClCompile Include="ihs_irc7702a.cpp" />
+    <ClCompile Include="ihs_mortal.cpp" />
+    <ClCompile Include="ihs_server7702.cpp" />
+    <ClCompile Include="illustrator.cpp" />
+    <ClCompile Include="input.cpp" />
+    <ClCompile Include="input_harmonization.cpp" />
+    <ClCompile Include="input_realization.cpp" />
+    <ClCompile Include="input_seq_helpers.cpp" />
+    <ClCompile Include="input_sequence.cpp" />
+    <ClCompile Include="input_xml_io.cpp" />
+    <ClCompile Include="interest_rates.cpp" />
+    <ClCompile Include="ledger.cpp" />
+    <ClCompile Include="ledger_base.cpp" />
+    <ClCompile Include="ledger_invariant.cpp" />
+    <ClCompile Include="ledger_text_formats.cpp" />
+    <ClCompile Include="ledger_variant.cpp" />
+    <ClCompile Include="ledger_xml_io.cpp" />
+    <ClCompile Include="ledger_xsl.cpp" />
+    <ClCompile Include="ledgervalues.cpp" />
+    <ClCompile Include="license.cpp" />
+    <ClCompile Include="lmi.cpp" />
+    <ClCompile Include="loads.cpp" />
+    <ClCompile Include="mc_enum.cpp" />
+    <ClCompile Include="mc_enum_types.cpp" />
+    <ClCompile Include="mc_enum_types_aux.cpp" />
+    <ClCompile Include="md5.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Debug Legacy_SOA|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Release Legacy_SOA|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug Legacy_SOA|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Legacy_SOA|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="mec_input.cpp" />
+    <ClCompile Include="mec_server.cpp" />
+    <ClCompile Include="mec_state.cpp" />
+    <ClCompile Include="mec_xml_document.cpp" />
+    <ClCompile Include="miscellany.cpp" />
+    <ClCompile Include="mortality_rates_fetch.cpp" />
+    <ClCompile Include="multiple_cell_document.cpp" />
+    <ClCompile Include="mvc_model.cpp" />
+    <ClCompile Include="my_proem.cpp" />
+    <ClCompile Include="name_value_pairs.cpp" />
+    <ClCompile Include="null_stream.cpp" />
+    <ClCompile Include="outlay.cpp" />
+    <ClCompile Include="path_utility.cpp" />
+    <ClCompile Include="preferences_model.cpp" />
+    <ClCompile Include="premium_tax.cpp" />
+    <ClCompile Include="product_data.cpp" />
+    <ClCompile Include="product_names.cpp" />
+    <ClCompile Include="progress_meter.cpp" />
+    <ClCompile Include="rounding_rules.cpp" />
+    <ClCompile Include="sigfpe.cpp" />
+    <ClCompile Include="single_cell_document.cpp" />
+    <ClCompile Include="stratified_algorithms.cpp" />
+    <ClCompile Include="stratified_charges.cpp" />
+    <ClCompile Include="surrchg_rates.cpp" />
+    <ClCompile Include="system_command.cpp" />
+    <ClCompile Include="timer.cpp" />
+    <ClCompile Include="tn_range_types.cpp" />
+    <ClCompile Include="xml_lmi.cpp" />
+    <ClCompile Include="yare_input.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
