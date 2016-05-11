@@ -61,10 +61,18 @@ void LMI_SO validate_filepath
     ,std::string const& context
     );
 
+namespace boost
+{
+namespace filesystem
+{
+
 inline std::ostream& operator<<(std::ostream& os, fs::path const& z)
 {
     return os << z.string();
 }
+
+} // namespace filesystem
+} // namespace boost
 
 #endif // path_utility_hpp
 
