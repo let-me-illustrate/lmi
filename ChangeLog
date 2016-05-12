@@ -39100,3 +39100,9 @@ Trim pasted strings.
   progress_meter.hpp
 Suppress a clang warning.
 
+20160512T1548Z <gchicares@sbcglobal.net> [451]
+
+  main_wx_test.cpp
+Prevent crash if GUI test aborted (VZ). See:
+  https://github.com/vadz/lmi/pull/24/
+
