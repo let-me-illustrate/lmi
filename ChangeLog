@@ -39095,3 +39095,8 @@ Restrict multiline text-paste handler to input seq entries (VZ).
   skeleton.cpp
 Trim pasted strings.
 
+20160512T0050Z <gchicares@sbcglobal.net> [451]
+
+  progress_meter.hpp
+Suppress a clang warning.
+
