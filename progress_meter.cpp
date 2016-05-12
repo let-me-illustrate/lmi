@@ -72,12 +72,11 @@ bool set_progress_meter_creator(progress_meter_creator_type f)
 progress_meter::progress_meter
     (int                max_count
     ,std::string const& title
-    ,enum_display_mode  display_mode
+    ,enum_display_mode  /* display_mode */
     )
     :count_         (0)
     ,max_count_     (max_count)
     ,title_         (title)
-    ,display_mode_  (display_mode)
     ,was_cancelled_ (false)
 {
 }
