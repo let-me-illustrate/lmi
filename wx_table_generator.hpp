@@ -90,6 +90,12 @@ class wx_table_generator
     // Return the rectangle containing the cell area.
     wxRect cell_rect(std::size_t column, int y);
 
+    // Return the rectangle adjusted for the text contents of the cell: it is
+    // more narrow than the full cell rectangle to leave margins around the
+    // text and its vertical position is adjusted so that it can be directly
+    // passed to wxDC::DrawLabel().
+    wxRect text_rect(std::size_t column, int y);
+
     // Output a horizontal separator line across the specified columns,
     // using the usual C++ close/open interval convention.
     void output_horz_separator
