@@ -51,6 +51,13 @@ class wx_table_generator
     // The table has the given total width and starts at the left margin.
     wx_table_generator(wxDC& dc, int left_margin, int total_width);
 
+    // Adds a column to the table. The total number of added columns determines
+    // the number of the expected value in output_row() calls.
+    //
+    // Providing an empty header suppresses the table display, while still
+    // taking into account in output_row(), providing a convenient way to hide
+    // a single column without changing the data representation.
+    //
     // Each column must either have a fixed width, specified as the width of
     // the longest text that may appear in this column, or be expandable
     // meaning that the rest of the page width is allocated to it which will be
@@ -133,6 +140,10 @@ class wx_table_generator
             ,is_centered_(width != 0)
             {
             }
+
+        // A column with empty header is considered to be suppressed and
+        // doesn't appear in the output at all.
+        bool is_hidden() const { return header_.empty(); }
 
         std::string header_;
         int width_;
