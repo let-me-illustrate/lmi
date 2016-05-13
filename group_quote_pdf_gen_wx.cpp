@@ -749,9 +749,11 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
         if(invar.HasSpouseRider)
             {
             std::pair<int, oenum_format_style> const f0(0, oe_format_normal);
+            double const number_of_lives = invar.GetInforceLives().at(0);
+            LMI_ASSERT(0.0 < number_of_lives);
             elected_riders_footnote_ +=
                   " The spouse coverage amount is $"
-                + ledger_format(invar.SpouseRiderAmount, f0)
+                + ledger_format(invar.SpouseRiderAmount / number_of_lives, f0)
                 + "."
                 ;
             }
