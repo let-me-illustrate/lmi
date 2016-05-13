@@ -148,6 +148,13 @@ wxRect wx_table_generator::cell_rect(std::size_t column, int y)
     return wxRect(x, y, columns_.at(column).width_, row_height_);
 }
 
+wxRect wx_table_generator::text_rect(std::size_t column, int y)
+{
+    wxRect text_rect = cell_rect(column, y).Deflate(dc_.GetCharWidth(), 0);
+    text_rect.Offset(0, char_height_);
+    return text_rect;
+}
+
 void wx_table_generator::do_compute_column_widths_if_necessary()
 {
     if(has_column_widths_)
@@ -356,26 +363,15 @@ void wx_table_generator::output_highlighted_cell
         return;
         }
 
-    wxRect const total_rect = cell_rect(column, y);
     {
     wxDCPenChanger set_transparent_pen(dc_, *wxTRANSPARENT_PEN);
     wxDCBrushChanger set_grey_brush(dc_, *wxLIGHT_GREY_BRUSH);
-    dc_.DrawRectangle(total_rect);
+    dc_.DrawRectangle(cell_rect(column, y));
     }
 
-    wxRect text_rect = total_rect.Deflate(dc_.GetCharWidth(), 0);
-    text_rect.Offset(0, char_height_);
-
-    dc_.DrawLabel
-        (lhs
-        ,text_rect
-        ,wxALIGN_LEFT
-        );
-    dc_.DrawLabel
-        (rhs
-        ,text_rect
-        ,wxALIGN_RIGHT
-        );
+    wxRect const r = text_rect(column, y);
+    dc_.DrawLabel(lhs, r, wxALIGN_LEFT);
+    dc_.DrawLabel(rhs, r, wxALIGN_RIGHT);
 
     output_vert_separator(column, y);
 }
