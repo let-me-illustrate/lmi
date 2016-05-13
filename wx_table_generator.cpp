@@ -70,14 +70,14 @@ wx_table_generator::wx_table_generator
 }
 
 void wx_table_generator::add_column
-    (char const* header
-    ,char const* widest_text
+    (std::string const& header
+    ,std::string const& widest_text
     )
 {
     wxDCFontChanger set_header_font(dc_, get_header_font());
 
     // Set width to the special value of 0 for the variable width columns.
-    int width = widest_text[0] ? dc_.GetTextExtent(widest_text).x : 0;
+    int width = widest_text.empty() ? 0 : dc_.GetTextExtent(widest_text).x;
 
     // Keep track of the maximal number of lines in a header as this determines
     // the number of lines used for all of them. This is one plus the number of
