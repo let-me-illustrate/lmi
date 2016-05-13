@@ -39115,3 +39115,39 @@ Use std::string instead of char* in wx_table_generator (VZ). See:
   https://github.com/vadz/lmi/pull/28
 for this commit and the next several.
 
+20160513T1352Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  wx_table_generator.cpp
+  wx_table_generator.hpp
+Refactor: move total table cells drawing into wx_table_generator (VZ).
+
+20160513T1356Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  wx_table_generator.cpp
+  wx_table_generator.hpp
+Suppress columns with only zeroes in group quote summary (VZ).
+
+20160513T1359Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  wx_table_generator.cpp
+  wx_table_generator.hpp
+Refactor: add wx_table_generator::text_rect() helper (VZ).
+
+20160513T1402Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor: move some variables outside of the loop to allow reuse (VZ).
+
+20160513T1404Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Add averages sub-header to the group quote report (VZ).
+
+20160513T1414Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+State individual (not group total) spouse rider amount.
+
