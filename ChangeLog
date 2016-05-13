@@ -39106,3 +39106,12 @@ Suppress a clang warning.
 Prevent crash if GUI test aborted (VZ). See:
   https://github.com/vadz/lmi/pull/24/
 
+20160513T1349Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  wx_table_generator.cpp
+  wx_table_generator.hpp
+Use std::string instead of char* in wx_table_generator (VZ). See:
+  https://github.com/vadz/lmi/pull/28
+for this commit and the next several.
+
