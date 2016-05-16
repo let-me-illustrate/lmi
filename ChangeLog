@@ -39052,3 +39052,102 @@ Provide a ledger format for 'GroupIndivSelection'.
   illustrator.cpp
 Exempt some riders from group-quote consistency test.
 
+20160511T1648Z <gchicares@sbcglobal.net> [451]
+
+  wx_test_validate_output.cpp
+Fix a typographical error in a comment.
+
+20160511T1650Z <gchicares@sbcglobal.net> [451]
+
+  path_utility.hpp
+Define operator<<() for fs::path in the right namespace (VZ).
+
+20160511T1700Z <gchicares@sbcglobal.net> [451]
+
+  interest_rates.cpp
+Initialize variables explicitly to avoid warnings (VZ).
+
+20160511T1713Z <gchicares@sbcglobal.net> [451]
+
+  ihs_crc_comp.cpp
+Restore std::cout precision after changing it (VZ).
+
+20160511T2002Z <gchicares@sbcglobal.net> [451]
+
+  wx_test_validate_output.cpp
+Fix defect introduced 20160511T1648Z: extra space (reported by VZ).
+
+20160511T2003Z <gchicares@sbcglobal.net> [451]
+
+  icon_monger.cpp
+Avoid spurious warnings when loading standard wx icons (VZ).
+
+20160511T2238Z <gchicares@sbcglobal.net> [451]
+
+  skeleton.cpp
+Restrict multiline text-paste handler to input seq entries (VZ).
+
+20160511T2355Z <gchicares@sbcglobal.net> [451]
+
+  miscellany.cpp
+  miscellany.hpp
+  miscellany_test.cpp
+  skeleton.cpp
+Trim pasted strings.
+
+20160512T0050Z <gchicares@sbcglobal.net> [451]
+
+  progress_meter.hpp
+Suppress a clang warning.
+
+20160512T1548Z <gchicares@sbcglobal.net> [451]
+
+  main_wx_test.cpp
+Prevent crash if GUI test aborted (VZ). See:
+  https://github.com/vadz/lmi/pull/24/
+
+20160513T1349Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  wx_table_generator.cpp
+  wx_table_generator.hpp
+Use std::string instead of char* in wx_table_generator (VZ). See:
+  https://github.com/vadz/lmi/pull/28
+for this commit and the next several.
+
+20160513T1352Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  wx_table_generator.cpp
+  wx_table_generator.hpp
+Refactor: move total table cells drawing into wx_table_generator (VZ).
+
+20160513T1356Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  wx_table_generator.cpp
+  wx_table_generator.hpp
+Suppress columns with only zeroes in group quote summary (VZ).
+
+20160513T1359Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  wx_table_generator.cpp
+  wx_table_generator.hpp
+Refactor: add wx_table_generator::text_rect() helper (VZ).
+
+20160513T1402Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor: move some variables outside of the loop to allow reuse (VZ).
+
+20160513T1404Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Add averages sub-header to the group quote report (VZ).
+
+20160513T1414Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+State individual (not group total) spouse rider amount.
+

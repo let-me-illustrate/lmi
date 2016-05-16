@@ -228,6 +228,12 @@ class LMI_SO progress_meter
     int count() const;
     int max_count() const;
 
+    // This accessor is not actually used today; it serves only to
+    // prevent Clang from complaining that the member it accesses is
+    // otherwise unused. See:
+    //   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00035.html
+    enum_display_mode display_mode() const {return display_mode_;}
+
     virtual void        do_dawdle            (int seconds);
     virtual std::string progress_message     () const = 0;
     virtual bool        show_progress_message()       = 0;

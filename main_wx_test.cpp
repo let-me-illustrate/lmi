@@ -46,7 +46,6 @@
 #include <wx/frame.h>
 #include <wx/init.h>                    // wxEntry()
 #include <wx/msgdlg.h>
-#include <wx/scopeguard.h>
 #include <wx/stopwatch.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
@@ -803,7 +802,29 @@ void SkeletonTest::RunTheTests()
 
     // Whatever happens, ensure that the main window is closed and thus the
     // main loop terminated and the application exits at the end of the tests.
-    wxON_BLOCK_EXIT_OBJ1(*mainWin, wxWindow::Close, true /* force close */);
+    class ensure_top_window_closed
+    {
+      public:
+        explicit ensure_top_window_closed(wxApp* app)
+            :app_(app)
+        {
+        }
+
+        ensure_top_window_closed(ensure_top_window_closed const&) = delete;
+        ensure_top_window_closed& operator=(ensure_top_window_closed const&) = delete;
+
+        ~ensure_top_window_closed()
+        {
+        wxWindow* const top = app_->GetTopWindow();
+        if(top)
+            {
+            top->Close(true /* force close */);
+            }
+        }
+
+      private:
+        wxApp const* const app_;
+    } close_top_window_on_scope_exit(this);
 
     // Close any initially opened dialogs (e.g. "About" dialog shown unless a
     // special command line option is specified).

@@ -51,12 +51,19 @@ class wx_table_generator
     // The table has the given total width and starts at the left margin.
     wx_table_generator(wxDC& dc, int left_margin, int total_width);
 
+    // Adds a column to the table. The total number of added columns determines
+    // the number of the expected value in output_row() calls.
+    //
+    // Providing an empty header suppresses the table display, while still
+    // taking into account in output_row(), providing a convenient way to hide
+    // a single column without changing the data representation.
+    //
     // Each column must either have a fixed width, specified as the width of
     // the longest text that may appear in this column, or be expandable
     // meaning that the rest of the page width is allocated to it which will be
-    // the case if widest_text is empty (but it shouldn't be null).
+    // the case if widest_text is empty.
     // Notice that column headers may be multiline strings.
-    void add_column(char const* header, char const* widest_text);
+    void add_column(std::string const& header, std::string const& widest_text);
 
     // Render the headers at the given position and update it.
     void output_header(int* pos_y);
@@ -66,11 +73,28 @@ class wx_table_generator
     // same number of them as the number of columns.
     void output_row(int* pos_y, std::string const* values);
 
+    // Render a single highlighted (by shading its background) cell with the
+    // given strings displayed in it left and right-aligned respectively.
+    // This is used for aggregate amounts display currently, so the LHS string
+    // is always just "$" currently.
+    void output_highlighted_cell
+        (std::size_t        column
+        ,int                y
+        ,std::string const& lhs
+        ,std::string const& rhs
+        );
+
     // Return the height of a single table row.
     int row_height() const {return row_height_;}
 
     // Return the rectangle containing the cell area.
     wxRect cell_rect(std::size_t column, int y);
+
+    // Return the rectangle adjusted for the text contents of the cell: it is
+    // more narrow than the full cell rectangle to leave margins around the
+    // text and its vertical position is adjusted so that it can be directly
+    // passed to wxDC::DrawLabel().
+    wxRect text_rect(std::size_t column, int y);
 
     // Output a horizontal separator line across the specified columns,
     // using the usual C++ close/open interval convention.
@@ -113,7 +137,7 @@ class wx_table_generator
 
     struct column_info
     {
-        column_info(char const* header, int width)
+        column_info(std::string const& header, int width)
             :header_(header)
             ,width_(width)
             // Fixed width columns are centered by default, variable width ones
@@ -122,6 +146,10 @@ class wx_table_generator
             ,is_centered_(width != 0)
             {
             }
+
+        // A column with empty header is considered to be suppressed and
+        // doesn't appear in the output at all.
+        bool is_hidden() const { return header_.empty(); }
 
         std::string header_;
         int width_;

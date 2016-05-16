@@ -70,29 +70,38 @@ wx_table_generator::wx_table_generator
 }
 
 void wx_table_generator::add_column
-    (char const* header
-    ,char const* widest_text
+    (std::string const& header
+    ,std::string const& widest_text
     )
 {
-    wxDCFontChanger set_header_font(dc_, get_header_font());
-
-    // Set width to the special value of 0 for the variable width columns.
-    int width = widest_text[0] ? dc_.GetTextExtent(widest_text).x : 0;
-
-    // Keep track of the maximal number of lines in a header as this determines
-    // the number of lines used for all of them. This is one plus the number of
-    // newlines in the anticipated case where there is no newline character at
-    // the beginning or end of the header's string representation.
-    increase_to_if_smaller(max_header_lines_, 1u + count_newlines(header));
-
-    // Also increase the column width to be sufficiently wide to fit
-    // this header line if it has fixed width.
-    if(0 != width)
+    // There is no need to care about the column width for hidden columns.
+    int width;
+    if(header.empty())
         {
-        increase_to_if_smaller(width, dc_.GetMultiLineTextExtent(header).x);
+        width = 0;
+        }
+    else
+        {
+        wxDCFontChanger set_header_font(dc_, get_header_font());
 
-        // Add roughly 1 em margins on both sides.
-        width += dc_.GetTextExtent("MM").x;
+        // Set width to the special value of 0 for the variable width columns.
+        width = widest_text.empty() ? 0 : dc_.GetTextExtent(widest_text).x;
+
+        // Keep track of the maximal number of lines in a header as this determines
+        // the number of lines used for all of them. This is one plus the number of
+        // newlines in the anticipated case where there is no newline character at
+        // the beginning or end of the header's string representation.
+        increase_to_if_smaller(max_header_lines_, 1u + count_newlines(header));
+
+        // Also increase the column width to be sufficiently wide to fit
+        // this header line if it has fixed width.
+        if(0 != width)
+            {
+            increase_to_if_smaller(width, dc_.GetMultiLineTextExtent(header).x);
+
+            // Add roughly 1 em margins on both sides.
+            width += dc_.GetTextExtent("MM").x;
+            }
         }
 
     columns_.push_back(column_info(header, width));
@@ -139,6 +148,13 @@ wxRect wx_table_generator::cell_rect(std::size_t column, int y)
     return wxRect(x, y, columns_.at(column).width_, row_height_);
 }
 
+wxRect wx_table_generator::text_rect(std::size_t column, int y)
+{
+    wxRect text_rect = cell_rect(column, y).Deflate(dc_.GetCharWidth(), 0);
+    text_rect.Offset(0, char_height_);
+    return text_rect;
+}
+
 void wx_table_generator::do_compute_column_widths_if_necessary()
 {
     if(has_column_widths_)
@@ -152,6 +168,11 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
     typedef std::vector<column_info>::const_iterator cici;
     for(cici i = columns_.begin(); i != columns_.end(); ++i)
         {
+        if(i->is_hidden())
+            {
+            continue;
+            }
+
         if(0 == i->width_)
             {
             num_expand++;
@@ -176,6 +197,11 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         typedef std::vector<column_info>::iterator cii;
         for(cii i = columns_.begin(); i != columns_.end(); ++i)
             {
+            if(i->is_hidden())
+                {
+                continue;
+                }
+
             if(0 == i->width_)
                 {
                 i->width_ = per_expand;
@@ -202,13 +228,19 @@ void wx_table_generator::do_output_values
     std::size_t const num_columns = columns_.size();
     for(std::size_t col = 0; col < num_columns; ++col)
         {
-        int const width = columns_.at(col).width_;
+        column_info const& ci = columns_.at(col);
+        if(ci.is_hidden())
+            {
+            continue;
+            }
+
+        int const width = ci.width_;
 
         std::string const& s = values[col];
         if(!s.empty())
             {
             int x_text = x;
-            if(columns_.at(col).is_centered_)
+            if(ci.is_centered_)
                 {
                 // Centre the text for the columns configured to do it.
                 x_text += (width - dc_.GetTextExtent(s).x) / 2;
@@ -319,3 +351,27 @@ void wx_table_generator::output_row
     do_output_horz_separator(left_margin_, x, *pos_y);
 }
 
+void wx_table_generator::output_highlighted_cell
+    (std::size_t        column
+    ,int                y
+    ,std::string const& lhs
+    ,std::string const& rhs
+    )
+{
+    if(columns_.at(column).is_hidden())
+        {
+        return;
+        }
+
+    {
+    wxDCPenChanger set_transparent_pen(dc_, *wxTRANSPARENT_PEN);
+    wxDCBrushChanger set_grey_brush(dc_, *wxLIGHT_GREY_BRUSH);
+    dc_.DrawRectangle(cell_rect(column, y));
+    }
+
+    wxRect const r = text_rect(column, y);
+    dc_.DrawLabel(lhs, r, wxALIGN_LEFT);
+    dc_.DrawLabel(rhs, r, wxALIGN_RIGHT);
+
+    output_vert_separator(column, y);
+}

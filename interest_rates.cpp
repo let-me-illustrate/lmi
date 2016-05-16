@@ -192,8 +192,8 @@ void convert_interest_rates
     annual_net_rate .resize(length);
     monthly_net_rate.resize(length);
 
-    double cached_annual_net_rate;
-    double cached_monthly_net_rate;
+    double cached_annual_net_rate     = 0.0;
+    double cached_monthly_net_rate    = 0.0;
 
     double previous_annual_gross_rate = 0.0;
     double previous_spread            = 0.0;
