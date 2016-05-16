@@ -63,7 +63,7 @@
 
 #include "config.hpp"
 
-#include <cstdlib> // EXIT_SUCCESS, EXIT_FAILURE
+#include <cstdlib>                      // EXIT_SUCCESS, EXIT_FAILURE
 #include <exception>
 #include <ostream>
 #include <string>
@@ -92,11 +92,11 @@
 
 // Relational macros require their arguments to be streamable.
 
-#define BOOST_TEST_EQUAL(a,b) \
-    BOOST_TEST_RELATION(a,==,b)  \
+#define BOOST_TEST_EQUAL(a,b)   \
+    BOOST_TEST_RELATION(a,==,b) \
 
 #define BOOST_TEST_UNEQUAL(a,b) \
-    BOOST_TEST_RELATION(a,!=,b)  \
+    BOOST_TEST_RELATION(a,!=,b) \
 
 #define BOOST_TEST_RELATION(a,op,b)                      \
     if((a) op (b))                                       \
@@ -152,10 +152,7 @@
         }                                                     \
     catch(std::exception const& e)                            \
         {                                                     \
-        if                                                    \
-            (   typeid(e)                                     \
-            !=  typeid(TYPE)                                  \
-            )                                                 \
+        if(typeid(e) != typeid(TYPE))                         \
             {                                                 \
             lmi_test::error_stream()                          \
                 << "Caught exception of type\n    '"          \
@@ -195,28 +192,28 @@
             }                                                 \
         }                                                     \
 
-#define INVOKE_BOOST_TEST(exp,file,line)  \
-    if(!(exp))                            \
-        {                                 \
-        lmi_test::record_error();         \
-        lmi_test::error_stream()          \
-            << "\n**** test failed: "     \
-            << (exp)                      \
-            << "\n[invoked from "         \
-            << "file " << (file) << ", "  \
-            << "line: " << (line)         \
-            << "]"                        \
-            << BOOST_TEST_FLUSH           \
-            ;                             \
-        }                                 \
-    else                                  \
-        lmi_test::record_success();       \
+#define INVOKE_BOOST_TEST(exp,file,line) \
+    if(!(exp))                           \
+        {                                \
+        lmi_test::record_error();        \
+        lmi_test::error_stream()         \
+            << "\n**** test failed: "    \
+            << (exp)                     \
+            << "\n[invoked from "        \
+            << "file " << (file) << ", " \
+            << "line: " << (line)        \
+            << "]"                       \
+            << BOOST_TEST_FLUSH          \
+            ;                            \
+        }                                \
+    else                                 \
+        lmi_test::record_success();      \
 
-#define INVOKE_BOOST_TEST_EQUAL(a,b,file,line) \
-    INVOKE_BOOST_TEST_RELATION(a,==,b,file,line)  \
+#define INVOKE_BOOST_TEST_EQUAL(a,b,file,line)   \
+    INVOKE_BOOST_TEST_RELATION(a,==,b,file,line) \
 
 #define INVOKE_BOOST_TEST_UNEQUAL(a,b,file,line) \
-    INVOKE_BOOST_TEST_RELATION(a,!=,b,file,line)  \
+    INVOKE_BOOST_TEST_RELATION(a,!=,b,file,line) \
 
 #define INVOKE_BOOST_TEST_RELATION(a,op,b,file,line)     \
     if((a) op (b))                                       \
@@ -266,11 +263,11 @@ namespace lmi_test
 
     std::ostream& error_stream();
 
+    // Increment test_tools_successes counter.
     void record_success();
-    // Effect: increment test_tools_successes counter.
 
+    // Increment test_tools_errors counter.
     void record_error();
-    // Effect: increment test_tools_errors counter.
 } // namespace lmi_test
 
 // For convenience, include lower-level layers. The original boost
