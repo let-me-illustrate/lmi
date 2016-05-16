@@ -382,7 +382,7 @@ AdjustableMaxBoundAxis<Integral>::DoCreateAdjustControl
     // called only once
     if(lower_bound_ == upper_bound_)
         {
-        return NULL;
+        return nullptr;
         }
     return new Adjuster(*this, grid, lower_bound_, upper_bound_);
 }

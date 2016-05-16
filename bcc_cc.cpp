@@ -35,13 +35,13 @@ int try_main(int argc, char* argv[])
     // compiler. TRICKY !! They are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"help",         NO_ARG,   0, 001, 0, "display this help and exit"},
-        {"license",      NO_ARG,   0, 002, 0, "display license and exit"},
-        {"accept",       NO_ARG,   0, 003, 0, "accept license (-l to display)"},
-        {"program",      REQD_ARG, 0, 004, 0, "compiler's filepath"},
-        {"include",      REQD_ARG, 0, 'I', 0, "include path"},
-        {"out-file",     REQD_ARG, 0, 'o', 0, "output object file"},
-        {0,              NO_ARG,   0,   0, 0, ""}
+        {"help",         NO_ARG,   nullptr, 001, nullptr, "display this help and exit"},
+        {"license",      NO_ARG,   nullptr, 002, nullptr, "display license and exit"},
+        {"accept",       NO_ARG,   nullptr, 003, nullptr, "accept license (-l to display)"},
+        {"program",      REQD_ARG, nullptr, 004, nullptr, "compiler's filepath"},
+        {"include",      REQD_ARG, nullptr, 'I', nullptr, "include path"},
+        {"out-file",     REQD_ARG, nullptr, 'o', nullptr, "output object file"},
+        {nullptr,              NO_ARG,   nullptr,   0, nullptr, ""}
       };
 
     bool license_accepted = false;

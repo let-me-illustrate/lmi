@@ -258,7 +258,7 @@ double AccountValue::Solve()
         ThatSolveEndYear = BasicValues::GetLength();
         }
 
-    double(*SolveFn)(double)     = 0;
+    double(*SolveFn)(double)     = nullptr;
     double           LowerBound  = 0.0;
     double           UpperBound  = 0.0;
     root_bias        Bias        = bias_higher;

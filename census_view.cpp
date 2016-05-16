@@ -394,7 +394,7 @@ class DatumSequenceRenderer
 
 DatumSequenceRenderer::DatumSequenceRenderer()
     :wxDataViewCustomRenderer(typeid(input_sequence_variant_data).name(), wxDATAVIEW_CELL_EDITABLE, wxDVR_DEFAULT_ALIGNMENT)
-    ,m_input(0)
+    ,m_input(nullptr)
 {
 }
 
@@ -877,7 +877,7 @@ END_EVENT_TABLE()
 CensusView::CensusView()
     :ViewEx                          ()
     ,autosize_columns_               (false)
-    ,list_window_                    (0)
+    ,list_window_                    (nullptr)
     ,list_model_                     (new(wx) CensusViewDataViewModel(*this))
 {
 }
@@ -957,7 +957,7 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
             }
         ++i;
         }
-    return 0;
+    return nullptr;
 }
 
 /// Determine which columns need to be displayed because their rows
@@ -1061,7 +1061,7 @@ void CensusView::update_class_names()
     while(n != unique_class_names.end())
         {
         Input* parms = class_parms_from_class_name(*n);
-        if(0 != parms)
+        if(nullptr != parms)
             {
             // If we already have default parameters for the class,
             // insert them into the rebuilt vector.

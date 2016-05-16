@@ -268,7 +268,7 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
     {
         case 0:
             // no visible templates, hence nothing to choose from
-            theTemplate = NULL;
+            theTemplate = nullptr;
             break;
 
         case 1:
@@ -290,7 +290,7 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
                           );
 */
             int selection = SingleChoicePopupMenu(strings).Choose();
-            theTemplate = 0;
+            theTemplate = nullptr;
             if(-1 != selection)
                 {
                 theTemplate = data[selection];

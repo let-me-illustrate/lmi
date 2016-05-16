@@ -413,7 +413,7 @@ void gpt_test::test_invariants()
 
 /// The obsolescent GPT class more or less requires this ugliness.
 
-Irc7702* ugliness = 0;
+Irc7702* ugliness = nullptr;
 
 /// Instantiate obsolescent GPT class.
 

@@ -124,9 +124,9 @@ ProductEditorView::~ProductEditorView()
 
 TreeGridViewBase::TreeGridViewBase()
     :ProductEditorView()
-    ,grid_(NULL)
-    ,grid_label_(NULL)
-    ,tree_(NULL)
+    ,grid_(nullptr)
+    ,grid_label_(nullptr)
+    ,tree_(nullptr)
 {
 }
 

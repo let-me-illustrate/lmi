@@ -67,7 +67,7 @@ class IllustrationView
     // friend.
     //
     void DisplaySelectedValuesAsHtml();
-    void Run(Input* = 0);
+    void Run(Input* = nullptr);
     void SetLedger(boost::shared_ptr<Ledger const>);
 
   private:

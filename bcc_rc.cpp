@@ -35,17 +35,17 @@ int try_main(int argc, char* argv[])
     // compiler. TRICKY !! They are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"help",         NO_ARG,   0, 001, 0, "display this help and exit"},
-        {"license",      NO_ARG,   0, 002, 0, "display license and exit"},
-        {"accept",       NO_ARG,   0, 003, 0, "accept license (-l to display)"},
-        {"program",      REQD_ARG, 0, 004, 0, "resource compiler's filepath"},
+        {"help",         NO_ARG,   nullptr, 001, nullptr, "display this help and exit"},
+        {"license",      NO_ARG,   nullptr, 002, nullptr, "display license and exit"},
+        {"accept",       NO_ARG,   nullptr, 003, nullptr, "accept license (-l to display)"},
+        {"program",      REQD_ARG, nullptr, 004, nullptr, "resource compiler's filepath"},
 // TRICKY !! '-i' is ambiguous:
 //   for windres, it means 'input file'
 //   for borland, it means 'include path'
 //        {"in-file",      REQD_ARG, 0, 'i', 0, "input .rc text file"},
-        {"include",      REQD_ARG, 0, 'i', 0, "include path"},
-        {"out-file",     REQD_ARG, 0, 'o', 0, "output binary resource file"},
-        {0,              NO_ARG,   0,   0, 0, ""}
+        {"include",      REQD_ARG, nullptr, 'i', nullptr, "include path"},
+        {"out-file",     REQD_ARG, nullptr, 'o', nullptr, "output binary resource file"},
+        {nullptr,              NO_ARG,   nullptr,   0, nullptr, ""}
       };
 
     bool license_accepted = false;

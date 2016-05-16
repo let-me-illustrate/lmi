@@ -387,12 +387,12 @@ typedef void(*pf)(std::string const& line1, std::string const& line2);
 pf const transition_functions[6][6] =
     {
     /*        to: 0     1     2     3     4     5 */
-    /* from 0 */ {0, &f01, &f02,    0,    0,    0,},
-    /* from 1 */ {0, &f11, &f12,    0,    0,    0,},
-    /* from 2 */ {0,    0, &f22, &f23, &f24, &f25,},
-    /* from 3 */ {0,    0, &f32, &f33, &f34,    0,},
-    /* from 4 */ {0,    0, &f42,    0, &f44,    0,},
-    /* from 5 */ {0,    0,    0,    0,    0,    0,},
+    /* from 0 */ {nullptr, &f01, &f02,    nullptr,    nullptr,    nullptr,},
+    /* from 1 */ {nullptr, &f11, &f12,    nullptr,    nullptr,    nullptr,},
+    /* from 2 */ {nullptr,    nullptr, &f22, &f23, &f24, &f25,},
+    /* from 3 */ {nullptr,    nullptr, &f32, &f33, &f34,    nullptr,},
+    /* from 4 */ {nullptr,    nullptr, &f42,    nullptr, &f44,    nullptr,},
+    /* from 5 */ {nullptr,    nullptr,    nullptr,    nullptr,    nullptr,    nullptr,},
     };
 
 //============================================================================

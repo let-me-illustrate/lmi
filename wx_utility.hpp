@@ -80,7 +80,7 @@ void Connect
     ,wxEventType     event
     ,Return (Class::*handler)(Argument)
     ,int             id = wxID_ANY
-    ,wxEvtHandler*   event_sink = NULL
+    ,wxEvtHandler*   event_sink = nullptr
     )
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
@@ -104,7 +104,7 @@ void Connect
         (id
         ,event
         ,c_cast<t1>(static_cast<t0>(handler))
-        ,NULL
+        ,nullptr
         ,event_sink
         );
 }

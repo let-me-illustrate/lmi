@@ -149,15 +149,15 @@ int main(int argc, char* argv[])
     // This line forces mpatrol to link when it otherwise might not.
     // It has no other effect according to C99 7.20.3.2/2, second
     // sentence.
-    std::free(0);
+    std::free(nullptr);
 
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"help",         NO_ARG,   0, 001, 0, "display this help and exit"},
-        {"license",      NO_ARG,   0, 002, 0, "display license and exit"},
-        {"accept",       NO_ARG,   0, 003, 0, "accept license (-l to display)"},
-        {0,              NO_ARG,   0,   0, 0, ""}
+        {"help",         NO_ARG,   nullptr, 001, nullptr, "display this help and exit"},
+        {"license",      NO_ARG,   nullptr, 002, nullptr, "display license and exit"},
+        {"accept",       NO_ARG,   nullptr, 003, nullptr, "accept license (-l to display)"},
+        {nullptr,              NO_ARG,   nullptr,   0, nullptr, ""}
       };
 
     bool license_accepted = false;

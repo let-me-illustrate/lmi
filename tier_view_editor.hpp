@@ -102,12 +102,12 @@ class tier_entity_adapter
 
 inline bool tier_entity_adapter::is_void() const
 {
-    return limits_ == NULL;
+    return limits_ == nullptr;
 }
 
 inline tier_entity_adapter::tier_entity_adapter()
-    :limits_(NULL)
-    ,values_(NULL)
+    :limits_(nullptr)
+    ,values_(nullptr)
 {
 }
 
