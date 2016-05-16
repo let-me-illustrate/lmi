@@ -67,7 +67,7 @@
 #include "getopt.hpp"
 #include "license.hpp"
 
-#include <cstdlib>  // std::free()
+#include <cstdlib>                      // std::free()
 #include <iostream>
 
 #if defined __MINGW32__
