@@ -42,7 +42,7 @@
 #include "gpt_xml_document.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ihs_server7702.hpp"           // RunServer7702FromStruct()
-#include "materially_equal.hpp"
+#include "materially_equal.hpp"         // material_difference()
 #include "math_functors.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
 #include "miscellany.hpp"               // ios_out_trunc_binary()

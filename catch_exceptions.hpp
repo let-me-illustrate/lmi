@@ -59,12 +59,12 @@
 
 #include "exit_codes.hpp"
 
-#include <string>             // for string
-#include <new>                // for bad_alloc
-#include <typeinfo>           // for bad_cast, bad_typeid
-#include <exception>          // for exception, bad_exception
-#include <ostream>            // for ostream
-#include <stdexcept>          // for std exception hierarchy
+#include <string>
+#include <new>                          // bad_alloc
+#include <typeinfo>                     // bad_cast, bad_typeid
+#include <exception>                    // exception, bad_exception
+#include <ostream>
+#include <stdexcept>
 
 // GWC changed namespace 'boost' to prevent any conflict with code in
 // a later version of boost.

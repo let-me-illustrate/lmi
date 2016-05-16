@@ -65,7 +65,7 @@
 
 #include "exit_codes.hpp"
 #include "fenv_lmi.hpp"
-#include "miscellany.hpp"
+#include "miscellany.hpp"               // stifle_warning_for_unused_value()
 #include "test_tools.hpp"
 
 #include <iostream>
