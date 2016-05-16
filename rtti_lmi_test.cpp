@@ -34,8 +34,9 @@
 #include <sstream>
 #include <vector>
 
-struct RttiLmiTest
+class RttiLmiTest
 {
+public:
     class X {};
     static void TestTypeInfo();
 };

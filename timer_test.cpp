@@ -64,8 +64,9 @@ void goo(int i, X, X const&, X*)
         }
 }
 
-struct TimerTest
+class TimerTest
 {
+public:
     static void WaitTenMsec();
     static void SleepOneSec();
     static void TestResolution();

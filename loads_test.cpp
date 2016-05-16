@@ -66,8 +66,9 @@ double premium_tax::load_rate        () const {return 0.0;}
 double premium_tax::maximum_load_rate() const {return 0.0;}
 double premium_tax::minimum_load_rate() const {return 0.0;}
 
-struct LoadsTest
+class LoadsTest
 {
+public:
     LoadsTest(load_details const& details)
         :details_ (details)
         ,database_(details.length_)

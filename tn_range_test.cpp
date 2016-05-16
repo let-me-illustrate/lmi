@@ -112,8 +112,9 @@ class absurd
 template class tn_range<int, absurd<int> >;
 typedef tn_range<int, absurd<int> > r_absurd;
 
-struct tn_range_test
+class tn_range_test
 {
+public:
     template<typename T>
     static void test_auxiliary_functions(char const* file, int line);
 
