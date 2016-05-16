@@ -61,7 +61,7 @@ LMI_WX_TEST_CASE(default_update)
     struct change_dob_in_defaults_dialog
         :public wxExpectModalBase<MvcController>
     {
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -112,7 +112,7 @@ LMI_WX_TEST_CASE(default_update)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "defaults dialog";
             }

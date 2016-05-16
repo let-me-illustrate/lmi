@@ -49,7 +49,7 @@ class ProductEditorDocument
 {
   public:
     ProductEditorDocument();
-    virtual ~ProductEditorDocument();
+    ~ProductEditorDocument() override;
 
   protected:
     virtual void ReadDocument (std::string const& filename) = 0;
@@ -59,10 +59,10 @@ class ProductEditorDocument
     ProductEditorView& PredominantView() const;
 
     // wxDocument overrides.
-    virtual bool IsModified() const;
-    virtual void Modify(bool modified);
-    virtual bool DoOpenDocument(wxString const& filename);
-    virtual bool DoSaveDocument(wxString const& filename);
+    bool IsModified() const override;
+    void Modify(bool modified) override;
+    bool DoOpenDocument(wxString const& filename) override;
+    bool DoSaveDocument(wxString const& filename) override;
 };
 
 /// Common base for all product editor view classes.
@@ -75,7 +75,7 @@ class ProductEditorView
 
   public:
     ProductEditorView();
-    virtual ~ProductEditorView();
+    ~ProductEditorView() override;
 
   protected:
     virtual bool IsModified() const = 0;
@@ -91,7 +91,7 @@ class TreeGridViewBase
 {
   public:
     TreeGridViewBase();
-    virtual ~TreeGridViewBase();
+    ~TreeGridViewBase() override;
 
   protected:
     MultiDimGrid& grid() const;
@@ -108,7 +108,7 @@ class TreeGridViewBase
 
   private:
     // ViewEx required implementation.
-    virtual wxWindow* CreateChildWindow();
+    wxWindow* CreateChildWindow() override;
 
     // These objects are held by pointer since the destruction is taken care
     // of by wx.

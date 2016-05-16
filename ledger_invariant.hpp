@@ -47,14 +47,14 @@ class LMI_SO LedgerInvariant
     explicit LedgerInvariant(int len);
     LedgerInvariant(LedgerInvariant const&);
     LedgerInvariant& operator=(LedgerInvariant const&);
-    virtual ~LedgerInvariant();
+    ~LedgerInvariant() override;
 
     void Init(BasicValues const*);
 
     LedgerInvariant& PlusEq(LedgerInvariant const& a_Addend);
 
     bool                         IsFullyInitialized()    const;
-    virtual int                  GetLength()             const;
+    int                  GetLength()             const override;
     std::vector<double> const&   GetInforceLives()       const;
     double                       GetInitAnnLoanDueRate() const;
     std::string const&           GetStatePostalAbbrev()  const;
@@ -67,8 +67,8 @@ class LMI_SO LedgerInvariant
     int irr_precision;
     void CalculateIrrs(Ledger const&);
 
-    void UpdateCRC(CRC& a_crc) const;
-    void Spew(std::ostream& os) const;
+    void UpdateCRC(CRC& a_crc) const override;
+    void Spew(std::ostream& os) const override;
 
 // TODO ?? Make data private. Provide const accessors. Some values
 // (e.g., outlay) could be calculated dynamically instead of stored.

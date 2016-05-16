@@ -123,15 +123,15 @@ class holder
 
   public:
     holder(ClassType*, ValueType const&);
-    virtual ~holder();
+    ~holder() override;
 
     // placeholder required implementation.
-    virtual holder& assign(placeholder const&);
-    virtual holder& assign(std::string const&);
-    virtual placeholder* clone() const;
-    virtual bool equals(placeholder const&) const;
-    virtual std::string str() const;
-    virtual std::type_info const& type() const;
+    holder& assign(placeholder const&) override;
+    holder& assign(std::string const&) override;
+    placeholder* clone() const override;
+    bool equals(placeholder const&) const override;
+    std::string str() const override;
+    std::type_info const& type() const override;
 #if defined LMI_MSC
     virtual void* defraud() const;
 #endif // defined LMI_MSC
@@ -249,7 +249,7 @@ class any_member
   public:
     any_member();
     any_member(any_member const&);
-    virtual ~any_member();
+    ~any_member() override;
 
     template<typename ValueType>
     any_member(ClassType*, ValueType const&);
@@ -261,15 +261,15 @@ class any_member
     bool operator!=(any_member const&) const;
 
     // any_entity required implementation.
-    virtual std::string str() const;
-    virtual std::type_info const& type() const;
+    std::string str() const override;
+    std::type_info const& type() const override;
 
   private:
     template<typename ExactMemberType>
     ExactMemberType* exact_cast();
 
     // any_entity required implementation.
-    virtual any_member& assign(std::string const&);
+    any_member& assign(std::string const&) override;
 
     ClassType* object_;
     placeholder* content_;

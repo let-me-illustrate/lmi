@@ -58,7 +58,7 @@ class LMI_SO gpt_state
   public:
     gpt_state();
     gpt_state(gpt_state const&);
-    virtual ~gpt_state();
+    ~gpt_state() override;
 
     gpt_state& operator=(gpt_state const&);
     bool operator==(gpt_state const&) const;
@@ -69,11 +69,11 @@ class LMI_SO gpt_state
     void AscribeMembers();
 
     // xml_serializable required implementation.
-    virtual int                class_version() const;
-    virtual std::string const& xml_root_name() const;
+    int                class_version() const override;
+    std::string const& xml_root_name() const override;
 
     // xml_serializable overrides.
-    virtual bool is_detritus(std::string const&) const;
+    bool is_detritus(std::string const&) const override;
 
     int    B0_deduced_policy_year;
     int    B1_deduced_contract_year;

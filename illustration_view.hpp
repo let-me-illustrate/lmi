@@ -60,7 +60,7 @@ class IllustrationView
 
   public:
     IllustrationView();
-    virtual ~IllustrationView();
+    ~IllustrationView() override;
 
     // Making these functions public so that they can be invoked by
     // class CensusView is arguably less bad than making that class a
@@ -78,12 +78,12 @@ class IllustrationView
     void emit_pdf(mcenum_emission);
 
     // ViewEx required implementation.
-    virtual wxWindow* CreateChildWindow();
-    virtual char const* icon_xrc_resource   () const;
-    virtual char const* menubar_xrc_resource() const;
+    wxWindow* CreateChildWindow() override;
+    char const* icon_xrc_resource   () const override;
+    char const* menubar_xrc_resource() const override;
 
     // ViewEx overrides.
-    virtual bool OnCreate(wxDocument*, long int);
+    bool OnCreate(wxDocument*, long int) override;
 
     void UponCopyFull           (wxCommandEvent&);
     void UponCopySummary        (wxCommandEvent&);

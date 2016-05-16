@@ -168,10 +168,10 @@ class xml_actuarial_table
 {
   public:
     xml_actuarial_table(std::string const& filename, int table_number);
-    virtual ~xml_actuarial_table();
+    ~xml_actuarial_table() override;
 
   protected:
-    std::vector<double> specific_values(int issue_age, int length) const;
+    std::vector<double> specific_values(int issue_age, int length) const override;
 
   private:
     void load_xml_table                    (std::string const& filename);
@@ -225,7 +225,7 @@ class soa_actuarial_table
 {
   public:
     soa_actuarial_table(std::string const& filename, int table_number);
-    virtual ~soa_actuarial_table();
+    ~soa_actuarial_table() override;
 
     std::string const& filename       () const {return filename_       ;}
 
@@ -233,7 +233,7 @@ class soa_actuarial_table
     void find_table();
     void parse_table();
     void read_values(std::istream& is, int nominal_length);
-    std::vector<double> specific_values(int issue_age, int length) const;
+    std::vector<double> specific_values(int issue_age, int length) const override;
 
     // Ctor arguments.
     std::string filename_     ;

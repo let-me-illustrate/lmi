@@ -38,7 +38,7 @@ class RoundingDocument
 {
   public:
     RoundingDocument();
-    virtual ~RoundingDocument();
+    ~RoundingDocument() override;
 
     typedef std::map<std::string, rounding_parameters*> values_type;
     values_type&       values();
@@ -46,8 +46,8 @@ class RoundingDocument
 
   private:
     // ProductEditorDocument overrides.
-    virtual void ReadDocument (std::string const& filename);
-    virtual void WriteDocument(std::string const& filename);
+    void ReadDocument (std::string const& filename) override;
+    void WriteDocument(std::string const& filename) override;
 
     RoundingView& PredominantView() const;
 

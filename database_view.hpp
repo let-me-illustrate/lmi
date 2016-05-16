@@ -42,21 +42,21 @@ class DatabaseView
 {
   public:
     DatabaseView();
-    virtual ~DatabaseView();
+    ~DatabaseView() override;
 
   private:
     // ViewEx required implementation.
-    virtual char const* icon_xrc_resource   () const;
-    virtual char const* menubar_xrc_resource() const;
+    char const* icon_xrc_resource   () const override;
+    char const* menubar_xrc_resource() const override;
 
     // ProductEditorView required implementation.
-    virtual bool IsModified() const;
-    virtual void DiscardEdits();
+    bool IsModified() const override;
+    void DiscardEdits() override;
 
     // TreeGridViewBase required implementation.
-    virtual wxTreeCtrl*   CreateTreeCtrl(wxWindow* parent);
-    virtual MultiDimGrid* CreateGridCtrl(wxWindow* parent);
-    virtual void          SetupControls();
+    wxTreeCtrl*   CreateTreeCtrl(wxWindow* parent) override;
+    MultiDimGrid* CreateGridCtrl(wxWindow* parent) override;
+    void          SetupControls() override;
 
     DatabaseDocument&           document() const;
     DatabaseTableAdapter      & table_adapter()      ;

@@ -41,15 +41,15 @@ class datum_string
   public:
     datum_string();
     explicit datum_string(std::string const&);
-    virtual ~datum_string();
+    ~datum_string() override;
 
     datum_string& operator=(std::string const&);
 
     std::string const& value() const;
 
     // datum_base required implementation.
-    virtual std::istream& read (std::istream&);
-    virtual std::ostream& write(std::ostream&) const;
+    std::istream& read (std::istream&) override;
+    std::ostream& write(std::ostream&) const override;
 
   private:
     std::string value_;

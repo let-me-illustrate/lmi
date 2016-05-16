@@ -52,7 +52,7 @@ class LMI_SO DBDictionary
     DBDictionary();
     DBDictionary(std::string const& filename);
 
-    ~DBDictionary();
+    ~DBDictionary() override;
 
     database_entity const& datum(std::string const&) const;
 
@@ -76,23 +76,23 @@ class LMI_SO DBDictionary
     void Nyarlathotep();
 
     // xml_serializable required implementation.
-    virtual int                class_version() const;
-    virtual std::string const& xml_root_name() const;
+    int                class_version() const override;
+    std::string const& xml_root_name() const override;
 
     // xml_serializable overrides.
-    virtual void read_element
+    void read_element
         (xml::element const& e
         ,std::string const&  name
         ,int                 file_version
-        );
-    virtual void write_element
+        ) override;
+    void write_element
         (xml::element&       parent
         ,std::string const&  name
-        ) const;
-    virtual void write_proem
+        ) const override;
+    void write_proem
         (xml_lmi::xml_document& document
         ,std::string const&     file_leaf_name
-        ) const;
+        ) const override;
 
     database_entity MinIssAge           ;
     database_entity MaxIssAge           ;

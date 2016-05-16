@@ -68,19 +68,19 @@ class ce_product_name
     static std::size_t ordinal(std::string const&);
 
     // mc_enum_base required implementation.
-    virtual std::vector<std::string> const& all_strings() const;
-    virtual std::size_t cardinality() const;
-    virtual void enforce_proscription();
-    virtual std::size_t ordinal() const;
-    virtual std::string str(int) const;
+    std::vector<std::string> const& all_strings() const override;
+    std::size_t cardinality() const override;
+    void enforce_proscription() override;
+    std::size_t ordinal() const override;
+    std::string str(int) const override;
 
     std::string str() const;
     std::string value() const;
 
   private:
     // datum_base required implementation.
-    virtual std::istream& read (std::istream&);
-    virtual std::ostream& write(std::ostream&) const;
+    std::istream& read (std::istream&) override;
+    std::ostream& write(std::ostream&) const override;
 
     std::string value_;
 };

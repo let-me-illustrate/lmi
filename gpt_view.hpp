@@ -51,13 +51,13 @@ class gpt_mvc_view
 {
   public:
     gpt_mvc_view();
-    virtual ~gpt_mvc_view();
+    ~gpt_mvc_view() override;
 
   private:
     // MvcView required implementation.
-    virtual char const* DoBookControlName () const;
-    virtual char const* DoMainDialogName  () const;
-    virtual char const* DoResourceFileName() const;
+    char const* DoBookControlName () const override;
+    char const* DoMainDialogName  () const override;
+    char const* DoResourceFileName() const override;
 };
 
 class gpt_view
@@ -69,7 +69,7 @@ class gpt_view
 
   public:
     gpt_view();
-    virtual ~gpt_view();
+    ~gpt_view() override;
 
   private:
     gpt_document& document() const;
@@ -78,15 +78,15 @@ class gpt_view
     void Run();
 
     // ViewEx required implementation.
-    virtual wxWindow* CreateChildWindow();
-    virtual char const* icon_xrc_resource   () const;
-    virtual char const* menubar_xrc_resource() const;
+    wxWindow* CreateChildWindow() override;
+    char const* icon_xrc_resource   () const override;
+    char const* menubar_xrc_resource() const override;
 
     // ViewEx overrides.
-    virtual bool OnCreate(wxDocument*, long int);
+    bool OnCreate(wxDocument*, long int) override;
 
     // wxView overrides.
-    virtual wxPrintout* OnCreatePrintout();
+    wxPrintout* OnCreatePrintout() override;
 
     void UponProperties        (wxCommandEvent&);
     void UponUpdateFileSave    (wxUpdateUIEvent&);

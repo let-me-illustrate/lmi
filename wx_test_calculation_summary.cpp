@@ -100,7 +100,7 @@ class expect_preferences_dialog_base
         wxTEST_DIALOG(wxYield(), *this);
         }
 
-    virtual int OnInvoked(MvcController* dialog) const
+    int OnInvoked(MvcController* dialog) const override
         {
         // OnInvoked() is const but it doesn't make much sense for
         // OnPreferencesInvoked() to be const as it is going to modify the
@@ -124,7 +124,7 @@ class expect_preferences_dialog_base
         return self->OnPreferencesInvoked();
         }
 
-    virtual wxString GetDefaultDescription() const
+    wxString GetDefaultDescription() const override
         {
         return "preferences dialog";
         }
@@ -304,7 +304,7 @@ LMI_WX_TEST_CASE(calculation_summary)
 
         struct verify_builtin_calculation_summary : expect_preferences_dialog_base
         {
-            virtual int OnPreferencesInvoked()
+            int OnPreferencesInvoked() override
                 {
                 LMI_ASSERT_EQUAL(use_checkbox_->GetValue(), true);
 
@@ -336,7 +336,7 @@ LMI_WX_TEST_CASE(calculation_summary)
     // Use a single "NewCashLoan" custom column in third position.
     struct set_custom_columns_in_preferences_dialog : expect_preferences_dialog_base
     {
-        virtual int OnPreferencesInvoked()
+        int OnPreferencesInvoked() override
             {
             set_use_builtin_summary(false);
 
@@ -361,7 +361,7 @@ LMI_WX_TEST_CASE(calculation_summary)
     // Now switch to using the default columns.
     struct use_builtin_calculation_summary : expect_preferences_dialog_base
     {
-        virtual int OnPreferencesInvoked()
+        int OnPreferencesInvoked() override
             {
             // Before returning to the built-in summary, check that our custom
             // value for the column #2 moved into the position #0 (because the
@@ -397,7 +397,7 @@ LMI_WX_TEST_CASE(calculation_summary)
     struct use_custom_calculation_summary : expect_preferences_dialog_base
     {
       public:
-        virtual int OnPreferencesInvoked()
+        int OnPreferencesInvoked() override
             {
             set_use_builtin_summary(false);
 

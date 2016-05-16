@@ -48,7 +48,7 @@ class RoundingButtons
         ,long               style = 0
         ,std::string const& name  = wxPanelNameStr
         );
-    virtual ~RoundingButtons();
+    ~RoundingButtons() override;
 
     void Create
         (wxWindow*          parent
@@ -108,8 +108,8 @@ class RoundingButtonsXmlHandler
     RoundingButtonsXmlHandler();
 
   private:
-    virtual wxObject* DoCreateResource();
-    virtual bool CanHandle(wxXmlNode* node);
+    wxObject* DoCreateResource() override;
+    bool CanHandle(wxXmlNode* node) override;
 
     DECLARE_DYNAMIC_CLASS(RoundingButtonsXmlHandler)
 };

@@ -94,7 +94,7 @@ class ViewEx
     wxMenuBar* MenuBar() const;
 
   protected:
-    virtual ~ViewEx();
+    ~ViewEx() override;
 
     wxFrame& FrameWindow() const;
 
@@ -109,9 +109,9 @@ class ViewEx
     virtual char const* menubar_xrc_resource() const = 0;
 
     // wxView overrides.
-    virtual bool OnClose(bool delete_window);
-    virtual bool OnCreate(wxDocument* doc, long int flags);
-    virtual void OnDraw(wxDC*);
+    bool OnClose(bool delete_window) override;
+    bool OnCreate(wxDocument* doc, long int flags) override;
+    void OnDraw(wxDC*) override;
 
     wxIcon     IconFromXmlResource   (char const*) const;
     wxMenuBar* MenuBarFromXmlResource(char const*) const;

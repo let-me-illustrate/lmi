@@ -101,7 +101,7 @@ class AxisMaxBoundAdjuster
     void     SetMaximumAxisValue(Integral max_value);
 
   private:
-    virtual void DoUponChange();
+    void DoUponChange() override;
     void EnsureValidMaximumAxisValue(Integral const&) const;
 
     MultiDimAxisAny& axis_;
@@ -253,15 +253,15 @@ class AdjustableMaxBoundAxis
     Integral GetUpperBound() const;
 
     /// If the axis has been adjusted, then refresh value choice control
-    void UpdateChoiceControl(MultiDimAxisAnyChoice& choice) const;
+    void UpdateChoiceControl(MultiDimAxisAnyChoice& choice) const override;
 
   private:
     /// Create the adjustment control
-    virtual Adjuster* DoCreateAdjustControl(MultiDimGrid&, MultiDimTableAny&);
+    Adjuster* DoCreateAdjustControl(MultiDimGrid&, MultiDimTableAny&) override;
     /// Applies user changes to this axis, reads adjustment window
-    virtual bool DoApplyAdjustment(Adjuster&, unsigned int axis_id);
+    bool DoApplyAdjustment(Adjuster&, unsigned int axis_id) override;
     /// Sync the corresponding adjustment control with itself
-    virtual bool DoRefreshAdjustment(Adjuster&, unsigned int axis_id);
+    bool DoRefreshAdjustment(Adjuster&, unsigned int axis_id) override;
 
     Integral lower_bound_;
     Integral upper_bound_;
@@ -437,10 +437,10 @@ class AutoResizingTreeCtrl
         ,wxValidator const& = wxDefaultValidator
         );
 
-    virtual ~AutoResizingTreeCtrl();
+    ~AutoResizingTreeCtrl() override;
 
   private:
-    virtual wxSize DoGetBestSize() const;
+    wxSize DoGetBestSize() const override;
 
     void DoGetBestSizePrivate
         (wxSize&

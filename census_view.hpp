@@ -63,9 +63,9 @@ class CensusView
     CensusDocument& document() const;
 
     // ViewEx required implementation.
-    virtual wxWindow* CreateChildWindow();
-    virtual char const* icon_xrc_resource   () const;
-    virtual char const* menubar_xrc_resource() const;
+    wxWindow* CreateChildWindow() override;
+    char const* icon_xrc_resource   () const override;
+    char const* menubar_xrc_resource() const override;
 
     void UponAddCell                (wxCommandEvent&);
     void UponDeleteCells            (wxCommandEvent&);

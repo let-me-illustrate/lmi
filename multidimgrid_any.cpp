@@ -114,9 +114,9 @@ class MultiDimGridGrid
         ,long style = 0 // no wxWANTS_CHARS, as is wxGrid's default
         ,std::string const& name = wxPanelNameStr
         );
-    virtual ~MultiDimGridGrid();
+    ~MultiDimGridGrid() override;
 
-    virtual wxSize DoGetBestSize() const;
+    wxSize DoGetBestSize() const override;
 
   private:
     void UponKeyDown(wxKeyEvent& event);
