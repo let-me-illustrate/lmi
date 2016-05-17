@@ -175,7 +175,7 @@ void process_command_line(int argc, char* argv[])
         {"file"      ,REQD_ARG ,nullptr ,'f' ,nullptr ,"input file to run"},
         {"data_path" ,REQD_ARG ,nullptr ,'d' ,nullptr ,"path to data files"},
         {"print_db"  ,NO_ARG   ,nullptr ,'p' ,nullptr ,"print product databases and exit"},
-        {nullptr           ,NO_ARG   ,nullptr ,0   ,nullptr ,""}
+        {nullptr     ,NO_ARG   ,nullptr ,0   ,nullptr ,""}
       };
 
     bool license_accepted    = false;

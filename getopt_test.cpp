@@ -80,11 +80,11 @@ std::string getopt_test::test(int argc, char* argv[])
             {"list"    ,LIST_ARG ,nullptr ,  0 ,nullptr     ,""},
             {"opt"     ,OPT_ARG  ,nullptr ,  0 ,nullptr     ,""},
             {"alt"     ,ALT_ARG  ,nullptr ,  0 ,nullptr     ,""},
-            {"vfile"   ,REQD_ARG ,nullptr ,  0 ,vfile ,""},
-            {"vlist"   ,LIST_ARG ,nullptr ,  0 ,vlist ,""},
-            {"vopt"    ,OPT_ARG  ,nullptr ,  0 ,vopt  ,""},
-            {"valt"    ,ALT_ARG  ,nullptr ,  0 ,vopt  ,""},
-            {nullptr         ,NO_ARG   ,nullptr ,  0 ,nullptr     ,""}
+            {"vfile"   ,REQD_ARG ,nullptr ,  0 ,vfile       ,""},
+            {"vlist"   ,LIST_ARG ,nullptr ,  0 ,vlist       ,""},
+            {"vopt"    ,OPT_ARG  ,nullptr ,  0 ,vopt        ,""},
+            {"valt"    ,ALT_ARG  ,nullptr ,  0 ,vopt        ,""},
+            {nullptr   ,NO_ARG   ,nullptr ,  0 ,nullptr     ,""}
         };
     int option_index = 0;
     GetOpt getopt_long

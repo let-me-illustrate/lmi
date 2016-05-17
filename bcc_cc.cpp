@@ -41,7 +41,7 @@ int try_main(int argc, char* argv[])
         {"program",      REQD_ARG, nullptr, 004, nullptr, "compiler's filepath"},
         {"include",      REQD_ARG, nullptr, 'I', nullptr, "include path"},
         {"out-file",     REQD_ARG, nullptr, 'o', nullptr, "output object file"},
-        {nullptr,              NO_ARG,   nullptr,   0, nullptr, ""}
+        {nullptr,        NO_ARG,   nullptr,   0, nullptr, ""}
       };
 
     bool license_accepted = false;

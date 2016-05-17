@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
         {"help",         NO_ARG,   nullptr, 001, nullptr, "display this help and exit"},
         {"license",      NO_ARG,   nullptr, 002, nullptr, "display license and exit"},
         {"accept",       NO_ARG,   nullptr, 003, nullptr, "accept license (-l to display)"},
-        {nullptr,              NO_ARG,   nullptr,   0, nullptr, ""}
+        {nullptr,        NO_ARG,   nullptr,   0, nullptr, ""}
       };
 
     bool license_accepted = false;

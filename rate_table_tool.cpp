@@ -404,7 +404,7 @@ int try_main(int argc, char* argv[])
         {"extract-all"    , NO_ARG,   nullptr, 'x', nullptr    , "extract all tables to text files"},
         {"rename=NAMEFILE", REQD_ARG, nullptr, 'r', nullptr    , "rename tables from NAMEFILE"},
         {"verify"         , NO_ARG,   nullptr, 'v', nullptr    , "verify integrity of all tables"},
-        {nullptr                , NO_ARG,   nullptr,   0, nullptr    , ""}
+        {nullptr          , NO_ARG,   nullptr,   0, nullptr    , ""}
       };
     bool license_accepted = false;
     bool show_license     = false;

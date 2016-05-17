@@ -60,7 +60,7 @@ int try_main(int argc, char* argv[])
         {"s",            REQD_ARG, nullptr, 's', nullptr, "see inline documentation"},
         {"u",            REQD_ARG, nullptr, 'u', nullptr, "see inline documentation"},
         {"v",            REQD_ARG, nullptr, 'v', nullptr, "see inline documentation"},
-        {nullptr,              NO_ARG,   nullptr,   0, nullptr, ""}
+        {nullptr,        NO_ARG,   nullptr,   0, nullptr, ""}
       };
 
     bool license_accepted = false;

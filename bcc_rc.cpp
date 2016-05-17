@@ -45,7 +45,7 @@ int try_main(int argc, char* argv[])
 //        {"in-file",      REQD_ARG, 0, 'i', 0, "input .rc text file"},
         {"include",      REQD_ARG, nullptr, 'i', nullptr, "include path"},
         {"out-file",     REQD_ARG, nullptr, 'o', nullptr, "output binary resource file"},
-        {nullptr,              NO_ARG,   nullptr,   0, nullptr, ""}
+        {nullptr,        NO_ARG,   nullptr,   0, nullptr, ""}
       };
 
     bool license_accepted = false;

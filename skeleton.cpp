@@ -1206,7 +1206,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
         {"data_path"    ,REQD_ARG ,nullptr ,'d' ,nullptr ,"path to data files"},
         {"print_db"     ,NO_ARG   ,nullptr ,'p' ,nullptr ,"print product databases"},
         {"prospicience" ,REQD_ARG ,nullptr ,004 ,nullptr ,"validation date"},
-        {nullptr              ,NO_ARG   ,nullptr ,0   ,nullptr ,""}
+        {nullptr        ,NO_ARG   ,nullptr ,0   ,nullptr ,""}
       };
 
     bool show_help        = false;

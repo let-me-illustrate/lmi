@@ -122,7 +122,7 @@ int try_main(int argc, char* argv[])
         {"lib-path",     REQD_ARG, nullptr, 'L', nullptr, "library path"},
         {"out-file",     REQD_ARG, nullptr, 'o', nullptr, "output executable file"},
         {"/",            REQD_ARG, nullptr, '/', nullptr, "linker option"},
-        {nullptr,              NO_ARG,   nullptr,   0, nullptr, ""}
+        {nullptr,        NO_ARG,   nullptr,   0, nullptr, ""}
       };
 
     bool license_accepted = false;
