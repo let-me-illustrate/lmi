@@ -39199,3 +39199,13 @@ Expunge obsolete _GLIBCXX_ macros, especially for concept checking.
   test_tools_test.cpp
 Permit regexen in thrown-exception tests.
 
+20160517T2302Z <gchicares@sbcglobal.net> [451]
+
+  miscellany.hpp
+Fix defect introduced 20160511T2355Z: missing visibility attributes.
+
+20160517T2303Z <gchicares@sbcglobal.net> [451]
+
+  skeleton.cpp
+Rework 20160511T2355Z behavior change: less DWIM, not more.
+

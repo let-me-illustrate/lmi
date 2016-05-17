@@ -904,9 +904,6 @@ namespace
                 }
             }
 
-        ltrim(new_text, " ;");
-        rtrim(new_text, " ;");
-
         return new_text;
         }
 
