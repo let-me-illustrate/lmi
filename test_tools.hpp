@@ -137,6 +137,10 @@ inline bool whats_what(std::string const& observed, std::string const& expected)
         || 0 == observed.compare(0, observed.find("\n[file "), expected)
         ;
 }
+
+class what_regex;
+
+bool whats_what(std::string const& observed, what_regex const& expected);
 } // namespace lmi_test
 
 /// Make sure 'expression' throws the anticipated exception. Signal an

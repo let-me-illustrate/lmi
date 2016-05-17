@@ -39151,3 +39151,51 @@ Add averages sub-header to the group quote report (VZ).
   group_quote_pdf_gen_wx.cpp
 State individual (not group total) spouse rider amount.
 
+20160516T1556Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+  wx_table_generator.cpp
+  wx_table_generator.hpp
+Format totals and averages as other data are formatted (VZ).
+
+20160516T1608Z <gchicares@sbcglobal.net> [451]
+
+  catch_exceptions.hpp
+  gpt_server.cpp
+  mec_server.cpp
+  test_main.cpp
+Say why headers are included iff not obvious.
+
+20160516T1617Z <gchicares@sbcglobal.net> [451]
+
+  cpp_main.cpp
+  test_tools.hpp
+Reformat.
+
+20160516T2235Z <zeitlin> [451]
+
+  configure.ac
+Suppress deprecated declarations warnings in configure gcc build.
+
+20160516T2336Z <zeitlin> [451]
+
+  Makefile.am
+Fix building unit tests in autotools build.
+
+20160517T0100Z <gchicares@sbcglobal.net> [451]
+
+  test_tools.hpp
+Refactor.
+
+20160517T2235Z <gchicares@sbcglobal.net> [451]
+
+  workhorse.make
+Expunge obsolete _GLIBCXX_ macros, especially for concept checking.
+
+20160517T2238Z <gchicares@sbcglobal.net> [451]
+
+  test_main.cpp
+  test_tools.hpp
+  test_tools_test.cpp
+Permit regexen in thrown-exception tests.
+
