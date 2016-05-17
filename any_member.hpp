@@ -293,7 +293,7 @@ class any_member
 
 template<typename ClassType>
 any_member<ClassType>::any_member()
-    :object_(0)
+    :object_(nullptr)
     ,content_(nullptr)
 {}
 
