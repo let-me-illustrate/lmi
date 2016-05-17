@@ -110,31 +110,42 @@
             ;                                            \
         }                                                \
 
-/// Make sure 'expression' throws the anticipated exception. Signal an
-/// error if no exception is thrown. Otherwise, compare the exception
-/// actually thrown against the one anticipated: deem them equivalent
-/// iff both
-///  - their types match exactly, and
-///  - either
-///    - 'WHAT' is empty, or
-///    - 'WHAT' exactly matches the actual exception's what(), or
-///    - 'WHAT' matches the actual exception's what() up to but not
+namespace lmi_test
+{
+/// Judge whether what() matches macro argument WHAT acceptably.
+///
+/// Intended to be called only by BOOST_TEST_THROW(). Arguments:
+///   - observed: the what() string actually thrown;
+///   - expected: macro argument 'WHAT', the string anticipated.
+///
+/// Deem the arguments equivalent iff either:
+///   - 'WHAT' is empty; or
+///   - 'WHAT' exactly matches the actual exception's what(); or
+///   - 'WHAT' matches the actual exception's what() up to but not
 ///      including any lmi exception-location string. (Some lmi
 ///      exceptions add a newline and the file name and line number,
 ///      always beginning "\n[file ").
 ///
 /// TODO ?? Probably the first element of the triple condition should
 /// be removed, and tests that rely on it strengthened.
-///
-/// COMPILER !! The borland compiler complains:
-///   std::out_of_range: position beyond end of string in function:
-///   basic_string::compare(size_t,size_t,basic_string [const]&) const
-///   index: -1 is greater than max_index: [size of string]
-/// but that complaint seems incorrect: the second argument is allowed
-/// to be npos, and only an invalid first argument can cause this
-/// exception, but the first argument here is always zero, which is
-/// always permissible. See C++98 21.3.6.8/3 and 21.3.1/4, and cf.
-/// Josuttis, TC++SL, 11.3.4 .
+
+inline bool whats_what(std::string const& observed, std::string const& expected)
+{
+    return
+           expected.empty()
+        || observed == expected
+        || 0 == observed.compare(0, observed.find("\n[file "), expected)
+        ;
+}
+} // namespace lmi_test
+
+/// Make sure 'expression' throws the anticipated exception. Signal an
+/// error if no exception is thrown. Otherwise, compare the exception
+/// actually thrown against the one anticipated: deem them equivalent
+/// iff both
+///  - their types match exactly, and
+///  - lmi_test::whats_what() deems the observed what() equivalent to
+///    macro argument WHAT.
 
 #define BOOST_TEST_THROW(expression,TYPE,WHAT)                \
     try                                                       \
@@ -164,17 +175,7 @@
                 ;                                             \
             lmi_test::record_error();                         \
             }                                                 \
-        else if                                               \
-            (   std::string(WHAT).size()                      \
-            &&  (   std::string((e).what())                   \
-                !=  std::string(WHAT)                         \
-                )                                             \
-            &&  0 != std::string((e).what()).compare          \
-                    (0                                        \
-                    ,std::string((e).what()).find("\n[file ") \
-                    ,std::string(WHAT)                        \
-                    )                                         \
-            )                                                 \
+        else if(!lmi_test::whats_what((e.what()), (WHAT)))    \
             {                                                 \
             lmi_test::error_stream()                          \
                 << "Caught exception\n    '"                  \
@@ -260,6 +261,11 @@ namespace lmi_test
     // macro in one file and three function implementations in another
     // file, and writing the function invocations in the macro took
     // about as much space as inlining the code.
+    //
+    // OTOH, comparing the expected to the observed what() string is
+    // simpler in an auxiliary function: that function, whats_what(),
+    // is more readable than the inlined macro code it replaced, and
+    // easier to overload.
 
     std::ostream& error_stream();
 
