@@ -550,19 +550,12 @@ endif
 # Build type governs
 #  - optimization flags
 #  - gprof
-#  - libstdc++ debugging and concept-checking macros
+#  - libstdc++ debugging macros
 
-# libstdc++ debugging and concept-checking macros are given in the
-# intended '_GLIBCXX' forms first, and also in the '_GLIBCPP' forms
-# that apparently were used for gcc-3.3.x .
-#
-# '-D_GLIBXX_DEBUG_PEDANTIC' is required for gcc-3.4.x and gcc-4.0.0;
-# this known defect was later corrected.
+# libstdc++ debugging macros
 
 every_libstdcxx_warning_macro := \
-  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_CONCEPT_CHECKS \
-  -D_GLIBCPP_DEBUG -D_GLIBCPP_DEBUG_PEDANTIC -D_GLIBCPP_CONCEPT_CHECKS \
-                   -D_GLIBXX_DEBUG_PEDANTIC \
+  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC \
 
 test_targets := unit_tests cgi_tests cli_tests
 
