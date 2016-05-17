@@ -104,8 +104,9 @@ int test_main(int, char*[])
         ;
     lmi_test::test::test_tools_errors = 0;
 
-    // This test, unlike the others above, should not fail. It makes
-    // sure that the anticipated and actually-thrown exceptions are
+    // The following tests, unlike those above, should not fail.
+
+    // Ensure that the anticipated and actually-thrown exceptions are
     // treated as equivalent even though the latter has an extra
     // terminal substring beginning with "\n[file ", which some lmi
     // exceptions add.
@@ -114,11 +115,19 @@ int test_main(int, char*[])
         (throw_exception
             (std::runtime_error
                 ("arbitrary"
-                "\n[file <remainder of terminal substring to ignore>]"
+                "\n[file <remainder of terminal substring to ignore>"
                 )
             )
         ,std::runtime_error
         ,"arbitrary"
+        );
+
+    // Test exception::what() against a regular expression.
+
+    BOOST_TEST_THROW
+        (throw_exception(std::runtime_error("Iteration 31: failure."))
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Iteration [0-9]*: failure\\.$")
         );
 
     return 0;

@@ -69,6 +69,8 @@
 #include "test_tools.hpp"
 
 #include <iostream>
+#include <ostream>
+#include <regex>
 #include <stdexcept>
 
 // GWC changed namespace 'boost' to prevent any conflict with code in
@@ -100,6 +102,33 @@ namespace lmi_test
     void record_success()
     {
         ++test::test_tools_successes;
+    }
+
+    /// Preserve regex ctor argument so stream inserter can write it.
+    ///
+    /// The sole motivation for this simple std::regex wrapper is to
+    /// let BOOST_TEST_THROW print the regex in diagnostics like:
+    ///   "Caught 'XYZ' but expected '[0-9]*'."
+
+    class what_regex
+    {
+      public:
+        what_regex(std::string const& s) : s_(s) {}
+
+        std::string const& str() const {return s_;}
+
+      private:
+        std::string s_;
+    };
+
+    std::ostream& operator<<(std::ostream& os, what_regex const& z)
+    {
+        return os << z.str();
+    }
+
+    bool whats_what(std::string const& observed, what_regex const& expected)
+    {
+        return std::regex_search(observed, std::regex(expected.str()));
     }
 } // namespace lmi_test
 
