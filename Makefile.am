@@ -926,9 +926,6 @@ test_progress_meter_SOURCES = \
   progress_meter_test.cpp \
   timer.cpp
 test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
-test_progress_meter_LDADD = \
-  liblmi.la \
-  $(XMLWRAPP_LIBS)
 
 test_regex_SOURCES = \
   $(common_test_objects) \
