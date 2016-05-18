@@ -116,6 +116,7 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     elapsed_time$(EXEEXT) \
     generate_passkey$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
+    table_tool$(EXEEXT) \
 
   ifneq (so_test,$(findstring so_test,$(build_type)))
     default_targets += \

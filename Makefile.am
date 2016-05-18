@@ -50,6 +50,7 @@ bin_PROGRAMS = \
     antediluvian_cli \
     ihs_crc_comp \
     product_files \
+    table_tool \
     test_coding_rules \
     wx_test
 
@@ -133,6 +134,7 @@ TESTS = \
     test_safely_dereference_as \
     test_sandbox \
     test_snprintf \
+    test_soa_database \
     test_stratified_algorithms \
     test_stream_cast \
     test_system_command \
@@ -490,6 +492,17 @@ product_files_SOURCES = \
     my_rnd.cpp \
     my_tier.cpp
 product_files_LDADD = \
+    liblmi.la \
+    $(BOOST_LIBS) \
+    $(XMLWRAPP_LIBS)
+
+table_tool_SOURCES = \
+    alert_cli.cpp \
+    main_common.cpp \
+    main_common_non_wx.cpp \
+    soa_database.cpp \
+    table_tool.cpp
+table_tool_LDADD = \
     liblmi.la \
     $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
@@ -964,6 +977,15 @@ test_snprintf_SOURCES = \
   $(common_test_objects) \
   snprintf_test.cpp
 test_snprintf_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_soa_database_SOURCES = \
+  alert_cli.cpp \
+  soa_database.cpp \
+  soa_database_test.cpp
+test_soa_database_LDADD = \
+  liblmi.la \
+  $(BOOST_LIBS) \
+  $(XMLWRAPP_LIBS)
 
 test_stratified_algorithms_SOURCES = \
   $(common_test_objects) \

@@ -443,6 +443,7 @@ unit_test_targets := \
   safely_dereference_as_test \
   sandbox_test \
   snprintf_test \
+  soa_database_test \
   stratified_algorithms_test \
   stream_cast_test \
   system_command_test \
@@ -862,6 +863,18 @@ snprintf_test$(EXEEXT): \
   $(common_test_objects) \
   snprintf_test.o \
 
+soa_database_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  calendar_date.o \
+  crc32.o \
+  global_settings.o \
+  path_utility.o \
+  miscellany.o \
+  null_stream.o \
+  soa_database.o \
+  soa_database_test.o \
+
 stratified_algorithms_test$(EXEEXT): \
   $(common_test_objects) \
   stratified_algorithms_test.o \
@@ -949,6 +962,20 @@ generate_passkey$(EXEEXT): \
 ihs_crc_comp$(EXEEXT): \
   $(main_auxiliary_common_objects) \
   ihs_crc_comp.o \
+
+table_tool$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(main_auxiliary_common_objects) \
+  calendar_date.o \
+  crc32.o \
+  getopt.o \
+  global_settings.o \
+  license.o \
+  miscellany.o \
+  null_stream.o \
+  path_utility.o \
+  soa_database.o \
+  table_tool.o
 
 test_coding_rules_test := $(src_dir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
