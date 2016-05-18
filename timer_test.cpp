@@ -36,10 +36,7 @@
 #   include <boost/bind.hpp>
 #endif // !defined __BORLANDC__
 
-#include <cfloat>
-#include <climits>
 #include <cmath>
-#include <ctime>
 
 inline void do_nothing()
 {}
@@ -68,7 +65,6 @@ struct TimerTest
 {
     static void WaitTenMsec();
     static void SleepOneSec();
-    static void TestResolution();
     static void TestExceptions();
     static void TestAliquotTimer();
 };
@@ -85,45 +81,6 @@ void TimerTest::WaitTenMsec()
 void TimerTest::SleepOneSec()
 {
     lmi_sleep(1);
-}
-
-/// Roughly validate accuracy of high-resolution timer.
-///
-/// Time an interval of about one second with both std::clock() and
-/// the high-resolution timer, and make sure the relative error is
-/// within a reasonable range.
-
-void TimerTest::TestResolution()
-{
-    std::clock_t first = std::clock();
-    std::clock_t last;
-    double clock_resolution;
-    for(;;)
-        {
-        last = std::clock();
-        clock_resolution = double(last - first) / CLOCKS_PER_SEC;
-        if(0.0 != clock_resolution)
-            {
-            break;
-            }
-        }
-
-    Timer timer;
-    first = std::clock();
-    double interval = 1.0;
-    for(;;)
-        {
-        last = std::clock();
-        double elapsed = (last - first) / CLOCKS_PER_SEC;
-        if(interval <= elapsed)
-            {
-            break;
-            }
-        }
-    double observed = timer.stop().elapsed_seconds();
-    double relative_error = std::fabs(observed - interval) / interval;
-
-    BOOST_TEST_RELATION(relative_error,<,2.0*clock_resolution);
 }
 
 void TimerTest::TestExceptions()
@@ -184,7 +141,6 @@ void TimerTest::TestAliquotTimer()
 
 int test_main(int, char*[])
 {
-    TimerTest::TestResolution();
     TimerTest::TestExceptions();
     TimerTest::TestAliquotTimer();
     return EXIT_SUCCESS;

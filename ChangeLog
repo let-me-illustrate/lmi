@@ -39209,3 +39209,13 @@ Fix defect introduced 20160511T2355Z: missing visibility attributes.
   skeleton.cpp
 Rework 20160511T2355Z behavior change: less DWIM, not more.
 
+20160518T0225Z <gchicares@sbcglobal.net> [451]
+
+  Makefile.am
+Remove a needless dependency.
+
+20160518T0226Z <gchicares@sbcglobal.net> [451]
+
+  timer_test.cpp
+Expunge an erroneous test.
+
