@@ -1446,21 +1446,19 @@ void group_quote_pdf_generator_wx::output_aggregate_values
         table_gen.output_highlighted_cell
             (col
             ,y
-            ,"$"
-            ,ledger_format(totals_.total(col), f)
+            ,'$' + ledger_format(totals_.total(col), f)
             );
 
         // Only premium columns have averages, but we must output something for
         // all cells to ensure that we use homogeneous background.
         double const average = averages_.mean(col);
-        std::string lhs, rhs;
+        std::string average_text;
         if(average != 0.0)
             {
-            lhs = "$";
-            rhs = ledger_format(average, f);
+            average_text = '$' + ledger_format(average, f);
             }
 
-        table_gen.output_highlighted_cell(col, y_next, lhs, rhs);
+        table_gen.output_highlighted_cell(col, y_next, average_text);
         }
 
     table_gen.output_vert_separator(e_col_max, y);

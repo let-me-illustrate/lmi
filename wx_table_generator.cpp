@@ -354,8 +354,7 @@ void wx_table_generator::output_row
 void wx_table_generator::output_highlighted_cell
     (std::size_t        column
     ,int                y
-    ,std::string const& lhs
-    ,std::string const& rhs
+    ,std::string const& value
     )
 {
     if(columns_.at(column).is_hidden())
@@ -369,9 +368,7 @@ void wx_table_generator::output_highlighted_cell
     dc_.DrawRectangle(cell_rect(column, y));
     }
 
-    wxRect const r = text_rect(column, y);
-    dc_.DrawLabel(lhs, r, wxALIGN_LEFT);
-    dc_.DrawLabel(rhs, r, wxALIGN_RIGHT);
+    dc_.DrawLabel(value, text_rect(column, y), wxALIGN_CENTER_HORIZONTAL);
 
     output_vert_separator(column, y);
 }

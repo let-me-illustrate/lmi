@@ -565,7 +565,6 @@ if test "$GCC" == "yes"; then
         dnl Assume this is the real gcc.
         c_warnings_flags="$c_warnings_flags \
             -Wcast-align \
-            -Wdeprecated-declarations \
             -Wdisabled-optimization \
             -Wimport \
             -Wmultichar \
@@ -587,7 +586,7 @@ if test "x$GXX" == "xyes"; then
     else
         cxx_warnings_flags="$cxx_warnings_flags \
         -Wctor-dtor-privacy \
-        -Wdeprecated \
+        -Wno-deprecated-declarations \
         -Wnon-template-friend \
         -Woverloaded-virtual \
         -Wpmf-conversions \

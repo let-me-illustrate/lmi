@@ -623,6 +623,7 @@ test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_configurable_settings_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   configurable_settings.cpp \
   configurable_settings_test.cpp \
   data_directory.cpp \
@@ -632,6 +633,7 @@ test_configurable_settings_SOURCES = \
   mc_enum.cpp \
   mc_enum_types.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   path_utility.cpp \
   xml_lmi.cpp
 test_configurable_settings_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
@@ -685,9 +687,11 @@ test_getopt_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_global_settings_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   global_settings.cpp \
   global_settings_test.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   path_utility.cpp
 test_global_settings_CXXFLAGS = $(AM_CXXFLAGS)
 test_global_settings_LDADD = \
@@ -811,6 +815,7 @@ test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_mc_enum_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   datum_base.cpp \
   facets.cpp \
   global_settings.cpp \
@@ -818,6 +823,7 @@ test_mc_enum_SOURCES = \
   mc_enum_test.cpp \
   mc_enum_test_aux.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   path_utility.cpp
 test_mc_enum_CXXFLAGS = $(AM_CXXFLAGS)
 test_mc_enum_LDADD = \
@@ -864,8 +870,10 @@ test_obstruct_slicing_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_path_utility_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   global_settings.cpp \
   miscellany.cpp \
+  null_stream.cpp \
   path_utility.cpp \
   path_utility_test.cpp
 test_path_utility_CXXFLAGS = $(AM_CXXFLAGS)
@@ -947,8 +955,6 @@ test_progress_meter_SOURCES = \
   progress_meter_test.cpp \
   timer.cpp
 test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
-test_progress_meter_LDADD = \
-  liblmi.la
 
 test_regex_SOURCES = \
   $(common_test_objects) \
