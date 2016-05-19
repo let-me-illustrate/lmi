@@ -23,8 +23,6 @@
     http://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
-
-    $Id$
 -->
 
 <object class="wxPanel" name="rounding_view_panel">

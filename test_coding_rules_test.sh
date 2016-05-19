@@ -21,8 +21,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 echo "Testing 'test_coding_rules'."
 
 rm --force eraseme*
@@ -34,12 +32,9 @@ good_copyright="...Copyright (C)...`date -u +'%Y'`..."
 # Dollar signs must be escaped with '\' in here-documents; writing
 # them on different lines prevents RCS substitution here.
 
-good_rcsid="...\$\
-Id:...\$..."
-
 good_url="...http://savannah.nongnu.org/projects/lmi..."
 
-boilerplate="$good_copyright"$'\n'"$good_rcsid"$'\n'"$good_url"
+boilerplate="$good_copyright"$'\n'"$good_url"
 
 # Files in general.
 
@@ -55,7 +50,7 @@ $boilerplate
 EOF
 
 cat >eraseme_copyright_001 <<EOF
-$good_rcsid $good_url
+$good_url
 Copyright (C)
   is expected to be on the same line as
 `date -u +'%Y'`
@@ -70,7 +65,7 @@ Copyright &copy; `date -u +'%Y'`
 EOF
 
 cat >eraseme_copyright_003.html <<EOF
-$good_rcsid $good_url
+$good_url
 Missing "(C)" copyright.
 Copyright &copy; `date -u +'%Y'`
 EOF
@@ -104,53 +99,6 @@ $boilerplate
  ELEGANT !! No such marker.
 EOF
 
-# Files in general: RCS Ids.
-
-cat >eraseme_rcs_id_000 <<EOF
-$good_copyright $good_url
-A real RCS Id must be accepted:
-\$\
-Id: test_coding_rules_test.sh,v 1.13 2007/12/29 14:16:18 chicares Exp \$
-EOF
-
-cat >eraseme_rcs_id_001 <<EOF
-$good_copyright $good_url
-\$\
-Id\$ # Okay.
-EOF
-
-cat >eraseme_rcs_id_002 <<EOF
-$good_copyright $good_url
-\$\
-Id # Lacks terminal dollar sign.
-EOF
-
-cat >eraseme_rcs_id_003 <<EOF
-$good_copyright $good_url
-\$\
-Id
-\$ # Terminal dollar sign must be on same line.
-EOF
-
-cat >eraseme_rcs_id_004 <<EOF
-$good_copyright $good_url
-# No RCS Id at all.
-EOF
-
-cat >eraseme_rcs_id_005 <<EOF
-$good_copyright $good_url
-\$\
-Id gibberish\$ # Lacks colon.
-EOF
-
-cat >eraseme_rcs_id_006 <<EOF
-$good_copyright $good_url
-// \$\
-Id: README.auto,v 1.6 2007/02/23 12:43:25 chicares Exp \$
-Version: \$\
-Id: README.auto,v 1.6 2007/02/23 12:43:25 chicares Exp \$
-EOF
-
 # Files in general: taboos.
 
 cat >eraseme_taboo_000 <<EOF
@@ -167,12 +115,12 @@ EOF
 # Files in general: lmi url.
 
 cat >eraseme_url_000 <<EOF
-$good_copyright $good_rcsid
+$good_copyright
 <http://savannah.nongnu.org/projects/lmi>
 EOF
 
 cat >eraseme_url_001 <<EOF
-$good_copyright $good_rcsid
+$good_copyright
 EOF
 
 # Files in general: whitespace.
@@ -456,13 +404,6 @@ File 'eraseme_marker_001' has irregular defect marker 'INELEGANT !!B'.
 File 'eraseme_marker_001' has irregular defect marker 'INELEGANT !!!'.
 File 'eraseme_marker_001' has irregular defect marker 'ELEGANT !! '.
 File 'eraseme_png_003-dot.dash-dot.png' exceeds 31-character file-name limit.
-File 'eraseme_rcs_id_002' lacks a well-formed RCS Id.
-File 'eraseme_rcs_id_002' contains a malformed RCS Id.
-File 'eraseme_rcs_id_003' lacks a well-formed RCS Id.
-File 'eraseme_rcs_id_003' contains a malformed RCS Id.
-File 'eraseme_rcs_id_004' lacks a well-formed RCS Id.
-File 'eraseme_rcs_id_005' lacks a well-formed RCS Id.
-File 'eraseme_rcs_id_006' contains more than one RCS Id.
 File 'eraseme_taboo_001' breaks taboo 'Cambridge'.
 File 'eraseme_taboo_001' breaks taboo 'Temple'.
 File 'eraseme_taboo_001' breaks taboo 'Shibboleth'.

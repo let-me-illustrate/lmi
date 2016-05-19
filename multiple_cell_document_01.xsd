@@ -23,7 +23,6 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
   -->
-  <!-- $Id$ -->
   <!-- Use file extension '.cns' for multiple-life xml documents. -->
   <!-- This schema corresponds to version 1 of class multiple_cell_document. -->
   <!--

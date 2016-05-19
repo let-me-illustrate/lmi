@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // See my usenet messages sent to borland.public.whatever on
 // 2000-06-06T00:05:29 -0400 and 2000-08-28T21:24:18 -0400 for a rather
 // different borland linker frontend.

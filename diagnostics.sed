@@ -19,8 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id$
-#
   # Delete expected output from make.
 /Circular.*dependency dropped/d
 /Entering directory/d

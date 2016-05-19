@@ -25,8 +25,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 # Replace certain special characters with html entities as required
 # for the output to be valid html. This script does not attempt to
 # handle quotes or dashes more tastefully than its input: that would

@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // Configuration header for compiler quirks--mingw gcc-3.2.3 .
 
 #ifndef config_ming323_hpp

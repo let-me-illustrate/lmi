@@ -42,8 +42,6 @@ long double expm1l(long double x);
  * email: <gchicares@sbcglobal.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id$
- *
  * End local GWC modifications. */
 
 long double expm1l(long double x) /* Local GWC modification: type changed. */

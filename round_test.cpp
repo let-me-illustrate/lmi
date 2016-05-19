@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // Unit tests for libmingwex round() and its kin. See:
 //   http://sf.net/tracker/?func=detail&atid=302435&aid=1962656&group_id=2435
 // All testcases reported to mingw.org are believed to be included here.

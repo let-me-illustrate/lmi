@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // To make msw use this:
 AAAAAAAA ICON "lmi.ico"
 // as the application's icon e.g. for 'explorer', make sure it's both
