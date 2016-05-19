@@ -597,68 +597,6 @@ class group_quote_pdf_generator_wx
     };
     totals_data totals_;
 
-    class averages_data
-    {
-      public:
-        averages_data()
-            {
-            for(int col = e_first_totalled_column; col < e_col_max; ++col)
-                {
-                int const n = index_from_col(col);
-                values_counts_[n] = 0;
-                mean_values_[n] = 0.0;
-                }
-            }
-
-        // Adds 1000*premium/face_amount to the values over which the mean
-        // value is computed. The value is silently ignored if the face amount
-        // is zero, which can happen if this column is not used at all in this
-        // quote.
-        void add_data_point(int col, double premium, double face_amount)
-            {
-            if(face_amount == 0.0)
-                {
-                return;
-                }
-
-            double const d = 1000.0*premium / face_amount;
-
-            // Iteratively compute the mean of the sequence of values using the
-            // simplified (as we don't need the standard deviation here)
-            // version of the algorithm described in Knuth's "The Art of
-            // Computer Programming, Volume 2: Seminumerical Algorithms",
-            // section 4.2.2.
-            //
-            // The algorithm defines the sequence M(k)
-            //
-            //  M(1) = x(1), M(k) = M(k-1) + (x(k) - M(k-1)) / k
-            //
-            // where x(k) is the k-th value and the mean value of the sequence
-            // up to the member N is simply the last value M(N).
-            int const n = index_from_col(col);
-            if(values_counts_[n]++ == 0)
-                {
-                mean_values_[n] = d;
-                }
-            else
-                {
-                mean_values_[n] += (d - mean_values_[n]) / values_counts_[n];
-                }
-            }
-
-        double mean(int col) const
-            {
-            return mean_values_[index_from_col(col)];
-            }
-
-      private:
-        static int index_from_col(int col) { return col - e_first_totalled_column; }
-
-        unsigned values_counts_[e_col_max - e_first_totalled_column];
-        double   mean_values_  [e_col_max - e_first_totalled_column];
-    };
-    averages_data averages_;
-
     struct page_metrics
         {
         page_metrics()
@@ -840,11 +778,6 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
     bool const is_composite = ledger.is_composite();
 
-    // Some values which will be used more than once in the loop below.
-    double const basic_face_amount = invar.SpecAmt.at(year);
-    double const suppl_face_amount = invar.TermSpecAmt.at(year);
-    double const total_face_amount = basic_face_amount + suppl_face_amount;
-
     row_data rd;
     for(int col = 0; col < e_col_max; ++col)
         {
@@ -878,10 +811,11 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_basic_face_amount:
                 {
-                rd.values[col] = '$' + ledger_format(basic_face_amount, f0);
+                double const z = invar.SpecAmt.at(year);
+                rd.values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
-                    totals_.total(col, basic_face_amount);
+                    totals_.total(col, z);
                     }
                 }
                 break;
@@ -893,18 +827,15 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     {
                     totals_.total(col, z);
                     }
-                else
-                    {
-                    averages_.add_data_point(col, z, basic_face_amount);
-                    }
                 }
                 break;
             case e_col_supplemental_face_amount:
                 {
-                rd.values[col] = '$' + ledger_format(suppl_face_amount, f0);
+                double const z = invar.TermSpecAmt.at(year);
+                rd.values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
-                    totals_.total(col, suppl_face_amount);
+                    totals_.total(col, z);
                     }
                 }
                 break;
@@ -916,18 +847,15 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                     {
                     totals_.total(col, z);
                     }
-                else
-                    {
-                    averages_.add_data_point(col, z, suppl_face_amount);
-                    }
                 }
                 break;
             case e_col_total_face_amount:
                 {
-                rd.values[col] = '$' + ledger_format(total_face_amount, f0);
+                double const z = invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year);
+                rd.values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
-                    totals_.total(col, total_face_amount);
+                    totals_.total(col, z);
                     }
                 }
                 break;
@@ -938,10 +866,6 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 if(is_composite)
                     {
                     totals_.total(col, z);
-                    }
-                else
-                    {
-                    averages_.add_data_point(col, z, total_face_amount);
                     }
                 }
                 break;
@@ -1422,11 +1346,18 @@ void group_quote_pdf_generator_wx::output_aggregate_values
 
         // Only premium columns have averages, but we must output something for
         // all cells to ensure that we use homogeneous background.
-        double const average = averages_.mean(col);
         std::string average_text;
-        if(average != 0.0)
+        switch(col)
             {
-            average_text = '$' + ledger_format(average, f);
+            case e_col_basic_premium:
+            case e_col_additional_premium:
+            case e_col_total_premium:
+                // We can rely on the face amount column corresponding to this
+                // premium just preceding it because the way we display the
+                // averages wouldn't make sense otherwise.
+                double const average = 1000*totals_.total(col)/totals_.total(col - 1);
+                average_text = '$' + ledger_format(average, f);
+                break;
             }
 
         table_gen.output_highlighted_cell(col, y_next, average_text);
