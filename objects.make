@@ -443,6 +443,7 @@ unit_test_targets := \
   print_matrix_test \
   product_file_test \
   progress_meter_test \
+  rate_table_test \
   regex_test \
   round_test \
   round_to_test \
@@ -839,6 +840,18 @@ progress_meter_test$(EXEEXT): \
   progress_meter_test.o \
   timer.o \
 
+rate_table_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  calendar_date.o \
+  crc32.o \
+  global_settings.o \
+  path_utility.o \
+  miscellany.o \
+  null_stream.o \
+  rate_table.o \
+  rate_table_test.o \
+
 regex_test$(EXEEXT): \
   $(boost_regex_objects) \
   $(common_test_objects) \
@@ -956,6 +969,20 @@ generate_passkey$(EXEEXT): \
 ihs_crc_comp$(EXEEXT): \
   $(main_auxiliary_common_objects) \
   ihs_crc_comp.o \
+
+rate_table_tool$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(main_auxiliary_common_objects) \
+  calendar_date.o \
+  crc32.o \
+  getopt.o \
+  global_settings.o \
+  license.o \
+  miscellany.o \
+  null_stream.o \
+  path_utility.o \
+  rate_table.o \
+  rate_table_tool.o \
 
 test_coding_rules_test := $(src_dir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)

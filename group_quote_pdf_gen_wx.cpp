@@ -1297,50 +1297,23 @@ void group_quote_pdf_generator_wx::output_document_header
          "</tr>"
          ;
 
-    {
-    open_and_ensure_closing_tag tag_tr(summary_html, "tr");
-    append_name_value_to_html_table
-        (summary_html
-        ,"Product"
-        ,report_data_.product_
-        );
-    append_name_value_to_html_table
-        (summary_html
-        ,"Effective Date"
-        ,report_data_.effective_date_
-        );
-    }
-    {
-    open_and_ensure_closing_tag tag_tr(summary_html, "tr");
-    append_name_value_to_html_table
-        (summary_html
-        ,"Riders"
-        ,report_data_.elected_riders_ + " " // " ": force colon if empty
-        );
-    append_name_value_to_html_table
-        (summary_html
-        ,"Contract State"
-        ,report_data_.contract_state_
-        );
-    }
-    {
-    open_and_ensure_closing_tag tag_tr(summary_html, "tr");
-    append_name_value_to_html_table
-        (summary_html
-        ,"Number of Participants"
-        ,wxString::Format("%d", row_num_).ToStdString()
-        );
-    append_name_value_to_html_table
-        (summary_html
-        ,"Premium Mode"
-        ,report_data_.premium_mode_
-        );
-    }
-
-    // Add a "plan type" field, then any additional fields,
+    // Add fixed fields first, then any additional ones,
     // in left-to-right then top-to-bottom order.
     std::vector<extra_summary_field> fields;
-    fields.emplace_back(extra_summary_field{"Plan Type", report_data_.plan_type_});
+
+    fields.push_back({"Product",                report_data_.product_                           });
+    fields.push_back({"Effective Date",         report_data_.effective_date_                    });
+
+    // Append the space to ensure the field name is followed by a colon even if
+    // the value is empty.
+    fields.push_back({"Riders",                 report_data_.elected_riders_ + " "              });
+    fields.push_back({"Contract State",         report_data_.contract_state_                    });
+
+    fields.push_back({"Number of Participants", wxString::Format("%d", row_num_).ToStdString()  });
+    fields.push_back({"Premium Mode",           report_data_.premium_mode_                      });
+
+    fields.push_back({"Plan Type",              report_data_.plan_type_                         });
+
     std::vector<extra_summary_field> const& f = report_data_.extra_fields_;
     fields.insert(fields.end(), f.begin(), f.end());
 
