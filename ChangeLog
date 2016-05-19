@@ -39808,7 +39808,7 @@ Expunge all RCS Id's.
   group_quote_pdf_gen_wx.cpp
 Change "averages" from mean of ratios to ratios of sums (VZ).
 
- <gchicares@sbcglobal.net> [451]
+20160519T2141Z <gchicares@sbcglobal.net> [451]
 
   version.hpp
 Designate release candidate 6608.
