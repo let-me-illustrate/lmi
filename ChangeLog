@@ -39219,3 +39219,15 @@ Remove a needless dependency.
   timer_test.cpp
 Expunge an erroneous test.
 
+20160519T0031Z <gchicares@sbcglobal.net> [451]
+
+  Makefile.am
+  objects.make
+  rate_table.cpp      [new file]
+  rate_table.hpp      [new file]
+  rate_table_test.cpp [new file]
+  rate_table_tool.cpp [new file]
+  workhorse.make
+Add rate-table reimplmentation for testing (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-05/msg00062.html
+

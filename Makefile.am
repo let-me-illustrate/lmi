@@ -50,6 +50,7 @@ bin_PROGRAMS = \
     antediluvian_cli \
     ihs_crc_comp \
     product_files \
+    rate_table_tool \
     test_coding_rules \
     wx_test
 
@@ -126,6 +127,7 @@ TESTS = \
     test_print_matrix \
     test_product_file \
     test_progress_meter \
+    test_rate_table \
     test_regex \
     test_round \
     test_round_to \
@@ -490,6 +492,17 @@ product_files_SOURCES = \
     my_rnd.cpp \
     my_tier.cpp
 product_files_LDADD = \
+    liblmi.la \
+    $(BOOST_LIBS) \
+    $(XMLWRAPP_LIBS)
+
+rate_table_tool_SOURCES = \
+    alert_cli.cpp \
+    main_common.cpp \
+    main_common_non_wx.cpp \
+    rate_table.cpp \
+    rate_table_tool.cpp
+rate_table_tool_LDADD = \
     liblmi.la \
     $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
@@ -926,6 +939,15 @@ test_progress_meter_SOURCES = \
   progress_meter_test.cpp \
   timer.cpp
 test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_rate_table_SOURCES = \
+  alert_cli.cpp \
+  rate_table.cpp \
+  rate_table_test.cpp
+test_rate_table_LDADD = \
+  liblmi.la \
+  $(BOOST_LIBS) \
+  $(XMLWRAPP_LIBS)
 
 test_regex_SOURCES = \
   $(common_test_objects) \
