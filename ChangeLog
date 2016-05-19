@@ -39231,3 +39231,14 @@ Expunge an erroneous test.
 Add rate-table reimplmentation for testing (VZ). See:
   http://lists.nongnu.org/archive/html/lmi/2016-05/msg00062.html
 
+20160519T0112Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Refactor for clarity (VZ). See:
+  http://lists.nongnu.org/archive/html/lmi/2016-05/msg00060.html
+
+20160519T0119Z <gchicares@sbcglobal.net> [451]
+
+  version.hpp
+Designate release candidate 6605.
+
