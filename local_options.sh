@@ -21,8 +21,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 # This sample usage:
 #   ./local_options mingw_dir=/MinGW-20050120/ CFLAGS='-g -O0'
 # creates a file 'local_options.make' that contains
@@ -56,8 +54,6 @@
 
 echo "# Copyright (C) `date -u +'%Y'` [you]."     > local_options.make
 echo "# http://savannah.nongnu.org/projects/lmi" >> local_options.make
-echo "# \$\
-Id: \$"                                          >> local_options.make
 echo ""                                          >> local_options.make
 echo "# Local options"                           >> local_options.make
 for z in "$@"

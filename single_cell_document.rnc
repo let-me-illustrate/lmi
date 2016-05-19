@@ -19,8 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 # Use file extension '.ill' for single-life xml documents.
 
 start = element single_cell_document

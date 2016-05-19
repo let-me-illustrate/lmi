@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // TODO ?? TAXATION !! Make this a server app. Consider where to store DB, SA history.
 
 // TODO ?? TAXATION !! Do we need a separate function to handle withdrawals?

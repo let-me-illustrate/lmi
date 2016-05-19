@@ -19,8 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id$
-#
 # grep -n ^ *.?pp | sed -nf check_std_names.sed
 #
 # First, don't complain about the 'free' in 'free software'

@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 #ifndef premium_tax_hpp
 #define premium_tax_hpp
 

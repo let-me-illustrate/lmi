@@ -19,8 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 ################################################################################
@@ -394,7 +392,6 @@ happy_new_year: source_clean
 	[ -z '$(wildcard *.?pp)' ] || $(GREP) '$(old_year)' *.?pp \
 	  | $(SED) \
 	    -e '/$(old_year)[, ]*$(new_year)/d' \
-	    -e'/[$$]Id: .* $(old_year)-.*[$$]/d' \
 	    -e'/http:\/\/lists.nongnu.org\/archive\/html\/lmi\/$(old_year)/d' \
 	    -e'/\(VERSION\|version\).*$(old_year)[0-9]\{4\}T[0-9]\{4\}Z/d' \
 	  || true

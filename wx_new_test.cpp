@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // This unit test proves little, but including it in the unit-test
 // suite ensures that it'll be compiled with stronger warning options
 // than wx would permit.

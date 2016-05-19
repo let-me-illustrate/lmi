@@ -36,9 +36,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// GWC added this RCS Id:
-// $Id$
-
 // GWC removed obsolete '#pragma implementation'.
 
 // GWC removed a dozen or two lines that served to make alloca() available

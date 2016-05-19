@@ -31,8 +31,6 @@
  * email: <gchicares@sbcglobal.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id$
- *
  * GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
  * can be used across the lmi project.
  *

@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
 {DB_Topic_Underwriting,DB_FIRST,"Underwriting","Underwriting types, classifications, and restrictions; permissible rate classes; approved jurisdictions",}, \

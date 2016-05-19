@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // This implementation is a derived work based on wxWindows code, viz.
 //   include/wx/prntbase.h (C) 1997 Julian Smart and Markus Holzem
 // both of which are covered by the wxWindows license.

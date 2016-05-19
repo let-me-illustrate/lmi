@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // This is not portable because a signal handler isn't guaranteed to
 // work if it does anything other than set a volatile global or static
 // variable, without calling any standard library function other than

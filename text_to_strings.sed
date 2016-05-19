@@ -25,8 +25,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 # Escape all double-quote characters in the input. Add a C newline
 # representation at the end of each line and surround the line in
 # double quotes.

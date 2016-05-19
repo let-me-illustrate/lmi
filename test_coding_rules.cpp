@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
@@ -742,27 +740,6 @@ void check_preamble(file const& f)
 
     static std::string const url("http://savannah.nongnu.org/projects/lmi");
     require(f, url, "lacks lmi URL.");
-
-    static std::string const good_rcs_id =
-        "\\$"
-        "Id(:[^\\n]*)*\\$"
-        ;
-    require(f, good_rcs_id, "lacks a well-formed RCS Id.");
-
-    static std::string const pleonastic_rcs_id =
-        "\\$"
-        "Id"
-        ".*"
-        "\\$"
-        "Id"
-        ;
-    forbid(f, pleonastic_rcs_id, "contains more than one RCS Id.");
-
-    static std::string const bad_rcs_id =
-        "\\$"
-        "Id[^\\$\\n]*\\n"
-        ;
-    forbid(f, bad_rcs_id, "contains a malformed RCS Id.");
 }
 
 /// Deem a reserved name permissible or not.
