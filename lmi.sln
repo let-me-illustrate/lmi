@@ -25,7 +25,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soa2xml", "soa2xml.vcxproj"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soa_stress_test", "soa_stress_test.vcxproj", "{529CBF3A-BCBC-52EE-B507-ED1C8A0456F6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soa_database_test", "soa_database_test.vcxproj", "{3823E1F3-1BDF-4CDB-85D5-D288FBEBD569}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rate_table_test", "rate_table_test.vcxproj", "{3823E1F3-1BDF-4CDB-85D5-D288FBEBD569}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "group_quote_pdf_gen_test", "group_quote_pdf_gen_test.vcxproj", "{884D7A57-5DF6-4FD6-BDC5-F5FEAEA50CD5}"
 	ProjectSection(ProjectDependencies) = postProject
