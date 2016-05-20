@@ -19,8 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id$
-#
   # Often, make says 'not remade because of errors' if it encounters
   # an error; but sometimes it doesn't. It is more robust to look for
   # three successive asterisks, then discard lines reporting errors

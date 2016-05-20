@@ -19,8 +19,6 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 # Configurable settings ########################################################
 
 # Use the 2005-08-27 version by default.

@@ -19,8 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 # This experimental makefile runs unit tests, filters out most routine
 # output, and summarizes results. It's handy, but abstruse. Usually,
 # makefiles simply emit the output of the commands they run, and using

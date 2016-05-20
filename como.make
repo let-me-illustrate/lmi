@@ -19,8 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 # Limited support for Comeau C++ version 4.3.10.1, using MinGW gcc as
 # the underlying C compiler, with a Cygwin shell. Comeau C++ is useful
 # because it conforms to the standard in some ways that gcc does not,

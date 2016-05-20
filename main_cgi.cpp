@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // This is a derived work based on Stephen F. Booth's
 //   cgicc-3.1.4/demo/test.cpp
 // which bears copyright notice

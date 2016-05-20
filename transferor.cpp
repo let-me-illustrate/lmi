@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // Acknowledgment
 
 // wxWindows-2.4.1 file 'src/common/valgen.cpp', copyright 1999 by its

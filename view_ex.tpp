@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "rtti_lmi.hpp"

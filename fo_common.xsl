@@ -20,8 +20,6 @@
     http://savannah.nongnu.org/projects/lmi
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
-
-    $Id$
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">

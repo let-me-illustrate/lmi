@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // This program makes borland's 'tlib' work somewhat like gnu 'ar'.
 // The emulation is very limited. Only the following 'ar' commands are
 // recognized:

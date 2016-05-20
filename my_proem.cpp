@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
 #   pragma hdrstop
@@ -48,8 +46,5 @@ void write_proem
     std::string const y(value_cast<std::string>(today().year()));
     document.add_comment("Copyright (C) " + y + " Gregory W. Chicares.");
     document.add_comment("http://savannah.nongnu.org/projects/lmi");
-    // The apparently-needless '""' prevents 'test_coding_rules.cpp'
-    // from complaining that this file has more than one RCS Id.
-    document.add_comment("$""Id: $");
 }
 

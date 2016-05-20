@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // Configuration header for compiler quirks--bcc-5.5.1 .
 
 #ifndef config_bc551_hpp

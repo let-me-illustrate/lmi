@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
 // if a solution exists between the given bounds, and because of

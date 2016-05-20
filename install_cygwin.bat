@@ -19,8 +19,6 @@
 @REM email: <gchicares@sbcglobal.net>
 @REM snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-@REM $Id$
-
 @ECHO OFF
 
 @REM Install Cygwin. See file 'INSTALL'.

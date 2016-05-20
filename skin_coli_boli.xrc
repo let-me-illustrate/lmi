@@ -24,8 +24,6 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id$
-
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
     aesthetic preferences of an actual customer group.

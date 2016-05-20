@@ -19,8 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id$
-
 # Use file extension '.cns' for multiple-life xml documents.
 
 # Inforce data from external systems must include 'case_default' and

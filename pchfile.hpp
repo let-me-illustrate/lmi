@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
-
 // Always include this header first in every '.cpp' file, before
 // anything else except comments and whitespace. Never include it in
 // any header file. Include any headers to be precompiled here.

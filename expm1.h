@@ -19,8 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expm1.h,v 1.5 2008-12-27 02:56:40 chicares Exp $
-
 // The include guard has an 'lmi_' prefix to avoid conflict, because
 // 'expm1_h' is an obvious name that libraries might use.
 
