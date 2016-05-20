@@ -39813,3 +39813,18 @@ Change "averages" from mean of ratios to ratios of sums (VZ).
   version.hpp
 Designate release candidate 6608.
 
+20160520T1247Z <gchicares@sbcglobal.net> [451]
+
+  group_quote_pdf_gen_wx.cpp
+Do not attempt to define an average for "additional" premium.
+
+20160520T1340Z <gchicares@sbcglobal.net> [451]
+
+  GNUmakefile
+Do not write an RCS Id when generating 'version.hpp'.
+
+20160520T1343Z <gchicares@sbcglobal.net> [451]
+
+  version.hpp
+Designate release candidate 6612.
+
