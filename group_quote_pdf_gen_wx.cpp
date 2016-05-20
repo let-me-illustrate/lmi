@@ -1344,22 +1344,64 @@ void group_quote_pdf_generator_wx::output_aggregate_values
             ,'$' + ledger_format(totals_.total(col), f)
             );
 
-        // Only premium columns have averages, but we must output something for
-        // all cells to ensure that we use homogeneous background.
+        // Average cost per $1000 is presented only for the "basic"
+        // and "total" premium columns. It obviously cannot be defined
+        // for face-amount columns. Less obviously, it doesn't make
+        // sense to define it for "additional" premium. Due to the
+        // unusual design of the main product this is intended to
+        // support, "additional" premium might include:
+        //   - a required dumpin, whose natural divisor is the "basic"
+        //     face amount; and
+        //   - charges for "supplemental" face amount, for which that
+        //     amount (if present) is the natural divisor; and
+        //   - charges for spouse and child riders, whose natural
+        //     divisors are their respective benefit amounts.
+        // It would in theory be possible to write special-case logic
+        // for the first two cases, but not for the third, and
+        // not for each of the eight possible combinations of these
+        // three cases.
+
         std::string average_text;
-        switch(col)
+
+        // The cast is only used to ensure that if any new elements are added
+        // to the enum, the compiler would warn about their values not being
+        // present in this switch.
+        switch(static_cast<enum_group_quote_columns>(col))
             {
             case e_col_basic_premium:
-            case e_col_additional_premium:
-            case e_col_total_premium:
-                // We can rely on the face amount column corresponding to this
-                // premium just preceding it because the way we display the
-                // averages wouldn't make sense otherwise.
-                double const average = 1000*totals_.total(col)/totals_.total(col - 1);
+                {
+                double const dividend = totals_.total(e_col_basic_premium);
+                double const divisor  = totals_.total(e_col_basic_face_amount);
+                LMI_ASSERT(0.0 != divisor);
+                double const average = 1000.0 * dividend / divisor;
                 average_text = '$' + ledger_format(average, f);
+                }
                 break;
+            case e_col_total_premium:
+                {
+                double const dividend = totals_.total(e_col_total_premium);
+                double const divisor  = totals_.total(e_col_total_face_amount);
+                LMI_ASSERT(0.0 != divisor);
+                double const average = 1000.0 * dividend / divisor;
+                average_text = '$' + ledger_format(average, f);
+                }
+                break;
+            case e_col_basic_face_amount:
+            case e_col_supplemental_face_amount:
+            case e_col_additional_premium:
+            case e_col_total_face_amount:
+                {
+                // Do nothing: leave 'average_text' empty.
+                }
+                break;
+            default:
+                {
+                fatal_error() << "Case " << col << " not found." << LMI_FLUSH;
+                }
             }
 
+        // For columns that do not have averages, writing an empty
+        // string ensures that the background is homogeneous.
         table_gen.output_highlighted_cell(col, y_next, average_text);
         }
 
