@@ -249,8 +249,6 @@ gpl_notices := \
 // email: <gchicares@sbcglobal.net>\n\
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA\n\
 \n\
-// $$\rId: $$\n\
-\n\
 "
 
 ################################################################################
