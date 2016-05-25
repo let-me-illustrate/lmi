@@ -42,7 +42,7 @@ Copy and paste the following lines into the "Command Prompt" window:
 Save the following files into the 'C:\cache_for_lmi' directory:
 
   http://cygwin.com/setup-x86.exe
-  http://svn.sv.nongnu.org/svn/lmi/lmi/trunk/install_cygwin.bat
+  http://git.savannah.gnu.org/cgit/lmi.git/plain/install_cygwin.bat
 
 Copy and paste the following lines into the "Command prompt" window:
 
@@ -65,7 +65,7 @@ Copy the following, and paste it (Shift-Insert) into the shell:
 
   mkdir -p /tmp
   export TMP=/tmp
-  install_script='http://svn.sv.nongnu.org/svn/lmi/lmi/trunk/install_msw.sh'
+  install_script='http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
   cd /tmp
   wget -N $install_script
   chmod +x install_msw.sh

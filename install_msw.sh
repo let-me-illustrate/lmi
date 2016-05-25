@@ -25,7 +25,7 @@ set -v
 
 # To get the latest version of this script:
 #
-# wget -N 'http://svn.sv.nongnu.org/svn/lmi/lmi/trunk/install_msw.sh'
+# wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
 
 # To remove lmi prior to reinstalling with this script:
 #
@@ -95,10 +95,9 @@ cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
 java -version
 
 cd /opt/lmi/src
-# Prefer http to svn's own protocol because it works better from
-# behind corporate firewalls.
-#svn checkout svn://svn.sv.nongnu.org/lmi/lmi/trunk lmi
-svn checkout http://svn.sv.nongnu.org/svn/lmi/lmi/trunk lmi
+# Use http only if a corporate firewall blocks the git protocol.
+# git clone http://git.savannah.nongnu.org/r/lmi.git
+git clone git://git.savannah.nongnu.org/lmi.git
 
 cd /opt/lmi/src/lmi
 

@@ -183,9 +183,11 @@ date:
 # Designate a release candidate.
 
 # A release candidate is a revision with an updated version-datestamp
-# header. It is merely a designated svn revision: svn offers no real
-# equivalent of 'cvs rtag', and the closest substitute, 'svn copy',
-# makes an unwanted copy.
+# header: it is merely an sha1sum pointing to a designated commit.
+# The code actually released into production each month is the last
+# release candidate designated that month. No repository tag would be
+# useful because releases can easily be found with this command:
+#   git log --follow version.hpp
 
 .PHONY: release_candidate
 release_candidate:
@@ -199,12 +201,9 @@ release_candidate:
 	  | $(SED) -e 's/^ *//' \
 	  | $(TR) --delete '\r' \
 	  > version.hpp
-	@$(ECHO) Version is "'$(yyyymmddhhmm)'".
-	@$(ECHO) "  To designate a release candidate:"
+	@$(ECHO) "  To designate a release candidate, push a change such as:"
 	@$(ECHO) \
-	  "svn commit -m'Designate release candidate" \
-	  "$(shell expr 1 + `svnversion` : '\([0-9]*\)')'" \
-	  "version.hpp ChangeLog"
+	  "git commit version.hpp -m'Designate release candidate $(yyyymmddhhmm)'"
 
 ################################################################################
 
@@ -461,10 +460,9 @@ nychthemeral_log := log-lmi-nychthemeral-$(yyyymmddhhmm)
 
 .PHONY: checkout
 checkout:
-	$(MKDIR) --parents $(nychthemeral_directory); \
-	cd $(nychthemeral_directory); \
-	svn co svn://svn.savannah.nongnu.org/lmi/lmi/trunk lmi; \
-	svn co svn://svn.savannah.nongnu.org/lmi/skeleton/trunk skeleton; \
+	$(MKDIR) --parents $(nychthemeral_directory) \
+	&& cd $(nychthemeral_directory) \
+	&& git clone git://git.savannah.nongnu.org/lmi.git \
 
 # SOMEDAY !! Add build types for gcov (-fprofile-arcs -ftest-coverage)
 # and for gprof. See:
