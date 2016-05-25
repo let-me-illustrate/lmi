@@ -25,7 +25,7 @@
 # 'class_defaults'; but those elements wouldn't be expected to have
 # any analogue on an administration system, so it seems best to copy
 # them from this document:
-#   http://svn.savannah.nongnu.org/viewvc/*checkout*/lmi/trunk/sample.cns?root=lmi
+#   http://git.savannah.gnu.org/cgit/lmi.git/plain/sample.cns
 # overwriting its 'particular_cells' with the individual records of
 # all contracts in the group.
 
