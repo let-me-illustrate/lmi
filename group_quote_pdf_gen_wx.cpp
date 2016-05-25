@@ -299,8 +299,8 @@ std::vector<extra_summary_field> parse_extra_report_fields(std::string const& s)
 /// of those locations, or if it's found but cannot be loaded.
 ///
 /// Diagnosed failures are presented merely as warnings so that quotes
-/// can be produced even with a generic system built from svn only,
-/// with no (proprietary) images.
+/// can be produced even with a generic system built from the free
+/// public source code only, with no (proprietary) images.
 
 wxImage load_image(char const* file)
 {
