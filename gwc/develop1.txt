@@ -23,9 +23,11 @@ ssh-add -D
 ssh-agent -k > /dev/null 2>&1
 
   # In between...
-  # ...commit a change
+  # ...commit and push changes to git
 
-svn commit -m "Modify foo" foo.cpp
+git commit one_file another_file -m"One set of changes"
+git commit --all -m"Another set of changes"
+git push
 
   # ...commit a change to cvs repository
 
@@ -33,76 +35,52 @@ export CVS_RSH="ssh"
 export CVSROOT="{USER}{AT_SIGN}cvs.sv.gnu.org:/web/lmi"
 cvs commit -m "Modify foo webpage" bar.html
 
-  # ...rename a file [pending--resolved at next 'commit', as for 'add']
-  # [for cvs, add and delete--unlike svn, not an atomic operation]
+  # ...rename a file
+  # [for git, prefer to rename a file without changing its contents]
+  # [for cvs, add the new and delete the old]
 
-svn mv lmi.rc lmi_msw_res.rc
-svn commit -m"Rename msw resource file" lmi_msw_res.rc lmi.rc
-
-  # ...merge two files together, deleting the unwanted one
-
-svn remove dbdict.cpp
-svn mv ihs_dbdict.cpp dbdict.cpp
+git mv lmi.rc lmi_msw_res.rc
 
   # Make a patch against repository from local tree
 
-svn diff file0.cpp file1.cpp >/dev/clipboard
+git diff file0.cpp file1.cpp >/dev/clipboard
 cvs diff -U3 file0.cpp file1.cpp >/dev/clipboard
 
   # Roll a file back to an earlier revision
 
-svn merge -r HEAD:5141 census_view.cpp
+git checkout [sha1sum] census_view.cpp
+git checkout HEAD^ census_view.cpp
 
-  # Make a list of files modified in local tree,
-  # suitable for pasting into 'ChangeLog'
+  # Update the local source tree (where I make my own changes) when
+  # someone else has committed a change to the online master repo.
 
-for z in *; do [ ! -d $z ] && [ $z -nt ../../mirror/lmi/$z ] && echo "  $z"; done >> /dev/clipboard
+git remote -v update
+git pull
 
-  # Update the local source tree (where I make my own changes)
-  # when someone else has committed a change.
-
-svn status --show-updates
-svn update
-
-  # Set local timestamps to match repository
+  # Set local timestamps from RCS Id's, to match repository
   # (this should be necessary only if your clock is unsynchronized)
   #
   # This is slow, so consider specifying the names of changed files
   # instead of using '*' at the beginning
   #
-  # ...for svn:
-
-for z in * ; do grep --directories=skip --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.* [0-9][0-9]* \([0-9]\{4\}[-0-9: ]*\).*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
-
   # ...for cvs:
 
 for z in * ; do grep --directories=skip --quiet --files-with-matches '$Id:' $z && touch "--date=$(<$z sed -e'/$Id:/!d' |sed -e's/^.*\([0-9]\{4\}[0-9\/: ]*\) .*$/\1/')" $z && date -u +'%Y%m%dT%H%MZ' -r $z; done;
 
-  # If svn wrongly guesses that a file is binary, as indicated by
-  # "(bin)" here...
+  # If msw sets an incorrect executable bit, and you accidentally
+  # commit it (without first running 'make check_concinnity', which
+  # would catch the error), fix it thus:
 
-svn add sort_cell_subelements.xsl
-A  (bin)  sort_cell_subelements.xsl
-
-  # ...fix it by removing mime-type:
-
-svn proplist sort_cell_subelements.xsl
-Properties on 'sort_cell_subelements.xsl':
-  svn:mime-type
-  svn:keywords
-svn propdel svn:mime-type sort_cell_subelements.xsl
-property 'svn:mime-type' deleted from 'sort_cell_subelements.xsl'.
-svn proplist sort_cell_subelements.xsl
-Properties on 'sort_cell_subelements.xsl':
-  svn:keywords
+git update-index --chmod=+x some-file-name
+git update-index --chmod=-x some-file-name
 
   # Second screen: only for updating local shadow copy of repository
   #
   # I use the last line repeatedly to keep my local shadow copy current
 
 cd /lmi/mirror/lmi
-svn status --show-updates
-svn update
+git remote -v update
+git pull
 
   # Similarly, for webpages repository
 
@@ -155,7 +133,7 @@ cd /lmi/src/lmi
 make $coefficiency check_concinnity >../log 2>&1
 sed -f diagnostics.sed ../log 2>&1 |less -S
 
-  # Copy date to clipboard for pasting into 'ChangeLog'
+  # Copy date to clipboard for pasting
 
 date -u +'%Y%m%dT%H%MZ' |tr -d '\n' >/dev/clipboard
 

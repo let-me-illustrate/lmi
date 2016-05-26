@@ -92,7 +92,7 @@ EOF
   # Configure ssh
 
   # Create new credentials if necessary, if not copied elsewhence
-  # (replace my address with yours of course)
+  # (replace my address with yours, of course)
 echo "Protocol 2" > ~/.ssh/config
 ssh-keygen -t rsa -b 4096 -C "gchicares@sbcglobal.net"
   # and register key here:
@@ -122,42 +122,46 @@ ssh-add ~/.ssh/id_rsa
 
   # If you see the following:
 
-The authenticity of host 'svn.savannah.nongnu.org (140.186.70.72)' can't be established.
+The authenticity of host 'git.savannah.nongnu.org (140.186.70.72)' can't be established.
 RSA key fingerprint is 80:5a:b0:0c:ec:93:66:29:49:7e:04:2b:fd:ba:2c:d5.
+  # ...or...
+RSA key fingerprint is SHA256:FYkx0iik+iBeCLRzvUyUSTRT98TEBBJoYuQsTXbyGL8.
 Are you sure you want to continue connecting (yes/no)?
 
   # then answer 'yes' after verifying that the fingerprint matches exactly:
   #   http://savannah.gnu.org/maintenance/SshAccess
   # to preclude a man-in-the-middle attack (you may be asked more than once)
+  #
+  # Alternatively, both md5 and sha256 fingerprints can be verified thus:
+
+ssh-keyscan git.sv.gnu.org > eraseme_key.pub
+ssh-keygen -l -f eraseme_key.pub
+ssh-keygen -l -f eraseme_key.pub -E md5
 
   # Similarly, try to access this URL:
 https://savannah.gnu.org/
   # and follow the instructions here if needed:
 http://savannah.gnu.org/tls/tutorial/
 
-  # Initialize svn
+  # Configure git (replace my name and address with yours, of course)
 
-svn --help >/dev/null 2>&1
-
-sed -i ~/.subversion/config \
-  -e'/[[]miscellany[]]/s/$/\nuse-commit-times = yes\nenable-auto-props = yes/' \
-  -e'/[[]auto-props[]]/s/$/\n* = svn:keywords=Id/'
+git config --global user.name "Gregory W. Chicares"
+git config --global user.email gchicares@sbcglobal.net
 
   # Mirror online repositories
   #
-  # 'install_cygwin.bat' already mounted /lmi/
+  # ['install_cygwin.bat' already mounted a /lmi/ directory]
 
 mkdir --parents /lmi/mirror
 cd /lmi/mirror
-svn checkout http://svn.savannah.nongnu.org/svn/lmi/lmi/trunk lmi
-svn checkout http://svn.savannah.nongnu.org/svn/lmi/skeleton/trunk skeleton
+git clone git://git.savannah.nongnu.org/lmi.git
 
   # All savannah webpages are on a cvs-only server
   # Use a subdirectory to avoid conflict on name 'lmi'
   #
   # If you're behind a draconian corporate firewall, you may need to
-  # use your ssh credentials instead of 'pserver' (cf. code below that
-  # creates a local working copy)
+  # use your ssh credentials instead of 'pserver' (cf. commands below
+  # that create a local working copy)
 
 mkdir --parents /lmi/mirror/web
 cd /lmi/mirror/web
@@ -169,7 +173,6 @@ cvs -z3 -d:pserver:anonymous@cvs.savannah.nongnu.org:/web/lmi checkout lmi
 
   # All savannah webpages are on a cvs-only server
   # Use a subdirectory to avoid conflict on name 'lmi'
-  # Handle cvs first--cvs has better error messages than svn
 
 mkdir --parents /lmi/src/web
 cd /lmi/src/web
@@ -177,25 +180,17 @@ export CVS_RSH="ssh"
 export CVSROOT="chicares@cvs.sv.gnu.org:/web/lmi"
 cvs -z3 checkout lmi
 
-  # For svn, nothing like $CVS_RSH or $CVSROOT is needed: that
-  # information is embedded in the working copy.
-  #
-  # The syntax varies among protocols:
-  #   svn checkout    http://         svn.savannah.nongnu.org/svn/lmi/lmi/trunk lmi
-  #   svn checkout     svn://         svn.savannah.nongnu.org    /lmi/lmi/trunk lmi
-  #   svn checkout svn+ssh://chicares@svn.savannah.nongnu.org    /lmi/lmi/trunk lmi
+  # For git, nothing like $CVS_RSH or $CVSROOT is needed: that
+  # information is embedded in .git/config .
 
 mkdir --parents /lmi/src
 cd /lmi/src
-svn checkout svn+ssh://chicares@svn.savannah.nongnu.org/lmi/lmi/trunk lmi
+git clone chicares@git.sv.gnu.org:/srv/git/lmi.git
   # [anticipate a "fingerprint" message here the first time]
-pushd lmi; svn propset svn:keywords "Id" . --recursive; popd
-svn checkout svn+ssh://chicares@svn.savannah.nongnu.org/lmi/skeleton/trunk skeleton
-pushd skeleton; svn propset svn:keywords "Id" . --recursive; popd
 
   # Copy proprietary test data
 
-  # contents: most recent archive, or working copy of proprietary svn
+  # contents: most recent archive, or proprietary repo
 mkdir --parents /opt/lmi/test
 cp --preserve /archive/lmi/testdecks/* /opt/lmi/test
 
@@ -205,7 +200,7 @@ cp --preserve /archive/lmi/touchstone/* /opt/lmi/touchstone
 
   # Copy proprietary products
 
-  # contents: most recent archive, or working copy of proprietary svn
+  # contents: most recent archive, or proprietary repo
 mkdir --parents /lmi/src/products/src
 cp --preserve /archive/lmi/src/products/src/* /lmi/src/products/src
 
