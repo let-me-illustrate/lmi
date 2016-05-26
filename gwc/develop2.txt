@@ -1,28 +1,47 @@
   # Work with proprietary repository (prerequisite: 'develop0')
+  #
+  # Discussed in detail here:
+  #   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
 
-  # Create a brand-new repository
+  # Initial setup: create a working copy, cloned from the
+  # already-provided "blessed" repo
 
-svnadmin create /lmi/src/products/src/repository
-svn import /lmi/src/products/src/clean-src file:///lmi/src/products/src/repository/src -m "Initial import"
-svn import /lmi/src/products/src/clean-data file:///lmi/src/products/src/repository/data -m "Initial import"
-svnadmin verify /lmi/src/products/src/repository
-mkdir /lmi/src/products/src/tmp/working_copy
-cd /lmi/src/products/src/tmp/working_copy
-svn checkout file:///lmi/src/products/src/repository
+cd /opt/lmi
+git clone file:///opt/lmi/blessed/proprietary
 
-  # Check out a working copy
+  # Create a bundle to share by email
 
-svnadmin verify /lmi/src/products/src/repository-20120403T1557Z/repository
-mkdir /lmi/src/products/src/tmp/working_copy_tmp_20120403
-cd    /lmi/src/products/src/tmp/working_copy_tmp_20120403
-svn checkout file:///lmi/src/products/src/repository-20120403T1557Z/repository
+  # Make some changes, then test concinnity (before every commit)
 
-  # Test concinnity (before every commit)
-  # (rerun after committing changes in test/ to regenerate 'md5sums',
-  # because committing files with an RCS Id changes their contents)
-
-cd repository/data/
+cd /opt/lmi/proprietary/data/
 cd ../data; make src_dir=/lmi/src/lmi -f /lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
 cd ../src ; make src_dir=/lmi/src/lmi -f /lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
 cd ../test; make src_dir=/lmi/src/lmi -f /lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+
+  # Commit the changes in whatever batches make sense
+
+cd /opt/lmi/proprietary
+  # [commit selected files by name...]
+git commit one_file another_file -m"One set of changes"
+  # [...or commit all changes]
+git commit --all -m"Another set of changes"
+
+  # When everything is ready to share...
+
+cd /opt/lmi/proprietary
+git bundle create YourBundleName ^origin/master HEAD --branches
+
+  # Email that bundle, then push the changes to your "blessed" repository
+
+git push
+
+  # When you receive a bundle in email...
+
+cd /opt/lmi/proprietary
+git bundle verify /path/where/you/saved/TheirBundleName
+git pull /path/where/you/saved/TheirBundleName
+
+  # ...then synchronize your "blessed" repository with your correspondent's
+
+git push
 
