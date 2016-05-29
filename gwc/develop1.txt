@@ -46,6 +46,14 @@ git mv lmi.rc lmi_msw_res.rc
 git diff file0.cpp file1.cpp >/dev/clipboard
 cvs diff -U3 file0.cpp file1.cpp >/dev/clipboard
 
+  # Apply an email patch
+
+git am --scissors /path/to/patch
+
+  # Discard local changes to particular files
+
+git checkout -- ce_skin_name.cpp ce_skin_name.hpp
+
   # Roll a file back to an earlier revision
 
 git checkout [sha1sum] census_view.cpp
@@ -88,6 +96,15 @@ cd /lmi/mirror/web
 export CVS_RSH="ssh"
 export CVSROOT="{USER}{AT_SIGN}cvs.sv.gnu.org:/web/lmi"
 cvs -z3 update -l lmi
+
+  # Set mirror timestamps to match working directory's
+  #
+  # This is slow, so consider specifying the names of changed files
+  # instead of using '*' at the beginning
+  #
+  # ...for git:
+
+for z in * ; do [ -f $z ] && ( [ $z -nt /lmi/src/lmi/$z ] || [ $z -ot /lmi/src/lmi/$z ] ) && touch --reference=/lmi/src/lmi/$z $z; done
 
   # Third screen: only for building and testing
 
