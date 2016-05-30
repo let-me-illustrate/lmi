@@ -31,8 +31,9 @@
         <growablerows>1</growablerows>
         <object class="sizeritem">
             <flag>wxALIGN_LEFT</flag>
+            <border>4</border>
             <object class="wxCheckBox" name="UseBuiltinCalculationSummary">
-                <label>Use built-in calculation summary</label>
+                <label>Use default calculation summary columns</label>
             </object>
         </object>
         <object class="sizeritem">
@@ -214,20 +215,20 @@
     </object>
 </object>
 
-<object class="wxPanel" name="parameters_editor_panel">
+<object class="wxPanel" name="input_configuration_panel">
     <object class="wxBoxSizer">
         <orient>wxVERTICAL</orient>
         <object class="sizeritem">
             <flag>wxALL</flag>
-            <border>5</border>
+            <border>4</border>
             <object class="wxStaticText">
-                <label>Choose the skin to use for the parameters editor:</label>
+                <label>Skin for input parameters</label>
             </object>
         </object>
         <object class="sizeritem">
             <option>1</option>
             <flag>wxGROW|wxALL</flag>
-            <border>5</border>
+            <border>4</border>
             <object class="wxListBox" name="SkinFileName">
                 <style>wxLB_SINGLE</style>
             </object>
@@ -252,12 +253,12 @@
             <border>4</border>
             <object class="wxNotebook" name="preferences_notebook">
                 <object class="notebookpage">
-                    <label>Calculation summary columns</label>
-                    <object_ref ref="calculation_summary_panel"/>
+                    <label>Input</label>
+                    <object_ref ref="input_configuration_panel"/>
                 </object>
                 <object class="notebookpage">
-                    <label>Parameters editor appearance</label>
-                    <object_ref ref="parameters_editor_panel"/>
+                    <label>View</label>
+                    <object_ref ref="calculation_summary_panel"/>
                 </object>
             </object>
         </object>
