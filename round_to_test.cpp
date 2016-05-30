@@ -29,8 +29,8 @@
 #include "fenv_lmi.hpp"
 #include "test_tools.hpp"
 
-#include <algorithm> // std::max()
-#include <cstddef>   // std::size_t
+#include <algorithm>                    // std::max()
+#include <cstddef>                      // std::size_t
 #include <ios>
 #include <iostream>
 #include <ostream>

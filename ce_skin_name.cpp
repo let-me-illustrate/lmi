@@ -24,7 +24,7 @@
 #include "alert.hpp"
 #include "facets.hpp"
 #include "global_settings.hpp"
-#include "path_utility.hpp" // fs::path inserter
+#include "path_utility.hpp"             // fs::path inserter
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/operations.hpp>

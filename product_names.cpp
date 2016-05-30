@@ -25,7 +25,7 @@
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"
-#include "path_utility.hpp" // fs::path inserter
+#include "path_utility.hpp"             // fs::path inserter
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/operations.hpp>

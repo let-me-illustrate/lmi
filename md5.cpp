@@ -55,8 +55,8 @@
  * function bcopy().
  */
 #if 1
-# include <cstdlib> // GWC replaced <stdlib.h> .
-# include <cstring> // GWC replaced <string.h> .
+# include <cstdlib>                     // GWC replaced <stdlib.h> .
+# include <cstring>                     // GWC replaced <string.h> .
 #else
 # ifndef HAVE_MEMCPY
 #  define memcpy(d, s, n) bcopy ((s), (d), (n))

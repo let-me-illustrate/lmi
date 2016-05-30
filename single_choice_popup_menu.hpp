@@ -26,7 +26,7 @@
 
 #include "wx_utility.hpp"
 
-#include <wx/arrstr.h> // wxArrayString
+#include <wx/arrstr.h>                  // wxArrayString
 #include <wx/menu.h>
 #include <wx/string.h>
 #include <wx/window.h>

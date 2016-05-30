@@ -32,7 +32,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/static_assert.hpp>
 
-#include <climits> // CHAR_BIT
+#include <climits>                      // CHAR_BIT
 #include <string>
 #include <vector>
 

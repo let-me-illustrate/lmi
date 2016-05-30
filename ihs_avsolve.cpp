@@ -39,14 +39,14 @@
 #include "death_benefits.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "mc_enum_types_aux.hpp" // set_run_basis_from_cloven_bases()
-#include "miscellany.hpp"        // ios_out_app_binary()
+#include "mc_enum_types_aux.hpp"        // set_run_basis_from_cloven_bases()
+#include "miscellany.hpp"               // ios_out_app_binary()
 #include "outlay.hpp"
 #include "zero.hpp"
 
-#include <algorithm>             // std::min(), std::max()
+#include <algorithm>                    // std::min(), std::max()
 #include <functional>
-#include <numeric>               // std::accumulate()
+#include <numeric>                      // std::accumulate()
 
 namespace
 {

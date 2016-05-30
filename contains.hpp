@@ -26,7 +26,7 @@
 
 #include <boost/utility/enable_if.hpp>
 
-#include <algorithm> // std::find()
+#include <algorithm>                    // std::find()
 
 #if defined __BORLANDC__ || defined __COMO_VERSION__ && __COMO_VERSION__ <= 4303
 #   define LMI_NO_SFINAE

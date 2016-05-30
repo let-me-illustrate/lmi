@@ -34,7 +34,7 @@
 #   include <boost/filesystem/path.hpp>
 #endif // !defined __BORLANDC__
 
-#include <cstdio> // std::remove()
+#include <cstdio>                       // std::remove()
 #include <fstream>
 
 int test_main(int, char*[])

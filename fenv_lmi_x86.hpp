@@ -28,7 +28,7 @@
 #include <stdexcept>
 
 #if defined __BORLANDC__ || defined _MSC_VER
-#   include <float.h> // Nonstandard floating-point hardware control.
+#   include <float.h>                   // nonstandard _control87()
 #endif // defined __BORLANDC__ || defined _MSC_VER
 
 #if defined LMI_X86

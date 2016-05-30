@@ -27,7 +27,7 @@
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <wx/bookctrl.h> // wxBookCtrlBase, wxBookCtrlBaseEvent
+#include <wx/bookctrl.h>                // wxBookCtrlBase, wxBookCtrlBaseEvent
 #include <wx/dialog.h>
 #include <wx/stattext.h>
 

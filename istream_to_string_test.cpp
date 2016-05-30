@@ -26,7 +26,7 @@
 
 #include "istream_to_string.hpp"
 
-#include "miscellany.hpp" // ios_in_binary()
+#include "miscellany.hpp"               // ios_in_binary()
 #include "test_tools.hpp"
 #include "timer.hpp"
 

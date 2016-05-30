@@ -33,8 +33,8 @@
 #   include <boost/lexical_cast.hpp>
 #endif // !defined __BORLANDC__
 
-#include <cmath>   // std::pow()
-#include <cstring> // std::strcpy(), std::strcmp
+#include <cmath>                        // std::pow()
+#include <cstring>                      // std::strcpy(), std::strcmp
 #include <istream>
 #include <limits>
 #include <ostream>

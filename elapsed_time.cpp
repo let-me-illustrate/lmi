@@ -24,7 +24,7 @@
 #include "system_command.hpp"
 #include "timer.hpp"
 
-#include <cstdlib>  // EXIT_FAILURE
+#include <cstdlib>                      // EXIT_FAILURE
 #include <iostream>
 #include <string>
 

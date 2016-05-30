@@ -98,9 +98,9 @@
 #include <wx/grid.h>
 #include <wx/choice.h>
 
-#include <cstddef>   // std::size_t
+#include <cstddef>                      // std::size_t
 #include <string>
-#include <utility>   // std::pair
+#include <utility>                      // std::pair
 #include <vector>
 
 class MultiDimAxisAny;

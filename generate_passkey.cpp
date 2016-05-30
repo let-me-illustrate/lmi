@@ -24,7 +24,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "authenticity.hpp" // md5_hex_string()
+#include "authenticity.hpp"             // md5_hex_string()
 #include "main_common.hpp"
 #include "md5.hpp"
 

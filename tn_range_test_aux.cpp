@@ -24,8 +24,8 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "tn_range.tpp"          // Template class implementation.
-#include "tn_range_test_aux.hpp" // Trammel class.
+#include "tn_range.tpp"                 // Template class implementation.
+#include "tn_range_test_aux.hpp"        // Trammel class.
 
 // Normally, one would prefer to instantiate all tn_range templates
 // in a single file. Here, however, the point is to instantiate one

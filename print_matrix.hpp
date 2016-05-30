@@ -28,7 +28,7 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cstddef> // std::size_t
+#include <cstddef>                      // std::size_t
 #include <functional>
 #include <iterator>
 #include <numeric>

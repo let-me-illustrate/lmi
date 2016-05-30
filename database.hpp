@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include "dbindex.hpp"
-#include "dbnames.hpp" // e_database_key
+#include "dbnames.hpp"                  // e_database_key
 #include "mc_enum_type_enums.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"

@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-#include "mc_enum_types_aux.hpp" // mc_n_ enumerators
+#include "mc_enum_types_aux.hpp"        // mc_n_ enumerators
 #include "round_to.hpp"
 
 #include <vector>

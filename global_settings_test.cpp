@@ -26,7 +26,7 @@
 
 #include "global_settings.hpp"
 
-#include "path_utility.hpp" // initialize_filesystem()
+#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 
 #include <boost/filesystem/exception.hpp>

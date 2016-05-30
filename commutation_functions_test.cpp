@@ -28,17 +28,17 @@
 
 #include "et_vector.hpp"
 #include "math_functors.hpp"
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
 #include <boost/bind.hpp>
 
 #include <algorithm>
-#include <cmath>          // std::fabs()
-#include <iomanip>        // std::setw() etc.
-#include <ios>            // std::ios_base::fixed()
-#include <numeric>        // std::partial_sum()
+#include <cmath>                        // std::fabs()
+#include <iomanip>                      // std::setw() etc.
+#include <ios>                          // std::ios_base::fixed()
+#include <numeric>                      // std::partial_sum()
 #include <vector>
 
 namespace

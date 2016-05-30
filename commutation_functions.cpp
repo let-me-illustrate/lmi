@@ -27,12 +27,12 @@
 #include "commutation_functions.hpp"
 
 #include "assert_lmi.hpp"
-#include "et_vector.hpp" // [VECTORIZE]
+#include "et_vector.hpp"                // [VECTORIZE]
 
-#include <algorithm>     // std::rotate_copy() [VECTORIZE]
-#include <cmath>         // std::pow()
-#include <functional>    // std::multiplies()  [VECTORIZE]
-#include <numeric>       // std::partial_sum()
+#include <algorithm>                    // std::rotate_copy() [VECTORIZE]
+#include <cmath>                        // std::pow()
+#include <functional>                   // std::multiplies()  [VECTORIZE]
+#include <numeric>                      // std::partial_sum()
 
 /// Interest- and mortality-rate vectors --> commutation functions.
 ///

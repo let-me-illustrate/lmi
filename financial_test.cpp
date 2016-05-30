@@ -33,8 +33,8 @@
 #   include <boost/bind.hpp>
 #endif // !defined __BORLANDC__
 
-#include <cmath>    // std::fabs()
-#include <iomanip>  // Formatting of optional detail.
+#include <cmath>                        // std::fabs()
+#include <iomanip>                      // Formatting of optional detail.
 #include <iostream>
 #include <vector>
 

@@ -40,7 +40,7 @@
 #endif // defined LMI_MSW
 
 #include <ios>
-#include <sstream>   // std::stringbuf
+#include <sstream>                      // std::stringbuf
 #include <stdexcept>
 
 namespace

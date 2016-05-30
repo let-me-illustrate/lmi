@@ -26,7 +26,7 @@
 
 #include "xml_serialize.hpp"
 
-#include "miscellany.hpp" // lmi_array_size(), stifle_warning_for_unused_variable()
+#include "miscellany.hpp"               // lmi_array_size(), stifle_warning_for_unused_variable()
 #include "test_tools.hpp"
 #include "timer.hpp"
 

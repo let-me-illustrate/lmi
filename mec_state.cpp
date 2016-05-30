@@ -29,7 +29,7 @@
 
 #include "alert.hpp"
 #include "contains.hpp"
-#include "miscellany.hpp" // htmlize(), lmi_array_size()
+#include "miscellany.hpp"               // htmlize(), lmi_array_size()
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 

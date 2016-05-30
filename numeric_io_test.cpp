@@ -27,7 +27,7 @@
 #include "numeric_io_cast.hpp"
 
 #include "handle_exceptions.hpp"
-#include "ieee754.hpp" // infinity<>()
+#include "ieee754.hpp"                  // infinity<>()
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -36,7 +36,7 @@
 #   include <boost/lexical_cast.hpp>
 #endif // ! defined __BORLANDC__
 
-#include <cmath>       // std::exp()
+#include <cmath>                        // std::exp()
 #include <limits>
 #include <sstream>
 #include <stdexcept>

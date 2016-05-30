@@ -75,7 +75,7 @@ std::map<std::string, bool> my_taboos(); // See 'my_test_coding_rules.cpp'.
 // be constructed before main() is called.
 
 #if defined __MINGW32__
-#   include <fcntl.h> // _O_BINARY
+#   include <fcntl.h>                   // _O_BINARY
     int _CRT_fmode = _O_BINARY;
 #endif // defined __MINGW32__
 

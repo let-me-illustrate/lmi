@@ -30,12 +30,12 @@
 #include "data_directory.hpp"
 #include "dbdict.hpp"
 #include "dbvalue.hpp"
-#include "lmi.hpp"                    // is_antediluvian_fork()
-#include "oecumenic_enumerations.hpp" // methuselah
+#include "lmi.hpp"                      // is_antediluvian_fork()
+#include "oecumenic_enumerations.hpp"   // methuselah
 #include "product_data.hpp"
 #include "yare_input.hpp"
 
-#include <algorithm> // std::min()
+#include <algorithm>                    // std::min()
 
 /// Construct from essential input (product and axes).
 

@@ -37,9 +37,9 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <cstddef> // std::size_t
+#include <cstddef>                      // std::size_t
 #include <cstdio>
-#include <cstring> // std::memcpy()
+#include <cstring>                      // std::memcpy()
 #include <fstream>
 #include <string>
 #include <vector>

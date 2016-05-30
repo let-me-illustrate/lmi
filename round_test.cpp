@@ -40,11 +40,11 @@
 #include "fenv_lmi.hpp"
 #include "test_tools.hpp"
 
-#include <algorithm> // std::max()
-#include <cstddef>   // std::size_t
+#include <algorithm>                    // std::max()
+#include <cstddef>                      // std::size_t
 #include <ios>
 #include <iostream>
-#include <math.h>    // C99 round() and kin
+#include <math.h>                       // C99 round() and kin
 #include <ostream>
 
 #if defined LMI_IEC_559

@@ -24,7 +24,7 @@
 #include "alert.hpp"
 #include "value_cast.hpp"
 
-#include <cmath> // std::pow()
+#include <cmath>                        // std::pow()
 #include <exception>
 #include <istream>
 #include <limits>

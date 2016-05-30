@@ -26,7 +26,7 @@
 
 #include "print_matrix.hpp"
 
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 
 namespace
