@@ -34,7 +34,7 @@
 #include <wx/event.h>
 #include <wx/string.h>
 
-#include <cstddef>   // NULL
+#include <cstddef>                      // NULL
 #include <stdexcept>
 #include <string>
 #include <vector>

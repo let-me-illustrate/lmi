@@ -37,7 +37,7 @@
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <wx/defs.h> // wx shared-library 'attributes'
+#include <wx/defs.h>                    // wx shared-library 'attributes'
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 

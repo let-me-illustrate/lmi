@@ -31,7 +31,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <cstdio> // std::remove()
+#include <cstdio>                       // std::remove()
 #include <fstream>
 
 namespace

@@ -26,7 +26,7 @@
 
 #include "facets.hpp"
 
-#include <algorithm> // std::copy()
+#include <algorithm>                    // std::copy()
 
 // Class blank_is_not_whitespace_ctype is intended for extracting
 // std::strings from a stream without stopping at blanks. It is a

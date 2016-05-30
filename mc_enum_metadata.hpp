@@ -38,7 +38,7 @@
 
 #include <boost/static_assert.hpp>
 
-#include <cstddef> // std::size_t
+#include <cstddef>                      // std::size_t
 
 /// Associate an mc_enum type with its metadata through its enum type.
 ///

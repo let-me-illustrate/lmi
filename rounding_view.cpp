@@ -28,7 +28,7 @@
 
 #include "alert.hpp"
 #include "rounding_document.hpp"
-#include "rounding_view_editor.hpp" // class RoundingButtons
+#include "rounding_view_editor.hpp"     // class RoundingButtons
 #include "safely_dereference_as.hpp"
 
 #include <wx/panel.h>

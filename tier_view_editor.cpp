@@ -27,7 +27,7 @@
 #include "tier_view_editor.hpp"
 
 #include "assert_lmi.hpp"
-#include "ieee754.hpp" // infinity<>()
+#include "ieee754.hpp"                  // infinity<>()
 #include "multidimgrid_safe.tpp"
 #include "stratified_charges.hpp"
 #include "value_cast.hpp"

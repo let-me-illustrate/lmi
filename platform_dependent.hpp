@@ -56,19 +56,19 @@
 #endif // defined __GNUC__ && defined __STRICT_ANSI__
 
 #if defined LMI_POSIX
-#   include <stdio.h>   // fileno()
-#   include <stdlib.h>  // putenv()
-#   include <string.h>  // strdup()
-#   include <strings.h> // strcasecmp()
-#   include <unistd.h>  // access(), R_OK, chdir()
+#   include <stdio.h>                   // fileno()
+#   include <stdlib.h>                  // putenv()
+#   include <string.h>                  // strdup()
+#   include <strings.h>                 // strcasecmp()
+#   include <unistd.h>                  // access(), R_OK, chdir()
 #elif defined LMI_MSW
     // The MinGW port of gcc to msw prototypes what lmi needs in these
     // headers. Other compilers for the msw platform might not.
-#   include <direct.h>  // chdir()
-#   include <io.h>      // access(), R_OK
-#   include <stdio.h>   // fileno()
-#   include <stdlib.h>  // putenv()
-#   include <string.h>  // _wcsdup(), strcasecmp(), strdup()
+#   include <direct.h>                  // chdir()
+#   include <io.h>                      // access(), R_OK
+#   include <stdio.h>                   // fileno()
+#   include <stdlib.h>                  // putenv()
+#   include <string.h>                  // _wcsdup(), strcasecmp(), strdup()
 #   ifdef __BORLANDC__
 #       define R_OK 04
 #   endif // __BORLANDC__

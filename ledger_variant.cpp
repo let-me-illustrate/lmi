@@ -28,11 +28,11 @@
 
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
-#include "database.hpp" // Used only for initial loan rate.
-#include "dbnames.hpp"  // Used only for initial loan rate.
+#include "database.hpp"                 // Used only for initial loan rate.
+#include "dbnames.hpp"                  // Used only for initial loan rate.
 #include "interest_rates.hpp"
 #include "loads.hpp"
-#include "mc_enum_types_aux.hpp" // mc_str()
+#include "mc_enum_types_aux.hpp"        // mc_str()
 #include "outlay.hpp"
 
 #include <algorithm>

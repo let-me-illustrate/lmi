@@ -92,15 +92,15 @@
 #include "getopt.hpp"
 
 // GWC added this.
-#include <algorithm>     // std::max()
+#include <algorithm>                    // std::max()
 // GWC added this for prototype of std::isalpha().
 #include <cctype>
 // GWC added this.
-#include <climits> // UCHAR_MAX
+#include <climits>                      // UCHAR_MAX
 // GWC added this.
 #include <cstdio>
 // GWC added this.
-#include <cstdlib> // std::malloc
+#include <cstdlib>                      // std::malloc
 // GWC added this.
 #include <cstring>
 // GWC added this.

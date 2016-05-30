@@ -26,7 +26,7 @@
 
 #include "test_tools.hpp"
 
-#include <stdio.h> // snprintf() (C99, not C++98).
+#include <stdio.h>                      // snprintf() (C99, not C++98).
 #include <string>
 
 int test_main(int, char*[])

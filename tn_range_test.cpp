@@ -25,12 +25,12 @@
 #endif // __BORLANDC__
 
 #include "tn_range.hpp"
-#include "tn_range.tpp"          // Class template implementation.
-#include "tn_range_test_aux.hpp" // Template class instantiation.
+#include "tn_range.tpp"                 // Class template implementation.
+#include "tn_range_test_aux.hpp"        // Template class instantiation.
 
 #include "test_tools.hpp"
 
-#include <algorithm> // std::min()
+#include <algorithm>                    // std::min()
 #include <sstream>
 
 // This should fail to compile:

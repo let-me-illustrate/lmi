@@ -26,7 +26,7 @@
 
 #include "tier_document.hpp"
 
-#include "ieee754.hpp" // infinity<>()
+#include "ieee754.hpp"                  // infinity<>()
 
 // EVGENIY !! Doesn't it seem strange that this wx header appears
 // to be needed here? I don't see it included in similar files.

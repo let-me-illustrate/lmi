@@ -26,7 +26,7 @@
 
 #include "dbdict.hpp"
 #include "fund_data.hpp"
-#include "path_utility.hpp" // initialize_filesystem()
+#include "path_utility.hpp"             // initialize_filesystem()
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
 #include "stratified_charges.hpp"

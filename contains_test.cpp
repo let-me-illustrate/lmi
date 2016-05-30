@@ -26,7 +26,7 @@
 
 #include "contains.hpp"
 
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 
 #include <boost/static_assert.hpp>
@@ -36,7 +36,7 @@
 #include <map>
 #include <set>
 #include <string>
-#include <utility>        // std::pair
+#include <utility>                      // std::pair
 #include <vector>
 
 struct HasFind   {void find();};

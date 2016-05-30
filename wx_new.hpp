@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include <cstddef> // std::size_t
+#include <cstddef>                      // std::size_t
 
 // TODO ?? CALCULATION_SUMMARY Revise in light of this message:
 //   http://lists.nongnu.org/archive/html/lmi/2006-10/msg00024.html

@@ -35,7 +35,7 @@
 
 #include <wx/defs.h>
 
-#include <algorithm> // std::swap()
+#include <algorithm>                    // std::swap()
 
 namespace
 {

@@ -26,7 +26,7 @@
 
 #include "single_choice_popup_menu.hpp"
 
-#include <wx/gdicmn.h> // wxDefaultPosition, wxSize
+#include <wx/gdicmn.h>                  // wxDefaultPosition, wxSize
 
 SingleChoicePopupMenu::SingleChoicePopupMenu
     (wxArrayString const& choices

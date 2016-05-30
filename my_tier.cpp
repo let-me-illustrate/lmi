@@ -40,7 +40,7 @@
 #include "stratified_charges.hpp"
 
 #include "data_directory.hpp"
-#include "ieee754.hpp" // infinity<>()
+#include "ieee754.hpp"                  // infinity<>()
 
 //============================================================================
 void stratified_charges::write_proprietary_stratified_files()

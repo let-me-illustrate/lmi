@@ -28,7 +28,7 @@
 
 #include "test_tools.hpp"
 
-#include <cmath> // std::exp()
+#include <cmath>                        // std::exp()
 #include <functional>
 #include <iostream>
 #include <istream>

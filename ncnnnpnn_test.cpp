@@ -31,7 +31,7 @@
 #include <limits>
 
 #if defined __BORLANDC__
-#   include <float.h> // nonstandard _control87
+#   include <float.h>                   // nonstandard _control87()
 #endif // __BORLANDC__
 
 int test_main(int, char*[])

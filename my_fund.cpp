@@ -39,7 +39,7 @@
 
 #include "fund_data.hpp"
 
-#include "data_directory.hpp" // AddDataDir()
+#include "data_directory.hpp"           // AddDataDir()
 
 //============================================================================
 void FundData::WriteProprietaryFundFiles()

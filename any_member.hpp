@@ -76,7 +76,7 @@
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // defined __BORLANDC__
 
-#include <algorithm> // std::lower_bound(), std::swap()
+#include <algorithm>                    // std::lower_bound(), std::swap()
 #include <map>
 #include <sstream>
 #include <stdexcept>

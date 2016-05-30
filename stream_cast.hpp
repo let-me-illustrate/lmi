@@ -57,7 +57,7 @@
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // defined __BORLANDC__
 
-#include <istream> // std::ws
+#include <istream>                      // std::ws
 #include <sstream>
 #include <stdexcept>
 #include <string>

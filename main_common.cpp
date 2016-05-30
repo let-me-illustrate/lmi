@@ -31,7 +31,7 @@
 #include "sigfpe.hpp"
 
 #include <csignal>
-#include <exception> // std::set_terminate()
+#include <exception>                    // std::set_terminate()
 #include <stdexcept>
 
 #if defined __MINGW32__

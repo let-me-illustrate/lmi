@@ -32,10 +32,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <wx/version.h> // Mark this file as wx dependent.
+#include <wx/version.h>                 // Mark this file as wx dependent.
 
 #include <string>
-#include <utility> // std::pair
+#include <utility>                      // std::pair
 #include <vector>
 
 /// Notes on TierEditorGrid and TierTableAdapter.

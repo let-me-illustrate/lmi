@@ -32,10 +32,10 @@
 #include "value_cast.hpp"
 
 #include <wx/msgdlg.h>
-#include <wx/utils.h> // wxBusyCursor
+#include <wx/utils.h>                   // wxBusyCursor
 
 #include <exception>
-#include <numeric>    // std::accumulate()
+#include <numeric>                      // std::accumulate()
 
 /// Database Axis definitions
 /// -------------------------

@@ -26,7 +26,7 @@
 
 #include "mc_enum.hpp"
 
-#include <algorithm> // std::find()
+#include <algorithm>                    // std::find()
 
 mc_enum_base::mc_enum_base(int cardinality_of_the_enumeration)
     :allowed_(cardinality_of_the_enumeration, true)

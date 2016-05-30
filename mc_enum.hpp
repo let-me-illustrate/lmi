@@ -30,7 +30,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_enum.hpp>
 
-#include <cstddef> // std::size_t
+#include <cstddef>                      // std::size_t
 #include <deque>
 #include <string>
 #include <vector>

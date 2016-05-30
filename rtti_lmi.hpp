@@ -27,8 +27,8 @@
 #include "obstruct_slicing.hpp"
 
 #if defined __GNUC__
+#   include <cstdlib>                   // std::free()
 #   include <cxxabi.h>
-#   include <cstdlib> // std::free()
 #endif // defined __GNUC__
 
 #include <ostream>

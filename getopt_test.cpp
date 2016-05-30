@@ -47,7 +47,7 @@
 #include "getopt.hpp"
 
 #include "assert_lmi.hpp"
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 
 #include <sstream>

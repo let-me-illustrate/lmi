@@ -27,10 +27,10 @@
 #include "stratified_algorithms.hpp"
 
 #include "materially_equal.hpp"
-#include "miscellany.hpp" // lmi_array_size()
+#include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 
-#include <cmath>          // std::fabs()
+#include <cmath>                        // std::fabs()
 #include <limits>
 
 void banded_test()

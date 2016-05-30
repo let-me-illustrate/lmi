@@ -38,7 +38,7 @@
 
 #include "alert.hpp"
 
-#include <cfloat> // DBL_MAX
+#include <cfloat>                       // DBL_MAX
 #include <csignal>
 #include <string>
 

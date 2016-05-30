@@ -47,8 +47,8 @@
 // GWC: lmi compatibility header.
 #include "config.hpp"
 
-#include <cstddef> // std::size_t
-#include <cstdio>  // GWC added this required header.
+#include <cstddef>                      // std::size_t
+#include <cstdio>                       // GWC added this required header.
 
 /* GWC: Make this header usable with C++. */
 #ifdef __cplusplus
