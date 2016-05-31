@@ -40,7 +40,7 @@
 /// lifetime and it needs to be restarted to "notice" any new skins.
 /// Unlike ce_product_name, the full file names are presented in the
 /// GUI: base names of '.policy' files are designed to be recognizable
-/// to end users, but '.skin' names are more esoteric and it is less
+/// to end users, but skin names are more esoteric and it is less
 /// confusing to show them as file names rather than apparent phrases.
 
 class ce_skin_name
