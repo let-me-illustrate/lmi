@@ -345,7 +345,6 @@ liblmi_common_sources = \
     outlay.cpp \
     path_utility.cpp \
     premium_tax.cpp \
-    product_names.cpp \
     progress_meter.cpp \
     sigfpe.cpp \
     single_cell_document.cpp \
@@ -739,7 +738,6 @@ test_input_SOURCES = \
   null_stream.cpp \
   path_utility.cpp \
   premium_tax.cpp \
-  product_names.cpp \
   single_cell_document.cpp \
   timer.cpp \
   tn_range_types.cpp \
@@ -1212,7 +1210,6 @@ noinst_HEADERS = \
     print_matrix.hpp \
     product_data.hpp \
     product_editor.hpp \
-    product_names.hpp \
     progress_meter.hpp \
     round_to.hpp \
     rounding_document.hpp \

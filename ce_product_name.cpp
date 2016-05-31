@@ -22,10 +22,83 @@
 #include "ce_product_name.hpp"
 
 #include "alert.hpp"
+#include "contains.hpp"
 #include "facets.hpp"
-#include "product_names.hpp"
+#include "global_settings.hpp"
+#include "miscellany.hpp"               // lmi_tolower()
+#include "path_utility.hpp"             // fs::path inserter
 
-#include <algorithm>
+#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+
+#include <algorithm>                    // std::find(), std::transform()
+
+namespace
+{
+std::vector<std::string> fetch_product_names()
+{
+    fs::path path(global_settings::instance().data_directory());
+    std::vector<std::string> names;
+    fs::directory_iterator i(path);
+    fs::directory_iterator end_i;
+    for(; i != end_i; ++i)
+        {
+        if(is_directory(*i) || ".policy" != fs::extension(*i))
+            {
+            continue;
+            }
+        std::string name(basename(*i));
+        std::transform
+            (name.begin()
+            ,name.end()
+            ,name.begin()
+            ,lmi_tolower
+            );
+        names.push_back(name);
+        }
+
+    if(names.empty())
+        {
+        fatal_error()
+            << "Data directory '"
+            << path
+            << "' contains no product files."
+            << LMI_FLUSH
+            ;
+        }
+
+    return names;
+}
+
+std::vector<std::string> const& product_names()
+{
+    static std::vector<std::string> const names(fetch_product_names());
+    return names;
+}
+
+/// Default product name is "sample" if that product is available,
+/// else the name of the first product found.
+///
+/// Rationale: It is always possible to specify a different default
+/// product by using a default-input file. If none is used, then the
+/// first product found is not necessarily a better default than
+/// "sample". Defaults hardcoded in the input class are designed to
+/// be generally suitable, but might be inappropriate for some exotic
+/// product. If a user creates an invalid product that appears first
+/// in the list, then the system will still work in default cases
+/// with "sample".
+
+std::string const& default_product_name()
+{
+    static std::string const default_name =
+        contains(product_names(), "sample")
+        ? std::string("sample")
+        : product_names().front()
+        ;
+    return default_name;
+}
+} // Unnamed namespace.
 
 ce_product_name::ce_product_name()
     :mc_enum_base(product_names().size())
@@ -110,11 +183,6 @@ std::string ce_product_name::str() const
 std::string ce_product_name::value() const
 {
     return value_;
-}
-
-std::vector<std::string> const& ce_product_name::product_names()
-{
-    return ::product_names();
 }
 
 std::istream& ce_product_name::read(std::istream& is)

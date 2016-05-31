@@ -30,17 +30,11 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>
-#include <cstring>
+#include <algorithm>                    // std::find()
+#include <cstring>                      // std::strlen()
 
 namespace
 {
-std::string const& default_skin_name()
-{
-    static std::string const default_name("default");
-    return default_name;
-}
-
 std::vector<std::string> fetch_skin_names()
 {
     fs::path path(global_settings::instance().data_directory());
@@ -81,6 +75,18 @@ std::vector<std::string> fetch_skin_names()
         }
 
     return names;
+}
+
+std::vector<std::string> const& skin_names()
+{
+    static std::vector<std::string> const names(fetch_skin_names());
+    return names;
+}
+
+std::string const& default_skin_name()
+{
+    static std::string const default_name("default");
+    return default_name;
 }
 } // Unnamed namespace.
 
@@ -167,12 +173,6 @@ std::string ce_skin_name::str() const
 std::string ce_skin_name::value() const
 {
     return value_;
-}
-
-std::vector<std::string> const& ce_skin_name::skin_names()
-{
-    static std::vector<std::string> const names(fetch_skin_names());
-    return names;
 }
 
 std::istream& ce_skin_name::read(std::istream& is)

@@ -236,7 +236,6 @@ common_common_objects := \
   outlay.o \
   path_utility.o \
   premium_tax.o \
-  product_names.o \
   progress_meter.o \
   sigfpe.o \
   single_cell_document.o \
@@ -661,7 +660,6 @@ input_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
   premium_tax.o \
-  product_names.o \
   single_cell_document.o \
   timer.o \
   tn_range_types.o \
