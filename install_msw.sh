@@ -95,9 +95,11 @@ cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
 java -version
 
 cd /opt/lmi/src
-# Use http only if a corporate firewall blocks the git protocol.
-# git clone http://git.savannah.nongnu.org/r/lmi.git
-git clone git://git.savannah.nongnu.org/lmi.git
+# Favor http over git's own protocol only because corporate firewalls
+# in lmi's target industry tend to block the latter.
+git clone http://git.savannah.nongnu.org/r/lmi.git
+# Use git's own wherever possible.
+# git clone git://git.savannah.nongnu.org/lmi.git
 
 cd /opt/lmi/src/lmi
 
