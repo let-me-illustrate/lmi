@@ -126,6 +126,21 @@ std::string htmlize(std::string const& raw_text)
     return html;
 }
 
+bool begins_with(std::string const& s, std::string const& prefix)
+{
+    return prefix == s.substr(0, prefix.size());
+}
+
+bool ends_with(std::string const& s, std::string const& suffix)
+{
+    std::string::size_type pos = s.rfind(suffix);
+    if(std::string::npos == pos)
+        {
+        return false;
+        }
+    return s.substr(pos).size() == suffix.size();
+}
+
 void ltrim(std::string& s, char const* superfluous)
 {
     std::string::size_type p = s.find_first_not_of(superfluous);

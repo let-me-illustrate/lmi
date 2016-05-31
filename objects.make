@@ -1006,6 +1006,7 @@ bcc_ld$(EXEEXT): \
   bcc_ld.o \
   getopt.o \
   license.o \
+  miscellany.o \
   system_command.o \
   system_command_non_wx.o \
 

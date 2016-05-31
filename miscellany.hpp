@@ -96,6 +96,14 @@ std::vector<std::string> LMI_SO split_into_lines(std::string const&);
 
 std::string htmlize(std::string const&);
 
+/// Ascertain whether string begins with prefix.
+
+bool LMI_SO begins_with(std::string const& s, std::string const& prefix);
+
+/// Ascertain whether string begins ends with suffix.
+
+bool LMI_SO ends_with(std::string const& s, std::string const& suffix);
+
 /// Remove superfluous characters from beginning of string.
 
 void LMI_SO ltrim(std::string& s, char const* superfluous);

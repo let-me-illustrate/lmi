@@ -97,6 +97,54 @@ void test_minmax()
 #endif // !defined __BORLANDC__
 }
 
+void test_prefix_and_suffix()
+{
+    std::string s = "";
+
+    BOOST_TEST( begins_with(s, ""));
+    BOOST_TEST( ends_with  (s, ""));
+
+    BOOST_TEST(!begins_with(s, "A"));
+    BOOST_TEST(!ends_with  (s, "Z"));
+
+    BOOST_TEST(!begins_with(s, "ABC"));
+    BOOST_TEST(!ends_with  (s, "XYZ"));
+
+    s = "W";
+
+    BOOST_TEST( begins_with(s, ""));
+    BOOST_TEST( ends_with  (s, ""));
+
+    BOOST_TEST(!begins_with(s, "A"));
+    BOOST_TEST(!ends_with  (s, "Z"));
+
+    BOOST_TEST(!begins_with(s, "WW"));
+    BOOST_TEST(!ends_with  (s, "WW"));
+
+    BOOST_TEST( begins_with(s, "W"));
+    BOOST_TEST( ends_with  (s, "W"));
+
+    s = "LMNOP";
+
+    BOOST_TEST( begins_with(s, ""));
+    BOOST_TEST( ends_with  (s, ""));
+
+    BOOST_TEST(!begins_with(s, "A"));
+    BOOST_TEST(!ends_with  (s, "Z"));
+
+    BOOST_TEST( begins_with(s, "L"));
+    BOOST_TEST( ends_with  (s, "P"));
+
+    BOOST_TEST( begins_with(s, "LMN"));
+    BOOST_TEST( ends_with  (s, "NOP"));
+
+    BOOST_TEST( begins_with(s, "LMNOP"));
+    BOOST_TEST( ends_with  (s, "LMNOP"));
+
+    BOOST_TEST(!begins_with(s, "LMNOPQ"));
+    BOOST_TEST(!ends_with  (s, "KLMNOP"));
+}
+
 void test_trimming()
 {
     char const*const superfluous = " ;";
@@ -134,6 +182,7 @@ int test_main(int, char*[])
 {
     test_files_are_identical();
     test_minmax();
+    test_prefix_and_suffix();
     test_trimming();
 
     return 0;
