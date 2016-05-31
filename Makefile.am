@@ -1135,6 +1135,7 @@ noinst_HEADERS = \
     edit_mvc_docview_parameters.hpp \
     emit_ledger.hpp \
     exit_codes.hpp \
+    expm1.h \
     facets.hpp \
     fenv_guard.hpp \
     fenv_lmi.hpp \

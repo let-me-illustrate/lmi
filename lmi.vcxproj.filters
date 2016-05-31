@@ -256,9 +256,6 @@
     <ClCompile Include="product_data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="product_names.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="progress_meter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -296,6 +293,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="group_quote_pdf_gen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ce_skin_name.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

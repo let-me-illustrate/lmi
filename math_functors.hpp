@@ -34,8 +34,8 @@
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
 #endif // Defined __BORLANDC__ .
 
-#include <algorithm>
-#include <cmath>
+#include <algorithm>                    // std::max(), std::min()
+#include <cmath>                        // C99 expm1(), log1p()
 #include <functional>
 #include <stdexcept>
 #include <vector>
@@ -69,7 +69,7 @@ extern "C" long double log1pl(long double);
 #if !defined LMI_COMPILER_PROVIDES_EXPM1L
 #   if defined LMI_COMO_WITH_MINGW
 extern "C" double expm1(double);
-double expm1l(double x) {return expm1(x);}
+inline double expm1l(double x) {return expm1(x);}
 #   else  // !defined LMI_COMO_WITH_MINGW
 extern "C" long double expm1l(long double);
 #   endif // !defined LMI_COMO_WITH_MINGW
@@ -78,7 +78,7 @@ extern "C" long double expm1l(long double);
 #if !defined LMI_COMPILER_PROVIDES_LOG1PL
 #   if defined LMI_COMO_WITH_MINGW
 extern "C" double log1p(double);
-double log1pl(double x) {return log1p(x);}
+inline double log1pl(double x) {return log1p(x);}
 #   else  // !defined LMI_COMO_WITH_MINGW
 extern "C" long double log1pl(long double);
 #   endif // !defined LMI_COMO_WITH_MINGW

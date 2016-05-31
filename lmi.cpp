@@ -22,7 +22,7 @@
 #include LMI_PCH_HEADER
 #ifdef __BORLANDC__
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif
 
 #include "lmi.hpp"
 

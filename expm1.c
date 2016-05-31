@@ -1,5 +1,5 @@
 /* This is public domain. It's not
- *   "Copyright (C) 2005, 2006, 2007, 2008, 2009 Gregory W. Chicares"
+ *   "Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares"
  * but including that quoted string satisfies lmi's style-conformity
  * tests. Eventually this will become part of MinGW and cygwin, and
  * will then be removed from the lmi repository. Find the original at:

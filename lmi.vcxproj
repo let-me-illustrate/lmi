@@ -452,6 +452,7 @@
     <ClCompile Include="authenticity.cpp" />
     <ClCompile Include="calendar_date.cpp" />
     <ClCompile Include="ce_product_name.cpp" />
+    <ClCompile Include="ce_skin_name.cpp" />
     <ClCompile Include="commutation_functions.cpp" />
     <ClCompile Include="configurable_settings.cpp" />
     <ClCompile Include="crc32.cpp" />
@@ -557,7 +558,6 @@
     <ClCompile Include="preferences_model.cpp" />
     <ClCompile Include="premium_tax.cpp" />
     <ClCompile Include="product_data.cpp" />
-    <ClCompile Include="product_names.cpp" />
     <ClCompile Include="progress_meter.cpp" />
     <ClCompile Include="rounding_rules.cpp" />
     <ClCompile Include="sigfpe.cpp" />
