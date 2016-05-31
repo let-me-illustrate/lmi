@@ -30,14 +30,18 @@
 #include <string>
 #include <vector>
 
-/// This class encapsulates skin names. As for the related class
-/// ce_product_name, its values are only available at run time, so
+/// This class encapsulates skin names. As with the related class
+/// ce_product_name, its values are available only at run time, so
 /// there can be no compile time enum to represent them.
 ///
-/// Valid values are the base names of 'skin*.xrc' product files found
-/// in the (configurable) data directory. As with ce_product_name, the
-/// valid values never change during the program lifetime and it needs
-/// to be restarted to "notice" any new skins.
+/// Valid values are the full (base + extension) names of 'skin*.xrc'
+/// skin files found in the (configurable) data directory. As with
+/// ce_product_name, the valid values never change during the program
+/// lifetime and it needs to be restarted to "notice" any new skins.
+/// Unlike ce_product_name, the full file names are presented in the
+/// GUI: base names of '.policy' files are designed to be recognizable
+/// to end users, but '.skin' names are more esoteric and it is less
+/// confusing to show them as file names rather than apparent phrases.
 
 class ce_skin_name
     :public mc_enum_base
