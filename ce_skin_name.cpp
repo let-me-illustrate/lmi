@@ -29,6 +29,7 @@
 #include "alert.hpp"
 #include "facets.hpp"
 #include "global_settings.hpp"
+#include "miscellany.hpp"               // begins_with()
 #include "path_utility.hpp"             // fs::path inserter
 
 #include <boost/filesystem/convenience.hpp>
@@ -36,7 +37,6 @@
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // std::find()
-#include <cstring>                      // std::strlen()
 
 namespace
 {
@@ -53,19 +53,10 @@ std::vector<std::string> fetch_skin_names()
             continue;
             }
         std::string const name(i->leaf());
-        // Skin files are expected to be called "skin_something.xrc" with the
-        // exception of "skin.xrc".
-        static char const* skin_prefix = "skin";
-        static std::size_t const skin_prefix_len = std::strlen(skin_prefix);
-        if(name.compare(0, skin_prefix_len, skin_prefix) != 0)
+        if(!begins_with(name, "skin"))
             {
             continue;
             }
-        if(fs::basename(*i).length() > skin_prefix_len && name[skin_prefix_len] != '_')
-            {
-            continue;
-            }
-
         names.push_back(name);
         }
 

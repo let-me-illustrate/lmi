@@ -38,6 +38,7 @@
 #include "getopt.hpp"
 #include "handle_exceptions.hpp"
 #include "license.hpp"
+#include "miscellany.hpp"               // ends_with()
 #include "system_command.hpp"
 
 #include <algorithm>
@@ -68,23 +69,6 @@ namespace
                 }
             }
         return t;
-        }
-
-#if 0 // Potentially useful, yet unused.
-    bool begins_with(std::string const& s, std::string const& prefix)
-        {
-        return prefix == s.substr(0, prefix.size());
-        }
-#endif // 0
-
-    bool ends_with(std::string const& s, std::string const& suffix)
-        {
-        std::string::size_type pos = s.rfind(suffix);
-        if(std::string::npos == pos)
-            {
-            return false;
-            }
-        return s.substr(pos).size() == suffix.size();
         }
 
     // TRICKY COMPILER !! Contrary to the borland documentation,

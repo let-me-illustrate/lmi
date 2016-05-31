@@ -29,6 +29,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 
+#include <algorithm>                    // std::equal()
 #include <ctime>
 #include <fstream>
 #include <istream>
@@ -124,6 +125,20 @@ std::string htmlize(std::string const& raw_text)
         }
 
     return html;
+}
+
+bool begins_with(std::string const& s, std::string const& prefix)
+{
+    return
+           (prefix.size() <= s.size())
+        && std::equal(prefix.begin(), prefix.end(), s.begin());
+}
+
+bool ends_with(std::string const& s, std::string const& suffix)
+{
+    return
+           (suffix.size() <= s.size())
+        && std::equal(suffix.rbegin(), suffix.rend(), s.rbegin());
 }
 
 void ltrim(std::string& s, char const* superfluous)

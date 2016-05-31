@@ -30,14 +30,13 @@
 #include "contains.hpp"
 #include "facets.hpp"
 #include "global_settings.hpp"
-#include "miscellany.hpp"               // lmi_tolower()
 #include "path_utility.hpp"             // fs::path inserter
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>                    // std::find(), std::transform()
+#include <algorithm>                    // std::find()
 
 namespace
 {
@@ -53,14 +52,7 @@ std::vector<std::string> fetch_product_names()
             {
             continue;
             }
-        std::string name(basename(*i));
-        std::transform
-            (name.begin()
-            ,name.end()
-            ,name.begin()
-            ,lmi_tolower
-            );
-        names.push_back(name);
+        names.push_back(basename(*i));
         }
 
     if(names.empty())
