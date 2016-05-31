@@ -90,8 +90,6 @@ class ce_product_name
     std::string value() const;
 
   private:
-    static std::vector<std::string> const& product_names();
-
     // datum_base required implementation.
     // TODO ?? Consider moving the implementation into the base class.
     virtual std::istream& read (std::istream&);

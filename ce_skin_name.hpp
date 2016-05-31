@@ -30,14 +30,14 @@
 #include <string>
 #include <vector>
 
-/// This class encapsulates skin names. It is similar to ce_product_name in
-/// that its values are only available at run time, so there can be no compile
-/// time enum to represent them.
+/// This class encapsulates skin names. As for the related class
+/// ce_product_name, its values are only available at run time, so
+/// there can be no compile time enum to represent them.
 ///
 /// Valid values are the base names of 'skin*.xrc' product files found
-/// in the (configurable) data directory. As with ce_product_name, the valid
-/// values never change during the program lifetime and it needs to be
-/// restarted to "notice" the new skins.
+/// in the (configurable) data directory. As with ce_product_name, the
+/// valid values never change during the program lifetime and it needs
+/// to be restarted to "notice" any new skins.
 
 class ce_skin_name
     :public mc_enum_base
@@ -66,8 +66,6 @@ class ce_skin_name
     std::string value() const;
 
   private:
-    static std::vector<std::string> const& skin_names();
-
     // datum_base required implementation.
     // TODO ?? Consider moving the implementation into the base class.
     virtual std::istream& read (std::istream&);
