@@ -1180,7 +1180,7 @@ here, but it looks weird if we don't make this look like its siblings.
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="InputSequenceEntry" name="Inforce7702AAmountsPaidHistory">
+                            <object class="wxTextCtrl" name="Inforce7702AAmountsPaidHistory">
                                 <title>7702A(e)(1) 'amounts paid' history for current seven-pay period</title>
                                 <help>7702A(e)(1) 'amounts paid' by 7702A(e)(2) 'contract year' since beginning of last seven-pay period--zero if not in a seven-pay period</help>
                                 <size>180,-1</size>

@@ -28,6 +28,7 @@
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"
+#include "miscellany.hpp"               // begins_with()
 
 #include <cstddef>                      // std::size_t
 #include <sstream>
@@ -53,16 +54,13 @@ namespace
 
 std::string magic_null_column_name("[none]");
 
-// Check if the given PreferencesModel class member name is one of the
-// calculation summary columns.
-bool is_calculation_summary_column_member(std::string const& member)
-{
-    static char const* summary_column_prefix = "CalculationSummaryColumn";
-    static std::size_t summary_column_prefix_len = strlen(summary_column_prefix);
+/// Does a member name nominate a calculation-summary column?
 
-    return member.compare(0, summary_column_prefix_len, summary_column_prefix) == 0;
+bool is_calculation_summary_column_name(std::string const& member_name)
+{
+    return begins_with(member_name, "CalculationSummaryColumn");
 }
-}
+} // Unnamed namespace.
 
 PreferencesModel::PreferencesModel()
     :UseBuiltinCalculationSummary("No")
@@ -90,7 +88,6 @@ void PreferencesModel::AscribeMembers()
     ascribe("CalculationSummaryColumn09"  , &PreferencesModel::CalculationSummaryColumn09);
     ascribe("CalculationSummaryColumn10"  , &PreferencesModel::CalculationSummaryColumn10);
     ascribe("CalculationSummaryColumn11"  , &PreferencesModel::CalculationSummaryColumn11);
-
     ascribe("SkinFileName"                , &PreferencesModel::SkinFileName);
 }
 
@@ -229,8 +226,7 @@ void PreferencesModel::Load()
     for(std::size_t i = 0; i < member_names().size(); ++i)
         {
         std::string const& name = member_names()[i];
-
-        if(!is_calculation_summary_column_member(name))
+        if(!is_calculation_summary_column_name(name))
             {
             continue;
             }
@@ -253,7 +249,7 @@ std::string PreferencesModel::string_of_column_names() const
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
-        if(!is_calculation_summary_column_member(*i))
+        if(!is_calculation_summary_column_name(*i))
             {
             continue;
             }

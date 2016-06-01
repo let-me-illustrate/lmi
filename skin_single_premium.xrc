@@ -263,7 +263,6 @@
                                     <border>4</border>
                                     <object class="wxSpinCtrl" name="SurviveToAge">
                                         <help>Partial mortality survival age limit</help>
-                                        <size>10,-1</size>
                                         <max>100</max>
                                     </object>
                                 </object>
@@ -278,7 +277,6 @@
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="SurviveToYear">
                                         <help>Partial mortality survival year limit</help>
-                                        <size>10,-1</size>
                                         <max>100</max>
                                         <value>99</value>
                                     </object>

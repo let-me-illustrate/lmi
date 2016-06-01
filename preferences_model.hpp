@@ -33,6 +33,8 @@
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
+#include <string>
+
 class LMI_SO PreferencesModel
     :virtual private obstruct_slicing<PreferencesModel>
     ,public MvcModel
@@ -79,7 +81,6 @@ class LMI_SO PreferencesModel
     mce_report_column CalculationSummaryColumn09;
     mce_report_column CalculationSummaryColumn10;
     mce_report_column CalculationSummaryColumn11;
-
     ce_skin_name      SkinFileName;
 };
 

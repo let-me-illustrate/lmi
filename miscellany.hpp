@@ -100,7 +100,7 @@ std::string htmlize(std::string const&);
 
 bool LMI_SO begins_with(std::string const& s, std::string const& prefix);
 
-/// Ascertain whether string begins ends with suffix.
+/// Ascertain whether string ends with suffix.
 
 bool LMI_SO ends_with(std::string const& s, std::string const& suffix);
 
