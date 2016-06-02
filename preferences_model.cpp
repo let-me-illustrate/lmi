@@ -64,7 +64,6 @@ bool is_calculation_summary_column_name(std::string const& member_name)
 } // Unnamed namespace.
 
 PreferencesModel::PreferencesModel()
-    :UseBuiltinCalculationSummary("No")
 {
     AscribeMembers();
     Load();
