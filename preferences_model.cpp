@@ -37,23 +37,11 @@
 
 namespace
 {
-// TODO ?? CALCULATION_SUMMARY Evgeniy has asked:
-// what is the proper way to retrieve the magic "[none]" value?
-//
-// Answer: I guess I'd clone some similar code, like
-// configuration_filename() in 'configurable_settings.cpp', just for
-// consistency; and then, what is most important, search for every use
-// of that string in every other module and replace them all with
-// calls to a function like that--which therefore might belong in some
-// other module.
-//
-// However, it would be even better to reimplement this class to
-// configure every data member in class configurable_settings, and
+// Empty columns: it would be even better to reimplement this class to
 // store the twelve instances of mce_report_column here the same way
-// that class 'Input' stores its twelve in its xml file. Then the
-// whole issue would vanish.
+// that class 'Input' stores its twelve in its xml file.
 
-std::string magic_null_column_name("[none]");
+std::string const empty_column_name("[none]");
 
 /// Does a member name nominate a calculation-summary column?
 
@@ -235,7 +223,7 @@ void PreferencesModel::Load()
             }
         if(columns.size() <= i)
             {
-            operator[](name) = magic_null_column_name;
+            operator[](name) = empty_column_name;
             }
         else
             {
@@ -262,7 +250,7 @@ std::string PreferencesModel::string_of_column_names() const
             continue;
             }
         std::string const column = operator[](*i).str();
-        if(column != magic_null_column_name)
+        if(column != empty_column_name)
             {
             oss << column << " ";
             }
