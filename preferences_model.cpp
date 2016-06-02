@@ -267,15 +267,7 @@ void PreferencesModel::Save() const
 {
     configurable_settings& z = configurable_settings::instance();
 
-    std::string s(string_of_column_names());
-    if(s.empty() && "Yes" != UseBuiltinCalculationSummary)
-        {
-        warning()
-            << "Calculation summary will be empty: no columns chosen."
-            << LMI_FLUSH
-            ;
-        }
-    z["calculation_summary_columns"    ] = s;
+    z["calculation_summary_columns"    ] = string_of_column_names();
     z["use_builtin_calculation_summary"] = value_cast<std::string>("Yes" == UseBuiltinCalculationSummary);
     z["skin_filename"                  ] = SkinFileName.value();
 }

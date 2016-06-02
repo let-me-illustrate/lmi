@@ -434,7 +434,10 @@ std::string const& configurable_settings::xsl_fo_command() const
 
 namespace
 {
-std::vector<std::string> parse_calculation_summary_columns(std::string const& s)
+std::vector<std::string> parse_calculation_summary_columns
+    (std::string const& s
+    ,bool               use_builtin_calculation_summary
+    )
 {
     std::istringstream iss(s);
     std::vector<std::string> const& allowable = all_strings<mcenum_report_column>();
@@ -457,6 +460,15 @@ std::vector<std::string> parse_calculation_summary_columns(std::string const& s)
                 ;
             }
         }
+
+    if(columns.empty() && !use_builtin_calculation_summary)
+        {
+        warning()
+            << "Calculation summary will be empty: no columns chosen."
+            << LMI_FLUSH
+            ;
+        }
+
     return columns;
 }
 } // Unnamed namespace.
@@ -464,7 +476,10 @@ std::vector<std::string> parse_calculation_summary_columns(std::string const& s)
 std::vector<std::string> input_calculation_summary_columns()
 {
     configurable_settings const& z = configurable_settings::instance();
-    return parse_calculation_summary_columns(z.calculation_summary_columns());
+    return parse_calculation_summary_columns
+        (z.calculation_summary_columns()
+        ,z.use_builtin_calculation_summary()
+        );
 }
 
 std::vector<std::string> effective_calculation_summary_columns()
@@ -472,8 +487,9 @@ std::vector<std::string> effective_calculation_summary_columns()
     configurable_settings const& z = configurable_settings::instance();
     return parse_calculation_summary_columns
         (z.use_builtin_calculation_summary()
-        ? default_calculation_summary_columns()
-        : z.calculation_summary_columns()
+            ? default_calculation_summary_columns()
+            : z.calculation_summary_columns()
+        ,z.use_builtin_calculation_summary()
         );
 }
 
