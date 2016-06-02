@@ -29,6 +29,7 @@
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "miscellany.hpp"               // begins_with()
+#include "value_cast.hpp"
 
 #include <cstddef>                      // std::size_t
 #include <sstream>
@@ -264,6 +265,8 @@ std::string PreferencesModel::string_of_column_names() const
 
 void PreferencesModel::Save() const
 {
+    configurable_settings& z = configurable_settings::instance();
+
     std::string s(string_of_column_names());
     if(s.empty() && "Yes" != UseBuiltinCalculationSummary)
         {
@@ -272,9 +275,8 @@ void PreferencesModel::Save() const
             << LMI_FLUSH
             ;
         }
-    configurable_settings& z = configurable_settings::instance();
-    z.calculation_summary_columns(s);
-    z.use_builtin_calculation_summary("Yes" == UseBuiltinCalculationSummary);
-    z.skin_filename(SkinFileName.value());
+    z["calculation_summary_columns"    ] = s;
+    z["use_builtin_calculation_summary"] = value_cast<std::string>("Yes" == UseBuiltinCalculationSummary);
+    z["skin_filename"                  ] = SkinFileName.value();
 }
 

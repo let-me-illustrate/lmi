@@ -313,28 +313,6 @@ void configurable_settings::redintegrate_ex_post
         }
 }
 
-// TODO ?? CALCULATION_SUMMARY Address the validation issue:
-
-/// A whitespace-delimited list of columns to be shown on the
-/// calculation summary, unless overridden by
-/// use_builtin_calculation_summary(true).
-///
-/// Precondition: Argument is semantically valid; ultimately this will
-/// be validated elsewhere.
-
-void configurable_settings::calculation_summary_columns(std::string const& s)
-{
-    calculation_summary_columns_ = s;
-}
-
-/// If true, then use built-in default calculation-summary columns;
-/// otherwise, use calculation_summary_columns().
-
-void configurable_settings::use_builtin_calculation_summary(bool b)
-{
-    use_builtin_calculation_summary_ = b;
-}
-
 /// A whitespace-delimited list of columns to be shown on the
 /// calculation summary, unless overridden by
 /// use_builtin_calculation_summary(true).
@@ -421,11 +399,6 @@ int configurable_settings::seconds_to_pause_between_printouts() const
 }
 
 /// Name of '.xrc' interface skin.
-
-void configurable_settings::skin_filename(std::string const& skin_filename)
-{
-    skin_filename_ = skin_filename;
-}
 
 std::string const& configurable_settings::skin_filename() const
 {
