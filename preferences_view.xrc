@@ -29,11 +29,13 @@
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablerows>1</growablerows>
+        <growablecols>0</growablecols>
         <object class="sizeritem">
             <flag>wxALIGN_LEFT</flag>
             <border>4</border>
             <object class="wxCheckBox" name="UseBuiltinCalculationSummary">
                 <label>Use default calculation summary columns</label>
+                <help>Use builtin default columns instead of custom selections</help>
             </object>
         </object>
         <object class="sizeritem">
@@ -41,7 +43,7 @@
             <border>4</border>
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
-                <growablecols>0,1</growablecols>
+                <growablecols>1</growablecols>
                 <object class="sizeritem">
                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>4</border>
@@ -215,7 +217,7 @@
     </object>
 </object>
 
-<object class="wxPanel" name="input_configuration_panel">
+<object class="wxPanel" name="general_configuration_panel">
     <object class="wxBoxSizer">
         <orient>wxVERTICAL</orient>
         <object class="sizeritem">
@@ -231,6 +233,76 @@
             <border>4</border>
             <object class="wxListBox" name="SkinFileName">
                 <style>wxLB_SINGLE</style>
+                <help>Skins show different sets of input fields, tailored to various lines of business</help>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>2</cols>
+                <growablecols>1</growablecols>
+                <growablerows>0</growablerows>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Input defaults</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxTextCtrl" name="DefaultInputFilename">
+<!-- change soon to:
+                    <object class="wxFilePickerCtrl" name="DefaultInputFilename">
+-->
+                        <help>Name of file with customized input values that are used as defaults for new illustrations and censuses</help>
+                        <size>180,-1</size>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Printout directory</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxTextCtrl" name="PrintDirectory">
+<!-- change soon to:
+                    <object class="wxDirPickerCtrl" name="PrintDirectory">
+-->
+                        <help>Location where PDF files are written</help>
+                        <size>180,-1</size>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Seconds to pause between printouts</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxSpinCtrl" name="SecondsToPauseBetweenPrintouts">
+                        <help>Number of seconds to pause between batched printouts, to prevent the printer from scrambling their order</help>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Spreadsheet file extension</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxTextCtrl" name="SpreadsheetFileExtension">
+                        <help>File extension for spreadsheet output</help>
+                    </object>
+                </object>
             </object>
         </object>
     </object>
@@ -253,8 +325,8 @@
             <border>4</border>
             <object class="wxNotebook" name="preferences_notebook">
                 <object class="notebookpage">
-                    <label>Input</label>
-                    <object_ref ref="input_configuration_panel"/>
+                    <label>General</label>
+                    <object_ref ref="general_configuration_panel"/>
                 </object>
                 <object class="notebookpage">
                     <label>View</label>

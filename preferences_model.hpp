@@ -28,10 +28,13 @@
 
 #include "any_member.hpp"
 #include "ce_skin_name.hpp"
+#include "datum_string.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "tn_range.hpp"
+#include "tn_range_types.hpp"
 
 #include <string>
 
@@ -68,20 +71,24 @@ class LMI_SO PreferencesModel
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
 
-    mce_yes_or_no     UseBuiltinCalculationSummary;
-    mce_report_column CalculationSummaryColumn00;
-    mce_report_column CalculationSummaryColumn01;
-    mce_report_column CalculationSummaryColumn02;
-    mce_report_column CalculationSummaryColumn03;
-    mce_report_column CalculationSummaryColumn04;
-    mce_report_column CalculationSummaryColumn05;
-    mce_report_column CalculationSummaryColumn06;
-    mce_report_column CalculationSummaryColumn07;
-    mce_report_column CalculationSummaryColumn08;
-    mce_report_column CalculationSummaryColumn09;
-    mce_report_column CalculationSummaryColumn10;
-    mce_report_column CalculationSummaryColumn11;
-    ce_skin_name      SkinFileName;
+    mce_report_column       CalculationSummaryColumn00;
+    mce_report_column       CalculationSummaryColumn01;
+    mce_report_column       CalculationSummaryColumn02;
+    mce_report_column       CalculationSummaryColumn03;
+    mce_report_column       CalculationSummaryColumn04;
+    mce_report_column       CalculationSummaryColumn05;
+    mce_report_column       CalculationSummaryColumn06;
+    mce_report_column       CalculationSummaryColumn07;
+    mce_report_column       CalculationSummaryColumn08;
+    mce_report_column       CalculationSummaryColumn09;
+    mce_report_column       CalculationSummaryColumn10;
+    mce_report_column       CalculationSummaryColumn11;
+    datum_string            DefaultInputFilename;
+    datum_string            PrintDirectory;
+    tnr_nonnegative_integer SecondsToPauseBetweenPrintouts;
+    ce_skin_name            SkinFileName;
+    datum_string            SpreadsheetFileExtension;
+    mce_yes_or_no           UseBuiltinCalculationSummary;
 };
 
 /// Specialization of struct template reconstitutor for this Model
@@ -93,9 +100,11 @@ template<> struct reconstitutor<datum_base, PreferencesModel>
     static DesiredType* reconstitute(any_member<PreferencesModel>& m)
         {
         DesiredType* z = 0;
-        z = exact_cast<ce_skin_name     >(m); if(z) return z;
-        z = exact_cast<mce_report_column>(m); if(z) return z;
-        z = exact_cast<mce_yes_or_no    >(m); if(z) return z;
+        z = exact_cast<ce_skin_name            >(m); if(z) return z;
+        z = exact_cast<datum_string            >(m); if(z) return z;
+        z = exact_cast<mce_report_column       >(m); if(z) return z;
+        z = exact_cast<mce_yes_or_no           >(m); if(z) return z;
+        z = exact_cast<tnr_nonnegative_integer >(m); if(z) return z;
         return z;
         }
 };

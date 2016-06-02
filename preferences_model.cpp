@@ -76,20 +76,24 @@ PreferencesModel::~PreferencesModel()
 
 void PreferencesModel::AscribeMembers()
 {
-    ascribe("UseBuiltinCalculationSummary", &PreferencesModel::UseBuiltinCalculationSummary);
-    ascribe("CalculationSummaryColumn00"  , &PreferencesModel::CalculationSummaryColumn00);
-    ascribe("CalculationSummaryColumn01"  , &PreferencesModel::CalculationSummaryColumn01);
-    ascribe("CalculationSummaryColumn02"  , &PreferencesModel::CalculationSummaryColumn02);
-    ascribe("CalculationSummaryColumn03"  , &PreferencesModel::CalculationSummaryColumn03);
-    ascribe("CalculationSummaryColumn04"  , &PreferencesModel::CalculationSummaryColumn04);
-    ascribe("CalculationSummaryColumn05"  , &PreferencesModel::CalculationSummaryColumn05);
-    ascribe("CalculationSummaryColumn06"  , &PreferencesModel::CalculationSummaryColumn06);
-    ascribe("CalculationSummaryColumn07"  , &PreferencesModel::CalculationSummaryColumn07);
-    ascribe("CalculationSummaryColumn08"  , &PreferencesModel::CalculationSummaryColumn08);
-    ascribe("CalculationSummaryColumn09"  , &PreferencesModel::CalculationSummaryColumn09);
-    ascribe("CalculationSummaryColumn10"  , &PreferencesModel::CalculationSummaryColumn10);
-    ascribe("CalculationSummaryColumn11"  , &PreferencesModel::CalculationSummaryColumn11);
-    ascribe("SkinFileName"                , &PreferencesModel::SkinFileName);
+    ascribe("CalculationSummaryColumn00"    , &PreferencesModel::CalculationSummaryColumn00    );
+    ascribe("CalculationSummaryColumn01"    , &PreferencesModel::CalculationSummaryColumn01    );
+    ascribe("CalculationSummaryColumn02"    , &PreferencesModel::CalculationSummaryColumn02    );
+    ascribe("CalculationSummaryColumn03"    , &PreferencesModel::CalculationSummaryColumn03    );
+    ascribe("CalculationSummaryColumn04"    , &PreferencesModel::CalculationSummaryColumn04    );
+    ascribe("CalculationSummaryColumn05"    , &PreferencesModel::CalculationSummaryColumn05    );
+    ascribe("CalculationSummaryColumn06"    , &PreferencesModel::CalculationSummaryColumn06    );
+    ascribe("CalculationSummaryColumn07"    , &PreferencesModel::CalculationSummaryColumn07    );
+    ascribe("CalculationSummaryColumn08"    , &PreferencesModel::CalculationSummaryColumn08    );
+    ascribe("CalculationSummaryColumn09"    , &PreferencesModel::CalculationSummaryColumn09    );
+    ascribe("CalculationSummaryColumn10"    , &PreferencesModel::CalculationSummaryColumn10    );
+    ascribe("CalculationSummaryColumn11"    , &PreferencesModel::CalculationSummaryColumn11    );
+    ascribe("DefaultInputFilename"          , &PreferencesModel::DefaultInputFilename          );
+    ascribe("PrintDirectory"                , &PreferencesModel::PrintDirectory                );
+    ascribe("SecondsToPauseBetweenPrintouts", &PreferencesModel::SecondsToPauseBetweenPrintouts);
+    ascribe("SkinFileName"                  , &PreferencesModel::SkinFileName                  );
+    ascribe("SpreadsheetFileExtension"      , &PreferencesModel::SpreadsheetFileExtension      );
+    ascribe("UseBuiltinCalculationSummary"  , &PreferencesModel::UseBuiltinCalculationSummary  );
 }
 
 void PreferencesModel::DoAdaptExternalities()
@@ -137,6 +141,8 @@ void PreferencesModel::DoEnforceProscription(std::string const&)
 
 void PreferencesModel::DoHarmonize()
 {
+    SecondsToPauseBetweenPrintouts.minimum_and_maximum(0, 60);
+
     bool do_not_use_builtin_defaults = "No" == UseBuiltinCalculationSummary;
     CalculationSummaryColumn00.enable(do_not_use_builtin_defaults);
     CalculationSummaryColumn01.enable(do_not_use_builtin_defaults);
@@ -218,12 +224,9 @@ bool PreferencesModel::IsModified() const
 
 void PreferencesModel::Load()
 {
-    std::vector<std::string> columns(input_calculation_summary_columns());
-
     configurable_settings const& z = configurable_settings::instance();
-    bool b = z.use_builtin_calculation_summary();
-    UseBuiltinCalculationSummary = b ? "Yes" : "No";
 
+    std::vector<std::string> columns(input_calculation_summary_columns());
     for(std::size_t i = 0; i < member_names().size(); ++i)
         {
         std::string const& name = member_names()[i];
@@ -241,7 +244,12 @@ void PreferencesModel::Load()
             }
         }
 
-    SkinFileName = z.skin_filename();
+    DefaultInputFilename           = z.default_input_filename();
+    PrintDirectory                 = z.print_directory();
+    SecondsToPauseBetweenPrintouts = z.seconds_to_pause_between_printouts();
+    SkinFileName                   = z.skin_filename();
+    SpreadsheetFileExtension       = z.spreadsheet_file_extension();
+    UseBuiltinCalculationSummary   = z.use_builtin_calculation_summary() ? "Yes" : "No";
 }
 
 std::string PreferencesModel::string_of_column_names() const
@@ -267,8 +275,12 @@ void PreferencesModel::Save() const
 {
     configurable_settings& z = configurable_settings::instance();
 
-    z["calculation_summary_columns"    ] = string_of_column_names();
-    z["use_builtin_calculation_summary"] = value_cast<std::string>("Yes" == UseBuiltinCalculationSummary);
-    z["skin_filename"                  ] = SkinFileName.value();
+    z["calculation_summary_columns"       ] = string_of_column_names();
+    z["default_input_filename"            ] = DefaultInputFilename    .value();
+    z["print_directory"                   ] = PrintDirectory          .value();
+    z["seconds_to_pause_between_printouts"] = value_cast<std::string>(SecondsToPauseBetweenPrintouts.value());
+    z["skin_filename"                     ] = SkinFileName            .value();
+    z["spreadsheet_file_extension"        ] = SpreadsheetFileExtension.value();
+    z["use_builtin_calculation_summary"   ] = value_cast<std::string>("Yes" == UseBuiltinCalculationSummary);
 }
 
