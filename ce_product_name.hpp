@@ -58,8 +58,6 @@
 /// operation should really be performed only once. Alternatively, the
 /// program might write the 'sample' product's files if it finds no
 /// other product.
-///
-/// TODO ?? Can't read() and write() be moved to the base class?
 
 class ce_product_name
     :public mc_enum_base
@@ -89,7 +87,6 @@ class ce_product_name
 
   private:
     // datum_base required implementation.
-    // TODO ?? Consider moving the implementation into the base class.
     virtual std::istream& read (std::istream&);
     virtual std::ostream& write(std::ostream&) const;
 
