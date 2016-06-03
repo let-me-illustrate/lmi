@@ -46,18 +46,10 @@
 /// cached, not because of any measured improvement in run time, but
 /// in order to keep the type from mutating with unknown consequences.
 ///
-/// TODO ?? Reconsider this. It seems desirable to recognize changes
+/// SOMEDAY !! Reconsider this. It would be nice to recognize changes
 /// to the data directory made by advanced users, but is that easily
 /// possible without adjusting the base class's 'allowed_' vector and
 /// perhaps changing the way ordinal() works?
-///
-/// TODO ?? Policy-file names are read the first time this class is
-/// instantiated. That's not the best time to do it, because an error
-/// is reported if no such file is found. It would be better to test
-/// that at startup. A simple singleton might be wanted if this
-/// operation should really be performed only once. Alternatively, the
-/// program might write the 'sample' product's files if it finds no
-/// other product.
 
 class ce_product_name
     :public mc_enum_base
