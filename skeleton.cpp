@@ -66,6 +66,7 @@
 #include "mec_document.hpp"
 #include "mec_view.hpp"
 #include "miscellany.hpp"
+#include "msw_workarounds.hpp"          // PreloadDesignatedDlls()
 #include "mvc_controller.hpp"
 #include "policy_document.hpp"
 #include "policy_view.hpp"
@@ -689,6 +690,12 @@ bool Skeleton::OnInit()
             {
             return false;
             }
+
+        // Preload DLLs after calling ProcessCommandLine(). Reason:
+        // command-line option '--data_path' may specify the directory
+        // from which 'configurable_settings.xml' is read, and that
+        // XML file gives the list of DLLs to preload.
+        MswDllPreloader::instance().PreloadDesignatedDlls();
 
         authenticate_system();
 

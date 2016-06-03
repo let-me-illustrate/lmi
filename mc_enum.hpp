@@ -137,7 +137,6 @@ class mc_enum
     static std::vector<std::string> const& s();
 
     // datum_base required implementation.
-    // TODO ?? Consider moving the implementation into the base class.
     virtual std::istream& read (std::istream&);
     virtual std::ostream& write(std::ostream&) const;
 

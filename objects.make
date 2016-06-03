@@ -714,6 +714,7 @@ mc_enum_test$(EXEEXT): \
   $(boost_common_objects) \
   $(common_test_objects) \
   calendar_date.o \
+  ce_product_name.o \
   datum_base.o \
   facets.o \
   global_settings.o \

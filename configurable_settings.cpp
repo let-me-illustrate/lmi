@@ -67,7 +67,9 @@ std::string const& configuration_filename()
 ///
 /// Look for the configuration file first where FHS would have it.
 /// To support non-FHS platforms, if it's not readable there, then
-/// look in the data directory.
+/// look in the data directory. Care should be taken to parse the
+/// command line early in main(), particularly because it may use
+/// '--data_path' to specify the data directory.
 ///
 /// Throws if the file is not readable.
 ///
@@ -99,9 +101,6 @@ fs::path const& configuration_filepath()
                             + configuration_filename();
     if(0 != access(filename.c_str(), R_OK))
         {
-        // TODO ?? At this point, AddDataDir() refers to the directory
-        // where the wx binary resides. A configurable_settings object
-        // apparently exists before ProcessCommandLine() is called.
         filename = AddDataDir(configuration_filename());
         if(0 != access(filename.c_str(), R_OK))
             {
