@@ -24,6 +24,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "ce_product_name.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_test_aux.hpp"
 
@@ -38,11 +39,13 @@
 struct mc_enum_test
 {
     static void test();
+    static void test_product_name();
 };
 
 int test_main(int, char*[])
 {
     mc_enum_test::test();
+    mc_enum_test::test_product_name();
     return 0;
 }
 
@@ -222,6 +225,18 @@ void mc_enum_test::test()
         (e_island unknown("Borneo")
         ,std::runtime_error
         ,""
+        );
+}
+
+void mc_enum_test::test_product_name()
+{
+    std::stringstream ss;
+    ss.str("invalid product");
+    ce_product_name x;
+    BOOST_TEST_THROW
+        (ss >> x
+        ,std::runtime_error
+        ,"Value 'invalid product' invalid for type 'ce_product_name'."
         );
 }
 

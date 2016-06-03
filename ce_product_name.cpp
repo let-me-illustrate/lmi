@@ -177,6 +177,11 @@ std::string ce_product_name::value() const
     return value_;
 }
 
+/// DWISOTT.
+///
+/// Calls operator=(std::string const&), which throws if the value
+/// read from the stream is invalid.
+
 std::istream& ce_product_name::read(std::istream& is)
 {
     std::locale old_locale = is.imbue(blank_is_not_whitespace_locale());

@@ -59,8 +59,6 @@
 /// program might write the 'sample' product's files if it finds no
 /// other product.
 ///
-/// TODO ?? Add unit tests.
-///
 /// TODO ?? Can't read() and write() be moved to the base class?
 
 class ce_product_name
