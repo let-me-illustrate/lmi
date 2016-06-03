@@ -30,7 +30,7 @@
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
-#include "msw_workarounds.hpp"
+#include "msw_workarounds.hpp"          // PreloadDesignatedDlls()
 #include "obstruct_slicing.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
@@ -907,9 +907,6 @@ int main(int argc, char* argv[])
 {
     initialize_application();
     initialize_filesystem();
-#ifdef LMI_MSW
-    MswDllPreloader::instance().PreloadDesignatedDlls();
-#endif
 
     // We need to handle test-specific options and remove them from argv before
     // letting wxEntry() instantiate Skeleton application object that would
@@ -918,6 +915,10 @@ int main(int argc, char* argv[])
         {
         return 0;
         }
+
+#ifdef LMI_MSW
+    MswDllPreloader::instance().PreloadDesignatedDlls();
+#endif
 
     return wxEntry(argc, argv);
 }

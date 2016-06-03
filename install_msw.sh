@@ -166,7 +166,7 @@ echo -n "8fa614e38dde6f7ab0f9fade87dfa2e3"         >/opt/lmi/data/passkey
 
 # Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
 
-cat >/opt/lmi/bin/configurable_settings.xml <<EOF
+cat >/opt/lmi/data/configurable_settings.xml <<EOF
 <?xml version="1.0"?>
 <configurable_settings version="2">
   <calculation_summary_columns/>
