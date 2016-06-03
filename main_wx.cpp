@@ -39,7 +39,6 @@
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"
 #include "main_common.hpp"              // initialize_application()
-#include "msw_workarounds.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
 
@@ -95,7 +94,6 @@ int WINAPI WinMain
 #ifndef LMI_MSW
         result = wxEntry(argc, argv);
 #else // LMI_MSW defined.
-        MswDllPreloader::instance().PreloadDesignatedDlls();
         result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 #endif // LMI_MSW defined.
         }
