@@ -177,27 +177,24 @@ void PreferencesModel::DoTransmogrify()
 {
 }
 
+/// Determine whether any member has been changed.
+///
+/// Any parse_calculation_summary_columns() diagnostics are repeated
+/// when 'unchanged' is constructed, because the ctor calls Load().
+/// But Load() must be called in that case, because a copy of *(this)
+/// would be identical to itself, frustrating this function's purpose.
+///
+/// The test that compares column selections as a single string is not
+/// superfluous: it serves to detect removal of invalid substrings by
+/// parse_calculation_summary_columns().
+///
+/// This might be renamed operator==(configurable_settings const&),
+/// but that doesn't seem clearer.
+
 bool PreferencesModel::IsModified() const
 {
     PreferencesModel unchanged;
-// CALCULATION_SUMMARY Apparently unneeded: ctor calls Load().
-//    unchanged.Load();
-// Unfortunately, construction of 'unchanged' therefore causes any
-// parse_calculation_summary_columns() diagnostics to be repeated.
-// It would seem better to permit copying, and then use a copy.
-    if(unchanged.UseBuiltinCalculationSummary != UseBuiltinCalculationSummary)
-        {
-        return true;
-        }
     configurable_settings const& z = configurable_settings::instance();
-    if(string_of_column_names() != z.calculation_summary_columns())
-        {
-        return true;
-        }
-    // This test duplicates the preceding one. This one may be what
-    // is ultimately wanted, but for now at least it doesn't detect
-    // parse_calculation_summary_columns()'s removal of invalid
-    // substrings.
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
@@ -206,6 +203,12 @@ bool PreferencesModel::IsModified() const
             return true;
             }
         }
+
+    if(string_of_column_names() != z.calculation_summary_columns())
+        {
+        return true;
+        }
+
     return false;
 }
 

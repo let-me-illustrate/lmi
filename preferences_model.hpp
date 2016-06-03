@@ -47,8 +47,6 @@ class LMI_SO PreferencesModel
     PreferencesModel();
     virtual ~PreferencesModel();
 
-    // TODO ?? CALCULATION_SUMMARY Use operator==() instead of
-    // IsModified(), once column selections are stored individually.
     bool IsModified() const;
     void Load();
     void Save() const;
