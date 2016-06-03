@@ -320,28 +320,6 @@ void configurable_settings::redintegrate_ex_post
         }
 }
 
-// TODO ?? CALCULATION_SUMMARY Address the validation issue:
-
-/// A whitespace-delimited list of columns to be shown on the
-/// calculation summary, unless overridden by
-/// use_builtin_calculation_summary(true).
-///
-/// Precondition: Argument is semantically valid; ultimately this will
-/// be validated elsewhere.
-
-void configurable_settings::calculation_summary_columns(std::string const& s)
-{
-    calculation_summary_columns_ = s;
-}
-
-/// If true, then use built-in default calculation-summary columns;
-/// otherwise, use calculation_summary_columns().
-
-void configurable_settings::use_builtin_calculation_summary(bool b)
-{
-    use_builtin_calculation_summary_ = b;
-}
-
 /// A whitespace-delimited list of columns to be shown on the
 /// calculation summary, unless overridden by
 /// use_builtin_calculation_summary(true).
@@ -429,11 +407,6 @@ int configurable_settings::seconds_to_pause_between_printouts() const
 
 /// Name of '.xrc' interface skin.
 
-void configurable_settings::skin_filename(std::string const& skin_filename)
-{
-    skin_filename_ = skin_filename;
-}
-
 std::string const& configurable_settings::skin_filename() const
 {
     return skin_filename_;
@@ -468,7 +441,10 @@ std::string const& configurable_settings::xsl_fo_command() const
 
 namespace
 {
-std::vector<std::string> parse_calculation_summary_columns(std::string const& s)
+std::vector<std::string> parse_calculation_summary_columns
+    (std::string const& s
+    ,bool               use_builtin_calculation_summary
+    )
 {
     std::istringstream iss(s);
     std::vector<std::string> const& allowable = all_strings<mcenum_report_column>();
@@ -491,6 +467,15 @@ std::vector<std::string> parse_calculation_summary_columns(std::string const& s)
                 ;
             }
         }
+
+    if(columns.empty() && !use_builtin_calculation_summary)
+        {
+        warning()
+            << "Calculation summary will be empty: no columns chosen."
+            << LMI_FLUSH
+            ;
+        }
+
     return columns;
 }
 } // Unnamed namespace.
@@ -498,7 +483,10 @@ std::vector<std::string> parse_calculation_summary_columns(std::string const& s)
 std::vector<std::string> input_calculation_summary_columns()
 {
     configurable_settings const& z = configurable_settings::instance();
-    return parse_calculation_summary_columns(z.calculation_summary_columns());
+    return parse_calculation_summary_columns
+        (z.calculation_summary_columns()
+        ,z.use_builtin_calculation_summary()
+        );
 }
 
 std::vector<std::string> effective_calculation_summary_columns()
@@ -506,8 +494,9 @@ std::vector<std::string> effective_calculation_summary_columns()
     configurable_settings const& z = configurable_settings::instance();
     return parse_calculation_summary_columns
         (z.use_builtin_calculation_summary()
-        ? default_calculation_summary_columns()
-        : z.calculation_summary_columns()
+            ? default_calculation_summary_columns()
+            : z.calculation_summary_columns()
+        ,z.use_builtin_calculation_summary()
         );
 }
 

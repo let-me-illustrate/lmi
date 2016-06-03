@@ -75,7 +75,7 @@ std::size_t const number_of_custom_columns
 // Special name used when the column is not used at all. This is the same
 // string used in preferences_model.cpp, but we duplicate it here as we don't
 // have access to it.
-char const* const magic_null_column_name = "[none]";
+char const* const empty_column_name = "[none]";
 
 // Total number of configurable summary columns. This, again, duplicates the
 // number [implicitly] used in preferences_model.cpp.
@@ -323,7 +323,7 @@ LMI_WX_TEST_CASE(calculation_summary)
                         }
                     else
                         {
-                        LMI_ASSERT_EQUAL(column, magic_null_column_name);
+                        LMI_ASSERT_EQUAL(column, empty_column_name);
                         }
                     }
 
@@ -347,7 +347,7 @@ LMI_WX_TEST_CASE(calculation_summary)
             for(unsigned n = 0; n < total_number_of_columns; ++n)
                 {
                 focus_column_combobox(n);
-                ui.Select(n == 2 ? "NewCashLoan" : magic_null_column_name);
+                ui.Select(n == 2 ? "NewCashLoan" : empty_column_name);
                 }
 
             return wxID_OK;
@@ -379,7 +379,7 @@ LMI_WX_TEST_CASE(calculation_summary)
                 {
                 LMI_ASSERT_EQUAL
                     (focus_column_combobox(n)->GetValue()
-                    ,magic_null_column_name
+                    ,empty_column_name
                     );
                 }
 
@@ -414,7 +414,7 @@ LMI_WX_TEST_CASE(calculation_summary)
                 {
                 LMI_ASSERT_EQUAL
                     (focus_column_combobox(n)->GetValue()
-                    ,magic_null_column_name
+                    ,empty_column_name
                     );
                 }
 

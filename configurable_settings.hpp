@@ -54,10 +54,6 @@ class LMI_SO configurable_settings
 
     void save() const;
 
-    void calculation_summary_columns(std::string const&);
-    void use_builtin_calculation_summary(bool);
-    void skin_filename(std::string const&);
-
     std::string const& calculation_summary_columns        () const;
     std::string const& cgi_bin_log_filename               () const;
     std::string const& custom_input_0_filename            () const;

@@ -29,6 +29,7 @@
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "miscellany.hpp"               // begins_with()
+#include "value_cast.hpp"
 
 #include <cstddef>                      // std::size_t
 #include <sstream>
@@ -36,23 +37,11 @@
 
 namespace
 {
-// TODO ?? CALCULATION_SUMMARY Evgeniy has asked:
-// what is the proper way to retrieve the magic "[none]" value?
-//
-// Answer: I guess I'd clone some similar code, like
-// configuration_filename() in 'configurable_settings.cpp', just for
-// consistency; and then, what is most important, search for every use
-// of that string in every other module and replace them all with
-// calls to a function like that--which therefore might belong in some
-// other module.
-//
-// However, it would be even better to reimplement this class to
-// configure every data member in class configurable_settings, and
+// Empty columns: it would be even better to reimplement this class to
 // store the twelve instances of mce_report_column here the same way
-// that class 'Input' stores its twelve in its xml file. Then the
-// whole issue would vanish.
+// that class 'Input' stores its twelve in its xml file.
 
-std::string magic_null_column_name("[none]");
+std::string const empty_column_name("[none]");
 
 /// Does a member name nominate a calculation-summary column?
 
@@ -63,7 +52,6 @@ bool is_calculation_summary_column_name(std::string const& member_name)
 } // Unnamed namespace.
 
 PreferencesModel::PreferencesModel()
-    :UseBuiltinCalculationSummary("No")
 {
     AscribeMembers();
     Load();
@@ -75,20 +63,24 @@ PreferencesModel::~PreferencesModel()
 
 void PreferencesModel::AscribeMembers()
 {
-    ascribe("UseBuiltinCalculationSummary", &PreferencesModel::UseBuiltinCalculationSummary);
-    ascribe("CalculationSummaryColumn00"  , &PreferencesModel::CalculationSummaryColumn00);
-    ascribe("CalculationSummaryColumn01"  , &PreferencesModel::CalculationSummaryColumn01);
-    ascribe("CalculationSummaryColumn02"  , &PreferencesModel::CalculationSummaryColumn02);
-    ascribe("CalculationSummaryColumn03"  , &PreferencesModel::CalculationSummaryColumn03);
-    ascribe("CalculationSummaryColumn04"  , &PreferencesModel::CalculationSummaryColumn04);
-    ascribe("CalculationSummaryColumn05"  , &PreferencesModel::CalculationSummaryColumn05);
-    ascribe("CalculationSummaryColumn06"  , &PreferencesModel::CalculationSummaryColumn06);
-    ascribe("CalculationSummaryColumn07"  , &PreferencesModel::CalculationSummaryColumn07);
-    ascribe("CalculationSummaryColumn08"  , &PreferencesModel::CalculationSummaryColumn08);
-    ascribe("CalculationSummaryColumn09"  , &PreferencesModel::CalculationSummaryColumn09);
-    ascribe("CalculationSummaryColumn10"  , &PreferencesModel::CalculationSummaryColumn10);
-    ascribe("CalculationSummaryColumn11"  , &PreferencesModel::CalculationSummaryColumn11);
-    ascribe("SkinFileName"                , &PreferencesModel::SkinFileName);
+    ascribe("CalculationSummaryColumn00"    , &PreferencesModel::CalculationSummaryColumn00    );
+    ascribe("CalculationSummaryColumn01"    , &PreferencesModel::CalculationSummaryColumn01    );
+    ascribe("CalculationSummaryColumn02"    , &PreferencesModel::CalculationSummaryColumn02    );
+    ascribe("CalculationSummaryColumn03"    , &PreferencesModel::CalculationSummaryColumn03    );
+    ascribe("CalculationSummaryColumn04"    , &PreferencesModel::CalculationSummaryColumn04    );
+    ascribe("CalculationSummaryColumn05"    , &PreferencesModel::CalculationSummaryColumn05    );
+    ascribe("CalculationSummaryColumn06"    , &PreferencesModel::CalculationSummaryColumn06    );
+    ascribe("CalculationSummaryColumn07"    , &PreferencesModel::CalculationSummaryColumn07    );
+    ascribe("CalculationSummaryColumn08"    , &PreferencesModel::CalculationSummaryColumn08    );
+    ascribe("CalculationSummaryColumn09"    , &PreferencesModel::CalculationSummaryColumn09    );
+    ascribe("CalculationSummaryColumn10"    , &PreferencesModel::CalculationSummaryColumn10    );
+    ascribe("CalculationSummaryColumn11"    , &PreferencesModel::CalculationSummaryColumn11    );
+    ascribe("DefaultInputFilename"          , &PreferencesModel::DefaultInputFilename          );
+    ascribe("PrintDirectory"                , &PreferencesModel::PrintDirectory                );
+    ascribe("SecondsToPauseBetweenPrintouts", &PreferencesModel::SecondsToPauseBetweenPrintouts);
+    ascribe("SkinFileName"                  , &PreferencesModel::SkinFileName                  );
+    ascribe("SpreadsheetFileExtension"      , &PreferencesModel::SpreadsheetFileExtension      );
+    ascribe("UseBuiltinCalculationSummary"  , &PreferencesModel::UseBuiltinCalculationSummary  );
 }
 
 void PreferencesModel::DoAdaptExternalities()
@@ -136,6 +128,8 @@ void PreferencesModel::DoEnforceProscription(std::string const&)
 
 void PreferencesModel::DoHarmonize()
 {
+    SecondsToPauseBetweenPrintouts.minimum_and_maximum(0, 60);
+
     bool do_not_use_builtin_defaults = "No" == UseBuiltinCalculationSummary;
     CalculationSummaryColumn00.enable(do_not_use_builtin_defaults);
     CalculationSummaryColumn01.enable(do_not_use_builtin_defaults);
@@ -183,27 +177,24 @@ void PreferencesModel::DoTransmogrify()
 {
 }
 
+/// Determine whether any member has been changed.
+///
+/// Any parse_calculation_summary_columns() diagnostics are repeated
+/// when 'unchanged' is constructed, because the ctor calls Load().
+/// But Load() must be called in that case, because a copy of *(this)
+/// would be identical to itself, frustrating this function's purpose.
+///
+/// The test that compares column selections as a single string is not
+/// superfluous: it serves to detect removal of invalid substrings by
+/// parse_calculation_summary_columns().
+///
+/// This might be renamed operator==(configurable_settings const&),
+/// but that doesn't seem clearer.
+
 bool PreferencesModel::IsModified() const
 {
     PreferencesModel unchanged;
-// CALCULATION_SUMMARY Apparently unneeded: ctor calls Load().
-//    unchanged.Load();
-// Unfortunately, construction of 'unchanged' therefore causes any
-// parse_calculation_summary_columns() diagnostics to be repeated.
-// It would seem better to permit copying, and then use a copy.
-    if(unchanged.UseBuiltinCalculationSummary != UseBuiltinCalculationSummary)
-        {
-        return true;
-        }
     configurable_settings const& z = configurable_settings::instance();
-    if(string_of_column_names() != z.calculation_summary_columns())
-        {
-        return true;
-        }
-    // This test duplicates the preceding one. This one may be what
-    // is ultimately wanted, but for now at least it doesn't detect
-    // parse_calculation_summary_columns()'s removal of invalid
-    // substrings.
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
@@ -212,17 +203,20 @@ bool PreferencesModel::IsModified() const
             return true;
             }
         }
+
+    if(string_of_column_names() != z.calculation_summary_columns())
+        {
+        return true;
+        }
+
     return false;
 }
 
 void PreferencesModel::Load()
 {
-    std::vector<std::string> columns(input_calculation_summary_columns());
-
     configurable_settings const& z = configurable_settings::instance();
-    bool b = z.use_builtin_calculation_summary();
-    UseBuiltinCalculationSummary = b ? "Yes" : "No";
 
+    std::vector<std::string> columns(input_calculation_summary_columns());
     for(std::size_t i = 0; i < member_names().size(); ++i)
         {
         std::string const& name = member_names()[i];
@@ -232,7 +226,7 @@ void PreferencesModel::Load()
             }
         if(columns.size() <= i)
             {
-            operator[](name) = magic_null_column_name;
+            operator[](name) = empty_column_name;
             }
         else
             {
@@ -240,7 +234,12 @@ void PreferencesModel::Load()
             }
         }
 
-    SkinFileName = z.skin_filename();
+    DefaultInputFilename           = z.default_input_filename();
+    PrintDirectory                 = z.print_directory();
+    SecondsToPauseBetweenPrintouts = z.seconds_to_pause_between_printouts();
+    SkinFileName                   = z.skin_filename();
+    SpreadsheetFileExtension       = z.spreadsheet_file_extension();
+    UseBuiltinCalculationSummary   = z.use_builtin_calculation_summary() ? "Yes" : "No";
 }
 
 std::string PreferencesModel::string_of_column_names() const
@@ -254,7 +253,7 @@ std::string PreferencesModel::string_of_column_names() const
             continue;
             }
         std::string const column = operator[](*i).str();
-        if(column != magic_null_column_name)
+        if(column != empty_column_name)
             {
             oss << column << " ";
             }
@@ -264,17 +263,14 @@ std::string PreferencesModel::string_of_column_names() const
 
 void PreferencesModel::Save() const
 {
-    std::string s(string_of_column_names());
-    if(s.empty() && "Yes" != UseBuiltinCalculationSummary)
-        {
-        warning()
-            << "Calculation summary will be empty: no columns chosen."
-            << LMI_FLUSH
-            ;
-        }
     configurable_settings& z = configurable_settings::instance();
-    z.calculation_summary_columns(s);
-    z.use_builtin_calculation_summary("Yes" == UseBuiltinCalculationSummary);
-    z.skin_filename(SkinFileName.value());
+
+    z["calculation_summary_columns"       ] = string_of_column_names();
+    z["default_input_filename"            ] = DefaultInputFilename    .value();
+    z["print_directory"                   ] = PrintDirectory          .value();
+    z["seconds_to_pause_between_printouts"] = value_cast<std::string>(SecondsToPauseBetweenPrintouts.value());
+    z["skin_filename"                     ] = SkinFileName            .value();
+    z["spreadsheet_file_extension"        ] = SpreadsheetFileExtension.value();
+    z["use_builtin_calculation_summary"   ] = value_cast<std::string>("Yes" == UseBuiltinCalculationSummary);
 }
 
