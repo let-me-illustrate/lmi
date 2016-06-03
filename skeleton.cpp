@@ -66,6 +66,7 @@
 #include "mec_document.hpp"
 #include "mec_view.hpp"
 #include "miscellany.hpp"
+#include "msw_workarounds.hpp"
 #include "mvc_controller.hpp"
 #include "policy_document.hpp"
 #include "policy_view.hpp"
@@ -691,6 +692,11 @@ bool Skeleton::OnInit()
             }
 
         authenticate_system();
+
+        // It is important for this line to be after ProcessCommandLine() call
+        // as it uses configurable_settings which is loaded from the file whose
+        // location can be specified using a command line option.
+        MswDllPreloader::instance().PreloadDesignatedDlls();
 
         wxInitAllImageHandlers();
 
