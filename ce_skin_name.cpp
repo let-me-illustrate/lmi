@@ -22,6 +22,7 @@
 #include "ce_skin_name.hpp"
 
 #include "alert.hpp"
+#include "contains.hpp"
 #include "facets.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"               // begins_with()
@@ -74,9 +75,16 @@ std::vector<std::string> const& skin_names()
     return names;
 }
 
+/// Default skin is 'skin.xrc' if that file exists,
+/// else the first skin file found.
+
 std::string const& default_skin_name()
 {
-    static std::string const default_name("default");
+    static std::string const default_name =
+        contains(skin_names(), "skin.xrc")
+        ? std::string("skin.xrc")
+        : skin_names().front()
+        ;
     return default_name;
 }
 } // Unnamed namespace.
