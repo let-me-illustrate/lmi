@@ -55,7 +55,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstddef>                      // NULL
 #include <cstdio>                       // std::printf()
 #include <ios>
 #include <iostream>
@@ -274,7 +273,7 @@ void process_command_line(int argc, char* argv[])
 
             case 'e':
                 {
-                LMI_ASSERT(NULL != getopt_long.optarg);
+                LMI_ASSERT(nullptr != getopt_long.optarg);
                 std::string const s(getopt_long.optarg);
                 std::istringstream iss(s);
                 for(;EOF != iss.peek();)
@@ -306,7 +305,7 @@ void process_command_line(int argc, char* argv[])
 
             case 'f':
                 {
-                LMI_ASSERT(NULL != getopt_long.optarg);
+                LMI_ASSERT(nullptr != getopt_long.optarg);
                 std::string const s(getopt_long.optarg);
                 std::string const e = fs::extension(s);
                 if(".cns" == e || ".ill" == e || ".ini" == e || ".inix" == e)

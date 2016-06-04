@@ -44,7 +44,7 @@ IMPLEMENT_DYNAMIC_CLASS(TextEditView, ViewEx)
 
 TextEditView::TextEditView()
     :ViewEx      ()
-    ,text_window_(0)
+    ,text_window_(nullptr)
 {
 }
 

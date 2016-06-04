@@ -139,7 +139,7 @@ int extract_last_copyright_year(wxString const& html)
 // the dialog. The dialog name is only used for diagnostic purposes.
 wxHtmlWindow* find_html_window(wxWindow* parent, std::string const& dialog_name)
 {
-    wxHtmlWindow* html_win = 0;
+    wxHtmlWindow* html_win = nullptr;
     wxWindowList const& wl = parent->GetChildren();
     for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
@@ -173,7 +173,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
     {
         virtual int OnInvoked(wxDialog* d) const
             {
-            LMI_ASSERT(0 != d);
+            LMI_ASSERT(nullptr != d);
 
             // Extract the last word of the dialog title.
             wxString const last_word = d->GetTitle().AfterLast(' ');

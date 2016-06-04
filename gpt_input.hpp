@@ -227,7 +227,7 @@ template<> struct reconstitutor<datum_base, gpt_input>
     typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<gpt_input>& m)
         {
-        DesiredType* z = 0;
+        DesiredType* z = nullptr;
         z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<datum_string            >(m); if(z) return z;
         // Sequences.

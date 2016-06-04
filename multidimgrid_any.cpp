@@ -49,7 +49,7 @@ wxWindow* MultiDimAxisAny::CreateAdjustControl
     ,MultiDimTableAny& // unused: table
     )
 {
-    return NULL;
+    return nullptr;
 }
 
 bool MultiDimAxisAny::ApplyAdjustment(wxWindow&, unsigned int)
@@ -291,13 +291,13 @@ void MultiDimGrid::Init()
     table_data_refresh_counter_ = 0;
 
     // These pointers are used in IsFullyConstructed.
-    first_axis_choice_ = NULL;
-    second_axis_choice_ = NULL;
+    first_axis_choice_ = nullptr;
+    second_axis_choice_ = nullptr;
 }
 
 MultiDimGrid::~MultiDimGrid()
 {
-    // If we don't set grid() table to NULL, then a crash might occur.
+    // If we don't set grid() table to nullptr, then a crash might occur.
     // The reason is that MultiDimGrid has multiple base classes:
     // wxGridTableBase and wxPanel
     // By the time the wxPanel destructor is called
@@ -309,7 +309,7 @@ MultiDimGrid::~MultiDimGrid()
     // so that wxGridTableBase part is destroyed _after_ wxPanel base.
     // But it is not a good idea to depend on the base classes order,
     // especially when a change would lead to non-obvious crashes.
-    grid().SetTable(NULL);
+    grid().SetTable(nullptr);
 }
 
 bool MultiDimGrid::Create

@@ -65,12 +65,12 @@ std::string ViewName()
 template<typename ViewType>
 ViewType& PredominantView(wxDocument const& document)
 {
-    ViewType* view = 0;
+    ViewType* view = nullptr;
     wxList const& views = document.GetViews();
     for(wxList::const_iterator i = views.begin(); i != views.end(); ++i)
         {
         wxObject* p = *i;
-        LMI_ASSERT(0 != p);
+        LMI_ASSERT(nullptr != p);
         if(p->IsKindOf(CLASSINFO(ViewType)))
             {
             view = dynamic_cast<ViewType*>(p);

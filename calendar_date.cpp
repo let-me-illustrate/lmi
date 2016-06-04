@@ -788,9 +788,9 @@ calendar_date const& last_yyyy_date()
 
 calendar_date today()
 {
-    std::time_t const t0 = std::time(0);
+    std::time_t const t0 = std::time(nullptr);
     std::tm const*const t1 = std::localtime(&t0);
-    LMI_ASSERT(NULL != t1);
+    LMI_ASSERT(nullptr != t1);
     return calendar_date
         (1900 + t1->tm_year
         ,   1 + t1->tm_mon

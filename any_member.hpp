@@ -293,8 +293,8 @@ class any_member
 
 template<typename ClassType>
 any_member<ClassType>::any_member()
-    :object_(0)
-    ,content_(0)
+    :object_ (nullptr)
+    ,content_(nullptr)
 {}
 
 template<typename ClassType>
@@ -302,7 +302,7 @@ any_member<ClassType>::any_member(any_member const& other)
     :obstruct_slicing<any_member<ClassType> >()
     ,any_entity (other)
     ,object_    (other.object_)
-    ,content_   (other.content_ ? other.content_->clone() : 0)
+    ,content_   (other.content_ ? other.content_->clone() : nullptr)
 {}
 
 template<typename ClassType>
@@ -383,7 +383,7 @@ ExactMemberType* any_member<ClassType>::exact_cast()
     typedef ExactMemberType ClassType::* pmd_type;
     if(type() != typeid(pmd_type))
         {
-        return 0;
+        return nullptr;
         }
     typedef holder<ClassType,pmd_type> holder_type;
     LMI_ASSERT(content_);
@@ -444,7 +444,7 @@ struct reconstitutor
 {
     static MemberType* reconstitute(any_member<ClassType> const&)
         {
-        return 0;
+        return nullptr;
         }
 };
 
@@ -458,7 +458,7 @@ struct reconstitutor
 template<typename MemberType, typename ClassType>
 bool is_reconstitutable_as(any_member<ClassType>& member)
 {
-    return 0 != reconstitutor<MemberType,ClassType>::reconstitute(member);
+    return nullptr != reconstitutor<MemberType,ClassType>::reconstitute(member);
 }
 
 template<typename MemberType, typename ClassType>

@@ -112,20 +112,20 @@
 // GWC added this.
 #include <vector>
 
-char* GetOpt::nextchar = 0;
+char* GetOpt::nextchar = nullptr;
 int GetOpt::first_nonopt = 0;
 int GetOpt::last_nonopt = 0;
 
 GetOpt::GetOpt (int argc, char** argv, char const* optstring)
- :list_option (0)
+ :list_option (nullptr)
  ,list_option_first (0)
  ,optindvalue (EOF)
  ,opterr (true)
  ,nargc (argc)
  ,nargv (argv)
  ,noptstring (optstring)
- ,nlongopts (0)
- ,nlongind (0)
+ ,nlongopts (nullptr)
+ ,nlongind (nullptr)
  ,nlong_only (0)
 {
     Initialize (noptstring);
@@ -133,7 +133,7 @@ GetOpt::GetOpt (int argc, char** argv, char const* optstring)
 
 GetOpt::GetOpt (int argc, char** argv, char const* optstring,
                 Option const* longopts, int* longind, int long_only)
- :list_option (0)
+ :list_option (nullptr)
  ,list_option_first (0)
  ,optindvalue (EOF)
  ,opterr (true)
@@ -145,7 +145,7 @@ GetOpt::GetOpt (int argc, char** argv, char const* optstring,
  ,nlong_only (long_only)
 {
     // Automatically register any short-option alii for long options.
-    for(Option const* i = nlongopts; 0 != i->name; ++i)
+    for(Option const* i = nlongopts; nullptr != i->name; ++i)
         {
         if(!i->val)
             {
@@ -178,11 +178,11 @@ GetOpt::Initialize  (std::string const& a_optstring)
   // non-option ARGV-elements is empty.
 
   first_nonopt = last_nonopt = optind = 1;
-  optarg = nextchar = 0;
+  optarg = nextchar = nullptr;
 
   // Determine how to handle the ordering of options and nonoptions.
 
-  if (0 == a_optstring.c_str())
+  if (nullptr == a_optstring.c_str())
     {
       noptstring = "";
       if (std::getenv ("_POSIX_OPTION_ORDER"))
@@ -205,7 +205,7 @@ GetOpt::exchange (char** argv)
 // GWC substituted std::malloc() for alloca() and added call to std::free() below.
 //  char** temp = static_cast<char**>(alloca (nonopts_size));
   char** temp = static_cast<char**>(std::malloc (nonopts_size));
-  if(0 == temp)
+  if(nullptr == temp)
     {
     throw std::runtime_error("Out of memory.");
     }
@@ -233,9 +233,9 @@ GetOpt::List_Value  (int i)
 
   list_option_first = 0;
   optarg = nargv[i];
-  nextchar = 0;
+  nextchar = nullptr;
   if (list_option->has_arg != LIST_ARG)
-    list_option = 0;
+    list_option = nullptr;
   if (x->flag)
     {
       *(x->flag) = x->val;
@@ -250,10 +250,10 @@ GetOpt::List_No_Value  ()
   Option const* x = list_option;
 
   list_option_first = 0;
-  list_option = 0;
+  list_option = nullptr;
   optindvalue = EOF;
-  optarg = 0;
-  nextchar = 0;
+  optarg = nullptr;
+  nextchar = nullptr;
   if (x->flag)
     {
       *(x->flag) = x->val;
@@ -375,7 +375,7 @@ GetOpt::operator()()
             return EOF;
         }
 
-      if (list_option->valid == 0)
+      if (list_option->valid == nullptr)
         {
           // If there isn't a valid list of values,
           // try to see if current argument isn't an option.
@@ -393,7 +393,7 @@ GetOpt::operator()()
 
           char const** v;
 
-          for (v = list_option->valid, optindvalue = 0;  *v != 0; v++, optindvalue++)
+          for (v = list_option->valid, optindvalue = 0;  *v != nullptr; v++, optindvalue++)
             if (std::strcmp (*v, nargv[optind]) == 0)
               return  List_Value (optind++);
           optindvalue = EOF;
@@ -403,11 +403,11 @@ GetOpt::operator()()
 
           if (list_option_first)
             return  List_No_Value ();
-          list_option = 0;
+          list_option = nullptr;
         }
     }
 
-  if (nextchar == 0 || *nextchar == 0)
+  if (nextchar == nullptr || *nextchar == 0)
     {
       if (ordering == PERMUTE)
         {
@@ -456,7 +456,7 @@ GetOpt::operator()()
 
           if (list_option_first)
             return  List_No_Value ();
-          list_option = 0;
+          list_option = nullptr;
 
           // Set the next-arg-index to point at the non-options
           // that we previously skipped, so the caller will digest them.
@@ -476,7 +476,7 @@ GetOpt::operator()()
 
           if (list_option_first)
             return  List_No_Value ();
-          list_option = 0;
+          list_option = nullptr;
 
           if (ordering == REQUIRE_ORDER)
             return EOF;
@@ -521,7 +521,7 @@ GetOpt::operator()()
     {
       char* nameend;
       Option const* p;
-      Option const* pfound = 0;
+      Option const* pfound = nullptr;
       int exact = 0;
       int ambig = 0;
       int indfound = 0;
@@ -543,7 +543,7 @@ GetOpt::operator()()
                 exact = 1;
                 break;
               }
-            else if (pfound == 0)
+            else if (pfound == nullptr)
               {
                 // First nonexact match found.
                 pfound = p;
@@ -574,7 +574,7 @@ GetOpt::operator()()
 
           if (list_option_first)
             return  List_No_Value ();
-          list_option = 0;
+          list_option = nullptr;
 
           option_index = indfound;
           optind++;
@@ -639,7 +639,7 @@ GetOpt::operator()()
                 break;
 
               default:
-                optarg = 0;
+                optarg = nullptr;
                 break;
 
              }
@@ -667,7 +667,7 @@ GetOpt::operator()()
               {
                 char const** v;
 
-                for (v = pfound->valid, optindvalue = 0;  *v != 0; v++, optindvalue++)
+                for (v = pfound->valid, optindvalue = 0;  *v != nullptr; v++, optindvalue++)
                   if (std::strcmp (*v, optarg) == 0)
                     return  result;
                 optindvalue = EOF;
@@ -701,7 +701,7 @@ GetOpt::operator()()
       // option, then it's an error.
       // Otherwise interpret it as a short option.
 
-      if (!nlong_only || nargv[optind][1] == '-' || std::strchr (noptstring.c_str(), *nextchar) == 0)
+      if (!nlong_only || nargv[optind][1] == '-' || std::strchr (noptstring.c_str(), *nextchar) == nullptr)
         {
           if (list_option)
             // It is not a long option, but it is a value for LIST_ARG
@@ -740,7 +740,7 @@ GetOpt::operator()()
     if (*nextchar == 0)
       optind++;
 
-    if (temp == 0 || c == ':')
+    if (temp == nullptr || c == ':')
       {
         if (opterr)
           {
@@ -751,7 +751,7 @@ GetOpt::operator()()
 
                 if (list_option_first)
                   return  List_No_Value ();
-                list_option = 0;
+                list_option = nullptr;
 
                 std::fprintf (stderr, "%s: unrecognized option, character code 0%o\n",
                          nargv[0], c);
@@ -774,7 +774,7 @@ GetOpt::operator()()
 
     if (list_option_first)
       return  List_No_Value ();
-    list_option = 0;
+    list_option = nullptr;
 
     if (temp[1] == ':')
       {
@@ -787,8 +787,8 @@ GetOpt::operator()()
                 optind++;
               }
             else
-              optarg = 0;
-            nextchar = 0;
+              optarg = nullptr;
+            nextchar = nullptr;
           }
         else
           {
@@ -812,7 +812,7 @@ GetOpt::operator()()
               // We already incremented 'optind' once;
               // increment it again when taking next ARGV-elt as argument.
               optarg = nargv[optind++];
-            nextchar = 0;
+            nextchar = nullptr;
           }
       }
     return c;
@@ -826,7 +826,7 @@ GetOpt::next_arg (int& i)
 
   // Terminates LIST_ARG processing.
 
-  list_option = 0;
+  list_option = nullptr;
 
   if (0 < std::sscanf (nargv[optind], "%d", &tmp))
     {
@@ -845,7 +845,7 @@ GetOpt::next_arg (double& d)
 
   // Terminates LIST_ARG processing.
 
-  list_option = 0;
+  list_option = nullptr;
 
   if (0 < std::sscanf (nargv[optind], "%lf", &tmp))
     {
@@ -863,7 +863,7 @@ GetOpt::next_arg (std::string& s)
 {
   // Terminates LIST_ARG processing.
 
-  list_option = 0;
+  list_option = nullptr;
 
   if ('-' != nargv[optind][0])
     {
@@ -888,7 +888,7 @@ GetOpt::usage(std::ostream& os)
     typedef str_vec::iterator str_vec_i;
     str_vec option_names;
     str_vec option_descriptions;
-    for(Option const* i = nlongopts; 0 != i->name; ++i)
+    for(Option const* i = nlongopts; nullptr != i->name; ++i)
         {
         int const c = i->val;
         std::string s;
@@ -898,7 +898,7 @@ GetOpt::usage(std::ostream& os)
             // Don't show options with intentionally-bizarre 'val'.
             continue;
             }
-        else if(0 == i->flag && std::isalpha(c))
+        else if(nullptr == i->flag && std::isalpha(c))
             {
             s += '-';
             s += static_cast<char>(c);

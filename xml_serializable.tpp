@@ -225,7 +225,7 @@ std::string const& xml_serializable<T>::xml_root_name() const
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const& x
-    ,typename boost::enable_if<boost::is_same<X,Y> >::type* = 0
+    ,typename boost::enable_if<boost::is_same<X,Y> >::type* = nullptr
     )
 {
     return x;
@@ -234,7 +234,7 @@ inline Y sfinae_cast
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const&
-    ,typename boost::disable_if<boost::is_same<X,Y> >::type* = 0
+    ,typename boost::disable_if<boost::is_same<X,Y> >::type* = nullptr
     )
 {
     fatal_error() << "Impermissible type conversion." << LMI_FLUSH;

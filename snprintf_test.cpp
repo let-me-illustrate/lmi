@@ -38,7 +38,7 @@ int test_main(int, char*[])
     char buf[1000] = "zzzzzzzzz";
     int len;
 
-    len = snprintf(0, 0, "%4d", 1234);
+    len = snprintf(nullptr, 0, "%4d", 1234);
     BOOST_TEST_EQUAL(4, len);
 
     // All tests in this group fail with the defective msvc rtl.

@@ -90,7 +90,7 @@ END_EVENT_TABLE()
 mec_view::mec_view()
     :ViewEx       ()
     ,html_content_("Unable to display results.")
-    ,html_window_ (0)
+    ,html_window_ (nullptr)
 {
 }
 

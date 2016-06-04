@@ -123,7 +123,7 @@ class LMI_SO callback
 template<typename FunctionPointer>
 FunctionPointer callback<FunctionPointer>::operator()() const
 {
-    if(0 == function_pointer_)
+    if(nullptr == function_pointer_)
         {
         throw std::logic_error("Callback pointer is null.");
         }
@@ -133,11 +133,11 @@ FunctionPointer callback<FunctionPointer>::operator()() const
 template<typename FunctionPointer>
 void callback<FunctionPointer>::initialize(FunctionPointer concrete_pointer)
 {
-    if(0 != function_pointer_)
+    if(nullptr != function_pointer_)
         {
         throw std::logic_error("Callback pointer already initialized.");
         }
-    if(0 == concrete_pointer)
+    if(nullptr == concrete_pointer)
         {
         throw std::logic_error("Attempt to reset callback pointer to null.");
         }

@@ -62,13 +62,13 @@ std::string getopt_test::test(int argc, char* argv[])
     // These preconditions are required by C++98 3.6.1/2 and also by
     // C99 5.1.2.2.1; violating them could cause a crash.
     LMI_ASSERT(0 <= argc);
-    LMI_ASSERT(0 == argv[argc]);
+    LMI_ASSERT(nullptr == argv[argc]);
 
     std::ostringstream oss;
 
-    static char const* vfile[] = {"file", "archive", 0};
-    static char const* vlist[] = {"one", "two", "three", 0};
-    static char const* vopt [] = {"optional", "alternative", 0};
+    static char const* vfile[] = {"file", "archive", nullptr};
+    static char const* vlist[] = {"one", "two", "three", nullptr};
+    static char const* vopt [] = {"optional", "alternative", nullptr};
     static Option long_options[] =
         {
             {"add"     ,REQD_ARG ,0 ,  0 ,0     ,""},
@@ -206,14 +206,14 @@ int test_main(int, char*[])
     char arg0[] = {""};
     char arg1[] = {"--verbose"};
     char arg2[] = {"xyz"};
-    char* test_argv[] = {arg0, arg1, arg2, 0};
+    char* test_argv[] = {arg0, arg1, arg2, nullptr};
     int test_argc = -1 + static_cast<int>(lmi_array_size(test_argv));
     std::string s = getopt_test::test(test_argc, test_argv);
     BOOST_TEST_EQUAL(s, "option verbose\nnon-option ARGV-elements: xyz\n");
     }
 
     {
-    char* test_argv[] = {0};
+    char* test_argv[] = {nullptr};
     int test_argc = -1 + static_cast<int>(lmi_array_size(test_argv));
     std::string s = getopt_test::test(test_argc, test_argv);
     BOOST_TEST_EQUAL(s, "");
@@ -223,7 +223,7 @@ int test_main(int, char*[])
     char arg0[] = {""};
     char arg1[] = {"-o"};
     char arg2[] = {"-d1,2,3"};
-    char* test_argv[] = {arg0, arg1, arg2, 0};
+    char* test_argv[] = {arg0, arg1, arg2, nullptr};
     int test_argc = -1 + static_cast<int>(lmi_array_size(test_argv));
     std::string s = getopt_test::test(test_argc, test_argv);
     BOOST_TEST_EQUAL(s, "option o\noption d with value '1,2,3'\n");

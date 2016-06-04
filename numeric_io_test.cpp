@@ -310,12 +310,12 @@ int test_main(int, char*[])
 //    BOOST_TEST_THROW(numeric_io_cast<double*>("0"), std::invalid_argument, "");
 
     BOOST_TEST_THROW
-        (numeric_io_cast<std::string>((char const*)(0))
+        (numeric_io_cast<std::string>((char const*)nullptr)
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to std::string."
         );
     BOOST_TEST_THROW
-        (numeric_io_cast<unsigned int>((char const*)(0))
+        (numeric_io_cast<unsigned int>((char const*)nullptr)
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to number."
         );

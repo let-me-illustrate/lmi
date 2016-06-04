@@ -480,7 +480,7 @@ template<> struct reconstitutor<datum_sequence, Input>
     typedef datum_sequence DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
         {
-        DesiredType* z = 0;
+        DesiredType* z = nullptr;
         z = exact_cast<dbo_sequence            >(m); if(z) return z;
         z = exact_cast<mode_sequence           >(m); if(z) return z;
         z = exact_cast<numeric_sequence        >(m); if(z) return z;
@@ -498,7 +498,7 @@ template<> struct reconstitutor<mc_enum_base, Input>
     typedef mc_enum_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
         {
-        DesiredType* z = 0;
+        DesiredType* z = nullptr;
         z = exact_cast<ce_product_name         >(m); if(z) return z;
         z = exact_cast<mce_class               >(m); if(z) return z;
         z = exact_cast<mce_country             >(m); if(z) return z;
@@ -544,7 +544,7 @@ template<> struct reconstitutor<tn_range_base, Input>
     typedef tn_range_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
         {
-        DesiredType* z = 0;
+        DesiredType* z = nullptr;
         z = exact_cast<tnr_age                 >(m); if(z) return z;
         z = exact_cast<tnr_corridor_factor     >(m); if(z) return z;
         z = exact_cast<tnr_date                >(m); if(z) return z;
@@ -566,7 +566,7 @@ template<> struct reconstitutor<datum_base, Input>
     typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
         {
-        DesiredType* z = 0;
+        DesiredType* z = nullptr;
         z = exact_cast<datum_string            >(m); if(z) return z;
         z = reconstitutor<datum_sequence,Input>::reconstitute(m); if(z) return z;
         z = reconstitutor<mc_enum_base  ,Input>::reconstitute(m); if(z) return z;

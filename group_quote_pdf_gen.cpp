@@ -35,7 +35,7 @@ callback<group_quote_pdf_generator::creator_type>
 } // Unnnamed namespace.
 
 typedef group_quote_pdf_generator::creator_type FunctionPointer;
-template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = 0;
+template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = nullptr;
 
 bool group_quote_pdf_generator::set_creator(creator_type f)
 {

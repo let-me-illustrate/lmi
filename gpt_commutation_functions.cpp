@@ -268,7 +268,7 @@ double gpt_cf_triad::calculate_premium
         : (oe_gsp == glp_or_gsp                               ) ? &cf_gsp
         : throw std::runtime_error("Cannot determine GPT assumptions.")
         ;
-    LMI_ASSERT(0 != pcf); // Redundant: demonstrably cannot fail.
+    LMI_ASSERT(nullptr != pcf); // Redundant: demonstrably cannot fail.
     double const z = pcf->calculate_premium(glp_or_gsp, args);
     LMI_ASSERT(0.0 <= z);
     return z;

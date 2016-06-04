@@ -44,7 +44,7 @@
 ///
 /// Motivation: Some libraries provide accessors that return pointers,
 /// which may be null, to a base class, e.g.
-///   wxWindow* wxView::GetFrame(); // NULL if no frame exists.
+///   wxWindow* wxView::GetFrame(); // nullptr if no frame exists.
 /// through which an application may need to call derived-class member
 /// functions. Undefined behavior occurs if the pointer is null or the
 /// pointee's dynamic type is inappropriate, and it is all too easy to

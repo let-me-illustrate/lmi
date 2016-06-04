@@ -53,7 +53,7 @@ namespace lmi
     inline std::string Demangle(char const* mangled_name)
     {
         int status = 0;
-        char* demangled_name = abi::__cxa_demangle(mangled_name, 0, 0, &status);
+        char* demangled_name = abi::__cxa_demangle(mangled_name, nullptr, nullptr, &status);
         std::string s = (0 == status) ? demangled_name : mangled_name;
         std::free(demangled_name);
         return s;

@@ -37,7 +37,7 @@ std::ostringstream& progress_meter_unit_test_stream()
     return oss;
 }
 
-progress_meter_creator_type progress_meter_creator = 0;
+progress_meter_creator_type progress_meter_creator = nullptr;
 
 boost::shared_ptr<progress_meter> create_progress_meter
     (int                               max_count
@@ -45,7 +45,7 @@ boost::shared_ptr<progress_meter> create_progress_meter
     ,progress_meter::enum_display_mode display_mode
     )
 {
-    if(0 == progress_meter_creator)
+    if(nullptr == progress_meter_creator)
         {
         fatal_error() << "Function pointer not yet initialized." << LMI_FLUSH;
         }
@@ -55,7 +55,7 @@ boost::shared_ptr<progress_meter> create_progress_meter
 
 bool set_progress_meter_creator(progress_meter_creator_type f)
 {
-    if(0 != progress_meter_creator)
+    if(nullptr != progress_meter_creator)
         {
         // TODO ?? Use 'callback.hpp' instead, and consider whether
         // this message can ever actually be displayed--either in its

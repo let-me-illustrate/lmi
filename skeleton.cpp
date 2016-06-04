@@ -200,9 +200,9 @@ END_EVENT_TABLE()
 ///     the "AppName" (but not the "AppDisplayName").
 
 Skeleton::Skeleton()
-    :config_          (0)
-    ,doc_manager_     (0)
-    ,frame_           (0)
+    :config_          (nullptr)
+    ,doc_manager_     (nullptr)
+    ,frame_           (nullptr)
     ,timer_           (this)
 {
     SetAppName("lmi_wx");
@@ -728,7 +728,7 @@ bool Skeleton::OnInit()
 
         frame_ = new(wx) wxDocMDIParentFrame
             (doc_manager_
-            ,NULL
+            ,nullptr
             ,wxID_ANY
             ,"lmi"
             ,wxDefaultPosition
@@ -1272,7 +1272,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
             case 'f':
                 {
-                LMI_ASSERT(NULL != getopt_long.optarg);
+                LMI_ASSERT(nullptr != getopt_long.optarg);
                 input_files.push_back(getopt_long.optarg);
                 }
                 break;

@@ -392,19 +392,19 @@ int try_main(int argc, char* argv[])
     int option_index = 0;
     static struct Option long_options[] =
       {
-        {"help"           , NO_ARG,   0, 'h', 0    , "display this help and exit"},
-        {"delete"         , REQD_ARG, 0, 'd', 0    , "delete table #n from database"},
-        {"license"        , NO_ARG,   0, 'l', 0    , "display license and exit"},
-        {"accept"         , NO_ARG,   0, 'a', 0    , "accept license (-l to display)"},
-        {"file=FILE"      , REQD_ARG, 0, 'f', 0    , "use database FILE"},
-        {"crc"            , NO_ARG,   0, 'c', 0    , "show CRCs of all tables"},
-        {"list"           , NO_ARG,   0, 't', 0    , "list all tables"},
-        {"merge=TEXTFILE" , REQD_ARG, 0, 'm', 0    , "merge TEXTFILE into database"},
-        {"extract=n"      , REQD_ARG, 0, 'e', 0    , "extract table #n into n.txt"},
-        {"extract-all"    , NO_ARG,   0, 'x', 0    , "extract all tables to text files"},
-        {"rename=NAMEFILE", REQD_ARG, 0, 'r', 0    , "rename tables from NAMEFILE"},
-        {"verify"         , NO_ARG,   0, 'v', 0    , "verify integrity of all tables"},
-        {0                , NO_ARG,   0,   0, 0    , ""}
+        {"help"        ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"delete"      ,REQD_ARG ,0 ,'d' ,0 ,"delete table #n from database"},
+        {"license"     ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
+        {"accept"      ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
+        {"file=FILE"   ,REQD_ARG ,0 ,'f' ,0 ,"use database FILE"},
+        {"crc"         ,NO_ARG   ,0 ,'c' ,0 ,"show CRCs of all tables"},
+        {"list"        ,NO_ARG   ,0 ,'t' ,0 ,"list all tables"},
+        {"merge=FILE"  ,REQD_ARG ,0 ,'m' ,0 ,"merge FILE into database"},
+        {"extract=n"   ,REQD_ARG ,0 ,'e' ,0 ,"extract table #n into n.txt"},
+        {"extract-all" ,NO_ARG   ,0 ,'x' ,0 ,"extract all tables to txt files"},
+        {"rename=FILE" ,REQD_ARG ,0 ,'r' ,0 ,"rename tables from FILE"},
+        {"verify"      ,NO_ARG   ,0 ,'v' ,0 ,"verify integrity of all tables"},
+        {0             ,NO_ARG   ,0 ,0   ,0 ,""}
       };
     bool license_accepted = false;
     bool show_license     = false;

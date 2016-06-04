@@ -213,7 +213,7 @@ template<> struct reconstitutor<base_datum, S>
     typedef base_datum DesiredType;
     static DesiredType* reconstitute(any_member<S>& m)
         {
-        DesiredType* z = 0;
+        DesiredType* z = nullptr;
         z = exact_cast<DesiredType  >(m); if(z) return z;
         z = exact_cast<derived_datum>(m); if(z) return z;
         return z;
