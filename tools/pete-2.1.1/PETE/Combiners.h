@@ -166,7 +166,7 @@ struct Combine1<A, Op, TreeCombine >
 {
   typedef UnaryNode<Op, A> Type_t;
   inline static
-  Type_t combine(const A &a, const TreeCombine &t)
+  Type_t combine(const A &a, const TreeCombine &)
   {
     return Type_t(a);
   }
@@ -177,7 +177,7 @@ struct Combine2<A, B, Op, TreeCombine >
 {
   typedef BinaryNode<Op, A, B> Type_t;
   inline static
-  Type_t combine(const A &a, const B &b, const TreeCombine &t)
+  Type_t combine(const A &a, const B &b, const TreeCombine &)
   {
     return Type_t(a, b);
   }
@@ -188,7 +188,7 @@ struct Combine3<A, B, C, Op, TreeCombine >
 {
   typedef TrinaryNode<Op, A, B, C> Type_t;
   inline static
-  Type_t combine(const A &a, const B &b, const C &c, const TreeCombine &t)
+  Type_t combine(const A &a, const B &b, const C &c, const TreeCombine &)
   {
     return Type_t(a, b, c);
   }
