@@ -182,8 +182,11 @@ GetOpt::Initialize  (std::string const& a_optstring)
 
   // Determine how to handle the ordering of options and nonoptions.
 
-  if (nullptr == a_optstring.c_str())
+  // GWC replaced an erroneous test comparing nullptr to
+  // a_optstring.c_str(), which cannot be a null pointer:
+  if (a_optstring.empty())
     {
+      // GWC comment: the next line is apparently pleonastic.
       noptstring = "";
       if (std::getenv ("_POSIX_OPTION_ORDER"))
         ordering = REQUIRE_ORDER;
