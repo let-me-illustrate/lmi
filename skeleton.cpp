@@ -686,7 +686,7 @@ bool Skeleton::OnInit()
         wxLog::SetActiveTarget(new DebugStderrLog);
 #endif // defined __WXMSW__
 
-        if(false == ProcessCommandLine(argc, argv))
+        if(false == ProcessCommandLine())
             {
             return false;
             }
@@ -1191,7 +1191,7 @@ void Skeleton::UponWindowTileVertically(wxCommandEvent&)
 #endif // !wxCHECK_VERSION(2,6,0)
 }
 
-bool Skeleton::ProcessCommandLine(int argc, char* argv[])
+bool Skeleton::ProcessCommandLine()
 {
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
