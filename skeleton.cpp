@@ -691,11 +691,13 @@ bool Skeleton::OnInit()
             return false;
             }
 
+#ifdef LMI_MSW
         // Preload DLLs after calling ProcessCommandLine(). Reason:
         // command-line option '--data_path' may specify the directory
         // from which 'configurable_settings.xml' is read, and that
         // XML file gives the list of DLLs to preload.
         MswDllPreloader::instance().PreloadDesignatedDlls();
+#endif // LMI_MSW defined.
 
         authenticate_system();
 
