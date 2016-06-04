@@ -161,21 +161,21 @@ void process_command_line(int argc, char* argv[])
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
-        {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
-        {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"pyx"       ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
-        {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"license"   ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
-        {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
-        {"selftest"  ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
-        {"profile"   ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
-        {"emit"      ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
-        {"file"      ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
-        {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases and exit"},
-        {0           ,NO_ARG   ,0 ,0   ,0 ,""}
+        {"ash_nazg"  ,NO_ARG   ,nullptr ,001 ,nullptr ,"ash nazg durbatulûk"},
+        {"ash_naz"   ,NO_ARG   ,nullptr ,003 ,nullptr ,"fraud"},
+        {"mellon"    ,NO_ARG   ,nullptr ,002 ,nullptr ,"pedo mellon a minno"},
+        {"mello"     ,NO_ARG   ,nullptr ,003 ,nullptr ,"fraud"},
+        {"pyx"       ,REQD_ARG ,nullptr ,'x' ,nullptr ,"for docimasy"},
+        {"help"      ,NO_ARG   ,nullptr ,'h' ,nullptr ,"display this help and exit"},
+        {"license"   ,NO_ARG   ,nullptr ,'l' ,nullptr ,"display license and exit"},
+        {"accept"    ,NO_ARG   ,nullptr ,'a' ,nullptr ,"accept license (-l to display)"},
+        {"selftest"  ,NO_ARG   ,nullptr ,'s' ,nullptr ,"perform self test and exit"},
+        {"profile"   ,NO_ARG   ,nullptr ,'o' ,nullptr ,"set up for profiling and exit"},
+        {"emit"      ,REQD_ARG ,nullptr ,'e' ,nullptr ,"choose what output to emit"},
+        {"file"      ,REQD_ARG ,nullptr ,'f' ,nullptr ,"input file to run"},
+        {"data_path" ,REQD_ARG ,nullptr ,'d' ,nullptr ,"path to data files"},
+        {"print_db"  ,NO_ARG   ,nullptr ,'p' ,nullptr ,"print product databases and exit"},
+        {nullptr     ,NO_ARG   ,nullptr ,0   ,nullptr ,""}
       };
 
     bool license_accepted    = false;
@@ -274,7 +274,7 @@ void process_command_line(int argc, char* argv[])
 
             case 'e':
                 {
-                LMI_ASSERT(NULL != getopt_long.optarg);
+                LMI_ASSERT(nullptr != getopt_long.optarg);
                 std::string const s(getopt_long.optarg);
                 std::istringstream iss(s);
                 for(;EOF != iss.peek();)
@@ -306,7 +306,7 @@ void process_command_line(int argc, char* argv[])
 
             case 'f':
                 {
-                LMI_ASSERT(NULL != getopt_long.optarg);
+                LMI_ASSERT(nullptr != getopt_long.optarg);
                 std::string const s(getopt_long.optarg);
                 std::string const e = fs::extension(s);
                 if(".cns" == e || ".ill" == e || ".ini" == e || ".inix" == e)

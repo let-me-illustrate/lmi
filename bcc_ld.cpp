@@ -112,17 +112,17 @@ int try_main(int argc, char* argv[])
     // as you use '/' rather than '-' to introduce borland options.
     static Option long_options[] =
       {
-        {"help",         NO_ARG,   0, 001, 0, "display this help and exit"},
-        {"license",      NO_ARG,   0, 002, 0, "display license and exit"},
-        {"accept",       NO_ARG,   0, 003, 0, "accept license (-l to display)"},
-        {"def-file",     REQD_ARG, 0, 004, 0, "module definition file"},
-        {"map-file",     REQD_ARG, 0, 005, 0, "map file"},
-        {"program",      REQD_ARG, 0, 007, 0, "linker's filepath"},
-        {"startup-file", REQD_ARG, 0, 010, 0, "startup file"},
-        {"lib-path",     REQD_ARG, 0, 'L', 0, "library path"},
-        {"out-file",     REQD_ARG, 0, 'o', 0, "output executable file"},
-        {"/",            REQD_ARG, 0, '/', 0, "linker option"},
-        {0,              NO_ARG,   0,   0, 0, ""}
+        {"help",         NO_ARG,   nullptr, 001, nullptr, "display this help and exit"},
+        {"license",      NO_ARG,   nullptr, 002, nullptr, "display license and exit"},
+        {"accept",       NO_ARG,   nullptr, 003, nullptr, "accept license (-l to display)"},
+        {"def-file",     REQD_ARG, nullptr, 004, nullptr, "module definition file"},
+        {"map-file",     REQD_ARG, nullptr, 005, nullptr, "map file"},
+        {"program",      REQD_ARG, nullptr, 007, nullptr, "linker's filepath"},
+        {"startup-file", REQD_ARG, nullptr, 010, nullptr, "startup file"},
+        {"lib-path",     REQD_ARG, nullptr, 'L', nullptr, "library path"},
+        {"out-file",     REQD_ARG, nullptr, 'o', nullptr, "output executable file"},
+        {"/",            REQD_ARG, nullptr, '/', nullptr, "linker option"},
+        {nullptr,        NO_ARG,   nullptr,   0, nullptr, ""}
       };
 
     bool license_accepted = false;

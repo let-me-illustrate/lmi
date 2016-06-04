@@ -161,40 +161,40 @@ bool Transferor::PerformTransfer(transfer_direction td)
     // Custom controls.
     InputSequenceEntry * sequence   ;
 
-    if     (0 != (button       = dynamic_cast<wxButton         *>(control)))
+    if     (nullptr != (button       = dynamic_cast<wxButton         *>(control)))
         return Transfer(td, data_,             *button      );
-    else if(0 != (checkbox     = dynamic_cast<wxCheckBox       *>(control)))
+    else if(nullptr != (checkbox     = dynamic_cast<wxCheckBox       *>(control)))
         return Transfer(td, data_,             *checkbox    );
-    else if(0 != (checklistbox = dynamic_cast<wxCheckListBox   *>(control)))
+    else if(nullptr != (checklistbox = dynamic_cast<wxCheckListBox   *>(control)))
         return Transfer(td, data_,             *checklistbox);
-    else if(0 != (combobox     = dynamic_cast<wxComboBox       *>(control)))
+    else if(nullptr != (combobox     = dynamic_cast<wxComboBox       *>(control)))
         return Transfer(td, data_,             *combobox    );
-    else if(0 != (choice       = dynamic_cast<wxChoice         *>(control)))
+    else if(nullptr != (choice       = dynamic_cast<wxChoice         *>(control)))
         return Transfer(td, data_,             *choice      );
-    else if(0 != (datepicker   = dynamic_cast<wxDatePickerCtrl *>(control)))
+    else if(nullptr != (datepicker   = dynamic_cast<wxDatePickerCtrl *>(control)))
         return Transfer(td, data_,             *datepicker  );
-    else if(0 != (gauge        = dynamic_cast<wxGauge          *>(control)))
+    else if(nullptr != (gauge        = dynamic_cast<wxGauge          *>(control)))
         return Transfer(td, data_,             *gauge       );
-    else if(0 != (listbox      = dynamic_cast<wxListBox        *>(control)))
+    else if(nullptr != (listbox      = dynamic_cast<wxListBox        *>(control)))
         return Transfer(td, data_,             *listbox     );
-    else if(0 != (radiobox     = dynamic_cast<wxRadioBox       *>(control)))
+    else if(nullptr != (radiobox     = dynamic_cast<wxRadioBox       *>(control)))
         return Transfer(td, data_,             *radiobox    );
-    else if(0 != (radiobutton  = dynamic_cast<wxRadioButton    *>(control)))
+    else if(nullptr != (radiobutton  = dynamic_cast<wxRadioButton    *>(control)))
         return Transfer(td, data_,             *radiobutton );
-    else if(0 != (scrollbar    = dynamic_cast<wxScrollBar      *>(control)))
+    else if(nullptr != (scrollbar    = dynamic_cast<wxScrollBar      *>(control)))
         return Transfer(td, data_,             *scrollbar   );
-    else if(0 != (slider       = dynamic_cast<wxSlider         *>(control)))
+    else if(nullptr != (slider       = dynamic_cast<wxSlider         *>(control)))
         return Transfer(td, data_,             *slider      );
-    else if(0 != (spinbutton   = dynamic_cast<wxSpinButton     *>(control)))
+    else if(nullptr != (spinbutton   = dynamic_cast<wxSpinButton     *>(control)))
         return Transfer(td, data_,             *spinbutton  );
-    else if(0 != (spinctrl     = dynamic_cast<wxSpinCtrl       *>(control)))
+    else if(nullptr != (spinctrl     = dynamic_cast<wxSpinCtrl       *>(control)))
         return Transfer(td, data_,             *spinctrl    );
-    else if(0 != (statictext   = dynamic_cast<wxStaticText     *>(control)))
+    else if(nullptr != (statictext   = dynamic_cast<wxStaticText     *>(control)))
         return Transfer(td, data_,             *statictext  );
-    else if(0 != (textctrl     = dynamic_cast<wxTextCtrl       *>(control)))
+    else if(nullptr != (textctrl     = dynamic_cast<wxTextCtrl       *>(control)))
         return Transfer(td, data_,             *textctrl    );
     // Custom controls.
-    else if(0 != (sequence     = dynamic_cast<InputSequenceEntry *>(control)))
+    else if(nullptr != (sequence     = dynamic_cast<InputSequenceEntry *>(control)))
         return Transfer(td, data_,             *sequence    );
     else
         {

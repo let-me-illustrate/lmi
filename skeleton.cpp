@@ -200,9 +200,9 @@ END_EVENT_TABLE()
 ///     the "AppName" (but not the "AppDisplayName").
 
 Skeleton::Skeleton()
-    :config_          (0)
-    ,doc_manager_     (0)
-    ,frame_           (0)
+    :config_          (nullptr)
+    ,doc_manager_     (nullptr)
+    ,frame_           (nullptr)
     ,timer_           (this)
 {
     SetAppName("lmi_wx");
@@ -728,7 +728,7 @@ bool Skeleton::OnInit()
 
         frame_ = new(wx) wxDocMDIParentFrame
             (doc_manager_
-            ,NULL
+            ,nullptr
             ,wxID_ANY
             ,"lmi"
             ,wxDefaultPosition
@@ -1196,17 +1196,17 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =
       {
-        {"ash_nazg"     ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
-        {"ash_naz"      ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"help"         ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"mellon"       ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
-        {"mello"        ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"pyx"          ,REQD_ARG ,0 ,'x' ,0 ,"for docimasy"},
-        {"file"         ,REQD_ARG ,0 ,'f' ,0 ,"input file to run"},
-        {"data_path"    ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"print_db"     ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
-        {"prospicience" ,REQD_ARG ,0 ,004 ,0 ,"validation date"},
-        {0              ,NO_ARG   ,0 ,0   ,0 ,""}
+        {"ash_nazg"     ,NO_ARG   ,nullptr ,001 ,nullptr ,"ash nazg durbatulûk"},
+        {"ash_naz"      ,NO_ARG   ,nullptr ,003 ,nullptr ,"fraud"},
+        {"help"         ,NO_ARG   ,nullptr ,'h' ,nullptr ,"display this help and exit"},
+        {"mellon"       ,NO_ARG   ,nullptr ,002 ,nullptr ,"pedo mellon a minno"},
+        {"mello"        ,NO_ARG   ,nullptr ,003 ,nullptr ,"fraud"},
+        {"pyx"          ,REQD_ARG ,nullptr ,'x' ,nullptr ,"for docimasy"},
+        {"file"         ,REQD_ARG ,nullptr ,'f' ,nullptr ,"input file to run"},
+        {"data_path"    ,REQD_ARG ,nullptr ,'d' ,nullptr ,"path to data files"},
+        {"print_db"     ,NO_ARG   ,nullptr ,'p' ,nullptr ,"print product databases"},
+        {"prospicience" ,REQD_ARG ,nullptr ,004 ,nullptr ,"validation date"},
+        {nullptr        ,NO_ARG   ,nullptr ,0   ,nullptr ,""}
       };
 
     bool show_help        = false;
@@ -1272,7 +1272,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
             case 'f':
                 {
-                LMI_ASSERT(NULL != getopt_long.optarg);
+                LMI_ASSERT(nullptr != getopt_long.optarg);
                 input_files.push_back(getopt_long.optarg);
                 }
                 break;

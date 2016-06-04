@@ -34,7 +34,7 @@ namespace
 }
 
 typedef system_command_fp_type FunctionPointer;
-template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = 0;
+template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = nullptr;
 
 bool system_command_initialize(system_command_fp_type f)
 {

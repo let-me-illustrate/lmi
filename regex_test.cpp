@@ -204,7 +204,7 @@ void mete()
         :1 == Function ? contains_regex1
         :2 == Function ? contains_regex2
         :3 == Function ? contains_regex3
-        :0
+        :nullptr
         ;
     f(Regex);
 }

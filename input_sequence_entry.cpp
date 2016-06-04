@@ -589,7 +589,7 @@ void InputSequenceEditor::insert_row(int new_row)
             ,wxDefaultPosition
             ,wxDefaultSize
             ,0
-            ,NULL
+            ,nullptr
             ,keywords_only_ ? wxCB_READONLY : 0
             );
         value_ctrl = combo;
@@ -669,7 +669,7 @@ void InputSequenceEditor::insert_row(int new_row)
     remove->Connect
         (wxEVT_COMMAND_BUTTON_CLICKED
         ,wxCommandEventHandler(InputSequenceEditor::UponRemoveRow)
-        ,NULL
+        ,nullptr
         ,this
         );
     sizer_->wxSizer::Insert(insert_pos++, remove, wxSizerFlags(flags).TripleBorder(wxLEFT));
@@ -691,7 +691,7 @@ void InputSequenceEditor::insert_row(int new_row)
     add->Connect
         (wxEVT_COMMAND_BUTTON_CLICKED
         ,wxCommandEventHandler(InputSequenceEditor::UponAddRow)
-        ,NULL
+        ,nullptr
         ,this
         );
     sizer_->wxSizer::Insert(insert_pos++, add, wxSizerFlags(flags).Border(wxLEFT, 0).Right());
@@ -1379,7 +1379,7 @@ InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
 } // Unnamed namespace.
 
 InputSequenceEntry::InputSequenceEntry()
-    :input_(0)
+    :input_(nullptr)
 {
 }
 
@@ -1388,7 +1388,7 @@ InputSequenceEntry::InputSequenceEntry
     ,wxWindowID         id
     ,wxString const&    name
     )
-    :input_(0)
+    :input_(nullptr)
 {
     Create(parent, id, name);
 }
@@ -1421,26 +1421,26 @@ bool InputSequenceEntry::Create
     text_->Connect
         (wxEVT_KILL_FOCUS
         ,wxFocusEventHandler(InputSequenceEntry::UponChildKillFocus)
-        ,NULL
+        ,nullptr
         ,this
         );
     text_->Connect
         (wxEVT_TEXT_ENTER
         ,wxCommandEventHandler(InputSequenceEntry::UponEnter)
-        ,NULL
+        ,nullptr
         ,this
         );
 
     button_->Connect
         (wxEVT_KILL_FOCUS
         ,wxFocusEventHandler(InputSequenceEntry::UponChildKillFocus)
-        ,NULL
+        ,nullptr
         ,this
         );
     button_->Connect
         (wxEVT_COMMAND_BUTTON_CLICKED
         ,wxCommandEventHandler(InputSequenceEntry::UponOpenEditor)
-        ,NULL
+        ,nullptr
         ,this
         );
 
@@ -1498,7 +1498,7 @@ void InputSequenceEntry::UponChildKillFocus(wxFocusEvent& event)
 {
     // Don't notify the parent (and thus wxDataViewCtrl) of focus change if its within this
     // InputSequenceEntry composite control or a InputSequenceEditor window opened from it.
-    if(0 == event.GetWindow() ||
+    if(nullptr == event.GetWindow() ||
        (event.GetWindow()->GetParent() != GetParent() &&
         wxGetTopLevelParent(event.GetWindow())->GetParent() != this))
         {

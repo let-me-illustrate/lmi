@@ -238,7 +238,7 @@ void EnumerateLineage
     for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
         wxWindow* c = *i;
-        LMI_ASSERT(0 != c);
+        LMI_ASSERT(nullptr != c);
         v.push_back(c);
         EnumerateLineage(c, v);
         }

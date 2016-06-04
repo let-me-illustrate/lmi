@@ -166,7 +166,7 @@ To stream_cast(From from, To = To())
 template<>
 inline std::string stream_cast<std::string>(char* from, std::string)
 {
-    if(0 == from)
+    if(nullptr == from)
         {
         throw std::runtime_error
             ("Cannot convert (char*)(0) to std::string."
@@ -178,7 +178,7 @@ inline std::string stream_cast<std::string>(char* from, std::string)
 template<>
 inline std::string stream_cast<std::string>(char const* from, std::string)
 {
-    if(0 == from)
+    if(nullptr == from)
         {
         throw std::runtime_error
             ("Cannot convert (char const*)(0) to std::string."

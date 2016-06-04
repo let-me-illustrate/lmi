@@ -207,7 +207,7 @@ struct numeric_converter<To, char const*>
     typedef char const* From;
     To operator()(From from) const
         {
-        if(0 == from)
+        if(nullptr == from)
             {
             throw std::runtime_error
                 ("Cannot convert (char const*)(0) to number."
@@ -356,7 +356,7 @@ struct numeric_converter<std::string, char const*>
     typedef std::string To;
     To operator()(From from) const
         {
-        if(0 == from)
+        if(nullptr == from)
             {
             throw std::runtime_error
                 ("Cannot convert (char const*)(0) to std::string."

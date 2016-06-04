@@ -62,11 +62,11 @@ struct has_member_find
     template<typename PMF, PMF pmf> struct spoiler;
 
     template<typename D>
-    static nay_t deduce(D*, spoiler<void (Mixin::*)(), &D::find>* = 0);
+    static nay_t deduce(D*, spoiler<void (Mixin::*)(), &D::find>* = nullptr);
 
     static yea_t deduce(...);
 
-    static bool const value = sizeof(yea_t) == sizeof deduce((Derived*)(0));
+    static bool const value = sizeof(yea_t) == sizeof deduce((Derived*)nullptr);
 };
 
 /// Ascertain whether a "container" includes a given element.
@@ -82,7 +82,7 @@ template<typename T>
 bool contains
     (T const& t
     ,typename T::value_type const& element
-    ,typename boost::disable_if<has_member_find<T> >::type* = 0
+    ,typename boost::disable_if<has_member_find<T> >::type* = nullptr
     )
 {
     return t.end() != std::find(t.begin(), t.end(), element);
@@ -98,7 +98,7 @@ template<typename T>
 bool contains
     (T const& t
     ,T const& element
-    ,typename T::traits_type::char_type const* = 0
+    ,typename T::traits_type::char_type const* = nullptr
     )
 {
     return T::npos != t.find(element);
