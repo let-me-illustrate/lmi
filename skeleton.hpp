@@ -129,7 +129,7 @@ class Skeleton
     virtual int  OnExit               ();
     virtual void OnUnhandledException ();
 
-    bool ProcessCommandLine(int argc, char* argv[]);
+    bool ProcessCommandLine();
     void OpenCommandLineFiles(std::vector<std::string> const& files);
     void UpdateViews();
 
