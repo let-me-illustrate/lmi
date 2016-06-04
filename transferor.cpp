@@ -71,6 +71,7 @@ namespace
     bool Transfer(transfer_direction, std::string&, wxChoice&         );
     bool Transfer(transfer_direction, std::string&, wxComboBox&       );
     bool Transfer(transfer_direction, std::string&, wxDatePickerCtrl& );
+    bool Transfer(transfer_direction, std::string&, wxDirPickerCtrl&  );
     bool Transfer(transfer_direction, std::string&, wxFilePickerCtrl& );
     bool Transfer(transfer_direction, std::string&, wxGauge&          );
     bool Transfer(transfer_direction, std::string&, wxListBox&        );
@@ -150,6 +151,7 @@ bool Transferor::PerformTransfer(transfer_direction td)
     wxComboBox       * combobox     ;
     wxChoice         * choice       ;
     wxDatePickerCtrl * datepicker   ;
+    wxDirPickerCtrl  * dirpicker    ;
     wxFilePickerCtrl * filepicker   ;
     wxGauge          * gauge        ;
     wxListBox        * listbox      ;
@@ -176,6 +178,8 @@ bool Transferor::PerformTransfer(transfer_direction td)
         return Transfer(td, data_,             *choice      );
     else if(0 != (datepicker   = dynamic_cast<wxDatePickerCtrl *>(control)))
         return Transfer(td, data_,             *datepicker  );
+    else if(0 != (dirpicker    = dynamic_cast<wxDirPickerCtrl *>(control)))
+        return Transfer(td, data_,             *dirpicker   );
     else if(0 != (filepicker   = dynamic_cast<wxFilePickerCtrl *>(control)))
         return Transfer(td, data_,             *filepicker  );
     else if(0 != (gauge        = dynamic_cast<wxGauge          *>(control)))
@@ -381,6 +385,19 @@ namespace
             wxDateTime wx_date = control.GetValue();
             calendar_date lmi_date = ConvertDateFromWx(wx_date);
             data = numeric_io_cast<std::string>(lmi_date.julian_day_number());
+            }
+        return true;
+    }
+
+    bool Transfer(transfer_direction td, std::string& data, wxDirPickerCtrl& control)
+    {
+        if(td == from_string_to_control)
+            {
+            control.SetPath(data);
+            }
+        else
+            {
+            data = control.GetPath().ToStdString();
             }
         return true;
     }

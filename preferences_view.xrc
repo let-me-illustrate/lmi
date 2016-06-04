@@ -269,10 +269,9 @@
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="PrintDirectory">
-<!-- change soon to:
                     <object class="wxDirPickerCtrl" name="PrintDirectory">
--->
+                        <style>wxDIRP_DIR_MUST_EXIST|wxDIRP_USE_TEXTCTRL|wxDIRP_SMALL</style>
+                        <message>Choose directory where PDF files are written</message>
                         <help>Location where PDF files are written</help>
                         <size>180,-1</size>
                     </object>
