@@ -252,10 +252,10 @@
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="DefaultInputFilename">
-<!-- change soon to:
                     <object class="wxFilePickerCtrl" name="DefaultInputFilename">
--->
+                        <style>wxFLP_OPEN|wxFLP_FILE_MUST_EXIST|wxFLP_USE_TEXTCTRL|wxFLP_SMALL</style>
+                        <message>Choose default file for new illustrations and censuses</message>
+                        <wildcard>Illustrations (*.ill)|*.ill|All files|*.*</wildcard>
                         <help>Name of file with customized input values that are used as defaults for new illustrations and censuses</help>
                         <size>180,-1</size>
                     </object>
@@ -269,10 +269,9 @@
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="PrintDirectory">
-<!-- change soon to:
                     <object class="wxDirPickerCtrl" name="PrintDirectory">
--->
+                        <style>wxDIRP_DIR_MUST_EXIST|wxDIRP_USE_TEXTCTRL|wxDIRP_SMALL</style>
+                        <message>Choose directory where PDF files are written</message>
                         <help>Location where PDF files are written</help>
                         <size>180,-1</size>
                     </object>
