@@ -889,14 +889,14 @@ void AccountValue::TxTakeWD()
     //   max loan: cannot become overloaned until end of policy year.
     // However, lmi provides a variety of implementations instead of
     // only one.
-    double MaxWD =
+    double maxWD =
           AVUnloaned
         + (AVRegLn  + AVPrfLn)
         - (RegLnBal + PrfLnBal)
         - mlydedtonextmodalpmtdate;
-    if(MaxWD < wd)
+    if(maxWD < wd)
         {
-        wd = MaxWD;
+        wd = maxWD;
         }
 
     AVUnloaned -= wd;

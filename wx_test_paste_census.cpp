@@ -297,12 +297,12 @@ LMI_WX_TEST_CASE(paste_census)
                 gender_radiobox = dynamic_cast<wxRadioBox*>(gender_window);
             LMI_ASSERT(gender_radiobox);
 
-            wxUIActionSimulator ui;
+            wxUIActionSimulator ui2;
             // Select the last, "Unisex", radio button, by simulating
             // down-arrow twice: female --> male, then male --> unisex.
-            ui.Char(WXK_DOWN);
+            ui2.Char(WXK_DOWN);
             wxYield();
-            ui.Char(WXK_DOWN);
+            ui2.Char(WXK_DOWN);
             wxYield();
 
             LMI_ASSERT_EQUAL(gender_radiobox->GetSelection(), 2);
@@ -370,8 +370,8 @@ LMI_WX_TEST_CASE(paste_census)
                 class_radiobox = dynamic_cast<wxRadioBox*>(class_window);
             LMI_ASSERT(class_radiobox);
 
-            wxUIActionSimulator ui;
-            ui.Char(WXK_UP); // Select the first, "Preferred", radio button.
+            wxUIActionSimulator ui2;
+            ui2.Char(WXK_UP); // Select the first, "Preferred", radio button.
             wxYield();
 
             LMI_ASSERT_EQUAL(class_radiobox->GetSelection(), 0);

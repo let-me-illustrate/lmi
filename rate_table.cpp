@@ -2725,7 +2725,7 @@ void database_impl::delete_table(table::Number number)
     remove_index_entry(number);
 }
 
-void database_impl::save(fs::path const& path)
+void database_impl::save(fs::path const& output_path)
 {
     // This class ensures that we either overwrite both the output .ndx and
     // .dat files or don't change either of them if an error happens (unless a
@@ -2943,7 +2943,7 @@ void database_impl::save(fs::path const& path)
         safe_output_file database_;
     };
 
-    safe_database_output output(path);
+    safe_database_output output(output_path);
 
     save(output.index(), output.database());
 

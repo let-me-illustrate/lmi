@@ -125,7 +125,7 @@ LMI_WX_TEST_CASE(default_update)
         // depending on the skin used.
         static void ToggleUseDOB(wxWindow* usedob_window)
             {
-            wxUIActionSimulator ui;
+            wxUIActionSimulator ui2;
 
             if(dynamic_cast<wxRadioBox*>(usedob_window))
                 {
@@ -134,12 +134,12 @@ LMI_WX_TEST_CASE(default_update)
                 // GTK we also have to explicitly check it by pressing
                 // Space or Enter and as it doesn't do anything under MSW, we
                 // just do it unconditionally to avoid conditional compilation.
-                ui.Char(WXK_DOWN);
-                ui.Char(WXK_SPACE);
+                ui2.Char(WXK_DOWN);
+                ui2.Char(WXK_SPACE);
                 }
             else if(dynamic_cast<wxCheckBox*>(usedob_window))
                 {
-                ui.Char(WXK_SPACE);
+                ui2.Char(WXK_SPACE);
                 }
             else
                 {

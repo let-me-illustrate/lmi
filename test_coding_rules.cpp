@@ -491,9 +491,9 @@ void check_copyright(file const& f)
 
     if(f.is_of_phylum(e_html) && !f.phyloanalyze("^COPYING"))
         {
-        std::ostringstream oss;
-        oss << "Copyright &copy;[^\\n]*" << year;
-        require(f, oss.str(), "lacks current secondary copyright.");
+        std::ostringstream oss2;
+        oss2 << "Copyright &copy;[^\\n]*" << year;
+        require(f, oss2.str(), "lacks current secondary copyright.");
         }
 }
 

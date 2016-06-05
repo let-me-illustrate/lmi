@@ -202,10 +202,10 @@ LMI_WX_TEST_CASE(about_dialog_version)
             // And then press the default button in it which opens the license.
             struct expect_license_dialog : public wxExpectModalBase<wxDialog>
             {
-                virtual int OnInvoked(wxDialog* d) const
+                virtual int OnInvoked(wxDialog* license_dialog) const
                     {
                     wxHtmlWindow* const
-                        license_win = find_html_window(d, "license");
+                        license_win = find_html_window(license_dialog, "license");
 
                     // This is a rather indirect -- because testing this
                     // directly is not easily possible -- test of the scrollbar

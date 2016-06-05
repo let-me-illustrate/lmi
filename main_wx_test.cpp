@@ -210,8 +210,8 @@ class application_test
     struct test_descriptor
     {
         // The pointer must be non-NULL but we don't take ownership of it.
-        test_descriptor(wx_base_test_case* test)
-            :test(test)
+        test_descriptor(wx_base_test_case* t)
+            :test(t)
             ,run(run_default)
         {
         }
