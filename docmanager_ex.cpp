@@ -32,10 +32,10 @@
 // and in the later years given in the copyright notice above as
 // detailed in ChangeLog.
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // defined __BORLANDC__
 
 #include "docmanager_ex.hpp"
 

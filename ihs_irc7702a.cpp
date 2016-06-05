@@ -25,10 +25,10 @@
 
 // TODO ?? TAXATION !! Treat ROP increases as material changes exactly where needed.
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #include "ihs_irc7702a.hpp"
 

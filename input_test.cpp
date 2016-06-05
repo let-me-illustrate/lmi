@@ -19,10 +19,10 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 // Facilities offered by all of these headers are tested here.
 // Class product_database might appear not to belong, but it's

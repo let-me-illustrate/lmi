@@ -19,10 +19,10 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #include "ncnnnpnn.hpp"
 
@@ -32,7 +32,7 @@
 
 #if defined __BORLANDC__
 #   include <float.h>                   // nonstandard _control87()
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 int test_main(int, char*[])
 {
@@ -134,7 +134,7 @@ int test_main(int, char*[])
     // and signals a hardware exception; but we want to test them,
     // so we mask them from the application.
     _control87(0x00ff,  0x00ff);
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
     volatile long double d = 0.0;
     ncnnnpnn( 1.0 / d  );

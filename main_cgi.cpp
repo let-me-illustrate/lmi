@@ -31,10 +31,10 @@
 // other reasons evident in the repository or explained in 'ChangeLog'.
 // Any defect should not reflect on Stephen F. Booth's reputation.
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"

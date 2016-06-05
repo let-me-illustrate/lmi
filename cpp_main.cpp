@@ -56,10 +56,10 @@
 // may elect to do so because header-only implementation requires no library
 // build support. (Suggested by Ed Brey)
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #include "catch_exceptions.hpp"
 #include "getopt.hpp"

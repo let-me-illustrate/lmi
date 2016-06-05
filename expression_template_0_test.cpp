@@ -37,10 +37,10 @@
 #   define NDEBUG 1
 #endif // defined USE_UBLAS
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #include "et_vector.hpp"
 #include "materially_equal.hpp"

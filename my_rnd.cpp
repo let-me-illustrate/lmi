@@ -32,10 +32,10 @@
 // Those files are all you need: distributing the program itself isn't
 // necessary anyway.
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #include "rounding_rules.hpp"
 

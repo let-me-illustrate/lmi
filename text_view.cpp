@@ -27,10 +27,10 @@
 // class out of a larger file, and in the later years given in the
 // copyright notice above.
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // defined __BORLANDC__
 
 #include "text_view.hpp"
 

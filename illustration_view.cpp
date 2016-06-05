@@ -29,10 +29,10 @@
 // view class customized for illustration documents, and in the later
 // years given in the copyright notice above.
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // defined __BORLANDC__
 
 #include "illustration_view.hpp"
 

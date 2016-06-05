@@ -218,7 +218,7 @@ struct numeric_converter<To, char const*>
         }
 };
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 // COMPILER !! The borland compiler fails to ignore top-level
 // cv-qualifiers as 14.8.2/1 requires. Reference:
 //   http://groups.google.com/groups?as_umsgid=4164c8f0@newsgroups.borland.com
@@ -332,7 +332,7 @@ struct numeric_converter<std::string, std::string>
         }
 };
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 // COMPILER !! The borland compiler needs this to convert from a
 // string literal. It seems to type such constants as [non-const]
 // char*, ignoring 4.2/2 .
@@ -347,7 +347,7 @@ struct numeric_converter<std::string, char*>
         return from;
         }
 };
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 template<>
 struct numeric_converter<std::string, char const*>

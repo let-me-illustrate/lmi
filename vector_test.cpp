@@ -22,10 +22,10 @@
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"

@@ -29,10 +29,10 @@
 // to work. This file is retained because it might be useful on other
 // platforms (on which it hasn't been tested).
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #include "sigfpe.hpp"
 

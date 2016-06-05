@@ -30,10 +30,10 @@
 // Functions [ll,l]round[f,,l]() are not explicitly tested, though
 // they ideally ought to be.
 
-#ifdef __BORLANDC__
+#if defined __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #include "round_to.hpp"
 
