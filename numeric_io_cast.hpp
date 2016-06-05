@@ -122,10 +122,8 @@ To numeric_io_cast(From from, To = To())
 template<typename To, typename From>
 struct numeric_converter
 {
-#ifndef __BORLANDC__
     BOOST_STATIC_ASSERT(boost::is_void<To>::value);
     BOOST_STATIC_ASSERT(boost::is_void<From>::value);
-#endif // ! defined __BORLANDC__
 
     To operator()(From const& from) const
         {
@@ -149,9 +147,7 @@ struct numeric_converter
 template<typename To>
 struct numeric_converter<To, std::string>
 {
-#ifndef __BORLANDC__
     BOOST_STATIC_ASSERT(boost::is_arithmetic<To>::value);
-#endif // ! defined __BORLANDC__
 
     typedef std::string From;
     To operator()(From const& from) const
@@ -220,9 +216,7 @@ struct numeric_converter<To, char const*>
 template<typename From>
 struct numeric_converter<std::string, From>
 {
-#ifndef __BORLANDC__
     BOOST_STATIC_ASSERT(boost::is_arithmetic<From>::value);
-#endif // ! defined __BORLANDC__
 
     typedef std::string To;
     To operator()(From const& from) const

@@ -28,12 +28,10 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/is_function.hpp>
-#   include <boost/type_traits/is_pointer.hpp>
-#   include <boost/type_traits/remove_pointer.hpp>
-#endif // !defined __BORLANDC__
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_function.hpp>
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
 
 #include <stdexcept>
 

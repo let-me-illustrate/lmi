@@ -133,10 +133,6 @@ enum e_ieee754_rounding
     ,fe_towardzero = 0x03
     };
 
-#   if !defined __BORLANDC__
-// COMPILER !! Due to its poor support for non-type template
-// parameters, borland cannot compile this implementation.
-
 /// Parameters of 80x87 hardware control word.
 ///
 /// Reserved bits:
@@ -302,8 +298,6 @@ inline unsigned short int msw_to_intel(unsigned int m)
 {
     return msw_to_intel(msw_control_word(m));
 }
-
-#   endif // !defined __BORLANDC__
 
 /// Default settings for x87 fpu.
 
