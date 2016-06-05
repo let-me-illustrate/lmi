@@ -218,38 +218,6 @@ struct numeric_converter<To, char const*>
         }
 };
 
-#if defined __BORLANDC__
-// COMPILER !! The borland compiler fails to ignore top-level
-// cv-qualifiers as 14.8.2/1 requires. Reference:
-//   http://groups.google.com/groups?as_umsgid=4164c8f0@newsgroups.borland.com
-//
-template<typename To>
-struct numeric_converter<To, std::string const>
-{
-    typedef std::string From;
-    To operator()(From const& from) const
-        {
-        numeric_converter<To,std::string> z;
-        return z(from);
-        }
-};
-
-// COMPILER !! The borland compiler needs this to convert from a
-// string literal. It seems to type such constants as [non-const]
-// char*, ignoring 4.2/2 .
-//
-template<typename To>
-struct numeric_converter<To, char*>
-{
-    typedef char const* From;
-    To operator()(From const& from) const
-        {
-        numeric_converter<To,std::string> z;
-        return z(from);
-        }
-};
-#endif // defined __BORLANDC__
-
 // Conversion from arithmetic type to string uses maximum accurate
 // precision for floating point.
 //
@@ -331,23 +299,6 @@ struct numeric_converter<std::string, std::string>
         return from;
         }
 };
-
-#if defined __BORLANDC__
-// COMPILER !! The borland compiler needs this to convert from a
-// string literal. It seems to type such constants as [non-const]
-// char*, ignoring 4.2/2 .
-//
-template<>
-struct numeric_converter<std::string, char*>
-{
-    typedef char* From;
-    typedef std::string To;
-    To operator()(From const& from) const
-        {
-        return from;
-        }
-};
-#endif // defined __BORLANDC__
 
 template<>
 struct numeric_converter<std::string, char const*>

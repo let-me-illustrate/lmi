@@ -233,12 +233,6 @@ void tn_range_test::test_percentages(char const* file, int line)
 {
     // These workarounds for negative one permit running these tests
     // with unsigned percentage types, and avoid compiler warnings.
-#if defined __BORLANDC__
-    // COMPILER !! This definition somehow makes borland happy. See
-    //  http://groups.google.com/groups?selm=4196a049%241%40newsgroups.borland.com
-    T::number_type work_around_borland_defect;
-    &work_around_borland_defect;
-#endif // defined __BORLANDC__
     typedef typename T::number_type N;
     // Use this to test whether -1 is valid.
     N n1 = static_cast<N>(-1);

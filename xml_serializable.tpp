@@ -108,11 +108,6 @@ void xml_serializable<T>::read(xml::element const& x)
         handle_missing_version_attribute();
         }
 
-// COMPILER !! Borland doesn't find operator==() in ns xml.
-#if defined __BORLANDC__
-using namespace xml;
-#endif // defined __BORLANDC__
-
     std::ostringstream oss;
 
     std::map<std::string,value_type> detritus_map;
