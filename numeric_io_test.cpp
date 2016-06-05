@@ -104,12 +104,8 @@ void mete_infinity()
 // These tests generally assume IEC 60559 floating point. Hardware
 // that deviates from that standard is probably so rare that it can
 // reasonably be ignored, with an appropriate runtime message.
-//
-// COMPILER !! The borland compiler through version 5.5.1 reports that
-// its double type doesn't conform to IEC 60559, but that seems wrong.
-#ifndef __BORLANDC__
-    BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_iec559);
-#endif // ! defined __BORLANDC__
+
+BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_iec559);
 
 int test_main(int, char*[])
 {

@@ -106,11 +106,9 @@ class LMI_SO callback
     :        private lmi::uncopyable <callback<FunctionPointer> >
     ,virtual private obstruct_slicing<callback<FunctionPointer> >
 {
-#if !defined __BORLANDC__
     BOOST_STATIC_ASSERT(boost::is_pointer<FunctionPointer>::value);
     typedef typename boost::remove_pointer<FunctionPointer>::type f_type;
     BOOST_STATIC_ASSERT(boost::is_function<f_type>::value);
-#endif // !defined __BORLANDC__
 
   public:
     FunctionPointer operator()() const;
