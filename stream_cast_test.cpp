@@ -90,13 +90,13 @@ int test_main(int, char*[])
     // explains, a conversion to bool is used instead.
 
     BOOST_TEST_THROW
-        (stream_cast<std::string>((char*)(0))
+        (stream_cast<std::string>((char*)nullptr)
         ,std::runtime_error
         ,"Cannot convert (char*)(0) to std::string."
         );
 
     BOOST_TEST_THROW
-        (stream_cast<std::string>((char const*)(0))
+        (stream_cast<std::string>((char const*)nullptr)
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to std::string."
         );

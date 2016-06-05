@@ -37,7 +37,7 @@ namespace
 {
 std::streambuf* select_streambuf(progress_meter::enum_display_mode display_mode)
 {
-    std::streambuf* z = 0;
+    std::streambuf* z = nullptr;
     switch(display_mode)
         {
         case progress_meter::e_normal_display:

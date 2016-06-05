@@ -173,9 +173,9 @@ void rtrim(std::string& s, char const* superfluous)
 std::string iso_8601_datestamp_verbose()
 {
     std::size_t const len = sizeof "CCYY-MM-DDTHH:MM:SSZ";
-    std::time_t const t0 = std::time(0);
+    std::time_t const t0 = std::time(nullptr);
     std::tm const*const t1 = std::gmtime(&t0);
-    LMI_ASSERT(NULL != t1);
+    LMI_ASSERT(nullptr != t1);
     char s[len];
     std::size_t rc = std::strftime(s, len, "%Y-%m-%dT%H:%M:%SZ", t1);
     LMI_ASSERT(0 != rc);
@@ -185,9 +185,9 @@ std::string iso_8601_datestamp_verbose()
 std::string iso_8601_datestamp_terse()
 {
     std::size_t const len = sizeof "CCYYMMDDTHHMMSSZ";
-    std::time_t const t0 = std::time(0);
+    std::time_t const t0 = std::time(nullptr);
     std::tm const*const t1 = std::gmtime(&t0);
-    LMI_ASSERT(NULL != t1);
+    LMI_ASSERT(nullptr != t1);
     char s[len];
     std::size_t rc = std::strftime(s, len, "%Y%m%dT%H%M%SZ", t1);
     LMI_ASSERT(0 != rc);

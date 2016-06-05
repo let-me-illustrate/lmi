@@ -933,7 +933,7 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
         );
 
     // Create an HTML parser to allow easily adding HTML contents to the output.
-    wxHtmlWinParser html_parser(NULL);
+    wxHtmlWinParser html_parser(nullptr);
     html_parser.SetDC(&pdf_dc);
     html_parser.SetStandardFonts
         (pdf_dc.GetFont().GetPointSize()

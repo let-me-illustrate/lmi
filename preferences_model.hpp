@@ -97,7 +97,7 @@ template<> struct reconstitutor<datum_base, PreferencesModel>
     typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<PreferencesModel>& m)
         {
-        DesiredType* z = 0;
+        DesiredType* z = nullptr;
         z = exact_cast<ce_skin_name            >(m); if(z) return z;
         z = exact_cast<datum_string            >(m); if(z) return z;
         z = exact_cast<mce_report_column       >(m); if(z) return z;

@@ -47,7 +47,7 @@ int try_main(int, char*[])
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
     std::FILE* md5sums_file = std::fopen(md5sum_file(), "rb");
-    if(0 == md5sums_file)
+    if(nullptr == md5sums_file)
         {
         std::cerr << "File '" << md5sum_file() << "' not found.\n";
         return EXIT_FAILURE;

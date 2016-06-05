@@ -149,7 +149,7 @@ int main(int argc, char* argv[])
     // This line forces mpatrol to link when it otherwise might not.
     // It has no other effect according to C99 7.20.3.2/2, second
     // sentence.
-    std::free(0);
+    std::free(nullptr);
 
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static Option long_options[] =

@@ -65,9 +65,10 @@
 namespace
 {
 
-// The field value with the expected error message (or at least its variable
-// part, see below for how the full error message is constructed) or NULL if no
-// error should be given.
+/// The field value with the expected error message (or at least its
+/// variable part--see below for how the full error message is
+/// constructed), or nullptr if no error should be given.
+
 struct coi_multiplier_test_data
 {
     char const* value;
@@ -80,9 +81,9 @@ coi_multiplier_test_data const test_cases[] =
     { "-1"  ,"Lowest COI multiplier entered is -1, but 0.9 is the lowest multiplier allowed." },
     { "0"   ,"COI multiplier entered is '0', but it must contain at least one number other than zero." },
     { "0.8" ,"Lowest COI multiplier entered is 0.8, but 0.9 is the lowest multiplier allowed." },
-    { "0.9" ,NULL },
-    { "1"   ,NULL },
-    { "1.1" ,NULL },
+    { "0.9" ,nullptr },
+    { "1"   ,nullptr },
+    { "1.1" ,nullptr },
 };
 
 } // anonymous namespace

@@ -316,7 +316,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
     // This variable is used both as a flag indicating that the last option was
     // the one selecting the test to run and so must be followed by the test
     // name, but also for the diagnostic message at the end of this function.
-    char const* last_test_option = 0;
+    char const* last_test_option = nullptr;
 
     char const* opt_gui_test_path = "--gui_test_path";
     int const opt_gui_test_path_length = strlen(opt_gui_test_path);
@@ -327,7 +327,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
 
         if (last_test_option)
             {
-            last_test_option = 0;
+            last_test_option = nullptr;
             process_test_name(arg);
             remove_arg(n, argc, argv);
             continue;

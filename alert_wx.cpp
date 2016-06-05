@@ -71,7 +71,7 @@ void status_alert(std::string const& s)
 
 void warning_alert(std::string const& s)
 {
-    wxMessageBox(s, "Warning", wxOK, wxTheApp ? wxTheApp->GetTopWindow() : 0);
+    wxMessageBox(s, "Warning", wxOK, wxTheApp ? wxTheApp->GetTopWindow() : nullptr);
 }
 
 /// It seems silly to offer an option that should never be declined,
@@ -84,7 +84,7 @@ void warning_alert(std::string const& s)
 
 void hobsons_choice_alert(std::string const& s)
 {
-    wxWindow* w = 0;
+    wxWindow* w = nullptr;
     if(wxTheApp)
         {
         w = wxTheApp->GetTopWindow();

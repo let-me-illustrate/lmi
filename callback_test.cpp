@@ -63,7 +63,7 @@ namespace shared_library
 } // namespace shared_library
 
 typedef shared_library::adder_fp_type FunctionPointer;
-template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = 0;
+template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = nullptr;
 
 namespace application
 {

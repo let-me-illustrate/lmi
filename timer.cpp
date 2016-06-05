@@ -192,7 +192,7 @@ elapsed_t Timer::inspect() const
 {
 #if defined LMI_POSIX
     timeval x;
-    gettimeofday(&x, 0);
+    gettimeofday(&x, nullptr);
     return elapsed_t(1000000) * x.tv_sec + x.tv_usec;
 #elif defined LMI_MSW
 #   ifdef LMI_MS_HEADER_INCLUDED

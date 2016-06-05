@@ -128,9 +128,9 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(e_direct       ,method(cp  ,ccp));
 
     // Not convertible: value_cast() forbids conversion to pointer.
-    BOOST_TEST_EQUAL(e_stream       ,method(s, (char volatile*)(0)   ));
+    BOOST_TEST_EQUAL(e_stream       ,method(s, (char volatile*)nullptr   ));
 
-    BOOST_TEST_EQUAL(e_stream       ,method(   (char volatile*)(0), s));
+    BOOST_TEST_EQUAL(e_stream       ,method(   (char volatile*)nullptr, s));
 
     n_d_c = value_cast<NotDefaultConstructible>(n_d_c);
     n_d_c = value_cast(n_d_c, n_d_c);
@@ -285,19 +285,19 @@ int extra_tests0()
     BOOST_TEST_THROW(value_cast<double>(""), std::invalid_argument, "");
 
     BOOST_TEST_THROW
-        (value_cast<std::string>((char*)(0))
+        (value_cast<std::string>((char*)nullptr)
         ,std::runtime_error
         ,"Null pointer holds no value to convert."
         );
 
     BOOST_TEST_THROW
-        (value_cast<std::string>((char const*)(0))
+        (value_cast<std::string>((char const*)nullptr)
         ,std::runtime_error
         ,"Null pointer holds no value to convert."
         );
 
-    BOOST_TEST_EQUAL("0", value_cast<std::string>((char volatile*)(0)));
-    BOOST_TEST_EQUAL("0", value_cast<std::string>((char const volatile*)(0)));
+    BOOST_TEST_EQUAL("0", value_cast<std::string>((char volatile*)nullptr));
+    BOOST_TEST_EQUAL("0", value_cast<std::string>((char const volatile*)nullptr));
 
     // Numeric casts from
     //   (char               *)(0)
@@ -305,7 +305,7 @@ int extra_tests0()
     //   (char const volatile*)(0)
     // are forbidden by a compile-time assertion.
     BOOST_TEST_THROW
-        (value_cast<unsigned int>((char const*)(0))
+        (value_cast<unsigned int>((char const*)nullptr)
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to number."
         );

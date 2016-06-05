@@ -299,7 +299,7 @@ unsigned int DatabaseTableAdapter::DoGetDimension() const
 
 bool DatabaseTableAdapter::IsVoid() const
 {
-    return db_value_ == NULL;
+    return db_value_ == nullptr;
 }
 
 double DatabaseTableAdapter::DoGetValue(Coords const& coords) const

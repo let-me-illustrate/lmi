@@ -91,7 +91,7 @@ void check
     ,int n
     ,std::string const& e
     ,std::vector<std::string> const& k = std::vector<std::string>(0)
-    ,char const* const* c = 0
+    ,char const* const* c = nullptr
     ,std::string const& w = std::string("")
     )
 {
@@ -113,7 +113,7 @@ void check
     std::vector<std::string> s(seq.linear_keyword_representation());
     // Assert that std::equal() has defined behavior.
     assert(s.size() == static_cast<unsigned int>(n));
-    if((0 != c) && !std::equal(c, c + n, s.begin()))
+    if((nullptr != c) && !std::equal(c, c + n, s.begin()))
         {
         std::cout << "\nExpression: '" << e << '\'';
         std::cout << "\n  expected: ";

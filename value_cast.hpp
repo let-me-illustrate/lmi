@@ -140,7 +140,7 @@ void throw_if_null_pointer(T)
 template<typename T>
 void throw_if_null_pointer(T* t)
 {
-    if(0 == t)
+    if(nullptr == t)
         {
         throw std::runtime_error("Null pointer holds no value to convert.");
         }

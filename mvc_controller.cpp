@@ -107,7 +107,7 @@ MvcController::MvcController
     wxBusyCursor wait;
 
     char const* resource_file_name = view_.ResourceFileName();
-    LMI_ASSERT(0 != resource_file_name && 0 != std::strlen(resource_file_name));
+    LMI_ASSERT(nullptr != resource_file_name && 0 != std::strlen(resource_file_name));
 
     if(!wxXmlResource::Get()->LoadDialog(this, parent, view_.MainDialogName()))
         {
@@ -222,7 +222,7 @@ void MvcController::ConditionallyEnable()
     for(wvci i = page_lineage.begin(); i != page_lineage.end(); ++i)
         {
         wxWindow* pw = *i;
-        LMI_ASSERT(0 != pw);
+        LMI_ASSERT(nullptr != pw);
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
             {
@@ -252,7 +252,7 @@ void MvcController::ConditionallyEnable()
     for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
         {
         wxWindow* pw = *i;
-        LMI_ASSERT(0 != pw);
+        LMI_ASSERT(nullptr != pw);
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
             {
@@ -467,7 +467,7 @@ void MvcController::Initialize()
     for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
         {
         wxWindow* pw = *i;
-        LMI_ASSERT(0 != pw);
+        LMI_ASSERT(nullptr != pw);
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
             {
@@ -495,7 +495,7 @@ bool MvcController::ModelAndViewValuesEquivalent(std::string const& name) const
     std::string const& model_value = model_.Entity(name).str();
     bool equal = view_value == model_value;
     bool equivalent = equal;
-    if(!equal && 0 != ModelPointer<tn_range_base>(name))
+    if(!equal && nullptr != ModelPointer<tn_range_base>(name))
         {
         equivalent =
                 value_cast<double>(view_value)
@@ -513,9 +513,9 @@ std::string MvcController::NameOfControlToDeferEvaluating() const
     if(!w)    w = dynamic_cast<wxSpinCtrl      *>(last_focused_window_);
     if(!w)    w = dynamic_cast<wxDatePickerCtrl*>(last_focused_window_);
 
-    wxValidator const* v = w ? w->GetValidator() : 0;
+    wxValidator const* v = w ? w->GetValidator() : nullptr;
     Transferor  const* t = dynamic_cast<Transferor const*>(v);
-    return (t && 0 != ModelPointer<tn_range_base>(t->name())) ? t->name() : "";
+    return (t && nullptr != ModelPointer<tn_range_base>(t->name())) ? t->name() : "";
 }
 
 void MvcController::RefocusLastFocusedWindow()

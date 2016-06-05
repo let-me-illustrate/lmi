@@ -101,7 +101,7 @@ END_EVENT_TABLE()
 
 IllustrationView::IllustrationView()
     :ViewEx                  ()
-    ,html_window_            (0)
+    ,html_window_            (nullptr)
     ,is_phony_               (false)
 {
 }
@@ -349,11 +349,11 @@ IllustrationView& MakeNewIllustrationDocAndView
     ,char const*   filename
     )
 {
-    LMI_ASSERT(0 != dm);
-    LMI_ASSERT(0 != filename);
+    LMI_ASSERT(nullptr != dm);
+    LMI_ASSERT(nullptr != filename);
 
     wxDocTemplate* dt = dm->FindTemplateForPath(filename);
-    LMI_ASSERT(0 != dt);
+    LMI_ASSERT(nullptr != dt);
 
     wxDocument* new_document = dt->CreateDocument
         (filename
@@ -398,7 +398,7 @@ bool custom_io_0_run_if_file_exists(wxDocManager* dm)
                 }
             else
                 {
-                LMI_ASSERT(0 != dm);
+                LMI_ASSERT(nullptr != dm);
                 IllustrationView& illview = MakeNewIllustrationDocAndView
                     (dm
                     ,(c.custom_output_0_filename() + ".ill").c_str()

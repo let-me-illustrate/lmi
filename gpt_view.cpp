@@ -90,7 +90,7 @@ END_EVENT_TABLE()
 gpt_view::gpt_view()
     :ViewEx       ()
     ,html_content_("Unable to display results.")
-    ,html_window_ (0)
+    ,html_window_ (nullptr)
 {
 }
 

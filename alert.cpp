@@ -46,33 +46,33 @@
 namespace
 {
 typedef void (*alert_function_pointer)(std::string const&);
-alert_function_pointer status_alert_function         = 0;
-alert_function_pointer warning_alert_function        = 0;
-alert_function_pointer hobsons_choice_alert_function = 0;
-alert_function_pointer fatal_error_alert_function    = 0;
+alert_function_pointer status_alert_function         = nullptr;
+alert_function_pointer warning_alert_function        = nullptr;
+alert_function_pointer hobsons_choice_alert_function = nullptr;
+alert_function_pointer fatal_error_alert_function    = nullptr;
 
 typedef void (*message_function_pointer)(char const*);
-message_function_pointer safe_message_alert_function = 0;
+message_function_pointer safe_message_alert_function = nullptr;
 
 inline bool all_function_pointers_have_been_set()
 {
     return
-            0 != status_alert_function
-        &&  0 != warning_alert_function
-        &&  0 != hobsons_choice_alert_function
-        &&  0 != fatal_error_alert_function
-        &&  0 != safe_message_alert_function
+            nullptr != status_alert_function
+        &&  nullptr != warning_alert_function
+        &&  nullptr != hobsons_choice_alert_function
+        &&  nullptr != fatal_error_alert_function
+        &&  nullptr != safe_message_alert_function
         ;
 }
 
 inline bool any_function_pointer_has_been_set()
 {
     return
-            0 != status_alert_function
-        ||  0 != warning_alert_function
-        ||  0 != hobsons_choice_alert_function
-        ||  0 != fatal_error_alert_function
-        ||  0 != safe_message_alert_function
+            nullptr != status_alert_function
+        ||  nullptr != warning_alert_function
+        ||  nullptr != hobsons_choice_alert_function
+        ||  nullptr != fatal_error_alert_function
+        ||  nullptr != safe_message_alert_function
         ;
 }
 
@@ -233,7 +233,7 @@ std::ostream& fatal_error()
 
 void safely_show_message(char const* message)
 {
-    if(0 == safe_message_alert_function)
+    if(nullptr == safe_message_alert_function)
         {
         report_catastrophe
             ("No function defined for reporting a problem safely."

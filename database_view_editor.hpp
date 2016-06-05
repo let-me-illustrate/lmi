@@ -70,7 +70,7 @@ class DatabaseTableAdapter
         == static_cast<int>(e_number_of_axes)
         );
   public:
-    DatabaseTableAdapter(database_entity* db_value = NULL);
+    DatabaseTableAdapter(database_entity* db_value = nullptr);
 
     virtual ~DatabaseTableAdapter();
 

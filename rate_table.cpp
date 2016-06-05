@@ -2665,7 +2665,7 @@ database_impl::IndexEntry* database_impl::do_find_table_entry(table::Number numb
 {
     NumberToIndexMap::const_iterator const ci = index_by_number_.find(number);
 
-    return ci == index_by_number_.end() ? NULL : &index_.at(ci->second);
+    return ci == index_by_number_.end() ? nullptr : &index_.at(ci->second);
 }
 
 table database_impl::find_table(table::Number number) const

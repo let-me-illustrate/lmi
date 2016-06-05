@@ -58,7 +58,7 @@ int test_main(int, char*[])
     diagnostic0 += lmi::TypeInfo(typeid(D*)).Name();
     diagnostic0 += "'.";
 
-    D* null_pointer = 0;
+    D* null_pointer = nullptr;
     BOOST_TEST_THROW
         (safely_dereference_as<D>(null_pointer)
         ,std::runtime_error
