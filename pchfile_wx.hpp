@@ -1,4 +1,4 @@
-// Account value--unit test.
+// Precompiled header file for use with wx.
 //
 // Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
@@ -19,24 +19,29 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#include "pchfile.hpp"
+// In every '.cpp' file that is expected to benefit from precompiled
+// headers, include exactly one of these PCH headers:
+//   pchfile.hpp
+//   pchfile_wx.hpp
+// Include it before anything else except comments and whitespace.
+// Never include any PCH header in any other file.
 
-#include "account_value.hpp"
+// Rationale for reverse include guards: see 'config*.hpp'.
 
-#include "test_tools.hpp"
+#ifndef pchfile_wx_hpp
+#define pchfile_wx_hpp
 
-struct AccountValueTest
-{
-    static void Test();
-};
+#if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
 
-void AccountValueTest::Test()
-{
-}
+#   define LMI_OKAY_TO_INCLUDE_PCHLIST_HPP
+#   include "pchlist.hpp"
+#   undef  LMI_OKAY_TO_INCLUDE_PCHLIST_HPP
 
-int test_main(int, char*[])
-{
-    AccountValueTest::Test();
-    return EXIT_SUCCESS;
-}
+#   define LMI_OKAY_TO_INCLUDE_PCHLIST_WX_HPP
+#   include "pchlist_wx.hpp"
+#   undef  LMI_OKAY_TO_INCLUDE_PCHLIST_WX_HPP
+
+#endif // defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
+
+#endif // pchfile_wx_hpp
 

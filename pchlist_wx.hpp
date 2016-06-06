@@ -1,6 +1,6 @@
-// Instruct the operating system to execute a command.
+// List of headers to precompile for use with wx.
 //
-// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,28 +19,29 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#include "pchfile.hpp"
+#ifndef pchlist_wx_hpp
+#define pchlist_wx_hpp
 
-#include "system_command.hpp"
+#if !defined LMI_OKAY_TO_INCLUDE_PCHLIST_WX_HPP
+#   error This file is not intended for separate inclusion.
+#endif // !defined LMI_OKAY_TO_INCLUDE_PCHLIST_WX_HPP
 
-#include "callback.hpp"
+#if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
 
-namespace
-{
-    callback<system_command_fp_type> system_command_callback;
-}
+// This list includes the most frequently used wx headers, based
+// on gcc's dependencies output.
 
-typedef system_command_fp_type FunctionPointer;
-template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = nullptr;
+#   include "config.hpp"
 
-bool system_command_initialize(system_command_fp_type f)
-{
-    system_command_callback.initialize(f);
-    return true;
-}
+#   include "product_editor.hpp"
+#   include "view_ex.hpp"
+#   include "wx_new.hpp"
+#   include "wx_utility.hpp"
+#   include "wx_workarounds.hpp"
 
-void system_command(std::string const& command_line)
-{
-    system_command_callback()(command_line);
-}
+#   include <wx/wx.h>
+
+#endif // defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
+
+#endif // pchlist_wx_hpp
 

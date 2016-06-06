@@ -19,11 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#if defined __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // defined __BORLANDC__
-
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "handle_exceptions.hpp"
@@ -405,21 +400,37 @@ void assay_whitespace(file const& f)
 ///
 /// Exceptions are necessarily made for
 ///  - this program's test script;
-///  - 'GNUmakefile' and log files; and
-///  - 'config.hpp' and its related 'config_*.hpp' headers.
+///  - 'GNUmakefile' and log files;
+///  - 'config.hpp' and its related 'config_*.hpp' headers;
+///  - 'pchfile*.hpp', which exclude 'config.hpp'; and
+///  - 'pchlist*.hpp', which include 'config.hpp', indented.
 
 void check_config_hpp(file const& f)
 {
-    static std::string const loose ("# *include *[<\"]config.hpp[>\"]");
-    static std::string const strict("\\n(#include \"config.hpp\")\\n");
+    static std::string const loose  ("# *include *[<\"]config.hpp[>\"]");
+    static std::string const strict ("\\n(#include \"config.hpp\")\\n");
+    static std::string const indent ("\\n(#   include \"config.hpp\")\\n");
 
     if
         (   f.is_of_phylum(e_log)
         ||  f.phyloanalyze("^test_coding_rules_test.sh$")
         ||  f.phyloanalyze("^GNUmakefile$")
+        ||  f.phyloanalyze("^pchfile(_.*)?\\.hpp$")
         )
         {
         return;
+        }
+    else if(f.is_of_phylum(e_header) && f.phyloanalyze("^pchlist(_.*)?\\.hpp$"))
+        {
+        require(f, loose , "must include 'config.hpp'.");
+        require(f, indent, "lacks line '#   include \"config.hpp\"'.");
+        boost::smatch match;
+        static boost::regex const first_include("(# *include[^\\n]*)");
+        boost::regex_search(f.data(), match, first_include);
+        if("#   include \"config.hpp\"" != match[1])
+            {
+            complain(f, "must include 'config.hpp' first.");
+            }
         }
     else if(f.is_of_phylum(e_header) && !f.phyloanalyze("^config(_.*)?\\.hpp$"))
         {

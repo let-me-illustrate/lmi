@@ -40,6 +40,8 @@
  * For subsequent GWC modifications, see 'ChangeLog'.
  */
 
+#include "pchfile.hpp"
+
 // Suppress this because we wouldn't have glibc's 'config.h'.
 //#ifdef HAVE_CONFIG_H
 //# include <config.h>

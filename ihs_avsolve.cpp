@@ -26,10 +26,7 @@
 // is as good as any algorithm's, and its worst-case performance
 // is better than any algorithm's except Bolzano's.
 
-#if defined __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // defined __BORLANDC__
+#include "pchfile.hpp"
 
 #include "account_value.hpp"
 

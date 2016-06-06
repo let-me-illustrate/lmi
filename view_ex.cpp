@@ -27,10 +27,7 @@
 // enhanced view class, and in the later years given in the copyright
 // notice above.
 
-#if defined __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // defined __BORLANDC__
+#include "pchfile_wx.hpp"
 
 #include "view_ex.hpp"
 

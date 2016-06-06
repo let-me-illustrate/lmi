@@ -29,10 +29,7 @@
 // implementation, modifying it in 2002 and the later years given in
 // the copyright notice above.
 
-#if defined __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // defined __BORLANDC__
+#include "pchfile_wx.hpp"
 
 #include "alert.hpp"                    // safely_show_message()
 #include "fenv_lmi.hpp"

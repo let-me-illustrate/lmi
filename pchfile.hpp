@@ -1,4 +1,4 @@
-// Precompiled header file.
+// Precompiled header file for general use.
 //
 // Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
@@ -19,22 +19,25 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// Always include this header first in every '.cpp' file, before
-// anything else except comments and whitespace. Never include it in
-// any header file. Include any headers to be precompiled here.
+// In every '.cpp' file that is expected to benefit from precompiled
+// headers, include exactly one of these PCH headers:
+//   pchfile.hpp
+//   pchfile_wx.hpp
+// Include it before anything else except comments and whitespace.
+// Never include any PCH header in any other file.
+
+// Rationale for reverse include guards: see 'config*.hpp'.
 
 #ifndef pchfile_hpp
 #define pchfile_hpp
 
-#include "config.hpp"
-
 #if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
-// This is merely a casual guess, not supported by any measurement of
-// its effect on performance. The optimal set of headers to precompile
-// probably varies by compiler. Including wx headers might impair
-// performance for non-wx targets.
-#   include <wx/wxprec.h>
-#endif
+
+#   define LMI_OKAY_TO_INCLUDE_PCHLIST_HPP
+#   include "pchlist.hpp"
+#   undef  LMI_OKAY_TO_INCLUDE_PCHLIST_HPP
+
+#endif // defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
 
 #endif // pchfile_hpp
 

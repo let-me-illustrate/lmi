@@ -27,10 +27,7 @@
 // but is implemented differently and has different goals, so any
 // problems introduced here don't reflect on Kevin Smith's reputation.
 
-#if defined __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // defined __BORLANDC__
+#include "pchfile_wx.hpp"
 
 #include "transferor.hpp"
 

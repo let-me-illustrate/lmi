@@ -19,6 +19,8 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+#include "pchfile.hpp"
+
 #if !defined __BORLANDC__
 #   define USE_UBLAS
 #endif // !defined __BORLANDC__
@@ -36,11 +38,6 @@
 //   http://lists.boost.org/Archives/boost/2003/10/55518.php
 #   define NDEBUG 1
 #endif // defined USE_UBLAS
-
-#if defined __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // defined __BORLANDC__
 
 #include "et_vector.hpp"
 #include "materially_equal.hpp"

@@ -32,10 +32,7 @@
 // Those files are all you need: distributing the program itself isn't
 // necessary anyway.
 
-#if defined __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // defined __BORLANDC__
+#include "pchfile.hpp"
 
 #include "stratified_charges.hpp"
 
