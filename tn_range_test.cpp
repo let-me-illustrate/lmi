@@ -164,9 +164,6 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
         INVOKE_BOOST_TEST_EQUAL( 1, signum( infT), file, line);
         }
 
-#if !defined __BORLANDC__
-    // COMPILER !! The borland compiler tends to crash msw xp whenever
-    // a quiet NaN is used.
     bool volatile has_quiet_NaN = std::numeric_limits<T>::has_quiet_NaN;
     if(is_iec559 && has_quiet_NaN)
         {
@@ -174,7 +171,6 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
         INVOKE_BOOST_TEST_EQUAL( 0, signum(-qnanT), file, line);
         INVOKE_BOOST_TEST_EQUAL( 0, signum( qnanT), file, line);
         }
-#endif // Not borland compiler.
 }
 
 template<typename T>

@@ -26,9 +26,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/bind.hpp>
-#endif // !defined __BORLANDC__
+#include <boost/bind.hpp>
 
 #include <cmath>                        // std::fabs()
 #include <iomanip>                      // Formatting of optional detail.
@@ -174,7 +172,6 @@ std::cout << "tolerance = .000005: " << .000005 << '\n';
         <= tolerance
         );
 
-#if !defined __BORLANDC__
     typedef std::vector<double>::iterator VI;
     int const decimals = 5;
     std::cout
@@ -195,7 +192,6 @@ std::cout << "tolerance = .000005: " << .000005 << '\n';
             )
         << '\n'
         ;
-#endif // !defined __BORLANDC__
 
     return 0;
 }

@@ -137,20 +137,10 @@ int test_main(int, char*[])
     ncnnnpnn( 1.0 / d  );
     ncnnnpnn(-1.0 / d  );
 
-#if !defined __BORLANDC__
     if(std::numeric_limits<long double>::has_quiet_NaN)
         {
         ncnnnpnn(std::numeric_limits<long double>::quiet_NaN());
         }
-#else // defined __BORLANDC__
-    // COMPILER !! Problem with borland compiler: see
-    //   http://lists.boost.org/Archives/boost/2001/05/12046.php
-    //   http://lists.boost.org/Archives/boost/2001/05/12078.php
-    // We choose to avoid the hardware exception here,
-    // so that all our tests can run to completion
-    // unattended; but it is a failure, so:
-    BOOST_TEST(false);
-#endif // defined __BORLANDC__
 
     return 0;
 }

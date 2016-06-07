@@ -67,9 +67,7 @@ std::bitset<CHAR_BIT * sizeof(unsigned long int)> bits(unsigned long int i)
 
 int test_main(int, char*[])
 {
-#if defined __BORLANDC__
-    // Skip many tests that this defective compiler can't handle.
-#elif defined LMI_X86
+#if defined LMI_X86
     unsigned short int cw = 0x0000;
 
     BOOST_TEST_EQUAL_BITS(0x037f, msw_to_intel(0x0008001f));

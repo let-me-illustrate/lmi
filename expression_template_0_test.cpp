@@ -21,9 +21,7 @@
 
 #include "pchfile.hpp"
 
-#if !defined __BORLANDC__
-#   define USE_UBLAS
-#endif // !defined __BORLANDC__
+#define USE_UBLAS
 
 #if defined USE_UBLAS
 // BOOST !! Startlingly enough, boost uBLAS depends on this standard
@@ -44,9 +42,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/bind.hpp>
-#endif // !defined __BORLANDC__
+#include <boost/bind.hpp>
 
 #if defined USE_UBLAS
 #   include <boost/numeric/ublas/vector.hpp>
@@ -204,7 +200,6 @@ void mete_stl_plain()
 
 void mete_stl_fancy()
 {
-#if !defined __BORLANDC__
     static std::vector<double> tmp0(max_length);
     std::transform
         (sv0b.begin()
@@ -228,7 +223,6 @@ void mete_stl_fancy()
         ,sv2b.begin()
         ,std::plus<double>()
         );
-#endif // !defined __BORLANDC__
 }
 
 /// This implementation uses std::valarray.
@@ -418,11 +412,9 @@ void time_one_array_length(int length)
     BOOST_TEST_EQUAL           (sv2a[alpha], value_alpha);
     BOOST_TEST(materially_equal(sv2a[omega], value_omega));
 
-#if !defined __BORLANDC__
     mete_stl_fancy();
     BOOST_TEST_EQUAL           (sv2b[alpha], value_alpha);
     BOOST_TEST(materially_equal(sv2b[omega], value_omega));
-#endif // !defined __BORLANDC__
 
     mete_valarray();
     BOOST_TEST_EQUAL           (va2 [alpha], value_alpha);

@@ -27,9 +27,7 @@
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/bind.hpp>
-#endif // !defined __BORLANDC__
+#include <boost/bind.hpp>
 
 #include <cmath>
 
@@ -115,10 +113,8 @@ void TimerTest::TestAliquotTimer()
 
     std::cout << "  " << TimeAnAliquot(foo, 0.1) << '\n';
 
-#if !defined __BORLANDC__
     X x;
     std::cout << "  " << TimeAnAliquot(boost::bind(goo, 10, x, x, &x), 0.1) << '\n';
-#endif // !defined __BORLANDC__
 
     std::string takes_too_long = TimeAnAliquot(WaitTenMsec, 0.0099999).str();
     BOOST_TEST(contains(takes_too_long, "took longer"));

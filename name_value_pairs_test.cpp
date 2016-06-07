@@ -26,20 +26,16 @@
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/filesystem/operations.hpp>
-#   include <boost/filesystem/path.hpp>
-#endif // !defined __BORLANDC__
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <cstdio>                       // std::remove()
 #include <fstream>
 
 int test_main(int, char*[])
 {
-#if !defined __BORLANDC__
     fs::path const tmpdir(fs::complete("/tmp"));
     fs::create_directory(tmpdir);
-#endif // !defined __BORLANDC__
 
     std::string filename0("/tmp/eraseme");
 
