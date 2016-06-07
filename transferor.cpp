@@ -255,7 +255,7 @@ namespace
             else
                 {
                 warning()
-                    << "Control '" << control.GetLabel() << "':"
+                    << "Control '" << control.GetName() << "':"
                     << " expected 'Yes' or 'No', but got '" << data << "'."
                     << LMI_FLUSH
                     ;
@@ -295,7 +295,7 @@ namespace
             else
                 {
                 warning()
-                    << "Control '" << control.GetLabel() << "':"
+                    << "Control '" << control.GetName() << "':"
                     << " invalid entry '" << data << "'."
                     << LMI_FLUSH
                     ;
@@ -331,7 +331,7 @@ namespace
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
             fatal_error()
-                << "CheckListBox '" << control.GetLabel() << "':"
+                << "CheckListBox '" << control.GetName() << "':"
                 << " must be constrained to a single selection."
                 << LMI_FLUSH
                 ;
@@ -349,7 +349,7 @@ namespace
         if(!(wxCB_READONLY & control.GetWindowStyle()))
             {
             fatal_error()
-                << "ComboBox '" << control.GetLabel() << "':"
+                << "ComboBox '" << control.GetName() << "':"
                 << " must be read only."
                 << LMI_FLUSH
                 ;
@@ -411,7 +411,7 @@ namespace
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
             fatal_error()
-                << "ListBox '" << control.GetLabel() << "':"
+                << "ListBox '" << control.GetName() << "':"
                 << " must be constrained to a single selection."
                 << LMI_FLUSH
                 ;
