@@ -1406,7 +1406,7 @@ bool InputSequenceEntry::Create
     button_ = new(wx) InputSequenceButton(this, wxID_ANY);
 
     sizer->Add(text_, wxSizerFlags(1).Expand());
-    sizer->Add(button_, wxSizerFlags().Expand().Border(wxLEFT, 1));
+    sizer->Add(button_, wxSizerFlags().Expand().Border(wxLEFT));
 
     SetSizer(sizer);
 
