@@ -65,12 +65,3 @@
 #   error Disable wxUSE_GIF in wx setup.
 #endif // wxUSE_GIF
 
-// This application is single threaded, and wasn't designed to be
-// thread safe. It might work perfectly well if compiled with thread
-// support enabled (but not used), but that has never been tested, and
-// presumably would require changes to the lmi makefiles.
-//
-#if wxUSE_THREADS
-#   error Disable wxUSE_THREADS in wx setup.
-#endif // wxUSE_THREADS
-

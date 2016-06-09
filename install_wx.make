@@ -116,7 +116,6 @@ config_options = \
   --disable-ribbon \
   --disable-richtext \
   --disable-stc \
-  --disable-threads \
   --disable-webview \
   --enable-monolithic \
   --enable-shared \
