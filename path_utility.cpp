@@ -297,8 +297,6 @@ fs::path unique_filepath
 // TODO ?? CALCULATION_SUMMARY Refactor duplication:
 //   validate_directory()
 //   validate_filepath()
-// and add unit tests for both.
-// Also rename 'validate_directory' --> 'validate_directory_path',
 
 /// Throw an informative exception if the 'directory' argument does
 /// not name a valid directory.
@@ -308,16 +306,13 @@ fs::path unique_filepath
 /// 'context': semantic description of the directory to be named;
 /// used in the exception report.
 ///
-/// Although a std::invalid_argument exception would seem more
-/// fitting in the context of this function, in the global context
-/// 'd' may be specified by users, so std::runtime_error is
-/// preferable.
+/// Although a std::invalid_argument exception might at first seem
+/// appropriate here, std::runtime_error is chosen because the
+/// 'directory' argument may be specified by users.
 ///
 /// Exceptions thrown from the boost filesystem library on path
 /// assignment are caught in order to rethrow with 'context'
 /// prepended.
-///
-/// TODO ?? Need unit tests.
 
 void validate_directory
     (std::string const& directory

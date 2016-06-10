@@ -249,6 +249,59 @@ void test_path_inserter()
     BOOST_TEST_EQUAL(z, oss.str());
 }
 
+void test_path_validation()
+{
+    std::string context("Unit test file");
+
+    // Create a file and a directory to test.
+    fs::create_directory("path_utility_test_dir");
+    write_dummy_file("path_utility_test_file");
+
+    // All right.
+    validate_directory("path_utility_test_dir", context);
+    validate_filepath("path_utility_test_file", context);
+    validate_filepath("./path_utility_test_file", context);
+
+    // Not well formed.
+    BOOST_TEST_THROW
+        (validate_filepath("<|>", context)
+        ,std::runtime_error
+        ,lmi_test::what_regex("invalid name \"<|>\" in path")
+        );
+
+    // Not empty.
+    BOOST_TEST_THROW
+        (validate_filepath("", context)
+        ,std::runtime_error
+        ,"Unit test file must not be empty."
+        );
+
+    // Must exist.
+    BOOST_TEST_THROW
+        (validate_filepath("no_such_file", context)
+        ,std::runtime_error
+        ,"Unit test file 'no_such_file' not found."
+        );
+
+    // Must be a directory.
+    BOOST_TEST_THROW
+        (validate_directory("path_utility_test_file", context)
+        ,std::runtime_error
+        ,"Unit test file 'path_utility_test_file' is not a directory."
+        );
+
+    // Must not be a directory.
+    BOOST_TEST_THROW
+        (validate_filepath("path_utility_test_dir", context)
+        ,std::runtime_error
+        ,"Unit test file 'path_utility_test_dir' is a directory."
+        );
+
+    // Remove file and directory created for this test.
+    fs::remove("path_utility_test_dir");
+    fs::remove("path_utility_test_file");
+}
+
 int test_main(int, char*[])
 {
     test_orthodox_filename();
@@ -256,6 +309,7 @@ int test_main(int, char*[])
     test_unique_filepath_with_normal_filenames();
     test_unique_filepath_with_ludicrous_filenames();
     test_path_inserter();
+    test_path_validation();
 
     return EXIT_SUCCESS;
 }
