@@ -515,6 +515,7 @@
     <ClCompile Include="license.cpp" />
     <ClCompile Include="lmi.cpp" />
     <ClCompile Include="loads.cpp" />
+    <ClCompile Include="main_common.cpp" />
     <ClCompile Include="mc_enum.cpp" />
     <ClCompile Include="mc_enum_types.cpp" />
     <ClCompile Include="mc_enum_types_aux.cpp" />

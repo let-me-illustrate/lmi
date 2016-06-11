@@ -14,9 +14,6 @@
     <ClCompile Include="main_common_non_wx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main_common.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="alert_cli.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

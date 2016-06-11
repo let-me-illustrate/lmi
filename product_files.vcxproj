@@ -488,7 +488,6 @@
   <ItemGroup>
     <ClCompile Include="alert_cli.cpp" />
     <ClCompile Include="generate_product_files.cpp" />
-    <ClCompile Include="main_common.cpp" />
     <ClCompile Include="main_common_non_wx.cpp" />
     <ClCompile Include="my_db.cpp" />
     <ClCompile Include="my_fund.cpp" />

@@ -298,5 +298,8 @@
     <ClCompile Include="ce_skin_name.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main_common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

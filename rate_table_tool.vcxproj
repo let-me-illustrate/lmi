@@ -251,7 +251,6 @@
     <ClCompile Include="alert.cpp" />
     <ClCompile Include="alert_cli.cpp" />
     <ClCompile Include="fenv_lmi.cpp" />
-    <ClCompile Include="main_common.cpp" />
     <ClCompile Include="main_common_non_wx.cpp" />
     <ClCompile Include="sigfpe.cpp" />
     <ClCompile Include="rate_table.cpp" />

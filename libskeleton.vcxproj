@@ -459,7 +459,6 @@
     <ClCompile Include="illustration_document.cpp" />
     <ClCompile Include="illustration_view.cpp" />
     <ClCompile Include="input_sequence_entry.cpp" />
-    <ClCompile Include="main_common.cpp" />
     <ClCompile Include="mec_document.cpp" />
     <ClCompile Include="mec_view.cpp" />
     <ClCompile Include="msw_workarounds.cpp" />
