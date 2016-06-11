@@ -88,10 +88,8 @@ void test_minmax()
     // Motivation for relational operators: to write this...
     BOOST_TEST(zero <= m.minimum() && m.maximum() <= one);
     // ...more compactly:
-#if !defined __BORLANDC__
     BOOST_TEST(  zero <= m && m <= one );
     BOOST_TEST(!(zero <  m || m <  one));
-#endif // !defined __BORLANDC__
 }
 
 void test_prefix_and_suffix()

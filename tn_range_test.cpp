@@ -164,9 +164,6 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
         INVOKE_BOOST_TEST_EQUAL( 1, signum( infT), file, line);
         }
 
-#if !defined __BORLANDC__
-    // COMPILER !! The borland compiler tends to crash msw xp whenever
-    // a quiet NaN is used.
     bool volatile has_quiet_NaN = std::numeric_limits<T>::has_quiet_NaN;
     if(is_iec559 && has_quiet_NaN)
         {
@@ -174,7 +171,6 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
         INVOKE_BOOST_TEST_EQUAL( 0, signum(-qnanT), file, line);
         INVOKE_BOOST_TEST_EQUAL( 0, signum( qnanT), file, line);
         }
-#endif // Not borland compiler.
 }
 
 template<typename T>
@@ -230,12 +226,6 @@ void tn_range_test::test_percentages(char const* file, int line)
 {
     // These workarounds for negative one permit running these tests
     // with unsigned percentage types, and avoid compiler warnings.
-#ifdef __BORLANDC__
-    // COMPILER !! This definition somehow makes borland happy. See
-    //  http://groups.google.com/groups?selm=4196a049%241%40newsgroups.borland.com
-    T::number_type work_around_borland_defect;
-    &work_around_borland_defect;
-#endif // __BORLANDC__
     typedef typename T::number_type N;
     // Use this to test whether -1 is valid.
     N n1 = static_cast<N>(-1);

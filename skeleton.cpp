@@ -29,7 +29,7 @@
 // implementation, modifying it in 2002 and the later years given in
 // the copyright notice above.
 
-#include "pchfile.hpp"
+#include "pchfile_wx.hpp"
 
 #include "skeleton.hpp"
 

@@ -152,7 +152,6 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Legacy_SOA|Win32'">
     <Midl>
-      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>WIN32;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
@@ -160,7 +159,7 @@
       <AdditionalOptions>/MP /Zm125 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -173,7 +172,7 @@
       <DebugInformationFormat />
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
@@ -188,7 +187,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
-      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>WIN32;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
@@ -196,7 +194,7 @@
       <AdditionalOptions>/w44062 /w44263 /w44264 /w44265 /w44266 /w44289 /w44296 /w44545 /w44546 /w44547 /w44549 /w44555 /w44574 /w44986</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_LIB_TOOLSET="vc140";WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BOOST_LIB_TOOLSET="vc140";WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -209,7 +207,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
@@ -224,7 +222,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Legacy_SOA|Win32'">
     <Midl>
-      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>WIN32;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
@@ -232,7 +229,7 @@
       <AdditionalOptions>/MP /Zm125 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -247,7 +244,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
@@ -262,7 +259,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
-      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>WIN32;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
@@ -270,7 +266,7 @@
       <AdditionalOptions>/w44062 /w44263 /w44264 /w44265 /w44266 /w44289 /w44296 /w44545 /w44546 /w44547 /w44549 /w44555 /w44574 /w44986</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_LIB_TOOLSET="vc140";WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BOOST_LIB_TOOLSET="vc140";WIN32;wxMSVC_VERSION_AUTO;_LIB;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -285,7 +281,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc140_lib\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
@@ -300,7 +296,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release Legacy_SOA|Win32'">
     <Midl>
-      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>WIN32;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
@@ -308,7 +303,7 @@
       <AdditionalOptions>/MP /Zm125 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -321,7 +316,7 @@
       <DebugInformationFormat />
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
@@ -336,7 +331,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
     <Midl>
-      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>WIN32;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
@@ -344,7 +338,7 @@
       <AdditionalOptions>/w44061 /w44062 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -357,7 +351,7 @@
       <DebugInformationFormat />
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXMSW__;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
@@ -372,7 +366,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug Legacy_SOA|Win32'">
     <Midl>
-      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>WIN32;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
@@ -380,7 +373,7 @@
       <AdditionalOptions>/MP /Zm125 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -395,7 +388,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
@@ -410,7 +403,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">
     <Midl>
-      <AdditionalOptions>/D LMI_PCH_HEADER=\"pchfile.hpp\" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>WIN32;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
@@ -418,7 +410,7 @@
       <AdditionalOptions>/w44061 /w44062 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;wxMSVC_VERSION_AUTO;_LIB;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -433,7 +425,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;LMI_PCH_HEADER="pchfile.hpp";BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;BOOST_FILESYSTEM_VERSION=2;LMI_DONT_USE_XML_TABLES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;.;w:\include\boost\1.33.1;tools\pete-2.1.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>

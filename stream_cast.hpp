@@ -49,13 +49,9 @@
 #include "facets.hpp"
 #include "rtti_lmi.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/is_arithmetic.hpp>
-#   include <boost/type_traits/is_pointer.hpp>
-#else  // defined __BORLANDC__
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
-#endif // defined __BORLANDC__
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/is_pointer.hpp>
 
 #include <istream>                      // std::ws
 #include <sstream>
@@ -104,13 +100,12 @@
 template<typename To, typename From>
 To stream_cast(From from, To = To())
 {
-#if !defined __BORLANDC__
     BOOST_STATIC_ASSERT
         (   !boost::is_arithmetic<From>::value
         ||  !boost::is_arithmetic<To  >::value
         );
     BOOST_STATIC_ASSERT(!boost::is_pointer   <To  >::value);
-#endif // !defined __BORLANDC__
+
     std::stringstream interpreter;
     std::ostringstream err;
     To result = To();
@@ -205,17 +200,6 @@ inline std::string stream_cast<std::string>
 {
     return from;
 }
-
-#if defined __BORLANDC__
-// COMPILER !! Work around borland defect.
-inline std::string stream_cast
-    (std::string from
-    ,std::string
-    )
-{
-    return from;
-}
-#endif // defined __BORLANDC__
 
 #endif // stream_cast_hpp
 

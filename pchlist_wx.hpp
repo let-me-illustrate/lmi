@@ -1,4 +1,4 @@
-// MVC View base class.
+// List of headers to precompile for use with wx.
 //
 // Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
@@ -19,30 +19,29 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#include "pchfile_wx.hpp"
+#ifndef pchlist_wx_hpp
+#define pchlist_wx_hpp
 
-#include "mvc_view.hpp"
+#if !defined LMI_OKAY_TO_INCLUDE_PCHLIST_WX_HPP
+#   error This file is not intended for separate inclusion.
+#endif // !defined LMI_OKAY_TO_INCLUDE_PCHLIST_WX_HPP
 
-MvcView::MvcView()
-{
-}
+#if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
 
-MvcView::~MvcView()
-{
-}
+// This list includes the most frequently used wx headers, based
+// on gcc's dependencies output.
 
-char const* MvcView::BookControlName() const
-{
-    return DoBookControlName();
-}
+#   include "config.hpp"
 
-char const* MvcView::MainDialogName() const
-{
-    return DoMainDialogName();
-}
+#   include "product_editor.hpp"
+#   include "view_ex.hpp"
+#   include "wx_new.hpp"
+#   include "wx_utility.hpp"
+#   include "wx_workarounds.hpp"
 
-char const* MvcView::ResourceFileName() const
-{
-    return DoResourceFileName();
-}
+#   include <wx/wx.h>
+
+#endif // defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
+
+#endif // pchlist_wx_hpp
 

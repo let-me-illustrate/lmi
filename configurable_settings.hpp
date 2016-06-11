@@ -72,6 +72,7 @@ class LMI_SO configurable_settings
 
   private:
     configurable_settings();
+    ~configurable_settings();
 
     void ascribe_members();
     void load();
@@ -109,14 +110,6 @@ class LMI_SO configurable_settings
     std::string spreadsheet_file_extension_;
     bool        use_builtin_calculation_summary_;
     std::string xsl_fo_command_;
-
-#ifdef __BORLANDC__
-// COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:
-// http://groups.google.com/groups?selm=7ei6fi%244me%241%40nnrp1.dejanews.com
-// http://groups.google.com/groups?hl=en&lr=&ie=UTF-8&selm=m3k9fc25dj.fsf%40gabi-soft.fr
-  public:
-#endif // __BORLANDC__
-    ~configurable_settings();
 };
 
 std::vector<std::string>        input_calculation_summary_columns();

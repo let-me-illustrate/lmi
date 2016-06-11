@@ -85,7 +85,6 @@ class LMI_SO PreferencesModel
     datum_string            PrintDirectory;
     tnr_nonnegative_integer SecondsToPauseBetweenPrintouts;
     ce_skin_name            SkinFileName;
-    datum_string            SpreadsheetFileExtension;
     mce_yes_or_no           UseBuiltinCalculationSummary;
 };
 

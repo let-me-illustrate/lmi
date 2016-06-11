@@ -19,10 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifdef __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "contains.hpp"
 
@@ -82,19 +79,11 @@ void test_contains()
 
     // Associative containers.
 
-#if !defined __BORLANDC__
     std::map<std::string,std::string> const m(z, z + lmi_array_size(z));
-#else  // defined __BORLANDC__
-    std::map<std::string,std::string> const m(z, z + 2);
-#endif // defined __BORLANDC__
     BOOST_TEST( contains(m, "uatis inem"    ));
     BOOST_TEST(!contains(m, "cows and ducks"));
 
-#if !defined __BORLANDC__
     std::set<std::string> const s(y, y + lmi_array_size(y));
-#else  // defined __BORLANDC__
-    std::set<std::string> const s(y, y + 4);
-#endif // defined __BORLANDC__
     BOOST_TEST( contains(s, "si ergo" ));
     BOOST_TEST(!contains(s, "fortibus"));
 

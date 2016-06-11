@@ -31,9 +31,6 @@
     <ClCompile Include="docmanager_ex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="facets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="file_command_wx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

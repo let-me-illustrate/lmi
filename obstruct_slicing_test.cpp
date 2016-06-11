@@ -26,9 +26,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/bind.hpp>
-#endif // !defined __BORLANDC__
+#include <boost/bind.hpp>
 
 #include <string>
 
@@ -141,14 +139,12 @@ void mete(volatile int vi)
 template<typename T>
 void test_cost_of_obstruction(std::string const& s)
 {
-#if !defined __BORLANDC__
     std::cout
         << "  Class " << s << " has size " << sizeof(T) << '\n'
         << "  Speed test: \n      "
         << TimeAnAliquot(boost::bind(mete<T>, 0))
         << '\n'
         ;
-#endif // !defined __BORLANDC__
 }
 
 int test_main(int, char*[])
@@ -158,10 +154,8 @@ int test_main(int, char*[])
     // Correctness is verifiable only at compile time. At run time,
     // there's nothing to test except the cost.
 
-#if !defined __BORLANDC__
     test_cost_of_obstruction<X0>("X0");
     test_cost_of_obstruction<X1>("X1");
-#endif // !defined __BORLANDC__
 
     return EXIT_SUCCESS;
 }

@@ -27,7 +27,7 @@
 // class out of a larger file, and in the later years given in the
 // copyright notice above.
 
-#include "pchfile.hpp"
+#include "pchfile_wx.hpp"
 
 #include "text_view.hpp"
 

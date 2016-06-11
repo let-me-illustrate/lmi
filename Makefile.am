@@ -39,8 +39,6 @@ ACLOCAL_AMFLAGS = -I aclocal
 # Precompiled headers support
 ##############################################################################
 
-AM_CXXFLAGS = -DLMI_PCH_HEADER="<pchfile.hpp>"
-
 if LMI_USE_PCH
 
 AM_CXXFLAGS += -DLMI_COMPILER_USES_PCH
@@ -234,8 +232,7 @@ lmi_wx_SOURCES = \
     main_wx.cpp
 
 libskeleton_la_CXXFLAGS = \
-     $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS) -ULMI_PCH_HEADER -DLMI_PCH_HEADER="<pchfile_wx.hpp>"
-
+     $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_CFLAGS) $(GTK_CFLAGS)
 libskeleton_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libskeleton_la_LIBADD = \
     liblmi.la \

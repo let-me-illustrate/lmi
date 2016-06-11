@@ -34,13 +34,9 @@
 #include <string>
 #include <typeinfo>
 
-#if !defined __BORLANDC__
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/is_arithmetic.hpp>
-#   include <boost/type_traits/is_void.hpp>
-#else  // defined __BORLANDC__
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
-#endif // defined __BORLANDC__
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/is_void.hpp>
 
 template<typename To, typename From>
 struct numeric_converter;
@@ -126,10 +122,8 @@ To numeric_io_cast(From from, To = To())
 template<typename To, typename From>
 struct numeric_converter
 {
-#ifndef __BORLANDC__
     BOOST_STATIC_ASSERT(boost::is_void<To>::value);
     BOOST_STATIC_ASSERT(boost::is_void<From>::value);
-#endif // ! defined __BORLANDC__
 
     To operator()(From const& from) const
         {
@@ -153,9 +147,7 @@ struct numeric_converter
 template<typename To>
 struct numeric_converter<To, std::string>
 {
-#ifndef __BORLANDC__
     BOOST_STATIC_ASSERT(boost::is_arithmetic<To>::value);
-#endif // ! defined __BORLANDC__
 
     typedef std::string From;
     To operator()(From const& from) const
@@ -218,47 +210,13 @@ struct numeric_converter<To, char const*>
         }
 };
 
-#ifdef __BORLANDC__
-// COMPILER !! The borland compiler fails to ignore top-level
-// cv-qualifiers as 14.8.2/1 requires. Reference:
-//   http://groups.google.com/groups?as_umsgid=4164c8f0@newsgroups.borland.com
-//
-template<typename To>
-struct numeric_converter<To, std::string const>
-{
-    typedef std::string From;
-    To operator()(From const& from) const
-        {
-        numeric_converter<To,std::string> z;
-        return z(from);
-        }
-};
-
-// COMPILER !! The borland compiler needs this to convert from a
-// string literal. It seems to type such constants as [non-const]
-// char*, ignoring 4.2/2 .
-//
-template<typename To>
-struct numeric_converter<To, char*>
-{
-    typedef char const* From;
-    To operator()(From const& from) const
-        {
-        numeric_converter<To,std::string> z;
-        return z(from);
-        }
-};
-#endif // defined __BORLANDC__
-
 // Conversion from arithmetic type to string uses maximum accurate
 // precision for floating point.
 //
 template<typename From>
 struct numeric_converter<std::string, From>
 {
-#ifndef __BORLANDC__
     BOOST_STATIC_ASSERT(boost::is_arithmetic<From>::value);
-#endif // ! defined __BORLANDC__
 
     typedef std::string To;
     To operator()(From const& from) const
@@ -331,23 +289,6 @@ struct numeric_converter<std::string, std::string>
         return from;
         }
 };
-
-#ifdef __BORLANDC__
-// COMPILER !! The borland compiler needs this to convert from a
-// string literal. It seems to type such constants as [non-const]
-// char*, ignoring 4.2/2 .
-//
-template<>
-struct numeric_converter<std::string, char*>
-{
-    typedef char* From;
-    typedef std::string To;
-    To operator()(From const& from) const
-        {
-        return from;
-        }
-};
-#endif // __BORLANDC__
 
 template<>
 struct numeric_converter<std::string, char const*>

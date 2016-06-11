@@ -76,7 +76,6 @@ void PreferencesModel::AscribeMembers()
     ascribe("PrintDirectory"                , &PreferencesModel::PrintDirectory                );
     ascribe("SecondsToPauseBetweenPrintouts", &PreferencesModel::SecondsToPauseBetweenPrintouts);
     ascribe("SkinFileName"                  , &PreferencesModel::SkinFileName                  );
-    ascribe("SpreadsheetFileExtension"      , &PreferencesModel::SpreadsheetFileExtension      );
     ascribe("UseBuiltinCalculationSummary"  , &PreferencesModel::UseBuiltinCalculationSummary  );
 }
 
@@ -235,7 +234,6 @@ void PreferencesModel::Load()
     PrintDirectory                 = z.print_directory();
     SecondsToPauseBetweenPrintouts = z.seconds_to_pause_between_printouts();
     SkinFileName                   = z.skin_filename();
-    SpreadsheetFileExtension       = z.spreadsheet_file_extension();
     UseBuiltinCalculationSummary   = z.use_builtin_calculation_summary() ? "Yes" : "No";
 }
 
@@ -267,7 +265,6 @@ void PreferencesModel::Save() const
     z["print_directory"                   ] = PrintDirectory          .value();
     z["seconds_to_pause_between_printouts"] = value_cast<std::string>(SecondsToPauseBetweenPrintouts.value());
     z["skin_filename"                     ] = SkinFileName            .value();
-    z["spreadsheet_file_extension"        ] = SpreadsheetFileExtension.value();
     z["use_builtin_calculation_summary"   ] = value_cast<std::string>("Yes" == UseBuiltinCalculationSummary);
 }
 

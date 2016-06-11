@@ -28,12 +28,10 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/is_function.hpp>
-#   include <boost/type_traits/is_pointer.hpp>
-#   include <boost/type_traits/remove_pointer.hpp>
-#endif // !defined __BORLANDC__
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_function.hpp>
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
 
 #include <stdexcept>
 
@@ -106,11 +104,9 @@ class LMI_SO callback
     :        private lmi::uncopyable <callback<FunctionPointer> >
     ,virtual private obstruct_slicing<callback<FunctionPointer> >
 {
-#if !defined __BORLANDC__
     BOOST_STATIC_ASSERT(boost::is_pointer<FunctionPointer>::value);
     typedef typename boost::remove_pointer<FunctionPointer>::type f_type;
     BOOST_STATIC_ASSERT(boost::is_function<f_type>::value);
-#endif // !defined __BORLANDC__
 
   public:
     FunctionPointer operator()() const;

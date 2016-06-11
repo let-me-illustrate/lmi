@@ -34,22 +34,9 @@
 #include <stdexcept>
 #include <string>
 
-#if !defined __BORLANDC__
-#   include <boost/cast.hpp>
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/is_float.hpp>
-#else  // defined __BORLANDC__
-// COMPILER !! Workarounds for defective borland compiler.
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
-namespace boost
-{
-    template<typename T, typename U>
-    T numeric_cast(U u)
-    {
-        return static_cast<T>(u);
-    }
-} // namespace boost
-#endif // defined __BORLANDC__
+#include <boost/cast.hpp>
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_float.hpp>
 
 /// Number of exact decimal digits to the right of the decimal point.
 ///

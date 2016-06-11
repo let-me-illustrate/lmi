@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#include "pchfile.hpp"
+#include "pchfile_wx.hpp"
 
 #include "mvc_controller.hpp"
 #include "mvc_controller.tpp"
@@ -823,20 +823,26 @@ void MvcController::UponUpdateUI(wxUpdateUIEvent& event)
     cached_transfer_data_ = transfer_data_;
 
     DiagnosticsWindow().SetLabel("");
-    std::vector<std::string> names_of_changed_controls;
+    std::vector<std::string> control_changes;
     std::string const name_to_ignore = NameOfControlToDeferEvaluating();
     typedef std::map<std::string,std::string>::const_iterator smci;
     for(smci i = transfer_data_.begin(); i != transfer_data_.end(); ++i)
         {
-        std::string const& name       = i->first;
-        std::string const& view_value = i->second;
+        std::string const& name        = i->first;
+        std::string const& view_value  = i->second;
+        std::string const& model_value = model_.Entity(name).str();
         if(name == name_to_ignore || ModelAndViewValuesEquivalent(name))
             {
             continue;
             }
         try
             {
-            names_of_changed_controls.push_back(name);
+            std::string change =
+                  name + ":\n"
+                + "    model: '" + model_value + "'\n"
+                + "    view:  '" + view_value  + "'\n"
+                ;
+            control_changes.push_back(change);
             model_.Entity(name) = view_value;
             }
         catch(std::exception const& e)
@@ -847,17 +853,13 @@ void MvcController::UponUpdateUI(wxUpdateUIEvent& event)
 
     // wxEVT_UPDATE_UI events should occur frequently enough that two
     // control changes cannot be simultaneous.
-    if(1 < names_of_changed_controls.size())
+    if(1 < control_changes.size())
         {
-        warning() << "Contents of more than one control changed, namely\n";
+        warning() << "Contents of more than one control changed.\n";
         typedef std::vector<std::string>::const_iterator svci;
-        for
-            (svci i = names_of_changed_controls.begin()
-            ;i     != names_of_changed_controls.end()
-            ;++i
-            )
+        for(svci i = control_changes.begin(); i != control_changes.end(); ++i)
             {
-            warning() << *i << " changed" << '\n';
+            warning() << *i;
             }
         warning() << LMI_FLUSH;
         }

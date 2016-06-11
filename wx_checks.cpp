@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#include "pchfile.hpp"
+#include "pchfile_wx.hpp"
 
 #include "wx_checks.hpp"
 
@@ -71,26 +71,5 @@
 #if wxUSE_GIF
 #   error Disable wxUSE_GIF in wx setup.
 #endif // wxUSE_GIF
-
-#if defined __GNUC__ && defined LMI_MSW
-// Not yet implemented for gcc on the msw platform.
-#   if wxUSE_ON_FATAL_EXCEPTION
-#       error Disable wxUSE_ON_FATAL_EXCEPTION in wx setup.
-#   endif // wxUSE_ON_FATAL_EXCEPTION
-
-// Not yet implemented for gcc on the msw platform.
-#   if wxUSE_STACKWALKER
-#       error Disable wxUSE_STACKWALKER in wx setup.
-#   endif // wxUSE_STACKWALKER
-#endif // defined __GNUC__ && defined LMI_MSW
-
-// This application is single threaded, and wasn't designed to be
-// thread safe. It might work perfectly well if compiled with thread
-// support enabled (but not used), but that has never been tested, and
-// presumably would require changes to the lmi makefiles.
-//
-#if wxUSE_THREADS
-#   error Disable wxUSE_THREADS in wx setup.
-#endif // wxUSE_THREADS
 
 #endif // 0

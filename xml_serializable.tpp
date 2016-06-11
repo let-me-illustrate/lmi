@@ -19,11 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifdef __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // __BORLANDC__
-
 #include "xml_serializable.hpp"
 
 #include "alert.hpp"
@@ -107,11 +102,6 @@ void xml_serializable<T>::read(xml::element const& x)
         {
         handle_missing_version_attribute();
         }
-
-// COMPILER !! Borland doesn't find operator==() in ns xml.
-#ifdef __BORLANDC__
-using namespace xml;
-#endif // __BORLANDC__
 
     std::ostringstream oss;
 

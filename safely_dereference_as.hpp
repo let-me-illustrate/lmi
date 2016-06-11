@@ -26,13 +26,9 @@
 
 #include "rtti_lmi.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/is_base_and_derived.hpp>
-#   include <boost/type_traits/is_same.hpp>
-#else  // Defined __BORLANDC__ .
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
-#endif // Defined __BORLANDC__ .
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 #include <sstream>
 #include <stdexcept>

@@ -27,7 +27,7 @@
 //   while preview is active, application hidden as well as disabled
 // and in the later years given in the copyright notice above.
 
-#include "pchfile.hpp"
+#include "pchfile_wx.hpp"
 
 #include "previewframe_ex.hpp"
 

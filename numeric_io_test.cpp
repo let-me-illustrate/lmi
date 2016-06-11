@@ -29,9 +29,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/lexical_cast.hpp>
-#endif // ! defined __BORLANDC__
+#include <boost/lexical_cast.hpp>
 
 #include <cmath>                        // std::exp()
 #include <limits>
@@ -84,11 +82,9 @@ void mete_two_thirds()
 
 void mete_two_thirds_boost()
 {
-#if !defined __BORLANDC__
     std::string s = boost::lexical_cast<std::string>(2.0 / 3.0);
     double d = boost::lexical_cast<double>(s);
     stifle_warning_for_unused_value(d);
-#endif // ! defined __BORLANDC__
 }
 
 void mete_infinity()
@@ -101,12 +97,8 @@ void mete_infinity()
 // These tests generally assume IEC 60559 floating point. Hardware
 // that deviates from that standard is probably so rare that it can
 // reasonably be ignored, with an appropriate runtime message.
-//
-// COMPILER !! The borland compiler through version 5.5.1 reports that
-// its double type doesn't conform to IEC 60559, but that seems wrong.
-#ifndef __BORLANDC__
-    BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_iec559);
-#endif // ! defined __BORLANDC__
+
+BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_iec559);
 
 int test_main(int, char*[])
 {

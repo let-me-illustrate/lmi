@@ -27,12 +27,8 @@
 #include "assert_lmi.hpp"
 #include "et_vector.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/is_float.hpp>
-#else  // Defined __BORLANDC__ .
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
-#endif // Defined __BORLANDC__ .
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_float.hpp>
 
 #include <algorithm>                    // std::max(), std::min()
 #include <cmath>                        // C99 expm1(), log1p()

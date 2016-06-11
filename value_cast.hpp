@@ -27,8 +27,6 @@
 #include "numeric_io_cast.hpp"
 #include "stream_cast.hpp"
 
-#if !defined __BORLANDC__
-
 #include <boost/cast.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -261,25 +259,6 @@ To value_cast(From const& from, To)
 {
     return value_cast<To,From>(from);
 }
-
-#else // defined __BORLANDC__
-
-// COMPILER !! It's not worth working around borland defects: they are
-// legion. Don't rely on these casts to DTRT with borland tools.
-
-template<typename To, typename From>
-To value_cast(From const& from, To = To())
-{
-    return stream_cast<To>(from);
-}
-
-template<typename To, typename From>
-To numeric_value_cast(From const& from)
-{
-    return static_cast<To>(from);
-}
-
-#endif // defined __BORLANDC__
 
 #endif // value_cast_hpp
 

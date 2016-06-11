@@ -69,9 +69,6 @@
 #   include <stdio.h>                   // fileno()
 #   include <stdlib.h>                  // putenv()
 #   include <string.h>                  // _wcsdup(), strcasecmp(), strdup()
-#   ifdef __BORLANDC__
-#       define R_OK 04
-#   endif // __BORLANDC__
 #else // Unknown platform.
     // It seems too fragile to give the prototypes here:
     //   extern "C" int access(char const*, int);

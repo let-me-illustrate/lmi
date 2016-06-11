@@ -19,7 +19,7 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#include "pchfile.hpp"
+#include "pchfile_wx.hpp"
 
 #include "input_sequence_entry.hpp"
 
@@ -1366,11 +1366,6 @@ InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
     :wxButton(parent, id, "...", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT)
 {
     SetToolTip("Open sequence editor");
-
-    // Set vertical size to 1px - it's ridiculously small, but the sizers will make it as
-    // tall as the text control. Use text extent of "..." for width, because standard
-    // buttons use more padding.
-    SetMinSize(wxSize(8 + GetTextExtent(GetLabel()).x, 1));
 }
 
 } // Unnamed namespace.
@@ -1411,7 +1406,7 @@ bool InputSequenceEntry::Create
     button_ = new(wx) InputSequenceButton(this, wxID_ANY);
 
     sizer->Add(text_, wxSizerFlags(1).Expand());
-    sizer->Add(button_, wxSizerFlags().Expand().Border(wxLEFT, 1));
+    sizer->Add(button_, wxSizerFlags().Expand().Border(wxLEFT));
 
     SetSizer(sizer);
 

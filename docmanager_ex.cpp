@@ -32,7 +32,7 @@
 // and in the later years given in the copyright notice above as
 // detailed in ChangeLog.
 
-#include "pchfile.hpp"
+#include "pchfile_wx.hpp"
 
 #include "docmanager_ex.hpp"
 

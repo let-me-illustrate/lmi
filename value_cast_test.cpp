@@ -26,9 +26,7 @@
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/lexical_cast.hpp>
-#endif // !defined __BORLANDC__
+#include <boost/lexical_cast.hpp>
 
 #include <cmath>                        // std::pow()
 #include <cstring>                      // std::strcpy(), std::strcmp
@@ -46,13 +44,11 @@ struct X {std::string s;};
 std::istream& operator>>(std::istream& is, X&       x) {is >> x.s; return is;}
 std::ostream& operator<<(std::ostream& os, X const& x) {os << x.s; return os;}
 
-#if !defined __BORLANDC__
 template<typename To, typename From>
 cast_method method(From, To)
 {
     return value_cast_chooser<To,From>::method();
 }
-#endif // !defined __BORLANDC__
 
 int extra_tests0();
 int extra_tests1();
@@ -63,7 +59,6 @@ int test_main(int, char*[])
     // These could be static assertions, but any failure would prevent
     // other tests from running.
 
-#if !defined __BORLANDC__
     BOOST_TEST( is_string<char               *>::value);
     BOOST_TEST( is_string<char const         *>::value);
     BOOST_TEST(!is_string<char       volatile*>::value);
@@ -73,7 +68,6 @@ int test_main(int, char*[])
     BOOST_TEST(is_string<std::string      &>::value);
     BOOST_TEST(is_string<std::string const >::value);
     BOOST_TEST(is_string<std::string const&>::value);
-#endif // !defined __BORLANDC__
 
 // These tests fail to compile:
 //    BOOST_TEST(is_string<std::string volatile>::value);
@@ -87,7 +81,6 @@ int test_main(int, char*[])
     X x;
     NotDefaultConstructible n_d_c(std::cin);
 
-#if !defined __BORLANDC__
     // Test which conversion is used for type double.
 
     BOOST_TEST_EQUAL(e_both_numeric ,method(d   ,d  ));
@@ -131,9 +124,6 @@ int test_main(int, char*[])
 
     n_d_c = value_cast<NotDefaultConstructible>(n_d_c);
     n_d_c = value_cast(n_d_c, n_d_c);
-#else  // defined __BORLANDC__
-    stifle_warning_for_unused_variable(cp);
-#endif // defined __BORLANDC__
 
     // Forbidden conversions to pointer, detected at compile time.
 //    cp = value_cast(d, cp);
@@ -158,7 +148,6 @@ int test_main(int, char*[])
     // numeric_cast delegates to boost::numeric::converter:
     i = boost::numeric_cast<int>(2.71828);
     // but these do:
-#if !defined __BORLANDC__
     BOOST_TEST_THROW
         (i = value_cast<int>(d)
         ,std::runtime_error
@@ -169,7 +158,6 @@ int test_main(int, char*[])
         ,std::runtime_error
         ,"Value not preserved converting 2.71828 to 2 ."
         );
-#endif // !defined __BORLANDC__
 
     // This conversion should work: value is exactly preserved.
 
@@ -277,7 +265,6 @@ int extra_tests0()
     a = value_cast<std::string>(d);
     BOOST_TEST_EQUAL("3.14159", a);
 
-#if !defined __BORLANDC__
     BOOST_TEST_THROW(value_cast<double>(b) , std::invalid_argument, "");
     BOOST_TEST_THROW(value_cast<double>(""), std::invalid_argument, "");
 
@@ -306,7 +293,6 @@ int extra_tests0()
         ,std::runtime_error
         ,"Cannot convert (char const*)(0) to number."
         );
-#endif // !defined __BORLANDC__
 
     d = value_cast<double>(a);
     BOOST_TEST_EQUAL(3.14159, d);
@@ -477,7 +463,6 @@ int extra_tests1()
 ///
 /// TODO ?? Many of the boost tests remain to be adapted.
 
-#if !defined __BORLANDC__
 int boost_tests()
 {
     // Original boost::lexical_cast test suite, with wchar_t tests
@@ -798,10 +783,4 @@ int boost_tests()
 
     return 0;
 }
-#else  // defined __BORLANDC__
-int boost_tests()
-{
-    return 0;
-}
-#endif // defined __BORLANDC__
 

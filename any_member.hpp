@@ -68,13 +68,9 @@
 #include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
-#if !defined __BORLANDC__
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/is_base_and_derived.hpp>
-#   include <boost/type_traits/is_same.hpp>
-#else  // defined __BORLANDC__
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) class IgNoRe
-#endif // defined __BORLANDC__
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 #include <algorithm>                    // std::lower_bound(), std::swap()
 #include <map>
@@ -264,23 +260,13 @@ class any_member
     bool operator==(any_member const&) const;
     bool operator!=(any_member const&) const;
 
-#if defined __BORLANDC__
-    // COMPILER !! The borland compiler, defectively it would seem,
-    // fails to recognize the friendship granted to function template
-    // member_cast() above.
-    template<typename ExactMemberType>
-    ExactMemberType* exact_cast();
-#endif // defined __BORLANDC__
-
     // any_entity required implementation.
     virtual std::string str() const;
     virtual std::type_info const& type() const;
 
   private:
-#if !defined __BORLANDC__
     template<typename ExactMemberType>
     ExactMemberType* exact_cast();
-#endif // !defined __BORLANDC__
 
     // any_entity required implementation.
     virtual any_member& assign(std::string const&);
@@ -563,24 +549,8 @@ class MemberSymbolTable
   protected:
     MemberSymbolTable();
 
-#if !defined __BORLANDC__
     template<typename ValueType, typename SameOrBaseClassType>
     void ascribe(std::string const&, ValueType SameOrBaseClassType::*);
-#else  // defined __BORLANDC__
-    // The borland compiler defectively can't handle non-inline member
-    // function templates.
-    template<typename ValueType, typename SameOrBaseClassType>
-    void ascribe(std::string const& s, ValueType SameOrBaseClassType::* p2m)
-        {
-        ClassType* class_object = static_cast<ClassType*>(this);
-        map_.insert
-            (member_pair_type(s, any_member<ClassType>(class_object, p2m))
-            );
-        typedef std::vector<std::string>::iterator svi;
-        svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
-        member_names_.insert(i, s);
-        }
-#endif // defined __BORLANDC__
 
   private:
     void complain_that_no_such_member_is_ascribed(std::string const&) const;
@@ -645,7 +615,6 @@ any_member<ClassType> const& MemberSymbolTable<ClassType>::operator[]
     return i->second;
 }
 
-#if !defined __BORLANDC__
 template<typename ClassType>
 template<typename ValueType, typename SameOrBaseClassType>
 void MemberSymbolTable<ClassType>::ascribe
@@ -681,7 +650,6 @@ void MemberSymbolTable<ClassType>::ascribe
     svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
     member_names_.insert(i, s);
 }
-#endif // !defined __BORLANDC__
 
 template<typename ClassType>
 MemberSymbolTable<ClassType>& MemberSymbolTable<ClassType>::assign

@@ -91,6 +91,7 @@ class LMI_SO global_settings
 
   private:
     global_settings();
+    ~global_settings();
 
     bool mellon_;
     bool ash_nazg_;
@@ -99,14 +100,6 @@ class LMI_SO global_settings
     bool regression_testing_;
     fs::path data_directory_;
     calendar_date prospicience_date_;
-
-#ifdef __BORLANDC__
-// COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:
-// http://groups.google.com/groups?selm=7ei6fi%244me%241%40nnrp1.dejanews.com
-// http://groups.google.com/groups?hl=en&lr=&ie=UTF-8&selm=m3k9fc25dj.fsf%40gabi-soft.fr
-  public:
-#endif // __BORLANDC__
-    ~global_settings();
 };
 
 #endif // global_settings_hpp

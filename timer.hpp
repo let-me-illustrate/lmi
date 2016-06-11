@@ -34,15 +34,8 @@
     // Compilers for this platform use various types for its high-
     // resolution timer, but they use the same platform API, so
     // it's sufficient to use the same 64-bit integer type for all.
-    //
-    // Type double can't be used, even though it be the right size:
-    // arithmetic performed on this type requires that it be integral.
-    //
-#   ifndef __BORLANDC__
-    typedef unsigned long long int elapsed_t;
-#   else // __BORLANDC__
-    typedef unsigned __int64 elapsed_t;
-#   endif // __BORLANDC__
+#   include <cstdint>
+    typedef std::uint64_t elapsed_t;
 #else // Unknown platform.
 #   include <ctime>
     typedef std::clock_t elapsed_t;

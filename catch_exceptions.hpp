@@ -118,19 +118,10 @@ namespace lmi_test
         // std:: exceptions
         catch(std::bad_alloc const& e)
             {detail::report_exception(out, "std::bad_alloc:"       , e.what());}
-
-#if !defined(__BORLANDC__) || 0x0551 < __BORLANDC__
         catch(std::bad_cast const& e)
             {detail::report_exception(out, "std::bad_cast:"        , e.what());}
         catch(std::bad_typeid const& e)
             {detail::report_exception(out, "std::bad_typeid:"      , e.what());}
-#else // Old borland compiler.
-        catch(std::bad_cast const&)
-            {detail::report_exception(out, "std::bad_cast"         , "");}
-        catch(std::bad_typeid const&)
-            {detail::report_exception(out, "std::bad_typeid"       , "");}
-#endif // Old borland compiler.
-
         catch(std::bad_exception const& e)
             {detail::report_exception(out, "std::bad_exception:"   , e.what());}
         catch(std::domain_error const& e)

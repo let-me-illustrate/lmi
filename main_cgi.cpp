@@ -31,11 +31,7 @@
 // other reasons evident in the repository or explained in 'ChangeLog'.
 // Any defect should not reflect on Stephen F. Booth's reputation.
 
-#include LMI_PCH_HEADER
-
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"

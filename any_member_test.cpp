@@ -363,11 +363,7 @@ void any_member_test::test_any_member()
     s.d0 = std::exp(1.0);
     double d1 = *s["d0"].exact_cast<double>();
     BOOST_TEST_EQUAL(numeric_io_cast<std::string>(d1), "2.718281828459045");
-#if !defined __BORLANDC__
-    // This test fails with (defective) borland tools, which cannot
-    // handle the numeric-conversion routines correctly.
     BOOST_TEST_EQUAL(s["d0"].str(), "2.718281828459045");
-#endif // !defined __BORLANDC__
 
 // COMPILER !! The borland compiler can build the program with the
 // following line, but a run-time exception results.
@@ -471,7 +467,6 @@ void any_member_test::supplemental_test0()
 //    base_datum const* bp2 = member_cast<base_datum>(s["dd"]);
 //    BOOST_TEST_EQUAL(1729, bp2->virtual_function());
 
-#if !defined __BORLANDC__
     // COMPILER !! The borland compiler doesn't find the const overload;
     // presumably it is defective in this respect.
     S const& r = s;
@@ -479,7 +474,6 @@ void any_member_test::supplemental_test0()
     BOOST_TEST_EQUAL(7, bp3->sane);
     // This is appropriately forbidden: virtual_function() is not const.
 //    BOOST_TEST_EQUAL(1729, bp3->virtual_function());
-#endif // !defined __BORLANDC__
 
     // If the original type is known, an explicit exact_cast is possible.
     BOOST_TEST_EQUAL(1729, s["dd"].exact_cast<derived_datum>()->virtual_function());
@@ -630,12 +624,10 @@ void any_member_test::supplemental_test1()
 
     BOOST_TEST_THROW(r2["unknown_member"], std::runtime_error, "");
 
-#if !defined __BORLANDC__
     // Assigning a decimal-literal value to an integer isn't type
     // safe, and might require truncation, so it's forbidden.
     BOOST_TEST_THROW(r2["i0"] = "888e3", std::invalid_argument, "");
     BOOST_TEST_THROW(r2["i1"] = "999.9", std::invalid_argument, "");
-#endif // !defined __BORLANDC__
 }
 
 // This test detects a problem with the original distribution of

@@ -1,4 +1,4 @@
-// Precompiled header file.
+// Precompiled header file for use with wx.
 //
 // Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 //
@@ -19,27 +19,29 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id$
+// In every '.cpp' file that is expected to benefit from precompiled
+// headers, include exactly one of these PCH headers:
+//   pchfile.hpp
+//   pchfile_wx.hpp
+// Include it before anything else except comments and whitespace.
+// Never include any PCH header in any other file.
 
-// Always include this header first in every '.cpp' file that uses wxWidgets,
-// before anything else except comments and whitespace. Never include it in
-// any header file.
+// Rationale for reverse include guards: see 'config*.hpp'.
 
 #ifndef pchfile_wx_hpp
 #define pchfile_wx_hpp
 
-#include "pchfile.hpp"
-
 #if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
-#   include <wx/wx.h>
 
-#   include "wx_new.hpp"
-#   include "wx_utility.hpp"
-#   include "wx_workarounds.hpp"
+#   define LMI_OKAY_TO_INCLUDE_PCHLIST_HPP
+#   include "pchlist.hpp"
+#   undef  LMI_OKAY_TO_INCLUDE_PCHLIST_HPP
 
-#   include "product_editor.hpp"
-#   include "view_ex.hpp"
-#endif
+#   define LMI_OKAY_TO_INCLUDE_PCHLIST_WX_HPP
+#   include "pchlist_wx.hpp"
+#   undef  LMI_OKAY_TO_INCLUDE_PCHLIST_WX_HPP
+
+#endif // defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
 
 #endif // pchfile_wx_hpp
 

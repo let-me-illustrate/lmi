@@ -257,7 +257,7 @@
                         <message>Choose default file for new illustrations and censuses</message>
                         <wildcard>Illustrations (*.ill)|*.ill|All files|*.*</wildcard>
                         <help>Name of file with customized input values that are used as defaults for new illustrations and censuses</help>
-                        <size>180,-1</size>
+                        <size>350,-1</size>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -273,7 +273,7 @@
                         <style>wxDIRP_DIR_MUST_EXIST|wxDIRP_USE_TEXTCTRL|wxDIRP_SMALL</style>
                         <message>Choose directory where PDF files are written</message>
                         <help>Location where PDF files are written</help>
-                        <size>180,-1</size>
+                        <size>350,-1</size>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -287,19 +287,6 @@
                     <flag>wxGROW</flag>
                     <object class="wxSpinCtrl" name="SecondsToPauseBetweenPrintouts">
                         <help>Number of seconds to pause between batched printouts, to prevent the printer from scrambling their order</help>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                    <border>4</border>
-                    <object class="wxStaticText">
-                        <label>Spreadsheet file extension</label>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="SpreadsheetFileExtension">
-                        <help>File extension for spreadsheet output</help>
                     </object>
                 </object>
             </object>

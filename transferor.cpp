@@ -27,7 +27,7 @@
 // but is implemented differently and has different goals, so any
 // problems introduced here don't reflect on Kevin Smith's reputation.
 
-#include "pchfile.hpp"
+#include "pchfile_wx.hpp"
 
 #include "transferor.hpp"
 
@@ -235,10 +235,9 @@ namespace
         return true;
     }
 
-    // TODO ?? Explain why this uses "Yes" and "No" instead of
-    // true and false, or change it to support bool, e.g.
-    //   control.SetValue(numeric_io_cast<bool>(data));
-    //   data = numeric_io_cast<std::string>(control.GetValue());
+    // This uses "Yes" and "No" instead of true and false or 1 and 0,
+    // because the capitalized English words seem clearer for humans
+    // who read the xml files that store the data edited here.
     //
     template<typename T>
     bool TransferBool(transfer_direction td, std::string& data, T& control)
@@ -256,10 +255,8 @@ namespace
             else
                 {
                 warning()
-                    << "Boolean data is unexpectedly numeric"
-// TODO ?? Show the offending control's name (unavailable for now).
-//                    << " for control '" << name() << "'"
-                    << "."
+                    << "Control '" << control.GetName() << "':"
+                    << " expected 'Yes' or 'No', but got '" << data << "'."
                     << LMI_FLUSH
                     ;
                 return false;
@@ -298,12 +295,8 @@ namespace
             else
                 {
                 warning()
-                    << "String '"
-                    << data
-                    << "' not found"
-// TODO ?? Show the offending control's name (unavailable for now).
-//                    << " for control '" << name() << "'"
-                    << "."
+                    << "Control '" << control.GetName() << "':"
+                    << " invalid entry '" << data << "'."
                     << LMI_FLUSH
                     ;
                 return false;
@@ -338,9 +331,7 @@ namespace
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
             fatal_error()
-                << "CheckListBox"
-// TODO ?? Show the offending control's name (unavailable for now).
-//                << "Control '" << name() << "'"
+                << "CheckListBox '" << control.GetName() << "':"
                 << " must be constrained to a single selection."
                 << LMI_FLUSH
                 ;
@@ -358,9 +349,7 @@ namespace
         if(!(wxCB_READONLY & control.GetWindowStyle()))
             {
             fatal_error()
-                << "ComboBox"
-// TODO ?? Show the offending control's name (unavailable for now).
-//                << "Control '" << name() << "'"
+                << "ComboBox '" << control.GetName() << "':"
                 << " must be read only."
                 << LMI_FLUSH
                 ;
@@ -422,9 +411,7 @@ namespace
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
             fatal_error()
-                << "ListBox"
-// TODO ?? Show the offending control's name (unavailable for now).
-//                << "Control '" << name() << "'"
+                << "ListBox '" << control.GetName() << "':"
                 << " must be constrained to a single selection."
                 << LMI_FLUSH
                 ;
