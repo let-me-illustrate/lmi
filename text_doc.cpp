@@ -27,10 +27,7 @@
 // class out of a larger file, and in the later years given in the
 // copyright notice above.
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "text_doc.hpp"
 #include "view_ex.tpp"

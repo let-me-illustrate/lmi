@@ -29,10 +29,7 @@
 // implementation, modifying it in 2002 and the later years given in
 // the copyright notice above.
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
+#include "pchfile.hpp"
 
 #include "skeleton.hpp"
 

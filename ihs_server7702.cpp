@@ -22,10 +22,7 @@
 // Known defects:
 // grep for "NEED DECISION"
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "ihs_server7702.hpp"
 

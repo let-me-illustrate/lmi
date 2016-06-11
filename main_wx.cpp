@@ -29,10 +29,7 @@
 // implementation, modifying it in 2002 and the later years given in
 // the copyright notice above.
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "alert.hpp"                    // safely_show_message()
 #include "fenv_lmi.hpp"

@@ -30,10 +30,7 @@
 // Functions [ll,l]round[f,,l]() are not explicitly tested, though
 // they ideally ought to be.
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "round_to.hpp"
 

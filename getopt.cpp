@@ -82,10 +82,7 @@
 // evidence here to support banning alloca() from this project.
 
 // GWC added this to conform to LMI standards.
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 // GWC changed filename to conform to LMI standard: lowercase, .hpp .
 // #include <GetOpt.h>

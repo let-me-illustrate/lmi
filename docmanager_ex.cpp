@@ -32,10 +32,7 @@
 // and in the later years given in the copyright notice above as
 // detailed in ChangeLog.
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "docmanager_ex.hpp"
 

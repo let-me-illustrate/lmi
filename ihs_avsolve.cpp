@@ -26,10 +26,7 @@
 // is as good as any algorithm's, and its worst-case performance
 // is better than any algorithm's except Bolzano's.
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "account_value.hpp"
 

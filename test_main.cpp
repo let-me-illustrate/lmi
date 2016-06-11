@@ -56,10 +56,7 @@
 // may elect to do so because header-only implementation requires no library
 // build support. (Suggested by Ed Brey)
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "exit_codes.hpp"
 #include "fenv_lmi.hpp"

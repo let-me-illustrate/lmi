@@ -22,10 +22,7 @@
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.
 
-#include LMI_PCH_HEADER
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif // __BORLANDC__
+#include "pchfile.hpp"
 
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
