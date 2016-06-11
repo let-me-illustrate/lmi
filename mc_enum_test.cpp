@@ -33,9 +33,8 @@
 // Enumerative types 'e_holiday' and 'e_island' are explicitly
 // instantiated in a different translation unit.
 
-class mc_enum_test
+struct mc_enum_test
 {
-public:
     static void test();
     static void test_product_name();
 };
