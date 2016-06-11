@@ -294,120 +294,115 @@ fs::path unique_filepath
     return filepath;
 }
 
-// TODO ?? CALCULATION_SUMMARY Refactor duplication:
-//   validate_directory()
-//   validate_filepath()
-
-/// Throw an informative exception if the 'directory' argument does
-/// not name a valid directory.
+namespace
+{
+/// Throw if 'a_path' does not name a valid path.
 ///
-/// 'directory': directory-name to be validated.
+/// "Valid" means the path is well formed, not an empty string, and
+/// names an existing file or directory.
 ///
-/// 'context': semantic description of the directory to be named;
-/// used in the exception report.
+/// 'a_path': path to be validated.
+///
+/// 'context': semantic description of the path's usage,
+/// to be shown in the exception report.
 ///
 /// Although a std::invalid_argument exception might at first seem
-/// appropriate here, std::runtime_error is chosen because the
-/// 'directory' argument may be specified by users.
+/// appropriate here, std::runtime_error (via fatal_error()) is chosen
+/// because the 'a_path' argument may be specified by users.
 ///
 /// Exceptions thrown from the boost filesystem library on path
 /// assignment are caught in order to rethrow with 'context'
 /// prepended.
+///
+/// Design alternative: instead of calling this function from
+/// validate_directory() and validate_filepath(), eliminate those
+/// functions and call this directly with an 'is_directory' argument.
+/// This alternative would make it easy to add other requirements such
+/// as 'is_readable' or 'is_writable'.
+
+void validate_path
+    (std::string const& a_path
+    ,std::string const& context
+    )
+{
+    fs::path path;
+    try
+        {
+        path = a_path;
+        }
+    catch(fs::filesystem_error const& e)
+        {
+        fatal_error()
+            << context
+            << ": "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        }
+
+    if(path.empty())
+        {
+        fatal_error()
+            << context
+            << " must not be empty."
+            << LMI_FLUSH
+            ;
+        }
+    if(!fs::exists(path))
+        {
+        fatal_error()
+            << context
+            << " '"
+            << path
+            << "' not found."
+            << LMI_FLUSH
+            ;
+        }
+}
+} // Unnamed namespace.
+
+/// Throw if 'directory' does not name a valid directory.
+///
+/// 'directory': directory-name to be validated.
+///
+/// Implemented in terms of validate_path(), q.v.
 
 void validate_directory
     (std::string const& directory
     ,std::string const& context
     )
 {
-    fs::path path;
-    try
-        {
-        path = directory;
-        }
-    catch(fs::filesystem_error const& e)
-        {
-        fatal_error()
-            << context
-            << ": "
-            << e.what()
-            << LMI_FLUSH
-            ;
-        }
-
-    if(path.empty())
-        {
-        fatal_error()
-            << context
-            << " must not be empty."
-            << LMI_FLUSH
-            ;
-        }
-    if(!fs::exists(path))
+    validate_path(directory, context);
+    if(!fs::is_directory(directory))
         {
         fatal_error()
             << context
             << " '"
-            << path
-            << "' not found."
-            << LMI_FLUSH
-            ;
-        }
-    if(!fs::is_directory(path))
-        {
-        fatal_error()
-            << context
-            << " '"
-            << path
+            << directory
             << "' is not a directory."
             << LMI_FLUSH
             ;
         }
 }
 
+/// Throw if 'filepath' does not name a valid filepath.
+///
+/// 'filepath': filepath to be validated.
+///
+/// Implemented in terms of validate_path(), q.v.
+
 void validate_filepath
     (std::string const& filepath
     ,std::string const& context
     )
 {
-    fs::path path;
-    try
-        {
-        path = filepath;
-        }
-    catch(fs::filesystem_error const& e)
-        {
-        fatal_error()
-            << context
-            << ": "
-            << e.what()
-            << LMI_FLUSH
-            ;
-        }
-
-    if(path.empty())
-        {
-        fatal_error()
-            << context
-            << " must not be empty."
-            << LMI_FLUSH
-            ;
-        }
-    if(!fs::exists(path))
+    validate_path(filepath, context);
+    if(fs::is_directory(filepath))
         {
         fatal_error()
             << context
             << " '"
-            << path
-            << "' not found."
-            << LMI_FLUSH
-            ;
-        }
-    if(fs::is_directory(path))
-        {
-        fatal_error()
-            << context
-            << " '"
-            << path
+            << filepath
             << "' is a directory."
             << LMI_FLUSH
             ;
