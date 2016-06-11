@@ -69,7 +69,7 @@ char const notices_text[] =
     "Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA\n"
     ;
 
-std::string htmlize_licence_text(std::string const& s)
+std::string htmlize(std::string const& s)
 {
     std::string t(s);
     static std::string const double_newline("\n\n");
@@ -126,7 +126,7 @@ std::string const& license_as_text()
 
 std::string const& license_notices_as_html()
 {
-    static std::string s(htmlize_licence_text(license_notices_as_text()));
+    static std::string s(htmlize(license_notices_as_text()));
     return s;
 }
 
