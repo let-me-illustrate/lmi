@@ -73,19 +73,6 @@ namespace
             :std::ctype<char>(get_table(), false, 1)
             {}
 
-        // Standard library of MSVC 7 doesn't define the value of
-        // std::ctype<char>::table_size in the header so it cannot be used as a
-        // compile-time constant below. To work around this problem we define
-        // our own table_size for this compiler which happens to coincide with
-        // the value effectively used by MSVC 7 (and should also be generally
-        // big enough for any sane implementation)
-#if defined(_MSC_VER) && (_MSC_VER <= 0x1400)
-        enum
-        {
-            table_size = UCHAR_MAX + 1
-        };
-#endif // _MSC_VER 7.x workaround
-
       private:
         static std::ctype_base::mask const* get_table()
             {
