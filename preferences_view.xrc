@@ -289,19 +289,6 @@
                         <help>Number of seconds to pause between batched printouts, to prevent the printer from scrambling their order</help>
                     </object>
                 </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                    <border>4</border>
-                    <object class="wxStaticText">
-                        <label>Spreadsheet file extension</label>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="SpreadsheetFileExtension">
-                        <help>File extension for spreadsheet output</help>
-                    </object>
-                </object>
             </object>
         </object>
     </object>
