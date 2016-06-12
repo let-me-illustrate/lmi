@@ -28,6 +28,9 @@
 #include "miscellany.hpp"               // begins_with()
 #include "value_cast.hpp"
 
+#include <boost/filesystem/operations.hpp> // fs::system_complete()
+#include <boost/filesystem/path.hpp>
+
 #include <cstddef>                      // std::size_t
 #include <sstream>
 #include <vector>
@@ -46,12 +49,68 @@ bool is_calculation_summary_column_name(std::string const& member_name)
 {
     return begins_with(member_name, "CalculationSummaryColumn");
 }
+
+/// Convert "C:\native\path" to "/generic/path". Cf. native_path().
+
+std::string generic_path(std::string const& s)
+{
+#if defined LMI_MSW
+    return fs::system_complete(fs::path(s)).string();
+#else  // !defined LMI_MSW
+    return s;
+#endif // !defined LMI_MSW
+}
+
+/// Convert "/generic/path" to "C:\native\path".
+///
+/// wxDirPickerCtrl and wxFilePickerCtrl hold native paths internally,
+/// so calling SetPath("/x/y") on msw changes their internal state to
+/// something like "C:\x\y". However, lmi's MVC framework assumes that
+/// setting a textcontrol from a string establishes the postcondition
+/// that the textcontrol's contents are identical to the string. Thus,
+/// these controls in effect force the use of native paths, while lmi
+/// prefers forward slashes as path delimiters. This function and its
+/// counterpart generic_path() are used to translate between the two
+/// styles, so that backward slashes are sequestered in the GUI and do
+/// not flow into 'configurable_settings.xml'.
+///
+/// At least with the version of boost currently used (2016-06),
+/// native_file_string() and native_directory_string() are identical,
+/// so there is no need to differentiate between directories and
+/// filepaths.
+
+std::string native_path(std::string const& s)
+{
+#if defined LMI_MSW
+    return fs::system_complete(fs::path(s)).native_file_string();
+#else  // !defined LMI_MSW
+    return s;
+#endif // !defined LMI_MSW
+}
 } // Unnamed namespace.
 
 PreferencesModel::PreferencesModel()
 {
     AscribeMembers();
     Load();
+
+    // Temporary unit test, to be removed before release.
+    std::string const g("/path/to/somewhere");
+    std::string const n("C:\\path\\to\\somewhere");
+    warning()
+        << "Remove this test before release.\n"
+        << g << " g (generic)\n"
+        << n << " n (native)\n"
+        << generic_path(n) << " generic_path(n)\n"
+        << native_path (g) << " native_path(g)\n"
+        << generic_path(g) << " generic_path(g)\n"
+        << native_path (n) << " native_path (n)\n"
+        << "Oh, and BTW...\n"
+        << fs::path("foo\\bar\\data.txt", fs::no_check).string() << " <-- fs::path(\"foo\\bar\\data.txt\", fs::no_check).string()\n"
+        << "...but OTOH...\n"
+        << fs::path("foo\\bar\\data.txt"              ).string() << " <-- fs::path(\"foo\\bar\\data.txt\"              ).string()\n"
+        << LMI_FLUSH
+        ;
 }
 
 PreferencesModel::~PreferencesModel()
@@ -230,8 +289,8 @@ void PreferencesModel::Load()
             }
         }
 
-    DefaultInputFilename           = z.default_input_filename();
-    PrintDirectory                 = z.print_directory();
+    DefaultInputFilename           = native_path(z.default_input_filename());
+    PrintDirectory                 = native_path(z.print_directory());
     SecondsToPauseBetweenPrintouts = z.seconds_to_pause_between_printouts();
     SkinFileName                   = z.skin_filename();
     UseBuiltinCalculationSummary   = z.use_builtin_calculation_summary() ? "Yes" : "No";
@@ -261,8 +320,8 @@ void PreferencesModel::Save() const
     configurable_settings& z = configurable_settings::instance();
 
     z["calculation_summary_columns"       ] = string_of_column_names();
-    z["default_input_filename"            ] = DefaultInputFilename    .value();
-    z["print_directory"                   ] = PrintDirectory          .value();
+    z["default_input_filename"            ] = generic_path(DefaultInputFilename    .value());
+    z["print_directory"                   ] = generic_path(PrintDirectory          .value());
     z["seconds_to_pause_between_printouts"] = value_cast<std::string>(SecondsToPauseBetweenPrintouts.value());
     z["skin_filename"                     ] = SkinFileName            .value();
     z["use_builtin_calculation_summary"   ] = value_cast<std::string>("Yes" == UseBuiltinCalculationSummary);
