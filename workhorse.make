@@ -338,13 +338,14 @@ vpath quoted_gpl_html $(src_dir)
 # Only files in the source directory are tested. Files that reside
 # elsewhere (e.g., headers accompanying libraries) are not tested.
 
-# Exclude headers named 'config_*.hpp' and 'pchlist*': they are
-# designed to signal errors if they are used separately.
+# Exclude headers named 'config_*.hpp' or 'pchlist*.hpp': they are
+# designed to signal errors if they are used separately. $(sort) is
+# used here to remove duplicates, which are harmless but inefficient.
 
 physical_closure_files := \
-  $(addsuffix .physical_closure,\
-    $(filter-out config_%.hpp,\
-      $(filter-out pchlist%.hpp,\
+  $(sort \
+    $(addsuffix .physical_closure,\
+      $(filter-out config_%.hpp pchlist%.hpp,\
         $(notdir \
           $(wildcard \
             $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
@@ -353,46 +354,47 @@ physical_closure_files := \
         ) \
       ) \
     ) \
-  )
+  ) \
 
 ################################################################################
 
 # Files that depend on wx, which can't use the strictest gcc warnings.
 
-# '.cpp' files are deemed to depend on wx iff they include lmi's
-# wx-specific PCH file.
+# Files are deemed to depend on wx iff they contain 'include *<wx/'.
+# This heuristic isn't foolproof because wx headers might be included
+# indirectly. Include an innocuous header like <wx/version.h> in files
+# for which it fails.
 
 wx_dependent_objects := \
-  $(addsuffix .o,\
-    $(basename \
-      $(notdir \
-        $(shell $(GREP) \
-          --files-with-matches \
-          '\#include "pchfile_wx.hpp"' \
-          $(src_dir)/*.cpp \
-        ) \
-      ) \
-    ) \
-  )
-
-# Other files are deemed to depend on wx iff they obviously include a
-# wx header. This heuristic isn't foolproof because wx headers might
-# be included indirectly. An innocuous header like <wx/version.h> can
-# be included in files for which it fails.
-
-wx_dependent_physical_closure_files := \
-  $(addsuffix .physical_closure,\
-    $(notdir \
-      $(shell $(GREP) \
-        --files-with-matches \
-        '\#include *<wx/' \
-        $(wildcard \
-          $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
+  $(sort \
+    $(addsuffix .o,\
+      $(basename \
+        $(notdir \
+          $(shell $(GREP) \
+            --files-with-matches \
+            'include *<wx/' \
+            $(src_dir)/*.?pp \
           ) \
         ) \
       ) \
     ) \
-  )
+  ) \
+
+wx_dependent_physical_closure_files := \
+  $(sort \
+    $(addsuffix .physical_closure,\
+      $(notdir \
+        $(shell $(GREP) \
+          --files-with-matches \
+          'include *<wx/' \
+          $(wildcard \
+            $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
+            ) \
+          ) \
+        ) \
+      ) \
+    ) \
+  ) \
 
 ################################################################################
 
