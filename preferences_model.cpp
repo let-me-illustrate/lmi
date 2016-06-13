@@ -93,24 +93,6 @@ PreferencesModel::PreferencesModel()
 {
     AscribeMembers();
     Load();
-
-    // Temporary unit test, to be removed before release.
-    std::string const g("/path/to/somewhere");
-    std::string const n("C:\\path\\to\\somewhere");
-    warning()
-        << "Remove this test before release.\n"
-        << g << " g (generic)\n"
-        << n << " n (native)\n"
-        << generic_path(n) << " generic_path(n)\n"
-        << native_path (g) << " native_path(g)\n"
-        << generic_path(g) << " generic_path(g)\n"
-        << native_path (n) << " native_path (n)\n"
-        << "Oh, and BTW...\n"
-        << fs::path("foo\\bar\\data.txt", fs::no_check).string() << " <-- fs::path(\"foo\\bar\\data.txt\", fs::no_check).string()\n"
-        << "...but OTOH...\n"
-        << fs::path("foo\\bar\\data.txt"              ).string() << " <-- fs::path(\"foo\\bar\\data.txt\"              ).string()\n"
-        << LMI_FLUSH
-        ;
 }
 
 PreferencesModel::~PreferencesModel()
