@@ -1048,7 +1048,7 @@ fardel: install
 .PHONY: wrap_fardel
 wrap_fardel:
 	@$(CP) $(prefix)/third_party/bin/md5sum$(EXEEXT) .
-	@$(CP) $(bin_dir)/configurable_settings.xml .
+	@$(CP) $(data_dir)/configurable_settings.xml .
 	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
 	@$(fardel_date_script)
 	@$(MD5SUM) $(fardel_checksummed_files) >validated.md5
@@ -1100,10 +1100,7 @@ test_data := \
 # local copies are provided for as needed.
 
 configurable_settings.xml:
-	@$(CP) --preserve --update $(bin_dir)/$@ .
-
-$(data_dir)/configurable_settings.xml:
-	@$(CP) --preserve --update $(bin_dir)/$(notdir $@) $(data_dir)/.
+	@$(CP) --preserve --update $(data_dir)/$@ .
 
 ################################################################################
 
