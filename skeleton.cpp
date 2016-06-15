@@ -65,6 +65,7 @@
 #include "miscellany.hpp"
 #include "msw_workarounds.hpp"          // PreloadDesignatedDlls()
 #include "mvc_controller.hpp"
+#include "path_utility.hpp"             // fs::path inserter
 #include "policy_document.hpp"
 #include "policy_view.hpp"
 #include "preferences_model.hpp"
@@ -486,10 +487,22 @@ void Skeleton::UponDropFiles(wxDropFilesEvent& event)
 
 void Skeleton::UponEditDefaultCell(wxCommandEvent&)
 {
-    doc_manager_->CreateDocument
-        (configurable_settings::instance().default_input_filename()
-        ,wxDOC_SILENT
-        );
+    configurable_settings& z = configurable_settings::instance();
+    fs::path const p(z.default_input_filename());
+
+    if(p.empty() || !fs::exists(p) || fs::is_directory(p))
+        {
+        fatal_error()
+            << "The default input file, '"
+            << p
+            << "', could not be read.\n\n"
+            << "Use the \"Preferences\" dialog to select any saved"
+            << " illustration-input file as the default."
+            << LMI_FLUSH
+            ;
+        }
+
+    doc_manager_->CreateDocument(p.string(), wxDOC_SILENT);
 }
 
 /// Display user manual in default browser.
