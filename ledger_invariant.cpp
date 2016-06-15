@@ -106,8 +106,7 @@ void LedgerInvariant::Alloc(int len)
 
     EndYearVectors  ["TermSpecAmt"           ] = &TermSpecAmt            ;
     EndYearVectors  ["SpecAmt"               ] = &SpecAmt                ;
-    // SOMEDAY !! This contradicts the "ProducerCompensation" comment in the header.
-    BegYearVectors  ["ProducerCompensation"  ] = &ProducerCompensation   ;
+    EndYearVectors  ["ProducerCompensation"  ] = &ProducerCompensation   ;
 
     OtherVectors    ["IndvTaxBracket"        ] = &IndvTaxBracket         ;
     OtherVectors    ["CorpTaxBracket"        ] = &CorpTaxBracket         ;

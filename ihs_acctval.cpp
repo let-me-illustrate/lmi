@@ -1543,35 +1543,9 @@ void AccountValue::FinalizeYear()
 
         InvariantValues().GptForceout[Year] = YearsTotalGptForceout;
 
-// TODO ?? Not yet implemented.
+// SOMEDAY !! Not yet implemented.
 //        InvariantValues().NaarForceout[Year] = InvariantValues().ErGrossPmt[Year];
-
-        // Producer compensation is complicated, and generally varies
-        // by producer type (which is unknown to lmi). It was probably
-        // a mistake to attempt to calculate it in "simple" situations
-        // because the result is incorrect otherwise.
-        if(CalculateComp && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate)
-            {
-            // This should also incorporate:
-            //   asset-tiered compensation
-            //   input 'extra' compensation (on premium and assets)
-            double commission =
-                    InvariantValues().GrossPmt[Year]
-                -   TieredGrossToNet
-                        (InvariantValues().GrossPmt[Year]
-                        ,AnnualTargetPrem
-                        ,CompTarget[Year]
-                        ,CompExcess[Year]
-                        )
-                ;
-            InvariantValues().ProducerCompensation[Year] =
-// This would normally be expected:
-//                  AssetComp[Year] * AVSepAcct
-// but some obsolete product needed this instead:
-                    AssetComp[Year] * (AVSepAcct + AVGenAcct)
-                +   commission
-                ;
-            }
+//        InvariantValues().ProducerCompensation[Year] =
         }
 }
 
