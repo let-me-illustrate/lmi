@@ -300,7 +300,7 @@
 {DB_ErPremMethod,DB_Topic_Allocations,"ErPremMethod","Apportionment of employer premiums between general and separate accounts: 0=follow input fund allocation, 1=credit 'preferred' account",}, \
 {DB_ErPremAcct,DB_Topic_Allocations,"ErPremAcct","Preferred account for employer premiums if input overridden: 0=general account, 1=separate account",}, \
 {DB_Topic_Compensation,DB_FIRST,"Compensation","Commissions, asset-based compensation, and chargebacks",}, \
-{DB_CalculateComp,DB_Topic_Compensation,"CalculateComp","Calculate compensation [not fully implemented]",}, \
+{DB_CalculateComp,DB_Topic_Compensation,"CalculateComp","Calculate compensation [not implemented]",}, \
 {DB_CompTarget,DB_Topic_Compensation,"CompTarget","Producer-only compensation on premium up to target",}, \
 {DB_CompExcess,DB_Topic_Compensation,"CompExcess","Producer-only compensation on premium in excess of target",}, \
 {DB_CompChargeback,DB_Topic_Compensation,"CompChargeback","Compensation chargeback for early termination",}, \

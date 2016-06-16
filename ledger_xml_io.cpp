@@ -260,7 +260,7 @@ void Ledger::write(xml::element& x) const
     title_map["PrefLoanBalance_Guaranteed"      ] = "Guar Preferred Loan Bal";
     title_map["PremTaxLoad_Current"             ] = "Curr Premium Tax Load";
     title_map["PremTaxLoad_Guaranteed"          ] = "Guar Premium Tax Load";
-// TODO ?? Excluded because it's defectively implemented:
+// Excluded because it's unimplemented:
 //    title_map["ProducerCompensation"            ] = " _____________ Producer Compensation";
     title_map["ProjectedCoiCharge_Current"      ] = "Experience Rating Projected COI Charge";
     title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";

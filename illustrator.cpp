@@ -42,7 +42,6 @@
 
 #include <boost/filesystem/convenience.hpp>
 
-#include <cstdio>                       // std::remove()
 #include <iostream>
 #include <string>
 
@@ -208,24 +207,12 @@ Input const& default_cell()
         catch(...)
             {
             report_exception();
-            if(0 == std::remove(default_input_file.c_str()))
-                {
-                warning()
-                    << "Removed defective default input file '"
-                    << default_input_file
-                    << "'."
-                    << LMI_FLUSH
-                    ;
-                }
-            else
-                {
-                warning()
-                    << "Unable to remove defective default input file '"
-                    << default_input_file
-                    << "'. Make sure it is not write protected."
-                    << LMI_FLUSH
-                    ;
-                }
+            warning()
+                << "Unable to read default input file '"
+                << default_input_file
+                << "'. Built-in default parameters will be used instead."
+                << LMI_FLUSH
+                ;
             }
         }
 

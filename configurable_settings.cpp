@@ -176,6 +176,7 @@ configurable_settings::configurable_settings()
             << LMI_FLUSH
             ;
         validate_directory(print_directory_, "Fallback print directory");
+        save();
         }
 }
 
