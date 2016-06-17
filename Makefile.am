@@ -1089,6 +1089,7 @@ noinst_HEADERS = \
     configurable_settings.hpp \
     contains.hpp \
     crc32.hpp \
+    currency.hpp \
     custom_io_0.hpp \
     custom_io_1.hpp \
     data_directory.hpp \
