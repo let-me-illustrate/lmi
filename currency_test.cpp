@@ -1,4 +1,4 @@
-// Currency amounts--unit test.
+// Represent a currency amount exactly as integral cents--unit test.
 //
 // Copyright (C) 2016 Gregory W. Chicares.
 //
@@ -31,87 +31,88 @@
 
 void test_ctors()
 {
-    BOOST_TEST_EQUAL(currency().total_subunits(), 0);
-    BOOST_TEST_EQUAL(currency(0, 99).total_subunits(), 99);
-    BOOST_TEST_EQUAL(currency(1, 99).total_subunits(), 199);
+    BOOST_TEST_EQUAL(currency(     ).total_cents(),   0);
+    BOOST_TEST_EQUAL(currency(0, 99).total_cents(),  99);
+    BOOST_TEST_EQUAL(currency(1, 99).total_cents(), 199);
 
     currency const c(4, 56);
-    BOOST_TEST_EQUAL(currency(c).total_subunits(), 456);
+    BOOST_TEST_EQUAL(currency(c).total_cents(), 456);
 
-    static char const* const range_error = "Currency amount out of range.";
-    BOOST_TEST_THROW(currency(-1, 0), std::overflow_error, range_error);
-    BOOST_TEST_THROW(currency(-1, 99), std::overflow_error, range_error);
-    BOOST_TEST_THROW(currency(-1, -99), std::overflow_error, range_error);
+    static char const* const overflow_msg = "Currency amount out of range.";
+    BOOST_TEST_THROW(currency(-1,   0), std::overflow_error, overflow_msg);
+    BOOST_TEST_THROW(currency(-1,  99), std::overflow_error, overflow_msg);
+    BOOST_TEST_THROW(currency(-1, -99), std::overflow_error, overflow_msg);
     BOOST_TEST_THROW
         (currency(std::numeric_limits<currency::amount_type>::max(), 0)
         ,std::overflow_error
-        ,range_error
+        ,overflow_msg
         );
     BOOST_TEST_THROW
         (currency(std::numeric_limits<currency::amount_type>::min(), 0)
         ,std::overflow_error
-        ,range_error
+        ,overflow_msg
         );
 
-    static char const* const subunits_error = "Invalid amount of currency subunits.";
-    BOOST_TEST_THROW(currency(1, 100), std::runtime_error, subunits_error);
-    BOOST_TEST_THROW(currency(1, 101), std::runtime_error, subunits_error);
-    BOOST_TEST_THROW(currency(1, -1), std::runtime_error, subunits_error);
+    static char const* const cents_msg = "Invalid number of cents.";
+    BOOST_TEST_THROW(currency(1, 100), std::runtime_error, cents_msg);
+    BOOST_TEST_THROW(currency(1, 101), std::runtime_error, cents_msg);
+    BOOST_TEST_THROW(currency(1,  -1), std::runtime_error, cents_msg);
 }
 
 void test_accessors()
 {
     auto c = currency(1234, 56);
-    BOOST_TEST_EQUAL(c.units(), 1234);
-    BOOST_TEST_EQUAL(c.subunits(), 56);
+    BOOST_TEST_EQUAL(c.dollars(), 1234);
+    BOOST_TEST_EQUAL(c.cents()  , 56);
 
     c = -currency(9876543, 21);
-    BOOST_TEST_EQUAL(c.units(), -9876543);
-    BOOST_TEST_EQUAL(c.subunits(), -21);
+    BOOST_TEST_EQUAL(c.dollars(), -9876543);
+    BOOST_TEST_EQUAL(c.cents()  , -21);
 
     c = -currency(0, 99);
-    BOOST_TEST_EQUAL(c.units(), 0);
-    BOOST_TEST_EQUAL(c.subunits(), -99);
+    BOOST_TEST_EQUAL(c.dollars(), 0);
+    BOOST_TEST_EQUAL(c.cents()  , -99);
 
     c = -c;
-    BOOST_TEST_EQUAL(c.units(), 0);
-    BOOST_TEST_EQUAL(c.subunits(), 99);
+    BOOST_TEST_EQUAL(c.dollars(), 0);
+    BOOST_TEST_EQUAL(c.cents()  , 99);
 }
 
 void test_comparison()
 {
-    BOOST_TEST( currency(1, 23) < currency(1, 24) );
-    BOOST_TEST( -currency(1, 23) > -currency(1, 24) );
+    BOOST_TEST( currency(1, 23) <  currency(1, 24));
+    BOOST_TEST(-currency(1, 23) > -currency(1, 24));
 
-    BOOST_TEST( currency(1, 23) <= currency(1, 23) );
-    BOOST_TEST( currency(1, 23) == currency(1, 23) );
-    BOOST_TEST( currency(1, 23) != currency(1, 24) );
-    BOOST_TEST( currency(1, 23) >= currency(1, 23) );
+    BOOST_TEST( currency(1, 23) <= currency(1, 23));
+    BOOST_TEST( currency(1, 23) == currency(1, 23));
+    BOOST_TEST( currency(1, 23) != currency(1, 24));
+    BOOST_TEST( currency(1, 23) >= currency(1, 23));
 }
 
 void test_arithmetic()
 {
     auto c = currency(1, 23) + currency(4, 77);
-    BOOST_TEST_EQUAL(c.total_subunits(), 600);
+    BOOST_TEST_EQUAL(c.total_cents(), 600);
 
     c *= 12;
-    BOOST_TEST_EQUAL(c.total_subunits(), 7200);
+    BOOST_TEST_EQUAL(c.total_cents(), 7200);
 
+    // $72.00 - $80.10 = $8.10
     auto d = c - currency(80, 10);
-    BOOST_TEST_EQUAL(d.total_subunits(), -810);
+    BOOST_TEST_EQUAL(d.total_cents(), -810);
 }
 
 void test_double()
 {
-    BOOST_TEST_EQUAL(currency::from_value(1.23).total_subunits(), 123);
-    BOOST_TEST_EQUAL(currency::from_value(-1.23).total_subunits(), -123);
+    BOOST_TEST_EQUAL(currency::from_value( 1.23).total_cents(),  123);
+    BOOST_TEST_EQUAL(currency::from_value(-1.23).total_cents(), -123);
 
-    BOOST_TEST_EQUAL(currency::from_value(0.005).total_subunits(), 1);
-    BOOST_TEST_EQUAL(currency::from_value(-0.005).total_subunits(), -1);
+    BOOST_TEST_EQUAL(currency::from_value( 0.005).total_cents(),  1);
+    BOOST_TEST_EQUAL(currency::from_value(-0.005).total_cents(), -1);
 
-    auto c = currency::from_value(14857345.859999999404);
-    BOOST_TEST_EQUAL(c.total_subunits() ,1485734586);
-    BOOST_TEST_EQUAL(c.value(), 14857345.86);
+    auto c = currency::from_value(    14857345.859999999404);
+    BOOST_TEST_EQUAL(c.total_cents() ,1485734586);
+    BOOST_TEST_EQUAL(c.value()       ,14857345.86);
 }
 
 void test_stream_roundtrip
