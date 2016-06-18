@@ -79,12 +79,12 @@ class currency
 
     currency(amount_type dollars, int cents)
         {
-        if(dollars < 0 || dollars >= max_dollars())
+        if(!(0 <= dollars && dollars < max_dollars()))
             {
             throw std::overflow_error("Currency amount out of range.");
             }
 
-        if(cents < 0 || cents >= cents_per_dollar)
+        if(!(0 <= cents && cents < cents_per_dollar))
             {
             throw std::runtime_error("Invalid number of cents.");
             }
@@ -99,7 +99,7 @@ class currency
 
     static currency from_value(double d)
         {
-        if(std::trunc(d) >= static_cast<double>(max_dollars()))
+        if(static_cast<double>(max_dollars()) <= std::trunc(d))
             {
             throw std::overflow_error("Currency amount out of range.");
             }
@@ -277,7 +277,7 @@ inline std::istream& operator>>(std::istream& is, currency& c)
         return is;
         }
 
-    if(cents < 0 || cents >= currency::cents_per_dollar)
+    if(!(0 <= cents && cents < currency::cents_per_dollar))
         {
         is.setstate(std::ios_base::failbit);
         return is;
