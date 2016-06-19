@@ -186,6 +186,7 @@ void do_some_arithmetic(T t)
     t -= u;
     t = t - u;
     u = t;
+    T volatile v(t);
 }
 
 void time_double()
