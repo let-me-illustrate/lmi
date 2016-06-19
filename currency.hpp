@@ -49,6 +49,8 @@
 
 class currency
 {
+    friend class currency_test;
+
   public:
     /// Using int32_t for the value would limit the range to about
     /// twenty million dollars, which is insufficient; but int32_t

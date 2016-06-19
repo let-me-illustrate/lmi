@@ -29,7 +29,31 @@
 #include <sstream>
 #include <stdexcept>
 
-void test_ctors()
+class currency_test
+{
+  public:
+    static void test();
+
+  private:
+    static void test_ctors();
+    static void test_accessors();
+    static void test_comparison();
+    static void test_arithmetic();
+    static void test_double();
+    static void test_streams();
+};
+
+void currency_test::test()
+{
+    test_ctors();
+    test_accessors();
+    test_comparison();
+    test_arithmetic();
+    test_double();
+    test_streams();
+}
+
+void currency_test::test_ctors()
 {
     BOOST_TEST_EQUAL(currency(     ).total_cents(),   0);
     BOOST_TEST_EQUAL(currency(0, 99).total_cents(),  99);
@@ -59,7 +83,7 @@ void test_ctors()
     BOOST_TEST_THROW(currency(1,  -1), std::runtime_error, cents_msg);
 }
 
-void test_accessors()
+void currency_test::test_accessors()
 {
     auto c = currency(1234, 56);
     BOOST_TEST_EQUAL(c.dollars(), 1234);
@@ -78,7 +102,7 @@ void test_accessors()
     BOOST_TEST_EQUAL(c.cents()  , 99);
 }
 
-void test_comparison()
+void currency_test::test_comparison()
 {
     BOOST_TEST( currency(1, 23) <  currency(1, 24));
     BOOST_TEST(-currency(1, 23) > -currency(1, 24));
@@ -89,7 +113,7 @@ void test_comparison()
     BOOST_TEST( currency(1, 23) >= currency(1, 23));
 }
 
-void test_arithmetic()
+void currency_test::test_arithmetic()
 {
     auto c = currency(1, 23) + currency(4, 77);
     BOOST_TEST_EQUAL(c.total_cents(), 600);
@@ -102,7 +126,7 @@ void test_arithmetic()
     BOOST_TEST_EQUAL(d.total_cents(), -810);
 }
 
-void test_double()
+void currency_test::test_double()
 {
     BOOST_TEST_EQUAL(currency::from_value( 1.23).total_cents(),  123);
     BOOST_TEST_EQUAL(currency::from_value(-1.23).total_cents(), -123);
@@ -134,7 +158,7 @@ void test_stream_roundtrip
     INVOKE_BOOST_TEST_EQUAL(c, c0, file, line);
 }
 
-void test_streams()
+void currency_test::test_streams()
 {
     #define TEST_ROUNDTRIP(c, str) \
         test_stream_roundtrip(c, str, __FILE__, __LINE__)
@@ -152,12 +176,7 @@ void test_streams()
 
 int test_main(int, char*[])
 {
-    test_ctors();
-    test_accessors();
-    test_comparison();
-    test_arithmetic();
-    test_double();
-    test_streams();
+    currency_test::test();
 
     return EXIT_SUCCESS;
 }
