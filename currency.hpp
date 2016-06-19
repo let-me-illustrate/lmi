@@ -92,7 +92,7 @@ class currency
         cents_ = cents_per_dollar * dollars + cents;
         }
 
-    /// Static constructor from floating-point dollars.
+    /// Convert from floating-point dollars.
     ///
     /// The argument may be positive or negative. Its value is rounded
     /// to the nearest cent.
