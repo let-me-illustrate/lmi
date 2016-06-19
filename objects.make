@@ -568,6 +568,7 @@ crc32_test$(EXEEXT): \
 currency_test$(EXEEXT): \
   $(common_test_objects) \
   currency_test.o \
+  timer.o \
 
 expression_template_0_test$(EXEEXT): \
   $(common_test_objects) \

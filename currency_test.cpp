@@ -24,6 +24,7 @@
 #include "currency.hpp"
 
 #include "test_tools.hpp"
+#include "timer.hpp"
 
 #include <limits>
 #include <sstream>
@@ -41,6 +42,7 @@ class currency_test
     static void test_arithmetic();
     static void test_double();
     static void test_streams();
+    static void test_speed();
 };
 
 void currency_test::test()
@@ -51,6 +53,7 @@ void currency_test::test()
     test_arithmetic();
     test_double();
     test_streams();
+    test_speed();
 }
 
 void currency_test::test_ctors()
@@ -172,6 +175,45 @@ void currency_test::test_streams()
     TEST_ROUNDTRIP(-currency(  0, 99),   "-0.99");
 
     #undef TEST_ROUNDTRIP
+}
+
+template<typename T>
+void do_some_arithmetic(T t)
+{
+    T u(t);
+    t += u;
+    t += t;
+    t -= u;
+    t = t - u;
+    u = t;
+}
+
+void time_double()
+{
+    double d(1.23);
+    for(int j = 0; j < 1000000; ++j)
+        {
+        do_some_arithmetic(d);
+        }
+}
+
+void time_currency()
+{
+    currency c(1, 23);
+    for(int j = 0; j < 1000000; ++j)
+        {
+        do_some_arithmetic(c);
+        }
+}
+
+void currency_test::test_speed()
+{
+    std::cout
+        << "  Speed tests..."
+        << "\n  double  : " << TimeAnAliquot(time_double)
+        << "\n  currency: " << TimeAnAliquot(time_currency)
+        << std::endl
+        ;
 }
 
 int test_main(int, char*[])

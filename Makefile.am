@@ -636,7 +636,8 @@ test_crc32_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_currency_SOURCES = \
   $(common_test_objects) \
-  currency_test.cpp
+  currency_test.cpp \
+  timer.cpp
 test_currency_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_expression_template_0_SOURCES = \
