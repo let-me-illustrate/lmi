@@ -198,6 +198,15 @@ void time_double()
         }
 }
 
+void time_amount_type()
+{
+    currency::amount_type a(123);
+    for(int j = 0; j < 1000000; ++j)
+        {
+        do_some_arithmetic(a);
+        }
+}
+
 void time_currency()
 {
     currency c(1, 23);
@@ -211,8 +220,9 @@ void currency_test::test_speed()
 {
     std::cout
         << "  Speed tests..."
-        << "\n  double  : " << TimeAnAliquot(time_double)
-        << "\n  currency: " << TimeAnAliquot(time_currency)
+        << "\n  double     : " << TimeAnAliquot(time_double)
+        << "\n  amount_type: " << TimeAnAliquot(time_amount_type)
+        << "\n  currency   : " << TimeAnAliquot(time_currency)
         << std::endl
         ;
 }
