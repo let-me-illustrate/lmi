@@ -461,7 +461,7 @@ bool DatumSequenceRenderer::GetValue(wxVariant& value) const
 // This class is used to implement conversion to and from wxVariant for use by
 // wxDVC renderers in a single place.
 
-class renderer_type_convertor
+class renderer_type_converter
 {
   public:
     virtual wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const = 0;
@@ -469,16 +469,16 @@ class renderer_type_convertor
     virtual char const* variant_type() const = 0;
     virtual wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const = 0;
 
-    static renderer_type_convertor const& get(any_member<Input> const& value);
+    static renderer_type_converter const& get(any_member<Input> const& value);
 
   private:
     template<typename T>
-    static renderer_type_convertor const& get_impl();
+    static renderer_type_converter const& get_impl();
 };
 
-// class renderer_bool_convertor
+// class renderer_bool_converter
 
-class renderer_bool_convertor : public renderer_type_convertor
+class renderer_bool_converter : public renderer_type_converter
 {
     virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
     {
@@ -506,9 +506,9 @@ class renderer_bool_convertor : public renderer_type_convertor
     }
 };
 
-// class renderer_enum_convertor
+// class renderer_enum_converter
 
-class renderer_enum_convertor : public renderer_type_convertor
+class renderer_enum_converter : public renderer_type_converter
 {
     virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
     {
@@ -536,9 +536,9 @@ class renderer_enum_convertor : public renderer_type_convertor
     }
 };
 
-// class renderer_sequence_convertor
+// class renderer_sequence_converter
 
-class renderer_sequence_convertor : public renderer_type_convertor
+class renderer_sequence_converter : public renderer_type_converter
 {
   public:
     virtual wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const
@@ -564,9 +564,9 @@ class renderer_sequence_convertor : public renderer_type_convertor
     }
 };
 
-// class renderer_range_convertor
+// class renderer_range_converter
 
-class renderer_range_convertor : public renderer_type_convertor
+class renderer_range_converter : public renderer_type_converter
 {
   public:
     virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
@@ -589,7 +589,7 @@ class renderer_range_convertor : public renderer_type_convertor
     }
 };
 
-class renderer_int_range_convertor : public renderer_range_convertor
+class renderer_int_range_converter : public renderer_range_converter
 {
   public:
     virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
@@ -598,7 +598,7 @@ class renderer_int_range_convertor : public renderer_range_convertor
     }
 };
 
-class renderer_double_range_convertor : public renderer_range_convertor
+class renderer_double_range_converter : public renderer_range_converter
 {
   public:
     virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
@@ -607,7 +607,7 @@ class renderer_double_range_convertor : public renderer_range_convertor
     }
 };
 
-class renderer_date_convertor : public renderer_range_convertor
+class renderer_date_converter : public renderer_range_converter
 {
   public:
     virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
@@ -616,9 +616,9 @@ class renderer_date_convertor : public renderer_range_convertor
     }
 };
 
-// class renderer_fallback_convertor
+// class renderer_fallback_converter
 
-class renderer_fallback_convertor : public renderer_type_convertor
+class renderer_fallback_converter : public renderer_type_converter
 {
   public:
     virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
@@ -657,38 +657,38 @@ class renderer_fallback_convertor : public renderer_type_convertor
     static const wchar_t RETURN_SYMBOL = 0x23ce;
 };
 
-renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> const& value)
+renderer_type_converter const& renderer_type_converter::get(any_member<Input> const& value)
 {
     if(exact_cast<mce_yes_or_no>(value))
         {
-        return get_impl<renderer_bool_convertor>();
+        return get_impl<renderer_bool_converter>();
         }
     else if(exact_cast<datum_string>(value))
         {
-        return get_impl<renderer_fallback_convertor>();
+        return get_impl<renderer_fallback_converter>();
         }
     else if(is_reconstitutable_as<datum_sequence>(value))
         {
-        return get_impl<renderer_sequence_convertor>();
+        return get_impl<renderer_sequence_converter>();
         }
     else if(is_reconstitutable_as<mc_enum_base  >(value))
         {
-        return get_impl<renderer_enum_convertor>();
+        return get_impl<renderer_enum_converter>();
         }
     else if(is_reconstitutable_as<tn_range_base >(value))
         {
         tn_range_base const* as_range = member_cast<tn_range_base>(value);
         if(typeid(int) == as_range->value_type())
             {
-            return get_impl<renderer_int_range_convertor>();
+            return get_impl<renderer_int_range_converter>();
             }
         else if(typeid(double) == as_range->value_type())
             {
-            return get_impl<renderer_double_range_convertor>();
+            return get_impl<renderer_double_range_converter>();
             }
         else if(typeid(calendar_date) == as_range->value_type())
             {
-            return get_impl<renderer_date_convertor>();
+            return get_impl<renderer_date_converter>();
             }
         else
             {
@@ -706,11 +706,11 @@ renderer_type_convertor const& renderer_type_convertor::get(any_member<Input> co
         // Fall through to treat datum as string.
         }
 
-    return get_impl<renderer_fallback_convertor>();
+    return get_impl<renderer_fallback_converter>();
 }
 
 template<typename T>
-renderer_type_convertor const& renderer_type_convertor::get_impl()
+renderer_type_converter const& renderer_type_converter::get_impl()
 {
     static T singleton;
     return singleton;
@@ -756,7 +756,7 @@ void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned row, un
     else
         {
         any_member<Input> const& cell = cell_at(row, col);
-        renderer_type_convertor const& conv = renderer_type_convertor::get(cell);
+        renderer_type_converter const& conv = renderer_type_converter::get(cell);
         Input const& row_data = view_.cell_parms()[row];
 
         variant = conv.to_variant(cell, row_data, col_name(col));
@@ -768,7 +768,7 @@ bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned r
     LMI_ASSERT(col != Col_CellNum);
 
     any_member<Input>& cell = cell_at(row, col);
-    renderer_type_convertor const& conv = renderer_type_convertor::get(cell);
+    renderer_type_converter const& conv = renderer_type_converter::get(cell);
 
     std::string const prev_val = cell.str();
     std::string new_val = conv.from_variant(variant);
@@ -800,7 +800,7 @@ wxString CensusViewDataViewModel::GetColumnType(unsigned int col) const
     else
         {
         any_member<Input> const& representative_value = cell_at(0, col);
-        renderer_type_convertor const& conv = renderer_type_convertor::get(representative_value);
+        renderer_type_converter const& conv = renderer_type_converter::get(representative_value);
 
         return conv.variant_type();
         }
@@ -1213,7 +1213,7 @@ void CensusView::update_visible_columns()
             {
             any_member<Input> const& representative_value = list_model_->cell_at(0, 1 + column);
 
-            wxDataViewRenderer* renderer = renderer_type_convertor::get(representative_value).create_renderer(representative_value);
+            wxDataViewRenderer* renderer = renderer_type_converter::get(representative_value).create_renderer(representative_value);
             LMI_ASSERT(renderer);
 
             list_window_->AppendColumn

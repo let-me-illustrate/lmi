@@ -123,6 +123,7 @@ TESTS = \
     test_configurable_settings \
     test_contains \
     test_crc32 \
+    test_currency \
     test_expression_template_0 \
     test_fenv_lmi \
     test_file_command \
@@ -660,6 +661,12 @@ test_crc32_SOURCES = \
   crc32_test.cpp
 test_crc32_CXXFLAGS = $(AM_CXXFLAGS)
 
+test_currency_SOURCES = \
+  $(common_test_objects) \
+  currency_test.cpp \
+  timer.cpp
+test_currency_CXXFLAGS = $(AM_CXXFLAGS)
+
 test_expression_template_0_SOURCES = \
   $(common_test_objects) \
   expression_template_0_test.cpp \
@@ -1109,6 +1116,7 @@ noinst_HEADERS = \
     configurable_settings.hpp \
     contains.hpp \
     crc32.hpp \
+    currency.hpp \
     custom_io_0.hpp \
     custom_io_1.hpp \
     data_directory.hpp \

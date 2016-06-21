@@ -412,6 +412,7 @@ unit_test_targets := \
   configurable_settings_test \
   contains_test \
   crc32_test \
+  currency_test \
   expression_template_0_test \
   fenv_lmi_test \
   file_command_test \
@@ -570,6 +571,11 @@ crc32_test$(EXEEXT): \
   $(common_test_objects) \
   crc32.o \
   crc32_test.o \
+
+currency_test$(EXEEXT): \
+  $(common_test_objects) \
+  currency_test.o \
+  timer.o \
 
 expression_template_0_test$(EXEEXT): \
   $(common_test_objects) \
