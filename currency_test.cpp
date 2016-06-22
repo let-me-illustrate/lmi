@@ -189,7 +189,7 @@ void do_some_arithmetic(T t)
     T volatile v(t);
 }
 
-void time_double()
+void mete_double()
 {
     double d(1.23);
     for(int j = 0; j < 1000000; ++j)
@@ -198,7 +198,7 @@ void time_double()
         }
 }
 
-void time_amount_type()
+void mete_amount_type()
 {
     currency::amount_type a(123);
     for(int j = 0; j < 1000000; ++j)
@@ -207,7 +207,7 @@ void time_amount_type()
         }
 }
 
-void time_currency()
+void mete_currency()
 {
     currency c(1, 23);
     for(int j = 0; j < 1000000; ++j)
@@ -220,9 +220,9 @@ void currency_test::test_speed()
 {
     std::cout
         << "  Speed tests..."
-        << "\n  double     : " << TimeAnAliquot(time_double)
-        << "\n  amount_type: " << TimeAnAliquot(time_amount_type)
-        << "\n  currency   : " << TimeAnAliquot(time_currency)
+        << "\n  double     : " << TimeAnAliquot(mete_double)
+        << "\n  amount_type: " << TimeAnAliquot(mete_amount_type)
+        << "\n  currency   : " << TimeAnAliquot(mete_currency)
         << std::endl
         ;
 }
