@@ -26,6 +26,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#include <cmath>                        // std::floor()
 #include <limits>
 #include <sstream>
 #include <stdexcept>
@@ -34,6 +35,19 @@ class currency_test
 {
   public:
     static void test();
+
+    /// An arbitrary amount that is quasi-volatile.
+    ///
+    /// The return type is 'T', not 'T volatile'. Instantiations are
+    /// written so that the value returned cannot be computed at
+    /// compile time and calculations involving it therefore cannot
+    /// be eliminated by optimization.
+    ///
+    /// This function template is a member so that its specialization
+    /// for class currency can call a private constructor.
+
+    template<typename T>
+    static T arbitrary_amount();
 
   private:
     static void test_ctors();
@@ -177,22 +191,91 @@ void currency_test::test_streams()
     #undef TEST_ROUNDTRIP
 }
 
+template<>
+double currency_test::arbitrary_amount<double>()
+{
+    double volatile z(1.23);
+    return z;
+}
+
+template<>
+currency::amount_type currency_test::arbitrary_amount<currency::amount_type>()
+{
+    currency::amount_type volatile z(123);
+    return z;
+}
+
+/// An arbitrary currency amount that is quasi-volatile.
+///
+/// The local currency::amount_type variable is volatile, but the
+/// currency object returned is not volatile. It can't be, because
+/// class currency is not "volatile-correct", and there's no present
+/// need to make it so.
+///
+/// However, the currency value represented by the object returned is
+/// "volatile" in the sense that the compiler cannot presume to know
+/// it, so it can't be precomputed at compile time, and calculations
+/// involving it cannot be optimized into oblivion.
+
+template<>
+currency currency_test::arbitrary_amount<currency>()
+{
+    currency::amount_type volatile z(123);
+    return currency(z);
+}
+
+template<typename T>
+inline double convert_to_double(T t)
+{
+    return t;
+}
+
+template<>
+inline double convert_to_double(currency c)
+{
+    return c.value();
+}
+
+template<typename T>
+inline T convert_from_double(double d)
+{
+    return d;
+}
+
+template<>
+inline currency convert_from_double<currency>(double d)
+{
+    return currency::from_value(d);
+}
+
 template<typename T>
 void do_some_arithmetic(T t)
 {
-    T u(t);
-    t += u;
-    t += t;
-    t -= u;
-    t = t - u;
-    u = t;
-    T volatile v(t);
+    T a(currency_test::arbitrary_amount<T>());
+    T b(currency_test::arbitrary_amount<T>());
+    T c(currency_test::arbitrary_amount<T>());
+    T d(currency_test::arbitrary_amount<T>());
+    T e(currency_test::arbitrary_amount<T>());
+    T f(currency_test::arbitrary_amount<T>());
+
+    for(int j = 0; j < 1000; ++j)
+        {
+        T u(a + b);
+        t += u;
+        u += u;
+        t += u - c + d - e;
+        u += t - f;
+        u = convert_from_double<T>(std::floor(convert_to_double(u) * 1.03));
+        T volatile v(u);
+        }
+
+    T volatile w(t);
 }
 
 void mete_double()
 {
-    double d(1.23);
-    for(int j = 0; j < 1000000; ++j)
+    double d(12345.67);
+    for(int j = 0; j < 1000; ++j)
         {
         do_some_arithmetic(d);
         }
@@ -200,8 +283,8 @@ void mete_double()
 
 void mete_amount_type()
 {
-    currency::amount_type a(123);
-    for(int j = 0; j < 1000000; ++j)
+    currency::amount_type a(1234567);
+    for(int j = 0; j < 1000; ++j)
         {
         do_some_arithmetic(a);
         }
@@ -209,8 +292,8 @@ void mete_amount_type()
 
 void mete_currency()
 {
-    currency c(1, 23);
-    for(int j = 0; j < 1000000; ++j)
+    currency c(12345, 67);
+    for(int j = 0; j < 1000; ++j)
         {
         do_some_arithmetic(c);
         }
