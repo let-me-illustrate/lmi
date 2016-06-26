@@ -920,15 +920,6 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxGridSizer">
-                                        <cols>2</cols>
-                                        <rows>2</rows>
-<!-- TODO ?? Wendy, what is the purpose of this sizer, which seems to contain nothing? -->
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM</flag>
                                     <border>2</border>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
