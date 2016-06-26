@@ -214,12 +214,6 @@ bool Transferor::PerformTransfer(transfer_direction td)
         }
 }
 
-// TODO ?? Use TransferString() with class wxControlWithItems instead
-// of its derived classes, now that wx has been changed to implement
-// wxControlWithItems::SetSelection(). But consider whether class
-// wxItemContainerImmutable can be used for all those classes and
-// wxRadioBox as well.
-
 namespace
 {
     bool TransferLabel(transfer_direction td, std::string& data, wxControl& control)
@@ -283,14 +277,23 @@ namespace
         return true;
     }
 
-    template<typename T>
-    bool TransferString(transfer_direction td, std::string& data, T& control)
+    // Passing "items" to this function allows to avoid making it a template
+    // (and hence instantiating it many times for different classes) and
+    // results in better compilation error messages, but does force the caller
+    // to pass the same object, necessarily inheriting from both wxControl and
+    // wxItemContainerImmutable, twice.
+    bool TransferString
+        (transfer_direction td
+        ,std::string& data
+        ,wxItemContainerImmutable& items
+        ,wxWindow& control
+        )
     {
         if(td == from_string_to_control)
             {
-            if(wxNOT_FOUND != control.FindString(data))
+            if(wxNOT_FOUND != items.FindString(data))
                 {
-                control.SetStringSelection(data);
+                items.SetStringSelection(data);
                 }
             else
                 {
@@ -311,7 +314,7 @@ namespace
             // suppressed if living with that problem is acceptable.
 #   error Outdated library: wx-2.6.2 or greater is required.
 #endif // !wxCHECK_VERSION(2,6,2)
-            data = control.GetStringSelection();
+            data = items.GetStringSelection();
             }
         return true;
     }
@@ -336,12 +339,12 @@ namespace
                 << LMI_FLUSH
                 ;
             }
-        return TransferString(td, data, control);
+        return TransferString(td, data, control, control);
     }
 
     bool Transfer(transfer_direction td, std::string& data, wxChoice& control)
     {
-        return TransferString(td, data, control);
+        return TransferString(td, data, control, control);
     }
 
     bool Transfer(transfer_direction td, std::string& data, wxComboBox& control)
@@ -354,7 +357,7 @@ namespace
                 << LMI_FLUSH
                 ;
             }
-        return TransferString(td, data, control);
+        return TransferString(td, data, control, control);
     }
 
     bool Transfer(transfer_direction td, std::string& data, wxDatePickerCtrl& control)
@@ -416,12 +419,12 @@ namespace
                 << LMI_FLUSH
                 ;
             }
-        return TransferString(td, data, control);
+        return TransferString(td, data, control, control);
     }
 
     bool Transfer(transfer_direction td, std::string& data, wxRadioBox& control)
     {
-        return TransferString(td, data, control);
+        return TransferString(td, data, control, control);
     }
 
     bool Transfer(transfer_direction td, std::string& data, wxRadioButton& control)
