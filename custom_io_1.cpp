@@ -161,8 +161,17 @@ bool custom_io_1_read(Input& z, std::string const& filename)
     if(ApplicantPermFlatExtraAmt.empty()) ApplicantPermFlatExtraAmt = "0.0";
     if(ApplicantTempFlatExtraAmt.empty()) ApplicantTempFlatExtraAmt = "0.0";
 
-    // Always use the current declared rate; disregard <InterestRateData>.
+    // Always disregard <InterestRateData>. Use the current declared
+    // rate vector in production. For regression testing, hardcode
+    // arbitrary rates in order to avoid gratuitous regression errors.
+    // The hardcoded rates deliberately use more than the usual number
+    // of decimal places to make the regression test finickier.
     z["UseCurrentDeclaredRate"] = "Yes";
+    if(global_settings::instance().regression_testing())
+        {
+        z["UseCurrentDeclaredRate"] = "No";
+        z["GeneralAccountRate"]     = "0.04321012; 0.04321098";
+        }
 
     // Always calculate issue age from DOB. <ApplicantDOB> is always
     // specified. This is robust: lmi knows exactly how to calculate
