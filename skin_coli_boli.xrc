@@ -1179,7 +1179,7 @@
                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>2</border>
                     <object class="wxStaticText">
-                        <label>State</label>
+                        <label>State </label>
                     </object>
                 </object>
                 <object class="sizeritem">
