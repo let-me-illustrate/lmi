@@ -214,12 +214,6 @@ bool Transferor::PerformTransfer(transfer_direction td)
         }
 }
 
-// TODO ?? Use TransferString() with class wxControlWithItems instead
-// of its derived classes, now that wx has been changed to implement
-// wxControlWithItems::SetSelection(). But consider whether class
-// wxItemContainerImmutable can be used for all those classes and
-// wxRadioBox as well.
-
 namespace
 {
     bool TransferLabel(transfer_direction td, std::string& data, wxControl& control)
