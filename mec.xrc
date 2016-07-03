@@ -49,15 +49,7 @@
                     <border>4</border>
                     <object class="wxListBox" name="ProductName">
                         <help>Product</help>
-<!-- WX !! If this "size" line... -->
-                        <size>-1,0</size>
-<!--
-...is deleted, then the dialog is displayed incorrectly: at least with
-msw, at the bottom of the screen, the 'Cancel' button's bottom border
-is not shown, and the 'Help' button isn't shown at all. This seems to
-demonstrate a defect in the wx library. See
-  https://savannah.nongnu.org/bugs/?func=detailitem&item_id=13415
--->
+                        <size>90,-1d</size>
                         <style>wxLB_SINGLE</style>
                     </object>
                 </object>
