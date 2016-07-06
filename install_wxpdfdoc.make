@@ -54,8 +54,8 @@ triplet_prefix :=
 
 compiler       := gcc-$(shell $(mingw_bin_dir)/$(triplet_prefix)gcc -dumpversion)
 
-wx_cc_flags    :=
-wx_cxx_flags   := -std=c++11
+wx_cc_flags    := -fno-omit-frame-pointer
+wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \

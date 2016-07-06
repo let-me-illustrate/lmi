@@ -99,8 +99,8 @@ build_dir      := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 # Pass gcc options in $CC and $CXX, not $*FLAGS--explanation here:
 #   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00001.html
 
-wx_cc_flags    :=
-wx_cxx_flags   := -std=c++11
+wx_cc_flags    := -fno-omit-frame-pointer
+wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
