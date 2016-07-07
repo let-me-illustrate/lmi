@@ -27,7 +27,6 @@
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
-#include "msw_workarounds.hpp"          // PreloadDesignatedDlls()
 #include "obstruct_slicing.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
@@ -900,22 +899,27 @@ void SkeletonTest::RunTheTests()
         }
 }
 
+/// Run automated GUI test.
+///
+/// Perform only the minimum necessary initialization that the lmi_wx
+/// main() function would do; then preprocess the command line, before
+/// calling wxEntry(), to handle and remove any GUI-test-specific
+/// options (which Skeleton::ProcessCommandLine() must not see).
+///
+/// Don't call PreloadDesignatedDlls() here. Skeleton::OnInit() must
+/// do that, because PreloadDesignatedDlls() instantiates class
+/// configurable_settings, which must not be instantiated before
+/// Skeleton::ProcessCommandLine() reads the '--data_path' option.
+
 int main(int argc, char* argv[])
 {
     initialize_application();
     initialize_filesystem();
 
-    // We need to handle test-specific options and remove them from argv before
-    // letting wxEntry() instantiate Skeleton application object that would
-    // give an error for these, unknown to it, options.
     if (!application_test::instance().process_command_line(argc, argv))
         {
         return 0;
         }
-
-#ifdef LMI_MSW
-    MswDllPreloader::instance().PreloadDesignatedDlls();
-#endif
 
     return wxEntry(argc, argv);
 }
