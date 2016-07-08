@@ -68,8 +68,10 @@ ifneq ($(use_git), N)
 # wx_md5            := 1ce7f42362ba3075eeb4be4679f88dd3
 # wx_commit_sha     := 4475fe36a54cd62457dcd73c8739b1e7d46e1cde
 # wx_md5            := 47e4a36d8164ec4c69cab68a3d05f951
-  wx_commit_sha     := c4d06e8117f8930b57bffaf6a3323007c9df8d4b
-  wx_md5            := 97e6a75d1a83e5597942741f8382c3d4
+# wx_commit_sha     := c4d06e8117f8930b57bffaf6a3323007c9df8d4b
+# wx_md5            := 97e6a75d1a83e5597942741f8382c3d4
+  wx_commit_sha     := 4c0e272589667c7cf57407d99f1810e2e83348e4
+  wx_md5            := 5fd8da132214bb973133d574fde5cbee
 
   wx_version        := $(wx_commit_sha)
 
@@ -99,8 +101,8 @@ build_dir      := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 # Pass gcc options in $CC and $CXX, not $*FLAGS--explanation here:
 #   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00001.html
 
-wx_cc_flags    :=
-wx_cxx_flags   := -std=c++11
+wx_cc_flags    := -fno-omit-frame-pointer
+wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \

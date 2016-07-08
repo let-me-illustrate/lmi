@@ -568,15 +568,20 @@ every_libstdcxx_warning_macro := \
 
 test_targets := unit_tests cgi_tests cli_tests
 
+# Since gcc version 4.6, '-fomit-frame-pointer' has apparently been
+# the default. Don't use that because it makes debugging difficult.
+# See:
+#   https://lists.gnu.org/archive/html/lmi/2016-06/msg00091.html
+
 ifeq (gprof,$(findstring gprof,$(build_type)))
-  optimization_flag := -O0
+  optimization_flag := -O0 -fno-omit-frame-pointer
   gprof_flag := -pg
 else
   ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
-    optimization_flag := -O0
+    optimization_flag := -O0 -fno-omit-frame-pointer
     libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
   else
-    optimization_flag := -O2
+    optimization_flag := -O2 -fno-omit-frame-pointer
   endif
 endif
 
@@ -595,13 +600,13 @@ endif
 
 my_unoptimizable_files := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
 
-$(my_unoptimizable_files): optimization_flag := -O0
+$(my_unoptimizable_files): optimization_flag := -O0 -fno-omit-frame-pointer
 
 # Blocking optimization in default $(CXXFLAGS) isn't enough, because
 # it is too easily overridden by specifying $(CXXFLAGS) on the command
 # line. This flag overrides such overrides:
 
-$(my_unoptimizable_files): tutelary_flag := -O0
+$(my_unoptimizable_files): tutelary_flag := -O0 -fno-omit-frame-pointer
 
 ################################################################################
 

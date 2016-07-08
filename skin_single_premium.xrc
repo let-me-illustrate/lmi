@@ -59,7 +59,7 @@
                             <border>4</border>
                             <object class="wxListBox" name="ProductName">
                                 <help>Product</help>
-                                <size>-1,50</size>
+                                <size>90,-1d</size>
                                 <style>wxLB_SINGLE</style>
                             </object>
                         </object>
