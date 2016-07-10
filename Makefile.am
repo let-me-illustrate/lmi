@@ -52,7 +52,6 @@ bin_PROGRAMS = \
     ihs_crc_comp \
     product_files \
     rate_table_tool \
-    test_coding_rules \
     wx_test
 
 # MD5 !! 'objects.make' copies lmi_md5sum$(EXEEXT) to $localbindir,
@@ -244,7 +243,6 @@ libskeleton_la_LIBADD = \
     libwx_new.la \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
-    $(BOOST_LIBS) \
     $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
 
@@ -263,7 +261,6 @@ lmi_wx_LDADD = \
     libwx_new.la \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
-    $(BOOST_LIBS) \
     $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
 if LMI_MSW
@@ -285,8 +282,7 @@ lmi_cli_SOURCES = \
 lmi_cli_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 lmi_cli_LDADD = \
     liblmi.la \
-    $(XMLWRAPP_LIBS) \
-    $(BOOST_LIBS)
+    $(XMLWRAPP_LIBS)
 
 wx_test_SOURCES = \
   main_wx_test.cpp \
@@ -311,7 +307,6 @@ wx_test_LDADD = \
     libwx_new.la \
     $(XMLWRAPP_LIBS) \
     $(GTK_LIBS) \
-    $(BOOST_LIBS) \
     $(WXPDFDOC_LIBS) \
     $(WX_LIBS)
 
@@ -419,8 +414,6 @@ libantediluvian_la_SOURCES = \
 libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 libantediluvian_la_CFLAGS = $(AM_CFLAGS)
 libantediluvian_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
-libantediluvian_la_LIBADD = \
-    $(BOOST_LIBS)
 
 liblmi_la_SOURCES = \
     authenticity.cpp \
@@ -470,8 +463,7 @@ liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 liblmi_la_CFLAGS = $(AM_CFLAGS)
 liblmi_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 liblmi_la_LIBADD = \
-    $(XMLWRAPP_LIBS) \
-    $(BOOST_LIBS)
+    $(XMLWRAPP_LIBS)
 
 libcgi_la_SOURCES = \
     alert_cgi.cpp \
@@ -498,7 +490,6 @@ lmi_md5sum_SOURCES = \
     md5sum_cli.cpp
 lmi_md5sum_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 lmi_md5sum_LDADD = \
-    $(BOOST_LIBS) \
     libmain_auxiliary_common.la
 
 # MD5 !! Remove "timer.cpp" below.
@@ -517,7 +508,6 @@ generate_passkey_SOURCES = \
     timer.cpp
 generate_passkey_CXXFLAGS = $(AM_CXXFLAGS)
 generate_passkey_LDADD = \
-    $(BOOST_LIBS) \
     libmain_auxiliary_common.la
 
 elapsed_time_SOURCES = \
@@ -533,8 +523,7 @@ antediluvian_cgi_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 antediluvian_cgi_LDADD = \
     libcgi.la \
     libantediluvian.la \
-    $(CGICC_LIBS) \
-    $(BOOST_LIBS)
+    $(CGICC_LIBS)
 
 antediluvian_cli_SOURCES = \
     $(cli_sources)
@@ -542,7 +531,6 @@ antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 antediluvian_cli_LDADD = \
     libantediluvian.la \
     liblmi.la \
-    $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
 
 ihs_crc_comp_SOURCES = ihs_crc_comp.cpp
@@ -562,7 +550,6 @@ product_files_SOURCES = \
     my_tier.cpp
 product_files_LDADD = \
     liblmi.la \
-    $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
 
 rate_table_tool_SOURCES = \
@@ -573,8 +560,11 @@ rate_table_tool_SOURCES = \
     rate_table_tool.cpp
 rate_table_tool_LDADD = \
     liblmi.la \
-    $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
+
+if !LMI_MSW
+
+bin_PROGRAMS += test_coding_rules
 
 test_coding_rules_SOURCES = \
   alert.cpp \
@@ -586,10 +576,12 @@ test_coding_rules_SOURCES = \
   my_test_coding_rules.cpp \
   sigfpe.cpp \
   test_coding_rules.cpp
-test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
+test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS) $(PCRE2_CFLAGS)
 test_coding_rules_LDADD = \
   libmain_auxiliary_common.la \
-  $(BOOST_LIBS)
+  $(PCRE2_LIBS)
+
+endif
 
 # unit tests
 libtest_common_la_SOURCES = \
@@ -619,15 +611,13 @@ actuarial_table_test_SOURCES = \
 actuarial_table_test_CXXFLAGS = $(AM_CXXFLAGS)
 actuarial_table_test_LDADD = \
   libtest_common.la \
-  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 alert_test_LDADD = \
   libtest_common.la
 
 any_member_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 assert_lmi_test_LDADD = \
   libtest_common.la
@@ -641,15 +631,13 @@ authenticity_test_SOURCES = \
   system_command_non_wx.cpp
 authenticity_test_CXXFLAGS = $(AM_CXXFLAGS)
 authenticity_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 bourn_cast_test_LDADD = \
   libtest_common.la
 
 cache_file_reads_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 calendar_date_test_LDADD = \
   libtest_common.la
@@ -679,7 +667,6 @@ configurable_settings_test_SOURCES = \
 configurable_settings_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 configurable_settings_test_LDADD = \
   libtest_common.la \
-  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 contains_test_LDADD = \
@@ -742,8 +729,7 @@ getopt_test_LDADD = \
   libtest_common.la
 
 global_settings_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 gpt_cf_triad_test_SOURCES = \
   commutation_functions.cpp \
@@ -753,8 +739,7 @@ gpt_cf_triad_test_SOURCES = \
   ihs_irc7702.cpp
 gpt_cf_triad_test_CXXFLAGS = $(AM_CXXFLAGS)
 gpt_cf_triad_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 gpt_test_SOURCES = \
   commutation_functions.cpp \
@@ -785,8 +770,7 @@ input_seq_test_SOURCES = \
   input_sequence_test.cpp
 input_seq_test_CXXFLAGS = $(AM_CXXFLAGS)
 input_seq_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 input_test_SOURCES = \
   ce_product_name.cpp \
@@ -825,7 +809,6 @@ input_test_SOURCES = \
 input_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 input_test_LDADD = \
   libtest_common.la \
-  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 interpolate_string_test_SOURCES = \
@@ -842,8 +825,7 @@ irc7702_tables_test_SOURCES = \
   irc7702_tables_test.cpp
 irc7702_tables_test_CXXFLAGS = $(AM_CXXFLAGS)
 irc7702_tables_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 irc7702a_test_SOURCES = \
   ihs_irc7702a.cpp \
@@ -854,7 +836,6 @@ irc7702a_test_SOURCES = \
 irc7702a_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 irc7702a_test_LDADD = \
   libtest_common.la \
-  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 istream_to_string_test_LDADD = \
@@ -879,7 +860,6 @@ ledger_test_SOURCES = \
 ledger_test_CXXFLAGS = $(AM_CXXFLAGS)
 ledger_test_LDADD = \
   libtest_common.la \
-  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 loads_test_SOURCES = \
@@ -906,8 +886,7 @@ mc_enum_test_SOURCES = \
   mc_enum_test_aux.cpp
 mc_enum_test_CXXFLAGS = $(AM_CXXFLAGS)
 mc_enum_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 md5sum_test_SOURCES = \
   md5.cpp \
@@ -915,8 +894,7 @@ md5sum_test_SOURCES = \
   md5sum_test.cpp
 md5sum_test_CXXFLAGS = $(AM_CXXFLAGS)
 md5sum_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 miscellany_test_LDADD = \
   libtest_common.la
@@ -936,8 +914,7 @@ name_value_pairs_test_SOURCES = \
   name_value_pairs_test.cpp
 name_value_pairs_test_CXXFLAGS = $(AM_CXXFLAGS)
 name_value_pairs_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 ncnnnpnn_test_LDADD = \
   libtest_common.la
@@ -946,15 +923,13 @@ null_stream_test_LDADD = \
   libtest_common.la
 
 numeric_io_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 path_utility_test_SOURCES = \
     path_utility_test.cpp \
     wine_workarounds.cpp
 path_utility_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 premium_tax_test_SOURCES = \
   data_directory.cpp \
@@ -976,7 +951,6 @@ premium_tax_test_SOURCES = \
 premium_tax_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 premium_tax_test_LDADD = \
   libtest_common.la \
-  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 print_matrix_test_SOURCES = \
@@ -984,8 +958,7 @@ print_matrix_test_SOURCES = \
   print_matrix_test.cpp
 print_matrix_test_CXXFLAGS = $(AM_CXXFLAGS)
 print_matrix_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 product_file_test_SOURCES = \
   data_directory.cpp \
@@ -1010,7 +983,6 @@ product_file_test_SOURCES = \
 product_file_test_CXXFLAGS = $(AM_CXXFLAGS)
 product_file_test_LDADD = \
   libtest_common.la \
-  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 progress_meter_test_SOURCES = \
@@ -1028,12 +1000,10 @@ rate_table_test_SOURCES = \
 rate_table_test_CXXFLAGS = $(AM_CXXFLAGS)
 rate_table_test_LDADD = \
   libtest_common.la \
-  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 regex_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 report_table_test_SOURCES = \
   report_table.cpp \
@@ -1099,12 +1069,10 @@ tn_range_test_SOURCES = \
   tn_range_test_aux.cpp
 tn_range_test_CXXFLAGS = $(AM_CXXFLAGS)
 tn_range_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 value_cast_test_LDADD = \
-  libtest_common.la \
-  $(BOOST_LIBS)
+  libtest_common.la
 
 vector_test_LDADD = \
   libtest_common.la
@@ -1118,7 +1086,6 @@ xml_serialize_test_SOURCES = \
 xml_serialize_test_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 xml_serialize_test_LDADD = \
   libtest_common.la \
-  $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
 zero_test_LDADD = \
@@ -1137,7 +1104,6 @@ noinst_HEADERS = \
     authenticity.hpp \
     basic_tables.hpp \
     basic_values.hpp \
-    boost_regex.hpp \
     bourn_cast.hpp \
     cache_file_reads.hpp \
     calendar_date.hpp \

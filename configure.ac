@@ -57,13 +57,6 @@ dnl === Command line options ===
 AC_ARG_WITH(boost-headers,
             [AC_HELP_STRING([--with-boost-headers=dir], [Boost headers directory])],
             lmi_boost_headers=$withval)
-AC_ARG_WITH(boost-libs,
-            [AC_HELP_STRING([--with-boost-libs=dir], [Boost libs installation directory])],
-            lmi_boost_libs=$withval)
-AC_ARG_WITH(boost-toolkit,
-            [AC_HELP_STRING([--with-boost-toolkit=dir], [Boost installation toolkit (gcc, mgw, etc.)])],
-            lmi_boost_toolkit=$withval)
-
 dnl add support for --wxdir, --wx-config, --wx-prefix, ----wx-exec-prefix
 WX_CONFIG_OPTIONS
 
@@ -413,56 +406,6 @@ AC_CHECK_HEADER([boost/type_traits.hpp],
     [AC_MSG_FAILURE([Boost headers not found, $errmsg])],
     [AC_INCLUDES_DEFAULT()]
 )
-
-dnl The default boost library name should be used unless otherwise specified
-dnl via --with-boost-tookit options, in which case we need to add
-dnl toolkit suffix to the library name (example -lboost_regex-gcc-mt).
-if test "x$lmi_boost_toolkit" != "x"; then
-    lmi_boost_toolkit="-$lmi_boost_toolkit"
-fi
-boost_libsystem="boost_system$lmi_boost_toolkit"
-boost_libregex="boost_regex$lmi_boost_toolkit"
-
-save_CPPFLAGS=$CPPFLAGS
-save_LIBS=$LIBS
-save_LDFLAGS=$LDFLAGS
-if test "x$lmi_boost_libs" != "x"; then
-    BOOST_LDFLAGS="$BOOST_LDFLAGS -L$lmi_boost_libs "
-    LDFLAGS="$LDFLAGS $BOOST_LDFLAGS"
-    errmsg="even in $lmi_boost_libs"
-else
-    errmsg="use --with-boost-libs=dir
-if it is installed in non default location"
-fi
-
-dnl latest versions of boost extract some common functionality in
-dnl libboost_system which we must link when using any other Boost library, so
-dnl check for it first
-AC_CHECK_LIB($boost_libsystem,main,BOOST_LIBS="-l$boost_libsystem")
-
-dnl usually when we want to check for a library we use AC_CHECK_LIB and main()
-dnl but since under mingw with -pedantic and -std= options test does not pass
-dnl we are forced to use a bit more sophisticated construct and include our own
-dnl wrapper header which disables various warnings that occur in Boost headers
-
-CPPFLAGS="$save_CPPFLAGS -I$srcdir"
-LIBS="$save_LIBS -l$boost_libregex"
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "boost_regex.hpp"]],
-    [[boost::regex *r]])],
-    [],
-    [AC_MSG_FAILURE([Boost regex library $boost_libregex not found, $errmsg])]
-)
-
-LDFLAGS=$save_LDFLAGS
-LIBS=$save_LIBS
-CPPFLAGS=$save_CPPFLAGS
-
-BOOST_LIBS="-l$boost_libregex $BOOST_LIBS"
-
-dnl contains flags needed to link to externally or internally built
-dnl boost libraries
-AC_SUBST(BOOST_LIBS)
-
 dnl check for the other required libraries: under Unix we use pkg-config which
 dnl is easily available for (and often already installed under) any Linux
 dnl system but when using Cygwin we do the checks manually as installing
@@ -510,6 +453,14 @@ AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
 
 CXXFLAGS=$save_CXXFLAGS
 LIBS=$save_LIBS
+
+dnl --- libpcre2-8 is used by test_coding_rules which is only built under Linux
+if test "$USE_LINUX" = "1"; then
+    PKG_CHECK_MODULES(PCRE2, libpcre2-8)
+    AC_SUBST(PCRE2_CFLAGS)
+    AC_SUBST(PCRE2_LIBS)
+    AC_DEFINE([LMI_HAS_PCRE], [], [Defined when PCRE library is available.])
+fi
 
 dnl --- libunwind and libdw, only used under Linux and only with gcc/libstdc++
 if test "$USE_LINUX" = "1" -a "$CLANG" != "yes"; then

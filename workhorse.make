@@ -331,7 +331,6 @@ sys_include_directories := \
 all_source_directories := \
   $(srcdir) \
   /opt/lmi/third_party/src/boost/libs/filesystem/src \
-  /opt/lmi/third_party/src/boost/libs/regex/src \
   /opt/lmi/third_party/src/cgicc \
 
 vpath lib%.a          $(CURDIR)
@@ -590,35 +589,9 @@ gcc_common_extra_warnings := \
 bourn_cast_test.o: gcc_common_extra_warnings += \
   -Wno-double-promotion \
 
-# Some boost-1.33.1 libraries are incompatible with many warnings.
-
-$(boost_regex_objects): gcc_common_extra_warnings += \
-  -Wno-conversion \
-  -Wno-duplicated-branches \
-  -Wno-implicit-fallthrough \
-  -Wno-old-style-cast \
-  -Wno-register \
-  -Wno-shadow \
-  -Wno-switch-enum \
-  -Wno-unused-macros \
-  -Wno-unused-result \
-  -Wno-useless-cast \
-  -Wno-zero-as-null-pointer-constant \
-
 $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-zero-as-null-pointer-constant \
-
-# The boost regex library improperly defines "NOMINMAX":
-#   http://lists.boost.org/Archives/boost/2006/03/102189.php
-# at least in version 1.33.1, and there seems to be no easy workaround
-# except to blow away all warning options and let a warning appear.
-# This problem seems not to occur with gcc-4.x .
-
-ifeq (3.4.5,$(gcc_version))
-  static_mutex.o: gcc_common_extra_warnings :=
-  static_mutex.o:          gcc_cxx_warnings :=
-endif
 
 ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   ifeq (3.4.5,$(gcc_version))

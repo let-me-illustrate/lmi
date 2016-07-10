@@ -30,6 +30,19 @@ PERFORM :=
 
 EXTRA_LIBS := -ldw -lunwind -ldl
 
+# We assume that PCRE2 library is always available under POSIX systems.
+#
+# This library is only used in test_coding_rules.cpp and, optionally, in the
+# regex_test.cpp unit test, and the rest of lmi can be built without it, so if
+# this is ever needed, support for PCRE could be made conditional by adding
+# some check around these lines.
+#
+# Alternatively, if we decide to require PCRE under all systems, we could move
+# these lines to configuration.make itself.
+platform_defines := \
+    -DLMI_HAS_PCRE
+EXTRA_LIBS += -lpcre2-8
+
 AR      := ar
 CC      := gcc
 CPP     := cpp
