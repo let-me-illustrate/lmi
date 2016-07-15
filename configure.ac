@@ -467,6 +467,9 @@ AC_TRY_COMPILE([#include <xmlwrapp/xmlwrapp.h>],
 CXXFLAGS=$save_CXXFLAGS
 LIBS=$save_LIBS
 
+PKG_CHECK_MODULES(PCRECPP, libpcrecpp)
+LIBS="$LIBS $PCRECPP_LIBS" dnl FIXME: only use for test_coding_rules
+
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then
     lmi_found_cgicc=yes

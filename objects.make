@@ -983,9 +983,9 @@ rate_table_tool$(EXEEXT): \
 
 test_coding_rules_test := $(src_dir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
+test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = -lpcrecpp -lpcre
 test_coding_rules$(EXEEXT): \
   $(boost_filesystem_objects) \
-  $(boost_regex_objects) \
   $(main_auxiliary_common_objects) \
   my_test_coding_rules.o \
   test_coding_rules.o \

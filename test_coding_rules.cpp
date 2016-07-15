@@ -32,7 +32,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
 #include <boost/filesystem/path.hpp>
-#include <boost/regex.hpp>
+#include <pcrecpp.h>
 
 #include <cstddef>                      // std::size_t
 #include <ctime>
@@ -264,7 +264,7 @@ bool file::is_of_phylum(enum_kingdom z) const
 
 bool file::phyloanalyze(std::string const& s) const
 {
-    return boost::regex_search(leaf_name(), boost::regex(s));
+    return pcrecpp::RE(s).PartialMatch(leaf_name());
 }
 
 void complain(file const& f, std::string const& complaint)
@@ -278,7 +278,7 @@ void require
     ,std::string const& complaint
     )
 {
-    if(!boost::regex_search(f.data(), boost::regex(regex)))
+    if(!pcrecpp::RE(regex).PartialMatch(f.data()))
         {
         complain(f, complaint);
         }
@@ -290,7 +290,7 @@ void forbid
     ,std::string const& complaint
     )
 {
-    if(boost::regex_search(f.data(), boost::regex(regex)))
+    if(pcrecpp::RE(regex).PartialMatch(f.data()))
         {
         complain(f, complaint);
         }
@@ -299,11 +299,10 @@ void forbid
 void taboo
     (file const&             f
     ,std::string const&      regex
-    ,boost::regex::flag_type flags = boost::regex::ECMAScript
+    ,pcrecpp::RE_Options const& flags = pcrecpp::RE_Options()
     )
 {
-    boost::regex::flag_type syntax = flags | boost::regex::ECMAScript;
-    if(boost::regex_search(f.data(), boost::regex(regex, syntax)))
+    if(pcrecpp::RE(regex, flags).PartialMatch(f.data()))
         {
         std::ostringstream oss;
         oss << "breaks taboo '" << regex << "'.";
@@ -320,8 +319,8 @@ void taboo
 
 void assay_non_latin(file const& f)
 {
-    static boost::regex const forbidden("[\\x00-\\x08\\x0e-\\x1f\\x7f-\\x9f]");
-    if(boost::regex_search(f.data(), forbidden))
+    static pcrecpp::RE const forbidden("[\\x00-\\x08\\x0e-\\x1f\\x7f-\\x9f]");
+    if(forbidden.PartialMatch(f.data()))
         {
         throw std::runtime_error("File contains a forbidden character.");
         }
@@ -366,8 +365,8 @@ void assay_whitespace(file const& f)
         throw std::runtime_error("File contains '\\t'.");
         }
 
-    static boost::regex const postinitial_tab("[^\\n]\\t");
-    if(f.is_of_phylum(e_make) && boost::regex_search(f.data(), postinitial_tab))
+    static pcrecpp::RE const postinitial_tab("[^\\n]\\t");
+    if(f.is_of_phylum(e_make) && postinitial_tab.PartialMatch(f.data()))
         {
         throw std::runtime_error("File contains postinitial '\\t'.");
         }
@@ -424,10 +423,10 @@ void check_config_hpp(file const& f)
         {
         require(f, loose , "must include 'config.hpp'.");
         require(f, indent, "lacks line '#   include \"config.hpp\"'.");
-        boost::smatch match;
-        static boost::regex const first_include("(# *include[^\\n]*)");
-        boost::regex_search(f.data(), match, first_include);
-        if("#   include \"config.hpp\"" != match[1])
+        std::string match;
+        static pcrecpp::RE const first_include("(# *include[^\\n]*)");
+        first_include.PartialMatch(f.data(), &match);
+        if("#   include \"config.hpp\"" != match)
             {
             complain(f, "must include 'config.hpp' first.");
             }
@@ -436,10 +435,10 @@ void check_config_hpp(file const& f)
         {
         require(f, loose , "must include 'config.hpp'.");
         require(f, strict, "lacks line '#include \"config.hpp\"'.");
-        boost::smatch match;
-        static boost::regex const first_include("(# *include[^\\n]*)");
-        boost::regex_search(f.data(), match, first_include);
-        if("#include \"config.hpp\"" != match[1])
+        std::string match;
+        static pcrecpp::RE const first_include("(# *include[^\\n]*)");
+        first_include.PartialMatch(f.data(), &match);
+        if("#include \"config.hpp\"" != match)
             {
             complain(f, "must include 'config.hpp' first.");
             }
@@ -522,41 +521,37 @@ void check_cxx(file const& f)
         }
 
     {
-    static boost::regex const r("(\\w+)( +)([*&])(\\w+\\b)([*;]?)([^\\n]*)");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcrecpp::RE const r("(\\w+)( +)([*&])(\\w+\\b)([*;]?)(.*)");
+    std::string z1, z2, z3, z4, z5, z6;
+    for(pcrecpp::StringPiece data(f.data()); r.FindAndConsume(&data, &z1, &z2, &z3, &z4, &z5, &z6); )
         {
-        boost::smatch const& z(*i);
         if
-            (   "return"    != z[1]           // 'return *p'
-            &&  "nix"       != z[4]           // '*nix'
-            &&  !('*' == z[3] && '*' == z[5]) // '*emphasis*' in comment
-            &&  !('&' == z[3] && ';' == z[5]) // '&nbsp;'
+            (   "return"    != z1           // 'return *p'
+            &&  "nix"       != z4           // '*nix'
+            &&  !("*" == z3 && "*" == z5)   // '*emphasis*' in comment
+            &&  !("&" == z3 && ";" == z5)   // '&nbsp;'
             )
             {
             std::ostringstream oss;
-            oss << "should fuse '" << z[3] << "' with type: '" << z[0] << "'.";
+            oss << "should fuse '" << z3 << "' with type: '" << z1 << z2 << z3 << z4 << z5 << z6 << "'.";
             complain(f, oss.str());
             }
         }
     }
 
     {
-    static boost::regex const r("\\bconst +([A-Za-z][A-Za-z0-9_:]*) *[*&]");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcrecpp::RE const r("(\\bconst +)([A-Za-z][A-Za-z0-9_:]*)( *[*&])");
+    std::string z1, z2, z3;
+    for(pcrecpp::StringPiece data(f.data()); r.FindAndConsume(&data, &z1, &z2, &z3); )
         {
-        boost::smatch const& z(*i);
         if
-            (   "volatile"  != z[1]           // 'const volatile'
+            (   "volatile"  != z2           // 'const volatile'
             )
             {
             std::ostringstream oss;
             oss
                 << "should write 'const' after the type it modifies: '"
-                << z[0]
+                << z1 << z2 << z3
                 << "'."
                 ;
             complain(f, oss.str());
@@ -580,57 +575,53 @@ void check_defect_markers(file const& f)
         }
 
     {
-    static boost::regex const r("(\\b\\w+\\b\\W*)\\?\\?(.)");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcrecpp::RE const r("(\\b\\w+\\b\\W*)\\?\\?(.)", pcrecpp::RE_Options().set_dotall(true));
+    std::string z1, z2;
+    for(pcrecpp::StringPiece data(f.data()); r.FindAndConsume(&data, &z1, &z2); )
         {
-        boost::smatch const& z(*i);
-        bool const error_preceding = "TODO " != z[1];
-        bool const error_following = " " != z[2] && "\n" != z[2];
+        bool const error_preceding = "TODO " != z1;
+        bool const error_following = " " != z2 && "\n" != z2;
         if(error_preceding || error_following)
             {
             std::ostringstream oss;
-            oss << "has irregular defect marker '" << z[0] << "'.";
+            oss << "has irregular defect marker '" << z1 << "?" /* oh the irony */ "?" << z2 << "'.";
             complain(f, oss.str());
             }
         }
     }
 
     {
-    static boost::regex const r("(\\b\\w+\\b\\W?)!!(.)");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcrecpp::RE const r("(\\b\\w+\\b\\W?)!!(.)");
+    std::string z1, z2;
+    for(pcrecpp::StringPiece data(f.data()); r.FindAndConsume(&data, &z1, &z2); )
         {
-        boost::smatch const& z(*i);
         bool const error_preceding =
                 true
-            &&  "APACHE "      != z[1]
-            &&  "BOOST "       != z[1]
-            &&  "COMPILER "    != z[1]
-            &&  "CYGWIN "      != z[1]
-            &&  "DATABASE "    != z[1]
-            &&  "ET "          != z[1]
-            &&  "EVGENIY "     != z[1]
-            &&  "IHS "         != z[1]
-            &&  "INELEGANT "   != z[1]
-            &&  "INPUT "       != z[1]
-            &&  "PORT "        != z[1]
-            &&  "SOA "         != z[1]
-            &&  "SOMEDAY "     != z[1]
-            &&  "TAXATION "    != z[1]
-            &&  "THIRD_PARTY " != z[1]
-            &&  "TRICKY "      != z[1]
-            &&  "USER "        != z[1]
-            &&  "WX "          != z[1]
-            &&  "XMLWRAPP "    != z[1]
+            &&  "APACHE "      != z1
+            &&  "BOOST "       != z1
+            &&  "COMPILER "    != z1
+            &&  "CYGWIN "      != z1
+            &&  "DATABASE "    != z1
+            &&  "ET "          != z1
+            &&  "EVGENIY "     != z1
+            &&  "IHS "         != z1
+            &&  "INELEGANT "   != z1
+            &&  "INPUT "       != z1
+            &&  "PORT "        != z1
+            &&  "SOA "         != z1
+            &&  "SOMEDAY "     != z1
+            &&  "TAXATION "    != z1
+            &&  "THIRD_PARTY " != z1
+            &&  "TRICKY "      != z1
+            &&  "USER "        != z1
+            &&  "WX "          != z1
+            &&  "XMLWRAPP "    != z1
             ;
-        bool const error_following = " " != z[2] && "\n" != z[2];
+        bool const error_following = " " != z2 && "\n" != z2;
         if(error_preceding || error_following)
             {
             std::ostringstream oss;
-            oss << "has irregular defect marker '" << z[0] << "'.";
+            oss << "has irregular defect marker '" << z1 << "!!" << z2 << "'.";
             complain(f, oss.str());
             }
         }
@@ -644,15 +635,12 @@ void check_include_guards(file const& f)
         return;
         }
 
-    std::string const guard = boost::regex_replace
-        (f.leaf_name()
-        ,boost::regex("\\.hpp$")
-        ,"_hpp"
-        );
+    std::string guard = f.leaf_name();
+    pcrecpp::RE("\\.hpp$").Replace("_hpp", &guard);
     std::string const guards =
             "\\n#ifndef "   + guard
         +   "\\n#define "   + guard + "\\n"
-        +   ".*"
+        +   "[^\\x00]*"
         +   "\\n#endif // " + guard + "\\n+$"
         ;
     require(f, guards, "lacks canonical header guards.");
@@ -665,20 +653,18 @@ void check_label_indentation(file const& f)
         return;
         }
 
-    static boost::regex const r("\\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:)");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcrecpp::RE const r("\\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:)");
+    std::string z1, z2, z3;
+    for(pcrecpp::StringPiece data(f.data()); r.FindAndConsume(&data, &z1, &z2, &z3); )
         {
-        boost::smatch const& z(*i);
         if
-            (   "default" != z[2]
-            &&  "  "      != z[1]
-            &&  "      "  != z[1]
+            (   "default" != z2
+            &&  "  "      != z1
+            &&  "      "  != z1
             )
             {
             std::ostringstream oss;
-            oss << "has misindented label '" << z[1] << z[2] << z[3] << "'.";
+            oss << "has misindented label '" << z1 << z2 << z3 << "'.";
             complain(f, oss.str());
             }
         }
@@ -709,10 +695,10 @@ void check_logs(file const& f)
         entries = f.data();
         }
 
-    static boost::regex const r("\\n(?!\\|)(?! *https?:)([^\\n]{71,})(?=\\n)");
-    boost::sregex_iterator i(entries.begin(), entries.end(), r);
-    boost::sregex_iterator const omega;
-    if(omega == i)
+    static pcrecpp::RE const r("\\n(?!\\|)(?! *https?:)([^\\n]{71,})(?=\\n)");
+    pcrecpp::StringPiece data(entries);
+    std::string z1;
+    if(!r.FindAndConsume(&data, &z1))
         {
         return;
         }
@@ -723,11 +709,11 @@ void check_logs(file const& f)
         << "0000000001111111111222222222233333333334444444444555555555566666666667\n"
         << "1234567890123456789012345678901234567890123456789012345678901234567890"
         ;
-    for(; i != omega; ++i)
+    do
         {
-        boost::smatch const& z(*i);
-        oss << '\n' << z[1];
+        oss << '\n' << z1;
         }
+    while(r.FindAndConsume(&data, &z1));
     complain(f, oss.str());
 }
 
@@ -889,17 +875,14 @@ void check_reserved_names(file const& f)
         return;
         }
 
-    static boost::regex const r("(\\b\\w*__\\w*\\b)");
-    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
-    boost::sregex_iterator const omega;
-    for(; i != omega; ++i)
+    static pcrecpp::RE const r("(\\b\\w*__\\w*\\b)");
+    std::string s;
+    for(pcrecpp::StringPiece data(f.data()); r.FindAndConsume(&data, &s); )
         {
-        boost::smatch const& z(*i);
-        std::string const s = z[0];
-        static boost::regex const not_all_underscore("[A-Za-z0-9]");
+        static pcrecpp::RE const not_all_underscore("[A-Za-z0-9]");
         if
             (   !check_reserved_name_exception(s)
-            &&  boost::regex_search(s, not_all_underscore)
+            &&  not_all_underscore.PartialMatch(s)
             )
             {
             std::ostringstream oss;
@@ -925,14 +908,14 @@ void enforce_taboos(file const& f)
     taboo(f, "Cambridge");
     taboo(f, "Temple");
     // Patented.
-    taboo(f, "\\.gif", boost::regex::icase);
+    taboo(f, "\\.gif", pcrecpp::RE_Options(PCRE_CASELESS));
     // Obsolete email address.
     taboo(f, "chicares@mindspring.com");
     // Obscured email address.
     taboo(f, "address@hidden");
     // Certain proprietary libraries.
-    taboo(f, "\\bowl\\b", boost::regex::icase);
-    taboo(f, "vtss", boost::regex::icase);
+    taboo(f, "\\bowl\\b", pcrecpp::RE_Options(PCRE_CASELESS));
+    taboo(f, "vtss", pcrecpp::RE_Options(PCRE_CASELESS));
     // Suspiciously specific to msw.
     taboo(f, "Microsoft");
     taboo(f, "Visual [A-Z]");
@@ -955,7 +938,7 @@ void enforce_taboos(file const& f)
         &&  !f.is_of_phylum(e_synopsis)
         )
         {
-        taboo(f, "\\bexe\\b", boost::regex::icase);
+        taboo(f, "\\bexe\\b", pcrecpp::RE_Options(PCRE_CASELESS));
         }
 
     if
@@ -965,11 +948,11 @@ void enforce_taboos(file const& f)
         &&  !f.phyloanalyze("configure.ac") // GNU libtool uses 'win32-dll'.
         )
         {
-        taboo(f, "WIN32", boost::regex::icase);
+        taboo(f, "WIN32", pcrecpp::RE_Options(PCRE_CASELESS));
         }
 
     if
-        (  !boost::regex_search(f.data(), boost::regex(my_taboo_indulgence()))
+        (  !pcrecpp::RE(my_taboo_indulgence()).PartialMatch(f.data())
         && !contains(f.data(), "Automatically generated from custom input.")
         )
         {
@@ -978,12 +961,7 @@ void enforce_taboos(file const& f)
         typedef std::map<std::string, bool>::const_iterator mci;
         for(mci i = z.begin(); i != z.end(); ++i)
             {
-            boost::regex::flag_type syntax =
-                i->second
-                ? boost::regex::ECMAScript | boost::regex::icase
-                : boost::regex::ECMAScript
-                ;
-            taboo(f, i->first, syntax);
+            taboo(f, i->first, pcrecpp::RE_Options().set_caseless(i->second));
             }
         }
 }
