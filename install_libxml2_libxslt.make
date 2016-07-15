@@ -23,16 +23,12 @@
 
 # Archives and their md5sums
 
-libxml2_version = libxml2-2.6.26
-libxslt_version = libxslt-1.1.17
-#libxml2_version = libxml2-2.9.4
-#libxslt_version = libxslt-1.1.29
+libxml2_version = libxml2-2.9.4
+libxslt_version = libxslt-1.1.29
 
 libxml2_archive := $(libxml2_version).tar.gz
 libxslt_archive := $(libxslt_version).tar.gz
 
-libxml2-2.6.26.tar.gz-md5 := 2d8d3805041edab967368b497642f981
-libxslt-1.1.17.tar.gz-md5 := fde6a7a93c0eb14cba628692fa3a1000
 libxml2-2.9.4.tar.gz-md5  := ae249165c173b1ff386ee8ad676815f5
 libxslt-1.1.29.tar.gz-md5 := a129d3c44c022de3b9dcf6d6f288d72e
 
@@ -50,12 +46,6 @@ $(libxslt_version): $(libxml2_version)
 
 host          := ftp://xmlsoft.org
 host_path     := libxml2
-
-# Expunge this soon.
-libxml2-2.6.26.tar.gz: host := ftp://ftp.gnome.org
-libxslt-1.1.17.tar.gz: host := ftp://ftp.gnome.org
-libxml2-2.6.26.tar.gz: host_path := pub/GNOME/sources/libxml2/2.6
-libxslt-1.1.17.tar.gz: host_path := pub/GNOME/sources/libxslt/1.1
 
 mingw_dir     := /MinGW_
 
@@ -101,15 +91,9 @@ common_options := \
     STRIP='$(mingw_bin_dir)/strip' \
   WINDRES='$(mingw_bin_dir)/windres' \
 
-$(libxml2_version)_options := \
-  $(common_options) \
-  --with-schemas \
-  --without-iconv \
-  --without-modules \
-  --without-schematron \
+# Expunge '--without-threads' and '--without-zlib' soon.
 
-# Expunge this workaround soon.
-libxml2-2.6.26: $(libxml2_version)_options := \
+$(libxml2_version)_options := \
   $(common_options) \
   --with-schemas \
   --without-iconv \
@@ -152,13 +136,12 @@ initial_setup:
 	$(MKDIR) --parents $(cache_dir)
 	$(MKDIR) --parents $(xml_dir)
 
-# Expunge old versions, then restore these two assignments: s/=/:=/
-WGETFLAGS = \
+WGETFLAGS := \
   --cut-dirs=$(words $(subst /, ,$(host_path))) \
   --force-directories \
   --no-host-directories \
 
-wget_whence = $(host)/$(host_path)
+wget_whence := $(host)/$(host_path)
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
