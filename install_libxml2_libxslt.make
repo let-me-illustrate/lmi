@@ -23,14 +23,16 @@
 
 # Archives and their md5sums
 
-libxml2_version = libxml2-2.9.4
-libxslt_version = libxslt-1.1.29
+zlib_version    := zlib-1.2.8
+libxml2_version := libxml2-2.9.4
+libxslt_version := libxslt-1.1.29
 
+zlib-1.2.8.tar.gz-md5     := 44d667c142d7cda120332623eab69f40
 libxml2-2.9.4.tar.gz-md5  := ae249165c173b1ff386ee8ad676815f5
 libxslt-1.1.29.tar.gz-md5 := a129d3c44c022de3b9dcf6d6f288d72e
 
 # Libraries are ordered by dependency, rather than alphabetically.
-libraries := $(libxml2_version) $(libxslt_version)
+libraries := $(zlib_version) $(libxml2_version) $(libxslt_version)
 
 source_archives := $(addsuffix .tar.gz, $(libraries))
 
@@ -40,6 +42,9 @@ source_archives := $(addsuffix .tar.gz, $(libraries))
 
 host          := ftp://xmlsoft.org
 host_path     := libxml2
+
+$(zlib_version).tar.gz: host      := http://zlib.net
+$(zlib_version).tar.gz: host_path :=
 
 mingw_dir     := /MinGW_
 
@@ -52,6 +57,21 @@ xml_dir       := /opt/lmi/xml-scratch
 # Variables that normally should be left alone #################################
 
 mingw_bin_dir := $(mingw_dir)/bin
+
+# zlib's 'configure' was written by hand; it doesn't even recognize
+# fundamental autoconf options such as '--build'. For the overrides
+# specified here, see:
+#   http://lists.nongnu.org/archive/html/lmi/2016-07/msg00036.html
+# zlib's makefile doesn't install the 'libz1.dll.a' import library
+# that it builds; apparently that doesn't matter because libxml2
+# doesn't link it explicitly.
+
+$(zlib_version)_options :=
+
+$(zlib_version)_overrides := \
+  LDSHARED='gcc -shared -Wl,--out-implib,libz1.dll.a' \
+  LDSHAREDLIBC='' \
+  SHAREDLIBV='libz1.dll' \
 
 # For 'host' and 'build' configure options, see:
 #   http://cygwin.com/ml/cygwin/2002-01/msg00837.html
@@ -85,16 +105,12 @@ xmlsoft_common_options := \
     STRIP='$(mingw_bin_dir)/strip' \
   WINDRES='$(mingw_bin_dir)/windres' \
 
-# Expunge '--without-threads' and '--without-zlib' soon.
-
 $(libxml2_version)_options := \
   $(xmlsoft_common_options) \
   --with-schemas \
   --without-iconv \
   --without-modules \
   --without-schematron \
-  --without-threads \
-  --without-zlib \
 
 $(libxslt_version)_options := \
   $(xmlsoft_common_options) \
@@ -119,6 +135,7 @@ all: clobber $(source_archives) $(libraries)
 
 # Order-only prerequisites.
 
+$(libxml2_version):| $(zlib_version)
 $(libxslt_version):| $(libxml2_version)
 $(libraries)      :| $(source_archives)
 $(source_archives):| initial_setup
@@ -158,7 +175,7 @@ $(libraries):
 	-[ -e $@-lmi.patch ] && $(PATCH) --directory=$(xml_dir) --strip=1 <$@-lmi.patch
 	cd $(xml_dir)/$@ \
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
-	  && ./configure --prefix=$(prefix) $($@_options) \
+	  && $($@_overrides) ./configure --prefix=$(prefix) $($@_options) \
 	  && $(MAKE) \
 	  && $(MAKE) install \
 
