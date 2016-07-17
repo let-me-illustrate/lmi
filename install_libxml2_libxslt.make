@@ -26,19 +26,13 @@
 libxml2_version = libxml2-2.9.4
 libxslt_version = libxslt-1.1.29
 
-libxml2_archive := $(libxml2_version).tar.gz
-libxslt_archive := $(libxslt_version).tar.gz
-
 libxml2-2.9.4.tar.gz-md5  := ae249165c173b1ff386ee8ad676815f5
 libxslt-1.1.29.tar.gz-md5 := a129d3c44c022de3b9dcf6d6f288d72e
 
 # Libraries are ordered by dependency, rather than alphabetically.
-source_archives := \
-  $(libxml2_archive) \
-  $(libxslt_archive) \
+libraries := $(libxml2_version) $(libxslt_version)
 
-# libxslt requires a roughly contemporary libxml2
-$(libxslt_version): $(libxml2_version)
+source_archives := $(addsuffix .tar.gz, $(libraries))
 
 # 'ftp://xmlsoft.org' has 'libxml2/' and 'libxslt/' subdirectories,
 # but they seem to be identical: the latter is apparently a link to
@@ -69,7 +63,7 @@ mingw_bin_dir := $(mingw_dir)/bin
 # which elicit fatal errors such as this:
 #   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
 
-common_options := \
+xmlsoft_common_options := \
   --build=i686-pc-cygwin \
   --host=i686-w64-mingw32 \
   --disable-dependency-tracking \
@@ -94,7 +88,7 @@ common_options := \
 # Expunge '--without-threads' and '--without-zlib' soon.
 
 $(libxml2_version)_options := \
-  $(common_options) \
+  $(xmlsoft_common_options) \
   --with-schemas \
   --without-iconv \
   --without-modules \
@@ -103,7 +97,7 @@ $(libxml2_version)_options := \
   --without-zlib \
 
 $(libxslt_version)_options := \
-  $(common_options) \
+  $(xmlsoft_common_options) \
   --with-libxml-prefix=$(prefix) \
   --without-crypto \
 
@@ -120,15 +114,15 @@ WGET   := wget
 
 # Targets ######################################################################
 
-libraries := $(libxml2_version) $(libxslt_version)
-
 .PHONY: all
 all: clobber $(source_archives) $(libraries)
 
-# Simulated order-only prerequisites.
-$(libraries): $(source_archives)
-$(source_archives): initial_setup
-initial_setup: clobber
+# Order-only prerequisites.
+
+$(libxslt_version):| $(libxml2_version)
+$(libraries)      :| $(source_archives)
+$(source_archives):| initial_setup
+initial_setup     :| clobber
 
 .PHONY: initial_setup
 initial_setup:
