@@ -1,4 +1,4 @@
-# Install msw-native libxml2 and libxslt with options suitable for lmi.
+# Install libxml2 and libxslt with options suitable for lmi.
 #
 # Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 #
@@ -21,13 +21,30 @@
 
 # Configurable settings ########################################################
 
-# Libraries are ordered by dependency, rather than alphabetically.
-source_archives := \
-  libxml2/2.6/libxml2-2.6.26.tar.bz2 \
-  libxslt/1.1/libxslt-1.1.17.tar.bz2 \
+# Archives and their md5sums
 
-host          := ftp://ftp.gnome.org
-host_path     := pub/GNOME/sources
+zlib_version    := zlib-1.2.8
+libxml2_version := libxml2-2.9.4
+libxslt_version := libxslt-1.1.29
+
+zlib-1.2.8.tar.gz-md5     := 44d667c142d7cda120332623eab69f40
+libxml2-2.9.4.tar.gz-md5  := ae249165c173b1ff386ee8ad676815f5
+libxslt-1.1.29.tar.gz-md5 := a129d3c44c022de3b9dcf6d6f288d72e
+
+# Libraries are ordered by dependency, rather than alphabetically.
+libraries := $(zlib_version) $(libxml2_version) $(libxslt_version)
+
+source_archives := $(addsuffix .tar.gz, $(libraries))
+
+# 'ftp://xmlsoft.org' has 'libxml2/' and 'libxslt/' subdirectories,
+# but they seem to be identical: the latter is apparently a link to
+# the former, so only the former is used here.
+
+host          := ftp://xmlsoft.org
+host_path     := libxml2
+
+$(zlib_version).tar.gz: host      := http://zlib.net
+$(zlib_version).tar.gz: host_path :=
 
 mingw_dir     := /MinGW_
 
@@ -41,6 +58,21 @@ xml_dir       := /opt/lmi/xml-scratch
 
 mingw_bin_dir := $(mingw_dir)/bin
 
+# zlib's 'configure' was written by hand; it doesn't even recognize
+# fundamental autoconf options such as '--build'. For the overrides
+# specified here, see:
+#   http://lists.nongnu.org/archive/html/lmi/2016-07/msg00036.html
+# zlib's makefile doesn't install the 'libz1.dll.a' import library
+# that it builds; apparently that doesn't matter because libxml2
+# doesn't link it explicitly.
+
+$(zlib_version)_options :=
+
+$(zlib_version)_overrides := \
+  LDSHARED='gcc -shared -Wl,--out-implib,libz1.dll.a' \
+  LDSHAREDLIBC='' \
+  SHAREDLIBV='libz1.dll' \
+
 # For 'host' and 'build' configure options, see:
 #   http://cygwin.com/ml/cygwin/2002-01/msg00837.html
 
@@ -51,7 +83,7 @@ mingw_bin_dir := $(mingw_dir)/bin
 # which elicit fatal errors such as this:
 #   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
 
-common_options := \
+xmlsoft_common_options := \
   --build=i686-pc-cygwin \
   --host=i686-w64-mingw32 \
   --disable-dependency-tracking \
@@ -73,17 +105,15 @@ common_options := \
     STRIP='$(mingw_bin_dir)/strip' \
   WINDRES='$(mingw_bin_dir)/windres' \
 
-libxml2-2.6.26_options := \
-  $(common_options) \
+$(libxml2_version)_options := \
+  $(xmlsoft_common_options) \
   --with-schemas \
   --without-iconv \
   --without-modules \
   --without-schematron \
-  --without-threads \
-  --without-zlib \
 
-libxslt-1.1.17_options := \
-  $(common_options) \
+$(libxslt_version)_options := \
+  $(xmlsoft_common_options) \
   --with-libxml-prefix=$(prefix) \
   --without-crypto \
 
@@ -100,21 +130,22 @@ WGET   := wget
 
 # Targets ######################################################################
 
-libraries := $(source_archives:.tar.bz2=)
-
 .PHONY: all
 all: clobber $(source_archives) $(libraries)
 
-# Simulated order-only prerequisites.
-$(libraries): $(source_archives)
-$(source_archives): initial_setup
-initial_setup: clobber
+# Order-only prerequisites.
+
+$(libxml2_version):| $(zlib_version)
+$(libxslt_version):| $(libxml2_version)
+$(libraries)      :| $(source_archives)
+$(source_archives):| initial_setup
+initial_setup     :| clobber
 
 .PHONY: initial_setup
 initial_setup:
-	@$(MKDIR) --parents $(prefix)
-	@$(MKDIR) --parents $(cache_dir)
-	@$(MKDIR) --parents $(xml_dir)
+	$(MKDIR) --parents $(prefix)
+	$(MKDIR) --parents $(cache_dir)
+	$(MKDIR) --parents $(xml_dir)
 
 WGETFLAGS := \
   --cut-dirs=$(words $(subst /, ,$(host_path))) \
@@ -129,40 +160,28 @@ TARFLAGS := --keep-old-files
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
-	cd $(cache_dir) && [ -e $*.md5sum ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$*.md5sum
-	cd $(cache_dir) && [ -e $@        ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$@
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $(wget_whence)/$@
 	cd $(cache_dir)/$(dir $@) && \
-	  $(GREP) $(notdir $@) $(notdir $*).md5sum | $(MD5SUM) --check --status -
+	  $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	$(TAR) --extract $(TARFLAGS) --directory=$(xml_dir) --file=$(cache_dir)/$@
 
-# Someday it may be necessary to add these variables to this recipe:
+# Someday it may be necessary to add a line like this to the recipe:
 #   export lt_cv_to_tool_file_cmd=func_convert_file_cygwin_to_w32
-#   export PATH="/path/to/MinGW/bin:${PATH}"
 # but that's not necessary for now. See:
 #   http://lists.nongnu.org/archive/html/lmi/2011-06/msg00025.html
 
 .PHONY: $(libraries)
 $(libraries):
-	cd $(xml_dir)/$(notdir $@) \
-	  && ./configure --prefix=$(prefix) $($(notdir $@)_options) \
+	-[ -e $@-lmi.patch ] && $(PATCH) --directory=$(xml_dir) --strip=1 <$@-lmi.patch
+	cd $(xml_dir)/$@ \
+	  && export PATH="$(mingw_bin_dir):${PATH}" \
+	  && $($@_overrides) ./configure --prefix=$(prefix) $($@_options) \
 	  && $(MAKE) \
 	  && $(MAKE) install \
 
-.PHONY: libxslt/1.1/libxslt-1.1.17
-libxslt/1.1/libxslt-1.1.17: patch_libxslt
-libxslt/1.1/libxslt-1.1.17: libxml2/2.6/libxml2-2.6.26
-
-# Patches ######################################################################
-
-# libxslt-1.1.17.patch
-
-.PHONY: patch_libxslt
-patch_libxslt: libxslt/1.1/libxslt-1.1.17.tar.bz2
-	$(PATCH) --directory=$(xml_dir) --strip=1 < libxslt-1.1.17-lmi.patch
-
 .PHONY: clobber
 clobber:
-	-for z in $(notdir $(libraries)); \
+	-for z in $(libraries); \
 	  do \
 	    cd $(xml_dir)/$$z && $(MAKE) uninstall maintainer-clean; \
 	    $(RM) --recursive $(xml_dir)/$$z; \
