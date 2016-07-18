@@ -34,17 +34,25 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
 
+#include <condition_variable>
 #include <cstddef>                      // std::size_t
 #include <ctime>
 #include <iomanip>
 #include <ios>
 #include <iostream>
 #include <map>
+#include <mutex>
 #include <ostream>
+#include <queue>
 #include <set>
 #include <sstream>
 #include <stdexcept>                    // std::runtime_error
 #include <string>
+#include <thread>
+
+// Global object used to synchronize output to the standard output and error
+// streams from multiple threads.
+std::mutex std_streams_mutex;
 
 std::string my_taboo_indulgence();       // See 'my_test_coding_rules.cpp'.
 
@@ -269,6 +277,7 @@ bool file::phyloanalyze(std::string const& s) const
 
 void complain(file const& f, std::string const& complaint)
 {
+    std::lock_guard<std::mutex> lock(std_streams_mutex);
     std::cout << "File '" << f.full_name() << "' " << complaint << std::endl;
 }
 
@@ -1115,22 +1124,137 @@ statistics process_file(std::string const& file_path)
     return statistics::analyze_file(f);
 }
 
+// Queue used to pass file names to process from the main thread to the
+// workers.
+class worker_threads_pool
+{
+  public:
+    worker_threads_pool()
+        {
+        unsigned num_threads = std::thread::hardware_concurrency();
+        if(num_threads <= 1)
+            {
+            // If the number of the threads is unknown (0) or possibly
+            // misdetected (1 can be returned in this case), use at least 2 of
+            // them as this could speed things up even for a single core
+            // machine. In practice, it is going to be hard to find one for
+            // checking this, however.
+            num_threads = 2;
+            }
+
+        threads_.reserve(num_threads);
+        for(unsigned n = 0; n < num_threads; ++n)
+            {
+            threads_.emplace_back(&worker_threads_pool::do_work, this);
+            }
+        }
+
+    void add_file(std::string const& file)
+        {
+            {
+            std::lock_guard<std::mutex> lock(queue_mutex_);
+            queue_.push(file);
+            } // We do not need to hold the mutex before notifying the workers.
+
+        cond_has_work_.notify_one();
+        }
+
+    statistics wait_for_results()
+        {
+            {
+            std::lock_guard<std::mutex> lock(queue_mutex_);
+            should_exit_ = true;
+            }
+
+        cond_has_work_.notify_all();
+
+        for(auto& t: threads_)
+            {
+            t.join();
+            }
+
+        return total_statistics_;
+        }
+
+  private:
+    void do_work()
+        {
+        for(;;)
+            {
+            std::string file;
+                {
+                std::unique_lock<std::mutex> lock(queue_mutex_);
+                cond_has_work_.wait(lock, [=] { return !queue_.empty() || should_exit_; });
+
+                if(queue_.empty())
+                    {
+                    // We must have been woken up because it is time to exit.
+                    return;
+                    }
+
+                file = queue_.front();
+                queue_.pop();
+                } // Unlock the mutex to allow other threads to run now.
+
+            statistics z;
+            try
+                {
+                z = process_file(file);
+                }
+            catch(...)
+                {
+                z.set_error_flag();
+                std::lock_guard<std::mutex> lock(std_streams_mutex);
+                std::cerr << "Exception--file '" << file << "': " << std::flush;
+                report_exception();
+                }
+
+                {
+                std::lock_guard<std::mutex> lock(stats_mutex_);
+                total_statistics_ += z;
+                }
+            }
+        }
+
+    std::vector<std::thread> threads_;
+
+    // The combined statistics from all workers and the mutex protecting it.
+    statistics total_statistics_;
+    std::mutex stats_mutex_;
+
+    // The queue used to distribute work to the threads together with the mutex
+    // protecting it and a condition variable indicating whether there is any
+    // work to be done.
+    std::queue<std::string> queue_;
+    std::mutex queue_mutex_;
+    std::condition_variable cond_has_work_;
+
+    // Flag indicating that the worker threads should exit. It is protected by
+    // the same queue_mutex_ that is used for protecting the queue itself.
+    bool should_exit_ = false;
+};
+
 int try_main(int argc, char* argv[])
 {
+    worker_threads_pool pool;
     statistics z;
     for(int j = 1; j < argc; ++j)
         {
         try
             {
-            z += process_file(argv[j]);
+            pool.add_file(argv[j]);
             }
         catch(...)
             {
             z.set_error_flag();
+            std::lock_guard<std::mutex> lock(std_streams_mutex);
             std::cerr << "Exception--file '" << argv[j] << "': " << std::flush;
             report_exception();
             }
         }
+
+    z += pool.wait_for_results();
+
     z.print_summary();
     return z.check_error_flag() ? EXIT_FAILURE : EXIT_SUCCESS;
 }

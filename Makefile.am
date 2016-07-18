@@ -515,7 +515,7 @@ test_coding_rules_SOURCES = \
   my_test_coding_rules.cpp \
   sigfpe.cpp \
   test_coding_rules.cpp
-test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
+test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS) -pthread
 test_coding_rules_LDADD = \
   libmain_auxiliary_common.la \
   $(BOOST_LIBS)
