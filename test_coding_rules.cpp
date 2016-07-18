@@ -993,12 +993,15 @@ void enforce_taboos(file const& f)
 class statistics
 {
   public:
-    statistics() : files_(0), lines_(0), defects_(0) {}
+    statistics() : files_(0), lines_(0), defects_(0), error_(false) {}
     ~statistics() {}
 
     statistics& operator+=(statistics const&);
 
     static statistics analyze_file(file const&);
+
+    void set_error_flag() { error_ = true; }
+    bool check_error_flag() const { return error_; }
 
     void print_summary() const;
 
@@ -1006,6 +1009,7 @@ class statistics
     std::size_t files_;
     std::size_t lines_;
     std::size_t defects_;
+    bool        error_;
 };
 
 statistics& statistics::operator+=(statistics const& z)
@@ -1013,6 +1017,11 @@ statistics& statistics::operator+=(statistics const& z)
     files_   += z.files_  ;
     lines_   += z.lines_  ;
     defects_ += z.defects_;
+
+    if(z.error_)
+        {
+        error_ = true;
+        }
 
     return *this;
 }
@@ -1108,7 +1117,6 @@ statistics process_file(std::string const& file_path)
 
 int try_main(int argc, char* argv[])
 {
-    bool error_flag = false;
     statistics z;
     for(int j = 1; j < argc; ++j)
         {
@@ -1118,12 +1126,12 @@ int try_main(int argc, char* argv[])
             }
         catch(...)
             {
-            error_flag = true;
+            z.set_error_flag();
             std::cerr << "Exception--file '" << argv[j] << "': " << std::flush;
             report_exception();
             }
         }
     z.print_summary();
-    return error_flag ? EXIT_FAILURE : EXIT_SUCCESS;
+    return z.check_error_flag() ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
