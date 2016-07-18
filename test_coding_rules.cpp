@@ -50,6 +50,12 @@
 #include <string>
 #include <thread>
 
+#if defined __MINGW32__ && !defined _GLIBCXX_HAS_GTHREADS
+#   include <mingw.condition_variable.h>
+#   include <mingw.mutex.h>
+#   include <mingw.thread.h>
+#endif
+
 // Global object used to synchronize output to the standard output and error
 // streams from multiple threads.
 std::mutex std_streams_mutex;
