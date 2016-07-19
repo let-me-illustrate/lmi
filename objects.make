@@ -634,7 +634,6 @@ input_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
-  antediluvian_stubs.o \
   calendar_date.o \
   ce_product_name.o \
   configurable_settings.o \
@@ -656,6 +655,7 @@ input_test$(EXEEXT): \
   input_sequence.o \
   input_test.o \
   input_xml_io.o \
+  lmi.o \
   mc_enum.o \
   mc_enum_types.o \
   mc_enum_types_aux.o \
@@ -666,7 +666,9 @@ input_test$(EXEEXT): \
   null_stream.o \
   path_utility.o \
   premium_tax.o \
+  product_data.o \
   single_cell_document.o \
+  stratified_charges.o \
   timer.o \
   tn_range_types.o \
   xml_lmi.o \

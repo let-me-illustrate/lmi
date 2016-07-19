@@ -36,6 +36,7 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "miscellany.hpp"
+#include "path_utility.hpp"             // initialize_filesystem()
 #include "test_tools.hpp"
 #include "timer.hpp"
 #include "xml_lmi.hpp"
@@ -523,6 +524,9 @@ void input_test::mete_ill_xsd()
 
 int test_main(int, char*[])
 {
+    // Absolute paths require "native" name-checking policy for msw.
+    initialize_filesystem();
+
     // Location of '*.xsd' files.
     global_settings::instance().set_data_directory("/opt/lmi/data");
 
