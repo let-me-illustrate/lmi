@@ -154,7 +154,7 @@ void input_test::test_product_database()
     // writing individual functions by hand is simpler and clearer.
     std::cout
         << "\n  Database speed tests..."
-        << "\n  initialize()      : " << TimeAnAliquot(boost::bind        (&product_database::initialize,      &db, "sample.database"))
+        << "\n  initialize()      : " << TimeAnAliquot(boost::bind        (&product_database::initialize,      &db, "sample"         ))
         << "\n  Query(vector)     : " << TimeAnAliquot(boost::bind<void  >(&product_database::Query,           &db, v, DB_MaturityAge))
         << "\n  Query(scalar)     : " << TimeAnAliquot(boost::bind<double>(&product_database::Query,           &db,    DB_MaturityAge))
         << "\n  entity_from_key() : " << TimeAnAliquot(boost::bind        (&product_database::entity_from_key, &db,    DB_MaturityAge))

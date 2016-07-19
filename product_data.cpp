@@ -137,13 +137,20 @@ product_data::product_data()
 /// The argument is a string (typically Input::ProductName) such as
 /// 'sample'. The appropriate extension and path are added here to
 /// produce a filepath.
+///
+/// Somewhat arbitrarily, forbid '.' in product names. There's no real
+/// need to allow that, and it would complicate the code. A product
+/// name like "ul.with.variable.funds" could too easily be mistaken
+/// for a '.funds' file. The boost filesystem portability guidelines
+/// suggest "Do not use more that one period in a file name", and
+/// extensions are added to product names to create file names.
 
 product_data::product_data(std::string const& product_name)
 {
     ascribe_members();
 
     fs::path path(product_name);
-    LMI_ASSERT(product_name == path.leaf());
+    LMI_ASSERT(product_name == fs::basename(path));
     path = fs::change_extension(path, ".policy");
     load(AddDataDir(path.string()));
 }
