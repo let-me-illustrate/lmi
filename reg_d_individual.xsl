@@ -574,6 +574,8 @@
   </xsl:template>
 
   <xsl:template name="standardheader">
+    <xsl:param name="displaycontractlanguage"/>
+    <xsl:param name="displaydisclaimer"/>
     <xsl:param name="logo_only"/>
     <fo:table table-layout="fixed" padding-after="2.5pt" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
       <fo:table-column column-width="50mm"/>
@@ -595,8 +597,6 @@
         </fo:table-row>
       </fo:table-body>
     </fo:table>
-    <xsl:param name="displaycontractlanguage"/>
-    <xsl:param name="displaydisclaimer"/>
     <fo:block text-align="center" font-size="9pt">
       <xsl:if test="$displaycontractlanguage=1">
         <fo:block padding-top="1em">
