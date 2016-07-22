@@ -706,26 +706,28 @@
 
   <xsl:template name="standard-header">
     <xsl:param name="logo_only"/>
-    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
-      <fo:table-column column-width="50mm"/>
-      <fo:table-column column-width="90mm"/>
-      <fo:table-column column-width="50mm"/>
-      <fo:table-body>
-        <fo:table-row>
-          <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:call-template name="company-logo"/>
-            </fo:block>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
-        </fo:table-row>
-      </fo:table-body>
-    </fo:table>
+    <fo:block padding-after="2.5pt">
+      <fo:table table-layout="fixed" width="100%" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
+        <fo:table-column column-width="50mm"/>
+        <fo:table-column column-width="90mm"/>
+        <fo:table-column column-width="50mm"/>
+        <fo:table-body>
+          <fo:table-row>
+            <fo:table-cell>
+              <fo:block text-align="left">
+                <xsl:call-template name="company-logo"/>
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell>
+              <fo:block/>
+            </fo:table-cell>
+            <fo:table-cell>
+              <fo:block/>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
     <xsl:if test="not($logo_only)">
       <fo:block font-weight="bold" font-size="14pt" font-family="sans-serif" text-align="center" padding-top="1em">
         <xsl:value-of select="$scalars/PolicyMktgName"/>
