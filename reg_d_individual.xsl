@@ -917,7 +917,12 @@
               <fo:table-cell number-columns-spanned="7">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="7">
+              <fo:table-cell>
+                <xsl:attribute name="number-columns-spanned">
+                  <!-- generate-table-columns adds one extra column and
+                       7 columns are taken by the table-cell above: -->
+                  <xsl:value-of select="count($columns) - 7 + 1"/>
+                </xsl:attribute>
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
