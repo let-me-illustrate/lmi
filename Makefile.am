@@ -1074,6 +1074,7 @@ noinst_HEADERS = \
     assert_lmi.hpp \
     authenticity.hpp \
     basic_values.hpp \
+    cache_file_reads.hpp \
     calendar_date.hpp \
     callback.hpp \
     catch_exceptions.hpp \
