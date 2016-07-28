@@ -52,9 +52,9 @@ class file_cache
     typedef std::string key_type;
 
     // Return singleton instance of the cache.
-    static file_cache& instance()
+    static file_cache<T>& instance()
         {
-        static file_cache z;
+        static file_cache<T> z;
         return z;
         }
 
