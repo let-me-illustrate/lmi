@@ -398,6 +398,7 @@ unit_test_targets := \
   any_member_test \
   assert_lmi_test \
   authenticity_test \
+  cache_file_reads_test \
   calendar_date_test \
   callback_test \
   comma_punct_test \
@@ -514,6 +515,12 @@ authenticity_test$(EXEEXT): \
   path_utility.o \
   system_command.o \
   system_command_non_wx.o \
+
+cache_file_reads_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  cache_file_reads_test.o \
+  timer.o \
 
 calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
