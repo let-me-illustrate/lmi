@@ -30,7 +30,17 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/fstream.hpp>
+
+// Work around unused parameters in Boost 1.33.1 comparison operators for
+// optional.
+#ifdef __clang__
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wunused-parameter"
+#endif // __clang__
 #include <boost/optional.hpp>
+#ifdef __clang__
+#   pragma clang diagnostic pop
+#endif // __clang__
 
 #include <algorithm>
 #include <climits>                      // ULLONG_MAX
