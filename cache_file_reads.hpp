@@ -100,8 +100,7 @@ class file_cache
         std::time_t    write_time;
     };
 
-    typedef std::map<std::string,record> map_type;
-    map_type cache_;
+    std::map<std::string,record> cache_;
 };
 
 /// Mixin to cache parent instances constructed from files.
@@ -111,13 +110,12 @@ class file_cache
 template<typename T>
 class cache_file_reads
 {
-    typedef file_cache<T> cache_type;
-    using retrieved_type = typename cache_type::retrieved_type;
+    using retrieved_type = typename file_cache<T>::retrieved_type;
 
   public:
     static retrieved_type read_from_cache(std::string const& filename)
         {
-        return cache_type::instance().retrieve_or_reload(filename);
+        return file_cache<T>::instance().retrieve_or_reload(filename);
         }
 };
 
