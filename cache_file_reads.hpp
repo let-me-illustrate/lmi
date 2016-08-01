@@ -32,6 +32,7 @@
 #include <ctime>                        // std::time_t
 #include <map>
 #include <string>
+#include <utility>                      // std::make_pair()
 
 /// Cache of class T instances constructed from files.
 ///
@@ -84,7 +85,7 @@ class file_cache
         // insert() doesn't update the value if the key is already
         // present, so insert a dummy value and then modify it--this
         // works for both existing and new keys.
-        i = cache_.insert(i, typename map_type::value_type(filename, record()));
+        i = cache_.insert(i, std::make_pair(filename, record()));
         record& rec = i->second;
         rec.data = value;
         rec.write_time = write_time;
