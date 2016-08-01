@@ -68,7 +68,7 @@ class file_cache
         // Throws if !exists(filename).
         std::time_t const write_time = fs::last_write_time(filename);
 
-        typename map_type::iterator i = cache_.lower_bound(filename);
+        auto i = cache_.lower_bound(filename);
         if
             (  cache_.end() != i
             && filename     == i->first
