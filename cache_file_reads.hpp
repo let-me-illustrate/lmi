@@ -55,7 +55,7 @@ class file_cache
     :private lmi::uncopyable<file_cache<T> >
 {
   public:
-    typedef boost::shared_ptr<T const> value_ptr_type;
+    using retrieved_type = boost::shared_ptr<T const>;
 
     static file_cache<T>& instance()
         {
@@ -63,7 +63,7 @@ class file_cache
         return z;
         }
 
-    value_ptr_type retrieve_or_reload(std::string const& filename)
+    retrieved_type retrieve_or_reload(std::string const& filename)
         {
         // Throws if !exists(filename).
         std::time_t const write_time = fs::last_write_time(filename);
@@ -79,7 +79,7 @@ class file_cache
             }
 
         // Construction may throw, so do it before updating the cache.
-        value_ptr_type value(new T(filename));
+        retrieved_type value(new T(filename));
 
         // insert() doesn't update the value if the key is already
         // present, so insert a dummy value and then modify it--this
@@ -95,7 +95,7 @@ class file_cache
   private:
     struct record
     {
-        value_ptr_type data;
+        retrieved_type data;
         std::time_t    write_time;
     };
 
@@ -110,11 +110,11 @@ class file_cache
 template<typename T>
 class cache_file_reads
 {
-  public:
     typedef file_cache<T> cache_type;
-    typedef typename cache_type::value_ptr_type ptr_type;
+    using retrieved_type = typename cache_type::retrieved_type;
 
-    static ptr_type read_from_cache(std::string const& filename)
+  public:
+    static retrieved_type read_from_cache(std::string const& filename)
         {
         return cache_type::instance().retrieve_or_reload(filename);
         }
