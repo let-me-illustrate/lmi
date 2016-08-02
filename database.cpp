@@ -183,12 +183,14 @@ void product_database::initialize(std::string const& product_name)
 {
     if(is_antediluvian_fork())
         {
-        DBDictionary::instance().InitAntediluvian();
+            boost::shared_ptr<DBDictionary> d(new DBDictionary);
+        d->InitAntediluvian();
+        db_ = d;
         }
     else
         {
         std::string filename(product_data(product_name).datum("DatabaseFilename"));
-        DBDictionary::instance().Init(AddDataDir(filename));
+        db_ = DBDictionary::get_cached(AddDataDir(filename));
         }
     maturity_age_ = static_cast<int>(Query(DB_MaturityAge));
     length_ = maturity_age_ - index_.index_vector()[e_axis_issue_age];
@@ -199,7 +201,7 @@ void product_database::initialize(std::string const& product_name)
 
 database_entity const& product_database::entity_from_key(e_database_key k) const
 {
-    DBDictionary const& db = DBDictionary::instance();
-    return db.datum(db_name_from_key(k));
+    LMI_ASSERT(db_);
+    return db_->datum(db_name_from_key(k));
 }
 

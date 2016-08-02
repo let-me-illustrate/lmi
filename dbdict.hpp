@@ -26,6 +26,7 @@
 
 #include "any_member.hpp"
 #include "dbvalue.hpp"
+#include "loaded_files_cache.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
@@ -40,6 +41,7 @@ class LMI_SO DBDictionary
     ,virtual private obstruct_slicing  <DBDictionary>
     ,        public  xml_serializable  <DBDictionary>
     ,        public  MemberSymbolTable <DBDictionary>
+    ,        public  loaded_from_cache <DBDictionary>
 {
     friend class DatabaseDocument;
     friend class input_test;        // For test_product_database().
@@ -47,19 +49,20 @@ class LMI_SO DBDictionary
     friend class premium_tax_test;  // For test_rates().
 
   public:
-    static DBDictionary& instance();
+    DBDictionary();
+    DBDictionary(std::string const& filename);
+
     ~DBDictionary();
 
     database_entity const& datum(std::string const&) const;
 
-    void Init(std::string const& filename);
     void WriteSampleDBFile();
     void WriteProprietaryDBFiles();
 
     void InitAntediluvian();
 
   private:
-    DBDictionary();
+    void Init(std::string const& filename);
 
     void ascribe_members();
 

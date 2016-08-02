@@ -84,15 +84,15 @@ template<> database_entity value_cast<database_entity>(std::string const&)
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-DBDictionary& DBDictionary::instance()
-{
-    static DBDictionary z;
-    return z;
-}
-
 DBDictionary::DBDictionary()
 {
     ascribe_members();
+}
+
+DBDictionary::DBDictionary(std::string const& filename)
+{
+    ascribe_members();
+    Init(filename);
 }
 
 DBDictionary::~DBDictionary()
@@ -433,7 +433,7 @@ void DBDictionary::ascribe_members()
     ascribe("SecondaryHurdle"     , &DBDictionary::SecondaryHurdle     );
 }
 
-/// Read and cache a database file.
+/// Read a database file.
 
 void DBDictionary::Init(std::string const& filename)
 {
@@ -1074,20 +1074,20 @@ void print_databases()
             }
         try
             {
-            DBDictionary::instance().Init(i->string());
+            DBDictionary const z(i->string());
+
+            fs::path out_file = fs::change_extension(*i, ".dbt");
+            fs::ofstream os(out_file, ios_out_trunc_binary());
+            typedef std::vector<std::string>::const_iterator svci;
+            for(svci i = z.member_names().begin(); i != z.member_names().end(); ++i)
+                {
+                z.datum(*i).write(os);
+                }
             }
         catch(...)
             {
             report_exception();
             continue;
-            }
-        fs::path out_file = fs::change_extension(*i, ".dbt");
-        fs::ofstream os(out_file, ios_out_trunc_binary());
-        DBDictionary const& z = DBDictionary::instance();
-        typedef std::vector<std::string>::const_iterator svci;
-        for(svci j = z.member_names().begin(); j != z.member_names().end(); ++j)
-            {
-            z.datum(*j).write(os);
             }
         }
 }

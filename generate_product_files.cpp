@@ -38,13 +38,13 @@ int try_main(int, char*[])
 
     std::cout << "Generating product files." << std::endl;
 
-    DBDictionary::instance() .WriteSampleDBFile                  ();
+    DBDictionary()           .WriteSampleDBFile                  ();
     product_data            ::WritePolFiles                      ();
     FundData                ::WriteFundFiles                     ();
     rounding_rules          ::write_rounding_files               ();
     stratified_charges      ::write_stratified_files             ();
 
-    DBDictionary::instance() .WriteProprietaryDBFiles            ();
+    DBDictionary()           .WriteProprietaryDBFiles            ();
     FundData                ::WriteProprietaryFundFiles          ();
     product_data            ::WriteProprietaryPolFiles           ();
     rounding_rules          ::write_proprietary_rounding_files   ();
