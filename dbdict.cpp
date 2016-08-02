@@ -50,8 +50,6 @@
 
 template class xml_serializable<DBDictionary>;
 
-std::string DBDictionary::cached_filename_;
-
 namespace xml_serialize
 {
 template<> struct xml_io<database_entity>
@@ -436,39 +434,19 @@ void DBDictionary::ascribe_members()
 }
 
 /// Read and cache a database file.
-///
-/// Perform the expensive operation of reading the dictionary from
-/// file only if the cached file name doesn't match the new filename.
 
 void DBDictionary::Init(std::string const& filename)
 {
     LMI_ASSERT(!filename.empty());
-    if(filename == cached_filename_)
-        {
-        return;
-        }
 
     try
         {
-        cached_filename_ = filename;
         load(filename);
         }
     catch(...)
         {
-        InvalidateCache();
         report_exception();
         }
-}
-
-/// Cause next Init() call to read from file instead of using cache.
-///
-/// The implementation simply sets the cached filename to an empty
-/// string, which is its initial value upon (static) construction and
-/// cannot validly name any file.
-
-void DBDictionary::InvalidateCache()
-{
-    cached_filename_.clear();
 }
 
 /// Save file, invalidating the cache.
@@ -480,7 +458,6 @@ void DBDictionary::InvalidateCache()
 
 void DBDictionary::WriteDB(std::string const& filename) const
 {
-    InvalidateCache();
     save(filename);
 }
 

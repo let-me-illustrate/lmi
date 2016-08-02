@@ -69,8 +69,6 @@ class LMI_SO DBDictionary
     void Add(database_entity const&);
     void InitDB();
 
-    static void InvalidateCache();
-
     // xml_serializable required implementation.
     virtual int                class_version() const;
     virtual std::string const& xml_root_name() const;
@@ -89,8 +87,6 @@ class LMI_SO DBDictionary
         (xml_lmi::xml_document& document
         ,std::string const&     file_leaf_name
         ) const;
-
-    static std::string cached_filename_;
 
     database_entity MinIssAge           ;
     database_entity MaxIssAge           ;
