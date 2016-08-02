@@ -175,6 +175,19 @@ bool product_database::varies_by_state(e_database_key k) const
     return 1 != entity_from_key(k).axis_lengths().at(e_axis_state);
 }
 
+namespace
+{
+/// Antediluvian database for static initialization.
+
+boost::shared_ptr<DBDictionary const> antediluvian_db()
+{
+    boost::shared_ptr<DBDictionary> z(new DBDictionary);
+    z->InitAntediluvian();
+    LMI_ASSERT(z);
+    return z;
+}
+} // Unnamed namespace.
+
 /// Initialize upon construction.
 ///
 /// Set maturity age and default length (number of years to maturity).
@@ -183,9 +196,8 @@ void product_database::initialize(std::string const& product_name)
 {
     if(is_antediluvian_fork())
         {
-            boost::shared_ptr<DBDictionary> d(new DBDictionary);
-        d->InitAntediluvian();
-        db_ = d;
+        static boost::shared_ptr<DBDictionary const> z(antediluvian_db());
+        db_ = z;
         }
     else
         {
