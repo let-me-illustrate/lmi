@@ -71,26 +71,23 @@ class file_cache
 
         auto i = cache_.lower_bound(filename);
         if
-            (  cache_.end() != i
-            && filename     == i->first
-            && write_time   == i->second.write_time
+            (  cache_.end() == i
+            || filename     != i->first
+            || write_time   != i->second.write_time
             )
             {
-            return i->second.data;
+            // Construct before inserting because ctor might throw.
+            retrieved_type value(new T(filename));
+
+            // insert() doesn't update the value if the key is already
+            // present, so insert a dummy value and then modify it.
+            // This works for both existing and new keys.
+            i = cache_.insert(i, std::make_pair(filename, record()));
+            i->second.data = value;
+            i->second.write_time = write_time;
             }
 
-        // Construction may throw, so do it before updating the cache.
-        retrieved_type value(new T(filename));
-
-        // insert() doesn't update the value if the key is already
-        // present, so insert a dummy value and then modify it--this
-        // works for both existing and new keys.
-        i = cache_.insert(i, std::make_pair(filename, record()));
-        record& rec = i->second;
-        rec.data = value;
-        rec.write_time = write_time;
-
-        return value;
+        return i->second.data;
         }
 
   private:
