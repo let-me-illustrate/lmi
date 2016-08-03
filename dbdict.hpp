@@ -56,8 +56,8 @@ class LMI_SO DBDictionary
 
     database_entity const& datum(std::string const&) const;
 
-    void WriteSampleDBFile();
-    void WriteProprietaryDBFiles();
+    static void WriteSampleDBFile();
+    static void WriteProprietaryDBFiles();
 
     void InitAntediluvian();
 
@@ -71,6 +71,9 @@ class LMI_SO DBDictionary
     void WriteDB(std::string const& filename) const;
     void Add(database_entity const&);
     void InitDB();
+
+    // A temporary expedient.
+    void Nyarlathotep();
 
     // xml_serializable required implementation.
     virtual int                class_version() const;
