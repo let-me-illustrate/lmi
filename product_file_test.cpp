@@ -67,7 +67,7 @@ std::string product_file_test::stratified_filename_ ;
 
 void product_file_test::write_all_files()
 {
-    DBDictionary()      .WriteSampleDBFile      ();
+    DBDictionary       ::WriteSampleDBFile      ();
     product_data       ::WritePolFiles          ();
     FundData           ::WriteFundFiles         ();
     rounding_rules     ::write_rounding_files   ();
