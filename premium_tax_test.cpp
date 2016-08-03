@@ -46,11 +46,11 @@ class premium_tax_test
 
 void premium_tax_test::write_prerequisite_files()
 {
-    DBDictionary::instance() .WriteSampleDBFile      ();
+    DBDictionary()      .WriteSampleDBFile      ();
     // product_database::initialize() requires a real '.product' file,
     // even though it's not otherwise used in this TU.
-    product_data            ::WritePolFiles          ();
-    stratified_charges      ::write_stratified_files ();
+    product_data       ::WritePolFiles          ();
+    stratified_charges ::write_stratified_files ();
 }
 
 /// Test premium-tax rates.
@@ -106,10 +106,12 @@ void premium_tax_test::test_rates()
     // A uniform but nonzero load would elicit a runtime error,
     // because the tiered load is not zero.
     {
-    database_entity const original = DBDictionary::instance().datum("PremTaxLoad");
+    DBDictionary& dictionary = const_cast<DBDictionary&>(*db.db_);
+
+    database_entity const original = dictionary.datum("PremTaxLoad");
     database_entity const scalar(DB_PremTaxLoad, 0.0000);
 
-    DBDictionary::instance().datum("PremTaxLoad") = scalar;
+    dictionary.datum("PremTaxLoad") = scalar;
 
     premium_tax z(mce_s_AK, mce_s_CT, false, db, strata);
     BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
@@ -119,7 +121,7 @@ void premium_tax_test::test_rates()
     BOOST_TEST_EQUAL(z.is_tiered                (), true  );
     BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0000);
 
-    DBDictionary::instance().datum("PremTaxLoad") = original;
+    dictionary.datum("PremTaxLoad") = original;
     }
 
     // Amortized.
