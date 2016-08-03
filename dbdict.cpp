@@ -449,12 +449,7 @@ void DBDictionary::Init(std::string const& filename)
         }
 }
 
-/// Save file, invalidating the cache.
-///
-/// If data are modified (by the GUI product editor) and saved under a
-/// new name, the cache must be invalidated. Otherwise, calling Init()
-/// with the name of the intact original file would fail to reload the
-/// unmodified data.
+/// Save a database file.
 
 void DBDictionary::WriteDB(std::string const& filename) const
 {
