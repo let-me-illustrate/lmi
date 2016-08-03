@@ -576,59 +576,61 @@ void DBDictionary::InitDB()
 
 void DBDictionary::WriteSampleDBFile()
 {
-    InitDB();
-    Add(database_entity(DB_GuarMonthlyPolFee   , 8.00));
-    Add(database_entity(DB_GuarSpecAmtLoad     , 0.0));
-    Add(database_entity(DB_GuarAnnualPolFee    , 0.0));
-    Add(database_entity(DB_GuarFundAdminChg    , 0.0));
-    Add(database_entity(DB_GuarPremLoadTgt     , 0.07));
-    Add(database_entity(DB_GuarPremLoadExc     , 0.04));
-    Add(database_entity(DB_GuarPremLoadTgtRfd  , 0.00));
-    Add(database_entity(DB_GuarPremLoadExcRfd  , 0.00));
-    Add(database_entity(DB_GuarAcctValLoad     , 0.0));
-    Add(database_entity(DB_CurrMonthlyPolFee   , 5.00));
-    Add(database_entity(DB_CurrSpecAmtLoad     , 0.0));
-    Add(database_entity(DB_CurrAnnualPolFee    , 0.0));
-    Add(database_entity(DB_CurrFundAdminChg    , 0.0));
-    Add(database_entity(DB_CurrPremLoadTgt     , 0.05));
-    Add(database_entity(DB_CurrPremLoadExc     , 0.02));
-    Add(database_entity(DB_CurrPremLoadTgtRfd  , 0.00));
-    Add(database_entity(DB_CurrPremLoadExcRfd  , 0.00));
-    Add(database_entity(DB_CurrAcctValLoad     , 0.0));
-    Add(database_entity(DB_DacTaxPremLoad      , 0.01));
-    Add(database_entity(DB_FundCharge          , 0.0));
-    Add(database_entity(DB_PremTaxFundCharge   , 0.0));
-    Add(database_entity(DB_DacTaxFundCharge    , 0.0));
-    Add(database_entity(DB_WaivePremTaxInt1035 , true));
-    Add(database_entity(DB_FirstWdMonth        , 0.0));
-    Add(database_entity(DB_MaxWdDed            , mce_to_next_anniversary));
-    Add(database_entity(DB_MinWd               , 100.0));
-    Add(database_entity(DB_WdFee               , 25.0));
-    Add(database_entity(DB_WdFeeRate           , 0.02));
-    Add(database_entity(DB_WdCanDecrSpecAmtDbo1, true));
-    Add(database_entity(DB_WdCanDecrSpecAmtDbo2, true));
-    Add(database_entity(DB_WdCanDecrSpecAmtDbo3, true));
-    Add(database_entity(DB_FirstLoanMonth      , 0.0));
-    Add(database_entity(DB_AllowPrefLoan       , false));
-    Add(database_entity(DB_AllowFixedLoan      , true));
-    Add(database_entity(DB_FixedLoanRate       , 0.06));
-    Add(database_entity(DB_AllowVlr            , true));
-    Add(database_entity(DB_MaxLoanAcctValMult  , 1.0));
-    Add(database_entity(DB_MaxLoanDed          , mce_to_next_anniversary));
-    Add(database_entity(DB_GuarPrefLoanSpread  , 0.0));
-    Add(database_entity(DB_GuarRegLoanSpread   , 0.04));
-    Add(database_entity(DB_CurrPrefLoanSpread  , 0.0));
-    Add(database_entity(DB_CurrRegLoanSpread   , 0.02));
-    Add(database_entity(DB_GuarInt             , 0.03));
-    Add(database_entity(DB_NaarDiscount        , 0.00246627));
-    Add(database_entity(DB_GuarIntSpread       , 0.03));
-    Add(database_entity(DB_GuarMandE           , 0.009));
-    Add(database_entity(DB_CurrIntSpread       , 0.01));
-    Add(database_entity(DB_CurrMandE           , 0.009));
-    Add(database_entity(DB_BonusInt            , 0.0));
-    Add(database_entity(DB_IntFloor            , 0.0));
-    Add(database_entity(DB_SepAcctSpreadMethod , mce_spread_is_effective_annual));
-    Add(database_entity(DB_DynamicMandE        , false));
+    DBDictionary z;
+
+    z.InitDB();
+    z.Add(database_entity(DB_GuarMonthlyPolFee   , 8.00));
+    z.Add(database_entity(DB_GuarSpecAmtLoad     , 0.0));
+    z.Add(database_entity(DB_GuarAnnualPolFee    , 0.0));
+    z.Add(database_entity(DB_GuarFundAdminChg    , 0.0));
+    z.Add(database_entity(DB_GuarPremLoadTgt     , 0.07));
+    z.Add(database_entity(DB_GuarPremLoadExc     , 0.04));
+    z.Add(database_entity(DB_GuarPremLoadTgtRfd  , 0.00));
+    z.Add(database_entity(DB_GuarPremLoadExcRfd  , 0.00));
+    z.Add(database_entity(DB_GuarAcctValLoad     , 0.0));
+    z.Add(database_entity(DB_CurrMonthlyPolFee   , 5.00));
+    z.Add(database_entity(DB_CurrSpecAmtLoad     , 0.0));
+    z.Add(database_entity(DB_CurrAnnualPolFee    , 0.0));
+    z.Add(database_entity(DB_CurrFundAdminChg    , 0.0));
+    z.Add(database_entity(DB_CurrPremLoadTgt     , 0.05));
+    z.Add(database_entity(DB_CurrPremLoadExc     , 0.02));
+    z.Add(database_entity(DB_CurrPremLoadTgtRfd  , 0.00));
+    z.Add(database_entity(DB_CurrPremLoadExcRfd  , 0.00));
+    z.Add(database_entity(DB_CurrAcctValLoad     , 0.0));
+    z.Add(database_entity(DB_DacTaxPremLoad      , 0.01));
+    z.Add(database_entity(DB_FundCharge          , 0.0));
+    z.Add(database_entity(DB_PremTaxFundCharge   , 0.0));
+    z.Add(database_entity(DB_DacTaxFundCharge    , 0.0));
+    z.Add(database_entity(DB_WaivePremTaxInt1035 , true));
+    z.Add(database_entity(DB_FirstWdMonth        , 0.0));
+    z.Add(database_entity(DB_MaxWdDed            , mce_to_next_anniversary));
+    z.Add(database_entity(DB_MinWd               , 100.0));
+    z.Add(database_entity(DB_WdFee               , 25.0));
+    z.Add(database_entity(DB_WdFeeRate           , 0.02));
+    z.Add(database_entity(DB_WdCanDecrSpecAmtDbo1, true));
+    z.Add(database_entity(DB_WdCanDecrSpecAmtDbo2, true));
+    z.Add(database_entity(DB_WdCanDecrSpecAmtDbo3, true));
+    z.Add(database_entity(DB_FirstLoanMonth      , 0.0));
+    z.Add(database_entity(DB_AllowPrefLoan       , false));
+    z.Add(database_entity(DB_AllowFixedLoan      , true));
+    z.Add(database_entity(DB_FixedLoanRate       , 0.06));
+    z.Add(database_entity(DB_AllowVlr            , true));
+    z.Add(database_entity(DB_MaxLoanAcctValMult  , 1.0));
+    z.Add(database_entity(DB_MaxLoanDed          , mce_to_next_anniversary));
+    z.Add(database_entity(DB_GuarPrefLoanSpread  , 0.0));
+    z.Add(database_entity(DB_GuarRegLoanSpread   , 0.04));
+    z.Add(database_entity(DB_CurrPrefLoanSpread  , 0.0));
+    z.Add(database_entity(DB_CurrRegLoanSpread   , 0.02));
+    z.Add(database_entity(DB_GuarInt             , 0.03));
+    z.Add(database_entity(DB_NaarDiscount        , 0.00246627));
+    z.Add(database_entity(DB_GuarIntSpread       , 0.03));
+    z.Add(database_entity(DB_GuarMandE           , 0.009));
+    z.Add(database_entity(DB_CurrIntSpread       , 0.01));
+    z.Add(database_entity(DB_CurrMandE           , 0.009));
+    z.Add(database_entity(DB_BonusInt            , 0.0));
+    z.Add(database_entity(DB_IntFloor            , 0.0));
+    z.Add(database_entity(DB_SepAcctSpreadMethod , mce_spread_is_effective_annual));
+    z.Add(database_entity(DB_DynamicMandE        , false));
 
     // gender, smoker
     int dims313[e_number_of_axes] = {3, 1, 3, 1, 1, 1, 1};
@@ -645,10 +647,10 @@ void DBDictionary::WriteSampleDBFile()
 
     // For now at least, just use (a multiple of) guaranteed COI rates
     // as current.
-    Add(database_entity(DB_CurrCoiTable, e_number_of_axes, dims313, TgCOI));
-    Add(database_entity(DB_GuarCoiTable, e_number_of_axes, dims313, TgCOI));
+    z.Add(database_entity(DB_CurrCoiTable, e_number_of_axes, dims313, TgCOI));
+    z.Add(database_entity(DB_GuarCoiTable, e_number_of_axes, dims313, TgCOI));
 
-    Add(database_entity(DB_CoiNyMinTable       , 0.0));
+    z.Add(database_entity(DB_CoiNyMinTable       , 0.0));
 
     double coimult[9] =
         {
@@ -656,65 +658,65 @@ void DBDictionary::WriteSampleDBFile()
         0.60, 0.50, 0.55, // male:   sm ns us
         0.50, 0.40, 0.45, // unisex: sm ns us
         };
-    Add(database_entity(DB_CurrCoiMultiplier, e_number_of_axes, dims313, coimult));
+    z.Add(database_entity(DB_CurrCoiMultiplier, e_number_of_axes, dims313, coimult));
 
-    Add(database_entity(DB_UseNyCoiFloor       , 0.0));
-    Add(database_entity(DB_GuarCoiCeiling      , 0.0));
-    Add(database_entity(DB_CoiGuarIsMin        , 0.0));
-    Add(database_entity(DB_CoiSnflIsGuar       , 0.0));
-    Add(database_entity(DB_CurrCoiIsAnnual     , true));
-    Add(database_entity(DB_GuarCoiIsAnnual     , true));
-    Add(database_entity(DB_MdptCoiIsAnnual     , true));
-    Add(database_entity(DB_AgeLastOrNearest    , oe_age_last_birthday));
-    Add(database_entity(DB_AllowRetirees       , true));
-    Add(database_entity(DB_MinSpecAmt          , 100000.0));
+    z.Add(database_entity(DB_UseNyCoiFloor       , 0.0));
+    z.Add(database_entity(DB_GuarCoiCeiling      , 0.0));
+    z.Add(database_entity(DB_CoiGuarIsMin        , 0.0));
+    z.Add(database_entity(DB_CoiSnflIsGuar       , 0.0));
+    z.Add(database_entity(DB_CurrCoiIsAnnual     , true));
+    z.Add(database_entity(DB_GuarCoiIsAnnual     , true));
+    z.Add(database_entity(DB_MdptCoiIsAnnual     , true));
+    z.Add(database_entity(DB_AgeLastOrNearest    , oe_age_last_birthday));
+    z.Add(database_entity(DB_AllowRetirees       , true));
+    z.Add(database_entity(DB_MinSpecAmt          , 100000.0));
     // Forbid substandard table ratings with simplified or guaranteed issue.
     int dim_uw_basis[e_number_of_axes] = {1, 1, 1, 1, 5, 1, 1};
     //                              med  para nonmed   SI     GI
     double allow_substd_table[] = {true, true, true, false, false};
-    Add(database_entity(DB_AllowSubstdTable, e_number_of_axes, dim_uw_basis, allow_substd_table));
-    Add(database_entity(DB_AllowFlatExtras     , true));
-    Add(database_entity(DB_MinIssAge           , 15));
-    Add(database_entity(DB_MaxIssAge           , 70));
-    Add(database_entity(DB_MinIssSpecAmt       , 50000.0));
-    Add(database_entity(DB_MinIssBaseSpecAmt   , 50000.0));
-    Add(database_entity(DB_MaxIssSpecAmt       , 10000000.0));
-    Add(database_entity(DB_MinRenlSpecAmt      , 50000.0));
-    Add(database_entity(DB_MinRenlBaseSpecAmt  , 50000.0));
-    Add(database_entity(DB_MaxRenlSpecAmt      , 10000000.0));
-    Add(database_entity(DB_MinSpecAmtIncr      , 0.0));
-    Add(database_entity(DB_MaxIncrAge          , 99));
-    Add(database_entity(DB_MinPmt              , 0.0));
-    Add(database_entity(DB_SmokeOrTobacco      , oe_tobacco_nontobacco));
-    Add(database_entity(DB_AllowUnisex         , true));
-    Add(database_entity(DB_AllowSexDistinct    , true));
-    Add(database_entity(DB_AllowUnismoke       , true));
-    Add(database_entity(DB_AllowSmokeDistinct  , true));
-    Add(database_entity(DB_AllowFullUw         , true));
-    Add(database_entity(DB_AllowParamedUw      , true));
-    Add(database_entity(DB_AllowNonmedUw       , true));
-    Add(database_entity(DB_AllowSimpUw         , true));
-    Add(database_entity(DB_AllowGuarUw         , true));
-    Add(database_entity(DB_AllowMortBlendSex   , true));
-    Add(database_entity(DB_AllowMortBlendSmoke , true));
-    Add(database_entity(DB_AllowRatedWp        , false));
-    Add(database_entity(DB_AllowRatedAdb       , false));
-    Add(database_entity(DB_AllowRatedTerm      , true));
-    Add(database_entity(DB_Allowable           , true));
-    Add(database_entity(DB_AllowPreferredClass , true));
-    Add(database_entity(DB_AllowCvat           , true));
-    Add(database_entity(DB_AllowGpt            , true));
+    z.Add(database_entity(DB_AllowSubstdTable, e_number_of_axes, dim_uw_basis, allow_substd_table));
+    z.Add(database_entity(DB_AllowFlatExtras     , true));
+    z.Add(database_entity(DB_MinIssAge           , 15));
+    z.Add(database_entity(DB_MaxIssAge           , 70));
+    z.Add(database_entity(DB_MinIssSpecAmt       , 50000.0));
+    z.Add(database_entity(DB_MinIssBaseSpecAmt   , 50000.0));
+    z.Add(database_entity(DB_MaxIssSpecAmt       , 10000000.0));
+    z.Add(database_entity(DB_MinRenlSpecAmt      , 50000.0));
+    z.Add(database_entity(DB_MinRenlBaseSpecAmt  , 50000.0));
+    z.Add(database_entity(DB_MaxRenlSpecAmt      , 10000000.0));
+    z.Add(database_entity(DB_MinSpecAmtIncr      , 0.0));
+    z.Add(database_entity(DB_MaxIncrAge          , 99));
+    z.Add(database_entity(DB_MinPmt              , 0.0));
+    z.Add(database_entity(DB_SmokeOrTobacco      , oe_tobacco_nontobacco));
+    z.Add(database_entity(DB_AllowUnisex         , true));
+    z.Add(database_entity(DB_AllowSexDistinct    , true));
+    z.Add(database_entity(DB_AllowUnismoke       , true));
+    z.Add(database_entity(DB_AllowSmokeDistinct  , true));
+    z.Add(database_entity(DB_AllowFullUw         , true));
+    z.Add(database_entity(DB_AllowParamedUw      , true));
+    z.Add(database_entity(DB_AllowNonmedUw       , true));
+    z.Add(database_entity(DB_AllowSimpUw         , true));
+    z.Add(database_entity(DB_AllowGuarUw         , true));
+    z.Add(database_entity(DB_AllowMortBlendSex   , true));
+    z.Add(database_entity(DB_AllowMortBlendSmoke , true));
+    z.Add(database_entity(DB_AllowRatedWp        , false));
+    z.Add(database_entity(DB_AllowRatedAdb       , false));
+    z.Add(database_entity(DB_AllowRatedTerm      , true));
+    z.Add(database_entity(DB_Allowable           , true));
+    z.Add(database_entity(DB_AllowPreferredClass , true));
+    z.Add(database_entity(DB_AllowCvat           , true));
+    z.Add(database_entity(DB_AllowGpt            , true));
 
-    Add(database_entity(DB_CorridorWhence      , 1));
-    Add(database_entity(DB_Irc7702NspWhence    , 2));
-    Add(database_entity(DB_SevenPayWhence      , 1));
+    z.Add(database_entity(DB_CorridorWhence      , 1));
+    z.Add(database_entity(DB_Irc7702NspWhence    , 2));
+    z.Add(database_entity(DB_SevenPayWhence      , 1));
     // This is just a sample product, so make do with plausible
     // all-male seven-pay premiums, and use GPT corridor factors for
     // CVAT. 'Irc7702NspWhence' specifies that NSP is calculated as
     // the reciprocal of corridor, so no NSP table is needed.
-    Add(database_entity(DB_CorridorTable       , 7));
-    Add(database_entity(DB_Irc7702NspTable     , 0));
-    Add(database_entity(DB_SevenPayTable       , 10));
+    z.Add(database_entity(DB_CorridorTable       , 7));
+    z.Add(database_entity(DB_Irc7702NspTable     , 0));
+    z.Add(database_entity(DB_SevenPayTable       , 10));
 
     // Following IRS Notice 88-128, use only the male and female
     // tables with no smoker distinction, and a unisex table where
@@ -725,26 +727,26 @@ void DBDictionary::WriteSampleDBFile()
     // which contains a numerical error but was adopted by NAIC.
     int dims311[e_number_of_axes] = {3, 1, 1, 1, 1, 1, 1}; // gender
     double T7702q[9] = {35, 41, 107,}; // Female, male, unisex.
-    Add(database_entity(DB_Irc7702QTable, e_number_of_axes, dims311, T7702q));
+    z.Add(database_entity(DB_Irc7702QTable, e_number_of_axes, dims311, T7702q));
 
-    Add(database_entity(DB_AllowDbo1           , true));
-    Add(database_entity(DB_AllowDbo2           , true));
-    Add(database_entity(DB_AllowDbo3           , true));
-    Add(database_entity(DB_DboChgCanIncrSpecAmt, true));
-    Add(database_entity(DB_DboChgCanDecrSpecAmt, true));
-    Add(database_entity(DB_SnflQTable          , 0.0));
-    Add(database_entity(DB_SurrChgByFormula    , 0.0));
-    Add(database_entity(DB_SurrChgPeriod       , 0.0));
-    Add(database_entity(DB_SurrChgZeroDur      , 0.0));
-    Add(database_entity(DB_SurrChgNlpMult      , 0.0));
-    Add(database_entity(DB_SurrChgNlpMax       , 0.0));
-    Add(database_entity(DB_SurrChgEaMax        , 0.0));
-    Add(database_entity(DB_SurrChgPremMult     , 0.0));
-    Add(database_entity(DB_SurrChgAmort        , 0.0));
+    z.Add(database_entity(DB_AllowDbo1           , true));
+    z.Add(database_entity(DB_AllowDbo2           , true));
+    z.Add(database_entity(DB_AllowDbo3           , true));
+    z.Add(database_entity(DB_DboChgCanIncrSpecAmt, true));
+    z.Add(database_entity(DB_DboChgCanDecrSpecAmt, true));
+    z.Add(database_entity(DB_SnflQTable          , 0.0));
+    z.Add(database_entity(DB_SurrChgByFormula    , 0.0));
+    z.Add(database_entity(DB_SurrChgPeriod       , 0.0));
+    z.Add(database_entity(DB_SurrChgZeroDur      , 0.0));
+    z.Add(database_entity(DB_SurrChgNlpMult      , 0.0));
+    z.Add(database_entity(DB_SurrChgNlpMax       , 0.0));
+    z.Add(database_entity(DB_SurrChgEaMax        , 0.0));
+    z.Add(database_entity(DB_SurrChgPremMult     , 0.0));
+    z.Add(database_entity(DB_SurrChgAmort        , 0.0));
 
     int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
     std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
-    Add
+    z.Add
         (database_entity
             (DB_PremTaxRate
             ,premium_tax_dimensions
@@ -756,7 +758,7 @@ void DBDictionary::WriteSampleDBFile()
     std::vector<double> alt_form(e_max_dim_state);
     alt_form[mce_s_KS] = true;
     alt_form[mce_s_KY] = true;
-    Add
+    z.Add
         (database_entity
             (DB_UsePolicyFormAlt
             ,premium_tax_dimensions
@@ -764,18 +766,18 @@ void DBDictionary::WriteSampleDBFile()
             )
         );
 
-    Add(database_entity(DB_PremTaxState        , oe_ee_state));
-    Add(database_entity(DB_MaturityAge         , 100));
-    Add(database_entity(DB_AllowExtEndt        , true));
-    Add(database_entity(DB_MinPremType         , oe_monthly_deduction));
-    Add(database_entity(DB_TgtPremType         , oe_modal_nonmec));
-    Add(database_entity(DB_TgtPremFixedAtIssue , false));
-    Add(database_entity(DB_TgtPremIgnoreSubstd , true));
-    Add(database_entity(DB_NoLapseMinDur       , 0.0));
-    Add(database_entity(DB_NoLapseMinAge       , 0.0));
-    Add(database_entity(DB_NoLapseUnratedOnly  , false));
-    Add(database_entity(DB_NoLapseDbo1Only     , false));
-    Add(database_entity(DB_LoadRfdProportion   , 0.0));
+    z.Add(database_entity(DB_PremTaxState        , oe_ee_state));
+    z.Add(database_entity(DB_MaturityAge         , 100));
+    z.Add(database_entity(DB_AllowExtEndt        , true));
+    z.Add(database_entity(DB_MinPremType         , oe_monthly_deduction));
+    z.Add(database_entity(DB_TgtPremType         , oe_modal_nonmec));
+    z.Add(database_entity(DB_TgtPremFixedAtIssue , false));
+    z.Add(database_entity(DB_TgtPremIgnoreSubstd , true));
+    z.Add(database_entity(DB_NoLapseMinDur       , 0.0));
+    z.Add(database_entity(DB_NoLapseMinAge       , 0.0));
+    z.Add(database_entity(DB_NoLapseUnratedOnly  , false));
+    z.Add(database_entity(DB_NoLapseDbo1Only     , false));
+    z.Add(database_entity(DB_LoadRfdProportion   , 0.0));
 
     // uw_class, smoker
     int dims143[e_number_of_axes] = {1, 4, 3, 1, 1, 1, 1};
@@ -788,75 +790,75 @@ void DBDictionary::WriteSampleDBFile()
         0, 0, 0, // ultra: sm ns us [zero: error message--no ultrapref class]
         };
 
-    Add(database_entity(DB_TermTable    , e_number_of_axes, dims143, TtCOI));
-    Add(database_entity(DB_GuarTermTable, e_number_of_axes, dims143, TtCOI));
-    Add(database_entity(DB_AllowTerm           , true));
-    Add(database_entity(DB_TermMinIssAge       , 15));
-    Add(database_entity(DB_TermMaxIssAge       , 65));
-    Add(database_entity(DB_TermForcedConvAge   , 70));
-    Add(database_entity(DB_TermForcedConvDur   , 10));
-    Add(database_entity(DB_MaxTermProportion   , 0.0));
-    Add(database_entity(DB_TermCoiRate         , 0.0));
-    Add(database_entity(DB_TermPremRate        , 0.0));
-    Add(database_entity(DB_WpTable             , 8));
-    Add(database_entity(DB_AllowWp             , true));
-    Add(database_entity(DB_WpMinIssAge         , 18));
-    Add(database_entity(DB_WpMaxIssAge         , 64));
-    Add(database_entity(DB_WpCoiRate           , 0.0));
-    Add(database_entity(DB_WpPremRate          , 0.0));
+    z.Add(database_entity(DB_TermTable    , e_number_of_axes, dims143, TtCOI));
+    z.Add(database_entity(DB_GuarTermTable, e_number_of_axes, dims143, TtCOI));
+    z.Add(database_entity(DB_AllowTerm           , true));
+    z.Add(database_entity(DB_TermMinIssAge       , 15));
+    z.Add(database_entity(DB_TermMaxIssAge       , 65));
+    z.Add(database_entity(DB_TermForcedConvAge   , 70));
+    z.Add(database_entity(DB_TermForcedConvDur   , 10));
+    z.Add(database_entity(DB_MaxTermProportion   , 0.0));
+    z.Add(database_entity(DB_TermCoiRate         , 0.0));
+    z.Add(database_entity(DB_TermPremRate        , 0.0));
+    z.Add(database_entity(DB_WpTable             , 8));
+    z.Add(database_entity(DB_AllowWp             , true));
+    z.Add(database_entity(DB_WpMinIssAge         , 18));
+    z.Add(database_entity(DB_WpMaxIssAge         , 64));
+    z.Add(database_entity(DB_WpCoiRate           , 0.0));
+    z.Add(database_entity(DB_WpPremRate          , 0.0));
     // SOA qx_ins table 708 is 70-75 US ADB experience.
-    Add(database_entity(DB_AdbTable            , 708));
-    Add(database_entity(DB_AllowAdb            , true));
-    Add(database_entity(DB_AdbMinIssAge        , 15));
-    Add(database_entity(DB_AdbMaxIssAge        , 70));
-    Add(database_entity(DB_AdbLimit            , 1000000.0));
-    Add(database_entity(DB_AdbCoiRate          , 0.0));
-    Add(database_entity(DB_AdbPremRate         , 0.0));
-    Add(database_entity(DB_WeightClass         , 0.0));
-    Add(database_entity(DB_WeightGender        , 0.0));
-    Add(database_entity(DB_WeightSmoking       , 0.0));
-    Add(database_entity(DB_WeightAge           , 0.0));
-    Add(database_entity(DB_WeightSpecAmt       , 0.0));
-    Add(database_entity(DB_WeightState         , 0.0));
-    Add(database_entity(DB_FullExpPol          , 0.0));
-    Add(database_entity(DB_FullExpPrem         , 0.0));
-    Add(database_entity(DB_FullExpDumpin       , 0.0));
-    Add(database_entity(DB_FullExpSpecAmt      , 0.0));
-    Add(database_entity(DB_VarExpPol           , 0.0));
-    Add(database_entity(DB_VarExpPrem          , 0.0));
-    Add(database_entity(DB_VarExpDumpin        , 0.0));
-    Add(database_entity(DB_VarExpSpecAmt       , 0.0));
-    Add(database_entity(DB_MedicalProportion   , 0.0));
-    Add(database_entity(DB_UwTestCost          , 0.0));
-    Add(database_entity(DB_VxBasicQTable       , 0.0));
-    Add(database_entity(DB_VxDeficQTable       , 0.0));
-    Add(database_entity(DB_VxTaxQTable         , 0.0));
-    Add(database_entity(DB_StatVxInt           , 0.0));
-    Add(database_entity(DB_TaxVxInt            , 0.0));
-    Add(database_entity(DB_StatVxQ             , 0.0));
-    Add(database_entity(DB_TaxVxQ              , 0.0));
-    Add(database_entity(DB_DeficVxQ            , 0.0));
-    Add(database_entity(DB_SnflQ               , 0.0));
-    Add(database_entity(DB_CalculateComp       , false));
-    Add(database_entity(DB_CompTarget          , 0.0));
-    Add(database_entity(DB_CompExcess          , 0.0));
-    Add(database_entity(DB_CompChargeback      , 0.0));
-    Add(database_entity(DB_LapseRate           , 0.0));
-    Add(database_entity(DB_ReqSurpNaar         , 0.0));
-    Add(database_entity(DB_ReqSurpVx           , 0.0));
-    Add(database_entity(DB_LicFitRate          , 0.0));
-    Add(database_entity(DB_LicDacTaxRate       , 0.0));
-    Add(database_entity(DB_GdbVxMethod         , 0.0));
-    Add(database_entity(DB_PrimaryHurdle       , 0.0));
-    Add(database_entity(DB_SecondaryHurdle     , 0.0));
-    Add(database_entity(DB_LedgerType          , mce_ill_reg));
-    Add(database_entity(DB_AllowExpRating      , false));
+    z.Add(database_entity(DB_AdbTable            , 708));
+    z.Add(database_entity(DB_AllowAdb            , true));
+    z.Add(database_entity(DB_AdbMinIssAge        , 15));
+    z.Add(database_entity(DB_AdbMaxIssAge        , 70));
+    z.Add(database_entity(DB_AdbLimit            , 1000000.0));
+    z.Add(database_entity(DB_AdbCoiRate          , 0.0));
+    z.Add(database_entity(DB_AdbPremRate         , 0.0));
+    z.Add(database_entity(DB_WeightClass         , 0.0));
+    z.Add(database_entity(DB_WeightGender        , 0.0));
+    z.Add(database_entity(DB_WeightSmoking       , 0.0));
+    z.Add(database_entity(DB_WeightAge           , 0.0));
+    z.Add(database_entity(DB_WeightSpecAmt       , 0.0));
+    z.Add(database_entity(DB_WeightState         , 0.0));
+    z.Add(database_entity(DB_FullExpPol          , 0.0));
+    z.Add(database_entity(DB_FullExpPrem         , 0.0));
+    z.Add(database_entity(DB_FullExpDumpin       , 0.0));
+    z.Add(database_entity(DB_FullExpSpecAmt      , 0.0));
+    z.Add(database_entity(DB_VarExpPol           , 0.0));
+    z.Add(database_entity(DB_VarExpPrem          , 0.0));
+    z.Add(database_entity(DB_VarExpDumpin        , 0.0));
+    z.Add(database_entity(DB_VarExpSpecAmt       , 0.0));
+    z.Add(database_entity(DB_MedicalProportion   , 0.0));
+    z.Add(database_entity(DB_UwTestCost          , 0.0));
+    z.Add(database_entity(DB_VxBasicQTable       , 0.0));
+    z.Add(database_entity(DB_VxDeficQTable       , 0.0));
+    z.Add(database_entity(DB_VxTaxQTable         , 0.0));
+    z.Add(database_entity(DB_StatVxInt           , 0.0));
+    z.Add(database_entity(DB_TaxVxInt            , 0.0));
+    z.Add(database_entity(DB_StatVxQ             , 0.0));
+    z.Add(database_entity(DB_TaxVxQ              , 0.0));
+    z.Add(database_entity(DB_DeficVxQ            , 0.0));
+    z.Add(database_entity(DB_SnflQ               , 0.0));
+    z.Add(database_entity(DB_CalculateComp       , false));
+    z.Add(database_entity(DB_CompTarget          , 0.0));
+    z.Add(database_entity(DB_CompExcess          , 0.0));
+    z.Add(database_entity(DB_CompChargeback      , 0.0));
+    z.Add(database_entity(DB_LapseRate           , 0.0));
+    z.Add(database_entity(DB_ReqSurpNaar         , 0.0));
+    z.Add(database_entity(DB_ReqSurpVx           , 0.0));
+    z.Add(database_entity(DB_LicFitRate          , 0.0));
+    z.Add(database_entity(DB_LicDacTaxRate       , 0.0));
+    z.Add(database_entity(DB_GdbVxMethod         , 0.0));
+    z.Add(database_entity(DB_PrimaryHurdle       , 0.0));
+    z.Add(database_entity(DB_SecondaryHurdle     , 0.0));
+    z.Add(database_entity(DB_LedgerType          , mce_ill_reg));
+    z.Add(database_entity(DB_AllowExpRating      , false));
 
     // 1960 CSG (which does not distinguish gender).
-    Add(database_entity(DB_GroupProxyRateTable , 305));
+    z.Add(database_entity(DB_GroupProxyRateTable , 305));
 
     double T83Gam[3] = {825, 826, 826,};
-    Add
+    z.Add
         (database_entity
             (DB_PartialMortTable
             ,e_number_of_axes
@@ -866,85 +868,85 @@ void DBDictionary::WriteSampleDBFile()
             )
         );
 
-    Add(database_entity(DB_AllowWd             , true));
-    Add(database_entity(DB_AllowLoan           , true));
-    Add(database_entity(DB_AllowChangeToDbo2   , true));
-    Add(database_entity(DB_AllowSpecAmtIncr    , true));
-    Add(database_entity(DB_NoLapseAlwaysActive , false));
-    Add(database_entity(DB_ExpRatStdDevMult    , 0.0));
-    Add(database_entity(DB_ExpRatIbnrMult      , 0.0));
-    Add(database_entity(DB_ExpRatCoiRetention  , 0.0));
-    Add(database_entity(DB_StableValFundCharge , 0.0));
-    Add(database_entity(DB_LoadAmortFundCharge , 0.0030));
-    Add(database_entity(DB_AllowAmortPremLoad  , false));
-    Add(database_entity(DB_PremTaxAmortPeriod  , 0));
-    Add(database_entity(DB_PremTaxAmortIntRate , 0.0));
+    z.Add(database_entity(DB_AllowWd             , true));
+    z.Add(database_entity(DB_AllowLoan           , true));
+    z.Add(database_entity(DB_AllowChangeToDbo2   , true));
+    z.Add(database_entity(DB_AllowSpecAmtIncr    , true));
+    z.Add(database_entity(DB_NoLapseAlwaysActive , false));
+    z.Add(database_entity(DB_ExpRatStdDevMult    , 0.0));
+    z.Add(database_entity(DB_ExpRatIbnrMult      , 0.0));
+    z.Add(database_entity(DB_ExpRatCoiRetention  , 0.0));
+    z.Add(database_entity(DB_StableValFundCharge , 0.0));
+    z.Add(database_entity(DB_LoadAmortFundCharge , 0.0030));
+    z.Add(database_entity(DB_AllowAmortPremLoad  , false));
+    z.Add(database_entity(DB_PremTaxAmortPeriod  , 0));
+    z.Add(database_entity(DB_PremTaxAmortIntRate , 0.0));
     // Pass through premium tax.
-    Add
+    z.Add
         (database_entity
             (DB_PremTaxLoad
             ,premium_tax_dimensions
             ,premium_tax_rates_for_life_insurance()
             )
         );
-    Add(database_entity(DB_AllowHoneymoon      , true));
+    z.Add(database_entity(DB_AllowHoneymoon      , true));
     // Set target equal to seven-pay premium.
-    Add(database_entity(DB_TgtPremTable        , 10));
-    Add(database_entity(DB_TgtPremMonthlyPolFee, 0.0));
-    Add(database_entity(DB_AllowExtraAssetComp , true));
-    Add(database_entity(DB_AllowExtraPremComp  , true));
-    Add(database_entity(DB_AssetChargeType     , oe_asset_charge_spread));
-    Add(database_entity(DB_AllowUltraPrefClass , false));
-    Add(database_entity(DB_AllowGenAcct        , true));
-    Add(database_entity(DB_AllowSepAcct        , true));
-    Add(database_entity(DB_AllowGenAcctEarnRate, true));
-    Add(database_entity(DB_AllowSepAcctNetRate , true));
-    Add(database_entity(DB_MaxGenAcctRate      , 0.06));
-    Add(database_entity(DB_MaxSepAcctRate      , 0.12));
-    Add(database_entity(DB_MinVlrRate          , 0.04));
-    Add(database_entity(DB_SurrChgAcctValMult  , 0.0));
-    Add(database_entity(DB_IntSpreadMode       , mce_spread_daily));
-    Add(database_entity(DB_StateApproved       , true));
-    Add(database_entity(DB_AllowStateXX        , true));
-    Add(database_entity(DB_AllowForeign        , true));
-    Add(database_entity(DB_GroupIndivSelection , false));
-    Add(database_entity(DB_AllowImfOverride    , false));
-    Add(database_entity(DB_AllowNo7702         , false));
-    Add(database_entity(DB_EnforceNaarLimit    , true));
-    Add(database_entity(DB_DynamicSepAcctLoad  , false));
-    Add(database_entity(DB_SpecAmtLoadLimit    , 10000000.0));
-    Add(database_entity(DB_RatingsAffect7702   , false));
-    Add(database_entity(DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium));
-    Add(database_entity(DB_GptMatChangeDefn    , 0));
-    Add(database_entity(DB_Irc7702BftIsSpecAmt , 0));
-    Add(database_entity(DB_Initial7702BftIsDb  , false));
-    Add(database_entity(DB_Irc7702Endowment    , 0));
-    Add(database_entity(DB_Equiv7702Dbo3       , 0));
-    Add(database_entity(DB_TermIsQABOrDb7702   , 1));
-    Add(database_entity(DB_TermIsQABOrDb7702A  , 1));
-    Add(database_entity(DB_GioIsQAB            , false));
-    Add(database_entity(DB_AdbIsQAB            , false));
-    Add(database_entity(DB_SpouseRiderIsQAB    , false));
-    Add(database_entity(DB_ChildRiderIsQAB     , false));
-    Add(database_entity(DB_WpIsQAB             , false));
-    Add(database_entity(DB_ExpRatRiskCoiMult   , 0));
-    Add(database_entity(DB_SurrChgSpecAmtMult  , 0.0));
-    Add(database_entity(DB_AllowSpouseRider    , false));
-    Add(database_entity(DB_AllowChildRider     , false));
+    z.Add(database_entity(DB_TgtPremTable        , 10));
+    z.Add(database_entity(DB_TgtPremMonthlyPolFee, 0.0));
+    z.Add(database_entity(DB_AllowExtraAssetComp , true));
+    z.Add(database_entity(DB_AllowExtraPremComp  , true));
+    z.Add(database_entity(DB_AssetChargeType     , oe_asset_charge_spread));
+    z.Add(database_entity(DB_AllowUltraPrefClass , false));
+    z.Add(database_entity(DB_AllowGenAcct        , true));
+    z.Add(database_entity(DB_AllowSepAcct        , true));
+    z.Add(database_entity(DB_AllowGenAcctEarnRate, true));
+    z.Add(database_entity(DB_AllowSepAcctNetRate , true));
+    z.Add(database_entity(DB_MaxGenAcctRate      , 0.06));
+    z.Add(database_entity(DB_MaxSepAcctRate      , 0.12));
+    z.Add(database_entity(DB_MinVlrRate          , 0.04));
+    z.Add(database_entity(DB_SurrChgAcctValMult  , 0.0));
+    z.Add(database_entity(DB_IntSpreadMode       , mce_spread_daily));
+    z.Add(database_entity(DB_StateApproved       , true));
+    z.Add(database_entity(DB_AllowStateXX        , true));
+    z.Add(database_entity(DB_AllowForeign        , true));
+    z.Add(database_entity(DB_GroupIndivSelection , false));
+    z.Add(database_entity(DB_AllowImfOverride    , false));
+    z.Add(database_entity(DB_AllowNo7702         , false));
+    z.Add(database_entity(DB_EnforceNaarLimit    , true));
+    z.Add(database_entity(DB_DynamicSepAcctLoad  , false));
+    z.Add(database_entity(DB_SpecAmtLoadLimit    , 10000000.0));
+    z.Add(database_entity(DB_RatingsAffect7702   , false));
+    z.Add(database_entity(DB_CvatMatChangeDefn   , mce_earlier_of_increase_or_unnecessary_premium));
+    z.Add(database_entity(DB_GptMatChangeDefn    , 0));
+    z.Add(database_entity(DB_Irc7702BftIsSpecAmt , 0));
+    z.Add(database_entity(DB_Initial7702BftIsDb  , false));
+    z.Add(database_entity(DB_Irc7702Endowment    , 0));
+    z.Add(database_entity(DB_Equiv7702Dbo3       , 0));
+    z.Add(database_entity(DB_TermIsQABOrDb7702   , 1));
+    z.Add(database_entity(DB_TermIsQABOrDb7702A  , 1));
+    z.Add(database_entity(DB_GioIsQAB            , false));
+    z.Add(database_entity(DB_AdbIsQAB            , false));
+    z.Add(database_entity(DB_SpouseRiderIsQAB    , false));
+    z.Add(database_entity(DB_ChildRiderIsQAB     , false));
+    z.Add(database_entity(DB_WpIsQAB             , false));
+    z.Add(database_entity(DB_ExpRatRiskCoiMult   , 0));
+    z.Add(database_entity(DB_SurrChgSpecAmtMult  , 0.0));
+    z.Add(database_entity(DB_AllowSpouseRider    , false));
+    z.Add(database_entity(DB_AllowChildRider     , false));
 
     // Spouse and child riders unavailable, so it doesn't matter
     // what table is specified.
-    Add(database_entity(DB_SpouseRiderTable    , 0));
-    Add(database_entity(DB_ChildRiderTable     , 0));
+    z.Add(database_entity(DB_SpouseRiderTable    , 0));
+    z.Add(database_entity(DB_ChildRiderTable     , 0));
 
-    Add(database_entity(DB_GenAcctIntBonus     , 0.0));
+    z.Add(database_entity(DB_GenAcctIntBonus     , 0.0));
 
     // Allow experience rating.
-    Add(database_entity(DB_AllowExpRating      , 1.0));
-    Add(database_entity(DB_ExpRatIbnrMult      , 6.0));
-    Add(database_entity(DB_ExpRatAmortPeriod   , 4.0));
+    z.Add(database_entity(DB_AllowExpRating      , 1.0));
+    z.Add(database_entity(DB_ExpRatIbnrMult      , 6.0));
+    z.Add(database_entity(DB_ExpRatAmortPeriod   , 4.0));
 
-    WriteDB(AddDataDir("sample.database"));
+    z.WriteDB(AddDataDir("sample.database"));
 }
 
 /// Initialize the built-in database for the antediluvian branch.
