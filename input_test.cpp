@@ -98,13 +98,15 @@ void input_test::test_product_database()
     Input input;
     yare_input yi(input);
     product_database db(yi);
+    DBDictionary& dictionary = const_cast<DBDictionary&>(*db.db_);
+
     std::vector<double> v;
     std::vector<double> w;
 
     // This vector's last element must be replicated.
     int dims_stat[e_number_of_axes] = {1, 1, 1, 1, 1, 1, 10};
     double stat[10] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.05};
-    DBDictionary::instance().datum("StatVxQ") = database_entity
+    dictionary.datum("StatVxQ") = database_entity
         (DB_StatVxQ
         ,e_number_of_axes
         ,dims_stat
@@ -129,7 +131,7 @@ void input_test::test_product_database()
         ,0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8
         ,0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9
         };
-    DBDictionary::instance().datum("TaxVxQ") = database_entity
+    dictionary.datum("TaxVxQ") = database_entity
         (DB_TaxVxQ
         ,e_number_of_axes
         ,dims_tax
@@ -164,7 +166,7 @@ void input_test::test_product_database()
     database_entity const maturity = db.entity_from_key(DB_MaturityAge);
 
     // Maturity age must not vary by duration.
-    DBDictionary::instance().datum("MaturityAge") = database_entity
+    dictionary.datum("MaturityAge") = database_entity
         (DB_StatVxQ
         ,e_number_of_axes
         ,dims_stat
@@ -175,12 +177,12 @@ void input_test::test_product_database()
         ,std::runtime_error
         ,"Assertion '1 == v.extent()' failed."
         );
-    DBDictionary::instance().datum("MaturityAge") = maturity;
+    dictionary.datum("MaturityAge") = maturity;
 
     // A nondefault lookup index with a different issue age changes
     // the length of a queried vector.
     int dims_snflq[e_number_of_axes] = {1, 1, 1, e_max_dim_issue_age, 1, 1, 1};
-    DBDictionary::instance().datum("SnflQ") = database_entity
+    dictionary.datum("SnflQ") = database_entity
         (DB_SnflQ
         ,e_number_of_axes
         ,dims_snflq
