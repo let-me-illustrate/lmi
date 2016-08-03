@@ -67,11 +67,11 @@ std::string product_file_test::stratified_filename_ ;
 
 void product_file_test::write_all_files()
 {
-    DBDictionary::instance() .WriteSampleDBFile      ();
-    product_data            ::WritePolFiles          ();
-    FundData                ::WriteFundFiles         ();
-    rounding_rules          ::write_rounding_files   ();
-    stratified_charges      ::write_stratified_files ();
+    DBDictionary()      .WriteSampleDBFile      ();
+    product_data       ::WritePolFiles          ();
+    FundData           ::WriteFundFiles         ();
+    rounding_rules     ::write_rounding_files   ();
+    stratified_charges ::write_stratified_files ();
 
     policy_filename_     = "sample";
     product_data p(policy_filename_);
@@ -83,8 +83,7 @@ void product_file_test::write_all_files()
 
 void product_file_test::read_database_file()
 {
-    DBDictionary::instance().InvalidateCache();
-    DBDictionary::instance().Init(database_filename_);
+    DBDictionary().Init(database_filename_);
 }
 
 void product_file_test::read_fund_file()
