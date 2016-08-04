@@ -447,7 +447,7 @@ void product_data::redintegrate_ex_post
 /// necessarily represents a substitutable value, while everything
 /// else in a report is just literal text.
 
-void product_data::WritePolFiles()
+void product_data::write_policy_files()
 {
     product_data z;
 

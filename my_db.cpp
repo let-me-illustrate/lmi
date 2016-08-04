@@ -40,7 +40,7 @@
 #include "dbnames.hpp"
 
 //============================================================================
-void DBDictionary::WriteProprietaryDBFiles()
+void DBDictionary::write_proprietary_database_files()
 {
   // Sample policy form.
   {

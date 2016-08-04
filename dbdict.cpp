@@ -574,7 +574,7 @@ void DBDictionary::InitDB()
     Add(database_entity(DB_ChildRiderMaxAmt    , bignum));
 }
 
-void DBDictionary::WriteSampleDBFile()
+void DBDictionary::write_database_files()
 {
     DBDictionary z;
 

@@ -46,11 +46,11 @@ class premium_tax_test
 
 void premium_tax_test::write_prerequisite_files()
 {
-    DBDictionary       ::WriteSampleDBFile      ();
+    DBDictionary       ::write_database_files ();
     // product_database::initialize() requires a real '.product' file,
     // even though it's not otherwise used in this TU.
-    product_data       ::WritePolFiles          ();
-    stratified_charges ::write_stratified_files ();
+    product_data       ::write_policy_files   ();
+    stratified_charges ::write_strata_files   ();
 }
 
 /// Test premium-tax rates.

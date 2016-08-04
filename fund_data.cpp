@@ -148,7 +148,7 @@ void FundData::Write(std::string const& a_Filename) const
 }
 
 //============================================================================
-void FundData::WriteFundFiles()
+void FundData::write_funds_files()
 {
     FundData foo;
     foo.FundInfo_.push_back

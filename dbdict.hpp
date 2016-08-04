@@ -56,8 +56,8 @@ class LMI_SO DBDictionary
 
     database_entity const& datum(std::string const&) const;
 
-    static void WriteSampleDBFile();
-    static void WriteProprietaryDBFiles();
+    static void write_database_files();
+    static void write_proprietary_database_files();
 
     void InitAntediluvian();
 

@@ -70,8 +70,8 @@ class LMI_SO FundData
     FundData(std::string const& a_Filename);
     ~FundData();
 
-    static void WriteFundFiles();
-    static void WriteProprietaryFundFiles();
+    static void write_funds_files();
+    static void write_proprietary_funds_files();
 
     FundInfo const& GetFundInfo(int j) const;
     int GetNumberOfFunds() const;

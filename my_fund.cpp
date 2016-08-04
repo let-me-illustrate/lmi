@@ -39,7 +39,7 @@
 #include "data_directory.hpp"           // AddDataDir()
 
 //============================================================================
-void FundData::WriteProprietaryFundFiles()
+void FundData::write_proprietary_funds_files()
 {
     {
     // Sample product.

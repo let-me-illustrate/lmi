@@ -38,17 +38,17 @@ int try_main(int, char*[])
 
     std::cout << "Generating product files." << std::endl;
 
-    DBDictionary       ::WriteSampleDBFile                  ();
-    product_data       ::WritePolFiles                      ();
-    FundData           ::WriteFundFiles                     ();
-    rounding_rules     ::write_rounding_files               ();
-    stratified_charges ::write_stratified_files             ();
+    DBDictionary       ::write_database_files ();
+    FundData           ::write_funds_files    ();
+    product_data       ::write_policy_files   ();
+    rounding_rules     ::write_rounding_files ();
+    stratified_charges ::write_strata_files   ();
 
-    DBDictionary       ::WriteProprietaryDBFiles            ();
-    FundData           ::WriteProprietaryFundFiles          ();
-    product_data       ::WriteProprietaryPolFiles           ();
-    rounding_rules     ::write_proprietary_rounding_files   ();
-    stratified_charges ::write_proprietary_stratified_files ();
+    DBDictionary       ::write_proprietary_database_files ();
+    FundData           ::write_proprietary_funds_files    ();
+    product_data       ::write_proprietary_policy_files   ();
+    rounding_rules     ::write_proprietary_rounding_files ();
+    stratified_charges ::write_proprietary_strata_files   ();
 
     std::cout << "\nAll product files written.\n" << std::endl;
 
