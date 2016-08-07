@@ -107,6 +107,59 @@ database_entity::~database_entity()
 {
 }
 
+#if 0
+/// Deliberately undefined copy assignment operator.
+///
+/// 'input_test.cpp' contains the following strange code, which seems
+/// to have been written by accident and demonstrates a design flaw:
+///
+///   DBDictionary& dictionary = ...
+///   ...
+///   dictionary.datum("MaturityAge") = database_entity
+///       (DB_StatVxQ
+///       ,e_number_of_axes
+///       ,dims_stat
+///       ,stat
+///       );
+///   BOOST_TEST_THROW
+///       (db.Query(DB_MaturityAge)
+///       ,std::runtime_error
+///       ,"Assertion '1 == v.extent()' failed."
+///       );
+///
+/// There are two different types of keys:
+///  - strings like "MaturityAge", and
+///  - enumerators like DB_MaturityAge or DB_StatVxQ,
+/// and no invariant that preserves their mutual correspondence.
+///
+/// The first line in the example above sets
+///   dictionary["MaturityAge"]
+/// but
+///   dictionary["StatVxQ"]
+/// would have been set instead if it had been written thus:
+///   dictionary.Add(...the temporary created above...)
+///
+/// The copy-ctor implementation below would produce an error in that
+/// unit test. Defining it detects that problem, and its assertion
+/// doesn't seem to fire in any other case. However, what is asserted
+/// is not a sensible invariant of class database_entity. More likely
+/// the real problem is that std::map::value_type is
+///   std::pair<key_type const, mapped_type>
+/// but the present class is akin to
+///   struct{key_type k; mapped_type t;};
+/// and its key is thus not const. Probably this situation arose
+/// because the original implementation predated any usable STL.
+
+database_entity& database_entity::operator=(database_entity const& z)
+{
+    LMI_ASSERT(0 == key_ || z.key_ == key_);
+    axis_lengths_ = z.axis_lengths_;
+    data_values_  = z.data_values_;
+    gloss_        = z.gloss_;
+    return *this;
+}
+#endif // 0
+
 bool database_entity::operator==(database_entity const& z) const
 {
 #if 0
