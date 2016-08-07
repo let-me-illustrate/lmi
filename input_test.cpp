@@ -98,7 +98,7 @@ void input_test::test_product_database()
     Input input;
     yare_input yi(input);
     product_database db(yi);
-    DBDictionary& dictionary = const_cast<DBDictionary&>(*db.db_);
+    DBDictionary& dictionary = *db.db_;
 
     std::vector<double> v;
     std::vector<double> w;

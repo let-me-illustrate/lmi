@@ -106,7 +106,7 @@ void premium_tax_test::test_rates()
     // A uniform but nonzero load would elicit a runtime error,
     // because the tiered load is not zero.
     {
-    DBDictionary& dictionary = const_cast<DBDictionary&>(*db.db_);
+    DBDictionary& dictionary = *db.db_;
 
     database_entity const original = dictionary.datum("PremTaxLoad");
     database_entity const scalar(DB_PremTaxLoad, 0.0000);

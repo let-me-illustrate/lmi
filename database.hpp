@@ -78,13 +78,14 @@ class LMI_SO product_database
   private:
     void initialize(std::string const& product_name);
 
+    DBDictionary const& db() const;
     database_entity const& entity_from_key(e_database_key) const;
 
     database_index  index_;
     int             length_;
     int             maturity_age_;
 
-    boost::shared_ptr<DBDictionary const> db_;
+    boost::shared_ptr<DBDictionary> db_;
 };
 
 #endif // database_hpp

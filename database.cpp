@@ -179,7 +179,7 @@ namespace
 {
 /// Antediluvian database for static initialization.
 
-boost::shared_ptr<DBDictionary const> antediluvian_db()
+boost::shared_ptr<DBDictionary> antediluvian_db()
 {
     boost::shared_ptr<DBDictionary> z(new DBDictionary);
     z->InitAntediluvian();
@@ -196,7 +196,7 @@ void product_database::initialize(std::string const& product_name)
 {
     if(is_antediluvian_fork())
         {
-        static boost::shared_ptr<DBDictionary const> z(antediluvian_db());
+        static boost::shared_ptr<DBDictionary> z(antediluvian_db());
         db_ = z;
         }
     else
@@ -209,11 +209,16 @@ void product_database::initialize(std::string const& product_name)
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
+DBDictionary const& product_database::db() const
+{
+    LMI_ASSERT(db_);
+    return *db_;
+}
+
 /// Database entity corresponding to the given key.
 
 database_entity const& product_database::entity_from_key(e_database_key k) const
 {
-    LMI_ASSERT(db_);
-    return db_->datum(db_name_from_key(k));
+    return db().datum(db_name_from_key(k));
 }
 
