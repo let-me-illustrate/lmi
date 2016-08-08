@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "assert_lmi.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/operations.hpp>
@@ -89,6 +90,7 @@ class file_cache
             i->second.write_time = write_time;
             }
 
+        LMI_ASSERT(i->second.data);
         return i->second.data;
         }
 
@@ -112,6 +114,10 @@ class cache_file_reads
     using retrieved_type = typename file_cache<T>::retrieved_type;
 
   public:
+    /// Return parent instance (constructed from file) via cache.
+    ///
+    /// Postcondition: returned pointer is not null; otherwise,
+    /// file_cache::retrieve_or_reload() throws.
     static retrieved_type read_from_cache(std::string const& filename)
         {
         return file_cache<T>::instance().retrieve_or_reload(filename);

@@ -178,6 +178,8 @@ bool product_database::varies_by_state(e_database_key k) const
 namespace
 {
 /// Antediluvian database for static initialization.
+///
+/// Postcondition: returned pointer is not null; throws otherwise.
 
 boost::shared_ptr<DBDictionary> antediluvian_db()
 {
@@ -211,7 +213,6 @@ void product_database::initialize(std::string const& product_name)
 
 DBDictionary const& product_database::db() const
 {
-    LMI_ASSERT(db_);
     return *db_;
 }
 
