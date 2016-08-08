@@ -78,13 +78,13 @@ void cache_file_reads_test::test_preconditions()
 
     // The cache is accessible with or without an object.
     BOOST_TEST_EQUAL
-        (x0.read_from_cache("sample.ill")->s()
-        ,X::read_from_cache("sample.ill")->s()
+        (x0.read_via_cache("sample.ill")->s()
+        ,X::read_via_cache("sample.ill")->s()
         );
 
     // The file must exist.
     BOOST_TEST_THROW
-        (X::read_from_cache("no_such_file")
+        (X::read_via_cache("no_such_file")
         ,boost::filesystem::filesystem_error
         ,lmi_test::what_regex("no_such_file.*cannot find the file specified")
         );
@@ -108,7 +108,7 @@ void cache_file_reads_test::mete_uncached()
 
 void cache_file_reads_test::mete_cached()
 {
-    X const& x(*X::read_from_cache("sample.ill"));
+    X const& x(*X::read_via_cache("sample.ill"));
     volatile std::string::size_type z = x.s().size();
 }
 

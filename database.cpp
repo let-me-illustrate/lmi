@@ -204,7 +204,7 @@ void product_database::initialize(std::string const& product_name)
     else
         {
         std::string filename(product_data(product_name).datum("DatabaseFilename"));
-        db_ = DBDictionary::read_from_cache(AddDataDir(filename));
+        db_ = DBDictionary::read_via_cache(AddDataDir(filename));
         }
     maturity_age_ = static_cast<int>(Query(DB_MaturityAge));
     length_ = maturity_age_ - index_.index_vector()[e_axis_issue_age];

@@ -118,7 +118,8 @@ class cache_file_reads
     ///
     /// Postcondition: returned pointer is not null; otherwise,
     /// file_cache::retrieve_or_reload() throws.
-    static retrieved_type read_from_cache(std::string const& filename)
+
+    static retrieved_type read_via_cache(std::string const& filename)
         {
         return file_cache<T>::instance().retrieve_or_reload(filename);
         }
