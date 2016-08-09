@@ -35,6 +35,8 @@
 #include <string>
 #include <utility>                      // std::make_pair()
 
+namespace detail
+{
 /// Cache of class T instances constructed from files.
 ///
 /// Motivation: It is costly to deserialize objects from xml, so cache
@@ -103,6 +105,7 @@ class file_cache
 
     std::map<std::string,record> cache_;
 };
+} // namespace detail
 
 /// Mixin to cache parent instances constructed from files.
 ///
@@ -111,7 +114,7 @@ class file_cache
 template<typename T>
 class cache_file_reads
 {
-    using retrieved_type = typename file_cache<T>::retrieved_type;
+    using retrieved_type = typename detail::file_cache<T>::retrieved_type;
 
   public:
     /// Return parent instance (constructed from file) via cache.
@@ -121,7 +124,7 @@ class cache_file_reads
 
     static retrieved_type read_via_cache(std::string const& filename)
         {
-        return file_cache<T>::instance().retrieve_or_reload(filename);
+        return detail::file_cache<T>::instance().retrieve_or_reload(filename);
         }
 };
 
