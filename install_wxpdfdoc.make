@@ -94,9 +94,9 @@ all: clobber
 
 .PHONY: initial_setup
 initial_setup:
-	@$(MKDIR) --parents $(prefix)
-	@$(MKDIR) --parents $(cache_dir)
-	@$(MKDIR) --parents $(wxpdfdoc_dir)
+	$(MKDIR) --parents $(prefix)
+	$(MKDIR) --parents $(cache_dir)
+	$(MKDIR) --parents $(wxpdfdoc_dir)
 
 UNZIPFLAGS := -q
 

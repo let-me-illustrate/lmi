@@ -154,17 +154,17 @@ all: boost cgicc fop jing md5sum_msw sample trang xmlwrapp
 .PHONY: boost
 boost: $(file_list)
 	-[ -e $(stem).patch ] && $(PATCH) --directory=scratch --strip=1 < $(stem).patch
-	@$(MKDIR) $(third_party_include_dir)/boost/
+	$(MKDIR) $(third_party_include_dir)/boost/
 	$(CP) --force --preserve --recursive scratch/$(stem)/boost/* $(third_party_include_dir)/boost/
-	@$(MKDIR) $(third_party_source_dir)/boost/
+	$(MKDIR) $(third_party_source_dir)/boost/
 	$(MV)                                scratch/$(stem)/*       $(third_party_source_dir)/boost/
 
 .PHONY: cgicc
 cgicc: $(file_list)
 	$(PATCH) --directory=scratch --strip=1 < $(stem).patch
-	@$(MKDIR) $(third_party_include_dir)/cgicc
+	$(MKDIR) $(third_party_include_dir)/cgicc
 	$(MV) scratch/$(stem)/cgicc/*.h   $(third_party_include_dir)/cgicc/
-	@$(MKDIR) $(third_party_source_dir)/cgicc
+	$(MKDIR) $(third_party_source_dir)/cgicc
 	$(MV) scratch/$(stem)/cgicc/*.cpp $(third_party_source_dir)/cgicc/
 	cd $(destination) && $(MD5SUM) include/cgicc/* src/cgicc/* >$(stem).md5sums
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
@@ -179,12 +179,12 @@ cgicc: $(file_list)
 
 .PHONY: fop
 fop: $(file_list)
-	@$(MKDIR) $(destination)/$(stem)
+	$(MKDIR) $(destination)/$(stem)
 	$(MV) scratch/$(stem)/* $(destination)/$(stem)
 
 .PHONY: jing
 jing: $(file_list)
-	@$(MKDIR) --parents $(destination)/rng
+	$(MKDIR) --parents $(destination)/rng
 	$(MV) scratch/$(stem)/bin/$@.jar         $(destination)/rng
 	$(MV) scratch/$(stem)/bin/xercesImpl.jar $(destination)/rng
 
@@ -209,24 +209,24 @@ md5sum_msw: $(file_list)
 
 .PHONY: sample
 sample: $(file_list)
-	@-$(MKDIR) --parents $(prefix)/data
+	-$(MKDIR) --parents $(prefix)/data
 	$(MV) scratch/$(stem)/* $(prefix)/data
 
 .PHONY: trang
 trang: $(file_list)
-	@$(MKDIR) --parents $(destination)/rng
+	$(MKDIR) --parents $(destination)/rng
 	$(MV) scratch/$(stem)/$@.jar $(destination)/rng
 
 .PHONY: xmlwrapp
 xmlwrapp: $(file_list)
 	-[ -e $(stem).patch ] && $(PATCH) --directory=scratch --strip=1 < $(stem).patch
-	@$(MKDIR) $(third_party_include_dir)/xmlwrapp/
+	$(MKDIR) $(third_party_include_dir)/xmlwrapp/
 	$(MV) scratch/$(stem)/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
-	@$(MKDIR) $(third_party_include_dir)/xsltwrapp/
+	$(MKDIR) $(third_party_include_dir)/xsltwrapp/
 	$(MV) scratch/$(stem)/include/xsltwrapp/*.h $(third_party_include_dir)/xsltwrapp/
-	@$(MKDIR) $(third_party_source_dir)/libxml/
+	$(MKDIR) $(third_party_source_dir)/libxml/
 	$(MV) scratch/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
-	@$(MKDIR) $(third_party_source_dir)/libxslt/
+	$(MKDIR) $(third_party_source_dir)/libxslt/
 	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
 	cd $(destination) && $(MD5SUM) include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
@@ -240,13 +240,13 @@ $(file_list): initial_setup
 initial_setup:
 	@[ ! -e $(destination) ]   || { $(ECHO) -e $(destination_exists) && false; }
 	@[ ! -e scratch        ]   || { $(ECHO) -e $(scratch_exists)     && false; }
-	@$(MKDIR) --parents $(cache_dir)
-	@$(MKDIR) --parents $(destination)
-	@$(MKDIR) $(third_party_bin_dir)
-	@$(MKDIR) $(third_party_include_dir)
-	@$(MKDIR) $(third_party_lib_dir)
-	@$(MKDIR) $(third_party_source_dir)
-	@$(MKDIR) scratch
+	$(MKDIR) --parents $(cache_dir)
+	$(MKDIR) --parents $(destination)
+	$(MKDIR) $(third_party_bin_dir)
+	$(MKDIR) $(third_party_include_dir)
+	$(MKDIR) $(third_party_lib_dir)
+	$(MKDIR) $(third_party_source_dir)
+	$(MKDIR) scratch
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
@@ -280,6 +280,6 @@ WGETFLAGS :=
 
 .PHONY: clobber
 clobber:
-	@$(RM) --force --recursive scratch
-	@$(RM) --force --recursive $(destination)
+	$(RM) --force --recursive scratch
+	$(RM) --force --recursive $(destination)
 

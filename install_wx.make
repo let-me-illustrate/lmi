@@ -170,9 +170,9 @@ initial_setup: clobber
 
 .PHONY: initial_setup
 initial_setup:
-	@$(MKDIR) --parents $(prefix)
-	@$(MKDIR) --parents $(cache_dir)
-	@$(MKDIR) --parents $(build_dir)
+	$(MKDIR) --parents $(prefix)
+	$(MKDIR) --parents $(cache_dir)
+	$(MKDIR) --parents $(build_dir)
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
