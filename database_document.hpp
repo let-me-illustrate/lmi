@@ -29,11 +29,6 @@
 #include "dbdict.hpp"
 #include "dbnames.hpp"
 
-#include <map>
-#include <string>
-
-class LMI_SO_FWD_DECL database_entity;
-
 class DatabaseDocument
     :public ProductEditorDocument
 {
@@ -43,17 +38,12 @@ class DatabaseDocument
 
     database_entity& GetTDBValue(e_database_key index);
 
-    static void swap_kludge
-        (std::map<std::string,database_entity>&
-        ,DBDictionary&
-        );
-
   private:
     // ProductEditorDocument overrides.
     virtual void ReadDocument (std::string const& filename);
     virtual void WriteDocument(std::string const& filename);
 
-    std::map<std::string,database_entity> dict_;
+    DBDictionary db_;
 
     DECLARE_DYNAMIC_CLASS(DatabaseDocument)
 };

@@ -31,10 +31,13 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
+#include <boost/shared_ptr.hpp>
+
 #include <string>
 #include <vector>
 
 class database_entity;
+class DBDictionary;
 class yare_input;
 
 /// Database of product parameters.
@@ -43,7 +46,8 @@ class LMI_SO product_database
     :        private lmi::uncopyable <product_database>
     ,virtual private obstruct_slicing<product_database>
 {
-    friend class input_test; // For test_product_database().
+    friend class input_test;       // For test_product_database().
+    friend class premium_tax_test; // For test_rates().
 
   public:
     product_database
@@ -74,11 +78,14 @@ class LMI_SO product_database
   private:
     void initialize(std::string const& product_name);
 
+    DBDictionary const& db() const;
     database_entity const& entity_from_key(e_database_key) const;
 
     database_index  index_;
     int             length_;
     int             maturity_age_;
+
+    boost::shared_ptr<DBDictionary> db_;
 };
 
 #endif // database_hpp

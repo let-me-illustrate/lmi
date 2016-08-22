@@ -574,29 +574,31 @@
   </xsl:template>
 
   <xsl:template name="standardheader">
-    <xsl:param name="logo_only"/>
-    <fo:table table-layout="fixed" padding-after="2.5pt" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
-      <fo:table-column column-width="50mm"/>
-      <fo:table-column column-width="90mm"/>
-      <fo:table-column column-width="50mm"/>
-      <fo:table-body>
-        <fo:table-row>
-          <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:call-template name="company-logo"/>
-            </fo:block>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
-        </fo:table-row>
-      </fo:table-body>
-    </fo:table>
     <xsl:param name="displaycontractlanguage"/>
     <xsl:param name="displaydisclaimer"/>
+    <xsl:param name="logo_only"/>
+    <fo:block padding-after="2.5pt">
+      <fo:table table-layout="fixed" width="100%" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
+        <fo:table-column column-width="50mm"/>
+        <fo:table-column column-width="90mm"/>
+        <fo:table-column column-width="50mm"/>
+        <fo:table-body>
+          <fo:table-row>
+            <fo:table-cell>
+              <fo:block text-align="left">
+                <xsl:call-template name="company-logo"/>
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell>
+              <fo:block/>
+            </fo:table-cell>
+            <fo:table-cell>
+              <fo:block/>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
     <fo:block text-align="center" font-size="9pt">
       <xsl:if test="$displaycontractlanguage=1">
         <fo:block padding-top="1em">
@@ -622,97 +624,99 @@
       </xsl:if>
     </fo:block>
 
-    <fo:table table-layout="fixed" width="100%" padding-top="1em">
-      <fo:table-column column-width="125mm"/>
-      <fo:table-column column-width="proportional-column-width(1)"/>
-      <fo:table-body>
-        <fo:table-row>
-          <fo:table-cell padding-right="2mm">
-            <fo:block text-align="left" font-size="9pt">
-              <fo:block>
-                Date Prepared: <xsl:call-template name="date-prepared"/>
-              </fo:block>
-              <fo:block>
-                <xsl:choose>
-                  <xsl:when test="$is_composite">
-                    Composite of individuals
-                  </xsl:when>
-                  <xsl:otherwise>
-                    Prepared for:
-                    <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/Insured1"/>
-                      <xsl:with-param name="length" select="30"/>
-                    </xsl:call-template>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </fo:block>
-              <xsl:if test="not($is_composite)">
+    <fo:block padding-top="1em">
+      <fo:table table-layout="fixed" width="100%">
+        <fo:table-column column-width="125mm"/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <fo:table-body>
+          <fo:table-row>
+            <fo:table-cell padding-right="2mm">
+              <fo:block text-align="left" font-size="9pt">
                 <fo:block>
-                  Age: <xsl:value-of select="$scalars/Age"/>
+                  Date Prepared: <xsl:call-template name="date-prepared"/>
                 </fo:block>
-              </xsl:if>
-              <xsl:if test="not($is_composite)">
                 <fo:block>
-                  Issue State: <xsl:value-of select="$scalars/StatePostalAbbrev"/>
-                </fo:block>
-              </xsl:if>
-              <fo:block>
-                Selected Face Amount:
-                $<xsl:value-of select="$scalars/InitTotalSA"/>
-              </fo:block>
-              <fo:block>
-                Initial Death Benefit Option:
-                <xsl:value-of select="$scalars/InitDBOpt"/>
-              </fo:block>
-            </fo:block>
-          </fo:table-cell>
-
-          <fo:table-cell>
-            <fo:block text-align="left" font-size="9pt">
-              <fo:block>
-                Policy: <xsl:value-of select="$scalars/PolicyMktgName"/>
-              </fo:block>
-              <fo:block/>
-              <xsl:if test="not($is_composite)">
-                <fo:block>
-                  Underwriting Type:
                   <xsl:choose>
-                    <xsl:when test="$scalars/UWType='Medical'">
-                      Fully underwritten
+                    <xsl:when test="$is_composite">
+                      Composite of individuals
                     </xsl:when>
                     <xsl:otherwise>
-                      <xsl:value-of select="$scalars/UWType"/>
+                      Prepared for:
+                      <xsl:call-template name="limitstring">
+                        <xsl:with-param name="passString" select="$scalars/Insured1"/>
+                        <xsl:with-param name="length" select="30"/>
+                      </xsl:call-template>
                     </xsl:otherwise>
                   </xsl:choose>
                 </fo:block>
-                <fo:block>
-                  Rate Classification: <xsl:value-of select="$scalars/Gender"/>,
-                  <xsl:value-of select="$scalars/Smoker"/>,
-                  <xsl:value-of select="$scalars/UWClass"/>
-                </fo:block>
-                <xsl:if test="$scalars/UWClass='Rated'">
-                  <fo:block padding-left="3em">
-                    <fo:block>
-                      Table Rating:
-                      <xsl:value-of select="$scalars/SubstandardTable"/>
-                    </fo:block>
-                    <!-- Flats don't require "Rated" class; and does this value actually print anyway?
-                    These questions apply as well to the original:
-                      http://svn.savannah.nongnu.org/viewvc/lmi/trunk/individual_private_placement.xsl?annotate=696&root=lmi&pathrev=3585
-                    -->
-                    <fo:block>
-                      Initial Annual Flat Extra:
-                      <xsl:value-of select="$vectors[@name='AnnualFlatExtra']/duration[1]/@column_value"/>
-                      per 1,000
-                    </fo:block>
+                <xsl:if test="not($is_composite)">
+                  <fo:block>
+                    Age: <xsl:value-of select="$scalars/Age"/>
                   </fo:block>
                 </xsl:if>
-              </xsl:if>
-            </fo:block>
-          </fo:table-cell>
-        </fo:table-row>
-      </fo:table-body>
-    </fo:table>
+                <xsl:if test="not($is_composite)">
+                  <fo:block>
+                    Issue State: <xsl:value-of select="$scalars/StatePostalAbbrev"/>
+                  </fo:block>
+                </xsl:if>
+                <fo:block>
+                  Selected Face Amount:
+                  $<xsl:value-of select="$scalars/InitTotalSA"/>
+                </fo:block>
+                <fo:block>
+                  Initial Death Benefit Option:
+                  <xsl:value-of select="$scalars/InitDBOpt"/>
+                </fo:block>
+              </fo:block>
+            </fo:table-cell>
+
+            <fo:table-cell>
+              <fo:block text-align="left" font-size="9pt">
+                <fo:block>
+                  Policy: <xsl:value-of select="$scalars/PolicyMktgName"/>
+                </fo:block>
+                <fo:block/>
+                <xsl:if test="not($is_composite)">
+                  <fo:block>
+                    Underwriting Type:
+                    <xsl:choose>
+                      <xsl:when test="$scalars/UWType='Medical'">
+                        Fully underwritten
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="$scalars/UWType"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </fo:block>
+                  <fo:block>
+                    Rate Classification: <xsl:value-of select="$scalars/Gender"/>,
+                    <xsl:value-of select="$scalars/Smoker"/>,
+                    <xsl:value-of select="$scalars/UWClass"/>
+                  </fo:block>
+                  <xsl:if test="$scalars/UWClass='Rated'">
+                    <fo:block padding-left="3em">
+                      <fo:block>
+                        Table Rating:
+                        <xsl:value-of select="$scalars/SubstandardTable"/>
+                      </fo:block>
+                      <!-- Flats don't require "Rated" class; and does this value actually print anyway?
+                      These questions apply as well to the original:
+                        http://svn.savannah.nongnu.org/viewvc/lmi/trunk/individual_private_placement.xsl?annotate=696&root=lmi&pathrev=3585
+                      -->
+                      <fo:block>
+                        Initial Annual Flat Extra:
+                        <xsl:value-of select="$vectors[@name='AnnualFlatExtra']/duration[1]/@column_value"/>
+                        per 1,000
+                      </fo:block>
+                    </fo:block>
+                  </xsl:if>
+                </xsl:if>
+              </fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
 
     <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
       <xsl:call-template name="print-mastercontractnumber-and-contractnumber"/>
@@ -721,26 +725,28 @@
 
   <xsl:template name="plain-header">
     <xsl:param name="logo_only"/>
-    <fo:table table-layout="fixed" padding-after="2.5pt" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
-      <fo:table-column column-width="50mm"/>
-      <fo:table-column column-width="90mm"/>
-      <fo:table-column column-width="50mm"/>
-      <fo:table-body>
-        <fo:table-row>
-          <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:call-template name="company-logo"/>
-            </fo:block>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
-          <fo:table-cell>
-            <fo:block/>
-          </fo:table-cell>
-        </fo:table-row>
-      </fo:table-body>
-    </fo:table>
+    <fo:block padding-after="2.5pt">
+      <fo:table table-layout="fixed" width="100%" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
+        <fo:table-column column-width="50mm"/>
+        <fo:table-column column-width="90mm"/>
+        <fo:table-column column-width="50mm"/>
+        <fo:table-body>
+          <fo:table-row>
+            <fo:table-cell>
+              <fo:block text-align="left">
+                <xsl:call-template name="company-logo"/>
+              </fo:block>
+            </fo:table-cell>
+            <fo:table-cell>
+              <fo:block/>
+            </fo:table-cell>
+            <fo:table-cell>
+              <fo:block/>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
   </xsl:template>
 
   <xsl:template name="irr-guaranteed-illustration-report">
@@ -917,7 +923,12 @@
               <fo:table-cell number-columns-spanned="7">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="7">
+              <fo:table-cell>
+                <xsl:attribute name="number-columns-spanned">
+                  <!-- generate-table-columns adds one extra column and
+                       7 columns are taken by the table-cell above: -->
+                  <xsl:value-of select="count($columns) - 7 + 1"/>
+                </xsl:attribute>
                 <xsl:call-template name="header-cell-with-border"/>
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>

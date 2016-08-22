@@ -175,6 +175,21 @@ bool product_database::varies_by_state(e_database_key k) const
     return 1 != entity_from_key(k).axis_lengths().at(e_axis_state);
 }
 
+namespace
+{
+/// Antediluvian database for static initialization.
+///
+/// Postcondition: returned pointer is not null; throws otherwise.
+
+boost::shared_ptr<DBDictionary> antediluvian_db()
+{
+    boost::shared_ptr<DBDictionary> z(new DBDictionary);
+    z->InitAntediluvian();
+    LMI_ASSERT(z);
+    return z;
+}
+} // Unnamed namespace.
+
 /// Initialize upon construction.
 ///
 /// Set maturity age and default length (number of years to maturity).
@@ -183,23 +198,28 @@ void product_database::initialize(std::string const& product_name)
 {
     if(is_antediluvian_fork())
         {
-        DBDictionary::instance().InitAntediluvian();
+        static boost::shared_ptr<DBDictionary> z(antediluvian_db());
+        db_ = z;
         }
     else
         {
         std::string filename(product_data(product_name).datum("DatabaseFilename"));
-        DBDictionary::instance().Init(AddDataDir(filename));
+        db_ = DBDictionary::read_via_cache(AddDataDir(filename));
         }
     maturity_age_ = static_cast<int>(Query(DB_MaturityAge));
     length_ = maturity_age_ - index_.index_vector()[e_axis_issue_age];
     LMI_ASSERT(0 < length_ && length_ <= methuselah);
 }
 
+DBDictionary const& product_database::db() const
+{
+    return *db_;
+}
+
 /// Database entity corresponding to the given key.
 
 database_entity const& product_database::entity_from_key(e_database_key k) const
 {
-    DBDictionary const& db = DBDictionary::instance();
-    return db.datum(db_name_from_key(k));
+    return db().datum(db_name_from_key(k));
 }
 

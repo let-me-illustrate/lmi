@@ -40,7 +40,7 @@
 #include "ieee754.hpp"                  // infinity<>()
 
 //============================================================================
-void stratified_charges::write_proprietary_stratified_files()
+void stratified_charges::write_proprietary_strata_files()
 {
     // Sample policy form.
     stratified_charges foo;

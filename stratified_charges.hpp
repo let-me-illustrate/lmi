@@ -146,8 +146,8 @@ class LMI_SO stratified_charges
     double maximum_tiered_premium_tax_rate(mcenum_state) const;
     double minimum_tiered_premium_tax_rate(mcenum_state) const;
 
-    static void write_stratified_files();
-    static void write_proprietary_stratified_files();
+    static void write_strata_files();
+    static void write_proprietary_strata_files();
 
   private:
     stratified_charges(); // Private, but implemented for friends' use.

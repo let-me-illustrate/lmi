@@ -116,6 +116,7 @@ TESTS = \
     test_any_member \
     test_assert_lmi \
     test_authenticity \
+    test_cache_file_reads \
     test_calendar_date \
     test_callback \
     test_comma_punct \
@@ -601,6 +602,14 @@ test_authenticity_SOURCES = \
   system_command_non_wx.cpp
 test_authenticity_CXXFLAGS = $(AM_CXXFLAGS)
 test_authenticity_LDADD = \
+  $(BOOST_LIBS)
+
+test_cache_file_reads_SOURCES = \
+  $(common_test_objects) \
+  cache_file_reads_test.cpp \
+  timer.cpp
+test_cache_file_reads_CXXFLAGS = $(AM_CXXFLAGS)
+test_cache_file_reads_LDADD = \
   $(BOOST_LIBS)
 
 test_calendar_date_SOURCES = \
@@ -1100,6 +1109,7 @@ noinst_HEADERS = \
     assert_lmi.hpp \
     authenticity.hpp \
     basic_values.hpp \
+    cache_file_reads.hpp \
     calendar_date.hpp \
     callback.hpp \
     catch_exceptions.hpp \

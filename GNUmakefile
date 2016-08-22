@@ -275,14 +275,14 @@ source_clean:
 
 .PHONY: clean
 clean: source_clean
-	@-$(RM) --force --recursive $(build_directory)
+	-$(RM) --force --recursive $(build_directory)
 
 .PHONY: distclean mostlyclean maintainer-clean
 distclean mostlyclean maintainer-clean: clean
 
 .PHONY: clobber
 clobber: source_clean
-	@-$(RM) --force --recursive $(src_dir)/../build
+	-$(RM) --force --recursive $(src_dir)/../build
 
 ################################################################################
 

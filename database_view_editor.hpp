@@ -75,7 +75,6 @@ class DatabaseTableAdapter
     virtual ~DatabaseTableAdapter();
 
     /// Decorated object accessors
-    database_entity* GetTDBValue() const;
     void SetTDBValue(database_entity* db_value);
 
     /// Return true if the object data is modified since the last save
@@ -122,11 +121,6 @@ class DatabaseTableAdapter
 
     DECLARE_NO_COPY_CLASS(DatabaseTableAdapter)
 };
-
-inline database_entity* DatabaseTableAdapter::GetTDBValue() const
-{
-    return db_value_;
-}
 
 inline void DatabaseTableAdapter::SetTDBValue(database_entity* db_value)
 {

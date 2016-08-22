@@ -1160,12 +1160,7 @@ void CensusView::apply_changes
 
     // Probably this should be factored out into a member function
     // that's called elsewhere too--e.g., when a cell is read from
-    // file, or when a census is pasted. For this to work fully as
-    // desired, however, the DATABASE !! must be changed. Today,
-    // it caches exactly one product, and its cache-invalidation
-    // discipline isn't sufficiently strict. For now, applying the
-    // present technique elsewhere might well exacerbate crosstalk
-    // in a census that comprises more than one product.
+    // file, or when a census is pasted.
     typedef std::vector<Input>::iterator ii;
     for(ii j = class_parms().begin(); j != class_parms().end(); ++j)
         {

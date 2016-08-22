@@ -40,12 +40,13 @@
 #include "dbnames.hpp"
 
 //============================================================================
-void DBDictionary::WriteProprietaryDBFiles()
+void DBDictionary::write_proprietary_database_files()
 {
   // Sample policy form.
   {
-    InitDB();
-    Add(database_entity(DB_GuarMonthlyPolFee, 10.00));
+    DBDictionary z;
+    z.InitDB();
+    z.Add(database_entity(DB_GuarMonthlyPolFee, 10.00));
     // etc.
 // Not necessary for 'sample' product only, because it's built in.
 //  WriteDB(AddDataDir("sample.database"));

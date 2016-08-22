@@ -46,11 +46,11 @@
 /// that program itself. Those files are all you need: distributing
 /// the program itself isn't necessary anyway.
 ///
-/// This function is intentionally a minimal clone of WritePolFiles(),
-/// and is intended only as an examplar for customization to implement
+/// This is intentionally a minimal clone of write_policy_files(), and
+/// is intended only as an examplar for customization to implement
 /// proprietary real-world products.
 
-void product_data::WriteProprietaryPolFiles()
+void product_data::write_proprietary_policy_files()
 {
     product_data z;
 

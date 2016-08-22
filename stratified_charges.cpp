@@ -590,7 +590,7 @@ void stratified_charges::write_proem
     ::write_proem(document, file_leaf_name);
 }
 
-void stratified_charges::write_stratified_files()
+void stratified_charges::write_strata_files()
 {
     // Guard against recurrence of the problem described here:
     //   http://lists.nongnu.org/archive/html/lmi/2008-02/msg00024.html

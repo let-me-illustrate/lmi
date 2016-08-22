@@ -29,6 +29,9 @@
 
 #include <csignal>
 #include <exception>                    // std::set_terminate()
+#if defined LMI_MSW
+#   include <fcntl.h>                   // _O_BINARY
+#endif // defined LMI_MSW
 #include <stdexcept>
 
 #if defined __MINGW32__
@@ -62,6 +65,12 @@ void initialize_application()
     std::set_terminate(lmi_terminate_handler);
     try
         {
+#if defined LMI_MSW
+        // Force standard output streams to binary mode.
+        setmode(fileno(stdout), O_BINARY);
+        setmode(fileno(stderr), O_BINARY);
+#endif // defined LMI_MSW
+
         // This line forces mpatrol to link when it otherwise might not.
         // It has no other effect according to C99 7.20.3.2/2, second
         // sentence.

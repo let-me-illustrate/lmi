@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
+#include "cache_file_reads.hpp"
 #include "dbvalue.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
@@ -40,26 +41,28 @@ class LMI_SO DBDictionary
     ,virtual private obstruct_slicing  <DBDictionary>
     ,        public  xml_serializable  <DBDictionary>
     ,        public  MemberSymbolTable <DBDictionary>
+    ,        public  cache_file_reads  <DBDictionary>
 {
     friend class DatabaseDocument;
     friend class input_test;        // For test_product_database().
-    friend class product_file_test; // Uses InvalidateCache() for timing.
+    friend class product_file_test; // For read_database_file().
     friend class premium_tax_test;  // For test_rates().
 
   public:
-    static DBDictionary& instance();
+    DBDictionary();
+    DBDictionary(std::string const& filename);
+
     ~DBDictionary();
 
     database_entity const& datum(std::string const&) const;
 
-    void Init(std::string const& filename);
-    void WriteSampleDBFile();
-    void WriteProprietaryDBFiles();
+    static void write_database_files();
+    static void write_proprietary_database_files();
 
     void InitAntediluvian();
 
   private:
-    DBDictionary();
+    void Init(std::string const& filename);
 
     void ascribe_members();
 
@@ -69,7 +72,8 @@ class LMI_SO DBDictionary
     void Add(database_entity const&);
     void InitDB();
 
-    static void InvalidateCache();
+    // A temporary expedient.
+    void Nyarlathotep();
 
     // xml_serializable required implementation.
     virtual int                class_version() const;
@@ -89,8 +93,6 @@ class LMI_SO DBDictionary
         (xml_lmi::xml_document& document
         ,std::string const&     file_leaf_name
         ) const;
-
-    static std::string cached_filename_;
 
     database_entity MinIssAge           ;
     database_entity MaxIssAge           ;
