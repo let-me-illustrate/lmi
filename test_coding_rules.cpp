@@ -50,30 +50,6 @@ std::string my_taboo_indulgence();       // See 'my_test_coding_rules.cpp'.
 
 std::map<std::string, bool> my_taboos(); // See 'my_test_coding_rules.cpp'.
 
-// Open predefined standard streams in binary mode.
-//
-// There is no portable way to do this. Of course, it doesn't matter
-// on *nix anyway.
-//
-// SOMEDAY !! Consider moving this to 'main_common.cpp'. The issue is
-// that there are two behaviors:
-//   (1) open all files in binary mode
-//   (2) open predefined streams in binary mode before main()
-// and we want only (2) and not (1), but MinGW doesn't permit that.
-// For portable correctness, we should take care to open all streams
-// in binary mode; but if we fail to do so, then (1) masks the defect.
-// Yet MinGW offers only
-//   (a) '_fmode'     --> (1) only
-//   (b) '_CRT_fmode' --> both (1) and (2)
-// and not [(2) and not (1)]. It is not sufficient to override
-// '_fmode' on the first line of main() because non-local objects can
-// be constructed before main() is called.
-
-#if defined __MINGW32__
-#   include <fcntl.h>                   // _O_BINARY
-    int _CRT_fmode = _O_BINARY;
-#endif // defined __MINGW32__
-
 enum enum_phylum
     {e_no_phylum  = 0
     ,e_binary     = 1 <<  0

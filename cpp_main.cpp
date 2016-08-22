@@ -63,6 +63,9 @@
 #include "license.hpp"
 
 #include <cstdlib>                      // std::free()
+#if defined LMI_MSW
+#   include <fcntl.h>                   // _O_BINARY
+#endif // defined LMI_MSW
 #include <iostream>
 
 #if defined __MINGW32__
@@ -143,6 +146,12 @@ namespace lmi_test
 
 int main(int argc, char* argv[])
 {
+#if defined LMI_MSW
+    // Force standard output streams to binary mode.
+    setmode(fileno(stdout), O_BINARY);
+    setmode(fileno(stderr), O_BINARY);
+#endif // defined LMI_MSW
+
     // This line forces mpatrol to link when it otherwise might not.
     // It has no other effect according to C99 7.20.3.2/2, second
     // sentence.
