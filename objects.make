@@ -990,7 +990,7 @@ rate_table_tool$(EXEEXT): \
   rate_table.o \
   rate_table_tool.o \
 
-test_coding_rules_test := $(src_dir)/test_coding_rules_test.sh
+test_coding_rules_test := PERFORM=$(PERFORM) $(src_dir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
 test_coding_rules$(EXEEXT): \
   $(boost_filesystem_objects) \

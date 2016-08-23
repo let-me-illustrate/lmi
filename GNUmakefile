@@ -339,7 +339,7 @@ check_concinnity: source_clean custom_tools
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
-	    $(XMLLINT) --encode ASCII $$z \
+	    $(PERFORM) $(XMLLINT) --encode ASCII $$z \
 	    | $(TR) --delete '\r' \
 	    | $(DIFF) \
 	      --ignore-blank-lines \
@@ -349,7 +349,7 @@ check_concinnity: source_clean custom_tools
 	      || $(ECHO) "... in file $$z"; \
 	  done;
 	@$(ECHO) "  Miscellaneous problems:"
-	@-$(TEST_CODING_RULES) *
+	@-$(PERFORM) $(TEST_CODING_RULES) *
 
 ################################################################################
 

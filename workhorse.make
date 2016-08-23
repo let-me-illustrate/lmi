@@ -922,7 +922,7 @@ install: $(default_targets)
 	@[ -z "$(compiler_runtime_files)" ] \
 	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
 ifeq (,$(USE_SO_ATTRIBUTES))
-	@cd $(data_dir); $(bin_dir)/product_files$(EXEEXT)
+	@cd $(data_dir); $(PERFORM) $(bin_dir)/product_files$(EXEEXT)
 else
 	@$(ECHO) "Can't build product_files$(EXEEXT) with USE_SO_ATTRIBUTES."
 endif
@@ -1136,7 +1136,7 @@ run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run:
 	@$(ECHO) -e "\nRunning $*:"
-	@-./$* --accept
+	@-$(PERFORM) ./$* --accept
 
 ################################################################################
 
@@ -1166,10 +1166,10 @@ self_test_options := --accept --data_path=$(data_dir) --selftest
 
 .PHONY: cli_selftest
 cli_selftest:
-	@./antediluvian_cli$(EXEEXT) $(self_test_options) > /dev/null
-	@./antediluvian_cli$(EXEEXT) $(self_test_options)
-	@./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
-	@./lmi_cli_shared$(EXEEXT) $(self_test_options)
+	@$(PERFORM) ./antediluvian_cli$(EXEEXT) $(self_test_options) > /dev/null
+	@$(PERFORM) ./antediluvian_cli$(EXEEXT) $(self_test_options)
+	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
+	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) $(self_test_options)
 
 cli_test-sample.ill: special_emission :=
 cli_test-sample.cns: special_emission := emit_composite_only
@@ -1177,13 +1177,13 @@ cli_test-sample.cns: special_emission := emit_composite_only
 .PHONY: cli_test-%
 cli_test-%:
 	@$(ECHO) Test $*:
-	@./lmi_cli_shared$(EXEEXT) \
+	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) \
 	  --accept \
 	  --data_path=$(data_dir) \
 	  --emit=$(special_emission),emit_text_stream,emit_quietly,emit_timings \
 	  --file=$* \
 	  | $(SED) -e '/milliseconds/!d'
-	@./lmi_cli_shared$(EXEEXT) \
+	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) \
 	  --accept \
 	  --data_path=$(data_dir) \
 	  --emit=$(special_emission),emit_text_stream,emit_quietly \
@@ -1206,8 +1206,8 @@ cli_test-%:
 .PHONY: cgi_tests
 cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 	@$(ECHO) Test common gateway interface:
-	@./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
-	@./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in >cgi.touchstone
+	@$(PERFORM) ./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
+	@$(PERFORM) ./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in >cgi.touchstone
 	@<cgi.touchstone \
 	  $(DIFF) \
 	      --ignore-all-space \
@@ -1288,7 +1288,7 @@ testdecks := $(wildcard $(addprefix $(test_dir)/*., $(testdeck_suffixes)))
 
 .PHONY: $(testdecks)
 $(testdecks):
-	@-$(bin_dir)/lmi_cli_shared$(EXEEXT) \
+	@-$(PERFORM) $(bin_dir)/lmi_cli_shared$(EXEEXT) \
 	  --accept \
 	  --ash_nazg \
 	  --data_path=$(data_dir) \
@@ -1298,7 +1298,7 @@ $(testdecks):
 	@$(MD5SUM) --binary $(basename $(notdir $@)).* >> $(system_test_md5sums)
 	@for z in $(dot_test_files); \
 	  do \
-	    $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
+	    $(PERFORM) $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
 	    | $(SED) -e '/Summary.*max rel err/!d' -e "s/^ /$$z/" \
 	    >> $(system_test_analysis); \
 	  done
