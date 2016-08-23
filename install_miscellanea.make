@@ -166,7 +166,7 @@ cgicc: $(file_list)
 	$(MV) scratch/$(stem)/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	$(MKDIR) $(third_party_source_dir)/cgicc
 	$(MV) scratch/$(stem)/cgicc/*.cpp $(third_party_source_dir)/cgicc/
-	cd $(destination) && $(MD5SUM) include/cgicc/* src/cgicc/* >$(stem).md5sums
+	cd $(destination) && $(MD5SUM) --binary include/cgicc/* src/cgicc/* >$(stem).md5sums
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
 	$(SORT) --key=2 --output=$(stem).X                $(stem).md5sums
 	$(SORT) --key=2 --output=$(stem).Y $(destination)/$(stem).md5sums
@@ -228,7 +228,7 @@ xmlwrapp: $(file_list)
 	$(MV) scratch/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
 	$(MKDIR) $(third_party_source_dir)/libxslt/
 	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
-	cd $(destination) && $(MD5SUM) include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
+	cd $(destination) && $(MD5SUM) --binary include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
 	$(SORT) --key=2 --output=$(stem).X                $(stem).md5sums
 	$(SORT) --key=2 --output=$(stem).Y $(destination)/$(stem).md5sums

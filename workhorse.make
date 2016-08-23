@@ -1056,7 +1056,7 @@ wrap_fardel:
 	@$(CP) $(data_dir)/configurable_settings.xml .
 	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
 	@$(fardel_date_script)
-	@$(MD5SUM) $(fardel_checksummed_files) >validated.md5
+	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
 	@$(bin_dir)/generate_passkey > passkey
 	@$(TAR) \
 	  --bzip2 \
@@ -1241,7 +1241,7 @@ touchstone_files := \
   $(filter-out $(touchstone_exclusions),$(wildcard $(touchstone_dir)/*))
 
 $(touchstone_md5sums): $(touchstone_files)
-	@cd $(touchstone_dir) && $(MD5SUM) $(notdir $^) > $@
+	@cd $(touchstone_dir) && $(MD5SUM) --binary $(notdir $^) > $@
 	@$(SORT) --key=2 --output=$@ $@
 
 testdeck_suffixes    := cns ill ini inix mec gpt
@@ -1295,7 +1295,7 @@ $(testdecks):
 	  --emit=$(test_emission) \
 	  --pyx=system_testing \
 	  --file=$@
-	@$(MD5SUM) $(basename $(notdir $@)).* >> $(system_test_md5sums)
+	@$(MD5SUM) --binary $(basename $(notdir $@)).* >> $(system_test_md5sums)
 	@for z in $(dot_test_files); \
 	  do \
 	    $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
