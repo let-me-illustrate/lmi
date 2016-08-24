@@ -127,18 +127,6 @@ config_options = \
   --without-subdirs \
   CFLAGS='$(wx_cc_flags)' \
   CXXFLAGS='$(wx_cxx_flags)' \
-       AR='$(mingw_bin_dir)/$(triplet_prefix)ar' \
-       AS='$(mingw_bin_dir)/$(triplet_prefix)as' \
-       CC='$(mingw_bin_dir)/$(triplet_prefix)gcc' \
-      CPP='$(mingw_bin_dir)/$(triplet_prefix)cpp' \
-      CXX='$(mingw_bin_dir)/$(triplet_prefix)g++' \
-  DLLTOOL='$(mingw_bin_dir)/$(triplet_prefix)dlltool' \
-       LD='$(mingw_bin_dir)/$(triplet_prefix)ld' \
-       NM='$(mingw_bin_dir)/$(triplet_prefix)nm' \
-  OBJDUMP='$(mingw_bin_dir)/$(triplet_prefix)objdump' \
-   RANLIB='$(mingw_bin_dir)/$(triplet_prefix)ranlib' \
-    STRIP='$(mingw_bin_dir)/$(triplet_prefix)strip' \
-  WINDRES='$(mingw_bin_dir)/$(triplet_prefix)windres' \
 
 # Utilities ####################################################################
 
@@ -202,7 +190,8 @@ WGETFLAGS :=
 
 .PHONY: wx
 wx:
-	../configure $(config_options) && $(MAKE) && $(MAKE) install
+	export PATH="$(mingw_bin_dir):${PATH}" \
+	  && ../configure $(config_options) && $(MAKE) && $(MAKE) install \
 
 # 'wx-config' is not portable. For example, it uses 'printf(1)', which
 # zsh supports only in versions after 4.0.1 . Far worse, it underlies
