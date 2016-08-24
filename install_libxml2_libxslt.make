@@ -147,12 +147,15 @@ initial_setup:
 	$(MKDIR) --parents $(cache_dir)
 	$(MKDIR) --parents $(xml_dir)
 
-WGETFLAGS := \
+# $(WGETFLAGS) and $(wget_whence) must be recursively expanded because
+# $(host) and $(host_path) have target-specific values.
+
+WGETFLAGS = \
   --cut-dirs=$(words $(subst /, ,$(host_path))) \
   --force-directories \
   --no-host-directories \
 
-wget_whence := $(host)/$(host_path)
+wget_whence = $(host)/$(host_path)
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
