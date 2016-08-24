@@ -85,12 +85,30 @@ endif
 
 # Variables that normally should be left alone #################################
 
-mingw_bin_dir  := $(mingw_dir)/bin
+# Specify $(build_type) explicitly, depending on `uname`. It would
+# seem cleaner to deduce it this way:
+#   build_type  := $(shell /path/to/config.guess)
+# but that script is not easy to find. There's a copy in the wx
+# archive, but that hasn't yet been extracted at this point. Debian
+# GNU/Linux provides it in /usr/share/misc/ and recommends:
+#   https://wiki.debian.org/AutoTools/autoconf
+#   "In general you are much better off building against the current
+#   versions of these files than the ones shipped with the tarball"
+# but that directory is not on $PATH . Alternatively, RH provides it
+# in /usr/lib/rpm/redhat/ .
 
-#triplet_prefix := i686-w64-mingw32-
-triplet_prefix :=
+mingw_bin_dir :=
+build_type    := x86_64-unknown-linux-gnu
+host_type     := i686-w64-mingw32
 
-compiler       := gcc-$(shell $(mingw_bin_dir)/$(triplet_prefix)gcc -dumpversion)
+uname := $(shell uname -s 2>/dev/null)
+ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+  mingw_bin_dir := $(mingw_dir)/bin/
+  build_type    := i686-pc-cygwin
+  host_type     := i686-w64-mingw32
+endif
+
+compiler       := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
 vendor         := $(subst .,,$(compiler))-$(wx_md5)
 
 build_dir      := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
@@ -103,8 +121,8 @@ wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
-  --build=i686-pc-cygwin \
-  --host=i686-w64-mingw32 \
+  --build=$(build_type) \
+  --host=$(host_type) \
   --disable-apple_ieee \
   --disable-aui \
   --disable-compat24 \

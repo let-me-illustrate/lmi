@@ -47,20 +47,26 @@ $(wxpdfdoc_archive)-md5     := 8e3c4d6cd1df9c7f91426c8c4723cb6e
 
 # Variables that normally should be left alone #################################
 
-mingw_bin_dir  := $(mingw_dir)/bin
+mingw_bin_dir :=
+build_type    := x86_64-unknown-linux-gnu
+host_type     := i686-w64-mingw32
 
-#triplet_prefix := i686-w64-mingw32-
-triplet_prefix :=
+uname := $(shell uname -s 2>/dev/null)
+ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+  mingw_bin_dir := $(mingw_dir)/bin/
+  build_type    := i686-pc-cygwin
+  host_type     := i686-w64-mingw32
+endif
 
-compiler       := gcc-$(shell $(mingw_bin_dir)/$(triplet_prefix)gcc -dumpversion)
+compiler       := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
 
 wx_cc_flags    := -fno-omit-frame-pointer
 wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
-  --build=i686-pc-cygwin \
-  --host=i686-w64-mingw32 \
+  --build=$(build_type) \
+  --host=$(host_type) \
   --disable-dependency-tracking \
   --with-wx-config=$(prefix)/bin/wx-config-portable \
   CFLAGS='$(wx_cc_flags)' \
