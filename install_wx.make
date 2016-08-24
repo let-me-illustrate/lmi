@@ -97,9 +97,6 @@ build_dir      := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
-#
-# Pass gcc options in $CC and $CXX, not $*FLAGS--explanation here:
-#   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00001.html
 
 wx_cc_flags    := -fno-omit-frame-pointer
 wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
@@ -128,11 +125,13 @@ config_options = \
   --without-libtiff \
   --without-opengl \
   --without-subdirs \
+  CFLAGS='$(wx_cc_flags)' \
+  CXXFLAGS='$(wx_cxx_flags)' \
        AR='$(mingw_bin_dir)/$(triplet_prefix)ar' \
        AS='$(mingw_bin_dir)/$(triplet_prefix)as' \
-       CC='$(mingw_bin_dir)/$(triplet_prefix)gcc $(wx_cc_flags)' \
+       CC='$(mingw_bin_dir)/$(triplet_prefix)gcc' \
       CPP='$(mingw_bin_dir)/$(triplet_prefix)cpp' \
-      CXX='$(mingw_bin_dir)/$(triplet_prefix)g++ $(wx_cxx_flags)' \
+      CXX='$(mingw_bin_dir)/$(triplet_prefix)g++' \
   DLLTOOL='$(mingw_bin_dir)/$(triplet_prefix)dlltool' \
        LD='$(mingw_bin_dir)/$(triplet_prefix)ld' \
        NM='$(mingw_bin_dir)/$(triplet_prefix)nm' \
