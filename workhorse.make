@@ -686,11 +686,8 @@ REQUIRED_CPPFLAGS = \
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
 
-# TODO ?? Define $(wx_cxxflags) for msw as well as posix.
-
 REQUIRED_CXXFLAGS = \
   $(CXX_WARNINGS) \
-  $(wx_cxxflags) \
 
 REQUIRED_ARFLAGS = \
   -rus

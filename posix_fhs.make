@@ -43,12 +43,6 @@ platform_xmlwrapp_libraries := \
   -lxsltwrapp \
   -lxmlwrapp \
 
-# Let the user override this on the make command line to use a
-# non-default wx configuration.
-WXCONFIG := wx-config
-
-wx_cxxflags := $(shell $(WXCONFIG) --cxxflags) -DwxUSE_STD_STRING
-
 AR      := ar
 CC      := gcc
 CPP     := cpp
