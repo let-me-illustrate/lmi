@@ -47,7 +47,6 @@ platform_xmlwrapp_libraries := \
 # non-default wx configuration.
 WXCONFIG := wx-config
 
-platform_wx_libraries := $(shell $(WXCONFIG) --libs)
 wx_cxxflags := $(shell $(WXCONFIG) --cxxflags) -DwxUSE_STD_STRING
 
 AR      := ar

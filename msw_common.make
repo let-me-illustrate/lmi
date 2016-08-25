@@ -46,10 +46,6 @@ platform_gnome_xml_libraries := \
   -lxslt \
   -lxml2 \
 
-platform_wx_libraries := \
-  -lwx_new \
-  -lwxmsw25d \
-
 # In addition to other reasons for treating these libraries as mere
 # collections of source files, there's a specific problem with boost.
 # The build system provided by boost produces library names such as

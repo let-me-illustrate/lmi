@@ -119,13 +119,6 @@ LDFLAGS := \
   -L$(bcc_lib_dir) /ap /c /E0 /m /Tpe /V4.0 /w /w-dup /w-dpl \
   --startup-file $(bcc_lib_dir)/c0x32.obj import32.lib cw32i.lib \
 
-# The borland linker fails with this library search path:
-#   /wx-cvs-20050216/wxWidgets/lib/gcc_dll
-# Perhaps it requires an msdos path. Passing an empty variable
-# definition to the main makefile at least allows unit tests to link.
-
-platform_wx_libraries :=
-
 # The borland compiler can't handle the boost filesystem code, but it
 # can limp through some tests by pretending that code doesn't exist.
 
@@ -260,7 +253,6 @@ bcc_5_5_1.make:: ;
 	                           CXXFLAGS='$(CXXFLAGS)' \
 	                                 LD='$(LD)' \
 	                            LDFLAGS='$(LDFLAGS)' \
-	              platform_wx_libraries='$(platform_wx_libraries)' \
 	           boost_filesystem_objects='$(boost_filesystem_objects)' \
 	         excluded_unit_test_targets='$(excluded_unit_test_targets)' \
 	                            GNU_CPP='$(GNU_CPP)' \

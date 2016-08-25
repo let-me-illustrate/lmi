@@ -217,8 +217,6 @@ wx_libraries := \
       -e 's/ -[^l][^ ]*//g' \
   )
 
-platform_wx_libraries := $(wx_library_paths) $(wx_libraries)
-
 # Target 'wx_config_check', and the variables that it alone uses,
 # are experimental and may disappear in a future release.
 
@@ -629,7 +627,7 @@ REQUIRED_LIBS := \
   $(platform_gnome_xml_libraries) \
 
 wx_ldflags = \
-  $(platform_wx_libraries) \
+  $(wx_library_paths) $(wx_libraries) \
   $(platform_gui_ldflags) \
 
 wx_pdfdoc_ldflags := \
