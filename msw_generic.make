@@ -1,4 +1,4 @@
-# Platform specifics: msw (cygwin) with MinGW-w64 toolchain.
+# Platform specifics: *nix cross for msw with MinGW-w64 toolchain.
 #
 # Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 #
@@ -23,29 +23,15 @@
 
 # Sanity checks.
 
-cygdrive_diagnostic := \
-  Current working directory '$(CURDIR)' contains '/cygdrive/'. \
-  This is likely to cause problems with native tools such as the \
-  MinGW-w64 compiler. Build from an identity-mount directory instead
-
-ifeq (/cygdrive/,$(findstring /cygdrive/,$(CURDIR)))
-  $(error $(cygdrive_diagnostic))
-endif
-
 ifeq (,$(wildcard /opt/lmi/*))
   $(warning Installation may be invalid: /opt/lmi/ missing or empty. )
 endif
 
 ################################################################################
 
-system_root := /cygdrive/c
+system_root := /
 
-################################################################################
-
-# Use cygwin as a quasi-cross-compiler for an i686-pc-mingw32 target.
-
-# For autotoolized libraries, pass these flags to 'configure':
-# cross_compile_flags := --build=i686-pc-cygwin --host=i686-w64-mingw32
+PERFORM := wine
 
 ################################################################################
 
@@ -64,9 +50,11 @@ system_root := /cygdrive/c
 # These paths are slash-terminated so that setting them to empty
 # strings does the right thing.
 
+USE_STD_PATHS := NOPE
+
 ifeq (,$(USE_STD_PATHS))
   PATH_BIN     := /bin/
-  PATH_GCC     := /MinGW_/bin/
+  PATH_GCC     := /usr/bin/
   PATH_USR_BIN := /usr/bin/
 endif
 
@@ -74,13 +62,7 @@ endif
 
 # Compiler, linker, and so on.
 
-# Oddly, MinGW-w64 provides prefixed versions of compilers:
-#   i686-w64-mingw32-gcc.exe
-#   i686-w64-mingw32-g++.exe
-# but not of the other tools.
-
-#host_prefix := i686-w64-mingw32-
-host_prefix :=
+host_prefix := i686-w64-mingw32-
 
 AR      := $(PATH_GCC)$(host_prefix)ar
 CC      := $(PATH_GCC)$(host_prefix)gcc
@@ -89,11 +71,9 @@ CXX     := $(PATH_GCC)$(host_prefix)g++
 LD      := $(PATH_GCC)$(host_prefix)g++
 RC      := $(PATH_GCC)$(host_prefix)windres
 
-# Identify run-time libraries for redistribution. See:
-#   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
-# Of course manipulating an lmi user's $PATH is out of the question.
+# Identify run-time libraries for redistribution.
 
-compiler_sysroot := /MinGW_/i686-w64-mingw32/lib
+compiler_sysroot := /usr/lib/gcc/i686-w64-mingw32/4.9-win32
 
 compiler_runtime_files := \
   $(compiler_sysroot)/libstdc++-6.dll \
@@ -132,7 +112,7 @@ WGET    := $(PATH_USR_BIN)wget
 
 # Programs for which FHS doesn't specify a location.
 
-# Instead of requiring installation of Cygwin's libxml2:
+# Instead of requiring installation of libxml2 on the host:
 #   XMLLINT := $(PATH_USR_BIN)xmllint
 # use the one that lmi builds:
 XMLLINT := /opt/lmi/local/bin/xmllint
