@@ -73,15 +73,15 @@ endif
 
 # Compiler, linker, and so on.
 
-#triplet_prefix := i686-w64-mingw32-
-triplet_prefix :=
+#host_prefix := i686-w64-mingw32-
+host_prefix :=
 
-AR      := $(PATH_GCC)$(triplet_prefix)ar
-CC      := $(PATH_GCC)$(triplet_prefix)gcc $(cross_compile_flags)
-CPP     := $(PATH_GCC)$(triplet_prefix)cpp $(cross_compile_flags)
-CXX     := $(PATH_GCC)$(triplet_prefix)g++ $(cross_compile_flags)
-LD      := $(PATH_GCC)$(triplet_prefix)g++ $(cross_compile_flags)
-RC      := $(PATH_GCC)$(triplet_prefix)windres
+AR      := $(PATH_GCC)$(host_prefix)ar
+CC      := $(PATH_GCC)$(host_prefix)gcc $(cross_compile_flags)
+CPP     := $(PATH_GCC)$(host_prefix)cpp $(cross_compile_flags)
+CXX     := $(PATH_GCC)$(host_prefix)g++ $(cross_compile_flags)
+LD      := $(PATH_GCC)$(host_prefix)g++ $(cross_compile_flags)
+RC      := $(PATH_GCC)$(host_prefix)windres
 
 # Identify run-time libraries for redistribution. See:
 #   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
