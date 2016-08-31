@@ -34,67 +34,82 @@ set -v
 stamp0=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Started: $stamp0"
 
-# '--jobs=4': big benefit for multicore, no penalty for single core.
+# '--jobs=4': big benefit for multicore, no penalty for single core
+#   (but don't force it to 4 if it's already set).
 # '--output-sync=recurse' is also used, passim, to facilitate log
-# comparison.
-export coefficiency='--jobs=4'
+#   comparison.
+if [ -z "$coefficiency" ]
+then
+    export coefficiency='--jobs=4'
+fi
 
-mount
+export platform
+if [ "$(expr substr $(uname -s) 1 6)" = "CYGWIN" ]
+then
+    platform=CYGWIN
+fi
 
-# Establish mounts carefully.
-#
-# A command such as
-#   mkdir --parents /cygdrive/c/opt/lmi/src/lmi
-# has the perverse effect of creating 'C:\cygwin\cygdrive'. To avoid
-# that problem, '/opt' is first mounted, then unmounted.
-#
-# Don't remove the '/opt' directory from Cygwin's filesystem. Other
-# programs may want to use it. Furthermore, if it were removed, then
-# shell completion, e.g., '/op' [tab], wouldn't work.
+if [ "CYGWIN" = "$platform" ]
+then
+    mount
 
-# The 'mount' command differs greatly between Cygwin versions.
-#
-# Cygwin-1.5 stores all mounts in the msw registry:
-#   HKLM for 'system' mounts
-#   HKCU for 'user' mounts
-# 'mount' adds 'system' mounts by default.
-# 'mount --mount-commands' gives commands to replicate all mounts.
-#
-# Cygwin-1.7 stores all permanent mounts in files:
-#   /etc/fstab for 'system' mounts
-#   /etc/fstab.d/[user-name] for 'user' mounts
-# 'mount' adds temporary mounts that vanish when the session ends; it
-#   does not affect 'system' mounts (unless 'override' is specified,
-#   which is never done here).
-# 'mount --mount-commands' is invalid; errors resulting from this
-#   obsolete option are discarded here.
-#
-# Regardless of version, only system mounts are wanted here, and they
-# are never overridden.
+    # Establish mounts carefully.
+    #
+    # A command such as
+    #   mkdir --parents /cygdrive/c/opt/lmi/src/lmi
+    # has the perverse effect of creating 'C:\cygwin\cygdrive'. To avoid
+    # that problem, '/opt' is first mounted, then unmounted.
+    #
+    # Don't remove the '/opt' directory from Cygwin's filesystem. Other
+    # programs may want to use it. Furthermore, if it were removed, then
+    # shell completion, e.g., '/op' [tab], wouldn't work.
 
-restore_opt_mount=`mount --mount-commands 2>/dev/null | grep '"/opt"'`
+    # The 'mount' command differs greatly between Cygwin versions.
+    #
+    # Cygwin-1.5 stores all mounts in the msw registry:
+    #   HKLM for 'system' mounts
+    #   HKCU for 'user' mounts
+    # 'mount' adds 'system' mounts by default.
+    # 'mount --mount-commands' gives commands to replicate all mounts.
+    #
+    # Cygwin-1.7 stores all permanent mounts in files:
+    #   /etc/fstab for 'system' mounts
+    #   /etc/fstab.d/[user-name] for 'user' mounts
+    # 'mount' adds temporary mounts that vanish when the session ends; it
+    #   does not affect 'system' mounts (unless 'override' is specified,
+    #   which is never done here).
+    # 'mount --mount-commands' is invalid; errors resulting from this
+    #   obsolete option are discarded here.
+    #
+    # Regardless of version, only system mounts are wanted here, and they
+    # are never overridden.
 
-umount "/opt"
-umount "/opt/lmi"
-mkdir /opt
-mount --force "C:/opt" "/opt"
-mkdir --parents /opt/lmi/src/lmi
-umount "/opt"
-mount --force "C:/opt/lmi" "/opt/lmi"
+    restore_opt_mount=`mount --mount-commands 2>/dev/null | grep '"/opt"'`
 
-[ -z "$restore_opt_mount" ] || sh -c $restore_opt_mount
+    umount "/opt"
+    umount "/opt/lmi"
+    mkdir /opt
+    mount --force "C:/opt" "/opt"
+    mkdir --parents /opt/lmi/src/lmi
+    umount "/opt"
+    mount --force "C:/opt/lmi" "/opt/lmi"
 
-# Read this entire thread for $CYGCHECK rationale:
-#   https://cygwin.com/ml/cygwin/2012-02/threads.html#00910
-#   https://cygwin.com/ml/cygwin/2012-03/threads.html#00005
-# Cf.:
-#   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
-export CYGCHECK=`cygpath --mixed /usr/bin/cygcheck`
-cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
+    [ -z "$restore_opt_mount" ] || sh -c $restore_opt_mount
 
-java -version
+    # Read this entire thread for $CYGCHECK rationale:
+    #   https://cygwin.com/ml/cygwin/2012-02/threads.html#00910
+    #   https://cygwin.com/ml/cygwin/2012-03/threads.html#00005
+    # Cf.:
+    #   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
+    export CYGCHECK=`cygpath --mixed /usr/bin/cygcheck`
+    cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
 
+    java -version
+fi
+
+mkdir --parents /opt/lmi/src
 cd /opt/lmi/src
+
 # Favor http over git's own protocol only because corporate firewalls
 # in lmi's target industry tend to block the latter.
 git clone http://git.savannah.nongnu.org/r/lmi.git
@@ -103,22 +118,25 @@ git clone http://git.savannah.nongnu.org/r/lmi.git
 
 cd /opt/lmi/src/lmi
 
-# A "Replacing former [...] mount:" message probably means that this
-# mount was set by an earlier lmi installation; that can be ignored.
-# It seems quite unlikely that anyone who's building lmi would have
-# any other need for mounts with the names used here.
+if [ "CYGWIN" = "$platform" ]
+then
+    # A "Replacing former [...] mount:" message probably means that this
+    # mount was set by an earlier lmi installation; that can be ignored.
+    # It seems quite unlikely that anyone who's building lmi would have
+    # any other need for mounts with the names used here.
 
-restore_MinGW_mount=`mount --mount-commands 2>/dev/null | grep '"/MinGW_"'`
-[ -z "$restore_MinGW_mount" ] \
-  || echo $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-4_9_1"' \
-  || echo -e "Replacing former MinGW_ mount:\n $restore_MinGW_mount" >/dev/tty
-mount --force "C:/opt/lmi/MinGW-4_9_1" "/MinGW_"
+    restore_MinGW_mount=`mount --mount-commands 2>/dev/null | grep '"/MinGW_"'`
+    [ -z "$restore_MinGW_mount" ] \
+      || echo $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-4_9_1"' \
+      || echo -e "Replacing former MinGW_ mount:\n $restore_MinGW_mount" >/dev/tty
+    mount --force "C:/opt/lmi/MinGW-4_9_1" "/MinGW_"
 
-restore_cache_mount=`mount --mount-commands 2>/dev/null | grep '"/cache_for_lmi"'`
-[ -z "$restore_cache_mount" ] \
-  || echo $restore_cache_mount | grep --silent '"C:/cache_for_lmi"' \
-  || echo -e "Replacing former cache mount:\n  $restore_cache_mount" >/dev/tty
-mount --force "C:/cache_for_lmi" "/cache_for_lmi"
+    restore_cache_mount=`mount --mount-commands 2>/dev/null | grep '"/cache_for_lmi"'`
+    [ -z "$restore_cache_mount" ] \
+      || echo $restore_cache_mount | grep --silent '"C:/cache_for_lmi"' \
+      || echo -e "Replacing former cache mount:\n  $restore_cache_mount" >/dev/tty
+    mount --force "C:/cache_for_lmi" "/cache_for_lmi"
+fi
 
 # Downloaded archives are kept in /cache_for_lmi/downloads/ because
 # they are costly to download and some host might be temporarily
@@ -132,8 +150,16 @@ md5sum $0
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
 rm --force --recursive scratch
-rm --force --recursive /MinGW_
-make $coefficiency --output-sync=recurse -f install_mingw.make
+
+if [ "CYGWIN" = "$platform" ]
+then
+    # For Cygwin, install and use this msw-native compiler.
+    rm --force --recursive /MinGW_
+    make $coefficiency --output-sync=recurse -f install_mingw.make
+else
+    # For real *nix, set LMI_HOST to specify a cross compiler.
+    export LMI_HOST=i686-w64-mingw32
+fi
 
 make $coefficiency --output-sync=recurse -f install_miscellanea.make clobber
 make $coefficiency --output-sync=recurse -f install_miscellanea.make
@@ -153,12 +179,15 @@ make $coefficiency --output-sync=recurse PATH=$minimal_path wx_config_check
 make $coefficiency --output-sync=recurse PATH=$minimal_path show_flags
 make $coefficiency --output-sync=recurse PATH=$minimal_path install
 
-# No lmi binary should depend on any Cygwin library.
+if [ "CYGWIN" = "$platform" ]
+then
+    # No lmi binary should depend on any Cygwin library.
 
-for z in /opt/lmi/bin/*; \
-  do cmd /c $CYGCHECK $z 2>&1 | grep --silent cygwin \
-    && echo -e "\ncygcheck $z" && cmd /c $CYGCHECK $z; \
-  done
+    for z in /opt/lmi/bin/*; \
+      do cmd /c $CYGCHECK $z 2>&1 | grep --silent cygwin \
+        && echo -e "\ncygcheck $z" && cmd /c $CYGCHECK $z; \
+      done
+fi
 
 echo -n "2450449 2458849"                          >/opt/lmi/data/expiry
 echo    "0efd124fac6b15e6a9cd0b3dd718eea5  expiry" >/opt/lmi/data/validated.md5
