@@ -1,0 +1,154 @@
+# Create a chroot for cross-building "Let me illustrate...".
+#
+# Copyright (C) 2016 Gregory W. Chicares.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+# http://savannah.nongnu.org/projects/lmi
+# email: <gchicares@sbcglobal.net>
+# snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+# Create a chroot for cross-building lmi--with wine, which is
+# required to run programs built in the chroot.
+
+# Starting in a normal terminal, enter a root shell.
+su
+mkdir -p /srv/chroot/cross3
+apt-get update
+apt-get install schroot debootstrap
+
+# If the connection hiccups, 'debootstrap' doesn't seem to resume,
+# so keep trying until it succeeds.
+
+debootstrap --arch=amd64 jessie /srv/chroot/cross3 http://httpredir.debian.org/debian
+while [ $? -ne 0 ]; do !!; done
+
+cat >/etc/schroot/chroot.d/cross3.conf <<\EOF
+[cross3]
+description=debian-8 cross build with wine
+directory=/srv/chroot/cross3
+users=greg
+groups=greg
+root-groups=root
+EOF
+
+# Exit root shell (return to normal shell).
+exit
+
+# This command--to start a root shell in the chroot--can be run as a
+# normal user. It will prompt for the root password.
+
+schroot --chroot=cross3 --user=root --directory=/
+# enter password
+
+# Add i386 before installing wine, so that wine can run 32-bit .exe's .
+
+dpkg --add-architecture i386
+
+apt-get update
+apt-get install g++-mingw-w64-i686 automake libtool make pkg-config \
+ git zsh bzip2 unzip sudo wine
+
+# Don't worry about messages like these:
+#   E: Can not write log (Is /dev/pts mounted?)
+#   [FAIL] Can't start system message bus - /proc is not mounted ... failed!
+# It's okay that /dev/pts and /proc are not mounted in this chroot.
+
+addgroup --gid=1000 greg
+adduser --gid=1000 --uid=1000 greg
+# enter user password, twice
+# then just press Enter repeatedly to accept defaults
+
+mkdir -p /opt/lmi
+chown greg:greg /opt/lmi
+mkdir -p /cache_for_lmi
+chown greg:greg /cache_for_lmi
+
+chsh -s /bin/zsh greg
+touch /home/greg/.zshrc
+chown greg:greg /home/greg/.zshrc
+
+# Substitute your system's $DISPLAY below:
+
+cat >/home/greg/.zshrc <<\EOF
+export WINEPATH='Z:\\opt\\lmi\\local\\bin;Z:\\opt\\lmi\\local\\lib'
+export LMI_HOST=i686-w64-mingw32
+export PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH"
+# At a regular user prompt, outside the chroot, do this:
+#   $ echo $DISPLAY
+# and replace :0.0 below with the string it returns:
+export DISPLAY=":0.0"
+
+export coefficiency='--jobs=32'
+
+# export TZ=UCT
+# export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+#  No--better to do this:
+# update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+
+# bindkey "\e[3~" delete-char      # Del
+# bindkey '\e[H' beginning-of-line # Home
+# bindkey '\e[F' end-of-line       # End
+bindkey "^[[1;5D" backward-word  # Ctrl-left
+bindkey "^[[1;5C" forward-word   # Ctrl-right
+bindkey '\e[1;3D' backward-word  # Alt-left
+bindkey '\e[1;3C' forward-word   # Alt-right
+
+prompt='%d[%?]%(!.#.$)'
+
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.history
+setopt HIST_IGNORE_DUPS
+
+autoload -U compinit
+compinit -u
+EOF
+
+# Repair /usr/share/libtool/config/ltmain.sh as indicated here:
+#   http://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
+# Do this as root because root owns the file.
+
+cat >/home/greg/ltmain.sh.patch <<\EOF
+--- /usr/share/libtool/config/ltmain.sh.original 2016-01-25 03:43:07.768000000 +0000
++++ /usr/share/libtool/config/ltmain.sh 2016-01-25 03:44:17.100000000 +0000
+@@ -4178,7 +4178,8 @@
+ /* declarations of non-ANSI functions */
+ #if defined(__MINGW32__)
+ # ifdef __STRICT_ANSI__
+-int _putenv (const char *);
++     /* int _putenv (const char *); */
++_CRTIMP int _putenv (const char *);
+ # endif
+ #elif defined(__CYGWIN__)
+ # ifdef __STRICT_ANSI__
+EOF
+
+patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
+ && patch --strip=0 </home/greg/ltmain.sh.patch
+
+# Exit from the root shell in the chroot.
+exit
+
+# If cached lmi downloads are available elsewhere, copy them, e.g.:
+#   cp -a /srv/chroot/cross1/cache_for_lmi/* /srv/chroot/cross3/cache_for_lmi/
+# This optional step merely conserves bandwidth.
+
+# Enter the chroot as a normal user
+
+schroot --chroot=cross3
+
+wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
+chmod +x install_msw.sh
+./install_msw.sh >log 2>&1
