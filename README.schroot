@@ -36,13 +36,13 @@ apt-get install schroot debootstrap
 debootstrap --arch=amd64 --make-tarball=/var/cache/jessie_bootstrap.tar jessie /tmp/eraseme
 
 # Unpack the OS tarball into the particular chroot being created.
-mkdir -p /srv/chroot/cross3
-debootstrap --arch=amd64 --unpack-tarball=/var/cache/jessie_bootstrap.tar jessie /srv/chroot/cross3
+mkdir -p /srv/chroot/cross-lmi
+debootstrap --arch=amd64 --unpack-tarball=/var/cache/jessie_bootstrap.tar jessie /srv/chroot/cross-lmi
 
-cat >/etc/schroot/chroot.d/cross3.conf <<\EOF
-[cross3]
+cat >/etc/schroot/chroot.d/cross-lmi.conf <<\EOF
+[cross-lmi]
 description=debian-8 cross build
-directory=/srv/chroot/cross3
+directory=/srv/chroot/cross-lmi
 users=greg
 groups=greg
 root-groups=root
@@ -54,7 +54,7 @@ exit
 # This command--to start a root shell in the chroot--can be run as a
 # normal user. It will prompt for the root password.
 
-schroot --chroot=cross3 --user=root --directory=/
+schroot --chroot=cross-lmi --user=root --directory=/
 # enter password
 
 # Add i386 before installing wine, so that wine can run 32-bit .exe's .
@@ -145,12 +145,12 @@ patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
 exit
 
 # If cached lmi downloads are available elsewhere, copy them, e.g.:
-#   cp -a /srv/chroot/cross1/cache_for_lmi/* /srv/chroot/cross3/cache_for_lmi/
+#   cp -a /srv/chroot/cross1/cache_for_lmi/* /srv/chroot/cross-lmi/cache_for_lmi/
 # This optional step merely conserves bandwidth.
 
 # Enter the chroot as a normal user
 
-schroot --chroot=cross3
+schroot --chroot=cross-lmi
 
 wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
 chmod +x install_msw.sh
