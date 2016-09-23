@@ -22,7 +22,10 @@
 # Create a chroot for cross-building lmi--with wine, which is
 # required to run programs built in the chroot.
 
-# Starting in a normal terminal, enter a root shell.
+# Log in as the user that will normally use the chroot.
+# Substitute that user's name wherever 'greg' appears below.
+
+# Temporarily enter a root shell.
 su
 apt-get update
 apt-get install schroot debootstrap
@@ -38,7 +41,7 @@ debootstrap --arch=amd64 --unpack-tarball=/var/cache/jessie_bootstrap.tar jessie
 
 cat >/etc/schroot/chroot.d/cross3.conf <<\EOF
 [cross3]
-description=debian-8 cross build with wine
+description=debian-8 cross build
 directory=/srv/chroot/cross3
 users=greg
 groups=greg
@@ -80,8 +83,6 @@ chown greg:greg /cache_for_lmi
 chsh -s /bin/zsh greg
 touch /home/greg/.zshrc
 chown greg:greg /home/greg/.zshrc
-
-# Substitute your system's $DISPLAY below:
 
 cat >/home/greg/.zshrc <<\EOF
 export WINEPATH='Z:\\opt\\lmi\\local\\bin;Z:\\opt\\lmi\\local\\lib'
