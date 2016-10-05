@@ -103,9 +103,9 @@ then
     #   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
     export CYGCHECK=`cygpath --mixed /usr/bin/cygcheck`
     cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
-
-    java -version
 fi
+
+java -version
 
 mkdir --parents /opt/lmi/src
 cd /opt/lmi/src
