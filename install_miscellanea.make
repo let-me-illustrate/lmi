@@ -72,10 +72,10 @@ sample:               stem = data
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
 $(fop_archive)-url      := http://archive.apache.org/dist/xmlgraphics/fop/binaries/$(fop_archive)
-$(jing_archive)-url     := http://jing-trang.googlecode.com/files/$(jing_archive)
+$(jing_archive)-url     := http://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(jing_archive)
 $(md5sum_msw_exe)-url   := http://etree.org/cgi-bin/counter.cgi/software/md5sum.exe#!md5!eb574b236133e60c989c6f472f07827b
 $(sample_archive)-url   := http://download.savannah.gnu.org/releases/lmi/$(sample_archive)
-$(trang_archive)-url    := http://jing-trang.googlecode.com/files/$(trang_archive)
+$(trang_archive)-url    := http://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(trang_archive)
 $(xmlwrapp_archive)-url := http://github.com/vslavik/xmlwrapp/releases/download/v0.7.1/$(xmlwrapp_archive)
 
 $(boost_archive)-md5    := 2b999b2fb7798e1737d1fff8fac602ef
@@ -125,6 +125,11 @@ scratch_exists = \
 
 .PHONY: all
 all: boost cgicc fop jing md5sum_msw sample trang xmlwrapp
+
+# The jing and trang code downloaded here is used only for native msw.
+# For GNU/Linux, native tools are used even when lmi is cross-compiled
+# for msw; downloading the archives anyway, as for msw, does no harm,
+# and may be useful for validating the URLs.
 
 # Patches were generated according to this advice:
 #
