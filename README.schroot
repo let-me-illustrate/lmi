@@ -39,7 +39,8 @@ debootstrap --arch=amd64 --make-tarball=/var/cache/jessie_bootstrap.tar jessie /
 # (If the preceding apt-get and debootstrap steps have already been
 # completed once, then skip them and start here.)
 mkdir -p /srv/chroot/cross-lmi
-debootstrap --arch=amd64 --unpack-tarball=/var/cache/jessie_bootstrap.tar jessie /srv/chroot/cross-lmi
+debootstrap --arch=amd64 --unpack-tarball=/var/cache/jessie_bootstrap.tar \
+ jessie /srv/chroot/cross-lmi >cross-lmi-debootstrap-log 2>&1
 
 cat >/etc/schroot/chroot.d/cross-lmi.conf <<\EOF
 [cross-lmi]
@@ -78,8 +79,9 @@ dpkg-divert --divert /usr/bin/ischroot.debianutils --rename /usr/bin/ischroot
 ln -s /bin/true /usr/bin/ischroot
 
 apt-get update
-apt-get install g++-mingw-w64-i686 automake libtool make pkg-config \
- git zsh bzip2 unzip sudo wine
+apt-get --assume-yes install g++-mingw-w64-i686 automake libtool make \
+ pkg-config git zsh bzip2 unzip sudo wine \
+ >cross-lmi-apt-get-log 2>&1
 
 # Don't worry about messages like these:
 #   E: Can not write log (Is /dev/pts mounted?)
