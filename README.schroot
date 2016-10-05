@@ -63,6 +63,20 @@ schroot --chroot=cross-lmi --user=root --directory=/
 
 dpkg --add-architecture i386
 
+# Prevent daemons from starting in the chroot; work around an
+# 'ischroot' defect. See:
+#   https://wiki.debian.org/chroot#Configuration
+
+cat >/usr/sbin/policy-rc.d <<EOF
+#!/bin/sh
+exit 101
+EOF
+
+chmod a+x /usr/sbin/policy-rc.d
+
+dpkg-divert --divert /usr/bin/ischroot.debianutils --rename /usr/bin/ischroot
+ln -s /bin/true /usr/bin/ischroot
+
 apt-get update
 apt-get install g++-mingw-w64-i686 automake libtool make pkg-config \
  git zsh bzip2 unzip sudo wine
