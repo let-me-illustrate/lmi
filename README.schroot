@@ -170,6 +170,31 @@ exit
 
 schroot --chroot=cross-lmi
 
+# Configure ssh, iff this chroot needs write access to savannah.
+# The easiest way is to copy existing credentials, e.g.:
+#   cp --preserve --recursive ~/.ssh/ /srv/chroot/cross-lmi/home/greg
+
+# Configure git. See:
+#   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
+# Use your own name and email address.
+git config --global user.name "Gregory W. Chicares"
+git config --global user.email gchicares@sbcglobal.net
+git config --global color.ui auto
+git config --global push.default simple
+
+# Initialize wine. See:
+#   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
+WINEDLLOVERRIDES=mscoree=d wine wineboot
+
 wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
 chmod +x install_msw.sh
 ./install_msw.sh >log 2>&1
+
+# Now everything should work much as it does in native msw. To run an
+# msw program, prefix its command line with 'wine', e.g.:
+
+pushd /opt/lmi/bin
+wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
+
+# Exit the chroot.
+exit
