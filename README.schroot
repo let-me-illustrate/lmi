@@ -163,7 +163,7 @@ patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
 exit
 
 # If cached lmi downloads are available elsewhere, copy them, e.g.:
-#   cp -a /srv/chroot/cross1/cache_for_lmi/* /srv/chroot/cross-lmi/cache_for_lmi/
+#   cp -a /srv/cache_for_lmi/* /srv/chroot/cross-lmi/cache_for_lmi/
 # This optional step merely conserves bandwidth.
 
 # Enter the chroot as a normal user
