@@ -42,6 +42,9 @@ mkdir -p /srv/chroot/cross-lmi
 debootstrap --arch=amd64 --unpack-tarball=/var/cache/jessie_bootstrap.tar \
  jessie /srv/chroot/cross-lmi >cross-lmi-debootstrap-log 2>&1
 
+# This command should produce no output:
+grep --invert-match '^I:' cross-lmi-debootstrap-log
+
 cat >/etc/schroot/chroot.d/cross-lmi.conf <<\EOF
 [cross-lmi]
 description=debian-8 cross build
@@ -100,6 +103,13 @@ apt-get --assume-yes install g++-mingw-w64-i686 automake libtool make \
  pkg-config git zsh bzip2 unzip sudo wine default-jre fop jing trang \
  >cross-lmi-apt-get-log 2>&1
 
+# This command should produce little output:
+<cross-lmi-apt-get-log sed -e'0,/^Preconfiguring/d' \
+ -e'/^Fetched\|^Preparing\|^Unpacking\|^Configuring\|^Selecting/d' \
+ -e'/^Setting up\|^Processing\|^Adding\|^update-alternatives\|^[Dd]one./d' \
+ -e'/^(Reading database\|^Linking\|^Moving old\|^Regenerating/d' \
+ -e'/^Creating config\|^Updating certificates\|^Running hooks/d'
+#
 # Don't worry about messages like the following--see:
 #   http://lists.nongnu.org/archive/html/lmi/2016-09/msg00025.html
 #
@@ -212,7 +222,8 @@ chmod +x install_msw.sh
 ./install_msw.sh >log 2>&1
 
 # Now everything should work much as it does in native msw. To run an
-# msw program, prefix its command line with 'wine', e.g.:
+# msw program, prefix its command line with 'wine'. Test the chroot by
+# running the lmi binary built in the preceding step:
 
 pushd /opt/lmi/bin
 wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
