@@ -237,5 +237,38 @@ wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
 # the URL, using your savannah ID instead of mine:
 # git remote set-url origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 
+# Duplicate proprietary repository (if available).
+# First, copy "blessed" repository (here, 'cp' is sufficient: this
+# bare repository has no references that need to be resolved):
+cd /opt/lmi
+cp --dereference --preserve --recursive /cache_for_lmi/blessed .
+# Then create a working copy by cloning the bare repository...
+git clone -b master file:///opt/lmi/blessed/proprietary
+# ...and verify it:
+cd proprietary
+git rev-parse HEAD
+
+# Create and populate the proprietary source directory used by 'vpath':
+mkdir --parents /opt/lmi/src/products/src
+cp -a /opt/lmi/proprietary/src /opt/lmi/src/products
+# ...and the directories for system testing:
+cp -a /opt/lmi/proprietary/test /opt/lmi
+mkdir --parents /opt/lmi/touchstone
+cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
+
+# Remove object files previously built without proprietary source:
+rm /opt/lmi/src/build/lmi/Linux/gcc/ship/my*
+
+# Run a system test.
+cd /opt/lmi/src/lmi
+make $coefficiency system_test 2>&1 |less
+# That test fails the first time because no results are saved in
+# touchstone/ yet. Copy the results just generated...
+cp -a /opt/lmi/test/* /opt/lmi/touchstone
+# ...removing summaries...
+rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
+# ...and rerun the test, which should now succeed:
+make $coefficiency system_test 2>&1 |less
+
 # Exit the chroot.
 exit
