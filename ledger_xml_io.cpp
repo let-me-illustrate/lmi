@@ -818,7 +818,7 @@ void Ledger::write(xml::element& x) const
 //    int              Length;
 //    mcenum_gen_basis GenBasis_;
 //    mcenum_sep_basis SepBasis_;
-//    bool             FullyInitialized;   // i.e. by Init(BasicValues* b)
+//    bool             FullyInitialized;   // I.e. by Init(BasicValues const* b)
 
 // Now we're ready to write the xml.
 

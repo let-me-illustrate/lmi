@@ -158,7 +158,7 @@ class LMI_SO LedgerVariant
     int              Length;
     mcenum_gen_basis GenBasis_;
     mcenum_sep_basis SepBasis_;
-    bool             FullyInitialized; // I.e. by Init(BasicValues* b).
+    bool             FullyInitialized; // I.e. by Init(BasicValues const* b).
 };
 
 typedef std::map<mcenum_run_basis, LedgerVariant> ledger_map_t;

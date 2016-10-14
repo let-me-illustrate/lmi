@@ -49,7 +49,7 @@ class LMI_SO LedgerInvariant
     LedgerInvariant& operator=(LedgerInvariant const&);
     virtual ~LedgerInvariant();
 
-    void Init(BasicValues*);
+    void Init(BasicValues const*);
 
     LedgerInvariant& PlusEq(LedgerInvariant const& a_Addend);
 
@@ -409,7 +409,7 @@ class LMI_SO LedgerInvariant
 
     // Special cases.
     int             Length;
-    bool            FullyInitialized;   // I.e. by Init(BasicValues* b).
+    bool            FullyInitialized;   // I.e. by Init(BasicValues const* b).
 };
 
 inline bool LedgerInvariant::IsFullyInitialized() const

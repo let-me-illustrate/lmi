@@ -446,7 +446,7 @@ void LedgerInvariant::Init()
 }
 
 //============================================================================
-void LedgerInvariant::Init(BasicValues* b)
+void LedgerInvariant::Init(BasicValues const* b)
 {
     // Zero-initialize almost everything.
     Init();
