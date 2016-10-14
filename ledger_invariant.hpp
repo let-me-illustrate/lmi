@@ -201,6 +201,7 @@ class LMI_SO LedgerInvariant
     double          Has1035ExchCharge;
     double          EffDateJdn;
     double          DateOfBirthJdn;
+    double          InforceAsOfDateJdn;
     double          SplitFundAllocation;
     double          GenAcctAllocation;
     double          SupplementalReport;
@@ -384,6 +385,7 @@ class LMI_SO LedgerInvariant
     // JDNs are used in UpdateCRC() and Spew().
     std::string     EffDate;
     std::string     DateOfBirth;
+    std::string     InforceAsOfDate;
 
     // Arguably enumerative members such as 'ErMode' should be of type
     // std::string instead, because strings would be more useful for
