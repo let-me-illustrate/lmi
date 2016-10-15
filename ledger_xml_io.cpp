@@ -102,6 +102,7 @@ bool unavailable(std::string const& s)
     static std::string const a[] =
         {"DateOfBirthJdn"        // used by group quotes
         ,"EffDateJdn"            // used by group quotes
+        ,"InforceAsOfDateJdn"    // probably not needed
         ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
         ,"InitPremTaxRate"       // used by PrintRosterTabDelimited(); not cents
         ,"SubstdTable"           // probably not needed
