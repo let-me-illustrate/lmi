@@ -206,6 +206,15 @@ exit
 # The easiest way is to copy existing credentials, e.g.:
 #   cp -a ~/.ssh/ /srv/chroot/cross-lmi/home/greg
 
+# Use an msw-native java to let lmi write illustrations to pdf. See:
+#   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00010.html
+# It's convenient to obtain it outside a chroot, where a web browser
+# is available--e.g., save this file:
+#   http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase5-419410.html
+# to /srv/cache_for_lmi/, then copy it into the chroot's filesystem:
+#   cp -a /srv/cache_for_lmi/jre-1_5_0-windows-i586.exe /srv/chroot/cross-lmi/cache_for_lmi
+# where it can be run later. Only the JRE is wanted, and nothing else.
+
 # Enter the chroot as a normal user
 
 schroot --chroot=cross-lmi
@@ -221,6 +230,9 @@ git config --global push.default simple
 # Initialize wine. See:
 #   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
 WINEDLLOVERRIDES=mscoree=d wine wineboot
+
+# Install java.
+wine /cache_for_lmi/jre-1_5_0-windows-i586.exe
 
 wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
 chmod +x install_msw.sh

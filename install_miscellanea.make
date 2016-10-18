@@ -126,11 +126,6 @@ scratch_exists = \
 .PHONY: all
 all: boost cgicc fop jing md5sum_msw sample trang xmlwrapp
 
-# The jing and trang code downloaded here is used only for native msw.
-# For GNU/Linux, native tools are used even when lmi is cross-compiled
-# for msw; downloading the archives anyway, as for msw, does no harm,
-# and may be useful for validating the URLs.
-
 # Patches were generated according to this advice:
 #
 # http://www.linuxfromscratch.org/patches/submit.html
