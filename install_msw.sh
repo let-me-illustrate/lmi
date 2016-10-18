@@ -216,6 +216,13 @@ cat >/opt/lmi/data/configurable_settings.xml <<EOF
 </configurable_settings>
 EOF
 
+# Use "Z:" instead of "C:" for wine.
+
+if [ "CYGWIN" != "$platform" ]
+then
+    sed -i /opt/lmi/data/configurable_settings.xml -e's/C:/Z:/g'
+fi
+
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
 
