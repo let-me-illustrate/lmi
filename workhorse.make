@@ -1052,7 +1052,7 @@ wrap_fardel:
 	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
 	@$(fardel_date_script)
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
-	@$(bin_dir)/generate_passkey > passkey
+	@$(PERFORM) $(bin_dir)/generate_passkey > passkey
 	@$(TAR) \
 	  --bzip2 \
 	  --create \
