@@ -56,12 +56,25 @@ xml_dir       := /opt/lmi/xml-scratch
 
 # Variables that normally should be left alone #################################
 
-mingw_bin_dir := $(mingw_dir)/bin
+mingw_bin_dir :=
+build_type    := x86_64-unknown-linux-gnu
+host_type     := i686-w64-mingw32
+
+uname := $(shell uname -s 2>/dev/null)
+ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+  mingw_bin_dir := $(mingw_dir)/bin/
+  build_type    := i686-pc-cygwin
+  host_type     := i686-w64-mingw32
+endif
 
 # zlib's 'configure' was written by hand; it doesn't even recognize
 # fundamental autoconf options such as '--build'. For the overrides
 # specified here, see:
 #   http://lists.nongnu.org/archive/html/lmi/2016-07/msg00036.html
+#
+# The unprefixed "gcc" in "LDSHARED" seems odd for cross compiling,
+# but it seems to work, at least with cygwin.
+#
 # zlib's makefile doesn't install the 'libz1.dll.a' import library
 # that it builds; apparently that doesn't matter because libxml2
 # doesn't link it explicitly.
@@ -84,26 +97,14 @@ $(zlib_version)_overrides := \
 #   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
 
 xmlsoft_common_options := \
-  --build=i686-pc-cygwin \
-  --host=i686-w64-mingw32 \
+  --build=$(build_type) \
+  --host=$(host_type) \
   --disable-dependency-tracking \
   --disable-static \
   --enable-shared \
   --with-debug \
   --without-python \
   LDFLAGS='-lws2_32' \
-       AR='$(mingw_bin_dir)/ar' \
-       AS='$(mingw_bin_dir)/as' \
-       CC='$(mingw_bin_dir)/gcc' \
-      CPP='$(mingw_bin_dir)/cpp' \
-      CXX='$(mingw_bin_dir)/g++' \
-  DLLTOOL='$(mingw_bin_dir)/dlltool' \
-       LD='$(mingw_bin_dir)/ld' \
-       NM='$(mingw_bin_dir)/nm' \
-  OBJDUMP='$(mingw_bin_dir)/objdump' \
-   RANLIB='$(mingw_bin_dir)/ranlib' \
-    STRIP='$(mingw_bin_dir)/strip' \
-  WINDRES='$(mingw_bin_dir)/windres' \
 
 $(libxml2_version)_options := \
   $(xmlsoft_common_options) \
@@ -147,12 +148,15 @@ initial_setup:
 	$(MKDIR) --parents $(cache_dir)
 	$(MKDIR) --parents $(xml_dir)
 
-WGETFLAGS := \
+# $(WGETFLAGS) and $(wget_whence) must be recursively expanded because
+# $(host) and $(host_path) have target-specific values.
+
+WGETFLAGS = \
   --cut-dirs=$(words $(subst /, ,$(host_path))) \
   --force-directories \
   --no-host-directories \
 
-wget_whence := $(host)/$(host_path)
+wget_whence = $(host)/$(host_path)
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2

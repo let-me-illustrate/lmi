@@ -47,34 +47,30 @@ $(wxpdfdoc_archive)-md5     := 8e3c4d6cd1df9c7f91426c8c4723cb6e
 
 # Variables that normally should be left alone #################################
 
-mingw_bin_dir  := $(mingw_dir)/bin
+mingw_bin_dir :=
+build_type    := x86_64-unknown-linux-gnu
+host_type     := i686-w64-mingw32
 
-#triplet_prefix := i686-w64-mingw32-
-triplet_prefix :=
+uname := $(shell uname -s 2>/dev/null)
+ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+  mingw_bin_dir := $(mingw_dir)/bin/
+  build_type    := i686-pc-cygwin
+  host_type     := i686-w64-mingw32
+endif
 
-compiler       := gcc-$(shell $(mingw_bin_dir)/$(triplet_prefix)gcc -dumpversion)
+compiler       := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
 
 wx_cc_flags    := -fno-omit-frame-pointer
 wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
-  --build=i686-pc-cygwin \
-  --host=i686-w64-mingw32 \
+  --build=$(build_type) \
+  --host=$(host_type) \
   --disable-dependency-tracking \
   --with-wx-config=$(prefix)/bin/wx-config-portable \
-       AR='$(mingw_bin_dir)/$(triplet_prefix)ar' \
-       AS='$(mingw_bin_dir)/$(triplet_prefix)as' \
-       CC='$(mingw_bin_dir)/$(triplet_prefix)gcc $(wx_cc_flags)' \
-      CPP='$(mingw_bin_dir)/$(triplet_prefix)cpp' \
-      CXX='$(mingw_bin_dir)/$(triplet_prefix)g++ $(wx_cxx_flags)' \
-  DLLTOOL='$(mingw_bin_dir)/$(triplet_prefix)dlltool' \
-       LD='$(mingw_bin_dir)/$(triplet_prefix)ld' \
-       NM='$(mingw_bin_dir)/$(triplet_prefix)nm' \
-  OBJDUMP='$(mingw_bin_dir)/$(triplet_prefix)objdump' \
-   RANLIB='$(mingw_bin_dir)/$(triplet_prefix)ranlib' \
-    STRIP='$(mingw_bin_dir)/$(triplet_prefix)strip' \
-  WINDRES='$(mingw_bin_dir)/$(triplet_prefix)windres' \
+  CFLAGS='$(wx_cc_flags)' \
+  CXXFLAGS='$(wx_cxx_flags)' \
 
 # Utilities ####################################################################
 
@@ -110,9 +106,10 @@ WGETFLAGS :=
 
 .PHONY: wxpdfdoc
 wxpdfdoc: $(wxpdfdoc_archive)
-	cd $(wxpdfdoc_dir)/$(wxpdfdoc_basename) && \
-	    ./configure $(config_options) && \
-	    $(MAKE) install_pdfdoc_dll install_pdfdoc_dll_headers
+	cd $(wxpdfdoc_dir)/$(wxpdfdoc_basename) \
+	  && export PATH="$(mingw_bin_dir):${PATH}" \
+	  && ./configure $(config_options) \
+	  && $(MAKE) install_pdfdoc_dll install_pdfdoc_dll_headers \
 
 .PHONY: clobber
 clobber:

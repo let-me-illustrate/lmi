@@ -102,6 +102,7 @@ bool unavailable(std::string const& s)
     static std::string const a[] =
         {"DateOfBirthJdn"        // used by group quotes
         ,"EffDateJdn"            // used by group quotes
+        ,"InforceAsOfDateJdn"    // probably not needed
         ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
         ,"InitPremTaxRate"       // used by PrintRosterTabDelimited(); not cents
         ,"SubstdTable"           // probably not needed
@@ -818,7 +819,7 @@ void Ledger::write(xml::element& x) const
 //    int              Length;
 //    mcenum_gen_basis GenBasis_;
 //    mcenum_sep_basis SepBasis_;
-//    bool             FullyInitialized;   // i.e. by Init(BasicValues* b)
+//    bool             FullyInitialized;   // I.e. by Init(BasicValues const* b)
 
 // Now we're ready to write the xml.
 

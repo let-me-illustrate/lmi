@@ -184,6 +184,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["Has1035ExchCharge"     ] = &Has1035ExchCharge      ;
     OtherScalars    ["EffDateJdn"            ] = &EffDateJdn             ;
     OtherScalars    ["DateOfBirthJdn"        ] = &DateOfBirthJdn         ;
+    OtherScalars    ["InforceAsOfDateJdn"    ] = &InforceAsOfDateJdn     ;
     OtherScalars    ["SplitFundAllocation"   ] = &SplitFundAllocation    ;
     OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
     OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
@@ -401,6 +402,7 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     // Scalars of type not compatible with double.
     EffDate                = obj.EffDate               ;
     DateOfBirth            = obj.DateOfBirth           ;
+    InforceAsOfDate        = obj.InforceAsOfDate       ;
     InitErMode             = obj.InitErMode            ;
     InitDBOpt              = obj.InitDBOpt             ;
 
@@ -444,7 +446,7 @@ void LedgerInvariant::Init()
 }
 
 //============================================================================
-void LedgerInvariant::Init(BasicValues* b)
+void LedgerInvariant::Init(BasicValues const* b)
 {
     // Zero-initialize almost everything.
     Init();
@@ -886,10 +888,12 @@ void LedgerInvariant::Init(BasicValues* b)
     UWClass                 = mc_str(b->yare_input_.UnderwritingClass);
     SubstandardTable        = mc_str(b->yare_input_.SubstandardTable);
 
-    EffDate                 = calendar_date(b->yare_input_.EffectiveDate).str();
-    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate).julian_day_number();
-    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth).str();
-    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth).julian_day_number();
+    EffDate                 = calendar_date(b->yare_input_.EffectiveDate  ).str();
+    EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate  ).julian_day_number();
+    DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth    ).str();
+    DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth    ).julian_day_number();
+    InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate).str();
+    InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate).julian_day_number();
     InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
 
     mcenum_dbopt const init_dbo = b->DeathBfts_->dbopt()[0];
@@ -1014,6 +1018,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     EffDateJdn                    = a_Addend.EffDateJdn;
     DateOfBirth                   = a_Addend.DateOfBirth;
     DateOfBirthJdn                = a_Addend.DateOfBirthJdn;
+    InforceAsOfDate               = a_Addend.InforceAsOfDate;
+    InforceAsOfDateJdn            = a_Addend.InforceAsOfDateJdn;
     InitErMode                    = a_Addend.InitErMode;
     InitDBOpt                     = a_Addend.InitDBOpt;
     Age                           = std::min(Age, a_Addend.Age);

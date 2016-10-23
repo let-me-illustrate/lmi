@@ -85,29 +85,44 @@ endif
 
 # Variables that normally should be left alone #################################
 
-mingw_bin_dir  := $(mingw_dir)/bin
+# Specify $(build_type) explicitly, depending on `uname`. It would
+# seem cleaner to deduce it this way:
+#   build_type  := $(shell /path/to/config.guess)
+# but that script is not easy to find. There's a copy in the wx
+# archive, but that hasn't yet been extracted at this point. Debian
+# GNU/Linux provides it in /usr/share/misc/ and recommends:
+#   https://wiki.debian.org/AutoTools/autoconf
+#   "In general you are much better off building against the current
+#   versions of these files than the ones shipped with the tarball"
+# but that directory is not on $PATH . Alternatively, RH provides it
+# in /usr/lib/rpm/redhat/ .
 
-#triplet_prefix := i686-w64-mingw32-
-triplet_prefix :=
+mingw_bin_dir :=
+build_type    := x86_64-unknown-linux-gnu
+host_type     := i686-w64-mingw32
 
-compiler       := gcc-$(shell $(mingw_bin_dir)/$(triplet_prefix)gcc -dumpversion)
+uname := $(shell uname -s 2>/dev/null)
+ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
+  mingw_bin_dir := $(mingw_dir)/bin/
+  build_type    := i686-pc-cygwin
+  host_type     := i686-w64-mingw32
+endif
+
+compiler       := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
 vendor         := $(subst .,,$(compiler))-$(wx_md5)
 
 build_dir      := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
-#
-# Pass gcc options in $CC and $CXX, not $*FLAGS--explanation here:
-#   http://lists.nongnu.org/archive/html/lmi/2013-07/msg00001.html
 
 wx_cc_flags    := -fno-omit-frame-pointer
 wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
-  --build=i686-pc-cygwin \
-  --host=i686-w64-mingw32 \
+  --build=$(build_type) \
+  --host=$(host_type) \
   --disable-apple_ieee \
   --disable-aui \
   --disable-compat24 \
@@ -128,18 +143,8 @@ config_options = \
   --without-libtiff \
   --without-opengl \
   --without-subdirs \
-       AR='$(mingw_bin_dir)/$(triplet_prefix)ar' \
-       AS='$(mingw_bin_dir)/$(triplet_prefix)as' \
-       CC='$(mingw_bin_dir)/$(triplet_prefix)gcc $(wx_cc_flags)' \
-      CPP='$(mingw_bin_dir)/$(triplet_prefix)cpp' \
-      CXX='$(mingw_bin_dir)/$(triplet_prefix)g++ $(wx_cxx_flags)' \
-  DLLTOOL='$(mingw_bin_dir)/$(triplet_prefix)dlltool' \
-       LD='$(mingw_bin_dir)/$(triplet_prefix)ld' \
-       NM='$(mingw_bin_dir)/$(triplet_prefix)nm' \
-  OBJDUMP='$(mingw_bin_dir)/$(triplet_prefix)objdump' \
-   RANLIB='$(mingw_bin_dir)/$(triplet_prefix)ranlib' \
-    STRIP='$(mingw_bin_dir)/$(triplet_prefix)strip' \
-  WINDRES='$(mingw_bin_dir)/$(triplet_prefix)windres' \
+  CFLAGS='$(wx_cc_flags)' \
+  CXXFLAGS='$(wx_cxx_flags)' \
 
 # Utilities ####################################################################
 
@@ -203,7 +208,8 @@ WGETFLAGS :=
 
 .PHONY: wx
 wx:
-	../configure $(config_options) && $(MAKE) && $(MAKE) install
+	export PATH="$(mingw_bin_dir):${PATH}" \
+	  && ../configure $(config_options) && $(MAKE) && $(MAKE) install \
 
 # 'wx-config' is not portable. For example, it uses 'printf(1)', which
 # zsh supports only in versions after 4.0.1 . Far worse, it underlies

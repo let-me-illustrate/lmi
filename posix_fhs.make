@@ -26,6 +26,8 @@ system_root := /
 EXEEXT :=
 SHREXT := .so
 
+PERFORM := wine
+
 platform_boost_libraries := \
   -lboost_filesystem-gcc \
 
@@ -40,13 +42,6 @@ platform_gnome_xml_libraries := \
 platform_xmlwrapp_libraries := \
   -lxsltwrapp \
   -lxmlwrapp \
-
-# Let the user override this on the make command line to use a
-# non-default wx configuration.
-WXCONFIG := wx-config
-
-platform_wx_libraries := $(shell $(WXCONFIG) --libs)
-wx_cxxflags := $(shell $(WXCONFIG) --cxxflags) -DwxUSE_STD_STRING
 
 AR      := ar
 CC      := gcc

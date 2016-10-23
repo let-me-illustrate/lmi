@@ -1,0 +1,286 @@
+# Create a chroot for cross-building "Let me illustrate...".
+#
+# Copyright (C) 2016 Gregory W. Chicares.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+# http://savannah.nongnu.org/projects/lmi
+# email: <gchicares@sbcglobal.net>
+# snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+# Create a chroot for cross-building lmi--with wine, which is
+# required to run programs built in the chroot.
+
+# Log in as the user that will normally use the chroot.
+# Substitute that user's name wherever 'greg' appears below.
+
+# Temporarily enter a root shell.
+su
+apt-get update
+apt-get install schroot debootstrap
+
+# Download all OS essentials. This step may be done a single time, and
+# its tarball used repeatedly. The target ('/tmp/eraseme') directory
+# will be created and erased automatically.
+debootstrap --arch=amd64 --make-tarball=/var/cache/jessie_bootstrap.tar jessie /tmp/eraseme
+
+# Unpack the OS tarball into the particular chroot being created.
+# (If the preceding apt-get and debootstrap steps have already been
+# completed once, then skip them and start here.)
+mkdir -p /srv/chroot/cross-lmi
+debootstrap --arch=amd64 --unpack-tarball=/var/cache/jessie_bootstrap.tar \
+ jessie /srv/chroot/cross-lmi >cross-lmi-debootstrap-log 2>&1
+
+# This command should produce no output:
+grep --invert-match '^I:' cross-lmi-debootstrap-log
+
+cat >/etc/schroot/chroot.d/cross-lmi.conf <<\EOF
+[cross-lmi]
+description=debian-8 cross build
+directory=/srv/chroot/cross-lmi
+users=greg
+groups=greg
+root-groups=root
+type=plain
+EOF
+
+# Exit root shell (return to normal shell).
+exit
+
+# This command--to start a root shell in the chroot--can be run as a
+# normal user. It will prompt for the root password.
+
+schroot --chroot=cross-lmi --user=root --directory=/
+# enter password
+
+# Add i386 before installing wine, so that wine can run 32-bit .exe's .
+
+dpkg --add-architecture i386
+
+# Prevent daemons from starting in the chroot; work around an
+# 'ischroot' defect. See:
+#   https://wiki.debian.org/chroot#Configuration
+
+cat >/usr/sbin/policy-rc.d <<EOF
+#!/bin/sh
+exit 101
+EOF
+
+chmod a+x /usr/sbin/policy-rc.d
+
+dpkg-divert --divert /usr/bin/ischroot.debianutils --rename /usr/bin/ischroot
+ln -s /bin/true /usr/bin/ischroot
+
+# This being a "plain" schroot, mount essential directories:
+mount -t devpts -o rw,nosuid,noexec,relatime,mode=600 devpts /dev/pts
+mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
+
+# If the chroot is to be permanent, consider adding those mounts to /etc/fstab .
+# If the chroot is ever to be eradicated, be sure to unmount first:
+# ...inside chroot:
+#   umount ./dev/pts
+#   umount ./proc
+# ...or outside chroot:
+#   umount /srv/chroot/cross-lmi/dev/pts/
+#   umount /srv/chroot/cross-lmi/proc/
+# Then, and only then:
+#   rm -rf /srv/chroot/cross-lmi/
+#   rm /etc/schroot/chroot.d/cross-lmi.conf
+
+apt-get update
+apt-get --assume-yes install g++-mingw-w64-i686 automake libtool make \
+ pkg-config git zsh bzip2 unzip sudo wine default-jre fop jing trang \
+ >cross-lmi-apt-get-log 2>&1
+
+# This command should produce little output:
+<cross-lmi-apt-get-log sed -e'0,/^Preconfiguring/d' \
+ -e'/^Fetched\|^Preparing\|^Unpacking\|^Configuring\|^Selecting/d' \
+ -e'/^Setting up\|^Processing\|^Adding\|^update-alternatives\|^[Dd]one./d' \
+ -e'/^(Reading database\|^Linking\|^Moving old\|^Regenerating/d' \
+ -e'/^Creating config\|^Updating certificates\|^Running hooks/d'
+#
+# Don't worry about messages like the following--see:
+#   http://lists.nongnu.org/archive/html/lmi/2016-09/msg00025.html
+#
+#   update-rc.d: warning: start and stop actions are no longer supported; falling back to defaults
+#   invoke-rc.d: policy-rc.d denied execution of start.
+#   No schema files found: doing nothing.
+#   Warning: The home dir /run/uuidd you specified can't be accessed: No such file or directory
+#   Not creating home directory `/run/uuidd'.
+
+addgroup --gid=1000 greg
+adduser --gid=1000 --uid=1000 greg
+# enter user password, twice
+# then just press Enter repeatedly to accept defaults
+
+mkdir -p /opt/lmi
+chown greg:greg /opt/lmi
+mkdir -p /cache_for_lmi
+chown greg:greg /cache_for_lmi
+
+chsh -s /bin/zsh greg
+touch /home/greg/.zshrc
+chown greg:greg /home/greg/.zshrc
+
+cat >/home/greg/.zshrc <<\EOF
+export WINEPATH='Z:\\opt\\lmi\\local\\bin;Z:\\opt\\lmi\\local\\lib'
+export LMI_HOST=i686-w64-mingw32
+export PATH="/opt/lmi/local/bin:/opt/lmi/local/lib:$PATH"
+# At a regular user prompt, outside the chroot, do this:
+#   $ echo $DISPLAY
+# and replace :0.0 below with the string it returns:
+export DISPLAY=":0.0"
+
+export coefficiency='--jobs=32'
+
+# export TZ=UCT
+# export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+#  No--better to do this:
+# update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+
+# bindkey "\e[3~" delete-char      # Del
+# bindkey '\e[H' beginning-of-line # Home
+# bindkey '\e[F' end-of-line       # End
+bindkey "^[[1;5D" backward-word  # Ctrl-left
+bindkey "^[[1;5C" forward-word   # Ctrl-right
+bindkey '\e[1;3D' backward-word  # Alt-left
+bindkey '\e[1;3C' forward-word   # Alt-right
+
+prompt='%d[%?]%(!.#.$)'
+
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.history
+setopt HIST_IGNORE_DUPS
+
+autoload -U compinit
+compinit -u
+EOF
+
+# Repair /usr/share/libtool/config/ltmain.sh as indicated here:
+#   http://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
+# Do this as root because root owns the file.
+
+cat >/home/greg/ltmain.sh.patch <<\EOF
+--- /usr/share/libtool/config/ltmain.sh.original 2016-01-25 03:43:07.768000000 +0000
++++ /usr/share/libtool/config/ltmain.sh 2016-01-25 03:44:17.100000000 +0000
+@@ -4178,7 +4178,8 @@
+ /* declarations of non-ANSI functions */
+ #if defined(__MINGW32__)
+ # ifdef __STRICT_ANSI__
+-int _putenv (const char *);
++     /* int _putenv (const char *); */
++_CRTIMP int _putenv (const char *);
+ # endif
+ #elif defined(__CYGWIN__)
+ # ifdef __STRICT_ANSI__
+EOF
+
+patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
+ && patch --strip=0 </home/greg/ltmain.sh.patch
+
+# Exit from the root shell in the chroot.
+exit
+
+# If cached lmi downloads are available elsewhere, copy them now.
+# Copying cache_for_lmi/downloads/ is an optional step that merely
+# conserves bandwidth. Directory cache_for_lmi/ in a native msw
+# installation also contains cygwin files, which are not wanted in a
+# chroot. For convenience, add a bare repository of proprietary files
+# to this directory (after making sure it's up to date):
+#   cp --dereference --preserve --recursive /WHEREVER/blessed /srv/cache_for_lmi
+#   cp -a /srv/cache_for_lmi/* /srv/chroot/cross-lmi/cache_for_lmi/
+
+# Configure ssh, iff this chroot needs write access to savannah.
+# The easiest way is to copy existing credentials, e.g.:
+#   cp -a ~/.ssh/ /srv/chroot/cross-lmi/home/greg
+
+# Use an msw-native java to let lmi write illustrations to pdf. See:
+#   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00010.html
+# It's convenient to obtain it outside a chroot, where a web browser
+# is available--e.g., save this file:
+#   http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase5-419410.html
+# to /srv/cache_for_lmi/, then copy it into the chroot's filesystem:
+#   cp -a /srv/cache_for_lmi/jre-1_5_0-windows-i586.exe /srv/chroot/cross-lmi/cache_for_lmi
+# where it can be run later. Only the JRE is wanted, and nothing else.
+
+# Enter the chroot as a normal user
+
+schroot --chroot=cross-lmi
+
+# Configure git. See:
+#   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
+# Use your own name and email address.
+git config --global user.name "Gregory W. Chicares"
+git config --global user.email gchicares@sbcglobal.net
+git config --global color.ui auto
+git config --global push.default simple
+
+# Initialize wine. See:
+#   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
+WINEDLLOVERRIDES=mscoree=d wine wineboot
+
+# Install java.
+wine /cache_for_lmi/jre-1_5_0-windows-i586.exe
+
+wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
+chmod +x install_msw.sh
+./install_msw.sh >log 2>&1
+
+# Now everything should work much as it does in native msw. To run an
+# msw program, prefix its command line with 'wine'. Test the chroot by
+# running the lmi binary built in the preceding step:
+
+pushd /opt/lmi/bin
+wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
+
+# Iff this chroot needs write access to savannah, then reconfigure
+# the URL, using your savannah ID instead of mine:
+# git remote set-url origin chicares@git.sv.gnu.org:/srv/git/lmi.git
+
+# Duplicate proprietary repository (if available).
+# First, copy "blessed" repository (here, 'cp' is sufficient: this
+# bare repository has no references that need to be resolved):
+cd /opt/lmi
+cp --dereference --preserve --recursive /cache_for_lmi/blessed .
+# Then create a working copy by cloning the bare repository...
+git clone -b master file:///opt/lmi/blessed/proprietary
+# ...and verify it:
+cd proprietary
+git rev-parse HEAD
+
+# Create and populate the proprietary source directory used by 'vpath':
+mkdir --parents /opt/lmi/src/products/src
+cp -a /opt/lmi/proprietary/src /opt/lmi/src/products
+# ...and the directories for system testing:
+cp -a /opt/lmi/proprietary/test /opt/lmi
+mkdir --parents /opt/lmi/touchstone
+cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
+
+# Remove object files previously built without proprietary source:
+rm /opt/lmi/src/build/lmi/Linux/gcc/ship/my*
+
+# Run a system test.
+cd /opt/lmi/src/lmi
+make $coefficiency system_test 2>&1 |less
+# That test fails the first time because no results are saved in
+# touchstone/ yet. Copy the results just generated...
+cp -a /opt/lmi/test/* /opt/lmi/touchstone
+# ...removing summaries...
+rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
+# ...and rerun the test, which should now succeed:
+make $coefficiency system_test 2>&1 |less
+
+# Exit the chroot.
+exit

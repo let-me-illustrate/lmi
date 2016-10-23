@@ -42,11 +42,9 @@ system_root := /cygdrive/c
 
 ################################################################################
 
-# Use cygwin as a quasi-cross-compiler for an i686-pc-mingw32 target
-# (no longer supported):
-# cross_compile_flags := -mno-cygwin
+# Use cygwin as a quasi-cross-compiler for an i686-pc-mingw32 target.
 
-# Untested:
+# For autotoolized libraries, pass these flags to 'configure':
 # cross_compile_flags := --build=i686-pc-cygwin --host=i686-w64-mingw32
 
 ################################################################################
@@ -55,7 +53,10 @@ system_root := /cygdrive/c
 # correctly even if $PATH is empty. That seems desirable as a general
 # principle; furthermore, many problems reported on mailing lists are
 # due to users inadvertently mixing cygwin and other tools by setting
-# $PATH incorrectly.
+# $PATH incorrectly. OTOH, such problems arise infrequently with real
+# *nix, and some fundamental tools are not necessarily located in any
+# particular location: for example, neither FHS-2.2 nor FHS-3.0
+# prescribes where 'grep' must reside.
 #
 # To force $PATH to be respected instead, set $(USE_STD_PATHS) to a
 # nonempty string.
@@ -73,15 +74,20 @@ endif
 
 # Compiler, linker, and so on.
 
-#triplet_prefix := i686-w64-mingw32-
-triplet_prefix :=
+# Oddly, MinGW-w64 provides prefixed versions of compilers:
+#   i686-w64-mingw32-gcc.exe
+#   i686-w64-mingw32-g++.exe
+# but not of the other tools.
 
-AR      := $(PATH_GCC)$(triplet_prefix)ar
-CC      := $(PATH_GCC)$(triplet_prefix)gcc $(cross_compile_flags)
-CPP     := $(PATH_GCC)$(triplet_prefix)cpp $(cross_compile_flags)
-CXX     := $(PATH_GCC)$(triplet_prefix)g++ $(cross_compile_flags)
-LD      := $(PATH_GCC)$(triplet_prefix)g++ $(cross_compile_flags)
-RC      := $(PATH_GCC)$(triplet_prefix)windres
+#host_prefix := i686-w64-mingw32-
+host_prefix :=
+
+AR      := $(PATH_GCC)$(host_prefix)ar
+CC      := $(PATH_GCC)$(host_prefix)gcc
+CPP     := $(PATH_GCC)$(host_prefix)cpp
+CXX     := $(PATH_GCC)$(host_prefix)g++
+LD      := $(PATH_GCC)$(host_prefix)g++
+RC      := $(PATH_GCC)$(host_prefix)windres
 
 # Identify run-time libraries for redistribution. See:
 #   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
@@ -110,7 +116,8 @@ RM      := $(PATH_BIN)rm
 SED     := $(PATH_BIN)sed
 TAR     := $(PATH_BIN)tar
 
-# FHS-2.2 would put these in /usr/bin .
+# FHS-2.2 would presumably put these in /usr/bin . However, debian
+# puts 'bzip2' and 'grep' in /bin .
 
 BZIP2   := $(PATH_USR_BIN)bzip2
 DIFF    := $(PATH_USR_BIN)diff

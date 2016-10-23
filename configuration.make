@@ -27,6 +27,10 @@ uname := $(shell uname -s 2>/dev/null)
 
 platform-makefile := posix_fhs.make
 
+ifeq (i686-w64-mingw32,$(findstring i686-w64-mingw32,$(LMI_HOST)))
+  platform-makefile := msw_generic.make
+endif
+
 ifeq (MINGW,$(findstring MINGW,$(uname)))
   platform-makefile := msw_msys.make
 else

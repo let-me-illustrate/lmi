@@ -72,10 +72,10 @@ sample:               stem = data
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
 $(fop_archive)-url      := http://archive.apache.org/dist/xmlgraphics/fop/binaries/$(fop_archive)
-$(jing_archive)-url     := http://jing-trang.googlecode.com/files/$(jing_archive)
+$(jing_archive)-url     := http://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(jing_archive)
 $(md5sum_msw_exe)-url   := http://etree.org/cgi-bin/counter.cgi/software/md5sum.exe#!md5!eb574b236133e60c989c6f472f07827b
 $(sample_archive)-url   := http://download.savannah.gnu.org/releases/lmi/$(sample_archive)
-$(trang_archive)-url    := http://jing-trang.googlecode.com/files/$(trang_archive)
+$(trang_archive)-url    := http://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(trang_archive)
 $(xmlwrapp_archive)-url := http://github.com/vslavik/xmlwrapp/releases/download/v0.7.1/$(xmlwrapp_archive)
 
 $(boost_archive)-md5    := 5eca2116d39d61382b8f8235915cb267
@@ -166,7 +166,7 @@ cgicc: $(file_list)
 	$(MV) scratch/$(stem)/cgicc/*.h   $(third_party_include_dir)/cgicc/
 	$(MKDIR) $(third_party_source_dir)/cgicc
 	$(MV) scratch/$(stem)/cgicc/*.cpp $(third_party_source_dir)/cgicc/
-	cd $(destination) && $(MD5SUM) include/cgicc/* src/cgicc/* >$(stem).md5sums
+	cd $(destination) && $(MD5SUM) --binary include/cgicc/* src/cgicc/* >$(stem).md5sums
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
 	$(SORT) --key=2 --output=$(stem).X                $(stem).md5sums
 	$(SORT) --key=2 --output=$(stem).Y $(destination)/$(stem).md5sums
@@ -228,7 +228,7 @@ xmlwrapp: $(file_list)
 	$(MV) scratch/$(stem)/src/libxml/* $(third_party_source_dir)/libxml/
 	$(MKDIR) $(third_party_source_dir)/libxslt/
 	$(MV) scratch/$(stem)/src/libxslt/* $(third_party_source_dir)/libxslt/
-	cd $(destination) && $(MD5SUM) include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
+	cd $(destination) && $(MD5SUM) --binary include/xmlwrapp/* include/xsltwrapp/* src/libxml/* src/libxslt/* >$(stem).md5sums
 	cd $(destination) && $(MD5SUM) --check $(CURDIR)/$(stem).md5sums
 	$(SORT) --key=2 --output=$(stem).X                $(stem).md5sums
 	$(SORT) --key=2 --output=$(stem).Y $(destination)/$(stem).md5sums

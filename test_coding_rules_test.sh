@@ -21,6 +21,14 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# This script is intended to be invoked by lmi makefiles. If it is
+# run independently, the environment variable PERFORM should be set
+# to indicate any cross interpreter--e.g., use this command:
+#   PERFORM=wine /path/to/test_coding_rules_test.sh
+# to make this script run a cross-compiled 'test_coding_rules.exe'
+# built for msw in a GNU/Linux environment. It can be run natively
+# with $PERFORM unset.
+
 echo "Testing 'test_coding_rules'."
 
 rm --force eraseme*
@@ -346,7 +354,7 @@ touch another.unexpected.file
 
 # Compare observed to expected. Note that directory '.' is ignored.
 
-2>&1 ./test_coding_rules \
+2>&1 $PERFORM ./test_coding_rules \
   . \
   a_nonexistent_file \
   an_expungible_file.bak \

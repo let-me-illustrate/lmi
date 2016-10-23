@@ -1,4 +1,4 @@
-# Platform specifics: msw generic with a bourne-compliant shell.
+# Platform specifics: *nix cross for msw with MinGW-w64 toolchain.
 #
 # Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
 #
@@ -21,75 +21,101 @@
 
 ################################################################################
 
-$(error Generic msw environment no longer supported--use Cygwin instead)
+# Sanity checks.
 
-# This file is obsolete. It supported a 1990s development environment
-# ported to msw here:
-#   ftp://ftp.franken.de/pub/win32/develop/gnuwin32/mingw32/porters/Mikey/
-# and served only as a transitional aid for developers who once used
-# those ancient ports.
+ifeq (,$(wildcard /opt/lmi/*))
+  $(warning Installation may be invalid: /opt/lmi/ missing or empty. )
+endif
 
 ################################################################################
 
-system_root := C:
+system_root := /
+
+PERFORM := wine
 
 ################################################################################
 
-# Path to each compiler's root directory, i.e. bin/.. .
-mingw_dir  := $(system_root)/MinGW
-cygwin_dir := $(system_root)/cygwin
-como_dir   := $(system_root)/como433
+# These makefiles are designed to be independent of $PATH: they work
+# correctly even if $PATH is empty. That seems desirable as a general
+# principle; furthermore, many problems reported on mailing lists are
+# due to users inadvertently mixing cygwin and other tools by setting
+# $PATH incorrectly. OTOH, such problems arise infrequently with real
+# *nix, and some fundamental tools are not necessarily located in any
+# particular location: for example, neither FHS-2.2 nor FHS-3.0
+# prescribes where 'grep' must reside.
+#
+# To force $PATH to be respected instead, set $(USE_STD_PATHS) to a
+# nonempty string.
+#
+# These paths are slash-terminated so that setting them to empty
+# strings does the right thing.
 
-# Path to each compiler's main include directory. This is where
-# patches would be applied for noncompliant compilers.
+USE_STD_PATHS := NOPE
 
-mingw_main_include_dir  := $(mingw_dir)
-cygwin_main_include_dir := $(cygwin_dir)/usr
-como_main_include_dir   := $(como_dir)
+ifeq (,$(USE_STD_PATHS))
+  PATH_BIN     := /bin/
+  PATH_GCC     := /usr/bin/
+  PATH_USR_BIN := /usr/bin/
+endif
 
 ################################################################################
 
 # Compiler, linker, and so on.
 
-AR  := $(mingw_dir)/bin/ar
-CC  := $(mingw_dir)/bin/gcc
-CPP := $(mingw_dir)/bin/cpp
-CXX := $(mingw_dir)/bin/g++
-LD  := $(mingw_dir)/bin/g++
-RC  := $(mingw_dir)/bin/windres
+host_prefix := i686-w64-mingw32-
+
+AR      := $(PATH_GCC)$(host_prefix)ar
+CC      := $(PATH_GCC)$(host_prefix)gcc
+CPP     := $(PATH_GCC)$(host_prefix)cpp
+CXX     := $(PATH_GCC)$(host_prefix)g++
+LD      := $(PATH_GCC)$(host_prefix)g++
+RC      := $(PATH_GCC)$(host_prefix)windres
+
+# Identify run-time libraries for redistribution.
+
+compiler_sysroot := /usr/lib/gcc/i686-w64-mingw32/4.9-win32
+
+compiler_runtime_files := \
+  $(compiler_sysroot)/libstdc++-6.dll \
+  $(compiler_sysroot)/libgcc_s_sjlj-1.dll \
 
 ################################################################################
 
 # Standard utilities.
 
-gnu_utils_dir  := $(system_root)/gnu
-
 # Required in /bin (if anywhere) by FHS-2.2 .
 
-CP      := $(gnu_utils_dir)/cp
-DATE    := $(gnu_utils_dir)/date
-ECHO    := $(gnu_utils_dir)/echo
-GZIP    := $(gnu_utils_dir)/gzip
-LS      := $(gnu_utils_dir)/ls
-MKDIR   := $(gnu_utils_dir)/mkdir
-MV      := $(gnu_utils_dir)/mv
-RM      := $(gnu_utils_dir)/rm
-SED     := $(gnu_utils_dir)/sed
-TAR     := $(gnu_utils_dir)/tar
+CP      := $(PATH_BIN)cp
+DATE    := $(PATH_BIN)date
+ECHO    := $(PATH_BIN)echo
+GZIP    := $(PATH_BIN)gzip
+LS      := $(PATH_BIN)ls
+MKDIR   := $(PATH_BIN)mkdir
+MV      := $(PATH_BIN)mv
+RM      := $(PATH_BIN)rm
+SED     := $(PATH_BIN)sed
+TAR     := $(PATH_BIN)tar
 
-# FHS-2.2 would put these in /usr/bin .
+# FHS-2.2 would presumably put these in /usr/bin . However, debian
+# puts 'bzip2' and 'grep' in /bin .
 
-BZIP2   := $(gnu_utils_dir)/bzip2
-DIFF    := $(gnu_utils_dir)/diff
-GREP    := $(gnu_utils_dir)/grep
-MD5SUM  := $(gnu_utils_dir)/md5sum
-PATCH   := $(gnu_utils_dir)/patch
-SORT    := $(gnu_utils_dir)/sort
-TOUCH   := $(gnu_utils_dir)/touch
-TR      := $(gnu_utils_dir)/tr
-WC      := $(gnu_utils_dir)/wc
-WGET    := $(gnu_utils_dir)/wget
-XMLLINT := $(gnu_utils_dir)/xmllint
+BZIP2   := $(PATH_USR_BIN)bzip2
+DIFF    := $(PATH_USR_BIN)diff
+GREP    := $(PATH_USR_BIN)grep
+MD5SUM  := $(PATH_USR_BIN)md5sum
+PATCH   := $(PATH_USR_BIN)patch
+SORT    := $(PATH_USR_BIN)sort
+TOUCH   := $(PATH_USR_BIN)touch
+TR      := $(PATH_USR_BIN)tr
+WC      := $(PATH_USR_BIN)wc
+WGET    := $(PATH_USR_BIN)wget
+
+# Programs for which FHS doesn't specify a location.
+
+# Instead of requiring installation of libxml2 on the host:
+#   XMLLINT := $(PATH_USR_BIN)xmllint
+# use the one that lmi builds:
+XMLLINT := /opt/lmi/local/bin/xmllint
 
 ################################################################################
 

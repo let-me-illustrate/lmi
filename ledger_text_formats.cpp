@@ -724,6 +724,7 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"Salary"
         ,"SpecifiedAmount"
         ,"SupplSpecAmt"
+        ,"InitialTargetPremium"
         ,"ModalMinimumPremium"
         ,"ModalMinimumDumpin"
         ,"EeModalMinimumPremium"
@@ -732,6 +733,7 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"ErMode"
         ,"CorpName"
         ,"EffDate"
+        ,"InforceAsOfDate"
         ,"PremiumTaxState"
         ,"StateOfJurisdiction"
         ,"CurrentGeneralAccountInterestRate"
@@ -807,6 +809,7 @@ void PrintRosterTabDelimited
         << Invar.value_str("Salary"               ,d) << '\t'
         << Invar.value_str("SpecAmt"              ,d) << '\t'
         << Invar.value_str("TermSpecAmt"          ,d) << '\t'
+        << Invar.value_str("InitTgtPrem"            ) << '\t'
         << Invar.value_str("ModalMinimumPremium"  ,d) << '\t'
         << Invar.value_str("ModalMinimumDumpin"     ) << '\t'
         << Invar.value_str("EeModalMinimumPremium",d) << '\t'
@@ -815,6 +818,7 @@ void PrintRosterTabDelimited
         << Invar.ErMode                           [d] << '\t'
         << Invar.value_str("CorpName"               ) << '\t'
         << "'" << Invar.EffDate                       << "'\t"
+        << "'" << Invar.InforceAsOfDate               << "'\t"
         << Invar.value_str("PremiumTaxState"        ) << '\t'
         << Invar.value_str("StatePostalAbbrev"      ) << '\t'
         << Curr_.value_str("AnnGAIntRate"         ,d) << '\t'
