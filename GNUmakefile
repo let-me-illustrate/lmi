@@ -191,7 +191,7 @@ date:
 
 .PHONY: release_candidate
 release_candidate:
-	@$(ECHO) -e \
+	@printf '%b' \
 	  $(gpl_notices) \
 	  '#ifndef version_hpp\n' \
 	  '#define version_hpp\n\n' \

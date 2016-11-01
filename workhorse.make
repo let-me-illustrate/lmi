@@ -1130,7 +1130,7 @@ run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run:
-	@$(ECHO) -e "\nRunning $*:"
+	@printf "\nRunning $*:\n"
 	@-$(PERFORM) ./$* --accept
 
 ################################################################################

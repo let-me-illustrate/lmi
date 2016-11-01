@@ -127,14 +127,14 @@ then
 
     restore_MinGW_mount=`mount --mount-commands 2>/dev/null | grep '"/MinGW_"'`
     [ -z "$restore_MinGW_mount" ] \
-      || echo $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-4_9_1"' \
-      || echo -e "Replacing former MinGW_ mount:\n $restore_MinGW_mount" >/dev/tty
+      || printf $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-4_9_1"' \
+      || printf "Replacing former MinGW_ mount:\n $restore_MinGW_mount\n" >/dev/tty
     mount --force "C:/opt/lmi/MinGW-4_9_1" "/MinGW_"
 
     restore_cache_mount=`mount --mount-commands 2>/dev/null | grep '"/cache_for_lmi"'`
     [ -z "$restore_cache_mount" ] \
-      || echo $restore_cache_mount | grep --silent '"C:/cache_for_lmi"' \
-      || echo -e "Replacing former cache mount:\n  $restore_cache_mount" >/dev/tty
+      || printf $restore_cache_mount | grep --silent '"C:/cache_for_lmi"' \
+      || printf "Replacing former cache mount:\n  $restore_cache_mount\n" >/dev/tty
     mount --force "C:/cache_for_lmi" "/cache_for_lmi"
 fi
 
@@ -185,7 +185,7 @@ then
 
     for z in /opt/lmi/bin/*; \
       do cmd /c $CYGCHECK $z 2>&1 | grep --silent cygwin \
-        && echo -e "\ncygcheck $z" && cmd /c $CYGCHECK $z; \
+        && printf "\ncygcheck $z\n" && cmd /c $CYGCHECK $z; \
       done
 fi
 
