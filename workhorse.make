@@ -979,7 +979,7 @@ fardel_date_script := \
   d2=`$(DATE) --utc --date="$$d0 + 2 months" +%s`; \
   j1=`expr 2440588 + $$d1 / 86400`; \
   j2=`expr 2440588 + $$d2 / 86400`; \
-  echo -n "$$j1 $$j2" >expiry; \
+  printf "$$j1 $$j2" >expiry; \
 
 # Several shared libraries are required by lmi, but there seems to be
 # no straightforward way to discover their individual names because
