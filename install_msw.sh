@@ -70,7 +70,9 @@ then
     #   HKLM for 'system' mounts
     #   HKCU for 'user' mounts
     # 'mount' adds 'system' mounts by default.
-    # 'mount --mount-commands' gives commands to replicate all mounts.
+    # 'mount --mount-commands' gives commands to replicate all mounts,
+    # with 'device|directory' arguments in double quotes; this script
+    # no longer supports that obsolete command option.
     #
     # Cygwin-1.7 stores all permanent mounts in files:
     #   /etc/fstab for 'system' mounts
@@ -78,13 +80,14 @@ then
     # 'mount' adds temporary mounts that vanish when the session ends; it
     #   does not affect 'system' mounts (unless 'override' is specified,
     #   which is never done here).
-    # 'mount --mount-commands' is invalid; errors resulting from this
-    #   obsolete option are discarded here.
+    # 'mount --mount-entries' gives mount arguments to replicate all
+    # mounts, with no quotes around arguments (hence the trailing space
+    # in the 'grep' commands below).
     #
     # Regardless of version, only system mounts are wanted here, and they
     # are never overridden.
 
-    restore_opt_mount=`mount --mount-commands 2>/dev/null | grep '"/opt"'`
+    restore_opt_mount=`mount --mount-entries | grep '/opt/lmi '`
 
     umount "/opt"
     umount "/opt/lmi"
@@ -94,7 +97,7 @@ then
     umount "/opt"
     mount --force "C:/opt/lmi" "/opt/lmi"
 
-    [ -z "$restore_opt_mount" ] || sh -c $restore_opt_mount
+    [ -z "$restore_opt_mount" ] || sh -c mount $restore_opt_mount
 
     # Read this entire thread for $CYGCHECK rationale:
     #   https://cygwin.com/ml/cygwin/2012-02/threads.html#00910
@@ -125,15 +128,15 @@ then
     # It seems quite unlikely that anyone who's building lmi would have
     # any other need for mounts with the names used here.
 
-    restore_MinGW_mount=`mount --mount-commands 2>/dev/null | grep '"/MinGW_"'`
+    restore_MinGW_mount=`mount --mount-entries | grep '/MinGW_ '`
     [ -z "$restore_MinGW_mount" ] \
-      || printf $restore_MinGW_mount | grep --silent '"C:/opt/lmi/MinGW-4_9_1"' \
+      || printf "$restore_MinGW_mount\n" | grep --silent 'C:/opt/lmi/MinGW-4_9_1' \
       || printf "Replacing former MinGW_ mount:\n $restore_MinGW_mount\n" >/dev/tty
     mount --force "C:/opt/lmi/MinGW-4_9_1" "/MinGW_"
 
-    restore_cache_mount=`mount --mount-commands 2>/dev/null | grep '"/cache_for_lmi"'`
+    restore_cache_mount=`mount --mount-entries | grep '/cache_for_lmi '`
     [ -z "$restore_cache_mount" ] \
-      || printf $restore_cache_mount | grep --silent '"C:/cache_for_lmi"' \
+      || printf "$restore_cache_mount\n" | grep --silent 'C:/cache_for_lmi' \
       || printf "Replacing former cache mount:\n  $restore_cache_mount\n" >/dev/tty
     mount --force "C:/cache_for_lmi" "/cache_for_lmi"
 fi
