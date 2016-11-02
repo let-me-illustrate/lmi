@@ -1235,8 +1235,14 @@ touchstone_exclusions := $(touchstone_md5sums) $(touchstone_dir)/ChangeLog
 touchstone_files := \
   $(filter-out $(touchstone_exclusions),$(wildcard $(touchstone_dir)/*))
 
+# Don't call md5sum with an empty $(touchstone_files) list, which would
+# cause md5sum to wait indefinitely for input; instead, create an empty
+# $(touchstone_md5sums) iff none exists, because this is a prerequisite
+# of the 'system_test' target.
+
 $(touchstone_md5sums): $(touchstone_files)
-	@cd $(touchstone_dir) && $(MD5SUM) --binary $(notdir $^) > $@
+	@-[ -f "$@" ] || $(TOUCH) $@
+	@-[ -n "$^" ] && cd $(touchstone_dir) && $(MD5SUM) --binary $(notdir $^) > $@
 	@$(SORT) --key=2 --output=$@ $@
 
 testdeck_suffixes    := cns ill ini inix mec gpt
