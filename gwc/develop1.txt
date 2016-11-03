@@ -9,7 +9,7 @@
 
   # Initialize session
 
-cd /lmi/src/lmi
+cd /opt/lmi/src/lmi
 
   [paste these lines individually...]
 eval `ssh-agent`
@@ -104,11 +104,11 @@ cvs -z3 update -l lmi
   #
   # ...for git:
 
-for z in * ; do [ -f $z ] && ( [ $z -nt /lmi/src/lmi/$z ] || [ $z -ot /lmi/src/lmi/$z ] ) && touch --reference=/lmi/src/lmi/$z $z; done
+for z in * ; do [ -f $z ] && ( [ $z -nt /opt/lmi/src/lmi/$z ] || [ $z -ot /opt/lmi/src/lmi/$z ] ) && touch --reference=/opt/lmi/src/lmi/$z $z; done
 
   # Third screen: only for building and testing
 
-cd /lmi/src/lmi
+cd /opt/lmi/src/lmi
 
 make $coefficiency install check_physical_closure >../log 2>&1
 make $coefficiency cgi_tests cli_tests >../log 2>&1
@@ -141,11 +141,11 @@ diff --unified=0 /tmp/m.txt /tmp/t.txt |sed -e'/^[+][+][+]/d' -e'/^@/d' -e'/^-/d
 
   # Test xml schemata
 
-pushd /tmp; /lmi/src/lmi/test_schemata.sh >/lmi/src/log 2>&1; popd
+pushd /tmp; /opt/lmi/src/lmi/test_schemata.sh >/opt/lmi/src/log 2>&1; popd
 
   # Fourth screen: only for checking
 
-cd /lmi/src/lmi
+cd /opt/lmi/src/lmi
 
 make $coefficiency check_concinnity >../log 2>&1
 sed -f diagnostics.sed ../log 2>&1 |less -S
@@ -180,7 +180,7 @@ popd
 
   # Miscellany (no particular screen)
 
-cd /lmi/src/lmi
+cd /opt/lmi/src/lmi
 
   # Identify source files not encoded compatibly with UTF-8
 
@@ -191,12 +191,6 @@ for z in *.?pp; (iconv -f UTF-8 -t UTF-8 $z &>/dev/null || echo $z)
 cp -a product_data.cpp eraseme
 iconv -f ISO-8859-1 -t UTF-8 eraseme > product_data.cpp
 
-  # Compare two local trees using a primitive msw tool
-
-windiff -D -O 'c:/lmi/src/lmi' 'c:/lmi/mirror/lmi' &
-windiff -D -O 'c:/lmi/src/lmi/' 'c:/lmi/src/lmi/a00/' &
-
   # Check spelling
 
 http://lists.nongnu.org/archive/html/lmi/2015-10/msg00076.html
-
