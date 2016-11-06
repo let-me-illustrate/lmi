@@ -68,11 +68,11 @@
 {DB_Equiv7702Dbo3,DB_Topic_7702And7702A,"Equiv7702Dbo3","For 7702, treat return of premium death benefit option same as: 0=level 1=increasing",}, \
 {DB_TermIsQABOrDb7702,DB_Topic_7702And7702A,"TermIsQABOrDb7702","Treat term rider as QAB or death benefit for 7702: 0=neither, 1=DB, 2=QAB",}, \
 {DB_TermIsQABOrDb7702A,DB_Topic_7702And7702A,"TermIsQABOrDb7702A","Treat term rider as QAB or death benefit for 7702A: 0=neither, 1=DB, 2=QAB",}, \
-{DB_GioIsQAB,DB_Topic_7702And7702A,"GioIsQAB","Treat guaranteed insurability option as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
-{DB_AdbIsQAB,DB_Topic_7702And7702A,"AdbIsQAB","Treat accidental death benefit as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
-{DB_SpouseRiderIsQAB,DB_Topic_7702And7702A,"SpouseRiderIsQAB","Treat spouse term rider as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
-{DB_ChildRiderIsQAB,DB_Topic_7702And7702A,"ChildRiderIsQAB","Treat child term rider as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
-{DB_WpIsQAB,DB_Topic_7702And7702A,"WpIsQAB","Treat waiver benefit as a QAB for 7702 and 7702A: 0=no, 1=yes",}, \
+{DB_GioIsQAB,DB_Topic_7702And7702A,"GioIsQAB","Treat guaranteed insurability option as a QAB for 7702 and 7702A: 0=no, 1=yes [not yet implemented]",}, \
+{DB_AdbIsQAB,DB_Topic_7702And7702A,"AdbIsQAB","Treat accidental death benefit as a QAB for 7702 and 7702A: 0=no, 1=yes [implemented for guideline premiums only]",}, \
+{DB_SpouseRiderIsQAB,DB_Topic_7702And7702A,"SpouseRiderIsQAB","Treat spouse term rider as a QAB for 7702 and 7702A: 0=no, 1=yes [not yet implemented]",}, \
+{DB_ChildRiderIsQAB,DB_Topic_7702And7702A,"ChildRiderIsQAB","Treat child term rider as a QAB for 7702 and 7702A: 0=no, 1=yes [not yet implemented]",}, \
+{DB_WpIsQAB,DB_Topic_7702And7702A,"WpIsQAB","Treat waiver benefit as a QAB for 7702 and 7702A: 0=no, 1=yes [not yet implemented]",}, \
 {DB_Topic_MortalityCharges,DB_FIRST,"Mortality charges","Mortality rates, limits, conversions, and reentry",}, \
 {DB_GuarCoiTable,DB_Topic_MortalityCharges,"GuarCoiTable","Guaranteed mortality charge table (index in mortality table database)",}, \
 {DB_GuarCoiIsAnnual,DB_Topic_MortalityCharges,"GuarCoiIsAnnual","Guaranteed cost of insurance table rates are: 0=monthly, 1=annual",}, \
