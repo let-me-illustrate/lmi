@@ -248,6 +248,10 @@ chmod +x install_msw.sh
 pushd /opt/lmi/bin
 wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
 
+# Symlink the repository's hooks/ directory:
+cd /opt/lmi/src/lmi
+ln --symbolic --force --no-dereference ../hooks .git
+
 # Iff this chroot needs write access to savannah, then reconfigure
 # the URL, using your savannah ID instead of mine:
 # git remote set-url origin chicares@git.sv.gnu.org:/srv/git/lmi.git
@@ -262,6 +266,8 @@ git clone -b master file:///opt/lmi/blessed/proprietary
 # ...and verify it:
 cd proprietary
 git rev-parse HEAD
+# ...then symlink its hooks/ directory:
+ln --symbolic --force --no-dereference ../hooks .git
 
 # Create and populate the proprietary source directory used by 'vpath':
 mkdir --parents /opt/lmi/src/products/src

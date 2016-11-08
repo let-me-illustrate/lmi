@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# git pre-commit hook
+
+# git pre-commit hook
+
+# Copyright (C) 2016 Gregory W. Chicares.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+# http://savannah.nongnu.org/projects/lmi
+# email: <gchicares@sbcglobal.net>
+# snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+set -e
+
+check_concinnity()
+{
+    output=$( \
+        make src_dir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity \
+        2>&1 | sed \
+          -e'/^make[[]/d' \
+          -e'/^  Problems detected by xmllint:$/d' \
+          -e'/^  Miscellaneous problems:$/d' \
+          -e'/^ *[0-9][0-9]* \(source files\|source lines\|marked defects\)$/d'
+      )
+    if [ -n "$output" ]; then
+        printf '\n%s\n' "$output"
+        printf "COMMIT ABORTED\n"
+        exit 1
+    fi
+}
+
+printf "checking..."
+check_concinnity
+printf "okay\n"
