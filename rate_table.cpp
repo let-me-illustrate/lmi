@@ -1579,9 +1579,9 @@ double table_impl::parse_single_value
     if(num_spaces > text_format::gap_length)
         {
         fatal_error()
-            << "two many spaces"
+            << "too many spaces"
             << location_info(line_num, current - start + 1)
-            << " (at most" << text_format::gap_length << " allowed here)"
+            << " (at most " << text_format::gap_length << " allowed here)"
             << std::flush
             ;
         }
