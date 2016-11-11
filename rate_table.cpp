@@ -1561,8 +1561,14 @@ double table_impl::parse_single_value
     ,int& line_num
     )
 {
-    // There should be at least one and up to gap_length spaces before the
-    // value.
+    // The number of spaces before the value should be at least one,
+    // and no greater than (gap_length, plus one if the number of
+    // decimals is zero, because get_value_width() assumes, contrary
+    // to fact, that a decimal point is written regardless).
+    int const num_spaces_allowed =
+          text_format::gap_length
+        + (0 == *num_decimals_)
+        ;
     if(*current != ' ')
         {
         fatal_error()
@@ -1576,12 +1582,12 @@ double table_impl::parse_single_value
         {
         ++num_spaces;
         }
-    if(num_spaces > text_format::gap_length)
+    if(num_spaces_allowed < num_spaces)
         {
         fatal_error()
             << "too many spaces"
             << location_info(line_num, current - start + 1)
-            << " (at most " << text_format::gap_length << " allowed here)"
+            << " (at most " << num_spaces_allowed << " allowed here)"
             << std::flush
             ;
         }
