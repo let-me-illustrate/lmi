@@ -1604,6 +1604,13 @@ double table_impl::parse_single_value
             ;
         }
 
+    // Exit early if zero decimals.
+    if(0 == *num_decimals_)
+        {
+        current = res_int_part.end;
+        return res_int_part.num;
+        }
+
     if(*res_int_part.end != '.')
         {
         fatal_error()
