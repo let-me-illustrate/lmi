@@ -11,7 +11,8 @@ git clone file:///opt/lmi/blessed/proprietary
 
   # Create a bundle to share by email
 
-  # Make some changes, then test concinnity (before every commit)
+  # Make some changes, then test concinnity before every commit
+  # (a pre-commit hook shows these commands' output, filtered)
 
 cd /opt/lmi/proprietary/data/
 cd ../data; make src_dir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
