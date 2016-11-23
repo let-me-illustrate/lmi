@@ -71,7 +71,8 @@ void calculate_and_display_crcs(fs::path const& database_filename)
         }
 }
 
-// Return a sorted vector of all table numbers.
+/// Return a sorted vector of all table numbers.
+
 std::vector<table::Number> get_all_tables_numbers(database const& table_file)
 {
     int const tables_count = table_file.tables_count();
@@ -162,8 +163,9 @@ void delete_table
     table_file.save(database_filename);
 }
 
-// Save the given table in a text file with its number as name, return the name
-// of this file.
+/// Save the given table in a text file with its number as name;
+/// return the name of this file.
+
 std::string do_save_as_text_file(table const& t)
 {
     std::ostringstream oss;
@@ -298,7 +300,8 @@ void rename_tables
     table_file.save(database_filename);
 }
 
-// Returns the number of tables that failed the verification.
+/// Return the number of tables that failed verification.
+
 int verify(fs::path const& database_filename)
 {
     database const orig_db(database_filename);
