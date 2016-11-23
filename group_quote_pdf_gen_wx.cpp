@@ -336,11 +336,11 @@ wxImage load_image(char const* file)
 
 /// Output an image at the given scale into the PDF.
 ///
-/// The scale specifies how many times the image should be shrunk, i.e. scale >
-/// 1 makes the image smaller while scale < 1 makes it larger.
+/// The scale specifies how many times the image should be shrunk:
+/// scale > 1 makes the image smaller, while scale < 1 makes it larger.
 ///
-/// Updates pos_y by increasing it by the height of the specified image at the
-/// given scale.
+/// Updates pos_y by increasing it by the height of the specified
+/// image at the given scale.
 
 void output_image
     (wxPdfDC&         pdf_dc
@@ -1051,7 +1051,7 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
         {
         table_gen.output_row(&pos_y, i->values);
 
-        if(pos_y >= last_row_y)
+        if(last_row_y <= pos_y)
             {
             output_page_number_and_version(pdf_dc, total_pages, current_page);
 

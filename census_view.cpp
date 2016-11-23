@@ -808,7 +808,7 @@ wxString CensusViewDataViewModel::GetColumnType(unsigned int col) const
 
 std::string const& CensusViewDataViewModel::col_name(unsigned col) const
 {
-    LMI_ASSERT(col > 0);
+    LMI_ASSERT(0 < col);
     return all_headers()[col - 1];
 }
 

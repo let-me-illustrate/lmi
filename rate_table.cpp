@@ -295,7 +295,7 @@ parse_result strict_parse_number(char const* start)
     parse_result res;
 
     // This check catches whitespace and the leading minus sign.
-    if(*start >= '0' && *start <= '9')
+    if('0' <= *start && *start <= '9')
         {
         char* end = nullptr;
         res.num = std::strtoull(start, &end, 10);
@@ -512,7 +512,7 @@ void writer::write_values
     // that would result if we simply truncated it to 16 bits however.
     do_write_record_header
         (e_record_values
-        ,length > std::numeric_limits<uint16_t>::max()
+        ,std::numeric_limits<uint16_t>::max() < length
             ? std::numeric_limits<uint16_t>::max()
             : static_cast<uint16_t>(length)
         );
@@ -570,7 +570,7 @@ void writer::write(enum_soa_field field, boost::optional<std::string> const& ost
     if(ostr)
         {
         std::string::size_type const length = ostr->size();
-        if(length > std::numeric_limits<uint16_t>::max())
+        if(std::numeric_limits<uint16_t>::max() < length)
             {
             fatal_error()
                 << "the value of the field '"
@@ -834,7 +834,7 @@ boost::optional<field_and_value> parse_field_and_value
     // A valid field name can consist of a few words only, so check for this
     // to avoid giving warnings about colons appearing in the middle (or even
     // at the end of) a line.
-    if(std::count(line.begin(), line.begin() + pos_colon, ' ') > 3)
+    if(3 < std::count(line.begin(), line.begin() + pos_colon, ' '))
         {
         return no_field;
         }
@@ -1246,7 +1246,7 @@ unsigned table_impl::get_expected_number_of_values() const
 
     // Compute the expected number of values, checking the consistency of the
     // fields determining this as a side effect.
-    if(*min_age_ > *max_age_)
+    if(*max_age_ < *min_age_)
         {
         fatal_error()
             << "minimum age " << *min_age_
@@ -1300,7 +1300,7 @@ unsigned table_impl::get_expected_number_of_values() const
         // there is no risk of overflow here neither.
         select_range *= *select_period_;
 
-        if(select_range > std::numeric_limits<unsigned>::max() - num_values)
+        if(std::numeric_limits<unsigned>::max() - num_values < select_range)
             {
             fatal_error()
                 << "too many values in the table with maximum age " << *max_age_
@@ -1386,7 +1386,7 @@ unsigned long table_impl::do_parse_number
             ;
         }
 
-    if(res.num > max_num)
+    if(max_num < res.num)
         {
         fatal_error()
             << "value for numeric field '"
@@ -2585,7 +2585,7 @@ void database_impl::remove_index_entry(table::Number number)
     // But also update the remaining lookup map indices.
     for(auto& e: index_by_number_)
         {
-        if(e.second > index_deleted)
+        if(index_deleted < e.second)
             {
             --e.second;
             }
@@ -2618,7 +2618,7 @@ void database_impl::read_index(std::istream& index_is)
             offset = from_bytes<uint32_t>(&index_record[e_index_pos_offset]);
 
         // Check that the cast to int below is safe.
-        if(number >= static_cast<unsigned>(std::numeric_limits<int>::max()))
+        if(static_cast<unsigned>(std::numeric_limits<int>::max()) <= number)
             {
             fatal_error()
                 << "database index is corrupt: "
