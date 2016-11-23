@@ -28,6 +28,9 @@
 #include "path_utility.hpp"
 #include "rate_table.hpp"
 
+#include <boost/filesystem/convenience.hpp> // extension()
+#include <boost/filesystem/operations.hpp>  // is_directory(), directory_iterator
+
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
@@ -102,14 +105,23 @@ void list_tables(fs::path const& database_filename)
         }
 }
 
+/// Merge 'path_to_merge' into 'database_filename'.
+///
+/// If no 'database_filename' exists, create it, as an incidental side
+/// effect of merging. No command other than '--merge' has any need to
+/// create an empty database, so no separate '--create' command would
+/// be useful.
+///
+/// If 'path_to_merge' names a file, then merge that file. If it names
+/// a directory, then merge all '*.txt' files in that directory. See
+/// rationale:
+///   http://lists.nongnu.org/archive/html/lmi/2016-11/msg00025.html
+
 void merge
     (fs::path const& database_filename
-    ,fs::path const& filename_to_merge
+    ,fs::path const& path_to_merge
     )
 {
-    // Allow creating new databases using merge command, as there is no other
-    // way to do it and it doesn't seem to be worth it to have a separate
-    // --create command which would just create two 0-sized files.
     std::unique_ptr<database> table_file;
     if(database::exists(database_filename))
         {
@@ -120,8 +132,23 @@ void merge
         table_file.reset(new database);
         }
 
-    table const& t = table::read_from_text(filename_to_merge);
-    table_file->add_or_replace_table(t);
+    if(fs::is_directory(path_to_merge))
+        {
+        fs::directory_iterator i(path_to_merge);
+        fs::directory_iterator const eod;
+        for(; i != eod; ++i)
+            {
+            if(".txt" != fs::extension(*i)) continue;
+            table const& t = table::read_from_text(*i);
+            table_file->add_or_replace_table(t);
+            }
+        }
+    else
+        {
+        table const& t = table::read_from_text(path_to_merge);
+        table_file->add_or_replace_table(t);
+        }
+
     table_file->save(database_filename);
 }
 
@@ -396,7 +423,7 @@ int try_main(int argc, char* argv[])
         {"file=FILE"   ,REQD_ARG ,0 ,'f' ,0 ,"use database FILE"},
         {"crc"         ,NO_ARG   ,0 ,'c' ,0 ,"show CRCs of all tables"},
         {"list"        ,NO_ARG   ,0 ,'t' ,0 ,"list all tables"},
-        {"merge=FILE"  ,REQD_ARG ,0 ,'m' ,0 ,"merge FILE into database"},
+        {"merge=PATH"  ,REQD_ARG ,0 ,'m' ,0 ,"merge PATH (file or dir) into database"},
         {"extract=n"   ,REQD_ARG ,0 ,'e' ,0 ,"extract table #n into n.txt"},
         {"extract-all" ,NO_ARG   ,0 ,'x' ,0 ,"extract all tables to txt files"},
         {"rename=FILE" ,REQD_ARG ,0 ,'r' ,0 ,"rename tables from FILE"},
@@ -420,7 +447,7 @@ int try_main(int argc, char* argv[])
 
     fs::path database_filename;
     fs::path new_database_filename;
-    fs::path filename_to_merge;
+    fs::path path_to_merge;
     int table_number_to_extract = 0;
     int table_number_to_delete = 0;
     fs::path filename_of_table_names;
@@ -486,7 +513,7 @@ int try_main(int argc, char* argv[])
             {
             run_merge = true;
             ++num_to_do;
-            filename_to_merge = getopt_long.optarg;
+            path_to_merge = getopt_long.optarg;
             }
             break;
 
@@ -643,7 +670,7 @@ int try_main(int argc, char* argv[])
 
     if(run_merge)
         {
-        merge(database_filename, filename_to_merge);
+        merge(database_filename, path_to_merge);
         return EXIT_SUCCESS;
         }
 
