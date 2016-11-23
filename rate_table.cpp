@@ -42,19 +42,22 @@
 #   pragma clang diagnostic pop
 #endif // __clang__
 
-#include <algorithm>
+#include <algorithm>                    // std::count()
 #include <climits>                      // ULLONG_MAX
-#include <cmath>
+#include <cmath>                        // std::pow()
 #include <cstdint>
 #include <cstdlib>                      // std::strtoull()
-#include <fstream>
-#include <limits>
+#include <cstring>                      // std::strncmp()
 #include <iomanip>
+#include <ios>
+#include <istream>
+#include <limits>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <sstream>
 #include <stdexcept>
-#include <utility>                      // std::make_pair()
+#include <utility>                      // std::make_pair(), std::swap()
 #include <vector>
 
 using std::uint8_t;

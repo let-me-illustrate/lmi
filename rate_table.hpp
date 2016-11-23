@@ -29,9 +29,9 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <memory>
-#include <istream>
-#include <ostream>
+#include <iosfwd>
+#include <memory>                       // std::shared_ptr
+#include <string>
 
 /// Namespace containing classes working with databases in version 3 of the SOA
 /// format.

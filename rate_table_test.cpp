@@ -32,7 +32,12 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
-#include <iomanip>
+#include <fstream>
+#include <iomanip>                      // std::setw(), std::setfill()
+#include <ios>
+#include <sstream>
+#include <stdexcept>
+#include <streambuf>
 
 using namespace soa_v3_format;
 

@@ -31,19 +31,19 @@
 #include <boost/filesystem/convenience.hpp> // extension()
 #include <boost/filesystem/operations.hpp>  // is_directory(), directory_iterator
 
-#include <algorithm>
-#include <cstdio>
-#include <cstdlib>
+#include <algorithm>                    // std::sort()
+#include <cstdio>                       // std::fflush()
+#include <cstdlib>                      // std::atoi()
+#include <exception>
 #include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <limits>
+#include <iomanip>                      // std::setw(), std::setfill()
+#include <iostream>                     // std::cout, std::cerr
 #include <map>
-#include <memory>
-#include <ostream>
-#include <string>
+#include <memory>                       // std::unique_ptr
+#include <ostream>                      // std::endl
 #include <sstream>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 using namespace soa_v3_format;
