@@ -477,7 +477,7 @@ class MultiDimGrid
   public:
     /// Default constructor, use Create() to really create the control.
     MultiDimGrid();
-    virtual ~MultiDimGrid();
+    ~MultiDimGrid() override;
 
     MultiDimGrid
         (wxWindow* parent
@@ -529,13 +529,13 @@ class MultiDimGrid
     /// should add color highlighting of selected axis in here.
 
     // wxGridTableBase overrides.
-    virtual int GetNumberCols();
-    virtual int GetNumberRows();
-    virtual bool IsEmptyCell(int row, int col);
-    virtual wxString GetValue(int row, int col);
-    virtual void SetValue(int row, int col, wxString const& value);
-    virtual wxString GetColLabelValue(int col);
-    virtual wxString GetRowLabelValue(int row);
+    int GetNumberCols() override;
+    int GetNumberRows() override;
+    bool IsEmptyCell(int row, int col) override;
+    wxString GetValue(int row, int col) override;
+    void SetValue(int row, int col, wxString const& value) override;
+    wxString GetColLabelValue(int col) override;
+    wxString GetRowLabelValue(int row) override;
 
     unsigned int EnsureIndexIsPositive(int) const;
 

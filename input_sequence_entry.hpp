@@ -75,8 +75,8 @@ class InputSequenceEntryXmlHandler
     InputSequenceEntryXmlHandler();
 
   private:
-    virtual wxObject* DoCreateResource();
-    virtual bool CanHandle(wxXmlNode* node);
+    wxObject* DoCreateResource() override;
+    bool CanHandle(wxXmlNode* node) override;
 
     DECLARE_DYNAMIC_CLASS(InputSequenceEntryXmlHandler)
 };

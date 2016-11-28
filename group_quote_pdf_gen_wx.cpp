@@ -479,8 +479,8 @@ class group_quote_pdf_generator_wx
                 );
         }
 
-    virtual void add_ledger(Ledger const& ledger);
-    virtual void save(std::string const& output_filename);
+    void add_ledger(Ledger const& ledger) override;
+    void save(std::string const& output_filename) override;
 
   private:
     // These margins are arbitrary and can be changed to conform to subjective

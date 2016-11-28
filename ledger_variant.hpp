@@ -50,7 +50,7 @@ class LMI_SO LedgerVariant
     LedgerVariant(int len = 0);
     LedgerVariant(LedgerVariant const&);
     LedgerVariant& operator=(LedgerVariant const&);
-    virtual ~LedgerVariant();
+    ~LedgerVariant() override;
 
     LedgerVariant& PlusEq
         (LedgerVariant const&  a_Addend
@@ -61,7 +61,7 @@ class LMI_SO LedgerVariant
 
     bool IsFullyInitialized() const {return FullyInitialized;}
 
-    virtual int GetLength() const {return Length;}
+    int GetLength() const override {return Length;}
 
     void set_run_basis(mcenum_run_basis);
 
@@ -80,8 +80,8 @@ class LMI_SO LedgerVariant
     inline double InitAnnSepAcctNetRate() const
         {return InitAnnSepAcctNetInt;}
 
-    void UpdateCRC(CRC& a_crc) const;
-    void Spew(std::ostream& os) const;
+    void UpdateCRC(CRC& a_crc) const override;
+    void Spew(std::ostream& os) const override;
 
 // TODO ?? Make data private. Provide const accessors. Some of these
 // values could be calculated dynamically instead of stored.

@@ -277,7 +277,7 @@ LMI_WX_TEST_CASE(paste_census)
     struct change_gender_in_class_defaults_dialog
         :public wxExpectModalBase<MvcController>
     {
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -307,7 +307,7 @@ LMI_WX_TEST_CASE(paste_census)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "class defaults dialog";
             }
@@ -350,7 +350,7 @@ LMI_WX_TEST_CASE(paste_census)
     struct change_class_in_case_defaults_dialog
         :public wxExpectModalBase<MvcController>
     {
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -376,7 +376,7 @@ LMI_WX_TEST_CASE(paste_census)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "case defaults dialog";
             }

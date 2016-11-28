@@ -100,7 +100,7 @@ class LMI_SO rounding_rules
 
   public:
     explicit rounding_rules(std::string const& filename);
-    ~rounding_rules();
+    ~rounding_rules() override;
 
     rounding_parameters const& datum(std::string const& name) const;
 
@@ -114,23 +114,23 @@ class LMI_SO rounding_rules
     void ascribe_members();
 
     // xml_serializable required implementation.
-    virtual int                class_version() const;
-    virtual std::string const& xml_root_name() const;
+    int                class_version() const override;
+    std::string const& xml_root_name() const override;
 
     // xml_serializable overrides.
-    virtual void read_element
+    void read_element
         (xml::element const& e
         ,std::string const&  name
         ,int                 file_version
-        );
-    virtual void write_element
+        ) override;
+    void write_element
         (xml::element&       parent
         ,std::string const&  name
-        ) const;
-    virtual void write_proem
+        ) const override;
+    void write_proem
         (xml_lmi::xml_document& document
         ,std::string const&     file_leaf_name
-        ) const;
+        ) const override;
 
     rounding_parameters round_specamt_           ;
     rounding_parameters round_death_benefit_     ;

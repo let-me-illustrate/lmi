@@ -97,7 +97,7 @@ LMI_WX_TEST_CASE(input_validation)
             :value_(value)
         {}
 
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -122,7 +122,7 @@ LMI_WX_TEST_CASE(input_validation)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return wxString::Format
                 ("edit cell dialog for testing COI multiplier \"%s\""

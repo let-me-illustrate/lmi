@@ -48,11 +48,11 @@ class dev_null_stream_buffer
         {
         setp(buffer_, buffer_ + buffer_size_);
         }
-    virtual ~dev_null_stream_buffer()
+    ~dev_null_stream_buffer() override
         {}
 
   private:
-    virtual int_type overflow(int_type c)
+    int_type overflow(int_type c) override
         {
         setp(buffer_, buffer_ + buffer_size_);
         return traits_type::not_eof(c);

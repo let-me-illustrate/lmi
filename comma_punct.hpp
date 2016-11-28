@@ -45,8 +45,8 @@ class comma_punct
         {}
 
   protected:
-    char do_thousands_sep()   const {return ',';}
-    std::string do_grouping() const {return "\003";}
+    char do_thousands_sep()   const override {return ',';}
+    std::string do_grouping() const override {return "\003";}
 };
 
 #endif // comma_punct_hpp

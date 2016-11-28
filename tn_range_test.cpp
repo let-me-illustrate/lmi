@@ -37,9 +37,9 @@ template<typename T>
 class nonnegative
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return 0.0;}
-    T default_value()   const {return 1.0;}
-    T nominal_maximum() const {return std::numeric_limits<T>::max();}
+    T nominal_minimum() const override {return 0.0;}
+    T default_value()   const override {return 1.0;}
+    T nominal_maximum() const override {return std::numeric_limits<T>::max();}
 };
 
 template class tn_range<double, nonnegative<double> >;
@@ -52,9 +52,9 @@ template<typename T>
 class unbounded
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return -std::numeric_limits<T>::max();}
-    T default_value()   const {return 0.0;}
-    T nominal_maximum() const {return  std::numeric_limits<T>::max();}
+    T nominal_minimum() const override {return -std::numeric_limits<T>::max();}
+    T default_value()   const override {return 0.0;}
+    T nominal_maximum() const override {return  std::numeric_limits<T>::max();}
 };
 
 template class tn_range<double, unbounded<double> >;
@@ -84,9 +84,9 @@ template<typename T>
 class surd
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return 0.069999999999999999;}
-    T default_value()   const {return 0.07;}
-    T nominal_maximum() const {return 0.070000000000000001;}
+    T nominal_minimum() const override {return 0.069999999999999999;}
+    T default_value()   const override {return 0.07;}
+    T nominal_maximum() const override {return 0.070000000000000001;}
 };
 
 template class tn_range<double, surd<double> >;
@@ -99,9 +99,9 @@ template<typename T>
 class absurd
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return 1;}
-    T default_value()   const {return 0;}
-    T nominal_maximum() const {return 0;}
+    T nominal_minimum() const override {return 1;}
+    T default_value()   const override {return 0;}
+    T nominal_maximum() const override {return 0;}
 };
 
 template class tn_range<int, absurd<int> >;

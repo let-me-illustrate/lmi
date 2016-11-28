@@ -96,7 +96,7 @@ struct tn_range_variant_data
     {
     }
 
-    virtual bool Eq(wxVariantData& data) const
+    bool Eq(wxVariantData& data) const override
     {
         tn_range_variant_data* d = dynamic_cast<tn_range_variant_data*>(&data);
         if(!d)
@@ -104,9 +104,9 @@ struct tn_range_variant_data
         return value == d->value && min == d->min && max == d->max;
     }
 
-    virtual wxString GetType() const { return typeid(tn_range_variant_data).name(); }
+    wxString GetType() const override { return typeid(tn_range_variant_data).name(); }
 
-    virtual wxVariantData* Clone() const
+    wxVariantData* Clone() const override
     {
         return new(wx) tn_range_variant_data(value, min, max);
     }
@@ -124,13 +124,13 @@ class RangeTypeRenderer
     RangeTypeRenderer();
 
   public:
-    virtual bool HasEditorCtrl() const { return true; }
-    virtual wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value);
-    virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value);
-    virtual bool Render(wxRect rect, wxDC* dc, int state);
-    virtual wxSize GetSize() const;
-    virtual bool SetValue(wxVariant const& value);
-    virtual bool GetValue(wxVariant& value) const;
+    bool HasEditorCtrl() const override { return true; }
+    wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value) override;
+    bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;
+    bool Render(wxRect rect, wxDC* dc, int state) override;
+    wxSize GetSize() const override;
+    bool SetValue(wxVariant const& value) override;
+    bool GetValue(wxVariant& value) const override;
 
   protected:
     virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) = 0;
@@ -212,8 +212,8 @@ class IntSpinRenderer
     IntSpinRenderer() : RangeTypeRenderer() {}
 
   protected:
-    virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data);
-    virtual std::string DoGetValueFromEditor(wxWindow* editor);
+    wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) override;
+    std::string DoGetValueFromEditor(wxWindow* editor) override;
 };
 
 wxWindow* IntSpinRenderer::DoCreateEditor
@@ -250,8 +250,8 @@ class DoubleRangeRenderer
     DoubleRangeRenderer() : RangeTypeRenderer() {}
 
   protected:
-    virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data);
-    virtual std::string DoGetValueFromEditor(wxWindow* editor);
+    wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) override;
+    std::string DoGetValueFromEditor(wxWindow* editor) override;
 };
 
 wxWindow* DoubleRangeRenderer::DoCreateEditor
@@ -294,11 +294,11 @@ class DateRenderer
 {
   public:
     DateRenderer() : RangeTypeRenderer() {}
-    virtual bool Render(wxRect rect, wxDC* dc, int state);
+    bool Render(wxRect rect, wxDC* dc, int state) override;
 
   protected:
-    virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data);
-    virtual std::string DoGetValueFromEditor(wxWindow* editor);
+    wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) override;
+    std::string DoGetValueFromEditor(wxWindow* editor) override;
 };
 
 wxWindow* DateRenderer::DoCreateEditor
@@ -351,7 +351,7 @@ struct input_sequence_variant_data
     {
     }
 
-    virtual bool Eq(wxVariantData& data) const
+    bool Eq(wxVariantData& data) const override
     {
         input_sequence_variant_data* d = dynamic_cast<input_sequence_variant_data*>(&data);
         if(!d)
@@ -359,9 +359,9 @@ struct input_sequence_variant_data
         return value == d->value;
     }
 
-    virtual wxString GetType() const { return typeid(input_sequence_variant_data).name(); }
+    wxString GetType() const override { return typeid(input_sequence_variant_data).name(); }
 
-    virtual wxVariantData* Clone() const
+    wxVariantData* Clone() const override
     {
         return new(wx) input_sequence_variant_data(value, input, field);
     }
@@ -376,13 +376,13 @@ class DatumSequenceRenderer
 {
   public:
     DatumSequenceRenderer();
-    virtual bool HasEditorCtrl() const { return true; }
-    virtual wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value);
-    virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value);
-    virtual bool Render(wxRect rect, wxDC* dc, int state);
-    virtual wxSize GetSize() const;
-    virtual bool SetValue(wxVariant const& value);
-    virtual bool GetValue(wxVariant& value) const;
+    bool HasEditorCtrl() const override { return true; }
+    wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value) override;
+    bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;
+    bool Render(wxRect rect, wxDC* dc, int state) override;
+    wxSize GetSize() const override;
+    bool SetValue(wxVariant const& value) override;
+    bool GetValue(wxVariant& value) const override;
 
     std::string  m_value;
     Input const* m_input;
@@ -480,7 +480,7 @@ class renderer_type_converter
 
 class renderer_bool_converter : public renderer_type_converter
 {
-    virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
+    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
     {
         std::string const s(x.str());
         return
@@ -490,17 +490,17 @@ class renderer_bool_converter : public renderer_type_converter
             ;
     }
 
-    virtual std::string from_variant(wxVariant const& x) const
+    std::string from_variant(wxVariant const& x) const override
     {
         return x.GetBool() ? "Yes" : "No";
     }
 
-    virtual char const* variant_type() const
+    char const* variant_type() const override
     {
         return "bool";
     }
 
-    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    wxDataViewRenderer* create_renderer(any_member<Input> const&) const override
     {
         return new(wx) wxDataViewToggleRenderer("bool", wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_CENTER);
     }
@@ -510,22 +510,22 @@ class renderer_bool_converter : public renderer_type_converter
 
 class renderer_enum_converter : public renderer_type_converter
 {
-    virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
+    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
     {
         return wxString(x.str());
     }
 
-    virtual std::string from_variant(wxVariant const& x) const
+    std::string from_variant(wxVariant const& x) const override
     {
         return x.GetString().ToStdString();
     }
 
-    virtual char const* variant_type() const
+    char const* variant_type() const override
     {
         return "string";
     }
 
-    virtual wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const
+    wxDataViewRenderer* create_renderer(any_member<Input> const& representative_value) const override
     {
         mc_enum_base const* as_enum = member_cast<mc_enum_base>(representative_value);
 
@@ -541,24 +541,24 @@ class renderer_enum_converter : public renderer_type_converter
 class renderer_sequence_converter : public renderer_type_converter
 {
   public:
-    virtual wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const
+    wxVariant to_variant(any_member<Input> const& x, Input const& row, std::string const& col) const override
     {
         return new(wx) input_sequence_variant_data(x.str(), &row, col);
     }
 
-    virtual std::string from_variant(wxVariant const& x) const
+    std::string from_variant(wxVariant const& x) const override
     {
         input_sequence_variant_data const* data = dynamic_cast<input_sequence_variant_data*>(x.GetData());
         LMI_ASSERT(data);
         return data->value;
     }
 
-    virtual char const* variant_type() const
+    char const* variant_type() const override
     {
         return typeid(input_sequence_variant_data).name();
     }
 
-    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    wxDataViewRenderer* create_renderer(any_member<Input> const&) const override
     {
         return new(wx) DatumSequenceRenderer();
     }
@@ -569,21 +569,21 @@ class renderer_sequence_converter : public renderer_type_converter
 class renderer_range_converter : public renderer_type_converter
 {
   public:
-    virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
+    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
     {
         tn_range_base const* as_range = member_cast<tn_range_base>(x);
         LMI_ASSERT(as_range);
         return new(wx) tn_range_variant_data(*as_range);
     }
 
-    virtual std::string from_variant(wxVariant const& x) const
+    std::string from_variant(wxVariant const& x) const override
     {
         tn_range_variant_data const* data = dynamic_cast<tn_range_variant_data*>(x.GetData());
         LMI_ASSERT(data);
         return data->value;
     }
 
-    virtual char const* variant_type() const
+    char const* variant_type() const override
     {
         return typeid(tn_range_variant_data).name();
     }
@@ -592,7 +592,7 @@ class renderer_range_converter : public renderer_type_converter
 class renderer_int_range_converter : public renderer_range_converter
 {
   public:
-    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    wxDataViewRenderer* create_renderer(any_member<Input> const&) const override
     {
         return new(wx) IntSpinRenderer();
     }
@@ -601,7 +601,7 @@ class renderer_int_range_converter : public renderer_range_converter
 class renderer_double_range_converter : public renderer_range_converter
 {
   public:
-    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    wxDataViewRenderer* create_renderer(any_member<Input> const&) const override
     {
         return new(wx) DoubleRangeRenderer();
     }
@@ -610,7 +610,7 @@ class renderer_double_range_converter : public renderer_range_converter
 class renderer_date_converter : public renderer_range_converter
 {
   public:
-    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    wxDataViewRenderer* create_renderer(any_member<Input> const&) const override
     {
         return new(wx) DateRenderer();
     }
@@ -621,7 +621,7 @@ class renderer_date_converter : public renderer_range_converter
 class renderer_fallback_converter : public renderer_type_converter
 {
   public:
-    virtual wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const
+    wxVariant to_variant(any_member<Input> const& x, Input const&, std::string const&) const override
     {
         // Strings containing new line characters are currently not displayed
         // correctly by wxDataViewCtrl, so display the value on a single line
@@ -632,7 +632,7 @@ class renderer_fallback_converter : public renderer_type_converter
         return s;
     }
 
-    virtual std::string from_variant(wxVariant const& x) const
+    std::string from_variant(wxVariant const& x) const override
     {
         // Undo the replacement done above. Notice that this will (wrongly)
         // translate any RETURN_SYMBOL characters entered by the user into the
@@ -643,12 +643,12 @@ class renderer_fallback_converter : public renderer_type_converter
         return s.ToStdString();
     }
 
-    virtual char const* variant_type() const
+    char const* variant_type() const override
     {
         return "string";
     }
 
-    virtual wxDataViewRenderer* create_renderer(any_member<Input> const&) const
+    wxDataViewRenderer* create_renderer(any_member<Input> const&) const override
     {
         return new(wx) wxDataViewTextRenderer("string", wxDATAVIEW_CELL_EDITABLE);
     }
@@ -730,12 +730,12 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
     {
     }
 
-    virtual void GetValueByRow(wxVariant& variant, unsigned int row, unsigned int col) const;
-    virtual bool SetValueByRow(wxVariant const&, unsigned int, unsigned int);
+    void GetValueByRow(wxVariant& variant, unsigned int row, unsigned int col) const override;
+    bool SetValueByRow(wxVariant const&, unsigned int, unsigned int) override;
 
-    virtual unsigned int GetColumnCount() const;
+    unsigned int GetColumnCount() const override;
 
-    virtual wxString GetColumnType(unsigned int col) const;
+    wxString GetColumnType(unsigned int col) const override;
 
     std::string const& col_name(unsigned col) const;
     any_member<Input>& cell_at(unsigned row, unsigned col);

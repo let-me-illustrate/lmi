@@ -107,7 +107,7 @@ class database_tree_item_data
 {
   public:
     database_tree_item_data(db_names const&);
-    virtual ~database_tree_item_data() {}
+    ~database_tree_item_data() override {}
 
     db_names const& db_name() const {return db_names_;}
 

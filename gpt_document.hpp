@@ -41,7 +41,7 @@ class gpt_document
 
   public:
     gpt_document();
-    virtual ~gpt_document();
+    ~gpt_document() override;
 
     gpt_view& PredominantView() const;
 
@@ -49,12 +49,12 @@ class gpt_document
     wxHtmlWindow& PredominantViewWindow() const;
 
     // wxDocument overrides.
-    virtual bool OnCreate(wxString const& filename, long int flags);
+    bool OnCreate(wxString const& filename, long int flags) override;
 #if !wxCHECK_VERSION(2,9,0)
     virtual bool OnNewDocument();
 #endif // !wxCHECK_VERSION(2,9,0)
-    virtual bool DoOpenDocument(wxString const& filename);
-    virtual bool DoSaveDocument(wxString const& filename);
+    bool DoOpenDocument(wxString const& filename) override;
+    bool DoSaveDocument(wxString const& filename) override;
 
     gpt_xml_document doc_;
 

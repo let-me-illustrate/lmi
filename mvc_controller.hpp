@@ -414,7 +414,7 @@ class MvcController
 
   public:
     MvcController(wxWindow* parent, MvcModel&, MvcView const&);
-    ~MvcController();
+    ~MvcController() override;
 
     void TestModelViewConsistency() const;
 
@@ -452,7 +452,7 @@ class MvcController
     void UponUpdateUI              (wxUpdateUIEvent&     );
 
     // wxWindow overrides.
-    virtual bool Validate();
+    bool Validate() override;
 
     // Auxiliary functions to extend wxWindow::FindWindow().
 

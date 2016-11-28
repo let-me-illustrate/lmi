@@ -42,9 +42,9 @@ template<typename T>
 class percentage_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return   0;}
-    T default_value()   const {return   0;}
-    T nominal_maximum() const {return 100;}
+    T nominal_minimum() const override {return   0;}
+    T default_value()   const override {return   0;}
+    T nominal_maximum() const override {return 100;}
 };
 
 typedef tn_range<int, percentage_trammel<int> > r_int_percentage;
@@ -86,9 +86,9 @@ template<typename T>
 class range_udt_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return   0;}
-    T default_value()   const {return   0;}
-    T nominal_maximum() const {return 100;}
+    T nominal_minimum() const override {return   0;}
+    T default_value()   const override {return   0;}
+    T nominal_maximum() const override {return 100;}
 };
 
 typedef tn_range<RangeUDT, range_udt_trammel<RangeUDT> > r_range_udt;
