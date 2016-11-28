@@ -552,6 +552,8 @@ void BasicValues::Init7702()
         local_mly_charge_add = GetAdbRates();
         }
 
+    double local_adb_limit = Database_->Query(DB_AdbIsQAB) ? AdbLimit : 0.0;
+
     Irc7702_.reset
         (new Irc7702
             (yare_input_.DefinitionOfLifeInsurance
@@ -571,7 +573,7 @@ void BasicValues::Init7702()
             ,Loads_->specified_amount_load(mce_gen_curr)
             ,SpecAmtLoadLimit
             ,local_mly_charge_add
-            ,AdbLimit
+            ,local_adb_limit
 /// TAXATION !! No contemporary authority seems to believe that a
 /// change in the premium-tax rate, even if passed through to the
 /// policyowner, is a 7702A material change or a GPT adjustment event.

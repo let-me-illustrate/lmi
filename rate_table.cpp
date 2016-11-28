@@ -42,19 +42,22 @@
 #   pragma clang diagnostic pop
 #endif // __clang__
 
-#include <algorithm>
+#include <algorithm>                    // std::count()
 #include <climits>                      // ULLONG_MAX
-#include <cmath>
+#include <cmath>                        // std::pow()
 #include <cstdint>
 #include <cstdlib>                      // std::strtoull()
-#include <fstream>
-#include <limits>
+#include <cstring>                      // std::strncmp()
 #include <iomanip>
+#include <ios>
+#include <istream>
+#include <limits>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <sstream>
 #include <stdexcept>
-#include <utility>                      // std::make_pair()
+#include <utility>                      // std::make_pair(), std::swap()
 #include <vector>
 
 using std::uint8_t;
@@ -292,7 +295,7 @@ parse_result strict_parse_number(char const* start)
     parse_result res;
 
     // This check catches whitespace and the leading minus sign.
-    if(*start >= '0' && *start <= '9')
+    if('0' <= *start && *start <= '9')
         {
         char* end = nullptr;
         res.num = std::strtoull(start, &end, 10);
@@ -509,7 +512,7 @@ void writer::write_values
     // that would result if we simply truncated it to 16 bits however.
     do_write_record_header
         (e_record_values
-        ,length > std::numeric_limits<uint16_t>::max()
+        ,std::numeric_limits<uint16_t>::max() < length
             ? std::numeric_limits<uint16_t>::max()
             : static_cast<uint16_t>(length)
         );
@@ -567,7 +570,7 @@ void writer::write(enum_soa_field field, boost::optional<std::string> const& ost
     if(ostr)
         {
         std::string::size_type const length = ostr->size();
-        if(length > std::numeric_limits<uint16_t>::max())
+        if(std::numeric_limits<uint16_t>::max() < length)
             {
             fatal_error()
                 << "the value of the field '"
@@ -831,7 +834,7 @@ boost::optional<field_and_value> parse_field_and_value
     // A valid field name can consist of a few words only, so check for this
     // to avoid giving warnings about colons appearing in the middle (or even
     // at the end of) a line.
-    if(std::count(line.begin(), line.begin() + pos_colon, ' ') > 3)
+    if(3 < std::count(line.begin(), line.begin() + pos_colon, ' '))
         {
         return no_field;
         }
@@ -1243,7 +1246,7 @@ unsigned table_impl::get_expected_number_of_values() const
 
     // Compute the expected number of values, checking the consistency of the
     // fields determining this as a side effect.
-    if(*min_age_ > *max_age_)
+    if(*max_age_ < *min_age_)
         {
         fatal_error()
             << "minimum age " << *min_age_
@@ -1297,7 +1300,7 @@ unsigned table_impl::get_expected_number_of_values() const
         // there is no risk of overflow here neither.
         select_range *= *select_period_;
 
-        if(select_range > std::numeric_limits<unsigned>::max() - num_values)
+        if(std::numeric_limits<unsigned>::max() - num_values < select_range)
             {
             fatal_error()
                 << "too many values in the table with maximum age " << *max_age_
@@ -1346,7 +1349,9 @@ std::string* table_impl::parse_string
 {
     throw_if_duplicate_record(ostr.is_initialized(), field, line_num);
 
-    if(value.empty())
+    // With slight regret, allow the comments field to be empty because
+    // some historical files have put commentary in table name instead.
+    if(value.empty() && e_field_comments != field)
         {
         fatal_error()
             << "non-empty value must be specified for the field '"
@@ -1381,7 +1386,7 @@ unsigned long table_impl::do_parse_number
             ;
         }
 
-    if(res.num > max_num)
+    if(max_num < res.num)
         {
         fatal_error()
             << "value for numeric field '"
@@ -1561,8 +1566,14 @@ double table_impl::parse_single_value
     ,int& line_num
     )
 {
-    // There should be at least one and up to gap_length spaces before the
-    // value.
+    // The number of spaces before the value should be at least one,
+    // and no greater than (gap_length, plus one if the number of
+    // decimals is zero, because get_value_width() assumes, contrary
+    // to fact, that a decimal point is written regardless).
+    int const num_spaces_allowed =
+          text_format::gap_length
+        + (0 == *num_decimals_)
+        ;
     if(*current != ' ')
         {
         fatal_error()
@@ -1576,12 +1587,12 @@ double table_impl::parse_single_value
         {
         ++num_spaces;
         }
-    if(num_spaces > text_format::gap_length)
+    if(num_spaces_allowed < num_spaces)
         {
         fatal_error()
-            << "two many spaces"
+            << "too many spaces"
             << location_info(line_num, current - start + 1)
-            << " (at most" << text_format::gap_length << " allowed here)"
+            << " (at most " << num_spaces_allowed << " allowed here)"
             << std::flush
             ;
         }
@@ -1596,6 +1607,13 @@ double table_impl::parse_single_value
             << location_info(line_num, current - start + 1)
             << std::flush
             ;
+        }
+
+    // Exit early if zero decimals.
+    if(0 == *num_decimals_)
+        {
+        current = res_int_part.end;
+        return res_int_part.num;
         }
 
     if(*res_int_part.end != '.')
@@ -2567,7 +2585,7 @@ void database_impl::remove_index_entry(table::Number number)
     // But also update the remaining lookup map indices.
     for(auto& e: index_by_number_)
         {
-        if(e.second > index_deleted)
+        if(index_deleted < e.second)
             {
             --e.second;
             }
@@ -2600,7 +2618,7 @@ void database_impl::read_index(std::istream& index_is)
             offset = from_bytes<uint32_t>(&index_record[e_index_pos_offset]);
 
         // Check that the cast to int below is safe.
-        if(number >= static_cast<unsigned>(std::numeric_limits<int>::max()))
+        if(static_cast<unsigned>(std::numeric_limits<int>::max()) <= number)
             {
             fatal_error()
                 << "database index is corrupt: "

@@ -105,9 +105,9 @@ $(file_list): initial_setup
 
 .PHONY: initial_setup
 initial_setup:
-	type "$(WGET)" >/dev/null || { $(ECHO) -e $(wget_missing)   && false; }
-	[ ! -e $(prefix) ]        || { $(ECHO) -e $(prefix_exists)  && false; }
-	[ ! -e scratch   ]        || { $(ECHO) -e $(scratch_exists) && false; }
+	type "$(WGET)" >/dev/null || { printf '%b' $(wget_missing)   && false; }
+	[ ! -e $(prefix) ]        || { printf '%b' $(prefix_exists)  && false; }
+	[ ! -e scratch   ]        || { printf '%b' $(scratch_exists) && false; }
 	$(MKDIR) --parents $(prefix)
 	$(RM) --force --recursive $(prefix)
 	$(MKDIR) --parents scratch

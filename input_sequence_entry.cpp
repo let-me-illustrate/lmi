@@ -696,7 +696,7 @@ void InputSequenceEditor::insert_row(int new_row)
     // update id_to_row_ mapping:
     for(id_to_row_map::iterator i = id_to_row_.begin(); i != id_to_row_.end(); ++i)
         {
-        if(i->second >= new_row)
+        if(new_row <= i->second)
             {
             i->second = i->second + 1;
             }
@@ -814,7 +814,7 @@ void InputSequenceEditor::remove_row(int row)
             {
             to_remove.push_back(i->first);
             }
-        else if(i->second > row)
+        else if(row < i->second)
             {
             i->second = i->second - 1;
             }
@@ -1060,7 +1060,7 @@ void InputSequenceEditor::adjust_duration_num_range(int row)
     if(!duration_mode_field(row).needs_number())
         return;
 
-    int const prev_duration = (row > 0) ? duration_scalars_[row - 1] : 0;
+    int const prev_duration = (0 < row) ? duration_scalars_[row - 1] : 0;
     wxSpinCtrl& duration = duration_num_field(row);
 
     int range_min = 0;

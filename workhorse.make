@@ -1026,7 +1026,7 @@ fardel_date_script := \
   d2=`$(DATE) --utc --date="$$d0 + 2 months" +%s`; \
   j1=`expr 2440588 + $$d1 / 86400`; \
   j2=`expr 2440588 + $$d2 / 86400`; \
-  echo -n "$$j1 $$j2" >expiry; \
+  printf "$$j1 $$j2" >expiry; \
 
 # Several shared libraries are required by lmi, but there seems to be
 # no straightforward way to discover their individual names because
@@ -1099,7 +1099,7 @@ wrap_fardel:
 	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
 	@$(fardel_date_script)
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
-	@$(bin_dir)/generate_passkey > passkey
+	@$(PERFORM) $(bin_dir)/generate_passkey > passkey
 	@$(TAR) \
 	  --bzip2 \
 	  --create \
@@ -1177,7 +1177,7 @@ run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run:
-	@$(ECHO) -e "\nRunning $*:"
+	@printf "\nRunning $*:\n"
 	@-$(PERFORM) ./$* --accept
 
 ################################################################################
@@ -1282,8 +1282,14 @@ touchstone_exclusions := $(touchstone_md5sums) $(touchstone_dir)/ChangeLog
 touchstone_files := \
   $(filter-out $(touchstone_exclusions),$(wildcard $(touchstone_dir)/*))
 
+# Don't call md5sum with an empty $(touchstone_files) list, which would
+# cause md5sum to wait indefinitely for input; instead, create an empty
+# $(touchstone_md5sums) iff none exists, because this is a prerequisite
+# of the 'system_test' target.
+
 $(touchstone_md5sums): $(touchstone_files)
-	@cd $(touchstone_dir) && $(MD5SUM) --binary $(notdir $^) > $@
+	@-[ -f "$@" ] || $(TOUCH) $@
+	@-[ -n "$^" ] && cd $(touchstone_dir) && $(MD5SUM) --binary $(notdir $^) > $@
 	@$(SORT) --key=2 --output=$@ $@
 
 testdeck_suffixes    := cns ill ini inix mec gpt

@@ -32,7 +32,12 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
-#include <iomanip>
+#include <fstream>
+#include <iomanip>                      // std::setw(), std::setfill()
+#include <ios>
+#include <sstream>
+#include <stdexcept>
+#include <streambuf>
 
 using namespace soa_v3_format;
 
@@ -235,6 +240,20 @@ std::string const simple_table_values(1 + R"table(
 /// Minimal valid SOA table in text format.
 std::string const simple_table_text(simple_table_header + simple_table_values);
 
+/// A table with zero decimals. The original SOA code, and the code in
+/// 'rate_table.cpp', both write these table values in a field of width
+/// four: two spaces between columns, plus one for the data, plus one
+/// for a nonexistent decimal point.
+std::string const integral_table(1 + R"table(
+Table number: 1
+Table type: Aggregate
+Minimum age: 0
+Maximum age: 1
+Number of decimal places: 0
+Table values:
+  0   0
+  1   1
+)table");
 } // Unnamed namespace.
 
 /// Test opening database files.
@@ -358,7 +377,7 @@ void test_from_text()
         ,lmi_test::what_regex("expected a field")
         );
 
-    // And so should using too few of them: chop of the last line to test.
+    // And so should using too few of them: chop off the last line to test.
     BOOST_TEST_THROW
         (table::read_from_text(simple_table_header + "  0  0.12345")
         ,std::runtime_error
@@ -378,6 +397,9 @@ void test_from_text()
         +"  0  0.12345\n"
          "  1 10.98765\n"
         );
+
+    // The number of decimals may be zero.
+    table::read_from_text(integral_table);
 }
 
 void test_save()

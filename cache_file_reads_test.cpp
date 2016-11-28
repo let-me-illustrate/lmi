@@ -86,7 +86,7 @@ void cache_file_reads_test::test_preconditions()
     BOOST_TEST_THROW
         (X::read_via_cache("no_such_file")
         ,boost::filesystem::filesystem_error
-        ,lmi_test::what_regex("no_such_file.*cannot find the file specified")
+        ,lmi_test::what_regex("no_such_file")
         );
 }
 

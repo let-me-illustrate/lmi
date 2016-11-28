@@ -238,8 +238,8 @@ $(file_list): initial_setup
 
 .PHONY: initial_setup
 initial_setup:
-	@[ ! -e $(destination) ]   || { $(ECHO) -e $(destination_exists) && false; }
-	@[ ! -e scratch        ]   || { $(ECHO) -e $(scratch_exists)     && false; }
+	@[ ! -e $(destination) ]   || { printf '%b' $(destination_exists) && false; }
+	@[ ! -e scratch        ]   || { printf '%b' $(scratch_exists)     && false; }
 	$(MKDIR) --parents $(cache_dir)
 	$(MKDIR) --parents $(destination)
 	$(MKDIR) $(third_party_bin_dir)
