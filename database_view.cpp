@@ -107,7 +107,7 @@ class database_tree_item_data
 {
   public:
     database_tree_item_data(db_names const&);
-    virtual ~database_tree_item_data() {}
+    virtual ~database_tree_item_data() = default;
 
     db_names const& db_name() const {return db_names_;}
 
@@ -151,9 +151,7 @@ DatabaseView::DatabaseView()
 {
 }
 
-DatabaseView::~DatabaseView()
-{
-}
+DatabaseView::~DatabaseView() = default;
 
 wxTreeCtrl* DatabaseView::CreateTreeCtrl(wxWindow* parent)
 {

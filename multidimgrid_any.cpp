@@ -140,9 +140,7 @@ inline MultiDimGridGrid::MultiDimGridGrid
 {
 }
 
-MultiDimGridGrid::~MultiDimGridGrid()
-{
-}
+MultiDimGridGrid::~MultiDimGridGrid() = default;
 
 wxSize MultiDimGridGrid::DoGetBestSize() const
 {

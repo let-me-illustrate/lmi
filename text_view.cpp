@@ -45,9 +45,7 @@ TextEditView::TextEditView()
 {
 }
 
-TextEditView::~TextEditView()
-{
-}
+TextEditView::~TextEditView() = default;
 
 wxWindow* TextEditView::CreateChildWindow()
 {

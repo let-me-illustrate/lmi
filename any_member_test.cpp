@@ -35,7 +35,7 @@
 struct base_datum
 {
     base_datum() :sane(7) {}
-    virtual ~base_datum() {}            // Just to make it polymorphic.
+    virtual ~base_datum() = default;    // Just to make it polymorphic.
     virtual int virtual_function() = 0; // Just to make it abstract.
     bool base_function()
         {

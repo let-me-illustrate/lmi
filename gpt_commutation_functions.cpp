@@ -161,8 +161,7 @@ gpt_commfns::gpt_commfns
     LMI_ASSERT(0.0 < *std::min_element(D_net_exc_.begin(), D_net_exc_.end()));
 }
 
-gpt_commfns::~gpt_commfns()
-{}
+gpt_commfns::~gpt_commfns() = default;
 
 /// Calculate GLP or GSP.
 ///
@@ -213,8 +212,7 @@ gpt_cf_triad::gpt_cf_triad
 {
 }
 
-gpt_cf_triad::~gpt_cf_triad()
-{}
+gpt_cf_triad::~gpt_cf_triad() = default;
 
 /// Calculate GLP or GSP.
 ///

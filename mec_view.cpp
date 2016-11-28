@@ -35,13 +35,9 @@
 #include <wx/html/htmprint.h>
 #include <wx/xrc/xmlres.h>
 
-mec_mvc_view::mec_mvc_view()
-{
-}
+mec_mvc_view::mec_mvc_view() = default;
 
-mec_mvc_view::~mec_mvc_view()
-{
-}
+mec_mvc_view::~mec_mvc_view() = default;
 
 char const* mec_mvc_view::DoBookControlName() const
 {
@@ -91,9 +87,7 @@ mec_view::mec_view()
 {
 }
 
-mec_view::~mec_view()
-{
-}
+mec_view::~mec_view() = default;
 
 inline mec_input& mec_view::input_data()
 {

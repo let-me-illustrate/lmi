@@ -248,9 +248,7 @@ bool need_loan_rates(yare_input const& yi)
 #endif // 0
 } // Unnamed namespace.
 
-InterestRates::~InterestRates()
-{
-}
+InterestRates::~InterestRates() = default;
 
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             (v.GetLength())

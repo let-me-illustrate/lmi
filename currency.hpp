@@ -70,9 +70,7 @@ class currency
     /// No ctor-initializer-list is needed because the lone data
     /// member has a member-initializer at its point of declaration.
 
-    currency()
-        {
-        }
+    currency() = default;
 
     /// Constructor from a positive number of dollars and cents.
     ///

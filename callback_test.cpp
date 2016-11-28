@@ -48,9 +48,7 @@ namespace shared_library
     class adder
     {
       public:
-        adder()
-            {
-            }
+        adder() = default;
 
         double operator()(int x,float y,double z) const
             {

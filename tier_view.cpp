@@ -69,7 +69,7 @@ class tier_tree_item_data
 {
   public:
     tier_tree_item_data(tier_entity_info const&);
-    virtual ~tier_tree_item_data() {}
+    virtual ~tier_tree_item_data() = default;
 
     tier_entity_info const& entity_info() const;
 
@@ -102,9 +102,7 @@ TierView::TierView()
 {
 }
 
-TierView::~TierView()
-{
-}
+TierView::~TierView() = default;
 
 wxTreeCtrl* TierView::CreateTreeCtrl(wxWindow* parent)
 {

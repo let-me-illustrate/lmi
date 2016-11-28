@@ -107,8 +107,7 @@ class placeholder
 
 // Implementation of class placeholder.
 
-inline placeholder::~placeholder()
-{}
+inline placeholder::~placeholder() = default;
 
 // Definition of class holder.
 
@@ -150,8 +149,7 @@ holder<ClassType,ValueType>::holder(ClassType* object, ValueType const& value)
 {}
 
 template<typename ClassType, typename ValueType>
-holder<ClassType,ValueType>::~holder()
-{}
+holder<ClassType,ValueType>::~holder() = default;
 
 template<typename ClassType, typename ValueType>
 holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
@@ -562,12 +560,10 @@ class MemberSymbolTable
 // Implementation of class MemberSymbolTable.
 
 template<typename ClassType>
-MemberSymbolTable<ClassType>::MemberSymbolTable()
-{}
+MemberSymbolTable<ClassType>::MemberSymbolTable() = default;
 
 template<typename ClassType>
-MemberSymbolTable<ClassType>::~MemberSymbolTable()
-{}
+MemberSymbolTable<ClassType>::~MemberSymbolTable() = default;
 
 // operator[]() returns a known member; unlike std::map::operator[](),
 // it never adds a new pair to the map, and it complains if such an

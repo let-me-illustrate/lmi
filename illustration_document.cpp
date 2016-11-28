@@ -39,9 +39,7 @@ IllustrationDocument::IllustrationDocument()
 {
 }
 
-IllustrationDocument::~IllustrationDocument()
-{
-}
+IllustrationDocument::~IllustrationDocument() = default;
 
 IllustrationView& IllustrationDocument::PredominantView() const
 {

@@ -64,13 +64,9 @@ void ComplainAboutAnyDiscrepancies
 }
 } // Unnamed namespace.
 
-MvcModel::MvcModel()
-{
-}
+MvcModel::MvcModel() = default;
 
-MvcModel::~MvcModel()
-{
-}
+MvcModel::~MvcModel() = default;
 
 datum_base const* MvcModel::BaseDatumPointer(std::string const& name) const
 {

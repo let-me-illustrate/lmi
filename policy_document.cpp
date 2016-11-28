@@ -83,9 +83,7 @@ PolicyDocument::PolicyDocument()
     values_["GuarMortalityFootnote"   ] = &product_data_.GuarMortalityFootnote   .datum_;
 }
 
-PolicyDocument::~PolicyDocument()
-{
-}
+PolicyDocument::~PolicyDocument() = default;
 
 PolicyView& PolicyDocument::PredominantView() const
 {

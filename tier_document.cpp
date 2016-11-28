@@ -43,9 +43,7 @@ TierDocument::TierDocument()
     initialize_charges();
 }
 
-TierDocument::~TierDocument()
-{
-}
+TierDocument::~TierDocument() = default;
 
 void TierDocument::initialize_charges()
 {

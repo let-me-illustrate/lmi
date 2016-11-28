@@ -41,9 +41,7 @@ modal_outlay::modal_outlay(yare_input const& yi)
 {
 }
 
-modal_outlay::~modal_outlay()
-{
-}
+modal_outlay::~modal_outlay() = default;
 
 void modal_outlay::set_ee_modal_premiums(double z, int from_year, int to_year)
 {

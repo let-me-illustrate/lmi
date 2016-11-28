@@ -110,9 +110,7 @@ rounding_parameters::rounding_parameters
 {
 }
 
-rounding_parameters::~rounding_parameters()
-{
-}
+rounding_parameters::~rounding_parameters() = default;
 
 bool rounding_parameters::operator==(rounding_parameters const& z) const
 {
@@ -203,9 +201,7 @@ rounding_rules::rounding_rules(std::string const& filename)
     LMI_ASSERT(r_not_at_all == round_min_init_premium_  .style() || r_upward   == round_min_init_premium_  .style());
 }
 
-rounding_rules::~rounding_rules()
-{
-}
+rounding_rules::~rounding_rules() = default;
 
 /// Member datum nominated by the given name.
 

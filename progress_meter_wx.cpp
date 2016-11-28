@@ -102,9 +102,7 @@ concrete_progress_meter::concrete_progress_meter
         }
 }
 
-concrete_progress_meter::~concrete_progress_meter()
-{
-}
+concrete_progress_meter::~concrete_progress_meter() = default;
 
 /// Sleep for the number of seconds given in the argument.
 ///

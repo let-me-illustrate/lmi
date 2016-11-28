@@ -126,9 +126,7 @@ mec_input::mec_input(mec_input const& z)
     DoAdaptExternalities();
 }
 
-mec_input::~mec_input()
-{
-}
+mec_input::~mec_input() = default;
 
 mec_input& mec_input::operator=(mec_input const& z)
 {

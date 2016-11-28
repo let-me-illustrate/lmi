@@ -53,8 +53,7 @@ global_settings::global_settings()
     ,prospicience_date_         (last_yyyy_date())
 {}
 
-global_settings::~global_settings()
-{}
+global_settings::~global_settings() = default;
 
 global_settings& global_settings::instance()
 {

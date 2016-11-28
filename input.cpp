@@ -247,9 +247,7 @@ Input::Input(Input const& z)
     DoAdaptExternalities();
 }
 
-Input::~Input()
-{
-}
+Input::~Input() = default;
 
 Input& Input::operator=(Input const& z)
 {

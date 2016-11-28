@@ -95,9 +95,7 @@ PreferencesModel::PreferencesModel()
     Load();
 }
 
-PreferencesModel::~PreferencesModel()
-{
-}
+PreferencesModel::~PreferencesModel() = default;
 
 void PreferencesModel::AscribeMembers()
 {

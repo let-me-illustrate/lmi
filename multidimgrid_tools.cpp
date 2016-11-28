@@ -73,9 +73,7 @@ AutoResizingTreeCtrl::AutoResizingTreeCtrl
 {
 }
 
-AutoResizingTreeCtrl::~AutoResizingTreeCtrl()
-{
-}
+AutoResizingTreeCtrl::~AutoResizingTreeCtrl() = default;
 
 wxSize AutoResizingTreeCtrl::DoGetBestSize() const
 {

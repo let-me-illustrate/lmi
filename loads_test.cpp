@@ -50,7 +50,7 @@ std::vector<double> BasicValues::GetGuarSpecAmtLoadTable() const {return dummy_v
 
 #include "database.hpp"
 product_database::product_database(int length) :length_(length) {}
-product_database::~product_database() {}
+product_database::~product_database() = default;
 int product_database::length() const {return length_;}
 void product_database::Query(std::vector<double>& v, e_database_key) const {v.resize(length_);}
 double product_database::Query(e_database_key) const {return 0.0;}

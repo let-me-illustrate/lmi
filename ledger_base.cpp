@@ -64,9 +64,7 @@ LedgerBase& LedgerBase::operator=(LedgerBase const& obj)
 }
 
 //============================================================================
-LedgerBase::~LedgerBase()
-{
-}
+LedgerBase::~LedgerBase() = default;
 
 //============================================================================
 void LedgerBase::Alloc()

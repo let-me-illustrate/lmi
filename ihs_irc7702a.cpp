@@ -171,9 +171,7 @@ Irc7702A::Irc7702A
 }
 
 //============================================================================
-Irc7702A::~Irc7702A()
-{
-}
+Irc7702A::~Irc7702A() = default;
 
 /// Set initial values on issue or inforce date.
 ///
