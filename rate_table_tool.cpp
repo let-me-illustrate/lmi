@@ -133,6 +133,8 @@ void merge
         table_file.reset(new database);
         }
 
+    int count = 0;
+
     if(fs::is_directory(path_to_merge))
         {
         fs::directory_iterator i(path_to_merge);
@@ -142,15 +144,19 @@ void merge
             if(".txt" != fs::extension(*i)) continue;
             table const& t = table::read_from_text(*i);
             table_file->add_or_replace_table(t);
+            ++count;
             }
         }
     else
         {
         table const& t = table::read_from_text(path_to_merge);
         table_file->add_or_replace_table(t);
+        ++count;
         }
 
     table_file->save(database_filename);
+
+    std::cout << "Number of tables merged: " << count << "\n";
 }
 
 void delete_table
@@ -192,13 +198,13 @@ void extract_all(fs::path database_filename)
 {
     database const table_file(database_filename);
 
-    auto const tables_count = table_file.tables_count();
-    for(int i = 0; i != tables_count; ++i)
+    auto const count = table_file.tables_count();
+    for(int i = 0; i != count; ++i)
         {
         do_save_as_text_file(table_file.get_nth_table(i));
         }
 
-    std::cout << "Extracted " << tables_count << " tables.\n";
+    std::cout << "Number of tables extracted: " << count << "\n";
 }
 
 void rename_tables
