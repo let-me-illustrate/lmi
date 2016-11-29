@@ -45,6 +45,7 @@
 #include <algorithm>                    // std::count()
 #include <climits>                      // ULLONG_MAX
 #include <cmath>                        // std::pow()
+#include <cstddef>                      // std::size_t
 #include <cstdint>
 #include <cstdlib>                      // std::strtoull()
 #include <cstring>                      // std::strncmp()
