@@ -131,9 +131,7 @@ BasicValues::BasicValues
 }
 
 //============================================================================
-BasicValues::~BasicValues()
-{
-}
+BasicValues::~BasicValues() = default;
 
 //============================================================================
 void BasicValues::Init()

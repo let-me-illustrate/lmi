@@ -23,13 +23,9 @@
 
 #include "preferences_view.hpp"
 
-PreferencesView::PreferencesView()
-{
-}
+PreferencesView::PreferencesView() = default;
 
-PreferencesView::~PreferencesView()
-{
-}
+PreferencesView::~PreferencesView() = default;
 
 char const* PreferencesView::DoBookControlName() const
 {

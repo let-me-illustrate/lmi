@@ -38,9 +38,7 @@ ProductEditorDocument::ProductEditorDocument()
 {
 }
 
-ProductEditorDocument::~ProductEditorDocument()
-{
-}
+ProductEditorDocument::~ProductEditorDocument() = default;
 
 ProductEditorView& ProductEditorDocument::PredominantView() const
 {
@@ -120,9 +118,7 @@ ProductEditorView::ProductEditorView()
 {
 }
 
-ProductEditorView::~ProductEditorView()
-{
-}
+ProductEditorView::~ProductEditorView() = default;
 
 TreeGridViewBase::TreeGridViewBase()
     :ProductEditorView()
@@ -132,9 +128,7 @@ TreeGridViewBase::TreeGridViewBase()
 {
 }
 
-TreeGridViewBase::~TreeGridViewBase()
-{
-}
+TreeGridViewBase::~TreeGridViewBase() = default;
 
 wxTreeCtrl& TreeGridViewBase::tree() const
 {

@@ -34,9 +34,7 @@ IllusVal::IllusVal(std::string const& filename)
 {
 }
 
-IllusVal::~IllusVal()
-{
-}
+IllusVal::~IllusVal() = default;
 
 double IllusVal::run(Input const& input)
 {

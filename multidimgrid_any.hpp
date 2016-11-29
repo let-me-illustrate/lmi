@@ -193,7 +193,7 @@ class MultiDimAxisAny
 {
   public:
     MultiDimAxisAny(std::string const& name);
-    virtual ~MultiDimAxisAny() {}
+    virtual ~MultiDimAxisAny() = default;
 
     std::string const&   GetName() const;
 
@@ -290,8 +290,8 @@ class MultiDimTableAny
     typedef boost::shared_ptr<MultiDimAxisAny> AxisAnyPtr;
     typedef std::vector<AxisAnyPtr> AxesAny;
 
-    MultiDimTableAny() {}
-    virtual ~MultiDimTableAny() {}
+    MultiDimTableAny() = default;
+    virtual ~MultiDimTableAny() = default;
 
     /// Return the number of dimensions in this table.
     unsigned int GetDimension() const;

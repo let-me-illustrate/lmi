@@ -86,7 +86,7 @@ class file
 {
   public:
     explicit file(std::string const& file_path);
-    ~file() {}
+    ~file() = default;
 
     bool is_of_phylum(enum_phylum ) const;
     bool is_of_phylum(enum_kingdom) const;
@@ -970,7 +970,7 @@ class statistics
 {
   public:
     statistics() : files_(0), lines_(0), defects_(0) {}
-    ~statistics() {}
+    ~statistics() = default;
 
     statistics& operator+=(statistics const&);
 

@@ -94,8 +94,8 @@ template<typename T>
 class obstruct_slicing
 {
   protected:
-    obstruct_slicing() {}
-    obstruct_slicing(obstruct_slicing const&) {}
+    obstruct_slicing() = default;
+    obstruct_slicing(obstruct_slicing const&) = default;
 };
 
 #endif // obstruct_slicing_hpp

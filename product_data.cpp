@@ -88,8 +88,7 @@ template<> glossed_string value_cast<glossed_string>(std::string const& z)
     return glossed_string(z);
 }
 
-glossed_string::glossed_string()
-{}
+glossed_string::glossed_string() = default;
 
 glossed_string::glossed_string
     (std::string const& datum
@@ -99,8 +98,7 @@ glossed_string::glossed_string
     ,gloss_(gloss)
 {}
 
-glossed_string::~glossed_string()
-{}
+glossed_string::~glossed_string() = default;
 
 glossed_string& glossed_string::operator=(std::string const& s)
 {
@@ -155,9 +153,7 @@ product_data::product_data(std::string const& product_name)
     load(AddDataDir(path.string()));
 }
 
-product_data::~product_data()
-{
-}
+product_data::~product_data() = default;
 
 /// Principal string datum (without gloss) for named member.
 

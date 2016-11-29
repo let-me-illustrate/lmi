@@ -37,11 +37,9 @@ namespace
 void authenticate_system()
 {}
 
-glossed_string::glossed_string()
-{}
+glossed_string::glossed_string() = default;
 
-glossed_string::~glossed_string()
-{}
+glossed_string::~glossed_string() = default;
 
 bool is_antediluvian_fork()
 {
@@ -51,8 +49,7 @@ bool is_antediluvian_fork()
 gpt_server::gpt_server(mcenum_emission)
 {}
 
-gpt_server::~gpt_server()
-{}
+gpt_server::~gpt_server() = default;
 
 bool gpt_server::operator()(fs::path const&)
 {
@@ -61,8 +58,7 @@ bool gpt_server::operator()(fs::path const&)
 
 template class xml_serializable<gpt_state>;
 
-gpt_state::gpt_state()
-{}
+gpt_state::gpt_state() = default;
 
 gpt_state::gpt_state(gpt_state const&)
     :obstruct_slicing  <gpt_state>()
@@ -70,8 +66,7 @@ gpt_state::gpt_state(gpt_state const&)
     ,MemberSymbolTable <gpt_state>()
 {}
 
-gpt_state::~gpt_state()
-{}
+gpt_state::~gpt_state() = default;
 
 int gpt_state::class_version() const
 {
@@ -91,8 +86,7 @@ bool gpt_state::is_detritus(std::string const&) const
 mec_server::mec_server(mcenum_emission)
 {}
 
-mec_server::~mec_server()
-{}
+mec_server::~mec_server() = default;
 
 bool mec_server::operator()(fs::path const&)
 {
@@ -101,8 +95,7 @@ bool mec_server::operator()(fs::path const&)
 
 template class xml_serializable<mec_state>;
 
-mec_state::mec_state()
-{}
+mec_state::mec_state() = default;
 
 mec_state::mec_state(mec_state const&)
     :obstruct_slicing  <mec_state>()
@@ -110,8 +103,7 @@ mec_state::mec_state(mec_state const&)
     ,MemberSymbolTable <mec_state>()
 {}
 
-mec_state::~mec_state()
-{}
+mec_state::~mec_state() = default;
 
 int mec_state::class_version() const
 {
@@ -131,8 +123,7 @@ bool mec_state::is_detritus(std::string const&) const
 product_data::product_data(std::string const&)
 {}
 
-product_data::~product_data()
-{}
+product_data::~product_data() = default;
 
 int product_data::class_version() const
 {

@@ -95,9 +95,7 @@ actuarial_table_base::actuarial_table_base()
 {
 }
 
-actuarial_table_base::~actuarial_table_base()
-{
-}
+actuarial_table_base::~actuarial_table_base() = default;
 
 /// Read a given number of values for a given issue age.
 
@@ -190,9 +188,7 @@ xml_actuarial_table::xml_actuarial_table(std::string const& filename, int table_
     load_xml_table(xmlfile);
 }
 
-xml_actuarial_table::~xml_actuarial_table()
-{
-}
+xml_actuarial_table::~xml_actuarial_table() = default;
 
 void xml_actuarial_table::load_xml_table(std::string const& filename)
 {
@@ -515,9 +511,7 @@ soa_actuarial_table::soa_actuarial_table(std::string const& filename, int table_
     parse_table();
 }
 
-soa_actuarial_table::~soa_actuarial_table()
-{
-}
+soa_actuarial_table::~soa_actuarial_table() = default;
 
 /// Find the table specified by table_number_.
 ///

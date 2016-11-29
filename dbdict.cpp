@@ -95,9 +95,7 @@ DBDictionary::DBDictionary(std::string const& filename)
     Init(filename);
 }
 
-DBDictionary::~DBDictionary()
-{
-}
+DBDictionary::~DBDictionary() = default;
 
 database_entity const& DBDictionary::datum(std::string const& name) const
 {

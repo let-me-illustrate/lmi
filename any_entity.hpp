@@ -37,7 +37,7 @@
 class any_entity
 {
   public:
-    virtual ~any_entity() {}
+    virtual ~any_entity() = default;
 
     any_entity& operator=(std::string const& s) {return assign(s);}
 

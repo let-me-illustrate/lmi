@@ -58,8 +58,7 @@ Authenticity::Authenticity()
 {
 }
 
-Authenticity::~Authenticity()
-{}
+Authenticity::~Authenticity() = default;
 
 Authenticity& Authenticity::Instance()
 {

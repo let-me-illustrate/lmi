@@ -127,7 +127,7 @@ class TypeInfo
 
   public:
     TypeInfo(std::type_info const& z): ti_(&z) {}
-    ~TypeInfo() {}
+    ~TypeInfo() = default;
 
     bool operator==(TypeInfo const& z) const {return *z.ti_ == *ti_;}
     bool  operator<(TypeInfo const& z) const {return ti_->before(*z.ti_);}

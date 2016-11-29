@@ -103,9 +103,7 @@ IllustrationView::IllustrationView()
 {
 }
 
-IllustrationView::~IllustrationView()
-{
-}
+IllustrationView::~IllustrationView() = default;
 
 inline Input& IllustrationView::input_data()
 {

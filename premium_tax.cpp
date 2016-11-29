@@ -178,8 +178,7 @@ premium_tax::premium_tax
     levy_rate_ = db.Query(DB_PremTaxRate, index);
 }
 
-premium_tax::~premium_tax()
-{}
+premium_tax::~premium_tax() = default;
 
 /// Test consistency of premium-tax loads.
 ///

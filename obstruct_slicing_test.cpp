@@ -37,7 +37,7 @@
 class no_derive0
 {
   protected:
-    no_derive0() {}
+    no_derive0() = default;
 };
 
 class A0
@@ -55,8 +55,8 @@ template<typename T>
 class no_derive1
 {
   protected:
-    no_derive1() {}
-    no_derive1(no_derive1 const&) {}
+    no_derive1() = default;
+    no_derive1(no_derive1 const&) = default;
 };
 
 class B0
@@ -78,8 +78,8 @@ class C0_no_derive
     friend class C0;
 
   private:
-    C0_no_derive() {}
-    C0_no_derive(C0_no_derive const&) {}
+    C0_no_derive() = default;
+    C0_no_derive(C0_no_derive const&) = default;
 };
 
 class C0

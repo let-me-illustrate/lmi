@@ -36,8 +36,7 @@ class X
     :public cache_file_reads<X>
 {
   public:
-    X()
-        {}
+    X() = default;
     X(std::string const& filename)
         {
         std::ifstream ifs(filename, ios_in_binary());

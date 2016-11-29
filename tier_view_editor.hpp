@@ -254,9 +254,7 @@ inline TierTableAdapter::TierTableAdapter(tier_entity_adapter entity)
 {
     SetTierEntity(entity);
 }
-inline TierTableAdapter::~TierTableAdapter()
-{
-}
+inline TierTableAdapter::~TierTableAdapter() = default;
 
 inline tier_entity_adapter TierTableAdapter::GetTierEntity() const
 {

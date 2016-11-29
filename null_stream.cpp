@@ -48,8 +48,7 @@ class dev_null_stream_buffer
         {
         setp(buffer_, buffer_ + buffer_size_);
         }
-    virtual ~dev_null_stream_buffer()
-        {}
+    virtual ~dev_null_stream_buffer() = default;
 
   private:
     virtual int_type overflow(int_type c)

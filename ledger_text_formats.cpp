@@ -208,9 +208,7 @@ calculation_summary_formatter::calculation_summary_formatter
         }
 }
 
-calculation_summary_formatter::~calculation_summary_formatter()
-{
-}
+calculation_summary_formatter::~calculation_summary_formatter() = default;
 
 std::string calculation_summary_formatter::top_note
     (std::string const& line_break
@@ -920,9 +918,7 @@ FlatTextLedgerPrinter::FlatTextLedgerPrinter
 {
 }
 
-FlatTextLedgerPrinter::~FlatTextLedgerPrinter()
-{
-}
+FlatTextLedgerPrinter::~FlatTextLedgerPrinter() = default;
 
 void FlatTextLedgerPrinter::Print() const
 {

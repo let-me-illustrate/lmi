@@ -128,9 +128,7 @@ AccountValue::AccountValue(Input const& input)
 }
 
 //============================================================================
-AccountValue::~AccountValue()
-{
-}
+AccountValue::~AccountValue() = default;
 
 //============================================================================
 boost::shared_ptr<Ledger const> AccountValue::ledger_from_av() const

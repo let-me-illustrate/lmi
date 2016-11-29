@@ -40,9 +40,7 @@ PolicyView::PolicyView()
 {
 }
 
-PolicyView::~PolicyView()
-{
-}
+PolicyView::~PolicyView() = default;
 
 wxWindow* PolicyView::CreateChildWindow()
 {

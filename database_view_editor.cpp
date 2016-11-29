@@ -110,9 +110,7 @@ DatabaseTableAdapter::DatabaseTableAdapter(database_entity* db_value)
     indexes_.resize(eda_max);
 }
 
-DatabaseTableAdapter::~DatabaseTableAdapter()
-{
-}
+DatabaseTableAdapter::~DatabaseTableAdapter() = default;
 
 bool DatabaseTableAdapter::DoApplyAxisAdjustment
     (MultiDimAxisAny& axis

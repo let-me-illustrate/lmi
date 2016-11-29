@@ -202,9 +202,7 @@ yare_input::yare_input(Input const& z)
     CorporationPaymentStrategy       = convert_vector_type<mcenum_pmt_strategy >(z.CorporationPaymentStrategyRealized_ );
 }
 
-yare_input::~yare_input()
-{
-}
+yare_input::~yare_input() = default;
 
 bool is_policy_rated(yare_input const& z)
 {

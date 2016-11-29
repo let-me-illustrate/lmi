@@ -136,9 +136,7 @@ gpt_input::gpt_input(gpt_input const& z)
     DoAdaptExternalities();
 }
 
-gpt_input::~gpt_input()
-{
-}
+gpt_input::~gpt_input() = default;
 
 gpt_input& gpt_input::operator=(gpt_input const& z)
 {
