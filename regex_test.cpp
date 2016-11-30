@@ -288,7 +288,7 @@ void test_input_sequence_regex()
 {
     // A crude regex for a floating-point number, which defectively
     // accepts '.'.
-    std::string const N("\\-?[0-9.]+");
+    std::string const N(R"(\-?[0-9.]+)");
     // A set of keywords. These happen to be the ones permitted for
     // 'specamt_sequence'.
     std::string       K("maximum|target|sevenpay|glp|gsp|corridor|salary");
@@ -309,7 +309,7 @@ void test_input_sequence_regex()
     //    with ']' or ')', with anything but a semicolon in between
     //    (the actual grammar is of course more restrictive, but need
     //    not be described here).
-    std::string const Y("(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\\[\\(][^;]+[\\]\\)]))");
+    std::string const Y(R"((( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)])))");
     // The regex to be tested. It can consist solely of zero or more
     // spaces. Otherwise, it consists of one or more data-duration
     // pairs ('X' and an optional 'Y' as above), with an obligatory
