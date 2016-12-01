@@ -1006,7 +1006,7 @@ class table_impl
         (int num_spaces
         ,char const* start
         ,char const*& current
-        ,int& line_num
+        ,int line_num
         );
 
     // Helper of parse_values() parsing an integer value of at most age_width
@@ -1015,7 +1015,7 @@ class table_impl
     uint16_t parse_age
         (char const* start
         ,char const*& current
-        ,int& line_num
+        ,int line_num
         );
 
     // Helper of parse_values() parsing a single floating point value using the
@@ -1024,7 +1024,7 @@ class table_impl
     double parse_single_value
         (char const* start
         ,char const*& current
-        ,int& line_num
+        ,int line_num
         );
 
     // Compute the expected number of values from minimum and maximum age
@@ -1521,7 +1521,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
 uint16_t table_impl::parse_age
     (char const* start
     ,char const*& current
-    ,int& line_num
+    ,int line_num
     )
 {
     using text_format::age_width;
@@ -1564,7 +1564,7 @@ uint16_t table_impl::parse_age
 double table_impl::parse_single_value
     (char const* start
     ,char const*& current
-    ,int& line_num
+    ,int line_num
     )
 {
     // The number of spaces before the value should be at least one,
@@ -1660,7 +1660,7 @@ void table_impl::skip_spaces
     (int num_spaces
     ,char const* start
     ,char const*& current
-    ,int& line_num
+    ,int line_num
     )
 {
     if(std::strncmp(current, std::string(num_spaces, ' ').c_str(), num_spaces) != 0)
