@@ -265,7 +265,7 @@ void test_database_open()
     BOOST_TEST_THROW
         (database("nonexistent")
         ,std::runtime_error
-        ,lmi_test::what_regex("'nonexistent\\.ndx' could not be opened")
+        ,lmi_test::what_regex("Unable to open 'nonexistent\\.ndx'")
         );
 
     test_file_eraser erase("eraseme.ndx");
@@ -276,7 +276,7 @@ void test_database_open()
     BOOST_TEST_THROW
         (database("eraseme")
         ,std::runtime_error
-        ,lmi_test::what_regex("'eraseme\\.dat' could not be opened")
+        ,lmi_test::what_regex("Unable to open 'eraseme\\.dat'")
         );
 }
 

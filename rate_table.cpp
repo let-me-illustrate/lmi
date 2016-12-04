@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "crc32.hpp"
+#include "miscellany.hpp"               // ios_in_binary(), ios_out_trunc_binary()
 #include "path_utility.hpp"
 
 #include <boost/filesystem/convenience.hpp>
@@ -190,52 +191,6 @@ inline
 T get_value_or(boost::optional<T> const& o, U v)
 {
     return o ? *o : v;
-}
-
-template<typename T>
-struct open_file_traits;
-
-template<>
-struct open_file_traits<fs::ifstream>
-{
-    static std::ios_base::openmode get_mode() { return std::ios_base::in; }
-    static char const* describe_access() { return "reading"; }
-};
-
-template<>
-struct open_file_traits<fs::ofstream>
-{
-    static std::ios_base::openmode get_mode() { return std::ios_base::out; }
-    static char const* describe_access() { return "writing"; }
-};
-
-// Helper function opening the stream for reading or writing the given file and
-// throwing an exception on error. It shouldn't be used directly, prefer to use
-// the more readable open_{text,binary}_file() helpers below.
-template<typename T>
-void open_file(T& ifs, fs::path const& path, std::ios_base::openmode mode)
-{
-    ifs.open(path, open_file_traits<T>::get_mode() | mode);
-    if(!ifs)
-        {
-        fatal_error()
-            << "file '" << path << "' could not be opened for "
-            << open_file_traits<T>::describe_access()
-            << std::flush
-            ;
-        }
-}
-
-template<typename T>
-inline void open_text_file(T& fs, fs::path const& path)
-{
-    open_file(fs, path, std::ios_base::binary);
-}
-
-template<typename T>
-inline void open_binary_file(T& fs, fs::path const& path)
-{
-    open_file(fs, path, std::ios_base::binary);
 }
 
 // Functions doing the same thing as istream::read() and ostream::write()
@@ -2306,11 +2261,11 @@ unsigned long table_impl::compute_hash_value() const
 
 table table::read_from_text(fs::path const& file)
 {
+    fs::ifstream ifs(file, ios_in_binary());
+    if(!ifs) fatal_error() << "Unable to open '" << file << "'." << LMI_FLUSH;
+
     try
         {
-        fs::ifstream ifs;
-        open_text_file(ifs, file);
-
         return table(table_impl::create_from_text(ifs));
         }
     catch(std::runtime_error const& e)
@@ -2347,9 +2302,8 @@ table table::read_from_text(std::string const& text)
 
 void table::save_as_text(fs::path const& file) const
 {
-    fs::ofstream ofs;
-    open_text_file(ofs, file);
-
+    fs::ofstream ofs(file, ios_out_trunc_binary());
+    if(!ofs) fatal_error() << "Unable to open '" << file << "'." << LMI_FLUSH;
     impl_->write_as_text(ofs);
 }
 
@@ -2523,18 +2477,17 @@ database_impl::database_impl(fs::path const& path)
     :path_(path)
 {
     fs::path const index_path = get_index_path(path);
-
-    fs::ifstream index_ifs;
-    open_binary_file(index_ifs, index_path);
-    read_index(index_ifs);
+    fs::ifstream ifs(index_path, ios_in_binary());
+    if(!ifs) fatal_error() << "Unable to open '" << index_path << "'." << LMI_FLUSH;
+    read_index(ifs);
 
     // Open the database file right now to ensure that we can do it, even if we
     // don't need it just yet. As it will be used soon anyhow, delaying opening
     // it wouldn't be a useful optimization.
-    auto const ifs = std::make_shared<fs::ifstream>();
-    open_binary_file(*ifs, get_data_path(path));
-
-    data_is_ = ifs;
+    fs::path const data_path = get_data_path(path);
+    auto const pifs = std::make_shared<fs::ifstream>(data_path, ios_in_binary());
+    if(!*pifs) fatal_error() << "Unable to open '" << data_path << "'." << LMI_FLUSH;
+    data_is_ = pifs;
 }
 
 database_impl::database_impl
@@ -2921,7 +2874,8 @@ void database_impl::save(fs::path const& path)
                     )
                 ,description_(description)
             {
-            open_binary_file(ofs_, temp_path_);
+            ofs_.open(temp_path_, ios_out_trunc_binary());
+            if(!ofs_) fatal_error() << "Unable to open '" << temp_path_ << "'." << LMI_FLUSH;
             }
 
             void close()
