@@ -872,8 +872,7 @@ class table_impl
 
     // read_xxx() methods for binary format.
 
-    static
-    void read_string
+    static void read_string
             (boost::optional<std::string>& ostr
             ,enum_soa_field field
             ,std::istream& ifs
@@ -881,14 +880,12 @@ class table_impl
             );
 
     template<typename T>
-    static
-    T do_read_number(char const* name, std::istream& ifs);
+    static T do_read_number(char const* name, std::istream& ifs);
 
     void read_type(std::istream& ids, uint16_t length);
 
     template<typename T>
-    static
-    void read_number
+    static void read_number
             (boost::optional<T>& onum
             ,enum_soa_field field
             ,std::istream& ifs
@@ -916,8 +913,7 @@ class table_impl
 
     // This method returns the pointer to ostr string value to allow further
     // modifying it later in the caller.
-    static
-    std::string* parse_string
+    static std::string* parse_string
             (boost::optional<std::string>& ostr
             ,enum_soa_field field
             ,int line_num
@@ -925,8 +921,7 @@ class table_impl
             );
 
     // Parse number checking that it is less than the given maximal value.
-    static
-    unsigned long do_parse_number
+    static unsigned long do_parse_number
             (enum_soa_field field
             ,int line_num
             ,unsigned long max_num
@@ -934,8 +929,7 @@ class table_impl
             );
 
     template<typename T>
-    static
-    void parse_number
+    static void parse_number
             (boost::optional<T>& onum
             ,enum_soa_field field
             ,int line_num
