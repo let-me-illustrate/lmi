@@ -175,7 +175,7 @@ void delete_table
 std::string do_save_as_text_file(table const& t)
 {
     std::ostringstream oss;
-    oss << t.number() << ".txt";
+    oss << std::setfill('0') << std::setw(5) << t.number() << ".txt";
     std::string const filename = oss.str();
     t.save_as_text(filename);
     return filename;
@@ -433,7 +433,7 @@ int try_main(int argc, char* argv[])
         {"crc"         ,NO_ARG   ,0 ,'c' ,0 ,"show CRCs of all tables"},
         {"list"        ,NO_ARG   ,0 ,'t' ,0 ,"list all tables"},
         {"merge=PATH"  ,REQD_ARG ,0 ,'m' ,0 ,"merge PATH (file or dir) into database"},
-        {"extract=n"   ,REQD_ARG ,0 ,'e' ,0 ,"extract table #n into n.txt"},
+        {"extract=n"   ,REQD_ARG ,0 ,'e' ,0 ,"extract table #n into 0000n.txt"},
         {"extract-all" ,NO_ARG   ,0 ,'x' ,0 ,"extract all tables to txt files"},
         {"rename=FILE" ,REQD_ARG ,0 ,'r' ,0 ,"rename tables from FILE"},
         {"verify"      ,NO_ARG   ,0 ,'v' ,0 ,"verify integrity of all tables"},
