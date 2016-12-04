@@ -2285,7 +2285,6 @@ table table::read_from_text(std::string const& text)
     try
         {
         std::istringstream iss(text);
-
         return table(table_impl::create_from_text(iss));
         }
     catch(std::runtime_error const& e)
@@ -2310,9 +2309,7 @@ void table::save_as_text(fs::path const& file) const
 std::string table::save_as_text() const
 {
     std::ostringstream oss;
-
     impl_->write_as_text(oss);
-
     return oss.str();
 }
 
