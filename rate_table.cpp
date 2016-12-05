@@ -1299,9 +1299,7 @@ std::string* table_impl::parse_string
 {
     throw_if_duplicate_record(ostr.is_initialized(), field, line_num);
 
-    // With slight regret, allow the comments field to be empty because
-    // some historical files have put commentary in table name instead.
-    if(value.empty() && e_field_comments != field)
+    if(value.empty())
         {
         fatal_error()
             << "non-empty value must be specified for the field '"
