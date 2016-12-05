@@ -133,10 +133,8 @@ LMI_WX_TEST_CASE(input_validation)
         char const* const value_;
     };
 
-    for(std::size_t n = 0; n < sizeof test_cases / sizeof(test_cases[0]); n++)
+    for(auto const& td: test_cases)
         {
-        coi_multiplier_test_data const& td = test_cases[n];
-
         // This flag is used to assert that all expected exceptions were
         // generated at the end of the loop. The reason for using it instead of
         // just asserting directly inside the "try" statement is that failing

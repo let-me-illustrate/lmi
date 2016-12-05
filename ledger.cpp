@@ -134,14 +134,10 @@ void Ledger::SetRunBases(int length)
             }
         }
 
-    for
-        (ledger_map_t::iterator p = l_map_rep.begin()
-        ;p != l_map_rep.end()
-        ;++p
-        )
+    for(auto& p: l_map_rep)
         {
-        ledger_map_t::key_type const& key = (*p).first;
-        ledger_map_t::mapped_type& data = (*p).second;
+        ledger_map_t::key_type const& key = p.first;
+        ledger_map_t::mapped_type& data = p.second;
 
         run_bases_.push_back(key);
         data.set_run_basis(key);
@@ -312,13 +308,9 @@ int Ledger::GetMaxLength() const
     ledger_map_t const& l_map_rep = ledger_map_->held();
     double max_length = 0.0;
 
-    for
-        (ledger_map_t::const_iterator lmci = l_map_rep.begin()
-        ;lmci != l_map_rep.end()
-        ;++lmci
-        )
+    for(auto const& lmci: l_map_rep)
         {
-        max_length = std::max(max_length, (*lmci).second.LapseYear);
+        max_length = std::max(max_length, lmci.second.LapseYear);
         }
     return static_cast<int>(max_length);
 }

@@ -752,14 +752,12 @@ void Ledger::write(xml::element& x) const
 
     // That was the tricky part. Now it's all downhill.
 
-    ledger_map_t const& l_map_rep = ledger_map_->held();
-    typedef ledger_map_t::const_iterator lmci;
-    for(lmci i = l_map_rep.begin(); i != l_map_rep.end(); i++)
+    for(auto const& i: ledger_map_->held())
         {
-        std::string suffix = suffixes[i->first];
+        std::string suffix = suffixes[i.first];
         for
-            (scalar_map::const_iterator j = i->second.AllScalars.begin()
-            ;j != i->second.AllScalars.end()
+            (scalar_map::const_iterator j = i.second.AllScalars.begin()
+            ;j != i.second.AllScalars.end()
             ;++j
             )
             {
@@ -768,16 +766,16 @@ void Ledger::write(xml::element& x) const
                 stringscalars[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
             }
         for
-            (string_map::const_iterator j = i->second.Strings.begin()
-            ;j != i->second.Strings.end()
+            (string_map::const_iterator j = i.second.Strings.begin()
+            ;j != i.second.Strings.end()
             ;++j
             )
             {
             strings[j->first + suffix] = j->second;
             }
         for
-            (double_vector_map::const_iterator j = i->second.AllVectors.begin()
-            ;j != i->second.AllVectors.end()
+            (double_vector_map::const_iterator j = i.second.AllVectors.begin()
+            ;j != i.second.AllVectors.end()
             ;++j
             )
             {

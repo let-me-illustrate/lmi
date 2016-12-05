@@ -171,11 +171,10 @@ void MvcModel::Harmonize()
 
 void MvcModel::Transmogrify()
 {
-    typedef NamesType::const_iterator ntci;
-    for(ntci i = Names().begin(); i != Names().end(); ++i)
+    for(auto const& name: Names())
         {
-        DoEnforceCircumscription(*i);
-        DoEnforceProscription   (*i);
+        DoEnforceCircumscription(name);
+        DoEnforceProscription   (name);
         }
     DoTransmogrify();
 }

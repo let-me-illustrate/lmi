@@ -133,13 +133,9 @@ InputSequence::InputSequence(std::vector<double> const& v)
     intervals.push_back(dummy);
     intervals.back().value_number = current_value;
 
-    for
-        (std::vector<double>::const_iterator vi = v.begin()
-        ;vi != v.end()
-        ;++vi
-        )
+    for(double vi : v)
         {
-        current_value = *vi;
+        current_value = vi;
         if(prior_value == current_value)
             {
             ++intervals.back().end_duration;
@@ -173,13 +169,9 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
     intervals.push_back(dummy);
     intervals.back().value_keyword = current_value;
 
-    for
-        (std::vector<std::string>::const_iterator vi = v.begin()
-        ;vi != v.end()
-        ;++vi
-        )
+    for(auto const& vi: v)
         {
-        current_value = *vi;
+        current_value = vi;
         if(prior_value == current_value)
             {
             ++intervals.back().end_duration;

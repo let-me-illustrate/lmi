@@ -320,11 +320,7 @@ census_run_result run_census_in_parallel::operator()
             ;
         }
 
-    for
-        (std::vector<mcenum_run_basis>::const_iterator run_basis = RunBases.begin()
-        ;run_basis != RunBases.end()
-        ;++run_basis
-        )
+    for(auto run_basis: RunBases)
         {
         // It seems somewhat anomalous to create and update a GUI
         // progress meter inside this critical calculation section,
@@ -339,22 +335,22 @@ census_run_result run_census_in_parallel::operator()
         mcenum_gen_basis expense_and_general_account_basis;
         mcenum_sep_basis separate_account_basis;
         set_cloven_bases_from_run_basis
-            (*run_basis
+            (run_basis
             ,expense_and_general_account_basis
             ,separate_account_basis
             );
 
         // Calculate duration when the youngest life matures.
         int MaxYr = 0;
-        for(i = cell_values.begin(); i != cell_values.end(); ++i)
+        for(auto& cell_value: cell_values)
             {
-            (*i)->InitializeLife(*run_basis);
+            cell_value->InitializeLife(run_basis);
             MaxYr = std::max(MaxYr, (*i)->GetLength());
             }
 
         meter = create_progress_meter
             (MaxYr - first_cell_inforce_year
-            ,mc_str(*run_basis)
+            ,mc_str(run_basis)
             ,progress_meter_mode(emission)
             );
 
@@ -601,9 +597,9 @@ census_run_result run_census_in_parallel::operator()
             } // End for year.
         meter->culminate();
 
-        for(i = cell_values.begin(); i != cell_values.end(); ++i)
+        for(auto& cell_value: cell_values)
             {
-            (*i)->FinalizeLife(*run_basis);
+            cell_value->FinalizeLife(run_basis);
             }
 
         } // End fenv_guard scope.
@@ -676,12 +672,11 @@ census_run_result run_census::operator()
     census_run_result result;
 
     int composite_length = 0;
-    typedef std::vector<Input>::const_iterator svii;
-    for(svii i = cells.begin(); i != cells.end(); ++i)
+    for(auto const& cell: cells)
         {
-        if(!cell_should_be_ignored(*i))
+        if(!cell_should_be_ignored(cell))
             {
-            composite_length = std::max(composite_length, i->years_to_maturity());
+            composite_length = std::max(composite_length, cell.years_to_maturity());
             }
         }
     // If cell_should_be_ignored() is true for all cells, composite

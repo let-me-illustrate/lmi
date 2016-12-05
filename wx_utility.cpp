@@ -231,10 +231,8 @@ void EnumerateLineage
     ,std::vector<wxWindow*>& v
     )
 {
-    wxWindowList const& wl = w->GetChildren();
-    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+    for(auto c: w->GetChildren())
         {
-        wxWindow* c = *i;
         LMI_ASSERT(nullptr != c);
         v.push_back(c);
         EnumerateLineage(c, v);

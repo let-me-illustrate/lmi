@@ -152,16 +152,13 @@ bool single_cell_document::data_source_is_external(xml::document const& d) const
     // INPUT !! Remove "InforceDataSource" and the following code when
     // external systems are updated to use the "data_source" attribute.
 
-    typedef xml::const_nodes_view::const_iterator cnvi;
-
     xml::const_nodes_view const i_nodes(root.elements("cell"));
     LMI_ASSERT(1 == i_nodes.size());
-    for(cnvi i = i_nodes.begin(); i != i_nodes.end(); ++i)
+    for(auto const& i_node: i_nodes)
         {
-        xml::const_nodes_view const j_nodes(i->elements("InforceDataSource"));
-        for(cnvi j = j_nodes.begin(); j != j_nodes.end(); ++j)
+        for(auto const& j_node: i_node.elements("InforceDataSource"))
             {
-            std::string s(xml_lmi::get_content(*j));
+            std::string s(xml_lmi::get_content(j_node));
             if("0" != s && "1" != s)
                 {
                 return true;

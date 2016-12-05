@@ -160,21 +160,20 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
     int num_expand = 0;
     int total_fixed = 0;
 
-    typedef std::vector<column_info>::const_iterator cici;
-    for(cici i = columns_.begin(); i != columns_.end(); ++i)
+    for(auto const& ci: columns_)
         {
-        if(i->is_hidden())
+        if(ci.is_hidden())
             {
             continue;
             }
 
-        if(0 == i->width_)
+        if(0 == ci.width_)
             {
             num_expand++;
             }
         else
             {
-            total_fixed += i->width_;
+            total_fixed += ci.width_;
             }
         }
 
@@ -189,17 +188,16 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         int const per_expand
             = (total_width_ - total_fixed + num_expand - 1)/num_expand;
 
-        typedef std::vector<column_info>::iterator cii;
-        for(cii i = columns_.begin(); i != columns_.end(); ++i)
+        for(auto& column: columns_)
             {
-            if(i->is_hidden())
+            if(column.is_hidden())
                 {
                 continue;
                 }
 
-            if(0 == i->width_)
+            if(0 == column.width_)
                 {
-                i->width_ = per_expand;
+                column.width_ = per_expand;
                 }
             }
         }

@@ -127,11 +127,10 @@ void PasskeyTest::RemoveTestFiles(char const* file, int line) const
     filenames.push_back("passkey");
     filenames.push_back("coleridge");
     filenames.push_back(md5sum_file());
-    typedef std::vector<std::string>::const_iterator aut0;
-    for(aut0 i = filenames.begin(); i != filenames.end(); ++i)
+    for(auto const& fn: filenames)
         {
-        std::remove(i->c_str());
-        INVOKE_BOOST_TEST(!fs::exists(*i), file, line);
+        std::remove(fn.c_str());
+        INVOKE_BOOST_TEST(!fs::exists(fn), file, line);
         }
 }
 

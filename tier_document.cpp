@@ -51,11 +51,9 @@ void TierDocument::initialize_charges()
         (std::vector<double>(1, infinity<double>()) // limits
         ,std::vector<double>(1,                0.0) // values
         );
-    std::vector<std::string> const& v = charges_.member_names();
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = v.begin(); i != v.end(); ++i)
+    for(auto const& mn: charges_.member_names())
         {
-        charges_.datum(*i) = dummy_entity;
+        charges_.datum(mn) = dummy_entity;
         }
 }
 

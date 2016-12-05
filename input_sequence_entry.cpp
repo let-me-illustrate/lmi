@@ -92,9 +92,9 @@ DurationModeChoice::DurationModeChoice(wxWindow* parent)
 
     {
     wxWindowUpdateLocker lock(this);
-    for(unsigned int i = 0; i < duration_mode_choices; ++i)
+    for(auto const& duration_mode_choice_value: duration_mode_choice_values)
         {
-        Append(duration_mode_choice_values[i].label);
+        Append(duration_mode_choice_value.label);
         }
     }
 
@@ -694,11 +694,11 @@ void InputSequenceEditor::insert_row(int new_row)
     sizer_->wxSizer::Insert(insert_pos++, add, wxSizerFlags(flags).Border(wxLEFT, 0).Right());
 
     // update id_to_row_ mapping:
-    for(id_to_row_map::iterator i = id_to_row_.begin(); i != id_to_row_.end(); ++i)
+    for(auto& i: id_to_row_)
         {
-        if(new_row <= i->second)
+        if(new_row <= i.second)
             {
-            i->second = i->second + 1;
+            i.second = i.second + 1;
             }
         }
 
@@ -808,15 +808,15 @@ void InputSequenceEditor::remove_row(int row)
 
     // update id_to_row_ mapping:
     std::vector<wxWindowID> to_remove;
-    for(id_to_row_map::iterator i = id_to_row_.begin(); i != id_to_row_.end(); ++i)
+    for(auto& i: id_to_row_)
         {
-        if(i->second == row)
+        if(i.second == row)
             {
-            to_remove.push_back(i->first);
+            to_remove.push_back(i.first);
             }
-        else if(row < i->second)
+        else if(row < i.second)
             {
-            i->second = i->second - 1;
+            i.second = i.second - 1;
             }
         }
     LMI_ASSERT(!to_remove.empty());

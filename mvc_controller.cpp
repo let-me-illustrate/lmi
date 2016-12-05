@@ -133,14 +133,12 @@ MvcController::MvcController
     // Call ModelReference() to ensure that each Model entity is of a
     // type derived from class datum_base.
 
-    std::vector<std::string> const& mn = model_.Names();
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = mn.begin(); i != mn.end(); ++i)
+    for(auto const& mn: model_.Names())
         {
-        ModelReference<datum_base>(*i);
-        if(FindWindow(wxXmlResource::GetXRCID(i->c_str())))
+        ModelReference<datum_base>(mn);
+        if(FindWindow(wxXmlResource::GetXRCID(mn.c_str())))
             {
-            Bind(*i, transfer_data_[*i] = model_.Entity(*i).str());
+            Bind(mn, transfer_data_[mn] = model_.Entity(mn).str());
             }
         }
 
@@ -178,10 +176,9 @@ void MvcController::Assimilate(std::string const& name_to_ignore)
 
     ConditionallyEnable();
 
-    typedef std::map<std::string,std::string>::const_iterator smci;
-    for(smci i = transfer_data_.begin(); i != transfer_data_.end(); ++i)
+    for(auto const& i: transfer_data_)
         {
-        std::string const& name        = i->first;
+        std::string const& name        = i.first;
         std::string const& model_value = model_.Entity(name).str();
         if(name == name_to_ignore || ModelAndViewValuesEquivalent(name))
             {
@@ -212,11 +209,8 @@ wxBookCtrlBase const& MvcController::BookControl() const
 
 void MvcController::ConditionallyEnable()
 {
-    typedef std::vector<wxWindow*>::const_iterator wvci;
-    std::vector<wxWindow*> page_lineage = Lineage(&CurrentPage());
-    for(wvci i = page_lineage.begin(); i != page_lineage.end(); ++i)
+    for(auto pw: Lineage(&CurrentPage()))
         {
-        wxWindow* pw = *i;
         LMI_ASSERT(nullptr != pw);
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
@@ -244,9 +238,8 @@ void MvcController::ConditionallyEnable()
     // date ranges fail to work, and the observable symptom is quite
     // spectacular.
 
-    for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
+    for(auto pw: lineage_)
         {
-        wxWindow* pw = *i;
         LMI_ASSERT(nullptr != pw);
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
@@ -424,11 +417,8 @@ void MvcController::EnsureOptimalFocus()
         }
 
     SetFocus();
-    typedef std::vector<wxWindow*>::const_iterator wvci;
-    std::vector<wxWindow*> page_lineage = Lineage(&CurrentPage());
-    for(wvci i = page_lineage.begin(); i != page_lineage.end(); ++i)
+    for(auto w: Lineage(&CurrentPage()))
         {
-        wxWindow* w = *i;
         if(w && w->IsEnabled() && w->AcceptsFocus())
             {
             w->SetFocus();
@@ -458,10 +448,8 @@ void MvcController::EnsureOptimalFocus()
 
 void MvcController::Initialize()
 {
-    typedef std::vector<wxWindow*>::const_iterator wvci;
-    for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
+    for(auto pw: lineage_)
         {
-        wxWindow* pw = *i;
         LMI_ASSERT(nullptr != pw);
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
@@ -521,20 +509,16 @@ void MvcController::RefocusLastFocusedWindow()
 
 void MvcController::TestModelViewConsistency() const
 {
-    std::vector<std::string> const& mn = model_.Names();
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = mn.begin(); i != mn.end(); ++i)
+    for(auto const& mn: model_.Names())
         {
-        if(!FindWindow(wxXmlResource::GetXRCID(i->c_str())))
+        if(!FindWindow(wxXmlResource::GetXRCID(mn.c_str())))
             {
-            warning() << "No View entity matches '" << *i << "'.\n";
+            warning() << "No View entity matches '" << mn << "'.\n";
             }
         }
 
-    typedef std::vector<wxWindow*>::const_iterator wvci;
-    for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
+    for(auto pw: lineage_)
         {
-        wxWindow* pw = *i;
         if
             (   pw->AcceptsFocus()
             &&  !dynamic_cast<Transferor*>(pw->GetValidator())
@@ -823,11 +807,10 @@ void MvcController::UponUpdateUI(wxUpdateUIEvent& event)
     DiagnosticsWindow().SetLabel("");
     std::vector<std::string> control_changes;
     std::string const name_to_ignore = NameOfControlToDeferEvaluating();
-    typedef std::map<std::string,std::string>::const_iterator smci;
-    for(smci i = transfer_data_.begin(); i != transfer_data_.end(); ++i)
+    for(auto const& i: transfer_data_)
         {
-        std::string const& name        = i->first;
-        std::string const& view_value  = i->second;
+        std::string const& name        = i.first;
+        std::string const& view_value  = i.second;
         std::string const& model_value = model_.Entity(name).str();
         if(name == name_to_ignore || ModelAndViewValuesEquivalent(name))
             {
@@ -854,10 +837,9 @@ void MvcController::UponUpdateUI(wxUpdateUIEvent& event)
     if(1 < control_changes.size())
         {
         warning() << "Contents of more than one control changed.\n";
-        typedef std::vector<std::string>::const_iterator svci;
-        for(svci i = control_changes.begin(); i != control_changes.end(); ++i)
+        for(auto const& change: control_changes)
             {
-            warning() << *i;
+            warning() << change;
             }
         warning() << LMI_FLUSH;
         }

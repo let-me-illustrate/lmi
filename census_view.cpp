@@ -69,14 +69,13 @@ std::string insert_spaces_between_words(std::string const& s)
 {
     std::string r;
     std::insert_iterator<std::string> j(r, r.begin());
-    std::string::const_iterator i;
-    for(i = s.begin(); i != s.end(); ++i)
+    for(auto c: s)
         {
-        if(is_ok_for_cctype(*i) && std::isupper(*i) && !r.empty())
+        if(is_ok_for_cctype(c) && std::isupper(c) && !r.empty())
             {
             *j++ = ' ';
             }
-        *j++ = *i;
+        *j++ = c;
         }
     return r;
 }
@@ -966,10 +965,9 @@ bool CensusView::column_value_varies_across_cells
     ,std::vector<Input> const& cells
     ) const
 {
-    typedef std::vector<Input>::const_iterator ici;
-    for(ici j = cells.begin(); j != cells.end(); ++j)
+    for(auto const& cell: cells)
         {
-        if(!((*j)[header] == case_parms()[0][header]))
+        if(!(cell[header] == case_parms()[0][header]))
             {
             return true;
             }
@@ -1036,10 +1034,9 @@ void CensusView::update_class_names()
     // Extract names and add them even if they might be duplicates.
     std::vector<std::string> all_class_names;
 
-    typedef std::vector<Input>::const_iterator ici;
-    for(ici i = cell_parms().begin(); i != cell_parms().end(); ++i)
+    for(auto const& cell_parm: cell_parms())
         {
-        all_class_names.push_back((*i)["EmployeeClass"].str());
+        all_class_names.push_back(cell_parm["EmployeeClass"].str());
         }
 
     std::vector<std::string> unique_class_names;
@@ -1123,36 +1120,33 @@ void CensusView::apply_changes
 
     std::vector<std::string> headers_of_changed_parameters;
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
-    typedef std::vector<std::string>::const_iterator sci;
-    for(sci i = all_headers.begin(); i != all_headers.end(); ++i)
+    for(auto const& header: all_headers)
         {
-        if(!(old_parms[*i] == new_parms[*i]))
+        if(!(old_parms[header] == new_parms[header]))
             {
-            headers_of_changed_parameters.push_back(*i);
+            headers_of_changed_parameters.push_back(header);
             }
         }
-    for(sci i = headers_of_changed_parameters.begin(); i != headers_of_changed_parameters.end(); ++i)
+    for(auto const& header: headers_of_changed_parameters)
         {
         if(!for_this_class_only)
             {
-            typedef std::vector<Input>::iterator ii;
-            for(ii j = class_parms().begin(); j != class_parms().end(); ++j)
+            for(auto& class_parm: class_parms())
                 {
-                (*j)[*i] = new_parms[*i].str();
+                class_parm[header] = new_parms[header].str();
                 }
-            for(ii j = cell_parms ().begin(); j != cell_parms ().end(); ++j)
+            for(auto& cell_parm: cell_parms())
                 {
-                (*j)[*i] = new_parms[*i].str();
+                cell_parm[header] = new_parms[header].str();
                 }
             }
         else
             {
-            typedef std::vector<Input>::iterator ii;
-            for(ii j = cell_parms().begin(); j != cell_parms().end(); ++j)
+            for(auto& cell_parm: cell_parms())
                 {
-                if((*j)["EmployeeClass"] == old_parms["EmployeeClass"])
+                if(cell_parm["EmployeeClass"] == old_parms["EmployeeClass"])
                     {
-                    (*j)[*i] = new_parms[*i].str();
+                    cell_parm[header] = new_parms[header].str();
                     }
                 }
             }
@@ -1161,14 +1155,13 @@ void CensusView::apply_changes
     // Probably this should be factored out into a member function
     // that's called elsewhere too--e.g., when a cell is read from
     // file, or when a census is pasted.
-    typedef std::vector<Input>::iterator ii;
-    for(ii j = class_parms().begin(); j != class_parms().end(); ++j)
+    for(auto& class_parm: class_parms())
         {
-        j->Reconcile();
+        class_parm.Reconcile();
         }
-    for(ii j = cell_parms() .begin(); j != cell_parms() .end(); ++j)
+    for(auto& cell_parm: cell_parms())
         {
-        j->Reconcile();
+        cell_parm.Reconcile();
         }
 }
 
@@ -1509,10 +1502,9 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
     Timer timer;
 
     wxArrayInt erasures;
-    typedef wxDataViewItemArray::const_iterator dvci;
-    for(dvci i = selection.begin(); i != selection.end(); ++i)
+    for(auto i: selection)
         {
-        erasures.push_back(list_model_->GetRow(*i));
+        erasures.push_back(list_model_->GetRow(i));
         }
     std::sort(erasures.begin(), erasures.end());
 

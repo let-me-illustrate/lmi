@@ -54,17 +54,11 @@ wxWindow* RoundingView::CreateChildWindow()
         fatal_error() << "Unable to load xml resource." << LMI_FLUSH;
         }
 
-    typedef RoundingDocument::values_type::const_iterator value_const_iterator;
-    for
-        (value_const_iterator cit = document().values().begin()
-        ,end = document().values().end()
-        ;cit != end
-        ;++cit
-        )
+    for(auto const& value: document().values())
         {
         RoundingButtons* control = dynamic_cast<RoundingButtons*>
             (wxWindow::FindWindowById
-                (wxXmlResource::GetXRCID(cit->first.c_str())
+                (wxXmlResource::GetXRCID(value.first.c_str())
                 ,frame
                 )
             );
@@ -72,12 +66,12 @@ wxWindow* RoundingView::CreateChildWindow()
             {
             fatal_error()
                 << "Required text control '"
-                << cit->first
+                << value.first
                 << "' not found."
                 << LMI_FLUSH
                 ;
             }
-        controls_[cit->first] = control;
+        controls_[value.first] = control;
         }
     return main_panel;
 }
@@ -99,14 +93,9 @@ RoundingDocument& RoundingView::document() const
 
 bool RoundingView::IsModified() const
 {
-    for
-        (controls_type::const_iterator it = controls().begin()
-        ,end = controls().end()
-        ;it != end
-        ;++it
-        )
+    for(auto const& it: controls())
         {
-        if(it->second->IsModified())
+        if(it.second->IsModified())
             {
             return true;
             }

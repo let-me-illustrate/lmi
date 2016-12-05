@@ -634,9 +634,8 @@ void MemberSymbolTable<ClassType>::ascribe
 
     ClassType* class_object = static_cast<ClassType*>(this);
     map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));
-    typedef std::vector<std::string>::iterator svi;
     // TODO ?? This would appear to be O(N^2).
-    svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+    auto i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
     member_names_.insert(i, s);
 }
 
@@ -645,10 +644,9 @@ MemberSymbolTable<ClassType>& MemberSymbolTable<ClassType>::assign
     (MemberSymbolTable<ClassType> const& z
     )
 {
-    typedef std::vector<std::string>::const_iterator mnci;
-    for(mnci i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& name: member_names())
         {
-        operator[](*i) = z[*i];
+        operator[](name) = z[name];
         }
     return *this;
 }
@@ -658,10 +656,9 @@ bool MemberSymbolTable<ClassType>::equals
     (MemberSymbolTable<ClassType> const& z
     ) const
 {
-    typedef std::vector<std::string>::const_iterator mnci;
-    for(mnci i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& name: member_names())
         {
-        if(z[*i] != operator[](*i))
+        if(z[name] != operator[](name))
             {
             return false;
             }
@@ -687,11 +684,9 @@ std::map<std::string,std::string> member_state
     )
 {
     std::map<std::string,std::string> z;
-    std::vector<std::string> const& names = object.member_names();
-    typedef std::vector<std::string>::const_iterator mnci;
-    for(mnci i = names.begin(); i != names.end(); ++i)
+    for(auto const& name: object.member_names())
         {
-        z[*i] = object[*i].str();
+        z[name] = object[name].str();
         }
     return z;
 }

@@ -844,21 +844,20 @@ false // Silly workaround for now.
         && 0.0 < InforceSeparateAccountValue.value()
         ;
 
-    typedef std::vector<mcenum_report_column>::const_iterator vrci;
-    for(vrci i = weird_report_columns.begin(); i != weird_report_columns.end(); ++i)
+    for(auto c: weird_report_columns)
         {
-        SupplementalReportColumn00.allow(*i, enable_weirdness);
-        SupplementalReportColumn01.allow(*i, enable_weirdness);
-        SupplementalReportColumn02.allow(*i, enable_weirdness);
-        SupplementalReportColumn03.allow(*i, enable_weirdness);
-        SupplementalReportColumn04.allow(*i, enable_weirdness);
-        SupplementalReportColumn05.allow(*i, enable_weirdness);
-        SupplementalReportColumn06.allow(*i, enable_weirdness);
-        SupplementalReportColumn07.allow(*i, enable_weirdness);
-        SupplementalReportColumn08.allow(*i, enable_weirdness);
-        SupplementalReportColumn09.allow(*i, enable_weirdness);
-        SupplementalReportColumn10.allow(*i, enable_weirdness);
-        SupplementalReportColumn11.allow(*i, enable_weirdness);
+        SupplementalReportColumn00.allow(c, enable_weirdness);
+        SupplementalReportColumn01.allow(c, enable_weirdness);
+        SupplementalReportColumn02.allow(c, enable_weirdness);
+        SupplementalReportColumn03.allow(c, enable_weirdness);
+        SupplementalReportColumn04.allow(c, enable_weirdness);
+        SupplementalReportColumn05.allow(c, enable_weirdness);
+        SupplementalReportColumn06.allow(c, enable_weirdness);
+        SupplementalReportColumn07.allow(c, enable_weirdness);
+        SupplementalReportColumn08.allow(c, enable_weirdness);
+        SupplementalReportColumn09.allow(c, enable_weirdness);
+        SupplementalReportColumn10.allow(c, enable_weirdness);
+        SupplementalReportColumn11.allow(c, enable_weirdness);
         }
 }
 

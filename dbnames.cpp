@@ -89,10 +89,9 @@ std::map<std::string,int> static_get_short_names()
 {
     std::map<std::string,int> m;
     static std::vector<db_names> const names = static_get_db_names();
-    typedef std::vector<db_names>::const_iterator vdbnci;
-    for(vdbnci i = names.begin(); i != names.end(); ++i)
+    for(auto const& name: names)
         {
-        m[i->ShortName] = i->Idx;
+        m[name.ShortName] = name.Idx;
         }
     return m;
 }

@@ -157,10 +157,9 @@ Input::permissible_specified_amount_strategy_keywords()
 //    std::map<std::string,std::string> permissible_keywords = all_keywords;
     std::map<std::string,std::string> permissible_keywords;
     // Don't use initialization--we want this to happen every time [6.7].
-    typedef std::map<std::string,std::string>::const_iterator smci;
-    for(smci i = all_keywords.begin(); i != all_keywords.end(); ++i)
+    for(auto const& keyword: all_keywords)
         {
-        permissible_keywords.insert(*i);
+        permissible_keywords.insert(keyword);
         }
 
     bool specified_amount_indeterminate = mce_solve_specamt == SolveType;
@@ -232,18 +231,14 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
 
     if(report_errors)
         {
-        for
-            (std::vector<std::string>::iterator i = s.begin()
-            ;i != s.end()
-            ;++i
-            )
+        for(auto const& str: s)
             {
             std::ostringstream oss;
             bool diagnostics_present = false;
-            if(!i->empty())
+            if(!str.empty())
                 {
                 diagnostics_present = true;
-                oss << (*i) << "\n";
+                oss << str << "\n";
                 }
             if(diagnostics_present)
                 {

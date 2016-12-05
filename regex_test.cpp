@@ -163,10 +163,9 @@ bool contains_regex0(std::string const& regex)
 bool contains_regex1(std::string const& regex)
 {
     boost::regex const r(regex, boost::regex::sed);
-    typedef std::vector<std::string>::const_iterator vsi;
-    for(vsi i = lines.begin(); i != lines.end(); ++i)
+    for(auto const& line: lines)
         {
-        if(boost::regex_search(*i, r))
+        if(boost::regex_search(line, r))
             {
             return true;
             }
@@ -223,12 +222,11 @@ char never[] = "lord";
 void test_psalm_37()
 {
     lines = vectorize(original);
-    typedef std::vector<std::string>::iterator vsi;
-    for(vsi i = lines.begin(); i != lines.end(); ++i)
+    for(auto const& line: lines)
         {
         for(int j = 0; j < 10; ++j)
             {
-            text += *i + '\n';
+            text += line + '\n';
             }
         }
     lines = vectorize(text);

@@ -94,9 +94,9 @@ void print_matrix
     for(std::size_t j = 0; j < data.size(); ++j)
         {
         os << '\t' << value_cast<std::string>(data[j]);
-        for(std::size_t k = 0; k < moduli.size(); ++k)
+        for(auto m: moduli)
             {
-            if(0 == (1 + j) % moduli[k])
+            if(0 == (1 + j) % m)
                 {
                 os << '\n';
                 }

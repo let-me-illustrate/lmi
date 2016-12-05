@@ -511,10 +511,9 @@ void DBDictionary::InitDB()
     static double const dbl_inf = infinity<double>();
     static double const bignum = std::numeric_limits<double>::max();
 
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& name: member_names())
         {
-        Add(database_entity(db_key_from_name(*i), 0.0));
+        Add(database_entity(db_key_from_name(name), 0.0));
         }
 
     // It would be dangerous to set these to zero.
@@ -966,10 +965,9 @@ void DBDictionary::InitAntediluvian()
     // Zero is inappropriate for some entities ("DB_CurrCoiMultiplier",
     // e.g.), but the antediluvian branch doesn't actually use most
     // database entities.
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& name: member_names())
         {
-        Add(database_entity(db_key_from_name(*i), 0.0));
+        Add(database_entity(db_key_from_name(name), 0.0));
         }
 
     // These are the same as class date_trammel's nominal limits.
@@ -1085,10 +1083,9 @@ void print_databases()
 
             fs::path out_file = fs::change_extension(*i, ".dbt");
             fs::ofstream os(out_file, ios_out_trunc_binary());
-            typedef std::vector<std::string>::const_iterator svci;
-            for(svci i = z.member_names().begin(); i != z.member_names().end(); ++i)
+            for(auto const& mn: z.member_names())
                 {
-                z.datum(*i).write(os);
+                z.datum(mn).write(os);
                 }
             }
         catch(...)
