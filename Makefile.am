@@ -812,6 +812,7 @@ test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
 test_mc_enum_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
+  ce_product_name.cpp \
   datum_base.cpp \
   facets.cpp \
   global_settings.cpp \
