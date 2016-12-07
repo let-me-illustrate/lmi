@@ -316,12 +316,14 @@ void assay_non_latin(file const& f)
 
 void assay_whitespace(file const& f)
 {
-    if
-        (   contains(f.data(), '\r')
-        ||  contains(f.data(), '\v')
-        )
+    if(contains(f.data(), '\r'))
         {
-        throw std::runtime_error("File contains '\\r' or '\\v'.");
+        throw std::runtime_error("File contains '\\r'.");
+        }
+
+    if(contains(f.data(), '\v'))
+        {
+        throw std::runtime_error("File contains '\\v'.");
         }
 
     if

@@ -418,9 +418,9 @@ File 'eraseme_taboo_001' breaks taboo 'Shibboleth'.
 File 'eraseme_taboo_001' breaks taboo 'sibboleth'.
 File 'eraseme_url_001' lacks lmi URL.
 Exception--file 'eraseme_whitespace_001': File contains '\f'.
-Exception--file 'eraseme_whitespace_002': File contains '\r' or '\v'.
+Exception--file 'eraseme_whitespace_002': File contains '\r'.
 Exception--file 'eraseme_whitespace_003': File contains '\t'.
-Exception--file 'eraseme_whitespace_004': File contains '\r' or '\v'.
+Exception--file 'eraseme_whitespace_004': File contains '\v'.
 EOF
 
 diff --unified=0 eraseme_expected eraseme_observed && rm --force \
