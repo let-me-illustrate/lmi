@@ -27,6 +27,7 @@
 #include "crc32.hpp"
 #include "miscellany.hpp"               // ios_in_binary(), ios_out_trunc_binary()
 #include "path_utility.hpp"
+#include "value_cast.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/exception.hpp>
@@ -45,7 +46,6 @@
 
 #include <algorithm>                    // std::count()
 #include <climits>                      // ULLONG_MAX
-#include <cmath>                        // std::pow()
 #include <cstddef>                      // std::size_t
 #include <cstdint>
 #include <cstdlib>                      // std::strtoull()
@@ -1514,6 +1514,8 @@ double table_impl::parse_single_value
     ,int line_num
     )
 {
+    char const* origin = current;
+
     // The number of spaces before the value should be at least one,
     // and no greater than (gap_length, plus one if the number of
     // decimals is zero, because get_value_width() assumes, contrary
@@ -1596,11 +1598,7 @@ double table_impl::parse_single_value
 
     current = res_frac_part.end;
 
-    double value = res_frac_part.num;
-    value /= std::pow(10, *num_decimals_);
-    value += res_int_part.num;
-
-    return value;
+    return value_cast<double>(std::string(origin, current));
 }
 
 void table_impl::skip_spaces
