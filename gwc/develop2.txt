@@ -46,3 +46,12 @@ git pull /path/where/you/saved/TheirBundleName
   # ...then synchronize your "blessed" repository with your correspondent's
 
 git push
+
+  # Whenever a rate table changes, regenerate the binary database
+
+cd /opt/lmi/data
+rm proprietary.dat proprietary.ndx
+  # native:
+/opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+  # msw cross build:
+wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
