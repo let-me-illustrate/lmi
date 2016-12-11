@@ -1854,11 +1854,9 @@ void table_impl::validate()
                 break;
             }
 
-        // We have a reasonable default for this field, so don't complain if
-        // it's absent.
         if(!num_decimals_)
             {
-            num_decimals_ = 6;
+            fatal_error() << "Number of decimals not specified." << LMI_FLUSH;
             }
 
         // If we don't have the hash, compute it ourselves. If we do, check
