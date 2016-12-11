@@ -340,7 +340,16 @@ int verify(fs::path const& database_filename)
                     << LMI_FLUSH
                     ;
                 }
-
+            if(new_table != orig_table)
+                {
+                // This is not really fatal, it is only used here to throw an
+                // exception in a convenient way.
+                fatal_error()
+                    << "After loading and saving the original table '\n"
+                    << "binary contents differed.\n"
+                    << LMI_FLUSH
+                    ;
+                }
             }
         catch(std::exception const& e)
             {
