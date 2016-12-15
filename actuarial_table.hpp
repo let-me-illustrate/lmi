@@ -26,7 +26,6 @@
 
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
-#include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <string>
@@ -114,97 +113,8 @@ enum e_actuarial_table_method
     ,e_reenter_upon_rate_reset     = 2
     };
 
-/// Types of actuarial tables.
-
-enum e_table_type
-    {e_table_invalid               = -1
-    ,e_table_aggregate             = 'A'
-    ,e_table_duration              = 'D'
-    ,e_table_select_and_ultimate   = 'S'
-    };
-
-/// Base class for actuarial tables, both XML and binary.
-/// SOA !! This is only temporary, merge with xml_actuarial_table into
-/// single class once we remove binary SOA format support
-
-class actuarial_table_base
-{
-  public:
-    actuarial_table_base();
-    virtual ~actuarial_table_base();
-
-    std::vector<double> values(int issue_age, int length) const;
-    std::vector<double> values_elaborated
-        (int                      issue_age
-        ,int                      length
-        ,e_actuarial_table_method method
-        ,int                      inforce_duration
-        ,int                      reset_duration
-        ) const;
-
-    char               table_type     () const {return table_type_     ;}
-    int                min_age        () const {return min_age_        ;}
-    int                max_age        () const {return max_age_        ;}
-    int                select_period  () const {return select_period_  ;}
-    int                max_select_age () const {return max_select_age_ ;}
-
-  protected:
-    virtual std::vector<double> specific_values(int issue_age, int length) const = 0;
-
-    // Table parameters, in order read from table header.
-    char table_type_     ;
-    int  min_age_        ;
-    int  max_age_        ;
-    int  select_period_  ;
-    int  max_select_age_ ;
-};
-
-/// Read actuarial table from XML file.
-
-class xml_actuarial_table
-    :        public  actuarial_table_base
-    ,        private lmi::uncopyable <xml_actuarial_table>
-    ,virtual private obstruct_slicing<xml_actuarial_table>
-{
-  public:
-    xml_actuarial_table(std::string const& filename, int table_number);
-    virtual ~xml_actuarial_table();
-
-  protected:
-    std::vector<double> specific_values(int issue_age, int length) const;
-
-  private:
-    void load_xml_table                    (std::string const& filename);
-    void load_xml_aggregate_table          (xml::element const& node);
-    void load_xml_duration_table           (xml::element const& node);
-    void load_xml_select_table             (xml::element const& node);
-    void load_xml_select_and_ultimate_table(xml::element const& node);
-    void load_xml_table_with_ages
-        (xml::element const& node
-        ,std::vector<double>& data
-        ,int& min_age
-        ,int& max_age
-        );
-
-    // Table data. For 1D tables (e_table_aggregate and e_table_duration), this
-    // is the vector of values from min_age_ to max_age_.
-    // For e_table_select_and_ultimate, the content is organized by rows, with
-    // select_period_ entries per row, with rows ranging from min_age_ to
-    // max_select_age_.
-    std::vector<double> data_;
-
-    // For e_table_select_and_ultimate, this vector contains the ultimate
-    // column. The first value, ultimate_[0], is for min_age_+select_period_,
-    // the last is for max_select_age_.
-    std::vector<double> ultimate_;
-};
-
 /// Read a table from a database in the binary format designed by the
 /// Society of Actuaries (SOA) and used for the tables SOA publishes.
-///
-/// This is deprecated, old format, this class' code is left in only
-/// temporarily for the purpose of validating the new XML-based format
-/// loader's correctness.
 ///
 /// Do not check CRCs of these tables as the SOA software does. Tests
 /// show that CRC checking makes the illustration system considerably
@@ -218,16 +128,30 @@ class xml_actuarial_table
 /// has apparently chosen to leave them that way for backward
 /// compatibility.
 
-class soa_actuarial_table
-    :        public  actuarial_table_base
-    ,        private lmi::uncopyable <soa_actuarial_table>
-    ,virtual private obstruct_slicing<soa_actuarial_table>
+class actuarial_table
+    :        private lmi::uncopyable <actuarial_table>
+    ,virtual private obstruct_slicing<actuarial_table>
 {
   public:
-    soa_actuarial_table(std::string const& filename, int table_number);
-    virtual ~soa_actuarial_table();
+    actuarial_table(std::string const& filename, int table_number);
+    ~actuarial_table();
+
+    std::vector<double> values(int issue_age, int length) const;
+    std::vector<double> values_elaborated
+        (int                      issue_age
+        ,int                      length
+        ,e_actuarial_table_method method
+        ,int                      inforce_duration
+        ,int                      reset_duration
+        ) const;
 
     std::string const& filename       () const {return filename_       ;}
+    int                table_number   () const {return table_number_   ;}
+    char               table_type     () const {return table_type_     ;}
+    int                min_age        () const {return min_age_        ;}
+    int                max_age        () const {return max_age_        ;}
+    int                select_period  () const {return select_period_  ;}
+    int                max_select_age () const {return max_select_age_ ;}
 
   private:
     void find_table();
@@ -239,7 +163,13 @@ class soa_actuarial_table
     std::string filename_     ;
     int         table_number_ ;
 
-    // Table data.
+    // Table parameters, in order read from table header.
+    char table_type_     ;
+    int  min_age_        ;
+    int  max_age_        ;
+    int  select_period_  ;
+    int  max_select_age_ ;
+
     std::vector<double> data_;
 
     std::streampos table_offset_;
@@ -267,14 +197,6 @@ std::vector<double> actuarial_table_rates_elaborated
     ,int                      inforce_duration
     ,int                      reset_duration
     );
-
-// #define LMI_USE_XML_TABLES
-
-#if defined LMI_USE_XML_TABLES
-typedef xml_actuarial_table actuarial_table;
-#else  // !defined LMI_USE_XML_TABLES
-typedef soa_actuarial_table actuarial_table;
-#endif // !defined LMI_USE_XML_TABLES
 
 #endif // actuarial_table_hpp
 

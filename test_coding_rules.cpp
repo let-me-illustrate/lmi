@@ -603,7 +603,6 @@ void check_defect_markers(file const& f)
             &&  "INELEGANT "   != z[1]
             &&  "INPUT "       != z[1]
             &&  "PORT "        != z[1]
-            &&  "SOA "         != z[1]
             &&  "SOMEDAY "     != z[1]
             &&  "TAXATION "    != z[1]
             &&  "THIRD_PARTY " != z[1]

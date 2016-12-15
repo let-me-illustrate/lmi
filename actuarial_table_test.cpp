@@ -244,14 +244,14 @@ void test_precondition_failures()
         (actuarial_table("nonexistent", 0)
         ,std::runtime_error
         ,"There is no table number 0 in file 'nonexistent'."
-        ); // SOA !! Revise for xml.
+        );
 
     BOOST_TEST_THROW
         (actuarial_table("nonexistent", 1)
         ,std::runtime_error
         ,"File 'nonexistent.ndx' is required but could not be found."
          " Try reinstalling."
-        ); // SOA !! Revise for xml.
+        );
 
     std::ifstream ifs((qx_cso + ".ndx").c_str(), ios_in_binary());
     std::ofstream ofs("eraseme.ndx", ios_out_trunc_binary());
@@ -262,7 +262,7 @@ void test_precondition_failures()
         ,std::runtime_error
         ,"File 'eraseme.dat' is required but could not be found."
          " Try reinstalling."
-        ); // SOA !! Revise for xml.
+        );
     BOOST_TEST(0 == std::remove("eraseme.ndx"));
 
     actuarial_table z(qx_ins, 256);

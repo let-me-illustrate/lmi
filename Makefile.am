@@ -1242,7 +1242,6 @@ noinst_HEADERS = \
     single_choice_popup_menu.hpp \
     skeleton.hpp \
     so_attributes.hpp \
-    soa_helpers.hpp \
     stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \
