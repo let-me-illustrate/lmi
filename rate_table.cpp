@@ -1857,6 +1857,38 @@ void table_impl::validate()
             fatal_error() << "Number of decimals not specified." << LMI_FLUSH;
             }
 
+        uint16_t putative_num_decimals = *num_decimals_;
+        uint16_t required_num_decimals = deduce_number_of_decimals(values_);
+        if(required_num_decimals < putative_num_decimals)
+            {
+            warning()
+                << "Table #" << *number_
+                << " specifies " << putative_num_decimals
+                << " decimals, but " << required_num_decimals
+                << " would suffice."
+                << LMI_FLUSH
+                ;
+            }
+        // Later, change '<' to '!=' to trim trailing zeros too (and expunge
+        // the warning above); but for now, adjust only for lost precision.
+        // This condition is true only if the table is defective,
+        // which should occur rarely enough that the cost of
+        // recalculating the hash value both here and below
+        // doesn't matter.
+        if(putative_num_decimals < required_num_decimals)
+            {
+            warning()
+                << "Table #" << *number_
+                << " specifies " << putative_num_decimals
+                << " decimals, but " << required_num_decimals
+                << " were necessary."
+                << "\nThis flaw has been corrected, and the CRC recalculated."
+                << LMI_FLUSH
+                ;
+            *num_decimals_ = required_num_decimals;
+            *hash_value_ = compute_hash_value();
+            }
+
         // If we don't have the hash, compute it ourselves. If we do, check
         // that it corresponds to what we should have unless the hash value in
         // input is just 0 which is equivalent to being not specified (such
