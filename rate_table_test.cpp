@@ -443,6 +443,40 @@ void test_copy()
     do_test_copy(qx_ins_path);
 }
 
+/// Test deduce_number_of_decimals(std::string const&).
+///
+/// The tested function's argument is a string for generality, though
+/// in its intended use that string is always a value returned by
+/// value_cast<std::string>(double). The extra generality makes it
+/// easier to write tests here. Some of the failing tests in comments
+/// indicate improvements needed if a more general version of the
+/// tested function is ever desired for other purposes.
+
+void test_decimal_deduction()
+{
+    //                                                 1 234567890123456
+    BOOST_TEST_EQUAL( 9, deduce_number_of_decimals("0002.123456789000001"));
+    BOOST_TEST_EQUAL( 8, deduce_number_of_decimals("0002.123456789999991"));
+
+    BOOST_TEST_EQUAL( 8, deduce_number_of_decimals("0002.12345678999999 "));
+    BOOST_TEST_EQUAL(13, deduce_number_of_decimals("0002.1234567899999  "));
+
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.000000000000000"));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.000000000000000000000000"));
+    // Fails, but value_cast can't return this.
+//  BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.0              "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.               "));
+    // Fails, but value_cast can't return this.
+//  BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("    .0              "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("    .               "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0                "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   1                "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   9                "));
+
+    //                                                123456789012345678
+    BOOST_TEST_EQUAL( 5, deduce_number_of_decimals("0.012830000000000001"));
+}
+
 int test_main(int, char*[])
 {
     test_database_open();
@@ -454,6 +488,7 @@ int test_main(int, char*[])
     test_add_table();
     test_delete();
     test_copy();
+    test_decimal_deduction();
 
     return EXIT_SUCCESS;
 }

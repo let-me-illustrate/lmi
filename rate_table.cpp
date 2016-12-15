@@ -46,7 +46,6 @@
 
 #include <algorithm>                    // std::count()
 #include <climits>                      // ULLONG_MAX
-#include <cstddef>                      // std::size_t
 #include <cstdint>
 #include <cstdlib>                      // std::strtoull()
 #include <cstring>                      // std::strncmp()
@@ -60,7 +59,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <utility>                      // std::make_pair(), std::swap()
-#include <vector>
 
 using std::uint8_t;
 using std::uint16_t;
@@ -3154,3 +3152,86 @@ void database::save(std::ostream& index_os, std::ostream& data_os)
 }
 
 } // namespace soa_v3_format
+
+/// Infer the decimal precision of a rounded decimal-formatted number.
+
+std::size_t deduce_number_of_decimals(std::string const& arg)
+{
+    // Early exit: no decimal point means zero decimals.
+    if(std::string::npos == arg.find('.'))
+        {
+        return 0;
+        }
+
+    std::string s(arg);
+    std::size_t d = 0;
+
+    // Strip leading blanks and zeros.
+    std::string::size_type q = s.find_first_not_of(" 0");
+    if(std::string::npos != q)
+        {
+        s.erase(0, q);
+        }
+
+    // Strip trailing blanks.
+    std::string::size_type r = s.find_last_not_of(" ");
+    if(std::string::npos != r)
+        {
+        s.erase(1 + r);
+        }
+
+    // Preliminary result is number of characters after '.'.
+    // (Decrement for '.' unless nothing followed it.)
+    d = s.size() - s.find('.');
+    if(d) --d;
+
+    // Length of stripped string is number of significant digits
+    // (on both sides of the decimal point) plus one for the '.'.
+    // If this total exceeds 15--i.e., if there are more than 14
+    // significant digits--then there may be excess precision.
+    // In that case, keep only the first 15 digits (plus the '.',
+    // for a total of 16 characters), because those digits are
+    // guaranteed to be significant for IEEE754 double precision;
+    // drop the rest, which may include arbitrary digits. Then
+    // drop any trailing string that's all zeros or nines, and
+    // return the length of the remaining string. This wrongly
+    // truncates a number whose representation requires 15 or 16
+    // digits when the last one or more decimal digit is a nine,
+    // but that doesn't matter for the present use case: rate
+    // tables aren't expected to have more than about eight
+    // decimal places; and this function will be called for each
+    // number in a table and the maximum result used, so that
+    // such incorrect truncation can only occur if every number
+    // in the table is ill-conditioned in this way.
+    if(15 < s.size())
+        {
+        s.resize(16);
+        if('0' == s.back() || '9' == s.back())
+            {
+            d = s.find_last_not_of(s.back()) - s.find('.');
+            }
+        }
+
+    return d;
+}
+
+/// Infer the decimal precision of a decimally-rounded vector<double>.
+///
+/// Motivation: Some historical tables were stored only in the binary
+/// format. (Of course, no one wrote that by hand; text input surely
+/// was written first, but was not preserved.) The number of decimals
+/// implicit in the data values may defectively be inconsistent with
+/// the "Number of decimal places" header, and must be deduced. It is
+/// determined here as the greatest number of decimals required for
+/// any value datum, so that converting to text with that precision
+/// is lossless.
+
+std::size_t deduce_number_of_decimals(std::vector<double> const& values)
+{
+    std::size_t z = 0;
+    for(auto v: values)
+        {
+        z = std::max(z, deduce_number_of_decimals(value_cast<std::string>(v)));
+        }
+    return z;
+}
