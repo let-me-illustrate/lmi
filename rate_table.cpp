@@ -1859,23 +1859,11 @@ void table_impl::validate()
 
         uint16_t putative_num_decimals = *num_decimals_;
         uint16_t required_num_decimals = deduce_number_of_decimals(values_);
-        if(required_num_decimals < putative_num_decimals)
-            {
-            warning()
-                << "Table #" << *number_
-                << " specifies " << putative_num_decimals
-                << " decimals, but " << required_num_decimals
-                << " would suffice."
-                << LMI_FLUSH
-                ;
-            }
-        // Later, change '<' to '!=' to trim trailing zeros too (and expunge
-        // the warning above); but for now, adjust only for lost precision.
         // This condition is true only if the table is defective,
         // which should occur rarely enough that the cost of
         // recalculating the hash value both here and below
         // doesn't matter.
-        if(putative_num_decimals < required_num_decimals)
+        if(putative_num_decimals != required_num_decimals)
             {
             warning()
                 << "Table #" << *number_
