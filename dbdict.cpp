@@ -529,6 +529,18 @@ void DBDictionary::InitDB()
     Add(database_entity(DB_MaxWdGenAcctValMult , 1.0));
     Add(database_entity(DB_MaxWdSepAcctValMult , 1.0));
 
+    // This is determined by law and regulation, and should be the
+    // same for all life-insurance products.
+    int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
+    std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
+    Add
+        (database_entity
+            (DB_PremTaxRate
+            ,premium_tax_dimensions
+            ,premium_tax_rates_for_life_insurance()
+            )
+        );
+
     // These are the same as class date_trammel's nominal limits.
     Add(database_entity(DB_CoiResetMinDate     , gregorian_epoch().julian_day_number()));
     Add(database_entity(DB_CoiResetMaxDate     , last_yyyy_date ().julian_day_number()));
