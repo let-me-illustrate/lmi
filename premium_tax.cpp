@@ -393,7 +393,7 @@ std::vector<double> const& premium_tax_rates_for_life_insurance()
     static int const n = 53;
     static double const d[n] =
         //   AL       AK       AZ       AR       CA       CO       CT
-        {0.0230,  tiered,  0.0199,  0.0250,  0.0235,  0.0200,  0.0175
+        {0.0230,  tiered,  0.0198,  0.0250,  0.0235,  0.0200,  0.0175
         //   DE       DC       FL       GA       HI       ID
         ,0.0200,  0.0175,  0.0175,  0.0225,  0.0275,  0.0150
         //   IL       IN       IA       KS       KY       LA       ME
