@@ -345,7 +345,7 @@ int verify(fs::path const& database_filename)
                 // This is not really fatal, it is only used here to throw an
                 // exception in a convenient way.
                 fatal_error()
-                    << "After loading and saving the original table '\n"
+                    << "After loading and saving the original table \n"
                     << "binary contents differed.\n"
                     << LMI_FLUSH
                     ;
