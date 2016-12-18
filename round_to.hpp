@@ -79,29 +79,6 @@ namespace detail
 
 #ifdef LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 
-// Returns the absolute value of 'r'. Somewhat defectively, assumes
-// that the negative of a negative argument is representable, which is
-// not guaranteed by C++98--but is OK for IEC 60559 floating-point
-// types, which can be negated by flipping the sign bit. However, it
-// might not be OK for non-IEC 60559 floating-point types. We might
-// assert std::numeric_limits<RealType>::is_iec559, but some compilers
-// (e.g. bc++5.5.1) would fail, perhaps properly, even though they run
-// on the same hardware as other compilers that would pass that test;
-// yet this is a property of the hardware, not of the compiler.
-
-template<typename RealType>
-RealType perform_fabs(RealType r)
-{
-    if(r < RealType(0))
-        {
-        return -r;
-        }
-    else
-        {
-        return r;
-        }
-}
-
 // Returns 'r' raised to the 'n'th power. The sgi stl provides a faster
 // implementation as an extension (although it does not seem to work
 // with negative powers). Because this template function is called only
@@ -136,51 +113,15 @@ RealType perform_pow(RealType r, int n)
         }
 }
 
-// Returns largest integer-valued RealType value that does not exceed
-// its argument.
-template<typename RealType>
-RealType perform_floor(RealType r)
-{
-    // Use std::floor() when we know it'll work; else just return
-    // the argument. TODO ?? Isn't that incorrect for long double?
-    static double const max_integral_double = perform_pow
-        (2.0
-        ,std::numeric_limits<double>::digits
-        );
-    if
-        (  r < -max_integral_double
-        ||      max_integral_double < r
-        )
-        {
-        return r;
-        }
-    else
-        {
-        return std::floor(r);
-        }
-}
-
 #else // not defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 
 // Unlike the kludges above, these are defined inline to avoid
 // penalizing compliant compilers.
 
 template<typename RealType>
-inline RealType perform_fabs(RealType r)
-{
-    return std::fabs(r);
-}
-
-template<typename RealType>
 inline RealType perform_pow(RealType r, int n)
 {
     return std::pow(r, n);
-}
-
-template<typename RealType>
-inline RealType perform_floor(RealType r)
-{
-    return std::floor(r);
 }
 
 #endif // not defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
@@ -334,7 +275,7 @@ RealType round_near(RealType r)
             ;
 #endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
     RealType f_part = r - i_part;
-    RealType abs_f_part = perform_fabs(f_part);
+    RealType abs_f_part = std::fabs(f_part);
 
     // If      |fractional part| <  .5, ignore it;
     // else if |fractional part| == .5, ignore it if integer part is even;
@@ -346,7 +287,7 @@ RealType round_near(RealType r)
               RealType(0.5) == abs_f_part
            && i_part
                   != RealType(2)
-                  *  detail::perform_floor(RealType(0.5) * i_part)
+                  *  std::floor(RealType(0.5) * i_part)
            )
         )
         {
