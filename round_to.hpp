@@ -73,9 +73,9 @@ namespace detail
 // functions use only operations that the standard requires to be
 // defined for those types.
 
-#if defined __MINGW32__ || defined __BORLANDC__
+#if defined __MINGW32__
 #   define LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
-#endif // defined __MINGW32__ || defined __BORLANDC__
+#endif // defined __MINGW32__
 
 #ifdef LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 
@@ -216,48 +216,7 @@ inline RealType perform_rint(RealType r)
     return r;
 }
 
-#elif defined __BORLANDC__
-
-// The borland compiler is a gratis download, but allows inline asm
-// only with the non-gratis borland assembler, which not everyone has.
-// It can "emit" inline machine code without extra tools, even in an
-// inline or template function, but it cannot inline the undocumented
-// 'noretval' pragma, which prevents a superfluous and costly store
-// and pop of the result, so this function is written out of line.
-// This compiler's documented 'warn' pragma prevents a warning (which
-// would here be incorrect) that no value is returned.
-
-float perform_rint(float)
-{
-    __emit__(0x0d9, 0x045, 0x008); // FLD short-real ptr[ebp+08]
-    __emit__(0x0d9, 0x0fc);        // FRNDINT
-#   pragma noretval
-    return;
-#pragma warn -rvl
-}
-#pragma warn .rvl
-
-double perform_rint(double)
-{
-    __emit__(0x0dd, 0x045, 0x008); // FLD qword ptr[ebp+08]
-    __emit__(0x0d9, 0x0fc);        // FRNDINT
-#   pragma noretval
-    return;
-#pragma warn -rvl
-}
-#pragma warn .rvl
-
-long double perform_rint(long double)
-{
-    __emit__(0x0db, 0x06d, 0x008); // FLD tbyte ptr[ebp+08]
-    __emit__(0x0d9, 0x0fc);        // FRNDINT
-#   pragma noretval
-    return;
-#pragma warn -rvl
-}
-#pragma warn .rvl
-
-#else // neither (__GNUC__ && LMI_X86) nor __BORLANDC__
+#else // not (__GNUC__ && LMI_X86)
 
 // The round_X functions below work with any real_type-to-integer_type.
 // Compilers that provide rint() may have optimized it (or you can
@@ -278,7 +237,7 @@ inline RealType perform_rint(RealType r)
 #endif // not defined LMI_RINT_AVAILABLE
 }
 
-#endif // neither (__GNUC__ && LMI_X86) nor __BORLANDC__
+#endif // not (__GNUC__ && LMI_X86)
 
 // Auxiliary rounding functions: one for each supported rounding style.
 // These functions avoid switching the hardware rounding mode as long
@@ -449,8 +408,8 @@ class round_to
 /// This default ctor only renders the class DefaultConstructible.
 /// The object it creates throws on use.
 ///
-/// The cast to 'rounding_function_t' seems to be required by the
-/// ancient borland compiler.
+/// The cast to 'rounding_function_t' seemed to be required by an
+/// ancient compiler.
 
 template<typename RealType>
 round_to<RealType>::round_to()
