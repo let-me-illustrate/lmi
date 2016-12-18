@@ -35,12 +35,10 @@
 #include <stdexcept>
 
 // Round a floating-point number to a given number of decimal places,
-// following a given rounding style. Read the accompanying html
-// documentation.
+// following a given rounding style.
 
-// As the html documentation explains, power-of-ten scaling factors
-// are best represented in the maximum available precision, which
-// is indicated by type 'max_prec_real'.
+// Power-of-ten scaling factors are best represented in the maximum
+// available precision, which is indicated by type 'max_prec_real'.
 //
 // Changing this typedef lets you use a nonstandard type or class with
 // greater precision if desired.
@@ -188,7 +186,6 @@ inline RealType perform_floor(RealType r)
 #endif // not defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 } // namespace detail
 
-// See HTML documentation.
 inline rounding_style& default_rounding_style()
 {
     static rounding_style default_style = r_to_nearest;
@@ -413,7 +410,6 @@ RealType erroneous_rounding_function(RealType)
 }
 } // namespace detail
 
-// See HTML documentation.
 template<typename RealType>
 class round_to
     :public std::unary_function<RealType, RealType>
