@@ -58,30 +58,7 @@ typedef long double max_prec_real;
 
 namespace detail
 {
-// 26.5/6 requires float and long double versions of std::fabs() and
-// std::pow(), but neither mingw gcc-3.3 or earlier (which uses the
-// msvc runtime library) nor bc++5.5.1 implements them: they provide
-// only double versions. For those compilers, these workarounds are
-// provided; the names are intentionally ugly.
-//
-// If your compiler is broken in this respect, define the following
-// macro (which might be generally useful in a config header) to use
-// workarounds for the missing functions we need. It would perhaps be
-// better to provide specializations of these workarounds for double,
-// which would just call the appropriate standard C function, but it's
-// better still to tell the implementor to conform to the standard.
-
-// The template parameter of each function template in namespace
-// 'detail' is restricted to floating point types [3.9.1/8]. Those
-// functions use only operations that the standard requires to be
-// defined for those types.
-
 #if defined __MINGW32__
-#   define LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
-#endif // defined __MINGW32__
-
-#if defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
-
 // Returns 'r' raised to the 'n'th power. The sgi stl provides a faster
 // implementation as an extension (although it does not seem to work
 // with negative powers). Because this template function is called only
@@ -116,7 +93,7 @@ RealType perform_pow(RealType r, int n)
         }
 }
 
-#else  // !defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+#else  // !defined __MINGW32__
 
 // Unlike the kludges above, these are defined inline to avoid
 // penalizing compliant compilers.
@@ -127,7 +104,7 @@ inline RealType perform_pow(RealType r, int n)
     return std::pow(r, n);
 }
 
-#endif // !defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+#endif // !defined __MINGW32__
 } // namespace detail
 
 inline rounding_style& default_rounding_style()
@@ -483,7 +460,6 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
         }
 }
 
-#undef LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 #undef LMI_HAVE_RINT
 
 #endif // round_to_hpp
