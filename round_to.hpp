@@ -187,7 +187,7 @@ RealType round_trunc(RealType r)
         }
     return i_part;
 #else  // !defined LMI_HAVE_RINT
-    double x = std::floor(std::fabs(r));
+    RealType x = std::floor(std::fabs(r));
     return (0.0 <= r) ? x : -x;
 #endif // !defined LMI_HAVE_RINT
 }
