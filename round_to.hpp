@@ -138,50 +138,9 @@ inline rounding_style& default_rounding_style()
 
 namespace detail
 {
-// perform_rint() rounds argument to an integer value in floating-point
-// format, using the current rounding direction if possible, in which
-// case it's the same as the C99 rint() function. Not named rint()
-// because some C++ compilers already provide that function.
-
-#if defined __GNUC__ && defined LMI_X86
-
-// TODO ?? Test speed with mingw's builtin rint().
-
-// Profiling suggests that inlining this template function makes a
-// realistic application that performs a lot of rounding run about
-// half a percent faster with gcc. That may be measurement error,
-// but it seems a reasonable outcome because some calls to this
-// function, in other auxiliary functions, really can be inlined, as
-// opposed to calling it through a pointer, which cannot.
-template<typename RealType>
-inline RealType perform_rint(RealType r)
-{
-    __asm__ ("frndint" : "=t" (r) : "0" (r));
-    return r;
-}
-
-#else  // !(defined __GNUC__ && defined LMI_X86)
-
-// The round_X functions below work with any real_type-to-integer_type.
-// Compilers that provide rint() may have optimized it (or you can
-// provide a fast implementation yourself).
-
-template<typename RealType>
-inline RealType perform_rint(RealType r)
-{
-#if defined LMI_HAVE_RINT
-    return rint(r);
-#else  // !defined LMI_HAVE_RINT
-    throw std::logic_error("rint() not defined.");
-#endif // !defined LMI_HAVE_RINT
-}
-
-#endif // !(defined __GNUC__ && defined LMI_X86)
-
 // Auxiliary rounding functions: one for each supported rounding style.
-// These functions avoid switching the hardware rounding mode as long
-// as perform_rint() does. Most use perform_rint() if available, but
-// do not require it to follow any particular style.
+// These functions avoid changing the hardware rounding mode as long
+// as the library functions they call do not change it.
 
 // Perform no rounding at all.
 template<typename RealType>
@@ -195,7 +154,7 @@ template<typename RealType>
 RealType round_up(RealType r)
 {
 #if defined LMI_HAVE_RINT
-    RealType i_part = perform_rint(r);
+    RealType i_part = std::rint(r);
     if(i_part < r)
         {
         // Suppose the value of 'i_part' is not exactly representable
@@ -215,7 +174,7 @@ template<typename RealType>
 RealType round_down(RealType r)
 {
 #if defined LMI_HAVE_RINT
-    RealType i_part = perform_rint(r);
+    RealType i_part = std::rint(r);
     if(r < i_part)
         {
         i_part--;
@@ -231,7 +190,7 @@ template<typename RealType>
 RealType round_trunc(RealType r)
 {
 #if defined LMI_HAVE_RINT
-    RealType i_part = perform_rint(r);
+    RealType i_part = std::rint(r);
     RealType f_part = r - i_part;
     // Consider the integer part 'i_part' and the fractional part
     // 'f_part': the integer part is the final answer if
@@ -261,7 +220,7 @@ template<typename RealType>
 RealType round_near(RealType r)
 {
 #if defined LMI_HAVE_RINT
-    RealType i_part = perform_rint(r);
+    RealType i_part = std::rint(r);
 #else  // !defined LMI_HAVE_RINT
 //  To return immediately with this value:
 //    return (RealType(0) < r) ? std::floor(r + 0.5) : std::ceil(r -0.5);
@@ -487,7 +446,7 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
         && a_style != r_indeterminate
         )
         {
-        return detail::perform_rint;
+        return std::rint;
         }
 #endif // defined LMI_HAVE_RINT
 
@@ -511,7 +470,7 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
             }
         case r_current:
             {
-            return detail::perform_rint;
+            return std::rint;
             }
         case r_not_at_all:
             {
