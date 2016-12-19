@@ -53,6 +53,9 @@
 // this typedef to double.
 typedef long double max_prec_real;
 
+// Any modern C++ compiler provides std::rint().
+#define LMI_HAVE_RINT
+
 namespace detail
 {
 // 26.5/6 requires float and long double versions of std::fabs() and
@@ -77,7 +80,7 @@ namespace detail
 #   define LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 #endif // defined __MINGW32__
 
-#ifdef LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+#if defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 
 // Returns 'r' raised to the 'n'th power. The sgi stl provides a faster
 // implementation as an extension (although it does not seem to work
@@ -113,7 +116,7 @@ RealType perform_pow(RealType r, int n)
         }
 }
 
-#else // not defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+#else  // !defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 
 // Unlike the kludges above, these are defined inline to avoid
 // penalizing compliant compilers.
@@ -124,7 +127,7 @@ inline RealType perform_pow(RealType r, int n)
     return std::pow(r, n);
 }
 
-#endif // not defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+#endif // !defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
 } // namespace detail
 
 inline rounding_style& default_rounding_style()
@@ -157,28 +160,23 @@ inline RealType perform_rint(RealType r)
     return r;
 }
 
-#else // not (__GNUC__ && LMI_X86)
+#else  // !(defined __GNUC__ && defined LMI_X86)
 
 // The round_X functions below work with any real_type-to-integer_type.
 // Compilers that provide rint() may have optimized it (or you can
 // provide a fast implementation yourself).
 
-#if defined __GNUC__ && !defined __MINGW32__
-#   define LMI_RINT_AVAILABLE
-#endif // defined __GNUC__ && !defined __MINGW32__
-
 template<typename RealType>
 inline RealType perform_rint(RealType r)
 {
-#ifdef LMI_RINT_AVAILABLE
+#if defined LMI_HAVE_RINT
     return rint(r);
-#else // not defined LMI_RINT_AVAILABLE
-#   define LMI_LACKING_RINT_OR_EQUIVALENT
+#else  // !defined LMI_HAVE_RINT
     throw std::logic_error("rint() not defined.");
-#endif // not defined LMI_RINT_AVAILABLE
+#endif // !defined LMI_HAVE_RINT
 }
 
-#endif // not (__GNUC__ && LMI_X86)
+#endif // !(defined __GNUC__ && defined LMI_X86)
 
 // Auxiliary rounding functions: one for each supported rounding style.
 // These functions avoid switching the hardware rounding mode as long
@@ -196,7 +194,7 @@ RealType round_not(RealType r)
 template<typename RealType>
 RealType round_up(RealType r)
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
+#if defined LMI_HAVE_RINT
     RealType i_part = perform_rint(r);
     if(i_part < r)
         {
@@ -207,32 +205,32 @@ RealType round_up(RealType r)
         i_part++;
         }
     return i_part;
-#else // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#else  // !defined LMI_HAVE_RINT
     return std::ceil(r);
-#endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#endif // !defined LMI_HAVE_RINT
 }
 
 // Round down.
 template<typename RealType>
 RealType round_down(RealType r)
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
+#if defined LMI_HAVE_RINT
     RealType i_part = perform_rint(r);
     if(r < i_part)
         {
         i_part--;
         }
     return i_part;
-#else // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#else  // !defined LMI_HAVE_RINT
     return std::floor(r);
-#endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#endif // !defined LMI_HAVE_RINT
 }
 
 // Truncate.
 template<typename RealType>
 RealType round_trunc(RealType r)
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
+#if defined LMI_HAVE_RINT
     RealType i_part = perform_rint(r);
     RealType f_part = r - i_part;
     // Consider the integer part 'i_part' and the fractional part
@@ -252,19 +250,19 @@ RealType round_trunc(RealType r)
         i_part++;
         }
     return i_part;
-#else // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#else  // !defined LMI_HAVE_RINT
     double x = std::floor(std::fabs(r));
     return (0.0 <= r) ? x : -x;
-#endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#endif // !defined LMI_HAVE_RINT
 }
 
 // Round to nearest using bankers method.
 template<typename RealType>
 RealType round_near(RealType r)
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
+#if defined LMI_HAVE_RINT
     RealType i_part = perform_rint(r);
-#else // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#else  // !defined LMI_HAVE_RINT
 //  To return immediately with this value:
 //    return (RealType(0) < r) ? std::floor(r + 0.5) : std::ceil(r -0.5);
 //  would be incorrect, because halfway cases must be rounded to even.
@@ -276,7 +274,7 @@ RealType round_near(RealType r)
     // This 'i_part' needn't equal the value that std::rint() would
     // return, as long as both produce the same correct result after
     // adjustment below.
-#endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#endif // !defined LMI_HAVE_RINT
     RealType f_part = r - i_part;
     RealType abs_f_part = std::fabs(f_part);
 
@@ -483,7 +481,7 @@ template<typename RealType>
 typename round_to<RealType>::rounding_function_t
 round_to<RealType>::select_rounding_function(rounding_style const a_style) const
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
+#if defined LMI_HAVE_RINT
     if
         (  a_style == default_rounding_style()
         && a_style != r_indeterminate
@@ -491,7 +489,7 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
         {
         return detail::perform_rint;
         }
-#endif // not defined LMI_LACKING_RINT_OR_EQUIVALENT
+#endif // defined LMI_HAVE_RINT
 
     switch(a_style)
         {
@@ -527,8 +525,7 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
 }
 
 #undef LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
-#undef LMI_RINT_AVAILABLE
-#undef LMI_LACKING_RINT_OR_EQUIVALENT
+#undef LMI_HAVE_RINT
 
 #endif // round_to_hpp
 
