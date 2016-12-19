@@ -265,7 +265,7 @@ RealType round_near(RealType r)
 #ifndef LMI_LACKING_RINT_OR_EQUIVALENT
     RealType i_part = perform_rint(r);
 #else // defined LMI_LACKING_RINT_OR_EQUIVALENT
-//  This
+//  To return immediately with this value:
 //    return (RealType(0) < r) ? std::floor(r + 0.5) : std::ceil(r -0.5);
 //  would be incorrect, because halfway cases must be rounded to even.
     RealType i_part =
@@ -273,6 +273,9 @@ RealType round_near(RealType r)
             ? std::floor(r + 0.5)
             : std::ceil (r - 0.5)
             ;
+    // This 'i_part' needn't equal the value that std::rint() would
+    // return, as long as both produce the same correct result after
+    // adjustment below.
 #endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
     RealType f_part = r - i_part;
     RealType abs_f_part = std::fabs(f_part);
