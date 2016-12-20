@@ -69,7 +69,7 @@ std::string insert_spaces_between_words(std::string const& s)
 {
     std::string r;
     std::insert_iterator<std::string> j(r, r.begin());
-    for(auto c: s)
+    for(char c: s)
         {
         if(is_ok_for_cctype(c) && std::isupper(c) && !r.empty())
             {
@@ -1190,25 +1190,25 @@ void CensusView::update_visible_columns()
     // still information--so if the user made them different from any cell
     // wrt some column, we respect that conscious decision.
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
-    std::vector<std::string>::const_iterator i;
-    unsigned int column;
-    for(i = all_headers.begin(), column = 0; i != all_headers.end(); ++i, ++column)
+    unsigned int column = 0;
+    for(auto const& header: all_headers)
         {
+        ++column;
         if
-            (  column_value_varies_across_cells(*i, class_parms())
-            || column_value_varies_across_cells(*i, cell_parms ())
+            (  column_value_varies_across_cells(header, class_parms())
+            || column_value_varies_across_cells(header, cell_parms ())
             )
             {
-            any_member<Input> const& representative_value = list_model_->cell_at(0, 1 + column);
+            any_member<Input> const& representative_value = list_model_->cell_at(0, column);
 
             wxDataViewRenderer* renderer = renderer_type_converter::get(representative_value).create_renderer(representative_value);
             LMI_ASSERT(renderer);
 
             list_window_->AppendColumn
                 (new(wx) wxDataViewColumn
-                    (insert_spaces_between_words(*i)
+                    (insert_spaces_between_words(header)
                     ,renderer
-                    ,1 + column
+                    ,column
                     ,width
                     ,wxALIGN_LEFT
                     ,wxDATAVIEW_COL_RESIZABLE

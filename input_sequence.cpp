@@ -133,7 +133,7 @@ InputSequence::InputSequence(std::vector<double> const& v)
     intervals.push_back(dummy);
     intervals.back().value_number = current_value;
 
-    for(double vi : v)
+    for(double vi: v)
         {
         current_value = vi;
         if(prior_value == current_value)

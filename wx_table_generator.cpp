@@ -188,16 +188,16 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         int const per_expand
             = (total_width_ - total_fixed + num_expand - 1)/num_expand;
 
-        for(auto& column: columns_)
+        for(auto& ci: columns_)
             {
-            if(column.is_hidden())
+            if(ci.is_hidden())
                 {
                 continue;
                 }
 
-            if(0 == column.width_)
+            if(0 == ci.width_)
                 {
-                column.width_ = per_expand;
+                ci.width_ = per_expand;
                 }
             }
         }

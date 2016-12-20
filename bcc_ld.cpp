@@ -61,11 +61,16 @@ namespace
     std::string switch_slashes(std::string const& s, bool skip_first)
         {
         std::string t(s);
-        for(std::string::size_type j = skip_first; j < t.size(); ++j)
+        for(char& c: t)
             {
-            if('/' == t[j])
+            if(skip_first)
                 {
-                t[j] = '\\';
+                skip_first = false;
+                continue;
+                }
+            if('/' == c)
+                {
+                c = '\\';
                 }
             }
         return t;

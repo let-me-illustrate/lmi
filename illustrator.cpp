@@ -228,22 +228,23 @@ void assert_consistent_run_order
     ,std::vector<Input> const& cells
     )
 {
-    typedef std::vector<Input>::size_type svst;
-    for(svst i = 0; i != cells.size(); ++i)
+    std::size_t i = 0;
+    for(auto const& cell: cells)
         {
-        if(case_default["RunOrder"] != cells[i]["RunOrder"])
+        if(case_default["RunOrder"] != cell["RunOrder"])
             {
             fatal_error()
                 << "Case-default run order '"
                 << case_default["RunOrder"]
                 << "' differs from run order '"
-                << cells[i]["RunOrder"]
+                << cell["RunOrder"]
                 << "' of cell number "
                 << 1 + i
                 << ". Make this consistent before running illustrations."
                 << LMI_FLUSH
                 ;
             }
+        ++i;
         }
 }
 
@@ -291,13 +292,11 @@ void assert_okay_to_run_group_quote
         fatal_error() << "Group quotes allowed for new business only." << LMI_FLUSH;
         }
 
-    typedef std::vector<Input>::size_type svst;
-    for(svst i = 0; i != cells.size(); ++i)
+    std::size_t i = 0;
+    for(auto const& cell: cells)
         {
-        Input const& cell = cells[i];
-        for(std::size_t j = 0; j != n; ++j)
+        for(auto field: fields)
             {
-            char const*const field = fields[j];
             if(case_default[field] != cell[field])
                 {
                 fatal_error()
@@ -314,6 +313,7 @@ void assert_okay_to_run_group_quote
                     ;
                 }
             }
+        ++i;
         }
 }
 } // Unnamed namespace.

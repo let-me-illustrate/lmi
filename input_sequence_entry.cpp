@@ -820,11 +820,9 @@ void InputSequenceEditor::remove_row(int row)
             }
         }
     LMI_ASSERT(!to_remove.empty());
-    for(std::vector<wxWindowID>::const_iterator rm = to_remove.begin()
-        ;rm != to_remove.end()
-        ;++rm)
+    for(auto rm: to_remove)
         {
-        id_to_row_.erase(*rm);
+        id_to_row_.erase(rm);
         }
 
     // update the row following the one we just removed and the one before it,
