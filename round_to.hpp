@@ -58,7 +58,7 @@ typedef long double max_prec_real;
 
 namespace detail
 {
-#if defined __MINGW32__
+#if 0 // This elaborate workaround is probably no longer useful.
 // Returns 'r' raised to the 'n'th power. The sgi stl provides a faster
 // implementation as an extension (although it does not seem to work
 // with negative powers). Because this template function is called only
@@ -93,18 +93,43 @@ RealType perform_pow(RealType r, int n)
         }
 }
 
-#else  // !defined __MINGW32__
+#else  // !0
 
-// Unlike the kludges above, these are defined inline to avoid
-// penalizing compliant compilers.
+/// Raise an integer-valued real to an integer power.
+///
+/// Motivation: calculate accurate powers of ten. See:
+///   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
+/// Library authors often optimize pow() for integral exponents,
+/// using multiplication rather than a transcendental calculation.
+/// When 'r' is exactly representable, positive integral powers
+/// returned by a high-quality std::pow() are likely to be exact if
+/// they are exactly representable, or otherwise as accurate as they
+/// can be; but for negative integral powers this integral-exponent
+/// "optimization" may very well reduce accuracy, e.g., if 10^-3 is
+/// calculated as (0.1 * 0.1 * 0.1). Because the positive-exponent
+/// case is likely to be treated ideally by the library author, when
+/// 'n' is negative this function calls std::pow() to calculate the
+/// positive power and returns the reciprocal: 1 / (10 * 10 * 10)
+/// in the preceding example.
 
 template<typename RealType>
-inline RealType perform_pow(RealType r, int n)
+RealType perform_pow(RealType r, int n)
 {
-    return std::pow(r, n);
+    if(0 == n)
+        {
+        return RealType(1.0);
+        }
+    else if(n < 0)
+        {
+        return RealType(1.0) / std::pow(r, -n);
+        }
+    else
+        {
+        return std::pow(r, n);
+        }
 }
 
-#endif // !defined __MINGW32__
+#endif // !0
 } // namespace detail
 
 inline rounding_style& default_rounding_style()
