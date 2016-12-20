@@ -266,36 +266,27 @@ class round_to
     int decimals() const;
     rounding_style style() const;
 
-  protected:
-    // Boost coding standards 8.1 implicitly forbid private typedefs.
-    // This typedef may be wanted if this class is ever derived from,
-    // even though it's not obvious to the author how such inheritance
-    // would be useful.
-    typedef RealType (*rounding_function_t)(RealType);
-
   private:
+    typedef RealType (*rounding_function_t)(RealType);
     rounding_function_t select_rounding_function(rounding_style) const;
 
     int decimals_;
     rounding_style style_;
     max_prec_real scale_fwd_;
     max_prec_real scale_back_;
-    rounding_function_t rounding_function;
+    rounding_function_t rounding_function_;
 };
 
-/// This default ctor only renders the class DefaultConstructible.
+/// This default ctor serves only to render the class DefaultConstructible.
 /// The object it creates throws on use.
-///
-/// The cast to 'rounding_function_t' seemed to be required by an
-/// ancient compiler.
 
 template<typename RealType>
 round_to<RealType>::round_to()
-    :decimals_(0)
-    ,style_(r_indeterminate)
-    ,scale_fwd_(1.0)
-    ,scale_back_(1.0)
-    ,rounding_function((rounding_function_t)detail::erroneous_rounding_function)
+    :decimals_          (0)
+    ,style_             (r_indeterminate)
+    ,scale_fwd_         (1.0)
+    ,scale_back_        (1.0)
+    ,rounding_function_ (detail::erroneous_rounding_function)
 {
 }
 
@@ -325,11 +316,11 @@ round_to<RealType>::round_to()
 
 template<typename RealType>
 round_to<RealType>::round_to(int decimals, rounding_style a_style)
-    :decimals_(decimals)
-    ,style_(a_style)
-    ,scale_fwd_(detail::perform_pow(max_prec_real(10.0), decimals))
-    ,scale_back_(max_prec_real(1.0) / scale_fwd_)
-    ,rounding_function(select_rounding_function(a_style))
+    :decimals_          (decimals)
+    ,style_             (a_style)
+    ,scale_fwd_         (detail::perform_pow(max_prec_real(10.0), decimals))
+    ,scale_back_        (max_prec_real(1.0) / scale_fwd_)
+    ,rounding_function_ (select_rounding_function(a_style))
 {
 /*
 // TODO ?? This might improve accuracy slightly, but would prevent
@@ -364,22 +355,22 @@ round_to<RealType>::round_to(int decimals, rounding_style a_style)
 
 template<typename RealType>
 round_to<RealType>::round_to(round_to const& z)
-    :decimals_        (z.decimals_        )
-    ,style_           (z.style_           )
-    ,scale_fwd_       (z.scale_fwd_       )
-    ,scale_back_      (z.scale_back_      )
-    ,rounding_function(z.rounding_function)
+    :decimals_          (z.decimals_         )
+    ,style_             (z.style_            )
+    ,scale_fwd_         (z.scale_fwd_        )
+    ,scale_back_        (z.scale_back_       )
+    ,rounding_function_ (z.rounding_function_)
 {
 }
 
 template<typename RealType>
 round_to<RealType>& round_to<RealType>::operator=(round_to const& z)
 {
-    decimals_         = z.decimals_        ;
-    style_            = z.style_           ;
-    scale_fwd_        = z.scale_fwd_       ;
-    scale_back_       = z.scale_back_      ;
-    rounding_function = z.rounding_function;
+    decimals_          = z.decimals_         ;
+    style_             = z.style_            ;
+    scale_fwd_         = z.scale_fwd_        ;
+    scale_back_        = z.scale_back_       ;
+    rounding_function_ = z.rounding_function_;
     return *this;
 }
 
@@ -396,7 +387,7 @@ template<typename RealType>
 inline RealType round_to<RealType>::operator()(RealType r) const
 {
     return static_cast<RealType>
-        (rounding_function(static_cast<RealType>(r * scale_fwd_)) * scale_back_
+        (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_
         );
 }
 
