@@ -215,7 +215,7 @@ bool test_one_case
 {
     RealType observed = roundFDL(unrounded);
 
-    max_prec_real abs_error = detail::perform_fabs(observed - expected);
+    max_prec_real abs_error = std::fabs(observed - expected);
     // Nonstandardly define relative error in terms of
     // o(bserved) and e(xpected) as
     //   |(o-e)/e| if e nonzero, else
@@ -225,7 +225,7 @@ bool test_one_case
     max_prec_real rel_error(0.0);
     if(max_prec_real(0.0) != expected)
         {
-        rel_error = detail::perform_fabs
+        rel_error = std::fabs
             (
               (observed - max_prec_real(expected))
             / expected
@@ -233,7 +233,7 @@ bool test_one_case
         }
     else if(max_prec_real(0.0) != observed)
         {
-        rel_error = detail::perform_fabs
+        rel_error = std::fabs
             (
               (observed - max_prec_real(expected))
             / observed
