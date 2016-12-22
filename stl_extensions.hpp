@@ -45,13 +45,16 @@
 // with the above disclaimers.
 //
 // Gregory W. Chicares modified it trivially in 2002 and 2005, and in
-// later years as indicated in 'ChangeLog'. Any defect in it should
-// not reflect on SGI's or HP's reputation.
+// later years as indicated in 'ChangeLog' or in `git log`. Any defect
+// in it should not reflect on SGI's or HP's reputation.
 
 #ifndef stl_extensions_hpp
 #define stl_extensions_hpp
 
 #include "config.hpp"
+
+#include <functional>                   // std::multiplies(), std::plus()
+#include <stdexcept>                    // std::logic_error()
 
 namespace nonstd
 {
@@ -129,6 +132,63 @@ void iota
         {
         *first++ = value++;
         }
+}
+
+/// Identity element.
+
+template <typename T> inline T identity_element(std::plus<T>)
+{
+    return T(0);
+}
+
+template <typename T> inline T identity_element(std::multiplies<T>)
+{
+    return T(1);
+}
+
+/// Returns x ** n, where 0 <= n.
+///
+/// Note that "multiplication" is required to be associative, but not
+/// necessarily commutative.
+///
+/// GWC modification: throw on negative exponent--otherwise, the loop
+/// appears not to terminate.
+
+template <typename T, typename Integer, typename MonoidOperation>
+T power(T x, Integer n, MonoidOperation opr)
+{
+    if (n < 0)
+        {
+        throw std::logic_error("power() called with negative exponent.");
+        }
+    if (n == 0)
+        {
+        return identity_element(opr);
+        }
+    else
+        {
+        while ((n & 1) == 0)
+            {
+            n >>= 1;
+            x = opr(x, x);
+            }
+        T result = x;
+        n >>= 1;
+        while (n != 0)
+            {
+            x = opr(x, x);
+            if ((n & 1) != 0)
+                result = opr(result, x);
+            n >>= 1;
+            }
+        return result;
+        }
+}
+
+template <typename T, typename Integer>
+inline T power(T x, Integer n)
+{
+    return power(x, n, std::multiplies<T>());
 }
 } // namespace nonstd
 
