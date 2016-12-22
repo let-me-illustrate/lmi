@@ -118,11 +118,16 @@ namespace fs = boost::filesystem;
 #   include <_mingw.h>
 #endif // __MINGW32__
 
-// This is RTL version, not gcc version. As to MinGW-w64, see:
+// lmi used the mingw.org toolchain through gcc-3.4.5, and switched
+// to MinGW-w64's gcc-4.9.2 circa 2016-01-01. To distinguish one from
+// the other, see:
 //   http://comments.gmane.org/gmane.comp.gnu.mingw.w64.general/641
-// No attempt is made to distinguish the MinGW-w64 versus mingw.org
-// toolchains: lmi used the mingw.org toolchain through gcc-3.4.5,
-// and switched to MinGW-w64's gcc-4.9.2 circa 2016-01-01.
+//   https://sourceforge.net/p/mingw-w64/mailman/message/28485906/
+#if defined __MINGW64_VERSION_MAJOR
+#   define LMI_MINGW_W64
+#endif // defined __MINGW64_VERSION_MAJOR
+
+// This is RTL version, not gcc version.
 #if defined __MINGW32_VERSION || defined __MINGW64_VERSION_MAJOR
 #   define LMI_MINGW_VERSION \
         (__MINGW32_MAJOR_VERSION * 100 + __MINGW32_MINOR_VERSION)

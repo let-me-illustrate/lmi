@@ -781,11 +781,14 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_vsnprintf"
         ,"_wcsdup"
     // Compiler specific: gcc.
+        ,"__FLOAT_WORD_ORDER__"
         ,"__GLIBCPP__"
         ,"__GNUC_MINOR__"
         ,"__GNUC_PATCHLEVEL__"
         ,"__GNUC__"
         ,"__GNUG__"
+        ,"__ORDER_BIG_ENDIAN__"
+        ,"__ORDER_LITTLE_ENDIAN__"
         ,"__STRICT_ANSI__"
         ,"__asm__"
         ,"__attribute__"
@@ -806,6 +809,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_LIBC"
         ,"__BIG_ENDIAN"
         ,"__BYTE_ORDER"
+        ,"__FLOAT_WORD_ORDER"
     // Compiler specific: EDG; hence, como, and also libcomo.
         ,"__asm"
         ,"__COMO__"

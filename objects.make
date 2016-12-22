@@ -237,6 +237,7 @@ common_common_objects := \
   path_utility.o \
   premium_tax.o \
   progress_meter.o \
+  round_glibc.o \
   sigfpe.o \
   single_cell_document.o \
   surrchg_rates.o \
@@ -866,6 +867,7 @@ regex_test$(EXEEXT): \
 
 round_test$(EXEEXT): \
   $(common_test_objects) \
+  round_glibc.o \
   round_test.o \
 
 round_to_test$(EXEEXT): \
