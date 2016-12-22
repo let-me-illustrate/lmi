@@ -123,7 +123,7 @@ void banded_test()
     BOOST_TEST_THROW
         (banded_rate<double>()(0.0, decreasing, rates)
         ,std::runtime_error
-        ,"Assertion 'nonstd::is_sorted(z.begin(), z.end())' failed."
+        ,"Assertion 'std::is_sorted(z.begin(), z.end())' failed."
         );
 }
 

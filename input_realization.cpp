@@ -33,7 +33,6 @@
 #include "input_seq_helpers.hpp"
 #include "miscellany.hpp"               // minmax
 #include "round_to.hpp"
-#include "stl_extensions.hpp"           // nonstd::is_sorted()
 #include "value_cast.hpp"
 
 #include <boost/bind.hpp>
@@ -547,7 +546,7 @@ std::string Input::RealizeDeathBenefitOption()
 
     if
         (   !database_->Query(DB_AllowChangeToDbo2)
-        &&  !nonstd::is_sorted
+        &&  !std::is_sorted
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
                 ,boost::bind

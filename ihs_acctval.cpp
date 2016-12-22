@@ -43,7 +43,6 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
-#include "stl_extensions.hpp"
 #include "stratified_algorithms.hpp"
 #include "surrchg_rates.hpp"
 
@@ -526,9 +525,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         {
         int length_7702a = std::min(7, BasicValues::GetLength());
         // Premium history starts at contract year zero.
-        // TAXATION !! nonstd::copy_n() is used nowhere else, and
-        // may be expunged if this line becomes unnecessary.
-        nonstd::copy_n
+        std::copy_n
             (yare_input_.Inforce7702AAmountsPaidHistory.begin()
             ,length_7702a
             ,std::back_inserter(pmts_7702a)
