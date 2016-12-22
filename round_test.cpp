@@ -214,6 +214,9 @@ bool test_one_case
     )
 {
     RealType observed = roundFDL(unrounded);
+    // C++'s overloaded round should behave as if it calls C99's
+    // round(), roundf(), or roundl() as appropriate.
+    BOOST_TEST_EQUAL(std::round(unrounded), observed);
 
     max_prec_real abs_error = std::fabs(observed - expected);
     // Nonstandardly define relative error in terms of
