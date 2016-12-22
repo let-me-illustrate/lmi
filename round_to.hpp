@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
+#include "stl_extensions.hpp"           // nonstd::power()
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_float.hpp>
@@ -58,14 +59,31 @@ typedef long double max_prec_real;
 
 namespace detail
 {
-#if 0 // This elaborate workaround is probably no longer useful.
-// Returns 'r' raised to the 'n'th power. The sgi stl provides a faster
-// implementation as an extension (although it does not seem to work
-// with negative powers). Because this template function is called only
-// by the round_to constructor, efficiency here is not important in the
-// contemplated typical case where a round_to object is created once
-// and used to round many numbers. Defectively fails to check for
-// overflow or undeflow, but the round_to ctor does do that check.
+#if 1
+/// Raise 'r' to the integer power 'n'.
+///
+/// Motivation: To raise an integer-valued real to a positive integer
+/// power without any roundoff error as long as the result is exactly
+/// representable. See:
+///   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
+///
+/// For negative 'n', the most accurate result possible is obtained by
+/// calculating power(r, -n), and returning its reciprocal calculated
+/// with the maximum available precision.
+///
+/// Because this template function is called only by the round_to
+/// constructor, efficiency here is not crucial in the contemplated
+/// typical case where a round_to object is created once and used to
+/// round many numbers, whereas it is crucial to avoid roundoff error.
+/// However, that does not justify gratuitous inefficiency, and the
+/// use of power() here means that the number of multiplications is
+/// O(log n), so this should be as fast as a library function that
+/// has been optimized for accuracy.
+///
+/// Fails to check for overflow or undeflow, but the round_to ctor
+/// does compare 'n' to the minimum and maximum decimal exponents,
+/// which suffices there because its 'r' is always ten.
+
 template<typename RealType>
 RealType perform_pow(RealType r, int n)
 {
@@ -75,25 +93,15 @@ RealType perform_pow(RealType r, int n)
         }
     if(n < 0)
         {
-        // Successive division by 'r' would lose precision at each step
-        // when 'r' is exactly representable but its reciprocal is not,
-        // and division is much slower than multiplication on some
-        // machines, so instead calculate the positive power and take
-        // its reciprocal.
-        return RealType(1.0) / perform_pow(r, -n);
+        return max_prec_real(1.0) / nonstd::power(r, -n);
         }
     else
         {
-        RealType z = r;
-        while(--n)
-            {
-            z *= r;
-            }
-        return z;
+        return nonstd::power(r, n);
         }
 }
 
-#else  // !0
+#else  // 0
 
 /// Raise an integer-valued real to an integer power.
 ///
@@ -129,7 +137,7 @@ RealType perform_pow(RealType r, int n)
         }
 }
 
-#endif // !0
+#endif // 0
 } // namespace detail
 
 inline rounding_style& default_rounding_style()
