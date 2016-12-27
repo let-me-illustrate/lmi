@@ -490,9 +490,12 @@ endif
 $(wx_dependent_objects):                gcc_common_extra_warnings :=
 $(wx_dependent_physical_closure_files): gcc_common_extra_warnings :=
 
-# Boost didn't remove an unused parameter in this file:
+# Boost didn't remove an unused parameter in this file, which also
+# seems to contain a "maybe-uninitialized" variable--see:
+#   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00080.html
 
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
+operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialized
 
 # The boost regex library improperly defines "NOMINMAX":
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
