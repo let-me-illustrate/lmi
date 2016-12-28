@@ -33,6 +33,13 @@
 #include <ostream>
 
 #if defined LMI_IEC_559
+    // The 'LMI_IEC_559' macro is never defined by any source file or
+    // by any makefile, so this conditional block is not reached today.
+    // For the macro's original rationale, see:
+    //   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00034.html
+    // The description that follows is outdated anyway, because C++11
+    // now provides <cfenv>.
+    //
     // In case the C++ compiler offers C99 fesetround(), assume that
     // it defines __STDC_IEC_559__, but doesn't support
     //   #pragma STDC FENV_ACCESS ON
@@ -44,7 +51,17 @@
         ,fe_upward     = FE_UPWARD
         ,fe_towardzero = FE_TOWARDZERO
         };
+#elif defined LMI_X86_64
+    // Probably this conditional should distinguish SSE from x87,
+    // rather than 64- from 32-bit x64. For the nonce, this prevents
+    // certain unit-test failures noted here:
+    //   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00053.html
+#   include <cfenv>
 #elif defined LMI_X86
+    // It seems at first that the conditional here should be LMI_X86_32
+    // because x86_64 is treated above. However, perhaps the actual
+    // distinction is between SSE above and x87 here.
+    //
     // "fenv_lmi_x86.hpp" provides the necessary values.
 #else  // No known way to set rounding style.
 #   error No known way to set rounding style.
@@ -102,6 +119,16 @@ void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
 {
 #if defined LMI_IEC_559
     fesetround(mode);
+#elif defined LMI_X86_64
+    // See comments above on the <cfenv> series of conditionals.
+    // For the nonce, set both i87 and SSE rounding modes here.
+    fesetround(  (fe_tonearest  == mode) ? FE_TONEAREST
+               : (fe_downward   == mode) ? FE_DOWNWARD
+               : (fe_upward     == mode) ? FE_UPWARD
+               : (fe_towardzero == mode) ? FE_TOWARDZERO
+               : throw std::runtime_error("Failed to set rounding mode.")
+              );
+    fenv_rounding(mode);
 #elif defined LMI_X86
     fenv_rounding(mode);
 #else // No known way to set hardware rounding mode.
