@@ -50,6 +50,8 @@
 #   endif // Pragma STDC FENV_ACCESS implemented.
 #endif // defined LMI_IEC_559
 
+#include <cfenv>
+
 /// These functions manage the floating-point environment.
 ///
 ///   void fenv_initialize();
@@ -88,6 +90,29 @@
 /// gracefully during normal termination.
 
 namespace floating_point_environment {} // doxygen workaround.
+
+#if defined FE_DBLPREC
+enum e_ieee754_precision : decltype(FE_FLTPREC)
+    {fe_fltprec  = FE_FLTPREC
+    ,fe_dblprec  = FE_DBLPREC
+    ,fe_ldblprec = FE_LDBLPREC
+    };
+#else  // !defined FE_DBLPREC
+// If not otherwise defined, use glibc's values.
+enum e_ieee754_precision
+    {fe_fltprec  = 0x0000
+    ,fe_dblprec  = 0x0200
+    ,fe_ldblprec = 0x0300
+    };
+#endif // !defined FE_DBLPREC
+
+// Assume <cfenv> defines these macros.
+enum e_ieee754_rounding : decltype(FE_TONEAREST)
+    {fe_tonearest  = FE_TONEAREST
+    ,fe_downward   = FE_DOWNWARD
+    ,fe_upward     = FE_UPWARD
+    ,fe_towardzero = FE_TOWARDZERO
+    };
 
 enum enum_fenv_indulgence
     {e_fenv_indulge_nothing = 0

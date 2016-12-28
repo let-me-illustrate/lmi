@@ -32,7 +32,7 @@
 #endif // defined __BORLANDC__ || defined _MSC_VER
 
 #if defined LMI_X86
-/// These functions manipulate the x86 fpu (80x87) control word. This
+/// These functions manipulate the x86 fpu (x87) control word. This
 /// shouldn't be as difficult as it actually is. Part of the problem
 /// is that C was strangely slow to adopt sophisticated numerics:
 ///   1980: 8087 introduced
@@ -40,7 +40,7 @@
 ///   1999: C finally gets fesetenv(), but without precision control *
 /// which left setting the control word to nonstandard routines or
 /// nonportable asm, and part is that function _control87() in the
-/// widely-used ms C rtl takes an argument that differs gratuitously
+/// widely-used msvc rtl takes an argument that differs gratuitously
 /// from the hardware control word--see, e.g.:
 ///   http://groups.google.com/groups?selm=34775BB8.E10BA020%40tc.umn.edu
 ///
@@ -86,9 +86,9 @@ struct intel_control_word_for_exposition_only
     unsigned int   :4;  // Bits 12-15.
 };
 
-/// The ms C rtl control word, represented as bitfields.
+/// The msvc rtl control word, represented as bitfields.
 
-struct msw_control_word_for_exposition_only
+struct msvc_control_word_for_exposition_only
 {
     unsigned int PM:1;  // Bit  0.
     unsigned int UM:1;  // Bit  1.
@@ -104,36 +104,43 @@ struct msw_control_word_for_exposition_only
     unsigned int   :12; // Bits 20-31: reserved.
 };
 
-/// Precision-control values used by 80x87 hardware. The enumerators
-/// are lowercase versions of the GNU/Linux <fenvwm.h> macros,
-/// although the constant-expressions may differ.
+/// IEEE 754 precision-control values used by x87 hardware.
+///
+/// Cf. the cognate macros in WG14 N751/J11.
+///
+/// The enumerators are prefixed lowercase versions of those cognates,
+/// although the constant-expressions may differ in value and in type.
 
-enum e_ieee754_precision
-    {fe_fltprec  = 0x00
-    ,fe_dblprec  = 0x02
-    ,fe_ldblprec = 0x03
+enum e_x87_precision
+    {x87_fe_fltprec  = 0x00
+    ,x87_fe_dblprec  = 0x02
+    ,x87_fe_ldblprec = 0x03
     };
 
-/// Precision-control values used by ms C rtl, which differ
+/// Precision-control values used by msvc rtl, which differ
 /// gratuitously from hardware values.
 
-enum e_msw_pc
-    {msw_fltprec  = 0x02
-    ,msw_dblprec  = 0x01
-    ,msw_ldblprec = 0x00
+enum e_msvc_precision
+    {msvc_fltprec  = 0x02
+    ,msvc_dblprec  = 0x01
+    ,msvc_ldblprec = 0x00
     };
 
-/// Rounding-control values. The enumerators are lowercase versions of
-/// the C99 7.6/7 macros, although the constant-expressions may differ.
+/// IEEE 754 rounding-control values used by x87 hardware.
+///
+/// Cf. the cognate macros in C++11 <cfenv>.
+///
+/// The enumerators are prefixed lowercase versions of those cognates,
+/// although the constant-expressions may differ in value and in type.
 
-enum e_ieee754_rounding
-    {fe_tonearest  = 0x00
-    ,fe_downward   = 0x01
-    ,fe_upward     = 0x02
-    ,fe_towardzero = 0x03
+enum e_x87_rounding
+    {x87_fe_tonearest  = 0x00
+    ,x87_fe_downward   = 0x01
+    ,x87_fe_upward     = 0x02
+    ,x87_fe_towardzero = 0x03
     };
 
-/// Parameters of 80x87 hardware control word.
+/// Parameters of x87 hardware control word.
 ///
 /// Reserved bits:
 ///   'reserved_values' specifies values of reserved bits.
@@ -146,8 +153,8 @@ struct intel_control_word_parameters
 {
     typedef unsigned short int integer_type;
     enum {nbits = 16};
-    typedef e_ieee754_precision pc_type;
-    typedef e_ieee754_rounding  rc_type;
+    typedef e_x87_precision pc_type;
+    typedef e_x87_rounding  rc_type;
     enum {reserved_values = 0x0040};
     enum {settable = 0x0f3f};
     enum {im_bit = 0};
@@ -158,13 +165,13 @@ struct intel_control_word_parameters
     enum {pm_bit = 5};
     enum {pc_bit0 = 8};
     enum {rc_bit0 = 10};
-    static pc_type pc24() {return fe_fltprec ;}
-    static pc_type pc53() {return fe_dblprec ;}
-    static pc_type pc64() {return fe_ldblprec;}
+    static pc_type pc24() {return x87_fe_fltprec ;}
+    static pc_type pc53() {return x87_fe_dblprec ;}
+    static pc_type pc64() {return x87_fe_ldblprec;}
     static pc_type pcerror() {throw std::logic_error("Invalid fpu PC value.");}
 };
 
-/// Parameters of ms C rtl control word, which differ gratuitously
+/// Parameters of msvc rtl control word, which differ gratuitously
 /// from hardware parameters.
 ///
 /// 'settable' in terms of the ms macros is
@@ -174,12 +181,12 @@ struct intel_control_word_parameters
 ///
 /// 'reserved_values' can have no meaning here, for ms documents none.
 
-struct msw_control_word_parameters
+struct msvc_control_word_parameters
 {
     typedef unsigned int integer_type;
     enum {nbits = 32};
-    typedef e_msw_pc           pc_type;
-    typedef e_ieee754_rounding rc_type;
+    typedef e_msvc_precision pc_type;
+    typedef e_x87_rounding   rc_type;
     enum {reserved_values = 0x0000};
     enum {settable = 0x000b031f};
     enum {im_bit = 4};
@@ -190,15 +197,15 @@ struct msw_control_word_parameters
     enum {pm_bit = 0};
     enum {pc_bit0 = 16};
     enum {rc_bit0 = 8};
-    static pc_type pc24() {return msw_fltprec ;}
-    static pc_type pc53() {return msw_dblprec ;}
-    static pc_type pc64() {return msw_ldblprec;}
+    static pc_type pc24() {return msvc_fltprec ;}
+    static pc_type pc53() {return msvc_dblprec ;}
+    static pc_type pc64() {return msvc_ldblprec;}
     static pc_type pcerror() {throw std::logic_error("Invalid fpu PC value.");}
 };
 
-/// Generic representation of 80x87 control word. The template
+/// Generic representation of x87 control word. The template
 /// parameter selects between the hardware control word and the
-/// gratuitously-different one used by the ms C rtl.
+/// gratuitously-different one used by the msvc rtl.
 
 template<typename ControlWordType>
 class control_word
@@ -275,28 +282,28 @@ class control_word
 };
 
 typedef control_word<intel_control_word_parameters> intel_control_word;
-typedef control_word<msw_control_word_parameters> msw_control_word;
+typedef control_word<msvc_control_word_parameters> msvc_control_word;
 
 // Conversion functions.
 
-inline unsigned int intel_to_msw(intel_control_word i)
+inline unsigned int intel_to_msvc(intel_control_word i)
 {
-    return msw_control_word(i).cw();
+    return msvc_control_word(i).cw();
 }
 
-inline unsigned int intel_to_msw(unsigned short int i)
+inline unsigned int intel_to_msvc(unsigned short int i)
 {
-    return intel_to_msw(intel_control_word(i));
+    return intel_to_msvc(intel_control_word(i));
 }
 
-inline unsigned short int msw_to_intel(msw_control_word m)
+inline unsigned short int msvc_to_intel(msvc_control_word m)
 {
     return intel_control_word(m).cw();
 }
 
-inline unsigned short int msw_to_intel(unsigned int m)
+inline unsigned short int msvc_to_intel(unsigned int m)
 {
-    return msw_to_intel(msw_control_word(m));
+    return msvc_to_intel(msvc_control_word(m));
 }
 
 /// Default settings for x87 fpu.
@@ -317,7 +324,7 @@ inline unsigned short int x87_control_word()
     control_word = static_cast<unsigned short int>(_control87(0, 0));
 #   elif defined _MSC_VER
     // Test _MSC_VER last: some non-ms compilers or libraries define it.
-    control_word = msw_to_intel(_control87(0, 0));
+    control_word = msvc_to_intel(_control87(0, 0));
 #   else // Unknown compiler or platform.
 #       error Unknown compiler or platform.
 #   endif // Unknown compiler or platform.
@@ -335,7 +342,7 @@ inline void x87_control_word(unsigned short int cw)
     _control87(cw, 0x0ffff);
 #   elif defined _MSC_VER
     // Test _MSC_VER last: some non-ms compilers or libraries define it.
-    _control87(intel_to_msw(cw),  0x0ffffffff);
+    _control87(intel_to_msvc(cw),  0x0ffffffff);
 #   else // Unknown compiler or platform.
 #       error Unknown compiler or platform.
 #   endif // Unknown compiler or platform.
