@@ -122,12 +122,7 @@ void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
 #elif defined LMI_X86_64
     // See comments above on the <cfenv> series of conditionals.
     // For the nonce, set both i87 and SSE rounding modes here.
-    fesetround(  (fe_tonearest  == mode) ? FE_TONEAREST
-               : (fe_downward   == mode) ? FE_DOWNWARD
-               : (fe_upward     == mode) ? FE_UPWARD
-               : (fe_towardzero == mode) ? FE_TOWARDZERO
-               : throw std::runtime_error("Failed to set rounding mode.")
-              );
+    fesetround(mode);
     fenv_rounding(mode);
 #elif defined LMI_X86
     fenv_rounding(mode);

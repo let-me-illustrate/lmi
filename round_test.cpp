@@ -114,6 +114,11 @@ void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
 {
 #if defined LMI_IEC_559
     fesetround(mode);
+#elif defined LMI_X86_64
+    // See the parallel section of 'round_to_test.cpp'.
+    // For the nonce, set both i87 and SSE rounding modes here.
+    fesetround(mode);
+    fenv_rounding(mode);
 #elif defined LMI_X86
     fenv_rounding(mode);
 #else // No known way to set hardware rounding mode.
