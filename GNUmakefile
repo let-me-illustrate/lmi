@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -359,8 +359,8 @@ check_concinnity: source_clean custom_tools
 # either in the last days of the old year or the first days of the
 # new, so they can't be derived dynamically from the current date.
 
-old_year := 2015
-new_year := 2016
+old_year := 2016
+new_year := 2017
 
 backup_directory := saved_$(old_year)
 
@@ -399,6 +399,7 @@ happy_new_year: source_clean
 	    -e '/unutterable := $(unutterable)/d' \
 	    -e '/$(unutterable) (C) .(yyyy) Gregory W. Chicares/d' \
 	    -e '/$(unutterable) \((C)\|&copy;\) 1989, 1991 Free Software Foundation, Inc./d' \
+	    -e '/$(unutterable) (C) 1997-2016 Free Software Foundation, Inc./d' \
 	    -e '/$(unutterable) (C) 1987, 1989 Free Software Foundation, Inc./d' \
 	    -e '/$(unutterable) (C) 1987, 1989, 1992 Free Software Foundation, Inc./d' \
 	    -e '/$(unutterable) (C) 1995, 1996 Free Software Foundation, Inc./d' \
@@ -417,6 +418,7 @@ happy_new_year: source_clean
 	    -e '/$(unutterable) Kevlin Henney, 2000, 2001. All rights reserved./d' \
 	    -e '/$(unutterable) Kevlin Henney, 2000-2003. All rights reserved./d' \
 	    -e '/$(unutterable) Terje Sletteb/d' \
+	    -e '/$(unutterable) (C) 1993 by Sun Microsystems, Inc./d' \
 	    -e '/Portions marked.*$(unutterable).*Gregory W. Chicares/d' \
 	    -e '/oss << "$(unutterable).*" << 1900 + t1->tm_year;/d' \
 	    -e '/$(unutterable) (C) 1994$$/d' \
