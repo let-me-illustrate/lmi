@@ -1,6 +1,6 @@
 // Rounding--unit test.
 //
-// Copyright (C) 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2001, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -114,6 +114,11 @@ void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
 {
 #if defined LMI_IEC_559
     fesetround(mode);
+#elif defined LMI_X86_64
+    // See the parallel section of 'round_to_test.cpp'.
+    // For the nonce, set both i87 and SSE rounding modes here.
+    fesetround(mode);
+    fenv_rounding(mode);
 #elif defined LMI_X86
     fenv_rounding(mode);
 #else // No known way to set hardware rounding mode.
@@ -214,8 +219,11 @@ bool test_one_case
     )
 {
     RealType observed = roundFDL(unrounded);
+    // C++'s overloaded round should behave as if it calls C99's
+    // round(), roundf(), or roundl() as appropriate.
+    BOOST_TEST_EQUAL(std::round(unrounded), observed);
 
-    max_prec_real abs_error = detail::perform_fabs(observed - expected);
+    max_prec_real abs_error = std::fabs(observed - expected);
     // Nonstandardly define relative error in terms of
     // o(bserved) and e(xpected) as
     //   |(o-e)/e| if e nonzero, else
@@ -225,7 +233,7 @@ bool test_one_case
     max_prec_real rel_error(0.0);
     if(max_prec_real(0.0) != expected)
         {
-        rel_error = detail::perform_fabs
+        rel_error = std::fabs
             (
               (observed - max_prec_real(expected))
             / expected
@@ -233,7 +241,7 @@ bool test_one_case
         }
     else if(max_prec_real(0.0) != observed)
         {
-        rel_error = detail::perform_fabs
+        rel_error = std::fabs
             (
               (observed - max_prec_real(expected))
             / observed

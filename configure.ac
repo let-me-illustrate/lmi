@@ -1,6 +1,6 @@
 dnl configure.ac script for lmi, process with autoconf to create configure
 dnl
-dnl Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Vadim Zeitlin.
+dnl Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Vadim Zeitlin.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License version 2 as
@@ -580,7 +580,8 @@ fi
 if test "x$GXX" == "xyes"; then
     if test "$CLANG" = "yes"; then
         cxx_warnings_flags="$cxx_warnings_flags \
-            -Wno-inconsistent-missing-override"
+            -Wno-inconsistent-missing-override \
+            -Wno-mismatched-tags"
     else
         cxx_warnings_flags="$cxx_warnings_flags \
         -Wctor-dtor-privacy \

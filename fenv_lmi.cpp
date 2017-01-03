@@ -1,6 +1,6 @@
 // Manage floating-point environment.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -88,7 +88,13 @@ e_ieee754_precision fenv_precision()
         : throw std::runtime_error("Failed to determine hardware precision.")
         ;
 #elif defined LMI_X86
-    return intel_control_word(x87_control_word()).pc();;
+    e_x87_precision pc = intel_control_word(x87_control_word()).pc();
+    return
+          (x87_fe_fltprec  == pc) ? fe_fltprec
+        : (x87_fe_dblprec  == pc) ? fe_dblprec
+        : (x87_fe_ldblprec == pc) ? fe_ldblprec
+        : throw std::runtime_error("Failed to determine hardware precision.")
+        ;
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
@@ -105,8 +111,14 @@ void fenv_precision(e_ieee754_precision precision_mode)
         ;
     _control87(z, MCW_PC);
 #elif defined LMI_X86
+    e_x87_precision pc =
+          (fe_fltprec  == precision_mode) ? x87_fe_fltprec
+        : (fe_dblprec  == precision_mode) ? x87_fe_dblprec
+        : (fe_ldblprec == precision_mode) ? x87_fe_ldblprec
+        : throw std::runtime_error("Failed to set hardware precision.")
+        ;
     intel_control_word control_word(x87_control_word());
-    control_word.pc(precision_mode);
+    control_word.pc(pc);
     x87_control_word(control_word.cw());
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
@@ -134,7 +146,14 @@ e_ieee754_rounding fenv_rounding()
         : throw std::runtime_error("Failed to determine rounding mode.")
         ;
 #elif defined LMI_X86
-    return intel_control_word(x87_control_word()).rc();;
+    e_x87_rounding rc = intel_control_word(x87_control_word()).rc();
+    return
+          (x87_fe_tonearest  == rc) ? fe_tonearest
+        : (x87_fe_downward   == rc) ? fe_downward
+        : (x87_fe_upward     == rc) ? fe_upward
+        : (x87_fe_towardzero == rc) ? fe_towardzero
+        : throw std::runtime_error("Failed to determine rounding mode.")
+        ;
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
@@ -161,8 +180,15 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
         ;
     _control87(z, MCW_RC);
 #elif defined LMI_X86
+    e_x87_rounding rc =
+          (fe_tonearest  == rounding_mode) ? x87_fe_tonearest
+        : (fe_downward   == rounding_mode) ? x87_fe_downward
+        : (fe_upward     == rounding_mode) ? x87_fe_upward
+        : (fe_towardzero == rounding_mode) ? x87_fe_towardzero
+        : throw std::runtime_error("Failed to set rounding mode.")
+        ;
     intel_control_word control_word(x87_control_word());
-    control_word.rc(rounding_mode);
+    control_word.rc(rc);
     x87_control_word(control_word.cw());
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.

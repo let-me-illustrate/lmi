@@ -1,6 +1,6 @@
 // Rounding.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
+#include "stl_extensions.hpp"           // nonstd::power()
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_float.hpp>
@@ -35,12 +36,10 @@
 #include <stdexcept>
 
 // Round a floating-point number to a given number of decimal places,
-// following a given rounding style. Read the accompanying html
-// documentation.
+// following a given rounding style.
 
-// As the html documentation explains, power-of-ten scaling factors
-// are best represented in the maximum available precision, which
-// is indicated by type 'max_prec_real'.
+// Power-of-ten scaling factors are best represented in the maximum
+// available precision, which is indicated by type 'max_prec_real'.
 //
 // Changing this typedef lets you use a nonstandard type or class with
 // greater precision if desired.
@@ -55,62 +54,36 @@
 // this typedef to double.
 typedef long double max_prec_real;
 
+// Any modern C++ compiler provides std::rint().
+#define LMI_HAVE_RINT
+
 namespace detail
 {
-// 26.5/6 requires float and long double versions of std::fabs() and
-// std::pow(), but neither mingw gcc-3.3 or earlier (which uses the
-// msvc runtime library) nor bc++5.5.1 implements them: they provide
-// only double versions. For those compilers, these workarounds are
-// provided; the names are intentionally ugly.
-//
-// If your compiler is broken in this respect, define the following
-// macro (which might be generally useful in a config header) to use
-// workarounds for the missing functions we need. It would perhaps be
-// better to provide specializations of these workarounds for double,
-// which would just call the appropriate standard C function, but it's
-// better still to tell the implementor to conform to the standard.
+#if 1
+/// Raise 'r' to the integer power 'n'.
+///
+/// Motivation: To raise an integer-valued real to a positive integer
+/// power without any roundoff error as long as the result is exactly
+/// representable. See:
+///   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
+///
+/// For negative 'n', the most accurate result possible is obtained by
+/// calculating power(r, -n), and returning its reciprocal calculated
+/// with the maximum available precision.
+///
+/// Because this template function is called only by the round_to
+/// constructor, efficiency here is not crucial in the contemplated
+/// typical case where a round_to object is created once and used to
+/// round many numbers, whereas it is crucial to avoid roundoff error.
+/// However, that does not justify gratuitous inefficiency, and the
+/// use of power() here means that the number of multiplications is
+/// O(log n), so this should be as fast as a library function that
+/// has been optimized for accuracy.
+///
+/// Fails to check for overflow or undeflow, but the round_to ctor
+/// does compare 'n' to the minimum and maximum decimal exponents,
+/// which suffices there because its 'r' is always ten.
 
-// The template parameter of each function template in namespace
-// 'detail' is restricted to floating point types [3.9.1/8]. Those
-// functions use only operations that the standard requires to be
-// defined for those types.
-
-#if defined __MINGW32__ || defined __BORLANDC__
-#   define LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
-#endif // defined __MINGW32__ || defined __BORLANDC__
-
-#ifdef LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
-
-// Returns the absolute value of 'r'. Somewhat defectively, assumes
-// that the negative of a negative argument is representable, which is
-// not guaranteed by C++98--but is OK for IEC 60559 floating-point
-// types, which can be negated by flipping the sign bit. However, it
-// might not be OK for non-IEC 60559 floating-point types. We might
-// assert std::numeric_limits<RealType>::is_iec559, but some compilers
-// (e.g. bc++5.5.1) would fail, perhaps properly, even though they run
-// on the same hardware as other compilers that would pass that test;
-// yet this is a property of the hardware, not of the compiler.
-
-template<typename RealType>
-RealType perform_fabs(RealType r)
-{
-    if(r < RealType(0))
-        {
-        return -r;
-        }
-    else
-        {
-        return r;
-        }
-}
-
-// Returns 'r' raised to the 'n'th power. The sgi stl provides a faster
-// implementation as an extension (although it does not seem to work
-// with negative powers). Because this template function is called only
-// by the round_to constructor, efficiency here is not important in the
-// contemplated typical case where a round_to object is created once
-// and used to round many numbers. Defectively fails to check for
-// overflow or undeflow, but the round_to ctor does do that check.
 template<typename RealType>
 RealType perform_pow(RealType r, int n)
 {
@@ -120,75 +93,53 @@ RealType perform_pow(RealType r, int n)
         }
     if(n < 0)
         {
-        // Successive division by 'r' would lose precision at each step
-        // when 'r' is exactly representable but its reciprocal is not,
-        // and division is much slower than multiplication on some
-        // machines, so instead calculate the positive power and take
-        // its reciprocal.
-        return RealType(1.0) / perform_pow(r, -n);
+        return max_prec_real(1.0) / nonstd::power(r, -n);
         }
     else
         {
-        RealType z = r;
-        while(--n)
-            {
-            z *= r;
-            }
-        return z;
+        return nonstd::power(r, n);
         }
 }
 
-// Returns largest integer-valued RealType value that does not exceed
-// its argument.
+#else  // 0
+
+/// Raise an integer-valued real to an integer power.
+///
+/// Motivation: calculate accurate powers of ten. See:
+///   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00049.html
+/// Library authors often optimize pow() for integral exponents,
+/// using multiplication rather than a transcendental calculation.
+/// When 'r' is exactly representable, positive integral powers
+/// returned by a high-quality std::pow() are likely to be exact if
+/// they are exactly representable, or otherwise as accurate as they
+/// can be; but for negative integral powers this integral-exponent
+/// "optimization" may very well reduce accuracy, e.g., if 10^-3 is
+/// calculated as (0.1 * 0.1 * 0.1). Because the positive-exponent
+/// case is likely to be treated ideally by the library author, when
+/// 'n' is negative this function calls std::pow() to calculate the
+/// positive power and returns the reciprocal: 1 / (10 * 10 * 10)
+/// in the preceding example.
+
 template<typename RealType>
-RealType perform_floor(RealType r)
+RealType perform_pow(RealType r, int n)
 {
-    // Use std::floor() when we know it'll work; else just return
-    // the argument. TODO ?? Isn't that incorrect for long double?
-    static double const max_integral_double = perform_pow
-        (2.0
-        ,std::numeric_limits<double>::digits
-        );
-    if
-        (  r < -max_integral_double
-        ||      max_integral_double < r
-        )
+    if(0 == n)
         {
-        return r;
+        return RealType(1.0);
+        }
+    else if(n < 0)
+        {
+        return RealType(1.0) / std::pow(r, -n);
         }
     else
         {
-        return std::floor(r);
+        return std::pow(r, n);
         }
 }
 
-#else // not defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
-
-// Unlike the kludges above, these are defined inline to avoid
-// penalizing compliant compilers.
-
-template<typename RealType>
-inline RealType perform_fabs(RealType r)
-{
-    return std::fabs(r);
-}
-
-template<typename RealType>
-inline RealType perform_pow(RealType r, int n)
-{
-    return std::pow(r, n);
-}
-
-template<typename RealType>
-inline RealType perform_floor(RealType r)
-{
-    return std::floor(r);
-}
-
-#endif // not defined LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+#endif // 0
 } // namespace detail
 
-// See HTML documentation.
 inline rounding_style& default_rounding_style()
 {
     static rounding_style default_style = r_to_nearest;
@@ -197,96 +148,9 @@ inline rounding_style& default_rounding_style()
 
 namespace detail
 {
-// perform_rint() rounds argument to an integer value in floating-point
-// format, using the current rounding direction if possible, in which
-// case it's the same as the C99 rint() function. Not named rint()
-// because some C++ compilers already provide that function.
-
-#if defined __GNUC__ && defined LMI_X86
-
-// TODO ?? Test speed with mingw's builtin rint().
-
-// Profiling suggests that inlining this template function makes a
-// realistic application that performs a lot of rounding run about
-// half a percent faster with gcc. That may be measurement error,
-// but it seems a reasonable outcome because some calls to this
-// function, in other auxiliary functions, really can be inlined, as
-// opposed to calling it through a pointer, which cannot.
-template<typename RealType>
-inline RealType perform_rint(RealType r)
-{
-    __asm__ ("frndint" : "=t" (r) : "0" (r));
-    return r;
-}
-
-#elif defined __BORLANDC__
-
-// The borland compiler is a gratis download, but allows inline asm
-// only with the non-gratis borland assembler, which not everyone has.
-// It can "emit" inline machine code without extra tools, even in an
-// inline or template function, but it cannot inline the undocumented
-// 'noretval' pragma, which prevents a superfluous and costly store
-// and pop of the result, so this function is written out of line.
-// This compiler's documented 'warn' pragma prevents a warning (which
-// would here be incorrect) that no value is returned.
-
-float perform_rint(float)
-{
-    __emit__(0x0d9, 0x045, 0x008); // FLD short-real ptr[ebp+08]
-    __emit__(0x0d9, 0x0fc);        // FRNDINT
-#   pragma noretval
-    return;
-#pragma warn -rvl
-}
-#pragma warn .rvl
-
-double perform_rint(double)
-{
-    __emit__(0x0dd, 0x045, 0x008); // FLD qword ptr[ebp+08]
-    __emit__(0x0d9, 0x0fc);        // FRNDINT
-#   pragma noretval
-    return;
-#pragma warn -rvl
-}
-#pragma warn .rvl
-
-long double perform_rint(long double)
-{
-    __emit__(0x0db, 0x06d, 0x008); // FLD tbyte ptr[ebp+08]
-    __emit__(0x0d9, 0x0fc);        // FRNDINT
-#   pragma noretval
-    return;
-#pragma warn -rvl
-}
-#pragma warn .rvl
-
-#else // neither (__GNUC__ && LMI_X86) nor __BORLANDC__
-
-// The round_X functions below work with any real_type-to-integer_type.
-// Compilers that provide rint() may have optimized it (or you can
-// provide a fast implementation yourself).
-
-#if defined __GNUC__ && !defined __MINGW32__
-#   define LMI_RINT_AVAILABLE
-#endif // defined __GNUC__ && !defined __MINGW32__
-
-template<typename RealType>
-inline RealType perform_rint(RealType r)
-{
-#ifdef LMI_RINT_AVAILABLE
-    return rint(r);
-#else // not defined LMI_RINT_AVAILABLE
-#   define LMI_LACKING_RINT_OR_EQUIVALENT
-    throw std::logic_error("rint() not defined.");
-#endif // not defined LMI_RINT_AVAILABLE
-}
-
-#endif // neither (__GNUC__ && LMI_X86) nor __BORLANDC__
-
 // Auxiliary rounding functions: one for each supported rounding style.
-// These functions avoid switching the hardware rounding mode as long
-// as perform_rint() does. Most use perform_rint() if available, but
-// do not require it to follow any particular style.
+// These functions avoid changing the hardware rounding mode as long
+// as the library functions they call do not change it.
 
 // Perform no rounding at all.
 template<typename RealType>
@@ -299,8 +163,8 @@ RealType round_not(RealType r)
 template<typename RealType>
 RealType round_up(RealType r)
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
-    RealType i_part = perform_rint(r);
+#if defined LMI_HAVE_RINT
+    RealType i_part = std::rint(r);
     if(i_part < r)
         {
         // Suppose the value of 'i_part' is not exactly representable
@@ -310,33 +174,33 @@ RealType round_up(RealType r)
         i_part++;
         }
     return i_part;
-#else // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#else  // !defined LMI_HAVE_RINT
     return std::ceil(r);
-#endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#endif // !defined LMI_HAVE_RINT
 }
 
 // Round down.
 template<typename RealType>
 RealType round_down(RealType r)
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
-    RealType i_part = perform_rint(r);
+#if defined LMI_HAVE_RINT
+    RealType i_part = std::rint(r);
     if(r < i_part)
         {
         i_part--;
         }
     return i_part;
-#else // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#else  // !defined LMI_HAVE_RINT
     return std::floor(r);
-#endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#endif // !defined LMI_HAVE_RINT
 }
 
 // Truncate.
 template<typename RealType>
 RealType round_trunc(RealType r)
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
-    RealType i_part = perform_rint(r);
+#if defined LMI_HAVE_RINT
+    RealType i_part = std::rint(r);
     RealType f_part = r - i_part;
     // Consider the integer part 'i_part' and the fractional part
     // 'f_part': the integer part is the final answer if
@@ -355,20 +219,20 @@ RealType round_trunc(RealType r)
         i_part++;
         }
     return i_part;
-#else // defined LMI_LACKING_RINT_OR_EQUIVALENT
-    double x = std::floor(std::fabs(r));
+#else  // !defined LMI_HAVE_RINT
+    RealType x = std::floor(std::fabs(r));
     return (0.0 <= r) ? x : -x;
-#endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
+#endif // !defined LMI_HAVE_RINT
 }
 
 // Round to nearest using bankers method.
 template<typename RealType>
 RealType round_near(RealType r)
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
-    RealType i_part = perform_rint(r);
-#else // defined LMI_LACKING_RINT_OR_EQUIVALENT
-//  This
+#if defined LMI_HAVE_RINT
+    RealType i_part = std::rint(r);
+#else  // !defined LMI_HAVE_RINT
+//  To return immediately with this value:
 //    return (RealType(0) < r) ? std::floor(r + 0.5) : std::ceil(r -0.5);
 //  would be incorrect, because halfway cases must be rounded to even.
     RealType i_part =
@@ -376,9 +240,12 @@ RealType round_near(RealType r)
             ? std::floor(r + 0.5)
             : std::ceil (r - 0.5)
             ;
-#endif // defined LMI_LACKING_RINT_OR_EQUIVALENT
+    // This 'i_part' needn't equal the value that std::rint() would
+    // return, as long as both produce the same correct result after
+    // adjustment below.
+#endif // !defined LMI_HAVE_RINT
     RealType f_part = r - i_part;
-    RealType abs_f_part = perform_fabs(f_part);
+    RealType abs_f_part = std::fabs(f_part);
 
     // If      |fractional part| <  .5, ignore it;
     // else if |fractional part| == .5, ignore it if integer part is even;
@@ -390,7 +257,7 @@ RealType round_near(RealType r)
               RealType(0.5) == abs_f_part
            && i_part
                   != RealType(2)
-                  *  detail::perform_floor(RealType(0.5) * i_part)
+                  *  std::floor(RealType(0.5) * i_part)
            )
         )
         {
@@ -413,7 +280,6 @@ RealType erroneous_rounding_function(RealType)
 }
 } // namespace detail
 
-// See HTML documentation.
 template<typename RealType>
 class round_to
     :public std::unary_function<RealType, RealType>
@@ -433,36 +299,27 @@ class round_to
     int decimals() const;
     rounding_style style() const;
 
-  protected:
-    // Boost coding standards 8.1 implicitly forbid private typedefs.
-    // This typedef may be wanted if this class is ever derived from,
-    // even though it's not obvious to the author how such inheritance
-    // would be useful.
-    typedef RealType (*rounding_function_t)(RealType);
-
   private:
+    typedef RealType (*rounding_function_t)(RealType);
     rounding_function_t select_rounding_function(rounding_style) const;
 
     int decimals_;
     rounding_style style_;
     max_prec_real scale_fwd_;
     max_prec_real scale_back_;
-    rounding_function_t rounding_function;
+    rounding_function_t rounding_function_;
 };
 
-/// This default ctor only renders the class DefaultConstructible.
+/// This default ctor serves only to render the class DefaultConstructible.
 /// The object it creates throws on use.
-///
-/// The cast to 'rounding_function_t' seems to be required by the
-/// ancient borland compiler.
 
 template<typename RealType>
 round_to<RealType>::round_to()
-    :decimals_(0)
-    ,style_(r_indeterminate)
-    ,scale_fwd_(1.0)
-    ,scale_back_(1.0)
-    ,rounding_function((rounding_function_t)detail::erroneous_rounding_function)
+    :decimals_          (0)
+    ,style_             (r_indeterminate)
+    ,scale_fwd_         (1.0)
+    ,scale_back_        (1.0)
+    ,rounding_function_ (detail::erroneous_rounding_function)
 {
 }
 
@@ -492,11 +349,11 @@ round_to<RealType>::round_to()
 
 template<typename RealType>
 round_to<RealType>::round_to(int decimals, rounding_style a_style)
-    :decimals_(decimals)
-    ,style_(a_style)
-    ,scale_fwd_(detail::perform_pow(max_prec_real(10.0), decimals))
-    ,scale_back_(max_prec_real(1.0) / scale_fwd_)
-    ,rounding_function(select_rounding_function(a_style))
+    :decimals_          (decimals)
+    ,style_             (a_style)
+    ,scale_fwd_         (detail::perform_pow(max_prec_real(10.0), decimals))
+    ,scale_back_        (max_prec_real(1.0) / scale_fwd_)
+    ,rounding_function_ (select_rounding_function(a_style))
 {
 /*
 // TODO ?? This might improve accuracy slightly, but would prevent
@@ -531,22 +388,22 @@ round_to<RealType>::round_to(int decimals, rounding_style a_style)
 
 template<typename RealType>
 round_to<RealType>::round_to(round_to const& z)
-    :decimals_        (z.decimals_        )
-    ,style_           (z.style_           )
-    ,scale_fwd_       (z.scale_fwd_       )
-    ,scale_back_      (z.scale_back_      )
-    ,rounding_function(z.rounding_function)
+    :decimals_          (z.decimals_         )
+    ,style_             (z.style_            )
+    ,scale_fwd_         (z.scale_fwd_        )
+    ,scale_back_        (z.scale_back_       )
+    ,rounding_function_ (z.rounding_function_)
 {
 }
 
 template<typename RealType>
 round_to<RealType>& round_to<RealType>::operator=(round_to const& z)
 {
-    decimals_         = z.decimals_        ;
-    style_            = z.style_           ;
-    scale_fwd_        = z.scale_fwd_       ;
-    scale_back_       = z.scale_back_      ;
-    rounding_function = z.rounding_function;
+    decimals_          = z.decimals_         ;
+    style_             = z.style_            ;
+    scale_fwd_         = z.scale_fwd_        ;
+    scale_back_        = z.scale_back_       ;
+    rounding_function_ = z.rounding_function_;
     return *this;
 }
 
@@ -563,7 +420,7 @@ template<typename RealType>
 inline RealType round_to<RealType>::operator()(RealType r) const
 {
     return static_cast<RealType>
-        (rounding_function(static_cast<RealType>(r * scale_fwd_)) * scale_back_
+        (rounding_function_(static_cast<RealType>(r * scale_fwd_)) * scale_back_
         );
 }
 
@@ -584,15 +441,15 @@ template<typename RealType>
 typename round_to<RealType>::rounding_function_t
 round_to<RealType>::select_rounding_function(rounding_style const a_style) const
 {
-#ifndef LMI_LACKING_RINT_OR_EQUIVALENT
+#if defined LMI_HAVE_RINT
     if
         (  a_style == default_rounding_style()
         && a_style != r_indeterminate
         )
         {
-        return detail::perform_rint;
+        return std::rint;
         }
-#endif // not defined LMI_LACKING_RINT_OR_EQUIVALENT
+#endif // defined LMI_HAVE_RINT
 
     switch(a_style)
         {
@@ -614,7 +471,7 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
             }
         case r_current:
             {
-            return detail::perform_rint;
+            return std::rint;
             }
         case r_not_at_all:
             {
@@ -627,9 +484,7 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
         }
 }
 
-#undef LMI_BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
-#undef LMI_RINT_AVAILABLE
-#undef LMI_LACKING_RINT_OR_EQUIVALENT
+#undef LMI_HAVE_RINT
 
 #endif // round_to_hpp
 

@@ -1,7 +1,7 @@
 # Master automake makefile, run automake to generate Makefile.am from it (this
 # is also done by autogen.sh script)
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Vadim Zeitlin.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Vadim Zeitlin.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -375,6 +375,7 @@ liblmi_common_sources = \
     path_utility.cpp \
     premium_tax.cpp \
     progress_meter.cpp \
+    round_glibc.cpp \
     sigfpe.cpp \
     single_cell_document.cpp \
     surrchg_rates.cpp \
@@ -839,6 +840,7 @@ test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
 test_mc_enum_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
+  ce_product_name.cpp \
   datum_base.cpp \
   facets.cpp \
   global_settings.cpp \
@@ -998,6 +1000,7 @@ test_regex_LDADD = \
 
 test_round_SOURCES = \
   $(common_test_objects) \
+  round_glibc.cpp \
   round_test.cpp
 test_round_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -1267,7 +1270,6 @@ noinst_HEADERS = \
     single_choice_popup_menu.hpp \
     skeleton.hpp \
     so_attributes.hpp \
-    soa_helpers.hpp \
     stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \

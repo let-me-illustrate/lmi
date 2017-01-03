@@ -1,6 +1,6 @@
 // Test files for consistency with various rules.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -65,12 +65,13 @@ enum enum_phylum
     ,e_make       = 1 << 10
     ,e_md5        = 1 << 11
     ,e_patch      = 1 << 12
-    ,e_relax_ng   = 1 << 13
-    ,e_script     = 1 << 14
-    ,e_synopsis   = 1 << 15
-    ,e_touchstone = 1 << 16
-    ,e_xml_input  = 1 << 17
-    ,e_xml_other  = 1 << 18
+    ,e_rates      = 1 << 13
+    ,e_relax_ng   = 1 << 14
+    ,e_script     = 1 << 15
+    ,e_synopsis   = 1 << 16
+    ,e_touchstone = 1 << 17
+    ,e_xml_input  = 1 << 18
+    ,e_xml_other  = 1 << 19
     };
 
 enum enum_kingdom
@@ -171,6 +172,7 @@ file::file(std::string const& file_path)
         : ".make"       == extension() ? e_make
         : ".md5sums"    == extension() ? e_md5
         : ".patch"      == extension() ? e_patch
+        : ".rates"      == extension() ? e_rates
         : ".rnc"        == extension() ? e_relax_ng
         : ".ac"         == extension() ? e_script
         : ".bat"        == extension() ? e_script
@@ -314,12 +316,14 @@ void assay_non_latin(file const& f)
 
 void assay_whitespace(file const& f)
 {
-    if
-        (   contains(f.data(), '\r')
-        ||  contains(f.data(), '\v')
-        )
+    if(contains(f.data(), '\r'))
         {
-        throw std::runtime_error("File contains '\\r' or '\\v'.");
+        throw std::runtime_error("File contains '\\r'.");
+        }
+
+    if(contains(f.data(), '\v'))
+        {
+        throw std::runtime_error("File contains '\\v'.");
         }
 
     if
@@ -449,6 +453,12 @@ void check_config_hpp(file const& f)
 /// circle-C symbol is reliably available and more attractive. Both
 /// notices must include the current year, except that html versions
 /// of the GPL use the FSF's copyright years in the '&copy;' notice.
+///
+/// Rate tables (phylum 'e_rates') are tested for a copyright notice,
+/// even though none is logically required (e.g., regulatory tables
+/// are not copyrighted), because the principal use case for '.rates'
+/// files is to embody proprietary data that really should have a
+/// copyright notice.
 ///
 /// SOMEDAY !! This test could be liberalized to permit copyright
 /// notices to span multiple lines. For now, it is assumed that the
@@ -593,7 +603,6 @@ void check_defect_markers(file const& f)
             &&  "INELEGANT "   != z[1]
             &&  "INPUT "       != z[1]
             &&  "PORT "        != z[1]
-            &&  "SOA "         != z[1]
             &&  "SOMEDAY "     != z[1]
             &&  "TAXATION "    != z[1]
             &&  "THIRD_PARTY " != z[1]
@@ -718,6 +727,7 @@ void check_preamble(file const& f)
         (   f.is_of_phylum(e_gpl)
         ||  f.is_of_phylum(e_md5)
         ||  f.is_of_phylum(e_patch)
+        ||  f.is_of_phylum(e_rates)
         ||  f.is_of_phylum(e_touchstone)
         ||  f.is_of_phylum(e_xml_input)
         )
@@ -771,11 +781,14 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_vsnprintf"
         ,"_wcsdup"
     // Compiler specific: gcc.
+        ,"__FLOAT_WORD_ORDER__"
         ,"__GLIBCPP__"
         ,"__GNUC_MINOR__"
         ,"__GNUC_PATCHLEVEL__"
         ,"__GNUC__"
         ,"__GNUG__"
+        ,"__ORDER_BIG_ENDIAN__"
+        ,"__ORDER_LITTLE_ENDIAN__"
         ,"__STRICT_ANSI__"
         ,"__asm__"
         ,"__attribute__"
@@ -796,6 +809,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_LIBC"
         ,"__BIG_ENDIAN"
         ,"__BYTE_ORDER"
+        ,"__FLOAT_WORD_ORDER"
     // Compiler specific: EDG; hence, como, and also libcomo.
         ,"__asm"
         ,"__COMO__"

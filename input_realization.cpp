@@ -1,6 +1,6 @@
 // Realize sequence-string input as vectors.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -33,7 +33,6 @@
 #include "input_seq_helpers.hpp"
 #include "miscellany.hpp"               // minmax
 #include "round_to.hpp"
-#include "stl_extensions.hpp"           // nonstd::is_sorted()
 #include "value_cast.hpp"
 
 #include <boost/bind.hpp>
@@ -547,7 +546,7 @@ std::string Input::RealizeDeathBenefitOption()
 
     if
         (   !database_->Query(DB_AllowChangeToDbo2)
-        &&  !nonstd::is_sorted
+        &&  !std::is_sorted
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
                 ,boost::bind

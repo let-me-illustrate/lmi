@@ -1,6 +1,6 @@
 // Account value.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -43,7 +43,6 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
-#include "stl_extensions.hpp"
 #include "stratified_algorithms.hpp"
 #include "surrchg_rates.hpp"
 
@@ -526,9 +525,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
         {
         int length_7702a = std::min(7, BasicValues::GetLength());
         // Premium history starts at contract year zero.
-        // TAXATION !! nonstd::copy_n() is used nowhere else, and
-        // may be expunged if this line becomes unnecessary.
-        nonstd::copy_n
+        std::copy_n
             (yare_input_.Inforce7702AAmountsPaidHistory.begin()
             ,length_7702a
             ,std::back_inserter(pmts_7702a)

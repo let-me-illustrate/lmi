@@ -2,7 +2,7 @@
 
 # Test files for consistency with various rules: unit test.
 
-# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -418,9 +418,9 @@ File 'eraseme_taboo_001' breaks taboo 'Shibboleth'.
 File 'eraseme_taboo_001' breaks taboo 'sibboleth'.
 File 'eraseme_url_001' lacks lmi URL.
 Exception--file 'eraseme_whitespace_001': File contains '\f'.
-Exception--file 'eraseme_whitespace_002': File contains '\r' or '\v'.
+Exception--file 'eraseme_whitespace_002': File contains '\r'.
 Exception--file 'eraseme_whitespace_003': File contains '\t'.
-Exception--file 'eraseme_whitespace_004': File contains '\r' or '\v'.
+Exception--file 'eraseme_whitespace_004': File contains '\v'.
 EOF
 
 diff --unified=0 eraseme_expected eraseme_observed && rm --force \

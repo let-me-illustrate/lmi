@@ -1,6 +1,6 @@
 // Actuarial tables from SOA database--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -244,14 +244,14 @@ void test_precondition_failures()
         (actuarial_table("nonexistent", 0)
         ,std::runtime_error
         ,"There is no table number 0 in file 'nonexistent'."
-        ); // SOA !! Revise for xml.
+        );
 
     BOOST_TEST_THROW
         (actuarial_table("nonexistent", 1)
         ,std::runtime_error
         ,"File 'nonexistent.ndx' is required but could not be found."
          " Try reinstalling."
-        ); // SOA !! Revise for xml.
+        );
 
     std::ifstream ifs((qx_cso + ".ndx").c_str(), ios_in_binary());
     std::ofstream ofs("eraseme.ndx", ios_out_trunc_binary());
@@ -262,7 +262,7 @@ void test_precondition_failures()
         ,std::runtime_error
         ,"File 'eraseme.dat' is required but could not be found."
          " Try reinstalling."
-        ); // SOA !! Revise for xml.
+        );
     BOOST_TEST(0 == std::remove("eraseme.ndx"));
 
     actuarial_table z(qx_ins, 256);

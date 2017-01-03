@@ -1,6 +1,6 @@
 // Numerical algorithms for stratified rates.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -26,9 +26,8 @@
 
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // minmax
-#include "stl_extensions.hpp"           // nonstd::is_sorted()
 
-#include <algorithm>                    // std::upper_bound()
+#include <algorithm>                    // std::is_sorted(), std::upper_bound()
 #include <functional>
 #include <vector>
 
@@ -301,7 +300,7 @@ T banded_rate<T>::operator()
     LMI_ASSERT(zero <  extrema.maximum());
 
     std::vector<T> const& z(cumulative_limits);
-    LMI_ASSERT(nonstd::is_sorted(z.begin(), z.end()));
+    LMI_ASSERT(std::is_sorted(z.begin(), z.end()));
 
     // Ignore the last limit. It's asserted elsewhere to be infinity.
     std::vector<double>::const_iterator band = std::upper_bound

@@ -1,6 +1,6 @@
 // SOA tables represented in binary SOA format--unit test.
 //
-// Copyright (C) 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -44,7 +44,6 @@ using namespace soa_v3_format;
 // Unit test helpers for working with files.
 namespace
 {
-
 // Class temporarily redirecting std::cout to a string: this is useful to check
 // that the expected output appears on cout or just to suppress some output
 // we're not interested in.
@@ -115,96 +114,6 @@ class test_file_eraser
   private:
     fs::path path_;
 };
-
-// Check that the two binary files contents is identical, failing the current
-// test if it isn't.
-//
-// BOOST !! We could use BOOST_CHECK_EQUAL_COLLECTIONS if we could use the
-// full Boost.Test framework.
-void check_files_equal
-    (fs::path const& path1
-    ,fs::path const& path2
-    ,char const* file
-    ,int line
-    )
-{
-    fs::ifstream ifs1(path1, std::ios_base::in | std::ios_base::binary);
-    INVOKE_BOOST_TEST(!ifs1.bad(), file, line);
-
-    fs::ifstream ifs2(path2, std::ios_base::in | std::ios_base::binary);
-    INVOKE_BOOST_TEST(!ifs2.bad(), file, line);
-
-    // Compare the file sizes.
-    ifs1.seekg(0, std::ios_base::end);
-    ifs2.seekg(0, std::ios_base::end);
-    INVOKE_BOOST_TEST_EQUAL(ifs1.tellg(), ifs2.tellg(), file, line);
-    if(ifs1.tellg() != ifs2.tellg())
-        {
-        lmi_test::record_error();
-        lmi_test::error_stream()
-            << "Files '" << path1 << "' and '" << path2 << "' "
-            << "have different sizes: " << ifs1.tellg() << " and "
-            << ifs2.tellg() << " respectively."
-            << BOOST_TEST_FLUSH
-            ;
-        return;
-        }
-
-    // Rewind back to the beginning.
-    ifs1.seekg(0, std::ios_base::beg);
-    ifs2.seekg(0, std::ios_base::beg);
-
-    // Look for differences: using istream_iterator<char> here would be simpler
-    // but also much less efficient, so read the file by larger blocks instead.
-    const int buffer_size = 4096;
-    char buf1[buffer_size];
-    char buf2[buffer_size];
-    for(std::streamsize offset = 0;;)
-        {
-        ifs1.read(buf1, buffer_size);
-        INVOKE_BOOST_TEST(!ifs1.bad(), file, line);
-
-        ifs2.read(buf2, buffer_size);
-        INVOKE_BOOST_TEST(!ifs2.bad(), file, line);
-
-        std::streamsize const count = ifs1.gcount();
-        INVOKE_BOOST_TEST_EQUAL(count, ifs2.gcount(), file, line);
-
-        if(!count)
-            {
-            return;
-            }
-
-        for(std::streamsize pos = 0; pos < count; ++pos)
-            {
-            if(buf1[pos] != buf2[pos])
-                {
-                lmi_test::record_error();
-                lmi_test::error_stream()
-                    << "Files '" << path1 << "' and '" << path2 << "' "
-                    << "differ at offset " << offset + pos << ": "
-                    << std::hex << std::setfill('0')
-                    << std::setw(2)
-                    << static_cast<int>(static_cast<unsigned char>(buf1[pos]))
-                    << " != "
-                    << std::setw(2)
-                    << static_cast<int>(static_cast<unsigned char>(buf2[pos]))
-                    << std::dec
-                    << BOOST_TEST_FLUSH
-                    ;
-                return;
-                }
-            }
-
-        offset += count;
-        }
-}
-
-// Macro allowing to easily pass the correct file name and line number to
-// check_files_equal().
-#define TEST_FILES_EQUAL(path1, path2) \
-    check_files_equal(path1, path2, __FILE__, __LINE__)
-
 } // Unnamed namespace.
 
 namespace
@@ -265,7 +174,7 @@ void test_database_open()
     BOOST_TEST_THROW
         (database("nonexistent")
         ,std::runtime_error
-        ,lmi_test::what_regex("'nonexistent\\.ndx' could not be opened")
+        ,lmi_test::what_regex("Unable to open 'nonexistent\\.ndx'")
         );
 
     test_file_eraser erase("eraseme.ndx");
@@ -276,7 +185,7 @@ void test_database_open()
     BOOST_TEST_THROW
         (database("eraseme")
         ,std::runtime_error
-        ,lmi_test::what_regex("'eraseme\\.dat' could not be opened")
+        ,lmi_test::what_regex("Unable to open 'eraseme\\.dat'")
         );
 }
 
@@ -406,19 +315,37 @@ void test_save()
 {
     database qx_ins(qx_ins_path);
 
-    test_file_eraser erase_ndx("eraseme.ndx");
-    test_file_eraser erase_dat("eraseme.dat");
-    qx_ins.save("eraseme");
+    qx_ins.save("eraseme0");
 
-    TEST_FILES_EQUAL("eraseme.ndx", qx_ins_path + ".ndx");
-    TEST_FILES_EQUAL("eraseme.dat", qx_ins_path + ".dat");
+    bool okay_ndx0 = files_are_identical("eraseme0.ndx", qx_ins_path + ".ndx");
+    bool okay_dat0 = files_are_identical("eraseme0.dat", qx_ins_path + ".dat");
+    BOOST_TEST(okay_ndx0);
+    BOOST_TEST(okay_dat0);
 
-    database db_tmp("eraseme");
+    database db_tmp("eraseme0");
     BOOST_TEST_EQUAL(qx_ins.tables_count(), db_tmp.tables_count());
 
-    db_tmp.save("eraseme");
-    TEST_FILES_EQUAL("eraseme.ndx", qx_ins_path + ".ndx");
-    TEST_FILES_EQUAL("eraseme.dat", qx_ins_path + ".dat");
+    // File 'eraseme0.dat' is still open and cannot be removed yet.
+    // Saving 'db_tmp' closes the file so that it can be removed.
+    db_tmp.save("eraseme1");
+
+    // Leave the files for analysis if they didn't match.
+    if(okay_ndx0 && okay_dat0)
+        {
+        BOOST_TEST(0 == std::remove("eraseme0.ndx"));
+        BOOST_TEST(0 == std::remove("eraseme0.dat"));
+        }
+
+    bool okay_ndx1 = files_are_identical("eraseme1.ndx", qx_ins_path + ".ndx");
+    bool okay_dat1 = files_are_identical("eraseme1.dat", qx_ins_path + ".dat");
+    BOOST_TEST(okay_ndx1);
+    BOOST_TEST(okay_dat1);
+    // Leave the files for analysis if they didn't match.
+    if(okay_ndx1 && okay_dat1)
+        {
+        BOOST_TEST(0 == std::remove("eraseme1.ndx"));
+        BOOST_TEST(0 == std::remove("eraseme1.dat"));
+        }
 }
 
 void test_add_table()
@@ -497,10 +424,10 @@ void do_test_copy(std::string const& path)
     database db_new(index_ss, data_ss);
     BOOST_TEST_EQUAL(db_new.tables_count(), tables_count);
 
-    // In general, we can't just use TEST_FILES_EQUAL() to compare the files
-    // here because the order of tables in the original .dat file is lost and
-    // it does not need to be the same as the order in the index file, so we
-    // just compare the logical contents.
+    // Compare binary rate-table files logically rather than literally.
+    // These files are unlikely to be identical because the order of
+    // the tables in the original .dat file is lost and need not be the
+    // same as the order in the index file.
     for(int i = 0; i != tables_count; ++i)
         {
         BOOST_TEST_EQUAL
@@ -516,6 +443,40 @@ void test_copy()
     do_test_copy(qx_ins_path);
 }
 
+/// Test deduce_number_of_decimals(std::string const&).
+///
+/// The tested function's argument is a string for generality, though
+/// in its intended use that string is always a value returned by
+/// value_cast<std::string>(double). The extra generality makes it
+/// easier to write tests here. Some of the failing tests in comments
+/// indicate improvements needed if a more general version of the
+/// tested function is ever desired for other purposes.
+
+void test_decimal_deduction()
+{
+    //                                                 1 234567890123456
+    BOOST_TEST_EQUAL( 9, deduce_number_of_decimals("0002.123456789000001"));
+    BOOST_TEST_EQUAL( 8, deduce_number_of_decimals("0002.123456789999991"));
+
+    BOOST_TEST_EQUAL( 8, deduce_number_of_decimals("0002.12345678999999 "));
+    BOOST_TEST_EQUAL(13, deduce_number_of_decimals("0002.1234567899999  "));
+
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.000000000000000"));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.000000000000000000000000"));
+    // Fails, but value_cast can't return this.
+//  BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.0              "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0.               "));
+    // Fails, but value_cast can't return this.
+//  BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("    .0              "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("    .               "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   0                "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   1                "));
+    BOOST_TEST_EQUAL( 0, deduce_number_of_decimals("   9                "));
+
+    //                                                123456789012345678
+    BOOST_TEST_EQUAL( 5, deduce_number_of_decimals("0.012830000000000001"));
+}
+
 int test_main(int, char*[])
 {
     test_database_open();
@@ -527,6 +488,7 @@ int test_main(int, char*[])
     test_add_table();
     test_delete();
     test_copy();
+    test_decimal_deduction();
 
     return EXIT_SUCCESS;
 }

@@ -1,6 +1,6 @@
 // Actuarial tables from SOA database.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -26,12 +26,9 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "deserialize_cast.hpp"
-#include "materially_equal.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"   // methuselah
 #include "path_utility.hpp"             // fs::path inserter
-#include "value_cast.hpp"
-#include "xml_lmi.hpp"
 
 #include <boost/cstdint.hpp>
 #include <boost/filesystem/convenience.hpp>
@@ -39,15 +36,11 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/static_assert.hpp>
 
-#include <xmlwrapp/nodes_view.h>
-
 #include <algorithm>                    // std::max(), std::min()
 #include <cctype>                       // std::toupper()
 #include <climits>                      // CHAR_BIT
-#include <iomanip>                      // std::setprecision()
 #include <ios>
 #include <istream>
-#include <iterator>                     // std::distance()
 #include <limits>
 
 namespace
@@ -86,22 +79,39 @@ namespace
     }
 } // Unnamed namespace.
 
-actuarial_table_base::actuarial_table_base()
-    :table_type_     (-1)
+actuarial_table::actuarial_table(std::string const& filename, int table_number)
+    :filename_       (filename)
+    ,table_number_   (table_number)
+    ,table_type_     (-1)
     ,min_age_        (-1)
     ,max_age_        (-1)
     ,select_period_  (-1)
     ,max_select_age_ (-1)
+    ,table_offset_   (-1)
 {
+    if(table_number_ <= 0)
+        {
+        fatal_error()
+            << "There is no table number "
+            << table_number_
+            << " in file '"
+            << filename_
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
+
+    find_table();
+    parse_table();
 }
 
-actuarial_table_base::~actuarial_table_base()
+actuarial_table::~actuarial_table()
 {
 }
 
 /// Read a given number of values for a given issue age.
 
-std::vector<double> actuarial_table_base::values(int issue_age, int length) const
+std::vector<double> actuarial_table::values(int issue_age, int length) const
 {
     return specific_values(issue_age, length);
 }
@@ -113,7 +123,7 @@ std::vector<double> actuarial_table_base::values(int issue_age, int length) cons
 /// method: method-specific adjustments are not permitted to render
 /// sane what was insane ab ovo.
 
-std::vector<double> actuarial_table_base::values_elaborated
+std::vector<double> actuarial_table::values_elaborated
     (int                      issue_age
     ,int                      length
     ,e_actuarial_table_method method
@@ -178,347 +188,6 @@ std::vector<double> actuarial_table_base::values_elaborated
         }
 }
 
-xml_actuarial_table::xml_actuarial_table(std::string const& filename, int table_number)
-{
-    // SOA !! This is temporary code for API compatibility with soa_actuarial_table.
-    // It should be changed so that the constructor takes only a single
-    // argument, filename of the XML table file.
-    std::string xmlfile(filename, 0, filename.rfind('.'));
-    xmlfile += "_";
-    xmlfile += value_cast<std::string>(table_number);
-    xmlfile += ".xtable";
-    load_xml_table(xmlfile);
-}
-
-xml_actuarial_table::~xml_actuarial_table()
-{
-}
-
-void xml_actuarial_table::load_xml_table(std::string const& filename)
-{
-    xml_lmi::dom_parser parser(filename);
-    xml::element root(parser.root_node("table"));
-
-    // SOA !! Implement loading of multi-dimensional tables as well.
-    // SOA !! Upgrade xmlwrapp:
-    // XMLWRAPP !! This should be const_iterator, but xmlwrapp < 0.7 lacks the
-    // necessary operator!= for comparing const and non-const iterators.
-    xml::node::iterator i;
-
-    if (root.end() != (i = root.find("aggregate")))
-        {
-        load_xml_aggregate_table(*i);
-        }
-    else if (root.end() != (i = root.find("duration")))
-        {
-        load_xml_duration_table(*i);
-        }
-    else if (root.end() != (i = root.find("select")))
-        {
-        load_xml_select_table(*i);
-        }
-    else if (root.end() != (i = root.find("select-and-ultimate")))
-        {
-        load_xml_select_and_ultimate_table(*i);
-        }
-    else
-        {
-        fatal_error()
-            << "Required data element not found."
-            << LMI_FLUSH
-            ;
-        }
-}
-
-void xml_actuarial_table::load_xml_table_with_ages
-    (xml::element const& node
-    ,std::vector<double>& data
-    ,int& min_age
-    ,int& max_age
-    )
-{
-    xml::const_nodes_view const values = node.elements("value");
-
-    data.reserve(std::distance(values.begin(), values.end()));
-
-    min_age = max_age = -1;
-
-    typedef xml::const_nodes_view::const_iterator cnvi;
-    for(cnvi i = values.begin(); i != values.end(); ++i)
-        {
-        data.push_back(value_cast<double>(xml_lmi::get_content(*i)));
-        int age;
-        if(!xml_lmi::get_attr(*i, "age", age))
-            {
-            fatal_error()
-                << "XML <value> node doesn't have 'age' attribute."
-                << LMI_FLUSH
-                ;
-            }
-        if(-1 == min_age)
-            {
-            min_age = age;
-            }
-        else
-            {
-            if(max_age + 1 != age)
-                {
-                fatal_error()
-                    << "XML <value> node has 'age' attribute value '"
-                    << age
-                    << "' but '"
-                    << max_age + 1
-                    << "' was expected."
-                    << LMI_FLUSH
-                    ;
-                }
-            }
-        max_age = age;
-        }
-
-    LMI_ASSERT(data.size() == size_t(max_age - min_age + 1));
-}
-
-void xml_actuarial_table::load_xml_aggregate_table(xml::element const& node)
-{
-    load_xml_table_with_ages
-        (node
-        ,data_
-        ,min_age_
-        ,max_age_
-        );
-
-    table_type_ = e_table_aggregate;
-}
-
-void xml_actuarial_table::load_xml_duration_table(xml::element const& node)
-{
-    xml::const_nodes_view const values = node.elements("value");
-
-    data_.reserve(std::distance(values.begin(), values.end()));
-
-    typedef xml::const_nodes_view::const_iterator cnvi;
-    for(cnvi i = values.begin(); i != values.end(); ++i)
-        {
-        data_.push_back(value_cast<double>(xml_lmi::get_content(*i)));
-        }
-
-    table_type_ = e_table_duration;
-}
-
-void xml_actuarial_table::load_xml_select_table(xml::element const& node)
-{
-    xml::const_nodes_view const rows = node.elements("row");
-
-    if(!xml_lmi::get_attr(node, "period", select_period_))
-        {
-        fatal_error()
-            << "XML <select> node doesn't have 'period' attribute."
-            << LMI_FLUSH
-            ;
-        }
-
-    data_.reserve(std::distance(rows.begin(), rows.end()) * select_period_);
-
-    min_age_ = max_age_ = -1;
-
-    typedef xml::const_nodes_view::const_iterator cnvi;
-    for(cnvi i = rows.begin(); i != rows.end(); ++i)
-        {
-        int age;
-        if(!xml_lmi::get_attr(*i, "age", age))
-            {
-            fatal_error()
-                << "XML <row> node doesn't have 'age' attribute."
-                << LMI_FLUSH
-                ;
-            }
-        if(-1 == min_age_)
-            {
-            min_age_ = age;
-            }
-        else
-            {
-            if(max_age_ + 1 != age)
-                {
-                fatal_error()
-                    << "XML <row> node has 'age' attribute value '"
-                    << age
-                    << "' but '"
-                    << max_age_ + 1
-                    << "' was expected."
-                    << LMI_FLUSH
-                    ;
-                }
-            }
-        max_age_ = age;
-
-        xml::const_nodes_view const values = i->elements("value");
-        if(select_period_ != std::distance(values.begin(), values.end()))
-            {
-            fatal_error()
-                << "XML <row> node has "
-                << std::distance(values.begin(), values.end())
-                << " values but select period is "
-                << select_period_
-                << "."
-                << LMI_FLUSH
-                ;
-            }
-
-        for(cnvi v = values.begin(); v != values.end(); ++v)
-            {
-            data_.push_back(value_cast<double>(xml_lmi::get_content(*v)));
-            }
-        }
-
-    max_select_age_ = max_age_;
-
-    LMI_ASSERT(data_.size() == size_t((max_age_ - min_age_ + 1) * select_period_));
-
-    // Use the same type for select and select & ultimate tables: selected
-    // table is just a special case of the latter where max_age_ ==
-    // max_select_age_ and the ultimate table is empty.
-    table_type_ = e_table_select_and_ultimate;
-}
-
-void xml_actuarial_table::load_xml_select_and_ultimate_table(xml::element const& node)
-{
-    load_xml_select_table(*xml_lmi::retrieve_element(node, "select"));
-
-    int ultimate_min_age;
-    load_xml_table_with_ages
-        (*xml_lmi::retrieve_element(node, "ultimate")
-        ,ultimate_
-        ,ultimate_min_age
-        ,max_age_
-        );
-
-    if(ultimate_min_age != min_age_ + select_period_)
-        {
-        fatal_error()
-            << "Ultimate table should have min. age "
-            << min_age_
-            << ", but has "
-            << ultimate_min_age
-            << "."
-            << LMI_FLUSH
-            ;
-        }
-
-    table_type_ = e_table_select_and_ultimate;
-}
-
-std::vector<double> xml_actuarial_table::specific_values
-    (int issue_age
-    ,int length
-    ) const
-{
-    if(table_type_ != e_table_duration)
-        {
-        // min_age_ and max_age_ are invalid for duration tables
-        LMI_ASSERT(min_age_ <= issue_age && issue_age <= max_age_);
-        LMI_ASSERT(0 <= length && length <= 1 + max_age_ - issue_age);
-        }
-
-    std::vector<double> v;
-    switch(table_type_)
-        {
-        case e_table_aggregate:
-            {
-            // Parenthesize the offsets--addition in C and C++ is
-            // in effect left associative:
-            //   data_.begin() + issue_age - min_age_
-            // means
-            //   (data_.begin() + issue_age) - min_age_
-            // but the subexpression
-            //   (data_.begin() + issue_age)
-            // is likely to return a past-the-end iterator, which
-            // libstdc++'s debug mode will dislike.
-            //
-            v = std::vector<double>
-                (data_.begin() + (issue_age - min_age_)
-                ,data_.begin() + (issue_age - min_age_ + length)
-                );
-            }
-            break;
-        case e_table_duration:
-            {
-            v = std::vector<double>
-                (data_.begin()
-                ,data_.begin() + length
-                );
-            }
-            break;
-        case e_table_select_and_ultimate:
-            {
-            v.resize(length);
-            std::vector<double>::iterator cursor = v.begin();
-
-            int row_to_start_at;
-
-            // Write select portion:
-            if(issue_age < max_select_age_ + select_period_)
-                {
-                row_to_start_at = (std::min(max_select_age_, issue_age) - min_age_);
-                int offset_in_row = std::max(0, issue_age - max_select_age_);
-                int k = offset_in_row
-                    +   row_to_start_at * select_period_
-                    ;
-                for(int i = offset_in_row; cursor != v.end() && i < select_period_; i++, k++)
-                    *(cursor++) = data_[k];
-                }
-            else
-                {
-                const int min_ultimate_age = min_age_ + select_period_;
-                row_to_start_at = issue_age - min_ultimate_age;
-                }
-
-            // And ultimate:
-            for(int k = row_to_start_at; cursor != v.end(); k++)
-                *(cursor++) = ultimate_[k];
-            }
-            break;
-
-        default:
-            {
-            fatal_error()
-                << "Table type '"
-                << table_type_
-                << "' not recognized: must be one of 'A', 'D', or 'S'."
-                << LMI_FLUSH
-                ;
-            }
-        }
-    LMI_ASSERT(v.size() == static_cast<unsigned int>(length));
-    return v;
-}
-
-soa_actuarial_table::soa_actuarial_table(std::string const& filename, int table_number)
-    :filename_       (filename)
-    ,table_number_   (table_number)
-    ,table_offset_   (-1)
-{
-    if(table_number_ <= 0)
-        {
-        fatal_error()
-            << "There is no table number "
-            << table_number_
-            << " in file '"
-            << filename_
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
-
-    find_table();
-    parse_table();
-}
-
-soa_actuarial_table::~soa_actuarial_table()
-{
-}
-
 /// Find the table specified by table_number_.
 ///
 /// SOA documentation does not specify the domain of table numbers,
@@ -534,7 +203,7 @@ soa_actuarial_table::~soa_actuarial_table()
 /// Asserting that the table number is nonzero makes it safe to use
 /// zero as a sentry.
 
-void soa_actuarial_table::find_table()
+void actuarial_table::find_table()
 {
     LMI_ASSERT(0 != table_number_);
 
@@ -569,9 +238,7 @@ void soa_actuarial_table::find_table()
     BOOST_STATIC_ASSERT(sizeof(boost::int32_t) <= sizeof(int));
     while(index_ifs)
         {
-        int index_table_number =
-            deserialize_cast<boost::int32_t>(index_record)
-            ;
+        int index_table_number = deserialize_cast<boost::int32_t>(index_record);
         if(table_number_ == index_table_number)
             {
             char* p = 54 + index_record;
@@ -629,7 +296,7 @@ void soa_actuarial_table::find_table()
 ///   15   2-byte integer:  Maximum select age (if zero, then it's max age)
 ///   17   8-byte doubles:  Table values
 
-void soa_actuarial_table::parse_table()
+void actuarial_table::parse_table()
 {
     LMI_ASSERT(-1 == table_type_    );
     LMI_ASSERT(-1 == min_age_       );
@@ -774,7 +441,7 @@ void soa_actuarial_table::parse_table()
 /// taken as unlimited, so its value should be max_age_; this
 /// implementation makes it so after the fact.
 
-void soa_actuarial_table::read_values(std::istream& is, int nominal_length)
+void actuarial_table::read_values(std::istream& is, int nominal_length)
 {
     if('S' != table_type_)
         {
@@ -831,7 +498,7 @@ void soa_actuarial_table::read_values(std::istream& is, int nominal_length)
 /// considered preferable to throw an exception, in case permitting
 /// issue age to exceed max_select_age_ is an inadvertent mistake.
 
-std::vector<double> soa_actuarial_table::specific_values
+std::vector<double> actuarial_table::specific_values
     (int issue_age
     ,int length
     ) const
@@ -842,7 +509,7 @@ std::vector<double> soa_actuarial_table::specific_values
     std::vector<double> v;
     switch(table_type_)
         {
-        case e_table_aggregate:
+        case 'A':
             {
             // Parenthesize the offsets--addition in C and C++ is
             // in effect left associative:
@@ -860,7 +527,7 @@ std::vector<double> soa_actuarial_table::specific_values
                 );
             }
             break;
-        case e_table_duration:
+        case 'D':
             {
             v = std::vector<double>
                 (data_.begin()
@@ -868,7 +535,7 @@ std::vector<double> soa_actuarial_table::specific_values
                 );
             }
             break;
-        case e_table_select_and_ultimate:
+        case 'S':
             {
             int const stride = 1 + select_period_;
             int k =
@@ -903,38 +570,6 @@ std::vector<double> soa_actuarial_table::specific_values
     return v;
 }
 
-#if defined LMI_USE_XML_TABLES
-namespace
-{
-    bool almost_equal_doubles(std::vector<double> const& a, std::vector<double> const& b)
-    {
-        if(a.size() != b.size())
-            return false;
-
-        size_t const size = a.size();
-        for(size_t i = 0; i < size; i++)
-            {
-            if(!materially_equal(a[i], b[i], 2.0E-15L))
-                {
-                warning()
-                    << i << " i\n"
-                    << value_cast<std::string>(a[i]) << " ... a[i]\n"
-                    << value_cast<std::string>(b[i]) << " ... b[i]\n"
-                    << std::setprecision(20)
-                    << a[i] << " a[i]\n"
-                    << b[i] << " b[i]\n"
-                    << value_cast<std::string>((b[i] - a[i]) / b[i]) << " (b[i] - a[i]) / b[i]\n"
-                    << LMI_FLUSH
-                    ;
-                return false;
-                }
-            }
-
-        return true;
-    }
-} // Unnamed namespace.
-#endif // defined LMI_USE_XML_TABLES
-
 std::vector<double> actuarial_table_rates
     (std::string const& table_filename
     ,int                table_number
@@ -942,22 +577,8 @@ std::vector<double> actuarial_table_rates
     ,int                length
     )
 {
-#if defined LMI_USE_XML_TABLES
-    xml_actuarial_table     z(table_filename, table_number);
-    soa_actuarial_table z_soa(table_filename, table_number);
-
-    std::vector<double> values    (z.values(issue_age, length));
-    std::vector<double> values_soa(z_soa.values(issue_age, length));
-
-    // SOA !! Temporarily verify correctness of XML implementation,
-    // remove this once satisfied
-    LMI_ASSERT(almost_equal_doubles(values, values_soa));
-    return values;
-#else  // !defined LMI_USE_XML_TABLES
-// SOA !! Ultimately, there will be only one class:
     actuarial_table z(table_filename, table_number);
     return z.values(issue_age, length);
-#endif // !defined LMI_USE_XML_TABLES
 }
 
 std::vector<double> actuarial_table_rates_elaborated
@@ -970,31 +591,6 @@ std::vector<double> actuarial_table_rates_elaborated
     ,int                      reset_duration
     )
 {
-#if defined LMI_USE_XML_TABLES
-    xml_actuarial_table     z(table_filename, table_number);
-    soa_actuarial_table z_soa(table_filename, table_number);
-
-    std::vector<double> values(z.values_elaborated
-        (issue_age
-        ,length
-        ,method
-        ,inforce_duration
-        ,reset_duration
-        ));
-    std::vector<double> values_soa(z_soa.values_elaborated
-        (issue_age
-        ,length
-        ,method
-        ,inforce_duration
-        ,reset_duration
-        ));
-
-    // SOA !! Temporarily verify correctness of XML implementation,
-    // remove this once satisfied
-    LMI_ASSERT(almost_equal_doubles(values, values_soa));
-    return values;
-#else  // !defined LMI_USE_XML_TABLES
-// SOA !! Ultimately, there will be only one class:
     actuarial_table z(table_filename, table_number);
     return z.values_elaborated
         (issue_age
@@ -1003,6 +599,5 @@ std::vector<double> actuarial_table_rates_elaborated
         ,inforce_duration
         ,reset_duration
         );
-#endif // !defined LMI_USE_XML_TABLES
 }
 

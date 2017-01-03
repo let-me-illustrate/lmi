@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702 guideline premium--unit test.
 //
-// Copyright (C) 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -27,10 +27,10 @@
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
-#include "stl_extensions.hpp"           // nonstd::iota()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#include <numeric>                      // std::iota()
 #include <vector>
 
 namespace
@@ -263,7 +263,7 @@ void gpt_test::initialize(int issue_age)
     qab_waiver_rate      .assign(length,  0.000029);
 
     std::vector<int>    iota_i(length);
-    nonstd::iota(iota_i.begin(), iota_i.end(), issue_age);
+    std::iota(iota_i.begin(), iota_i.end(), issue_age);
     std::vector<double> iota_d(length, 0.0);
     iota_d += 1.0 + 0.001 * iota_i;
     glp_ic               *= iota_d;

@@ -1,6 +1,6 @@
 // Manage floating-point environment--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -70,20 +70,20 @@ int test_main(int, char*[])
 #if defined LMI_X86
     unsigned short int cw = 0x0000;
 
-    BOOST_TEST_EQUAL_BITS(0x037f, msw_to_intel(0x0008001f));
+    BOOST_TEST_EQUAL_BITS(0x037f, msvc_to_intel(0x0008001f));
 
-    BOOST_TEST_EQUAL_BITS(0x0008001f, intel_to_msw(0x037f));
+    BOOST_TEST_EQUAL_BITS(0x0008001f, intel_to_msvc(0x037f));
 
     cw = 0x037f;
-    BOOST_TEST_EQUAL_BITS(0x0008001f, intel_to_msw(cw));
-    BOOST_TEST_EQUAL_BITS(cw, msw_to_intel(0x0008001f));
-    BOOST_TEST_EQUAL_BITS(cw, msw_to_intel(intel_to_msw(cw)));
+    BOOST_TEST_EQUAL_BITS(0x0008001f, intel_to_msvc(cw));
+    BOOST_TEST_EQUAL_BITS(cw, msvc_to_intel(0x0008001f));
+    BOOST_TEST_EQUAL_BITS(cw, msvc_to_intel(intel_to_msvc(cw)));
 
     cw = 0x027f;
-    BOOST_TEST_EQUAL_BITS(cw, msw_to_intel(intel_to_msw(cw)));
+    BOOST_TEST_EQUAL_BITS(cw, msvc_to_intel(intel_to_msvc(cw)));
 
     cw = 0x037f;
-    BOOST_TEST_EQUAL_BITS(cw, msw_to_intel(intel_to_msw(cw)));
+    BOOST_TEST_EQUAL_BITS(cw, msvc_to_intel(intel_to_msvc(cw)));
 
     // Most reserved bits should be left as initialized by FINIT...
     x87_control_word(0x0000);
@@ -105,21 +105,21 @@ int test_main(int, char*[])
     // traps this upon conversion between different control-word
     // types, but not otherwise--it guards against accidental misuse,
     // not fraud such as:
-    //   e_ieee754_precision(0x01); // Poor practice at best.
-    //   e_msw_pc           (0x03); // Unspecified behavior: C++98 7.2/9 .
+    //   e_x87_precision (0x01); // Poor practice at best.
+    //   e_msvc_precision(0x03); // Unspecified behavior: C++98 7.2/9 .
 
     intel_control_word invalid_intel_control_word(0);
-    invalid_intel_control_word.pc(e_ieee754_precision(0x01));
+    invalid_intel_control_word.pc(e_x87_precision (0x01));
     BOOST_TEST_THROW
-        (msw_control_word   msw_error  (invalid_intel_control_word)
+        (msvc_control_word  msvc_error (invalid_intel_control_word)
         ,std::logic_error
         ,"Invalid fpu PC value."
         );
 
-    msw_control_word   invalid_msw_control_word  (0);
-    invalid_msw_control_word.pc  (e_msw_pc  (0x03));
+    msvc_control_word  invalid_msvc_control_word (0);
+    invalid_msvc_control_word.pc (e_msvc_precision(0x03));
     BOOST_TEST_THROW
-        (intel_control_word intel_error(invalid_msw_control_word  )
+        (intel_control_word intel_error(invalid_msvc_control_word )
         ,std::logic_error
         ,"Invalid fpu PC value."
         );
@@ -149,7 +149,7 @@ int test_main(int, char*[])
 #   endif // defined __MINGW32__
 
 #   if defined _MCW_EM
-    // Test the ms C rtl method.
+    // Test the msvc rtl method.
     x87_control_word(0x0000);
     _control87(_MCW_EM,  _MCW_EM);
     _control87(_RC_NEAR, _MCW_RC);

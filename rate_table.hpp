@@ -1,6 +1,6 @@
 // Tools for working with SOA tables represented in binary format.
 //
-// Copyright (C) 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -29,9 +29,11 @@
 
 #include <boost/filesystem/path.hpp>
 
+#include <cstddef>                      // std::size_t
 #include <iosfwd>
 #include <memory>                       // std::shared_ptr
 #include <string>
+#include <vector>
 
 /// Namespace containing classes working with databases in version 3 of the SOA
 /// format.
@@ -194,5 +196,11 @@ inline std::ostream& operator<<(std::ostream& os, table::Number const& number)
 }
 
 } // namespace soa_v3_format
+
+// These "deduce" functions do not clearly belong in any namespace.
+// They are declared here to facilitate unit testing.
+
+std::size_t deduce_number_of_decimals(std::string const&);
+std::size_t deduce_number_of_decimals(std::vector<double> const&);
 
 #endif // rate_table_hpp

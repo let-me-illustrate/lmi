@@ -15,9 +15,10 @@ git clone file:///opt/lmi/blessed/proprietary
   # (a pre-commit hook shows these commands' output, filtered)
 
 cd /opt/lmi/proprietary/data/
-cd ../data; make src_dir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../src ; make src_dir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../test; make src_dir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../data  ; make src_dir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../src   ; make src_dir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../test  ; make src_dir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../tables; make src_dir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
 
   # Commit the changes in whatever batches make sense
 
@@ -31,6 +32,8 @@ git commit --all -m"Another set of changes"
 
 cd /opt/lmi/proprietary
 git bundle create YourBundleName ^origin/master HEAD --branches
+  # for example (substitute your own initials)
+git bundle create /opt/lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle ^origin/master HEAD --branches
 
   # Email that bundle, then push the changes to your "blessed" repository
 
@@ -45,3 +48,12 @@ git pull /path/where/you/saved/TheirBundleName
   # ...then synchronize your "blessed" repository with your correspondent's
 
 git push
+
+  # Whenever a rate table changes, regenerate the binary database
+
+cd /opt/lmi/data
+rm proprietary.dat proprietary.ndx
+  # native:
+/opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+  # msw cross build:
+wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables

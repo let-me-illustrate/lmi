@@ -1,6 +1,6 @@
 // Life insurance illustrations: SOA mortality table utility.
 //
-// Copyright (C) 2003, 2004, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -114,8 +114,8 @@ void list_tables(fs::path const& database_filename)
 /// be useful.
 ///
 /// If 'path_to_merge' names a file, then merge that file. If it names
-/// a directory, then merge all '*.txt' files in that directory. See
-/// rationale:
+/// a directory, then merge all '*.rates' files in that directory.
+/// Rationale:
 ///   http://lists.nongnu.org/archive/html/lmi/2016-11/msg00025.html
 
 void merge
@@ -133,24 +133,30 @@ void merge
         table_file.reset(new database);
         }
 
+    int count = 0;
+
     if(fs::is_directory(path_to_merge))
         {
         fs::directory_iterator i(path_to_merge);
         fs::directory_iterator const eod;
         for(; i != eod; ++i)
             {
-            if(".txt" != fs::extension(*i)) continue;
+            if(".rates" != fs::extension(*i)) continue;
             table const& t = table::read_from_text(*i);
             table_file->add_or_replace_table(t);
+            ++count;
             }
         }
     else
         {
         table const& t = table::read_from_text(path_to_merge);
         table_file->add_or_replace_table(t);
+        ++count;
         }
 
     table_file->save(database_filename);
+
+    std::cout << "Number of tables merged: " << count << "\n";
 }
 
 void delete_table
@@ -169,7 +175,7 @@ void delete_table
 std::string do_save_as_text_file(table const& t)
 {
     std::ostringstream oss;
-    oss << t.number() << ".txt";
+    oss << std::setfill('0') << std::setw(5) << t.number() << ".rates";
     std::string const filename = oss.str();
     t.save_as_text(filename);
     return filename;
@@ -192,13 +198,13 @@ void extract_all(fs::path database_filename)
 {
     database const table_file(database_filename);
 
-    auto const tables_count = table_file.tables_count();
-    for(int i = 0; i != tables_count; ++i)
+    auto const count = table_file.tables_count();
+    for(int i = 0; i != count; ++i)
         {
         do_save_as_text_file(table_file.get_nth_table(i));
         }
 
-    std::cout << "Extracted " << tables_count << " tables.\n";
+    std::cout << "Number of tables extracted: " << count << "\n";
 }
 
 void rename_tables
@@ -334,7 +340,16 @@ int verify(fs::path const& database_filename)
                     << LMI_FLUSH
                     ;
                 }
-
+            if(new_table != orig_table)
+                {
+                // This is not really fatal, it is only used here to throw an
+                // exception in a convenient way.
+                fatal_error()
+                    << "After loading and saving the original table \n"
+                    << "binary contents differed.\n"
+                    << LMI_FLUSH
+                    ;
+                }
             }
         catch(std::exception const& e)
             {
@@ -427,8 +442,8 @@ int try_main(int argc, char* argv[])
         {"crc"         ,NO_ARG   ,0 ,'c' ,0 ,"show CRCs of all tables"},
         {"list"        ,NO_ARG   ,0 ,'t' ,0 ,"list all tables"},
         {"merge=PATH"  ,REQD_ARG ,0 ,'m' ,0 ,"merge PATH (file or dir) into database"},
-        {"extract=n"   ,REQD_ARG ,0 ,'e' ,0 ,"extract table #n into n.txt"},
-        {"extract-all" ,NO_ARG   ,0 ,'x' ,0 ,"extract all tables to txt files"},
+        {"extract=n"   ,REQD_ARG ,0 ,'e' ,0 ,"extract table #n into '0000n.rates'"},
+        {"extract-all" ,NO_ARG   ,0 ,'x' ,0 ,"extract all tables to '.rates' files"},
         {"rename=FILE" ,REQD_ARG ,0 ,'r' ,0 ,"rename tables from FILE"},
         {"verify"      ,NO_ARG   ,0 ,'v' ,0 ,"verify integrity of all tables"},
         {0             ,NO_ARG   ,0 ,0   ,0 ,""}

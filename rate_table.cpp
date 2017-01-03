@@ -1,6 +1,6 @@
 // Tools for working with SOA tables represented in binary format.
 //
-// Copyright (C) 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -25,7 +25,9 @@
 
 #include "alert.hpp"
 #include "crc32.hpp"
+#include "miscellany.hpp"               // ios_in_binary(), ios_out_trunc_binary()
 #include "path_utility.hpp"
+#include "value_cast.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/exception.hpp>
@@ -44,7 +46,6 @@
 
 #include <algorithm>                    // std::count()
 #include <climits>                      // ULLONG_MAX
-#include <cmath>                        // std::pow()
 #include <cstdint>
 #include <cstdlib>                      // std::strtoull()
 #include <cstring>                      // std::strncmp()
@@ -58,7 +59,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <utility>                      // std::make_pair(), std::swap()
-#include <vector>
 
 using std::uint8_t;
 using std::uint16_t;
@@ -189,52 +189,6 @@ inline
 T get_value_or(boost::optional<T> const& o, U v)
 {
     return o ? *o : v;
-}
-
-template<typename T>
-struct open_file_traits;
-
-template<>
-struct open_file_traits<fs::ifstream>
-{
-    static std::ios_base::openmode get_mode() { return std::ios_base::in; }
-    static char const* describe_access() { return "reading"; }
-};
-
-template<>
-struct open_file_traits<fs::ofstream>
-{
-    static std::ios_base::openmode get_mode() { return std::ios_base::out; }
-    static char const* describe_access() { return "writing"; }
-};
-
-// Helper function opening the stream for reading or writing the given file and
-// throwing an exception on error. It shouldn't be used directly, prefer to use
-// the more readable open_{text,binary}_file() helpers below.
-template<typename T>
-void open_file(T& ifs, fs::path const& path, std::ios_base::openmode mode)
-{
-    ifs.open(path, open_file_traits<T>::get_mode() | mode);
-    if(!ifs)
-        {
-        fatal_error()
-            << "file '" << path << "' could not be opened for "
-            << open_file_traits<T>::describe_access()
-            << std::flush
-            ;
-        }
-}
-
-template<typename T>
-inline void open_text_file(T& fs, fs::path const& path)
-{
-    open_file(fs, path, static_cast<std::ios_base::openmode>(0));
-}
-
-template<typename T>
-inline void open_binary_file(T& fs, fs::path const& path)
-{
-    open_file(fs, path, std::ios_base::binary);
 }
 
 // Functions doing the same thing as istream::read() and ostream::write()
@@ -916,8 +870,7 @@ class table_impl
 
     // read_xxx() methods for binary format.
 
-    static
-    void read_string
+    static void read_string
             (boost::optional<std::string>& ostr
             ,enum_soa_field field
             ,std::istream& ifs
@@ -925,14 +878,12 @@ class table_impl
             );
 
     template<typename T>
-    static
-    T do_read_number(char const* name, std::istream& ifs);
+    static T do_read_number(char const* name, std::istream& ifs);
 
     void read_type(std::istream& ids, uint16_t length);
 
     template<typename T>
-    static
-    void read_number
+    static void read_number
             (boost::optional<T>& onum
             ,enum_soa_field field
             ,std::istream& ifs
@@ -960,8 +911,7 @@ class table_impl
 
     // This method returns the pointer to ostr string value to allow further
     // modifying it later in the caller.
-    static
-    std::string* parse_string
+    static std::string* parse_string
             (boost::optional<std::string>& ostr
             ,enum_soa_field field
             ,int line_num
@@ -969,8 +919,7 @@ class table_impl
             );
 
     // Parse number checking that it is less than the given maximal value.
-    static
-    unsigned long do_parse_number
+    static unsigned long do_parse_number
             (enum_soa_field field
             ,int line_num
             ,unsigned long max_num
@@ -978,8 +927,7 @@ class table_impl
             );
 
     template<typename T>
-    static
-    void parse_number
+    static void parse_number
             (boost::optional<T>& onum
             ,enum_soa_field field
             ,int line_num
@@ -1005,7 +953,7 @@ class table_impl
         (int num_spaces
         ,char const* start
         ,char const*& current
-        ,int& line_num
+        ,int line_num
         );
 
     // Helper of parse_values() parsing an integer value of at most age_width
@@ -1014,7 +962,7 @@ class table_impl
     uint16_t parse_age
         (char const* start
         ,char const*& current
-        ,int& line_num
+        ,int line_num
         );
 
     // Helper of parse_values() parsing a single floating point value using the
@@ -1023,7 +971,7 @@ class table_impl
     double parse_single_value
         (char const* start
         ,char const*& current
-        ,int& line_num
+        ,int line_num
         );
 
     // Compute the expected number of values from minimum and maximum age
@@ -1520,7 +1468,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
 uint16_t table_impl::parse_age
     (char const* start
     ,char const*& current
-    ,int& line_num
+    ,int line_num
     )
 {
     using text_format::age_width;
@@ -1563,9 +1511,11 @@ uint16_t table_impl::parse_age
 double table_impl::parse_single_value
     (char const* start
     ,char const*& current
-    ,int& line_num
+    ,int line_num
     )
 {
+    char const* origin = current;
+
     // The number of spaces before the value should be at least one,
     // and no greater than (gap_length, plus one if the number of
     // decimals is zero, because get_value_width() assumes, contrary
@@ -1648,18 +1598,14 @@ double table_impl::parse_single_value
 
     current = res_frac_part.end;
 
-    double value = res_frac_part.num;
-    value /= std::pow(10, *num_decimals_);
-    value += res_int_part.num;
-
-    return value;
+    return value_cast<double>(std::string(origin, current));
 }
 
 void table_impl::skip_spaces
     (int num_spaces
     ,char const* start
     ,char const*& current
-    ,int& line_num
+    ,int line_num
     )
 {
     if(std::strncmp(current, std::string(num_spaces, ' ').c_str(), num_spaces) != 0)
@@ -1906,11 +1852,29 @@ void table_impl::validate()
                 break;
             }
 
-        // We have a reasonable default for this field, so don't complain if
-        // it's absent.
         if(!num_decimals_)
             {
-            num_decimals_ = 6;
+            fatal_error() << "Number of decimals not specified." << LMI_FLUSH;
+            }
+
+        uint16_t putative_num_decimals = *num_decimals_;
+        uint16_t required_num_decimals = deduce_number_of_decimals(values_);
+        // This condition is true only if the table is defective,
+        // which should occur rarely enough that the cost of
+        // recalculating the hash value both here and below
+        // doesn't matter.
+        if(putative_num_decimals != required_num_decimals)
+            {
+            warning()
+                << "Table #" << *number_
+                << " specifies " << putative_num_decimals
+                << " decimals, but " << required_num_decimals
+                << " were necessary."
+                << "\nThis flaw has been corrected, and the CRC recalculated."
+                << LMI_FLUSH
+                ;
+            *num_decimals_ = required_num_decimals;
+            *hash_value_ = compute_hash_value();
             }
 
         // If we don't have the hash, compute it ourselves. If we do, check
@@ -2305,11 +2269,11 @@ unsigned long table_impl::compute_hash_value() const
 
 table table::read_from_text(fs::path const& file)
 {
+    fs::ifstream ifs(file, ios_in_binary());
+    if(!ifs) fatal_error() << "Unable to open '" << file << "'." << LMI_FLUSH;
+
     try
         {
-        fs::ifstream ifs;
-        open_text_file(ifs, file);
-
         return table(table_impl::create_from_text(ifs));
         }
     catch(std::runtime_error const& e)
@@ -2329,7 +2293,6 @@ table table::read_from_text(std::string const& text)
     try
         {
         std::istringstream iss(text);
-
         return table(table_impl::create_from_text(iss));
         }
     catch(std::runtime_error const& e)
@@ -2346,18 +2309,15 @@ table table::read_from_text(std::string const& text)
 
 void table::save_as_text(fs::path const& file) const
 {
-    fs::ofstream ofs;
-    open_text_file(ofs, file);
-
+    fs::ofstream ofs(file, ios_out_trunc_binary());
+    if(!ofs) fatal_error() << "Unable to open '" << file << "'." << LMI_FLUSH;
     impl_->write_as_text(ofs);
 }
 
 std::string table::save_as_text() const
 {
     std::ostringstream oss;
-
     impl_->write_as_text(oss);
-
     return oss.str();
 }
 
@@ -2522,18 +2482,17 @@ database_impl::database_impl(fs::path const& path)
     :path_(path)
 {
     fs::path const index_path = get_index_path(path);
-
-    fs::ifstream index_ifs;
-    open_binary_file(index_ifs, index_path);
-    read_index(index_ifs);
+    fs::ifstream ifs(index_path, ios_in_binary());
+    if(!ifs) fatal_error() << "Unable to open '" << index_path << "'." << LMI_FLUSH;
+    read_index(ifs);
 
     // Open the database file right now to ensure that we can do it, even if we
     // don't need it just yet. As it will be used soon anyhow, delaying opening
     // it wouldn't be a useful optimization.
-    auto const ifs = std::make_shared<fs::ifstream>();
-    open_binary_file(*ifs, get_data_path(path));
-
-    data_is_ = ifs;
+    fs::path const data_path = get_data_path(path);
+    auto const pifs = std::make_shared<fs::ifstream>(data_path, ios_in_binary());
+    if(!*pifs) fatal_error() << "Unable to open '" << data_path << "'." << LMI_FLUSH;
+    data_is_ = pifs;
 }
 
 database_impl::database_impl
@@ -2920,7 +2879,8 @@ void database_impl::save(fs::path const& path)
                     )
                 ,description_(description)
             {
-            open_binary_file(ofs_, temp_path_);
+            ofs_.open(temp_path_, ios_out_trunc_binary());
+            if(!ofs_) fatal_error() << "Unable to open '" << temp_path_ << "'." << LMI_FLUSH;
             }
 
             void close()
@@ -3212,3 +3172,86 @@ void database::save(std::ostream& index_os, std::ostream& data_os)
 }
 
 } // namespace soa_v3_format
+
+/// Infer the decimal precision of a rounded decimal-formatted number.
+
+std::size_t deduce_number_of_decimals(std::string const& arg)
+{
+    // Early exit: no decimal point means zero decimals.
+    if(std::string::npos == arg.find('.'))
+        {
+        return 0;
+        }
+
+    std::string s(arg);
+    std::size_t d = 0;
+
+    // Strip leading blanks and zeros.
+    std::string::size_type q = s.find_first_not_of(" 0");
+    if(std::string::npos != q)
+        {
+        s.erase(0, q);
+        }
+
+    // Strip trailing blanks.
+    std::string::size_type r = s.find_last_not_of(" ");
+    if(std::string::npos != r)
+        {
+        s.erase(1 + r);
+        }
+
+    // Preliminary result is number of characters after '.'.
+    // (Decrement for '.' unless nothing followed it.)
+    d = s.size() - s.find('.');
+    if(d) --d;
+
+    // Length of stripped string is number of significant digits
+    // (on both sides of the decimal point) plus one for the '.'.
+    // If this total exceeds 15--i.e., if there are more than 14
+    // significant digits--then there may be excess precision.
+    // In that case, keep only the first 15 digits (plus the '.',
+    // for a total of 16 characters), because those digits are
+    // guaranteed to be significant for IEEE754 double precision;
+    // drop the rest, which may include arbitrary digits. Then
+    // drop any trailing string that's all zeros or nines, and
+    // return the length of the remaining string. This wrongly
+    // truncates a number whose representation requires 15 or 16
+    // digits when the last one or more decimal digit is a nine,
+    // but that doesn't matter for the present use case: rate
+    // tables aren't expected to have more than about eight
+    // decimal places; and this function will be called for each
+    // number in a table and the maximum result used, so that
+    // such incorrect truncation can only occur if every number
+    // in the table is ill-conditioned in this way.
+    if(15 < s.size())
+        {
+        s.resize(16);
+        if('0' == s.back() || '9' == s.back())
+            {
+            d = s.find_last_not_of(s.back()) - s.find('.');
+            }
+        }
+
+    return d;
+}
+
+/// Infer the decimal precision of a decimally-rounded vector<double>.
+///
+/// Motivation: Some historical tables were stored only in the binary
+/// format. (Of course, no one wrote that by hand; text input surely
+/// was written first, but was not preserved.) The number of decimals
+/// implicit in the data values may defectively be inconsistent with
+/// the "Number of decimal places" header, and must be deduced. It is
+/// determined here as the greatest number of decimals required for
+/// any value datum, so that converting to text with that precision
+/// is lossless.
+
+std::size_t deduce_number_of_decimals(std::vector<double> const& values)
+{
+    std::size_t z = 0;
+    for(auto v: values)
+        {
+        z = std::max(z, deduce_number_of_decimals(value_cast<std::string>(v)));
+        }
+    return z;
+}

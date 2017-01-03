@@ -1,6 +1,6 @@
 # Makefile: object lists.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -244,6 +244,7 @@ common_common_objects := \
   path_utility.o \
   premium_tax.o \
   progress_meter.o \
+  round_glibc.o \
   sigfpe.o \
   single_cell_document.o \
   surrchg_rates.o \
@@ -873,6 +874,7 @@ regex_test$(EXEEXT): \
 
 round_test$(EXEEXT): \
   $(common_test_objects) \
+  round_glibc.o \
   round_test.o \
 
 round_to_test$(EXEEXT): \
@@ -1040,27 +1042,6 @@ bcc_rc$(EXEEXT): \
   license.o \
   system_command.o \
   system_command_non_wx.o \
-
-# Temporary tools for migration from binary to xml actuarial tables.
-# SOA !! Expunge after migration.
-
-soa2xml$(EXEEXT): \
-  $(boost_filesystem_objects) \
-  $(xmlwrapp_objects) \
-  actuarial_table.o \
-  alert.o \
-  alert_cli.o \
-  soa2xml.o \
-  xml_lmi.o \
-
-soa_stress_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
-  $(xmlwrapp_objects) \
-  actuarial_table.o \
-  alert.o \
-  alert_cli.o \
-  soa_stress_test.o \
-  xml_lmi.o \
 
 ################################################################################
 

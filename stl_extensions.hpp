@@ -1,6 +1,6 @@
 // SGI extensions to STL.
 //
-// Copyright (C) 2001, 2002, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -45,90 +45,74 @@
 // with the above disclaimers.
 //
 // Gregory W. Chicares modified it trivially in 2002 and 2005, and in
-// later years as indicated in 'ChangeLog'. Any defect in it should
-// not reflect on SGI's or HP's reputation.
+// later years as indicated in 'ChangeLog' or in `git log`. Any defect
+// in it should not reflect on SGI's or HP's reputation.
 
 #ifndef stl_extensions_hpp
 #define stl_extensions_hpp
 
 #include "config.hpp"
 
+#include <functional>                   // std::multiplies(), std::plus()
+#include <stdexcept>                    // std::logic_error()
+
 namespace nonstd
 {
-template<typename InputIterator, typename Size, typename OutputIterator>
-void copy_n(InputIterator first, Size count, OutputIterator result)
+/// Identity element.
+
+template <typename T> inline T identity_element(std::plus<T>)
 {
-    Size j = count;
-    for(; 0 < j; --j)
-        {
-        *result = *first;
-        ++first;
-        ++result;
-        }
+    return T(0);
 }
 
-/// is_sorted, a predicate testing whether a range is sorted in
-/// nondescending order.  This is an extension, not part of the C++
-/// standard.
-
-template<typename ForwardIterator>
-bool is_sorted
-    (ForwardIterator first
-    ,ForwardIterator last
-    )
+template <typename T> inline T identity_element(std::multiplies<T>)
 {
-    if(first == last)
-        {
-        return true;
-        }
+    return T(1);
+}
 
-    ForwardIterator next = first;
-    for(++next; next != last; first = next, ++next)
+/// Returns x ** n, where 0 <= n.
+///
+/// Note that "multiplication" is required to be associative, but not
+/// necessarily commutative.
+///
+/// GWC modification: throw on negative exponent--otherwise, the loop
+/// appears not to terminate.
+
+template <typename T, typename Integer, typename MonoidOperation>
+T power(T x, Integer n, MonoidOperation opr)
+{
+    if (n < 0)
         {
-        if(*next < *first)
+        throw std::logic_error("power() called with negative exponent.");
+        }
+    if (n == 0)
+        {
+        return identity_element(opr);
+        }
+    else
+        {
+        while ((n & 1) == 0)
             {
-            return false;
+            n >>= 1;
+            x = opr(x, x);
             }
-        }
-
-    return true;
-}
-
-template<typename ForwardIterator, typename StrictWeakOrdering>
-bool is_sorted
-    (ForwardIterator first
-    ,ForwardIterator last
-    ,StrictWeakOrdering comp
-    )
-{
-    if(first == last)
-        {
-        return true;
-        }
-
-    ForwardIterator next = first;
-    for(++next; next != last; first = next, ++next)
-        {
-        if(comp(*next, *first))
+        T result = x;
+        n >>= 1;
+        while (n != 0)
             {
-            return false;
+            x = opr(x, x);
+            if ((n & 1) != 0)
+                result = opr(result, x);
+            n >>= 1;
             }
+        return result;
         }
-
-    return true;
 }
 
-template<typename ForwardIterator, typename T>
-void iota
-    (ForwardIterator first
-    ,ForwardIterator last
-    ,T               value
-    )
+template <typename T, typename Integer>
+inline T power(T x, Integer n)
 {
-    while(first != last)
-        {
-        *first++ = value++;
-        }
+    return power(x, n, std::multiplies<T>());
 }
 } // namespace nonstd
 

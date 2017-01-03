@@ -1,6 +1,6 @@
 // Product-database map.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -528,6 +528,18 @@ void DBDictionary::InitDB()
     Add(database_entity(DB_SurrChgAcctValSlope , 1.0));
     Add(database_entity(DB_MaxWdGenAcctValMult , 1.0));
     Add(database_entity(DB_MaxWdSepAcctValMult , 1.0));
+
+    // This is determined by law and regulation, and should be the
+    // same for all life-insurance products.
+    int ptd[e_number_of_axes] = {1, 1, 1, 1, 1, e_max_dim_state, 1};
+    std::vector<int> premium_tax_dimensions(ptd, ptd + e_number_of_axes);
+    Add
+        (database_entity
+            (DB_PremTaxRate
+            ,premium_tax_dimensions
+            ,premium_tax_rates_for_life_insurance()
+            )
+        );
 
     // These are the same as class date_trammel's nominal limits.
     Add(database_entity(DB_CoiResetMinDate     , gregorian_epoch().julian_day_number()));
