@@ -153,7 +153,9 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("test_lib_arbitrary_exception"    ),Skeleton::UponTestLibArbitraryException    )
     EVT_MENU(XRCID("test_lib_catastrophe_report"     ),Skeleton::UponTestLibCatastropheReport     )
     EVT_MENU(XRCID("test_date_conversions"           ),Skeleton::UponTestDateConversions          )
+#if defined LMI_X87
     EVT_MENU(XRCID("test_floating_point_environment" ),Skeleton::UponTestFloatingPointEnvironment )
+#endif // defined LMI_X87
     EVT_MENU(XRCID("test_pasting"                    ),Skeleton::UponTestPasting                  )
     EVT_MENU(XRCID("test_system_command"             ),Skeleton::UponTestSystemCommand            )
     EVT_MENU(XRCID("window_cascade"                  ),Skeleton::UponWindowCascade                )
@@ -1024,6 +1026,7 @@ void Skeleton::UponTestDateConversions(wxCommandEvent&)
     TestDateConversions();
 }
 
+#if defined LMI_X87
 void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 {
     status() << "Begin test of floating-point environment." << std::flush;
@@ -1080,6 +1083,7 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 
     status() << "End test of floating-point environment." << std::flush;
 }
+#endif // defined LMI_X87
 
 /// Test custom handler UponPaste().
 ///

@@ -68,6 +68,17 @@ namespace fs = boost::filesystem;
 #   error Unknown hardware. Consider contributing support.
 #endif // Unknown hardware.
 
+#if defined LMI_X86
+    #if defined _M_IX86_FP && _M_IX86_FP == 0
+        #define LMI_X87
+    // Test for __SSE_MATH__ instead of __SSE__ as the latter is still defined
+    // in x86-64 builds even if the use of SSE is explicitly disabled using gcc
+    // -mfpmath=387 option.
+    #elif !defined __SSE_MATH__
+        #define LMI_X87
+    #endif
+#endif // defined LMI_X86
+
 #if defined __GNUC__
 // This selects a correct snprintf() for MinGW-w64.
 #   if !defined _ISOC99_SOURCE

@@ -32,41 +32,6 @@
 #include <iostream>
 #include <ostream>
 
-#if defined LMI_IEC_559
-    // The 'LMI_IEC_559' macro is never defined by any source file or
-    // by any makefile, so this conditional block is not reached today.
-    // For the macro's original rationale, see:
-    //   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00034.html
-    // The description that follows is outdated anyway, because C++11
-    // now provides <cfenv>.
-    //
-    // In case the C++ compiler offers C99 fesetround(), assume that
-    // it defines __STDC_IEC_559__, but doesn't support
-    //   #pragma STDC FENV_ACCESS ON
-    // in C++ mode. (I have no such compiler, so that assumption and
-    // code that ought to use that pragma are untested.)
-    enum e_ieee754_rounding
-        {fe_tonearest  = FE_TONEAREST
-        ,fe_downward   = FE_DOWNWARD
-        ,fe_upward     = FE_UPWARD
-        ,fe_towardzero = FE_TOWARDZERO
-        };
-#elif defined LMI_X86_64
-    // Probably this conditional should distinguish SSE from x87,
-    // rather than 64- from 32-bit x64. For the nonce, this prevents
-    // certain unit-test failures noted here:
-    //   http://lists.nongnu.org/archive/html/lmi/2016-12/msg00053.html
-#   include <cfenv>
-#elif defined LMI_X86
-    // It seems at first that the conditional here should be LMI_X86_32
-    // because x86_64 is treated above. However, perhaps the actual
-    // distinction is between SSE above and x87 here.
-    //
-    // "fenv_lmi_x86.hpp" provides the necessary values.
-#else  // No known way to set rounding style.
-#   error No known way to set rounding style.
-#endif // No known way to set rounding style.
-
 // Print name of software rounding style for diagnostics.
 char const* get_name_of_style(rounding_style style)
 {
@@ -117,21 +82,7 @@ template<> char const* get_name_of_float_type<long double>()
 
 void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
 {
-#if defined LMI_IEC_559
-    fesetround(mode);
-#elif defined LMI_X86_64
-    // See comments above on the <cfenv> series of conditionals.
-    // For the nonce, set both i87 and SSE rounding modes here.
-    fesetround(mode);
     fenv_rounding(mode);
-#elif defined LMI_X86
-    fenv_rounding(mode);
-#else // No known way to set hardware rounding mode.
-    std::cerr
-        << "\nCannot set floating-point hardware rounding mode.\n"
-        << "Results may be invalid.\n"
-        ;
-#endif // No known way to set hardware rounding mode.
 
     if(synchronize)
         {
@@ -182,13 +133,13 @@ void print_hex_val(T t, char const* name)
   std::cout << "hex value of " << name << " is: ";
 
 // GWC modifications begin
-  // My principal compiler, mingw gcc, has sizeof(long double) == 12,
+  // When using x87 with gcc, sizeof(long double) == 12,
   // but only ten bytes are significant; the other two are padding.
   std::size_t size_of_T = sizeof(T);
-#if defined __GNUC__ && defined LMI_X86
+#if defined __GNUC__ && defined LMI_X87
   if(12 == size_of_T)
     size_of_T = 10;
-#endif // defined __GNUC__ && defined LMI_X86
+#endif // defined __GNUC__ && defined LMI_X87
 // GWC modifications end
 
   for (unsigned int i = 0; i < size_of_T; ++i) { // modified by GWC
