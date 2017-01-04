@@ -789,6 +789,8 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__GNUG__"
         ,"__ORDER_BIG_ENDIAN__"
         ,"__ORDER_LITTLE_ENDIAN__"
+        ,"__SSE__"
+        ,"__SSE_MATH__"
         ,"__STRICT_ANSI__"
         ,"__asm__"
         ,"__attribute__"
@@ -820,8 +822,6 @@ bool check_reserved_name_exception(std::string const& s)
     // Compiler specific: borland.
         ,"_CatcherPTR"
         ,"__BORLANDC__"
-        ,"__FLAT__"
-        ,"__emit__"
         ,"_max_dble"
         ,"_streams"
     // Compiler specific: ms.
