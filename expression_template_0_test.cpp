@@ -111,11 +111,11 @@ struct greater_of
     std::valarray<double> va2;
 
     // ub*: boost uBLAS.
-    #if defined USE_UBLAS
+#if defined USE_UBLAS
     boost::numeric::ublas::vector<double> ub0;
     boost::numeric::ublas::vector<double> ub1;
     boost::numeric::ublas::vector<double> ub2;
-    #endif // defined USE_UBLAS
+#endif // defined USE_UBLAS
 
     // pv*: PETE standard vectors.
     std::vector<double> pv0;

@@ -177,9 +177,7 @@ void test_stream_roundtrip
 
 void currency_test::test_streams()
 {
-    #define TEST_ROUNDTRIP(c, str) \
-        test_stream_roundtrip(c, str, __FILE__, __LINE__)
-
+#define TEST_ROUNDTRIP(c, str) test_stream_roundtrip(c, str, __FILE__, __LINE__)
     TEST_ROUNDTRIP( currency(123, 45),  "123.45");
     TEST_ROUNDTRIP( currency(  0,  0),    "0.00");
     TEST_ROUNDTRIP( currency(  0,  1),    "0.01");
@@ -187,8 +185,7 @@ void currency_test::test_streams()
     TEST_ROUNDTRIP(-currency(123, 45), "-123.45");
     TEST_ROUNDTRIP(-currency(  0,  1),   "-0.01");
     TEST_ROUNDTRIP(-currency(  0, 99),   "-0.99");
-
-    #undef TEST_ROUNDTRIP
+#undef TEST_ROUNDTRIP
 }
 
 template<>
