@@ -113,7 +113,9 @@ class Skeleton
 
     // Miscellaneous tests.
     void UponTestDateConversions          (wxCommandEvent&);
+#if defined LMI_X87
     void UponTestFloatingPointEnvironment (wxCommandEvent&);
+#endif // defined LMI_X87
     void UponTestPasting                  (wxCommandEvent&);
     void UponTestSystemCommand            (wxCommandEvent&);
 

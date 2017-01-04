@@ -24,6 +24,10 @@
 
 #include "config.hpp"
 
+#if !defined LMI_X87
+#   error This header should only be included from fenv_lmi.hpp if necessary.
+#endif // LMI_X87
+
 #include <bitset>
 #include <stdexcept>
 
@@ -31,7 +35,6 @@
 #   include <float.h>                   // nonstandard _control87()
 #endif // defined __BORLANDC__ || defined _MSC_VER
 
-#if defined LMI_X86
 /// These functions manipulate the x86 fpu (x87) control word. This
 /// shouldn't be as difficult as it actually is. Part of the problem
 /// is that C was strangely slow to adopt sophisticated numerics:
@@ -348,7 +351,6 @@ inline void x87_control_word(unsigned short int cw)
 #   endif // Unknown compiler or platform.
 }
 
-#endif // LMI_X86
 
 #endif // fenv_lmi_x86_hpp
 
