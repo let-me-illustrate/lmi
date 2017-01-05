@@ -27,6 +27,7 @@
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 
+#include <cfenv>
 #include <iomanip>
 #include <ios>
 #include <sstream>
@@ -52,7 +53,7 @@
 /// they are sufficient, in order to maintain consistency with cases
 /// for which they are not. Another reason for this design decision
 /// is type safety: for instance,
-///   fesetround(int);
+///   std::fesetround(int);
 /// accepts any integer, whereas
 ///   void fenv_rounding(e_ieee754_rounding rounding_mode)
 /// accepts only the arguments we allow.
@@ -64,13 +65,13 @@ void fenv_initialize()
 #if defined LMI_X87
     x87_control_word(default_x87_control_word());
 #else  // !defined LMI_X87
-    fenv_t save_env;
-    feholdexcept(&save_env);
-    fesetround(FE_TONEAREST);
+    std::fenv_t save_env;
+    std::feholdexcept(&save_env);
+    std::fesetround(FE_TONEAREST);
     // Standard C++ provides no way to set hardware precision.
     // Here is an example of a C99 7.6/9 extension that controls
     // hardware precision for MinGW32:
-    //   fesetenv(FE_PC64_ENV);
+    //   std::fesetenv(FE_PC64_ENV);
 #endif // !defined LMI_X87
 }
 
@@ -120,7 +121,7 @@ e_ieee754_rounding fenv_rounding()
         : throw std::runtime_error("Failed to determine rounding mode.")
         ;
 #else  // !defined LMI_X87
-    int z = fegetround();
+    int z = std::fegetround();
     return
           (FE_TONEAREST  == z) ? fe_tonearest
         : (FE_DOWNWARD   == z) ? fe_downward
@@ -152,7 +153,7 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
         : (fe_towardzero == rounding_mode) ? FE_TOWARDZERO
         : throw std::runtime_error("Failed to set rounding mode.")
         ;
-    fesetround(z);
+    std::fesetround(z);
 #endif // !defined LMI_X87
 }
 
@@ -161,7 +162,7 @@ bool fenv_is_valid()
 #if defined LMI_X87
     return default_x87_control_word() == x87_control_word();
 #else  // !defined LMI_X87
-    return FE_TONEAREST == fegetround() && 0 == fetestexcept(FE_ALL_EXCEPT);
+    return FE_TONEAREST == std::fegetround() && 0 == std::fetestexcept(FE_ALL_EXCEPT);
 #endif // !defined LMI_X87
 }
 
@@ -180,8 +181,8 @@ std::string fenv_explain_invalid_control_word()
 #else  // !defined LMI_X87
     oss
         << "The floating-point environment unexpectedly changed."
-        << "\nThe rounding mode is " << fegetround()
-        << " and the exception bitmask is " << fetestexcept(FE_ALL_EXCEPT)
+        << "\nThe rounding mode is " << std::fegetround()
+        << " and the exception bitmask is " << std::fetestexcept(FE_ALL_EXCEPT)
         << ".\n"
         ;
 #endif // !defined LMI_X87
