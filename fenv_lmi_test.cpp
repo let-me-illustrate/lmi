@@ -224,14 +224,14 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( 2, rint( 2.5));
 #endif // defined LMI_COMPILER_PROVIDES_RINT
 
+    fenv_initialize();
+    BOOST_TEST(fenv_validate());
+
     std::cout
         << "Expect induced warnings exactly as predicted below,"
         << " but no test failure."
         << std::endl
         ;
-
-    fenv_initialize();
-    BOOST_TEST(fenv_validate());
 
     fenv_initialize();
     fenv_precision(fe_dblprec);

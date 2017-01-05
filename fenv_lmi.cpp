@@ -59,19 +59,20 @@ namespace floating_point_environment {} // doxygen workaround.
 
 void fenv_initialize()
 {
-#if defined LMI_IEC_559
+#if defined LMI_X86
+    x87_control_word(default_x87_control_word());
+#elif defined LMI_IEC_559
     fenv_t save_env;
     feholdexcept(&save_env);
     fesetround(FE_TONEAREST);
 #   if defined __MINGW32__
+    // Standard C++ provides no way to set hardware precision.
     // Here is an example of a C99 7.6/9 extension that controls
-    // hardware precision.
-    fesetenv(FE_PC64_ENV);
+    // hardware precision for MinGW32:
+    //   fesetenv(FE_PC64_ENV);
 #   else  // !defined __MINGW32__
 #       error Find a platform-specific way to set hardware precision.
 #   endif // !defined __MINGW32__
-#elif defined LMI_X86
-    x87_control_word(default_x87_control_word());
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
@@ -127,16 +128,7 @@ void fenv_precision(e_ieee754_precision precision_mode)
 
 e_ieee754_rounding fenv_rounding()
 {
-#if defined LMI_IEC_559
-    int z = fegetround();
-    return
-          (FE_TONEAREST  == z) ? fe_tonearest
-        : (FE_DOWNWARD   == z) ? fe_downward
-        : (FE_UPWARD     == z) ? fe_upward
-        : (FE_TOWARDZERO == z) ? fe_towardzero
-        : throw std::runtime_error("Failed to determine rounding mode.")
-        ;
-#elif defined __BORLANDC__
+#if defined __BORLANDC__
     unsigned short int rc = (unsigned short int)(MCW_RC) & x87_control_word();
     return
           (RC_NEAR == rc) ? fe_tonearest
@@ -154,6 +146,15 @@ e_ieee754_rounding fenv_rounding()
         : (x87_fe_towardzero == rc) ? fe_towardzero
         : throw std::runtime_error("Failed to determine rounding mode.")
         ;
+#elif defined LMI_IEC_559
+    int z = fegetround();
+    return
+          (FE_TONEAREST  == z) ? fe_tonearest
+        : (FE_DOWNWARD   == z) ? fe_downward
+        : (FE_UPWARD     == z) ? fe_upward
+        : (FE_TOWARDZERO == z) ? fe_towardzero
+        : throw std::runtime_error("Failed to determine rounding mode.")
+        ;
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
@@ -161,16 +162,7 @@ e_ieee754_rounding fenv_rounding()
 
 void fenv_rounding(e_ieee754_rounding rounding_mode)
 {
-#if defined LMI_IEC_559
-    int z =
-          (fe_tonearest  == rounding_mode) ? FE_TONEAREST
-        : (fe_downward   == rounding_mode) ? FE_DOWNWARD
-        : (fe_upward     == rounding_mode) ? FE_UPWARD
-        : (fe_towardzero == rounding_mode) ? FE_TOWARDZERO
-        : throw std::runtime_error("Failed to set rounding mode.")
-        ;
-    fesetround(z);
-#elif defined __BORLANDC__
+#if defined __BORLANDC__
     unsigned short int z =
           (fe_tonearest  == rounding_mode) ? (unsigned short int)(RC_NEAR)
         : (fe_downward   == rounding_mode) ? (unsigned short int)(RC_DOWN)
@@ -190,6 +182,15 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
     intel_control_word control_word(x87_control_word());
     control_word.rc(rc);
     x87_control_word(control_word.cw());
+#elif defined LMI_IEC_559
+    int z =
+          (fe_tonearest  == rounding_mode) ? FE_TONEAREST
+        : (fe_downward   == rounding_mode) ? FE_DOWNWARD
+        : (fe_upward     == rounding_mode) ? FE_UPWARD
+        : (fe_towardzero == rounding_mode) ? FE_TOWARDZERO
+        : throw std::runtime_error("Failed to set rounding mode.")
+        ;
+    fesetround(z);
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
