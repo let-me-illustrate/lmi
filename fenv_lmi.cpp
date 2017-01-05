@@ -76,15 +76,7 @@ void fenv_initialize()
 
 e_ieee754_precision fenv_precision()
 {
-#if defined __BORLANDC__
-    unsigned short int pc = (unsigned short int)(MCW_PC) & x87_control_word();
-    return
-          (PC_24 == pc) ? fe_fltprec
-        : (PC_53 == pc) ? fe_dblprec
-        : (PC_64 == pc) ? fe_ldblprec
-        : throw std::runtime_error("Failed to determine hardware precision.")
-        ;
-#elif defined LMI_X87
+#if defined LMI_X87
     e_x87_precision pc = intel_control_word(x87_control_word()).pc();
     return
           (x87_fe_fltprec  == pc) ? fe_fltprec
@@ -101,15 +93,7 @@ e_ieee754_precision fenv_precision()
 
 void fenv_precision(e_ieee754_precision precision_mode)
 {
-#if defined __BORLANDC__
-    unsigned short int z =
-          (fe_fltprec  == precision_mode) ? (unsigned short int)(PC_24)
-        : (fe_dblprec  == precision_mode) ? (unsigned short int)(PC_53)
-        : (fe_ldblprec == precision_mode) ? (unsigned short int)(PC_64)
-        : throw std::runtime_error("Failed to set hardware precision.")
-        ;
-    _control87(z, MCW_PC);
-#elif defined LMI_X87
+#if defined LMI_X87
     e_x87_precision pc =
           (fe_fltprec  == precision_mode) ? x87_fe_fltprec
         : (fe_dblprec  == precision_mode) ? x87_fe_dblprec
@@ -126,16 +110,7 @@ void fenv_precision(e_ieee754_precision precision_mode)
 
 e_ieee754_rounding fenv_rounding()
 {
-#if defined __BORLANDC__
-    unsigned short int rc = (unsigned short int)(MCW_RC) & x87_control_word();
-    return
-          (RC_NEAR == rc) ? fe_tonearest
-        : (RC_DOWN == rc) ? fe_downward
-        : (RC_UP   == rc) ? fe_upward
-        : (RC_CHOP == rc) ? fe_towardzero
-        : throw std::runtime_error("Failed to determine rounding mode.")
-        ;
-#elif defined LMI_X87
+#if defined LMI_X87
     e_x87_rounding rc = intel_control_word(x87_control_word()).rc();
     return
           (x87_fe_tonearest  == rc) ? fe_tonearest
@@ -158,16 +133,7 @@ e_ieee754_rounding fenv_rounding()
 
 void fenv_rounding(e_ieee754_rounding rounding_mode)
 {
-#if defined __BORLANDC__
-    unsigned short int z =
-          (fe_tonearest  == rounding_mode) ? (unsigned short int)(RC_NEAR)
-        : (fe_downward   == rounding_mode) ? (unsigned short int)(RC_DOWN)
-        : (fe_upward     == rounding_mode) ? (unsigned short int)(RC_UP)
-        : (fe_towardzero == rounding_mode) ? (unsigned short int)(RC_CHOP)
-        : throw std::runtime_error("Failed to set rounding mode.")
-        ;
-    _control87(z, MCW_RC);
-#elif defined LMI_X87
+#if defined LMI_X87
     e_x87_rounding rc =
           (fe_tonearest  == rounding_mode) ? x87_fe_tonearest
         : (fe_downward   == rounding_mode) ? x87_fe_downward
