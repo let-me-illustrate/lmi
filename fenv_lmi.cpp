@@ -66,8 +66,8 @@ void fenv_initialize()
     x87_control_word(default_x87_control_word());
 #else  // !defined LMI_X87
     std::fenv_t saved_env;
-    std::feholdexcept(&saved_env);
-    std::fesetround(FE_TONEAREST);
+    LMI_ASSERT(0 == std::feholdexcept(&saved_env));
+    LMI_ASSERT(0 == std::fesetround(FE_TONEAREST));
     // Standard C++ provides no way to set hardware precision.
     // Here is an example of a C99 7.6/9 extension that controls
     // hardware precision for MinGW32:
@@ -122,6 +122,7 @@ e_ieee754_rounding fenv_rounding()
         ;
 #else  // !defined LMI_X87
     int z = std::fegetround();
+    LMI_ASSERT(0 <= z); // Returns negative on failure [C99 7.6.3.1/3].
     return
           (FE_TONEAREST  == z) ? fe_tonearest
         : (FE_DOWNWARD   == z) ? fe_downward
@@ -153,7 +154,7 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
         : (fe_towardzero == rounding_mode) ? FE_TOWARDZERO
         : throw std::runtime_error("Failed to set rounding mode.")
         ;
-    std::fesetround(z);
+    LMI_ASSERT(0 == std::fesetround(z));
 #endif // !defined LMI_X87
 }
 

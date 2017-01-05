@@ -135,13 +135,13 @@ int test_main(int, char*[])
 
 #   if defined __MINGW32__
     // Test the C99 method, as extended by MinGW.
-    std::fesetenv(FE_PC53_ENV);
+    BOOST_TEST_EQUAL(0, std::fesetenv(FE_PC53_ENV));
     BOOST_TEST_EQUAL_BITS(0x027f, x87_control_word());
 
-    std::fesetenv(FE_PC64_ENV);
+    BOOST_TEST_EQUAL(0, std::fesetenv(FE_PC64_ENV));
     BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
 
-    std::fesetenv(FE_DFL_ENV);
+    BOOST_TEST_EQUAL(0, std::fesetenv(FE_DFL_ENV));
     BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
 #   endif // defined __MINGW32__
 
