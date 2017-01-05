@@ -30,8 +30,6 @@
 #   include "fenv_lmi_x86.hpp"
 #endif // defined LMI_X87
 
-#include <cfenv>
-
 /// These functions manage the floating-point environment.
 ///
 ///   void fenv_initialize();
@@ -72,27 +70,20 @@
 
 namespace floating_point_environment {} // doxygen workaround.
 
-#if defined FE_DBLPREC
-enum e_ieee754_precision : decltype(FE_FLTPREC)
-    {fe_fltprec  = FE_FLTPREC
-    ,fe_dblprec  = FE_DBLPREC
-    ,fe_ldblprec = FE_LDBLPREC
-    };
-#else  // !defined FE_DBLPREC
-// If not otherwise defined, use glibc's values.
-enum e_ieee754_precision
-    {fe_fltprec  = 0x0000
-    ,fe_dblprec  = 0x0200
-    ,fe_ldblprec = 0x0300
-    };
-#endif // !defined FE_DBLPREC
+// Pixilated enumerators foster rigor, as they are unlikely to work
+// by accident.
 
-// Assume <cfenv> defines these macros.
-enum e_ieee754_rounding : decltype(FE_TONEAREST)
-    {fe_tonearest  = FE_TONEAREST
-    ,fe_downward   = FE_DOWNWARD
-    ,fe_upward     = FE_UPWARD
-    ,fe_towardzero = FE_TOWARDZERO
+enum e_ieee754_precision
+    {fe_fltprec  = 887
+    ,fe_dblprec  = 883
+    ,fe_ldblprec = 881
+    };
+
+enum e_ieee754_rounding
+    {fe_tonearest  = 88811
+    ,fe_downward   = 88813
+    ,fe_upward     = 88817
+    ,fe_towardzero = 88819
     };
 
 enum enum_fenv_indulgence
