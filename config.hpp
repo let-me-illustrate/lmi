@@ -148,6 +148,22 @@ namespace fs = boost::filesystem;
 #   define LMI_MSVCRT
 #endif // Compilers that use the msvc C runtime, without corrections such as libmingwex.
 
+// Test for x87.
+//
+// For gcc, test the __SSE_MATH__ macro. It might seem logical to test
+// the __SSE__ macro instead; however, for x86_64, gcc defines __SSE__
+// even if SSE is explicitly disabled with '-mfpmath=387'.
+
+#if defined LMI_X86
+#   if defined __GNUC__ && !defined __SSE_MATH__
+#       define LMI_X87
+#   elif defined LMI_MSC && defined _M_IX86_FP && _M_IX86_FP == 0
+#       define LMI_X87
+#   else   // Unknown compiler.
+#       error Unknown compiler--cannot detect SSE. Consider contributing support.
+#   endif  // Unknown compiler.
+#endif // defined LMI_X86
+
 #if defined HAVE_CONFIG_H // Using autoconf.
 #   include "config.h"
 #else // Not using autoconf.
