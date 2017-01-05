@@ -41,10 +41,6 @@
 
 #include <bitset>
 #include <climits>                      // CHAR_BIT
-#if defined LMI_IEC_559 || defined __MINGW32__
-// Specify '|| defined __MINGW32__' to test MinGW extensions like FE_PC64_ENV.
-#   include <fenv.h>
-#endif // defined LMI_IEC_559
 #include <math.h>                       // C99 rint()
 #include <stdexcept>
 
@@ -67,7 +63,7 @@ std::bitset<CHAR_BIT * sizeof(unsigned long int)> bits(unsigned long int i)
 
 int test_main(int, char*[])
 {
-#if defined LMI_X86
+#if defined LMI_X87
     unsigned short int cw = 0x0000;
 
     BOOST_TEST_EQUAL_BITS(0x037f, msvc_to_intel(0x0008001f));
@@ -168,12 +164,11 @@ int test_main(int, char*[])
     fenv_rounding(fe_towardzero);
     BOOST_TEST_EQUAL_BITS(0x0f7f, x87_control_word());
 
-#else  // Unknown platform.
-    throw std::runtime_error("Unknown platform.");
-#endif // Unknown platform.
+#endif // defined LMI_X87
 
-    // Test precision control.
+    // Test precision control iff supported.
 
+#if defined LMI_X87
     fenv_precision  (fe_fltprec);
     BOOST_TEST_EQUAL(fe_fltprec , fenv_precision());
 
@@ -182,6 +177,7 @@ int test_main(int, char*[])
 
     fenv_precision  (fe_ldblprec);
     BOOST_TEST_EQUAL(fe_ldblprec, fenv_precision());
+#endif // defined LMI_X87
 
     // Test rounding control.
 
@@ -227,6 +223,7 @@ int test_main(int, char*[])
     fenv_initialize();
     BOOST_TEST(fenv_validate());
 
+#if defined LMI_X87
     std::cout
         << "Expect induced warnings exactly as predicted below,"
         << " but no test failure."
@@ -269,6 +266,7 @@ int test_main(int, char*[])
     BOOST_TEST(0 == fenv_guard::instance_count());
     std::cout << "...end of induced warning]." << std::endl;
     BOOST_TEST(fenv_validate());
+#endif // defined LMI_X87
 
     return 0;
 }

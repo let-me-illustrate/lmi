@@ -26,29 +26,9 @@
 
 #include "so_attributes.hpp"
 
-#if defined LMI_X86
+#if defined LMI_X87
 #   include "fenv_lmi_x86.hpp"
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
-
-// SOMEDAY !! Revisit suppressed __STDC_IEC_559__ support. See:
-//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00033.html
-#if defined LMI_IEC_559
-// In case the C++ compiler supports C99 7.6 facilities, assume that
-// it defines __STDC_IEC_559__ (except that MinGW supports some such
-// facilities but defines no such macro), and puts prototypes in
-// <fenv.h> but not in namespace std.
-#   include <fenv.h>
-#   if defined __GNUC__ && LMI_GCC_VERSION <= 40300
-// As of 2007-07-05, the gcc manual here:
-//   http://gcc.gnu.org/onlinedocs/gcc/Floating-point-implementation.html
-// which "corresponds to GCC version 4.3.0" says "This pragma is not
-// implemented".
-#   else  // Pragma STDC FENV_ACCESS implemented.
-#       pragma STDC FENV_ACCESS ON
-#   endif // Pragma STDC FENV_ACCESS implemented.
-#endif // defined LMI_IEC_559
+#endif // defined LMI_X87
 
 #include <cfenv>
 

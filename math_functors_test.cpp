@@ -140,7 +140,7 @@ struct coi_rate_from_q_naive
 /// This function isn't a unit test per se. Its purpose is to show
 /// how a sample calculation is affected by
 ///   exponential versus power method, and
-///   hardware precision.
+///   hardware precision (on supported platforms).
 ///
 /// Define f(i,m) = (1+i)^(1/m) - 1, i.e., "i upper m over m".
 /// Let i0 = 0.0004 (forty bp).
@@ -150,6 +150,7 @@ struct coi_rate_from_q_naive
 void sample_results()
 {
     fenv_initialize();
+#if defined LMI_X87
     fenv_precision(fe_ldblprec);
     std::cout
         << "\n  annual rate corresponding to a 0.004 daily spread"
@@ -163,6 +164,7 @@ void sample_results()
 
     fenv_initialize();
     fenv_precision(fe_dblprec);
+#endif // defined LMI_X87
     std::cout
         << std::setprecision(20)
         << "    double precision, expm1l and log1pl\n      "

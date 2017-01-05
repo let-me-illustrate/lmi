@@ -24,6 +24,8 @@
 #include "fenv_lmi.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
+#include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 
 #include <iomanip>
 #include <ios>
@@ -59,23 +61,17 @@ namespace floating_point_environment {} // doxygen workaround.
 
 void fenv_initialize()
 {
-#if defined LMI_X86
+#if defined LMI_X87
     x87_control_word(default_x87_control_word());
-#elif defined LMI_IEC_559
+#else  // !defined LMI_X87
     fenv_t save_env;
     feholdexcept(&save_env);
     fesetround(FE_TONEAREST);
-#   if defined __MINGW32__
     // Standard C++ provides no way to set hardware precision.
     // Here is an example of a C99 7.6/9 extension that controls
     // hardware precision for MinGW32:
     //   fesetenv(FE_PC64_ENV);
-#   else  // !defined __MINGW32__
-#       error Find a platform-specific way to set hardware precision.
-#   endif // !defined __MINGW32__
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
+#endif // !defined LMI_X87
 }
 
 e_ieee754_precision fenv_precision()
@@ -88,7 +84,7 @@ e_ieee754_precision fenv_precision()
         : (PC_64 == pc) ? fe_ldblprec
         : throw std::runtime_error("Failed to determine hardware precision.")
         ;
-#elif defined LMI_X86
+#elif defined LMI_X87
     e_x87_precision pc = intel_control_word(x87_control_word()).pc();
     return
           (x87_fe_fltprec  == pc) ? fe_fltprec
@@ -96,9 +92,11 @@ e_ieee754_precision fenv_precision()
         : (x87_fe_ldblprec == pc) ? fe_ldblprec
         : throw std::runtime_error("Failed to determine hardware precision.")
         ;
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
+#else  // !defined LMI_X87
+    // Assume that any reasonable platform other than x87 uses
+    // double-precision floating point by default.
+    return fe_dblprec;
+#endif // !defined LMI_X87
 }
 
 void fenv_precision(e_ieee754_precision precision_mode)
@@ -111,7 +109,7 @@ void fenv_precision(e_ieee754_precision precision_mode)
         : throw std::runtime_error("Failed to set hardware precision.")
         ;
     _control87(z, MCW_PC);
-#elif defined LMI_X86
+#elif defined LMI_X87
     e_x87_precision pc =
           (fe_fltprec  == precision_mode) ? x87_fe_fltprec
         : (fe_dblprec  == precision_mode) ? x87_fe_dblprec
@@ -121,9 +119,9 @@ void fenv_precision(e_ieee754_precision precision_mode)
     intel_control_word control_word(x87_control_word());
     control_word.pc(pc);
     x87_control_word(control_word.cw());
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
+#else  // !defined LMI_X87
+    throw std::logic_error("Unable to set hardware precision.");
+#endif // !defined LMI_X87
 }
 
 e_ieee754_rounding fenv_rounding()
@@ -137,7 +135,7 @@ e_ieee754_rounding fenv_rounding()
         : (RC_CHOP == rc) ? fe_towardzero
         : throw std::runtime_error("Failed to determine rounding mode.")
         ;
-#elif defined LMI_X86
+#elif defined LMI_X87
     e_x87_rounding rc = intel_control_word(x87_control_word()).rc();
     return
           (x87_fe_tonearest  == rc) ? fe_tonearest
@@ -146,7 +144,7 @@ e_ieee754_rounding fenv_rounding()
         : (x87_fe_towardzero == rc) ? fe_towardzero
         : throw std::runtime_error("Failed to determine rounding mode.")
         ;
-#elif defined LMI_IEC_559
+#else  // !defined LMI_X87
     int z = fegetround();
     return
           (FE_TONEAREST  == z) ? fe_tonearest
@@ -155,9 +153,7 @@ e_ieee754_rounding fenv_rounding()
         : (FE_TOWARDZERO == z) ? fe_towardzero
         : throw std::runtime_error("Failed to determine rounding mode.")
         ;
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
+#endif // !defined LMI_X87
 }
 
 void fenv_rounding(e_ieee754_rounding rounding_mode)
@@ -171,7 +167,7 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
         : throw std::runtime_error("Failed to set rounding mode.")
         ;
     _control87(z, MCW_RC);
-#elif defined LMI_X86
+#elif defined LMI_X87
     e_x87_rounding rc =
           (fe_tonearest  == rounding_mode) ? x87_fe_tonearest
         : (fe_downward   == rounding_mode) ? x87_fe_downward
@@ -182,7 +178,7 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
     intel_control_word control_word(x87_control_word());
     control_word.rc(rc);
     x87_control_word(control_word.cw());
-#elif defined LMI_IEC_559
+#else  // !defined LMI_X87
     int z =
           (fe_tonearest  == rounding_mode) ? FE_TONEAREST
         : (fe_downward   == rounding_mode) ? FE_DOWNWARD
@@ -191,18 +187,16 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
         : throw std::runtime_error("Failed to set rounding mode.")
         ;
     fesetround(z);
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
+#endif // !defined LMI_X87
 }
 
 bool fenv_is_valid()
 {
-#if defined LMI_X86
+#if defined LMI_X87
     return default_x87_control_word() == x87_control_word();
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
+#else  // !defined LMI_X87
+    return fe_tonearest == fegetround() && 0 == fetestexcept(FE_ALL_EXCEPT);
+#endif // !defined LMI_X87
 }
 
 namespace
@@ -210,15 +204,22 @@ namespace
 std::string fenv_explain_invalid_control_word()
 {
     std::ostringstream oss;
+#if defined LMI_X87
     oss
         << "The floating-point control word was unexpectedly '"
         << std::hex << std::internal << std::showbase << std::setfill('0')
-#if defined LMI_X86
         << std::setw(6) << x87_control_word()
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
-        << "'."
+        << "'.\n"
+        ;
+#else  // !defined LMI_X87
+    oss
+        << "The floating-point environment unexpectedly changed."
+        << "\nThe rounding mode is " << fegetround()
+        << " and the exception bitmask is " << fetestexcept(FE_ALL_EXCEPT)
+        << ".\n"
+        ;
+#endif // !defined LMI_X87
+    oss
         << "\nProbably some other program changed this crucial setting."
         << "\nIt has been reset correctly. Rerun any illustration that"
         << "\nwas being run when this message appeared, because it may"
@@ -250,17 +251,17 @@ std::string fenv_explain_invalid_control_word()
 
 bool fenv_validate(enum_fenv_indulgence indulgence)
 {
+#if defined LMI_X87
     if
         (   e_fenv_indulge_0x027f == indulgence
-#if defined LMI_X86
         &&  e_fenv_indulge_0x027f == x87_control_word()
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
         )
         {
         fenv_initialize();
         }
+#else  // !defined LMI_X87
+    stifle_warning_for_unused_variable(indulgence);
+#endif // !defined LMI_X87
 
     bool okay = fenv_is_valid();
 
