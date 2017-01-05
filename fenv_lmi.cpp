@@ -161,7 +161,7 @@ bool fenv_is_valid()
 #if defined LMI_X87
     return default_x87_control_word() == x87_control_word();
 #else  // !defined LMI_X87
-    return fe_tonearest == fegetround() && 0 == fetestexcept(FE_ALL_EXCEPT);
+    return FE_TONEAREST == fegetround() && 0 == fetestexcept(FE_ALL_EXCEPT);
 #endif // !defined LMI_X87
 }
 
