@@ -68,8 +68,9 @@
 ///
 ///   e_ieee754_precision fenv_precision();
 ///   void fenv_precision(e_ieee754_precision);
-/// The precision functions similarly resemble GNU/Linux functions
-/// fe[gs]etprecision().
+/// The precision functions similarly resemble WG14 N751/J11 functions
+/// fe[gs]etprecision(). At least for now, they are meaningfully
+/// implemented for x87 only.
 ///
 ///   bool LMI_SO fenv_is_valid()
 /// If current floating-point environment matches lmi default, then
