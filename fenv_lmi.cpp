@@ -65,8 +65,8 @@ void fenv_initialize()
 #if defined LMI_X87
     x87_control_word(default_x87_control_word());
 #else  // !defined LMI_X87
-    std::fenv_t save_env;
-    std::feholdexcept(&save_env);
+    std::fenv_t saved_env;
+    std::feholdexcept(&saved_env);
     std::fesetround(FE_TONEAREST);
     // Standard C++ provides no way to set hardware precision.
     // Here is an example of a C99 7.6/9 extension that controls
