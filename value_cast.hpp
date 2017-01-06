@@ -183,7 +183,16 @@ struct value_cast_choice
     enum
         {
         // Here, is_convertible means 'From' is convertible to 'To'.
-        convertible = std::is_convertible<From,To>::value
+        // We explicitly exclude the case of 'char[]' string literals which are
+        // deemed to be convertible to 'bool' in virtue of C++ implicit
+        // conversion rules, but it doesn't make sense to apply these
+        // conversions here, so just exclude them (notice that 'To' is known
+        // not to be an array due to a check in value_cast(), so there is no
+        // need to check if 'From' is convertible to it if it's a pointer: it
+        // isn't).
+        convertible =
+               !std::is_array<From>::value
+            &&  std::is_convertible<From,To>::value
         };
 
     enum
