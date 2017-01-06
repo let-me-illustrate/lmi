@@ -28,12 +28,10 @@
 #include "stream_cast.hpp"
 
 #include <boost/cast.hpp>
-#include <boost/type_traits/is_arithmetic.hpp>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_pointer.hpp>
 
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
 
 // INELEGANT !! Test the runtime performance of value_cast() compared
 // to the other casts it uses, to ensure that its overhead is minimal.
@@ -103,10 +101,10 @@
 /// although their rationale is not to increase the expressive power,
 /// but merely to work around a compiler defect.
 ///
-/// All uses of class boost::is_convertible here are commented to avoid
+/// All uses of class std::is_convertible here are commented to avoid
 /// confusion due to the surprising order of its template parameters:
 /// compare
-///   boost::is_convertible<From,To>(From z)
+///   std::is_convertible<From,To>(From z)
 /// to the declarations above. Also see this comment:
 ///   http://lists.boost.org/Archives/boost/2006/01/99722.php
 ///   "BTW Its a real pain that the parameter order for is_convertible
@@ -127,7 +125,7 @@ template<typename T>
 struct is_string
 {
     // Here, is_convertible means 'T' is convertible to std::string.
-    enum {value = boost::is_convertible<T,std::string>::value};
+    enum {value = std::is_convertible<T,std::string>::value};
 };
 
 template<typename T>
@@ -185,21 +183,30 @@ struct value_cast_choice
     enum
         {
         // Here, is_convertible means 'From' is convertible to 'To'.
-        convertible = boost::is_convertible<From,To>::value
+        // We explicitly exclude the case of 'char[]' string literals which are
+        // deemed to be convertible to 'bool' in virtue of C++ implicit
+        // conversion rules, but it doesn't make sense to apply these
+        // conversions here, so just exclude them (notice that 'To' is known
+        // not to be an array due to a check in value_cast(), so there is no
+        // need to check if 'From' is convertible to it if it's a pointer: it
+        // isn't).
+        convertible =
+               !std::is_array<From>::value
+            &&  std::is_convertible<From,To>::value
         };
 
     enum
         {
         both_numeric =
-                boost::is_arithmetic<From>::value
-            &&  boost::is_arithmetic<To  >::value
+                std::is_arithmetic<From>::value
+            &&  std::is_arithmetic<To  >::value
         };
 
     enum
         {
         one_numeric_one_string =
-                boost::is_arithmetic<From>::value && is_string<To  >::value
-            ||  boost::is_arithmetic<To  >::value && is_string<From>::value
+                std::is_arithmetic<From>::value && is_string<To  >::value
+            ||  std::is_arithmetic<To  >::value && is_string<From>::value
         };
 
     enum
@@ -250,7 +257,7 @@ struct value_cast_chooser<To,From,e_stream>
 template<typename To, typename From>
 To value_cast(From const& from)
 {
-    BOOST_STATIC_ASSERT(!boost::is_pointer<To>::value);
+    BOOST_STATIC_ASSERT(!std::is_pointer<To>::value);
     return value_cast_chooser<To,From>()(from);
 }
 
