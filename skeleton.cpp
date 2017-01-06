@@ -1026,6 +1026,7 @@ void Skeleton::UponTestDateConversions(wxCommandEvent&)
 
 void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
 {
+#if defined LMI_X87
     status() << "Begin test of floating-point environment." << std::flush;
 
     warning()
@@ -1079,6 +1080,9 @@ void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
     LMI_ASSERT(fenv_is_valid());
 
     status() << "End test of floating-point environment." << std::flush;
+#else  // !defined LMI_X87
+    warning() << "This test does nothing at present." << std::flush;
+#endif // !defined LMI_X87
 }
 
 /// Test custom handler UponPaste().

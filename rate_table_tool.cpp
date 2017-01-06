@@ -137,12 +137,27 @@ void merge
 
     if(fs::is_directory(path_to_merge))
         {
+        // Merge tables in sorted order, so that adding identical sets
+        // of tables to identical databases yields identical results.
+        // An entire database may thus be sorted by extracting all its
+        // tables and merging them into a new database in a single
+        // operation. The only real benefit is that identity is easier
+        // to verify than equivalence: databases created this way from
+        // the same data on different machines have identical md5sums.
+        std::vector<fs::path> table_names;
         fs::directory_iterator i(path_to_merge);
         fs::directory_iterator const eod;
         for(; i != eod; ++i)
             {
-            if(".rates" != fs::extension(*i)) continue;
-            table const& t = table::read_from_text(*i);
+            if(".rates" == fs::extension(*i))
+                {
+                table_names.push_back(*i);
+                }
+            }
+        std::sort(table_names.begin(), table_names.end());
+        for(auto const& j: table_names)
+            {
+            table const& t = table::read_from_text(j);
             table_file->add_or_replace_table(t);
             ++count;
             }

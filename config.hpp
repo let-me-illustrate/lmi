@@ -68,8 +68,35 @@ namespace fs = boost::filesystem;
 #   error Unknown hardware. Consider contributing support.
 #endif // Unknown hardware.
 
-#if defined __GNUC__
+// Test for x87.
+//
+// For gcc, test the __SSE_MATH__ macro. It might seem logical to test
+// the __SSE__ macro instead; however, for x86_64, gcc defines __SSE__
+// even if SSE is explicitly disabled with '-mfpmath=387'.
+//
+// The _M_IX86_FP test is conditional on _MSC_VER. It would be
+// slightly better to use LMI_MSC in the conditional instead, but
+// that doesn't justify moving this test block far away from where
+// LMI_X86 is set. See:
+//   http://lists.nongnu.org/archive/html/lmi/2017-01/msg00009.html
+
+#if defined LMI_X86
+#   if defined __GNUC__
+#       if !defined __SSE_MATH__
+#           define LMI_X87
+#       endif // !defined __SSE_MATH__
+#   elif defined _MSC_VER
+#       if defined _M_IX86_FP && _M_IX86_FP == 0
+#           define LMI_X87
+#       endif // defined _M_IX86_FP && _M_IX86_FP == 0
+#   else   // Unknown compiler.
+#       error Unknown compiler--cannot detect SSE. Consider contributing support.
+#   endif  // Unknown compiler.
+#endif // defined LMI_X86
+
 // This selects a correct snprintf() for MinGW-w64.
+
+#if defined __GNUC__
 #   if !defined _ISOC99_SOURCE
 #       define _ISOC99_SOURCE
 #   endif // !defined _ISOC99_SOURCE
@@ -139,7 +166,10 @@ namespace fs = boost::filesystem;
 
 // Give this toolchain its own lmi-specific macro. Rationale:
 //   http://boost.cvs.sf.net/boost/boost/boost/config.hpp?annotate=1.1
-//   Many other "compilers define _MSC_VER. Thus BOOST_MSVC."
+//   Many other "compilers define _MSC_VER. Thus BOOST_MSVC. [...]
+//   Must remain the last #elif since some other vendors (Metrowerks,
+//   for example) also #define _MSC_VER"
+
 #if defined _MSC_VER && !defined LMI_GCC_VERSION && !defined LMI_COMO_WITH_MINGW
 #    define LMI_MSC
 #endif // defined _MSC_VER && !defined LMI_GCC_VERSION && !defined LMI_COMO_WITH_MINGW

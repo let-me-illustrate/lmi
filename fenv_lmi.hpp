@@ -26,31 +26,9 @@
 
 #include "so_attributes.hpp"
 
-#if defined LMI_X86
+#if defined LMI_X87
 #   include "fenv_lmi_x86.hpp"
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
-
-// SOMEDAY !! Revisit suppressed __STDC_IEC_559__ support. See:
-//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00033.html
-#if defined LMI_IEC_559
-// In case the C++ compiler supports C99 7.6 facilities, assume that
-// it defines __STDC_IEC_559__ (except that MinGW supports some such
-// facilities but defines no such macro), and puts prototypes in
-// <fenv.h> but not in namespace std.
-#   include <fenv.h>
-#   if defined __GNUC__ && LMI_GCC_VERSION <= 40300
-// As of 2007-07-05, the gcc manual here:
-//   http://gcc.gnu.org/onlinedocs/gcc/Floating-point-implementation.html
-// which "corresponds to GCC version 4.3.0" says "This pragma is not
-// implemented".
-#   else  // Pragma STDC FENV_ACCESS implemented.
-#       pragma STDC FENV_ACCESS ON
-#   endif // Pragma STDC FENV_ACCESS implemented.
-#endif // defined LMI_IEC_559
-
-#include <cfenv>
+#endif // defined LMI_X87
 
 /// These functions manage the floating-point environment.
 ///
@@ -68,8 +46,9 @@
 ///
 ///   e_ieee754_precision fenv_precision();
 ///   void fenv_precision(e_ieee754_precision);
-/// The precision functions similarly resemble GNU/Linux functions
-/// fe[gs]etprecision().
+/// The precision functions similarly resemble WG14 N751/J11 functions
+/// fe[gs]etprecision(). At least for now, they are meaningfully
+/// implemented for x87 only.
 ///
 ///   bool LMI_SO fenv_is_valid()
 /// If current floating-point environment matches lmi default, then
@@ -91,27 +70,20 @@
 
 namespace floating_point_environment {} // doxygen workaround.
 
-#if defined FE_DBLPREC
-enum e_ieee754_precision : decltype(FE_FLTPREC)
-    {fe_fltprec  = FE_FLTPREC
-    ,fe_dblprec  = FE_DBLPREC
-    ,fe_ldblprec = FE_LDBLPREC
-    };
-#else  // !defined FE_DBLPREC
-// If not otherwise defined, use glibc's values.
-enum e_ieee754_precision
-    {fe_fltprec  = 0x0000
-    ,fe_dblprec  = 0x0200
-    ,fe_ldblprec = 0x0300
-    };
-#endif // !defined FE_DBLPREC
+// Pixilated enumerators foster rigor, as they are unlikely to work
+// by accident.
 
-// Assume <cfenv> defines these macros.
-enum e_ieee754_rounding : decltype(FE_TONEAREST)
-    {fe_tonearest  = FE_TONEAREST
-    ,fe_downward   = FE_DOWNWARD
-    ,fe_upward     = FE_UPWARD
-    ,fe_towardzero = FE_TOWARDZERO
+enum e_ieee754_precision
+    {fe_fltprec  = 887
+    ,fe_dblprec  = 883
+    ,fe_ldblprec = 881
+    };
+
+enum e_ieee754_rounding
+    {fe_tonearest  = 88811
+    ,fe_downward   = 88813
+    ,fe_upward     = 88817
+    ,fe_towardzero = 88819
     };
 
 enum enum_fenv_indulgence

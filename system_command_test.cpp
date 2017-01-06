@@ -31,16 +31,20 @@
 
 int test_main(int, char*[])
 {
-    std::ofstream os("eraseme", ios_out_trunc_binary());
-    os << "abc\n";
-    os.close();
+    std::ofstream os0("eraseme", ios_out_trunc_binary());
+    os0 << "0123456789abcdef0123456789abcdef  eraseme\n";
+    os0.close();
 
-    system_command("grep --quiet abc eraseme");
+    std::ofstream os1("eraseme.md5", ios_out_trunc_binary());
+    os1 << "e87dfb7b7c7f87985d3eff4782c172b8  eraseme\n";
+    os1.close();
+
+    system_command("md5sum --check --status eraseme.md5");
 
     BOOST_TEST_THROW
-        (system_command("grep --quiet xyz eraseme")
+        (system_command("md5sum --check --status eraseme")
         ,std::runtime_error
-        ,"Exit code 1 from command 'grep --quiet xyz eraseme'."
+        ,"Exit code 1 from command 'md5sum --check --status eraseme'."
         );
 
     BOOST_TEST_THROW
@@ -50,6 +54,7 @@ int test_main(int, char*[])
         );
 
     std::remove("eraseme");
+    std::remove("eraseme.md5");
 
     return 0;
 }

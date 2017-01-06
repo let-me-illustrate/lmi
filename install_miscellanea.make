@@ -188,9 +188,10 @@ jing: $(file_list)
 	$(MV) scratch/$(stem)/bin/$@.jar         $(destination)/rng
 	$(MV) scratch/$(stem)/bin/xercesImpl.jar $(destination)/rng
 
-# The 'md5sum_msw' binary is required only by the msw-specific
-# 'fardel' target. On other platforms, it can't be executed, but it
-# could be used to create a cross 'fardel'.
+# The 'md5sum_msw' binary is redistributed to msw end users for
+# authentication, so the 'fardel' target requires it. On other
+# platforms, it cannot be executed directly, but it is needed for
+# creating a cross 'fardel' and for running cross unit tests.
 #
 # It is placed in lmi's 'third_party/bin/' subdirectory--imperatively
 # not in lmi's 'local/bin/' subdirectory, which is added to $PATH.

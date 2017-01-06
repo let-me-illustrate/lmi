@@ -1156,15 +1156,20 @@ configurable_settings.xml:
 
 # Unit tests.
 
-# Use '--jobs=1' to force tests to run in series: running them in
-# parallel would scramble their output.
-#
-# Ignore the "disabling jobserver mode" warning.
+# Use '--output-sync=recurse' so that the output of each test is
+# written as a separate block even though the tests are run in
+# parallel. Each block is written when its test ends, so the order
+# of the blocks is indeterminate. When tests are run in parallel,
+# their internal timings may be less accurate because of competition
+# for resources other than CPUs. Tests can of course be run in series
+# simply by not specifying '--jobs=' on the command line; that is
+# advisable if output is written to logs which are to be compared,
+# e.g., to determine whether timings have changed.
 
 .PHONY: unit_tests
 unit_tests: $(test_data)
 	@-$(MAKE) --file=$(this_makefile) build_unit_tests
-	@ $(MAKE) --file=$(this_makefile) --jobs=1 run_unit_tests
+	@ $(MAKE) --file=$(this_makefile) --output-sync=recurse run_unit_tests
 
 .PHONY: build_unit_tests
 build_unit_tests: configurable_settings.xml $(unit_test_targets)
@@ -1192,7 +1197,11 @@ cli_subtargets := cli_tests_init cli_selftest $(addprefix cli_test-,$(test_data)
 $(cli_subtargets): $(data_dir)/configurable_settings.xml
 
 # Use '--jobs=1' to force tests to run in series: running them in
-# parallel would scramble their output.
+# parallel would scramble their output. Using '--output-sync=recurse'
+# would prevent scrambling, but would not preserve the order of the
+# tests; that alternative is not chosen because a uniform order makes
+# visual inspection a little easier, while the tests are so fast that
+# parallelism affords no palpable advantage.
 #
 # Ignore the "disabling jobserver mode" warning.
 
