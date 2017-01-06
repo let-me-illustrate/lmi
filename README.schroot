@@ -249,6 +249,18 @@ chmod +x install_msw.sh
 pushd /opt/lmi/bin
 wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
 
+# '--host' being 'i686-w64-mingw32', unit tests require an msw-native
+# 'md5sum.exe'. Fortuitously, 'install_miscellanea.make' has installed
+# one already, taking care to place it off $PATH so that it doesn't
+# shadow a native 'md5sum' provided, e.g., by cygwin. However, in this
+# chroot it cannot shadow the native GNU/Linux 'md5sum', so copy it to
+# a directory that's on $WINEPATH to make unit tests work; it doesn't
+# matter that this directory is also on $PATH. The file is tiny, so a
+# copy isn't too wasteful, and wine doesn't find it if it's simply
+# symlinked.
+
+cp -a /opt/lmi/third_party/bin/md5sum.exe /opt/lmi/local/bin
+
 # Symlink the repository's hooks/ directory:
 cd /opt/lmi/src/lmi
 ln --symbolic --force --no-dereference ../hooks .git
