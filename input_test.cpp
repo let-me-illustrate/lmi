@@ -63,6 +63,9 @@ class input_test
         test_document_classes();
         test_obsolete_history();
         assay_speed();
+        // Rerun this test after assay_speed() because it removes
+        // 'replica' files iff their contents are uninteresting.
+        test_document_classes();
         }
 
   private:

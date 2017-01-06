@@ -68,6 +68,9 @@ void test_files_are_identical()
     ofs1 << "Test\n";
     }
     BOOST_TEST(!files_are_identical(f0, f1));
+
+    std::remove(f0);
+    std::remove(f1);
 }
 
 void test_minmax()
