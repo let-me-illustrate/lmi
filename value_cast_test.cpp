@@ -736,15 +736,16 @@ int boost_tests()
     BOOST_TEST_EQUAL(true, value_cast<bool>(true));
     BOOST_TEST_EQUAL(false, value_cast<bool>(false));
 
-    // COMPILER !! Suppress this test for gcc-4.1.2, which refuses,
-    // defectively it would seem, to compile it. See:
-    //   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00010.html
-#if !(defined __GNUC__ && 40102 == LMI_GCC_VERSION)
     BOOST_TEST_EQUAL(true, value_cast<bool>("1"));
-#endif // !(defined __GNUC__ && 40102 == LMI_GCC_VERSION)
+    BOOST_TEST_EQUAL(false, value_cast<bool>("0"));
+
+    // GWC addition: likewise, for char* rather than char[].
+    char const* p1 = "1";
+    BOOST_TEST_EQUAL(true, value_cast<bool>(p1));
+    char const* p0 = "0";
+    BOOST_TEST_EQUAL(false, value_cast<bool>(p0));
 
     // This fails; should it?
-//    BOOST_TEST_EQUAL(false, value_cast<bool>("0"));
 //    BOOST_TEST_THROW(value_cast<bool>(""), boost::bad_value_cast);
 //    BOOST_TEST_THROW(value_cast<bool>("Test"), boost::bad_value_cast);
 
