@@ -176,6 +176,20 @@ To numeric_value_cast(From const& from)
 
 /// Class template value_cast_choice is an appurtenance of function
 /// template value_cast(); it selects the best conversion method.
+///
+/// The choice among conversion methods depends in part on whether
+/// an implicit conversion is available. Implicit conversions from
+/// pointer or array to bool are disregarded as being infelicitous.
+/// For example, given:
+///   char const* untrue = "0";
+/// these casts:
+///   static_cast<bool>(untrue);  // converts pointer->bool
+///   static_cast<bool>("0");     // converts array->pointer->bool
+/// return 'true' because the conversions involve non-null pointers;
+/// however, these casts:
+///   value_cast<bool>(untrue);
+///   value_cast<bool>("0");
+/// preserve the value by returning 'false'.
 
 template<typename To, typename From>
 struct value_cast_choice
@@ -183,7 +197,10 @@ struct value_cast_choice
     enum
         {
         // Here, is_convertible means 'From' is convertible to 'To'.
-        convertible = std::is_convertible<From,To>::value
+        felicitously_convertible =
+                std::is_convertible<From,To>::value
+            &&!(std::is_array   <From>::value && std::is_same<bool,To>::value)
+            &&!(std::is_pointer <From>::value && std::is_same<bool,To>::value)
         };
 
     enum
@@ -202,7 +219,7 @@ struct value_cast_choice
 
     enum
         {choice =
-            convertible
+            felicitously_convertible
                 ?both_numeric
                     ?e_both_numeric
                     :e_direct
