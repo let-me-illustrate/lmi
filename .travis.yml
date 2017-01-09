@@ -30,7 +30,7 @@ before_install:
     - sudo apt-get -qq update
     - sudo apt-get install -y libwxgtk3.0-dev
     - git clone --depth 1 https://github.com/vadz/wxpdfdoc.git
-    - pushd wxpdfdoc && ./configure && make install && popd
+    - pushd wxpdfdoc && autoreconf && ./configure && make install && popd
 
 script:
     - set -e && echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
