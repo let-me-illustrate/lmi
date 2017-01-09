@@ -104,7 +104,6 @@
 #   include <boost/filesystem/operations.hpp>
 #   include <boost/filesystem/path.hpp>
 #   include <boost/iterator.hpp>
-#   include <boost/preprocessor.hpp>
 #   include <boost/shared_ptr.hpp>
 #   include <boost/utility.hpp>
 
