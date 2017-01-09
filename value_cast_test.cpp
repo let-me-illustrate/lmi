@@ -661,6 +661,12 @@ int boost_tests()
 
     // A roughly-equivalent value_cast test suite.
 
+    // Many of the boost tests are not valid for value_cast<>().
+    //F marks tests that fail
+    //T marks tests that throw
+    //X marks tests that fail to throw
+    //Z marks tests that fail to compile
+
     // void test_conversion_to_char()
 
     BOOST_TEST_EQUAL('A', value_cast<char>('A'));
@@ -675,32 +681,32 @@ int boost_tests()
     BOOST_TEST_EQUAL('\123', value_cast<char>(0123));
 
     // See 'Important note on narrowing conversions' above.
-//    BOOST_TEST_EQUAL('1', value_cast<char>(1.0)); // Suppressed.
+//F    BOOST_TEST_EQUAL('1', value_cast<char>(1.0)); // Suppressed.
 
     // See 'Important note on char types' above.
     BOOST_TEST_EQUAL('\1', value_cast<char>(true));
     BOOST_TEST_EQUAL('\0', value_cast<char>(false));
 
-////    BOOST_TEST_EQUAL('A', value_cast<char>("A"));
+//T    BOOST_TEST_EQUAL('A', value_cast<char>("A"));
 
-////    BOOST_TEST_EQUAL(' ', value_cast<char>(" "));
+//T    BOOST_TEST_EQUAL(' ', value_cast<char>(" "));
 
-//    BOOST_TEST_THROW(value_cast<char>(""), boost::bad_value_cast);
-//    BOOST_TEST_THROW(value_cast<char>("Test"), boost::bad_value_cast);
+    BOOST_TEST_THROW(value_cast<char>(""), std::invalid_argument, "");
+    BOOST_TEST_THROW(value_cast<char>("Test"), std::invalid_argument, "");
 
-////    BOOST_TEST_EQUAL('A', value_cast<char>(std::string("A")));
-////    BOOST_TEST_EQUAL(' ', value_cast<char>(std::string(" ")));
+//T    BOOST_TEST_EQUAL('A', value_cast<char>(std::string("A")));
+//T    BOOST_TEST_EQUAL(' ', value_cast<char>(std::string(" ")));
 
-//    BOOST_TEST_THROW
-//        (value_cast<char>(std::string(""))
-//        ,boost::bad_value_cast
-//        ,""
-//        );
-//    BOOST_TEST_THROW
-//        (value_cast<char>(std::string("Test"))
-//        ,boost::bad_value_cast
-//        ,""
-//        );
+    BOOST_TEST_THROW
+        (value_cast<char>(std::string(""))
+        ,std::invalid_argument
+        ,""
+        );
+    BOOST_TEST_THROW
+        (value_cast<char>(std::string("Test"))
+        ,std::invalid_argument
+        ,""
+        );
 
     // void test_conversion_to_int()
 
@@ -708,7 +714,7 @@ int boost_tests()
     BOOST_TEST_EQUAL(1, value_cast<int>('\1'));
     BOOST_TEST_EQUAL(0, value_cast<int>('\0'));
 
-//    BOOST_TEST_THROW(value_cast<int>('A'),boost::bad_value_cast);
+//X    BOOST_TEST_THROW(value_cast<int>('A'), std::invalid_argument, "");
     BOOST_TEST_EQUAL(1, value_cast<int>(1));
 
     BOOST_TEST_EQUAL
@@ -716,45 +722,45 @@ int boost_tests()
         ,value_cast<int>(std::numeric_limits<int>::max())
         );
 
-//    BOOST_TEST_EQUAL(1,value_cast<int>(1.0));
+    BOOST_TEST_EQUAL(1,value_cast<int>(1.0));
 
-//    BOOST_TEST_THROW(value_cast<int>(1.23), boost::bad_value_cast);
+    BOOST_TEST_THROW(value_cast<int>(1.23), std::runtime_error, "");
 
-//    BOOST_TEST_THROW(value_cast<int>(1e20), boost::bad_value_cast);
+    BOOST_TEST_THROW(value_cast<int>(1e20), boost::numeric::positive_overflow, "");
     BOOST_TEST_EQUAL(1, value_cast<int>(true));
     BOOST_TEST_EQUAL(0, value_cast<int>(false));
     BOOST_TEST_EQUAL(123, value_cast<int>("123"));
-//    BOOST_TEST_THROW
+//X    BOOST_TEST_THROW
 //        (value_cast<int>(" 123")
-//        ,boost::bad_value_cast
+//        ,std::invalid_argument
 //        ,""
 //        );
-//    BOOST_TEST_THROW(value_cast<int>(""), boost::bad_value_cast, "");
-//    BOOST_TEST_THROW(value_cast<int>("Test"), boost::bad_value_cast);
+    BOOST_TEST_THROW(value_cast<int>(""), std::invalid_argument, "");
+    BOOST_TEST_THROW(value_cast<int>("Test"), std::invalid_argument, "");
     BOOST_TEST_EQUAL(123, value_cast<int>("123"));
     BOOST_TEST_EQUAL(123,value_cast<int>(std::string("123")));
-//    BOOST_TEST_THROW
+//X    BOOST_TEST_THROW
 //        (value_cast<int>(std::string(" 123"))
-//        ,boost::bad_value_cast
+//        ,std::invalid_argument
 //        ,""
 //        );
-//    BOOST_TEST_THROW
-//        (value_cast<int>(std::string(""))
-//        ,boost::bad_value_cast
-//        ,""
-//        );
-//    BOOST_TEST_THROW
-//        (value_cast<int>(std::string("Test"))
-//        ,boost::bad_value_cast
-//        ,""
-//        );
+    BOOST_TEST_THROW
+        (value_cast<int>(std::string(""))
+        ,std::invalid_argument
+        ,""
+        );
+    BOOST_TEST_THROW
+        (value_cast<int>(std::string("Test"))
+        ,std::invalid_argument
+        ,""
+        );
 
     // void test_conversion_to_double()
 
     // See 'Important note on char types' above.
     BOOST_TEST_EQUAL(1.0, value_cast<double>('\1'));
 
-//    BOOST_TEST_THROW(value_cast<double>('A'), boost::bad_value_cast);
+//X    BOOST_TEST_THROW(value_cast<double>('A'), std::invalid_argument, "");
     BOOST_TEST_EQUAL(1.0, value_cast<double>(1));
     BOOST_TEST_EQUAL(1.23, value_cast<double>(1.23));
 
@@ -766,19 +772,19 @@ int boost_tests()
     BOOST_TEST_EQUAL(1.0, value_cast<double>(true));
     BOOST_TEST_EQUAL(0.0, value_cast<double>(false));
     BOOST_TEST_EQUAL(1.23, value_cast<double>("1.23"));
-//    BOOST_TEST_THROW(value_cast<double>(""), boost::bad_value_cast);
-//    BOOST_TEST_THROW(value_cast<double>("Test"), boost::bad_value_cast);
+    BOOST_TEST_THROW(value_cast<double>(""), std::invalid_argument, "");
+    BOOST_TEST_THROW(value_cast<double>("Test"), std::invalid_argument, "");
     BOOST_TEST_EQUAL(1.23, value_cast<double>(std::string("1.23")));
-//    BOOST_TEST_THROW
-//        (value_cast<double>(std::string(""))
-//        ,boost::bad_value_cast
-//        ,""
-//        );
-//    BOOST_TEST_THROW
-//        (value_cast<double>(std::string("Test"))
-//        ,boost::bad_value_cast
-//        ,""
-//        );
+    BOOST_TEST_THROW
+        (value_cast<double>(std::string(""))
+        ,std::invalid_argument
+        ,""
+        );
+    BOOST_TEST_THROW
+        (value_cast<double>(std::string("Test"))
+        ,std::invalid_argument
+        ,""
+        );
 
     // void test_conversion_to_bool()
 
@@ -786,10 +792,10 @@ int boost_tests()
     BOOST_TEST_EQUAL(true, value_cast<bool>('\1'));
     BOOST_TEST_EQUAL(false, value_cast<bool>('\0'));
 
-//    BOOST_TEST_THROW(value_cast<bool>('A'), boost::bad_value_cast);
+    BOOST_TEST_THROW(value_cast<bool>('A'), boost::numeric::positive_overflow, "");
     BOOST_TEST_EQUAL(true, value_cast<bool>(1));
     BOOST_TEST_EQUAL(false, value_cast<bool>(0));
-//    BOOST_TEST_THROW(value_cast<bool>(123), boost::bad_value_cast);
+    BOOST_TEST_THROW(value_cast<bool>(123), boost::numeric::positive_overflow, "");
     BOOST_TEST_EQUAL(true, value_cast<bool>(1.0));
     BOOST_TEST_EQUAL(false, value_cast<bool>(0.0));
     BOOST_TEST_EQUAL(true, value_cast<bool>(true));
@@ -806,28 +812,28 @@ int boost_tests()
     char const* p0 = "0";
     BOOST_TEST_EQUAL(false, value_cast<bool>(p0));
 
-//    BOOST_TEST_THROW(value_cast<bool>(""), boost::bad_value_cast);
-//    BOOST_TEST_THROW(value_cast<bool>("Test"), boost::bad_value_cast);
+    BOOST_TEST_THROW(value_cast<bool>(""), std::invalid_argument, "");
+    BOOST_TEST_THROW(value_cast<bool>("Test"), std::invalid_argument, "");
 
     BOOST_TEST_EQUAL(true, value_cast<bool>("1"));
     BOOST_TEST_EQUAL(false, value_cast<bool>("0"));
     BOOST_TEST_EQUAL(true, value_cast<bool>(std::string("1")));
     BOOST_TEST_EQUAL(false, value_cast<bool>(std::string("0")));
-//    BOOST_TEST_THROW
-//        (value_cast<bool>(std::string(""))
-//        ,boost::bad_value_cast
-//        ,""
-//        );
-//    BOOST_TEST_THROW
-//        (value_cast<bool>(std::string("Test"))
-//        ,boost::bad_value_cast
-//        ,""
-//        );
+    BOOST_TEST_THROW
+        (value_cast<bool>(std::string(""))
+        ,std::invalid_argument
+        ,""
+        );
+    BOOST_TEST_THROW
+        (value_cast<bool>(std::string("Test"))
+        ,std::invalid_argument
+        ,""
+        );
 
     // void test_conversion_to_string()
 
-//    BOOST_TEST_EQUAL("A", value_cast<std::string>('A'));
-//    BOOST_TEST_EQUAL(" ", value_cast<std::string>(' '));
+//F    BOOST_TEST_EQUAL("A", value_cast<std::string>('A'));
+//F    BOOST_TEST_EQUAL(" ", value_cast<std::string>(' '));
     BOOST_TEST_EQUAL("123", value_cast<std::string>(123));
     BOOST_TEST_EQUAL("1.23", value_cast<std::string>(1.23));
     BOOST_TEST_EQUAL("1.111111111", value_cast<std::string>(1.111111111));
@@ -854,7 +860,7 @@ int boost_tests()
 
     // void test_conversion_to_pointer()
 
-//    BOOST_TEST_THROW(value_cast<char *>("Test"), boost::bad_value_cast);
+//Z    BOOST_TEST_THROW(value_cast<char *>("Test"), std::invalid_argument, "");
 
     return 0;
 }
