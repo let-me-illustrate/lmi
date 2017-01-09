@@ -29,9 +29,9 @@
 #include "calendar_date.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 #include <limits>
+#include <type_traits>
 
 // SOMEDAY !! Move this one to a 'test' file.
 
@@ -112,7 +112,7 @@ class date_trammel
     :public trammel_base<T>
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT((boost::is_same<calendar_date,T>::value));
+    BOOST_STATIC_ASSERT((std::is_same<calendar_date,T>::value));
 
     T nominal_minimum() const {return gregorian_epoch();}
     T default_value()   const {return today          ();}

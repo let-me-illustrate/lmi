@@ -29,9 +29,9 @@
 #include <boost/operators.hpp>
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
 
 #include <string>
+#include <type_traits>
 #include <typeinfo>
 
 /// Design notes for class template trammel_base.
@@ -238,7 +238,7 @@ class tn_range
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
     BOOST_STATIC_ASSERT
-        ((boost::is_base_and_derived
+        ((std::is_base_of
             <trammel_base<Number>
             ,Trammel
             >::value

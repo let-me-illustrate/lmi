@@ -34,6 +34,7 @@
 #include <functional>
 #include <iomanip>
 #include <limits>
+#include <type_traits>
 
 // Some of these tests may raise hardware exceptions. That means that
 // edge cases are tested, not that the code tested is invalid for
@@ -59,7 +60,7 @@ template<typename T>
 struct i_upper_12_over_12_from_i_naive
     :public std::unary_function<T, T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
         long double z = -1.0L + std::pow((1.0L + i), 1.0L / 12.0L);
@@ -71,7 +72,7 @@ template<typename T>
 struct i_from_i_upper_12_over_12_naive
     :public std::unary_function<T, T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
         long double z = -1.0L + std::pow((1.0L + i), 12.0L);
@@ -83,7 +84,7 @@ template<typename T>
 struct d_upper_12_from_i_naive
     :public std::unary_function<T, T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
         long double z = 12.0L * (1.0L - std::pow(1.0L + i, -1.0L / 12.0L));
@@ -94,7 +95,7 @@ struct d_upper_12_from_i_naive
 template<typename T, int n>
 struct net_i_from_gross_naive
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& i, T const& spread, T const& fee) const
         {
         static long double const reciprocal_n = 1.0L / n;
@@ -114,7 +115,7 @@ template<typename T>
 struct coi_rate_from_q_naive
     :public std::binary_function<T,T,T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& q, T const& max_coi) const
         {
         if(0.0 == q)

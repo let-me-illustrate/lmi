@@ -27,16 +27,15 @@
 #include "numeric_io_traits.hpp"
 #include "rtti_lmi.hpp"
 
+#include <boost/static_assert.hpp>
+
 #include <cstring>                      // std::strcmp()
 #include <sstream>
 #include <stdexcept>
 #include <stdio.h>                      // snprintf() (C99, not C++98).
 #include <string>
+#include <type_traits>
 #include <typeinfo>
-
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_arithmetic.hpp>
-#include <boost/type_traits/is_void.hpp>
 
 template<typename To, typename From>
 struct numeric_converter;
@@ -122,8 +121,8 @@ To numeric_io_cast(From from, To = To())
 template<typename To, typename From>
 struct numeric_converter
 {
-    BOOST_STATIC_ASSERT(boost::is_void<To>::value);
-    BOOST_STATIC_ASSERT(boost::is_void<From>::value);
+    BOOST_STATIC_ASSERT(std::is_void<To  >::value);
+    BOOST_STATIC_ASSERT(std::is_void<From>::value);
 
     To operator()(From const& from) const
         {
@@ -147,7 +146,7 @@ struct numeric_converter
 template<typename To>
 struct numeric_converter<To, std::string>
 {
-    BOOST_STATIC_ASSERT(boost::is_arithmetic<To>::value);
+    BOOST_STATIC_ASSERT(std::is_arithmetic<To>::value);
 
     typedef std::string From;
     To operator()(From const& from) const
@@ -216,7 +215,7 @@ struct numeric_converter<To, char const*>
 template<typename From>
 struct numeric_converter<std::string, From>
 {
-    BOOST_STATIC_ASSERT(boost::is_arithmetic<From>::value);
+    BOOST_STATIC_ASSERT(std::is_arithmetic<From>::value);
 
     typedef std::string To;
     To operator()(From const& from) const

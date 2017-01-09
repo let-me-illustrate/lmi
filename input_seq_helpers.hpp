@@ -30,11 +30,11 @@
 #include "so_attributes.hpp"
 #include "tn_range.hpp"
 
-#include <boost/type_traits/is_enum.hpp>
 #include <boost/utility/enable_if.hpp>
 
 #include <map>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 namespace detail
@@ -109,7 +109,7 @@ namespace detail
 template<typename T>
 std::vector<T> convert_vector_type
     (std::vector<mc_enum<T> > const& ve
-    ,typename boost::enable_if<boost::is_enum<T> >::type* = nullptr
+    ,typename boost::enable_if<std::is_enum<T> >::type* = nullptr
     )
 {
     std::vector<T> z;

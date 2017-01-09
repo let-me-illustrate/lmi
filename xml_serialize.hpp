@@ -29,11 +29,11 @@
 #include "xml_lmi.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_enum.hpp>
 
 #include <xmlwrapp/nodes_view.h>
 
 #include <string>
+#include <type_traits>
 #include <vector>
 
 /// Serialization to and from xml.
@@ -58,7 +58,7 @@ namespace xml_serialize
 template<typename T>
 struct xml_io
 {
-    BOOST_STATIC_ASSERT(!boost::is_enum<T>::value); // Prefer mc_enum.
+    BOOST_STATIC_ASSERT(!std::is_enum<T>::value); // Prefer mc_enum.
 
     static void to_xml(xml::element& e, T const& t)
     {

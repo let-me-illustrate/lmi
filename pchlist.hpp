@@ -106,7 +106,6 @@
 #   include <boost/iterator.hpp>
 #   include <boost/preprocessor.hpp>
 #   include <boost/shared_ptr.hpp>
-#   include <boost/type_traits.hpp>
 #   include <boost/utility.hpp>
 
 #   include <cstddef>
@@ -116,6 +115,7 @@
 #   include <iterator>
 #   include <stdexcept>
 #   include <string>
+#   include <type_traits>
 #   include <utility>
 #   include <vector>
 

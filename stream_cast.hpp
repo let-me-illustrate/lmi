@@ -50,13 +50,12 @@
 #include "rtti_lmi.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_arithmetic.hpp>
-#include <boost/type_traits/is_pointer.hpp>
 
 #include <istream>                      // std::ws
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 
 /// Design notes for function template stream_cast.
 ///
@@ -101,10 +100,10 @@ template<typename To, typename From>
 To stream_cast(From from, To = To())
 {
     BOOST_STATIC_ASSERT
-        (   !boost::is_arithmetic<From>::value
-        ||  !boost::is_arithmetic<To  >::value
+        (   !std::is_arithmetic<From>::value
+        ||  !std::is_arithmetic<To  >::value
         );
-    BOOST_STATIC_ASSERT(!boost::is_pointer   <To  >::value);
+    BOOST_STATIC_ASSERT(!std::is_pointer<To>::value);
 
     std::stringstream interpreter;
     std::ostringstream err;

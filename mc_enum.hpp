@@ -28,11 +28,11 @@
 
 #include <boost/operators.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_enum.hpp>
 
 #include <cstddef>                      // std::size_t
 #include <deque>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 /// This abstract non-template base class serves two design purposes.
@@ -99,7 +99,7 @@ class mc_enum
     ,private boost::equality_comparable<mc_enum<T>, T          >
     ,private boost::equality_comparable<mc_enum<T>, std::string>
 {
-    BOOST_STATIC_ASSERT(boost::is_enum<T>::value);
+    BOOST_STATIC_ASSERT(std::is_enum<T>::value);
 
     friend class mc_enum_test;
     template<typename U> friend std::vector<std::string> const& all_strings();

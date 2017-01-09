@@ -27,15 +27,13 @@
 #include "so_attributes.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 
 #include <wx/event.h>
 #include <wx/string.h>
 
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 class LMI_SO_FWD_DECL calendar_date;
@@ -83,13 +81,13 @@ void Connect
     )
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT((boost::is_same<void,Return>::value));
-    BOOST_STATIC_ASSERT((boost::is_base_and_derived<wxEvtHandler,Class>::value));
-    typedef typename boost::remove_reference<Argument>::type argument_type;
+    BOOST_STATIC_ASSERT((std::is_same<void,Return>::value));
+    BOOST_STATIC_ASSERT((std::is_base_of<wxEvtHandler,Class>::value));
+    typedef typename std::remove_reference<Argument>::type argument_type;
     BOOST_STATIC_ASSERT
         ((
-            boost::is_same            <wxEvent,argument_type>::value
-        ||  boost::is_base_and_derived<wxEvent,argument_type>::value
+            std::is_same   <wxEvent,argument_type>::value
+        ||  std::is_base_of<wxEvent,argument_type>::value
         ));
 
     if(!object)

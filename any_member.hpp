@@ -69,13 +69,12 @@
 #include "value_cast.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 #include <algorithm>                    // std::lower_bound(), std::swap()
 #include <map>
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 
 // Definition of class placeholder.
@@ -626,18 +625,18 @@ void MemberSymbolTable<ClassType>::ascribe
     // Double parentheses: don't parse comma as a macro parameter separator.
     BOOST_STATIC_ASSERT
         ((
-        boost::is_base_and_derived
+        std::is_base_of
             <MemberSymbolTable<ClassType>
             ,ClassType
             >::value
         ));
     BOOST_STATIC_ASSERT
         ((
-            boost::is_same
+            std::is_same
                 <SameOrBaseClassType
                 ,ClassType
                 >::value
-        ||  boost::is_base_and_derived
+        ||  std::is_base_of
                 <SameOrBaseClassType
                 ,ClassType
                 >::value

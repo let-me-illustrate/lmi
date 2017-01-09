@@ -33,8 +33,8 @@
 
 #include <boost/any.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-#include <boost/type_traits/is_same.hpp>
+
+#include <type_traits>
 
 /// MultiDim* type-safe classes
 /// ---------------------------
@@ -261,8 +261,8 @@ class MultiDimAdjustableAxis
     :public BaseAxisType
 {
     BOOST_STATIC_ASSERT(
-        (  boost::is_base_of<MultiDimAxisAny, BaseAxisType>::value
-        || boost::is_same<MultiDimAxisAny, BaseAxisType>::value
+        (  std::is_base_of<MultiDimAxisAny, BaseAxisType>::value
+        || std::is_same   <MultiDimAxisAny, BaseAxisType>::value
         ));
 
   protected:

@@ -24,7 +24,6 @@
 #include "alert.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
 
 #if !defined LMI_MSW
 #   include <cstdio>
@@ -35,6 +34,7 @@
 #include <ios>
 #include <sstream>                      // std::stringbuf
 #include <stdexcept>
+#include <type_traits>
 
 namespace
 {
@@ -196,7 +196,7 @@ template<typename T>
 inline std::ostream& alert_stream()
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT((boost::is_base_and_derived<alert_buf,T>::value));
+    BOOST_STATIC_ASSERT((std::is_base_of<alert_buf,T>::value));
     static T buffer_;
     static std::ostream stream_(&buffer_);
     stream_.clear();

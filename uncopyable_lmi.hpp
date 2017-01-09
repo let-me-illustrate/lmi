@@ -23,7 +23,8 @@
 #include "config.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
+
+#include <type_traits>
 
 /// Forbid compiler to generate copy and assignment functions.
 ///
@@ -99,7 +100,7 @@ class uncopyable
     ~uncopyable()
         {
         // Double parentheses: don't parse comma as a macro parameter separator.
-        BOOST_STATIC_ASSERT((boost::is_base_and_derived<uncopyable<T>,T>::value));
+        BOOST_STATIC_ASSERT((std::is_base_of<uncopyable<T>,T>::value));
         }
 
   private:

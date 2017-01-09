@@ -29,8 +29,6 @@
 
 #include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <boost/utility/enable_if.hpp>
 
 #include <xmlwrapp/nodes_view.h>
@@ -38,6 +36,7 @@
 #include <algorithm>                    // std::copy(), std::find()
 #include <iterator>                     // std::back_inserter
 #include <sstream>
+#include <type_traits>
 #include <vector>
 
 template<typename T>
@@ -50,8 +49,8 @@ xml_serializable<T>::~xml_serializable()
     // Double parentheses: don't parse comma as a macro parameter separator.
     BOOST_STATIC_ASSERT
         ((
-           boost::is_base_and_derived<xml_serializable <T>,T>::value
-        && boost::is_base_and_derived<MemberSymbolTable<T>,T>::value
+           std::is_base_of<xml_serializable <T>,T>::value
+        && std::is_base_of<MemberSymbolTable<T>,T>::value
         ));
 }
 
@@ -215,7 +214,7 @@ std::string const& xml_serializable<T>::xml_root_name() const
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const& x
-    ,typename boost::enable_if<boost::is_same<X,Y> >::type* = nullptr
+    ,typename boost::enable_if<std::is_same<X,Y> >::type* = nullptr
     )
 {
     return x;
@@ -224,7 +223,7 @@ inline Y sfinae_cast
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const&
-    ,typename boost::disable_if<boost::is_same<X,Y> >::type* = nullptr
+    ,typename boost::disable_if<std::is_same<X,Y> >::type* = nullptr
     )
 {
     fatal_error() << "Impermissible type conversion." << LMI_FLUSH;

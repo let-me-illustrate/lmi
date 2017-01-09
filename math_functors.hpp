@@ -28,12 +28,12 @@
 #include "et_vector.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_float.hpp>
 
 #include <algorithm>                    // std::max(), std::min()
 #include <cmath>                        // C99 expm1(), log1p()
 #include <functional>
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 
 // For Comeau, implement expm1l() and log1pl() using type double, not
@@ -103,7 +103,7 @@ template<typename T>
 struct mean
     :public std::binary_function<T, T, T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& x, T const& y) const
         {return 0.5 * x + 0.5 * y;}
 };
@@ -133,7 +133,7 @@ struct mean
 template<typename T, int n>
 struct i_upper_n_over_n_from_i
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     BOOST_STATIC_ASSERT(0 < n);
     T operator()(T const& i) const
         {
@@ -159,7 +159,7 @@ template<typename T>
 struct i_upper_12_over_12_from_i
     :public std::unary_function<T, T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
         return i_upper_n_over_n_from_i<double,12>()(i);
@@ -170,7 +170,7 @@ template<typename T, int n>
 struct i_from_i_upper_n_over_n
     :public std::unary_function<T, T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     BOOST_STATIC_ASSERT(0 < n);
     T operator()(T const& i) const
         {
@@ -185,7 +185,7 @@ template<typename T>
 struct i_from_i_upper_12_over_12
     :public std::unary_function<T, T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
         return i_from_i_upper_n_over_n<double,12>()(i);
@@ -196,7 +196,7 @@ template<typename T, int n>
 struct d_upper_n_from_i
     :public std::unary_function<T, T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     BOOST_STATIC_ASSERT(0 < n);
     T operator()(T const& i) const
         {
@@ -222,7 +222,7 @@ template<typename T>
 struct d_upper_12_from_i
     :public std::unary_function<T, T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& i) const
         {
         return d_upper_n_from_i<double,12>()(i);
@@ -238,7 +238,7 @@ struct d_upper_12_from_i
 template<typename T, int n>
 struct net_i_from_gross
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     BOOST_STATIC_ASSERT(0 < n);
     T operator()(T const& i, T const& spread, T const& fee) const
         {
@@ -289,7 +289,7 @@ template<typename T>
 struct coi_rate_from_q
     :public std::binary_function<T,T,T>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
     T operator()(T const& q, T const& max_coi) const
         {
         if(!(0.0 <= max_coi && max_coi <= 1.0))

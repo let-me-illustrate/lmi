@@ -27,12 +27,11 @@
 #include "rtti_lmi.hpp"
 
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 #include <wx/window.h>
 #include <wx/xrc/xmlres.h>
+
+#include <type_traits>
 
 template<typename T>
 T const* MvcController::ModelPointer(std::string const& name) const
@@ -72,13 +71,13 @@ T const& MvcController::ModelReference(std::string const& name) const
 template<typename T>
 T& MvcController::WindowFromXrcName(char const* name) const
 {
-    BOOST_STATIC_ASSERT(!boost::is_pointer<T>::value);
+    BOOST_STATIC_ASSERT(!std::is_pointer<T>::value);
 
     // Double parentheses: don't parse comma as a macro parameter separator.
     BOOST_STATIC_ASSERT
         ((
-            boost::is_same<wxWindow,T>::value
-        ||  boost::is_base_and_derived<wxWindow,T>::value
+            std::is_same   <wxWindow,T>::value
+        ||  std::is_base_of<wxWindow,T>::value
         ));
 
     wxWindow* w = FindWindow(wxXmlResource::GetXRCID(name));
