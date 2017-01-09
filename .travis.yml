@@ -1,0 +1,44 @@
+# This is the control file for Travis continuous integration system.
+#
+# It is used automatically for the repositories on Github if it's found in the
+# root directory of the project.
+#
+# Copyright (C) 2017 Greg Chicares
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+# http://savannah.nongnu.org/projects/lmi
+# email: <gchicares@sbcglobal.net>
+# snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+language: cpp
+sudo: required
+dist: trusty
+compiler: gcc
+
+before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get install -y libwxgtk3.0-dev
+    - git clone --depth 1 https://github.com/vadz/wxpdfdoc.git
+    - pushd wxpdfdoc && ./configure && make install && popd
+
+script:
+    - set -e && echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
+    - ./configure
+    - echo -en 'travis_fold:end:script.configure\\r'
+    - echo 'Building...' && echo -en 'travis_fold:start:script.build\\r'
+    - make
+    - echo -en 'travis_fold:end:script.build\\r'
+    - echo 'Installing...' && echo -en 'travis_fold:start:script.install\\r'
+    - sudo make install
+    - echo -en 'travis_fold:end:script.install\\r'
