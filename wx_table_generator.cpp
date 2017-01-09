@@ -44,11 +44,11 @@ void increase_to_if_smaller(T& first, T second)
 } // Unnamed namespace.
 
 wx_table_generator::wx_table_generator
-    (wxDC& dc_
+    (wxDC& dc
     ,int left_margin
     ,int total_width
     )
-    :dc_(dc_)
+    :dc_(dc)
     ,left_margin_(left_margin)
     ,total_width_(total_width)
     ,char_height_(dc_.GetCharHeight())

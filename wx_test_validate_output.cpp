@@ -124,9 +124,9 @@ void init_test_census
     struct change_corp_in_case_defaults_dialog
         :public enter_comments_in_case_defaults_dialog
     {
-        change_corp_in_case_defaults_dialog(std::string const& corp_name)
+        change_corp_in_case_defaults_dialog(std::string const& name)
             :enter_comments_in_case_defaults_dialog("idiosyncrasyZ")
-            ,corp_name_(corp_name)
+            ,corp_name_(name)
             {
             }
 
@@ -136,8 +136,8 @@ void init_test_census
 
             wx_test_focus_controller_child(*dialog, "CorporationName");
 
-            wxUIActionSimulator ui;
-            ui.Text((corp_name_ + " Inc.").c_str());
+            wxUIActionSimulator ui2;
+            ui2.Text((corp_name_ + " Inc.").c_str());
             wxYield();
 
             return wxID_OK;
@@ -158,8 +158,8 @@ void init_test_census
     struct change_name_in_cell_dialog
         :public wxExpectModalBase<MvcController>
     {
-        change_name_in_cell_dialog(std::string const& insured_name)
-            :insured_name(insured_name)
+        change_name_in_cell_dialog(std::string const& name)
+            :insured_name(name)
             {
             }
 
@@ -170,8 +170,8 @@ void init_test_census
 
             wx_test_focus_controller_child(*dialog, "InsuredName");
 
-            wxUIActionSimulator ui;
-            ui.Text(insured_name.c_str());
+            wxUIActionSimulator ui2;
+            ui2.Text(insured_name.c_str());
             wxYield();
 
             return wxID_OK;
