@@ -34,6 +34,7 @@ before_install:
 
 script:
     - set -e && echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
+    - autoreconf -i
     - ./configure
     - echo -en 'travis_fold:end:script.configure\\r'
     - echo 'Building...' && echo -en 'travis_fold:start:script.build\\r'
