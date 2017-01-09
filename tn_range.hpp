@@ -237,12 +237,7 @@ class tn_range
     ,private boost::equality_comparable<tn_range<Number,Trammel>, std::string>
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT
-        ((std::is_base_of
-            <trammel_base<Number>
-            ,Trammel
-            >::value
-        ));
+    BOOST_STATIC_ASSERT((std::is_base_of<trammel_base<Number>,Trammel>::value));
 
     friend class tn_range_test;
 
