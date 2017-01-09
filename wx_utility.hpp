@@ -84,11 +84,7 @@ void Connect
     BOOST_STATIC_ASSERT((std::is_same<void,Return>::value));
     BOOST_STATIC_ASSERT((std::is_base_of<wxEvtHandler,Class>::value));
     typedef typename std::remove_reference<Argument>::type argument_type;
-    BOOST_STATIC_ASSERT
-        ((
-            std::is_same   <wxEvent,argument_type>::value
-        ||  std::is_base_of<wxEvent,argument_type>::value
-        ));
+    BOOST_STATIC_ASSERT((std::is_base_of<wxEvent,argument_type>::value));
 
     if(!object)
         {

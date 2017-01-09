@@ -260,10 +260,7 @@ template<typename AdjustControl, typename BaseAxisType = MultiDimAxisAny>
 class MultiDimAdjustableAxis
     :public BaseAxisType
 {
-    BOOST_STATIC_ASSERT(
-        (  std::is_base_of<MultiDimAxisAny, BaseAxisType>::value
-        || std::is_same   <MultiDimAxisAny, BaseAxisType>::value
-        ));
+    BOOST_STATIC_ASSERT((std::is_base_of<MultiDimAxisAny, BaseAxisType>::value));
 
   protected:
     typedef AdjustControl AxisAdjustControl;

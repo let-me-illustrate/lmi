@@ -632,14 +632,10 @@ void MemberSymbolTable<ClassType>::ascribe
         ));
     BOOST_STATIC_ASSERT
         ((
-            std::is_same
-                <SameOrBaseClassType
-                ,ClassType
-                >::value
-        ||  std::is_base_of
-                <SameOrBaseClassType
-                ,ClassType
-                >::value
+        std::is_base_of
+            <SameOrBaseClassType
+            ,ClassType
+            >::value
         ));
 
     ClassType* class_object = static_cast<ClassType*>(this);

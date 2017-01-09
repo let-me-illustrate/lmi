@@ -71,11 +71,7 @@ template<typename T, typename U>
 T& safely_dereference_as(U* u)
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT
-        ((
-            std::is_same   <U,T>::value
-        ||  std::is_base_of<U,T>::value
-        ));
+    BOOST_STATIC_ASSERT((std::is_base_of<U,T>::value));
     if(!u)
         {
         std::ostringstream oss;
