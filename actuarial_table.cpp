@@ -30,7 +30,6 @@
 #include "oecumenic_enumerations.hpp"   // methuselah
 #include "path_utility.hpp"             // fs::path inserter
 
-#include <boost/cstdint.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
@@ -39,6 +38,7 @@
 #include <algorithm>                    // std::max(), std::min()
 #include <cctype>                       // std::toupper()
 #include <climits>                      // CHAR_BIT
+#include <cstdint>
 #include <ios>
 #include <istream>
 #include <limits>
@@ -55,7 +55,7 @@ namespace
     /// in bytes. This length must be read as unsigned because it may
     /// be 2^15 or greater, but less than 2^16.
 
-    typedef boost::uint16_t soa_table_length_type;
+    typedef std::uint16_t soa_table_length_type;
     int const soa_table_length_max =
         std::numeric_limits<soa_table_length_type>::max()
         ;
@@ -66,7 +66,7 @@ namespace
     /// in order to avoid warnings for unsigned types.
 
     template<typename T>
-    T read_datum(std::istream& is, T& t, boost::int16_t nominal_length)
+    T read_datum(std::istream& is, T& t, std::int16_t nominal_length)
     {
         LMI_ASSERT(sizeof(T) == nominal_length);
         T const invalid(static_cast<T>(-1));
@@ -235,14 +235,14 @@ void actuarial_table::find_table()
     int const index_record_length(58);
     char index_record[index_record_length] = {0};
 
-    BOOST_STATIC_ASSERT(sizeof(boost::int32_t) <= sizeof(int));
+    BOOST_STATIC_ASSERT(sizeof(std::int32_t) <= sizeof(int));
     while(index_ifs)
         {
-        int index_table_number = deserialize_cast<boost::int32_t>(index_record);
+        int index_table_number = deserialize_cast<std::int32_t>(index_record);
         if(table_number_ == index_table_number)
             {
             char* p = 54 + index_record;
-            int z = deserialize_cast<boost::int32_t>(p);
+            int z = deserialize_cast<std::int32_t>(p);
             table_offset_ = std::streampos(z);
             break;
             }
@@ -322,17 +322,17 @@ void actuarial_table::parse_table()
 
     while(data_ifs)
         {
-        boost::int16_t record_type;
-        read_datum(data_ifs, record_type, sizeof(boost::int16_t));
+        std::int16_t record_type;
+        read_datum(data_ifs, record_type, sizeof(std::int16_t));
 
         soa_table_length_type nominal_length;
-        read_datum(data_ifs, nominal_length, sizeof(boost::int16_t));
+        read_datum(data_ifs, nominal_length, sizeof(std::int16_t));
 
         switch(record_type)
             {
             case 2: // 4-byte integer: Table number.
                 {
-                boost::int32_t z;
+                std::int32_t z;
                 read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(z == table_number_);
                 }
@@ -352,7 +352,7 @@ void actuarial_table::parse_table()
             case 12: // 2-byte integer: Minimum age.
                 {
                 LMI_ASSERT(-1 == min_age_);
-                boost::int16_t z;
+                std::int16_t z;
                 read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(0 <= z && z <= methuselah);
                 min_age_ = z;
@@ -361,7 +361,7 @@ void actuarial_table::parse_table()
             case 13: // 2-byte integer: Maximum age.
                 {
                 LMI_ASSERT(-1 == max_age_);
-                boost::int16_t z;
+                std::int16_t z;
                 read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(0 <= z && z <= methuselah);
                 max_age_ = z;
@@ -370,7 +370,7 @@ void actuarial_table::parse_table()
             case 14: // 2-byte integer: Select period.
                 {
                 LMI_ASSERT(-1 == select_period_);
-                boost::int16_t z;
+                std::int16_t z;
                 read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(0 <= z && z <= methuselah);
                 select_period_ = z;
@@ -379,7 +379,7 @@ void actuarial_table::parse_table()
             case 15: // 2-byte integer: Maximum select age.
                 {
                 LMI_ASSERT(-1 == max_select_age_);
-                boost::int16_t z;
+                std::int16_t z;
                 read_datum(data_ifs, z, nominal_length);
                 LMI_ASSERT(0 <= z && z <= methuselah);
                 max_select_age_ = z;
