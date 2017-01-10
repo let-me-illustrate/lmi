@@ -2476,6 +2476,13 @@ class database_impl
 database_impl::database_impl(fs::path const& path)
     :path_(path)
 {
+    if(path_.empty())
+        {
+        // This ctor can be explicitly used with an empty path to create a
+        // database not (yet) associated with any physical file.
+        return;
+        }
+
     fs::path const index_path = get_index_path(path);
     fs::ifstream ifs(index_path, ios_in_binary());
     if(!ifs) fatal_error() << "Unable to open '" << index_path << "'." << LMI_FLUSH;
