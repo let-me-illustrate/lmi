@@ -35,6 +35,15 @@ endif
 
 ACLOCAL_AMFLAGS = -I aclocal
 
+# This is a workaround for the harmless but annoying warning
+#
+# ar: `u' modifier ignored since `D' is the default (see `U')
+#
+# given by Linux systems using recent binutils with the switch to building
+# deterministic archives (that can't include the timestamps) when building all
+# static libraries with default "cru" flags used by Automake up to 1.15.
+ARFLAGS = cr
+
 ##############################################################################
 # All Targets
 ##############################################################################
