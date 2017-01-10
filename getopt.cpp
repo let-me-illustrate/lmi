@@ -162,9 +162,7 @@ GetOpt::GetOpt (int argc, char** argv, char const* optstring,
     Initialize (noptstring);
 }
 
-GetOpt::~GetOpt()
-{
-}
+GetOpt::~GetOpt() = default;
 
 void
 GetOpt::Initialize  (std::string const& a_optstring)

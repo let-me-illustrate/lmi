@@ -58,9 +58,7 @@ FundInfo::FundInfo
 }
 
 //============================================================================
-FundInfo::~FundInfo()
-{
-}
+FundInfo::~FundInfo() = default;
 
 namespace xml_serialize
 {
@@ -90,9 +88,7 @@ template<> struct xml_io<FundInfo>
 } // namespace xml_serialize
 
 //============================================================================
-FundData::FundData()
-{
-}
+FundData::FundData() = default;
 
 //============================================================================
 FundData::FundData(std::string const& a_Filename)
@@ -101,9 +97,7 @@ FundData::FundData(std::string const& a_Filename)
 }
 
 //============================================================================
-FundData::~FundData()
-{
-}
+FundData::~FundData() = default;
 
 namespace
 {

@@ -96,7 +96,7 @@ template<typename T>
 class uncopyable
 {
   protected:
-    uncopyable() {}
+    uncopyable() = default;
     ~uncopyable()
         {
         // Double parentheses: don't parse comma as a macro parameter separator.

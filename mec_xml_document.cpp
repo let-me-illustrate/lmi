@@ -52,9 +52,7 @@ mec_xml_document::mec_xml_document(std::string const& filename)
 }
 
 //============================================================================
-mec_xml_document::~mec_xml_document()
-{
-}
+mec_xml_document::~mec_xml_document() = default;
 
 //============================================================================
 std::string const& mec_xml_document::xml_root_name() const

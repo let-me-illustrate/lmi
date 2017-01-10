@@ -36,9 +36,7 @@
 
 /// Ctor for unit testing.
 
-Loads::Loads()
-{
-}
+Loads::Loads() = default;
 
 /// Ctor for production branch.
 

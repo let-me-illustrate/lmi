@@ -103,9 +103,7 @@ database_entity::database_entity
     assert_invariants();
 }
 
-database_entity::~database_entity()
-{
-}
+database_entity::~database_entity() = default;
 
 #if 0
 /// Deliberately undefined copy assignment operator.

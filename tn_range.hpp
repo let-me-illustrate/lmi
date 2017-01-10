@@ -83,7 +83,7 @@ class trammel_base
     friend class tn_range_test;
 
   public:
-    virtual ~trammel_base() {}
+    virtual ~trammel_base() = default;
 
     void assert_sanity   () const;
     T minimum_minimorum  () const;
@@ -91,9 +91,9 @@ class trammel_base
     T maximum_maximorum  () const;
 
   protected:
-    trammel_base() {}
-    trammel_base(trammel_base const&) {}
-    trammel_base& operator=(trammel_base const&) {return *this;}
+    trammel_base() = default;
+    trammel_base(trammel_base const&) = default;
+    trammel_base& operator=(trammel_base const&) = default;
 
   private:
     virtual T nominal_minimum() const = 0;

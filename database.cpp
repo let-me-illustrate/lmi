@@ -72,9 +72,7 @@ product_database::product_database(yare_input const& input)
     initialize(input.ProductName);
 }
 
-product_database::~product_database()
-{
-}
+product_database::~product_database() = default;
 
 /// Number of years to maturity for default lookup index.
 ///

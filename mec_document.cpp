@@ -38,9 +38,7 @@ mec_document::mec_document()
 {
 }
 
-mec_document::~mec_document()
-{
-}
+mec_document::~mec_document() = default;
 
 mec_view& mec_document::PredominantView() const
 {

@@ -84,9 +84,7 @@ template<> stratified_entity value_cast<stratified_entity>(std::string const&)
 
 // Class stratified_entity implementation.
 
-stratified_entity::stratified_entity()
-{
-}
+stratified_entity::stratified_entity() = default;
 
 stratified_entity::stratified_entity
     (std::vector<double> const& limits
@@ -100,9 +98,7 @@ stratified_entity::stratified_entity
     assert_validity();
 }
 
-stratified_entity::~stratified_entity()
-{
-}
+stratified_entity::~stratified_entity() = default;
 
 bool stratified_entity::operator==(stratified_entity const& z) const
 {
@@ -190,9 +186,7 @@ stratified_charges::stratified_charges(stratified_charges const& z)
     MemberSymbolTable<stratified_charges>::assign(z);
 }
 
-stratified_charges::~stratified_charges()
-{
-}
+stratified_charges::~stratified_charges() = default;
 
 stratified_charges& stratified_charges::operator=(stratified_charges const& z)
 {

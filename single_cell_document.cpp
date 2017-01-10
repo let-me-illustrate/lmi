@@ -60,9 +60,7 @@ single_cell_document::single_cell_document(std::string const& filename)
 }
 
 //============================================================================
-single_cell_document::~single_cell_document()
-{
-}
+single_cell_document::~single_cell_document() = default;
 
 /// Backward-compatibility serial number of this class's xml version.
 ///

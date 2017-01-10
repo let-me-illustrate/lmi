@@ -2361,7 +2361,6 @@ class database_impl
         return fs::change_extension(path, ".dat");
         }
 
-    database_impl();
     explicit database_impl(fs::path const& path);
     database_impl(std::istream& index_is, shared_ptr<std::istream> data_is);
 
@@ -2473,10 +2472,6 @@ class database_impl
     // loading everything from it.
     shared_ptr<std::istream> data_is_;
 };
-
-database_impl::database_impl()
-{
-}
 
 database_impl::database_impl(fs::path const& path)
     :path_(path)
@@ -3000,7 +2995,7 @@ bool database::exists(fs::path const& path)
 }
 
 database::database()
-    :impl_(new database_impl())
+    :impl_(new database_impl(fs::path()))
 {
 }
 

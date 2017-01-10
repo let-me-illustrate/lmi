@@ -68,9 +68,7 @@ RoundingDocument::RoundingDocument()
     values_["min_init_premium"  ] = &rounding_rules_.round_min_init_premium_  ;
 }
 
-RoundingDocument::~RoundingDocument()
-{
-}
+RoundingDocument::~RoundingDocument() = default;
 
 void RoundingDocument::ReadDocument(std::string const& filename)
 {

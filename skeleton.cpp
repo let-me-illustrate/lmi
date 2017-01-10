@@ -214,9 +214,7 @@ Skeleton::Skeleton()
     timer_.Start(100);
 }
 
-Skeleton::~Skeleton()
-{
-}
+Skeleton::~Skeleton() = default;
 
 wxMDIChildFrame* Skeleton::CreateChildFrame
     (wxDocument* doc

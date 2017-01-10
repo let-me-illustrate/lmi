@@ -500,9 +500,7 @@ mec_server::mec_server(mcenum_emission emission)
 {
 }
 
-mec_server::~mec_server()
-{
-}
+mec_server::~mec_server() = default;
 
 bool mec_server::operator()(fs::path const& file_path)
 {

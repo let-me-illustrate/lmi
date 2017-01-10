@@ -262,9 +262,7 @@ InputSequence::InputSequence
     realize_vector();
 }
 
-InputSequence::~InputSequence()
-{
-}
+InputSequence::~InputSequence() = default;
 
 /*
 // TODO ?? Want a similar function for std::vector<string>, for enumerators?

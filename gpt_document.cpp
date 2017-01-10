@@ -38,9 +38,7 @@ gpt_document::gpt_document()
 {
 }
 
-gpt_document::~gpt_document()
-{
-}
+gpt_document::~gpt_document() = default;
 
 gpt_view& gpt_document::PredominantView() const
 {

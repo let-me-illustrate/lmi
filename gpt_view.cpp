@@ -35,13 +35,9 @@
 #include <wx/html/htmprint.h>
 #include <wx/xrc/xmlres.h>
 
-gpt_mvc_view::gpt_mvc_view()
-{
-}
+gpt_mvc_view::gpt_mvc_view() = default;
 
-gpt_mvc_view::~gpt_mvc_view()
-{
-}
+gpt_mvc_view::~gpt_mvc_view() = default;
 
 char const* gpt_mvc_view::DoBookControlName() const
 {
@@ -91,9 +87,7 @@ gpt_view::gpt_view()
 {
 }
 
-gpt_view::~gpt_view()
-{
-}
+gpt_view::~gpt_view() = default;
 
 inline gpt_input& gpt_view::input_data()
 {

@@ -52,9 +52,7 @@ gpt_xml_document::gpt_xml_document(std::string const& filename)
 }
 
 //============================================================================
-gpt_xml_document::~gpt_xml_document()
-{
-}
+gpt_xml_document::~gpt_xml_document() = default;
 
 //============================================================================
 std::string const& gpt_xml_document::xml_root_name() const

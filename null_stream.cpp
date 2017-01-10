@@ -48,8 +48,7 @@ class dev_null_stream_buffer
         {
         setp(buffer_, buffer_ + buffer_size_);
         }
-    ~dev_null_stream_buffer() override
-        {}
+    ~dev_null_stream_buffer() override = default;
 
   private:
     int_type overflow(int_type c) override

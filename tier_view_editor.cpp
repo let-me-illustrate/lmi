@@ -191,13 +191,9 @@ MultiDimTableAny::AxesAny TierTableAdapter::DoGetAxesAny()
 // TierEditorGrid implementation
 // ---------------------------
 
-TierEditorGrid::TierEditorGrid()
-{
-}
+TierEditorGrid::TierEditorGrid() = default;
 
-TierEditorGrid::~TierEditorGrid()
-{
-}
+TierEditorGrid::~TierEditorGrid() = default;
 
 TierEditorGrid::TierEditorGrid
     (wxWindow* parent

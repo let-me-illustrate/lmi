@@ -40,9 +40,7 @@ RoundingView::RoundingView()
 {
 }
 
-RoundingView::~RoundingView()
-{
-}
+RoundingView::~RoundingView() = default;
 
 wxWindow* RoundingView::CreateChildWindow()
 {

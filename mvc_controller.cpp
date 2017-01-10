@@ -153,9 +153,7 @@ MvcController::MvcController
         );
 }
 
-MvcController::~MvcController()
-{
-}
+MvcController::~MvcController() = default;
 
 /// Make the Model consistent, and change the View to comport with it.
 ///

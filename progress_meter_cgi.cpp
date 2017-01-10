@@ -59,9 +59,7 @@ concrete_progress_meter::concrete_progress_meter
 {
 }
 
-concrete_progress_meter::~concrete_progress_meter()
-{
-}
+concrete_progress_meter::~concrete_progress_meter() = default;
 
 std::string concrete_progress_meter::progress_message() const
 {

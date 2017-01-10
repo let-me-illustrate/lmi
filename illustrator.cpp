@@ -53,9 +53,7 @@ illustrator::illustrator(mcenum_emission emission)
 {
 }
 
-illustrator::~illustrator()
-{
-}
+illustrator::~illustrator() = default;
 
 bool illustrator::operator()(fs::path const& file_path)
 {

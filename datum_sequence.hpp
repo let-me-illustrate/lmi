@@ -117,7 +117,7 @@ class numeric_sequence
     ,private boost::equality_comparable<numeric_sequence,numeric_sequence>
 {
   public:
-    numeric_sequence() {}
+    numeric_sequence() = default;
     explicit numeric_sequence(std::string const& s) : datum_sequence(s) {}
 
     numeric_sequence& operator=(std::string const&);
@@ -148,7 +148,7 @@ class payment_sequence
     ,private boost::equality_comparable<payment_sequence,payment_sequence>
 {
   public:
-    payment_sequence() {}
+    payment_sequence() = default;
     explicit payment_sequence(std::string const& s) : datum_sequence(s) {}
 
     payment_sequence& operator=(std::string const&);
@@ -179,7 +179,7 @@ class mode_sequence
     ,private boost::equality_comparable<mode_sequence,mode_sequence>
 {
   public:
-    mode_sequence() {}
+    mode_sequence() = default;
     explicit mode_sequence(std::string const& s) : datum_sequence(s) {}
 
     mode_sequence& operator=(std::string const&);
@@ -211,7 +211,7 @@ class specamt_sequence
     ,private boost::equality_comparable<specamt_sequence,specamt_sequence>
 {
   public:
-    specamt_sequence() {}
+    specamt_sequence() = default;
     explicit specamt_sequence(std::string const& s) : datum_sequence(s) {}
 
     specamt_sequence& operator=(std::string const&);
@@ -242,7 +242,7 @@ class dbo_sequence
     ,private boost::equality_comparable<dbo_sequence,dbo_sequence>
 {
   public:
-    dbo_sequence() {}
+    dbo_sequence() = default;
     explicit dbo_sequence(std::string const& s) : datum_sequence(s) {}
 
     dbo_sequence& operator=(std::string const&);

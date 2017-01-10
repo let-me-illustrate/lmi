@@ -41,9 +41,7 @@ DatabaseDocument::DatabaseDocument()
     db_.InitDB();
 }
 
-DatabaseDocument::~DatabaseDocument()
-{
-}
+DatabaseDocument::~DatabaseDocument() = default;
 
 database_entity& DatabaseDocument::GetTDBValue(e_database_key index)
 {

@@ -59,9 +59,7 @@ multiple_cell_document::multiple_cell_document(std::string const& filename)
 }
 
 //============================================================================
-multiple_cell_document::~multiple_cell_document()
-{
-}
+multiple_cell_document::~multiple_cell_document() = default;
 
 /// Verify invariants.
 ///

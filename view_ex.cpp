@@ -64,9 +64,7 @@ ViewEx::ViewEx()
 {
 }
 
-ViewEx::~ViewEx()
-{
-}
+ViewEx::~ViewEx() = default;
 
 DocManagerEx& ViewEx::DocManager() const
 {
