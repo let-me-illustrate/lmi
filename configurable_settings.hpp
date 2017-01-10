@@ -72,28 +72,28 @@ class LMI_SO configurable_settings
 
   private:
     configurable_settings();
-    ~configurable_settings();
+    ~configurable_settings() override;
 
     void ascribe_members();
     void load();
 
     // xml_serializable required implementation.
-    virtual int                class_version() const;
-    virtual std::string const& xml_root_name() const;
+    int                class_version() const override;
+    std::string const& xml_root_name() const override;
 
     // xml_serializable overrides.
-    virtual void handle_missing_version_attribute() const;
-    virtual bool is_detritus(std::string const&) const;
-    virtual void redintegrate_ex_ante
+    void handle_missing_version_attribute() const override;
+    bool is_detritus(std::string const&) const override;
+    void redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
         ,std::string      & value
-        ) const;
-    virtual void redintegrate_ex_post
+        ) const override;
+    void redintegrate_ex_post
         (int                                       file_version
         ,std::map<std::string, std::string> const& detritus_map
         ,std::list<std::string>             const& residuary_names
-        );
+        ) override;
 
     std::string calculation_summary_columns_;
     std::string cgi_bin_log_filename_;

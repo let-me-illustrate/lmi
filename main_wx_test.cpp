@@ -638,20 +638,20 @@ class SkeletonTest : public Skeleton
 
   protected:
     // Override base class virtual method.
-    virtual DocManagerEx* CreateDocManager();
+    DocManagerEx* CreateDocManager() override;
 
     // wxApp overrides.
-    virtual bool OnInit                 ();
-    virtual bool OnExceptionInMainLoop  ();
-    virtual bool StoreCurrentException  ();
-    virtual void RethrowStoredException ();
-    virtual void OnAssertFailure
+    bool OnInit                 () override;
+    bool OnExceptionInMainLoop  () override;
+    bool StoreCurrentException  () override;
+    void RethrowStoredException () override;
+    void OnAssertFailure
         (wxChar const* file
         ,int line
         ,wxChar const* func
         ,wxChar const* cond
         ,wxChar const* msg
-        );
+        ) override;
 
   private:
     void RunTheTests();
@@ -674,14 +674,14 @@ DocManagerEx* SkeletonTest::CreateDocManager()
     class DocManagerTest : public DocManagerEx
     {
       public:
-        virtual void FileHistoryLoad(wxConfigBase const&)
+        void FileHistoryLoad(wxConfigBase const&) override
             {
             // We could call the base class method here, but it doesn't seem
             // useful to do it and doing nothing here makes it more symmetric
             // with FileHistorySave().
             }
 
-        virtual void FileHistorySave(wxConfigBase&)
+        void FileHistorySave(wxConfigBase&) override
             {
             // Do not save the history to persistent storage: we don't want the
             // files opened during testing replace the files actually opened by

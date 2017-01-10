@@ -168,7 +168,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
 {
     struct expect_about_dialog : public wxExpectModalBase<wxDialog>
     {
-        virtual int OnInvoked(wxDialog* d) const
+        int OnInvoked(wxDialog* d) const override
             {
             LMI_ASSERT(nullptr != d);
 
@@ -199,7 +199,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
             // And then press the default button in it which opens the license.
             struct expect_license_dialog : public wxExpectModalBase<wxDialog>
             {
-                virtual int OnInvoked(wxDialog* d) const
+                int OnInvoked(wxDialog* d) const override
                     {
                     wxHtmlWindow* const
                         license_win = find_html_window(d, "license");
@@ -228,7 +228,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
                     return wxID_OK;
                     }
 
-                virtual wxString GetDefaultDescription() const
+                wxString GetDefaultDescription() const override
                     {
                     return "license dialog";
                     }
@@ -244,7 +244,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "about dialog";
             }

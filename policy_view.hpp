@@ -42,7 +42,7 @@ class PolicyView
 {
   public:
     PolicyView();
-    virtual ~PolicyView();
+    ~PolicyView() override;
 
     typedef std::map<std::string, wxTextCtrl*> controls_type;
     controls_type&       controls();
@@ -54,13 +54,13 @@ class PolicyView
     PolicyDocument& document() const;
 
     // ViewEx required implementation.
-    virtual wxWindow* CreateChildWindow();
-    virtual char const* icon_xrc_resource   () const;
-    virtual char const* menubar_xrc_resource() const;
+    wxWindow* CreateChildWindow() override;
+    char const* icon_xrc_resource   () const override;
+    char const* menubar_xrc_resource() const override;
 
     // ProductEditorView required implementation.
-    virtual bool IsModified() const;
-    virtual void DiscardEdits();
+    bool IsModified() const override;
+    void DiscardEdits() override;
 
     controls_type controls_;
 

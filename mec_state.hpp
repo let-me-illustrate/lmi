@@ -54,7 +54,7 @@ class LMI_SO mec_state
   public:
     mec_state();
     mec_state(mec_state const&);
-    virtual ~mec_state();
+    ~mec_state() override;
 
     mec_state& operator=(mec_state const&);
     bool operator==(mec_state const&) const;
@@ -65,11 +65,11 @@ class LMI_SO mec_state
     void AscribeMembers();
 
     // xml_serializable required implementation.
-    virtual int                class_version() const;
-    virtual std::string const& xml_root_name() const;
+    int                class_version() const override;
+    std::string const& xml_root_name() const override;
 
     // xml_serializable overrides.
-    virtual bool is_detritus(std::string const&) const;
+    bool is_detritus(std::string const&) const override;
 
     int    B0_deduced_policy_year;
     int    B1_deduced_contract_year;

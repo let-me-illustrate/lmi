@@ -38,7 +38,7 @@ class PolicyDocument
 {
   public:
     PolicyDocument();
-    virtual ~PolicyDocument();
+    ~PolicyDocument() override;
 
     typedef std::map<std::string, std::string*> values_type;
     values_type&       values();
@@ -46,8 +46,8 @@ class PolicyDocument
 
   private:
     // ProductEditorDocument overrides.
-    virtual void ReadDocument (std::string const& filename);
-    virtual void WriteDocument(std::string const& filename);
+    void ReadDocument (std::string const& filename) override;
+    void WriteDocument(std::string const& filename) override;
 
     PolicyView& PredominantView() const;
 

@@ -69,7 +69,7 @@ class tier_tree_item_data
 {
   public:
     tier_tree_item_data(tier_entity_info const&);
-    virtual ~tier_tree_item_data() {}
+    ~tier_tree_item_data() override {}
 
     tier_entity_info const& entity_info() const;
 

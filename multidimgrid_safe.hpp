@@ -71,7 +71,7 @@ class MultiDimAxis
 
     MultiDimAxis(std::string const& name);
 
-    virtual boost::any GetValue(unsigned int n) const;
+    boost::any GetValue(unsigned int n) const override;
 
   protected:
     /// Implement this function returning values of the type ValueType
@@ -107,9 +107,9 @@ class MultiDimEnumAxis
         );
 
     /// Base class virtuals
-    virtual unsigned int GetCardinality() const;
-    virtual std::string  GetLabel(unsigned int n) const;
-    virtual Enum         DoGetValue(unsigned int n) const;
+    unsigned int GetCardinality() const override;
+    std::string  GetLabel(unsigned int n) const override;
+    Enum         DoGetValue(unsigned int n) const override;
 
   private:
     std::vector<std::string> values_;
@@ -150,11 +150,11 @@ class MultiDimIntegralAxis
     /// Modifier for GetMinValue(), GetMaxValue() and GetStep()
     void SetValues(Integral minValue, Integral maxValue, Integral step);
     /// Override MultiDimAxisAny::GetCardinality()
-    virtual unsigned int GetCardinality() const;
+    unsigned int GetCardinality() const override;
     /// Override MultiDimAxisAny::GetLabel()
-    virtual std::string GetLabel(unsigned int n) const;
+    std::string GetLabel(unsigned int n) const override;
     /// Override MultiDimAxis::DoGetValue()
-    virtual Integral DoGetValue(unsigned int n) const;
+    Integral DoGetValue(unsigned int n) const override;
 
   private:
     Integral min_;
@@ -231,10 +231,10 @@ class MultiDimTable
 
   private:
     /// MultiDimTableAny overrides.
-    virtual boost::any DoGetValueAny(Coords const&) const;
-    virtual void       DoSetValueAny(Coords const&, boost::any const&);
-    virtual boost::any  StringToValue(std::string const&) const;
-    virtual std::string ValueToString(boost::any const&) const;
+    boost::any DoGetValueAny(Coords const&) const override;
+    void       DoSetValueAny(Coords const&, boost::any const&) override;
+    boost::any  StringToValue(std::string const&) const override;
+    std::string ValueToString(boost::any const&) const override;
 };
 
 /// Design notes for MultiDimAdjustableAxis<AdjustControl, BaseAxisType>
@@ -285,9 +285,9 @@ class MultiDimAdjustableAxis
 
   private:
     /// MultiDimAxisAny overrides.
-    virtual wxWindow* CreateAdjustControl(MultiDimGrid&, MultiDimTableAny&);
-    virtual bool ApplyAdjustment(wxWindow&, unsigned int axis_id);
-    virtual bool RefreshAdjustment(wxWindow&, unsigned int axis_id);
+    wxWindow* CreateAdjustControl(MultiDimGrid&, MultiDimTableAny&) override;
+    bool ApplyAdjustment(wxWindow&, unsigned int axis_id) override;
+    bool RefreshAdjustment(wxWindow&, unsigned int axis_id) override;
 };
 
 #endif // multidimgrid_safe_hpp

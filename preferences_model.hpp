@@ -45,7 +45,7 @@ class LMI_SO PreferencesModel
 {
   public:
     PreferencesModel();
-    virtual ~PreferencesModel();
+    ~PreferencesModel() override;
 
     bool IsModified() const;
     void Load();
@@ -57,17 +57,17 @@ class LMI_SO PreferencesModel
     std::string string_of_column_names() const;
 
     // MvcModel required implementation.
-    virtual void DoAdaptExternalities();
-    virtual datum_base const* DoBaseDatumPointer(std::string const&) const;
-    virtual any_entity      & DoEntity(std::string const&)      ;
-    virtual any_entity const& DoEntity(std::string const&) const;
-    virtual NamesType const& DoNames() const;
-    virtual StateType        DoState() const;
-    virtual void DoCustomizeInitialValues();
-    virtual void DoEnforceCircumscription(std::string const&);
-    virtual void DoEnforceProscription   (std::string const&);
-    virtual void DoHarmonize();
-    virtual void DoTransmogrify();
+    void DoAdaptExternalities() override;
+    datum_base const* DoBaseDatumPointer(std::string const&) const override;
+    any_entity      & DoEntity(std::string const&) override      ;
+    any_entity const& DoEntity(std::string const&) const override;
+    NamesType const& DoNames() const override;
+    StateType        DoState() const override;
+    void DoCustomizeInitialValues() override;
+    void DoEnforceCircumscription(std::string const&) override;
+    void DoEnforceProscription   (std::string const&) override;
+    void DoHarmonize() override;
+    void DoTransmogrify() override;
 
     mce_report_column       CalculationSummaryColumn00;
     mce_report_column       CalculationSummaryColumn01;

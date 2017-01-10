@@ -36,15 +36,15 @@ class datum_boolean
 {
   public:
     explicit datum_boolean(bool = true);
-    virtual ~datum_boolean();
+    ~datum_boolean() override;
 
     datum_boolean& operator=(bool);
 
     bool value() const;
 
     // datum_base required implementation.
-    virtual std::istream& read (std::istream&);
-    virtual std::ostream& write(std::ostream&) const;
+    std::istream& read (std::istream&) override;
+    std::ostream& write(std::ostream&) const override;
 
   private:
     bool value_;

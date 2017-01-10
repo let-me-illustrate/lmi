@@ -91,7 +91,7 @@ LMI_WX_TEST_CASE(input_sequences)
             :test_data_(test_data)
         {}
 
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -143,7 +143,7 @@ LMI_WX_TEST_CASE(input_sequences)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "cell properties dialog" + sequence_describe();
             }

@@ -210,7 +210,7 @@ class TierTableAdapter
     typedef tier_entity_adapter::double_pair double_pair;
 
     TierTableAdapter(tier_entity_adapter entity = tier_entity_adapter());
-    virtual ~TierTableAdapter();
+    ~TierTableAdapter() override;
 
     /// Getter/Setter for the decorated object
     tier_entity_adapter GetTierEntity() const;
@@ -228,15 +228,15 @@ class TierTableAdapter
 
   private:
     // MultiDimTableAny required implementation.
-    virtual bool CanChangeVariationWith(unsigned int n) const;
-    virtual unsigned int DoGetDimension() const {return 1;}
-    virtual void MakeVaryByDimension(unsigned int n, bool varies);
-    virtual AxesAny DoGetAxesAny();
-    virtual bool VariesByDimension(unsigned int n) const;
+    bool CanChangeVariationWith(unsigned int n) const override;
+    unsigned int DoGetDimension() const override {return 1;}
+    void MakeVaryByDimension(unsigned int n, bool varies) override;
+    AxesAny DoGetAxesAny() override;
+    bool VariesByDimension(unsigned int n) const override;
 
     // MultiDimTableAny overrides.
-    virtual bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int n);
-    virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int n);
+    bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int n) override;
+    bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int n) override;
 
     void EnsureIndexIsZero(unsigned int) const;
 
@@ -329,7 +329,7 @@ class TierEditorGrid
 
     /// Default constructor, use Create() to really create the control.
     TierEditorGrid();
-    virtual ~TierEditorGrid();
+    ~TierEditorGrid() override;
 
     TierEditorGrid
         (wxWindow* parent
@@ -352,16 +352,16 @@ class TierEditorGrid
     /// columns in the grid.
 
     // MultiDimGrid overrides.
-    virtual unsigned int DoGetNumberCols() const;
-    virtual unsigned int DoGetNumberRows() const;
-    virtual std::string DoGetValue(unsigned int row, unsigned int col) const;
-    virtual void        DoSetValue
+    unsigned int DoGetNumberCols() const override;
+    unsigned int DoGetNumberRows() const override;
+    std::string DoGetValue(unsigned int row, unsigned int col) const override;
+    void        DoSetValue
         (unsigned int row
         ,unsigned int col
         ,std::string const&
-        );
-    virtual std::string DoGetColLabelValue(unsigned int col) const;
-    virtual std::string DoGetRowLabelValue(unsigned int row) const;
+        ) override;
+    std::string DoGetColLabelValue(unsigned int col) const override;
+    std::string DoGetRowLabelValue(unsigned int row) const override;
 
   private:
     enum enum_tier_grid_column

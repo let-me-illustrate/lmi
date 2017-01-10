@@ -59,7 +59,7 @@ class LMI_SO AccountValue
     enum {months_per_year = 12};
 
     explicit AccountValue(Input const& input);
-    ~AccountValue();
+    ~AccountValue() override;
 
     double RunAV                ();
 

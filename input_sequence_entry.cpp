@@ -203,7 +203,7 @@ class InputSequenceEditor
     void sequence(InputSequence const& s);
     std::string sequence_string();
 
-    virtual bool TransferDataFromWindow();
+    bool TransferDataFromWindow() override;
 
   private:
     // Helper class ensuring that only one relayout is really done during its

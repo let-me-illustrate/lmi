@@ -72,7 +72,7 @@ class DatabaseTableAdapter
   public:
     DatabaseTableAdapter(database_entity* db_value = nullptr);
 
-    virtual ~DatabaseTableAdapter();
+    ~DatabaseTableAdapter() override;
 
     /// Decorated object accessors
     void SetTDBValue(database_entity* db_value);
@@ -90,15 +90,15 @@ class DatabaseTableAdapter
 
   private:
     /// MultiDimTableAny required implementation.
-    virtual bool VariesByDimension(unsigned int) const;
-    virtual void MakeVaryByDimension(unsigned int, bool);
-    virtual bool CanChangeVariationWith(unsigned int) const;
-    AxesAny DoGetAxesAny();
-    virtual unsigned int DoGetDimension() const;
+    bool VariesByDimension(unsigned int) const override;
+    void MakeVaryByDimension(unsigned int, bool) override;
+    bool CanChangeVariationWith(unsigned int) const override;
+    AxesAny DoGetAxesAny() override;
+    unsigned int DoGetDimension() const override;
 
     /// MultiDimTableAny overrides.
-    virtual bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int);
-    virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int);
+    bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int) override;
+    bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int) override;
 
     /// Helper, converts array of boost::any into array of ints
     static void ConvertValue(Coords const&, std::vector<int>&);

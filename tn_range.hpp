@@ -248,7 +248,7 @@ class tn_range
     tn_range();
     explicit tn_range(Number);
     explicit tn_range(std::string const&);
-    virtual ~tn_range();
+    ~tn_range() override;
 
     tn_range& operator=(Number);
     tn_range& operator=(std::string const&);
@@ -274,17 +274,17 @@ class tn_range
     bool is_valid(Number) const;
 
     // datum_base required implementation.
-    virtual std::istream& read (std::istream&);
-    virtual std::ostream& write(std::ostream&) const;
+    std::istream& read (std::istream&) override;
+    std::ostream& write(std::ostream&) const override;
 
     // tn_range_base required implementation.
-    virtual std::string diagnose_invalidity(std::string const&) const;
-    virtual void enforce_circumscription();
-    virtual bool equal_to(std::string const&) const;
-    virtual std::string str() const;
-    virtual double universal_minimum() const;
-    virtual double universal_maximum() const;
-    virtual std::type_info const& value_type() const;
+    std::string diagnose_invalidity(std::string const&) const override;
+    void enforce_circumscription() override;
+    bool equal_to(std::string const&) const override;
+    std::string str() const override;
+    double universal_minimum() const override;
+    double universal_maximum() const override;
+    std::type_info const& value_type() const override;
 
     Trammel trammel_;
 

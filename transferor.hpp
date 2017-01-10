@@ -119,13 +119,13 @@ class Transferor
 {
   public:
     Transferor(std::string& data, std::string const& name);
-    virtual ~Transferor();
+    ~Transferor() override;
 
     // wxValidator overrides.
-    virtual wxObject* Clone() const;
-    virtual bool TransferFromWindow();
-    virtual bool TransferToWindow();
-    virtual bool Validate(wxWindow*);
+    wxObject* Clone() const override;
+    bool TransferFromWindow() override;
+    bool TransferToWindow() override;
+    bool Validate(wxWindow*) override;
 
     std::string const& name() const;
 

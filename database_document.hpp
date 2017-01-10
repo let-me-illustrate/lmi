@@ -34,14 +34,14 @@ class DatabaseDocument
 {
   public:
     DatabaseDocument();
-    virtual ~DatabaseDocument();
+    ~DatabaseDocument() override;
 
     database_entity& GetTDBValue(e_database_key index);
 
   private:
     // ProductEditorDocument overrides.
-    virtual void ReadDocument (std::string const& filename);
-    virtual void WriteDocument(std::string const& filename);
+    void ReadDocument (std::string const& filename) override;
+    void WriteDocument(std::string const& filename) override;
 
     DBDictionary db_;
 

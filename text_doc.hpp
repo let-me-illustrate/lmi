@@ -41,14 +41,14 @@ class TextEditDocument
 {
   public:
     TextEditDocument();
-    virtual ~TextEditDocument();
+    ~TextEditDocument() override;
 
   private:
     // wxDocument overrides.
-    virtual bool IsModified() const;
-    virtual void Modify(bool);
-    virtual bool DoOpenDocument(wxString const& filename);
-    virtual bool DoSaveDocument(wxString const& filename);
+    bool IsModified() const override;
+    void Modify(bool) override;
+    bool DoOpenDocument(wxString const& filename) override;
+    bool DoSaveDocument(wxString const& filename) override;
 
     wxTextCtrl& PredominantViewWindow() const;
 

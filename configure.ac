@@ -556,7 +556,6 @@ fi
 if test "x$GXX" == "xyes"; then
     if test "$CLANG" = "yes"; then
         cxx_warnings_flags="$cxx_warnings_flags \
-            -Wno-inconsistent-missing-override \
             -Wno-mismatched-tags"
     else
         cxx_warnings_flags="$cxx_warnings_flags \

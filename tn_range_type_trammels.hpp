@@ -39,72 +39,72 @@ template<typename T>
 class percentage_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return   0;}
-    T default_value()   const {return   0;}
-    T nominal_maximum() const {return 100;}
+    T nominal_minimum() const override {return   0;}
+    T default_value()   const override {return   0;}
+    T nominal_maximum() const override {return 100;}
 };
 
 template<typename T>
 class proportion_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return 0;}
-    T default_value()   const {return 0;}
-    T nominal_maximum() const {return 1;}
+    T nominal_minimum() const override {return 0;}
+    T default_value()   const override {return 0;}
+    T nominal_maximum() const override {return 1;}
 };
 
 template<typename T>
 class unrestricted_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return -std::numeric_limits<T>::max();}
-    T default_value()   const {return  0;}
-    T nominal_maximum() const {return  std::numeric_limits<T>::max();}
+    T nominal_minimum() const override {return -std::numeric_limits<T>::max();}
+    T default_value()   const override {return  0;}
+    T nominal_maximum() const override {return  std::numeric_limits<T>::max();}
 };
 
 template<typename T>
 class nonnegative_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return 0;}
-    T default_value()   const {return 0;}
-    T nominal_maximum() const {return std::numeric_limits<T>::max();}
+    T nominal_minimum() const override {return 0;}
+    T default_value()   const override {return 0;}
+    T nominal_maximum() const override {return std::numeric_limits<T>::max();}
 };
 
 template<typename T>
 class age_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return  0;}
-    T default_value()   const {return  0;}
-    T nominal_maximum() const {return 99;}
+    T nominal_minimum() const override {return  0;}
+    T default_value()   const override {return  0;}
+    T nominal_maximum() const override {return 99;}
 };
 
 template<typename T>
 class duration_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return   0;}
-    T default_value()   const {return   0;}
-    T nominal_maximum() const {return 100;}
+    T nominal_minimum() const override {return   0;}
+    T default_value()   const override {return   0;}
+    T nominal_maximum() const override {return 100;}
 };
 
 template<typename T>
 class month_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return  0;}
-    T default_value()   const {return  0;}
-    T nominal_maximum() const {return 11;}
+    T nominal_minimum() const override {return  0;}
+    T default_value()   const override {return  0;}
+    T nominal_maximum() const override {return 11;}
 };
 
 template<typename T>
 class corridor_factor_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return 1;}
-    T default_value()   const {return 1;}
-    T nominal_maximum() const {return std::numeric_limits<T>::max();}
+    T nominal_minimum() const override {return 1;}
+    T default_value()   const override {return 1;}
+    T nominal_maximum() const override {return std::numeric_limits<T>::max();}
 };
 
 template<typename T>
@@ -114,9 +114,9 @@ class date_trammel
     // Double parentheses: don't parse comma as a macro parameter separator.
     BOOST_STATIC_ASSERT((std::is_same<calendar_date,T>::value));
 
-    T nominal_minimum() const {return gregorian_epoch();}
-    T default_value()   const {return today          ();}
-    T nominal_maximum() const {return last_yyyy_date ();}
+    T nominal_minimum() const override {return gregorian_epoch();}
+    T default_value()   const override {return today          ();}
+    T nominal_maximum() const override {return last_yyyy_date ();}
 };
 
 #endif // tn_range_type_trammels_hpp

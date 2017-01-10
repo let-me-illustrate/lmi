@@ -39,13 +39,13 @@ class PreferencesView
 {
   public:
     PreferencesView();
-    virtual ~PreferencesView();
+    ~PreferencesView() override;
 
   private:
     // MvcView required implementation.
-    virtual char const* DoBookControlName () const;
-    virtual char const* DoMainDialogName  () const;
-    virtual char const* DoResourceFileName() const;
+    char const* DoBookControlName () const override;
+    char const* DoMainDialogName  () const override;
+    char const* DoResourceFileName() const override;
 };
 
 #endif // preferences_view_hpp

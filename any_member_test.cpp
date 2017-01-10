@@ -61,7 +61,7 @@ struct derived_datum
 {
     bool operator==(derived_datum const& z) const
         {return 7 == sane && 7 == z.sane;}
-    virtual int virtual_function() {return 1729;}
+    int virtual_function() override {return 1729;}
 };
 
 // Unused stub.

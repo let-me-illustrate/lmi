@@ -40,15 +40,15 @@ class icon_monger
 {
   public:
     icon_monger();
-    virtual ~icon_monger();
+    ~icon_monger() override;
 
   private:
     // wxArtProvider required implementation.
-    virtual wxBitmap CreateBitmap
+    wxBitmap CreateBitmap
         (wxArtID const&
         ,wxArtClient const&
         ,wxSize const&
-        );
+        ) override;
 
     std::map<wxArtID,std::string> icon_names_by_wx_id_;
     std::set<std::string>         lmi_specific_icon_names_;

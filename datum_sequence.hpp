@@ -72,7 +72,7 @@ class datum_sequence
   public:
     datum_sequence();
     explicit datum_sequence(std::string const&);
-    virtual ~datum_sequence() = 0;
+    ~datum_sequence() override = 0;
 
     datum_sequence& operator=(std::string const&);
 
@@ -122,9 +122,9 @@ class numeric_sequence
 
     numeric_sequence& operator=(std::string const&);
 
-    virtual bool numeric_values_are_allowable() const {return true;}
-    virtual bool keyword_values_are_allowable() const {return false;}
-    virtual std::map<std::string,std::string> const allowed_keywords() const;
+    bool numeric_values_are_allowable() const override {return true;}
+    bool keyword_values_are_allowable() const override {return false;}
+    std::map<std::string,std::string> const allowed_keywords() const override;
 };
 
 bool operator==(numeric_sequence const&, numeric_sequence const&);
@@ -153,9 +153,9 @@ class payment_sequence
 
     payment_sequence& operator=(std::string const&);
 
-    virtual bool numeric_values_are_allowable() const {return true;}
-    virtual bool keyword_values_are_allowable() const {return true;}
-    virtual std::map<std::string,std::string> const allowed_keywords() const;
+    bool numeric_values_are_allowable() const override {return true;}
+    bool keyword_values_are_allowable() const override {return true;}
+    std::map<std::string,std::string> const allowed_keywords() const override;
 };
 
 bool operator==(payment_sequence const&, payment_sequence const&);
@@ -184,10 +184,10 @@ class mode_sequence
 
     mode_sequence& operator=(std::string const&);
 
-    virtual bool numeric_values_are_allowable() const {return false;}
-    virtual bool keyword_values_are_allowable() const {return true;}
-    virtual std::string const default_keyword() const;
-    virtual std::map<std::string,std::string> const allowed_keywords() const;
+    bool numeric_values_are_allowable() const override {return false;}
+    bool keyword_values_are_allowable() const override {return true;}
+    std::string const default_keyword() const override;
+    std::map<std::string,std::string> const allowed_keywords() const override;
 };
 
 bool operator==(mode_sequence const&, mode_sequence const&);
@@ -216,9 +216,9 @@ class specamt_sequence
 
     specamt_sequence& operator=(std::string const&);
 
-    virtual bool numeric_values_are_allowable() const {return true;}
-    virtual bool keyword_values_are_allowable() const {return true;}
-    virtual std::map<std::string,std::string> const allowed_keywords() const;
+    bool numeric_values_are_allowable() const override {return true;}
+    bool keyword_values_are_allowable() const override {return true;}
+    std::map<std::string,std::string> const allowed_keywords() const override;
 };
 
 bool operator==(specamt_sequence const&, specamt_sequence const&);
@@ -247,10 +247,10 @@ class dbo_sequence
 
     dbo_sequence& operator=(std::string const&);
 
-    virtual bool numeric_values_are_allowable() const {return false;}
-    virtual bool keyword_values_are_allowable() const {return true;}
-    virtual std::string const default_keyword() const;
-    virtual std::map<std::string,std::string> const allowed_keywords() const;
+    bool numeric_values_are_allowable() const override {return false;}
+    bool keyword_values_are_allowable() const override {return true;}
+    std::string const default_keyword() const override;
+    std::map<std::string,std::string> const allowed_keywords() const override;
 };
 
 bool operator==(dbo_sequence const&, dbo_sequence const&);
