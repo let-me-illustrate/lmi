@@ -217,7 +217,7 @@ file::file(std::string const& file_path)
     data_ = '\n' + data();
     if('\n' != data().at(data().size() - 1))
         {
-        throw std::runtime_error("File does not end in '\\n'.");
+        throw std::runtime_error(R"(File does not end in '\n'.)");
         }
 }
 
@@ -298,7 +298,7 @@ void taboo
 
 void assay_non_latin(file const& f)
 {
-    static boost::regex const forbidden("[\\x00-\\x08\\x0e-\\x1f\\x7f-\\x9f]");
+    static boost::regex const forbidden(R"([\x00-\x08\x0e-\x1f\x7f-\x9f])");
     if(boost::regex_search(f.data(), forbidden))
         {
         throw std::runtime_error("File contains a forbidden character.");
@@ -318,12 +318,12 @@ void assay_whitespace(file const& f)
 {
     if(contains(f.data(), '\r'))
         {
-        throw std::runtime_error("File contains '\\r'.");
+        throw std::runtime_error(R"(File contains '\r'.)");
         }
 
     if(contains(f.data(), '\v'))
         {
-        throw std::runtime_error("File contains '\\v'.");
+        throw std::runtime_error(R"(File contains '\v'.)");
         }
 
     if
@@ -332,7 +332,7 @@ void assay_whitespace(file const& f)
         &&  contains(f.data(), '\f')
         )
         {
-        throw std::runtime_error("File contains '\\f'.");
+        throw std::runtime_error(R"(File contains '\f'.)");
         }
 
     if
@@ -343,13 +343,13 @@ void assay_whitespace(file const& f)
         &&  contains(f.data(), '\t')
         )
         {
-        throw std::runtime_error("File contains '\\t'.");
+        throw std::runtime_error(R"(File contains '\t'.)");
         }
 
-    static boost::regex const postinitial_tab("[^\\n]\\t");
+    static boost::regex const postinitial_tab(R"([^\n]\t)");
     if(f.is_of_phylum(e_make) && boost::regex_search(f.data(), postinitial_tab))
         {
-        throw std::runtime_error("File contains postinitial '\\t'.");
+        throw std::runtime_error(R"(File contains postinitial '\t'.)");
         }
 
     if
@@ -358,7 +358,7 @@ void assay_whitespace(file const& f)
         &&  contains(f.data(), "\n\n\n")
         )
         {
-        complain(f, "contains '\\n\\n\\n'.");
+        complain(f, R"(contains '\n\n\n'.)");
         }
 
     if
@@ -366,7 +366,7 @@ void assay_whitespace(file const& f)
         &&  contains(f.data(), " \n")
         )
         {
-        complain(f, "contains ' \\n'.");
+        complain(f, R"(contains ' \n'.)");
         }
 }
 
@@ -379,7 +379,7 @@ void assay_whitespace(file const& f)
 /// must precede all other include directives.
 ///
 /// Exceptions are necessarily made for
-///  - this program's test script;
+///  - the present source file, and its test script;
 ///  - 'GNUmakefile' and log files;
 ///  - 'config.hpp' and its related 'config_*.hpp' headers;
 ///  - 'pchfile*.hpp', which exclude 'config.hpp'; and
@@ -387,39 +387,40 @@ void assay_whitespace(file const& f)
 
 void check_config_hpp(file const& f)
 {
-    static std::string const loose  ("# *include *[<\"]config.hpp[>\"]");
-    static std::string const strict ("\\n(#include \"config.hpp\")\\n");
-    static std::string const indent ("\\n(#   include \"config.hpp\")\\n");
+    static std::string const loose  (R"(# *include *[<"]config.hpp[>"])");
+    static std::string const strict (R"(\n(#include "config.hpp")\n)");
+    static std::string const indent (R"(\n(#   include "config.hpp")\n)");
 
     if
         (   f.is_of_phylum(e_log)
+        ||  f.phyloanalyze("^test_coding_rules.cpp$")
         ||  f.phyloanalyze("^test_coding_rules_test.sh$")
         ||  f.phyloanalyze("^GNUmakefile$")
-        ||  f.phyloanalyze("^pchfile(_.*)?\\.hpp$")
+        ||  f.phyloanalyze(R"(^pchfile(_.*)?\.hpp$)")
         )
         {
         return;
         }
-    else if(f.is_of_phylum(e_header) && f.phyloanalyze("^pchlist(_.*)?\\.hpp$"))
+    else if(f.is_of_phylum(e_header) && f.phyloanalyze(R"(^pchlist(_.*)?\.hpp$)"))
         {
         require(f, loose , "must include 'config.hpp'.");
-        require(f, indent, "lacks line '#   include \"config.hpp\"'.");
+        require(f, indent, R"(lacks line '#   include "config.hpp"'.)");
         boost::smatch match;
-        static boost::regex const first_include("(# *include[^\\n]*)");
+        static boost::regex const first_include(R"((# *include[^\n]*))");
         boost::regex_search(f.data(), match, first_include);
-        if("#   include \"config.hpp\"" != match[1])
+        if(R"(#   include "config.hpp")" != match[1])
             {
             complain(f, "must include 'config.hpp' first.");
             }
         }
-    else if(f.is_of_phylum(e_header) && !f.phyloanalyze("^config(_.*)?\\.hpp$"))
+    else if(f.is_of_phylum(e_header) && !f.phyloanalyze(R"(^config(_.*)?\.hpp$)"))
         {
         require(f, loose , "must include 'config.hpp'.");
-        require(f, strict, "lacks line '#include \"config.hpp\"'.");
+        require(f, strict, R"(lacks line '#include "config.hpp"'.)");
         boost::smatch match;
-        static boost::regex const first_include("(# *include[^\\n]*)");
+        static boost::regex const first_include(R"((# *include[^\n]*))");
         boost::regex_search(f.data(), match, first_include);
-        if("#include \"config.hpp\"" != match[1])
+        if(R"(#include "config.hpp")" != match[1])
             {
             complain(f, "must include 'config.hpp' first.");
             }
@@ -483,13 +484,13 @@ void check_copyright(file const& f)
     int const year = 1900 + t1->tm_year;
 
     std::ostringstream oss;
-    oss << "Copyright \\(C\\)[^\\n]*" << year;
+    oss << R"(Copyright \(C\)[^\n]*)" << year;
     require(f, oss.str(), "lacks current copyright.");
 
     if(f.is_of_phylum(e_html) && !f.phyloanalyze("^COPYING"))
         {
         std::ostringstream oss;
-        oss << "Copyright &copy;[^\\n]*" << year;
+        oss << R"(Copyright &copy;[^\n]*)" << year;
         require(f, oss.str(), "lacks current secondary copyright.");
         }
 }
@@ -508,7 +509,7 @@ void check_cxx(file const& f)
         }
 
     {
-    static boost::regex const r("(\\w+)( +)([*&])(\\w+\\b)([*;]?)([^\\n]*)");
+    static boost::regex const r(R"((\w+)( +)([*&])(\w+\b)([*;]?)([^\n]*))");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator const omega;
     for(; i != omega; ++i)
@@ -529,7 +530,7 @@ void check_cxx(file const& f)
     }
 
     {
-    static boost::regex const r("\\bconst +([A-Za-z][A-Za-z0-9_:]*) *[*&]");
+    static boost::regex const r(R"(\bconst +([A-Za-z][A-Za-z0-9_:]*) *[*&])");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator const omega;
     for(; i != omega; ++i)
@@ -566,7 +567,7 @@ void check_defect_markers(file const& f)
         }
 
     {
-    static boost::regex const r("(\\b\\w+\\b\\W*)\\?\\?(.)");
+    static boost::regex const r(R"((\b\w+\b\W*)\?\?(.))");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator const omega;
     for(; i != omega; ++i)
@@ -584,7 +585,7 @@ void check_defect_markers(file const& f)
     }
 
     {
-    static boost::regex const r("(\\b\\w+\\b\\W?)!!(.)");
+    static boost::regex const r(R"((\b\w+\b\W?)!!(.))");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator const omega;
     for(; i != omega; ++i)
@@ -631,14 +632,14 @@ void check_include_guards(file const& f)
 
     std::string const guard = boost::regex_replace
         (f.leaf_name()
-        ,boost::regex("\\.hpp$")
+        ,boost::regex(R"(\.hpp$)")
         ,"_hpp"
         );
     std::string const guards =
-            "\\n#ifndef "   + guard
-        +   "\\n#define "   + guard + "\\n"
+            R"(\n#ifndef )"   + guard
+        +   R"(\n#define )"   + guard + R"(\n)"
         +   ".*"
-        +   "\\n#endif // " + guard + "\\n+$"
+        +   R"(\n#endif // )" + guard + R"(\n+$)"
         ;
     require(f, guards, "lacks canonical header guards.");
 }
@@ -650,7 +651,7 @@ void check_label_indentation(file const& f)
         return;
         }
 
-    static boost::regex const r("\\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:)");
+    static boost::regex const r(R"(\n( *)([A-Za-z][A-Za-z0-9_]*)( *:)(?!:))");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator const omega;
     for(; i != omega; ++i)
@@ -694,7 +695,7 @@ void check_logs(file const& f)
         entries = f.data();
         }
 
-    static boost::regex const r("\\n(?!\\|)(?! *https?:)([^\\n]{71,})(?=\\n)");
+    static boost::regex const r(R"(\n(?!\|)(?! *https?:)([^\n]{71,})(?=\n))");
     boost::sregex_iterator i(entries.begin(), entries.end(), r);
     boost::sregex_iterator const omega;
     if(omega == i)
@@ -879,7 +880,7 @@ void check_reserved_names(file const& f)
         return;
         }
 
-    static boost::regex const r("(\\b\\w*__\\w*\\b)");
+    static boost::regex const r(R"((\b\w*__\w*\b))");
     boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
     boost::sregex_iterator const omega;
     for(; i != omega; ++i)
@@ -910,24 +911,24 @@ void enforce_taboos(file const& f)
         }
 
     // ASCII copyright symbol requires upper-case 'C'.
-    taboo(f, "\\(c\\) *[0-9]");
+    taboo(f, R"(\(c\) *[0-9])");
     // Former addresses of the Free Software Foundation.
     taboo(f, "Cambridge");
     taboo(f, "Temple");
     // Patented.
-    taboo(f, "\\.gif", boost::regex::icase);
+    taboo(f, R"(\.gif)", boost::regex::icase);
     // Obsolete email address.
     taboo(f, "chicares@mindspring.com");
     // Obscured email address.
     taboo(f, "address@hidden");
     // Certain proprietary libraries.
-    taboo(f, "\\bowl\\b", boost::regex::icase);
+    taboo(f, R"(\bowl\b)", boost::regex::icase);
     taboo(f, "vtss", boost::regex::icase);
     // Suspiciously specific to msw.
     taboo(f, "Microsoft");
     taboo(f, "Visual [A-Z]");
-    taboo(f, "\\bWIN\\b");
-    taboo(f, "\\bExcel\\b");
+    taboo(f, R"(\bWIN\b)");
+    taboo(f, R"(\bExcel\b)");
     // Insinuated by certain msw tools.
     taboo(f, "Microsoft Word");
     taboo(f, "Stylus Studio");
@@ -945,7 +946,7 @@ void enforce_taboos(file const& f)
         &&  !f.is_of_phylum(e_synopsis)
         )
         {
-        taboo(f, "\\bexe\\b", boost::regex::icase);
+        taboo(f, R"(\bexe\b)", boost::regex::icase);
         }
 
     if
