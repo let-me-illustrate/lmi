@@ -23,8 +23,6 @@
 #include "assert_lmi.hpp"
 #include "rtti_lmi.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <wx/docview.h>
 
 #include <string>
@@ -51,8 +49,7 @@
 template<typename ViewType>
 std::string ViewName()
 {
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT((std::is_base_of<wxView,ViewType>::value));
+    static_assert(std::is_base_of<wxView,ViewType>::value, "");
     return lmi::TypeInfo(typeid(ViewType)).Name();
 }
 

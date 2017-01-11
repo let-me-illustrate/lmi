@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <limits>
 #include <type_traits>
 
@@ -44,7 +42,7 @@
 template<typename T>
 T implausible_value(T const& t = -9.99999e35)
 {
-    BOOST_STATIC_ASSERT(::std::is_floating_point<T>::value);
+    static_assert(::std::is_floating_point<T>::value, "");
 
     if(std::numeric_limits<T>::has_quiet_NaN)
         {
@@ -72,8 +70,8 @@ T implausible_value(T const& t = -9.99999e35)
 template<typename T>
 inline T infinity()
 {
-    BOOST_STATIC_ASSERT(::std::is_floating_point<T>::value);
-    BOOST_STATIC_ASSERT(std::numeric_limits<T>::has_infinity);
+    static_assert(::std::is_floating_point<T>::value, "");
+    static_assert(std::numeric_limits<T>::has_infinity, "");
     static T const volatile z = std::numeric_limits<T>::infinity();
     return z;
 }
@@ -104,7 +102,7 @@ inline T infinity()
 template<typename T>
 inline bool is_infinite(T t)
 {
-    BOOST_STATIC_ASSERT(::std::is_floating_point<T>::value);
+    static_assert(::std::is_floating_point<T>::value, "");
     static T const volatile pos_inf =  std::numeric_limits<T>::infinity();
     static T const volatile neg_inf = -std::numeric_limits<T>::infinity();
     static bool const has_inf = std::numeric_limits<T>::has_infinity;

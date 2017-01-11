@@ -23,8 +23,6 @@
 
 #include "alert.hpp"
 
-#include <boost/static_assert.hpp>
-
 #if !defined LMI_MSW
 #   include <cstdio>
 #else  // defined LMI_MSW
@@ -195,8 +193,7 @@ class fatal_error_buf
 template<typename T>
 inline std::ostream& alert_stream()
 {
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT((std::is_base_of<alert_buf,T>::value));
+    static_assert(std::is_base_of<alert_buf,T>::value, "");
     static T buffer_;
     static std::ostream stream_(&buffer_);
     stream_.clear();

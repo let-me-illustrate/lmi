@@ -33,7 +33,7 @@
 // known to all translation units that might use it.
 
 // An assertion such as
-//    BOOST_STATIC_ASSERT(100 <= std::numeric_limits<T>::max());
+//    static_assert(100 <= std::numeric_limits<T>::max(), "");
 // cannot work: the macro's argument must be an integral constant
 // expression, so it can't involve a function call and can't perform
 // any non-integer operation.

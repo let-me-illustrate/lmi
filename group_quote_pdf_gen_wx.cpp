@@ -43,7 +43,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/static_assert.hpp>
 
 #include <wx/datetime.h>
 #include <wx/html/htmlcell.h>
@@ -466,7 +465,7 @@ column_definition const column_definitions[] =
     ,{"Total\n%s\nPremium"             ,   "$9,999,999,999.00"} // e_col_total_premium
     };
 
-BOOST_STATIC_ASSERT(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max);
+static_assert(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max, "");
 
 class group_quote_pdf_generator_wx
     :public group_quote_pdf_generator

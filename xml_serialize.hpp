@@ -28,8 +28,6 @@
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <xmlwrapp/nodes_view.h>
 
 #include <string>
@@ -58,7 +56,7 @@ namespace xml_serialize
 template<typename T>
 struct xml_io
 {
-    BOOST_STATIC_ASSERT(!std::is_enum<T>::value); // Prefer mc_enum.
+    static_assert(!std::is_enum<T>::value, ""); // Prefer mc_enum.
 
     static void to_xml(xml::element& e, T const& t)
     {

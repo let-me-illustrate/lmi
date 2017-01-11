@@ -32,7 +32,6 @@
 #include "multidimgrid_any.hpp"
 
 #include <boost/any.hpp>
-#include <boost/static_assert.hpp>
 
 #include <type_traits>
 
@@ -260,7 +259,7 @@ template<typename AdjustControl, typename BaseAxisType = MultiDimAxisAny>
 class MultiDimAdjustableAxis
     :public BaseAxisType
 {
-    BOOST_STATIC_ASSERT((std::is_base_of<MultiDimAxisAny, BaseAxisType>::value));
+    static_assert(std::is_base_of<MultiDimAxisAny,BaseAxisType>::value, "");
 
   protected:
     typedef AdjustControl AxisAdjustControl;

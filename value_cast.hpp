@@ -265,7 +265,7 @@ struct value_cast_chooser<To,From,e_stream>
 template<typename To, typename From>
 To value_cast(From const& from)
 {
-    BOOST_STATIC_ASSERT(!std::is_pointer<To>::value);
+    static_assert(!std::is_pointer<To>::value, "");
     return value_cast_chooser<To,From>()(from);
 }
 

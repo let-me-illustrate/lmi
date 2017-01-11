@@ -26,8 +26,6 @@
 #include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <deque>
 #include <list>
 #include <map>
@@ -42,14 +40,14 @@ struct LacksFind {            };
 void test_has_member_find()
 {
 #if !defined LMI_NO_SFINAE
-    BOOST_STATIC_ASSERT( has_member_find<HasFind  >::value);
-    BOOST_STATIC_ASSERT(!has_member_find<LacksFind>::value);
+    static_assert( has_member_find<HasFind  >::value, "");
+    static_assert(!has_member_find<LacksFind>::value, "");
 
-    BOOST_STATIC_ASSERT( has_member_find<std::string>::value);
+    static_assert( has_member_find<std::string>::value, "");
 
-    BOOST_STATIC_ASSERT(( has_member_find<std::map   <int,int> >::value));
-    BOOST_STATIC_ASSERT ( has_member_find<std::set   <int    > >::value) ;
-    BOOST_STATIC_ASSERT (!has_member_find<std::vector<int    > >::value) ;
+    static_assert( has_member_find<std::map   <int,int> >::value, "");
+    static_assert( has_member_find<std::set   <int    > >::value, "");
+    static_assert(!has_member_find<std::vector<int    > >::value, "");
 #endif // !defined LMI_NO_SFINAE
 }
 

@@ -28,7 +28,6 @@
 #include "xml_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/static_assert.hpp>
 #include <boost/utility/enable_if.hpp>
 
 #include <xmlwrapp/nodes_view.h>
@@ -45,13 +44,8 @@ xml_serializable<T>::~xml_serializable()
     // Assert that static_cast<T cv&> doesn't engender undefined
     // behavior, and that class T provides the expected operator[]()
     // and member_names() functions.
-    //
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT
-        ((
-           std::is_base_of<xml_serializable <T>,T>::value
-        && std::is_base_of<MemberSymbolTable<T>,T>::value
-        ));
+    static_assert(std::is_base_of<xml_serializable <T>,T>::value, "");
+    static_assert(std::is_base_of<MemberSymbolTable<T>,T>::value, "");
 }
 
 template<typename T>

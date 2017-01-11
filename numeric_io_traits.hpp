@@ -27,7 +27,6 @@
 #include "ieee754.hpp"                  // is_infinite<>()
 
 #include <boost/cast.hpp>
-#include <boost/static_assert.hpp>
 
 #include <algorithm>                    // std::max()
 #include <cmath>                        // C99 functions fabsl(), log10l(), strtold()
@@ -65,7 +64,7 @@
 template<typename T>
 inline int floating_point_decimals(T t)
 {
-    BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
+    static_assert(std::is_floating_point<T>::value, "");
 #if defined LMI_MSVCRT
     // COMPILER !! This C runtime not only writes infinity as "1.#INF"
     // instead of "inf" but also "respects" the precision specifier

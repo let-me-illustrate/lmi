@@ -108,7 +108,7 @@ namespace
     template<typename T>
     T signum(T t)
     {
-        BOOST_STATIC_ASSERT(std::is_arithmetic<T>::value);
+        static_assert(std::is_arithmetic<T>::value, "");
         T volatile zero = 0;
         if(t < zero)
             {
@@ -191,7 +191,7 @@ namespace
     template<typename T>
     struct is_exact_integer_tester<T,true>
     {
-        BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point<T>::value, "");
         bool operator()(T t)
             {
             static T z0 = std::pow
@@ -220,7 +220,7 @@ namespace
     template<typename T>
     T adjust_bound(T t, T direction)
     {
-        BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point<T>::value, "");
         if(is_exact_integer(t))
             {
             return t;
@@ -273,7 +273,7 @@ namespace
     template<typename T>
     struct bound_adjuster<T,-1>
     {
-        BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point<T>::value, "");
         T operator()(T t)
             {
             static T const extremum = -std::numeric_limits<T>::max();
@@ -284,7 +284,7 @@ namespace
     template<typename T>
     struct bound_adjuster<T,1>
     {
-        BOOST_STATIC_ASSERT(std::is_floating_point<T>::value);
+        static_assert(std::is_floating_point<T>::value, "");
         T operator()(T t)
             {
             static T const extremum = std::numeric_limits<T>::max();

@@ -27,8 +27,6 @@
 #include "numeric_io_traits.hpp"
 #include "rtti_lmi.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <cstring>                      // std::strcmp()
 #include <sstream>
 #include <stdexcept>
@@ -110,7 +108,7 @@ To numeric_io_cast(From from, To = To())
 
 // A compile-time failure iff this template is ever instantiated is
 // desired, but the straightforward
-//   BOOST_STATIC_ASSERT(0);
+//   static_assert(0, "");
 // can fail even if it's never instantiated; instead, it is asserted
 // that both template parameters are void, which 14.1/7 forbids.
 //
@@ -121,8 +119,8 @@ To numeric_io_cast(From from, To = To())
 template<typename To, typename From>
 struct numeric_converter
 {
-    BOOST_STATIC_ASSERT(std::is_void<To  >::value);
-    BOOST_STATIC_ASSERT(std::is_void<From>::value);
+    static_assert(std::is_void<To  >::value, "");
+    static_assert(std::is_void<From>::value, "");
 
     To operator()(From const& from) const
         {
@@ -146,7 +144,7 @@ struct numeric_converter
 template<typename To>
 struct numeric_converter<To, std::string>
 {
-    BOOST_STATIC_ASSERT(std::is_arithmetic<To>::value);
+    static_assert(std::is_arithmetic<To>::value, "");
 
     typedef std::string From;
     To operator()(From const& from) const
@@ -215,7 +213,7 @@ struct numeric_converter<To, char const*>
 template<typename From>
 struct numeric_converter<std::string, From>
 {
-    BOOST_STATIC_ASSERT(std::is_arithmetic<From>::value);
+    static_assert(std::is_arithmetic<From>::value, "");
 
     typedef std::string To;
     To operator()(From const& from) const

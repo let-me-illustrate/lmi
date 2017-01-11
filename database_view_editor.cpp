@@ -284,7 +284,7 @@ void DatabaseTableAdapter::ConvertValue
     // If the following assert fails, then it probably means that
     // the number of axes has been changed and the change should
     // be reflected in the code above.
-    BOOST_STATIC_ASSERT( eda_max == 7 );
+    static_assert(eda_max == 7, "");
 }
 
 unsigned int DatabaseTableAdapter::DoGetDimension() const
@@ -338,6 +338,6 @@ MultiDimTableAny::AxesAny DatabaseTableAdapter::DoGetAxesAny()
     // If the following assert fails, then it probably means that
     // the number of axes has been changed and the change should
     // be reflected in the code above.
-    BOOST_STATIC_ASSERT( eda_max == 7 );
+    static_assert(eda_max == 7, "");
     return axes;
 }

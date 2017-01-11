@@ -26,8 +26,6 @@
 #include "mvc_model.hpp"
 #include "rtti_lmi.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <wx/window.h>
 #include <wx/xrc/xmlres.h>
 
@@ -71,10 +69,8 @@ T const& MvcController::ModelReference(std::string const& name) const
 template<typename T>
 T& MvcController::WindowFromXrcName(char const* name) const
 {
-    BOOST_STATIC_ASSERT(!std::is_pointer<T>::value);
-
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT((std::is_base_of<wxWindow,T>::value));
+    static_assert(!std::is_pointer<T>::value, "");
+    static_assert(std::is_base_of<wxWindow,T>::value, "");
 
     wxWindow* w = FindWindow(wxXmlResource::GetXRCID(name));
     if(!w)

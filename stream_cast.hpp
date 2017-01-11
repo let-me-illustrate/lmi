@@ -49,8 +49,6 @@
 #include "facets.hpp"
 #include "rtti_lmi.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <istream>                      // std::ws
 #include <sstream>
 #include <stdexcept>
@@ -99,11 +97,12 @@
 template<typename To, typename From>
 To stream_cast(From from, To = To())
 {
-    BOOST_STATIC_ASSERT
+    static_assert
         (   !std::is_arithmetic<From>::value
         ||  !std::is_arithmetic<To  >::value
+        ,""
         );
-    BOOST_STATIC_ASSERT(!std::is_pointer<To>::value);
+    static_assert(!std::is_pointer<To>::value, "");
 
     std::stringstream interpreter;
     std::ostringstream err;

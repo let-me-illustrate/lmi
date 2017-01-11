@@ -68,8 +68,6 @@
 #include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <algorithm>                    // std::lower_bound(), std::swap()
 #include <map>
 #include <sstream>
@@ -617,22 +615,22 @@ void MemberSymbolTable<ClassType>::ascribe
     ,ValueType SameOrBaseClassType::* p2m
     )
 {
-    // Assert that the static_cast doesn't engender undefined behavior.
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT
-        ((
+    static_assert
+        (
         std::is_base_of
             <MemberSymbolTable<ClassType>
             ,ClassType
             >::value
-        ));
-    BOOST_STATIC_ASSERT
-        ((
+        ,""
+        );
+    static_assert
+        (
         std::is_base_of
             <SameOrBaseClassType
             ,ClassType
             >::value
-        ));
+        ,""
+        );
 
     ClassType* class_object = static_cast<ClassType*>(this);
     map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));

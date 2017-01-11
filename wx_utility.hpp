@@ -26,8 +26,6 @@
 
 #include "so_attributes.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <wx/event.h>
 #include <wx/string.h>
 
@@ -80,11 +78,10 @@ void Connect
     ,wxEvtHandler*   event_sink = nullptr
     )
 {
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT((std::is_same<void,Return>::value));
-    BOOST_STATIC_ASSERT((std::is_base_of<wxEvtHandler,Class>::value));
+    static_assert(std::is_same<void,Return>::value, "");
+    static_assert(std::is_base_of<wxEvtHandler,Class>::value, "");
     typedef typename std::remove_reference<Argument>::type argument_type;
-    BOOST_STATIC_ASSERT((std::is_base_of<wxEvent,argument_type>::value));
+    static_assert(std::is_base_of<wxEvent,argument_type>::value, "");
 
     if(!object)
         {

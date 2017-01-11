@@ -36,8 +36,6 @@
 
 #include "config.hpp"
 
-#include <boost/static_assert.hpp>
-
 #include <cstddef>                      // std::size_t
 
 /// Associate an mc_enum type with its metadata through its enum type.
@@ -111,7 +109,7 @@ struct mc_enum_key
 template<typename T, std::size_t N, T const (&E)[N], char const*const (&C)[N]>
 struct mc_enum_data
 {
-    BOOST_STATIC_ASSERT(0 < N);
+    static_assert(0 < N, "");
 
     static std::size_t const n_ = N;
     static T    const*        e() {return E;}

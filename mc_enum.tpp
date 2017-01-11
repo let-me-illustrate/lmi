@@ -39,7 +39,7 @@ mc_enum<T>::mc_enum()
     ,value_(e()[0])
 {
     typedef mc_enum_key<T> metadata;
-    BOOST_STATIC_ASSERT(0 < metadata::n_);
+    static_assert(0 < metadata::n_, "");
 }
 
 template<typename T>

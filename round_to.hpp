@@ -27,8 +27,6 @@
 #include "mc_enum_type_enums.hpp"
 #include "stl_extensions.hpp"           // nonstd::power()
 
-#include <boost/static_assert.hpp>
-
 #include <cmath>
 #include <functional>
 #include <limits>
@@ -284,7 +282,7 @@ template<typename RealType>
 class round_to
     :public std::unary_function<RealType, RealType>
 {
-    BOOST_STATIC_ASSERT(std::is_floating_point<RealType>::value);
+    static_assert(std::is_floating_point<RealType>::value, "");
 
   public:
     round_to();
