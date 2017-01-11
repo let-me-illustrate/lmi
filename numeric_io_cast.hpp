@@ -106,16 +106,14 @@ To numeric_io_cast(From from, To = To())
     return converter.operator()(from);
 }
 
-// A compile-time failure iff this template is ever instantiated is
-// desired, but the straightforward
-//   static_assert(0, "");
-// can fail even if it's never instantiated; instead, it is asserted
-// that both template parameters are void, which 14.1/7 forbids.
-//
-// In case that compile-time assertion doesn't fail, e.g. because the
-// borland compiler doesn't support the idiom, a run-time exception is
-// thrown from To().
-//
+/// A compile-time failure iff this template is ever instantiated is
+/// desired, but the straightforward
+///   static_assert(0, "");
+/// can fail even if it's never instantiated; instead, it is asserted
+/// that both template parameters are void, which 14.1/7 forbids.
+/// To make assurance doubly sure, a run-time exception is thrown in
+/// any case.
+
 template<typename To, typename From>
 struct numeric_converter
 {
@@ -124,17 +122,7 @@ struct numeric_converter
 
     To operator()(From const& from) const
         {
-        std::ostringstream err;
-        err
-            << "Cannot convert '"
-            << from
-            << "' from type "
-            << lmi::TypeInfo(typeid(From))
-            << " to type "
-            << lmi::TypeInfo(typeid(To))
-            << "'."
-            ;
-        throw std::runtime_error(err.str());
+        throw std::logic_error("Impossible numeric conversion.");
         }
 };
 
