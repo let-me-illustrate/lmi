@@ -31,7 +31,10 @@
 #include <sstream>
 
 // This should fail to compile:
-//   template class tn_range<double, std::string>;
+//    template class tn_range<double, std::string>;
+
+// This should fail to compile:
+//    tn_range<bool, percentage_trammel<bool> > boolean_percentage;
 
 template<typename T>
 class nonnegative

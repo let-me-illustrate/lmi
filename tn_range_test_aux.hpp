@@ -27,21 +27,17 @@
 #include "tn_range_fwd.hpp"
 
 #include <istream>
+#include <limits>
 #include <ostream>
 
-// The derived trammel class must be defined here so that its size is
+// Each derived trammel class must be defined here so that its size is
 // known to all translation units that might use it.
-
-// An assertion such as
-//    static_assert(100 <= std::numeric_limits<T>::max(), "");
-// cannot work: the macro's argument must be an integral constant
-// expression, so it can't involve a function call and can't perform
-// any non-integer operation.
 
 template<typename T>
 class percentage_trammel
     :public trammel_base<T>
 {
+    static_assert(100 <= std::numeric_limits<T>::max(), "");
     T nominal_minimum() const override {return   0;}
     T default_value()   const override {return   0;}
     T nominal_maximum() const override {return 100;}
