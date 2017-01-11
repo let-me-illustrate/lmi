@@ -41,8 +41,8 @@ ACLOCAL_AMFLAGS = -I aclocal
 #
 # given by Linux systems using recent binutils with the switch to building
 # deterministic archives (that can't include the timestamps) when building all
-# static libraries with default "cru" flags used by Automake up to 1.15.
-ARFLAGS = cr
+# static libraries with default "cru" flags used by Libtool up to 2.4.6.
+AR_FLAGS = cr
 
 ##############################################################################
 # All Targets
