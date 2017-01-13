@@ -120,7 +120,7 @@ struct numeric_converter
     static_assert(std::is_void<To  >::value, "");
     static_assert(std::is_void<From>::value, "");
 
-    To operator()(From const& from) const
+    To operator()(From const&) const
         {
         throw std::logic_error("Impossible numeric conversion.");
         }
