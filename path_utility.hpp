@@ -26,6 +26,7 @@
 
 #include "so_attributes.hpp"
 
+#include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <ostream>
@@ -67,6 +68,16 @@ namespace filesystem
 inline std::ostream& operator<<(std::ostream& os, fs::path const& z)
 {
     return os << z.string();
+}
+
+inline directory_iterator begin(directory_iterator iter)
+{
+    return iter;
+}
+
+inline directory_iterator end(directory_iterator const&)
+{
+    return directory_iterator();
 }
 
 } // namespace filesystem

@@ -22,6 +22,7 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
+#include "path_utility.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_statusbar.hpp"
 #include "uncopyable_lmi.hpp"
@@ -32,8 +33,6 @@
 #include <wx/scopeguard.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
-
-#include <boost/filesystem/operations.hpp>
 
 #include <cmath>                        // std::fabs()
 
@@ -133,7 +132,7 @@ class census_benchmark
 LMI_WX_TEST_CASE(benchmark_census)
 {
     fs::directory_iterator const end_i;
-    for(fs::path const& p: get_test_files_path())
+    for(fs::path const& p: fs::directory_iterator(get_test_files_path()))
         {
         if(!wxString(p.leaf()).Matches("MSEC*.cns"))
             {
