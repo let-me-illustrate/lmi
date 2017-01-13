@@ -96,14 +96,9 @@ void PolicyDocument::ReadDocument(std::string const& filename)
     if(!GetViews().empty())
         {
         PolicyView& view = PredominantView();
-        for
-            (values_type::iterator it = values_.begin()
-            ,end = values_.end()
-            ;it != end
-            ;++it
-            )
+        for(auto const& value: values_)
             {
-            view.controls()[it->first]->SetValue(*it->second);
+            view.controls()[value.first]->SetValue(*value.second);
             }
         }
 }
@@ -113,14 +108,9 @@ void PolicyDocument::WriteDocument(std::string const& filename)
     if(!GetViews().empty())
         {
         PolicyView& view = PredominantView();
-        for
-            (values_type::iterator it = values_.begin()
-            ,end = values_.end()
-            ;it != end
-            ;++it
-            )
+        for(auto& value: values_)
             {
-            *it->second = view.controls()[it->first]->GetValue();
+            *value.second = view.controls()[value.first]->GetValue();
             }
         }
     save(product_data_, filename);

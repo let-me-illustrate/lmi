@@ -108,11 +108,9 @@ void xml_serializable<T>::read(xml::element const& x)
         );
     std::list<std::string>::iterator current_member;
 
-    xml::const_nodes_view const elements(x.elements());
-    typedef xml::const_nodes_view::const_iterator cnvi;
-    for(cnvi child = elements.begin(); child != elements.end(); ++child)
+    for(auto const& child: x.elements())
         {
-        std::string node_tag(child->get_name());
+        std::string node_tag(child.get_name());
         current_member = std::find
             (residuary_names.begin()
             ,residuary_names.end()
@@ -120,13 +118,13 @@ void xml_serializable<T>::read(xml::element const& x)
             );
         if(residuary_names.end() != current_member)
             {
-            read_element(*child, node_tag, file_version);
+            read_element(child, node_tag, file_version);
             residuary_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
             {
             // Hold certain obsolete entities that must be translated.
-            value_type v = fetch_element(*child);
+            value_type v = fetch_element(child);
             redintegrate_ex_ante(file_version, node_tag, v);
             detritus_map[node_tag] = v;
             }

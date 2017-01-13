@@ -406,11 +406,9 @@ void process_command_line(int argc, char* argv[])
         {
         getopt_long.usage();
         std::cout << "Suboptions for '--emit':\n";
-        std::vector<std::string> const& v = allowed_strings_emission();
-        typedef std::vector<std::string>::const_iterator vsi;
-        for(vsi i = v.begin(); i != v.end(); ++i)
+        for(auto const& s: allowed_strings_emission())
             {
-            std::cout << "  " << *i << '\n';
+            std::cout << "  " << s << '\n';
             }
         return;
         }

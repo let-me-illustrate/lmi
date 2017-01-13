@@ -84,9 +84,9 @@ namespace
 
         // Make exclusive-or pattern from polynomial (0xedb88320).
         e = 0;
-        for(i = 0; i < sizeof p / sizeof(int); ++i)
+        for(int pc: p)
             {
-            e |= 1L << (31 - p[i]);
+            e |= 1L << (31 - pc);
             }
 
         for(i = 1; i < 256; ++i)
@@ -151,9 +151,9 @@ unsigned int CRC::value() const
 //============================================================================
 CRC& CRC::operator+=(std::string const& z)
 {
-    for(unsigned int j = 0; j < z.length(); j++)
+    for(char c: z)
         {
-        operator+=(z[j]);
+        operator+=(c);
         }
     return *this;
 }

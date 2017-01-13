@@ -467,10 +467,10 @@ void actuarial_table::read_values(std::istream& is, int nominal_length)
         );
     data_.resize(number_of_values);
     char z[sizeof(double)];
-    for(int j = 0; j < number_of_values; ++j)
+    for(auto& d: data_)
         {
         is.read(z, sizeof(double));
-        data_[j] = deserialize_cast<double>(z);
+        d = deserialize_cast<double>(z);
         }
 }
 

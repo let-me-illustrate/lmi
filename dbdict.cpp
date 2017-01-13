@@ -36,14 +36,13 @@
 #include "miscellany.hpp"
 #include "my_proem.hpp"                 // ::write_proem()
 #include "oecumenic_enumerations.hpp"
+#include "path_utility.hpp"
 #include "premium_tax.hpp"              // premium_tax_rates_for_life_insurance()
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <limits>
 #include <vector>
@@ -511,10 +510,9 @@ void DBDictionary::InitDB()
     static double const dbl_inf = infinity<double>();
     static double const bignum = std::numeric_limits<double>::max();
 
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& name: member_names())
         {
-        Add(database_entity(db_key_from_name(*i), 0.0));
+        Add(database_entity(db_key_from_name(name), 0.0));
         }
 
     // It would be dangerous to set these to zero.
@@ -966,10 +964,9 @@ void DBDictionary::InitAntediluvian()
     // Zero is inappropriate for some entities ("DB_CurrCoiMultiplier",
     // e.g.), but the antediluvian branch doesn't actually use most
     // database entities.
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& name: member_names())
         {
-        Add(database_entity(db_key_from_name(*i), 0.0));
+        Add(database_entity(db_key_from_name(name), 0.0));
         }
 
     // These are the same as class date_trammel's nominal limits.
@@ -1071,24 +1068,21 @@ void DBDictionary::InitAntediluvian()
 void print_databases()
 {
     fs::path path(global_settings::instance().data_directory());
-    fs::directory_iterator i(path);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
+    for(fs::path const& p: fs::directory_iterator(path))
         {
-        if(is_directory(*i) || ".database" != fs::extension(*i))
+        if(is_directory(p) || ".database" != fs::extension(p))
             {
             continue;
             }
         try
             {
-            DBDictionary const z(i->string());
+            DBDictionary const z(p.string());
 
-            fs::path out_file = fs::change_extension(*i, ".dbt");
+            fs::path out_file = fs::change_extension(p, ".dbt");
             fs::ofstream os(out_file, ios_out_trunc_binary());
-            typedef std::vector<std::string>::const_iterator svci;
-            for(svci i = z.member_names().begin(); i != z.member_names().end(); ++i)
+            for(auto const& mn: z.member_names())
                 {
-                z.datum(*i).write(os);
+                z.datum(mn).write(os);
                 }
             }
         catch(...)

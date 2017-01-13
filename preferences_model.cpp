@@ -190,21 +190,20 @@ void PreferencesModel::DoHarmonize()
     weird_report_columns.push_back(mce_current_0_cash_surrender_value             );
     weird_report_columns.push_back(mce_guaranteed_0_cash_surrender_value          );
 
-    typedef std::vector<mcenum_report_column>::const_iterator vrci;
-    for(vrci i = weird_report_columns.begin(); i != weird_report_columns.end(); ++i)
+    for(auto c: weird_report_columns)
         {
-        CalculationSummaryColumn00.allow(*i, false);
-        CalculationSummaryColumn01.allow(*i, false);
-        CalculationSummaryColumn02.allow(*i, false);
-        CalculationSummaryColumn03.allow(*i, false);
-        CalculationSummaryColumn04.allow(*i, false);
-        CalculationSummaryColumn05.allow(*i, false);
-        CalculationSummaryColumn06.allow(*i, false);
-        CalculationSummaryColumn07.allow(*i, false);
-        CalculationSummaryColumn08.allow(*i, false);
-        CalculationSummaryColumn09.allow(*i, false);
-        CalculationSummaryColumn10.allow(*i, false);
-        CalculationSummaryColumn11.allow(*i, false);
+        CalculationSummaryColumn00.allow(c, false);
+        CalculationSummaryColumn01.allow(c, false);
+        CalculationSummaryColumn02.allow(c, false);
+        CalculationSummaryColumn03.allow(c, false);
+        CalculationSummaryColumn04.allow(c, false);
+        CalculationSummaryColumn05.allow(c, false);
+        CalculationSummaryColumn06.allow(c, false);
+        CalculationSummaryColumn07.allow(c, false);
+        CalculationSummaryColumn08.allow(c, false);
+        CalculationSummaryColumn09.allow(c, false);
+        CalculationSummaryColumn10.allow(c, false);
+        CalculationSummaryColumn11.allow(c, false);
         }
 }
 

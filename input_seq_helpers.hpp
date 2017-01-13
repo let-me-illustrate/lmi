@@ -113,10 +113,9 @@ std::vector<T> convert_vector_type
     )
 {
     std::vector<T> z;
-    typename std::vector<mc_enum<T> >::const_iterator ve_i;
-    for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
+    for(auto const& e: ve)
         {
-        z.push_back(ve_i->value());
+        z.push_back(e.value());
         }
     return z;
 }
@@ -127,10 +126,9 @@ std::vector<Number> convert_vector_type
     )
 {
     std::vector<Number> z;
-    typename std::vector<tn_range<Number,Trammel> >::const_iterator vr_i;
-    for(vr_i = vr.begin(); vr_i != vr.end(); ++vr_i)
+    for(auto const& r: vr)
         {
-        z.push_back(vr_i->value());
+        z.push_back(r.value());
         }
     return z;
 }

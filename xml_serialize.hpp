@@ -92,13 +92,12 @@ struct xml_sequence_io
     {
         // XMLWRAPP !! Add a clear() function.
         e.erase(e.begin(), e.end());
-        typedef typename T::const_iterator tci;
-        for(tci i = t.begin(); i != t.end(); ++i)
+        for(auto const& x: t)
             {
             // This is not equivalent to calling set_element():
             // multiple <item> elements are expressly permitted.
             xml::element z("item");
-            xml_io<item_t>::to_xml(z, *i);
+            xml_io<item_t>::to_xml(z, x);
             e.push_back(z);
             }
     }
@@ -106,12 +105,10 @@ struct xml_sequence_io
     static void from_xml(xml::element const& e, T& t)
     {
         t.clear();
-        xml::const_nodes_view const items(e.elements("item"));
-        typedef xml::const_nodes_view::const_iterator cnvi;
-        for(cnvi i = items.begin(); i != items.end(); ++i)
+        for(auto const& element: e.elements("item"))
             {
             item_t z;
-            xml_io<item_t>::from_xml(*i, z);
+            xml_io<item_t>::from_xml(element, z);
             t.push_back(z);
             }
     }

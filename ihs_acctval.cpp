@@ -317,14 +317,9 @@ double AccountValue::RunAllApplicableBases()
         // on the solve basis.
         }
     // Run all bases, current first.
-    std::vector<mcenum_run_basis> const& run_bases = ledger_->GetRunBases();
-    for
-        (std::vector<mcenum_run_basis>::const_iterator b = run_bases.begin()
-        ;b != run_bases.end()
-        ;++b
-        )
+    for(auto run_base: ledger_->GetRunBases())
         {
-        RunOneBasis(*b);
+        RunOneBasis(run_base);
         }
     return z;
 }

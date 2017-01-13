@@ -177,11 +177,12 @@ void DatabaseView::SetupControls()
 
     wxTreeCtrl& tree_ctrl = tree();
 
-    for(std::size_t i = 0; i < names.size(); ++i)
+    bool is_first = true;
+    for(auto const& name: names)
         {
-        db_names const& name = names[i];
-        if(0 == i)
+        if(is_first)
             {
+            is_first = false;
             LMI_ASSERT(name.Idx == name.ParentIdx);
             wxTreeItemId id = tree_ctrl.AddRoot
                 (""

@@ -269,12 +269,11 @@ void application_test::process_test_name(char const* name)
 
     bool any_tests_matched = false;
 
-    typedef std::vector<test_descriptor>::iterator tdi;
-    for(tdi i = tests_.begin(); i != tests_.end(); ++i)
+    for(auto& test: tests_)
         {
-        if (wxString(i->get_name()).Matches(name))
+        if (wxString(test.get_name()).Matches(name))
             {
-            i->run = run;
+            test.run = run;
             any_tests_matched = true;
             }
         }
@@ -452,21 +451,20 @@ TestsResults application_test::run()
 
     TestsResults results;
 
-    typedef std::vector<test_descriptor>::const_iterator ctdi;
-    for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
+    for(auto const& test: tests_)
         {
-        if ((run_all_ && i->run != run_no) || i->run == run_yes)
+        if ((run_all_ && test.run != run_no) || test.run == run_yes)
             {
             std::string error;
             results.total++;
 
-            char const* const name = i->get_name();
+            char const* const name = test.get_name();
 
             try
                 {
                 wxPrintf("%s: started\n", name);
                 wxStopWatch sw;
-                i->run_test();
+                test.run_test();
                 // Check that no messages were unexpectedly logged during this
                 // test execution.
                 wxLog::FlushActive();
@@ -522,10 +520,9 @@ void application_test::list_tests()
 
     std::cout << "Available tests:\n";
 
-    typedef std::vector<test_descriptor>::const_iterator ctdi;
-    for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
+    for(auto const& test: tests_)
         {
-        std::cout << '\t' << i->get_name() << '\n';
+        std::cout << '\t' << test.get_name() << '\n';
         }
 
     std::cout << tests_.size() << " test cases.\n";

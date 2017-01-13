@@ -522,18 +522,14 @@ std::vector<std::string> mec_input::RealizeAllSequenceInput(bool report_errors)
 
     if(report_errors)
         {
-        for
-            (std::vector<std::string>::iterator i = s.begin()
-            ;i != s.end()
-            ;++i
-            )
+        for(auto const& str: s)
             {
             std::ostringstream oss;
             bool diagnostics_present = false;
-            if(!i->empty())
+            if(!str.empty())
                 {
                 diagnostics_present = true;
-                oss << (*i) << "\n";
+                oss << str << "\n";
                 }
             if(diagnostics_present)
                 {

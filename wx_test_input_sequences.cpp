@@ -161,10 +161,10 @@ LMI_WX_TEST_CASE(input_sequences)
     };
 
     wxUIActionSimulator ui;
-    for(std::size_t n = 0; n < sizeof test_cases / sizeof(test_cases[0]); n++)
+    for(auto const& test_case: test_cases)
         {
         ui.Char('e', wxMOD_CONTROL); // "Illustration|Edit Cell"
-        wxTEST_DIALOG(wxYield(), test_sequence_dialog(test_cases[n]));
+        wxTEST_DIALOG(wxYield(), test_sequence_dialog(test_case));
         }
 
     ill.close_discard_changes();

@@ -93,15 +93,16 @@ std::string build_not_found_message(std::set<std::string> const& remaining)
     bool const only_one = remaining.size() == 1;
     message << (only_one ? "column" : "columns");
 
-    typedef std::set<std::string>::const_iterator ssci;
-    for(ssci i = remaining.begin(); i != remaining.end(); ++i)
+    bool first = true;
+    for(auto const& s: remaining)
         {
-        if(i != remaining.begin())
+        if(!first)
             {
             message << ",";
+            first = false;
             }
 
-        message << " '" << *i << "'";
+        message << " '" << s << "'";
         }
 
     message << " " << (only_one ? "was" : "were") << " not found" << " ";
