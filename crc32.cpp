@@ -151,9 +151,9 @@ unsigned int CRC::value() const
 //============================================================================
 CRC& CRC::operator+=(std::string const& z)
 {
-    for(unsigned int j = 0; j < z.length(); j++)
+    for(auto const& j : z)
         {
-        operator+=(z[j]);
+        operator+=(j);
         }
     return *this;
 }
