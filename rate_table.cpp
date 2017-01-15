@@ -732,7 +732,7 @@ boost::optional<field_and_value> parse_field_and_value
     std::string const name(line, 0, pos_colon);
 
     int n = 0;
-    for(soa_field const& f: soa_fields)
+    for(auto const& f : soa_fields)
         {
         if(name == f.name)
             {
