@@ -157,10 +157,9 @@ Input::permissible_specified_amount_strategy_keywords()
 //    std::map<std::string,std::string> permissible_keywords = all_keywords;
     std::map<std::string,std::string> permissible_keywords;
     // Don't use initialization--we want this to happen every time [6.7].
-    typedef std::map<std::string,std::string>::const_iterator smci;
-    for(smci i = all_keywords.begin(); i != all_keywords.end(); ++i)
+    for(auto const& i : all_keywords)
         {
-        permissible_keywords.insert(*i);
+        permissible_keywords.insert(i);
         }
 
     bool specified_amount_indeterminate = mce_solve_specamt == SolveType;
@@ -232,18 +231,14 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
 
     if(report_errors)
         {
-        for
-            (std::vector<std::string>::iterator i = s.begin()
-            ;i != s.end()
-            ;++i
-            )
+        for(auto const& i : s)
             {
             std::ostringstream oss;
             bool diagnostics_present = false;
-            if(!i->empty())
+            if(!i.empty())
                 {
                 diagnostics_present = true;
-                oss << (*i) << "\n";
+                oss << i << "\n";
                 }
             if(diagnostics_present)
                 {
@@ -831,20 +826,16 @@ std::string Input::RealizeWithdrawal()
     else
         {
         double lowest_allowed_withdrawal = database_->Query(DB_MinWd);
-        for
-            (std::vector<tnr_unrestricted_double>::iterator i = WithdrawalRealized_.begin()
-            ;i < WithdrawalRealized_.end()
-            ;++i
-            )
+        for(auto const& i : WithdrawalRealized_)
             {
-            if(0.0 < i->value() && i->value() < lowest_allowed_withdrawal)
+            if(0.0 < i.value() && i.value() < lowest_allowed_withdrawal)
                 {
                 std::ostringstream oss;
                 oss
                     << "Minimum withdrawal is "
                     << lowest_allowed_withdrawal
                     << "; "
-                    << *i
+                    << i
                     << " is too low."
                     ;
                 return oss.str();

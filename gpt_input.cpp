@@ -576,18 +576,14 @@ std::vector<std::string> gpt_input::RealizeAllSequenceInput(bool report_errors)
 
     if(report_errors)
         {
-        for
-            (std::vector<std::string>::iterator i = s.begin()
-            ;i != s.end()
-            ;++i
-            )
+        for(auto const& i : s)
             {
             std::ostringstream oss;
             bool diagnostics_present = false;
-            if(!i->empty())
+            if(!i.empty())
                 {
                 diagnostics_present = true;
-                oss << (*i) << "\n";
+                oss << i << "\n";
                 }
             if(diagnostics_present)
                 {

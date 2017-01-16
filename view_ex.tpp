@@ -63,10 +63,8 @@ template<typename ViewType>
 ViewType& PredominantView(wxDocument const& document)
 {
     ViewType* view = nullptr;
-    wxList const& views = document.GetViews();
-    for(wxList::const_iterator i = views.begin(); i != views.end(); ++i)
+    for(auto const& p : document.GetViews())
         {
-        wxObject* p = *i;
         LMI_ASSERT(nullptr != p);
         if(p->IsKindOf(CLASSINFO(ViewType)))
             {

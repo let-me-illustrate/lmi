@@ -51,7 +51,6 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
-#include <iterator>
 #include <limits>
 #include <numeric>
 #include <string>
@@ -317,14 +316,9 @@ double AccountValue::RunAllApplicableBases()
         // on the solve basis.
         }
     // Run all bases, current first.
-    std::vector<mcenum_run_basis> const& run_bases = ledger_->GetRunBases();
-    for
-        (std::vector<mcenum_run_basis>::const_iterator b = run_bases.begin()
-        ;b != run_bases.end()
-        ;++b
-        )
+    for(auto const& b : ledger_->GetRunBases())
         {
-        RunOneBasis(*b);
+        RunOneBasis(b);
         }
     return z;
 }

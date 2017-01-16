@@ -531,10 +531,9 @@ void product_data::write_policy_files()
 
     // 'sample2' product
 
-    typedef std::vector<std::string>::const_iterator svci;
-    for(svci i = z.member_names().begin(); i != z.member_names().end(); ++i)
+    for(auto const& i : z.member_names())
         {
-        z[*i] = '{' + *i + '}';
+        z[i] = '{' + i + '}';
         }
 
     // Names of lmi product files.

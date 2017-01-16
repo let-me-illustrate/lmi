@@ -54,17 +54,11 @@ wxWindow* PolicyView::CreateChildWindow()
         fatal_error() << "Unable to load xml resource." << LMI_FLUSH;
         }
 
-    typedef PolicyDocument::values_type::const_iterator value_const_iterator;
-    for
-        (value_const_iterator cit = document().values().begin()
-        ,end = document().values().end()
-        ;cit != end
-        ;++cit
-        )
+    for(auto const& i : document().values())
         {
         wxTextCtrl* text_ctrl = dynamic_cast<wxTextCtrl*>
             (wxWindow::FindWindowById
-                (wxXmlResource::GetXRCID(cit->first.c_str())
+                (wxXmlResource::GetXRCID(i.first.c_str())
                 ,frame
                 )
             );
@@ -72,12 +66,12 @@ wxWindow* PolicyView::CreateChildWindow()
             {
             fatal_error()
                 << "Required text control '"
-                << cit->first
+                << i.first
                 << "' not found."
                 << LMI_FLUSH
                 ;
             }
-        controls_[cit->first] = text_ctrl;
+        controls_[i.first] = text_ctrl;
         }
 
     return main_panel;
@@ -100,14 +94,9 @@ PolicyDocument& PolicyView::document() const
 
 bool PolicyView::IsModified() const
 {
-    for
-        (controls_type::const_iterator it = controls().begin()
-        ,end = controls().end()
-        ;it != end
-        ;++it
-        )
+    for(auto const& i : controls())
         {
-        if(it->second->IsModified())
+        if(i.second->IsModified())
             {
             return true;
             }
@@ -117,13 +106,8 @@ bool PolicyView::IsModified() const
 
 void PolicyView::DiscardEdits()
 {
-    for
-        (controls_type::iterator it = controls().begin()
-        ,end = controls().end()
-        ;it != end
-        ;++it
-        )
+    for(auto const& i : controls())
         {
-        it->second->DiscardEdits();
+        i.second->DiscardEdits();
         }
 }

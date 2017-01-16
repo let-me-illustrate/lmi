@@ -122,14 +122,12 @@ MultiDimGrid* TierView::CreateGridCtrl(wxWindow* parent)
 
 void TierView::SetupControls()
 {
-    std::vector<tier_entity_info> const& entities = get_tier_entity_infos();
     std::map<e_stratified, wxTreeItemId> index_to_id;
 
     wxTreeCtrl& tree_ctrl = tree();
 
-    for(std::size_t i = 0; i < entities.size(); ++i)
+    for(auto const& entity : get_tier_entity_infos())
         {
-        tier_entity_info const& entity = entities[i];
         if(entity.index == entity.parent_index)
             {
             wxTreeItemId id = tree_ctrl.AddRoot("");

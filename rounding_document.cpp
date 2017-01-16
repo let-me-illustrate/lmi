@@ -76,10 +76,9 @@ void RoundingDocument::ReadDocument(std::string const& filename)
     if(!GetViews().empty())
         {
         RoundingView& view = PredominantView();
-        typedef values_type::const_iterator vtci;
-        for(vtci i = values_.begin(); i != values_.end(); ++i)
+        for(auto const& i : values_)
             {
-            view.controls()[i->first]->SetValue(*i->second);
+            view.controls()[i.first]->SetValue(*i.second);
             }
         }
 }
@@ -89,10 +88,9 @@ void RoundingDocument::WriteDocument(std::string const& filename)
     if(!GetViews().empty())
         {
         RoundingView& view = PredominantView();
-        typedef values_type::const_iterator vtci;
-        for(vtci i = values_.begin(); i != values_.end(); ++i)
+        for(auto const& i : values_)
             {
-            *i->second = view.controls()[i->first]->GetValue();
+            *i.second = view.controls()[i.first]->GetValue();
             }
         }
     save(rounding_rules_, filename);

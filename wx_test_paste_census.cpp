@@ -93,8 +93,7 @@ std::string build_not_found_message(std::set<std::string> const& remaining)
     bool const only_one = remaining.size() == 1;
     message << (only_one ? "column" : "columns");
 
-    typedef std::set<std::string>::const_iterator ssci;
-    for(ssci i = remaining.begin(); i != remaining.end(); ++i)
+    for(auto i = remaining.begin(); i != remaining.end(); ++i)
         {
         if(i != remaining.begin())
             {
