@@ -93,14 +93,16 @@ std::string build_not_found_message(std::set<std::string> const& remaining)
     bool const only_one = remaining.size() == 1;
     message << (only_one ? "column" : "columns");
 
-    for(auto i = remaining.begin(); i != remaining.end(); ++i)
+    bool first = true;
+    for(auto const& i : remaining)
         {
-        if(i != remaining.begin())
+        if(!first)
             {
             message << ",";
+            first = false;
             }
 
-        message << " '" << *i << "'";
+        message << " '" << i << "'";
         }
 
     message << " " << (only_one ? "was" : "were") << " not found" << " ";
