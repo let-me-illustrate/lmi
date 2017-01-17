@@ -965,16 +965,14 @@ void enforce_taboos(file const& f)
         )
         {
         // Unspeakable private taboos.
-        std::map<std::string, bool> const z = my_taboos();
-        typedef std::map<std::string, bool>::const_iterator mci;
-        for(mci i = z.begin(); i != z.end(); ++i)
+        for(auto const& i : my_taboos())
             {
             boost::regex::flag_type syntax =
-                i->second
+                i.second
                 ? boost::regex::ECMAScript | boost::regex::icase
                 : boost::regex::ECMAScript
                 ;
-            taboo(f, i->first, syntax);
+            taboo(f, i.first, syntax);
             }
         }
 }
