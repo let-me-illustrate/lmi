@@ -172,15 +172,13 @@ MultiDimGrid* DatabaseView::CreateGridCtrl(wxWindow* parent)
 
 void DatabaseView::SetupControls()
 {
-    std::vector<db_names> const& names = GetDBNames();
     std::map<e_database_key, wxTreeItemId> name_to_id;
 
     wxTreeCtrl& tree_ctrl = tree();
 
-    for(std::size_t i = 0; i < names.size(); ++i)
+    for(auto const& name : GetDBNames())
         {
-        db_names const& name = names[i];
-        if(0 == i)
+        if(DB_FIRST == name.Idx)
             {
             LMI_ASSERT(name.Idx == name.ParentIdx);
             wxTreeItemId id = tree_ctrl.AddRoot
