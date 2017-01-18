@@ -292,12 +292,12 @@ std::string md5_hex_string(std::vector<unsigned char> const& vuc)
     LMI_ASSERT(md5len == vuc.size());
     std::stringstream oss;
     oss << std::hex;
-    for(int j = 0; j < md5len; ++j)
+    for(auto const& j : vuc)
         {
         oss
             << std::setw(chars_per_formatted_hex_byte)
             << std::setfill('0')
-            << static_cast<unsigned int>(vuc[j])
+            << static_cast<unsigned int>(j)
             ;
         }
     return oss.str();

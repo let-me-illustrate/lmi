@@ -43,10 +43,9 @@ template class xml_serializable<mec_state>;
 mec_state::mec_state()
 {
     AscribeMembers();
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& i : member_names())
         {
-        operator[](*i) = "0";
+        operator[](i) = "0";
         }
 }
 
