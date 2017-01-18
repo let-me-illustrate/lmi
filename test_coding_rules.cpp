@@ -550,6 +550,69 @@ void check_cxx(file const& f)
             }
         }
     }
+
+    // Tests above: C or C++. Tests below: C++ only.
+    if(!f.is_of_phylum(e_cxx))
+        {
+        return;
+        }
+
+    {
+    static std::string const p(R"(\bfor\b[^\n]+[^:\n]:[^:\n][^)\n]+\))");
+    static std::string const q(R"(\bfor\b\( *([:\w]+)( *[^ ]*) *\w+([ :]+))");
+    // This is "p && q || p", so to speak. If 'p' doesn't match, then
+    // ignore this occurrence. Else if 'q' matches, then diagnose the
+    // problem. Otherwise, match p again and show a diagnostic.
+    static boost::regex const r("(?=" + p + ")(?:" + q + ")|(" + p + ")");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator const omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        if("" == z[1] && "" == z[2] && "" == z[3])
+            {
+            std::ostringstream oss;
+            oss
+                << "spurious or malformed for-range-declaration: '"
+                << z[0] << "'."
+                ;
+            complain(f, oss.str());
+            }
+        else
+            {
+            if("auto" != z[1])
+                {
+                std::ostringstream oss;
+                oss
+                    << "for-range-declaration should"
+                    << " deduce type rather than specify '"
+                    << z[1] << "'."
+                    ;
+                complain(f, oss.str());
+                }
+            if("&" != z[2] && " const&" != z[2])
+                {
+                std::ostringstream oss;
+                oss
+                    << "for-range-declaration should"
+                    << " use 'auto&' or 'auto const&' instead of '"
+                    << z[1] << z[2] << "'."
+                    ;
+                complain(f, oss.str());
+                }
+            if(" : " != z[3])
+                {
+                std::ostringstream oss;
+                oss
+                    << "should have a space on both sides of the colon"
+                    << " following the for-range-declaration, instead of '"
+                    << z[3] << "'."
+                    ;
+                complain(f, oss.str());
+                }
+            }
+        }
+    }
 }
 
 /// Check defect markers, which contain a doubled '!' or '?'.
