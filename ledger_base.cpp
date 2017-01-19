@@ -85,22 +85,14 @@ void LedgerBase::Alloc()
 //============================================================================
 void LedgerBase::Initialize(int a_Length)
 {
-    for
-        (double_vector_map::iterator i = AllVectors.begin()
-        ;i != AllVectors.end()
-        ;i++
-        )
+    for(auto& i : AllVectors)
         {
-        (*i).second->assign(a_Length, 0.0);
+        i.second->assign(a_Length, 0.0);
         }
 
-    for
-        (scalar_map::iterator i = AllScalars.begin()
-        ;i != AllScalars.end()
-        ;i++
-        )
+    for(auto& i : AllScalars)
         {
-        *(*i).second = 0.0;
+        *i.second = 0.0;
         }
 }
 
@@ -333,13 +325,9 @@ double LedgerBase::DetermineScaleFactor() const
     double min_val = 0.0;
     double max_val = 0.0;
 
-    for
-        (double_vector_map::const_iterator svmi = ScalableVectors.begin()
-        ;svmi != ScalableVectors.end()
-        ;svmi++
-        )
+    for(auto const& i : ScalableVectors)
         {
-        minmax<double> extrema(*(*svmi).second);
+        minmax<double> extrema(*i.second);
         min_val = std::min(min_val, extrema.minimum());
         max_val = std::max(max_val, extrema.maximum());
         }
@@ -461,14 +449,10 @@ void LedgerBase::ApplyScaleFactor(double a_Mult)
 
     // TODO ?? Would be clearer with bind1st.
     std::vector<double>M(GetLength(), m_scaling_factor);
-    for
-        (double_vector_map::iterator svmi = ScalableVectors.begin()
-        ;svmi != ScalableVectors.end()
-        ;svmi++
-        )
+    for(auto& i : ScalableVectors)
         {
-        // ET !! *(*svmi).second *= M;
-        std::vector<double>& v = *(*svmi).second;
+        // ET !! *i.second *= M;
+        std::vector<double>& v = *i.second;
         std::transform
             (v.begin()
             ,v.end()
@@ -495,31 +479,19 @@ double LedgerBase::ScaleFactor() const
 void LedgerBase::UpdateCRC(CRC& crc) const
 {
 // TODO ?? std::transform() might be cleaner.
-    for
-        (double_vector_map::const_iterator vmi = AllVectors.begin()
-        ;vmi != AllVectors.end()
-        ;vmi++
-        )
+    for(auto const& i : AllVectors)
         {
-        crc += *(*vmi).second;
+        crc += *i.second;
         }
 
-    for
-        (scalar_map::const_iterator sci = AllScalars.begin()
-        ;sci != AllScalars.end()
-        ;sci++
-        )
+    for(auto const& i : AllScalars)
         {
-        crc += *(*sci).second;
+        crc += *i.second;
         }
 
-    for
-        (string_map::const_iterator sti = Strings.begin()
-        ;sti != Strings.end()
-        ;sti++
-        )
+    for(auto const& i : Strings)
         {
-        crc += *(*sti).second;
+        crc += *i.second;
         }
 }
 
@@ -528,39 +500,27 @@ void LedgerBase::Spew(std::ostream& os) const
 {
     static int const prec = max_stream_precision();
 
-    for
-        (double_vector_map::const_iterator vmi = AllVectors.begin()
-        ;vmi != AllVectors.end()
-        ;vmi++
-        )
+    for(auto const& i : AllVectors)
         {
-        SpewVector(os, (*vmi).first, *(*vmi).second);
+        SpewVector(os, i.first, *i.second);
         }
 
-    for
-        (scalar_map::const_iterator sci = AllScalars.begin()
-        ;sci != AllScalars.end()
-        ;sci++
-        )
+    for(auto const& i : AllScalars)
         {
         os
-            << (*sci).first
+            << i.first
             << "=="
-            << std::setprecision(prec) << *(*sci).second
+            << std::setprecision(prec) << *i.second
             << '\n'
             ;
         }
 
-    for
-        (string_map::const_iterator sti = Strings.begin()
-        ;sti != Strings.end()
-        ;sti++
-        )
+    for(auto const& i : Strings)
         {
         os
-            << (*sti).first
+            << i.first
             << "=="
-            << *(*sti).second
+            << *i.second
             << '\n'
             ;
         }

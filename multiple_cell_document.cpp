@@ -142,24 +142,22 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
     class_parms_.clear();
     cell_parms_ .clear();
 
-    xml::const_nodes_view const elements(root.elements());
-    typedef xml::const_nodes_view::const_iterator cnvi;
     Input cell;
     int counter = 0;
-    for(cnvi i = elements.begin(); i != elements.end(); ++i)
+    for(auto const& i : root.elements())
         {
-        std::string const tag(i->get_name());
+        std::string const tag(i.get_name());
         std::vector<Input>& v
             ( ("case_default"     == tag) ? case_parms_
             : ("class_defaults"   == tag) ? class_parms_
             : ("particular_cells" == tag) ? cell_parms_
             : hurl<std::vector<Input> >("Unexpected element '" + tag + "'.")
             );
-        xml::const_nodes_view const subelements(i->elements());
+        xml::const_nodes_view const subelements(i.elements());
         v.reserve(std::distance(subelements.begin(), subelements.end()));
-        for(cnvi j = subelements.begin(); j != subelements.end(); ++j)
+        for(auto const& j : subelements)
             {
-            *j >> cell;
+            j >> cell;
             v.push_back(cell);
             status() << "Read " << ++counter << " cells." << std::flush;
             }
@@ -177,6 +175,9 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
     Input temp;
 
     xml::const_nodes_view const elements(root.elements());
+    // With C++14 we would write
+    //   auto i = elements.cbegin();
+    // instead of the next two lines.
     typedef xml::const_nodes_view::const_iterator cnvi;
     cnvi i = elements.begin();
 
@@ -383,20 +384,16 @@ bool multiple_cell_document::data_source_is_external(xml::document const& d) con
     // INPUT !! Remove "InforceDataSource" and the following code when
     // external systems are updated to use the "data_source" attribute.
 
-    typedef xml::const_nodes_view::const_iterator cnvi;
-
     // Tag names vary: {"case_default", "class_defaults", "particular_cells"}.
     xml::const_nodes_view const i_nodes(root.elements());
     LMI_ASSERT(3 == i_nodes.size());
-    for(cnvi i = i_nodes.begin(); i != i_nodes.end(); ++i)
+    for(auto const& i : i_nodes)
         {
-        xml::const_nodes_view const j_nodes(i->elements("cell"));
-        for(cnvi j = j_nodes.begin(); j != j_nodes.end(); ++j)
+        for(auto const& j : i.elements("cell"))
             {
-            xml::const_nodes_view const k_nodes(j->elements("InforceDataSource"));
-            for(cnvi k = k_nodes.begin(); k != k_nodes.end(); ++k)
+            for(auto const& k : j.elements("InforceDataSource"))
                 {
-                std::string s(xml_lmi::get_content(*k));
+                std::string s(xml_lmi::get_content(k));
                 if("0" != s && "1" != s)
                     {
                     return true;
@@ -479,20 +476,18 @@ void multiple_cell_document::write(std::ostream& os) const
     xml::node::iterator case_i = root.insert(case_default);
     case_parms_[0].write(*case_i);
 
-    typedef std::vector<Input>::const_iterator svii;
-
     xml::element class_defaults("class_defaults");
     xml::node::iterator classes_i = root.insert(class_defaults);
-    for(svii i = class_parms_.begin(); i != class_parms_.end(); ++i)
+    for(auto const& i : class_parms_)
         {
-        i->write(*classes_i);
+        i.write(*classes_i);
         }
 
     xml::element particular_cells("particular_cells");
     xml::node::iterator cells_i = root.insert(particular_cells);
-    for(svii i = cell_parms_.begin(); i != cell_parms_.end(); ++i)
+    for(auto const& i : cell_parms_)
         {
-        i->write(*cells_i);
+        i.write(*cells_i);
         }
 
     os << document;

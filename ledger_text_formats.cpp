@@ -321,15 +321,14 @@ std::string calculation_summary_formatter::format_as_html() const
         }
 
     std::string const width = value_cast<std::string>(100 / columns_.size());
-    typedef std::vector<std::string>::const_iterator vsci;
     oss
         << "<hr>\n"
         << "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n"
         << "<tr align=\"right\">\n"
         ;
-    for(vsci i = columns_.begin(); i != columns_.end(); ++i)
+    for(auto const& i : columns_)
         {
-        ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
+        ledger_metadata const& z = map_lookup(ledger_metadata_map(), i);
         oss << "<td valign=\"bottom\" width=\"" << width << "%\">" << z.legend_ << " </td>\n";
         }
     oss << "</tr>\n";
@@ -341,11 +340,11 @@ std::string calculation_summary_formatter::format_as_html() const
             oss << "<tr><td><br></td></tr>\n";
             }
         oss << "<tr align=\"right\">\n";
-        for(vsci i = columns_.begin(); i != columns_.end(); ++i)
+        for(auto const& i : columns_)
             {
-            ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
+            ledger_metadata const& z = map_lookup(ledger_metadata_map(), i);
             std::string s = ledger_format
-                (numeric_vector(ledger_, *i)[j]
+                (numeric_vector(ledger_, i)[j]
                 ,std::make_pair(z.decimals_, z.style_)
                 );
             oss << "<td nowrap>&nbsp;&nbsp;&nbsp;" << s << "</td>\n";
@@ -410,22 +409,21 @@ std::string calculation_summary_formatter::format_as_tsv() const
         }
 
     std::string const width = value_cast<std::string>(100 / columns_.size());
-    typedef std::vector<std::string>::const_iterator vsci;
     oss << '\n';
-    for(vsci i = columns_.begin(); i != columns_.end(); ++i)
+    for(auto const& i : columns_)
         {
-        ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
+        ledger_metadata const& z = map_lookup(ledger_metadata_map(), i);
         oss << z.legend_ << '\t';
         }
     oss << '\n';
 
     for(int j = 0; j < max_length_; ++j)
         {
-        for(vsci i = columns_.begin(); i != columns_.end(); ++i)
+        for(auto const& i : columns_)
             {
-            ledger_metadata const& z = map_lookup(ledger_metadata_map(), *i);
+            ledger_metadata const& z = map_lookup(ledger_metadata_map(), i);
             std::string s = ledger_format
-                (numeric_vector(ledger_, *i)[j]
+                (numeric_vector(ledger_, i)[j]
                 ,std::make_pair(z.decimals_, z.style_)
                 );
             oss << s << '\t';
@@ -583,10 +581,9 @@ void PrintCellTabDelimited
         (cheaders
         ,cheaders + lmi_array_size(cheaders)
         );
-    typedef std::vector<std::string>::const_iterator vsi;
-    for(vsi i = sheaders.begin(); i != sheaders.end(); ++i)
+    for(auto const& i : sheaders)
         {
-        os << *i << '\t';
+        os << i << '\t';
         }
     os << "\n\n";
 
@@ -754,10 +751,9 @@ void PrintRosterHeaders(std::string const& file_name)
         (cheaders
         ,cheaders + lmi_array_size(cheaders)
         );
-    typedef std::vector<std::string>::const_iterator vsi;
-    for(vsi i = sheaders.begin(); i != sheaders.end(); ++i)
+    for(auto const& i : sheaders)
         {
-        os << *i << '\t';
+        os << i << '\t';
         }
     os << "\n\n";
 
@@ -1035,9 +1031,8 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
 
     int summary_rows[] = {4, 9, 19, std::min(99, 69 - value_cast<int>(invar().Age))};
 
-    for(int j = 0; j < static_cast<int>(sizeof summary_rows / sizeof(int)); ++j)
+    for(auto const& row : summary_rows)
         {
-        int row = summary_rows[j];
         // Skip row if it doesn't exist. For instance, if issue age is
         // 85 and maturity age is 100, then there is no twentieth duration.
         if(ledger_.GetMaxLength() < 1 + row)
@@ -1226,9 +1221,9 @@ std::vector<std::string> ledger_format
     )
 {
     std::vector<std::string> sv;
-    for(unsigned int j = 0; j < dv.size(); ++j)
+    for(auto const& i : dv)
         {
-        sv.push_back(ledger_format(dv[j], f));
+        sv.push_back(ledger_format(i, f));
         }
     return sv;
 }
