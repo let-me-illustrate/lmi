@@ -30,14 +30,9 @@ namespace detail
         )
     {
         std::vector<std::string> keywords;
-        stringmap_iterator i_keyword_dictionary = keyword_dictionary.begin();
-        for
-            (
-            ;i_keyword_dictionary != keyword_dictionary.end()
-            ;++i_keyword_dictionary
-            )
+        for(auto const& i : keyword_dictionary)
             {
-            keywords.push_back((*i_keyword_dictionary).first);
+            keywords.push_back(i.first);
             }
         return keywords;
     }

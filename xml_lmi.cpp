@@ -278,15 +278,14 @@ std::string get_content(xml::element const& element)
     try
         {
         std::string s;
-        typedef xml::node::const_iterator NodeConstIterator;
-        for(NodeConstIterator i = element.begin(); i != element.end(); ++i)
+        for(auto const& i : element)
             {
-            if(i->is_text())
+            if(i.is_text())
                 {
-                char const* content = i->get_content();
+                char const* content = i.get_content();
                 if(content)
                     {
-                    s += i->get_content();
+                    s += i.get_content();
                     }
                 }
             }

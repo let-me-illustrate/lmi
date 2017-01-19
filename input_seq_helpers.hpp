@@ -44,11 +44,6 @@ namespace detail
         stringmap
         ;
 
-    typedef
-        std::map<std::string, std::string, std::less<std::string> >::const_iterator
-        stringmap_iterator
-        ;
-
     std::vector<std::string> LMI_SO extract_keys_from_string_map
         (stringmap const& keyword_dictionary
         );
@@ -113,10 +108,9 @@ std::vector<T> convert_vector_type
     )
 {
     std::vector<T> z;
-    typename std::vector<mc_enum<T> >::const_iterator ve_i;
-    for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
+    for(auto const& i : ve)
         {
-        z.push_back(ve_i->value());
+        z.push_back(i.value());
         }
     return z;
 }
@@ -127,10 +121,9 @@ std::vector<Number> convert_vector_type
     )
 {
     std::vector<Number> z;
-    typename std::vector<tn_range<Number,Trammel> >::const_iterator vr_i;
-    for(vr_i = vr.begin(); vr_i != vr.end(); ++vr_i)
+    for(auto const& i : vr)
         {
-        z.push_back(vr_i->value());
+        z.push_back(i.value());
         }
     return z;
 }
