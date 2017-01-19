@@ -76,7 +76,7 @@ Input const& LMI_SO default_cell();
 void LMI_SO test_census_consensus
     (mcenum_emission           emission
     ,Input              const& case_default
-    ,std::vector<Input> const& cells
+    ,std::vector<Input> const& all_cells
     );
 
 #endif // illustrator_hpp

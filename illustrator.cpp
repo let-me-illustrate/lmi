@@ -33,7 +33,6 @@
 #include "handle_exceptions.hpp"
 #include "input.hpp"
 #include "ledgervalues.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
 #include "multiple_cell_document.hpp"
 #include "path_utility.hpp"             // fs::path inserter
 #include "platform_dependent.hpp"       // access()
@@ -225,31 +224,32 @@ namespace
 
 void assert_consistent_run_order
     (Input              const& case_default
-    ,std::vector<Input> const& cells
+    ,std::vector<Input> const& all_cells
     )
 {
-    typedef std::vector<Input>::size_type svst;
-    for(svst i = 0; i != cells.size(); ++i)
+    int i = 0;
+    for(auto const& cell : all_cells)
         {
-        if(case_default["RunOrder"] != cells[i]["RunOrder"])
+        if(case_default["RunOrder"] != cell["RunOrder"])
             {
             fatal_error()
                 << "Case-default run order '"
                 << case_default["RunOrder"]
                 << "' differs from run order '"
-                << cells[i]["RunOrder"]
+                << cell["RunOrder"]
                 << "' of cell number "
                 << 1 + i
                 << ". Make this consistent before running illustrations."
                 << LMI_FLUSH
                 ;
             }
+        ++i;
         }
 }
 
 void assert_okay_to_run_group_quote
     (Input              const& case_default
-    ,std::vector<Input> const& cells
+    ,std::vector<Input> const& all_cells
     )
 {
     // There is a surjective mapping of the input fields listed here
@@ -270,7 +270,7 @@ void assert_okay_to_run_group_quote
     // products used with group quotes, spouse and child riders have
     // no maximum issue age.)
     //
-    static char const*const fields[] =
+    static char const*const group_quote_invariant_fields[] =
         {"ProductName"
         ,"CorporationName"
         ,"AgentName"
@@ -284,20 +284,17 @@ void assert_okay_to_run_group_quote
         ,"SpouseRider"
         ,"SpouseRiderAmount"
         };
-    static std::size_t const n = lmi_array_size(fields);
 
     if(case_default["EffectiveDate"] != case_default["InforceAsOfDate"])
         {
         fatal_error() << "Group quotes allowed for new business only." << LMI_FLUSH;
         }
 
-    typedef std::vector<Input>::size_type svst;
-    for(svst i = 0; i != cells.size(); ++i)
+    int i = 0;
+    for(auto const& cell : all_cells)
         {
-        Input const& cell = cells[i];
-        for(std::size_t j = 0; j != n; ++j)
+        for(auto const& field : group_quote_invariant_fields)
             {
-            char const*const field = fields[j];
             if(case_default[field] != cell[field])
                 {
                 fatal_error()
@@ -314,6 +311,7 @@ void assert_okay_to_run_group_quote
                     ;
                 }
             }
+        ++i;
         }
 }
 } // Unnamed namespace.
@@ -321,13 +319,13 @@ void assert_okay_to_run_group_quote
 void test_census_consensus
     (mcenum_emission           emission
     ,Input              const& case_default
-    ,std::vector<Input> const& cells
+    ,std::vector<Input> const& all_cells
     )
 {
-    assert_consistent_run_order(case_default, cells);
+    assert_consistent_run_order(case_default, all_cells);
     if(emission & mce_emit_group_quote)
         {
-        assert_okay_to_run_group_quote(case_default, cells);
+        assert_okay_to_run_group_quote(case_default, all_cells);
         }
 }
 
