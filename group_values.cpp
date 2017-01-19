@@ -252,7 +252,6 @@ census_run_result run_census_in_parallel::operator()
 
     std::vector<Input>::const_iterator ip;
     std::vector<boost::shared_ptr<AccountValue> > cell_values;
-    std::vector<boost::shared_ptr<AccountValue> >::iterator i;
     std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
 
     int j = 0;
@@ -270,6 +269,7 @@ census_run_result run_census_in_parallel::operator()
             fenv_guard fg;
             boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
             std::string const name(cells[j]["InsuredName"].str());
+            // Indexing: here, j is an index into cells, not cell_values.
             av->SetDebugFilename
                 (serial_file_path(file, name, j, "hastur").string()
                 );
@@ -395,17 +395,17 @@ census_run_result run_census_in_parallel::operator()
                 +   experience_reserve_rate[year]
                 ;
 
-            for(i = cell_values.begin(); i != cell_values.end(); ++i)
+            for(auto& i : cell_values)
                 {
                 // A cell must be initialized at the beginning of any
                 // partial inforce year in which it's illustrated.
-                if((*i)->PrecedesInforceDuration(year, 11))
+                if(i->PrecedesInforceDuration(year, 11))
                     {
                     continue;
                     }
-                (*i)->Year = year;
-                (*i)->CoordinateCounters();
-                (*i)->InitializeYear();
+                i->Year = year;
+                i->CoordinateCounters();
+                i->InitializeYear();
                 }
 
             // Process one month at a time for all cells.
@@ -422,26 +422,26 @@ census_run_result run_census_in_parallel::operator()
                 // those assets may determine the M&E charge.
 
                 // Process transactions through monthly deduction.
-                for(i = cell_values.begin(); i != cell_values.end(); ++i)
+                for(auto& i : cell_values)
                     {
-                    if((*i)->PrecedesInforceDuration(year, month))
+                    if(i->PrecedesInforceDuration(year, month))
                         {
                         continue;
                         }
-                    (*i)->Month = month;
-                    (*i)->CoordinateCounters();
-                    (*i)->IncrementBOM(year, month, case_k_factor);
-                    assets += (*i)->GetSepAcctAssetsInforce();
+                    i->Month = month;
+                    i->CoordinateCounters();
+                    i->IncrementBOM(year, month, case_k_factor);
+                    assets += i->GetSepAcctAssetsInforce();
                     }
 
                 // Process transactions from int credit through end of month.
-                for(i = cell_values.begin(); i != cell_values.end(); ++i)
+                for(auto& i : cell_values)
                     {
-                    if((*i)->PrecedesInforceDuration(year, month))
+                    if(i->PrecedesInforceDuration(year, month))
                         {
                         continue;
                         }
-                    (*i)->IncrementEOM(year, month, assets, (*i)->CumPmts);
+                    i->IncrementEOM(year, month, assets, i->CumPmts);
                     }
                 }
 
@@ -460,19 +460,19 @@ census_run_result run_census_in_parallel::operator()
             double years_net_claims       = 0.0;
             double years_net_mortchgs     = 0.0;
             double projected_net_mortchgs = 0.0;
-            for(i = cell_values.begin(); i != cell_values.end(); ++i)
+            for(auto& i : cell_values)
                 {
-                if((*i)->PrecedesInforceDuration(year, 11))
+                if(i->PrecedesInforceDuration(year, 11))
                     {
                     continue;
                     }
-                (*i)->SetClaims();
-                (*i)->SetProjectedCoiCharge();
-                eoy_inforce_lives      += (*i)->InforceLivesEoy();
-                (*i)->IncrementEOY(year);
-                years_net_claims       += (*i)->GetCurtateNetClaimsInforce();
-                years_net_mortchgs     += (*i)->GetCurtateNetCoiChargeInforce();
-                projected_net_mortchgs += (*i)->GetProjectedCoiChargeInforce();
+                i->SetClaims();
+                i->SetProjectedCoiCharge();
+                eoy_inforce_lives      += i->InforceLivesEoy();
+                i->IncrementEOY(year);
+                years_net_claims       += i->GetCurtateNetClaimsInforce();
+                years_net_mortchgs     += i->GetCurtateNetCoiChargeInforce();
+                projected_net_mortchgs += i->GetProjectedCoiChargeInforce();
                 }
 
             // Calculate next year's k factor. Do this only for
@@ -558,14 +558,14 @@ census_run_result run_census_in_parallel::operator()
                     }
 
                 double case_net_mortality_reserve_checksum = 0.0;
-                for(i = cell_values.begin(); i != cell_values.end(); ++i)
+                for(auto& i : cell_values)
                     {
-                    if((*i)->PrecedesInforceDuration(year, 11))
+                    if(i->PrecedesInforceDuration(year, 11))
                         {
                         continue;
                         }
                     case_net_mortality_reserve_checksum +=
-                        (*i)->ApportionNetMortalityReserve
+                        i->ApportionNetMortalityReserve
                             (   case_net_mortality_reserve
                             /   eoy_inforce_lives
                             );
@@ -610,11 +610,11 @@ census_run_result run_census_in_parallel::operator()
         ,"Finalizing all cells"
         ,progress_meter_mode(emission)
         );
-    for(i = cell_values.begin(); i != cell_values.end(); ++i)
+    for(auto& i : cell_values)
         {
         fenv_guard fg;
-        (*i)->FinalizeLifeAllBases();
-        composite.PlusEq(*(*i)->ledger_from_av());
+        i->FinalizeLifeAllBases();
+        composite.PlusEq(*i->ledger_from_av());
         if(!meter->reflect_progress())
             {
             result.completed_normally_ = false;
@@ -630,12 +630,14 @@ census_run_result run_census_in_parallel::operator()
         ,"Writing output for all cells"
         ,progress_meter_mode(emission)
         );
-    for(j = 0, i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
+    j = 0;
+    for(auto const& i : cell_values)
         {
+        // Indexing: here, j is an index into cell_values, not cells.
         std::string const name(cells[j]["InsuredName"].str());
         result.seconds_for_output_ += emitter.emit_cell
             (serial_file_path(file, name, j, "hastur")
-            ,*(*i)->ledger_from_av()
+            ,*i->ledger_from_av()
             );
         meter->dawdle(intermission_between_printouts(emission));
         if(!meter->reflect_progress())
@@ -643,6 +645,7 @@ census_run_result run_census_in_parallel::operator()
             result.completed_normally_ = false;
             goto done;
             }
+        ++j;
         }
     meter->culminate();
 
