@@ -39,7 +39,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <iterator>
+#include <iterator>                     // std::istream_iterator
 #include <sstream>
 #include <stdexcept>
 

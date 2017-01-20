@@ -33,7 +33,7 @@
 #include <iomanip>
 #include <ios>
 #include <istream>
-#include <iterator>
+#include <iterator>                     // std::ostreambuf_iterator
 #include <locale>
 #include <ostream>
 #include <sstream>

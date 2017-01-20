@@ -60,7 +60,7 @@
 #include <cctype>
 #include <cstddef>                      // std::size_t
 #include <istream>                      // std::ws
-#include <iterator>
+#include <iterator>                     // std::insert_iterator
 #include <sstream>
 
 namespace

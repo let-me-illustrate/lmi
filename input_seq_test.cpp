@@ -27,7 +27,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <iterator>
+#include <iterator>                     // std::ostream_iterator
 
 // Macros don't offer default arguments, so we need one macro
 // for each number of arguments.

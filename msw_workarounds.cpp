@@ -36,7 +36,7 @@
 
 #include <algorithm>
 #include <functional>
-#include <iterator>
+#include <iterator>                     // std::istream_iterator
 #include <sstream>
 
 MswDllPreloader::MswDllPreloader()

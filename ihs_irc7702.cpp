@@ -32,7 +32,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
-#include <iterator>
+#include <iterator>                     // std::advance()
 #include <limits>
 #include <numeric>
 

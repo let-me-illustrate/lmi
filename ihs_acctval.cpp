@@ -51,6 +51,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <iterator>                     // std::back_inserter()
 #include <limits>
 #include <numeric>
 #include <string>

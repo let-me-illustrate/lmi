@@ -45,7 +45,6 @@
 #include <fstream>
 #include <iomanip>
 #include <ios>
-#include <iterator>
 #include <locale>
 #include <map>
 #include <ostream>

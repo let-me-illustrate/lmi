@@ -35,10 +35,9 @@
 #include "xml_serialize.hpp"
 
 #include <algorithm>
-#include <functional>
-#include <iterator>                     // std::advance()
+#include <functional>                   // std::multiplies()
 #include <limits>                       // std::numeric_limits
-#include <numeric>
+#include <numeric>                      // std::accumulate()
 #include <ostream>
 
 namespace

@@ -33,7 +33,7 @@
 #include <cctype>
 #include <ios>
 #include <istream>
-#include <iterator>
+#include <iterator>                     // std::ostream_iterator
 #include <ostream>
 #include <sstream>
 

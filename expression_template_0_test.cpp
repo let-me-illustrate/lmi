@@ -50,7 +50,7 @@
 
 #include <algorithm>
 #include <functional>
-#include <iterator>
+#include <iterator>                     // std::back_inserter()
 #include <string>
 #include <valarray>
 #include <vector>

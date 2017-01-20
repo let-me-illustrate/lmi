@@ -33,7 +33,7 @@
 #include <xmlwrapp/nodes_view.h>
 
 #include <algorithm>                    // std::copy(), std::find()
-#include <iterator>                     // std::back_inserter
+#include <iterator>                     // std::back_inserter()
 #include <sstream>
 #include <type_traits>
 #include <vector>
