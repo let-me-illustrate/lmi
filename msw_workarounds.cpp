@@ -36,6 +36,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <iostream>                     // std::cout, std::endl
 #include <iterator>                     // std::istream_iterator
 #include <sstream>
 
@@ -82,6 +83,8 @@ void MswDllPreloader::PreloadDesignatedDlls()
 
 void MswDllPreloader::PreloadOneDll(std::string const& dll_name)
 {
+    std::cout << "Preloading '" << dll_name << "'." << std::endl;
+
     fenv_initialize();
 
     if(0 == ::LoadLibraryA(dll_name.c_str()))
@@ -107,6 +110,8 @@ void MswDllPreloader::PreloadOneDll(std::string const& dll_name)
 
 void MswDllPreloader::UnloadOneDll(std::string const& dll_name)
 {
+    std::cout << "Unloading '" << dll_name << "'." << std::endl;
+
     if(0 == ::FreeLibrary(::GetModuleHandleA(dll_name.c_str())))
         {
         warning() << "Failed to unload '" << dll_name << "'." << LMI_FLUSH;
