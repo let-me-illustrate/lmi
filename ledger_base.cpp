@@ -447,11 +447,10 @@ void LedgerBase::ApplyScaleFactor(double a_Mult)
         }
     m_scale_unit = look_up_scale_unit(m_scaling_factor);
 
-    // TODO ?? Would be clearer with bind1st.
+    // ET !! *i.second *= M;
     std::vector<double>M(GetLength(), m_scaling_factor);
     for(auto& i : ScalableVectors)
         {
-        // ET !! *i.second *= M;
         std::vector<double>& v = *i.second;
         std::transform
             (v.begin()
@@ -478,7 +477,6 @@ double LedgerBase::ScaleFactor() const
 //============================================================================
 void LedgerBase::UpdateCRC(CRC& crc) const
 {
-// TODO ?? std::transform() might be cleaner.
     for(auto const& i : AllVectors)
         {
         crc += *i.second;
