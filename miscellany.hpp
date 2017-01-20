@@ -26,8 +26,6 @@
 
 #include "so_attributes.hpp"
 
-#include <boost/algorithm/minmax_element.hpp>
-
 #include <algorithm>
 #include <cctype>
 #include <climits>                      // UCHAR_MAX
@@ -66,7 +64,7 @@ class minmax
   public:
     explicit minmax(std::vector<T> const& v)
         {
-        extrema_t extrema = boost::minmax_element(v.begin(), v.end());
+        extrema_t extrema = std::minmax_element(v.begin(), v.end());
         minimum_ = *extrema.first ;
         maximum_ = *extrema.second;
         }
