@@ -30,12 +30,8 @@
 #include "fenv_lmi.hpp"
 #include "handle_exceptions.hpp"
 
-#include <boost/functional.hpp>
-
 #include <windows.h>
 
-#include <algorithm>
-#include <functional>
 #include <iostream>                     // std::cout, std::endl
 #include <iterator>                     // std::istream_iterator
 #include <sstream>
@@ -46,11 +42,10 @@ MswDllPreloader::MswDllPreloader()
 
 MswDllPreloader::~MswDllPreloader()
 {
-    std::for_each
-        (SuccessfullyPreloadedDlls_.begin()
-        ,SuccessfullyPreloadedDlls_.end()
-        ,boost::bind1st(std::mem_fun(&MswDllPreloader::UnloadOneDll), this)
-        );
+    for(auto const& i : SuccessfullyPreloadedDlls_)
+        {
+        UnloadOneDll(i);
+        }
 }
 
 MswDllPreloader& MswDllPreloader::instance()
@@ -70,14 +65,14 @@ MswDllPreloader& MswDllPreloader::instance()
 
 void MswDllPreloader::PreloadDesignatedDlls()
 {
-    std::istringstream iss
-        (configurable_settings::instance().libraries_to_preload()
-        );
-    std::for_each
-        (std::istream_iterator<std::string>(iss)
-        ,std::istream_iterator<std::string>()
-        ,boost::bind1st(std::mem_fun(&MswDllPreloader::PreloadOneDll), this)
-        );
+    configurable_settings const& c = configurable_settings::instance();
+    std::istringstream iss(c.libraries_to_preload());
+    std::istream_iterator<std::string> i(iss);
+    std::istream_iterator<std::string> const eos;
+    for(; eos != i; ++i)
+        {
+        PreloadOneDll(*i);
+        }
     fenv_initialize();
 }
 
