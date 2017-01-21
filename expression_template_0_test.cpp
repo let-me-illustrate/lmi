@@ -42,14 +42,12 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/bind.hpp>
-
 #if defined USE_UBLAS
 #   include <boost/numeric/ublas/vector.hpp>
 #endif // defined USE_UBLAS
 
 #include <algorithm>
-#include <functional>
+#include <functional>                   // std::bind() et al.
 #include <iterator>                     // std::back_inserter()
 #include <string>
 #include <valarray>
@@ -82,7 +80,7 @@ struct greater_of
 };
 
     // Global variables for timing tests. It would be in better taste
-    // to pass them as arguments, using boost::bind. However, that
+    // to pass them as arguments, using std::bind. However, that
     // would rule out using some compilers (e.g., borland), and it's
     // best to test this with as many different toolsets as possible.
 
@@ -206,12 +204,12 @@ void mete_stl_fancy()
         ,sv0b.end()
         ,sv1b.begin()
         ,tmp0.begin()
-        ,boost::bind
+        ,std::bind
             (std::minus<double>()
-            ,_1
-            ,boost::bind
+            ,std::placeholders::_1
+            ,std::bind
                 (std::multiplies<double>()
-                ,_2
+                ,std::placeholders::_2
                 ,2.1
                 )
             )

@@ -30,9 +30,8 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/bind.hpp>
-
 #include <cstddef>                      // std::size_t
+#include <functional>                   // std::bind()
 
 namespace
 {
@@ -230,25 +229,25 @@ int test_main(int, char*[])
 
     std::cout
         << "  Allocate:     "
-        << TimeAnAliquot(boost::bind(&LoadsTest::Allocate , &t))
+        << TimeAnAliquot(std::bind(&LoadsTest::Allocate , &t))
         << '\n'
         ;
 
     std::cout
         << "  Initialize:   "
-        << TimeAnAliquot(boost::bind(&LoadsTest::Initialize , &t))
+        << TimeAnAliquot(std::bind(&LoadsTest::Initialize , &t))
         << '\n'
         ;
 
     std::cout
         << "  Reinitialize: "
-        << TimeAnAliquot(boost::bind(&LoadsTest::Reinitialize , &t))
+        << TimeAnAliquot(std::bind(&LoadsTest::Reinitialize , &t))
         << '\n'
         ;
 
     std::cout
         << "  Recalculate:  "
-        << TimeAnAliquot(boost::bind(&LoadsTest::Recalculate, &t))
+        << TimeAnAliquot(std::bind(&LoadsTest::Recalculate, &t))
         << '\n'
         ;
 

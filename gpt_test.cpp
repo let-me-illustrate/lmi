@@ -593,7 +593,7 @@ void gpt_test::mete_premiums()
 /// Measure instantiation speed of old GPT class.
 ///
 /// This simple pass-through function could have been written inline
-/// with boost::bind, but it's preferable not to drag that in.
+/// with std::bind, but it's preferable not to drag that in.
 
 void gpt_test::mete_instantiate_old()
 {

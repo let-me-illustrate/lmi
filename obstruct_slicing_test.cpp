@@ -26,8 +26,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/bind.hpp>
-
+#include <functional>                   // std::bind()
 #include <string>
 
 // Here are all the techniques discussed in the header.
@@ -142,7 +141,7 @@ void test_cost_of_obstruction(std::string const& s)
     std::cout
         << "  Class " << s << " has size " << sizeof(T) << '\n'
         << "  Speed test: \n      "
-        << TimeAnAliquot(boost::bind(mete<T>, 0))
+        << TimeAnAliquot(std::bind(mete<T>, 0))
         << '\n'
         ;
 }

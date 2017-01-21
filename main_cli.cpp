@@ -46,13 +46,13 @@
 #include "timer.hpp"
 #include "value_cast.hpp"
 
-#include <boost/bind.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>
 #include <cmath>
 #include <cstdio>                       // std::printf()
+#include <functional>                   // std::bind()
 #include <ios>
 #include <iostream>
 #include <ostream>
@@ -136,7 +136,7 @@ void self_test()
 
     std::cout
         << "Test solve speed: "
-        << TimeAnAliquot(boost::bind(z, "CLI_selftest", IP), 0.1)
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", IP), 0.1)
         << '\n'
         ;
 }

@@ -46,11 +46,9 @@
 #include "stratified_algorithms.hpp"
 #include "surrchg_rates.hpp"
 
-#include <boost/bind.hpp>
-
 #include <algorithm>
 #include <cmath>
-#include <functional>
+#include <functional>                   // std::bind() et al.
 #include <iterator>                     // std::back_inserter()
 #include <limits>
 #include <numeric>
@@ -1155,9 +1153,9 @@ void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
         (SurrChgRates_->SpecamtRateDurationalFactor().begin()
         ,SurrChgRates_->SpecamtRateDurationalFactor().end() - year
         ,std::inserter(new_layer, new_layer.begin())
-        ,boost::bind
+        ,std::bind
             (round_surrender_charge()
-            ,boost::bind(std::multiplies<double>(), _1, z)
+            ,std::bind(std::multiplies<double>(), std::placeholders::_1, z)
             )
         );
 
@@ -1188,9 +1186,9 @@ void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
             (year + SurrChg_.begin()
             ,       SurrChg_.end()
             ,year + SurrChg_.begin()
-            ,boost::bind
+            ,std::bind
                 (round_surrender_charge()
-                ,boost::bind(std::multiplies<double>(), _1, multiplier)
+                ,std::bind(std::multiplies<double>(), std::placeholders::_1, multiplier)
                 )
             );
         }

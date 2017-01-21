@@ -35,9 +35,8 @@
 #include "round_to.hpp"
 #include "value_cast.hpp"
 
-#include <boost/bind.hpp>
-
 #include <algorithm>
+#include <functional>                   // std::bind()
 #include <sstream>
 #include <utility>                      // std::pair
 
@@ -544,10 +543,10 @@ std::string Input::RealizeDeathBenefitOption()
         &&  !std::is_sorted
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
-                ,boost::bind
+                ,std::bind
                     (std::logical_and<bool>()
-                    ,boost::bind(std::equal_to    <mce_dbopt>(), _1, mce_dbopt("B"))
-                    ,boost::bind(std::not_equal_to<mce_dbopt>(), _2, mce_dbopt("B"))
+                    ,std::bind(std::equal_to    <mce_dbopt>(), std::placeholders::_1, mce_dbopt("B"))
+                    ,std::bind(std::not_equal_to<mce_dbopt>(), std::placeholders::_2, mce_dbopt("B"))
                     )
                 )
         )

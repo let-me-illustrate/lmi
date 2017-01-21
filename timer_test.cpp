@@ -27,9 +27,8 @@
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 
-#include <boost/bind.hpp>
-
 #include <cmath>
+#include <functional>                   // std::bind()
 
 inline void do_nothing()
 {}
@@ -114,7 +113,7 @@ void TimerTest::TestAliquotTimer()
     std::cout << "  " << TimeAnAliquot(foo, 0.1) << '\n';
 
     X x;
-    std::cout << "  " << TimeAnAliquot(boost::bind(goo, 10, x, x, &x), 0.1) << '\n';
+    std::cout << "  " << TimeAnAliquot(std::bind(goo, 10, x, x, &x), 0.1) << '\n';
 
     std::string takes_too_long = TimeAnAliquot(WaitTenMsec, 0.0099999).str();
     BOOST_TEST(contains(takes_too_long, "took longer"));
