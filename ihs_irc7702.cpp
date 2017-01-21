@@ -32,7 +32,6 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
-#include <iterator>                     // std::advance()
 #include <limits>
 #include <numeric>
 
@@ -496,9 +495,8 @@ void Irc7702::InitCorridor()
         (   static_cast<unsigned int>(IssueAge)
         <=  CompleteGptCorridor().size()
         );
-    std::advance(corr, IssueAge);
     GptCorridor.assign
-        (corr
+        (corr + IssueAge
         ,CompleteGptCorridor().end()
         );
 }

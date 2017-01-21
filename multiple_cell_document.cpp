@@ -36,7 +36,6 @@
 
 #include <iomanip>
 #include <istream>
-#include <iterator>                     // std::distance()
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
@@ -154,7 +153,7 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
             : hurl<std::vector<Input> >("Unexpected element '" + tag + "'.")
             );
         xml::const_nodes_view const subelements(i.elements());
-        v.reserve(std::distance(subelements.begin(), subelements.end()));
+        v.reserve(subelements.size());
         for(auto const& j : subelements)
             {
             j >> cell;
