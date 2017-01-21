@@ -99,12 +99,10 @@
 #   include "yare_input.hpp"
 #   include "zero.hpp"
 
-#   include <boost/config.hpp>
 #   include <boost/filesystem/convenience.hpp>
 #   include <boost/filesystem/operations.hpp>
 #   include <boost/filesystem/path.hpp>
 #   include <boost/shared_ptr.hpp>
-#   include <boost/utility.hpp>
 
 #   include <cstddef>
 #   include <cstdlib>
