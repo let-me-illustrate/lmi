@@ -62,6 +62,8 @@ std::string adjust_interest_rates
     ,std::vector<double> const& declared_rate
     )
 {
+    LMI_ASSERT(!declared_rate.empty());
+
     // The customer's front end provides two interest rates: one for
     // the first year only, and another for all renewal years. It's
     // our understanding that the "InterestRateOngoing" is enabled iff
@@ -115,7 +117,6 @@ std::string adjust_interest_rates
     // and the current declared rate is used. It is expected that
     // this will not be acceptable for long.
 
-    LMI_ASSERT(!declared_rate.empty());
     std::vector<double> general_account_rate(declared_rate);
 
     if(credited_rates_fit_customer_paradigm)
