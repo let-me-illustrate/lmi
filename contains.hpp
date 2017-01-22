@@ -24,9 +24,8 @@
 
 #include "config.hpp"
 
-#include <boost/utility/enable_if.hpp>
-
 #include <algorithm>                    // std::find()
+#include <type_traits>                  // std::enable_if
 
 /// Determine whether a class has a find() member.
 ///
@@ -70,7 +69,7 @@ template<typename T>
 bool contains
     (T const& t
     ,typename T::value_type const& element
-    ,typename boost::disable_if<has_member_find<T> >::type* = nullptr
+    ,typename std::enable_if<!has_member_find<T>::value>::type* = nullptr
     )
 {
     return t.end() != std::find(t.begin(), t.end(), element);

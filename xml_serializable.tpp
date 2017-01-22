@@ -28,7 +28,6 @@
 #include "xml_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/utility/enable_if.hpp>
 
 #include <xmlwrapp/nodes_view.h>
 
@@ -205,7 +204,7 @@ std::string const& xml_serializable<T>::xml_root_name() const
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const& x
-    ,typename boost::enable_if<std::is_same<X,Y> >::type* = nullptr
+    ,typename std::enable_if<std::is_same<X,Y>::value>::type* = nullptr
     )
 {
     return x;
@@ -214,7 +213,7 @@ inline Y sfinae_cast
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const&
-    ,typename boost::disable_if<std::is_same<X,Y> >::type* = nullptr
+    ,typename std::enable_if<!std::is_same<X,Y>::value>::type* = nullptr
     )
 {
     fatal_error() << "Impermissible type conversion." << LMI_FLUSH;
