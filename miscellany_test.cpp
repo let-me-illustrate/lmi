@@ -28,6 +28,51 @@
 #include <cstdio>                       // std::remove()
 #include <fstream>
 
+void test_each_equal()
+{
+    int                a0[] {0, 0, 0, 0};
+    int const          a1[] {0, 1, 1, 1};
+    int volatile       a2[] {0, 1, 2, 2};
+    int const volatile a3[] {0, 1, 2, 3};
+
+    // There can be no volatile standard container.
+    std::vector<int>        v0 {0, 0, 0, 0};
+    std::vector<int> const  v1 {0, 1, 1, 1};
+    std::vector<int>        v2 {0, 1, 2, 2};
+    std::vector<int> const  v3 {0, 1, 2, 3};
+
+    // Test with containers.
+
+    BOOST_TEST( each_equal(a0, 0));
+    BOOST_TEST(!each_equal(a1, 0));
+    BOOST_TEST(!each_equal(a2, 0));
+    BOOST_TEST(!each_equal(a3, 0));
+
+    BOOST_TEST( each_equal(v0, 0));
+    BOOST_TEST(!each_equal(v1, 0));
+    BOOST_TEST(!each_equal(v2, 0));
+    BOOST_TEST(!each_equal(v3, 0));
+
+    // Test with iterators.
+
+    BOOST_TEST( each_equal(v0.begin(), v0.end(), 0));
+    BOOST_TEST(!each_equal(v1.begin(), v1.end(), 0));
+    BOOST_TEST(!each_equal(v2.begin(), v2.end(), 0));
+    BOOST_TEST(!each_equal(v3.begin(), v3.end(), 0));
+
+    // Iterators are more flexible, of course.
+
+    BOOST_TEST( each_equal(v0.begin() + 0, v0.end(), 0));
+    BOOST_TEST( each_equal(v1.begin() + 1, v1.end(), 1));
+    BOOST_TEST( each_equal(v2.begin() + 2, v2.end(), 2));
+    BOOST_TEST( each_equal(v3.begin() + 3, v3.end(), 3));
+
+    // Iterators are also more prone to error.
+    // This crashes with g++-mingw-w64-i686 4.9.1:
+
+//  BOOST_TEST( each_equal(v0.begin() + 7, v0.end(), 0));
+}
+
 void test_files_are_identical()
 {
     char const* f0("unlikely_file_name_0");
@@ -178,6 +223,7 @@ void test_trimming()
 
 int test_main(int, char*[])
 {
+    test_each_equal();
     test_files_are_identical();
     test_minmax();
     test_prefix_and_suffix();

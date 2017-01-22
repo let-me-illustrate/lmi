@@ -45,6 +45,18 @@ bool each_equal(InputIterator first, InputIterator last, T const& t)
     return std::distance(first, last) == std::count(first, last, t);
 }
 
+/// Test whether every element in a range equals the specified constant.
+
+template<typename RangeExpression, typename T>
+bool each_equal(RangeExpression const& range, T const& t)
+{
+    for(auto const& i : range)
+        {
+        if(t != i) return false;
+        }
+    return true;
+}
+
 /// Test whether two files are identical. Arguments are filenames.
 
 bool files_are_identical(std::string const&, std::string const&);
