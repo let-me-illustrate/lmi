@@ -39,7 +39,6 @@ struct LacksFind {            };
 
 void test_has_member_find()
 {
-#if !defined LMI_NO_SFINAE
     static_assert( has_member_find<HasFind  >::value, "");
     static_assert(!has_member_find<LacksFind>::value, "");
 
@@ -48,7 +47,6 @@ void test_has_member_find()
     static_assert( has_member_find<std::map   <int,int> >::value, "");
     static_assert( has_member_find<std::set   <int    > >::value, "");
     static_assert(!has_member_find<std::vector<int    > >::value, "");
-#endif // !defined LMI_NO_SFINAE
 }
 
 /// Test standard "containers" for which find() makes sense.
