@@ -47,7 +47,6 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <algorithm>                    // std::sort()
 #include <cstring>                      // std::strcmp()
