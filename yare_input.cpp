@@ -208,7 +208,7 @@ bool is_policy_rated(yare_input const& z)
 {
     return
             mce_table_none != z.SubstandardTable
-        ||  !each_equal(z.FlatExtra.begin(), z.FlatExtra.end(), 0.0)
+        ||  !each_equal(z.FlatExtra, 0.0)
         ;
 }
 

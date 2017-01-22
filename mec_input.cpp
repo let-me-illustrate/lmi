@@ -33,7 +33,7 @@
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"        // convert_vector(), convert_vector_type()
 #include "map_lookup.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
+#include "miscellany.hpp"               // each_equal(), lmi_array_size()
 
 #include <algorithm>                    // std::max()
 #include <limits>
@@ -564,7 +564,7 @@ std::string mec_input::RealizeFlatExtra()
         return "";
         }
 
-    if(!each_equal(FlatExtraRealized_.begin(), FlatExtraRealized_.end(), 0.0))
+    if(!each_equal(FlatExtraRealized_, 0.0))
         {
         return "Flat extras may not be illustrated on this policy form.";
         }

@@ -500,7 +500,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     else if(b->Database_->Query(DB_TermIsNotRider))
         {
         TermSpecAmt      = b->DeathBfts_->supplamt();
-        if(!each_equal(TermSpecAmt.begin(), TermSpecAmt.end(), 0.0))
+        if(!each_equal(TermSpecAmt, 0.0))
             {
             HasSupplSpecAmt = true;
             }
@@ -631,13 +631,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     std::vector<double> const& guar_m_and_e_rate = b->InterestRates_->MAndERate
         (mce_gen_guar
         );
-    LMI_ASSERT
-        (each_equal
-            (guar_m_and_e_rate.begin()
-            ,guar_m_and_e_rate.end()
-            ,guar_m_and_e_rate.front()
-            )
-        );
+    LMI_ASSERT(each_equal(guar_m_and_e_rate, guar_m_and_e_rate.front()));
     GuarMaxMandE            = guar_m_and_e_rate[0];
     InitDacTaxRate          = b->Loads_->dac_tax_load()[b->yare_input_.InforceYear];
     InitPremTaxRate         = b->PremiumTax_->maximum_load_rate();

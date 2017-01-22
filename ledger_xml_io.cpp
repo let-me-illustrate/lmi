@@ -684,11 +684,7 @@ void Ledger::write(xml::element& x) const
     strings["PrepDay"  ] = &PrepDay;
 
     double SalesLoadRefund =
-        !each_equal
-            (ledger_invariant_->RefundableSalesLoad.begin()
-            ,ledger_invariant_->RefundableSalesLoad.end()
-            ,0.0
-            );
+        !each_equal(ledger_invariant_->RefundableSalesLoad, 0.0);
     double SalesLoadRefundRate0 = ledger_invariant_->RefundableSalesLoad[0];
     double SalesLoadRefundRate1 = ledger_invariant_->RefundableSalesLoad[1];
 

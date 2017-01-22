@@ -31,7 +31,7 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "input_seq_helpers.hpp"
-#include "miscellany.hpp"               // minmax
+#include "miscellany.hpp"               // each_equal(), minmax
 #include "round_to.hpp"
 #include "value_cast.hpp"
 
@@ -794,7 +794,7 @@ std::string Input::RealizeNewLoan()
         return "";
         }
 
-    if(!each_equal(NewLoanRealized_.begin(), NewLoanRealized_.end(), 0.0))
+    if(!each_equal(NewLoanRealized_, 0.0))
         {
         return "Loans may not be illustrated on this policy form.";
         }
@@ -817,7 +817,7 @@ std::string Input::RealizeWithdrawal()
 
     if(!database_->Query(DB_AllowWd))
         {
-        if(!each_equal(WithdrawalRealized_.begin(), WithdrawalRealized_.end(), 0.0))
+        if(!each_equal(WithdrawalRealized_, 0.0))
             {
             return "Withdrawals may not be illustrated on this policy form.";
             }
@@ -865,7 +865,7 @@ std::string Input::RealizeFlatExtra()
         return "";
         }
 
-    if(!each_equal(FlatExtraRealized_.begin(), FlatExtraRealized_.end(), 0.0))
+    if(!each_equal(FlatExtraRealized_, 0.0))
         {
         return "Flat extras not permitted.";
         }
