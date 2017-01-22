@@ -30,10 +30,10 @@
 
 void test_each_equal()
 {
-    int                a0[] {0, 0, 0, 0};
-    int const          a1[] {0, 1, 1, 1};
-    int volatile       a2[] {0, 1, 2, 2};
-    int const volatile a3[] {0, 1, 2, 3};
+    int                   a0[] {0, 0, 0, 0};
+    int const             a1[] {0, 1, 1, 1};
+    int volatile          a2[] {0, 1, 2, 2};
+    int const volatile    a3[] {0, 1, 2, 3};
 
     // There can be no volatile standard container.
     std::vector<int>        v0 {0, 0, 0, 0};
@@ -67,10 +67,21 @@ void test_each_equal()
     BOOST_TEST( each_equal(v2.begin() + 2, v2.end(), 2));
     BOOST_TEST( each_equal(v3.begin() + 3, v3.end(), 3));
 
-    // Iterators are also more prone to error.
-    // This crashes with g++-mingw-w64-i686 4.9.1:
+    // Iterators are also more prone to error. The following examples
+    // have undefined behavior.
 
 //  BOOST_TEST( each_equal(v0.begin() + 7, v0.end(), 0));
+//  BOOST_TEST( each_equal(v0.begin()    , v3.end(), 0));
+
+    // Test empty ranges. There can be no empty array [8.3.4/1].
+    // By arbitrary definition, any value compares equal to an empty
+    // range.
+
+    BOOST_TEST( each_equal(v0.end(), v0.end(),     0)); // both end()
+    BOOST_TEST( each_equal(v0.end(), v0.end(), 12345)); // both end()
+    std::vector<int> v_empty;
+    BOOST_TEST( each_equal(v_empty, 23456));
+    BOOST_TEST( each_equal(v_empty.begin(), v_empty.end(), 34567));
 }
 
 void test_files_are_identical()

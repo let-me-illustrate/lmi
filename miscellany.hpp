@@ -42,7 +42,11 @@
 template<typename InputIterator, typename T>
 bool each_equal(InputIterator first, InputIterator last, T const& t)
 {
-    return std::distance(first, last) == std::count(first, last, t);
+    for(InputIterator i = first; i != last; ++i)
+        {
+        if(t != *i) return false;
+        }
+    return true;
 }
 
 /// Test whether every element in a range equals the specified constant.
