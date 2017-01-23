@@ -42,7 +42,6 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <wx/datetime.h>
 #include <wx/html/htmlcell.h>
@@ -52,6 +51,7 @@
 
 #include <cstring>                      // std::strstr()
 #include <limits>
+#include <memory>                       // std::unique_ptr
 #include <stdexcept>
 #include <utility>                      // std::pair
 #include <vector>
@@ -393,7 +393,7 @@ int output_html
     ,enum_output_mode output_mode = e_output_normal
     )
 {
-    boost::scoped_ptr<wxHtmlContainerCell> const cell
+    std::unique_ptr<wxHtmlContainerCell> const cell
         (static_cast<wxHtmlContainerCell*>(html_parser.Parse(html))
         );
     LMI_ASSERT(cell);

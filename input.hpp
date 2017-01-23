@@ -42,9 +42,9 @@
 class product_database;
 
 #include <boost/operators.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <map>
+#include <memory>                       // std::unique_ptr
 #include <string>
 #include <vector>
 
@@ -219,7 +219,7 @@ class LMI_SO Input
 
     void make_term_rider_consistent(bool aggressively = true);
 
-    boost::scoped_ptr<product_database> database_;
+    std::unique_ptr<product_database> database_;
 
     // Database axes are independent variables; they're "cached" along
     // with the database, which is reset when any of them changes.
