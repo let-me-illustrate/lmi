@@ -48,7 +48,7 @@ void concrete_file_command
     fs::path path(file);
     std::string extension = fs::extension(path);
 
-    boost::scoped_ptr<wxFileType> ft
+    boost::scoped_ptr<wxFileType> const ft
         (wxTheMimeTypesManager->GetFileTypeFromExtension(extension)
         );
 

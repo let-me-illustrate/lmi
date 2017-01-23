@@ -70,8 +70,8 @@ class DocManagerEx
         ,bool            sort
         ) override;
 
-    boost::scoped_ptr<wxPrintData> print_data_;
-    boost::scoped_ptr<wxPageSetupDialogData> page_setup_data_;
+    boost::scoped_ptr<wxPrintData>           const print_data_;
+    boost::scoped_ptr<wxPageSetupDialogData> const page_setup_data_;
 
     DECLARE_DYNAMIC_CLASS(DocManagerEx)
     DECLARE_EVENT_TABLE()

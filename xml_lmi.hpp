@@ -54,8 +54,8 @@ namespace xml_lmi
         xml::element const& root_node(std::string const& expected_name) const;
 
       private:
-        std::string                    error_context_;
-        boost::scoped_ptr<DomParser>   parser_;
+        std::string                       error_context_;
+        boost::scoped_ptr<DomParser>      parser_;
     };
 
     class xml_document
@@ -74,8 +74,8 @@ namespace xml_lmi
         void add_comment(std::string const&);
 
       private:
-        std::string                    error_context_;
-        boost::scoped_ptr<Document>    document_;
+        std::string                       error_context_;
+        boost::scoped_ptr<Document> const document_;
     };
 
     xml::node::const_iterator retrieve_element
