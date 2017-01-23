@@ -75,13 +75,13 @@ void concrete_progress_meter::culminate_ui()
 {
 }
 
-boost::shared_ptr<progress_meter> concrete_progress_meter_creator
+std::shared_ptr<progress_meter> concrete_progress_meter_creator
     (int                               max_count
     ,std::string const&                title
     ,progress_meter::enum_display_mode display_mode
     )
 {
-    return boost::shared_ptr<progress_meter>
+    return std::shared_ptr<progress_meter>
         (new concrete_progress_meter(max_count, title, display_mode)
         );
 }

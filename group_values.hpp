@@ -29,8 +29,8 @@
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
-#include <boost/shared_ptr.hpp>
 
+#include <memory>                       // std::shared_ptr
 #include <vector>
 
 class Input;
@@ -85,10 +85,10 @@ class LMI_SO run_census
         ,std::vector<Input> const& cells
         );
 
-    boost::shared_ptr<Ledger const> composite() const;
+    std::shared_ptr<Ledger const> composite() const;
 
   private:
-    boost::shared_ptr<Ledger> composite_;
+    std::shared_ptr<Ledger> composite_;
 };
 
 #endif // group_values_hpp

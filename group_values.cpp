@@ -117,7 +117,7 @@ census_run_result run_census_in_series::operator()
 {
     Timer timer;
     census_run_result result;
-    boost::shared_ptr<progress_meter> meter
+    std::shared_ptr<progress_meter> meter
         (create_progress_meter
             (cells.size()
             ,"Calculating all cells"
@@ -240,7 +240,7 @@ census_run_result run_census_in_parallel::operator()
 {
     Timer timer;
     census_run_result result;
-    boost::shared_ptr<progress_meter> meter
+    std::shared_ptr<progress_meter> meter
         (create_progress_meter
             (cells.size()
             ,"Initializing all cells"
@@ -251,7 +251,7 @@ census_run_result run_census_in_parallel::operator()
     ledger_emitter emitter(file, emission);
 
     std::vector<Input>::const_iterator ip;
-    std::vector<boost::shared_ptr<AccountValue> > cell_values;
+    std::vector<std::shared_ptr<AccountValue> > cell_values;
     std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
 
     int j = 0;
@@ -267,7 +267,7 @@ census_run_result run_census_in_parallel::operator()
             {
             { // Begin fenv_guard scope.
             fenv_guard fg;
-            boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
+            std::shared_ptr<AccountValue> av(new AccountValue(*ip));
             std::string const name(cells[j]["InsuredName"].str());
             // Indexing: here, j is an index into cells, not cell_values.
             av->SetDebugFilename
@@ -746,7 +746,7 @@ census_run_result run_census::operator()
     return result;
 }
 
-boost::shared_ptr<Ledger const> run_census::composite() const
+std::shared_ptr<Ledger const> run_census::composite() const
 {
     LMI_ASSERT(composite_.get());
     return composite_;

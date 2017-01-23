@@ -28,8 +28,7 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
-
+#include <memory>                       // std::shared_ptr
 #include <string>
 
 class Input;
@@ -49,11 +48,11 @@ class IllusVal
 
     double run(Input const&);
 
-    boost::shared_ptr<Ledger const> ledger() const;
+    std::shared_ptr<Ledger const> ledger() const;
 
   private:
     std::string filename_;
-    boost::shared_ptr<Ledger const> ledger_;
+    std::shared_ptr<Ledger const> ledger_;
 };
 
 #endif // ledgervalues_hpp

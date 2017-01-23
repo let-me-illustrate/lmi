@@ -33,8 +33,7 @@
 #include "uncopyable_lmi.hpp"
 #include "yare_input.hpp"
 
-#include <boost/shared_ptr.hpp>
-
+#include <memory>                       // std::shared_ptr
 #include <string>
 #include <vector>
 
@@ -114,21 +113,21 @@ class LMI_SO BasicValues
     mcenum_state          GetPremiumTaxState()         const;
     double                InvestmentManagementFee()    const;
 
-    yare_input                            yare_input_;
-    boost::shared_ptr<product_data>       ProductData_;
-    boost::shared_ptr<product_database>   Database_;
-    boost::shared_ptr<FundData>           FundData_;
-    boost::shared_ptr<rounding_rules>     RoundingRules_;
-    boost::shared_ptr<stratified_charges> StratifiedCharges_;
-    boost::shared_ptr<MortalityRates>     MortalityRates_;
-    boost::shared_ptr<InterestRates>      InterestRates_;
-    boost::shared_ptr<SurrChgRates>       SurrChgRates_;
-    boost::shared_ptr<death_benefits>     DeathBfts_;
-    boost::shared_ptr<modal_outlay>       Outlay_;
-    boost::shared_ptr<premium_tax>        PremiumTax_;
-    boost::shared_ptr<Loads>              Loads_;
-    boost::shared_ptr<Irc7702>            Irc7702_;
-    boost::shared_ptr<Irc7702A>           Irc7702A_;
+    yare_input                          yare_input_;
+    std::shared_ptr<product_data>       ProductData_;
+    std::shared_ptr<product_database>   Database_;
+    std::shared_ptr<FundData>           FundData_;
+    std::shared_ptr<rounding_rules>     RoundingRules_;
+    std::shared_ptr<stratified_charges> StratifiedCharges_;
+    std::shared_ptr<MortalityRates>     MortalityRates_;
+    std::shared_ptr<InterestRates>      InterestRates_;
+    std::shared_ptr<SurrChgRates>       SurrChgRates_;
+    std::shared_ptr<death_benefits>     DeathBfts_;
+    std::shared_ptr<modal_outlay>       Outlay_;
+    std::shared_ptr<premium_tax>        PremiumTax_;
+    std::shared_ptr<Loads>              Loads_;
+    std::shared_ptr<Irc7702>            Irc7702_;
+    std::shared_ptr<Irc7702A>           Irc7702A_;
 
     double GetAnnualTgtPrem(int a_year, double a_specamt) const;
 

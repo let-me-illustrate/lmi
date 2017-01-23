@@ -30,10 +30,9 @@
 
 #include "alert.hpp"
 
-#include <boost/shared_ptr.hpp>
-
 #include <wx/version.h>                 // Mark this file as wx dependent.
 
+#include <memory>                       // std::shared_ptr
 #include <string>
 #include <utility>                      // std::pair
 #include <vector>
@@ -331,7 +330,7 @@ class TierEditorGrid
 
     TierEditorGrid
         (wxWindow* parent
-        ,boost::shared_ptr<TierTableAdapter> const& table
+        ,std::shared_ptr<TierTableAdapter> const& table
         ,wxWindowID id = wxID_ANY
         ,wxPoint const& pos = wxDefaultPosition
         ,wxSize const& size = wxDefaultSize
@@ -339,7 +338,7 @@ class TierEditorGrid
 
     bool Create
         (wxWindow* parent
-        ,boost::shared_ptr<TierTableAdapter> const& table
+        ,std::shared_ptr<TierTableAdapter> const& table
         ,wxWindowID id = wxID_ANY
         ,wxPoint const& pos = wxDefaultPosition
         ,wxSize const& size = wxDefaultSize

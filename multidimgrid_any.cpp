@@ -309,7 +309,7 @@ MultiDimGrid::~MultiDimGrid()
 
 bool MultiDimGrid::Create
     (wxWindow* parent
-    ,boost::shared_ptr<MultiDimTableAny> const& atable
+    ,std::shared_ptr<MultiDimTableAny> const& atable
     ,wxWindowID id
     ,wxPoint const& pos
     ,wxSize const& size

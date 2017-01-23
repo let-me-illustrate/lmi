@@ -48,7 +48,7 @@ double IllusVal::run(Input const& input)
     return z;
 }
 
-boost::shared_ptr<Ledger const> IllusVal::ledger() const
+std::shared_ptr<Ledger const> IllusVal::ledger() const
 {
     LMI_ASSERT(ledger_.get());
     return ledger_;

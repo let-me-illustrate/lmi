@@ -29,7 +29,7 @@
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>                       // std::shared_ptr
 
 class DatabaseDocument;
 class DatabaseTableAdapter;
@@ -64,7 +64,7 @@ class DatabaseView
 
     void UponTreeSelectionChange(wxTreeEvent&);
 
-    boost::shared_ptr<DatabaseTableAdapter> const table_adapter_;
+    std::shared_ptr<DatabaseTableAdapter> const table_adapter_;
 
     DECLARE_DYNAMIC_CLASS(DatabaseView)
     DECLARE_EVENT_TABLE()

@@ -38,18 +38,17 @@
 
 #include "dbvalue.hpp"
 
-#include <boost/shared_ptr.hpp>
-
+#include <memory>                       // std::shared_ptr
 #include <string>
 
 /// Database dictionary adapter for database_entity class
 ///
 /// One could mention Adaptor pattern.
 /// It does not really owns the database_entity instance which is passed to it.
-/// The boost::shared_ptr does.
+/// The std::shared_ptr does.
 /// Regarding the fact that all the instances of database_entity are reside
 /// in the DBDictionary object and owned by it, one could pass entity via
-/// boost::shared_ptr constructed with deallocator object that does nothing.
+/// std::shared_ptr constructed with deallocator object that does nothing.
 
 class DatabaseTableAdapter
   :public MultiDimTable<double, DatabaseTableAdapter>
@@ -148,7 +147,7 @@ class DatabaseEditorGrid
   public:
     DatabaseEditorGrid
         (wxWindow*
-        ,boost::shared_ptr<DatabaseTableAdapter> const&
+        ,std::shared_ptr<DatabaseTableAdapter> const&
         ,wxWindowID = wxID_ANY
         ,wxPoint const& = wxDefaultPosition
         ,wxSize const& = wxDefaultSize
@@ -157,7 +156,7 @@ class DatabaseEditorGrid
 
 inline DatabaseEditorGrid::DatabaseEditorGrid
     (wxWindow* parent
-    ,boost::shared_ptr<DatabaseTableAdapter> const& table
+    ,std::shared_ptr<DatabaseTableAdapter> const& table
     ,wxWindowID id
     ,wxPoint const& pos
     ,wxSize const& size

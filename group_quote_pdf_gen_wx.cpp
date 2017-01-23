@@ -470,9 +470,9 @@ class group_quote_pdf_generator_wx
     :public group_quote_pdf_generator
 {
   public:
-    static boost::shared_ptr<group_quote_pdf_generator> do_create()
+    static std::shared_ptr<group_quote_pdf_generator> do_create()
         {
-        return boost::shared_ptr<group_quote_pdf_generator>
+        return std::shared_ptr<group_quote_pdf_generator>
                 (new group_quote_pdf_generator_wx()
                 );
         }

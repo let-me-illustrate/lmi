@@ -328,7 +328,7 @@ void IllustrationView::Run(Input* overriding_input)
 ///
 /// custom_io_0_run_if_file_exists() uses this function similarly.
 
-void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
+void IllustrationView::SetLedger(std::shared_ptr<Ledger const> ledger)
 {
     ledger_values_ = ledger;
     LMI_ASSERT(ledger_values_.get());

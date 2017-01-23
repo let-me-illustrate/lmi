@@ -40,7 +40,7 @@ bool group_quote_pdf_generator::set_creator(creator_type f)
     return true;
 }
 
-boost::shared_ptr<group_quote_pdf_generator> group_quote_pdf_generator::create()
+std::shared_ptr<group_quote_pdf_generator> group_quote_pdf_generator::create()
 {
     return group_quote_pdf_generator_create_callback()();
 }

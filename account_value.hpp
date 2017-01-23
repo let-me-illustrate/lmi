@@ -29,10 +29,9 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
-
 #include <iosfwd>
 #include <fstream>
+#include <memory>                       // std::shared_ptr
 #include <string>
 #include <vector>
 
@@ -91,7 +90,7 @@ class LMI_SO AccountValue
         ,int    ThatSolveEndYear
         );
 
-    boost::shared_ptr<Ledger const> ledger_from_av() const;
+    std::shared_ptr<Ledger const> ledger_from_av() const;
 
   private:
     LedgerInvariant const& InvariantValues() const;
@@ -323,9 +322,9 @@ class LMI_SO AccountValue
     bool            SolvingForGuarPremium;
     bool            ItLapsed;
 
-    boost::shared_ptr<Ledger         > ledger_;
-    boost::shared_ptr<LedgerInvariant> ledger_invariant_;
-    boost::shared_ptr<LedgerVariant  > ledger_variant_;
+    std::shared_ptr<Ledger         > ledger_;
+    std::shared_ptr<LedgerInvariant> ledger_invariant_;
+    std::shared_ptr<LedgerVariant  > ledger_variant_;
 
     oenum_increment_method             deduction_method;
     oenum_increment_account_preference deduction_preferred_account;

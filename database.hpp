@@ -31,8 +31,7 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
-
+#include <memory>                       // std::shared_ptr
 #include <string>
 #include <vector>
 
@@ -85,7 +84,7 @@ class LMI_SO product_database
     int             length_;
     int             maturity_age_;
 
-    boost::shared_ptr<DBDictionary> db_;
+    std::shared_ptr<DBDictionary> db_;
 };
 
 #endif // database_hpp

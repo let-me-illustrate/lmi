@@ -179,9 +179,9 @@ namespace
 ///
 /// Postcondition: returned pointer is not null; throws otherwise.
 
-boost::shared_ptr<DBDictionary> antediluvian_db()
+std::shared_ptr<DBDictionary> antediluvian_db()
 {
-    boost::shared_ptr<DBDictionary> z(new DBDictionary);
+    std::shared_ptr<DBDictionary> z(new DBDictionary);
     z->InitAntediluvian();
     LMI_ASSERT(z);
     return z;
@@ -196,7 +196,7 @@ void product_database::initialize(std::string const& product_name)
 {
     if(is_antediluvian_fork())
         {
-        static boost::shared_ptr<DBDictionary> z(antediluvian_db());
+        static std::shared_ptr<DBDictionary> z(antediluvian_db());
         db_ = z;
         }
     else

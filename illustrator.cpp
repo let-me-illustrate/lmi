@@ -163,7 +163,7 @@ void illustrator::conditionally_show_timings_on_stdout() const
 /// illustration, it's the one and only ledger. For a multiple-cell
 /// illustration, it's the composite ledger.
 
-boost::shared_ptr<Ledger const> illustrator::principal_ledger() const
+std::shared_ptr<Ledger const> illustrator::principal_ledger() const
 {
     LMI_ASSERT(principal_ledger_.get());
     return principal_ledger_;

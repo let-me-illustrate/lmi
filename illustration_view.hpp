@@ -39,9 +39,9 @@
 #include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
-
 #include <wx/event.h>
+
+#include <memory>                       // std::shared_ptr
 
 class IllustrationDocument;
 class Input;
@@ -68,7 +68,7 @@ class IllustrationView
     //
     void DisplaySelectedValuesAsHtml();
     void Run(Input* = nullptr);
-    void SetLedger(boost::shared_ptr<Ledger const>);
+    void SetLedger(std::shared_ptr<Ledger const>);
 
   private:
     IllustrationDocument& document() const;
@@ -102,7 +102,7 @@ class IllustrationView
 
     wxHtmlWindow* html_window_;
     bool is_phony_;
-    boost::shared_ptr<Ledger const> ledger_values_;
+    std::shared_ptr<Ledger const> ledger_values_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)
     DECLARE_EVENT_TABLE()

@@ -29,9 +29,9 @@
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <functional>
+#include <memory>                       // std::shared_ptr
 #include <vector>
 
 class Input;
@@ -55,7 +55,7 @@ class LMI_SO illustrator
 
     void conditionally_show_timings_on_stdout() const;
 
-    boost::shared_ptr<Ledger const> principal_ledger() const;
+    std::shared_ptr<Ledger const> principal_ledger() const;
 
     double seconds_for_input       () const;
     double seconds_for_calculations() const;
@@ -63,7 +63,7 @@ class LMI_SO illustrator
 
   private:
     mcenum_emission emission_;
-    boost::shared_ptr<Ledger const> principal_ledger_;
+    std::shared_ptr<Ledger const> principal_ledger_;
     double seconds_for_input_;
     double seconds_for_calculations_;
     double seconds_for_output_;

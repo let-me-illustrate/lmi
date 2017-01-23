@@ -33,10 +33,9 @@
 #include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
-
 #include <wx/object.h>                  // wxObjectDataPtr
 
+#include <memory>                       // std::shared_ptr
 #include <string>
 #include <vector>
 
@@ -127,7 +126,7 @@ class CensusView
 
     bool autosize_columns_;
 
-    boost::shared_ptr<Ledger const> composite_ledger_;
+    std::shared_ptr<Ledger const> composite_ledger_;
 
     wxDataViewCtrl* list_window_;
     wxObjectDataPtr<CensusViewDataViewModel> list_model_;

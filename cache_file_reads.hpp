@@ -28,10 +28,10 @@
 #include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/operations.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <ctime>                        // std::time_t
 #include <map>
+#include <memory>                       // std::shared_ptr
 #include <string>
 #include <utility>                      // std::make_pair()
 
@@ -61,7 +61,7 @@ class file_cache
     :private lmi::uncopyable<file_cache<T> >
 {
   public:
-    using retrieved_type = boost::shared_ptr<T>;
+    using retrieved_type = std::shared_ptr<T>;
 
     static file_cache<T>& instance()
         {
