@@ -74,13 +74,10 @@ bool files_are_identical(std::string const&, std::string const&);
 template<typename T>
 class minmax
 {
-    typedef typename std::vector<T>::const_iterator extremum_t;
-    typedef std::pair<extremum_t,extremum_t> extrema_t;
-
   public:
     explicit minmax(std::vector<T> const& v)
         {
-        extrema_t extrema = std::minmax_element(v.begin(), v.end());
+        auto const& extrema = std::minmax_element(v.begin(), v.end());
         minimum_ = *extrema.first ;
         maximum_ = *extrema.second;
         }

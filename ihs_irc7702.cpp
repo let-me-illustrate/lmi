@@ -490,13 +490,12 @@ void Irc7702::InitCorridor()
         );
 
     // GPT corridor
-    std::vector<double>::const_iterator corr = CompleteGptCorridor().begin();
     LMI_ASSERT
         (   static_cast<unsigned int>(IssueAge)
         <=  CompleteGptCorridor().size()
         );
     GptCorridor.assign
-        (corr + IssueAge
+        (CompleteGptCorridor().begin() + IssueAge
         ,CompleteGptCorridor().end()
         );
 }

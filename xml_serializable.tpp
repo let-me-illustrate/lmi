@@ -105,12 +105,11 @@ void xml_serializable<T>::read(xml::element const& x)
         ,t().member_names().end()
         ,std::back_inserter(residuary_names)
         );
-    std::list<std::string>::iterator current_member;
 
     for(auto const& child : x.elements())
         {
         std::string node_tag(child.get_name());
-        current_member = std::find
+        std::list<std::string>::iterator current_member = std::find
             (residuary_names.begin()
             ,residuary_names.end()
             ,node_tag

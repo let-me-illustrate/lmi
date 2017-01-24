@@ -262,9 +262,10 @@ LedgerBase& LedgerBase::PlusEq
         }
     LMI_ASSERT(a_Addend_svmi == a_Addend.BegYearVectors.end());
 
-    std::vector<double>::const_iterator eyi = a_Inforce.begin();
-    eyi++;
-    std::vector<double> const EndYearInforce(eyi, a_Inforce.end());
+    std::vector<double> const EndYearInforce
+        (a_Inforce.begin() + 1
+        ,a_Inforce.end()
+        );
     a_Addend_svmi = a_Addend.EndYearVectors.begin();
     for
         (double_vector_map::iterator svmi = EndYearVectors.begin()
