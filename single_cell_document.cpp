@@ -117,13 +117,10 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
         }
 
     xml::const_nodes_view const elements(root.elements());
-    LMI_ASSERT(!elements.empty());
-    xml::const_nodes_view::const_iterator i(elements.begin());
-    *i >> input_data_;
-    // XMLWRAPP !! It would be better to have operator+(int) in the
-    // iterator class, and to write this check above as
-    //   LMI_ASSERT(elements.end() == 1 + i);
-    LMI_ASSERT(elements.end() == ++i);
+    // An '.ill' document's root contains only one child element.
+    LMI_ASSERT(1 == elements.size());
+    // "*elements.begin()" because there is no front():
+    *elements.begin() >> input_data_;
 }
 
 /// Ascertain whether input file comes from a system other than lmi.
