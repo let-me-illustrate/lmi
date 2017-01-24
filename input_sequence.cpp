@@ -82,8 +82,8 @@ InputSequence::InputSequence
     // TODO ?? Not correct if last interval-endpoint specified is not the latest of all.
     if(intervals.size()) // TODO ?? And if not?
         {
-        intervals[intervals.size() - 1].end_duration = last_possible_duration;
-        intervals[intervals.size() - 1].end_mode     = e_maturity;
+        intervals.back().end_duration = last_possible_duration;
+        intervals.back().end_mode     = e_maturity;
         }
 
     realize_vector();

@@ -215,7 +215,8 @@ file::file(std::string const& file_path)
         }
 
     data_ = '\n' + data();
-    if('\n' != data().at(data().size() - 1))
+    // The '\n' sentinel just added makes back() safe for 0-byte files:
+    if('\n' != data().back())
         {
         throw std::runtime_error(R"(File does not end in '\n'.)");
         }
