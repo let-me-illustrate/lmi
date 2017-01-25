@@ -229,10 +229,9 @@ bool PreferencesModel::IsModified() const
 {
     PreferencesModel unchanged;
     configurable_settings const& z = configurable_settings::instance();
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& i : member_names())
         {
-        if(operator[](*i) != unchanged[*i])
+        if(operator[](i) != unchanged[i])
             {
             return true;
             }
@@ -278,14 +277,13 @@ void PreferencesModel::Load()
 std::string PreferencesModel::string_of_column_names() const
 {
     std::ostringstream oss;
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& i : member_names())
         {
-        if(!is_calculation_summary_column_name(*i))
+        if(!is_calculation_summary_column_name(i))
             {
             continue;
             }
-        std::string const column = operator[](*i).str();
+        std::string const column = operator[](i).str();
         if(column != empty_column_name)
             {
             oss << column << " ";

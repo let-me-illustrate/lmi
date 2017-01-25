@@ -201,14 +201,9 @@ void Loads::Calculate(load_details const& details)
                 );
 #endif // 0
             separate_account_load_[j] += extra_asset_comp;
-            std::vector<double>::iterator k;
-            for
-                (k = separate_account_load_[j].begin()
-                ;k != separate_account_load_[j].end()
-                ;++k
-                )
+            for(auto& k : separate_account_load_[j])
                 {
-                *k = details.round_interest_rate_(*k);
+                k = details.round_interest_rate_(k);
                 }
             }
         }

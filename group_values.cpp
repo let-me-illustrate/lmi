@@ -250,15 +250,14 @@ census_run_result run_census_in_parallel::operator()
 
     ledger_emitter emitter(file, emission);
 
-    std::vector<Input>::const_iterator ip;
     std::vector<std::shared_ptr<AccountValue> > cell_values;
     std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
 
-    int j = 0;
     int const first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
     int const first_cell_inforce_month = value_cast<int>((*cells.begin())["InforceMonth"].str());
     cell_values.reserve(cells.size());
-    for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
+    int j = 0;
+    for(auto const& ip : cells)
         {
         // This condition need be written only once, here, because
         // subsequently 'cell_values' (which reflects the condition)
@@ -267,7 +266,7 @@ census_run_result run_census_in_parallel::operator()
             {
             { // Begin fenv_guard scope.
             fenv_guard fg;
-            std::shared_ptr<AccountValue> av(new AccountValue(*ip));
+            std::shared_ptr<AccountValue> av(new AccountValue(ip));
             std::string const name(cells[j]["InsuredName"].str());
             // Indexing: here, j is an index into cells, not cell_values.
             av->SetDebugFilename
@@ -309,6 +308,8 @@ census_run_result run_census_in_parallel::operator()
             result.completed_normally_ = false;
             goto done;
             }
+
+        ++j;
         } // End for.
     meter->culminate();
     if(cell_values.empty())
