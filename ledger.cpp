@@ -162,7 +162,6 @@ void Ledger::SetRunBases(int length)
 void Ledger::ZeroInforceAfterLapse()
 {
     ledger_map_t const& l_map_rep = ledger_map_->held();
-    ledger_map_t::const_iterator this_i = l_map_rep.begin();
 
     // Pick the highest lapse year of any basis (i.e. any LedgerVariant).
     // Set inforce lives to zero at the end of that year and thereafter.
@@ -172,20 +171,16 @@ void Ledger::ZeroInforceAfterLapse()
     // that the vector of inforce lives does not correspond to the
     // current values.
     int lapse_year = 0;
-    while(this_i != l_map_rep.end())
+    for(auto const& i : l_map_rep)
         {
         lapse_year = std::max
             (lapse_year
-            ,static_cast<int>((*this_i).second.LapseYear)
+            ,static_cast<int>(i.second.LapseYear)
             );
-        ++this_i;
         }
-    std::vector<double>::iterator b =
-            ledger_invariant_->InforceLives.begin()
-        +   1
-        +   lapse_year
-        ;
+    std::vector<double>::iterator b = ledger_invariant_->InforceLives.begin();
     std::vector<double>::iterator e = ledger_invariant_->InforceLives.end();
+    b += std::min(e - b, 1 + lapse_year);
     if(b < e)
         {
         std::fill(b, e, 0.0);
