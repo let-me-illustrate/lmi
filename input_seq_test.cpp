@@ -141,12 +141,15 @@ void check2
 
 int test_main(int, char*[])
 {
-    // General test pattern:
-    //   e: expected result
-    // and the rest are ctor arguments:
-    //   d: numeric data
-    //   n: number of data
-    //   k,c,w: extra arguments
+    // Arguments to check[0-9]() functions:
+    //   expected results
+    //     c: keywords
+    //     d: numeric values
+    //   ctor arguments
+    //     n: length
+    //     e: expression
+    //     k: extra keywords
+    //     w: default keyword
 
     // An all-blank string is treated as zero.
     {
