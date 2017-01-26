@@ -26,7 +26,6 @@
 #include "test_tools.hpp"
 
 #include <algorithm>
-#include <cassert>
 #include <iterator>                     // std::ostream_iterator
 
 void analyze_errors
@@ -41,8 +40,6 @@ void analyze_errors
     InputSequence seq(e, n, 90, 95, 0, 2002, 0, k, w);
 
     std::vector<double> v(seq.linear_number_representation());
-    // Assert that std::equal() has defined behavior.
-    assert(v.size() == static_cast<unsigned int>(n));
     if(v != std::vector<double>(d, d + n))
         {
         std::cout << "\nExpression: '" << e << '\'';
@@ -54,9 +51,7 @@ void analyze_errors
         }
 
     std::vector<std::string> s(seq.linear_keyword_representation());
-    // Assert that std::equal() has defined behavior.
-    assert(s.size() == static_cast<unsigned int>(n));
-    if((nullptr != c) && !std::equal(c, c + n, s.begin()))
+    if(nullptr != c && s != std::vector<std::string>(c, c + n))
         {
         std::cout << "\nExpression: '" << e << '\'';
         std::cout << "\n  expected: ";
@@ -73,8 +68,6 @@ void analyze_errors
         }
 }
 
-static char const* c_default[] = {""};
-
 void check
     (char const*                     file
     ,int                             line
@@ -82,16 +75,18 @@ void check
     ,int                             n
     ,std::string const&              e
     ,std::vector<std::string> const& k = std::vector<std::string>(0)
-    ,char const* const*              c = c_default
+    ,char const* const*              c = nullptr
     ,std::string const&              w = std::string()
     )
 {
     InputSequence seq(e, n, 90, 95, 0, 2002, 0, k, w);
+
     std::vector<double> v(seq.linear_number_representation());
     bool const bv = v == std::vector<double>(d, d + n);
+
     std::vector<std::string> s(seq.linear_keyword_representation());
-    // This "k.empty()" thing needs reconsideration.
-    bool const bs = k.empty() || std::equal(c, c + n, s.begin());
+    bool const bs = nullptr == c || s == std::vector<std::string>(c, c + n);
+
     bool const b = bv && bs;
     if(!b) analyze_errors(d, n, e, k, c, w);
     INVOKE_BOOST_TEST(b, file, line);
