@@ -28,8 +28,10 @@
 #include <algorithm>
 #include <iterator>                     // std::ostream_iterator
 
-void analyze_errors
-    (double const*                   d
+void check
+    (char const*                     file
+    ,int                             line
+    ,double const*                   d
     ,int                             n
     ,std::string const&              e
     ,std::vector<std::string> const& k = std::vector<std::string>(0)
@@ -63,35 +65,13 @@ void analyze_errors
         std::cout << std::endl;
         }
 
-    if(seq.formatted_diagnostics().size())
+    bool const b = bv && bs;
+    INVOKE_BOOST_TEST(b, file, line);
+    if(!b && seq.formatted_diagnostics().size())
         {
         std::cout << '\n' << seq.formatted_diagnostics() << '\n';
         std::cout << std::endl;
         }
-}
-
-void check
-    (char const*                     file
-    ,int                             line
-    ,double const*                   d
-    ,int                             n
-    ,std::string const&              e
-    ,std::vector<std::string> const& k = std::vector<std::string>(0)
-    ,char const* const*              c = nullptr
-    ,std::string const&              w = std::string()
-    )
-{
-    InputSequence seq(e, n, 90, 95, 0, 2002, 0, k, w);
-
-    std::vector<double> v(seq.linear_number_representation());
-    bool const bv = v == std::vector<double>(d, d + n);
-
-    std::vector<std::string> s(seq.linear_keyword_representation());
-    bool const bs = nullptr == c || s == std::vector<std::string>(c, c + n);
-
-    bool const b = bv && bs;
-    if(!b) analyze_errors(d, n, e, k, c, w);
-    INVOKE_BOOST_TEST(b, file, line);
 }
 
 int test_main(int, char*[])
