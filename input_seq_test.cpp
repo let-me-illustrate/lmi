@@ -29,28 +29,27 @@
 #include <cassert>
 #include <iterator>                     // std::ostream_iterator
 
-template<typename T>
 void analyze_errors
-    (T const*                        d
+    (double const*                   d
     ,int                             n
     ,std::string const&              e
     ,std::vector<std::string> const& k = std::vector<std::string>(0)
     ,char const* const*              c = nullptr
-    ,std::string const&              w = std::string("")
+    ,std::string const&              w = std::string()
     )
 {
     InputSequence seq(e, n, 90, 95, 0, 2002, 0, k, w);
 
-    std::vector<T> v(seq.linear_number_representation());
+    std::vector<double> v(seq.linear_number_representation());
     // Assert that std::equal() has defined behavior.
     assert(v.size() == static_cast<unsigned int>(n));
-    if(v != std::vector<T>(d, d + n))
+    if(v != std::vector<double>(d, d + n))
         {
         std::cout << "\nExpression: '" << e << '\'';
         std::cout << "\n  expected: ";
-        std::copy(d, d + n, std::ostream_iterator<T>(std::cout, " "));
+        std::copy(d, d + n, std::ostream_iterator<double>(std::cout, " "));
         std::cout << "\n   but got: ";
-        std::copy(v.begin(), v.end(), std::ostream_iterator<T>(std::cout, " "));
+        std::copy(v.begin(), v.end(), std::ostream_iterator<double>(std::cout, " "));
         std::cout << std::endl;
         }
 
@@ -76,11 +75,10 @@ void analyze_errors
 
 static char const* c_default[] = {""};
 
-template<typename T>
 void check
     (char const*                     file
     ,int                             line
-    ,T const*                        d
+    ,double const*                   d
     ,int                             n
     ,std::string const&              e
     ,std::vector<std::string> const& k = std::vector<std::string>(0)
@@ -90,7 +88,7 @@ void check
 {
     InputSequence seq(e, n, 90, 95, 0, 2002, 0, k, w);
     std::vector<double> v(seq.linear_number_representation());
-    bool const bv = v == std::vector<T>(d, d + n);
+    bool const bv = v == std::vector<double>(d, d + n);
     std::vector<std::string> s(seq.linear_keyword_representation());
     // This "k.empty()" thing needs reconsideration.
     bool const bs = k.empty() || std::equal(c, c + n, s.begin());
