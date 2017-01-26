@@ -162,7 +162,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
     std::string prior_value =
         (0 != v.size())
         ? v.front()
-        : std::string("")
+        : std::string()
         ;
     std::string current_value = prior_value;
 
@@ -215,7 +215,7 @@ InputSequence::InputSequence
     std::string s_prior_value =
         (0 != s_v.size())
         ? s_v.front()
-        : std::string("")
+        : std::string()
         ;
     std::string s_current_value = s_prior_value;
 

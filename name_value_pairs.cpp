@@ -56,7 +56,7 @@ std::string const& name_value_pairs::string_value(std::string const& key) const
     string_map::const_iterator i = map_.find(key);
     if(i == map_.end())
         {
-        static std::string const empty_string("");
+        static std::string const empty_string = std::string();
         return empty_string;
         }
     else
