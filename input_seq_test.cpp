@@ -40,7 +40,8 @@ void analyze_errors
     InputSequence seq(e, n, 90, 95, 0, 2002, 0, k, w);
 
     std::vector<double> v(seq.linear_number_representation());
-    if(v != std::vector<double>(d, d + n))
+    bool const bv = v == std::vector<double>(d, d + n);
+    if(!bv)
         {
         std::cout << "\nExpression: '" << e << '\'';
         std::cout << "\n  expected: ";
@@ -51,7 +52,8 @@ void analyze_errors
         }
 
     std::vector<std::string> s(seq.linear_keyword_representation());
-    if(nullptr != c && s != std::vector<std::string>(c, c + n))
+    bool const bs = nullptr == c || s == std::vector<std::string>(c, c + n);
+    if(!bs)
         {
         std::cout << "\nExpression: '" << e << '\'';
         std::cout << "\n  expected: ";
