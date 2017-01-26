@@ -249,7 +249,7 @@ class LMI_SO InputSequence
         ,int a_effective_year
         ,int a_index_origin
         ,std::vector<std::string> const& a_extra_keywords
-            = std::vector<std::string>(0)
+            = std::vector<std::string>()
         ,std::string const& a_default_keyword = ""
         ,bool a_keywords_only = false
         );

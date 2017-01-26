@@ -34,7 +34,7 @@ void check
     ,double const*                   d
     ,int                             n
     ,std::string const&              e
-    ,std::vector<std::string> const& k = std::vector<std::string>(0)
+    ,std::vector<std::string> const& k = std::vector<std::string>()
     ,char const* const*              c = nullptr
     ,std::string const&              w = std::string()
     )
