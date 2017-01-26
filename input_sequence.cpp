@@ -291,97 +291,92 @@ void InputSequence::realize_vector()
         return;
         }
 
-    std::vector<ValueInterval>::iterator intervals_i;
     int prior_begin_duration = 0;
-    for
-        (intervals_i = intervals.begin()
-        ;intervals_i != intervals.end()
-        ;++intervals_i
-        )
+    for(auto const& interval_i : intervals)
         {
-        if(intervals_i->insane)
+        if(interval_i.insane)
             {
             fatal_error()
                 << "InputSequence: untrapped parser error."
                 << LMI_FLUSH
                 ;
             }
-        if(e_invalid_mode == intervals_i->begin_mode)
+        if(e_invalid_mode == interval_i.begin_mode)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << intervals_i->begin_duration << ", "
-                << intervals_i->end_duration << " )"
+                << "[ " << interval_i.begin_duration << ", "
+                << interval_i.end_duration << " )"
                 << " has invalid begin_mode."
                 << LMI_FLUSH
                 ;
             }
-        if(e_invalid_mode == intervals_i->end_mode)
+        if(e_invalid_mode == interval_i.end_mode)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << intervals_i->begin_duration << ", "
-                << intervals_i->end_duration << " )"
+                << "[ " << interval_i.begin_duration << ", "
+                << interval_i.end_duration << " )"
                 << " has invalid end_mode."
                 << LMI_FLUSH
                 ;
             }
         // TODO ?? Also check whether value_number is a NaN.
-        if(intervals_i->value_is_keyword && "insane" == intervals_i->value_keyword)
+        if(interval_i.value_is_keyword && "insane" == interval_i.value_keyword)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << intervals_i->begin_duration << ", "
-                << intervals_i->end_duration << " )"
+                << "[ " << interval_i.begin_duration << ", "
+                << interval_i.end_duration << " )"
                 << " has invalid value_keyword."
                 << LMI_FLUSH
                 ;
             }
         // TODO ?? Decide whether we should permit what's disallowed here.
         // Similar logic could disallow other things too.
-        if(intervals_i->begin_duration < prior_begin_duration)
+        if(interval_i.begin_duration < prior_begin_duration)
             {
             diagnostics
                 << "Previous interval began at duration "
                 << prior_begin_duration
                 << "; current interval "
-                << "[ " << intervals_i->begin_duration << ", "
-                << intervals_i->end_duration << " )"
+                << "[ " << interval_i.begin_duration << ", "
+                << interval_i.end_duration << " )"
                 << " would begin before that. "
                 ;
                 mark_diagnostic_context();
             return;
             }
-        prior_begin_duration = intervals_i->begin_duration;
+        prior_begin_duration = interval_i.begin_duration;
         bool interval_is_ok =
-               0                           <= intervals_i->begin_duration
-            && intervals_i->begin_duration <= intervals_i->end_duration
-            && intervals_i->end_duration   <= last_possible_duration
+               0                         <= interval_i.begin_duration
+            && interval_i.begin_duration <= interval_i.end_duration
+            && interval_i.end_duration   <= last_possible_duration
             ;
         if(!interval_is_ok)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << intervals_i->begin_duration << ", "
-                << intervals_i->end_duration << " )"
+                << "[ " << interval_i.begin_duration << ", "
+                << interval_i.end_duration << " )"
                 << " not valid."
                 << LMI_FLUSH
                 ;
             }
-        if(intervals_i->value_is_keyword)
+        if(interval_i.value_is_keyword)
             {
             std::fill
-                (s.begin() + intervals_i->begin_duration
-                ,s.begin() + intervals_i->end_duration
-                ,intervals_i->value_keyword
+                (s.begin() + interval_i.begin_duration
+                ,s.begin() + interval_i.end_duration
+                ,interval_i.value_keyword
                 );
             }
         else
             {
             std::fill
-                (r.begin() + intervals_i->begin_duration
-                ,r.begin() + intervals_i->end_duration
-                ,intervals_i->value_number
+                (r.begin() + interval_i.begin_duration
+                ,r.begin() + interval_i.end_duration
+                ,interval_i.value_number
                 );
             }
         }
@@ -1029,17 +1024,15 @@ std::string InputSequence::mathematical_representation() const
         }
 
     std::ostringstream oss;
-    std::vector<ValueInterval>::const_iterator intervals_i = intervals.begin();
-    std::vector<ValueInterval>::const_iterator off_the_end = intervals.end();
-    while(intervals_i != intervals.end())
+    for(auto const& interval_i : intervals)
         {
-        if(intervals_i->value_is_keyword)
+        if(interval_i.value_is_keyword)
             {
-            oss << intervals_i->value_keyword;
+            oss << interval_i.value_keyword;
             }
         else
             {
-            oss << value_cast<std::string>(intervals_i->value_number);
+            oss << value_cast<std::string>(interval_i.value_number);
             }
 
         // If there's only one interval, it must span all years, so
@@ -1050,13 +1043,13 @@ std::string InputSequence::mathematical_representation() const
             break;
             }
 
-        if(intervals_i->end_duration != last_possible_duration)
+        if(interval_i.end_duration != last_possible_duration)
             {
             oss
                 << " ["
-                << intervals_i->begin_duration
+                << interval_i.begin_duration
                 << ", "
-                << intervals_i->end_duration
+                << interval_i.end_duration
                 << "); "
                 ;
             }
@@ -1071,13 +1064,12 @@ std::string InputSequence::mathematical_representation() const
             {
             oss
                 << " ["
-                << intervals_i->begin_duration
+                << interval_i.begin_duration
                 << ", "
                 << "maturity"
                 << ")"
                 ;
             }
-        ++intervals_i;
         }
     return oss.str();
 }
@@ -1087,25 +1079,23 @@ std::string InputSequence::mathematical_representation() const
 std::string InputSequence::natural_language_representation() const
 {
     std::ostringstream oss;
-    std::vector<ValueInterval>::const_iterator intervals_i = intervals.begin();
-    while(intervals_i != intervals.end())
+    for(auto const& interval_i : intervals)
         {
-        if(intervals_i->value_is_keyword)
+        if(interval_i.value_is_keyword)
             {
-            oss << intervals_i->value_keyword;
+            oss << interval_i.value_keyword;
             }
         else
             {
-            oss << intervals_i->value_number;
+            oss << interval_i.value_number;
             }
         oss
             << " from "
-            << intervals_i->begin_duration
+            << interval_i.begin_duration
             << " to "
-            << intervals_i->end_duration
+            << interval_i.end_duration
             << "; "
             ;
-        ++intervals_i;
         }
     return oss.str();
 }
