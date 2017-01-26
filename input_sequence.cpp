@@ -1031,7 +1031,6 @@ std::string InputSequence::mathematical_representation() const
     std::ostringstream oss;
     std::vector<ValueInterval>::const_iterator intervals_i = intervals.begin();
     std::vector<ValueInterval>::const_iterator off_the_end = intervals.end();
-    std::vector<ValueInterval>::const_iterator last_interval = --off_the_end;
     while(intervals_i != intervals.end())
         {
         if(intervals_i->value_is_keyword)
@@ -1051,7 +1050,7 @@ std::string InputSequence::mathematical_representation() const
             break;
             }
 
-        if(intervals_i != last_interval)
+        if(intervals_i->end_duration != last_possible_duration)
             {
             oss
                 << " ["
