@@ -581,7 +581,7 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
 
     // Then find the book control containing it by walking up the window chain
     // until we reach it.
-    for (wxWindow* maybe_page = w;;)
+    for(wxWindow* maybe_page = w;;)
         {
         wxWindow* const maybe_book = maybe_page->GetParent();
 
@@ -593,14 +593,14 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
             ,"book control containing window \"" << name << "\" not found"
             );
 
-        if (wxBookCtrlBase* const book = dynamic_cast<wxBookCtrlBase*>(maybe_book))
+        if(wxBookCtrlBase* const book = dynamic_cast<wxBookCtrlBase*>(maybe_book))
             {
             // We found the notebook, now we can use it to make the page
             // containing the target window current.
             size_t const num_pages = book->GetPageCount();
-            for (size_t n = 0; n < num_pages; n++)
+            for(size_t n = 0; n < num_pages; n++)
                 {
-                if (book->GetPage(n) == maybe_page)
+                if(book->GetPage(n) == maybe_page)
                     {
                     book->SetSelection(n);
                     wxYield();
@@ -719,7 +719,7 @@ bool SkeletonTest::StoreCurrentException()
         domain_error_ = e.what();
         return true;
         }
-    catch (std::runtime_error const& e)
+    catch(std::runtime_error const& e)
         {
         runtime_error_ = e.what();
         return true;
@@ -747,7 +747,7 @@ void SkeletonTest::RethrowStoredException()
 
 bool SkeletonTest::OnExceptionInMainLoop()
 {
-    if (is_running_tests_)
+    if(is_running_tests_)
         {
         // Don't let the base class catch, report and ignore the exceptions
         // that happen while running the tests, we need to ensure that the test
@@ -770,7 +770,7 @@ void SkeletonTest::OnAssertFailure
     // another exception is already in flight as this would just result in the
     // program termination without any useful information about the reason of
     // the failure whatsoever.
-    if (is_running_tests_ && !std::uncaught_exception())
+    if(is_running_tests_ && !std::uncaught_exception())
         {
         throw test_assertion_failure_exception(msg ? msg : cond, file, line, func);
         }
@@ -783,7 +783,7 @@ void SkeletonTest::OnAssertFailure
 void SkeletonTest::RunTheTests()
 {
     wxWindow* const mainWin = GetTopWindow();
-    if (!mainWin)
+    if(!mainWin)
         {
         wxLogError("Failed to find the application main window.");
         ExitMainLoop();
@@ -818,10 +818,10 @@ void SkeletonTest::RunTheTests()
 
     // Close any initially opened dialogs (e.g. "About" dialog shown unless a
     // special command line option is specified).
-    for (;;)
+    for(;;)
         {
         wxWindow* const activeWin = wxGetActiveWindow();
-        if (!activeWin || activeWin == mainWin)
+        if(!activeWin || activeWin == mainWin)
             break;
 
         // Try to close the dialog.
@@ -830,7 +830,7 @@ void SkeletonTest::RunTheTests()
         wxYield();
 
         // But stop trying if it didn't work.
-        if (wxGetActiveWindow() == activeWin)
+        if(wxGetActiveWindow() == activeWin)
             {
             wxLogError("Failed to close the currently opened window, "
                        "please ensure it doesn't appear on program startup.");
@@ -912,7 +912,7 @@ int main(int argc, char* argv[])
     initialize_application();
     initialize_filesystem();
 
-    if (!application_test::instance().process_command_line(argc, argv))
+    if(!application_test::instance().process_command_line(argc, argv))
         {
         return 0;
         }

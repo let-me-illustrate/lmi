@@ -120,7 +120,7 @@
 // reaches a valid option or an option terminator.
 
 enum Option_Argument
-    { NO_ARG, REQD_ARG, OPT_ARG, LIST_ARG, ALT_ARG };
+    {NO_ARG, REQD_ARG, OPT_ARG, LIST_ARG, ALT_ARG};
 
 struct Option
 {
@@ -171,7 +171,7 @@ class LMI_SO GetOpt
     // of the value of 'ordering'.  In the case of RETURN_IN_ORDER, only
     // '--' can cause 'getopt' to return EOF with 'optind' != ARGC.
 
-    enum OrderingEnum { REQUIRE_ORDER, PERMUTE, RETURN_IN_ORDER };
+    enum OrderingEnum {REQUIRE_ORDER, PERMUTE, RETURN_IN_ORDER};
     OrderingEnum ordering;
 
     // Handle permutation of arguments.
@@ -193,14 +193,14 @@ class LMI_SO GetOpt
 
     int list_option_first;
 
-    void exchange (char** argv);
+    void exchange(char** argv);
 
     // Internal methods
 
-    void  Initialize  (std::string const& a_optstring);
-    int  List_Value  (int i);
-    int  List_No_Value  ();
-    void print_expanding  (char* v);
+    void Initialize(std::string const& a_optstring);
+    int List_Value(int i);
+    int List_No_Value();
+    void print_expanding(char* v);
 
   public:
     // Set to an option character which was unrecognized.
@@ -312,8 +312,8 @@ class LMI_SO GetOpt
     // it is parsed as a short option instead.
     // GWC note: i.e., use long only iff (bool)long_only is ***false***.
 
-    GetOpt (int argc, char** argv, char const* optstring);
-    GetOpt (int argc, char** argv, char const* optstring,
+    GetOpt(int argc, char** argv, char const* optstring);
+    GetOpt(int argc, char** argv, char const* optstring,
             Option const* longopts, int* longind, int long_only);
     // Write a non-inline dtor explicitly, to prevent an ostensible
     // problem detected by a malloc debugger when memory allocated on
@@ -323,7 +323,7 @@ class LMI_SO GetOpt
 
     // first_char returns the first character of the argument.
 
-    int first_char ();
+    int first_char();
 
     // next_arg looks at next argument for an integer, double or string
     // depending on the type of argument given to it. If the correct type is
@@ -338,14 +338,14 @@ class LMI_SO GetOpt
     // and increment the index to the options.  Return 1 if an integer is
     // found, else return 0.
 
-    int next_arg (int& i);
-    int next_arg (double& d);
+    int next_arg(int& i);
+    int next_arg(double& d);
     // GWC changed nonstandard to standard string class.
-    int next_arg (std::string& s);
+    int next_arg(std::string& s);
 
     // Prints a message for an invalid argument.
 
-    void print_invalid ();
+    void print_invalid();
 
     // Added by GWC.
     void usage(int status = EXIT_SUCCESS);
@@ -353,9 +353,9 @@ class LMI_SO GetOpt
 };
 
 // GWC removed an extraneous ';' that followed this function definition.
-inline int  GetOpt::first_char ()
+inline int GetOpt::first_char()
 {
-    return  nargv[optind][0];
+    return nargv[optind][0];
 }
 
 #endif // getopt_hpp

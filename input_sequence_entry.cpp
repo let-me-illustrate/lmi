@@ -775,7 +775,7 @@ void InputSequenceEditor::set_tab_order()
     std::vector<wxWindow*> order;
     for(int row = 0; row < rows_count_; ++row)
         {
-        for (int col = Col_Value; col <= Col_Then; ++col)
+        for(int col = Col_Value; col <= Col_Then; ++col)
             order.push_back(get_field_win(col, row));
         }
     for(int row = 0; row < rows_count_; ++row)
@@ -912,7 +912,7 @@ void InputSequenceEditor::really_do_layout()
 
     // Now check if we're actually going to have a scrollbar or not by
     // comparing our ideal minimum size with the size we would actually have.
-    if ( sizer->ComputeFittingClientSize(this) != sizer->GetMinSize() )
+    if(sizer->ComputeFittingClientSize(this) != sizer->GetMinSize())
         {
         // The only possible reason for discrepancy is that the window would be
         // too big to fit on the screen and so the actual size of the rows area

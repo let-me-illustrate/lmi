@@ -154,7 +154,7 @@ void print_hex_val(T t, char const* name)
 #endif // defined __GNUC__ && defined LMI_X87
 // GWC modifications end
 
-  for (unsigned int i = 0; i < size_of_T; ++i) { // modified by GWC
+  for(unsigned int i = 0; i < size_of_T; ++i) { // modified by GWC
     if(p[i] <= 0xF)
       std::cout << "0";
     // GWC changed C cast to static_cast:
@@ -162,7 +162,7 @@ void print_hex_val(T t, char const* name)
   }
 // GWC modifications begin
   std::cout << " / ";
-  for (int i = size_of_T - 1; 0 <= i; --i) {
+  for(int i = size_of_T - 1; 0 <= i; --i) {
     if(p[i] <= 0xF)
       std::cout << "0";
     std::cout << std::hex << static_cast<int>(p[i]);
