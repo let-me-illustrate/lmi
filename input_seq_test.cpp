@@ -302,13 +302,7 @@ int test_main(int, char*[])
     char const* c[n] = {"a", "a", "ccc", "ccc", "b", "b", "b", "b", "b"};
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e("a[0, 2); ccc [2, 4);b[4, 6);");
-    std::vector<std::string> k;
-    k.push_back("not_used");
-    k.push_back("a");
-    k.push_back("b");
-    k.push_back("c");
-    k.push_back("cc");
-    k.push_back("ccc");
+    std::vector<std::string> const k{"not_used", "a", "b", "c", "cc", "ccc"};
     check(__FILE__, __LINE__, d, n, e, "", k, c);
     }
 
@@ -318,8 +312,7 @@ int test_main(int, char*[])
     char const* c[n] = {"", "", "keyword_00", "keyword_00", "", "", "", "", ""};
     double const d[n] = {1, 1, 0, 0, 5, 5, 7, 7, 7};
     std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
-    std::vector<std::string> k;
-    k.push_back("keyword_00");
+    std::vector<std::string> const k{"keyword_00"};
     check(__FILE__, __LINE__, d, n, e, "", k, c);
     }
 
@@ -330,10 +323,7 @@ int test_main(int, char*[])
     char const* c[n] =  {"b", "b", "x", "a", "x", "x", "a", "x", "x", "x"};
     double const d[n] = {  0,   0,   0,   0,   5,   5,   0,   7,   7,   7};
     std::string const e("b [0, 2); a [3, 4); 5 [4, 6); a; 7");
-    std::vector<std::string> k;
-    k.push_back("a");
-    k.push_back("b");
-    k.push_back("x");
+    std::vector<std::string> const k{"a", "b", "x"};
     std::string w("x");
     check(__FILE__, __LINE__, d, n, e, "", k, c, w);
     }
