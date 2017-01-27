@@ -55,7 +55,12 @@ void check
         }
 
     std::vector<std::string> s(seq.linear_keyword_representation());
-    bool const bs = nullptr == c || s == std::vector<std::string>(c, c + n);
+    std::vector<std::string> expected_keyword_representation =
+        (nullptr == c)
+        ? std::vector<std::string>(n)
+        : std::vector<std::string>(c, c + n)
+        ;
+    bool const bs = s == expected_keyword_representation;
     if(!bs)
         {
         std::cout << "\nExpression: '" << e << '\'';
