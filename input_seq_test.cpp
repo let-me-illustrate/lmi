@@ -40,9 +40,9 @@ void check
     ,std::string const&              w = std::string()
     )
 {
-    InputSequence seq(e, n, 90, 95, 0, 2002, 0, k, w);
+    InputSequence const seq(e, n, 90, 95, 0, 2002, 0, k, w);
 
-    std::vector<double> v(seq.linear_number_representation());
+    std::vector<double> const& v(seq.linear_number_representation());
     bool const bv = v == std::vector<double>(d, d + n);
     if(!bv)
         {
@@ -54,8 +54,8 @@ void check
         std::cout << std::endl;
         }
 
-    std::vector<std::string> s(seq.linear_keyword_representation());
-    std::vector<std::string> expected_keyword_representation =
+    std::vector<std::string> const& s(seq.linear_keyword_representation());
+    std::vector<std::string> const expected_keyword_representation =
         (nullptr == c)
         ? std::vector<std::string>(n)
         : std::vector<std::string>(c, c + n)
@@ -105,7 +105,7 @@ int test_main(int, char*[])
     {
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::string e(" ");
+    std::string const e(" ");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -114,7 +114,7 @@ int test_main(int, char*[])
     {
     int const n = 9;
     double const d[n] = {1, 1, 1, 7, 7, 0, 0, 0, 0};
-    std::string e("1 3; 7 5;0");
+    std::string const e("1 3; 7 5;0");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -123,7 +123,7 @@ int test_main(int, char*[])
     {
     int const n = 5;
     double const d[n] = {1, 2, 3, 3, 3};
-    std::string e("1; 2; 3");
+    std::string const e("1; 2; 3");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -131,7 +131,7 @@ int test_main(int, char*[])
     {
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
-    std::string e("1 3; 3 6; 5 9; 7");
+    std::string const e("1 3; 3 6; 5 9; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -139,7 +139,7 @@ int test_main(int, char*[])
     {
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
-    std::string e("1 @93; 3 @96; 5 @99; 7");
+    std::string const e("1 @93; 3 @96; 5 @99; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -147,7 +147,7 @@ int test_main(int, char*[])
     {
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
-    std::string e("1 #3; 3 #3; 5 #3; 7");
+    std::string const e("1 #3; 3 #3; 5 #3; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -157,7 +157,7 @@ int test_main(int, char*[])
     {
     int const n = 9;
     double const d[n] = {1, 1, 3, 3, 3, 5, 7, 7, 7};
-    std::string e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
+    std::string const e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -165,7 +165,7 @@ int test_main(int, char*[])
     {
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 7, 7};
-    std::string e("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
+    std::string const e("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -173,7 +173,7 @@ int test_main(int, char*[])
     {
     int const n = 9;
     double const d[n] = {1, 1, 1, 1, 2, 3, 4, 5, 5};
-    std::string e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
+    std::string const e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -181,7 +181,7 @@ int test_main(int, char*[])
     {
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
-    std::string e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
+    std::string const e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -189,7 +189,7 @@ int test_main(int, char*[])
     {
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
-    std::string e("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
+    std::string const e("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -197,7 +197,7 @@ int test_main(int, char*[])
     {
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
-    std::string e("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
+    std::string const e("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
     char const* x =
         "Interval [ 0, 0 ) is improper: it ends before it begins."
         " Current token ';' at position 9.\n"
@@ -213,7 +213,7 @@ int test_main(int, char*[])
     {
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::string e("1; 9 (2, 0]; 3 [7, 3); 5 (5, 5); 7");
+    std::string const e("1; 9 (2, 0]; 3 [7, 3); 5 (5, 5); 7");
     char const* x =
         "Interval [ 3, 1 ) is improper: it ends before it begins."
         " Current token ';' at position 12.\n"
@@ -230,7 +230,7 @@ int test_main(int, char*[])
     {
     int const n = 9;
     double const d[n] = {0, 1, 0, 3, 0, 5, 7, 7, 7};
-    std::string e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
+    std::string const e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -239,7 +239,7 @@ int test_main(int, char*[])
     {
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 5, 5, 7, 7};
-    std::string e("1; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
+    std::string const e("1; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -248,7 +248,7 @@ int test_main(int, char*[])
     {
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::string e("5 [5, 6); 3 [2, 5); 1 [0, 2); 7");
+    std::string const e("5 [5, 6); 3 [2, 5); 1 [0, 2); 7");
     char const* x =
         "Previous interval began at duration 5;"
         " current interval [ 2, 5 ) would begin before that."
@@ -261,7 +261,7 @@ int test_main(int, char*[])
     {
     int const n = 10;
     double const d[n] = {0, 12, 0, 27, 0, 1, 7, 7, 7, 7};
-    std::string e("12 [1, @92); 27 [@93, @93]; 1 (@94, 5]; 7");
+    std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, 5]; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -271,7 +271,7 @@ int test_main(int, char*[])
     {
     int const n = 10;
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
-    std::string e("12.25 [1, @92); 27.875 [@93, @93]; 1.0625 (@94, 5]; 7.5");
+    std::string const e("12.25 [1, @92); 27.875 [@93, @93]; 1.0625 (@94, 5]; 7.5");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -279,7 +279,7 @@ int test_main(int, char*[])
     {
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
-    std::string e("1 @93; 3 @96; 5 @99; 7");
+    std::string const e("1 @93; 3 @96; 5 @99; 7");
     check(__FILE__, __LINE__, d, n, e);
     }
 
@@ -292,7 +292,7 @@ int test_main(int, char*[])
     {
     int const n = 5;
     double const d[n] = {1, 1, 1, 2, 2};
-    std::vector<double> v(d, d + n);
+    std::vector<double> const v(d, d + n);
     BOOST_TEST(v == InputSequence(v).linear_number_representation());
     }
 
@@ -301,7 +301,7 @@ int test_main(int, char*[])
     int const n = 9;
     char const* c[n] = {"a", "a", "ccc", "ccc", "b", "b", "b", "b", "b"};
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    std::string e("a[0, 2); ccc [2, 4);b[4, 6);");
+    std::string const e("a[0, 2); ccc [2, 4);b[4, 6);");
     std::vector<std::string> k;
     k.push_back("not_used");
     k.push_back("a");
@@ -317,7 +317,7 @@ int test_main(int, char*[])
     int const n = 9;
     char const* c[n] = {"", "", "keyword_00", "keyword_00", "", "", "", "", ""};
     double const d[n] = {1, 1, 0, 0, 5, 5, 7, 7, 7};
-    std::string e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
+    std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
     std::vector<std::string> k;
     k.push_back("keyword_00");
     check(__FILE__, __LINE__, d, n, e, "", k, c);
@@ -329,7 +329,7 @@ int test_main(int, char*[])
     int const n = 10;
     char const* c[n] =  {"b", "b", "x", "a", "x", "x", "a", "x", "x", "x"};
     double const d[n] = {  0,   0,   0,   0,   5,   5,   0,   7,   7,   7};
-    std::string e("b [0, 2); a [3, 4); 5 [4, 6); a; 7");
+    std::string const e("b [0, 2); a [3, 4); 5 [4, 6); a; 7");
     std::vector<std::string> k;
     k.push_back("a");
     k.push_back("b");
@@ -344,9 +344,9 @@ int test_main(int, char*[])
     {
     int const n = 10;
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
-    std::string e("7, retirement; 4");
+    std::string const e("7, retirement; 4");
     check(__FILE__, __LINE__, d, n, e);
-    InputSequence seq("7, retirement; 4", 10, 90, 95, 0, 2002, 0);
+    InputSequence const seq("7, retirement; 4", 10, 90, 95, 0, 2002, 0);
     std::vector<ValueInterval> const& i(seq.interval_representation());
     BOOST_TEST(e_inception  == i[0].begin_mode);
     BOOST_TEST(e_retirement == i[0].end_mode  );
