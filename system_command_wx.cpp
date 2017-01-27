@@ -51,9 +51,9 @@ void assemble_console_lines
         }
 
     os << category << '\n';
-    for(std::size_t j = 0; j < lines.GetCount(); ++j)
+    for(auto const& j : lines)
         {
-        os << lines[j] << '\n';
+        os << j << '\n';
         }
 }
 
