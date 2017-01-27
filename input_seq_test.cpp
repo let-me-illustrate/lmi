@@ -34,6 +34,7 @@ void check
     ,double const*                   d
     ,int                             n
     ,std::string const&              e
+    ,char const*                     x = ""
     ,std::vector<std::string> const& k = std::vector<std::string>()
     ,char const* const*              c = nullptr
     ,std::string const&              w = std::string()
@@ -65,13 +66,21 @@ void check
         std::cout << std::endl;
         }
 
-    bool const b = bv && bs;
-    INVOKE_BOOST_TEST(b, file, line);
-    if(!b && seq.formatted_diagnostics().size())
+    std::string const& y = seq.formatted_diagnostics();
+    bool const by = y.empty() || y == std::string(x);
+    if(!by)
         {
-        std::cout << '\n' << seq.formatted_diagnostics() << '\n';
-        std::cout << std::endl;
+        std::cout
+            <<   "\nObserved diagnostics:"
+            << "\n\n'" << y << "'"
+            << "\n\ndiffer from expected:"
+            << "\n\n'" << x << "'"
+            << std::endl
+            ;
         }
+
+    bool const b = bv && bs && by;
+    INVOKE_BOOST_TEST(b, file, line);
 }
 
 int test_main(int, char*[])
@@ -80,6 +89,7 @@ int test_main(int, char*[])
     //   expected results
     //     c: keywords
     //     d: numeric values
+    //     x: diagnostics
     //   ctor arguments
     //     n: length
     //     e: expression
@@ -138,7 +148,7 @@ int test_main(int, char*[])
 
     // {value [|( begin-duration, end-duration ]|) }
 
-    // Test [x,y).
+    // Test [a,b).
     {
     int const n = 9;
     double const d[n] = {1, 1, 3, 3, 3, 5, 7, 7, 7};
@@ -146,7 +156,7 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, d, n, e);
     }
 
-    // Test (x,y].
+    // Test (a,b].
     {
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 7, 7};
@@ -183,7 +193,15 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
     std::string e("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    char const* x =
+        "Interval [ 0, 0 ) is improper: it ends before it begins."
+        " Current token ';' at position 9.\n"
+        "Interval [ 2, 2 ) is improper: it ends before it begins."
+        " Current token ';' at position 19.\n"
+        "Interval [ 3, 3 ) is improper: it ends before it begins."
+        " Current token ';' at position 29.\n"
+        ;
+    check(__FILE__, __LINE__, d, n, e, x);
     }
 
     // Test grossly improper intervals.
@@ -191,7 +209,15 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string e("1; 9 (2, 0]; 3 [7, 3); 5 (5, 5); 7");
-    check(__FILE__, __LINE__, d, n, e);
+    char const* x =
+        "Interval [ 3, 1 ) is improper: it ends before it begins."
+        " Current token ';' at position 12.\n"
+        "Interval [ 7, 3 ) is improper: it ends before it begins."
+        " Current token ';' at position 22.\n"
+        "Interval [ 6, 5 ) is improper: it ends before it begins."
+        " Current token ';' at position 32.\n"
+        ;
+    check(__FILE__, __LINE__, d, n, e, x);
     }
 
     // Test intervals with 'holes'. Since the last element is replicated,
@@ -218,7 +244,12 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string e("5 [5, 6); 3 [2, 5); 1 [0, 2); 7");
-    check(__FILE__, __LINE__, d, n, e);
+    char const* x =
+        "Previous interval began at duration 5;"
+        " current interval [ 2, 5 ) would begin before that."
+        " Current token 'end of input' at position -1.\n"
+        ;
+    check(__FILE__, __LINE__, d, n, e, x);
     }
 
     // Durations with '@' prefix mean attained age.
@@ -273,7 +304,7 @@ int test_main(int, char*[])
     k.push_back("c");
     k.push_back("cc");
     k.push_back("ccc");
-    check(__FILE__, __LINE__, d, n, e, k, c);
+    check(__FILE__, __LINE__, d, n, e, "", k, c);
     }
 
     // Test numbers mixed with (enumerative) extra keywords.
@@ -284,7 +315,7 @@ int test_main(int, char*[])
     std::string e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
     std::vector<std::string> k;
     k.push_back("keyword_00");
-    check(__FILE__, __LINE__, d, n, e, k, c);
+    check(__FILE__, __LINE__, d, n, e, "", k, c);
     }
 
     // Test numbers mixed with (enumerative) extra keywords, with
@@ -299,7 +330,7 @@ int test_main(int, char*[])
     k.push_back("b");
     k.push_back("x");
     std::string w("x");
-    check(__FILE__, __LINE__, d, n, e, k, c, w);
+    check(__FILE__, __LINE__, d, n, e, "", k, c, w);
     }
 
 // TODO ?? Also test keyword as scalar duration.
