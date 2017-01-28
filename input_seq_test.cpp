@@ -55,17 +55,17 @@ void check
         }
 
     std::vector<std::string> const& s(seq.linear_keyword_representation());
-    std::vector<std::string> const expected_keyword_representation =
+    std::vector<std::string> const t =
         (nullptr == c)
         ? std::vector<std::string>(n)
         : std::vector<std::string>(c, c + n)
         ;
-    bool const bs = s == expected_keyword_representation;
+    bool const bs = s == t;
     if(!bs)
         {
         std::cout << "\nExpression: '" << e << '\'';
         std::cout << "\n  expected: ";
-        std::copy(c, c + n, std::ostream_iterator<char const*>(std::cout, "|"));
+        std::copy(t.begin(), t.end(), std::ostream_iterator<std::string>(std::cout, "|"));
         std::cout << "\n   but got: ";
         std::copy(s.begin(), s.end(), std::ostream_iterator<std::string>(std::cout, "|"));
         std::cout << std::endl;
