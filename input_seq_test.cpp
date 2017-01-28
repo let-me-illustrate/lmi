@@ -46,11 +46,12 @@ void check
     bool const bv = v == std::vector<double>(d, d + n);
     if(!bv)
         {
+        using osid = std::ostream_iterator<double>;
         std::cout << "\nExpression: '" << e << '\'';
         std::cout << "\n  expected: ";
-        std::copy(d, d + n, std::ostream_iterator<double>(std::cout, " "));
+        std::copy(d        , d + n  , osid(std::cout, " "));
         std::cout << "\n   but got: ";
-        std::copy(v.begin(), v.end(), std::ostream_iterator<double>(std::cout, " "));
+        std::copy(v.begin(), v.end(), osid(std::cout, " "));
         std::cout << std::endl;
         }
 
@@ -63,11 +64,12 @@ void check
     bool const bs = s == t;
     if(!bs)
         {
+        using osis = std::ostream_iterator<std::string>;
         std::cout << "\nExpression: '" << e << '\'';
         std::cout << "\n  expected: ";
-        std::copy(t.begin(), t.end(), std::ostream_iterator<std::string>(std::cout, "|"));
+        std::copy(t.begin(), t.end(), osis(std::cout, "|"));
         std::cout << "\n   but got: ";
-        std::copy(s.begin(), s.end(), std::ostream_iterator<std::string>(std::cout, "|"));
+        std::copy(s.begin(), s.end(), osis(std::cout, "|"));
         std::cout << std::endl;
         }
 
@@ -273,7 +275,7 @@ int test_main(int, char*[])
     {
     int const n = 10;
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
-    std::string const e("12.25 [1, @92); 27.875 [@93, @93]; 1.0625 (@94, 5]; 7.5");
+    std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625 (@94,5]; 7.5");
     check(__FILE__, __LINE__, d, n, e);
     }
 
