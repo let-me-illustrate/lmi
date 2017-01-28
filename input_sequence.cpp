@@ -951,9 +951,9 @@ void InputSequence::match(InputSequence::token_type t)
     else
         {
         diagnostics
-            << "Expected "
-            << '\'' << token_type_name(t) << '\''
-            << " . "
+            << "Expected '"
+            << token_type_name(t)
+            << "' . "
             ;
         mark_diagnostic_context();
         }
@@ -962,9 +962,9 @@ void InputSequence::match(InputSequence::token_type t)
 void InputSequence::mark_diagnostic_context()
 {
     diagnostics
-        << "Current token "
-        << '\'' << token_type_name(current_token_type) << '\''
-        << " at position " << input_stream.tellg()
+        << "Current token '"
+        << token_type_name(current_token_type)
+        << "' at position " << input_stream.tellg()
         << ".\n"
         ;
 }

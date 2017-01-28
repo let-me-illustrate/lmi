@@ -47,7 +47,7 @@ void check
     if(!bv)
         {
         using osid = std::ostream_iterator<double>;
-        std::cout << "\nExpression: '" << e << '\'';
+        std::cout << "\nExpression: '" << e << "'";
         std::cout << "\n  expected: ";
         std::copy(d        , d + n  , osid(std::cout, " "));
         std::cout << "\n   but got: ";
@@ -65,7 +65,7 @@ void check
     if(!bs)
         {
         using osis = std::ostream_iterator<std::string>;
-        std::cout << "\nExpression: '" << e << '\'';
+        std::cout << "\nExpression: '" << e << "'";
         std::cout << "\n  expected: ";
         std::copy(t.begin(), t.end(), osis(std::cout, "|"));
         std::cout << "\n   but got: ";
