@@ -1083,9 +1083,9 @@ void print_databases()
 
             fs::path out_file = fs::change_extension(*i, ".dbt");
             fs::ofstream os(out_file, ios_out_trunc_binary());
-            for(auto const& i : z.member_names())
+            for(auto const& j : z.member_names())
                 {
-                z.datum(i).write(os);
+                z.datum(j).write(os);
                 }
             }
         catch(...)
