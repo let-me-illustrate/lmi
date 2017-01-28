@@ -291,13 +291,32 @@ int test_main(int, char*[])
 //   additive expressions e.g. retirement-10 ?
 
     // Test construction from vector.
-    //   1 1 1 2 2 --> 1 [0,3);2 [3,5)
     // TODO ?? Test against canonical representation once we define that.
     {
     int const n = 5;
     double const d[n] = {1, 1, 1, 2, 2};
     std::vector<double> const v(d, d + n);
     BOOST_TEST(v == InputSequence(v).linear_number_representation());
+    BOOST_TEST_EQUAL
+        ("1 [0, 3); 2 [3, maturity)"
+        ,InputSequence(v).mathematical_representation()
+        );
+    }
+
+    // Test construction from one-element vector.
+    {
+    int const n = 1;
+    double const d[n] = {3};
+    std::vector<double> const v(d, d + n);
+    BOOST_TEST(v == InputSequence(v).linear_number_representation());
+    BOOST_TEST_EQUAL("3", InputSequence(v).mathematical_representation());
+    }
+
+    // Test construction from empty vector.
+    {
+    std::vector<double> const v;
+    BOOST_TEST(v == InputSequence(v).linear_number_representation());
+    BOOST_TEST_EQUAL("0", InputSequence(v).mathematical_representation());
     }
 
     // Test (enumerative) extra keywords.
