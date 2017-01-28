@@ -28,12 +28,8 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_function.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-#include <boost/type_traits/remove_pointer.hpp>
-
 #include <stdexcept>
+#include <type_traits>
 
 /// Design notes for class callback.
 ///
@@ -104,9 +100,9 @@ class LMI_SO callback
     :        private lmi::uncopyable <callback<FunctionPointer> >
     ,virtual private obstruct_slicing<callback<FunctionPointer> >
 {
-    BOOST_STATIC_ASSERT(boost::is_pointer<FunctionPointer>::value);
-    typedef typename boost::remove_pointer<FunctionPointer>::type f_type;
-    BOOST_STATIC_ASSERT(boost::is_function<f_type>::value);
+    static_assert(std::is_pointer<FunctionPointer>::value, "");
+    typedef typename std::remove_pointer<FunctionPointer>::type f_type;
+    static_assert(std::is_function<f_type>::value, "");
 
   public:
     FunctionPointer operator()() const;

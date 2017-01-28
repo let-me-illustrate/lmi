@@ -625,24 +625,22 @@ void ShowCensusOutput
         lives.push_back(input);
         }
 
-    std::vector<std::string>::iterator h;
-    std::vector<Input>::iterator i;
-
     // Print census as HTML table.
     std::cout << "Census:<BR><BR>";
     std::cout << "<TABLE>";
     std::cout << "<TR>";
-    for(h = headers.begin(); h != headers.end(); ++h)
+
+    for(auto const& h : headers)
         {
-        std::cout << "<TD>" << *h << "</TD>";
+        std::cout << "<TD>" << h << "</TD>";
         }
     std::cout << "</TR>";
-    for(i = lives.begin(); i != lives.end(); ++i)
+    for(auto const& i : lives)
         {
         std::cout << "<TR>";
-        for(h = headers.begin(); h != headers.end(); ++h)
+        for(auto const& h : headers)
             {
-            std::cout << "<TD>" << (*i)[*h] << "</TD>";
+            std::cout << "<TD>" << i[h] << "</TD>";
             }
         std::cout << "</TR>";
         }
@@ -675,9 +673,9 @@ void ShowCensusOutput
     // each life in order to get the composite.
     if(show_each_life)
         {
-        for(i = lives.begin(); i != lives.end(); ++i)
+        for(auto const& i : lives)
             {
-            ShowIllusOutput(*i);
+            ShowIllusOutput(i);
             }
         }
 }

@@ -49,8 +49,7 @@ name_value_pairs::name_value_pairs(std::string const& filename)
         }
 }
 
-name_value_pairs::~name_value_pairs()
-{}
+name_value_pairs::~name_value_pairs() = default;
 
 std::string const& name_value_pairs::string_value(std::string const& key) const
 {

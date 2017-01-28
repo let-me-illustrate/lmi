@@ -68,14 +68,11 @@
 #include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/type_traits/is_same.hpp>
-
 #include <algorithm>                    // std::lower_bound(), std::swap()
 #include <map>
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 
 // Definition of class placeholder.
@@ -107,8 +104,7 @@ class placeholder
 
 // Implementation of class placeholder.
 
-inline placeholder::~placeholder()
-{}
+inline placeholder::~placeholder() = default;
 
 // Definition of class holder.
 
@@ -123,15 +119,15 @@ class holder
 
   public:
     holder(ClassType*, ValueType const&);
-    virtual ~holder();
+    ~holder() override;
 
     // placeholder required implementation.
-    virtual holder& assign(placeholder const&);
-    virtual holder& assign(std::string const&);
-    virtual placeholder* clone() const;
-    virtual bool equals(placeholder const&) const;
-    virtual std::string str() const;
-    virtual std::type_info const& type() const;
+    holder& assign(placeholder const&) override;
+    holder& assign(std::string const&) override;
+    placeholder* clone() const override;
+    bool equals(placeholder const&) const override;
+    std::string str() const override;
+    std::type_info const& type() const override;
 #if defined LMI_MSC
     virtual void* defraud() const;
 #endif // defined LMI_MSC
@@ -150,8 +146,7 @@ holder<ClassType,ValueType>::holder(ClassType* object, ValueType const& value)
 {}
 
 template<typename ClassType, typename ValueType>
-holder<ClassType,ValueType>::~holder()
-{}
+holder<ClassType,ValueType>::~holder() = default;
 
 template<typename ClassType, typename ValueType>
 holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
@@ -249,7 +244,7 @@ class any_member
   public:
     any_member();
     any_member(any_member const&);
-    virtual ~any_member();
+    ~any_member() override;
 
     template<typename ValueType>
     any_member(ClassType*, ValueType const&);
@@ -261,15 +256,15 @@ class any_member
     bool operator!=(any_member const&) const;
 
     // any_entity required implementation.
-    virtual std::string str() const;
-    virtual std::type_info const& type() const;
+    std::string str() const override;
+    std::type_info const& type() const override;
 
   private:
     template<typename ExactMemberType>
     ExactMemberType* exact_cast();
 
     // any_entity required implementation.
-    virtual any_member& assign(std::string const&);
+    any_member& assign(std::string const&) override;
 
     ClassType* object_;
     placeholder* content_;
@@ -562,12 +557,10 @@ class MemberSymbolTable
 // Implementation of class MemberSymbolTable.
 
 template<typename ClassType>
-MemberSymbolTable<ClassType>::MemberSymbolTable()
-{}
+MemberSymbolTable<ClassType>::MemberSymbolTable() = default;
 
 template<typename ClassType>
-MemberSymbolTable<ClassType>::~MemberSymbolTable()
-{}
+MemberSymbolTable<ClassType>::~MemberSymbolTable() = default;
 
 // operator[]() returns a known member; unlike std::map::operator[](),
 // it never adds a new pair to the map, and it complains if such an
@@ -622,32 +615,27 @@ void MemberSymbolTable<ClassType>::ascribe
     ,ValueType SameOrBaseClassType::* p2m
     )
 {
-    // Assert that the static_cast doesn't engender undefined behavior.
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT
-        ((
-        boost::is_base_and_derived
+    static_assert
+        (
+        std::is_base_of
             <MemberSymbolTable<ClassType>
             ,ClassType
             >::value
-        ));
-    BOOST_STATIC_ASSERT
-        ((
-            boost::is_same
-                <SameOrBaseClassType
-                ,ClassType
-                >::value
-        ||  boost::is_base_and_derived
-                <SameOrBaseClassType
-                ,ClassType
-                >::value
-        ));
+        ,""
+        );
+    static_assert
+        (
+        std::is_base_of
+            <SameOrBaseClassType
+            ,ClassType
+            >::value
+        ,""
+        );
 
     ClassType* class_object = static_cast<ClassType*>(this);
     map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));
-    typedef std::vector<std::string>::iterator svi;
     // TODO ?? This would appear to be O(N^2).
-    svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+    auto i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
     member_names_.insert(i, s);
 }
 
@@ -656,10 +644,9 @@ MemberSymbolTable<ClassType>& MemberSymbolTable<ClassType>::assign
     (MemberSymbolTable<ClassType> const& z
     )
 {
-    typedef std::vector<std::string>::const_iterator mnci;
-    for(mnci i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& i : member_names())
         {
-        operator[](*i) = z[*i];
+        operator[](i) = z[i];
         }
     return *this;
 }
@@ -669,10 +656,9 @@ bool MemberSymbolTable<ClassType>::equals
     (MemberSymbolTable<ClassType> const& z
     ) const
 {
-    typedef std::vector<std::string>::const_iterator mnci;
-    for(mnci i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& i : member_names())
         {
-        if(z[*i] != operator[](*i))
+        if(z[i] != operator[](i))
             {
             return false;
             }
@@ -698,11 +684,9 @@ std::map<std::string,std::string> member_state
     )
 {
     std::map<std::string,std::string> z;
-    std::vector<std::string> const& names = object.member_names();
-    typedef std::vector<std::string>::const_iterator mnci;
-    for(mnci i = names.begin(); i != names.end(); ++i)
+    for(auto const& i : object.member_names())
         {
-        z[*i] = object[*i].str();
+        z[i] = object[i].str();
         }
     return z;
 }

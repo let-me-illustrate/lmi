@@ -19,8 +19,23 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+/// Information used by the GUI database editor.
+///
+/// The db_names::ParentIdx links permit organizing this information
+/// as a tree, corresponding to the database editor's tree control.
+/// Illustrations are concerned only with db_names::Idx values in the
+/// first column, and disregard items in the top two levels of the
+/// tree, i.e., the root (DB_FIRST) and its immediate children, whose
+/// parent is the root.
+///
+/// Physically, the first (root) item must have a parent, although
+/// logically it has none, so its parent is deemed to be itself.
+/// Similarly, it must have a long and a short name, although no end
+/// user can ever see them (because the GUI doesn't pointlessly show
+/// the root node), so they name Him Who Is Not to be Named.
+
 #define DB_NAMES \
-{DB_FIRST,DB_FIRST,"dummy","dummy",}, \
+{DB_FIRST,DB_FIRST,"Hastur","Hastur",}, \
 {DB_Topic_Underwriting,DB_FIRST,"Underwriting","Underwriting types, classifications, and restrictions; permissible rate classes; approved jurisdictions",}, \
 {DB_MinIssAge,DB_Topic_Underwriting,"MinIssAge","Minimum issue age",}, \
 {DB_MaxIssAge,DB_Topic_Underwriting,"MaxIssAge","Maximum issue age",}, \

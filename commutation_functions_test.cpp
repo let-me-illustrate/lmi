@@ -29,10 +29,9 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/bind.hpp>
-
 #include <algorithm>
 #include <cmath>                        // std::fabs()
+#include <functional>                   // std::bind()
 #include <iomanip>                      // std::setw() etc.
 #include <ios>                          // std::ios_base::fixed()
 #include <numeric>                      // std::partial_sum()
@@ -685,7 +684,7 @@ void Test_1980_CSO_Male_ANB()
     std::cout
         << "  Speed test: generate ordinary-life commutation functions\n    "
         << TimeAnAliquot
-            (boost::bind
+            (std::bind
                 (mete_olcf
                 ,q
                 ,ic
@@ -697,7 +696,7 @@ void Test_1980_CSO_Male_ANB()
     std::cout
         << "  Speed test: generate UL commutation functions\n    "
         << TimeAnAliquot
-            (boost::bind
+            (std::bind
                 (mete_ulcf
                 ,q
                 ,ic
@@ -710,9 +709,9 @@ void Test_1980_CSO_Male_ANB()
     std::cout
         << "  Speed test: calculate yearly account values\n    "
         << TimeAnAliquot
-            (boost::bind
+            (std::bind
                 (mete_reserve
-                ,boost::ref(ulcf)
+                ,std::ref(ulcf)
                 ,reserve
                 )
             )

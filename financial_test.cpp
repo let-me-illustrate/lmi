@@ -26,9 +26,8 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/bind.hpp>
-
 #include <cmath>                        // std::fabs()
+#include <functional>                   // std::bind()
 #include <iomanip>                      // Formatting of optional detail.
 #include <iostream>
 #include <vector>
@@ -181,7 +180,7 @@ std::cout << "tolerance = .000005: " << .000005 << '\n';
         << decimals
         << " decimals\n    "
         << TimeAnAliquot
-            (boost::bind
+            (std::bind
                 (irr<VI,VI,VI>
                 ,p.begin()
                 ,p.end()

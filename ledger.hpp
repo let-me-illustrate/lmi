@@ -28,9 +28,8 @@
 #include "so_attributes.hpp"
 #include "xml_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
-
 #include <iosfwd>
+#include <memory>                       // std::shared_ptr
 #include <string>
 #include <vector>
 
@@ -137,8 +136,8 @@ class LMI_SO Ledger
     // composites but not for all cells.
     double composite_lapse_year_;
 
-    boost::shared_ptr<ledger_map_holder> ledger_map_;
-    boost::shared_ptr<LedgerInvariant>   ledger_invariant_;
+    std::shared_ptr<ledger_map_holder> ledger_map_;
+    std::shared_ptr<LedgerInvariant>   ledger_invariant_;
 
     // It is convenient to have a vector that holds just the run bases,
     // i.e. just the key_type members of ledger_map_. We can use this for

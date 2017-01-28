@@ -25,18 +25,14 @@
 
 #include "facets.hpp"
 
-datum_string::datum_string()
-{
-}
+datum_string::datum_string() = default;
 
 datum_string::datum_string(std::string const& value)
     :value_(value)
 {
 }
 
-datum_string::~datum_string()
-{
-}
+datum_string::~datum_string() = default;
 
 datum_string& datum_string::operator=(std::string const& s)
 {

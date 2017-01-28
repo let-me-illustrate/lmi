@@ -45,7 +45,7 @@ class wx_base_test_case
     // Only required to fix g++ warning about a class having virtual functions
     // but a non-virtual dtor, as this class is not used polymorphically the
     // dtor doesn't really need to be virtual.
-    virtual ~wx_base_test_case() { }
+    virtual ~wx_base_test_case() = default;
 
     /// Skip the test if the specified file is not supported.
     ///

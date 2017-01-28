@@ -24,21 +24,8 @@
 
 #include "config.hpp"
 
-#include <boost/utility/enable_if.hpp>
-
 #include <algorithm>                    // std::find()
-
-#if defined __BORLANDC__ || defined __COMO_VERSION__ && __COMO_VERSION__ <= 4303
-#   define LMI_NO_SFINAE
-#   include <deque>
-#   include <list>
-#   include <map>
-#   include <set>
-#   include <string>
-#   include <vector>
-#endif // defined __BORLANDC__ || defined __COMO_VERSION__ && __COMO_VERSION__ <= 4303
-
-#if !defined LMI_NO_SFINAE
+#include <type_traits>                  // std::enable_if
 
 /// Determine whether a class has a find() member.
 ///
@@ -82,7 +69,7 @@ template<typename T>
 bool contains
     (T const& t
     ,typename T::value_type const& element
-    ,typename boost::disable_if<has_member_find<T> >::type* = nullptr
+    ,typename std::enable_if<!has_member_find<T>::value>::type* = nullptr
     )
 {
     return t.end() != std::find(t.begin(), t.end(), element);
@@ -146,62 +133,6 @@ bool contains
 {
     return t.end() != t.find(element);
 }
-
-#else // defined LMI_NO_SFINAE
-
-// Strings. Only std::string is supported here: compilers that can't
-// handle SFINAE might not provide std::basic_string either.
-
-bool contains(std::string const& t, std::string const& element)
-{
-    return std::string::npos != t.find(element);
-}
-
-bool contains(std::string const& t, char const* element)
-{
-    return std::string::npos != t.find(element);
-}
-
-bool contains(std::string const& t, char element)
-{
-    return std::string::npos != t.find(element);
-}
-
-// Associative containers.
-
-template<typename K, typename T>
-bool contains(std::map<K,T> const& t, typename std::map<K,T>::key_type const& element)
-{
-    return t.end() != t.find(element);
-}
-
-template<typename T>
-bool contains(std::set<T> const& t, typename std::set<T>::key_type const& element)
-{
-    return t.end() != t.find(element);
-}
-
-// Sequences.
-
-template<typename T>
-bool contains(std::deque<T> const& t, T const& element)
-{
-    return t.end() != std::find(t.begin(), t.end(), element);
-}
-
-template<typename T>
-bool contains(std::list<T> const& t, T const& element)
-{
-    return t.end() != std::find(t.begin(), t.end(), element);
-}
-
-template<typename T>
-bool contains(std::vector<T> const& t, T const& element)
-{
-    return t.end() != std::find(t.begin(), t.end(), element);
-}
-
-#endif // defined LMI_NO_SFINAE
 
 #endif // contains_hpp
 

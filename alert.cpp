@@ -23,9 +23,6 @@
 
 #include "alert.hpp"
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
-
 #if !defined LMI_MSW
 #   include <cstdio>
 #else  // defined LMI_MSW
@@ -35,6 +32,7 @@
 #include <ios>
 #include <sstream>                      // std::stringbuf
 #include <stdexcept>
+#include <type_traits>
 
 namespace
 {
@@ -130,7 +128,7 @@ class alert_buf
                 );
             }
         }
-    int sync()
+    int sync() override
         {
         raise_alert();
         return 0;
@@ -153,7 +151,7 @@ class alert_buf
 class status_buf
     :public alert_buf
 {
-    void raise_alert()
+    void raise_alert() override
         {
         status_alert_function(alert_string());
         }
@@ -162,7 +160,7 @@ class status_buf
 class warning_buf
     :public alert_buf
 {
-    void raise_alert()
+    void raise_alert() override
         {
         warning_alert_function(alert_string());
         }
@@ -171,7 +169,7 @@ class warning_buf
 class hobsons_choice_buf
     :public alert_buf
 {
-    void raise_alert()
+    void raise_alert() override
         {
         hobsons_choice_alert_function(alert_string());
         }
@@ -180,7 +178,7 @@ class hobsons_choice_buf
 class fatal_error_buf
     :public alert_buf
 {
-    void raise_alert()
+    void raise_alert() override
         {
         fatal_error_alert_function(alert_string());
         }
@@ -195,8 +193,7 @@ class fatal_error_buf
 template<typename T>
 inline std::ostream& alert_stream()
 {
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT((boost::is_base_and_derived<alert_buf,T>::value));
+    static_assert(std::is_base_of<alert_buf,T>::value, "");
     static T buffer_;
     static std::ostream stream_(&buffer_);
     stream_.clear();

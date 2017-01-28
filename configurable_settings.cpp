@@ -39,7 +39,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <iterator>
+#include <iterator>                     // std::istream_iterator
 #include <sstream>
 #include <stdexcept>
 
@@ -180,8 +180,7 @@ configurable_settings::configurable_settings()
         }
 }
 
-configurable_settings::~configurable_settings()
-{}
+configurable_settings::~configurable_settings() = default;
 
 configurable_settings& configurable_settings::instance()
 {

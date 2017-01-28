@@ -191,17 +191,13 @@ MultiDimTableAny::AxesAny TierTableAdapter::DoGetAxesAny()
 // TierEditorGrid implementation
 // ---------------------------
 
-TierEditorGrid::TierEditorGrid()
-{
-}
+TierEditorGrid::TierEditorGrid() = default;
 
-TierEditorGrid::~TierEditorGrid()
-{
-}
+TierEditorGrid::~TierEditorGrid() = default;
 
 TierEditorGrid::TierEditorGrid
     (wxWindow* parent
-    ,boost::shared_ptr<TierTableAdapter> const& table
+    ,std::shared_ptr<TierTableAdapter> const& table
     ,wxWindowID id
     ,wxPoint const& pos
     ,wxSize const& size
@@ -216,7 +212,7 @@ TierEditorGrid::TierEditorGrid
 
 bool TierEditorGrid::Create
     (wxWindow* parent
-    ,boost::shared_ptr<TierTableAdapter> const& table
+    ,std::shared_ptr<TierTableAdapter> const& table
     ,wxWindowID id
     ,wxPoint const& pos
     ,wxSize const& size

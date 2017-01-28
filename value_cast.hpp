@@ -28,12 +28,10 @@
 #include "stream_cast.hpp"
 
 #include <boost/cast.hpp>
-#include <boost/type_traits/is_arithmetic.hpp>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_pointer.hpp>
 
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
 
 // INELEGANT !! Test the runtime performance of value_cast() compared
 // to the other casts it uses, to ensure that its overhead is minimal.
@@ -103,10 +101,10 @@
 /// although their rationale is not to increase the expressive power,
 /// but merely to work around a compiler defect.
 ///
-/// All uses of class boost::is_convertible here are commented to avoid
+/// All uses of class std::is_convertible here are commented to avoid
 /// confusion due to the surprising order of its template parameters:
 /// compare
-///   boost::is_convertible<From,To>(From z)
+///   std::is_convertible<From,To>(From z)
 /// to the declarations above. Also see this comment:
 ///   http://lists.boost.org/Archives/boost/2006/01/99722.php
 ///   "BTW Its a real pain that the parameter order for is_convertible
@@ -127,7 +125,7 @@ template<typename T>
 struct is_string
 {
     // Here, is_convertible means 'T' is convertible to std::string.
-    enum {value = boost::is_convertible<T,std::string>::value};
+    enum {value = std::is_convertible<T,std::string>::value};
 };
 
 template<typename T>
@@ -178,6 +176,20 @@ To numeric_value_cast(From const& from)
 
 /// Class template value_cast_choice is an appurtenance of function
 /// template value_cast(); it selects the best conversion method.
+///
+/// The choice among conversion methods depends in part on whether
+/// an implicit conversion is available. Implicit conversions from
+/// pointer or array to bool are disregarded as being infelicitous.
+/// For example, given:
+///   char const* untrue = "0";
+/// these casts:
+///   static_cast<bool>(untrue);  // converts pointer->bool
+///   static_cast<bool>("0");     // converts array->pointer->bool
+/// return 'true' because the conversions involve non-null pointers;
+/// however, these casts:
+///   value_cast<bool>(untrue);
+///   value_cast<bool>("0");
+/// preserve the value by returning 'false'.
 
 template<typename To, typename From>
 struct value_cast_choice
@@ -185,26 +197,29 @@ struct value_cast_choice
     enum
         {
         // Here, is_convertible means 'From' is convertible to 'To'.
-        convertible = boost::is_convertible<From,To>::value
+        felicitously_convertible =
+                std::is_convertible<From,To>::value
+            &&!(std::is_array   <From>::value && std::is_same<bool,To>::value)
+            &&!(std::is_pointer <From>::value && std::is_same<bool,To>::value)
         };
 
     enum
         {
         both_numeric =
-                boost::is_arithmetic<From>::value
-            &&  boost::is_arithmetic<To  >::value
+                std::is_arithmetic<From>::value
+            &&  std::is_arithmetic<To  >::value
         };
 
     enum
         {
         one_numeric_one_string =
-                boost::is_arithmetic<From>::value && is_string<To  >::value
-            ||  boost::is_arithmetic<To  >::value && is_string<From>::value
+                std::is_arithmetic<From>::value && is_string<To  >::value
+            ||  std::is_arithmetic<To  >::value && is_string<From>::value
         };
 
     enum
         {choice =
-            convertible
+            felicitously_convertible
                 ?both_numeric
                     ?e_both_numeric
                     :e_direct
@@ -250,7 +265,7 @@ struct value_cast_chooser<To,From,e_stream>
 template<typename To, typename From>
 To value_cast(From const& from)
 {
-    BOOST_STATIC_ASSERT(!boost::is_pointer<To>::value);
+    static_assert(!std::is_pointer<To>::value, "");
     return value_cast_chooser<To,From>()(from);
 }
 

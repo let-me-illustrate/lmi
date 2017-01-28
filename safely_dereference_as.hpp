@@ -26,12 +26,9 @@
 
 #include "rtti_lmi.hpp"
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/type_traits/is_same.hpp>
-
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
 
 /// Dereference a non-null pointer, optionally downcasting it.
 ///
@@ -71,12 +68,7 @@
 template<typename T, typename U>
 T& safely_dereference_as(U* u)
 {
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT
-        ((
-            boost::is_same            <U,T>::value
-        ||  boost::is_base_and_derived<U,T>::value
-        ));
+    static_assert(std::is_base_of<U,T>::value, "");
     if(!u)
         {
         std::ostringstream oss;

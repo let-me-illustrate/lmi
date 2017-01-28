@@ -60,9 +60,7 @@ single_cell_document::single_cell_document(std::string const& filename)
 }
 
 //============================================================================
-single_cell_document::~single_cell_document()
-{
-}
+single_cell_document::~single_cell_document() = default;
 
 /// Backward-compatibility serial number of this class's xml version.
 ///
@@ -119,13 +117,10 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
         }
 
     xml::const_nodes_view const elements(root.elements());
-    LMI_ASSERT(!elements.empty());
-    xml::const_nodes_view::const_iterator i(elements.begin());
-    *i >> input_data_;
-    // XMLWRAPP !! It would be better to have operator+(int) in the
-    // iterator class, and to write this check above as
-    //   LMI_ASSERT(elements.end() == 1 + i);
-    LMI_ASSERT(elements.end() == ++i);
+    // An '.ill' document's root contains only one child element.
+    LMI_ASSERT(1 == elements.size());
+    // "*elements.begin()" because there is no front():
+    *elements.begin() >> input_data_;
 }
 
 /// Ascertain whether input file comes from a system other than lmi.
@@ -154,16 +149,13 @@ bool single_cell_document::data_source_is_external(xml::document const& d) const
     // INPUT !! Remove "InforceDataSource" and the following code when
     // external systems are updated to use the "data_source" attribute.
 
-    typedef xml::const_nodes_view::const_iterator cnvi;
-
     xml::const_nodes_view const i_nodes(root.elements("cell"));
     LMI_ASSERT(1 == i_nodes.size());
-    for(cnvi i = i_nodes.begin(); i != i_nodes.end(); ++i)
+    for(auto const& i : i_nodes)
         {
-        xml::const_nodes_view const j_nodes(i->elements("InforceDataSource"));
-        for(cnvi j = j_nodes.begin(); j != j_nodes.end(); ++j)
+        for(auto const& j : i.elements("InforceDataSource"))
             {
-            std::string s(xml_lmi::get_content(*j));
+            std::string s(xml_lmi::get_content(j));
             if("0" != s && "1" != s)
                 {
                 return true;

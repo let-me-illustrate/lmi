@@ -40,18 +40,18 @@ class CensusDocument
 
   public:
     CensusDocument();
-    virtual ~CensusDocument();
+    ~CensusDocument() override;
 
   private:
     wxDataViewCtrl& PredominantViewWindow() const;
 
     // wxDocument overrides.
-    virtual bool OnCreate(wxString const& filename, long int flags);
+    bool OnCreate(wxString const& filename, long int flags) override;
 #if !wxCHECK_VERSION(2,9,0)
     virtual bool OnNewDocument();
 #endif // !wxCHECK_VERSION(2,9,0)
-    virtual bool DoOpenDocument(wxString const& filename);
-    virtual bool DoSaveDocument(wxString const& filename);
+    bool DoOpenDocument(wxString const& filename) override;
+    bool DoSaveDocument(wxString const& filename) override;
 
     multiple_cell_document doc_;
 

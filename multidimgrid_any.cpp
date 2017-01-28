@@ -114,9 +114,9 @@ class MultiDimGridGrid
         ,long style = 0 // no wxWANTS_CHARS, as is wxGrid's default
         ,std::string const& name = wxPanelNameStr
         );
-    virtual ~MultiDimGridGrid();
+    ~MultiDimGridGrid() override;
 
-    virtual wxSize DoGetBestSize() const;
+    wxSize DoGetBestSize() const override;
 
   private:
     void UponKeyDown(wxKeyEvent& event);
@@ -140,9 +140,7 @@ inline MultiDimGridGrid::MultiDimGridGrid
 {
 }
 
-MultiDimGridGrid::~MultiDimGridGrid()
-{
-}
+MultiDimGridGrid::~MultiDimGridGrid() = default;
 
 wxSize MultiDimGridGrid::DoGetBestSize() const
 {
@@ -311,7 +309,7 @@ MultiDimGrid::~MultiDimGrid()
 
 bool MultiDimGrid::Create
     (wxWindow* parent
-    ,boost::shared_ptr<MultiDimTableAny> const& atable
+    ,std::shared_ptr<MultiDimTableAny> const& atable
     ,wxWindowID id
     ,wxPoint const& pos
     ,wxSize const& size

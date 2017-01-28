@@ -33,7 +33,7 @@
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"        // convert_vector(), convert_vector_type()
 #include "map_lookup.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
+#include "miscellany.hpp"               // each_equal(), lmi_array_size()
 
 #include <algorithm>                    // std::max()
 #include <limits>
@@ -136,9 +136,7 @@ gpt_input::gpt_input(gpt_input const& z)
     DoAdaptExternalities();
 }
 
-gpt_input::~gpt_input()
-{
-}
+gpt_input::~gpt_input() = default;
 
 gpt_input& gpt_input::operator=(gpt_input const& z)
 {
@@ -578,18 +576,14 @@ std::vector<std::string> gpt_input::RealizeAllSequenceInput(bool report_errors)
 
     if(report_errors)
         {
-        for
-            (std::vector<std::string>::iterator i = s.begin()
-            ;i != s.end()
-            ;++i
-            )
+        for(auto const& i : s)
             {
             std::ostringstream oss;
             bool diagnostics_present = false;
-            if(!i->empty())
+            if(!i.empty())
                 {
                 diagnostics_present = true;
-                oss << (*i) << "\n";
+                oss << i << "\n";
                 }
             if(diagnostics_present)
                 {
@@ -624,7 +618,7 @@ std::string gpt_input::RealizeOldFlatExtra()
         return "";
         }
 
-    if(!each_equal(OldFlatExtraRealized_.begin(), OldFlatExtraRealized_.end(), 0.0))
+    if(!each_equal(OldFlatExtraRealized_, 0.0))
         {
         return "Flat extras may not be illustrated on this policy form.";
         }
@@ -651,7 +645,7 @@ std::string gpt_input::RealizeNewFlatExtra()
         return "";
         }
 
-    if(!each_equal(NewFlatExtraRealized_.begin(), NewFlatExtraRealized_.end(), 0.0))
+    if(!each_equal(NewFlatExtraRealized_, 0.0))
         {
         return "Flat extras may not be illustrated on this policy form.";
         }

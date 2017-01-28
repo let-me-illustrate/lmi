@@ -242,15 +242,13 @@ bool need_loan_rates(yare_input const& yi)
         ||  0.0                    != yi.InforcePreferredLoanValue
         ||  0.0                    != yi.InforceRegularLoanBalance
         ||  0.0                    != yi.InforcePreferredLoanBalance
-        ||  !each_equal(yi.NewLoan.begin(), yi.NewLoan.end(), 0.0)
+        ||  !each_equal(yi.NewLoan, 0.0)
         ;
 }
 #endif // 0
 } // Unnamed namespace.
 
-InterestRates::~InterestRates()
-{
-}
+InterestRates::~InterestRates() = default;
 
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             (v.GetLength())
@@ -642,7 +640,7 @@ void InterestRates::InitializeLoanRates()
     // arise:
     LMI_ASSERT
         (  mce_fixed_loan_rate == LoanRateType_
-        || each_equal(PrefLoanRateDecr_.begin(), PrefLoanRateDecr_.end(), 0.0)
+        || each_equal(PrefLoanRateDecr_, 0.0)
         );
     for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
         {

@@ -33,7 +33,7 @@
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"        // convert_vector(), convert_vector_type()
 #include "map_lookup.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
+#include "miscellany.hpp"               // each_equal(), lmi_array_size()
 
 #include <algorithm>                    // std::max()
 #include <limits>
@@ -126,9 +126,7 @@ mec_input::mec_input(mec_input const& z)
     DoAdaptExternalities();
 }
 
-mec_input::~mec_input()
-{
-}
+mec_input::~mec_input() = default;
 
 mec_input& mec_input::operator=(mec_input const& z)
 {
@@ -524,18 +522,14 @@ std::vector<std::string> mec_input::RealizeAllSequenceInput(bool report_errors)
 
     if(report_errors)
         {
-        for
-            (std::vector<std::string>::iterator i = s.begin()
-            ;i != s.end()
-            ;++i
-            )
+        for(auto const& i : s)
             {
             std::ostringstream oss;
             bool diagnostics_present = false;
-            if(!i->empty())
+            if(!i.empty())
                 {
                 diagnostics_present = true;
-                oss << (*i) << "\n";
+                oss << i << "\n";
                 }
             if(diagnostics_present)
                 {
@@ -570,7 +564,7 @@ std::string mec_input::RealizeFlatExtra()
         return "";
         }
 
-    if(!each_equal(FlatExtraRealized_.begin(), FlatExtraRealized_.end(), 0.0))
+    if(!each_equal(FlatExtraRealized_, 0.0))
         {
         return "Flat extras may not be illustrated on this policy form.";
         }

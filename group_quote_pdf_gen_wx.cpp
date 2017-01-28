@@ -42,8 +42,6 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/static_assert.hpp>
 
 #include <wx/datetime.h>
 #include <wx/html/htmlcell.h>
@@ -53,6 +51,7 @@
 
 #include <cstring>                      // std::strstr()
 #include <limits>
+#include <memory>                       // std::unique_ptr
 #include <stdexcept>
 #include <utility>                      // std::pair
 #include <vector>
@@ -78,14 +77,14 @@ wxString escape_for_html_elem(std::string const& s)
 
     wxString z;
     z.reserve(u.length());
-    for(wxString::const_iterator i = u.begin(); i != u.end(); ++i)
+    for(auto const& i : u)
         {
-        switch((*i).GetValue())
+        switch(i.GetValue())
             {
             case '<': z += "&lt;" ; break;
             case '>': z += "&gt;" ; break;
             case '&': z += "&amp;"; break;
-            default : z += *i     ;
+            default : z += i      ;
             }
         }
     return z;
@@ -248,36 +247,35 @@ std::vector<extra_summary_field> parse_extra_report_fields(std::string const& s)
     std::vector<extra_summary_field> fields;
     fields.reserve(lines.size());
 
-    typedef std::vector<std::string>::const_iterator vsci;
-    for(vsci i = lines.begin(); i != lines.end(); ++i)
+    for(auto const& i : lines)
         {
         // Ignore the empty or blank lines, they could be added for readability
         // reasons and this also deals with the problem of split_into_lines()
         // returning a vector of a single empty line even if the source string
         // is entirely empty.
-        if(i->find_first_not_of(' ') == std::string::npos)
+        if(i.find_first_not_of(' ') == std::string::npos)
             {
             continue;
             }
 
         extra_summary_field field;
 
-        std::string::size_type const pos_colon = i->find(':');
+        std::string::size_type const pos_colon = i.find(':');
 
         // Notice that substr() call is correct even if there is no colon in
         // this line, i.e. pos_colon == npos.
-        field.name = i->substr(0, pos_colon);
+        field.name = i.substr(0, pos_colon);
 
         if(pos_colon != std::string::npos)
             {
             // Skip any spaces after the colon as this is what would be
             // normally expected by the user.
             std::string::size_type const
-                pos_value = i->find_first_not_of(' ', pos_colon + 1);
+                pos_value = i.find_first_not_of(' ', pos_colon + 1);
 
             if(pos_value != std::string::npos)
                 {
-                field.value = i->substr(pos_value);
+                field.value = i.substr(pos_value);
                 }
             }
         // else: If there is no colon or nothing but space after it, just leave
@@ -395,7 +393,7 @@ int output_html
     ,enum_output_mode output_mode = e_output_normal
     )
 {
-    boost::scoped_ptr<wxHtmlContainerCell> const cell
+    std::unique_ptr<wxHtmlContainerCell> const cell
         (static_cast<wxHtmlContainerCell*>(html_parser.Parse(html))
         );
     LMI_ASSERT(cell);
@@ -466,21 +464,21 @@ column_definition const column_definitions[] =
     ,{"Total\n%s\nPremium"             ,   "$9,999,999,999.00"} // e_col_total_premium
     };
 
-BOOST_STATIC_ASSERT(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max);
+static_assert(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max, "");
 
 class group_quote_pdf_generator_wx
     :public group_quote_pdf_generator
 {
   public:
-    static boost::shared_ptr<group_quote_pdf_generator> do_create()
+    static std::shared_ptr<group_quote_pdf_generator> do_create()
         {
-        return boost::shared_ptr<group_quote_pdf_generator>
+        return std::shared_ptr<group_quote_pdf_generator>
                 (new group_quote_pdf_generator_wx()
                 );
         }
 
-    virtual void add_ledger(Ledger const& ledger);
-    virtual void save(std::string const& output_filename);
+    void add_ledger(Ledger const& ledger) override;
+    void save(std::string const& output_filename) override;
 
   private:
     // These margins are arbitrary and can be changed to conform to subjective
@@ -1046,10 +1044,9 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
 
     int current_page = 1;
 
-    typedef std::vector<row_data>::const_iterator rdci;
-    for(rdci i = rows_.begin(); i != rows_.end(); ++i)
+    for(auto const& i : rows_)
         {
-        table_gen.output_row(&pos_y, i->values);
+        table_gen.output_row(&pos_y, i.values);
 
         if(last_row_y <= pos_y)
             {
@@ -1236,8 +1233,7 @@ void group_quote_pdf_generator_wx::output_document_header
     std::vector<extra_summary_field> const& f = report_data_.extra_fields_;
     fields.insert(fields.end(), f.begin(), f.end());
 
-    typedef std::vector<extra_summary_field>::const_iterator esfci;
-    for(esfci i = fields.begin(); i != fields.end();)
+    for(auto i = fields.begin(); i != fields.end(); ++i)
         {
         // Start a new table row and ensure it will be closed.
         open_and_ensure_closing_tag tag_tr(summary_html, "tr");

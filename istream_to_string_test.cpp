@@ -29,7 +29,7 @@
 
 #include <cstdio>
 #include <fstream>
-#include <iterator>
+#include <iterator>                     // std::istreambuf_iterator
 
 template<typename Char_t, typename Traits, typename Allocator>
 void istream_to_string_1

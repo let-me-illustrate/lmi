@@ -270,7 +270,7 @@ void demo1()
 namespace
 {
     // Global variables for timing tests. It would be in better taste
-    // to pass them as arguments, using boost::bind. However, that
+    // to pass them as arguments, using std::bind. However, that
     // would rule out using some compilers (e.g., borland), and it's
     // best to test this with as many different toolsets as possible.
 

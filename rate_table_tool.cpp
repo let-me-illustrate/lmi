@@ -93,7 +93,7 @@ void list_tables(fs::path const& database_filename)
     database const table_file(database_filename);
 
     auto const numbers = get_all_tables_numbers(table_file);
-    for(auto num: numbers)
+    for(auto const& num : numbers)
         {
         table const& t = table_file.find_table(num);
         std::cout
@@ -155,7 +155,7 @@ void merge
                 }
             }
         std::sort(table_names.begin(), table_names.end());
-        for(auto const& j: table_names)
+        for(auto const& j : table_names)
             {
             table const& t = table::read_from_text(j);
             table_file->add_or_replace_table(t);
@@ -233,7 +233,7 @@ void rename_tables
     // This map has all valid table numbers as keys and the value is non-empty
     // iff the table with the corresponding key needs to be renamed to it.
     std::map<table::Number, std::string> name_map;
-    for(auto num: numbers)
+    for(auto const& num : numbers)
         {
         name_map.emplace(num, std::string());
         }
@@ -334,7 +334,7 @@ int verify(fs::path const& database_filename)
     //
     // Make the output ordered by table numbers.
     auto const numbers = get_all_tables_numbers(orig_db);
-    for(auto num: numbers)
+    for(auto const& num : numbers)
         {
         try
             {

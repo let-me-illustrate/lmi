@@ -93,12 +93,12 @@
 #include "uncopyable_lmi.hpp"
 
 #include <boost/any.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <wx/grid.h>
 #include <wx/choice.h>
 
 #include <cstddef>                      // std::size_t
+#include <memory>                       // std::shared_ptr
 #include <string>
 #include <utility>                      // std::pair
 #include <vector>
@@ -193,7 +193,7 @@ class MultiDimAxisAny
 {
   public:
     MultiDimAxisAny(std::string const& name);
-    virtual ~MultiDimAxisAny() {}
+    virtual ~MultiDimAxisAny() = default;
 
     std::string const&   GetName() const;
 
@@ -287,11 +287,11 @@ class MultiDimTableAny
   public:
     /// Coordinates for an element of the table
     typedef std::vector<boost::any> Coords;
-    typedef boost::shared_ptr<MultiDimAxisAny> AxisAnyPtr;
+    typedef std::shared_ptr<MultiDimAxisAny> AxisAnyPtr;
     typedef std::vector<AxisAnyPtr> AxesAny;
 
-    MultiDimTableAny() {}
-    virtual ~MultiDimTableAny() {}
+    MultiDimTableAny() = default;
+    virtual ~MultiDimTableAny() = default;
 
     /// Return the number of dimensions in this table.
     unsigned int GetDimension() const;
@@ -477,18 +477,18 @@ class MultiDimGrid
   public:
     /// Default constructor, use Create() to really create the control.
     MultiDimGrid();
-    virtual ~MultiDimGrid();
+    ~MultiDimGrid() override;
 
     MultiDimGrid
         (wxWindow* parent
-        ,boost::shared_ptr<MultiDimTableAny> const& table
+        ,std::shared_ptr<MultiDimTableAny> const& table
         ,wxWindowID id = wxID_ANY
         ,wxPoint const& pos = wxDefaultPosition
         ,wxSize const& size = wxDefaultSize
         );
     bool Create
         (wxWindow* parent
-        ,boost::shared_ptr<MultiDimTableAny> const& table
+        ,std::shared_ptr<MultiDimTableAny> const& table
         ,wxWindowID id = wxID_ANY
         ,wxPoint const& pos = wxDefaultPosition
         ,wxSize const& size = wxDefaultSize
@@ -529,13 +529,13 @@ class MultiDimGrid
     /// should add color highlighting of selected axis in here.
 
     // wxGridTableBase overrides.
-    virtual int GetNumberCols();
-    virtual int GetNumberRows();
-    virtual bool IsEmptyCell(int row, int col);
-    virtual wxString GetValue(int row, int col);
-    virtual void SetValue(int row, int col, wxString const& value);
-    virtual wxString GetColLabelValue(int col);
-    virtual wxString GetRowLabelValue(int row);
+    int GetNumberCols() override;
+    int GetNumberRows() override;
+    bool IsEmptyCell(int row, int col) override;
+    wxString GetValue(int row, int col) override;
+    void SetValue(int row, int col, wxString const& value) override;
+    wxString GetColLabelValue(int col) override;
+    wxString GetRowLabelValue(int row) override;
 
     unsigned int EnsureIndexIsPositive(int) const;
 
@@ -560,13 +560,13 @@ class MultiDimGrid
 
   private:
     /// Shared pointer to an axis object
-    typedef boost::shared_ptr<MultiDimAxisAny> AxisPtr;
+    typedef std::shared_ptr<MultiDimAxisAny> AxisPtr;
     /// Container of (pointers to) axis objects.
     typedef std::vector<AxisPtr> Axis;
     /// Common part of all ctors
     void Init();
     /// Shared pointer to the data table.
-    boost::shared_ptr<MultiDimTableAny> table_;
+    std::shared_ptr<MultiDimTableAny> table_;
     /// Array (std::vector) of shared pointer to axis.
     Axis axis_;
     /// Cache variable - number of dimensions
@@ -701,7 +701,7 @@ inline MultiDimGrid::MultiDimGrid()
 }
 inline MultiDimGrid::MultiDimGrid
     (wxWindow* parent
-    ,boost::shared_ptr<MultiDimTableAny> const& table
+    ,std::shared_ptr<MultiDimTableAny> const& table
     ,wxWindowID id
     ,wxPoint const& pos
     ,wxSize const& size

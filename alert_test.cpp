@@ -26,7 +26,7 @@
 #include "test_tools.hpp"
 
 #include <algorithm>
-#include <iterator>
+#include <iterator>                     // std::ostream_iterator
 #include <stdexcept>
 #include <vector>
 

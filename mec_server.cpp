@@ -39,7 +39,7 @@
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
 #include "mec_input.hpp"
 #include "mec_xml_document.hpp"
-#include "miscellany.hpp"               // ios_out_trunc_binary()
+#include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"             // unique_filepath(), fs::path inserter
 #include "premium_tax.hpp"
@@ -201,7 +201,7 @@ mec_state test_one_days_7702A_transactions
     // the normal operator==(). Is that a PETE defect?
     std::vector<double> const zero(input.years_to_maturity(), 0.0);
     std::vector<double> const& naar_disc_rate =
-          each_equal(Mly7702ig.begin(), Mly7702ig.end(), 0.0)
+          each_equal(Mly7702ig, 0.0)
         ? zero
         : Mly7702iGlp
         ;
@@ -500,9 +500,7 @@ mec_server::mec_server(mcenum_emission emission)
 {
 }
 
-mec_server::~mec_server()
-{
-}
+mec_server::~mec_server() = default;
 
 bool mec_server::operator()(fs::path const& file_path)
 {

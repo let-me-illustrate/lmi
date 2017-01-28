@@ -29,8 +29,7 @@
 #include "round_to.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/scoped_ptr.hpp>
-
+#include <memory>                       // std::unique_ptr
 #include <vector>
 
 class ULCommFns;
@@ -231,7 +230,7 @@ class Irc7702
 // doesn't matter anymore. TAXATION !! Don't do that then.
 //
 // TODO ?? TAXATION !! Consider using std::vector instead of array members.
-    boost::scoped_ptr<ULCommFns> CommFns       [NumIOBases];
+    std::unique_ptr<ULCommFns> CommFns         [NumIOBases];
     // After the Init- functions have executed, we can delete the
     // rather sizeable ULCommFns objects, as long as we keep the
     // endowment-year value of D for each basis. TAXATION !! But

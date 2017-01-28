@@ -32,7 +32,6 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
-#include <iterator>
 #include <limits>
 #include <numeric>
 
@@ -203,9 +202,7 @@ Irc7702::Irc7702
 }
 
 //============================================================================
-Irc7702::~Irc7702()
-{
-}
+Irc7702::~Irc7702() = default;
 
 //============================================================================
 void Irc7702::ProcessGptPmt
@@ -493,14 +490,12 @@ void Irc7702::InitCorridor()
         );
 
     // GPT corridor
-    std::vector<double>::const_iterator corr = CompleteGptCorridor().begin();
     LMI_ASSERT
         (   static_cast<unsigned int>(IssueAge)
         <=  CompleteGptCorridor().size()
         );
-    std::advance(corr, IssueAge);
     GptCorridor.assign
-        (corr
+        (CompleteGptCorridor().begin() + IssueAge
         ,CompleteGptCorridor().end()
         );
 }

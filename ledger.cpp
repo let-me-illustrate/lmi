@@ -40,8 +40,8 @@
 //   Ledger Ledger::Clone() const
 //   {
 //       Ledger new_ledger(*this);
-//       new_ledger.ledger_map_       = boost::shared_ptr<ledger_map_holder>(new ledger_map_holder(*ledger_map_));
-//       new_ledger.ledger_invariant_ = boost::shared_ptr<LedgerInvariant>(new LedgerInvariant(*ledger_invariant_));
+//       new_ledger.ledger_map_       = std::shared_ptr<ledger_map_holder>(new ledger_map_holder(*ledger_map_));
+//       new_ledger.ledger_invariant_ = std::shared_ptr<LedgerInvariant>(new LedgerInvariant(*ledger_invariant_));
 //       return new_ledger;
 //   }
 // that would make unshared copies? If not, then Clone() would be
@@ -80,9 +80,7 @@ Ledger::Ledger
 }
 
 //============================================================================
-Ledger::~Ledger()
-{
-}
+Ledger::~Ledger() = default;
 
 //============================================================================
 void Ledger::SetRunBases(int length)
@@ -136,14 +134,10 @@ void Ledger::SetRunBases(int length)
             }
         }
 
-    for
-        (ledger_map_t::iterator p = l_map_rep.begin()
-        ;p != l_map_rep.end()
-        ;++p
-        )
+    for(auto& i : l_map_rep)
         {
-        ledger_map_t::key_type const& key = (*p).first;
-        ledger_map_t::mapped_type& data = (*p).second;
+        ledger_map_t::key_type const& key = i.first;
+        ledger_map_t::mapped_type& data = i.second;
 
         run_bases_.push_back(key);
         data.set_run_basis(key);
@@ -168,7 +162,6 @@ void Ledger::SetRunBases(int length)
 void Ledger::ZeroInforceAfterLapse()
 {
     ledger_map_t const& l_map_rep = ledger_map_->held();
-    ledger_map_t::const_iterator this_i = l_map_rep.begin();
 
     // Pick the highest lapse year of any basis (i.e. any LedgerVariant).
     // Set inforce lives to zero at the end of that year and thereafter.
@@ -178,20 +171,16 @@ void Ledger::ZeroInforceAfterLapse()
     // that the vector of inforce lives does not correspond to the
     // current values.
     int lapse_year = 0;
-    while(this_i != l_map_rep.end())
+    for(auto const& i : l_map_rep)
         {
         lapse_year = std::max
             (lapse_year
-            ,static_cast<int>((*this_i).second.LapseYear)
+            ,static_cast<int>(i.second.LapseYear)
             );
-        ++this_i;
         }
-    std::vector<double>::iterator b =
-            ledger_invariant_->InforceLives.begin()
-        +   1
-        +   lapse_year
-        ;
+    std::vector<double>::iterator b = ledger_invariant_->InforceLives.begin();
     std::vector<double>::iterator e = ledger_invariant_->InforceLives.end();
+    b += std::min(e - b, 1 + lapse_year);
     if(b < e)
         {
         std::fill(b, e, 0.0);
@@ -314,13 +303,9 @@ int Ledger::GetMaxLength() const
     ledger_map_t const& l_map_rep = ledger_map_->held();
     double max_length = 0.0;
 
-    for
-        (ledger_map_t::const_iterator lmci = l_map_rep.begin()
-        ;lmci != l_map_rep.end()
-        ;++lmci
-        )
+    for(auto const& i : l_map_rep)
         {
-        max_length = std::max(max_length, (*lmci).second.LapseYear);
+        max_length = std::max(max_length, i.second.LapseYear);
         }
     return static_cast<int>(max_length);
 }
@@ -333,18 +318,16 @@ void Ledger::AutoScale()
     double mult = ledger_invariant_->DetermineScaleFactor();
 
     ledger_map_t& l_map_rep = ledger_map_->held_;
-    ledger_map_t::const_iterator lmci = l_map_rep.begin();
-    for(;lmci != l_map_rep.end(); ++lmci)
+    for(auto const& i : l_map_rep)
         {
-        mult = std::min(mult, (*lmci).second.DetermineScaleFactor());
+        mult = std::min(mult, i.second.DetermineScaleFactor());
         }
 
     ledger_invariant_->ApplyScaleFactor(mult);
 
-    ledger_map_t::iterator lmi = l_map_rep.begin();
-    for(;lmi != l_map_rep.end(); ++lmi)
+    for(auto& i : l_map_rep)
         {
-        (*lmi).second.ApplyScaleFactor(mult);
+        i.second.ApplyScaleFactor(mult);
         }
 }
 
@@ -354,10 +337,9 @@ unsigned int Ledger::CalculateCRC() const
     CRC crc;
     ledger_invariant_->UpdateCRC(crc);
     ledger_map_t const& l_map_rep = ledger_map_->held();
-    ledger_map_t::const_iterator lmci = l_map_rep.begin();
-    for(;lmci != l_map_rep.end(); ++lmci)
+    for(auto const& i : l_map_rep)
         {
-        (*lmci).second.UpdateCRC(crc);
+        i.second.UpdateCRC(crc);
         }
 
     return crc.value();
@@ -368,10 +350,9 @@ void Ledger::Spew(std::ostream& os) const
 {
     ledger_invariant_->Spew(os);
     ledger_map_t const& l_map_rep = ledger_map_->held();
-    ledger_map_t::const_iterator lmci = l_map_rep.begin();
-    for(;lmci != l_map_rep.end(); ++lmci)
+    for(auto const& i : l_map_rep)
         {
-        (*lmci).second.Spew(os);
+        i.second.Spew(os);
         }
 }
 

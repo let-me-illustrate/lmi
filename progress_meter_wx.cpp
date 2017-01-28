@@ -63,15 +63,15 @@ class concrete_progress_meter
         ,enum_display_mode
         );
 
-    virtual ~concrete_progress_meter();
+    ~concrete_progress_meter() override;
 
   private:
     // progress_meter overrides.
-    virtual void do_dawdle(int seconds);
+    void do_dawdle(int seconds) override;
     // progress_meter required implementation.
-    virtual std::string progress_message() const;
-    virtual bool show_progress_message();
-    virtual void culminate_ui();
+    std::string progress_message() const override;
+    bool show_progress_message() override;
+    void culminate_ui() override;
 
     wxProgressDialog progress_dialog_;
 };
@@ -102,9 +102,7 @@ concrete_progress_meter::concrete_progress_meter
         }
 }
 
-concrete_progress_meter::~concrete_progress_meter()
-{
-}
+concrete_progress_meter::~concrete_progress_meter() = default;
 
 /// Sleep for the number of seconds given in the argument.
 ///
@@ -144,13 +142,13 @@ void concrete_progress_meter::culminate_ui()
 {
 }
 
-boost::shared_ptr<progress_meter> concrete_progress_meter_creator
+std::shared_ptr<progress_meter> concrete_progress_meter_creator
     (int                               max_count
     ,std::string const&                title
     ,progress_meter::enum_display_mode display_mode
     )
 {
-    return boost::shared_ptr<progress_meter>
+    return std::shared_ptr<progress_meter>
         (new concrete_progress_meter(max_count, title, display_mode)
         );
 }

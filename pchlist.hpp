@@ -99,15 +99,9 @@
 #   include "yare_input.hpp"
 #   include "zero.hpp"
 
-#   include <boost/config.hpp>
 #   include <boost/filesystem/convenience.hpp>
 #   include <boost/filesystem/operations.hpp>
 #   include <boost/filesystem/path.hpp>
-#   include <boost/iterator.hpp>
-#   include <boost/preprocessor.hpp>
-#   include <boost/shared_ptr.hpp>
-#   include <boost/type_traits.hpp>
-#   include <boost/utility.hpp>
 
 #   include <cstddef>
 #   include <cstdlib>
@@ -116,6 +110,7 @@
 #   include <iterator>
 #   include <stdexcept>
 #   include <string>
+#   include <type_traits>
 #   include <utility>
 #   include <vector>
 

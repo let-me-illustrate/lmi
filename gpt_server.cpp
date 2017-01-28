@@ -40,7 +40,7 @@
 #include "materially_equal.hpp"         // material_difference()
 #include "math_functors.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
-#include "miscellany.hpp"               // ios_out_trunc_binary()
+#include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"             // unique_filepath(), fs::path inserter
 #include "premium_tax.hpp"
@@ -218,7 +218,7 @@ gpt_state test_one_days_gpt_transactions
     // the normal operator==(). Is that a PETE defect?
     std::vector<double> const zero(input.years_to_maturity(), 0.0);
     std::vector<double> const& naar_disc_rate =
-          each_equal(Mly7702ig.begin(), Mly7702ig.end(), 0.0)
+          each_equal(Mly7702ig, 0.0)
         ? zero
         : Mly7702iGlp
         ;
@@ -518,9 +518,7 @@ gpt_server::gpt_server(mcenum_emission emission)
 {
 }
 
-gpt_server::~gpt_server()
-{
-}
+gpt_server::~gpt_server() = default;
 
 bool gpt_server::operator()(fs::path const& file_path)
 {

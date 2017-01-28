@@ -27,69 +27,16 @@
 
 #include <algorithm>
 #include <cassert>
-#include <iterator>
-
-// Macros don't offer default arguments, so we need one macro
-// for each number of arguments.
-
-#ifdef CHECK0
-#   error CHECK0 already defined.
-#else //  CHECK0
-#   define CHECK0(D, N, E) \
-        { \
-        InputSequence seq((E), (N), 90, 95, 0, 2002, 0); \
-        std::vector<double> v(seq.linear_number_representation()); \
-        bool b = std::equal((D), (D) + (N), v.begin()); \
-        (b) \
-            ? static_cast<void>(0) \
-            : check((D), (N), (E)); BOOST_TEST(b); \
-        }
-#endif // CHECK0
-
-#ifdef CHECK1
-#   error CHECK1 already defined.
-#else //  CHECK1
-#   define CHECK1(D, N, E, K, C) \
-        { \
-        InputSequence seq((E), (N), 90, 95, 0, 2002, 0, (K)); \
-        std::vector<double> v(seq.linear_number_representation()); \
-        std::vector<std::string> s(seq.linear_keyword_representation()); \
-        bool b = \
-               std::equal((D), (D) + (N), v.begin()) \
-            && std::equal((C), (C) + (N), s.begin()) \
-            ; \
-        (b) \
-            ? static_cast<void>(0) \
-            : check((D), (N), (E), (K), (C)); BOOST_TEST(b); \
-        }
-#endif // CHECK1
-
-#ifdef CHECK2
-#   error CHECK2 already defined.
-#else //  CHECK2
-#   define CHECK2(D, N, E, K, C, W) \
-        { \
-        InputSequence seq((E), (N), 90, 95, 0, 2002, 0, (K), (W)); \
-        std::vector<double> v(seq.linear_number_representation()); \
-        std::vector<std::string> s(seq.linear_keyword_representation()); \
-        bool b = \
-               std::equal((D), (D) + (N), v.begin()) \
-            && std::equal((C), (C) + (N), s.begin()) \
-            ; \
-        (b) \
-            ? static_cast<void>(0) \
-            : check((D), (N), (E), (K), (C), (W)); BOOST_TEST(b); \
-        }
-#endif // CHECK2
+#include <iterator>                     // std::ostream_iterator
 
 template<typename T>
-void check
-    (T const* d
-    ,int n
-    ,std::string const& e
+void analyze_errors
+    (T const*                        d
+    ,int                             n
+    ,std::string const&              e
     ,std::vector<std::string> const& k = std::vector<std::string>(0)
-    ,char const* const* c = nullptr
-    ,std::string const& w = std::string("")
+    ,char const* const*              c = nullptr
+    ,std::string const&              w = std::string("")
     )
 {
     InputSequence seq(e, n, 90, 95, 0, 2002, 0, k, w);
@@ -97,7 +44,7 @@ void check
     std::vector<T> v(seq.linear_number_representation());
     // Assert that std::equal() has defined behavior.
     assert(v.size() == static_cast<unsigned int>(n));
-    if(!std::equal(d, d + n, v.begin()))
+    if(v != std::vector<T>(d, d + n))
         {
         std::cout << "\nExpression: '" << e << '\'';
         std::cout << "\n  expected: ";
@@ -127,14 +74,49 @@ void check
         }
 }
 
+static char const* c_default[] = {""};
+
+template<typename T>
+void check
+    (char const*                     file
+    ,int                             line
+    ,T const*                        d
+    ,int                             n
+    ,std::string const&              e
+    ,std::vector<std::string> const& k = std::vector<std::string>(0)
+    ,char const* const*              c = c_default
+    ,std::string const&              w = std::string()
+    )
+{
+    InputSequence seq(e, n, 90, 95, 0, 2002, 0, k, w);
+    std::vector<double> v(seq.linear_number_representation());
+    bool const bv = v == std::vector<T>(d, d + n);
+    std::vector<std::string> s(seq.linear_keyword_representation());
+    // This "k.empty()" thing needs reconsideration.
+    bool const bs = k.empty() || std::equal(c, c + n, s.begin());
+    bool const b = bv && bs;
+    if(!b) analyze_errors(d, n, e, k, c, w);
+    INVOKE_BOOST_TEST(b, file, line);
+}
+
 int test_main(int, char*[])
 {
+    // Arguments to check():
+    //   expected results
+    //     c: keywords
+    //     d: numeric values
+    //   ctor arguments
+    //     n: length
+    //     e: expression
+    //     k: extra keywords
+    //     w: default keyword
+
     // An all-blank string is treated as zero.
     {
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string e(" ");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Make sure example in comment at top works.
@@ -143,7 +125,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 7, 7, 0, 0, 0, 0};
     std::string e("1 3; 7 5;0");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Numbers separated by semicolons mean values; the last is
@@ -152,7 +134,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 2, 3, 3, 3};
     std::string e("1; 2; 3");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Number-pairs separated by semicolons mean {value, end-duration}.
@@ -160,7 +142,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string e("1 3; 3 6; 5 9; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // {value, @ attained_age}
@@ -168,7 +150,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string e("1 @93; 3 @96; 5 @99; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // {value, # number_of_years_since_last_interval_endpoint}
@@ -176,7 +158,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string e("1 #3; 3 #3; 5 #3; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // {value [|( begin-duration, end-duration ]|) }
@@ -186,7 +168,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 3, 3, 3, 5, 7, 7, 7};
     std::string e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test (x,y].
@@ -194,7 +176,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 7, 7};
     std::string e("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test a mixture of all five ways of specifying duration.
@@ -202,7 +184,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 1, 2, 3, 4, 5, 5};
     std::string e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test intervals of length one.
@@ -210,7 +192,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
     std::string e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test empty intervals.
@@ -218,7 +200,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
     std::string e("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test subtly improper intervals.
@@ -226,7 +208,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
     std::string e("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test grossly improper intervals.
@@ -234,7 +216,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string e("1; 9 (2, 0]; 3 [7, 3); 5 (5, 5); 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test intervals with 'holes'. Since the last element is replicated,
@@ -243,7 +225,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 1, 0, 3, 0, 5, 7, 7, 7};
     std::string e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test overlapping intervals.
@@ -252,7 +234,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 5, 5, 7, 7};
     std::string e("1; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test intervals with decreasing begin-points.
@@ -261,7 +243,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string e("5 [5, 6); 3 [2, 5); 1 [0, 2); 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Durations with '@' prefix mean attained age.
@@ -269,7 +251,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12, 0, 27, 0, 1, 7, 7, 7, 7};
     std::string e("12 [1, @92); 27 [@93, @93]; 1 (@94, 5]; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // Test floating-point values; we choose values that we know
@@ -279,7 +261,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
     std::string e("12.25 [1, @92); 27.875 [@93, @93]; 1.0625 (@94, 5]; 7.5");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
     // {value, @ age} means {value, to-attained-age}
@@ -287,7 +269,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string e("1 @93; 3 @96; 5 @99; 7");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     }
 
 // TODO ?? Also support and test:
@@ -316,7 +298,7 @@ int test_main(int, char*[])
     k.push_back("c");
     k.push_back("cc");
     k.push_back("ccc");
-    CHECK1(d, n, e, k, c);
+    check(__FILE__, __LINE__, d, n, e, k, c);
     }
 
     // Test numbers mixed with (enumerative) extra keywords.
@@ -327,7 +309,7 @@ int test_main(int, char*[])
     std::string e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
     std::vector<std::string> k;
     k.push_back("keyword_00");
-    CHECK1(d, n, e, k, c);
+    check(__FILE__, __LINE__, d, n, e, k, c);
     }
 
     // Test numbers mixed with (enumerative) extra keywords, with
@@ -342,7 +324,7 @@ int test_main(int, char*[])
     k.push_back("b");
     k.push_back("x");
     std::string w("x");
-    CHECK2(d, n, e, k, c, w);
+    check(__FILE__, __LINE__, d, n, e, k, c, w);
     }
 
 // TODO ?? Also test keyword as scalar duration.
@@ -352,7 +334,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
     std::string e("7, retirement; 4");
-    CHECK0(d, n, e);
+    check(__FILE__, __LINE__, d, n, e);
     InputSequence seq("7, retirement; 4", 10, 90, 95, 0, 2002, 0);
     std::vector<ValueInterval> const& i(seq.interval_representation());
     BOOST_TEST(e_inception  == i[0].begin_mode);
@@ -367,8 +349,4 @@ int test_main(int, char*[])
 
     return 0;
 }
-
-#undef CHECK0
-#undef CHECK1
-#undef CHECK2
 

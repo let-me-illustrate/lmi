@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <cstddef>                      // std::size_t
 #include <functional>
-#include <iterator>
+#include <iterator>                     // std::back_inserter()
 #include <numeric>
 #include <ostream>
 #include <string>

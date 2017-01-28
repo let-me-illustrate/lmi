@@ -27,12 +27,11 @@
 #include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
-#include <boost/scoped_ptr.hpp>
-
 #include <xmlwrapp/node.h>              // xml::element
 
 #include <cstddef>                      // std::size_t
 #include <iosfwd>
+#include <memory>                       // std::unique_ptr
 #include <string>
 
 /// Interface to xmlwrapp.
@@ -54,8 +53,8 @@ namespace xml_lmi
         xml::element const& root_node(std::string const& expected_name) const;
 
       private:
-        std::string                    error_context_;
-        boost::scoped_ptr<DomParser>   parser_;
+        std::string                     error_context_;
+        std::unique_ptr<DomParser>      parser_;
     };
 
     class xml_document
@@ -74,8 +73,8 @@ namespace xml_lmi
         void add_comment(std::string const&);
 
       private:
-        std::string                    error_context_;
-        boost::scoped_ptr<Document>    document_;
+        std::string                     error_context_;
+        std::unique_ptr<Document> const document_;
     };
 
     xml::node::const_iterator retrieve_element

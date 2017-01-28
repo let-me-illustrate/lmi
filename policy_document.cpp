@@ -83,9 +83,7 @@ PolicyDocument::PolicyDocument()
     values_["GuarMortalityFootnote"   ] = &product_data_.GuarMortalityFootnote   .datum_;
 }
 
-PolicyDocument::~PolicyDocument()
-{
-}
+PolicyDocument::~PolicyDocument() = default;
 
 PolicyView& PolicyDocument::PredominantView() const
 {
@@ -98,14 +96,9 @@ void PolicyDocument::ReadDocument(std::string const& filename)
     if(!GetViews().empty())
         {
         PolicyView& view = PredominantView();
-        for
-            (values_type::iterator it = values_.begin()
-            ,end = values_.end()
-            ;it != end
-            ;++it
-            )
+        for(auto const& i : values_)
             {
-            view.controls()[it->first]->SetValue(*it->second);
+            view.controls()[i.first]->SetValue(*i.second);
             }
         }
 }
@@ -115,14 +108,9 @@ void PolicyDocument::WriteDocument(std::string const& filename)
     if(!GetViews().empty())
         {
         PolicyView& view = PredominantView();
-        for
-            (values_type::iterator it = values_.begin()
-            ,end = values_.end()
-            ;it != end
-            ;++it
-            )
+        for(auto const& i : values_)
             {
-            *it->second = view.controls()[it->first]->GetValue();
+            *i.second = view.controls()[i.first]->GetValue();
             }
         }
     save(product_data_, filename);

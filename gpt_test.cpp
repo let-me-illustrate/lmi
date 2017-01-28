@@ -370,12 +370,12 @@ void gpt_test::test_invariants()
     initialize(0); // Reset.
 
     // Monthly q equal to unity: probably a bad idea, but permitted.
-    q_m[q_m.size() - 1] = 1.0;
+    q_m.back() = 1.0;
     instantiate_cf();
     initialize(0); // Reset.
 
     // Monthly q greater than unity.
-    q_m[q_m.size() - 1] = 1.001;
+    q_m.back() = 1.001;
     BOOST_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
@@ -593,7 +593,7 @@ void gpt_test::mete_premiums()
 /// Measure instantiation speed of old GPT class.
 ///
 /// This simple pass-through function could have been written inline
-/// with boost::bind, but it's preferable not to drag that in.
+/// with std::bind, but it's preferable not to drag that in.
 
 void gpt_test::mete_instantiate_old()
 {

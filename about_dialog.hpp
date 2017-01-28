@@ -56,10 +56,10 @@ class AboutDialog
 {
   public:
     AboutDialog(wxWindow* parent);
-    virtual ~AboutDialog();
+    ~AboutDialog() override;
 
     // wxDialog overrides.
-    virtual int ShowModal();
+    int ShowModal() override;
 
   private:
     void UponReadLicense(wxCommandEvent&);

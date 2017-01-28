@@ -52,10 +52,10 @@ class PreviewFrameEx
         ,long int            style  = wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE
         ,wxString     const& name   = "Loading print preview..."
         );
-    virtual ~PreviewFrameEx();
+    ~PreviewFrameEx() override;
 
     // wxPreviewFrame overrides.
-    virtual void Initialize();
+    void Initialize() override;
 
   private:
     // WX !! Should OnCloseWindow() be virtual in the base class?

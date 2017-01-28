@@ -46,16 +46,15 @@
 #include "timer.hpp"
 #include "value_cast.hpp"
 
-#include <boost/bind.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>
 #include <cmath>
 #include <cstdio>                       // std::printf()
+#include <functional>                   // std::bind()
 #include <ios>
 #include <iostream>
-#include <iterator>
 #include <ostream>
 #include <stdexcept>
 #include <string>
@@ -137,7 +136,7 @@ void self_test()
 
     std::cout
         << "Test solve speed: "
-        << TimeAnAliquot(boost::bind(z, "CLI_selftest", IP), 0.1)
+        << TimeAnAliquot(std::bind(z, "CLI_selftest", IP), 0.1)
         << '\n'
         ;
 }
@@ -406,11 +405,9 @@ void process_command_line(int argc, char* argv[])
         {
         getopt_long.usage();
         std::cout << "Suboptions for '--emit':\n";
-        std::vector<std::string> const& v = allowed_strings_emission();
-        typedef std::vector<std::string>::const_iterator vsi;
-        for(vsi i = v.begin(); i != v.end(); ++i)
+        for(auto const& i : allowed_strings_emission())
             {
-            std::cout << "  " << *i << '\n';
+            std::cout << "  " << i << '\n';
             }
         return;
         }

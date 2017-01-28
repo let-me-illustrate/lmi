@@ -33,14 +33,14 @@ class TierDocument
 {
   public:
     TierDocument();
-    virtual ~TierDocument();
+    ~TierDocument() override;
 
     stratified_entity& get_stratified_entity(e_stratified index);
 
   private:
     // wxDocument overrides.
-    virtual void ReadDocument (std::string const& filename);
-    virtual void WriteDocument(std::string const& filename);
+    void ReadDocument (std::string const& filename) override;
+    void WriteDocument(std::string const& filename) override;
 
     void initialize_charges();
 

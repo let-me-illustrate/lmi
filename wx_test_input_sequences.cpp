@@ -91,7 +91,7 @@ LMI_WX_TEST_CASE(input_sequences)
             :test_data_(test_data)
         {}
 
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -143,7 +143,7 @@ LMI_WX_TEST_CASE(input_sequences)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "cell properties dialog" + sequence_describe();
             }
@@ -161,10 +161,10 @@ LMI_WX_TEST_CASE(input_sequences)
     };
 
     wxUIActionSimulator ui;
-    for(std::size_t n = 0; n < sizeof test_cases / sizeof(test_cases[0]); n++)
+    for(auto const& test : test_cases)
         {
         ui.Char('e', wxMOD_CONTROL); // "Illustration|Edit Cell"
-        wxTEST_DIALOG(wxYield(), test_sequence_dialog(test_cases[n]));
+        wxTEST_DIALOG(wxYield(), test_sequence_dialog(test));
         }
 
     ill.close_discard_changes();

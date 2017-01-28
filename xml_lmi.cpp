@@ -130,8 +130,7 @@ xml_lmi::dom_parser::dom_parser(std::istream const& is)
 
 /// Throws: nothing unless member parser_'s destructor does.
 
-xml_lmi::dom_parser::~dom_parser()
-{}
+xml_lmi::dom_parser::~dom_parser() = default;
 
 /// Return the parsed document.
 ///
@@ -201,8 +200,7 @@ xml_lmi::xml_document::xml_document(std::string const& root_node_name)
 {
 }
 
-xml_lmi::xml_document::~xml_document()
-{}
+xml_lmi::xml_document::~xml_document() = default;
 
 xml::element& xml_lmi::xml_document::root_node()
 {
@@ -280,15 +278,14 @@ std::string get_content(xml::element const& element)
     try
         {
         std::string s;
-        typedef xml::node::const_iterator NodeConstIterator;
-        for(NodeConstIterator i = element.begin(); i != element.end(); ++i)
+        for(auto const& i : element)
             {
-            if(i->is_text())
+            if(i.is_text())
                 {
-                char const* content = i->get_content();
+                char const* content = i.get_content();
                 if(content)
                     {
-                    s += i->get_content();
+                    s += i.get_content();
                     }
                 }
             }

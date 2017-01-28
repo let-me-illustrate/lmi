@@ -38,13 +38,13 @@ class DefaultView
 {
   public:
     DefaultView();
-    virtual ~DefaultView();
+    ~DefaultView() override;
 
   private:
     // MvcView required implementation.
-    virtual char const* DoBookControlName () const;
-    virtual char const* DoMainDialogName  () const;
-    virtual char const* DoResourceFileName() const;
+    char const* DoBookControlName () const override;
+    char const* DoMainDialogName  () const override;
+    char const* DoResourceFileName() const override;
 };
 
 #endif // default_view_hpp

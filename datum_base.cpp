@@ -28,9 +28,7 @@ datum_base::datum_base()
 {
 }
 
-datum_base::~datum_base()
-{
-}
+datum_base::~datum_base() = default;
 
 void datum_base::enable(bool b)
 {

@@ -28,12 +28,10 @@
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_enum.hpp>
-
 #include <xmlwrapp/nodes_view.h>
 
 #include <string>
+#include <type_traits>
 #include <vector>
 
 /// Serialization to and from xml.
@@ -58,7 +56,7 @@ namespace xml_serialize
 template<typename T>
 struct xml_io
 {
-    BOOST_STATIC_ASSERT(!boost::is_enum<T>::value); // Prefer mc_enum.
+    static_assert(!std::is_enum<T>::value, ""); // Prefer mc_enum.
 
     static void to_xml(xml::element& e, T const& t)
     {
@@ -84,23 +82,26 @@ struct xml_io
 /// from_xml() reads only <item> elements, ignoring other elements
 /// (and non-element nodes) that might have been added manually,
 /// e.g., as documentation.
+///
+/// C++11 has no way to assert that T is a Sequence; for the nonce,
+/// no other Sequence being used, assert that it's a vector.
 
 template<typename T>
 struct xml_sequence_io
 {
     typedef typename T::value_type item_t;
+    static_assert(std::is_same<T,std::vector<item_t> >::value, "");
 
     static void to_xml(xml::element& e, T const& t)
     {
         // XMLWRAPP !! Add a clear() function.
         e.erase(e.begin(), e.end());
-        typedef typename T::const_iterator tci;
-        for(tci i = t.begin(); i != t.end(); ++i)
+        for(auto const& i : t)
             {
             // This is not equivalent to calling set_element():
             // multiple <item> elements are expressly permitted.
             xml::element z("item");
-            xml_io<item_t>::to_xml(z, *i);
+            xml_io<item_t>::to_xml(z, i);
             e.push_back(z);
             }
     }
@@ -108,12 +109,10 @@ struct xml_sequence_io
     static void from_xml(xml::element const& e, T& t)
     {
         t.clear();
-        xml::const_nodes_view const items(e.elements("item"));
-        typedef xml::const_nodes_view::const_iterator cnvi;
-        for(cnvi i = items.begin(); i != items.end(); ++i)
+        for(auto const& i : e.elements("item"))
             {
             item_t z;
-            xml_io<item_t>::from_xml(*i, z);
+            xml_io<item_t>::from_xml(i, z);
             t.push_back(z);
             }
     }

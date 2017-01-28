@@ -95,9 +95,7 @@ PreferencesModel::PreferencesModel()
     Load();
 }
 
-PreferencesModel::~PreferencesModel()
-{
-}
+PreferencesModel::~PreferencesModel() = default;
 
 void PreferencesModel::AscribeMembers()
 {
@@ -192,21 +190,20 @@ void PreferencesModel::DoHarmonize()
     weird_report_columns.push_back(mce_current_0_cash_surrender_value             );
     weird_report_columns.push_back(mce_guaranteed_0_cash_surrender_value          );
 
-    typedef std::vector<mcenum_report_column>::const_iterator vrci;
-    for(vrci i = weird_report_columns.begin(); i != weird_report_columns.end(); ++i)
+    for(auto const& i : weird_report_columns)
         {
-        CalculationSummaryColumn00.allow(*i, false);
-        CalculationSummaryColumn01.allow(*i, false);
-        CalculationSummaryColumn02.allow(*i, false);
-        CalculationSummaryColumn03.allow(*i, false);
-        CalculationSummaryColumn04.allow(*i, false);
-        CalculationSummaryColumn05.allow(*i, false);
-        CalculationSummaryColumn06.allow(*i, false);
-        CalculationSummaryColumn07.allow(*i, false);
-        CalculationSummaryColumn08.allow(*i, false);
-        CalculationSummaryColumn09.allow(*i, false);
-        CalculationSummaryColumn10.allow(*i, false);
-        CalculationSummaryColumn11.allow(*i, false);
+        CalculationSummaryColumn00.allow(i, false);
+        CalculationSummaryColumn01.allow(i, false);
+        CalculationSummaryColumn02.allow(i, false);
+        CalculationSummaryColumn03.allow(i, false);
+        CalculationSummaryColumn04.allow(i, false);
+        CalculationSummaryColumn05.allow(i, false);
+        CalculationSummaryColumn06.allow(i, false);
+        CalculationSummaryColumn07.allow(i, false);
+        CalculationSummaryColumn08.allow(i, false);
+        CalculationSummaryColumn09.allow(i, false);
+        CalculationSummaryColumn10.allow(i, false);
+        CalculationSummaryColumn11.allow(i, false);
         }
 }
 
@@ -232,10 +229,9 @@ bool PreferencesModel::IsModified() const
 {
     PreferencesModel unchanged;
     configurable_settings const& z = configurable_settings::instance();
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& i : member_names())
         {
-        if(operator[](*i) != unchanged[*i])
+        if(operator[](i) != unchanged[i])
             {
             return true;
             }
@@ -281,14 +277,13 @@ void PreferencesModel::Load()
 std::string PreferencesModel::string_of_column_names() const
 {
     std::ostringstream oss;
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& i : member_names())
         {
-        if(!is_calculation_summary_column_name(*i))
+        if(!is_calculation_summary_column_name(i))
             {
             continue;
             }
-        std::string const column = operator[](*i).str();
+        std::string const column = operator[](i).str();
         if(column != empty_column_name)
             {
             oss << column << " ";

@@ -88,25 +88,17 @@ button_bitmaps const& all_button_bitmaps()
         states[e_state_selected] = "_selected";
 
         wxXmlResource& xml_resources = *wxXmlResource::Get();
-        for
-            (style_names::const_iterator li = styles.begin()
-            ;li != styles.end()
-            ;++li
-            )
+        for(auto const& li : styles)
             {
-            for
-                (state_names::const_iterator ti = states.begin()
-                ;ti != states.end()
-                ;++ti
-                )
+            for(auto const& ti : states)
                 {
                 std::ostringstream oss;
                 oss
                     << "rnd_"
-                    << li->second
-                    << ti->second
+                    << li.second
+                    << ti.second
                     ;
-                bitmaps[std::make_pair(li->first, ti->first)] =
+                bitmaps[std::make_pair(li.first, ti.first)] =
                     xml_resources.LoadBitmap(oss.str());
                 }
             }
@@ -250,9 +242,7 @@ wxSize RoundingButtons::CalculateMinimumTextControlSize
     return size;
 }
 
-RoundingButtons::~RoundingButtons()
-{
-}
+RoundingButtons::~RoundingButtons() = default;
 
 bool RoundingButtons::IsModified() const
 {

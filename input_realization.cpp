@@ -31,13 +31,12 @@
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "input_seq_helpers.hpp"
-#include "miscellany.hpp"               // minmax
+#include "miscellany.hpp"               // each_equal(), minmax
 #include "round_to.hpp"
 #include "value_cast.hpp"
 
-#include <boost/bind.hpp>
-
 #include <algorithm>
+#include <functional>                   // std::bind()
 #include <sstream>
 #include <utility>                      // std::pair
 
@@ -157,10 +156,9 @@ Input::permissible_specified_amount_strategy_keywords()
 //    std::map<std::string,std::string> permissible_keywords = all_keywords;
     std::map<std::string,std::string> permissible_keywords;
     // Don't use initialization--we want this to happen every time [6.7].
-    typedef std::map<std::string,std::string>::const_iterator smci;
-    for(smci i = all_keywords.begin(); i != all_keywords.end(); ++i)
+    for(auto const& i : all_keywords)
         {
-        permissible_keywords.insert(*i);
+        permissible_keywords.insert(i);
         }
 
     bool specified_amount_indeterminate = mce_solve_specamt == SolveType;
@@ -232,18 +230,14 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
 
     if(report_errors)
         {
-        for
-            (std::vector<std::string>::iterator i = s.begin()
-            ;i != s.end()
-            ;++i
-            )
+        for(auto const& i : s)
             {
             std::ostringstream oss;
             bool diagnostics_present = false;
-            if(!i->empty())
+            if(!i.empty())
                 {
                 diagnostics_present = true;
-                oss << (*i) << "\n";
+                oss << i << "\n";
                 }
             if(diagnostics_present)
                 {
@@ -549,10 +543,10 @@ std::string Input::RealizeDeathBenefitOption()
         &&  !std::is_sorted
                 (DeathBenefitOptionRealized_.begin()
                 ,DeathBenefitOptionRealized_.end()
-                ,boost::bind
+                ,std::bind
                     (std::logical_and<bool>()
-                    ,boost::bind(std::equal_to    <mce_dbopt>(), _1, mce_dbopt("B"))
-                    ,boost::bind(std::not_equal_to<mce_dbopt>(), _2, mce_dbopt("B"))
+                    ,std::bind(std::equal_to    <mce_dbopt>(), std::placeholders::_1, mce_dbopt("B"))
+                    ,std::bind(std::not_equal_to<mce_dbopt>(), std::placeholders::_2, mce_dbopt("B"))
                     )
                 )
         )
@@ -800,7 +794,7 @@ std::string Input::RealizeNewLoan()
         return "";
         }
 
-    if(!each_equal(NewLoanRealized_.begin(), NewLoanRealized_.end(), 0.0))
+    if(!each_equal(NewLoanRealized_, 0.0))
         {
         return "Loans may not be illustrated on this policy form.";
         }
@@ -823,7 +817,7 @@ std::string Input::RealizeWithdrawal()
 
     if(!database_->Query(DB_AllowWd))
         {
-        if(!each_equal(WithdrawalRealized_.begin(), WithdrawalRealized_.end(), 0.0))
+        if(!each_equal(WithdrawalRealized_, 0.0))
             {
             return "Withdrawals may not be illustrated on this policy form.";
             }
@@ -831,20 +825,16 @@ std::string Input::RealizeWithdrawal()
     else
         {
         double lowest_allowed_withdrawal = database_->Query(DB_MinWd);
-        for
-            (std::vector<tnr_unrestricted_double>::iterator i = WithdrawalRealized_.begin()
-            ;i < WithdrawalRealized_.end()
-            ;++i
-            )
+        for(auto const& i : WithdrawalRealized_)
             {
-            if(0.0 < i->value() && i->value() < lowest_allowed_withdrawal)
+            if(0.0 < i.value() && i.value() < lowest_allowed_withdrawal)
                 {
                 std::ostringstream oss;
                 oss
                     << "Minimum withdrawal is "
                     << lowest_allowed_withdrawal
                     << "; "
-                    << *i
+                    << i
                     << " is too low."
                     ;
                 return oss.str();
@@ -875,7 +865,7 @@ std::string Input::RealizeFlatExtra()
         return "";
         }
 
-    if(!each_equal(FlatExtraRealized_.begin(), FlatExtraRealized_.end(), 0.0))
+    if(!each_equal(FlatExtraRealized_, 0.0))
         {
         return "Flat extras not permitted.";
         }

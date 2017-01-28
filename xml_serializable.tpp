@@ -28,16 +28,13 @@
 #include "xml_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp> // basename()
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/utility/enable_if.hpp>
 
 #include <xmlwrapp/nodes_view.h>
 
 #include <algorithm>                    // std::copy(), std::find()
-#include <iterator>                     // std::back_inserter
+#include <iterator>                     // std::back_inserter()
 #include <sstream>
+#include <type_traits>
 #include <vector>
 
 template<typename T>
@@ -46,13 +43,8 @@ xml_serializable<T>::~xml_serializable()
     // Assert that static_cast<T cv&> doesn't engender undefined
     // behavior, and that class T provides the expected operator[]()
     // and member_names() functions.
-    //
-    // Double parentheses: don't parse comma as a macro parameter separator.
-    BOOST_STATIC_ASSERT
-        ((
-           boost::is_base_and_derived<xml_serializable <T>,T>::value
-        && boost::is_base_and_derived<MemberSymbolTable<T>,T>::value
-        ));
+    static_assert(std::is_base_of<xml_serializable <T>,T>::value, "");
+    static_assert(std::is_base_of<MemberSymbolTable<T>,T>::value, "");
 }
 
 template<typename T>
@@ -113,27 +105,24 @@ void xml_serializable<T>::read(xml::element const& x)
         ,t().member_names().end()
         ,std::back_inserter(residuary_names)
         );
-    std::list<std::string>::iterator current_member;
 
-    xml::const_nodes_view const elements(x.elements());
-    typedef xml::const_nodes_view::const_iterator cnvi;
-    for(cnvi child = elements.begin(); child != elements.end(); ++child)
+    for(auto const& child : x.elements())
         {
-        std::string node_tag(child->get_name());
-        current_member = std::find
+        std::string node_tag(child.get_name());
+        std::list<std::string>::iterator current_member = std::find
             (residuary_names.begin()
             ,residuary_names.end()
             ,node_tag
             );
         if(residuary_names.end() != current_member)
             {
-            read_element(*child, node_tag, file_version);
+            read_element(child, node_tag, file_version);
             residuary_names.erase(current_member);
             }
         else if(is_detritus(node_tag))
             {
             // Hold certain obsolete entities that must be translated.
-            value_type v = fetch_element(*child);
+            value_type v = fetch_element(child);
             redintegrate_ex_ante(file_version, node_tag, v);
             detritus_map[node_tag] = v;
             }
@@ -189,10 +178,9 @@ void xml_serializable<T>::immit_members_into(xml::element& root) const
 {
     xml_lmi::set_attr(root, "version", class_version());
 
-    std::vector<std::string>::const_iterator i;
-    for(i = t().member_names().begin(); i != t().member_names().end(); ++i)
+    for(auto const& i : t().member_names())
         {
-        write_element(root, *i);
+        write_element(root, i);
         }
 }
 
@@ -215,7 +203,7 @@ std::string const& xml_serializable<T>::xml_root_name() const
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const& x
-    ,typename boost::enable_if<boost::is_same<X,Y> >::type* = nullptr
+    ,typename std::enable_if<std::is_same<X,Y>::value>::type* = nullptr
     )
 {
     return x;
@@ -224,7 +212,7 @@ inline Y sfinae_cast
 template<typename X, typename Y>
 inline Y sfinae_cast
     (X const&
-    ,typename boost::disable_if<boost::is_same<X,Y> >::type* = nullptr
+    ,typename std::enable_if<!std::is_same<X,Y>::value>::type* = nullptr
     )
 {
     fatal_error() << "Impermissible type conversion." << LMI_FLUSH;

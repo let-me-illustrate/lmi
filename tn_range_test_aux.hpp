@@ -27,24 +27,20 @@
 #include "tn_range_fwd.hpp"
 
 #include <istream>
+#include <limits>
 #include <ostream>
 
-// The derived trammel class must be defined here so that its size is
+// Each derived trammel class must be defined here so that its size is
 // known to all translation units that might use it.
-
-// An assertion such as
-//    BOOST_STATIC_ASSERT(100 <= std::numeric_limits<T>::max());
-// cannot work: the macro's argument must be an integral constant
-// expression, so it can't involve a function call and can't perform
-// any non-integer operation.
 
 template<typename T>
 class percentage_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return   0;}
-    T default_value()   const {return   0;}
-    T nominal_maximum() const {return 100;}
+    static_assert(100 <= std::numeric_limits<T>::max(), "");
+    T nominal_minimum() const override {return   0;}
+    T default_value()   const override {return   0;}
+    T nominal_maximum() const override {return 100;}
 };
 
 typedef tn_range<int, percentage_trammel<int> > r_int_percentage;
@@ -86,9 +82,9 @@ template<typename T>
 class range_udt_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return   0;}
-    T default_value()   const {return   0;}
-    T nominal_maximum() const {return 100;}
+    T nominal_minimum() const override {return   0;}
+    T default_value()   const override {return   0;}
+    T nominal_maximum() const override {return 100;}
 };
 
 typedef tn_range<RangeUDT, range_udt_trammel<RangeUDT> > r_range_udt;

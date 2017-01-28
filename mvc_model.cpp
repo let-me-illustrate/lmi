@@ -64,13 +64,9 @@ void ComplainAboutAnyDiscrepancies
 }
 } // Unnamed namespace.
 
-MvcModel::MvcModel()
-{
-}
+MvcModel::MvcModel() = default;
 
-MvcModel::~MvcModel()
-{
-}
+MvcModel::~MvcModel() = default;
 
 datum_base const* MvcModel::BaseDatumPointer(std::string const& name) const
 {
@@ -175,11 +171,10 @@ void MvcModel::Harmonize()
 
 void MvcModel::Transmogrify()
 {
-    typedef NamesType::const_iterator ntci;
-    for(ntci i = Names().begin(); i != Names().end(); ++i)
+    for(auto const& i : Names())
         {
-        DoEnforceCircumscription(*i);
-        DoEnforceProscription   (*i);
+        DoEnforceCircumscription(i);
+        DoEnforceProscription   (i);
         }
     DoTransmogrify();
 }

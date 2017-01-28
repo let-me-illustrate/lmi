@@ -193,9 +193,8 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
-
 #include <iosfwd>
+#include <memory>                       // std::shared_ptr
 #include <string>
 
 std::ostringstream& LMI_SO progress_meter_unit_test_stream();
@@ -245,13 +244,13 @@ class LMI_SO progress_meter
     bool              was_cancelled_;
 };
 
-boost::shared_ptr<progress_meter> LMI_SO create_progress_meter
+std::shared_ptr<progress_meter> LMI_SO create_progress_meter
     (int                               max_count
     ,std::string const&                title = ""
     ,progress_meter::enum_display_mode       = progress_meter::e_normal_display
     );
 
-typedef boost::shared_ptr<progress_meter> (*progress_meter_creator_type)
+typedef std::shared_ptr<progress_meter> (*progress_meter_creator_type)
     (int                               max_count
     ,std::string const&                title
     ,progress_meter::enum_display_mode

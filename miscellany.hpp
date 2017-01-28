@@ -26,8 +26,6 @@
 
 #include "so_attributes.hpp"
 
-#include <boost/algorithm/minmax_element.hpp>
-
 #include <algorithm>
 #include <cctype>
 #include <climits>                      // UCHAR_MAX
@@ -44,7 +42,23 @@
 template<typename InputIterator, typename T>
 bool each_equal(InputIterator first, InputIterator last, T const& t)
 {
-    return std::distance(first, last) == std::count(first, last, t);
+    for(InputIterator i = first; i != last; ++i)
+        {
+        if(t != *i) return false;
+        }
+    return true;
+}
+
+/// Test whether every element in a range equals the specified constant.
+
+template<typename RangeExpression, typename T>
+bool each_equal(RangeExpression const& range, T const& t)
+{
+    for(auto const& i : range)
+        {
+        if(t != i) return false;
+        }
+    return true;
 }
 
 /// Test whether two files are identical. Arguments are filenames.
@@ -60,13 +74,10 @@ bool files_are_identical(std::string const&, std::string const&);
 template<typename T>
 class minmax
 {
-    typedef typename std::vector<T>::const_iterator extremum_t;
-    typedef std::pair<extremum_t,extremum_t> extrema_t;
-
   public:
     explicit minmax(std::vector<T> const& v)
         {
-        extrema_t extrema = boost::minmax_element(v.begin(), v.end());
+        auto const& extrema = std::minmax_element(v.begin(), v.end());
         minimum_ = *extrema.first ;
         maximum_ = *extrema.second;
         }

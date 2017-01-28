@@ -83,25 +83,23 @@ int year_from_string(wxString const& s)
 int extract_last_copyright_year(wxString const& html)
 {
     // Find the line starting with "Copyright".
-    wxArrayString const lines = wxSplit(html ,'\n' ,'\0');
-
-    wxString line;
-    for(wxArrayString::const_iterator i = lines.begin(); i != lines.end(); ++i)
+    wxString copyright_line;
+    for(auto const& line : wxSplit(html ,'\n' ,'\0'))
         {
-        if(i->StartsWith("Copyright"))
+        if(line.StartsWith("Copyright"))
             {
             LMI_ASSERT_WITH_MSG
-                (line.empty()
+                (copyright_line.empty()
                 ,"Unexpectedly found more than one copyright line in the "
                  "license notices text"
                 );
 
-            line = *i;
+            copyright_line = line;
             }
         }
 
     LMI_ASSERT_WITH_MSG
-        (!line.empty()
+        (!copyright_line.empty()
         ,"Copyright line not found in the license notices text"
         );
 
@@ -116,15 +114,17 @@ int extract_last_copyright_year(wxString const& html)
     // and notably not with MinGW 3.4. As we are only interested in matching
     // ASCII characters such as digits, using UTF-8 is safe even though
     // boost::regex has no real support for it.
-    std::string const line_utf8(line.utf8_str());
+    std::string const copyright_line_utf8(copyright_line.utf8_str());
     boost::smatch m;
     LMI_ASSERT_WITH_MSG
         (boost::regex_search
-            (line_utf8
+            (copyright_line_utf8
             ,m
             ,boost::regex("(?:\\d{4}, )+(\\d{4})")
             )
-        ,"Copyright line \"" + line + "\" doesn't contain copyright years"
+        , "Copyright line \""
+        + copyright_line
+        + "\" doesn't contain copyright years"
         );
 
     return year_from_string(wxString(m[1]));
@@ -137,10 +137,9 @@ int extract_last_copyright_year(wxString const& html)
 wxHtmlWindow* find_html_window(wxWindow* parent, std::string const& dialog_name)
 {
     wxHtmlWindow* html_win = nullptr;
-    wxWindowList const& wl = parent->GetChildren();
-    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+    for(auto const& w : parent->GetChildren())
         {
-        wxHtmlWindow* const maybe_html_win = dynamic_cast<wxHtmlWindow*>(*i);
+        wxHtmlWindow* const maybe_html_win = dynamic_cast<wxHtmlWindow*>(w);
         if(maybe_html_win)
             {
             LMI_ASSERT_WITH_MSG
@@ -168,7 +167,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
 {
     struct expect_about_dialog : public wxExpectModalBase<wxDialog>
     {
-        virtual int OnInvoked(wxDialog* d) const
+        int OnInvoked(wxDialog* d) const override
             {
             LMI_ASSERT(nullptr != d);
 
@@ -199,7 +198,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
             // And then press the default button in it which opens the license.
             struct expect_license_dialog : public wxExpectModalBase<wxDialog>
             {
-                virtual int OnInvoked(wxDialog* d) const
+                int OnInvoked(wxDialog* d) const override
                     {
                     wxHtmlWindow* const
                         license_win = find_html_window(d, "license");
@@ -228,7 +227,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
                     return wxID_OK;
                     }
 
-                virtual wxString GetDefaultDescription() const
+                wxString GetDefaultDescription() const override
                     {
                     return "license dialog";
                     }
@@ -244,7 +243,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "about dialog";
             }

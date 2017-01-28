@@ -93,15 +93,16 @@ std::string build_not_found_message(std::set<std::string> const& remaining)
     bool const only_one = remaining.size() == 1;
     message << (only_one ? "column" : "columns");
 
-    typedef std::set<std::string>::const_iterator ssci;
-    for(ssci i = remaining.begin(); i != remaining.end(); ++i)
+    bool first = true;
+    for(auto const& i : remaining)
         {
-        if(i != remaining.begin())
+        if(!first)
             {
             message << ",";
+            first = false;
             }
 
-        message << " '" << *i << "'";
+        message << " '" << i << "'";
         }
 
     message << " " << (only_one ? "was" : "were") << " not found" << " ";
@@ -277,7 +278,7 @@ LMI_WX_TEST_CASE(paste_census)
     struct change_gender_in_class_defaults_dialog
         :public wxExpectModalBase<MvcController>
     {
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -307,7 +308,7 @@ LMI_WX_TEST_CASE(paste_census)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "class defaults dialog";
             }
@@ -350,7 +351,7 @@ LMI_WX_TEST_CASE(paste_census)
     struct change_class_in_case_defaults_dialog
         :public wxExpectModalBase<MvcController>
     {
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -376,7 +377,7 @@ LMI_WX_TEST_CASE(paste_census)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "case defaults dialog";
             }

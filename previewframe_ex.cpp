@@ -59,9 +59,7 @@ PreviewFrameEx::PreviewFrameEx
         }
 }
 
-PreviewFrameEx::~PreviewFrameEx()
-{
-}
+PreviewFrameEx::~PreviewFrameEx() = default;
 
 void PreviewFrameEx::Initialize()
 {

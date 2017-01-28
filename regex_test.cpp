@@ -163,10 +163,9 @@ bool contains_regex0(std::string const& regex)
 bool contains_regex1(std::string const& regex)
 {
     boost::regex const r(regex, boost::regex::sed);
-    typedef std::vector<std::string>::const_iterator vsi;
-    for(vsi i = lines.begin(); i != lines.end(); ++i)
+    for(auto const& i : lines)
         {
-        if(boost::regex_search(*i, r))
+        if(boost::regex_search(i, r))
             {
             return true;
             }
@@ -223,12 +222,11 @@ char never[] = "lord";
 void test_psalm_37()
 {
     lines = vectorize(original);
-    typedef std::vector<std::string>::iterator vsi;
-    for(vsi i = lines.begin(); i != lines.end(); ++i)
+    for(auto const& i : lines)
         {
         for(int j = 0; j < 10; ++j)
             {
-            text += *i + '\n';
+            text += i + '\n';
             }
         }
     lines = vectorize(text);
@@ -288,7 +286,7 @@ void test_input_sequence_regex()
 {
     // A crude regex for a floating-point number, which defectively
     // accepts '.'.
-    std::string const N("\\-?[0-9.]+");
+    std::string const N(R"(\-?[0-9.]+)");
     // A set of keywords. These happen to be the ones permitted for
     // 'specamt_sequence'.
     std::string       K("maximum|target|sevenpay|glp|gsp|corridor|salary");
@@ -309,7 +307,7 @@ void test_input_sequence_regex()
     //    with ']' or ')', with anything but a semicolon in between
     //    (the actual grammar is of course more restrictive, but need
     //    not be described here).
-    std::string const Y("(( +| *, *)([@#]? *[0-9]+|[a-z]+|[\\[\\(][^;]+[\\]\\)]))");
+    std::string const Y(R"((( +| *, *)([@#]? *[0-9]+|[a-z]+|[\[\(][^;]+[\]\)])))");
     // The regex to be tested. It can consist solely of zero or more
     // spaces. Otherwise, it consists of one or more data-duration
     // pairs ('X' and an optional 'Y' as above), with an obligatory

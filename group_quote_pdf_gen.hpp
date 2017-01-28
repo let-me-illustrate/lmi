@@ -27,8 +27,7 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
-
+#include <memory>                       // std::shared_ptr
 #include <string>
 
 class Ledger;
@@ -45,10 +44,10 @@ class LMI_SO group_quote_pdf_generator
     :private lmi::uncopyable<group_quote_pdf_generator>
 {
   public:
-    typedef boost::shared_ptr<group_quote_pdf_generator> (*creator_type)();
+    typedef std::shared_ptr<group_quote_pdf_generator> (*creator_type)();
 
     static bool set_creator(creator_type);
-    static boost::shared_ptr<group_quote_pdf_generator> create();
+    static std::shared_ptr<group_quote_pdf_generator> create();
 
     virtual ~group_quote_pdf_generator();
 

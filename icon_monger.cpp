@@ -100,9 +100,7 @@ icon_monger::icon_monger()
     lmi_specific_icon_names_.insert("write-spreadsheet"       );
 }
 
-icon_monger::~icon_monger()
-{
-}
+icon_monger::~icon_monger() = default;
 
 namespace
 {
@@ -155,8 +153,7 @@ wxBitmap icon_monger::CreateBitmap
     bool is_builtin = 0 == icon_name.find("wxART_");
     if(is_builtin)
         {
-        typedef std::map<wxArtID,std::string>::const_iterator mci;
-        mci const i = icon_names_by_wx_id_.find(icon_name);
+        auto const& i = icon_names_by_wx_id_.find(icon_name);
         if(i == icon_names_by_wx_id_.end())
             {
             // This is not an error as not all wxART id's have lmi overrides,

@@ -36,7 +36,7 @@ std::ostringstream& progress_meter_unit_test_stream()
 
 progress_meter_creator_type progress_meter_creator = nullptr;
 
-boost::shared_ptr<progress_meter> create_progress_meter
+std::shared_ptr<progress_meter> create_progress_meter
     (int                               max_count
     ,std::string const&                title
     ,progress_meter::enum_display_mode display_mode
@@ -77,9 +77,7 @@ progress_meter::progress_meter
 {
 }
 
-progress_meter::~progress_meter()
-{
-}
+progress_meter::~progress_meter() = default;
 
 void progress_meter::dawdle(int seconds)
 {

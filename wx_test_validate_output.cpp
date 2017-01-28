@@ -73,7 +73,7 @@ struct enter_comments_in_case_defaults_dialog
         {
         }
 
-    virtual int OnInvoked(MvcController* dialog) const
+    int OnInvoked(MvcController* dialog) const override
         {
         dialog->Show();
         wxYield();
@@ -103,7 +103,7 @@ struct enter_comments_in_case_defaults_dialog
         return wxID_OK;
         }
 
-    virtual wxString GetDefaultDescription() const
+    wxString GetDefaultDescription() const override
         {
         return "case defaults dialog";
         }
@@ -130,7 +130,7 @@ void init_test_census
             {
             }
 
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             enter_comments_in_case_defaults_dialog::OnInvoked(dialog);
 
@@ -163,7 +163,7 @@ void init_test_census
             {
             }
 
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -177,7 +177,7 @@ void init_test_census
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "census cell dialog";
             }
@@ -456,7 +456,7 @@ LMI_WX_TEST_CASE(validate_output_illustration)
     struct enter_comment_in_illustration_dialog
         :public wxExpectModalBase<MvcController>
     {
-        virtual int OnInvoked(MvcController* dialog) const
+        int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();
             wxYield();
@@ -470,7 +470,7 @@ LMI_WX_TEST_CASE(validate_output_illustration)
             return wxID_OK;
             }
 
-        virtual wxString GetDefaultDescription() const
+        wxString GetDefaultDescription() const override
             {
             return "illustration properties dialog";
             }

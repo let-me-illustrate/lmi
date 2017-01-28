@@ -29,7 +29,7 @@
 #include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>                       // std::shared_ptr
 
 class DatabaseDocument;
 class DatabaseTableAdapter;
@@ -42,21 +42,21 @@ class DatabaseView
 {
   public:
     DatabaseView();
-    virtual ~DatabaseView();
+    ~DatabaseView() override;
 
   private:
     // ViewEx required implementation.
-    virtual char const* icon_xrc_resource   () const;
-    virtual char const* menubar_xrc_resource() const;
+    char const* icon_xrc_resource   () const override;
+    char const* menubar_xrc_resource() const override;
 
     // ProductEditorView required implementation.
-    virtual bool IsModified() const;
-    virtual void DiscardEdits();
+    bool IsModified() const override;
+    void DiscardEdits() override;
 
     // TreeGridViewBase required implementation.
-    virtual wxTreeCtrl*   CreateTreeCtrl(wxWindow* parent);
-    virtual MultiDimGrid* CreateGridCtrl(wxWindow* parent);
-    virtual void          SetupControls();
+    wxTreeCtrl*   CreateTreeCtrl(wxWindow* parent) override;
+    MultiDimGrid* CreateGridCtrl(wxWindow* parent) override;
+    void          SetupControls() override;
 
     DatabaseDocument&           document() const;
     DatabaseTableAdapter      & table_adapter()      ;
@@ -64,7 +64,7 @@ class DatabaseView
 
     void UponTreeSelectionChange(wxTreeEvent&);
 
-    boost::shared_ptr<DatabaseTableAdapter> const table_adapter_;
+    std::shared_ptr<DatabaseTableAdapter> const table_adapter_;
 
     DECLARE_DYNAMIC_CLASS(DatabaseView)
     DECLARE_EVENT_TABLE()

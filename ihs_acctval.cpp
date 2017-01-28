@@ -46,12 +46,10 @@
 #include "stratified_algorithms.hpp"
 #include "surrchg_rates.hpp"
 
-#include <boost/bind.hpp>
-
 #include <algorithm>
 #include <cmath>
-#include <functional>
-#include <iterator>
+#include <functional>                   // std::bind() et al.
+#include <iterator>                     // std::back_inserter()
 #include <limits>
 #include <numeric>
 #include <string>
@@ -181,12 +179,10 @@ AccountValue::AccountValue(Input const& input)
 }
 
 //============================================================================
-AccountValue::~AccountValue()
-{
-}
+AccountValue::~AccountValue() = default;
 
 //============================================================================
-boost::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
+std::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 {
     LMI_ASSERT(ledger_.get());
     return ledger_;
@@ -319,14 +315,9 @@ double AccountValue::RunAllApplicableBases()
         // on the solve basis.
         }
     // Run all bases, current first.
-    std::vector<mcenum_run_basis> const& run_bases = ledger_->GetRunBases();
-    for
-        (std::vector<mcenum_run_basis>::const_iterator b = run_bases.begin()
-        ;b != run_bases.end()
-        ;++b
-        )
+    for(auto const& b : ledger_->GetRunBases())
         {
-        RunOneBasis(*b);
+        RunOneBasis(b);
         }
     return z;
 }
@@ -1162,9 +1153,9 @@ void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
         (SurrChgRates_->SpecamtRateDurationalFactor().begin()
         ,SurrChgRates_->SpecamtRateDurationalFactor().end() - year
         ,std::inserter(new_layer, new_layer.begin())
-        ,boost::bind
+        ,std::bind
             (round_surrender_charge()
-            ,boost::bind(std::multiplies<double>(), _1, z)
+            ,std::bind(std::multiplies<double>(), std::placeholders::_1, z)
             )
         );
 
@@ -1195,9 +1186,9 @@ void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
             (year + SurrChg_.begin()
             ,       SurrChg_.end()
             ,year + SurrChg_.begin()
-            ,boost::bind
+            ,std::bind
                 (round_surrender_charge()
-                ,boost::bind(std::multiplies<double>(), _1, multiplier)
+                ,std::bind(std::multiplies<double>(), std::placeholders::_1, multiplier)
                 )
             );
         }

@@ -57,7 +57,7 @@ class Skeleton
 {
   public:
     Skeleton();
-    ~Skeleton();
+    ~Skeleton() override;
 
     // Called by view classes when they are instantiated.
     wxMDIChildFrame* CreateChildFrame(wxDocument*, ViewEx*);
@@ -67,15 +67,15 @@ class Skeleton
     virtual DocManagerEx* CreateDocManager();
 
     // wxApp overrides that are further overridden in gui test.
-    virtual void OnAssertFailure
+    void OnAssertFailure
         (wxChar const* file
         ,int           line
         ,wxChar const* func
         ,wxChar const* cond
         ,wxChar const* msg
-        );
-    virtual bool OnExceptionInMainLoop ();
-    virtual bool OnInit                ();
+        ) override;
+    bool OnExceptionInMainLoop () override;
+    bool OnInit                () override;
 
   private:
     wxMenuBar* AdjustMenus(wxMenuBar*);
@@ -126,8 +126,8 @@ class Skeleton
     void UponWindowTileVertically         (wxCommandEvent&);
 
     // wxApp overrides.
-    virtual int  OnExit               ();
-    virtual void OnUnhandledException ();
+    int  OnExit               () override;
+    void OnUnhandledException () override;
 
     bool ProcessCommandLine();
     void OpenCommandLineFiles(std::vector<std::string> const& files);

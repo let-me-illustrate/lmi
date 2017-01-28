@@ -117,7 +117,7 @@ census_run_result run_census_in_series::operator()
 {
     Timer timer;
     census_run_result result;
-    boost::shared_ptr<progress_meter> meter
+    std::shared_ptr<progress_meter> meter
         (create_progress_meter
             (cells.size()
             ,"Calculating all cells"
@@ -240,7 +240,7 @@ census_run_result run_census_in_parallel::operator()
 {
     Timer timer;
     census_run_result result;
-    boost::shared_ptr<progress_meter> meter
+    std::shared_ptr<progress_meter> meter
         (create_progress_meter
             (cells.size()
             ,"Initializing all cells"
@@ -250,16 +250,14 @@ census_run_result run_census_in_parallel::operator()
 
     ledger_emitter emitter(file, emission);
 
-    std::vector<Input>::const_iterator ip;
-    std::vector<boost::shared_ptr<AccountValue> > cell_values;
-    std::vector<boost::shared_ptr<AccountValue> >::iterator i;
+    std::vector<std::shared_ptr<AccountValue> > cell_values;
     std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
 
-    int j = 0;
     int const first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
     int const first_cell_inforce_month = value_cast<int>((*cells.begin())["InforceMonth"].str());
     cell_values.reserve(cells.size());
-    for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
+    int j = 0;
+    for(auto const& ip : cells)
         {
         // This condition need be written only once, here, because
         // subsequently 'cell_values' (which reflects the condition)
@@ -268,8 +266,9 @@ census_run_result run_census_in_parallel::operator()
             {
             { // Begin fenv_guard scope.
             fenv_guard fg;
-            boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
+            std::shared_ptr<AccountValue> av(new AccountValue(ip));
             std::string const name(cells[j]["InsuredName"].str());
+            // Indexing: here, j is an index into cells, not cell_values.
             av->SetDebugFilename
                 (serial_file_path(file, name, j, "hastur").string()
                 );
@@ -309,6 +308,8 @@ census_run_result run_census_in_parallel::operator()
             result.completed_normally_ = false;
             goto done;
             }
+
+        ++j;
         } // End for.
     meter->culminate();
     if(cell_values.empty())
@@ -320,11 +321,7 @@ census_run_result run_census_in_parallel::operator()
             ;
         }
 
-    for
-        (std::vector<mcenum_run_basis>::const_iterator run_basis = RunBases.begin()
-        ;run_basis != RunBases.end()
-        ;++run_basis
-        )
+    for(auto const& run_basis : RunBases)
         {
         // It seems somewhat anomalous to create and update a GUI
         // progress meter inside this critical calculation section,
@@ -339,22 +336,22 @@ census_run_result run_census_in_parallel::operator()
         mcenum_gen_basis expense_and_general_account_basis;
         mcenum_sep_basis separate_account_basis;
         set_cloven_bases_from_run_basis
-            (*run_basis
+            (run_basis
             ,expense_and_general_account_basis
             ,separate_account_basis
             );
 
         // Calculate duration when the youngest life matures.
         int MaxYr = 0;
-        for(i = cell_values.begin(); i != cell_values.end(); ++i)
+        for(auto& i : cell_values)
             {
-            (*i)->InitializeLife(*run_basis);
-            MaxYr = std::max(MaxYr, (*i)->GetLength());
+            i->InitializeLife(run_basis);
+            MaxYr = std::max(MaxYr, i->GetLength());
             }
 
         meter = create_progress_meter
             (MaxYr - first_cell_inforce_year
-            ,mc_str(*run_basis)
+            ,mc_str(run_basis)
             ,progress_meter_mode(emission)
             );
 
@@ -399,17 +396,17 @@ census_run_result run_census_in_parallel::operator()
                 +   experience_reserve_rate[year]
                 ;
 
-            for(i = cell_values.begin(); i != cell_values.end(); ++i)
+            for(auto& i : cell_values)
                 {
                 // A cell must be initialized at the beginning of any
                 // partial inforce year in which it's illustrated.
-                if((*i)->PrecedesInforceDuration(year, 11))
+                if(i->PrecedesInforceDuration(year, 11))
                     {
                     continue;
                     }
-                (*i)->Year = year;
-                (*i)->CoordinateCounters();
-                (*i)->InitializeYear();
+                i->Year = year;
+                i->CoordinateCounters();
+                i->InitializeYear();
                 }
 
             // Process one month at a time for all cells.
@@ -426,26 +423,26 @@ census_run_result run_census_in_parallel::operator()
                 // those assets may determine the M&E charge.
 
                 // Process transactions through monthly deduction.
-                for(i = cell_values.begin(); i != cell_values.end(); ++i)
+                for(auto& i : cell_values)
                     {
-                    if((*i)->PrecedesInforceDuration(year, month))
+                    if(i->PrecedesInforceDuration(year, month))
                         {
                         continue;
                         }
-                    (*i)->Month = month;
-                    (*i)->CoordinateCounters();
-                    (*i)->IncrementBOM(year, month, case_k_factor);
-                    assets += (*i)->GetSepAcctAssetsInforce();
+                    i->Month = month;
+                    i->CoordinateCounters();
+                    i->IncrementBOM(year, month, case_k_factor);
+                    assets += i->GetSepAcctAssetsInforce();
                     }
 
                 // Process transactions from int credit through end of month.
-                for(i = cell_values.begin(); i != cell_values.end(); ++i)
+                for(auto& i : cell_values)
                     {
-                    if((*i)->PrecedesInforceDuration(year, month))
+                    if(i->PrecedesInforceDuration(year, month))
                         {
                         continue;
                         }
-                    (*i)->IncrementEOM(year, month, assets, (*i)->CumPmts);
+                    i->IncrementEOM(year, month, assets, i->CumPmts);
                     }
                 }
 
@@ -464,19 +461,19 @@ census_run_result run_census_in_parallel::operator()
             double years_net_claims       = 0.0;
             double years_net_mortchgs     = 0.0;
             double projected_net_mortchgs = 0.0;
-            for(i = cell_values.begin(); i != cell_values.end(); ++i)
+            for(auto& i : cell_values)
                 {
-                if((*i)->PrecedesInforceDuration(year, 11))
+                if(i->PrecedesInforceDuration(year, 11))
                     {
                     continue;
                     }
-                (*i)->SetClaims();
-                (*i)->SetProjectedCoiCharge();
-                eoy_inforce_lives      += (*i)->InforceLivesEoy();
-                (*i)->IncrementEOY(year);
-                years_net_claims       += (*i)->GetCurtateNetClaimsInforce();
-                years_net_mortchgs     += (*i)->GetCurtateNetCoiChargeInforce();
-                projected_net_mortchgs += (*i)->GetProjectedCoiChargeInforce();
+                i->SetClaims();
+                i->SetProjectedCoiCharge();
+                eoy_inforce_lives      += i->InforceLivesEoy();
+                i->IncrementEOY(year);
+                years_net_claims       += i->GetCurtateNetClaimsInforce();
+                years_net_mortchgs     += i->GetCurtateNetCoiChargeInforce();
+                projected_net_mortchgs += i->GetProjectedCoiChargeInforce();
                 }
 
             // Calculate next year's k factor. Do this only for
@@ -562,14 +559,14 @@ census_run_result run_census_in_parallel::operator()
                     }
 
                 double case_net_mortality_reserve_checksum = 0.0;
-                for(i = cell_values.begin(); i != cell_values.end(); ++i)
+                for(auto& i : cell_values)
                     {
-                    if((*i)->PrecedesInforceDuration(year, 11))
+                    if(i->PrecedesInforceDuration(year, 11))
                         {
                         continue;
                         }
                     case_net_mortality_reserve_checksum +=
-                        (*i)->ApportionNetMortalityReserve
+                        i->ApportionNetMortalityReserve
                             (   case_net_mortality_reserve
                             /   eoy_inforce_lives
                             );
@@ -601,9 +598,9 @@ census_run_result run_census_in_parallel::operator()
             } // End for year.
         meter->culminate();
 
-        for(i = cell_values.begin(); i != cell_values.end(); ++i)
+        for(auto& i : cell_values)
             {
-            (*i)->FinalizeLife(*run_basis);
+            i->FinalizeLife(run_basis);
             }
 
         } // End fenv_guard scope.
@@ -614,11 +611,11 @@ census_run_result run_census_in_parallel::operator()
         ,"Finalizing all cells"
         ,progress_meter_mode(emission)
         );
-    for(i = cell_values.begin(); i != cell_values.end(); ++i)
+    for(auto& i : cell_values)
         {
         fenv_guard fg;
-        (*i)->FinalizeLifeAllBases();
-        composite.PlusEq(*(*i)->ledger_from_av());
+        i->FinalizeLifeAllBases();
+        composite.PlusEq(*i->ledger_from_av());
         if(!meter->reflect_progress())
             {
             result.completed_normally_ = false;
@@ -634,12 +631,14 @@ census_run_result run_census_in_parallel::operator()
         ,"Writing output for all cells"
         ,progress_meter_mode(emission)
         );
-    for(j = 0, i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
+    j = 0;
+    for(auto const& i : cell_values)
         {
+        // Indexing: here, j is an index into cell_values, not cells.
         std::string const name(cells[j]["InsuredName"].str());
         result.seconds_for_output_ += emitter.emit_cell
             (serial_file_path(file, name, j, "hastur")
-            ,*(*i)->ledger_from_av()
+            ,*i->ledger_from_av()
             );
         meter->dawdle(intermission_between_printouts(emission));
         if(!meter->reflect_progress())
@@ -647,6 +646,7 @@ census_run_result run_census_in_parallel::operator()
             result.completed_normally_ = false;
             goto done;
             }
+        ++j;
         }
     meter->culminate();
 
@@ -663,13 +663,9 @@ census_run_result run_census_in_parallel::operator()
     return result;
 }
 
-run_census::run_census()
-{
-}
+run_census::run_census() = default;
 
-run_census::~run_census()
-{
-}
+run_census::~run_census() = default;
 
 census_run_result run_census::operator()
     (fs::path           const& file
@@ -680,12 +676,11 @@ census_run_result run_census::operator()
     census_run_result result;
 
     int composite_length = 0;
-    typedef std::vector<Input>::const_iterator svii;
-    for(svii i = cells.begin(); i != cells.end(); ++i)
+    for(auto const& i : cells)
         {
-        if(!cell_should_be_ignored(*i))
+        if(!cell_should_be_ignored(i))
             {
-            composite_length = std::max(composite_length, i->years_to_maturity());
+            composite_length = std::max(composite_length, i.years_to_maturity());
             }
         }
     // If cell_should_be_ignored() is true for all cells, composite
@@ -752,7 +747,7 @@ census_run_result run_census::operator()
     return result;
 }
 
-boost::shared_ptr<Ledger const> run_census::composite() const
+std::shared_ptr<Ledger const> run_census::composite() const
 {
     LMI_ASSERT(composite_.get());
     return composite_;

@@ -58,13 +58,13 @@ class TextEditView
 
   public:
     TextEditView();
-    virtual ~TextEditView();
+    ~TextEditView() override;
 
   private:
     // ViewEx required implementation.
-    virtual wxWindow* CreateChildWindow();
-    virtual char const* icon_xrc_resource   () const;
-    virtual char const* menubar_xrc_resource() const;
+    wxWindow* CreateChildWindow() override;
+    char const* icon_xrc_resource   () const override;
+    char const* menubar_xrc_resource() const override;
 
     wxTextCtrl* text_window_;
 

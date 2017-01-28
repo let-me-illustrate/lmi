@@ -26,8 +26,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/bind.hpp>
-
+#include <functional>                   // std::bind()
 #include <string>
 
 // Here are all the techniques discussed in the header.
@@ -37,7 +36,7 @@
 class no_derive0
 {
   protected:
-    no_derive0() {}
+    no_derive0() = default;
 };
 
 class A0
@@ -55,8 +54,8 @@ template<typename T>
 class no_derive1
 {
   protected:
-    no_derive1() {}
-    no_derive1(no_derive1 const&) {}
+    no_derive1() = default;
+    no_derive1(no_derive1 const&) = default;
 };
 
 class B0
@@ -78,8 +77,8 @@ class C0_no_derive
     friend class C0;
 
   private:
-    C0_no_derive() {}
-    C0_no_derive(C0_no_derive const&) {}
+    C0_no_derive() = default;
+    C0_no_derive(C0_no_derive const&) = default;
 };
 
 class C0
@@ -142,7 +141,7 @@ void test_cost_of_obstruction(std::string const& s)
     std::cout
         << "  Class " << s << " has size " << sizeof(T) << '\n'
         << "  Speed test: \n      "
-        << TimeAnAliquot(boost::bind(mete<T>, 0))
+        << TimeAnAliquot(std::bind(mete<T>, 0))
         << '\n'
         ;
 }

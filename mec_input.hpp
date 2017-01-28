@@ -42,8 +42,8 @@
 class product_database;
 
 #include <boost/operators.hpp>
-#include <boost/scoped_ptr.hpp>
 
+#include <memory>                       // std::unique_ptr
 #include <string>
 #include <vector>
 
@@ -73,7 +73,7 @@ class LMI_SO mec_input
   public:
     mec_input();
     mec_input(mec_input const&);
-    virtual ~mec_input();
+    ~mec_input() override;
 
     mec_input& operator=(mec_input const&);
     bool operator==(mec_input const&) const;
@@ -95,41 +95,41 @@ class LMI_SO mec_input
     void AscribeMembers();
 
     // xml_serializable required implementation.
-    virtual int                class_version() const;
-    virtual std::string const& xml_root_name() const;
+    int                class_version() const override;
+    std::string const& xml_root_name() const override;
 
     // xml_serializable overrides.
-    virtual bool is_detritus(std::string const&) const;
-    virtual void redintegrate_ex_ante
+    bool is_detritus(std::string const&) const override;
+    void redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
         ,std::string      & value
-        ) const;
-    virtual void redintegrate_ex_post
+        ) const override;
+    void redintegrate_ex_post
         (int                                       file_version
         ,std::map<std::string, std::string> const& detritus_map
         ,std::list<std::string>             const& residuary_names
-        );
-    virtual void redintegrate_ad_terminum();
+        ) override;
+    void redintegrate_ad_terminum() override;
 
     // MvcModel required implementation.
-    virtual void DoAdaptExternalities();
-    virtual datum_base const* DoBaseDatumPointer(std::string const&) const;
-    virtual any_entity      & DoEntity(std::string const&)      ;
-    virtual any_entity const& DoEntity(std::string const&) const;
-    virtual NamesType const& DoNames() const;
-    virtual StateType        DoState() const;
-    virtual void DoCustomizeInitialValues();
-    virtual void DoEnforceCircumscription(std::string const&);
-    virtual void DoEnforceProscription   (std::string const&);
-    virtual void DoHarmonize();
-    virtual void DoTransmogrify();
+    void DoAdaptExternalities() override;
+    datum_base const* DoBaseDatumPointer(std::string const&) const override;
+    any_entity      & DoEntity(std::string const&) override      ;
+    any_entity const& DoEntity(std::string const&) const override;
+    NamesType const& DoNames() const override;
+    StateType        DoState() const override;
+    void DoCustomizeInitialValues() override;
+    void DoEnforceCircumscription(std::string const&) override;
+    void DoEnforceProscription   (std::string const&) override;
+    void DoHarmonize() override;
+    void DoTransmogrify() override;
 
     std::string RealizeFlatExtra     ();
     std::string RealizePaymentHistory();
     std::string RealizeBenefitHistory();
 
-    boost::scoped_ptr<product_database> database_;
+    std::unique_ptr<product_database> database_;
 
     // Database axes are independent variables; they're "cached" along
     // with the database, which is reset when any of them changes.

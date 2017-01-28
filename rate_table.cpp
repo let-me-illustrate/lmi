@@ -82,7 +82,7 @@ using std::uint64_t;
 // The SOA binary format uses IEEE 754 for the floating point values
 // representation and the code in this file won't work correctly if it is
 // different from their in memory representation.
-BOOST_STATIC_ASSERT(std::numeric_limits<double>::is_iec559);
+static_assert(std::numeric_limits<double>::is_iec559, "");
 
 // Helper functions used to swap bytes on big endian platforms.
 //
@@ -447,7 +447,7 @@ void writer::write_values
     std::vector<double> little_endian_values;
     little_endian_values.reserve(values.size());
 
-    for(auto v: values)
+    for(auto const& v : values)
         {
         little_endian_values.push_back(swap_bytes_if_big_endian(v));
         }
@@ -686,7 +686,7 @@ void writer::write_values
         os_ << std::fixed << std::setprecision(*num_decimals);
 
         uint16_t age = *min_age;
-        for(auto v: values)
+        for(auto const& v : values)
             {
             os_ << std::setw(text_format::age_width) << age++
                 << std::setw(value_width) << v << "\n";
@@ -732,7 +732,7 @@ boost::optional<field_and_value> parse_field_and_value
     std::string const name(line, 0, pos_colon);
 
     int n = 0;
-    for(soa_field const& f: soa_fields)
+    for(auto const& f : soa_fields)
         {
         if(name == f.name)
             {
@@ -800,7 +800,7 @@ boost::optional<field_and_value> parse_field_and_value
         {"Editor"
         ,"WARNING"
         };
-    for(auto const& not_field: known_not_fields)
+    for(auto const& not_field : known_not_fields)
         {
         if(name == not_field)
             {
@@ -1282,7 +1282,7 @@ void table_impl::read_values(std::istream& ifs, uint16_t /* length */)
         fatal_error() << "failed to read the values" << std::flush;
         }
 
-    for(auto& v: values_)
+    for(auto& v : values_)
         {
         v = swap_bytes_if_big_endian(v);
         }
@@ -2250,7 +2250,7 @@ unsigned long table_impl::compute_hash_value() const
     oss << std::fixed << std::setprecision(*num_decimals_);
     unsigned const value_width = *num_decimals_ + 2;
 
-    for(auto v: values_)
+    for(auto const& v : values_)
         {
         oss << std::setw(value_width) << v;
         }
@@ -2361,7 +2361,6 @@ class database_impl
         return fs::change_extension(path, ".dat");
         }
 
-    database_impl();
     explicit database_impl(fs::path const& path);
     database_impl(std::istream& index_is, shared_ptr<std::istream> data_is);
 
@@ -2474,13 +2473,16 @@ class database_impl
     shared_ptr<std::istream> data_is_;
 };
 
-database_impl::database_impl()
-{
-}
-
 database_impl::database_impl(fs::path const& path)
     :path_(path)
 {
+    if(path_.empty())
+        {
+        // This ctor can be explicitly used with an empty path to create a
+        // database not (yet) associated with any physical file.
+        return;
+        }
+
     fs::path const index_path = get_index_path(path);
     fs::ifstream ifs(index_path, ios_in_binary());
     if(!ifs) fatal_error() << "Unable to open '" << index_path << "'." << LMI_FLUSH;
@@ -2542,7 +2544,7 @@ void database_impl::remove_index_entry(table::Number number)
     index_by_number_.erase(it);
 
     // But also update the remaining lookup map indices.
-    for(auto& e: index_by_number_)
+    for(auto& e : index_by_number_)
         {
         if(index_deleted < e.second)
             {
@@ -2948,7 +2950,7 @@ void database_impl::save(std::ostream& index_os, std::ostream& data_os)
 {
     char index_record[e_index_pos_max] = {0};
 
-    for(auto const& i: index_)
+    for(auto const& i : index_)
         {
         shared_ptr<table_impl> const t = do_get_table_impl(i);
 
@@ -3000,7 +3002,7 @@ bool database::exists(fs::path const& path)
 }
 
 database::database()
-    :impl_(new database_impl())
+    :impl_(new database_impl(fs::path()))
 {
 }
 
@@ -3249,7 +3251,7 @@ std::size_t deduce_number_of_decimals(std::string const& arg)
 std::size_t deduce_number_of_decimals(std::vector<double> const& values)
 {
     std::size_t z = 0;
-    for(auto v: values)
+    for(auto const& v : values)
         {
         z = std::max(z, deduce_number_of_decimals(value_cast<std::string>(v)));
         }

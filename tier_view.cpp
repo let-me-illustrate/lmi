@@ -70,7 +70,7 @@ class tier_tree_item_data
 {
   public:
     tier_tree_item_data(tier_entity_info const&);
-    virtual ~tier_tree_item_data() {}
+    ~tier_tree_item_data() override = default;
 
     tier_entity_info const& entity_info() const;
 
@@ -103,9 +103,7 @@ TierView::TierView()
 {
 }
 
-TierView::~TierView()
-{
-}
+TierView::~TierView() = default;
 
 wxTreeCtrl* TierView::CreateTreeCtrl(wxWindow* parent)
 {
@@ -125,14 +123,12 @@ MultiDimGrid* TierView::CreateGridCtrl(wxWindow* parent)
 
 void TierView::SetupControls()
 {
-    std::vector<tier_entity_info> const& entities = get_tier_entity_infos();
     std::map<e_stratified, wxTreeItemId> index_to_id;
 
     wxTreeCtrl& tree_ctrl = tree();
 
-    for(std::size_t i = 0; i < entities.size(); ++i)
+    for(auto const& entity : get_tier_entity_infos())
         {
-        tier_entity_info const& entity = entities[i];
         if(entity.index == entity.parent_index)
             {
             wxTreeItemId id = tree_ctrl.AddRoot("");

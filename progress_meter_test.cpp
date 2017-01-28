@@ -53,7 +53,7 @@ void progress_meter_test::test_normal_usage()
 {
     progress_meter_unit_test_stream().str("");
     int const max_count = 3;
-    boost::shared_ptr<progress_meter> meter
+    std::shared_ptr<progress_meter> meter
         (create_progress_meter
             (max_count
             ,"Some title"
@@ -78,7 +78,7 @@ void progress_meter_test::test_normal_usage()
 void progress_meter_test::test_quiet_display_mode()
 {
     int const max_count = 3;
-    boost::shared_ptr<progress_meter> meter
+    std::shared_ptr<progress_meter> meter
         (create_progress_meter
             (max_count
             ,"ERROR: THIS SHOULD NOT DISPLAY"
@@ -97,7 +97,7 @@ void progress_meter_test::test_distinct_metered_operations()
     progress_meter_unit_test_stream().str("");
     int const max_count = 3;
 
-    boost::shared_ptr<progress_meter> meter0
+    std::shared_ptr<progress_meter> meter0
         (create_progress_meter
             (max_count
             ,"Operation 0"
@@ -111,7 +111,7 @@ void progress_meter_test::test_distinct_metered_operations()
     meter0->culminate();
 
     // Use a different shared pointer.
-    boost::shared_ptr<progress_meter> meter1
+    std::shared_ptr<progress_meter> meter1
         (create_progress_meter
             (max_count
             ,"Operation 1"
@@ -146,7 +146,7 @@ void progress_meter_test::test_empty_title_and_zero_max_count()
 {
     progress_meter_unit_test_stream().str("");
     int const max_count = 0;
-    boost::shared_ptr<progress_meter> meter
+    std::shared_ptr<progress_meter> meter
         (create_progress_meter
             (max_count
             ,""
@@ -169,7 +169,7 @@ void progress_meter_test::test_invalid_display_mode()
     progress_meter_unit_test_stream().str("");
     int const max_count = 0;
     BOOST_TEST_THROW
-        (boost::shared_ptr<progress_meter> meter
+        (std::shared_ptr<progress_meter> meter
             (create_progress_meter
                 (max_count
                 ,""
@@ -185,7 +185,7 @@ void progress_meter_test::test_postcondition_failure()
 {
     progress_meter_unit_test_stream().str("");
     int const max_count = 3;
-    boost::shared_ptr<progress_meter> meter
+    std::shared_ptr<progress_meter> meter
         (create_progress_meter
             (max_count
             ,"Some title"

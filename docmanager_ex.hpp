@@ -26,9 +26,9 @@
 
 #include "uncopyable_lmi.hpp"
 
-#include <boost/scoped_ptr.hpp>
-
 #include <wx/docview.h>
+
+#include <memory>                       // std::unique_ptr
 
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 class WXDLLIMPEXP_FWD_CORE wxPageSetupDialogData;
@@ -47,7 +47,7 @@ class DocManagerEx
     // explicitly marked that way--though it seems that it should be,
     // for consistency with the style of the rest of the library.
     //
-    virtual ~DocManagerEx();
+    ~DocManagerEx() override;
 
     void AssociateFileHistoryWithFileMenu(wxMenuBar*);
     void DissociateFileHistoryFromFileMenu(wxMenuBar*);
@@ -64,14 +64,14 @@ class DocManagerEx
     // deprecated unless it's wanted on other platforms?
 
     // wxDocManager overrides.
-    virtual wxDocTemplate* SelectDocumentType
+    wxDocTemplate* SelectDocumentType
         (wxDocTemplate** templates
         ,int             noTemplates
         ,bool            sort
-        );
+        ) override;
 
-    boost::scoped_ptr<wxPrintData> print_data_;
-    boost::scoped_ptr<wxPageSetupDialogData> page_setup_data_;
+    std::unique_ptr<wxPrintData>           const print_data_;
+    std::unique_ptr<wxPageSetupDialogData> const page_setup_data_;
 
     DECLARE_DYNAMIC_CLASS(DocManagerEx)
     DECLARE_EVENT_TABLE()

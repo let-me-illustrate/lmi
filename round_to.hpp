@@ -27,13 +27,11 @@
 #include "mc_enum_type_enums.hpp"
 #include "stl_extensions.hpp"           // nonstd::power()
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_float.hpp>
-
 #include <cmath>
 #include <functional>
 #include <limits>
 #include <stdexcept>
+#include <type_traits>
 
 // Round a floating-point number to a given number of decimal places,
 // following a given rounding style.
@@ -284,7 +282,7 @@ template<typename RealType>
 class round_to
     :public std::unary_function<RealType, RealType>
 {
-    BOOST_STATIC_ASSERT(boost::is_float<RealType>::value);
+    static_assert(std::is_floating_point<RealType>::value, "");
 
   public:
     round_to();

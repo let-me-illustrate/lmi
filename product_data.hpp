@@ -91,7 +91,7 @@ class LMI_SO product_data
 
   public:
     explicit product_data(std::string const& product_name);
-    ~product_data();
+    ~product_data() override;
 
     std::string const& datum(std::string const& name) const;
 
@@ -105,37 +105,37 @@ class LMI_SO product_data
     void ascribe_members();
 
     // xml_serializable required implementation.
-    virtual int                class_version() const;
-    virtual std::string const& xml_root_name() const;
+    int                class_version() const override;
+    std::string const& xml_root_name() const override;
 
     // xml_serializable overrides.
-    virtual value_type fetch_element
+    value_type fetch_element
         (xml::element const& e
-        ) const;
-    virtual void read_element
+        ) const override;
+    void read_element
         (xml::element const& e
         ,std::string const&  name
         ,int                 file_version
-        );
-    virtual void write_element
+        ) override;
+    void write_element
         (xml::element&       parent
         ,std::string const&  name
-        ) const;
-    virtual void write_proem
+        ) const override;
+    void write_proem
         (xml_lmi::xml_document& document
         ,std::string const&     file_leaf_name
-        ) const;
-    virtual bool is_detritus(std::string const&) const;
-    virtual void redintegrate_ex_ante
+        ) const override;
+    bool is_detritus(std::string const&) const override;
+    void redintegrate_ex_ante
         (int                file_version
         ,std::string const& name
         ,value_type       & value
-        ) const;
-    virtual void redintegrate_ex_post
+        ) const override;
+    void redintegrate_ex_post
         (int                                     file_version
         ,std::map<std::string,value_type> const& detritus_map
         ,std::list<std::string>           const& residuary_names
-        );
+        ) override;
 
     // Names of files that contain other product data.
     glossed_string DatabaseFilename;

@@ -23,7 +23,7 @@ dnl === Prologue ===
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [gchicares@sbcglobal.net])
-AM_INIT_AUTOMAKE()
+AM_INIT_AUTOMAKE([foreign])
 AM_MAINTAINER_MODE
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
@@ -145,6 +145,15 @@ AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX(11, noext)
 
 AC_PROG_LD
+
+# This is a workaround for the harmless but annoying warning
+#
+# ar: `u' modifier ignored since `D' is the default (see `U')
+#
+# given by Linux systems using recent binutils with the switch to building
+# deterministic archives (that can't include the timestamps) when building all
+# static libraries with default "cru" flags used by Libtool up to 2.4.6.
+AR_FLAGS=cr
 
 AC_CACHE_CHECK([if using clang],
     lmi_cv_prog_clang,
@@ -580,7 +589,6 @@ fi
 if test "x$GXX" == "xyes"; then
     if test "$CLANG" = "yes"; then
         cxx_warnings_flags="$cxx_warnings_flags \
-            -Wno-inconsistent-missing-override \
             -Wno-mismatched-tags"
     else
         cxx_warnings_flags="$cxx_warnings_flags \

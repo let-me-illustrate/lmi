@@ -40,9 +40,7 @@ CensusDocument::CensusDocument()
 {
 }
 
-CensusDocument::~CensusDocument()
-{
-}
+CensusDocument::~CensusDocument() = default;
 
 wxDataViewCtrl& CensusDocument::PredominantViewWindow() const
 {

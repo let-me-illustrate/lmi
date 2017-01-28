@@ -35,10 +35,9 @@ std::vector<std::string> mc_e_vector_to_string_vector
     )
 {
     std::vector<std::string> vs;
-    typename std::vector<mc_enum<T> >::const_iterator ve_i;
-    for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
+    for(auto const& i : ve)
         {
-        vs.push_back(ve_i->str());
+        vs.push_back(i.str());
         }
     return vs;
 }

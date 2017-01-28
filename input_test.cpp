@@ -41,8 +41,6 @@
 #include "timer.hpp"
 #include "xml_lmi.hpp"
 
-#include <boost/bind.hpp>
-
 #include <xmlwrapp/document.h>
 
 #if defined BOOST_MSVC || defined __BORLANDC__
@@ -50,6 +48,7 @@
 #endif // defined BOOST_MSVC || defined __BORLANDC__
 #include <cstdio>                       // std::remove()
 #include <fstream>
+#include <functional>                   // std::bind()
 #include <ios>
 #include <string>
 
@@ -159,10 +158,10 @@ void input_test::test_product_database()
     // writing individual functions by hand is simpler and clearer.
     std::cout
         << "\n  Database speed tests..."
-        << "\n  initialize()      : " << TimeAnAliquot(boost::bind        (&product_database::initialize,      &db, "sample"         ))
-        << "\n  Query(vector)     : " << TimeAnAliquot(boost::bind<void  >(&product_database::Query,           &db, v, DB_MaturityAge))
-        << "\n  Query(scalar)     : " << TimeAnAliquot(boost::bind<double>(&product_database::Query,           &db,    DB_MaturityAge))
-        << "\n  entity_from_key() : " << TimeAnAliquot(boost::bind        (&product_database::entity_from_key, &db,    DB_MaturityAge))
+        << "\n  initialize()      : " << TimeAnAliquot(std::bind(&product_database::initialize,      &db, "sample"         ))
+        << "\n  Query(vector)     : " << TimeAnAliquot(std::bind((void (product_database::*)(std::vector<double>&, e_database_key) const)&product_database::Query,           &db, v, DB_MaturityAge))
+        << "\n  Query(scalar)     : " << TimeAnAliquot(std::bind((double (product_database::*)(e_database_key) const)&product_database::Query,           &db,    DB_MaturityAge))
+        << "\n  entity_from_key() : " << TimeAnAliquot(std::bind(&product_database::entity_from_key, &db,    DB_MaturityAge))
         << '\n'
         ;
 
@@ -409,16 +408,16 @@ void input_test::assay_speed()
 
     std::cout
         << "\n  Class 'Input' speed tests..."
-        << "\n  Copy ctor: " << TimeAnAliquot(mete_copy_ctor           )
-        << "\n  Assign   : " << TimeAnAliquot(mete_assign_op           )
-        << "\n  Equals   : " << TimeAnAliquot(mete_equal_op            )
-        << "\n  Overhead : " << TimeAnAliquot(mete_overhead            )
-        << "\n  Read     : " << TimeAnAliquot(boost::bind(mete_read, e))
-        << "\n  Write    : " << TimeAnAliquot(mete_write               )
-        << "\n  'cns' io : " << TimeAnAliquot(mete_cns_io              )
-        << "\n  'ill' io : " << TimeAnAliquot(mete_ill_io              )
-        << "\n  'cns' xsd: " << TimeAnAliquot(mete_cns_xsd             )
-        << "\n  'ill' xsd: " << TimeAnAliquot(mete_ill_xsd             )
+        << "\n  Copy ctor: " << TimeAnAliquot(mete_copy_ctor         )
+        << "\n  Assign   : " << TimeAnAliquot(mete_assign_op         )
+        << "\n  Equals   : " << TimeAnAliquot(mete_equal_op          )
+        << "\n  Overhead : " << TimeAnAliquot(mete_overhead          )
+        << "\n  Read     : " << TimeAnAliquot(std::bind(mete_read, e))
+        << "\n  Write    : " << TimeAnAliquot(mete_write             )
+        << "\n  'cns' io : " << TimeAnAliquot(mete_cns_io            )
+        << "\n  'ill' io : " << TimeAnAliquot(mete_ill_io            )
+        << "\n  'cns' xsd: " << TimeAnAliquot(mete_cns_xsd           )
+        << "\n  'ill' xsd: " << TimeAnAliquot(mete_ill_xsd           )
         << '\n'
         ;
 }

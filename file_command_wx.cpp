@@ -28,10 +28,11 @@
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <wx/mimetype.h>
 #include <wx/utils.h>                   // wxExecute()
+
+#include <memory>                       // std::unique_ptr
 
 LMI_FORCE_LINKING_IN_SITU(file_command_wx)
 
@@ -48,7 +49,7 @@ void concrete_file_command
     fs::path path(file);
     std::string extension = fs::extension(path);
 
-    boost::scoped_ptr<wxFileType> ft
+    std::unique_ptr<wxFileType> const ft
         (wxTheMimeTypesManager->GetFileTypeFromExtension(extension)
         );
 

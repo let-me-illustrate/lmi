@@ -47,7 +47,6 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <algorithm>                    // std::sort()
 #include <cstring>                      // std::strcmp()
@@ -269,12 +268,11 @@ void application_test::process_test_name(char const* name)
 
     bool any_tests_matched = false;
 
-    typedef std::vector<test_descriptor>::iterator tdi;
-    for(tdi i = tests_.begin(); i != tests_.end(); ++i)
+    for(auto& i : tests_)
         {
-        if (wxString(i->get_name()).Matches(name))
+        if(wxString(i.get_name()).Matches(name))
             {
-            i->run = run;
+            i.run = run;
             any_tests_matched = true;
             }
         }
@@ -452,21 +450,20 @@ TestsResults application_test::run()
 
     TestsResults results;
 
-    typedef std::vector<test_descriptor>::const_iterator ctdi;
-    for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
+    for(auto const& i : tests_)
         {
-        if ((run_all_ && i->run != run_no) || i->run == run_yes)
+        if ((run_all_ && i.run != run_no) || i.run == run_yes)
             {
             std::string error;
             results.total++;
 
-            char const* const name = i->get_name();
+            char const* const name = i.get_name();
 
             try
                 {
                 wxPrintf("%s: started\n", name);
                 wxStopWatch sw;
-                i->run_test();
+                i.run_test();
                 // Check that no messages were unexpectedly logged during this
                 // test execution.
                 wxLog::FlushActive();
@@ -522,10 +519,9 @@ void application_test::list_tests()
 
     std::cout << "Available tests:\n";
 
-    typedef std::vector<test_descriptor>::const_iterator ctdi;
-    for(ctdi i = tests_.begin(); i != tests_.end(); ++i)
+    for(auto const& i : tests_)
         {
-        std::cout << '\t' << i->get_name() << '\n';
+        std::cout << '\t' << i.get_name() << '\n';
         }
 
     std::cout << tests_.size() << " test cases.\n";
@@ -638,20 +634,20 @@ class SkeletonTest : public Skeleton
 
   protected:
     // Override base class virtual method.
-    virtual DocManagerEx* CreateDocManager();
+    DocManagerEx* CreateDocManager() override;
 
     // wxApp overrides.
-    virtual bool OnInit                 ();
-    virtual bool OnExceptionInMainLoop  ();
-    virtual bool StoreCurrentException  ();
-    virtual void RethrowStoredException ();
-    virtual void OnAssertFailure
+    bool OnInit                 () override;
+    bool OnExceptionInMainLoop  () override;
+    bool StoreCurrentException  () override;
+    void RethrowStoredException () override;
+    void OnAssertFailure
         (wxChar const* file
         ,int line
         ,wxChar const* func
         ,wxChar const* cond
         ,wxChar const* msg
-        );
+        ) override;
 
   private:
     void RunTheTests();
@@ -674,14 +670,14 @@ DocManagerEx* SkeletonTest::CreateDocManager()
     class DocManagerTest : public DocManagerEx
     {
       public:
-        virtual void FileHistoryLoad(wxConfigBase const&)
+        void FileHistoryLoad(wxConfigBase const&) override
             {
             // We could call the base class method here, but it doesn't seem
             // useful to do it and doing nothing here makes it more symmetric
             // with FileHistorySave().
             }
 
-        virtual void FileHistorySave(wxConfigBase&)
+        void FileHistorySave(wxConfigBase&) override
             {
             // Do not save the history to persistent storage: we don't want the
             // files opened during testing replace the files actually opened by

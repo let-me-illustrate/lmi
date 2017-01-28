@@ -43,10 +43,9 @@ template class xml_serializable<gpt_state>;
 gpt_state::gpt_state()
 {
     AscribeMembers();
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
+    for(auto const& i : member_names())
         {
-        operator[](*i) = "0";
+        operator[](i) = "0";
         }
 }
 
@@ -59,9 +58,7 @@ gpt_state::gpt_state(gpt_state const& z)
     MemberSymbolTable<gpt_state>::assign(z);
 }
 
-gpt_state::~gpt_state()
-{
-}
+gpt_state::~gpt_state() = default;
 
 gpt_state& gpt_state::operator=(gpt_state const& z)
 {

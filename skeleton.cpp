@@ -100,7 +100,7 @@
 #include <wx/utils.h>                   // wxMilliSleep(), wxSafeYield()
 #include <wx/xrc/xmlres.h>
 
-#include <iterator>
+#include <iterator>                     // std::insert_iterator
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -214,9 +214,7 @@ Skeleton::Skeleton()
     timer_.Start(100);
 }
 
-Skeleton::~Skeleton()
-{
-}
+Skeleton::~Skeleton() = default;
 
 wxMDIChildFrame* Skeleton::CreateChildFrame
     (wxDocument* doc
@@ -823,10 +821,9 @@ void Skeleton::UponMenuOpen(wxMenuEvent& event)
     if(child_frame)
         {
         bool has_multiple_mdi_children = false;
-        wxWindowList const& wl = frame_->GetChildren();
-        for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+        for(auto const& i : frame_->GetChildren())
             {
-            wxMDIChildFrame const*const child = dynamic_cast<wxMDIChildFrame*>(*i);
+            wxMDIChildFrame const*const child = dynamic_cast<wxMDIChildFrame*>(i);
             if(child && child != child_frame)
                 {
                 has_multiple_mdi_children = true;
@@ -862,15 +859,14 @@ namespace
         new_text.reserve(original_text.size());
 
         std::insert_iterator<std::string> j(new_text, new_text.begin());
-        typedef std::string::const_iterator sci;
-        for(sci i = original_text.begin(); i != original_text.end(); ++i)
+        for(auto const& i : original_text)
             {
-            switch(*i)
+            switch(i)
                 {
                 case '\n': {*j++ = ';';} break;
                 case '\r': {           } break;
                 case '\t': {*j++ = ';';} break;
-                default  : {*j++ =  *i;}
+                default  : {*j++ =   i;}
                 }
             }
 
@@ -1370,14 +1366,13 @@ void Skeleton::OpenCommandLineFiles(std::vector<std::string> const& files)
 {
     LMI_ASSERT(doc_manager_);
 
-    typedef std::vector<std::string>::const_iterator vsci;
-    for(vsci i = files.begin(); i != files.end(); ++i)
+    for(auto const& i : files)
         {
-        if(!doc_manager_->CreateDocument(*i, wxDOC_SILENT))
+        if(!doc_manager_->CreateDocument(i, wxDOC_SILENT))
             {
             warning()
                 << "Document '"
-                << *i
+                << i
                 << "' specified on command line couldn't be opened."
                 << LMI_FLUSH
                 ;
@@ -1388,10 +1383,9 @@ void Skeleton::OpenCommandLineFiles(std::vector<std::string> const& files)
 void Skeleton::UpdateViews()
 {
     wxBusyCursor wait;
-    wxWindowList const& wl = frame_->GetChildren();
-    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+    for(auto const& i : frame_->GetChildren())
         {
-        wxDocMDIChildFrame const* c = dynamic_cast<wxDocMDIChildFrame*>(*i);
+        wxDocMDIChildFrame const* c = dynamic_cast<wxDocMDIChildFrame*>(i);
         if(c)
             {
             IllustrationView* v = dynamic_cast<IllustrationView*>(c->GetView());

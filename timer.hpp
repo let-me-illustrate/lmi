@@ -122,7 +122,7 @@ class LMI_SO Timer
 ///
 /// Template parameter 'F' is the type of the first ctor parameter,
 /// which either is a nullary function or behaves like one. A facility
-/// such as boost::bind() is useful for reducing the arity of the
+/// such as std::bind() is useful for reducing the arity of the
 /// argument (see unit test). Naturally, this is subject to the
 /// Forwarding Problem, but that's inherent in the language.
 ///
@@ -256,7 +256,7 @@ std::ostream& operator<<(std::ostream& os, AliquotTimer<F> const& z)
 /// template is more convenient to use than the class template in
 /// terms of which it is implemented. This is particularly valuable
 /// when that type cannot readily be named--or is indeed unspecified,
-/// as when boost::bind() is used.
+/// as when std::bind() is used.
 ///
 /// The maximum time defaults to one second, which is generally long
 /// enough to get a stable measurement.

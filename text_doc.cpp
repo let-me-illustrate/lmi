@@ -44,9 +44,7 @@ TextEditDocument::TextEditDocument()
 {
 }
 
-TextEditDocument::~TextEditDocument()
-{
-}
+TextEditDocument::~TextEditDocument() = default;
 
 wxTextCtrl& TextEditDocument::PredominantViewWindow() const
 {

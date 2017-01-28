@@ -30,6 +30,7 @@
 #include <ctime>
 #include <fstream>
 #include <istream>
+#include <iterator>                     // std::istreambuf_iterator
 
 namespace
 {
@@ -108,10 +109,8 @@ std::string htmlize(std::string const& raw_text)
     std::string html;
     html.reserve(raw_text.size());
 
-    typedef std::string::const_iterator sci;
-    for(sci i = raw_text.begin(); i != raw_text.end(); ++i)
+    for(auto const& c : raw_text)
         {
-        std::string::const_reference c = *i;
         switch(c)
             {
             case '&': {html += "&amp;";} break;
