@@ -1216,7 +1216,6 @@ wxString InputSequenceEditor::get_diagnostics_message()
         ,input_.retirement_age   ()
         ,input_.inforce_year     ()
         ,input_.effective_year   ()
-        ,0
         ,keywords_
         );
     wxString msg = sequence.formatted_diagnostics(true).c_str();
@@ -1556,7 +1555,6 @@ void InputSequenceEntry::DoOpenEditor()
         ,in.retirement_age   ()
         ,in.inforce_year     ()
         ,in.effective_year   ()
-        ,0
         ,keywords
         ,ds.default_keyword()
         ,keywords_only

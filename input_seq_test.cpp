@@ -40,7 +40,7 @@ void check
     ,std::string const&              w = std::string()
     )
 {
-    InputSequence const seq(e, n, 90, 95, 0, 2002, 0, k, w);
+    InputSequence const seq(e, n, 90, 95, 0, 2002, k, w);
 
     std::vector<double> const& v(seq.linear_number_representation());
     bool const bv = v == std::vector<double>(d, d + n);
@@ -340,7 +340,7 @@ int test_main(int, char*[])
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
     std::string const e("7, retirement; 4");
     check(__FILE__, __LINE__, d, n, e);
-    InputSequence const seq("7, retirement; 4", 10, 90, 95, 0, 2002, 0);
+    InputSequence const seq("7, retirement; 4", 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.interval_representation());
     BOOST_TEST(e_inception  == i[0].begin_mode);
     BOOST_TEST(e_retirement == i[0].end_mode  );

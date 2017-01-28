@@ -54,7 +54,6 @@ InputSequence::InputSequence
     ,int a_retirement_age
     ,int a_inforce_duration
     ,int a_effective_year
-    ,int a_index_origin
     ,std::vector<std::string> const& a_extra_keywords
     ,std::string const& a_default_keyword
     ,bool a_keywords_only
@@ -65,7 +64,6 @@ InputSequence::InputSequence
     ,retirement_age                (a_retirement_age)
     ,inforce_duration              (a_inforce_duration)
     ,effective_year                (a_effective_year)
-    ,index_origin                  (a_index_origin)
     ,extra_keywords                (a_extra_keywords)
     ,default_keyword               (a_default_keyword)
     ,keywords_only                 (a_keywords_only)

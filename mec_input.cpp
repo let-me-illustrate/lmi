@@ -49,7 +49,6 @@ std::string realize_sequence_string
     (mec_input           & input
     ,std::vector<T>      & v
     ,datum_sequence const& sequence_string
-    ,int                   index_origin = 0
     )
 {
     InputSequence s
@@ -59,7 +58,6 @@ std::string realize_sequence_string
         ,input.maturity_age     () // This class has no "retirement age".
         ,input.inforce_year     ()
         ,input.effective_year   ()
-        ,index_origin
         );
     detail::convert_vector(v, s.linear_number_representation());
     return s.formatted_diagnostics(true);
