@@ -425,7 +425,7 @@ void InputSequenceEditor::sequence(InputSequence const& s)
         {
         // have single row (initial state)
         add_row();
-        return;
+        goto done;
         }
 
     LMI_ASSERT(0 == intervals.front().begin_duration);
@@ -486,6 +486,7 @@ void InputSequenceEditor::sequence(InputSequence const& s)
 
     update_diagnostics();
 
+  done:
     // The layout was frozen initially, thaw it now, just once, as we can
     // determine our really final size.
     --layout_freeze_count_;
