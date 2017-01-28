@@ -65,8 +65,6 @@ void fenv_initialize()
 #if defined LMI_X87
     x87_control_word(default_x87_control_word());
 #else  // !defined LMI_X87
-    std::fenv_t saved_env;
-    LMI_ASSERT(0 == std::feholdexcept(&saved_env));
     LMI_ASSERT(0 == std::fesetround(FE_TONEAREST));
     // Standard C++ provides no way to set hardware precision.
     // Here is an example of a C99 7.6/9 extension that controls
@@ -164,7 +162,7 @@ bool fenv_is_valid()
 #if defined LMI_X87
     return default_x87_control_word() == x87_control_word();
 #else  // !defined LMI_X87
-    return FE_TONEAREST == std::fegetround() && 0 == std::fetestexcept(FE_ALL_EXCEPT);
+    return FE_TONEAREST == std::fegetround();
 #endif // !defined LMI_X87
 }
 
@@ -184,7 +182,6 @@ std::string fenv_explain_invalid_control_word()
     oss
         << "The floating-point environment unexpectedly changed."
         << "\nThe rounding mode is " << std::fegetround()
-        << " and the exception bitmask is " << std::fetestexcept(FE_ALL_EXCEPT)
         << ".\n"
         ;
 #endif // !defined LMI_X87
