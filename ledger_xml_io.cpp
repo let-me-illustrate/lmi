@@ -714,31 +714,19 @@ void Ledger::write(xml::element& x) const
     // along with all the stuff we plugged into it above.
     {
     std::string suffix = "";
-    for
-        (scalar_map::const_iterator j = scalars.begin()
-        ;j != scalars.end()
-        ;++j
-        )
+    for(auto const& j : scalars)
         {
-        if(format_exists(j->first, suffix, format_map))
-            stringscalars[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
+        if(format_exists(j.first, suffix, format_map))
+            stringscalars[j.first + suffix] = ledger_format(*j.second, format_map[j.first]);
         }
-    for
-        (string_map::const_iterator j = strings.begin()
-        ;j != strings.end()
-        ;++j
-        )
+    for(auto const& j : strings)
         {
-        stringscalars[j->first + suffix] = *j->second;
+        stringscalars[j.first + suffix] = *j.second;
         }
-    for
-        (double_vector_map::const_iterator j = vectors.begin()
-        ;j != vectors.end()
-        ;++j
-        )
+    for(auto const& j : vectors)
         {
-        if(format_exists(j->first, suffix, format_map))
-            stringvectors[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
+        if(format_exists(j.first, suffix, format_map))
+            stringvectors[j.first + suffix] = ledger_format(*j.second, format_map[j.first]);
         }
     }
 
@@ -751,33 +739,21 @@ void Ledger::write(xml::element& x) const
     for(auto const& i : ledger_map_->held())
         {
         std::string suffix = suffixes[i.first];
-        for
-            (scalar_map::const_iterator j = i.second.AllScalars.begin()
-            ;j != i.second.AllScalars.end()
-            ;++j
-            )
+        for(auto const& j : i.second.AllScalars)
             {
-//            scalars[j->first + suffix] = j->second;
-            if(format_exists(j->first, suffix, format_map))
-                stringscalars[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
+//            scalars[j.first + suffix] = j.second;
+            if(format_exists(j.first, suffix, format_map))
+                stringscalars[j.first + suffix] = ledger_format(*j.second, format_map[j.first]);
             }
-        for
-            (string_map::const_iterator j = i.second.Strings.begin()
-            ;j != i.second.Strings.end()
-            ;++j
-            )
+        for(auto const& j : i.second.Strings)
             {
-            strings[j->first + suffix] = j->second;
+            strings[j.first + suffix] = j.second;
             }
-        for
-            (double_vector_map::const_iterator j = i.second.AllVectors.begin()
-            ;j != i.second.AllVectors.end()
-            ;++j
-            )
+        for(auto const& j : i.second.AllVectors)
             {
-//            vectors[j->first + suffix] = j->second;
-            if(format_exists(j->first, suffix, format_map))
-                stringvectors[j->first + suffix] = ledger_format(*j->second, format_map[j->first]);
+//            vectors[j.first + suffix] = j.second;
+            if(format_exists(j.first, suffix, format_map))
+                stringvectors[j.first + suffix] = ledger_format(*j.second, format_map[j.first]);
             }
         }
 
@@ -819,26 +795,18 @@ void Ledger::write(xml::element& x) const
 
     xml::element scalar("scalar");
     xml::element data("data");
-    for
-        (std::map<std::string,std::string>::const_iterator j = stringscalars.begin()
-        ;j != stringscalars.end()
-        ;++j
-        )
+    for(auto const& j : stringscalars)
         {
-        std::string node_tag = j->first;
-        std::string value = j->second;
+        std::string node_tag = j.first;
+        std::string value = j.second;
         scalar.push_back(xml::element(node_tag.c_str(), value.c_str()));
         }
-    for
-        (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
-        ;j != stringvectors.end()
-        ;++j
-        )
+    for(auto const& j : stringvectors)
         {
         xml::element newcolumn("newcolumn");
         xml::element column("column");
-        xml_lmi::set_attr(column, "name", j->first.c_str());
-        std::vector<std::string> const& v = j->second;
+        xml_lmi::set_attr(column, "name", j.first.c_str());
+        std::vector<std::string> const& v = j.second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
         for(unsigned int k = 0; k < v.size(); ++k)
@@ -876,16 +844,11 @@ void Ledger::write(xml::element& x) const
         // Eventually customize the report name.
         supplementalreport.push_back(xml::element("title", "Supplemental Report"));
 
-        std::vector<std::string>::const_iterator j;
-        for
-            (j = SupplementalReportColumns.begin()
-            ;j != SupplementalReportColumns.end()
-            ;++j
-            )
+        for(auto const& j : SupplementalReportColumns)
             {
             xml::element columns("columns");
-            columns.push_back(xml::element("name", (*j).c_str()));
-            columns.push_back(xml::element("title", title_map[*j].c_str()));
+            columns.push_back(xml::element("name", j.c_str()));
+            columns.push_back(xml::element("title", title_map[j].c_str()));
             supplementalreport.push_back(columns);
             }
         }
@@ -924,25 +887,17 @@ void Ledger::write(xml::element& x) const
             );
         fs::ofstream ofs(filepath, ios_out_trunc_binary());
 
-        for
-            (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
-            ;j != stringvectors.end()
-            ;++j
-            )
+        for(auto const& j : stringvectors)
             {
-            ofs << j->first << '\t';
+            ofs << j.first << '\t';
             }
         ofs << '\n';
 
         for(unsigned int i = 0; i < static_cast<unsigned int>(GetMaxLength()); ++i)
             {
-            for
-                (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
-                ;j != stringvectors.end()
-                ;++j
-                )
+            for(auto const& j : stringvectors)
                 {
-                std::vector<std::string> const& v = j->second;
+                std::vector<std::string> const& v = j.second;
                 if(i < v.size())
                     {
                     ofs << v[i] << '\t';

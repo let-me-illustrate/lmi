@@ -1045,7 +1045,7 @@ void MultiDimGrid::PopulateGridAxisSelection(enum_axis_x_or_y x_or_y)
 
 int MultiDimGrid::GetAxisIndexByName(std::string const& axisName)
 {
-    for (unsigned int i = 0; i < dimension_; ++i)
+    for(unsigned int i = 0; i < dimension_; ++i)
         {
         if(axis_[i]->GetName() == axisName)
             {

@@ -215,22 +215,22 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
     int i;
     int n = 0;
 
-    for (i = 0; i < noTemplates; i++)
+    for(i = 0; i < noTemplates; i++)
     {
-        if (templates[i]->IsVisible())
+        if(templates[i]->IsVisible())
         {
             int j;
             bool want = TRUE;
-            for (j = 0; j < n; j++)
+            for(j = 0; j < n; j++)
             {
                 //filter out NOT unique documents + view combinations
-                if ( templates[i]->GetDocumentName() == data[j]->GetDocumentName() &&
+                if( templates[i]->GetDocumentName() == data[j]->GetDocumentName() &&
                      templates[i]->GetViewName() == data[j]->GetViewName()
                    )
                     want = FALSE;
             }
 
-            if ( want )
+            if(want)
             {
                 strings.Add(templates[i]->GetDescription());
 
@@ -240,18 +240,18 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
         }
     }  // for
 
-    if (sort)
+    if(sort)
     {
         strings.Sort(wxStringSortAscending);
         // Yes, this will be slow, but template lists
         // are typically short.
         int j;
         n = strings.Count();
-        for (i = 0; i < n; i++)
+        for(i = 0; i < n; i++)
         {
-            for (j = 0; j < noTemplates; j++)
+            for(j = 0; j < noTemplates; j++)
             {
-                if (strings[i] == templates[j]->GetDescription())
+                if(strings[i] == templates[j]->GetDescription())
                     data[i] = templates[j];
             }
         }
@@ -259,7 +259,7 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
 
     wxDocTemplate* theTemplate;
 
-    switch ( n )
+    switch(n)
     {
         case 0:
             // no visible templates, hence nothing to choose from

@@ -47,7 +47,6 @@ std::string realize_sequence_string
     (Input          const& input
     ,std::vector<T>      & v
     ,datum_sequence const& sequence_string
-    ,int                   index_origin = 0
     )
 {
     InputSequence s
@@ -57,7 +56,6 @@ std::string realize_sequence_string
         ,input.retirement_age   ()
         ,input.inforce_year     ()
         ,input.effective_year   ()
-        ,index_origin
         );
     detail::convert_vector(v, s.linear_number_representation());
     return s.formatted_diagnostics(true);
@@ -72,7 +70,6 @@ std::string realize_sequence_string
     ,datum_sequence    const& sequence_string
     ,detail::stringmap const& keyword_dictionary
     ,std::string       const& default_keyword
-    ,int                      index_origin = 0
     )
 {
     InputSequence s
@@ -82,7 +79,6 @@ std::string realize_sequence_string
         ,input.retirement_age   ()
         ,input.inforce_year     ()
         ,input.effective_year   ()
-        ,index_origin
         ,detail::extract_keys_from_string_map(keyword_dictionary)
         ,default_keyword
         ,true
@@ -106,7 +102,6 @@ std::string realize_sequence_string
     ,datum_sequence      const& sequence_string
     ,detail::stringmap   const& keyword_dictionary
     ,std::string         const& default_keyword
-    ,int                        index_origin = 0
     )
 {
     InputSequence s
@@ -116,7 +111,6 @@ std::string realize_sequence_string
         ,input.retirement_age   ()
         ,input.inforce_year     ()
         ,input.effective_year   ()
-        ,index_origin
         ,detail::extract_keys_from_string_map(keyword_dictionary)
         ,default_keyword
         ,false

@@ -56,8 +56,15 @@ death_benefits::~death_benefits() = default;
 //============================================================================
 void death_benefits::set_specamt(double z, int from_year, int to_year)
 {
-//    std::fill_n(specamt_.begin() + from_year, to_year - from_year, z);
-    // SOMEDAY !! Can't use a standard algorithm?
+#if 0
+    // Something like this would seem preferable, but it gives
+    //   Assertion 'to_year < length_' failed.
+    // with 'make cli_selftest' due to the issue noted in the ctor.
+    LMI_ASSERT(0 <= from_year);
+    LMI_ASSERT(     from_year <= to_year);
+    LMI_ASSERT(                  to_year < length_);
+    std::fill_n(specamt_.begin() + from_year, to_year - from_year, z);
+#endif // 0
     for(int j = from_year; j < std::min(length_, to_year); ++j)
         {
         specamt_[j] = z;
@@ -67,8 +74,15 @@ void death_benefits::set_specamt(double z, int from_year, int to_year)
 //============================================================================
 void death_benefits::set_supplamt(double z, int from_year, int to_year)
 {
-//    std::fill_n(supplamt_.begin() + from_year, to_year - from_year, z);
-    // SOMEDAY !! Can't use a standard algorithm?
+#if 0
+    // Something like this would seem preferable, but it gives
+    //   Assertion 'to_year < length_' failed.
+    // with 'make cli_selftest' due to the issue noted in the ctor.
+    LMI_ASSERT(0 <= from_year);
+    LMI_ASSERT(     from_year <= to_year);
+    LMI_ASSERT(                  to_year < length_);
+    std::fill_n(supplamt_.begin() + from_year, to_year - from_year, z);
+#endif // 0
     for(int j = from_year; j < std::min(length_, to_year); ++j)
         {
         supplamt_[j] = z;

@@ -54,7 +54,6 @@ InputSequence::InputSequence
     ,int a_retirement_age
     ,int a_inforce_duration
     ,int a_effective_year
-    ,int a_index_origin
     ,std::vector<std::string> const& a_extra_keywords
     ,std::string const& a_default_keyword
     ,bool a_keywords_only
@@ -65,7 +64,6 @@ InputSequence::InputSequence
     ,retirement_age                (a_retirement_age)
     ,inforce_duration              (a_inforce_duration)
     ,effective_year                (a_effective_year)
-    ,index_origin                  (a_index_origin)
     ,extra_keywords                (a_extra_keywords)
     ,default_keyword               (a_default_keyword)
     ,keywords_only                 (a_keywords_only)
@@ -76,10 +74,6 @@ InputSequence::InputSequence
 {
     sequence();
 
-    // TODO ?? Perhaps this belongs in realize_vector().
-    sort_intervals();
-
-    // TODO ?? Not correct if last interval-endpoint specified is not the latest of all.
     if(intervals.size()) // TODO ?? And if not?
         {
         intervals.back().end_duration = last_possible_duration;
@@ -162,7 +156,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
     std::string prior_value =
         (0 != v.size())
         ? v.front()
-        : std::string("")
+        : std::string()
         ;
     std::string current_value = prior_value;
 
@@ -215,7 +209,7 @@ InputSequence::InputSequence
     std::string s_prior_value =
         (0 != s_v.size())
         ? s_v.front()
-        : std::string("")
+        : std::string()
         ;
     std::string s_current_value = s_prior_value;
 
@@ -951,9 +945,9 @@ void InputSequence::match(InputSequence::token_type t)
     else
         {
         diagnostics
-            << "Expected "
-            << '\'' << token_type_name(t) << '\''
-            << " . "
+            << "Expected '"
+            << token_type_name(t)
+            << "' . "
             ;
         mark_diagnostic_context();
         }
@@ -962,9 +956,9 @@ void InputSequence::match(InputSequence::token_type t)
 void InputSequence::mark_diagnostic_context()
 {
     diagnostics
-        << "Current token "
-        << '\'' << token_type_name(current_token_type) << '\''
-        << " at position " << input_stream.tellg()
+        << "Current token '"
+        << token_type_name(current_token_type)
+        << "' at position " << input_stream.tellg()
         << ".\n"
         ;
 }
@@ -1103,28 +1097,5 @@ std::string InputSequence::natural_language_representation() const
 std::vector<ValueInterval> const& InputSequence::interval_representation() const
 {
     return intervals;
-}
-
-// Sort intervals by begin_duration and end_duration.
-// Detect overlaps.
-void InputSequence::sort_intervals()
-{
-/*
-// TODO ?? Code from above that may be a useful skeleton if we do this at all.
-    std::vector<ValueInterval>::iterator intervals_i = intervals.begin();
-    while(intervals_i != intervals.end())
-        {
-        oss
-            // TODO ?? Consider 'value_keyword'.
-            << intervals_i->value_number
-            << " ["
-            << intervals_i->begin_duration
-            << ", "
-            << intervals_i->end_duration
-            << "); "
-            ;
-        ++intervals_i;
-        }
-*/
 }
 

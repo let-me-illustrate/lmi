@@ -31,7 +31,7 @@
 
 namespace
 {
-    std::string const empty_string("");
+    std::string const empty_string = std::string();
 } // Unnamed namespace.
 
 void authenticate_system()

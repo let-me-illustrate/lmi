@@ -425,7 +425,7 @@ void InputSequenceEditor::sequence(InputSequence const& s)
         {
         // have single row (initial state)
         add_row();
-        return;
+        goto done;
         }
 
     LMI_ASSERT(0 == intervals.front().begin_duration);
@@ -486,6 +486,7 @@ void InputSequenceEditor::sequence(InputSequence const& s)
 
     update_diagnostics();
 
+  done:
     // The layout was frozen initially, thaw it now, just once, as we can
     // determine our really final size.
     --layout_freeze_count_;
@@ -775,7 +776,7 @@ void InputSequenceEditor::set_tab_order()
     std::vector<wxWindow*> order;
     for(int row = 0; row < rows_count_; ++row)
         {
-        for (int col = Col_Value; col <= Col_Then; ++col)
+        for(int col = Col_Value; col <= Col_Then; ++col)
             order.push_back(get_field_win(col, row));
         }
     for(int row = 0; row < rows_count_; ++row)
@@ -912,7 +913,7 @@ void InputSequenceEditor::really_do_layout()
 
     // Now check if we're actually going to have a scrollbar or not by
     // comparing our ideal minimum size with the size we would actually have.
-    if ( sizer->ComputeFittingClientSize(this) != sizer->GetMinSize() )
+    if(sizer->ComputeFittingClientSize(this) != sizer->GetMinSize())
         {
         // The only possible reason for discrepancy is that the window would be
         // too big to fit on the screen and so the actual size of the rows area
@@ -1216,7 +1217,6 @@ wxString InputSequenceEditor::get_diagnostics_message()
         ,input_.retirement_age   ()
         ,input_.inforce_year     ()
         ,input_.effective_year   ()
-        ,0
         ,keywords_
         );
     wxString msg = sequence.formatted_diagnostics(true).c_str();
@@ -1556,7 +1556,6 @@ void InputSequenceEntry::DoOpenEditor()
         ,in.retirement_age   ()
         ,in.inforce_year     ()
         ,in.effective_year   ()
-        ,0
         ,keywords
         ,ds.default_keyword()
         ,keywords_only

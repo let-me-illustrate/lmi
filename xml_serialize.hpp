@@ -60,8 +60,7 @@ struct xml_io
 
     static void to_xml(xml::element& e, T const& t)
     {
-        // XMLWRAPP !! Add a clear() function.
-        e.erase(e.begin(), e.end());
+        e.clear();
         // XMLWRAPP !! Someday, this might be rewritten thus:
         //   e.set_content(value_cast<std::string>(t).c_str());
         // but for now that doesn't work with embedded ampersands.
@@ -94,8 +93,7 @@ struct xml_sequence_io
 
     static void to_xml(xml::element& e, T const& t)
     {
-        // XMLWRAPP !! Add a clear() function.
-        e.erase(e.begin(), e.end());
+        e.clear();
         for(auto const& i : t)
             {
             // This is not equivalent to calling set_element():

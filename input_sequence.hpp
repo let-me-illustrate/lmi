@@ -44,11 +44,17 @@
 // Extract the grammar from lines matching the regexp _// GRAMMAR_ in
 // the implementation file.
 //
+// Index origin is always zero. This is actually natural for end users,
+// who think in terms of endpoints--inception implicitly being duration
+// zero, and each postinitial interval implicitly beginning at the prior
+// interval's endpoint, inclusive. Thus, a single-premium policy allows
+// payments in "year one" only, i.e., duration [0,1): from issue up to
+// but not including the first anniversary.
+//
 // Possible enhancements:
 //
 // Alternatives to
 // 1[0,3);2[3,5);0 --> 1 1 1 2 2 0 0...0
-//   Index origin 1 could be a configuration option
 //   Keywords could be used instead, e.g.
 //     1 from 1 to 3; 2 from 3 through 4; 0
 //
@@ -141,21 +147,7 @@
 //
 // Representation in input file.
 //
-// This is certainly a string. Distinctions between e.g. age, date, and
-// policy year must be preserved, because their interpretation depends
-// on context.
-//
-// Strings might simply be saved exactly as entered. That seems to be
-// the least surprising way. However, if we make index origin a
-// configurable option, then this method becomes ambiguous at best, and
-// at worst
-//   1 [0, 1)
-// becomes an error in origin one. This could be resolved by storing
-// the index origin in the input file, but then it's not really a
-// configuration option, and files saved with one convention cannot
-// easily and reliably be shared with a different user who prefers a
-// different convention. Furthermore, this approach means we can never
-// change the grammar without preserving backward compatibility.
+// Strings are stored in the least surprising way: exactly as entered.
 //
 // Alternatively, we can choose a canonical representation for input file
 // storage. Explicit interval notation is probably best because it
@@ -247,9 +239,8 @@ class LMI_SO InputSequence
         ,int a_retirement_age
         ,int a_inforce_duration
         ,int a_effective_year
-        ,int a_index_origin
         ,std::vector<std::string> const& a_extra_keywords
-            = std::vector<std::string>(0)
+            = std::vector<std::string>()
         ,std::string const& a_default_keyword = ""
         ,bool a_keywords_only = false
         );
@@ -322,10 +313,6 @@ class LMI_SO InputSequence
 
     void mark_diagnostic_context();
 
-    // SOMEDAY !! Something like this may be part of a solution if we
-    // decide to permit specification of intervals in random order.
-    void sort_intervals();
-
     std::istringstream input_stream;
     // Maturity (last possible) duration in context of this particular
     // life's issue age.
@@ -334,7 +321,6 @@ class LMI_SO InputSequence
     int retirement_age;
     int inforce_duration;
     int effective_year;
-    int index_origin;
     std::vector<std::string> extra_keywords;
     std::string default_keyword;
     bool keywords_only;

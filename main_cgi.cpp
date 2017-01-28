@@ -457,13 +457,11 @@ ShowInput(cgicc::Cgicc const& data)
        << cgicc::td("Element Value") << cgicc::tr() << '\n';
 
   // Iterate through the vector, and print out each value
-  cgicc::const_form_iterator iter;
-  for(iter = data.getElements().begin();
-      iter != data.getElements().end();
-      ++iter) {
-    std::cout << cgicc::tr().set("class","data") << cgicc::td(iter->getName())
-         << cgicc::td(iter->getValue()) << cgicc::tr() << '\n';
-  }
+  for(auto const& j : data.getElements())
+      {
+      std::cout << cgicc::tr().set("class","data") << cgicc::td(j.getName())
+         << cgicc::td(j.getValue()) << cgicc::tr() << '\n';
+      }
   std::cout << cgicc::table() << cgicc::div() << '\n';
 }
 
