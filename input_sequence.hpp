@@ -313,10 +313,6 @@ class LMI_SO InputSequence
 
     void mark_diagnostic_context();
 
-    // SOMEDAY !! Something like this may be part of a solution if we
-    // decide to permit specification of intervals in random order.
-    void sort_intervals();
-
     std::istringstream input_stream;
     // Maturity (last possible) duration in context of this particular
     // life's issue age.

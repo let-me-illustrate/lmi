@@ -239,7 +239,6 @@ int test_main(int, char*[])
     }
 
     // Test overlapping intervals.
-    // TODO ?? Treat these as an error?
     {
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 5, 5, 7, 7};
@@ -248,7 +247,6 @@ int test_main(int, char*[])
     }
 
     // Test intervals with decreasing begin-points.
-    // TODO ?? Should this case be allowed?
     {
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};

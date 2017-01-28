@@ -74,10 +74,6 @@ InputSequence::InputSequence
 {
     sequence();
 
-    // TODO ?? Perhaps this belongs in realize_vector().
-    sort_intervals();
-
-    // TODO ?? Not correct if last interval-endpoint specified is not the latest of all.
     if(intervals.size()) // TODO ?? And if not?
         {
         intervals.back().end_duration = last_possible_duration;
@@ -1101,28 +1097,5 @@ std::string InputSequence::natural_language_representation() const
 std::vector<ValueInterval> const& InputSequence::interval_representation() const
 {
     return intervals;
-}
-
-// Sort intervals by begin_duration and end_duration.
-// Detect overlaps.
-void InputSequence::sort_intervals()
-{
-/*
-// TODO ?? Code from above that may be a useful skeleton if we do this at all.
-    std::vector<ValueInterval>::iterator intervals_i = intervals.begin();
-    while(intervals_i != intervals.end())
-        {
-        oss
-            // TODO ?? Consider 'value_keyword'.
-            << intervals_i->value_number
-            << " ["
-            << intervals_i->begin_duration
-            << ", "
-            << intervals_i->end_duration
-            << "); "
-            ;
-        ++intervals_i;
-        }
-*/
 }
 
