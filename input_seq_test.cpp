@@ -48,10 +48,10 @@ void check
         {
         using osid = std::ostream_iterator<double>;
         std::cout << "\nExpression: '" << e << "'";
-        std::cout << "\n  expected: ";
-        std::copy(d        , d + n  , osid(std::cout, " "));
-        std::cout << "\n   but got: ";
+        std::cout << "\n      observed numbers: ";
         std::copy(v.begin(), v.end(), osid(std::cout, " "));
+        std::cout << "\n  differ from expected: ";
+        std::copy(d        , d + n  , osid(std::cout, " "));
         std::cout << std::endl;
         }
 
@@ -66,10 +66,10 @@ void check
         {
         using osis = std::ostream_iterator<std::string>;
         std::cout << "\nExpression: '" << e << "'";
-        std::cout << "\n  expected: ";
-        std::copy(t.begin(), t.end(), osis(std::cout, "|"));
-        std::cout << "\n   but got: ";
+        std::cout << "\n     observed keywords: ";
         std::copy(s.begin(), s.end(), osis(std::cout, "|"));
+        std::cout << "\n  differ from expected: ";
+        std::copy(t.begin(), t.end(), osis(std::cout, "|"));
         std::cout << std::endl;
         }
 
