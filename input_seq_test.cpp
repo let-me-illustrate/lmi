@@ -36,7 +36,7 @@ void check
     ,std::string const&              e
     ,char const*                     x = ""
     ,std::vector<std::string> const& k = std::vector<std::string>()
-    ,char const* const*              c = nullptr
+    ,std::vector<std::string> const& c = std::vector<std::string>()
     ,std::string const&              w = std::string()
     )
 {
@@ -56,9 +56,9 @@ void check
 
     std::vector<std::string> const& s(seq.linear_keyword_representation());
     std::vector<std::string> const t =
-        (nullptr == c)
+        ( std::vector<std::string>() == c)
         ? std::vector<std::string>(n)
-        : std::vector<std::string>(c, c + n)
+        : c
         ;
     bool const bs = s == t;
     if(!bs)
@@ -90,6 +90,8 @@ void check
 
 int test_main(int, char*[])
 {
+    using strvec = std::vector<std::string>;
+
     // Arguments to check():
     //   expected results
     //     c: keywords
@@ -299,20 +301,20 @@ int test_main(int, char*[])
     // Test (enumerative) extra keywords.
     {
     int const n = 9;
-    char const* c[n] = {"a", "a", "ccc", "ccc", "b", "b", "b", "b", "b"};
-    double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    strvec const c      {"a", "a", "ccc", "ccc", "b", "b", "b", "b", "b"};
+    double const d[n] = { 0 ,  0 ,   0  ,   0  ,  0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("a[0, 2); ccc [2, 4);b[4, 6);");
-    std::vector<std::string> const k{"not_used", "a", "b", "c", "cc", "ccc"};
+    strvec const k{"not_used", "a", "b", "c", "cc", "ccc"};
     check(__FILE__, __LINE__, d, n, e, "", k, c);
     }
 
     // Test numbers mixed with (enumerative) extra keywords.
     {
     int const n = 9;
-    char const* c[n] = {"", "", "keyword_00", "keyword_00", "", "", "", "", ""};
-    double const d[n] = {1, 1, 0, 0, 5, 5, 7, 7, 7};
+    strvec const c     {"", "", "keyword_00", "keyword_00", "", "", "", "", ""};
+    double const d[n] ={ 1,  1,       0     ,       0     ,  5,  5,  7,  7,  7};
     std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
-    std::vector<std::string> const k{"keyword_00"};
+    strvec const k{"keyword_00"};
     check(__FILE__, __LINE__, d, n, e, "", k, c);
     }
 
@@ -320,10 +322,10 @@ int test_main(int, char*[])
     // a default keyword.
     {
     int const n = 10;
-    char const* c[n] =  {"b", "b", "x", "a", "x", "x", "a", "x", "x", "x"};
-    double const d[n] = {  0,   0,   0,   0,   5,   5,   0,   7,   7,   7};
+    strvec const c      {"b", "b", "x", "a", "x", "x", "a", "x", "x", "x"};
+    double const d[n] = { 0 ,  0 ,  0 ,  0 ,  5 ,  5 ,  0 ,  7 ,  7 ,  7 };
     std::string const e("b [0, 2); a [3, 4); 5 [4, 6); a; 7");
-    std::vector<std::string> const k{"a", "b", "x"};
+    strvec const k{"a", "b", "x"};
     std::string w("x");
     check(__FILE__, __LINE__, d, n, e, "", k, c, w);
     }
