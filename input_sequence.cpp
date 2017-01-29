@@ -25,6 +25,7 @@
 #include "input_sequence.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"
@@ -74,11 +75,28 @@ InputSequence::InputSequence
 {
     sequence();
 
-    if(intervals.size()) // TODO ?? And if not?
+    // Inception and maturity endpoints exist, so the interval they
+    // define must exist. However, parsing an empty expression
+    // constructs zero intervals, so a default one must be created
+    // to make the physical reality meet the conceptual requirement.
+    if(intervals.empty())
         {
-        intervals.back().end_duration = last_possible_duration;
-        intervals.back().end_mode     = e_maturity;
+        intervals.push_back(ValueInterval());
         }
+
+    // Extend the last interval's endpoint to maturity, replicating
+    // the last element. (This doesn't need to be done by the ctors
+    // that take vector arguments, because those arguments specify
+    // each value in [inception, maturity) and deduce the terminal
+    // (maturity) duration from size().)
+
+    // This invariant has not yet been established, whether or not the
+    // sequence was empty.
+    intervals.back().end_duration = last_possible_duration;
+    // This invariant is established by realize_vector(), but it does
+    // no harm to repeat it here, and it would be confusing not to do
+    // so in conjunction with the line above.
+    intervals.back().end_mode     = e_maturity;
 
     realize_vector();
 }
@@ -272,6 +290,16 @@ InputSequence::InputSequence
 
 void InputSequence::realize_vector()
 {
+    // Post-construction invariants.
+    // Every ctor must already have established this...
+    LMI_ASSERT(!intervals.empty());
+    // ...and this:
+    LMI_ASSERT(last_possible_duration == intervals.back().end_duration);
+    // It cannot be assumed that all ctors have yet established this...
+    intervals.back().end_mode = e_maturity;
+    // ...though now of course it has been established:
+    LMI_ASSERT(e_maturity             == intervals.back().end_mode    );
+
     std::vector<double> default_numeric_vector(last_possible_duration);
     std::vector<std::string> default_string_vector(last_possible_duration, default_keyword);
     std::vector<double> r(default_numeric_vector);
