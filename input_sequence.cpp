@@ -1037,14 +1037,6 @@ std::string InputSequence::element_by_element_representation() const
 //   do we want enumerators e.g. for such tokens?
 std::string InputSequence::mathematical_representation() const
 {
-    if(intervals.empty())
-        {
-        fatal_error()
-            << "Sequence contains no interval."
-            << LMI_FLUSH
-            ;
-        }
-
     std::ostringstream oss;
     for(auto const& interval_i : intervals)
         {

@@ -427,15 +427,11 @@ void InputSequenceEditor::sequence(InputSequence const& s)
     std::vector<ValueInterval> const& intervals = s.interval_representation();
     int const num_intervals = intervals.size();
 
-    if(intervals.empty())
-        {
-        // have single row (initial state)
-        add_row();
-        return;
-        }
-
+    // Reaffirm InputSequence invariants that are relied upon here:
+    LMI_ASSERT(!intervals.empty());
     LMI_ASSERT(0 == intervals.front().begin_duration);
     LMI_ASSERT(e_maturity == intervals.back().end_mode);
+
     for(int i = 1; i < num_intervals; ++i)
         {
         LMI_ASSERT(intervals[i].begin_duration == intervals[i - 1].end_duration);
