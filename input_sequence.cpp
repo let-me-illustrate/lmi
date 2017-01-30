@@ -1001,9 +1001,23 @@ std::vector<std::string> InputSequence::linear_keyword_representation() const
     return keyword_result;
 }
 
-// Return a regularized representation using [x,y) interval notation.
-// TODO ?? This loses the variable nature of retirement age e.g.;
-//   do we want enumerators e.g. for such tokens?
+/// Regularized representation in [x,y) interval notation.
+///
+/// If there's only one interval, it must span all years, so depict it
+/// as the simple scalar that it is, specifying no interval.
+///
+/// Use keyword 'maturity' for the last duration. This avoids
+/// gratuitous differences between lives, e.g.
+///   '10000 [20,55); 0' for a 45-year-old
+/// and
+///   '10000 [20,65); 0' for a 35-year-old
+/// which the census GUI would treat as varying across cells, whereas
+///   '10000 [20,65); maturity'
+/// expresses the same sequence uniformly.
+///
+/// TODO ?? For the same reason, this representation should preserve
+/// duration keywords such as 'retirement'.
+
 std::string InputSequence::mathematical_representation() const
 {
     std::ostringstream oss;
@@ -1018,9 +1032,6 @@ std::string InputSequence::mathematical_representation() const
             oss << value_cast<std::string>(interval_i.value_number);
             }
 
-        // If there's only one interval, it must span all years, so
-        // we don't need to specify the interval, and users prefer
-        // that we represent it as the simple scalar that it is.
         if(1 == intervals.size())
             {
             break;
@@ -1036,13 +1047,6 @@ std::string InputSequence::mathematical_representation() const
                 << "); "
                 ;
             }
-        // Use keyword 'maturity' for the last duration. This avoids
-        // gratuitous differences between lives, e.g.
-        //   [20,55) for a 45-year-old
-        // and
-        //   [20,65) for a 35-year-old. The census GUI would show these
-        // as varying if we use the numeric duration, even though there's
-        // no essential difference.
         else
             {
             oss
