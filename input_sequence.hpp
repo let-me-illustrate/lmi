@@ -257,9 +257,8 @@ class LMI_SO InputSequence
         );
     ~InputSequence();
 
-    // SOMEDAY !! These probably ought to return const&.
-    std::vector<double> linear_number_representation() const;
-    std::vector<std::string> linear_keyword_representation() const;
+    std::vector<double>      const& linear_number_representation()  const;
+    std::vector<std::string> const& linear_keyword_representation() const;
 
     std::string mathematical_representation() const;
 

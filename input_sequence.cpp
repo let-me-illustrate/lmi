@@ -991,12 +991,12 @@ std::string InputSequence::formatted_diagnostics
     return s;
 }
 
-std::vector<double> InputSequence::linear_number_representation() const
+std::vector<double> const& InputSequence::linear_number_representation() const
 {
     return number_result;
 }
 
-std::vector<std::string> InputSequence::linear_keyword_representation() const
+std::vector<std::string> const& InputSequence::linear_keyword_representation() const
 {
     return keyword_result;
 }
