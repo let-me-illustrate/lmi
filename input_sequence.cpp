@@ -25,6 +25,7 @@
 #include "input_sequence.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"
@@ -49,7 +50,7 @@ ValueInterval::ValueInterval()
 
 InputSequence::InputSequence
     (std::string const& input_expression
-    ,int a_last_possible_duration // TODO ?? Prefer maturity age?
+    ,int a_years_to_maturity
     ,int a_issue_age
     ,int a_retirement_age
     ,int a_inforce_duration
@@ -59,7 +60,7 @@ InputSequence::InputSequence
     ,bool a_keywords_only
     )
     :input_stream                  (input_expression.c_str())
-    ,last_possible_duration        (a_last_possible_duration)
+    ,years_to_maturity             (a_years_to_maturity)
     ,issue_age                     (a_issue_age)
     ,retirement_age                (a_retirement_age)
     ,inforce_duration              (a_inforce_duration)
@@ -74,11 +75,28 @@ InputSequence::InputSequence
 {
     sequence();
 
-    if(intervals.size()) // TODO ?? And if not?
+    // Inception and maturity endpoints exist, so the interval they
+    // define must exist. However, parsing an empty expression
+    // constructs zero intervals, so a default one must be created
+    // to make the physical reality meet the conceptual requirement.
+    if(intervals.empty())
         {
-        intervals.back().end_duration = last_possible_duration;
-        intervals.back().end_mode     = e_maturity;
+        intervals.push_back(ValueInterval());
         }
+
+    // Extend the last interval's endpoint to maturity, replicating
+    // the last element. (This doesn't need to be done by the ctors
+    // that take vector arguments, because those arguments specify
+    // each value in [inception, maturity) and deduce the terminal
+    // (maturity) duration from size().)
+
+    // This invariant has not yet been established, whether or not the
+    // sequence was empty.
+    intervals.back().end_duration = years_to_maturity;
+    // This invariant is established by realize_vector(), but it does
+    // no harm to repeat it here, and it would be confusing not to do
+    // so in conjunction with the line above.
+    intervals.back().end_mode     = e_maturity;
 
     realize_vector();
 }
@@ -113,7 +131,7 @@ InputSequence::InputSequence
 // unintended use.
 
 InputSequence::InputSequence(std::vector<double> const& v)
-    :last_possible_duration(v.size())
+    :years_to_maturity(v.size())
 {
     ValueInterval dummy;
 
@@ -144,11 +162,12 @@ InputSequence::InputSequence(std::vector<double> const& v)
             prior_value = current_value;
             }
         }
+
     realize_vector();
 }
 
 InputSequence::InputSequence(std::vector<std::string> const& v)
-    :last_possible_duration(v.size())
+    :years_to_maturity(v.size())
 {
     ValueInterval dummy;
     dummy.value_is_keyword = true;
@@ -180,6 +199,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
             prior_value = current_value;
             }
         }
+
     realize_vector();
 }
 
@@ -187,7 +207,7 @@ InputSequence::InputSequence
     (std::vector<double> const& n_v
     ,std::vector<std::string> const& s_v
     )
-    :last_possible_duration(n_v.size())
+    :years_to_maturity(n_v.size())
 {
     if(n_v.size() != s_v.size())
         {
@@ -245,35 +265,26 @@ InputSequence::InputSequence
             s_prior_value = s_current_value;
             }
         }
+
     realize_vector();
 }
 
 InputSequence::~InputSequence() = default;
 
-/*
-// TODO ?? Want a similar function for std::vector<string>, for enumerators?
-InputSequence::InputSequence
-    (double value_to_retirement
-    ,double value_from_retirement
-    )
-{
-// TODO ?? This loses the variable nature of retirement age.
-    ValueInterval to_retirement;
-    to_retirement.value_number     = value_to_retirement;
-    intervals.push_back(to_retirement);
-
-    ValueInterval from_retirement;
-    from_retirement.value_number     = value_from_retirement;
-    intervals.push_back(from_retirement);
-
-    realize_vector();
-}
-*/
-
 void InputSequence::realize_vector()
 {
-    std::vector<double> default_numeric_vector(last_possible_duration);
-    std::vector<std::string> default_string_vector(last_possible_duration, default_keyword);
+    // Post-construction invariants.
+    // Every ctor must already have established this...
+    LMI_ASSERT(!intervals.empty());
+    // ...and this:
+    LMI_ASSERT(years_to_maturity == intervals.back().end_duration);
+    // It cannot be assumed that all ctors have yet established this...
+    intervals.back().end_mode = e_maturity;
+    // ...though now of course it has been established:
+    LMI_ASSERT(e_maturity             == intervals.back().end_mode    );
+
+    std::vector<double> default_numeric_vector(years_to_maturity);
+    std::vector<std::string> default_string_vector(years_to_maturity, default_keyword);
     std::vector<double> r(default_numeric_vector);
     number_result = r;
     std::vector<std::string> s(default_string_vector);
@@ -326,8 +337,6 @@ void InputSequence::realize_vector()
                 << LMI_FLUSH
                 ;
             }
-        // TODO ?? Decide whether we should permit what's disallowed here.
-        // Similar logic could disallow other things too.
         if(interval_i.begin_duration < prior_begin_duration)
             {
             diagnostics
@@ -345,7 +354,7 @@ void InputSequence::realize_vector()
         bool interval_is_ok =
                0                         <= interval_i.begin_duration
             && interval_i.begin_duration <= interval_i.end_duration
-            && interval_i.end_duration   <= last_possible_duration
+            && interval_i.end_duration   <= years_to_maturity
             ;
         if(!interval_is_ok)
             {
@@ -383,13 +392,13 @@ void InputSequence::realize_vector()
 // GRAMMAR interval-end: one of ] )
 
 // GRAMMAR duration-constant: one of inforce retirement maturity
-// TODO ?? 'inforce' not yet implemented
+// SOMEDAY !! 'inforce' not yet implemented
 
 // GRAMMAR duration-scalar: integer
 // GRAMMAR duration-scalar: @ integer
 // GRAMMAR duration-scalar: # integer
 // GRAMMAR duration-scalar: duration-constant
-// TODO ?? calendar year not yet implemented
+// SOMEDAY !! calendar year not yet implemented
 
 void InputSequence::duration_scalar()
 {
@@ -424,7 +433,7 @@ void InputSequence::duration_scalar()
             else if("maturity" == current_keyword)
                 {
                 current_duration_scalar_mode = e_maturity;
-                current_duration_scalar = last_possible_duration;
+                current_duration_scalar = years_to_maturity;
                 match(e_keyword);
                 return;
                 }
@@ -595,7 +604,7 @@ void InputSequence::validate_duration
         mark_diagnostic_context();
         return;
         }
-    else if(last_possible_duration < tentative_end_duration)
+    else if(years_to_maturity < tentative_end_duration)
         {
         current_interval.insane = true;
         diagnostics
@@ -982,41 +991,35 @@ std::string InputSequence::formatted_diagnostics
     return s;
 }
 
-std::vector<double> InputSequence::linear_number_representation() const
+std::vector<double> const& InputSequence::linear_number_representation() const
 {
     return number_result;
 }
 
-std::vector<std::string> InputSequence::linear_keyword_representation() const
+std::vector<std::string> const& InputSequence::linear_keyword_representation() const
 {
     return keyword_result;
 }
 
-std::string InputSequence::element_by_element_representation() const
-{
-// TODO ?? What if value is keyword?
-    std::ostringstream oss;
-    std::copy
-        (number_result.begin()
-        ,number_result.end()
-        ,std::ostream_iterator<double>(oss, " ")
-        );
-    return oss.str();
-}
+/// Regularized representation in [x,y) interval notation.
+///
+/// If there's only one interval, it must span all years, so depict it
+/// as the simple scalar that it is, specifying no interval.
+///
+/// Use keyword 'maturity' for the last duration. This avoids
+/// gratuitous differences between lives, e.g.
+///   '10000 [20,55); 0' for a 45-year-old
+/// and
+///   '10000 [20,65); 0' for a 35-year-old
+/// which the census GUI would treat as varying across cells, whereas
+///   '10000 [20,65); maturity'
+/// expresses the same sequence uniformly.
+///
+/// TODO ?? For the same reason, this representation should preserve
+/// duration keywords such as 'retirement'.
 
-// Return a regularized representation using [x,y) interval notation.
-// TODO ?? This loses the variable nature of retirement age e.g.;
-//   do we want enumerators e.g. for such tokens?
 std::string InputSequence::mathematical_representation() const
 {
-    if(intervals.empty())
-        {
-        fatal_error()
-            << "Sequence contains no interval."
-            << LMI_FLUSH
-            ;
-        }
-
     std::ostringstream oss;
     for(auto const& interval_i : intervals)
         {
@@ -1029,15 +1032,12 @@ std::string InputSequence::mathematical_representation() const
             oss << value_cast<std::string>(interval_i.value_number);
             }
 
-        // If there's only one interval, it must span all years, so
-        // we don't need to specify the interval, and users prefer
-        // that we represent it as the simple scalar that it is.
         if(1 == intervals.size())
             {
             break;
             }
 
-        if(interval_i.end_duration != last_possible_duration)
+        if(interval_i.end_duration != years_to_maturity)
             {
             oss
                 << " ["
@@ -1047,13 +1047,6 @@ std::string InputSequence::mathematical_representation() const
                 << "); "
                 ;
             }
-        // Use keyword 'maturity' for the last duration. This avoids
-        // gratuitous differences between lives, e.g.
-        //   [20,55) for a 45-year-old
-        // and
-        //   [20,65) for a 35-year-old. The census GUI would show these
-        // as varying if we use the numeric duration, even though there's
-        // no essential difference.
         else
             {
             oss
@@ -1064,32 +1057,6 @@ std::string InputSequence::mathematical_representation() const
                 << ")"
                 ;
             }
-        }
-    return oss.str();
-}
-
-// Return a regularized representation readable by those uncomfortable
-// with [x,y) interval notation.
-std::string InputSequence::natural_language_representation() const
-{
-    std::ostringstream oss;
-    for(auto const& interval_i : intervals)
-        {
-        if(interval_i.value_is_keyword)
-            {
-            oss << interval_i.value_keyword;
-            }
-        else
-            {
-            oss << interval_i.value_number;
-            }
-        oss
-            << " from "
-            << interval_i.begin_duration
-            << " to "
-            << interval_i.end_duration
-            << "; "
-            ;
         }
     return oss.str();
 }

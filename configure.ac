@@ -22,7 +22,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 dnl === Prologue ===
 
 AC_PREREQ(2.56)
-AC_INIT(LMI, 1.0.0, [gchicares@sbcglobal.net])
+AC_INIT(lmi, 1.0.0, [gchicares@sbcglobal.net])
 AM_INIT_AUTOMAKE([foreign])
 AM_MAINTAINER_MODE
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
@@ -612,7 +612,7 @@ if test "x$GXX" == "xyes"; then
     fi
 
     dnl this one must be disabled because there are tons of occurrences of
-    dnl this warning in both wx and LMI sources
+    dnl this warning in both wx and lmi sources
     if test "$CLANG" = "yes"; then
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-logical-op-parentheses)
         LMI_CXX_ADD_IF_SUPPORTED(-Wno-bitwise-op-parentheses)

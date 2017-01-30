@@ -285,7 +285,7 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, d, n, e);
     }
 
-// TODO ?? Also support and test:
+// SOMEDAY !! Also support and test:
 //   additive expressions e.g. retirement-10 ?
 
     // Test construction from vector.
@@ -364,8 +364,6 @@ int test_main(int, char*[])
     BOOST_TEST(e_retirement == i[1].begin_mode);
     BOOST_TEST(e_maturity   == i[1].end_mode  );
     }
-
-// TODO ?? Also test default keyword.
 
 // TODO ?? Also test keywords-only switch.
 

@@ -413,6 +413,12 @@ void InputSequenceEditor::sequence(InputSequence const& s)
 {
     LayoutOnceGuard guard(this);
 
+    // The layout was frozen initially, but it can be thawed as soon as this
+    // function returns because we will finally be able to determine our real
+    // size. Notice that thaw will only happen on function exit, in the dtor
+    // of the layout guard defined just above.
+    --layout_freeze_count_;
+
     while(0 < rows_count_)
         {
         remove_row(0);
@@ -421,15 +427,11 @@ void InputSequenceEditor::sequence(InputSequence const& s)
     std::vector<ValueInterval> const& intervals = s.interval_representation();
     int const num_intervals = intervals.size();
 
-    if(intervals.empty())
-        {
-        // have single row (initial state)
-        add_row();
-        goto done;
-        }
-
+    // Reaffirm InputSequence invariants that are relied upon here:
+    LMI_ASSERT(!intervals.empty());
     LMI_ASSERT(0 == intervals.front().begin_duration);
     LMI_ASSERT(e_maturity == intervals.back().end_mode);
+
     for(int i = 1; i < num_intervals; ++i)
         {
         LMI_ASSERT(intervals[i].begin_duration == intervals[i - 1].end_duration);
@@ -485,11 +487,6 @@ void InputSequenceEditor::sequence(InputSequence const& s)
     value_field_ctrl(0).SetFocus();
 
     update_diagnostics();
-
-  done:
-    // The layout was frozen initially, thaw it now, just once, as we can
-    // determine our really final size.
-    --layout_freeze_count_;
 }
 
 std::string InputSequenceEditor::sequence_string()

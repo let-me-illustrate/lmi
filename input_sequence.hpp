@@ -31,15 +31,15 @@
 // meaning can be resolved only in the context of each life. It cannot
 // be expressed as a simple vector of values:
 //   premium: 10000, 10000, ...[how many?], 0, 0, ...[how many?]
-// At present, LMI offers separate pre- and post-retirement fields for
-// such inputs, and a simple vector of values to accommodate varying
+// A long time ago, lmi offered separate pre- and post-retirement fields
+// for such inputs, and a simple vector of values to accommodate varying
 // values that don't fit the [issue, retirement), [retirement, maturity)
 // paradigm, such as premiums following the exact pattern
 //   premium: 50000 25000 25000 10000 10000...
-// but these pardigms are disjoint, so it cannot easily accomodate
+// but these pardigms are disjoint, so it could not easily accomodate
 //   premium: 50000; 25000 [1, 3); 10000 [3, retirement); 0
-// Applying such a rule across a census of 1000 lives requires manually
-// editing each life, which is unacceptably tedious.
+// Applying such a rule across a census of 1000 lives required manually
+// editing each life, which was unacceptably tedious.
 
 // Extract the grammar from lines matching the regexp _// GRAMMAR_ in
 // the implementation file.
@@ -71,7 +71,7 @@
 // That problem could be overcome by making expectancy available to the
 // input modules. But then changing the mortality table could change the
 // validity of all intervals involving expectancy. And rerunning an
-// illustration several year after issue would logically produce a
+// illustration several years after issue would logically produce a
 // different recalculated expectancy; that would need to be explained
 // to naive users. Furthermore, appropriate footnotes would need to be
 // written, and consumers might still be confused: it's not evident to
@@ -98,36 +98,7 @@
 //   1.5 * salary
 //   100000 increasing 5% annually
 
-// Steps to incorporate this into LMI/IHS.
-//
-// Input fields that need to vary by year:
-//
-//   2     add-on custodial fee
-// 1 2     add-on comp on assets
-// 1 2     add-on comp on premium
-//   2     non-US corridor
-//   2     partial mortality mult
-//   2     case assumed assets?
-//   2     client tax bracket
-//         salary
-// 1 2     flat extras
-//   2     corp tax bracket
-// 1     4 spec amt
-// 1   3   dbo
-// 1     4 ee pmt
-//     3   ee mode
-// 1     4 er pmt
-//     3   er mode
-//         GA int rate
-//         SA int rate
-// 1       loan
-// 1       WD
-//   ?     term rider amount [not yet]
-//
-// 1 = remove associated duration control
-// 2 = input class must be changed to vary by year
-// 3 = enumerated type
-// 4 = hybrid type: floating point + enumerated
+// GUI considerations.
 //
 // Hybrid types: A really useful facility for entering premiums must
 // permit simple strategies as well as amounts: for instance, target
@@ -154,36 +125,6 @@
 // has the greatest flexibility; half-open intervals of the form [x, y)
 // are preferable. Someday we might instead define a 'simplest form' that
 // might e.g. reduce singletons to simple scalars.
-//
-// Backward compatibility with old input files will require some effort.
-//
-// Items that are already vectors in the input class must be
-// redone to remove things like
-//   VaryingSpecAmt()
-//   SetSpecAmt()
-//   SpecAmtVaries
-//   sSpecAmt
-//   MakeSpecAmt
-// Old cases including regression test decks must be updated.
-// Presumably census cut and paste doesn't need varying amounts.
-//
-// Validators must be applied to vector input.
-//
-// All edit fields must be widened or given a wide popup.
-// The pre/post-retirement distinction must be removed.
-// The 'Varying' tab must be removed.
-// Other tabs might be combined: e.g. the 'Face' tab becomes tiny.
-//
-// New output page(s) for yearly varying input:
-// # columns
-// 2  tax brackets
-// 1  salary
-// 1  flat extras
-// 1  dbo
-// 4  ee and er pmt and mode
-// 2  GA and SA interest rates
-// 2  loans and WDs
-// 1  term rider amount
 
 #ifndef input_sequence_hpp
 #define input_sequence_hpp
@@ -234,7 +175,7 @@ class LMI_SO InputSequence
   public:
     InputSequence
         (std::string const& input_expression
-        ,int a_last_possible_duration // TODO ?? Prefer maturity age?
+        ,int a_years_to_maturity
         ,int a_issue_age
         ,int a_retirement_age
         ,int a_inforce_duration
@@ -255,21 +196,12 @@ class LMI_SO InputSequence
         (std::vector<double> const&
         ,std::vector<std::string> const&
         );
-    InputSequence(double value_to_retirement, double value_from_retirement);
     ~InputSequence();
 
-    void realize_vector();
+    std::vector<double>      const& linear_number_representation()  const;
+    std::vector<std::string> const& linear_keyword_representation() const;
 
-    // SOMEDAY !! This probably ought to return a reference.
-    std::vector<double> linear_number_representation() const;
-    std::vector<std::string> linear_keyword_representation() const;
-    std::string element_by_element_representation() const;
-
-    // SOMEDAY !! These two 'regularized representation' functions
-    // are probably not useful. The representation we care about is a
-    // std::vector<double>.
     std::string mathematical_representation() const;
-    std::string natural_language_representation() const;
 
     std::vector<ValueInterval> const& interval_representation() const;
 
@@ -278,6 +210,8 @@ class LMI_SO InputSequence
         ) const;
 
   private:
+    void realize_vector();
+
     enum token_type
         {e_eof             = 0
         ,e_major_separator = ';'
@@ -314,9 +248,7 @@ class LMI_SO InputSequence
     void mark_diagnostic_context();
 
     std::istringstream input_stream;
-    // Maturity (last possible) duration in context of this particular
-    // life's issue age.
-    int last_possible_duration;
+    int years_to_maturity;
     int issue_age;
     int retirement_age;
     int inforce_duration;

@@ -19,13 +19,13 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-                  README file for building LMI with autotools
+                  README file for building lmi with autotools
                   ===========================================
 
 0. Introduction
 ---------------
 
-LMI now has a autoconf toolchain build system. The advantages of using it are:
+lmi now has a autoconf toolchain build system. The advantages of using it are:
 
 a) we can use standard "configure && make && make install" invocation and
    standard configure options such as --prefix, --enable-debug and so on
