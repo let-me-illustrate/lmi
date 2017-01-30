@@ -257,16 +257,11 @@ class LMI_SO InputSequence
         );
     ~InputSequence();
 
-    // SOMEDAY !! This probably ought to return a reference.
+    // SOMEDAY !! These probably ought to return const&.
     std::vector<double> linear_number_representation() const;
     std::vector<std::string> linear_keyword_representation() const;
-    std::string element_by_element_representation() const;
 
-    // SOMEDAY !! These two 'regularized representation' functions
-    // are probably not useful. The representation we care about is a
-    // std::vector<double>.
     std::string mathematical_representation() const;
-    std::string natural_language_representation() const;
 
     std::vector<ValueInterval> const& interval_representation() const;
 

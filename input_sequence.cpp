@@ -1001,18 +1001,6 @@ std::vector<std::string> InputSequence::linear_keyword_representation() const
     return keyword_result;
 }
 
-std::string InputSequence::element_by_element_representation() const
-{
-// TODO ?? What if value is keyword?
-    std::ostringstream oss;
-    std::copy
-        (number_result.begin()
-        ,number_result.end()
-        ,std::ostream_iterator<double>(oss, " ")
-        );
-    return oss.str();
-}
-
 // Return a regularized representation using [x,y) interval notation.
 // TODO ?? This loses the variable nature of retirement age e.g.;
 //   do we want enumerators e.g. for such tokens?
@@ -1065,32 +1053,6 @@ std::string InputSequence::mathematical_representation() const
                 << ")"
                 ;
             }
-        }
-    return oss.str();
-}
-
-// Return a regularized representation readable by those uncomfortable
-// with [x,y) interval notation.
-std::string InputSequence::natural_language_representation() const
-{
-    std::ostringstream oss;
-    for(auto const& interval_i : intervals)
-        {
-        if(interval_i.value_is_keyword)
-            {
-            oss << interval_i.value_keyword;
-            }
-        else
-            {
-            oss << interval_i.value_number;
-            }
-        oss
-            << " from "
-            << interval_i.begin_duration
-            << " to "
-            << interval_i.end_duration
-            << "; "
-            ;
         }
     return oss.str();
 }
