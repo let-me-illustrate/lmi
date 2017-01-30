@@ -271,26 +271,6 @@ InputSequence::InputSequence
 
 InputSequence::~InputSequence() = default;
 
-/*
-// TODO ?? Want a similar function for std::vector<string>, for enumerators?
-InputSequence::InputSequence
-    (double value_to_retirement
-    ,double value_from_retirement
-    )
-{
-// TODO ?? This loses the variable nature of retirement age.
-    ValueInterval to_retirement;
-    to_retirement.value_number     = value_to_retirement;
-    intervals.push_back(to_retirement);
-
-    ValueInterval from_retirement;
-    from_retirement.value_number     = value_from_retirement;
-    intervals.push_back(from_retirement);
-
-    realize_vector();
-}
-*/
-
 void InputSequence::realize_vector()
 {
     // Post-construction invariants.

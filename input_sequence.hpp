@@ -31,15 +31,15 @@
 // meaning can be resolved only in the context of each life. It cannot
 // be expressed as a simple vector of values:
 //   premium: 10000, 10000, ...[how many?], 0, 0, ...[how many?]
-// At present, lmi offers separate pre- and post-retirement fields for
-// such inputs, and a simple vector of values to accommodate varying
+// A long time ago, lmi offered separate pre- and post-retirement fields
+// for such inputs, and a simple vector of values to accommodate varying
 // values that don't fit the [issue, retirement), [retirement, maturity)
 // paradigm, such as premiums following the exact pattern
 //   premium: 50000 25000 25000 10000 10000...
-// but these pardigms are disjoint, so it cannot easily accomodate
+// but these pardigms are disjoint, so it could not easily accomodate
 //   premium: 50000; 25000 [1, 3); 10000 [3, retirement); 0
-// Applying such a rule across a census of 1000 lives requires manually
-// editing each life, which is unacceptably tedious.
+// Applying such a rule across a census of 1000 lives required manually
+// editing each life, which was unacceptably tedious.
 
 // Extract the grammar from lines matching the regexp _// GRAMMAR_ in
 // the implementation file.
@@ -255,7 +255,6 @@ class LMI_SO InputSequence
         (std::vector<double> const&
         ,std::vector<std::string> const&
         );
-    InputSequence(double value_to_retirement, double value_from_retirement);
     ~InputSequence();
 
     // SOMEDAY !! This probably ought to return a reference.
