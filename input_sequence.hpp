@@ -71,7 +71,7 @@
 // That problem could be overcome by making expectancy available to the
 // input modules. But then changing the mortality table could change the
 // validity of all intervals involving expectancy. And rerunning an
-// illustration several year after issue would logically produce a
+// illustration several years after issue would logically produce a
 // different recalculated expectancy; that would need to be explained
 // to naive users. Furthermore, appropriate footnotes would need to be
 // written, and consumers might still be confused: it's not evident to
@@ -98,36 +98,7 @@
 //   1.5 * salary
 //   100000 increasing 5% annually
 
-// Steps to incorporate this into lmi/IHS.
-//
-// Input fields that need to vary by year:
-//
-//   2     add-on custodial fee
-// 1 2     add-on comp on assets
-// 1 2     add-on comp on premium
-//   2     non-US corridor
-//   2     partial mortality mult
-//   2     case assumed assets?
-//   2     client tax bracket
-//         salary
-// 1 2     flat extras
-//   2     corp tax bracket
-// 1     4 spec amt
-// 1   3   dbo
-// 1     4 ee pmt
-//     3   ee mode
-// 1     4 er pmt
-//     3   er mode
-//         GA int rate
-//         SA int rate
-// 1       loan
-// 1       WD
-//   ?     term rider amount [not yet]
-//
-// 1 = remove associated duration control
-// 2 = input class must be changed to vary by year
-// 3 = enumerated type
-// 4 = hybrid type: floating point + enumerated
+// GUI considerations.
 //
 // Hybrid types: A really useful facility for entering premiums must
 // permit simple strategies as well as amounts: for instance, target
@@ -154,36 +125,6 @@
 // has the greatest flexibility; half-open intervals of the form [x, y)
 // are preferable. Someday we might instead define a 'simplest form' that
 // might e.g. reduce singletons to simple scalars.
-//
-// Backward compatibility with old input files will require some effort.
-//
-// Items that are already vectors in the input class must be
-// redone to remove things like
-//   VaryingSpecAmt()
-//   SetSpecAmt()
-//   SpecAmtVaries
-//   sSpecAmt
-//   MakeSpecAmt
-// Old cases including regression test decks must be updated.
-// Presumably census cut and paste doesn't need varying amounts.
-//
-// Validators must be applied to vector input.
-//
-// All edit fields must be widened or given a wide popup.
-// The pre/post-retirement distinction must be removed.
-// The 'Varying' tab must be removed.
-// Other tabs might be combined: e.g. the 'Face' tab becomes tiny.
-//
-// New output page(s) for yearly varying input:
-// # columns
-// 2  tax brackets
-// 1  salary
-// 1  flat extras
-// 1  dbo
-// 4  ee and er pmt and mode
-// 2  GA and SA interest rates
-// 2  loans and WDs
-// 1  term rider amount
 
 #ifndef input_sequence_hpp
 #define input_sequence_hpp
