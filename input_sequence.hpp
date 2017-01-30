@@ -258,8 +258,6 @@ class LMI_SO InputSequence
     InputSequence(double value_to_retirement, double value_from_retirement);
     ~InputSequence();
 
-    void realize_vector();
-
     // SOMEDAY !! This probably ought to return a reference.
     std::vector<double> linear_number_representation() const;
     std::vector<std::string> linear_keyword_representation() const;
@@ -278,6 +276,8 @@ class LMI_SO InputSequence
         ) const;
 
   private:
+    void realize_vector();
+
     enum token_type
         {e_eof             = 0
         ,e_major_separator = ';'
