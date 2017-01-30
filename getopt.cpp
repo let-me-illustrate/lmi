@@ -81,10 +81,10 @@
 // A web search will reveal more problems; I judge that there's enough
 // evidence here to support banning alloca() from this project.
 
-// GWC added this to conform to LMI standards.
+// GWC added this to conform to lmi standards.
 #include "pchfile.hpp"
 
-// GWC changed filename to conform to LMI standard: lowercase, .hpp .
+// GWC changed filename to conform to lmi standard: lowercase, .hpp .
 // #include <GetOpt.h>
 #include "getopt.hpp"
 

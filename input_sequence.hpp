@@ -31,7 +31,7 @@
 // meaning can be resolved only in the context of each life. It cannot
 // be expressed as a simple vector of values:
 //   premium: 10000, 10000, ...[how many?], 0, 0, ...[how many?]
-// At present, LMI offers separate pre- and post-retirement fields for
+// At present, lmi offers separate pre- and post-retirement fields for
 // such inputs, and a simple vector of values to accommodate varying
 // values that don't fit the [issue, retirement), [retirement, maturity)
 // paradigm, such as premiums following the exact pattern
@@ -98,7 +98,7 @@
 //   1.5 * salary
 //   100000 increasing 5% annually
 
-// Steps to incorporate this into LMI/IHS.
+// Steps to incorporate this into lmi/IHS.
 //
 // Input fields that need to vary by year:
 //

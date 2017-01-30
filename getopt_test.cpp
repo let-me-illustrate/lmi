@@ -36,10 +36,10 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// GWC added this to conform to LMI standards.
+// GWC added this to conform to lmi standards.
 #include "pchfile.hpp"
 
-// GWC changed filename to conform to LMI standard: lowercase, .hpp .
+// GWC changed filename to conform to lmi standard: lowercase, .hpp .
 // #include <GetOpt.h>
 #include "getopt.hpp"
 

@@ -55,7 +55,7 @@
 
 // GWC removed obsolete '#pragma interface'.
 
-// GWC added this to conform to LMI standards.
+// GWC added this to conform to lmi standards.
 #include "config.hpp"
 
 // GWC added this.
