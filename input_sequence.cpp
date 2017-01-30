@@ -162,6 +162,7 @@ InputSequence::InputSequence(std::vector<double> const& v)
             prior_value = current_value;
             }
         }
+
     realize_vector();
 }
 
@@ -198,6 +199,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
             prior_value = current_value;
             }
         }
+
     realize_vector();
 }
 
@@ -263,6 +265,7 @@ InputSequence::InputSequence
             s_prior_value = s_current_value;
             }
         }
+
     realize_vector();
 }
 
