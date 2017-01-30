@@ -50,7 +50,7 @@ ValueInterval::ValueInterval()
 
 InputSequence::InputSequence
     (std::string const& input_expression
-    ,int a_last_possible_duration // TODO ?? Prefer maturity age?
+    ,int a_years_to_maturity
     ,int a_issue_age
     ,int a_retirement_age
     ,int a_inforce_duration
@@ -60,7 +60,7 @@ InputSequence::InputSequence
     ,bool a_keywords_only
     )
     :input_stream                  (input_expression.c_str())
-    ,last_possible_duration        (a_last_possible_duration)
+    ,years_to_maturity             (a_years_to_maturity)
     ,issue_age                     (a_issue_age)
     ,retirement_age                (a_retirement_age)
     ,inforce_duration              (a_inforce_duration)
@@ -92,7 +92,7 @@ InputSequence::InputSequence
 
     // This invariant has not yet been established, whether or not the
     // sequence was empty.
-    intervals.back().end_duration = last_possible_duration;
+    intervals.back().end_duration = years_to_maturity;
     // This invariant is established by realize_vector(), but it does
     // no harm to repeat it here, and it would be confusing not to do
     // so in conjunction with the line above.
@@ -131,7 +131,7 @@ InputSequence::InputSequence
 // unintended use.
 
 InputSequence::InputSequence(std::vector<double> const& v)
-    :last_possible_duration(v.size())
+    :years_to_maturity(v.size())
 {
     ValueInterval dummy;
 
@@ -167,7 +167,7 @@ InputSequence::InputSequence(std::vector<double> const& v)
 }
 
 InputSequence::InputSequence(std::vector<std::string> const& v)
-    :last_possible_duration(v.size())
+    :years_to_maturity(v.size())
 {
     ValueInterval dummy;
     dummy.value_is_keyword = true;
@@ -207,7 +207,7 @@ InputSequence::InputSequence
     (std::vector<double> const& n_v
     ,std::vector<std::string> const& s_v
     )
-    :last_possible_duration(n_v.size())
+    :years_to_maturity(n_v.size())
 {
     if(n_v.size() != s_v.size())
         {
@@ -277,14 +277,14 @@ void InputSequence::realize_vector()
     // Every ctor must already have established this...
     LMI_ASSERT(!intervals.empty());
     // ...and this:
-    LMI_ASSERT(last_possible_duration == intervals.back().end_duration);
+    LMI_ASSERT(years_to_maturity == intervals.back().end_duration);
     // It cannot be assumed that all ctors have yet established this...
     intervals.back().end_mode = e_maturity;
     // ...though now of course it has been established:
     LMI_ASSERT(e_maturity             == intervals.back().end_mode    );
 
-    std::vector<double> default_numeric_vector(last_possible_duration);
-    std::vector<std::string> default_string_vector(last_possible_duration, default_keyword);
+    std::vector<double> default_numeric_vector(years_to_maturity);
+    std::vector<std::string> default_string_vector(years_to_maturity, default_keyword);
     std::vector<double> r(default_numeric_vector);
     number_result = r;
     std::vector<std::string> s(default_string_vector);
@@ -354,7 +354,7 @@ void InputSequence::realize_vector()
         bool interval_is_ok =
                0                         <= interval_i.begin_duration
             && interval_i.begin_duration <= interval_i.end_duration
-            && interval_i.end_duration   <= last_possible_duration
+            && interval_i.end_duration   <= years_to_maturity
             ;
         if(!interval_is_ok)
             {
@@ -433,7 +433,7 @@ void InputSequence::duration_scalar()
             else if("maturity" == current_keyword)
                 {
                 current_duration_scalar_mode = e_maturity;
-                current_duration_scalar = last_possible_duration;
+                current_duration_scalar = years_to_maturity;
                 match(e_keyword);
                 return;
                 }
@@ -604,7 +604,7 @@ void InputSequence::validate_duration
         mark_diagnostic_context();
         return;
         }
-    else if(last_possible_duration < tentative_end_duration)
+    else if(years_to_maturity < tentative_end_duration)
         {
         current_interval.insane = true;
         diagnostics
@@ -1038,7 +1038,7 @@ std::string InputSequence::mathematical_representation() const
             break;
             }
 
-        if(interval_i.end_duration != last_possible_duration)
+        if(interval_i.end_duration != years_to_maturity)
             {
             oss
                 << " ["

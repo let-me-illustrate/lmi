@@ -234,7 +234,7 @@ class LMI_SO InputSequence
   public:
     InputSequence
         (std::string const& input_expression
-        ,int a_last_possible_duration // TODO ?? Prefer maturity age?
+        ,int a_years_to_maturity
         ,int a_issue_age
         ,int a_retirement_age
         ,int a_inforce_duration
@@ -313,9 +313,7 @@ class LMI_SO InputSequence
     void mark_diagnostic_context();
 
     std::istringstream input_stream;
-    // Maturity (last possible) duration in context of this particular
-    // life's issue age.
-    int last_possible_duration;
+    int years_to_maturity;
     int issue_age;
     int retirement_age;
     int inforce_duration;
