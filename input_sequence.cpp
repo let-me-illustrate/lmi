@@ -392,13 +392,13 @@ void InputSequence::realize_vector()
 // GRAMMAR interval-end: one of ] )
 
 // GRAMMAR duration-constant: one of inforce retirement maturity
-// TODO ?? 'inforce' not yet implemented
+// SOMEDAY !! 'inforce' not yet implemented
 
 // GRAMMAR duration-scalar: integer
 // GRAMMAR duration-scalar: @ integer
 // GRAMMAR duration-scalar: # integer
 // GRAMMAR duration-scalar: duration-constant
-// TODO ?? calendar year not yet implemented
+// SOMEDAY !! calendar year not yet implemented
 
 void InputSequence::duration_scalar()
 {

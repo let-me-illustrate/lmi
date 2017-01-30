@@ -285,7 +285,7 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, d, n, e);
     }
 
-// TODO ?? Also support and test:
+// SOMEDAY !! Also support and test:
 //   additive expressions e.g. retirement-10 ?
 
     // Test construction from vector.
