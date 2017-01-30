@@ -357,8 +357,6 @@ void InputSequence::realize_vector()
                 << LMI_FLUSH
                 ;
             }
-        // TODO ?? Decide whether we should permit what's disallowed here.
-        // Similar logic could disallow other things too.
         if(interval_i.begin_duration < prior_begin_duration)
             {
             diagnostics
