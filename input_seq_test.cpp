@@ -365,8 +365,6 @@ int test_main(int, char*[])
     BOOST_TEST(e_maturity   == i[1].end_mode  );
     }
 
-// TODO ?? Also test default keyword.
-
 // TODO ?? Also test keywords-only switch.
 
     return 0;
