@@ -532,8 +532,8 @@ void InputSequence::intervalic_duration()
         + begin_excl
         ;
     duration_mode tentative_begin_duration_mode = current_duration_scalar_mode;
-    int tentative_end_duration;
-    duration_mode tentative_end_duration_mode;// TODO ?? expunge = e_duration;;
+    int tentative_end_duration = -1;
+    duration_mode tentative_end_duration_mode = e_invalid_mode;
     match(e_minor_separator); // TODO ?? Require this?
     duration_scalar();
     if
@@ -613,6 +613,21 @@ void InputSequence::validate_duration
             << tentative_end_duration << " )"
             << " is improper: it "
             << "ends after the last possible duration. "
+            ;
+        mark_diagnostic_context();
+        return;
+        }
+    else if
+        (  e_invalid_mode == tentative_begin_duration_mode
+        || e_invalid_mode == tentative_end_duration_mode
+        )
+        {
+        current_interval.insane = true;
+        diagnostics
+            << "Interval "
+            << "[ " << tentative_begin_duration << ", "
+            << tentative_end_duration << " )"
+            << " has an invalid duration mode. "
             ;
         mark_diagnostic_context();
         return;
