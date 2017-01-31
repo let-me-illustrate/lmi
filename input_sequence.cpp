@@ -326,7 +326,6 @@ void InputSequence::realize_vector()
                 << LMI_FLUSH
                 ;
             }
-        // TODO ?? Also check whether value_number is a NaN.
         if(interval_i.value_is_keyword && "insane" == interval_i.value_keyword)
             {
             fatal_error()
