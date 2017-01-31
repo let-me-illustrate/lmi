@@ -38,9 +38,10 @@ void check
     ,std::vector<std::string> const& k = std::vector<std::string>()
     ,std::vector<std::string> const& c = std::vector<std::string>()
     ,std::string const&              w = std::string()
+    ,bool                            o = false
     )
 {
-    InputSequence const seq(e, n, 90, 95, 0, 2002, k, w);
+    InputSequence const seq(e, n, 90, 95, 0, 2002, k, w, o);
 
     std::vector<double> const& v(seq.linear_number_representation());
     bool const bv = v == std::vector<double>(d, d + n);
@@ -104,6 +105,7 @@ int test_main(int, char*[])
     //     e: expression
     //     k: extra keywords
     //     w: default keyword
+    //     o: keywords only
 
     // An all-blank string is treated as zero.
     {
@@ -317,7 +319,8 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL("0", InputSequence(v).mathematical_representation());
     }
 
-    // Test (enumerative) extra keywords.
+    // Test (enumerative) extra keywords, and keywords-only switch
+    // (with input it allows).
     {
     int const n = 9;
     strvec const c      {"a", "a", "ccc", "ccc", "b", "b", "b", "b", "b"};
@@ -325,6 +328,11 @@ int test_main(int, char*[])
     std::string const e("a[0, 2); ccc [2, 4);b[4, 6);");
     strvec const k{"not_used", "a", "b", "c", "cc", "ccc"};
     check(__FILE__, __LINE__, d, n, e, "", k, c);
+    // Toggle keywords-only switch on: same result.
+    bool const o = true;
+    check(__FILE__, __LINE__, d, n, e, "", k, c, "", o);
+    // Toggle keywords-only switch explicitly off: same result.
+    check(__FILE__, __LINE__, d, n, e, "", k, c, "", false);
     }
 
     // Test numbers mixed with (enumerative) extra keywords.
@@ -349,6 +357,27 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, d, n, e, "", k, c, w);
     }
 
+    // Test keywords-only switch with input it forbids.
+    // SOMEDAY !! It is not ideal for construction to succeed and give
+    // a vector of zeros. Instead, the ctor should throw what is now
+    // made available (only on demand) as formatted_diagnostics().
+    {
+    int const n = 10;
+    strvec const c      {"x", "x", "x", "x", "x", "x", "x", "x", "x", "x"};
+    double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 };
+    char const* x =
+        "Expected keyword chosen from { a b x }."
+        " Current token 'number' at position 21.\n"
+        "Expected ';'."
+        " Current token '[' at position 23.\n"
+        ;
+    std::string const e("b [0, 2); a [3, 4); 5 [4, 6); a; 7");
+    strvec const k{"a", "b", "x"};
+    std::string w("x");
+    bool const o = true;
+    check(__FILE__, __LINE__, d, n, e, x, k, c, w, o);
+    }
+
     // Duration keywords: {retirement, maturity}
     {
     int const n = 10;
@@ -362,8 +391,6 @@ int test_main(int, char*[])
     BOOST_TEST(e_retirement == i[1].begin_mode);
     BOOST_TEST(e_maturity   == i[1].end_mode  );
     }
-
-// TODO ?? Also test keywords-only switch.
 
     return 0;
 }
