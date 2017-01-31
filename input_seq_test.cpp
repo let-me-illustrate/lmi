@@ -323,10 +323,10 @@ int test_main(int, char*[])
     // (with input it allows).
     {
     int const n = 9;
-    strvec const c      {"a", "a", "ccc", "ccc", "b", "b", "b", "b", "b"};
+    strvec const c      {"p", "p", "rrr", "rrr", "q", "q", "q", "q", "q"};
     double const d[n] = { 0 ,  0 ,   0  ,   0  ,  0 ,  0 ,  0 ,  0 ,  0 };
-    std::string const e("a[0, 2); ccc [2, 4);b[4, 6);");
-    strvec const k{"not_used", "a", "b", "c", "cc", "ccc"};
+    std::string const e("p[0, 2); rrr [2, 4);q[4, 6);");
+    strvec const k{"not_used", "p", "q", "r", "rr", "rrr"};
     check(__FILE__, __LINE__, d, n, e, "", k, c);
     // Toggle keywords-only switch on: same result.
     bool const o = true;
@@ -349,11 +349,11 @@ int test_main(int, char*[])
     // a default keyword.
     {
     int const n = 10;
-    strvec const c      {"b", "b", "x", "a", "x", "x", "a", "x", "x", "x"};
+    strvec const c      {"q", "q", "z", "p", "z", "z", "p", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  5 ,  5 ,  0 ,  7 ,  7 ,  7 };
-    std::string const e("b [0, 2); a [3, 4); 5 [4, 6); a; 7");
-    strvec const k{"a", "b", "x"};
-    std::string w("x");
+    std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
+    strvec const k{"p", "q", "z"};
+    std::string w("z");
     check(__FILE__, __LINE__, d, n, e, "", k, c, w);
     }
 
@@ -363,17 +363,17 @@ int test_main(int, char*[])
     // made available (only on demand) as formatted_diagnostics().
     {
     int const n = 10;
-    strvec const c      {"x", "x", "x", "x", "x", "x", "x", "x", "x", "x"};
+    strvec const c      {"z", "z", "z", "z", "z", "z", "z", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 };
     char const* x =
-        "Expected keyword chosen from { a b x }."
+        "Expected keyword chosen from { p q z }."
         " Current token 'number' at position 21.\n"
         "Expected ';'."
         " Current token '[' at position 23.\n"
         ;
-    std::string const e("b [0, 2); a [3, 4); 5 [4, 6); a; 7");
-    strvec const k{"a", "b", "x"};
-    std::string w("x");
+    std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
+    strvec const k{"p", "q", "z"};
+    std::string w("z");
     bool const o = true;
     check(__FILE__, __LINE__, d, n, e, x, k, c, w, o);
     }
