@@ -349,13 +349,11 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, d, n, e, "", k, c, w);
     }
 
-// TODO ?? Also test keyword as scalar duration.
-
     // Duration keywords: {retirement, maturity}
     {
     int const n = 10;
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
-    std::string const e("7, retirement; 4");
+    std::string const e("7, retirement; 4, maturity");
     check(__FILE__, __LINE__, d, n, e);
     InputSequence const seq("7, retirement; 4", 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.interval_representation());
