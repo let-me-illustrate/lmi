@@ -267,11 +267,9 @@ void InputSequence::realize_vector()
     // ...though now of course it has been established:
     LMI_ASSERT(e_maturity        == intervals.back().end_mode    );
 
-    std::vector<double> default_numeric_vector(years_to_maturity);
-    std::vector<std::string> default_string_vector(years_to_maturity, default_keyword);
-    std::vector<double> r(default_numeric_vector);
-    number_result = r;
-    std::vector<std::string> s(default_string_vector);
+    std::vector<double>      r(years_to_maturity);
+    std::vector<std::string> s(years_to_maturity, default_keyword);
+    number_result  = r;
     keyword_result = s;
 
     // Vectors have default values if the input expression could not be parsed.
@@ -367,7 +365,7 @@ void InputSequence::realize_vector()
             }
         }
 
-    number_result = r;
+    number_result  = r;
     keyword_result = s;
 }
 
