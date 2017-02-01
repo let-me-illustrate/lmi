@@ -136,9 +136,9 @@ InputSequence::InputSequence(std::vector<double> const& v)
     ValueInterval dummy;
 
     double prior_value =
-        (0 != v.size())
-        ? v.front()
-        : 0.0
+        v.empty()
+        ? 0.0
+        : v.front()
         ;
     double current_value = prior_value;
 
@@ -173,9 +173,9 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
     dummy.value_is_keyword = true;
 
     std::string prior_value =
-        (0 != v.size())
-        ? v.front()
-        : std::string()
+        v.empty()
+        ? std::string()
+        : v.front()
         ;
     std::string current_value = prior_value;
 
@@ -220,16 +220,16 @@ InputSequence::InputSequence
     ValueInterval dummy;
 
     double n_prior_value =
-        (0 != n_v.size())
-        ? n_v.front()
-        : 0.0
+        n_v.empty()
+        ? 0.0
+        : n_v.front()
         ;
     double n_current_value = n_prior_value;
 
     std::string s_prior_value =
-        (0 != s_v.size())
-        ? s_v.front()
-        : std::string()
+        s_v.empty()
+        ? std::string()
+        : s_v.front()
         ;
     std::string s_current_value = s_prior_value;
 
@@ -291,7 +291,7 @@ void InputSequence::realize_vector()
     keyword_result = s;
 
     // Vectors have default values if the input expression could not be parsed.
-    if(formatted_diagnostics().size())
+    if(!formatted_diagnostics().empty())
         {
         return;
         }
