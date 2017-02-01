@@ -49,15 +49,15 @@ ValueInterval::ValueInterval()
 {}
 
 InputSequence::InputSequence
-    (std::string const& input_expression
-    ,int a_years_to_maturity
-    ,int a_issue_age
-    ,int a_retirement_age
-    ,int a_inforce_duration
-    ,int a_effective_year
+    (std::string const&              input_expression
+    ,int                             a_years_to_maturity
+    ,int                             a_issue_age
+    ,int                             a_retirement_age
+    ,int                             a_inforce_duration
+    ,int                             a_effective_year
     ,std::vector<std::string> const& a_extra_keywords
-    ,std::string const& a_default_keyword
-    ,bool a_keywords_only
+    ,std::string const&              a_default_keyword
+    ,bool                            a_keywords_only
     )
     :input_stream                  (input_expression.c_str())
     ,years_to_maturity             (a_years_to_maturity)
@@ -281,7 +281,7 @@ void InputSequence::realize_vector()
     // It cannot be assumed that all ctors have yet established this...
     intervals.back().end_mode = e_maturity;
     // ...though now of course it has been established:
-    LMI_ASSERT(e_maturity             == intervals.back().end_mode    );
+    LMI_ASSERT(e_maturity        == intervals.back().end_mode    );
 
     std::vector<double> default_numeric_vector(years_to_maturity);
     std::vector<std::string> default_string_vector(years_to_maturity, default_keyword);
@@ -506,7 +506,7 @@ void InputSequence::single_duration()
 //    last_input_duration = static_cast<int>(current_duration_scalar);
 //    duration_mode tentative_begin_duration_mode = e_duration;
     duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode;
-    int tentative_end_duration = current_duration_scalar;
+    int tentative_end_duration                  = current_duration_scalar;
 //    int tentative_end_duration   = last_input_duration + static_cast<int>(current_duration_scalar);
     duration_mode tentative_end_duration_mode   = current_duration_scalar_mode;
     validate_duration
@@ -531,8 +531,8 @@ void InputSequence::intervalic_duration()
         + begin_excl
         ;
     duration_mode tentative_begin_duration_mode = current_duration_scalar_mode;
-    int tentative_end_duration = -1;
-    duration_mode tentative_end_duration_mode = e_invalid_mode;
+    int tentative_end_duration                  = -1;
+    duration_mode tentative_end_duration_mode   = e_invalid_mode;
     match(e_minor_separator); // TODO ?? Require this?
     duration_scalar();
     if
@@ -544,10 +544,7 @@ void InputSequence::intervalic_duration()
         match(current_token_type);
         // Add one to the interval-end if it was expressed
         // as inclusive, because we store [begin, end).
-        tentative_end_duration =
-              current_duration_scalar
-            + end_incl
-            ;
+        tentative_end_duration      = current_duration_scalar + end_incl;
         tentative_end_duration_mode = current_duration_scalar_mode;
         }
     else
@@ -667,7 +664,9 @@ void InputSequence::duration()
             break;
         default:
             {
-            diagnostics << "Expected number, '[', '(', 'retirement', or 'maturity'. ";
+            diagnostics
+                << "Expected number, '[', '(', 'retirement', or 'maturity'. "
+                ;
             mark_diagnostic_context();
             }
         }
@@ -769,7 +768,10 @@ void InputSequence::span()
             break;
         default:
             {
-            diagnostics << "Expected ';', ',', '@', '#', '[', '(', number, 'retirement', or 'maturity'. ";
+            diagnostics
+                << "Expected ';', ',', '@', '#', '[', '(',"
+                << " number, 'retirement', or 'maturity'. "
+                ;
             mark_diagnostic_context();
             }
         }

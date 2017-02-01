@@ -174,28 +174,22 @@ class LMI_SO InputSequence
 {
   public:
     InputSequence
-        (std::string const& input_expression
-        ,int a_years_to_maturity
-        ,int a_issue_age
-        ,int a_retirement_age
-        ,int a_inforce_duration
-        ,int a_effective_year
+        (std::string const&              input_expression
+        ,int                             a_years_to_maturity
+        ,int                             a_issue_age
+        ,int                             a_retirement_age
+        ,int                             a_inforce_duration
+        ,int                             a_effective_year
         ,std::vector<std::string> const& a_extra_keywords
             = std::vector<std::string>()
-        ,std::string const& a_default_keyword = ""
-        ,bool a_keywords_only = false
+        ,std::string const&              a_default_keyword = ""
+        ,bool                            a_keywords_only = false
         );
 
-    InputSequence
-        (std::vector<double> const&
-        );
-    InputSequence
-        (std::vector<std::string> const&
-        );
-    InputSequence
-        (std::vector<double> const&
-        ,std::vector<std::string> const&
-        );
+    InputSequence(std::vector<double> const&);
+    InputSequence(std::vector<std::string> const&);
+    InputSequence(std::vector<double> const&, std::vector<std::string> const&);
+
     ~InputSequence();
 
     std::vector<double>      const& linear_number_representation()  const;
