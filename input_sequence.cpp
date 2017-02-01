@@ -135,11 +135,7 @@ InputSequence::InputSequence(std::vector<double> const& v)
 {
     ValueInterval dummy;
 
-    double prior_value =
-        v.empty()
-        ? 0.0
-        : v.front()
-        ;
+    double prior_value = v.empty() ? 0.0 : v.front();
     double current_value = prior_value;
 
     intervals.push_back(dummy);
@@ -172,11 +168,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
     ValueInterval dummy;
     dummy.value_is_keyword = true;
 
-    std::string prior_value =
-        v.empty()
-        ? std::string()
-        : v.front()
-        ;
+    std::string prior_value = v.empty() ? std::string() : v.front();
     std::string current_value = prior_value;
 
     intervals.push_back(dummy);
@@ -219,18 +211,10 @@ InputSequence::InputSequence
 
     ValueInterval dummy;
 
-    double n_prior_value =
-        n_v.empty()
-        ? 0.0
-        : n_v.front()
-        ;
+    double n_prior_value = n_v.empty() ? 0.0 : n_v.front();
     double n_current_value = n_prior_value;
 
-    std::string s_prior_value =
-        s_v.empty()
-        ? std::string()
-        : s_v.front()
-        ;
+    std::string s_prior_value = s_v.empty() ? std::string() : s_v.front();
     std::string s_current_value = s_prior_value;
 
     intervals.push_back(dummy);
