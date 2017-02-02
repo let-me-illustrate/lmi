@@ -168,6 +168,9 @@ struct ValueInterval
     bool          insane;
 };
 
+class InputSequence;
+using SequenceParser = InputSequence;
+
 class LMI_SO InputSequence
     :        private lmi::uncopyable <InputSequence>
     ,virtual private obstruct_slicing<InputSequence>

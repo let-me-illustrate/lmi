@@ -381,7 +381,7 @@ void InputSequence::realize_vector()
 // GRAMMAR duration-scalar: duration-constant
 // SOMEDAY !! calendar year not yet implemented
 
-void InputSequence::duration_scalar()
+void SequenceParser::duration_scalar()
 {
     switch(current_token_type)
         {
@@ -464,7 +464,7 @@ void InputSequence::duration_scalar()
         }
 }
 
-void InputSequence::null_duration()
+void SequenceParser::null_duration()
 {
     int tentative_begin_duration                = last_input_duration++;
     duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode;
@@ -480,7 +480,7 @@ void InputSequence::null_duration()
 
 // GRAMMAR duration: duration-scalar
 
-void InputSequence::single_duration()
+void SequenceParser::single_duration()
 {
     duration_scalar();
     int tentative_begin_duration                = last_input_duration;
@@ -501,7 +501,7 @@ void InputSequence::single_duration()
 
 // GRAMMAR duration: interval-begin duration-scalar , duration-scalar interval-end
 
-void InputSequence::intervalic_duration()
+void SequenceParser::intervalic_duration()
 {
     bool begin_excl = (e_begin_excl == current_token_type);
     match(current_token_type);
@@ -543,7 +543,7 @@ void InputSequence::intervalic_duration()
         );
 }
 
-void InputSequence::validate_duration
+void SequenceParser::validate_duration
     (int           tentative_begin_duration
     ,duration_mode tentative_begin_duration_mode
     ,int           tentative_end_duration
@@ -620,7 +620,7 @@ void InputSequence::validate_duration
         }
 }
 
-void InputSequence::duration()
+void SequenceParser::duration()
 {
     switch(current_token_type)
         {
@@ -658,7 +658,7 @@ void InputSequence::duration()
 // GRAMMAR value: floating-point-number
 // GRAMMAR value: value-constant
 
-void InputSequence::value()
+void SequenceParser::value()
 {
     switch(current_token_type)
         {
@@ -723,7 +723,7 @@ void InputSequence::value()
 // GRAMMAR span: value
 // GRAMMAR span: value , duration
 
-void InputSequence::span()
+void SequenceParser::span()
 {
     // Assume interval is sane until shown otherwise.
     current_interval.insane = false;
@@ -767,7 +767,7 @@ void InputSequence::span()
 // GRAMMAR sequence: span ; span
 // GRAMMAR sequence: series ;
 
-void InputSequence::sequence()
+void SequenceParser::sequence()
 {
     // Numbers should always be set explicitly, so we initialize
     // them to recognizable, implausible values. Set the 'insane'
@@ -820,7 +820,7 @@ void InputSequence::sequence()
         }
 }
 
-InputSequence::token_type InputSequence::get_token()
+SequenceParser::token_type SequenceParser::get_token()
 {
     char c = '\0';
     do
@@ -903,7 +903,7 @@ InputSequence::token_type InputSequence::get_token()
         }
 }
 
-std::string InputSequence::token_type_name(InputSequence::token_type t)
+std::string SequenceParser::token_type_name(SequenceParser::token_type t)
 {
     switch(t)
         {
@@ -943,7 +943,7 @@ std::string InputSequence::token_type_name(InputSequence::token_type t)
         }
 }
 
-void InputSequence::match(InputSequence::token_type t)
+void SequenceParser::match(SequenceParser::token_type t)
 {
     if(current_token_type == t)
         {
@@ -960,7 +960,7 @@ void InputSequence::match(InputSequence::token_type t)
         }
 }
 
-void InputSequence::mark_diagnostic_context()
+void SequenceParser::mark_diagnostic_context()
 {
     diagnostics
         << "Current token '"
