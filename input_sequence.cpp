@@ -204,7 +204,7 @@ InputSequence::InputSequence
     if(n_v.size() != s_v.size())
         {
         fatal_error()
-            << "InputSequence: vector lengths differ."
+            << "Vector lengths differ."
             << LMI_FLUSH
             ;
         }
@@ -284,7 +284,7 @@ void InputSequence::realize_vector()
         if(interval_i.insane)
             {
             fatal_error()
-                << "InputSequence: untrapped parser error."
+                << "Untrapped parser error."
                 << LMI_FLUSH
                 ;
             }
