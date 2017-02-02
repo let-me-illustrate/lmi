@@ -74,15 +74,16 @@ void check
         std::cout << std::endl;
         }
 
-    std::string const& y = seq.formatted_diagnostics();
-    bool const by = y.empty() || y == std::string(x);
+    std::string const& y0(seq.formatted_diagnostics());
+    std::string const y1 = (nullptr == x) ? std::string() : std::string(x);
+    bool const by = y0 == y1;
     if(!by)
         {
         std::cout
             <<   "\nObserved diagnostics:"
-            << "\n\n'" << y << "'"
+            << "\n\n'" << y0 << "'"
             << "\n\ndiffer from expected:"
-            << "\n\n'" << x << "'"
+            << "\n\n'" << y1 << "'"
             << std::endl
             ;
         }
