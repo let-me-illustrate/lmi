@@ -168,15 +168,12 @@ struct ValueInterval
     bool          insane;
 };
 
-class InputSequence;
-using SequenceParser = InputSequence;
-
-class LMI_SO InputSequence
-    :        private lmi::uncopyable <InputSequence>
-    ,virtual private obstruct_slicing<InputSequence>
+class SequenceParser
+    :        private lmi::uncopyable <SequenceParser>
+    ,virtual private obstruct_slicing<SequenceParser>
 {
   public:
-    InputSequence
+    SequenceParser
         (std::string const&              input_expression
         ,int                             a_years_to_maturity
         ,int                             a_issue_age
@@ -184,31 +181,16 @@ class LMI_SO InputSequence
         ,int                             a_inforce_duration
         ,int                             a_effective_year
         ,std::vector<std::string> const& a_extra_keywords
-            = std::vector<std::string>()
-        ,std::string const&              a_default_keyword = ""
-        ,bool                            a_keywords_only = false
+        ,std::string const&              a_default_keyword
+        ,bool                            a_keywords_only
         );
 
-    InputSequence(std::vector<double> const&);
-    InputSequence(std::vector<std::string> const&);
-    InputSequence(std::vector<double> const&, std::vector<std::string> const&);
+    ~SequenceParser();
 
-    ~InputSequence();
-
-    std::vector<double>      const& linear_number_representation()  const;
-    std::vector<std::string> const& linear_keyword_representation() const;
-
-    std::string mathematical_representation() const;
-
-    std::vector<ValueInterval> const& interval_representation() const;
-
-    std::string formatted_diagnostics
-        (bool show_first_message_only = false
-        ) const;
+    std::string EXPEDIENTdiagnostics() const;
+    std::vector<ValueInterval> const& EXPEDIENTintervals() const;
 
   private:
-    void realize_vector();
-
     enum token_type
         {e_eof             = 0
         ,e_major_separator = ';'
@@ -260,12 +242,64 @@ class LMI_SO InputSequence
     int current_duration_scalar;
     duration_mode previous_duration_scalar_mode;
     duration_mode current_duration_scalar_mode;
+    ValueInterval current_interval;
 
     int last_input_duration;
 
     std::ostringstream diagnostics;
 
-    ValueInterval current_interval;
+    std::vector<ValueInterval> intervals;
+};
+
+class LMI_SO InputSequence
+    :        private lmi::uncopyable <InputSequence>
+    ,virtual private obstruct_slicing<InputSequence>
+{
+  public:
+    InputSequence
+        (std::string const&              input_expression
+        ,int                             a_years_to_maturity
+        ,int                             a_issue_age
+        ,int                             a_retirement_age
+        ,int                             a_inforce_duration
+        ,int                             a_effective_year
+        ,std::vector<std::string> const& a_extra_keywords
+            = std::vector<std::string>()
+        ,std::string const&              a_default_keyword = ""
+        ,bool                            a_keywords_only = false
+        );
+
+    InputSequence(std::vector<double> const&);
+    InputSequence(std::vector<std::string> const&);
+    InputSequence(std::vector<double> const&, std::vector<std::string> const&);
+
+    ~InputSequence();
+
+    std::vector<double>      const& linear_number_representation()  const;
+    std::vector<std::string> const& linear_keyword_representation() const;
+
+    std::string mathematical_representation() const;
+
+    std::vector<ValueInterval> const& interval_representation() const;
+
+    std::string formatted_diagnostics
+        (bool show_first_message_only = false
+        ) const;
+
+  private:
+    void realize_vector();
+
+    int years_to_maturity;
+    int issue_age;
+    int retirement_age;
+    int inforce_duration;
+    int effective_year;
+    std::vector<std::string> extra_keywords;
+    std::string default_keyword;
+    bool keywords_only;
+
+    std::string EXPEDIENTdiagnostics;
+
     std::vector<ValueInterval> intervals;
     std::vector<double> number_result;
     std::vector<std::string> keyword_result;

@@ -48,7 +48,7 @@ ValueInterval::ValueInterval()
     ,insane           (false)
 {}
 
-InputSequence::InputSequence
+SequenceParser::SequenceParser
     (std::string const&              input_expression
     ,int                             a_years_to_maturity
     ,int                             a_issue_age
@@ -74,6 +74,54 @@ InputSequence::InputSequence
     ,last_input_duration           (0)
 {
     sequence();
+}
+
+SequenceParser::~SequenceParser() = default;
+
+std::string SequenceParser::EXPEDIENTdiagnostics() const
+{
+    return diagnostics.str();
+}
+
+std::vector<ValueInterval> const& SequenceParser::EXPEDIENTintervals() const
+{
+    return intervals;
+}
+
+InputSequence::InputSequence
+    (std::string const&              input_expression
+    ,int                             a_years_to_maturity
+    ,int                             a_issue_age
+    ,int                             a_retirement_age
+    ,int                             a_inforce_duration
+    ,int                             a_effective_year
+    ,std::vector<std::string> const& a_extra_keywords
+    ,std::string const&              a_default_keyword
+    ,bool                            a_keywords_only
+    )
+    :years_to_maturity             (a_years_to_maturity)
+    ,issue_age                     (a_issue_age)
+    ,retirement_age                (a_retirement_age)
+    ,inforce_duration              (a_inforce_duration)
+    ,effective_year                (a_effective_year)
+    ,extra_keywords                (a_extra_keywords)
+    ,default_keyword               (a_default_keyword)
+    ,keywords_only                 (a_keywords_only)
+{
+    SequenceParser parser
+        (input_expression
+        ,years_to_maturity
+        ,issue_age
+        ,retirement_age
+        ,inforce_duration
+        ,effective_year
+        ,extra_keywords
+        ,default_keyword
+        ,keywords_only
+        );
+
+    EXPEDIENTdiagnostics = parser.EXPEDIENTdiagnostics();
+    intervals = parser.EXPEDIENTintervals();
 
     // Inception and maturity endpoints exist, so the interval they
     // define must exist. However, parsing an empty expression
@@ -977,7 +1025,7 @@ std::string InputSequence::formatted_diagnostics
     (bool show_first_message_only
     ) const
 {
-    std::string s(diagnostics.str());
+    std::string s(EXPEDIENTdiagnostics);
     if(show_first_message_only)
         {
         std::string::size_type z(s.find('\n'));
