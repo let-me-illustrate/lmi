@@ -34,7 +34,7 @@ void check
     ,double const*                   d
     ,int                             n
     ,std::string const&              e
-    ,char const*                     x = ""
+    ,char const*                     m = ""
     ,std::vector<std::string> const& k = std::vector<std::string>()
     ,std::vector<std::string> const& c = std::vector<std::string>()
     ,std::string const&              w = std::string()
@@ -74,16 +74,16 @@ void check
         std::cout << std::endl;
         }
 
-    std::string const& y0(seq.formatted_diagnostics());
-    std::string const y1 = (nullptr == x) ? std::string() : std::string(x);
-    bool const by = y0 == y1;
+    std::string const& x(seq.formatted_diagnostics());
+    std::string const y = (nullptr == m) ? std::string() : std::string(m);
+    bool const by = x == y;
     if(!by)
         {
         std::cout
             <<   "\nObserved diagnostics:"
-            << "\n\n'" << y0 << "'"
+            << "\n\n'" << x << "'"
             << "\n\ndiffer from expected:"
-            << "\n\n'" << y1 << "'"
+            << "\n\n'" << y << "'"
             << std::endl
             ;
         }
@@ -100,7 +100,7 @@ int test_main(int, char*[])
     //   expected results
     //     c: keywords
     //     d: numeric values
-    //     x: diagnostics
+    //     m: diagnostics
     //   ctor arguments
     //     n: length
     //     e: expression
@@ -114,18 +114,18 @@ int test_main(int, char*[])
     int const n = 1;
     double const d[n] = {0};
     std::string const e(" ");
-    char const* x = "A mistakenly expected error message.";
-    check(__FILE__, __LINE__, d, n, e, x);
+    char const* m = "A mistakenly expected error message.";
+    check(__FILE__, __LINE__, d, n, e, m);
     }
 
     // Demonstrate a defect: [21.4.2/9] "shall not be a null pointer".
-    // Typing "x = 0" is a plausible mistake.
+    // Typing "m = 0" is a plausible mistake.
     {
     int const n = 1;
     double const d[n] = {0};
     std::string const e("0 [0,0)");
-    char const* x = 0;
-    check(__FILE__, __LINE__, d, n, e, x);
+    char const* m = 0;
+    check(__FILE__, __LINE__, d, n, e, m);
     }
 
     // An all-blank string is treated as zero.
@@ -225,7 +225,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
     std::string const e("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
-    char const* x =
+    char const* m =
         "Interval [ 0, 0 ) is improper: it ends before it begins."
         " Current token ';' at position 9.\n"
         "Interval [ 2, 2 ) is improper: it ends before it begins."
@@ -233,7 +233,7 @@ int test_main(int, char*[])
         "Interval [ 3, 3 ) is improper: it ends before it begins."
         " Current token ';' at position 29.\n"
         ;
-    check(__FILE__, __LINE__, d, n, e, x);
+    check(__FILE__, __LINE__, d, n, e, m);
     }
 
     // Test grossly improper intervals.
@@ -241,7 +241,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e("1; 9 (2, 0]; 3 [7, 3); 5 (5, 5); 7");
-    char const* x =
+    char const* m =
         "Interval [ 3, 1 ) is improper: it ends before it begins."
         " Current token ';' at position 12.\n"
         "Interval [ 7, 3 ) is improper: it ends before it begins."
@@ -249,7 +249,7 @@ int test_main(int, char*[])
         "Interval [ 6, 5 ) is improper: it ends before it begins."
         " Current token ';' at position 32.\n"
         ;
-    check(__FILE__, __LINE__, d, n, e, x);
+    check(__FILE__, __LINE__, d, n, e, m);
     }
 
     // Test intervals with 'holes'. Since the last element is replicated,
@@ -274,12 +274,12 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e("5 [5, 6); 3 [2, 5); 1 [0, 2); 7");
-    char const* x =
+    char const* m =
         "Previous interval began at duration 5;"
         " current interval [ 2, 5 ) would begin before that."
         " Current token 'end of input' at position -1.\n"
         ;
-    check(__FILE__, __LINE__, d, n, e, x);
+    check(__FILE__, __LINE__, d, n, e, m);
     }
 
     // Durations with '@' prefix mean attained age.
@@ -386,7 +386,7 @@ int test_main(int, char*[])
     int const n = 10;
     strvec const c      {"z", "z", "z", "z", "z", "z", "z", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 };
-    char const* x =
+    char const* m =
         "Expected keyword chosen from { p q z }."
         " Current token 'number' at position 21.\n"
         "Expected ';'."
@@ -396,7 +396,7 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     std::string w("z");
     bool const o = true;
-    check(__FILE__, __LINE__, d, n, e, x, k, c, w, o);
+    check(__FILE__, __LINE__, d, n, e, m, k, c, w, o);
     }
 
     // Duration keywords: {retirement, maturity}
