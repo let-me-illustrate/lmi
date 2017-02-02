@@ -240,8 +240,8 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, d, n, e, m);
     }
 
-    // Test intervals with 'holes'. Since the last element is replicated,
-    // there can be no 'hole' at the end.
+    // Test an expression with gaps between intervals. Because the
+    // last element is replicated, there can be no gap at the end.
     {
     int const n = 9;
     double const d[n] = {0, 1, 0, 3, 0, 5, 7, 7, 7};
@@ -385,6 +385,37 @@ int test_main(int, char*[])
     std::string w("z");
     bool const o = true;
     check(__FILE__, __LINE__, d, n, e, m, k, c, w, o);
+    }
+
+    // Test an expression with a gap between intervals, with the
+    // keywords-only switch and a default keyword to fill the gap.
+    {
+    int const n = 5;
+    strvec const c      {"q", "q", "z", "z", "p"};
+    double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
+    std::string const e("q [0, 2); p [4, maturity)");
+    strvec const k{"p", "q", "z"};
+    std::string w("z");
+    bool const o = true;
+    check(__FILE__, __LINE__, d, n, e, "", k, c, w, o);
+    }
+
+    // Test an expression with a gap between intervals, with the
+    // keywords-only switch and a default keyword that is not an
+    // element of the set of allowed keywords. This test passes at
+    // the moment, but it seems insane because the values in 'c'
+    // below could not be realized from an expression 'e' that
+    // specifies a value for each year: "q;q;u;u;p" would be
+    // rejected because 'u' is not an element of {p, q, z}.
+    {
+    int const n = 5;
+    strvec const c      {"q", "q", "u", "u", "p"};
+    double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
+    std::string const e("q [0, 2); p [4, maturity)");
+    strvec const k{"p", "q", "z"};
+    std::string w("u");
+    bool const o = true;
+    check(__FILE__, __LINE__, d, n, e, "", k, c, w, o);
     }
 
     // Duration keywords: {retirement, maturity}
