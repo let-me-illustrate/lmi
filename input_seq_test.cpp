@@ -108,6 +108,14 @@ int test_main(int, char*[])
     //     w: default keyword
     //     o: keywords only
 
+    // An empty string is treated as zero.
+    {
+    int const n = 5;
+    double const d[n] = {0, 0, 0, 0, 0};
+    std::string const e("");
+    check(__FILE__, __LINE__, d, n, e);
+    }
+
     // An all-blank string is treated as zero.
     {
     int const n = 9;
@@ -391,6 +399,18 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(e_retirement, i[0].end_mode  );
     BOOST_TEST_EQUAL(e_retirement, i[1].begin_mode);
     BOOST_TEST_EQUAL(e_maturity  , i[1].end_mode  );
+    }
+
+    // Test a simple parser error.
+    {
+    int const n = 2;
+    double const d[n] = {0, 0};
+    std::string const e("[0, 1)");
+    char const* m =
+        "Expected number or keyword."
+        " Current token '[' at position 1.\n"
+        ;
+    check(__FILE__, __LINE__, d, n, e, m);
     }
 
     return 0;
