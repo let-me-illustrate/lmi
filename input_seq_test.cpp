@@ -108,26 +108,6 @@ int test_main(int, char*[])
     //     w: default keyword
     //     o: keywords only
 
-    // Demonstrate a defect: the "expected" error message is of course
-    // not observed, but that should be reported.
-    {
-    int const n = 1;
-    double const d[n] = {0};
-    std::string const e(" ");
-    char const* m = "A mistakenly expected error message.";
-    check(__FILE__, __LINE__, d, n, e, m);
-    }
-
-    // Demonstrate a defect: [21.4.2/9] "shall not be a null pointer".
-    // Typing "m = 0" is a plausible mistake.
-    {
-    int const n = 1;
-    double const d[n] = {0};
-    std::string const e("0 [0,0)");
-    char const* m = 0;
-    check(__FILE__, __LINE__, d, n, e, m);
-    }
-
     // An all-blank string is treated as zero.
     {
     int const n = 9;
