@@ -41,55 +41,80 @@ void check
     ,bool                            o = false
     )
 {
-    InputSequence const seq(e, n, 90, 95, 0, 2002, k, w, o);
-
-    std::vector<double> const& v(seq.linear_number_representation());
-    bool const bv = v == std::vector<double>(d, d + n);
-    if(!bv)
+    try
         {
-        using osid = std::ostream_iterator<double>;
-        std::cout << "\nExpression: '" << e << "'";
-        std::cout << "\n      observed numbers: ";
-        std::copy(v.begin(), v.end(), osid(std::cout, " "));
-        std::cout << "\n  differ from expected: ";
-        std::copy(d        , d + n  , osid(std::cout, " "));
-        std::cout << std::endl;
-        }
+        InputSequence const seq(e, n, 90, 95, 0, 2002, k, w, o);
 
-    std::vector<std::string> const& s(seq.linear_keyword_representation());
-    std::vector<std::string> const t =
-        ( std::vector<std::string>() == c)
-        ? std::vector<std::string>(n)
-        : c
-        ;
-    bool const bs = s == t;
-    if(!bs)
-        {
-        using osis = std::ostream_iterator<std::string>;
-        std::cout << "\nExpression: '" << e << "'";
-        std::cout << "\n     observed keywords: ";
-        std::copy(s.begin(), s.end(), osis(std::cout, "|"));
-        std::cout << "\n  differ from expected: ";
-        std::copy(t.begin(), t.end(), osis(std::cout, "|"));
-        std::cout << std::endl;
-        }
+        std::vector<double> const& v(seq.linear_number_representation());
+        bool const bv = v == std::vector<double>(d, d + n);
+        if(!bv)
+            {
+            using osid = std::ostream_iterator<double>;
+            std::cout << "\nExpression: '" << e << "'";
+            std::cout << "\n      observed numbers: ";
+            std::copy(v.begin(), v.end(), osid(std::cout, " "));
+            std::cout << "\n  differ from expected: ";
+            std::copy(d        , d + n  , osid(std::cout, " "));
+            std::cout << std::endl;
+            }
 
-    std::string const& x(seq.formatted_diagnostics());
-    std::string const y = (nullptr == m) ? std::string() : std::string(m);
-    bool const by = x == y;
-    if(!by)
-        {
-        std::cout
-            <<   "\nObserved diagnostics:"
-            << "\n\n'" << x << "'"
-            << "\n\ndiffer from expected:"
-            << "\n\n'" << y << "'"
-            << std::endl
+        std::vector<std::string> const& s(seq.linear_keyword_representation());
+        std::vector<std::string> const t =
+            ( std::vector<std::string>() == c)
+            ? std::vector<std::string>(n)
+            : c
             ;
-        }
+        bool const bs = s == t;
+        if(!bs)
+            {
+            using osis = std::ostream_iterator<std::string>;
+            std::cout << "\nExpression: '" << e << "'";
+            std::cout << "\n     observed keywords: ";
+            std::copy(s.begin(), s.end(), osis(std::cout, "|"));
+            std::cout << "\n  differ from expected: ";
+            std::copy(t.begin(), t.end(), osis(std::cout, "|"));
+            std::cout << std::endl;
+            }
 
-    bool const b = bv && bs && by;
-    INVOKE_BOOST_TEST(b, file, line);
+        std::string const& x(seq.formatted_diagnostics());
+        std::string const y = (nullptr == m) ? std::string() : std::string(m);
+        bool const by = x == y;
+        if(!by)
+            {
+            std::cout
+                <<   "\nObserved diagnostics:"
+                << "\n\n'" << x << "'"
+                << "\n\ndiffer from expected:"
+                << "\n\n'" << y << "'"
+                << std::endl
+                ;
+            }
+
+        bool const b = bv && bs && by;
+        INVOKE_BOOST_TEST(b, file, line);
+        }
+    catch(std::exception const& x)
+        {
+        std::string const f = x.what();
+        std::string const g = f.substr(0, f.find("\n[file "));
+        std::string const h = (nullptr == m) ? std::string() : std::string(m);
+        bool const b = g == h;
+        if(!b)
+            {
+            std::cout
+                <<   "\nObserved exception:"
+                << "\n\n'" << g << "'"
+                << "\n\ndiffers from expected:"
+                << "\n\n'" << h << "'"
+                << std::endl
+                ;
+            }
+        INVOKE_BOOST_TEST(b, file, line);
+        }
+    catch(...)
+        {
+        throw std::runtime_error("Unexpected exception");
+        }
 }
 
 int test_main(int, char*[])
@@ -265,7 +290,6 @@ int test_main(int, char*[])
     char const* m =
         "Previous interval began at duration 5;"
         " current interval [ 2, 5 ) would begin before that."
-        " Current token 'end of input' at position -1.\n"
         ;
     check(__FILE__, __LINE__, d, n, e, m);
     }

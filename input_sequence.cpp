@@ -320,15 +320,15 @@ void InputSequence::realize_vector()
             }
         if(interval_i.begin_duration < prior_begin_duration)
             {
-            diagnostics
+            fatal_error()
                 << "Previous interval began at duration "
                 << prior_begin_duration
                 << "; current interval "
                 << "[ " << interval_i.begin_duration << ", "
                 << interval_i.end_duration << " )"
-                << " would begin before that. "
+                << " would begin before that."
+                << LMI_FLUSH
                 ;
-                mark_diagnostic_context();
             return;
             }
         prior_begin_duration = interval_i.begin_duration;
