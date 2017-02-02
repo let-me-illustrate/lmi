@@ -385,12 +385,12 @@ int test_main(int, char*[])
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
     std::string const e("7, retirement; 4, maturity");
     check(__FILE__, __LINE__, d, n, e);
-    InputSequence const seq("7, retirement; 4", 10, 90, 95, 0, 2002);
+    InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.interval_representation());
-    BOOST_TEST(e_inception  == i[0].begin_mode);
-    BOOST_TEST(e_retirement == i[0].end_mode  );
-    BOOST_TEST(e_retirement == i[1].begin_mode);
-    BOOST_TEST(e_maturity   == i[1].end_mode  );
+    BOOST_TEST_EQUAL(e_inception , i[0].begin_mode);
+    BOOST_TEST_EQUAL(e_retirement, i[0].end_mode  );
+    BOOST_TEST_EQUAL(e_retirement, i[1].begin_mode);
+    BOOST_TEST_EQUAL(e_maturity  , i[1].end_mode  );
     }
 
     return 0;
