@@ -106,6 +106,20 @@ InputSequence::InputSequence
     ,keywords_only_                 (a_keywords_only)
     ,default_keyword_               (a_default_keyword)
 {
+    // A default keyword should be specified (i.e., nonempty) only for
+    // keyword-only sequences (otherwise, the default is numeric), and
+    // it should always be allowable even though other keywords may be
+    // disallowed in context. As this is written in 2017-02, the only
+    // UDTs with default keywords are:
+    //   mode_sequence::default_keyword() // "annual"
+    //   dbo_sequence::default_keyword()  // "a"
+    // This assertion will provide useful guidance if, e.g., a new
+    // policy form that forbids annual mode is implemented.
+    LMI_ASSERT
+        (  a_default_keyword.empty()
+        || a_keywords_only && contains(a_allowed_keywords, a_default_keyword)
+        );
+
     SequenceParser parser
         (input_expression
         ,a_years_to_maturity

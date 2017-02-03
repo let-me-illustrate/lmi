@@ -384,15 +384,22 @@ int test_main(int, char*[])
     }
 
     // Test numbers mixed with (enumerative) allowed keywords, with
-    // a default keyword.
+    // a default keyword. Because numbers are allowed, gaps are
+    // filled with a default number (such as zero), so a default
+    // keyword cannot be necessary and is therefore forbidden.
     {
     int const n = 10;
     strvec const c      {"q", "q", "z", "p", "z", "z", "p", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  5 ,  5 ,  0 ,  7 ,  7 ,  7 };
     std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
+    char const* m =
+        "Assertion 'a_default_keyword.empty() ||"
+        " a_keywords_only && contains(a_allowed_keywords, a_default_keyword)'"
+        " failed."
+        ;
     strvec const k{"p", "q", "z"};
     std::string w("z");
-    check(__FILE__, __LINE__, n, d, e, "", k, c, false, w);
+    check(__FILE__, __LINE__, n, d, e, m, k, c, false, w);
     }
 
     // Test keywords-only switch with input it forbids.
@@ -429,22 +436,25 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, n, d, e, "", k, c, o, w);
     }
 
-    // Test an expression with a gap between intervals, with the
-    // keywords-only switch and a default keyword that is not an
-    // element of the set of allowed keywords. This test passes at
-    // the moment, but it seems insane because the values in 'c'
-    // below could not be realized from an expression 'e' that
-    // specifies a value for each year: "q;q;u;u;p" would be
-    // rejected because 'u' is not an element of {p, q, z}.
+    // Test a default keyword that is not an element of the set of
+    // allowed keywords. Even if this were not forbidden, the values
+    // in 'c' below could not be realized from an expression 'e' that
+    // specifies a value for each year: "q;q;u;u;p" would be rejected
+    // because 'u' is not an element of {p, q, z}.
     {
     int const n = 5;
     strvec const c      {"q", "q", "u", "u", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
+    char const* m =
+        "Assertion 'a_default_keyword.empty() ||"
+        " a_keywords_only && contains(a_allowed_keywords, a_default_keyword)'"
+        " failed."
+        ;
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("u");
-    check(__FILE__, __LINE__, n, d, e, "", k, c, o, w);
+    check(__FILE__, __LINE__, n, d, e, m, k, c, o, w);
     }
 
     // Duration keywords: {retirement, maturity}
