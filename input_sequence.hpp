@@ -221,7 +221,7 @@ class SequenceParser
     void span();
     void sequence();
     token_type get_token();
-    void match(token_type t);
+    void match(token_type);
 
     void mark_diagnostic_context();
 
