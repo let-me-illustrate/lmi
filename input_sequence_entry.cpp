@@ -1554,8 +1554,8 @@ void InputSequenceEntry::DoOpenEditor()
         ,in.inforce_year     ()
         ,in.effective_year   ()
         ,keywords
-        ,ds.default_keyword()
         ,keywords_only
+        ,ds.default_keyword()
         );
 
     std::string const diagnostics = sequence.formatted_diagnostics(true);

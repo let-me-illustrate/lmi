@@ -80,8 +80,8 @@ std::string realize_sequence_string
         ,input.inforce_year     ()
         ,input.effective_year   ()
         ,detail::extract_keys_from_string_map(keyword_dictionary)
-        ,default_keyword
         ,true
+        ,default_keyword
         );
     detail::convert_vector
         (v
@@ -112,8 +112,8 @@ std::string realize_sequence_string
         ,input.inforce_year     ()
         ,input.effective_year   ()
         ,detail::extract_keys_from_string_map(keyword_dictionary)
-        ,default_keyword
         ,false
+        ,default_keyword
         );
     detail::convert_vector(vn, s.linear_number_representation());
     detail::convert_vector

@@ -181,7 +181,6 @@ class SequenceParser
         ,int                             a_inforce_duration
         ,int                             a_effective_year
         ,std::vector<std::string> const& a_extra_keywords
-        ,std::string const&              a_default_keyword
         ,bool                            a_keywords_only
         );
 
@@ -227,13 +226,14 @@ class SequenceParser
     void mark_diagnostic_context();
 
     std::istringstream input_stream;
+
+    // Copies of ctor args that are identical to class InputSequence's.
     int years_to_maturity;
     int issue_age;
     int retirement_age;
     int inforce_duration;
     int effective_year;
     std::vector<std::string> extra_keywords;
-    std::string default_keyword;
     bool keywords_only;
 
     token_type current_token_type;
@@ -243,7 +243,6 @@ class SequenceParser
     duration_mode previous_duration_scalar_mode;
     duration_mode current_duration_scalar_mode;
     ValueInterval current_interval;
-
     int last_input_duration;
 
     std::ostringstream diagnostics;
@@ -265,8 +264,8 @@ class LMI_SO InputSequence
         ,int                             a_effective_year
         ,std::vector<std::string> const& a_extra_keywords
             = std::vector<std::string>()
-        ,std::string const&              a_default_keyword = ""
         ,bool                            a_keywords_only = false
+        ,std::string const&              a_default_keyword = ""
         );
 
     InputSequence(std::vector<double> const&);
@@ -289,14 +288,16 @@ class LMI_SO InputSequence
   private:
     void realize_vector();
 
+    // Copies of ctor args that are identical to class SequenceParser's.
     int years_to_maturity;
     int issue_age;
     int retirement_age;
     int inforce_duration;
     int effective_year;
     std::vector<std::string> extra_keywords;
-    std::string default_keyword;
     bool keywords_only;
+    // Copy of a ctor arg that is unique to this class.
+    std::string default_keyword;
 
     std::string EXPEDIENTdiagnostics;
 

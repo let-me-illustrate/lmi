@@ -37,13 +37,13 @@ void check
     ,char const*                     m = ""
     ,std::vector<std::string> const& k = std::vector<std::string>()
     ,std::vector<std::string> const& c = std::vector<std::string>()
-    ,std::string const&              w = std::string()
     ,bool                            o = false
+    ,std::string const&              w = std::string()
     )
 {
     try
         {
-        InputSequence const seq(e, n, 90, 95, 0, 2002, k, w, o);
+        InputSequence const seq(e, n, 90, 95, 0, 2002, k, o, w);
 
         std::vector<double> const& v(seq.linear_number_representation());
         bool const bv = v == std::vector<double>(d, d + n);
@@ -130,8 +130,8 @@ int test_main(int, char*[])
     //     n: length
     //     e: expression
     //     k: extra keywords
-    //     w: default keyword
     //     o: keywords only
+    //     w: default keyword
 
     // An empty string is treated as zero.
     {
@@ -363,9 +363,9 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, d, n, e, "", k, c);
     // Toggle keywords-only switch on: same result.
     bool const o = true;
-    check(__FILE__, __LINE__, d, n, e, "", k, c, "", o);
+    check(__FILE__, __LINE__, d, n, e, "", k, c, o);
     // Toggle keywords-only switch explicitly off: same result.
-    check(__FILE__, __LINE__, d, n, e, "", k, c, "", false);
+    check(__FILE__, __LINE__, d, n, e, "", k, c, false);
     }
 
     // Test numbers mixed with (enumerative) extra keywords.
@@ -387,7 +387,7 @@ int test_main(int, char*[])
     std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
     strvec const k{"p", "q", "z"};
     std::string w("z");
-    check(__FILE__, __LINE__, d, n, e, "", k, c, w);
+    check(__FILE__, __LINE__, d, n, e, "", k, c, false, w);
     }
 
     // Test keywords-only switch with input it forbids.
@@ -408,7 +408,7 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     std::string w("z");
     bool const o = true;
-    check(__FILE__, __LINE__, d, n, e, m, k, c, w, o);
+    check(__FILE__, __LINE__, d, n, e, m, k, c, o, w);
     }
 
     // Test an expression with a gap between intervals, with the
@@ -421,7 +421,7 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     std::string w("z");
     bool const o = true;
-    check(__FILE__, __LINE__, d, n, e, "", k, c, w, o);
+    check(__FILE__, __LINE__, d, n, e, "", k, c, o, w);
     }
 
     // Test an expression with a gap between intervals, with the
@@ -439,7 +439,7 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     std::string w("u");
     bool const o = true;
-    check(__FILE__, __LINE__, d, n, e, "", k, c, w, o);
+    check(__FILE__, __LINE__, d, n, e, "", k, c, o, w);
     }
 
     // Duration keywords: {retirement, maturity}

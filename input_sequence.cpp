@@ -56,7 +56,6 @@ SequenceParser::SequenceParser
     ,int                             a_inforce_duration
     ,int                             a_effective_year
     ,std::vector<std::string> const& a_extra_keywords
-    ,std::string const&              a_default_keyword
     ,bool                            a_keywords_only
     )
     :input_stream                  (input_expression.c_str())
@@ -66,7 +65,6 @@ SequenceParser::SequenceParser
     ,inforce_duration              (a_inforce_duration)
     ,effective_year                (a_effective_year)
     ,extra_keywords                (a_extra_keywords)
-    ,default_keyword               (a_default_keyword)
     ,keywords_only                 (a_keywords_only)
     ,current_token_type            (e_startup)
     ,previous_duration_scalar_mode (e_inception)
@@ -96,8 +94,8 @@ InputSequence::InputSequence
     ,int                             a_inforce_duration
     ,int                             a_effective_year
     ,std::vector<std::string> const& a_extra_keywords
-    ,std::string const&              a_default_keyword
     ,bool                            a_keywords_only
+    ,std::string const&              a_default_keyword
     )
     :years_to_maturity             (a_years_to_maturity)
     ,issue_age                     (a_issue_age)
@@ -105,8 +103,8 @@ InputSequence::InputSequence
     ,inforce_duration              (a_inforce_duration)
     ,effective_year                (a_effective_year)
     ,extra_keywords                (a_extra_keywords)
-    ,default_keyword               (a_default_keyword)
     ,keywords_only                 (a_keywords_only)
+    ,default_keyword               (a_default_keyword)
 {
     SequenceParser parser
         (input_expression
@@ -116,7 +114,6 @@ InputSequence::InputSequence
         ,inforce_duration
         ,effective_year
         ,extra_keywords
-        ,default_keyword
         ,keywords_only
         );
 
