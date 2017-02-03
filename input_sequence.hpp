@@ -225,29 +225,29 @@ class SequenceParser
 
     void mark_diagnostic_context();
 
-    std::istringstream input_stream;
+    std::istringstream input_stream_;
 
     // Copies of ctor args that are identical to class InputSequence's.
-    int years_to_maturity;
-    int issue_age;
-    int retirement_age;
-    int inforce_duration;
-    int effective_year;
-    std::vector<std::string> allowed_keywords;
-    bool keywords_only;
+    int years_to_maturity_;
+    int issue_age_;
+    int retirement_age_;
+    int inforce_duration_;
+    int effective_year_;
+    std::vector<std::string> allowed_keywords_;
+    bool keywords_only_;
 
-    token_type current_token_type;
-    double current_number;
-    std::string current_keyword;
-    int current_duration_scalar;
-    duration_mode previous_duration_scalar_mode;
-    duration_mode current_duration_scalar_mode;
-    ValueInterval current_interval;
-    int last_input_duration;
+    token_type current_token_type_;
+    double current_number_;
+    std::string current_keyword_;
+    int current_duration_scalar_;
+    duration_mode previous_duration_scalar_mode_;
+    duration_mode current_duration_scalar_mode_;
+    ValueInterval current_interval_;
+    int last_input_duration_;
 
-    std::ostringstream diagnostics;
+    std::ostringstream diagnostics_;
 
-    std::vector<ValueInterval> intervals;
+    std::vector<ValueInterval> intervals_;
 };
 
 class LMI_SO InputSequence
@@ -289,21 +289,21 @@ class LMI_SO InputSequence
     void realize_vector();
 
     // Copies of ctor args that are identical to class SequenceParser's.
-    int years_to_maturity;
-    int issue_age;
-    int retirement_age;
-    int inforce_duration;
-    int effective_year;
-    std::vector<std::string> allowed_keywords;
-    bool keywords_only;
+    int years_to_maturity_;
+    int issue_age_;
+    int retirement_age_;
+    int inforce_duration_;
+    int effective_year_;
+    std::vector<std::string> allowed_keywords_;
+    bool keywords_only_;
     // Copy of a ctor arg that is unique to this class.
-    std::string default_keyword;
+    std::string default_keyword_;
 
-    std::string EXPEDIENTdiagnostics;
+    std::string EXPEDIENTdiagnostics_;
 
-    std::vector<ValueInterval> intervals;
-    std::vector<double> number_result;
-    std::vector<std::string> keyword_result;
+    std::vector<ValueInterval> intervals_;
+    std::vector<double> number_result_;
+    std::vector<std::string> keyword_result_;
 };
 
 #endif // input_sequence_hpp
