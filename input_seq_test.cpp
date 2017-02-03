@@ -129,7 +129,7 @@ int test_main(int, char*[])
     //   ctor arguments
     //     n: length
     //     e: expression
-    //     k: extra keywords
+    //     k: allowed keywords
     //     o: keywords only
     //     w: default keyword
 
@@ -352,7 +352,7 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL("0", InputSequence(v).mathematical_representation());
     }
 
-    // Test (enumerative) extra keywords, and keywords-only switch
+    // Test (enumerative) allowed keywords, and keywords-only switch
     // (with input it allows).
     {
     int const n = 9;
@@ -368,7 +368,7 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, d, n, e, "", k, c, false);
     }
 
-    // Test numbers mixed with (enumerative) extra keywords.
+    // Test numbers mixed with (enumerative) allowed keywords.
     {
     int const n = 9;
     strvec const c     {"", "", "keyword_00", "keyword_00", "", "", "", "", ""};
@@ -378,7 +378,7 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, d, n, e, "", k, c);
     }
 
-    // Test numbers mixed with (enumerative) extra keywords, with
+    // Test numbers mixed with (enumerative) allowed keywords, with
     // a default keyword.
     {
     int const n = 10;

@@ -55,7 +55,7 @@ SequenceParser::SequenceParser
     ,int                             a_retirement_age
     ,int                             a_inforce_duration
     ,int                             a_effective_year
-    ,std::vector<std::string> const& a_extra_keywords
+    ,std::vector<std::string> const& a_allowed_keywords
     ,bool                            a_keywords_only
     )
     :input_stream                  (input_expression.c_str())
@@ -64,7 +64,7 @@ SequenceParser::SequenceParser
     ,retirement_age                (a_retirement_age)
     ,inforce_duration              (a_inforce_duration)
     ,effective_year                (a_effective_year)
-    ,extra_keywords                (a_extra_keywords)
+    ,allowed_keywords              (a_allowed_keywords)
     ,keywords_only                 (a_keywords_only)
     ,current_token_type            (e_startup)
     ,previous_duration_scalar_mode (e_inception)
@@ -93,7 +93,7 @@ InputSequence::InputSequence
     ,int                             a_retirement_age
     ,int                             a_inforce_duration
     ,int                             a_effective_year
-    ,std::vector<std::string> const& a_extra_keywords
+    ,std::vector<std::string> const& a_allowed_keywords
     ,bool                            a_keywords_only
     ,std::string const&              a_default_keyword
     )
@@ -102,7 +102,7 @@ InputSequence::InputSequence
     ,retirement_age                (a_retirement_age)
     ,inforce_duration              (a_inforce_duration)
     ,effective_year                (a_effective_year)
-    ,extra_keywords                (a_extra_keywords)
+    ,allowed_keywords              (a_allowed_keywords)
     ,keywords_only                 (a_keywords_only)
     ,default_keyword               (a_default_keyword)
 {
@@ -113,7 +113,7 @@ InputSequence::InputSequence
         ,retirement_age
         ,inforce_duration
         ,effective_year
-        ,extra_keywords
+        ,allowed_keywords
         ,keywords_only
         );
 
@@ -716,8 +716,8 @@ void SequenceParser::value()
                     << "Expected keyword chosen from { "
                     ;
                 std::copy
-                    (extra_keywords.begin()
-                    ,extra_keywords.end()
+                    (allowed_keywords.begin()
+                    ,allowed_keywords.end()
                     ,std::ostream_iterator<std::string>(diagnostics, " ")
                     );
                 diagnostics << "}. ";
@@ -731,13 +731,13 @@ void SequenceParser::value()
         case e_keyword:
             {
             current_interval.value_is_keyword = true;
-            if(extra_keywords.empty())
+            if(allowed_keywords.empty())
                 {
                 diagnostics << "Expected number. ";
                 mark_diagnostic_context();
                 break;
                 }
-            if(contains(extra_keywords, current_keyword))
+            if(contains(allowed_keywords, current_keyword))
                 {
                 current_interval.value_keyword = current_keyword;
                 match(current_token_type);
@@ -748,8 +748,8 @@ void SequenceParser::value()
                     << "Expected keyword chosen from { "
                     ;
                 std::copy
-                    (extra_keywords.begin()
-                    ,extra_keywords.end()
+                    (allowed_keywords.begin()
+                    ,allowed_keywords.end()
                     ,std::ostream_iterator<std::string>(diagnostics, " ")
                     );
                 diagnostics << "}. ";

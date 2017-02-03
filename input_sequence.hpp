@@ -180,7 +180,7 @@ class SequenceParser
         ,int                             a_retirement_age
         ,int                             a_inforce_duration
         ,int                             a_effective_year
-        ,std::vector<std::string> const& a_extra_keywords
+        ,std::vector<std::string> const& a_allowed_keywords
         ,bool                            a_keywords_only
         );
 
@@ -233,7 +233,7 @@ class SequenceParser
     int retirement_age;
     int inforce_duration;
     int effective_year;
-    std::vector<std::string> extra_keywords;
+    std::vector<std::string> allowed_keywords;
     bool keywords_only;
 
     token_type current_token_type;
@@ -262,7 +262,7 @@ class LMI_SO InputSequence
         ,int                             a_retirement_age
         ,int                             a_inforce_duration
         ,int                             a_effective_year
-        ,std::vector<std::string> const& a_extra_keywords
+        ,std::vector<std::string> const& a_allowed_keywords
             = std::vector<std::string>()
         ,bool                            a_keywords_only = false
         ,std::string const&              a_default_keyword = ""
@@ -294,7 +294,7 @@ class LMI_SO InputSequence
     int retirement_age;
     int inforce_duration;
     int effective_year;
-    std::vector<std::string> extra_keywords;
+    std::vector<std::string> allowed_keywords;
     bool keywords_only;
     // Copy of a ctor arg that is unique to this class.
     std::string default_keyword;
