@@ -126,12 +126,17 @@ int test_main(int, char*[])
     //     c: keywords
     //     d: numeric values
     //     m: diagnostics
-    //   ctor arguments
+    //   InputSequence ctor arguments
     //     n: length
     //     e: expression
     //     k: allowed keywords
     //     o: keywords only
     //     w: default keyword
+    // Tests instantiate local variables with those names as needed,
+    // preferably in this order:
+    //   n c d e m k o w
+    // which is the same as the order in check()'s declaration except
+    // that c and d are juxtaposed to facilitate visual comparison.
 
     // An empty string is treated as zero.
     {
@@ -398,16 +403,16 @@ int test_main(int, char*[])
     int const n = 10;
     strvec const c      {"z", "z", "z", "z", "z", "z", "z", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 };
+    std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
     char const* m =
         "Expected keyword chosen from { p q z }."
         " Current token 'number' at position 21.\n"
         "Expected ';'."
         " Current token '[' at position 23.\n"
         ;
-    std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
     strvec const k{"p", "q", "z"};
-    std::string w("z");
     bool const o = true;
+    std::string w("z");
     check(__FILE__, __LINE__, n, d, e, m, k, c, o, w);
     }
 
@@ -419,8 +424,8 @@ int test_main(int, char*[])
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
     strvec const k{"p", "q", "z"};
-    std::string w("z");
     bool const o = true;
+    std::string w("z");
     check(__FILE__, __LINE__, n, d, e, "", k, c, o, w);
     }
 
@@ -437,8 +442,8 @@ int test_main(int, char*[])
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
     strvec const k{"p", "q", "z"};
-    std::string w("u");
     bool const o = true;
+    std::string w("u");
     check(__FILE__, __LINE__, n, d, e, "", k, c, o, w);
     }
 
