@@ -1,4 +1,4 @@
-// Input sequences e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0... : unit test.
+// Input sequences e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0....
 // Extract the grammar from lines matching the regexp _// GRAMMAR_ .
 //
 // Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
@@ -48,40 +48,99 @@ ValueInterval::ValueInterval()
     ,insane           (false)
 {}
 
-InputSequence::InputSequence
-    (std::string const& input_expression
-    ,int a_years_to_maturity
-    ,int a_issue_age
-    ,int a_retirement_age
-    ,int a_inforce_duration
-    ,int a_effective_year
-    ,std::vector<std::string> const& a_extra_keywords
-    ,std::string const& a_default_keyword
-    ,bool a_keywords_only
+SequenceParser::SequenceParser
+    (std::string const&              input_expression
+    ,int                             a_years_to_maturity
+    ,int                             a_issue_age
+    ,int                             a_retirement_age
+    ,int                             a_inforce_duration
+    ,int                             a_effective_year
+    ,std::vector<std::string> const& a_allowed_keywords
+    ,bool                            a_keywords_only
     )
-    :input_stream                  (input_expression.c_str())
-    ,years_to_maturity             (a_years_to_maturity)
-    ,issue_age                     (a_issue_age)
-    ,retirement_age                (a_retirement_age)
-    ,inforce_duration              (a_inforce_duration)
-    ,effective_year                (a_effective_year)
-    ,extra_keywords                (a_extra_keywords)
-    ,default_keyword               (a_default_keyword)
-    ,keywords_only                 (a_keywords_only)
-    ,current_token_type            (e_startup)
-    ,previous_duration_scalar_mode (e_inception)
-    ,current_duration_scalar_mode  (e_inception)
-    ,last_input_duration           (0)
+    :input_stream_                  (input_expression.c_str())
+    ,years_to_maturity_             (a_years_to_maturity)
+    ,issue_age_                     (a_issue_age)
+    ,retirement_age_                (a_retirement_age)
+    ,inforce_duration_              (a_inforce_duration)
+    ,effective_year_                (a_effective_year)
+    ,allowed_keywords_              (a_allowed_keywords)
+    ,keywords_only_                 (a_keywords_only)
+    ,current_token_type_            (e_startup)
+    ,previous_duration_scalar_mode_ (e_inception)
+    ,current_duration_scalar_mode_  (e_inception)
+    ,last_input_duration_           (0)
 {
     sequence();
+}
+
+SequenceParser::~SequenceParser() = default;
+
+std::string SequenceParser::diagnostics() const
+{
+    return diagnostics_.str();
+}
+
+std::vector<ValueInterval> const& SequenceParser::intervals() const
+{
+    return intervals_;
+}
+
+InputSequence::InputSequence
+    (std::string const&              input_expression
+    ,int                             a_years_to_maturity
+    ,int                             a_issue_age
+    ,int                             a_retirement_age
+    ,int                             a_inforce_duration
+    ,int                             a_effective_year
+    ,std::vector<std::string> const& a_allowed_keywords
+    ,bool                            a_keywords_only
+    ,std::string const&              a_default_keyword
+    )
+    :years_to_maturity_             (a_years_to_maturity)
+    ,issue_age_                     (a_issue_age)
+    ,retirement_age_                (a_retirement_age)
+    ,inforce_duration_              (a_inforce_duration)
+    ,effective_year_                (a_effective_year)
+    ,allowed_keywords_              (a_allowed_keywords)
+    ,keywords_only_                 (a_keywords_only)
+    ,default_keyword_               (a_default_keyword)
+{
+    // A default keyword should be specified (i.e., nonempty) only for
+    // keyword-only sequences (otherwise, the default is numeric), and
+    // it should always be allowable even though other keywords may be
+    // disallowed in context. As this is written in 2017-02, the only
+    // UDTs with default keywords are:
+    //   mode_sequence::default_keyword() // "annual"
+    //   dbo_sequence::default_keyword()  // "a"
+    // This assertion will provide useful guidance if, e.g., a new
+    // policy form that forbids annual mode is implemented.
+    LMI_ASSERT
+        (  a_default_keyword.empty()
+        || a_keywords_only && contains(a_allowed_keywords, a_default_keyword)
+        );
+
+    SequenceParser parser
+        (input_expression
+        ,a_years_to_maturity
+        ,a_issue_age
+        ,a_retirement_age
+        ,a_inforce_duration
+        ,a_effective_year
+        ,a_allowed_keywords
+        ,a_keywords_only
+        );
+
+    parser_diagnostics_ = parser.diagnostics();
+    intervals_ = parser.intervals();
 
     // Inception and maturity endpoints exist, so the interval they
     // define must exist. However, parsing an empty expression
     // constructs zero intervals, so a default one must be created
     // to make the physical reality meet the conceptual requirement.
-    if(intervals.empty())
+    if(intervals_.empty())
         {
-        intervals.push_back(ValueInterval());
+        intervals_.push_back(ValueInterval());
         }
 
     // Extend the last interval's endpoint to maturity, replicating
@@ -92,11 +151,11 @@ InputSequence::InputSequence
 
     // This invariant has not yet been established, whether or not the
     // sequence was empty.
-    intervals.back().end_duration = years_to_maturity;
+    intervals_.back().end_duration = a_years_to_maturity;
     // This invariant is established by realize_vector(), but it does
     // no harm to repeat it here, and it would be confusing not to do
     // so in conjunction with the line above.
-    intervals.back().end_mode     = e_maturity;
+    intervals_.back().end_mode     = e_maturity;
 
     realize_vector();
 }
@@ -117,7 +176,7 @@ InputSequence::InputSequence
 //   when the vectors are of length zero, and
 //   for the last interval.
 // As a consequence, we always push_back a dummy interval exactly when
-// we know that it will be needed, and then write to intervals.back().
+// we know that it will be needed, and then write to intervals_.back().
 //
 // An alternative design would work with a temporary interval and
 // call push_back as needed. I tried that and concluded that this
@@ -131,34 +190,30 @@ InputSequence::InputSequence
 // unintended use.
 
 InputSequence::InputSequence(std::vector<double> const& v)
-    :years_to_maturity(v.size())
+    :years_to_maturity_(v.size())
 {
     ValueInterval dummy;
 
-    double prior_value =
-        (0 != v.size())
-        ? v.front()
-        : 0.0
-        ;
+    double prior_value = v.empty() ? 0.0 : v.front();
     double current_value = prior_value;
 
-    intervals.push_back(dummy);
-    intervals.back().value_number = current_value;
+    intervals_.push_back(dummy);
+    intervals_.back().value_number = current_value;
 
     for(auto const& vi : v)
         {
         current_value = vi;
         if(prior_value == current_value)
             {
-            ++intervals.back().end_duration;
+            ++intervals_.back().end_duration;
             }
         else
             {
-            int value_change_duration = intervals.back().end_duration;
-            intervals.push_back(dummy);
-            intervals.back().value_number = current_value;
-            intervals.back().begin_duration = value_change_duration;
-            intervals.back().end_duration = ++value_change_duration;
+            int value_change_duration = intervals_.back().end_duration;
+            intervals_.push_back(dummy);
+            intervals_.back().value_number = current_value;
+            intervals_.back().begin_duration = value_change_duration;
+            intervals_.back().end_duration = ++value_change_duration;
             prior_value = current_value;
             }
         }
@@ -167,35 +222,31 @@ InputSequence::InputSequence(std::vector<double> const& v)
 }
 
 InputSequence::InputSequence(std::vector<std::string> const& v)
-    :years_to_maturity(v.size())
+    :years_to_maturity_(v.size())
 {
     ValueInterval dummy;
     dummy.value_is_keyword = true;
 
-    std::string prior_value =
-        (0 != v.size())
-        ? v.front()
-        : std::string()
-        ;
+    std::string prior_value = v.empty() ? std::string() : v.front();
     std::string current_value = prior_value;
 
-    intervals.push_back(dummy);
-    intervals.back().value_keyword = current_value;
+    intervals_.push_back(dummy);
+    intervals_.back().value_keyword = current_value;
 
     for(auto const& vi : v)
         {
         current_value = vi;
         if(prior_value == current_value)
             {
-            ++intervals.back().end_duration;
+            ++intervals_.back().end_duration;
             }
         else
             {
-            int value_change_duration = intervals.back().end_duration;
-            intervals.push_back(dummy);
-            intervals.back().value_keyword = current_value;
-            intervals.back().begin_duration = value_change_duration;
-            intervals.back().end_duration = ++value_change_duration;
+            int value_change_duration = intervals_.back().end_duration;
+            intervals_.push_back(dummy);
+            intervals_.back().value_keyword = current_value;
+            intervals_.back().begin_duration = value_change_duration;
+            intervals_.back().end_duration = ++value_change_duration;
             prior_value = current_value;
             }
         }
@@ -207,36 +258,28 @@ InputSequence::InputSequence
     (std::vector<double> const& n_v
     ,std::vector<std::string> const& s_v
     )
-    :years_to_maturity(n_v.size())
+    :years_to_maturity_(n_v.size())
 {
     if(n_v.size() != s_v.size())
         {
         fatal_error()
-            << "InputSequence: vector lengths differ."
+            << "Vector lengths differ."
             << LMI_FLUSH
             ;
         }
 
     ValueInterval dummy;
 
-    double n_prior_value =
-        (0 != n_v.size())
-        ? n_v.front()
-        : 0.0
-        ;
+    double n_prior_value = n_v.empty() ? 0.0 : n_v.front();
     double n_current_value = n_prior_value;
 
-    std::string s_prior_value =
-        (0 != s_v.size())
-        ? s_v.front()
-        : std::string()
-        ;
+    std::string s_prior_value = s_v.empty() ? std::string() : s_v.front();
     std::string s_current_value = s_prior_value;
 
-    intervals.push_back(dummy);
-    intervals.back().value_number  = n_current_value;
-    intervals.back().value_keyword = s_current_value;
-    intervals.back().value_is_keyword = "" != s_current_value;
+    intervals_.push_back(dummy);
+    intervals_.back().value_number  = n_current_value;
+    intervals_.back().value_keyword = s_current_value;
+    intervals_.back().value_is_keyword = "" != s_current_value;
 
     std::vector<double>::const_iterator n_vi;
     std::vector<std::string>::const_iterator s_vi;
@@ -250,17 +293,17 @@ InputSequence::InputSequence
         s_current_value = *s_vi;
         if(n_prior_value == n_current_value && s_prior_value == s_current_value)
             {
-            ++intervals.back().end_duration;
+            ++intervals_.back().end_duration;
             }
         else
             {
-            int value_change_duration = intervals.back().end_duration;
-            intervals.push_back(dummy);
-            intervals.back().value_number = n_current_value;
-            intervals.back().value_keyword = s_current_value;
-            intervals.back().value_is_keyword = "" != s_current_value;
-            intervals.back().begin_duration = value_change_duration;
-            intervals.back().end_duration = ++value_change_duration;
+            int value_change_duration = intervals_.back().end_duration;
+            intervals_.push_back(dummy);
+            intervals_.back().value_number = n_current_value;
+            intervals_.back().value_keyword = s_current_value;
+            intervals_.back().value_is_keyword = "" != s_current_value;
+            intervals_.back().begin_duration = value_change_duration;
+            intervals_.back().end_duration = ++value_change_duration;
             n_prior_value = n_current_value;
             s_prior_value = s_current_value;
             }
@@ -275,34 +318,32 @@ void InputSequence::realize_vector()
 {
     // Post-construction invariants.
     // Every ctor must already have established this...
-    LMI_ASSERT(!intervals.empty());
+    LMI_ASSERT(!intervals_.empty());
     // ...and this:
-    LMI_ASSERT(years_to_maturity == intervals.back().end_duration);
+    LMI_ASSERT(years_to_maturity_ == intervals_.back().end_duration);
     // It cannot be assumed that all ctors have yet established this...
-    intervals.back().end_mode = e_maturity;
+    intervals_.back().end_mode = e_maturity;
     // ...though now of course it has been established:
-    LMI_ASSERT(e_maturity             == intervals.back().end_mode    );
+    LMI_ASSERT(e_maturity        == intervals_.back().end_mode    );
 
-    std::vector<double> default_numeric_vector(years_to_maturity);
-    std::vector<std::string> default_string_vector(years_to_maturity, default_keyword);
-    std::vector<double> r(default_numeric_vector);
-    number_result = r;
-    std::vector<std::string> s(default_string_vector);
-    keyword_result = s;
+    std::vector<double>      r(years_to_maturity_);
+    std::vector<std::string> s(years_to_maturity_, default_keyword_);
+    number_result_  = r;
+    keyword_result_ = s;
 
     // Vectors have default values if the input expression could not be parsed.
-    if(formatted_diagnostics().size())
+    if(!formatted_diagnostics().empty())
         {
         return;
         }
 
     int prior_begin_duration = 0;
-    for(auto const& interval_i : intervals)
+    for(auto const& interval_i : intervals_)
         {
         if(interval_i.insane)
             {
             fatal_error()
-                << "InputSequence: untrapped parser error."
+                << "Untrapped parser error."
                 << LMI_FLUSH
                 ;
             }
@@ -326,8 +367,7 @@ void InputSequence::realize_vector()
                 << LMI_FLUSH
                 ;
             }
-        // TODO ?? Also check whether value_number is a NaN.
-        if(interval_i.value_is_keyword && "insane" == interval_i.value_keyword)
+        if(interval_i.value_is_keyword && "daft" == interval_i.value_keyword)
             {
             fatal_error()
                 << "Interval "
@@ -339,22 +379,22 @@ void InputSequence::realize_vector()
             }
         if(interval_i.begin_duration < prior_begin_duration)
             {
-            diagnostics
+            fatal_error()
                 << "Previous interval began at duration "
                 << prior_begin_duration
                 << "; current interval "
                 << "[ " << interval_i.begin_duration << ", "
                 << interval_i.end_duration << " )"
-                << " would begin before that. "
+                << " would begin before that."
+                << LMI_FLUSH
                 ;
-                mark_diagnostic_context();
             return;
             }
         prior_begin_duration = interval_i.begin_duration;
         bool interval_is_ok =
                0                         <= interval_i.begin_duration
             && interval_i.begin_duration <= interval_i.end_duration
-            && interval_i.end_duration   <= years_to_maturity
+            && interval_i.end_duration   <= years_to_maturity_
             ;
         if(!interval_is_ok)
             {
@@ -384,8 +424,8 @@ void InputSequence::realize_vector()
             }
         }
 
-    number_result = r;
-    keyword_result = s;
+    number_result_  = r;
+    keyword_result_ = s;
 }
 
 // GRAMMAR interval-begin: one of [ (
@@ -400,46 +440,46 @@ void InputSequence::realize_vector()
 // GRAMMAR duration-scalar: duration-constant
 // SOMEDAY !! calendar year not yet implemented
 
-void InputSequence::duration_scalar()
+void SequenceParser::duration_scalar()
 {
-    switch(current_token_type)
+    switch(current_token_type_)
         {
         case e_age_prefix:
             {
-            current_duration_scalar_mode = e_attained_age;
-            match(current_token_type);
+            current_duration_scalar_mode_ = e_attained_age;
+            match(current_token_type_);
             }
             break;
         case e_cardinal_prefix:
             {
-            current_duration_scalar_mode = e_number_of_years;
-            match(current_token_type);
+            current_duration_scalar_mode_ = e_number_of_years;
+            match(current_token_type_);
             }
             break;
         case e_number:
             {
-            current_duration_scalar_mode = e_duration;
+            current_duration_scalar_mode_ = e_duration;
             }
             break;
         case e_keyword:
             {
-            if("retirement" == current_keyword)
+            if("retirement" == current_keyword_)
                 {
-                current_duration_scalar_mode = e_retirement;
-                current_duration_scalar = retirement_age - issue_age;
+                current_duration_scalar_mode_ = e_retirement;
+                current_duration_scalar_ = retirement_age_ - issue_age_;
                 match(e_keyword);
                 return;
                 }
-            else if("maturity" == current_keyword)
+            else if("maturity" == current_keyword_)
                 {
-                current_duration_scalar_mode = e_maturity;
-                current_duration_scalar = years_to_maturity;
+                current_duration_scalar_mode_ = e_maturity;
+                current_duration_scalar_ = years_to_maturity_;
                 match(e_keyword);
                 return;
                 }
             else
                 {
-                diagnostics
+                diagnostics_
                     << "Expected keyword "
                     << "'retirement' "
                     << " or 'maturity'. "
@@ -450,15 +490,15 @@ void InputSequence::duration_scalar()
             break;
         default:
             {
-            diagnostics << "Expected keyword, number, '@', or '#'. ";
+            diagnostics_ << "Expected keyword, number, '@', or '#'. ";
             mark_diagnostic_context();
             }
         }
 
-    current_duration_scalar = static_cast<int>(current_number);
+    current_duration_scalar_ = static_cast<int>(current_number_);
     match(e_number);
 
-    switch(current_duration_scalar_mode)
+    switch(current_duration_scalar_mode_)
         {
         case e_duration:
             {
@@ -467,27 +507,27 @@ void InputSequence::duration_scalar()
             break;
         case e_attained_age:
             {
-            current_duration_scalar -= issue_age;
+            current_duration_scalar_ -= issue_age_;
             }
             break;
         case e_number_of_years:
             {
-            current_duration_scalar += last_input_duration;
+            current_duration_scalar_ += last_input_duration_;
             }
             break;
         default:
             {
-            diagnostics << "Expected number, '@', or '#'. ";
+            diagnostics_ << "Expected number, '@', or '#'. ";
             mark_diagnostic_context();
             }
         }
 }
 
-void InputSequence::null_duration()
+void SequenceParser::null_duration()
 {
-    int tentative_begin_duration                = last_input_duration++;
-    duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode;
-    int tentative_end_duration                  = last_input_duration;
+    int tentative_begin_duration                = last_input_duration_++;
+    duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode_;
+    int tentative_end_duration                  = last_input_duration_;
     duration_mode tentative_end_duration_mode   = e_duration;
     validate_duration
         (tentative_begin_duration
@@ -499,17 +539,17 @@ void InputSequence::null_duration()
 
 // GRAMMAR duration: duration-scalar
 
-void InputSequence::single_duration()
+void SequenceParser::single_duration()
 {
     duration_scalar();
-    int tentative_begin_duration                = last_input_duration;
-//    last_input_duration += static_cast<int>(current_duration_scalar);
-//    last_input_duration = static_cast<int>(current_duration_scalar);
+    int tentative_begin_duration                = last_input_duration_;
+//    last_input_duration_ += static_cast<int>(current_duration_scalar_);
+//    last_input_duration_ = static_cast<int>(current_duration_scalar_);
 //    duration_mode tentative_begin_duration_mode = e_duration;
-    duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode;
-    int tentative_end_duration = current_duration_scalar;
-//    int tentative_end_duration   = last_input_duration + static_cast<int>(current_duration_scalar);
-    duration_mode tentative_end_duration_mode   = current_duration_scalar_mode;
+    duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode_;
+    int tentative_end_duration                  = current_duration_scalar_;
+//    int tentative_end_duration   = last_input_duration_ + static_cast<int>(current_duration_scalar_);
+    duration_mode tentative_end_duration_mode   = current_duration_scalar_mode_;
     validate_duration
         (tentative_begin_duration
         ,tentative_begin_duration_mode
@@ -520,40 +560,37 @@ void InputSequence::single_duration()
 
 // GRAMMAR duration: interval-begin duration-scalar , duration-scalar interval-end
 
-void InputSequence::intervalic_duration()
+void SequenceParser::intervalic_duration()
 {
-    bool begin_excl = (e_begin_excl == current_token_type);
-    match(current_token_type);
+    bool begin_excl = (e_begin_excl == current_token_type_);
+    match(current_token_type_);
     duration_scalar();
     // Add one to the interval-beginning if it was expressed
     // as exclusive, because we store [begin, end).
     int tentative_begin_duration =
-          static_cast<int>(current_duration_scalar)
+          static_cast<int>(current_duration_scalar_)
         + begin_excl
         ;
-    duration_mode tentative_begin_duration_mode = current_duration_scalar_mode;
-    int tentative_end_duration;
-    duration_mode tentative_end_duration_mode;// TODO ?? expunge = e_duration;;
+    duration_mode tentative_begin_duration_mode = current_duration_scalar_mode_;
+    int tentative_end_duration                  = -1;
+    duration_mode tentative_end_duration_mode   = e_invalid_mode;
     match(e_minor_separator); // TODO ?? Require this?
     duration_scalar();
     if
-        (  e_end_incl == current_token_type
-        || e_end_excl == current_token_type
+        (  e_end_incl == current_token_type_
+        || e_end_excl == current_token_type_
         )
         {
-        bool end_incl = (e_end_incl == current_token_type);
-        match(current_token_type);
+        bool end_incl = (e_end_incl == current_token_type_);
+        match(current_token_type_);
         // Add one to the interval-end if it was expressed
         // as inclusive, because we store [begin, end).
-        tentative_end_duration =
-              current_duration_scalar
-            + end_incl
-            ;
-        tentative_end_duration_mode = current_duration_scalar_mode;
+        tentative_end_duration      = current_duration_scalar_ + end_incl;
+        tentative_end_duration_mode = current_duration_scalar_mode_;
         }
     else
         {
-        diagnostics << "Expected ')' or ']'. ";
+        diagnostics_ << "Expected ')' or ']'. ";
         mark_diagnostic_context();
         return;
         }
@@ -565,7 +602,7 @@ void InputSequence::intervalic_duration()
         );
 }
 
-void InputSequence::validate_duration
+void SequenceParser::validate_duration
     (int           tentative_begin_duration
     ,duration_mode tentative_begin_duration_mode
     ,int           tentative_end_duration
@@ -574,8 +611,8 @@ void InputSequence::validate_duration
 {
     if(tentative_begin_duration < 0)
         {
-        current_interval.insane = true;
-        diagnostics
+        current_interval_.insane = true;
+        diagnostics_
             << "Interval "
             << "[ " << tentative_begin_duration << ", "
             << tentative_end_duration << " )"
@@ -593,8 +630,8 @@ void InputSequence::validate_duration
     // [B, E) is improper if B == E.
     else if(tentative_end_duration <= tentative_begin_duration)
         {
-        current_interval.insane = true;
-        diagnostics
+        current_interval_.insane = true;
+        diagnostics_
             << "Interval "
             << "[ " << tentative_begin_duration << ", "
             << tentative_end_duration << " )"
@@ -604,10 +641,10 @@ void InputSequence::validate_duration
         mark_diagnostic_context();
         return;
         }
-    else if(years_to_maturity < tentative_end_duration)
+    else if(years_to_maturity_ < tentative_end_duration)
         {
-        current_interval.insane = true;
-        diagnostics
+        current_interval_.insane = true;
+        diagnostics_
             << "Interval "
             << "[ " << tentative_begin_duration << ", "
             << tentative_end_duration << " )"
@@ -617,19 +654,34 @@ void InputSequence::validate_duration
         mark_diagnostic_context();
         return;
         }
+    else if
+        (  e_invalid_mode == tentative_begin_duration_mode
+        || e_invalid_mode == tentative_end_duration_mode
+        )
+        {
+        current_interval_.insane = true;
+        diagnostics_
+            << "Interval "
+            << "[ " << tentative_begin_duration << ", "
+            << tentative_end_duration << " )"
+            << " has an invalid duration mode. "
+            ;
+        mark_diagnostic_context();
+        return;
+        }
     else
         {
-        current_interval.begin_duration = tentative_begin_duration     ;
-        current_interval.end_duration   = tentative_end_duration       ;
-        current_interval.begin_mode     = tentative_begin_duration_mode;
-        current_interval.end_mode       = tentative_end_duration_mode  ;
-        last_input_duration             = current_interval.end_duration;
+        current_interval_.begin_duration = tentative_begin_duration     ;
+        current_interval_.end_duration   = tentative_end_duration       ;
+        current_interval_.begin_mode     = tentative_begin_duration_mode;
+        current_interval_.end_mode       = tentative_end_duration_mode  ;
+        last_input_duration_ = current_interval_.end_duration;
         }
 }
 
-void InputSequence::duration()
+void SequenceParser::duration()
 {
-    switch(current_token_type)
+    switch(current_token_type_)
         {
         case e_eof:
         case e_major_separator:
@@ -653,73 +705,75 @@ void InputSequence::duration()
             break;
         default:
             {
-            diagnostics << "Expected number, '[', '(', 'retirement', or 'maturity'. ";
+            diagnostics_
+                << "Expected number, '[', '(', 'retirement', or 'maturity'. "
+                ;
             mark_diagnostic_context();
             }
         }
-    previous_duration_scalar_mode = current_duration_scalar_mode;
+    previous_duration_scalar_mode_ = current_duration_scalar_mode_;
 }
 
 // GRAMMAR value: floating-point-number
 // GRAMMAR value: value-constant
 
-void InputSequence::value()
+void SequenceParser::value()
 {
-    switch(current_token_type)
+    switch(current_token_type_)
         {
         case e_number:
             {
-            current_interval.value_is_keyword = false;
-            if(keywords_only)
+            current_interval_.value_is_keyword = false;
+            if(keywords_only_)
                 {
-                diagnostics
+                diagnostics_
                     << "Expected keyword chosen from { "
                     ;
                 std::copy
-                    (extra_keywords.begin()
-                    ,extra_keywords.end()
-                    ,std::ostream_iterator<std::string>(diagnostics, " ")
+                    (allowed_keywords_.begin()
+                    ,allowed_keywords_.end()
+                    ,std::ostream_iterator<std::string>(diagnostics_, " ")
                     );
-                diagnostics << "}. ";
+                diagnostics_ << "}. ";
                 mark_diagnostic_context();
                 break;
                 }
-            current_interval.value_number = current_number;
-            match(current_token_type);
+            current_interval_.value_number = current_number_;
+            match(current_token_type_);
             }
             break;
         case e_keyword:
             {
-            current_interval.value_is_keyword = true;
-            if(extra_keywords.empty())
+            current_interval_.value_is_keyword = true;
+            if(allowed_keywords_.empty())
                 {
-                diagnostics << "Expected number. ";
+                diagnostics_ << "Expected number. ";
                 mark_diagnostic_context();
                 break;
                 }
-            if(contains(extra_keywords, current_keyword))
+            if(contains(allowed_keywords_, current_keyword_))
                 {
-                current_interval.value_keyword = current_keyword;
-                match(current_token_type);
+                current_interval_.value_keyword = current_keyword_;
+                match(current_token_type_);
                 }
             else
                 {
-                diagnostics
+                diagnostics_
                     << "Expected keyword chosen from { "
                     ;
                 std::copy
-                    (extra_keywords.begin()
-                    ,extra_keywords.end()
-                    ,std::ostream_iterator<std::string>(diagnostics, " ")
+                    (allowed_keywords_.begin()
+                    ,allowed_keywords_.end()
+                    ,std::ostream_iterator<std::string>(diagnostics_, " ")
                     );
-                diagnostics << "}. ";
+                diagnostics_ << "}. ";
                 mark_diagnostic_context();
                 }
             }
             break;
         default:
             {
-            diagnostics << "Expected number or keyword. ";
+            diagnostics_ << "Expected number or keyword. ";
             mark_diagnostic_context();
             }
         }
@@ -728,12 +782,12 @@ void InputSequence::value()
 // GRAMMAR span: value
 // GRAMMAR span: value , duration
 
-void InputSequence::span()
+void SequenceParser::span()
 {
     // Assume interval is sane until shown otherwise.
-    current_interval.insane = false;
+    current_interval_.insane = false;
     value();
-    switch(current_token_type)
+    switch(current_token_type_)
         {
         case e_minor_separator:
             {
@@ -755,13 +809,16 @@ void InputSequence::span()
             break;
         default:
             {
-            diagnostics << "Expected ';', ',', '@', '#', '[', '(', number, 'retirement', or 'maturity'. ";
+            diagnostics_
+                << "Expected ';', ',', '@', '#', '[', '(',"
+                << " number, 'retirement', or 'maturity'. "
+                ;
             mark_diagnostic_context();
             }
         }
-    if(!current_interval.insane)
+    if(!current_interval_.insane)
         {
-        intervals.push_back(current_interval);
+        intervals_.push_back(current_interval_);
         }
 }
 
@@ -769,23 +826,23 @@ void InputSequence::span()
 // GRAMMAR sequence: span ; span
 // GRAMMAR sequence: series ;
 
-void InputSequence::sequence()
+void SequenceParser::sequence()
 {
     // Numbers should always be set explicitly, so we initialize
     // them to recognizable, implausible values. Set the 'insane'
     // flag: assume the sequence is insane until known otherwise.
-    current_interval.value_number     = -999999999999.999;
-    current_interval.value_keyword    = "insane";
-    current_interval.value_is_keyword = true;
-    current_interval.begin_duration   = -1;
-    current_interval.begin_mode       = e_invalid_mode;
-    current_interval.end_duration     = -2;
-    current_interval.end_mode         = e_invalid_mode;
-    current_interval.insane           = true;
+    current_interval_.value_number     = -999999999999.999;
+    current_interval_.value_keyword    = "daft";
+    current_interval_.value_is_keyword = true;
+    current_interval_.begin_duration   = -1;
+    current_interval_.begin_mode       = e_invalid_mode;
+    current_interval_.end_duration     = -2;
+    current_interval_.end_mode         = e_invalid_mode;
+    current_interval_.insane           = true;
 
     for(;;)
         {
-        switch(current_token_type)
+        switch(current_token_type_)
             {
             case e_eof:
                 {
@@ -793,8 +850,8 @@ void InputSequence::sequence()
                 }
             case e_major_separator:
                 {
-                match(current_token_type);
-                if(e_eof == current_token_type)
+                match(current_token_type_);
+                if(e_eof == current_token_type_)
                     {
                     return;
                     }
@@ -804,8 +861,8 @@ void InputSequence::sequence()
 // TODO ?? Superfluous. Same comment elsewhere. Fall through instead.
             case e_startup:
                 {
-                match(current_token_type);
-                if(e_eof == current_token_type)
+                match(current_token_type_);
+                if(e_eof == current_token_type_)
                     {
                     return;
                     }
@@ -814,7 +871,7 @@ void InputSequence::sequence()
                 break;
             default:
                 {
-                diagnostics << "Expected ';'. ";
+                diagnostics_ << "Expected ';'. ";
                 mark_diagnostic_context();
                 return;
                 }
@@ -822,12 +879,12 @@ void InputSequence::sequence()
         }
 }
 
-InputSequence::token_type InputSequence::get_token()
+SequenceParser::token_type SequenceParser::get_token()
 {
     char c = '\0';
     do
         {
-        if(!input_stream.get(c))
+        if(!input_stream_.get(c))
             {
             // COMPILER !! bc++5.02 puts garbage into 'c': reset to '\0'.
             // I believe [27.6.1.3] doesn't allow the garbage.
@@ -841,7 +898,7 @@ InputSequence::token_type InputSequence::get_token()
         {
         case 0:
             {
-            return current_token_type = e_eof;
+            return current_token_type_ = e_eof;
             }
         case e_major_separator:
         case e_minor_separator:
@@ -852,24 +909,24 @@ InputSequence::token_type InputSequence::get_token()
         case e_age_prefix:
         case e_cardinal_prefix:
             {
-            return current_token_type = token_type(c);
+            return current_token_type_ = token_type(c);
             }
         case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9':
         case '.': case '-':
             {
-            input_stream.putback(c);
+            input_stream_.putback(c);
             // TODO ?? Assigning 0.0 here at least gives a predictable
             // value upon failure. We can't read both '.' and the
             // following character and then reliably put both back.
-            current_number = 0.0;
-            input_stream >> current_number;
-            if(input_stream.fail())
+            current_number_ = 0.0;
+            input_stream_ >> current_number_;
+            if(input_stream_.fail())
                 {
-                diagnostics << "Invalid number '" << c << "'. ";
+                diagnostics_ << "Invalid number '" << c << "'. ";
                 mark_diagnostic_context();
                 }
-            return current_token_type = e_number;
+            return current_token_type_ = e_number;
             }
         // An arbitrary rule must be selected for keyword names;
         // we choose the regexp '[a-z][a-z0-9_]*'.
@@ -880,9 +937,9 @@ InputSequence::token_type InputSequence::get_token()
         case 'u': case 'v': case 'w': case 'x': case 'y':
         case 'z':
             {
-            current_keyword = c;
+            current_keyword_ = c;
             while
-                (  input_stream.get(c)
+                (  input_stream_.get(c)
                 && ((is_ok_for_cctype(c) && std::isalnum(c)) || '_' == c)
                 )
                 {
@@ -891,21 +948,21 @@ InputSequence::token_type InputSequence::get_token()
                 // whence this and other ideas are borrowed, but gcc-2.95.x
                 // seems not to support it; operator+=() is likely to be
                 // implemented the same way anyway.
-                current_keyword += c;
+                current_keyword_ += c;
                 }
-            input_stream.putback(c);
-            return current_token_type = e_keyword;
+            input_stream_.putback(c);
+            return current_token_type_ = e_keyword;
             }
         default:
             {
-            diagnostics << "Unknown token '" << c << "'. ";
+            diagnostics_ << "Unknown token '" << c << "'. ";
             mark_diagnostic_context();
-            return current_token_type = token_type(0);
+            return current_token_type_ = token_type(0);
             }
         }
 }
 
-std::string InputSequence::token_type_name(InputSequence::token_type t)
+std::string SequenceParser::token_type_name(SequenceParser::token_type t)
 {
     switch(t)
         {
@@ -945,15 +1002,15 @@ std::string InputSequence::token_type_name(InputSequence::token_type t)
         }
 }
 
-void InputSequence::match(InputSequence::token_type t)
+void SequenceParser::match(SequenceParser::token_type t)
 {
-    if(current_token_type == t)
+    if(current_token_type_ == t)
         {
-        current_token_type = get_token();
+        current_token_type_ = get_token();
         }
     else
         {
-        diagnostics
+        diagnostics_
             << "Expected '"
             << token_type_name(t)
             << "' . "
@@ -962,12 +1019,12 @@ void InputSequence::match(InputSequence::token_type t)
         }
 }
 
-void InputSequence::mark_diagnostic_context()
+void SequenceParser::mark_diagnostic_context()
 {
-    diagnostics
+    diagnostics_
         << "Current token '"
-        << token_type_name(current_token_type)
-        << "' at position " << input_stream.tellg()
+        << token_type_name(current_token_type_)
+        << "' at position " << input_stream_.tellg()
         << ".\n"
         ;
 }
@@ -979,7 +1036,9 @@ std::string InputSequence::formatted_diagnostics
     (bool show_first_message_only
     ) const
 {
-    std::string s(diagnostics.str());
+    // Data member parser_diagnostics_ exists only so that this function
+    // can return it. Eliminate it when this function is eliminated.
+    std::string s(parser_diagnostics_);
     if(show_first_message_only)
         {
         std::string::size_type z(s.find('\n'));
@@ -993,12 +1052,12 @@ std::string InputSequence::formatted_diagnostics
 
 std::vector<double> const& InputSequence::linear_number_representation() const
 {
-    return number_result;
+    return number_result_;
 }
 
 std::vector<std::string> const& InputSequence::linear_keyword_representation() const
 {
-    return keyword_result;
+    return keyword_result_;
 }
 
 /// Regularized representation in [x,y) interval notation.
@@ -1021,7 +1080,7 @@ std::vector<std::string> const& InputSequence::linear_keyword_representation() c
 std::string InputSequence::mathematical_representation() const
 {
     std::ostringstream oss;
-    for(auto const& interval_i : intervals)
+    for(auto const& interval_i : intervals_)
         {
         if(interval_i.value_is_keyword)
             {
@@ -1032,12 +1091,12 @@ std::string InputSequence::mathematical_representation() const
             oss << value_cast<std::string>(interval_i.value_number);
             }
 
-        if(1 == intervals.size())
+        if(1 == intervals_.size())
             {
             break;
             }
 
-        if(interval_i.end_duration != years_to_maturity)
+        if(interval_i.end_duration != years_to_maturity_)
             {
             oss
                 << " ["
@@ -1063,6 +1122,6 @@ std::string InputSequence::mathematical_representation() const
 
 std::vector<ValueInterval> const& InputSequence::interval_representation() const
 {
-    return intervals;
+    return intervals_;
 }
 

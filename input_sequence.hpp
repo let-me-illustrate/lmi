@@ -1,4 +1,4 @@
-// Input sequences e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0... : unit test.
+// Input sequences e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0....
 //
 // Copyright (C) 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
@@ -168,50 +168,28 @@ struct ValueInterval
     bool          insane;
 };
 
-class LMI_SO InputSequence
-    :        private lmi::uncopyable <InputSequence>
-    ,virtual private obstruct_slicing<InputSequence>
+class SequenceParser
+    :        private lmi::uncopyable <SequenceParser>
+    ,virtual private obstruct_slicing<SequenceParser>
 {
   public:
-    InputSequence
-        (std::string const& input_expression
-        ,int a_years_to_maturity
-        ,int a_issue_age
-        ,int a_retirement_age
-        ,int a_inforce_duration
-        ,int a_effective_year
-        ,std::vector<std::string> const& a_extra_keywords
-            = std::vector<std::string>()
-        ,std::string const& a_default_keyword = ""
-        ,bool a_keywords_only = false
+    SequenceParser
+        (std::string const&              input_expression
+        ,int                             a_years_to_maturity
+        ,int                             a_issue_age
+        ,int                             a_retirement_age
+        ,int                             a_inforce_duration
+        ,int                             a_effective_year
+        ,std::vector<std::string> const& a_allowed_keywords
+        ,bool                            a_keywords_only
         );
 
-    InputSequence
-        (std::vector<double> const&
-        );
-    InputSequence
-        (std::vector<std::string> const&
-        );
-    InputSequence
-        (std::vector<double> const&
-        ,std::vector<std::string> const&
-        );
-    ~InputSequence();
+    ~SequenceParser();
 
-    std::vector<double>      const& linear_number_representation()  const;
-    std::vector<std::string> const& linear_keyword_representation() const;
-
-    std::string mathematical_representation() const;
-
-    std::vector<ValueInterval> const& interval_representation() const;
-
-    std::string formatted_diagnostics
-        (bool show_first_message_only = false
-        ) const;
+    std::string diagnostics() const;
+    std::vector<ValueInterval> const& intervals() const;
 
   private:
-    void realize_vector();
-
     enum token_type
         {e_eof             = 0
         ,e_major_separator = ';'
@@ -243,35 +221,91 @@ class LMI_SO InputSequence
     void span();
     void sequence();
     token_type get_token();
-    void match(token_type t);
+    void match(token_type);
 
     void mark_diagnostic_context();
 
-    std::istringstream input_stream;
-    int years_to_maturity;
-    int issue_age;
-    int retirement_age;
-    int inforce_duration;
-    int effective_year;
-    std::vector<std::string> extra_keywords;
-    std::string default_keyword;
-    bool keywords_only;
+    std::istringstream input_stream_;
 
-    token_type current_token_type;
-    double current_number;
-    std::string current_keyword;
-    int current_duration_scalar;
-    duration_mode previous_duration_scalar_mode;
-    duration_mode current_duration_scalar_mode;
+    // Copies of ctor args that are identical to class InputSequence's.
+    int years_to_maturity_;
+    int issue_age_;
+    int retirement_age_;
+    int inforce_duration_;
+    int effective_year_;
+    std::vector<std::string> allowed_keywords_;
+    bool keywords_only_;
 
-    int last_input_duration;
+    token_type current_token_type_;
+    double current_number_;
+    std::string current_keyword_;
+    int current_duration_scalar_;
+    duration_mode previous_duration_scalar_mode_;
+    duration_mode current_duration_scalar_mode_;
+    ValueInterval current_interval_;
+    int last_input_duration_;
 
-    std::ostringstream diagnostics;
+    std::ostringstream diagnostics_;
 
-    ValueInterval current_interval;
-    std::vector<ValueInterval> intervals;
-    std::vector<double> number_result;
-    std::vector<std::string> keyword_result;
+    std::vector<ValueInterval> intervals_;
+};
+
+class LMI_SO InputSequence
+    :        private lmi::uncopyable <InputSequence>
+    ,virtual private obstruct_slicing<InputSequence>
+{
+  public:
+    InputSequence
+        (std::string const&              input_expression
+        ,int                             a_years_to_maturity
+        ,int                             a_issue_age
+        ,int                             a_retirement_age
+        ,int                             a_inforce_duration
+        ,int                             a_effective_year
+        ,std::vector<std::string> const& a_allowed_keywords
+            = std::vector<std::string>()
+        ,bool                            a_keywords_only = false
+        ,std::string const&              a_default_keyword = ""
+        );
+
+    InputSequence(std::vector<double> const&);
+    InputSequence(std::vector<std::string> const&);
+    InputSequence(std::vector<double> const&, std::vector<std::string> const&);
+
+    ~InputSequence();
+
+    std::vector<double>      const& linear_number_representation()  const;
+    std::vector<std::string> const& linear_keyword_representation() const;
+
+    std::string mathematical_representation() const;
+
+    std::vector<ValueInterval> const& interval_representation() const;
+
+    std::string formatted_diagnostics
+        (bool show_first_message_only = false
+        ) const;
+
+  private:
+    void realize_vector();
+
+    // Copies of ctor args that are identical to class SequenceParser's.
+    // Most of these copies are unused as this is written in 2017-01;
+    // they're retained in case a use is someday found for them.
+    int years_to_maturity_;
+    int issue_age_;
+    int retirement_age_;
+    int inforce_duration_;
+    int effective_year_;
+    std::vector<std::string> allowed_keywords_;
+    bool keywords_only_;
+    // Copy of a ctor arg that is unique to this class.
+    std::string default_keyword_;
+
+    std::string parser_diagnostics_;
+
+    std::vector<ValueInterval> intervals_;
+    std::vector<double> number_result_;
+    std::vector<std::string> keyword_result_;
 };
 
 #endif // input_sequence_hpp
