@@ -108,13 +108,13 @@ InputSequence::InputSequence
 {
     SequenceParser parser
         (input_expression
-        ,years_to_maturity_
-        ,issue_age_
-        ,retirement_age_
-        ,inforce_duration_
-        ,effective_year_
-        ,allowed_keywords_
-        ,keywords_only_
+        ,a_years_to_maturity
+        ,a_issue_age
+        ,a_retirement_age
+        ,a_inforce_duration
+        ,a_effective_year
+        ,a_allowed_keywords
+        ,a_keywords_only
         );
 
     parser_diagnostics_ = parser.diagnostics();
@@ -137,7 +137,7 @@ InputSequence::InputSequence
 
     // This invariant has not yet been established, whether or not the
     // sequence was empty.
-    intervals_.back().end_duration = years_to_maturity_;
+    intervals_.back().end_duration = a_years_to_maturity;
     // This invariant is established by realize_vector(), but it does
     // no harm to repeat it here, and it would be confusing not to do
     // so in conjunction with the line above.

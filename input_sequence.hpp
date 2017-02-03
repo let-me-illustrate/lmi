@@ -289,6 +289,8 @@ class LMI_SO InputSequence
     void realize_vector();
 
     // Copies of ctor args that are identical to class SequenceParser's.
+    // Most of these copies are unused as this is written in 2017-01;
+    // they're retained in case a use is someday found for them.
     int years_to_maturity_;
     int issue_age_;
     int retirement_age_;
