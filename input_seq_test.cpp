@@ -31,8 +31,8 @@
 void check
     (char const*                     file
     ,int                             line
-    ,double const*                   d
     ,int                             n
+    ,double const*                   d
     ,std::string const&              e
     ,char const*                     m = ""
     ,std::vector<std::string> const& k = std::vector<std::string>()
@@ -138,7 +138,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
     std::string const e("");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // An all-blank string is treated as zero.
@@ -146,7 +146,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e(" ");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Make sure example in comment at top works.
@@ -155,7 +155,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 7, 7, 0, 0, 0, 0};
     std::string const e("1 3; 7 5;0");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Numbers separated by semicolons mean values; the last is
@@ -164,7 +164,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 2, 3, 3, 3};
     std::string const e("1; 2; 3");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Number-pairs separated by semicolons mean {value, end-duration}.
@@ -172,7 +172,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 3; 3 6; 5 9; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // {value, @ attained_age}
@@ -180,7 +180,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 @93; 3 @96; 5 @99; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // {value, # number_of_years_since_last_interval_endpoint}
@@ -188,7 +188,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 #3; 3 #3; 5 #3; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // {value [|( begin-duration, end-duration ]|) }
@@ -198,7 +198,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 3, 3, 3, 5, 7, 7, 7};
     std::string const e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Test (a,b].
@@ -206,7 +206,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 7, 7};
     std::string const e("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Test a mixture of all five ways of specifying duration.
@@ -214,7 +214,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 1, 2, 3, 4, 5, 5};
     std::string const e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Test intervals of length one.
@@ -222,7 +222,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
     std::string const e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Test empty intervals.
@@ -230,7 +230,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
     std::string const e("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Test subtly improper intervals.
@@ -246,7 +246,7 @@ int test_main(int, char*[])
         "Interval [ 3, 3 ) is improper: it ends before it begins."
         " Current token ';' at position 29.\n"
         ;
-    check(__FILE__, __LINE__, d, n, e, m);
+    check(__FILE__, __LINE__, n, d, e, m);
     }
 
     // Test grossly improper intervals.
@@ -262,7 +262,7 @@ int test_main(int, char*[])
         "Interval [ 6, 5 ) is improper: it ends before it begins."
         " Current token ';' at position 32.\n"
         ;
-    check(__FILE__, __LINE__, d, n, e, m);
+    check(__FILE__, __LINE__, n, d, e, m);
     }
 
     // Test an expression with gaps between intervals. Because the
@@ -271,7 +271,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 1, 0, 3, 0, 5, 7, 7, 7};
     std::string const e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Test overlapping intervals.
@@ -279,7 +279,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 5, 5, 7, 7};
     std::string const e("1; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Test intervals with decreasing begin-points.
@@ -291,7 +291,7 @@ int test_main(int, char*[])
         "Previous interval began at duration 5;"
         " current interval [ 2, 5 ) would begin before that."
         ;
-    check(__FILE__, __LINE__, d, n, e, m);
+    check(__FILE__, __LINE__, n, d, e, m);
     }
 
     // Durations with '@' prefix mean attained age.
@@ -299,7 +299,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12, 0, 27, 0, 1, 7, 7, 7, 7};
     std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, 5]; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // Test floating-point values; we choose values that we know
@@ -309,7 +309,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625 (@94,5]; 7.5");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
     // {value, @ age} means {value, to-attained-age}
@@ -317,7 +317,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 @93; 3 @96; 5 @99; 7");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     }
 
 // SOMEDAY !! Also support and test:
@@ -360,12 +360,12 @@ int test_main(int, char*[])
     double const d[n] = { 0 ,  0 ,   0  ,   0  ,  0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("p[0, 2); rrr [2, 4);q[4, 6);");
     strvec const k{"not_used", "p", "q", "r", "rr", "rrr"};
-    check(__FILE__, __LINE__, d, n, e, "", k, c);
+    check(__FILE__, __LINE__, n, d, e, "", k, c);
     // Toggle keywords-only switch on: same result.
     bool const o = true;
-    check(__FILE__, __LINE__, d, n, e, "", k, c, o);
+    check(__FILE__, __LINE__, n, d, e, "", k, c, o);
     // Toggle keywords-only switch explicitly off: same result.
-    check(__FILE__, __LINE__, d, n, e, "", k, c, false);
+    check(__FILE__, __LINE__, n, d, e, "", k, c, false);
     }
 
     // Test numbers mixed with (enumerative) allowed keywords.
@@ -375,7 +375,7 @@ int test_main(int, char*[])
     double const d[n] ={ 1,  1,       0     ,       0     ,  5,  5,  7,  7,  7};
     std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
     strvec const k{"keyword_00"};
-    check(__FILE__, __LINE__, d, n, e, "", k, c);
+    check(__FILE__, __LINE__, n, d, e, "", k, c);
     }
 
     // Test numbers mixed with (enumerative) allowed keywords, with
@@ -387,7 +387,7 @@ int test_main(int, char*[])
     std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
     strvec const k{"p", "q", "z"};
     std::string w("z");
-    check(__FILE__, __LINE__, d, n, e, "", k, c, false, w);
+    check(__FILE__, __LINE__, n, d, e, "", k, c, false, w);
     }
 
     // Test keywords-only switch with input it forbids.
@@ -408,7 +408,7 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     std::string w("z");
     bool const o = true;
-    check(__FILE__, __LINE__, d, n, e, m, k, c, o, w);
+    check(__FILE__, __LINE__, n, d, e, m, k, c, o, w);
     }
 
     // Test an expression with a gap between intervals, with the
@@ -421,7 +421,7 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     std::string w("z");
     bool const o = true;
-    check(__FILE__, __LINE__, d, n, e, "", k, c, o, w);
+    check(__FILE__, __LINE__, n, d, e, "", k, c, o, w);
     }
 
     // Test an expression with a gap between intervals, with the
@@ -439,7 +439,7 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     std::string w("u");
     bool const o = true;
-    check(__FILE__, __LINE__, d, n, e, "", k, c, o, w);
+    check(__FILE__, __LINE__, n, d, e, "", k, c, o, w);
     }
 
     // Duration keywords: {retirement, maturity}
@@ -447,7 +447,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
     std::string const e("7, retirement; 4, maturity");
-    check(__FILE__, __LINE__, d, n, e);
+    check(__FILE__, __LINE__, n, d, e);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.interval_representation());
     BOOST_TEST_EQUAL(e_inception , i[0].begin_mode);
@@ -465,7 +465,7 @@ int test_main(int, char*[])
         "Expected number or keyword."
         " Current token '[' at position 1.\n"
         ;
-    check(__FILE__, __LINE__, d, n, e, m);
+    check(__FILE__, __LINE__, n, d, e, m);
     }
 
     return 0;
