@@ -186,8 +186,8 @@ class SequenceParser
 
     ~SequenceParser();
 
-    std::string EXPEDIENTdiagnostics() const;
-    std::vector<ValueInterval> const& EXPEDIENTintervals() const;
+    std::string diagnostics() const;
+    std::vector<ValueInterval> const& intervals() const;
 
   private:
     enum token_type
@@ -299,7 +299,7 @@ class LMI_SO InputSequence
     // Copy of a ctor arg that is unique to this class.
     std::string default_keyword_;
 
-    std::string EXPEDIENTdiagnostics_;
+    std::string parser_diagnostics_;
 
     std::vector<ValueInterval> intervals_;
     std::vector<double> number_result_;

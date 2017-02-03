@@ -76,12 +76,12 @@ SequenceParser::SequenceParser
 
 SequenceParser::~SequenceParser() = default;
 
-std::string SequenceParser::EXPEDIENTdiagnostics() const
+std::string SequenceParser::diagnostics() const
 {
     return diagnostics_.str();
 }
 
-std::vector<ValueInterval> const& SequenceParser::EXPEDIENTintervals() const
+std::vector<ValueInterval> const& SequenceParser::intervals() const
 {
     return intervals_;
 }
@@ -117,8 +117,8 @@ InputSequence::InputSequence
         ,keywords_only_
         );
 
-    EXPEDIENTdiagnostics_ = parser.EXPEDIENTdiagnostics();
-    intervals_ = parser.EXPEDIENTintervals();
+    parser_diagnostics_ = parser.diagnostics();
+    intervals_ = parser.intervals();
 
     // Inception and maturity endpoints exist, so the interval they
     // define must exist. However, parsing an empty expression
@@ -1022,7 +1022,9 @@ std::string InputSequence::formatted_diagnostics
     (bool show_first_message_only
     ) const
 {
-    std::string s(EXPEDIENTdiagnostics_);
+    // Data member parser_diagnostics_ exists only so that this function
+    // can return it. Eliminate it when this function is eliminated.
+    std::string s(parser_diagnostics_);
     if(show_first_message_only)
         {
         std::string::size_type z(s.find('\n'));
