@@ -353,7 +353,7 @@ void InputSequence::realize_vector()
                 << LMI_FLUSH
                 ;
             }
-        if(interval_i.value_is_keyword && "insane" == interval_i.value_keyword)
+        if(interval_i.value_is_keyword && "daft" == interval_i.value_keyword)
             {
             fatal_error()
                 << "Interval "
@@ -818,7 +818,7 @@ void SequenceParser::sequence()
     // them to recognizable, implausible values. Set the 'insane'
     // flag: assume the sequence is insane until known otherwise.
     current_interval.value_number     = -999999999999.999;
-    current_interval.value_keyword    = "insane";
+    current_interval.value_keyword    = "daft";
     current_interval.value_is_keyword = true;
     current_interval.begin_duration   = -1;
     current_interval.begin_mode       = e_invalid_mode;
