@@ -66,10 +66,6 @@ SequenceParser::SequenceParser
     ,effective_year_                (a_effective_year)
     ,allowed_keywords_              (a_allowed_keywords)
     ,keywords_only_                 (a_keywords_only)
-    ,current_token_type_            (e_startup)
-    ,previous_duration_scalar_mode_ (e_inception)
-    ,current_duration_scalar_mode_  (e_inception)
-    ,last_input_duration_           (0)
 {
     sequence();
 }
@@ -828,9 +824,14 @@ void SequenceParser::span()
 
 void SequenceParser::sequence()
 {
-    // Numbers should always be set explicitly, so we initialize
-    // them to recognizable, implausible values. Set the 'insane'
-    // flag: assume the sequence is insane until known otherwise.
+    current_token_type_            = e_startup;
+    previous_duration_scalar_mode_ = e_inception;
+    current_duration_scalar_mode_  = e_inception;
+    last_input_duration_           = 0;
+
+    // All ValueInterval members should be set explicitly, so
+    // initialize them now to recognizable, implausible values,
+    // such that the interval is insane until modified.
     current_interval_.value_number     = -999999999999.999;
     current_interval_.value_keyword    = "daft";
     current_interval_.value_is_keyword = true;
