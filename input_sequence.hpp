@@ -36,7 +36,7 @@
 // values that don't fit the [issue, retirement), [retirement, maturity)
 // paradigm, such as premiums following the exact pattern
 //   premium: 50000 25000 25000 10000 10000...
-// but these pardigms are disjoint, so it could not easily accomodate
+// but these paradigms are disjoint, so it could not easily accommodate
 //   premium: 50000; 25000 [1, 3); 10000 [3, retirement); 0
 // Applying such a rule across a census of 1000 lives required manually
 // editing each life, which was unacceptably tedious.
