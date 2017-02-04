@@ -265,7 +265,7 @@ class LMI_SO InputSequence
         ,std::vector<std::string> const& a_allowed_keywords
             = std::vector<std::string>()
         ,bool                            a_keywords_only = false
-        ,std::string const&              a_default_keyword = ""
+        ,std::string const&              a_default_keyword = std::string()
         );
 
     InputSequence(std::vector<double> const&);
