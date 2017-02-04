@@ -262,10 +262,9 @@ class LMI_SO InputSequence
         ,int                             a_retirement_age
         ,int                             a_inforce_duration
         ,int                             a_effective_year
-        ,std::vector<std::string> const& a_allowed_keywords
-            = std::vector<std::string>()
-        ,bool                            a_keywords_only = false
-        ,std::string const&              a_default_keyword = std::string()
+        ,std::vector<std::string> const& a_allowed_keywords = {}
+        ,bool                            a_keywords_only    = false
+        ,std::string const&              a_default_keyword  = std::string()
         );
 
     InputSequence(std::vector<double> const&);
