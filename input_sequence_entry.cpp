@@ -50,6 +50,7 @@
 #include <wx/valtext.h>
 
 #include <algorithm>                    // std::copy()
+#include <exception>
 #include <iterator>                     // std::back_inserter()
 #include <map>
 #include <vector>
@@ -1208,24 +1209,32 @@ wxString InputSequenceEditor::get_diagnostics_message()
 
     // Diagnose unanticipated input errors by invoking the parser;
     // return the first line of its diagnostics as an error message.
-    InputSequence const sequence
-        (sequence_string()
-        ,input_.years_to_maturity()
-        ,input_.issue_age        ()
-        ,input_.retirement_age   ()
-        ,input_.inforce_year     ()
-        ,input_.effective_year   ()
-        ,keywords_
-        ,keywords_only_
-        ,default_keyword_
-        );
-    std::string parser_diagnostics(sequence.formatted_diagnostics());
-    std::string::size_type z(parser_diagnostics.find('\n'));
-    if(std::string::npos != z)
+    try
         {
-        parser_diagnostics.erase(z);
+        InputSequence const sequence
+            (sequence_string()
+            ,input_.years_to_maturity()
+            ,input_.issue_age        ()
+            ,input_.retirement_age   ()
+            ,input_.inforce_year     ()
+            ,input_.effective_year   ()
+            ,keywords_
+            ,keywords_only_
+            ,default_keyword_
+            );
         }
-    return wxString(parser_diagnostics.c_str());
+    catch(std::exception const& e)
+        {
+        std::string parser_diagnostics(e.what());
+        std::string::size_type z(parser_diagnostics.find('\n'));
+        if(std::string::npos != z)
+            {
+            parser_diagnostics.erase(z);
+            }
+        return wxString(parser_diagnostics.c_str());
+        }
+
+    return wxString();
 }
 
 void InputSequenceEditor::UponValueChange(wxCommandEvent&)
@@ -1552,26 +1561,29 @@ void InputSequenceEntry::DoOpenEditor()
     LMI_ASSERT(!(keywords_only && keywords.empty()));
     editor.set_keywords(keywords, keywords_only, ds.default_keyword());
 
-    InputSequence sequence
-        (sequence_string
-        ,in.years_to_maturity()
-        ,in.issue_age        ()
-        ,in.retirement_age   ()
-        ,in.inforce_year     ()
-        ,in.effective_year   ()
-        ,keywords
-        ,keywords_only
-        ,ds.default_keyword()
-        );
-
-    std::string parser_diagnostics(sequence.formatted_diagnostics());
-    std::string::size_type z(parser_diagnostics.find('\n'));
-    if(std::string::npos != z)
+    try
         {
-        parser_diagnostics.erase(z);
+        InputSequence sequence
+            (sequence_string
+            ,in.years_to_maturity()
+            ,in.issue_age        ()
+            ,in.retirement_age   ()
+            ,in.inforce_year     ()
+            ,in.effective_year   ()
+            ,keywords
+            ,keywords_only
+            ,ds.default_keyword()
+            );
+        editor.sequence(sequence);
         }
-    if(!parser_diagnostics.empty())
+    catch(std::exception const& e)
         {
+        std::string parser_diagnostics(e.what());
+        std::string::size_type z(parser_diagnostics.find('\n'));
+        if(std::string::npos != z)
+            {
+            parser_diagnostics.erase(z);
+            }
         warning()
             << "The sequence is invalid and cannot be edited visually.\n"
             << parser_diagnostics
@@ -1579,8 +1591,6 @@ void InputSequenceEntry::DoOpenEditor()
             ;
         return;
         }
-
-    editor.sequence(sequence);
 
     editor.associate_text_ctrl(text_);
     editor.CentreOnParent();
