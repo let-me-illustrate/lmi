@@ -36,6 +36,7 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
+#include <exception>
 #include <functional>                   // std::bind()
 #include <sstream>
 #include <utility>                      // std::pair
@@ -928,6 +929,21 @@ int Input::must_overwrite_specamt_with_obsolete_history
         {
         realize_sequence_string(*this, u, numeric_sequence(specamt));
         realize_sequence_string(*this, v, numeric_sequence(history));
+        }
+    catch(std::exception const& e)
+        {
+        if(!hide_errors)
+            {
+            warning()
+                << "Possible conflict between specified amount and history."
+                << " Merge them manually into the specified-amount field."
+                << "\nSpecified amount: " << specamt
+                << "\nHistory: " << history
+                << "\nError: " << e.what()
+                << LMI_FLUSH
+                ;
+            }
+        return 2;
         }
     catch(...)
         {

@@ -918,11 +918,21 @@ InputSequence::~InputSequence() = default;
 
 std::vector<double> const& InputSequence::linear_number_representation() const
 {
+    if(!formatted_diagnostics().empty())
+        {
+        fatal_error() << formatted_diagnostics() << LMI_FLUSH;
+        }
+
     return number_result_;
 }
 
 std::vector<std::string> const& InputSequence::linear_keyword_representation() const
 {
+    if(!formatted_diagnostics().empty())
+        {
+        fatal_error() << formatted_diagnostics() << LMI_FLUSH;
+        }
+
     return keyword_result_;
 }
 
@@ -945,6 +955,11 @@ std::vector<std::string> const& InputSequence::linear_keyword_representation() c
 
 std::string InputSequence::mathematical_representation() const
 {
+    if(!formatted_diagnostics().empty())
+        {
+        fatal_error() << formatted_diagnostics() << LMI_FLUSH;
+        }
+
     std::ostringstream oss;
     for(auto const& interval_i : intervals_)
         {
