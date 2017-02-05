@@ -29,6 +29,7 @@
 #include "input.hpp"
 #include "input_seq_helpers.hpp"
 #include "input_sequence.hpp"
+#include "miscellany.hpp"               // rtrim()
 #include "mvc_controller.hpp"
 #include "numeric_io_cast.hpp"
 #include "value_cast.hpp"
@@ -1194,7 +1195,8 @@ bool InputSequenceEditor::is_valid_value(wxString const& w)
 
 wxString InputSequenceEditor::get_diagnostics_message()
 {
-    // Check some common problems and issue nice error messages for them:
+    // Diagnose anticipated input errors; return an error message,
+    // written in the context of the GUI, for the first error found.
     for(int row = 0; row < rows_count_; ++row)
         {
         wxString const value = value_field(row).GetValue();
@@ -1205,8 +1207,8 @@ wxString InputSequenceEditor::get_diagnostics_message()
             return wxString::Format("Invalid keyword \"%s\" on row %d.", value.c_str(), row);
         }
 
-    // As fallback, parse the sequence and check the diagnostics. This may be
-    // less human-readable, but it's better than nothing at all:
+    // Diagnose unanticipated input errors by invoking the parser;
+    // return the first line of its diagnostics as an error message.
     InputSequence const sequence
         (sequence_string()
         ,input_.years_to_maturity()
@@ -1216,10 +1218,9 @@ wxString InputSequenceEditor::get_diagnostics_message()
         ,input_.effective_year   ()
         ,keywords_
         );
-    wxString msg = sequence.formatted_diagnostics(true).c_str();
-    // formatted_diagnostics() returns newline-terminated string, fix it:
-    msg.Trim();
-    return msg;
+    std::string parser_diagnostics(sequence.formatted_diagnostics());
+    rtrim(parser_diagnostics, "\n");
+    return wxString(parser_diagnostics.c_str());
 }
 
 void InputSequenceEditor::UponValueChange(wxCommandEvent&)
@@ -1558,12 +1559,13 @@ void InputSequenceEntry::DoOpenEditor()
         ,ds.default_keyword()
         );
 
-    std::string const diagnostics = sequence.formatted_diagnostics(true);
-    if(!diagnostics.empty())
+    std::string parser_diagnostics(sequence.formatted_diagnostics());
+    rtrim(parser_diagnostics, "\n");
+    if(!parser_diagnostics.empty())
         {
         warning()
             << "The sequence is invalid and cannot be edited visually.\n"
-            << diagnostics
+            << parser_diagnostics
             << LMI_FLUSH
             ;
         return;
