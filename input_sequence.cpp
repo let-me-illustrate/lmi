@@ -37,6 +37,7 @@
 #include <iterator>                     // std::ostream_iterator
 #include <ostream>
 #include <sstream>
+#include <stdexcept>
 
 ValueInterval::ValueInterval()
     :value_number     (0.0)
@@ -1003,6 +1004,11 @@ std::string InputSequence::mathematical_representation() const
 
 std::vector<ValueInterval> const& InputSequence::interval_representation() const
 {
+    if(!formatted_diagnostics().empty())
+        {
+        throw std::runtime_error(formatted_diagnostics());
+        }
+
     return intervals_;
 }
 
