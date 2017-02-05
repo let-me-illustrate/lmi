@@ -1217,6 +1217,8 @@ wxString InputSequenceEditor::get_diagnostics_message()
         ,input_.inforce_year     ()
         ,input_.effective_year   ()
         ,keywords_
+        ,keywords_only_
+        ,default_keyword_
         );
     std::string parser_diagnostics(sequence.formatted_diagnostics());
     rtrim(parser_diagnostics, "\n");
