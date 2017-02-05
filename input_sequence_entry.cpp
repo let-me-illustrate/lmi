@@ -1587,7 +1587,7 @@ void InputSequenceEntry::DoOpenEditor()
         warning()
             << "The sequence is invalid and cannot be edited visually.\n"
             << parser_diagnostics
-            << LMI_FLUSH
+            << std::flush
             ;
         return;
         }
