@@ -224,11 +224,15 @@ void test_trimming()
     BOOST_TEST_EQUAL(s, "a");
 
     s = "a; ;";
-    ltrim(s, superfluous); rtrim(s, superfluous);
+    rtrim(s, superfluous); // Shows what rtrim() does.
+    BOOST_TEST_EQUAL(s, "a");
+    ltrim(s, superfluous); rtrim(s, superfluous); // Does nothing, correctly.
     BOOST_TEST_EQUAL(s, "a");
 
     s = "; ;a";
-    ltrim(s, superfluous); rtrim(s, superfluous);
+    ltrim(s, superfluous); // Shows what ltrim() does.
+    BOOST_TEST_EQUAL(s, "a");
+    ltrim(s, superfluous); rtrim(s, superfluous); // Does nothing, correctly.
     BOOST_TEST_EQUAL(s, "a");
 }
 
