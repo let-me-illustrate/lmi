@@ -29,7 +29,6 @@
 #include "input.hpp"
 #include "input_seq_helpers.hpp"
 #include "input_sequence.hpp"
-#include "miscellany.hpp"               // rtrim()
 #include "mvc_controller.hpp"
 #include "numeric_io_cast.hpp"
 #include "value_cast.hpp"
@@ -1221,7 +1220,11 @@ wxString InputSequenceEditor::get_diagnostics_message()
         ,default_keyword_
         );
     std::string parser_diagnostics(sequence.formatted_diagnostics());
-    rtrim(parser_diagnostics, "\n");
+    std::string::size_type z(parser_diagnostics.find('\n'));
+    if(std::string::npos != z)
+        {
+        parser_diagnostics.erase(z);
+        }
     return wxString(parser_diagnostics.c_str());
 }
 
@@ -1562,7 +1565,11 @@ void InputSequenceEntry::DoOpenEditor()
         );
 
     std::string parser_diagnostics(sequence.formatted_diagnostics());
-    rtrim(parser_diagnostics, "\n");
+    std::string::size_type z(parser_diagnostics.find('\n'));
+    if(std::string::npos != z)
+        {
+        parser_diagnostics.erase(z);
+        }
     if(!parser_diagnostics.empty())
         {
         warning()
