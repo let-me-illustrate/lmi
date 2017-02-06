@@ -1225,7 +1225,7 @@ wxString InputSequenceEditor::get_diagnostics_message()
         }
     catch(std::exception const& e)
         {
-        return wxString(abridge_diagnostics(e.what()).c_str());
+        return abridge_diagnostics(e.what());
         }
 
     return wxString();
