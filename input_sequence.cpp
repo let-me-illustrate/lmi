@@ -1111,19 +1111,40 @@ void InputSequence::realize_vector()
 /// describing all the anomalies diagnosed while parsing an input
 /// sequence. When that string is not empty, it is reasonable to throw
 /// an exception constructed from it--most generally, in its entirety.
+///
 /// In the important special case where diagnostics are to be shown to
-/// end users to whom the full multiline set may be overwhelming, this
-/// function may be used to extract only the first line (without any
-/// terminal '\n'), which is presumably the most helpful element.
+/// end users, to whom the full multiline set may be overwhelming, use
+/// this function where the exception is caught. It extracts only the
+/// first line, which is presumably the most helpful element, removing
+/// that line's terminal '\n'.
+///
+/// It then strips anything SequenceParser::mark_diagnostic_context()
+/// may have added at the end (and any blanks preceding it), because
+/// end users are unlikely to know what a "token" is, or to care about
+/// the (origin-zero) offset of the error.
+///
+/// Precondition: the argument is not empty; throws otherwise.
+/// Postcondition: the return value is not empty; throws otherwise.
 
 std::string abridge_diagnostics(char const* what)
 {
     std::string s(what);
-    std::string::size_type z(s.find('\n'));
-    if(std::string::npos != z)
+    LMI_ASSERT(!s.empty());
+
+    std::string::size_type z0(s.find('\n'));
+    if(std::string::npos != z0)
         {
-        s.erase(z);
+        s.erase(z0);
         }
+
+    std::string::size_type z1(s.find("Current token"));
+    if(std::string::npos != z1)
+        {
+        s.erase(z1);
+        }
+    rtrim(s, " ");
+
+    LMI_ASSERT(!s.empty());
     return s;
 }
 

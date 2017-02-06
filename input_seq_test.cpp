@@ -237,6 +237,10 @@ int test_main(int, char*[])
         " Current token ';' at position 29.\n"
         ;
     check(__FILE__, __LINE__, n, d, e, m);
+    BOOST_TEST_EQUAL
+        ("Interval [ 0, 0 ) is improper: it ends before it begins."
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Test grossly improper intervals.
@@ -253,6 +257,10 @@ int test_main(int, char*[])
         " Current token ';' at position 32.\n"
         ;
     check(__FILE__, __LINE__, n, d, e, m);
+    BOOST_TEST_EQUAL
+        ("Interval [ 3, 1 ) is improper: it ends before it begins."
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Test an expression with gaps between intervals. Because the
@@ -282,6 +290,10 @@ int test_main(int, char*[])
         " current interval [ 2, 5 ) would begin before that."
         ;
     check(__FILE__, __LINE__, n, d, e, m);
+    BOOST_TEST_EQUAL
+        (std::string(m)
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Durations with '@' prefix mean attained age.
@@ -385,6 +397,10 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     std::string w("z");
     check(__FILE__, __LINE__, n, d, e, m, k, c, false, w);
+    BOOST_TEST_EQUAL
+        (std::string(m)
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Test keywords-only switch with input it forbids.
@@ -403,6 +419,10 @@ int test_main(int, char*[])
     bool const o = true;
     std::string w("z");
     check(__FILE__, __LINE__, n, d, e, m, k, c, o, w);
+    BOOST_TEST_EQUAL
+        ("Expected keyword chosen from { p q z }."
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Test an expression with a gap between intervals, with the
@@ -437,6 +457,10 @@ int test_main(int, char*[])
     bool const o = true;
     std::string w("u");
     check(__FILE__, __LINE__, n, d, e, m, k, c, o, w);
+    BOOST_TEST_EQUAL
+        (std::string(m)
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Duration keywords: {retirement, maturity}
@@ -463,6 +487,10 @@ int test_main(int, char*[])
         " Current token '[' at position 1.\n"
         ;
     check(__FILE__, __LINE__, n, d, e, m);
+    BOOST_TEST_EQUAL
+        ("Expected number or keyword."
+        ,abridge_diagnostics(m)
+        );
     }
 
     return 0;
