@@ -64,13 +64,7 @@ std::string realize_sequence_string
         }
     catch(std::exception const& e)
         {
-        std::string parser_diagnostics(e.what());
-        std::string::size_type z(parser_diagnostics.find('\n'));
-        if(std::string::npos != z)
-            {
-            parser_diagnostics.erase(z);
-            }
-        return parser_diagnostics;
+        return abridge_diagnostics(e.what());
         }
     return std::string();
 }
@@ -108,13 +102,7 @@ std::string realize_sequence_string
         }
     catch(std::exception const& e)
         {
-        std::string parser_diagnostics(e.what());
-        std::string::size_type z(parser_diagnostics.find('\n'));
-        if(std::string::npos != z)
-            {
-            parser_diagnostics.erase(z);
-            }
-        return parser_diagnostics;
+        return abridge_diagnostics(e.what());
         }
     return std::string();
 }
@@ -154,13 +142,7 @@ std::string realize_sequence_string
         }
     catch(std::exception const& e)
         {
-        std::string parser_diagnostics(e.what());
-        std::string::size_type z(parser_diagnostics.find('\n'));
-        if(std::string::npos != z)
-            {
-            parser_diagnostics.erase(z);
-            }
-        return parser_diagnostics;
+        return abridge_diagnostics(e.what());
         }
     return std::string();
 }

@@ -1225,13 +1225,7 @@ wxString InputSequenceEditor::get_diagnostics_message()
         }
     catch(std::exception const& e)
         {
-        std::string parser_diagnostics(e.what());
-        std::string::size_type z(parser_diagnostics.find('\n'));
-        if(std::string::npos != z)
-            {
-            parser_diagnostics.erase(z);
-            }
-        return wxString(parser_diagnostics.c_str());
+        return wxString(abridge_diagnostics(e.what()).c_str());
         }
 
     return wxString();
@@ -1578,15 +1572,9 @@ void InputSequenceEntry::DoOpenEditor()
         }
     catch(std::exception const& e)
         {
-        std::string parser_diagnostics(e.what());
-        std::string::size_type z(parser_diagnostics.find('\n'));
-        if(std::string::npos != z)
-            {
-            parser_diagnostics.erase(z);
-            }
         warning()
             << "The sequence is invalid and cannot be edited visually.\n"
-            << parser_diagnostics
+            << abridge_diagnostics(e.what())
             << std::flush
             ;
         return;
