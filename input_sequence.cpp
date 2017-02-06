@@ -734,7 +734,12 @@ InputSequence::InputSequence
         ,a_keywords_only
         );
 
-    parser_diagnostics_ = parser.diagnostics();
+    std::string const parser_diagnostics = parser.diagnostics();
+    if(!parser_diagnostics.empty())
+        {
+        throw std::runtime_error(parser_diagnostics);
+        }
+
     intervals_ = parser.intervals();
 
     // Inception and maturity endpoints exist, so the interval they
@@ -919,21 +924,11 @@ InputSequence::~InputSequence() = default;
 
 std::vector<double> const& InputSequence::linear_number_representation() const
 {
-    if(!formatted_diagnostics().empty())
-        {
-        throw std::runtime_error(formatted_diagnostics());
-        }
-
     return number_result_;
 }
 
 std::vector<std::string> const& InputSequence::linear_keyword_representation() const
 {
-    if(!formatted_diagnostics().empty())
-        {
-        throw std::runtime_error(formatted_diagnostics());
-        }
-
     return keyword_result_;
 }
 
@@ -956,11 +951,6 @@ std::vector<std::string> const& InputSequence::linear_keyword_representation() c
 
 std::string InputSequence::mathematical_representation() const
 {
-    if(!formatted_diagnostics().empty())
-        {
-        throw std::runtime_error(formatted_diagnostics());
-        }
-
     std::ostringstream oss;
     for(auto const& interval_i : intervals_)
         {
@@ -1004,33 +994,7 @@ std::string InputSequence::mathematical_representation() const
 
 std::vector<ValueInterval> const& InputSequence::interval_representation() const
 {
-    if(!formatted_diagnostics().empty())
-        {
-        throw std::runtime_error(formatted_diagnostics());
-        }
-
     return intervals_;
-}
-
-/// Rationale for option to show only first diagnostic:
-/// downstream errors can confuse users.
-
-std::string InputSequence::formatted_diagnostics
-    (bool show_first_message_only
-    ) const
-{
-    // Data member parser_diagnostics_ exists only so that this function
-    // can return it. Eliminate it when this function is eliminated.
-    std::string s(parser_diagnostics_);
-    if(show_first_message_only)
-        {
-        std::string::size_type z(s.find('\n'));
-        if(std::string::npos != z)
-            {
-            s.erase(z);
-            }
-        }
-    return s;
 }
 
 void InputSequence::realize_vector()
@@ -1049,12 +1013,6 @@ void InputSequence::realize_vector()
     std::vector<std::string> s(years_to_maturity_, default_keyword_);
     number_result_  = r;
     keyword_result_ = s;
-
-    // Vectors have default values if the input expression could not be parsed.
-    if(!formatted_diagnostics().empty())
-        {
-        return;
-        }
 
     int prior_begin_duration = 0;
     for(auto const& interval_i : intervals_)
@@ -1145,5 +1103,27 @@ void InputSequence::realize_vector()
 
     number_result_  = r;
     keyword_result_ = s;
+}
+
+/// Extract first substring from a '\n'-delimited exception::what().
+///
+/// SequenceParser::diagnostics() returns a '\n'-delimited string
+/// describing all the anomalies diagnosed while parsing an input
+/// sequence. When that string is not empty, it is reasonable to throw
+/// an exception constructed from it--most generally, in its entirety.
+/// In the important special case where diagnostics are to be shown to
+/// end users to whom the full multiline set may be overwhelming, this
+/// function may be used to extract only the first line (without any
+/// terminal '\n'), which is presumably the most helpful element.
+
+std::string abridge_diagnostics(char const* what)
+{
+    std::string s(what);
+    std::string::size_type z(s.find('\n'));
+    if(std::string::npos != z)
+        {
+        s.erase(z);
+        }
+    return s;
 }
 

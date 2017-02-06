@@ -280,10 +280,6 @@ class LMI_SO InputSequence
 
     std::vector<ValueInterval> const& interval_representation() const;
 
-    std::string formatted_diagnostics
-        (bool show_first_message_only = false
-        ) const;
-
   private:
     void realize_vector();
 
@@ -300,12 +296,12 @@ class LMI_SO InputSequence
     // Copy of a ctor arg that is unique to this class.
     std::string default_keyword_;
 
-    std::string parser_diagnostics_;
-
     std::vector<ValueInterval> intervals_;
     std::vector<double> number_result_;
     std::vector<std::string> keyword_result_;
 };
+
+std::string LMI_SO abridge_diagnostics(char const* what);
 
 #endif // input_sequence_hpp
 

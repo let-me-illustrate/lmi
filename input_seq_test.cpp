@@ -76,22 +76,7 @@ void check
             std::cout << std::endl;
             }
 
-        std::string const& x(seq.formatted_diagnostics());
-        std::string const y = (nullptr == m) ? std::string() : std::string(m);
-        bool const by = x == y;
-        if(!by)
-            {
-            std::cout
-                <<   "\nObserved diagnostics:"
-                << "\n\n'" << x << "'"
-                << "\n\ndiffer from expected:"
-                << "\n\n'" << y << "'"
-                << std::endl
-                ;
-            }
-
-        bool const b = bv && bs && by;
-        INVOKE_BOOST_TEST(b, file, line);
+        INVOKE_BOOST_TEST(bv && bs, file, line);
         }
     catch(std::exception const& x)
         {
@@ -403,9 +388,6 @@ int test_main(int, char*[])
     }
 
     // Test keywords-only switch with input it forbids.
-    // SOMEDAY !! It is not ideal for construction to succeed and give
-    // a vector of zeros. Instead, the ctor should throw what is now
-    // made available (only on demand) as formatted_diagnostics().
     {
     int const n = 10;
     strvec const c      {"z", "z", "z", "z", "z", "z", "z", "z", "z", "z"};
