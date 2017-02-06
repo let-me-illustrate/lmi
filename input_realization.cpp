@@ -50,16 +50,29 @@ std::string realize_sequence_string
     ,datum_sequence const& sequence_string
     )
 {
-    InputSequence s
-        (sequence_string.value()
-        ,input.years_to_maturity()
-        ,input.issue_age        ()
-        ,input.retirement_age   ()
-        ,input.inforce_year     ()
-        ,input.effective_year   ()
-        );
-    detail::convert_vector(v, s.linear_number_representation());
-    return s.formatted_diagnostics(true);
+    try
+        {
+        InputSequence s
+            (sequence_string.value()
+            ,input.years_to_maturity()
+            ,input.issue_age        ()
+            ,input.retirement_age   ()
+            ,input.inforce_year     ()
+            ,input.effective_year   ()
+            );
+        detail::convert_vector(v, s.linear_number_representation());
+        }
+    catch(std::exception const& e)
+        {
+        std::string parser_diagnostics(e.what());
+        std::string::size_type z(parser_diagnostics.find('\n'));
+        if(std::string::npos != z)
+            {
+            parser_diagnostics.erase(z);
+            }
+        return parser_diagnostics;
+        }
+    return std::string();
 }
 
 //============================================================================
@@ -73,24 +86,37 @@ std::string realize_sequence_string
     ,std::string       const& default_keyword
     )
 {
-    InputSequence s
-        (sequence_string.value()
-        ,input.years_to_maturity()
-        ,input.issue_age        ()
-        ,input.retirement_age   ()
-        ,input.inforce_year     ()
-        ,input.effective_year   ()
-        ,detail::extract_keys_from_string_map(keyword_dictionary)
-        ,true
-        ,default_keyword
-        );
-    detail::convert_vector
-        (v
-        ,s.linear_keyword_representation()
-        ,keyword_dictionary
-        ,default_keyword
-        );
-    return s.formatted_diagnostics(true);
+    try
+        {
+        InputSequence s
+            (sequence_string.value()
+            ,input.years_to_maturity()
+            ,input.issue_age        ()
+            ,input.retirement_age   ()
+            ,input.inforce_year     ()
+            ,input.effective_year   ()
+            ,detail::extract_keys_from_string_map(keyword_dictionary)
+            ,true
+            ,default_keyword
+            );
+        detail::convert_vector
+            (v
+            ,s.linear_keyword_representation()
+            ,keyword_dictionary
+            ,default_keyword
+            );
+        }
+    catch(std::exception const& e)
+        {
+        std::string parser_diagnostics(e.what());
+        std::string::size_type z(parser_diagnostics.find('\n'));
+        if(std::string::npos != z)
+            {
+            parser_diagnostics.erase(z);
+            }
+        return parser_diagnostics;
+        }
+    return std::string();
 }
 
 //============================================================================
@@ -105,25 +131,38 @@ std::string realize_sequence_string
     ,std::string         const& default_keyword
     )
 {
-    InputSequence s
-        (sequence_string.value()
-        ,input.years_to_maturity()
-        ,input.issue_age        ()
-        ,input.retirement_age   ()
-        ,input.inforce_year     ()
-        ,input.effective_year   ()
-        ,detail::extract_keys_from_string_map(keyword_dictionary)
-        ,false
-        ,default_keyword
-        );
-    detail::convert_vector(vn, s.linear_number_representation());
-    detail::convert_vector
-        (ve
-        ,s.linear_keyword_representation()
-        ,keyword_dictionary
-        ,default_keyword
-        );
-    return s.formatted_diagnostics(true);
+    try
+        {
+        InputSequence s
+            (sequence_string.value()
+            ,input.years_to_maturity()
+            ,input.issue_age        ()
+            ,input.retirement_age   ()
+            ,input.inforce_year     ()
+            ,input.effective_year   ()
+            ,detail::extract_keys_from_string_map(keyword_dictionary)
+            ,false
+            ,default_keyword
+            );
+        detail::convert_vector(vn, s.linear_number_representation());
+        detail::convert_vector
+            (ve
+            ,s.linear_keyword_representation()
+            ,keyword_dictionary
+            ,default_keyword
+            );
+        }
+    catch(std::exception const& e)
+        {
+        std::string parser_diagnostics(e.what());
+        std::string::size_type z(parser_diagnostics.find('\n'));
+        if(std::string::npos != z)
+            {
+            parser_diagnostics.erase(z);
+            }
+        return parser_diagnostics;
+        }
+    return std::string();
 }
 
 // SpecifiedAmount.allowed_keywords() does more or less the same
@@ -925,12 +964,9 @@ int Input::must_overwrite_specamt_with_obsolete_history
 {
     std::vector<tnr_unrestricted_double> u;
     std::vector<tnr_unrestricted_double> v;
-    try
-        {
-        realize_sequence_string(*this, u, numeric_sequence(specamt));
-        realize_sequence_string(*this, v, numeric_sequence(history));
-        }
-    catch(std::exception const& e)
+    std::string su = realize_sequence_string(*this, u, numeric_sequence(specamt));
+    std::string sv = realize_sequence_string(*this, v, numeric_sequence(history));
+    if(!su.empty() || !sv.empty())
         {
         if(!hide_errors)
             {
@@ -938,23 +974,23 @@ int Input::must_overwrite_specamt_with_obsolete_history
                 << "Possible conflict between specified amount and history."
                 << " Merge them manually into the specified-amount field."
                 << "\nSpecified amount: " << specamt
+                << "\nErrors: '" << su << "'"
                 << "\nHistory: " << history
-                << "\nError: " << e.what()
+                << "\nErrors: '" << sv << "'"
                 << LMI_FLUSH
                 ;
             }
         return 2;
         }
-    catch(...)
-        {
-        report_exception();
-        return 3;
-        }
 
     bool history_differs = false;
     bool future_differs  = false;
-    int const years_of_history = InforceYear.value() + (0 != InforceMonth.value());
-    for(int j = 0; j < years_of_history; ++j)
+
+    unsigned int const years_of_history = InforceYear.value() + (0 != InforceMonth.value());
+    LMI_ASSERT(years_of_history <= u.size());
+    LMI_ASSERT(years_of_history <= v.size());
+
+    for(unsigned int j = 0; j < years_of_history; ++j)
         {
         if(u[j] != v[j])
             {

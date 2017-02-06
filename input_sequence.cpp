@@ -921,7 +921,7 @@ std::vector<double> const& InputSequence::linear_number_representation() const
 {
     if(!formatted_diagnostics().empty())
         {
-        fatal_error() << formatted_diagnostics() << LMI_FLUSH;
+        throw std::runtime_error(formatted_diagnostics());
         }
 
     return number_result_;
@@ -931,7 +931,7 @@ std::vector<std::string> const& InputSequence::linear_keyword_representation() c
 {
     if(!formatted_diagnostics().empty())
         {
-        fatal_error() << formatted_diagnostics() << LMI_FLUSH;
+        throw std::runtime_error(formatted_diagnostics());
         }
 
     return keyword_result_;
@@ -958,7 +958,7 @@ std::string InputSequence::mathematical_representation() const
 {
     if(!formatted_diagnostics().empty())
         {
-        fatal_error() << formatted_diagnostics() << LMI_FLUSH;
+        throw std::runtime_error(formatted_diagnostics());
         }
 
     std::ostringstream oss;
