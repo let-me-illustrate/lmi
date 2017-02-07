@@ -718,7 +718,8 @@ test_ieee754_CXXFLAGS = $(AM_CXXFLAGS)
 test_input_seq_SOURCES = \
   $(common_test_objects) \
   input_seq_test.cpp \
-  input_sequence.cpp
+  input_sequence.cpp \
+  miscellany.cpp
 test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_input_SOURCES = \
