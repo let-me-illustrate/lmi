@@ -801,6 +801,7 @@ InputSequence::InputSequence(std::vector<double> const& v)
     :years_to_maturity_(v.size())
 {
     ValueInterval dummy;
+    dummy.value_is_keyword = false;
 
     double prior_value = v.empty() ? 0.0 : v.front();
     double current_value = prior_value;
