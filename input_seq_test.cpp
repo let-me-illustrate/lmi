@@ -322,11 +322,9 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, n, d, e);
     }
 
-// SOMEDAY !! Also support and test:
-//   additive expressions e.g. retirement-10 ?
+    // TODO ?? Test against canonical representation once we define that.
 
     // Test construction from vector.
-    // TODO ?? Test against canonical representation once we define that.
     {
     int const n = 5;
     double const d[n] = {1, 1, 1, 2, 2};
