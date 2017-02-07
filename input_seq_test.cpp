@@ -324,7 +324,7 @@ int test_main(int, char*[])
 
     // TODO ?? Test against canonical representation once we define that.
 
-    // Test construction from vector.
+    // Test construction from numeric vector.
     {
     int const n = 5;
     double const d[n] = {1, 1, 1, 2, 2};
@@ -332,6 +332,16 @@ int test_main(int, char*[])
     BOOST_TEST(v == InputSequence(v).linear_number_representation());
     BOOST_TEST_EQUAL
         ("1 [0, 3); 2 [3, maturity)"
+        ,InputSequence(v).mathematical_representation()
+        );
+    }
+
+    // Test construction from string (keyword) vector.
+    {
+    std::vector<std::string> const v{"alpha", "beta", "beta", "gamma", "eta"};
+    BOOST_TEST(v == InputSequence(v).linear_keyword_representation());
+    BOOST_TEST_EQUAL
+        ("alpha [0, 1); beta [1, 3); gamma [3, 4); eta [4, maturity)"
         ,InputSequence(v).mathematical_representation()
         );
     }
