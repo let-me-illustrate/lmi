@@ -125,6 +125,31 @@ int test_main(int, char*[])
         ,lmi_test::what_regex("^Iteration [0-9]*: failure\\.$")
         );
 
+    // Test whats_what().
+
+    // [Here, '.*$' means what it would mean if this were a regex.]
+    std::string const observed = "xyzzy\n[file .*$";
+    // An expectation given as "" means that the what-string is not to
+    // be tested at all, because it was impossible, difficult, or just
+    // unimportant to specify an actual expectation when the test was
+    // written. It doesn't mean that an empty what-string is expected;
+    // it only means that any what-string is accepted.
+    BOOST_TEST( lmi_test::whats_what(observed, ""));
+    // A full exact match is accepted [and here '.*$' is no regex]:
+    BOOST_TEST( lmi_test::whats_what(observed, "xyzzy\n[file .*$"));
+    // Alternatively, discard any portion of the what-string that
+    // begins with "\n[file " (presumably appended by LMI_FLUSH) and
+    // test that truncated what-string. An exact match is accepted:
+    BOOST_TEST( lmi_test::whats_what(observed, "xyzzy"));
+    // However, partial matches are rejected:
+    BOOST_TEST(!lmi_test::whats_what(observed, "xyzz"));
+    BOOST_TEST(!lmi_test::whats_what(observed, "xyzzy!"));
+    // The expectation must exactly equal either the untruncated or
+    // the truncated what-string; an exact match to a "partially
+    // truncated" what-string is rejected:
+    BOOST_TEST(!lmi_test::whats_what(observed, "xyzzy\n"));
+    BOOST_TEST(!lmi_test::whats_what(observed, "xyzzy\n[file .*"));
+
     return 0;
 }
 
