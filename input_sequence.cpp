@@ -49,6 +49,16 @@ ValueInterval::ValueInterval()
     ,insane           (false)
 {}
 
+void ValueInterval::value(double d)
+{
+    value_number = d;
+}
+
+void ValueInterval::value(std::string const& s)
+{
+    value_keyword = s;
+}
+
 SequenceParser::SequenceParser
     (std::string const&              input_expression
     ,int                             a_years_to_maturity
@@ -807,7 +817,7 @@ InputSequence::InputSequence(std::vector<double> const& v)
     double current_value = prior_value;
 
     intervals_.push_back(dummy);
-    intervals_.back().value_number = current_value;
+    intervals_.back().value(current_value);
 
     for(auto const& vi : v)
         {
@@ -820,7 +830,7 @@ InputSequence::InputSequence(std::vector<double> const& v)
             {
             int value_change_duration = intervals_.back().end_duration;
             intervals_.push_back(dummy);
-            intervals_.back().value_number = current_value;
+            intervals_.back().value(current_value);
             intervals_.back().begin_duration = value_change_duration;
             intervals_.back().end_duration = ++value_change_duration;
             prior_value = current_value;
@@ -840,7 +850,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
     std::string current_value = prior_value;
 
     intervals_.push_back(dummy);
-    intervals_.back().value_keyword = current_value;
+    intervals_.back().value(current_value);
 
     for(auto const& vi : v)
         {
@@ -853,7 +863,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
             {
             int value_change_duration = intervals_.back().end_duration;
             intervals_.push_back(dummy);
-            intervals_.back().value_keyword = current_value;
+            intervals_.back().value(current_value);
             intervals_.back().begin_duration = value_change_duration;
             intervals_.back().end_duration = ++value_change_duration;
             prior_value = current_value;
