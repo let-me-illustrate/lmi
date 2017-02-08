@@ -771,12 +771,12 @@ InputSequence::InputSequence
     // This invariant has not yet been established, whether or not the
     // sequence was empty.
     intervals_.back().end_duration = a_years_to_maturity;
-    // This invariant is established by realize_vector(), but it does
-    // no harm to repeat it here, and it would be confusing not to do
-    // so in conjunction with the line above.
+    // This invariant is established by realize_intervals(), but it
+    // does no harm to repeat it here, and it would be confusing not
+    // to do so in conjunction with the line above.
     intervals_.back().end_mode     = e_maturity;
 
-    realize_vector();
+    realize_intervals();
 }
 
 // Constructors taking one or two vectors as their sole arguments are
@@ -812,14 +812,14 @@ InputSequence::InputSequence(std::vector<double> const& v)
     :years_to_maturity_(v.size())
 {
     initialize_from_vector(v);
-    realize_vector();
+    realize_intervals();
 }
 
 InputSequence::InputSequence(std::vector<std::string> const& v)
     :years_to_maturity_(v.size())
 {
     initialize_from_vector(v);
-    realize_vector();
+    realize_intervals();
 }
 
 template<typename T>
@@ -912,7 +912,7 @@ InputSequence::InputSequence
             }
         }
 
-    realize_vector();
+    realize_intervals();
 }
 
 InputSequence::~InputSequence() = default;
@@ -992,7 +992,7 @@ std::vector<ValueInterval> const& InputSequence::interval_representation() const
     return intervals_;
 }
 
-void InputSequence::realize_vector()
+void InputSequence::realize_intervals()
 {
     // Post-construction invariants.
     // Every ctor must already have established this...

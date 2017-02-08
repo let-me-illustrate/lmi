@@ -288,7 +288,7 @@ class LMI_SO InputSequence
     template<typename T>
     void initialize_from_vector(std::vector<T> const&);
 
-    void realize_vector();
+    void realize_intervals();
 
     // Copies of ctor args that are identical to class SequenceParser's.
     // Most of these copies are unused as this is written in 2017-01;
