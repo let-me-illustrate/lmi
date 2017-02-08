@@ -273,7 +273,6 @@ class LMI_SO InputSequence
 
     explicit InputSequence(std::vector<double> const&);
     explicit InputSequence(std::vector<std::string> const&);
-    InputSequence(std::vector<double> const&, std::vector<std::string> const&);
 
     ~InputSequence();
 

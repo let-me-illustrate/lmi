@@ -779,14 +779,9 @@ InputSequence::InputSequence
     realize_intervals();
 }
 
-// Constructors taking one or two vectors as their sole arguments are
+// Constructors taking only one (vector) argument are
 // intended to convert flat vectors to input sequences, compacted with
 // run-length encoding: 1 1 1 2 2 becomes 1[0,2), 2[2,4).
-//
-// The constructor that takes two vector arguments exists because some
-// sequences may have both numeric and keyword values. Distinct vectors
-// are supplied for these two value types; for each interval, the value
-// type chosen is keyword if the keyword is not blank, else numeric.
 //
 // The control constructs may appear nonobvious. This design treats
 // the push_back operation as fundamental: push_back is called exactly
@@ -855,64 +850,6 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
             prior_value = current_value;
             }
         }
-}
-
-InputSequence::InputSequence
-    (std::vector<double> const& n_v
-    ,std::vector<std::string> const& s_v
-    )
-    :years_to_maturity_(n_v.size())
-{
-    if(n_v.size() != s_v.size())
-        {
-        fatal_error()
-            << "Vector lengths differ."
-            << LMI_FLUSH
-            ;
-        }
-
-    ValueInterval dummy;
-
-    double n_prior_value = n_v.empty() ? 0.0 : n_v.front();
-    double n_current_value = n_prior_value;
-
-    std::string s_prior_value = s_v.empty() ? std::string() : s_v.front();
-    std::string s_current_value = s_prior_value;
-
-    intervals_.push_back(dummy);
-    intervals_.back().value_number  = n_current_value;
-    intervals_.back().value_keyword = s_current_value;
-    intervals_.back().value_is_keyword = "" != s_current_value;
-
-    std::vector<double>::const_iterator n_vi;
-    std::vector<std::string>::const_iterator s_vi;
-    for
-        (n_vi = n_v.begin(), s_vi = s_v.begin()
-        ;n_vi != n_v.end() // s_v has same length, as 'asserted' above.
-        ;++n_vi, ++s_vi
-        )
-        {
-        n_current_value = *n_vi;
-        s_current_value = *s_vi;
-        if(n_prior_value == n_current_value && s_prior_value == s_current_value)
-            {
-            ++intervals_.back().end_duration;
-            }
-        else
-            {
-            int value_change_duration = intervals_.back().end_duration;
-            intervals_.push_back(dummy);
-            intervals_.back().value_number = n_current_value;
-            intervals_.back().value_keyword = s_current_value;
-            intervals_.back().value_is_keyword = "" != s_current_value;
-            intervals_.back().begin_duration = value_change_duration;
-            intervals_.back().end_duration = ++value_change_duration;
-            n_prior_value = n_current_value;
-            s_prior_value = s_current_value;
-            }
-        }
-
-    realize_intervals();
 }
 
 InputSequence::~InputSequence() = default;
