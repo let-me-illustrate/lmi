@@ -158,10 +158,6 @@ struct ValueInterval
 {
     ValueInterval();
 
-    // Should this struct become a class because these members have been added?
-    void value(double);
-    void value(std::string const&);
-
     double        value_number;
     std::string   value_keyword;
     bool          value_is_keyword;

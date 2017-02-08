@@ -50,16 +50,6 @@ ValueInterval::ValueInterval()
     ,insane           (false)
 {}
 
-void ValueInterval::value(double d)
-{
-    value_number = d;
-}
-
-void ValueInterval::value(std::string const& s)
-{
-    value_keyword = s;
-}
-
 SequenceParser::SequenceParser
     (std::string const&              input_expression
     ,int                             a_years_to_maturity
@@ -809,6 +799,26 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
     realize_intervals();
 }
 
+namespace
+{
+// Naturally {value_number, value_keyword} constitute a discriminated
+// union: perhaps std::variant when lmi someday requires C++17. See:
+//   http://lists.nongnu.org/archive/html/lmi/2017-02/msg00025.html
+// Until then...
+
+void set_value(ValueInterval& v, double d)
+{
+    LMI_ASSERT(!v.value_is_keyword);
+    v.value_number = d;
+}
+
+void set_value(ValueInterval& v, std::string const& s)
+{
+    LMI_ASSERT(v.value_is_keyword);
+    v.value_keyword = s;
+}
+} // Unnamed namespace.
+
 // Constructors taking only one (vector) argument are used to convert
 // flat vectors with one value per year to input sequences, compacted
 // with run-length encoding.
@@ -847,7 +857,7 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
     T current_value = prior_value;
 
     intervals_.push_back(dummy);
-    intervals_.back().value(current_value);
+    set_value(intervals_.back(), current_value);
 
     for(auto const& vi : v)
         {
@@ -860,7 +870,7 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
             {
             int value_change_duration = intervals_.back().end_duration;
             intervals_.push_back(dummy);
-            intervals_.back().value(current_value);
+            set_value(intervals_.back(), current_value);
             intervals_.back().begin_duration = value_change_duration;
             intervals_.back().end_duration = ++value_change_duration;
             prior_value = current_value;
