@@ -285,6 +285,9 @@ class LMI_SO InputSequence
     std::vector<ValueInterval> const& interval_representation() const;
 
   private:
+    template<typename T>
+    void initialize_from_vector(std::vector<T> const&);
+
     void realize_vector();
 
     // Copies of ctor args that are identical to class SequenceParser's.

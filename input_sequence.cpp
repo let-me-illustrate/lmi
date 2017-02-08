@@ -38,6 +38,7 @@
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
 
 ValueInterval::ValueInterval()
     :value_number     (0.0)
@@ -810,44 +811,29 @@ InputSequence::InputSequence
 InputSequence::InputSequence(std::vector<double> const& v)
     :years_to_maturity_(v.size())
 {
-    ValueInterval dummy;
-    dummy.value_is_keyword = false;
-
-    double prior_value = v.empty() ? 0.0 : v.front();
-    double current_value = prior_value;
-
-    intervals_.push_back(dummy);
-    intervals_.back().value(current_value);
-
-    for(auto const& vi : v)
-        {
-        current_value = vi;
-        if(prior_value == current_value)
-            {
-            ++intervals_.back().end_duration;
-            }
-        else
-            {
-            int value_change_duration = intervals_.back().end_duration;
-            intervals_.push_back(dummy);
-            intervals_.back().value(current_value);
-            intervals_.back().begin_duration = value_change_duration;
-            intervals_.back().end_duration = ++value_change_duration;
-            prior_value = current_value;
-            }
-        }
-
+    initialize_from_vector(v);
     realize_vector();
 }
 
 InputSequence::InputSequence(std::vector<std::string> const& v)
     :years_to_maturity_(v.size())
 {
-    ValueInterval dummy;
-    dummy.value_is_keyword = true;
+    initialize_from_vector(v);
+    realize_vector();
+}
 
-    std::string prior_value = v.empty() ? std::string() : v.front();
-    std::string current_value = prior_value;
+template<typename T>
+void InputSequence::initialize_from_vector(std::vector<T> const& v)
+{
+    bool const T_is_double = std::is_same<T,double     >::value;
+    bool const T_is_string = std::is_same<T,std::string>::value;
+    static_assert(T_is_double || T_is_string, "");
+
+    ValueInterval dummy;
+    dummy.value_is_keyword = T_is_string;
+
+    T prior_value = v.empty() ? T() : v.front();
+    T current_value = prior_value;
 
     intervals_.push_back(dummy);
     intervals_.back().value(current_value);
@@ -869,8 +855,6 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
             prior_value = current_value;
             }
         }
-
-    realize_vector();
 }
 
 InputSequence::InputSequence
