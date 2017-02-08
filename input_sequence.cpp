@@ -779,9 +779,39 @@ InputSequence::InputSequence
     realize_intervals();
 }
 
-// Constructors taking only one (vector) argument are
-// intended to convert flat vectors to input sequences, compacted with
-// run-length encoding: 1 1 1 2 2 becomes 1[0,2), 2[2,4).
+/// Construct from vector: e.g, 1 1 1 2 2 --> 1[0,3); 2[3,4).
+///
+/// This is used, e.g., when interest rates obtained from an external
+/// source vary from one year to the next, and it is desired to use
+/// them as lmi input. It might seem that inserting semicolons between
+/// elements would produce acceptable input, and that the only benefit
+/// is run-length encoding. However, if the imported vector is of
+/// length 20, with the last 19 elements the same, then pasting it
+/// into lmi with semicolon delimiters would be an input error if
+/// there are only 15 years until retirement.
+
+InputSequence::InputSequence(std::vector<double> const& v)
+    :years_to_maturity_(v.size())
+{
+    initialize_from_vector(v);
+    realize_intervals();
+}
+
+/// Construct from vector: e.g, a a a b b --> a[0,3); b[3,4).
+///
+/// No actual need for this particular ctor has yet been found, but
+/// one might be, someday.
+
+InputSequence::InputSequence(std::vector<std::string> const& v)
+    :years_to_maturity_(v.size())
+{
+    initialize_from_vector(v);
+    realize_intervals();
+}
+
+// Constructors taking only one (vector) argument are used to convert
+// flat vectors with one value per year to input sequences, compacted
+// with run-length encoding.
 //
 // The control constructs may appear nonobvious. This design treats
 // the push_back operation as fundamental: push_back is called exactly
@@ -802,20 +832,6 @@ InputSequence::InputSequence
 // input, and should not be used in any other situation.
 // SOMEDAY !! Ideally, therefore, they should be protected from
 // unintended use.
-
-InputSequence::InputSequence(std::vector<double> const& v)
-    :years_to_maturity_(v.size())
-{
-    initialize_from_vector(v);
-    realize_intervals();
-}
-
-InputSequence::InputSequence(std::vector<std::string> const& v)
-    :years_to_maturity_(v.size())
-{
-    initialize_from_vector(v);
-    realize_intervals();
-}
 
 template<typename T>
 void InputSequence::initialize_from_vector(std::vector<T> const& v)
