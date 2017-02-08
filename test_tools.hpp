@@ -193,22 +193,23 @@ bool whats_what(std::string const& observed, what_regex const& expected);
             }                                                 \
         }                                                     \
 
-#define INVOKE_BOOST_TEST(exp,file,line) \
-    if(!(exp))                           \
-        {                                \
-        lmi_test::record_error();        \
-        lmi_test::error_stream()         \
-            << "\n**** test failed: "    \
-            << (exp)                     \
-            << "\n[invoked from "        \
-            << "file " << (file) << ", " \
-            << "line: " << (line)        \
-            << "]"                       \
-            << BOOST_TEST_FLUSH          \
-            ;                            \
-        }                                \
-    else                                 \
-        lmi_test::record_success();      \
+#define INVOKE_BOOST_TEST(exp,file,line)    \
+    if(!(exp))                              \
+        {                                   \
+        lmi_test::record_error();           \
+        lmi_test::error_stream()            \
+            << lmi_test::test::error_prefix \
+            << "test failed: "              \
+            << (exp)                        \
+            << "\n[invoked from "           \
+            << "file " << (file) << ", "    \
+            << "line: " << (line)           \
+            << "]"                          \
+            << BOOST_TEST_FLUSH             \
+            ;                               \
+        }                                   \
+    else                                    \
+        lmi_test::record_success();         \
 
 #define INVOKE_BOOST_TEST_EQUAL(a,b,file,line)   \
     INVOKE_BOOST_TEST_RELATION(a,==,b,file,line) \

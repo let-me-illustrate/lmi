@@ -50,6 +50,12 @@ void throw_exception(ExceptionType const& e)
 
 int test_main(int, char*[])
 {
+    // Tests in this special section may be designed to fail. Their
+    // failures are reported with a distinctive prefix so that they
+    // don't look like real errors.
+
+    lmi_test::test::error_prefix = "\n#### ";
+
     BOOST_TEST(always_true);
     BOOST_TEST(always_false);
 
@@ -74,10 +80,6 @@ int test_main(int, char*[])
     BOOST_TEST_THROW((void)(0), std::runtime_error, "arbitrary");
     BOOST_TEST_THROW(;, std::runtime_error, "arbitrary");
 
-    // COMPILER !! The next two tests fail with borland C++ 5.5.1 .
-    // Probably this is a compiler defect, but someday this should be
-    // investigated.
-
     BOOST_TEST_THROW
         (throw_exception(std::runtime_error("arbitrary"))
         ,std::logic_error
@@ -91,15 +93,18 @@ int test_main(int, char*[])
         );
 
     std::cout
-        << "\n[This is a test of the testing framework's error-reporting\n"
-        << "facilities. It is contrived to report simulated errors.\n"
-        << "On exit, its error counter is overridden so that it reports\n"
-        << "a total of zero errors.]"
+        << "\n[This is a test of the testing framework's error-reporting"
+        << "\nfacilities. It is contrived to report simulated errors,"
+        << "\nwhich are marked with four '#' rather than '*' characters"
+        << "\nand are excluded from the count of real errors reported"
+        << "\nupon exit.]"
         << std::endl
         ;
     lmi_test::test::test_tools_errors = 0;
 
     // The following tests, unlike those above, should not fail.
+
+    lmi_test::test::error_prefix = "\n**** ";
 
     // Ensure that the anticipated and actually-thrown exceptions are
     // treated as equivalent even though the latter has an extra
