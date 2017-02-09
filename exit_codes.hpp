@@ -54,6 +54,7 @@
 #include "config.hpp"
 
 #include <cstdlib>
+#include <string>
 
 // GWC changed namespace 'boost' to prevent any conflict with code in
 // a later version of boost.
@@ -74,11 +75,20 @@ namespace lmi_test
     // their own error reporting.  Values > 255 are sometimes reserved for
     // system detected errors.  200/201 were suggested to minimize conflict.
 
-    int const exit_success = EXIT_SUCCESS;  // implementation-defined value
-    int const exit_failure = EXIT_FAILURE;  // implementation-defined value
+    int const exit_success  = EXIT_SUCCESS; // implementation-defined value
+    int const exit_failure  = EXIT_FAILURE; // implementation-defined value
     int const exit_exception_failure = 200; // otherwise uncaught exception
-    int const exit_test_failure = 201;      // report_error or
+    int const exit_test_failure      = 201; // report_error or
                                             // report_critical_error called.
+
+    // Decoration of test results. This goes slightly beyond the goal of the
+    // original boost implementation, which was merely to propose non-macro
+    // exit codes for standardization, yet it's not illogical (because the
+    // purpose is to report success or failure at exit), and it's convenient
+    // (because this is the one header included by all unit-test files) to
+    // write such declarations here.
+
+    extern std::string error_prefix;
 } // namespace lmi_test
 
 #endif // exit_codes_hpp
