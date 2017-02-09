@@ -85,11 +85,13 @@ namespace lmi_test
     };
   } // namespace test
 
+    std::string const default_error_prefix = "\n**** ";
+
     // Change this to test this testing library's facilities without
     // emitting this actual prefix, e.g., to force simulated errors.
     // Change it back to perform tests that are intended to pass,
     // e.g., tests to validate internal helpers such as whats_what().
-    std::string error_prefix = "\n**** ";
+    std::string error_prefix = default_error_prefix;
 
     std::ostream& error_stream()
     {

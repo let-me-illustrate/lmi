@@ -88,7 +88,8 @@ namespace lmi_test
     // (because this is the one header included by all unit-test files) to
     // write such declarations here.
 
-    extern std::string error_prefix;
+    extern std::string const default_error_prefix;
+    extern std::string               error_prefix;
 } // namespace lmi_test
 
 #endif // exit_codes_hpp

@@ -104,7 +104,7 @@ int test_main(int, char*[])
 
     // The following tests, unlike those above, should not fail.
 
-    lmi_test::error_prefix = "\n**** ";
+    lmi_test::error_prefix = lmi_test::default_error_prefix;
 
     // Ensure that the anticipated and actually-thrown exceptions are
     // treated as equivalent even though the latter has an extra
