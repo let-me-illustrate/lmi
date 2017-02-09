@@ -78,7 +78,13 @@ namespace lmi_test
         ,char const*   name
         ,char const*   info
         )
-      {os << "\n** uncaught exception: " << name << " " << info << std::endl;}
+      {
+      os
+          << "\n" << default_error_prefix
+          << "uncaught exception: " << name << " " << info
+          << std::endl
+          ;
+      }
   } // namespace detail
 
   // catch_exceptions  ------------------------------------------------------//
@@ -154,11 +160,13 @@ namespace lmi_test
             {
             out
                 << std::endl
-                << "**** returning with error code " << result
+                << default_error_prefix
+                << "returning with error code " << result
                 << std::endl
                 ;
             err
-                << "**********  errors detected; see stdout for details  ***********"
+                << default_error_prefix << default_error_prefix // Yes, twice.
+                << "errors detected; see stdout for details"
                 << std::endl
                 ;
             }
