@@ -75,12 +75,6 @@ namespace lmi_test
 {
   namespace test
   {
-    // Change this to test this testing library's facilities without
-    // emitting this actual prefix, e.g., to force simulated errors.
-    // Change it back to perform tests that are intended to pass,
-    // e.g., tests to validate internal helpers such as whats_what().
-    std::string error_prefix = "\n**** ";
-
     int test_tools_errors = 0;  // Count of errors detected.
     int test_tools_successes = 0;  // Count of successful tests.
 
@@ -91,9 +85,15 @@ namespace lmi_test
     };
   } // namespace test
 
+    // Change this to test this testing library's facilities without
+    // emitting this actual prefix, e.g., to force simulated errors.
+    // Change it back to perform tests that are intended to pass,
+    // e.g., tests to validate internal helpers such as whats_what().
+    std::string error_prefix = "\n**** ";
+
     std::ostream& error_stream()
     {
-        return std::cout << test::error_prefix << "test failed: ";
+        return std::cout << error_prefix << "test failed: ";
     }
 
     void record_error()
@@ -159,7 +159,7 @@ int cpp_main(int argc, char* argv[])
     catch(lmi_test::test::test_tools_exception const&)
         {
         std::cout
-            << lmi_test::test::error_prefix
+            << lmi_test::error_prefix
             << "previous test error is fatal"
             << std::endl
             ;
@@ -171,7 +171,7 @@ int cpp_main(int argc, char* argv[])
     if(lmi_test::test::test_tools_errors)
         {
         std::cout
-            << lmi_test::test::error_prefix
+            << lmi_test::error_prefix
             << lmi_test::test::test_tools_errors
             << " test errors detected; "
             << lmi_test::test::test_tools_successes

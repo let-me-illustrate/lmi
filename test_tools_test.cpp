@@ -54,7 +54,7 @@ int test_main(int, char*[])
     // failures are reported with a distinctive prefix so that they
     // don't look like real errors.
 
-    lmi_test::test::error_prefix = "\n#### ";
+    lmi_test::error_prefix = "\n#### ";
 
     BOOST_TEST(always_true);
     BOOST_TEST(always_false);
@@ -104,7 +104,7 @@ int test_main(int, char*[])
 
     // The following tests, unlike those above, should not fail.
 
-    lmi_test::test::error_prefix = "\n**** ";
+    lmi_test::error_prefix = "\n**** ";
 
     // Ensure that the anticipated and actually-thrown exceptions are
     // treated as equivalent even though the latter has an extra

@@ -198,7 +198,7 @@ bool whats_what(std::string const& observed, what_regex const& expected);
         {                                   \
         lmi_test::record_error();           \
         lmi_test::error_stream()            \
-            << lmi_test::test::error_prefix \
+            << lmi_test::error_prefix       \
             << "test failed: "              \
             << (exp)                        \
             << "\n[invoked from "           \
