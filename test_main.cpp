@@ -85,7 +85,20 @@ namespace lmi_test
     };
   } // namespace test
 
-    std::string const default_error_prefix = "\n**** ";
+    // Rationale for writing these prefixen as concatenations of short
+    // string literals: during pre-release testing, an error in the
+    // following statement created an appearance that every test had
+    // succeeded when actually none could be built, because gcc emitted
+    // the (not-then-obfuscated) success prefix once for each test as
+    // part of an error message...and therefore 'grep --count' found
+    // exactly the expected number of apparent success markers.
+
+    std::string success_prefix             = "\n!""!""!""! ";
+
+    // There is no 'default_success_prefix' because there is no need to
+    // override 'success_prefix'.
+
+    std::string const default_error_prefix = "\n*""*""*""* ";
 
     // Change this to test this testing library's facilities without
     // emitting this actual prefix, e.g., to force simulated errors.

@@ -174,6 +174,7 @@ namespace lmi_test
             {
             out
                 << std::flush
+                << success_prefix
                 << "no errors detected"
                 << std::endl
                 ;
