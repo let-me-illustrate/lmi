@@ -98,7 +98,7 @@ namespace lmi_test
     // There is no 'default_success_prefix' because there is no need to
     // override 'success_prefix'.
 
-    std::string const default_error_prefix = "\n*""*""*""* ";
+    std::string const default_error_prefix = "\n?""?""?""? ";
 
     // Change this to test this testing library's facilities without
     // emitting this actual prefix, e.g., to force simulated errors.
