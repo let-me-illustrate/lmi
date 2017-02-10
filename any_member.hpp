@@ -587,7 +587,7 @@ any_member<ClassType>& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     )
 {
-    typename member_map_type::iterator i = map_.find(s);
+    auto i = map_.find(s);
     if(map_.end() == i)
         {
         complain_that_no_such_member_is_ascribed(s);
@@ -600,7 +600,7 @@ any_member<ClassType> const& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     ) const
 {
-    typename member_map_type::const_iterator i = map_.find(s);
+    auto const i = map_.find(s);
     if(map_.end() == i)
         {
         complain_that_no_such_member_is_ascribed(s);
