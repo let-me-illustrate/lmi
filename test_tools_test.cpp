@@ -95,9 +95,10 @@ int test_main(int, char*[])
     std::cout
         << "\n[This is a test of the testing framework's error-reporting"
         << "\nfacilities. It is contrived to report simulated errors,"
-        << "\nwhich are marked with four '#' rather than '*' characters"
-        << "\nand are excluded from the count of real errors reported"
-        << "\nupon exit.]"
+        << "\nwhich are marked thus:"
+        << lmi_test::error_prefix << "(simulation of simulated error)"
+        << "\nto distinguish them from real errors and are excluded from"
+        << "\nthe count of real errors reported upon exit.]"
         << std::endl
         ;
     lmi_test::test::test_tools_errors = 0;
