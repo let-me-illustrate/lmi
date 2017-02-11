@@ -246,7 +246,7 @@ class LMI_SO progress_meter
 
 std::shared_ptr<progress_meter> LMI_SO create_progress_meter
     (int                               max_count
-    ,std::string const&                title = ""
+    ,std::string const&                title = std::string()
     ,progress_meter::enum_display_mode       = progress_meter::e_normal_display
     );
 

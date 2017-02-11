@@ -223,13 +223,17 @@ void test_trimming()
     ltrim(s, superfluous); rtrim(s, superfluous);
     BOOST_TEST_EQUAL(s, "a");
 
-    s = "a; ;";
-    ltrim(s, superfluous); rtrim(s, superfluous);
-    BOOST_TEST_EQUAL(s, "a");
+    s = "a ; a ; ";
+    rtrim(s, superfluous); // Shows what rtrim() does.
+    BOOST_TEST_EQUAL(s, "a ; a");
+    ltrim(s, superfluous); rtrim(s, superfluous); // Does nothing, correctly.
+    BOOST_TEST_EQUAL(s, "a ; a");
 
-    s = "; ;a";
-    ltrim(s, superfluous); rtrim(s, superfluous);
-    BOOST_TEST_EQUAL(s, "a");
+    s = "; a ; a";
+    ltrim(s, superfluous); // Shows what ltrim() does.
+    BOOST_TEST_EQUAL(s, "a ; a");
+    ltrim(s, superfluous); rtrim(s, superfluous); // Does nothing, correctly.
+    BOOST_TEST_EQUAL(s, "a ; a");
 }
 
 int test_main(int, char*[])

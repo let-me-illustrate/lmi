@@ -50,6 +50,7 @@
 #include <wx/valtext.h>
 
 #include <algorithm>                    // std::copy()
+#include <exception>
 #include <iterator>                     // std::back_inserter()
 #include <map>
 #include <vector>
@@ -1194,7 +1195,8 @@ bool InputSequenceEditor::is_valid_value(wxString const& w)
 
 wxString InputSequenceEditor::get_diagnostics_message()
 {
-    // Check some common problems and issue nice error messages for them:
+    // Diagnose anticipated input errors; return an error message,
+    // written in the context of the GUI, for the first error found.
     for(int row = 0; row < rows_count_; ++row)
         {
         wxString const value = value_field(row).GetValue();
@@ -1205,21 +1207,28 @@ wxString InputSequenceEditor::get_diagnostics_message()
             return wxString::Format("Invalid keyword \"%s\" on row %d.", value.c_str(), row);
         }
 
-    // As fallback, parse the sequence and check the diagnostics. This may be
-    // less human-readable, but it's better than nothing at all:
-    InputSequence const sequence
-        (sequence_string()
-        ,input_.years_to_maturity()
-        ,input_.issue_age        ()
-        ,input_.retirement_age   ()
-        ,input_.inforce_year     ()
-        ,input_.effective_year   ()
-        ,keywords_
-        );
-    wxString msg = sequence.formatted_diagnostics(true).c_str();
-    // formatted_diagnostics() returns newline-terminated string, fix it:
-    msg.Trim();
-    return msg;
+    // Diagnose unanticipated input errors by invoking the parser;
+    // return the first line of its diagnostics as an error message.
+    try
+        {
+        InputSequence const sequence
+            (sequence_string()
+            ,input_.years_to_maturity()
+            ,input_.issue_age        ()
+            ,input_.retirement_age   ()
+            ,input_.inforce_year     ()
+            ,input_.effective_year   ()
+            ,keywords_
+            ,keywords_only_
+            ,default_keyword_
+            );
+        }
+    catch(std::exception const& e)
+        {
+        return abridge_diagnostics(e.what());
+        }
+
+    return wxString();
 }
 
 void InputSequenceEditor::UponValueChange(wxCommandEvent&)
@@ -1546,30 +1555,30 @@ void InputSequenceEntry::DoOpenEditor()
     LMI_ASSERT(!(keywords_only && keywords.empty()));
     editor.set_keywords(keywords, keywords_only, ds.default_keyword());
 
-    InputSequence sequence
-        (sequence_string
-        ,in.years_to_maturity()
-        ,in.issue_age        ()
-        ,in.retirement_age   ()
-        ,in.inforce_year     ()
-        ,in.effective_year   ()
-        ,keywords
-        ,keywords_only
-        ,ds.default_keyword()
-        );
-
-    std::string const diagnostics = sequence.formatted_diagnostics(true);
-    if(!diagnostics.empty())
+    try
+        {
+        InputSequence sequence
+            (sequence_string
+            ,in.years_to_maturity()
+            ,in.issue_age        ()
+            ,in.retirement_age   ()
+            ,in.inforce_year     ()
+            ,in.effective_year   ()
+            ,keywords
+            ,keywords_only
+            ,ds.default_keyword()
+            );
+        editor.sequence(sequence);
+        }
+    catch(std::exception const& e)
         {
         warning()
             << "The sequence is invalid and cannot be edited visually.\n"
-            << diagnostics
-            << LMI_FLUSH
+            << abridge_diagnostics(e.what())
+            << std::flush
             ;
         return;
         }
-
-    editor.sequence(sequence);
 
     editor.associate_text_ctrl(text_);
     editor.CentreOnParent();

@@ -76,22 +76,7 @@ void check
             std::cout << std::endl;
             }
 
-        std::string const& x(seq.formatted_diagnostics());
-        std::string const y = (nullptr == m) ? std::string() : std::string(m);
-        bool const by = x == y;
-        if(!by)
-            {
-            std::cout
-                <<   "\nObserved diagnostics:"
-                << "\n\n'" << x << "'"
-                << "\n\ndiffer from expected:"
-                << "\n\n'" << y << "'"
-                << std::endl
-                ;
-            }
-
-        bool const b = bv && bs && by;
-        INVOKE_BOOST_TEST(b, file, line);
+        INVOKE_BOOST_TEST(bv && bs, file, line);
         }
     catch(std::exception const& x)
         {
@@ -252,6 +237,10 @@ int test_main(int, char*[])
         " Current token ';' at position 29.\n"
         ;
     check(__FILE__, __LINE__, n, d, e, m);
+    BOOST_TEST_EQUAL
+        ("Interval [ 0, 0 ) is improper: it ends before it begins."
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Test grossly improper intervals.
@@ -268,6 +257,10 @@ int test_main(int, char*[])
         " Current token ';' at position 32.\n"
         ;
     check(__FILE__, __LINE__, n, d, e, m);
+    BOOST_TEST_EQUAL
+        ("Interval [ 3, 1 ) is improper: it ends before it begins."
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Test an expression with gaps between intervals. Because the
@@ -297,6 +290,10 @@ int test_main(int, char*[])
         " current interval [ 2, 5 ) would begin before that."
         ;
     check(__FILE__, __LINE__, n, d, e, m);
+    BOOST_TEST_EQUAL
+        (std::string(m)
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Durations with '@' prefix mean attained age.
@@ -325,15 +322,11 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, n, d, e);
     }
 
-// SOMEDAY !! Also support and test:
-//   additive expressions e.g. retirement-10 ?
-
-    // Test construction from vector.
     // TODO ?? Test against canonical representation once we define that.
+
+    // Test construction from numeric vector.
     {
-    int const n = 5;
-    double const d[n] = {1, 1, 1, 2, 2};
-    std::vector<double> const v(d, d + n);
+    std::vector<double> const v{1, 1, 1, 2, 2};
     BOOST_TEST(v == InputSequence(v).linear_number_representation());
     BOOST_TEST_EQUAL
         ("1 [0, 3); 2 [3, maturity)"
@@ -341,11 +334,19 @@ int test_main(int, char*[])
         );
     }
 
+    // Test construction from string (keyword) vector.
+    {
+    std::vector<std::string> const v{"alpha", "beta", "beta", "gamma", "eta"};
+    BOOST_TEST(v == InputSequence(v).linear_keyword_representation());
+    BOOST_TEST_EQUAL
+        ("alpha [0, 1); beta [1, 3); gamma [3, 4); eta [4, maturity)"
+        ,InputSequence(v).mathematical_representation()
+        );
+    }
+
     // Test construction from one-element vector.
     {
-    int const n = 1;
-    double const d[n] = {3};
-    std::vector<double> const v(d, d + n);
+    std::vector<double> const v{3};
     BOOST_TEST(v == InputSequence(v).linear_number_representation());
     BOOST_TEST_EQUAL("3", InputSequence(v).mathematical_representation());
     }
@@ -400,12 +401,13 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     std::string w("z");
     check(__FILE__, __LINE__, n, d, e, m, k, c, false, w);
+    BOOST_TEST_EQUAL
+        (std::string(m)
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Test keywords-only switch with input it forbids.
-    // SOMEDAY !! It is not ideal for construction to succeed and give
-    // a vector of zeros. Instead, the ctor should throw what is now
-    // made available (only on demand) as formatted_diagnostics().
     {
     int const n = 10;
     strvec const c      {"z", "z", "z", "z", "z", "z", "z", "z", "z", "z"};
@@ -421,6 +423,10 @@ int test_main(int, char*[])
     bool const o = true;
     std::string w("z");
     check(__FILE__, __LINE__, n, d, e, m, k, c, o, w);
+    BOOST_TEST_EQUAL
+        ("Expected keyword chosen from { p q z }."
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Test an expression with a gap between intervals, with the
@@ -455,6 +461,10 @@ int test_main(int, char*[])
     bool const o = true;
     std::string w("u");
     check(__FILE__, __LINE__, n, d, e, m, k, c, o, w);
+    BOOST_TEST_EQUAL
+        (std::string(m)
+        ,abridge_diagnostics(m)
+        );
     }
 
     // Duration keywords: {retirement, maturity}
@@ -481,6 +491,10 @@ int test_main(int, char*[])
         " Current token '[' at position 1.\n"
         ;
     check(__FILE__, __LINE__, n, d, e, m);
+    BOOST_TEST_EQUAL
+        ("Expected number or keyword."
+        ,abridge_diagnostics(m)
+        );
     }
 
     return 0;

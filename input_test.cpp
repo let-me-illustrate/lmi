@@ -355,44 +355,46 @@ void input_test::test_obsolete_history()
     z.InforceYear  = 0;
     z.InforceMonth = 0;
     // For new business, history is irrelevant.
-    BOOST_TEST(0 == z.must_overwrite_specamt_with_obsolete_history("0"    , "1"           , true));
+    BOOST_TEST_EQUAL(0, z.must_overwrite_specamt_with_obsolete_history("0"    , "1"           , true));
     // Year 0, month 1: one year of history.
     z.InforceYear  = 0;
     z.InforceMonth = 1;
-    BOOST_TEST(2 == z.must_overwrite_specamt_with_obsolete_history("0"    , "1"           , true));
-    BOOST_TEST(0 == z.must_overwrite_specamt_with_obsolete_history("1"    , "1"           , true));
+    BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("0"    , "1"           , true));
+    BOOST_TEST_EQUAL(0, z.must_overwrite_specamt_with_obsolete_history("1"    , "1"           , true));
     // Year 1, month 0: one year of history.
     z.InforceYear  = 1;
     z.InforceMonth = 0;
-    BOOST_TEST(2 == z.must_overwrite_specamt_with_obsolete_history("0"    , "1"           , true));
-    BOOST_TEST(0 == z.must_overwrite_specamt_with_obsolete_history("1"    , "1"           , true));
-    BOOST_TEST(0 == z.must_overwrite_specamt_with_obsolete_history("1"    , "1;2"         , true));
-    BOOST_TEST(1 == z.must_overwrite_specamt_with_obsolete_history("1;2"  , "2"           , true));
+    BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("0"    , "1"           , true));
+    BOOST_TEST_EQUAL(0, z.must_overwrite_specamt_with_obsolete_history("1"    , "1"           , true));
+    BOOST_TEST_EQUAL(0, z.must_overwrite_specamt_with_obsolete_history("1"    , "1;2"         , true));
+    BOOST_TEST_EQUAL(1, z.must_overwrite_specamt_with_obsolete_history("1;2"  , "2"           , true));
     // "History" after first year doesn't matter.
-    BOOST_TEST(0 == z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1"           , true));
+    BOOST_TEST_EQUAL(0, z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1"           , true));
     // Year 1, month 1: two years of history.
     z.InforceYear  = 1;
     z.InforceMonth = 1;
-    BOOST_TEST(0 == z.must_overwrite_specamt_with_obsolete_history("1"    , "1"           , true));
+    BOOST_TEST_EQUAL(0, z.must_overwrite_specamt_with_obsolete_history("1"    , "1"           , true));
     // No conflict: history is a "subset" of specamt.
-    BOOST_TEST(0 == z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1;2;3"       , true));
-    BOOST_TEST(2 == z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1"           , true));
-    BOOST_TEST(1 == z.must_overwrite_specamt_with_obsolete_history("1;2"  , "2"           , true));
-    BOOST_TEST(2 == z.must_overwrite_specamt_with_obsolete_history("1"    , "1;2"         , true));
-    BOOST_TEST(2 == z.must_overwrite_specamt_with_obsolete_history("1;2"  , "2;3"         , true));
-    BOOST_TEST(0 == z.must_overwrite_specamt_with_obsolete_history("1;2;3", "1;2;3"       , true));
+    BOOST_TEST_EQUAL(0, z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1;2;3"       , true));
+    BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1"           , true));
+    BOOST_TEST_EQUAL(1, z.must_overwrite_specamt_with_obsolete_history("1;2"  , "2"           , true));
+    BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("1"    , "1;2"         , true));
+    BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("1;2"  , "2;3"         , true));
+    BOOST_TEST_EQUAL(0, z.must_overwrite_specamt_with_obsolete_history("1;2;3", "1;2;3"       , true));
     // Warn if a keyword is used--this one's meaning depends on context.
-    BOOST_TEST(2 == z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1;corridor"  , true));
+    BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1;corridor"  , true));
     // Keyword may engender "obvious" false positives.
-    BOOST_TEST(2 == z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1;2;corridor", true));
+    BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("1;2"  , "1;2;corridor", true));
     // This would have been forbidden: history was numeric only.
-//  BOOST_TEST(2 == z.must_overwrite_specamt_with_obsolete_history("X"    , "1"           , true));
-    BOOST_TEST(2 == z.must_overwrite_specamt_with_obsolete_history("1"    , "X"           , true));
-    // This case differs little from the preceding one, but has a different
-    // outcome. Reason: non-numeric substrings are interepreted as zero.
-    // This oddity doesn't matter, because specified amount by its nature
-    // must be positive, and zero is returned so that nothing is changed.
-    BOOST_TEST(0 == z.must_overwrite_specamt_with_obsolete_history("0"    , "X"           , true));
+//  BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("X"    , "1"           , true));
+    BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("1"    , "X"           , true));
+    // This case differs little from the preceding one, but formerly it
+    // had a different outcome. Reason: non-numeric substrings were
+    // interepreted as zero, simply because realize_vector() exited
+    // early if the input-sequence parser emitted any diagnostics. Now,
+    // however, any parser diagnostic raises an exception, which causes
+    // must_overwrite_specamt_with_obsolete_history() to return 2.
+    BOOST_TEST_EQUAL(2, z.must_overwrite_specamt_with_obsolete_history("0"    , "X"           , true));
 }
 
 void input_test::assay_speed()

@@ -644,6 +644,7 @@ input_seq_test$(EXEEXT): \
   $(common_test_objects) \
   input_seq_test.o \
   input_sequence.o \
+  miscellany.o \
 
 input_test$(EXEEXT): \
   $(boost_common_objects) \

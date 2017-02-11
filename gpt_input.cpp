@@ -36,6 +36,7 @@
 #include "miscellany.hpp"               // each_equal(), lmi_array_size()
 
 #include <algorithm>                    // std::max()
+#include <exception>
 #include <limits>
 #include <sstream>
 #include <utility>                      // std::pair
@@ -51,16 +52,23 @@ std::string realize_sequence_string
     ,datum_sequence const& sequence_string
     )
 {
-    InputSequence s
-        (sequence_string.value()
-        ,input.years_to_maturity()
-        ,input.issue_age        ()
-        ,input.maturity_age     () // This class has no "retirement age".
-        ,input.inforce_year     ()
-        ,input.effective_year   ()
-        );
-    detail::convert_vector(v, s.linear_number_representation());
-    return s.formatted_diagnostics(true);
+    try
+        {
+        InputSequence s
+            (sequence_string.value()
+            ,input.years_to_maturity()
+            ,input.issue_age        ()
+            ,input.maturity_age     () // This class has no "retirement age".
+            ,input.inforce_year     ()
+            ,input.effective_year   ()
+            );
+        detail::convert_vector(v, s.linear_number_representation());
+        }
+    catch(std::exception const& e)
+        {
+        return abridge_diagnostics(e.what());
+        }
+    return std::string();
 }
 } // Unnamed namespace.
 
