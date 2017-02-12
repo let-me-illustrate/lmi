@@ -56,7 +56,7 @@ class RoundingButtons
         ,wxPoint const&     pos   = wxDefaultPosition
         ,wxSize const&      size  = wxDefaultSize
         ,long               style = 0
-        ,std::string const& name  = wxPanelNameStr
+        ,wxString const&    name  = wxPanelNameStr
         );
 
     bool IsModified() const;
