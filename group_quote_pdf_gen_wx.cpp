@@ -545,7 +545,7 @@ class group_quote_pdf_generator_wx
         std::string premium_mode_;
         std::string contract_state_;
         std::string effective_date_;
-        std::string footer_;
+        wxString    footer_html_;
 
         // Dynamically-determined fields.
         std::string elected_riders_;
@@ -700,7 +700,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
     effective_date_   = ConvertDateToWx(eff_date).FormatDate().ToStdString();
     // Deliberately begin the footer with <br> tags, to separate it
     // from the logo right above it.
-    footer_ =
+    footer_html_ =
           brbr (invar.GroupQuoteIsNotAnOffer)
         + brbr (invar.GroupQuoteRidersFooter)
         + brbr (elected_riders_footnote_)
@@ -801,7 +801,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 {
                 rd.values[col] = ConvertDateToWx
                     (jdn_t(static_cast<int>(invar.DateOfBirthJdn))
-                    ).FormatDate();
+                    ).FormatDate().ToStdString(wxConvUTF8);
                 }
                 break;
             case e_col_basic_face_amount:
@@ -1424,7 +1424,7 @@ void group_quote_pdf_generator_wx::output_footer
         *pos_y += vert_skip;
         }
 
-    wxString const footer_html = "<p>" + report_data_.footer_ + "</p>";
+    wxString const footer_html = "<p>" + report_data_.footer_html_ + "</p>";
 
     *pos_y += output_html
         (html_parser
