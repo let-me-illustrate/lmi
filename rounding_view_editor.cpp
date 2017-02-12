@@ -179,7 +179,7 @@ void RoundingButtons::Create
     ,wxPoint const&     pos
     ,wxSize const&      size
     ,long               style
-    ,std::string const& name
+    ,wxString const&    name
     )
 {
     wxPanel::Create(parent, id, pos, size, style, name);
@@ -379,7 +379,7 @@ wxObject* RoundingButtonsXmlHandler::DoCreateResource()
         ,GetPosition()
         ,GetSize()
         ,GetStyle()
-        ,std::string(GetName())
+        ,GetName()
         );
 
     SetupWindow(control);
