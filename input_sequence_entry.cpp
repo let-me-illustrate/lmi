@@ -1541,7 +1541,7 @@ void InputSequenceEntry::DoOpenEditor()
     // close to user's point of attention and the mouse cursor.
     InputSequenceEditor editor(button_, title_, in);
 
-    std::string sequence_string = std::string(text_->GetValue());
+    std::string sequence_string = text_->GetValue().ToStdString(wxConvUTF8);
     datum_sequence const& ds = *member_cast<datum_sequence>(in[field_name()]);
 
     std::map<std::string,std::string> const kwmap = ds.allowed_keywords();
