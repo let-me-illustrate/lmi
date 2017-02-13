@@ -150,22 +150,23 @@ enum duration_mode
     ,e_maturity
     };
 
-// value applies throughout the interval [begin_duration, end_duration).
-//   where value means value_keyword if value_is_keyword, else value_number
-// 'insane' flags instances that are syntactically valid but semantically
-// invalid, such as improper intervals e.g. [5, 3).
+/// A single 'span' in the input-sequence grammar.
+///
+/// value_{number,keyword} applies throughout the interval
+///   [begin_duration, end_duration)
+
 struct ValueInterval
 {
-    ValueInterval();
+    ValueInterval() = default;
 
-    double        value_number;
+    double        value_number     = 0.0;
     std::string   value_keyword;
-    bool          value_is_keyword;
-    int           begin_duration;
-    duration_mode begin_mode;
-    int           end_duration;
-    duration_mode end_mode;
-    bool          insane;
+    bool          value_is_keyword = false;
+    int           begin_duration   = 0;
+    duration_mode begin_mode       = e_inception;
+    int           end_duration     = 0;
+    duration_mode end_mode         = e_maturity;
+    bool          insane           = false;
 };
 
 class SequenceParser

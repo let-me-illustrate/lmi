@@ -40,16 +40,6 @@
 #include <stdexcept>
 #include <type_traits>
 
-ValueInterval::ValueInterval()
-    :value_number     (0.0)
-    ,value_is_keyword (false)
-    ,begin_duration   (0)
-    ,begin_mode       (e_duration)
-    ,end_duration     (0)
-    ,end_mode         (e_duration)
-    ,insane           (false)
-{}
-
 SequenceParser::SequenceParser
     (std::string const&              input_expression
     ,int                             a_years_to_maturity
