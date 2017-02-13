@@ -212,6 +212,7 @@ common_common_objects := \
   input_realization.o \
   input_seq_helpers.o \
   input_sequence.o \
+  input_sequence_parser.o \
   input_xml_io.o \
   interest_rates.o \
   ledger.o \
@@ -637,6 +638,7 @@ input_seq_test$(EXEEXT): \
   $(common_test_objects) \
   input_seq_test.o \
   input_sequence.o \
+  input_sequence_parser.o \
   miscellany.o \
 
 input_test$(EXEEXT): \
@@ -662,6 +664,7 @@ input_test$(EXEEXT): \
   input_realization.o \
   input_seq_helpers.o \
   input_sequence.o \
+  input_sequence_parser.o \
   input_test.o \
   input_xml_io.o \
   lmi.o \

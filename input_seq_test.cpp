@@ -1,4 +1,4 @@
-// Input sequences e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0... : unit test.
+// Input sequences (e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0...): unit test
 //
 // Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //

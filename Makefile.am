@@ -323,6 +323,7 @@ liblmi_common_sources = \
     input_realization.cpp \
     input_seq_helpers.cpp \
     input_sequence.cpp \
+    input_sequence_parser.cpp \
     input_xml_io.cpp \
     interest_rates.cpp \
     ledger.cpp \
@@ -719,6 +720,7 @@ test_input_seq_SOURCES = \
   $(common_test_objects) \
   input_seq_test.cpp \
   input_sequence.cpp \
+  input_sequence_parser.cpp \
   miscellany.cpp
 test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -744,6 +746,7 @@ test_input_SOURCES = \
   input_realization.cpp \
   input_seq_helpers.cpp \
   input_sequence.cpp \
+  input_sequence_parser.cpp \
   input_test.cpp \
   input_xml_io.cpp \
   mc_enum.cpp \
@@ -1163,6 +1166,8 @@ noinst_HEADERS = \
     input_seq_helpers.hpp \
     input_sequence.hpp \
     input_sequence_entry.hpp \
+    input_sequence_interval.hpp \
+    input_sequence_parser.hpp \
     interest_rates.hpp \
     istream_to_string.hpp \
     ledger.hpp \
