@@ -467,6 +467,32 @@ int test_main(int, char*[])
         );
     }
 
+    // Test an expression with a gap before the first interval,
+    // with the keywords-only switch (and a default keyword).
+    {
+    int const n = 5;
+    strvec const c      {"z", "q", "q", "p", "p"};
+    double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
+    std::string const e("q [1, 3); p [3, maturity)");
+    strvec const k{"p", "q", "z"};
+    bool const o = true;
+    std::string w("z");
+    check(__FILE__, __LINE__, n, d, e, "", k, c, o, w);
+    }
+
+    // Test an expression with a gap before the first interval,
+    // without the keywords-only switch. The default value should
+    // be numeric, and the keyword gap should be filled with an
+    // empty string.
+    {
+    int const n = 5;
+    strvec const c      {"", "q", "q", "p", "p"};
+    double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
+    std::string const e("q [1, 3); p [3, maturity)");
+    strvec const k{"p", "q", "z"};
+    check(__FILE__, __LINE__, n, d, e, "", k, c);
+    }
+
     // Duration keywords: {retirement, maturity}
     {
     int const n = 10;
