@@ -27,7 +27,7 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "input.hpp"
-#include "input_seq_helpers.hpp"
+#include "input_sequence_aux.hpp"       // extract_keys_from_string_map()
 #include "input_sequence.hpp"
 #include "mvc_controller.hpp"
 #include "numeric_io_cast.hpp"

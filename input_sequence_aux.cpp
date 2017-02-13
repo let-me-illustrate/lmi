@@ -1,4 +1,4 @@
-// Interpret sequence strings.
+// Interpret sequence strings containing mc_enum and tn_range types.
 //
 // Copyright (C) 2002, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
@@ -21,7 +21,7 @@
 
 #include "pchfile.hpp"
 
-#include "input_seq_helpers.hpp"
+#include "input_sequence_aux.hpp"
 
 namespace detail
 {

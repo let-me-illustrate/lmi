@@ -210,8 +210,8 @@ common_common_objects := \
   input.o \
   input_harmonization.o \
   input_realization.o \
-  input_seq_helpers.o \
   input_sequence.o \
+  input_sequence_aux.o \
   input_sequence_parser.o \
   input_xml_io.o \
   interest_rates.o \
@@ -418,7 +418,7 @@ unit_test_targets := \
   gpt_test \
   handle_exceptions_test \
   ieee754_test \
-  input_seq_test \
+  input_sequence_test \
   input_test \
   irc7702a_test \
   istream_to_string_test \
@@ -634,11 +634,11 @@ ieee754_test$(EXEEXT): \
   $(common_test_objects) \
   ieee754_test.o \
 
-input_seq_test$(EXEEXT): \
+input_sequence_test$(EXEEXT): \
   $(common_test_objects) \
-  input_seq_test.o \
   input_sequence.o \
   input_sequence_parser.o \
+  input_sequence_test.o \
   miscellany.o \
 
 input_test$(EXEEXT): \
@@ -662,8 +662,8 @@ input_test$(EXEEXT): \
   input.o \
   input_harmonization.o \
   input_realization.o \
-  input_seq_helpers.o \
   input_sequence.o \
+  input_sequence_aux.o \
   input_sequence_parser.o \
   input_test.o \
   input_xml_io.o \

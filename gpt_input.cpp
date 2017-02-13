@@ -31,7 +31,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
-#include "input_seq_helpers.hpp"        // convert_vector(), convert_vector_type()
+#include "input_sequence_aux.hpp"       // convert_vector(), convert_vector_type()
 #include "map_lookup.hpp"
 #include "miscellany.hpp"               // each_equal(), lmi_array_size()
 
