@@ -87,9 +87,14 @@ void check
             std::cout << std::endl;
             }
 
+//#define TEST_REPRESENTATION
+#if defined TEST_REPRESENTATION
+        INVOKE_BOOST_TEST(bv && bs && bf, file, line);
+#else  // !defined TEST_REPRESENTATION
         // For the nonce, each 'g' is just a copy of its corresponding 'e',
         // so don't make 'bf' fail the test yet.
         INVOKE_BOOST_TEST(bv && bs /* && bf */, file, line);
+#endif // !defined TEST_REPRESENTATION
         }
     catch(std::exception const& x)
         {
@@ -142,7 +147,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
     std::string const e("");
-    std::string const g("");
+    std::string const g("0");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -151,7 +156,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e(" ");
-    std::string const g(" ");
+    std::string const g("0");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -161,7 +166,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 7, 7, 0, 0, 0, 0};
     std::string const e("1 3; 7 5;0");
-    std::string const g("1 3; 7 5;0");
+    std::string const g("1 [0, 3); 7 [3, 5); 0 [5, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -171,7 +176,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 2, 3, 3, 3};
     std::string const e("1; 2; 3");
-    std::string const g("1; 2; 3");
+    std::string const g("1 [0, 1); 2 [1, 2); 3 [2, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -180,7 +185,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 3; 3 6; 5 9; 7");
-    std::string const g("1 3; 3 6; 5 9; 7");
+    std::string const g("1 [0, 3); 3 [3, 6); 5 [6, 9); 7 [9, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -189,7 +194,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 @93; 3 @96; 5 @99; 7");
-    std::string const g("1 @93; 3 @96; 5 @99; 7");
+    std::string const g("1 [0, @93); 3 [@93, @96); 5 [@96, @99); 7 [@99, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -198,7 +203,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 #3; 3 #3; 5 #3; 7");
-    std::string const g("1 #3; 3 #3; 5 #3; 7");
+    std::string const g("1 [0, 3); 3 [3, 6); 5 [6, 9); 7 [9, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -209,7 +214,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 3, 3, 3, 5, 7, 7, 7};
     std::string const e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
-    std::string const g("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
+    std::string const g("1 [0, 2); 3 [2, 5); 5 [5, 6); 7 [6, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -218,7 +223,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 7, 7};
     std::string const e("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
-    std::string const g("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
+    // Should the first two intervals be combined?
+    std::string const g("1 [0, 1); 1 [1, 3); 3 [3, 6); 5 [6, 7); 7 [7, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -227,7 +233,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 1, 2, 3, 4, 5, 5};
     std::string const e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
-    std::string const g("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
+    std::string const g("1 [0, 4); 2 [4, 5); 3 [5, 6); 4 [6, @97); 5 [@97, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -236,16 +242,16 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
     std::string const e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
-    std::string const g("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
+    std::string const g("1 [0, 1); 3 [1, 2); 5 [2, 3); 7 [3, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
-    // Test empty intervals.
+    // Test empty intervals. (But they aren't empty?)
     {
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
     std::string const e("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
-    std::string const g("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
+    std::string const g("1 [0, 1); 3 [1, 2); 5 [2, 3); 7 [3, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -254,7 +260,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
     std::string const e("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
-    std::string const g("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
+    std::string const g(""); // Expression is invalid.
     char const* m =
         "Interval [ 0, 0 ) is improper: it ends before it begins."
         " Current token ';' at position 9.\n"
@@ -275,7 +281,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e("1; 9 (2, 0]; 3 [7, 3); 5 (5, 5); 7");
-    std::string const g("1; 9 (2, 0]; 3 [7, 3); 5 (5, 5); 7");
+    std::string const g(""); // Expression is invalid.
     char const* m =
         "Interval [ 3, 1 ) is improper: it ends before it begins."
         " Current token ';' at position 12.\n"
@@ -297,7 +303,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 1, 0, 3, 0, 5, 7, 7, 7};
     std::string const e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
-    std::string const g("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
+    std::string const g("0 [0, 1); 1 [1, 2); 0 [2, 3); 3 [3, 4); 0 [4, 5); 5 [5, 6); 7 [6, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -306,7 +312,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 5, 5, 7, 7};
     std::string const e("1; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
-    std::string const g("1; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
+    // mathematical_representation() returns '...1 [1, maturity)3 [3, 8)...'?
+    std::string const g("1 [0, 1); 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7"); // Isn't this invalid?
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -315,7 +322,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e("5 [5, 6); 3 [2, 5); 1 [0, 2); 7");
-    std::string const g("5 [5, 6); 3 [2, 5); 1 [0, 2); 7");
+    std::string const g(""); // Expression is invalid.
     char const* m =
         "Previous interval began at duration 5;"
         " current interval [ 2, 5 ) would begin before that."
@@ -332,7 +339,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12, 0, 27, 0, 1, 7, 7, 7, 7};
     std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, 5]; 7");
-    std::string const g("12 [1, @92); 27 [@93, @93]; 1 (@94, 5]; 7");
+    std::string const g("0 [0, 1); 12 [1, @92); 0 [@92, @93); 27 [@93, @94); 0 [@94, @95); 1 [@95, 6); 7 [6, maturity");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -343,7 +350,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625 (@94,5]; 7.5");
-    std::string const g("12.25 [1,@92); 27.875 [@93,@93]; 1.0625 (@94,5]; 7.5");
+    std::string const g("0 [0, 1); 12.25 [1, @92); 0 [@92, @93); 27.875 [@93, @94); 0 [@94, @95); 1.0625 [@95, 6); 7.5 [6, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -352,7 +359,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 @93; 3 @96; 5 @99; 7");
-    std::string const g("1 @93; 3 @96; 5 @99; 7");
+    std::string const g("1 [0, @93); 3 [@93, @96); 5 [@96, @99); 7 [@99, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -399,7 +406,7 @@ int test_main(int, char*[])
     strvec const c      {"p", "p", "rrr", "rrr", "q", "q", "q", "q", "q"};
     double const d[n] = { 0 ,  0 ,   0  ,   0  ,  0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("p[0, 2); rrr [2, 4);q[4, 6);");
-    std::string const g("p[0, 2); rrr [2, 4);q[4, 6);");
+    std::string const g("p [0, 2); rrr [2, 4); q [4, maturity)");
     strvec const k{"not_used", "p", "q", "r", "rr", "rrr"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     // Toggle keywords-only switch on: same result.
@@ -415,7 +422,7 @@ int test_main(int, char*[])
     strvec const c     {"", "", "keyword_00", "keyword_00", "", "", "", "", ""};
     double const d[n] ={ 1,  1,       0     ,       0     ,  5,  5,  7,  7,  7};
     std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
-    std::string const g("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
+    std::string const g("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7 [6, maturity)");
     strvec const k{"keyword_00"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
@@ -429,7 +436,7 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "z", "p", "z", "z", "p", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  5 ,  5 ,  0 ,  7 ,  7 ,  7 };
     std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
-    std::string const g("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
+    std::string const g(""); // Expression is invalid.
     char const* m =
         "Assertion 'a_default_keyword.empty() ||"
         " a_keywords_only && contains(a_allowed_keywords, a_default_keyword)'"
@@ -450,7 +457,7 @@ int test_main(int, char*[])
     strvec const c      {"z", "z", "z", "z", "z", "z", "z", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
-    std::string const g("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
+    std::string const g(""); // Expression is invalid.
     char const* m =
         "Expected keyword chosen from { p q z }."
         " Current token 'number' at position 21.\n"
@@ -474,7 +481,9 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "z", "z", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
-    std::string const g("q [0, 2); p [4, maturity)");
+    // A sequence with a gap can't be created in the GUI; but how does
+    // the GUI translate this sequence if it's typed in?
+    std::string const g("q [0, 2); z [2, 4); p [4, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
@@ -491,7 +500,7 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "u", "u", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
-    std::string const g("q [0, 2); p [4, maturity)");
+    std::string const g(""); // Expression is invalid.
     char const* m =
         "Assertion 'a_default_keyword.empty() ||"
         " a_keywords_only && contains(a_allowed_keywords, a_default_keyword)'"
@@ -514,7 +523,7 @@ int test_main(int, char*[])
     strvec const c      {"z", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
-    std::string const g("q [1, 3); p [3, maturity)");
+    std::string const g("z [0, 1); q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
@@ -530,7 +539,7 @@ int test_main(int, char*[])
     strvec const c      {"", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
-    std::string const g("q [1, 3); p [3, maturity)");
+    std::string const g("0 [0, 1); q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
@@ -540,7 +549,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
     std::string const e("7, retirement; 4, maturity");
-    std::string const g("7, retirement; 4, maturity");
+    std::string const g("7 [0, retirement); 4 [retirement, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.interval_representation());
@@ -555,7 +564,7 @@ int test_main(int, char*[])
     int const n = 2;
     double const d[n] = {0, 0};
     std::string const e("[0, 1)");
-    std::string const g("[0, 1)");
+    std::string const g(""); // Expression is invalid.
     char const* m =
         "Expected number or keyword."
         " Current token '[' at position 1.\n"
