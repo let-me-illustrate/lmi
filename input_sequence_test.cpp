@@ -34,6 +34,7 @@ void check
     ,int                             n
     ,double const*                   d
     ,std::string const&              e
+    ,std::string const&              g
     ,char const*                     m = ""
     ,std::vector<std::string> const& k = std::vector<std::string>()
     ,std::vector<std::string> const& c = std::vector<std::string>()
@@ -76,21 +77,33 @@ void check
             std::cout << std::endl;
             }
 
-        INVOKE_BOOST_TEST(bv && bs, file, line);
+        std::string const& f = seq.mathematical_representation();
+        bool const bf = g == f;
+        if(!bf)
+            {
+            std::cout << "\nExpression:                '" << e << "'";
+            std::cout << "\n  observed representation: '" << f << "'";
+            std::cout << "\n  differs from expected:   '" << g << "'";
+            std::cout << std::endl;
+            }
+
+        // For the nonce, each 'g' is just a copy of its corresponding 'e',
+        // so don't make 'bf' fail the test yet.
+        INVOKE_BOOST_TEST(bv && bs /* && bf */, file, line);
         }
     catch(std::exception const& x)
         {
-        std::string const f = x.what();
-        std::string const g = f.substr(0, f.find("\n[file "));
-        std::string const h = (nullptr == m) ? std::string() : std::string(m);
-        bool const b = g == h;
+        std::string const y = x.what();
+        std::string const i = y.substr(0, y.find("\n[file "));
+        std::string const j = (nullptr == m) ? std::string() : std::string(m);
+        bool const b = i == j;
         if(!b)
             {
             std::cout
                 <<   "\nObserved exception:"
-                << "\n\n'" << g << "'"
+                << "\n\n'" << i << "'"
                 << "\n\ndiffers from expected:"
-                << "\n\n'" << h << "'"
+                << "\n\n'" << j << "'"
                 << std::endl
                 ;
             }
@@ -110,6 +123,7 @@ int test_main(int, char*[])
     //   expected results
     //     c: keywords
     //     d: numeric values
+    //     g: representation
     //     m: diagnostics
     //   InputSequence ctor arguments
     //     n: length
@@ -119,7 +133,7 @@ int test_main(int, char*[])
     //     w: default keyword
     // Tests instantiate local variables with those names as needed,
     // preferably in this order:
-    //   n c d e m k o w
+    //   n c d e g m k o w
     // which is the same as the order in check()'s declaration except
     // that c and d are juxtaposed to facilitate visual comparison.
 
@@ -128,7 +142,8 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
     std::string const e("");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // An all-blank string is treated as zero.
@@ -136,7 +151,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e(" ");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g(" ");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Make sure example in comment at top works.
@@ -145,7 +161,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 7, 7, 0, 0, 0, 0};
     std::string const e("1 3; 7 5;0");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 3; 7 5;0");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Numbers separated by semicolons mean values; the last is
@@ -154,7 +171,8 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 2, 3, 3, 3};
     std::string const e("1; 2; 3");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1; 2; 3");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Number-pairs separated by semicolons mean {value, end-duration}.
@@ -162,7 +180,8 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 3; 3 6; 5 9; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 3; 3 6; 5 9; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // {value, @ attained_age}
@@ -170,7 +189,8 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 @93; 3 @96; 5 @99; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 @93; 3 @96; 5 @99; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // {value, # number_of_years_since_last_interval_endpoint}
@@ -178,7 +198,8 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 #3; 3 #3; 5 #3; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 #3; 3 #3; 5 #3; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // {value [|( begin-duration, end-duration ]|) }
@@ -188,7 +209,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 3, 3, 3, 5, 7, 7, 7};
     std::string const e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Test (a,b].
@@ -196,7 +218,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 7, 7};
     std::string const e("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Test a mixture of all five ways of specifying duration.
@@ -204,7 +227,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 1, 2, 3, 4, 5, 5};
     std::string const e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Test intervals of length one.
@@ -212,7 +236,8 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
     std::string const e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Test empty intervals.
@@ -220,7 +245,8 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {1, 3, 5, 7, 7};
     std::string const e("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Test subtly improper intervals.
@@ -228,6 +254,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
     std::string const e("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
+    std::string const g("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
     char const* m =
         "Interval [ 0, 0 ) is improper: it ends before it begins."
         " Current token ';' at position 9.\n"
@@ -236,7 +263,7 @@ int test_main(int, char*[])
         "Interval [ 3, 3 ) is improper: it ends before it begins."
         " Current token ';' at position 29.\n"
         ;
-    check(__FILE__, __LINE__, n, d, e, m);
+    check(__FILE__, __LINE__, n, d, e, g, m);
     BOOST_TEST_EQUAL
         ("Interval [ 0, 0 ) is improper: it ends before it begins."
         ,abridge_diagnostics(m)
@@ -248,6 +275,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e("1; 9 (2, 0]; 3 [7, 3); 5 (5, 5); 7");
+    std::string const g("1; 9 (2, 0]; 3 [7, 3); 5 (5, 5); 7");
     char const* m =
         "Interval [ 3, 1 ) is improper: it ends before it begins."
         " Current token ';' at position 12.\n"
@@ -256,7 +284,7 @@ int test_main(int, char*[])
         "Interval [ 6, 5 ) is improper: it ends before it begins."
         " Current token ';' at position 32.\n"
         ;
-    check(__FILE__, __LINE__, n, d, e, m);
+    check(__FILE__, __LINE__, n, d, e, g, m);
     BOOST_TEST_EQUAL
         ("Interval [ 3, 1 ) is improper: it ends before it begins."
         ,abridge_diagnostics(m)
@@ -269,7 +297,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 1, 0, 3, 0, 5, 7, 7, 7};
     std::string const e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Test overlapping intervals.
@@ -277,7 +306,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {1, 1, 1, 3, 3, 5, 5, 7, 7};
     std::string const e("1; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Test intervals with decreasing begin-points.
@@ -285,11 +315,12 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e("5 [5, 6); 3 [2, 5); 1 [0, 2); 7");
+    std::string const g("5 [5, 6); 3 [2, 5); 1 [0, 2); 7");
     char const* m =
         "Previous interval began at duration 5;"
         " current interval [ 2, 5 ) would begin before that."
         ;
-    check(__FILE__, __LINE__, n, d, e, m);
+    check(__FILE__, __LINE__, n, d, e, g, m);
     BOOST_TEST_EQUAL
         (std::string(m)
         ,abridge_diagnostics(m)
@@ -301,7 +332,8 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12, 0, 27, 0, 1, 7, 7, 7, 7};
     std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, 5]; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("12 [1, @92); 27 [@93, @93]; 1 (@94, 5]; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // Test floating-point values; we choose values that we know
@@ -311,7 +343,8 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625 (@94,5]; 7.5");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("12.25 [1,@92); 27.875 [@93,@93]; 1.0625 (@94,5]; 7.5");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // {value, @ age} means {value, to-attained-age}
@@ -319,7 +352,8 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 @93; 3 @96; 5 @99; 7");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("1 @93; 3 @96; 5 @99; 7");
+    check(__FILE__, __LINE__, n, d, e, g);
     }
 
     // TODO ?? Test against canonical representation once we define that.
@@ -365,13 +399,14 @@ int test_main(int, char*[])
     strvec const c      {"p", "p", "rrr", "rrr", "q", "q", "q", "q", "q"};
     double const d[n] = { 0 ,  0 ,   0  ,   0  ,  0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("p[0, 2); rrr [2, 4);q[4, 6);");
+    std::string const g("p[0, 2); rrr [2, 4);q[4, 6);");
     strvec const k{"not_used", "p", "q", "r", "rr", "rrr"};
-    check(__FILE__, __LINE__, n, d, e, "", k, c);
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     // Toggle keywords-only switch on: same result.
     bool const o = true;
-    check(__FILE__, __LINE__, n, d, e, "", k, c, o);
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c, o);
     // Toggle keywords-only switch explicitly off: same result.
-    check(__FILE__, __LINE__, n, d, e, "", k, c, false);
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c, false);
     }
 
     // Test numbers mixed with (enumerative) allowed keywords.
@@ -380,8 +415,9 @@ int test_main(int, char*[])
     strvec const c     {"", "", "keyword_00", "keyword_00", "", "", "", "", ""};
     double const d[n] ={ 1,  1,       0     ,       0     ,  5,  5,  7,  7,  7};
     std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
+    std::string const g("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
     strvec const k{"keyword_00"};
-    check(__FILE__, __LINE__, n, d, e, "", k, c);
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
 
     // Test numbers mixed with (enumerative) allowed keywords, with
@@ -393,6 +429,7 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "z", "p", "z", "z", "p", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  5 ,  5 ,  0 ,  7 ,  7 ,  7 };
     std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
+    std::string const g("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
     char const* m =
         "Assertion 'a_default_keyword.empty() ||"
         " a_keywords_only && contains(a_allowed_keywords, a_default_keyword)'"
@@ -400,7 +437,7 @@ int test_main(int, char*[])
         ;
     strvec const k{"p", "q", "z"};
     std::string w("z");
-    check(__FILE__, __LINE__, n, d, e, m, k, c, false, w);
+    check(__FILE__, __LINE__, n, d, e, g, m, k, c, false, w);
     BOOST_TEST_EQUAL
         (std::string(m)
         ,abridge_diagnostics(m)
@@ -413,6 +450,7 @@ int test_main(int, char*[])
     strvec const c      {"z", "z", "z", "z", "z", "z", "z", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
+    std::string const g("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
     char const* m =
         "Expected keyword chosen from { p q z }."
         " Current token 'number' at position 21.\n"
@@ -422,7 +460,7 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
-    check(__FILE__, __LINE__, n, d, e, m, k, c, o, w);
+    check(__FILE__, __LINE__, n, d, e, g, m, k, c, o, w);
     BOOST_TEST_EQUAL
         ("Expected keyword chosen from { p q z }."
         ,abridge_diagnostics(m)
@@ -436,10 +474,11 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "z", "z", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
+    std::string const g("q [0, 2); p [4, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
-    check(__FILE__, __LINE__, n, d, e, "", k, c, o, w);
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c, o, w);
     }
 
     // Test a default keyword that is not an element of the set of
@@ -452,6 +491,7 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "u", "u", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
+    std::string const g("q [0, 2); p [4, maturity)");
     char const* m =
         "Assertion 'a_default_keyword.empty() ||"
         " a_keywords_only && contains(a_allowed_keywords, a_default_keyword)'"
@@ -460,7 +500,7 @@ int test_main(int, char*[])
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("u");
-    check(__FILE__, __LINE__, n, d, e, m, k, c, o, w);
+    check(__FILE__, __LINE__, n, d, e, g, m, k, c, o, w);
     BOOST_TEST_EQUAL
         (std::string(m)
         ,abridge_diagnostics(m)
@@ -474,10 +514,11 @@ int test_main(int, char*[])
     strvec const c      {"z", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
+    std::string const g("q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
-    check(__FILE__, __LINE__, n, d, e, "", k, c, o, w);
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c, o, w);
     }
 
     // Test an expression with a gap before the first interval,
@@ -489,8 +530,9 @@ int test_main(int, char*[])
     strvec const c      {"", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
+    std::string const g("q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
-    check(__FILE__, __LINE__, n, d, e, "", k, c);
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
 
     // Duration keywords: {retirement, maturity}
@@ -498,7 +540,8 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
     std::string const e("7, retirement; 4, maturity");
-    check(__FILE__, __LINE__, n, d, e);
+    std::string const g("7, retirement; 4, maturity");
+    check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.interval_representation());
     BOOST_TEST_EQUAL(e_inception , i[0].begin_mode);
@@ -512,11 +555,12 @@ int test_main(int, char*[])
     int const n = 2;
     double const d[n] = {0, 0};
     std::string const e("[0, 1)");
+    std::string const g("[0, 1)");
     char const* m =
         "Expected number or keyword."
         " Current token '[' at position 1.\n"
         ;
-    check(__FILE__, __LINE__, n, d, e, m);
+    check(__FILE__, __LINE__, n, d, e, g, m);
     BOOST_TEST_EQUAL
         ("Expected number or keyword."
         ,abridge_diagnostics(m)
