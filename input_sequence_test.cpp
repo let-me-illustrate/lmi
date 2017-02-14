@@ -310,10 +310,11 @@ int test_main(int, char*[])
     // Test overlapping intervals.
     {
     int const n = 9;
-    double const d[n] = {1, 1, 1, 3, 3, 5, 5, 7, 7};
-    std::string const e("1; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
+    double const d[n] = {0, 1, 1, 3, 3, 5, 5, 7, 7};
+    std::string const e("0; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
     // mathematical_representation() returns '...1 [1, maturity)3 [3, 8)...'?
-    std::string const g("1 [0, 1); 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7"); // Isn't this invalid?
+    // Should overlapping intervals be accepted anyway?
+    std::string const g("0 [0, 1); 1 [1, 9); 3 [3, 8); 5 [5, 7); 7 [7, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
