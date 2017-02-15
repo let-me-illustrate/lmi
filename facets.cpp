@@ -76,13 +76,10 @@ namespace
       private:
         static std::ctype_base::mask const* get_table()
             {
-            static std::ctype_base::mask m_[table_size];
-            std::copy(classic_table(), classic_table() + table_size, m_);
-            int const space = ' ';
-            m_[space] = static_cast<std::ctype_base::mask>
-                (m_[space] & ~std::ctype_base::space
-                );
-            return m_;
+            static std::ctype_base::mask rc[table_size];
+            std::copy(classic_table(), classic_table() + table_size, rc);
+            rc[' '] &= ~std::ctype_base::space;
+            return rc;
             }
     };
 
