@@ -1686,6 +1686,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         while(std::getline(iss_line, token, '\t'))
             {
+#if 0 // expunge soon?
             static std::string const space(" ");
             if(std::string::npos == token.find_first_not_of(space))
                 {
@@ -1703,6 +1704,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 //   http://savannah.nongnu.org/bugs/?20240
                 fatal_error() << "Invalid input." << LMI_FLUSH;
                 }
+#endif // 0
             values.push_back(token);
             }
 
