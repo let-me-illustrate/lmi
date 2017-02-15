@@ -29,6 +29,7 @@
 #include "contains.hpp"
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
+#include "facets.hpp"                   // tab_is_not_whitespace_locale()
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
@@ -1615,6 +1616,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     std::vector<Input> cells;
 
     std::istringstream iss_census(census_data);
+    iss_census.imbue(tab_is_not_whitespace_locale());
     std::string line;
 
     // Get header line; parse into field names.
