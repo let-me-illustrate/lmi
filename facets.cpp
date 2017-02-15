@@ -90,15 +90,7 @@ namespace
     std::locale const& locale_with_facet()
     {
         static Facet f;
-        // This message [rejoin lines split here for readability]
-        //   http://groups.google.com/groups
-        //     ?selm=nsa2fvssom2ggk0ohj05n7rfdk05a5co96%404ax.com
-        // describes the technique used here to avoid the Most Vexing
-        // Parse.
-        static std::locale custom_locale = std::locale
-            (std::locale()
-            ,&f
-            );
+        static std::locale custom_locale = std::locale(std::locale(), &f);
         return custom_locale;
     }
 } // Unnamed namespace.
