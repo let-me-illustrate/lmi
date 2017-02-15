@@ -93,10 +93,15 @@ namespace
     }
 } // Unnamed namespace.
 
-// Convenience interface.
+// Convenience interfaces.
 
 std::locale const& blank_is_not_whitespace_locale()
 {
     return locale_with_facet<C_is_not_whitespace_ctype<' '>>();
+}
+
+std::locale const& tab_is_not_whitespace_locale()
+{
+    return locale_with_facet<C_is_not_whitespace_ctype<'\t'>>();
 }
 
