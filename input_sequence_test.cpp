@@ -273,7 +273,7 @@ int test_main(int, char*[])
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
     std::string const e("1 [0, 0); 3 (1, 2); 5 (2, 2]; 7");
-//    census += "'" + e + "\t\timproper first interval\t\n";
+    // census: invalid expression cannot be pasted into GUI
     std::string const g(""); // Expression is invalid.
     char const* m =
         "Interval [ 0, 0 ) is improper: it ends before it begins."
