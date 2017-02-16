@@ -1369,7 +1369,6 @@ class InputSequenceButton
 InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
     :wxButton(parent, id, "...", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT)
 {
-    SetToolTip("Open sequence editor");
 }
 
 } // Unnamed namespace.
