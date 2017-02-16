@@ -2,7 +2,7 @@
 
 # git commit-msg hook
 
-# Copyright (C) 2016 Gregory W. Chicares.
+# Copyright (C) 2016, 2017 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -26,7 +26,7 @@ set -e
 sed_script='
 1{/\.$/{s/^.*$/Do not end first line with period/p}}
 2{/^$/!{s/\(^.*$\)/Second line "\1" not empty./p}}
-/.\{73\}/s/\(^.*$\)/\1 exceeds 72 characters/p
+/.\{73\}/s/\(^.*$\)/"\1" exceeds 72 characters/p
 '
 
 printf "checking commit message..."
