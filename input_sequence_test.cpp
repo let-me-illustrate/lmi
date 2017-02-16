@@ -550,9 +550,10 @@ int test_main(int, char*[])
     }
 
     // Test an expression with a gap before the first interval,
-    // without the keywords-only switch. The default value should
-    // be numeric, and the keyword gap should be filled with an
-    // empty string.
+    // without the keywords-only switch. This is otherwise the same
+    // as the preceding case; results differ in that the default value
+    // is numeric and the keyword gap is filled with an empty string.
+    // (Should it be empty?)
     {
     int const n = 5;
     strvec const c      {"", "q", "q", "p", "p"};
