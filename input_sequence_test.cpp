@@ -594,7 +594,7 @@ int test_main(int, char*[])
     }
 
     std::cout
-        << "Paste into a census to test similar expressions in the GUI:\n\n"
+        << "\nPaste into a census to test similar expressions in the GUI:\n\n"
         << "---------8<--------8<--------8<--------"
         << "8<--------8<--------8<--------8<-------"
         << census
