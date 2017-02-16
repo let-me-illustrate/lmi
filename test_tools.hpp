@@ -117,15 +117,13 @@ namespace lmi_test
 ///   - expected: macro argument 'WHAT', the string anticipated.
 ///
 /// Deem the arguments equivalent iff either:
-///   - 'WHAT' is empty; or
+///   - 'WHAT' is empty, indicating that the actual exception's what()
+///      is to be disregarded (not that it is expected to be empty);
 ///   - 'WHAT' exactly matches the actual exception's what(); or
 ///   - 'WHAT' matches the actual exception's what() up to but not
 ///      including any lmi exception-location string. (Some lmi
 ///      exceptions add a newline and the file name and line number,
-///      always beginning "\n[file ").
-///
-/// TODO ?? Probably the first element of the triple condition should
-/// be removed, and tests that rely on it strengthened.
+///      always beginning "\n[file "--cf. LMI_FLUSH).
 
 inline bool whats_what(std::string const& observed, std::string const& expected)
 {
@@ -195,22 +193,23 @@ bool whats_what(std::string const& observed, what_regex const& expected);
             }                                                 \
         }                                                     \
 
-#define INVOKE_BOOST_TEST(exp,file,line) \
-    if(!(exp))                           \
-        {                                \
-        lmi_test::record_error();        \
-        lmi_test::error_stream()         \
-            << "\n**** test failed: "    \
-            << (exp)                     \
-            << "\n[invoked from "        \
-            << "file " << (file) << ", " \
-            << "line: " << (line)        \
-            << "]"                       \
-            << BOOST_TEST_FLUSH          \
-            ;                            \
-        }                                \
-    else                                 \
-        lmi_test::record_success();      \
+#define INVOKE_BOOST_TEST(exp,file,line)    \
+    if(!(exp))                              \
+        {                                   \
+        lmi_test::record_error();           \
+        lmi_test::error_stream()            \
+            << lmi_test::error_prefix       \
+            << "test failed: "              \
+            << (exp)                        \
+            << "\n[invoked from "           \
+            << "file " << (file) << ", "    \
+            << "line: " << (line)           \
+            << "]"                          \
+            << BOOST_TEST_FLUSH             \
+            ;                               \
+        }                                   \
+    else                                    \
+        lmi_test::record_success();         \
 
 #define INVOKE_BOOST_TEST_EQUAL(a,b,file,line)   \
     INVOKE_BOOST_TEST_RELATION(a,==,b,file,line) \

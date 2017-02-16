@@ -1095,17 +1095,17 @@ void Skeleton::UponTestPasting(wxCommandEvent&)
     ClipboardEx::SetText("1\r\n2\r\n3\r\n");
     t.SetSelection(-1L, -1L);
     t.Paste();
-    if("1;2;3" != t.GetValue())
+    if("1;2;3;" != t.GetValue())
         {
-        warning() << "'1;2;3' != '" << t.GetValue() << "'" << LMI_FLUSH;
+        warning() << "'1;2;3;' != '" << t.GetValue() << "'" << LMI_FLUSH;
         }
 
     ClipboardEx::SetText("X\tY\tZ\t");
     t.SetSelection(-1L, -1L);
     t.Paste();
-    if("X;Y;Z" != t.GetValue())
+    if("X;Y;Z;" != t.GetValue())
         {
-        warning() << "'X;Y;Z' != '" << t.GetValue() << "'" << LMI_FLUSH;
+        warning() << "'X;Y;Z;' != '" << t.GetValue() << "'" << LMI_FLUSH;
         }
 
     z->Destroy();

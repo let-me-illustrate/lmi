@@ -24,7 +24,7 @@
 #include "yare_input.hpp"
 
 #include "input.hpp"
-#include "input_seq_helpers.hpp"        // convert_vector_type()
+#include "input_sequence_aux.hpp"       // convert_vector_type()
 #include "miscellany.hpp"               // each_equal()
 
 #include <numeric>                      // std::accumulate()

@@ -25,8 +25,8 @@
 
 #include <algorithm>                    // std::copy()
 
-// Class blank_is_not_whitespace_ctype is intended for extracting
-// std::strings from a stream without stopping at blanks. It is a
+// Class C_is_not_whitespace_ctype is intended for extracting
+// std::strings from a stream without stopping at char <C>. It is a
 // derived work based on Dietmar Kuehl's article
 //   http://groups.google.com/groups?selm=7vpld2%24jj%241%40nnrp1.deja.com
 // which bears no copyright notice, as is usual in usenet.
@@ -35,8 +35,8 @@
 //   http://groups.google.com/groups?selm=3820A76F.3952E808%40ihug.co.nz
 // that ' ' can be used as an array index even if type 'char' is
 // signed, because 2.2/3 requires it to have a positive value.
-// However, gcc has a warning for 'char' array indexes that doesn't
-// recognize this exception, so a workaround for "[' ']" is used here.
+// The template parameter is specifically unsigned to avoid compiler
+// warnings about [] with a negative index.
 //
 // GWC modified this class
 //   in 2004 (see Motivation below)
@@ -66,23 +66,21 @@
 
 namespace
 {
-    class blank_is_not_whitespace_ctype: public std::ctype<char>
+    template<unsigned char C>
+    class C_is_not_whitespace_ctype: public std::ctype<char>
     {
       public:
-        blank_is_not_whitespace_ctype()
+        C_is_not_whitespace_ctype()
             :std::ctype<char>(get_table(), false, 1)
             {}
 
       private:
         static std::ctype_base::mask const* get_table()
             {
-            static std::ctype_base::mask m_[table_size];
-            std::copy(classic_table(), classic_table() + table_size, m_);
-            int const space = ' ';
-            m_[space] = static_cast<std::ctype_base::mask>
-                (m_[space] & ~std::ctype_base::space
-                );
-            return m_;
+            static std::ctype_base::mask rc[table_size];
+            std::copy(classic_table(), classic_table() + table_size, rc);
+            rc[C] &= ~std::ctype_base::space;
+            return rc;
             }
     };
 
@@ -90,23 +88,20 @@ namespace
     std::locale const& locale_with_facet()
     {
         static Facet f;
-        // This message [rejoin lines split here for readability]
-        //   http://groups.google.com/groups
-        //     ?selm=nsa2fvssom2ggk0ohj05n7rfdk05a5co96%404ax.com
-        // describes the technique used here to avoid the Most Vexing
-        // Parse.
-        static std::locale custom_locale = std::locale
-            (std::locale()
-            ,&f
-            );
+        static std::locale custom_locale = std::locale(std::locale(), &f);
         return custom_locale;
     }
 } // Unnamed namespace.
 
-// Convenience interface.
+// Convenience interfaces.
 
 std::locale const& blank_is_not_whitespace_locale()
 {
-    return locale_with_facet<blank_is_not_whitespace_ctype>();
+    return locale_with_facet<C_is_not_whitespace_ctype<' '>>();
+}
+
+std::locale const& tab_is_not_whitespace_locale()
+{
+    return locale_with_facet<C_is_not_whitespace_ctype<'\t'>>();
 }
 

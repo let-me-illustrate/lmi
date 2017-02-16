@@ -67,6 +67,7 @@
 #include <ostream>
 #include <regex>
 #include <stdexcept>
+#include <string>
 
 // GWC changed namespace 'boost' to prevent any conflict with code in
 // a later version of boost.
@@ -84,9 +85,30 @@ namespace lmi_test
     };
   } // namespace test
 
+    // Rationale for writing these prefixen as concatenations of short
+    // string literals: during pre-release testing, an error in the
+    // following statement created an appearance that every test had
+    // succeeded when actually none could be built, because gcc emitted
+    // the (not-then-obfuscated) success prefix once for each test as
+    // part of an error message...and therefore 'grep --count' found
+    // exactly the expected number of apparent success markers.
+
+    std::string success_prefix             = "\n!""!""!""! ";
+
+    // There is no 'default_success_prefix' because there is no need to
+    // override 'success_prefix'.
+
+    std::string const default_error_prefix = "\n?""?""?""? ";
+
+    // Change this to test this testing library's facilities without
+    // emitting this actual prefix, e.g., to force simulated errors.
+    // Change it back to perform tests that are intended to pass,
+    // e.g., tests to validate internal helpers such as whats_what().
+    std::string error_prefix = default_error_prefix;
+
     std::ostream& error_stream()
     {
-        return std::cout << "\n**** test failed: ";
+        return std::cout << error_prefix << "test failed: ";
     }
 
     void record_error()
@@ -151,7 +173,11 @@ int cpp_main(int argc, char* argv[])
 
     catch(lmi_test::test::test_tools_exception const&)
         {
-        std::cout << "\n**** previous test error is fatal" << std::endl;
+        std::cout
+            << lmi_test::error_prefix
+            << "previous test error is fatal"
+            << std::endl
+            ;
         // Reset so we don't get two messages.
         lmi_test::test::test_tools_errors = 0;
         result = lmi_test::exit_test_failure;
@@ -160,7 +186,7 @@ int cpp_main(int argc, char* argv[])
     if(lmi_test::test::test_tools_errors)
         {
         std::cout
-            << "\n**** "
+            << lmi_test::error_prefix
             << lmi_test::test::test_tools_errors
             << " test errors detected; "
             << lmi_test::test::test_tools_successes

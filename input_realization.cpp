@@ -30,7 +30,7 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
-#include "input_seq_helpers.hpp"
+#include "input_sequence_aux.hpp"       // convert_vector()
 #include "miscellany.hpp"               // each_equal(), minmax
 #include "round_to.hpp"
 #include "value_cast.hpp"

@@ -1,4 +1,4 @@
-// Interpret sequence strings.
+// Interpret sequence strings containing mc_enum and tn_range types.
 //
 // Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
@@ -19,8 +19,13 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef input_seq_helpers_hpp
-#define input_seq_helpers_hpp
+// Input sequences are often used with mc_enum and tn_range types.
+// This header contains some auxiliary functions that are useful for
+// those UDTs in combination with sequences, while keeping all those
+// entities physically separate otherwise.
+
+#ifndef input_sequence_aux_hpp
+#define input_sequence_aux_hpp
 
 #include "config.hpp"
 
@@ -126,5 +131,5 @@ std::vector<Number> convert_vector_type
     return z;
 }
 
-#endif // input_seq_helpers_hpp
+#endif // input_sequence_aux_hpp
 

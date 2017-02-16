@@ -1,4 +1,4 @@
-// Input sequences e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0....
+// Input sequences (e.g. 1 3; 7 5;0; --> 1 1 1 7 7 0...)
 //
 // Copyright (C) 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
@@ -42,7 +42,7 @@
 // editing each life, which was unacceptably tedious.
 
 // Extract the grammar from lines matching the regexp _// GRAMMAR_ in
-// the implementation file.
+// the parser TU.
 //
 // Index origin is always zero. This is actually natural for end users,
 // who think in terms of endpoints--inception implicitly being duration
@@ -131,124 +131,13 @@
 
 #include "config.hpp"
 
+#include "input_sequence_interval.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <string>
-#include <sstream>
 #include <vector>
-
-enum duration_mode
-    {e_invalid_mode
-    ,e_duration
-    ,e_attained_age
-    ,e_number_of_years
-    ,e_inception
-    ,e_inforce
-    ,e_retirement
-    ,e_maturity
-    };
-
-// value applies throughout the interval [begin_duration, end_duration).
-//   where value means value_keyword if value_is_keyword, else value_number
-// 'insane' flags instances that are syntactically valid but semantically
-// invalid, such as improper intervals e.g. [5, 3).
-struct ValueInterval
-{
-    ValueInterval();
-
-    double        value_number;
-    std::string   value_keyword;
-    bool          value_is_keyword;
-    int           begin_duration;
-    duration_mode begin_mode;
-    int           end_duration;
-    duration_mode end_mode;
-    bool          insane;
-};
-
-class SequenceParser
-    :        private lmi::uncopyable <SequenceParser>
-    ,virtual private obstruct_slicing<SequenceParser>
-{
-  public:
-    SequenceParser
-        (std::string const&              input_expression
-        ,int                             a_years_to_maturity
-        ,int                             a_issue_age
-        ,int                             a_retirement_age
-        ,int                             a_inforce_duration
-        ,int                             a_effective_year
-        ,std::vector<std::string> const& a_allowed_keywords
-        ,bool                            a_keywords_only
-        );
-
-    ~SequenceParser();
-
-    std::string diagnostics() const;
-    std::vector<ValueInterval> const& intervals() const;
-
-  private:
-    enum token_type
-        {e_eof             = 0
-        ,e_major_separator = ';'
-        ,e_minor_separator = ','
-        ,e_begin_incl      = '['
-        ,e_begin_excl      = '('
-        ,e_end_incl        = ']'
-        ,e_end_excl        = ')'
-        ,e_age_prefix      = '@'
-        ,e_cardinal_prefix = '#'
-        ,e_number
-        ,e_keyword
-        ,e_startup
-        };
-    std::string token_type_name(token_type);
-
-    void duration_scalar();
-    void null_duration();
-    void single_duration();
-    void intervalic_duration();
-    void validate_duration
-        (int           tentative_begin_duration
-        ,duration_mode tentative_begin_duration_mode
-        ,int           tentative_end_duration
-        ,duration_mode tentative_end_duration_mode
-        );
-    void duration();
-    void value();
-    void span();
-    void sequence();
-    token_type get_token();
-    void match(token_type);
-
-    void mark_diagnostic_context();
-
-    std::istringstream input_stream_;
-
-    // Copies of ctor args that are identical to class InputSequence's.
-    int years_to_maturity_;
-    int issue_age_;
-    int retirement_age_;
-    int inforce_duration_;
-    int effective_year_;
-    std::vector<std::string> allowed_keywords_;
-    bool keywords_only_;
-
-    token_type current_token_type_;
-    double current_number_;
-    std::string current_keyword_;
-    int current_duration_scalar_;
-    duration_mode previous_duration_scalar_mode_;
-    duration_mode current_duration_scalar_mode_;
-    ValueInterval current_interval_;
-    int last_input_duration_;
-
-    std::ostringstream diagnostics_;
-
-    std::vector<ValueInterval> intervals_;
-};
 
 class LMI_SO InputSequence
     :        private lmi::uncopyable <InputSequence>
@@ -267,9 +156,8 @@ class LMI_SO InputSequence
         ,std::string const&              a_default_keyword  = std::string()
         );
 
-    InputSequence(std::vector<double> const&);
-    InputSequence(std::vector<std::string> const&);
-    InputSequence(std::vector<double> const&, std::vector<std::string> const&);
+    explicit InputSequence(std::vector<double> const&);
+    explicit InputSequence(std::vector<std::string> const&);
 
     ~InputSequence();
 
@@ -281,7 +169,10 @@ class LMI_SO InputSequence
     std::vector<ValueInterval> const& interval_representation() const;
 
   private:
-    void realize_vector();
+    template<typename T>
+    void initialize_from_vector(std::vector<T> const&);
+
+    void realize_intervals();
 
     // Copies of ctor args that are identical to class SequenceParser's.
     // Most of these copies are unused as this is written in 2017-01;
