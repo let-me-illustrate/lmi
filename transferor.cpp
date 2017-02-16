@@ -222,7 +222,7 @@ namespace
             }
         else
             {
-            data = control.GetLabel();
+            data = control.GetLabel().ToStdString(wxConvUTF8);
             }
         return true;
     }
@@ -303,7 +303,7 @@ namespace
             // suppressed if living with that problem is acceptable.
 #   error Outdated library: wx-2.6.2 or greater is required.
 #endif // !wxCHECK_VERSION(2,6,2)
-            data = control.GetStringSelection();
+            data = control.GetStringSelection().ToStdString(wxConvUTF8);
             }
         return true;
     }
@@ -462,7 +462,7 @@ namespace
             }
         else
             {
-            data = control.GetValue();
+            data = control.GetValue().ToStdString(wxConvUTF8);
             }
         return true;
     }

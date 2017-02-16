@@ -58,7 +58,7 @@ std::string ClipboardEx::GetText()
 
     wxTextDataObject z;
     wxTheClipboard->GetData(z);
-    std::string s(z.GetText());
+    std::string s(z.GetText().ToStdString(wxConvUTF8));
 
     static std::string const crlf("\r\n");
     static std::string const   lf(  "\n");
@@ -187,7 +187,11 @@ void TestDateConversions()
             }
 
         std::string const lmi_str(lmi_date0.str());
-        std::string const wx_str(ConvertDateToWx(lmi_date0).FormatISODate());
+        std::string const wx_str
+            (ConvertDateToWx(lmi_date0)
+            .FormatISODate()
+            .ToStdString(wxConvUTF8)
+            );
         if(lmi_str != wx_str)
             {
             fatal_error()
@@ -213,7 +217,7 @@ std::vector<std::string> EnumerateBookPageNames(wxBookCtrlBase const& book)
     std::vector<std::string> z;
     for(std::size_t j = 0; j < book.GetPageCount(); ++j)
         {
-        std::string name(book.GetPageText(j));
+        std::string name(book.GetPageText(j).ToStdString(wxConvUTF8));
         LMI_ASSERT(!contains(z, name));
         z.push_back(name);
         }
