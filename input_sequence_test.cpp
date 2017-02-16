@@ -258,17 +258,11 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
-    // Test empty intervals. (But they aren't empty?)
-    {
-    int const n = 5;
-    double const d[n] = {1, 3, 5, 7, 7};
-    std::string const e("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
-    census += e + "\t\t\t\n";
-    std::string const g("1 [0, 1); 3 [1, 2); 5 [2, 3); 7 [3, maturity)");
-    check(__FILE__, __LINE__, n, d, e, g);
-    }
-
-    // Test subtly improper intervals.
+    // Test subtly improper (empty) intervals.
+    //
+    // Mathematical convention might regard these intervals:
+    //   (x,x); (x,x]; [x,x); and [y,x], x<y
+    // as proper but empty, yet that's merely a convention.
     {
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
