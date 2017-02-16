@@ -1369,7 +1369,6 @@ class InputSequenceButton
 InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
     :wxButton(parent, id, "...", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT)
 {
-    SetToolTip("Open sequence editor");
 }
 
 } // Unnamed namespace.
@@ -1493,7 +1492,7 @@ std::string InputSequenceEntry::field_name() const
 void InputSequenceEntry::UponChildKillFocus(wxFocusEvent& event)
 {
     // Check whether the given possibly null window is a child of another one.
-    auto const is_child_of = [](wxWindow* c, wxWindow* p)
+    auto const is_child_of = [](wxWindow const* c, wxWindow const* p)
         {
         return c && c->GetParent() == p;
         };
@@ -1503,12 +1502,15 @@ void InputSequenceEntry::UponChildKillFocus(wxFocusEvent& event)
     // InputSequenceEntry window opened from it and having our button as the
     // parent: this prevents the in-place editor in the census view from
     // closing whenever this happens.
-    if(is_child_of(event.GetWindow(), this) ||
-       is_child_of(wxGetTopLevelParent(event.GetWindow()), button_))
+    if
+        (  is_child_of(event.GetWindow(), this)
+        || is_child_of(wxGetTopLevelParent(event.GetWindow()), button_)
+        )
         {
         event.Skip();
         return;
         }
+
     ProcessWindowEvent(event);
 }
 
