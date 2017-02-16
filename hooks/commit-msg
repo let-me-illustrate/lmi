@@ -34,7 +34,7 @@ printf "checking commit message..."
 z=$(sed -n -e "$sed_script" "$1")
 
 if [ -n "$z" ]; then
-    printf '\n%b\n' "$z"
+    printf '\n%s\n' "$z"
     printf "COMMIT ABORTED\n"
     exit 1
 fi
