@@ -195,7 +195,7 @@ int test_main(int, char*[])
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
-    // {value, @ attained_age}
+    // {value, @ to-attained-age}
     {
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
@@ -372,16 +372,6 @@ int test_main(int, char*[])
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625(@94,#1]; 7.5");
     census += e + "\t\t! not a partition\t\n";
     std::string const g("0 [0, 1); 12.25 [1, @92); 0 [@92, @93); 27.875 [@93, @94); 0 [@94, @95); 1.0625 [@95, @96); 7.5 [@96, maturity)");
-    check(__FILE__, __LINE__, n, d, e, g);
-    }
-
-    // {value, @ age} means {value, to-attained-age}
-    {
-    int const n = 10;
-    double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
-    std::string const e("1 @93; 3 @96; 5 @99; 7");
-    census += e + "\t\t\t\n";
-    std::string const g("1 [0, @93); 3 [@93, @96); 5 [@96, @99); 7 [@99, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
