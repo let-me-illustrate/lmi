@@ -1492,15 +1492,27 @@ std::string InputSequenceEntry::field_name() const
 
 void InputSequenceEntry::UponChildKillFocus(wxFocusEvent& event)
 {
-    // Don't notify the parent (and thus wxDataViewCtrl) of focus change if its within this
-    // InputSequenceEntry composite control or a InputSequenceEditor window opened from it.
-    if(nullptr == event.GetWindow() ||
-        (event.GetWindow()->GetParent() != GetParent() &&
-        wxGetTopLevelParent(event.GetWindow())->GetParent() != this))
+    // Check whether the given possibly null window is a child of another one.
+    auto const is_child_of = [](wxWindow const* c, wxWindow const* p)
         {
-        GetParent()->ProcessWindowEvent(event);
+        return c && c->GetParent() == p;
+        };
+
+    // Suppress normal focus loss event processing if the focus simply goes to
+    // another element of this composite window or changes inside an
+    // InputSequenceEntry window opened from it and having our button as the
+    // parent: this prevents the in-place editor in the census view from
+    // closing whenever this happens.
+    if
+        (  is_child_of(event.GetWindow(), this)
+        || is_child_of(wxGetTopLevelParent(event.GetWindow()), button_)
+        )
+        {
+        event.Skip();
+        return;
         }
-    event.Skip();
+
+    ProcessWindowEvent(event);
 }
 
 void InputSequenceEntry::UponEnter(wxCommandEvent& event)
@@ -1539,6 +1551,8 @@ void InputSequenceEntry::DoOpenEditor()
 
     // Center the window on the [...] button for best locality -- it will be
     // close to user's point of attention and the mouse cursor.
+    // Note that if the parent used here changes, the code in
+    // UponChildKillFocus() would need to be updated.
     InputSequenceEditor editor(button_, title_, in);
 
     std::string sequence_string = std::string(text_->GetValue());
