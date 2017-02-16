@@ -500,7 +500,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="input_harmonization.cpp" />
     <ClCompile Include="input_realization.cpp" />
-    <ClCompile Include="input_seq_helpers.cpp" />
+    <ClCompile Include="input_sequence_aux.cpp" />
     <ClCompile Include="input_sequence.cpp" />
     <ClCompile Include="input_xml_io.cpp" />
     <ClCompile Include="interest_rates.cpp" />

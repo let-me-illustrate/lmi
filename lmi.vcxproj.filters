@@ -151,7 +151,7 @@
     <ClCompile Include="input_realization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input_seq_helpers.cpp">
+    <ClCompile Include="input_sequence_aux.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="input_sequence.cpp">
