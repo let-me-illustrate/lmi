@@ -1491,6 +1491,10 @@ std::string InputSequenceEntry::field_name() const
 
 void InputSequenceEntry::UponChildKillFocus(wxFocusEvent& event)
 {
+    // Never prevent the default focus event handling from taking place,
+    // whatever else we do with it.
+    event.Skip();
+
     // Check whether the given possibly null window is a child of another one.
     auto const is_child_of = [](wxWindow const* c, wxWindow const* p)
         {
@@ -1507,7 +1511,6 @@ void InputSequenceEntry::UponChildKillFocus(wxFocusEvent& event)
         || is_child_of(wxGetTopLevelParent(event.GetWindow()), button_)
         )
         {
-        event.Skip();
         return;
         }
 
