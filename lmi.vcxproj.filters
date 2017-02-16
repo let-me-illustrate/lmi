@@ -157,6 +157,9 @@
     <ClCompile Include="input_sequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="input_sequence_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="input_xml_io.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

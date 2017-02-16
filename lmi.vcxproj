@@ -502,6 +502,7 @@
     <ClCompile Include="input_realization.cpp" />
     <ClCompile Include="input_sequence_aux.cpp" />
     <ClCompile Include="input_sequence.cpp" />
+    <ClCompile Include="input_sequence_parser.cpp" />
     <ClCompile Include="input_xml_io.cpp" />
     <ClCompile Include="interest_rates.cpp" />
     <ClCompile Include="ledger.cpp" />
