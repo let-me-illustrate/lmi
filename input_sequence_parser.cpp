@@ -597,15 +597,21 @@ SequenceParser::token_type SequenceParser::get_token()
         case '5': case '6': case '7': case '8': case '9':
         case '.': case '-':
             {
+            // Lookahead is limited to a single character, not because
+            // this is an LL(1) grammar (where "1" means one token,
+            // not one character), but rather because a std::istream
+            // is used for convenience, and calling putback() multiple
+            // times may fail. If e.g. '.' or '-' were used elsewhere
+            // as well as in numeric tokens, then that convenience
+            // might be unaffordable.
             input_stream_.putback(c);
-            // TODO ?? Assigning 0.0 here at least gives a predictable
-            // value upon failure. We can't read both '.' and the
-            // following character and then reliably put both back.
+            // Zero-initialize so that parsing can continue with a
+            // non-random value in case extraction fails.
             current_number_ = 0.0;
             input_stream_ >> current_number_;
             if(input_stream_.fail())
                 {
-                diagnostics_ << "Invalid number '" << c << "'. ";
+                diagnostics_ << "Invalid number starting with '" << c << "'. ";
                 mark_diagnostic_context();
                 }
             return current_token_type_ = e_number;
