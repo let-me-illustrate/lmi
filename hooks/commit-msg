@@ -26,6 +26,7 @@ set -e
 sed_script='
 1{/\.$/{s/^.*$/Do not end first line with period/p}}
 2{/^$/!{s/\(^.*$\)/Second line "\1" not empty./p}}
+/^# ------------------------ >8 ------------------------/q
 /.\{73\}/s/\(^.*$\)/"\1" exceeds 72 characters/p
 '
 
