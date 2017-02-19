@@ -530,18 +530,8 @@ void SequenceParser::sequence()
                 {
                 return;
                 }
-            case e_major_separator:
-                {
-                match(current_token_type_);
-                if(e_eof == current_token_type_)
-                    {
-                    return;
-                    }
-                span();
-                }
-                break;
-// TODO ?? Superfluous. Same comment elsewhere. Fall through instead.
             case e_startup:
+            case e_major_separator:
                 {
                 match(current_token_type_);
                 if(e_eof == current_token_type_)
