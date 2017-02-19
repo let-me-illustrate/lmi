@@ -251,7 +251,7 @@ void SequenceParser::intervalic_duration()
     duration_mode tentative_begin_duration_mode = current_duration_scalar_mode_;
     int tentative_end_duration                  = -1;
     duration_mode tentative_end_duration_mode   = e_invalid_mode;
-    match(e_minor_separator); // TODO ?? Require this?
+    match(e_minor_separator);
     duration_scalar();
     if
         (  e_end_incl == current_token_type_
