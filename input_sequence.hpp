@@ -192,7 +192,5 @@ class LMI_SO InputSequence
     std::vector<std::string> keyword_result_;
 };
 
-std::string LMI_SO abridge_diagnostics(char const* what);
-
 #endif // input_sequence_hpp
 
