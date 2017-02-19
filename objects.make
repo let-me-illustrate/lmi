@@ -1002,6 +1002,7 @@ test_coding_rules$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(boost_regex_objects) \
   $(main_auxiliary_common_objects) \
+  miscellany.o \
   my_test_coding_rules.o \
   test_coding_rules.o \
 

@@ -515,6 +515,7 @@ test_coding_rules_SOURCES = \
   fenv_lmi.cpp \
   main_common.cpp \
   main_common_non_wx.cpp \
+  miscellany.cpp \
   my_test_coding_rules.cpp \
   sigfpe.cpp \
   test_coding_rules.cpp
