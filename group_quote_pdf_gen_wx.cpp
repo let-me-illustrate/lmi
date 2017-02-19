@@ -30,8 +30,8 @@
 #include "force_linking.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
-#include "ledger_variant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
+#include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"               // split_into_lines()
 #include "oecumenic_enumerations.hpp"   // oenum_format_style

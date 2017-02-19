@@ -31,8 +31,8 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <string>
 #include <sstream>
+#include <string>
 #include <vector>
 
 class SequenceParser

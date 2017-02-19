@@ -22,9 +22,9 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
+#include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_statusbar.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/crt.h>
 #include <wx/dialog.h>

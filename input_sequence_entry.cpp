@@ -27,8 +27,8 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "input.hpp"
-#include "input_sequence_aux.hpp"       // extract_keys_from_string_map()
 #include "input_sequence.hpp"
+#include "input_sequence_aux.hpp"       // extract_keys_from_string_map()
 #include "mvc_controller.hpp"
 #include "numeric_io_cast.hpp"
 #include "value_cast.hpp"
@@ -46,8 +46,8 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/wupdlock.h>
 #include <wx/valtext.h>
+#include <wx/wupdlock.h>
 
 #include <algorithm>                    // std::copy()
 #include <exception>

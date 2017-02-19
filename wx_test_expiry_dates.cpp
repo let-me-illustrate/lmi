@@ -24,9 +24,9 @@
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
+#include "version.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_date.hpp"
-#include "version.hpp"
 
 #include <wx/crt.h>
 

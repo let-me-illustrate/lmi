@@ -48,8 +48,8 @@
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
 #include <wx/utils.h>                   // wxBusyCursor
-#include <wx/xrc/xmlres.h>
 #include <wx/wupdlock.h>
+#include <wx/xrc/xmlres.h>
 
 #include <cstddef>                      // std::size_t
 #include <cstring>                      // std::strlen()

@@ -94,8 +94,8 @@
 #   include "tn_range.hpp"
 #   include "tn_range_type_trammels.hpp"
 #   include "tn_range_types.hpp"
-#   include "xml_serializable.hpp"
 #   include "value_cast.hpp"
+#   include "xml_serializable.hpp"
 #   include "yare_input.hpp"
 #   include "zero.hpp"
 

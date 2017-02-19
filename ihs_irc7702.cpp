@@ -1034,8 +1034,8 @@ double Irc7702::premiums_paid() const
 
 #include "ihs_timer.hpp"
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 // SOA table 120: "1980 CSO 50% Male Age nearest"
 static double const Q[100] =

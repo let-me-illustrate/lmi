@@ -94,8 +94,8 @@
 
 #include <boost/any.hpp>
 
-#include <wx/grid.h>
 #include <wx/choice.h>
+#include <wx/grid.h>
 
 #include <cstddef>                      // std::size_t
 #include <memory>                       // std::shared_ptr

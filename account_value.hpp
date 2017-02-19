@@ -29,8 +29,8 @@
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
-#include <iosfwd>
 #include <fstream>
+#include <iosfwd>
 #include <memory>                       // std::shared_ptr
 #include <string>
 #include <vector>
