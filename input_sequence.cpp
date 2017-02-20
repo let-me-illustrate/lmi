@@ -36,6 +36,14 @@
 #include <stdexcept>
 #include <type_traits>
 
+namespace
+{
+void assert_not_insane_or_disordered
+    (std::vector<ValueInterval> const& intervals
+    ,int                               years_to_maturity
+    );
+} // Unnamed namespace.
+
 InputSequence::InputSequence
     (std::string const&              input_expression
     ,int                             a_years_to_maturity
@@ -313,13 +321,46 @@ void InputSequence::realize_intervals()
     // ...though now of course it has been established:
     LMI_ASSERT(e_maturity        == intervals_.back().end_mode    );
 
+    assert_not_insane_or_disordered(intervals_, years_to_maturity_);
+
     std::vector<double>      r(years_to_maturity_);
     std::vector<std::string> s(years_to_maturity_, default_keyword_);
     number_result_  = r;
     keyword_result_ = s;
 
-    int prior_begin_duration = 0;
     for(auto const& interval_i : intervals_)
+        {
+        if(interval_i.value_is_keyword)
+            {
+            std::fill
+                (s.begin() + interval_i.begin_duration
+                ,s.begin() + interval_i.end_duration
+                ,interval_i.value_keyword
+                );
+            }
+        else
+            {
+            std::fill
+                (r.begin() + interval_i.begin_duration
+                ,r.begin() + interval_i.end_duration
+                ,interval_i.value_number
+                );
+            }
+        }
+
+    number_result_  = r;
+    keyword_result_ = s;
+}
+
+namespace
+{
+void assert_not_insane_or_disordered
+    (std::vector<ValueInterval> const& intervals
+    ,int                               years_to_maturity
+    )
+{
+    int prior_begin_duration = 0;
+    for(auto const& interval_i : intervals)
         {
         if(interval_i.insane)
             {
@@ -378,7 +419,7 @@ void InputSequence::realize_intervals()
                 << LMI_FLUSH
                 ;
             }
-        if(years_to_maturity_ < interval_i.end_duration)
+        if(years_to_maturity < interval_i.end_duration)
             {
             fatal_error()
                 << "Interval "
@@ -401,25 +442,7 @@ void InputSequence::realize_intervals()
                 ;
             }
         prior_begin_duration = interval_i.begin_duration;
-        if(interval_i.value_is_keyword)
-            {
-            std::fill
-                (s.begin() + interval_i.begin_duration
-                ,s.begin() + interval_i.end_duration
-                ,interval_i.value_keyword
-                );
-            }
-        else
-            {
-            std::fill
-                (r.begin() + interval_i.begin_duration
-                ,r.begin() + interval_i.end_duration
-                ,interval_i.value_number
-                );
-            }
         }
-
-    number_result_  = r;
-    keyword_result_ = s;
 }
+} // Unnamed namespace.
 
