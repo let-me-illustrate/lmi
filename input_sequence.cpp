@@ -328,6 +328,16 @@ void InputSequence::realize_intervals()
                 << LMI_FLUSH
                 ;
             }
+        if(interval_i.value_is_keyword && "daft" == interval_i.value_keyword)
+            {
+            fatal_error()
+                << "Interval "
+                << "[ " << interval_i.begin_duration << ", "
+                << interval_i.end_duration << " )"
+                << " has invalid value_keyword."
+                << LMI_FLUSH
+                ;
+            }
         if(e_invalid_mode == interval_i.begin_mode)
             {
             fatal_error()
@@ -345,16 +355,6 @@ void InputSequence::realize_intervals()
                 << "[ " << interval_i.begin_duration << ", "
                 << interval_i.end_duration << " )"
                 << " has invalid end_mode."
-                << LMI_FLUSH
-                ;
-            }
-        if(interval_i.value_is_keyword && "daft" == interval_i.value_keyword)
-            {
-            fatal_error()
-                << "Interval "
-                << "[ " << interval_i.begin_duration << ", "
-                << interval_i.end_duration << " )"
-                << " has invalid value_keyword."
                 << LMI_FLUSH
                 ;
             }
