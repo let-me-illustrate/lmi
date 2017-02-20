@@ -358,18 +358,33 @@ void InputSequence::realize_intervals()
                 << LMI_FLUSH
                 ;
             }
-        bool interval_is_ok =
-               0                         <= interval_i.begin_duration
-            && interval_i.begin_duration <= interval_i.end_duration
-            && interval_i.end_duration   <= years_to_maturity_
-            ;
-        if(!interval_is_ok)
+        if(interval_i.begin_duration < 0)
             {
             fatal_error()
                 << "Interval "
                 << "[ " << interval_i.begin_duration << ", "
                 << interval_i.end_duration << " )"
-                << " not valid."
+                << " is improper: it begins before duration zero."
+                << LMI_FLUSH
+                ;
+            }
+        if(interval_i.end_duration < interval_i.begin_duration)
+            {
+            fatal_error()
+                << "Interval "
+                << "[ " << interval_i.begin_duration << ", "
+                << interval_i.end_duration << " )"
+                << " is improper: it ends before it begins."
+                << LMI_FLUSH
+                ;
+            }
+        if(years_to_maturity_ < interval_i.end_duration)
+            {
+            fatal_error()
+                << "Interval "
+                << "[ " << interval_i.begin_duration << ", "
+                << interval_i.end_duration << " )"
+                << " is improper: it ends after maturity."
                 << LMI_FLUSH
                 ;
             }
