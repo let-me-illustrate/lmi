@@ -358,19 +358,6 @@ void InputSequence::realize_intervals()
                 << LMI_FLUSH
                 ;
             }
-        if(interval_i.begin_duration < prior_begin_duration)
-            {
-            fatal_error()
-                << "Previous interval began at duration "
-                << prior_begin_duration
-                << "; current interval "
-                << "[ " << interval_i.begin_duration << ", "
-                << interval_i.end_duration << " )"
-                << " would begin before that."
-                << LMI_FLUSH
-                ;
-            }
-        prior_begin_duration = interval_i.begin_duration;
         bool interval_is_ok =
                0                         <= interval_i.begin_duration
             && interval_i.begin_duration <= interval_i.end_duration
@@ -386,6 +373,19 @@ void InputSequence::realize_intervals()
                 << LMI_FLUSH
                 ;
             }
+        if(interval_i.begin_duration < prior_begin_duration)
+            {
+            fatal_error()
+                << "Previous interval began at duration "
+                << prior_begin_duration
+                << "; current interval "
+                << "[ " << interval_i.begin_duration << ", "
+                << interval_i.end_duration << " )"
+                << " would begin before that."
+                << LMI_FLUSH
+                ;
+            }
+        prior_begin_duration = interval_i.begin_duration;
         if(interval_i.value_is_keyword)
             {
             std::fill
