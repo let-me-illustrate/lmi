@@ -369,7 +369,6 @@ void InputSequence::realize_intervals()
                 << " would begin before that."
                 << LMI_FLUSH
                 ;
-            return;
             }
         prior_begin_duration = interval_i.begin_duration;
         bool interval_is_ok =
