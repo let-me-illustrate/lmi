@@ -42,6 +42,12 @@ void assert_not_insane_or_disordered
     (std::vector<ValueInterval> const& intervals
     ,int                               years_to_maturity
     );
+
+void fill_interval_gaps
+    (std::vector<ValueInterval> const& in
+    ,std::vector<ValueInterval>      & out
+    ,int                               years_to_maturity
+    );
 } // Unnamed namespace.
 
 InputSequence::InputSequence
@@ -95,30 +101,11 @@ InputSequence::InputSequence
         throw std::runtime_error(parser_diagnostics);
         }
 
-    intervals_ = parser.intervals();
-
-    // Inception and maturity endpoints exist, so the interval they
-    // define must exist. However, parsing an empty expression
-    // constructs zero intervals, so a default one must be created
-    // to make the physical reality meet the conceptual requirement.
-    if(intervals_.empty())
-        {
-        intervals_.push_back(ValueInterval());
-        }
-
-    // Extend the last interval's endpoint to maturity, replicating
-    // the last element. (This doesn't need to be done by the ctors
-    // that take vector arguments, because those arguments specify
-    // each value in [inception, maturity) and deduce the terminal
-    // (maturity) duration from size().)
-
-    // This invariant has not yet been established, whether or not the
-    // sequence was empty.
-    intervals_.back().end_duration = a_years_to_maturity;
-    // This invariant is established by realize_intervals(), but it
-    // does no harm to repeat it here, and it would be confusing not
-    // to do so in conjunction with the line above.
-    intervals_.back().end_mode     = e_maturity;
+    fill_interval_gaps
+        (parser.intervals()
+        ,intervals_
+        ,a_years_to_maturity
+        );
 
     realize_intervals();
 }
@@ -443,6 +430,38 @@ void assert_not_insane_or_disordered
             }
         prior_begin_duration = interval_i.begin_duration;
         }
+}
+
+void fill_interval_gaps
+    (std::vector<ValueInterval> const& in
+    ,std::vector<ValueInterval>      & out
+    ,int                               years_to_maturity
+    )
+{
+    out = in;
+
+    // Inception and maturity endpoints exist, so the interval they
+    // define must exist. However, parsing an empty expression
+    // constructs zero intervals, so a default one must be created
+    // to make the physical reality meet the conceptual requirement.
+    if(in.empty())
+        {
+        out.push_back(ValueInterval());
+        }
+
+    // Extend the last interval's endpoint to maturity, replicating
+    // the last element. (This doesn't need to be done by the ctors
+    // that take vector arguments, because those arguments specify
+    // each value in [inception, maturity) and deduce the terminal
+    // (maturity) duration from size().)
+
+    // This invariant has not yet been established, whether or not the
+    // sequence was empty.
+    out.back().end_duration = years_to_maturity;
+    // This invariant is established by realize_intervals(), but it
+    // does no harm to repeat it here, and it would be confusing not
+    // to do so in conjunction with the line above.
+    out.back().end_mode     = e_maturity;
 }
 } // Unnamed namespace.
 
