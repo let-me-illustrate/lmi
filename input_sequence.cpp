@@ -431,6 +431,14 @@ void assert_not_insane_or_disordered
         }
 }
 
+/// Assert postconditions established by all ctors.
+///
+/// What is actually asserted here, for now at least, is only that the
+/// intervals are contiguous--not that they truly partition the range
+/// [0, years_to_maturity). Cf. fill_interval_gaps(), which similarly
+/// establishes only this weaker invariant, which also happens to be
+/// what InputSequenceEntry asserts.
+
 void assert_sane_and_ordered_partition
     (std::vector<ValueInterval> const& intervals
     ,int                               years_to_maturity
@@ -445,6 +453,24 @@ void assert_sane_and_ordered_partition
 
     LMI_ASSERT(years_to_maturity == intervals.back().end_duration);
     LMI_ASSERT(e_maturity        == intervals.back().end_mode    );
+
+    int prior_end_duration = 0;
+    for(auto const& i : intervals)
+        {
+        if(i.begin_duration != prior_end_duration)
+            {
+            fatal_error()
+                << "Interval "
+                << "[ " << i.begin_duration << ", "
+                << i.end_duration << " )"
+                << " should begin at duration "
+                << prior_end_duration
+                << ", where the previous interval ended."
+                << LMI_FLUSH
+                ;
+            }
+        prior_end_duration = i.end_duration;
+        }
 }
 
 /// Create a partition of [0, maturity) from parser output.
