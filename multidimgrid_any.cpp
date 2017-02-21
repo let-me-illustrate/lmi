@@ -1170,7 +1170,7 @@ void MultiDimGrid::SetValue(int row, int col, wxString const& value)
         DoSetValue
             (EnsureIndexIsPositive(row)
             ,EnsureIndexIsPositive(col)
-            ,std::string(value)
+            ,value.ToStdString(wxConvUTF8)
             );
         }
     catch(std::exception const& e)
@@ -1376,7 +1376,7 @@ void MultiDimAxisAnyChoice::PopulateChoiceList()
     int const selection = GetSelection();
     std::string const selected_label =
         selection != wxNOT_FOUND
-        ? std::string(GetString(selection))
+        ? GetString(selection).ToStdString(wxConvUTF8)
         : std::string()
         ;
 

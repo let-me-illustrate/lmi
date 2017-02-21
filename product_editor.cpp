@@ -73,7 +73,7 @@ bool ProductEditorDocument::DoOpenDocument(wxString const& filename)
 {
     try
         {
-        ReadDocument(std::string(filename));
+        ReadDocument(filename.ToStdString(wxConvUTF8));
         return true;
         }
     catch(std::exception const& e)
@@ -95,7 +95,7 @@ bool ProductEditorDocument::DoSaveDocument(wxString const& filename)
 {
     try
         {
-        WriteDocument(std::string(filename));
+        WriteDocument(filename.ToStdString(wxConvUTF8));
         return true;
         }
     catch(std::exception const& e)

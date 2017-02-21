@@ -110,7 +110,7 @@ void PolicyDocument::WriteDocument(std::string const& filename)
         PolicyView& view = PredominantView();
         for(auto const& i : values_)
             {
-            *i.second = view.controls()[i.first]->GetValue();
+            *i.second = view.controls()[i.first]->GetValue().ToStdString(wxConvUTF8);
             }
         }
     save(product_data_, filename);
