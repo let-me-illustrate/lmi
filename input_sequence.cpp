@@ -302,17 +302,17 @@ std::vector<ValueInterval> const& InputSequence::interval_representation() const
 
 void InputSequence::realize_intervals()
 {
-    // Post-construction invariants.
-    // Every ctor must already have established this...
-    LMI_ASSERT(!intervals_.empty());
-    // ...and this:
-    LMI_ASSERT(years_to_maturity_ == intervals_.back().end_duration);
-    // It cannot be assumed that all ctors have yet established this...
-    intervals_.back().end_mode = e_maturity;
-    // ...though now of course it has been established:
-    LMI_ASSERT(e_maturity        == intervals_.back().end_mode    );
+    // Post-construction invariants that every ctor has already established.
 
     assert_not_insane_or_disordered(intervals_, years_to_maturity_);
+
+    LMI_ASSERT(!intervals_.empty());
+
+    LMI_ASSERT(0                  == intervals_.front().begin_duration);
+    LMI_ASSERT(e_inception        == intervals_.front().begin_mode    );
+
+    LMI_ASSERT(years_to_maturity_ == intervals_.back().end_duration);
+    LMI_ASSERT(e_maturity         == intervals_.back().end_mode    );
 
     std::vector<double>      r(years_to_maturity_);
     std::vector<std::string> s(years_to_maturity_, default_keyword_);
