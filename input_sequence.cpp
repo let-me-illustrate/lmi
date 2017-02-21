@@ -43,6 +43,11 @@ void assert_not_insane_or_disordered
     ,int                               years_to_maturity
     );
 
+void assert_sane_and_ordered_partition
+    (std::vector<ValueInterval> const& intervals
+    ,int                               years_to_maturity
+    );
+
 void fill_interval_gaps
     (std::vector<ValueInterval> const& in
     ,std::vector<ValueInterval>      & out
@@ -302,17 +307,7 @@ std::vector<ValueInterval> const& InputSequence::interval_representation() const
 
 void InputSequence::realize_intervals()
 {
-    // Post-construction invariants that every ctor has already established.
-
-    assert_not_insane_or_disordered(intervals_, years_to_maturity_);
-
-    LMI_ASSERT(!intervals_.empty());
-
-    LMI_ASSERT(0                  == intervals_.front().begin_duration);
-    LMI_ASSERT(e_inception        == intervals_.front().begin_mode    );
-
-    LMI_ASSERT(years_to_maturity_ == intervals_.back().end_duration);
-    LMI_ASSERT(e_maturity         == intervals_.back().end_mode    );
+    assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 
     std::vector<double>      r(years_to_maturity_);
     std::vector<std::string> s(years_to_maturity_, default_keyword_);
@@ -434,6 +429,22 @@ void assert_not_insane_or_disordered
             }
         prior_begin_duration = interval_i.begin_duration;
         }
+}
+
+void assert_sane_and_ordered_partition
+    (std::vector<ValueInterval> const& intervals
+    ,int                               years_to_maturity
+    )
+{
+    assert_not_insane_or_disordered(intervals, years_to_maturity);
+
+    LMI_ASSERT(!intervals.empty());
+
+    LMI_ASSERT(0                 == intervals.front().begin_duration);
+    LMI_ASSERT(e_inception       == intervals.front().begin_mode    );
+
+    LMI_ASSERT(years_to_maturity == intervals.back().end_duration);
+    LMI_ASSERT(e_maturity        == intervals.back().end_mode    );
 }
 
 /// Create a partition of [0, maturity) from parser output.
