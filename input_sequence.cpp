@@ -47,6 +47,8 @@ void fill_interval_gaps
     (std::vector<ValueInterval> const& in
     ,std::vector<ValueInterval>      & out
     ,int                               years_to_maturity
+    ,bool                              keywords_only
+    ,std::string                const& default_keyword
     );
 } // Unnamed namespace.
 
@@ -105,6 +107,8 @@ InputSequence::InputSequence
         (parser.intervals()
         ,intervals_
         ,a_years_to_maturity
+        ,a_keywords_only
+        ,a_default_keyword
         );
 
     realize_intervals();
@@ -432,35 +436,85 @@ void assert_not_insane_or_disordered
         }
 }
 
+/// Create a partition of [0, maturity) from parser output.
+///
+/// The last interval's endpoint is extended to maturity, replicating
+/// the last value.
+///
+/// SequenceParser returns a set of intervals that may not constitute
+/// a partition. Indeed, parsing an empty expression constructs zero
+/// intervals, in which case a single interval must be created.
+///
+/// The for-statement does nothing if 'in' is empty. Otherwise, it
+/// reads an element of 'in' and writes it to 'out', preceding it if
+/// necessary with a synthesized interval to fill any preceding gap.
+/// It has two main branches, controlled by its topmost if-else. The
+/// first branch executes on the first iteration, and only then. (If
+/// 'in' was empty, the for-statement does nothing; otherwise, 'out'
+/// must be empty.)
+///
+/// The for-statement's second branch creates an improper interval if
+/// the parsed expression had overlapping intervals. Alternatively, it
+/// would create no such interval if its '!=' condition were replaced
+/// by '<'; it is not obvious which way is better. Either way, the
+/// anomaly is caught downstream.
+
 void fill_interval_gaps
     (std::vector<ValueInterval> const& in
     ,std::vector<ValueInterval>      & out
     ,int                               years_to_maturity
+    ,bool                              keywords_only
+    ,std::string                const& default_keyword
     )
 {
-    out = in;
+    assert_not_insane_or_disordered(in, years_to_maturity);
 
-    // Inception and maturity endpoints exist, so the interval they
-    // define must exist. However, parsing an empty expression
-    // constructs zero intervals, so a default one must be created
-    // to make the physical reality meet the conceptual requirement.
-    if(in.empty())
+    LMI_ASSERT(out.empty());
+
+    ValueInterval default_interval;
+    default_interval.value_is_keyword = keywords_only;
+    if(keywords_only)
         {
-        out.push_back(ValueInterval());
+        default_interval.value_keyword = default_keyword;
         }
 
-    // Extend the last interval's endpoint to maturity, replicating
-    // the last element. (This doesn't need to be done by the ctors
-    // that take vector arguments, because those arguments specify
-    // each value in [inception, maturity) and deduce the terminal
-    // (maturity) duration from size().)
+    if(in.empty())
+        {
+        out.push_back(default_interval);
+        }
 
-    // This invariant has not yet been established, whether or not the
-    // sequence was empty.
+    // If in.empty(), then this loop iterates zero times.
+    for(auto const& next : in)
+        {
+        if(out.empty()) // Iff first pass.
+            {
+            if(0 != next.begin_duration)
+                {
+                out.push_back(default_interval);
+                out.back().end_mode     = next.begin_mode    ;
+                out.back().end_duration = next.begin_duration;
+                }
+            out.push_back(next);
+            }
+        else // Iff not first pass.
+            {
+            auto const& last = out.back(); // Safe: 'out' cannot be empty.
+            if(last.end_duration != next.begin_duration)
+                {
+                out.push_back(default_interval);
+                out.back().begin_mode     = last.end_mode    ;
+                out.back().begin_duration = last.end_duration;
+                out.back().end_mode     = next.begin_mode    ;
+                out.back().end_duration = next.begin_duration;
+                }
+            out.push_back(next);
+            }
+        }
+
+    LMI_ASSERT(0 == out.front().begin_duration);
+    out.front().begin_mode  = e_inception;
+
     out.back().end_duration = years_to_maturity;
-    // This invariant is established by realize_intervals(), but it
-    // does no harm to repeat it here, and it would be confusing not
-    // to do so in conjunction with the line above.
     out.back().end_mode     = e_maturity;
 }
 } // Unnamed namespace.
