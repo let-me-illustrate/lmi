@@ -76,6 +76,8 @@ InputSequence::InputSequence
     ,allowed_keywords_              (a_allowed_keywords)
     ,keywords_only_                 (a_keywords_only)
     ,default_keyword_               (a_default_keyword)
+    ,number_result_                 (a_years_to_maturity)
+    ,keyword_result_                (a_years_to_maturity, a_default_keyword)
 {
     // A default keyword should be specified (i.e., nonempty) only for
     // keyword-only sequences (otherwise, the default is numeric), and
@@ -313,11 +315,6 @@ std::vector<ValueInterval> const& InputSequence::interval_representation() const
 
 void InputSequence::realize_intervals()
 {
-    std::vector<double>      r(years_to_maturity_);
-    std::vector<std::string> s(years_to_maturity_, default_keyword_);
-    number_result_  = r;
-    keyword_result_ = s;
-
     for(auto const& interval_i : intervals_)
         {
         LMI_ASSERT(0 <= interval_i.begin_duration);
@@ -326,23 +323,20 @@ void InputSequence::realize_intervals()
         if(interval_i.value_is_keyword)
             {
             std::fill
-                (s.begin() + interval_i.begin_duration
-                ,s.begin() + interval_i.end_duration
+                (keyword_result_.begin() + interval_i.begin_duration
+                ,keyword_result_.begin() + interval_i.end_duration
                 ,interval_i.value_keyword
                 );
             }
         else
             {
             std::fill
-                (r.begin() + interval_i.begin_duration
-                ,r.begin() + interval_i.end_duration
+                (number_result_.begin() + interval_i.begin_duration
+                ,number_result_.begin() + interval_i.end_duration
                 ,interval_i.value_number
                 );
             }
         }
-
-    number_result_  = r;
-    keyword_result_ = s;
 }
 
 namespace
