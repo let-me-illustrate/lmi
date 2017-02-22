@@ -126,17 +126,18 @@ InputSequence::InputSequence
 /// source vary from one year to the next, and it is desired to use
 /// them as lmi input. It might seem that inserting semicolons between
 /// elements would produce acceptable input, and that the only benefit
-/// is run-length encoding. However, if the imported vector is of
-/// length 20, with the last 19 elements the same, then pasting it
+/// is saving space because of RLE. However, if the imported vector is
+/// of length 20, with the last 19 elements the same, then pasting it
 /// into lmi with semicolon delimiters would be an input error if
-/// there are only 15 years until retirement.
+/// there are only 15 years until retirement, whereas the two-element
+/// RLE representation would work correctly.
 
 InputSequence::InputSequence(std::vector<double> const& v)
     :years_to_maturity_(v.size())
+    ,number_result_    {v}
+    ,keyword_result_   {}
 {
     initialize_from_vector(v);
-    realize_intervals();
-    LMI_ASSERT(v == number_result_);
     assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 }
 
@@ -147,10 +148,10 @@ InputSequence::InputSequence(std::vector<double> const& v)
 
 InputSequence::InputSequence(std::vector<std::string> const& v)
     :years_to_maturity_(v.size())
+    ,number_result_    {}
+    ,keyword_result_   {v}
 {
     initialize_from_vector(v);
-    realize_intervals();
-    LMI_ASSERT(v == keyword_result_);
     assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 }
 
