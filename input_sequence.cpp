@@ -117,6 +117,7 @@ InputSequence::InputSequence
         );
 
     realize_intervals();
+    assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 }
 
 /// Construct from vector: e.g, 1 1 1 2 2 --> 1[0,3); 2[3,4).
@@ -135,6 +136,7 @@ InputSequence::InputSequence(std::vector<double> const& v)
 {
     initialize_from_vector(v);
     realize_intervals();
+    assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 }
 
 /// Construct from vector: e.g, a a a b b --> a[0,3); b[3,4).
@@ -147,6 +149,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
 {
     initialize_from_vector(v);
     realize_intervals();
+    assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 }
 
 namespace
@@ -307,8 +310,6 @@ std::vector<ValueInterval> const& InputSequence::interval_representation() const
 
 void InputSequence::realize_intervals()
 {
-    assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
-
     std::vector<double>      r(years_to_maturity_);
     std::vector<std::string> s(years_to_maturity_, default_keyword_);
     number_result_  = r;
