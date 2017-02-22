@@ -136,6 +136,7 @@ InputSequence::InputSequence(std::vector<double> const& v)
 {
     initialize_from_vector(v);
     realize_intervals();
+    LMI_ASSERT(v == number_result_);
     assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 }
 
@@ -149,6 +150,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
 {
     initialize_from_vector(v);
     realize_intervals();
+    LMI_ASSERT(v == keyword_result_);
     assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 }
 
