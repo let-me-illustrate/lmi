@@ -316,6 +316,9 @@ void InputSequence::realize_intervals()
 
     for(auto const& interval_i : intervals_)
         {
+        LMI_ASSERT(0 <= interval_i.begin_duration);
+        LMI_ASSERT(interval_i.begin_duration <= interval_i.end_duration);
+        LMI_ASSERT(interval_i.end_duration <= years_to_maturity_);
         if(interval_i.value_is_keyword)
             {
             std::fill
@@ -493,8 +496,9 @@ void assert_sane_and_ordered_partition
 /// The for-statement's second branch creates an improper interval if
 /// the parsed expression had overlapping intervals. Alternatively, it
 /// would create no such interval if its '!=' condition were replaced
-/// by '<'; it is not obvious which way is better. Either way, the
-/// anomaly is caught downstream.
+/// by '<'; it is not obvious which way is better. For now at least,
+/// assert_sane_and_ordered_partition() is called at the end of this
+/// function to trap the anomaly.
 
 void fill_interval_gaps
     (std::vector<ValueInterval> const& in
@@ -553,6 +557,10 @@ void fill_interval_gaps
 
     out.back().end_duration = years_to_maturity;
     out.back().end_mode     = e_maturity;
+
+    // This is necessary only to trap any improper interval that
+    // may have been inserted.
+    assert_sane_and_ordered_partition(out, years_to_maturity);
 }
 } // Unnamed namespace.
 
