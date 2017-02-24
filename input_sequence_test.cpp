@@ -515,8 +515,8 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "z", "z", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
-    census += "\tannual [0, 2); monthly [4, maturity)\t\t\n";
-    // 'annual 2; annual 4; monthly'
+    census += "\tquarterly [0, 2); monthly [4, maturity)\t\t\n";
+    // 'quarterly 2; annual 4; monthly'
     std::string const g("q [0, 2); z [2, 4); p [4, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
