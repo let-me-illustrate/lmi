@@ -142,6 +142,11 @@ int test_main(int, char*[])
     //   n c d e g m k o w
     // which is the same as the order in check()'s declaration except
     // that c and d are juxtaposed to facilitate visual comparison.
+    //
+    // Each assignment to 'census' is followed by a comment showing
+    // how the census manager canonicalized the sequence as of
+    // 20170224T1200Z, determined by editing the sequence using
+    // InputSequenceEntry and copying and pasting the result.
 
     // An empty string is treated as zero.
     {
@@ -149,6 +154,7 @@ int test_main(int, char*[])
     double const d[n] = {0, 0, 0, 0, 0};
     std::string const e("");
     census += e + "\t\tcorp pmt empty\t\n";
+    // '0'
     std::string const g("0");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -159,6 +165,7 @@ int test_main(int, char*[])
     double const d[n] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::string const e(" ");
     census += e + "\t\tcorp pmt blank\t\n";
+    // '0'
     std::string const g("0");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -170,6 +177,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 7, 7, 0, 0, 0, 0};
     std::string const e("1 3; 7 5;0");
     census += e + "\t\t\t\n";
+    // '1 3; 7 5; 0'
     std::string const g("1 [0, 3); 7 [3, 5); 0 [5, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -181,6 +189,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 2, 3, 3, 3};
     std::string const e("1; 2; 3");
     census += e + "\t\t\t\n";
+    // '1 1; 2 2; 3'
     std::string const g("1 [0, 1); 2 [1, 2); 3 [2, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -191,6 +200,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 3; 3 6; 5 9; 7");
     census += e + "\t\t\t\n";
+    // '1 3; 3 6; 5 9; 7'
     std::string const g("1 [0, 3); 3 [3, 6); 5 [6, 9); 7 [9, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -201,6 +211,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 @93; 3 @96; 5 @99; 7");
     census += e + "\t\t\t\n";
+    // '1 @93; 3 @96; 5 @99; 7'
     std::string const g("1 [0, @93); 3 [@93, @96); 5 [@96, @99); 7 [@99, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -211,6 +222,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 #3; 3 #3; 5 #3; 7");
     census += e + "\t\t\t\n";
+    // '1 #3; 3 #3; 5 #3; 7'
     std::string const g("1 [0, #3); 3 [3, #3); 5 [6, #3); 7 [9, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -223,6 +235,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 3, 3, 3, 5, 7, 7, 7};
     std::string const e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
     census += e + "\t\t\t\n";
+    // '1 2; 3 5; 5 6; 7'
     std::string const g("1 [0, 2); 3 [2, 5); 5 [5, 6); 7 [6, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -233,6 +246,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 7, 7};
     std::string const e("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
     census += e + "\t\t\t\n";
+    // '1 1; 1 3; 3 6; 5 7; 7'
     // Should the first two intervals be combined?
     std::string const g("1 [0, 1); 1 [1, 3); 3 [3, 6); 5 [6, 7); 7 [7, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
@@ -244,6 +258,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 1, 2, 3, 4, 5, 5};
     std::string const e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
     census += e + "\t\t\t\n";
+    // '1 4; 2 5; 3 #1; 4 @97; 5'
     std::string const g("1 [0, 4); 2 [4, 5); 3 [5, #1); 4 [6, @97); 5 [@97, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -254,6 +269,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 3, 5, 7, 7};
     std::string const e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
     census += e + "\t\t\t\n";
+    // '1 1; 3 2; 5 3; 7'
     std::string const g("1 [0, 1); 3 [1, 2); 5 [2, 3); 7 [3, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -313,6 +329,7 @@ int test_main(int, char*[])
     double const d[n] = {0, 1, 0, 3, 0, 5, 7, 7, 7};
     std::string const e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
     census += e + "\t\t\t\n";
+    // '0 1; 1 2; 0 3; 3 4; 0 5; 5 6; 7'
     std::string const g("0 [0, 1); 1 [1, 2); 0 [2, 3); 3 [3, 4); 0 [4, 5); 5 [5, 6); 7 [6, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -354,6 +371,7 @@ int test_main(int, char*[])
     double const d[n] = {0, 12, 0, 27, 0, 1, 7, 7, 7, 7};
     std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, #1]; 7");
     census += e + "\t\t\t\n";
+    // '0 1; 12 @92; 0 @93; 27 @94; 0 @95; 1 #1; 7'
     std::string const g("0 [0, 1); 12 [1, @92); 0 [@92, @93); 27 [@93, @94); 0 [@94, @95); 1 [@95, #1); 7 [@96, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -366,6 +384,7 @@ int test_main(int, char*[])
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625(@94,#1]; 7.5");
     census += e + "\t\t\t\n";
+    // '0 1; 12.25 @92; 0 @93; 27.875 @94; 0 @95; 1.0625 #1; 7.5'
     std::string const g("0 [0, 1); 12.25 [1, @92); 0 [@92, @93); 27.875 [@93, @94); 0 [@94, @95); 1.0625 [@95, #1); 7.5 [@96, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -414,11 +433,13 @@ int test_main(int, char*[])
     double const d[n] = { 0 ,  0 ,   0  ,   0  ,  0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("p[0, 2); rrr [2, 4);q[4, 6);");
     census += "glp[0, 2); target [2, 4);gsp[4, 6);\t\t\t\n";
+    // 'glp 2; target 4; gsp'
     std::string const g("p [0, 2); rrr [2, 4); q [4, maturity)");
     strvec const k{"not_used", "p", "q", "r", "rr", "rrr"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     // Toggle keywords-only switch on: same result.
     census += "\tannual[0, 2); quarterly [2, 4);monthly[4, 6);\t\t\n";
+    // 'annual 2; quarterly 4; monthly'
     bool const o = true;
     check(__FILE__, __LINE__, n, d, e, g, "", k, c, o);
     // Toggle keywords-only switch explicitly off: same result.
@@ -432,6 +453,7 @@ int test_main(int, char*[])
     double const d[n] ={ 1,  1,       0     ,       0     ,  5,  5,  7,  7,  7};
     std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
     census += "1 [0, 2); corridor [2, 4); 5 [4, 6); 7\t\t\t\n";
+    // '1 2; corridor 4; 5 6; 7'
     std::string const g("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7 [6, maturity)");
     strvec const k{"keyword_00"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
@@ -494,6 +516,7 @@ int test_main(int, char*[])
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
     census += "\tannual [0, 2); monthly [4, maturity)\t\t\n";
+    // 'annual 2; annual 4; monthly'
     std::string const g("q [0, 2); z [2, 4); p [4, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
@@ -536,6 +559,7 @@ int test_main(int, char*[])
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
     census += "\tquarterly [1, 3); monthly [3, maturity)\t\t\n";
+    // 'annual 1; quarterly 3; monthly'
     std::string const g("z [0, 1); q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
@@ -554,6 +578,7 @@ int test_main(int, char*[])
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
     census += "sevenpay [1, 3); glp [3, maturity)\t\t\t\n";
+    // '0 1; sevenpay 3; glp'
     std::string const g("0 [0, 1); q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
@@ -565,6 +590,7 @@ int test_main(int, char*[])
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
     std::string const e("7, retirement; 4, maturity");
     census += e + "\t\t\t\n";
+    // '7 retirement; 4'
     std::string const g("7 [0, retirement); 4 [retirement, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
