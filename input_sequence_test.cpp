@@ -322,7 +322,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 1, 1, 3, 3, 5, 5, 7, 7};
     std::string const e("0; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
-    census += e + "\t\t! not a partition\t\n";
+    // census: invalid expression cannot be pasted into GUI
     std::string const g("0 [0, 1); 1 [1, 9); 3 [3, 8); 5 [5, 7); 7 [7, maturity)");
     char const* m =
         "Interval [ 9, 3 ) is improper: it ends before it begins."
@@ -445,7 +445,7 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "z", "p", "z", "z", "p", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  5 ,  5 ,  0 ,  7 ,  7 ,  7 };
     std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
-    census += "sevenpay [0, 2); glp [3, 4); 5 [4, 6); glp; 7\t\t! not a partition\t\n";
+    // census: invalid expression cannot be pasted into GUI
     std::string const g(""); // Expression is invalid.
     char const* m =
         "Assertion 'a_default_keyword.empty() ||"
