@@ -413,11 +413,12 @@ int test_main(int, char*[])
     strvec const c      {"p", "p", "rrr", "rrr", "q", "q", "q", "q", "q"};
     double const d[n] = { 0 ,  0 ,   0  ,   0  ,  0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("p[0, 2); rrr [2, 4);q[4, 6);");
-    census += "glp[0, 2); target [2, 4);gsp[4, 6);\tannual[0, 2); quarterly [2, 4);monthly[4, 6);\t\t\n";
+    census += "glp[0, 2); target [2, 4);gsp[4, 6);\t\t\t\n";
     std::string const g("p [0, 2); rrr [2, 4); q [4, maturity)");
     strvec const k{"not_used", "p", "q", "r", "rr", "rrr"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     // Toggle keywords-only switch on: same result.
+    census += "\tannual[0, 2); quarterly [2, 4);monthly[4, 6);\t\t\n";
     bool const o = true;
     check(__FILE__, __LINE__, n, d, e, g, "", k, c, o);
     // Toggle keywords-only switch explicitly off: same result.
@@ -536,7 +537,7 @@ int test_main(int, char*[])
     strvec const c      {"z", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
-    census += "sevenpay [1, 3); glp [3, maturity)\tquarterly [1, 3); monthly [3, maturity)\t\t\n";
+    census += "\tquarterly [1, 3); monthly [3, maturity)\t\t\n";
     std::string const g("z [0, 1); q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
@@ -554,7 +555,7 @@ int test_main(int, char*[])
     strvec const c      {"", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
-    census += "sevenpay [1, 3); glp [3, maturity)\tquarterly [1, 3); monthly [3, maturity)\t\t\n";
+    census += "sevenpay [1, 3); glp [3, maturity)\t\t\t\n";
     std::string const g("0 [0, 1); q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
