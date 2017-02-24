@@ -312,7 +312,7 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 1, 0, 3, 0, 5, 7, 7, 7};
     std::string const e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
-    census += e + "\t\t! not a partition\t\n";
+    census += e + "\t\t\t\n";
     std::string const g("0 [0, 1); 1 [1, 2); 0 [2, 3); 3 [3, 4); 0 [4, 5); 5 [5, 6); 7 [6, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -353,7 +353,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12, 0, 27, 0, 1, 7, 7, 7, 7};
     std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, #1]; 7");
-    census += e + "\t\t! not a partition\t\n";
+    census += e + "\t\t\t\n";
     std::string const g("0 [0, 1); 12 [1, @92); 0 [@92, @93); 27 [@93, @94); 0 [@94, @95); 1 [@95, #1); 7 [@96, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -365,7 +365,7 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625(@94,#1]; 7.5");
-    census += e + "\t\t! not a partition\t\n";
+    census += e + "\t\t\t\n";
     std::string const g("0 [0, 1); 12.25 [1, @92); 0 [@92, @93); 27.875 [@93, @94); 0 [@94, @95); 1.0625 [@95, #1); 7.5 [@96, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
@@ -492,7 +492,7 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "z", "z", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
-    census += "\tannual [0, 2); monthly [4, maturity)\t! not a partition\t\n";
+    census += "\tannual [0, 2); monthly [4, maturity)\t\t\n";
     // A sequence with a gap can't be created in the GUI; but how does
     // the GUI translate this sequence if it's typed in?
     std::string const g("q [0, 2); z [2, 4); p [4, maturity)");
@@ -536,7 +536,7 @@ int test_main(int, char*[])
     strvec const c      {"z", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
-    census += "sevenpay [1, 3); glp [3, maturity)\tquarterly [1, 3); monthly [3, maturity)\t! not a partition\t\n";
+    census += "sevenpay [1, 3); glp [3, maturity)\tquarterly [1, 3); monthly [3, maturity)\t\t\n";
     std::string const g("z [0, 1); q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
@@ -554,7 +554,7 @@ int test_main(int, char*[])
     strvec const c      {"", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
-    census += "sevenpay [1, 3); glp [3, maturity)\tquarterly [1, 3); monthly [3, maturity)\t! not a partition\t\n";
+    census += "sevenpay [1, 3); glp [3, maturity)\tquarterly [1, 3); monthly [3, maturity)\t\t\n";
     std::string const g("0 [0, 1); q [1, 3); p [3, maturity)");
     strvec const k{"p", "q", "z"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
