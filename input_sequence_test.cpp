@@ -211,7 +211,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 #3; 3 #3; 5 #3; 7");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, 3); 3 [3, 6); 5 [6, 9); 7 [9, maturity)");
+    std::string const g("1 [0, #3); 3 [3, #3); 5 [6, #3); 7 [9, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -244,7 +244,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 1, 2, 3, 4, 5, 5};
     std::string const e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, 4); 2 [4, 5); 3 [5, 6); 4 [6, @97); 5 [@97, maturity)");
+    std::string const g("1 [0, 4); 2 [4, 5); 3 [5, #1); 4 [6, @97); 5 [@97, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -354,7 +354,7 @@ int test_main(int, char*[])
     double const d[n] = {0, 12, 0, 27, 0, 1, 7, 7, 7, 7};
     std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, #1]; 7");
     census += e + "\t\t! not a partition\t\n";
-    std::string const g("0 [0, 1); 12 [1, @92); 0 [@92, @93); 27 [@93, @94); 0 [@94, @95); 1 [@95, @96); 7 [@96, maturity");
+    std::string const g("0 [0, 1); 12 [1, @92); 0 [@92, @93); 27 [@93, @94); 0 [@94, @95); 1 [@95, #1); 7 [@96, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -366,7 +366,7 @@ int test_main(int, char*[])
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625(@94,#1]; 7.5");
     census += e + "\t\t! not a partition\t\n";
-    std::string const g("0 [0, 1); 12.25 [1, @92); 0 [@92, @93); 27.875 [@93, @94); 0 [@94, @95); 1.0625 [@95, @96); 7.5 [@96, maturity)");
+    std::string const g("0 [0, 1); 12.25 [1, @92); 0 [@92, @93); 27.875 [@93, @94); 0 [@94, @95); 1.0625 [@95, #1); 7.5 [@96, maturity)");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
