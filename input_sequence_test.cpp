@@ -494,8 +494,6 @@ int test_main(int, char*[])
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
     census += "\tannual [0, 2); monthly [4, maturity)\t\t\n";
-    // A sequence with a gap can't be created in the GUI; but how does
-    // the GUI translate this sequence if it's typed in?
     std::string const g("q [0, 2); z [2, 4); p [4, maturity)");
     strvec const k{"p", "q", "z"};
     bool const o = true;
