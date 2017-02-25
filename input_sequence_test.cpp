@@ -611,6 +611,7 @@ int test_main(int, char*[])
         );
     }
 
+#if defined SHOW_CENSUS_PASTE_TEST_CASES
     std::cout
         << "\nPaste into a census to test similar expressions in the GUI:\n\n"
         << "---------8<--------8<--------8<--------"
@@ -620,6 +621,7 @@ int test_main(int, char*[])
         << ">8-------->8-------->8-------->8-------"
         << std::endl
         ;
+#endif // defined SHOW_CENSUS_PASTE_TEST_CASES
 
     return 0;
 }
