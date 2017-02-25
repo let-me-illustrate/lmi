@@ -149,7 +149,6 @@ int test_main(int, char*[])
     std::string const e("");
     census += e + "\t\tcorp pmt empty\t\n";
     std::string const g("0");
-BOOST_TEST(std::string("0") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -160,7 +159,6 @@ BOOST_TEST(std::string("0") == g);
     std::string const e(" ");
     census += e + "\t\tcorp pmt blank\t\n";
     std::string const g("0");
-BOOST_TEST(std::string("0") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -172,7 +170,6 @@ BOOST_TEST(std::string("0") == g);
     std::string const e("1 3; 7 5;0");
     census += e + "\t\t\t\n";
     std::string const g("1 3; 7 5; 0");
-BOOST_TEST(std::string("1 3; 7 5; 0") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -184,7 +181,6 @@ BOOST_TEST(std::string("1 3; 7 5; 0") == g);
     std::string const e("1; 2; 3");
     census += e + "\t\t\t\n";
     std::string const g("1 1; 2 2; 3");
-BOOST_TEST(std::string("1 1; 2 2; 3") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -195,7 +191,6 @@ BOOST_TEST(std::string("1 1; 2 2; 3") == g);
     std::string const e("1 3; 3 6; 5 9; 7");
     census += e + "\t\t\t\n";
     std::string const g("1 3; 3 6; 5 9; 7");
-BOOST_TEST(std::string("1 3; 3 6; 5 9; 7") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -206,7 +201,6 @@ BOOST_TEST(std::string("1 3; 3 6; 5 9; 7") == g);
     std::string const e("1 @93; 3 @96; 5 @99; 7");
     census += e + "\t\t\t\n";
     std::string const g("1 @93; 3 @96; 5 @99; 7");
-BOOST_TEST(std::string("1 @93; 3 @96; 5 @99; 7") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -217,7 +211,6 @@ BOOST_TEST(std::string("1 @93; 3 @96; 5 @99; 7") == g);
     std::string const e("1 #3; 3 #3; 5 #3; 7");
     census += e + "\t\t\t\n";
     std::string const g("1 #3; 3 #3; 5 #3; 7");
-BOOST_TEST(std::string("1 #3; 3 #3; 5 #3; 7") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -230,7 +223,6 @@ BOOST_TEST(std::string("1 #3; 3 #3; 5 #3; 7") == g);
     std::string const e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
     census += e + "\t\t\t\n";
     std::string const g("1 2; 3 5; 5 6; 7");
-BOOST_TEST(std::string("1 2; 3 5; 5 6; 7") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -242,7 +234,6 @@ BOOST_TEST(std::string("1 2; 3 5; 5 6; 7") == g);
     census += e + "\t\t\t\n";
     // Should the first two intervals be combined?
     std::string const g("1 1; 1 3; 3 6; 5 7; 7");
-BOOST_TEST(std::string("1 1; 1 3; 3 6; 5 7; 7") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -253,7 +244,6 @@ BOOST_TEST(std::string("1 1; 1 3; 3 6; 5 7; 7") == g);
     std::string const e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
     census += e + "\t\t\t\n";
     std::string const g("1 4; 2 5; 3 #1; 4 @97; 5");
-BOOST_TEST(std::string("1 4; 2 5; 3 #1; 4 @97; 5") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -264,7 +254,6 @@ BOOST_TEST(std::string("1 4; 2 5; 3 #1; 4 @97; 5") == g);
     std::string const e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
     census += e + "\t\t\t\n";
     std::string const g("1 1; 3 2; 5 3; 7");
-BOOST_TEST(std::string("1 1; 3 2; 5 3; 7") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -324,7 +313,6 @@ BOOST_TEST(std::string("1 1; 3 2; 5 3; 7") == g);
     std::string const e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
     census += e + "\t\t\t\n";
     std::string const g("0 1; 1 2; 0 3; 3 4; 0 5; 5 6; 7");
-BOOST_TEST(std::string("0 1; 1 2; 0 3; 3 4; 0 5; 5 6; 7") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -366,7 +354,6 @@ BOOST_TEST(std::string("0 1; 1 2; 0 3; 3 4; 0 5; 5 6; 7") == g);
     std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, #1]; 7");
     census += e + "\t\t\t\n";
     std::string const g("0 1; 12 @92; 0 @93; 27 @94; 0 @95; 1 #1; 7");
-BOOST_TEST(std::string("0 1; 12 @92; 0 @93; 27 @94; 0 @95; 1 #1; 7") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -379,7 +366,6 @@ BOOST_TEST(std::string("0 1; 12 @92; 0 @93; 27 @94; 0 @95; 1 #1; 7") == g);
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625(@94,#1]; 7.5");
     census += e + "\t\t\t\n";
     std::string const g("0 1; 12.25 @92; 0 @93; 27.875 @94; 0 @95; 1.0625 #1; 7.5");
-BOOST_TEST(std::string("0 1; 12.25 @92; 0 @93; 27.875 @94; 0 @95; 1.0625 #1; 7.5") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -426,12 +412,10 @@ BOOST_TEST(std::string("0 1; 12.25 @92; 0 @93; 27.875 @94; 0 @95; 1.0625 #1; 7.5
     std::string const e("p[0, 2); rrr [2, 4);q[4, 6);");
     census += "glp[0, 2); target [2, 4);gsp[4, 6);\t\t\t\n";
     std::string const g("p 2; rrr 4; q");
-BOOST_TEST(std::string("p 2; rrr 4; q") == g);
     strvec const k{"not_used", "p", "q", "r", "rr", "rrr"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     // Toggle keywords-only switch on: same result.
     census += "\tannual[0, 2); quarterly [2, 4);monthly[4, 6);\t\t\n";
-BOOST_TEST(std::string("p 2; rrr 4; q") == g);
     bool const o = true;
     check(__FILE__, __LINE__, n, d, e, g, "", k, c, o);
     // Toggle keywords-only switch explicitly off: same result.
@@ -446,7 +430,6 @@ BOOST_TEST(std::string("p 2; rrr 4; q") == g);
     std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
     census += "1 [0, 2); corridor [2, 4); 5 [4, 6); 7\t\t\t\n";
     std::string const g("1 2; keyword_00 4; 5 6; 7");
-BOOST_TEST(std::string("1 2; keyword_00 4; 5 6; 7") == g);
     strvec const k{"keyword_00"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
@@ -509,7 +492,6 @@ BOOST_TEST(std::string("1 2; keyword_00 4; 5 6; 7") == g);
     std::string const e("q [0, 2); p [4, maturity)");
     census += "\tquarterly [0, 2); monthly [4, maturity)\t\t\n";
     std::string const g("q 2; z 4; p");
-BOOST_TEST(std::string("q 2; z 4; p") == g);
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
@@ -552,7 +534,6 @@ BOOST_TEST(std::string("q 2; z 4; p") == g);
     std::string const e("q [1, 3); p [3, maturity)");
     census += "\tquarterly [1, 3); monthly [3, maturity)\t\t\n";
     std::string const g("z 1; q 3; p");
-BOOST_TEST(std::string("z 1; q 3; p") == g);
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
@@ -571,7 +552,6 @@ BOOST_TEST(std::string("z 1; q 3; p") == g);
     std::string const e("q [1, 3); p [3, maturity)");
     census += "sevenpay [1, 3); glp [3, maturity)\t\t\t\n";
     std::string const g("0 1; q 3; p");
-BOOST_TEST(std::string("0 1; q 3; p") == g);
     strvec const k{"p", "q", "z"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
@@ -583,7 +563,6 @@ BOOST_TEST(std::string("0 1; q 3; p") == g);
     std::string const e("7, retirement; 4, maturity");
     census += e + "\t\t\t\n";
     std::string const g("7 retirement; 4");
-BOOST_TEST(std::string("7 retirement; 4") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.interval_representation());
@@ -626,7 +605,6 @@ BOOST_TEST(std::string("7 retirement; 4") == g);
     std::string const e("s 3; 250 retirement; 100 #1; 75 @98; 50");
     census += "sevenpay 3; 250 retirement; 100 #1; 75 @98; 50\t\t\t\n";
     std::string const g("s 3; 250 retirement; 100 #1; 75 @98; 50");
-BOOST_TEST(std::string("s 3; 250 retirement; 100 #1; 75 @98; 50") == g);
     strvec const k{"s", "_"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
@@ -638,7 +616,6 @@ BOOST_TEST(std::string("s 3; 250 retirement; 100 #1; 75 @98; 50") == g);
     std::string const e("10; 11; 12; 13; 14; 15");
     census += e + "\t\t\t\n";
     std::string const g("10 1; 11 2; 12 3; 13 4; 14 5; 15");
-BOOST_TEST(std::string("10 1; 11 2; 12 3; 13 4; 14 5; 15") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -650,7 +627,6 @@ BOOST_TEST(std::string("10 1; 11 2; 12 3; 13 4; 14 5; 15") == g);
     std::string const e("a; m");
     census += "\tannual; monthly\t\t\n";
     std::string const g("a 1; m");
-BOOST_TEST(std::string("a 1; m") == g);
     strvec const k{"a", "m"};
     bool const o = true;
     std::string w("a");
@@ -664,7 +640,6 @@ BOOST_TEST(std::string("a 1; m") == g);
     std::string const e("10000 4; 0");
     census += e + "\t\t\t\n";
     std::string const g("10000 4; 0");
-BOOST_TEST(std::string("10000 4; 0") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -675,7 +650,6 @@ BOOST_TEST(std::string("10000 4; 0") == g);
     std::string const e("10000 3; 5000 5; 0");
     census += e + "\t\t\t\n";
     std::string const g("10000 3; 5000 5; 0");
-BOOST_TEST(std::string("10000 3; 5000 5; 0") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -686,7 +660,6 @@ BOOST_TEST(std::string("10000 3; 5000 5; 0") == g);
     std::string const e("10000 @93; 0");
     census += e + "\t\t\t\n";
     std::string const g("10000 @93; 0");
-BOOST_TEST(std::string("10000 @93; 0") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -697,7 +670,6 @@ BOOST_TEST(std::string("10000 @93; 0") == g);
     std::string const e("10000 retirement; 0");
     census += e + "\t\t\t\n";
     std::string const g("10000 retirement; 0");
-BOOST_TEST(std::string("10000 retirement; 0") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -708,7 +680,6 @@ BOOST_TEST(std::string("10000 retirement; 0") == g);
     std::string const e("0 retirement; 5000");
     census += e + "\t\t\t\n";
     std::string const g("0 retirement; 5000");
-BOOST_TEST(std::string("0 retirement; 5000") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -719,7 +690,6 @@ BOOST_TEST(std::string("0 retirement; 5000") == g);
     std::string const e("0 retirement; 5000 maturity");
     census += e + "\t\t\t\n";
     std::string const g("0 retirement; 5000");
-BOOST_TEST(std::string("0 retirement; 5000") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -730,7 +700,6 @@ BOOST_TEST(std::string("0 retirement; 5000") == g);
     std::string const e("0 retirement; 5000 #2; 0");
     census += e + "\t\t\t\n";
     std::string const g("0 retirement; 5000 #2; 0");
-BOOST_TEST(std::string("0 retirement; 5000 #2; 0") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -741,7 +710,6 @@ BOOST_TEST(std::string("0 retirement; 5000 #2; 0") == g);
     std::string const e("0,[0,retirement);10,[retirement,#3);0");
     census += e + "\t\t\t\n";
     std::string const g("0 retirement; 10 #3; 0");
-BOOST_TEST(std::string("0 retirement; 10 #3; 0") == g);
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
