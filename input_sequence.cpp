@@ -238,6 +238,129 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
 
 InputSequence::~InputSequence() = default;
 
+/// Canonical form of an input sequence
+///
+/// Consider the set S of all strings that are well formed wrt the
+/// grammar defined by class SequenceParser. Some are equivalent:
+/// e.g., "1 [0, maturity)" and "1" mean the same thing. Choosing one
+/// member of each equivalence class defines a canonical form.
+///
+/// The canonical form need not be a string if a better representation
+/// can be found. For example, it might appear obvious that any member
+/// of S can be transformed into this member of the present class:
+///   std::vector<ValueInterval> intervals_;
+/// yet that is not necessarily the case: this sequence
+///   0, @65; 10000
+/// is well formed, but (as this is written in 2017-02) would not be
+/// permitted for a 70-year-old. Even if that obstacle is overcome,
+/// a std::vector<ValueInterval> seems a poor choice because it is
+/// intricate and unwieldy: it would be uncouth to serialize that into
+/// xml or ask humans to deal with it. A simple, compact, readable
+/// string is wanted instead.
+///
+/// Another unsuccessful candidate for the canonical form would have
+/// specified left-closed and right-open intervals in full. Thus,
+///   0, retirement; 10000, #10; 0
+/// would have been canonicalized as
+///   0 [0, retirement); 10000 [retirement, #10); 0 [?, maturity)
+/// But then the last interval must begin at "retirement + 10", which
+/// is not allowed by the grammar and therefore cannot be canonical.
+/// At first, it had seemed possible to work around this by changing
+/// the parser, to forbid
+///   e_number_of_years == ValueInterval.begin_mode
+/// by replacing that mode with the most recent differing begin_mode:
+/// thus, {"@50" + "#10"} and {"5" + "#10"} would become "@60" and 15
+/// respectively. However, that experiment failed because "retirement"
+/// is neither an age nor a duration. It might be deemed to signify an
+/// age, but that would lose the variable nature of the retirement-age
+/// ctor argument, inaptly treating the case above as equivalent to
+///   0, retirement; 10000, @C; 0
+/// where C is 75 for retirement at age 65, 72...at age 62, and so on.
+/// Specifying the original string
+///   0, retirement; 10000, #10; 0
+/// at the group level, for a census with differing retirement ages,
+/// encompasses that variation; no canonicalization that loses that
+/// advantage is acceptable.
+
+std::string InputSequence::canonical_form() const
+{
+    std::ostringstream oss;
+    for(auto const& interval_i : intervals_)
+        {
+        if(interval_i.value_is_keyword)
+            {
+            oss << interval_i.value_keyword;
+            }
+        else
+            {
+            oss << value_cast<std::string>(interval_i.value_number);
+            }
+
+        if(1 == intervals_.size())
+            {
+            break;
+            }
+
+        std::string s;
+        switch(interval_i.end_mode)
+            {
+            case e_invalid_mode:
+                {
+                fatal_error() << "Invalid mode." << LMI_FLUSH;
+                }
+                break;
+            case e_duration:
+                {
+                int const z = interval_i.end_duration;
+                s = " " + value_cast<std::string>(z);
+                }
+                break;
+            case e_attained_age:
+                {
+                int const z = interval_i.end_duration + issue_age_;
+                s = " @" + value_cast<std::string>(z);
+                }
+                break;
+            case e_number_of_years:
+                {
+                int const z = interval_i.end_duration - interval_i.begin_duration;
+                s = " #" + value_cast<std::string>(z);
+                }
+                break;
+            case e_inception:
+                {
+                fatal_error() << "Interval ended at inception." << LMI_FLUSH;
+                }
+                break;
+            case e_inforce:
+                {
+                fatal_error() << "'e_inforce' not implemented." << LMI_FLUSH;
+                }
+                break;
+            case e_retirement:
+                {
+                s = " retirement";
+                }
+                break;
+            case e_maturity:
+                {
+                s = " maturity"; // Generally omitted.
+                }
+                break;
+            }
+
+        if(interval_i.end_duration != years_to_maturity_)
+            {
+            oss << s << "; ";
+            }
+        else
+            {
+            ; // Do nothing.
+            }
+        }
+    return oss.str();
+}
+
 std::vector<double> const& InputSequence::linear_number_representation() const
 {
     return number_result_;

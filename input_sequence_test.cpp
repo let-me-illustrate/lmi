@@ -77,7 +77,7 @@ void check
             std::cout << std::endl;
             }
 
-        std::string const& f = seq.mathematical_representation();
+        std::string const& f = seq.canonical_form();
         bool const bf = g == f;
         if(!bf)
             {
@@ -87,13 +87,7 @@ void check
             std::cout << std::endl;
             }
 
-//#define TEST_REPRESENTATION
-#if defined TEST_REPRESENTATION
         INVOKE_BOOST_TEST(bv && bs && bf, file, line);
-#else  // !defined TEST_REPRESENTATION
-        // Don't make 'bf' fail the test yet.
-        INVOKE_BOOST_TEST(bv && bs /* && bf */, file, line);
-#endif // !defined TEST_REPRESENTATION
         }
     catch(std::exception const& x)
         {
@@ -178,7 +172,7 @@ int test_main(int, char*[])
     std::string const e("1 3; 7 5;0");
     census += e + "\t\t\t\n";
     // '1 3; 7 5; 0'
-    std::string const g("1 [0, 3); 7 [3, 5); 0 [5, maturity)");
+    std::string const g("1 3; 7 5; 0");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -190,7 +184,7 @@ int test_main(int, char*[])
     std::string const e("1; 2; 3");
     census += e + "\t\t\t\n";
     // '1 1; 2 2; 3'
-    std::string const g("1 [0, 1); 2 [1, 2); 3 [2, maturity)");
+    std::string const g("1 1; 2 2; 3");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -201,7 +195,7 @@ int test_main(int, char*[])
     std::string const e("1 3; 3 6; 5 9; 7");
     census += e + "\t\t\t\n";
     // '1 3; 3 6; 5 9; 7'
-    std::string const g("1 [0, 3); 3 [3, 6); 5 [6, 9); 7 [9, maturity)");
+    std::string const g("1 3; 3 6; 5 9; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -212,7 +206,7 @@ int test_main(int, char*[])
     std::string const e("1 @93; 3 @96; 5 @99; 7");
     census += e + "\t\t\t\n";
     // '1 @93; 3 @96; 5 @99; 7'
-    std::string const g("1 [0, @93); 3 [@93, @96); 5 [@96, @99); 7 [@99, maturity)");
+    std::string const g("1 @93; 3 @96; 5 @99; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -223,7 +217,7 @@ int test_main(int, char*[])
     std::string const e("1 #3; 3 #3; 5 #3; 7");
     census += e + "\t\t\t\n";
     // '1 #3; 3 #3; 5 #3; 7'
-    std::string const g("1 [0, #3); 3 [3, #3); 5 [6, #3); 7 [9, maturity)");
+    std::string const g("1 #3; 3 #3; 5 #3; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -236,7 +230,7 @@ int test_main(int, char*[])
     std::string const e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
     census += e + "\t\t\t\n";
     // '1 2; 3 5; 5 6; 7'
-    std::string const g("1 [0, 2); 3 [2, 5); 5 [5, 6); 7 [6, maturity)");
+    std::string const g("1 2; 3 5; 5 6; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -248,7 +242,7 @@ int test_main(int, char*[])
     census += e + "\t\t\t\n";
     // '1 1; 1 3; 3 6; 5 7; 7'
     // Should the first two intervals be combined?
-    std::string const g("1 [0, 1); 1 [1, 3); 3 [3, 6); 5 [6, 7); 7 [7, maturity)");
+    std::string const g("1 1; 1 3; 3 6; 5 7; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -259,7 +253,7 @@ int test_main(int, char*[])
     std::string const e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
     census += e + "\t\t\t\n";
     // '1 4; 2 5; 3 #1; 4 @97; 5'
-    std::string const g("1 [0, 4); 2 [4, 5); 3 [5, #1); 4 [6, @97); 5 [@97, maturity)");
+    std::string const g("1 4; 2 5; 3 #1; 4 @97; 5");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -270,7 +264,7 @@ int test_main(int, char*[])
     std::string const e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
     census += e + "\t\t\t\n";
     // '1 1; 3 2; 5 3; 7'
-    std::string const g("1 [0, 1); 3 [1, 2); 5 [2, 3); 7 [3, maturity)");
+    std::string const g("1 1; 3 2; 5 3; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -330,7 +324,7 @@ int test_main(int, char*[])
     std::string const e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
     census += e + "\t\t\t\n";
     // '0 1; 1 2; 0 3; 3 4; 0 5; 5 6; 7'
-    std::string const g("0 [0, 1); 1 [1, 2); 0 [2, 3); 3 [3, 4); 0 [4, 5); 5 [5, 6); 7 [6, maturity)");
+    std::string const g("0 1; 1 2; 0 3; 3 4; 0 5; 5 6; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -340,7 +334,7 @@ int test_main(int, char*[])
     double const d[n] = {0, 1, 1, 3, 3, 5, 5, 7, 7};
     std::string const e("0; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
     // census: invalid expression cannot be pasted into GUI
-    std::string const g("0 [0, 1); 1 [1, 9); 3 [3, 8); 5 [5, 7); 7 [7, maturity)");
+    std::string const g("0 1; 1 9; 3 8; 5 7; 7");
     char const* m =
         "Interval [ 9, 3 ) is improper: it ends before it begins."
         ;
@@ -372,7 +366,7 @@ int test_main(int, char*[])
     std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, #1]; 7");
     census += e + "\t\t\t\n";
     // '0 1; 12 @92; 0 @93; 27 @94; 0 @95; 1 #1; 7'
-    std::string const g("0 [0, 1); 12 [1, @92); 0 [@92, @93); 27 [@93, @94); 0 [@94, @95); 1 [@95, #1); 7 [@96, maturity)");
+    std::string const g("0 1; 12 @92; 0 @93; 27 @94; 0 @95; 1 #1; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -385,11 +379,9 @@ int test_main(int, char*[])
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625(@94,#1]; 7.5");
     census += e + "\t\t\t\n";
     // '0 1; 12.25 @92; 0 @93; 27.875 @94; 0 @95; 1.0625 #1; 7.5'
-    std::string const g("0 [0, 1); 12.25 [1, @92); 0 [@92, @93); 27.875 [@93, @94); 0 [@94, @95); 1.0625 [@95, #1); 7.5 [@96, maturity)");
+    std::string const g("0 1; 12.25 @92; 0 @93; 27.875 @94; 0 @95; 1.0625 #1; 7.5");
     check(__FILE__, __LINE__, n, d, e, g);
     }
-
-    // TODO ?? Test against canonical representation once we define that.
 
     // Test construction from numeric vector.
     {
@@ -434,7 +426,7 @@ int test_main(int, char*[])
     std::string const e("p[0, 2); rrr [2, 4);q[4, 6);");
     census += "glp[0, 2); target [2, 4);gsp[4, 6);\t\t\t\n";
     // 'glp 2; target 4; gsp'
-    std::string const g("p [0, 2); rrr [2, 4); q [4, maturity)");
+    std::string const g("p 2; rrr 4; q");
     strvec const k{"not_used", "p", "q", "r", "rr", "rrr"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     // Toggle keywords-only switch on: same result.
@@ -454,7 +446,7 @@ int test_main(int, char*[])
     std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
     census += "1 [0, 2); corridor [2, 4); 5 [4, 6); 7\t\t\t\n";
     // '1 2; corridor 4; 5 6; 7'
-    std::string const g("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7 [6, maturity)");
+    std::string const g("1 2; keyword_00 4; 5 6; 7");
     strvec const k{"keyword_00"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
@@ -517,7 +509,7 @@ int test_main(int, char*[])
     std::string const e("q [0, 2); p [4, maturity)");
     census += "\tquarterly [0, 2); monthly [4, maturity)\t\t\n";
     // 'quarterly 2; annual 4; monthly'
-    std::string const g("q [0, 2); z [2, 4); p [4, maturity)");
+    std::string const g("q 2; z 4; p");
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
@@ -560,7 +552,7 @@ int test_main(int, char*[])
     std::string const e("q [1, 3); p [3, maturity)");
     census += "\tquarterly [1, 3); monthly [3, maturity)\t\t\n";
     // 'annual 1; quarterly 3; monthly'
-    std::string const g("z [0, 1); q [1, 3); p [3, maturity)");
+    std::string const g("z 1; q 3; p");
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
@@ -579,7 +571,7 @@ int test_main(int, char*[])
     std::string const e("q [1, 3); p [3, maturity)");
     census += "sevenpay [1, 3); glp [3, maturity)\t\t\t\n";
     // '0 1; sevenpay 3; glp'
-    std::string const g("0 [0, 1); q [1, 3); p [3, maturity)");
+    std::string const g("0 1; q 3; p");
     strvec const k{"p", "q", "z"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
@@ -591,7 +583,7 @@ int test_main(int, char*[])
     std::string const e("7, retirement; 4, maturity");
     census += e + "\t\t\t\n";
     // '7 retirement; 4'
-    std::string const g("7 [0, retirement); 4 [retirement, maturity)");
+    std::string const g("7 retirement; 4");
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.interval_representation());

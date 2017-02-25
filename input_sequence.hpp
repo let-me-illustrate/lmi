@@ -161,6 +161,8 @@ class LMI_SO InputSequence
 
     ~InputSequence();
 
+    std::string canonical_form() const;
+
     std::vector<double>      const& linear_number_representation()  const;
     std::vector<std::string> const& linear_keyword_representation() const;
 
