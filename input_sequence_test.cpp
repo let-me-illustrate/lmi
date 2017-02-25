@@ -611,6 +611,140 @@ BOOST_TEST(std::string("7 retirement; 4") == g);
         );
     }
 
+    // Test all examples in the user manual:
+    //   http://www.nongnu.org/lmi/sequence_input.html
+    // Each example is quoted unmodified as a comment before its test.
+    // Some examples have been superficially changed to work with
+    // check(), e.g. because check() uses issue age 90. Others scale
+    // numbers or use shorter keywords for brevity.
+
+    // sevenpay 7; 250000 retirement; 100000 #10; 75000 @95; 50000
+    {
+    int const n = 9;
+    strvec const c     {"s", "s", "s",  "",  "",  "",  "",  "",  ""};
+    double const d[n] ={ 0 ,  0 ,  0 , 250, 250, 100,  75,  75,  50};
+    std::string const e("s 3; 250 retirement; 100 #1; 75 @98; 50");
+    census += "sevenpay 3; 250 retirement; 100 #1; 75 @98; 50\t\t\t\n";
+    std::string const g("s 3; 250 retirement; 100 #1; 75 @98; 50");
+BOOST_TEST(std::string("s 3; 250 retirement; 100 #1; 75 @98; 50") == g);
+    strvec const k{"s", "_"};
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c);
+    }
+
+    // 100000; 110000; 120000; 130000; 140000; 150000
+    {
+    int const n = 9;
+    double const d[n] = {10, 11, 12, 13, 14, 15, 15, 15, 15};
+    std::string const e("10; 11; 12; 13; 14; 15");
+    census += e + "\t\t\t\n";
+    std::string const g("10 1; 11 2; 12 3; 13 4; 14 5; 15");
+BOOST_TEST(std::string("10 1; 11 2; 12 3; 13 4; 14 5; 15") == g);
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // annual; monthly
+    {
+    int const n = 5;
+    strvec const c      {"a", "m", "m", "m", "m"};
+    double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
+    std::string const e("a; m");
+    census += "\tannual; monthly\t\t\n";
+    std::string const g("a 1; m");
+BOOST_TEST(std::string("a 1; m") == g);
+    strvec const k{"a", "m"};
+    bool const o = true;
+    std::string w("a");
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c, o, w);
+    }
+
+    // 10000 20; 0
+    {
+    int const n = 9;
+    double const d[n] = {10000, 10000, 10000, 10000, 0, 0, 0, 0, 0};
+    std::string const e("10000 4; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("10000 4; 0");
+BOOST_TEST(std::string("10000 4; 0") == g);
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 10000 10; 5000 15; 0
+    {
+    int const n = 9;
+    double const d[n] = {10000, 10000, 10000, 5000, 5000, 0, 0, 0, 0};
+    std::string const e("10000 3; 5000 5; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("10000 3; 5000 5; 0");
+BOOST_TEST(std::string("10000 3; 5000 5; 0") == g);
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 10000 @70; 0
+    {
+    int const n = 9;
+    double const d[n] = {10000, 10000, 10000, 0, 0, 0, 0, 0, 0};
+    std::string const e("10000 @93; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("10000 @93; 0");
+BOOST_TEST(std::string("10000 @93; 0") == g);
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 10000 retirement; 0
+    {
+    int const n = 9;
+    double const d[n] = {10000, 10000, 10000, 10000, 10000, 0, 0, 0, 0};
+    std::string const e("10000 retirement; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("10000 retirement; 0");
+BOOST_TEST(std::string("10000 retirement; 0") == g);
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 0 retirement; 5000
+    {
+    int const n = 9;
+    double const d[n] = {0, 0, 0, 0, 0, 5000, 5000, 5000, 5000};
+    std::string const e("0 retirement; 5000");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 5000");
+BOOST_TEST(std::string("0 retirement; 5000") == g);
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 0 retirement; 5000 maturity
+    {
+    int const n = 9;
+    double const d[n] = {0, 0, 0, 0, 0, 5000, 5000, 5000, 5000};
+    std::string const e("0 retirement; 5000 maturity");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 5000");
+BOOST_TEST(std::string("0 retirement; 5000") == g);
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 0 retirement; 5000 #10; 0
+    {
+    int const n = 9;
+    double const d[n] = {0, 0, 0, 0, 0, 5000, 5000, 0, 0};
+    std::string const e("0 retirement; 5000 #2; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 5000 #2; 0");
+BOOST_TEST(std::string("0 retirement; 5000 #2; 0") == g);
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 0,[0,retirement);10000,[retirement,#10);0
+    {
+    int const n = 9;
+    double const d[n] = {0, 0, 0, 0, 0, 10, 10, 10, 0};
+    std::string const e("0,[0,retirement);10,[retirement,#3);0");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 10 #3; 0");
+BOOST_TEST(std::string("0 retirement; 10 #3; 0") == g);
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
 #if defined SHOW_CENSUS_PASTE_TEST_CASES
     std::cout
         << "\nPaste into a census to test similar expressions in the GUI:\n\n"
