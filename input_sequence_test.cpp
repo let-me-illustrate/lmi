@@ -372,35 +372,43 @@ int test_main(int, char*[])
     // Test construction from numeric vector.
     {
     std::vector<double> const v{1, 1, 1, 2, 2};
-    BOOST_TEST(v == InputSequence(v).linear_number_representation());
+    InputSequence const seq(v);
+    BOOST_TEST(v == seq.linear_number_representation());
+    BOOST_TEST_EQUAL("1 3; 2", seq.canonical_form());
     BOOST_TEST_EQUAL
         ("1 [0, 3); 2 [3, maturity)"
-        ,InputSequence(v).mathematical_representation()
+        ,seq.mathematical_representation()
         );
     }
 
     // Test construction from string (keyword) vector.
     {
     std::vector<std::string> const v{"alpha", "beta", "beta", "gamma", "eta"};
-    BOOST_TEST(v == InputSequence(v).linear_keyword_representation());
+    InputSequence const seq(v);
+    BOOST_TEST(v == seq.linear_keyword_representation());
+    BOOST_TEST_EQUAL("alpha 1; beta 3; gamma 4; eta", seq.canonical_form());
     BOOST_TEST_EQUAL
         ("alpha [0, 1); beta [1, 3); gamma [3, 4); eta [4, maturity)"
-        ,InputSequence(v).mathematical_representation()
+        ,seq.mathematical_representation()
         );
     }
 
     // Test construction from one-element vector.
     {
     std::vector<double> const v{3};
-    BOOST_TEST(v == InputSequence(v).linear_number_representation());
-    BOOST_TEST_EQUAL("3", InputSequence(v).mathematical_representation());
+    InputSequence const seq(v);
+    BOOST_TEST(v == seq.linear_number_representation());
+    BOOST_TEST_EQUAL("3", seq.canonical_form());
+    BOOST_TEST_EQUAL("3", seq.mathematical_representation());
     }
 
     // Test construction from empty vector.
     {
     std::vector<double> const v;
-    BOOST_TEST(v == InputSequence(v).linear_number_representation());
-    BOOST_TEST_EQUAL("0", InputSequence(v).mathematical_representation());
+    InputSequence const seq(v);
+    BOOST_TEST(v == seq.linear_number_representation());
+    BOOST_TEST_EQUAL("0", seq.canonical_form());
+    BOOST_TEST_EQUAL("0", seq.mathematical_representation());
     }
 
     // Test (enumerative) allowed keywords, and keywords-only switch
