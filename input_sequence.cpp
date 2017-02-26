@@ -51,6 +51,13 @@ void fill_interval_gaps
     ,std::string                const& default_keyword
     );
 
+void realize_intervals
+    (std::vector<ValueInterval> const& intervals
+    ,std::vector<std::string>        & keyword_result
+    ,std::vector<double>             & number_result
+    ,int                               years_to_maturity
+    );
+
 void assert_sane_and_ordered_partition
     (std::vector<ValueInterval> const& intervals
     ,int                               years_to_maturity
@@ -112,7 +119,13 @@ InputSequence::InputSequence
         ,a_default_keyword
         );
 
-    realize_intervals();
+    realize_intervals
+        (intervals_
+        ,keyword_result_
+        ,number_result_
+        ,years_to_maturity_
+        );
+
     assert_sane_and_ordered_partition(intervals_, a_years_to_maturity);
 }
 
@@ -430,32 +443,6 @@ std::vector<ValueInterval> const& InputSequence::interval_representation() const
     return intervals_;
 }
 
-void InputSequence::realize_intervals()
-{
-    for(auto const& interval_i : intervals_)
-        {
-        LMI_ASSERT(0 <= interval_i.begin_duration);
-        LMI_ASSERT(interval_i.begin_duration <= interval_i.end_duration);
-        LMI_ASSERT(interval_i.end_duration <= years_to_maturity_);
-        if(interval_i.value_is_keyword)
-            {
-            std::fill
-                (keyword_result_.begin() + interval_i.begin_duration
-                ,keyword_result_.begin() + interval_i.end_duration
-                ,interval_i.value_keyword
-                );
-            }
-        else
-            {
-            std::fill
-                (number_result_.begin() + interval_i.begin_duration
-                ,number_result_.begin() + interval_i.end_duration
-                ,interval_i.value_number
-                );
-            }
-        }
-}
-
 namespace
 {
 void assert_not_insane_or_disordered
@@ -634,6 +621,39 @@ void fill_interval_gaps
     // This is necessary only to trap any improper interval that
     // may have been inserted.
     assert_sane_and_ordered_partition(out, years_to_maturity);
+}
+
+/// Decode RLE intervals into keyword and numeric vectors.
+
+void realize_intervals
+    (std::vector<ValueInterval> const& intervals
+    ,std::vector<std::string>        & keyword_result
+    ,std::vector<double>             & number_result
+    ,int                               years_to_maturity
+    )
+{
+    for(auto const& interval_i : intervals)
+        {
+        LMI_ASSERT(0 <= interval_i.begin_duration);
+        LMI_ASSERT(interval_i.begin_duration <= interval_i.end_duration);
+        LMI_ASSERT(interval_i.end_duration <= years_to_maturity);
+        if(interval_i.value_is_keyword)
+            {
+            std::fill
+                (keyword_result.begin() + interval_i.begin_duration
+                ,keyword_result.begin() + interval_i.end_duration
+                ,interval_i.value_keyword
+                );
+            }
+        else
+            {
+            std::fill
+                (number_result.begin() + interval_i.begin_duration
+                ,number_result.begin() + interval_i.end_duration
+                ,interval_i.value_number
+                );
+            }
+        }
 }
 
 /// Assert postconditions established by all ctors.

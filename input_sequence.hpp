@@ -174,8 +174,6 @@ class LMI_SO InputSequence
     template<typename T>
     void initialize_from_vector(std::vector<T> const&);
 
-    void realize_intervals();
-
     int years_to_maturity_;
     int issue_age_;
 
