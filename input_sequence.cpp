@@ -119,7 +119,7 @@ InputSequence::InputSequence
         );
 
     realize_intervals();
-    assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
+    assert_sane_and_ordered_partition(intervals_, a_years_to_maturity);
 }
 
 /// Construct from vector: e.g, 1 1 1 2 2 --> 1[0,3); 2[3,4).
