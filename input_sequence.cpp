@@ -210,6 +210,8 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
 
     ValueInterval default_interval;
     default_interval.value_is_keyword = T_is_string;
+    default_interval.begin_mode       = e_duration;
+    default_interval.end_mode         = e_duration;
 
     T prior_value = v.empty() ? T() : v.front();
     T current_value = prior_value;
@@ -234,6 +236,12 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
             prior_value = current_value;
             }
         }
+
+    LMI_ASSERT(0                  == intervals_.front().begin_duration);
+    intervals_.front().begin_mode  = e_inception;
+
+    LMI_ASSERT(years_to_maturity_ == intervals_.back().end_duration);
+    intervals_.back().end_mode     = e_maturity;
 }
 
 InputSequence::~InputSequence() = default;
