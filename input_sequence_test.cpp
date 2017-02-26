@@ -396,11 +396,6 @@ void input_sequence_test::test()
     InputSequence const seq(v);
     BOOST_TEST(v == seq.linear_number_representation());
     BOOST_TEST_EQUAL("1 3; 2", canonicalized_input_sequence(v));
-    BOOST_TEST_EQUAL("1 3; 2", seq.canonical_form());
-    BOOST_TEST_EQUAL
-        ("1 [0, 3); 2 [3, maturity)"
-        ,seq.mathematical_representation()
-        );
     }
 
     // Test construction from string (keyword) vector.
@@ -412,11 +407,6 @@ void input_sequence_test::test()
         ("alpha 1; beta 3; gamma 4; eta"
         ,canonicalized_input_sequence(v)
         );
-    BOOST_TEST_EQUAL("alpha 1; beta 3; gamma 4; eta", seq.canonical_form());
-    BOOST_TEST_EQUAL
-        ("alpha [0, 1); beta [1, 3); gamma [3, 4); eta [4, maturity)"
-        ,seq.mathematical_representation()
-        );
     }
 
     // Test construction from one-element vector.
@@ -425,8 +415,6 @@ void input_sequence_test::test()
     InputSequence const seq(v);
     BOOST_TEST(v == seq.linear_number_representation());
     BOOST_TEST_EQUAL("3", canonicalized_input_sequence(v));
-    BOOST_TEST_EQUAL("3", seq.canonical_form());
-    BOOST_TEST_EQUAL("3", seq.mathematical_representation());
     }
 
     // Test construction from empty vector.
@@ -435,8 +423,6 @@ void input_sequence_test::test()
     InputSequence const seq(v);
     BOOST_TEST(v == seq.linear_number_representation());
     BOOST_TEST_EQUAL("0", canonicalized_input_sequence(v));
-    BOOST_TEST_EQUAL("0", seq.canonical_form());
-    BOOST_TEST_EQUAL("0", seq.mathematical_representation());
     }
 
     // Test (enumerative) allowed keywords, and keywords-only switch

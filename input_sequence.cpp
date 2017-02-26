@@ -386,66 +386,6 @@ std::vector<std::string> const& InputSequence::linear_keyword_representation() c
     return keyword_result_;
 }
 
-/// Regularized representation in [x,y) interval notation.
-///
-/// If there's only one interval, it must span all years, so depict it
-/// as the simple scalar that it is, specifying no interval.
-///
-/// Use keyword 'maturity' for the last duration. This avoids
-/// gratuitous differences between lives, e.g.
-///   '10000 [20,55); 0' for a 45-year-old
-/// and
-///   '10000 [20,65); 0' for a 35-year-old
-/// which the census GUI would treat as varying across cells, whereas
-///   '10000 [20,65); maturity'
-/// expresses the same sequence uniformly.
-///
-/// TODO ?? For the same reason, this representation should preserve
-/// duration keywords such as 'retirement'.
-
-std::string InputSequence::mathematical_representation() const
-{
-    std::ostringstream oss;
-    for(auto const& interval_i : intervals_)
-        {
-        if(interval_i.value_is_keyword)
-            {
-            oss << interval_i.value_keyword;
-            }
-        else
-            {
-            oss << value_cast<std::string>(interval_i.value_number);
-            }
-
-        if(1 == intervals_.size())
-            {
-            break;
-            }
-
-        if(interval_i.end_duration != years_to_maturity_)
-            {
-            oss
-                << " ["
-                << interval_i.begin_duration
-                << ", "
-                << interval_i.end_duration
-                << "); "
-                ;
-            }
-        else
-            {
-            oss
-                << " ["
-                << interval_i.begin_duration
-                << ", "
-                << "maturity"
-                << ")"
-                ;
-            }
-        }
-    return oss.str();
-}
-
 std::vector<ValueInterval> const& InputSequence::interval_representation() const
 {
     return intervals_;

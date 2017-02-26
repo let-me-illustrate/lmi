@@ -168,8 +168,6 @@ class LMI_SO InputSequence
     std::vector<double>      const& linear_number_representation()  const;
     std::vector<std::string> const& linear_keyword_representation() const;
 
-    std::string mathematical_representation() const;
-
     std::vector<ValueInterval> const& interval_representation() const;
 
   private:
