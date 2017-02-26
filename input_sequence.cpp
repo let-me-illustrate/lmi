@@ -300,15 +300,15 @@ InputSequence::~InputSequence() = default;
 std::string InputSequence::canonical_form() const
 {
     std::ostringstream oss;
-    for(auto const& interval_i : intervals_)
+    for(auto const& i : intervals_)
         {
-        if(interval_i.value_is_keyword)
+        if(i.value_is_keyword)
             {
-            oss << interval_i.value_keyword;
+            oss << i.value_keyword;
             }
         else
             {
-            oss << value_cast<std::string>(interval_i.value_number);
+            oss << value_cast<std::string>(i.value_number);
             }
 
         if(1 == intervals_.size())
@@ -317,7 +317,7 @@ std::string InputSequence::canonical_form() const
             }
 
         std::string s;
-        switch(interval_i.end_mode)
+        switch(i.end_mode)
             {
             case e_invalid_mode:
                 {
@@ -326,19 +326,19 @@ std::string InputSequence::canonical_form() const
                 break;
             case e_duration:
                 {
-                int const z = interval_i.end_duration;
+                int const z = i.end_duration;
                 s = " " + value_cast<std::string>(z);
                 }
                 break;
             case e_attained_age:
                 {
-                int const z = interval_i.end_duration + issue_age_;
+                int const z = i.end_duration + issue_age_;
                 s = " @" + value_cast<std::string>(z);
                 }
                 break;
             case e_number_of_years:
                 {
-                int const z = interval_i.end_duration - interval_i.begin_duration;
+                int const z = i.end_duration - i.begin_duration;
                 s = " #" + value_cast<std::string>(z);
                 }
                 break;
@@ -364,7 +364,7 @@ std::string InputSequence::canonical_form() const
                 break;
             }
 
-        if(interval_i.end_duration != years_to_maturity_)
+        if(i.end_duration != years_to_maturity_)
             {
             oss << s << "; ";
             }
@@ -399,88 +399,88 @@ void assert_not_insane_or_disordered
     )
 {
     int prior_begin_duration = 0;
-    for(auto const& interval_i : intervals)
+    for(auto const& i : intervals)
         {
-        if(interval_i.insane)
+        if(i.insane)
             {
             fatal_error()
                 << "Untrapped parser error."
                 << LMI_FLUSH
                 ;
             }
-        if(interval_i.value_is_keyword && "daft" == interval_i.value_keyword)
+        if(i.value_is_keyword && "daft" == i.value_keyword)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << interval_i.begin_duration << ", "
-                << interval_i.end_duration << " )"
+                << "[ " << i.begin_duration
+                << ", " << i.end_duration << " )"
                 << " has invalid value_keyword."
                 << LMI_FLUSH
                 ;
             }
-        if(e_invalid_mode == interval_i.begin_mode)
+        if(e_invalid_mode == i.begin_mode)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << interval_i.begin_duration << ", "
-                << interval_i.end_duration << " )"
+                << "[ " << i.begin_duration
+                << ", " << i.end_duration << " )"
                 << " has invalid begin_mode."
                 << LMI_FLUSH
                 ;
             }
-        if(e_invalid_mode == interval_i.end_mode)
+        if(e_invalid_mode == i.end_mode)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << interval_i.begin_duration << ", "
-                << interval_i.end_duration << " )"
+                << "[ " << i.begin_duration
+                << ", " << i.end_duration << " )"
                 << " has invalid end_mode."
                 << LMI_FLUSH
                 ;
             }
-        if(interval_i.begin_duration < 0)
+        if(i.begin_duration < 0)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << interval_i.begin_duration << ", "
-                << interval_i.end_duration << " )"
+                << "[ " << i.begin_duration
+                << ", " << i.end_duration << " )"
                 << " is improper: it begins before duration zero."
                 << LMI_FLUSH
                 ;
             }
-        if(interval_i.end_duration < interval_i.begin_duration)
+        if(i.end_duration < i.begin_duration)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << interval_i.begin_duration << ", "
-                << interval_i.end_duration << " )"
+                << "[ " << i.begin_duration
+                << ", " << i.end_duration << " )"
                 << " is improper: it ends before it begins."
                 << LMI_FLUSH
                 ;
             }
-        if(years_to_maturity < interval_i.end_duration)
+        if(years_to_maturity < i.end_duration)
             {
             fatal_error()
                 << "Interval "
-                << "[ " << interval_i.begin_duration << ", "
-                << interval_i.end_duration << " )"
+                << "[ " << i.begin_duration
+                << ", " << i.end_duration << " )"
                 << " is improper: it ends after maturity."
                 << LMI_FLUSH
                 ;
             }
-        if(interval_i.begin_duration < prior_begin_duration)
+        if(i.begin_duration < prior_begin_duration)
             {
             fatal_error()
                 << "Previous interval began at duration "
                 << prior_begin_duration
                 << "; current interval "
-                << "[ " << interval_i.begin_duration << ", "
-                << interval_i.end_duration << " )"
+                << "[ " << i.begin_duration
+                << ", " << i.end_duration << " )"
                 << " would begin before that."
                 << LMI_FLUSH
                 ;
             }
-        prior_begin_duration = interval_i.begin_duration;
+        prior_begin_duration = i.begin_duration;
         }
 }
 
@@ -580,25 +580,25 @@ void realize_intervals
     ,int                               years_to_maturity
     )
 {
-    for(auto const& interval_i : intervals)
+    for(auto const& i : intervals)
         {
-        LMI_ASSERT(0 <= interval_i.begin_duration);
-        LMI_ASSERT(interval_i.begin_duration <= interval_i.end_duration);
-        LMI_ASSERT(interval_i.end_duration <= years_to_maturity);
-        if(interval_i.value_is_keyword)
+        LMI_ASSERT(0 <= i.begin_duration);
+        LMI_ASSERT(i.begin_duration <= i.end_duration);
+        LMI_ASSERT(i.end_duration <= years_to_maturity);
+        if(i.value_is_keyword)
             {
             std::fill
-                (keyword_result.begin() + interval_i.begin_duration
-                ,keyword_result.begin() + interval_i.end_duration
-                ,interval_i.value_keyword
+                (keyword_result.begin() + i.begin_duration
+                ,keyword_result.begin() + i.end_duration
+                ,i.value_keyword
                 );
             }
         else
             {
             std::fill
-                (number_result.begin() + interval_i.begin_duration
-                ,number_result.begin() + interval_i.end_duration
-                ,interval_i.value_number
+                (number_result.begin() + i.begin_duration
+                ,number_result.begin() + i.end_duration
+                ,i.value_number
                 );
             }
         }
@@ -634,8 +634,8 @@ void assert_sane_and_ordered_partition
             {
             fatal_error()
                 << "Interval "
-                << "[ " << i.begin_duration << ", "
-                << i.end_duration << " )"
+                << "[ " << i.begin_duration
+                << ", " << i.end_duration << " )"
                 << " should begin at duration "
                 << prior_end_duration
                 << ", where the previous interval ended."
