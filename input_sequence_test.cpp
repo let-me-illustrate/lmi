@@ -395,6 +395,7 @@ void input_sequence_test::test()
     std::vector<double> const v{1, 1, 1, 2, 2};
     InputSequence const seq(v);
     BOOST_TEST(v == seq.linear_number_representation());
+    BOOST_TEST_EQUAL("1 3; 2", canonicalized_input_sequence(v));
     BOOST_TEST_EQUAL("1 3; 2", seq.canonical_form());
     BOOST_TEST_EQUAL
         ("1 [0, 3); 2 [3, maturity)"
@@ -407,6 +408,10 @@ void input_sequence_test::test()
     std::vector<std::string> const v{"alpha", "beta", "beta", "gamma", "eta"};
     InputSequence const seq(v);
     BOOST_TEST(v == seq.linear_keyword_representation());
+    BOOST_TEST_EQUAL
+        ("alpha 1; beta 3; gamma 4; eta"
+        ,canonicalized_input_sequence(v)
+        );
     BOOST_TEST_EQUAL("alpha 1; beta 3; gamma 4; eta", seq.canonical_form());
     BOOST_TEST_EQUAL
         ("alpha [0, 1); beta [1, 3); gamma [3, 4); eta [4, maturity)"
@@ -419,6 +424,7 @@ void input_sequence_test::test()
     std::vector<double> const v{3};
     InputSequence const seq(v);
     BOOST_TEST(v == seq.linear_number_representation());
+    BOOST_TEST_EQUAL("3", canonicalized_input_sequence(v));
     BOOST_TEST_EQUAL("3", seq.canonical_form());
     BOOST_TEST_EQUAL("3", seq.mathematical_representation());
     }
@@ -428,6 +434,7 @@ void input_sequence_test::test()
     std::vector<double> const v;
     InputSequence const seq(v);
     BOOST_TEST(v == seq.linear_number_representation());
+    BOOST_TEST_EQUAL("0", canonicalized_input_sequence(v));
     BOOST_TEST_EQUAL("0", seq.canonical_form());
     BOOST_TEST_EQUAL("0", seq.mathematical_representation());
     }

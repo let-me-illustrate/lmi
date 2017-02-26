@@ -137,7 +137,7 @@ std::string adjust_interest_rates
         {
         ; // Do nothing.
         }
-    return InputSequence(general_account_rate).mathematical_representation();
+    return canonicalized_input_sequence(general_account_rate);
 }
 
 #if 0

@@ -143,6 +143,9 @@ class LMI_SO InputSequence
     :        private lmi::uncopyable <InputSequence>
     ,virtual private obstruct_slicing<InputSequence>
 {
+    template<typename T>
+    friend std::string canonicalized_input_sequence(std::vector<T> const&);
+
     friend class input_sequence_test;
 
   public:
@@ -158,9 +161,6 @@ class LMI_SO InputSequence
         ,std::string const&              a_default_keyword  = std::string()
         );
 
-    explicit InputSequence(std::vector<double> const&);
-    explicit InputSequence(std::vector<std::string> const&);
-
     ~InputSequence();
 
     std::string canonical_form() const;
@@ -173,6 +173,9 @@ class LMI_SO InputSequence
     std::vector<ValueInterval> const& interval_representation() const;
 
   private:
+    explicit InputSequence(std::vector<double> const&);
+    explicit InputSequence(std::vector<std::string> const&);
+
     template<typename T>
     void initialize_from_vector(std::vector<T> const&);
 
@@ -183,6 +186,12 @@ class LMI_SO InputSequence
     std::vector<double> number_result_;
     std::vector<std::string> keyword_result_;
 };
+
+template<typename T>
+std::string canonicalized_input_sequence(std::vector<T> const& z)
+{
+    return InputSequence(z).canonical_form();
+}
 
 #endif // input_sequence_hpp
 

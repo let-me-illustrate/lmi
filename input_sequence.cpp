@@ -131,6 +131,9 @@ InputSequence::InputSequence
 
 /// Construct from vector: e.g, 1 1 1 2 2 --> 1[0,3); 2[3,4).
 ///
+/// Accessible only by unit test or through free function template
+/// canonicalized_input_sequence().
+///
 /// This is used, e.g., when interest rates obtained from an external
 /// source vary from one year to the next, and it is desired to use
 /// them as lmi input. It might seem that inserting semicolons between
@@ -150,6 +153,9 @@ InputSequence::InputSequence(std::vector<double> const& v)
 }
 
 /// Construct from vector: e.g, a a a b b --> a[0,3); b[3,4).
+///
+/// Accessible only by unit test or through free function template
+/// canonicalized_input_sequence().
 ///
 /// No actual need for this particular ctor has yet been found, but
 /// one might be, someday.
@@ -199,7 +205,8 @@ void set_value(ValueInterval& v, std::string const& s)
 ///
 /// As these comments suggest, the ctors that use this function
 /// template are suitable only for certain specialized purposes where
-/// the argument is known to be valid.
+/// the argument is known to be valid, and therefore they are private
+/// and accessible only through canonicalized_input_sequence().
 
 template<typename T>
 void InputSequence::initialize_from_vector(std::vector<T> const& v)

@@ -45,7 +45,7 @@ namespace
         {
         std::vector<double> z;
         database.Query(z, DB_MaxGenAcctRate);
-        return InputSequence(z).mathematical_representation();
+        return canonicalized_input_sequence(z);
         }
 } // Unnamed namespace.
 
