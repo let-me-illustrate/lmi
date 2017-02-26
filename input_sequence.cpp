@@ -77,8 +77,8 @@ InputSequence::InputSequence
     )
     :years_to_maturity_ (a_years_to_maturity)
     ,issue_age_         (a_issue_age)
-    ,number_result_     (a_years_to_maturity)
-    ,keyword_result_    (a_years_to_maturity, a_default_keyword)
+    ,seriatim_keywords_ (a_years_to_maturity, a_default_keyword)
+    ,seriatim_numbers_  (a_years_to_maturity)
 {
     // A default keyword should be specified (i.e., nonempty) only for
     // keyword-only sequences (otherwise, the default is numeric), and
@@ -121,12 +121,28 @@ InputSequence::InputSequence
 
     realize_intervals
         (intervals_
-        ,keyword_result_
-        ,number_result_
+        ,seriatim_keywords_
+        ,seriatim_numbers_
         ,years_to_maturity_
         );
 
     assert_sane_and_ordered_partition(intervals_, a_years_to_maturity);
+}
+
+/// Construct from vector: e.g, a a a b b --> a[0,3); b[3,4).
+///
+/// Accessible only by unit test or through free function template
+/// canonicalized_input_sequence().
+///
+/// No actual need for this particular ctor has yet been found, but
+/// one might be, someday.
+
+InputSequence::InputSequence(std::vector<std::string> const& v)
+    :years_to_maturity_ (v.size())
+    ,seriatim_keywords_ (v)
+{
+    initialize_from_vector(v);
+    assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 }
 
 /// Construct from vector: e.g, 1 1 1 2 2 --> 1[0,3); 2[3,4).
@@ -145,24 +161,8 @@ InputSequence::InputSequence
 /// RLE representation would work correctly.
 
 InputSequence::InputSequence(std::vector<double> const& v)
-    :years_to_maturity_(v.size())
-    ,number_result_    (v)
-{
-    initialize_from_vector(v);
-    assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
-}
-
-/// Construct from vector: e.g, a a a b b --> a[0,3); b[3,4).
-///
-/// Accessible only by unit test or through free function template
-/// canonicalized_input_sequence().
-///
-/// No actual need for this particular ctor has yet been found, but
-/// one might be, someday.
-
-InputSequence::InputSequence(std::vector<std::string> const& v)
-    :years_to_maturity_(v.size())
-    ,keyword_result_   (v)
+    :years_to_maturity_ (v.size())
+    ,seriatim_numbers_  (v)
 {
     initialize_from_vector(v);
     assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
@@ -194,7 +194,7 @@ void set_value(ValueInterval& v, std::string const& s)
 /// template to convert vectors (with one value per year) to input
 /// sequences (compacted with RLE).
 ///
-/// Sets only one of {keyword_result_, number_result_}. The other
+/// Sets only one of {seriatim_keywords_,seriatim_numbers_}. The other
 /// defaults to an empty vector (the calling ctor doesn't necessarily
 /// know an appropriate default for its elements, so it can't have any
 /// other size than zero).
@@ -376,19 +376,19 @@ std::string InputSequence::canonical_form() const
     return oss.str();
 }
 
-std::vector<double> const& InputSequence::linear_number_representation() const
-{
-    return number_result_;
-}
-
-std::vector<std::string> const& InputSequence::linear_keyword_representation() const
-{
-    return keyword_result_;
-}
-
-std::vector<ValueInterval> const& InputSequence::interval_representation() const
+std::vector<ValueInterval> const& InputSequence::intervals() const
 {
     return intervals_;
+}
+
+std::vector<std::string> const& InputSequence::seriatim_keywords() const
+{
+    return seriatim_keywords_;
+}
+
+std::vector<double> const& InputSequence::seriatim_numbers() const
+{
+    return seriatim_numbers_;
 }
 
 namespace

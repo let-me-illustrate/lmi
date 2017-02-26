@@ -165,14 +165,13 @@ class LMI_SO InputSequence
 
     std::string canonical_form() const;
 
-    std::vector<double>      const& linear_number_representation()  const;
-    std::vector<std::string> const& linear_keyword_representation() const;
-
-    std::vector<ValueInterval> const& interval_representation() const;
+    std::vector<ValueInterval> const& intervals() const;
+    std::vector<std::string>   const& seriatim_keywords() const;
+    std::vector<double>        const& seriatim_numbers()  const;
 
   private:
-    explicit InputSequence(std::vector<double> const&);
     explicit InputSequence(std::vector<std::string> const&);
+    explicit InputSequence(std::vector<double> const&);
 
     template<typename T>
     void initialize_from_vector(std::vector<T> const&);
@@ -181,8 +180,8 @@ class LMI_SO InputSequence
     int issue_age_;
 
     std::vector<ValueInterval> intervals_;
-    std::vector<double> number_result_;
-    std::vector<std::string> keyword_result_;
+    std::vector<std::string>   seriatim_keywords_;
+    std::vector<double>        seriatim_numbers_;
 };
 
 template<typename T>

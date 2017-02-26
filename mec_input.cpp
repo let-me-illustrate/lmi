@@ -62,7 +62,7 @@ std::string realize_sequence_string
             ,input.inforce_year     ()
             ,input.effective_year   ()
             );
-        detail::convert_vector(v, s.linear_number_representation());
+        detail::convert_vector(v, s.seriatim_numbers());
         }
     catch(std::exception const& e)
         {

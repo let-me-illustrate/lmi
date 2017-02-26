@@ -67,7 +67,7 @@ void input_sequence_test::check
         {
         InputSequence const seq(e, n, 90, 95, 0, 2002, k, o, w);
 
-        std::vector<double> const& v(seq.linear_number_representation());
+        std::vector<double> const& v(seq.seriatim_numbers());
         bool const bv = v == std::vector<double>(d, d + n);
         if(!bv)
             {
@@ -80,7 +80,7 @@ void input_sequence_test::check
             std::cout << std::endl;
             }
 
-        std::vector<std::string> const& s(seq.linear_keyword_representation());
+        std::vector<std::string> const& s(seq.seriatim_keywords());
         std::vector<std::string> const t =
             ( std::vector<std::string>() == c)
             ? std::vector<std::string>(n)
@@ -394,7 +394,7 @@ void input_sequence_test::test()
     {
     std::vector<double> const v{1, 1, 1, 2, 2};
     InputSequence const seq(v);
-    BOOST_TEST(v == seq.linear_number_representation());
+    BOOST_TEST(v == seq.seriatim_numbers());
     BOOST_TEST_EQUAL("1 3; 2", canonicalized_input_sequence(v));
     }
 
@@ -402,7 +402,7 @@ void input_sequence_test::test()
     {
     std::vector<std::string> const v{"alpha", "beta", "beta", "gamma", "eta"};
     InputSequence const seq(v);
-    BOOST_TEST(v == seq.linear_keyword_representation());
+    BOOST_TEST(v == seq.seriatim_keywords());
     BOOST_TEST_EQUAL
         ("alpha 1; beta 3; gamma 4; eta"
         ,canonicalized_input_sequence(v)
@@ -413,7 +413,7 @@ void input_sequence_test::test()
     {
     std::vector<double> const v{3};
     InputSequence const seq(v);
-    BOOST_TEST(v == seq.linear_number_representation());
+    BOOST_TEST(v == seq.seriatim_numbers());
     BOOST_TEST_EQUAL("3", canonicalized_input_sequence(v));
     }
 
@@ -421,7 +421,7 @@ void input_sequence_test::test()
     {
     std::vector<double> const v;
     InputSequence const seq(v);
-    BOOST_TEST(v == seq.linear_number_representation());
+    BOOST_TEST(v == seq.seriatim_numbers());
     BOOST_TEST_EQUAL("0", canonicalized_input_sequence(v));
     }
 
@@ -587,7 +587,7 @@ void input_sequence_test::test()
     std::string const g("7 retirement; 4");
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
-    std::vector<ValueInterval> const& i(seq.interval_representation());
+    std::vector<ValueInterval> const& i(seq.intervals());
     BOOST_TEST_EQUAL(e_inception , i[0].begin_mode);
     BOOST_TEST_EQUAL(e_retirement, i[0].end_mode  );
     BOOST_TEST_EQUAL(e_retirement, i[1].begin_mode);

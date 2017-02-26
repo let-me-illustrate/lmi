@@ -425,7 +425,7 @@ void InputSequenceEditor::sequence(InputSequence const& s)
         remove_row(0);
         }
 
-    std::vector<ValueInterval> const& intervals = s.interval_representation();
+    std::vector<ValueInterval> const& intervals = s.intervals();
     int const num_intervals = intervals.size();
 
     // Reaffirm InputSequence invariants that are relied upon here:
