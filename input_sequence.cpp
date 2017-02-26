@@ -208,13 +208,13 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
     bool const T_is_string = std::is_same<T,std::string>::value;
     static_assert(T_is_double || T_is_string, "");
 
-    ValueInterval dummy;
-    dummy.value_is_keyword = T_is_string;
+    ValueInterval default_interval;
+    default_interval.value_is_keyword = T_is_string;
 
     T prior_value = v.empty() ? T() : v.front();
     T current_value = prior_value;
 
-    intervals_.push_back(dummy);
+    intervals_.push_back(default_interval);
     set_value(intervals_.back(), current_value);
 
     for(auto const& vi : v)
@@ -227,7 +227,7 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
         else
             {
             int value_change_duration = intervals_.back().end_duration;
-            intervals_.push_back(dummy);
+            intervals_.push_back(default_interval);
             set_value(intervals_.back(), current_value);
             intervals_.back().begin_duration = value_change_duration;
             intervals_.back().end_duration = ++value_change_duration;
