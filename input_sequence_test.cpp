@@ -28,7 +28,28 @@
 #include <algorithm>
 #include <iterator>                     // std::ostream_iterator
 
-void check
+class input_sequence_test
+{
+  public:
+    static void test();
+
+  private:
+    static void check
+        (char const*                     file
+        ,int                             line
+        ,int                             n
+        ,double const*                   d
+        ,std::string const&              e
+        ,std::string const&              g
+        ,char const*                     m
+        ,std::vector<std::string> const& k
+        ,std::vector<std::string> const& c
+        ,bool                            o
+        ,std::string const&              w
+        );
+};
+
+void input_sequence_test::check
     (char const*                     file
     ,int                             line
     ,int                             n
@@ -113,7 +134,7 @@ void check
         }
 }
 
-int test_main(int, char*[])
+void input_sequence_test::test()
 {
     std::string census = "\nCorporationPayment\tCorporationPaymentMode\tComments\n";
 
@@ -732,7 +753,12 @@ int test_main(int, char*[])
         << std::endl
         ;
 #endif // defined SHOW_CENSUS_PASTE_TEST_CASES
+}
 
-    return 0;
+int test_main(int, char*[])
+{
+    input_sequence_test::test();
+
+    return EXIT_SUCCESS;
 }
 
