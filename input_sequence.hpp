@@ -176,18 +176,8 @@ class LMI_SO InputSequence
 
     void realize_intervals();
 
-    // Copies of ctor args that are identical to class SequenceParser's.
-    // Most of these copies are unused as this is written in 2017-01;
-    // they're retained in case a use is someday found for them.
     int years_to_maturity_;
     int issue_age_;
-    int retirement_age_;
-    int inforce_duration_;
-    int effective_year_;
-    std::vector<std::string> allowed_keywords_;
-    bool keywords_only_;
-    // Copy of a ctor arg that is unique to this class.
-    std::string default_keyword_;
 
     std::vector<ValueInterval> intervals_;
     std::vector<double> number_result_;

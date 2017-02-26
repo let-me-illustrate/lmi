@@ -68,16 +68,10 @@ InputSequence::InputSequence
     ,bool                            a_keywords_only
     ,std::string const&              a_default_keyword
     )
-    :years_to_maturity_             (a_years_to_maturity)
-    ,issue_age_                     (a_issue_age)
-    ,retirement_age_                (a_retirement_age)
-    ,inforce_duration_              (a_inforce_duration)
-    ,effective_year_                (a_effective_year)
-    ,allowed_keywords_              (a_allowed_keywords)
-    ,keywords_only_                 (a_keywords_only)
-    ,default_keyword_               (a_default_keyword)
-    ,number_result_                 (a_years_to_maturity)
-    ,keyword_result_                (a_years_to_maturity, a_default_keyword)
+    :years_to_maturity_ (a_years_to_maturity)
+    ,issue_age_         (a_issue_age)
+    ,number_result_     (a_years_to_maturity)
+    ,keyword_result_    (a_years_to_maturity, a_default_keyword)
 {
     // A default keyword should be specified (i.e., nonempty) only for
     // keyword-only sequences (otherwise, the default is numeric), and
