@@ -43,17 +43,17 @@ void assert_not_insane_or_disordered
     ,int                               years_to_maturity
     );
 
-void assert_sane_and_ordered_partition
-    (std::vector<ValueInterval> const& intervals
-    ,int                               years_to_maturity
-    );
-
 void fill_interval_gaps
     (std::vector<ValueInterval> const& in
     ,std::vector<ValueInterval>      & out
     ,int                               years_to_maturity
     ,bool                              keywords_only
     ,std::string                const& default_keyword
+    );
+
+void assert_sane_and_ordered_partition
+    (std::vector<ValueInterval> const& intervals
+    ,int                               years_to_maturity
     );
 } // Unnamed namespace.
 
@@ -549,48 +549,6 @@ void assert_not_insane_or_disordered
         }
 }
 
-/// Assert postconditions established by all ctors.
-///
-/// What is actually asserted here, for now at least, is only that the
-/// intervals are contiguous--not that they truly partition the range
-/// [0, years_to_maturity). Cf. fill_interval_gaps(), which similarly
-/// establishes only this weaker invariant, which also happens to be
-/// what InputSequenceEntry asserts.
-
-void assert_sane_and_ordered_partition
-    (std::vector<ValueInterval> const& intervals
-    ,int                               years_to_maturity
-    )
-{
-    assert_not_insane_or_disordered(intervals, years_to_maturity);
-
-    LMI_ASSERT(!intervals.empty());
-
-    LMI_ASSERT(0                 == intervals.front().begin_duration);
-    LMI_ASSERT(e_inception       == intervals.front().begin_mode    );
-
-    LMI_ASSERT(years_to_maturity == intervals.back().end_duration);
-    LMI_ASSERT(e_maturity        == intervals.back().end_mode    );
-
-    int prior_end_duration = 0;
-    for(auto const& i : intervals)
-        {
-        if(i.begin_duration != prior_end_duration)
-            {
-            fatal_error()
-                << "Interval "
-                << "[ " << i.begin_duration << ", "
-                << i.end_duration << " )"
-                << " should begin at duration "
-                << prior_end_duration
-                << ", where the previous interval ended."
-                << LMI_FLUSH
-                ;
-            }
-        prior_end_duration = i.end_duration;
-        }
-}
-
 /// Create a partition of [0, maturity) from parser output.
 ///
 /// The last interval's endpoint is extended to maturity, replicating
@@ -676,6 +634,48 @@ void fill_interval_gaps
     // This is necessary only to trap any improper interval that
     // may have been inserted.
     assert_sane_and_ordered_partition(out, years_to_maturity);
+}
+
+/// Assert postconditions established by all ctors.
+///
+/// What is actually asserted here, for now at least, is only that the
+/// intervals are contiguous--not that they truly partition the range
+/// [0, years_to_maturity). Cf. fill_interval_gaps(), which similarly
+/// establishes only this weaker invariant, which also happens to be
+/// what InputSequenceEntry asserts.
+
+void assert_sane_and_ordered_partition
+    (std::vector<ValueInterval> const& intervals
+    ,int                               years_to_maturity
+    )
+{
+    assert_not_insane_or_disordered(intervals, years_to_maturity);
+
+    LMI_ASSERT(!intervals.empty());
+
+    LMI_ASSERT(0                 == intervals.front().begin_duration);
+    LMI_ASSERT(e_inception       == intervals.front().begin_mode    );
+
+    LMI_ASSERT(years_to_maturity == intervals.back().end_duration);
+    LMI_ASSERT(e_maturity        == intervals.back().end_mode    );
+
+    int prior_end_duration = 0;
+    for(auto const& i : intervals)
+        {
+        if(i.begin_duration != prior_end_duration)
+            {
+            fatal_error()
+                << "Interval "
+                << "[ " << i.begin_duration << ", "
+                << i.end_duration << " )"
+                << " should begin at duration "
+                << prior_end_duration
+                << ", where the previous interval ended."
+                << LMI_FLUSH
+                ;
+            }
+        prior_end_duration = i.end_duration;
+        }
 }
 } // Unnamed namespace.
 
