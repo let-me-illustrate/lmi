@@ -143,6 +143,8 @@ class LMI_SO InputSequence
     :        private lmi::uncopyable <InputSequence>
     ,virtual private obstruct_slicing<InputSequence>
 {
+    friend class input_sequence_test;
+
   public:
     InputSequence
         (std::string const&              input_expression
