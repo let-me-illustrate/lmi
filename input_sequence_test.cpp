@@ -99,7 +99,7 @@ void input_sequence_test::check
             }
 
         std::string const& f = seq.canonical_form();
-        bool const bf = g == f;
+        bool const bf = f == g;
         if(!bf)
             {
             std::cout << "\nExpression:                '" << e << "'";
