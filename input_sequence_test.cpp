@@ -108,7 +108,18 @@ void input_sequence_test::check
             std::cout << std::endl;
             }
 
-        INVOKE_BOOST_TEST(bv && bs && bf, file, line);
+        InputSequence const idempotence_test(f, n, 90, 95, 0, 2002, k, o, w);
+        std::string const& h = idempotence_test.canonical_form();
+        bool const bh = h == f;
+        if(!bh)
+            {
+            std::cout << "\nExpression:          '" << e << "'";
+            std::cout << "\n  c14n(c14n):        '" << h << "'";
+            std::cout << "\n  differs from c14n: '" << f << "'";
+            std::cout << std::endl;
+            }
+
+        INVOKE_BOOST_TEST(bv && bs && bf && bh, file, line);
         }
     catch(std::exception const& x)
         {
