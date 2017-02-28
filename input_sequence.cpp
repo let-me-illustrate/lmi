@@ -611,6 +611,21 @@ void realize_intervals
 /// [0, years_to_maturity). Cf. fill_interval_gaps(), which similarly
 /// establishes only this weaker invariant, which also happens to be
 /// what InputSequenceEntry asserts.
+///
+/// It is also asserted that begin and end modes are rational--which
+/// is a subtle concept. When no duration is explicitly specified, the
+/// next interval "inherits" its begin mode from a preceding interval.
+/// Thus, in this example:
+///   0 retirement; 1000; 0 maturity
+/// the third interval's begin mode is e_retirement ("inherited" from
+/// the first interval's end mode): it begins at the retirement age
+/// incremented by one (one being the width of the second interval).
+/// Similarly, in this example:
+///   1; 2; 3
+/// the second interval's begin mode is e_inception: it begins at
+/// inception plus an offset of one. The "mode" means not that begins
+/// at inception, but at a point based on inception. This explains why
+/// e_inception may be the begin mode of a postinitial interval.
 
 void assert_sane_and_ordered_partition
     (std::vector<ValueInterval> const& intervals
@@ -643,6 +658,26 @@ void assert_sane_and_ordered_partition
                 ;
             }
         prior_end_duration = i.end_duration;
+        }
+
+    for(auto j = intervals.begin(); j != intervals.end(); ++j)
+        {
+        if(intervals.begin() == j || (intervals.end() - 1) == j)
+            {
+            // front() and back(): see assertions above.
+            continue;
+            }
+        else
+            {
+            LMI_ASSERT(e_invalid_mode != j->begin_mode);
+// ...no... LMI_ASSERT(e_inception    != j->begin_mode); // Documented above.
+            LMI_ASSERT(e_inforce      != j->begin_mode);
+            LMI_ASSERT(e_maturity     != j->begin_mode);
+            LMI_ASSERT(e_invalid_mode != j->end_mode);
+            LMI_ASSERT(e_inception    != j->end_mode);
+            LMI_ASSERT(e_inforce      != j->end_mode);
+            LMI_ASSERT(e_maturity     != j->end_mode);
+            }
         }
 }
 } // Unnamed namespace.

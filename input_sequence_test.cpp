@@ -599,10 +599,24 @@ void input_sequence_test::test()
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.intervals());
+    }
+
+    // Duration keywords, with a one-time-only event at retirement.
+    {
+    int const n = 10;
+    double const d[n] = {0, 0, 0, 0, 0, 1000, 0, 0, 0, 0};
+    std::string const e("0 retirement; 1000; 0 maturity");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 1000 6; 0");
+    check(__FILE__, __LINE__, n, d, e, g);
+    InputSequence const seq(e, 10, 90, 95, 0, 2002);
+    std::vector<ValueInterval> const& i(seq.intervals());
     BOOST_TEST_EQUAL(e_inception , i[0].begin_mode);
     BOOST_TEST_EQUAL(e_retirement, i[0].end_mode  );
     BOOST_TEST_EQUAL(e_retirement, i[1].begin_mode);
-    BOOST_TEST_EQUAL(e_maturity  , i[1].end_mode  );
+    BOOST_TEST_EQUAL(e_duration  , i[1].end_mode  );
+    BOOST_TEST_EQUAL(e_retirement, i[2].begin_mode);
+    BOOST_TEST_EQUAL(e_maturity  , i[2].end_mode  );
     }
 
     // Test a simple parser error.
