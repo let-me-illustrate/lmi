@@ -403,9 +403,7 @@ void SequenceParser::value()
             current_interval_.value_is_keyword = false;
             if(keywords_only_)
                 {
-                diagnostics_
-                    << "Expected keyword chosen from { "
-                    ;
+                diagnostics_ << "Expected keyword chosen from { ";
                 std::copy
                     (allowed_keywords_.begin()
                     ,allowed_keywords_.end()
@@ -435,9 +433,7 @@ void SequenceParser::value()
                 }
             else
                 {
-                diagnostics_
-                    << "Expected keyword chosen from { "
-                    ;
+                diagnostics_ << "Expected keyword chosen from { ";
                 std::copy
                     (allowed_keywords_.begin()
                     ,allowed_keywords_.end()
@@ -648,11 +644,7 @@ void SequenceParser::match(SequenceParser::token_type t)
         }
     else
         {
-        diagnostics_
-            << "Expected '"
-            << token_type_name(t)
-            << "' . "
-            ;
+        diagnostics_ << "Expected '" << token_type_name(t) << "' . ";
         mark_diagnostic_context();
         }
 }
