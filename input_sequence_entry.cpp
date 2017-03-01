@@ -528,7 +528,6 @@ std::string InputSequenceEditor::sequence_string()
             case e_inforce:
                 {
                 fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
-                return "";
                 }
                 break;
             }
