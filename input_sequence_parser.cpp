@@ -202,9 +202,9 @@ void SequenceParser::duration_scalar()
 
 void SequenceParser::null_duration()
 {
-    int           trial_begin_duration = last_input_duration_++;
+    int           trial_begin_duration =     last_input_duration_;
     duration_mode trial_begin_mode     = previous_duration_scalar_mode_;
-    int           trial_end_duration   = last_input_duration_;
+    int           trial_end_duration   = 1 + last_input_duration_;
     duration_mode trial_end_mode       = e_duration;
     validate_duration
         (trial_begin_duration
