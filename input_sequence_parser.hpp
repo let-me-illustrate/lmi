@@ -78,10 +78,10 @@ class SequenceParser
     void single_duration();
     void intervalic_duration();
     void validate_duration
-        (int           tentative_begin_duration
-        ,duration_mode tentative_begin_duration_mode
-        ,int           tentative_end_duration
-        ,duration_mode tentative_end_duration_mode
+        (int           trial_begin_duration
+        ,duration_mode trial_begin_mode
+        ,int           trial_end_duration
+        ,duration_mode trial_end_mode
         );
     void duration();
     void value();

@@ -202,15 +202,15 @@ void SequenceParser::duration_scalar()
 
 void SequenceParser::null_duration()
 {
-    int tentative_begin_duration                = last_input_duration_++;
-    duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode_;
-    int tentative_end_duration                  = last_input_duration_;
-    duration_mode tentative_end_duration_mode   = e_duration;
+    int           trial_begin_duration = last_input_duration_++;
+    duration_mode trial_begin_mode     = previous_duration_scalar_mode_;
+    int           trial_end_duration   = last_input_duration_;
+    duration_mode trial_end_mode       = e_duration;
     validate_duration
-        (tentative_begin_duration
-        ,tentative_begin_duration_mode
-        ,tentative_end_duration
-        ,tentative_end_duration_mode
+        (trial_begin_duration
+        ,trial_begin_mode
+        ,trial_end_duration
+        ,trial_end_mode
         );
 }
 
@@ -219,19 +219,19 @@ void SequenceParser::null_duration()
 void SequenceParser::single_duration()
 {
     duration_scalar();
-    int tentative_begin_duration                = last_input_duration_;
+    int           trial_begin_duration = last_input_duration_;
 //    last_input_duration_ += static_cast<int>(current_duration_scalar_);
 //    last_input_duration_ = static_cast<int>(current_duration_scalar_);
-//    duration_mode tentative_begin_duration_mode = e_duration;
-    duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode_;
-    int tentative_end_duration                  = current_duration_scalar_;
-//    int tentative_end_duration   = last_input_duration_ + static_cast<int>(current_duration_scalar_);
-    duration_mode tentative_end_duration_mode   = current_duration_scalar_mode_;
+//    duration_mode trial_begin_mode = e_duration;
+    duration_mode trial_begin_mode     = previous_duration_scalar_mode_;
+    int           trial_end_duration   = current_duration_scalar_;
+//    int trial_end_duration       = last_input_duration_ + static_cast<int>(current_duration_scalar_);
+    duration_mode trial_end_mode       = current_duration_scalar_mode_;
     validate_duration
-        (tentative_begin_duration
-        ,tentative_begin_duration_mode
-        ,tentative_end_duration
-        ,tentative_end_duration_mode
+        (trial_begin_duration
+        ,trial_begin_mode
+        ,trial_end_duration
+        ,trial_end_mode
         );
 }
 
@@ -244,13 +244,13 @@ void SequenceParser::intervalic_duration()
     duration_scalar();
     // Add one to the interval-beginning if it was expressed
     // as exclusive, because we store [begin, end).
-    int tentative_begin_duration =
+    int trial_begin_duration =
           static_cast<int>(current_duration_scalar_)
         + begin_excl
         ;
-    duration_mode tentative_begin_duration_mode = current_duration_scalar_mode_;
-    int tentative_end_duration                  = -1;
-    duration_mode tentative_end_duration_mode   = e_invalid_mode;
+    duration_mode trial_begin_mode   = current_duration_scalar_mode_;
+    int           trial_end_duration = -1;
+    duration_mode trial_end_mode     = e_invalid_mode;
     match(e_minor_separator);
     duration_scalar();
     if
@@ -262,8 +262,8 @@ void SequenceParser::intervalic_duration()
         match(current_token_type_);
         // Add one to the interval-end if it was expressed
         // as inclusive, because we store [begin, end).
-        tentative_end_duration      = current_duration_scalar_ + end_incl;
-        tentative_end_duration_mode = current_duration_scalar_mode_;
+        trial_end_duration = current_duration_scalar_ + end_incl;
+        trial_end_mode     = current_duration_scalar_mode_;
         }
     else
         {
@@ -272,27 +272,27 @@ void SequenceParser::intervalic_duration()
         return;
         }
     validate_duration
-        (tentative_begin_duration
-        ,tentative_begin_duration_mode
-        ,tentative_end_duration
-        ,tentative_end_duration_mode
+        (trial_begin_duration
+        ,trial_begin_mode
+        ,trial_end_duration
+        ,trial_end_mode
         );
 }
 
 void SequenceParser::validate_duration
-    (int           tentative_begin_duration
-    ,duration_mode tentative_begin_duration_mode
-    ,int           tentative_end_duration
-    ,duration_mode tentative_end_duration_mode
+    (int           trial_begin_duration
+    ,duration_mode trial_begin_mode
+    ,int           trial_end_duration
+    ,duration_mode trial_end_mode
     )
 {
-    if(tentative_begin_duration < 0)
+    if(trial_begin_duration < 0)
         {
         current_interval_.insane = true;
         diagnostics_
             << "Interval "
-            << "[ " << tentative_begin_duration << ", "
-            << tentative_end_duration << " )"
+            << "[ " << trial_begin_duration
+            << ", " << trial_end_duration << " )"
             << " is improper: it "
             << "begins before the first possible duration. "
             ;
@@ -305,26 +305,26 @@ void SequenceParser::validate_duration
     //   ends   at X, and excludes X
     // so it both includes and excludes X. Thus, an interval
     // [B, E) is improper if B == E.
-    else if(tentative_end_duration <= tentative_begin_duration)
+    else if(trial_end_duration <= trial_begin_duration)
         {
         current_interval_.insane = true;
         diagnostics_
             << "Interval "
-            << "[ " << tentative_begin_duration << ", "
-            << tentative_end_duration << " )"
+            << "[ " << trial_begin_duration
+            << ", " << trial_end_duration << " )"
             << " is improper: it "
             << "ends before it begins. "
             ;
         mark_diagnostic_context();
         return;
         }
-    else if(years_to_maturity_ < tentative_end_duration)
+    else if(years_to_maturity_ < trial_end_duration)
         {
         current_interval_.insane = true;
         diagnostics_
             << "Interval "
-            << "[ " << tentative_begin_duration << ", "
-            << tentative_end_duration << " )"
+            << "[ " << trial_begin_duration
+            << ", " << trial_end_duration << " )"
             << " is improper: it "
             << "ends after the last possible duration. "
             ;
@@ -332,15 +332,15 @@ void SequenceParser::validate_duration
         return;
         }
     else if
-        (  e_invalid_mode == tentative_begin_duration_mode
-        || e_invalid_mode == tentative_end_duration_mode
+        (  e_invalid_mode == trial_begin_mode
+        || e_invalid_mode == trial_end_mode
         )
         {
         current_interval_.insane = true;
         diagnostics_
             << "Interval "
-            << "[ " << tentative_begin_duration << ", "
-            << tentative_end_duration << " )"
+            << "[ " << trial_begin_duration
+            << ", " << trial_end_duration << " )"
             << " has an invalid duration mode. "
             ;
         mark_diagnostic_context();
@@ -348,10 +348,10 @@ void SequenceParser::validate_duration
         }
     else
         {
-        current_interval_.begin_duration = tentative_begin_duration     ;
-        current_interval_.end_duration   = tentative_end_duration       ;
-        current_interval_.begin_mode     = tentative_begin_duration_mode;
-        current_interval_.end_mode       = tentative_end_duration_mode  ;
+        current_interval_.begin_duration = trial_begin_duration;
+        current_interval_.end_duration   = trial_end_duration  ;
+        current_interval_.begin_mode     = trial_begin_mode    ;
+        current_interval_.end_mode       = trial_end_mode      ;
         last_input_duration_ = current_interval_.end_duration;
         }
 }
