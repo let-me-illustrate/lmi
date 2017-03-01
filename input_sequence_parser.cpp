@@ -220,12 +220,12 @@ void SequenceParser::single_duration()
 {
     duration_scalar();
     int           trial_begin_duration = last_input_duration_;
-//    last_input_duration_ += static_cast<int>(current_duration_scalar_);
-//    last_input_duration_ = static_cast<int>(current_duration_scalar_);
+//    last_input_duration_ += current_duration_scalar_;
+//    last_input_duration_ = current_duration_scalar_;
 //    duration_mode trial_begin_mode = e_duration;
     duration_mode trial_begin_mode     = previous_duration_scalar_mode_;
     int           trial_end_duration   = current_duration_scalar_;
-//    int trial_end_duration       = last_input_duration_ + static_cast<int>(current_duration_scalar_);
+//    int trial_end_duration = last_input_duration_ + current_duration_scalar_;
     duration_mode trial_end_mode       = current_duration_scalar_mode_;
     validate_duration
         (trial_begin_duration
@@ -244,10 +244,7 @@ void SequenceParser::intervalic_duration()
     duration_scalar();
     // Add one to the interval-beginning if it was expressed
     // as exclusive, because we store [begin, end).
-    int trial_begin_duration =
-          static_cast<int>(current_duration_scalar_)
-        + begin_excl
-        ;
+    int trial_begin_duration         = current_duration_scalar_ + begin_excl;
     duration_mode trial_begin_mode   = current_duration_scalar_mode_;
     int           trial_end_duration = -1;
     duration_mode trial_end_mode     = e_invalid_mode;
