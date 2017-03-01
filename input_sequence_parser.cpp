@@ -489,7 +489,15 @@ void SequenceParser::span()
             mark_diagnostic_context();
             }
         }
-    if(!current_interval_.insane)
+    if(current_interval_.insane)
+        {
+        if(diagnostics_.str().empty())
+            {
+            diagnostics_ << "Internal parser error. ";
+            mark_diagnostic_context();
+            }
+        }
+    else
         {
         intervals_.push_back(current_interval_);
         }
