@@ -501,11 +501,6 @@ void SequenceParser::span()
 
 void SequenceParser::sequence()
 {
-    current_token_type_            = e_startup;
-    previous_duration_scalar_mode_ = e_inception;
-    current_duration_scalar_mode_  = e_inception;
-    last_input_duration_           = 0;
-
     // All ValueInterval members should be set explicitly, so
     // initialize them now to recognizable, implausible values,
     // such that the interval is insane until modified.
