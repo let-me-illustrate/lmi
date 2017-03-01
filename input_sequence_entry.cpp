@@ -533,7 +533,24 @@ std::string InputSequenceEditor::sequence_string()
             }
         }
 
-    return s;
+    // This code largely duplicates InputSequence::canonical_form(),
+    // but, unfortunately, the two cannot readily be combined. (It
+    // would be possible to produce a std::vector<ValueInterval> here
+    // and canonicalize it, but that would not be simpler.) Yet it
+    // makes no sense to maintain the two in parallel, so just
+    // recanonicalize the result to simplify it.
+    return InputSequence
+        (s
+        ,input_.years_to_maturity()
+        ,input_.issue_age        ()
+        ,input_.retirement_age   ()
+        ,input_.inforce_year     ()
+        ,input_.effective_year   ()
+        ,keywords_
+        ,keywords_only_
+        ,default_keyword_
+        ).canonical_form()
+        ;
 }
 
 void SizeWinForText(wxControl* win, wxString const& text)
