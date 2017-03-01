@@ -41,7 +41,7 @@ SequenceParser::SequenceParser
     ,std::vector<std::string> const& a_allowed_keywords
     ,bool                            a_keywords_only
     )
-    :input_stream_                  (input_expression.c_str())
+    :input_stream_                  (input_expression)
     ,years_to_maturity_             (a_years_to_maturity)
     ,issue_age_                     (a_issue_age)
     ,retirement_age_                (a_retirement_age)
