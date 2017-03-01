@@ -220,12 +220,8 @@ void SequenceParser::single_duration()
 {
     duration_scalar();
     int           trial_begin_duration = last_input_duration_;
-//    last_input_duration_ += current_duration_scalar_;
-//    last_input_duration_ = current_duration_scalar_;
-//    duration_mode trial_begin_mode = e_duration;
     duration_mode trial_begin_mode     = previous_duration_scalar_mode_;
     int           trial_end_duration   = current_duration_scalar_;
-//    int trial_end_duration = last_input_duration_ + current_duration_scalar_;
     duration_mode trial_end_mode       = current_duration_scalar_mode_;
     validate_duration
         (trial_begin_duration
