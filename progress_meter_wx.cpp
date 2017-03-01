@@ -120,6 +120,7 @@ void concrete_progress_meter::do_dawdle(int seconds)
     for(int i = 10 * seconds; 0 < i && !progress_dialog_.WasCancelled(); --i)
         {
         wxMilliSleep(100);
+        oss.clear();
         oss.str("");
         oss << "Waiting " << 0.1 * i << " seconds";
         progress_dialog_.Update(count(), oss.str());
