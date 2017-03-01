@@ -497,33 +497,32 @@ std::string InputSequenceEditor::sequence_string()
             case e_retirement:
                 {
                 s.append(" retirement");
-                break;
                 }
+                break;
             case e_attained_age:
                 {
                 s.append(" @");
                 s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
-                break;
                 }
+                break;
             case e_duration:
                 {
                 s.append(" ");
                 s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
-                break;
                 }
+                break;
             case e_number_of_years:
                 {
                 s.append(" #");
                 s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
-                break;
                 }
+                break;
             case e_maturity:
                 {
                 LMI_ASSERT(i == rows_count_ - 1);
                 // " maturity" is implicit, don't add it
-                break;
                 }
-
+                break;
             case e_invalid_mode:
             case e_inception:
             case e_inforce:
@@ -531,6 +530,7 @@ std::string InputSequenceEditor::sequence_string()
                 fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
                 return "";
                 }
+                break;
             }
         }
 
