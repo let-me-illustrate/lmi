@@ -492,6 +492,9 @@ std::string InputSequenceEditor::sequence_string()
 
         s.append(value_field(i).GetValue().c_str());
 
+        auto endpoint = duration_num_field(i).GetValue();
+        std::string z = value_cast<std::string>(endpoint);
+
         switch(duration_mode_field(i).value())
             {
             case e_retirement:
@@ -501,20 +504,17 @@ std::string InputSequenceEditor::sequence_string()
                 break;
             case e_attained_age:
                 {
-                s.append(" @");
-                s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
+                s.append(" @").append(z);
                 }
                 break;
             case e_duration:
                 {
-                s.append(" ");
-                s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
+                s.append(" ").append(z);
                 }
                 break;
             case e_number_of_years:
                 {
-                s.append(" #");
-                s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
+                s.append(" #").append(z);
                 }
                 break;
             case e_maturity:
