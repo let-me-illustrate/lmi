@@ -326,8 +326,15 @@ std::string InputSequence::canonical_form() const
                 break;
             case e_duration:
                 {
-                int const z = i.end_duration;
-                s = " " + value_cast<std::string>(z);
+                if(1 == i.end_duration - i.begin_duration)
+                    {
+                    ; // Do nothing: leave 's' empty.
+                    }
+                else
+                    {
+                    int const z = i.end_duration;
+                    s = " " + value_cast<std::string>(z);
+                    }
                 }
                 break;
             case e_attained_age:
