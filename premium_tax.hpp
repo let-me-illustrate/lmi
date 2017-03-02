@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"       // mcenum_state
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <vector>
@@ -85,9 +84,8 @@ class stratified_charges;
 ///
 /// start_new_year() should be improved as noted in its documentation.
 
-class premium_tax
-  :        private lmi::uncopyable <premium_tax>
-  ,virtual private obstruct_slicing<premium_tax>
+class premium_tax final
+    :private lmi::uncopyable <premium_tax>
 {
   public:
     premium_tax

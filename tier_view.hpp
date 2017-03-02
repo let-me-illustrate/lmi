@@ -26,7 +26,6 @@
 
 #include "product_editor.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <memory>                       // std::shared_ptr
@@ -35,10 +34,9 @@ class TierDocument;
 class TierTableAdapter;
 class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 
-class TierView
-    :        public  TreeGridViewBase
-    ,        private lmi::uncopyable <TierView>
-    ,virtual private obstruct_slicing<TierView>
+class TierView final
+    :public  TreeGridViewBase
+    ,private lmi::uncopyable <TierView>
 {
   public:
     TierView();

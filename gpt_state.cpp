@@ -50,8 +50,7 @@ gpt_state::gpt_state()
 }
 
 gpt_state::gpt_state(gpt_state const& z)
-    :obstruct_slicing  <gpt_state>()
-    ,xml_serializable  <gpt_state>()
+    :xml_serializable  <gpt_state>()
     ,MemberSymbolTable <gpt_state>()
 {
     AscribeMembers();

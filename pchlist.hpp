@@ -77,7 +77,6 @@
 #   include "null_stream.hpp"
 #   include "numeric_io_cast.hpp"
 #   include "numeric_io_traits.hpp"
-#   include "obstruct_slicing.hpp"
 #   include "oecumenic_enumerations.hpp"
 #   include "outlay.hpp"
 #   include "path_utility.hpp"

@@ -35,7 +35,6 @@
 #include "view_ex.hpp"
 
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
-#include "obstruct_slicing.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -51,10 +50,9 @@ class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 // TODO ?? Consider adding an input reference member. Here, it's used
 // only for edit and run; in the census view class, it's used widely.
 
-class IllustrationView
-    :        public  ViewEx
-    ,        private lmi::uncopyable <IllustrationView>
-    ,virtual private obstruct_slicing<IllustrationView>
+class IllustrationView final
+    :public  ViewEx
+    ,private lmi::uncopyable <IllustrationView>
 {
     friend class IllustrationDocument;
 

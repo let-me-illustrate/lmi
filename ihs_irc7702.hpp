@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
 #include "round_to.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -51,9 +50,8 @@ class ULCommFns;
 // as needed, being sure to round conservatively if at all. Unrounded
 // values are especially needed for the iterative specamt calculation.
 
-class Irc7702
-    :        private lmi::uncopyable <Irc7702>
-    ,virtual private obstruct_slicing<Irc7702>
+class Irc7702 final
+    :private lmi::uncopyable <Irc7702>
 {
     friend class FindSpecAmt;
     friend class gpt_specamt;

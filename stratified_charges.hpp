@@ -26,7 +26,6 @@
 
 #include "any_member.hpp"
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
@@ -64,8 +63,7 @@ enum e_stratified
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO stratified_entity
-    :virtual private obstruct_slicing<stratified_entity>
+class LMI_SO stratified_entity final
 {
     friend class stratified_charges;
     friend class TierView;
@@ -98,10 +96,9 @@ class LMI_SO stratified_entity
 
 /// Rates that depend upon the amount they're multiplied by.
 
-class LMI_SO stratified_charges
-    :virtual private obstruct_slicing  <stratified_charges>
-    ,        public  xml_serializable  <stratified_charges>
-    ,        public  MemberSymbolTable <stratified_charges>
+class LMI_SO stratified_charges final
+    :public  xml_serializable  <stratified_charges>
+    ,public  MemberSymbolTable <stratified_charges>
 {
     friend class TierDocument;
 

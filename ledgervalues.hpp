@@ -24,7 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -38,9 +37,8 @@ class Ledger;
 ///
 /// This class encapsulates a frequently-used series of operations.
 
-class IllusVal
-    :        private lmi::uncopyable <IllusVal>
-    ,virtual private obstruct_slicing<IllusVal>
+class IllusVal final
+    :private lmi::uncopyable <IllusVal>
 {
   public:
     explicit IllusVal(std::string const& filename);

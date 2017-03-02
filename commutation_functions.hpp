@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -33,9 +32,8 @@
 
 /// Ordinary-life commutation functions.
 
-class LMI_SO OLCommFns
-    :        private lmi::uncopyable <OLCommFns>
-    ,virtual private obstruct_slicing<OLCommFns>
+class LMI_SO OLCommFns final
+    :private lmi::uncopyable <OLCommFns>
 {
   public:
     OLCommFns
@@ -80,9 +78,8 @@ class LMI_SO OLCommFns
 /// k-ly, for mode parameter k; 'm-' might seem more clearly to stand
 /// for "modal", but would too easily be taken as connoting "monthly".
 
-class LMI_SO ULCommFns
-    :        private lmi::uncopyable <ULCommFns>
-    ,virtual private obstruct_slicing<ULCommFns>
+class LMI_SO ULCommFns final
+    :private lmi::uncopyable <ULCommFns>
 {
   public:
     ULCommFns

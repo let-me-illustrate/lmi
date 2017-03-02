@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "mec_input.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
@@ -33,9 +32,8 @@
 #include <iosfwd>
 #include <string>
 
-class LMI_SO mec_xml_document
-    :        private lmi::uncopyable <mec_xml_document>
-    ,virtual private obstruct_slicing<mec_xml_document>
+class LMI_SO mec_xml_document final
+    :private lmi::uncopyable <mec_xml_document>
 {
     friend class mec_document;
     friend class mec_view;

@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
@@ -41,9 +40,8 @@ class Ledger;
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO illustrator
+class LMI_SO illustrator final
     :public std::unary_function<fs::path const&, bool>
-    ,virtual private obstruct_slicing<illustrator>
 {
   public:
     explicit illustrator(mcenum_emission);

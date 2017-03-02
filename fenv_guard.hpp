@@ -24,7 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -39,9 +38,8 @@
 /// Intended use: instantiate on the stack at the beginning of any
 /// floating-point calculations that presume the invariant.
 
-class LMI_SO fenv_guard
-    :        private lmi::uncopyable <fenv_guard>
-    ,virtual private obstruct_slicing<fenv_guard>
+class LMI_SO fenv_guard final
+    :private lmi::uncopyable <fenv_guard>
 {
   public:
     fenv_guard();

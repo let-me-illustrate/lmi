@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "calendar_date.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -48,9 +47,8 @@ enum {md5len = 128 / CHAR_BIT};
 /// 'cached_date_' holds the most-recently-validated date, or a
 /// peremptorily-invalid default value of JDN zero.
 
-class Authenticity
-    :        private lmi::uncopyable <Authenticity>
-    ,virtual private obstruct_slicing<Authenticity>
+class Authenticity final
+    :private lmi::uncopyable <Authenticity>
 {
     friend class PasskeyTest;
 

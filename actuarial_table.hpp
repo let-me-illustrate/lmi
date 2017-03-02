@@ -24,7 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <iosfwd>
@@ -128,9 +127,8 @@ enum e_actuarial_table_method
 /// has apparently chosen to leave them that way for backward
 /// compatibility.
 
-class actuarial_table
-    :        private lmi::uncopyable <actuarial_table>
-    ,virtual private obstruct_slicing<actuarial_table>
+class actuarial_table final
+    :private lmi::uncopyable <actuarial_table>
 {
   public:
     actuarial_table(std::string const& filename, int table_number);

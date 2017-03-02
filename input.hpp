@@ -33,7 +33,6 @@
 #include "datum_string.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "tn_range.hpp"
 #include "tn_range_types.hpp"
@@ -116,12 +115,11 @@ class product_database;
 /// strings (through base class template MemberSymbolTable), though;
 /// for them, readability overcomes the usual convention.
 
-class LMI_SO Input
-    :virtual private obstruct_slicing           <Input>
-    ,        public  xml_serializable           <Input>
-    ,        public  MvcModel
-    ,        public  MemberSymbolTable          <Input>
-    ,        private boost::equality_comparable <Input>
+class LMI_SO Input final
+    :public  xml_serializable           <Input>
+    ,public  MvcModel
+    ,public  MemberSymbolTable          <Input>
+    ,private boost::equality_comparable <Input>
 {
     friend class input_test;
     friend class yare_input;

@@ -61,8 +61,7 @@ template class xml_serializable<gpt_state>;
 gpt_state::gpt_state() = default;
 
 gpt_state::gpt_state(gpt_state const&)
-    :obstruct_slicing  <gpt_state>()
-    ,xml_serializable  <gpt_state>()
+    :xml_serializable  <gpt_state>()
     ,MemberSymbolTable <gpt_state>()
 {}
 
@@ -98,8 +97,7 @@ template class xml_serializable<mec_state>;
 mec_state::mec_state() = default;
 
 mec_state::mec_state(mec_state const&)
-    :obstruct_slicing  <mec_state>()
-    ,xml_serializable  <mec_state>()
+    :xml_serializable  <mec_state>()
     ,MemberSymbolTable <mec_state>()
 {}
 

@@ -24,7 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/path.hpp>
@@ -115,9 +114,9 @@ class table
 /// It is represented by two disk files with the extensions .dat and .ndx, the
 /// first containing the tables data and the second being the index allowing to
 /// locate a table by its number.
-class database
-    :        private lmi::uncopyable <database>
-    ,virtual private obstruct_slicing<database>
+
+class database final
+    :private lmi::uncopyable <database>
 {
   public:
     // Check if a database at the given path exists.

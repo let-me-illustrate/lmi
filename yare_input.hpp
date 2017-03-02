@@ -26,7 +26,6 @@
 
 #include "calendar_date.hpp"
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
 
 #include <string>
 #include <vector>
@@ -51,8 +50,7 @@ class Input;
 /// in particular dispensing with the considerable overhead of UDTs
 /// (mc_enum and tn_range classes) designed for interactive input.
 
-class yare_input
-    :virtual private obstruct_slicing<yare_input>
+class yare_input final
 {
   public:
     explicit yare_input(Input const&);

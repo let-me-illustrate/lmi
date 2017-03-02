@@ -24,7 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -96,9 +95,8 @@
 /// 'alert*.?pp'.
 
 template<typename FunctionPointer>
-class LMI_SO callback
-    :        private lmi::uncopyable <callback<FunctionPointer> >
-    ,virtual private obstruct_slicing<callback<FunctionPointer> >
+class LMI_SO callback final
+    :private lmi::uncopyable <callback<FunctionPointer> >
 {
     static_assert(std::is_pointer<FunctionPointer>::value, "");
     typedef typename std::remove_pointer<FunctionPointer>::type f_type;

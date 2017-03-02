@@ -34,7 +34,6 @@
 
 #include "view_ex.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <wx/defs.h>                    // wx shared-library 'attributes'
@@ -49,10 +48,9 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 /// It's left in the repository, though, because it might be a useful
 /// model for some other feature someday.
 
-class TextEditView
-    :        public  ViewEx
-    ,        private lmi::uncopyable <TextEditView>
-    ,virtual private obstruct_slicing<TextEditView>
+class TextEditView final
+    :public  ViewEx
+    ,private lmi::uncopyable <TextEditView>
 {
     friend class TextEditDocument;
 

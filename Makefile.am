@@ -121,7 +121,6 @@ TESTS = \
     test_name_value_pairs \
     test_ncnnnpnn \
     test_numeric_io \
-    test_obstruct_slicing \
     test_path_utility \
     test_premium_tax \
     test_print_matrix \
@@ -865,12 +864,6 @@ test_numeric_io_SOURCES = \
   timer.cpp
 test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_obstruct_slicing_SOURCES = \
-  $(common_test_objects) \
-  obstruct_slicing_test.cpp \
-  timer.cpp
-test_obstruct_slicing_CXXFLAGS = $(AM_CXXFLAGS)
-
 test_path_utility_SOURCES = \
   $(common_test_objects) \
   calendar_date.cpp \
@@ -1223,7 +1216,6 @@ noinst_HEADERS = \
     null_stream.hpp \
     numeric_io_cast.hpp \
     numeric_io_traits.hpp \
-    obstruct_slicing.hpp \
     oecumenic_enumerations.hpp \
     outlay.hpp \
     path_utility.hpp \

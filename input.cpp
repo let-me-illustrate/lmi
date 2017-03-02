@@ -237,8 +237,7 @@ Input::Input()
 }
 
 Input::Input(Input const& z)
-    :obstruct_slicing  <Input>()
-    ,xml_serializable  <Input>()
+    :xml_serializable  <Input>()
     ,MvcModel                 ()
     ,MemberSymbolTable <Input>()
 {

@@ -33,7 +33,6 @@
 #include "datum_string.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "tn_range.hpp"
 #include "tn_range_types.hpp"
@@ -63,12 +62,11 @@ class product_database;
 /// are just excess baggage that can be eliminated once the 7702A
 /// calculations are rewritten.
 
-class LMI_SO mec_input
-    :virtual private obstruct_slicing           <mec_input>
-    ,        public  xml_serializable           <mec_input>
-    ,        public  MvcModel
-    ,        public  MemberSymbolTable          <mec_input>
-    ,        private boost::equality_comparable <mec_input>
+class LMI_SO mec_input final
+    :public  xml_serializable           <mec_input>
+    ,public  MvcModel
+    ,public  MemberSymbolTable          <mec_input>
+    ,private boost::equality_comparable <mec_input>
 {
   public:
     mec_input();

@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "input.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
@@ -33,9 +32,8 @@
 #include <iosfwd>
 #include <string>
 
-class LMI_SO single_cell_document
-    :        private lmi::uncopyable <single_cell_document>
-    ,virtual private obstruct_slicing<single_cell_document>
+class LMI_SO single_cell_document final
+    :private lmi::uncopyable <single_cell_document>
 {
     friend class IllustrationDocument;
     friend class IllustrationView;

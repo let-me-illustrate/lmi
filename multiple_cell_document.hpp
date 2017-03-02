@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "input.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
@@ -77,9 +76,8 @@
 /// add a new cell copied from a selection of class defaults, although
 /// that could of course be implemented.
 
-class LMI_SO multiple_cell_document
-    :        private lmi::uncopyable <multiple_cell_document>
-    ,virtual private obstruct_slicing<multiple_cell_document>
+class LMI_SO multiple_cell_document final
+    :private lmi::uncopyable <multiple_cell_document>
 {
 // TODO ?? Avoid long-distance friendship...in single-cell class, too.
     friend class CensusDocument;

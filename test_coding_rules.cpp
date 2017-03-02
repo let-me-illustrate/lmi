@@ -25,7 +25,6 @@
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"               // lmi_array_size(), split_into_lines()
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp> // fs::extension()
@@ -82,9 +81,8 @@ enum enum_kingdom
     ,e_c_or_cxx   = e_c          | e_cxx
     };
 
-class file
-    :        private lmi::uncopyable <file>
-    ,virtual private obstruct_slicing<file>
+class file final
+    :private lmi::uncopyable <file>
 {
   public:
     explicit file(std::string const& file_path);

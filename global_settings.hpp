@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "calendar_date.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -66,9 +65,8 @@
 /// store them e.g. in xml files, and because that enables 'set_'
 /// functions to validate their arguments.
 
-class LMI_SO global_settings
-    :        private lmi::uncopyable <global_settings>
-    ,virtual private obstruct_slicing<global_settings>
+class LMI_SO global_settings final
+    :private lmi::uncopyable <global_settings>
 {
   public:
     static global_settings& instance();

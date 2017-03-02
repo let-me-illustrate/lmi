@@ -27,7 +27,6 @@
 #include "mvc_view.hpp"
 #include "view_ex.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -60,10 +59,9 @@ class gpt_mvc_view
     char const* DoResourceFileName() const override;
 };
 
-class gpt_view
-    :        public  ViewEx
-    ,        private lmi::uncopyable <gpt_view>
-    ,virtual private obstruct_slicing<gpt_view>
+class gpt_view final
+    :public  ViewEx
+    ,private lmi::uncopyable <gpt_view>
 {
     friend class gpt_document;
 

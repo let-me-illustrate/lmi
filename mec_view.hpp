@@ -27,7 +27,6 @@
 #include "mvc_view.hpp"
 #include "view_ex.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -60,10 +59,9 @@ class mec_mvc_view
     char const* DoResourceFileName() const override;
 };
 
-class mec_view
-    :        public  ViewEx
-    ,        private lmi::uncopyable <mec_view>
-    ,virtual private obstruct_slicing<mec_view>
+class mec_view final
+    :public  ViewEx
+    ,private lmi::uncopyable <mec_view>
 {
     friend class mec_document;
 

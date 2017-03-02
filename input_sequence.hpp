@@ -132,16 +132,14 @@
 #include "config.hpp"
 
 #include "input_sequence_interval.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <string>
 #include <vector>
 
-class LMI_SO InputSequence
-    :        private lmi::uncopyable <InputSequence>
-    ,virtual private obstruct_slicing<InputSequence>
+class LMI_SO InputSequence final
+    :private lmi::uncopyable <InputSequence>
 {
     template<typename T>
     friend std::string canonicalized_input_sequence(std::vector<T> const&);

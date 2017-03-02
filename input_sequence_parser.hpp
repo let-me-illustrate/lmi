@@ -27,7 +27,6 @@
 #include "config.hpp"
 
 #include "input_sequence_interval.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -35,9 +34,8 @@
 #include <string>
 #include <vector>
 
-class SequenceParser
-    :        private lmi::uncopyable <SequenceParser>
-    ,virtual private obstruct_slicing<SequenceParser>
+class SequenceParser final
+    :private lmi::uncopyable <SequenceParser>
 {
   public:
     SequenceParser

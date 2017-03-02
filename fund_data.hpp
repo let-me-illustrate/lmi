@@ -24,7 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -35,8 +34,7 @@
 
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_SO FundInfo
-    :virtual private obstruct_slicing<FundInfo>
+class LMI_SO FundInfo final
 {
     friend class FundData;
 
@@ -62,9 +60,8 @@ class LMI_SO FundInfo
     std::string gloss_;
 };
 
-class LMI_SO FundData
-    :        private lmi::uncopyable <FundData>
-    ,virtual private obstruct_slicing<FundData>
+class LMI_SO FundData final
+    :private lmi::uncopyable <FundData>
 {
   public:
     FundData(std::string const& a_Filename);

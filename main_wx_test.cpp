@@ -27,7 +27,6 @@
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
-#include "obstruct_slicing.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
 #include "uncopyable_lmi.hpp"
@@ -149,9 +148,9 @@ struct TestsResults
 /// Run the tests.
 ///
 /// This is a simple Meyers singleton.
-class application_test
-    :        private lmi::uncopyable  <application_test>
-    ,virtual private obstruct_slicing <application_test>
+
+class application_test final
+    :private lmi::uncopyable  <application_test>
 {
   public:
     static application_test& instance();

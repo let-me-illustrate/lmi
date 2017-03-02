@@ -37,7 +37,6 @@
 #include "map_lookup.hpp"
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
@@ -139,9 +138,8 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
     return m;
 }
 
-class calculation_summary_formatter
-    :        private lmi::uncopyable <calculation_summary_formatter>
-    ,virtual private obstruct_slicing<calculation_summary_formatter>
+class calculation_summary_formatter final
+    :private lmi::uncopyable <calculation_summary_formatter>
 {
   public:
     calculation_summary_formatter(Ledger const&);
@@ -837,9 +835,8 @@ void PrintRosterTabDelimited
         }
 }
 
-class FlatTextLedgerPrinter
-    :        private lmi::uncopyable <FlatTextLedgerPrinter>
-    ,virtual private obstruct_slicing<FlatTextLedgerPrinter>
+class FlatTextLedgerPrinter final
+    :private lmi::uncopyable <FlatTextLedgerPrinter>
 {
   public:
     FlatTextLedgerPrinter(Ledger const&, std::ostream&);

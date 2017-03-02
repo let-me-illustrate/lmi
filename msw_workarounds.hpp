@@ -26,7 +26,6 @@
 
 #ifdef LMI_MSW
 
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <deque>
@@ -49,9 +48,8 @@
 /// which they were loaded. The data member is of type std::deque
 /// in order to let this reversal be expressed more cleanly.
 
-class MswDllPreloader
-    :        private lmi::uncopyable <MswDllPreloader>
-    ,virtual private obstruct_slicing<MswDllPreloader>
+class MswDllPreloader final
+    :private lmi::uncopyable <MswDllPreloader>
 {
   public:
     static MswDllPreloader& instance();

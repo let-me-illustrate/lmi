@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
-
 #if defined __GNUC__
 #   include <cstdlib>                   // std::free()
 #   include <cxxabi.h>
@@ -120,8 +118,7 @@ namespace lmi
 ///   lmi::TypeInfo(typeid(X));
 /// and resisting the temptation to add syntactic sugar.
 
-class TypeInfo
-    :virtual private obstruct_slicing<TypeInfo>
+class TypeInfo final
 {
     friend class ::RttiLmiTest;
 

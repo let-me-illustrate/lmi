@@ -26,7 +26,6 @@
 
 #include "product_editor.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <map>
@@ -35,10 +34,9 @@
 class PolicyDocument;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
-class PolicyView
-    :        public  ProductEditorView
-    ,        private lmi::uncopyable <PolicyView>
-    ,virtual private obstruct_slicing<PolicyView>
+class PolicyView final
+    :public  ProductEditorView
+    ,private lmi::uncopyable <PolicyView>
 {
   public:
     PolicyView();

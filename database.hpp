@@ -27,7 +27,6 @@
 #include "dbindex.hpp"
 #include "dbnames.hpp"                  // e_database_key
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "uncopyable_lmi.hpp"
 
@@ -41,9 +40,8 @@ class yare_input;
 
 /// Database of product parameters.
 
-class LMI_SO product_database
-    :        private lmi::uncopyable <product_database>
-    ,virtual private obstruct_slicing<product_database>
+class LMI_SO product_database final
+    :private lmi::uncopyable <product_database>
 {
     friend class input_test;       // For test_product_database().
     friend class premium_tax_test; // For test_rates().

@@ -24,7 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "uncopyable_lmi.hpp"
 
 #include <wx/bookctrl.h>                // wxBookCtrlBase, wxBookCtrlBaseEvent
@@ -405,10 +404,9 @@ namespace model_view_controller{} // doxygen workaround.
 /// unit_test_under_way_: True iff a unit test is in charge of the
 /// Controller.
 
-class MvcController
-    :        public  wxDialog
-    ,        private lmi::uncopyable <MvcController>
-    ,virtual private obstruct_slicing<MvcController>
+class MvcController final
+    :public  wxDialog
+    ,private lmi::uncopyable <MvcController>
 {
     friend class MvcTest;
 

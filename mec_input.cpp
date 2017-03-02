@@ -122,8 +122,7 @@ mec_input::mec_input()
 }
 
 mec_input::mec_input(mec_input const& z)
-    :obstruct_slicing  <mec_input>()
-    ,xml_serializable  <mec_input>()
+    :xml_serializable  <mec_input>()
     ,MvcModel                     ()
     ,MemberSymbolTable <mec_input>()
 {

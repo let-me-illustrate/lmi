@@ -176,8 +176,7 @@ stratified_charges::stratified_charges(std::string const& filename)
 }
 
 stratified_charges::stratified_charges(stratified_charges const& z)
-    :obstruct_slicing  <stratified_charges>()
-    ,xml_serializable  <stratified_charges>()
+    :xml_serializable  <stratified_charges>()
     ,MemberSymbolTable <stratified_charges>()
 {
     ascribe_members();

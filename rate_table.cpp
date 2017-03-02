@@ -834,9 +834,8 @@ boost::optional<field_and_value> parse_field_and_value
 namespace soa_v3_format
 {
 
-class table_impl
-    :        private lmi::uncopyable <table_impl>
-    ,virtual private obstruct_slicing<table_impl>
+class table_impl final
+    :private lmi::uncopyable <table_impl>
 {
   public:
     // Load the table data from the stream containing the table data in either
@@ -2346,9 +2345,8 @@ bool table::operator==(table const& other) const
     return impl_->is_equal(*other.impl_);
 }
 
-class database_impl
-    :        private lmi::uncopyable <database_impl>
-    ,virtual private obstruct_slicing<database_impl>
+class database_impl final
+    :private lmi::uncopyable <database_impl>
 {
   public:
     static fs::path get_index_path(fs::path const& path)

@@ -63,7 +63,6 @@
 #include "any_entity.hpp"
 
 #include "assert_lmi.hpp"
-#include "obstruct_slicing.hpp"
 #include "rtti_lmi.hpp"
 #include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
@@ -229,9 +228,8 @@ MemberType* member_cast(any_member<ClassType>&);
 struct any_member_test;
 
 template<typename ClassType>
-class any_member
-    :virtual private obstruct_slicing<any_member<ClassType> >
-    ,public any_entity
+class any_member final
+    :public any_entity
 {
     template<typename MemberType, typename CT>
     friend MemberType* exact_cast(any_member<CT>&);
@@ -280,8 +278,7 @@ any_member<ClassType>::any_member()
 
 template<typename ClassType>
 any_member<ClassType>::any_member(any_member const& other)
-    :obstruct_slicing<any_member<ClassType> >()
-    ,any_entity (other)
+    :any_entity (other)
     ,object_    (other.object_)
     ,content_   (other.content_ ? other.content_->clone() : nullptr)
 {}

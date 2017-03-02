@@ -132,8 +132,7 @@ gpt_input::gpt_input()
 }
 
 gpt_input::gpt_input(gpt_input const& z)
-    :obstruct_slicing  <gpt_input>()
-    ,xml_serializable  <gpt_input>()
+    :xml_serializable  <gpt_input>()
     ,MvcModel                     ()
     ,MemberSymbolTable <gpt_input>()
 {

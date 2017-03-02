@@ -432,7 +432,6 @@ unit_test_targets := \
   name_value_pairs_test \
   ncnnnpnn_test \
   numeric_io_test \
-  obstruct_slicing_test \
   path_utility_test \
   premium_tax_test \
   print_matrix_test \
@@ -763,11 +762,6 @@ ncnnnpnn_test$(EXEEXT): \
 numeric_io_test$(EXEEXT): \
   $(common_test_objects) \
   numeric_io_test.o \
-  timer.o \
-
-obstruct_slicing_test$(EXEEXT): \
-  $(common_test_objects) \
-  obstruct_slicing_test.o \
   timer.o \
 
 path_utility_test$(EXEEXT): \
