@@ -679,7 +679,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
             ;
         if(invar.HasSpouseRider)
             {
-            std::pair<int, oenum_format_style> const f0(0, oe_format_normal);
+            std::pair<int,oenum_format_style> const f0(0, oe_format_normal);
             double const number_of_lives = invar.GetInforceLives().at(0);
             LMI_ASSERT(0.0 < number_of_lives);
             elected_riders_footnote_ +=
@@ -768,8 +768,8 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
     int const year = 0;
 
-    std::pair<int, oenum_format_style> const f0(0, oe_format_normal);
-    std::pair<int, oenum_format_style> const f2(2, oe_format_normal);
+    std::pair<int,oenum_format_style> const f0(0, oe_format_normal);
+    std::pair<int,oenum_format_style> const f2(2, oe_format_normal);
 
     bool const is_composite = ledger.is_composite();
 
@@ -1329,7 +1329,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
             :(e_col_total_premium               == col) ? 2
             :throw std::logic_error("Invalid column type.")
             );
-        std::pair<int, oenum_format_style> const f(num_dec, oe_format_normal);
+        std::pair<int,oenum_format_style> const f(num_dec, oe_format_normal);
 
         table_gen.output_highlighted_cell
             (col

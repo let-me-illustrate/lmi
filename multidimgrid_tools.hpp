@@ -226,9 +226,9 @@ class AdjustableMaxBoundAxis
     ,MultiDimIntegralAxis<Integral>
     >
 {
-    typedef AxisMaxBoundAdjuster<Integral>                   Adjuster;
-    typedef MultiDimIntegralAxis<Integral>                   GrandBaseClass;
-    typedef MultiDimAdjustableAxis<Adjuster, GrandBaseClass> BaseClass;
+    typedef AxisMaxBoundAdjuster<Integral>                  Adjuster;
+    typedef MultiDimIntegralAxis<Integral>                  GrandBaseClass;
+    typedef MultiDimAdjustableAxis<Adjuster,GrandBaseClass> BaseClass;
 
   public:
     AdjustableMaxBoundAxis

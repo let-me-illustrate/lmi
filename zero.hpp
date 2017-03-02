@@ -45,7 +45,7 @@ enum root_bias
     ,bias_higher // Require  0.0 <= f(z).
     };
 
-typedef std::pair<double, root_validity> root_type;
+typedef std::pair<double,root_validity> root_type;
 
 /// Return a zero z of a function f within input bounds [a,b].
 ///

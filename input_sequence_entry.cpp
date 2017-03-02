@@ -343,7 +343,7 @@ class InputSequenceEditor
     wxButton* ok_button_;
     wxButton* cancel_button_;
     wxStaticText* diagnostics_;
-    typedef std::map<wxWindowID, int> id_to_row_map;
+    typedef std::map<wxWindowID,int> id_to_row_map;
     id_to_row_map id_to_row_;
 
     // scalar absolute values for end durations; this is used to recompute

@@ -59,7 +59,7 @@
 class tier_entity_adapter
 {
   public:
-    typedef std::pair<double, double> double_pair;
+    typedef std::pair<double,double> double_pair;
 
     /// We can't store a pointer/reference to stratified_entity because
     /// stratified_entity has private interface for accessing

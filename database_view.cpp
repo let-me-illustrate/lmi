@@ -172,7 +172,7 @@ MultiDimGrid* DatabaseView::CreateGridCtrl(wxWindow* parent)
 
 void DatabaseView::SetupControls()
 {
-    std::map<e_database_key, wxTreeItemId> name_to_id;
+    std::map<e_database_key,wxTreeItemId> name_to_id;
 
     wxTreeCtrl& tree_ctrl = tree();
 

@@ -99,7 +99,7 @@ class CRC;
 /// A map<> is clearly called for. Certain implementation choices must be made.
 ///
 /// Choice 1: Who owns the data? We want only one instance of the data to
-/// exist. If we have a bunch of vectors and a map<key, vector> then we have
+/// exist. If we have a bunch of vectors and a map<key,vector> then we have
 /// two copies; that wastes memory and, worse, the copies can become
 /// unsynchronized.
 ///

@@ -124,7 +124,7 @@ jdn_t LMI_SO YmdToJdn(ymd_t);
 /// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO calendar_date
-    :boost::additive<calendar_date, int>
+    :boost::additive<calendar_date,int>
     ,boost::totally_ordered<calendar_date>
     ,boost::unit_steppable<calendar_date>
 {
@@ -179,7 +179,7 @@ class LMI_SO calendar_date
 
 // gcc-3.x and bc-5.5.1 do not work at all well with this technique
 // suggested as a space optimization in the boost documentation:
-//    template struct boost::additive<calendar_date, int>;
+//    template struct boost::additive<calendar_date,int>;
 //    template struct boost::totally_ordered<calendar_date>;
 //    template struct boost::unit_steppable<calendar_date>;
 

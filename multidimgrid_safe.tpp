@@ -168,11 +168,11 @@ T ValueCastConversion<T>::StringToValue(std::string const& text) const
     return value_cast<T>(text);
 }
 
-/// MultiDimAdjustableAxis<AdjustControl, BaseAxisType>
+/// MultiDimAdjustableAxis<AdjustControl,BaseAxisType>
 /// ---------------------------------------------------
 
 template<typename AdjustControl, typename BaseAxisType>
-wxWindow* MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::CreateAdjustControl
+wxWindow* MultiDimAdjustableAxis<AdjustControl,BaseAxisType>::CreateAdjustControl
     (MultiDimGrid& grid
     ,MultiDimTableAny& table
     )
@@ -181,7 +181,7 @@ wxWindow* MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::CreateAdjustContr
 }
 
 template<typename AdjustControl, typename BaseAxisType>
-bool MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::ApplyAdjustment
+bool MultiDimAdjustableAxis<AdjustControl,BaseAxisType>::ApplyAdjustment
     (wxWindow& adjust_window
     ,unsigned int axis_id
     )
@@ -194,7 +194,7 @@ bool MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::ApplyAdjustment
 }
 
 template<typename AdjustControl, typename BaseAxisType>
-bool MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::RefreshAdjustment
+bool MultiDimAdjustableAxis<AdjustControl,BaseAxisType>::RefreshAdjustment
     (wxWindow& adjust_window
     ,unsigned int axis_id
     )
@@ -207,7 +207,7 @@ bool MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::RefreshAdjustment
 }
 
 template<typename AdjustControl, typename BaseAxisType>
-MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::MultiDimAdjustableAxis
+MultiDimAdjustableAxis<AdjustControl,BaseAxisType>::MultiDimAdjustableAxis
     (std::string const& name
     )
     :BaseAxisType(name)

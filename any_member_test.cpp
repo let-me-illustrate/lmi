@@ -637,7 +637,7 @@ void any_member_test::supplemental_test1()
 
 template<typename ClassType> class Bar
 {
-    std::map<int, int> m_; // Works OK if you remove this line.
+    std::map<int,int> m_; // Works OK if you remove this line.
 };
 
 struct R : public Bar<R>

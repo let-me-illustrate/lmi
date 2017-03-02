@@ -51,7 +51,7 @@
 /// std::shared_ptr constructed with deallocator object that does nothing.
 
 class DatabaseTableAdapter
-  :public MultiDimTable<double, DatabaseTableAdapter>
+  :public MultiDimTable<double,DatabaseTableAdapter>
 {
     enum enum_database_axis
         {eda_gender = 0

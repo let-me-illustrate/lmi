@@ -161,7 +161,7 @@ class LMI_SO LedgerVariant
     bool             FullyInitialized; // I.e. by Init(BasicValues const* b).
 };
 
-typedef std::map<mcenum_run_basis, LedgerVariant> ledger_map_t;
+typedef std::map<mcenum_run_basis,LedgerVariant> ledger_map_t;
 
 /// C++98 17.4.3.6 forbids declaring std::map<S,T> where S or T is
 /// incomplete. But class ledger_map_holder can be forward declared

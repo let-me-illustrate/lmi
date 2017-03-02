@@ -191,7 +191,7 @@ struct ValueCastConversion
 ///
 /// Example of usage:
 /// class MyTable
-///     : MultiDimTable<int, MyTable>
+///     : MultiDimTable<int,MyTable>
 /// {
 ///   public:
 ///     /// MultiDimTable contract:
@@ -236,7 +236,7 @@ class MultiDimTable
     std::string ValueToString(boost::any const&) const override;
 };
 
-/// Design notes for MultiDimAdjustableAxis<AdjustControl, BaseAxisType>
+/// Design notes for MultiDimAdjustableAxis<AdjustControl,BaseAxisType>
 ///
 /// Adjustable Axis base class.
 ///
