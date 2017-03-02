@@ -760,7 +760,7 @@ std::string month_name(int month)
     c_time.tm_mon = month - 1;
     char format[] = "%B";
     std::ostringstream oss;
-    std::use_facet<std::time_put<char> >(oss.getloc()).put
+    std::use_facet<std::time_put<char>>(oss.getloc()).put
         (std::ostreambuf_iterator<char>(oss.rdbuf())
         ,oss
         ,'\0'

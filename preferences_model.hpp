@@ -89,7 +89,7 @@ class LMI_SO PreferencesModel final
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its UDTs share.
 
-template<> struct reconstitutor<datum_base, PreferencesModel>
+template<> struct reconstitutor<datum_base,PreferencesModel>
 {
     typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<PreferencesModel>& m)

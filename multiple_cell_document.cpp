@@ -150,7 +150,7 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
             ( ("case_default"     == tag) ? case_parms_
             : ("class_defaults"   == tag) ? class_parms_
             : ("particular_cells" == tag) ? cell_parms_
-            : hurl<std::vector<Input> >("Unexpected element '" + tag + "'.")
+            : hurl<std::vector<Input>>("Unexpected element '" + tag + "'.")
             );
         xml::const_nodes_view const subelements(i.elements());
         v.reserve(subelements.size());

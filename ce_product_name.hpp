@@ -53,8 +53,8 @@
 
 class ce_product_name
     :public mc_enum_base
-    ,private boost::equality_comparable<ce_product_name, ce_product_name>
-    ,private boost::equality_comparable<ce_product_name, std::string>
+    ,private boost::equality_comparable<ce_product_name,ce_product_name>
+    ,private boost::equality_comparable<ce_product_name,std::string>
 {
   public:
     ce_product_name();

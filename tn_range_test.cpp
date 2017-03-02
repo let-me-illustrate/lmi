@@ -34,7 +34,7 @@
 //    template class tn_range<double, std::string>;
 
 // This should fail to compile:
-//    tn_range<bool, percentage_trammel<bool> > boolean_percentage;
+//    tn_range<bool, percentage_trammel<bool>> boolean_percentage;
 
 template<typename T>
 class nonnegative
@@ -45,8 +45,8 @@ class nonnegative
     T nominal_maximum() const override {return std::numeric_limits<T>::max();}
 };
 
-template class tn_range<double, nonnegative<double> >;
-typedef tn_range<double, nonnegative<double> > r_nonnegative;
+template class tn_range<double, nonnegative<double>>;
+typedef tn_range<double, nonnegative<double>> r_nonnegative;
 
 /// One reasonable interpretation of an "unbounded" floating-point
 /// range encompasses only normalized values that are nonsingular.
@@ -60,25 +60,25 @@ class unbounded
     T nominal_maximum() const override {return  std::numeric_limits<T>::max();}
 };
 
-template class tn_range<double, unbounded<double> >;
-typedef tn_range<double, unbounded<double> > r_unbounded;
+template class tn_range<double, unbounded<double>>;
+typedef tn_range<double, unbounded<double>> r_unbounded;
 
 // Range type 'r_int_percentage' is explicitly instantiated in a
 // different translation unit. A different template class with the
 // same trammel type can be instantiated here:
 
-typedef tn_range<double, percentage_trammel<double> > r_double_percentage;
-template class tn_range<double, percentage_trammel<double> >;
+typedef tn_range<double, percentage_trammel<double>> r_double_percentage;
+template class tn_range<double, percentage_trammel<double>>;
 
 // Although character and unsigned types aren't expected to be very
 // useful as the first template parameter of class template tn_range,
 // instantiating and testing examples here ensures that they work.
 
-typedef tn_range<signed char, percentage_trammel<signed char> > r_signed_char_percentage;
-template class tn_range<signed char, percentage_trammel<signed char> >;
+typedef tn_range<signed char, percentage_trammel<signed char>> r_signed_char_percentage;
+template class tn_range<signed char, percentage_trammel<signed char>>;
 
-typedef tn_range<unsigned int, percentage_trammel<unsigned int> > r_unsigned_int_percentage;
-template class tn_range<unsigned int, percentage_trammel<unsigned int> >;
+typedef tn_range<unsigned int, percentage_trammel<unsigned int>> r_unsigned_int_percentage;
+template class tn_range<unsigned int, percentage_trammel<unsigned int>>;
 
 // This range type's bounds aren't exactly representable in binary.
 // See the inline discussion where it is tested.
@@ -92,8 +92,8 @@ class surd
     T nominal_maximum() const override {return 0.070000000000000001;}
 };
 
-template class tn_range<double, surd<double> >;
-typedef tn_range<double, surd<double> > r_surd;
+template class tn_range<double, surd<double>>;
+typedef tn_range<double, surd<double>> r_surd;
 
 /// An exception should be thrown if an attempt is made to use an
 /// object of type 'r_absurd', because its limits are crossed.
@@ -107,8 +107,8 @@ class absurd
     T nominal_maximum() const override {return 0;}
 };
 
-template class tn_range<int, absurd<int> >;
-typedef tn_range<int, absurd<int> > r_absurd;
+template class tn_range<int, absurd<int>>;
+typedef tn_range<int, absurd<int>> r_absurd;
 
 struct tn_range_test
 {

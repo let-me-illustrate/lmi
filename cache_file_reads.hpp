@@ -58,7 +58,7 @@ namespace detail
 
 template<typename T>
 class file_cache
-    :private lmi::uncopyable<file_cache<T> >
+    :private lmi::uncopyable<file_cache<T>>
 {
   public:
     using retrieved_type = std::shared_ptr<T>;

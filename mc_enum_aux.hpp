@@ -31,7 +31,7 @@
 
 template<typename T>
 std::vector<std::string> mc_e_vector_to_string_vector
-    (std::vector<mc_enum<T> > const& ve
+    (std::vector<mc_enum<T>> const& ve
     )
 {
     std::vector<std::string> vs;

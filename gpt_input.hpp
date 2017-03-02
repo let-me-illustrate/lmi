@@ -220,7 +220,7 @@ class LMI_SO gpt_input final
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its UDTs share.
 
-template<> struct reconstitutor<datum_base, gpt_input>
+template<> struct reconstitutor<datum_base,gpt_input>
 {
     typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<gpt_input>& m)

@@ -250,7 +250,7 @@ census_run_result run_census_in_parallel::operator()
 
     ledger_emitter emitter(file, emission);
 
-    std::vector<std::shared_ptr<AccountValue> > cell_values;
+    std::vector<std::shared_ptr<AccountValue>> cell_values;
     std::vector<mcenum_run_basis> const& RunBases = composite.GetRunBases();
 
     int const first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());

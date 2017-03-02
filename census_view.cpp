@@ -1042,7 +1042,7 @@ void CensusView::update_class_names()
 
     std::vector<std::string> unique_class_names;
 
-    std::insert_iterator<std::vector<std::string> > iin
+    std::insert_iterator<std::vector<std::string>> iin
         (unique_class_names
         ,unique_class_names.begin()
         );
@@ -1094,7 +1094,7 @@ void CensusView::update_class_names()
 
     // Replace the vector of class parameters with the one we rebuilt.
     class_parms().clear();
-    std::insert_iterator<std::vector<Input> > iip(class_parms(), class_parms().begin());
+    std::insert_iterator<std::vector<Input>> iip(class_parms(), class_parms().begin());
     std::copy(rebuilt_class_parms.begin(), rebuilt_class_parms.end(), iip);
 }
 
@@ -1774,7 +1774,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         }
 
     auto selection = cell_parms().size();
-    std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
+    std::back_insert_iterator<std::vector<Input>> iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
     document().Modify(true);
     list_model_->Reset(cell_parms().size());

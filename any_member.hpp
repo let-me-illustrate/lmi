@@ -110,7 +110,7 @@ inline placeholder::~placeholder() = default;
 template<typename ClassType, typename ValueType>
 class holder
     :public  placeholder
-    ,private lmi::uncopyable<holder<ClassType,ValueType> >
+    ,private lmi::uncopyable<holder<ClassType,ValueType>>
 {
     // Friendship is extended to class any_member only to support its
     // cast operations.
@@ -523,9 +523,9 @@ MemberType const* member_cast(any_member<ClassType> const& member)
 
 template<typename ClassType>
 class MemberSymbolTable
-    :private lmi::uncopyable<MemberSymbolTable<ClassType> >
+    :private lmi::uncopyable<MemberSymbolTable<ClassType>>
 {
-    typedef std::map<std::string, any_member<ClassType> > member_map_type;
+    typedef std::map<std::string, any_member<ClassType>> member_map_type;
     typedef typename member_map_type::value_type member_pair_type;
 
   public:

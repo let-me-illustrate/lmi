@@ -43,7 +43,7 @@
 namespace detail
 {
     typedef
-        std::map<std::string, std::string, std::less<std::string> >
+        std::map<std::string, std::string, std::less<std::string>>
         stringmap
         ;
 
@@ -106,7 +106,7 @@ namespace detail
 
 template<typename T>
 std::vector<T> convert_vector_type
-    (std::vector<mc_enum<T> > const& ve
+    (std::vector<mc_enum<T>> const& ve
     ,typename std::enable_if<std::is_enum<T>::value>::type* = nullptr
     )
 {
@@ -120,7 +120,7 @@ std::vector<T> convert_vector_type
 
 template<typename Number, typename Trammel>
 std::vector<Number> convert_vector_type
-    (std::vector<tn_range<Number,Trammel> > const& vr
+    (std::vector<tn_range<Number,Trammel>> const& vr
     )
 {
     std::vector<Number> z;

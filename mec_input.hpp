@@ -188,7 +188,7 @@ class LMI_SO mec_input final
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its UDTs share.
 
-template<> struct reconstitutor<datum_base, mec_input>
+template<> struct reconstitutor<datum_base,mec_input>
 {
     typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<mec_input>& m)

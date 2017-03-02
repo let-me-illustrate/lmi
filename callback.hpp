@@ -96,7 +96,7 @@
 
 template<typename FunctionPointer>
 class LMI_SO callback final
-    :private lmi::uncopyable <callback<FunctionPointer> >
+    :private lmi::uncopyable <callback<FunctionPointer>>
 {
     static_assert(std::is_pointer<FunctionPointer>::value, "");
     typedef typename std::remove_pointer<FunctionPointer>::type f_type;

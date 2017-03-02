@@ -53,7 +53,7 @@ class product_database;
 /// input.
 ///
 /// The MVC framework uses two distinct data structures. One is simply
-/// a std::map<std::string>,std::string> > member of the Controller;
+/// a std::map<std::string>,std::string>> member of the Controller;
 /// it captures user input exactly. The other, this class, holds data
 /// of various types that a real program might capture from GUI input
 /// and use downstream. These two data structures are distinct because
@@ -473,7 +473,7 @@ class LMI_SO Input final
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its input sequences share.
 
-template<> struct reconstitutor<datum_sequence, Input>
+template<> struct reconstitutor<datum_sequence,Input>
 {
     typedef datum_sequence DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
@@ -491,7 +491,7 @@ template<> struct reconstitutor<datum_sequence, Input>
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its mc_enum types share.
 
-template<> struct reconstitutor<mc_enum_base, Input>
+template<> struct reconstitutor<mc_enum_base,Input>
 {
     typedef mc_enum_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
@@ -537,7 +537,7 @@ template<> struct reconstitutor<mc_enum_base, Input>
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its tn_range types share.
 
-template<> struct reconstitutor<tn_range_base, Input>
+template<> struct reconstitutor<tn_range_base,Input>
 {
     typedef tn_range_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
@@ -559,7 +559,7 @@ template<> struct reconstitutor<tn_range_base, Input>
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its UDTs share.
 
-template<> struct reconstitutor<datum_base, Input>
+template<> struct reconstitutor<datum_base,Input>
 {
     typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)

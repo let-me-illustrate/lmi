@@ -163,7 +163,7 @@ std::ostream& S::write(std::ostream& os)
 template<typename D>
 class V
 {
-    typedef std::map<std::string, any_member<D> > member_map;
+    typedef std::map<std::string, any_member<D>> member_map;
 };
 
 class U
@@ -205,7 +205,7 @@ struct T : public Q, public MemberSymbolTable<T>
         }
 };
 
-template<> struct reconstitutor<base_datum, S>
+template<> struct reconstitutor<base_datum,S>
 {
     typedef base_datum DesiredType;
     static DesiredType* reconstitute(any_member<S>& m)

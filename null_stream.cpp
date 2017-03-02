@@ -38,10 +38,10 @@
 /// described in 'ChangeLog'; any defect in it should not reflect on
 /// Dietmar Kuehl's reputation.
 
-template<typename CharType, typename traits = std::char_traits<CharType> >
+template<typename CharType, typename traits = std::char_traits<CharType>>
 class dev_null_stream_buffer
     :public  std::streambuf
-    ,private lmi::uncopyable<dev_null_stream_buffer<CharType,traits> >
+    ,private lmi::uncopyable<dev_null_stream_buffer<CharType,traits>>
 {
   public:
     dev_null_stream_buffer()
