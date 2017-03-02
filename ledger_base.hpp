@@ -166,9 +166,9 @@ class CRC;
 ///
 /// We choose 3.a., which impels us to choose 2.a.
 
-typedef std::map<std::string, std::vector<double>*, std::less<std::string>> double_vector_map;
-typedef std::map<std::string, std::string*, std::less<std::string>> string_map;
-typedef std::map<std::string, double*, std::less<std::string>> scalar_map;
+typedef std::map<std::string,std::vector<double>*> double_vector_map;
+typedef std::map<std::string,std::string*> string_map;
+typedef std::map<std::string,double*> scalar_map;
 
 class LMI_SO LedgerBase
 {
