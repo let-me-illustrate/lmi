@@ -321,7 +321,7 @@ std::string InputSequence::canonical_form() const
             {
             case e_invalid_mode:
                 {
-                fatal_error() << "Invalid mode." << LMI_FLUSH;
+                alarum() << "Invalid mode." << LMI_FLUSH;
                 }
                 break;
             case e_duration:
@@ -351,12 +351,12 @@ std::string InputSequence::canonical_form() const
                 break;
             case e_inception:
                 {
-                fatal_error() << "Interval ended at inception." << LMI_FLUSH;
+                alarum() << "Interval ended at inception." << LMI_FLUSH;
                 }
                 break;
             case e_inforce:
                 {
-                fatal_error() << "'e_inforce' not implemented." << LMI_FLUSH;
+                alarum() << "'e_inforce' not implemented." << LMI_FLUSH;
                 }
                 break;
             case e_retirement:
@@ -410,14 +410,11 @@ void assert_not_insane_or_disordered
         {
         if(i.insane)
             {
-            fatal_error()
-                << "Untrapped parser error."
-                << LMI_FLUSH
-                ;
+            alarum() << "Untrapped parser error." << LMI_FLUSH;
             }
         if(i.value_is_keyword && "daft" == i.value_keyword)
             {
-            fatal_error()
+            alarum()
                 << "Interval "
                 << "[ " << i.begin_duration
                 << ", " << i.end_duration << " )"
@@ -427,7 +424,7 @@ void assert_not_insane_or_disordered
             }
         if(e_invalid_mode == i.begin_mode)
             {
-            fatal_error()
+            alarum()
                 << "Interval "
                 << "[ " << i.begin_duration
                 << ", " << i.end_duration << " )"
@@ -437,7 +434,7 @@ void assert_not_insane_or_disordered
             }
         if(e_invalid_mode == i.end_mode)
             {
-            fatal_error()
+            alarum()
                 << "Interval "
                 << "[ " << i.begin_duration
                 << ", " << i.end_duration << " )"
@@ -447,7 +444,7 @@ void assert_not_insane_or_disordered
             }
         if(i.begin_duration < 0)
             {
-            fatal_error()
+            alarum()
                 << "Interval "
                 << "[ " << i.begin_duration
                 << ", " << i.end_duration << " )"
@@ -457,7 +454,7 @@ void assert_not_insane_or_disordered
             }
         if(i.end_duration < i.begin_duration)
             {
-            fatal_error()
+            alarum()
                 << "Interval "
                 << "[ " << i.begin_duration
                 << ", " << i.end_duration << " )"
@@ -467,7 +464,7 @@ void assert_not_insane_or_disordered
             }
         if(years_to_maturity < i.end_duration)
             {
-            fatal_error()
+            alarum()
                 << "Interval "
                 << "[ " << i.begin_duration
                 << ", " << i.end_duration << " )"
@@ -477,7 +474,7 @@ void assert_not_insane_or_disordered
             }
         if(i.begin_duration < prior_begin_duration)
             {
-            fatal_error()
+            alarum()
                 << "Previous interval began at duration "
                 << prior_begin_duration
                 << "; current interval "
@@ -654,7 +651,7 @@ void assert_sane_and_ordered_partition
         {
         if(i.begin_duration != prior_end_duration)
             {
-            fatal_error()
+            alarum()
                 << "Interval "
                 << "[ " << i.begin_duration
                 << ", " << i.end_duration << " )"

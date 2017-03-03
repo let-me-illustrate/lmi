@@ -286,7 +286,7 @@ census_run_result run_census_in_parallel::operator()
                 ||  first_cell_inforce_month != av->yare_input_.InforceMonth
                 )
                 {
-                fatal_error()
+                alarum()
                     << "Running census by month untested for inforce"
                     << " with inforce duration varying across cells."
                     << LMI_FLUSH
@@ -295,7 +295,7 @@ census_run_result run_census_in_parallel::operator()
 
             if(mce_solve_none != av->yare_input_.SolveType)
                 {
-                fatal_error()
+                alarum()
                     << "Running census by month: solves not permitted."
                     << LMI_FLUSH
                     ;
@@ -315,7 +315,7 @@ census_run_result run_census_in_parallel::operator()
     if(cell_values.empty())
         {
         // Make sure it's safe to dereference cell_values[0] later.
-        fatal_error()
+        alarum()
             << "No cell with any lives was included in the composite."
             << LMI_FLUSH
             ;
@@ -578,7 +578,7 @@ census_run_result run_census_in_parallel::operator()
                         )
                     )
                     {
-                    fatal_error()
+                    alarum()
                         << "\nExperience-rating reserve discrepancy in year "
                         << year
                         << ": "
@@ -723,7 +723,7 @@ census_run_result run_census::operator()
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << order
                 << " not found."

@@ -66,17 +66,17 @@ int test_main(int, char*[])
     warning() << "File and line where this diagnostic arose:";
     warning() << LMI_FLUSH;
 
-    // Run this 'fatal_error' test twice in order to ensure that the
-    // stream state is cleared after an exception is thrown; if it is
-    // not, then getting a reference to the stream again, e.g., by
-    // calling fatal_error(), fails with an exception inside the
-    // standard library, probably in std::ios_base::clear().
+    // Run this 'alarum' test twice in order to ensure that the stream
+    // state is cleared after an exception is thrown; if it is not,
+    // then getting a reference to the stream again, e.g., by calling
+    // alarum(), fails with an exception inside the standard library,
+    // probably in std::ios_base::clear().
 
-    std::string s("First simulated fatal error.");
-    BOOST_TEST_THROW(fatal_error() << s << std::flush, std::runtime_error, s);
+    std::string s("First simulated alarum.");
+    BOOST_TEST_THROW(alarum() << s << std::flush, std::runtime_error, s);
 
-    s = "Second simulated fatal error.";
-    BOOST_TEST_THROW(fatal_error() << s << std::flush, std::runtime_error, s);
+    s = "Second simulated alarum.";
+    BOOST_TEST_THROW(alarum() << s << std::flush, std::runtime_error, s);
 
 #if defined __GLIBCPP__ && __GLIBCPP__==20030426
     std::cout

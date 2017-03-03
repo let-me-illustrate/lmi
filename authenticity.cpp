@@ -70,7 +70,7 @@ Authenticity& Authenticity::Instance()
     catch(...)
         {
         report_exception();
-        fatal_error() << "Instantiation failed." << LMI_FLUSH;
+        alarum() << "Instantiation failed." << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }

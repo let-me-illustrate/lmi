@@ -129,7 +129,7 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
     LMI_ASSERT(0 < file_version);
     if(class_version() < file_version)
         {
-        fatal_error() << "Incompatible file version." << LMI_FLUSH;
+        alarum() << "Incompatible file version." << LMI_FLUSH;
         }
 
     if(data_source_is_external(parser.document()))
@@ -187,7 +187,7 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
     LMI_ASSERT(i != elements.end());
     if("cell" != xml_lmi::get_name(*i))
         {
-        fatal_error()
+        alarum()
             << "XML node name is '"
             << xml_lmi::get_name(*i)
             << "' but '"
@@ -205,7 +205,7 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
         xml_lmi::get_attr(*i, "version", version);
         if(5 != version)
             {
-            fatal_error()
+            alarum()
                 << "Case-default 'cell' element is empty, but is version "
                 << version
                 << " where version 5 was expected."
@@ -224,7 +224,7 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
     LMI_ASSERT(i != elements.end());
     if("NumberOfClasses" != xml_lmi::get_name(*i))
         {
-        fatal_error()
+        alarum()
             << "XML node name is '"
             << xml_lmi::get_name(*i)
             << "' but '"
@@ -249,7 +249,7 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
             {
             if(1 != number_of_classes)
                 {
-                fatal_error()
+                alarum()
                     << "Class-default 'cell' element is empty, and there are "
                     << number_of_classes
                     << " classes where 1 was expected."
@@ -260,7 +260,7 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
             xml_lmi::get_attr(*i, "version", version);
             if(5 != version)
                 {
-                fatal_error()
+                alarum()
                     << "Class-default 'cell' element is empty, but is version "
                     << version
                     << " where version 5 was expected."
@@ -280,7 +280,7 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
         }
     if(class_parms_.size() != number_of_classes)
         {
-        fatal_error()
+        alarum()
             << "Number of classes read is "
             << class_parms_.size()
             << " but should have been "
@@ -296,7 +296,7 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
     LMI_ASSERT(i != elements.end());
     if("NumberOfCells" != xml_lmi::get_name(*i))
         {
-        fatal_error()
+        alarum()
             << "XML node name is '"
             << xml_lmi::get_name(*i)
             << "' but '"
@@ -333,7 +333,7 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
         }
     if(cell_parms_.size() != number_of_cells)
         {
-        fatal_error()
+        alarum()
             << "Number of individuals read is "
             << cell_parms_.size()
             << " but should have been "
@@ -347,7 +347,7 @@ void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
     ++i;
     if(i != elements.end())
         {
-        fatal_error()
+        alarum()
             << "Read all data expected in XML document, "
             << "but more data remains."
             << LMI_FLUSH

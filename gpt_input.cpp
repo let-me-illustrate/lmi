@@ -358,7 +358,7 @@ void gpt_input::DoHarmonize()
         }
     else
         {
-        fatal_error()
+        alarum()
             << "No option selected for definition of life insurance."
             << LMI_FLUSH
             ;
@@ -592,7 +592,7 @@ std::vector<std::string> gpt_input::RealizeAllSequenceInput(bool report_errors)
                 }
             if(diagnostics_present)
                 {
-                fatal_error()
+                alarum()
                     << "Input validation problems:\n"
                     << oss.str()
                     << LMI_FLUSH

@@ -125,11 +125,11 @@ bool DatabaseTableAdapter::DoApplyAxisAdjustment
             static_cast<DatabaseDurationAxis&>(axis);
         if(duration_axis.GetMinValue() != 0)
             {
-            fatal_error() << "Duration must start at 0." << LMI_FLUSH;
+            alarum() << "Duration must start at 0." << LMI_FLUSH;
             }
         if(duration_axis.GetMaxValue() < 0)
             {
-            fatal_error()
+            alarum()
                 << "Duration must have at least one value."
                 << LMI_FLUSH
                 ;

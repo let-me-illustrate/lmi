@@ -291,7 +291,7 @@ mec_state test_one_days_7702A_transactions
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Unknown modal premium type " << target_premium_type << '.'
             << LMI_FLUSH
             ;
@@ -514,7 +514,7 @@ bool mec_server::operator()(fs::path const& file_path)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "File '"
             << file_path
             << "': extension '"

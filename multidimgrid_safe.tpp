@@ -121,14 +121,11 @@ void MultiDimIntegralAxis<Integral>::SetValues
 {
     if(!(min_value <= max_value))
         {
-        fatal_error()
-            << "Minimum value exceeds maximum value."
-            << LMI_FLUSH
-            ;
+        alarum() << "Minimum value exceeds maximum value." << LMI_FLUSH;
         }
     if(step < 1)
         {
-        fatal_error() << "Step must be at least 1." << LMI_FLUSH;
+        alarum() << "Step must be at least 1." << LMI_FLUSH;
         }
 
     min_ = min_value;
@@ -271,11 +268,7 @@ A MultiDimTable<T, D, C>::UnwrapAny(boost::any const& any)
         }
     catch(boost::bad_any_cast const& e)
         {
-        fatal_error()
-            << "Type mismatch : "
-            << e.what()
-            << LMI_FLUSH
-            ;
+        alarum() << "Type mismatch : " << e.what() << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }

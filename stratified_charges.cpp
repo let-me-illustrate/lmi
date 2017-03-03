@@ -64,7 +64,7 @@ namespace xml_serialize
 
 template<> std::string value_cast<std::string>(stratified_entity const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
@@ -76,7 +76,7 @@ template<> std::string value_cast<std::string>(stratified_entity const&)
 
 template<> stratified_entity value_cast<stratified_entity>(std::string const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
@@ -284,7 +284,7 @@ double stratified_charges::stratified_sepacct_load
             // break;
         case mce_gen_mdpt:
             {
-            fatal_error()
+            alarum()
                 << "Dynamic separate-account load not supported with "
                 << "midpoint expense basis, because variable products "
                 << "are not subject to the illustration reg."
@@ -294,7 +294,7 @@ double stratified_charges::stratified_sepacct_load
             break;
         default:
             {
-            fatal_error() << "Case '" << basis << "' not found." << LMI_FLUSH;
+            alarum() << "Case '" << basis << "' not found." << LMI_FLUSH;
             }
         }
     throw "Unreachable--silences a compiler diagnostic.";
@@ -356,7 +356,7 @@ double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets)
             // break;
         case mce_gen_mdpt:
             {
-            fatal_error()
+            alarum()
                 << "Dynamic separate-account M&E not supported with "
                 << "midpoint expense basis, because variable products "
                 << "are not subject to the illustration reg."
@@ -366,7 +366,7 @@ double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets)
             break;
         default:
             {
-            fatal_error() << "Case '" << basis << "' not found." << LMI_FLUSH;
+            alarum() << "Case '" << basis << "' not found." << LMI_FLUSH;
             }
         }
     throw "Unreachable--silences a compiler diagnostic.";

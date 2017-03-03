@@ -76,7 +76,7 @@ namespace
         case mce_monthly:    return 3; // M
         default:
             {
-            fatal_error() << "Case " << a_mode << " not found." << LMI_FLUSH;
+            alarum() << "Case " << a_mode << " not found." << LMI_FLUSH;
             throw "Unreachable--silences a compiler diagnostic.";
             }
         }
@@ -460,7 +460,7 @@ void AccountValue::PerformSpecAmtStrategy()
             break;
         case mce_sa_mep:
             {
-            fatal_error()
+            alarum()
                 << "Modified endowment premium not implemented."
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
@@ -470,7 +470,7 @@ void AccountValue::PerformSpecAmtStrategy()
             break;
         case mce_sa_glp:
             {
-            fatal_error()
+            alarum()
                 << "Guideline level premium not implemented."
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
@@ -480,7 +480,7 @@ void AccountValue::PerformSpecAmtStrategy()
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << yare_input_.SpecifiedAmountStrategy[0]
                 << " not found."
@@ -543,7 +543,7 @@ void AccountValue::TxOptionChange()
             break;
         default:
             {
-            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
+            alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
     ActualSpecAmt = round_specamt()(ActualSpecAmt);
@@ -630,7 +630,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             break;
         case mce_pmt_mep:
             {
-            fatal_error()
+            alarum()
                 << "Modified endowment premium not implemented."
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
@@ -640,7 +640,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             break;
         case mce_pmt_glp:
             {
-            fatal_error()
+            alarum()
                 << "Guideline level premium not implemented."
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
@@ -650,7 +650,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << yare_input_.PaymentStrategy[0]
                 << " not found."
@@ -760,7 +760,7 @@ void AccountValue::TxSetDeathBft(bool)
             break;
         default:
             {
-            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
+            alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 
@@ -927,7 +927,7 @@ void AccountValue::TxTakeWD()
             break;
         default:
             {
-            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
+            alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 

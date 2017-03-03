@@ -71,7 +71,7 @@ template<> std::string value_cast<std::string>(glossed_string const& z)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Invalid function call. Context:"
             << '\n' << z.datum()
             << '\n' << z.gloss()

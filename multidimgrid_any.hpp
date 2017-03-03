@@ -360,7 +360,7 @@ inline boost::any MultiDimTableAny::GetValueAny(Coords const& coords) const
 {
     if(coords.size() != GetDimension())
         {
-        fatal_error() << "Incorrect dimension." << LMI_FLUSH;
+        alarum() << "Incorrect dimension." << LMI_FLUSH;
         }
     return DoGetValueAny(coords);
 }
@@ -371,7 +371,7 @@ inline void MultiDimTableAny::SetValueAny
 {
     if(coords.size() != GetDimension())
         {
-        fatal_error() << "Incorrect dimension." << LMI_FLUSH;
+        alarum() << "Incorrect dimension." << LMI_FLUSH;
         }
     DoSetValueAny(coords, value);
 }
@@ -715,7 +715,7 @@ inline unsigned int MultiDimGrid::DoGetAxisIndexByName(std::string const& name)
     int n = GetAxisIndexByName(name);
     if(n == wxNOT_FOUND || static_cast<int>(dimension_) <= n)
         {
-        fatal_error() << "Unknown axis '" << name << "'." << LMI_FLUSH;
+        alarum() << "Unknown axis '" << name << "'." << LMI_FLUSH;
         }
     return static_cast<unsigned int>(n);
 }

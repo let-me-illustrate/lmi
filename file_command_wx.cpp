@@ -55,12 +55,7 @@ void concrete_file_command
 
     if(!ft)
         {
-        fatal_error()
-            << "File type '"
-            << extension
-            << "' unknown."
-            << LMI_FLUSH
-            ;
+        alarum() << "File type '" << extension << "' unknown." << LMI_FLUSH;
         }
 
     wxString cmd;
@@ -87,18 +82,13 @@ void concrete_file_command
         }
     else
         {
-        fatal_error()
-            << "Action '"
-            << action
-            << "' unrecognized."
-            << LMI_FLUSH
-            ;
+        alarum() << "Action '" << action << "' unrecognized." << LMI_FLUSH;
         return;
         }
 
     if(!okay)
         {
-        fatal_error()
+        alarum()
             << "Unable to determine command to '"
             << action
             << "' file '"
@@ -110,7 +100,7 @@ void concrete_file_command
     okay = wxExecute(cmd);
     if(!okay)
         {
-        fatal_error()
+        alarum()
             << "Unable to '"
             << action
             << "' file '"

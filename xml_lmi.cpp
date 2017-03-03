@@ -45,8 +45,8 @@ namespace xml_lmi
 ///
 /// Postconditions: member parser_ is valid.
 ///
-/// Throws: std::runtime_error, via fatal_error(), if a precondition
-/// is violated, or if xml-library calls throw an exception derived
+/// Throws: std::runtime_error, via alarum(), if a precondition is
+/// violated, or if xml-library calls throw an exception derived
 /// from std::exception.
 
 xml_lmi::dom_parser::dom_parser(std::string const& filename)
@@ -66,7 +66,7 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
         }
     catch(std::exception const& e)
         {
-        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        alarum() << error_context_ << e.what() << LMI_FLUSH;
         }
 }
 
@@ -76,8 +76,8 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
 ///
 /// Postconditions: member parser_ is valid.
 ///
-/// Throws: std::runtime_error, via fatal_error(), if a precondition
-/// is violated, or if xml-library calls throw an exception derived
+/// Throws: std::runtime_error, via alarum(), if a precondition is
+/// violated, or if xml-library calls throw an exception derived
 /// from std::exception.
 
 xml_lmi::dom_parser::dom_parser(char const* data, std::size_t length)
@@ -89,7 +89,7 @@ xml_lmi::dom_parser::dom_parser(char const* data, std::size_t length)
         }
     catch(std::exception const& e)
         {
-        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        alarum() << error_context_ << e.what() << LMI_FLUSH;
         }
 }
 
@@ -105,8 +105,8 @@ xml_lmi::dom_parser::dom_parser(char const* data, std::size_t length)
 ///
 /// Postconditions: member parser_ is valid.
 ///
-/// Throws: std::runtime_error, via fatal_error(), if a precondition
-/// is violated, or if xml-library calls throw an exception derived
+/// Throws: std::runtime_error, via alarum(), if a precondition is
+/// violated, or if xml-library calls throw an exception derived
 /// from std::exception.
 
 xml_lmi::dom_parser::dom_parser(std::istream const& is)
@@ -124,7 +124,7 @@ xml_lmi::dom_parser::dom_parser(std::istream const& is)
         }
     catch(std::exception const& e)
         {
-        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        alarum() << error_context_ << e.what() << LMI_FLUSH;
         }
 }
 
@@ -136,8 +136,8 @@ xml_lmi::dom_parser::~dom_parser() = default;
 ///
 /// Preconditions: member parser_ has a document.
 ///
-/// Throws: std::runtime_error, via fatal_error(), if a precondition
-/// is violated, or if xml-library calls throw an exception derived
+/// Throws: std::runtime_error, via alarum(), if a precondition is
+/// violated, or if xml-library calls throw an exception derived
 /// from std::exception. Ctor postconditions are assumed to have been
 /// satisfied and are not tested.
 
@@ -149,7 +149,7 @@ xml_lmi::Document const& xml_lmi::dom_parser::document() const
         }
     catch(std::exception const& e)
         {
-        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        alarum() << error_context_ << e.what() << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }
@@ -160,8 +160,8 @@ xml_lmi::Document const& xml_lmi::dom_parser::document() const
 /// has a root node; the argument, if not empty, matches the name of
 /// that root node.
 ///
-/// Throws: std::runtime_error, via fatal_error(), if a precondition
-/// is violated, or if xml-library calls throw an exception derived
+/// Throws: std::runtime_error, via alarum(), if a precondition is
+/// violated, or if xml-library calls throw an exception derived
 /// from std::exception. Ctor postconditions are assumed to have been
 /// satisfied and are not tested.
 
@@ -190,7 +190,7 @@ xml::element const& xml_lmi::dom_parser::root_node
         }
     catch(std::exception const& e)
         {
-        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        alarum() << error_context_ << e.what() << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }
@@ -212,12 +212,7 @@ void xml_lmi::xml_document::save(std::string const& filename)
     bool okay = document_->save_to_file(filename.c_str());
     if(!okay)
         {
-        fatal_error()
-            << "Unable to save file '"
-            << filename
-            << "'."
-            << LMI_FLUSH
-            ;
+        alarum() << "Unable to save file '" << filename << "'." << LMI_FLUSH;
         }
 }
 
@@ -243,7 +238,7 @@ void xml_lmi::xml_document::add_comment(std::string const& s)
             return;
             }
         }
-    fatal_error() << "Cannot add comment to rootless document." << LMI_FLUSH;
+    alarum() << "Cannot add comment to rootless document." << LMI_FLUSH;
 }
 
 /// Find an element subnode by name, throwing if it is not found.
@@ -256,12 +251,7 @@ xml::node::const_iterator retrieve_element
     xml::node::const_iterator i = parent.find(name.c_str());
     if(parent.end() == i)
         {
-        fatal_error()
-            << "Required element '"
-            << name
-            << "' not found."
-            << LMI_FLUSH
-            ;
+        alarum() << "Required element '" << name << "' not found." << LMI_FLUSH;
         }
     return i;
 }
@@ -293,7 +283,7 @@ std::string get_content(xml::element const& element)
         }
     catch(std::exception const& e)
         {
-        fatal_error() << e.what() << LMI_FLUSH;
+        alarum() << e.what() << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }
@@ -309,7 +299,7 @@ std::string get_name(xml::element const& element)
         }
     catch(std::exception const& e)
         {
-        fatal_error() << e.what() << LMI_FLUSH;
+        alarum() << e.what() << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }
@@ -341,7 +331,7 @@ bool get_attr
         }
     catch(std::exception const& e)
         {
-        fatal_error() << e.what() << LMI_FLUSH;
+        alarum() << e.what() << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }
@@ -383,7 +373,7 @@ void set_attr
         }
     catch(std::exception const& e)
         {
-        fatal_error() << e.what() << LMI_FLUSH;
+        alarum() << e.what() << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }

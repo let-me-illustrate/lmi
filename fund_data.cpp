@@ -113,7 +113,7 @@ void FundData::Read(std::string const& a_Filename)
 {
     if(access(a_Filename.c_str(), R_OK))
         {
-        fatal_error()
+        alarum()
             << "File '"
             << a_Filename
             << "' is required but could not be found. Try reinstalling."

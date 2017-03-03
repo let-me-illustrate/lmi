@@ -134,10 +134,7 @@ wxTreeCtrl& TreeGridViewBase::tree() const
 {
     if(!tree_)
         {
-        fatal_error()
-            << "Tree control can't be null"
-            << LMI_FLUSH
-            ;
+        alarum() << "Tree control can't be null" << LMI_FLUSH;
         }
     return *tree_;
 }
@@ -146,10 +143,7 @@ MultiDimGrid& TreeGridViewBase::grid() const
 {
     if(!grid_)
         {
-        fatal_error()
-            << "Grid control can't be null"
-            << LMI_FLUSH
-            ;
+        alarum() << "Grid control can't be null" << LMI_FLUSH;
         }
     return *grid_;
 }
@@ -158,10 +152,7 @@ void TreeGridViewBase::set_grid_label_text(std::string const& label)
 {
     if(!grid_label_)
         {
-        fatal_error()
-            << "Grid control can't be null"
-            << LMI_FLUSH
-            ;
+        alarum() << "Grid control can't be null" << LMI_FLUSH;
         }
     grid_label_->SetLabel(label);
 }

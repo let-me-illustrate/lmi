@@ -85,7 +85,7 @@ namespace detail
             else
                 {
                 dst[j] = T(); // COMPILER !! Cuz we can't throw...see below.
-                fatal_error()
+                alarum()
                     << "Key '"
                     << src[j]
                     << "' not found in map."

@@ -67,7 +67,7 @@ template<> struct xml_io<rounding_parameters>
 
 template<> std::string value_cast<std::string>(rounding_parameters const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
@@ -79,7 +79,7 @@ template<> std::string value_cast<std::string>(rounding_parameters const&)
 
 template<> rounding_parameters value_cast<rounding_parameters>(std::string const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
 }
 

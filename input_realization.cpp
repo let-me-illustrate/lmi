@@ -257,7 +257,7 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
                 }
             if(diagnostics_present)
                 {
-                fatal_error()
+                alarum()
                     << "Input validation problems for '"
                     << InsuredName
                     << "':\n"
@@ -1104,10 +1104,7 @@ void Input::make_term_rider_consistent(bool aggressively)
         }
     else
         {
-        fatal_error()
-            << "Term is neither proportional nor absolute."
-            << LMI_FLUSH
-            ;
+        alarum() << "Term is neither proportional nor absolute." << LMI_FLUSH;
         }
 
     if

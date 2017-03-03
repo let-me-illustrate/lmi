@@ -106,7 +106,7 @@ bool illustrator::operator()(fs::path const& file_path)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "File '"
             << file_path
             << "': extension '"
@@ -232,7 +232,7 @@ void assert_consistent_run_order
         {
         if(case_default["RunOrder"] != cell["RunOrder"])
             {
-            fatal_error()
+            alarum()
                 << "Case-default run order '"
                 << case_default["RunOrder"]
                 << "' differs from run order '"
@@ -287,7 +287,7 @@ void assert_okay_to_run_group_quote
 
     if(case_default["EffectiveDate"] != case_default["InforceAsOfDate"])
         {
-        fatal_error() << "Group quotes allowed for new business only." << LMI_FLUSH;
+        alarum() << "Group quotes allowed for new business only." << LMI_FLUSH;
         }
 
     int i = 0;
@@ -297,7 +297,7 @@ void assert_okay_to_run_group_quote
             {
             if(case_default[field] != cell[field])
                 {
-                fatal_error()
+                alarum()
                     << "Input field '"
                     << field
                     << "': value in cell number "

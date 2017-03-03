@@ -104,7 +104,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
             }
         default:
             {
-            fatal_error() << "Case " << strategy << " not found." << LMI_FLUSH;
+            alarum() << "Case " << strategy << " not found." << LMI_FLUSH;
             throw "Unreachable--silences a compiler diagnostic.";
             }
         }
@@ -248,7 +248,7 @@ double AccountValue::DoPerformPmtStrategy
                     }
                 else
                     {
-                    fatal_error()
+                    alarum()
                         << "Type "
                         << a_SolveForWhichPrem
                         << " not allowed here."
@@ -309,7 +309,7 @@ double AccountValue::DoPerformPmtStrategy
             }
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << a_StrategyVector[Year]
                 << " not found."

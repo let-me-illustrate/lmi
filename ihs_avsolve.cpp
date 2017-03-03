@@ -391,12 +391,7 @@ double AccountValue::Solve
             break;
         default:
             {
-            fatal_error()
-                << "Case "
-                << a_SolveType
-                << " not found."
-                << LMI_FLUSH
-                ;
+            alarum() << "Case " << a_SolveType << " not found." << LMI_FLUSH;
             }
         }
 

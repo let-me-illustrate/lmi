@@ -114,7 +114,7 @@ void MvcModel::Reconcile()
 
     if(!okay)
         {
-        fatal_error()
+        alarum()
             << "Unable to make Model consistent after "
             << maximum_iterations
             << " iterations."

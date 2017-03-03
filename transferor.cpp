@@ -131,7 +131,7 @@ bool Transferor::PerformTransfer(transfer_direction td)
 {
     if(!m_validatorWindow)
         {
-        fatal_error()
+        alarum()
             << "Validator for '"
             << name()
             << "' not bound to any control."
@@ -202,7 +202,7 @@ bool Transferor::PerformTransfer(transfer_direction td)
         return Transfer(td, data_,             *sequence    );
     else
         {
-        fatal_error()
+        alarum()
             << "Unrecognized control '"
             << name()
             << "'."
@@ -322,7 +322,7 @@ namespace
     {
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
-            fatal_error()
+            alarum()
                 << "CheckListBox '" << control.GetName() << "':"
                 << " must be constrained to a single selection."
                 << LMI_FLUSH
@@ -340,7 +340,7 @@ namespace
     {
         if(!(wxCB_READONLY & control.GetWindowStyle()))
             {
-            fatal_error()
+            alarum()
                 << "ComboBox '" << control.GetName() << "':"
                 << " must be read only."
                 << LMI_FLUSH
@@ -402,7 +402,7 @@ namespace
     {
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
-            fatal_error()
+            alarum()
                 << "ListBox '" << control.GetName() << "':"
                 << " must be constrained to a single selection."
                 << LMI_FLUSH

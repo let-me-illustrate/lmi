@@ -322,7 +322,7 @@ bool MultiDimGrid::Create
     table_ = atable;
     if(!table_)
         {
-        fatal_error() << "Table cannot be null." << LMI_FLUSH;
+        alarum() << "Table cannot be null." << LMI_FLUSH;
         }
     dimension_ = table().GetDimension();
 
@@ -333,10 +333,7 @@ bool MultiDimGrid::Create
     axis_ = table().GetAxesAny();
     if(dimension_ != axis_.size())
         {
-        fatal_error()
-            << "Table size does not match number of axes."
-            << LMI_FLUSH
-            ;
+        alarum() << "Table size does not match number of axes." << LMI_FLUSH;
         }
 
     // initializing fixed values with empty ones
@@ -883,7 +880,7 @@ bool MultiDimGrid::SetGridAxisSelection(int firstAxis, int secondAxis)
 {
     if(firstAxis == secondAxis && firstAxis != wxNOT_FOUND)
         {
-        fatal_error() << "Select different axes." << LMI_FLUSH;
+        alarum() << "Select different axes." << LMI_FLUSH;
         return false;
         }
     bool update =
@@ -1118,7 +1115,7 @@ MultiDimGrid::Coords const& MultiDimGrid::PrepareFixedCoords(int row, int col) c
         {
         if(col != 0)
             {
-            fatal_error() << "No first grid axis selected." << LMI_FLUSH;
+            alarum() << "No first grid axis selected." << LMI_FLUSH;
             }
         }
 
@@ -1131,7 +1128,7 @@ MultiDimGrid::Coords const& MultiDimGrid::PrepareFixedCoords(int row, int col) c
         {
         if(row != 0)
             {
-            fatal_error() << "No second grid axis selected." << LMI_FLUSH;
+            alarum() << "No second grid axis selected." << LMI_FLUSH;
             }
         }
     return axis_fixed_coords_;
@@ -1252,10 +1249,7 @@ void MultiDimGrid::UponAxisVariesToggle(wxCommandEvent& event)
 
     if(it == axis_varies_checkboxes_.end())
         {
-        fatal_error()
-            << "Event received from unexpected control."
-            << LMI_FLUSH
-            ;
+        alarum() << "Event received from unexpected control." << LMI_FLUSH;
         }
 
     std::size_t index = it - axis_varies_checkboxes_.begin();
@@ -1301,10 +1295,7 @@ void MultiDimGrid::UponSwitchSelectedAxis(wxCommandEvent& event)
     int id = event.GetId();
     if(id != e_axis_x && id != e_axis_y)
         {
-        fatal_error()
-            << "Event received from unexpected control."
-            << LMI_FLUSH
-            ;
+        alarum() << "Event received from unexpected control." << LMI_FLUSH;
         }
 
     DoOnSwitchSelectedAxis(static_cast<enum_axis_x_or_y>(id));
@@ -1339,7 +1330,7 @@ unsigned int MultiDimGrid::EnsureIndexIsPositive(int row_or_col) const
 {
     if(row_or_col < 0)
         {
-        fatal_error()
+        alarum()
             << "Row or column index "
             << row_or_col
             << " is negative."
@@ -1414,7 +1405,7 @@ void MultiDimAxisAnyChoice::SelectionChanged()
     int const sel = GetSelection();
     if(!(0 <= sel && static_cast<unsigned int>(sel) < axis_.GetCardinality()))
         {
-        fatal_error()
+        alarum()
             << "The axis is inconsistent with its choice control."
             << LMI_FLUSH
             ;

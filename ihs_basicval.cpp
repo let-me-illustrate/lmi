@@ -151,7 +151,7 @@ void BasicValues::Init()
         &&  !global_settings::instance().regression_testing()
         )
         {
-        fatal_error()
+        alarum()
             << "Product "
             << yare_input_.ProductName
             << " not approved in state "
@@ -184,7 +184,7 @@ void BasicValues::Init()
 
     if(IssueAge < Database_->Query(DB_MinIssAge))
         {
-        fatal_error()
+        alarum()
             << "Issue age "
             << IssueAge
             << " less than minimum "
@@ -195,7 +195,7 @@ void BasicValues::Init()
         }
     if(Database_->Query(DB_MaxIssAge) < IssueAge)
         {
-        fatal_error()
+        alarum()
             << "Issue age "
             << IssueAge
             << " greater than maximum "
@@ -511,7 +511,7 @@ void BasicValues::Init7702()
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << yare_input_.LoanRateType
                 << " not found."
@@ -743,10 +743,7 @@ void BasicValues::SetPermanentInvariants()
         &&  !(Database_->Query(DB_AllowSubstdTable) && mce_rated == yare_input_.UnderwritingClass)
         )
         {
-        fatal_error()
-            << "Substandard table ratings not permitted."
-            << LMI_FLUSH
-            ;
+        alarum() << "Substandard table ratings not permitted." << LMI_FLUSH;
         }
 
     // SOMEDAY !! WP and ADB shouldn't always be forbidden with table
@@ -760,14 +757,11 @@ void BasicValues::SetPermanentInvariants()
     // people they cover are unlikely to be underwritten.
     if(is_policy_rated(yare_input_) && yare_input_.WaiverOfPremiumBenefit)
         {
-        fatal_error()
-            << "Substandard waiver of premium not supported."
-            << LMI_FLUSH
-            ;
+        alarum() << "Substandard waiver of premium not supported." << LMI_FLUSH;
         }
     if(is_policy_rated(yare_input_) && yare_input_.AccidentalDeathBenefit)
         {
-        fatal_error()
+        alarum()
             << "Substandard accidental death rider not supported."
             << LMI_FLUSH
             ;
@@ -862,7 +856,7 @@ void BasicValues::SetMaxSurvivalDur()
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << yare_input_.SurviveToType
                 << " not found."
@@ -920,7 +914,7 @@ double BasicValues::GetModalPrem
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Unknown modal premium type " << a_prem_type << '.'
             << LMI_FLUSH
             ;
@@ -1173,7 +1167,7 @@ double BasicValues::GetModalPremMlyDed
                 break;
             default:
                 {
-                fatal_error()
+                alarum()
                     << "Case '"
                     << WaiverChargeMethod
                     << "' not found."
@@ -1255,7 +1249,7 @@ double BasicValues::GetModalPremMlyDedEe
                 break;
             default:
                 {
-                fatal_error()
+                alarum()
                     << "Case '"
                     << WaiverChargeMethod
                     << "' not found."
@@ -1335,7 +1329,7 @@ double BasicValues::GetModalPremMlyDedEr
                 break;
             default:
                 {
-                fatal_error()
+                alarum()
                     << "Case '"
                     << WaiverChargeMethod
                     << "' not found."
@@ -1404,7 +1398,7 @@ double BasicValues::GetModalSpecAmt
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Unknown modal premium type " << premium_type << '.'
             << LMI_FLUSH
             ;
@@ -1478,7 +1472,7 @@ double BasicValues::GetModalSpecAmtSalary(int a_year) const
 
 double BasicValues::GetModalSpecAmtMlyDed(double, mcenum_mode) const
 {
-    fatal_error()
+    alarum()
         << "No maximum specified amount is defined for this product."
         << LMI_FLUSH
         ;
@@ -1674,7 +1668,7 @@ std::vector<double> BasicValues::GetTable
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << CanBlendSmoking
                 << "' not found."
@@ -1703,7 +1697,7 @@ std::vector<double> BasicValues::GetTable
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << CanBlendGender
                 << "' not found."
@@ -1858,7 +1852,7 @@ std::vector<double> BasicValues::GetTable
         }
     else
         {
-        fatal_error() << "Invalid mortality blending." << LMI_FLUSH;
+        alarum() << "Invalid mortality blending." << LMI_FLUSH;
         }
 
     return BlendedTable;
@@ -1888,7 +1882,7 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
             }
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << yare_input_.DefinitionOfLifeInsurance
                 << " not found."

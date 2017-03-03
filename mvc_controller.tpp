@@ -43,7 +43,7 @@ T const& MvcController::ModelReference(std::string const& name) const
     T const* p = ModelPointer<T>(name);
     if(!p)
         {
-        fatal_error()
+        alarum()
             << "Cannot convert Model datum '"
             << name
             << "' of type '"
@@ -75,7 +75,7 @@ T& MvcController::WindowFromXrcName(char const* name) const
     wxWindow* w = FindWindow(wxXmlResource::GetXRCID(name));
     if(!w)
         {
-        fatal_error()
+        alarum()
             << "Unable to find '"
             << name
             << "' in xml resources."
@@ -86,7 +86,7 @@ T& MvcController::WindowFromXrcName(char const* name) const
     T* t = dynamic_cast<T*>(w);
     if(!t)
         {
-        fatal_error()
+        alarum()
             << "Unable to convert '"
             << name
             << "' to type '"

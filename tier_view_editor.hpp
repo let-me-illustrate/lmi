@@ -119,7 +119,7 @@ inline tier_entity_adapter::tier_entity_adapter
 {
     if(limits.size() != values.size())
         {
-        fatal_error() << "Inconsistent vector lengths." << LMI_FLUSH;
+        alarum() << "Inconsistent vector lengths." << LMI_FLUSH;
         }
 }
 
@@ -180,7 +180,7 @@ struct FakeConversion
 // TODO ?? EVGENIY !! Is an actual implementation needed?
     void fail() const
     {
-        fatal_error() << "Dummy implementation called." << LMI_FLUSH;
+        alarum() << "Dummy implementation called." << LMI_FLUSH;
     }
   public:
     tier_entity_adapter::double_pair StringToValue(std::string const&) const

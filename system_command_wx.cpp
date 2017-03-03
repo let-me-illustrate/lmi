@@ -102,7 +102,7 @@ void concrete_system_command(std::string const& command_line)
         }
     else if(-1L == exit_code)
         {
-        fatal_error()
+        alarum()
             << "Command '"
             << command_line
             << "' not recognized."
@@ -111,16 +111,16 @@ void concrete_system_command(std::string const& command_line)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Exit code "
             << exit_code
             << " from command '"
             << command_line
             << "'.\n"
             ;
-        assemble_console_lines(fatal_error(), output, "Output:");
-        assemble_console_lines(fatal_error(), errors, "Errors:");
-        fatal_error() << std::flush;
+        assemble_console_lines(alarum(), output, "Output:");
+        assemble_console_lines(alarum(), errors, "Errors:");
+        alarum() << std::flush;
         }
 }
 

@@ -477,7 +477,7 @@ void writer::write_values
     // for its success, exceptionally, in order to detect the error a.s.a.p.
     if(!stream_write(os_, &little_endian_values[0], length))
         {
-        fatal_error() << "writing values failed" << std::flush;
+        alarum() << "writing values failed" << std::flush;
         }
 }
 
@@ -526,7 +526,7 @@ void writer::write(enum_soa_field field, boost::optional<std::string> const& ost
         std::string::size_type const length = ostr->size();
         if(std::numeric_limits<uint16_t>::max() < length)
             {
-            fatal_error()
+            alarum()
                 << "the value of the field '"
                 << soa_fields[field].name
                 << "' is too long to be represented in the SOA binary format"
@@ -747,7 +747,7 @@ boost::optional<field_and_value> parse_field_and_value
                 {
                 if(pos_colon + 1 != line.length())
                     {
-                    fatal_error()
+                    alarum()
                         << "value not allowed after '" << name << ":'"
                         << location_info(line_num)
                         << std::flush
@@ -758,7 +758,7 @@ boost::optional<field_and_value> parse_field_and_value
                 {
                 if(pos_colon + 1 == line.length())
                     {
-                    fatal_error()
+                    alarum()
                         << "value expected after '" << name << ":'"
                         << location_info(line_num, pos_colon + 1)
                         << std::flush
@@ -767,7 +767,7 @@ boost::optional<field_and_value> parse_field_and_value
 
                 if(line[pos_colon + 1] != ' ')
                     {
-                    fatal_error()
+                    alarum()
                         << "space expected after '" << name << ":'"
                         << location_info(line_num, pos_colon + 1)
                         << std::flush
@@ -1047,7 +1047,7 @@ void throw_if_duplicate_record
 {
     if(do_throw)
         {
-        fatal_error()
+        alarum()
             << "duplicate occurrence of the field '"
             << soa_fields[field].name
             << "'"
@@ -1066,7 +1066,7 @@ void throw_if_unexpected_length
 {
     if(length != expected_length)
         {
-        fatal_error()
+        alarum()
             << "unexpected length " << length
             << " for the field '"
             << soa_fields[field].name
@@ -1084,7 +1084,7 @@ void throw_if_missing_field(boost::optional<T> const& o, enum_soa_field field)
 {
     if(!o)
         {
-        fatal_error()
+        alarum()
             << "required field '"
             << soa_fields[field].name
             << "' was not specified"
@@ -1108,7 +1108,7 @@ void table_impl::read_string
     str.resize(length);
     if(!stream_read(ifs, &str[0], length))
         {
-        fatal_error()
+        alarum()
             << "failed to read all " << length << " bytes of the field '"
             << soa_fields[field].name
             << "'"
@@ -1125,7 +1125,7 @@ T table_impl::do_read_number(char const* name, std::istream& ifs)
     T num;
     if(!stream_read(ifs, &num, sizeof(T)))
         {
-        fatal_error() << "failed to read field '" << name << "'" << std::flush;
+        alarum() << "failed to read field '" << name << "'" << std::flush;
         }
 
     return swap_bytes_if_big_endian(num);
@@ -1148,7 +1148,7 @@ void table_impl::read_type(std::istream& ifs, uint16_t length)
             return;
         }
 
-    fatal_error() << "unknown table type '" << type << "'" << std::flush;
+    alarum() << "unknown table type '" << type << "'" << std::flush;
 }
 
 template<typename T>
@@ -1175,7 +1175,7 @@ void table_impl::read_number_before_values
 {
     if(!values_.empty())
         {
-        fatal_error()
+        alarum()
             << "field '"
             << soa_fields[field].name
             << "' must occur before the values"
@@ -1195,7 +1195,7 @@ unsigned table_impl::get_expected_number_of_values() const
     // fields determining this as a side effect.
     if(*max_age_ < *min_age_)
         {
-        fatal_error()
+        alarum()
             << "minimum age " << *min_age_
             << " cannot be greater than the maximum age " << *max_age_
             << std::flush
@@ -1220,7 +1220,7 @@ unsigned table_impl::get_expected_number_of_values() const
         // in integer overflow below if it were allowed.
         if(num_values < *select_period_)
             {
-            fatal_error()
+            alarum()
                 << "select period " << *select_period_
                 << " is too big for the age range "
                 << *min_age_ << ".." << *max_age_
@@ -1249,7 +1249,7 @@ unsigned table_impl::get_expected_number_of_values() const
 
         if(std::numeric_limits<unsigned>::max() - num_values < select_range)
             {
-            fatal_error()
+            alarum()
                 << "too many values in the table with maximum age " << *max_age_
                 << ", select period " << *select_period_
                 << " and maximum select age " << effective_max_select
@@ -1278,7 +1278,7 @@ void table_impl::read_values(std::istream& ifs, uint16_t /* length */)
     values_.resize(num_values);
     if(!stream_read(ifs, &values_[0], num_values*sizeof(double)))
         {
-        fatal_error() << "failed to read the values" << std::flush;
+        alarum() << "failed to read the values" << std::flush;
         }
 
     for(auto& v : values_)
@@ -1300,7 +1300,7 @@ std::string* table_impl::parse_string
     // some historical files have put commentary in table name instead.
     if(value.empty() && e_field_comments != field)
         {
-        fatal_error()
+        alarum()
             << "non-empty value must be specified for the field '"
             << soa_fields[field].name
             << "'"
@@ -1324,7 +1324,7 @@ unsigned long table_impl::do_parse_number
     auto const res = strict_parse_number(value.c_str());
     if(!res.end || *res.end != '\0')
         {
-        fatal_error()
+        alarum()
             << "value for numeric field '"
             << soa_fields[field].name
             << "' is not a number"
@@ -1335,7 +1335,7 @@ unsigned long table_impl::do_parse_number
 
     if(max_num < res.num)
         {
-        fatal_error()
+        alarum()
             << "value for numeric field '"
             << soa_fields[field].name
             << "' is out of range (maximum allowed is "
@@ -1383,7 +1383,7 @@ void table_impl::parse_table_type
         }
     else
         {
-        fatal_error()
+        alarum()
             << "invalid table type value '" << value << "'"
             << location_info(line_num)
             << " (\"" << table_type_as_string(table_type::aggregate) << "\", "
@@ -1403,7 +1403,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
     std::string line;
     if(!std::getline(is, line))
         {
-        fatal_error()
+        alarum()
             << "header expected for a select table"
             << location_info(line_num)
             << std::flush
@@ -1416,7 +1416,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
         {
         if(actual != expected)
             {
-            fatal_error()
+            alarum()
                 << "expected duration " << expected
                 << " and not " << actual
                 << " in the select table header" << location_info(line_num)
@@ -1432,7 +1432,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
 
     if(actual != *select_period_)
         {
-        fatal_error()
+        alarum()
             << "expected " << *select_period_
             << " duration labels and not " << actual
             << " in the select table header" << location_info(line_num)
@@ -1444,7 +1444,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
     iss >> header;
     if(!iss)
         {
-        fatal_error()
+        alarum()
             << "expected the ultimate column label \""
             << text_format::ultimate_header << "\""
             << " in the select table header" << location_info(line_num)
@@ -1454,7 +1454,7 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
 
     if(header != text_format::ultimate_header)
         {
-        fatal_error()
+        alarum()
             << "expected the ultimate column label \""
             << text_format::ultimate_header << "\""
             << " and not \"" << header << "\""
@@ -1479,7 +1479,7 @@ uint16_t table_impl::parse_age
         {
         if(start_num - current == age_width)
             {
-            fatal_error()
+            alarum()
                 << "at most " << age_width - 1 << " spaces allowed"
                 << location_info(line_num, current - start + 1)
                 << std::flush
@@ -1492,7 +1492,7 @@ uint16_t table_impl::parse_age
     auto const res_age = strict_parse_number(start_num);
     if(!res_age.end || (res_age.end - current != age_width))
         {
-        fatal_error()
+        alarum()
             << "expected a number with "
             << age_width - (start_num - current) << " digits"
             << location_info(line_num, start_num - start + 1)
@@ -1525,7 +1525,7 @@ double table_impl::parse_single_value
         ;
     if(*current != ' ')
         {
-        fatal_error()
+        alarum()
             << "expected a space"
             << location_info(line_num, current - start + 1)
             << std::flush
@@ -1538,7 +1538,7 @@ double table_impl::parse_single_value
         }
     if(num_spaces_allowed < num_spaces)
         {
-        fatal_error()
+        alarum()
             << "too many spaces"
             << location_info(line_num, current - start + 1)
             << " (at most " << num_spaces_allowed << " allowed here)"
@@ -1551,7 +1551,7 @@ double table_impl::parse_single_value
     auto const res_int_part = strict_parse_number(current);
     if(!res_int_part.end)
         {
-        fatal_error()
+        alarum()
             << "expected a valid integer part"
             << location_info(line_num, current - start + 1)
             << std::flush
@@ -1567,7 +1567,7 @@ double table_impl::parse_single_value
 
     if(*res_int_part.end != '.')
         {
-        fatal_error()
+        alarum()
             << "expected decimal point"
             << location_info(line_num, res_int_part.end - start + 1)
             << std::flush
@@ -1577,7 +1577,7 @@ double table_impl::parse_single_value
     auto const res_frac_part = strict_parse_number(res_int_part.end + 1);
     if(!res_frac_part.end)
         {
-        fatal_error()
+        alarum()
             << "expected a valid fractional part"
             << location_info(line_num, res_frac_part.end - start + 1)
             << std::flush
@@ -1586,7 +1586,7 @@ double table_impl::parse_single_value
 
     if(res_frac_part.end - res_int_part.end - 1 != *num_decimals_)
         {
-        fatal_error()
+        alarum()
             << "expected " << *num_decimals_ << " decimal digits, not "
             << res_frac_part.end - res_int_part.end - 1
             << " in the value"
@@ -1609,7 +1609,7 @@ void table_impl::skip_spaces
 {
     if(std::strncmp(current, std::string(num_spaces, ' ').c_str(), num_spaces) != 0)
         {
-        fatal_error()
+        alarum()
             << "expected " << num_spaces << " spaces"
             << location_info(line_num, current - start + 1)
             << std::flush
@@ -1648,7 +1648,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
 
     if(!num_decimals_)
         {
-        fatal_error()
+        alarum()
             << "the '" << soa_fields[e_field_num_decimals].name << "' field "
             << "must be specified before the table values"
             << location_info(line_num)
@@ -1658,7 +1658,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
 
     if(!type_)
         {
-        fatal_error()
+        alarum()
             << "table type must occur before its values"
             << location_info(line_num)
             << std::flush
@@ -1691,7 +1691,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
         if(!std::getline(is, line))
             {
             // Complain about premature input end.
-            fatal_error()
+            alarum()
                 << "table values for age " << age
                 << " are missing" << location_info(line_num)
                 << std::flush
@@ -1707,7 +1707,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
             {
             // Distinguish select age at the beginning of the line from the
             // ultimate age on the right side of the table.
-            fatal_error()
+            alarum()
                 << "incorrect "
                 << (is_select_table ? "select " : "")
                 << "age value " << actual_age
@@ -1754,7 +1754,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
             auto const ultimate_age = parse_age(start, current, line_num);
             if(ultimate_age != expected_age)
                 {
-                fatal_error()
+                alarum()
                     << "incorrect ultimate age value " << ultimate_age
                     << location_info(line_num)
                     << " (" << expected_age << " expected)"
@@ -1765,7 +1765,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
 
         if(current - start < static_cast<int>(line.length()))
             {
-            fatal_error()
+            alarum()
                 << "unexpected characters \"" << current << "\""
                 << location_info(line_num, current - start + 1)
                 << std::flush
@@ -1800,7 +1800,7 @@ void table_impl::validate()
         // the values.
         if(values_.empty())
             {
-            fatal_error() << "no values defined" << std::flush;
+            alarum() << "no values defined" << std::flush;
             }
 
         // Validate the type and check that the select period has or hasn't
@@ -1811,7 +1811,7 @@ void table_impl::validate()
             case table_type::duration:
                 if(get_value_or(select_period_, 0))
                     {
-                    fatal_error()
+                    alarum()
                         << "select period cannot be specified for a table "
                         << "of type '" << table_type_as_string(*type_) << "'"
                         << std::flush
@@ -1821,7 +1821,7 @@ void table_impl::validate()
                   && *max_select_age_ != *max_age_
                   )
                     {
-                    fatal_error()
+                    alarum()
                         << "maximum select age " << *max_select_age_
                         << " different from the maximum age " << *max_age_
                         << " cannot be specified for a table of type '"
@@ -1834,7 +1834,7 @@ void table_impl::validate()
             case table_type::select:
                 if(!get_value_or(select_period_, 0))
                     {
-                    fatal_error()
+                    alarum()
                         << "select period must be specified "
                         << "for a select and ultimate table"
                         << std::flush
@@ -1842,7 +1842,7 @@ void table_impl::validate()
                     }
                 if(!get_value_or(max_select_age_, 0))
                     {
-                    fatal_error()
+                    alarum()
                         << "maximum select age must be specified "
                         << "for a select and ultimate table"
                         << std::flush
@@ -1853,7 +1853,7 @@ void table_impl::validate()
 
         if(!num_decimals_)
             {
-            fatal_error() << "Number of decimals not specified." << LMI_FLUSH;
+            alarum() << "Number of decimals not specified." << LMI_FLUSH;
             }
 
         uint16_t putative_num_decimals = *num_decimals_;
@@ -1886,7 +1886,7 @@ void table_impl::validate()
             {
             if(*hash_value_ != correct_hash_value)
                 {
-                fatal_error()
+                alarum()
                     << "hash value " << *hash_value_ << " doesn't match "
                     << "the computed hash value " << correct_hash_value
                     << std::flush
@@ -1900,7 +1900,7 @@ void table_impl::validate()
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "bad data for table " << *number_ << ": "
             << e.what()
             << std::flush
@@ -1913,7 +1913,7 @@ void table_impl::read_from_binary(std::istream& ifs, uint32_t offset)
     ifs.seekg(offset, std::ios::beg);
     if(!ifs)
         {
-        fatal_error() << "seek error" << std::flush;
+        alarum() << "seek error" << std::flush;
         }
 
     for(;;)
@@ -1992,7 +1992,7 @@ void table_impl::read_from_binary(std::istream& ifs, uint32_t offset)
                 read_number(hash_value_, e_field_hash_value, ifs, length);
                 break;
             default:
-                fatal_error() << "unknown field type " << record_type << std::flush;
+                alarum() << "unknown field type " << record_type << std::flush;
             }
         }
 }
@@ -2041,7 +2041,7 @@ void table_impl::read_from_text(std::istream& is)
                 {
                 if(line.find_first_not_of(whitespace) != std::string::npos)
                     {
-                    fatal_error()
+                    alarum()
                         << "blank line " << blank_line_num << " "
                         << "cannot appear in the middle of the input "
                         << "and be followed by non-blank line " << line_num
@@ -2062,7 +2062,7 @@ void table_impl::read_from_text(std::istream& is)
             // Only one field can appear after the table values.
             if(!values_.empty() && field != e_field_hash_value)
                 {
-                fatal_error()
+                alarum()
                     << "field '" << soa_fields[field].name << "' "
                     << "is not allowed after the table values"
                     << location_info(line_num)
@@ -2130,7 +2130,7 @@ void table_impl::read_from_text(std::istream& is)
                 case e_field_hash_value:
                     if(values_.empty())
                         {
-                        fatal_error()
+                        alarum()
                             << "'" << soa_fields[field].name << "' field "
                             << "is only allowed after the table values and not "
                             << location_info(line_num)
@@ -2147,7 +2147,7 @@ void table_impl::read_from_text(std::istream& is)
             // Must be a continuation of the previous line.
             if(!last_string)
                 {
-                fatal_error()
+                alarum()
                     << "expected a field name followed by a colon"
                     << location_info(line_num)
                     << std::flush
@@ -2203,7 +2203,7 @@ void table_impl::do_write(std::ostream& os) const
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "saving table " << *number_ << "failed: " << e.what()
             << std::flush
             ;
@@ -2269,7 +2269,7 @@ unsigned long table_impl::compute_hash_value() const
 table table::read_from_text(fs::path const& file)
 {
     fs::ifstream ifs(file, ios_in_binary());
-    if(!ifs) fatal_error() << "Unable to open '" << file << "'." << LMI_FLUSH;
+    if(!ifs) alarum() << "Unable to open '" << file << "'." << LMI_FLUSH;
 
     try
         {
@@ -2277,7 +2277,7 @@ table table::read_from_text(fs::path const& file)
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "Error reading table from file '" << file << "': "
             << e.what()
             << "."
@@ -2296,7 +2296,7 @@ table table::read_from_text(std::string const& text)
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "Error reading table from string: "
             << e.what()
             << "."
@@ -2309,7 +2309,7 @@ table table::read_from_text(std::string const& text)
 void table::save_as_text(fs::path const& file) const
 {
     fs::ofstream ofs(file, ios_out_trunc_binary());
-    if(!ofs) fatal_error() << "Unable to open '" << file << "'." << LMI_FLUSH;
+    if(!ofs) alarum() << "Unable to open '" << file << "'." << LMI_FLUSH;
     impl_->write_as_text(ofs);
 }
 
@@ -2483,7 +2483,7 @@ database_impl::database_impl(fs::path const& path)
 
     fs::path const index_path = get_index_path(path);
     fs::ifstream ifs(index_path, ios_in_binary());
-    if(!ifs) fatal_error() << "Unable to open '" << index_path << "'." << LMI_FLUSH;
+    if(!ifs) alarum() << "Unable to open '" << index_path << "'." << LMI_FLUSH;
     read_index(ifs);
 
     // Open the database file right now to ensure that we can do it, even if we
@@ -2491,7 +2491,7 @@ database_impl::database_impl(fs::path const& path)
     // it wouldn't be a useful optimization.
     fs::path const data_path = get_data_path(path);
     auto const pifs = std::make_shared<fs::ifstream>(data_path, ios_in_binary());
-    if(!*pifs) fatal_error() << "Unable to open '" << data_path << "'." << LMI_FLUSH;
+    if(!*pifs) alarum() << "Unable to open '" << data_path << "'." << LMI_FLUSH;
     data_is_ = pifs;
 }
 
@@ -2564,7 +2564,7 @@ void database_impl::read_index(std::istream& index_is)
                 break;
                 }
 
-            fatal_error()
+            alarum()
                 << "error reading entry " << index_.size()
                 << " from the database index"
                 << std::flush
@@ -2579,7 +2579,7 @@ void database_impl::read_index(std::istream& index_is)
         // Check that the cast to int below is safe.
         if(static_cast<unsigned>(std::numeric_limits<int>::max()) <= number)
             {
-            fatal_error()
+            alarum()
                 << "database index is corrupt: "
                 << "table number " << number << " is out of range"
                 << std::flush
@@ -2588,7 +2588,7 @@ void database_impl::read_index(std::istream& index_is)
 
         if(!add_index_entry(table::Number(static_cast<int>(number)), offset))
             {
-            fatal_error()
+            alarum()
                 << "database index is corrupt: "
                 << "duplicate entries for the table number " << number
                 << std::flush
@@ -2622,7 +2622,7 @@ shared_ptr<table_impl> database_impl::do_get_table_impl
             }
         catch(std::runtime_error const& e)
             {
-            fatal_error()
+            alarum()
                 << "error reading table " << entry.number_
                 << " from the offset " << entry.offset_
                 << " in the database '" << path_ << "': " << e.what()
@@ -2632,7 +2632,7 @@ shared_ptr<table_impl> database_impl::do_get_table_impl
 
         if(entry.table_->number() != entry.number_)
             {
-            fatal_error()
+            alarum()
                 << "database '" << path_ << "' is corrupt: "
                 << "table number " << entry.table_->number()
                 << " is inconsistent with its number in the index ("
@@ -2855,7 +2855,7 @@ void database_impl::save(fs::path const& path)
 
             database_.cleanup_temp();
 
-            fatal_error() << error_stream.str() << std::flush;
+            alarum() << error_stream.str() << std::flush;
             }
 
       private:
@@ -2880,7 +2880,7 @@ void database_impl::save(fs::path const& path)
                 ,description_(description)
             {
             ofs_.open(temp_path_, ios_out_trunc_binary());
-            if(!ofs_) fatal_error() << "Unable to open '" << temp_path_ << "'." << LMI_FLUSH;
+            if(!ofs_) alarum() << "Unable to open '" << temp_path_ << "'." << LMI_FLUSH;
             }
 
             void close()
@@ -2888,7 +2888,7 @@ void database_impl::save(fs::path const& path)
                 ofs_.close();
                 if(!ofs_)
                     {
-                    fatal_error()
+                    alarum()
                         << "failed to close the output " << description_
                         << " file \"" << temp_path_ << "\""
                         << std::flush
@@ -2959,7 +2959,7 @@ void database_impl::save(std::ostream& index_os, std::ostream& data_os)
         uint32_t const offset32 = static_cast<uint32_t>(offset);
         if(static_cast<std::streamoff>(offset32) != offset)
             {
-            fatal_error()
+            alarum()
                 << "database is too large to be stored in SOA v3 format."
                 << std::flush
                 ;
@@ -3011,7 +3011,7 @@ try
 }
 catch(std::runtime_error const& e)
 {
-    fatal_error()
+    alarum()
         << "Error reading database from '" << path << "': "
         << e.what()
         << "."
@@ -3029,7 +3029,7 @@ try
 }
 catch(std::runtime_error const& e)
 {
-    fatal_error()
+    alarum()
         << "Error reading database: "
         << e.what()
         << "."
@@ -3055,7 +3055,7 @@ table database::get_nth_table(int idx) const
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "Error getting table at index " << idx << ": "
             << e.what()
             << "."
@@ -3073,7 +3073,7 @@ table database::find_table(table::Number number) const
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "Error getting table with number " << number << ": "
             << e.what()
             << "."
@@ -3091,7 +3091,7 @@ void database::append_table(table const& table)
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "Error appending table number " << table.number()
             << " to the database: "
             << e.what()
@@ -3109,7 +3109,7 @@ void database::add_or_replace_table(table const& table)
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "Error adding table number " << table.number() << ": "
             << e.what()
             << "."
@@ -3126,7 +3126,7 @@ void database::delete_table(table::Number number)
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "Error deleting table number " << number << ": "
             << e.what()
             << "."
@@ -3143,7 +3143,7 @@ void database::save(fs::path const& path)
         }
     catch(std::runtime_error const& e)
         {
-        fatal_error()
+        alarum()
             << "Error saving database to '" << path << "': "
             << e.what()
             << "."
@@ -3162,7 +3162,7 @@ void database::save(std::ostream& index_os, std::ostream& data_os)
         {
         // We can't really provide any extra information here, but still do it
         // just for consistency with save() above.
-        fatal_error()
+        alarum()
             << "Error saving database to: "
             << e.what()
             << "."

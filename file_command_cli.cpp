@@ -32,7 +32,7 @@ void concrete_file_command
     ,std::string const&
     )
 {
-    fatal_error()
+    alarum()
         << "Class 'file_command' not implemented for command-line interface."
         << LMI_FLUSH
         ;

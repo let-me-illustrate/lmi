@@ -911,7 +911,7 @@ void Ledger::write(xml::element& x) const
             }
         if(!ofs)
             {
-            fatal_error() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
+            alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
             }
         }
 }

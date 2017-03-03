@@ -373,7 +373,7 @@ void output_image
             break;
         default:
             {
-            fatal_error() << "Case " << output_mode << " not found." << LMI_FLUSH;
+            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
             }
         }
 
@@ -419,7 +419,7 @@ int output_html
             break;
         default:
             {
-            fatal_error() << "Case " << output_mode << " not found." << LMI_FLUSH;
+            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
             }
         }
 
@@ -624,7 +624,7 @@ void assert_nonblank(std::string const& value, std::string const& name)
 {
     if(std::string::npos == value.find_first_not_of(" \f\n\r\t\v"))
         {
-        fatal_error() << name << " must not be blank." << LMI_FLUSH;
+        alarum() << name << " must not be blank." << LMI_FLUSH;
         }
 }
 
@@ -746,7 +746,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 {
     if(0 == ledger.GetCurrFull().LapseYear)
         {
-        fatal_error() << "Lapsed during first year." << LMI_FLUSH;
+        alarum() << "Lapsed during first year." << LMI_FLUSH;
         }
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
@@ -759,7 +759,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
         {
         if(invar.GroupIndivSelection != individual_selection_)
             {
-            fatal_error()
+            alarum()
                 << "Group quotes cannot mix mandatory and voluntary on the same plan."
                 << LMI_FLUSH
                 ;
@@ -866,12 +866,12 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_max:
                 {
-                fatal_error() << "Unreachable." << LMI_FLUSH;
+                alarum() << "Unreachable." << LMI_FLUSH;
                 }
                 break;
             default:
                 {
-                fatal_error() << "Case " << col << " not found." << LMI_FLUSH;
+                alarum() << "Case " << col << " not found." << LMI_FLUSH;
                 }
             }
         }
@@ -1001,12 +1001,12 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
                 break;
             case e_col_max:
                 {
-                fatal_error() << "Unreachable." << LMI_FLUSH;
+                alarum() << "Unreachable." << LMI_FLUSH;
                 }
                 break;
             default:
                 {
-                fatal_error() << "Case " << col << " not found." << LMI_FLUSH;
+                alarum() << "Case " << col << " not found." << LMI_FLUSH;
                 }
             }
 
@@ -1389,7 +1389,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
                 break;
             default:
                 {
-                fatal_error() << "Case " << col << " not found." << LMI_FLUSH;
+                alarum() << "Case " << col << " not found." << LMI_FLUSH;
                 }
             }
 

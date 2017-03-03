@@ -92,7 +92,7 @@ std::size_t mc_enum<T>::ordinal(std::string const& s)
     std::size_t v = std::find(c(), c() + n(), s) - c();
     if(v == n())
         {
-        fatal_error()
+        alarum()
             << "Value '"
             << s
             << "' invalid for type '"
@@ -137,7 +137,7 @@ std::size_t mc_enum<T>::ordinal() const
     std::size_t i = std::find(e(), e() + n(), value_) - e();
     if(i == n())
         {
-        fatal_error()
+        alarum()
             << "Value "
             << value_
             << " invalid for type '"

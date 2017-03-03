@@ -447,7 +447,7 @@ void Input::redintegrate_ex_post
         bool const b1 = !contains(residuary_names, "PremiumTaxState");
         if(b0 || b1)
             {
-            fatal_error() << "Unexpected 'state' fields." << LMI_FLUSH; // deficient_extract
+            alarum() << "Unexpected 'state' fields." << LMI_FLUSH; // deficient_extract
             LMI_ASSERT(b0 && b1 && 5 == file_version);
             StateOfJurisdiction = map_lookup(detritus_map, "FilingApprovalState");
             }
@@ -466,7 +466,7 @@ void Input::redintegrate_ex_post
             // Deemed state must not depend on itself.
             if(db.varies_by_state(DB_PremTaxState))
                 {
-                fatal_error()
+                alarum()
                     << "Database invalid: circular dependency."
                     << " State of jurisdiction depends on itself."
                     << LMI_FLUSH
@@ -489,7 +489,7 @@ void Input::redintegrate_ex_post
                     break;
                 default:
                     {
-                    fatal_error()
+                    alarum()
                         << "Cannot determine state of jurisdiction."
                         << LMI_FLUSH
                         ;

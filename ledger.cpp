@@ -125,12 +125,7 @@ void Ledger::SetRunBases(int length)
 #endif
         default:
             {
-            fatal_error()
-                << "Case '"
-                << ledger_type_
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            alarum() << "Case '" << ledger_type_ << "' not found." << LMI_FLUSH;
             }
         }
 
@@ -205,7 +200,7 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
 
     if(ledger_type_ != a_Addend.ledger_type())
         {
-        fatal_error()
+        alarum()
             << "Cannot add ledgers for products with different"
             << " formatting requirements."
             << LMI_FLUSH
@@ -274,7 +269,7 @@ void Ledger::SetOneLedgerVariant
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Failed attempt to set ledger for unused basis '"
             << mc_str(a_Basis)
             << "'."
@@ -562,7 +557,7 @@ void throw_if_interdicted(Ledger const& z)
     std::string s = reason_to_interdict(z);
     if(!s.empty())
         {
-        fatal_error() << s << LMI_FLUSH;
+        alarum() << s << LMI_FLUSH;
         }
 }
 

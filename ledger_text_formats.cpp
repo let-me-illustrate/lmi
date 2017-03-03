@@ -665,10 +665,7 @@ void PrintCellTabDelimited
 
         if(contains(bases, mce_run_gen_curr_sep_half))
             {
-            fatal_error()
-                << "Three-rate illustrations not supported."
-                << LMI_FLUSH
-                ;
+            alarum() << "Three-rate illustrations not supported." << LMI_FLUSH;
             }
 
         os << Invar.value_str("ProducerCompensation"  ,j) << '\t';
@@ -677,7 +674,7 @@ void PrintCellTabDelimited
         }
     if(!os)
         {
-        fatal_error() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
         }
 }
 
@@ -756,7 +753,7 @@ void PrintRosterHeaders(std::string const& file_name)
 
     if(!os)
         {
-        fatal_error() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
         }
 }
 
@@ -831,7 +828,7 @@ void PrintRosterTabDelimited
 
     if(!os)
         {
-        fatal_error() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
         }
 }
 
@@ -1187,7 +1184,7 @@ std::string ledger_format
     interpreter >> s;
     if(!interpreter.eof())
         {
-        fatal_error() << "Formatting error." << LMI_FLUSH;
+        alarum() << "Formatting error." << LMI_FLUSH;
         }
 
     if(f.second)

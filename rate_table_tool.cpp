@@ -242,7 +242,7 @@ void rename_tables
     std::ifstream ifs(filename_of_table_names.string().c_str());
     if(!ifs)
         {
-        fatal_error()
+        alarum()
             << "File with the new table names \"" << filename_of_table_names
             << "\" couldn't be opened."
             << std::flush
@@ -296,7 +296,7 @@ void rename_tables
 
         if(!error.empty())
             {
-            fatal_error()
+            alarum()
                 << "Error in new table names file \"" << filename_of_table_names
                 << "\": " << error << " at line " << line_num << "."
                 << std::flush
@@ -344,9 +344,7 @@ int verify(fs::path const& database_filename)
             auto const new_text = new_table.save_as_text();
             if(new_text != orig_text)
                 {
-                // This is not really fatal, it is only used here to throw an
-                // exception in a convenient way.
-                fatal_error()
+                alarum()
                     << "After loading and saving the original table '\n"
                     << orig_text
                     << "' became '\n"
@@ -357,9 +355,7 @@ int verify(fs::path const& database_filename)
                 }
             if(new_table != orig_table)
                 {
-                // This is not really fatal, it is only used here to throw an
-                // exception in a convenient way.
-                fatal_error()
+                alarum()
                     << "After loading and saving the original table \n"
                     << "binary contents differed.\n"
                     << LMI_FLUSH

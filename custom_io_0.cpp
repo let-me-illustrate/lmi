@@ -206,7 +206,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
         ;
     if(0 != access(actual_filename.c_str(), F_OK))
         {
-        fatal_error()
+        alarum()
             << "File '"
             << actual_filename
             << "' is required but could not be found."
@@ -251,7 +251,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "ApplicantGender is '"
             << gender
             << "', but it must be 'F', 'M', or 'U'."
@@ -274,7 +274,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "ApplicantTobacco is '"
             << tobacco
             << "', but it must be 'Y', 'N', or 'U'."
@@ -292,7 +292,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
 
     if("Standard" != z["UnderwritingClass"].str())
         {
-        fatal_error()
+        alarum()
             << "Internal error: not initialized to standard rate class."
             << LMI_FLUSH
             ;
@@ -318,7 +318,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "ProductOption is '"
             << undw
             << "', but it must be 'P', 'F', 'S', or 'G'."
@@ -341,7 +341,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "DeathBenefitOption is '"
             << dbopt
             << "', but it must be 'L', 'I', or 'ROP'."
@@ -494,7 +494,7 @@ void custom_io_0_write(Ledger const& ledger_values, std::string const& filename)
         );
     if(!os.good())
         {
-        fatal_error()
+        alarum()
             << "File '"
             << actual_filename
             << "' could not be opened for writing."
@@ -541,7 +541,7 @@ void custom_io_0_write(Ledger const& ledger_values, std::string const& filename)
         }
     if(!os.good())
         {
-        fatal_error() << "Error writing output file." << LMI_FLUSH;
+        alarum() << "Error writing output file." << LMI_FLUSH;
         }
 }
 

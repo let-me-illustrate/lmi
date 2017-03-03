@@ -196,7 +196,7 @@ double BasicValues::GetModalTgtPrem
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << a_mode
                 << " not found."
@@ -280,7 +280,7 @@ double BasicValues::GetModalTgtSpecAmt
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << a_mode
                 << " not found."

@@ -37,7 +37,7 @@ volatile bool ensure_setup = set_alert_functions
     (status_alert
     ,warning_alert
     ,hobsons_choice_alert
-    ,fatal_error_alert
+    ,alarum_alert
     ,safe_message_alert
     );
 
@@ -96,7 +96,7 @@ void hobsons_choice_alert(std::string const& s)
         }
 }
 
-void fatal_error_alert(std::string const& s)
+void alarum_alert(std::string const& s)
 {
     throw std::runtime_error(s);
 }

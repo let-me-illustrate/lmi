@@ -124,7 +124,7 @@ Irc7702A::Irc7702A
         case mce_later_of_increase_or_unnecessary_premium:
             {
             // TODO ?? TAXATION !! Not implemented yet.
-            fatal_error()
+            alarum()
                 << "mce_later_of_increase_or_unnecessary_premium not implemented."
                 << LMI_FLUSH
                 ;
@@ -152,7 +152,7 @@ Irc7702A::Irc7702A
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << DefnMaterialChange
                 << "' not found."
@@ -307,7 +307,7 @@ void Irc7702A::Initialize7702A
 
     if(!Use7PPTable || !UseNSPTable)
         {
-        fatal_error()
+        alarum()
             << "Present implementation requires 7702A factor tables."
             << LMI_FLUSH
             ;
@@ -1044,7 +1044,7 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
         // to becoming a MEC in a past year, then we didn't add all the
         // payments together; but we don't need to, since we're a MEC
         // and the cumulative payments are no longer relevant.
-        fatal_error()
+        alarum()
             << "While processing a decrease in"
             << " policy month " << PolicyMonth
             << ", policy year " << PolicyYear

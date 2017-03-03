@@ -99,7 +99,7 @@ mcenum_dbopt_7702 effective_dbopt_7702
         case mce_option1: return mce_option1_for_7702;
         case mce_option2: return mce_option2_for_7702;
         case mce_rop:     return rop_equivalent      ;
-        default: fatal_error() << "No " << actual_dbopt << " case." << LMI_FLUSH;
+        default: alarum() << "No " << actual_dbopt << " case." << LMI_FLUSH;
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -173,7 +173,7 @@ void set_cloven_bases_from_run_basis
     else if(r == mce_run_gen_guar_sep_zero) {g = mce_gen_guar; s = mce_sep_zero;}
     else if(r == mce_run_gen_curr_sep_half) {g = mce_gen_curr; s = mce_sep_half;}
     else if(r == mce_run_gen_guar_sep_half) {g = mce_gen_guar; s = mce_sep_half;}
-    else {fatal_error() << "Run basis " << r << " unknown." << LMI_FLUSH;}
+    else {alarum() << "Run basis " << r << " unknown." << LMI_FLUSH;}
 }
 
 /// Illustrations are run on two primary bases:
@@ -213,6 +213,6 @@ void set_run_basis_from_cloven_bases
     else if(g == mce_gen_guar && s == mce_sep_zero) r = mce_run_gen_guar_sep_zero;
     else if(g == mce_gen_curr && s == mce_sep_half) r = mce_run_gen_curr_sep_half;
     else if(g == mce_gen_guar && s == mce_sep_half) r = mce_run_gen_guar_sep_half;
-    else {fatal_error() << "Cannot set run basis." << LMI_FLUSH;}
+    else {alarum() << "Cannot set run basis." << LMI_FLUSH;}
 }
 

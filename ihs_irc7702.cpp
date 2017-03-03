@@ -810,7 +810,7 @@ std::vector<double> const& Irc7702::Corridor() const
         }
     else
         {
-        fatal_error() << "7702 test is neither GPT nor CVAT." << LMI_FLUSH;
+        alarum() << "7702 test is neither GPT nor CVAT." << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }
@@ -832,12 +832,7 @@ Irc7702::EIOBasis Irc7702::Get4PctBasis
             }
         default:
             {
-            fatal_error()
-                << "Case '"
-                << a_DBOpt
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            alarum() << "Case '" << a_DBOpt << "' not found." << LMI_FLUSH;
             throw "Unreachable--silences a compiler diagnostic.";
             }
         }

@@ -45,7 +45,7 @@ void floating_point_error_handler(int)
 
     if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
         {
-        fatal_error()
+        alarum()
             << "Cannot reinstall floating point error signal handler."
             << LMI_FLUSH
             ;

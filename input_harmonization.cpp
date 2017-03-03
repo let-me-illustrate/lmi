@@ -174,7 +174,7 @@ void Input::DoHarmonize()
             }
         else
             {
-            fatal_error()
+            alarum()
                 << "No option selected for definition of life insurance."
                 << LMI_FLUSH
                 ;
@@ -980,7 +980,7 @@ void Input::set_solve_durations()
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << SolveTgtAtWhich.value()
                 << "' not found."
@@ -1013,7 +1013,7 @@ void Input::set_solve_durations()
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << SolveFromWhich.value()
                 << "' not found."
@@ -1046,7 +1046,7 @@ void Input::set_solve_durations()
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << SolveToWhich.value()
                 << "' not found."
@@ -1134,7 +1134,7 @@ void Input::set_inforce_durations_from_dates()
         ,true
         );
     // After testing in production, either remove the "pyx" bypass, or
-    // redesign this. Replacing fatal_error() with warning() would cause
+    // redesign this. Replacing alarum() with warning() would cause
     // multiple messageboxes, which is unavoidable if the diagnostic is
     // to be given when GUI input enters an invalid state, and also
     // whenever an illustration is about to be produced.
@@ -1150,7 +1150,7 @@ if(1 != InforceDataSource.value())
   {
     if(expected != InforceAsOfDate.value() && !contains(global_settings::instance().pyx(), "off_monthiversary"))
         {
-        fatal_error()
+        alarum()
             << "Input inforce-as-of date, "
             << InforceAsOfDate.value().str()
             << ", should be an exact monthiversary date."
@@ -1173,7 +1173,7 @@ if(1 != InforceDataSource.value())
         && (0 == InforceYear && 0 == InforceMonth)
         )
         {
-        fatal_error()
+        alarum()
             << "Inforce illustrations not permitted during month of issue."
             << LMI_FLUSH
             ;

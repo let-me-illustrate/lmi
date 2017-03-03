@@ -125,7 +125,7 @@ AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
 {
     if(maximum_upper_bound < maximum_lower_bound)
         {
-        fatal_error()
+        alarum()
             << "Invalid bounds ["
             << maximum_lower_bound
             << ","
@@ -183,7 +183,7 @@ void AxisMaxBoundAdjuster<Integral>::EnsureValidMaximumAxisValue
 {
     if(max_value < maximum_lower_bound_ || maximum_upper_bound_ < max_value)
         {
-        fatal_error()
+        alarum()
             << "Maximum value ("
             << max_value
             << ") is outside allowed range ["
@@ -321,10 +321,7 @@ void AdjustableMaxBoundAxis<Integral>::SetBounds(Integral lower_bound, Integral 
 {
     if(lower_bound < 0 || upper_bound < lower_bound)
         {
-        fatal_error()
-            << "Bounds are invalid."
-            << LMI_FLUSH
-            ;
+        alarum() << "Bounds are invalid." << LMI_FLUSH;
         }
     lower_bound_ = lower_bound;
     upper_bound_ = upper_bound;
@@ -396,10 +393,7 @@ bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
     Integral const new_max_value = adjust_window.GetMaximumAxisValue();
     if(!(lower_bound_ <= new_max_value && new_max_value <= upper_bound_))
         {
-        fatal_error()
-            << "New maximum value is outside valid range."
-            << LMI_FLUSH
-            ;
+        alarum() << "New maximum value is outside valid range." << LMI_FLUSH;
         }
     bool const updated = (GrandBaseClass::GetMaxValue() != new_max_value);
     SetMaxValue(new_max_value);

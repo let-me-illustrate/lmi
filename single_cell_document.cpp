@@ -108,7 +108,7 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 
     if(class_version() < file_version)
         {
-        fatal_error() << "Incompatible file version." << LMI_FLUSH;
+        alarum() << "Incompatible file version." << LMI_FLUSH;
         }
 
     if(data_source_is_external(parser.document()))

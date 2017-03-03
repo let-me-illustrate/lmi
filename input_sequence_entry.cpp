@@ -147,7 +147,7 @@ void DurationModeChoice::value(duration_mode x)
             }
         }
 
-    fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+    alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
 }
 
 duration_mode DurationModeChoice::value() const
@@ -527,7 +527,7 @@ std::string InputSequenceEditor::sequence_string()
             case e_inception:
             case e_inforce:
                 {
-                fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+                alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
                 }
                 break;
             }
@@ -985,7 +985,7 @@ wxString InputSequenceEditor::format_from_text(int row)
         case e_inception:
         case e_inforce:
             {
-            fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+            alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
             return "";
             }
         }
@@ -1050,7 +1050,7 @@ int InputSequenceEditor::compute_duration_scalar(int row)
         case e_inception:
         case e_inforce:
             {
-            fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+            alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
             return 0;
             }
         }
@@ -1094,7 +1094,7 @@ void InputSequenceEditor::adjust_duration_num_range(int row)
         case e_inception:
         case e_inforce:
             {
-            fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+            alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
             break;
             }
         }

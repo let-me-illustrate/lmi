@@ -148,12 +148,7 @@ std::string LedgerBase::value_str(std::string const& map_key, int index) const
         return value_cast<std::string>((*(*found).second)[index]);
         }
 
-    fatal_error()
-        << "Map key '"
-        << map_key
-        << "' not found."
-        << LMI_FLUSH
-        ;
+    alarum() << "Map key '" << map_key << "' not found." << LMI_FLUSH;
     return "";
 }
 
@@ -172,12 +167,7 @@ std::string LedgerBase::value_str(std::string const& map_key) const
         return value_cast<std::string>(*(*found_scalar).second);
         }
 
-    fatal_error()
-        << "Map key '"
-        << map_key
-        << "' not found."
-        << LMI_FLUSH
-        ;
+    alarum() << "Map key '" << map_key << "' not found." << LMI_FLUSH;
     return "";
 }
 
@@ -241,7 +231,7 @@ LedgerBase& LedgerBase::PlusEq
     LMI_ASSERT(0.0 != m_scaling_factor);
     if(m_scaling_factor != a_Addend.m_scaling_factor)
         {
-        fatal_error() << "Cannot add differently scaled ledgers." << LMI_FLUSH;
+        alarum() << "Cannot add differently scaled ledgers." << LMI_FLUSH;
         }
 
     double_vector_map::const_iterator a_Addend_svmi;
@@ -415,12 +405,7 @@ namespace
                 //  break;
             default:
                 {
-                fatal_error()
-                    << "Case '"
-                    << z
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
+                alarum() << "Case '" << z << "' not found." << LMI_FLUSH;
                 throw "Unreachable--silences a compiler diagnostic.";
                 }
             }

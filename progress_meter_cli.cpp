@@ -54,12 +54,7 @@ std::streambuf* select_streambuf(progress_meter::enum_display_mode display_mode)
             break;
         default:
             {
-            fatal_error()
-                << "Case "
-                << display_mode
-                << " not found."
-                << LMI_FLUSH
-                ;
+            alarum() << "Case " << display_mode << " not found." << LMI_FLUSH;
             }
         }
     return z;
