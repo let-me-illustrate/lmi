@@ -26,7 +26,6 @@
 
 #include "mc_enum_type_enums.hpp"
 #include "round_to.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <memory>                       // std::unique_ptr
 #include <vector>
@@ -51,7 +50,6 @@ class ULCommFns;
 // values are especially needed for the iterative specamt calculation.
 
 class Irc7702 final
-    :private lmi::uncopyable <Irc7702>
 {
     friend class FindSpecAmt;
     friend class gpt_specamt;
@@ -141,6 +139,9 @@ class Irc7702 final
     double premiums_paid() const;
 
   private:
+    Irc7702(Irc7702 const&) = delete;
+    Irc7702& operator=(Irc7702 const&) = delete;
+
     // Interest and DB Option basis
     enum EIOBasis
         {Opt1Int4Pct

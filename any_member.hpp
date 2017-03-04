@@ -64,7 +64,6 @@
 
 #include "assert_lmi.hpp"
 #include "rtti_lmi.hpp"
-#include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>                    // std::lower_bound(), std::swap()
@@ -109,8 +108,7 @@ inline placeholder::~placeholder() = default;
 
 template<typename ClassType, typename ValueType>
 class holder
-    :public  placeholder
-    ,private lmi::uncopyable<holder<ClassType,ValueType>>
+    :public placeholder
 {
     // Friendship is extended to class any_member only to support its
     // cast operations.
@@ -132,6 +130,9 @@ class holder
 #endif // defined LMI_MSC
 
   private:
+    holder(holder const&) = delete;
+    holder& operator=(holder const&) = delete;
+
     ClassType* object_;
     ValueType held_;
 };
@@ -523,7 +524,6 @@ MemberType const* member_cast(any_member<ClassType> const& member)
 
 template<typename ClassType>
 class MemberSymbolTable
-    :private lmi::uncopyable<MemberSymbolTable<ClassType>>
 {
     typedef std::map<std::string, any_member<ClassType>> member_map_type;
     typedef typename member_map_type::value_type member_pair_type;
@@ -545,6 +545,9 @@ class MemberSymbolTable
     void ascribe(std::string const&, ValueType SameOrBaseClassType::*);
 
   private:
+    MemberSymbolTable(MemberSymbolTable const&) = delete;
+    MemberSymbolTable& operator=(MemberSymbolTable const&) = delete;
+
     void complain_that_no_such_member_is_ascribed(std::string const&) const;
 
     member_map_type map_;

@@ -26,14 +26,12 @@
 
 #include "input.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <string>
 
 class LMI_SO single_cell_document final
-    :private lmi::uncopyable <single_cell_document>
 {
     friend class IllustrationDocument;
     friend class IllustrationView;
@@ -51,6 +49,9 @@ class LMI_SO single_cell_document final
     void write(std::ostream&) const;
 
   private:
+    single_cell_document(single_cell_document const&) = delete;
+    single_cell_document& operator=(single_cell_document const&) = delete;
+
     void parse(xml_lmi::dom_parser const&);
 
     int                class_version() const;

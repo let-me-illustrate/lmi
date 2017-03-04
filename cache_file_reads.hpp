@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/operations.hpp>
 
@@ -58,7 +57,6 @@ namespace detail
 
 template<typename T>
 class file_cache
-    :private lmi::uncopyable<file_cache<T>>
 {
   public:
     using retrieved_type = std::shared_ptr<T>;
@@ -97,6 +95,10 @@ class file_cache
         }
 
   private:
+    file_cache() = default;
+    file_cache(file_cache const&) = delete;
+    file_cache& operator=(file_cache const&) = delete;
+
     struct record
     {
         retrieved_type data;

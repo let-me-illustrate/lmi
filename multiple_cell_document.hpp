@@ -26,7 +26,6 @@
 
 #include "input.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
@@ -77,7 +76,6 @@
 /// that could of course be implemented.
 
 class LMI_SO multiple_cell_document final
-    :private lmi::uncopyable <multiple_cell_document>
 {
 // TODO ?? Avoid long-distance friendship...in single-cell class, too.
     friend class CensusDocument;
@@ -97,6 +95,9 @@ class LMI_SO multiple_cell_document final
     void write(std::ostream&) const;
 
   private:
+    multiple_cell_document(multiple_cell_document const&) = delete;
+    multiple_cell_document& operator=(multiple_cell_document const&) = delete;
+
     void parse   (xml_lmi::dom_parser const&);
     void parse_v0(xml_lmi::dom_parser const&);
 

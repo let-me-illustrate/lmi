@@ -25,7 +25,6 @@
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"               // lmi_array_size(), split_into_lines()
-#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp> // fs::extension()
 #include <boost/filesystem/fstream.hpp>
@@ -82,7 +81,6 @@ enum enum_kingdom
     };
 
 class file final
-    :private lmi::uncopyable <file>
 {
   public:
     explicit file(std::string const& file_path);
@@ -100,6 +98,9 @@ class file final
     std::string const& data     () const {return data_;     }
 
   private:
+    file(file const&) = delete;
+    file& operator=(file const&) = delete;
+
     fs::path    path_;
     std::string full_name_;
     std::string leaf_name_;

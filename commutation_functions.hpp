@@ -26,14 +26,12 @@
 
 #include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <vector>
 
 /// Ordinary-life commutation functions.
 
 class LMI_SO OLCommFns final
-    :private lmi::uncopyable <OLCommFns>
 {
   public:
     OLCommFns
@@ -51,6 +49,9 @@ class LMI_SO OLCommFns final
     std::vector<double> const&  M() const {return  m;}
 
   private:
+    OLCommFns(OLCommFns const&) = delete;
+    OLCommFns& operator=(OLCommFns const&) = delete;
+
     int Length;
 
     std::vector<double> const& q;
@@ -79,7 +80,6 @@ class LMI_SO OLCommFns final
 /// for "modal", but would too easily be taken as connoting "monthly".
 
 class LMI_SO ULCommFns final
-    :private lmi::uncopyable <ULCommFns>
 {
   public:
     ULCommFns
@@ -101,6 +101,9 @@ class LMI_SO ULCommFns final
     std::vector<double> const&  kM() const {return  km;}
 
   private:
+    ULCommFns(ULCommFns const&) = delete;
+    ULCommFns& operator=(ULCommFns const&) = delete;
+
     std::vector<double> qc;
     std::vector<double> ic;
     std::vector<double> ig;

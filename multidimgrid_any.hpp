@@ -90,7 +90,6 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <boost/any.hpp>
 
@@ -189,7 +188,6 @@ class WXDLLIMPEXP_FWD_CORE wxGridBagSizer;
 /// was up-to-date.
 
 class MultiDimAxisAny
-    :private lmi::uncopyable<MultiDimAxisAny>
 {
   public:
     MultiDimAxisAny(std::string const& name);
@@ -212,6 +210,9 @@ class MultiDimAxisAny
     virtual bool RefreshAdjustment(wxWindow&, unsigned int axis_id);
 
   private:
+    MultiDimAxisAny(MultiDimAxisAny const&) = delete;
+    MultiDimAxisAny& operator=(MultiDimAxisAny const&) = delete;
+
     /// Name of the axis used throughout the MultiDimGrid methods
     std::string const name_;
 };
@@ -470,7 +471,6 @@ inline void MultiDimTableAny::SetValueAny
 class MultiDimGrid
     :public  wxPanel
     ,private wxGridTableBase
-    ,private lmi::uncopyable<MultiDimGrid>
 {
     friend class GridRefreshTableDataGuard;
 
@@ -522,6 +522,9 @@ class MultiDimGrid
     wxGrid& grid() const;
 
   private:
+    MultiDimGrid(MultiDimGrid const&) = delete;
+    MultiDimGrid& operator=(MultiDimGrid const&) = delete;
+
     /// Implementation of wxGridTableBase interface. The widget serves as a data
     /// source for the wxGrid component.
     ///
@@ -755,8 +758,7 @@ inline bool MultiDimGrid::RefreshAxisAdjustment(std::string const& name)
 /// PopulateChoiceList(): Fill the control with axis value labels
 
 class MultiDimAxisAnyChoice
-    :public  wxChoice
-    ,private lmi::uncopyable<MultiDimAxisAnyChoice>
+    :public wxChoice
 {
     friend class MultiDimAxisAny;
 
@@ -770,6 +772,9 @@ class MultiDimAxisAnyChoice
     void PopulateChoiceList();
 
   private:
+    MultiDimAxisAnyChoice(MultiDimAxisAnyChoice const&) = delete;
+    MultiDimAxisAnyChoice& operator=(MultiDimAxisAnyChoice const&) = delete;
+
     // the axis that this object controls
     MultiDimAxisAny const& axis_;
 

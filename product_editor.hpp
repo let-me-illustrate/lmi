@@ -26,8 +26,6 @@
 
 #include "view_ex.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <wx/docview.h>
 
 #include <string>
@@ -44,8 +42,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 /// by the view portion of the document/view classes pair.
 
 class ProductEditorDocument
-    :public  wxDocument
-    ,private lmi::uncopyable<ProductEditorDocument>
+    :public wxDocument
 {
   public:
     ProductEditorDocument();
@@ -56,6 +53,9 @@ class ProductEditorDocument
     virtual void WriteDocument(std::string const& filename) = 0;
 
   private:
+    ProductEditorDocument(ProductEditorDocument const&) = delete;
+    ProductEditorDocument& operator=(ProductEditorDocument const&) = delete;
+
     ProductEditorView& PredominantView() const;
 
     // wxDocument overrides.
@@ -68,8 +68,7 @@ class ProductEditorDocument
 /// Common base for all product editor view classes.
 
 class ProductEditorView
-    :public  ViewEx
-    ,private lmi::uncopyable<ProductEditorView>
+    :public ViewEx
 {
     friend class ProductEditorDocument;
 
@@ -80,14 +79,17 @@ class ProductEditorView
   protected:
     virtual bool IsModified() const = 0;
     virtual void DiscardEdits() = 0;
+
+  private:
+    ProductEditorView(ProductEditorView const&) = delete;
+    ProductEditorView& operator=(ProductEditorView const&) = delete;
 };
 
 /// This class is a common base for TierView and DatabaseView classes.
 /// It contains and lays out common widgets.
 
 class TreeGridViewBase
-    :public  ProductEditorView
-    ,private lmi::uncopyable<TreeGridViewBase>
+    :public ProductEditorView
 {
   public:
     TreeGridViewBase();
@@ -107,6 +109,9 @@ class TreeGridViewBase
     virtual void SetupControls() = 0;
 
   private:
+    TreeGridViewBase(TreeGridViewBase const&) = delete;
+    TreeGridViewBase& operator=(TreeGridViewBase const&) = delete;
+
     // ViewEx required implementation.
     wxWindow* CreateChildWindow() override;
 

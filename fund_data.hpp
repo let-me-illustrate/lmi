@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <string>
 #include <vector>
@@ -61,7 +60,6 @@ class LMI_SO FundInfo final
 };
 
 class LMI_SO FundData final
-    :private lmi::uncopyable <FundData>
 {
   public:
     FundData(std::string const& a_Filename);
@@ -74,7 +72,9 @@ class LMI_SO FundData final
     int GetNumberOfFunds() const;
 
   private:
-    FundData(); // Private, but implemented.
+    FundData(); // Used by write_funds_files().
+    FundData(FundData const&) = delete;
+    FundData& operator=(FundData const&) = delete;
 
     void Read (std::string const& a_Filename);
     void Write(std::string const& a_Filename) const;

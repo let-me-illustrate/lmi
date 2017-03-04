@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <boost/filesystem/path.hpp>
 
 #include <cstddef>                      // std::size_t
@@ -116,7 +114,6 @@ class table
 /// locate a table by its number.
 
 class database final
-    :private lmi::uncopyable <database>
 {
   public:
     // Check if a database at the given path exists.
@@ -144,6 +141,8 @@ class database final
     // and so is passed by shared_ptr<> to ensure that the database can use it
     // for as long as it needs it.
     database(std::istream& index_is, shared_ptr<std::istream> data_is);
+
+    ~database();
 
     // table access by index, only useful for iterating over all of them (using
     // iterators could be an alternative approach, but would be heavier without
@@ -181,9 +180,10 @@ class database final
     void save(fs::path const& path);
     void save(std::ostream& index_os, std::ostream& data_os);
 
-    ~database();
-
   private:
+    database(database const&) = delete;
+    database& operator=(database const&) = delete;
+
     database_impl* const impl_;
 };
 

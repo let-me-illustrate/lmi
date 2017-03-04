@@ -206,7 +206,6 @@ void append_name_value_to_html_table
 /// less likely.
 
 class open_and_ensure_closing_tag
-    :private lmi::uncopyable<open_and_ensure_closing_tag>
 {
   public:
     open_and_ensure_closing_tag(wxString& html, char const* tag)
@@ -222,6 +221,9 @@ class open_and_ensure_closing_tag
     }
 
   private:
+    open_and_ensure_closing_tag(open_and_ensure_closing_tag const&) = delete;
+    open_and_ensure_closing_tag& operator=(open_and_ensure_closing_tag const&) = delete;
+
     wxString& html_;
     wxString const tag_;
 };

@@ -26,8 +26,6 @@
 
 #include "product_editor.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <map>
 #include <string>
 
@@ -35,8 +33,7 @@ class PolicyDocument;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 class PolicyView final
-    :public  ProductEditorView
-    ,private lmi::uncopyable <PolicyView>
+    :public ProductEditorView
 {
   public:
     PolicyView();
@@ -49,6 +46,9 @@ class PolicyView final
     static char const* resource_file_name();
 
   private:
+    PolicyView(PolicyView const&) = delete;
+    PolicyView& operator=(PolicyView const&) = delete;
+
     PolicyDocument& document() const;
 
     // ViewEx required implementation.

@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #if defined LMI_POSIX
 #   include <sys/time.h>                // gettimeofday()
@@ -60,7 +59,6 @@ void lmi_sleep(unsigned int seconds);
 /// make your own decision about that rationale.
 
 class LMI_SO Timer
-    :private lmi::uncopyable<Timer>
 {
     friend class TimerTest;
     template<typename F> friend class AliquotTimer;
@@ -77,6 +75,9 @@ class LMI_SO Timer
     double             elapsed_seconds() const;
 
   private:
+    Timer(Timer const&) = delete;
+    Timer& operator=(Timer const&) = delete;
+
     elapsed_t   calibrate();
     void        start();
 

@@ -26,7 +26,6 @@
 
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/path.hpp>
 
@@ -41,7 +40,6 @@ class Ledger;
 /// returns time spent, which is almost always wanted.
 
 class LMI_SO ledger_emitter final
-    :private lmi::uncopyable <ledger_emitter>
 {
   public:
     ledger_emitter(fs::path const& case_filepath, mcenum_emission emission);
@@ -52,6 +50,9 @@ class LMI_SO ledger_emitter final
     double finish   ();
 
   private:
+    ledger_emitter(ledger_emitter const&) = delete;
+    ledger_emitter& operator=(ledger_emitter const&) = delete;
+
     fs::path const& case_filepath_;
     mcenum_emission emission_;
 

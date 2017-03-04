@@ -25,7 +25,6 @@
 #include "configurable_settings.hpp"
 #include "mvc_controller.hpp"
 #include "path_utility.hpp"
-#include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 #include "wx_test_output.hpp"

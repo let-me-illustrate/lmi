@@ -25,14 +25,12 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <vector>
 
 class yare_input;
 
 class modal_outlay final
-    :private lmi::uncopyable <modal_outlay>
 {
     friend class AccountValue;
 
@@ -51,7 +49,8 @@ class modal_outlay final
     std::vector<double>      const& withdrawals          () const;
 
   private:
-    modal_outlay();
+    modal_outlay(modal_outlay const&) = delete;
+    modal_outlay& operator=(modal_outlay const&) = delete;
 
     // Not yet used, but needed for MEC avoidance.
     void set_external_1035_amount(double z);

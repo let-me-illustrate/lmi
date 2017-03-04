@@ -133,13 +133,11 @@
 
 #include "input_sequence_interval.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <string>
 #include <vector>
 
 class LMI_SO InputSequence final
-    :private lmi::uncopyable <InputSequence>
 {
     template<typename T>
     friend std::string canonicalized_input_sequence(std::vector<T> const&);
@@ -168,6 +166,9 @@ class LMI_SO InputSequence final
     std::vector<double>        const& seriatim_numbers()  const;
 
   private:
+    InputSequence(InputSequence const&) = delete;
+    InputSequence& operator=(InputSequence const&) = delete;
+
     explicit InputSequence(std::vector<std::string> const&);
     explicit InputSequence(std::vector<double> const&);
 

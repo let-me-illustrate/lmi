@@ -26,8 +26,6 @@
 
 #include "product_editor.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <memory>                       // std::shared_ptr
 
 class DatabaseDocument;
@@ -35,14 +33,16 @@ class DatabaseTableAdapter;
 class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 
 class DatabaseView final
-    :public  TreeGridViewBase
-    ,private lmi::uncopyable <DatabaseView>
+    :public TreeGridViewBase
 {
   public:
     DatabaseView();
     ~DatabaseView() override;
 
   private:
+    DatabaseView(DatabaseView const&) = delete;
+    DatabaseView& operator=(DatabaseView const&) = delete;
+
     // ViewEx required implementation.
     char const* icon_xrc_resource   () const override;
     char const* menubar_xrc_resource() const override;

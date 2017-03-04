@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <wx/bookctrl.h>                // wxBookCtrlBase, wxBookCtrlBaseEvent
 #include <wx/dialog.h>
 #include <wx/stattext.h>
@@ -405,8 +403,7 @@ namespace model_view_controller{} // doxygen workaround.
 /// Controller.
 
 class MvcController final
-    :public  wxDialog
-    ,private lmi::uncopyable <MvcController>
+    :public wxDialog
 {
     friend class MvcTest;
 
@@ -419,6 +416,9 @@ class MvcController final
     MvcModel const& Model() const;
 
   private:
+    MvcController(MvcController const&) = delete;
+    MvcController& operator=(MvcController const&) = delete;
+
     void Assimilate(std::string const& name_to_ignore);
     void Bind(std::string const& name, std::string& data) const;
     wxBookCtrlBase      & BookControl()      ;

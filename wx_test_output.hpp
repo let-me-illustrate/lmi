@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <boost/filesystem/operations.hpp>
 
 /// Class helping to check for the expected output file existence.
@@ -35,18 +33,12 @@
 /// later. It also cleans up the file when it is destroyed.
 
 class output_file_existence_checker
-    :private lmi::uncopyable<output_file_existence_checker>
 {
   public:
     output_file_existence_checker(fs::path const& path)
         :path_(path)
         {
         fs::remove(path_);
-        }
-
-    bool exists() const
-        {
-        return fs::exists(path_);
         }
 
     ~output_file_existence_checker()
@@ -60,7 +52,15 @@ class output_file_existence_checker
             }
         }
 
+    bool exists() const
+        {
+        return fs::exists(path_);
+        }
+
   private:
+    output_file_existence_checker(output_file_existence_checker const&) = delete;
+    output_file_existence_checker& operator=(output_file_existence_checker const&) = delete;
+
     fs::path path_;
 };
 

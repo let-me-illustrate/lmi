@@ -27,7 +27,6 @@
 #include "basic_values.hpp"
 #include "oecumenic_enumerations.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <fstream>
 #include <iosfwd>
@@ -48,7 +47,6 @@ class LedgerVariant;
 
 class LMI_SO AccountValue
     :protected BasicValues
-    ,private   lmi::uncopyable<AccountValue>
 {
     friend class SolveHelper;
     friend class run_census_in_parallel;
@@ -93,6 +91,9 @@ class LMI_SO AccountValue
     std::shared_ptr<Ledger const> ledger_from_av() const;
 
   private:
+    AccountValue(AccountValue const&) = delete;
+    AccountValue& operator=(AccountValue const&) = delete;
+
     LedgerInvariant const& InvariantValues() const;
     LedgerVariant   const& VariantValues  () const;
 

@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <wx/dialog.h>
 
 /// Implementation notes: class AboutDialog.
@@ -51,8 +49,7 @@
 /// for consistency, so does the first.
 
 class AboutDialog
-    :public  wxDialog
-    ,private lmi::uncopyable<AboutDialog>
+    :public wxDialog
 {
   public:
     AboutDialog(wxWindow* parent);
@@ -62,6 +59,9 @@ class AboutDialog
     int ShowModal() override;
 
   private:
+    AboutDialog(AboutDialog const&) = delete;
+    AboutDialog& operator=(AboutDialog const&) = delete;
+
     void UponReadLicense(wxCommandEvent&);
 
     DECLARE_EVENT_TABLE()

@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <stdexcept>
 #include <type_traits>
@@ -96,17 +95,21 @@
 
 template<typename FunctionPointer>
 class LMI_SO callback final
-    :private lmi::uncopyable <callback<FunctionPointer>>
 {
     static_assert(std::is_pointer<FunctionPointer>::value, "");
     typedef typename std::remove_pointer<FunctionPointer>::type f_type;
     static_assert(std::is_function<f_type>::value, "");
 
   public:
+    callback() = default;
+
     FunctionPointer operator()() const;
     void initialize(FunctionPointer concrete_pointer);
 
   private:
+    callback(callback const&) = delete;
+    callback& operator=(callback const&) = delete;
+
     static FunctionPointer function_pointer_;
 };
 

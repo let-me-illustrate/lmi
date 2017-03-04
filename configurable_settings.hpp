@@ -26,7 +26,6 @@
 
 #include "any_member.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
 
 #include <string>
@@ -43,9 +42,8 @@
 /// Data members are documented in their accessors' implementations.
 
 class LMI_SO configurable_settings final
-    :private lmi::uncopyable   <configurable_settings>
-    ,public  xml_serializable  <configurable_settings>
-    ,public  MemberSymbolTable <configurable_settings>
+    :public xml_serializable  <configurable_settings>
+    ,public MemberSymbolTable <configurable_settings>
 {
   public:
     static configurable_settings& instance();
@@ -71,6 +69,8 @@ class LMI_SO configurable_settings final
   private:
     configurable_settings();
     ~configurable_settings() override;
+    configurable_settings(configurable_settings const&) = delete;
+    configurable_settings& operator=(configurable_settings const&) = delete;
 
     void ascribe_members();
     void load();

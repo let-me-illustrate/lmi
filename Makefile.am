@@ -1264,7 +1264,6 @@ noinst_HEADERS = \
     tn_range_type_trammels.hpp \
     tn_range_types.hpp \
     transferor.hpp \
-    uncopyable_lmi.hpp \
     value_cast.hpp \
     version.hpp \
     view_ex.hpp \

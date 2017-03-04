@@ -37,7 +37,6 @@
 #include "map_lookup.hpp"
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"
-#include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -139,7 +138,6 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
 }
 
 class calculation_summary_formatter final
-    :private lmi::uncopyable <calculation_summary_formatter>
 {
   public:
     calculation_summary_formatter(Ledger const&);
@@ -151,6 +149,9 @@ class calculation_summary_formatter final
     std::string top_note(std::string const& line_break) const;
 
   private:
+    calculation_summary_formatter(calculation_summary_formatter const&) = delete;
+    calculation_summary_formatter& operator=(calculation_summary_formatter const&) = delete;
+
     Ledger          const&   ledger_;
     LedgerInvariant const&   invar_;
     int             const    max_length_;
@@ -833,7 +834,6 @@ void PrintRosterTabDelimited
 }
 
 class FlatTextLedgerPrinter final
-    :private lmi::uncopyable <FlatTextLedgerPrinter>
 {
   public:
     FlatTextLedgerPrinter(Ledger const&, std::ostream&);
@@ -842,6 +842,9 @@ class FlatTextLedgerPrinter final
     void Print() const;
 
   private:
+    FlatTextLedgerPrinter(FlatTextLedgerPrinter const&) = delete;
+    FlatTextLedgerPrinter& operator=(FlatTextLedgerPrinter const&) = delete;
+
     void PrintHeader             () const;
     void PrintFooter             () const;
     void PrintNarrativeSummary   () const;

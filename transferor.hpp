@@ -32,8 +32,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <wx/validate.h>
 
 #include <string>
@@ -114,8 +112,7 @@ enum transfer_direction
 /// overridden here to return true instead.
 
 class Transferor
-    :public  wxValidator
-    ,private lmi::uncopyable<Transferor>
+    :public wxValidator
 {
   public:
     Transferor(std::string& data, std::string const& name);
@@ -130,6 +127,9 @@ class Transferor
     std::string const& name() const;
 
   private:
+    Transferor(Transferor const&) = delete;
+    Transferor& operator=(Transferor const&) = delete;
+
     bool PerformTransfer(transfer_direction);
 
     std::string& data_;

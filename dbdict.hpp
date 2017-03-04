@@ -28,7 +28,6 @@
 #include "cache_file_reads.hpp"
 #include "dbvalue.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
 
 #include <string>
@@ -36,10 +35,9 @@
 /// Cached product database.
 
 class LMI_SO DBDictionary final
-    :private lmi::uncopyable   <DBDictionary>
-    ,public  xml_serializable  <DBDictionary>
-    ,public  MemberSymbolTable <DBDictionary>
-    ,public  cache_file_reads  <DBDictionary>
+    :public xml_serializable  <DBDictionary>
+    ,public MemberSymbolTable <DBDictionary>
+    ,public cache_file_reads  <DBDictionary>
 {
     friend class DatabaseDocument;
     friend class input_test;        // For test_product_database().
@@ -60,6 +58,9 @@ class LMI_SO DBDictionary final
     void InitAntediluvian();
 
   private:
+    DBDictionary(DBDictionary const&) = delete;
+    DBDictionary& operator=(DBDictionary const&) = delete;
+
     void Init(std::string const& filename);
 
     void ascribe_members();

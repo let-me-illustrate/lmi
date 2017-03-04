@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <iosfwd>
 #include <string>
 #include <vector>
@@ -128,7 +126,6 @@ enum e_actuarial_table_method
 /// compatibility.
 
 class actuarial_table final
-    :private lmi::uncopyable <actuarial_table>
 {
   public:
     actuarial_table(std::string const& filename, int table_number);
@@ -152,6 +149,9 @@ class actuarial_table final
     int                max_select_age () const {return max_select_age_ ;}
 
   private:
+    actuarial_table(actuarial_table const&) = delete;
+    actuarial_table& operator=(actuarial_table const&) = delete;
+
     void find_table();
     void parse_table();
     void read_values(std::istream& is, int nominal_length);

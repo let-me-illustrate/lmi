@@ -26,14 +26,12 @@
 
 #include "mec_input.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <string>
 
 class LMI_SO mec_xml_document final
-    :private lmi::uncopyable <mec_xml_document>
 {
     friend class mec_document;
     friend class mec_view;
@@ -50,6 +48,9 @@ class LMI_SO mec_xml_document final
     void write(std::ostream&) const;
 
   private:
+    mec_xml_document(mec_xml_document const&) = delete;
+    mec_xml_document& operator=(mec_xml_document const&) = delete;
+
     void parse(xml_lmi::dom_parser const&);
     std::string const& xml_root_name() const;
 

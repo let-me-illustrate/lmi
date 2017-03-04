@@ -835,9 +835,10 @@ namespace soa_v3_format
 {
 
 class table_impl final
-    :private lmi::uncopyable <table_impl>
 {
   public:
+    table_impl() = default;
+
     // Load the table data from the stream containing the table data in either
     // binary or text representation.
     //
@@ -860,6 +861,9 @@ class table_impl final
     unsigned long compute_hash_value() const;
 
   private:
+    table_impl(table_impl const&) = delete;
+    table_impl& operator=(table_impl const&) = delete;
+
     // Helper methods for IO: all of them throw std::runtime_error on failure
     // and mention the field name in the error message.
     //
@@ -2346,7 +2350,6 @@ bool table::operator==(table const& other) const
 }
 
 class database_impl final
-    :private lmi::uncopyable <database_impl>
 {
   public:
     static fs::path get_index_path(fs::path const& path)
@@ -2372,6 +2375,9 @@ class database_impl final
     void save(std::ostream& index_os, std::ostream& data_os);
 
   private:
+    database_impl(database_impl const&) = delete;
+    database_impl& operator=(database_impl const&) = delete;
+
     // An index record is composed of:
     //
     //  -  4 byte table number

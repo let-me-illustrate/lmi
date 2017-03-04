@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "mvc_controller.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/log.h>
 #include <wx/testing.h>
@@ -54,7 +53,6 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
 /// to close().
 
 class wx_test_document_base
-    :private lmi::uncopyable<wx_test_document_base>
 {
   public:
     wx_test_document_base()
@@ -119,6 +117,9 @@ class wx_test_document_base
     void set_opened() { opened_ = true; }
 
   private:
+    wx_test_document_base(wx_test_document_base const&) = delete;
+    wx_test_document_base& operator=(wx_test_document_base const&) = delete;
+
     // Common part of different close() methods.
     void do_close()
     {

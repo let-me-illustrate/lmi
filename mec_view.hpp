@@ -28,7 +28,6 @@
 #include "view_ex.hpp"
 
 #include "oecumenic_enumerations.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/event.h>
 
@@ -60,8 +59,7 @@ class mec_mvc_view
 };
 
 class mec_view final
-    :public  ViewEx
-    ,private lmi::uncopyable <mec_view>
+    :public ViewEx
 {
     friend class mec_document;
 
@@ -70,6 +68,9 @@ class mec_view final
     ~mec_view() override;
 
   private:
+    mec_view(mec_view const&) = delete;
+    mec_view& operator=(mec_view const&) = delete;
+
     mec_document& document() const;
 
     oenum_mvc_dv_rc edit_parameters();

@@ -26,7 +26,6 @@
 
 #include "gpt_input.hpp"
 #include "gpt_xml_document.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
@@ -34,8 +33,7 @@ class gpt_view;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 class gpt_document
-    :public  wxDocument
-    ,private lmi::uncopyable<gpt_document>
+    :public wxDocument
 {
     friend class gpt_view;
 
@@ -46,6 +44,9 @@ class gpt_document
     gpt_view& PredominantView() const;
 
   private:
+    gpt_document(gpt_document const&) = delete;
+    gpt_document& operator=(gpt_document const&) = delete;
+
     wxHtmlWindow& PredominantViewWindow() const;
 
     // wxDocument overrides.

@@ -29,7 +29,6 @@
 #include "main_common.hpp"              // initialize_application()
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
-#include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 
@@ -150,7 +149,6 @@ struct TestsResults
 /// This is a simple Meyers singleton.
 
 class application_test final
-    :private lmi::uncopyable  <application_test>
 {
   public:
     static application_test& instance();
@@ -181,6 +179,8 @@ class application_test final
 
   private:
     application_test();
+    application_test(application_test const&) = delete;
+    application_test& operator=(application_test const&) = delete;
 
     // Sort all tests in alphabetical order of their names.
     void sort_tests();

@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <memory>                       // std::shared_ptr
 #include <string>
@@ -38,7 +37,6 @@ class Ledger;
 /// This class encapsulates a frequently-used series of operations.
 
 class IllusVal final
-    :private lmi::uncopyable <IllusVal>
 {
   public:
     explicit IllusVal(std::string const& filename);
@@ -49,6 +47,9 @@ class IllusVal final
     std::shared_ptr<Ledger const> ledger() const;
 
   private:
+    IllusVal(IllusVal const&) = delete;
+    IllusVal& operator=(IllusVal const&) = delete;
+
     std::string filename_;
     std::shared_ptr<Ledger const> ledger_;
 };

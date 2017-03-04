@@ -27,7 +27,6 @@
 #include "multidimgrid_safe.hpp"
 
 #include "alert.hpp"
-#include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <wx/choice.h>
@@ -86,8 +85,7 @@ class AxisMaxBoundAdjusterBase
 
 template<typename Integral>
 class AxisMaxBoundAdjuster
-    :public  AxisMaxBoundAdjusterBase
-    ,private lmi::uncopyable<AxisMaxBoundAdjuster<Integral>>
+    :public AxisMaxBoundAdjusterBase
 {
   public:
     AxisMaxBoundAdjuster
@@ -101,6 +99,9 @@ class AxisMaxBoundAdjuster
     void     SetMaximumAxisValue(Integral max_value);
 
   private:
+    AxisMaxBoundAdjuster(AxisMaxBoundAdjuster const&) = delete;
+    AxisMaxBoundAdjuster& operator=(AxisMaxBoundAdjuster const&) = delete;
+
     void DoUponChange() override;
     void EnsureValidMaximumAxisValue(Integral const&) const;
 

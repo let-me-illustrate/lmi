@@ -28,7 +28,6 @@
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
 
 #include <string>
@@ -89,9 +88,8 @@ class LMI_SO rounding_parameters final
 /// The 7702 and 7702A interest rate must be rounded up, if at all.
 
 class LMI_SO rounding_rules final
-    :private lmi::uncopyable   <rounding_rules>
-    ,public  xml_serializable  <rounding_rules>
-    ,public  MemberSymbolTable <rounding_rules>
+    :public xml_serializable  <rounding_rules>
+    ,public MemberSymbolTable <rounding_rules>
 {
     friend class RoundingDocument;
 
@@ -107,6 +105,8 @@ class LMI_SO rounding_rules final
 
   private:
     rounding_rules();
+    rounding_rules(rounding_rules const&) = delete;
+    rounding_rules& operator=(rounding_rules const&) = delete;
 
     void ascribe_members();
 

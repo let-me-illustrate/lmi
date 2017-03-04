@@ -28,7 +28,6 @@
 #include "view_ex.hpp"
 
 #include "oecumenic_enumerations.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/event.h>
 
@@ -60,8 +59,7 @@ class gpt_mvc_view
 };
 
 class gpt_view final
-    :public  ViewEx
-    ,private lmi::uncopyable <gpt_view>
+    :public ViewEx
 {
     friend class gpt_document;
 
@@ -70,6 +68,9 @@ class gpt_view final
     ~gpt_view() override;
 
   private:
+    gpt_view(gpt_view const&) = delete;
+    gpt_view& operator=(gpt_view const&) = delete;
+
     gpt_document& document() const;
 
     oenum_mvc_dv_rc edit_parameters();

@@ -137,7 +137,7 @@ rounding_style rounding_parameters::raw_style() const
     return style_.value();
 }
 
-/// Private default ctor.
+/// Private default ctor for friend class and write_rounding_files().
 
 rounding_rules::rounding_rules()
     :round_specamt_           (0, r_upward    , "")

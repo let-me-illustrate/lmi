@@ -26,7 +26,6 @@
 
 #include "calendar_date.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/path.hpp>
 
@@ -48,7 +47,6 @@ enum {md5len = 128 / CHAR_BIT};
 /// peremptorily-invalid default value of JDN zero.
 
 class Authenticity final
-    :private lmi::uncopyable <Authenticity>
 {
     friend class PasskeyTest;
 
@@ -62,6 +60,8 @@ class Authenticity final
   private:
     Authenticity();
     ~Authenticity();
+    Authenticity(Authenticity const&) = delete;
+    Authenticity& operator=(Authenticity const&) = delete;
 
     static void ResetCache();
 

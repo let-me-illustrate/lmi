@@ -34,8 +34,6 @@
 
 #include "view_ex.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <wx/defs.h>                    // wx shared-library 'attributes'
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
@@ -49,8 +47,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 /// model for some other feature someday.
 
 class TextEditView final
-    :public  ViewEx
-    ,private lmi::uncopyable <TextEditView>
+    :public ViewEx
 {
     friend class TextEditDocument;
 
@@ -59,6 +56,9 @@ class TextEditView final
     ~TextEditView() override;
 
   private:
+    TextEditView(TextEditView const&) = delete;
+    TextEditView& operator=(TextEditView const&) = delete;
+
     // ViewEx required implementation.
     wxWindow* CreateChildWindow() override;
     char const* icon_xrc_resource   () const override;

@@ -36,7 +36,6 @@
 
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "oecumenic_enumerations.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/event.h>
 
@@ -51,8 +50,7 @@ class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 // only for edit and run; in the census view class, it's used widely.
 
 class IllustrationView final
-    :public  ViewEx
-    ,private lmi::uncopyable <IllustrationView>
+    :public ViewEx
 {
     friend class IllustrationDocument;
 
@@ -69,6 +67,9 @@ class IllustrationView final
     void SetLedger(std::shared_ptr<Ledger const>);
 
   private:
+    IllustrationView(IllustrationView const&) = delete;
+    IllustrationView& operator=(IllustrationView const&) = delete;
+
     IllustrationDocument& document() const;
 
     oenum_mvc_dv_rc edit_parameters();

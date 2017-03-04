@@ -26,8 +26,6 @@
 
 #ifdef LMI_MSW
 
-#include "uncopyable_lmi.hpp"
-
 #include <deque>
 #include <string>
 
@@ -49,7 +47,6 @@
 /// in order to let this reversal be expressed more cleanly.
 
 class MswDllPreloader final
-    :private lmi::uncopyable <MswDllPreloader>
 {
   public:
     static MswDllPreloader& instance();
@@ -58,6 +55,8 @@ class MswDllPreloader final
   private:
     MswDllPreloader();
     ~MswDllPreloader();
+    MswDllPreloader(MswDllPreloader const&) = delete;
+    MswDllPreloader& operator=(MswDllPreloader const&) = delete;
 
     void PreloadOneDll(std::string const& dll_name);
     void UnloadOneDll (std::string const& dll_name);

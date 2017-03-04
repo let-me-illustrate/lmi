@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <wx/artprov.h>
 
 #include <map>
@@ -35,14 +33,16 @@
 /// Icon provider for wx interface.
 
 class icon_monger
-    :public  wxArtProvider
-    ,private lmi::uncopyable<icon_monger>
+    :public wxArtProvider
 {
   public:
     icon_monger();
     ~icon_monger() override;
 
   private:
+    icon_monger(icon_monger const&) = delete;
+    icon_monger& operator=(icon_monger const&) = delete;
+
     // wxArtProvider required implementation.
     wxBitmap CreateBitmap
         (wxArtID const&

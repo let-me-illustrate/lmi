@@ -26,7 +26,6 @@
 
 #include "any_member.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
 
 #include <string>
@@ -78,9 +77,8 @@ template<> struct deserialized<product_data>
 /// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO product_data final
-    :private lmi::uncopyable   <product_data>
-    ,public  xml_serializable  <product_data>
-    ,public  MemberSymbolTable <product_data>
+    :public xml_serializable  <product_data>
+    ,public MemberSymbolTable <product_data>
 {
     typedef deserialized<product_data>::value_type value_type;
 
@@ -98,6 +96,8 @@ class LMI_SO product_data final
 
   private:
     product_data();
+    product_data(product_data const&) = delete;
+    product_data& operator=(product_data const&) = delete;
 
     void ascribe_members();
 

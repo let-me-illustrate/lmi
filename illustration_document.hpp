@@ -26,7 +26,6 @@
 
 #include "input.hpp"
 #include "single_cell_document.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
@@ -47,8 +46,7 @@ class IllustrationView;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 class IllustrationDocument
-    :public  wxDocument
-    ,private lmi::uncopyable<IllustrationDocument>
+    :public wxDocument
 {
     friend class IllustrationView;
 
@@ -59,6 +57,9 @@ class IllustrationDocument
     IllustrationView& PredominantView() const;
 
   private:
+    IllustrationDocument(IllustrationDocument const&) = delete;
+    IllustrationDocument& operator=(IllustrationDocument const&) = delete;
+
     wxHtmlWindow& PredominantViewWindow() const;
 
     // wxDocument overrides.

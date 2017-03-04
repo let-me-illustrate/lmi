@@ -26,8 +26,6 @@
 
 #include "product_editor.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <memory>                       // std::shared_ptr
 
 class TierDocument;
@@ -35,14 +33,16 @@ class TierTableAdapter;
 class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 
 class TierView final
-    :public  TreeGridViewBase
-    ,private lmi::uncopyable <TierView>
+    :public TreeGridViewBase
 {
   public:
     TierView();
     ~TierView() override;
 
   private:
+    TierView(TierView const&) = delete;
+    TierView& operator=(TierView const&) = delete;
+
     // ViewEx required implementation.
     char const* icon_xrc_resource   () const override;
     char const* menubar_xrc_resource() const override;

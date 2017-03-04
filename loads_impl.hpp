@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "round_to.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <vector>
 
@@ -80,7 +79,6 @@ class product_database;
 /// implemented.
 
 struct load_details
-    :private lmi::uncopyable<load_details>
 {
     load_details
         (int                        length

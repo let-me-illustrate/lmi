@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 /// Guard class for critical floating-point calculations.
 ///
@@ -39,7 +38,6 @@
 /// floating-point calculations that presume the invariant.
 
 class LMI_SO fenv_guard final
-    :private lmi::uncopyable <fenv_guard>
 {
   public:
     fenv_guard();
@@ -48,6 +46,9 @@ class LMI_SO fenv_guard final
     static int instance_count();
 
   private:
+    fenv_guard(fenv_guard const&) = delete;
+    fenv_guard& operator=(fenv_guard const&) = delete;
+
     static int instance_count_;
 };
 

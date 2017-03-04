@@ -26,16 +26,13 @@
 
 #include "product_editor.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <map>
 
 class RoundingButtons;
 class RoundingDocument;
 
 class RoundingView final
-    :public  ProductEditorView
-    ,private lmi::uncopyable <RoundingView>
+    :public ProductEditorView
 {
   public:
     RoundingView();
@@ -48,6 +45,9 @@ class RoundingView final
     static char const* resource_file_name();
 
   private:
+    RoundingView(RoundingView const&) = delete;
+    RoundingView& operator=(RoundingView const&) = delete;
+
     RoundingDocument& document() const;
 
     // ViewEx required implementation.

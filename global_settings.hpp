@@ -26,7 +26,6 @@
 
 #include "calendar_date.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/path.hpp>
 
@@ -66,7 +65,6 @@
 /// functions to validate their arguments.
 
 class LMI_SO global_settings final
-    :private lmi::uncopyable <global_settings>
 {
   public:
     static global_settings& instance();
@@ -90,6 +88,8 @@ class LMI_SO global_settings final
   private:
     global_settings();
     ~global_settings();
+    global_settings(global_settings const&) = delete;
+    global_settings& operator=(global_settings const&) = delete;
 
     bool mellon_;
     bool ash_nazg_;

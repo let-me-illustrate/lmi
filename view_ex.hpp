@@ -71,8 +71,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <wx/docview.h>
 
 #include <string>
@@ -84,8 +82,7 @@ class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 
 class ViewEx
-    :public  wxView
-    ,private lmi::uncopyable<ViewEx>
+    :public wxView
 {
   public:
     ViewEx();
@@ -103,6 +100,9 @@ class ViewEx
     bool DoOnCreate(wxDocument* doc, long int flags);
 
   private:
+    ViewEx(ViewEx const&) = delete;
+    ViewEx& operator=(ViewEx const&) = delete;
+
     // Pure virtuals.
     virtual wxWindow* CreateChildWindow() = 0;
     virtual char const* icon_xrc_resource   () const = 0;

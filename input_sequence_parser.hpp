@@ -28,14 +28,12 @@
 
 #include "input_sequence_interval.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <sstream>
 #include <string>
 #include <vector>
 
 class SequenceParser final
-    :private lmi::uncopyable <SequenceParser>
 {
   public:
     SequenceParser
@@ -55,6 +53,9 @@ class SequenceParser final
     std::vector<ValueInterval> const& intervals() const;
 
   private:
+    SequenceParser(SequenceParser const&) = delete;
+    SequenceParser& operator=(SequenceParser const&) = delete;
+
     enum token_type
         {e_eof             = 0
         ,e_major_separator = ';'

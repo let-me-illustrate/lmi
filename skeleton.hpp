@@ -34,8 +34,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <wx/app.h>
 #include <wx/timer.h>
 
@@ -52,8 +50,7 @@ class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 
 class Skeleton
-    :        public  wxApp
-    ,        private lmi::uncopyable <Skeleton>
+    :public wxApp
 {
   public:
     Skeleton();
@@ -78,6 +75,9 @@ class Skeleton
     bool OnInit                () override;
 
   private:
+    Skeleton(Skeleton const&) = delete;
+    Skeleton& operator=(Skeleton const&) = delete;
+
     wxMenuBar* AdjustMenus(wxMenuBar*);
 
     void InitDocManager ();

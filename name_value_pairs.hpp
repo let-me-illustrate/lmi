@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <map>
 #include <string>
 
@@ -82,7 +80,6 @@
 /// extra checks can easily be added if they become desirable.
 
 class name_value_pairs final
-    :private lmi::uncopyable <name_value_pairs>
 {
     friend int test_main(int, char*[]);
 
@@ -97,6 +94,9 @@ class name_value_pairs final
     std::string        string_numeric_value(std::string const& key) const;
 
   private:
+    name_value_pairs(name_value_pairs const&) = delete;
+    name_value_pairs& operator=(name_value_pairs const&) = delete;
+
     std::map<std::string, std::string> const& map() const;
 
     string_map map_;

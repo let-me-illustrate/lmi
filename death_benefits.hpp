@@ -25,14 +25,12 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <vector>
 
 class yare_input;
 
 class death_benefits final
-    :private lmi::uncopyable <death_benefits>
 {
   public:
     death_benefits(int, yare_input const&);
@@ -46,6 +44,9 @@ class death_benefits final
     std::vector<double>       const& supplamt() const;
 
   private:
+    death_benefits(death_benefits const&) = delete;
+    death_benefits& operator=(death_benefits const&) = delete;
+
     int length_;
     std::vector<mcenum_dbopt> dbopt_   ;
     std::vector<double>       specamt_ ;
