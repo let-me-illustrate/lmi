@@ -141,7 +141,7 @@ class calculation_summary_formatter final
 {
   public:
     calculation_summary_formatter(Ledger const&);
-    ~calculation_summary_formatter();
+    ~calculation_summary_formatter() = default;
 
     std::string format_as_html() const;
     std::string format_as_tsv () const;
@@ -205,8 +205,6 @@ calculation_summary_formatter::calculation_summary_formatter
             }
         }
 }
-
-calculation_summary_formatter::~calculation_summary_formatter() = default;
 
 std::string calculation_summary_formatter::top_note
     (std::string const& line_break
@@ -837,7 +835,7 @@ class FlatTextLedgerPrinter final
 {
   public:
     FlatTextLedgerPrinter(Ledger const&, std::ostream&);
-    ~FlatTextLedgerPrinter();
+    ~FlatTextLedgerPrinter() = default;
 
     void Print() const;
 
@@ -909,8 +907,6 @@ FlatTextLedgerPrinter::FlatTextLedgerPrinter
     ,os_    (os)
 {
 }
-
-FlatTextLedgerPrinter::~FlatTextLedgerPrinter() = default;
 
 void FlatTextLedgerPrinter::Print() const
 {

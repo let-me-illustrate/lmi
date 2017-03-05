@@ -95,8 +95,6 @@ DBDictionary::DBDictionary(std::string const& filename)
     Init(filename);
 }
 
-DBDictionary::~DBDictionary() = default;
-
 database_entity const& DBDictionary::datum(std::string const& name) const
 {
     return *member_cast<database_entity>(operator[](name));

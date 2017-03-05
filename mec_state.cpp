@@ -57,8 +57,6 @@ mec_state::mec_state(mec_state const& z)
     MemberSymbolTable<mec_state>::assign(z);
 }
 
-mec_state::~mec_state() = default;
-
 mec_state& mec_state::operator=(mec_state const& z)
 {
     MemberSymbolTable<mec_state>::assign(z);

@@ -70,8 +70,6 @@ DocManagerEx::DocManagerEx(long int flags, bool initialize)
 {
 }
 
-DocManagerEx::~DocManagerEx() = default;
-
 // WX !! Perhaps xrc could support a menu-use-file-history tag,
 // and this stuff could be made available by default in the library.
 

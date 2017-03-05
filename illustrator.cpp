@@ -52,8 +52,6 @@ illustrator::illustrator(mcenum_emission emission)
 {
 }
 
-illustrator::~illustrator() = default;
-
 bool illustrator::operator()(fs::path const& file_path)
 {
     std::string const extension = fs::extension(file_path);

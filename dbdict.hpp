@@ -48,7 +48,7 @@ class LMI_SO DBDictionary final
     DBDictionary();
     DBDictionary(std::string const& filename);
 
-    ~DBDictionary() override;
+    ~DBDictionary() override = default;
 
     database_entity const& datum(std::string const&) const;
 

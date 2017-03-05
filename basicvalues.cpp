@@ -78,9 +78,6 @@ BasicValues::BasicValues(Input const& input)
 }
 
 //============================================================================
-BasicValues::~BasicValues() = default;
-
-//============================================================================
 void BasicValues::Init()
 {
     // Bind to input and database representing policy form.

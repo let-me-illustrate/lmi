@@ -173,8 +173,6 @@ configurable_settings::configurable_settings()
         }
 }
 
-configurable_settings::~configurable_settings() = default;
-
 configurable_settings& configurable_settings::instance()
 {
     try

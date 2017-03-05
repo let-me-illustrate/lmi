@@ -131,9 +131,6 @@ BasicValues::BasicValues
 }
 
 //============================================================================
-BasicValues::~BasicValues() = default;
-
-//============================================================================
 void BasicValues::Init()
 {
     ProductData_.reset(new product_data(yare_input_.ProductName));

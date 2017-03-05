@@ -87,7 +87,7 @@ class name_value_pairs final
 
   public:
     name_value_pairs(std::string const& filename);
-    ~name_value_pairs();
+    ~name_value_pairs() = default;
 
     std::string const& string_value        (std::string const& key) const;
     double             numeric_value       (std::string const& key) const;

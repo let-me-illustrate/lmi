@@ -85,7 +85,7 @@ class LMI_SO multiple_cell_document final
   public:
     multiple_cell_document();
     multiple_cell_document(std::string const& filename);
-    ~multiple_cell_document();
+    ~multiple_cell_document() = default;
 
     std::vector<Input> const& case_parms() const;
     std::vector<Input> const& class_parms() const;

@@ -57,9 +57,6 @@ multiple_cell_document::multiple_cell_document(std::string const& filename)
     assert_vector_sizes_are_sane();
 }
 
-//============================================================================
-multiple_cell_document::~multiple_cell_document() = default;
-
 /// Verify invariants.
 ///
 /// Throws if any asserted invariant does not hold.

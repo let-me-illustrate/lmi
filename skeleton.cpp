@@ -212,8 +212,6 @@ Skeleton::Skeleton()
     timer_.Start(100);
 }
 
-Skeleton::~Skeleton() = default;
-
 wxMDIChildFrame* Skeleton::CreateChildFrame
     (wxDocument* doc
     ,ViewEx*     view

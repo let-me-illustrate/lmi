@@ -38,7 +38,7 @@ class RoundingDocument
 {
   public:
     RoundingDocument();
-    ~RoundingDocument() override;
+    ~RoundingDocument() override = default;
 
     typedef std::map<std::string, rounding_parameters*> values_type;
     values_type&       values();

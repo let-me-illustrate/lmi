@@ -36,7 +36,7 @@ class datum_boolean
 {
   public:
     explicit datum_boolean(bool = true);
-    ~datum_boolean() override;
+    ~datum_boolean() override = default;
 
     datum_boolean& operator=(bool);
 

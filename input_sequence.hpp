@@ -157,7 +157,7 @@ class LMI_SO InputSequence final
         ,std::string const&              a_default_keyword  = std::string()
         );
 
-    ~InputSequence();
+    ~InputSequence() = default;
 
     std::string canonical_form() const;
 

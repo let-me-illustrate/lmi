@@ -83,8 +83,6 @@ PolicyDocument::PolicyDocument()
     values_["GuarMortalityFootnote"   ] = &product_data_.GuarMortalityFootnote   .datum_;
 }
 
-PolicyDocument::~PolicyDocument() = default;
-
 PolicyView& PolicyDocument::PredominantView() const
 {
     return ::PredominantView<PolicyView>(*this);

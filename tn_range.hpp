@@ -245,7 +245,7 @@ class tn_range
     tn_range();
     explicit tn_range(Number);
     explicit tn_range(std::string const&);
-    ~tn_range() override;
+    ~tn_range() override = default;
 
     tn_range& operator=(Number);
     tn_range& operator=(std::string const&);

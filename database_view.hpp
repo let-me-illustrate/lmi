@@ -37,7 +37,7 @@ class DatabaseView final
 {
   public:
     DatabaseView();
-    ~DatabaseView() override;
+    ~DatabaseView() override = default;
 
   private:
     DatabaseView(DatabaseView const&) = delete;

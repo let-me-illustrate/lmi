@@ -28,8 +28,6 @@ datum_boolean::datum_boolean(bool value)
 {
 }
 
-datum_boolean::~datum_boolean() = default;
-
 datum_boolean& datum_boolean::operator=(bool b)
 {
     value_ = b;

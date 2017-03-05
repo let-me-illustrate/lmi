@@ -68,7 +68,7 @@ class LMI_SO configurable_settings final
 
   private:
     configurable_settings();
-    ~configurable_settings() override;
+    ~configurable_settings() override = default;
     configurable_settings(configurable_settings const&) = delete;
     configurable_settings& operator=(configurable_settings const&) = delete;
 

@@ -114,7 +114,7 @@ class MultiDimGridGrid
         ,long style = 0 // no wxWANTS_CHARS, as is wxGrid's default
         ,std::string const& name = wxPanelNameStr
         );
-    ~MultiDimGridGrid() override;
+    ~MultiDimGridGrid() override = default;
 
     wxSize DoGetBestSize() const override;
 
@@ -139,8 +139,6 @@ inline MultiDimGridGrid::MultiDimGridGrid
     :wxGrid(parent, id, pos, size, style, name)
 {
 }
-
-MultiDimGridGrid::~MultiDimGridGrid() = default;
 
 wxSize MultiDimGridGrid::DoGetBestSize() const
 {

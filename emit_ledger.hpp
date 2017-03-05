@@ -43,7 +43,7 @@ class LMI_SO ledger_emitter final
 {
   public:
     ledger_emitter(fs::path const& case_filepath, mcenum_emission emission);
-    ~ledger_emitter();
+    ~ledger_emitter() = default;
 
     double initiate ();
     double emit_cell(fs::path const& cell_filepath, Ledger const& ledger);

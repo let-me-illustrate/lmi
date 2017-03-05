@@ -37,7 +37,7 @@ class icon_monger
 {
   public:
     icon_monger();
-    ~icon_monger() override;
+    ~icon_monger() override = default;
 
   private:
     icon_monger(icon_monger const&) = delete;

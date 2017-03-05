@@ -104,8 +104,6 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
     parse_table();
 }
 
-actuarial_table::~actuarial_table() = default;
-
 /// Read a given number of values for a given issue age.
 
 std::vector<double> actuarial_table::values(int issue_age, int length) const

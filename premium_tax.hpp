@@ -97,7 +97,7 @@ class premium_tax final
         (mcenum_state              tax_state
         ,product_database   const& db
         );
-    ~premium_tax();
+    ~premium_tax() = default;
 
     void   start_new_year();
     double calculate_load(double payment, stratified_charges const& strata);

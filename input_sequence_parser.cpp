@@ -53,8 +53,6 @@ SequenceParser::SequenceParser
     sequence();
 }
 
-SequenceParser::~SequenceParser() = default;
-
 std::string SequenceParser::diagnostics() const
 {
     return diagnostics_.str();

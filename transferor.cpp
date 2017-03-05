@@ -91,8 +91,6 @@ Transferor::Transferor(std::string& data, std::string const& name)
 {
 }
 
-Transferor::~Transferor() = default;
-
 wxObject* Transferor::Clone() const
 {
     return new Transferor(data_, name_);

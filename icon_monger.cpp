@@ -100,8 +100,6 @@ icon_monger::icon_monger()
     lmi_specific_icon_names_.insert("write-spreadsheet"       );
 }
 
-icon_monger::~icon_monger() = default;
-
 namespace
 {
 /// Return desired icon size.

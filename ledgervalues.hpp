@@ -40,7 +40,7 @@ class IllusVal final
 {
   public:
     explicit IllusVal(std::string const& filename);
-    ~IllusVal();
+    ~IllusVal() = default;
 
     double run(Input const&);
 

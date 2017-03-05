@@ -34,8 +34,6 @@ IllusVal::IllusVal(std::string const& filename)
 {
 }
 
-IllusVal::~IllusVal() = default;
-
 double IllusVal::run(Input const& input)
 {
     fenv_guard fg;

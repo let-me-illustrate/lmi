@@ -52,7 +52,7 @@ class LMI_SO mec_state final
   public:
     mec_state();
     mec_state(mec_state const&);
-    ~mec_state() override;
+    ~mec_state() override = default;
 
     mec_state& operator=(mec_state const&);
     bool operator==(mec_state const&) const;

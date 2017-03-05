@@ -65,7 +65,7 @@ class LMI_SO Timer
 
   public:
     Timer();
-    ~Timer();
+    ~Timer() = default;
 
     Timer&      restart();
     Timer&      stop();

@@ -170,9 +170,6 @@ Irc7702A::Irc7702A
     LMI_ASSERT(0.0 < extrema_nsp.minimum() && extrema_nsp.maximum() <= 1.0);
 }
 
-//============================================================================
-Irc7702A::~Irc7702A() = default;
-
 /// Set initial values on issue or inforce date.
 ///
 /// This is notionally called once per *current*-basis run

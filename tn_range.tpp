@@ -389,11 +389,6 @@ tn_range<Number,Trammel>::tn_range(std::string const& s)
 }
 
 template<typename Number, typename Trammel>
-tn_range<Number,Trammel>::~tn_range()
-{
-}
-
-template<typename Number, typename Trammel>
 tn_range<Number,Trammel>& tn_range<Number,Trammel>::operator=(Number n)
 {
     value_ = curb(n);

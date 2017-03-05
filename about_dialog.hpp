@@ -53,7 +53,7 @@ class AboutDialog
 {
   public:
     AboutDialog(wxWindow* parent);
-    ~AboutDialog() override;
+    ~AboutDialog() override = default;
 
     // wxDialog overrides.
     int ShowModal() override;

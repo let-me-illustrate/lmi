@@ -34,7 +34,7 @@ class death_benefits final
 {
   public:
     death_benefits(int, yare_input const&);
-    ~death_benefits();
+    ~death_benefits() = default;
 
     void set_specamt (double z, int from_year, int to_year);
     void set_supplamt(double z, int from_year, int to_year);

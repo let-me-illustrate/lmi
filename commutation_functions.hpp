@@ -39,7 +39,7 @@ class LMI_SO OLCommFns final
         ,std::vector<double> const& a_i
         );
 
-    ~OLCommFns();
+    ~OLCommFns() = default;
 
     double                 Domega() const {return ed.back();}
     std::vector<double> const& ED() const {return ed;}
@@ -90,7 +90,7 @@ class LMI_SO ULCommFns final
         ,mcenum_mode                mode
         );
 
-    ~ULCommFns();
+    ~ULCommFns() = default;
 
     double                 aDomega() const {return ead.back();}
     std::vector<double> const& EaD() const {return ead;}

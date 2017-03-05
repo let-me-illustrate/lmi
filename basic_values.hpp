@@ -94,7 +94,7 @@ class LMI_SO BasicValues
         ,bool               a_AdbInForce
         ,double             a_TargetPremium
         );
-    virtual ~BasicValues();
+    virtual ~BasicValues() = default;
 
     void Init();
     void GPTServerInit();

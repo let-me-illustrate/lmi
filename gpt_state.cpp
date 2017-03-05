@@ -57,8 +57,6 @@ gpt_state::gpt_state(gpt_state const& z)
     MemberSymbolTable<gpt_state>::assign(z);
 }
 
-gpt_state::~gpt_state() = default;
-
 gpt_state& gpt_state::operator=(gpt_state const& z)
 {
     MemberSymbolTable<gpt_state>::assign(z);

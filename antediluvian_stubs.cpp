@@ -49,8 +49,6 @@ bool is_antediluvian_fork()
 gpt_server::gpt_server(mcenum_emission)
 {}
 
-gpt_server::~gpt_server() = default;
-
 bool gpt_server::operator()(fs::path const&)
 {
     return false;
@@ -64,8 +62,6 @@ gpt_state::gpt_state(gpt_state const&)
     :xml_serializable  <gpt_state>()
     ,MemberSymbolTable <gpt_state>()
 {}
-
-gpt_state::~gpt_state() = default;
 
 int gpt_state::class_version() const
 {
@@ -100,8 +96,6 @@ mec_state::mec_state(mec_state const&)
     :xml_serializable  <mec_state>()
     ,MemberSymbolTable <mec_state>()
 {}
-
-mec_state::~mec_state() = default;
 
 int mec_state::class_version() const
 {

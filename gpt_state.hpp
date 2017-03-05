@@ -56,7 +56,7 @@ class LMI_SO gpt_state final
   public:
     gpt_state();
     gpt_state(gpt_state const&);
-    ~gpt_state() override;
+    ~gpt_state() override = default;
 
     gpt_state& operator=(gpt_state const&);
     bool operator==(gpt_state const&) const;

@@ -151,8 +151,6 @@ MvcController::MvcController
         );
 }
 
-MvcController::~MvcController() = default;
-
 /// Make the Model consistent, and change the View to comport with it.
 ///
 /// While this function isn't called explicitly upon initialization,

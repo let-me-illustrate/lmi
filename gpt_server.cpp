@@ -518,8 +518,6 @@ gpt_server::gpt_server(mcenum_emission emission)
 {
 }
 
-gpt_server::~gpt_server() = default;
-
 bool gpt_server::operator()(fs::path const& file_path)
 {
     std::string const extension = fs::extension(file_path);

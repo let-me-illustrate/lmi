@@ -116,7 +116,7 @@ class Transferor
 {
   public:
     Transferor(std::string& data, std::string const& name);
-    ~Transferor() override;
+    ~Transferor() override = default;
 
     // wxValidator overrides.
     wxObject* Clone() const override;

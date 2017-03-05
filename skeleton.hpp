@@ -54,7 +54,7 @@ class Skeleton
 {
   public:
     Skeleton();
-    ~Skeleton() override;
+    ~Skeleton() override = default;
 
     // Called by view classes when they are instantiated.
     wxMDIChildFrame* CreateChildFrame(wxDocument*, ViewEx*);

@@ -44,7 +44,7 @@ class DocManagerEx
     // explicitly marked that way--though it seems that it should be,
     // for consistency with the style of the rest of the library.
     //
-    ~DocManagerEx() override;
+    ~DocManagerEx() override = default;
 
     void AssociateFileHistoryWithFileMenu(wxMenuBar*);
     void DissociateFileHistoryFromFileMenu(wxMenuBar*);

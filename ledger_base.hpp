@@ -175,7 +175,7 @@ class LMI_SO LedgerBase
     friend class Ledger;
 
   public:
-    virtual ~LedgerBase();
+    virtual ~LedgerBase() = default;
 
     void               ApplyScaleFactor(double a_Mult);
 

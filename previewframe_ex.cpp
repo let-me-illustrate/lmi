@@ -59,8 +59,6 @@ PreviewFrameEx::PreviewFrameEx
         }
 }
 
-PreviewFrameEx::~PreviewFrameEx() = default;
-
 void PreviewFrameEx::Initialize()
 {
     wxPreviewFrame::Initialize();

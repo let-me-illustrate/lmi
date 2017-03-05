@@ -129,7 +129,7 @@ class actuarial_table final
 {
   public:
     actuarial_table(std::string const& filename, int table_number);
-    ~actuarial_table();
+    ~actuarial_table() = default;
 
     std::vector<double> values(int issue_age, int length) const;
     std::vector<double> values_elaborated

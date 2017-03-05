@@ -151,8 +151,6 @@ DatabaseView::DatabaseView()
 {
 }
 
-DatabaseView::~DatabaseView() = default;
-
 wxTreeCtrl* DatabaseView::CreateTreeCtrl(wxWindow* parent)
 {
     return new(wx) AutoResizingTreeCtrl

@@ -47,7 +47,7 @@ class SequenceParser final
         ,bool                            a_keywords_only
         );
 
-    ~SequenceParser();
+    ~SequenceParser() = default;
 
     std::string diagnostics() const;
     std::vector<ValueInterval> const& intervals() const;

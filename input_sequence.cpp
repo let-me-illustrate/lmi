@@ -251,8 +251,6 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
     intervals_.back().end_mode     = e_maturity;
 }
 
-InputSequence::~InputSequence() = default;
-
 /// Canonical form of an input sequence
 ///
 /// Consider the set S of all strings that are well formed wrt the

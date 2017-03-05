@@ -80,9 +80,6 @@ Ledger::Ledger
 }
 
 //============================================================================
-Ledger::~Ledger() = default;
-
-//============================================================================
 void Ledger::SetRunBases(int length)
 {
     ledger_map_t& l_map_rep = ledger_map_->held_;

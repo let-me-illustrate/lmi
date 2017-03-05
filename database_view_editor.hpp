@@ -72,7 +72,7 @@ class DatabaseTableAdapter
   public:
     DatabaseTableAdapter(database_entity* db_value = nullptr);
 
-    ~DatabaseTableAdapter() override;
+    ~DatabaseTableAdapter() override = default;
 
     /// Decorated object accessors
     void SetTDBValue(database_entity* db_value);

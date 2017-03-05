@@ -33,7 +33,7 @@ class TierDocument
 {
   public:
     TierDocument();
-    ~TierDocument() override;
+    ~TierDocument() override = default;
 
     stratified_entity& get_stratified_entity(e_stratified index);
 

@@ -218,7 +218,7 @@ class LMI_SO progress_meter
         ,enum_display_mode
         );
 
-    virtual ~progress_meter();
+    virtual ~progress_meter() = default;
 
     int count() const;
     int max_count() const;

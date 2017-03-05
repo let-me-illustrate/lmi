@@ -48,8 +48,6 @@ AboutDialog::AboutDialog(wxWindow* parent)
 {
 }
 
-AboutDialog::~AboutDialog() = default;
-
 /// This virtual function calls its base-class namesake explicitly.
 
 int AboutDialog::ShowModal()

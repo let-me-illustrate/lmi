@@ -77,8 +77,6 @@ progress_meter::progress_meter
 {
 }
 
-progress_meter::~progress_meter() = default;
-
 void progress_meter::dawdle(int seconds)
 {
     do_dawdle(seconds);

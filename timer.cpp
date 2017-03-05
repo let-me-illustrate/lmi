@@ -79,8 +79,6 @@ Timer::Timer()
     start();
 }
 
-Timer::~Timer() = default;
-
 /// Set elapsed time to zero, and restart timer.
 
 Timer& Timer::restart()

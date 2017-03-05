@@ -36,7 +36,7 @@ class modal_outlay final
 
   public:
     explicit modal_outlay(yare_input const&);
-    ~modal_outlay();
+    ~modal_outlay() = default;
 
     double                          dumpin               () const;
     double                          external_1035_amount () const;

@@ -66,7 +66,7 @@ class Irc7702A final
 //      ,std::vector<double> const&  a_PolFee
 // TAXATION !! probably other arguments are needed for reproposals
         );
-    ~Irc7702A();
+    ~Irc7702A() = default;
 
     void Initialize7702A
         (bool   a_Ignore

@@ -409,7 +409,7 @@ class MvcController final
 
   public:
     MvcController(wxWindow* parent, MvcModel&, MvcView const&);
-    ~MvcController() override;
+    ~MvcController() override = default;
 
     void TestModelViewConsistency() const;
 

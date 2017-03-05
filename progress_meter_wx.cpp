@@ -63,7 +63,7 @@ class concrete_progress_meter
         ,enum_display_mode
         );
 
-    ~concrete_progress_meter() override;
+    ~concrete_progress_meter() override = default;
 
   private:
     // progress_meter overrides.
@@ -101,8 +101,6 @@ concrete_progress_meter::concrete_progress_meter
         progress_dialog_.Update(0);
         }
 }
-
-concrete_progress_meter::~concrete_progress_meter() = default;
 
 /// Sleep for the number of seconds given in the argument.
 ///

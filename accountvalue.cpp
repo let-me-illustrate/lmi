@@ -128,9 +128,6 @@ AccountValue::AccountValue(Input const& input)
 }
 
 //============================================================================
-AccountValue::~AccountValue() = default;
-
-//============================================================================
 std::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 {
     LMI_ASSERT(ledger_.get());

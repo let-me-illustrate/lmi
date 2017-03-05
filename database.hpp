@@ -57,7 +57,7 @@ class LMI_SO product_database final
     explicit product_database(yare_input const&);
     // Special ctor implemented only in a unit-test TU.
     explicit product_database(int length);
-    ~product_database();
+    ~product_database() = default;
 
     int length() const;
     database_index index() const;
