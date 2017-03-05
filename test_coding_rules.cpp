@@ -1071,7 +1071,7 @@ void enforce_taboos(file const& f)
 class statistics
 {
   public:
-    statistics() : files_(0), lines_(0), defects_(0) {}
+    statistics() = default;
     ~statistics() = default;
 
     statistics& operator+=(statistics const&);
@@ -1081,9 +1081,9 @@ class statistics
     void print_summary() const;
 
   private:
-    std::size_t files_;
-    std::size_t lines_;
-    std::size_t defects_;
+    std::size_t files_   = 0;
+    std::size_t lines_   = 0;
+    std::size_t defects_ = 0;
 };
 
 statistics& statistics::operator+=(statistics const& z)

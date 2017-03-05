@@ -52,8 +52,8 @@ class TextEditView final
     friend class TextEditDocument;
 
   public:
-    TextEditView();
-    ~TextEditView() override;
+    TextEditView() = default;
+    ~TextEditView() override = default;
 
   private:
     TextEditView(TextEditView const&) = delete;
@@ -64,7 +64,7 @@ class TextEditView final
     char const* icon_xrc_resource   () const override;
     char const* menubar_xrc_resource() const override;
 
-    wxTextCtrl* text_window_;
+    wxTextCtrl* text_window_ = nullptr;
 
     DECLARE_DYNAMIC_CLASS(TextEditView)
 };

@@ -1378,11 +1378,6 @@ InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
 
 } // Unnamed namespace.
 
-InputSequenceEntry::InputSequenceEntry()
-    :input_(nullptr)
-{
-}
-
 InputSequenceEntry::InputSequenceEntry
     (wxWindow*          parent
     ,wxWindowID         id

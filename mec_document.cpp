@@ -33,13 +33,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(mec_document, wxDocument)
 
-mec_document::mec_document()
-    :wxDocument()
-{
-}
-
-mec_document::~mec_document() = default;
-
 mec_view& mec_document::PredominantView() const
 {
     return ::PredominantView<mec_view>(*this);

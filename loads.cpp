@@ -34,10 +34,6 @@
 #include "mc_enum_types_aux.hpp"        // mc_n_ enumerators
 #include "premium_tax.hpp"
 
-/// Ctor for unit testing.
-
-Loads::Loads() = default;
-
 /// Ctor for production branch.
 
 Loads::Loads(BasicValues& V)

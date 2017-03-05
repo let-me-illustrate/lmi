@@ -48,8 +48,8 @@ class mec_mvc_view
     :public MvcView
 {
   public:
-    mec_mvc_view();
-    ~mec_mvc_view() override;
+    mec_mvc_view() = default;
+    ~mec_mvc_view() override = default;
 
   private:
     // MvcView required implementation.
@@ -64,8 +64,8 @@ class mec_view final
     friend class mec_document;
 
   public:
-    mec_view();
-    ~mec_view() override;
+    mec_view() = default;
+    ~mec_view() override = default;
 
   private:
     mec_view(mec_view const&) = delete;
@@ -95,8 +95,8 @@ class mec_view final
 
     mec_input& input_data();
 
-    std::string html_content_;
-    wxHtmlWindow* html_window_;
+    std::string html_content_  = std::string("Unable to display results.");
+    wxHtmlWindow* html_window_ = nullptr;
 
     DECLARE_DYNAMIC_CLASS(mec_view)
     DECLARE_EVENT_TABLE()

@@ -37,8 +37,8 @@ class CensusDocument
     friend class CensusView;
 
   public:
-    CensusDocument();
-    ~CensusDocument() override;
+    CensusDocument() = default;
+    ~CensusDocument() override = default;
 
   private:
     CensusDocument(CensusDocument const&) = delete;

@@ -35,8 +35,8 @@ class RoundingView final
     :public ProductEditorView
 {
   public:
-    RoundingView();
-    ~RoundingView() override;
+    RoundingView() = default;
+    ~RoundingView() override = default;
 
     typedef std::map<std::string, RoundingButtons*> controls_type;
     controls_type&       controls();

@@ -38,14 +38,14 @@ class LMI_SO FundInfo final
     friend class FundData;
 
   public:
-    FundInfo();
+    FundInfo() = default;
     FundInfo
         (double             ScalarIMF
         ,std::string const& ShortName
         ,std::string const& LongName
         ,std::string const& gloss = std::string()
         );
-    ~FundInfo();
+    ~FundInfo() = default;
 
     double ScalarIMF() const;
     std::string const& ShortName() const;
@@ -53,17 +53,17 @@ class LMI_SO FundInfo final
     std::string const& gloss() const;
 
   private:
-    double ScalarIMF_;
-    std::string ShortName_;
-    std::string LongName_;
-    std::string gloss_;
+    double      ScalarIMF_ = 0.0;
+    std::string ShortName_ = std::string();
+    std::string LongName_  = std::string();
+    std::string gloss_     = std::string();
 };
 
 class LMI_SO FundData final
 {
   public:
     FundData(std::string const& a_Filename);
-    ~FundData();
+    ~FundData() = default;
 
     static void write_funds_files();
     static void write_proprietary_funds_files();
@@ -72,7 +72,7 @@ class LMI_SO FundData final
     int GetNumberOfFunds() const;
 
   private:
-    FundData(); // Used by write_funds_files().
+    FundData() = default; // Used by write_funds_files().
     FundData(FundData const&) = delete;
     FundData& operator=(FundData const&) = delete;
 

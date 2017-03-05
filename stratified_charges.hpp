@@ -69,13 +69,13 @@ class LMI_SO stratified_entity final
     friend class TierView;
 
   public:
-    stratified_entity();
+    stratified_entity() = default;
     stratified_entity
         (std::vector<double> const& limits
         ,std::vector<double> const& values
         ,std::string const&         gloss = std::string()
         );
-    ~stratified_entity();
+    ~stratified_entity() = default;
 
     bool operator==(stratified_entity const&) const;
 
@@ -105,7 +105,7 @@ class LMI_SO stratified_charges final
   public:
     stratified_charges(std::string const& filename);
     stratified_charges(stratified_charges const&);
-    ~stratified_charges() override;
+    ~stratified_charges() override = default;
 
     stratified_charges& operator=(stratified_charges const&);
 

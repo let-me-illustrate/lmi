@@ -32,12 +32,6 @@
 #include <ostream>
 
 //============================================================================
-mec_xml_document::mec_xml_document()
-    :input_data_()
-{
-}
-
-//============================================================================
 mec_xml_document::mec_xml_document(mec_input const& z)
     :input_data_(z)
 {
@@ -50,9 +44,6 @@ mec_xml_document::mec_xml_document(std::string const& filename)
     xml_lmi::dom_parser parser(filename);
     parse(parser);
 }
-
-//============================================================================
-mec_xml_document::~mec_xml_document() = default;
 
 //============================================================================
 std::string const& mec_xml_document::xml_root_name() const

@@ -39,7 +39,7 @@ class InputSequenceEntry
     :public wxPanel
 {
   public:
-    InputSequenceEntry();
+    InputSequenceEntry() = default;
     InputSequenceEntry(wxWindow* parent, wxWindowID id, wxString const& name);
     bool Create(wxWindow* parent, wxWindowID id, wxString const& name);
 
@@ -60,7 +60,7 @@ class InputSequenceEntry
 
     void DoOpenEditor();
 
-    Input const* input_;
+    Input const* input_ = nullptr;
     std::string field_name_;
 
     wxTextCtrl* text_;

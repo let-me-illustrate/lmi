@@ -34,14 +34,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(RoundingView, ProductEditorView)
 
-RoundingView::RoundingView()
-    :ProductEditorView()
-    ,controls_()
-{
-}
-
-RoundingView::~RoundingView() = default;
-
 wxWindow* RoundingView::CreateChildWindow()
 {
     wxWindow* frame = GetFrame();

@@ -55,8 +55,8 @@ class IllustrationView final
     friend class IllustrationDocument;
 
   public:
-    IllustrationView();
-    ~IllustrationView() override;
+    IllustrationView() = default;
+    ~IllustrationView() override = default;
 
     // Making these functions public so that they can be invoked by
     // class CensusView is arguably less bad than making that class a
@@ -99,8 +99,8 @@ class IllustrationView final
 
     Input& input_data();
 
-    wxHtmlWindow* html_window_;
-    bool is_phony_;
+    wxHtmlWindow* html_window_ = nullptr;
+    bool is_phony_             = false;
     std::shared_ptr<Ledger const> ledger_values_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)

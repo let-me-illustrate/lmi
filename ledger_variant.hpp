@@ -174,9 +174,9 @@ class ledger_map_holder
     friend class Ledger;
 
   public:
-    ledger_map_holder();
+    ledger_map_holder() = default;
     explicit ledger_map_holder(ledger_map_t const&);
-    ~ledger_map_holder();
+    ~ledger_map_holder() = default;
 
     ledger_map_t const& held() const;
 

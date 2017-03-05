@@ -46,7 +46,7 @@ class LMI_SO rounding_parameters final
         ,rounding_style     style
         ,std::string const& gloss = std::string()
         );
-    ~rounding_parameters();
+    ~rounding_parameters() = default;
 
     bool operator==(rounding_parameters const&) const;
 
@@ -57,11 +57,12 @@ class LMI_SO rounding_parameters final
     rounding_style            raw_style() const;
 
   private:
-    rounding_parameters();
+    /// Private default ctor, for friends only.
+    rounding_parameters() = default;
 
-    int                decimals_;
-    mce_rounding_style style_   ;
-    std::string        gloss_   ;
+    int                decimals_ = 0;
+    mce_rounding_style style_    = mce_rounding_style(r_indeterminate);
+    std::string        gloss_    = std::string();
 };
 
 /// Product rounding rules.
@@ -95,7 +96,7 @@ class LMI_SO rounding_rules final
 
   public:
     explicit rounding_rules(std::string const& filename);
-    ~rounding_rules() override;
+    ~rounding_rules() override = default;
 
     rounding_parameters const& datum(std::string const& name) const;
 

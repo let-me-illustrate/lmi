@@ -45,8 +45,8 @@ class ProductEditorDocument
     :public wxDocument
 {
   public:
-    ProductEditorDocument();
-    ~ProductEditorDocument() override;
+    ProductEditorDocument() = default;
+    ~ProductEditorDocument() override = default;
 
   protected:
     virtual void ReadDocument (std::string const& filename) = 0;
@@ -73,8 +73,8 @@ class ProductEditorView
     friend class ProductEditorDocument;
 
   public:
-    ProductEditorView();
-    ~ProductEditorView() override;
+    ProductEditorView() = default;
+    ~ProductEditorView() override = default;
 
   protected:
     virtual bool IsModified() const = 0;
@@ -92,8 +92,8 @@ class TreeGridViewBase
     :public ProductEditorView
 {
   public:
-    TreeGridViewBase();
-    ~TreeGridViewBase() override;
+    TreeGridViewBase() = default;
+    ~TreeGridViewBase() override = default;
 
   protected:
     MultiDimGrid& grid() const;
@@ -117,9 +117,9 @@ class TreeGridViewBase
 
     // These objects are held by pointer since the destruction is taken care
     // of by wx.
-    MultiDimGrid* grid_;
-    wxStaticText* grid_label_;
-    wxTreeCtrl*   tree_;
+    MultiDimGrid* grid_       = nullptr;
+    wxStaticText* grid_label_ = nullptr;
+    wxTreeCtrl*   tree_       = nullptr;
 };
 
 #endif // product_editor_hpp

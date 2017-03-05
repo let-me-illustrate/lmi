@@ -361,14 +361,10 @@ void LedgerVariant::Spew(std::ostream& os) const
     LedgerBase::Spew(os);
 }
 
-ledger_map_holder::ledger_map_holder() = default;
-
 ledger_map_holder::ledger_map_holder(ledger_map_t const& z)
     :held_(z)
 {
 }
-
-ledger_map_holder::~ledger_map_holder() = default;
 
 ledger_map_t const& ledger_map_holder::held() const
 {

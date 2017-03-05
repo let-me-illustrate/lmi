@@ -39,14 +39,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditView, ViewEx)
 
-TextEditView::TextEditView()
-    :ViewEx      ()
-    ,text_window_(nullptr)
-{
-}
-
-TextEditView::~TextEditView() = default;
-
 wxWindow* TextEditView::CreateChildWindow()
 {
     return text_window_ = new(wx) wxTextCtrl

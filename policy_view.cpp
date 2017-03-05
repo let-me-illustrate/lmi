@@ -34,14 +34,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(PolicyView, ProductEditorView)
 
-PolicyView::PolicyView()
-    :ProductEditorView()
-    ,controls_()
-{
-}
-
-PolicyView::~PolicyView() = default;
-
 wxWindow* PolicyView::CreateChildWindow()
 {
     wxWindow* frame = GetFrame();

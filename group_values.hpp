@@ -74,8 +74,8 @@ struct census_run_result
 class LMI_SO run_census final
 {
   public:
-    run_census();
-    ~run_census();
+    run_census() = default;
+    ~run_census() = default;
 
     census_run_result operator()
         (fs::path           const& file

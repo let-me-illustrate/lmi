@@ -37,10 +37,10 @@ class LMI_SO mec_xml_document final
     friend class mec_view;
 
   public:
-    mec_xml_document();
+    mec_xml_document() = default;
     mec_xml_document(mec_input const&);
     mec_xml_document(std::string const& filename);
-    ~mec_xml_document();
+    ~mec_xml_document() = default;
 
     mec_input const& input_data() const;
 

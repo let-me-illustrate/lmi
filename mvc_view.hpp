@@ -43,8 +43,8 @@
 class MvcView
 {
   public:
-    MvcView();
-    virtual ~MvcView();
+    MvcView() = default;
+    virtual ~MvcView() = default;
 
     char const* BookControlName () const;
     char const* MainDialogName  () const;

@@ -48,8 +48,8 @@ class gpt_mvc_view
     :public MvcView
 {
   public:
-    gpt_mvc_view();
-    ~gpt_mvc_view() override;
+    gpt_mvc_view() = default;
+    ~gpt_mvc_view() override = default;
 
   private:
     // MvcView required implementation.
@@ -64,8 +64,8 @@ class gpt_view final
     friend class gpt_document;
 
   public:
-    gpt_view();
-    ~gpt_view() override;
+    gpt_view() = default;
+    ~gpt_view() override = default;
 
   private:
     gpt_view(gpt_view const&) = delete;
@@ -95,8 +95,8 @@ class gpt_view final
 
     gpt_input& input_data();
 
-    std::string html_content_;
-    wxHtmlWindow* html_window_;
+    std::string html_content_ = std::string("Unable to display results.");
+    wxHtmlWindow* html_window_ = nullptr;
 
     DECLARE_DYNAMIC_CLASS(gpt_view)
     DECLARE_EVENT_TABLE()

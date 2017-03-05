@@ -35,10 +35,6 @@
 #include <wx/html/htmprint.h>
 #include <wx/xrc/xmlres.h>
 
-gpt_mvc_view::gpt_mvc_view() = default;
-
-gpt_mvc_view::~gpt_mvc_view() = default;
-
 char const* gpt_mvc_view::DoBookControlName() const
 {
     return "gpt_notebook";
@@ -79,15 +75,6 @@ BEGIN_EVENT_TABLE(gpt_view, ViewEx)
     EVT_UPDATE_UI(XRCID("column_width_varying" ),gpt_view::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),gpt_view::UponUpdateInapplicable)
 END_EVENT_TABLE()
-
-gpt_view::gpt_view()
-    :ViewEx       ()
-    ,html_content_("Unable to display results.")
-    ,html_window_ (nullptr)
-{
-}
-
-gpt_view::~gpt_view() = default;
 
 inline gpt_input& gpt_view::input_data()
 {

@@ -51,15 +51,6 @@ namespace
     int const chars_per_formatted_hex_byte = CHAR_BIT / 4;
 }
 
-/// Initialize cached date to JDN zero, which is peremptorily invalid.
-
-Authenticity::Authenticity()
-    :CachedDate_(jdn_t(0))
-{
-}
-
-Authenticity::~Authenticity() = default;
-
 Authenticity& Authenticity::Instance()
 {
     try

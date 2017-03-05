@@ -47,13 +47,13 @@ class LMI_SO group_quote_pdf_generator
     static bool set_creator(creator_type);
     static std::shared_ptr<group_quote_pdf_generator> create();
 
-    virtual ~group_quote_pdf_generator();
+    virtual ~group_quote_pdf_generator() = default;
 
     virtual void add_ledger(Ledger const& ledger) = 0;
     virtual void save(std::string const& output_filename) = 0;
 
   protected:
-    group_quote_pdf_generator();
+    group_quote_pdf_generator() = default;
 
   private:
     group_quote_pdf_generator(group_quote_pdf_generator const&) = delete;

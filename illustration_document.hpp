@@ -51,8 +51,8 @@ class IllustrationDocument
     friend class IllustrationView;
 
   public:
-    IllustrationDocument();
-    ~IllustrationDocument() override;
+    IllustrationDocument() = default;
+    ~IllustrationDocument() override = default;
 
     IllustrationView& PredominantView() const;
 
@@ -72,7 +72,7 @@ class IllustrationDocument
 
     single_cell_document doc_;
 
-    bool is_phony_;
+    bool is_phony_ = false;
 
     DECLARE_DYNAMIC_CLASS(IllustrationDocument)
 };

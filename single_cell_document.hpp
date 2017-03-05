@@ -38,10 +38,10 @@ class LMI_SO single_cell_document final
     friend class input_test; // For mete_ill_xsd().
 
   public:
-    single_cell_document();
+    single_cell_document() = default;
     single_cell_document(Input const&);
     single_cell_document(std::string const& filename);
-    ~single_cell_document();
+    ~single_cell_document() = default;
 
     Input const& input_data() const;
 

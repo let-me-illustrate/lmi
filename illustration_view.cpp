@@ -96,15 +96,6 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),IllustrationView::UponUpdateInapplicable )
 END_EVENT_TABLE()
 
-IllustrationView::IllustrationView()
-    :ViewEx                  ()
-    ,html_window_            (nullptr)
-    ,is_phony_               (false)
-{
-}
-
-IllustrationView::~IllustrationView() = default;
-
 inline Input& IllustrationView::input_data()
 {
     return document().doc_.input_data_;

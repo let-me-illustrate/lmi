@@ -38,8 +38,8 @@ class gpt_document
     friend class gpt_view;
 
   public:
-    gpt_document();
-    ~gpt_document() override;
+    gpt_document() = default;
+    ~gpt_document() override = default;
 
     gpt_view& PredominantView() const;
 

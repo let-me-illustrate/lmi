@@ -38,8 +38,8 @@ class mec_document
     friend class mec_view;
 
   public:
-    mec_document();
-    ~mec_document() override;
+    mec_document() = default;
+    ~mec_document() override = default;
 
     mec_view& PredominantView() const;
 

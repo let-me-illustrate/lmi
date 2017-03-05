@@ -37,10 +37,10 @@ class LMI_SO gpt_xml_document final
     friend class gpt_view;
 
   public:
-    gpt_xml_document();
-    gpt_xml_document(gpt_input const&);
-    gpt_xml_document(std::string const& filename);
-    ~gpt_xml_document();
+    gpt_xml_document() = default;
+    explicit gpt_xml_document(gpt_input const&);
+    explicit gpt_xml_document(std::string const& filename);
+    ~gpt_xml_document() = default;
 
     gpt_input const& input_data() const;
 

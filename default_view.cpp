@@ -25,10 +25,6 @@
 
 #include "configurable_settings.hpp"
 
-DefaultView::DefaultView() = default;
-
-DefaultView::~DefaultView() = default;
-
 char const* DefaultView::DoBookControlName() const
 {
     return "input_notebook";

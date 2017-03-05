@@ -34,8 +34,8 @@
 class LMI_SO datum_base
 {
   public:
-    datum_base();
-    virtual ~datum_base();
+    datum_base() = default;
+    virtual ~datum_base() = default;
 
     void enable(bool);
     bool is_enabled() const;
@@ -44,7 +44,7 @@ class LMI_SO datum_base
     virtual std::ostream& write(std::ostream&) const = 0;
 
   private:
-    bool enabled_;
+    bool enabled_ = true;
 };
 
 inline std::istream& operator>>(std::istream& is, datum_base& z)

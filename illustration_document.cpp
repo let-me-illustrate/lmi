@@ -34,13 +34,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(IllustrationDocument, wxDocument)
 
-IllustrationDocument::IllustrationDocument()
-    :is_phony_(false)
-{
-}
-
-IllustrationDocument::~IllustrationDocument() = default;
-
 IllustrationView& IllustrationDocument::PredominantView() const
 {
     return ::PredominantView<IllustrationView>(*this);

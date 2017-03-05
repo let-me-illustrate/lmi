@@ -663,10 +663,6 @@ census_run_result run_census_in_parallel::operator()
     return result;
 }
 
-run_census::run_census() = default;
-
-run_census::~run_census() = default;
-
 census_run_result run_census::operator()
     (fs::path           const& file
     ,mcenum_emission    const  emission

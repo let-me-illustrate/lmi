@@ -35,15 +35,6 @@
 #include <boost/filesystem/path.hpp>
 
 //============================================================================
-FundInfo::FundInfo()
-    :ScalarIMF_(0.0)
-    ,ShortName_("")
-    ,LongName_ ("")
-    ,gloss_    ("")
-{
-}
-
-//============================================================================
 FundInfo::FundInfo
     (double             ScalarIMF
     ,std::string const& ShortName
@@ -56,9 +47,6 @@ FundInfo::FundInfo
     ,gloss_    (gloss)
 {
 }
-
-//============================================================================
-FundInfo::~FundInfo() = default;
 
 namespace xml_serialize
 {
@@ -88,16 +76,10 @@ template<> struct xml_io<FundInfo>
 } // namespace xml_serialize
 
 //============================================================================
-FundData::FundData() = default;
-
-//============================================================================
 FundData::FundData(std::string const& a_Filename)
 {
     Read(a_Filename);
 }
-
-//============================================================================
-FundData::~FundData() = default;
 
 namespace
 {

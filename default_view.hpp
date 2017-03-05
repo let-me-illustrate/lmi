@@ -37,8 +37,8 @@ class DefaultView
     :public MvcView
 {
   public:
-    DefaultView();
-    ~DefaultView() override;
+    DefaultView() = default;
+    ~DefaultView() override = default;
 
   private:
     // MvcView required implementation.

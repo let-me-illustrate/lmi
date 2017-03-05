@@ -36,8 +36,8 @@ class PolicyView final
     :public ProductEditorView
 {
   public:
-    PolicyView();
-    ~PolicyView() override;
+    PolicyView() = default;
+    ~PolicyView() override = default;
 
     typedef std::map<std::string, wxTextCtrl*> controls_type;
     controls_type&       controls();

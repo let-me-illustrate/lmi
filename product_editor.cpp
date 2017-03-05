@@ -33,13 +33,6 @@
 #include <wx/treectrl.h>
 #include <wx/window.h>
 
-ProductEditorDocument::ProductEditorDocument()
-    :wxDocument()
-{
-}
-
-ProductEditorDocument::~ProductEditorDocument() = default;
-
 ProductEditorView& ProductEditorDocument::PredominantView() const
 {
     return ::PredominantView<ProductEditorView>(*this);
@@ -112,23 +105,6 @@ bool ProductEditorDocument::DoSaveDocument(wxString const& filename)
         return false;
         }
 }
-
-ProductEditorView::ProductEditorView()
-    :ViewEx()
-{
-}
-
-ProductEditorView::~ProductEditorView() = default;
-
-TreeGridViewBase::TreeGridViewBase()
-    :ProductEditorView()
-    ,grid_(nullptr)
-    ,grid_label_(nullptr)
-    ,tree_(nullptr)
-{
-}
-
-TreeGridViewBase::~TreeGridViewBase() = default;
 
 wxTreeCtrl& TreeGridViewBase::tree() const
 {

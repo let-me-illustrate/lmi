@@ -85,13 +85,13 @@ class ViewEx
     :public wxView
 {
   public:
-    ViewEx();
+    ViewEx() = default;
 
     wxIcon     Icon   () const;
     wxMenuBar* MenuBar() const;
 
   protected:
-    ~ViewEx() override;
+    ~ViewEx() override = default;
 
     wxFrame& FrameWindow() const;
 

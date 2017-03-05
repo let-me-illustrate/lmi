@@ -72,7 +72,7 @@ class Loads
     std::vector<double> const& excess_premium_load_minimum_premium_tax() const;
 
   private:
-    Loads(); // Ctor for unit testing.
+    Loads() = default; // Ctor for unit testing.
 
     void Allocate(int length);
     void Initialize(product_database const&);

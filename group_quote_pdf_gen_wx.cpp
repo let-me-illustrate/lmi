@@ -490,7 +490,7 @@ class group_quote_pdf_generator_wx
     static int const vert_skip   = 12;
 
     // Ctor is private as it is only used by do_create().
-    group_quote_pdf_generator_wx();
+    group_quote_pdf_generator_wx() = default;
 
     // Generate the PDF once we have all the data.
     void do_generate_pdf(wxPdfDC& pdf_dc);
@@ -612,15 +612,9 @@ class group_quote_pdf_generator_wx
         };
     page_metrics page_;
 
-    int row_num_;
-    int individual_selection_;
+    int row_num_ = 0;
+    int individual_selection_ = 99;
 };
-
-group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
-    :row_num_(0)
-    ,individual_selection_(99)
-{
-}
 
 void assert_nonblank(std::string const& value, std::string const& name)
 {

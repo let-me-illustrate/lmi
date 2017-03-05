@@ -178,7 +178,7 @@ class application_test final
     bool is_distribution_test() const { return is_distribution_test_; }
 
   private:
-    application_test();
+    application_test() = default;
     application_test(application_test const&) = delete;
     application_test& operator=(application_test const&) = delete;
 
@@ -230,16 +230,10 @@ class application_test final
 
     fs::path test_files_path_;
 
-    bool run_all_;
+    bool run_all_ = true;
 
-    bool is_distribution_test_;
+    bool is_distribution_test_ = false;
 };
-
-application_test::application_test()
-    :run_all_(true)
-    ,is_distribution_test_(false)
-{
-}
 
 application_test& application_test::instance()
 {
