@@ -172,7 +172,7 @@ void Ledger::ZeroInforceAfterLapse()
         }
     std::vector<double>::iterator b = ledger_invariant_->InforceLives.begin();
     std::vector<double>::iterator e = ledger_invariant_->InforceLives.end();
-    b += std::min(e - b, 1 + lapse_year);
+    b += std::min(static_cast<int>(e - b), 1 + lapse_year);
     if(b < e)
         {
         std::fill(b, e, 0.0);
