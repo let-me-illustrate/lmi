@@ -37,10 +37,6 @@ namespace
 void authenticate_system()
 {}
 
-glossed_string::glossed_string() = default;
-
-glossed_string::~glossed_string() = default;
-
 bool is_antediluvian_fork()
 {
     return true;

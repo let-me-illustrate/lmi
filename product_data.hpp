@@ -43,12 +43,12 @@ class glossed_string final
     friend class PolicyDocument;
 
   public:
-    glossed_string();
+    glossed_string() = default;
     explicit glossed_string
         (std::string const& datum
         ,std::string const& gloss = std::string()
         );
-    ~glossed_string();
+    ~glossed_string() = default;
 
     glossed_string& operator=(std::string const&);
 
