@@ -46,8 +46,6 @@ datum_sequence::datum_sequence(std::string const& s)
     assert_sanity();
 }
 
-datum_sequence::~datum_sequence() = default;
-
 datum_sequence& datum_sequence::operator=(std::string const& s)
 {
     datum_string::operator=(s);
