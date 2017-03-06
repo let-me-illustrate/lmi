@@ -27,14 +27,7 @@
 #include "handle_exceptions.hpp"
 #include "path_utility.hpp"
 
-#include <boost/filesystem/operations.hpp>
-
-/// Initialize directory paths to ".", not an empty string. Reason:
-/// objects of the boost filesystem library's path class are created
-/// from these strings, which, if the strings were empty, would trigger
-/// exceptions when passed to that library's directory_iterator ctor.
-///
-/// 6.7/4 might seem to permit instance() to call this ctor before the
+/// 6.7/4 might seem to permit instance() to call the ctor before the
 /// first statement of main(); however, that is actually not permitted
 /// because it wouldn't meet the conditions of 3.6.2/2; cf.
 ///   http://groups.google.com/group/comp.lang.c++.moderated/msg/f322587e93ce83fb
@@ -42,18 +35,6 @@
 /// called too early, then setting a default policy later with
 /// default_name_check() will throw an exception, so there's no need
 /// to guard against such things here in any event.
-
-global_settings::global_settings()
-    :mellon_                    (false)
-    ,ash_nazg_                  (false)
-    ,pyx_                       ("")
-    ,custom_io_0_               (false)
-    ,regression_testing_        (false)
-    ,data_directory_            (fs::system_complete("."))
-    ,prospicience_date_         (last_yyyy_date())
-{}
-
-global_settings::~global_settings() = default;
 
 global_settings& global_settings::instance()
 {

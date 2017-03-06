@@ -27,6 +27,7 @@
 #include "calendar_date.hpp"
 #include "so_attributes.hpp"
 
+#include <boost/filesystem/operations.hpp> // fs::system_complete()
 #include <boost/filesystem/path.hpp>
 
 #include <string>
@@ -55,7 +56,11 @@
 /// haven't approved a product, because it is important to test new
 /// products before approval.
 ///
-/// data_directory_: Path to data files.
+/// data_directory_: Path to data files, initialized to ".", not an
+/// empty string. Reason: objects of the boost filesystem library's
+/// path class are created from these strings, which, if the strings
+/// were empty, would trigger exceptions when passed to that library's
+/// directory_iterator ctor.
 ///
 /// Directory members, whose names end in 'directory_', are stored as
 /// filesystem path objects because that is their nature. They are
@@ -86,18 +91,18 @@ class LMI_SO global_settings final
     calendar_date const& prospicience_date        () const;
 
   private:
-    global_settings();
-    ~global_settings();
+    global_settings() = default;
+    ~global_settings() = default;
     global_settings(global_settings const&) = delete;
     global_settings& operator=(global_settings const&) = delete;
 
-    bool mellon_;
-    bool ash_nazg_;
-    std::string pyx_;
-    bool custom_io_0_;
-    bool regression_testing_;
-    fs::path data_directory_;
-    calendar_date prospicience_date_;
+    bool mellon_                     {false};
+    bool ash_nazg_                   {false};
+    std::string pyx_                 {};
+    bool custom_io_0_                {false};
+    bool regression_testing_         {false};
+    fs::path data_directory_         {fs::system_complete(".")};
+    calendar_date prospicience_date_ {last_yyyy_date()};
 };
 
 #endif // global_settings_hpp
