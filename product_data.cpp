@@ -153,6 +153,12 @@ product_data::product_data(std::string const& product_name)
     load(AddDataDir(path.string()));
 }
 
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
+
 product_data::~product_data() = default;
 
 /// Principal string datum (without gloss) for named member.

@@ -131,6 +131,12 @@ mec_input::mec_input(mec_input const& z)
     DoAdaptExternalities();
 }
 
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
+
 mec_input::~mec_input() = default;
 
 mec_input& mec_input::operator=(mec_input const& z)

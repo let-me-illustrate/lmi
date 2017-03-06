@@ -246,6 +246,12 @@ Input::Input(Input const& z)
     DoAdaptExternalities();
 }
 
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
+
 Input::~Input() = default;
 
 Input& Input::operator=(Input const& z)

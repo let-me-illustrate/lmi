@@ -201,7 +201,12 @@ Irc7702::Irc7702
     Init();
 }
 
-//============================================================================
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
+
 Irc7702::~Irc7702() = default;
 
 //============================================================================

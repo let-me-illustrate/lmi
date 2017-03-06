@@ -141,6 +141,12 @@ gpt_input::gpt_input(gpt_input const& z)
     DoAdaptExternalities();
 }
 
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
+
 gpt_input::~gpt_input() = default;
 
 gpt_input& gpt_input::operator=(gpt_input const& z)

@@ -128,6 +128,12 @@ xml_lmi::dom_parser::dom_parser(std::istream const& is)
         }
 }
 
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
+///
 /// Throws: nothing unless member parser_'s destructor does.
 
 xml_lmi::dom_parser::~dom_parser() = default;
@@ -199,6 +205,12 @@ xml_lmi::xml_document::xml_document(std::string const& root_node_name)
     :document_(new xml_lmi::Document(xml::element(root_node_name.c_str())))
 {
 }
+
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
 
 xml_lmi::xml_document::~xml_document() = default;
 
