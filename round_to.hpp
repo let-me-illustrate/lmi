@@ -287,9 +287,8 @@ class round_to
   public:
     round_to();
     round_to(int decimals, rounding_style style);
-    round_to(round_to const&);
-
-    round_to& operator=(round_to const&);
+    round_to(round_to const&) = default;
+    round_to& operator=(round_to const&) = default;
 
     bool operator==(round_to const&) const;
     RealType operator()(RealType r) const;
@@ -382,27 +381,6 @@ round_to<RealType>::round_to(int decimals, rounding_style a_style)
         {
         throw std::domain_error("Invalid number of decimals.");
         }
-}
-
-template<typename RealType>
-round_to<RealType>::round_to(round_to const& z)
-    :decimals_          (z.decimals_         )
-    ,style_             (z.style_            )
-    ,scale_fwd_         (z.scale_fwd_        )
-    ,scale_back_        (z.scale_back_       )
-    ,rounding_function_ (z.rounding_function_)
-{
-}
-
-template<typename RealType>
-round_to<RealType>& round_to<RealType>::operator=(round_to const& z)
-{
-    decimals_          = z.decimals_         ;
-    style_             = z.style_            ;
-    scale_fwd_         = z.scale_fwd_        ;
-    scale_back_        = z.scale_back_       ;
-    rounding_function_ = z.rounding_function_;
-    return *this;
 }
 
 template<typename RealType>
