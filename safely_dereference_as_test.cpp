@@ -27,7 +27,7 @@
 
 struct B
 {
-    virtual ~B()= default;
+    virtual ~B() = default;
 };
 
 struct D
