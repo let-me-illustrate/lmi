@@ -51,7 +51,7 @@ class LMI_SO mec_server final
 {
   public:
     explicit mec_server(mcenum_emission);
-    ~mec_server();
+    ~mec_server() = default;
 
     bool operator()(fs::path const&);
     bool operator()(fs::path const&, mec_input const&);
@@ -65,11 +65,11 @@ class LMI_SO mec_server final
     double seconds_for_output      () const;
 
   private:
-    mcenum_emission emission_;
-    mec_state state_;
-    double seconds_for_input_;
-    double seconds_for_calculations_;
-    double seconds_for_output_;
+    mcenum_emission emission_        {mce_emit_nothing};
+    mec_state state_                 {};
+    double seconds_for_input_        {0.0};
+    double seconds_for_calculations_ {0.0};
+    double seconds_for_output_       {0.0};
 };
 
 #endif // mec_server_hpp

@@ -77,8 +77,6 @@ bool gpt_state::is_detritus(std::string const&) const
 mec_server::mec_server(mcenum_emission)
 {}
 
-mec_server::~mec_server() = default;
-
 bool mec_server::operator()(fs::path const&)
 {
     return false;

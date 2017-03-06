@@ -494,13 +494,8 @@ mec_state test_one_days_7702A_transactions
 
 mec_server::mec_server(mcenum_emission emission)
     :emission_                 (emission)
-    ,seconds_for_input_        (0.0)
-    ,seconds_for_calculations_ (0.0)
-    ,seconds_for_output_       (0.0)
 {
 }
-
-mec_server::~mec_server() = default;
 
 bool mec_server::operator()(fs::path const& file_path)
 {
