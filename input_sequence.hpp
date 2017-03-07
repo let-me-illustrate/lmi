@@ -98,6 +98,55 @@
 //   1.5 * salary
 //   100000 increasing 5% annually
 
+// Inchoate ideas for future consideration.
+//
+// Gather all ctor arguments in an easy-to-manage struct--see:
+//   http://lists.nongnu.org/archive/html/lmi/2017-02/msg00037.html
+//
+// * Overlays
+//
+// Allow multiple layers of input sequences, like layers in a drawing.
+// For example:
+//
+// This overlay means 0 past retirement:
+//     1000 [0, 10); 0 [retirement, maturity)
+//   ...@30: 10 yrs...truncate nothing, leaving 10
+//   ...@60: 10 yrs...truncate, leaving 5
+//
+// This overlay means not less than ten years
+//     1000 [0, retirement); 1000[0, 10)
+//   ...@30: 35 yrs...extend nothing, leaving 35
+//   ...@60:  5 yrs...extend to 10
+//
+// Of course, amounts might even differ, e.g.:
+//     1000 [0, retirement); 200[0, 10)
+//
+// Algorithm:
+//   create a years_to_maturity-element std::map<duration, ValueInterval>
+//   add each layer in order (from left, probably)
+//     crucially, deleting any endpoints underneath
+//   traverse the map (from left) producing a vector<ValueInterval>
+//     each value-change separates an interval: this is RLE, IOW
+//     read mode from map...does right endpoint alone suffice?
+//       yes, iff we alter obscured intervals' right endpoints in loop
+//       instead...view them as transition-points
+//         then each layer simply overwrites any older transition-point
+//     ASCII-graphical example:
+//       [.)  [.)[...) [..)
+//       [........)[....)
+//                ^^    ^ obscured: must delete deliberately
+//
+// This overlay method would answer certain open questions:
+//  - Should further RLE be performed on input? E.g.:
+//      123; 123; 123 [2,5); 123 maturity
+//    At present, such RLE is not performed: if adjacent intervals have
+//    the same value, that is taken as intentional. That's significant
+//    at least while the GUI is open, because adding multiple intervals
+//    reuses the default value until modified--but this would happen
+//    after the GUI has closed.
+//  - Should overlapping intervals be forbidden? Overlays require that.
+// One could imagine a multidimensional GUI editor...
+
 // GUI considerations.
 //
 // Hybrid types: A really useful facility for entering premiums must
