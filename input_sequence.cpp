@@ -94,7 +94,7 @@ InputSequence::InputSequence
         || a_keywords_only && contains(a_allowed_keywords, a_default_keyword)
         );
 
-    SequenceParser parser
+    SequenceParser const parser
         (input_expression
         ,a_years_to_maturity
         ,a_issue_age
@@ -105,7 +105,7 @@ InputSequence::InputSequence
         ,a_keywords_only
         );
 
-    std::string const parser_diagnostics = parser.diagnostics();
+    std::string const parser_diagnostics = parser.diagnostic_messages();
     if(!parser_diagnostics.empty())
         {
         throw std::runtime_error(parser_diagnostics);

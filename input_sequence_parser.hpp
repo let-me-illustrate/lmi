@@ -46,15 +46,17 @@ class SequenceParser final
         ,bool                            a_keywords_only
         );
 
+    // In case it is ever desired to implement these: they might
+    // simply copy the "parser products" data members that have
+    // public accessors.
+    SequenceParser(SequenceParser const&) = delete;
+    SequenceParser& operator=(SequenceParser const&) = delete;
     ~SequenceParser() = default;
 
-    std::string diagnostics() const;
+    std::string diagnostic_messages() const;
     std::vector<ValueInterval> const& intervals() const;
 
   private:
-    SequenceParser(SequenceParser const&) = delete;
-    SequenceParser& operator=(SequenceParser const&) = delete;
-
     enum token_type
         {e_eof             = 0
         ,e_major_separator = ';'
@@ -91,6 +93,7 @@ class SequenceParser final
     void mark_diagnostic_context();
 
     // Parser products.
+    std::string diagnostic_messages_;
     std::vector<ValueInterval> intervals_;
 
     // Streams for parser input and diagnostic messages.

@@ -51,11 +51,12 @@ SequenceParser::SequenceParser
     ,keywords_only_                 (a_keywords_only)
 {
     sequence();
+    diagnostic_messages_ = diagnostics_.str();
 }
 
-std::string SequenceParser::diagnostics() const
+std::string SequenceParser::diagnostic_messages() const
 {
-    return diagnostics_.str();
+    return diagnostic_messages_;
 }
 
 std::vector<ValueInterval> const& SequenceParser::intervals() const
@@ -655,8 +656,8 @@ void SequenceParser::mark_diagnostic_context()
 
 /// Extract first substring from a '\n'-delimited exception::what().
 ///
-/// SequenceParser::diagnostics() returns a '\n'-delimited string
-/// describing all the anomalies diagnosed while parsing an input
+/// SequenceParser::diagnostic_messages() returns a '\n'-delimited
+/// string describing all anomalies diagnosed while parsing an input
 /// sequence. When that string is not empty, it is reasonable to throw
 /// an exception constructed from it--most generally, in its entirety.
 ///
