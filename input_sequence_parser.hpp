@@ -27,7 +27,6 @@
 #include "config.hpp"
 
 #include "input_sequence_interval.hpp"
-#include "so_attributes.hpp"
 
 #include <sstream>
 #include <string>
