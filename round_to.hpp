@@ -285,7 +285,9 @@ class round_to
     static_assert(std::is_floating_point<RealType>::value, "");
 
   public:
-    round_to();
+    /// The default ctor only makes the class DefaultConstructible;
+    /// the object it creates throws on use.
+    round_to() = default;
     round_to(int decimals, rounding_style style);
     round_to(round_to const&) = default;
     round_to& operator=(round_to const&) = default;
@@ -300,25 +302,12 @@ class round_to
     using rounding_fn_t = RealType (*)(RealType);
     rounding_fn_t select_rounding_function(rounding_style) const;
 
-    int decimals_;
-    rounding_style style_;
-    max_prec_real scale_fwd_;
-    max_prec_real scale_back_;
-    rounding_fn_t rounding_function_;
+    int decimals_                    {0};
+    rounding_style style_            {r_indeterminate};
+    max_prec_real scale_fwd_         {1.0};
+    max_prec_real scale_back_        {1.0};
+    rounding_fn_t rounding_function_ {detail::erroneous_rounding_function};
 };
-
-/// This default ctor serves only to render the class DefaultConstructible.
-/// The object it creates throws on use.
-
-template<typename RealType>
-round_to<RealType>::round_to()
-    :decimals_          (0)
-    ,style_             (r_indeterminate)
-    ,scale_fwd_         (1.0)
-    ,scale_back_        (1.0)
-    ,rounding_function_ (detail::erroneous_rounding_function)
-{
-}
 
 // Naran used const data members, reasoning that a highly optimizing
 // compiler could then calculate std::pow(10.0, n) at compile time.
