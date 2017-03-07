@@ -110,14 +110,14 @@ class SequenceParser final
     bool keywords_only_;
 
     // Parser internals.
-    token_type current_token_type_               = e_startup;
-    double current_number_                       = 0.0;
-    std::string current_keyword_;
-    int current_duration_scalar_                 = 0;
-    duration_mode previous_duration_scalar_mode_ = e_inception;
-    duration_mode current_duration_scalar_mode_  = e_inception;
-    ValueInterval current_interval_;
-    int last_input_duration_                     = 0;
+    token_type current_token_type_               {e_startup};
+    double current_number_                       {0.0};
+    std::string current_keyword_                 {};
+    int current_duration_scalar_                 {0};
+    duration_mode previous_duration_scalar_mode_ {e_inception};
+    duration_mode current_duration_scalar_mode_  {e_inception};
+    ValueInterval current_interval_              {};
+    int last_input_duration_                     {0};
 };
 
 #endif // input_sequence_parser_hpp
