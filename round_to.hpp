@@ -39,8 +39,8 @@
 // Power-of-ten scaling factors are best represented in the maximum
 // available precision, which is indicated by type 'max_prec_real'.
 //
-// Changing this typedef lets you use a nonstandard type or class with
-// greater precision if desired.
+// Change this alias-declaration to use a nonstandard type or class
+// with greater precision if desired.
 //
 // Alternatively, suppose your hardware offers an extended format,
 // but you can't or don't take advantage of it--either your compiler
@@ -49,8 +49,8 @@
 // If the compiler nonetheless treats double and long double as
 // distinct types, then it might generate extra machine code to
 // convert between those types. You could prevent that by changing
-// this typedef to double.
-typedef long double max_prec_real;
+// this alias-declaration to double.
+using max_prec_real = long double;
 
 // Any modern C++ compiler provides std::rint().
 #define LMI_HAVE_RINT
@@ -297,14 +297,14 @@ class round_to
     rounding_style style() const;
 
   private:
-    typedef RealType (*rounding_function_t)(RealType);
-    rounding_function_t select_rounding_function(rounding_style) const;
+    using rounding_fn_t = RealType (*)(RealType);
+    rounding_fn_t select_rounding_function(rounding_style) const;
 
     int decimals_;
     rounding_style style_;
     max_prec_real scale_fwd_;
     max_prec_real scale_back_;
-    rounding_function_t rounding_function_;
+    rounding_fn_t rounding_function_;
 };
 
 /// This default ctor serves only to render the class DefaultConstructible.
@@ -414,7 +414,7 @@ rounding_style round_to<RealType>::style() const
 
 // Choose the auxiliary rounding function indicated by the argument.
 template<typename RealType>
-typename round_to<RealType>::rounding_function_t
+typename round_to<RealType>::rounding_fn_t
 round_to<RealType>::select_rounding_function(rounding_style const a_style) const
 {
 #if defined LMI_HAVE_RINT
