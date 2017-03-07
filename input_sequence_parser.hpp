@@ -90,7 +90,12 @@ class SequenceParser final
 
     void mark_diagnostic_context();
 
+    // Parser products.
+    std::vector<ValueInterval> intervals_;
+
+    // Streams for parser input and diagnostic messages.
     std::istringstream input_stream_;
+    std::ostringstream diagnostics_;
 
     // Copies of ctor args that are identical to class InputSequence's.
     int years_to_maturity_;
@@ -101,6 +106,7 @@ class SequenceParser final
     std::vector<std::string> allowed_keywords_;
     bool keywords_only_;
 
+    // Parser internals.
     token_type current_token_type_               = e_startup;
     double current_number_                       = 0.0;
     std::string current_keyword_;
@@ -109,10 +115,6 @@ class SequenceParser final
     duration_mode current_duration_scalar_mode_  = e_inception;
     ValueInterval current_interval_;
     int last_input_duration_                     = 0;
-
-    std::ostringstream diagnostics_;
-
-    std::vector<ValueInterval> intervals_;
 };
 
 #endif // input_sequence_parser_hpp
