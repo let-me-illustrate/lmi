@@ -30,7 +30,9 @@
 
 #include <string>
 
-class datum_string_base
+// Implicitly-declared special member functions do the right thing.
+
+class LMI_SO datum_string_base
     :public datum_base
 {
   public:
