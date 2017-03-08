@@ -89,8 +89,6 @@ PreferencesModel::PreferencesModel()
     Load();
 }
 
-PreferencesModel::~PreferencesModel() = default;
-
 void PreferencesModel::AscribeMembers()
 {
     ascribe("CalculationSummaryColumn00"    , &PreferencesModel::CalculationSummaryColumn00    );
