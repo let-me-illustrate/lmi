@@ -148,7 +148,6 @@ TESTS = \
     test_name_value_pairs \
     test_ncnnnpnn \
     test_numeric_io \
-    test_obstruct_slicing \
     test_path_utility \
     test_premium_tax \
     test_print_matrix \
@@ -542,6 +541,7 @@ test_coding_rules_SOURCES = \
   fenv_lmi.cpp \
   main_common.cpp \
   main_common_non_wx.cpp \
+  miscellany.cpp \
   my_test_coding_rules.cpp \
   sigfpe.cpp \
   test_coding_rules.cpp
@@ -890,12 +890,6 @@ test_numeric_io_SOURCES = \
   numeric_io_test.cpp \
   timer.cpp
 test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
-
-test_obstruct_slicing_SOURCES = \
-  $(common_test_objects) \
-  obstruct_slicing_test.cpp \
-  timer.cpp
-test_obstruct_slicing_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_path_utility_SOURCES = \
   $(common_test_objects) \
@@ -1248,7 +1242,6 @@ noinst_HEADERS = \
     null_stream.hpp \
     numeric_io_cast.hpp \
     numeric_io_traits.hpp \
-    obstruct_slicing.hpp \
     oecumenic_enumerations.hpp \
     outlay.hpp \
     path_utility.hpp \
@@ -1297,7 +1290,6 @@ noinst_HEADERS = \
     tn_range_type_trammels.hpp \
     tn_range_types.hpp \
     transferor.hpp \
-    uncopyable_lmi.hpp \
     value_cast.hpp \
     version.hpp \
     view_ex.hpp \

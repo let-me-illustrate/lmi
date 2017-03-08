@@ -23,13 +23,6 @@
 
 #include "datum_base.hpp"
 
-datum_base::datum_base()
-    :enabled_(true)
-{
-}
-
-datum_base::~datum_base() = default;
-
 void datum_base::enable(bool b)
 {
     enabled_ = b;

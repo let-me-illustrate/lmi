@@ -242,8 +242,6 @@ wxSize RoundingButtons::CalculateMinimumTextControlSize
     return size;
 }
 
-RoundingButtons::~RoundingButtons() = default;
-
 bool RoundingButtons::IsModified() const
 {
     return !(GetValue() == previous_value_);

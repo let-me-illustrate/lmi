@@ -48,8 +48,8 @@
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
 #include <wx/utils.h>                   // wxBusyCursor
-#include <wx/xrc/xmlres.h>
 #include <wx/wupdlock.h>
+#include <wx/xrc/xmlres.h>
 
 #include <cstddef>                      // std::size_t
 #include <cstring>                      // std::strlen()
@@ -108,7 +108,7 @@ MvcController::MvcController
 
     if(!wxXmlResource::Get()->LoadDialog(this, parent, view_.MainDialogName()))
         {
-        fatal_error() << "Unable to load dialog." << LMI_FLUSH;
+        alarum() << "Unable to load dialog." << LMI_FLUSH;
         }
 
     BookControl().ChangeSelection(last_selected_page[view_.ResourceFileName()]);
@@ -150,8 +150,6 @@ MvcController::MvcController
         ,&MvcController::UponInitDialog
         );
 }
-
-MvcController::~MvcController() = default;
 
 /// Make the Model consistent, and change the View to comport with it.
 ///
@@ -283,7 +281,7 @@ void MvcController::ConditionallyEnableItems
 
     if(control_is_enumerative && !datum)
         {
-        fatal_error()
+        alarum()
             << "View control '"
             << name
             << "' is of enumerative type '"
@@ -302,7 +300,7 @@ void MvcController::ConditionallyEnableItems
 
     if(!control_is_enumerative && datum)
         {
-        fatal_error()
+        alarum()
             << "Model datum '"
             << name
             << "' is of enumerative type '"
@@ -348,7 +346,7 @@ void MvcController::ConditionallyEnableItems
         }
     else
         {
-        fatal_error() << "Unexpected case." << LMI_FLUSH;
+        alarum() << "Unexpected case." << LMI_FLUSH;
         }
 }
 
@@ -357,12 +355,12 @@ wxWindow& MvcController::CurrentPage() const
     wxBookCtrlBase const& book = BookControl();
     if(wxNOT_FOUND == book.GetSelection())
         {
-        fatal_error() << "No page selected in notebook." << LMI_FLUSH;
+        alarum() << "No page selected in notebook." << LMI_FLUSH;
         }
     wxWindow* page = book.GetPage(book.GetSelection());
     if(!page)
         {
-        fatal_error() << "Selected notebook page is invalid." << LMI_FLUSH;
+        alarum() << "Selected notebook page is invalid." << LMI_FLUSH;
         }
     return *page;
 }
@@ -437,7 +435,7 @@ void MvcController::EnsureOptimalFocus()
             {
             EndModal(wxID_CANCEL);
             }
-        fatal_error()
+        alarum()
             << "Dialog cancelled because a disabled or null window ("
             << NameLabelId(f)
             << ") improperly had focus."
@@ -581,7 +579,7 @@ void MvcController::UpdateCircumscription
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Range limits not yet supported for control '"
             << name
             << "' of type '"

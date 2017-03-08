@@ -77,7 +77,6 @@
 #   include "null_stream.hpp"
 #   include "numeric_io_cast.hpp"
 #   include "numeric_io_traits.hpp"
-#   include "obstruct_slicing.hpp"
 #   include "oecumenic_enumerations.hpp"
 #   include "outlay.hpp"
 #   include "path_utility.hpp"
@@ -94,8 +93,8 @@
 #   include "tn_range.hpp"
 #   include "tn_range_type_trammels.hpp"
 #   include "tn_range_types.hpp"
-#   include "xml_serializable.hpp"
 #   include "value_cast.hpp"
+#   include "xml_serializable.hpp"
 #   include "yare_input.hpp"
 #   include "zero.hpp"
 

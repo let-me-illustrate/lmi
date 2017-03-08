@@ -60,7 +60,7 @@ std::string realize_sequence_string
             ,input.inforce_year     ()
             ,input.effective_year   ()
             );
-        detail::convert_vector(v, s.linear_number_representation());
+        detail::convert_vector(v, s.seriatim_numbers());
         }
     catch(std::exception const& e)
         {
@@ -95,7 +95,7 @@ std::string realize_sequence_string
             );
         detail::convert_vector
             (v
-            ,s.linear_keyword_representation()
+            ,s.seriatim_keywords()
             ,keyword_dictionary
             ,default_keyword
             );
@@ -132,10 +132,10 @@ std::string realize_sequence_string
             ,false
             ,default_keyword
             );
-        detail::convert_vector(vn, s.linear_number_representation());
+        detail::convert_vector(vn, s.seriatim_numbers());
         detail::convert_vector
             (ve
-            ,s.linear_keyword_representation()
+            ,s.seriatim_keywords()
             ,keyword_dictionary
             ,default_keyword
             );
@@ -257,7 +257,7 @@ std::vector<std::string> Input::RealizeAllSequenceInput(bool report_errors)
                 }
             if(diagnostics_present)
                 {
-                fatal_error()
+                alarum()
                     << "Input validation problems for '"
                     << InsuredName
                     << "':\n"
@@ -1104,10 +1104,7 @@ void Input::make_term_rider_consistent(bool aggressively)
         }
     else
         {
-        fatal_error()
-            << "Term is neither proportional nor absolute."
-            << LMI_FLUSH
-            ;
+        alarum() << "Term is neither proportional nor absolute." << LMI_FLUSH;
         }
 
     if

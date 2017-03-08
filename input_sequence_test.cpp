@@ -28,7 +28,28 @@
 #include <algorithm>
 #include <iterator>                     // std::ostream_iterator
 
-void check
+class input_sequence_test
+{
+  public:
+    static void test();
+
+  private:
+    static void check
+        (char const*                     file
+        ,int                             line
+        ,int                             n
+        ,double const*                   d
+        ,std::string const&              e
+        ,std::string const&              g
+        ,char const*                     m
+        ,std::vector<std::string> const& k
+        ,std::vector<std::string> const& c
+        ,bool                            o
+        ,std::string const&              w
+        );
+};
+
+void input_sequence_test::check
     (char const*                     file
     ,int                             line
     ,int                             n
@@ -46,7 +67,7 @@ void check
         {
         InputSequence const seq(e, n, 90, 95, 0, 2002, k, o, w);
 
-        std::vector<double> const& v(seq.linear_number_representation());
+        std::vector<double> const& v(seq.seriatim_numbers());
         bool const bv = v == std::vector<double>(d, d + n);
         if(!bv)
             {
@@ -59,7 +80,7 @@ void check
             std::cout << std::endl;
             }
 
-        std::vector<std::string> const& s(seq.linear_keyword_representation());
+        std::vector<std::string> const& s(seq.seriatim_keywords());
         std::vector<std::string> const t =
             ( std::vector<std::string>() == c)
             ? std::vector<std::string>(n)
@@ -77,8 +98,8 @@ void check
             std::cout << std::endl;
             }
 
-        std::string const& f = seq.mathematical_representation();
-        bool const bf = g == f;
+        std::string const& f = seq.canonical_form();
+        bool const bf = f == g;
         if(!bf)
             {
             std::cout << "\nExpression:                '" << e << "'";
@@ -87,13 +108,18 @@ void check
             std::cout << std::endl;
             }
 
-//#define TEST_REPRESENTATION
-#if defined TEST_REPRESENTATION
-        INVOKE_BOOST_TEST(bv && bs && bf, file, line);
-#else  // !defined TEST_REPRESENTATION
-        // Don't make 'bf' fail the test yet.
-        INVOKE_BOOST_TEST(bv && bs /* && bf */, file, line);
-#endif // !defined TEST_REPRESENTATION
+        InputSequence const idempotence_test(f, n, 90, 95, 0, 2002, k, o, w);
+        std::string const& h = idempotence_test.canonical_form();
+        bool const bh = h == f;
+        if(!bh)
+            {
+            std::cout << "\nExpression:          '" << e << "'";
+            std::cout << "\n  c14n(c14n):        '" << h << "'";
+            std::cout << "\n  differs from c14n: '" << f << "'";
+            std::cout << std::endl;
+            }
+
+        INVOKE_BOOST_TEST(bv && bs && bf && bh, file, line);
         }
     catch(std::exception const& x)
         {
@@ -119,7 +145,7 @@ void check
         }
 }
 
-int test_main(int, char*[])
+void input_sequence_test::test()
 {
     std::string census = "\nCorporationPayment\tCorporationPaymentMode\tComments\n";
 
@@ -142,6 +168,11 @@ int test_main(int, char*[])
     //   n c d e g m k o w
     // which is the same as the order in check()'s declaration except
     // that c and d are juxtaposed to facilitate visual comparison.
+    //
+    // Each assignment to 'census' is followed by a comment showing
+    // how the census manager canonicalized the sequence as of
+    // 20170224T1200Z, determined by editing the sequence using
+    // InputSequenceEntry and copying and pasting the result.
 
     // An empty string is treated as zero.
     {
@@ -170,7 +201,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 7, 7, 0, 0, 0, 0};
     std::string const e("1 3; 7 5;0");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, 3); 7 [3, 5); 0 [5, maturity)");
+    std::string const g("1 3; 7 5; 0");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -181,7 +212,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 2, 3, 3, 3};
     std::string const e("1; 2; 3");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, 1); 2 [1, 2); 3 [2, maturity)");
+    std::string const g("1; 2; 3");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -191,17 +222,17 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 3; 3 6; 5 9; 7");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, 3); 3 [3, 6); 5 [6, 9); 7 [9, maturity)");
+    std::string const g("1 3; 3 6; 5 9; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
-    // {value, @ attained_age}
+    // {value, @ to-attained-age}
     {
     int const n = 10;
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 @93; 3 @96; 5 @99; 7");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, @93); 3 [@93, @96); 5 [@96, @99); 7 [@99, maturity)");
+    std::string const g("1 @93; 3 @96; 5 @99; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -211,7 +242,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
     std::string const e("1 #3; 3 #3; 5 #3; 7");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, 3); 3 [3, 6); 5 [6, 9); 7 [9, maturity)");
+    std::string const g("1 #3; 3 #3; 5 #3; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -223,7 +254,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 3, 3, 3, 5, 7, 7, 7};
     std::string const e("1 [0, 2); 3 [2, 5); 5 [5, 6); 7");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, 2); 3 [2, 5); 5 [5, 6); 7 [6, maturity)");
+    std::string const g("1 2; 3 5; 5; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -234,7 +265,7 @@ int test_main(int, char*[])
     std::string const e("1; 1 (0, 2]; 3 (2, 5]; 5 (5, 6]; 7");
     census += e + "\t\t\t\n";
     // Should the first two intervals be combined?
-    std::string const g("1 [0, 1); 1 [1, 3); 3 [3, 6); 5 [6, 7); 7 [7, maturity)");
+    std::string const g("1; 1 3; 3 6; 5; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -244,7 +275,7 @@ int test_main(int, char*[])
     double const d[n] = {1, 1, 1, 1, 2, 3, 4, 5, 5};
     std::string const e("1 [0, 4); 2 5; 3 #1; 4 @97; 5");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, 4); 2 [4, 5); 3 [5, 6); 4 [6, @97); 5 [@97, maturity)");
+    std::string const g("1 4; 2; 3 #1; 4 @97; 5");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -254,21 +285,15 @@ int test_main(int, char*[])
     double const d[n] = {1, 3, 5, 7, 7};
     std::string const e("1 [0, 1); 3 [1, 2); 5 (1, 2]; 7");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, 1); 3 [1, 2); 5 [2, 3); 7 [3, maturity)");
+    std::string const g("1; 3; 5; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
-    // Test empty intervals. (But they aren't empty?)
-    {
-    int const n = 5;
-    double const d[n] = {1, 3, 5, 7, 7};
-    std::string const e("1 [0, 1); 3 [1, 1]; 5 (1, 2]; 7");
-    census += e + "\t\t\t\n";
-    std::string const g("1 [0, 1); 3 [1, 2); 5 [2, 3); 7 [3, maturity)");
-    check(__FILE__, __LINE__, n, d, e, g);
-    }
-
-    // Test subtly improper intervals.
+    // Test subtly improper (empty) intervals.
+    //
+    // Mathematical convention might regard these intervals:
+    //   (x,x); (x,x]; [x,x); and [y,x], x<y
+    // as proper but empty, yet that's merely a convention.
     {
     int const n = 5;
     double const d[n] = {0, 0, 0, 0, 0};
@@ -318,8 +343,8 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 1, 0, 3, 0, 5, 7, 7, 7};
     std::string const e("1 [1, 2); 3 [3, 3]; 5 (4, 5]; 7");
-    census += e + "\t\t! not a partition\t\n";
-    std::string const g("0 [0, 1); 1 [1, 2); 0 [2, 3); 3 [3, 4); 0 [4, 5); 5 [5, 6); 7 [6, maturity)");
+    census += e + "\t\t\t\n";
+    std::string const g("0; 1; 0; 3; 0; 5; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -328,11 +353,12 @@ int test_main(int, char*[])
     int const n = 9;
     double const d[n] = {0, 1, 1, 3, 3, 5, 5, 7, 7};
     std::string const e("0; 1 (0, 8]; 3 (2, 7]; 5 (4, 6]; 7");
-    census += e + "\t\t! not a partition\t\n";
-    // mathematical_representation() returns '...1 [1, maturity)3 [3, 8)...'?
-    // Should overlapping intervals be accepted anyway?
-    std::string const g("0 [0, 1); 1 [1, 9); 3 [3, 8); 5 [5, 7); 7 [7, maturity)");
-    check(__FILE__, __LINE__, n, d, e, g);
+    // census: invalid expression cannot be pasted into GUI
+    std::string const g("0; 1 9; 3 8; 5 7; 7");
+    char const* m =
+        "Interval [ 9, 3 ) is improper: it ends before it begins."
+        ;
+    check(__FILE__, __LINE__, n, d, e, g, m);
     }
 
     // Test intervals with decreasing begin-points.
@@ -358,8 +384,8 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12, 0, 27, 0, 1, 7, 7, 7, 7};
     std::string const e("12 [1, @92); 27 [@93, @93]; 1 (@94, #1]; 7");
-    census += e + "\t\t! not a partition\t\n";
-    std::string const g("0 [0, 1); 12 [1, @92); 0 [@92, @93); 27 [@93, @94); 0 [@94, @95); 1 [@95, @96); 7 [@96, maturity");
+    census += e + "\t\t\t\n";
+    std::string const g("0; 12 @92; 0 @93; 27 @94; 0 @95; 1 #1; 7");
     check(__FILE__, __LINE__, n, d, e, g);
     }
 
@@ -370,55 +396,44 @@ int test_main(int, char*[])
     int const n = 10;
     double const d[n] = {0, 12.25, 0, 27.875, 0, 1.0625, 7.5, 7.5, 7.5, 7.5};
     std::string const e("12.25 [1,@92); 27.875 [@93,@93]; 1.0625(@94,#1]; 7.5");
-    census += e + "\t\t! not a partition\t\n";
-    std::string const g("0 [0, 1); 12.25 [1, @92); 0 [@92, @93); 27.875 [@93, @94); 0 [@94, @95); 1.0625 [@95, @96); 7.5 [@96, maturity)");
-    check(__FILE__, __LINE__, n, d, e, g);
-    }
-
-    // {value, @ age} means {value, to-attained-age}
-    {
-    int const n = 10;
-    double const d[n] = {1, 1, 1, 3, 3, 3, 5, 5, 5, 7};
-    std::string const e("1 @93; 3 @96; 5 @99; 7");
     census += e + "\t\t\t\n";
-    std::string const g("1 [0, @93); 3 [@93, @96); 5 [@96, @99); 7 [@99, maturity)");
+    std::string const g("0; 12.25 @92; 0 @93; 27.875 @94; 0 @95; 1.0625 #1; 7.5");
     check(__FILE__, __LINE__, n, d, e, g);
     }
-
-    // TODO ?? Test against canonical representation once we define that.
 
     // Test construction from numeric vector.
     {
     std::vector<double> const v{1, 1, 1, 2, 2};
-    BOOST_TEST(v == InputSequence(v).linear_number_representation());
-    BOOST_TEST_EQUAL
-        ("1 [0, 3); 2 [3, maturity)"
-        ,InputSequence(v).mathematical_representation()
-        );
+    InputSequence const seq(v);
+    BOOST_TEST(v == seq.seriatim_numbers());
+    BOOST_TEST_EQUAL("1 3; 2", canonicalized_input_sequence(v));
     }
 
     // Test construction from string (keyword) vector.
     {
     std::vector<std::string> const v{"alpha", "beta", "beta", "gamma", "eta"};
-    BOOST_TEST(v == InputSequence(v).linear_keyword_representation());
+    InputSequence const seq(v);
+    BOOST_TEST(v == seq.seriatim_keywords());
     BOOST_TEST_EQUAL
-        ("alpha [0, 1); beta [1, 3); gamma [3, 4); eta [4, maturity)"
-        ,InputSequence(v).mathematical_representation()
+        ("alpha; beta 3; gamma; eta"
+        ,canonicalized_input_sequence(v)
         );
     }
 
     // Test construction from one-element vector.
     {
     std::vector<double> const v{3};
-    BOOST_TEST(v == InputSequence(v).linear_number_representation());
-    BOOST_TEST_EQUAL("3", InputSequence(v).mathematical_representation());
+    InputSequence const seq(v);
+    BOOST_TEST(v == seq.seriatim_numbers());
+    BOOST_TEST_EQUAL("3", canonicalized_input_sequence(v));
     }
 
     // Test construction from empty vector.
     {
     std::vector<double> const v;
-    BOOST_TEST(v == InputSequence(v).linear_number_representation());
-    BOOST_TEST_EQUAL("0", InputSequence(v).mathematical_representation());
+    InputSequence const seq(v);
+    BOOST_TEST(v == seq.seriatim_numbers());
+    BOOST_TEST_EQUAL("0", canonicalized_input_sequence(v));
     }
 
     // Test (enumerative) allowed keywords, and keywords-only switch
@@ -428,11 +443,12 @@ int test_main(int, char*[])
     strvec const c      {"p", "p", "rrr", "rrr", "q", "q", "q", "q", "q"};
     double const d[n] = { 0 ,  0 ,   0  ,   0  ,  0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("p[0, 2); rrr [2, 4);q[4, 6);");
-    census += "glp[0, 2); target [2, 4);gsp[4, 6);\tannual[0, 2); quarterly [2, 4);monthly[4, 6);\t\t\n";
-    std::string const g("p [0, 2); rrr [2, 4); q [4, maturity)");
+    census += "glp[0, 2); target [2, 4);gsp[4, 6);\t\t\t\n";
+    std::string const g("p 2; rrr 4; q");
     strvec const k{"not_used", "p", "q", "r", "rr", "rrr"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     // Toggle keywords-only switch on: same result.
+    census += "\tannual[0, 2); quarterly [2, 4);monthly[4, 6);\t\t\n";
     bool const o = true;
     check(__FILE__, __LINE__, n, d, e, g, "", k, c, o);
     // Toggle keywords-only switch explicitly off: same result.
@@ -446,7 +462,7 @@ int test_main(int, char*[])
     double const d[n] ={ 1,  1,       0     ,       0     ,  5,  5,  7,  7,  7};
     std::string const e("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7");
     census += "1 [0, 2); corridor [2, 4); 5 [4, 6); 7\t\t\t\n";
-    std::string const g("1 [0, 2); keyword_00 [2, 4); 5 [4, 6); 7 [6, maturity)");
+    std::string const g("1 2; keyword_00 4; 5 6; 7");
     strvec const k{"keyword_00"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
@@ -460,7 +476,7 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "z", "p", "z", "z", "p", "z", "z", "z"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  5 ,  5 ,  0 ,  7 ,  7 ,  7 };
     std::string const e("q [0, 2); p [3, 4); 5 [4, 6); p; 7");
-    census += "sevenpay [0, 2); glp [3, 4); 5 [4, 6); glp; 7\t\t! not a partition\t\n";
+    // census: invalid expression cannot be pasted into GUI
     std::string const g(""); // Expression is invalid.
     char const* m =
         "Assertion 'a_default_keyword.empty() ||"
@@ -507,10 +523,8 @@ int test_main(int, char*[])
     strvec const c      {"q", "q", "z", "z", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [0, 2); p [4, maturity)");
-    census += "\tannual [0, 2); monthly [4, maturity)\t! not a partition\t\n";
-    // A sequence with a gap can't be created in the GUI; but how does
-    // the GUI translate this sequence if it's typed in?
-    std::string const g("q [0, 2); z [2, 4); p [4, maturity)");
+    census += "\tquarterly [0, 2); monthly [4, maturity)\t\t\n";
+    std::string const g("q 2; z 4; p");
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
@@ -551,8 +565,8 @@ int test_main(int, char*[])
     strvec const c      {"z", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
-    census += "sevenpay [1, 3); glp [3, maturity)\tquarterly [1, 3); monthly [3, maturity)\t! not a partition\t\n";
-    std::string const g("z [0, 1); q [1, 3); p [3, maturity)");
+    census += "\tquarterly [1, 3); monthly [3, maturity)\t\t\n";
+    std::string const g("z; q 3; p");
     strvec const k{"p", "q", "z"};
     bool const o = true;
     std::string w("z");
@@ -560,16 +574,17 @@ int test_main(int, char*[])
     }
 
     // Test an expression with a gap before the first interval,
-    // without the keywords-only switch. The default value should
-    // be numeric, and the keyword gap should be filled with an
-    // empty string.
+    // without the keywords-only switch. This is otherwise the same
+    // as the preceding case; results differ in that the default value
+    // is numeric and the keyword gap is filled with an empty string.
+    // (Should it be empty?)
     {
     int const n = 5;
     strvec const c      {"", "q", "q", "p", "p"};
     double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
     std::string const e("q [1, 3); p [3, maturity)");
-    census += "sevenpay [1, 3); glp [3, maturity)\tquarterly [1, 3); monthly [3, maturity)\t! not a partition\t\n";
-    std::string const g("0 [0, 1); q [1, 3); p [3, maturity)");
+    census += "sevenpay [1, 3); glp [3, maturity)\t\t\t\n";
+    std::string const g("0; q 3; p");
     strvec const k{"p", "q", "z"};
     check(__FILE__, __LINE__, n, d, e, g, "", k, c);
     }
@@ -580,14 +595,56 @@ int test_main(int, char*[])
     double const d[n] = {7, 7, 7, 7, 7, 4, 4, 4, 4, 4};
     std::string const e("7, retirement; 4, maturity");
     census += e + "\t\t\t\n";
-    std::string const g("7 [0, retirement); 4 [retirement, maturity)");
+    std::string const g("7 retirement; 4");
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
-    std::vector<ValueInterval> const& i(seq.interval_representation());
+    std::vector<ValueInterval> const& i(seq.intervals());
+    }
+
+    // Duration keywords, with a one-time-only event at retirement.
+    {
+    int const n = 10;
+    double const d[n] = {0, 0, 0, 0, 0, 1000, 0, 0, 0, 0};
+    std::string const e("0 retirement; 1000; 0 maturity");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 1000; 0");
+    check(__FILE__, __LINE__, n, d, e, g);
+    InputSequence const seq(e, 10, 90, 95, 0, 2002);
+    std::vector<ValueInterval> const& i(seq.intervals());
     BOOST_TEST_EQUAL(e_inception , i[0].begin_mode);
     BOOST_TEST_EQUAL(e_retirement, i[0].end_mode  );
     BOOST_TEST_EQUAL(e_retirement, i[1].begin_mode);
-    BOOST_TEST_EQUAL(e_maturity  , i[1].end_mode  );
+    BOOST_TEST_EQUAL(e_duration  , i[1].end_mode  );
+    BOOST_TEST_EQUAL(e_retirement, i[2].begin_mode);
+    BOOST_TEST_EQUAL(e_maturity  , i[2].end_mode  );
+    }
+
+    // Duration keywords, with a one-year-long event at retirement.
+    // This differs from the immediately preceding example. If it
+    // were canonicalized the same way, the difference between the
+    // two would be nullified.
+    //
+    // One could argue that an interval of implicit length one ought
+    // to be considered as
+    //   begin-point, #1
+    // instead of
+    //   begin-point, 1+begin-point
+    // but that's six of one vs. half a dozen of the other.
+    {
+    int const n = 10;
+    double const d[n] = {0, 0, 0, 0, 0, 1000, 0, 0, 0, 0};
+    std::string const e("0 retirement; 1000 #1; 0 maturity");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 1000 #1; 0");
+    check(__FILE__, __LINE__, n, d, e, g);
+    InputSequence const seq(e, 10, 90, 95, 0, 2002);
+    std::vector<ValueInterval> const& i(seq.intervals());
+    BOOST_TEST_EQUAL(e_inception      , i[0].begin_mode);
+    BOOST_TEST_EQUAL(e_retirement     , i[0].end_mode  );
+    BOOST_TEST_EQUAL(e_retirement     , i[1].begin_mode);
+    BOOST_TEST_EQUAL(e_number_of_years, i[1].end_mode  );
+    BOOST_TEST_EQUAL(e_number_of_years, i[2].begin_mode);
+    BOOST_TEST_EQUAL(e_maturity       , i[2].end_mode  );
     }
 
     // Test a simple parser error.
@@ -608,8 +665,132 @@ int test_main(int, char*[])
         );
     }
 
+    // Test all examples in the user manual:
+    //   http://www.nongnu.org/lmi/sequence_input.html
+    // Each example is quoted unmodified as a comment before its test.
+    // Some examples have been superficially changed to work with
+    // check(), e.g. because check() uses issue age 90. Others scale
+    // numbers or use shorter keywords for brevity.
+
+    // sevenpay 7; 250000 retirement; 100000 #10; 75000 @95; 50000
+    {
+    int const n = 9;
+    strvec const c     {"s", "s", "s",  "",  "",  "",  "",  "",  ""};
+    double const d[n] ={ 0 ,  0 ,  0 , 250, 250, 100,  75,  75,  50};
+    std::string const e("s 3; 250 retirement; 100 #1; 75 @98; 50");
+    census += "sevenpay 3; 250 retirement; 100 #1; 75 @98; 50\t\t\t\n";
+    std::string const g("s 3; 250 retirement; 100 #1; 75 @98; 50");
+    strvec const k{"s", "_"};
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c);
+    }
+
+    // 100000; 110000; 120000; 130000; 140000; 150000
+    {
+    int const n = 9;
+    double const d[n] = {10, 11, 12, 13, 14, 15, 15, 15, 15};
+    std::string const e("10; 11; 12; 13; 14; 15");
+    census += e + "\t\t\t\n";
+    std::string const g("10; 11; 12; 13; 14; 15");
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // annual; monthly
+    {
+    int const n = 5;
+    strvec const c      {"a", "m", "m", "m", "m"};
+    double const d[n] = { 0 ,  0 ,  0 ,  0 ,  0 };
+    std::string const e("a; m");
+    census += "\tannual; monthly\t\t\n";
+    std::string const g("a; m");
+    strvec const k{"a", "m"};
+    bool const o = true;
+    std::string w("a");
+    check(__FILE__, __LINE__, n, d, e, g, "", k, c, o, w);
+    }
+
+    // 10000 20; 0
+    {
+    int const n = 9;
+    double const d[n] = {10000, 10000, 10000, 10000, 0, 0, 0, 0, 0};
+    std::string const e("10000 4; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("10000 4; 0");
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 10000 10; 5000 15; 0
+    {
+    int const n = 9;
+    double const d[n] = {10000, 10000, 10000, 5000, 5000, 0, 0, 0, 0};
+    std::string const e("10000 3; 5000 5; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("10000 3; 5000 5; 0");
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 10000 @70; 0
+    {
+    int const n = 9;
+    double const d[n] = {10000, 10000, 10000, 0, 0, 0, 0, 0, 0};
+    std::string const e("10000 @93; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("10000 @93; 0");
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 10000 retirement; 0
+    {
+    int const n = 9;
+    double const d[n] = {10000, 10000, 10000, 10000, 10000, 0, 0, 0, 0};
+    std::string const e("10000 retirement; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("10000 retirement; 0");
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 0 retirement; 5000
+    {
+    int const n = 9;
+    double const d[n] = {0, 0, 0, 0, 0, 5000, 5000, 5000, 5000};
+    std::string const e("0 retirement; 5000");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 5000");
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 0 retirement; 5000 maturity
+    {
+    int const n = 9;
+    double const d[n] = {0, 0, 0, 0, 0, 5000, 5000, 5000, 5000};
+    std::string const e("0 retirement; 5000 maturity");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 5000");
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 0 retirement; 5000 #10; 0
+    {
+    int const n = 9;
+    double const d[n] = {0, 0, 0, 0, 0, 5000, 5000, 0, 0};
+    std::string const e("0 retirement; 5000 #2; 0");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 5000 #2; 0");
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+    // 0,[0,retirement);10000,[retirement,#10);0
+    {
+    int const n = 9;
+    double const d[n] = {0, 0, 0, 0, 0, 10, 10, 10, 0};
+    std::string const e("0,[0,retirement);10,[retirement,#3);0");
+    census += e + "\t\t\t\n";
+    std::string const g("0 retirement; 10 #3; 0");
+    check(__FILE__, __LINE__, n, d, e, g);
+    }
+
+#if defined SHOW_CENSUS_PASTE_TEST_CASES
     std::cout
-        << "Paste into a census to test similar expressions in the GUI:\n\n"
+        << "\nPaste into a census to test similar expressions in the GUI:\n\n"
         << "---------8<--------8<--------8<--------"
         << "8<--------8<--------8<--------8<-------"
         << census
@@ -617,7 +798,13 @@ int test_main(int, char*[])
         << ">8-------->8-------->8-------->8-------"
         << std::endl
         ;
+#endif // defined SHOW_CENSUS_PASTE_TEST_CASES
+}
 
-    return 0;
+int test_main(int, char*[])
+{
+    input_sequence_test::test();
+
+    return EXIT_SUCCESS;
 }
 

@@ -439,7 +439,6 @@ unit_test_targets := \
   name_value_pairs_test \
   ncnnnpnn_test \
   numeric_io_test \
-  obstruct_slicing_test \
   path_utility_test \
   premium_tax_test \
   print_matrix_test \
@@ -772,11 +771,6 @@ numeric_io_test$(EXEEXT): \
   numeric_io_test.o \
   timer.o \
 
-obstruct_slicing_test$(EXEEXT): \
-  $(common_test_objects) \
-  obstruct_slicing_test.o \
-  timer.o \
-
 path_utility_test$(EXEEXT): \
   $(boost_common_objects) \
   $(common_test_objects) \
@@ -1009,6 +1003,7 @@ test_coding_rules$(EXEEXT): \
   $(boost_common_objects) \
   $(boost_regex_objects) \
   $(main_auxiliary_common_objects) \
+  miscellany.o \
   my_test_coding_rules.o \
   test_coding_rules.o \
 

@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
@@ -43,18 +42,17 @@
 /// in particular, when their names are used to nominate xml elements.
 /// 'A*_' is reserved in case it's wanted later--e.g., for arguments.
 
-class LMI_SO mec_state
-    :virtual private obstruct_slicing           <mec_state>
-    ,        public  xml_serializable           <mec_state>
-    ,        public  MemberSymbolTable          <mec_state>
-    ,        private boost::equality_comparable <mec_state>
+class LMI_SO mec_state final
+    :public  xml_serializable           <mec_state>
+    ,public  MemberSymbolTable          <mec_state>
+    ,private boost::equality_comparable <mec_state>
 {
     friend class Irc7702A;
 
   public:
     mec_state();
     mec_state(mec_state const&);
-    ~mec_state() override;
+    ~mec_state() override = default;
 
     mec_state& operator=(mec_state const&);
     bool operator==(mec_state const&) const;

@@ -34,9 +34,6 @@
 
 #include "view_ex.hpp"
 
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
-
 #include <wx/defs.h>                    // wx shared-library 'attributes'
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
@@ -49,24 +46,25 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 /// It's left in the repository, though, because it might be a useful
 /// model for some other feature someday.
 
-class TextEditView
-    :        public  ViewEx
-    ,        private lmi::uncopyable <TextEditView>
-    ,virtual private obstruct_slicing<TextEditView>
+class TextEditView final
+    :public ViewEx
 {
     friend class TextEditDocument;
 
   public:
-    TextEditView();
-    ~TextEditView() override;
+    TextEditView() = default;
+    ~TextEditView() override = default;
 
   private:
+    TextEditView(TextEditView const&) = delete;
+    TextEditView& operator=(TextEditView const&) = delete;
+
     // ViewEx required implementation.
     wxWindow* CreateChildWindow() override;
     char const* icon_xrc_resource   () const override;
     char const* menubar_xrc_resource() const override;
 
-    wxTextCtrl* text_window_;
+    wxTextCtrl* text_window_ = nullptr;
 
     DECLARE_DYNAMIC_CLASS(TextEditView)
 };

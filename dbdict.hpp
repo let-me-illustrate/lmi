@@ -27,21 +27,17 @@
 #include "any_member.hpp"
 #include "cache_file_reads.hpp"
 #include "dbvalue.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
 
 #include <string>
 
 /// Cached product database.
 
-class LMI_SO DBDictionary
-    :        private lmi::uncopyable   <DBDictionary>
-    ,virtual private obstruct_slicing  <DBDictionary>
-    ,        public  xml_serializable  <DBDictionary>
-    ,        public  MemberSymbolTable <DBDictionary>
-    ,        public  cache_file_reads  <DBDictionary>
+class LMI_SO DBDictionary final
+    :public xml_serializable  <DBDictionary>
+    ,public MemberSymbolTable <DBDictionary>
+    ,public cache_file_reads  <DBDictionary>
 {
     friend class DatabaseDocument;
     friend class input_test;        // For test_product_database().
@@ -52,7 +48,7 @@ class LMI_SO DBDictionary
     DBDictionary();
     DBDictionary(std::string const& filename);
 
-    ~DBDictionary() override;
+    ~DBDictionary() override = default;
 
     database_entity const& datum(std::string const&) const;
 
@@ -62,6 +58,9 @@ class LMI_SO DBDictionary
     void InitAntediluvian();
 
   private:
+    DBDictionary(DBDictionary const&) = delete;
+    DBDictionary& operator=(DBDictionary const&) = delete;
+
     void Init(std::string const& filename);
 
     void ascribe_members();

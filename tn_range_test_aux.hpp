@@ -43,7 +43,7 @@ class percentage_trammel
     T nominal_maximum() const override {return 100;}
 };
 
-typedef tn_range<int, percentage_trammel<int> > r_int_percentage;
+typedef tn_range<int, percentage_trammel<int>> r_int_percentage;
 
 /// Class RangeUDT demonstrates the requirements for the Number
 /// parameter of class template tn_range. It must be:
@@ -87,7 +87,7 @@ class range_udt_trammel
     T nominal_maximum() const override {return 100;}
 };
 
-typedef tn_range<RangeUDT, range_udt_trammel<RangeUDT> > r_range_udt;
+typedef tn_range<RangeUDT, range_udt_trammel<RangeUDT>> r_range_udt;
 
 #endif // tn_range_test_aux_hpp
 

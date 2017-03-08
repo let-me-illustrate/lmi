@@ -123,7 +123,7 @@ MultiDimGrid* TierView::CreateGridCtrl(wxWindow* parent)
 
 void TierView::SetupControls()
 {
-    std::map<e_stratified, wxTreeItemId> index_to_id;
+    std::map<e_stratified,wxTreeItemId> index_to_id;
 
     wxTreeCtrl& tree_ctrl = tree();
 

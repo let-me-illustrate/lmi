@@ -23,10 +23,6 @@
 
 #include "mvc_view.hpp"
 
-MvcView::MvcView() = default;
-
-MvcView::~MvcView() = default;
-
 char const* MvcView::BookControlName() const
 {
     return DoBookControlName();

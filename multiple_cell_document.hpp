@@ -25,9 +25,7 @@
 #include "config.hpp"
 
 #include "input.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
@@ -77,9 +75,7 @@
 /// add a new cell copied from a selection of class defaults, although
 /// that could of course be implemented.
 
-class LMI_SO multiple_cell_document
-    :        private lmi::uncopyable <multiple_cell_document>
-    ,virtual private obstruct_slicing<multiple_cell_document>
+class LMI_SO multiple_cell_document final
 {
 // TODO ?? Avoid long-distance friendship...in single-cell class, too.
     friend class CensusDocument;
@@ -89,7 +85,7 @@ class LMI_SO multiple_cell_document
   public:
     multiple_cell_document();
     multiple_cell_document(std::string const& filename);
-    ~multiple_cell_document();
+    ~multiple_cell_document() = default;
 
     std::vector<Input> const& case_parms() const;
     std::vector<Input> const& class_parms() const;
@@ -99,6 +95,9 @@ class LMI_SO multiple_cell_document
     void write(std::ostream&) const;
 
   private:
+    multiple_cell_document(multiple_cell_document const&) = delete;
+    multiple_cell_document& operator=(multiple_cell_document const&) = delete;
+
     void parse   (xml_lmi::dom_parser const&);
     void parse_v0(xml_lmi::dom_parser const&);
 

@@ -40,7 +40,7 @@ typedef void (*alert_function_pointer)(std::string const&);
 alert_function_pointer status_alert_function         = nullptr;
 alert_function_pointer warning_alert_function        = nullptr;
 alert_function_pointer hobsons_choice_alert_function = nullptr;
-alert_function_pointer fatal_error_alert_function    = nullptr;
+alert_function_pointer alarum_alert_function         = nullptr;
 
 typedef void (*message_function_pointer)(char const*);
 message_function_pointer safe_message_alert_function = nullptr;
@@ -51,7 +51,7 @@ inline bool all_function_pointers_have_been_set()
             nullptr != status_alert_function
         &&  nullptr != warning_alert_function
         &&  nullptr != hobsons_choice_alert_function
-        &&  nullptr != fatal_error_alert_function
+        &&  nullptr != alarum_alert_function
         &&  nullptr != safe_message_alert_function
         ;
 }
@@ -62,7 +62,7 @@ inline bool any_function_pointer_has_been_set()
             nullptr != status_alert_function
         ||  nullptr != warning_alert_function
         ||  nullptr != hobsons_choice_alert_function
-        ||  nullptr != fatal_error_alert_function
+        ||  nullptr != alarum_alert_function
         ||  nullptr != safe_message_alert_function
         ;
 }
@@ -88,7 +88,7 @@ bool set_alert_functions
     (void(*status_alert_function_pointer        )(std::string const&)
     ,void(*warning_alert_function_pointer       )(std::string const&)
     ,void(*hobsons_choice_alert_function_pointer)(std::string const&)
-    ,void(*fatal_error_alert_function_pointer   )(std::string const&)
+    ,void(*alarum_alert_function_pointer        )(std::string const&)
     ,void(*safe_message_alert_function_pointer  )(char const*)
     )
 {
@@ -101,7 +101,7 @@ bool set_alert_functions
     status_alert_function         = status_alert_function_pointer        ;
     warning_alert_function        = warning_alert_function_pointer       ;
     hobsons_choice_alert_function = hobsons_choice_alert_function_pointer;
-    fatal_error_alert_function    = fatal_error_alert_function_pointer   ;
+    alarum_alert_function         = alarum_alert_function_pointer        ;
     safe_message_alert_function   = safe_message_alert_function_pointer  ;
     return true;
 }
@@ -175,12 +175,12 @@ class hobsons_choice_buf
         }
 };
 
-class fatal_error_buf
+class alarum_buf
     :public alert_buf
 {
     void raise_alert() override
         {
-        fatal_error_alert_function(alert_string());
+        alarum_alert_function(alert_string());
         }
 };
 
@@ -216,9 +216,9 @@ std::ostream& hobsons_choice()
     return alert_stream<hobsons_choice_buf>();
 }
 
-std::ostream& fatal_error()
+std::ostream& alarum()
 {
-    return alert_stream<fatal_error_buf>();
+    return alert_stream<alarum_buf>();
 }
 
 void safely_show_message(char const* message)
@@ -260,9 +260,9 @@ void test_hobsons_choice()
     hobsons_choice() << "Test hobsons_choice()" << LMI_FLUSH;
 }
 
-void test_fatal_error()
+void test_alarum()
 {
-    fatal_error()    << "Test fatal_error()"    << LMI_FLUSH;
+    alarum()         << "Test alarum()"         << LMI_FLUSH;
 }
 
 void test_standard_exception()

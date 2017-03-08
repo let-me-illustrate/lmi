@@ -90,7 +90,7 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
 {
     if(table_number_ <= 0)
         {
-        fatal_error()
+        alarum()
             << "There is no table number "
             << table_number_
             << " in file '"
@@ -103,8 +103,6 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
     find_table();
     parse_table();
 }
-
-actuarial_table::~actuarial_table() = default;
 
 /// Read a given number of values for a given issue age.
 
@@ -174,7 +172,7 @@ std::vector<double> actuarial_table::values_elaborated
         case e_reenter_never: // Fall through.
         default:
             {
-            fatal_error()
+            alarum()
                 << "Table-lookup method "
                 << method
                 << " is not valid in this context."
@@ -209,7 +207,7 @@ void actuarial_table::find_table()
     fs::ifstream index_ifs(index_path, ios_in_binary());
     if(!index_ifs)
         {
-        fatal_error()
+        alarum()
             << "File '"
             << index_path
             << "' is required but could not be found. Try reinstalling."
@@ -246,7 +244,7 @@ void actuarial_table::find_table()
         index_ifs.read(index_record, index_record_length);
         if(index_record_length != index_ifs.gcount())
             {
-            fatal_error()
+            alarum()
                 << "Table "
                 << table_number_
                 << " in file '"
@@ -263,7 +261,7 @@ void actuarial_table::find_table()
 
     if(std::streampos(-1) == table_offset_)
         {
-        fatal_error()
+        alarum()
             << "Table "
             << table_number_
             << " in file '"
@@ -306,7 +304,7 @@ void actuarial_table::parse_table()
     fs::ifstream data_ifs(data_path, ios_in_binary());
     if(!data_ifs)
         {
-        fatal_error()
+        alarum()
             << "File '"
             << data_path
             << "' is required but could not be found. Try reinstalling."
@@ -555,7 +553,7 @@ std::vector<double> actuarial_table::specific_values
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Table type '"
                 << table_type_
                 << "' not recognized: must be one of 'A', 'D', or 'S'."

@@ -29,5 +29,5 @@
 // such template in a different translation unit than the unit-test
 // driver, in order to prove that explicit instantiation works.
 
-template class tn_range<int, percentage_trammel<int> >;
+template class tn_range<int, percentage_trammel<int>>;
 

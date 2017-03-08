@@ -27,7 +27,6 @@
 #include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "test_tools.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -87,7 +86,6 @@ class std_out_redirector
 // Class ensuring that the file with the given name is removed when the test
 // ends, whether it succeeds or fails.
 class test_file_eraser
-    :private lmi::uncopyable<test_file_eraser>
 {
   public:
     explicit test_file_eraser(fs::path const& path)
@@ -112,6 +110,9 @@ class test_file_eraser
         }
 
   private:
+    test_file_eraser(test_file_eraser const&) = delete;
+    test_file_eraser& operator=(test_file_eraser const&) = delete;
+
     fs::path path_;
 };
 } // Unnamed namespace.

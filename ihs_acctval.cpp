@@ -179,9 +179,6 @@ AccountValue::AccountValue(Input const& input)
 }
 
 //============================================================================
-AccountValue::~AccountValue() = default;
-
-//============================================================================
 std::shared_ptr<Ledger const> AccountValue::ledger_from_av() const
 {
     LMI_ASSERT(ledger_.get());
@@ -243,7 +240,7 @@ double AccountValue::RunOneBasis(mcenum_run_basis a_Basis)
         && mce_run_gen_mdpt_sep_full == a_Basis
         )
         {
-        fatal_error()
+        alarum()
             << "Midpoint basis defined only for illustration-reg ledger."
             << LMI_FLUSH
             ;
@@ -611,7 +608,7 @@ void AccountValue::SetInitialValues()
 
     if(!Database_->Query(DB_AllowGenAcct) && 0.0 != GenAcctPaymentAllocation)
         {
-        fatal_error()
+        alarum()
             << "No general account is allowed for this product, but "
             << GenAcctPaymentAllocation
             << " is allocated to the general account."
@@ -621,7 +618,7 @@ void AccountValue::SetInitialValues()
 
     if(!Database_->Query(DB_AllowSepAcct) && 0.0 != SepAcctPaymentAllocation)
         {
-        fatal_error()
+        alarum()
             << "No separate account is allowed for this product, but "
             << SepAcctPaymentAllocation
             << " is allocated to the separate account."
@@ -800,7 +797,7 @@ double AccountValue::IncrementBOM
         ||  daily_interest_accounting && !(28 <= days_in_policy_month && days_in_policy_month <= 31)
         )
         {
-        fatal_error()
+        alarum()
             << "Expected year = "  << Year
             << "; actual year is  " << year << ".\n"
             << "Expected month = " << Month
@@ -1864,7 +1861,7 @@ void AccountValue::CoordinateCounters()
 //   eleventh monthiversary 2001-02-28 (not the twenty-ninth)
         if(days_in_policy_month !=  current_monthiversary.days_in_month())
             {
-            fatal_error()
+            alarum()
                 << Year << " Year; " << Month << " Month\n"
                 << current_monthiversary.year() << '-'
                 << current_monthiversary.month() << '-'

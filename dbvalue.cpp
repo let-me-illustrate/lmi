@@ -102,8 +102,6 @@ database_entity::database_entity
     assert_invariants();
 }
 
-database_entity::~database_entity() = default;
-
 #if 0
 /// Deliberately undefined copy assignment operator.
 ///
@@ -265,7 +263,7 @@ double& database_entity::operator[](std::vector<int> const& index)
     if(static_cast<int>(data_values_.size()) <= z)
         {
         z = 0;
-        fatal_error()
+        alarum()
             << "Trying to index database item '"
             << GetDBNames()[key_].ShortName
             << "' past end of data."
@@ -295,7 +293,7 @@ double const* database_entity::operator[](database_index const& idx) const
     if(static_cast<int>(data_values_.size()) <= z)
         {
         z = 0;
-        fatal_error()
+        alarum()
             << "Trying to index database item '"
             << GetDBNames()[key_].ShortName
             << "' past end of data."
@@ -383,7 +381,7 @@ void database_entity::assert_invariants() const
         {
         if(*ai != 1 && *ai != *mi && *ai != axis_lengths_.back())
             {
-            fatal_error()
+            alarum()
                 << "Database item '"
                 << GetDBNames()[key_].ShortName
                 << "' has invalid length "
@@ -400,7 +398,7 @@ void database_entity::assert_invariants() const
 
     if(max_dims.back() < axis_lengths_.back())
             {
-            fatal_error()
+            alarum()
                 << "Database item '"
                 << GetDBNames()[key_].ShortName
                 << "' has invalid duration."
@@ -420,7 +418,7 @@ int database_entity::getndata() const
     catch(...)
         {
         report_exception();
-        fatal_error()
+        alarum()
             << "Database item '"
             << GetDBNames()[key_].ShortName
             << "' has invalid dimensions."
@@ -445,7 +443,7 @@ int database_entity::getndata(std::vector<int> const& z)
 
     if(MaxPossibleElements < n)
         {
-        fatal_error()
+        alarum()
             << "There are " << n
             << " data, but at most " << MaxPossibleElements
             << " are permitted."
@@ -455,7 +453,7 @@ int database_entity::getndata(std::vector<int> const& z)
 
     if(n <= 0)
         {
-        fatal_error() << "Number of data must exceed zero." << LMI_FLUSH;
+        alarum() << "Number of data must exceed zero." << LMI_FLUSH;
         }
 
     LMI_ASSERT(MaxPossibleElements <= std::numeric_limits<int>::max());

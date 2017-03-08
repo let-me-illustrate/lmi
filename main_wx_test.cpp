@@ -27,10 +27,8 @@
 #include "force_linking.hpp"
 #include "handle_exceptions.hpp"        // stealth_exception
 #include "main_common.hpp"              // initialize_application()
-#include "obstruct_slicing.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "skeleton.hpp"
-#include "uncopyable_lmi.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_new.hpp"
 
@@ -149,9 +147,8 @@ struct TestsResults
 /// Run the tests.
 ///
 /// This is a simple Meyers singleton.
-class application_test
-    :        private lmi::uncopyable  <application_test>
-    ,virtual private obstruct_slicing <application_test>
+
+class application_test final
 {
   public:
     static application_test& instance();
@@ -181,7 +178,9 @@ class application_test
     bool is_distribution_test() const { return is_distribution_test_; }
 
   private:
-    application_test();
+    application_test() = default;
+    application_test(application_test const&) = delete;
+    application_test& operator=(application_test const&) = delete;
 
     // Sort all tests in alphabetical order of their names.
     void sort_tests();
@@ -231,16 +230,10 @@ class application_test
 
     fs::path test_files_path_;
 
-    bool run_all_;
+    bool run_all_ = true;
 
-    bool is_distribution_test_;
+    bool is_distribution_test_ = false;
 };
-
-application_test::application_test()
-    :run_all_(true)
-    ,is_distribution_test_(false)
-{
-}
 
 application_test& application_test::instance()
 {

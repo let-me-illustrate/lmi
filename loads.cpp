@@ -34,10 +34,6 @@
 #include "mc_enum_types_aux.hpp"        // mc_n_ enumerators
 #include "premium_tax.hpp"
 
-/// Ctor for unit testing.
-
-Loads::Loads() = default;
-
 /// Ctor for production branch.
 
 Loads::Loads(BasicValues& V)
@@ -213,7 +209,7 @@ void Loads::Calculate(load_details const& details)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Case '"
             << details.asset_charge_type_
             << "' not found."
@@ -285,7 +281,7 @@ void Loads::Calculate(load_details const& details)
             < monthly_policy_fee_[mce_gen_curr][j]
             )
             {
-            fatal_error()
+            alarum()
                 << "Duration "
                 << j
                 << ": current monthly policy fee "
@@ -335,7 +331,7 @@ void Loads::Calculate(load_details const& details)
 
 void Loads::AmortizePremiumTax(load_details const&)
 {
-    fatal_error() << "Premium-tax amortization not implemented." << LMI_FLUSH;
+    alarum() << "Premium-tax amortization not implemented." << LMI_FLUSH;
 }
 
 /// Ctor for antediluvian branch.

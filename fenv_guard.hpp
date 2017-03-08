@@ -24,9 +24,7 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 /// Guard class for critical floating-point calculations.
 ///
@@ -39,9 +37,7 @@
 /// Intended use: instantiate on the stack at the beginning of any
 /// floating-point calculations that presume the invariant.
 
-class LMI_SO fenv_guard
-    :        private lmi::uncopyable <fenv_guard>
-    ,virtual private obstruct_slicing<fenv_guard>
+class LMI_SO fenv_guard final
 {
   public:
     fenv_guard();
@@ -50,6 +46,9 @@ class LMI_SO fenv_guard
     static int instance_count();
 
   private:
+    fenv_guard(fenv_guard const&) = delete;
+    fenv_guard& operator=(fenv_guard const&) = delete;
+
     static int instance_count_;
 };
 

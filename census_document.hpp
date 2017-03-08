@@ -26,23 +26,24 @@
 
 #include "input.hpp"
 #include "multiple_cell_document.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
 class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 
 class CensusDocument
-    :public  wxDocument
-    ,private lmi::uncopyable<CensusDocument>
+    :public wxDocument
 {
     friend class CensusView;
 
   public:
-    CensusDocument();
-    ~CensusDocument() override;
+    CensusDocument() = default;
+    ~CensusDocument() override = default;
 
   private:
+    CensusDocument(CensusDocument const&) = delete;
+    CensusDocument& operator=(CensusDocument const&) = delete;
+
     wxDataViewCtrl& PredominantViewWindow() const;
 
     // wxDocument overrides.

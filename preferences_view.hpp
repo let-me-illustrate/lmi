@@ -38,8 +38,8 @@ class PreferencesView
     :public MvcView
 {
   public:
-    PreferencesView();
-    ~PreferencesView() override;
+    PreferencesView() = default;
+    ~PreferencesView() override = default;
 
   private:
     // MvcView required implementation.

@@ -246,7 +246,7 @@ void MortalityRates::MakeCoiRateSubstandard(std::vector<double>& coi_rates)
 
     if(!(AllowFlatExtras_ || AllowSubstdTable_))
         {
-        fatal_error()
+        alarum()
             << "Flat extras and table ratings not permitted."
             << LMI_FLUSH
             ;
@@ -276,7 +276,7 @@ std::vector<double> const& MortalityRates::MonthlyCoiRatesBand0
         case mce_gen_curr: return MonthlyCurrentCoiRatesBand0_;
         case mce_gen_mdpt: return MonthlyMidpointCoiRatesBand0_;
         case mce_gen_guar: return MonthlyGuaranteedCoiRates_;
-        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
+        default: alarum() << "Case " << b << " not found." << LMI_FLUSH;
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -291,7 +291,7 @@ std::vector<double> const& MortalityRates::MonthlyCoiRatesBand1
         case mce_gen_curr: return MonthlyCurrentCoiRatesBand1_;
         case mce_gen_mdpt: return MonthlyMidpointCoiRatesBand1_;
         case mce_gen_guar: return MonthlyGuaranteedCoiRates_;
-        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
+        default: alarum() << "Case " << b << " not found." << LMI_FLUSH;
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -306,7 +306,7 @@ std::vector<double> const& MortalityRates::MonthlyCoiRatesBand2
         case mce_gen_curr: return MonthlyCurrentCoiRatesBand2_;
         case mce_gen_mdpt: return MonthlyMidpointCoiRatesBand2_;
         case mce_gen_guar: return MonthlyGuaranteedCoiRates_;
-        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
+        default: alarum() << "Case " << b << " not found." << LMI_FLUSH;
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -321,7 +321,7 @@ std::vector<double> const& MortalityRates::SpouseRiderRates
         case mce_gen_curr: return CurrentSpouseRiderRates_;
         case mce_gen_mdpt: return MidpointSpouseRiderRates_;
         case mce_gen_guar: return GuaranteedSpouseRiderRates_;
-        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
+        default: alarum() << "Case " << b << " not found." << LMI_FLUSH;
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -336,7 +336,7 @@ std::vector<double> const& MortalityRates::MonthlyTermCoiRates
         case mce_gen_curr: return MonthlyCurrentTermCoiRates_;
         case mce_gen_mdpt: return MonthlyMidpointTermCoiRates_;
         case mce_gen_guar: return MonthlyGuaranteedTermCoiRates_;
-        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
+        default: alarum() << "Case " << b << " not found." << LMI_FLUSH;
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }

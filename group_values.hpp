@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
@@ -72,12 +71,11 @@ struct census_run_result
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO run_census
-    :virtual private obstruct_slicing<run_census>
+class LMI_SO run_census final
 {
   public:
-    run_census();
-    ~run_census();
+    run_census() = default;
+    ~run_census() = default;
 
     census_run_result operator()
         (fs::path           const& file

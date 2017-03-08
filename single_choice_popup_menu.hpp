@@ -50,7 +50,7 @@ class SingleChoicePopupMenu
         ,wxWindow*            parent = &TopWindow()
         );
 
-    ~SingleChoicePopupMenu() override;
+    ~SingleChoicePopupMenu() override = default;
 
     int Choose();
 

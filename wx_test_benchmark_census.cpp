@@ -24,7 +24,6 @@
 #include "assert_lmi.hpp"
 #include "wx_test_case.hpp"
 #include "wx_test_statusbar.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/crt.h>
 #include <wx/dialog.h>
@@ -41,7 +40,6 @@ namespace
 {
 
 class census_benchmark
-    :private lmi::uncopyable<census_benchmark>
 {
   public:
     explicit census_benchmark(fs::path const& path)
@@ -55,6 +53,12 @@ class census_benchmark
             ,wxExpectModal<wxFileDialog>(path.native_file_string())
             );
         wxYield();
+        }
+
+    ~census_benchmark()
+        {
+        // Close the census window opened in the ctor itself.
+        close_window();
         }
 
     void time_operation
@@ -91,13 +95,10 @@ class census_benchmark
         z.Char('l', wxMOD_CONTROL); // "File|Close"
         }
 
-    ~census_benchmark()
-        {
-        // Close the census window opened in the ctor itself.
-        close_window();
-        }
-
   private:
+    census_benchmark(census_benchmark const&) = delete;
+    census_benchmark& operator=(census_benchmark const&) = delete;
+
     wxStatusBar& status_;
     wxString const name_;
 };

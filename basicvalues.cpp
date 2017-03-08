@@ -78,9 +78,6 @@ BasicValues::BasicValues(Input const& input)
 }
 
 //============================================================================
-BasicValues::~BasicValues() = default;
-
-//============================================================================
 void BasicValues::Init()
 {
     // Bind to input and database representing policy form.
@@ -196,7 +193,7 @@ double BasicValues::GetModalTgtPrem
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << a_mode
                 << " not found."
@@ -280,7 +277,7 @@ double BasicValues::GetModalTgtSpecAmt
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << a_mode
                 << " not found."

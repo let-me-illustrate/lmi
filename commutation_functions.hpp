@@ -25,17 +25,13 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <vector>
 
 /// Ordinary-life commutation functions.
 
-class LMI_SO OLCommFns
-    :        private lmi::uncopyable <OLCommFns>
-    ,virtual private obstruct_slicing<OLCommFns>
+class LMI_SO OLCommFns final
 {
   public:
     OLCommFns
@@ -43,7 +39,7 @@ class LMI_SO OLCommFns
         ,std::vector<double> const& a_i
         );
 
-    ~OLCommFns();
+    ~OLCommFns() = default;
 
     double                 Domega() const {return ed.back();}
     std::vector<double> const& ED() const {return ed;}
@@ -53,6 +49,9 @@ class LMI_SO OLCommFns
     std::vector<double> const&  M() const {return  m;}
 
   private:
+    OLCommFns(OLCommFns const&) = delete;
+    OLCommFns& operator=(OLCommFns const&) = delete;
+
     int Length;
 
     std::vector<double> const& q;
@@ -80,9 +79,7 @@ class LMI_SO OLCommFns
 /// k-ly, for mode parameter k; 'm-' might seem more clearly to stand
 /// for "modal", but would too easily be taken as connoting "monthly".
 
-class LMI_SO ULCommFns
-    :        private lmi::uncopyable <ULCommFns>
-    ,virtual private obstruct_slicing<ULCommFns>
+class LMI_SO ULCommFns final
 {
   public:
     ULCommFns
@@ -93,7 +90,7 @@ class LMI_SO ULCommFns
         ,mcenum_mode                mode
         );
 
-    ~ULCommFns();
+    ~ULCommFns() = default;
 
     double                 aDomega() const {return ead.back();}
     std::vector<double> const& EaD() const {return ead;}
@@ -104,6 +101,9 @@ class LMI_SO ULCommFns
     std::vector<double> const&  kM() const {return  km;}
 
   private:
+    ULCommFns(ULCommFns const&) = delete;
+    ULCommFns& operator=(ULCommFns const&) = delete;
+
     std::vector<double> qc;
     std::vector<double> ic;
     std::vector<double> ig;

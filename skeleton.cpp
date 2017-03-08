@@ -107,8 +107,6 @@
 
 namespace
 {
-// Load the XRC file with the given base name from the data directory and call
-// fatal_error() if loading it failed.
 void load_xrc_file_from_data_directory
     (wxXmlResource& xml_resources
     ,char const* xrc_filename
@@ -120,7 +118,7 @@ void load_xrc_file_from_data_directory
     if(!xml_resources.Load(AddDataDir(xrc_filename)))
 #endif // !wxCHECK_VERSION(2,9,0)
         {
-        fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
+        alarum() << "Unable to load xml resources." << LMI_FLUSH;
         }
 }
 } // Unnamed namespace.
@@ -142,13 +140,13 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("test_app_status_alert"           ),Skeleton::UponTestAppStatus                )
     EVT_MENU(XRCID("test_app_warning_alert"          ),Skeleton::UponTestAppWarning               )
     EVT_MENU(XRCID("test_app_hobsons_choice_alert"   ),Skeleton::UponTestAppHobsons               )
-    EVT_MENU(XRCID("test_app_fatal_error_alert"      ),Skeleton::UponTestAppFatal                 )
+    EVT_MENU(XRCID("test_app_alarum_alert"           ),Skeleton::UponTestAppFatal                 )
     EVT_MENU(XRCID("test_app_standard_exception"     ),Skeleton::UponTestAppStandardException     )
     EVT_MENU(XRCID("test_app_arbitrary_exception"    ),Skeleton::UponTestAppArbitraryException    )
     EVT_MENU(XRCID("test_lib_status_alert"           ),Skeleton::UponTestLibStatus                )
     EVT_MENU(XRCID("test_lib_warning_alert"          ),Skeleton::UponTestLibWarning               )
     EVT_MENU(XRCID("test_lib_hobsons_choice_alert"   ),Skeleton::UponTestLibHobsons               )
-    EVT_MENU(XRCID("test_lib_fatal_error_alert"      ),Skeleton::UponTestLibFatal                 )
+    EVT_MENU(XRCID("test_lib_alarum_alert"           ),Skeleton::UponTestLibFatal                 )
     EVT_MENU(XRCID("test_lib_standard_exception"     ),Skeleton::UponTestLibStandardException     )
     EVT_MENU(XRCID("test_lib_arbitrary_exception"    ),Skeleton::UponTestLibArbitraryException    )
     EVT_MENU(XRCID("test_lib_catastrophe_report"     ),Skeleton::UponTestLibCatastropheReport     )
@@ -213,8 +211,6 @@ Skeleton::Skeleton()
     config_ = wxConfigBase::Get();
     timer_.Start(100);
 }
-
-Skeleton::~Skeleton() = default;
 
 wxMDIChildFrame* Skeleton::CreateChildFrame
     (wxDocument* doc
@@ -447,7 +443,7 @@ void Skeleton::InitMenuBar()
     wxMenuBar* menu_bar = wxXmlResource::Get()->LoadMenuBar("main_menu");
     if(!menu_bar)
         {
-        fatal_error() << "Unable to create menubar." << LMI_FLUSH;
+        alarum() << "Unable to create menubar." << LMI_FLUSH;
         }
     else
         {
@@ -464,7 +460,7 @@ void Skeleton::InitToolBar()
     wxToolBar* tool_bar = wxXmlResource::Get()->LoadToolBar(frame_, "toolbar");
     if(!tool_bar)
         {
-        fatal_error() << "Unable to create toolbar." << LMI_FLUSH;
+        alarum() << "Unable to create toolbar." << LMI_FLUSH;
         }
     frame_->SetToolBar(tool_bar);
 }
@@ -490,7 +486,7 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
 
     if(p.empty() || !fs::exists(p) || fs::is_directory(p))
         {
-        fatal_error()
+        alarum()
             << "The default input file, '"
             << p
             << "', could not be read.\n\n"
@@ -544,20 +540,20 @@ void Skeleton::UponHelp(wxCommandEvent&)
     }
     if(!r)
         {
-        fatal_error()
+        alarum()
             << "Unable to open"
             << "\n    " << s
             << "\nin default browser."
             ;
         if(canonical_url != s)
             {
-            fatal_error()
+            alarum()
                 << '\n'
                 << "\nThe user manual can be read online here:"
                 << "\n    " << canonical_url
                 ;
             }
-        fatal_error() << std::flush;
+        alarum() << std::flush;
         }
 
     fenv_validate(e_fenv_indulge_0x027f);
@@ -961,7 +957,7 @@ void Skeleton::UponTestAppHobsons(wxCommandEvent&)
 
 void Skeleton::UponTestAppFatal(wxCommandEvent&)
 {
-    fatal_error()    << "Test fatal_error() ."    << LMI_FLUSH;
+    alarum()         << "Test alarum() ."         << LMI_FLUSH;
 }
 
 void Skeleton::UponTestAppStandardException(wxCommandEvent&)
@@ -991,7 +987,7 @@ void Skeleton::UponTestLibHobsons(wxCommandEvent&)
 
 void Skeleton::UponTestLibFatal(wxCommandEvent&)
 {
-    test_fatal_error();
+    test_alarum();
 }
 
 void Skeleton::UponTestLibStandardException(wxCommandEvent&)

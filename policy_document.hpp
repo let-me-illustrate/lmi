@@ -38,7 +38,7 @@ class PolicyDocument
 {
   public:
     PolicyDocument();
-    ~PolicyDocument() override;
+    ~PolicyDocument() override = default;
 
     typedef std::map<std::string, std::string*> values_type;
     values_type&       values();

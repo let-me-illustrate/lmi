@@ -44,7 +44,7 @@ std::shared_ptr<progress_meter> create_progress_meter
 {
     if(nullptr == progress_meter_creator)
         {
-        fatal_error() << "Function pointer not yet initialized." << LMI_FLUSH;
+        alarum() << "Function pointer not yet initialized." << LMI_FLUSH;
         }
 
     return progress_meter_creator(max_count, title, display_mode);
@@ -57,7 +57,7 @@ bool set_progress_meter_creator(progress_meter_creator_type f)
         // TODO ?? Use 'callback.hpp' instead, and consider whether
         // this message can ever actually be displayed--either in its
         // present form, or in the 'callback.hpp' equivalent.
-        fatal_error() << "Function pointer already initialized." << LMI_FLUSH;
+        alarum() << "Function pointer already initialized." << LMI_FLUSH;
         }
 
     progress_meter_creator = f;
@@ -77,8 +77,6 @@ progress_meter::progress_meter
 {
 }
 
-progress_meter::~progress_meter() = default;
-
 void progress_meter::dawdle(int seconds)
 {
     do_dawdle(seconds);
@@ -88,11 +86,11 @@ bool progress_meter::reflect_progress()
 {
     if(max_count_ <= count_)
         {
-        fatal_error() << "Progress meter maximum count exceeded." << LMI_FLUSH;
+        alarum() << "Progress meter maximum count exceeded." << LMI_FLUSH;
         }
     if(was_cancelled_)
         {
-        fatal_error() << "Progress meter previously cancelled." << LMI_FLUSH;
+        alarum() << "Progress meter previously cancelled." << LMI_FLUSH;
         }
     ++count_;
     was_cancelled_ = !show_progress_message();

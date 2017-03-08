@@ -30,18 +30,18 @@
 
 // SOMEDAY !! Move these two to a 'test' file.
 
-template class tn_range<int          , percentage_trammel     <int          > >;
-template class tn_range<double       , percentage_trammel     <double       > >;
+template class tn_range<int          , percentage_trammel     <int          >>;
+template class tn_range<double       , percentage_trammel     <double       >>;
 
-template class tn_range<double       , unrestricted_trammel   <double       > >;
-template class tn_range<double       , proportion_trammel     <double       > >;
-template class tn_range<double       , nonnegative_trammel    <double       > >;
-template class tn_range<int          , nonnegative_trammel    <int          > >;
-template class tn_range<int          , age_trammel            <int          > >;
-template class tn_range<int          , duration_trammel       <int          > >;
-template class tn_range<int          , month_trammel          <int          > >;
-template class tn_range<double       , corridor_factor_trammel<double       > >;
-template class tn_range<calendar_date, date_trammel           <calendar_date> >;
+template class tn_range<double       , unrestricted_trammel   <double       >>;
+template class tn_range<double       , proportion_trammel     <double       >>;
+template class tn_range<double       , nonnegative_trammel    <double       >>;
+template class tn_range<int          , nonnegative_trammel    <int          >>;
+template class tn_range<int          , age_trammel            <int          >>;
+template class tn_range<int          , duration_trammel       <int          >>;
+template class tn_range<int          , month_trammel          <int          >>;
+template class tn_range<double       , corridor_factor_trammel<double       >>;
+template class tn_range<calendar_date, date_trammel           <calendar_date>>;
 
 // Explicitly instantiate trammel_base for every type actually used.
 // Otherwise, its specialized members (minimum_minimorum(), e.g.)

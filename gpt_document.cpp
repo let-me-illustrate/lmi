@@ -33,13 +33,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(gpt_document, wxDocument)
 
-gpt_document::gpt_document()
-    :wxDocument()
-{
-}
-
-gpt_document::~gpt_document() = default;
-
 gpt_view& gpt_document::PredominantView() const
 {
     return ::PredominantView<gpt_view>(*this);

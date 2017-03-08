@@ -35,9 +35,7 @@
 #include "view_ex.hpp"
 
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
-#include "obstruct_slicing.hpp"
 #include "oecumenic_enumerations.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/event.h>
 
@@ -51,16 +49,14 @@ class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 // TODO ?? Consider adding an input reference member. Here, it's used
 // only for edit and run; in the census view class, it's used widely.
 
-class IllustrationView
-    :        public  ViewEx
-    ,        private lmi::uncopyable <IllustrationView>
-    ,virtual private obstruct_slicing<IllustrationView>
+class IllustrationView final
+    :public ViewEx
 {
     friend class IllustrationDocument;
 
   public:
-    IllustrationView();
-    ~IllustrationView() override;
+    IllustrationView() = default;
+    ~IllustrationView() override = default;
 
     // Making these functions public so that they can be invoked by
     // class CensusView is arguably less bad than making that class a
@@ -71,6 +67,9 @@ class IllustrationView
     void SetLedger(std::shared_ptr<Ledger const>);
 
   private:
+    IllustrationView(IllustrationView const&) = delete;
+    IllustrationView& operator=(IllustrationView const&) = delete;
+
     IllustrationDocument& document() const;
 
     oenum_mvc_dv_rc edit_parameters();
@@ -100,8 +99,8 @@ class IllustrationView
 
     Input& input_data();
 
-    wxHtmlWindow* html_window_;
-    bool is_phony_;
+    wxHtmlWindow* html_window_ = nullptr;
+    bool is_phony_             = false;
     std::shared_ptr<Ledger const> ledger_values_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)

@@ -26,7 +26,6 @@
 
 #include "input.hpp"
 #include "single_cell_document.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
@@ -47,18 +46,20 @@ class IllustrationView;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 class IllustrationDocument
-    :public  wxDocument
-    ,private lmi::uncopyable<IllustrationDocument>
+    :public wxDocument
 {
     friend class IllustrationView;
 
   public:
-    IllustrationDocument();
-    ~IllustrationDocument() override;
+    IllustrationDocument() = default;
+    ~IllustrationDocument() override = default;
 
     IllustrationView& PredominantView() const;
 
   private:
+    IllustrationDocument(IllustrationDocument const&) = delete;
+    IllustrationDocument& operator=(IllustrationDocument const&) = delete;
+
     wxHtmlWindow& PredominantViewWindow() const;
 
     // wxDocument overrides.
@@ -71,7 +72,7 @@ class IllustrationDocument
 
     single_cell_document doc_;
 
-    bool is_phony_;
+    bool is_phony_ = false;
 
     DECLARE_DYNAMIC_CLASS(IllustrationDocument)
 };

@@ -253,22 +253,22 @@ void test_psalm_37()
     BOOST_TEST(!contains_regex2(never));
     BOOST_TEST(!contains_regex3(never));
 
-    std::cout << "  early 0:   " << TimeAnAliquot(mete<0, early>) << '\n';
-    std::cout << "  early 1:   " << TimeAnAliquot(mete<1, early>) << '\n';
-    std::cout << "  early 2:   " << TimeAnAliquot(mete<2, early>) << '\n';
-    std::cout << "  early 3:   " << TimeAnAliquot(mete<3, early>) << '\n';
+    std::cout << "  early 0:   " << TimeAnAliquot(mete<0,early>) << '\n';
+    std::cout << "  early 1:   " << TimeAnAliquot(mete<1,early>) << '\n';
+    std::cout << "  early 2:   " << TimeAnAliquot(mete<2,early>) << '\n';
+    std::cout << "  early 3:   " << TimeAnAliquot(mete<3,early>) << '\n';
     std::cout << '\n';
 
-    std::cout << "  late  0:   " << TimeAnAliquot(mete<0, late >) << '\n';
-    std::cout << "  late  1:   " << TimeAnAliquot(mete<1, late >) << '\n';
-    std::cout << "  late  2:   " << TimeAnAliquot(mete<2, late >) << '\n';
-    std::cout << "  late  3:   " << TimeAnAliquot(mete<3, late >) << '\n';
+    std::cout << "  late  0:   " << TimeAnAliquot(mete<0,late >) << '\n';
+    std::cout << "  late  1:   " << TimeAnAliquot(mete<1,late >) << '\n';
+    std::cout << "  late  2:   " << TimeAnAliquot(mete<2,late >) << '\n';
+    std::cout << "  late  3:   " << TimeAnAliquot(mete<3,late >) << '\n';
     std::cout << '\n';
 
-    std::cout << "  never 0:   " << TimeAnAliquot(mete<0, never>) << '\n';
-    std::cout << "  never 1:   " << TimeAnAliquot(mete<1, never>) << '\n';
-    std::cout << "  never 2:   " << TimeAnAliquot(mete<2, never>) << '\n';
-    std::cout << "  never 3:   " << TimeAnAliquot(mete<3, never>) << '\n';
+    std::cout << "  never 0:   " << TimeAnAliquot(mete<0,never>) << '\n';
+    std::cout << "  never 1:   " << TimeAnAliquot(mete<1,never>) << '\n';
+    std::cout << "  never 2:   " << TimeAnAliquot(mete<2,never>) << '\n';
+    std::cout << "  never 3:   " << TimeAnAliquot(mete<3,never>) << '\n';
     std::cout << '\n';
 }
 

@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <memory>                       // std::shared_ptr
 #include <string>
@@ -41,7 +40,6 @@ class Ledger;
 /// uses wxPdfDocument and other wx facilities and is only part of libskeleton.
 
 class LMI_SO group_quote_pdf_generator
-    :private lmi::uncopyable<group_quote_pdf_generator>
 {
   public:
     typedef std::shared_ptr<group_quote_pdf_generator> (*creator_type)();
@@ -49,13 +47,17 @@ class LMI_SO group_quote_pdf_generator
     static bool set_creator(creator_type);
     static std::shared_ptr<group_quote_pdf_generator> create();
 
-    virtual ~group_quote_pdf_generator();
+    virtual ~group_quote_pdf_generator() = default;
 
     virtual void add_ledger(Ledger const& ledger) = 0;
     virtual void save(std::string const& output_filename) = 0;
 
   protected:
-    group_quote_pdf_generator();
+    group_quote_pdf_generator() = default;
+
+  private:
+    group_quote_pdf_generator(group_quote_pdf_generator const&) = delete;
+    group_quote_pdf_generator& operator=(group_quote_pdf_generator const&) = delete;
 };
 
 #endif // group_quote_pdf_gen_hpp

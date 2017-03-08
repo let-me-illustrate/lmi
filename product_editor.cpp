@@ -33,13 +33,6 @@
 #include <wx/treectrl.h>
 #include <wx/window.h>
 
-ProductEditorDocument::ProductEditorDocument()
-    :wxDocument()
-{
-}
-
-ProductEditorDocument::~ProductEditorDocument() = default;
-
 ProductEditorView& ProductEditorDocument::PredominantView() const
 {
     return ::PredominantView<ProductEditorView>(*this);
@@ -113,31 +106,11 @@ bool ProductEditorDocument::DoSaveDocument(wxString const& filename)
         }
 }
 
-ProductEditorView::ProductEditorView()
-    :ViewEx()
-{
-}
-
-ProductEditorView::~ProductEditorView() = default;
-
-TreeGridViewBase::TreeGridViewBase()
-    :ProductEditorView()
-    ,grid_(nullptr)
-    ,grid_label_(nullptr)
-    ,tree_(nullptr)
-{
-}
-
-TreeGridViewBase::~TreeGridViewBase() = default;
-
 wxTreeCtrl& TreeGridViewBase::tree() const
 {
     if(!tree_)
         {
-        fatal_error()
-            << "Tree control can't be null"
-            << LMI_FLUSH
-            ;
+        alarum() << "Tree control can't be null" << LMI_FLUSH;
         }
     return *tree_;
 }
@@ -146,10 +119,7 @@ MultiDimGrid& TreeGridViewBase::grid() const
 {
     if(!grid_)
         {
-        fatal_error()
-            << "Grid control can't be null"
-            << LMI_FLUSH
-            ;
+        alarum() << "Grid control can't be null" << LMI_FLUSH;
         }
     return *grid_;
 }
@@ -158,10 +128,7 @@ void TreeGridViewBase::set_grid_label_text(std::string const& label)
 {
     if(!grid_label_)
         {
-        fatal_error()
-            << "Grid control can't be null"
-            << LMI_FLUSH
-            ;
+        alarum() << "Grid control can't be null" << LMI_FLUSH;
         }
     grid_label_->SetLabel(label);
 }

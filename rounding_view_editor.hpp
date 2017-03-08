@@ -48,7 +48,7 @@ class RoundingButtons
         ,long               style = 0
         ,std::string const& name  = wxPanelNameStr
         );
-    ~RoundingButtons() override;
+    ~RoundingButtons() override = default;
 
     void Create
         (wxWindow*          parent

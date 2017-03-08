@@ -58,7 +58,7 @@ bool lmi_isnan(T t)
 
 template<typename T>
 struct i_upper_12_over_12_from_i_naive
-    :public std::unary_function<T, T>
+    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value, "");
     T operator()(T const& i) const
@@ -70,7 +70,7 @@ struct i_upper_12_over_12_from_i_naive
 
 template<typename T>
 struct i_from_i_upper_12_over_12_naive
-    :public std::unary_function<T, T>
+    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value, "");
     T operator()(T const& i) const
@@ -82,7 +82,7 @@ struct i_from_i_upper_12_over_12_naive
 
 template<typename T>
 struct d_upper_12_from_i_naive
-    :public std::unary_function<T, T>
+    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value, "");
     T operator()(T const& i) const

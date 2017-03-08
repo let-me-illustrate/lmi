@@ -26,7 +26,6 @@
 
 #include "mc_enum_type_enums.hpp"
 #include "mec_state.hpp"
-#include "obstruct_slicing.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
 
@@ -41,8 +40,7 @@ void LMI_SO TestIrc7702A();
 
 // Implicitly-declared special member functions do the right thing.
 
-class Irc7702A
-    :virtual private obstruct_slicing<Irc7702A>
+class Irc7702A final
 {
   public:
     enum e_death_benefit_definition {e_death_benefit_7702A, e_specamt_7702A};
@@ -68,7 +66,7 @@ class Irc7702A
 //      ,std::vector<double> const&  a_PolFee
 // TAXATION !! probably other arguments are needed for reproposals
         );
-    ~Irc7702A();
+    ~Irc7702A() = default;
 
     void Initialize7702A
         (bool   a_Ignore

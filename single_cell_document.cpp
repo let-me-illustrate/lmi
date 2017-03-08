@@ -39,12 +39,6 @@
 #include <sstream>
 
 //============================================================================
-single_cell_document::single_cell_document()
-    :input_data_()
-{
-}
-
-//============================================================================
 single_cell_document::single_cell_document(Input const& z)
     :input_data_(z)
 {
@@ -58,9 +52,6 @@ single_cell_document::single_cell_document(std::string const& filename)
     xml_lmi::dom_parser parser(filename);
     parse(parser);
 }
-
-//============================================================================
-single_cell_document::~single_cell_document() = default;
 
 /// Backward-compatibility serial number of this class's xml version.
 ///
@@ -108,7 +99,7 @@ void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 
     if(class_version() < file_version)
         {
-        fatal_error() << "Incompatible file version." << LMI_FLUSH;
+        alarum() << "Incompatible file version." << LMI_FLUSH;
         }
 
     if(data_source_is_external(parser.document()))

@@ -30,8 +30,8 @@
 #include "force_linking.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
-#include "ledger_variant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
+#include "ledger_variant.hpp"
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"               // split_into_lines()
 #include "oecumenic_enumerations.hpp"   // oenum_format_style
@@ -206,7 +206,6 @@ void append_name_value_to_html_table
 /// less likely.
 
 class open_and_ensure_closing_tag
-    :private lmi::uncopyable<open_and_ensure_closing_tag>
 {
   public:
     open_and_ensure_closing_tag(wxString& html, char const* tag)
@@ -222,6 +221,9 @@ class open_and_ensure_closing_tag
     }
 
   private:
+    open_and_ensure_closing_tag(open_and_ensure_closing_tag const&) = delete;
+    open_and_ensure_closing_tag& operator=(open_and_ensure_closing_tag const&) = delete;
+
     wxString& html_;
     wxString const tag_;
 };
@@ -373,7 +375,7 @@ void output_image
             break;
         default:
             {
-            fatal_error() << "Case " << output_mode << " not found." << LMI_FLUSH;
+            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
             }
         }
 
@@ -419,7 +421,7 @@ int output_html
             break;
         default:
             {
-            fatal_error() << "Case " << output_mode << " not found." << LMI_FLUSH;
+            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
             }
         }
 
@@ -488,7 +490,7 @@ class group_quote_pdf_generator_wx
     static int const vert_skip   = 12;
 
     // Ctor is private as it is only used by do_create().
-    group_quote_pdf_generator_wx();
+    group_quote_pdf_generator_wx() = default;
 
     // Generate the PDF once we have all the data.
     void do_generate_pdf(wxPdfDC& pdf_dc);
@@ -610,21 +612,15 @@ class group_quote_pdf_generator_wx
         };
     page_metrics page_;
 
-    int row_num_;
-    int individual_selection_;
+    int row_num_ = 0;
+    int individual_selection_ = 99;
 };
-
-group_quote_pdf_generator_wx::group_quote_pdf_generator_wx()
-    :row_num_(0)
-    ,individual_selection_(99)
-{
-}
 
 void assert_nonblank(std::string const& value, std::string const& name)
 {
     if(std::string::npos == value.find_first_not_of(" \f\n\r\t\v"))
         {
-        fatal_error() << name << " must not be blank." << LMI_FLUSH;
+        alarum() << name << " must not be blank." << LMI_FLUSH;
         }
 }
 
@@ -679,7 +675,7 @@ void group_quote_pdf_generator_wx::global_report_data::fill_global_report_data
             ;
         if(invar.HasSpouseRider)
             {
-            std::pair<int, oenum_format_style> const f0(0, oe_format_normal);
+            std::pair<int,oenum_format_style> const f0(0, oe_format_normal);
             double const number_of_lives = invar.GetInforceLives().at(0);
             LMI_ASSERT(0.0 < number_of_lives);
             elected_riders_footnote_ +=
@@ -746,7 +742,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 {
     if(0 == ledger.GetCurrFull().LapseYear)
         {
-        fatal_error() << "Lapsed during first year." << LMI_FLUSH;
+        alarum() << "Lapsed during first year." << LMI_FLUSH;
         }
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
@@ -759,7 +755,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
         {
         if(invar.GroupIndivSelection != individual_selection_)
             {
-            fatal_error()
+            alarum()
                 << "Group quotes cannot mix mandatory and voluntary on the same plan."
                 << LMI_FLUSH
                 ;
@@ -768,8 +764,8 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
     int const year = 0;
 
-    std::pair<int, oenum_format_style> const f0(0, oe_format_normal);
-    std::pair<int, oenum_format_style> const f2(2, oe_format_normal);
+    std::pair<int,oenum_format_style> const f0(0, oe_format_normal);
+    std::pair<int,oenum_format_style> const f2(2, oe_format_normal);
 
     bool const is_composite = ledger.is_composite();
 
@@ -866,12 +862,12 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 break;
             case e_col_max:
                 {
-                fatal_error() << "Unreachable." << LMI_FLUSH;
+                alarum() << "Unreachable." << LMI_FLUSH;
                 }
                 break;
             default:
                 {
-                fatal_error() << "Case " << col << " not found." << LMI_FLUSH;
+                alarum() << "Case " << col << " not found." << LMI_FLUSH;
                 }
             }
         }
@@ -1001,12 +997,12 @@ void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
                 break;
             case e_col_max:
                 {
-                fatal_error() << "Unreachable." << LMI_FLUSH;
+                alarum() << "Unreachable." << LMI_FLUSH;
                 }
                 break;
             default:
                 {
-                fatal_error() << "Case " << col << " not found." << LMI_FLUSH;
+                alarum() << "Case " << col << " not found." << LMI_FLUSH;
                 }
             }
 
@@ -1329,7 +1325,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
             :(e_col_total_premium               == col) ? 2
             :throw std::logic_error("Invalid column type.")
             );
-        std::pair<int, oenum_format_style> const f(num_dec, oe_format_normal);
+        std::pair<int,oenum_format_style> const f(num_dec, oe_format_normal);
 
         table_gen.output_highlighted_cell
             (col
@@ -1389,7 +1385,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
                 break;
             default:
                 {
-                fatal_error() << "Case " << col << " not found." << LMI_FLUSH;
+                alarum() << "Case " << col << " not found." << LMI_FLUSH;
                 }
             }
 

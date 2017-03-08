@@ -54,7 +54,7 @@ std::vector<std::string> fetch_product_names()
 
     if(names.empty())
         {
-        fatal_error()
+        alarum()
             << "Data directory '"
             << path
             << "' contains no product files."
@@ -132,7 +132,7 @@ std::size_t ce_product_name::ordinal(std::string const& s)
         ;
     if(v == product_names().size())
         {
-        fatal_error()
+        alarum()
             << "Value '"
             << s
             << "' invalid for type '"

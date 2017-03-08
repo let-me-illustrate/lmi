@@ -51,9 +51,6 @@ death_benefits::death_benefits(int length, yare_input const& yi)
 }
 
 //============================================================================
-death_benefits::~death_benefits() = default;
-
-//============================================================================
 void death_benefits::set_specamt(double z, int from_year, int to_year)
 {
 #if 0

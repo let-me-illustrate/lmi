@@ -35,13 +35,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(CensusDocument, wxDocument)
 
-CensusDocument::CensusDocument()
-    :wxDocument()
-{
-}
-
-CensusDocument::~CensusDocument() = default;
-
 wxDataViewCtrl& CensusDocument::PredominantViewWindow() const
 {
     return ::PredominantViewWindow<CensusView,wxDataViewCtrl>

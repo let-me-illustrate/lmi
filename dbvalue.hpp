@@ -25,7 +25,6 @@
 #include "config.hpp"
 
 #include "dbindex.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi_fwd.hpp"
 
@@ -54,8 +53,7 @@ namespace xml_serialize {template<typename T> struct xml_io;}
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO database_entity
-    :virtual private obstruct_slicing<database_entity>
+class LMI_SO database_entity final
 {
     friend struct xml_serialize::xml_io<database_entity>;
 
@@ -79,7 +77,7 @@ class LMI_SO database_entity
         ,double             datum
         ,std::string const& gloss = std::string()
         );
-    ~database_entity();
+    ~database_entity() = default;
 
     bool operator==(database_entity const&) const;
 

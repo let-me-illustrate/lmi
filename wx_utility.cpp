@@ -53,7 +53,7 @@ std::string ClipboardEx::GetText()
     wxClipboardLocker lock;
     if(!lock)
         {
-        fatal_error() << "Unable to lock clipboard." << LMI_FLUSH;
+        alarum() << "Unable to lock clipboard." << LMI_FLUSH;
         }
 
     wxTextDataObject z;
@@ -81,7 +81,7 @@ void ClipboardEx::SetText(std::string const& s)
     wxClipboardLocker lock;
     if(!lock)
         {
-        fatal_error() << "Unable to lock clipboard." << LMI_FLUSH;
+        alarum() << "Unable to lock clipboard." << LMI_FLUSH;
         }
 
     wxTextDataObject* TextDataObject = new(wx) wxTextDataObject(s);
@@ -178,7 +178,7 @@ void TestDateConversions()
                 );
         if(lmi_date1 != lmi_date0)
             {
-            fatal_error()
+            alarum()
                 << "Date conversion failed:\n"
                 << lmi_date0.str() << " original\n"
                 << lmi_date1.str() << " converted\n"
@@ -194,7 +194,7 @@ void TestDateConversions()
             );
         if(lmi_str != wx_str)
             {
-            fatal_error()
+            alarum()
                 << "ISO8601 representations differ:\n"
                 << lmi_str << " lmi\n"
                 << wx_str  << " wx\n"
@@ -305,7 +305,7 @@ std::string ValidateAndConvertFilename(wxString const& w)
 {
     if(w.IsEmpty())
         {
-        fatal_error() << "Filename is empty." << LMI_FLUSH;
+        alarum() << "Filename is empty." << LMI_FLUSH;
         }
     std::string s(w.mb_str());
     if(s.empty())

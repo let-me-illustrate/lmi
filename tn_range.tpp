@@ -310,7 +310,7 @@ void trammel_base<T>::assert_sanity() const
 {
     if(!(nominal_minimum() <= nominal_maximum()))
         {
-        fatal_error()
+        alarum()
             << "Lower bound "
             << nominal_minimum()
             << " exceeds upper bound "
@@ -321,7 +321,7 @@ void trammel_base<T>::assert_sanity() const
         }
     if(!(nominal_minimum() <= default_value()))
         {
-        fatal_error()
+        alarum()
             << "Lower bound "
             << nominal_minimum()
             << " exceeds default value "
@@ -332,7 +332,7 @@ void trammel_base<T>::assert_sanity() const
         }
     if(!(default_value() <= nominal_maximum()))
         {
-        fatal_error()
+        alarum()
             << "Default value "
             << default_value()
             << " exceeds upper bound "
@@ -389,11 +389,6 @@ tn_range<Number,Trammel>::tn_range(std::string const& s)
 }
 
 template<typename Number, typename Trammel>
-tn_range<Number,Trammel>::~tn_range()
-{
-}
-
-template<typename Number, typename Trammel>
 tn_range<Number,Trammel>& tn_range<Number,Trammel>::operator=(Number n)
 {
     value_ = curb(n);
@@ -427,7 +422,7 @@ void tn_range<Number,Trammel>::minimum(Number n)
     Number candidate(adjust_minimum(n));
     if(!(trammel_.minimum_minimorum() <= candidate))
         {
-        fatal_error()
+        alarum()
             << "Cannot change lower bound to "
             << candidate
             << ", which is less than infimum "
@@ -438,7 +433,7 @@ void tn_range<Number,Trammel>::minimum(Number n)
         }
     if(!(candidate <= maximum()))
         {
-        fatal_error()
+        alarum()
             << "Cannot change lower bound to "
             << candidate
             << ", which is greater than upper bound "
@@ -471,7 +466,7 @@ void tn_range<Number,Trammel>::maximum(Number n)
     Number candidate(adjust_maximum(n));
     if(!(minimum() <= candidate))
         {
-        fatal_error()
+        alarum()
             << "Cannot change upper bound to "
             << candidate
             << ", which is less than lower bound "
@@ -482,7 +477,7 @@ void tn_range<Number,Trammel>::maximum(Number n)
         }
     if(!(candidate <= trammel_.maximum_maximorum()))
         {
-        fatal_error()
+        alarum()
             << "Cannot change upper bound to "
             << candidate
             << ", which is greater than supremum "
@@ -630,7 +625,7 @@ std::string tn_range<Number,Trammel>::format_limits_for_error_message() const
         }
     else
         {
-        fatal_error() << "Unanticipated case." << LMI_FLUSH;
+        alarum() << "Unanticipated case." << LMI_FLUSH;
         }
     return oss.str();
 }
@@ -708,7 +703,7 @@ std::string tn_range<Number,Trammel>::diagnose_invalidity
         }
     else
         {
-        fatal_error() << "Unanticipated case." << LMI_FLUSH;
+        alarum() << "Unanticipated case." << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }

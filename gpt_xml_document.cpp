@@ -32,12 +32,6 @@
 #include <ostream>
 
 //============================================================================
-gpt_xml_document::gpt_xml_document()
-    :input_data_()
-{
-}
-
-//============================================================================
 gpt_xml_document::gpt_xml_document(gpt_input const& z)
     :input_data_(z)
 {
@@ -50,9 +44,6 @@ gpt_xml_document::gpt_xml_document(std::string const& filename)
     xml_lmi::dom_parser parser(filename);
     parse(parser);
 }
-
-//============================================================================
-gpt_xml_document::~gpt_xml_document() = default;
 
 //============================================================================
 std::string const& gpt_xml_document::xml_root_name() const

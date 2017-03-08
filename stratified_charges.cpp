@@ -64,7 +64,7 @@ namespace xml_serialize
 
 template<> std::string value_cast<std::string>(stratified_entity const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
@@ -76,13 +76,11 @@ template<> std::string value_cast<std::string>(stratified_entity const&)
 
 template<> stratified_entity value_cast<stratified_entity>(std::string const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
 // Class stratified_entity implementation.
-
-stratified_entity::stratified_entity() = default;
 
 stratified_entity::stratified_entity
     (std::vector<double> const& limits
@@ -95,8 +93,6 @@ stratified_entity::stratified_entity
 {
     assert_validity();
 }
-
-stratified_entity::~stratified_entity() = default;
 
 bool stratified_entity::operator==(stratified_entity const& z) const
 {
@@ -176,15 +172,12 @@ stratified_charges::stratified_charges(std::string const& filename)
 }
 
 stratified_charges::stratified_charges(stratified_charges const& z)
-    :obstruct_slicing  <stratified_charges>()
-    ,xml_serializable  <stratified_charges>()
+    :xml_serializable  <stratified_charges>()
     ,MemberSymbolTable <stratified_charges>()
 {
     ascribe_members();
     MemberSymbolTable<stratified_charges>::assign(z);
 }
-
-stratified_charges::~stratified_charges() = default;
 
 stratified_charges& stratified_charges::operator=(stratified_charges const& z)
 {
@@ -285,7 +278,7 @@ double stratified_charges::stratified_sepacct_load
             // break;
         case mce_gen_mdpt:
             {
-            fatal_error()
+            alarum()
                 << "Dynamic separate-account load not supported with "
                 << "midpoint expense basis, because variable products "
                 << "are not subject to the illustration reg."
@@ -295,7 +288,7 @@ double stratified_charges::stratified_sepacct_load
             break;
         default:
             {
-            fatal_error() << "Case '" << basis << "' not found." << LMI_FLUSH;
+            alarum() << "Case '" << basis << "' not found." << LMI_FLUSH;
             }
         }
     throw "Unreachable--silences a compiler diagnostic.";
@@ -357,7 +350,7 @@ double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets)
             // break;
         case mce_gen_mdpt:
             {
-            fatal_error()
+            alarum()
                 << "Dynamic separate-account M&E not supported with "
                 << "midpoint expense basis, because variable products "
                 << "are not subject to the illustration reg."
@@ -367,7 +360,7 @@ double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets)
             break;
         default:
             {
-            fatal_error() << "Case '" << basis << "' not found." << LMI_FLUSH;
+            alarum() << "Case '" << basis << "' not found." << LMI_FLUSH;
             }
         }
     throw "Unreachable--silences a compiler diagnostic.";

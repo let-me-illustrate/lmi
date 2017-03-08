@@ -34,14 +34,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(RoundingView, ProductEditorView)
 
-RoundingView::RoundingView()
-    :ProductEditorView()
-    ,controls_()
-{
-}
-
-RoundingView::~RoundingView() = default;
-
 wxWindow* RoundingView::CreateChildWindow()
 {
     wxWindow* frame = GetFrame();
@@ -51,7 +43,7 @@ wxWindow* RoundingView::CreateChildWindow()
         );
     if(!main_panel)
         {
-        fatal_error() << "Unable to load xml resource." << LMI_FLUSH;
+        alarum() << "Unable to load xml resource." << LMI_FLUSH;
         }
 
     for(auto const& i : document().values())
@@ -64,7 +56,7 @@ wxWindow* RoundingView::CreateChildWindow()
             );
         if(!control)
             {
-            fatal_error()
+            alarum()
                 << "Required text control '"
                 << i.first
                 << "' not found."

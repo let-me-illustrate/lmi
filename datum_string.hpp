@@ -39,9 +39,9 @@ class datum_string
     ,private boost::equality_comparable<datum_string,datum_string>
 {
   public:
-    datum_string();
+    datum_string() = default;
     explicit datum_string(std::string const&);
-    ~datum_string() override;
+    ~datum_string() override = default;
 
     datum_string& operator=(std::string const&);
 

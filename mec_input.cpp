@@ -62,7 +62,7 @@ std::string realize_sequence_string
             ,input.inforce_year     ()
             ,input.effective_year   ()
             );
-        detail::convert_vector(v, s.linear_number_representation());
+        detail::convert_vector(v, s.seriatim_numbers());
         }
     catch(std::exception const& e)
         {
@@ -122,8 +122,7 @@ mec_input::mec_input()
 }
 
 mec_input::mec_input(mec_input const& z)
-    :obstruct_slicing  <mec_input>()
-    ,xml_serializable  <mec_input>()
+    :xml_serializable  <mec_input>()
     ,MvcModel                     ()
     ,MemberSymbolTable <mec_input>()
 {
@@ -131,6 +130,12 @@ mec_input::mec_input(mec_input const& z)
     MemberSymbolTable<mec_input>::assign(z);
     DoAdaptExternalities();
 }
+
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
 
 mec_input::~mec_input() = default;
 
@@ -326,7 +331,7 @@ void mec_input::DoHarmonize()
         }
     else
         {
-        fatal_error()
+        alarum()
             << "No option selected for definition of life insurance."
             << LMI_FLUSH
             ;
@@ -539,7 +544,7 @@ std::vector<std::string> mec_input::RealizeAllSequenceInput(bool report_errors)
                 }
             if(diagnostics_present)
                 {
-                fatal_error()
+                alarum()
                     << "Input validation problems:\n"
                     << oss.str()
                     << LMI_FLUSH

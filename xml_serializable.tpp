@@ -52,7 +52,7 @@ void xml_serializable<T>::load(fs::path const& path)
 {
     if(access(path.string().c_str(), R_OK))
         {
-        fatal_error()
+        alarum()
             << "File '"
             << path.string()
             << "' is required but could not be found. Try reinstalling."
@@ -79,7 +79,7 @@ void xml_serializable<T>::read(xml::element const& x)
 {
     if(xml_root_name() != x.get_name())
         {
-        fatal_error()
+        alarum()
             << "XML node name is '"
             << x.get_name()
             << "' but '"
@@ -215,7 +215,7 @@ inline Y sfinae_cast
     ,typename std::enable_if<!std::is_same<X,Y>::value>::type* = nullptr
     )
 {
-    fatal_error() << "Impermissible type conversion." << LMI_FLUSH;
+    alarum() << "Impermissible type conversion." << LMI_FLUSH;
     return Y();
 }
 
@@ -306,7 +306,7 @@ void xml_serializable<T>::write_proem
 template<typename T>
 void xml_serializable<T>::handle_missing_version_attribute() const
 {
-    fatal_error()
+    alarum()
         << "XML tag <"
         << xml_root_name()
         << "> lacks required version attribute."
@@ -362,7 +362,7 @@ void xml_serializable<T>::redintegrate_ex_ante
         return;
         }
 
-    fatal_error()
+    alarum()
         << "Incompatible file version."
         << " An explicit override is necessary."
         << LMI_FLUSH
@@ -410,7 +410,7 @@ void xml_serializable<T>::redintegrate_ex_post
         return;
         }
 
-    fatal_error()
+    alarum()
         << "Incompatible file version."
         << " An explicit override is necessary."
         << LMI_FLUSH

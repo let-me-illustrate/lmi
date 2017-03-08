@@ -24,9 +24,7 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <string>
 #include <vector>
@@ -35,20 +33,19 @@
 
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_SO FundInfo
-    :virtual private obstruct_slicing<FundInfo>
+class LMI_SO FundInfo final
 {
     friend class FundData;
 
   public:
-    FundInfo();
+    FundInfo() = default;
     FundInfo
         (double             ScalarIMF
         ,std::string const& ShortName
         ,std::string const& LongName
         ,std::string const& gloss = std::string()
         );
-    ~FundInfo();
+    ~FundInfo() = default;
 
     double ScalarIMF() const;
     std::string const& ShortName() const;
@@ -56,19 +53,17 @@ class LMI_SO FundInfo
     std::string const& gloss() const;
 
   private:
-    double ScalarIMF_;
-    std::string ShortName_;
-    std::string LongName_;
-    std::string gloss_;
+    double      ScalarIMF_ = 0.0;
+    std::string ShortName_ = std::string();
+    std::string LongName_  = std::string();
+    std::string gloss_     = std::string();
 };
 
-class LMI_SO FundData
-    :        private lmi::uncopyable <FundData>
-    ,virtual private obstruct_slicing<FundData>
+class LMI_SO FundData final
 {
   public:
     FundData(std::string const& a_Filename);
-    ~FundData();
+    ~FundData() = default;
 
     static void write_funds_files();
     static void write_proprietary_funds_files();
@@ -77,7 +72,9 @@ class LMI_SO FundData
     int GetNumberOfFunds() const;
 
   private:
-    FundData(); // Private, but implemented.
+    FundData() = default; // Used by write_funds_files().
+    FundData(FundData const&) = delete;
+    FundData& operator=(FundData const&) = delete;
 
     void Read (std::string const& a_Filename);
     void Write(std::string const& a_Filename) const;

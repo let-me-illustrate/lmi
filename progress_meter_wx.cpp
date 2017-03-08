@@ -63,7 +63,7 @@ class concrete_progress_meter
         ,enum_display_mode
         );
 
-    ~concrete_progress_meter() override;
+    ~concrete_progress_meter() override = default;
 
   private:
     // progress_meter overrides.
@@ -102,8 +102,6 @@ concrete_progress_meter::concrete_progress_meter
         }
 }
 
-concrete_progress_meter::~concrete_progress_meter() = default;
-
 /// Sleep for the number of seconds given in the argument.
 ///
 /// Sleep only for a tenth of a second at a time, to ensure that the
@@ -120,6 +118,7 @@ void concrete_progress_meter::do_dawdle(int seconds)
     for(int i = 10 * seconds; 0 < i && !progress_dialog_.WasCancelled(); --i)
         {
         wxMilliSleep(100);
+        oss.clear();
         oss.str("");
         oss << "Waiting " << 0.1 * i << " seconds";
         progress_dialog_.Update(count(), oss.str());

@@ -69,7 +69,7 @@ class LMI_SO Ledger
         ,bool               no_can_issue
         ,bool               is_composite
         );
-    virtual ~Ledger();
+    virtual ~Ledger() = default;
 
     void ZeroInforceAfterLapse();
     Ledger& PlusEq(Ledger const& a_Addend);

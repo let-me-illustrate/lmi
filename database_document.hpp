@@ -34,7 +34,7 @@ class DatabaseDocument
 {
   public:
     DatabaseDocument();
-    ~DatabaseDocument() override;
+    ~DatabaseDocument() override = default;
 
     database_entity& GetTDBValue(e_database_key index);
 

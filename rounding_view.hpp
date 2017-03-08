@@ -26,22 +26,17 @@
 
 #include "product_editor.hpp"
 
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
-
 #include <map>
 
 class RoundingButtons;
 class RoundingDocument;
 
-class RoundingView
-    :        public  ProductEditorView
-    ,        private lmi::uncopyable <RoundingView>
-    ,virtual private obstruct_slicing<RoundingView>
+class RoundingView final
+    :public ProductEditorView
 {
   public:
-    RoundingView();
-    ~RoundingView() override;
+    RoundingView() = default;
+    ~RoundingView() override = default;
 
     typedef std::map<std::string, RoundingButtons*> controls_type;
     controls_type&       controls();
@@ -50,6 +45,9 @@ class RoundingView
     static char const* resource_file_name();
 
   private:
+    RoundingView(RoundingView const&) = delete;
+    RoundingView& operator=(RoundingView const&) = delete;
+
     RoundingDocument& document() const;
 
     // ViewEx required implementation.

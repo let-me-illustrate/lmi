@@ -27,8 +27,8 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "input.hpp"
-#include "input_sequence_aux.hpp"       // extract_keys_from_string_map()
 #include "input_sequence.hpp"
+#include "input_sequence_aux.hpp"       // extract_keys_from_string_map()
 #include "mvc_controller.hpp"
 #include "numeric_io_cast.hpp"
 #include "value_cast.hpp"
@@ -46,8 +46,8 @@
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/wupdlock.h>
 #include <wx/valtext.h>
+#include <wx/wupdlock.h>
 
 #include <algorithm>                    // std::copy()
 #include <exception>
@@ -147,7 +147,7 @@ void DurationModeChoice::value(duration_mode x)
             }
         }
 
-    fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+    alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
 }
 
 duration_mode DurationModeChoice::value() const
@@ -343,7 +343,7 @@ class InputSequenceEditor
     wxButton* ok_button_;
     wxButton* cancel_button_;
     wxStaticText* diagnostics_;
-    typedef std::map<wxWindowID, int> id_to_row_map;
+    typedef std::map<wxWindowID,int> id_to_row_map;
     id_to_row_map id_to_row_;
 
     // scalar absolute values for end durations; this is used to recompute
@@ -425,23 +425,12 @@ void InputSequenceEditor::sequence(InputSequence const& s)
         remove_row(0);
         }
 
-    std::vector<ValueInterval> const& intervals = s.interval_representation();
+    std::vector<ValueInterval> const& intervals = s.intervals();
     int const num_intervals = intervals.size();
-
-    // Reaffirm InputSequence invariants that are relied upon here:
-    LMI_ASSERT(!intervals.empty());
-    LMI_ASSERT(0 == intervals.front().begin_duration);
-    LMI_ASSERT(e_maturity == intervals.back().end_mode);
-
-    for(int i = 1; i < num_intervals; ++i)
-        {
-        LMI_ASSERT(intervals[i].begin_duration == intervals[i - 1].end_duration);
-        }
 
     for(int i = 0; i < num_intervals; ++i)
         {
         ValueInterval const& data = intervals[i];
-        LMI_ASSERT(!data.insane);
 
         add_row();
 
@@ -503,49 +492,65 @@ std::string InputSequenceEditor::sequence_string()
 
         s.append(value_field(i).GetValue().c_str());
 
+        auto endpoint = duration_num_field(i).GetValue();
+        std::string z = value_cast<std::string>(endpoint);
+
         switch(duration_mode_field(i).value())
             {
             case e_retirement:
                 {
                 s.append(" retirement");
-                break;
                 }
+                break;
             case e_attained_age:
                 {
-                s.append(" @");
-                s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
-                break;
+                s.append(" @").append(z);
                 }
+                break;
             case e_duration:
                 {
-                s.append(" ");
-                s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
-                break;
+                s.append(" ").append(z);
                 }
+                break;
             case e_number_of_years:
                 {
-                s.append(" #");
-                s.append(value_cast<std::string>(duration_num_field(i).GetValue()));
-                break;
+                s.append(" #").append(z);
                 }
+                break;
             case e_maturity:
                 {
                 LMI_ASSERT(i == rows_count_ - 1);
                 // " maturity" is implicit, don't add it
-                break;
                 }
-
+                break;
             case e_invalid_mode:
             case e_inception:
             case e_inforce:
                 {
-                fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
-                return "";
+                alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
                 }
+                break;
             }
         }
 
-    return s;
+    // This code largely duplicates InputSequence::canonical_form(),
+    // but, unfortunately, the two cannot readily be combined. (It
+    // would be possible to produce a std::vector<ValueInterval> here
+    // and canonicalize it, but that would not be simpler.) Yet it
+    // makes no sense to maintain the two in parallel, so just
+    // recanonicalize the result to simplify it.
+    return InputSequence
+        (s
+        ,input_.years_to_maturity()
+        ,input_.issue_age        ()
+        ,input_.retirement_age   ()
+        ,input_.inforce_year     ()
+        ,input_.effective_year   ()
+        ,keywords_
+        ,keywords_only_
+        ,default_keyword_
+        ).canonical_form()
+        ;
 }
 
 void SizeWinForText(wxControl* win, wxString const& text)
@@ -980,7 +985,7 @@ wxString InputSequenceEditor::format_from_text(int row)
         case e_inception:
         case e_inforce:
             {
-            fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+            alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
             return "";
             }
         }
@@ -1045,7 +1050,7 @@ int InputSequenceEditor::compute_duration_scalar(int row)
         case e_inception:
         case e_inforce:
             {
-            fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+            alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
             return 0;
             }
         }
@@ -1089,7 +1094,7 @@ void InputSequenceEditor::adjust_duration_num_range(int row)
         case e_inception:
         case e_inforce:
             {
-            fatal_error() << "unexpected duration_mode value" << LMI_FLUSH;
+            alarum() << "Unexpected duration_mode value." << LMI_FLUSH;
             break;
             }
         }
@@ -1372,11 +1377,6 @@ InputSequenceButton::InputSequenceButton(wxWindow* parent, wxWindowID id)
 }
 
 } // Unnamed namespace.
-
-InputSequenceEntry::InputSequenceEntry()
-    :input_(nullptr)
-{
-}
 
 InputSequenceEntry::InputSequenceEntry
     (wxWindow*          parent

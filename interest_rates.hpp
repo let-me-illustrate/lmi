@@ -140,7 +140,7 @@ class InterestRates
 {
   public:
     InterestRates(BasicValues const&);
-    ~InterestRates();
+    ~InterestRates() = default;
 
     std::vector<double> const& MlyGlpRate() const;
     std::vector<double> const& MlyGspRate() const;

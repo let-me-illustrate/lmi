@@ -94,8 +94,6 @@ OLCommFns::OLCommFns
     std::partial_sum(c.rbegin(), c.rend(), m.rbegin());
 }
 
-OLCommFns::~OLCommFns() = default;
-
 /// Interest- and mortality-rate vectors --> commutation functions.
 ///
 /// Constructor arguments:
@@ -195,6 +193,4 @@ ULCommFns::ULCommFns
     std::partial_sum(ad.rbegin(), ad.rend(), an.rbegin());
     std::partial_sum(kc.rbegin(), kc.rend(), km.rbegin());
 }
-
-ULCommFns::~ULCommFns() = default;
 

@@ -24,9 +24,7 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <memory>                       // std::shared_ptr
 #include <string>
@@ -38,19 +36,20 @@ class Ledger;
 ///
 /// This class encapsulates a frequently-used series of operations.
 
-class IllusVal
-    :        private lmi::uncopyable <IllusVal>
-    ,virtual private obstruct_slicing<IllusVal>
+class IllusVal final
 {
   public:
     explicit IllusVal(std::string const& filename);
-    ~IllusVal();
+    ~IllusVal() = default;
 
     double run(Input const&);
 
     std::shared_ptr<Ledger const> ledger() const;
 
   private:
+    IllusVal(IllusVal const&) = delete;
+    IllusVal& operator=(IllusVal const&) = delete;
+
     std::string filename_;
     std::shared_ptr<Ledger const> ledger_;
 };

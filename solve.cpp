@@ -124,7 +124,7 @@ double SolveTest()
 // fall through...
                 default:
                     {
-                    fatal_error()
+                    alarum()
                         << "Case "
                         << ThatSolveTarget
                         << " not found."
@@ -142,7 +142,7 @@ double SolveTest()
         case mce_solve_for_tax_basis: // Fall through.
         case mce_solve_for_non_mec:
             {
-            fatal_error() << "Not implemented.";
+            alarum() << "Not implemented.";
             }
             break;
         throw "Unreachable--silences a compiler diagnostic.";
@@ -307,7 +307,7 @@ double AccountValue::Solve()
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case "
                 << yare_input_.SolveType
                 << " not found."

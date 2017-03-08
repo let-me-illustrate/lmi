@@ -74,11 +74,7 @@ ViewType& PredominantView(wxDocument const& document)
         }
     if(!view)
         {
-        fatal_error()
-            << ViewName<ViewType>()
-            << ": view not found."
-            << LMI_FLUSH
-            ;
+        alarum() << ViewName<ViewType>() << ": view not found." << LMI_FLUSH;
         }
     return *view;
 }
@@ -97,11 +93,7 @@ ViewWindowType& PredominantViewWindow
     ViewWindowType* view_window_pointer = view.*view_window_member;
     if(!view_window_pointer)
         {
-        fatal_error()
-            << ViewName<ViewType>()
-            << ": window not found."
-            << LMI_FLUSH
-            ;
+        alarum() << ViewName<ViewType>() << ": window not found." << LMI_FLUSH;
         }
     return *view_window_pointer;
 }

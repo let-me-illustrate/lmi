@@ -297,7 +297,7 @@ void AccountValue::process_payment(double payment)
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << ee_premium_allocation_method
                 << "' not found."
@@ -319,7 +319,7 @@ void AccountValue::process_payment(double payment)
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << er_premium_allocation_method
                 << "' not found."
@@ -362,7 +362,7 @@ void AccountValue::IncrementAVPreferentially
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << preferred_account
                 << "' not found."
@@ -391,7 +391,7 @@ void AccountValue::process_deduction(double decrement)
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << deduction_method
                 << "' not found."
@@ -419,7 +419,7 @@ void AccountValue::process_distribution(double decrement)
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << distribution_method
                 << "' not found."
@@ -524,7 +524,7 @@ void AccountValue::DecrementAVProgressively
             break;
         default:
             {
-            fatal_error()
+            alarum()
                 << "Case '"
                 << preferred_account
                 << "' not found."
@@ -758,7 +758,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
                 break;
             default:
                 {
-                fatal_error()
+                alarum()
                     << "Case "
                     << yare_input_.TermAdjustmentMethod
                     << " not found."
@@ -926,7 +926,7 @@ void AccountValue::TxOptionChange()
 
     if(!AllowChangeToDBO2 && mce_option2 == YearsDBOpt)
         {
-        fatal_error()
+        alarum()
             << "Change to increasing death benefit option"
             << " not allowed on this policy form."
             << LMI_FLUSH
@@ -962,7 +962,7 @@ void AccountValue::TxOptionChange()
                     }
                 else
                     {
-                    fatal_error() << "Unknown death benefit option." << LMI_FLUSH;
+                    alarum() << "Unknown death benefit option." << LMI_FLUSH;
                     }
                 }
             else
@@ -995,7 +995,7 @@ void AccountValue::TxOptionChange()
             break;
         default:
             {
-            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
+            alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 }
@@ -1055,7 +1055,7 @@ void AccountValue::TxSpecAmtChange()
         &&  ActualSpecAmt < YearsSpecAmt
         )
         {
-        fatal_error()
+        alarum()
             << "Specified-amount increases not allowed on this policy form."
             << LMI_FLUSH
             ;
@@ -1068,7 +1068,7 @@ void AccountValue::TxSpecAmtChange()
         &&  ActualSpecAmt < YearsSpecAmt
         )
         {
-        fatal_error()
+        alarum()
             << "Cannot increase specified amount after age "
             << MaxIncrAge
             << " on this policy form."
@@ -1665,7 +1665,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
             break;
         default:
             {
-            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
+            alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 
@@ -1938,7 +1938,7 @@ void AccountValue::TxSetRiderDed()
                 break;
             default:
                 {
-                fatal_error()
+                alarum()
                     << "Case '"
                     << WaiverChargeMethod
                     << "' not found."
@@ -2059,7 +2059,7 @@ void AccountValue::TxTakeSepAcctLoad()
             }
         if(0.0 != tiered_comp)
             {
-            fatal_error()
+            alarum()
                 << "Tiered asset-based compensation unimplemented."
                 << LMI_FLUSH
                 ;
@@ -2111,7 +2111,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
             }
         case mce_gen_mdpt:
             {
-            fatal_error()
+            alarum()
                 << "Dynamic M&E not supported with midpoint expense basis."
                 << LMI_FLUSH
                 ;
@@ -2119,12 +2119,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
             break;
         default:
             {
-            fatal_error()
-                << "Case "
-                << GenBasis_
-                << " not found."
-                << LMI_FLUSH
-                ;
+            alarum() << "Case " << GenBasis_ << " not found." << LMI_FLUSH;
             }
         }
 
@@ -2136,7 +2131,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
     double imf_rate = StratifiedCharges_->tiered_investment_management_fee(assets);
     if(0.0 != imf_rate)
         {
-        fatal_error()
+        alarum()
             << "Tiered investment management fee unimplemented."
             << LMI_FLUSH
             ;
@@ -2148,7 +2143,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
             ;
     if(0.0 != asset_comp_rate)
         {
-        fatal_error()
+        alarum()
             << "Tiered asset-based compensation unimplemented."
             << LMI_FLUSH
             ;
@@ -2350,12 +2345,7 @@ double AccountValue::anticipated_deduction
             }
         default:
             {
-            fatal_error()
-                << "Case "
-                << method
-                << " not found."
-                << LMI_FLUSH
-                ;
+            alarum() << "Case " << method << " not found." << LMI_FLUSH;
             throw "Unreachable--silences a compiler diagnostic.";
             }
         }
@@ -2657,7 +2647,7 @@ void AccountValue::TxTakeWD()
             break;
         default:
             {
-            fatal_error() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
+            alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
             }
         }
 
@@ -2714,10 +2704,7 @@ void AccountValue::SetMaxLoan()
         ;
     if(0 != Month)
         {
-        fatal_error()
-            << "Off-anniversary loans untested."
-            << LMI_FLUSH
-            ;
+        alarum() << "Off-anniversary loans untested." << LMI_FLUSH;
         reg_loan_factor =
                 std::pow(1.0 + YearsRegLnIntDueRate, 12 - Month)
             -   1.0
@@ -2950,7 +2937,7 @@ void AccountValue::TxTestLapse()
             }
         else if(!HoneymoonActive && !Solving && lapse_test_csv < 0.0)
             {
-            fatal_error()
+            alarum()
                 << "Unloaned value not positive,"
                 << " no-lapse guarantee not active,"
                 << " and honeymoon not active, yet policy did not lapse."

@@ -26,7 +26,6 @@
 
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
 #include "mec_state.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
@@ -47,13 +46,12 @@ class mec_input;
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO mec_server
+class LMI_SO mec_server final
     :public std::unary_function<fs::path const&, bool>
-    ,virtual private obstruct_slicing<mec_server>
 {
   public:
     explicit mec_server(mcenum_emission);
-    ~mec_server();
+    ~mec_server() = default;
 
     bool operator()(fs::path const&);
     bool operator()(fs::path const&, mec_input const&);
@@ -67,11 +65,11 @@ class LMI_SO mec_server
     double seconds_for_output      () const;
 
   private:
-    mcenum_emission emission_;
-    mec_state state_;
-    double seconds_for_input_;
-    double seconds_for_calculations_;
-    double seconds_for_output_;
+    mcenum_emission emission_        {mce_emit_nothing};
+    mec_state state_                 {};
+    double seconds_for_input_        {0.0};
+    double seconds_for_calculations_ {0.0};
+    double seconds_for_output_       {0.0};
 };
 
 #endif // mec_server_hpp

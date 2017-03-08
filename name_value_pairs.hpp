@@ -24,9 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
-
 #include <map>
 #include <string>
 
@@ -82,9 +79,7 @@
 /// purpose library, but it meets lmi's specialized needs, and such
 /// extra checks can easily be added if they become desirable.
 
-class name_value_pairs
-    :        private lmi::uncopyable <name_value_pairs>
-    ,virtual private obstruct_slicing<name_value_pairs>
+class name_value_pairs final
 {
     friend int test_main(int, char*[]);
 
@@ -92,13 +87,16 @@ class name_value_pairs
 
   public:
     name_value_pairs(std::string const& filename);
-    ~name_value_pairs();
+    ~name_value_pairs() = default;
 
     std::string const& string_value        (std::string const& key) const;
     double             numeric_value       (std::string const& key) const;
     std::string        string_numeric_value(std::string const& key) const;
 
   private:
+    name_value_pairs(name_value_pairs const&) = delete;
+    name_value_pairs& operator=(name_value_pairs const&) = delete;
+
     std::map<std::string, std::string> const& map() const;
 
     string_map map_;

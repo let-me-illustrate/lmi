@@ -605,7 +605,7 @@ void ShowCensusOutput
             }
         if(values.size() != headers.size())
             {
-            fatal_error()
+            alarum()
                 << "Line #" << current_line << ":<BR>"
                 << "  (" << line << ")<BR>"
                 << "should have one value per column.<BR>"

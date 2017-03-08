@@ -52,7 +52,7 @@ std::string xsl_filename(Ledger const& ledger)
         case mce_variable_annuity:             return "variable_annuity.xsl";
         default:
             {
-            fatal_error() << "Case '" << z << "' not found." << LMI_FLUSH;
+            alarum() << "Case '" << z << "' not found." << LMI_FLUSH;
             }
         }
     throw "Unreachable--silences a compiler diagnostic.";
@@ -67,7 +67,7 @@ fs::path xsl_filepath(Ledger const& ledger)
     fs::path xsl_file(global_settings::instance().data_directory() / xsl_name);
     if(!fs::exists(xsl_file))
         {
-        fatal_error()
+        alarum()
             << "Unable to read file '"
             << xsl_file
             << "' required for ledger type '"
@@ -113,7 +113,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
         ofs.close();
         if(!ofs.good())
             {
-            fatal_error()
+            alarum()
                 << "Unable to write output file '"
                 << xml_file
                 << "'."
@@ -129,7 +129,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     ofs.close();
     if(!ofs.good())
         {
-        fatal_error()
+        alarum()
             << "Unable to write output file '"
             << xml_fo_file
             << "'."

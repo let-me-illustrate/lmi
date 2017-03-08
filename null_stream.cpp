@@ -22,7 +22,6 @@
 #include "pchfile.hpp"
 
 #include "null_stream.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <ostream>
 #include <streambuf>
@@ -38,10 +37,9 @@
 /// described in 'ChangeLog'; any defect in it should not reflect on
 /// Dietmar Kuehl's reputation.
 
-template<typename CharType, typename traits = std::char_traits<CharType> >
+template<typename CharType, typename traits = std::char_traits<CharType>>
 class dev_null_stream_buffer
-    :public  std::streambuf
-    ,private lmi::uncopyable<dev_null_stream_buffer<CharType,traits> >
+    :public std::streambuf
 {
   public:
     dev_null_stream_buffer()
@@ -51,6 +49,9 @@ class dev_null_stream_buffer
     ~dev_null_stream_buffer() override = default;
 
   private:
+    dev_null_stream_buffer(dev_null_stream_buffer const&) = delete;
+    dev_null_stream_buffer& operator=(dev_null_stream_buffer const&) = delete;
+
     int_type overflow(int_type c) override
         {
         setp(buffer_, buffer_ + buffer_size_);

@@ -67,7 +67,7 @@ template<> struct xml_io<rounding_parameters>
 
 template<> std::string value_cast<std::string>(rounding_parameters const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
@@ -79,17 +79,8 @@ template<> std::string value_cast<std::string>(rounding_parameters const&)
 
 template<> rounding_parameters value_cast<rounding_parameters>(std::string const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
-}
-
-/// Private default ctor, for friends only.
-
-rounding_parameters::rounding_parameters()
-    :decimals_ (0              )
-    ,style_    (r_indeterminate)
-    ,gloss_    (""             )
-{
 }
 
 /// Construct from components.
@@ -109,8 +100,6 @@ rounding_parameters::rounding_parameters
     ,gloss_    (gloss   )
 {
 }
-
-rounding_parameters::~rounding_parameters() = default;
 
 bool rounding_parameters::operator==(rounding_parameters const& z) const
 {
@@ -137,7 +126,7 @@ rounding_style rounding_parameters::raw_style() const
     return style_.value();
 }
 
-/// Private default ctor.
+/// Private default ctor for friend class and write_rounding_files().
 
 rounding_rules::rounding_rules()
     :round_specamt_           (0, r_upward    , "")
@@ -200,8 +189,6 @@ rounding_rules::rounding_rules(std::string const& filename)
     LMI_ASSERT(r_not_at_all == round_max_premium_       .style() || r_downward == round_max_premium_       .style());
     LMI_ASSERT(r_not_at_all == round_min_init_premium_  .style() || r_upward   == round_min_init_premium_  .style());
 }
-
-rounding_rules::~rounding_rules() = default;
 
 /// Member datum nominated by the given name.
 

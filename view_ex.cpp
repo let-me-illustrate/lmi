@@ -59,13 +59,6 @@
 
 IMPLEMENT_ABSTRACT_CLASS(ViewEx, wxView)
 
-ViewEx::ViewEx()
-    :wxView()
-{
-}
-
-ViewEx::~ViewEx() = default;
-
 DocManagerEx& ViewEx::DocManager() const
 {
     return safely_dereference_as<DocManagerEx>(GetDocumentManager());

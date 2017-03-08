@@ -120,8 +120,8 @@ class LMI_SO MvcModel
     typedef std::vector<std::string> NamesType;
     typedef std::map<std::string,std::string> StateType;
 
-    MvcModel();
-    virtual ~MvcModel();
+    MvcModel() = default;
+    virtual ~MvcModel() = default;
 
     datum_base const* BaseDatumPointer(std::string const&) const;
 

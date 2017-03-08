@@ -60,7 +60,7 @@ std::vector<std::string> fetch_skin_names()
 
     if(names.empty())
         {
-        fatal_error()
+        alarum()
             << "Data directory '"
             << path
             << "' contains no skin files."
@@ -129,7 +129,7 @@ std::size_t ce_skin_name::ordinal(std::string const& s)
         ;
     if(v == skin_names().size())
         {
-        fatal_error()
+        alarum()
             << "Value '"
             << s
             << "' invalid for type '"

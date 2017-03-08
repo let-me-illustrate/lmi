@@ -54,7 +54,7 @@
 /// the user's attention: the program can continue, but not in exactly
 /// the way the user wanted, so resumption semantics are appropriate.
 /// All interfaces must display a message (e.g., a GUI would typically
-/// use a messagebox) but, unlike fatal_error, not routinely throw an
+/// use a messagebox) but, unlike alarum(), not routinely throw an
 /// exception (unless due to internal error).
 ///
 /// hobsons_choice: Serious runtime problems that users may be allowed
@@ -66,7 +66,7 @@
 /// used only for regression testing might print a message and attempt
 /// to continue.
 ///
-/// fatal_error: Dire runtime problems that prevent the system from
+/// alarum: Dire runtime problems that prevent the system from
 /// performing a requested action in any reasonable manner, and that
 /// therefore call for resumption semantics. All interfaces must show
 /// a message and throw an exception when the stream is flushed. A GUI
@@ -87,15 +87,15 @@
 ///
 /// Usage notes.
 ///
-/// The 'lmi' project is gradually striving to favor fatal_error()
-/// over warning() and hobsons_choice(). For temporary debugging code,
+/// The 'lmi' project is gradually striving to favor alarum() over
+/// warning() and hobsons_choice(). For temporary debugging code,
 /// warning() is often useful, but production code should generally
 /// avoid warning() and especially hobsons_choice(). Already, option
 /// 'offer_hobsons_choice' in 'configurable_settings.?pp', if set as
 /// recommended, removes the user choice from hobsons_choice().
 ///
 /// Sometimes gcc warns of a missing return statement after the stream
-/// returned by fatal_error() is flushed: an exception is obligatorily
+/// returned by alarum() is flushed: an exception is obligatorily
 /// thrown, but it is difficult for a compiler to discern that. When
 /// (and only when) gcc issues such a warning, add exactly this line:
 ///   throw "Unreachable--silences a compiler diagnostic.";
@@ -119,8 +119,8 @@
 /// The output destination could easily be expressed as a manipulator:
 ///   single_ostream << "error" << some_variable << messagebox;
 /// That might be a slightly simpler design. And it is intended that an
-/// exception be thrown for fatal errors at least, which seems more
-/// like an independent action than a consequence of flushing a stream.
+/// exception be thrown for alarum() at least, which seems more like
+/// an independent action than a consequence of flushing a stream.
 /// But following the std::cerr paradigm is the least surprising
 /// approach, and it seems natural enough to emit the contents of the
 /// buffer when std::flush is called.
@@ -160,7 +160,7 @@ namespace alert_classes{} // doxygen workaround.
 std::ostream& LMI_SO status();
 std::ostream& LMI_SO warning();
 std::ostream& LMI_SO hobsons_choice();
-std::ostream& LMI_SO fatal_error();
+std::ostream& LMI_SO alarum();
 
 void LMI_SO safely_show_message(char const*);
 void LMI_SO safely_show_message(std::string const&);
@@ -174,7 +174,7 @@ void LMI_SO safely_show_message(std::string const&);
 void status_alert         (std::string const&);
 void warning_alert        (std::string const&);
 void hobsons_choice_alert (std::string const&);
-void fatal_error_alert    (std::string const&);
+void alarum_alert         (std::string const&);
 
 /// Implement this function for each platform, in a manner that should
 /// always work safely and immediately. For instance, for the wx GUI
@@ -200,7 +200,7 @@ bool LMI_SO set_alert_functions
     (void(*status_alert_function_pointer        )(std::string const&)
     ,void(*warning_alert_function_pointer       )(std::string const&)
     ,void(*hobsons_choice_alert_function_pointer)(std::string const&)
-    ,void(*fatal_error_alert_function_pointer   )(std::string const&)
+    ,void(*alarum_alert_function_pointer        )(std::string const&)
     ,void(*safe_message_alert_function_pointer  )(char const*)
     );
 
@@ -213,7 +213,7 @@ bool LMI_SO set_alert_functions
 /// of other code, failure semantics are more appropriate, because
 /// such tests should not require manual intervention; therefore, the
 /// implementation provided for a command-line interface writes to
-/// stderr and signals a fatal error. A server application probably
+/// stderr and signals an exception. A server application probably
 /// should fail and write a message in a log file.
 
 std::string const& LMI_SO hobsons_prompt();
@@ -242,7 +242,7 @@ class hobsons_choice_exception
 void LMI_SO test_status();
 void LMI_SO test_warning();
 void LMI_SO test_hobsons_choice();
-void LMI_SO test_fatal_error();
+void LMI_SO test_alarum();
 void LMI_SO test_standard_exception();
 void LMI_SO test_arbitrary_exception();
 void LMI_SO test_catastrophe_report();

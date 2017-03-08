@@ -31,16 +31,14 @@
 #include "datum_string.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "tn_range.hpp"
 #include "tn_range_types.hpp"
 
 #include <string>
 
-class LMI_SO PreferencesModel
-    :virtual private obstruct_slicing<PreferencesModel>
-    ,public MvcModel
+class LMI_SO PreferencesModel final
+    :public MvcModel
     ,public MemberSymbolTable<PreferencesModel>
 {
   public:
@@ -91,7 +89,7 @@ class LMI_SO PreferencesModel
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its UDTs share.
 
-template<> struct reconstitutor<datum_base, PreferencesModel>
+template<> struct reconstitutor<datum_base,PreferencesModel>
 {
     typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<PreferencesModel>& m)

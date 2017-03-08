@@ -37,10 +37,6 @@ namespace
 void authenticate_system()
 {}
 
-glossed_string::glossed_string() = default;
-
-glossed_string::~glossed_string() = default;
-
 bool is_antediluvian_fork()
 {
     return true;
@@ -48,8 +44,6 @@ bool is_antediluvian_fork()
 
 gpt_server::gpt_server(mcenum_emission)
 {}
-
-gpt_server::~gpt_server() = default;
 
 bool gpt_server::operator()(fs::path const&)
 {
@@ -61,12 +55,9 @@ template class xml_serializable<gpt_state>;
 gpt_state::gpt_state() = default;
 
 gpt_state::gpt_state(gpt_state const&)
-    :obstruct_slicing  <gpt_state>()
-    ,xml_serializable  <gpt_state>()
+    :xml_serializable  <gpt_state>()
     ,MemberSymbolTable <gpt_state>()
 {}
-
-gpt_state::~gpt_state() = default;
 
 int gpt_state::class_version() const
 {
@@ -86,8 +77,6 @@ bool gpt_state::is_detritus(std::string const&) const
 mec_server::mec_server(mcenum_emission)
 {}
 
-mec_server::~mec_server() = default;
-
 bool mec_server::operator()(fs::path const&)
 {
     return false;
@@ -98,12 +87,9 @@ template class xml_serializable<mec_state>;
 mec_state::mec_state() = default;
 
 mec_state::mec_state(mec_state const&)
-    :obstruct_slicing  <mec_state>()
-    ,xml_serializable  <mec_state>()
+    :xml_serializable  <mec_state>()
     ,MemberSymbolTable <mec_state>()
 {}
-
-mec_state::~mec_state() = default;
 
 int mec_state::class_version() const
 {

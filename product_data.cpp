@@ -71,7 +71,7 @@ template<> std::string value_cast<std::string>(glossed_string const& z)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Invalid function call. Context:"
             << '\n' << z.datum()
             << '\n' << z.gloss()
@@ -88,8 +88,6 @@ template<> glossed_string value_cast<glossed_string>(std::string const& z)
     return glossed_string(z);
 }
 
-glossed_string::glossed_string() = default;
-
 glossed_string::glossed_string
     (std::string const& datum
     ,std::string const& gloss
@@ -97,8 +95,6 @@ glossed_string::glossed_string
     :datum_(datum)
     ,gloss_(gloss)
 {}
-
-glossed_string::~glossed_string() = default;
 
 glossed_string& glossed_string::operator=(std::string const& s)
 {
@@ -152,6 +148,12 @@ product_data::product_data(std::string const& product_name)
     path = fs::change_extension(path, ".policy");
     load(AddDataDir(path.string()));
 }
+
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
 
 product_data::~product_data() = default;
 

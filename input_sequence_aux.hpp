@@ -42,10 +42,7 @@
 
 namespace detail
 {
-    typedef
-        std::map<std::string, std::string, std::less<std::string> >
-        stringmap
-        ;
+    typedef std::map<std::string,std::string> stringmap;
 
     std::vector<std::string> LMI_SO extract_keys_from_string_map
         (stringmap const& keyword_dictionary
@@ -88,7 +85,7 @@ namespace detail
             else
                 {
                 dst[j] = T(); // COMPILER !! Cuz we can't throw...see below.
-                fatal_error()
+                alarum()
                     << "Key '"
                     << src[j]
                     << "' not found in map."
@@ -106,7 +103,7 @@ namespace detail
 
 template<typename T>
 std::vector<T> convert_vector_type
-    (std::vector<mc_enum<T> > const& ve
+    (std::vector<mc_enum<T>> const& ve
     ,typename std::enable_if<std::is_enum<T>::value>::type* = nullptr
     )
 {
@@ -120,7 +117,7 @@ std::vector<T> convert_vector_type
 
 template<typename Number, typename Trammel>
 std::vector<Number> convert_vector_type
-    (std::vector<tn_range<Number,Trammel> > const& vr
+    (std::vector<tn_range<Number,Trammel>> const& vr
     )
 {
     std::vector<Number> z;

@@ -68,7 +68,7 @@ template<> struct xml_io<database_entity>
 
 template<> std::string value_cast<std::string>(database_entity const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
@@ -80,7 +80,7 @@ template<> std::string value_cast<std::string>(database_entity const&)
 
 template<> database_entity value_cast<database_entity>(std::string const&)
 {
-    fatal_error() << "Invalid function call." << LMI_FLUSH;
+    alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
@@ -94,8 +94,6 @@ DBDictionary::DBDictionary(std::string const& filename)
     ascribe_members();
     Init(filename);
 }
-
-DBDictionary::~DBDictionary() = default;
 
 database_entity const& DBDictionary::datum(std::string const& name) const
 {

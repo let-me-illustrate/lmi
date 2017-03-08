@@ -1042,7 +1042,7 @@ void CensusView::update_class_names()
 
     std::vector<std::string> unique_class_names;
 
-    std::insert_iterator<std::vector<std::string> > iin
+    std::insert_iterator<std::vector<std::string>> iin
         (unique_class_names
         ,unique_class_names.begin()
         );
@@ -1082,7 +1082,7 @@ void CensusView::update_class_names()
             // It should not be possible for no cell to be found in the class.
             if(!found)
                 {
-                fatal_error()
+                alarum()
                     << "Cannot find any cell in class "
                     << "'" << *n << "'."
                     << LMI_FLUSH
@@ -1094,7 +1094,7 @@ void CensusView::update_class_names()
 
     // Replace the vector of class parameters with the one we rebuilt.
     class_parms().clear();
-    std::insert_iterator<std::vector<Input> > iip(class_parms(), class_parms().begin());
+    std::insert_iterator<std::vector<Input>> iip(class_parms(), class_parms().begin());
     std::copy(rebuilt_class_parms.begin(), rebuilt_class_parms.end(), iip);
 }
 
@@ -1586,7 +1586,7 @@ void CensusView::UponRunCaseToGroupRoster(wxCommandEvent&)
             break;
         default:
             {
-            fatal_error() << "Case " << selection << " not found." << LMI_FLUSH;
+            alarum() << "Case " << selection << " not found." << LMI_FLUSH;
             }
         }
 }
@@ -1652,7 +1652,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     bool const age_pasted = contains(headers, "IssueAge");
     if(dob_pasted && age_pasted)
         {
-        fatal_error()
+        alarum()
             << "Cannot paste both 'DateOfBirth' and 'IssueAge'."
             << LMI_FLUSH
             ;
@@ -1697,12 +1697,12 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
                     << "Last valid value, if any: " << values.back()
                     << LMI_FLUSH
                     ;
-// TODO ?? It would be better to use fatal_error() instead of
-// warning() followed by fatal_error() with a short string, but
+// TODO ?? It would be better to use alarum() instead of
+// warning() followed by alarum() with a short string, but
 // apparently that can segfault with very long strings. Is there
 // a limit on exception size that should be tested here? See:
 //   http://savannah.nongnu.org/bugs/?20240
-                fatal_error() << "Invalid input." << LMI_FLUSH;
+                alarum() << "Invalid input." << LMI_FLUSH;
                 }
 #endif // 0
             values.push_back(token);
@@ -1710,7 +1710,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         if(values.size() != headers.size())
             {
-            fatal_error()
+            alarum()
                 << "Line #" << current_line << ": "
                 << "  (" << line << ") "
                 << "should have one value per column. "
@@ -1740,7 +1740,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
                     }
                 else
                     {
-                    fatal_error()
+                    alarum()
                         << "Invalid date " << values[j]
                         << " for '" << headers[j] << "'"
                         << " on line " << current_line << "."
@@ -1774,7 +1774,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         }
 
     auto selection = cell_parms().size();
-    std::back_insert_iterator<std::vector<Input> > iip(cell_parms());
+    std::back_insert_iterator<std::vector<Input>> iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
     document().Modify(true);
     list_model_->Reset(cell_parms().size());

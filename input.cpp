@@ -237,8 +237,7 @@ Input::Input()
 }
 
 Input::Input(Input const& z)
-    :obstruct_slicing  <Input>()
-    ,xml_serializable  <Input>()
+    :xml_serializable  <Input>()
     ,MvcModel                 ()
     ,MemberSymbolTable <Input>()
 {
@@ -246,6 +245,12 @@ Input::Input(Input const& z)
     MemberSymbolTable<Input>::assign(z);
     DoAdaptExternalities();
 }
+
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
 
 Input::~Input() = default;
 

@@ -89,7 +89,7 @@ template<typename T>
 struct xml_sequence_io
 {
     typedef typename T::value_type item_t;
-    static_assert(std::is_same<T,std::vector<item_t> >::value, "");
+    static_assert(std::is_same<T,std::vector<item_t>>::value, "");
 
     static void to_xml(xml::element& e, T const& t)
     {
@@ -117,8 +117,8 @@ struct xml_sequence_io
 };
 
 template<typename T>
-struct xml_io<std::vector<T> >
-  :public xml_sequence_io<std::vector<T> >
+struct xml_io<std::vector<T>>
+  :public xml_sequence_io<std::vector<T>>
 {};
 
 /// Serialize a datum into a subelement of the given xml element.

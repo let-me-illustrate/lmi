@@ -25,20 +25,16 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <vector>
 
 class yare_input;
 
-class death_benefits
-    :        private lmi::uncopyable <death_benefits>
-    ,virtual private obstruct_slicing<death_benefits>
+class death_benefits final
 {
   public:
     death_benefits(int, yare_input const&);
-    ~death_benefits();
+    ~death_benefits() = default;
 
     void set_specamt (double z, int from_year, int to_year);
     void set_supplamt(double z, int from_year, int to_year);
@@ -48,6 +44,9 @@ class death_benefits
     std::vector<double>       const& supplamt() const;
 
   private:
+    death_benefits(death_benefits const&) = delete;
+    death_benefits& operator=(death_benefits const&) = delete;
+
     int length_;
     std::vector<mcenum_dbopt> dbopt_   ;
     std::vector<double>       specamt_ ;

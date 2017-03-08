@@ -315,10 +315,9 @@ class LMI_SO GetOpt
     GetOpt(int argc, char** argv, char const* optstring);
     GetOpt(int argc, char** argv, char const* optstring,
             Option const* longopts, int* longind, int long_only);
-    // Write a non-inline dtor explicitly, to prevent an ostensible
-    // problem detected by a malloc debugger when memory allocated on
-    // one side of a shared-library boundary is freed on the other.
-    ~GetOpt(); // Added by GWC.
+
+    ~GetOpt() = default; // Added by GWC.
+
     int operator()();
 
     // first_char returns the first character of the argument.

@@ -52,7 +52,7 @@ class PreviewFrameEx
         ,long int            style  = wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE
         ,wxString     const& name   = "Loading print preview..."
         );
-    ~PreviewFrameEx() override;
+    ~PreviewFrameEx() override = default;
 
     // wxPreviewFrame overrides.
     void Initialize() override;

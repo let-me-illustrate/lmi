@@ -94,9 +94,9 @@ class LMI_SO mc_enum_base
 template<typename T>
 class mc_enum
     :public mc_enum_base
-    ,private boost::equality_comparable<mc_enum<T>, mc_enum<T> >
-    ,private boost::equality_comparable<mc_enum<T>, T          >
-    ,private boost::equality_comparable<mc_enum<T>, std::string>
+    ,private boost::equality_comparable<mc_enum<T>,mc_enum<T>>
+    ,private boost::equality_comparable<mc_enum<T>,T>
+    ,private boost::equality_comparable<mc_enum<T>,std::string>
 {
     static_assert(std::is_enum<T>::value, "");
 

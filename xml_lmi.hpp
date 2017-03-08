@@ -24,7 +24,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
 #include <xmlwrapp/node.h>              // xml::element
@@ -39,7 +38,6 @@
 namespace xml_lmi
 {
     class dom_parser
-        :private lmi::uncopyable<dom_parser>
     {
         typedef xml::tree_parser DomParser;
 
@@ -53,12 +51,14 @@ namespace xml_lmi
         xml::element const& root_node(std::string const& expected_name) const;
 
       private:
+        dom_parser(dom_parser const&) = delete;
+        dom_parser& operator=(dom_parser const&) = delete;
+
         std::string                     error_context_;
         std::unique_ptr<DomParser>      parser_;
     };
 
     class xml_document
-        :private lmi::uncopyable<xml_document>
     {
       public:
         xml_document(std::string const& root_node_name);
@@ -73,6 +73,9 @@ namespace xml_lmi
         void add_comment(std::string const&);
 
       private:
+        xml_document(xml_document const&) = delete;
+        xml_document& operator=(xml_document const&) = delete;
+
         std::string                     error_context_;
         std::unique_ptr<Document> const document_;
     };

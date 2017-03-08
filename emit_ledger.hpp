@@ -25,9 +25,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <boost/filesystem/path.hpp>
 
@@ -41,19 +39,20 @@ class Ledger;
 /// Each member function (except the lightweight ctor and dtor)
 /// returns time spent, which is almost always wanted.
 
-class LMI_SO ledger_emitter
-    :        private lmi::uncopyable <ledger_emitter>
-    ,virtual private obstruct_slicing<ledger_emitter>
+class LMI_SO ledger_emitter final
 {
   public:
     ledger_emitter(fs::path const& case_filepath, mcenum_emission emission);
-    ~ledger_emitter();
+    ~ledger_emitter() = default;
 
     double initiate ();
     double emit_cell(fs::path const& cell_filepath, Ledger const& ledger);
     double finish   ();
 
   private:
+    ledger_emitter(ledger_emitter const&) = delete;
+    ledger_emitter& operator=(ledger_emitter const&) = delete;
+
     fs::path const& case_filepath_;
     mcenum_emission emission_;
 

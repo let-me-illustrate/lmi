@@ -39,8 +39,8 @@
 // Power-of-ten scaling factors are best represented in the maximum
 // available precision, which is indicated by type 'max_prec_real'.
 //
-// Changing this typedef lets you use a nonstandard type or class with
-// greater precision if desired.
+// Change this alias-declaration to use a nonstandard type or class
+// with greater precision if desired.
 //
 // Alternatively, suppose your hardware offers an extended format,
 // but you can't or don't take advantage of it--either your compiler
@@ -49,8 +49,8 @@
 // If the compiler nonetheless treats double and long double as
 // distinct types, then it might generate extra machine code to
 // convert between those types. You could prevent that by changing
-// this typedef to double.
-typedef long double max_prec_real;
+// this alias-declaration to double.
+using max_prec_real = long double;
 
 // Any modern C++ compiler provides std::rint().
 #define LMI_HAVE_RINT
@@ -280,16 +280,17 @@ RealType erroneous_rounding_function(RealType)
 
 template<typename RealType>
 class round_to
-    :public std::unary_function<RealType, RealType>
+    :public std::unary_function<RealType,RealType>
 {
     static_assert(std::is_floating_point<RealType>::value, "");
 
   public:
-    round_to();
+    /// The default ctor only makes the class DefaultConstructible;
+    /// the object it creates throws on use.
+    round_to() = default;
     round_to(int decimals, rounding_style style);
-    round_to(round_to const&);
-
-    round_to& operator=(round_to const&);
+    round_to(round_to const&) = default;
+    round_to& operator=(round_to const&) = default;
 
     bool operator==(round_to const&) const;
     RealType operator()(RealType r) const;
@@ -298,28 +299,15 @@ class round_to
     rounding_style style() const;
 
   private:
-    typedef RealType (*rounding_function_t)(RealType);
-    rounding_function_t select_rounding_function(rounding_style) const;
+    using rounding_fn_t = RealType (*)(RealType);
+    rounding_fn_t select_rounding_function(rounding_style) const;
 
-    int decimals_;
-    rounding_style style_;
-    max_prec_real scale_fwd_;
-    max_prec_real scale_back_;
-    rounding_function_t rounding_function_;
+    int decimals_                    {0};
+    rounding_style style_            {r_indeterminate};
+    max_prec_real scale_fwd_         {1.0};
+    max_prec_real scale_back_        {1.0};
+    rounding_fn_t rounding_function_ {detail::erroneous_rounding_function};
 };
-
-/// This default ctor serves only to render the class DefaultConstructible.
-/// The object it creates throws on use.
-
-template<typename RealType>
-round_to<RealType>::round_to()
-    :decimals_          (0)
-    ,style_             (r_indeterminate)
-    ,scale_fwd_         (1.0)
-    ,scale_back_        (1.0)
-    ,rounding_function_ (detail::erroneous_rounding_function)
-{
-}
 
 // Naran used const data members, reasoning that a highly optimizing
 // compiler could then calculate std::pow(10.0, n) at compile time.
@@ -385,27 +373,6 @@ round_to<RealType>::round_to(int decimals, rounding_style a_style)
 }
 
 template<typename RealType>
-round_to<RealType>::round_to(round_to const& z)
-    :decimals_          (z.decimals_         )
-    ,style_             (z.style_            )
-    ,scale_fwd_         (z.scale_fwd_        )
-    ,scale_back_        (z.scale_back_       )
-    ,rounding_function_ (z.rounding_function_)
-{
-}
-
-template<typename RealType>
-round_to<RealType>& round_to<RealType>::operator=(round_to const& z)
-{
-    decimals_          = z.decimals_         ;
-    style_             = z.style_            ;
-    scale_fwd_         = z.scale_fwd_        ;
-    scale_back_        = z.scale_back_       ;
-    rounding_function_ = z.rounding_function_;
-    return *this;
-}
-
-template<typename RealType>
 bool round_to<RealType>::operator==(round_to const& z) const
 {
     return decimals() == z.decimals() && style() == z.style();
@@ -436,7 +403,7 @@ rounding_style round_to<RealType>::style() const
 
 // Choose the auxiliary rounding function indicated by the argument.
 template<typename RealType>
-typename round_to<RealType>::rounding_function_t
+typename round_to<RealType>::rounding_fn_t
 round_to<RealType>::select_rounding_function(rounding_style const a_style) const
 {
 #if defined LMI_HAVE_RINT

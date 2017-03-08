@@ -66,6 +66,7 @@ void RttiLmiTest::TestTypeInfo()
     // Usable with UDTs.
 
     ti1 = typeid(X);
+    oss.clear();
     oss.str("");
     oss << ti1;
     BOOST_TEST_EQUAL(oss.str(), lmi::detail::Demangle(typeid(X).name()));

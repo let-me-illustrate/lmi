@@ -41,8 +41,6 @@ DatabaseDocument::DatabaseDocument()
     db_.InitDB();
 }
 
-DatabaseDocument::~DatabaseDocument() = default;
-
 database_entity& DatabaseDocument::GetTDBValue(e_database_key index)
 {
     std::string const& s = db_name_from_key(index);

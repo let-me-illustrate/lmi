@@ -73,8 +73,6 @@ ledger_emitter::ledger_emitter
         }
 }
 
-ledger_emitter::~ledger_emitter() = default;
-
 /// Perform initial case-level steps such as writing headers.
 
 double ledger_emitter::initiate()

@@ -24,6 +24,8 @@
 
 #include "config.hpp"
 
+#include "so_attributes.hpp"
+
 #include <string>
 
 enum duration_mode
@@ -55,6 +57,8 @@ struct ValueInterval
     duration_mode end_mode         = e_maturity;
     bool          insane           = false;
 };
+
+std::string LMI_SO abridge_diagnostics(char const* what);
 
 #endif // input_sequence_interval_hpp
 

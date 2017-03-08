@@ -69,7 +69,7 @@ namespace
             };
         if(!(0 < month && month < 13))
             {
-            fatal_error()
+            alarum()
                 << "Month "
                 << month
                 << " is outside the range [1, 12]."
@@ -149,7 +149,7 @@ namespace
             ||  original_day   != day
             )
             {
-            fatal_error()
+            alarum()
                 << "Date "
                 << format_yyyy_mm_dd_with_hyphens
                     (original_year
@@ -491,7 +491,7 @@ int attained_age
 {
     if(as_of_date < birthdate)
         {
-        fatal_error()
+        alarum()
             << "As-of date ("
             << as_of_date.str()
             << ") precedes birthdate ("
@@ -523,7 +523,7 @@ std::pair<int,int> years_and_months_since
 {
     if(other_date < base_date)
         {
-        fatal_error()
+        alarum()
             << "Second date ("
             << other_date.str()
             << ") precedes first date ("
@@ -684,7 +684,7 @@ class birthdate_limit
             }
         else
             {
-            fatal_error() << "Unexpected case." << LMI_FLUSH;
+            alarum() << "Unexpected case." << LMI_FLUSH;
             }
         }
 
@@ -749,7 +749,7 @@ std::string month_name(int month)
 {
     if(!(0 < month && month < 13))
         {
-        fatal_error()
+        alarum()
             << "Month "
             << month
             << " is outside the range [1, 12]."
@@ -760,7 +760,7 @@ std::string month_name(int month)
     c_time.tm_mon = month - 1;
     char format[] = "%B";
     std::ostringstream oss;
-    std::use_facet<std::time_put<char> >(oss.getloc()).put
+    std::use_facet<std::time_put<char>>(oss.getloc()).put
         (std::ostreambuf_iterator<char>(oss.rdbuf())
         ,oss
         ,'\0'

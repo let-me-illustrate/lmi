@@ -281,7 +281,7 @@ fs::path unique_filepath
         filepath = filepath.branch_path() / basename;
         if(fs::exists(filepath))
             {
-            fatal_error()
+            alarum()
                 << "Cannot create unique file path from file name '"
                 << original_filepath
                 << "' with extension '"
@@ -307,7 +307,7 @@ namespace
 /// to be shown in the exception report.
 ///
 /// Although a std::invalid_argument exception might at first seem
-/// appropriate here, std::runtime_error (via fatal_error()) is chosen
+/// appropriate here, std::runtime_error (via alarum()) is chosen
 /// because the 'a_path' argument may be specified by users.
 ///
 /// Exceptions thrown from the boost filesystem library on path
@@ -332,31 +332,16 @@ void validate_path
         }
     catch(fs::filesystem_error const& e)
         {
-        fatal_error()
-            << context
-            << ": "
-            << e.what()
-            << LMI_FLUSH
-            ;
+        alarum() << context << ": " << e.what() << LMI_FLUSH;
         }
 
     if(path.empty())
         {
-        fatal_error()
-            << context
-            << " must not be empty."
-            << LMI_FLUSH
-            ;
+        alarum() << context << " must not be empty." << LMI_FLUSH;
         }
     if(!fs::exists(path))
         {
-        fatal_error()
-            << context
-            << " '"
-            << path
-            << "' not found."
-            << LMI_FLUSH
-            ;
+        alarum() << context << " '" << path << "' not found." << LMI_FLUSH;
         }
 }
 } // Unnamed namespace.
@@ -375,7 +360,7 @@ void validate_directory
     validate_path(directory, context);
     if(!fs::is_directory(directory))
         {
-        fatal_error()
+        alarum()
             << context
             << " '"
             << directory
@@ -399,7 +384,7 @@ void validate_filepath
     validate_path(filepath, context);
     if(fs::is_directory(filepath))
         {
-        fatal_error()
+        alarum()
             << context
             << " '"
             << filepath

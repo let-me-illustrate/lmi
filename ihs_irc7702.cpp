@@ -201,7 +201,12 @@ Irc7702::Irc7702
     Init();
 }
 
-//============================================================================
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
+
 Irc7702::~Irc7702() = default;
 
 //============================================================================
@@ -810,7 +815,7 @@ std::vector<double> const& Irc7702::Corridor() const
         }
     else
         {
-        fatal_error() << "7702 test is neither GPT nor CVAT." << LMI_FLUSH;
+        alarum() << "7702 test is neither GPT nor CVAT." << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }
@@ -832,12 +837,7 @@ Irc7702::EIOBasis Irc7702::Get4PctBasis
             }
         default:
             {
-            fatal_error()
-                << "Case '"
-                << a_DBOpt
-                << "' not found."
-                << LMI_FLUSH
-                ;
+            alarum() << "Case '" << a_DBOpt << "' not found." << LMI_FLUSH;
             throw "Unreachable--silences a compiler diagnostic.";
             }
         }
@@ -1034,8 +1034,8 @@ double Irc7702::premiums_paid() const
 
 #include "ihs_timer.hpp"
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 // SOA table 120: "1980 CSO 50% Male Age nearest"
 static double const Q[100] =

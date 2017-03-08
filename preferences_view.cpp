@@ -23,10 +23,6 @@
 
 #include "preferences_view.hpp"
 
-PreferencesView::PreferencesView() = default;
-
-PreferencesView::~PreferencesView() = default;
-
 char const* PreferencesView::DoBookControlName() const
 {
     return "preferences_notebook";

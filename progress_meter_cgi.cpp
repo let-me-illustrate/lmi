@@ -41,7 +41,7 @@ class concrete_progress_meter
         ,enum_display_mode
         );
 
-    ~concrete_progress_meter() override;
+    ~concrete_progress_meter() override = default;
 
   private:
     // progress_meter required implementation.
@@ -58,8 +58,6 @@ concrete_progress_meter::concrete_progress_meter
     :progress_meter(max_count, title, display_mode)
 {
 }
-
-concrete_progress_meter::~concrete_progress_meter() = default;
 
 std::string concrete_progress_meter::progress_message() const
 {

@@ -41,7 +41,7 @@ SequenceParser::SequenceParser
     ,std::vector<std::string> const& a_allowed_keywords
     ,bool                            a_keywords_only
     )
-    :input_stream_                  (input_expression.c_str())
+    :input_stream_                  (input_expression)
     ,years_to_maturity_             (a_years_to_maturity)
     ,issue_age_                     (a_issue_age)
     ,retirement_age_                (a_retirement_age)
@@ -51,13 +51,12 @@ SequenceParser::SequenceParser
     ,keywords_only_                 (a_keywords_only)
 {
     sequence();
+    diagnostic_messages_ = diagnostics_.str();
 }
 
-SequenceParser::~SequenceParser() = default;
-
-std::string SequenceParser::diagnostics() const
+std::string SequenceParser::diagnostic_messages() const
 {
-    return diagnostics_.str();
+    return diagnostic_messages_;
 }
 
 std::vector<ValueInterval> const& SequenceParser::intervals() const
@@ -202,15 +201,15 @@ void SequenceParser::duration_scalar()
 
 void SequenceParser::null_duration()
 {
-    int tentative_begin_duration                = last_input_duration_++;
-    duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode_;
-    int tentative_end_duration                  = last_input_duration_;
-    duration_mode tentative_end_duration_mode   = e_duration;
+    int           trial_begin_duration =     last_input_duration_;
+    duration_mode trial_begin_mode     = previous_duration_scalar_mode_;
+    int           trial_end_duration   = 1 + last_input_duration_;
+    duration_mode trial_end_mode       = e_duration;
     validate_duration
-        (tentative_begin_duration
-        ,tentative_begin_duration_mode
-        ,tentative_end_duration
-        ,tentative_end_duration_mode
+        (trial_begin_duration
+        ,trial_begin_mode
+        ,trial_end_duration
+        ,trial_end_mode
         );
 }
 
@@ -219,19 +218,15 @@ void SequenceParser::null_duration()
 void SequenceParser::single_duration()
 {
     duration_scalar();
-    int tentative_begin_duration                = last_input_duration_;
-//    last_input_duration_ += static_cast<int>(current_duration_scalar_);
-//    last_input_duration_ = static_cast<int>(current_duration_scalar_);
-//    duration_mode tentative_begin_duration_mode = e_duration;
-    duration_mode tentative_begin_duration_mode = previous_duration_scalar_mode_;
-    int tentative_end_duration                  = current_duration_scalar_;
-//    int tentative_end_duration   = last_input_duration_ + static_cast<int>(current_duration_scalar_);
-    duration_mode tentative_end_duration_mode   = current_duration_scalar_mode_;
+    int           trial_begin_duration = last_input_duration_;
+    duration_mode trial_begin_mode     = previous_duration_scalar_mode_;
+    int           trial_end_duration   = current_duration_scalar_;
+    duration_mode trial_end_mode       = current_duration_scalar_mode_;
     validate_duration
-        (tentative_begin_duration
-        ,tentative_begin_duration_mode
-        ,tentative_end_duration
-        ,tentative_end_duration_mode
+        (trial_begin_duration
+        ,trial_begin_mode
+        ,trial_end_duration
+        ,trial_end_mode
         );
 }
 
@@ -244,14 +239,11 @@ void SequenceParser::intervalic_duration()
     duration_scalar();
     // Add one to the interval-beginning if it was expressed
     // as exclusive, because we store [begin, end).
-    int tentative_begin_duration =
-          static_cast<int>(current_duration_scalar_)
-        + begin_excl
-        ;
-    duration_mode tentative_begin_duration_mode = current_duration_scalar_mode_;
-    int tentative_end_duration                  = -1;
-    duration_mode tentative_end_duration_mode   = e_invalid_mode;
-    match(e_minor_separator); // TODO ?? Require this?
+    int trial_begin_duration         = current_duration_scalar_ + begin_excl;
+    duration_mode trial_begin_mode   = current_duration_scalar_mode_;
+    int           trial_end_duration = -1;
+    duration_mode trial_end_mode     = e_invalid_mode;
+    match(e_minor_separator);
     duration_scalar();
     if
         (  e_end_incl == current_token_type_
@@ -262,8 +254,8 @@ void SequenceParser::intervalic_duration()
         match(current_token_type_);
         // Add one to the interval-end if it was expressed
         // as inclusive, because we store [begin, end).
-        tentative_end_duration      = current_duration_scalar_ + end_incl;
-        tentative_end_duration_mode = current_duration_scalar_mode_;
+        trial_end_duration = current_duration_scalar_ + end_incl;
+        trial_end_mode     = current_duration_scalar_mode_;
         }
     else
         {
@@ -272,27 +264,27 @@ void SequenceParser::intervalic_duration()
         return;
         }
     validate_duration
-        (tentative_begin_duration
-        ,tentative_begin_duration_mode
-        ,tentative_end_duration
-        ,tentative_end_duration_mode
+        (trial_begin_duration
+        ,trial_begin_mode
+        ,trial_end_duration
+        ,trial_end_mode
         );
 }
 
 void SequenceParser::validate_duration
-    (int           tentative_begin_duration
-    ,duration_mode tentative_begin_duration_mode
-    ,int           tentative_end_duration
-    ,duration_mode tentative_end_duration_mode
+    (int           trial_begin_duration
+    ,duration_mode trial_begin_mode
+    ,int           trial_end_duration
+    ,duration_mode trial_end_mode
     )
 {
-    if(tentative_begin_duration < 0)
+    if(trial_begin_duration < 0)
         {
         current_interval_.insane = true;
         diagnostics_
             << "Interval "
-            << "[ " << tentative_begin_duration << ", "
-            << tentative_end_duration << " )"
+            << "[ " << trial_begin_duration
+            << ", " << trial_end_duration << " )"
             << " is improper: it "
             << "begins before the first possible duration. "
             ;
@@ -305,26 +297,26 @@ void SequenceParser::validate_duration
     //   ends   at X, and excludes X
     // so it both includes and excludes X. Thus, an interval
     // [B, E) is improper if B == E.
-    else if(tentative_end_duration <= tentative_begin_duration)
+    else if(trial_end_duration <= trial_begin_duration)
         {
         current_interval_.insane = true;
         diagnostics_
             << "Interval "
-            << "[ " << tentative_begin_duration << ", "
-            << tentative_end_duration << " )"
+            << "[ " << trial_begin_duration
+            << ", " << trial_end_duration << " )"
             << " is improper: it "
             << "ends before it begins. "
             ;
         mark_diagnostic_context();
         return;
         }
-    else if(years_to_maturity_ < tentative_end_duration)
+    else if(years_to_maturity_ < trial_end_duration)
         {
         current_interval_.insane = true;
         diagnostics_
             << "Interval "
-            << "[ " << tentative_begin_duration << ", "
-            << tentative_end_duration << " )"
+            << "[ " << trial_begin_duration
+            << ", " << trial_end_duration << " )"
             << " is improper: it "
             << "ends after the last possible duration. "
             ;
@@ -332,15 +324,15 @@ void SequenceParser::validate_duration
         return;
         }
     else if
-        (  e_invalid_mode == tentative_begin_duration_mode
-        || e_invalid_mode == tentative_end_duration_mode
+        (  e_invalid_mode == trial_begin_mode
+        || e_invalid_mode == trial_end_mode
         )
         {
         current_interval_.insane = true;
         diagnostics_
             << "Interval "
-            << "[ " << tentative_begin_duration << ", "
-            << tentative_end_duration << " )"
+            << "[ " << trial_begin_duration
+            << ", " << trial_end_duration << " )"
             << " has an invalid duration mode. "
             ;
         mark_diagnostic_context();
@@ -348,10 +340,10 @@ void SequenceParser::validate_duration
         }
     else
         {
-        current_interval_.begin_duration = tentative_begin_duration     ;
-        current_interval_.end_duration   = tentative_end_duration       ;
-        current_interval_.begin_mode     = tentative_begin_duration_mode;
-        current_interval_.end_mode       = tentative_end_duration_mode  ;
+        current_interval_.begin_duration = trial_begin_duration;
+        current_interval_.end_duration   = trial_end_duration  ;
+        current_interval_.begin_mode     = trial_begin_mode    ;
+        current_interval_.end_mode       = trial_end_mode      ;
         last_input_duration_ = current_interval_.end_duration;
         }
 }
@@ -403,9 +395,7 @@ void SequenceParser::value()
             current_interval_.value_is_keyword = false;
             if(keywords_only_)
                 {
-                diagnostics_
-                    << "Expected keyword chosen from { "
-                    ;
+                diagnostics_ << "Expected keyword chosen from { ";
                 std::copy
                     (allowed_keywords_.begin()
                     ,allowed_keywords_.end()
@@ -435,9 +425,7 @@ void SequenceParser::value()
                 }
             else
                 {
-                diagnostics_
-                    << "Expected keyword chosen from { "
-                    ;
+                diagnostics_ << "Expected keyword chosen from { ";
                 std::copy
                     (allowed_keywords_.begin()
                     ,allowed_keywords_.end()
@@ -493,7 +481,15 @@ void SequenceParser::span()
             mark_diagnostic_context();
             }
         }
-    if(!current_interval_.insane)
+    if(current_interval_.insane)
+        {
+        if(diagnostics_.str().empty())
+            {
+            diagnostics_ << "Internal parser error. ";
+            mark_diagnostic_context();
+            }
+        }
+    else
         {
         intervals_.push_back(current_interval_);
         }
@@ -505,11 +501,6 @@ void SequenceParser::span()
 
 void SequenceParser::sequence()
 {
-    current_token_type_            = e_startup;
-    previous_duration_scalar_mode_ = e_inception;
-    current_duration_scalar_mode_  = e_inception;
-    last_input_duration_           = 0;
-
     // All ValueInterval members should be set explicitly, so
     // initialize them now to recognizable, implausible values,
     // such that the interval is insane until modified.
@@ -530,18 +521,8 @@ void SequenceParser::sequence()
                 {
                 return;
                 }
-            case e_major_separator:
-                {
-                match(current_token_type_);
-                if(e_eof == current_token_type_)
-                    {
-                    return;
-                    }
-                span();
-                }
-                break;
-// TODO ?? Superfluous. Same comment elsewhere. Fall through instead.
             case e_startup:
+            case e_major_separator:
                 {
                 match(current_token_type_);
                 if(e_eof == current_token_type_)
@@ -597,15 +578,21 @@ SequenceParser::token_type SequenceParser::get_token()
         case '5': case '6': case '7': case '8': case '9':
         case '.': case '-':
             {
+            // Lookahead is limited to a single character, not because
+            // this is an LL(1) grammar (where "1" means one token,
+            // not one character), but rather because a std::istream
+            // is used for convenience, and calling putback() multiple
+            // times may fail. If e.g. '.' or '-' were used elsewhere
+            // as well as in numeric tokens, then that convenience
+            // might be unaffordable.
             input_stream_.putback(c);
-            // TODO ?? Assigning 0.0 here at least gives a predictable
-            // value upon failure. We can't read both '.' and the
-            // following character and then reliably put both back.
+            // Zero-initialize so that parsing can continue with a
+            // non-random value in case extraction fails.
             current_number_ = 0.0;
             input_stream_ >> current_number_;
             if(input_stream_.fail())
                 {
-                diagnostics_ << "Invalid number '" << c << "'. ";
+                diagnostics_ << "Invalid number starting with '" << c << "'. ";
                 mark_diagnostic_context();
                 }
             return current_token_type_ = e_number;
@@ -652,11 +639,7 @@ void SequenceParser::match(SequenceParser::token_type t)
         }
     else
         {
-        diagnostics_
-            << "Expected '"
-            << token_type_name(t)
-            << "' . "
-            ;
+        diagnostics_ << "Expected '" << token_type_name(t) << "' . ";
         mark_diagnostic_context();
         }
 }
@@ -673,8 +656,8 @@ void SequenceParser::mark_diagnostic_context()
 
 /// Extract first substring from a '\n'-delimited exception::what().
 ///
-/// SequenceParser::diagnostics() returns a '\n'-delimited string
-/// describing all the anomalies diagnosed while parsing an input
+/// SequenceParser::diagnostic_messages() returns a '\n'-delimited
+/// string describing all anomalies diagnosed while parsing an input
 /// sequence. When that string is not empty, it is reasonable to throw
 /// an exception constructed from it--most generally, in its entirety.
 ///

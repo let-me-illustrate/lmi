@@ -54,12 +54,7 @@ std::streambuf* select_streambuf(progress_meter::enum_display_mode display_mode)
             break;
         default:
             {
-            fatal_error()
-                << "Case "
-                << display_mode
-                << " not found."
-                << LMI_FLUSH
-                ;
+            alarum() << "Case " << display_mode << " not found." << LMI_FLUSH;
             }
         }
     return z;
@@ -81,7 +76,7 @@ class concrete_progress_meter
         ,enum_display_mode
         );
 
-    ~concrete_progress_meter() override;
+    ~concrete_progress_meter() override = default;
 
   private:
     // progress_meter required implementation.
@@ -102,8 +97,6 @@ concrete_progress_meter::concrete_progress_meter
 {
     os_ << title << std::flush;
 }
-
-concrete_progress_meter::~concrete_progress_meter() = default;
 
 std::string concrete_progress_meter::progress_message() const
 {

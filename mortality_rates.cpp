@@ -102,7 +102,7 @@ std::vector<double> const& MortalityRates::MonthlyCoiRates
         case mce_gen_curr: return MonthlyCurrentCoiRatesBand0_;
         case mce_gen_mdpt: return MonthlyMidpointCoiRatesBand0_;
         case mce_gen_guar: return MonthlyGuaranteedCoiRates_;
-        default: fatal_error() << "Case " << b << " not found." << LMI_FLUSH;
+        default: alarum() << "Case " << b << " not found." << LMI_FLUSH;
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }

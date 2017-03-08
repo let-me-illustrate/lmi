@@ -26,23 +26,18 @@
 
 #include "product_editor.hpp"
 
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
-
 #include <map>
 #include <string>
 
 class PolicyDocument;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
-class PolicyView
-    :        public  ProductEditorView
-    ,        private lmi::uncopyable <PolicyView>
-    ,virtual private obstruct_slicing<PolicyView>
+class PolicyView final
+    :public ProductEditorView
 {
   public:
-    PolicyView();
-    ~PolicyView() override;
+    PolicyView() = default;
+    ~PolicyView() override = default;
 
     typedef std::map<std::string, wxTextCtrl*> controls_type;
     controls_type&       controls();
@@ -51,6 +46,9 @@ class PolicyView
     static char const* resource_file_name();
 
   private:
+    PolicyView(PolicyView const&) = delete;
+    PolicyView& operator=(PolicyView const&) = delete;
+
     PolicyDocument& document() const;
 
     // ViewEx required implementation.

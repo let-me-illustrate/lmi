@@ -60,8 +60,6 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
         );
 }
 
-SingleChoicePopupMenu::~SingleChoicePopupMenu() = default;
-
 // WX !! Can't be const because PopupMenu() isn't.
 int SingleChoicePopupMenu::Choose()
 {

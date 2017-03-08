@@ -24,15 +24,12 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <boost/filesystem/path.hpp>
 
 /// Base class for the test case objects.
 ///
 /// It is only supposed to be used by LMI_WX_TEST_CASE macro and not directly.
 class wx_base_test_case
-    :private lmi::uncopyable<wx_base_test_case>
 {
   public:
     /// The function actually executing the test code.
@@ -96,6 +93,10 @@ class wx_base_test_case
     explicit wx_base_test_case(char const* name);
 
     char const* const m_name;
+
+  private:
+    wx_base_test_case(wx_base_test_case const&) = delete;
+    wx_base_test_case& operator=(wx_base_test_case const&) = delete;
 };
 
 /// Define a test function and register it with the application tester.

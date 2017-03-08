@@ -23,8 +23,8 @@
 
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
-#include "wx_test_case.hpp"
 #include "version.hpp"
+#include "wx_test_case.hpp"
 
 #include <wx/crt.h>
 #include <wx/dialog.h>

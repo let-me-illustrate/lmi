@@ -177,7 +177,7 @@ struct i_upper_n_over_n_from_i
 
 template<typename T>
 struct i_upper_12_over_12_from_i
-    :public std::unary_function<T, T>
+    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value, "");
     T operator()(T const& i) const
@@ -188,7 +188,7 @@ struct i_upper_12_over_12_from_i
 
 template<typename T, int n>
 struct i_from_i_upper_n_over_n
-    :public std::unary_function<T, T>
+    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value, "");
     static_assert(0 < n, "");
@@ -203,7 +203,7 @@ struct i_from_i_upper_n_over_n
 
 template<typename T>
 struct i_from_i_upper_12_over_12
-    :public std::unary_function<T, T>
+    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value, "");
     T operator()(T const& i) const
@@ -214,7 +214,7 @@ struct i_from_i_upper_12_over_12
 
 template<typename T, int n>
 struct d_upper_n_from_i
-    :public std::unary_function<T, T>
+    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value, "");
     static_assert(0 < n, "");
@@ -240,7 +240,7 @@ struct d_upper_n_from_i
 
 template<typename T>
 struct d_upper_12_from_i
-    :public std::unary_function<T, T>
+    :public std::unary_function<T,T>
 {
     static_assert(std::is_floating_point<T>::value, "");
     T operator()(T const& i) const

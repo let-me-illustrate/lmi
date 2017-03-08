@@ -35,10 +35,6 @@
 #include <wx/html/htmprint.h>
 #include <wx/xrc/xmlres.h>
 
-mec_mvc_view::mec_mvc_view() = default;
-
-mec_mvc_view::~mec_mvc_view() = default;
-
 char const* mec_mvc_view::DoBookControlName() const
 {
     return "mec_notebook";
@@ -79,15 +75,6 @@ BEGIN_EVENT_TABLE(mec_view, ViewEx)
     EVT_UPDATE_UI(XRCID("column_width_varying" ),mec_view::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),mec_view::UponUpdateInapplicable)
 END_EVENT_TABLE()
-
-mec_view::mec_view()
-    :ViewEx       ()
-    ,html_content_("Unable to display results.")
-    ,html_window_ (nullptr)
-{
-}
-
-mec_view::~mec_view() = default;
 
 inline mec_input& mec_view::input_data()
 {

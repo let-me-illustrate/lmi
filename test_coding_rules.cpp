@@ -24,9 +24,7 @@
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
-#include "miscellany.hpp"               // lmi_array_size()
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
+#include "miscellany.hpp"               // lmi_array_size(), split_into_lines()
 
 #include <boost/filesystem/convenience.hpp> // fs::extension()
 #include <boost/filesystem/fstream.hpp>
@@ -34,6 +32,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
 
+#include <algorithm>                    // std::is_sorted()
 #include <cstddef>                      // std::size_t
 #include <ctime>
 #include <iomanip>
@@ -81,9 +80,7 @@ enum enum_kingdom
     ,e_c_or_cxx   = e_c          | e_cxx
     };
 
-class file
-    :        private lmi::uncopyable <file>
-    ,virtual private obstruct_slicing<file>
+class file final
 {
   public:
     explicit file(std::string const& file_path);
@@ -101,6 +98,9 @@ class file
     std::string const& data     () const {return data_;     }
 
   private:
+    file(file const&) = delete;
+    file& operator=(file const&) = delete;
+
     fs::path    path_;
     std::string full_name_;
     std::string leaf_name_;
@@ -708,6 +708,31 @@ void check_include_guards(file const& f)
     require(f, guards, "lacks canonical header guards.");
 }
 
+void check_inclusion_order(file const& f)
+{
+    if(!f.is_of_phylum(e_c_or_cxx))
+        {
+        return;
+        }
+
+    static boost::regex const r(R"((?<=\n\n)(# *include *[<"][^\n]*\n)+\n)");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator const omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        std::string s = z[0];
+        rtrim(s, "\n");
+        std::vector<std::string> v = split_into_lines(s);
+        if(!std::is_sorted(v.begin(), v.end()))
+            {
+            std::ostringstream oss;
+            oss << "has missorted #include directives:\n" << s;
+            complain(f, oss.str());
+            }
+        }
+}
+
 void check_label_indentation(file const& f)
 {
     if(!f.is_of_phylum(e_c_or_cxx))
@@ -1046,7 +1071,7 @@ void enforce_taboos(file const& f)
 class statistics
 {
   public:
-    statistics() : files_(0), lines_(0), defects_(0) {}
+    statistics() = default;
     ~statistics() = default;
 
     statistics& operator+=(statistics const&);
@@ -1056,9 +1081,9 @@ class statistics
     void print_summary() const;
 
   private:
-    std::size_t files_;
-    std::size_t lines_;
-    std::size_t defects_;
+    std::size_t files_   = 0;
+    std::size_t lines_   = 0;
+    std::size_t defects_ = 0;
 };
 
 statistics& statistics::operator+=(statistics const& z)
@@ -1149,6 +1174,7 @@ statistics process_file(std::string const& file_path)
     check_cxx               (f);
     check_defect_markers    (f);
     check_include_guards    (f);
+    check_inclusion_order   (f);
     check_label_indentation (f);
     check_logs              (f);
     check_preamble          (f);

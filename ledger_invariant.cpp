@@ -860,7 +860,7 @@ void LedgerInvariant::Init(BasicValues const* b)
                 break;
             default:
                 {
-                fatal_error()
+                alarum()
                     << "Case '"
                     << smoke_or_tobacco
                     << "' not found."
@@ -928,7 +928,7 @@ if(1 != b->yare_input_.InforceDataSource)
   {
     if(IsInforce && (0 == b->yare_input_.InforceYear && 0 == b->yare_input_.InforceMonth))
         {
-        fatal_error()
+        alarum()
             << "Inforce illustrations not permitted during month of issue."
             << LMI_FLUSH
             ;

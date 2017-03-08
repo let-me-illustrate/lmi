@@ -25,26 +25,22 @@
 #include "config.hpp"
 
 #include "mec_input.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <string>
 
-class LMI_SO mec_xml_document
-    :        private lmi::uncopyable <mec_xml_document>
-    ,virtual private obstruct_slicing<mec_xml_document>
+class LMI_SO mec_xml_document final
 {
     friend class mec_document;
     friend class mec_view;
 
   public:
-    mec_xml_document();
+    mec_xml_document() = default;
     mec_xml_document(mec_input const&);
     mec_xml_document(std::string const& filename);
-    ~mec_xml_document();
+    ~mec_xml_document() = default;
 
     mec_input const& input_data() const;
 
@@ -52,6 +48,9 @@ class LMI_SO mec_xml_document
     void write(std::ostream&) const;
 
   private:
+    mec_xml_document(mec_xml_document const&) = delete;
+    mec_xml_document& operator=(mec_xml_document const&) = delete;
+
     void parse(xml_lmi::dom_parser const&);
     std::string const& xml_root_name() const;
 

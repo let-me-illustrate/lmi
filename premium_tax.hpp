@@ -25,8 +25,6 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"       // mcenum_state
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <vector>
 
@@ -85,9 +83,7 @@ class stratified_charges;
 ///
 /// start_new_year() should be improved as noted in its documentation.
 
-class premium_tax
-  :        private lmi::uncopyable <premium_tax>
-  ,virtual private obstruct_slicing<premium_tax>
+class premium_tax final
 {
   public:
     premium_tax
@@ -101,7 +97,7 @@ class premium_tax
         (mcenum_state              tax_state
         ,product_database   const& db
         );
-    ~premium_tax();
+    ~premium_tax() = default;
 
     void   start_new_year();
     double calculate_load(double payment, stratified_charges const& strata);
@@ -114,6 +110,9 @@ class premium_tax
     bool   is_tiered              () const;
 
   private:
+    premium_tax(premium_tax const&) = delete;
+    premium_tax& operator=(premium_tax const&) = delete;
+
     void test_consistency() const;
 
     double ascertain_maximum_load_rate(stratified_charges const& strata) const;

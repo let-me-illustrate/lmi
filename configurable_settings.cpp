@@ -101,7 +101,7 @@ fs::path const& configuration_filepath()
         filename = AddDataDir(configuration_filename());
         if(0 != access(filename.c_str(), R_OK))
             {
-            fatal_error()
+            alarum()
                 << "No readable file '"
                 << configuration_filename()
                 << "' exists."
@@ -180,8 +180,6 @@ configurable_settings::configurable_settings()
         }
 }
 
-configurable_settings::~configurable_settings() = default;
-
 configurable_settings& configurable_settings::instance()
 {
     try
@@ -192,7 +190,7 @@ configurable_settings& configurable_settings::instance()
     catch(...)
         {
         report_exception();
-        fatal_error() << "Instantiation failed." << LMI_FLUSH;
+        alarum() << "Instantiation failed." << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
         }
 }

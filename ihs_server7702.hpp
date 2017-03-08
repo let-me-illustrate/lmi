@@ -51,7 +51,8 @@ Server7702Output LMI_SO RunServer7702FromStruct(gpt_input a_Input);
 class Server7702
 {
   public:
-    Server7702(gpt_input& a_Input);
+    explicit Server7702(gpt_input& a_Input);
+
     void Process();
     Server7702Output const& GetOutput() const   {return Output;}
 

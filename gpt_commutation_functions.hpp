@@ -147,7 +147,7 @@ class gpt_commfns
         ,mcenum_dbopt_7702   const  dbo
         ,gpt_vector_parms    const& charges
         );
-    ~gpt_commfns();
+    ~gpt_commfns() = default;
 
     double calculate_premium(oenum_glp_or_gsp, gpt_scalar_parms const&) const;
 
@@ -190,7 +190,7 @@ class gpt_cf_triad
         ,std::vector<double> const& gsp_ig
         ,gpt_vector_parms    const& charges
         );
-    ~gpt_cf_triad();
+    ~gpt_cf_triad() = default;
 
     double calculate_premium
         (oenum_glp_or_gsp

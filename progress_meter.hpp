@@ -191,7 +191,6 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <iosfwd>
 #include <memory>                       // std::shared_ptr
@@ -200,7 +199,6 @@
 std::ostringstream& LMI_SO progress_meter_unit_test_stream();
 
 class LMI_SO progress_meter
-    :private lmi::uncopyable<progress_meter>
 {
   public:
     enum enum_display_mode
@@ -220,7 +218,7 @@ class LMI_SO progress_meter
         ,enum_display_mode
         );
 
-    virtual ~progress_meter();
+    virtual ~progress_meter() = default;
 
     int count() const;
     int max_count() const;
@@ -237,6 +235,9 @@ class LMI_SO progress_meter
     virtual void        culminate_ui         ()       = 0;
 
   private:
+    progress_meter(progress_meter const&) = delete;
+    progress_meter& operator=(progress_meter const&) = delete;
+
     int               count_;
     int               max_count_;
     std::string       title_;

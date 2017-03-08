@@ -24,9 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
-
 #include <wx/bookctrl.h>                // wxBookCtrlBase, wxBookCtrlBaseEvent
 #include <wx/dialog.h>
 #include <wx/stattext.h>
@@ -405,22 +402,23 @@ namespace model_view_controller{} // doxygen workaround.
 /// unit_test_under_way_: True iff a unit test is in charge of the
 /// Controller.
 
-class MvcController
-    :        public  wxDialog
-    ,        private lmi::uncopyable <MvcController>
-    ,virtual private obstruct_slicing<MvcController>
+class MvcController final
+    :public wxDialog
 {
     friend class MvcTest;
 
   public:
     MvcController(wxWindow* parent, MvcModel&, MvcView const&);
-    ~MvcController() override;
+    ~MvcController() override = default;
 
     void TestModelViewConsistency() const;
 
     MvcModel const& Model() const;
 
   private:
+    MvcController(MvcController const&) = delete;
+    MvcController& operator=(MvcController const&) = delete;
+
     void Assimilate(std::string const& name_to_ignore);
     void Bind(std::string const& name, std::string& data) const;
     wxBookCtrlBase      & BookControl()      ;

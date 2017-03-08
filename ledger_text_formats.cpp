@@ -37,8 +37,6 @@
 #include "map_lookup.hpp"
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -139,13 +137,11 @@ std::map<std::string,ledger_metadata> const& ledger_metadata_map()
     return m;
 }
 
-class calculation_summary_formatter
-    :        private lmi::uncopyable <calculation_summary_formatter>
-    ,virtual private obstruct_slicing<calculation_summary_formatter>
+class calculation_summary_formatter final
 {
   public:
     calculation_summary_formatter(Ledger const&);
-    ~calculation_summary_formatter();
+    ~calculation_summary_formatter() = default;
 
     std::string format_as_html() const;
     std::string format_as_tsv () const;
@@ -153,6 +149,9 @@ class calculation_summary_formatter
     std::string top_note(std::string const& line_break) const;
 
   private:
+    calculation_summary_formatter(calculation_summary_formatter const&) = delete;
+    calculation_summary_formatter& operator=(calculation_summary_formatter const&) = delete;
+
     Ledger          const&   ledger_;
     LedgerInvariant const&   invar_;
     int             const    max_length_;
@@ -206,8 +205,6 @@ calculation_summary_formatter::calculation_summary_formatter
             }
         }
 }
-
-calculation_summary_formatter::~calculation_summary_formatter() = default;
 
 std::string calculation_summary_formatter::top_note
     (std::string const& line_break
@@ -667,10 +664,7 @@ void PrintCellTabDelimited
 
         if(contains(bases, mce_run_gen_curr_sep_half))
             {
-            fatal_error()
-                << "Three-rate illustrations not supported."
-                << LMI_FLUSH
-                ;
+            alarum() << "Three-rate illustrations not supported." << LMI_FLUSH;
             }
 
         os << Invar.value_str("ProducerCompensation"  ,j) << '\t';
@@ -679,7 +673,7 @@ void PrintCellTabDelimited
         }
     if(!os)
         {
-        fatal_error() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
         }
 }
 
@@ -758,7 +752,7 @@ void PrintRosterHeaders(std::string const& file_name)
 
     if(!os)
         {
-        fatal_error() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
         }
 }
 
@@ -833,21 +827,22 @@ void PrintRosterTabDelimited
 
     if(!os)
         {
-        fatal_error() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
         }
 }
 
-class FlatTextLedgerPrinter
-    :        private lmi::uncopyable <FlatTextLedgerPrinter>
-    ,virtual private obstruct_slicing<FlatTextLedgerPrinter>
+class FlatTextLedgerPrinter final
 {
   public:
     FlatTextLedgerPrinter(Ledger const&, std::ostream&);
-    ~FlatTextLedgerPrinter();
+    ~FlatTextLedgerPrinter() = default;
 
     void Print() const;
 
   private:
+    FlatTextLedgerPrinter(FlatTextLedgerPrinter const&) = delete;
+    FlatTextLedgerPrinter& operator=(FlatTextLedgerPrinter const&) = delete;
+
     void PrintHeader             () const;
     void PrintFooter             () const;
     void PrintNarrativeSummary   () const;
@@ -912,8 +907,6 @@ FlatTextLedgerPrinter::FlatTextLedgerPrinter
     ,os_    (os)
 {
 }
-
-FlatTextLedgerPrinter::~FlatTextLedgerPrinter() = default;
 
 void FlatTextLedgerPrinter::Print() const
 {
@@ -1190,7 +1183,7 @@ std::string ledger_format
     interpreter >> s;
     if(!interpreter.eof())
         {
-        fatal_error() << "Formatting error." << LMI_FLUSH;
+        alarum() << "Formatting error." << LMI_FLUSH;
         }
 
     if(f.second)

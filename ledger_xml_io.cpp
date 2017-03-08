@@ -73,7 +73,7 @@ std::vector<std::string> const suffixes
     ,char_p_suffixes + n
     );
 
-typedef std::map<std::string, std::pair<int, oenum_format_style> > format_map_t;
+typedef std::map<std::string, std::pair<int,oenum_format_style>> format_map_t;
 typedef std::map<std::string, std::string> title_map_t;
 
 // For all numbers (so-called 'scalars' and 'vectors', but not
@@ -310,10 +310,10 @@ void Ledger::write(xml::element& x) const
 //   percentage (scaled by 100, '%' at end) or not
 // and therefore F0 is equivalent to F1
 
-    std::pair<int, oenum_format_style> f1(0, oe_format_normal);
-    std::pair<int, oenum_format_style> f2(2, oe_format_normal);
-    std::pair<int, oenum_format_style> f3(0, oe_format_percentage);
-    std::pair<int, oenum_format_style> f4(2, oe_format_percentage);
+    std::pair<int,oenum_format_style> f1(0, oe_format_normal);
+    std::pair<int,oenum_format_style> f2(2, oe_format_normal);
+    std::pair<int,oenum_format_style> f3(0, oe_format_percentage);
+    std::pair<int,oenum_format_style> f4(2, oe_format_percentage);
 
     format_map_t format_map;
 
@@ -704,7 +704,7 @@ void Ledger::write(xml::element& x) const
     // Maps to hold the results of formatting numeric data.
 
     std::map<std::string, std::string> stringscalars;
-    std::map<std::string, std::vector<std::string> > stringvectors;
+    std::map<std::string, std::vector<std::string>> stringvectors;
 
     stringvectors["FundNames"] = ledger_invariant_->FundNames;
 
@@ -911,7 +911,7 @@ void Ledger::write(xml::element& x) const
             }
         if(!ofs)
             {
-            fatal_error() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
+            alarum() << "Unable to write '" << filepath << "'." << LMI_FLUSH;
             }
         }
 }

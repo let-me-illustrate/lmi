@@ -64,10 +64,6 @@ void ComplainAboutAnyDiscrepancies
 }
 } // Unnamed namespace.
 
-MvcModel::MvcModel() = default;
-
-MvcModel::~MvcModel() = default;
-
 datum_base const* MvcModel::BaseDatumPointer(std::string const& name) const
 {
     return DoBaseDatumPointer(name);
@@ -114,7 +110,7 @@ void MvcModel::Reconcile()
 
     if(!okay)
         {
-        fatal_error()
+        alarum()
             << "Unable to make Model consistent after "
             << maximum_iterations
             << " iterations."

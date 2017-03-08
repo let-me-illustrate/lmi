@@ -25,26 +25,22 @@
 #include "config.hpp"
 
 #include "gpt_input.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_lmi_fwd.hpp"
 
 #include <iosfwd>
 #include <string>
 
-class LMI_SO gpt_xml_document
-    :        private lmi::uncopyable <gpt_xml_document>
-    ,virtual private obstruct_slicing<gpt_xml_document>
+class LMI_SO gpt_xml_document final
 {
     friend class gpt_document;
     friend class gpt_view;
 
   public:
-    gpt_xml_document();
-    gpt_xml_document(gpt_input const&);
-    gpt_xml_document(std::string const& filename);
-    ~gpt_xml_document();
+    gpt_xml_document() = default;
+    explicit gpt_xml_document(gpt_input const&);
+    explicit gpt_xml_document(std::string const& filename);
+    ~gpt_xml_document() = default;
 
     gpt_input const& input_data() const;
 
@@ -52,6 +48,9 @@ class LMI_SO gpt_xml_document
     void write(std::ostream&) const;
 
   private:
+    gpt_xml_document(gpt_xml_document const&) = delete;
+    gpt_xml_document& operator=(gpt_xml_document const&) = delete;
+
     void parse(xml_lmi::dom_parser const&);
     std::string const& xml_root_name() const;
 

@@ -27,17 +27,12 @@
 #include "config.hpp"
 
 #include "input_sequence_interval.hpp"
-#include "obstruct_slicing.hpp"
-#include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
-#include <string>
 #include <sstream>
+#include <string>
 #include <vector>
 
-class SequenceParser
-    :        private lmi::uncopyable <SequenceParser>
-    ,virtual private obstruct_slicing<SequenceParser>
+class SequenceParser final
 {
   public:
     SequenceParser
@@ -51,9 +46,14 @@ class SequenceParser
         ,bool                            a_keywords_only
         );
 
-    ~SequenceParser();
+    // In case it is ever desired to implement these: they might
+    // simply copy the "parser products" data members that have
+    // public accessors.
+    SequenceParser(SequenceParser const&) = delete;
+    SequenceParser& operator=(SequenceParser const&) = delete;
+    ~SequenceParser() = default;
 
-    std::string diagnostics() const;
+    std::string diagnostic_messages() const;
     std::vector<ValueInterval> const& intervals() const;
 
   private:
@@ -78,10 +78,10 @@ class SequenceParser
     void single_duration();
     void intervalic_duration();
     void validate_duration
-        (int           tentative_begin_duration
-        ,duration_mode tentative_begin_duration_mode
-        ,int           tentative_end_duration
-        ,duration_mode tentative_end_duration_mode
+        (int           trial_begin_duration
+        ,duration_mode trial_begin_mode
+        ,int           trial_end_duration
+        ,duration_mode trial_end_mode
         );
     void duration();
     void value();
@@ -92,7 +92,13 @@ class SequenceParser
 
     void mark_diagnostic_context();
 
+    // Parser products.
+    std::string diagnostic_messages_;
+    std::vector<ValueInterval> intervals_;
+
+    // Streams for parser input and diagnostic messages.
     std::istringstream input_stream_;
+    std::ostringstream diagnostics_;
 
     // Copies of ctor args that are identical to class InputSequence's.
     int years_to_maturity_;
@@ -103,18 +109,15 @@ class SequenceParser
     std::vector<std::string> allowed_keywords_;
     bool keywords_only_;
 
-    token_type current_token_type_;
-    double current_number_;
-    std::string current_keyword_;
-    int current_duration_scalar_;
-    duration_mode previous_duration_scalar_mode_;
-    duration_mode current_duration_scalar_mode_;
-    ValueInterval current_interval_;
-    int last_input_duration_;
-
-    std::ostringstream diagnostics_;
-
-    std::vector<ValueInterval> intervals_;
+    // Parser internals.
+    token_type current_token_type_               {e_startup};
+    double current_number_                       {0.0};
+    std::string current_keyword_                 {};
+    int current_duration_scalar_                 {0};
+    duration_mode previous_duration_scalar_mode_ {e_inception};
+    duration_mode current_duration_scalar_mode_  {e_inception};
+    ValueInterval current_interval_              {};
+    int last_input_duration_                     {0};
 };
 
 #endif // input_sequence_parser_hpp

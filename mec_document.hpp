@@ -26,7 +26,6 @@
 
 #include "mec_input.hpp"
 #include "mec_xml_document.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/docview.h>
 
@@ -34,18 +33,20 @@ class mec_view;
 class WXDLLIMPEXP_FWD_CORE wxHtmlWindow;
 
 class mec_document
-    :public  wxDocument
-    ,private lmi::uncopyable<mec_document>
+    :public wxDocument
 {
     friend class mec_view;
 
   public:
-    mec_document();
-    ~mec_document() override;
+    mec_document() = default;
+    ~mec_document() override = default;
 
     mec_view& PredominantView() const;
 
   private:
+    mec_document(mec_document const&) = delete;
+    mec_document& operator=(mec_document const&) = delete;
+
     wxHtmlWindow& PredominantViewWindow() const;
 
     // wxDocument overrides.

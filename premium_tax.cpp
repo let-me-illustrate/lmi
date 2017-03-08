@@ -178,8 +178,6 @@ premium_tax::premium_tax
     levy_rate_ = db.Query(DB_PremTaxRate, index);
 }
 
-premium_tax::~premium_tax() = default;
-
 /// Test consistency of premium-tax loads.
 ///
 /// If the scalar premium-tax load varies by state, then it must be
@@ -209,7 +207,7 @@ void premium_tax::test_consistency() const
 {
     if(varies_by_state_ && !load_rate_is_levy_rate_)
         {
-        fatal_error()
+        alarum()
             << "Premium-tax load varies by state, but differs"
             << " from premium-tax rates. Probably the database"
             << " is incorrect.\n"
@@ -221,7 +219,7 @@ void premium_tax::test_consistency() const
         {
         if(0.0 != tax_state_load_rate_)
             {
-            fatal_error()
+            alarum()
                 << "Premium-tax load is tiered in premium-tax state "
                 << mc_str(tax_state_)
                 << ", but the product database specifies a scalar load of "
@@ -237,7 +235,7 @@ void premium_tax::test_consistency() const
         {
         if(0.0 != domiciliary_load_rate_)
             {
-            fatal_error()
+            alarum()
                 << "Premium-tax load is tiered in state of domicile "
                 << mc_str(domicile_)
                 << ", but the product database specifies a scalar load of "
@@ -247,7 +245,7 @@ void premium_tax::test_consistency() const
                 << LMI_FLUSH
                 ;
             }
-        fatal_error()
+        alarum()
             << "Premium-tax load is tiered in state of domicile "
             << mc_str(domicile_)
             << ", but that case is not supported."

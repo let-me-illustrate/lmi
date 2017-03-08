@@ -72,7 +72,7 @@ class Loads
     std::vector<double> const& excess_premium_load_minimum_premium_tax() const;
 
   private:
-    Loads(); // Ctor for unit testing.
+    Loads() = default; // Ctor for unit testing.
 
     void Allocate(int length);
     void Initialize(product_database const&);
@@ -82,16 +82,16 @@ class Loads
 
     std::vector<double> refundable_sales_load_proportion_;
 
-    std::vector<std::vector<double> > monthly_policy_fee_;
-    std::vector<std::vector<double> > annual_policy_fee_;
-    std::vector<std::vector<double> > specified_amount_load_;
-    std::vector<std::vector<double> > separate_account_load_;
-    std::vector<std::vector<double> > target_premium_load_;
-    std::vector<std::vector<double> > excess_premium_load_;
-    std::vector<std::vector<double> > target_sales_load_;
-    std::vector<std::vector<double> > excess_sales_load_;
-    std::vector<std::vector<double> > target_total_load_;
-    std::vector<std::vector<double> > excess_total_load_;
+    std::vector<std::vector<double>> monthly_policy_fee_;
+    std::vector<std::vector<double>> annual_policy_fee_;
+    std::vector<std::vector<double>> specified_amount_load_;
+    std::vector<std::vector<double>> separate_account_load_;
+    std::vector<std::vector<double>> target_premium_load_;
+    std::vector<std::vector<double>> excess_premium_load_;
+    std::vector<std::vector<double>> target_sales_load_;
+    std::vector<std::vector<double>> excess_sales_load_;
+    std::vector<std::vector<double>> target_total_load_;
+    std::vector<std::vector<double>> excess_total_load_;
 
     std::vector<double> premium_tax_load_;
     std::vector<double> amortized_premium_tax_load_;

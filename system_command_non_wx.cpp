@@ -46,7 +46,7 @@ void concrete_system_command(std::string const& command_line)
     int exit_code = std::system(command_line.c_str());
     if(EXIT_SUCCESS != exit_code)
         {
-        fatal_error()
+        alarum()
             << "Exit code "
             << exit_code
             << " from command '"
@@ -91,7 +91,7 @@ void concrete_system_command(std::string const& command_line)
 
     if(0 != exit_code)
         {
-        fatal_error()
+        alarum()
             << "Exit code "
             << exit_code
             << " from command '"

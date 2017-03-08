@@ -26,7 +26,6 @@
 
 #include "gpt_state.hpp"
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
@@ -47,13 +46,12 @@ class gpt_input;
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO gpt_server
+class LMI_SO gpt_server final
     :public std::unary_function<fs::path const&, bool>
-    ,virtual private obstruct_slicing<gpt_server>
 {
   public:
     explicit gpt_server(mcenum_emission);
-    ~gpt_server();
+    ~gpt_server() = default;
 
     bool operator()(fs::path const&);
     bool operator()(fs::path const&, gpt_input const&);

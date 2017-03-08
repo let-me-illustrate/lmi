@@ -24,9 +24,6 @@
 
 #include "config.hpp"
 
-#include "obstruct_slicing.hpp"
-#include "uncopyable_lmi.hpp"
-
 #include <iosfwd>
 #include <string>
 #include <vector>
@@ -128,13 +125,11 @@ enum e_actuarial_table_method
 /// has apparently chosen to leave them that way for backward
 /// compatibility.
 
-class actuarial_table
-    :        private lmi::uncopyable <actuarial_table>
-    ,virtual private obstruct_slicing<actuarial_table>
+class actuarial_table final
 {
   public:
     actuarial_table(std::string const& filename, int table_number);
-    ~actuarial_table();
+    ~actuarial_table() = default;
 
     std::vector<double> values(int issue_age, int length) const;
     std::vector<double> values_elaborated
@@ -154,6 +149,9 @@ class actuarial_table
     int                max_select_age () const {return max_select_age_ ;}
 
   private:
+    actuarial_table(actuarial_table const&) = delete;
+    actuarial_table& operator=(actuarial_table const&) = delete;
+
     void find_table();
     void parse_table();
     void read_values(std::istream& is, int nominal_length);

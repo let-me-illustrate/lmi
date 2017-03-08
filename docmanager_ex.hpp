@@ -24,8 +24,6 @@
 
 #include "config.hpp"
 
-#include "uncopyable_lmi.hpp"
-
 #include <wx/docview.h>
 
 #include <memory>                       // std::unique_ptr
@@ -35,8 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxPageSetupDialogData;
 class WXDLLIMPEXP_FWD_CORE wxPrintData;
 
 class DocManagerEx
-    :public  wxDocManager
-    ,private lmi::uncopyable<DocManagerEx>
+    :public wxDocManager
 {
   public:
     explicit DocManagerEx
@@ -47,12 +44,15 @@ class DocManagerEx
     // explicitly marked that way--though it seems that it should be,
     // for consistency with the style of the rest of the library.
     //
-    ~DocManagerEx() override;
+    ~DocManagerEx() override = default;
 
     void AssociateFileHistoryWithFileMenu(wxMenuBar*);
     void DissociateFileHistoryFromFileMenu(wxMenuBar*);
 
   private:
+    DocManagerEx(DocManagerEx const&) = delete;
+    DocManagerEx& operator=(DocManagerEx const&) = delete;
+
     void UponPageSetup(wxCommandEvent&);
     // WX !! OnPreview() and OnPrint() aren't virtual; shouldn't they be?
     void UponPreview(wxCommandEvent&);

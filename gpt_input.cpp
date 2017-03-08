@@ -62,7 +62,7 @@ std::string realize_sequence_string
             ,input.inforce_year     ()
             ,input.effective_year   ()
             );
-        detail::convert_vector(v, s.linear_number_representation());
+        detail::convert_vector(v, s.seriatim_numbers());
         }
     catch(std::exception const& e)
         {
@@ -132,8 +132,7 @@ gpt_input::gpt_input()
 }
 
 gpt_input::gpt_input(gpt_input const& z)
-    :obstruct_slicing  <gpt_input>()
-    ,xml_serializable  <gpt_input>()
+    :xml_serializable  <gpt_input>()
     ,MvcModel                     ()
     ,MemberSymbolTable <gpt_input>()
 {
@@ -141,6 +140,12 @@ gpt_input::gpt_input(gpt_input const& z)
     MemberSymbolTable<gpt_input>::assign(z);
     DoAdaptExternalities();
 }
+
+/// Destructor.
+///
+/// Although it is explicitly defaulted, this destructor cannot be
+/// implemented inside the class definition, where a class type that
+/// it depends upon is incomplete.
 
 gpt_input::~gpt_input() = default;
 
@@ -359,7 +364,7 @@ void gpt_input::DoHarmonize()
         }
     else
         {
-        fatal_error()
+        alarum()
             << "No option selected for definition of life insurance."
             << LMI_FLUSH
             ;
@@ -593,7 +598,7 @@ std::vector<std::string> gpt_input::RealizeAllSequenceInput(bool report_errors)
                 }
             if(diagnostics_present)
                 {
-                fatal_error()
+                alarum()
                     << "Input validation problems:\n"
                     << oss.str()
                     << LMI_FLUSH

@@ -25,9 +25,7 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
 
 #include <string>
@@ -40,18 +38,17 @@
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class glossed_string
-    :virtual private obstruct_slicing<glossed_string>
+class glossed_string final
 {
     friend class PolicyDocument;
 
   public:
-    glossed_string();
+    glossed_string() = default;
     explicit glossed_string
         (std::string const& datum
         ,std::string const& gloss = std::string()
         );
-    ~glossed_string();
+    ~glossed_string() = default;
 
     glossed_string& operator=(std::string const&);
 
@@ -79,11 +76,9 @@ template<> struct deserialized<product_data>
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO product_data
-    :        private lmi::uncopyable   <product_data>
-    ,virtual private obstruct_slicing  <product_data>
-    ,        public  xml_serializable  <product_data>
-    ,        public  MemberSymbolTable <product_data>
+class LMI_SO product_data final
+    :public xml_serializable  <product_data>
+    ,public MemberSymbolTable <product_data>
 {
     typedef deserialized<product_data>::value_type value_type;
 
@@ -101,6 +96,8 @@ class LMI_SO product_data
 
   private:
     product_data();
+    product_data(product_data const&) = delete;
+    product_data& operator=(product_data const&) = delete;
 
     void ascribe_members();
 

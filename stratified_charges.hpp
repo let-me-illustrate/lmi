@@ -26,7 +26,6 @@
 
 #include "any_member.hpp"
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
@@ -64,20 +63,19 @@ enum e_stratified
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO stratified_entity
-    :virtual private obstruct_slicing<stratified_entity>
+class LMI_SO stratified_entity final
 {
     friend class stratified_charges;
     friend class TierView;
 
   public:
-    stratified_entity();
+    stratified_entity() = default;
     stratified_entity
         (std::vector<double> const& limits
         ,std::vector<double> const& values
         ,std::string const&         gloss = std::string()
         );
-    ~stratified_entity();
+    ~stratified_entity() = default;
 
     bool operator==(stratified_entity const&) const;
 
@@ -98,17 +96,16 @@ class LMI_SO stratified_entity
 
 /// Rates that depend upon the amount they're multiplied by.
 
-class LMI_SO stratified_charges
-    :virtual private obstruct_slicing  <stratified_charges>
-    ,        public  xml_serializable  <stratified_charges>
-    ,        public  MemberSymbolTable <stratified_charges>
+class LMI_SO stratified_charges final
+    :public  xml_serializable  <stratified_charges>
+    ,public  MemberSymbolTable <stratified_charges>
 {
     friend class TierDocument;
 
   public:
     stratified_charges(std::string const& filename);
     stratified_charges(stratified_charges const&);
-    ~stratified_charges() override;
+    ~stratified_charges() override = default;
 
     stratified_charges& operator=(stratified_charges const&);
 

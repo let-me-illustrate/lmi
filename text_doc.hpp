@@ -40,8 +40,8 @@ class TextEditDocument
     :public wxDocument
 {
   public:
-    TextEditDocument();
-    ~TextEditDocument() override;
+    TextEditDocument() = default;
+    ~TextEditDocument() override = default;
 
   private:
     // wxDocument overrides.

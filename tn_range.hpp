@@ -230,9 +230,9 @@ class LMI_SO tn_range_base
 template<typename Number, typename Trammel>
 class tn_range
     :public tn_range_base
-    ,private boost::totally_ordered    <tn_range<Number,Trammel> >
-    ,private boost::equality_comparable<tn_range<Number,Trammel>, Number>
-    ,private boost::equality_comparable<tn_range<Number,Trammel>, std::string>
+    ,private boost::totally_ordered    <tn_range<Number,Trammel>>
+    ,private boost::equality_comparable<tn_range<Number,Trammel>,Number>
+    ,private boost::equality_comparable<tn_range<Number,Trammel>,std::string>
 {
     static_assert(std::is_base_of<trammel_base<Number>,Trammel>::value, "");
 
@@ -245,7 +245,7 @@ class tn_range
     tn_range();
     explicit tn_range(Number);
     explicit tn_range(std::string const&);
-    ~tn_range() override;
+    ~tn_range() override = default;
 
     tn_range& operator=(Number);
     tn_range& operator=(std::string const&);

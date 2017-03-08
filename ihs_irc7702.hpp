@@ -25,9 +25,7 @@
 #include "config.hpp"
 
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
 #include "round_to.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <memory>                       // std::unique_ptr
 #include <vector>
@@ -51,9 +49,7 @@ class ULCommFns;
 // as needed, being sure to round conservatively if at all. Unrounded
 // values are especially needed for the iterative specamt calculation.
 
-class Irc7702
-    :        private lmi::uncopyable <Irc7702>
-    ,virtual private obstruct_slicing<Irc7702>
+class Irc7702 final
 {
     friend class FindSpecAmt;
     friend class gpt_specamt;
@@ -143,6 +139,9 @@ class Irc7702
     double premiums_paid() const;
 
   private:
+    Irc7702(Irc7702 const&) = delete;
+    Irc7702& operator=(Irc7702 const&) = delete;
+
     // Interest and DB Option basis
     enum EIOBasis
         {Opt1Int4Pct

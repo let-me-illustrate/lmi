@@ -33,7 +33,6 @@
 #include "datum_string.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 #include "tn_range.hpp"
 #include "tn_range_types.hpp"
@@ -54,7 +53,7 @@ class product_database;
 /// input.
 ///
 /// The MVC framework uses two distinct data structures. One is simply
-/// a std::map<std::string>,std::string> > member of the Controller;
+/// a std::map<std::string>,std::string>> member of the Controller;
 /// it captures user input exactly. The other, this class, holds data
 /// of various types that a real program might capture from GUI input
 /// and use downstream. These two data structures are distinct because
@@ -116,12 +115,11 @@ class product_database;
 /// strings (through base class template MemberSymbolTable), though;
 /// for them, readability overcomes the usual convention.
 
-class LMI_SO Input
-    :virtual private obstruct_slicing           <Input>
-    ,        public  xml_serializable           <Input>
-    ,        public  MvcModel
-    ,        public  MemberSymbolTable          <Input>
-    ,        private boost::equality_comparable <Input>
+class LMI_SO Input final
+    :public  xml_serializable           <Input>
+    ,public  MvcModel
+    ,public  MemberSymbolTable          <Input>
+    ,private boost::equality_comparable <Input>
 {
     friend class input_test;
     friend class yare_input;
@@ -475,7 +473,7 @@ class LMI_SO Input
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its input sequences share.
 
-template<> struct reconstitutor<datum_sequence, Input>
+template<> struct reconstitutor<datum_sequence,Input>
 {
     typedef datum_sequence DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
@@ -493,7 +491,7 @@ template<> struct reconstitutor<datum_sequence, Input>
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its mc_enum types share.
 
-template<> struct reconstitutor<mc_enum_base, Input>
+template<> struct reconstitutor<mc_enum_base,Input>
 {
     typedef mc_enum_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
@@ -539,7 +537,7 @@ template<> struct reconstitutor<mc_enum_base, Input>
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its tn_range types share.
 
-template<> struct reconstitutor<tn_range_base, Input>
+template<> struct reconstitutor<tn_range_base,Input>
 {
     typedef tn_range_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
@@ -561,7 +559,7 @@ template<> struct reconstitutor<tn_range_base, Input>
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its UDTs share.
 
-template<> struct reconstitutor<datum_base, Input>
+template<> struct reconstitutor<datum_base,Input>
 {
     typedef datum_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)

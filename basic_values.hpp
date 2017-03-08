@@ -30,7 +30,6 @@
 #include "oecumenic_enumerations.hpp"
 #include "round_to.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "yare_input.hpp"
 
 #include <memory>                       // std::shared_ptr
@@ -79,7 +78,6 @@ enum EBlend
     };
 
 class LMI_SO BasicValues
-    :private lmi::uncopyable<BasicValues>
 {
   public:
     BasicValues(Input const& input);
@@ -96,7 +94,7 @@ class LMI_SO BasicValues
         ,bool               a_AdbInForce
         ,double             a_TargetPremium
         );
-    virtual ~BasicValues();
+    virtual ~BasicValues() = default;
 
     void Init();
     void GPTServerInit();
@@ -382,6 +380,9 @@ class LMI_SO BasicValues
     std::vector<double>     TieredMECharges;
 
   private:
+    BasicValues(BasicValues const&) = delete;
+    BasicValues& operator=(BasicValues const&) = delete;
+
     double GetModalPrem
         (int                   a_year
         ,mcenum_mode           a_mode

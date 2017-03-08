@@ -146,7 +146,7 @@ void CalendarDateTest::TestAlgorithm199Bounds()
             ||  !(0 < c.day()   && c.day()   < 32)
             )
             {
-            fatal_error()
+            alarum()
                 << "Algorithm 199 failed for jdn "
                 << j
                 << ", which it would translate to gregorian date '"

@@ -136,7 +136,7 @@ double transform_annual_gross_rate_to_annual_net
         }
     else
         {
-        fatal_error() << "No " << spread_method << " case." << LMI_FLUSH;
+        alarum() << "No " << spread_method << " case." << LMI_FLUSH;
         }
     return std::max(floor, i);
 }
@@ -247,8 +247,6 @@ bool need_loan_rates(yare_input const& yi)
 }
 #endif // 0
 } // Unnamed namespace.
-
-InterestRates::~InterestRates() = default;
 
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             (v.GetLength())
@@ -385,7 +383,7 @@ void InterestRates::Initialize(BasicValues const& v)
             break;
         default:
             {
-            fatal_error() << "No " << LoanRateType_ << " case." << LMI_FLUSH;
+            alarum() << "No " << LoanRateType_ << " case." << LMI_FLUSH;
             }
         }
 
@@ -444,7 +442,7 @@ void InterestRates::InitializeGeneralAccountRates()
     std::vector<double> spread[mc_n_gen_bases] = {Zero_, Zero_, Zero_};
     if(mce_earned_rate == GenAcctRateType_)
         {
-        fatal_error()
+        alarum()
             << "General-account rate is unexpectedly an earned rate."
             << LMI_FLUSH
             ;
@@ -549,7 +547,7 @@ void InterestRates::InitializeSeparateAccountRates()
     // neither is the implicit net rate.
     if(mce_net_rate == SepAcctRateType_)
         {
-        fatal_error()
+        alarum()
             << "Separate-account rate is unexpectedly a net rate."
             << LMI_FLUSH
             ;
@@ -830,7 +828,7 @@ void InterestRates::DynamicMlySepAcctRate
             {
             if(mce_gen_mdpt == gen_basis)
                 {
-                fatal_error()
+                alarum()
                     << "Midpoint separate-account rate not supported."
                     << LMI_FLUSH
                     ;
@@ -857,12 +855,12 @@ void InterestRates::DynamicMlySepAcctRate
             break;
         case mce_net_rate:
             {
-            fatal_error() << "Net rate not supported." << LMI_FLUSH;
+            alarum() << "Net rate not supported." << LMI_FLUSH;
             }
             break;
         default:
             {
-            fatal_error() << "No " << SepAcctRateType_ << " case." << LMI_FLUSH;
+            alarum() << "No " << SepAcctRateType_ << " case." << LMI_FLUSH;
             }
         }
 }
@@ -1079,7 +1077,7 @@ void InterestRates::Initialize7702Rates()
             break;
         default:
             {
-            fatal_error() << "No " << LoanRateType_ << " case." << LMI_FLUSH;
+            alarum() << "No " << LoanRateType_ << " case." << LMI_FLUSH;
             }
         }
 */

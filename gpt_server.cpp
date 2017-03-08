@@ -308,7 +308,7 @@ gpt_state test_one_days_gpt_transactions
         }
     else
         {
-        fatal_error()
+        alarum()
             << "Unknown modal premium type " << target_premium_type << '.'
             << LMI_FLUSH
             ;
@@ -518,8 +518,6 @@ gpt_server::gpt_server(mcenum_emission emission)
 {
 }
 
-gpt_server::~gpt_server() = default;
-
 bool gpt_server::operator()(fs::path const& file_path)
 {
     std::string const extension = fs::extension(file_path);
@@ -532,7 +530,7 @@ bool gpt_server::operator()(fs::path const& file_path)
         }
     else
         {
-        fatal_error()
+        alarum()
             << "File '"
             << file_path
             << "': extension '"

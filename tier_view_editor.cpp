@@ -66,7 +66,7 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
 
     if(n == 0)
         {
-        fatal_error() << "There must be at least one band." << LMI_FLUSH;
+        alarum() << "There must be at least one band." << LMI_FLUSH;
         }
 
     if(n == limits().size())
@@ -98,10 +98,7 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
 
     if(limits().size() != values().size())
         {
-        fatal_error()
-            << "Inconsistent vector lengths."
-            << LMI_FLUSH
-            ;
+        alarum() << "Inconsistent vector lengths." << LMI_FLUSH;
         }
 }
 
@@ -133,10 +130,7 @@ void TierTableAdapter::EnsureIndexIsZero(unsigned int n) const
 {
     if(n != 0)
         {
-        fatal_error()
-            << "TierTableAdapter must have only one axis."
-            << LMI_FLUSH
-            ;
+        alarum() << "TierTableAdapter must have only one axis." << LMI_FLUSH;
         }
 }
 
@@ -152,10 +146,7 @@ bool TierTableAdapter::DoApplyAxisAdjustment
     TierBandAxis& ba = static_cast<TierBandAxis&>(axis);
     if(ba.GetMinValue() != 0 || ba.GetMaxValue() < ba.GetMinValue())
         {
-        fatal_error()
-            << "Band-axis adjuster has invalid limits."
-            << LMI_FLUSH
-            ;
+        alarum() << "Band-axis adjuster has invalid limits." << LMI_FLUSH;
         }
     unsigned int max_bound = GetBandsCount();
     updated = max_bound != (ba.GetMaxValue() + 1);
@@ -237,10 +228,7 @@ TierEditorGrid::enum_tier_grid_column TierEditorGrid::EnsureValidColumn
 {
     if(col != e_column_limit && col != e_column_value)
         {
-        fatal_error()
-            << "Grid has only two columns: Limit and Value."
-            << LMI_FLUSH
-            ;
+        alarum() << "Grid has only two columns: Limit and Value." << LMI_FLUSH;
         }
     return static_cast<enum_tier_grid_column>(col);
 }

@@ -27,9 +27,7 @@
 #include "any_member.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 #include "xml_serializable.hpp"
 
 #include <string>
@@ -38,8 +36,7 @@
 ///
 /// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO rounding_parameters
-    :virtual private obstruct_slicing<rounding_parameters>
+class LMI_SO rounding_parameters final
 {
     friend class rounding_rules;
 
@@ -49,7 +46,7 @@ class LMI_SO rounding_parameters
         ,rounding_style     style
         ,std::string const& gloss = std::string()
         );
-    ~rounding_parameters();
+    ~rounding_parameters() = default;
 
     bool operator==(rounding_parameters const&) const;
 
@@ -60,11 +57,12 @@ class LMI_SO rounding_parameters
     rounding_style            raw_style() const;
 
   private:
-    rounding_parameters();
+    /// Private default ctor, for friends only.
+    rounding_parameters() = default;
 
-    int                decimals_;
-    mce_rounding_style style_   ;
-    std::string        gloss_   ;
+    int                decimals_ = 0;
+    mce_rounding_style style_    = mce_rounding_style(r_indeterminate);
+    std::string        gloss_    = std::string();
 };
 
 /// Product rounding rules.
@@ -90,17 +88,15 @@ class LMI_SO rounding_parameters
 ///   max- means the opposite.
 /// The 7702 and 7702A interest rate must be rounded up, if at all.
 
-class LMI_SO rounding_rules
-    :        private lmi::uncopyable   <rounding_rules>
-    ,virtual private obstruct_slicing  <rounding_rules>
-    ,        public  xml_serializable  <rounding_rules>
-    ,        public  MemberSymbolTable <rounding_rules>
+class LMI_SO rounding_rules final
+    :public xml_serializable  <rounding_rules>
+    ,public MemberSymbolTable <rounding_rules>
 {
     friend class RoundingDocument;
 
   public:
     explicit rounding_rules(std::string const& filename);
-    ~rounding_rules() override;
+    ~rounding_rules() override = default;
 
     rounding_parameters const& datum(std::string const& name) const;
 
@@ -110,6 +106,8 @@ class LMI_SO rounding_rules
 
   private:
     rounding_rules();
+    rounding_rules(rounding_rules const&) = delete;
+    rounding_rules& operator=(rounding_rules const&) = delete;
 
     void ascribe_members();
 

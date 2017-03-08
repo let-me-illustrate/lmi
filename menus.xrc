@@ -201,14 +201,14 @@
         <object class="wxMenuItem" name="test_app_hobsons_choice_alert">
             <label>Test _hobsons-choice alert</label>
         </object>
-        <object class="wxMenuItem" name="test_app_fatal_error_alert">
-            <label>Test _fatal-error alert</label>
+        <object class="wxMenuItem" name="test_app_alarum_alert">
+            <label>Test _alarum alert</label>
         </object>
         <object class="wxMenuItem" name="test_app_standard_exception">
             <label>Test standard _exception</label>
         </object>
         <object class="wxMenuItem" name="test_app_arbitrary_exception">
-            <label>Test _arbitrary exception</label>
+            <label>Test arbitrary e_xception</label>
         </object>
     </object>
     <object class="wxMenu">
@@ -222,14 +222,14 @@
         <object class="wxMenuItem" name="test_lib_hobsons_choice_alert">
             <label>Test _hobsons-choice alert</label>
         </object>
-        <object class="wxMenuItem" name="test_lib_fatal_error_alert">
-            <label>Test _fatal-error alert</label>
+        <object class="wxMenuItem" name="test_lib_alarum_alert">
+            <label>Test _alarum alert</label>
         </object>
         <object class="wxMenuItem" name="test_lib_standard_exception">
             <label>Test standard _exception</label>
         </object>
         <object class="wxMenuItem" name="test_lib_arbitrary_exception">
-            <label>Test _arbitrary exception</label>
+            <label>Test arbitrary e_xception</label>
         </object>
         <object class="wxMenuItem" name="test_lib_catastrophe_report">
             <label>Test _catastrophe report</label>

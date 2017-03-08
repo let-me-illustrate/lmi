@@ -39,13 +39,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument)
 
-TextEditDocument::TextEditDocument()
-    :wxDocument()
-{
-}
-
-TextEditDocument::~TextEditDocument() = default;
-
 wxTextCtrl& TextEditDocument::PredominantViewWindow() const
 {
     return ::PredominantViewWindow<TextEditView,wxTextCtrl>

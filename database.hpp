@@ -27,9 +27,7 @@
 #include "dbindex.hpp"
 #include "dbnames.hpp"                  // e_database_key
 #include "mc_enum_type_enums.hpp"
-#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <memory>                       // std::shared_ptr
 #include <string>
@@ -41,9 +39,7 @@ class yare_input;
 
 /// Database of product parameters.
 
-class LMI_SO product_database
-    :        private lmi::uncopyable <product_database>
-    ,virtual private obstruct_slicing<product_database>
+class LMI_SO product_database final
 {
     friend class input_test;       // For test_product_database().
     friend class premium_tax_test; // For test_rates().
@@ -61,7 +57,7 @@ class LMI_SO product_database
     explicit product_database(yare_input const&);
     // Special ctor implemented only in a unit-test TU.
     explicit product_database(int length);
-    ~product_database();
+    ~product_database() = default;
 
     int length() const;
     database_index index() const;
@@ -75,6 +71,9 @@ class LMI_SO product_database
     bool varies_by_state(e_database_key) const;
 
   private:
+    product_database(product_database const&) = delete;
+    product_database& operator=(product_database const&) = delete;
+
     void initialize(std::string const& product_name);
 
     DBDictionary const& db() const;

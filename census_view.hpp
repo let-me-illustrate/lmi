@@ -29,9 +29,7 @@
 #include "input.hpp"
 #include "ledger.hpp"
 #include "mc_enum_type_enums.hpp"       // enum mcenum_emission
-#include "obstruct_slicing.hpp"
 #include "oecumenic_enumerations.hpp"
-#include "uncopyable_lmi.hpp"
 
 #include <wx/object.h>                  // wxObjectDataPtr
 
@@ -45,10 +43,8 @@ class CensusViewDataViewModel;
 class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
 class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 
-class CensusView
-    :        public  ViewEx
-    ,        private lmi::uncopyable <CensusView>
-    ,virtual private obstruct_slicing<CensusView>
+class CensusView final
+    :public ViewEx
 {
     friend class CensusDocument;
     friend class CensusViewDataViewModel;
@@ -57,6 +53,9 @@ class CensusView
     CensusView();
 
   private:
+    CensusView(CensusView const&) = delete;
+    CensusView& operator=(CensusView const&) = delete;
+
     void update_visible_columns();
 
     CensusDocument& document() const;
