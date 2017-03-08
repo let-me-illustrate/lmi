@@ -1229,7 +1229,7 @@ void group_quote_pdf_generator_wx::output_document_header
     std::vector<extra_summary_field> const& f = report_data_.extra_fields_;
     fields.insert(fields.end(), f.begin(), f.end());
 
-    for(auto i = fields.begin(); i != fields.end(); ++i)
+    for(auto i = fields.begin(); i != fields.end();)
         {
         // Start a new table row and ensure it will be closed.
         open_and_ensure_closing_tag tag_tr(summary_html, "tr");
