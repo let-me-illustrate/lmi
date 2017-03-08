@@ -43,7 +43,7 @@ class LMI_SO PreferencesModel final
 {
   public:
     PreferencesModel();
-    ~PreferencesModel() override = default;
+    ~PreferencesModel() override;
 
     bool IsModified() const;
     void Load();
