@@ -226,7 +226,7 @@ class LMI_SO tn_range_base
 /// the right thing.
 
 template<typename Number, typename Trammel>
-class tn_range final
+class LMI_SO tn_range final
     :public tn_range_base
 {
     static_assert(std::is_base_of_v<trammel_base<Number>,Trammel>);

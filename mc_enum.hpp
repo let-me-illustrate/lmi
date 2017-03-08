@@ -89,7 +89,7 @@ class LMI_SO mc_enum_base
 /// explained in the documentation for class mc_enum_data.
 
 template<typename T>
-class mc_enum final
+class LMI_SO mc_enum final
     :public mc_enum_base
 {
     static_assert(std::is_enum_v<T>);
