@@ -31,6 +31,13 @@
 #ifndef pchfile_wx_hpp
 #define pchfile_wx_hpp
 
+// Even if precompiled headers are not really being used, use this header to
+// disable some warnings which are enabled for the rest of lmi code but have to
+// be disabled for the code using wxWidgets as they occur in wxWidgets headers.
+#if defined __GNUC__
+#   pragma GCC diagnostic ignored "-Wcast-qual"
+#endif // defined __GNUC__
+
 #if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
 
 #   define LMI_OKAY_TO_INCLUDE_PCHLIST_HPP
