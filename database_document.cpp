@@ -26,13 +26,6 @@
 #include "alert.hpp"
 #include "contains.hpp"
 
-// EVGENIY !! Doesn't it seem strange that this wx header appears
-// to be needed here? I don't see it included in similar files.
-// I tried omitting it, but wasn't able to figure out what the
-// diagnostics really meant.
-
-#include <wx/defs.h>
-
 IMPLEMENT_DYNAMIC_CLASS(DatabaseDocument, ProductEditorDocument)
 
 DatabaseDocument::DatabaseDocument()
