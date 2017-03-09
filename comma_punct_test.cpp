@@ -29,18 +29,10 @@
 #include <iostream>
 #include <sstream>
 
-// TODO ?? More tests should be added, but the one test written here
-// suffices to show a gcc defect that's fixed in a later version.
+// TODO ?? More tests should be added.
 
 int test_main(int, char*[])
 {
-#if defined __GNUC__ && LMI_GCC_VERSION <= 40001
-    std::cerr
-        << "This test fails with gcc versions before 4.0.1: see\n"
-        << "  http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20914\n"
-        ;
-#endif // gcc version less than 4.0.1 .
-
     std::ostringstream oss;
 
     std::locale loc;
