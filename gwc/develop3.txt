@@ -1,0 +1,66 @@
+Inchoate C++11 coding guidelines for lmi
+
+---------
+
+Write explicitly-defaulted special member functions inline, in the
+class definition. Prefer explicitly-defaulted functions to user-written
+equivalents with empty {} bodies.
+
+Rationale: This makes the code clearer, and lets the compiler optimize
+better. It is better to write these functions inline: e.g., a destructor
+written out of line, even if explicitly defaulted, is not trivial.
+
+Exceptions: Sometimes it is not possible to define a destructor inside
+the class definition, because, e.g.:
+ * it is pure virtual and cannot be defined at the point of declaration
+ * the class has smart-pointer members of forward-declared types
+In such cases, define the destructor out of line in the '.cpp' file.
+
+---------
+
+Define these special member functions by default inside every class X:
+    X(X const&) = delete;
+    X& operator=(X const&) = delete;
+If X should be Copyable, then use '= default' instead. Write an
+implementation in '{}' only if the default does not do the right thing.
+
+Rationale: In C++98, a comment such as
+  'Implicitly-declared special member functions do the right thing'
+was appropriate, with the declarations elided. But in C++11, it is
+preferable to say that in code. This is better than deriving from
+an "uncopyable" class because it is clearer and optimizes better.
+
+Notes: In the C++98 "uncopyable" idiom, these special members were
+unimplemented and private, but with C++11 there is no need to prescribe
+whether "= delete" members are public or private; it is often clearest
+to write them in the vicinity of other special member functions.
+Incidentally, any compiler diagnostics are likely to be slightly clearer
+if they are public.
+
+This guideline does not call for an explicit destructor in all cases,
+to avoid pointless verbosity: a destructor is always defined anyway.
+
+---------
+
+Initialize all non-static data members with braced-init-lists in the
+class definition, e.g.:
+  int         a {3};
+  double      b {1.7321};
+  std::string c {"explicit default value"};
+  std::string d {}; // when an empty string is wanted
+
+Rationale: Initialize all such members to prevent them from being used
+with indeterminate values. Initialize them in the class's member-
+specification because that is the most convenient and obvious place,
+where any accidental omissions are easiest to discern. Use braced-init-
+lists for uniformity.
+
+---------
+
+Template parameter lists--write space after comma only in declarations:
+  template<typename T, typename U> // space after comma
+but not in instantiations:
+  std::pair<T,U>                   // no space after comma
+or in specializations:
+  template<> struct foo<T,U>       // no space after comma
+
