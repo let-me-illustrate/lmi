@@ -97,6 +97,9 @@ LMI_WX_TEST_CASE(input_validation)
             :value_(value)
         {}
 
+        test_coi_multiplier_dialog(test_coi_multiplier_dialog const&) = delete;
+        test_coi_multiplier_dialog& operator=(test_coi_multiplier_dialog const&) = delete;
+
         int OnInvoked(MvcController* dialog) const override
             {
             dialog->Show();

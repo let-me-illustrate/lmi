@@ -184,6 +184,8 @@ class InputSequenceEditor
 {
   public:
     InputSequenceEditor(wxWindow* parent, wxString const& title, Input const& input);
+    InputSequenceEditor(InputSequenceEditor const&) = delete;
+    InputSequenceEditor& operator=(InputSequenceEditor const&) = delete;
 
     void set_keywords
         (std::vector<std::string> const& keywords

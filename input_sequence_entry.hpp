@@ -41,6 +41,8 @@ class InputSequenceEntry
   public:
     InputSequenceEntry() = default;
     InputSequenceEntry(wxWindow* parent, wxWindowID id, wxString const& name);
+    InputSequenceEntry(InputSequenceEntry const&) = delete;
+    InputSequenceEntry& operator=(InputSequenceEntry const&) = delete;
     bool Create(wxWindow* parent, wxWindowID id, wxString const& name);
 
     void input(Input const& input);

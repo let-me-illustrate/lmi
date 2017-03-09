@@ -351,6 +351,9 @@ struct input_sequence_variant_data
     {
     }
 
+    input_sequence_variant_data(input_sequence_variant_data const&) = delete;
+    input_sequence_variant_data& operator=(input_sequence_variant_data const&) = delete;
+
     bool Eq(wxVariantData& data) const override
     {
         input_sequence_variant_data* d = dynamic_cast<input_sequence_variant_data*>(&data);
@@ -376,6 +379,8 @@ class DatumSequenceRenderer
 {
   public:
     DatumSequenceRenderer();
+    DatumSequenceRenderer(DatumSequenceRenderer const&) = delete;
+    DatumSequenceRenderer& operator=(DatumSequenceRenderer const&) = delete;
     bool HasEditorCtrl() const override { return true; }
     wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value) override;
     bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;

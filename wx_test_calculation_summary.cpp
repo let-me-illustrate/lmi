@@ -92,6 +92,9 @@ class expect_preferences_dialog_base
         {
         }
 
+    expect_preferences_dialog_base(expect_preferences_dialog_base const&) = delete;
+    expect_preferences_dialog_base& operator=(expect_preferences_dialog_base const&) = delete;
+
     void run() const
         {
         wxUIActionSimulator ui;

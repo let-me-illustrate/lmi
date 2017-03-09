@@ -2889,6 +2889,9 @@ void database_impl::save(fs::path const& path)
             if(!ofs_) alarum() << "Unable to open '" << temp_path_ << "'." << LMI_FLUSH;
             }
 
+            safe_output_file(safe_output_file const&) = delete;
+            safe_output_file& operator=(safe_output_file const&) = delete;
+
             void close()
                 {
                 ofs_.close();
