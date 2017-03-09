@@ -50,13 +50,7 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
         (0
         ,choices.GetCount()
         ,wxEVT_COMMAND_MENU_SELECTED
-#if wxCHECK_VERSION(2,6,0)
         ,wxCommandEventHandler(SingleChoicePopupMenu::UponMenuChoice)
-#else  // !wxCHECK_VERSION(2,6,0)
-        ,reinterpret_cast<wxObjectEventFunction>
-            (&SingleChoicePopupMenu::UponMenuChoice
-            )
-#endif // !wxCHECK_VERSION(2,6,0)
         );
 }
 

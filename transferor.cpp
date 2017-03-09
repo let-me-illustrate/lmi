@@ -294,13 +294,6 @@ namespace
             }
         else
             {
-#if !wxCHECK_VERSION(2,6,2)
-            // For dropdown comboboxes, scrolling through the list
-            // selects the highlighted item immediately, with wx
-            // versions prior to 2.6.2 . This error directive may be
-            // suppressed if living with that problem is acceptable.
-#   error Outdated library: wx-2.6.2 or greater is required.
-#endif // !wxCHECK_VERSION(2,6,2)
             data = control.GetStringSelection().ToStdString(wxConvUTF8);
             }
         return true;

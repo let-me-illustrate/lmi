@@ -462,14 +462,12 @@ void MultiDimGrid::DoRefreshTableData()
     wxWindowUpdateLocker update_locker(this);
     grid().SetTable(grid().GetTable(), false);
 
-#   if wxCHECK_VERSION(2,8,8)
     // Automatically adjust the width of the column of row labels.
     //
     // Note that there's no point in doing the same for columns using
     // SetColLabelSize(), because that would only affect _height_ of
     // columns labels, but we need to adjust their width.
     grid().SetRowLabelSize(wxGRID_AUTOSIZE);
-#   endif // wxCHECK_VERSION(2,8,8)
 
     // Adjust size of the data columns so that both the label and the
     // data fit in it. At the same time, we want to keep some sensible

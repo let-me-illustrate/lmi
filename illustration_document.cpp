@@ -103,45 +103,6 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
     return wxDocument::OnCreate(filename, flags);
 }
 
-#if !wxCHECK_VERSION(2,9,0)
-/// Formerly, wxDocument::OnNewDocument() called OnSaveModified().
-/// That would seem appropriate if an existing document were being
-/// overlaid, but the function is designed to create an entirely new
-/// document. It was a problem here because this class sets the dirty
-/// flag earlier. wxDocument::OnNewDocument() also clears the dirty
-/// flag, but it seems more sensible to set it. For these and perhaps
-/// other reasons, the base-class function must not be called here.
-///
-/// Setting the dirty flag peremptorily here was intemperate. The
-/// behavior with wx-2.9 or later is preferable: the dirty flag is set
-/// iff any change is made, so that when no change is made...
-///   File | New | Illustration
-///   OK
-///   File | Close
-/// ...this messagebox...
-///   "Do you want to save changes to unnamed1?"
-/// is no longer presented.
-
-bool IllustrationDocument::OnNewDocument()
-{
-    Modify(true);
-// SOMEDAY !! Search for "SetDocumentSaved" on the mailing list and
-// resolve the issues discussed there.
-    SetDocumentSaved(false);
-
-#if wxCHECK_VERSION(2,8,8)
-    wxString const name = GetDocumentManager()->MakeNewDocumentName();
-#else  // !wxCHECK_VERSION(2,8,8)
-    wxString name;
-    GetDocumentManager()->MakeDefaultName(name);
-#endif // !wxCHECK_VERSION(2,8,8)
-    SetTitle(name);
-    SetFilename(name, true);
-
-    return true;
-}
-#endif // !wxCHECK_VERSION(2,9,0)
-
 /// Override wx's built-in file management: doc_ handles that.
 ///
 /// Override DoOpenDocument() instead of OnOpenDocument(): the latter

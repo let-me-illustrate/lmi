@@ -1522,12 +1522,6 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         }
     LMI_ASSERT(cell_parms().size() == n_items - n_sel_items);
 
-#if !wxCHECK_VERSION(2,9,3)
-    // Remove selection to work around wx-2.9.2 bug in GetSelections()
-    // (we'll set it again below).
-    list_window_->UnselectAll();
-#endif
-
     // Send notifications about changes to the wxDataViewCtrl model. Two things
     // changed: some rows were deleted and cell number of some rows shifted
     // accordingly.
