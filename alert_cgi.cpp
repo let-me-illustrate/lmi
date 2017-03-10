@@ -47,16 +47,19 @@ void status_alert(std::string const&)
 // a higher-level routine catch and display it. It might be desirable
 // to write a log file, too.
 
+[[noreturn]]
 void warning_alert(std::string const& s)
 {
     throw std::runtime_error(s);
 }
 
+[[noreturn]]
 void hobsons_choice_alert(std::string const& s)
 {
     throw std::runtime_error(s);
 }
 
+[[noreturn]]
 void alarum_alert(std::string const& s)
 {
     throw std::runtime_error(s);

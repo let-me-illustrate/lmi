@@ -178,9 +178,11 @@ class hobsons_choice_buf
 class alarum_buf
     :public alert_buf
 {
+    [[noreturn]]
     void raise_alert() override
         {
         alarum_alert_function(alert_string());
+        throw "This should be unreachable--something is gravely amiss.";
         }
 };
 
@@ -265,11 +267,13 @@ void test_alarum()
     alarum()         << "Test alarum()"         << LMI_FLUSH;
 }
 
+[[noreturn]]
 void test_standard_exception()
 {
     throw std::runtime_error("Test a standard exception.");
 }
 
+[[noreturn]]
 void test_arbitrary_exception()
 {
     throw "Test an arbitrary exception.";

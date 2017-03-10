@@ -62,7 +62,9 @@ namespace xml_serialize
 ///   any_member::str()
 /// which is not useful here.
 
-template<> std::string value_cast<std::string>(stratified_entity const&)
+template<>
+[[noreturn]]
+std::string value_cast<std::string>(stratified_entity const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
@@ -74,7 +76,9 @@ template<> std::string value_cast<std::string>(stratified_entity const&)
 ///   any_member::operator=(std::string const&)
 /// which is not useful here.
 
-template<> stratified_entity value_cast<stratified_entity>(std::string const&)
+template<>
+[[noreturn]]
+stratified_entity value_cast<stratified_entity>(std::string const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";

@@ -187,6 +187,7 @@ void xml_serializable<T>::immit_members_into(xml::element& root) const
 /// Backward-compatibility serial number of class T's xml version.
 
 template<typename T>
+[[noreturn]]
 int xml_serializable<T>::class_version() const
 {
     throw "Unreachable--silences a compiler diagnostic.";
@@ -195,6 +196,7 @@ int xml_serializable<T>::class_version() const
 /// Root tag (when T is saved as the root of a document).
 
 template<typename T>
+[[noreturn]]
 std::string const& xml_serializable<T>::xml_root_name() const
 {
     throw "Unreachable--silences a compiler diagnostic.";

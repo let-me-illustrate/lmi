@@ -272,6 +272,7 @@ RealType round_near(RealType r)
 }
 
 template<typename RealType>
+[[noreturn]]
 RealType erroneous_rounding_function(RealType)
 {
     throw std::logic_error("Erroneous rounding function.");

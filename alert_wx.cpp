@@ -115,6 +115,7 @@ void hobsons_choice_alert(std::string const& s)
         }
 }
 
+[[noreturn]]
 void alarum_alert(std::string const& s)
 {
     throw std::runtime_error(s);
