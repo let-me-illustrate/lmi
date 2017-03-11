@@ -24,43 +24,39 @@
 
 #include "config.hpp"
 
+#include "so_attributes.hpp"
+
 #include <cstddef>                      // std::size_t
 
-// TODO ?? CALCULATION_SUMMARY Revise in light of this message:
-//   http://lists.nongnu.org/archive/html/lmi/2006-10/msg00024.html
-
-#if defined UNIT_TESTING_WX_NEW
-// Don't use so attributes for unit test.
-#   define LMI_WX_NEW_SO
-#elif defined HAVE_CONFIG_H
-// For msw, rely on the 'auto-import' kludge favored by autotools.
-#   define LMI_WX_NEW_SO
-#elif defined LMI_MSW
+#if defined LMI_WX_NEW_USE_SO_ATTRIBUTES && !defined UNIT_TESTING_WX_NEW
+#
+#   if defined LMI_WX_NEW_BUILD_SO && defined LMI_WX_NEW_USE_SO
+#       error Both LMI_WX_NEW_BUILD_SO and LMI_WX_NEW_USE_SO defined.
+#   endif // defined LMI_WX_NEW_BUILD_SO && defined LMI_WX_NEW_USE_SO
+#
 #   if defined LMI_WX_NEW_BUILD_SO
-#       define LMI_WX_NEW_SO __declspec(dllexport)
+#       define LMI_WX_NEW_SO LMI_EXPORT
 #   elif defined LMI_WX_NEW_USE_SO
-#       define LMI_WX_NEW_SO __declspec(dllimport)
+#       define LMI_WX_NEW_SO LMI_IMPORT
 #   else  // !defined LMI_WX_NEW_BUILD_SO && !defined LMI_WX_NEW_USE_SO
-#       error Either LMI_WX_NEW_BUILD_SO or LMI_WX_NEW_USE_SO must be defined.
+#       error Neither LMI_WX_NEW_BUILD_SO nor LMI_WX_NEW_USE_SO defined.
 #   endif // !defined LMI_WX_NEW_BUILD_SO && !defined LMI_WX_NEW_USE_SO
-#else  // !defined HAVE_CONFIG_H && !defined LMI_MSW
-#   error Unknown platform and build system.
-#endif // !defined HAVE_CONFIG_H && !defined LMI_MSW
+#
+#else  // !defined LMI_WX_NEW_USE_SO_ATTRIBUTES
+#   define LMI_WX_NEW_SO
+#endif // !defined LMI_WX_NEW_USE_SO_ATTRIBUTES
 
 /// When wx is used as an msw dll, memory is allocated and freed
-/// across dll boundaries, and that causes mpatrol to emit spurious
-/// diagnostics.
+/// across dll boundaries, and that caused mpatrol to emit spurious
+/// diagnostics. This facility was devised to work around that
+/// problem. It remains valuable although lmi no longer uses mpatrol,
+/// because it indicates memory allocations that must have no matching
+/// deallocations within lmi.
 ///
-/// To work around this problem, build these functions as a separate
-/// dll, and use 'new(wx)' to allocate memory that will be freed by
-/// wx--for instance, a frame window that's created in an application
-/// but (unavoidably) freed by a wx dll. The sole purpose of this
-/// workaround is to avoid spurious diagnostics; it is not suggested
-/// that this is a good way to manage memory.
-///
-/// It is assumed (but not known) that no such problem occurs on other
-/// platforms. Therefore, the macros above never use ELF visibility
-/// attributes.
+/// Build these functions as a separate shared library, and use
+/// 'new(wx)' to allocate memory that will be freed by wx--e.g., a
+/// frame window that's created in an application but (unavoidably)
+/// freed by a wx dll.
 
 enum wx_allocator{wx};
 
