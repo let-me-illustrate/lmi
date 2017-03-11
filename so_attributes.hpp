@@ -72,10 +72,12 @@
 #include "config.hpp"
 
 #if defined LMI_USE_SO_ATTRIBUTES
+#
+#   if defined LMI_BUILD_SO && defined LMI_USE_SO
+#       error Both LMI_BUILD_SO and LMI_USE_SO defined.
+#   endif // defined LMI_BUILD_SO && defined LMI_USE_SO
+#
 #   if defined LMI_MSW
-#       if defined LMI_BUILD_SO && defined LMI_USE_SO
-#           error Both LMI_BUILD_SO and LMI_USE_SO defined.
-#       endif // defined LMI_BUILD_SO && defined LMI_USE_SO
 #       if defined LMI_BUILD_SO
 #           define LMI_SO __declspec(dllexport)
 #       elif defined LMI_USE_SO
@@ -92,6 +94,7 @@
 #   else  // !defined LMI_MSW && !defined __GNUC__
 #       define LMI_SO
 #   endif // !defined LMI_MSW && !defined __GNUC__
+#
 #else  // !defined LMI_USE_SO_ATTRIBUTES
 #   define LMI_SO
 #endif // !defined LMI_USE_SO_ATTRIBUTES
