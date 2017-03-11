@@ -83,15 +83,15 @@
 #       else  // !defined LMI_BUILD_SO && !defined LMI_USE_SO
 #           error Neither LMI_BUILD_SO nor LMI_USE_SO defined.
 #       endif // !defined LMI_BUILD_SO && !defined LMI_USE_SO
-#   elif defined __GNUC__ && 30400 <= LMI_GCC_VERSION
+#   elif defined __GNUC__
 #       if defined LMI_BUILD_SO
 #           define LMI_SO __attribute__((visibility("default")))
 #       else  // !defined LMI_BUILD_SO
 #           define LMI_SO
 #       endif // !defined LMI_BUILD_SO
-#   else  // !defined LMI_MSW and no ELF visibility support
+#   else  // !defined LMI_MSW && !defined __GNUC__
 #       define LMI_SO
-#   endif // !defined LMI_MSW and no ELF visibility support
+#   endif // !defined LMI_MSW && !defined __GNUC__
 #else  // !defined LMI_USE_SO_ATTRIBUTES
 #   define LMI_SO
 #endif // !defined LMI_USE_SO_ATTRIBUTES
