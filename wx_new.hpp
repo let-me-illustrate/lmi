@@ -29,7 +29,10 @@
 // TODO ?? CALCULATION_SUMMARY Revise in light of this message:
 //   http://lists.nongnu.org/archive/html/lmi/2006-10/msg00024.html
 
-#if defined HAVE_CONFIG_H
+#if defined UNIT_TESTING_WX_NEW
+// Don't use so attributes for unit test.
+#   define LMI_WX_NEW_SO
+#elif defined HAVE_CONFIG_H
 // For msw, rely on the 'auto-import' kludge favored by autotools.
 #   define LMI_WX_NEW_SO
 #elif defined LMI_MSW

@@ -25,22 +25,12 @@
 
 #include "pchfile.hpp"
 
+#define UNIT_TESTING_WX_NEW
 // The '.cpp' file is deliberately included here instead of the header
 // because it was probably already compiled for inclusion in a dll,
-// resulting in an object that wouldn't necessarily work here.
-//
-// Explicitly include "wx_new.hpp" first for LMI_GCC_VERSION from
-// "config.hpp".
-
-#include "wx_new.hpp"
-#if defined __GNUC__ && 40600 <= LMI_GCC_VERSION
-#   pragma GCC diagnostic push
-#   pragma GCC diagnostic ignored "-Wattributes"
-#endif // defined __GNUC__ && 40600 <= LMI_GCC_VERSION
+// resulting in an object that wouldn't necessarily work here because
+// of unwanted shared-library attributes.
 #include "wx_new.cpp"
-#if defined __GNUC__ && 40600 <= LMI_GCC_VERSION
-#   pragma GCC diagnostic pop
-#endif // defined __GNUC__ && 40600 <= LMI_GCC_VERSION
 
 #include "test_tools.hpp"
 
