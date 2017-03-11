@@ -104,15 +104,17 @@
 // That worked for MinGW up to gcc-3.4.5; for MinGW-w64 gcc-4.9.1, it
 // elicits a warning, and ATTRIB must be dropped from the forward
 // declaration. No knowledge is claimed of the behavior of gcc
-// versions between these two, which lmi did not use.
+// versions between these two, which lmi did not use. It is unknown
+// whether this difference represents deliberate evolution of gcc or
+// a MinGW-w64 regression, so both versions are preserved.
 
 #if defined LMI_USE_SO_ATTRIBUTES
 #   if defined __GNUC__
-#       if LMI_GCC_VERSION < 40901
-#           define LMI_SO_FWD_DECL LMI_SO
-#       else  // !(LMI_GCC_VERSION < 40901)
+#       if defined LMI_MINGW_W64
 #           define LMI_SO_FWD_DECL
-#       endif // !(LMI_GCC_VERSION < 40901)
+#       else  // !defined LMI_MINGW_W64
+#           define LMI_SO_FWD_DECL LMI_SO
+#       endif // !defined LMI_MINGW_W64
 #   else  // !defined __GNUC__
 #       define LMI_SO_FWD_DECL LMI_SO
 #   endif // !defined __GNUC__
