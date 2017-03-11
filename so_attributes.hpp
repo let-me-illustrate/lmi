@@ -74,14 +74,14 @@
 #if defined LMI_USE_SO_ATTRIBUTES
 #   if defined LMI_MSW
 #       if defined LMI_BUILD_SO && defined LMI_USE_SO
-#           error LMI_BUILD_SO and LMI_USE_SO must not both be defined.
+#           error Both LMI_BUILD_SO and LMI_USE_SO defined.
 #       endif // defined LMI_BUILD_SO && defined LMI_USE_SO
 #       if defined LMI_BUILD_SO
 #           define LMI_SO __declspec(dllexport)
 #       elif defined LMI_USE_SO
 #           define LMI_SO __declspec(dllimport)
 #       else  // !defined LMI_BUILD_SO && !defined LMI_USE_SO
-#           error Either LMI_BUILD_SO or LMI_USE_SO must be defined.
+#           error Neither LMI_BUILD_SO nor LMI_USE_SO defined.
 #       endif // !defined LMI_BUILD_SO && !defined LMI_USE_SO
 #   elif defined __GNUC__ && 30400 <= LMI_GCC_VERSION
 #       if defined LMI_BUILD_SO
