@@ -25,11 +25,11 @@
 // If LMI_USE_SO_ATTRIBUTES is not defined, then LMI_SO is ignored.
 // This is the default behavior. Otherwise:
 //
-// - For gcc-3.4 or later, if the platform is not msw, then elf is
-// assumed, and symbols decorated with LMI_SO have 'default'
-// visibility. This is intended to be used with '-fvisibility=hidden'.
-// This implementation hasn't yet been tested; it is based on
-// comments given here
+// - For gcc (or any other toolchain that defines gcc macros), if the
+// platform is not msw, then elf is assumed, and symbols decorated
+// with LMI_SO have 'default' visibility. This is intended to be used
+// with '-fvisibility=hidden'. This implementation hasn't yet been
+// tested; it is based on comments given here
 //   http://mail.python.org/pipermail/c++-sig/2004-April/007139.html
 // by the author of the gcc 'visibility' patch.
 //
@@ -56,6 +56,7 @@
 // compatible attribute for symbol visibility, a feature for which
 // significant benefits are claimed:
 //   http://www.nedprod.com/programs/gccvisibility.html
+//   https://gcc.gnu.org/wiki/Visibility
 // The elf 'visibility' and msw dll 'declspec' attributes are similar
 // enough to use the same decoration macro, but they do different
 // things. In code that uses the shared object, the macro has an
