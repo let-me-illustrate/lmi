@@ -56,7 +56,10 @@
 // compatible attribute for symbol visibility, a feature for which
 // significant benefits are claimed:
 //   http://www.nedprod.com/programs/gccvisibility.html
+//     [if that becomes inaccessible, this began as a copy:
 //   https://gcc.gnu.org/wiki/Visibility
+//     but, being a wiki, it has been subject to erosion; the
+//     implementation here is closer to the authoritative original]
 // The elf 'visibility' and msw dll 'declspec' attributes are similar
 // enough to use the same decoration macro, but they do different
 // things. In code that uses the shared object, the macro has an
@@ -74,11 +77,15 @@
 #if defined LMI_USE_SO_ATTRIBUTES
 #
 #   if defined LMI_MSW
-#       define LMI_EXPORT __declspec(dllexport)
 #       define LMI_IMPORT __declspec(dllimport)
+#       define LMI_EXPORT __declspec(dllexport)
+#       define LMI_HIDDEN
+#       define LMI_PUBLIC
 #   elif defined __GNUC__
-#       define LMI_EXPORT __attribute__((visibility("default")))
 #       define LMI_IMPORT
+#       define LMI_EXPORT __attribute__((visibility("default")))
+#       define LMI_HIDDEN __attribute__((visibility("hidden")))
+#       define LMI_PUBLIC __attribute__((visibility("default")))
 #   else  // !defined LMI_MSW && !defined __GNUC__
 #       error Unknown platform. Consider contributing support.
 #   endif // !defined LMI_MSW && !defined __GNUC__
