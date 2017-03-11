@@ -92,7 +92,7 @@
 #           define LMI_SO
 #       endif // !defined LMI_BUILD_SO
 #   else  // !defined LMI_MSW && !defined __GNUC__
-#       define LMI_SO
+#       error Unknown platform. Consider contributing support.
 #   endif // !defined LMI_MSW && !defined __GNUC__
 #
 #else  // !defined LMI_USE_SO_ATTRIBUTES
