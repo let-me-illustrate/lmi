@@ -348,10 +348,7 @@ namespace
         {
         if(0.0 == a_ScalingFactor)
             {
-            hobsons_choice()
-                << "Scaling factor is zero. Report will be invalid."
-                << LMI_FLUSH
-                ;
+            alarum() << "Scaling factor is zero." << LMI_FLUSH;
             return "ZERO";
             }
 
@@ -419,7 +416,7 @@ void LedgerBase::ApplyScaleFactor(double a_Mult)
     LMI_ASSERT(0.0 != m_scaling_factor);
     if(1.0 != m_scaling_factor)
         {
-        hobsons_choice() << "Cannot scale the same ledger twice." << LMI_FLUSH;
+        alarum() << "Cannot scale the same ledger twice." << LMI_FLUSH;
         }
 
     m_scaling_factor = a_Mult;

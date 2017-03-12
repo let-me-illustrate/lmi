@@ -1114,7 +1114,7 @@ void Input::make_term_rider_consistent(bool aggressively)
         && !global_settings::instance().regression_testing()
         )
         {
-        hobsons_choice()
+        alarum()
             << "Method '"
             << TermAdjustmentMethod.str()
             << "' is unreliable."

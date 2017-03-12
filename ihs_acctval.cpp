@@ -135,7 +135,7 @@ AccountValue::AccountValue(Input const& input)
     // composite values are multiplied by the number of lives inforce.
     // Of course, a contract is not normally in force after maturity.
 
-    HOPEFULLY
+    LMI_ASSERT
         (   InvariantValues().InforceLives.size()
         ==  static_cast<unsigned int>(1 + BasicValues::GetLength())
         );
@@ -228,7 +228,7 @@ void AccountValue::SetGuarPrem()
         {
         GuarPremium = SolveGuarPremium();
         }
-    HOPEFULLY(GuarPremium < 1.0e100);
+    LMI_ASSERT(GuarPremium < 1.0e100);
     ledger_->SetGuarPremium(GuarPremium);
 }
 
@@ -552,7 +552,7 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
 //============================================================================
 void AccountValue::FinalizeLife(mcenum_run_basis a_Basis)
 {
-    HOPEFULLY(RunBasis_ == a_Basis);
+    LMI_ASSERT(RunBasis_ == a_Basis);
 
     DebugEndBasis();
 
@@ -750,7 +750,7 @@ void AccountValue::SetInitialValues()
         ||   oe_prefer_separate_account == distribution_preferred_account
         )
         {
-        HOPEFULLY(Database_->Query(DB_AllowSepAcct));
+        LMI_ASSERT(Database_->Query(DB_AllowSepAcct));
         }
     // If any account preference for premium is the general account,
     // then payment into the separate account must be permitted; but
@@ -761,7 +761,7 @@ void AccountValue::SetInitialValues()
         ||   oe_prefer_separate_account == er_premium_preferred_account
         )
         {
-        HOPEFULLY(Database_->Query(DB_AllowSepAcct));
+        LMI_ASSERT(Database_->Query(DB_AllowSepAcct));
         }
 }
 
@@ -781,13 +781,13 @@ double AccountValue::IncrementBOM
         }
 
     // Paranoid check.
-    HOPEFULLY(year == Year);
-    HOPEFULLY(month == Month);
-    HOPEFULLY(MonthsSinceIssue == Month + 12 * Year);
+    LMI_ASSERT(year == Year);
+    LMI_ASSERT(month == Month);
+    LMI_ASSERT(MonthsSinceIssue == Month + 12 * Year);
     if(daily_interest_accounting)
         {
-        HOPEFULLY(365 <= days_in_policy_year && days_in_policy_year <= 366);
-        HOPEFULLY(28 <= days_in_policy_month && days_in_policy_month <= 31);
+        LMI_ASSERT(365 <= days_in_policy_year && days_in_policy_year <= 366);
+        LMI_ASSERT(28 <= days_in_policy_month && days_in_policy_month <= 31);
         }
     if
         (   year != Year
@@ -838,13 +838,13 @@ void AccountValue::IncrementEOM
         }
 
     // Paranoid check.
-    HOPEFULLY(year == Year);
-    HOPEFULLY(month == Month);
-    HOPEFULLY(MonthsSinceIssue == Month + 12 * Year);
+    LMI_ASSERT(year == Year);
+    LMI_ASSERT(month == Month);
+    LMI_ASSERT(MonthsSinceIssue == Month + 12 * Year);
     if(daily_interest_accounting)
         {
-        HOPEFULLY(365 <= days_in_policy_year && days_in_policy_year <= 366);
-        HOPEFULLY(28 <= days_in_policy_month && days_in_policy_month <= 31);
+        LMI_ASSERT(365 <= days_in_policy_year && days_in_policy_year <= 366);
+        LMI_ASSERT(28 <= days_in_policy_month && days_in_policy_month <= 31);
         }
 
     // Save arguments, constraining their values to be nonnegative,
@@ -864,7 +864,7 @@ void AccountValue::IncrementEOY(int year)
         }
 
     // Paranoid check.
-    HOPEFULLY(year == Year);
+    LMI_ASSERT(year == Year);
 
     FinalizeYear();
 }
@@ -1030,7 +1030,7 @@ void AccountValue::InitializeSpecAmt()
         }
 
     SurrChgSpecAmt = InvariantValues().SpecAmt[0];
-    HOPEFULLY(0.0 <= SurrChgSpecAmt);
+    LMI_ASSERT(0.0 <= SurrChgSpecAmt);
     // TODO ?? SurrChgSpecAmt is not used yet.
 
     // TODO ?? Perform specamt strategy here?
@@ -1203,8 +1203,8 @@ double AccountValue::SurrChg()
     // negative base amounts, which would result in surrender charge
     // components having an unexpected sign.
 
-//    HOPEFULLY(0.0 <= CumPmts); // TODO ?? Fails on a few test cases: should it?
-    HOPEFULLY(0.0 <= InvariantValues().SpecAmt[0]);
+//    LMI_ASSERT(0.0 <= CumPmts); // TODO ?? Fails on a few test cases: should it?
+    LMI_ASSERT(0.0 <= InvariantValues().SpecAmt[0]);
 
     return
             YearsSurrChgAVMult      * std::max(0.0, TotalAccountValue())
@@ -1501,7 +1501,7 @@ void AccountValue::FinalizeYear()
 
         for(int j = 0; j < 12; ++j)
             {
-            HOPEFULLY(materially_equal(GrossPmts[j], EeGrossPmts[j] + ErGrossPmts[j]));
+            LMI_ASSERT(materially_equal(GrossPmts[j], EeGrossPmts[j] + ErGrossPmts[j]));
             InvariantValues().GrossPmt  [Year]  += GrossPmts[j];
             InvariantValues().EeGrossPmt[Year]  += EeGrossPmts[j];
             InvariantValues().ErGrossPmt[Year]  += ErGrossPmts[j];
@@ -1510,7 +1510,7 @@ void AccountValue::FinalizeYear()
             {
             InvariantValues().InitPrem = InvariantValues().GrossPmt[Year];
             }
-        HOPEFULLY
+        LMI_ASSERT
             (materially_equal
                 (   InvariantValues().GrossPmt  [Year]
                 ,   InvariantValues().EeGrossPmt[Year]
@@ -1642,7 +1642,7 @@ void AccountValue::SetAnnualInvariants()
 //============================================================================
 double AccountValue::GetPartMortQ(int a_year) const
 {
-    HOPEFULLY(a_year <= BasicValues::GetLength());
+    LMI_ASSERT(a_year <= BasicValues::GetLength());
     if(!yare_input_.UsePartialMortality || ItLapsed)
         {
         return 0.0;
@@ -1782,7 +1782,7 @@ double AccountValue::InforceLivesBoy() const
         }
 
     unsigned int index = Year;
-    HOPEFULLY(index < InvariantValues().InforceLives.size());
+    LMI_ASSERT(index < InvariantValues().InforceLives.size());
     return InvariantValues().InforceLives[index];
 }
 
@@ -1798,7 +1798,7 @@ double AccountValue::InforceLivesEoy() const
         }
 
     unsigned int index = 1 + Year;
-    HOPEFULLY(index < InvariantValues().InforceLives.size());
+    LMI_ASSERT(index < InvariantValues().InforceLives.size());
     return InvariantValues().InforceLives[index];
 }
 
@@ -1828,7 +1828,7 @@ void AccountValue::CoordinateCounters()
                 next_anniversary.julian_day_number()
             -   current_anniversary.julian_day_number()
             ;
-        HOPEFULLY(365 <= days_in_policy_year && days_in_policy_year <= 366);
+        LMI_ASSERT(365 <= days_in_policy_year && days_in_policy_year <= 366);
 
         calendar_date current_monthiversary = add_years_and_months
             (yare_input_.EffectiveDate
@@ -1847,9 +1847,9 @@ void AccountValue::CoordinateCounters()
             -   current_monthiversary.julian_day_number()
             ;
 
-        HOPEFULLY(28 <= days_in_policy_month && days_in_policy_month <= 31);
+        LMI_ASSERT(28 <= days_in_policy_month && days_in_policy_month <= 31);
 
-//        HOPEFULLY
+//        LMI_ASSERT
 //            (   days_in_policy_month
 //            ==  current_monthiversary.days_in_month()
 //            );
