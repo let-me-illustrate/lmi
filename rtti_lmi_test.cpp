@@ -65,11 +65,8 @@ void RttiLmiTest::TestTypeInfo()
 
     // Usable with UDTs.
 
-    ti1 = typeid(X);
-    oss.clear();
-    oss.str("");
-    oss << ti1;
-    BOOST_TEST_EQUAL(oss.str(), lmi::detail::Demangle(typeid(X).name()));
+    ti1 = typeid(X); // Converting ctor.
+    BOOST_TEST_EQUAL(ti1.Name(), lmi::detail::Demangle(typeid(X).name()));
 
     // Usable with containers.
 
