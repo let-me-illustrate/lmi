@@ -494,8 +494,8 @@ std::string InputSequenceEditor::sequence_string()
 
         s.append(value_field(i).GetValue().c_str());
 
-        auto endpoint = duration_num_field(i).GetValue();
-        std::string z = value_cast<std::string>(endpoint);
+        auto const endpoint = duration_num_field(i).GetValue();
+        std::string const z = value_cast<std::string>(endpoint);
 
         switch(duration_mode_field(i).value())
             {
