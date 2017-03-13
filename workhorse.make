@@ -435,8 +435,11 @@ gcc_cxx_warnings := \
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
 
-# WX !! The wx library triggers many warnings with the following
-# 'extra' flags.
+# WX !! The wx library triggers many diagnostics with the following
+# 'extra' flags. This makefile used to inhibit these flags for source
+# files that seemed to depend on wx according to a casual heuristic,
+# but now they're inhibited by a #pragma in the PCH file that all wx-
+# dependent TUs must include.
 
 gcc_common_extra_warnings := \
   -Wcast-qual \
