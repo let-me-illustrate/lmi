@@ -162,8 +162,8 @@ void Ledger::SetRunBases(int length)
 void Ledger::ZeroInforceAfterLapse()
 {
     ledger_map_t const& l_map_rep = ledger_map_->held();
-    using T = decltype(ledger_invariant_->InforceLives)::size_type;
-    T original_length = ledger_invariant_->InforceLives.size();
+    auto original_length = ledger_invariant_->InforceLives.size();
+    using T = decltype(original_length);
     T lapse_year = T(0);
     for(auto const& i : l_map_rep)
         {
