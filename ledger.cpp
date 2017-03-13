@@ -148,34 +148,32 @@ void Ledger::SetRunBases(int length)
         }
 }
 
-//============================================================================
-// TODO ?? This seems to be a bad idea: it zeroes what should already
-// have been zero.
+/// Pick the highest lapse year of any basis (i.e. any LedgerVariant).
+/// Set inforce lives to zero at the end of that year and thereafter.
+/// This is extremely likely to mean the lapse year on the current
+/// basis; but if it's the lapse year on some other basis, we don't
+/// want to truncate values on that other basis, even if it means
+/// that the vector of inforce lives does not correspond to the
+/// current values.
+///
+/// SOMEDAY !! Reconsider whether the values this function sets to
+/// zero should already have been zero.
+
 void Ledger::ZeroInforceAfterLapse()
 {
     ledger_map_t const& l_map_rep = ledger_map_->held();
-
-    // Pick the highest lapse year of any basis (i.e. any LedgerVariant).
-    // Set inforce lives to zero at the end of that year and thereafter.
-    // This is extremely likely to mean the lapse year on the current
-    // basis; but if it's the lapse year on some other basis, we don't
-    // want to truncate values on that other basis, even if it means
-    // that the vector of inforce lives does not correspond to the
-    // current values.
-    int lapse_year = 0;
+    using T = decltype(ledger_invariant_->InforceLives)::size_type;
+    T original_length = ledger_invariant_->InforceLives.size();
+    T lapse_year = T(0);
     for(auto const& i : l_map_rep)
         {
-        lapse_year = std::max
-            (lapse_year
-            ,static_cast<int>(i.second.LapseYear)
-            );
+        lapse_year = std::max(lapse_year, static_cast<T>(i.second.LapseYear));
         }
-    std::vector<double>::iterator b = ledger_invariant_->InforceLives.begin();
-    std::vector<double>::iterator e = ledger_invariant_->InforceLives.end();
-    b += std::min(static_cast<int>(e - b), 1 + lapse_year);
-    if(b < e)
+    T unlapsed_length = 1 + lapse_year;
+    if(unlapsed_length < original_length)
         {
-        std::fill(b, e, 0.0);
+        ledger_invariant_->InforceLives.resize(unlapsed_length);
+        ledger_invariant_->InforceLives.resize(original_length);
         }
 }
 
