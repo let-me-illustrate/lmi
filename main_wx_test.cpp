@@ -226,9 +226,9 @@ class application_test final
 
     fs::path test_files_path_;
 
-    bool run_all_ = true;
+    bool run_all_              {true};
 
-    bool is_distribution_test_ = false;
+    bool is_distribution_test_ {false};
 };
 
 application_test& application_test::instance()

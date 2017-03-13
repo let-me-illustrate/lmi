@@ -1081,9 +1081,9 @@ class statistics
     void print_summary() const;
 
   private:
-    std::size_t files_   = 0;
-    std::size_t lines_   = 0;
-    std::size_t defects_ = 0;
+    std::size_t files_   {0};
+    std::size_t lines_   {0};
+    std::size_t defects_ {0};
 };
 
 statistics& statistics::operator+=(statistics const& z)

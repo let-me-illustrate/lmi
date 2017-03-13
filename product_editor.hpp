@@ -117,9 +117,9 @@ class TreeGridViewBase
 
     // These objects are held by pointer since the destruction is taken care
     // of by wx.
-    MultiDimGrid* grid_       = nullptr;
-    wxStaticText* grid_label_ = nullptr;
-    wxTreeCtrl*   tree_       = nullptr;
+    MultiDimGrid* grid_       {nullptr};
+    wxStaticText* grid_label_ {nullptr};
+    wxTreeCtrl*   tree_       {nullptr};
 };
 
 #endif // product_editor_hpp

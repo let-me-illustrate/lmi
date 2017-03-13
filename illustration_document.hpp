@@ -69,7 +69,7 @@ class IllustrationDocument
 
     single_cell_document doc_;
 
-    bool is_phony_ = false;
+    bool is_phony_ {false};
 
     DECLARE_DYNAMIC_CLASS(IllustrationDocument)
 };

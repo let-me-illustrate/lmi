@@ -99,9 +99,9 @@ class IllustrationView final
 
     Input& input_data();
 
-    wxHtmlWindow* html_window_ = nullptr;
-    bool is_phony_             = false;
-    std::shared_ptr<Ledger const> ledger_values_;
+    wxHtmlWindow* html_window_                   {nullptr};
+    bool is_phony_                               {false};
+    std::shared_ptr<Ledger const> ledger_values_ {};
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)
     DECLARE_EVENT_TABLE()

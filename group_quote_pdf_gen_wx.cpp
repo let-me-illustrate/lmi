@@ -579,8 +579,8 @@ class group_quote_pdf_generator_wx
         };
     page_metrics page_;
 
-    int row_num_ = 0;
-    int individual_selection_ = 99;
+    int row_num_              {0};
+    int individual_selection_ {99};
 };
 
 void assert_nonblank(std::string const& value, std::string const& name)

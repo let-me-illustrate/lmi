@@ -95,8 +95,8 @@ class gpt_view final
 
     gpt_input& input_data();
 
-    std::string html_content_ = std::string("Unable to display results.");
-    wxHtmlWindow* html_window_ = nullptr;
+    std::string html_content_  {"Unable to display results."};
+    wxHtmlWindow* html_window_ {nullptr};
 
     DECLARE_DYNAMIC_CLASS(gpt_view)
     DECLARE_EVENT_TABLE()
