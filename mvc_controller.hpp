@@ -454,11 +454,6 @@ class MvcController final
 
     // Auxiliary functions to extend wxWindow::FindWindow().
 
-#if !wxCHECK_VERSION(2,5,4)
-    // Workaround: this function was not const until wx-2.5.4 .
-    wxWindow* FindWindow(long int window_id) const;
-#endif // !wxCHECK_VERSION(2,5,4)
-
     template<typename T>
     T& WindowFromXrcName(char const*) const;
 

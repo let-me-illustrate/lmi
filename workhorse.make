@@ -358,46 +358,6 @@ physical_closure_files := \
 
 ################################################################################
 
-# Files that depend on wx, which can't use the strictest gcc warnings.
-
-# Files are deemed to depend on wx iff they contain 'include *<wx/'.
-# This heuristic isn't foolproof because wx headers might be included
-# indirectly. Include an innocuous header like <wx/version.h> in files
-# for which it fails.
-
-wx_dependent_objects := \
-  $(sort \
-    $(addsuffix .o,\
-      $(basename \
-        $(notdir \
-          $(shell $(GREP) \
-            --files-with-matches \
-            'include *<wx/' \
-            $(src_dir)/*.?pp \
-          ) \
-        ) \
-      ) \
-    ) \
-  ) \
-
-wx_dependent_physical_closure_files := \
-  $(sort \
-    $(addsuffix .physical_closure,\
-      $(notdir \
-        $(shell $(GREP) \
-          --files-with-matches \
-          'include *<wx/' \
-          $(wildcard \
-            $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
-            ) \
-          ) \
-        ) \
-      ) \
-    ) \
-  ) \
-
-################################################################################
-
 # Warning options for gcc.
 
 c_standard   := -std=c99
@@ -478,8 +438,11 @@ gcc_cxx_warnings := \
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
 
-# WX !! The wx library triggers many warnings with the following
-# 'extra' flags.
+# WX !! The wx library triggers many diagnostics with the following
+# 'extra' flags. This makefile used to inhibit these flags for source
+# files that seemed to depend on wx according to a casual heuristic,
+# but now they're inhibited by a #pragma in the PCH file that all wx-
+# dependent TUs must include.
 
 gcc_common_extra_warnings := \
   -Wcast-qual \
@@ -489,9 +452,6 @@ ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
     expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
   endif
 endif
-
-$(wx_dependent_objects):                gcc_common_extra_warnings :=
-$(wx_dependent_physical_closure_files): gcc_common_extra_warnings :=
 
 # Boost didn't remove an unused parameter in this file, which also
 # seems to contain a "maybe-uninitialized" variable--see:

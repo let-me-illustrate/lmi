@@ -60,9 +60,9 @@ class LMI_SO rounding_parameters final
     /// Private default ctor, for friends only.
     rounding_parameters() = default;
 
-    int                decimals_ = 0;
-    mce_rounding_style style_    = mce_rounding_style(r_indeterminate);
-    std::string        gloss_    = std::string();
+    int                decimals_ {0};
+    mce_rounding_style style_    {r_indeterminate};
+    std::string        gloss_    {};
 };
 
 /// Product rounding rules.

@@ -51,9 +51,6 @@ class gpt_document
 
     // wxDocument overrides.
     bool OnCreate(wxString const& filename, long int flags) override;
-#if !wxCHECK_VERSION(2,9,0)
-    virtual bool OnNewDocument();
-#endif // !wxCHECK_VERSION(2,9,0)
     bool DoOpenDocument(wxString const& filename) override;
     bool DoSaveDocument(wxString const& filename) override;
 

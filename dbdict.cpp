@@ -66,7 +66,9 @@ template<> struct xml_io<database_entity>
 ///   any_member::str()
 /// which is not useful here.
 
-template<> std::string value_cast<std::string>(database_entity const&)
+template<>
+[[noreturn]]
+std::string value_cast<std::string>(database_entity const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
@@ -78,7 +80,9 @@ template<> std::string value_cast<std::string>(database_entity const&)
 ///   any_member::operator=(std::string const&)
 /// which is not useful here.
 
-template<> database_entity value_cast<database_entity>(std::string const&)
+template<>
+[[noreturn]]
+database_entity value_cast<database_entity>(std::string const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";

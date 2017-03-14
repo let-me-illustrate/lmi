@@ -184,6 +184,8 @@ class InputSequenceEditor
 {
   public:
     InputSequenceEditor(wxWindow* parent, wxString const& title, Input const& input);
+    InputSequenceEditor(InputSequenceEditor const&) = delete;
+    InputSequenceEditor& operator=(InputSequenceEditor const&) = delete;
 
     void set_keywords
         (std::vector<std::string> const& keywords
@@ -492,8 +494,8 @@ std::string InputSequenceEditor::sequence_string()
 
         s.append(value_field(i).GetValue().c_str());
 
-        auto endpoint = duration_num_field(i).GetValue();
-        std::string z = value_cast<std::string>(endpoint);
+        auto const endpoint = duration_num_field(i).GetValue();
+        std::string const z = value_cast<std::string>(endpoint);
 
         switch(duration_mode_field(i).value())
             {

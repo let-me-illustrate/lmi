@@ -75,25 +75,6 @@ bool CensusDocument::OnCreate(wxString const& filename, long int flags)
     return wxDocument::OnCreate(filename, flags);
 }
 
-#if !wxCHECK_VERSION(2,9,0)
-bool CensusDocument::OnNewDocument()
-{
-    Modify(true);
-    SetDocumentSaved(false);
-
-#if wxCHECK_VERSION(2,8,8)
-    wxString const name = GetDocumentManager()->MakeNewDocumentName();
-#else  // !wxCHECK_VERSION(2,8,8)
-    wxString name;
-    GetDocumentManager()->MakeDefaultName(name);
-#endif // !wxCHECK_VERSION(2,8,8)
-    SetTitle(name);
-    SetFilename(name, true);
-
-    return true;
-}
-#endif // !wxCHECK_VERSION(2,9,0)
-
 /// See documentation for IllustrationDocument::DoOpenDocument().
 
 bool CensusDocument::DoOpenDocument(wxString const&)

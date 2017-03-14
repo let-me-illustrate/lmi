@@ -160,9 +160,9 @@ void BasicValues::Init()
 
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
-    HOPEFULLY(IssueAge < 100);
-    HOPEFULLY(RetAge <= 100);
-    HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
+    LMI_ASSERT(IssueAge < 100);
+    LMI_ASSERT(RetAge <= 100);
+    LMI_ASSERT(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
     EndtAge = static_cast<int>(Database_->Query(DB_MaturityAge));
     Length = EndtAge - IssueAge;
@@ -254,9 +254,9 @@ void BasicValues::GPTServerInit()
 
     IssueAge = yare_input_.IssueAge;
     RetAge   = yare_input_.RetirementAge;
-    HOPEFULLY(IssueAge < 100);
-    HOPEFULLY(RetAge <= 100);
-    HOPEFULLY(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
+    LMI_ASSERT(IssueAge < 100);
+    LMI_ASSERT(RetAge <= 100);
+    LMI_ASSERT(yare_input_.RetireesCanEnroll || IssueAge <= RetAge);
 
     StateOfDomicile_ = mc_state_from_string(ProductData_->datum("InsCoDomicile"));
     StateOfJurisdiction_ = yare_input_.StateOfJurisdiction;
@@ -676,7 +676,7 @@ void BasicValues::SetPermanentInvariants()
     LapseIgnoresSurrChg = Database_->Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = Database_->Query(DB_SurrChgOnIncr        );
     SurrChgOnDecr       = Database_->Query(DB_SurrChgOnDecr        );
-    HOPEFULLY(!SurrChgOnDecr); // Surrchg change on decrease not supported.
+    LMI_ASSERT(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
     Database_->Query(FreeWDProportion, DB_FreeWdProportion);
 
@@ -702,8 +702,8 @@ void BasicValues::SetPermanentInvariants()
     // product which has no term rider and doesn't permit experience
     // rating, so we assert those preconditions and write simple code
     // for 'unusual' COI banding that ignores those features.
-    HOPEFULLY(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
-    HOPEFULLY(!(UseUnusualCOIBanding && Database_->Query(DB_AllowTerm)));
+    LMI_ASSERT(!(UseUnusualCOIBanding && yare_input_.UseExperienceRating));
+    LMI_ASSERT(!(UseUnusualCOIBanding && Database_->Query(DB_AllowTerm)));
 
     // Flat extras can be used even with guaranteed issue, e.g., for
     // aviation, occupation, avocation, or foreign travel. Admin
@@ -861,7 +861,7 @@ void BasicValues::SetMaxSurvivalDur()
                 ;
             }
         }
-    HOPEFULLY(MaxSurvivalDur <= EndtAge);
+    LMI_ASSERT(MaxSurvivalDur <= EndtAge);
 }
 
 //============================================================================

@@ -78,13 +78,6 @@ int test_main(int, char*[])
     s = "Second simulated alarum.";
     BOOST_TEST_THROW(alarum() << s << std::flush, std::runtime_error, s);
 
-#if defined __GLIBCPP__ && __GLIBCPP__==20030426
-    std::cout
-        << "This test fails with libstdc++-v3 if ostream.tcc is\n"
-        << "older than version 1.30.2.14 of 2003-12-01T19:39:49 .\n"
-        ;
-#endif // Defective version of libstdc++-v3.
-
     return 0;
 }
 

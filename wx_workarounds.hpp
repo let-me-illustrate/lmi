@@ -26,37 +26,5 @@
 
 #include <wx/defs.h>
 
-// These string-comparison operators became unnecessary in wx-2.5.4,
-// and harmful in wx-2.6.0:
-//   http://lists.gnu.org/archive/html/lmi/2005-08/msg00002.html
-
-#if !wxCHECK_VERSION(2,5,4) // wx prior to version 2.5.4 .
-
-#   include <wx/string.h>
-
-#   include <string>
-
-inline bool operator==(std::string const& s, wxString const& w)
-{
-    return s == w.c_str();
-}
-
-inline bool operator==(wxString const& w, std::string const& s)
-{
-    return s == w.c_str();
-}
-
-inline bool operator!=(std::string const& s, wxString const& w)
-{
-    return s != w.c_str();
-}
-
-inline bool operator!=(wxString const& w, std::string const& s)
-{
-    return s != w.c_str();
-}
-
-#endif // wx prior to version 2.5.4 .
-
 #endif // wx_workarounds_hpp
 

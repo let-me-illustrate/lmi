@@ -59,10 +59,6 @@ LMI_FORCE_LINKING_EX_SITU(group_quote_pdf_generator_wx)
 LMI_FORCE_LINKING_EX_SITU(progress_meter_wx)
 LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 
-#if !wxCHECK_VERSION(3,1,0)
-#   error wxWidgets 3.1.0 or later is required for the test suite.
-#endif
-
 class SkeletonTest;
 DECLARE_APP(SkeletonTest)
 
@@ -230,9 +226,9 @@ class application_test final
 
     fs::path test_files_path_;
 
-    bool run_all_ = true;
+    bool run_all_              {true};
 
-    bool is_distribution_test_ = false;
+    bool is_distribution_test_ {false};
 };
 
 application_test& application_test::instance()

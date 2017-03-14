@@ -567,6 +567,7 @@ MemberSymbolTable<ClassType>::~MemberSymbolTable() = default;
 // addition is attempted.
 
 template<typename ClassType>
+[[noreturn]]
 void MemberSymbolTable<ClassType>::complain_that_no_such_member_is_ascribed
     (std::string const& name
     ) const

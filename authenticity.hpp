@@ -65,7 +65,7 @@ class Authenticity final
 
     static void ResetCache();
 
-    mutable calendar_date CachedDate_ = calendar_date(jdn_t(0));
+    mutable calendar_date CachedDate_ {jdn_t(0)};
 };
 
 /// Authenticate production system and its crucial data files.

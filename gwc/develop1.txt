@@ -115,6 +115,12 @@ make $coefficiency cgi_tests cli_tests >../log 2>&1
 make $coefficiency system_test >../log 2>&1
 make $coefficiency unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf "%d tests succeeded\n") >../log
 
+  # other build types
+
+make $coefficiency all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 |less -S
+make $coefficiency cgi_tests cli_tests build_type=safestdlib  2>&1 |less -S
+make $coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf "%d tests succeeded\n") >../log
+
   # Run a single unit test
 
 make $coefficiency unit_tests unit_test_targets=regex_test.exe >../log 2>&1

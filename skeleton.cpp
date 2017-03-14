@@ -112,11 +112,7 @@ void load_xrc_file_from_data_directory
     ,char const* xrc_filename
     )
 {
-#if wxCHECK_VERSION(2,9,0)
     if(!xml_resources.LoadFile(wxFileName(AddDataDir(xrc_filename))))
-#else  // !wxCHECK_VERSION(2,9,0)
-    if(!xml_resources.Load(AddDataDir(xrc_filename)))
-#endif // !wxCHECK_VERSION(2,9,0)
         {
         alarum() << "Unable to load xml resources." << LMI_FLUSH;
         }
@@ -203,9 +199,7 @@ Skeleton::Skeleton()
 {
     SetAppName("lmi_wx");
 
-#if wxCHECK_VERSION(2,9,0)
     SetAppDisplayName("lmi...");
-#endif // wxCHECK_VERSION(2,9,0)
 
     SetVendorName("lmi");
     config_ = wxConfigBase::Get();
@@ -614,11 +608,7 @@ bool Skeleton::OnExceptionInMainLoop()
 #if !(defined __GNUC__ && LMI_GCC_VERSION < 30405)
         throw;
 #else  // defined __GNUC__ && LMI_GCC_VERSION < 30405
-#   if wxCHECK_VERSION(2,7,0)
         return wxAppBase::OnExceptionInMainLoop();
-#   else  // !wxCHECK_VERSION(2,7,0)
-        return wxAppConsole::OnExceptionInMainLoop();
-#   endif // !wxCHECK_VERSION(2,7,0)
 #endif // defined __GNUC__ && LMI_GCC_VERSION < 30405
         }
     catch(...)
@@ -752,9 +742,7 @@ bool Skeleton::OnInit()
         frame_->CreateStatusBar();
 
         frame_->Bind(wxEVT_MENU_OPEN, &Skeleton::UponMenuOpen, this);
-#if defined LMI_MSW || wxCHECK_VERSION(2,8,10)
         frame_->DragAcceptFiles(true);
-#endif // defined LMI_MSW || wxCHECK_VERSION(2,8,10)
         frame_->Centre(wxBOTH);
         frame_->Maximize(true);
 
@@ -960,11 +948,13 @@ void Skeleton::UponTestAppFatal(wxCommandEvent&)
     alarum()         << "Test alarum() ."         << LMI_FLUSH;
 }
 
+[[noreturn]]
 void Skeleton::UponTestAppStandardException(wxCommandEvent&)
 {
     throw std::runtime_error("Test a standard exception.");
 }
 
+[[noreturn]]
 void Skeleton::UponTestAppArbitraryException(wxCommandEvent&)
 {
     throw "Test an arbitrary exception.";
@@ -1189,14 +1179,7 @@ void Skeleton::UponWindowTileHorizontally(wxCommandEvent&)
 
 void Skeleton::UponWindowTileVertically(wxCommandEvent&)
 {
-#if wxCHECK_VERSION(2,6,0)
     frame_->Tile(wxVERTICAL);
-#else  // !wxCHECK_VERSION(2,6,0)
-    warning()
-        << "Vertical tiling not supported in this old wx version."
-        << LMI_FLUSH
-        ;
-#endif // !wxCHECK_VERSION(2,6,0)
 }
 
 bool Skeleton::ProcessCommandLine()

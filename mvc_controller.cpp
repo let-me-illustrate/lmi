@@ -892,10 +892,3 @@ bool MvcController::Validate()
     return diagnosis.empty();
 }
 
-#if !wxCHECK_VERSION(2,5,4)
-wxWindow* MvcController::FindWindow(long int window_id) const
-{
-    return const_cast<MvcController*>(this)->wxDialog::FindWindow(window_id);
-}
-#endif // !wxCHECK_VERSION(2,5,4)
-

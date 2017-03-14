@@ -53,10 +53,10 @@ class LMI_SO FundInfo final
     std::string const& gloss() const;
 
   private:
-    double      ScalarIMF_ = 0.0;
-    std::string ShortName_ = std::string();
-    std::string LongName_  = std::string();
-    std::string gloss_     = std::string();
+    double      ScalarIMF_ {0.0};
+    std::string ShortName_ {};
+    std::string LongName_  {};
+    std::string gloss_     {};
 };
 
 class LMI_SO FundData final
@@ -79,7 +79,7 @@ class LMI_SO FundData final
     void Read (std::string const& a_Filename);
     void Write(std::string const& a_Filename) const;
 
-    std::vector<FundInfo> FundInfo_;
+    std::vector<FundInfo> FundInfo_ {};
 };
 
 inline double FundInfo::ScalarIMF() const

@@ -25,9 +25,9 @@
 
 #include <wx/defs.h>
 
-#if !wxCHECK_VERSION(2,5,4) // wx prior to version 2.5.4 .
-#   error Outdated library: wx-2.5.4 or greater is required.
-#endif // wx prior to version 2.5.4 .
+#if !wxCHECK_VERSION(3,1,0) // wx prior to version 3.1.0 .
+#   error Outdated library: wx-3.1.0 or greater is required.
+#endif // wx prior to version 3.1.0 .
 
 // Require certain optional wx components.
 

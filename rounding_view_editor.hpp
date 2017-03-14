@@ -48,6 +48,8 @@ class RoundingButtons
         ,long               style = 0
         ,std::string const& name  = wxPanelNameStr
         );
+    RoundingButtons(RoundingButtons const&) = delete;
+    RoundingButtons& operator=(RoundingButtons const&) = delete;
     ~RoundingButtons() override = default;
 
     void Create

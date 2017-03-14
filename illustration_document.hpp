@@ -64,15 +64,12 @@ class IllustrationDocument
 
     // wxDocument overrides.
     bool OnCreate(wxString const& filename, long int flags) override;
-#if !wxCHECK_VERSION(2,9,0)
-    virtual bool OnNewDocument();
-#endif // !wxCHECK_VERSION(2,9,0)
     bool DoOpenDocument(wxString const& filename) override;
     bool DoSaveDocument(wxString const& filename) override;
 
     single_cell_document doc_;
 
-    bool is_phony_ = false;
+    bool is_phony_ {false};
 
     DECLARE_DYNAMIC_CLASS(IllustrationDocument)
 };

@@ -41,7 +41,7 @@
 
 void floating_point_error_handler(int)
 {
-    hobsons_choice() << "Floating point error." << LMI_FLUSH;
+    alarum() << "Floating point error." << LMI_FLUSH;
 
     if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
         {

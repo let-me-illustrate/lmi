@@ -94,15 +94,6 @@ class datum_sequence
     bool keyword_values_are_blocked_;
 };
 
-/// Implementation of pure virtual destructor.
-///
-/// Neither this explicitly-defaulted implementation nor any other can
-/// be written inside the class definition because C++11 [10.4/3] says
-/// "a function declaration cannot provide both a pure-specifier and a
-/// definition".
-
-inline datum_sequence::~datum_sequence() = default;
-
 bool operator==(datum_sequence const&, datum_sequence const&);
 
 // Specialize value_cast<> for each derived class, e.g., as follows:

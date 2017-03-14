@@ -189,15 +189,23 @@ date:
 # useful because releases can easily be found with this command:
 #   git log --follow version.hpp
 
+define version_hpp_text
+$(gpl_notices)
+
+#ifndef version_hpp
+#define version_hpp
+
+#include "config.hpp"
+
+#define LMI_VERSION "$(yyyymmddhhmm)"
+
+#endif // version_hpp
+endef
+export version_hpp_text
+
 .PHONY: release_candidate
 release_candidate:
-	@printf '%b' \
-	  $(gpl_notices) \
-	  '#ifndef version_hpp\n' \
-	  '#define version_hpp\n\n' \
-	  '#include "config.hpp"\n\n' \
-	  '#define LMI_VERSION "$(yyyymmddhhmm)"\n\n' \
-	  '#endif // version_hpp\n' \
+	@$(ECHO) "$$version_hpp_text" \
 	  | $(SED) -e 's/^ *//' \
 	  | $(TR) --delete '\r' \
 	  > version.hpp
@@ -227,28 +235,26 @@ quoted_gpl_html: COPYING
 	| $(TR) --delete '\r' \
 	>$(src_dir)/$@
 
-gpl_notices := \
-"\
-// Copyright (C) $(yyyy) Gregory W. Chicares.\n\
-//\n\
-// This program is free software; you can redistribute it and/or modify\n\
-// it under the terms of the GNU General Public License version 2 as\n\
-// published by the Free Software Foundation.\n\
-//\n\
-// This program is distributed in the hope that it will be useful,\n\
-// but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
-// GNU General Public License for more details.\n\
-//\n\
-// You should have received a copy of the GNU General Public License\n\
-// along with this program; if not, write to the Free Software Foundation,\n\
-// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA\n\
-//\n\
-// http://savannah.nongnu.org/projects/lmi\n\
-// email: <gchicares@sbcglobal.net>\n\
-// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA\n\
-\n\
-"
+define gpl_notices :=
+// Copyright (C) $(yyyy) Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <gchicares@sbcglobal.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+endef
 
 ################################################################################
 

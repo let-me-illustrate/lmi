@@ -1191,19 +1191,6 @@ std::string ledger_format
         s += '%';
         }
 
-#if defined __GNUC__ && LMI_GCC_VERSION <= 40001
-    // COMPILER !! Work around a gcc defect fixed in gcc-4.0.1: see
-    //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20914
-    static std::string const old_string("-,");
-    static std::string const new_string("-");
-    std::string::size_type position = s.find(old_string);
-    while(position != std::string::npos)
-        {
-        s.replace(position, old_string.length(), new_string);
-        position = s.find(old_string, 1 + position);
-        }
-#endif // gcc version less than 4.0.1 .
-
     return s;
 }
 

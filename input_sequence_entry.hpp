@@ -41,6 +41,8 @@ class InputSequenceEntry
   public:
     InputSequenceEntry() = default;
     InputSequenceEntry(wxWindow* parent, wxWindowID id, wxString const& name);
+    InputSequenceEntry(InputSequenceEntry const&) = delete;
+    InputSequenceEntry& operator=(InputSequenceEntry const&) = delete;
     bool Create(wxWindow* parent, wxWindowID id, wxString const& name);
 
     void input(Input const& input);
@@ -60,12 +62,12 @@ class InputSequenceEntry
 
     void DoOpenEditor();
 
-    Input const* input_ = nullptr;
-    std::string field_name_;
+    Input const* input_     {nullptr};
+    std::string field_name_ {};
 
-    wxTextCtrl* text_;
-    wxButton*   button_;
-    wxString    title_;
+    wxTextCtrl* text_       {nullptr};
+    wxButton*   button_     {nullptr};
+    wxString    title_      {};
 };
 
 class InputSequenceEntryXmlHandler

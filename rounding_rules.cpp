@@ -65,7 +65,9 @@ template<> struct xml_io<rounding_parameters>
 ///   any_member::str()
 /// which is not useful here.
 
-template<> std::string value_cast<std::string>(rounding_parameters const&)
+template<>
+[[noreturn]]
+std::string value_cast<std::string>(rounding_parameters const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";
@@ -77,7 +79,9 @@ template<> std::string value_cast<std::string>(rounding_parameters const&)
 ///   any_member::operator=(std::string const&)
 /// which is not useful here.
 
-template<> rounding_parameters value_cast<rounding_parameters>(std::string const&)
+template<>
+[[noreturn]]
+rounding_parameters value_cast<rounding_parameters>(std::string const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
     throw "Unreachable--silences a compiler diagnostic.";

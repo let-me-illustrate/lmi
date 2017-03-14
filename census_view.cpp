@@ -351,6 +351,9 @@ struct input_sequence_variant_data
     {
     }
 
+    input_sequence_variant_data(input_sequence_variant_data const&) = delete;
+    input_sequence_variant_data& operator=(input_sequence_variant_data const&) = delete;
+
     bool Eq(wxVariantData& data) const override
     {
         input_sequence_variant_data* d = dynamic_cast<input_sequence_variant_data*>(&data);
@@ -376,6 +379,8 @@ class DatumSequenceRenderer
 {
   public:
     DatumSequenceRenderer();
+    DatumSequenceRenderer(DatumSequenceRenderer const&) = delete;
+    DatumSequenceRenderer& operator=(DatumSequenceRenderer const&) = delete;
     bool HasEditorCtrl() const override { return true; }
     wxWindow* CreateEditorCtrl(wxWindow* parent, wxRect labelRect, wxVariant const& value) override;
     bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value) override;
@@ -1516,12 +1521,6 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         cell_parms().erase(erasures[j] + cell_parms().begin());
         }
     LMI_ASSERT(cell_parms().size() == n_items - n_sel_items);
-
-#if !wxCHECK_VERSION(2,9,3)
-    // Remove selection to work around wx-2.9.2 bug in GetSelections()
-    // (we'll set it again below).
-    list_window_->UnselectAll();
-#endif
 
     // Send notifications about changes to the wxDataViewCtrl model. Two things
     // changed: some rows were deleted and cell number of some rows shifted

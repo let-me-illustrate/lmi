@@ -254,28 +254,5 @@ void LMI_SO test_catastrophe_report();
     << ", line " << __LINE__ << "]\n" \
     << std::flush
 
-/// (Hopefully the name of this macro is self documenting.)
-///
-/// Weak assertion that users are allowed to bypass. Use LMI_ASSERT
-/// instead wherever possible.
-///
-/// The last line eats a semicolon written after the macro invocation.
-///
-/// TODO ?? It is generally a bad idea to let users bypass assertions.
-/// Any apparent need to do this probably masks a logic error.
-
-#define HOPEFULLY(condition)                                    \
-    do                                                          \
-        {                                                       \
-        if(!(condition))                                        \
-            {                                                   \
-            hobsons_choice()                                    \
-                << "Assertion '" << (#condition) << "' failed." \
-                << LMI_FLUSH                                    \
-                ;                                               \
-            }                                                   \
-        }                                                       \
-    while(0)
-
 #endif // alert_hpp
 

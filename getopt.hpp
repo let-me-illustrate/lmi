@@ -315,7 +315,8 @@ class LMI_SO GetOpt
     GetOpt(int argc, char** argv, char const* optstring);
     GetOpt(int argc, char** argv, char const* optstring,
             Option const* longopts, int* longind, int long_only);
-
+    GetOpt(GetOpt const&) = delete;
+    GetOpt& operator=(GetOpt const&) = delete;
     ~GetOpt() = default; // Added by GWC.
 
     int operator()();
