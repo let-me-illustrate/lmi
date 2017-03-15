@@ -548,6 +548,7 @@ class MemberSymbolTable
     MemberSymbolTable(MemberSymbolTable const&) = delete;
     MemberSymbolTable& operator=(MemberSymbolTable const&) = delete;
 
+    [[noreturn]]
     void complain_that_no_such_member_is_ascribed(std::string const&) const;
 
     member_map_type map_;
