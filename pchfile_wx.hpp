@@ -21,8 +21,8 @@
 
 // In every '.cpp' file that is expected to benefit from precompiled
 // headers, include exactly one of these PCH headers:
-//   pchfile.hpp
-//   pchfile_wx.hpp
+//   pchfile.hpp    // For TUs included in a non-wx-dependent library
+//   pchfile_wx.hpp // For TUs included in a     wx-dependent library
 // Include it before anything else except comments and whitespace.
 // Never include any PCH header in any other file.
 
