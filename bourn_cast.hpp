@@ -70,7 +70,7 @@
 /// which may be an independent redesign.
 
 template<typename To, typename From>
-To bourn_cast(From from)
+inline To bourn_cast(From from)
 {
 #   if defined __GNUC__
 #       pragma GCC diagnostic push
