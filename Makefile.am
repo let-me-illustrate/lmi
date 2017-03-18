@@ -89,6 +89,7 @@ TESTS = \
     test_any_member \
     test_assert_lmi \
     test_authenticity \
+    test_bourn_cast \
     test_cache_file_reads \
     test_calendar_date \
     test_callback \
@@ -578,6 +579,12 @@ test_authenticity_SOURCES = \
 test_authenticity_CXXFLAGS = $(AM_CXXFLAGS)
 test_authenticity_LDADD = \
   $(BOOST_LIBS)
+
+test_bourn_cast_SOURCES = \
+  $(common_test_objects) \
+  bourn_cast_test.cpp \
+  timer.cpp
+test_bourn_cast_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_cache_file_reads_SOURCES = \
   $(common_test_objects) \
@@ -1084,6 +1091,7 @@ noinst_HEADERS = \
     assert_lmi.hpp \
     authenticity.hpp \
     basic_values.hpp \
+    bourn_cast.hpp \
     cache_file_reads.hpp \
     calendar_date.hpp \
     callback.hpp \

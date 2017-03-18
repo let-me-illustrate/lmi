@@ -400,6 +400,7 @@ unit_test_targets := \
   any_member_test \
   assert_lmi_test \
   authenticity_test \
+  bourn_cast_test \
   cache_file_reads_test \
   calendar_date_test \
   callback_test \
@@ -516,6 +517,11 @@ authenticity_test$(EXEEXT): \
   path_utility.o \
   system_command.o \
   system_command_non_wx.o \
+
+bourn_cast_test$(EXEEXT): \
+  $(common_test_objects) \
+  bourn_cast_test.o \
+  timer.o \
 
 cache_file_reads_test$(EXEEXT): \
   $(boost_filesystem_objects) \
