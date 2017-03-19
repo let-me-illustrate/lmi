@@ -70,6 +70,9 @@
 /// which may be an independent redesign.
 
 template<typename To, typename From>
+#if 201402L < __cplusplus
+constexpr
+#endif // 201402L < __cplusplus
 inline To bourn_cast(From from)
 {
     using to_traits   = std::numeric_limits<To>;
