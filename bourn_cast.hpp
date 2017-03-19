@@ -72,15 +72,15 @@
 template<typename To, typename From>
 inline To bourn_cast(From from)
 {
-#   if defined __GNUC__
-#       pragma GCC diagnostic push
-#       pragma GCC diagnostic ignored "-Wsign-compare"
-#   endif // defined __GNUC__
     using to_traits   = std::numeric_limits<To>;
     using from_traits = std::numeric_limits<From>;
     static_assert(  to_traits::is_specialized, "");
     static_assert(from_traits::is_specialized, "");
 
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wsign-compare"
+#endif // defined __GNUC__
     if(! to_traits::is_signed && from < 0)
         throw std::runtime_error("Cast would convert negative to unsigned.");
     if(from_traits::is_signed && from < to_traits::lowest())
@@ -88,9 +88,9 @@ inline To bourn_cast(From from)
     if(to_traits::max() < from)
         throw std::runtime_error("Cast would transgress upper limit.");
     return static_cast<To>(from);
-#   if defined __GNUC__
-#       pragma GCC diagnostic pop
-#   endif // defined __GNUC__
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
 }
 
 #endif // bourn_cast_hpp
