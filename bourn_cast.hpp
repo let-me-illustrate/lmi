@@ -83,6 +83,9 @@ inline To bourn_cast(From from)
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wsign-compare"
+#   if __GNUC__ >= 5
+#       pragma GCC diagnostic ignored "-Wbool-compare"
+#   endif // __GNUC__ >= 5
 #endif // defined __GNUC__
     if(! to_traits::is_signed && from < 0)
         throw std::runtime_error("Cast would convert negative to unsigned.");
