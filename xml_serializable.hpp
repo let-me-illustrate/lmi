@@ -69,7 +69,10 @@ class LMI_SO xml_serializable
     void immit_members_into(xml::element&) const;
 
     // Class (T) identification.
+
+    /// Backward-compatibility serial number of class T's xml version.
     virtual int                class_version() const = 0;
+    /// Root tag (when T is saved as the root of a document).
     virtual std::string const& xml_root_name() const = 0;
 
     // Reading and writing.
