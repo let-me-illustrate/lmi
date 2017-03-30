@@ -88,7 +88,7 @@ inline To bourn_cast(From from)
 #   endif // 5 <= __GNUC__
 #endif // defined __GNUC__
     if(! to_traits::is_signed && from < 0)
-        throw std::runtime_error("Cast would convert negative to unsigned.");
+        throw std::runtime_error("Cannot cast negative to unsigned.");
     if(from_traits::is_signed && from < to_traits::lowest())
         throw std::runtime_error("Cast would transgress lower limit.");
     if(to_traits::max() < from)

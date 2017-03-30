@@ -253,7 +253,7 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (bourn_cast<bool>((signed char)(-1))
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     // Cast from signed to unsigned.
@@ -277,27 +277,27 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (bourn_cast<unsigned char>(std::numeric_limits<signed char>::lowest())
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     BOOST_TEST_THROW
         (bourn_cast<unsigned int >(std::numeric_limits<signed int >::lowest())
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     // Still forbidden even if unsigned type is wider.
     BOOST_TEST_THROW
         (bourn_cast<unsigned long>(std::numeric_limits<signed char>::lowest())
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     // Still forbidden even if value is only "slightly" negative.
     BOOST_TEST_THROW
         (bourn_cast<unsigned long>(-1)
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     // Transgress lower limit. It is not possible to write a unit test
