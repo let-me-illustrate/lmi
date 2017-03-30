@@ -75,7 +75,7 @@ constexpr
 #endif // 201402L < __cplusplus
 inline To bourn_cast(From from)
 {
-    using to_traits   = std::numeric_limits<To>;
+    using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
     static_assert(  to_traits::is_specialized, "");
     static_assert(from_traits::is_specialized, "");
