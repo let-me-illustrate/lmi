@@ -27,7 +27,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <climits>                      // LLONG_MIN, SCHAR_MIN, etc.
+#include <climits>                      // INT_MIN, LLONG_MIN, SCHAR_MIN
 #include <type_traits>                  // std::conditional
 
 /// Test trivial casts between identical types.
