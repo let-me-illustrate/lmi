@@ -151,53 +151,63 @@ void test_signednesses(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL(ITo(-9), bourn_cast<ITo>(LFrom(-9)), file, line);
 }
 
-/// Directly assign unsigned to signed a million times, for timing.
-///
-/// One million is guaranteed to be within range, because LONG_MAX
-/// can be no lower than the eighth Mersenne prime, and ULONG_MAX
-/// must be even greater.
+/// Speed test: convert one million times, using static_cast.
 
-void mete_direct()
+template<typename To, typename From>
+void mete_static()
 {
-    volatile signed long int z = 0;
-    for(unsigned long int j = 0; j < 1000000; ++j)
+    enum {N = 1000000};
+    using from_traits = std::numeric_limits<From>;
+    static_assert(from_traits::is_specialized, "");
+    static_assert(N < from_traits::max(), "");
+    volatile To z(0);
+    for(From j = 0; j < N; ++j)
         {
-        z = j;
+        z = static_cast<To>(j);
         }
     stifle_warning_for_unused_variable(z);
 }
 
-/// Convert signed to unsigned a million times, for timing.
+/// Speed test: convert one million times, using bourn_cast.
 
-void mete_signed_to_unsigned()
+template<typename To, typename From>
+void mete_bourn()
 {
-    volatile unsigned long int z = 0;
-    for(signed long int j = 0; j < 1000000; ++j)
+    enum {N = 1000000};
+    using from_traits = std::numeric_limits<From>;
+    static_assert(from_traits::is_specialized, "");
+    static_assert(N < from_traits::max(), "");
+    volatile To z(0);
+    for(From j = 0; j < N; ++j)
         {
-        z = bourn_cast<unsigned long int>(j);
-        }
-    stifle_warning_for_unused_variable(z);
-}
-
-/// Convert unsigned to signed a million times, for timing.
-
-void mete_unsigned_to_signed()
-{
-    volatile signed long int z = 0;
-    for(unsigned long int j = 0; j < 1000000; ++j)
-        {
-        z = bourn_cast<signed long int>(j);
+        z = bourn_cast<To>(j);
         }
     stifle_warning_for_unused_variable(z);
 }
 
 void assay_speed()
 {
+    using D  =            double;
+    using F  =             float;
+    using SL =   signed long int;
+    using UL = unsigned long int;
     std::cout
-        << "\n  Speed tests..."
-        << "\n  direct: " << TimeAnAliquot(mete_direct)
-        << "\n  S to U: " << TimeAnAliquot(mete_signed_to_unsigned)
-        << "\n  U to S: " << TimeAnAliquot(mete_unsigned_to_signed)
+        << "\n  Speed tests (Double, Float, Signed, Unsigned):"
+        << "\n"
+        << "\n  static_cast<U>(S): " << TimeAnAliquot(mete_static<UL,SL>)
+        << "\n   bourn_cast<U>(S): " << TimeAnAliquot(mete_bourn <UL,SL>)
+        << "\n   bourn_cast<S>(U): " << TimeAnAliquot(mete_bourn <SL,UL>)
+        << "\n"
+        << "\n  static_cast<D>(U): " << TimeAnAliquot(mete_static<D,UL>)
+        << "\n   bourn_cast<D>(U): " << TimeAnAliquot(mete_bourn <D,UL>)
+        << "\n"
+        << "\n  static_cast<U>(D): " << TimeAnAliquot(mete_static<UL,D>)
+        << "\n   bourn_cast<U>(D): " << TimeAnAliquot(mete_bourn <UL,D>)
+        << "\n   bourn_cast<S>(D): " << TimeAnAliquot(mete_bourn <SL,D>)
+        << "\n"
+        << "\n  static_cast<F>(D): " << TimeAnAliquot(mete_static<F,D>)
+        << "\n   bourn_cast<F>(D): " << TimeAnAliquot(mete_bourn <F,D>)
+        << "\n   bourn_cast<D>(F): " << TimeAnAliquot(mete_bourn <D,F>)
         << std::endl
         ;
 }
