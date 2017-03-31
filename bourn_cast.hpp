@@ -24,50 +24,46 @@
 
 #include "config.hpp"
 
+#include <cmath>                        // isinf(), isnan(), signbit()
 #include <limits>
 #include <stdexcept>
 
 /// Numeric stinted cast, across whose bourn no value is returned.
 ///
 /// Perform a static_cast between numeric types, but throw if the
-/// value is out of range. For example:
-///   bourn_cast<unsigned int>( 1); // Returns 1U.
-///   bourn_cast<unsigned int>(-1); // Throws.
-///
-/// Motivation: To convert between integral types that may differ in
-/// size and signedness, iff the value is between the maximum and
-/// minimum values permitted for the target (From) type. Because of
-/// the properties of integers, conversion between integral types
-/// either preserves the notional value, or throws.
+/// value cannot be preserved. For example:
+///   bourn_cast<unsigned int>( 1);        // Returns 1U.
+///   bourn_cast<unsigned int>(-1);        // Throws.
+///   bourn_cast<bool>(INT_MAX);           // Throws: out of range.
+///   bourn_cast<float>((double)INFINITY); // Returns infinity.
+///   bourn_cast<int>  ((double)INFINITY); // Throws.
+///   bourn_cast<unsigned int>(3.0);       // Returns 3U.
+///   bourn_cast<unsigned int>(3.14);      // Throws: 3.14 != 3.0U.
 ///
 /// Both From and To must be types for which std::numeric_limits is
-/// specialized. Use with floating-point types is neither forbidden
-/// nor encouraged. Integral-to-floating conversion is highly unlikely
+/// specialized. Integral-to-floating conversion is highly unlikely
 /// to exceed bounds, but may lose precision. Floating-to-integral
-/// conversion is extremely unlikely to preserve value, so a rounding
-/// facility is generally preferable. No special attention is given to
-/// exotic values such as infinities, NaNs, or negative zero. For now,
-/// bourn_cast<>() is intended as a simple replacement for the heavier
-/// "improved" boost::numeric_cast<>(), but in the future floating-
-/// point types may be forbidden.
+/// conversion is extremely unlikely to preserve value, in which case
+/// an exception is thrown; but bourn_cast is appropriate for casting
+/// an already-rounded integer-valued floating value to another type.
 ///
-/// This is a derived work based on Kevlin Henney's numeric_cast,
-/// which is presented on his site without any copyright notice:
-///   http://www.two-sdg.demon.co.uk/curbralan/code/numeric_cast/numeric_cast.hpp
-/// and also as part of boost, with the following notice:
-///   (C) Copyright Kevlin Henney and Dave Abrahams 1999.
-///   Distributed under the Boost Software License, Version 1.0.
-/// According to
-///   http://www.gnu.org/philosophy/license-list.html
-///   "This is a simple, permissive non-copyleft free software
-///   license, compatible with the GNU GPL."
+/// bourn_cast<>() is intended as a simple and correct replacement for
+/// boost::numeric_cast<>(), which does the wrong thing in some cases:
+///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
+///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00128.html
+/// It behaves the same way as boost::numeric_cast<>() except that,
+/// instead of quietly truncating, it throws on floating-to-integral
+/// conversions that would not preserve value.
 ///
-/// Rewritten by Gregory W. Chicares in 2017. Any defect here should
-/// not reflect on Kevlin Henney's reputation.
-///
-/// Also see:
-///   https://groups.google.com/forum/#!original/comp.std.c++/WHu6gUiwXkU/ZyV_ejRrXFYJ
-/// which may be an independent redesign.
+/// Facilities provided by <limits> are used to the exclusion of
+/// <type_traits> functions such as
+///   is_arithmetic()
+///   is_floating_point()
+///   is_integral()
+///   is_signed()
+///   is_unsigned()
+/// so that UDTs with std::numeric_limits specializations can work
+/// as expected.
 
 template<typename To, typename From>
 #if 201402L < __cplusplus
@@ -80,6 +76,9 @@ inline To bourn_cast(From from)
     static_assert(  to_traits::is_specialized, "");
     static_assert(from_traits::is_specialized, "");
 
+    static_assert(  to_traits::is_integer ||   to_traits::is_iec559, "");
+    static_assert(from_traits::is_integer || from_traits::is_iec559, "");
+
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wsign-compare"
@@ -87,13 +86,84 @@ inline To bourn_cast(From from)
 #       pragma GCC diagnostic ignored "-Wbool-compare"
 #   endif // 5 <= __GNUC__
 #endif // defined __GNUC__
-    if(! to_traits::is_signed && from < 0)
-        throw std::runtime_error("Cannot cast negative to unsigned.");
-    if(from_traits::is_signed && from < to_traits::lowest())
-        throw std::runtime_error("Cast would transgress lower limit.");
-    if(to_traits::max() < from)
-        throw std::runtime_error("Cast would transgress upper limit.");
-    return static_cast<To>(from);
+
+    // Floating to floating.
+    //
+    // Handle special cases first:
+    //  - infinities are interconvertible: no exception wanted;
+    //  - C++11 [4.8/1] doesn't require static_cast to DTRT for NaNs.
+    if(!to_traits::is_integer && !from_traits::is_integer)
+        {
+        if(std::isnan(from))
+            return to_traits::quiet_NaN();
+        if(std::isinf(from))
+            return
+                std::signbit(from)
+                ? -to_traits::infinity()
+                :  to_traits::infinity()
+                ;
+        if(from < to_traits::lowest())
+            throw std::runtime_error("Cast would transgress lower limit.");
+        if(to_traits::max() < from)
+            throw std::runtime_error("Cast would transgress upper limit.");
+        return static_cast<To>(from);
+        }
+
+    // Integral to floating.
+    if(!to_traits::is_integer && from_traits::is_integer)
+        {
+        if(from < to_traits::lowest())
+            throw std::runtime_error("Cast would transgress lower limit.");
+        if(to_traits::max() < from)
+            throw std::runtime_error("Cast would transgress upper limit.");
+        return static_cast<To>(from);
+        }
+
+    // Floating to integral.
+    //
+    // Assume integral types have a two's complement representation.
+    // Ones' complement might be handled thus [untested]:
+    //  - if(from < to_traits::lowest())
+    //  + if(from <= From(to_traits::lowest()) - 1)
+    if(to_traits::is_integer && !from_traits::is_integer)
+        {
+        if(std::isnan(from))
+            throw std::runtime_error("Cannot cast NaN to integral.");
+        if(from < to_traits::lowest())
+            throw std::runtime_error("Cast would transgress lower limit.");
+        if(From(to_traits::max()) + 1 <= from)
+            throw std::runtime_error("Cast would transgress upper limit.");
+        To const r = static_cast<To>(from);
+        if(r != from)
+            throw std::runtime_error("Cast would not preserve value.");
+        return r;
+        }
+
+    // Integral to integral.
+    //
+    // Converts between integral types that may differ in size and
+    // signedness, iff the value is between the maximum and minimum
+    // values permitted for the target (To) type. Because of the
+    // properties of integers, conversion between integral types
+    // either preserves the notional value, or throws.
+    //
+    // The underlying idea is discussed here:
+    //   https://groups.google.com/forum/#!original/comp.std.c++/WHu6gUiwXkU/ZyV_ejRrXFYJ
+    // and here:
+    //   http://www.two-sdg.demon.co.uk/curbralan/code/numeric_cast/numeric_cast.hpp
+    // and embodied in Kevlin Henney's original boost:numeric_cast,
+    // distributed under the GPL-compatible Boost Software License.
+    if(to_traits::is_integer && from_traits::is_integer)
+        {
+        if(! to_traits::is_signed && from < 0)
+            throw std::runtime_error("Cannot cast negative to unsigned.");
+        if(from_traits::is_signed && from < to_traits::lowest())
+            throw std::runtime_error("Cast would transgress lower limit.");
+        if(to_traits::max() < from)
+            throw std::runtime_error("Cast would transgress upper limit.");
+        return static_cast<To>(from);
+        }
+
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
