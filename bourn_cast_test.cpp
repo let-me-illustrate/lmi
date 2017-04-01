@@ -21,13 +21,37 @@
 
 #include "pchfile.hpp"
 
-#include "bourn_cast.hpp"
+//#define TEST_BOOST_CAST_INSTEAD
+#if defined TEST_BOOST_CAST_INSTEAD
+#   include <boost/cast.hpp>
+template<typename To, typename From>
+inline To bourn_cast(From from)
+{
+    try
+        {
+        return boost::numeric_cast<To>(from);
+        }
+    catch(boost::numeric::positive_overflow)
+        {
+        throw std::runtime_error("Cast would transgress upper limit.");
+        }
+    catch(boost::numeric::negative_overflow)
+        {
+        using   to_traits = std::numeric_limits<To  >;
+        using from_traits = std::numeric_limits<From>;
+        if(from_traits::is_integer && !to_traits::is_signed && from < 0)
+            throw std::runtime_error("Cannot cast negative to unsigned.");
+        else
+            throw std::runtime_error("Cast would transgress lower limit.");
+        }
+}
+#else  // !defined TEST_BOOST_CAST_INSTEAD
+#   include "bourn_cast.hpp"
+#endif // !defined TEST_BOOST_CAST_INSTEAD
 
 #include "miscellany.hpp"               // stifle_warning_for_unused_variable()
 #include "test_tools.hpp"
 #include "timer.hpp"
-
-#include <boost/cast.hpp>
 
 #include <climits>                      // INT_MIN, LLONG_MIN, SCHAR_MIN
 #include <type_traits>                  // std::conditional
@@ -166,48 +190,55 @@ void test_boost_anomalies()
     // operand cannot be represented in the destination format and this
     // cannot otherwise be indicated, the invalid operation exception shall
     // be signaled."
-    int nan = boost::numeric_cast<int>(double_limits::quiet_NaN());
-    std::cout << "Integer converted from NaN = " << nan << std::endl;
+    BOOST_TEST_THROW
+        (bourn_cast<int>(double_limits::quiet_NaN())
+        ,std::runtime_error
+        ,"Cannot cast NaN to integral."
+        );
 
     // IEEE 754-2008 [6.1]: "Operations on infinite operands are usually
     // exact and therefore signal no exceptions, including ... conversion of
     // an infinity into the same infinity in another format."
     try
         {
-        boost::numeric_cast<long double>(double_limits::infinity());
-        std::cout << "That worked, so this should too..." << std::endl;
-        boost::numeric_cast<float>(double_limits::infinity());
-        std::cout << "...because all infinities are convertible." << std::endl;
+        bourn_cast<long double>(double_limits::infinity());
+        // That worked, so this should too...
+        bourn_cast<float>(double_limits::infinity());
+        // ...because all infinities are convertible.
+        BOOST_TEST(true);
         }
-    catch(...){std::cout << "Line " << __LINE__ << ": bad throw." << std::endl;}
+    catch(...) {BOOST_TEST(false);}
 
     try
         {
-        boost::numeric_cast<int>(INT_MIN);
-        boost::numeric_cast<int>((double)INT_MIN);
-        std::cout << "That worked, so this should too..." << std::endl;
-        boost::numeric_cast<int>((float)INT_MIN);
-        std::cout << "...because INT_MIN = an exact power of 2." << std::endl;
+        bourn_cast<int>(INT_MIN);
+        bourn_cast<int>((double)INT_MIN);
+        // That worked, so this should too...
+        bourn_cast<int>((float)INT_MIN);
+        // ...because INT_MIN = an exact power of 2.
+        BOOST_TEST(true);
         }
-    catch(...){std::cout << "Line " << __LINE__ << ": bad throw." << std::endl;}
+    catch(...) {BOOST_TEST(false);}
 
     try
         {
-        boost::numeric_cast<long long int>((long double)LLONG_MIN);
-        std::cout << "That worked, so this should too..." << std::endl;
-        boost::numeric_cast<long long int>((float)LLONG_MIN);
-        std::cout << "...because LLONG_MIN = an exact power of 2." << std::endl;
+        bourn_cast<long long int>((long double)LLONG_MIN);
+        // That worked, so this should too...
+        bourn_cast<long long int>((float)LLONG_MIN);
+        // ...because LLONG_MIN = an exact power of 2.
+        BOOST_TEST(true);
         }
-    catch(...){std::cout << "Line " << __LINE__ << ": bad throw." << std::endl;}
+    catch(...) {BOOST_TEST(false);}
 
     try
         {
-        boost::numeric_cast<long long int>((long double)LLONG_MIN);
-        std::cout << "That worked, so this should too..." << std::endl;
-        boost::numeric_cast<long long int>((double)LLONG_MIN);
-        std::cout << "...because LLONG_MIN = an exact power of 2." << std::endl;
+        bourn_cast<long long int>((long double)LLONG_MIN);
+        // That worked, so this should too...
+        bourn_cast<long long int>((double)LLONG_MIN);
+        // ...because LLONG_MIN = an exact power of 2.
+        BOOST_TEST(true);
         }
-    catch(...){std::cout << "Line " << __LINE__ << ": bad throw." << std::endl;}
+    catch(...) {BOOST_TEST(false);}
 }
 
 /// Speed test: convert one million times, using static_cast.
