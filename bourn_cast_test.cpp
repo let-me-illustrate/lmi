@@ -50,6 +50,7 @@ inline To bourn_cast(From from)
 #endif // !defined TEST_BOOST_CAST_INSTEAD
 
 #include "miscellany.hpp"               // stifle_warning_for_unused_variable()
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -175,6 +176,106 @@ void test_signednesses(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL(CTo(-9), bourn_cast<CTo>(IFrom(-9)), file, line);
     INVOKE_BOOST_TEST_EQUAL(CTo(-9), bourn_cast<CTo>(LFrom(-9)), file, line);
     INVOKE_BOOST_TEST_EQUAL(ITo(-9), bourn_cast<ITo>(LFrom(-9)), file, line);
+}
+
+/// Test floating-point conversions [conv.double].
+///
+/// Calling this for every combination of {float, double, long double}
+/// means that any commutative test is performed twice, but making the
+/// code more complex to avoid that is a poor idea because this entire
+/// unit test takes only about a microsecond to run.
+
+template<typename To, typename From>
+void test_floating_conversions(char const* file, int line)
+{
+    using   to_traits = std::numeric_limits<To  >;
+    using from_traits = std::numeric_limits<From>;
+
+    static_assert(  to_traits::is_iec559, "");
+    static_assert(from_traits::is_iec559, "");
+
+    // std::isnormal values representable in any IEC559 'arithmetic
+    // format' (i.e., excluding the binary16 'interchange format').
+
+    From const largenum = nonstd::power(From(2), 100);
+    From const smallnum = From(1) / largenum;
+    INVOKE_BOOST_TEST_EQUAL(largenum, bourn_cast<To>(largenum), file, line);
+    INVOKE_BOOST_TEST_EQUAL(smallnum, bourn_cast<To>(smallnum), file, line);
+
+    // Normal min, max, and lowest.
+
+    From const from_min = from_traits::min();
+    From const from_max = from_traits::max();
+    From const from_low = from_traits::lowest();
+
+    if(from_traits::digits10 <= to_traits::digits10) // Widening or same.
+        {
+        INVOKE_BOOST_TEST_EQUAL(from_min, bourn_cast<To>(from_min), file, line);
+        INVOKE_BOOST_TEST_EQUAL(from_max, bourn_cast<To>(from_max), file, line);
+        INVOKE_BOOST_TEST_EQUAL(from_low, bourn_cast<To>(from_low), file, line);
+        }
+    else // Narrowing.
+        {
+        INVOKE_BOOST_TEST_EQUAL(To(0), bourn_cast<To>(from_min), file, line);
+        BOOST_TEST_THROW
+            (bourn_cast<To>(from_max)
+            ,std::runtime_error
+            ,"Cast would transgress upper limit."
+            );
+        BOOST_TEST_THROW
+            (bourn_cast<To>(from_low)
+            ,std::runtime_error
+            ,"Cast would transgress lower limit."
+            );
+        }
+
+    // Signed zeros.
+
+    INVOKE_BOOST_TEST_EQUAL(0.0, bourn_cast<To>( From(0)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(0.0, bourn_cast<To>(-From(0)), file, line);
+    INVOKE_BOOST_TEST(!std::signbit(bourn_cast<To>( From(0))), file, line);
+    INVOKE_BOOST_TEST( std::signbit(bourn_cast<To>(-From(0))), file, line);
+
+    // Infinities.
+
+    To   const   to_inf =   to_traits::infinity();
+    From const from_inf = from_traits::infinity();
+#if !defined TEST_BOOST_CAST_INSTEAD
+    INVOKE_BOOST_TEST( std::isinf(bourn_cast<To>( from_inf)), file, line);
+    INVOKE_BOOST_TEST( std::isinf(bourn_cast<To>(-from_inf)), file, line);
+    INVOKE_BOOST_TEST(!std::signbit(bourn_cast<To>( from_inf)), file, line);
+    INVOKE_BOOST_TEST( std::signbit(bourn_cast<To>(-from_inf)), file, line);
+    INVOKE_BOOST_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
+    INVOKE_BOOST_TEST_EQUAL(-to_inf, bourn_cast<To>(-from_inf), file, line);
+#else  // defined TEST_BOOST_CAST_INSTEAD
+    // Boost doesn't allow conversion of infinities to a narrower
+    // floating type, presumably because is presumptively permits
+    // conversion to the same or a wider floating type.
+    if(from_traits::digits10 <= to_traits::digits10) // Widening or same.
+        {
+        INVOKE_BOOST_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
+        INVOKE_BOOST_TEST_EQUAL(-to_inf, bourn_cast<To>(-from_inf), file, line);
+        }
+    else
+        {
+        INVOKE_BOOST_TEST(false, file, line); // This should be allowed.
+        BOOST_TEST_THROW
+            (bourn_cast<To>( from_traits::infinity())
+            ,std::runtime_error
+            ,"Cast would transgress upper limit."
+            );
+        BOOST_TEST_THROW
+            (bourn_cast<To>(-from_traits::infinity())
+            ,std::runtime_error
+            ,"Cast would transgress lower limit."
+            );
+        }
+#endif // defined TEST_BOOST_CAST_INSTEAD
+
+    // NaNs.
+
+    From const from_qnan = from_traits::quiet_NaN();
+    INVOKE_BOOST_TEST(std::isnan(bourn_cast<To>(from_qnan)), file, line);
 }
 
 /// Test boost::numeric_cast anomalies reported here:
@@ -371,6 +472,18 @@ int test_main(int, char*[])
     // Cast from unsigned to unsigned.
 
     test_signednesses<false,false>(__FILE__, __LINE__);
+
+    // Cast between floating types.
+
+    test_floating_conversions<float      , float      >(__FILE__, __LINE__);
+    test_floating_conversions<float      , double     >(__FILE__, __LINE__);
+    test_floating_conversions<float      , long double>(__FILE__, __LINE__);
+    test_floating_conversions<double     , float      >(__FILE__, __LINE__);
+    test_floating_conversions<double     , double     >(__FILE__, __LINE__);
+    test_floating_conversions<double     , long double>(__FILE__, __LINE__);
+    test_floating_conversions<long double, float      >(__FILE__, __LINE__);
+    test_floating_conversions<long double, double     >(__FILE__, __LINE__);
+    test_floating_conversions<long double, long double>(__FILE__, __LINE__);
 
     // Attempt forbidden conversion from negative to unsigned.
 
