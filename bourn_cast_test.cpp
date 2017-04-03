@@ -278,6 +278,134 @@ void test_floating_conversions(char const* file, int line)
     INVOKE_BOOST_TEST(std::isnan(bourn_cast<To>(from_qnan)), file, line);
 }
 
+/// Test conversions between integral and floating types [conv.fpint].
+
+template<typename I, typename F>
+void test_conv_fpint(char const* file, int line)
+{
+    using i_traits = std::numeric_limits<I>;
+    using f_traits = std::numeric_limits<F>;
+
+    static_assert(i_traits::is_integer, "");
+    static_assert(f_traits::is_iec559, "");
+
+    // Make sure 'digits' comparisons below are valid.
+    static_assert(2 == i_traits::radix, "");
+    static_assert(2 == f_traits::radix, "");
+
+    // Integral to floating.
+
+    I const i_hi = i_traits::max();
+    F const f_i_hi = bourn_cast<F>(i_hi);
+
+    if(i_traits::digits <= f_traits::digits)
+        {
+        INVOKE_BOOST_TEST_EQUAL(i_hi, bourn_cast<I>(f_i_hi), file, line);
+        }
+    else
+        {
+        BOOST_TEST_THROW
+            (bourn_cast<I>(f_i_hi)
+            ,std::runtime_error
+            ,"Cast would transgress upper limit."
+            );
+        }
+
+    I const i_lo = i_traits::lowest();
+    F const f_i_lo = bourn_cast<F>(i_lo);
+
+#if !defined TEST_BOOST_CAST_INSTEAD
+    INVOKE_BOOST_TEST_EQUAL(i_lo, bourn_cast<I>(f_i_lo), file, line);
+#else  // defined TEST_BOOST_CAST_INSTEAD
+    // boost::numeric_cast throws on conversions:
+    // -9223372036854775808.0f --> 64-bit signed int
+    //          -2147483648.0f --> 32-bit signed int
+    // -9223372036854775808.0  --> 64-bit signed int
+    if(!i_traits::is_signed || i_traits::digits <= f_traits::digits)
+        {
+        INVOKE_BOOST_TEST_EQUAL(i_lo, bourn_cast<I>(f_i_lo), file, line);
+        }
+    else
+        {
+        BOOST_TEST_THROW
+            (bourn_cast<I>(f_i_lo)
+            ,std::runtime_error
+            ,"This cast should have succeeded."
+            );
+        }
+#endif // defined TEST_BOOST_CAST_INSTEAD
+
+    // Floating to integral.
+
+    // Widening: not possible with standard arithmetic types.
+
+    // Narrowing.
+
+    // Converting an integer-valued floating-point number to an
+    // integral type preserves value: there is no truncation.
+    INVOKE_BOOST_TEST_EQUAL(I(3), bourn_cast<I>(F(3)), file, line);
+
+    // From positive zero.
+    INVOKE_BOOST_TEST_EQUAL(I(0), bourn_cast<I>(+F(0)), file, line);
+
+    // From negative zero. Interestingly, this negative value is
+    // properly convertible to an unsigned integral type.
+    INVOKE_BOOST_TEST_EQUAL(I(0), bourn_cast<I>(-F(0)), file, line);
+
+    // Out of bounds.
+
+    // Floating-point lowest and highest values are not necessarily
+    // outside the range of all integral types, but they almost
+    // certainly are for standard types.
+    BOOST_TEST_THROW
+        (bourn_cast<I>(f_traits::max())
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+    BOOST_TEST_THROW
+        (bourn_cast<I>(f_traits::lowest())
+        ,std::runtime_error
+        ,"Cast would transgress lower limit."
+        );
+
+    // From +inf.
+    BOOST_TEST_THROW
+        (bourn_cast<I>(+f_traits::infinity())
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+
+    // From -inf.
+    BOOST_TEST_THROW
+        (bourn_cast<I>(-f_traits::infinity())
+        ,std::runtime_error
+        ,"Cast would transgress lower limit."
+        );
+
+    // Otherwise disallowed.
+
+    // Truncating.
+
+#if !defined TEST_BOOST_CAST_INSTEAD
+    BOOST_TEST_THROW
+        (bourn_cast<I>(F(3.14))
+        ,std::runtime_error
+        ,"Cast would not preserve value."
+        );
+#else  // defined TEST_BOOST_CAST_INSTEAD
+    // boost::numeric cast truncates whereas bourn_cast throws; both
+    // are deliberate design decisions.
+    INVOKE_BOOST_TEST_EQUAL(3, bourn_cast<I>(F(3.14)), file, line);
+#endif // defined TEST_BOOST_CAST_INSTEAD
+
+    // From NaN.
+    BOOST_TEST_THROW
+        (bourn_cast<I>(f_traits::quiet_NaN())
+        ,std::runtime_error
+        ,"Cannot cast NaN to integral."
+        );
+}
+
 /// Test boost::numeric_cast anomalies reported here:
 ///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
 /// and confirmed here:
@@ -484,6 +612,29 @@ int test_main(int, char*[])
     test_floating_conversions<long double, float      >(__FILE__, __LINE__);
     test_floating_conversions<long double, double     >(__FILE__, __LINE__);
     test_floating_conversions<long double, long double>(__FILE__, __LINE__);
+
+    // Cast between floating and integral types.
+
+    test_conv_fpint<unsigned long long int,       float>(__FILE__, __LINE__);
+    test_conv_fpint<  signed long long int,       float>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned           int,       float>(__FILE__, __LINE__);
+    test_conv_fpint<  signed           int,       float>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned          char,       float>(__FILE__, __LINE__);
+    test_conv_fpint<  signed          char,       float>(__FILE__, __LINE__);
+
+    test_conv_fpint<unsigned long long int,      double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed long long int,      double>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned           int,      double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed           int,      double>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned          char,      double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed          char,      double>(__FILE__, __LINE__);
+
+    test_conv_fpint<unsigned long long int, long double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed long long int, long double>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned           int, long double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed           int, long double>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned          char, long double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed          char, long double>(__FILE__, __LINE__);
 
     // Attempt forbidden conversion from negative to unsigned.
 
