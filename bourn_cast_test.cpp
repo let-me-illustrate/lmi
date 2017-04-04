@@ -406,6 +406,128 @@ void test_conv_fpint(char const* file, int line)
         );
 }
 
+/// Test conversions between wide integral and narrow floating types.
+
+void test_m64_neighborhood()
+{
+    using ull_traits = std::numeric_limits<unsigned long long int>;
+    if(64 != ull_traits::digits)
+        {
+        std::cout
+            << "test_m64_neighborhood() not run because"
+            << "\nunsigned long long is not a 64-bit type."
+            << std::endl
+            ;
+        return;
+        }
+
+    // ULLONG_MAX must be at least 2^64 - 1 [C99 E/1], the 64th
+    // Mersenne number, M64. Converting that number between types
+    // float (IEEE 754 binary32) and unsigned long long int is
+    // interesting because
+    //   (2^64 - 1)ULL = 18446744073709551615 = M64     = 2^64 - 1
+    //   (2^64 - 1)f   = 18446744073709551616 = M64 + 1 = 2^64
+    // Cast either to the type of the other, and they compare equal,
+    // at least with gcc-4.9.2, although casting 2^64 to a 64-bit
+    // unsigned integer is UB.
+
+    unsigned long long int const ull_max = ull_traits::max();
+    float const f_ull_max = ull_max;
+    BOOST_TEST(f_ull_max == static_cast<float>(ull_max));
+    // Suppressed because behavior is undefined:
+    // BOOST_TEST(ull_max == static_cast<unsigned long long int>(f_ull_max));
+
+    // However, unlike static_cast, bourn_cast refuses to cast 2^64
+    // to a 64-bit integer, because it is out of range and therefore
+    // would constitute UB.
+
+    BOOST_TEST_EQUAL(f_ull_max, bourn_cast<float>(ull_max));
+    BOOST_TEST_THROW
+        (bourn_cast<unsigned long long int>(f_ull_max)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+
+    // To show that this case is not unique, test a value that is
+    // lower by two.
+
+    unsigned long long int const ull_hi = ull_traits::max() - 2; // 2^64 - 3
+
+    float const f_ull_hi = bourn_cast<float>(ull_hi);
+    BOOST_TEST_THROW
+        (bourn_cast<unsigned long long int>(f_ull_hi)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+
+    // The same outcome is observed with a value that is lower by
+    // about half a trillion units.
+
+    double const d_2_64 = nonstd::power(2.0, 64);
+    double const d_interesting = 0.5 * (d_2_64 + std::nextafterf(d_2_64, 0));
+    unsigned long long int const ull_interesting = d_interesting;
+    float const f_interesting = bourn_cast<float>(ull_interesting);
+    BOOST_TEST_THROW
+        (bourn_cast<unsigned long long int>(f_interesting)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+    float const f_uninteresting = bourn_cast<float>(ull_interesting - 1ULL);
+    bourn_cast<unsigned long long int>(f_uninteresting);
+
+    // A similar cast must fail for IEEE 754 binary64, because its 53
+    // mantissa bits cannot represent a value this close to 2^64.
+
+    double const d_ull_hi = bourn_cast<double>(ull_hi);
+    BOOST_TEST_THROW
+        (bourn_cast<unsigned long long int>(d_ull_hi)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+
+    // However, the same cast succeeds when the floating-point type
+    // has at least as much precision as the integral type.
+
+    using ld_traits = std::numeric_limits<long double>;
+    if(ull_traits::digits <= ld_traits::digits)
+        {
+        long double const ld_ull_hi = bourn_cast<long double>(ull_hi);
+        BOOST_TEST_EQUAL(ull_hi, bourn_cast<unsigned long long int>(ld_ull_hi));
+        }
+
+    // Off-by-one cases arise when the floating type has enough
+    // precision to represent a value exactly one unit outside the
+    // integral type's limits.
+
+    using sll_traits = std::numeric_limits<signed long long int>;
+    if(sll_traits::digits < ld_traits::digits)
+        {
+        signed long long int const sll_max = sll_traits::max();
+
+        long double const ld_sll_max = bourn_cast<long double>(sll_max);
+        BOOST_TEST_EQUAL(sll_max, bourn_cast<signed long long int>(ld_sll_max));
+
+        long double const ld_sll_too_high = ld_sll_max + 1;
+        BOOST_TEST_THROW
+            (bourn_cast<signed long long int>(ld_sll_too_high)
+            ,std::runtime_error
+            ,"Cast would transgress upper limit."
+            );
+
+        signed long long int const sll_min = sll_traits::min();
+
+        long double const ld_sll_min = bourn_cast<long double>(sll_min);
+        BOOST_TEST_EQUAL(sll_min, bourn_cast<signed long long int>(ld_sll_min));
+
+        long double const ld_sll_too_low = ld_sll_min - 1;
+        BOOST_TEST_THROW
+            (bourn_cast<signed long long int>(ld_sll_too_low)
+            ,std::runtime_error
+            ,"Cast would transgress lower limit."
+            );
+        }
+}
+
 /// Test boost::numeric_cast anomalies reported here:
 ///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
 /// and confirmed here:
@@ -635,6 +757,10 @@ int test_main(int, char*[])
     test_conv_fpint<  signed           int, long double>(__FILE__, __LINE__);
     test_conv_fpint<unsigned          char, long double>(__FILE__, __LINE__);
     test_conv_fpint<  signed          char, long double>(__FILE__, __LINE__);
+
+    // Test a peculiarly ill-conditioned range.
+
+    test_m64_neighborhood();
 
     // Attempt forbidden conversion from negative to unsigned.
 
