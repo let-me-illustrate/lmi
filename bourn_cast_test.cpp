@@ -496,9 +496,21 @@ void test_m64_neighborhood()
         BOOST_TEST_EQUAL(ull_hi, bourn_cast<unsigned long long int>(ld_ull_hi));
         }
 
-    // Off-by-one cases arise when the floating type has enough
-    // precision to represent a value exactly one unit outside the
-    // integral type's limits.
+    // These circumstances for gcc on i686 or x86_64:
+    //   64 = long double mantissa bits
+    //   63 = signed long long int non-sign bits
+    // clamor for a unit test. The extra bit in the significand lets
+    // the floating type represent exact integers one greater in
+    // magnitude than the integral type's limits. Adding one to the
+    // maximum
+    //   9223372036854775807 = 2^63 - 1 (sll_max below)
+    // gives
+    //   9223372036854775808 = 2^63     (ld_sll_too_high below)
+    // reminiscent of 2^64 and its successor above. A more interesting
+    // case is the integral minimum, which is an exact power of two in
+    // magnitude:
+    //   -9223372036854775808 = -2^63       (sll_min below)
+    //   -9223372036854775809 = -(2^63 + 1) (ld_sll_too_low below)
 
     using sll_traits = std::numeric_limits<signed long long int>;
     if(sll_traits::digits < ld_traits::digits)
