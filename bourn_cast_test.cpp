@@ -77,7 +77,7 @@ void test_same(char const* file, int line)
 
 /// Test casts involving two possibly different signednesses.
 
-template<bool SignedFrom, bool SignedTo>
+template<bool SignedTo, bool SignedFrom>
 void test_signednesses(char const* file, int line)
 {
     using CS = signed char;
