@@ -248,9 +248,11 @@ void test_floating_conversions(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
     INVOKE_BOOST_TEST_EQUAL(-to_inf, bourn_cast<To>(-from_inf), file, line);
 #else  // defined TEST_BOOST_CAST_INSTEAD
-    // Boost doesn't allow conversion of infinities to a narrower
-    // floating type, presumably because is presumptively permits
-    // conversion to the same or a wider floating type.
+    // Boost allows conversion of infinities to the same type or a
+    // wider floating type, but not to a narrower type--presumably
+    // because infinities are outside the [lowest(), max()] range but
+    // non-narrowing conversions are presumptively allowed regardless
+    // of value.
     if(from_traits::digits10 <= to_traits::digits10) // Widening or same.
         {
         INVOKE_BOOST_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
@@ -258,16 +260,15 @@ void test_floating_conversions(char const* file, int line)
         }
     else
         {
-        INVOKE_BOOST_TEST(false, file, line); // This should be allowed.
         BOOST_TEST_THROW
             (bourn_cast<To>( from_traits::infinity())
             ,std::runtime_error
-            ,"Cast would transgress upper limit."
+            ,"This cast should have succeeded."
             );
         BOOST_TEST_THROW
             (bourn_cast<To>(-from_traits::infinity())
             ,std::runtime_error
-            ,"Cast would transgress lower limit."
+            ,"This cast should have succeeded."
             );
         }
 #endif // defined TEST_BOOST_CAST_INSTEAD
