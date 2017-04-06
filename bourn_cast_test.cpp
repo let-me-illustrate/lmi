@@ -338,12 +338,15 @@ void test_conv_fpint(char const* file, int line)
 
     // Floating to integral.
 
-    // Widening: not possible with standard arithmetic types.
+    // Widening: generally not possible with standard arithmetic
+    // types because long long int is 64 bits wide in practice, and
+    // the exponent for float (IEEE 754 binary32) is in [-126, +127].
 
     // Narrowing.
 
-    // Converting an integer-valued floating-point number to an
-    // integral type preserves value: there is no truncation.
+    // An integer-valued floating-point number has no fractional part
+    // to truncate, so converting it to an integral type wide enough
+    // to represent it preserves value.
     INVOKE_BOOST_TEST_EQUAL(I(3), bourn_cast<I>(F(3)), file, line);
 
     // From positive zero.
