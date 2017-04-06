@@ -24,8 +24,11 @@
 
 #include "config.hpp"
 
+#include "rtti_lmi.hpp"                 // lmi::TypeInfo [demangling]
+
 #include <cmath>                        // isinf(), isnan(), signbit()
 #include <limits>
+#include <sstream>
 #include <stdexcept>
 
 /// Numeric stinted cast, across whose bourn no value is returned.
@@ -135,7 +138,18 @@ inline To bourn_cast(From from)
             throw std::runtime_error("Cast would transgress upper limit.");
         To const r = static_cast<To>(from);
         if(r != from)
-            throw std::runtime_error("Cast would not preserve value.");
+            {
+            lmi::TypeInfo from_type(typeid(From));
+            lmi::TypeInfo   to_type(typeid(To  ));
+            std::ostringstream oss;
+            oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
+            oss
+                << "Cast from " << from << " [" << from_type << "]"
+                << " to "       << r    << " [" << to_type   << "]"
+                << " would not preserve value."
+                ;
+            throw std::runtime_error(oss.str());
+            }
         return r;
         }
 

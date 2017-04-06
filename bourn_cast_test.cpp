@@ -394,7 +394,7 @@ void test_conv_fpint(char const* file, int line)
     BOOST_TEST_THROW
         (bourn_cast<I>(F(3.14))
         ,std::runtime_error
-        ,"Cast would not preserve value."
+        ,lmi_test::what_regex("^Cast.*would not preserve value\\.$")
         );
 #else  // defined TEST_BOOST_CAST_INSTEAD
     // boost::numeric cast truncates whereas bourn_cast throws; both
