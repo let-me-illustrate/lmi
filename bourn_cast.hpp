@@ -94,7 +94,17 @@ inline To bourn_cast(From from)
     //
     // Handle special cases first:
     //  - infinities are interconvertible: no exception wanted;
-    //  - C++11 [4.8/1] doesn't require static_cast to DTRT for NaNs.
+    //  - C++11 [4.8/1] doesn't require static_cast to DTRT for NaNs;
+    // then convert iff within range. Alternatively, a case could be
+    // made for converting out-of-range values to infinity, e.g.,
+    //   (float)(DBL_MAX) --> INFINITY
+    // citing IEEE 754-2008 [5.4.2] "conversion ... to a narrower format
+    // ... shall be rounded as specified in Clause 4" and [4.3.1] "an
+    // infinitely precise result [exceeding the normalized maximum] shall
+    // round to [infinity]", and C99 [F.2.1] "conversions for floating
+    // types provide the IEC 60559 conversions between floating-point
+    // precisions"; however, C++11 [4.8.1] still says this is undefined
+    // behavior, and such a conversion is unlikely to be intentional.
     if(!to_traits::is_integer && !from_traits::is_integer)
         {
         if(std::isnan(from))
