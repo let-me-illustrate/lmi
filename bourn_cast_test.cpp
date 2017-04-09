@@ -55,7 +55,6 @@ inline To bourn_cast(From from)
 #include "timer.hpp"
 
 #include <climits>                      // INT_MIN, LLONG_MIN, SCHAR_MIN
-#include <type_traits>                  // std::conditional
 
 /// Test trivial casts between identical types.
 

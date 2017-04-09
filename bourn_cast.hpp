@@ -30,6 +30,153 @@
 #include <limits>
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>                  // std::integral_constant
+
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wsign-compare"
+#   if 5 <= __GNUC__
+#       pragma GCC diagnostic ignored "-Wbool-compare"
+#   endif // 5 <= __GNUC__
+#endif // defined __GNUC__
+
+/// Floating to floating.
+///
+/// Handle special cases first:
+///  - infinities are interconvertible: no exception wanted;
+///  - C++11 [4.8/1] doesn't require static_cast to DTRT for NaNs;
+/// then convert iff within range. Alternatively, a case could be
+/// made for converting out-of-range values to infinity, e.g.,
+///   (float)(DBL_MAX) --> INFINITY
+/// citing IEEE 754-2008 [5.4.2] "conversion ... to a narrower format
+/// ... shall be rounded as specified in Clause 4" and [4.3.1] "an
+/// infinitely precise result [exceeding the normalized maximum] shall
+/// round to [infinity]", and C99 [F.2.1] "conversions for floating
+/// types provide the IEC 60559 conversions between floating-point
+/// precisions"; however, C++11 [4.8.1] still says this is undefined
+/// behavior, and such a conversion is unlikely to be intentional.
+
+template<typename To, typename From>
+#if 201402L < __cplusplus
+constexpr
+#endif // 201402L < __cplusplus
+inline To bourn_cast(From from, std::false_type, std::false_type)
+{
+    using   to_traits = std::numeric_limits<To  >;
+    using from_traits = std::numeric_limits<From>;
+    static_assert(!to_traits::is_integer && !from_traits::is_integer, "");
+
+    if(std::isnan(from))
+        return to_traits::quiet_NaN();
+    if(std::isinf(from))
+        return
+            std::signbit(from)
+            ? -to_traits::infinity()
+            :  to_traits::infinity()
+            ;
+    if(from < to_traits::lowest())
+        throw std::runtime_error("Cast would transgress lower limit.");
+    if(to_traits::max() < from)
+        throw std::runtime_error("Cast would transgress upper limit.");
+    return static_cast<To>(from);
+}
+
+/// Integral to floating.
+
+template<typename To, typename From>
+#if 201402L < __cplusplus
+constexpr
+#endif // 201402L < __cplusplus
+inline To bourn_cast(From from, std::false_type, std::true_type)
+{
+    using   to_traits = std::numeric_limits<To  >;
+    using from_traits = std::numeric_limits<From>;
+    static_assert(!to_traits::is_integer && from_traits::is_integer, "");
+
+    if(from < to_traits::lowest())
+        throw std::runtime_error("Cast would transgress lower limit.");
+    if(to_traits::max() < from)
+        throw std::runtime_error("Cast would transgress upper limit.");
+    return static_cast<To>(from);
+}
+
+/// Floating to integral.
+///
+/// Assume integral types have a two's complement representation.
+/// Ones' complement might be handled thus [untested]:
+///  - if(from < to_traits::lowest())
+///  + if(from <= From(to_traits::lowest()) - 1)
+
+template<typename To, typename From>
+#if 201402L < __cplusplus
+constexpr
+#endif // 201402L < __cplusplus
+inline To bourn_cast(From from, std::true_type, std::false_type)
+{
+    using   to_traits = std::numeric_limits<To  >;
+    using from_traits = std::numeric_limits<From>;
+    static_assert(to_traits::is_integer && !from_traits::is_integer, "");
+
+    if(std::isnan(from))
+        throw std::runtime_error("Cannot cast NaN to integral.");
+    if(from < to_traits::lowest())
+        throw std::runtime_error("Cast would transgress lower limit.");
+    if(From(to_traits::max()) + 1 <= from)
+        throw std::runtime_error("Cast would transgress upper limit.");
+    To const r = static_cast<To>(from);
+    if(r != from)
+        {
+        lmi::TypeInfo from_type(typeid(From));
+        lmi::TypeInfo   to_type(typeid(To  ));
+        std::ostringstream oss;
+        oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
+        oss
+            << "Cast from " << from << " [" << from_type << "]"
+            << " to "       << r    << " [" << to_type   << "]"
+            << " would not preserve value."
+            ;
+        throw std::runtime_error(oss.str());
+        }
+    return r;
+}
+
+/// Integral to integral.
+///
+/// Converts between integral types that may differ in size and
+/// signedness, iff the value is between the maximum and minimum
+/// values permitted for the target (To) type. Because of the
+/// properties of integers, conversion between integral types
+/// either preserves the notional value, or throws.
+///
+/// The underlying idea is discussed here:
+///   https://groups.google.com/forum/#!original/comp.std.c++/WHu6gUiwXkU/ZyV_ejRrXFYJ
+/// and here:
+///   http://www.two-sdg.demon.co.uk/curbralan/code/numeric_cast/numeric_cast.hpp
+/// and embodied in Kevlin Henney's original boost:numeric_cast,
+/// distributed under the GPL-compatible Boost Software License.
+
+template<typename To, typename From>
+#if 201402L < __cplusplus
+constexpr
+#endif // 201402L < __cplusplus
+inline To bourn_cast(From from, std::true_type, std::true_type)
+{
+    using   to_traits = std::numeric_limits<To  >;
+    using from_traits = std::numeric_limits<From>;
+    static_assert(to_traits::is_integer && from_traits::is_integer, "");
+
+    if(! to_traits::is_signed && from < 0)
+        throw std::runtime_error("Cannot cast negative to unsigned.");
+    if(from_traits::is_signed && from < to_traits::lowest())
+        throw std::runtime_error("Cast would transgress lower limit.");
+    if(to_traits::max() < from)
+        throw std::runtime_error("Cast would transgress upper limit.");
+    return static_cast<To>(from);
+}
+
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
 
 /// Numeric stinted cast, across whose bourn no value is returned.
 ///
@@ -76,121 +223,21 @@ inline To bourn_cast(From from)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
+
     static_assert(  to_traits::is_specialized, "");
     static_assert(from_traits::is_specialized, "");
 
-    static_assert(  to_traits::is_integer ||   to_traits::is_iec559, "");
-    static_assert(from_traits::is_integer || from_traits::is_iec559, "");
+    static constexpr bool   to_integer =   to_traits::is_integer;
+    static constexpr bool from_integer = from_traits::is_integer;
 
-#if defined __GNUC__
-#   pragma GCC diagnostic push
-#   pragma GCC diagnostic ignored "-Wsign-compare"
-#   if 5 <= __GNUC__
-#       pragma GCC diagnostic ignored "-Wbool-compare"
-#   endif // 5 <= __GNUC__
-#endif // defined __GNUC__
+    static_assert(  to_integer ||   to_traits::is_iec559, "");
+    static_assert(from_integer || from_traits::is_iec559, "");
 
-    // Floating to floating.
-    //
-    // Handle special cases first:
-    //  - infinities are interconvertible: no exception wanted;
-    //  - C++11 [4.8/1] doesn't require static_cast to DTRT for NaNs;
-    // then convert iff within range. Alternatively, a case could be
-    // made for converting out-of-range values to infinity, e.g.,
-    //   (float)(DBL_MAX) --> INFINITY
-    // citing IEEE 754-2008 [5.4.2] "conversion ... to a narrower format
-    // ... shall be rounded as specified in Clause 4" and [4.3.1] "an
-    // infinitely precise result [exceeding the normalized maximum] shall
-    // round to [infinity]", and C99 [F.2.1] "conversions for floating
-    // types provide the IEC 60559 conversions between floating-point
-    // precisions"; however, C++11 [4.8.1] still says this is undefined
-    // behavior, and such a conversion is unlikely to be intentional.
-    if(!to_traits::is_integer && !from_traits::is_integer)
-        {
-        if(std::isnan(from))
-            return to_traits::quiet_NaN();
-        if(std::isinf(from))
-            return
-                std::signbit(from)
-                ? -to_traits::infinity()
-                :  to_traits::infinity()
-                ;
-        if(from < to_traits::lowest())
-            throw std::runtime_error("Cast would transgress lower limit.");
-        if(to_traits::max() < from)
-            throw std::runtime_error("Cast would transgress upper limit.");
-        return static_cast<To>(from);
-        }
-
-    // Integral to floating.
-    if(!to_traits::is_integer && from_traits::is_integer)
-        {
-        if(from < to_traits::lowest())
-            throw std::runtime_error("Cast would transgress lower limit.");
-        if(to_traits::max() < from)
-            throw std::runtime_error("Cast would transgress upper limit.");
-        return static_cast<To>(from);
-        }
-
-    // Floating to integral.
-    //
-    // Assume integral types have a two's complement representation.
-    // Ones' complement might be handled thus [untested]:
-    //  - if(from < to_traits::lowest())
-    //  + if(from <= From(to_traits::lowest()) - 1)
-    if(to_traits::is_integer && !from_traits::is_integer)
-        {
-        if(std::isnan(from))
-            throw std::runtime_error("Cannot cast NaN to integral.");
-        if(from < to_traits::lowest())
-            throw std::runtime_error("Cast would transgress lower limit.");
-        if(From(to_traits::max()) + 1 <= from)
-            throw std::runtime_error("Cast would transgress upper limit.");
-        To const r = static_cast<To>(from);
-        if(r != from)
-            {
-            lmi::TypeInfo from_type(typeid(From));
-            lmi::TypeInfo   to_type(typeid(To  ));
-            std::ostringstream oss;
-            oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
-            oss
-                << "Cast from " << from << " [" << from_type << "]"
-                << " to "       << r    << " [" << to_type   << "]"
-                << " would not preserve value."
-                ;
-            throw std::runtime_error(oss.str());
-            }
-        return r;
-        }
-
-    // Integral to integral.
-    //
-    // Converts between integral types that may differ in size and
-    // signedness, iff the value is between the maximum and minimum
-    // values permitted for the target (To) type. Because of the
-    // properties of integers, conversion between integral types
-    // either preserves the notional value, or throws.
-    //
-    // The underlying idea is discussed here:
-    //   https://groups.google.com/forum/#!original/comp.std.c++/WHu6gUiwXkU/ZyV_ejRrXFYJ
-    // and here:
-    //   http://www.two-sdg.demon.co.uk/curbralan/code/numeric_cast/numeric_cast.hpp
-    // and embodied in Kevlin Henney's original boost:numeric_cast,
-    // distributed under the GPL-compatible Boost Software License.
-    if(to_traits::is_integer && from_traits::is_integer)
-        {
-        if(! to_traits::is_signed && from < 0)
-            throw std::runtime_error("Cannot cast negative to unsigned.");
-        if(from_traits::is_signed && from < to_traits::lowest())
-            throw std::runtime_error("Cast would transgress lower limit.");
-        if(to_traits::max() < from)
-            throw std::runtime_error("Cast would transgress upper limit.");
-        return static_cast<To>(from);
-        }
-
-#if defined __GNUC__
-#   pragma GCC diagnostic pop
-#endif // defined __GNUC__
+    return bourn_cast<To,From>
+        (from
+        ,std::integral_constant<bool,   to_integer>{}
+        ,std::integral_constant<bool, from_integer>{}
+        );
 }
 
 #endif // bourn_cast_hpp
