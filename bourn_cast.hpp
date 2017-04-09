@@ -117,11 +117,18 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
     using from_traits = std::numeric_limits<From>;
     static_assert(to_traits::is_integer && !from_traits::is_integer, "");
 
+    // At least with i686-w64-mingw32-g++ version 4.9.1, this change:
+    // - if(From(to_traits::max()) + 1 <= from)
+    // + if(adj_max <= from)
+    // fixes incorrect results with '-O0'.
+    static From const volatile raw_max = From(to_traits::max());
+    static From const volatile adj_max = raw_max + From(1);
+
     if(std::isnan(from))
         throw std::runtime_error("Cannot cast NaN to integral.");
     if(from < to_traits::lowest())
         throw std::runtime_error("Cast would transgress lower limit.");
-    if(From(to_traits::max()) + 1 <= from)
+    if(adj_max <= from)
         throw std::runtime_error("Cast would transgress upper limit.");
     To const r = static_cast<To>(from);
     if(r != from)
