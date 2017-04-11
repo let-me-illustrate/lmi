@@ -26,7 +26,7 @@ system_root := /
 EXEEXT :=
 SHREXT := .so
 
-PERFORM := wine
+PERFORM :=
 
 platform_boost_libraries := \
   -lboost_filesystem-gcc \
