@@ -23,13 +23,9 @@
 
 #include "alert.hpp"
 
-#include <cstdio>                       // std::fputs()
+#include <cstdio>                       // std::fputs(), std::getchar()
 #include <iostream>
 #include <stdexcept>
-
-// Avoid including any 'curses' header that defines rude macros:
-//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00045.html
-extern "C" int getch();
 
 namespace
 {
@@ -45,7 +41,7 @@ bool continue_anyway()
 {
     int c;
   ask:
-    c = getch();
+    c = getchar();
     if('y' == c || 'Y' == c)
         {
         std::cout << std::endl;

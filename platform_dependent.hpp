@@ -90,7 +90,8 @@
 // pollutes the global namespace intolerably with ill-named macros:
 //   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00045.html
 // and therefore a prototype for getch() is instead provided by other
-// means, locally, wherever it's needed.
+// means, locally, wherever it's needed. As of 2017-04, getch() is no
+// longer used; this paragraph is kept lest it be reintroduced.
 
 // GNU/Linux (but not MinGW) requires including certain headers while
 // __STRICT_ANSI__ is not defined in order to get prototypes for
