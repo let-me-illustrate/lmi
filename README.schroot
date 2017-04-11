@@ -101,7 +101,7 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 apt-get update
 apt-get --assume-yes install g++-mingw-w64-i686 automake libtool make \
  pkg-config git zsh bzip2 unzip sudo wine default-jre fop jing trang \
- g++-multilib vim vim-doc \
+ g++-multilib libxslt1-dev vim vim-doc \
  >cross-lmi-apt-get-log 2>&1
 
 # This command should produce little output:
