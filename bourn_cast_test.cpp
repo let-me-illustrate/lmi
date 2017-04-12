@@ -293,7 +293,7 @@ void test_conv_fpint(char const* file, int line)
     static_assert(2 == i_traits::radix, "");
     static_assert(2 == f_traits::radix, "");
 
-    // Integral to floating.
+    // Integral to floating and back.
 
     I const i_hi = i_traits::max();
     F const f_i_hi = bourn_cast<F>(i_hi);
@@ -545,7 +545,11 @@ void test_m64_neighborhood()
 
 /// Test boost::numeric_cast anomalies reported here:
 ///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
-/// and confirmed here:
+/// All these tests fail with boost-1.33.1 and gcc-4.9 '-O2' on
+///   x86_64-linux-gnu
+///   i686-linux-gnu
+///   i686-w64-mingw32
+/// and also with boost-1.62 and x86_64-linux-gnu as confirmed here:
 ///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00128.html
 
 void test_boost_anomalies()
