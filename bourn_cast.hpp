@@ -187,15 +187,20 @@ inline To bourn_cast(From from, std::true_type, std::true_type)
 
 /// Numeric stinted cast, across whose bourn no value is returned.
 ///
-/// Perform a static_cast between numeric types, but throw if the
-/// value cannot be preserved. For example:
+/// Perform a static_cast between numeric types, but throw if its
+/// behavior is undefined or if the value is out of range--e.g.:
 ///   bourn_cast<unsigned int>( 1);        // Returns 1U.
-///   bourn_cast<unsigned int>(-1);        // Throws.
-///   bourn_cast<bool>(INT_MAX);           // Throws: out of range.
+///   bourn_cast<unsigned int>(-1);        // Throws: out of range.
+///   bourn_cast<unsigned int>(-1.0);      // Throws: UB.
+///   bourn_cast<bool>(2);                 // Throws: out of range.
 ///   bourn_cast<float>((double)INFINITY); // Returns infinity.
 ///   bourn_cast<int>  ((double)INFINITY); // Throws.
+///   bourn_cast<float>(DBL_MAX);          // Throws: UB.
 ///   bourn_cast<unsigned int>(3.0);       // Returns 3U.
 ///   bourn_cast<unsigned int>(3.14);      // Throws: 3.14 != 3.0U.
+/// Thus, value is preserved exactly, except for the roundoff expected
+/// when converting a floating-point value to a different floating-
+/// point type that can represent it only with a loss of precision.
 ///
 /// Both From and To must be types for which std::numeric_limits is
 /// specialized. Integral-to-floating conversion is highly unlikely
