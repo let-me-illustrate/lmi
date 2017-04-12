@@ -61,14 +61,14 @@ inline To bourn_cast(From from)
 template<typename T>
 void test_same(char const* file, int line)
 {
-    using limits = std::numeric_limits<T>;
-    T upper = limits::max();
-    T lower = limits::lowest();
+    using traits = std::numeric_limits<T>;
+    T upper = traits::max();
+    T lower = traits::lowest();
     INVOKE_BOOST_TEST_EQUAL(upper, bourn_cast<T>(upper), file, line);
     INVOKE_BOOST_TEST_EQUAL(T( 1), bourn_cast<T>(T( 1)), file, line);
     INVOKE_BOOST_TEST_EQUAL(T( 0), bourn_cast<T>(T( 0)), file, line);
     INVOKE_BOOST_TEST_EQUAL(lower, bourn_cast<T>(lower), file, line);
-    if(limits::is_signed)
+    if(traits::is_signed)
         {
         INVOKE_BOOST_TEST_EQUAL(T(-1), bourn_cast<T>(T(-1)), file, line);
         }
@@ -550,14 +550,14 @@ void test_m64_neighborhood()
 
 void test_boost_anomalies()
 {
-    using double_limits = std::numeric_limits<double>;
+    using double_traits = std::numeric_limits<double>;
 
     // IEEE 754-2008 [5.8, conversion to integer]: "When a NaN or infinite
     // operand cannot be represented in the destination format and this
     // cannot otherwise be indicated, the invalid operation exception shall
     // be signaled."
     BOOST_TEST_THROW
-        (bourn_cast<int>(double_limits::quiet_NaN())
+        (bourn_cast<int>(double_traits::quiet_NaN())
         ,std::runtime_error
         ,"Cannot cast NaN to integral."
         );
@@ -567,9 +567,9 @@ void test_boost_anomalies()
     // an infinity into the same infinity in another format."
     try
         {
-        bourn_cast<long double>(double_limits::infinity());
+        bourn_cast<long double>(double_traits::infinity());
         // That worked, so this should too...
-        bourn_cast<float>(double_limits::infinity());
+        bourn_cast<float>(double_traits::infinity());
         // ...because all infinities are convertible.
         BOOST_TEST(true);
         }
