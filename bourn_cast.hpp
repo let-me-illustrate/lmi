@@ -221,7 +221,7 @@ inline To bourn_cast(From from, std::true_type, std::true_type)
 ///   bourn_cast<int>  ((double)INFINITY); // Throws.
 ///   bourn_cast<float>(DBL_MAX);          // Throws: UB.
 ///   bourn_cast<unsigned int>(3.0);       // Returns 3U.
-///   bourn_cast<unsigned int>(3.14);      // Throws: 3.14 != 3.0U.
+///   bourn_cast<unsigned int>(3.14);      // Throws: 3.14 != 3U.
 /// Thus, value is preserved exactly, except for the roundoff expected
 /// when converting a floating-point value to a different floating-
 /// point type that can represent it only with a loss of precision.
