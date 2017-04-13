@@ -110,11 +110,6 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 
 /// Floating to integral.
 ///
-/// Assume integral types have a two's complement representation.
-/// Ones' complement might be handled thus [untested]:
-///  - if(from < to_traits::lowest())
-///  + if(from <= From(to_traits::lowest()) - 1)
-///
 /// Integral max() must be one less than an integer power of two,
 /// because C++11 [3.9.1/7] says "the representations of integral
 /// types shall define values by use of a pure binary numeration
@@ -127,10 +122,10 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 /// to this maximum in order to determine whether it is within range:
 /// see test_m64_neighborhood() in the accompanying unit test for a
 /// demonstration of the issues that arise in converting ULLONG_MAX to
-/// IEEE 754 binary32. Therefore, the tractable comparison
-///   argument <= maximum + 1  // i.e., <= 2^n exactly
+/// IEEE 754 binary32. Therefore, the tractable throw-condition
+///   maximum + 1 <= argument  // 'maximum + 1' == 2^digits exactly
 /// is substituted for the intractable
-///   argument < maximum       // < 0xFF... may exceed float precision
+///   maximum < argument       // 0xFF... may exceed float precision
 /// To ensure that the addition 'maximum + 1' is not done in extended
 /// precision (as actually observed with various versions of gcc), it
 /// is performed through writes to volatile memory. To ensure that
@@ -141,6 +136,15 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 /// static assertion rather than a throw-statement because 128-bit
 /// long long integers are not generally available, so it is not
 /// possible to test such logic today.
+///
+/// Precondition: integral type has a two's complement representation.
+/// For ones' complement and sign-and-magnitude representations, the
+/// minimum might be handled in much the same way as the maximum,
+/// throwing if
+///  (argument < 0 && !to_traits::is_signed) ||
+///   argument <= minimum - 1  // 'minimum - 1' == 2^digits exactly
+/// instead of the intractable condition
+///   argument < minimum       // limit may exceed float precision
 
 template<typename To, typename From>
 #if 201402L < __cplusplus
@@ -152,6 +156,9 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
     using from_traits = std::numeric_limits<From>;
     static_assert(to_traits::is_integer && !from_traits::is_integer, "");
     static_assert(to_traits::digits < from_traits::max_exponent, "");
+
+    // Integral type must be two's complement.
+    static_assert(~To(0) == -To(1), "");
 
     static From const volatile raw_max = From(to_traits::max());
     static From const volatile adj_max = raw_max + From(1);
