@@ -45,8 +45,10 @@
 /// Handle special cases first:
 ///  - infinities are interconvertible: no exception wanted;
 ///  - C++11 [4.8/1] doesn't require static_cast to DTRT for NaNs;
-/// then convert iff within range. Alternatively, a case could be
-/// made for converting out-of-range values to infinity, e.g.,
+/// then convert iff within range.
+///
+/// Alternatively, a case could be made for converting out-of-range
+/// values to infinity, e.g.,
 ///   (float)(DBL_MAX) --> INFINITY
 /// citing IEEE 754-2008 [5.4.2] "conversion ... to a narrower format
 /// ... shall be rounded as specified in Clause 4" and [4.3.1] "an
@@ -55,6 +57,12 @@
 /// types provide the IEC 60559 conversions between floating-point
 /// precisions"; however, C++11 [4.8.1] still says this is undefined
 /// behavior, and such a conversion is unlikely to be intentional.
+///
+/// IEEE 754-2008 [6.2] would return a NaN argument unchanged wherever
+/// possible. While a compiler could do that, this implementation in
+/// general cannot: even in the case of conversion to the same type,
+/// returning the argument would involve undefined behavior in the
+/// case of a signaling NaN [C99 F.2.1].
 
 template<typename To, typename From>
 #if 201402L < __cplusplus
