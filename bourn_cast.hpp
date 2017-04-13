@@ -51,7 +51,7 @@
 /// citing IEEE 754-2008 [5.4.2] "conversion ... to a narrower format
 /// ... shall be rounded as specified in Clause 4" and [4.3.1] "an
 /// infinitely precise result [exceeding the normalized maximum] shall
-/// round to [infinity]", and C99 [F.2.1] "conversions for floating
+/// round to [infinity]", and C99 [F.3] "conversions for floating
 /// types provide the IEC 60559 conversions between floating-point
 /// precisions"; however, C++11 [4.8.1] still says this is undefined
 /// behavior, and such a conversion is unlikely to be intentional.
