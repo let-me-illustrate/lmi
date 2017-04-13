@@ -68,9 +68,34 @@ void test_same(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL(T( 1), bourn_cast<T>(T( 1)), file, line);
     INVOKE_BOOST_TEST_EQUAL(T( 0), bourn_cast<T>(T( 0)), file, line);
     INVOKE_BOOST_TEST_EQUAL(lower, bourn_cast<T>(lower), file, line);
+
     if(traits::is_signed)
         {
         INVOKE_BOOST_TEST_EQUAL(T(-1), bourn_cast<T>(T(-1)), file, line);
+        }
+
+    // Test whether integer limits are correctly calculated by this
+    // std::scalbln() technique, so that it can be relied upon in
+    // the bourn_cast floating-to-integral implementation. This
+    // demonstration has been tested with 32- and 64-bit gcc, with
+    // an 80-bit long double type whose 64-bit mantissa suffices to
+    // test the limits of every integral type up to 64 digits exactly
+    // because it can distinguish +/-(2^64) from +/-(2^64 - 1).
+    //
+    // The signed minimum given here assumes two's complement; it
+    // would be -(x - 1) for a ones' complement or sign-and-magnitude
+    // representation.
+    if(traits::is_integer)
+        {
+        long double const x = std::scalbln(1.0l, traits::digits);
+        long double const max = x - 1;
+        long double const min = traits::is_signed ? -x : 0;
+        INVOKE_BOOST_TEST_EQUAL(traits::max(), max, file, line);
+        INVOKE_BOOST_TEST_EQUAL(traits::min(), min, file, line);
+        T imax = bourn_cast<T>(max);
+        T imin = bourn_cast<T>(min);
+        INVOKE_BOOST_TEST_EQUAL(traits::max(), imax, file, line);
+        INVOKE_BOOST_TEST_EQUAL(traits::min(), imin, file, line);
         }
 }
 
