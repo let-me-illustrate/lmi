@@ -217,6 +217,9 @@ inline To bourn_cast(From from, std::true_type, std::true_type)
 /// instead of quietly truncating, it throws on floating-to-integral
 /// conversions that would not preserve value.
 ///
+/// The radix of all numeric types is asserted to be two because this
+/// implementation has not been tested with any other radix.
+///
 /// Facilities provided by <limits> are used to the exclusion of
 /// <type_traits> functions such as
 ///   is_arithmetic()
@@ -238,6 +241,9 @@ inline To bourn_cast(From from)
 
     static_assert(  to_traits::is_specialized, "");
     static_assert(from_traits::is_specialized, "");
+
+    static_assert(2 ==   to_traits::radix, "");
+    static_assert(2 == from_traits::radix, "");
 
     static constexpr bool   to_integer =   to_traits::is_integer;
     static constexpr bool from_integer = from_traits::is_integer;
