@@ -106,6 +106,33 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 /// Ones' complement might be handled thus [untested]:
 ///  - if(from < to_traits::lowest())
 ///  + if(from <= From(to_traits::lowest()) - 1)
+///
+/// Integral max() must be one less than an integer power of two,
+/// because C++11 [3.9.1/7] says "the representations of integral
+/// types shall define values by use of a pure binary numeration
+/// system", so the range of a signed eight-bit character (e.g.) is:
+///   [-127, +127] sign and magnitude, or ones' complement; or
+///   [-128, +127] two's complement;
+/// and the maximum must be 2^digits - 1 in any case.
+///
+/// It is not always feasible to compare the argument's value directly
+/// to this maximum in order to determine whether it is within range:
+/// see test_m64_neighborhood() in the accompanying unit test for a
+/// demonstration of the issues that arise in converting ULLONG_MAX to
+/// IEEE 754 binary32. Therefore, the tractable comparison
+///   argument <= maximum + 1  // i.e., <= 2^n exactly
+/// is substituted for the intractable
+///   argument < maximum       // < 0xFF... may exceed float precision
+/// To ensure that the addition 'maximum + 1' is not done in extended
+/// precision (as actually observed with various versions of gcc), it
+/// is performed through writes to volatile memory. To ensure that
+/// the maximum can be incremented, a static assertion compares the
+/// number of integral radix digits to the number of floating exponent
+/// digits. This assertion would be expected to fail with a 128-bit
+/// integral type and a 32-bit IEEE 754 float. It is written as a
+/// static assertion rather than a throw-statement because 128-bit
+/// long long integers are not generally available, so it is not
+/// possible to test such logic today.
 
 template<typename To, typename From>
 #if 201402L < __cplusplus
@@ -116,11 +143,8 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
     static_assert(to_traits::is_integer && !from_traits::is_integer, "");
+    static_assert(to_traits::digits < from_traits::max_exponent, "");
 
-    // At least with i686-w64-mingw32-g++ version 4.9.1, this change:
-    // - if(From(to_traits::max()) + 1 <= from)
-    // + if(adj_max <= from)
-    // fixes incorrect results with '-O0'.
     static From const volatile raw_max = From(to_traits::max());
     static From const volatile adj_max = raw_max + From(1);
 
