@@ -63,7 +63,6 @@ namespace xml_serialize
 /// which is not useful here.
 
 template<>
-[[noreturn]]
 std::string value_cast<std::string>(stratified_entity const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
@@ -77,7 +76,6 @@ std::string value_cast<std::string>(stratified_entity const&)
 /// which is not useful here.
 
 template<>
-[[noreturn]]
 stratified_entity value_cast<stratified_entity>(std::string const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
