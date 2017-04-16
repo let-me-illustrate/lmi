@@ -1,4 +1,4 @@
-// Ledger xsl operations.
+// Ledger PDF generation.
 //
 // Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
@@ -19,20 +19,26 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef ledger_xsl_hpp
-#define ledger_xsl_hpp
+#include "pchfile.hpp"
 
-#include "config.hpp"
+#include "ledger_pdf.hpp"
 
-#include <boost/filesystem/path.hpp>
+#include "configurable_settings.hpp"
+#include "ledger.hpp"
+#include "ledger_pdf_generator.hpp"
+#include "path_utility.hpp"
 
-#include <string>
+/// Write ledger as pdf.
 
-class Ledger;
+std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
+{
+    throw_if_interdicted(ledger);
 
-std::string write_ledger_as_pdf(Ledger const&, fs::path const&);
+    fs::path print_dir(configurable_settings::instance().print_directory());
+    fs::path pdf_out_file = unique_filepath(print_dir / filepath, ".pdf");
 
-fs::path xsl_filepath(Ledger const&);
+    auto const pdf = ledger_pdf_generator::create();
+    pdf->write(ledger, pdf_out_file);
 
-#endif // ledger_xsl_hpp
-
+    return pdf_out_file.string();
+}
