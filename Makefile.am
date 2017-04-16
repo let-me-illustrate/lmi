@@ -328,10 +328,10 @@ liblmi_common_sources = \
     ledger.cpp \
     ledger_base.cpp \
     ledger_invariant.cpp \
+    ledger_pdf.cpp \
+    ledger_pdf_generator.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
-    ledger_xml_io.cpp \
-    ledger_xsl.cpp \
     ledgervalues.cpp \
     license.cpp \
     loads.cpp \
@@ -1170,9 +1170,10 @@ noinst_HEADERS = \
     ledger.hpp \
     ledger_base.hpp \
     ledger_invariant.hpp \
+    ledger_pdf.hpp \
+    ledger_pdf_generator.hpp \
     ledger_text_formats.hpp \
     ledger_variant.hpp \
-    ledger_xsl.hpp \
     ledgervalues.hpp \
     license.hpp \
     lmi.hpp \
