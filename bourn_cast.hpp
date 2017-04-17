@@ -157,8 +157,8 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
     static_assert(to_traits::is_integer && !from_traits::is_integer, "");
     static_assert(to_traits::digits < from_traits::max_exponent, "");
 
-    // Integral type must be two's complement.
-    static_assert(~To(0) == -To(1), "");
+    static constexpr bool is_twos_complement(~To(0) == -To(1));
+    static_assert(is_twos_complement, "");
 
     static From const volatile raw_max = From(to_traits::max());
     static From const volatile adj_max = raw_max + From(1);
