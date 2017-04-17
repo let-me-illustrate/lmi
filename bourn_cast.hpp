@@ -101,6 +101,9 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
     using from_traits = std::numeric_limits<From>;
     static_assert(!to_traits::is_integer && from_traits::is_integer, "");
 
+    // If this assertion fails, the comparisons below may be UB.
+    static_assert(from_traits::digits < to_traits::max_exponent, "");
+
     if(from < to_traits::lowest())
         throw std::runtime_error("Cast would transgress lower limit.");
     if(to_traits::max() < from)
