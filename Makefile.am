@@ -207,6 +207,7 @@ libskeleton_la_SOURCES = \
     multidimgrid_tools.cpp \
     mvc_controller.cpp \
     mvc_view.cpp \
+    pdf_writer_wx.cpp \
     policy_document.cpp \
     policy_view.cpp \
     preferences_view.cpp \

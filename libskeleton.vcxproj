@@ -466,6 +466,7 @@
     <ClCompile Include="multidimgrid_tools.cpp" />
     <ClCompile Include="mvc_controller.cpp" />
     <ClCompile Include="mvc_view.cpp" />
+    <ClCompile Include="pdf_writer_wx.cpp" />
     <ClCompile Include="policy_document.cpp" />
     <ClCompile Include="policy_view.cpp" />
     <ClCompile Include="preferences_view.cpp" />
