@@ -36,6 +36,7 @@
 #include "miscellany.hpp"               // split_into_lines()
 #include "oecumenic_enumerations.hpp"   // oenum_format_style
 #include "path_utility.hpp"             // fs::path inserter
+#include "pdf_writer_wx.hpp"
 #include "version.hpp"
 #include "wx_table_generator.hpp"
 #include "wx_utility.hpp"               // ConvertDateToWx()
@@ -45,9 +46,7 @@
 
 #include <wx/datetime.h>
 #include <wx/html/htmlcell.h>
-#include <wx/html/winpars.h>
 #include <wx/image.h>
-#include <wx/pdfdc.h>
 
 #include <cstring>                      // strstr()
 #include <limits>
@@ -459,9 +458,6 @@ class group_quote_pdf_generator_wx
     // Ctor is private as it is only used by do_create().
     group_quote_pdf_generator_wx() = default;
 
-    // Generate the PDF once we have all the data.
-    void do_generate_pdf(wxPdfDC& pdf_dc);
-
     // Compute the number of pages needed by the table rows in the output given
     // the space remaining on the first page, the heights of the header, one
     // table row and the footer and the last row position.
@@ -858,46 +854,11 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
 void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 {
-    // Create a wxPrintData object just to describe the paper to use.
-    wxPrintData print_data;
-    print_data.SetOrientation(wxLANDSCAPE);
-    print_data.SetPaperId(wxPAPER_LETTER);
-    print_data.SetFilename(output_filename);
+    pdf_writer_wx pdf_writer(output_filename, wxLANDSCAPE);
+    wxPdfDC& pdf_dc = pdf_writer.dc();
+    wxHtmlWinParser& html_parser = pdf_writer.html_parser();
 
-    wxPdfDC pdf_dc(print_data);
     page_.initialize(pdf_dc);
-    do_generate_pdf(pdf_dc);
-    pdf_dc.EndDoc();
-}
-
-void group_quote_pdf_generator_wx::do_generate_pdf(wxPdfDC& pdf_dc)
-{
-    // Ensure that the output is independent of the current display resolution:
-    // it seems that this is only the case with the PDF map mode and wxDC mode
-    // different from wxMM_TEXT.
-    pdf_dc.SetMapModeStyle(wxPDF_MAPMODESTYLE_PDF);
-
-    // For simplicity, use points for everything: font sizers are expressed in
-    // them anyhow, so it's convenient to use them for everything else too.
-    pdf_dc.SetMapMode(wxMM_POINTS);
-
-    pdf_dc.StartDoc(wxString()); // Argument is not used.
-    pdf_dc.StartPage();
-
-    // Use a standard PDF Helvetica font (without embedding any custom fonts in
-    // the generated file, the only other realistic choice is Times New Roman).
-    pdf_dc.SetFont
-        (wxFontInfo(8).Family(wxFONTFAMILY_SWISS).FaceName("Helvetica")
-        );
-
-    // Create an HTML parser to allow easily adding HTML contents to the output.
-    wxHtmlWinParser html_parser(nullptr);
-    html_parser.SetDC(&pdf_dc);
-    html_parser.SetStandardFonts
-        (pdf_dc.GetFont().GetPointSize()
-        ,"Helvetica"
-        ,"Courier"
-        );
 
     int pos_y = 0;
 
