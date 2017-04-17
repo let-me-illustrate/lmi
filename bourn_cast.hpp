@@ -257,7 +257,14 @@ inline To bourn_cast(From from, std::true_type, std::true_type)
 /// conversions that would not preserve value.
 ///
 /// The radix of all numeric types is asserted to be two because this
-/// implementation has not been tested with any other radix.
+/// implementation has not been tested with any other radix, and some
+/// parts depend on binary representations. It might seem that C++11
+/// [3.9.1/7] guarantees this for integral types: "the representations
+/// of integral types shall define values by use of a pure binary
+/// numeration system". However, [18.3.2.4/22] says otherwise: "for
+/// integer types, [radix] specifies the base of the representation",
+/// and footnote 202 says that this "distinguishes types with bases
+/// other than 2 (e.g. BCD)".
 ///
 /// Facilities provided by <limits> are used to the exclusion of
 /// <type_traits> functions such as
@@ -268,6 +275,14 @@ inline To bourn_cast(From from, std::true_type, std::true_type)
 ///   is_unsigned()
 /// so that UDTs with std::numeric_limits specializations can work
 /// as expected.
+///
+/// It would be simple to write a correct implementation if there were
+/// a type capable of representing any value of any arithmetic type.
+/// This criterion is satisfied by x86_86's 80-bit long double type as
+/// long as there is no wider floating type and no integral type has
+/// more than 64 bits. However, because no such type generally exists,
+/// floating and integral limits must be compared with great care in
+/// order to avoid undefined behavior.
 
 template<typename To, typename From>
 #if 201402L < __cplusplus
