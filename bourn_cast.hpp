@@ -137,7 +137,7 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 /// long long integers are not generally available, so it is not
 /// possible to test such logic today.
 ///
-/// Precondition: integral type has a two's complement representation.
+/// Precondition: floating type has a two's complement representation.
 /// For ones' complement and sign-and-magnitude representations, the
 /// minimum might be handled in much the same way as the maximum,
 /// throwing if
