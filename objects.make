@@ -330,6 +330,7 @@ skeleton_objects := \
   multidimgrid_tools.o \
   mvc_controller.o \
   mvc_view.o \
+  pdf_writer_wx.o \
   policy_document.o \
   policy_view.o \
   preferences_view.o \
