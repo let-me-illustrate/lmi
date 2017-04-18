@@ -41,7 +41,7 @@ class pdf_writer_wx
 
     ~pdf_writer_wx();
 
-    wxPdfDC& dc() { return pdf_dc_; }
+    wxDC& dc() { return pdf_dc_; }
     wxPdfDocument& pdf_document() { return *pdf_dc_.GetPdfDocument(); }
     wxHtmlWinParser& html_parser() { return html_parser_; }
 
