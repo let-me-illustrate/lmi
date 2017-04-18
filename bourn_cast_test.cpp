@@ -393,21 +393,24 @@ void test_conv_fpint(char const* file, int line)
     BOOST_TEST_THROW
         (bourn_cast<I>(f_traits::lowest())
         ,std::runtime_error
-        ,"Cast would transgress lower limit."
+        ,   (i_traits::is_signed
+            ? "Cast would transgress lower limit."
+            : "Cannot cast negative to unsigned."
+            )
         );
 
     // From +inf.
     BOOST_TEST_THROW
         (bourn_cast<I>(+f_traits::infinity())
         ,std::runtime_error
-        ,"Cast would transgress upper limit."
+        ,"Cannot cast infinite to integral."
         );
 
     // From -inf.
     BOOST_TEST_THROW
         (bourn_cast<I>(-f_traits::infinity())
         ,std::runtime_error
-        ,"Cast would transgress lower limit."
+        ,"Cannot cast infinite to integral."
         );
 
     // Otherwise disallowed.

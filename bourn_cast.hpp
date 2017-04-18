@@ -26,7 +26,7 @@
 
 #include "rtti_lmi.hpp"                 // lmi::TypeInfo [demangling]
 
-#include <cmath>                        // isinf(), isnan(), signbit()
+#include <cmath>                        // isinf(), isnan(), ldexp(), signbit()
 #include <limits>
 #include <sstream>
 #include <stdexcept>
@@ -140,14 +140,17 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 /// long long integers are not generally available, so it is not
 /// possible to test such logic today.
 ///
-/// Precondition: floating type has a two's complement representation.
-/// For ones' complement and sign-and-magnitude representations, the
-/// minimum might be handled in much the same way as the maximum,
-/// throwing if
-///  (argument < 0 && !to_traits::is_signed) ||
-///   argument <= minimum - 1  // 'minimum - 1' == 2^digits exactly
-/// instead of the intractable condition
-///   argument < minimum       // limit may exceed float precision
+/// The result of ldexp() is guaranteed to be representable. If it
+/// overflows, it returns HUGE_VAL[FL] according to C99 [7.12.1/4],
+/// which is a positive infinity [F.9/2] for an implementation that
+/// conforms to IEEE 754. It is okay if one or both of the limits
+/// tested is an infinity: e.g., if the integral type has a maximum
+/// too large for the floating type to represent finitely, then no
+/// finite floating argument is too large to cast to the integral
+/// type. Because radix is asserted upstream to be two for all types,
+/// there is no need to use scalbn() in place of ldexp(); and as long
+/// as the widest integer has less than (sizeof int) digits, there is
+/// no need here for scalbln().
 
 template<typename To, typename From>
 #if 201402L < __cplusplus
@@ -158,19 +161,28 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
     static_assert(to_traits::is_integer && !from_traits::is_integer, "");
-    static_assert(to_traits::digits < from_traits::max_exponent, "");
+
+    static constexpr From limit = std::ldexp(From(1), to_traits::digits);
 
     static constexpr bool is_twos_complement(~To(0) == -To(1));
-    static_assert(is_twos_complement, "");
 
-    static From const volatile raw_max = From(to_traits::max());
-    static From const volatile adj_max = raw_max + From(1);
+    if(to_traits::digits < from_traits::max_exponent)
+        {
+        static From const volatile raw_max = From(to_traits::max());
+        static From const volatile adj_max = raw_max + From(1);
+        if(is_twos_complement && limit != adj_max)
+            throw std::runtime_error("Inconsistent limits.");
+        }
 
     if(std::isnan(from))
         throw std::runtime_error("Cannot cast NaN to integral.");
-    if(from < to_traits::lowest())
+    if(std::isinf(from))
+        throw std::runtime_error("Cannot cast infinite to integral.");
+    if(!to_traits::is_signed && from < 0)
+        throw std::runtime_error("Cannot cast negative to unsigned.");
+    if(from < -limit || from == -limit && !is_twos_complement)
         throw std::runtime_error("Cast would transgress lower limit.");
-    if(adj_max <= from)
+    if(limit <= from)
         throw std::runtime_error("Cast would transgress upper limit.");
     To const r = static_cast<To>(from);
     if(r != from)
