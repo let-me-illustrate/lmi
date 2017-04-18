@@ -36,16 +36,30 @@ class pdf_writer_wx
         ,wxPrintOrientation orientation
         );
 
+    pdf_writer_wx(pdf_writer_wx const&) = delete;
+    pdf_writer_wx& operator=(pdf_writer_wx const&) = delete;
+
     ~pdf_writer_wx();
 
     wxPdfDC& dc() { return pdf_dc_; }
-
+    wxPdfDocument& pdf_document() { return *pdf_dc_.GetPdfDocument(); }
     wxHtmlWinParser& html_parser() { return html_parser_; }
+
+    // Page metrics: the page width and height are the size of the page region
+    // reserved for the normal contents, excluding horizontal and vertical
+    // margins. Total width and height include the margins.
+    int get_horz_margin() const;
+    int get_vert_margin() const;
+    int get_page_width()  const;
+    int get_total_width() const;
+    int get_page_bottom() const;
 
   private:
     wxPrintData print_data_;
     wxPdfDC pdf_dc_;
     wxHtmlWinParser html_parser_;
+
+    wxSize const total_page_size_;
 };
 
 #endif // pdf_writer_wx_hpp
