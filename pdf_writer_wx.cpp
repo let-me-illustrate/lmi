@@ -26,6 +26,11 @@
 namespace
 {
 
+// These margins are arbitrary and can be changed to conform to subjective
+// preferences.
+constexpr int horz_margin = 24;
+constexpr int vert_margin = 36;
+
 wxPrintData make_print_data
     (wxString const&    output_filename
     ,wxPrintOrientation orientation
@@ -44,9 +49,10 @@ pdf_writer_wx::pdf_writer_wx
     (wxString const&    output_filename
     ,wxPrintOrientation orientation
     )
-    :print_data_    {make_print_data(output_filename, orientation)}
-    ,pdf_dc_        {print_data_}
-    ,html_parser_   {nullptr}
+    :print_data_        {make_print_data(output_filename, orientation)}
+    ,pdf_dc_            {print_data_}
+    ,html_parser_       {nullptr}
+    ,total_page_size_   {pdf_dc_.GetSize()}
 {
     // Ensure that the output is independent of the current display resolution:
     // it seems that this is only the case with the PDF map mode and wxDC mode
@@ -73,7 +79,31 @@ pdf_writer_wx::pdf_writer_wx
         ,"Helvetica"
         ,"Courier"
         );
+}
 
+int pdf_writer_wx::get_horz_margin() const
+{
+    return horz_margin;
+}
+
+int pdf_writer_wx::get_vert_margin() const
+{
+    return vert_margin;
+}
+
+int pdf_writer_wx::get_page_width()  const
+{
+    return total_page_size_.x - 2 * horz_margin;
+}
+
+int pdf_writer_wx::get_total_width() const
+{
+    return total_page_size_.x;
+}
+
+int pdf_writer_wx::get_page_bottom() const
+{
+    return total_page_size_.y - vert_margin;
 }
 
 pdf_writer_wx::~pdf_writer_wx()
