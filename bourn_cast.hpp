@@ -122,23 +122,29 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 /// and the maximum must be 2^digits - 1 in any case.
 ///
 /// It is not always feasible to compare the argument's value directly
-/// to this maximum in order to determine whether it is within range:
-/// see test_m64_neighborhood() in the accompanying unit test for a
-/// demonstration of the issues that arise in converting ULLONG_MAX to
-/// IEEE 754 binary32. Therefore, the tractable throw-condition
-///   maximum + 1 <= argument  // 'maximum + 1' == 2^digits exactly
-/// is substituted for the intractable
-///   maximum < argument       // 0xFF... may exceed float precision
-/// To ensure that the addition 'maximum + 1' is not done in extended
-/// precision (as actually observed with various versions of gcc), it
-/// is performed through writes to volatile memory. To ensure that
-/// the maximum can be incremented, a static assertion compares the
-/// number of integral radix digits to the number of floating exponent
-/// digits. This assertion would be expected to fail with a 128-bit
-/// integral type and a 32-bit IEEE 754 float. It is written as a
-/// static assertion rather than a throw-statement because 128-bit
-/// long long integers are not generally available, so it is not
-/// possible to test such logic today.
+/// to this maximum in order to determine whether it is within range.
+/// Suppose a 64-bit unsigned long long int is to be converted to an
+/// IEEE 754 binary32 float. The integral maximum is
+///   2^64-1 = 0xFFFFFFFFFFFFFFFF =
+///   11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111
+/// and the closest representable float is
+///   2^64 = 0x5F800000 = 01011111 10000000 00000000 00000000
+///   [exponent: 01011111 (191 decimal) - 127 bias = 64]
+/// Applying the usual arithmetic conversions to a comparison such as
+///   if(ULLONG_MAX < float_argument) throw "out of range";
+/// converts the integral maximum to the closest representable float,
+/// which equals 2^64; then, if the argument exactly equals 2^64, the
+/// inequality comparison is false, no exception is thrown, and a
+/// naive implementation would return the argument cast to integer;
+/// but that cast has undefined behavior and a reasonable compiler
+/// might give a surprising result such as zero.
+///
+/// Instead of attempting to make a test like this work:
+///   if(ULLONG_MAX < float_argument) throw "out of range";
+/// this implementation enforces the maximum thus:
+///   if(one_plus_maximum <= float_argument) throw "out of range";
+/// using ldexp() to calculate the integer power of two that is one
+/// greater than the integral maximum.
 ///
 /// The result of ldexp() is guaranteed to be representable. If it
 /// overflows, it returns HUGE_VAL[FL] according to C99 [7.12.1/4],
@@ -165,14 +171,6 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
     static constexpr From limit = std::ldexp(From(1), to_traits::digits);
 
     static constexpr bool is_twos_complement(~To(0) == -To(1));
-
-    if(to_traits::digits < from_traits::max_exponent)
-        {
-        static From const volatile raw_max = From(to_traits::max());
-        static From const volatile adj_max = raw_max + From(1);
-        if(is_twos_complement && limit != adj_max)
-            throw std::runtime_error("Inconsistent limits.");
-        }
 
     if(std::isnan(from))
         throw std::runtime_error("Cannot cast NaN to integral.");
