@@ -45,7 +45,6 @@
 #include <boost/filesystem/path.hpp>
 
 #include <wx/datetime.h>
-#include <wx/html/htmlcell.h>
 #include <wx/image.h>
 
 #include <cstring>                      // strstr()
@@ -59,11 +58,6 @@ LMI_FORCE_LINKING_IN_SITU(group_quote_pdf_generator_wx)
 
 namespace
 {
-
-enum enum_output_mode
-    {e_output_normal
-    ,e_output_measure_only
-    };
 
 /// Escape special XML characters in the given string, ensuring that it appears
 /// correctly inside HTML element contents. Notice that we don't need to escape
@@ -298,101 +292,6 @@ wxImage load_image(char const* file)
         }
 
     return image;
-}
-
-/// Output an image at the given scale into the PDF.
-///
-/// The scale specifies how many times the image should be shrunk:
-/// scale > 1 makes the image smaller, while scale < 1 makes it larger.
-///
-/// Updates pos_y by increasing it by the height of the specified
-/// image at the given scale.
-
-void output_image
-    (pdf_writer_wx&   pdf_writer
-    ,wxImage const&   image
-    ,char const*      image_name
-    ,double           scale
-    ,int              x
-    ,int*             pos_y
-    ,enum_output_mode output_mode = e_output_normal
-    )
-{
-    int const y = wxRound(image.GetHeight() / scale);
-
-    switch(output_mode)
-        {
-        case e_output_normal:
-            {
-            // Use wxPdfDocument API directly as wxDC doesn't provide a way to
-            // set the image scale at PDF level and also because passing via
-            // wxDC wastefully converts wxImage to wxBitmap only to convert it
-            // back to wxImage when embedding it into the PDF.
-            wxPdfDocument& pdf_doc = pdf_writer.pdf_document();
-
-            pdf_doc.SetImageScale(scale);
-            pdf_doc.Image(image_name, image, x, *pos_y);
-            pdf_doc.SetImageScale(1);
-            }
-            break;
-        case e_output_measure_only:
-            // Do nothing.
-            break;
-        default:
-            {
-            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
-            }
-        }
-
-    *pos_y += y;
-}
-
-/// Render, or just pretend rendering in order to measure it, the given HTML
-/// contents at the specified position wrapping it at the given width.
-/// Return the height of the output (using this width).
-
-int output_html
-    (pdf_writer_wx& pdf_writer
-    ,int x
-    ,int y
-    ,int width
-    ,wxString const& html
-    ,enum_output_mode output_mode = e_output_normal
-    )
-{
-    wxHtmlWinParser& html_parser = pdf_writer.html_parser();
-
-    std::unique_ptr<wxHtmlContainerCell> const cell
-        (static_cast<wxHtmlContainerCell*>(html_parser.Parse(html))
-        );
-    LMI_ASSERT(cell);
-
-    cell->Layout(width);
-    switch(output_mode)
-        {
-        case e_output_normal:
-            {
-            wxHtmlRenderingInfo rendering_info;
-            cell->Draw
-                (*html_parser.GetDC()
-                ,x
-                ,y
-                ,0
-                ,std::numeric_limits<int>::max()
-                ,rendering_info
-                );
-            }
-            break;
-        case e_output_measure_only:
-            // Do nothing.
-            break;
-        default:
-            {
-            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
-            }
-        }
-
-    return cell->GetHeight();
 }
 
 enum enum_group_quote_columns
@@ -1055,7 +954,7 @@ void group_quote_pdf_generator_wx::output_image_header
     double const image_width = banner_image.GetWidth();
     double const scale = image_width / pdf_writer.get_total_width();
     int const pos_top = *pos_y;
-    output_image(pdf_writer, banner_image, "banner", scale, 0, pos_y);
+    pdf_writer.output_image(banner_image, "banner", scale, 0, pos_y);
 
     auto& pdf_dc = pdf_writer.dc();
 
@@ -1101,7 +1000,12 @@ void group_quote_pdf_generator_wx::output_document_header
         ,escape_for_html_elem(report_data_.prepared_by_)
         );
 
-    output_html(pdf_writer, pdf_writer.get_horz_margin(), *pos_y, pdf_writer.get_page_width() / 2, title_html);
+    pdf_writer.output_html
+        (pdf_writer.get_horz_margin()
+        ,*pos_y
+        ,pdf_writer.get_page_width() / 2
+        ,title_html
+        );
 
     // Build the summary table with all the mandatory fields.
     wxString summary_html =
@@ -1152,9 +1056,8 @@ void group_quote_pdf_generator_wx::output_document_header
     // Finally close the summary table.
     summary_html += "</table>";
 
-    int const summary_height = output_html
-        (pdf_writer
-        ,pdf_writer.get_horz_margin() + pdf_writer.get_page_width() / 2
+    int const summary_height = pdf_writer.output_html
+        (pdf_writer.get_horz_margin() + pdf_writer.get_page_width() / 2
         ,*pos_y
         ,pdf_writer.get_page_width() / 2
         ,summary_html
@@ -1320,9 +1223,8 @@ void group_quote_pdf_generator_wx::output_footer
         {
         // Arbitrarily scale down the logo by a factor of 2 to avoid making it
         // too big.
-        output_image
-            (pdf_writer
-            ,logo_image
+        pdf_writer.output_image
+            (logo_image
             ,"company_logo"
             ,2.0
             ,pdf_writer.get_horz_margin()
@@ -1335,9 +1237,8 @@ void group_quote_pdf_generator_wx::output_footer
 
     wxString const footer_html = "<p>" + report_data_.footer_html_ + "</p>";
 
-    *pos_y += output_html
-        (pdf_writer
-        ,pdf_writer.get_horz_margin()
+    *pos_y += pdf_writer.output_html
+        (pdf_writer.get_horz_margin()
         ,*pos_y
         ,pdf_writer.get_page_width()
         ,footer_html

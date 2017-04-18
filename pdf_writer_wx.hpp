@@ -24,9 +24,18 @@
 
 #include "config.hpp"
 
+#include "assert_lmi.hpp"
+
 #include <wx/html/winpars.h>
 
 #include <wx/pdfdc.h>
+
+#include <memory>                       // std::unique_ptr
+
+enum enum_output_mode
+    {e_output_normal
+    ,e_output_measure_only
+    };
 
 class pdf_writer_wx
 {
@@ -41,9 +50,26 @@ class pdf_writer_wx
 
     ~pdf_writer_wx();
 
+    // High level functions which should be preferably used if possible.
+    int output_html
+        (int x
+        ,int y
+        ,int width
+        ,wxString const& html
+        ,enum_output_mode output_mode = e_output_normal
+        );
+
+    void output_image
+        (wxImage const&   image
+        ,char const*      image_name
+        ,double           scale
+        ,int              x
+        ,int*             pos_y
+        ,enum_output_mode output_mode = e_output_normal
+        );
+
+    // Accessors allowing to use lower level wxDC API directly.
     wxDC& dc() { return pdf_dc_; }
-    wxPdfDocument& pdf_document() { return *pdf_dc_.GetPdfDocument(); }
-    wxHtmlWinParser& html_parser() { return html_parser_; }
 
     // Page metrics: the page width and height are the size of the page region
     // reserved for the normal contents, excluding horizontal and vertical

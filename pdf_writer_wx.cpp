@@ -23,6 +23,10 @@
 
 #include "pdf_writer_wx.hpp"
 
+#include "alert.hpp"
+
+#include <wx/html/htmlcell.h>
+
 namespace
 {
 
@@ -79,6 +83,98 @@ pdf_writer_wx::pdf_writer_wx
         ,"Helvetica"
         ,"Courier"
         );
+}
+
+/// Output an image at the given scale into the PDF.
+///
+/// The scale specifies how many times the image should be shrunk:
+/// scale > 1 makes the image smaller, while scale < 1 makes it larger.
+///
+/// Updates pos_y by increasing it by the height of the specified
+/// image at the given scale.
+
+void pdf_writer_wx::output_image
+    (wxImage const&   image
+    ,char const*      image_name
+    ,double           scale
+    ,int              x
+    ,int*             pos_y
+    ,enum_output_mode output_mode
+    )
+{
+    int const y = wxRound(image.GetHeight() / scale);
+
+    switch(output_mode)
+        {
+        case e_output_normal:
+            {
+            // Use wxPdfDocument API directly as wxDC doesn't provide a way to
+            // set the image scale at PDF level and also because passing via
+            // wxDC wastefully converts wxImage to wxBitmap only to convert it
+            // back to wxImage when embedding it into the PDF.
+            wxPdfDocument* const pdf_doc = pdf_dc_.GetPdfDocument();
+            LMI_ASSERT(pdf_doc);
+
+            pdf_doc->SetImageScale(scale);
+            pdf_doc->Image(image_name, image, x, *pos_y);
+            pdf_doc->SetImageScale(1);
+            }
+            break;
+        case e_output_measure_only:
+            // Do nothing.
+            break;
+        default:
+            {
+            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
+            }
+        }
+
+    *pos_y += y;
+}
+
+/// Render, or just pretend rendering in order to measure it, the given HTML
+/// contents at the specified position wrapping it at the given width.
+/// Return the height of the output (using this width).
+
+int pdf_writer_wx::output_html
+    (int x
+    ,int y
+    ,int width
+    ,wxString const& html
+    ,enum_output_mode output_mode
+    )
+{
+    std::unique_ptr<wxHtmlContainerCell> const cell
+        (static_cast<wxHtmlContainerCell*>(html_parser_.Parse(html))
+        );
+    LMI_ASSERT(cell);
+
+    cell->Layout(width);
+    switch(output_mode)
+        {
+        case e_output_normal:
+            {
+            wxHtmlRenderingInfo rendering_info;
+            cell->Draw
+                (pdf_dc_
+                ,x
+                ,y
+                ,0
+                ,std::numeric_limits<int>::max()
+                ,rendering_info
+                );
+            }
+            break;
+        case e_output_measure_only:
+            // Do nothing.
+            break;
+        default:
+            {
+            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
+            }
+        }
+
+    return cell->GetHeight();
 }
 
 int pdf_writer_wx::get_horz_margin() const
