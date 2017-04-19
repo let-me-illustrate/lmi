@@ -164,8 +164,8 @@ int test_main(int, char*[])
 
     // Infinities.
 
-    double volatile const inf_dbl = std::numeric_limits<double>::infinity();
-    std::string     const inf_str = numeric_io_cast<std::string>(inf_dbl);
+    double const volatile inf_dbl = std::numeric_limits<double>::infinity();
+    std::string const inf_str = numeric_io_cast<std::string>(inf_dbl);
 
     BOOST_TEST_EQUAL(inf_dbl, numeric_io_cast<double>(inf_str));
 
