@@ -130,6 +130,8 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 /// and the closest representable float is
 ///   2^64 = 0x5F800000 = 01011111 10000000 00000000 00000000
 ///   [exponent: 01011111 (191 decimal) - 127 bias = 64]
+/// The integral type lacks the range to represent 2^64, while the
+/// floating type lacks the precision to represent 2^64 - 1.
 /// Applying the usual arithmetic conversions to a comparison such as
 ///   if(ULLONG_MAX < float_argument) throw "out of range";
 /// converts the integral maximum to the closest representable float,
