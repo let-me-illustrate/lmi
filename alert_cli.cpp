@@ -29,7 +29,7 @@
 
 namespace
 {
-volatile bool ensure_setup = set_alert_functions
+bool volatile ensure_setup = set_alert_functions
     (status_alert
     ,warning_alert
     ,hobsons_choice_alert
@@ -77,7 +77,7 @@ void hobsons_choice_alert(std::string const& s)
     // certainly a poor choice for applications that should run
     // unattended, such as servers or regression tests.
     //
-    static const volatile bool offer_hobsons_choice = false;
+    static bool const volatile offer_hobsons_choice = false;
     if(offer_hobsons_choice)
         {
         std::cerr << s << '\n' << hobsons_prompt() << std::endl;

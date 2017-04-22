@@ -318,7 +318,7 @@ inline unsigned short int default_x87_control_word()
 
 inline unsigned short int x87_control_word()
 {
-    volatile unsigned short int control_word = 0x0;
+    unsigned short int volatile control_word = 0x0;
 #   if defined __GNUC__
     asm volatile("fstcw %0" : : "m" (control_word));
 #   elif defined __BORLANDC__
@@ -337,7 +337,7 @@ inline unsigned short int x87_control_word()
 inline void x87_control_word(unsigned short int cw)
 {
 #   if defined __GNUC__
-    volatile unsigned short int control_word = cw;
+    unsigned short int volatile control_word = cw;
     asm volatile("fldcw %0" : : "m" (control_word));
 #   elif defined __BORLANDC__
     _control87(cw, 0x0ffff);

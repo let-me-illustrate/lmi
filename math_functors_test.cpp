@@ -49,7 +49,7 @@ namespace
 template<typename T>
 bool lmi_isnan(T t)
 {
-    volatile T t0(t);
+    T volatile t0(t);
     return t0 != t0;
 }
 
@@ -184,7 +184,7 @@ void sample_results()
 // less inaccurate than an alternative using expm1l() and log1pl().
 void mete0()
 {
-    volatile double x;
+    double volatile x;
     stifle_warning_for_unused_value(x);
     x = i_upper_12_over_12_from_i_naive<double>()(0.04);
     x = i_from_i_upper_12_over_12_naive<double>()(0.04);
@@ -195,7 +195,7 @@ void mete0()
 // This implementation uses production functors.
 void mete1()
 {
-    volatile double x;
+    double volatile x;
     stifle_warning_for_unused_value(x);
     x = i_upper_12_over_12_from_i<double>()(0.04);
     x = i_from_i_upper_12_over_12<double>()(0.04);

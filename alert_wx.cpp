@@ -40,7 +40,7 @@ LMI_FORCE_LINKING_IN_SITU(alert_wx)
 
 namespace
 {
-volatile bool ensure_setup = set_alert_functions
+bool volatile ensure_setup = set_alert_functions
     (status_alert
     ,warning_alert
     ,hobsons_choice_alert

@@ -125,7 +125,7 @@ std::shared_ptr<progress_meter> concrete_progress_meter_creator
         );
 }
 
-volatile bool ensure_setup = set_progress_meter_creator
+bool volatile ensure_setup = set_progress_meter_creator
     (concrete_progress_meter_creator
     );
 } // Unnamed namespace.

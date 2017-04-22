@@ -648,7 +648,7 @@ void mete_static()
     using from_traits = std::numeric_limits<From>;
     static_assert(from_traits::is_specialized, "");
     static_assert(N < from_traits::max(), "");
-    volatile To z(0);
+    To volatile z(0);
     for(From j = 0; j < N; ++j)
         {
         z = static_cast<To>(j);
@@ -665,7 +665,7 @@ void mete_bourn()
     using from_traits = std::numeric_limits<From>;
     static_assert(from_traits::is_specialized, "");
     static_assert(N < from_traits::max(), "");
-    volatile To z(0);
+    To volatile z(0);
     for(From j = 0; j < N; ++j)
         {
         z = bourn_cast<To>(j);

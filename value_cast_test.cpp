@@ -70,7 +70,7 @@ int test_main(int, char*[])
     BOOST_TEST(is_string<std::string const&>::value);
 
 // These tests fail to compile:
-//    BOOST_TEST(is_string<std::string volatile>::value);
+//    BOOST_TEST(is_string<std::string       volatile >::value);
 //    BOOST_TEST(is_string<std::string const volatile&>::value);
 
     char const* ccp = "2.71828";

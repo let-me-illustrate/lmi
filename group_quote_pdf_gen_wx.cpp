@@ -1392,7 +1392,7 @@ void group_quote_pdf_generator_wx::output_footer
         );
 }
 
-volatile bool ensure_setup = group_quote_pdf_generator_wx::set_creator
+bool volatile ensure_setup = group_quote_pdf_generator_wx::set_creator
     (group_quote_pdf_generator_wx::do_create
     );
 

@@ -104,6 +104,6 @@ void concrete_system_command(std::string const& command_line)
 
 #endif // defined LMI_MSW
 
-volatile bool ensure_setup = system_command_initialize(concrete_system_command);
+bool volatile ensure_setup = system_command_initialize(concrete_system_command);
 } // Unnamed namespace.
 

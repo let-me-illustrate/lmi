@@ -46,7 +46,7 @@ void test_interconvertibility
     )
 {
     T const v = numeric_io_cast<T>(s);
-    volatile bool is_exact = std::numeric_limits<T>::is_exact;
+    bool volatile is_exact = std::numeric_limits<T>::is_exact;
     if(is_exact)
         {
         INVOKE_BOOST_TEST_EQUAL(v, t, file, line);
@@ -102,7 +102,7 @@ static_assert(std::numeric_limits<double>::is_iec559, "");
 
 int test_main(int, char*[])
 {
-    volatile int z = 0; // Avoid "condition always true/false" warnings.
+    int volatile z = 0; // Avoid "condition always true/false" warnings.
     BOOST_TEST_EQUAL( z, floating_point_decimals( 0.0));
     BOOST_TEST_EQUAL( z, floating_point_decimals(-0.0));
     BOOST_TEST_EQUAL(15, floating_point_decimals( 1.0));
@@ -354,7 +354,7 @@ int test_main(int, char*[])
     BOOST_TEST_UNEQUAL("0.1", numeric_io_cast<std::string>(0.1 + 2.2204460492503131e-16));
 
     // 1 +/- epsilon must be formatted as apparent unity.
-    volatile bool eq = (1.0 + 2.2204460492503131e-16 == 1.00000000000000022204460492503131);
+    bool volatile eq = (1.0 + 2.2204460492503131e-16 == 1.00000000000000022204460492503131);
     BOOST_TEST(eq);
     BOOST_TEST_EQUAL("1", numeric_io_cast<std::string>(1.00000000000000022204460492503131));
     // Consider:

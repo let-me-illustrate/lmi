@@ -102,13 +102,13 @@ void cache_file_reads_test::assay_speed()
 void cache_file_reads_test::mete_uncached()
 {
     X const x("sample.ill");
-    volatile std::string::size_type z = x.s().size();
+    std::string::size_type volatile z = x.s().size();
 }
 
 void cache_file_reads_test::mete_cached()
 {
     X const& x(*X::read_via_cache("sample.ill"));
-    volatile std::string::size_type z = x.s().size();
+    std::string::size_type volatile z = x.s().size();
 }
 
 int test_main(int, char*[])
