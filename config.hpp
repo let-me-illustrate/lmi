@@ -202,12 +202,6 @@ namespace fs = boost::filesystem;
 #       undef  OK_TO_INCLUDE_CONFIG_MING323_HPP
 #   endif // MinGW gcc 3.2.3+ .
 
-#   if defined __CYGWIN__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
-#       define OK_TO_INCLUDE_CONFIG_CYG323_HPP
-#       include "config_cyg323.hpp"
-#       undef  OK_TO_INCLUDE_CONFIG_CYG323_HPP
-#   endif // Cygwin gcc 3.2.3+ .
-
 #   if defined LMI_COMO_WITH_MINGW
 #       define OK_TO_INCLUDE_CONFIG_COMO_WITH_MINGW_HPP
 #       include "config_como_mingw.hpp"
