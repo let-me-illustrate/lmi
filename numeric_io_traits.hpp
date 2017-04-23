@@ -24,9 +24,8 @@
 
 #include "config.hpp"
 
+#include "bourn_cast.hpp"
 #include "ieee754.hpp"                  // is_infinite<>()
-
-#include <boost/cast.hpp>
 
 #include <algorithm>                    // std::max()
 #include <cmath>                        // C99 functions fabsl(), log10l(), strtold()
@@ -117,9 +116,9 @@ inline std::string simplify_floating_point(std::string const& s)
 /// no strtoi() in the C standard: C99 7.20.1.2 says that atoi() is
 /// equivalent to
 ///   (int)strtol(nptr, endptr, 10)
-/// except for the treatment of errors. Therefore, template function
-/// boost::numeric_cast() is used to detect narrowing conversions and
-/// throw an exception whenever they occur.
+/// except for the treatment of errors. Therefore, function template
+/// bourn_cast() is used to detect narrowing conversions and throw an
+/// exception whenever they occur.
 ///
 /// It would seem nicer to choose a string-to-number conversion just by
 /// writing a function name: "std::strtoul", "std::strtod", etc. Here,
@@ -165,8 +164,8 @@ template<> struct numeric_conversion_traits<char>
     static T strtoT(char const* nptr, char** endptr)
         {
         return std::numeric_limits<T>::is_signed
-            ? boost::numeric_cast<T>(std::strtol (nptr, endptr, 10))
-            : boost::numeric_cast<T>(std::strtoul(nptr, endptr, 10))
+            ? bourn_cast<T>(std::strtol (nptr, endptr, 10))
+            : bourn_cast<T>(std::strtoul(nptr, endptr, 10))
             ;
         }
 };
@@ -179,7 +178,7 @@ template<> struct numeric_conversion_traits<signed char>
     typedef signed char T;
     static char const* fmt() {return "%.*i";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
+        {return bourn_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 
 /// C99's "%.*hhi" might be used instead if it gets added to C++.
@@ -190,7 +189,7 @@ template<> struct numeric_conversion_traits<unsigned char>
     typedef unsigned char T;
     static char const* fmt() {return "%.*u";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtoul(nptr, endptr, 10));}
+        {return bourn_cast<T>(std::strtoul(nptr, endptr, 10));}
 };
 
 // SOMEDAY !! Support this type when an actual need arises.
@@ -202,7 +201,7 @@ template<> struct numeric_conversion_traits<wchar_t>
     typedef wchar_t T;
     static char const* fmt() {return "%.*lc";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
+        {return bourn_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 #endif // 0
 
@@ -212,7 +211,7 @@ template<> struct numeric_conversion_traits<bool>
     typedef bool T;
     static char const* fmt() {return "%.*i";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
+        {return bourn_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 
 template<> struct numeric_conversion_traits<int>
