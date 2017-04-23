@@ -28,7 +28,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <cmath>                        // std::pow()
+#include <cmath>                        // std::scalbn()
 #include <cstring>                      // std::strcpy(), std::strcmp
 #include <istream>
 #include <limits>
@@ -328,9 +328,9 @@ int extra_tests0()
 
     // A big number that must be representable as a finite
     // floating-point number [18.2.1.2/27].
-    double big = std::pow
-        (static_cast<double>(std::numeric_limits<double>::radix)
-        ,static_cast<double>(std::numeric_limits<double>::max_exponent - 1)
+    double big = std::scalbn
+        (1.0
+        ,std::numeric_limits<double>::max_exponent - 1
         );
 
     // Using libmingwex's strtod() to convert a really big number
@@ -347,7 +347,7 @@ int extra_tests0()
     // Initialize 'nptr' to a string representation of
     //   FLT_RADIX^(DBL_MAX_EXP-1)
     // produced by snprintf(), verifiable thus:
-    //    double big = pow(FLT_RADIX, DBL_MAX_EXP - 1.0);
+    //    double big = std::scalbn(1.0, DBL_MAX_EXP - 1.0);
     //    snprintf(buffer, buffer_length, "%.*f", 0, big);
     char const* nptr =
     //   12345678901234567890123456789012345678901234567890 <-- 50 digits/line
@@ -365,9 +365,9 @@ int extra_tests0()
 
     // A small number that must be representable as a normalized
     // floating-point number [18.2.1.2/23].
-    double small = std::pow
-        (static_cast<double>(std::numeric_limits<double>::radix)
-        ,static_cast<double>(std::numeric_limits<double>::min_exponent)
+    double small = std::scalbn
+        (1.0
+        ,std::numeric_limits<double>::min_exponent
 // TODO ?? Why doesn't this work with '- 1' appended?
 //        ,static_cast<double>(std::numeric_limits<double>::min_exponent - 1)
         );
