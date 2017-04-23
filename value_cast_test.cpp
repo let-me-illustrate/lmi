@@ -368,11 +368,24 @@ int extra_tests0()
     double small = std::scalbn
         (1.0
         ,std::numeric_limits<double>::min_exponent
-// TODO ?? Why doesn't this work with '- 1' appended?
-//        ,static_cast<double>(std::numeric_limits<double>::min_exponent - 1)
         );
     BOOST_TEST_EQUAL( small, value_cast<double>(value_cast<std::string>( small)));
     BOOST_TEST_EQUAL(-small, value_cast<double>(value_cast<std::string>(-small)));
+
+    // Of course, the minimum normalized power of two is this:
+    double tiny = std::scalbn
+        (1.0
+        ,std::numeric_limits<double>::min_exponent - 1
+        );
+    BOOST_TEST_EQUAL(0x1p-1022, tiny);
+    // which converts to this:
+    BOOST_TEST_EQUAL(0x0.fffffffffffffp-1022, value_cast<double>(value_cast<std::string>(tiny)));
+    // which is the largest denormal.
+    //
+    // The round trip works for the values tested earlier only by
+    // accident: 17 digits are required for a binary64 round trip,
+    // but value_cast returns no more than 16 because the 17th is
+    // not known to be accurate.
 
     return 0;
 }
