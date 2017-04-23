@@ -24,13 +24,12 @@
 
 #include "config.hpp"
 
+#include "bourn_cast.hpp"
 #include "numeric_io_cast.hpp"
 #include "stream_cast.hpp"
 
-#include <boost/cast.hpp>
-
-#include <sstream>
 #include <stdexcept>
+#include <string>
 #include <type_traits>
 
 // INELEGANT !! Test the runtime performance of value_cast() compared
@@ -45,13 +44,10 @@
 // template function value_cast for string-like types, as was done
 // for template class datum_string.
 
-// INELEGANT !! Exceptions thrown from numeric_io_cast and stream_cast
-// ought perhaps to be derived from std::bad_cast.
-
 /// Function template value_cast() converts between types, choosing a
 /// conversion method in the following order of decreasing preference:
-///   numeric_value_cast  for number <--> number
-///   direct conversion   for intraconvertible types not both numeric
+///   bourn_cast          for number <--> number
+///   direct conversion   for interconvertible types not both numeric
 ///   numeric_io_cast     for number <--> string
 ///   stream_cast         for all other cases
 ///
@@ -142,38 +138,6 @@ void throw_if_null_pointer(T* t)
         }
 }
 
-/// Function template numeric_value_cast() wraps boost::numeric_cast
-/// to make it DWISOTT according to the boost-1.31.0 documentation:
-///   "An exception is thrown when a runtime value-preservation
-///   check fails."
-/// The problem is that
-///   boost::numeric_cast<int>(2.71828);
-/// returns the integer 2 without throwing, but 2.71828 and 2 are
-/// different values. It seems unreasonable to call truncation a
-/// value-preserving relation.
-
-template<typename To, typename From>
-To numeric_value_cast(From const& from)
-{
-    To result = boost::numeric_cast<To>(from);
-    if(result == from)
-        {
-        return result;
-        }
-    else
-        {
-        std::ostringstream oss;
-        oss
-            << "Value not preserved converting "
-            << numeric_io_cast<std::string>(from)
-            << " to "
-            << numeric_io_cast<std::string>(result)
-            << " ."
-            ;
-        throw std::runtime_error(oss.str());
-        }
-}
-
 /// Class template value_cast_choice is an appurtenance of function
 /// template value_cast(); it selects the best conversion method.
 ///
@@ -238,7 +202,7 @@ template<typename To, typename From>
 struct value_cast_chooser<To,From,e_both_numeric>
 {
     static cast_method method()     {return e_both_numeric;}
-    To operator()(From const& from) {return numeric_value_cast<To>(from);}
+    To operator()(From const& from) {return bourn_cast<To>(from);}
 };
 
 template<typename To, typename From>

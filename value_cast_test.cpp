@@ -141,22 +141,17 @@ int test_main(int, char*[])
     // A good compiler should warn about this conversion.
 //    value_cast<unsigned int>(-1);
 
-    // The boost-1.31.0 documentation says:
-    //   "An exception is thrown when a runtime value-preservation
-    //   check fails."
-    // yet this does not throw, even in boost-1.33.1, whose new
-    // numeric_cast delegates to boost::numeric::converter:
-    i = boost::numeric_cast<int>(2.71828);
-    // but these do:
+    // Forbidden truncation.
+
     BOOST_TEST_THROW
         (i = value_cast<int>(d)
         ,std::runtime_error
-        ,"Value not preserved converting 2.71828 to 2 ."
+        ,lmi_test::what_regex("^Cast.*would not preserve value\\.$")
         );
     BOOST_TEST_THROW
-        (numeric_value_cast<int>(2.71828)
+        (bourn_cast<int>(2.71828)
         ,std::runtime_error
-        ,"Value not preserved converting 2.71828 to 2 ."
+        ,lmi_test::what_regex("^Cast.*would not preserve value\\.$")
         );
 
     // This conversion should work: value is exactly preserved.
@@ -724,9 +719,17 @@ int boost_tests()
 
     BOOST_TEST_EQUAL(1,value_cast<int>(1.0));
 
-    BOOST_TEST_THROW(value_cast<int>(1.23), std::runtime_error, "");
+    BOOST_TEST_THROW
+        (value_cast<int>(1.23)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Cast.*would not preserve value\\.$")
+        );
 
-    BOOST_TEST_THROW(value_cast<int>(1e20), boost::numeric::positive_overflow, "");
+    BOOST_TEST_THROW
+        (value_cast<int>(1e20)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
     BOOST_TEST_EQUAL(1, value_cast<int>(true));
     BOOST_TEST_EQUAL(0, value_cast<int>(false));
     BOOST_TEST_EQUAL(123, value_cast<int>("123"));
@@ -792,10 +795,18 @@ int boost_tests()
     BOOST_TEST_EQUAL(true, value_cast<bool>('\1'));
     BOOST_TEST_EQUAL(false, value_cast<bool>('\0'));
 
-    BOOST_TEST_THROW(value_cast<bool>('A'), boost::numeric::positive_overflow, "");
+    BOOST_TEST_THROW
+        (value_cast<bool>('A')
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
     BOOST_TEST_EQUAL(true, value_cast<bool>(1));
     BOOST_TEST_EQUAL(false, value_cast<bool>(0));
-    BOOST_TEST_THROW(value_cast<bool>(123), boost::numeric::positive_overflow, "");
+    BOOST_TEST_THROW
+        (value_cast<bool>(123)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
     BOOST_TEST_EQUAL(true, value_cast<bool>(1.0));
     BOOST_TEST_EQUAL(false, value_cast<bool>(0.0));
     BOOST_TEST_EQUAL(true, value_cast<bool>(true));
