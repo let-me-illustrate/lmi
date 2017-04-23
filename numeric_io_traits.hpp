@@ -157,16 +157,16 @@ template<> struct numeric_conversion_traits<char>
     typedef char T;
     static char const* fmt()
         {
-        return (0 == std::numeric_limits<T>::min())
-            ? "%.*u"
-            : "%.*i"
+        return std::numeric_limits<T>::is_signed
+            ? "%.*i"
+            : "%.*u"
             ;
         }
     static T strtoT(char const* nptr, char** endptr)
         {
-        return (0 == std::numeric_limits<T>::min())
-            ? boost::numeric_cast<T>(std::strtoul(nptr, endptr, 10))
-            : boost::numeric_cast<T>(std::strtol (nptr, endptr, 10))
+        return std::numeric_limits<T>::is_signed
+            ? boost::numeric_cast<T>(std::strtol (nptr, endptr, 10))
+            : boost::numeric_cast<T>(std::strtoul(nptr, endptr, 10))
             ;
         }
 };
