@@ -64,14 +64,15 @@ int test_main(int, char*[])
     BOOST_TEST(!is_string<char       volatile*>::value);
     BOOST_TEST(!is_string<char const volatile*>::value);
 
-    BOOST_TEST(is_string<std::string       >::value);
-    BOOST_TEST(is_string<std::string      &>::value);
-    BOOST_TEST(is_string<std::string const >::value);
-    BOOST_TEST(is_string<std::string const&>::value);
+    BOOST_TEST( is_string<std::string                >::value);
+    BOOST_TEST( is_string<std::string const          >::value);
+    BOOST_TEST(!is_string<std::string       volatile >::value);
+    BOOST_TEST(!is_string<std::string const volatile >::value);
 
-// These tests fail to compile:
-//    BOOST_TEST(is_string<std::string       volatile >::value);
-//    BOOST_TEST(is_string<std::string const volatile&>::value);
+    BOOST_TEST( is_string<std::string               &>::value);
+    BOOST_TEST( is_string<std::string const         &>::value);
+    BOOST_TEST(!is_string<std::string       volatile&>::value);
+    BOOST_TEST(!is_string<std::string const volatile&>::value);
 
     char const* ccp = "2.71828";
     char* cp = const_cast<char*>("3.14159");
