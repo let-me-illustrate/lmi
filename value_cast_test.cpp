@@ -139,8 +139,11 @@ int test_main(int, char*[])
 
     // Forbidden narrowing conversions.
 
-    // A good compiler should warn about this conversion.
-//    value_cast<unsigned int>(-1);
+    BOOST_TEST_THROW
+        (value_cast<unsigned int>(-1)
+        ,std::runtime_error
+        ,"Cannot cast negative to unsigned."
+        );
 
     // Forbidden truncation.
 
