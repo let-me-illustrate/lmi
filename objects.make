@@ -323,6 +323,7 @@ skeleton_objects := \
   illustration_document.o \
   illustration_view.o \
   input_sequence_entry.o \
+  ledger_pdf_generator_wx.o \
   main_common.o \
   mec_document.o \
   mec_view.o \
