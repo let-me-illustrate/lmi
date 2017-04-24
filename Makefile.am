@@ -199,6 +199,7 @@ libskeleton_la_SOURCES = \
     illustration_document.cpp \
     illustration_view.cpp \
     input_sequence_entry.cpp \
+    ledger_pdf_generator_wx.cpp \
     main_common.cpp \
     mec_document.cpp \
     mec_view.cpp \
