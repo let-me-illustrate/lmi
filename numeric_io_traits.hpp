@@ -28,7 +28,7 @@
 #include "ieee754.hpp"                  // is_infinite<>()
 
 #include <algorithm>                    // std::max()
-#include <cmath>                        // C99 functions fabsl(), log10l(), strtold()
+#include <cmath>                        // std::fabs(), std::log10()
 #include <cstdlib>                      // std::strto*()
 #include <cstring>                      // std::strcmp(), std::strlen()
 #include <limits>
@@ -53,12 +53,6 @@
 /// Notes: Truncation by static_cast<int> is appropriate because the
 /// result is constrained to be nonnegative. If negative results were
 /// wanted, it would be necessary to round toward negative infinity.
-///
-/// Because many compilers in 2004 still don't implement C++98 26.5/6
-/// correctly, C99 functions fabsl() and log10l() are used here. It is
-/// less likely that these are incorrect than that the C++ overloads
-/// are missing, which would cause std::fabs() and std::log10() to be
-/// invoked for type long double.
 
 template<typename T>
 inline int floating_point_decimals(T t)
@@ -79,8 +73,8 @@ inline int floating_point_decimals(T t)
         {
         return 0;
         }
-    long double z = std::numeric_limits<T>::epsilon() * fabsl(t);
-    return std::max(0, static_cast<int>(-log10l(z)));
+    long double z = std::numeric_limits<T>::epsilon() * std::fabs(t);
+    return std::max(0, static_cast<int>(-std::log10(z)));
 }
 
 /// Simplify a formatted floating-point number.
@@ -385,7 +379,7 @@ template<> struct numeric_conversion_traits<long double>
 #if defined LMI_MSVCRT
         {return strtoFDL_msvc(nptr, endptr);}
 #else  // !defined LMI_MSVCRT
-        {return strtold(nptr, endptr);}
+        {return std::strtold(nptr, endptr);}
 #endif // !defined LMI_MSVCRT
 };
 
