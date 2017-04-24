@@ -133,7 +133,7 @@ int test_main(int, char*[])
     _control87(0x00ff,  0x00ff);
 #endif // defined __BORLANDC__
 
-    volatile long double d = 0.0;
+    long double volatile d = 0.0;
     ncnnnpnn( 1.0 / d  );
     ncnnnpnn(-1.0 / d  );
 

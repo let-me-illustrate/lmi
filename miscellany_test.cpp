@@ -30,10 +30,10 @@
 
 void test_each_equal()
 {
-    int                   a0[] {0, 0, 0, 0};
-    int const             a1[] {0, 1, 1, 1};
-    int volatile          a2[] {0, 1, 2, 2};
-    int const volatile    a3[] {0, 1, 2, 3};
+    int                a0[] {0, 0, 0, 0};
+    int const          a1[] {0, 1, 1, 1};
+    int       volatile a2[] {0, 1, 2, 2};
+    int const volatile a3[] {0, 1, 2, 3};
 
     // There can be no volatile standard container.
     std::vector<int>        v0 {0, 0, 0, 0};

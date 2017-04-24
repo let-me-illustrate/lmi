@@ -26,8 +26,8 @@
 #include <iostream>
 #include <ostream>
 
-volatile bool always_true  = true;
-volatile bool always_false = false;
+bool volatile always_true  = true;
+bool volatile always_false = false;
 
 void test_function(bool a, bool b, char const* file, int line)
 {

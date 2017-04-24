@@ -79,7 +79,7 @@ std::vector<db_names> const& static_get_db_names()
 
     static std::vector<db_names> const v(static_DBNames, static_DBNames + n);
 
-    static volatile bool b = check_order(v);
+    static bool volatile b = check_order(v);
     stifle_warning_for_unused_variable(b);
 
     return v;

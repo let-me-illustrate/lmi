@@ -21,36 +21,87 @@
 
 #include "pchfile.hpp"
 
-#include "bourn_cast.hpp"
+//#define TEST_BOOST_CAST_INSTEAD
+#if defined TEST_BOOST_CAST_INSTEAD
+#   include <boost/cast.hpp>
+template<typename To, typename From>
+inline To bourn_cast(From from)
+{
+    try
+        {
+        return boost::numeric_cast<To>(from);
+        }
+    catch(boost::numeric::positive_overflow)
+        {
+        throw std::runtime_error("Cast would transgress upper limit.");
+        }
+    catch(boost::numeric::negative_overflow)
+        {
+        using   to_traits = std::numeric_limits<To  >;
+        using from_traits = std::numeric_limits<From>;
+        if(from_traits::is_integer && !to_traits::is_signed && from < 0)
+            throw std::runtime_error("Cannot cast negative to unsigned.");
+        else
+            throw std::runtime_error("Cast would transgress lower limit.");
+        }
+}
+#else  // !defined TEST_BOOST_CAST_INSTEAD
+#   include "bourn_cast.hpp"
+#endif // !defined TEST_BOOST_CAST_INSTEAD
 
 #include "miscellany.hpp"               // stifle_warning_for_unused_variable()
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <climits>                      // LLONG_MIN, SCHAR_MIN, etc.
-#include <type_traits>                  // std::conditional
+#include <climits>                      // INT_MIN, LLONG_MIN, SCHAR_MIN
 
 /// Test trivial casts between identical types.
 
 template<typename T>
 void test_same(char const* file, int line)
 {
-    using limits = std::numeric_limits<T>;
-    T upper = limits::max();
-    T lower = limits::lowest();
+    using traits = std::numeric_limits<T>;
+    T upper = traits::max();
+    T lower = traits::lowest();
     INVOKE_BOOST_TEST_EQUAL(upper, bourn_cast<T>(upper), file, line);
     INVOKE_BOOST_TEST_EQUAL(T( 1), bourn_cast<T>(T( 1)), file, line);
     INVOKE_BOOST_TEST_EQUAL(T( 0), bourn_cast<T>(T( 0)), file, line);
     INVOKE_BOOST_TEST_EQUAL(lower, bourn_cast<T>(lower), file, line);
-    if(limits::is_signed)
+
+    if(traits::is_signed)
         {
         INVOKE_BOOST_TEST_EQUAL(T(-1), bourn_cast<T>(T(-1)), file, line);
+        }
+
+    // Test whether integer limits are correctly calculated by this
+    // std::scalbln() technique, so that it can be relied upon in
+    // the bourn_cast floating-to-integral implementation. This
+    // demonstration has been tested with 32- and 64-bit gcc, with
+    // an 80-bit long double type whose 64-bit mantissa suffices to
+    // test the limits of every integral type up to 64 digits exactly
+    // because it can distinguish +/-(2^64) from +/-(2^64 - 1).
+    //
+    // The signed minimum given here assumes two's complement; it
+    // would be -(x - 1) for a ones' complement or sign-and-magnitude
+    // representation.
+    if(traits::is_integer)
+        {
+        long double const x = std::scalbln(1.0l, traits::digits);
+        long double const max = x - 1;
+        long double const min = traits::is_signed ? -x : 0;
+        INVOKE_BOOST_TEST_EQUAL(traits::max(), max, file, line);
+        INVOKE_BOOST_TEST_EQUAL(traits::min(), min, file, line);
+        T imax = bourn_cast<T>(max);
+        T imin = bourn_cast<T>(min);
+        INVOKE_BOOST_TEST_EQUAL(traits::max(), imax, file, line);
+        INVOKE_BOOST_TEST_EQUAL(traits::min(), imin, file, line);
         }
 }
 
 /// Test casts involving two possibly different signednesses.
 
-template<bool SignedFrom, bool SignedTo>
+template<bool SignedTo, bool SignedFrom>
 void test_signednesses(char const* file, int line)
 {
     using CS = signed char;
@@ -151,53 +202,500 @@ void test_signednesses(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL(ITo(-9), bourn_cast<ITo>(LFrom(-9)), file, line);
 }
 
-/// Directly assign unsigned to signed a million times, for timing.
+/// Test floating-point conversions [conv.double].
 ///
-/// One million is guaranteed to be within range, because LONG_MAX
-/// can be no lower than the eighth Mersenne prime, and ULONG_MAX
-/// must be even greater.
+/// Calling this for every combination of {float, double, long double}
+/// means that any commutative test is performed twice, but making the
+/// code more complex to avoid that is a poor idea because this entire
+/// unit test takes only about a microsecond to run.
 
-void mete_direct()
+template<typename To, typename From>
+void test_floating_conversions(char const* file, int line)
 {
-    volatile signed long int z = 0;
-    for(unsigned long int j = 0; j < 1000000; ++j)
+    using   to_traits = std::numeric_limits<To  >;
+    using from_traits = std::numeric_limits<From>;
+
+    static_assert(  to_traits::is_iec559, "");
+    static_assert(from_traits::is_iec559, "");
+
+    // std::isnormal values representable in any IEC559 'arithmetic
+    // format' (i.e., excluding the binary16 'interchange format').
+
+    From const largenum = nonstd::power(From(2), 100);
+    From const smallnum = From(1) / largenum;
+    INVOKE_BOOST_TEST_EQUAL(largenum, bourn_cast<To>(largenum), file, line);
+    INVOKE_BOOST_TEST_EQUAL(smallnum, bourn_cast<To>(smallnum), file, line);
+
+    // Normal min, max, and lowest.
+
+    From const from_min = from_traits::min();
+    From const from_max = from_traits::max();
+    From const from_low = from_traits::lowest();
+
+    if(from_traits::digits10 <= to_traits::digits10) // Widening or same.
         {
-        z = j;
+        INVOKE_BOOST_TEST_EQUAL(from_min, bourn_cast<To>(from_min), file, line);
+        INVOKE_BOOST_TEST_EQUAL(from_max, bourn_cast<To>(from_max), file, line);
+        INVOKE_BOOST_TEST_EQUAL(from_low, bourn_cast<To>(from_low), file, line);
+        }
+    else // Narrowing.
+        {
+        INVOKE_BOOST_TEST_EQUAL(To(0), bourn_cast<To>(from_min), file, line);
+        BOOST_TEST_THROW
+            (bourn_cast<To>(from_max)
+            ,std::runtime_error
+            ,"Cast would transgress upper limit."
+            );
+        BOOST_TEST_THROW
+            (bourn_cast<To>(from_low)
+            ,std::runtime_error
+            ,"Cast would transgress lower limit."
+            );
+        }
+
+    // Signed zeros.
+
+    INVOKE_BOOST_TEST_EQUAL(0.0, bourn_cast<To>( From(0)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(0.0, bourn_cast<To>(-From(0)), file, line);
+    INVOKE_BOOST_TEST(!std::signbit(bourn_cast<To>( From(0))), file, line);
+    INVOKE_BOOST_TEST( std::signbit(bourn_cast<To>(-From(0))), file, line);
+
+    // Infinities.
+
+    To   const   to_inf =   to_traits::infinity();
+    From const from_inf = from_traits::infinity();
+#if !defined TEST_BOOST_CAST_INSTEAD
+    INVOKE_BOOST_TEST( std::isinf(bourn_cast<To>( from_inf)), file, line);
+    INVOKE_BOOST_TEST( std::isinf(bourn_cast<To>(-from_inf)), file, line);
+    INVOKE_BOOST_TEST(!std::signbit(bourn_cast<To>( from_inf)), file, line);
+    INVOKE_BOOST_TEST( std::signbit(bourn_cast<To>(-from_inf)), file, line);
+    INVOKE_BOOST_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
+    INVOKE_BOOST_TEST_EQUAL(-to_inf, bourn_cast<To>(-from_inf), file, line);
+#else  // defined TEST_BOOST_CAST_INSTEAD
+    // Boost allows conversion of infinities to the same type or a
+    // wider floating type, but not to a narrower type--presumably
+    // because infinities are outside the [lowest(), max()] range but
+    // non-narrowing conversions are presumptively allowed regardless
+    // of value.
+    if(from_traits::digits10 <= to_traits::digits10) // Widening or same.
+        {
+        INVOKE_BOOST_TEST_EQUAL( to_inf, bourn_cast<To>( from_inf), file, line);
+        INVOKE_BOOST_TEST_EQUAL(-to_inf, bourn_cast<To>(-from_inf), file, line);
+        }
+    else
+        {
+        BOOST_TEST_THROW
+            (bourn_cast<To>( from_traits::infinity())
+            ,std::runtime_error
+            ,"This cast should have succeeded."
+            );
+        BOOST_TEST_THROW
+            (bourn_cast<To>(-from_traits::infinity())
+            ,std::runtime_error
+            ,"This cast should have succeeded."
+            );
+        }
+#endif // defined TEST_BOOST_CAST_INSTEAD
+
+    // NaNs.
+
+    From const from_qnan = from_traits::quiet_NaN();
+    INVOKE_BOOST_TEST(std::isnan(bourn_cast<To>(from_qnan)), file, line);
+}
+
+/// Test conversions between integral and floating types [conv.fpint].
+
+template<typename I, typename F>
+void test_conv_fpint(char const* file, int line)
+{
+    using i_traits = std::numeric_limits<I>;
+    using f_traits = std::numeric_limits<F>;
+
+    static_assert(i_traits::is_integer, "");
+    static_assert(f_traits::is_iec559, "");
+
+    // Make sure 'digits' comparisons below are valid.
+    static_assert(2 == i_traits::radix, "");
+    static_assert(2 == f_traits::radix, "");
+
+    // Integral to floating and back.
+
+    I const i_hi = i_traits::max();
+    F const f_i_hi = bourn_cast<F>(i_hi);
+
+    if(i_traits::digits <= f_traits::digits)
+        {
+        INVOKE_BOOST_TEST_EQUAL(i_hi, bourn_cast<I>(f_i_hi), file, line);
+        }
+    else
+        {
+        BOOST_TEST_THROW
+            (bourn_cast<I>(f_i_hi)
+            ,std::runtime_error
+            ,"Cast would transgress upper limit."
+            );
+        }
+
+    I const i_lo = i_traits::lowest();
+    F const f_i_lo = bourn_cast<F>(i_lo);
+
+#if !defined TEST_BOOST_CAST_INSTEAD
+    INVOKE_BOOST_TEST_EQUAL(i_lo, bourn_cast<I>(f_i_lo), file, line);
+#else  // defined TEST_BOOST_CAST_INSTEAD
+    // boost::numeric_cast throws on conversions:
+    // -9223372036854775808.0f --> 64-bit signed int
+    //          -2147483648.0f --> 32-bit signed int
+    // -9223372036854775808.0  --> 64-bit signed int
+    if(!i_traits::is_signed || i_traits::digits <= f_traits::digits)
+        {
+        INVOKE_BOOST_TEST_EQUAL(i_lo, bourn_cast<I>(f_i_lo), file, line);
+        }
+    else
+        {
+        BOOST_TEST_THROW
+            (bourn_cast<I>(f_i_lo)
+            ,std::runtime_error
+            ,"This cast should have succeeded."
+            );
+        }
+#endif // defined TEST_BOOST_CAST_INSTEAD
+
+    // Floating to integral.
+
+    // Widening: generally not possible with standard arithmetic
+    // types because long long int is 64 bits wide in practice, and
+    // the exponent for float (IEEE 754 binary32) is in [-126, +127].
+
+    // Narrowing.
+
+    // An integer-valued floating-point number has no fractional part
+    // to truncate, so converting it to an integral type wide enough
+    // to represent it preserves value.
+    INVOKE_BOOST_TEST_EQUAL(I(3), bourn_cast<I>(F(3)), file, line);
+
+    // From positive zero.
+    INVOKE_BOOST_TEST_EQUAL(I(0), bourn_cast<I>(+F(0)), file, line);
+
+    // From negative zero. Interestingly, this negative value is
+    // properly convertible to an unsigned integral type.
+    INVOKE_BOOST_TEST_EQUAL(I(0), bourn_cast<I>(-F(0)), file, line);
+
+    // Out of bounds.
+
+    // Floating-point lowest and highest values are not necessarily
+    // outside the range of all integral types, but they almost
+    // certainly are for standard types.
+    BOOST_TEST_THROW
+        (bourn_cast<I>(f_traits::max())
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+    BOOST_TEST_THROW
+        (bourn_cast<I>(f_traits::lowest())
+        ,std::runtime_error
+        ,   (i_traits::is_signed
+            ? "Cast would transgress lower limit."
+            : "Cannot cast negative to unsigned."
+            )
+        );
+
+    // From +inf.
+    BOOST_TEST_THROW
+        (bourn_cast<I>(+f_traits::infinity())
+        ,std::runtime_error
+        ,"Cannot cast infinite to integral."
+        );
+
+    // From -inf.
+    BOOST_TEST_THROW
+        (bourn_cast<I>(-f_traits::infinity())
+        ,std::runtime_error
+        ,"Cannot cast infinite to integral."
+        );
+
+    // Otherwise disallowed.
+
+    // Truncating.
+
+#if !defined TEST_BOOST_CAST_INSTEAD
+    BOOST_TEST_THROW
+        (bourn_cast<I>(F(3.14))
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Cast.*would not preserve value\\.$")
+        );
+#else  // defined TEST_BOOST_CAST_INSTEAD
+    // boost::numeric cast truncates whereas bourn_cast throws; both
+    // are deliberate design decisions.
+    INVOKE_BOOST_TEST_EQUAL(3, bourn_cast<I>(F(3.14)), file, line);
+#endif // defined TEST_BOOST_CAST_INSTEAD
+
+    // From NaN.
+    BOOST_TEST_THROW
+        (bourn_cast<I>(f_traits::quiet_NaN())
+        ,std::runtime_error
+        ,"Cannot cast NaN to integral."
+        );
+}
+
+/// Test conversions between wide integral and narrow floating types.
+
+void test_m64_neighborhood()
+{
+    using ull_traits = std::numeric_limits<unsigned long long int>;
+    if(64 != ull_traits::digits)
+        {
+        std::cout
+            << "test_m64_neighborhood() not run because"
+            << "\nunsigned long long is not a 64-bit type."
+            << std::endl
+            ;
+        return;
+        }
+
+    // ULLONG_MAX must be at least 2^64 - 1 [C99 E/1], the 64th
+    // Mersenne number, M64. Converting that number between types
+    // float (IEEE 754 binary32) and unsigned long long int is
+    // interesting because
+    //   (2^64 - 1)ULL = 18446744073709551615 = M64     = 2^64 - 1
+    //   (2^64 - 1)f   = 18446744073709551616 = M64 + 1 = 2^64
+    // Cast either to the type of the other, and they compare equal,
+    // at least with gcc-4.9.2, although casting 2^64 to a 64-bit
+    // unsigned integer is UB.
+
+    unsigned long long int const ull_max = ull_traits::max();
+    float const f_ull_max = ull_max;
+    BOOST_TEST(f_ull_max == static_cast<float>(ull_max));
+    // Suppressed because behavior is undefined:
+    // BOOST_TEST(ull_max == static_cast<unsigned long long int>(f_ull_max));
+
+    // However, unlike static_cast, bourn_cast refuses to cast 2^64
+    // to a 64-bit integer, because it is out of range and therefore
+    // would constitute UB.
+
+    BOOST_TEST_EQUAL(f_ull_max, bourn_cast<float>(ull_max));
+    BOOST_TEST_THROW
+        (bourn_cast<unsigned long long int>(f_ull_max)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+
+    // To show that this case is not unique, test a value that is
+    // lower by two.
+
+    unsigned long long int const ull_hi = ull_traits::max() - 2; // 2^64 - 3
+
+    float const f_ull_hi = bourn_cast<float>(ull_hi);
+    BOOST_TEST_THROW
+        (bourn_cast<unsigned long long int>(f_ull_hi)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+
+    // The same outcome is observed with a value that is lower by
+    // about half a trillion units.
+
+    double const d_2_64 = nonstd::power(2.0, 64);
+    double const d_interesting = 0.5 * (d_2_64 + std::nextafterf(d_2_64, 0));
+    unsigned long long int const ull_interesting = d_interesting;
+    float const f_interesting = bourn_cast<float>(ull_interesting);
+    BOOST_TEST_THROW
+        (bourn_cast<unsigned long long int>(f_interesting)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+    float const f_uninteresting = bourn_cast<float>(ull_interesting - 1ULL);
+    bourn_cast<unsigned long long int>(f_uninteresting);
+
+    // A similar cast must fail for IEEE 754 binary64, because its 53
+    // mantissa bits cannot represent a value this close to 2^64.
+
+    double const d_ull_hi = bourn_cast<double>(ull_hi);
+    BOOST_TEST_THROW
+        (bourn_cast<unsigned long long int>(d_ull_hi)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
+
+    // However, the same cast succeeds when the floating-point type
+    // has at least as much precision as the integral type.
+
+    using ld_traits = std::numeric_limits<long double>;
+    if(ull_traits::digits <= ld_traits::digits)
+        {
+        long double const ld_ull_hi = bourn_cast<long double>(ull_hi);
+        BOOST_TEST_EQUAL(ull_hi, bourn_cast<unsigned long long int>(ld_ull_hi));
+        }
+
+    // These circumstances for gcc on i686 or x86_64:
+    //   64 = long double mantissa bits
+    //   63 = signed long long int non-sign bits
+    // clamor for a unit test. The extra bit in the significand lets
+    // the floating type represent exact integers one greater in
+    // magnitude than the integral type's limits. Adding one to the
+    // maximum
+    //   9223372036854775807 = 2^63 - 1 (sll_max below)
+    // gives
+    //   9223372036854775808 = 2^63     (ld_sll_too_high below)
+    // reminiscent of 2^64 and its successor above. A more interesting
+    // case is the integral minimum, which is an exact power of two in
+    // magnitude:
+    //   -9223372036854775808 = -2^63       (sll_min below)
+    //   -9223372036854775809 = -(2^63 + 1) (ld_sll_too_low below)
+
+    using sll_traits = std::numeric_limits<signed long long int>;
+    if(sll_traits::digits < ld_traits::digits)
+        {
+        signed long long int const sll_max = sll_traits::max();
+
+        long double const ld_sll_max = bourn_cast<long double>(sll_max);
+        BOOST_TEST_EQUAL(sll_max, bourn_cast<signed long long int>(ld_sll_max));
+
+        long double const ld_sll_too_high = ld_sll_max + 1;
+        BOOST_TEST_THROW
+            (bourn_cast<signed long long int>(ld_sll_too_high)
+            ,std::runtime_error
+            ,"Cast would transgress upper limit."
+            );
+
+        signed long long int const sll_min = sll_traits::min();
+
+        long double const ld_sll_min = bourn_cast<long double>(sll_min);
+        BOOST_TEST_EQUAL(sll_min, bourn_cast<signed long long int>(ld_sll_min));
+
+        long double const ld_sll_too_low = ld_sll_min - 1;
+        BOOST_TEST_THROW
+            (bourn_cast<signed long long int>(ld_sll_too_low)
+            ,std::runtime_error
+            ,"Cast would transgress lower limit."
+            );
+        }
+}
+
+/// Test boost::numeric_cast anomalies reported here:
+///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00127.html
+/// All these tests fail with boost-1.33.1 and gcc-4.9 '-O2' on
+///   x86_64-linux-gnu
+///   i686-linux-gnu
+///   i686-w64-mingw32
+/// and also with boost-1.62 and x86_64-linux-gnu as confirmed here:
+///   http://lists.nongnu.org/archive/html/lmi/2017-03/msg00128.html
+
+void test_boost_anomalies()
+{
+    using double_traits = std::numeric_limits<double>;
+
+    // IEEE 754-2008 [5.8, conversion to integer]: "When a NaN or infinite
+    // operand cannot be represented in the destination format and this
+    // cannot otherwise be indicated, the invalid operation exception shall
+    // be signaled."
+    BOOST_TEST_THROW
+        (bourn_cast<int>(double_traits::quiet_NaN())
+        ,std::runtime_error
+        ,"Cannot cast NaN to integral."
+        );
+
+    // IEEE 754-2008 [6.1]: "Operations on infinite operands are usually
+    // exact and therefore signal no exceptions, including ... conversion of
+    // an infinity into the same infinity in another format."
+    try
+        {
+        bourn_cast<long double>(double_traits::infinity());
+        // That worked, so this should too...
+        bourn_cast<float>(double_traits::infinity());
+        // ...because all infinities are convertible.
+        BOOST_TEST(true);
+        }
+    catch(...) {BOOST_TEST(false);}
+
+    try
+        {
+        bourn_cast<int>(INT_MIN);
+        bourn_cast<int>((double)INT_MIN);
+        // That worked, so this should too...
+        bourn_cast<int>((float)INT_MIN);
+        // ...because INT_MIN = an exact power of 2.
+        BOOST_TEST(true);
+        }
+    catch(...) {BOOST_TEST(false);}
+
+    try
+        {
+        bourn_cast<long long int>((long double)LLONG_MIN);
+        // That worked, so this should too...
+        bourn_cast<long long int>((float)LLONG_MIN);
+        // ...because LLONG_MIN = an exact power of 2.
+        BOOST_TEST(true);
+        }
+    catch(...) {BOOST_TEST(false);}
+
+    try
+        {
+        bourn_cast<long long int>((long double)LLONG_MIN);
+        // That worked, so this should too...
+        bourn_cast<long long int>((double)LLONG_MIN);
+        // ...because LLONG_MIN = an exact power of 2.
+        BOOST_TEST(true);
+        }
+    catch(...) {BOOST_TEST(false);}
+}
+
+/// Speed test: convert one million times, using static_cast.
+
+template<typename To, typename From>
+void mete_static()
+{
+    enum {N = 1000000};
+    using from_traits = std::numeric_limits<From>;
+    static_assert(from_traits::is_specialized, "");
+    static_assert(N < from_traits::max(), "");
+    To volatile z(0);
+    for(From j = 0; j < N; ++j)
+        {
+        z = static_cast<To>(j);
         }
     stifle_warning_for_unused_variable(z);
 }
 
-/// Convert signed to unsigned a million times, for timing.
+/// Speed test: convert one million times, using bourn_cast.
 
-void mete_signed_to_unsigned()
+template<typename To, typename From>
+void mete_bourn()
 {
-    volatile unsigned long int z = 0;
-    for(signed long int j = 0; j < 1000000; ++j)
+    enum {N = 1000000};
+    using from_traits = std::numeric_limits<From>;
+    static_assert(from_traits::is_specialized, "");
+    static_assert(N < from_traits::max(), "");
+    To volatile z(0);
+    for(From j = 0; j < N; ++j)
         {
-        z = bourn_cast<unsigned long int>(j);
-        }
-    stifle_warning_for_unused_variable(z);
-}
-
-/// Convert unsigned to signed a million times, for timing.
-
-void mete_unsigned_to_signed()
-{
-    volatile signed long int z = 0;
-    for(unsigned long int j = 0; j < 1000000; ++j)
-        {
-        z = bourn_cast<signed long int>(j);
+        z = bourn_cast<To>(j);
         }
     stifle_warning_for_unused_variable(z);
 }
 
 void assay_speed()
 {
+    using D  =            double;
+    using F  =             float;
+    using SL =   signed long int;
+    using UL = unsigned long int;
     std::cout
-        << "\n  Speed tests..."
-        << "\n  direct: " << TimeAnAliquot(mete_direct)
-        << "\n  S to U: " << TimeAnAliquot(mete_signed_to_unsigned)
-        << "\n  U to S: " << TimeAnAliquot(mete_unsigned_to_signed)
+        << "\n  Speed tests (Double, Float, Signed, Unsigned):"
+        << "\n"
+        << "\n  static_cast<U>(S): " << TimeAnAliquot(mete_static<UL,SL>)
+        << "\n   bourn_cast<U>(S): " << TimeAnAliquot(mete_bourn <UL,SL>)
+        << "\n   bourn_cast<S>(U): " << TimeAnAliquot(mete_bourn <SL,UL>)
+        << "\n"
+        << "\n  static_cast<D>(U): " << TimeAnAliquot(mete_static<D,UL>)
+        << "\n   bourn_cast<D>(U): " << TimeAnAliquot(mete_bourn <D,UL>)
+        << "\n"
+        << "\n  static_cast<U>(D): " << TimeAnAliquot(mete_static<UL,D>)
+        << "\n   bourn_cast<U>(D): " << TimeAnAliquot(mete_bourn <UL,D>)
+        << "\n   bourn_cast<S>(D): " << TimeAnAliquot(mete_bourn <SL,D>)
+        << "\n"
+        << "\n  static_cast<F>(D): " << TimeAnAliquot(mete_static<F,D>)
+        << "\n   bourn_cast<F>(D): " << TimeAnAliquot(mete_bourn <F,D>)
+        << "\n   bourn_cast<D>(F): " << TimeAnAliquot(mete_bourn <D,F>)
         << std::endl
         ;
 }
@@ -253,7 +751,7 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (bourn_cast<bool>((signed char)(-1))
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     // Cast from signed to unsigned.
@@ -272,32 +770,71 @@ int test_main(int, char*[])
 
     test_signednesses<false,false>(__FILE__, __LINE__);
 
+    // Cast between floating types.
+
+    test_floating_conversions<float      , float      >(__FILE__, __LINE__);
+    test_floating_conversions<float      , double     >(__FILE__, __LINE__);
+    test_floating_conversions<float      , long double>(__FILE__, __LINE__);
+    test_floating_conversions<double     , float      >(__FILE__, __LINE__);
+    test_floating_conversions<double     , double     >(__FILE__, __LINE__);
+    test_floating_conversions<double     , long double>(__FILE__, __LINE__);
+    test_floating_conversions<long double, float      >(__FILE__, __LINE__);
+    test_floating_conversions<long double, double     >(__FILE__, __LINE__);
+    test_floating_conversions<long double, long double>(__FILE__, __LINE__);
+
+    // Cast between floating and integral types.
+
+    test_conv_fpint<unsigned long long int,       float>(__FILE__, __LINE__);
+    test_conv_fpint<  signed long long int,       float>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned           int,       float>(__FILE__, __LINE__);
+    test_conv_fpint<  signed           int,       float>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned          char,       float>(__FILE__, __LINE__);
+    test_conv_fpint<  signed          char,       float>(__FILE__, __LINE__);
+
+    test_conv_fpint<unsigned long long int,      double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed long long int,      double>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned           int,      double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed           int,      double>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned          char,      double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed          char,      double>(__FILE__, __LINE__);
+
+    test_conv_fpint<unsigned long long int, long double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed long long int, long double>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned           int, long double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed           int, long double>(__FILE__, __LINE__);
+    test_conv_fpint<unsigned          char, long double>(__FILE__, __LINE__);
+    test_conv_fpint<  signed          char, long double>(__FILE__, __LINE__);
+
+    // Test a peculiarly ill-conditioned range.
+
+    test_m64_neighborhood();
+
     // Attempt forbidden conversion from negative to unsigned.
 
     BOOST_TEST_THROW
         (bourn_cast<unsigned char>(std::numeric_limits<signed char>::lowest())
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     BOOST_TEST_THROW
         (bourn_cast<unsigned int >(std::numeric_limits<signed int >::lowest())
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     // Still forbidden even if unsigned type is wider.
     BOOST_TEST_THROW
         (bourn_cast<unsigned long>(std::numeric_limits<signed char>::lowest())
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     // Still forbidden even if value is only "slightly" negative.
     BOOST_TEST_THROW
         (bourn_cast<unsigned long>(-1)
         ,std::runtime_error
-        ,"Cast would convert negative to unsigned."
+        ,"Cannot cast negative to unsigned."
         );
 
     // Transgress lower limit. It is not possible to write a unit test
@@ -334,6 +871,10 @@ int test_main(int, char*[])
         ,std::runtime_error
         ,"Cast would transgress upper limit."
         );
+
+    // Test boost::numeric_cast anomalies.
+
+    test_boost_anomalies();
 
     // Time representative casts.
 

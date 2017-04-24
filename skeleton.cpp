@@ -948,13 +948,11 @@ void Skeleton::UponTestAppFatal(wxCommandEvent&)
     alarum()         << "Test alarum() ."         << LMI_FLUSH;
 }
 
-[[noreturn]]
 void Skeleton::UponTestAppStandardException(wxCommandEvent&)
 {
     throw std::runtime_error("Test a standard exception.");
 }
 
-[[noreturn]]
 void Skeleton::UponTestAppArbitraryException(wxCommandEvent&)
 {
     throw "Test an arbitrary exception.";

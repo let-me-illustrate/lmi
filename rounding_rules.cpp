@@ -66,7 +66,6 @@ template<> struct xml_io<rounding_parameters>
 /// which is not useful here.
 
 template<>
-[[noreturn]]
 std::string value_cast<std::string>(rounding_parameters const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
@@ -80,7 +79,6 @@ std::string value_cast<std::string>(rounding_parameters const&)
 /// which is not useful here.
 
 template<>
-[[noreturn]]
 rounding_parameters value_cast<rounding_parameters>(std::string const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;

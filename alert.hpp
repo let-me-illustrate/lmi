@@ -174,6 +174,7 @@ void LMI_SO safely_show_message(std::string const&);
 void status_alert         (std::string const&);
 void warning_alert        (std::string const&);
 void hobsons_choice_alert (std::string const&);
+[[noreturn]]
 void alarum_alert         (std::string const&);
 
 /// Implement this function for each platform, in a manner that should
@@ -243,7 +244,9 @@ void LMI_SO test_status();
 void LMI_SO test_warning();
 void LMI_SO test_hobsons_choice();
 void LMI_SO test_alarum();
+[[noreturn]]
 void LMI_SO test_standard_exception();
+[[noreturn]]
 void LMI_SO test_arbitrary_exception();
 void LMI_SO test_catastrophe_report();
 

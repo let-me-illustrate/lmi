@@ -61,7 +61,7 @@ bool validate_mc_n_values()
 /// and Kanze's reply:
 ///   http://groups.google.com/groups?selm=d6651fb6.0111221034.42e78b95@posting.google.com
 
-volatile bool ensure_setup = validate_mc_n_values();
+bool volatile ensure_setup = validate_mc_n_values();
 } // Unnamed namespace.
 
 std::vector<std::string> const& all_strings_gender   () {return all_strings<mcenum_gender  >();}

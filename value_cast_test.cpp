@@ -28,7 +28,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <cmath>                        // std::pow()
+#include <cmath>                        // std::scalbn()
 #include <cstring>                      // std::strcpy(), std::strcmp
 #include <istream>
 #include <limits>
@@ -64,14 +64,15 @@ int test_main(int, char*[])
     BOOST_TEST(!is_string<char       volatile*>::value);
     BOOST_TEST(!is_string<char const volatile*>::value);
 
-    BOOST_TEST(is_string<std::string       >::value);
-    BOOST_TEST(is_string<std::string      &>::value);
-    BOOST_TEST(is_string<std::string const >::value);
-    BOOST_TEST(is_string<std::string const&>::value);
+    BOOST_TEST( is_string<std::string                >::value);
+    BOOST_TEST( is_string<std::string const          >::value);
+    BOOST_TEST(!is_string<std::string       volatile >::value);
+    BOOST_TEST(!is_string<std::string const volatile >::value);
 
-// These tests fail to compile:
-//    BOOST_TEST(is_string<std::string volatile>::value);
-//    BOOST_TEST(is_string<std::string const volatile&>::value);
+    BOOST_TEST( is_string<std::string               &>::value);
+    BOOST_TEST( is_string<std::string const         &>::value);
+    BOOST_TEST(!is_string<std::string       volatile&>::value);
+    BOOST_TEST(!is_string<std::string const volatile&>::value);
 
     char const* ccp = "2.71828";
     char* cp = const_cast<char*>("3.14159");
@@ -138,25 +139,23 @@ int test_main(int, char*[])
 
     // Forbidden narrowing conversions.
 
-    // A good compiler should warn about this conversion.
-//    value_cast<unsigned int>(-1);
+    BOOST_TEST_THROW
+        (value_cast<unsigned int>(-1)
+        ,std::runtime_error
+        ,"Cannot cast negative to unsigned."
+        );
 
-    // The boost-1.31.0 documentation says:
-    //   "An exception is thrown when a runtime value-preservation
-    //   check fails."
-    // yet this does not throw, even in boost-1.33.1, whose new
-    // numeric_cast delegates to boost::numeric::converter:
-    i = boost::numeric_cast<int>(2.71828);
-    // but these do:
+    // Forbidden truncation.
+
     BOOST_TEST_THROW
         (i = value_cast<int>(d)
         ,std::runtime_error
-        ,"Value not preserved converting 2.71828 to 2 ."
+        ,lmi_test::what_regex("^Cast.*would not preserve value\\.$")
         );
     BOOST_TEST_THROW
-        (numeric_value_cast<int>(2.71828)
+        (bourn_cast<int>(2.71828)
         ,std::runtime_error
-        ,"Value not preserved converting 2.71828 to 2 ."
+        ,lmi_test::what_regex("^Cast.*would not preserve value\\.$")
         );
 
     // This conversion should work: value is exactly preserved.
@@ -329,9 +328,9 @@ int extra_tests0()
 
     // A big number that must be representable as a finite
     // floating-point number [18.2.1.2/27].
-    double big = std::pow
-        (static_cast<double>(std::numeric_limits<double>::radix)
-        ,static_cast<double>(std::numeric_limits<double>::max_exponent - 1)
+    double big = std::scalbn
+        (1.0
+        ,std::numeric_limits<double>::max_exponent - 1
         );
 
     // Using libmingwex's strtod() to convert a really big number
@@ -348,7 +347,7 @@ int extra_tests0()
     // Initialize 'nptr' to a string representation of
     //   FLT_RADIX^(DBL_MAX_EXP-1)
     // produced by snprintf(), verifiable thus:
-    //    double big = pow(FLT_RADIX, DBL_MAX_EXP - 1.0);
+    //    double big = std::scalbn(1.0, DBL_MAX_EXP - 1.0);
     //    snprintf(buffer, buffer_length, "%.*f", 0, big);
     char const* nptr =
     //   12345678901234567890123456789012345678901234567890 <-- 50 digits/line
@@ -366,14 +365,27 @@ int extra_tests0()
 
     // A small number that must be representable as a normalized
     // floating-point number [18.2.1.2/23].
-    double small = std::pow
-        (static_cast<double>(std::numeric_limits<double>::radix)
-        ,static_cast<double>(std::numeric_limits<double>::min_exponent)
-// TODO ?? Why doesn't this work with '- 1' appended?
-//        ,static_cast<double>(std::numeric_limits<double>::min_exponent - 1)
+    double small = std::scalbn
+        (1.0
+        ,std::numeric_limits<double>::min_exponent
         );
     BOOST_TEST_EQUAL( small, value_cast<double>(value_cast<std::string>( small)));
     BOOST_TEST_EQUAL(-small, value_cast<double>(value_cast<std::string>(-small)));
+
+    // Of course, the minimum normalized power of two is this:
+    double tiny = std::scalbn
+        (1.0
+        ,std::numeric_limits<double>::min_exponent - 1
+        );
+    BOOST_TEST_EQUAL(0x1p-1022, tiny);
+    // which converts to this:
+    BOOST_TEST_EQUAL(0x0.fffffffffffffp-1022, value_cast<double>(value_cast<std::string>(tiny)));
+    // which is the largest denormal.
+    //
+    // The round trip works for the values tested earlier only by
+    // accident: 17 digits are required for a binary64 round trip,
+    // but value_cast returns no more than 16 because the 17th is
+    // not known to be accurate.
 
     return 0;
 }
@@ -724,9 +736,17 @@ int boost_tests()
 
     BOOST_TEST_EQUAL(1,value_cast<int>(1.0));
 
-    BOOST_TEST_THROW(value_cast<int>(1.23), std::runtime_error, "");
+    BOOST_TEST_THROW
+        (value_cast<int>(1.23)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Cast.*would not preserve value\\.$")
+        );
 
-    BOOST_TEST_THROW(value_cast<int>(1e20), boost::numeric::positive_overflow, "");
+    BOOST_TEST_THROW
+        (value_cast<int>(1e20)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
     BOOST_TEST_EQUAL(1, value_cast<int>(true));
     BOOST_TEST_EQUAL(0, value_cast<int>(false));
     BOOST_TEST_EQUAL(123, value_cast<int>("123"));
@@ -792,10 +812,18 @@ int boost_tests()
     BOOST_TEST_EQUAL(true, value_cast<bool>('\1'));
     BOOST_TEST_EQUAL(false, value_cast<bool>('\0'));
 
-    BOOST_TEST_THROW(value_cast<bool>('A'), boost::numeric::positive_overflow, "");
+    BOOST_TEST_THROW
+        (value_cast<bool>('A')
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
     BOOST_TEST_EQUAL(true, value_cast<bool>(1));
     BOOST_TEST_EQUAL(false, value_cast<bool>(0));
-    BOOST_TEST_THROW(value_cast<bool>(123), boost::numeric::positive_overflow, "");
+    BOOST_TEST_THROW
+        (value_cast<bool>(123)
+        ,std::runtime_error
+        ,"Cast would transgress upper limit."
+        );
     BOOST_TEST_EQUAL(true, value_cast<bool>(1.0));
     BOOST_TEST_EQUAL(false, value_cast<bool>(0.0));
     BOOST_TEST_EQUAL(true, value_cast<bool>(true));

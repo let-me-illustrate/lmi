@@ -99,7 +99,9 @@ class Skeleton
     void UponTestAppWarning               (wxCommandEvent&);
     void UponTestAppHobsons               (wxCommandEvent&);
     void UponTestAppFatal                 (wxCommandEvent&);
+    [[noreturn]]
     void UponTestAppStandardException     (wxCommandEvent&);
+    [[noreturn]]
     void UponTestAppArbitraryException    (wxCommandEvent&);
 
     // Test alerts from shared library.

@@ -118,6 +118,6 @@ void concrete_file_command
 /// and Kanze's reply:
 ///   http://groups.google.com/groups?selm=d6651fb6.0111221034.42e78b95@posting.google.com
 
-volatile bool ensure_setup = file_command_initialize(concrete_file_command);
+bool volatile ensure_setup = file_command_initialize(concrete_file_command);
 } // Unnamed namespace.
 

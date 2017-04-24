@@ -23,17 +23,13 @@
 
 #include "alert.hpp"
 
-#include <cstdio>                       // std::fputs()
+#include <cstdio>                       // std::fputs(), std::getchar()
 #include <iostream>
 #include <stdexcept>
 
-// Avoid including any 'curses' header that defines rude macros:
-//   http://lists.nongnu.org/archive/html/lmi/2008-06/msg00045.html
-extern "C" int getch();
-
 namespace
 {
-volatile bool ensure_setup = set_alert_functions
+bool volatile ensure_setup = set_alert_functions
     (status_alert
     ,warning_alert
     ,hobsons_choice_alert
@@ -45,7 +41,7 @@ bool continue_anyway()
 {
     int c;
   ask:
-    c = getch();
+    c = getchar();
     if('y' == c || 'Y' == c)
         {
         std::cout << std::endl;
@@ -81,7 +77,7 @@ void hobsons_choice_alert(std::string const& s)
     // certainly a poor choice for applications that should run
     // unattended, such as servers or regression tests.
     //
-    static const volatile bool offer_hobsons_choice = false;
+    static bool const volatile offer_hobsons_choice = false;
     if(offer_hobsons_choice)
         {
         std::cerr << s << '\n' << hobsons_prompt() << std::endl;
@@ -96,7 +92,6 @@ void hobsons_choice_alert(std::string const& s)
         }
 }
 
-[[noreturn]]
 void alarum_alert(std::string const& s)
 {
     throw std::runtime_error(s);

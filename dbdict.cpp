@@ -67,7 +67,6 @@ template<> struct xml_io<database_entity>
 /// which is not useful here.
 
 template<>
-[[noreturn]]
 std::string value_cast<std::string>(database_entity const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;
@@ -81,7 +80,6 @@ std::string value_cast<std::string>(database_entity const&)
 /// which is not useful here.
 
 template<>
-[[noreturn]]
 database_entity value_cast<database_entity>(std::string const&)
 {
     alarum() << "Invalid function call." << LMI_FLUSH;

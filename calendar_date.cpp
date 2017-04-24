@@ -25,7 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "value_cast.hpp"
+#include "bourn_cast.hpp"
 #include "zero.hpp"
 
 #include <algorithm>                    // std::max(), std::min()
@@ -691,7 +691,7 @@ class birthdate_limit
     double operator()(double candidate)
         {
         // Double parentheses circumvent the most vexing parse.
-        calendar_date z((jdn_t(numeric_value_cast<int>(candidate))));
+        calendar_date z((jdn_t(bourn_cast<int>(candidate))));
         return offset_ + notional_age(z, as_of_date_, alb_anb_) - limit_age_;
         }
 
@@ -705,7 +705,7 @@ class birthdate_limit
             ,*this
             );
         LMI_ASSERT(root_not_bracketed != z.second);
-        int j = numeric_value_cast<int>(z.first);
+        int j = bourn_cast<int>(z.first);
         j = std::min(j, as_of_date_.julian_day_number());
         j = std::max(j, a_priori_minimum_);
         j = std::min(j, a_priori_maximum_);

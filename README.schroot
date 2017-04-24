@@ -101,7 +101,7 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 apt-get update
 apt-get --assume-yes install g++-mingw-w64-i686 automake libtool make \
  pkg-config git zsh bzip2 unzip sudo wine default-jre fop jing trang \
- vim-nox vim-doc \
+ g++-multilib libxslt1-dev vim vim-doc \
  >cross-lmi-apt-get-log 2>&1
 
 # This command should produce little output:
@@ -190,6 +190,48 @@ EOF
 
 patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
  && patch --strip=0 </home/greg/ltmain.sh.patch
+
+# Configure vim.
+
+cat >/etc/vim/vimrc.local <<\EOF
+set shortmess=Il
+
+noremap <S-Up> <C-Y>
+noremap <S-Down> <C-E>
+
+" Counterpart to J
+nnoremap K i<Enter><Esc>
+
+" Tab key means ASCII HT (in insert mode)
+inoremap <Tab> <C-V><Tab>
+
+set shiftwidth=4
+set expandtab
+
+" Not very helpful--use 'scrolloff' instead
+" set cursorline
+
+" Always show at least one line above or below the cursor
+set scrolloff=1
+
+set cindent
+set cinoptions=t0\ g0\ {s\ (0\ U1 comments^=:///
+
+au BufReadPost,BufNewFile *.tpp set ft=cpp
+au BufReadPost,BufNewFile *.xpp set ft=cpp
+" au BufReadPost,BufNewFile *.?pp set ft=cpp
+
+syntax on
+set hlsearch
+
+set spell spelllang=en_us
+
+set wildmode=longest,longest,list:longest,full
+
+set history=1000
+
+set virtualedit=all
+EOF
 
 # Exit from the root shell in the chroot.
 exit

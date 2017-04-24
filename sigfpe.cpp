@@ -56,19 +56,19 @@ void floating_point_error_handler(int)
 //
 void fpe_handler_test()
 {
-//    volatile int i0 = 0;
-//    volatile int i1 = 1;
-//    volatile int i2;
+//    int volatile i0 = 0;
+//    int volatile i1 = 1;
+//    int volatile i2;
 //
 // CPU Integer divide by zero.
 // This one doesn't seem recoverable--handler goes into loop.
 //  i2 = i1 / i0;
 //  i2 = i1 % i0;
 
-    volatile double d0 = 0.0;
-    volatile double d1 = 1.0;
-    volatile double dm = DBL_MAX;
-    volatile double d2;
+    double volatile d0 = 0.0;
+    double volatile d1 = 1.0;
+    double volatile dm = DBL_MAX;
+    double volatile d2;
 
 // FPU divide by zero. (Note: 0/0 is invalid operation, not divide by 0.)
     d2 = d1 / d0;

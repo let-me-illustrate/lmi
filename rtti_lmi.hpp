@@ -107,7 +107,7 @@ namespace lmi
 ///   template<typename T>
 ///   TypeInfo(T t): ti_(&typeid(t)) {}
 /// is provided for this reason, and also to avoid any seeming
-/// amiguity in self-referential cases:
+/// ambiguity in self-referential cases:
 ///   int i;
 ///   lmi::TypeInfo ti(typeid(i));
 ///   lmi::TypeInfo(i);   // Would refer to typeid(int).

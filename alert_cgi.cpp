@@ -28,7 +28,7 @@
 
 namespace
 {
-volatile bool ensure_setup = set_alert_functions
+bool volatile ensure_setup = set_alert_functions
     (status_alert
     ,warning_alert
     ,hobsons_choice_alert
@@ -59,7 +59,6 @@ void hobsons_choice_alert(std::string const& s)
     throw std::runtime_error(s);
 }
 
-[[noreturn]]
 void alarum_alert(std::string const& s)
 {
     throw std::runtime_error(s);

@@ -267,13 +267,11 @@ void test_alarum()
     alarum()         << "Test alarum()"         << LMI_FLUSH;
 }
 
-[[noreturn]]
 void test_standard_exception()
 {
     throw std::runtime_error("Test a standard exception.");
 }
 
-[[noreturn]]
 void test_arbitrary_exception()
 {
     throw "Test an arbitrary exception.";
