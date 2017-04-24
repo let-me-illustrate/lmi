@@ -172,7 +172,7 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
 
     static From const limit = std::ldexp(From(1), to_traits::digits);
 
-    static constexpr bool is_twos_complement(~To(0) == -To(1));
+    constexpr bool is_twos_complement(~To(0) == -To(1));
 
     if(std::isnan(from))
         throw std::runtime_error("Cannot cast NaN to integral.");
@@ -314,8 +314,8 @@ inline To bourn_cast(From from)
     static_assert(2 ==   to_traits::radix, "");
     static_assert(2 == from_traits::radix, "");
 
-    static constexpr bool   to_integer =   to_traits::is_integer;
-    static constexpr bool from_integer = from_traits::is_integer;
+    constexpr bool   to_integer =   to_traits::is_integer;
+    constexpr bool from_integer = from_traits::is_integer;
 
     static_assert(  to_integer ||   to_traits::is_iec559, "");
     static_assert(from_integer || from_traits::is_iec559, "");
