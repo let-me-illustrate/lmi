@@ -180,8 +180,8 @@ void TestEckleyTable2()
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < coi.size(); j++)
         {
-        double d0 = fabs(nsp    [j] - Ax[j]);
-        double d1 = fabs(annuity[j] - ax[j]);
+        double d0 = std::fabs(nsp    [j] - Ax[j]);
+        double d1 = std::fabs(annuity[j] - ax[j]);
         worst_discrepancy = std::max(worst_discrepancy, d0);
         worst_discrepancy = std::max(worst_discrepancy, d1);
         if
@@ -215,8 +215,8 @@ void TestEckleyTable2()
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < coi.size(); j++)
         {
-        double d0 = fabs(premium[j] - Px[j] * .001);
-        double d1 = fabs(reserve[j] - Vx[j] * .001);
+        double d0 = std::fabs(premium[j] - Px[j] * .001);
+        double d1 = std::fabs(reserve[j] - Vx[j] * .001);
         worst_discrepancy = std::max(worst_discrepancy, d0);
         worst_discrepancy = std::max(worst_discrepancy, d1);
         if
@@ -302,8 +302,8 @@ void TestEckleyTables3and4()
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < coi.size(); j++)
         {
-        double d0 = fabs(premium[j] - Px[j] * .001);
-        double d1 = fabs(reserve[j] - Vx[j] * .001);
+        double d0 = std::fabs(premium[j] - Px[j] * .001);
+        double d1 = std::fabs(reserve[j] - Vx[j] * .001);
         worst_discrepancy = std::max(worst_discrepancy, d0);
         worst_discrepancy = std::max(worst_discrepancy, d1);
         if
@@ -385,9 +385,9 @@ void TestEckleyTable5()
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < coi.size(); j++)
         {
-        double d0 = fabs(CF.aD()[j]        - Dx  [j]);
-        double d1 = fabs(CF.kD()[j] / 12.0 - Dx12[j]);
-        double d2 = fabs(CF.kC()[j]        - Cx12[j]);
+        double d0 = std::fabs(CF.aD()[j]        - Dx  [j]);
+        double d1 = std::fabs(CF.kD()[j] / 12.0 - Dx12[j]);
+        double d2 = std::fabs(CF.kC()[j]        - Cx12[j]);
         worst_discrepancy = std::max(worst_discrepancy, d0);
         worst_discrepancy = std::max(worst_discrepancy, d1);
         worst_discrepancy = std::max(worst_discrepancy, d2);
@@ -535,10 +535,10 @@ void Test_1954_1958_IET_3pct()
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < q.size(); j++)
         {
-        double d0 = fabs(Dx[0] * CF.D()[j] - Dx[j]);
-        double d1 = fabs(Dx[0] * CF.N()[j] - Nx[j]);
-        double d2 = fabs(Dx[0] * CF.C()[j] - Cx[j]);
-        double d3 = fabs(Dx[0] * CF.M()[j] - Mx[j]);
+        double d0 = std::fabs(Dx[0] * CF.D()[j] - Dx[j]);
+        double d1 = std::fabs(Dx[0] * CF.N()[j] - Nx[j]);
+        double d2 = std::fabs(Dx[0] * CF.C()[j] - Cx[j]);
+        double d3 = std::fabs(Dx[0] * CF.M()[j] - Mx[j]);
         worst_discrepancy = std::max(worst_discrepancy, d0);
         worst_discrepancy = std::max(worst_discrepancy, d1);
         worst_discrepancy = std::max(worst_discrepancy, d2);
@@ -655,7 +655,7 @@ void Test_1980_CSO_Male_ANB()
     double worst_discrepancy = 0.0;
     for(unsigned int j = 0; j < q.size(); j++)
         {
-        double d0 = fabs(reserve[j] - Vx[j]);
+        double d0 = std::fabs(reserve[j] - Vx[j]);
         worst_discrepancy = std::max(worst_discrepancy, d0);
         if
             (  tolerance < d0

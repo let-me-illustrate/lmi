@@ -24,12 +24,11 @@
 
 #include "config.hpp"
 
+#include "bourn_cast.hpp"
 #include "ieee754.hpp"                  // is_infinite<>()
 
-#include <boost/cast.hpp>
-
 #include <algorithm>                    // std::max()
-#include <cmath>                        // C99 functions fabsl(), log10l(), strtold()
+#include <cmath>                        // std::fabs(), std::log10()
 #include <cstdlib>                      // std::strto*()
 #include <cstring>                      // std::strcmp(), std::strlen()
 #include <limits>
@@ -54,12 +53,6 @@
 /// Notes: Truncation by static_cast<int> is appropriate because the
 /// result is constrained to be nonnegative. If negative results were
 /// wanted, it would be necessary to round toward negative infinity.
-///
-/// Because many compilers in 2004 still don't implement C++98 26.5/6
-/// correctly, C99 functions fabsl() and log10l() are used here. It is
-/// less likely that these are incorrect than that the C++ overloads
-/// are missing, which would cause std::fabs() and std::log10() to be
-/// invoked for type long double.
 
 template<typename T>
 inline int floating_point_decimals(T t)
@@ -80,8 +73,8 @@ inline int floating_point_decimals(T t)
         {
         return 0;
         }
-    long double z = std::numeric_limits<T>::epsilon() * fabsl(t);
-    return std::max(0, static_cast<int>(-log10l(z)));
+    long double z = std::numeric_limits<T>::epsilon() * std::fabs(t);
+    return std::max(0, static_cast<int>(-std::log10(z)));
 }
 
 /// Simplify a formatted floating-point number.
@@ -117,9 +110,9 @@ inline std::string simplify_floating_point(std::string const& s)
 /// no strtoi() in the C standard: C99 7.20.1.2 says that atoi() is
 /// equivalent to
 ///   (int)strtol(nptr, endptr, 10)
-/// except for the treatment of errors. Therefore, template function
-/// boost::numeric_cast() is used to detect narrowing conversions and
-/// throw an exception whenever they occur.
+/// except for the treatment of errors. Therefore, function template
+/// bourn_cast() is used to detect narrowing conversions and throw an
+/// exception whenever they occur.
 ///
 /// It would seem nicer to choose a string-to-number conversion just by
 /// writing a function name: "std::strtoul", "std::strtod", etc. Here,
@@ -157,16 +150,16 @@ template<> struct numeric_conversion_traits<char>
     typedef char T;
     static char const* fmt()
         {
-        return (0 == std::numeric_limits<T>::min())
-            ? "%.*u"
-            : "%.*i"
+        return std::numeric_limits<T>::is_signed
+            ? "%.*i"
+            : "%.*u"
             ;
         }
     static T strtoT(char const* nptr, char** endptr)
         {
-        return (0 == std::numeric_limits<T>::min())
-            ? boost::numeric_cast<T>(std::strtoul(nptr, endptr, 10))
-            : boost::numeric_cast<T>(std::strtol (nptr, endptr, 10))
+        return std::numeric_limits<T>::is_signed
+            ? bourn_cast<T>(std::strtol (nptr, endptr, 10))
+            : bourn_cast<T>(std::strtoul(nptr, endptr, 10))
             ;
         }
 };
@@ -179,7 +172,7 @@ template<> struct numeric_conversion_traits<signed char>
     typedef signed char T;
     static char const* fmt() {return "%.*i";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
+        {return bourn_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 
 /// C99's "%.*hhi" might be used instead if it gets added to C++.
@@ -190,7 +183,7 @@ template<> struct numeric_conversion_traits<unsigned char>
     typedef unsigned char T;
     static char const* fmt() {return "%.*u";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtoul(nptr, endptr, 10));}
+        {return bourn_cast<T>(std::strtoul(nptr, endptr, 10));}
 };
 
 // SOMEDAY !! Support this type when an actual need arises.
@@ -202,7 +195,7 @@ template<> struct numeric_conversion_traits<wchar_t>
     typedef wchar_t T;
     static char const* fmt() {return "%.*lc";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
+        {return bourn_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 #endif // 0
 
@@ -212,7 +205,7 @@ template<> struct numeric_conversion_traits<bool>
     typedef bool T;
     static char const* fmt() {return "%.*i";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
+        {return bourn_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 
 template<> struct numeric_conversion_traits<int>
@@ -386,7 +379,7 @@ template<> struct numeric_conversion_traits<long double>
 #if defined LMI_MSVCRT
         {return strtoFDL_msvc(nptr, endptr);}
 #else  // !defined LMI_MSVCRT
-        {return strtold(nptr, endptr);}
+        {return std::strtold(nptr, endptr);}
 #endif // !defined LMI_MSVCRT
 };
 

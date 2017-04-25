@@ -139,7 +139,12 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(16, floating_point_decimals(0.450359962737049596));
     BOOST_TEST_EQUAL(16, floating_point_decimals(0.4503599627370495));
     BOOST_TEST_EQUAL(16, floating_point_decimals(0.4503599627370496));
-    // TODO ?? Fails for como with mingw, but succeeds with 0.45036 .
+    // The following test failed for como with mingw (although with a
+    // value of 0.45036 it unsurprisingly succeeded). It was observed
+    // to fail also with x86_64-linux-gnu, but only because of a
+    // mistake that was found before committing, i.e., using log10()
+    // instead of std::log10() in the implementation caused C function
+    // log10(double) to be called instead of log10l().
     BOOST_TEST_EQUAL(15, floating_point_decimals(0.4503599627370497));
 
     BOOST_TEST_EQUAL(   "3.14", simplify_floating_point(    "3.14"));
