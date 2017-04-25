@@ -164,7 +164,12 @@ bool fenv_is_valid()
 #if defined LMI_X87
     return default_x87_control_word() == x87_control_word();
 #else  // !defined LMI_X87
-    return FE_TONEAREST == std::fegetround() && 0 == std::fetestexcept(FE_ALL_EXCEPT);
+    // SOMEDAY !! Consider using glibc's fegetexcept() here to test
+    // which exceptions are actually enabled. std::fetestexcept() is
+    // useless for this purpose because it tests the status word
+    // rather than the control word--see:
+    //   http://lists.nongnu.org/archive/html/lmi/2017-01/msg00024.html
+    return FE_TONEAREST == std::fegetround();
 #endif // !defined LMI_X87
 }
 
@@ -181,10 +186,15 @@ std::string fenv_explain_invalid_control_word()
         << "'.\n"
         ;
 #else  // !defined LMI_X87
+    // SOMEDAY !! Consider using glibc's fegetexcept() here to show
+    // which exceptions are actually enabled. std::fetestexcept() is
+    // useless for this purpose because it tests the status word
+    // rather than the control word--see:
+    //   http://lists.nongnu.org/archive/html/lmi/2017-01/msg00024.html
     oss
         << "The floating-point environment unexpectedly changed."
         << "\nThe rounding mode is " << std::fegetround()
-        << " and the exception bitmask is " << std::fetestexcept(FE_ALL_EXCEPT)
+//      << " and the exception bitmask is " << fegetexcept()
         << ".\n"
         ;
 #endif // !defined LMI_X87
