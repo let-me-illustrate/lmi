@@ -38,7 +38,11 @@
 #   if 5 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wbool-compare"
 #   endif // 5 <= __GNUC__
-#endif // defined __GNUC__
+#elif defined LMI_MSC
+#   pragma warning(push)
+#   pragma warning(disable : 4018)
+#   pragma warning(disable : 4804)
+#endif // defined LMI_MSC
 
 /// Floating to floating.
 ///
@@ -237,7 +241,9 @@ inline To bourn_cast(From from, std::true_type, std::true_type)
 
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
-#endif // defined __GNUC__
+#elif defined LMI_MSC
+#   pragma warning(pop)
+#endif // defined LMI_MSC
 
 /// Numeric stinted cast, across whose bourn no value is returned.
 ///
