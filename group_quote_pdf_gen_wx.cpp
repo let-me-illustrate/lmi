@@ -28,6 +28,7 @@
 #include "calendar_date.hpp"            // jdn_t()
 #include "data_directory.hpp"           // AddDataDir()
 #include "force_linking.hpp"
+#include "html_text.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
@@ -59,114 +60,25 @@ LMI_FORCE_LINKING_IN_SITU(group_quote_pdf_generator_wx)
 namespace
 {
 
-/// Escape special XML characters in the given string, ensuring that it appears
-/// correctly inside HTML element contents. Notice that we don't need to escape
-/// quotes here as we never use the result of this function inside an HTML
-/// attribute, only inside HTML elements.
-
-wxString escape_for_html_elem(std::string const& s)
-{
-    wxString const u = wxString::FromUTF8(s.c_str());
-
-    wxString z;
-    z.reserve(u.length());
-    for(auto const& i : u)
-        {
-        switch(i.GetValue())
-            {
-            case '<': z += "&lt;" ; break;
-            case '>': z += "&gt;" ; break;
-            case '&': z += "&amp;"; break;
-            default : z += i      ;
-            }
-        }
-    return z;
-}
-
-/// Namespace for helpers used for HTML generation.
-
-namespace html
-{
-
-/// Namespace for the support HTML tags.
-///
-/// Tags are only used as template arguments, so they don't need to be defined,
-/// just declared -- and tag_info below specialized for them.
-
-namespace tag
-{
-
-struct b;
-struct br;
-
-} // namespace tag
-
-template<typename T>
-struct tag_info;
-
-template<>
-struct tag_info<tag::b>
-{
-    static char const* get_name() { return "b"; }
-    static bool has_end() { return true; }
-};
-
-template<>
-struct tag_info<tag::br>
-{
-    static char const* get_name() { return "br"; }
-    static bool has_end() { return false; }
-};
-
-} // namespace html
-
-/// Wrap the given text in an HTML tag if it is not empty, otherwise just
-/// return an empty string.
-///
-/// For the tags without matching closing tags, such as e.g. "<br>", wrapping
-/// the text means just prepending the tag to it. This is still done only if
-/// the text is not empty.
-
-template<typename T>
-wxString wrap_if_not_empty(wxString const& html)
-{
-    wxString result;
-    if(!html.empty())
-        {
-        result << '<' << html::tag_info<T>::get_name() << '>' << html;
-        if(html::tag_info<T>::has_end())
-            {
-            result << "</" << html::tag_info<T>::get_name() << '>';
-            }
-        }
-
-    return result;
-}
-
 /// Transform 'html' -> '<br><br>html', but return empty string unchanged.
 
-wxString brbr(std::string const& html)
+html::text brbr(std::string const& html)
 {
-    return
-        wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (escape_for_html_elem(html)
-                )
-            );
+    return html::text::escape_for_html_elem(html)
+            .wrap_if_not_empty<html::tag::br>()
+            .wrap_if_not_empty<html::tag::br>()
+            ;
 }
 
 /// Transform 'html' -> '<br><br><b>html</b>', but return empty string unchanged.
 
-wxString brbrb(std::string const& html)
+html::text brbrb(std::string const& html)
 {
-    return
-        wrap_if_not_empty<html::tag::br>
-            (wrap_if_not_empty<html::tag::br>
-                (wrap_if_not_empty<html::tag::b>
-                    (escape_for_html_elem(html)
-                    )
-                )
-            );
+    return html::text::escape_for_html_elem(html)
+                .wrap_if_not_empty<html::tag::b>()
+                .wrap_if_not_empty<html::tag::br>()
+                .wrap_if_not_empty<html::tag::br>()
+                ;
 }
 
 /// Generate HTML representation of a field name and value in an HTML table.
@@ -182,9 +94,9 @@ wxString name_value_as_html_table_data
     return wxString::Format
         ("<td nowrap align=\"right\"><b>%s%s&nbsp;&nbsp;</b></td>"
          "<td>%s&nbsp;&nbsp;&nbsp;&nbsp;</td>"
-        ,escape_for_html_elem(name)
+        ,html::text::escape_for_html_elem(name).as_string()
         ,(value.empty() ? "" : ":")
-        ,escape_for_html_elem(value)
+        ,html::text::escape_for_html_elem(value).as_string()
         );
 }
 
@@ -407,7 +319,7 @@ class group_quote_pdf_generator_wx
         std::string premium_mode_;
         std::string contract_state_;
         std::string effective_date_;
-        wxString    footer_html_;
+        html::text   footer_html_;
 
         // Dynamically-determined fields.
         std::string elected_riders_;
@@ -995,9 +907,9 @@ void group_quote_pdf_generator_wx::output_document_header
          "<td align=\"center\"><i>Prepared By: %s</i></td>"
          "</tr>"
          "</table>"
-        ,escape_for_html_elem(report_data_.company_)
+        ,html::text::escape_for_html_elem(report_data_.company_).as_string()
         ,wxDateTime::Today().FormatDate()
-        ,escape_for_html_elem(report_data_.prepared_by_)
+        ,html::text::escape_for_html_elem(report_data_.prepared_by_).as_string()
         );
 
     pdf_writer.output_html
@@ -1235,13 +1147,13 @@ void group_quote_pdf_generator_wx::output_footer
         *pos_y += vert_skip;
         }
 
-    wxString const footer_html = "<p>" + report_data_.footer_html_ + "</p>";
+    auto footer_html = report_data_.footer_html_.wrap<html::tag::p>();
 
     *pos_y += pdf_writer.output_html
         (pdf_writer.get_horz_margin()
         ,*pos_y
         ,pdf_writer.get_page_width()
-        ,footer_html
+        ,std::move(footer_html).as_string()
         ,output_mode
         );
 }
