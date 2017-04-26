@@ -151,11 +151,13 @@ struct coi_rate_from_q_naive
 void sample_results()
 {
     fenv_initialize();
-#if defined LMI_X87
-    fenv_precision(fe_ldblprec);
     std::cout
         << "\n  annual rate corresponding to a 0.004 daily spread"
         << ", by various methods\n"
+        ;
+#if defined LMI_X87
+    fenv_precision(fe_ldblprec);
+    std::cout
         << std::setprecision(20)
         << "    long double precision, expm1l and log1pl\n      "
         << net_i_from_gross<double,365>()(0.0, 0.004, 0.0) << '\n'
