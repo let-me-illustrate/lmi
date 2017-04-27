@@ -308,7 +308,6 @@ liblmi_common_sources = \
     dbvalue.cpp \
     death_benefits.cpp \
     emit_ledger.cpp \
-    expm1.c \
     facets.cpp \
     fenv_guard.cpp \
     fenv_lmi.cpp \
@@ -617,7 +616,6 @@ test_commutation_functions_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
-  expm1.c \
   timer.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -706,7 +704,6 @@ test_global_settings_LDADD = \
 test_gpt_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
-  expm1.c \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
   ihs_irc7702.cpp \
@@ -745,7 +742,6 @@ test_input_SOURCES = \
   dbdict.cpp \
   dbnames.cpp \
   dbvalue.cpp \
-  expm1.c \
   facets.cpp \
   global_settings.cpp \
   input.cpp \
@@ -798,7 +794,6 @@ test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_loads_SOURCES = \
   $(common_test_objects) \
-  expm1.c \
   loads.cpp \
   loads_test.cpp \
   timer.cpp
@@ -816,7 +811,6 @@ test_materially_equal_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_math_functors_SOURCES = \
   $(common_test_objects) \
-  expm1.c \
   math_functors_test.cpp \
   timer.cpp
 test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
@@ -846,7 +840,6 @@ test_miscellany_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_mortality_rates_SOURCES = \
   $(common_test_objects) \
-  expm1.c \
   ihs_mortal.cpp \
   mortality_rates_test.cpp
 test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
@@ -927,7 +920,6 @@ test_product_file_SOURCES = \
   dbdict.cpp \
   dbnames.cpp \
   dbvalue.cpp \
-  expm1.c \
   facets.cpp \
   fund_data.cpp \
   global_settings.cpp \
@@ -1133,7 +1125,6 @@ noinst_HEADERS = \
     edit_mvc_docview_parameters.hpp \
     emit_ledger.hpp \
     exit_codes.hpp \
-    expm1.h \
     facets.hpp \
     fenv_guard.hpp \
     fenv_lmi.hpp \

@@ -197,7 +197,6 @@ common_common_objects := \
   dbvalue.o \
   death_benefits.o \
   emit_ledger.o \
-  expm1.o \
   facets.o \
   fenv_guard.o \
   fenv_lmi.o \
@@ -549,7 +548,6 @@ commutation_functions_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
   commutation_functions_test.o \
-  expm1.o \
   timer.o \
 
 configurable_settings_test$(EXEEXT): \
@@ -625,7 +623,6 @@ global_settings_test$(EXEEXT): \
 gpt_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
-  expm1.o \
   gpt_commutation_functions.o \
   gpt_test.o \
   ihs_irc7702.o \
@@ -661,7 +658,6 @@ input_test$(EXEEXT): \
   dbdict.o \
   dbnames.o \
   dbvalue.o \
-  expm1.o \
   facets.o \
   global_settings.o \
   input.o \
@@ -709,7 +705,6 @@ istream_to_string_test$(EXEEXT): \
 
 loads_test$(EXEEXT): \
   $(common_test_objects) \
-  expm1.o \
   loads.o \
   loads_test.o \
   timer.o \
@@ -724,7 +719,6 @@ materially_equal_test$(EXEEXT): \
 
 math_functors_test$(EXEEXT): \
   $(common_test_objects) \
-  expm1.o \
   math_functors_test.o \
   timer.o \
 
@@ -750,7 +744,6 @@ miscellany_test$(EXEEXT): \
 
 mortality_rates_test$(EXEEXT): \
   $(common_test_objects) \
-  expm1.o \
   ihs_mortal.o \
   mortality_rates_test.o \
 
@@ -823,7 +816,6 @@ product_file_test$(EXEEXT): \
   dbdict.o \
   dbnames.o \
   dbvalue.o \
-  expm1.o \
   facets.o \
   fund_data.o \
   global_settings.o \
