@@ -34,16 +34,5 @@
 #   error Use this file only for MinGW gcc version 3.2.3 or higher.
 #endif // Not MinGW gcc-3.2.3+ .
 
-// Assume C++98 conformance by default. Define macros to indicate
-// departures from C++98, whether positive (such as providing C99
-// functions) or negative.
-
-// Version numbers are in 'include/_mingw.h' here:
-//   http://cygwin.com/cgi-bin/cvsweb.cgi/src/winsup/mingw/?cvsroot=src
-
-#if 200 <= LMI_MINGW_VERSION
-#   define LMI_COMPILER_PROVIDES_RINT
-#endif // 200 <= LMI_MINGW_VERSION
-
 #endif // config_ming323_hpp
 
