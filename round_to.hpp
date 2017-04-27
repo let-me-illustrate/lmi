@@ -52,9 +52,6 @@
 // this alias-declaration to double.
 using max_prec_real = long double;
 
-// Any modern C++ compiler provides std::rint().
-#define LMI_HAVE_RINT
-
 namespace detail
 {
 #if 1
@@ -161,7 +158,6 @@ RealType round_not(RealType r)
 template<typename RealType>
 RealType round_up(RealType r)
 {
-#if defined LMI_HAVE_RINT
     RealType i_part = std::rint(r);
     if(i_part < r)
         {
@@ -172,32 +168,24 @@ RealType round_up(RealType r)
         i_part++;
         }
     return i_part;
-#else  // !defined LMI_HAVE_RINT
-    return std::ceil(r);
-#endif // !defined LMI_HAVE_RINT
 }
 
 // Round down.
 template<typename RealType>
 RealType round_down(RealType r)
 {
-#if defined LMI_HAVE_RINT
     RealType i_part = std::rint(r);
     if(r < i_part)
         {
         i_part--;
         }
     return i_part;
-#else  // !defined LMI_HAVE_RINT
-    return std::floor(r);
-#endif // !defined LMI_HAVE_RINT
 }
 
 // Truncate.
 template<typename RealType>
 RealType round_trunc(RealType r)
 {
-#if defined LMI_HAVE_RINT
     RealType i_part = std::rint(r);
     RealType f_part = r - i_part;
     // Consider the integer part 'i_part' and the fractional part
@@ -217,31 +205,13 @@ RealType round_trunc(RealType r)
         i_part++;
         }
     return i_part;
-#else  // !defined LMI_HAVE_RINT
-    RealType x = std::floor(std::fabs(r));
-    return (0.0 <= r) ? x : -x;
-#endif // !defined LMI_HAVE_RINT
 }
 
 // Round to nearest using bankers method.
 template<typename RealType>
 RealType round_near(RealType r)
 {
-#if defined LMI_HAVE_RINT
     RealType i_part = std::rint(r);
-#else  // !defined LMI_HAVE_RINT
-//  To return immediately with this value:
-//    return (RealType(0) < r) ? std::floor(r + 0.5) : std::ceil(r -0.5);
-//  would be incorrect, because halfway cases must be rounded to even.
-    RealType i_part =
-        (RealType(0) < r)
-            ? std::floor(r + 0.5)
-            : std::ceil (r - 0.5)
-            ;
-    // This 'i_part' needn't equal the value that std::rint() would
-    // return, as long as both produce the same correct result after
-    // adjustment below.
-#endif // !defined LMI_HAVE_RINT
     RealType f_part = r - i_part;
     RealType abs_f_part = std::fabs(f_part);
 
@@ -407,7 +377,6 @@ template<typename RealType>
 typename round_to<RealType>::rounding_fn_t
 round_to<RealType>::select_rounding_function(rounding_style const a_style) const
 {
-#if defined LMI_HAVE_RINT
     if
         (  a_style == default_rounding_style()
         && a_style != r_indeterminate
@@ -415,7 +384,6 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
         {
         return std::rint;
         }
-#endif // defined LMI_HAVE_RINT
 
     switch(a_style)
         {
@@ -449,8 +417,6 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
             }
         }
 }
-
-#undef LMI_HAVE_RINT
 
 #endif // round_to_hpp
 

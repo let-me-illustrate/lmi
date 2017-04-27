@@ -208,57 +208,6 @@ if test "$profiling_option" = "yes"; then
     LDFLAGS="$LDFLAGS $PROFILING_FLAG"
 fi
 
-dnl === Checks for standard headers/functions ===
-
-AC_CHECK_HEADERS(curses.h)
-if test "$ac_cv_header_curses_h" != "yes"; then
-    AC_CHECK_HEADERS(conio.h)
-    if test "$ac_cv_header_conio_h" != "yes"; then
-        AC_MSG_FAILURE([Header for getch() not found: neither curses.h nor conio.h are available.])
-    fi
-fi
-
-dnl the functions below are typically found in libm and not libc so make sure
-dnl we look there
-AC_SEARCH_LIBS([log10l], [m],
-    [AC_DEFINE(HAVE_LOG10L, [1], [Define this if you have log10l function])]
-)
-AC_SEARCH_LIBS([fabsl], [m],
-    [AC_DEFINE(HAVE_FABSL, [1], [Define this if you have fabsl function])]
-)
-
-dnl check for snprintf: note that when compiling under gcc using -std= flag the
-dnl standard headers do not declare snprintf() and this is why we don't use
-dnl the usual AC_CHECK_FUNCS but reproduce the same workaround as used in
-dnl platform_dependent.hpp (see comment there) which makes it possible to
-dnl detect this function in all cases
-AC_CACHE_CHECK([for snprintf],
-    lmi_cv_func_snprintf,
-    [
-        AC_LINK_IFELSE([AC_LANG_PROGRAM(
-                [[
-                #if defined __GNUC__ && defined __STRICT_ANSI__
-                #   undef __STRICT_ANSI__
-                #endif
-                #include <stdio.h>]],
-                [[
-                char buf[1];
-                return snprintf(buf, 1, "%i", 0);
-                ]]
-            )],
-            lmi_cv_func_snprintf=yes,
-            lmi_cv_func_snprintf=no
-        )
-    ]
-)
-if test "x$lmi_cv_func_snprintf" = "xyes"; then
-    AC_DEFINE([HAVE_SNPRINTF], [1], [Define this if you have snprintf function])
-else
-    dnl TODO: for MSVC support we should check for _snprintf()
-    AC_MSG_FAILURE([The snprintf() function not found on your system])
-fi
-
-AM_CONDITIONAL(HAVE_SNPRINTF, [test "x$lmi_cv_func_snprintf" == "xyes"])
 AM_CONDITIONAL(LMI_WITH_CGI, [test "x$lmi_cgicc_option" == "xyes"])
 
 dnl === Library checks ===
