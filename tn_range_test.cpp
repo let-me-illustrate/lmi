@@ -136,7 +136,7 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     T const maxT = std::numeric_limits<T>::max();
     INVOKE_BOOST_TEST(!is_strictly_between_extrema(maxT), file, line);
     // This test would fail for type bool.
-    INVOKE_BOOST_TEST( is_strictly_between_extrema(   1), file, line);
+    INVOKE_BOOST_TEST( is_strictly_between_extrema<T>(1), file, line);
 
     INVOKE_BOOST_TEST_EQUAL(-1, signum(T(-1)), file, line);
     INVOKE_BOOST_TEST_EQUAL( 0, signum(T( 0)), file, line);
@@ -145,17 +145,17 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL(-1, signum(-maxT), file, line);
     INVOKE_BOOST_TEST_EQUAL( 1, signum( maxT), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(-1), file, line);
-    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer( 0), file, line);
-    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer( 1), file, line);
+    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T(-1)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T( 0)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T( 1)), file, line);
 
     // Integer types truncate the argument, always resulting in an
     // exact integer.
     bool volatile exact = std::numeric_limits<T>::is_exact;
     if(!exact)
         {
-        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer( 0.5), file, line);
-        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(1.07), file, line);
+        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(T( 0.5)), file, line);
+        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(T(1.07)), file, line);
         }
 
     bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
