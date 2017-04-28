@@ -30,7 +30,7 @@
 #include "timer.hpp"
 
 #include <algorithm>                    // std::min()
-#include <cmath>                        // std::pow()
+#include <cmath>                        // std::isnan(), std::pow()
 #include <functional>
 #include <iomanip>
 #include <limits>
@@ -42,17 +42,6 @@
 
 namespace
 {
-/// C99's isnan macro can't be written correctly in portable C++.
-/// This implementation is portable, but compilers needn't implement
-/// it correctly.
-
-template<typename T>
-bool lmi_isnan(T t)
-{
-    T volatile t0(t);
-    return t0 != t0;
-}
-
 // These naive implementations in terms of std::pow() are slower and
 // less accurate than those in the header tested here.
 
@@ -267,7 +256,7 @@ int test_main(int, char*[])
 
     // Test nonsensical interest rate of -101%.
 
-    BOOST_TEST(lmi_isnan(i_upper_12_over_12_from_i_naive<double>()(-1.01)));
+    BOOST_TEST(std::isnan(i_upper_12_over_12_from_i_naive<double>()(-1.01)));
     BOOST_TEST_THROW
         (i_upper_12_over_12_from_i<double>()(-1.01)
         ,std::domain_error
