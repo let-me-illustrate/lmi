@@ -125,6 +125,30 @@ struct coi_rate_from_q_naive
             }
         }
 };
+
+template<typename T, int n>
+struct i_upper_n_over_n_from_i_naive
+{
+    static_assert(std::is_floating_point<T>::value, "");
+    T operator()(T const& i) const
+        {
+        return T(-1) + std::pow((T(1) + i), T(1) / n);
+        }
+};
+
+// This implementation uses std::expm1() and std::log1p() for type T,
+// rather than the long double functions used in production.
+
+template<typename T, int n>
+struct i_upper_n_over_n_from_i_T
+{
+    static_assert(std::is_floating_point<T>::value, "");
+    T operator()(T const& i) const
+        {
+        static T const reciprocal_n = T(1) / n;
+        return std::expm1(std::log1p(i) * reciprocal_n);
+        }
+};
 } // Unnamed namespace.
 
 /// This function isn't a unit test per se. Its purpose is to show
@@ -140,29 +164,31 @@ struct coi_rate_from_q_naive
 void sample_results()
 {
     fenv_initialize();
+    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    std::cout.precision(25);
     std::cout
-        << "\n  annual rate corresponding to a 0.004 daily spread"
+        << "\n  daily rate corresponding to 1% annual interest"
         << ", by various methods\n"
+        << "    method in production\n      "
+        << i_upper_n_over_n_from_i      <long double,365>()(0.01) << '\n'
         ;
 #if defined LMI_X87
     fenv_precision(fe_ldblprec);
     std::cout
-        << std::setprecision(20)
         << "    long double precision, std::expm1 and std::log1p\n      "
-        << net_i_from_gross<double,365>()(0.0, 0.004, 0.0) << '\n'
+        << i_upper_n_over_n_from_i_T    <long double,365>()(0.01) << '\n'
         << "    long double precision, std::pow\n      "
-        << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
+        << i_upper_n_over_n_from_i_naive<long double,365>()(0.01) << '\n'
         ;
 
     fenv_initialize();
     fenv_precision(fe_dblprec);
 #endif // defined LMI_X87
     std::cout
-        << std::setprecision(20)
         << "    double precision, std::expm1 and std::log1p\n      "
-        << net_i_from_gross<double,365>      ()(0.0, 0.004, 0.0) << '\n'
+        << i_upper_n_over_n_from_i_T    <double,365>()(0.01) << '\n'
         << "    double precision, std::pow\n      "
-        << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
+        << i_upper_n_over_n_from_i_naive<double,365>()(0.01) << '\n'
         ;
 
     fenv_initialize();
