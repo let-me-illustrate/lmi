@@ -171,8 +171,8 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     if(is_iec559 && has_quiet_NaN)
         {
         T const qnanT = std::numeric_limits<T>::quiet_NaN();
-        INVOKE_BOOST_TEST_EQUAL( 0, signum(-qnanT), file, line);
-        INVOKE_BOOST_TEST_EQUAL( 0, signum( qnanT), file, line);
+        INVOKE_BOOST_TEST_EQUAL(-1, signum(-qnanT), file, line);
+        INVOKE_BOOST_TEST_EQUAL( 1, signum( qnanT), file, line);
         }
 }
 
