@@ -80,7 +80,7 @@ inline int floating_point_decimals(T t)
 /// Simplify a formatted floating-point number.
 ///
 /// Precondition: 's' is a floating-point number formatted as if by
-/// snprintf() with format "%#.*f" or "%#.*Lf".
+/// std::snprintf() with format "%#.*f" or "%#.*Lf".
 ///
 /// Returns: 's' without any insignificant characters (trailing zeros
 /// after the decimal point, and the decimal point itself if followed
@@ -134,7 +134,7 @@ struct numeric_conversion_traits
 };
 
 /// Return C99 7.19.6.1/8 default precision for integral types.
-/// Calling snprintf() with a precision of zero and a value of
+/// Calling std::snprintf() with a precision of zero and a value of
 /// zero would return no characters.
 
 struct Integral{};

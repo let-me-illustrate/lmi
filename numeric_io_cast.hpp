@@ -30,7 +30,7 @@
 #include <cstring>                      // std::strcmp()
 #include <sstream>
 #include <stdexcept>
-#include <stdio.h>                      // snprintf() (C99, not C++98).
+#include <stdio.h>                      // std::snprintf()
 #include <string>
 #include <type_traits>
 #include <typeinfo>
@@ -214,7 +214,7 @@ struct numeric_converter<std::string, From>
         // The borland rtl has a similar problem.
         char buffer[1 + buffer_length];
         buffer[buffer_length] = '\0';
-        int actual_length = snprintf
+        int actual_length = std::snprintf
             (buffer
             ,buffer_length
             ,numeric_conversion_traits<From>::fmt()
@@ -227,7 +227,7 @@ struct numeric_converter<std::string, From>
             err
                 << "Attempt to convert '"
                 << from
-                << "' to string failed: snprintf returned "
+                << "' to string failed: std::snprintf returned "
                 << actual_length
                 << ", indicating an encoding error with format string '"
                 << numeric_conversion_traits<From>::fmt()
@@ -241,7 +241,7 @@ struct numeric_converter<std::string, From>
             err
                 << "Attempt to convert '"
                 << from
-                << "' to string failed: snprintf returned "
+                << "' to string failed: std::snprintf returned "
                 << actual_length
                 << ", but buffer length is only "
                 << buffer_length
