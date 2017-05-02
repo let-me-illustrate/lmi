@@ -44,13 +44,19 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (system_command("md5sum --check --status eraseme")
         ,std::runtime_error
-        ,"Exit code 1 from command 'md5sum --check --status eraseme'."
+        ,lmi_test::what_regex
+            ("Exit code [0-9]* from command 'md5sum --check --status eraseme'.")
         );
 
+#if !defined LMI_MSW
+    lmi_test::what_regex bad_cmd("Exit code [0-9]* from command 'xyzzy'.");
+#else  // defined LMI_MSW
+    lmi_test::what_regex bad_cmd("Exit code 12345 from command 'xyzzy'.");
+#endif // defined LMI_MSW
     BOOST_TEST_THROW
         (system_command("xyzzy")
         ,std::runtime_error
-        ,"Exit code 12345 from command 'xyzzy'."
+        ,bad_cmd
         );
 
     std::remove("eraseme");
