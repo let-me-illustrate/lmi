@@ -164,6 +164,9 @@ void test_unique_filepath_with_normal_filenames()
     write_dummy_file(path1);
     BOOST_TEST_EQUAL(0, access(path1.string().c_str(), R_OK));
 
+#if defined LMI_MSW
+    // This conditional block tests an msw "feature".
+
     // Open a file for writing, and leave it open, preventing it from
     // being erased and therefore forcing unique_filepath() to use a
     // different name. This behavior isn't guaranteed on toy OS's.
@@ -212,10 +215,11 @@ void test_unique_filepath_with_normal_filenames()
 
     // Clean up the files created in this function.
 
-    BOOST_TEST(0 == std::remove(p));
-    BOOST_TEST(0 == std::remove(q));
-    BOOST_TEST(0 == std::remove(path2.string().c_str()));
     BOOST_TEST(0 == std::remove(path3.string().c_str()));
+    BOOST_TEST(0 == std::remove(path2.string().c_str()));
+#endif // defined LMI_MSW
+    BOOST_TEST(0 == std::remove(q));
+    BOOST_TEST(0 == std::remove(p));
 }
 
 void test_unique_filepath_with_ludicrous_filenames()
@@ -298,8 +302,8 @@ void test_path_validation()
         );
 
     // Remove file and directory created for this test.
-    fs::remove("path_utility_test_dir");
     fs::remove("path_utility_test_file");
+    fs::remove("path_utility_test_dir");
 }
 
 int test_main(int, char*[])

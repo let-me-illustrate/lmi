@@ -231,10 +231,10 @@ fs::path serial_file_path
 /// file 'foo.in', and output is to be saved in a pdf file. A natural
 /// name for the pdf file would be 'foo.pdf'. If a file with that
 /// exact name already exists, it should normally be erased, and its
-/// name reused: that's what an end user would expect. But that's not
-/// possible if 'foo.pdf' is already open in some viewer that locks it
-/// against modification; in that case, a distinct new name must be
-/// devised.
+/// name reused: that's what an end user would expect, and it's how
+/// *nix naturally works. But that's not possible on msw if 'foo.pdf'
+/// is already open in some viewer that locks it against modification;
+/// in that case, a distinct new name must be devised.
 ///
 /// Postcondition: !exists(returned_filepath).
 ///
@@ -246,7 +246,7 @@ fs::path serial_file_path
 /// hardly run illustrations faster than once a second. If even that
 /// fails to establish the postcondition, then throw an exception.
 ///
-/// Implementation note.
+/// Implementation notes.
 ///
 /// A try-block is necessary because fs::remove() can throw. The
 /// postcondition is asserted explicitly at the end of the try-block
@@ -255,6 +255,11 @@ fs::path serial_file_path
 /// apparently it mustn't fail without throwing, yet it doesn't throw
 /// on an operation that must fail, like removing a file that's locked
 /// by another process as in the motivating example above.
+///
+/// For *nix, the catch-clause is not normally expected to be reached,
+/// and the alternative filename it devises might work no better than
+/// the original. However, it doesn't hurt to try it, so there's no
+/// reason to restrict it to msw.
 
 fs::path unique_filepath
     (fs::path    const& original_filepath
