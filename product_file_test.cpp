@@ -21,8 +21,10 @@
 
 #include "pchfile.hpp"
 
+#include "data_directory.hpp"           // AddDataDir()
 #include "dbdict.hpp"
 #include "fund_data.hpp"
+#include "global_settings.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "product_data.hpp"
 #include "rounding_rules.hpp"
@@ -38,13 +40,14 @@ class product_file_test
   public:
     static void test()
         {
-        initialize_filesystem();
-        write_all_files();
+        // Location of product files.
+        global_settings::instance().set_data_directory("/opt/lmi/data");
+        get_filenames();
         assay_speed();
         }
 
   private:
-    static void write_all_files();
+    static void get_filenames();
     static void assay_speed();
     static void read_database_file()   ;
     static void read_fund_file()       ;
@@ -65,20 +68,14 @@ std::string product_file_test::policy_filename_     ;
 std::string product_file_test::rounding_filename_   ;
 std::string product_file_test::stratified_filename_ ;
 
-void product_file_test::write_all_files()
+void product_file_test::get_filenames()
 {
-    DBDictionary       ::write_database_files ();
-    FundData           ::write_funds_files    ();
-    product_data       ::write_policy_files   ();
-    rounding_rules     ::write_rounding_files ();
-    stratified_charges ::write_strata_files   ();
-
     policy_filename_     = "sample";
     product_data p(policy_filename_);
-    database_filename_   = p.datum("DatabaseFilename");
-    fund_filename_       = p.datum("FundFilename"    );
-    rounding_filename_   = p.datum("RoundingFilename");
-    stratified_filename_ = p.datum("TierFilename"    );
+    database_filename_   = AddDataDir(p.datum("DatabaseFilename"));
+    fund_filename_       = AddDataDir(p.datum("FundFilename"    ));
+    rounding_filename_   = AddDataDir(p.datum("RoundingFilename"));
+    stratified_filename_ = AddDataDir(p.datum("TierFilename"    ));
 }
 
 void product_file_test::read_database_file()
@@ -121,6 +118,9 @@ void product_file_test::assay_speed()
 
 int test_main(int, char*[])
 {
+    // Absolute paths require "native" name-checking policy for msw.
+    initialize_filesystem();
+
     product_file_test::test();
     return EXIT_SUCCESS;
 }
