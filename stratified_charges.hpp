@@ -36,25 +36,25 @@ enum e_stratified
     {e_stratified_first
 
     ,e_topic_premium_banded
-    ,e_curr_sepacct_load_banded_by_premium
-    ,e_guar_sepacct_load_banded_by_premium
+    ,e_curr_sepacct_load_banded_by_premium  // CurrSepAcctLoadBandedByPrem
+    ,e_guar_sepacct_load_banded_by_premium  // GuarSepAcctLoadBandedByPrem
 
     ,e_topic_asset_banded
-    ,e_curr_sepacct_load_banded_by_assets
-    ,e_guar_sepacct_load_banded_by_assets
+    ,e_curr_sepacct_load_banded_by_assets   // CurrSepAcctLoadBandedByAssets
+    ,e_guar_sepacct_load_banded_by_assets   // GuarSepAcctLoadBandedByAssets
 
     ,e_topic_asset_tiered
-    ,e_curr_m_and_e_tiered_by_assets
-    ,e_guar_m_and_e_tiered_by_assets
-    ,e_asset_based_comp_tiered_by_assets
-    ,e_investment_mgmt_fee_tiered_by_assets
-    ,e_curr_sepacct_load_tiered_by_assets
-    ,e_guar_sepacct_load_tiered_by_assets
+    ,e_curr_m_and_e_tiered_by_assets        // CurrMandETieredByAssets
+    ,e_guar_m_and_e_tiered_by_assets        // GuarMandETieredByAssets
+    ,e_asset_based_comp_tiered_by_assets    // AssetCompTieredByAssets
+    ,e_investment_mgmt_fee_tiered_by_assets // InvestmentMgmtFeeTieredByAssets
+    ,e_curr_sepacct_load_tiered_by_assets   // CurrSepAcctLoadTieredByAssets
+    ,e_guar_sepacct_load_tiered_by_assets   // GuarSepAcctLoadTieredByAssets
 
     ,e_topic_tiered_premium_tax
-    ,e_tiered_ak_premium_tax
-    ,e_tiered_de_premium_tax
-    ,e_tiered_sd_premium_tax
+    ,e_tiered_ak_premium_tax                // TieredAKPremTax
+    ,e_tiered_de_premium_tax                // TieredDEPremTax
+    ,e_tiered_sd_premium_tax                // TieredSDPremTax
 
     ,e_stratified_last
     };
