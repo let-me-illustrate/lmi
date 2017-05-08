@@ -370,19 +370,13 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
 /// Fictitious state XX may be used where no premium tax applies, as
 /// for offshore business.
 ///
-/// AZ rates (H. B. 2568):
-///   http://www.azleg.gov/legtext/52leg/1r/bills/hb2568h.pdf
-///   2016 0.0199
-///   2017 0.0198
-///   2018 0.0195
-///   2019 0.0192
-///   2020 0.0189
-///   2021 0.0186
-///   2022 0.0183
-///   2023 0.0180
-///   2024 0.0177
-///   2025 0.0174
-///   2026 0.0170
+/// AZ rates:
+///   https://insurance.az.gov/sites/default/files/documents/files/RegulatoryBulletin2016-02_20160705.pdf
+///   2017 0.0190
+///   2018 0.0185
+///   2019 0.0180
+///   2020 0.0175
+///   2021 0.0170
 
 std::vector<double> const& premium_tax_rates_for_life_insurance()
 {
@@ -390,7 +384,7 @@ std::vector<double> const& premium_tax_rates_for_life_insurance()
     static int const n = 53;
     static double const d[n] =
         //   AL       AK       AZ       AR       CA       CO       CT
-        {0.0230,  tiered,  0.0198,  0.0250,  0.0235,  0.0200,  0.0175
+        {0.0230,  tiered,  0.0190,  0.0250,  0.0235,  0.0200,  0.0175
         //   DE       DC       FL       GA       HI       ID
         ,0.0200,  0.0175,  0.0175,  0.0225,  0.0275,  0.0150
         //   IL       IN       IA       KS       KY       LA       ME

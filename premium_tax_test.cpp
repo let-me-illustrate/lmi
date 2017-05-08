@@ -90,7 +90,7 @@ void premium_tax_test::test_rates()
     BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
     BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
     BOOST_TEST_EQUAL(z.maximum_load_rate        (), 0.0270);
-    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0010);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0008);
     BOOST_TEST_EQUAL(z.is_tiered                (), true  );
     BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0270);
     }
