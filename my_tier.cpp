@@ -46,8 +46,8 @@ void stratified_charges::write_proprietary_strata_files()
     stratified_charges foo;
 
     // Example only.
-    foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).values_.push_back(0.0);
-    foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).limits_.push_back(infinity<double>());
+    foo.datum("CurrSepAcctLoadTieredByAssets").values_.push_back(0.0);
+    foo.datum("CurrSepAcctLoadTieredByAssets").limits_.push_back(infinity<double>());
 
 // Not necessary for 'sample' product only, because it's built in.
 //    foo.write(AddDataDir("sample.strata"));
