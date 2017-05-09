@@ -609,33 +609,9 @@ void stratified_charges::write_strata_files()
     foo.datum("GuarSepAcctLoadTieredByAssets"  ).values_.push_back(0.0);
     foo.datum("GuarSepAcctLoadTieredByAssets"  ).limits_.push_back(dbl_inf);
 
-    // AK parameters and citations as of 2017-05.
-    // AK 21.09.210(m):
-    //   http://codes.findlaw.com/ak/title-21-insurance/ak-st-sect-21-09-210.html
-
-    // SD parameters and citations as of 2011-05.
-    // SD 10-44-2(2) and 58-6-70:
-    //   http://legis.state.sd.us/statutes/DisplayStatute.aspx?Type=Statute&Statute=10-44-2
-    //   http://legis.state.sd.us/statutes/DisplayStatute.aspx?Statute=58-6&Type=Statute
-    // SD Chapter 260 (HB 1200), signed 2008-02-19, amended 58-6-70 by
-    // removing the former million-dollar first-year-premium threshold:
-    //   http://legis.state.sd.us/sessions/2008/SessionLaws/DisplayChapter.aspx?Chapter=260
-
-    foo.datum("TieredAKPremTax").values_.push_back (0.02700);
-    foo.datum("TieredAKPremTax").values_.push_back (0.00080);
-    foo.datum("TieredAKPremTax").limits_.push_back(100000.0);
-    foo.datum("TieredAKPremTax").limits_.push_back(dbl_inf);
-    foo.datum("TieredAKPremTax").gloss_ = "AK 21.09.210(m)";
-
-    // DE: not yet implemented.
-    foo.datum("TieredDEPremTax").values_.push_back (0.0);
-    foo.datum("TieredDEPremTax").limits_.push_back(dbl_inf);
-
-    foo.datum("TieredSDPremTax").values_.push_back (0.02500);
-    foo.datum("TieredSDPremTax").values_.push_back (0.00080);
-    foo.datum("TieredSDPremTax").limits_.push_back(100000.0);
-    foo.datum("TieredSDPremTax").limits_.push_back(dbl_inf);
-    foo.datum("TieredSDPremTax").gloss_ = "SD 10-44-2(2) and 58-6-70";
+    foo.datum("TieredAKPremTax") = StatutoryAKPremTax();
+    foo.datum("TieredDEPremTax") = StatutoryDEPremTax();
+    foo.datum("TieredSDPremTax") = StatutorySDPremTax();
 
     foo.save(AddDataDir("sample.strata"));
 }
@@ -656,5 +632,43 @@ void load(stratified_charges& z, fs::path const& path)
 void save(stratified_charges const& z, fs::path const& path)
 {
     z.xml_serializable<stratified_charges>::save(path);
+}
+
+/// AK parameters and citations as of 2017-05.
+/// AK 21.09.210(m):
+///   http://codes.findlaw.com/ak/title-21-insurance/ak-st-sect-21-09-210.html
+
+stratified_entity const& StatutoryAKPremTax()
+{
+    static std::vector<double> const values = {0.02700, 0.00080};
+    static std::vector<double> const limits = {100000.0, infinity<double>()};
+    static stratified_entity const z(limits, values, "AK 21.09.210(m)");
+    return z;
+}
+
+/// DE: not yet implemented.
+
+stratified_entity const& StatutoryDEPremTax()
+{
+    static std::vector<double> const values = {0.0};
+    static std::vector<double> const limits = {infinity<double>()};
+    static stratified_entity const z(limits, values, "DE [not implemented]");
+    return z;
+}
+
+/// SD parameters and citations as of 2011-05.
+/// SD 10-44-2(2) and 58-6-70:
+///   http://legis.state.sd.us/statutes/DisplayStatute.aspx?Type=Statute&Statute=10-44-2
+///   http://legis.state.sd.us/statutes/DisplayStatute.aspx?Statute=58-6&Type=Statute
+/// SD Chapter 260 (HB 1200), signed 2008-02-19, amended 58-6-70 by
+/// removing the former million-dollar first-year-premium threshold:
+///   http://legis.state.sd.us/sessions/2008/SessionLaws/DisplayChapter.aspx?Chapter=260
+
+stratified_entity const& StatutorySDPremTax()
+{
+    static std::vector<double> const values = {0.02500, 0.00080};
+    static std::vector<double> const limits = {100000.0, infinity<double>()};
+    static stratified_entity const z(limits, values, "SD 10-44-2(2), 58-6-70");
+    return z;
 }
 

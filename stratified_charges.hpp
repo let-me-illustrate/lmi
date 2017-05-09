@@ -1,4 +1,4 @@
-// Rates that depend on the amount they're muliplied by.
+// Rates that depend on the amount they're multiplied by.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
@@ -210,6 +210,10 @@ class LMI_SO stratified_charges final
 
 void LMI_SO load(stratified_charges      &, fs::path const&);
 void LMI_SO save(stratified_charges const&, fs::path const&);
+
+stratified_entity const& LMI_SO StatutoryAKPremTax();
+stratified_entity const& LMI_SO StatutoryDEPremTax();
+stratified_entity const& LMI_SO StatutorySDPremTax();
 
 #endif // stratified_charges_hpp
 
