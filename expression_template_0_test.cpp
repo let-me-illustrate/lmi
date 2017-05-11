@@ -79,10 +79,9 @@ struct greater_of
         }
 };
 
-    // Global variables for timing tests. It would be in better taste
-    // to pass them as arguments, using std::bind. However, that
-    // would rule out using some compilers (e.g., borland), and it's
-    // best to test this with as many different toolsets as possible.
+    // Global variables for timing tests. They could alternatively be
+    // passed as arguments, e.g., by using std::bind, but that would
+    // increase complexity in return for no real benefit.
 
     int g_length = 1;
 
@@ -309,6 +308,11 @@ void mete_valarray_typical()
 }
 
 #if defined USE_UBLAS
+// This is never actually called. It is incomplete: it is not known
+// whether the operations measured by other /mete.*typical/ functions
+// can even be expressed with this library; and that doesn't matter,
+// because other tests show it to be slower than its competitors.
+//
 // This library seems to provide most of what we need as named
 // functions like prod(), not as the overloaded operators that
 // we'd prefer for clarity.
