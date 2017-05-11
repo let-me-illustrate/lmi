@@ -88,6 +88,13 @@ struct greater_of
 
     int const max_length = 10000;
 
+    // Number of iterations for 'mete*' functions. This value is a
+    // compromise: higher values make this unit test take too long,
+    // while lower values may yield measurements that are less than
+    // a one-microsecond timer tick.
+
+    int const n_iter = 100;
+
     // cv*: C vectors.
     double cv0[max_length];
     double cv1[max_length];
@@ -133,9 +140,12 @@ struct greater_of
 
 void mete_c()
 {
-    for(int j = 0; j < g_length; ++j)
+    for(int i = 0; i < n_iter; ++i)
         {
-        cv2[j] += cv0[j] - 2.1 * cv1[j];
+        for(int j = 0; j < g_length; ++j)
+            {
+            cv2[j] += cv0[j] - 2.1 * cv1[j];
+            }
         }
 }
 
@@ -143,28 +153,31 @@ void mete_c()
 
 void mete_stl_plain()
 {
-    std::vector<double> tmp0;
-    tmp0.reserve(g_length);
-    std::transform
-        (sv1a.begin()
-        ,sv1a.end()
-        ,std::back_inserter(tmp0)
-        ,std::bind1st(std::multiplies<double>(), 2.1)
-        );
-    std::transform
-        (sv0a.begin()
-        ,sv0a.end()
-        ,tmp0.begin()
-        ,tmp0.begin()
-        ,std::minus<double>()
-        );
-    std::transform
-        (sv2a.begin()
-        ,sv2a.end()
-        ,tmp0.begin()
-        ,sv2a.begin()
-        ,std::plus<double>()
-        );
+    for(int i = 0; i < n_iter; ++i)
+        {
+        std::vector<double> tmp0;
+        tmp0.reserve(g_length);
+        std::transform
+            (sv1a.begin()
+            ,sv1a.end()
+            ,std::back_inserter(tmp0)
+            ,std::bind1st(std::multiplies<double>(), 2.1)
+            );
+        std::transform
+            (sv0a.begin()
+            ,sv0a.end()
+            ,tmp0.begin()
+            ,tmp0.begin()
+            ,std::minus<double>()
+            );
+        std::transform
+            (sv2a.begin()
+            ,sv2a.end()
+            ,tmp0.begin()
+            ,sv2a.begin()
+            ,std::plus<double>()
+            );
+        }
 }
 
 /// This implementation uses STL in a fancier way. A 'lambda' library
@@ -198,36 +211,42 @@ void mete_stl_plain()
 
 void mete_stl_fancy()
 {
-    static std::vector<double> tmp0(max_length);
-    std::transform
-        (sv0b.begin()
-        ,sv0b.end()
-        ,sv1b.begin()
-        ,tmp0.begin()
-        ,std::bind
-            (std::minus<double>()
-            ,std::placeholders::_1
+    for(int i = 0; i < n_iter; ++i)
+        {
+        static std::vector<double> tmp0(max_length);
+        std::transform
+            (sv0b.begin()
+            ,sv0b.end()
+            ,sv1b.begin()
+            ,tmp0.begin()
             ,std::bind
-                (std::multiplies<double>()
-                ,std::placeholders::_2
-                ,2.1
+                (std::minus<double>()
+                ,std::placeholders::_1
+                ,std::bind
+                    (std::multiplies<double>()
+                    ,std::placeholders::_2
+                    ,2.1
+                    )
                 )
-            )
-        );
-    std::transform
-        (sv2b.begin()
-        ,sv2b.end()
-        ,tmp0.begin()
-        ,sv2b.begin()
-        ,std::plus<double>()
-        );
+            );
+        std::transform
+            (sv2b.begin()
+            ,sv2b.end()
+            ,tmp0.begin()
+            ,sv2b.begin()
+            ,std::plus<double>()
+            );
+        }
 }
 
 /// This implementation uses std::valarray.
 
 void mete_valarray()
 {
-    va2 += va0 - 2.1 * va1;
+    for(int i = 0; i < n_iter; ++i)
+        {
+        va2 += va0 - 2.1 * va1;
+        }
 }
 
 /// This implementation uses boost::numeric::ublas::vector.
@@ -235,13 +254,19 @@ void mete_valarray()
 #if defined USE_UBLAS
 void mete_ublas()
 {
-    ub2 += ub0 - 2.1 * ub1;
+    for(int i = 0; i < n_iter; ++i)
+        {
+        ub2 += ub0 - 2.1 * ub1;
+        }
 }
 #endif // defined USE_UBLAS
 
 void mete_pete()
 {
-    pv2 += pv0 - 2.1 * pv1;
+    for(int i = 0; i < n_iter; ++i)
+        {
+        pv2 += pv0 - 2.1 * pv1;
+        }
 }
 
 void run_one_test(std::string const& s, void(*f)())
@@ -269,15 +294,18 @@ void run_one_test(std::string const& s, void(*f)())
 
 void mete_valarray_typical()
 {
-    std::valarray<double> va8 = va0 - va1;
-    std::valarray<double> va9 = 3.14 - va0;
-    va8 += va0;
-    va8 += va0 * va1;
+    for(int i = 0; i < n_iter; ++i)
+        {
+        std::valarray<double> va8 = va0 - va1;
+        std::valarray<double> va9 = 3.14 - va0;
+        va8 += va0;
+        va8 += va0 * va1;
 // This doesn't compile, and std::valarray's only comparable facility
 // is its apply() member function, which applies only unary functions.
 //    va0 = std::max(2.7, va8);
 //    va0 = std::max(va8, va9);
-    va9 = (1.0 - va8) * va9;
+        va9 = (1.0 - va8) * va9;
+        }
 }
 
 #if defined USE_UBLAS
@@ -286,21 +314,24 @@ void mete_valarray_typical()
 // we'd prefer for clarity.
 void mete_ublas_typical()
 {
-    boost::numeric::ublas::vector<double> ub8 = ub0 - ub1;
-    boost::numeric::ublas::vector<double> ub9;
-    // "no match for 'operator-'":
-//    ub9 = 3.14 - ub0;
-    ub8 += ub0;
+    for(int i = 0; i < n_iter; ++i)
+        {
+        boost::numeric::ublas::vector<double> ub8 = ub0 - ub1;
+        boost::numeric::ublas::vector<double> ub9;
+        // "no match for 'operator-'":
+//        ub9 = 3.14 - ub0;
+        ub8 += ub0;
+        }
 
-    // "ambiguous overload for 'operator*' in 'ub0 * ub1'":
-//    ub8 += ub0 * ub1;
+        // "ambiguous overload for 'operator*' in 'ub0 * ub1'":
+//        ub8 += ub0 * ub1;
 
-// This doesn't compile:
-//    ub0 = std::max(2.7, ub8);
-//    ub0 = std::max(ub8, ub9);
+//     This doesn't compile:
+//        ub0 = std::max(2.7, ub8);
+//        ub0 = std::max(ub8, ub9);
 
-    // "error: no match for 'operator-' in '1.0e+0 - ub8'":
-//    ub9 = (1.0 - ub8) * ub9;
+        // "error: no match for 'operator-' in '1.0e+0 - ub8'":
+//        ub9 = (1.0 - ub8) * ub9;
 }
 #endif // defined USE_UBLAS
 
@@ -335,10 +366,12 @@ void mete_pete_typical()
 //    std::vector<double> pv7c << pv0 - pv1;
 //    std::vector<double> pv7d(pv0 - pv1);
 
-    std::vector<double> pv8(pv0.size()); assign(pv8, pv0 - pv1);
-    std::vector<double> pv9(pv0.size()); assign(pv9, 3.14 - pv0);
-    pv8 += pv0;
-    pv8 += pv0 * pv1;
+    for(int i = 0; i < n_iter; ++i)
+        {
+        std::vector<double> pv8(pv0.size()); assign(pv8, pv0 - pv1);
+        std::vector<double> pv9(pv0.size()); assign(pv9, 3.14 - pv0);
+        pv8 += pv0;
+        pv8 += pv0 * pv1;
 
 // This doesn't compile:
 //    pv0 = std::max(2.7, pv8);
@@ -350,7 +383,8 @@ void mete_pete_typical()
 // approaches.
 //    assign(pv0, apply_binary(greater_of<double>(), pv8, pv9));
 
-    assign(pv9, (1.0 - pv8) * pv9);
+        assign(pv9, (1.0 - pv8) * pv9);
+        }
 }
 
 void time_one_array_length(int length)
@@ -399,33 +433,27 @@ void time_one_array_length(int length)
 
     int const alpha = 1 < g_length ? 1 : 0;
     int const omega = g_length - 1;
-    double const value_alpha = alpha * (0.001 + 0.100 - 2.1 * 0.010);
+    double const value_alpha = alpha * (0.001 + n_iter * (0.100 - 2.1 * 0.010));
     double const value_omega = omega * value_alpha;
 
     mete_c();
-    BOOST_TEST_EQUAL           (cv2 [alpha], value_alpha);
     BOOST_TEST(materially_equal(cv2 [omega], value_omega));
 
     mete_stl_plain();
-    BOOST_TEST_EQUAL           (sv2a[alpha], value_alpha);
     BOOST_TEST(materially_equal(sv2a[omega], value_omega));
 
     mete_stl_fancy();
-    BOOST_TEST_EQUAL           (sv2b[alpha], value_alpha);
     BOOST_TEST(materially_equal(sv2b[omega], value_omega));
 
     mete_valarray();
-    BOOST_TEST_EQUAL           (va2 [alpha], value_alpha);
     BOOST_TEST(materially_equal(va2 [omega], value_omega));
 
 #if defined USE_UBLAS
     mete_ublas();
-    BOOST_TEST_EQUAL           (ub2 [alpha], value_alpha);
     BOOST_TEST(materially_equal(ub2 [omega], value_omega));
 #endif // defined USE_UBLAS
 
     mete_pete();
-    BOOST_TEST_EQUAL           (pv2[alpha], value_alpha);
     BOOST_TEST(materially_equal(pv2[omega], value_omega));
 
     run_one_test("C               ", mete_c        );
