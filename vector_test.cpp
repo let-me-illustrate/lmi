@@ -329,7 +329,6 @@ void time_one_array_length(int length)
     BOOST_TEST_EQUAL(g_w   [n], 2.0 * n);
     double const va = TimeAnAliquot(mete_va, max_seconds).unit_time();
     BOOST_TEST_EQUAL(g_va_w[n], 2.0 * n);
-    LMI_ASSERT(0.0 != c);
     std::cout
         << std::setw( 7) << g_array_length
         << std::setw(15) << std::setprecision(3) << std::scientific << c

@@ -107,7 +107,9 @@ class LMI_SO Timer
 /// Otherwise, discard the first observation (which is often anomalous
 /// due, e.g., to cache effects); execute the operation repeatedly,
 /// until the stopping criterion is satisfied; and then record the
-/// mean measured time. The stopping criterion is that both:
+/// minimum measured time, which is more useful than the mean--see:
+///   http://lists.nongnu.org/archive/html/lmi/2017-05/msg00005.html
+/// The stopping criterion is that both:
 ///  - at least one percent of the allotted time has been spent; and
 ///  - either all allotted time has been used, or the repetition count
 ///      has reached one hundred.
@@ -202,31 +204,39 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
         }
 
     Timer timer;
-    double const limit = max_seconds_ * static_cast<double>(timer.frequency_);
+    double const dbl_freq   = static_cast<double>(timer.frequency_);
+    double const limit      = max_seconds_ * dbl_freq;
     double const start_time = static_cast<double>(timer.time_when_started_);
     double const expiry_min = start_time + 0.01 * limit;
     double const expiry_max = start_time +        limit;
+    elapsed_t minimum = limit;
     int j = 0;
     for
-        (elapsed_t now = 0
+        (elapsed_t now = start_time, previous = start_time
         ;now < expiry_min || j < 100 && now < expiry_max
-        ;++j, now = timer.inspect()
+        ;++j
         )
         {
         f_();
+        previous = now;
+        now = timer.inspect();
+        if(now - previous < minimum)
+            {
+            minimum = now - previous;
+            }
         }
     timer.stop();
-    unit_time_ = timer.elapsed_seconds() / j;
+    unit_time_ = minimum / dbl_freq;
     std::ostringstream oss;
     oss
         << std::scientific << std::setprecision(3)
-        << unit_time_
-        << " s = "
+        << timer.elapsed_seconds() / j
+        << " s mean; "
         << std::fixed      << std::setprecision(0)
-        << std::setw(10) << 1.0e9 * unit_time_
-        << " ns, mean of "
+        << std::setw(10) << 1.0e6 * unit_time_
+        << " us least of "
         << std::setw( 3) << j
-        << " iterations"
+        << " runs"
         ;
     str_ = oss.str();
 
