@@ -21,7 +21,7 @@
 
 toolset      := bcc
 
-src_dir      := $(CURDIR)
+srcdir       := $(CURDIR)
 
 gcc_version  :=
 
@@ -236,9 +236,9 @@ bcc_5_5_1.make:: ;
 	    $(cxx_library_headers) $(cxx_c_library_headers) \
 	    )
 	@-$(MAKE) \
-	  --file=$(src_dir)/GNUmakefile \
+	  --file=$(srcdir)/GNUmakefile \
 	  --jobs=1 \
-	                            src_dir='$(src_dir)' \
+	                             srcdir='$(srcdir)' \
 	                            toolset='$(toolset)' \
 	                        gcc_version='$(gcc_version)' \
 	                         C_WARNINGS='$(C_WARNINGS)' \

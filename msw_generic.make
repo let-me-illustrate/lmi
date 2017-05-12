@@ -121,6 +121,6 @@ XMLLINT := /opt/lmi/local/bin/xmllint
 
 # Configuration shared by all msw subplatforms.
 
-include $(src_dir)/msw_common.make
-$(src_dir)/msw_common.make:: ;
+include $(srcdir)/msw_common.make
+$(srcdir)/msw_common.make:: ;
 

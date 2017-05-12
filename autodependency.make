@@ -23,8 +23,8 @@
 
 # Configuration.
 
-include $(src_dir)/configuration.make
-$(src_dir)/configuration.make:: ;
+include $(srcdir)/configuration.make
+$(srcdir)/configuration.make:: ;
 
 ################################################################################
 

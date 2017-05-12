@@ -44,8 +44,8 @@ else
   endif
 endif
 
-include $(src_dir)/$(platform-makefile)
-$(src_dir)/$(platform-makefile):: ;
+include $(srcdir)/$(platform-makefile)
+$(srcdir)/$(platform-makefile):: ;
 
 ################################################################################
 

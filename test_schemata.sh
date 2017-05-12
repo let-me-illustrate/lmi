@@ -25,7 +25,7 @@ echo "  Test schemata..."
 
 # Directory where this script resides.
 
-src_dir=$(dirname $(readlink --canonicalize $0))
+srcdir=$(dirname $(readlink --canonicalize $0))
 
 # Directory where 'jing.jar' and 'trang.jar' reside, along with their
 # support files--extracted from:
@@ -36,7 +36,7 @@ jar_dir=/opt/lmi/third_party/rng
 
 # Data for testing.
 
-cp --preserve $src_dir/sample.cns $src_dir/sample.ill .
+cp --preserve $srcdir/sample.cns $srcdir/sample.ill .
 
 # Primary schemata (RNC: RELAX NG, compact syntax).
 #
@@ -46,7 +46,7 @@ cp --preserve $src_dir/sample.cns $src_dir/sample.ill .
 #
 # Only RNC is to be edited; XSD and RNG are generated from it.
 
-cp --preserve $src_dir/types.rnc $src_dir/cell.rnc $src_dir/multiple_cell_document.rnc $src_dir/single_cell_document.rnc .
+cp --preserve $srcdir/types.rnc $srcdir/cell.rnc $srcdir/multiple_cell_document.rnc $srcdir/single_cell_document.rnc .
 
 echo "  Test RNC files with 'jing'."
 
@@ -62,7 +62,7 @@ java -jar $jar_dir/jing.jar -c single_cell_document.rnc   sample.ill
 # XSD, generated from RNG, is stored in the repository because it's
 # widely used.
 
-cp --preserve $src_dir/types.xsd $src_dir/cell.xsd $src_dir/multiple_cell_document.xsd $src_dir/single_cell_document.xsd .
+cp --preserve $srcdir/types.xsd $srcdir/cell.xsd $srcdir/multiple_cell_document.xsd $srcdir/single_cell_document.xsd .
 
 echo "  Test XSD files with 'jing'."
 
@@ -187,14 +187,14 @@ echo "  Regenerate XSD files as they should appear in the repository."
 # 'cell.xsd', which lacks <xs:complexType name="cell_element">, so
 # process 'multiple' before 'single'.
 
-cp --preserve $src_dir/types_*.rnc $src_dir/cell_*.rnc $src_dir/multiple_cell_document_*.rnc $src_dir/single_cell_document_*.rnc .
+cp --preserve $srcdir/types_*.rnc $srcdir/cell_*.rnc $srcdir/multiple_cell_document_*.rnc $srcdir/single_cell_document_*.rnc .
 
 java -jar $jar_dir/trang.jar multiple_cell_document.rnc    multiple_cell_document.xsd
 java -jar $jar_dir/trang.jar single_cell_document.rnc      single_cell_document.xsd
 java -jar $jar_dir/trang.jar multiple_cell_document_01.rnc multiple_cell_document_01.xsd
 java -jar $jar_dir/trang.jar single_cell_document_01.rnc   single_cell_document_01.xsd
 sed -e 's/  *$//' -i *.xsd
-diff --unified=0 --from-file=$src_dir *.xsd || echo "Dubious '*.xsd' in repository."
+diff --unified=0 --from-file=$srcdir *.xsd || echo "Dubious '*.xsd' in repository."
 
 echo "  Done."
 
