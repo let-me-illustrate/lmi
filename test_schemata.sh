@@ -162,6 +162,8 @@ java -jar $jar_dir/jing.jar multiple_cell_document.rng    sample_bad.cns >> cns.
 echo "  invalid input, xmllint, .rng:"                                   >> cns.eraseme 2>&1
 xmllint --noout --relaxng multiple_cell_document.rng      sample_bad.cns >> cns.eraseme 2>&1
 sed -e 's/^.*error: //;s/\.cns fails/ fails/;s/  *$//' -i cns.eraseme
+sed -e 's/^.*Schemas validity error : //' -i cns.eraseme
+sed -e 's/^.*Relax-NG validity error : //' -i cns.eraseme
 diff --unified=0 touchstone.eraseme cns.eraseme
 
 echo "  Test invalid input: '.ill'."
@@ -179,6 +181,8 @@ java -jar $jar_dir/jing.jar single_cell_document.rng      sample_bad.ill >> ill.
 echo "  invalid input, xmllint, .rng:"                                   >> ill.eraseme 2>&1
 xmllint --noout --relaxng single_cell_document.rng        sample_bad.ill >> ill.eraseme 2>&1
 sed -e 's/^.*error: //;s/\.ill fails/ fails/;s/  *$//' -i ill.eraseme
+sed -e 's/^.*Schemas validity error : //' -i ill.eraseme
+sed -e 's/^.*Relax-NG validity error : //' -i ill.eraseme
 diff --unified=0 touchstone.eraseme ill.eraseme
 
 echo "  Regenerate XSD files as they should appear in the repository."
