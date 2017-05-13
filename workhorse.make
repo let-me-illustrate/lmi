@@ -847,16 +847,44 @@ lmi_msw_res.o: lmi.ico
 # different build_types and picking the latest version of each
 # component can produce a mismatched set.
 
-# SOMEDAY !! Follow the GNU Coding Standards more closely,
-# e.g., changing the value of $(datadir).
+# SOMEDAY !! Follow the GNU Coding Standards
+#   https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
+# more closely, changing the value of $(datadir), and perhaps using
+# some other standard directories that are commented out for now.
 
 prefix         := /opt/lmi
+# parent directory for machine-specific binaries
 exec_prefix    := $(prefix)
+# binaries that users can run
 bindir         := $(exec_prefix)/bin
-datadir        := $(exec_prefix)/data
+# binaries that administrators can run
+#sbindir        := $(exec_prefix)/sbin
+# binaries run by programs
+#libexecdir     := $(exec_prefix)/libexec
+# parent directory for read-only architecture-independent data files
 datarootdir    := $(prefix)/share
+# idiosyncratic read-only architecture-independent data files
+# GNU standard default:
+# datadir        := $(datarootdir)
+# nonstandard value used for now:
+datadir        := $(exec_prefix)/data
+# read-only data files that pertain to a single machine
+#sysconfdir     := $(prefix)/etc
+# architecture-independent data files which the programs modify while they run
+#sharedstatedir := $(prefix)/com
+# data files which the programs modify while they run
+#localstatedir  := $(prefix)/var
+# data files which the programs modify while they run, persisting until reboot
+#runstatedir    := $(localstatedir)/run
+# headers
+#includedir     := $(prefix)/include
 docdir         := $(datarootdir)/doc/lmi
 htmldir        := $(docdir)
+#libdir         := $(exec_prefix)/lib
+# srcdir: set to $(CURDIR) upstream; no GNU default value
+
+# no GNU standard for 'test' or 'touchstone': directory names therefore
+# contain '_' for distinction and clarity
 test_dir       := $(exec_prefix)/test
 touchstone_dir := $(exec_prefix)/touchstone
 
