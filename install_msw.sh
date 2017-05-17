@@ -219,11 +219,15 @@ cat >/opt/lmi/data/configurable_settings.xml <<EOF
 </configurable_settings>
 EOF
 
-# Use "Z:" instead of "C:" for wine.
+# Remove "C:" for wine: it designates the "wine prefix" directory.
+# "Z:" could be used instead, because that's where wine maps the
+# apparent root, but that wouldn't work with posix builds. Instead,
+# therefore, symlink the directories lmi uses as described in
+# 'README.schroot'.
 
 if [ "CYGWIN" != "$platform" ]
 then
-    sed -i /opt/lmi/data/configurable_settings.xml -e's/C:/Z:/g'
+    sed -i /opt/lmi/data/configurable_settings.xml -e's/C://g'
 fi
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
