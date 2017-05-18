@@ -97,10 +97,11 @@ initial_setup:
 UNZIPFLAGS := -q
 
 WGETFLAGS :=
+%.zip: WGETFLAGS += '--output-document=$@'
 
 .PHONY: %.zip
 %.zip: initial_setup
-	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) --output-document=$@ $($@-url)
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wxpdfdoc_dir)
 

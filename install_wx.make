@@ -204,9 +204,11 @@ WGETFLAGS :=
 # date. See:
 #   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00012.html
 
+%.zip: WGETFLAGS += '--output-document=$@'
+
 .PHONY: %.zip
 %.zip:
-	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) --output-document=$@ $($@-url)
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wx_dir)
 
