@@ -130,6 +130,11 @@ make $coefficiency unit_tests unit_test_targets=regex_test.exe >../log 2>&1
 make -f bcc_5_5_1.make $coefficiency unit_tests >../log 2>&1
 make -f como.make $coefficiency unit_tests >../log 2>&1
 
+  # Build wx and wxpdfdoc
+
+make $coefficiency --output-sync=recurse -f install_wx.make >../log 2>&1
+make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make >../log 2>&1
+
   # Shift differing system-test files among directories:
 cd /opt/lmi/touchstone
 for z in *; do cmp --quiet $z ../test/$z || ( mv $z ../touchstone_intermediate_eraseme/$z; mv ../test/$z ./$z; ) ; done
