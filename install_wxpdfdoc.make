@@ -58,10 +58,13 @@ ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
   host_type     := i686-w64-mingw32
 endif
 
-compiler       := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
+compiler         := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
 
-wx_cc_flags    := -fno-omit-frame-pointer
-wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
+wxpdfdoc_version := 0.9.4
+source_dir       := $(wxpdfdoc_dir)/wxPdfDoc-$(wxpdfdoc_version)
+
+wx_cc_flags      := -fno-omit-frame-pointer
+wx_cxx_flags     := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
@@ -104,6 +107,7 @@ WGETFLAGS :=
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wxpdfdoc_dir)
+	mv $(wxpdfdoc_dir)/$(basename $@) $(source_dir)
 
 .PHONY: wxpdfdoc
 wxpdfdoc: $(wxpdfdoc_archive)

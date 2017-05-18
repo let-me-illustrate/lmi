@@ -75,7 +75,9 @@ ifneq ($(use_git), N)
   wx_commit_sha     := 41045df7ea5f93e4c07c1bd846d7127a372705bd
   wx_md5            := 89775012799fe5c9bd8ea61e5fa43da7
 
-  wx_version        := $(wx_commit_sha)
+# Use a string distinct from any official wxwidgets.org release name
+# and from any such string previously used in this makefile.
+  wx_version        := 3.1.0-p1
 
   wx_archive        := wxWidgets-$(wx_commit_sha).zip
 
@@ -211,6 +213,7 @@ WGETFLAGS :=
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wx_dir)
+	mv $(wx_dir)/$(basename $@) $(source_dir)
 
 .PHONY: wx
 wx:
