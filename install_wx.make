@@ -113,7 +113,8 @@ endif
 compiler       := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
 vendor         := $(subst .,,$(compiler))-$(wx_md5)
 
-build_dir      := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
+source_dir     := $(wx_dir)/wxWidgets-$(wx_version)
+build_dir      := $(source_dir)/$(vendor)
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -168,6 +169,7 @@ patchset        := wx-$(wx_version).patch
 .PHONY: all
 all: clobber $(source_archives)
 	-[ -e $(patchset) ] && $(PATCH) --directory=$(wx_dir) --strip=1 <$(patchset)
+	$(MKDIR) --parents $(build_dir)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
 	$(MAKE) --file=$(this_makefile) --directory=$(prefix)/bin portable_script
 
@@ -179,7 +181,7 @@ initial_setup: clobber
 initial_setup:
 	$(MKDIR) --parents $(prefix)
 	$(MKDIR) --parents $(cache_dir)
-	$(MKDIR) --parents $(build_dir)
+	$(MKDIR) --parents $(wx_dir)
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
