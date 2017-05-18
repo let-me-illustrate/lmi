@@ -170,7 +170,7 @@ patchset        := wx-$(wx_version).patch
 
 .PHONY: all
 all: clobber $(source_archives)
-	-[ -e $(patchset) ] && $(PATCH) --directory=$(source_dir) --strip=1 <$(patchset)
+	[ ! -e $(patchset) ] || $(PATCH) --directory=$(source_dir) --strip=1 <$(patchset)
 	$(MKDIR) --parents $(build_dir)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
 	$(MAKE) --file=$(this_makefile) --directory=$(prefix)/bin portable_script
