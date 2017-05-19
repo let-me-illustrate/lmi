@@ -199,12 +199,20 @@ WGETFLAGS :=
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(TAR) --extract $(TARFLAGS) --directory=$(wx_dir) --file=$(cache_dir)/$@
 
+# Used only for retrieval from github by sha1sum.
+#
 # This archive is dynamically created by github, as of a commit
-# specified by the sha1sum embedded in the URL; '--output-document'
-# is used to add 'wxWidgets-' to its name. Not being a static file,
-# it doesn't bear a historical timestamp corresponding to the commit
-# date. See:
+# specified by the sha1sum embedded in the URL. Not being a static
+# file, it doesn't bear a historical timestamp corresponding to the
+# commit date--see:
 #   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00012.html
+# By default, the cached archive's name would be just the sha1sum plus
+# a '.zip' extension, which does not obviously have anything to do
+# with wx, so use '--output-document' to prepend "wxWidgets-" to its
+# name (while this is not that option's intended purpose, it does the
+# right thing in this case). The resulting filename is appropriate for
+# caching, but the name of the directory into which it extracts is
+# inconvenient for actual use, so rename that directory immediately.
 
 %.zip: WGETFLAGS += '--output-document=$@'
 
