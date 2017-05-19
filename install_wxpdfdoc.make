@@ -38,8 +38,7 @@ wxpdfdoc_dir  := /opt/lmi/wxpdfdoc-scratch
 # name, so we need a separate "urlbase" variable.
 
 wxpdfdoc_commit             := 5ac28a73e74916cf44d0ce286976e21d948e9bd8
-wxpdfdoc_basename           := wxpdfdoc-$(wxpdfdoc_commit)
-wxpdfdoc_archive            := $(wxpdfdoc_basename).zip
+wxpdfdoc_archive            := wxpdfdoc-$(wxpdfdoc_commit).zip
 $(wxpdfdoc_archive)-urlbase := $(wxpdfdoc_commit).zip
 $(wxpdfdoc_archive)-root    := https://github.com/vadz/wxpdfdoc/archive
 $(wxpdfdoc_archive)-url     := $($(wxpdfdoc_archive)-root)/$($(wxpdfdoc_archive)-urlbase)
@@ -111,7 +110,7 @@ WGETFLAGS :=
 
 .PHONY: wxpdfdoc
 wxpdfdoc: $(wxpdfdoc_archive)
-	cd $(wxpdfdoc_dir)/$(wxpdfdoc_basename) \
+	cd $(source_dir) \
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
 	  && ./configure $(config_options) \
 	  && $(MAKE) install_pdfdoc_dll install_pdfdoc_dll_headers \
@@ -120,7 +119,7 @@ wxpdfdoc: $(wxpdfdoc_archive)
 clobber:
 # The 'uninstall_pdfdoc_dll_headers' target doesn't remove the (now empty)
 # directory where the headers are installed, so do it separately ourselves.
-	-cd $(wxpdfdoc_dir)/$(wxpdfdoc_basename) && \
+	-cd $(source_dir) && \
 	    $(MAKE) uninstall_pdfdoc_dll uninstall_pdfdoc_dll_headers
 	-$(RMDIR) $(prefix)/include/wx
 	-$(RM) --force --recursive $(wxpdfdoc_dir)
