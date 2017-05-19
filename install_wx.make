@@ -52,7 +52,8 @@ wx_archive        := wxWidgets-$(wx_commit_sha).zip
 
 $(wx_archive)-md5 := $(wx_md5)
 
-$(wx_archive)-url := https://github.com/wxWidgets/wxWidgets/archive/$(wx_commit_sha).zip
+wx_server         := https://github.com/wxWidgets/wxWidgets/archive
+$(wx_archive)-url := $(wx_server)/$(wx_commit_sha).zip
 
 # Variables that normally should be left alone #################################
 
