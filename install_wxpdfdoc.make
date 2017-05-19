@@ -70,7 +70,6 @@ config_options = \
   --build=$(build_type) \
   --host=$(host_type) \
   --disable-dependency-tracking \
-  --with-wx-config=$(prefix)/bin/wx-config-portable \
   CFLAGS='$(wx_cc_flags)' \
   CXXFLAGS='$(wx_cxx_flags)' \
 

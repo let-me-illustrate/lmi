@@ -121,7 +121,6 @@ config_options = \
 
 # Utilities ####################################################################
 
-CHMOD  := chmod
 ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
@@ -142,7 +141,6 @@ all: clobber $(source_archives)
 	[ ! -e $(patchset) ] || $(PATCH) $(PATCHFLAGS) <$(patchset)
 	$(MKDIR) --parents $(build_dir)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
-	$(MAKE) --file=$(this_makefile) --directory=$(prefix)/bin portable_script
 
 # Simulated order-only prerequisites.
 $(source_archives): initial_setup
@@ -196,63 +194,6 @@ WGETFLAGS :=
 wx:
 	export PATH="$(mingw_bin_dir):${PATH}" \
 	  && ../configure $(config_options) && $(MAKE) && $(MAKE) install \
-
-# 'wx-config' is not portable. For example, it uses 'printf(1)', which
-# zsh supports only in versions after 4.0.1 . Far worse, it underlies
-# a problem discussed in these messages
-#   http://lists.gnu.org/archive/html/lmi/2006-04/msg00010.html
-#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00001.html
-#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00019.html
-#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00021.html
-# and extensive offline discussions, which has consumed person-weeks
-# of our time; though we can't pinpoint the exact cause, we have never
-# encountered any such problem except with 'wx-config'. Therefore, we
-# run 'wx-config' only here (in bash, in the present makefile) and
-# write the results of the only commands actually used during lmi build
-# into a portable script.
-#
-# Even if a forgiving shell is used, this portable script runs an
-# order of magnitude faster than the one wx creates.
-# WX !! Is any useful advantage lost?
-
-.PHONY: portable_script
-portable_script:
-	$(ECHO) '#!/bin/sh'                                              >wx-config-portable
-	$(ECHO) 'last_with_arg=0'                                       >>wx-config-portable
-	$(ECHO) 'while [ $$# -gt 0 ]; do'                               >>wx-config-portable
-	$(ECHO) '    case "$$1" in'                                     >>wx-config-portable
-	$(ECHO) '        --basename)'                                   >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --basename`"             >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --cflags | --cppflags | --cxxflags)'           >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --cxxflags`"             >>wx-config-portable
-	$(ECHO) '            this_with_arg=1'                           >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --host*)'                                      >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --libs)'                                       >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --libs`"                 >>wx-config-portable
-	$(ECHO) '            this_with_arg=1'                           >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --rescomp)'                                    >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --rescomp`"              >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --selected_config)'                            >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --selected_config`"      >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --version)'                                    >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --version`"              >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        *)'                                            >>wx-config-portable
-	$(ECHO) '            if [ "$$last_with_arg" -ne 1 ]; then'      >>wx-config-portable
-	$(ECHO) '                echo Bad argument $$1'                 >>wx-config-portable
-	$(ECHO) '                exit 1'                                >>wx-config-portable
-	$(ECHO) '            fi'                                        >>wx-config-portable
-	$(ECHO) '    esac'                                              >>wx-config-portable
-	$(ECHO) '    last_with_arg=$$this_with_arg'                     >>wx-config-portable
-	$(ECHO) '    shift'                                             >>wx-config-portable
-	$(ECHO) 'done'                                                  >>wx-config-portable
-	$(CHMOD) 755 wx-config-portable
 
 .PHONY: clobber
 clobber:

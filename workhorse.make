@@ -159,16 +159,7 @@ endif
 
 wx_dir := /opt/lmi/local/bin
 
-# Use our '-portable' script if it exists; else fall back on the
-# script wx provides.
-
-wx_config_script := \
-  $(firstword \
-    $(wildcard \
-      $(addprefix $(wx_dir)/,wx-config-portable wx-config \
-      ) \
-    ) \
-  )
+wx_config_script := wx-config
 
 # The conventional autotools usage...
 ifeq (gcc,$(toolset))
@@ -176,8 +167,7 @@ ifeq (gcc,$(toolset))
   wx_config_libs     := $(shell $(wx_config_script) --libs)
   wx_config_basename := $(shell $(wx_config_script) --basename)
   wx_config_version  := $(shell $(wx_config_script) --version)
-
-  # Define the variables used to construct the names of wxCode libraries.
+  # [variables used to construct the names of wxCode libraries]
   wxcode_basename := $(shell echo $(wx_config_basename) | sed 's/^wx/wxcode/')
   wxcode_version  := $(shell echo $(wx_config_version) | sed 's/\.[0-9]*$$//')
 endif
