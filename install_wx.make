@@ -23,8 +23,6 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
-wx_version    := 3.0.0
-
 mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
@@ -33,59 +31,28 @@ cache_dir     := /cache_for_lmi/downloads
 
 wx_dir        := /opt/lmi/wx-scratch
 
-# URLs and archive md5sums #####################################################
-
-wx-2.8.6-md5  := 8a130e5b25448a17454a6b957a5e075c
-wx-2.8.7-md5  := e3455083afdf6404a569a8bf0701cf13
-wx-2.8.9-md5  := b0b2d0f6915a21ca6f33896ee8f50387
-wx-2.8.10-md5 := 0461c2085ac1ad7e648aa84c4ba51dd1
-wx-2.9.0-md5  := 09058928eeb72853142c062bdec056ce
-wx-2.9.2-md5  := d6cec5bd331ba90b74c1e2fcb0563620
-wx-2.9.3-md5  := 6b6003713289ea4d3cd9b49c5db5b721
-wx-2.9.5-md5  := e98c5f92805493f150656403ffef3bb0
-wx-3.0.0-md5  := 241998efc12205172ed24c18788ea2cd
-
-wx_md5            := $(wx-$(wx_version)-md5)
-
-wx_archive        := wxWidgets-$(wx_version).tar.bz2
-
-$(wx_archive)-md5 := $(wx_md5)
-
-$(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
-
-# Enable this conditional section to use a github archive as of a
-# particular commit by specifying its sha1sum--the "latest commit"
-# shown here, for example:
-#   https://github.com/wxWidgets/wxWidgets
-
-use_git := Y
-
-ifneq ($(use_git), N)
+# git sha1sum and archive md5sum ###############################################
 
 # Use a string distinct from any official wxwidgets.org release name
 # and from any such string previously used in this makefile.
-  wx_version        := 3.1.0-p1
 
-# wx_commit_sha     := 0b821adf903872b6d8b56630d2191c5b9c3362e5
-# wx_md5            := ac28a959aabe36e26ea039ed78a51b54
-# wx_commit_sha     := 730c1ee79b77b3eab58881492b2de6b659319ba2
-# wx_md5            := 1ce7f42362ba3075eeb4be4679f88dd3
-# wx_commit_sha     := 4475fe36a54cd62457dcd73c8739b1e7d46e1cde
-# wx_md5            := 47e4a36d8164ec4c69cab68a3d05f951
-# wx_commit_sha     := c4d06e8117f8930b57bffaf6a3323007c9df8d4b
-# wx_md5            := 97e6a75d1a83e5597942741f8382c3d4
+wx_version        := 3.1.0-p1
+
+# Use a github archive as of a particular commit by specifying its
+# sha1sum--the "latest commit" shown here, for example:
+#   https://github.com/wxWidgets/wxWidgets
+# It is generally useful to retain only the last historical version.
+
 # wx_commit_sha     := 4c0e272589667c7cf57407d99f1810e2e83348e4
 # wx_md5            := 5fd8da132214bb973133d574fde5cbee
-  wx_commit_sha     := 41045df7ea5f93e4c07c1bd846d7127a372705bd
-  wx_md5            := 89775012799fe5c9bd8ea61e5fa43da7
+wx_commit_sha     := 41045df7ea5f93e4c07c1bd846d7127a372705bd
+wx_md5            := 89775012799fe5c9bd8ea61e5fa43da7
 
-  wx_archive        := wxWidgets-$(wx_commit_sha).zip
+wx_archive        := wxWidgets-$(wx_commit_sha).zip
 
-  $(wx_archive)-md5 := $(wx_md5)
+$(wx_archive)-md5 := $(wx_md5)
 
-  $(wx_archive)-url := https://github.com/wxWidgets/wxWidgets/archive/$(wx_commit_sha).zip
-
-endif
+$(wx_archive)-url := https://github.com/wxWidgets/wxWidgets/archive/$(wx_commit_sha).zip
 
 # Variables that normally should be left alone #################################
 
