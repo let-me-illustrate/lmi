@@ -62,6 +62,10 @@ use_git := Y
 
 ifneq ($(use_git), N)
 
+# Use a string distinct from any official wxwidgets.org release name
+# and from any such string previously used in this makefile.
+  wx_version        := 3.1.0-p1
+
 # wx_commit_sha     := 0b821adf903872b6d8b56630d2191c5b9c3362e5
 # wx_md5            := ac28a959aabe36e26ea039ed78a51b54
 # wx_commit_sha     := 730c1ee79b77b3eab58881492b2de6b659319ba2
@@ -74,10 +78,6 @@ ifneq ($(use_git), N)
 # wx_md5            := 5fd8da132214bb973133d574fde5cbee
   wx_commit_sha     := 41045df7ea5f93e4c07c1bd846d7127a372705bd
   wx_md5            := 89775012799fe5c9bd8ea61e5fa43da7
-
-# Use a string distinct from any official wxwidgets.org release name
-# and from any such string previously used in this makefile.
-  wx_version        := 3.1.0-p1
 
   wx_archive        := wxWidgets-$(wx_commit_sha).zip
 
