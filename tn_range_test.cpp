@@ -137,7 +137,7 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     T const minT = std::numeric_limits<T>::lowest();
 
     INVOKE_BOOST_TEST(!is_strictly_between_extrema(maxT), file, line);
-    if(1 < maxT)
+    if(T(1) < maxT)
         {
         INVOKE_BOOST_TEST( is_strictly_between_extrema<T>(1), file, line);
         }
@@ -152,8 +152,8 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
 
     if(minT < 0)
         {
-        INVOKE_BOOST_TEST_EQUAL(-1, signum(T(-1)), file, line);
-        INVOKE_BOOST_TEST_EQUAL(-1, signum(minT), file, line);
+        INVOKE_BOOST_TEST_EQUAL(T(-1), signum(T(-1)), file, line);
+        INVOKE_BOOST_TEST_EQUAL(T(-1), signum(minT), file, line);
         INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T(-1)), file, line);
         }
 
