@@ -235,8 +235,6 @@ template<> struct numeric_conversion_traits<long int>
         {return std::strtol(nptr, endptr, 10);}
 };
 
-// SOMEDAY !! Consider supporting type long long int when C++ does.
-#if 0
 template<> struct numeric_conversion_traits<long long int>
     :public numeric_conversion_traits<Integral>
 {
@@ -245,7 +243,6 @@ template<> struct numeric_conversion_traits<long long int>
     static T strtoT(char const* nptr, char** endptr)
         {return std::strtoll(nptr, endptr, 10);}
 };
-#endif // 0
 
 template<> struct numeric_conversion_traits<unsigned int>
     :public numeric_conversion_traits<Integral>
@@ -274,8 +271,6 @@ template<> struct numeric_conversion_traits<unsigned long int>
         {return std::strtoul(nptr, endptr, 10);}
 };
 
-// SOMEDAY !! Consider supporting type long long int when C++ does.
-#if 0
 template<> struct numeric_conversion_traits<unsigned long long int>
     :public numeric_conversion_traits<Integral>
 {
@@ -284,7 +279,6 @@ template<> struct numeric_conversion_traits<unsigned long long int>
     static T strtoT(char const* nptr, char** endptr)
         {return std::strtoull(nptr, endptr, 10);}
 };
-#endif // 0
 
 struct Floating{};
 template<> struct numeric_conversion_traits<Floating>
