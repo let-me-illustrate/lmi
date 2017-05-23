@@ -1,6 +1,6 @@
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/CgiDefs.h modified/cgicc-3.1.4/cgicc/CgiDefs.h
 --- original/cgicc-3.1.4/cgicc/CgiDefs.h	2000-10-15 16:03:07.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/CgiDefs.h	2016-01-18 13:59:21.281250000 +0000
++++ modified/cgicc-3.1.4/cgicc/CgiDefs.h	2017-05-23 20:51:50.826034362 +0000
 @@ -23,8 +23,11 @@
  #define _CGIDEFS_H_ 1
  
@@ -47,7 +47,7 @@ diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/CgiDefs.h modified/cgi
  #endif /* ! _CGIDEFS_H_ */
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/CgiEnvironment.cpp modified/cgicc-3.1.4/cgicc/CgiEnvironment.cpp
 --- original/cgicc-3.1.4/cgicc/CgiEnvironment.cpp	2000-10-15 15:58:12.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/CgiEnvironment.cpp	2016-01-18 13:59:21.312500000 +0000
++++ modified/cgicc-3.1.4/cgicc/CgiEnvironment.cpp	2017-05-23 21:39:43.967988884 +0000
 @@ -40,14 +40,20 @@
  CGICCNS CgiEnvironment::CgiEnvironment()
  {
@@ -77,25 +77,34 @@ diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/CgiEnvironment.cpp mod
      STDNS cin.read(temp, getContentLength());
 -    if(STDNS cin.gcount() != getContentLength()) {
 +
-+    if(STDNS cin.gcount() != static_cast<long int>(getContentLength())) {
++    if(STDNS cin.gcount() != static_cast<std::streamsize>(getContentLength())) {
        delete [] temp;
        throw STDNS runtime_error("I/O error");
      }
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/CgiUtils.cpp modified/cgicc-3.1.4/cgicc/CgiUtils.cpp
 --- original/cgicc-3.1.4/cgicc/CgiUtils.cpp	1999-08-09 18:25:31.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/CgiUtils.cpp	2016-01-18 13:59:21.312500000 +0000
++++ modified/cgicc-3.1.4/cgicc/CgiUtils.cpp	2017-05-23 21:39:59.240700786 +0000
+@@ -141,7 +141,7 @@
+ 		       const STDNS string& separator2)
+ {
+   STDNS string result;
+-  unsigned int start, limit;
++  std::string::size_type start, limit;
+   
+   start = data.find(separator1, 0);
+   if(start != STDNS string::npos) {
 @@ -183,7 +183,7 @@
    //auto_ptr<char> temp = new char[dataSize];
    char *temp = new char[dataSize];
    in.read(temp, dataSize);
 -  if(in.gcount() != dataSize) {
-+  if(in.gcount() != static_cast<long int>(dataSize)) {
++  if(in.gcount() != static_cast<std::streamsize>(dataSize)) {
      delete [] temp;
      throw STDNS runtime_error("I/O error");
    }
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/CgiUtils.h modified/cgicc-3.1.4/cgicc/CgiUtils.h
 --- original/cgicc-3.1.4/cgicc/CgiUtils.h	1999-08-09 23:03:41.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/CgiUtils.h	2016-01-18 13:59:21.328125000 +0000
++++ modified/cgicc-3.1.4/cgicc/CgiUtils.h	2017-05-23 20:51:50.826034362 +0000
 @@ -32,10 +32,12 @@
  
  #include "cgicc/CgiDefs.h"
@@ -114,7 +123,7 @@ diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/CgiUtils.h modified/cg
  #else
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/Cgicc.cpp modified/cgicc-3.1.4/cgicc/Cgicc.cpp
 --- original/cgicc-3.1.4/cgicc/Cgicc.cpp	1999-10-02 19:10:10.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/Cgicc.cpp	2016-01-18 14:04:52.000000000 +0000
++++ modified/cgicc-3.1.4/cgicc/Cgicc.cpp	2017-05-23 20:51:50.826034362 +0000
 @@ -27,7 +27,7 @@
  #include <functional>
  #include <iterator>
@@ -173,7 +182,7 @@ diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/Cgicc.cpp modified/cgi
  	    FE_valueCompare(param));
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/FormEntry.h modified/cgicc-3.1.4/cgicc/FormEntry.h
 --- original/cgicc-3.1.4/cgicc/FormEntry.h	1999-08-16 17:40:04.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/FormEntry.h	2016-01-18 13:59:21.328125000 +0000
++++ modified/cgicc-3.1.4/cgicc/FormEntry.h	2017-05-23 20:51:50.826034362 +0000
 @@ -96,7 +96,7 @@
  #ifdef WIN32
    /** Dummy operator for MSVC++ */
@@ -185,7 +194,7 @@ diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/FormEntry.h modified/c
  
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/FormFile.h modified/cgicc-3.1.4/cgicc/FormFile.h
 --- original/cgicc-3.1.4/cgicc/FormFile.h	1999-08-16 17:40:04.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/FormFile.h	2016-01-18 13:59:21.343750000 +0000
++++ modified/cgicc-3.1.4/cgicc/FormFile.h	2017-05-23 20:51:50.826034362 +0000
 @@ -100,7 +100,7 @@
  #ifdef WIN32
    /** Dummy operator for MSVC++ */
@@ -197,7 +206,7 @@ diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/FormFile.h modified/cg
  
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/HTMLAttributes.h modified/cgicc-3.1.4/cgicc/HTMLAttributes.h
 --- original/cgicc-3.1.4/cgicc/HTMLAttributes.h	2000-10-07 18:41:18.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/HTMLAttributes.h	2016-01-18 13:59:21.359375000 +0000
++++ modified/cgicc-3.1.4/cgicc/HTMLAttributes.h	2017-05-23 20:51:50.826034362 +0000
 @@ -100,7 +100,7 @@
  #ifdef WIN32
    /** Dummy operator for MSVC++ */
@@ -209,7 +218,7 @@ diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/HTMLAttributes.h modif
  
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/HTMLElements.cpp modified/cgicc-3.1.4/cgicc/HTMLElements.cpp
 --- original/cgicc-3.1.4/cgicc/HTMLElements.cpp	2000-09-21 15:21:28.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/HTMLElements.cpp	2016-01-18 14:02:24.000000000 +0000
++++ modified/cgicc-3.1.4/cgicc/HTMLElements.cpp	2017-05-23 20:51:50.826034362 +0000
 @@ -22,6 +22,7 @@
  #  pragma implementation
  #endif
@@ -220,7 +229,7 @@ diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/HTMLElements.cpp modif
  #include "cgicc/HTMLElements.h"
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/HTMLElements.h modified/cgicc-3.1.4/cgicc/HTMLElements.h
 --- original/cgicc-3.1.4/cgicc/HTMLElements.h	2000-07-03 02:54:03.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/HTMLElements.h	2016-01-18 13:59:21.359375000 +0000
++++ modified/cgicc-3.1.4/cgicc/HTMLElements.h	2017-05-23 20:51:50.826034362 +0000
 @@ -83,7 +83,7 @@
  #ifdef WIN32
    /** Dummy operator for MSVC++ */
@@ -232,7 +241,7 @@ diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/HTMLElements.h modifie
  
 diff --recursive '--unified=3' original/cgicc-3.1.4/cgicc/HTTPHeaders.h modified/cgicc-3.1.4/cgicc/HTTPHeaders.h
 --- original/cgicc-3.1.4/cgicc/HTTPHeaders.h	1999-08-16 17:40:05.000000000 +0000
-+++ modified/cgicc-3.1.4/cgicc/HTTPHeaders.h	2016-01-18 13:59:21.375000000 +0000
++++ modified/cgicc-3.1.4/cgicc/HTTPHeaders.h	2017-05-23 20:51:50.830034548 +0000
 @@ -155,7 +155,7 @@
  #ifdef WIN32
    /** Dummy operator for MSVC++ */
