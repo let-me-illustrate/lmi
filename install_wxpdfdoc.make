@@ -26,6 +26,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
+exec_prefix   := $(prefix)
 
 cache_dir     := /cache_for_lmi/downloads
 
@@ -67,6 +68,9 @@ wx_cxx_flags     := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
+  --exec-prefix=$(exec_prefix) \
+  --with-wx-prefix=$(prefix) \
+  --with-wx-exec-prefix=$(exec_prefix) \
   --build=$(build_type) \
   --host=$(host_type) \
   --disable-dependency-tracking \
@@ -92,6 +96,7 @@ all: clobber
 .PHONY: initial_setup
 initial_setup:
 	$(MKDIR) --parents $(prefix)
+	$(MKDIR) --parents $(exec_prefix)
 	$(MKDIR) --parents $(cache_dir)
 	$(MKDIR) --parents $(wxpdfdoc_dir)
 

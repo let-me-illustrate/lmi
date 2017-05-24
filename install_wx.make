@@ -26,6 +26,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
+exec_prefix   := $(prefix)
 
 cache_dir     := /cache_for_lmi/downloads
 
@@ -94,6 +95,7 @@ wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
+  --exec-prefix=$(exec_prefix) \
   --build=$(build_type) \
   --host=$(host_type) \
   --disable-apple_ieee \
@@ -149,6 +151,7 @@ initial_setup: clobber
 .PHONY: initial_setup
 initial_setup:
 	$(MKDIR) --parents $(prefix)
+	$(MKDIR) --parents $(exec_prefix)
 	$(MKDIR) --parents $(cache_dir)
 	$(MKDIR) --parents $(wx_dir)
 
@@ -200,6 +203,6 @@ clobber:
 # WX !! The 'uninstall' target doesn't remove quite everything.
 	-cd $(build_dir) && $(MAKE) uninstall distclean
 	-$(RM) --force --recursive $(prefix)/include/wx-$(basename $(wx_version))
-	-$(RM) --force --recursive $(prefix)/lib/wx
+	-$(RM) --force --recursive $(exec_prefix)/lib/wx
 	-$(RM) --force --recursive $(wx_dir)
 
