@@ -100,20 +100,23 @@ config_options = \
   --host=$(host_type) \
   --disable-apple_ieee \
   --disable-aui \
-  --disable-compat24 \
+  --disable-compat30 \
+  --disable-dependency-tracking \
   --disable-fswatcher \
   --disable-gif \
   --disable-mediactrl \
+  --disable-precomp-headers \
   --disable-propgrid \
   --disable-ribbon \
   --disable-richtext \
   --disable-stc \
   --disable-webview \
   --enable-monolithic \
+  --enable-option-checking \
   --enable-shared \
-  --enable-std_iostreams \
   --enable-stl \
   --enable-vendor='$(vendor)' \
+  --with-cxx=11 \
   --without-libjpeg \
   --without-libtiff \
   --without-opengl \
