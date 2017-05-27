@@ -139,14 +139,14 @@ patchset        := wx-$(wx_version).patch
 PATCHFLAGS      := --directory=$(source_dir) --strip=1
 
 .PHONY: all
-all: clobber $(source_archives)
+all: clobber_exec_prefix_only $(source_archives)
 	[ ! -e $(patchset) ] || $(PATCH) $(PATCHFLAGS) <$(patchset)
 	$(MKDIR) --parents $(build_dir)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
 
 # Simulated order-only prerequisites.
 $(source_archives): initial_setup
-initial_setup: clobber
+initial_setup: clobber_exec_prefix_only
 
 .PHONY: initial_setup
 initial_setup:
@@ -198,11 +198,14 @@ wx:
 	export PATH="$(mingw_bin_dir):${PATH}" \
 	  && ../configure $(config_options) && $(MAKE) && $(MAKE) install \
 
-.PHONY: clobber
-clobber:
-# WX !! The 'uninstall' target doesn't remove quite everything.
-	-cd $(build_dir) && $(MAKE) uninstall distclean
-	-$(RM) --force --recursive $(prefix)/include/wx-$(basename $(wx_version))
-	-$(RM) --force --recursive $(exec_prefix)/lib/wx
+# This incidentally removes wxPdfDoc, but it's probably a good idea
+# to rebuild that whenever wx is upgraded anyway.
+
+.PHONY: clobber_exec_prefix_only
+clobber_exec_prefix_only:
+	-$(RM) --force --recursive $(exec_prefix)/bin/wx*
+	-$(RM) --force --recursive $(exec_prefix)/include/wx*
+	-$(RM) --force --recursive $(exec_prefix)/lib/wx*
+	-$(RM) --force --recursive $(exec_prefix)/lib/libwx*
 	-$(RM) --force --recursive $(wx_dir)
 

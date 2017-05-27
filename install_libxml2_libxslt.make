@@ -143,7 +143,7 @@ WGET   := wget
 # Targets ######################################################################
 
 .PHONY: all
-all: clobber $(source_archives) $(libraries)
+all: clobber_exec_prefix_only $(source_archives) $(libraries)
 
 # Order-only prerequisites.
 
@@ -151,7 +151,7 @@ $(libxml2_version):| $(zlib_version)
 $(libxslt_version):| $(libxml2_version)
 $(libraries)      :| $(source_archives)
 $(source_archives):| initial_setup
-initial_setup     :| clobber
+initial_setup     :| clobber_exec_prefix_only
 
 .PHONY: initial_setup
 initial_setup:
@@ -195,11 +195,25 @@ $(libraries):
 	  && $(MAKE) \
 	  && $(MAKE) install \
 
-.PHONY: clobber
-clobber:
-	-for z in $(libraries); \
-	  do \
-	    cd $(xml_dir)/$$z && $(MAKE) uninstall maintainer-clean; \
-	    $(RM) --recursive $(xml_dir)/$$z; \
-	  done;
+# Nonchalantly remove pkgconfig and cmake subdirectories, even though
+# other libraries might someday write files in them, because lmi never
+# uses them.
+
+.PHONY: clobber_exec_prefix_only
+clobber_exec_prefix_only:
+	-$(RM) --force --recursive $(exec_prefix)/bin/*xml2*
+	-$(RM) --force --recursive $(exec_prefix)/bin/*xslt*
+	-$(RM) --force --recursive $(exec_prefix)/bin/xmllint*
+	-$(RM) --force --recursive $(exec_prefix)/bin/xmlcatalog*
+	-$(RM) --force --recursive $(exec_prefix)/include/libxml2
+	-$(RM) --force --recursive $(exec_prefix)/include/libxslt
+	-$(RM) --force --recursive $(exec_prefix)/include/libexslt
+	-$(RM) --force --recursive $(exec_prefix)/include/zconf.h
+	-$(RM) --force --recursive $(exec_prefix)/include/zlib.h
+	-$(RM) --force --recursive $(exec_prefix)/lib/*xml2*
+	-$(RM) --force --recursive $(exec_prefix)/lib/*xslt*
+	-$(RM) --force --recursive $(exec_prefix)/lib/libz*
+	-$(RM) --force --recursive $(exec_prefix)/lib/cmake
+	-$(RM) --force --recursive $(exec_prefix)/lib/pkgconfig
+	-$(RM) --force --recursive $(xml_dir)
 

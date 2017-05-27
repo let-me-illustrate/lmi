@@ -83,14 +83,13 @@ ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
 RM     := rm
-RMDIR  := rmdir
 UNZIP  := unzip
 WGET   := wget
 
 # Targets ######################################################################
 
 .PHONY: all
-all: clobber
+all: clobber_exec_prefix_only
 	$(MAKE) --file=$(this_makefile) wxpdfdoc
 
 .PHONY: initial_setup
@@ -119,11 +118,9 @@ wxpdfdoc: $(wxpdfdoc_archive)
 	  && ./configure $(config_options) \
 	  && $(MAKE) install_pdfdoc_dll install_pdfdoc_dll_headers \
 
-.PHONY: clobber
-clobber:
-# The 'uninstall_pdfdoc_dll_headers' target doesn't remove the (now empty)
-# directory where the headers are installed, so do it separately ourselves.
-	-cd $(source_dir) && \
-	    $(MAKE) uninstall_pdfdoc_dll uninstall_pdfdoc_dll_headers
-	-$(RMDIR) $(prefix)/include/wx
+.PHONY: clobber_exec_prefix_only
+clobber_exec_prefix_only:
+	-$(RM) --force --recursive $(exec_prefix)/lib/*wxcode*pdfdoc*
+	-$(RM) --force --recursive $(exec_prefix)/src/pdf*.inc
 	-$(RM) --force --recursive $(wxpdfdoc_dir)
+
