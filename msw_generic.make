@@ -112,7 +112,7 @@ WGET    := $(PATH_USR_BIN)wget
 
 # Programs for which FHS doesn't specify a location.
 
-# Instead of requiring installation of libxml2 on the host:
+# Instead of requiring installation of the build system's own libxml2:
 #   XMLLINT := $(PATH_USR_BIN)xmllint
 # use the one that lmi builds:
 XMLLINT := /opt/lmi/local/bin/xmllint
