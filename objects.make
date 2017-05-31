@@ -212,6 +212,7 @@ common_common_objects := \
   global_settings.o \
   group_quote_pdf_gen.o \
   group_values.o \
+  html.o \
   illustrator.o \
   input.o \
   input_harmonization.o \

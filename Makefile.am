@@ -344,6 +344,7 @@ liblmi_common_sources = \
     global_settings.cpp \
     group_values.cpp \
     group_quote_pdf_gen.cpp \
+    html.cpp \
     illustrator.cpp \
     input.cpp \
     input_harmonization.cpp \
@@ -1177,6 +1178,7 @@ noinst_HEADERS = \
     group_quote_pdf_gen.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
+    html.hpp \
     icon_monger.hpp \
     ieee754.hpp \
     ihs_irc7702.hpp \

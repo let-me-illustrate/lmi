@@ -487,6 +487,7 @@
     <ClCompile Include="gpt_xml_document.cpp" />
     <ClCompile Include="group_quote_pdf_gen.cpp" />
     <ClCompile Include="group_values.cpp" />
+    <ClCompile Include="html.cpp" />
     <ClCompile Include="ihs_acctval.cpp" />
     <ClCompile Include="ihs_avdebug.cpp" />
     <ClCompile Include="ihs_avmly.cpp" />
