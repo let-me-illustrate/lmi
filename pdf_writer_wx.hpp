@@ -32,6 +32,8 @@
 
 #include <memory>                       // std::unique_ptr
 
+namespace html { class text; }
+
 enum enum_output_mode
     {e_output_normal
     ,e_output_measure_only
@@ -55,7 +57,7 @@ class pdf_writer_wx
         (int x
         ,int y
         ,int width
-        ,wxString const& html
+        ,html::text const& html
         ,enum_output_mode output_mode = e_output_normal
         );
 
