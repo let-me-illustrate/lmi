@@ -24,6 +24,7 @@
 #include "pdf_writer_wx.hpp"
 
 #include "alert.hpp"
+#include "html.hpp"
 
 #include <wx/html/htmlcell.h>
 
@@ -140,12 +141,13 @@ int pdf_writer_wx::output_html
     (int x
     ,int y
     ,int width
-    ,wxString const& html
+    ,html::text const& html
     ,enum_output_mode output_mode
     )
 {
+    auto const html_str = wxString::FromUTF8(html.as_html());
     std::unique_ptr<wxHtmlContainerCell> const cell
-        (static_cast<wxHtmlContainerCell*>(html_parser_.Parse(html))
+        (static_cast<wxHtmlContainerCell*>(html_parser_.Parse(html_str))
         );
     LMI_ASSERT(cell);
 
