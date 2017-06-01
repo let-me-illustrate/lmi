@@ -199,6 +199,11 @@ int pdf_writer_wx::get_total_width() const
     return total_page_size_.x;
 }
 
+int pdf_writer_wx::get_page_height() const
+{
+    return total_page_size_.y - 2 * vert_margin;
+}
+
 int pdf_writer_wx::get_page_bottom() const
 {
     return total_page_size_.y - vert_margin;
