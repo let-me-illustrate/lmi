@@ -945,7 +945,7 @@ void group_quote_pdf_generator_wx::output_document_header
         (pdf_writer.get_horz_margin()
         ,*pos_y
         ,pdf_writer.get_page_width() / 2
-        ,title_html.as_html()
+        ,title_html
         );
 
     // Build the summary table with all the mandatory fields, starting by
@@ -1020,7 +1020,7 @@ void group_quote_pdf_generator_wx::output_document_header
         (pdf_writer.get_horz_margin() + pdf_writer.get_page_width() / 2
         ,*pos_y
         ,pdf_writer.get_page_width() / 2
-        ,summary_html.as_html()
+        ,summary_html
         );
 
     // wxHTML tables don't support "frame" attribute, so draw the border around
@@ -1201,7 +1201,7 @@ void group_quote_pdf_generator_wx::output_footer
         (pdf_writer.get_horz_margin()
         ,*pos_y
         ,pdf_writer.get_page_width()
-        ,footer_html.as_html()
+        ,footer_html
         ,output_mode
         );
 }
