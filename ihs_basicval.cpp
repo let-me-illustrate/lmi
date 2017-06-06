@@ -1217,8 +1217,8 @@ double BasicValues::GetModalPremMlyDedEe
 
     z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
 
-    double u = DBDiscountRate[a_year];
-    z *= (1.0 - std::pow(u, 12.0 / a_mode)) / (1.0 - u);
+    double const v12 = DBDiscountRate[a_year];
+    z *= (1.0 - std::pow(v12, 12.0 / a_mode)) / (1.0 - v12);
 
 #if 0
     z += annual_charge;
@@ -1296,8 +1296,8 @@ double BasicValues::GetModalPremMlyDedEr
 
     z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
 
-    double u = DBDiscountRate[a_year];
-    z *= (1.0 - std::pow(u, 12.0 / a_mode)) / (1.0 - u);
+    double const v12 = DBDiscountRate[a_year];
+    z *= (1.0 - std::pow(v12, 12.0 / a_mode)) / (1.0 - v12);
 
     z += annual_charge;
 
@@ -1489,15 +1489,15 @@ double BasicValues::GetAnnuityValueMlyDed(int a_year, mcenum_mode a_mode) const
         (   yare_input_.GeneralAccountRate[a_year]
         -   spread
         );
-    double u = 1.0 + std::max
+    double const u = 1.0 + std::max
         (z
         ,InterestRates_->GenAcctNetRate
             (mce_gen_guar
             ,mce_monthly_rate
             )[a_year]
         );
-    u = 1.0 / u;
-    return (1.0 - std::pow(u, 12.0 / a_mode)) / (1.0 - u);
+    double const v12 = 1.0 / u;
+    return (1.0 - std::pow(v12, 12.0 / a_mode)) / (1.0 - v12);
 }
 
 /// This forwarding function prevents the 'actuarial_table' module
