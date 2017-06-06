@@ -53,6 +53,7 @@
 
 #include <algorithm>
 #include <cmath>                        // std::pow()
+#include <functional>                   // std::multiplies
 #include <limits>
 #include <numeric>
 #include <stdexcept>
