@@ -383,6 +383,7 @@ libantediluvian_la_LIBADD = \
 liblmi_la_SOURCES = \
     authenticity.cpp \
     commutation_functions.cpp \
+    financial.cpp \
     fund_data.cpp \
     gpt_input.cpp \
     gpt_server.cpp \
@@ -678,6 +679,7 @@ test_file_command_CXXFLAGS = $(AM_CXXFLAGS)
 test_financial_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  financial.cpp \
   financial_test.cpp \
   null_stream.cpp \
   stratified_algorithms.cpp \

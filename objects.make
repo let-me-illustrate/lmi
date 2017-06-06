@@ -273,6 +273,7 @@ lmi_common_objects := \
   $(common_common_objects) \
   authenticity.o \
   commutation_functions.o \
+  financial.o \
   fund_data.o \
   gpt_input.o \
   gpt_server.o \
@@ -601,6 +602,7 @@ file_command_test$(EXEEXT): \
 financial_test$(EXEEXT): \
   $(common_test_objects) \
   facets.o \
+  financial.o \
   financial_test.o \
   null_stream.o \
   stratified_algorithms.o \
