@@ -1045,46 +1045,6 @@ double BasicValues::GetModalPremGSP
 
 /// Determine an approximate "pay as you go" modal premium.
 ///
-/// Rationale for overloading this function and its siblings. The
-/// simple three-argument form is intended for general use, parallel
-/// to similar 'GetModalPrem*' functions; it simply forwards to the
-/// four-argument implementation. That four-argument version, with an
-/// extra yare_input argument, is intended for calculating premiums
-/// under scenarios that differ from actual input, motivated by the
-/// group premium quote's need for premiums with and without certain
-/// riders. Another means to the same end would be to add an argument
-/// for each rider of interest, but that set of riders might expand,
-/// whereas the chosen technique is more future-proof.
-
-double BasicValues::GetModalPremMlyDed
-    (int         a_year
-    ,mcenum_mode a_mode
-    ,double      a_specamt
-    ) const
-{
-    return GetModalPremMlyDed(a_year, a_mode, a_specamt, yare_input_);
-}
-
-double BasicValues::GetModalPremMlyDedEe
-    (int         a_year
-    ,mcenum_mode a_mode
-    ,double      a_specamt
-    ) const
-{
-    return GetModalPremMlyDedEe(a_year, a_mode, a_specamt, yare_input_);
-}
-
-double BasicValues::GetModalPremMlyDedEr
-    (int         a_year
-    ,mcenum_mode a_mode
-    ,double      a_specamt
-    ) const
-{
-    return GetModalPremMlyDedEr(a_year, a_mode, a_specamt, yare_input_);
-}
-
-/// Determine an approximate "pay as you go" modal premium.
-///
 /// This more or less represents actual monthly deductions, at least
 /// for monthly mode on an option B contract, generally favoring
 /// sufficiency over minimality, but simplicity most of all.
@@ -1109,31 +1069,30 @@ double BasicValues::GetModalPremMlyDedEr
 /// to the fee's uneven incidence.
 
 double BasicValues::GetModalPremMlyDed
-    (int               a_year
-    ,mcenum_mode       a_mode
-    ,double            a_specamt
-    ,yare_input const& a_yi
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
     double z = a_specamt * DBDiscountRate[a_year];
     z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
 
-    if(a_yi.AccidentalDeathBenefit)
+    if(yare_input_.AccidentalDeathBenefit)
         {
         double r = MortalityRates_->AdbRates()[a_year];
         z += r * std::min(a_specamt, AdbLimit);
         }
 
-    if(a_yi.SpouseRider)
+    if(yare_input_.SpouseRider)
         {
         double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
-        z += r * a_yi.SpouseRiderAmount;
+        z += r * yare_input_.SpouseRiderAmount;
         }
 
-    if(a_yi.ChildRider)
+    if(yare_input_.ChildRider)
         {
         double r = MortalityRates_->ChildRiderRates()[a_year];
-        z += r * a_yi.ChildRiderAmount;
+        z += r * yare_input_.ChildRiderAmount;
         }
 
     if(true) // Written thus for parallelism and to keep 'r' local.
@@ -1146,7 +1105,7 @@ double BasicValues::GetModalPremMlyDed
 
     double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
 
-    if(a_yi.WaiverOfPremiumBenefit)
+    if(yare_input_.WaiverOfPremiumBenefit)
         {
         double const r = MortalityRates_->WpRates()[a_year];
         switch(WaiverChargeMethod)
@@ -1187,31 +1146,30 @@ double BasicValues::GetModalPremMlyDed
 // conditionals for ease of comparison to the unsuffixed original.
 
 double BasicValues::GetModalPremMlyDedEe
-    (int               a_year
-    ,mcenum_mode       a_mode
-    ,double            a_specamt
-    ,yare_input const& a_yi
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
     double z = a_specamt * DBDiscountRate[a_year];
     z *= GetCurrentTermRates()[a_year];
 #if 0
-    if(a_yi.AccidentalDeathBenefit)
+    if(yare_input_.AccidentalDeathBenefit)
         {
         double r = MortalityRates_->AdbRates()[a_year];
         z += r * std::min(a_specamt, AdbLimit);
         }
 #endif // 0
-    if(a_yi.SpouseRider)
+    if(yare_input_.SpouseRider)
         {
         double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
-        z += r * a_yi.SpouseRiderAmount;
+        z += r * yare_input_.SpouseRiderAmount;
         }
 
-    if(a_yi.ChildRider)
+    if(yare_input_.ChildRider)
         {
         double r = MortalityRates_->ChildRiderRates()[a_year];
-        z += r * a_yi.ChildRiderAmount;
+        z += r * yare_input_.ChildRiderAmount;
         }
 
 #if 0
@@ -1226,7 +1184,7 @@ double BasicValues::GetModalPremMlyDedEe
     double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
 #endif // 0
 
-    if(a_yi.WaiverOfPremiumBenefit)
+    if(yare_input_.WaiverOfPremiumBenefit)
         {
         double const r = MortalityRates_->WpRates()[a_year];
         switch(WaiverChargeMethod)
@@ -1269,32 +1227,31 @@ double BasicValues::GetModalPremMlyDedEe
 }
 
 double BasicValues::GetModalPremMlyDedEr
-    (int               a_year
-    ,mcenum_mode       a_mode
-    ,double            a_specamt
-    ,yare_input const& a_yi
+    (int         a_year
+    ,mcenum_mode a_mode
+    ,double      a_specamt
     ) const
 {
     double z = a_specamt * DBDiscountRate[a_year];
     z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
 
-    if(a_yi.AccidentalDeathBenefit)
+    if(yare_input_.AccidentalDeathBenefit)
         {
         double r = MortalityRates_->AdbRates()[a_year];
         z += r * std::min(a_specamt, AdbLimit);
         }
 
 #if 0
-    if(a_yi.SpouseRider)
+    if(yare_input_.SpouseRider)
         {
         double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
-        z += r * a_yi.SpouseRiderAmount;
+        z += r * yare_input_.SpouseRiderAmount;
         }
 
-    if(a_yi.ChildRider)
+    if(yare_input_.ChildRider)
         {
         double r = MortalityRates_->ChildRiderRates()[a_year];
-        z += r * a_yi.ChildRiderAmount;
+        z += r * yare_input_.ChildRiderAmount;
         }
 #endif // 0
 
@@ -1308,7 +1265,7 @@ double BasicValues::GetModalPremMlyDedEr
 
     double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
 
-    if(a_yi.WaiverOfPremiumBenefit)
+    if(yare_input_.WaiverOfPremiumBenefit)
         {
         double const r = MortalityRates_->WpRates()[a_year];
         switch(WaiverChargeMethod)
