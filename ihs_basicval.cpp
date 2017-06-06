@@ -1136,7 +1136,8 @@ double BasicValues::GetModalPremMlyDed
 
     z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
 
-    z *= GetAnnuityValueMlyDed(a_year, a_mode);
+    double const v12 = mly_ded_discount_factor(a_year, a_mode);
+    z *= (1.0 - std::pow(v12, 12.0 / a_mode)) / (1.0 - v12);
 
     z += annual_charge;
 
@@ -1466,7 +1467,7 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
         }
 }
 
-/// Calculate a special modal factor on the fly.
+/// Calculate a monthly-deduction discount factor on the fly.
 ///
 /// This factor depends on the general-account rate, which is always
 /// specified, even for separate-account-only products.
@@ -1477,16 +1478,16 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 /// may not prevent the contract from lapsing; both those outcomes are
 /// likely to frustrate customers.
 
-double BasicValues::GetAnnuityValueMlyDed(int a_year, mcenum_mode a_mode) const
+double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
 {
-    LMI_ASSERT(0.0 != a_mode);
+    LMI_ASSERT(0.0 != mode);
     double spread = 0.0;
-    if(mce_monthly != a_mode)
+    if(mce_monthly != mode)
         {
-        spread = MinPremIntSpread_[a_year] * 1.0 / a_mode;
+        spread = MinPremIntSpread_[year] * 1.0 / mode;
         }
     double z = i_upper_12_over_12_from_i<double>()
-        (   yare_input_.GeneralAccountRate[a_year]
+        (   yare_input_.GeneralAccountRate[year]
         -   spread
         );
     double const u = 1.0 + std::max
@@ -1494,10 +1495,9 @@ double BasicValues::GetAnnuityValueMlyDed(int a_year, mcenum_mode a_mode) const
         ,InterestRates_->GenAcctNetRate
             (mce_gen_guar
             ,mce_monthly_rate
-            )[a_year]
+            )[year]
         );
-    double const v12 = 1.0 / u;
-    return (1.0 - std::pow(v12, 12.0 / a_mode)) / (1.0 - v12);
+    return 1.0 / u;
 }
 
 /// This forwarding function prevents the 'actuarial_table' module
