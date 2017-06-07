@@ -371,6 +371,7 @@ class LMI_SO BasicValues
         ,double                a_specamt
         ,oenum_modal_prem_type a_prem_type
         ) const;
+    double mly_ded_discount_factor(int year, mcenum_mode mode) const;
     double GetModalPremMlyDed
         (int         a_year
         ,mcenum_mode a_mode
@@ -381,7 +382,6 @@ class LMI_SO BasicValues
         ,oenum_modal_prem_type premium_type
         ) const;
     double GetModalSpecAmtMlyDed(double annualized_pmt, mcenum_mode) const;
-    double mly_ded_discount_factor(int year, mcenum_mode mode) const;
 
     std::vector<double> GetActuarialTable
         (std::string const& TableFile

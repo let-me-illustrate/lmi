@@ -1044,6 +1044,39 @@ double BasicValues::GetModalPremGSP
     return round_max_premium()(ldbl_eps_plus_one() * z);
 }
 
+/// Calculate a monthly-deduction discount factor on the fly.
+///
+/// This factor depends on the general-account rate, which is always
+/// specified, even for separate-account-only products.
+///
+/// This concept is at the same time overelaborate and inadequate.
+/// If the crediting rate changes during a policy year, it results in
+/// a "pay-deductions" premium that varies between anniversaries, yet
+/// may not prevent the contract from lapsing; both those outcomes are
+/// likely to frustrate customers.
+
+double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
+{
+    LMI_ASSERT(0.0 != mode);
+    double spread = 0.0;
+    if(mce_monthly != mode)
+        {
+        spread = MinPremIntSpread_[year] * 1.0 / mode;
+        }
+    double z = i_upper_12_over_12_from_i<double>()
+        (   yare_input_.GeneralAccountRate[year]
+        -   spread
+        );
+    double const u = 1.0 + std::max
+        (z
+        ,InterestRates_->GenAcctNetRate
+            (mce_gen_guar
+            ,mce_monthly_rate
+            )[year]
+        );
+    return 1.0 / u;
+}
+
 /// Determine an approximate "pay as you go" modal premium.
 ///
 /// This more or less represents actual monthly deductions, at least
@@ -1465,39 +1498,6 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
         {
         return MortalityRates_->MonthlyCoiRatesBand0(rate_basis);
         }
-}
-
-/// Calculate a monthly-deduction discount factor on the fly.
-///
-/// This factor depends on the general-account rate, which is always
-/// specified, even for separate-account-only products.
-///
-/// This concept is at the same time overelaborate and inadequate.
-/// If the crediting rate changes during a policy year, it results in
-/// a "pay-deductions" premium that varies between anniversaries, yet
-/// may not prevent the contract from lapsing; both those outcomes are
-/// likely to frustrate customers.
-
-double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
-{
-    LMI_ASSERT(0.0 != mode);
-    double spread = 0.0;
-    if(mce_monthly != mode)
-        {
-        spread = MinPremIntSpread_[year] * 1.0 / mode;
-        }
-    double z = i_upper_12_over_12_from_i<double>()
-        (   yare_input_.GeneralAccountRate[year]
-        -   spread
-        );
-    double const u = 1.0 + std::max
-        (z
-        ,InterestRates_->GenAcctNetRate
-            (mce_gen_guar
-            ,mce_monthly_rate
-            )[year]
-        );
-    return 1.0 / u;
 }
 
 /// This forwarding function prevents the 'actuarial_table' module
