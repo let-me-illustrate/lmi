@@ -678,6 +678,7 @@ test_file_command_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_financial_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   facets.cpp \
   financial.cpp \
   financial_test.cpp \

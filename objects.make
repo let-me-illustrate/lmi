@@ -601,6 +601,7 @@ file_command_test$(EXEEXT): \
 
 financial_test$(EXEEXT): \
   $(common_test_objects) \
+  calendar_date.o \
   facets.o \
   financial.o \
   financial_test.o \
