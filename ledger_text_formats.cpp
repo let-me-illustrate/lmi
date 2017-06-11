@@ -720,6 +720,7 @@ void PrintRosterHeaders(std::string const& file_name)
         ,"ListBillPremium"
         ,"EeListBillPremium"
         ,"ErListBillPremium"
+        ,"ListBillDate"
         ,"EeMode"
         ,"ErMode"
         ,"CorpName"
@@ -807,6 +808,7 @@ void PrintRosterTabDelimited
         << Invar.value_str("ListBillPremium"        ) << '\t'
         << Invar.value_str("EeListBillPremium"      ) << '\t'
         << Invar.value_str("ErListBillPremium"      ) << '\t'
+        << "'" << Invar.ListBillDate                  << "'\t"
         << Invar.EeMode                           [d] << '\t'
         << Invar.ErMode                           [d] << '\t'
         << Invar.value_str("CorpName"               ) << '\t'
