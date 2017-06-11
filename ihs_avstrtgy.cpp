@@ -236,7 +236,7 @@ double AccountValue::DoPerformPmtStrategy
                     }
                 else if(mce_solve_ee_prem == a_SolveForWhichPrem)
                     {
-                    // Normally, ee mode is entered to match ee mode,
+                    // Normally, ee mode is entered to match er mode,
                     // which represents the payment mode chosen by the
                     // plan sponsor; but lmi has the extra flexibility
                     // to behave reasonably if it's not so entered.
