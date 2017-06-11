@@ -431,6 +431,25 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <rows>1</rows>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <object class="wxStaticText">
+                                        <label>List bill date </label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxDatePickerCtrl" name="ListBillDate">
+                                        <help>List bill date</help>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
                             <object class="wxCheckBox" name="IncludeInComposite">
                                 <help>Include this individual in any group composite</help>
                                 <label>Include in composite</label>

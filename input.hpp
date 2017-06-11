@@ -313,6 +313,7 @@ class LMI_SO Input final
     mce_yes_or_no            RetireesCanEnroll               ;
     mce_uw_basis             GroupUnderwritingType           ;
     tnr_date                 LastCoiReentryDate              ;
+    tnr_date                 ListBillDate                    ;
     mce_yes_or_no            BlendGender                     ;
     mce_yes_or_no            BlendSmoking                    ;
     tnr_proportion           MaleProportion                  ;

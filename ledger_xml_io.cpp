@@ -102,6 +102,7 @@ bool unavailable(std::string const& s)
     static std::string const a[] =
         {"DateOfBirthJdn"        // used by group quotes
         ,"EffDateJdn"            // used by group quotes
+        ,"ListBillDateJdn"       // probably not needed
         ,"InforceAsOfDateJdn"    // probably not needed
         ,"InitDacTaxRate"        // used by PrintRosterTabDelimited(); not cents
         ,"InitPremTaxRate"       // used by PrintRosterTabDelimited(); not cents
@@ -351,6 +352,8 @@ void Ledger::write(xml::element& x) const
 // > Format as a number with thousand separators and two decimal places (#,###,###.00)
 // >
     format_map["CurrentCoiMultiplier"              ] = f2;
+    format_map["EeListBillPremium"                 ] = f2;
+    format_map["ErListBillPremium"                 ] = f2;
     format_map["GuarPrem"                          ] = f2;
     format_map["InforceTaxBasis"                   ] = f2;
     format_map["InforceUnloanedAV"                 ] = f2;
@@ -360,6 +363,7 @@ void Ledger::write(xml::element& x) const
     format_map["InitSevenPayPrem"                  ] = f2;
     format_map["InitTgtPrem"                       ] = f2;
     format_map["InitMinPrem"                       ] = f2;
+    format_map["ListBillPremium"                   ] = f2;
     format_map["ModalMinimumDumpin"                ] = f2;
 // >
 // F1: zero decimals, commas

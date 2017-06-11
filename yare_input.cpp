@@ -95,6 +95,7 @@ yare_input::yare_input(Input const& z)
     RetireesCanEnroll                = z.RetireesCanEnroll               .value();
     GroupUnderwritingType            = z.GroupUnderwritingType           .value();
     LastCoiReentryDate               = z.LastCoiReentryDate              .value();
+    ListBillDate                     = z.ListBillDate                    .value();
     BlendGender                      = z.BlendGender                     .value();
     BlendSmoking                     = z.BlendSmoking                    .value();
     MaleProportion                   = z.MaleProportion                  .value();

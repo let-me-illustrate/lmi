@@ -136,6 +136,7 @@ class yare_input final
     bool                              RetireesCanEnroll               ;
     mcenum_uw_basis                   GroupUnderwritingType           ;
     calendar_date                     LastCoiReentryDate              ;
+    calendar_date                     ListBillDate                    ;
     bool                              BlendGender                     ;
     bool                              BlendSmoking                    ;
     double                            MaleProportion                  ;

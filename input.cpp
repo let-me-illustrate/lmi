@@ -113,6 +113,7 @@ Input::Input()
 //    ,RetireesCanEnroll                ("")
 //    ,GroupUnderwritingType            ("")
 //    ,LastCoiReentryDate               ("")
+      ,ListBillDate                     ("2440588") // Assume no inforce so old
 //    ,BlendGender                      ("")
 //    ,BlendSmoking                     ("")
     ,MaleProportion                   ("1")
@@ -358,6 +359,7 @@ void Input::AscribeMembers()
     ascribe("RetireesCanEnroll"                     , &Input::RetireesCanEnroll                     );
     ascribe("GroupUnderwritingType"                 , &Input::GroupUnderwritingType                 );
     ascribe("LastCoiReentryDate"                    , &Input::LastCoiReentryDate                    );
+    ascribe("ListBillDate"                          , &Input::ListBillDate                          );
     ascribe("BlendGender"                           , &Input::BlendGender                           );
     ascribe("BlendSmoking"                          , &Input::BlendSmoking                          );
     ascribe("MaleProportion"                        , &Input::MaleProportion                        );
