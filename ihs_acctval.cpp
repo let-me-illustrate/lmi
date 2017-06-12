@@ -164,6 +164,8 @@ AccountValue::AccountValue(Input const& input)
             );
         }
 
+    set_list_bill_year_and_month();
+
     OverridingEePmts    .resize(12 * BasicValues::GetLength());
     OverridingErPmts    .resize(12 * BasicValues::GetLength());
 
@@ -1129,6 +1131,100 @@ double AccountValue::ModalMinInitPremShortfall() const
     else
         {
         return 0.0;
+        }
+}
+
+/// Set duration at which list-bill premium is to be determined.
+///
+/// The year and month of determination correspond to the first
+/// monthiversary on or after the list-bill date. If there is no
+/// such monthiversary, then harmless default values are used.
+///
+/// SOMEDAY !! Add a calendar_date function to return 'b' directly
+/// instead of incrementing the number of months conditionally.
+
+void AccountValue::set_list_bill_year_and_month()
+{
+    auto const& cert_date = yare_input_.EffectiveDate;
+    auto const& bill_date = yare_input_.ListBillDate;
+    if(bill_date < cert_date) return;
+
+    auto z = years_and_months_since(cert_date, bill_date);
+    auto const a = add_years_and_months(cert_date, z.first, z.second, true);
+    if(a < bill_date)
+        {
+        ++z.second;
+        }
+    auto const b = add_years_and_months(cert_date, z.first, z.second, true);
+    LMI_ASSERT(cert_date <= b);
+    list_bill_year_   = z.first;
+    list_bill_month_  = z.second;
+
+    if(!contains(yare_input_.Comments, "idiosyncrasyL")) return;
+
+    // Temporary supplemental code for acceptance testing.
+    int const inforce_months_mod_12 = years_and_months_since
+        (cert_date, bill_date).second
+        ;
+    // Number of delta months in the twelvemonth starting on bill date.
+    int const months_ante = 12 - inforce_months_mod_12;
+    warning()
+        << yare_input_.EffectiveDate.str() << " yare_input_.EffectiveDate\n"
+        << yare_input_.ListBillDate.str() << " yare_input_.ListBillDate\n"
+        << list_bill_year_ << " list_bill_year_\n"
+        << list_bill_month_ << " list_bill_month_\n"
+        << a.str() << " a = speculative determination date\n"
+        << b.str() << " b = actual determination date\n"
+        << months_ante << " months_ante\n"
+        << "List-bill premium will be set in monthiversary processing on "
+        << b.str() << ", which is "
+        << list_bill_year_ << " years and " << list_bill_month_ << " months"
+        << " after the issue date. An annual-mode list bill will reflect this"
+        << " premium for "
+        << months_ante << " months,"
+        << " and a premium determined on the same date but at the next higher"
+        << " age for "
+        << (12 - months_ante) << " months. Other modes will use an appropriate"
+        << " number of initial elements of that twelve-month premium stream."
+        << LMI_FLUSH;
+}
+
+void AccountValue::set_list_bill_premium()
+{
+    bool const the_time_is_now =
+           Year  == list_bill_year_
+        && Month == list_bill_month_
+        && mce_run_gen_curr_sep_full == RunBasis_
+        ;
+    if(!the_time_is_now) return;
+
+    if(!SplitMinPrem)
+        {
+        InvariantValues().ListBillPremium = GetListBillPremMlyDed
+            (Year
+            ,InvariantValues().ErMode[Year].value()
+            ,InvariantValues().SpecAmt[Year]
+            );
+        InvariantValues().ErListBillPremium =
+            InvariantValues().ListBillPremium
+            ;
+        }
+    else
+        {
+        InvariantValues().EeListBillPremium = GetListBillPremMlyDedEe
+            (Year
+            ,InvariantValues().ErMode[Year].value()
+            ,InvariantValues().TermSpecAmt[Year]
+            );
+        InvariantValues().ErListBillPremium = GetListBillPremMlyDedEr
+            (Year
+            ,InvariantValues().ErMode[Year].value()
+            ,InvariantValues().SpecAmt[Year]
+            );
+        InvariantValues().ListBillPremium =
+              InvariantValues().EeListBillPremium
+            + InvariantValues().ErListBillPremium
+            ;
         }
 }
 

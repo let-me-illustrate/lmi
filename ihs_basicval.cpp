@@ -31,6 +31,7 @@
 #include "database.hpp"
 #include "death_benefits.hpp"
 #include "et_vector.hpp"
+#include "financial.hpp"                // list_bill_premium()
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt_specamt.hpp"
@@ -1335,6 +1336,92 @@ double BasicValues::GetModalPremMlyDedEr
 
     z += annual_charge;
 
+    return round_min_premium()(z);
+}
+
+/// Possibly off-anniversary premium to be shown on list bill.
+///
+/// Implemented in terms of list_bill_premium(), q.v.
+///
+/// Ascertain deductions at the current age, and then again at the
+/// next age iff that is less than the maturity age, otherwise
+/// assuming that deductions are zero after maturity.
+///
+/// The discounting specified in all GetModalPremMlyDed* functions
+/// results in an annuity factor of unity for monthly mode, so call
+/// those functions with monthly mode for the nonce to get
+/// undiscounted deductions. This isn't quite what's wanted because
+/// those functions perform rounding.
+
+double BasicValues::GetListBillPremMlyDed
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
+    ) const
+{
+    double const p0 = GetModalPremMlyDed(year, mce_monthly, specamt);
+    int const next_year = 1 + year;
+    double const p1 =
+        (next_year < GetLength())
+        ? GetModalPremMlyDed(next_year, mce_monthly, specamt)
+        : 0.0
+        ;
+    double const z = list_bill_premium
+        (p0
+        ,p1
+        ,mode
+        ,yare_input_.EffectiveDate
+        ,yare_input_.ListBillDate
+        ,mly_ded_discount_factor(year, mode)
+        );
+    return round_min_premium()(z);
+}
+
+double BasicValues::GetListBillPremMlyDedEe
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
+    ) const
+{
+    double const p0 = GetModalPremMlyDedEe(year, mce_monthly, specamt);
+    int const next_year = 1 + year;
+    double const p1 =
+        (next_year < GetLength())
+        ? GetModalPremMlyDedEe(next_year, mce_monthly, specamt)
+        : 0.0
+        ;
+    double const z = list_bill_premium
+        (p0
+        ,p1
+        ,mode
+        ,yare_input_.EffectiveDate
+        ,yare_input_.ListBillDate
+        ,DBDiscountRate[year]
+        );
+    return round_min_premium()(z);
+}
+
+double BasicValues::GetListBillPremMlyDedEr
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
+    ) const
+{
+    double const p0 = GetModalPremMlyDedEr(year, mce_monthly, specamt);
+    int const next_year = 1 + year;
+    double const p1 =
+        (next_year < GetLength())
+        ? GetModalPremMlyDedEr(next_year, mce_monthly, specamt)
+        : 0.0
+        ;
+    double const z = list_bill_premium
+        (p0
+        ,p1
+        ,mode
+        ,yare_input_.EffectiveDate
+        ,yare_input_.ListBillDate
+        ,DBDiscountRate[year]
+        );
     return round_min_premium()(z);
 }
 

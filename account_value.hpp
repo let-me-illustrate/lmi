@@ -290,6 +290,9 @@ class LMI_SO AccountValue
     double MinInitPrem() const;
     double ModalMinInitPremShortfall() const;
 
+    void   set_list_bill_year_and_month();
+    void   set_list_bill_premium();
+
     void   SetMaxLoan              ();
     void   SetMaxWD                ();
     double GetRefundableSalesLoad  () const;
@@ -538,6 +541,9 @@ class LMI_SO AccountValue
 
     bool    SplitMinPrem;
     bool    UnsplitSplitMinPrem;
+
+    int     list_bill_year_  {methuselah};
+    int     list_bill_month_ {13};
 
     bool    TermCanLapse;
     bool    TermRiderActive;

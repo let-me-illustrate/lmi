@@ -172,6 +172,12 @@ void AccountValue::DoMonthDR()
     NetMaxNecessaryPremium   = Irc7702A_->DebugGetNetMaxNecPm  ();
     GrossMaxNecessaryPremium = Irc7702A_->DebugGetGrossMaxNecPm();
 
+    // Determine list-bill premiums only after transactions that
+    // might change specamt have been processed.
+    // SOMEDAY !! Should InvariantValues().ModalMinimumPremium be
+    // set here for that reason?
+    set_list_bill_premium();
+
     TxAscertainDesiredPayment();
     TxLimitPayment(max_non_mec_premium);
 
