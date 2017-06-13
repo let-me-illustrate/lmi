@@ -1064,7 +1064,7 @@ double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
         {
         spread = MinPremIntSpread_[year] * 1.0 / mode;
         }
-    double z = i_upper_12_over_12_from_i<double>()
+    double const z = i_upper_12_over_12_from_i<double>()
         (   yare_input_.GeneralAccountRate[year]
         -   spread
         );
@@ -1125,25 +1125,25 @@ std::pair<double,double> BasicValues::approx_mly_ded
 
     if(yare_input_.AccidentalDeathBenefit)
         {
-        double r = MortalityRates_->AdbRates()[year];
+        double const r = MortalityRates_->AdbRates()[year];
         mly_ded += r * std::min(specamt, AdbLimit);
         }
 
     if(yare_input_.SpouseRider)
         {
-        double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[year];
+        double const r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[year];
         mly_ded += r * yare_input_.SpouseRiderAmount;
         }
 
     if(yare_input_.ChildRider)
         {
-        double r = MortalityRates_->ChildRiderRates()[year];
+        double const r = MortalityRates_->ChildRiderRates()[year];
         mly_ded += r * yare_input_.ChildRiderAmount;
         }
 
     if(true) // Written thus for parallelism and to keep 'r' local.
         {
-        double r = Loads_->specified_amount_load(mce_gen_curr)[year];
+        double const r = Loads_->specified_amount_load(mce_gen_curr)[year];
         mly_ded += r * std::min(specamt, SpecAmtLoadLimit);
         }
 
