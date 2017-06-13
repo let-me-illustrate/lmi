@@ -1078,7 +1078,7 @@ double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
     return 1.0 / u;
 }
 
-/// Determine an approximate "pay as you go" modal premium.
+/// Determine approximate monthly deductions.
 ///
 /// This more or less represents actual monthly deductions, at least
 /// for monthly mode on an option B contract, generally favoring
@@ -1102,11 +1102,22 @@ double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
 /// If annual_policy_fee is not zero, then level premium on any mode
 /// other than annual cannot precisely cover monthly deductions due
 /// to the fee's uneven incidence.
+///
+/// It might be objected that this function's name suggests that all
+/// deductions are monthly, whereas it returns "annual" and "monthly"
+/// deductions. Naming rationale: "monthly deduction" is a standard
+/// term with an unambiguous meaning; the "annual" policy fee is part
+/// of the monthly deduction on anniversary only.
+///
+/// This function and the modal-premium function implemented in terms
+/// of it are intended for use with group UL products for which the
+/// employer typically pays the approximate monthly deductions, but
+/// may also be used with any UL product when such a payment pattern
+/// is desired.
 
-double BasicValues::GetModalPremMlyDed
-    (int         year
-    ,mcenum_mode mode
-    ,double      specamt
+std::pair<double,double> BasicValues::approx_mly_ded
+    (int    year
+    ,double specamt
     ) const
 {
     double mly_ded = specamt * DBDiscountRate[year];
@@ -1172,12 +1183,23 @@ double BasicValues::GetModalPremMlyDed
     mly_ded /= 1.0 - load;
     ann_ded /= 1.0 - load;
 
+    return std::make_pair(ann_ded, mly_ded);
+}
+
+/// Determine an approximate "pay as you go" modal premium.
+
+double BasicValues::GetModalPremMlyDed
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
+    ) const
+{
+    auto const deductions = approx_mly_ded(year, specamt);
+    double const ann_ded = deductions.first;
+    double const mly_ded = deductions.second;
     double const v12 = mly_ded_discount_factor(year, mode);
-    mly_ded *= (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
-
-    mly_ded += ann_ded;
-
-    return round_min_premium()(mly_ded);
+    double const annuity = (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
+    return round_min_premium()(ann_ded + mly_ded * annuity);
 }
 
 // The "-Ee" and "-Er" variants are written with preprocessor

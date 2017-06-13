@@ -34,6 +34,7 @@
 
 #include <memory>                       // std::shared_ptr
 #include <string>
+#include <utility>                      // std::pair
 #include <vector>
 
 // Let's do this through once for UL, then think about extending it to other
@@ -387,6 +388,10 @@ class LMI_SO BasicValues
         ,oenum_modal_prem_type a_prem_type
         ) const;
     double mly_ded_discount_factor(int year, mcenum_mode mode) const;
+    std::pair<double,double> approx_mly_ded
+        (int    year
+        ,double specamt
+        ) const;
     double GetModalPremMlyDed
         (int         year
         ,mcenum_mode mode
