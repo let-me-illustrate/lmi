@@ -1168,7 +1168,9 @@ double BasicValues::GetModalPremMlyDed
             }
         }
 
-    mly_ded /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[year];
+    double const load = Loads_->target_premium_load_maximum_premium_tax()[year];
+    mly_ded /= 1.0 - load;
+    ann_ded /= 1.0 - load;
 
     double const v12 = mly_ded_discount_factor(year, mode);
     mly_ded *= (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
