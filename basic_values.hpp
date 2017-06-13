@@ -388,9 +388,9 @@ class LMI_SO BasicValues
         ) const;
     double mly_ded_discount_factor(int year, mcenum_mode mode) const;
     double GetModalPremMlyDed
-        (int         a_year
-        ,mcenum_mode a_mode
-        ,double      a_specamt
+        (int         year
+        ,mcenum_mode mode
+        ,double      specamt
         ) const;
     double GetModalSpecAmt
         (double                annualized_pmt

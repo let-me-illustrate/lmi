@@ -1104,50 +1104,50 @@ double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
 /// to the fee's uneven incidence.
 
 double BasicValues::GetModalPremMlyDed
-    (int         a_year
-    ,mcenum_mode a_mode
-    ,double      a_specamt
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
     ) const
 {
-    double z = a_specamt * DBDiscountRate[a_year];
-    z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
+    double z = specamt * DBDiscountRate[year];
+    z *= GetBandedCoiRates(mce_gen_curr, specamt)[year];
 
     if(yare_input_.AccidentalDeathBenefit)
         {
-        double r = MortalityRates_->AdbRates()[a_year];
-        z += r * std::min(a_specamt, AdbLimit);
+        double r = MortalityRates_->AdbRates()[year];
+        z += r * std::min(specamt, AdbLimit);
         }
 
     if(yare_input_.SpouseRider)
         {
-        double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
+        double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[year];
         z += r * yare_input_.SpouseRiderAmount;
         }
 
     if(yare_input_.ChildRider)
         {
-        double r = MortalityRates_->ChildRiderRates()[a_year];
+        double r = MortalityRates_->ChildRiderRates()[year];
         z += r * yare_input_.ChildRiderAmount;
         }
 
     if(true) // Written thus for parallelism and to keep 'r' local.
         {
-        double r = Loads_->specified_amount_load(mce_gen_curr)[a_year];
-        z += r * std::min(a_specamt, SpecAmtLoadLimit);
+        double r = Loads_->specified_amount_load(mce_gen_curr)[year];
+        z += r * std::min(specamt, SpecAmtLoadLimit);
         }
 
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
+    z += Loads_->monthly_policy_fee(mce_gen_curr)[year];
 
-    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
+    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[year];
 
     if(yare_input_.WaiverOfPremiumBenefit)
         {
-        double const r = MortalityRates_->WpRates()[a_year];
+        double const r = MortalityRates_->WpRates()[year];
         switch(WaiverChargeMethod)
             {
             case oe_waiver_times_specamt:
                 {
-                z += r * std::min(a_specamt, WpLimit);
+                z += r * std::min(specamt, WpLimit);
                 }
                 break;
             case oe_waiver_times_deductions:
@@ -1168,10 +1168,10 @@ double BasicValues::GetModalPremMlyDed
             }
         }
 
-    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
+    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[year];
 
-    double const v12 = mly_ded_discount_factor(a_year, a_mode);
-    z *= (1.0 - std::pow(v12, 12.0 / a_mode)) / (1.0 - v12);
+    double const v12 = mly_ded_discount_factor(year, mode);
+    z *= (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
 
     z += annual_charge;
 
