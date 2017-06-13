@@ -1109,36 +1109,36 @@ double BasicValues::GetModalPremMlyDed
     ,double      specamt
     ) const
 {
-    double z = specamt * DBDiscountRate[year];
-    z *= GetBandedCoiRates(mce_gen_curr, specamt)[year];
+    double mly_ded = specamt * DBDiscountRate[year];
+    mly_ded *= GetBandedCoiRates(mce_gen_curr, specamt)[year];
 
     if(yare_input_.AccidentalDeathBenefit)
         {
         double r = MortalityRates_->AdbRates()[year];
-        z += r * std::min(specamt, AdbLimit);
+        mly_ded += r * std::min(specamt, AdbLimit);
         }
 
     if(yare_input_.SpouseRider)
         {
         double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[year];
-        z += r * yare_input_.SpouseRiderAmount;
+        mly_ded += r * yare_input_.SpouseRiderAmount;
         }
 
     if(yare_input_.ChildRider)
         {
         double r = MortalityRates_->ChildRiderRates()[year];
-        z += r * yare_input_.ChildRiderAmount;
+        mly_ded += r * yare_input_.ChildRiderAmount;
         }
 
     if(true) // Written thus for parallelism and to keep 'r' local.
         {
         double r = Loads_->specified_amount_load(mce_gen_curr)[year];
-        z += r * std::min(specamt, SpecAmtLoadLimit);
+        mly_ded += r * std::min(specamt, SpecAmtLoadLimit);
         }
 
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[year];
+    mly_ded += Loads_->monthly_policy_fee(mce_gen_curr)[year];
 
-    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[year];
+    double ann_ded = Loads_->annual_policy_fee(mce_gen_curr)[year];
 
     if(yare_input_.WaiverOfPremiumBenefit)
         {
@@ -1147,13 +1147,13 @@ double BasicValues::GetModalPremMlyDed
             {
             case oe_waiver_times_specamt:
                 {
-                z += r * std::min(specamt, WpLimit);
+                mly_ded += r * std::min(specamt, WpLimit);
                 }
                 break;
             case oe_waiver_times_deductions:
                 {
-                z *= 1.0 + r;
-                annual_charge *= 1.0 + r;
+                mly_ded *= 1.0 + r;
+                ann_ded *= 1.0 + r;
                 }
                 break;
             default:
@@ -1168,14 +1168,14 @@ double BasicValues::GetModalPremMlyDed
             }
         }
 
-    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[year];
+    mly_ded /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[year];
 
     double const v12 = mly_ded_discount_factor(year, mode);
-    z *= (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
+    mly_ded *= (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
 
-    z += annual_charge;
+    mly_ded += ann_ded;
 
-    return round_min_premium()(z);
+    return round_min_premium()(mly_ded);
 }
 
 // The "-Ee" and "-Er" variants are written with preprocessor
