@@ -1371,11 +1371,10 @@ double BasicValues::GetModalPremMlyDedEr
 /// next age iff that is less than the maturity age, otherwise
 /// assuming that deductions are zero after maturity.
 ///
-/// The discounting specified in all GetModalPremMlyDed* functions
-/// results in an annuity factor of unity for monthly mode, so call
-/// those functions with monthly mode for the nonce to get
-/// undiscounted deductions. This isn't quite what's wanted because
-/// those functions perform rounding.
+/// Any once-a-year monthly deduction is deliberately ignored for
+/// simplicity. Such charges are extraordinary (e.g., a fee to
+/// offset underwriting costs for private placements), and occur
+/// only on products for which list bills would not be wanted.
 
 double BasicValues::GetListBillPremMlyDed
     (int         year
@@ -1383,11 +1382,11 @@ double BasicValues::GetListBillPremMlyDed
     ,double      specamt
     ) const
 {
-    double const p0 = GetModalPremMlyDed(year, mce_monthly, specamt);
+    double const p0 = approx_mly_ded(year, specamt).second;
     int const next_year = 1 + year;
     double const p1 =
         (next_year < GetLength())
-        ? GetModalPremMlyDed(next_year, mce_monthly, specamt)
+        ? approx_mly_ded(next_year, specamt).second
         : 0.0
         ;
     double const z = list_bill_premium
