@@ -169,11 +169,17 @@ class cover_page : public page
     {
         dc.SetPen(wxPen(*wxBLUE, 2));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+        auto const frame_horz_margin = writer.get_horz_margin();
+        auto const frame_vert_margin = writer.get_vert_margin();
+        auto const frame_width       = writer.get_page_width();
+        auto const frame_height      = writer.get_page_height();
+
         dc.DrawRectangle
-            (writer.get_horz_margin()
-            ,writer.get_vert_margin()
-            ,writer.get_page_width()
-            ,writer.get_page_height()
+            (frame_horz_margin
+            ,frame_vert_margin
+            ,frame_width
+            ,frame_height
             );
 
         auto const& invar = ledger.GetLedgerInvariant();
@@ -276,11 +282,45 @@ class cover_page : public page
                 )
                 ;
 
+        auto const text_horz_margin = 2*frame_horz_margin;
+        auto const text_width       = frame_width - 2*frame_horz_margin;
         writer.output_html
-            (writer.get_horz_margin()
-            ,4*writer.get_vert_margin()
-            ,writer.get_page_width()
+            (text_horz_margin
+            ,4*frame_vert_margin
+            ,text_width
             ,cover_html
+            );
+
+        auto const footer_html = tag::p[attr::align("center")]
+            (text::from
+                (invar.InsCoShortName
+                +"Financial Group is a marketing name for "
+                +invar.InsCoName
+                +"("
+                +invar.InsCoShortName
+                +") and its affiliated company and sales representatives, "
+                +invar.InsCoAddr
+                +"."
+                )
+            );
+
+        // Compute the footer height (which depends on how long it is, as it
+        // can be wrapped to take more than one line)...
+        int const footer_height = writer.output_html
+            (text_horz_margin
+            ,0
+            ,text_width
+            ,footer_html
+            ,e_output_measure_only
+            );
+
+        // ... in order to be able to position it precisely at the bottom of
+        // our blue frame.
+        writer.output_html
+            (text_horz_margin
+            ,frame_vert_margin + frame_height - footer_height
+            ,text_width
+            ,footer_html
             );
     }
 };
