@@ -53,6 +53,7 @@ wxPrintData make_print_data
 pdf_writer_wx::pdf_writer_wx
     (wxString const&    output_filename
     ,wxPrintOrientation orientation
+    ,std::array<int, 7> const* html_font_sizes
     )
     :print_data_        {make_print_data(output_filename, orientation)}
     ,pdf_dc_            {print_data_}
@@ -74,16 +75,33 @@ pdf_writer_wx::pdf_writer_wx
     // Use a standard PDF Helvetica font (without embedding any custom fonts in
     // the generated file, the only other realistic choice is Times New Roman).
     pdf_dc_.SetFont
-        (wxFontInfo(8).Family(wxFONTFAMILY_SWISS).FaceName("Helvetica")
+        (wxFontInfo
+            (html_font_sizes
+                ? html_font_sizes->at(2)
+                : 8
+            )
+            .Family(wxFONTFAMILY_SWISS)
+            .FaceName("Helvetica")
         );
 
     // Create an HTML parser to allow easily adding HTML contents to the output.
     html_parser_.SetDC(&pdf_dc_);
-    html_parser_.SetStandardFonts
-        (pdf_dc_.GetFont().GetPointSize()
-        ,"Helvetica"
-        ,"Courier"
-        );
+    if(html_font_sizes)
+        {
+        html_parser_.SetFonts
+            ("Helvetica"
+            ,"Courier"
+            ,html_font_sizes->data()
+            );
+        }
+    else
+        {
+        html_parser_.SetStandardFonts
+            (pdf_dc_.GetFont().GetPointSize()
+            ,"Helvetica"
+            ,"Courier"
+            );
+        }
 }
 
 /// Output an image at the given scale into the PDF.
