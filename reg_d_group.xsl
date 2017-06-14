@@ -820,7 +820,7 @@
     <xsl:variable name="columns" select="$illustration_assumption_columns[not(@composite) or (boolean(@composite='1')=$is_composite)]"/>
 
     <fo:flow flow-name="xsl-region-body">
-      <fo:block font-size="9pt serif">
+      <fo:block font-size="9pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
