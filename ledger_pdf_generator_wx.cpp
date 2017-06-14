@@ -50,7 +50,7 @@ class pdf_illustration
     pdf_illustration(Ledger const& ledger
                     ,fs::path const& output
                     )
-        :writer_(output.string(), wxPORTRAIT)
+        :writer_(output.string(), wxPORTRAIT, &html_font_sizes)
         ,dc_(writer_.dc())
         ,ledger_(ledger)
         ,properties_(properties::init(ledger))
@@ -118,6 +118,11 @@ class pdf_illustration
     };
 
   private:
+    // Use non-default font sizes to make it simpler to replicate the existing
+    // illustrations.
+    static std::array<int, 7> const html_font_sizes;
+
+
     // Writer object used for the page metrics and higher level functions.
     pdf_writer_wx writer_;
 
@@ -134,6 +139,16 @@ class pdf_illustration
     // Number of last added page.
     int page_number_{0};
 };
+
+std::array<int, 7> const pdf_illustration::html_font_sizes =
+    { 8
+    , 9
+    ,10
+    ,12
+    ,14
+    ,18
+    ,20
+    };
 
 class page
 {
@@ -292,15 +307,17 @@ class cover_page : public page
             );
 
         auto const footer_html = tag::p[attr::align("center")]
-            (text::from
-                (invar.InsCoShortName
-                +"Financial Group is a marketing name for "
-                +invar.InsCoName
-                +"("
-                +invar.InsCoShortName
-                +") and its affiliated company and sales representatives, "
-                +invar.InsCoAddr
-                +"."
+            (tag::font[attr::size("-1")]
+                (text::from
+                    (invar.InsCoShortName
+                    +"Financial Group is a marketing name for "
+                    +invar.InsCoName
+                    +"("
+                    +invar.InsCoShortName
+                    +") and its affiliated company and sales representatives, "
+                    +invar.InsCoAddr
+                    +"."
+                    )
                 )
             );
 
