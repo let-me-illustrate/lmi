@@ -220,6 +220,12 @@ double AccountValue::DoPerformPmtStrategy
             {
             if(SplitMinPrem)
                 {
+                auto const z = GetModalPremMlyDedEx
+                    (Year
+                    ,a_CurrentMode
+                    ,ActualSpecAmt
+                    ,TermSpecAmt
+                    );
                 if(UnsplitSplitMinPrem)
                     {
                     // Normally, if min prem is defined separately
@@ -229,10 +235,7 @@ double AccountValue::DoPerformPmtStrategy
                     // subplan designed for a single payor (e.g.,
                     // "voluntary" group coverage), "minimum" means
                     // the total: what was "split" must be "unsplit".
-                    return
-                          GetModalPremMlyDedEe(Year, a_CurrentMode, TermSpecAmt)
-                        + GetModalPremMlyDedEr(Year, a_CurrentMode, ActualSpecAmt)
-                        ;
+                    return z.first + z.second;
                     }
                 else if(mce_solve_ee_prem == a_SolveForWhichPrem)
                     {
@@ -240,11 +243,11 @@ double AccountValue::DoPerformPmtStrategy
                     // which represents the payment mode chosen by the
                     // plan sponsor; but lmi has the extra flexibility
                     // to behave reasonably if it's not so entered.
-                    return GetModalPremMlyDedEe(Year, a_CurrentMode, TermSpecAmt);
+                    return z.first;
                     }
                 else if(mce_solve_er_prem == a_SolveForWhichPrem)
                     {
-                    return GetModalPremMlyDedEr(Year, a_CurrentMode, ActualSpecAmt);
+                    return z.second;
                     }
                 else
                     {

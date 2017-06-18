@@ -975,20 +975,15 @@ void AccountValue::InitializeSpecAmt()
         }
     else
         {
-        InvariantValues().EeModalMinimumPremium[Year] = GetModalPremMlyDedEe
-            (Year
-            ,InvariantValues().ErMode[Year].value()
-            ,InvariantValues().TermSpecAmt[Year]
-            );
-        InvariantValues().ErModalMinimumPremium[Year] = GetModalPremMlyDedEr
+        auto const z = GetModalPremMlyDedEx
             (Year
             ,InvariantValues().ErMode[Year].value()
             ,InvariantValues().SpecAmt[Year]
+            ,InvariantValues().TermSpecAmt[Year]
             );
-        InvariantValues().ModalMinimumPremium[Year] =
-              InvariantValues().EeModalMinimumPremium[Year]
-            + InvariantValues().ErModalMinimumPremium[Year]
-            ;
+        InvariantValues().EeModalMinimumPremium[Year] = z.first;
+        InvariantValues().ErModalMinimumPremium[Year] = z.second;
+        InvariantValues().ModalMinimumPremium[Year] = z.first + z.second;
         }
 
     // No-lapse premium generally changes whenever specamt changes for
@@ -1211,20 +1206,15 @@ void AccountValue::set_list_bill_premium()
         }
     else
         {
-        InvariantValues().EeListBillPremium = GetListBillPremMlyDedEe
-            (Year
-            ,InvariantValues().ErMode[Year].value()
-            ,InvariantValues().TermSpecAmt[Year]
-            );
-        InvariantValues().ErListBillPremium = GetListBillPremMlyDedEr
+        auto const z = GetListBillPremMlyDedEx
             (Year
             ,InvariantValues().ErMode[Year].value()
             ,InvariantValues().SpecAmt[Year]
+            ,InvariantValues().TermSpecAmt[Year]
             );
-        InvariantValues().ListBillPremium =
-              InvariantValues().EeListBillPremium
-            + InvariantValues().ErListBillPremium
-            ;
+        InvariantValues().EeListBillPremium = z.first;
+        InvariantValues().ErListBillPremium = z.second;
+        InvariantValues().ListBillPremium = z.first + z.second;
         }
 }
 
