@@ -110,6 +110,7 @@ TESTS = \
     test_ieee754 \
     test_input_seq \
     test_input \
+    test_interpolate_string \
     test_irc7702a \
     test_istream_to_string \
     test_loads \
@@ -328,6 +329,7 @@ liblmi_common_sources = \
     input_sequence_parser.cpp \
     input_xml_io.cpp \
     interest_rates.cpp \
+    interpolate_string.cpp \
     ledger.cpp \
     ledger_base.cpp \
     ledger_invariant.cpp \
@@ -778,6 +780,11 @@ test_input_LDADD = \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
+test_interpolate_string_SOURCES = \
+  $(common_test_objects) \
+  interpolate_string.cpp \
+  interpolate_string_test.cpp
+
 test_irc7702a_SOURCES = \
   $(common_test_objects) \
   ihs_irc7702a.cpp \
@@ -1169,6 +1176,7 @@ noinst_HEADERS = \
     input_sequence_interval.hpp \
     input_sequence_parser.hpp \
     interest_rates.hpp \
+    interpolate_string.hpp \
     istream_to_string.hpp \
     ledger.hpp \
     ledger_base.hpp \
