@@ -310,5 +310,8 @@
     <ClCompile Include="html.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="interpolate_string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

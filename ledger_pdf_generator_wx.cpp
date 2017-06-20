@@ -28,6 +28,7 @@
 #include "force_linking.hpp"
 #include "global_settings.hpp"
 #include "html.hpp"
+#include "interpolate_string.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "pdf_writer_wx.hpp"
@@ -309,14 +310,13 @@ class cover_page : public page
         auto const footer_html = tag::p[attr::align("center")]
             (tag::font[attr::size("-1")]
                 (text::from
-                    (invar.InsCoShortName
-                    +"Financial Group is a marketing name for "
-                    +invar.InsCoName
-                    +"("
-                    +invar.InsCoShortName
-                    +") and its affiliated company and sales representatives, "
-                    +invar.InsCoAddr
-                    +"."
+                    (interpolate_string
+                        ("${InsCoShortName} Financial Group is a marketing "
+                         "name for ${InsCoName} (${InsCoShortName}) and its "
+                         "affiliated company and sales representatives, "
+                         "${InsCoAddr}.",
+                         [=](std::string const& k) { return invar.value_str(k); }
+                        )
                     )
                 )
             );
