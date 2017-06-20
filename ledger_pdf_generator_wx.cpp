@@ -37,6 +37,8 @@
 
 #include <wx/pdfdc.h>
 
+#include <map>
+
 LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
 
 using namespace html;
@@ -54,8 +56,8 @@ class pdf_illustration
         :writer_(output.string(), wxPORTRAIT, &html_font_sizes)
         ,dc_(writer_.dc())
         ,ledger_(ledger)
-        ,properties_(properties::init(ledger))
     {
+        init_variables();
     }
 
     // Add a new page using its render() method.
@@ -68,61 +70,86 @@ class pdf_illustration
             }
 
         T page;
-        page.render(ledger_, writer_, dc_, properties_);
+        page.render
+            (ledger_
+            ,writer_
+            ,dc_
+            ,[this](char const *s) { return interpolate_html(s); }
+            );
     }
 
-    // Global illustration properties.
-    class properties
+  protected:
+    // A method which can be used to interpolate an HTML string containing
+    // references to the variables defined for this illustration. The general
+    // syntax is the same as in the global interpolate_string() function, i.e.
+    // variables are anything of the form "${name}". The variable names
+    // understood by this function are:
+    //  - Scalar fields of GetLedgerInvariant().
+    //  - Special variables defined in this class, such as "lmi_version" and
+    //    "date_prepared".
+    //  - Any additional fields defined in the derived classes.
+    text interpolate_html(char const* s) const
     {
-      public:
-        // Fields can be accessed directly by pages.
-        text lmi_version_;
-        text date_prepared_;
-
-        static properties init(Ledger const& ledger)
-        {
-            std::string lmi_version(LMI_VERSION);
-            calendar_date prep_date;
-
-            // Skip authentication for non-interactive regression testing.
-            if(!global_settings::instance().regression_testing())
-                {
-                authenticate_system();
-                }
-            else
-                {
-                // For regression tests,
-                //   - use an invariant string as version
-                //   - use EffDate as date prepared
-                // in order to avoid gratuitous failures.
-                lmi_version = "Regression testing";
-                prep_date.julian_day_number
-                    (static_cast<int>(ledger.GetLedgerInvariant().EffDateJdn)
-                    );
-                }
-
-            properties p;
-            p.lmi_version_ = text::from(lmi_version);
-            p.date_prepared_ =
-                  text::from(month_name(prep_date.month()))
-                + text::nbsp()
-                + text::from(value_cast<std::string>(prep_date.day()))
-                + text::from(", ")
-                + text::from(value_cast<std::string>(prep_date.year()))
-                ;
-            return p;
-        }
-
-      private:
-        // Ctor is private, use init() to create objects of this type.
-        properties() = default;
-    };
+        return text::from_html
+            (interpolate_string
+                (s
+                ,[this](std::string const& s) { return expand_html(s).as_html(); }
+                )
+            );
+    }
 
   private:
+    // Highest level variable expansion function.
+    text expand_html(std::string const& s) const
+    {
+        // Check our own variables first:
+        auto const it = vars_.find(s);
+        if(it != vars_.end())
+            {
+            return it->second;
+            }
+
+        // Then look in the ledger.
+        return text::from(ledger_.GetLedgerInvariant().value_str(s));
+    }
+
+    // Initialize the variables that can be interpolated later.
+    void init_variables()
+    {
+        std::string lmi_version;
+        calendar_date prep_date;
+
+        // Skip authentication for non-interactive regression testing.
+        if(!global_settings::instance().regression_testing())
+            {
+            lmi_version = LMI_VERSION;
+            authenticate_system();
+            }
+        else
+            {
+            // For regression tests,
+            //   - use an invariant string as version
+            //   - use EffDate as date prepared
+            // in order to avoid gratuitous failures.
+            lmi_version = "Regression testing";
+            prep_date.julian_day_number
+                (static_cast<int>(ledger_.GetLedgerInvariant().EffDateJdn)
+                );
+            }
+
+        vars_["lmi_version"] = text::from(lmi_version);
+        vars_["date_prepared"] =
+              text::from(month_name(prep_date.month()))
+            + text::nbsp()
+            + text::from(value_cast<std::string>(prep_date.day()))
+            + text::from(", ")
+            + text::from(value_cast<std::string>(prep_date.year()))
+            ;
+    }
+
     // Use non-default font sizes to make it simpler to replicate the existing
     // illustrations.
     static std::array<int, 7> const html_font_sizes;
-
 
     // Writer object used for the page metrics and higher level functions.
     pdf_writer_wx writer_;
@@ -134,8 +161,8 @@ class pdf_illustration
     // Source of the data.
     Ledger const& ledger_;
 
-    // Properties initialized only once and used by pages via public accessor.
-    properties const properties_;
+    // Variables defined for all pages of this illustration.
+    std::map<std::string, text> vars_;
 
     // Number of last added page.
     int page_number_{0};
@@ -150,6 +177,10 @@ std::array<int, 7> const pdf_illustration::html_font_sizes =
     ,18
     ,20
     };
+
+// Type of function which can be used to interpolate variables in an HTML
+// string.
+using html_interpolator = std::function<text (char const* s)>;
 
 class page
 {
@@ -169,7 +200,7 @@ class page
         (Ledger const& ledger
         ,pdf_writer_wx& writer
         ,wxDC& dc
-        ,pdf_illustration::properties const& props
+        ,html_interpolator const& interpolate_html
         ) = 0;
 };
 
@@ -180,7 +211,7 @@ class cover_page : public page
         (Ledger const& ledger
         ,pdf_writer_wx& writer
         ,wxDC& dc
-        ,pdf_illustration::properties const& props
+        ,html_interpolator const& interpolate_html
         ) override
     {
         dc.SetPen(wxPen(*wxBLUE, 2));
@@ -291,7 +322,7 @@ class cover_page : public page
                 (tag::tr
                     (tag::td[attr::align("center")]
                         (tag::font[attr::size("+2")]
-                            (props.date_prepared_
+                            (interpolate_html("${date_prepared}")
                             )
                         )
                     )
@@ -309,14 +340,11 @@ class cover_page : public page
 
         auto const footer_html = tag::p[attr::align("center")]
             (tag::font[attr::size("-1")]
-                (text::from
-                    (interpolate_string
-                        ("${InsCoShortName} Financial Group is a marketing "
-                         "name for ${InsCoName} (${InsCoShortName}) and its "
-                         "affiliated company and sales representatives, "
-                         "${InsCoAddr}.",
-                         [=](std::string const& k) { return invar.value_str(k); }
-                        )
+                (interpolate_html
+                    ("${InsCoShortName} Financial Group is a marketing "
+                     "name for ${InsCoName} (${InsCoShortName}) and its "
+                     "affiliated company and sales representatives, "
+                     "${InsCoAddr}."
                     )
                 )
             );
