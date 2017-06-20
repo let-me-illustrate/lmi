@@ -215,6 +215,7 @@ common_common_objects := \
   input_sequence_parser.o \
   input_xml_io.o \
   interest_rates.o \
+  interpolate_string.o \
   ledger.o \
   ledger_base.o \
   ledger_invariant.o \
@@ -424,6 +425,7 @@ unit_test_targets := \
   ieee754_test \
   input_sequence_test \
   input_test \
+  interpolate_string_test \
   irc7702a_test \
   istream_to_string_test \
   loads_test \
@@ -692,6 +694,11 @@ input_test$(EXEEXT): \
   tn_range_types.o \
   xml_lmi.o \
   yare_input.o \
+
+interpolate_string_test$(EXEEXT): \
+  $(common_test_objects) \
+  interpolate_string.o \
+  interpolate_string_test.o \
 
 irc7702a_test$(EXEEXT): \
   $(boost_filesystem_objects) \
