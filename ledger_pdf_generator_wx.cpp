@@ -47,6 +47,15 @@ using namespace html;
 namespace
 {
 
+// This function is also provided in <boost/algorithm/string/predicate.hpp>,
+// but it's arguably not worth adding dependency on this Boost library just for
+// this function.
+inline
+bool starts_with(std::string const& s, char const* prefix)
+{
+    return s.compare(0, strlen(prefix), prefix) == 0;
+}
+
 // Helper class grouping functions for dealing with interpolating strings
 // containing variable references.
 class html_interpolator
@@ -430,6 +439,141 @@ affiliated company and sales representatives, ${InsCoAddr}.
     }
 };
 
+class narrative_summary_page : public page
+{
+  public:
+    void render
+        (Ledger const& ledger
+        ,pdf_writer_wx& writer
+        ,wxDC& dc
+        ,html_interpolator const& interpolate_html
+        ) override
+    {
+        auto const& invar = ledger.GetLedgerInvariant();
+
+        text summary_html =
+            tag::p[attr::align("center")]
+                (text::from("NARRATIVE SUMMARY")
+                )
+            ;
+
+        std::string description;
+        if(!interpolate_html.test_variable("SinglePremium"))
+            {
+            description = R"(
+${PolicyMktgName} is a ${GroupExperienceRating?group}${GroupCarveout?group}
+flexible premium adjustable life insurance contract.
+${GroupExperienceRating?
+It is a no-load policy and is intended for large case sales.
+It is primarily marketed to financial institutions
+to fund certain corporate liabilities.
+}
+It features accumulating account values, adjustable benefits,
+and flexible premiums.
+)";
+            }
+        else if(  interpolate_html.test_variable("ModifiedSinglePremium")
+               || interpolate_html.test_variable("ModifiedSinglePremium0")
+               )
+            {
+            description = R"(
+${PolicyMktgName}
+is a modified single premium adjustable life
+insurance contract. It features accumulating
+account values, adjustable benefits, and single premium.
+)";
+            }
+        else
+            {
+            description = R"(
+${PolicyMktgName}
+is a single premium adjustable life insurance contract.
+It features accumulating account values,
+adjustable benefits, and single premium.
+)";
+            }
+
+        summary_html +=
+            tag::p
+                (tag::font[attr::size("-1")]
+                    (interpolate_html(description.c_str())
+                    )
+                )
+            ;
+
+        if(!invar.IsInforce)
+            {
+            summary_html +=
+                tag::p
+                    (tag::font[attr::size("-1")]
+                        (interpolate_html
+                            (R"(
+Coverage may be available on a Guaranteed Standard Issue basis.
+All proposals are based on case characteristics and must
+be approved by the ${InsCoShortName}
+Home Office. For details regarding underwriting
+and coverage limitations refer to your offer letter
+or contact your ${InsCoShortName} representative.
+)"
+                            )
+                        )
+                    )
+                ;
+            }
+
+        writer.output_html
+            (writer.get_horz_margin()
+            ,writer.get_vert_margin()
+            ,writer.get_page_width()
+            ,summary_html
+            );
+    }
+};
+
+// Regular illustration.
+class pdf_illustration_regular : public pdf_illustration
+{
+  public:
+    pdf_illustration_regular(Ledger const& ledger
+                            ,fs::path const& output
+                            )
+        :pdf_illustration(ledger, output)
+    {
+        auto const& invar = ledger.GetLedgerInvariant();
+        auto const& policy_name = invar.PolicyLegalName;
+
+        // Define variables specific to this illustration.
+        add_variable
+            ("ModifiedSinglePremium"
+            ,starts_with(policy_name, "Single") && invar.GetStatePostalAbbrev() == "MA"
+            );
+
+        add_variable
+            ("ModifiedSinglePremium0"
+            ,starts_with(policy_name, "Modified")
+            );
+
+        add_variable
+            ("SinglePremium"
+            ,starts_with(policy_name, "Single") || starts_with(policy_name, "Modified")
+            );
+
+        add_variable
+            ("GroupCarveout"
+            ,policy_name == "Group Flexible Premium Adjustable Life Insurance Certificate"
+            );
+
+        add_variable
+            ("GroupExperienceRating"
+            ,policy_name == "Group Flexible Premium Adjustable Life Insurance Policy"
+            );
+
+        // Add all the pages.
+        add<cover_page>();
+        add<narrative_summary_page>();
+    }
+};
+
 class ledger_pdf_generator_wx : public ledger_pdf_generator
 {
   public:
@@ -452,8 +596,7 @@ void ledger_pdf_generator_wx::write
     ,fs::path const& output
     )
 {
-    pdf_illustration pdf_ill(ledger, output);
-    pdf_ill.add<cover_page>();
+    pdf_illustration_regular(ledger, output);
 }
 
 volatile bool ensure_setup = ledger_pdf_generator::set_creator
