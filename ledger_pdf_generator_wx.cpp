@@ -23,6 +23,7 @@
 
 #include "ledger_pdf_generator.hpp"
 
+#include "alert.hpp"
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "force_linking.hpp"
@@ -596,7 +597,23 @@ void ledger_pdf_generator_wx::write
     ,fs::path const& output
     )
 {
-    pdf_illustration_regular(ledger, output);
+    auto const z = ledger.ledger_type();
+    switch(z)
+        {
+        case mce_ill_reg:
+            {
+            pdf_illustration_regular(ledger, output);
+            }
+            break;
+        case mce_nasd:
+        case mce_group_private_placement:
+        case mce_individual_private_placement:
+            // TODO
+            alarum() << "Illustrating ledger type '" << z << "' not implemented yet" << LMI_FLUSH;
+            break;
+        default:
+            alarum() << "Unknown ledger type '" << z << "'." << LMI_FLUSH;
+        }
 }
 
 volatile bool ensure_setup = ledger_pdf_generator::set_creator
