@@ -458,6 +458,12 @@ class narrative_summary_page : public page
                 )
             ;
 
+        // Just a helper performing a common operation.
+        auto const add_body_paragraph = [](text const& t) -> text
+            {
+            return tag::p(tag::font[attr::size("-1")](t));
+            };
+
         std::string description;
         if(!interpolate_html.test_variable("SinglePremium"))
             {
@@ -494,21 +500,14 @@ adjustable benefits, and single premium.
 )";
             }
 
-        summary_html +=
-            tag::p
-                (tag::font[attr::size("-1")]
-                    (interpolate_html(description.c_str())
-                    )
-                )
-            ;
+        summary_html += add_body_paragraph
+            (interpolate_html(description.c_str())
+            );
 
         if(!invar.IsInforce)
             {
-            summary_html +=
-                tag::p
-                    (tag::font[attr::size("-1")]
-                        (interpolate_html
-                            (R"(
+            summary_html += add_body_paragraph
+                (interpolate_html(R"(
 Coverage may be available on a Guaranteed Standard Issue basis.
 All proposals are based on case characteristics and must
 be approved by the ${InsCoShortName}
@@ -516,10 +515,7 @@ Home Office. For details regarding underwriting
 and coverage limitations refer to your offer letter
 or contact your ${InsCoShortName} representative.
 )"
-                            )
-                        )
-                    )
-                ;
+                ));
             }
 
         writer.output_html
