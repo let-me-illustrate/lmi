@@ -32,6 +32,7 @@
 #include "interpolate_string.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
+#include "miscellany.hpp"               // lmi_tolower()
 #include "pdf_writer_wx.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
@@ -526,6 +527,37 @@ or contact your ${InsCoShortName} representative.
                 );
             }
 
+        summary_html += add_body_paragraph_html
+            ( interpolate_html("${AvName}")
+            + text::nbsp()
+            + interpolate_html("${MonthlyChargesPaymentFootnote}")
+            );
+
+        std::string premiums;
+        if(!interpolate_html.test_variable("SinglePremium"))
+            {
+            premiums = R"(
+Premiums are assumed to be paid on ${ErModeLCWithArticle}
+basis and received at the beginning of the contract year.
+)";
+            }
+        else
+            {
+            premiums = R"(
+The single premium is assumed to be paid at the beginning
+of the contract year.
+)";
+            }
+
+        premiums += R"(
+${AvName} Values, ${CsvName} Values,
+and death benefits are illustrated as of the end
+of the contract year. The method we use to allocate
+overhead expenses is the fully allocated expense method.
+)";
+
+        summary_html += add_body_paragraph(premiums);
+
         writer.output_html
             (writer.get_horz_margin()
             ,writer.get_vert_margin()
@@ -572,6 +604,19 @@ class pdf_illustration_regular : public pdf_illustration
             ("GroupExperienceRating"
             ,policy_name == "Group Flexible Premium Adjustable Life Insurance Policy"
             );
+
+        // Variable representing the premium payment frequency with the
+        // appropriate indefinite article preceding it, e.g. "an annual" or "a
+        // monthly".
+        auto const er_mode = invar.ErMode[0].str();
+        if(!er_mode.empty())
+            {
+            auto const er_mode_first = lmi_tolower(er_mode[0]);
+            add_variable
+                ("ErModeLCWithArticle"
+                ,(strchr("aeiou", er_mode_first) ? "an" : "a") + er_mode.substr(1)
+                );
+            }
 
         // Add all the pages.
         add<cover_page>();
