@@ -400,10 +400,11 @@ class cover_page : public page
         auto const footer_html = tag::p[attr::align("center")]
             (tag::font[attr::size("-1")]
                 (interpolate_html
-                    ("${InsCoShortName} Financial Group is a marketing "
-                     "name for ${InsCoName} (${InsCoShortName}) and its "
-                     "affiliated company and sales representatives, "
-                     "${InsCoAddr}."
+                    (R"(
+${InsCoShortName} Financial Group is a marketing
+name for ${InsCoName} (${InsCoShortName}) and its
+affiliated company and sales representatives, ${InsCoAddr}.
+)"
                     )
                 )
             );
