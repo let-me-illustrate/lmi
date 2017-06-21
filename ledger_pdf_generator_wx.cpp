@@ -38,6 +38,7 @@
 #include <wx/pdfdc.h>
 
 #include <map>
+#include <stdexcept>
 
 LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
 
@@ -46,14 +47,117 @@ using namespace html;
 namespace
 {
 
+// Helper class grouping functions for dealing with interpolating strings
+// containing variable references.
+class html_interpolator
+{
+  public:
+    // Ctor takes the object used to interpolate the variables not explicitly
+    // defined using add_variable(). Its lifetime must be greater than that of
+    // this object itself.
+    explicit html_interpolator(LedgerInvariant const& invar)
+        :invar_(invar)
+    {
+    }
+
+    // A method which can be used to interpolate an HTML string containing
+    // references to the variables defined for this illustration. The general
+    // syntax is the same as in the global interpolate_string() function, i.e.
+    // variables are anything of the form "${name}". The variable names
+    // understood by this function are:
+    //  - Scalar fields of GetLedgerInvariant().
+    //  - Special variables defined in this class, such as "lmi_version" and
+    //    "date_prepared".
+    //  - Any additional fields defined in the derived classes.
+    text operator()(char const* s) const
+    {
+        return text::from_html
+            (interpolate_string
+                (s
+                ,[this](std::string const& s) { return expand_html(s).as_html(); }
+                )
+            );
+    }
+
+    // Add a variable, providing either its raw text or already escaped HTML
+    // representation. Boolean values are converted to strings "0" or "1" as
+    // expected.
+    void add_variable(std::string const& name, text const& value)
+    {
+        vars_[name] = value;
+    }
+
+    void add_variable(std::string const& name, std::string const& value)
+    {
+        add_variable(name, text::from(value));
+    }
+
+    void add_variable(std::string const& name, bool value)
+    {
+        add_variable(name, std::string(value ? "1" : "0"));
+    }
+
+    // Test a boolean variable: the value must be "0" or "1", which is mapped
+    // to false or true respectively. Anything else results in an exception.
+    bool test_variable(std::string const& name) const
+    {
+        auto const z = expand_simple_html(name).as_html();
+        return
+              z == "1" ? true
+            : z == "0" ? false
+            : throw std::runtime_error
+                ("Variable '" + name + "' has non-boolean value '" + z + "'"
+                )
+            ;
+    }
+
+  private:
+    // Highest level variable expansion function.
+    text expand_html(std::string const& s) const
+    {
+        // Check for the special "${var?only-if-set}" form:
+        auto const pos_question = s.find('?');
+        if(pos_question != std::string::npos)
+            {
+            return test_variable(s.substr(0, pos_question))
+                    ? text::from(s.substr(pos_question + 1))
+                    : text()
+                    ;
+            }
+
+        return expand_simple_html(s);
+    }
+
+    // Simple expansion for just the variable name.
+    text expand_simple_html(std::string const& s) const
+    {
+        // Check our own variables first:
+        auto const it = vars_.find(s);
+        if(it != vars_.end())
+            {
+            return it->second;
+            }
+
+        // Then look in the ledger.
+        return text::from(invar_.value_str(s));
+    }
+
+    // Object used for variables expansion.
+    LedgerInvariant const& invar_;
+
+    // Variables defined for all pages of this illustration.
+    std::map<std::string, text> vars_;
+};
+
 // This is just a container for the illustration-global data.
-class pdf_illustration
+class pdf_illustration : protected html_interpolator
 {
   public:
     pdf_illustration(Ledger const& ledger
                     ,fs::path const& output
                     )
-        :writer_(output.string(), wxPORTRAIT, &html_font_sizes)
+        :html_interpolator(ledger.GetLedgerInvariant())
+        ,writer_(output.string(), wxPORTRAIT, &html_font_sizes)
         ,dc_(writer_.dc())
         ,ledger_(ledger)
     {
@@ -70,49 +174,10 @@ class pdf_illustration
             }
 
         T page;
-        page.render
-            (ledger_
-            ,writer_
-            ,dc_
-            ,[this](char const *s) { return interpolate_html(s); }
-            );
-    }
-
-  protected:
-    // A method which can be used to interpolate an HTML string containing
-    // references to the variables defined for this illustration. The general
-    // syntax is the same as in the global interpolate_string() function, i.e.
-    // variables are anything of the form "${name}". The variable names
-    // understood by this function are:
-    //  - Scalar fields of GetLedgerInvariant().
-    //  - Special variables defined in this class, such as "lmi_version" and
-    //    "date_prepared".
-    //  - Any additional fields defined in the derived classes.
-    text interpolate_html(char const* s) const
-    {
-        return text::from_html
-            (interpolate_string
-                (s
-                ,[this](std::string const& s) { return expand_html(s).as_html(); }
-                )
-            );
+        page.render(ledger_, writer_, dc_, *this);
     }
 
   private:
-    // Highest level variable expansion function.
-    text expand_html(std::string const& s) const
-    {
-        // Check our own variables first:
-        auto const it = vars_.find(s);
-        if(it != vars_.end())
-            {
-            return it->second;
-            }
-
-        // Then look in the ledger.
-        return text::from(ledger_.GetLedgerInvariant().value_str(s));
-    }
-
     // Initialize the variables that can be interpolated later.
     void init_variables()
     {
@@ -137,14 +202,15 @@ class pdf_illustration
                 );
             }
 
-        vars_["lmi_version"] = text::from(lmi_version);
-        vars_["date_prepared"] =
-              text::from(month_name(prep_date.month()))
+        add_variable("lmi_version", lmi_version);
+        add_variable
+            ("date_prepared"
+            , text::from(month_name(prep_date.month()))
             + text::nbsp()
             + text::from(value_cast<std::string>(prep_date.day()))
             + text::from(", ")
             + text::from(value_cast<std::string>(prep_date.year()))
-            ;
+            );
     }
 
     // Use non-default font sizes to make it simpler to replicate the existing
@@ -161,9 +227,6 @@ class pdf_illustration
     // Source of the data.
     Ledger const& ledger_;
 
-    // Variables defined for all pages of this illustration.
-    std::map<std::string, text> vars_;
-
     // Number of last added page.
     int page_number_{0};
 };
@@ -177,10 +240,6 @@ std::array<int, 7> const pdf_illustration::html_font_sizes =
     ,18
     ,20
     };
-
-// Type of function which can be used to interpolate variables in an HTML
-// string.
-using html_interpolator = std::function<text (char const* s)>;
 
 class page
 {
