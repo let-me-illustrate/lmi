@@ -547,6 +547,140 @@ overhead expenses is the fully allocated expense method.
 
         summary_html += add_body_paragraph(premiums);
 
+        if(!interpolate_html.test_variable("SinglePremium"))
+            {
+            summary_html += add_body_paragraph
+                (R"(
+In order to guarantee coverage to age
+{{EndtAge}}, {{ErModeLCWithArticle}} premium
+{{#HasGuarPrem}}
+of ${{GuarPrem}} must be paid.
+{{/HasGuarPrem}}
+{{^HasGuarPrem}}
+is defined.
+{{/HasGuarPrem}}
+This amount is based on the guaranteed monthly charges
+and the guaranteed interest crediting rate.
+{{#DefnLifeInsIsGPT}}
+This premium may be in excess of the maximum premium allowable
+in order to qualify this policy as life insurance.
+{{/DefnLifeInsIsGPT}}
+)"
+                );
+            }
+
+        summary_html += add_body_paragraph
+            (R"(
+Loaned amounts of the {{AvName}}
+Value will be credited a rate equal to the loan interest rate less
+a spread, guaranteed not to exceed
+{{#GroupCarveout}}
+1.25%.
+{{/GroupCarveout}}
+{{^GroupCarveout}}
+3.00%.
+{{/GroupCarveout}}
+)"
+            );
+
+        if(interpolate_html.test_variable("HasTerm"))
+            {
+            summary_html += add_body_paragraph
+                (R"(
+The term rider provides the option to purchase monthly
+term insurance on the life of the insured. The term rider
+selected face amount supplements the selected face amount
+of the contract. If the term rider is attached, the policy
+to which it is attached may have a lower annual cutoff premium
+and, as a result, the lower overall sales loads paid may be
+lower than a contract having the same total face amount,
+but with no term rider.
+{{#NoLapse}}
+  Also, the lapse protection feature of the contract's
+  {{NoLapseProvisionName}}
+  does not apply to the term rider's selected face amount.
+{{/NoLapse}}
+)"
+                );
+            }
+
+        if(interpolate_html.test_variable("HasWP"))
+            {
+            summary_html += add_body_paragraph
+                (R"(
+The Waiver of Monthly Charges Rider provides for waiver
+of monthly charges in the event of the disability
+of the insured that begins before attained age 65
+and continues for at least 6 months, as described in the rider.
+An additional charge is associated with this rider. Please refer
+to your contract for specific provisions and a detailed schedule
+of charges.
+)"
+                );
+            }
+
+        if(interpolate_html.test_variable("HasWP"))
+            {
+            summary_html += add_body_paragraph
+                (R"(
+The Accidental Death benefit provides an additional benefit
+if death is due to accident. An additional charge is associated
+with this rider. Please refer to your contract
+for specific provisions and a detailed schedule of charges.
+)"
+                );
+            }
+
+        summary_html += add_body_paragraph
+            (R"(
+The definition of life insurance for this contract is the
+{{#DefnLifeInsIsGPT}}
+    guideline premium test. The guideline single premium
+    is ${{InitGSP}}
+    and the guideline level premium
+    is ${{InitGLP}}
+{{/DefnLifeInsIsGPT}}
+{{^DefnLifeInsIsGPT}}
+    cash value accumulation test.
+{{/DefnLifeInsIsGPT}}
+)"
+            );
+
+        summary_html += add_body_paragraph
+            (R"(
+This is an illustration only. An illustration is not intended
+to predict actual performance. Interest rates
+and values set forth in the illustration are not guaranteed.
+)"
+            );
+
+        summary_html += add_body_paragraph
+            (R"(
+{{^StateIsTX}}
+This illustration assumes that the currently illustrated
+non-guaranteed elements will continue unchanged
+for all years shown. This is not likely to occur
+and actual results may be more or less favorable than shown.
+The non-guaranteed benefits and values are not guaranteed
+and are based on assumptions such as interest credited
+and current monthly charges, which are subject to change by
+{{InsCoName}}.
+{{/StateIsTX}}
+{{#StateIsTX}}
+This illustration is based on both non-guaranteed
+and guaranteed assumptions. Non-guaranteed assumptions
+include interest rates and monthly charges.
+This illustration assumes that the currently illustrated
+non-guaranteed elements will continue unchanged
+for all years shown. This is not likely to occur
+and actual results may be more or less favorable than shown.
+Factors that may affect future policy performance include
+the company's expectations for future mortality, investments,
+persistency, profits and expenses.
+{{/StateIsTX}}
+)"
+            );
+
         writer.output_html
             (writer.get_horz_margin()
             ,writer.get_vert_margin()
@@ -606,6 +740,21 @@ class pdf_illustration_regular : public pdf_illustration
                 ,(strchr("aeiou", er_mode_first) ? "an" : "a") + er_mode.substr(1)
                 );
             }
+
+        add_variable
+            ("HasGuarPrem"
+            ,invar.GuarPrem != 0
+            );
+
+        add_variable
+            ("DefnLifeInsIsGPT"
+            ,invar.DefnLifeIns == "GPT"
+            );
+
+        add_variable
+            ("StateIsTX"
+            ,invar.GetStatePostalAbbrev() == "TX"
+            );
 
         // Add all the pages.
         add<cover_page>();
