@@ -41,7 +41,7 @@ ACLOCAL_AMFLAGS = -I aclocal
 
 if LMI_USE_PCH
 
-AM_CXXFLAGS += -DLMI_COMPILER_USES_PCH
+AM_CXXFLAGS = -DLMI_COMPILER_USES_PCH
 
 PCH_FILES = pchfile.hpp.gch pchfile_wx.hpp.gch
 
