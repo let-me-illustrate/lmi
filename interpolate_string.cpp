@@ -25,7 +25,9 @@
 
 #include "alert.hpp"
 
+#include <stack>
 #include <stdexcept>
+#include <vector>
 
 std::string interpolate_string
     (char const* s
@@ -40,39 +42,157 @@ std::string interpolate_string
     // any better than this.
     out.reserve(strlen(s));
 
+    // The stack contains all the sections that we're currently in.
+    struct section_info
+    {
+        section_info(std::string const& name, bool active)
+            :name_(name)
+            ,active_(active)
+        {
+        }
+
+        // Name of the section, i.e. the part after "#".
+        //
+        // TODO: In C++14 this could be replaced with string_view which would
+        // save on memory allocations without compromising safety, as we know
+        // that the input string doesn't change during this function execution.
+        std::string const name_;
+
+        // If true, output section contents, otherwise simply eat it.
+        bool const active_;
+
+        // Note: we could also store the position of the section start here to
+        // improve error reporting. Currently this is done as templates we use
+        // are small and errors shouldn't be difficult to find even without the
+        // exact position, but this could change in the future.
+    };
+    std::stack<section_info, std::vector<section_info>> sections;
+
+    // Check if the output is currently active or suppressed because we're
+    // inside an inactive section.
+    auto const is_active = [&sections]()
+        {
+            return sections.empty() || sections.top().active_;
+        };
+
     for(char const* p = s; *p; ++p)
         {
-        if(p[0] == '$' && p[1] == '{')
+        // As we know that the string is NUL-terminated, it is safe to check
+        // the next character.
+        if(p[0] == '{' && p[1] == '{')
             {
             std::string name;
+            auto const pos_start = p - s + 1;
             for(p += 2;; ++p)
                 {
                 if(*p == '\0')
                     {
                     alarum()
                         << "Unmatched opening brace at position "
-                        << (p - s - 1 - name.length())
+                        << pos_start
                         << std::flush
                         ;
                     }
 
-                if(*p == '}')
+                if(p[0] == '}' && p[1] == '}')
                     {
-                    // We don't check here if name is not empty, as there is no
-                    // real reason to do it. Empty variable name may seem
-                    // strange, but why not allow using "${}" to insert
-                    // something into the interpolated string, after all?
-                    out += lookup(name);
+                    switch(name.empty() ? '\0' : name[0])
+                        {
+                        case '#':
+                        case '^':
+                            {
+                            auto const real_name = name.substr(1);
+                            // If we're inside a disabled section, it doesn't
+                            // matter whether this one is active or not.
+                            bool active = is_active();
+                            if(active)
+                                {
+                                auto const value = lookup(real_name);
+                                if(value == "1")
+                                    {
+                                    active = true;
+                                    }
+                                else if(value == "0")
+                                    {
+                                    active = false;
+                                    }
+                                else
+                                    {
+                                    alarum()
+                                        << "Invalid value '"
+                                        << value
+                                        << "' of section '"
+                                        << real_name
+                                        << "' at position "
+                                        << pos_start
+                                        << ", only \"0\" or \"1\" allowed"
+                                        << std::flush
+                                        ;
+                                    }
+
+                                if(name[0] == '^')
+                                    {
+                                    active = !active;
+                                    }
+                                }
+
+                            sections.emplace(real_name, active);
+                            }
+                            break;
+
+                        case '/':
+                            if(sections.empty())
+                                {
+                                alarum()
+                                    << "Unexpected end of section '"
+                                    << name.substr(1)
+                                    << "' at position "
+                                    << pos_start
+                                    << " without previous section start"
+                                    << std::flush
+                                    ;
+                                }
+                            if(name.compare(1, std::string::npos, sections.top().name_) != 0)
+                                {
+                                alarum()
+                                    << "Unexpected end of section '"
+                                    << name.substr(1)
+                                    << "' at position "
+                                    << pos_start
+                                    << " while inside the section '"
+                                    << sections.top().name_
+                                    << "'"
+                                    << std::flush
+                                    ;
+                                }
+                            sections.pop();
+                            break;
+
+                        default:
+                            if(is_active())
+                                {
+                                // We don't check here if name is not empty, as
+                                // there is no real reason to do it. Empty
+                                // variable name may seem strange, but why not
+                                // allow using "{{}}" to insert something into
+                                // the interpolated string, after all?
+                                out += lookup(name);
+                                }
+                        }
+
+                    // We consume two characters here ("}}"), not one, as in a
+                    // usual loop iteration.
+                    ++p;
                     break;
                     }
 
-                if(p[0] == '$' && p[1] == '{')
+                if(p[0] == '{' && p[1] == '{')
                     {
                     // We don't allow nested interpolations, so this can only
-                    // be result of an error, e.g. a forgotten '}' before it.
+                    // be result of an error, e.g. a forgotten "}}" somewhere.
                     alarum()
                         << "Unexpected nested interpolation at position "
-                        << (p - s + 1)
+                        << pos_start
                         << " (outer interpolation starts at "
                         << (p - s - 1 - name.length())
                         << ")"
@@ -86,10 +206,20 @@ std::string interpolate_string
                 name += *p;
                 }
             }
-        else
+        else if(is_active())
             {
             out += *p;
             }
+        }
+
+    if(!sections.empty())
+        {
+        alarum()
+            << "Unclosed section '"
+            << sections.top().name_
+            << "'"
+            << std::flush
+            ;
         }
 
     return out;
