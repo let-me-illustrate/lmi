@@ -316,7 +316,7 @@ extern element      const tr;
 inline
 text operator+(text t1, text const& t2)
 {
-    auto t{std::move(t1)};
+    text t{std::move(t1)};
     t += t2;
     return t;
 }
