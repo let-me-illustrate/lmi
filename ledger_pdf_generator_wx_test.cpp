@@ -30,6 +30,7 @@
 #include "force_linking.hpp"
 #include "global_settings.hpp"
 #include "illustrator.hpp"
+#include "path_utility.hpp"
 #include "single_cell_document.hpp"
 #include "test_tools.hpp"
 
