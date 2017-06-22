@@ -140,6 +140,7 @@ TESTS = \
     test_interpolate_string \
     test_irc7702a \
     test_istream_to_string \
+    test_ledger_pdf_generator_wx \
     test_loads \
     test_map_lookup \
     test_materially_equal \
@@ -831,6 +832,19 @@ test_istream_to_string_SOURCES = \
   istream_to_string_test.cpp \
   timer.cpp
 test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_ledger_pdf_generator_wx_SOURCES = \
+  ledger_pdf_generator_wx_test.cpp
+test_ledger_pdf_generator_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS)
+test_ledger_pdf_generator_wx_LDADD = \
+    liblmi.la \
+    libskeleton.la \
+    libwx_new.la \
+    $(XMLWRAPP_LIBS) \
+    $(GTK_LIBS) \
+    $(BOOST_LIBS) \
+    $(WXPDFDOC_LIBS) \
+    $(WX_LIBS)
 
 test_loads_SOURCES = \
   $(common_test_objects) \
