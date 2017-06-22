@@ -73,7 +73,7 @@ double list_bill_premium
     if(bill_date < cert_date) return 0.0;
     // Number of alpha months in the twelvemonth starting on bill date.
     int const inforce_months_mod_12 = years_and_months_since
-        (cert_date, bill_date).second
+        (cert_date, bill_date, true).second
         ;
     // Number of delta months in the twelvemonth starting on bill date.
     int const months_ante = 12 - inforce_months_mod_12;

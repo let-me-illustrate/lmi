@@ -1116,6 +1116,7 @@ void Input::set_inforce_durations_from_dates()
     std::pair<int,int> ym0 = years_and_months_since
         (EffectiveDate  .value()
         ,InforceAsOfDate.value()
+        ,true
         );
     InforceYear  = ym0.first;
     InforceMonth = ym0.second;
@@ -1123,6 +1124,7 @@ void Input::set_inforce_durations_from_dates()
     std::pair<int,int> ym1 = years_and_months_since
         (LastMaterialChangeDate.value()
         ,InforceAsOfDate       .value()
+        ,true
         );
     InforceContractYear  = ym1.first;
     InforceContractMonth = ym1.second;

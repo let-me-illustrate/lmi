@@ -208,6 +208,7 @@ int attained_age
 std::pair<int,int> years_and_months_since
     (calendar_date const& base_date
     ,calendar_date const& other_date
+    ,bool                 is_curtate
     );
 
 int duration_floor

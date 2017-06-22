@@ -625,7 +625,7 @@ void CalendarDateTest::TestIntegralDuration()
     BOOST_TEST_EQUAL(-1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL(-1, duration_ceiling(base_date, other_date));
     BOOST_TEST_THROW
-        (years_and_months_since(base_date, other_date)
+        (years_and_months_since(base_date, other_date, true)
         ,std::runtime_error
         ,"Second date (1999-01-01) precedes first date (2000-01-01)."
         );
@@ -633,14 +633,14 @@ void CalendarDateTest::TestIntegralDuration()
     other_date = calendar_date(2000,  1,  1);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     other_date = calendar_date(2001,  1,  1);
     BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
@@ -653,14 +653,14 @@ void CalendarDateTest::TestIntegralDuration()
     other_date = calendar_date(2000,  2,  2);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 1, ym.second);
 
     other_date = calendar_date(2001,  2,  2);
     BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 2, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 1, ym.second);
 
@@ -683,28 +683,28 @@ void CalendarDateTest::TestIntegralDuration()
     other_date = calendar_date(2000,  2, 29);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     other_date = calendar_date(2000,  3,  1);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     other_date = calendar_date(2001,  2, 28);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     other_date = calendar_date(2001,  3,  1);
     BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
@@ -715,28 +715,28 @@ void CalendarDateTest::TestIntegralDuration()
     base_date  = calendar_date(1999,  2, 28);
     BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 2, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     base_date  = calendar_date(1999,  3,  1);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL(11, ym.second);
 
     base_date  = calendar_date(2000,  2, 28);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     base_date  = calendar_date(2000,  2, 29);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
@@ -797,7 +797,7 @@ void CalendarDateTest::TestYearAndMonthDifferenceExhaustively()
             ;++e
             )
             {
-            std::pair<int,int> ym = years_and_months_since(d, e);
+            std::pair<int,int> ym = years_and_months_since(d, e, true);
             int y = ym.first;
             int m = ym.second;
             calendar_date a = add_years_and_months(d, y,     m, true);

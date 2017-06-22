@@ -581,6 +581,7 @@ void Input::redintegrate_ex_post
             std::pair<int,int> ym0 = years_and_months_since
                 (EffectiveDate  .value()
                 ,InforceAsOfDate.value()
+                ,true
                 );
             InforceYear  = ym0.first;
             InforceMonth = ym0.second;

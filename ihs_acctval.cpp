@@ -1144,7 +1144,7 @@ void AccountValue::set_list_bill_year_and_month()
     auto const& bill_date = yare_input_.ListBillDate;
     if(bill_date < cert_date) return;
 
-    auto z = years_and_months_since(cert_date, bill_date);
+    auto z = years_and_months_since(cert_date, bill_date, true);
     auto const a = add_years_and_months(cert_date, z.first, z.second, true);
     if(a < bill_date)
         {
@@ -1159,7 +1159,7 @@ void AccountValue::set_list_bill_year_and_month()
 
     // Temporary supplemental code for acceptance testing.
     int const inforce_months_mod_12 = years_and_months_since
-        (cert_date, bill_date).second
+        (cert_date, bill_date, true).second
         ;
     // Number of delta months in the twelvemonth starting on bill date.
     int const months_ante = 12 - inforce_months_mod_12;
