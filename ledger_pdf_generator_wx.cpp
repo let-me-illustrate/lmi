@@ -74,8 +74,11 @@ class html_interpolator
     // A method which can be used to interpolate an HTML string containing
     // references to the variables defined for this illustration. The general
     // syntax is the same as in the global interpolate_string() function, i.e.
-    // variables are anything of the form "${name}". The variable names
-    // understood by this function are:
+    // variables are of the form "{{name}}" and section of the form
+    // "{{#name}}..{{/name}}" or "{{^name}}..{{/name}}" are also allowed and
+    // their contents is included in the expansion if and only if the variable
+    // with the given name has value "1" for the former or "0" for the latter.
+    // The variable names understood by this function are:
     //  - Scalar fields of GetLedgerInvariant().
     //  - Special variables defined in this class, such as "lmi_version" and
     //    "date_prepared".
@@ -117,7 +120,7 @@ class html_interpolator
     // to false or true respectively. Anything else results in an exception.
     bool test_variable(std::string const& name) const
     {
-        auto const z = expand_simple_html(name).as_html();
+        auto const z = expand_html(name).as_html();
         return
               z == "1" ? true
             : z == "0" ? false
@@ -128,24 +131,8 @@ class html_interpolator
     }
 
   private:
-    // Highest level variable expansion function.
+    // The expansion function used with interpolate_string().
     text expand_html(std::string const& s) const
-    {
-        // Check for the special "${var?only-if-set}" form:
-        auto const pos_question = s.find('?');
-        if(pos_question != std::string::npos)
-            {
-            return test_variable(s.substr(0, pos_question))
-                    ? text::from(s.substr(pos_question + 1))
-                    : text()
-                    ;
-            }
-
-        return expand_simple_html(s);
-    }
-
-    // Simple expansion for just the variable name.
-    text expand_simple_html(std::string const& s) const
     {
         // Check our own variables first:
         auto const it = vars_.find(s);
@@ -397,7 +384,7 @@ class cover_page : public page
                 (tag::tr
                     (tag::td[attr::align("center")]
                         (tag::font[attr::size("+2")]
-                            (interpolate_html("${date_prepared}")
+                            (interpolate_html("{{date_prepared}}")
                             )
                         )
                     )
@@ -417,9 +404,9 @@ class cover_page : public page
             (tag::font[attr::size("-1")]
                 (interpolate_html
                     (R"(
-${InsCoShortName} Financial Group is a marketing
-name for ${InsCoName} (${InsCoShortName}) and its
-affiliated company and sales representatives, ${InsCoAddr}.
+{{InsCoShortName}} Financial Group is a marketing
+name for {{InsCoName}} ({{InsCoShortName}}) and its
+affiliated company and sales representatives, {{InsCoAddr}}.
 )"
                     )
                 )
@@ -479,13 +466,15 @@ class narrative_summary_page : public page
         if(!interpolate_html.test_variable("SinglePremium"))
             {
             description = R"(
-${PolicyMktgName} is a ${GroupExperienceRating?group}${GroupCarveout?group}
+{{PolicyMktgName}} is a
+{{#GroupExperienceRating}}group{{/GroupExperienceRating}}
+{{#GroupCarveout}}group{{/GroupCarveout}}
 flexible premium adjustable life insurance contract.
-${GroupExperienceRating?
+{{#GroupExperienceRating}}
 It is a no-load policy and is intended for large case sales.
 It is primarily marketed to financial institutions
 to fund certain corporate liabilities.
-}
+{{/GroupExperienceRating}}
 It features accumulating account values, adjustable benefits,
 and flexible premiums.
 )";
@@ -495,7 +484,7 @@ and flexible premiums.
                )
             {
             description = R"(
-${PolicyMktgName}
+{{PolicyMktgName}}
 is a modified single premium adjustable life
 insurance contract. It features accumulating
 account values, adjustable benefits, and single premium.
@@ -504,7 +493,7 @@ account values, adjustable benefits, and single premium.
         else
             {
             description = R"(
-${PolicyMktgName}
+{{PolicyMktgName}}
 is a single premium adjustable life insurance contract.
 It features accumulating account values,
 adjustable benefits, and single premium.
@@ -519,25 +508,25 @@ adjustable benefits, and single premium.
                 (R"(
 Coverage may be available on a Guaranteed Standard Issue basis.
 All proposals are based on case characteristics and must
-be approved by the ${InsCoShortName}
+be approved by the {{InsCoShortName}}
 Home Office. For details regarding underwriting
 and coverage limitations refer to your offer letter
-or contact your ${InsCoShortName} representative.
+or contact your {{InsCoShortName}} representative.
 )"
                 );
             }
 
         summary_html += add_body_paragraph_html
-            ( interpolate_html("${AvName}")
+            ( interpolate_html("{{AvName}}")
             + text::nbsp()
-            + interpolate_html("${MonthlyChargesPaymentFootnote}")
+            + interpolate_html("{{MonthlyChargesPaymentFootnote}}")
             );
 
         std::string premiums;
         if(!interpolate_html.test_variable("SinglePremium"))
             {
             premiums = R"(
-Premiums are assumed to be paid on ${ErModeLCWithArticle}
+Premiums are assumed to be paid on {{ErModeLCWithArticle}}
 basis and received at the beginning of the contract year.
 )";
             }
@@ -550,7 +539,7 @@ of the contract year.
             }
 
         premiums += R"(
-${AvName} Values, ${CsvName} Values,
+{{AvName}} Values, {{CsvName}} Values,
 and death benefits are illustrated as of the end
 of the contract year. The method we use to allocate
 overhead expenses is the fully allocated expense method.
