@@ -37,10 +37,12 @@
 #include <wx/app.h>
 #include <wx/image.h>
 #include <wx/init.h>
-#include <wx/html/forcelnk.h>
 
 // Code generating PDF uses wxHtmlParser, so ensure that wxHTML is linked in.
+#ifdef _MSC_VER
+#include <wx/html/forcelnk.h>
 FORCE_WXHTML_MODULES()
+#endif
 
 LMI_FORCE_LINKING_EX_SITU(group_quote_pdf_generator_wx)
 LMI_FORCE_LINKING_EX_SITU(ledger_pdf_generator_wx)
