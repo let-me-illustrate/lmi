@@ -23,6 +23,8 @@
 
 #include "html.hpp"
 
+#include <cstring>
+
 namespace html
 {
 
