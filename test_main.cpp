@@ -63,6 +63,7 @@
 #include "miscellany.hpp"               // stifle_warning_for_unused_value()
 #include "test_tools.hpp"
 
+#include <atomic>
 #include <iostream>
 #include <ostream>
 #include <regex>
@@ -75,8 +76,8 @@ namespace lmi_test
 {
   namespace test
   {
-    int test_tools_errors = 0;  // Count of errors detected.
-    int test_tools_successes = 0;  // Count of successful tests.
+    std::atomic<int> test_tools_errors    {0}; // Count of errors detected.
+    std::atomic<int> test_tools_successes {0}; // Count of successful tests.
 
     class test_tools_exception : public std::runtime_error
     {
