@@ -40,7 +40,10 @@
 #include <wx/pdfdc.h>
 
 #include <map>
+#include <memory>
+#include <sstream>
 #include <stdexcept>
+#include <vector>
 
 LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
 
@@ -152,6 +155,28 @@ class html_interpolator
     std::map<std::string, text> vars_;
 };
 
+class page
+{
+  public:
+    page() = default;
+
+    // Pages are not value-like objects, so prohibit copying them.
+    page(page const&) = delete;
+    page& operator=(page const&) = delete;
+
+    // Pages are never used polymorphically currently, but still give them a
+    // virtual dtor, if only to avoid gcc warnings about not having it.
+    virtual ~page() = default;
+
+    // Render this page contents.
+    virtual void render
+        (Ledger const& ledger
+        ,pdf_writer_wx& writer
+        ,wxDC& dc
+        ,html_interpolator const& interpolate_html
+        ) = 0;
+};
+
 // This is just a container for the illustration-global data.
 class pdf_illustration : protected html_interpolator
 {
@@ -167,17 +192,30 @@ class pdf_illustration : protected html_interpolator
         init_variables();
     }
 
-    // Add a new page using its render() method.
+    // Add a page.
     template<typename T>
     void add()
     {
-        if(page_number_++)
-            {
-            dc_.StartPage();
-            }
+        pages_.emplace_back(new T());
+    }
 
-        T page;
-        page.render(ledger_, writer_, dc_, *this);
+    // Render all pages.
+    void render_all()
+    {
+        bool first = true;
+        for(auto const& page : pages_)
+            {
+            if(first)
+                {
+                first = false;
+                }
+            else
+                {
+                dc_.StartPage();
+                }
+
+            page->render(ledger_, writer_, dc_, *this);
+            }
     }
 
   private:
@@ -214,6 +252,11 @@ class pdf_illustration : protected html_interpolator
             + text::from(", ")
             + text::from(value_cast<std::string>(prep_date.year()))
             );
+
+        add_variable
+            ("Composite"
+            ,ledger_.is_composite()
+            );
     }
 
     // Use non-default font sizes to make it simpler to replicate the existing
@@ -230,8 +273,8 @@ class pdf_illustration : protected html_interpolator
     // Source of the data.
     Ledger const& ledger_;
 
-    // Number of last added page.
-    int page_number_{0};
+    // All the pages of this illustration.
+    std::vector<std::unique_ptr<page>> pages_;
 };
 
 std::array<int, 7> const pdf_illustration::html_font_sizes =
@@ -243,28 +286,6 @@ std::array<int, 7> const pdf_illustration::html_font_sizes =
     ,18
     ,20
     };
-
-class page
-{
-  public:
-    page() = default;
-
-    // Pages are not value-like objects, so prohibit copying them.
-    page(page const&) = delete;
-    page& operator=(page const&) = delete;
-
-    // Pages are never used polymorphically currently, but still give them a
-    // virtual dtor, if only to avoid gcc warnings about not having it.
-    virtual ~page() = default;
-
-    // Render this page contents.
-    virtual void render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
-        ,wxDC& dc
-        ,html_interpolator const& interpolate_html
-        ) = 0;
-};
 
 class cover_page : public page
 {
@@ -433,7 +454,152 @@ affiliated company and sales representatives, {{InsCoAddr}}.
     }
 };
 
-class narrative_summary_page : public page
+/// Base class for all with a footer.
+class page_with_footer : public page
+{
+  public:
+    void render
+        (Ledger const& /* ledger */
+        ,pdf_writer_wx& writer
+        ,wxDC& dc
+        ,html_interpolator const& interpolate_html
+        ) override
+    {
+        auto footer_html =
+            tag::table[attr::width("100%")]
+                      [attr::cellspacing("0")]
+                      [attr::cellpadding("0")]
+                (tag::tr
+                    (tag::td[attr::colspan("3")]
+                        (text::nbsp())
+                    )
+                )
+                (tag::tr
+                    (tag::td
+                        (tag::font[attr::size("-2")]
+                            (interpolate_html
+                                ("Date Prepared: {{date_prepared}}"
+                                )
+                            )
+                        )
+                    )
+                    (tag::td[attr::align("center")]
+                        (tag::font[attr::size("-2")]
+                            (text::from(get_footer_contents())
+                            )
+                        )
+                    )
+                    (tag::td[attr::align("right")]
+                        (tag::font[attr::size("-2")]
+                            (interpolate_html
+                                ("{{InsCoName}}"
+                                )
+                            )
+                        )
+                    )
+                )
+                (tag::tr
+                    (tag::td
+                        (tag::font[attr::size("-2")]
+                            (interpolate_html
+                                ("System Version: {{lmi_version}}"
+                                )
+                            )
+                        )
+                    )
+                    (tag::td
+                        (text::nbsp()
+                        )
+                    )
+                    (tag::td[attr::align("right")]
+                        (tag::font[attr::size("-2")]
+                            (interpolate_html
+                                (R"(
+{{#IsInforce}}
+    {{#Composite}}
+        {{ImprimaturInforceComposite}}
+    {{/Composite}}
+    {{^Composite}}
+        {{ImprimaturInforce}}
+    {{/Composite}}
+{{/IsInforce}}
+{{^IsInforce}}
+    {{#Composite}}
+        {{ImprimaturPresaleComposite}}
+    {{/Composite}}
+    {{^Composite}}
+        {{ImprimaturPresale}}
+    {{/Composite}}
+{{/IsInforce}}
+)"
+                                )
+                            )
+                        )
+                    )
+                );
+
+        auto const frame_horz_margin = writer.get_horz_margin();
+        auto const frame_width       = writer.get_page_width();
+
+        auto const footer_height = writer.output_html
+            (frame_horz_margin
+            ,0
+            ,frame_width
+            ,footer_html
+            ,e_output_measure_only
+            );
+
+        auto const footer_top = writer.get_page_bottom() - footer_height;
+        writer.output_html
+            (frame_horz_margin
+            ,footer_top
+            ,frame_width
+            ,footer_html
+            );
+
+        dc.SetPen(*wxBLUE);
+        dc.DrawLine
+            (frame_horz_margin
+            ,footer_top
+            ,frame_width + frame_horz_margin
+            ,footer_top
+            );
+    }
+
+  private:
+    // Method to be overridden in the base class which should actually return
+    // the contents of the (middle part of the) footer.
+    virtual std::string get_footer_contents() const = 0;
+};
+
+/// Base class for all pages showing the page number in the footer.
+///
+/// In addition to actually providing page_with_footer with the correct string
+/// to show in the footer, this class implicitly handles the page count by
+/// incrementing it whenever a new object of this class is created.
+class numbered_page : public page_with_footer
+{
+  public:
+    numbered_page()
+        :this_page_number_(++last_page_number_)
+    {
+    }
+
+  private:
+    std::string get_footer_contents() const override
+    {
+        std::ostringstream oss;
+        oss << "Page " << this_page_number_ << " of " << last_page_number_;
+        return oss.str();
+    }
+
+    static int last_page_number_;
+    int        this_page_number_;
+};
+
+int numbered_page::last_page_number_ = 0;
+
+class narrative_summary_page : public numbered_page
 {
   public:
     void render
@@ -443,6 +609,8 @@ class narrative_summary_page : public page
         ,html_interpolator const& interpolate_html
         ) override
     {
+        numbered_page::render(ledger, writer, dc, interpolate_html);
+
         auto const& invar = ledger.GetLedgerInvariant();
 
         text summary_html =
@@ -784,13 +952,13 @@ void ledger_pdf_generator_wx::write
     ,fs::path const& output
     )
 {
+    std::unique_ptr<pdf_illustration> pdf_ill;
+
     auto const z = ledger.ledger_type();
     switch(z)
         {
         case mce_ill_reg:
-            {
-            pdf_illustration_regular(ledger, output);
-            }
+            pdf_ill.reset(new pdf_illustration_regular(ledger, output));
             break;
         case mce_nasd:
         case mce_group_private_placement:
@@ -801,6 +969,8 @@ void ledger_pdf_generator_wx::write
         default:
             alarum() << "Unknown ledger type '" << z << "'." << LMI_FLUSH;
         }
+
+    pdf_ill->render_all();
 }
 
 volatile bool ensure_setup = ledger_pdf_generator::set_creator
