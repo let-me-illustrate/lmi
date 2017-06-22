@@ -466,72 +466,64 @@ class page_with_footer : public page
         ) override
     {
         auto footer_html =
-            tag::table[attr::width("100%")]
-                      [attr::cellspacing("0")]
-                      [attr::cellpadding("0")]
-                (tag::tr
-                    (tag::td[attr::colspan("3")]
-                        (text::nbsp())
+            tag::font[attr::size("-2")]
+                (tag::table[attr::width("100%")]
+                          [attr::cellspacing("0")]
+                          [attr::cellpadding("0")]
+                    (tag::tr
+                        (tag::td[attr::colspan("3")]
+                            (text::nbsp())
+                        )
                     )
-                )
-                (tag::tr
-                    (tag::td
-                        (tag::font[attr::size("-2")]
+                    (tag::tr
+                        (tag::td
                             (interpolate_html
                                 ("Date Prepared: {{date_prepared}}"
                                 )
                             )
                         )
-                    )
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("-2")]
+                        (tag::td[attr::align("center")]
                             (text::from(get_footer_contents())
                             )
                         )
-                    )
-                    (tag::td[attr::align("right")]
-                        (tag::font[attr::size("-2")]
+                        (tag::td[attr::align("right")]
                             (interpolate_html
                                 ("{{InsCoName}}"
                                 )
                             )
                         )
                     )
-                )
-                (tag::tr
-                    (tag::td
-                        (tag::font[attr::size("-2")]
+                    (tag::tr
+                        (tag::td
                             (interpolate_html
                                 ("System Version: {{lmi_version}}"
                                 )
                             )
                         )
-                    )
-                    (tag::td
-                        (text::nbsp()
+                        (tag::td
+                            (text::nbsp()
+                            )
                         )
-                    )
-                    (tag::td[attr::align("right")]
-                        (tag::font[attr::size("-2")]
+                        (tag::td[attr::align("right")]
                             (interpolate_html
                                 (R"(
-{{#IsInforce}}
-    {{#Composite}}
-        {{ImprimaturInforceComposite}}
-    {{/Composite}}
-    {{^Composite}}
-        {{ImprimaturInforce}}
-    {{/Composite}}
-{{/IsInforce}}
-{{^IsInforce}}
-    {{#Composite}}
-        {{ImprimaturPresaleComposite}}
-    {{/Composite}}
-    {{^Composite}}
-        {{ImprimaturPresale}}
-    {{/Composite}}
-{{/IsInforce}}
-)"
+    {{#IsInforce}}
+        {{#Composite}}
+            {{ImprimaturInforceComposite}}
+        {{/Composite}}
+        {{^Composite}}
+            {{ImprimaturInforce}}
+        {{/Composite}}
+    {{/IsInforce}}
+    {{^IsInforce}}
+        {{#Composite}}
+            {{ImprimaturPresaleComposite}}
+        {{/Composite}}
+        {{^Composite}}
+            {{ImprimaturPresale}}
+        {{/Composite}}
+    {{/IsInforce}}
+    )"
                                 )
                             )
                         )
