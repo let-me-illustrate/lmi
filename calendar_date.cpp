@@ -504,17 +504,29 @@ int attained_age
     return notional_age(birthdate, as_of_date, alb_anb);
 }
 
-/// Full curtate years and months by which 'other_date' follows 'base_date'.
+/// Years and months by which 'other_date' follows 'base_date'.
 ///
-/// Throws if 'other_date' precedes 'base_date'.
+/// Depending on 'is_curtate', adding the result to 'base_date' thus:
+///   add_years_and_months(base_date, result.first, result.second, true)
+/// yields the closest monthiversary M of 'base_date' such that
+///   [is_curtate] M <= other_date
+///   [otherwise]       other_date <= M
+///
+/// Precondition: 'other_date' <= 'base_date'; throws if violated.
 ///
 /// Postconditions:
 ///   0 <= months < 12
-/// and
-///   a <= other_date < b
-/// for calendar dates a, b such that
-///   a = add_years_and_months(base_date, years,     months, true)
-///   b = add_years_and_months(base_date, years, 1 + months, true)
+/// and exactly one of the following:
+///
+/// if 'is_curtate', then (counting only full curtate months):
+///   a <= other_date <  b, for calendar dates a, b such that
+///     a = add_years_and_months(base_date, years, months    , true)
+///     b = add_years_and_months(base_date, years, months + 1, true)
+///
+/// otherwise (counting any partial month as well):
+///   a <  other_date <= b, for calendar dates a, b such that
+///     a = add_years_and_months(base_date, years, months - 1, true)
+///     b = add_years_and_months(base_date, years, months    , true)
 
 std::pair<int,int> years_and_months_since
     (calendar_date const& base_date
@@ -522,7 +534,6 @@ std::pair<int,int> years_and_months_since
     ,bool                 is_curtate
     )
 {
-(void)&is_curtate;
     if(other_date < base_date)
         {
         alarum()
@@ -542,11 +553,21 @@ std::pair<int,int> years_and_months_since
     int months = mdiff % 12;
 
     calendar_date z = add_years_and_months(base_date, years, months, true);
-    if(other_date < z)
+    if(is_curtate && other_date < z)
         {
         --mdiff;
         years  = mdiff / 12;
         months = mdiff % 12;
+        }
+    else if(!is_curtate && z < other_date)
+        {
+        ++mdiff;
+        years  = mdiff / 12;
+        months = mdiff % 12;
+        }
+    else
+        {
+        // Do nothing: postconditions have already been established.
         }
 
     LMI_ASSERT(0 <= years);

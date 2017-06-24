@@ -1134,9 +1134,6 @@ double AccountValue::ModalMinInitPremShortfall() const
 /// The year and month of determination correspond to the first
 /// monthiversary on or after the list-bill date. If there is no
 /// such monthiversary, then harmless default values are used.
-///
-/// SOMEDAY !! Add a calendar_date function to return 'b' directly
-/// instead of incrementing the number of months conditionally.
 
 void AccountValue::set_list_bill_year_and_month()
 {
@@ -1144,23 +1141,15 @@ void AccountValue::set_list_bill_year_and_month()
     auto const& bill_date = yare_input_.ListBillDate;
     if(bill_date < cert_date) return;
 
-    auto z = years_and_months_since(cert_date, bill_date, true);
-    auto const a = add_years_and_months(cert_date, z.first, z.second, true);
-    if(a < bill_date)
-        {
-        ++z.second;
-        }
-    auto const b = add_years_and_months(cert_date, z.first, z.second, true);
-    LMI_ASSERT(cert_date <= b);
+    auto const z = years_and_months_since(cert_date, bill_date, false);
     list_bill_year_   = z.first;
     list_bill_month_  = z.second;
 
     if(!contains(yare_input_.Comments, "idiosyncrasyL")) return;
 
     // Temporary supplemental code for acceptance testing.
-    int const inforce_months_mod_12 = years_and_months_since
-        (cert_date, bill_date, true).second
-        ;
+    auto const a = add_years_and_months(cert_date, z.first, z.second, true);
+    int const inforce_months_mod_12 = z.second;
     // Number of delta months in the twelvemonth starting on bill date.
     int const months_ante = 12 - inforce_months_mod_12;
     warning()
@@ -1168,11 +1157,10 @@ void AccountValue::set_list_bill_year_and_month()
         << yare_input_.ListBillDate.str() << " yare_input_.ListBillDate\n"
         << list_bill_year_ << " list_bill_year_\n"
         << list_bill_month_ << " list_bill_month_\n"
-        << a.str() << " a = speculative determination date\n"
-        << b.str() << " b = actual determination date\n"
+        << a.str() << " a = premium determination date\n"
         << months_ante << " months_ante\n"
         << "List-bill premium will be set in monthiversary processing on "
-        << b.str() << ", which is "
+        << a.str() << ", which is "
         << list_bill_year_ << " years and " << list_bill_month_ << " months"
         << " after the issue date. An annual-mode list bill will reflect this"
         << " premium for "

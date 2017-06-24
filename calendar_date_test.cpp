@@ -752,6 +752,68 @@ void CalendarDateTest::TestIntegralDuration()
     BOOST_TEST_EQUAL(-2, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL(-1, duration_ceiling(base_date, other_date));
 
+    // Test years_and_months_since()'s 'is_curtate' argument.
+
+    base_date  = calendar_date(2000,  1,  1);
+    other_date = calendar_date(2001,  1, 15);
+    // Curtate: count full months completed during interval.
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 0, ym.second);
+    // Not curtate: count months begun during interval.
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+
+    base_date  = calendar_date(2000,  1, 15);
+    other_date = calendar_date(2001,  2,  1);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 0, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+
+    // Curtate == non-curtate for identical dates.
+    base_date  = calendar_date(2000,  1,  1);
+    other_date = calendar_date(2000,  1,  1);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL( 0, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL( 0, ym.second);
+
+    // Curtate == non-curtate for exact monthiversaries.
+    base_date  = calendar_date(2000,  1,  1);
+    other_date = calendar_date(2001,  2,  1);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+
+    // Interval beginning on leap-year day.
+    base_date  = calendar_date(2000,  2, 29);
+    other_date = calendar_date(2001,  1,  1);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL(10, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL(11, ym.second);
+
+    // Interval ending on leap-year day.
+    base_date  = calendar_date(2000,  1,  1);
+    other_date = calendar_date(2000,  2, 29);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL( 2, ym.second);
+
     // Demonstrate strong noncommutativity. To show that
     //    duration_floor(X, Y)
     //   -duration_floor(Y, X)
@@ -797,13 +859,24 @@ void CalendarDateTest::TestYearAndMonthDifferenceExhaustively()
             ;++e
             )
             {
-            std::pair<int,int> ym = years_and_months_since(d, e, true);
-            int y = ym.first;
-            int m = ym.second;
-            calendar_date a = add_years_and_months(d, y,     m, true);
-            calendar_date b = add_years_and_months(d, y, 1 + m, true);
-            LMI_ASSERT(a <= e    );
-            LMI_ASSERT(     e < b);
+                {
+                std::pair<int,int> ym = years_and_months_since(d, e, true);
+                int y = ym.first;
+                int m = ym.second;
+                calendar_date a = add_years_and_months(d, y, m    , true);
+                calendar_date b = add_years_and_months(d, y, m + 1, true);
+                LMI_ASSERT(a <= e    );
+                LMI_ASSERT(     e < b);
+                }
+                {
+                std::pair<int,int> ym = years_and_months_since(d, e, false);
+                int y = ym.first;
+                int m = ym.second;
+                calendar_date a = add_years_and_months(d, y, m - 1, true);
+                calendar_date b = add_years_and_months(d, y, m    , true);
+                LMI_ASSERT(a < e     );
+                LMI_ASSERT(    e <= b);
+                }
             }
         }
 }
