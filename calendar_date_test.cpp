@@ -1060,6 +1060,7 @@ namespace
         std::string s = x.str();
         x = add_years_and_months(x, 1, 1, true);
         attained_age(y, x, oe_age_last_birthday);
+        y = minimum_birthdate(45, x, oe_age_last_birthday);
     }
 
     void mete_construct()
@@ -1096,6 +1097,11 @@ namespace
         attained_age(y, x, oe_age_last_birthday);
     }
 
+    void mete_dob_limit()
+    {
+        y = minimum_birthdate(45, x, oe_age_last_birthday);
+    }
+
 } // Unnamed namespace.
 
 void CalendarDateTest::TestSpeed()
@@ -1108,6 +1114,7 @@ void CalendarDateTest::TestSpeed()
         << "  Get y, m, d  : " << TimeAnAliquot(mete_get_y_m_d   ) << '\n'
         << "  Format       : " << TimeAnAliquot(mete_format      ) << '\n'
         << "  Calculate age: " << TimeAnAliquot(mete_attained_age) << '\n'
+        << "  DOB limit    : " << TimeAnAliquot(mete_dob_limit   ) << '\n'
         ;
 }
 
