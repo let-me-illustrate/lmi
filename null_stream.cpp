@@ -23,6 +23,7 @@
 
 #include "null_stream.hpp"
 
+#include <ios>
 #include <ostream>
 #include <streambuf>
 #include <string>
@@ -33,9 +34,9 @@
 ///   http://groups.google.com/groups?selm=82mbke$l5c$1@nnrp1.deja.com
 /// which bears no copyright notice, as is usual in usenet.
 ///
-/// GWC modified this class in 2007, and in any later year, as
-/// described in 'ChangeLog'; any defect in it should not reflect on
-/// Dietmar Kuehl's reputation.
+/// GWC modified this class in 2007, and in any later year as
+/// described in `git log`; any defect in it should not reflect on
+/// Dietmar Kühl's reputation.
 
 template<typename CharType, typename traits = std::char_traits<CharType>>
 class dev_null_stream_buffer
@@ -71,6 +72,7 @@ std::streambuf& null_streambuf()
 std::ostream& null_stream()
 {
     static std::ostream z(&null_streambuf());
+    z.setstate(std::ios::badbit);
     return z;
 }
 
