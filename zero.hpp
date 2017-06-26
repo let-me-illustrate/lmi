@@ -60,7 +60,7 @@ typedef std::pair<double,root_validity> root_type;
 /// of a true zero.
 ///
 /// Brent's algorithm with GWC modifications described below. See:
-/// R. P. Brent, _Algorithms for Minization without Derivatives_
+/// R. P. Brent, _Algorithms for Minimization without Derivatives_
 /// ISBN 0-13-022335-2
 ///
 /// Rationale for choice of algorithm
@@ -178,7 +178,7 @@ typedef std::pair<double,root_validity> root_type;
 /// 0.5 * (b + c) is not necessarily correct either, because its bias
 /// is unknown; yet is it appropriate to return c instead?
 ///
-/// The bias of c must be correct becaue f(b) and f(c) are known to
+/// The bias of c must be correct because f(b) and f(c) are known to
 /// have different signs. And c is within Brent's tolerance in the weak
 /// sense of his variable tol, which is a worst-case guarantee that
 /// applies to c as well as b. To see why, suppose the algorithm is
