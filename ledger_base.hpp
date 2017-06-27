@@ -26,14 +26,12 @@
 
 #include "so_attributes.hpp"
 
-#include <algorithm>
+#include <algorithm>                    // std::copy()
 #include <cfloat>                       // DECIMAL_DIG
-#include <functional>
-#include <iomanip>
-#include <ios>
-#include <iosfwd>
+#include <iomanip>                      // std::setprecision()
 #include <iterator>                     // std::ostream_iterator
 #include <map>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -196,13 +194,13 @@ class LMI_SO LedgerBase
     void Initialize(int a_Length);
 
     LedgerBase& PlusEq
-        (LedgerBase const&         a_Addend
+        (LedgerBase          const& a_Addend
         ,std::vector<double> const& a_Inforce
         );
 
     virtual int     GetLength() const = 0;
-    virtual void    UpdateCRC(CRC& crc) const;
-    virtual void    Spew(std::ostream& os) const;
+    virtual void    UpdateCRC(CRC&) const;
+    virtual void    Spew(std::ostream&) const;
 
     // TODO ?? A priori, protected data is a defect.
 
@@ -237,8 +235,8 @@ class LMI_SO LedgerBase
 };
 
 template<typename T> void SpewVector
-    (std::ostream&          os
-    ,std::string const&     name
+    (std::ostream        &  os
+    ,std::string    const&  name
     ,std::vector<T> const&  elements
     )
 {

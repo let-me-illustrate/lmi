@@ -29,11 +29,9 @@
 #include "miscellany.hpp"               // minmax
 #include "value_cast.hpp"
 
-#include <algorithm>
-#include <cmath>                        // std::pow()
-#include <functional>
-#include <numeric>
-#include <string>
+#include <algorithm>                    // std::max(), std::min(), std::transform()
+#include <cmath>                        // std::floor(), std::log10(), std::pow()
+#include <functional>                   // std::multiplies
 
 //============================================================================
 LedgerBase::LedgerBase(int a_Length)
@@ -221,7 +219,7 @@ namespace
 // cell issue dates differ, the result is valid only in that probably-
 // unexpected sense.
 LedgerBase& LedgerBase::PlusEq
-    (LedgerBase const&         a_Addend
+    (LedgerBase          const& a_Addend
     ,std::vector<double> const& a_Inforce
     )
 {
