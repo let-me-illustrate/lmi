@@ -26,8 +26,8 @@
 
 #include "null_stream.hpp"
 #include "round_to.hpp"
-#include "value_cast.hpp"
 
+#include <cfloat>                       // DECIMAL_DIG
 #include <cmath>
 #include <limits>
 #include <ostream>
@@ -241,6 +241,8 @@ root_type decimal_root
     ,std::ostream&   iteration_stream       = null_stream()
     )
 {
+    iteration_stream.precision(DECIMAL_DIG);
+
     static double const epsilon = std::numeric_limits<double>::epsilon();
 
     int number_of_iterations = 0;
@@ -255,8 +257,8 @@ root_type decimal_root
     double fa = static_cast<double>(f(a));
     iteration_stream
         << "iteration " << number_of_iterations++
-        << " iterand "  << value_cast<std::string>(a)
-        << " value "    << value_cast<std::string>(fa)
+        << " iterand "  << a
+        << " value "    << fa
         << std::endl
         ;
     if(0.0 == fa)
@@ -267,8 +269,8 @@ root_type decimal_root
     double fb = static_cast<double>(f(b));
     iteration_stream
         << "iteration " << number_of_iterations++
-        << " iterand "  << value_cast<std::string>(b)
-        << " value "    << value_cast<std::string>(fb)
+        << " iterand "  << b
+        << " value "    << fb
         << std::endl
         ;
     double last_evaluated_iterand = b; // Note 1.
@@ -401,8 +403,8 @@ root_type decimal_root
             last_evaluated_iterand = b;
             iteration_stream
                 << "iteration " << number_of_iterations++
-                << " iterand "  << value_cast<std::string>(b)
-                << " value "    << value_cast<std::string>(fb)
+                << " iterand "  << b
+                << " value "    << fb
                 << std::endl
                 ;
             }
