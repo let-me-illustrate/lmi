@@ -255,24 +255,30 @@ root_type decimal_root
     double b = round_(bound1);
 
     double fa = static_cast<double>(f(a));
-    iteration_stream
-        << "iteration " << number_of_iterations++
-        << " iterand "  << a
-        << " value "    << fa
-        << std::endl
-        ;
+    if(iteration_stream.good())
+        {
+        iteration_stream
+            << "iteration " << number_of_iterations++
+            << " iterand "  << a
+            << " value "    << fa
+            << std::endl
+            ;
+        }
     if(0.0 == fa)
         {
         return std::make_pair(a, root_is_valid);
         }
 
     double fb = static_cast<double>(f(b));
-    iteration_stream
-        << "iteration " << number_of_iterations++
-        << " iterand "  << b
-        << " value "    << fb
-        << std::endl
-        ;
+    if(iteration_stream.good())
+        {
+        iteration_stream
+            << "iteration " << number_of_iterations++
+            << " iterand "  << b
+            << " value "    << fb
+            << std::endl
+            ;
+        }
     double last_evaluated_iterand = b; // Note 1.
     if(0.0 == fb)
         {
@@ -401,12 +407,15 @@ root_type decimal_root
             {
             fb = static_cast<double>(f(b));
             last_evaluated_iterand = b;
-            iteration_stream
-                << "iteration " << number_of_iterations++
-                << " iterand "  << b
-                << " value "    << fb
-                << std::endl
-                ;
+            if(iteration_stream.good())
+                {
+                iteration_stream
+                    << "iteration " << number_of_iterations++
+                    << " iterand "  << b
+                    << " value "    << fb
+                    << std::endl
+                    ;
+                }
             }
         }
 }
