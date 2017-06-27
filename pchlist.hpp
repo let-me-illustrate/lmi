@@ -66,7 +66,6 @@
 #   include "ledger_invariant.hpp"
 #   include "ledger_variant.hpp"
 #   include "main_common.hpp"
-#   include "max_stream_precision.hpp"
 #   include "mc_enum.hpp"
 #   include "mc_enum_type_enums.hpp"
 #   include "mc_enum_types.hpp"

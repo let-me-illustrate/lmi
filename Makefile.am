@@ -1181,7 +1181,6 @@ noinst_HEADERS = \
     map_lookup.hpp \
     materially_equal.hpp \
     math_functors.hpp \
-    max_stream_precision.hpp \
     mc_enum.hpp \
     mc_enum.tpp \
     mc_enum_aux.hpp \

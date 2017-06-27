@@ -476,8 +476,6 @@ void LedgerBase::UpdateCRC(CRC& crc) const
 //============================================================================
 void LedgerBase::Spew(std::ostream& os) const
 {
-    static int const prec = max_stream_precision();
-
     for(auto const& i : AllVectors)
         {
         SpewVector(os, i.first, *i.second);
@@ -488,7 +486,7 @@ void LedgerBase::Spew(std::ostream& os) const
         os
             << i.first
             << "=="
-            << std::setprecision(prec) << *i.second
+            << std::setprecision(DECIMAL_DIG) << *i.second
             << '\n'
             ;
         }

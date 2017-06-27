@@ -24,11 +24,10 @@
 
 #include "config.hpp"
 
-#include "max_stream_precision.hpp"
 #include "so_attributes.hpp"
 
 #include <algorithm>
-#include <cfloat>
+#include <cfloat>                       // DECIMAL_DIG
 #include <functional>
 #include <iomanip>
 #include <ios>
@@ -245,9 +244,8 @@ template<typename T> void SpewVector
 {
     std::ostream_iterator<T> osi(os, "\n");
 
-    static int const prec = max_stream_precision();
     os << name << '\n';
-    os << std::setprecision(prec);
+    os << std::setprecision(DECIMAL_DIG);
     std::copy(elements.begin(), elements.end(), osi);
 }
 
