@@ -31,7 +31,7 @@
 #include "mc_enum_types_aux.hpp"        // mc_str()
 #include "stratified_charges.hpp"
 
-#include <algorithm>                    // std::max()
+#include <algorithm>                    // max()
 
 namespace {
 /// Determine whether premium tax is retaliatory.

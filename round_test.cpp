@@ -37,9 +37,9 @@
 #include "fenv_lmi.hpp"
 #include "test_tools.hpp"
 
-#include <algorithm>                    // std::max()
-#include <cmath>                        // std::round()
-#include <cstddef>                      // std::size_t
+#include <algorithm>                    // max()
+#include <cmath>                        // round()
+#include <cstddef>                      // size_t
 #include <ios>
 #include <iostream>
 #include <math.h>                       // ::round[,f,l]() and kin

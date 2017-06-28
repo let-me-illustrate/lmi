@@ -42,7 +42,7 @@
 #include <bitset>
 #include <cfenv>
 #include <climits>                      // CHAR_BIT
-#include <math.h>                       // std::rint()
+#include <math.h>                       // rint()
 #include <stdexcept>
 
 std::bitset<CHAR_BIT * sizeof(unsigned long int)> bits(unsigned long int i)

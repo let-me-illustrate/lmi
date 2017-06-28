@@ -29,8 +29,8 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <algorithm>                    // std::min()
-#include <cmath>                        // std::isnan(), std::pow()
+#include <algorithm>                    // min()
+#include <cmath>                        // isnan(), pow()
 #include <functional>
 #include <iomanip>
 #include <limits>

@@ -30,7 +30,7 @@
 #include <limits>
 #include <sstream>
 #include <stdexcept>
-#include <type_traits>                  // std::integral_constant
+#include <type_traits>                  // integral_constant
 
 #if defined __GNUC__
 #   pragma GCC diagnostic push

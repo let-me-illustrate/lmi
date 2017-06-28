@@ -27,10 +27,10 @@
 #include "bourn_cast.hpp"
 #include "ieee754.hpp"                  // is_infinite<>()
 
-#include <algorithm>                    // std::max()
-#include <cmath>                        // std::fabs(), std::log10()
-#include <cstdlib>                      // std::strto*()
-#include <cstring>                      // std::strcmp(), std::strlen()
+#include <algorithm>                    // max()
+#include <cmath>                        // fabs(), log10()
+#include <cstdlib>                      // strto*()
+#include <cstring>                      // strcmp(), strlen()
 #include <limits>
 #include <stdexcept>
 #include <string>

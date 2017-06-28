@@ -28,16 +28,16 @@
 #include "bourn_cast.hpp"
 #include "zero.hpp"
 
-#include <algorithm>                    // std::max(), std::min()
+#include <algorithm>                    // max(), min()
 #include <ctime>
 #include <iomanip>
 #include <ios>
 #include <istream>
-#include <iterator>                     // std::ostreambuf_iterator
+#include <iterator>                     // ostreambuf_iterator
 #include <locale>
 #include <ostream>
 #include <sstream>
-#include <stdexcept>                    // std::runtime_error
+#include <stdexcept>                    // runtime_error
 
 namespace
 {

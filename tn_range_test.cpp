@@ -27,7 +27,7 @@
 
 #include "test_tools.hpp"
 
-#include <algorithm>                    // std::min()
+#include <algorithm>                    // min()
 #include <sstream>
 
 // This should fail to compile:

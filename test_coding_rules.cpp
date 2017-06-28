@@ -32,8 +32,8 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/regex.hpp>
 
-#include <algorithm>                    // std::is_sorted()
-#include <cstddef>                      // std::size_t
+#include <algorithm>                    // is_sorted()
+#include <cstddef>                      // size_t
 #include <ctime>
 #include <iomanip>
 #include <ios>
@@ -42,7 +42,7 @@
 #include <ostream>
 #include <set>
 #include <sstream>
-#include <stdexcept>                    // std::runtime_error
+#include <stdexcept>                    // runtime_error
 #include <string>
 
 std::string my_taboo_indulgence();       // See 'my_test_coding_rules.cpp'.

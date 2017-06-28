@@ -36,7 +36,7 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 
 namespace
 {

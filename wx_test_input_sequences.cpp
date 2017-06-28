@@ -30,7 +30,7 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-#include <algorithm>                    // std::find()
+#include <algorithm>                    // find()
 
 /// Validate a variety of input sequences in the GUI input dialog.
 ///

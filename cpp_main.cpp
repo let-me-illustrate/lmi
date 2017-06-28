@@ -62,7 +62,7 @@
 #include "getopt.hpp"
 #include "license.hpp"
 
-#include <cstdlib>                      // std::free()
+#include <cstdlib>                      // free()
 #include <iostream>
 
 #if defined LMI_MSW

@@ -33,7 +33,7 @@
 
 #include <wx/object.h>                  // wxObjectDataPtr
 
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
 #include <vector>
 

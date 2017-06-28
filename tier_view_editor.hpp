@@ -32,9 +32,9 @@
 
 #include <wx/version.h>                 // Mark this file as wx dependent.
 
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 #include <vector>
 
 /// Notes on TierEditorGrid and TierTableAdapter.

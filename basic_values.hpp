@@ -32,9 +32,9 @@
 #include "so_attributes.hpp"
 #include "yare_input.hpp"
 
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 #include <vector>
 
 // Let's do this through once for UL, then think about extending it to other

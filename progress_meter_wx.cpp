@@ -29,7 +29,7 @@
 #include <wx/progdlg.h>
 #include <wx/utils.h>                   // wxMilliSleep()
 
-#include <ios>                          // std::fixed, std::ios_base::precision()
+#include <ios>                          // fixed, ios_base::precision()
 #include <sstream>
 
 LMI_FORCE_LINKING_IN_SITU(progress_meter_wx)

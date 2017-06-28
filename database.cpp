@@ -32,7 +32,7 @@
 #include "product_data.hpp"
 #include "yare_input.hpp"
 
-#include <algorithm>                    // std::min()
+#include <algorithm>                    // min()
 
 /// Construct from essential input (product and axes).
 

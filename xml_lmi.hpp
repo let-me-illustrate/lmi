@@ -28,9 +28,9 @@
 
 #include <xmlwrapp/node.h>              // xml::element
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <iosfwd>
-#include <memory>                       // std::unique_ptr
+#include <memory>                       // unique_ptr
 #include <string>
 
 /// Interface to xmlwrapp.

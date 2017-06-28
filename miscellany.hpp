@@ -29,10 +29,10 @@
 #include <algorithm>
 #include <cctype>
 #include <climits>                      // UCHAR_MAX
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <cstdio>                       // EOF
 #include <ios>
-#include <iterator>                     // std::distance()
+#include <iterator>                     // distance()
 #include <string>
 #include <utility>
 #include <vector>

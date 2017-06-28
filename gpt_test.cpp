@@ -30,7 +30,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <numeric>                      // std::iota()
+#include <numeric>                      // iota()
 #include <vector>
 
 namespace

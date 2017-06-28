@@ -38,7 +38,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
-#include <numeric>                      // std::accumulate()
+#include <numeric>                      // accumulate()
 #include <stdexcept>
 
 namespace

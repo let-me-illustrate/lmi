@@ -40,8 +40,8 @@
 #include "timer.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>                    // std::max()
-#include <iterator>                     // std::back_inserter()
+#include <algorithm>                    // max()
+#include <iterator>                     // back_inserter()
 #include <string>
 
 namespace

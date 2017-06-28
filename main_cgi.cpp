@@ -61,7 +61,7 @@
 #include <fstream>
 #include <ios>
 #include <iostream>
-#include <istream>                      // std::ws
+#include <istream>                      // ws
 #include <ostream>
 #include <sstream>
 #include <string>

@@ -48,11 +48,11 @@
 
 #include <xsltwrapp/xsltwrapp.h>
 
-#include <algorithm>                    // std::transform()
-#include <functional>                   // std::minus
+#include <algorithm>                    // transform()
+#include <functional>                   // minus
 #include <map>
 #include <ostream>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 
 namespace
 {

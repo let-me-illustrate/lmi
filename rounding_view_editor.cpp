@@ -39,7 +39,7 @@
 #include <map>
 #include <ostream>
 #include <sstream>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 
 namespace
 {

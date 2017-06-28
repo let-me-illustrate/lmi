@@ -30,7 +30,7 @@
 #endif // defined LMI_MSW
 
 #include <ios>
-#include <sstream>                      // std::stringbuf
+#include <sstream>                      // stringbuf
 #include <stdexcept>
 #include <type_traits>
 

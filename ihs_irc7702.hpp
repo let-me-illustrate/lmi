@@ -27,7 +27,7 @@
 #include "mc_enum_type_enums.hpp"
 #include "round_to.hpp"
 
-#include <memory>                       // std::unique_ptr
+#include <memory>                       // unique_ptr
 #include <vector>
 
 class ULCommFns;

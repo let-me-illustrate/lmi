@@ -29,7 +29,7 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 
 class group_quote_pdf_generator;
 class Ledger;

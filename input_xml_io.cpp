@@ -33,9 +33,9 @@
 #include "miscellany.hpp"               // lmi_array_size()
 #include "oecumenic_enumerations.hpp"
 
-#include <algorithm>                    // std::min()
+#include <algorithm>                    // min()
 #include <stdexcept>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 
 template class xml_serializable<Input>;
 

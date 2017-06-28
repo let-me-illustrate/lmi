@@ -47,8 +47,8 @@
 #endif // defined USE_UBLAS
 
 #include <algorithm>
-#include <functional>                   // std::bind() et al.
-#include <iterator>                     // std::back_inserter()
+#include <functional>                   // bind() et al.
+#include <iterator>                     // back_inserter()
 #include <string>
 #include <valarray>
 #include <vector>

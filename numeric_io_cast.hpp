@@ -27,10 +27,10 @@
 #include "numeric_io_traits.hpp"
 #include "rtti_lmi.hpp"
 
-#include <cstring>                      // std::strcmp()
+#include <cstring>                      // strcmp()
 #include <sstream>
 #include <stdexcept>
-#include <stdio.h>                      // std::snprintf()
+#include <stdio.h>                      // snprintf()
 #include <string>
 #include <type_traits>
 #include <typeinfo>

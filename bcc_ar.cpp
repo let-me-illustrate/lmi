@@ -40,7 +40,7 @@
 #include "license.hpp"
 #include "system_command.hpp"
 
-#include <cstdio>                       // std::remove()
+#include <cstdio>                       // remove()
 #include <iostream>
 #include <string>
 

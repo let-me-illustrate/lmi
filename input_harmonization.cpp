@@ -33,8 +33,8 @@
 #include "input_sequence.hpp"
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg(), is_three_rate_nasd()
 
-#include <algorithm>                    // std::min(), std::max()
-#include <utility>                      // std::pair
+#include <algorithm>                    // min(), max()
+#include <utility>                      // pair
 
 // Harmonization is physically separated for no better reason than to
 // facilitate its development at a time when it frequently changes.

@@ -23,7 +23,7 @@
 
 #include "test_tools.hpp"
 
-#include <stdio.h>                      // std::snprintf()
+#include <stdio.h>                      // snprintf()
 #include <string>
 
 int test_main(int, char*[])

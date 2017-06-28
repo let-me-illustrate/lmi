@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include <cstring>                      // std::memcpy()
+#include <cstring>                      // memcpy()
 
 /// Reinterpret char* contents as a value of the given type.
 ///

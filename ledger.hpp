@@ -29,7 +29,7 @@
 #include "xml_lmi.hpp"
 
 #include <iosfwd>
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
 #include <vector>
 

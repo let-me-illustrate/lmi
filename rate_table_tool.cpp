@@ -31,16 +31,16 @@
 #include <boost/filesystem/convenience.hpp> // extension()
 #include <boost/filesystem/operations.hpp>  // is_directory(), directory_iterator
 
-#include <algorithm>                    // std::sort()
-#include <cstdio>                       // std::fflush()
-#include <cstdlib>                      // std::atoi()
+#include <algorithm>                    // sort()
+#include <cstdio>                       // fflush()
+#include <cstdlib>                      // atoi()
 #include <exception>
 #include <fstream>
-#include <iomanip>                      // std::setw(), std::setfill()
-#include <iostream>                     // std::cout, std::cerr
+#include <iomanip>                      // setw(), setfill()
+#include <iostream>                     // cout, cerr
 #include <map>
-#include <memory>                       // std::unique_ptr
-#include <ostream>                      // std::endl
+#include <memory>                       // unique_ptr
+#include <ostream>                      // endl
 #include <sstream>
 #include <stdexcept>
 #include <string>

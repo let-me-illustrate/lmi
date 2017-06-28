@@ -28,11 +28,11 @@
 
 #include <boost/filesystem/operations.hpp>
 
-#include <ctime>                        // std::time_t
+#include <ctime>                        // time_t
 #include <map>
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
-#include <utility>                      // std::make_pair()
+#include <utility>                      // make_pair()
 
 namespace detail
 {

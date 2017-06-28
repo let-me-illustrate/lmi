@@ -96,10 +96,10 @@
 #include <wx/choice.h>
 #include <wx/grid.h>
 
-#include <cstddef>                      // std::size_t
-#include <memory>                       // std::shared_ptr
+#include <cstddef>                      // size_t
+#include <memory>                       // shared_ptr
 #include <string>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 #include <vector>
 
 class MultiDimAxisAny;

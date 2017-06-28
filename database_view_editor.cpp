@@ -32,7 +32,7 @@
 #include <wx/utils.h>                   // wxBusyCursor
 
 #include <exception>
-#include <numeric>                      // std::accumulate()
+#include <numeric>                      // accumulate()
 
 /// Database Axis definitions
 /// -------------------------

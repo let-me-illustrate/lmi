@@ -28,9 +28,9 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <functional>
-#include <iterator>                     // std::back_inserter()
+#include <iterator>                     // back_inserter()
 #include <numeric>
 #include <ostream>
 #include <string>

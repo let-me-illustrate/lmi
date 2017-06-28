@@ -25,9 +25,9 @@
 
 #include "calendar_date.hpp"
 
-#include <algorithm>                    // std::generate(), std::min()
-#include <cmath>                        // std::pow()
-#include <numeric>                      // std::inner_product()
+#include <algorithm>                    // generate(), min()
+#include <cmath>                        // pow()
+#include <numeric>                      // inner_product()
 #include <vector>
 
 /// Possibly off-anniversary premium to be shown on list bill.

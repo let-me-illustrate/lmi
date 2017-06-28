@@ -48,8 +48,8 @@
 
 #include <algorithm>
 #include <cmath>
-#include <functional>                   // std::bind() et al.
-#include <iterator>                     // std::back_inserter()
+#include <functional>                   // bind() et al.
+#include <iterator>                     // back_inserter()
 #include <limits>
 #include <numeric>
 #include <string>

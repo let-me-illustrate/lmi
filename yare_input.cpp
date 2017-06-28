@@ -27,7 +27,7 @@
 #include "input_sequence_aux.hpp"       // convert_vector_type()
 #include "miscellany.hpp"               // each_equal()
 
-#include <numeric>                      // std::accumulate()
+#include <numeric>                      // accumulate()
 
 yare_input::yare_input(Input const& z)
 {

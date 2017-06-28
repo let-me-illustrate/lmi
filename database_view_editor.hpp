@@ -38,7 +38,7 @@
 
 #include "dbvalue.hpp"
 
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
 
 /// Database dictionary adapter for database_entity class

@@ -42,7 +42,7 @@ class product_database;
 
 #include <boost/operators.hpp>
 
-#include <memory>                       // std::unique_ptr
+#include <memory>                       // unique_ptr
 #include <string>
 #include <vector>
 

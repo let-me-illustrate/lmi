@@ -24,7 +24,7 @@
 #include "alert.hpp"
 #include "value_cast.hpp"
 
-#include <cmath>                        // std::pow(), std::signbit()
+#include <cmath>                        // pow(), signbit()
 #include <exception>
 #include <istream>
 #include <limits>

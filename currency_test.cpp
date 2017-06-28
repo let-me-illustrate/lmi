@@ -26,7 +26,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <cmath>                        // std::floor()
+#include <cmath>                        // floor()
 #include <limits>
 #include <sstream>
 #include <stdexcept>

@@ -23,7 +23,7 @@
 
 #include "alert.hpp"
 
-#include <cstdio>                       // std::fputs()
+#include <cstdio>                       // fputs()
 #include <stdexcept>
 
 namespace

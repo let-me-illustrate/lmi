@@ -27,7 +27,7 @@
 #include <wx/dc.h>
 #include <wx/font.h>
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <string>
 #include <vector>
 

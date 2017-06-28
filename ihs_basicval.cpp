@@ -53,8 +53,8 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cmath>                        // std::pow()
-#include <functional>                   // std::multiplies
+#include <cmath>                        // pow()
+#include <functional>                   // multiplies
 #include <limits>
 #include <numeric>
 #include <stdexcept>

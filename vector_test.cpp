@@ -30,7 +30,7 @@
 #include "timer.hpp"
 
 #include <algorithm>
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <functional>
 #include <iomanip>
 #include <ios>

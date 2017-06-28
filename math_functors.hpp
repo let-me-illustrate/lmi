@@ -27,8 +27,8 @@
 #include "assert_lmi.hpp"
 #include "et_vector.hpp"
 
-#include <algorithm>                    // std::max(), std::min()
-#include <cmath>                        // std::expm1(), std::log1p()
+#include <algorithm>                    // max(), min()
+#include <cmath>                        // expm1(), log1p()
 #include <functional>
 #include <stdexcept>
 #include <type_traits>

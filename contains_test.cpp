@@ -31,7 +31,7 @@
 #include <map>
 #include <set>
 #include <string>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 #include <vector>
 
 struct HasFind   {void find();};

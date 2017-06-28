@@ -26,7 +26,7 @@
 
 #include <wx/docview.h>
 
-#include <memory>                       // std::unique_ptr
+#include <memory>                       // unique_ptr
 
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 class WXDLLIMPEXP_FWD_CORE wxPageSetupDialogData;

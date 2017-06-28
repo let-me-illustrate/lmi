@@ -26,7 +26,7 @@
 #include "facets.hpp"
 #include "rtti_lmi.hpp"
 
-#include <algorithm>                    // std::find()
+#include <algorithm>                    // find()
 #include <typeinfo>
 
 /// The header that defines class mc_enum is by design unaware of its

@@ -29,9 +29,9 @@
 #include "miscellany.hpp"               // minmax
 #include "value_cast.hpp"
 
-#include <algorithm>                    // std::max(), std::min(), std::transform()
-#include <cmath>                        // std::floor(), std::log10(), std::pow()
-#include <functional>                   // std::multiplies
+#include <algorithm>                    // max(), min(), transform()
+#include <cmath>                        // floor(), log10(), pow()
+#include <functional>                   // multiplies
 
 //============================================================================
 LedgerBase::LedgerBase(int a_Length)

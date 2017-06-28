@@ -26,7 +26,7 @@
 #include "miscellany.hpp"
 #include "test_tools.hpp"
 
-#include <cstdio>                       // std::remove()
+#include <cstdio>                       // remove()
 #include <fstream>
 
 int test_main(int, char*[])

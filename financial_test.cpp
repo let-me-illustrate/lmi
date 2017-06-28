@@ -26,8 +26,8 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <cmath>                        // std::fabs()
-#include <functional>                   // std::bind()
+#include <cmath>                        // fabs()
+#include <functional>                   // bind()
 #include <iomanip>                      // Formatting of optional detail.
 #include <iostream>
 #include <vector>

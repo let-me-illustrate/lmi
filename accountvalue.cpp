@@ -37,9 +37,9 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 
-#include <algorithm>                    // std::max(), std::min()
-#include <cmath>                        // std::pow()
-#include <numeric>                      // std::accumulate()
+#include <algorithm>                    // max(), min()
+#include <cmath>                        // pow()
+#include <numeric>                      // accumulate()
 
 namespace
 {

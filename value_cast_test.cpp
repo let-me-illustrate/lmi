@@ -28,8 +28,8 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <cmath>                        // std::scalbn()
-#include <cstring>                      // std::strcpy(), std::strcmp
+#include <cmath>                        // scalbn()
+#include <cstring>                      // strcpy(), strcmp()
 #include <istream>
 #include <limits>
 #include <ostream>

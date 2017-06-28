@@ -27,9 +27,9 @@
 #include "contains.hpp"
 #include "miscellany.hpp"               // is_ok_for_cctype(), rtrim()
 
-#include <algorithm>                    // std::copy()
-#include <cctype>                       // std::isalnum, std::isspace()
-#include <iterator>                     // std::ostream_iterator
+#include <algorithm>                    // copy()
+#include <cctype>                       // isalnum(), isspace()
+#include <iterator>                     // ostream_iterator
 
 SequenceParser::SequenceParser
     (std::string const&              input_expression

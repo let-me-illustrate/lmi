@@ -49,11 +49,11 @@
 #include <wx/image.h>
 #include <wx/pdfdc.h>
 
-#include <cstring>                      // std::strstr()
+#include <cstring>                      // strstr()
 #include <limits>
-#include <memory>                       // std::unique_ptr
+#include <memory>                       // unique_ptr
 #include <stdexcept>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 #include <vector>
 
 LMI_FORCE_LINKING_IN_SITU(group_quote_pdf_generator_wx)

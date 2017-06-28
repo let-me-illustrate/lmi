@@ -44,8 +44,8 @@
 #include "stratified_algorithms.hpp"
 #include "stratified_charges.hpp"
 
-#include <algorithm>                    // std::min(), std::max()
-#include <cmath>                        // std::pow()
+#include <algorithm>                    // min(), max()
+#include <cmath>                        // pow()
 #include <limits>
 
 // Each month, process all transactions in order.

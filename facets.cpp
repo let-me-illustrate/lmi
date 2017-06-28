@@ -23,7 +23,7 @@
 
 #include "facets.hpp"
 
-#include <algorithm>                    // std::copy()
+#include <algorithm>                    // copy()
 
 // Class C_is_not_whitespace_ctype is intended for extracting
 // std::strings from a stream without stopping at char <C>. It is a

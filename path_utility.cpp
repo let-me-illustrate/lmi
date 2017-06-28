@@ -32,7 +32,7 @@
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/operations.hpp>
 
-#include <cctype>                       // std::isalnum()
+#include <cctype>                       // isalnum()
 #include <exception>
 #include <iomanip>
 #include <sstream>

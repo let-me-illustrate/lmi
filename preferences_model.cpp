@@ -31,7 +31,7 @@
 #include <boost/filesystem/operations.hpp> // fs::system_complete()
 #include <boost/filesystem/path.hpp>
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <sstream>
 #include <vector>
 

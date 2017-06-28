@@ -25,7 +25,7 @@
 
 #include "test_tools.hpp"
 
-#include <cstdio>                       // std::remove()
+#include <cstdio>                       // remove()
 #include <fstream>
 
 void test_each_equal()

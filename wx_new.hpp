@@ -26,7 +26,7 @@
 
 #include "so_attributes.hpp"
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 
 #if defined LMI_WX_NEW_USE_SO_ATTRIBUTES && !defined UNIT_TESTING_WX_NEW
 #

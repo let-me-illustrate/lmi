@@ -26,10 +26,10 @@
 
 #include "so_attributes.hpp"
 
-#include <algorithm>                    // std::copy()
+#include <algorithm>                    // copy()
 #include <cfloat>                       // DECIMAL_DIG
-#include <iomanip>                      // std::setprecision()
-#include <iterator>                     // std::ostream_iterator
+#include <iomanip>                      // setprecision()
+#include <iterator>                     // ostream_iterator
 #include <map>
 #include <ostream>
 #include <string>

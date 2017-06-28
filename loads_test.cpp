@@ -30,8 +30,8 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <cstddef>                      // std::size_t
-#include <functional>                   // std::bind()
+#include <cstddef>                      // size_t
+#include <functional>                   // bind()
 
 namespace
 {

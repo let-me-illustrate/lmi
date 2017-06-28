@@ -30,11 +30,11 @@
 #include "timer.hpp"
 
 #include <algorithm>
-#include <cmath>                        // std::fabs()
-#include <functional>                   // std::bind()
-#include <iomanip>                      // std::setw() etc.
-#include <ios>                          // std::ios_base::fixed()
-#include <numeric>                      // std::partial_sum()
+#include <cmath>                        // fabs()
+#include <functional>                   // bind()
+#include <iomanip>                      // setw() etc.
+#include <ios>                          // ios_base::fixed()
+#include <numeric>                      // partial_sum()
 #include <vector>
 
 namespace

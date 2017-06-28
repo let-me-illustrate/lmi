@@ -26,7 +26,7 @@
 #include "assert_lmi.hpp"
 #include "yare_input.hpp"
 
-#include <algorithm>                    // std::min()
+#include <algorithm>                    // min()
 
 //============================================================================
 death_benefits::death_benefits(int length, yare_input const& yi)

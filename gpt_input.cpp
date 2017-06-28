@@ -35,11 +35,11 @@
 #include "map_lookup.hpp"
 #include "miscellany.hpp"               // each_equal(), lmi_array_size()
 
-#include <algorithm>                    // std::max()
+#include <algorithm>                    // max()
 #include <exception>
 #include <limits>
 #include <sstream>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 
 template class xml_serializable<gpt_input>;
 

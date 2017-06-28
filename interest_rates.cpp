@@ -32,9 +32,9 @@
 #include "miscellany.hpp"               // each_equal()
 #include "yare_input.hpp"
 
-#include <algorithm>                    // std::max(), std::copy()
+#include <algorithm>                    // max(), copy()
 #include <functional>
-#include <iterator>                     // std::back_inserter()
+#include <iterator>                     // back_inserter()
 
 // TODO ?? Future enhancements:
 //

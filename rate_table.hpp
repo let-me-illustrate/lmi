@@ -26,9 +26,9 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <iosfwd>
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
 #include <vector>
 

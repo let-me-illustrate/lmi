@@ -26,7 +26,7 @@
 
 #include "mc_enum.hpp"
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <string>
 #include <vector>
 

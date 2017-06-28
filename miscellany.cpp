@@ -26,11 +26,11 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 
-#include <algorithm>                    // std::equal()
+#include <algorithm>                    // equal()
 #include <ctime>
 #include <fstream>
 #include <istream>
-#include <iterator>                     // std::istreambuf_iterator
+#include <iterator>                     // istreambuf_iterator
 
 namespace
 {

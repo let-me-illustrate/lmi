@@ -27,7 +27,7 @@
 #include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 
-#include <cmath>                        // std::fabs()
+#include <cmath>                        // fabs()
 #include <limits>
 
 void banded_test()

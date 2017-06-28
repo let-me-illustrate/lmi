@@ -28,7 +28,7 @@
 #include "sigfpe.hpp"
 
 #include <csignal>
-#include <exception>                    // std::set_terminate()
+#include <exception>                    // set_terminate()
 #include <stdexcept>
 
 #if defined LMI_MSW
