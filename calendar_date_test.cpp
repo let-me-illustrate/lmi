@@ -24,7 +24,6 @@
 #include "calendar_date.hpp"
 
 #include "alert.hpp"
-#include "assert_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -865,8 +864,8 @@ void CalendarDateTest::TestYearAndMonthDifferenceExhaustively()
                 int m = ym.second;
                 calendar_date a = add_years_and_months(d, y, m    , true);
                 calendar_date b = add_years_and_months(d, y, m + 1, true);
-                LMI_ASSERT(a <= e    );
-                LMI_ASSERT(     e < b);
+                BOOST_TEST(a <= e    );
+                BOOST_TEST(     e < b);
                 }
                 {
                 std::pair<int,int> ym = years_and_months_since(d, e, false);
@@ -874,8 +873,8 @@ void CalendarDateTest::TestYearAndMonthDifferenceExhaustively()
                 int m = ym.second;
                 calendar_date a = add_years_and_months(d, y, m - 1, true);
                 calendar_date b = add_years_and_months(d, y, m    , true);
-                LMI_ASSERT(a < e     );
-                LMI_ASSERT(    e <= b);
+                BOOST_TEST(a < e     );
+                BOOST_TEST(    e <= b);
                 }
             }
         }
