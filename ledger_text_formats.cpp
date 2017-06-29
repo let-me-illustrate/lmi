@@ -1203,7 +1203,7 @@ std::string ledger_format
 }
 
 std::vector<std::string> ledger_format
-    (std::vector<double>               dv
+    (std::vector<double> const&        dv
     ,std::pair<int,oenum_format_style> f
     )
 {
