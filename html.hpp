@@ -293,6 +293,7 @@ extern attribute const cellspacing;
 extern attribute const colspan;
 extern attribute const nowrap;
 extern attribute const size;
+extern attribute const valign;
 extern attribute const width;
 
 } // namespace attr
