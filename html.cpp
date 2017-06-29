@@ -37,6 +37,7 @@ extern attribute const cellspacing  ("cellspacing");
 extern attribute const colspan      ("colspan");
 extern attribute const nowrap       ("nowrap");
 extern attribute const size         ("size");
+extern attribute const valign       ("valign");
 extern attribute const width        ("width");
 
 } // namespace attr
