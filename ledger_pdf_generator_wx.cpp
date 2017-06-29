@@ -27,10 +27,10 @@
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "force_linking.hpp"
-#include "global_settings.hpp"
 #include "html.hpp"
 #include "interpolate_string.hpp"
 #include "ledger.hpp"
+#include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
 #include "miscellany.hpp"               // lmi_tolower()
 #include "pdf_writer_wx.hpp"
@@ -67,10 +67,9 @@ class html_interpolator
 {
   public:
     // Ctor takes the object used to interpolate the variables not explicitly
-    // defined using add_variable(). Its lifetime must be greater than that of
-    // this object itself.
-    explicit html_interpolator(LedgerInvariant const& invar)
-        :invar_(invar)
+    // defined using add_variable().
+    explicit html_interpolator(ledger_evaluator&& evaluator)
+        :evaluator_(evaluator)
     {
     }
 
@@ -133,6 +132,14 @@ class html_interpolator
             ;
     }
 
+  protected:
+    // Used by derived classes to define variables based on the existing
+    // variables values.
+    std::string evaluate(std::string const& name) const
+    {
+        return evaluator_(name);
+    }
+
   private:
     // The expansion function used with interpolate_string().
     text expand_html(std::string const& s) const
@@ -145,11 +152,11 @@ class html_interpolator
             }
 
         // Then look in the ledger.
-        return text::from(invar_.value_str(s));
+        return text::from(evaluator_(s));
     }
 
     // Object used for variables expansion.
-    LedgerInvariant const& invar_;
+    ledger_evaluator const evaluator_;
 
     // Variables defined for all pages of this illustration.
     std::map<std::string, text> vars_;
@@ -184,7 +191,7 @@ class pdf_illustration : protected html_interpolator
     pdf_illustration(Ledger const& ledger
                     ,fs::path const& output
                     )
-        :html_interpolator(ledger.GetLedgerInvariant())
+        :html_interpolator(ledger.make_evaluator())
         ,writer_(output.string(), wxPORTRAIT, &html_font_sizes)
         ,dc_(writer_.dc())
         ,ledger_(ledger)
@@ -222,40 +229,13 @@ class pdf_illustration : protected html_interpolator
     // Initialize the variables that can be interpolated later.
     void init_variables()
     {
-        std::string lmi_version;
-        calendar_date prep_date;
-
-        // Skip authentication for non-interactive regression testing.
-        if(!global_settings::instance().regression_testing())
-            {
-            lmi_version = LMI_VERSION;
-            authenticate_system();
-            }
-        else
-            {
-            // For regression tests,
-            //   - use an invariant string as version
-            //   - use EffDate as date prepared
-            // in order to avoid gratuitous failures.
-            lmi_version = "Regression testing";
-            prep_date.julian_day_number
-                (static_cast<int>(ledger_.GetLedgerInvariant().EffDateJdn)
-                );
-            }
-
-        add_variable("lmi_version", lmi_version);
         add_variable
             ("date_prepared"
-            , text::from(month_name(prep_date.month()))
+            , text::from(evaluate("PrepMonth"))
             + text::nbsp()
-            + text::from(value_cast<std::string>(prep_date.day()))
+            + text::from(evaluate("PrepDay"))
             + text::from(", ")
-            + text::from(value_cast<std::string>(prep_date.year()))
-            );
-
-        add_variable
-            ("Composite"
-            ,ledger_.is_composite()
+            + text::from(evaluate("PrepYear"))
             );
     }
 
@@ -496,7 +476,7 @@ class page_with_footer : public page
                     (tag::tr
                         (tag::td
                             (interpolate_html
-                                ("System Version: {{lmi_version}}"
+                                ("System Version: {{LmiVersion}}"
                                 )
                             )
                         )
@@ -603,8 +583,6 @@ class narrative_summary_page : public numbered_page
     {
         numbered_page::render(ledger, writer, dc, interpolate_html);
 
-        auto const& invar = ledger.GetLedgerInvariant();
-
         text summary_html =
             tag::p[attr::align("center")]
                 (text::from("NARRATIVE SUMMARY")
@@ -662,7 +640,7 @@ adjustable benefits, and single premium.
 
         summary_html += add_body_paragraph(description);
 
-        if(!invar.IsInforce)
+        if(!interpolate_html.test_variable("IsInforce"))
             {
             summary_html += add_body_paragraph
                 (R"(
