@@ -1208,6 +1208,7 @@ std::vector<std::string> ledger_format
     )
 {
     std::vector<std::string> sv;
+    sv.reserve(dv.size());
     for(auto const& i : dv)
         {
         sv.push_back(ledger_format(i, f));
