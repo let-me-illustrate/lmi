@@ -333,6 +333,7 @@ liblmi_common_sources = \
     interpolate_string.cpp \
     ledger.cpp \
     ledger_base.cpp \
+    ledger_evaluator.cpp \
     ledger_invariant.cpp \
     ledger_pdf.cpp \
     ledger_pdf_generator.cpp \
@@ -1194,6 +1195,7 @@ noinst_HEADERS = \
     istream_to_string.hpp \
     ledger.hpp \
     ledger_base.hpp \
+    ledger_evaluator.hpp \
     ledger_invariant.hpp \
     ledger_pdf.hpp \
     ledger_pdf_generator.hpp \
