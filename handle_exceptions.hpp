@@ -26,7 +26,7 @@
 
 #include "alert.hpp"                    // hobsons_choice_exception, safely_show_message()
 
-#include <cstdlib>                      // std::exit()
+#include <cstdlib>                      // exit()
 #include <exception>
 #include <stdexcept>
 

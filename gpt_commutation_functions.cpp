@@ -28,8 +28,8 @@
 #include "et_vector.hpp"
 #include "miscellany.hpp"               // minmax
 
-#include <algorithm>                    // std::min_element()
-#include <numeric>                      // std::partial_sum()
+#include <algorithm>                    // min_element()
+#include <numeric>                      // partial_sum()
 #include <stdexcept>
 
 namespace

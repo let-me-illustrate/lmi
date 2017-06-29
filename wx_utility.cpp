@@ -40,7 +40,7 @@
 #include <wx/utils.h>                   // wxSafeYield()
 #include <wx/window.h>
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <sstream>
 
 /// Return whatever plain text the clipboard contains, or an empty

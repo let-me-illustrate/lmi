@@ -49,6 +49,7 @@ $(zlib_version).tar.gz: host_path :=
 mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
+exec_prefix   := $(prefix)
 
 cache_dir     := /cache_for_lmi/downloads
 
@@ -79,7 +80,9 @@ endif
 # that it builds; apparently that doesn't matter because libxml2
 # doesn't link it explicitly.
 
-$(zlib_version)_options :=
+$(zlib_version)_options := \
+  --prefix=$(prefix) \
+  --eprefix=$(exec_prefix) \
 
 $(zlib_version)_overrides := \
   LDSHARED='gcc -shared -Wl,--out-implib,libz1.dll.a' \
@@ -97,6 +100,8 @@ $(zlib_version)_overrides := \
 #   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
 
 xmlsoft_common_options := \
+  --prefix=$(prefix) \
+  --exec-prefix=$(exec_prefix) \
   --build=$(build_type) \
   --host=$(host_type) \
   --disable-dependency-tracking \
@@ -113,9 +118,15 @@ $(libxml2_version)_options := \
   --without-modules \
   --without-schematron \
 
+# The '--with-libxml-prefix' option is documented thus:
+#   "Specify location of libxml config"
+# and libxml2 installs 'xml2-config' under its own $exec_prefix if
+# that differs from its own $prefix. It would seem clearer if this
+# libxslt option were named '--with-libxml-exec-prefix'.
+
 $(libxslt_version)_options := \
   $(xmlsoft_common_options) \
-  --with-libxml-prefix=$(prefix) \
+  --with-libxml-prefix=$(exec_prefix) \
   --without-crypto \
 
 # Utilities ####################################################################
@@ -132,7 +143,7 @@ WGET   := wget
 # Targets ######################################################################
 
 .PHONY: all
-all: clobber $(source_archives) $(libraries)
+all: clobber_exec_prefix_only $(source_archives) $(libraries)
 
 # Order-only prerequisites.
 
@@ -140,11 +151,12 @@ $(libxml2_version):| $(zlib_version)
 $(libxslt_version):| $(libxml2_version)
 $(libraries)      :| $(source_archives)
 $(source_archives):| initial_setup
-initial_setup     :| clobber
+initial_setup     :| clobber_exec_prefix_only
 
 .PHONY: initial_setup
 initial_setup:
 	$(MKDIR) --parents $(prefix)
+	$(MKDIR) --parents $(exec_prefix)
 	$(MKDIR) --parents $(cache_dir)
 	$(MKDIR) --parents $(xml_dir)
 
@@ -179,15 +191,29 @@ $(libraries):
 	-[ -e $@-lmi.patch ] && $(PATCH) --directory=$(xml_dir) --strip=1 <$@-lmi.patch
 	cd $(xml_dir)/$@ \
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
-	  && $($@_overrides) ./configure --prefix=$(prefix) $($@_options) \
+	  && $($@_overrides) ./configure $($@_options) \
 	  && $(MAKE) \
 	  && $(MAKE) install \
 
-.PHONY: clobber
-clobber:
-	-for z in $(libraries); \
-	  do \
-	    cd $(xml_dir)/$$z && $(MAKE) uninstall maintainer-clean; \
-	    $(RM) --recursive $(xml_dir)/$$z; \
-	  done;
+# Nonchalantly remove pkgconfig and cmake subdirectories, even though
+# other libraries might someday write files in them, because lmi never
+# uses them.
+
+.PHONY: clobber_exec_prefix_only
+clobber_exec_prefix_only:
+	-$(RM) --force --recursive $(exec_prefix)/bin/*xml2*
+	-$(RM) --force --recursive $(exec_prefix)/bin/*xslt*
+	-$(RM) --force --recursive $(exec_prefix)/bin/xmllint*
+	-$(RM) --force --recursive $(exec_prefix)/bin/xmlcatalog*
+	-$(RM) --force --recursive $(exec_prefix)/include/libxml2
+	-$(RM) --force --recursive $(exec_prefix)/include/libxslt
+	-$(RM) --force --recursive $(exec_prefix)/include/libexslt
+	-$(RM) --force --recursive $(exec_prefix)/include/zconf.h
+	-$(RM) --force --recursive $(exec_prefix)/include/zlib.h
+	-$(RM) --force --recursive $(exec_prefix)/lib/*xml2*
+	-$(RM) --force --recursive $(exec_prefix)/lib/*xslt*
+	-$(RM) --force --recursive $(exec_prefix)/lib/libz*
+	-$(RM) --force --recursive $(exec_prefix)/lib/cmake
+	-$(RM) --force --recursive $(exec_prefix)/lib/pkgconfig
+	-$(RM) --force --recursive $(xml_dir)
 

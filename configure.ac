@@ -232,66 +232,7 @@ if test "$profiling_option" = "yes"; then
     LDFLAGS="$LDFLAGS $PROFILING_FLAG"
 fi
 
-dnl === Checks for standard headers/functions ===
-
-AC_CHECK_HEADERS(curses.h)
-if test "$ac_cv_header_curses_h" != "yes"; then
-    AC_CHECK_HEADERS(conio.h)
-    if test "$ac_cv_header_conio_h" != "yes"; then
-        AC_MSG_FAILURE([Header for getch() not found: neither curses.h nor conio.h are available.])
-    fi
-fi
-
-dnl the functions below are typically found in libm and not libc so make sure
-dnl we look there
-AC_SEARCH_LIBS([log10l], [m],
-    [AC_DEFINE(HAVE_LOG10L, [1], [Define this if you have log10l function])]
-)
-AC_SEARCH_LIBS([fabsl], [m],
-    [AC_DEFINE(HAVE_FABSL, [1], [Define this if you have fabsl function])]
-)
-
-dnl check for snprintf: note that when compiling under gcc using -std= flag the
-dnl standard headers do not declare snprintf() and this is why we don't use
-dnl the usual AC_CHECK_FUNCS but reproduce the same workaround as used in
-dnl platform_dependent.hpp (see comment there) which makes it possible to
-dnl detect this function in all cases
-AC_CACHE_CHECK([for snprintf],
-    lmi_cv_func_snprintf,
-    [
-        AC_LINK_IFELSE([AC_LANG_PROGRAM(
-                [[
-                #if defined __GNUC__ && defined __STRICT_ANSI__
-                #   undef __STRICT_ANSI__
-                #endif
-                #include <stdio.h>]],
-                [[
-                char buf[1];
-                return snprintf(buf, 1, "%i", 0);
-                ]]
-            )],
-            lmi_cv_func_snprintf=yes,
-            lmi_cv_func_snprintf=no
-        )
-    ]
-)
-if test "x$lmi_cv_func_snprintf" = "xyes"; then
-    AC_DEFINE([HAVE_SNPRINTF], [1], [Define this if you have snprintf function])
-else
-    dnl TODO: for MSVC support we should check for _snprintf()
-    AC_MSG_FAILURE([The snprintf() function not found on your system])
-fi
-
-AM_CONDITIONAL(HAVE_SNPRINTF, [test "x$lmi_cv_func_snprintf" == "xyes"])
 AM_CONDITIONAL(LMI_WITH_CGI, [test "x$lmi_cgicc_option" == "xyes"])
-
-dnl existing code already uses these macros so continue to use them instead of
-dnl the usual HAVE_EXPM1/HAVE_LOG1P
-AC_CHECK_FUNC(strtof, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOF, [1], [Define this if you have strtof() function]))
-AC_CHECK_FUNC(strtold, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOLD, [1], [Define this if you have strtold() function]))
-AC_CHECK_FUNC(expm1l, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1L, [1], [Define this if you have expm1l() function]))
-AC_CHECK_FUNC(log1pl, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1PL, [1], [Define this if you have log1pl() function]))
-AC_CHECK_FUNC(rint, AC_DEFINE(LMI_COMPILER_PROVIDES_RINT, [1], [Define this if you have rint() function]))
 
 dnl === Library checks ===
 
@@ -606,7 +547,7 @@ if test "x$GXX" == "xyes"; then
     dnl about "-funit-at-a-time is required for inlining of functions that are
     dnl only called once" in debug builds
     dnl
-    dnl NB: this is needed for expm1.c so we must add it to CFLAGS too
+    dnl NB: this is needed for any '*.c' so we must add it to CFLAGS too
     if test "$CLANG" != "yes"; then
         LMI_C_CXX_ADD_IF_SUPPORTED(-fno-inline-functions-called-once)
     fi

@@ -46,9 +46,9 @@
 #if defined BOOST_MSVC || defined __BORLANDC__
 #   include <cfloat>                    // floating-point hardware control
 #endif // defined BOOST_MSVC || defined __BORLANDC__
-#include <cstdio>                       // std::remove()
+#include <cstdio>                       // remove()
 #include <fstream>
-#include <functional>                   // std::bind()
+#include <functional>                   // bind()
 #include <ios>
 #include <string>
 

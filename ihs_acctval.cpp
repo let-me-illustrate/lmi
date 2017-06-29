@@ -48,8 +48,8 @@
 
 #include <algorithm>
 #include <cmath>
-#include <functional>                   // std::bind() et al.
-#include <iterator>                     // std::back_inserter()
+#include <functional>                   // bind() et al.
+#include <iterator>                     // back_inserter()
 #include <limits>
 #include <numeric>
 #include <string>
@@ -163,6 +163,8 @@ AccountValue::AccountValue(Input const& input)
             ,yare_input_.NumberOfIdenticalLives
             );
         }
+
+    set_list_bill_year_and_month();
 
     OverridingEePmts    .resize(12 * BasicValues::GetLength());
     OverridingErPmts    .resize(12 * BasicValues::GetLength());
@@ -973,20 +975,15 @@ void AccountValue::InitializeSpecAmt()
         }
     else
         {
-        InvariantValues().EeModalMinimumPremium[Year] = GetModalPremMlyDedEe
-            (Year
-            ,InvariantValues().ErMode[Year].value()
-            ,InvariantValues().TermSpecAmt[Year]
-            );
-        InvariantValues().ErModalMinimumPremium[Year] = GetModalPremMlyDedEr
+        auto const z = GetModalPremMlyDedEx
             (Year
             ,InvariantValues().ErMode[Year].value()
             ,InvariantValues().SpecAmt[Year]
+            ,InvariantValues().TermSpecAmt[Year]
             );
-        InvariantValues().ModalMinimumPremium[Year] =
-              InvariantValues().EeModalMinimumPremium[Year]
-            + InvariantValues().ErModalMinimumPremium[Year]
-            ;
+        InvariantValues().EeModalMinimumPremium[Year] = z.first;
+        InvariantValues().ErModalMinimumPremium[Year] = z.second;
+        InvariantValues().ModalMinimumPremium[Year] = z.first + z.second;
         }
 
     // No-lapse premium generally changes whenever specamt changes for
@@ -1129,6 +1126,83 @@ double AccountValue::ModalMinInitPremShortfall() const
     else
         {
         return 0.0;
+        }
+}
+
+/// Set duration at which list-bill premium is to be determined.
+///
+/// The year and month of determination correspond to the first
+/// monthiversary on or after the list-bill date. If there is no
+/// such monthiversary, then harmless default values are used.
+
+void AccountValue::set_list_bill_year_and_month()
+{
+    auto const& cert_date = yare_input_.EffectiveDate;
+    auto const& bill_date = yare_input_.ListBillDate;
+    if(bill_date < cert_date) return;
+
+    auto const z = years_and_months_since(cert_date, bill_date, false);
+    list_bill_year_   = z.first;
+    list_bill_month_  = z.second;
+
+    if(!contains(yare_input_.Comments, "idiosyncrasyL")) return;
+
+    // Temporary supplemental code for acceptance testing.
+    auto const a = add_years_and_months(cert_date, z.first, z.second, true);
+    int const inforce_months_mod_12 = z.second;
+    // Number of delta months in the twelvemonth starting on bill date.
+    int const months_ante = 12 - inforce_months_mod_12;
+    warning()
+        << yare_input_.EffectiveDate.str() << " yare_input_.EffectiveDate\n"
+        << yare_input_.ListBillDate.str() << " yare_input_.ListBillDate\n"
+        << list_bill_year_ << " list_bill_year_\n"
+        << list_bill_month_ << " list_bill_month_\n"
+        << a.str() << " a = premium determination date\n"
+        << months_ante << " months_ante\n"
+        << "List-bill premium will be set in monthiversary processing on "
+        << a.str() << ", which is "
+        << list_bill_year_ << " years and " << list_bill_month_ << " months"
+        << " after the issue date. An annual-mode list bill will reflect this"
+        << " premium for "
+        << months_ante << " months,"
+        << " and a premium determined on the same date but at the next higher"
+        << " age for "
+        << (12 - months_ante) << " months. Other modes will use an appropriate"
+        << " number of initial elements of that twelve-month premium stream."
+        << LMI_FLUSH;
+}
+
+void AccountValue::set_list_bill_premium()
+{
+    bool const the_time_is_now =
+           Year  == list_bill_year_
+        && Month == list_bill_month_
+        && mce_run_gen_curr_sep_full == RunBasis_
+        ;
+    if(!the_time_is_now) return;
+
+    if(!SplitMinPrem)
+        {
+        InvariantValues().ListBillPremium = GetListBillPremMlyDed
+            (Year
+            ,InvariantValues().ErMode[Year].value()
+            ,InvariantValues().SpecAmt[Year]
+            );
+        InvariantValues().ErListBillPremium =
+            InvariantValues().ListBillPremium
+            ;
+        }
+    else
+        {
+        auto const z = GetListBillPremMlyDedEx
+            (Year
+            ,InvariantValues().ErMode[Year].value()
+            ,InvariantValues().SpecAmt[Year]
+            ,InvariantValues().TermSpecAmt[Year]
+            );
+        InvariantValues().EeListBillPremium = z.first;
+        InvariantValues().ErListBillPremium = z.second;
+        InvariantValues().ListBillPremium = z.first + z.second;
         }
 }
 

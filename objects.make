@@ -204,7 +204,6 @@ common_common_objects := \
   dbvalue.o \
   death_benefits.o \
   emit_ledger.o \
-  expm1.o \
   facets.o \
   fenv_guard.o \
   fenv_lmi.o \
@@ -281,6 +280,7 @@ lmi_common_objects := \
   $(common_common_objects) \
   authenticity.o \
   commutation_functions.o \
+  financial.o \
   fund_data.o \
   gpt_input.o \
   gpt_server.o \
@@ -556,7 +556,6 @@ commutation_functions_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
   commutation_functions_test.o \
-  expm1.o \
   timer.o \
 
 configurable_settings_test$(EXEEXT): \
@@ -609,7 +608,9 @@ file_command_test$(EXEEXT): \
 
 financial_test$(EXEEXT): \
   $(common_test_objects) \
+  calendar_date.o \
   facets.o \
+  financial.o \
   financial_test.o \
   null_stream.o \
   stratified_algorithms.o \
@@ -632,7 +633,6 @@ global_settings_test$(EXEEXT): \
 gpt_test$(EXEEXT): \
   $(common_test_objects) \
   commutation_functions.o \
-  expm1.o \
   gpt_commutation_functions.o \
   gpt_test.o \
   ihs_irc7702.o \
@@ -668,7 +668,6 @@ input_test$(EXEEXT): \
   dbdict.o \
   dbnames.o \
   dbvalue.o \
-  expm1.o \
   facets.o \
   global_settings.o \
   input.o \
@@ -716,7 +715,6 @@ istream_to_string_test$(EXEEXT): \
 
 loads_test$(EXEEXT): \
   $(common_test_objects) \
-  expm1.o \
   loads.o \
   loads_test.o \
   timer.o \
@@ -731,7 +729,6 @@ materially_equal_test$(EXEEXT): \
 
 math_functors_test$(EXEEXT): \
   $(common_test_objects) \
-  expm1.o \
   math_functors_test.o \
   timer.o \
 
@@ -757,7 +754,6 @@ miscellany_test$(EXEEXT): \
 
 mortality_rates_test$(EXEEXT): \
   $(common_test_objects) \
-  expm1.o \
   ihs_mortal.o \
   mortality_rates_test.o \
 
@@ -830,7 +826,6 @@ product_file_test$(EXEEXT): \
   dbdict.o \
   dbnames.o \
   dbvalue.o \
-  expm1.o \
   facets.o \
   fund_data.o \
   global_settings.o \
@@ -1003,7 +998,7 @@ rate_table_tool$(EXEEXT): \
   rate_table.o \
   rate_table_tool.o \
 
-test_coding_rules_test := PERFORM=$(PERFORM) $(src_dir)/test_coding_rules_test.sh
+test_coding_rules_test := PERFORM=$(PERFORM) $(srcdir)/test_coding_rules_test.sh
 test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
 test_coding_rules$(EXEEXT): \
   $(boost_common_objects) \

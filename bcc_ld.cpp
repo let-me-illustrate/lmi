@@ -45,7 +45,7 @@
 #include <fstream>
 #include <ios>
 #include <iostream>
-#include <iterator>                     // std::ostream_iterator
+#include <iterator>                     // ostream_iterator
 #include <ostream>
 #include <sstream>
 #include <string>

@@ -37,11 +37,12 @@
 #include "fenv_lmi.hpp"
 #include "test_tools.hpp"
 
-#include <algorithm>                    // std::max()
-#include <cstddef>                      // std::size_t
+#include <algorithm>                    // max()
+#include <cmath>                        // round()
+#include <cstddef>                      // size_t
 #include <ios>
 #include <iostream>
-#include <math.h>                       // C99 round() and kin
+#include <math.h>                       // ::round[,f,l]() and kin
 #include <ostream>
 
 // Print name of software rounding style for diagnostics.
@@ -170,6 +171,13 @@ void print_hex_val(T t, char const* name)
   std::cout << std::dec << std::endl;
 // GWC modifications end
 }
+
+/// Emulate std::round() in order to test it. This may seem somewhat
+/// silly, because elsewhere a conforming C++11 implementation is
+/// presumed. However, std::round() calls for extraordinary testing
+/// because its MinGW-w64 CRT implementation is known to be defective,
+/// so it is not to be assumed that its C++ overloads are flawless
+/// (even though they probably come from an unmarred libstdc++).
 
 template<typename T> T roundFDL(T) {throw std::domain_error("Unknown float type.");}
 template<> float       roundFDL<float      >(float       t) {return roundf(t);}

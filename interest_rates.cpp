@@ -32,9 +32,9 @@
 #include "miscellany.hpp"               // each_equal()
 #include "yare_input.hpp"
 
-#include <algorithm>                    // std::max(), std::copy()
+#include <algorithm>                    // max(), copy()
 #include <functional>
-#include <iterator>                     // std::back_inserter()
+#include <iterator>                     // back_inserter()
 
 // TODO ?? Future enhancements:
 //
@@ -95,8 +95,8 @@ namespace
 // For the annual-effective method, transformation from annual to
 // daily and back again by naive methods would lose considerable
 // precision even when the spread and fee are zero, because i is
-// small relative to (1 + i). That is why expm1l() and log1pl() are
-// used instead of pow().
+// small relative to (1 + i). That is why std::expm1() and
+// std::log1p() are used instead of std::pow().
 //
 // If both spread and fee are zero, then the net rate should exactly
 // equal the gross rate. However, those two rates would differ

@@ -41,9 +41,9 @@
 #include "outlay.hpp"
 #include "zero.hpp"
 
-#include <algorithm>                    // std::min(), std::max()
+#include <algorithm>                    // min(), max()
 #include <functional>
-#include <numeric>                      // std::accumulate()
+#include <numeric>                      // accumulate()
 
 namespace
 {

@@ -28,7 +28,7 @@
 
 #include <boost/operators.hpp>
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <deque>
 #include <string>
 #include <type_traits>

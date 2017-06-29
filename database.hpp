@@ -29,7 +29,7 @@
 #include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
 
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
 #include <vector>
 

@@ -29,8 +29,8 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <algorithm>                    // std::min()
-#include <cmath>                        // std::pow()
+#include <algorithm>                    // min()
+#include <cmath>                        // isnan(), pow()
 #include <functional>
 #include <iomanip>
 #include <limits>
@@ -42,17 +42,6 @@
 
 namespace
 {
-/// C99's isnan macro can't be written correctly in portable C++.
-/// This implementation is portable, but compilers needn't implement
-/// it correctly.
-
-template<typename T>
-bool lmi_isnan(T t)
-{
-    T volatile t0(t);
-    return t0 != t0;
-}
-
 // These naive implementations in terms of std::pow() are slower and
 // less accurate than those in the header tested here.
 
@@ -136,6 +125,30 @@ struct coi_rate_from_q_naive
             }
         }
 };
+
+template<typename T, int n>
+struct i_upper_n_over_n_from_i_naive
+{
+    static_assert(std::is_floating_point<T>::value, "");
+    T operator()(T const& i) const
+        {
+        return T(-1) + std::pow((T(1) + i), T(1) / n);
+        }
+};
+
+// This implementation uses std::expm1() and std::log1p() for type T,
+// rather than the long double functions used in production.
+
+template<typename T, int n>
+struct i_upper_n_over_n_from_i_T
+{
+    static_assert(std::is_floating_point<T>::value, "");
+    T operator()(T const& i) const
+        {
+        static T const reciprocal_n = T(1) / n;
+        return std::expm1(std::log1p(i) * reciprocal_n);
+        }
+};
 } // Unnamed namespace.
 
 /// This function isn't a unit test per se. Its purpose is to show
@@ -151,27 +164,31 @@ struct coi_rate_from_q_naive
 void sample_results()
 {
     fenv_initialize();
+    std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    std::cout.precision(25);
+    std::cout
+        << "\n  daily rate corresponding to 1% annual interest"
+        << ", by various methods\n"
+        << "    method in production\n      "
+        << i_upper_n_over_n_from_i      <long double,365>()(0.01) << '\n'
+        ;
 #if defined LMI_X87
     fenv_precision(fe_ldblprec);
     std::cout
-        << "\n  annual rate corresponding to a 0.004 daily spread"
-        << ", by various methods\n"
-        << std::setprecision(20)
-        << "    long double precision, expm1l and log1pl\n      "
-        << net_i_from_gross<double,365>()(0.0, 0.004, 0.0) << '\n'
-        << "    long double precision, pow\n      "
-        << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
+        << "    long double precision, std::expm1 and std::log1p\n      "
+        << i_upper_n_over_n_from_i_T    <long double,365>()(0.01) << '\n'
+        << "    long double precision, std::pow\n      "
+        << i_upper_n_over_n_from_i_naive<long double,365>()(0.01) << '\n'
         ;
 
     fenv_initialize();
     fenv_precision(fe_dblprec);
 #endif // defined LMI_X87
     std::cout
-        << std::setprecision(20)
-        << "    double precision, expm1l and log1pl\n      "
-        << net_i_from_gross<double,365>      ()(0.0, 0.004, 0.0) << '\n'
-        << "    double precision, pow\n      "
-        << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
+        << "    double precision, std::expm1 and std::log1p\n      "
+        << i_upper_n_over_n_from_i_T    <double,365>()(0.01) << '\n'
+        << "    double precision, std::pow\n      "
+        << i_upper_n_over_n_from_i_naive<double,365>()(0.01) << '\n'
         ;
 
     fenv_initialize();
@@ -181,7 +198,7 @@ void sample_results()
 // different implementations.
 
 // This implementation naively uses std::pow(); it is both slower and
-// less inaccurate than an alternative using expm1l() and log1pl().
+// less inaccurate than an alternative using std::expm1() and std::log1p().
 void mete0()
 {
     double volatile x;
@@ -205,8 +222,8 @@ void mete1()
 
 void assay_speed()
 {
-    std::cout << "  Speed test: pow   \n    " << TimeAnAliquot(mete0) << '\n';
-    std::cout << "  Speed test: expm1l\n    " << TimeAnAliquot(mete1) << '\n';
+    std::cout << "  Speed test: std::pow  \n    " << TimeAnAliquot(mete0) << '\n';
+    std::cout << "  Speed test: std::expm1\n    " << TimeAnAliquot(mete1) << '\n';
 }
 
 int test_main(int, char*[])
@@ -265,7 +282,7 @@ int test_main(int, char*[])
 
     // Test nonsensical interest rate of -101%.
 
-    BOOST_TEST(lmi_isnan(i_upper_12_over_12_from_i_naive<double>()(-1.01)));
+    BOOST_TEST(std::isnan(i_upper_12_over_12_from_i_naive<double>()(-1.01)));
     BOOST_TEST_THROW
         (i_upper_12_over_12_from_i<double>()(-1.01)
         ,std::domain_error

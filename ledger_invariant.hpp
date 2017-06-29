@@ -150,6 +150,9 @@ class LMI_SO LedgerInvariant
     double          InitGLP;
     double          InitTgtPrem;
     double          InitMinPrem;
+    double          ListBillPremium;
+    double          EeListBillPremium;
+    double          ErListBillPremium;
     double          ModalMinimumDumpin;
     double          Dumpin;
     double          External1035Amount;
@@ -201,6 +204,7 @@ class LMI_SO LedgerInvariant
     double          Has1035ExchCharge;
     double          EffDateJdn;
     double          DateOfBirthJdn;
+    double          ListBillDateJdn;
     double          InforceAsOfDateJdn;
     double          SplitFundAllocation;
     double          GenAcctAllocation;
@@ -385,6 +389,7 @@ class LMI_SO LedgerInvariant
     // JDNs are used in UpdateCRC() and Spew().
     std::string     EffDate;
     std::string     DateOfBirth;
+    std::string     ListBillDate;
     std::string     InforceAsOfDate;
 
     // Arguably enumerative members such as 'ErMode' should be of type

@@ -49,9 +49,9 @@
 #include <wx/valtext.h>
 #include <wx/wupdlock.h>
 
-#include <algorithm>                    // std::copy()
+#include <algorithm>                    // copy()
 #include <exception>
-#include <iterator>                     // std::back_inserter()
+#include <iterator>                     // back_inserter()
 #include <map>
 #include <vector>
 

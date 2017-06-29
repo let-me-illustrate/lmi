@@ -32,7 +32,7 @@
 #include <wx/mimetype.h>
 #include <wx/utils.h>                   // wxExecute()
 
-#include <memory>                       // std::unique_ptr
+#include <memory>                       // unique_ptr
 
 LMI_FORCE_LINKING_IN_SITU(file_command_wx)
 

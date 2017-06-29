@@ -139,6 +139,20 @@ all: boost cgicc fop jing md5sum_msw sample trang xmlwrapp
 #   cd /tmp
 #   diff --recursive --unified=3 original modified >foo.patch
 #   patch --strip=1 --dry-run --directory=/wherever/scratch </tmp/foo.patch
+#
+# For example, to update the cgicc patch with additional changes:
+#   pushd /tmp
+#   mkdir original
+#   mkdir modified
+#   cd /tmp/original && tar -xjvf /cache_for_lmi/downloads/cgicc-3.1.4.tar.bz2
+#   cd /tmp/modified && tar -xjvf /cache_for_lmi/downloads/cgicc-3.1.4.tar.bz2
+# Patch first with '--dry-run' to be sure, then for real:
+#   patch --strip=1 --dry-run </opt/lmi/src/lmi/cgicc-3.1.4.patch
+#   patch --strip=1 </opt/lmi/src/lmi/cgicc-3.1.4.patch
+# Modify files in the "modified" directory, then:
+#   cd /tmp
+#   diff --recursive --unified=3 original modified >cgicc-3.1.4.patch
+#   patch --strip=1 --dry-run --directory=original </tmp/cgicc-3.1.4.patch
 
 # For some targets,
 #  - fresh md5sums are generated, then

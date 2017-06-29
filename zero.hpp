@@ -26,8 +26,8 @@
 
 #include "null_stream.hpp"
 #include "round_to.hpp"
-#include "value_cast.hpp"
 
+#include <cfloat>                       // DECIMAL_DIG
 #include <cmath>
 #include <limits>
 #include <ostream>
@@ -60,7 +60,7 @@ typedef std::pair<double,root_validity> root_type;
 /// of a true zero.
 ///
 /// Brent's algorithm with GWC modifications described below. See:
-/// R. P. Brent, _Algorithms for Minization without Derivatives_
+/// R. P. Brent, _Algorithms for Minimization without Derivatives_
 /// ISBN 0-13-022335-2
 ///
 /// Rationale for choice of algorithm
@@ -178,7 +178,7 @@ typedef std::pair<double,root_validity> root_type;
 /// 0.5 * (b + c) is not necessarily correct either, because its bias
 /// is unknown; yet is it appropriate to return c instead?
 ///
-/// The bias of c must be correct becaue f(b) and f(c) are known to
+/// The bias of c must be correct because f(b) and f(c) are known to
 /// have different signs. And c is within Brent's tolerance in the weak
 /// sense of his variable tol, which is a worst-case guarantee that
 /// applies to c as well as b. To see why, suppose the algorithm is
@@ -241,6 +241,8 @@ root_type decimal_root
     ,std::ostream&   iteration_stream       = null_stream()
     )
 {
+    iteration_stream.precision(DECIMAL_DIG);
+
     static double const epsilon = std::numeric_limits<double>::epsilon();
 
     int number_of_iterations = 0;
@@ -253,24 +255,30 @@ root_type decimal_root
     double b = round_(bound1);
 
     double fa = static_cast<double>(f(a));
-    iteration_stream
-        << "iteration " << number_of_iterations++
-        << " iterand "  << value_cast<std::string>(a)
-        << " value "    << value_cast<std::string>(fa)
-        << std::endl
-        ;
+    if(iteration_stream.good())
+        {
+        iteration_stream
+            << "iteration " << number_of_iterations++
+            << " iterand "  << a
+            << " value "    << fa
+            << std::endl
+            ;
+        }
     if(0.0 == fa)
         {
         return std::make_pair(a, root_is_valid);
         }
 
     double fb = static_cast<double>(f(b));
-    iteration_stream
-        << "iteration " << number_of_iterations++
-        << " iterand "  << value_cast<std::string>(b)
-        << " value "    << value_cast<std::string>(fb)
-        << std::endl
-        ;
+    if(iteration_stream.good())
+        {
+        iteration_stream
+            << "iteration " << number_of_iterations++
+            << " iterand "  << b
+            << " value "    << fb
+            << std::endl
+            ;
+        }
     double last_evaluated_iterand = b; // Note 1.
     if(0.0 == fb)
         {
@@ -399,12 +407,15 @@ root_type decimal_root
             {
             fb = static_cast<double>(f(b));
             last_evaluated_iterand = b;
-            iteration_stream
-                << "iteration " << number_of_iterations++
-                << " iterand "  << value_cast<std::string>(b)
-                << " value "    << value_cast<std::string>(fb)
-                << std::endl
-                ;
+            if(iteration_stream.good())
+                {
+                iteration_stream
+                    << "iteration " << number_of_iterations++
+                    << " iterand "  << b
+                    << " value "    << fb
+                    << std::endl
+                    ;
+                }
             }
         }
 }

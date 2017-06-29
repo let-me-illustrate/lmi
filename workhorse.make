@@ -60,22 +60,22 @@ all: effective_default_target
 
 # Don't remake this file.
 
-$(src_dir)/workhorse.make:: ;
+$(srcdir)/workhorse.make:: ;
 
 # Configuration.
 
-include $(src_dir)/configuration.make
-$(src_dir)/configuration.make:: ;
+include $(srcdir)/configuration.make
+$(srcdir)/configuration.make:: ;
 
 # Automatic dependencies.
 
-include $(src_dir)/autodependency.make
-$(src_dir)/autodependency.make:: ;
+include $(srcdir)/autodependency.make
+$(srcdir)/autodependency.make:: ;
 
 # Objects.
 
-include $(src_dir)/objects.make
-$(src_dir)/objects.make:: ;
+include $(srcdir)/objects.make
+$(srcdir)/objects.make:: ;
 
 ################################################################################
 
@@ -159,16 +159,7 @@ endif
 
 wx_dir := /opt/lmi/local/bin
 
-# Use our '-portable' script if it exists; else fall back on the
-# script wx provides.
-
-wx_config_script := \
-  $(firstword \
-    $(wildcard \
-      $(addprefix $(wx_dir)/,wx-config-portable wx-config \
-      ) \
-    ) \
-  )
+wx_config_script := wx-config
 
 # The conventional autotools usage...
 ifeq (gcc,$(toolset))
@@ -176,8 +167,7 @@ ifeq (gcc,$(toolset))
   wx_config_libs     := $(shell $(wx_config_script) --libs)
   wx_config_basename := $(shell $(wx_config_script) --basename)
   wx_config_version  := $(shell $(wx_config_script) --version)
-
-  # Define the variables used to construct the names of wxCode libraries.
+  # [variables used to construct the names of wxCode libraries]
   wxcode_basename := $(shell echo $(wx_config_basename) | sed 's/^wx/wxcode/')
   wxcode_version  := $(shell echo $(wx_config_version) | sed 's/\.[0-9]*$$//')
 endif
@@ -292,8 +282,8 @@ wx_config_check:
 
 all_include_directories := \
   . \
-  $(src_dir) \
-  $(src_dir)/tools/pete-2.1.1 \
+  $(srcdir) \
+  $(srcdir)/tools/pete-2.1.1 \
   $(overriding_include_directories) \
   $(compiler_include_directory) \
   $(wx_include_paths) \
@@ -303,7 +293,7 @@ all_include_directories := \
   /opt/lmi/local/include/libxml2 \
 
 all_source_directories := \
-  $(src_dir) \
+  $(srcdir) \
   /opt/lmi/third_party/src/boost/libs/filesystem/src \
   /opt/lmi/third_party/src/boost/libs/regex/src \
   /opt/lmi/third_party/src/boost/libs/system/src \
@@ -316,7 +306,7 @@ vpath %.o             $(CURDIR)
 # which are overridden by any customized files found in a special
 # directory.
 
-vpath my_%.cpp        $(src_dir)/../products/src
+vpath my_%.cpp        $(srcdir)/../products/src
 
 vpath %.c             $(all_source_directories)
 vpath %.cpp           $(all_source_directories)
@@ -326,10 +316,10 @@ vpath %.tpp           $(all_source_directories)
 vpath %.xpp           $(all_source_directories)
 
 vpath %.rc            $(all_source_directories)
-vpath %.ico           $(src_dir)
+vpath %.ico           $(srcdir)
 
-vpath quoted_gpl      $(src_dir)
-vpath quoted_gpl_html $(src_dir)
+vpath quoted_gpl      $(srcdir)
+vpath quoted_gpl_html $(srcdir)
 
 ################################################################################
 
@@ -348,7 +338,7 @@ physical_closure_files := \
       $(filter-out config_%.hpp pchlist%.hpp,\
         $(notdir \
           $(wildcard \
-            $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
+            $(addprefix $(srcdir)/,*.h *.hpp *.tpp *.xpp \
             ) \
           ) \
         ) \
@@ -894,40 +884,67 @@ lmi_msw_res.o: lmi.ico
 # different build_types and picking the latest version of each
 # component can produce a mismatched set.
 
-# SOMEDAY !! Follow the GNU Coding Standards more closely, writing
-#   bindir datadir srcdir
-# all with no '_', and changing the value of $(data_dir).
+# SOMEDAY !! Follow the GNU Coding Standards
+#   https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
+# more closely, changing the value of $(datadir), and perhaps using
+# some other standard directories that are commented out for now.
 
 prefix         := /opt/lmi
+# parent directory for machine-specific binaries
 exec_prefix    := $(prefix)
-bin_dir        := $(exec_prefix)/bin
-data_dir       := $(exec_prefix)/data
+# binaries that users can run
+bindir         := $(exec_prefix)/bin
+# binaries that administrators can run
+#sbindir        := $(exec_prefix)/sbin
+# binaries run by programs
+#libexecdir     := $(exec_prefix)/libexec
+# parent directory for read-only architecture-independent data files
 datarootdir    := $(prefix)/share
+# idiosyncratic read-only architecture-independent data files
+# GNU standard default:
+# datadir        := $(datarootdir)
+# nonstandard value used for now:
+datadir        := $(exec_prefix)/data
+# read-only data files that pertain to a single machine
+#sysconfdir     := $(prefix)/etc
+# architecture-independent data files which the programs modify while they run
+#sharedstatedir := $(prefix)/com
+# data files which the programs modify while they run
+#localstatedir  := $(prefix)/var
+# data files which the programs modify while they run, persisting until reboot
+#runstatedir    := $(localstatedir)/run
+# headers
+#includedir     := $(prefix)/include
 docdir         := $(datarootdir)/doc/lmi
 htmldir        := $(docdir)
+#libdir         := $(exec_prefix)/lib
+# srcdir: set to $(CURDIR) upstream; no GNU default value
+
+# no GNU standard for 'test' or 'touchstone': directory names therefore
+# contain '_' for distinction and clarity
 test_dir       := $(exec_prefix)/test
 touchstone_dir := $(exec_prefix)/touchstone
 
 data_files := \
-  $(wildcard $(addprefix $(src_dir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
+  $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
 
 help_files := \
-  $(wildcard $(addprefix $(src_dir)/,*.html)) \
+  $(wildcard $(addprefix $(srcdir)/,*.html)) \
 
 .PHONY: install
 install: $(default_targets)
 	+@[ -d $(exec_prefix)    ] || $(MKDIR) --parents $(exec_prefix)
-	+@[ -d $(bin_dir)        ] || $(MKDIR) --parents $(bin_dir)
-	+@[ -d $(data_dir)       ] || $(MKDIR) --parents $(data_dir)
+	+@[ -d $(bindir)         ] || $(MKDIR) --parents $(bindir)
+	+@[ -d $(datadir)        ] || $(MKDIR) --parents $(datadir)
 	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
-	@$(CP) --preserve --update $^ $(bin_dir)
-	@$(CP) --preserve --update $(data_files) $(data_dir)
-	@$(CP) --preserve --update $(help_files) $(data_dir)
+	@$(CP) --preserve --update $^ $(bindir)
+	@$(CP) --preserve --update $(data_files) $(datadir)
+	@$(CP) --preserve --update $(help_files) $(datadir)
 	@[ -z "$(compiler_runtime_files)" ] \
 	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
 ifeq (,$(USE_SO_ATTRIBUTES))
-	@cd $(data_dir); $(PERFORM) $(bin_dir)/product_files$(EXEEXT)
+	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
 else
 	@$(ECHO) "Can't build product_files$(EXEEXT) with USE_SO_ATTRIBUTES."
 endif
@@ -955,7 +972,7 @@ shared_data_files = \
 
 .PHONY: archive_shared_data_files
 archive_shared_data_files:
-	cd $(data_dir)/..; \
+	cd $(datadir)/..; \
 	$(TAR) \
 	  --create \
 	  --file=$(data_archive_name) \
@@ -999,19 +1016,19 @@ fardel_date_script := \
 # no others.
 
 fardel_binaries := \
-  $(bin_dir)/liblmi$(SHREXT) \
-  $(bin_dir)/lmi_cli_shared$(EXEEXT) \
-  $(bin_dir)/lmi_wx_shared$(EXEEXT) \
-  $(bin_dir)/skeleton$(SHREXT) \
-  $(bin_dir)/wx_new$(SHREXT) \
-  $(bin_dir)/wx_test$(EXEEXT) \
+  $(bindir)/liblmi$(SHREXT) \
+  $(bindir)/lmi_cli_shared$(EXEEXT) \
+  $(bindir)/lmi_wx_shared$(EXEEXT) \
+  $(bindir)/skeleton$(SHREXT) \
+  $(bindir)/wx_new$(SHREXT) \
+  $(bindir)/wx_test$(EXEEXT) \
   $(wildcard $(prefix)/local/bin/*$(SHREXT)) \
   $(wildcard $(prefix)/local/lib/*$(SHREXT)) \
-  $(wildcard $(bin_dir)/product_files$(EXEEXT)) \
+  $(wildcard $(bindir)/product_files$(EXEEXT)) \
   $(extra_fardel_binaries) \
 
 fardel_files := \
-  $(addprefix $(data_dir)/,$(shared_data_files)) \
+  $(addprefix $(datadir)/,$(shared_data_files)) \
   $(data_files) \
   $(help_files) \
   $(extra_fardel_files) \
@@ -1058,11 +1075,11 @@ fardel: install
 .PHONY: wrap_fardel
 wrap_fardel:
 	@$(CP) $(prefix)/third_party/bin/md5sum$(EXEEXT) .
-	@$(CP) $(data_dir)/configurable_settings.xml .
+	@$(CP) $(datadir)/configurable_settings.xml .
 	@$(CP) --preserve $(fardel_binaries) $(fardel_files) .
 	@$(fardel_date_script)
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
-	@$(PERFORM) $(bin_dir)/generate_passkey > passkey
+	@$(PERFORM) $(bindir)/generate_passkey > passkey
 	@$(TAR) \
 	  --bzip2 \
 	  --create \
@@ -1089,10 +1106,10 @@ eraseme.policy:
 
 # Test data.
 
-sample.cns: $(src_dir)/sample.cns
+sample.cns: $(srcdir)/sample.cns
 	$(CP) --preserve --update $< .
 
-sample.ill: $(src_dir)/sample.ill
+sample.ill: $(srcdir)/sample.ill
 	$(CP) --preserve --update $< .
 
 test_data := \
@@ -1110,7 +1127,7 @@ test_data := \
 # local copies are provided for as needed.
 
 configurable_settings.xml:
-	@$(CP) --preserve --update $(data_dir)/$@ .
+	@$(CP) --preserve --update $(datadir)/$@ .
 
 ################################################################################
 
@@ -1154,7 +1171,7 @@ run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 
 cli_subtargets := cli_tests_init cli_selftest $(addprefix cli_test-,$(test_data))
 
-$(cli_subtargets): $(data_dir)/configurable_settings.xml
+$(cli_subtargets): $(datadir)/configurable_settings.xml
 
 # Use '--jobs=1' to force tests to run in series: running them in
 # parallel would scramble their output. Using '--output-sync=recurse'
@@ -1176,7 +1193,7 @@ cli_tests_init:
 # Run the self test once, discarding the results, just to get the
 # program into the disk cache. Then run it again and report results.
 
-self_test_options := --accept --data_path=$(data_dir) --selftest
+self_test_options := --accept --data_path=$(datadir) --selftest
 
 .PHONY: cli_selftest
 cli_selftest:
@@ -1193,13 +1210,13 @@ cli_test-%:
 	@$(ECHO) Test $*:
 	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) \
 	  --accept \
-	  --data_path=$(data_dir) \
+	  --data_path=$(datadir) \
 	  --emit=$(special_emission),emit_text_stream,emit_quietly,emit_timings \
 	  --file=$* \
 	  | $(SED) -e '/milliseconds/!d'
 	@$(PERFORM) ./lmi_cli_shared$(EXEEXT) \
 	  --accept \
-	  --data_path=$(data_dir) \
+	  --data_path=$(datadir) \
 	  --emit=$(special_emission),emit_text_stream,emit_quietly \
 	  --file=$* \
 	  >$*.touchstone
@@ -1207,7 +1224,7 @@ cli_test-%:
 	  $(DIFF) \
 	      --ignore-all-space \
 	      --ignore-matching-lines='Prepared on' \
-	      - $(src_dir)/$*.touchstone \
+	      - $(srcdir)/$*.touchstone \
 	  | $(WC)   -l \
 	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
 
@@ -1228,7 +1245,7 @@ cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 	      --ignore-matching-lines='Prepared on' \
 	      --ignore-matching-lines='Compiled at' \
 	      --ignore-matching-lines=':[ 0-9]*milliseconds' \
-	      - $(src_dir)/cgi.touchstone \
+	      - $(srcdir)/cgi.touchstone \
 	  | $(WC)   -l \
 	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
 
@@ -1308,23 +1325,23 @@ testdecks := $(wildcard $(addprefix $(test_dir)/*., $(testdeck_suffixes)))
 
 .PHONY: $(testdecks)
 $(testdecks):
-	@-$(PERFORM) $(bin_dir)/lmi_cli_shared$(EXEEXT) \
+	@-$(PERFORM) $(bindir)/lmi_cli_shared$(EXEEXT) \
 	  --accept \
 	  --ash_nazg \
-	  --data_path=$(data_dir) \
+	  --data_path=$(datadir) \
 	  --emit=$(test_emission) \
 	  --pyx=system_testing \
 	  --file=$@
 	@$(MD5SUM) --binary $(basename $(notdir $@)).* >> $(system_test_md5sums)
 	@for z in $(dot_test_files); \
 	  do \
-	    $(PERFORM) $(bin_dir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
+	    $(PERFORM) $(bindir)/ihs_crc_comp$(EXEEXT) $$z $(touchstone_dir)/$$z \
 	    | $(SED) -e '/Summary.*max rel err/!d' -e "s/^ /$$z/" \
 	    >> $(system_test_analysis); \
 	  done
 
 .PHONY: system_test
-system_test: $(data_dir)/configurable_settings.xml $(touchstone_md5sums) install
+system_test: $(datadir)/configurable_settings.xml $(touchstone_md5sums) install
 	@$(ECHO) System test:
 	@$(RM) --force $(addprefix $(test_dir)/*., $(test_result_suffixes))
 	@[ "$(strip $(testdecks))" != "" ] || ( $(ECHO) No testdecks. && false )
@@ -1438,7 +1455,7 @@ show_flags:
 	@$(ECHO) ALL_ARFLAGS             = '$(ALL_ARFLAGS)'
 	@$(ECHO) ALL_LDFLAGS             = '$(ALL_LDFLAGS)'
 	@$(ECHO) ALL_RCFLAGS             = '$(ALL_RCFLAGS)'
-	@$(ECHO) src_dir                 = '$(src_dir)'
+	@$(ECHO) srcdir                  = '$(srcdir)'
 	@$(ECHO) all_include_directories = '$(all_include_directories)'
 	@$(ECHO) all_source_directories  = '$(all_source_directories)'
 	@$(ECHO) wx_include_paths        = '$(wx_include_paths)'

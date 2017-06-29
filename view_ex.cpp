@@ -55,7 +55,7 @@
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
-#include <cstdlib>                      // std::exit(), EXIT_FAILURE
+#include <cstdlib>                      // exit(), EXIT_FAILURE
 
 IMPLEMENT_ABSTRACT_CLASS(ViewEx, wxView)
 

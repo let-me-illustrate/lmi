@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #if defined __GNUC__
-#   include <cstdlib>                   // std::free()
+#   include <cstdlib>                   // free()
 #   include <cxxabi.h>
 #endif // defined __GNUC__
 

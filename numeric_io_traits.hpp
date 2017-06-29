@@ -27,10 +27,10 @@
 #include "bourn_cast.hpp"
 #include "ieee754.hpp"                  // is_infinite<>()
 
-#include <algorithm>                    // std::max()
-#include <cmath>                        // std::fabs(), std::log10()
-#include <cstdlib>                      // std::strto*()
-#include <cstring>                      // std::strcmp(), std::strlen()
+#include <algorithm>                    // max()
+#include <cmath>                        // fabs(), log10()
+#include <cstdlib>                      // strto*()
+#include <cstring>                      // strcmp(), strlen()
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -80,7 +80,7 @@ inline int floating_point_decimals(T t)
 /// Simplify a formatted floating-point number.
 ///
 /// Precondition: 's' is a floating-point number formatted as if by
-/// snprintf() with format "%#.*f" or "%#.*Lf".
+/// std::snprintf() with format "%#.*f" or "%#.*Lf".
 ///
 /// Returns: 's' without any insignificant characters (trailing zeros
 /// after the decimal point, and the decimal point itself if followed
@@ -134,7 +134,7 @@ struct numeric_conversion_traits
 };
 
 /// Return C99 7.19.6.1/8 default precision for integral types.
-/// Calling snprintf() with a precision of zero and a value of
+/// Calling std::snprintf() with a precision of zero and a value of
 /// zero would return no characters.
 
 struct Integral{};
@@ -235,8 +235,6 @@ template<> struct numeric_conversion_traits<long int>
         {return std::strtol(nptr, endptr, 10);}
 };
 
-// SOMEDAY !! Consider supporting type long long int when C++ does.
-#if 0
 template<> struct numeric_conversion_traits<long long int>
     :public numeric_conversion_traits<Integral>
 {
@@ -245,7 +243,6 @@ template<> struct numeric_conversion_traits<long long int>
     static T strtoT(char const* nptr, char** endptr)
         {return std::strtoll(nptr, endptr, 10);}
 };
-#endif // 0
 
 template<> struct numeric_conversion_traits<unsigned int>
     :public numeric_conversion_traits<Integral>
@@ -274,8 +271,6 @@ template<> struct numeric_conversion_traits<unsigned long int>
         {return std::strtoul(nptr, endptr, 10);}
 };
 
-// SOMEDAY !! Consider supporting type long long int when C++ does.
-#if 0
 template<> struct numeric_conversion_traits<unsigned long long int>
     :public numeric_conversion_traits<Integral>
 {
@@ -284,7 +279,6 @@ template<> struct numeric_conversion_traits<unsigned long long int>
     static T strtoT(char const* nptr, char** endptr)
         {return std::strtoull(nptr, endptr, 10);}
 };
-#endif // 0
 
 struct Floating{};
 template<> struct numeric_conversion_traits<Floating>

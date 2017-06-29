@@ -28,8 +28,8 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <cmath>                        // std::scalbn()
-#include <cstring>                      // std::strcpy(), std::strcmp
+#include <cmath>                        // scalbn()
+#include <cstring>                      // strcpy(), strcmp()
 #include <istream>
 #include <limits>
 #include <ostream>
@@ -346,9 +346,9 @@ int extra_tests0()
     {
     // Initialize 'nptr' to a string representation of
     //   FLT_RADIX^(DBL_MAX_EXP-1)
-    // produced by snprintf(), verifiable thus:
+    // produced by std::snprintf(), verifiable thus:
     //    double big = std::scalbn(1.0, DBL_MAX_EXP - 1.0);
-    //    snprintf(buffer, buffer_length, "%.*f", 0, big);
+    //    std::snprintf(buffer, buffer_length, "%.*f", 0, big);
     char const* nptr =
     //   12345678901234567890123456789012345678901234567890 <-- 50 digits/line
         "89884656743115795386465259539451236680898848947115"

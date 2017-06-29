@@ -28,7 +28,7 @@
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <stdexcept>
 
 namespace

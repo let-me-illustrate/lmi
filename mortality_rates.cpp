@@ -30,7 +30,7 @@
 #include "dbnames.hpp"
 #include "math_functors.hpp"            // assign_midpoint()
 
-#include <algorithm>                    // std::min()
+#include <algorithm>                    // min()
 
 //============================================================================
 MortalityRates::MortalityRates(BasicValues const& basic_values)

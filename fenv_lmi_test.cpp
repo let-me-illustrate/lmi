@@ -42,7 +42,7 @@
 #include <bitset>
 #include <cfenv>
 #include <climits>                      // CHAR_BIT
-#include <math.h>                       // C99 rint()
+#include <math.h>                       // rint()
 #include <stdexcept>
 
 std::bitset<CHAR_BIT * sizeof(unsigned long int)> bits(unsigned long int i)
@@ -187,39 +187,31 @@ int test_main(int, char*[])
 
     fenv_rounding   (fe_tonearest);
     BOOST_TEST_EQUAL(fe_tonearest , fenv_rounding());
-#if defined LMI_COMPILER_PROVIDES_RINT
-    BOOST_TEST_EQUAL(-2, rint(-2.5));
-    BOOST_TEST_EQUAL(-2, rint(-1.5));
-    BOOST_TEST_EQUAL( 2, rint( 1.5));
-    BOOST_TEST_EQUAL( 2, rint( 2.5));
-#endif // defined LMI_COMPILER_PROVIDES_RINT
+    BOOST_TEST_EQUAL(-2, std::rint(-2.5));
+    BOOST_TEST_EQUAL(-2, std::rint(-1.5));
+    BOOST_TEST_EQUAL( 2, std::rint( 1.5));
+    BOOST_TEST_EQUAL( 2, std::rint( 2.5));
 
     fenv_rounding   (fe_downward);
     BOOST_TEST_EQUAL(fe_downward  , fenv_rounding());
-#if defined LMI_COMPILER_PROVIDES_RINT
-    BOOST_TEST_EQUAL(-3, rint(-2.5));
-    BOOST_TEST_EQUAL(-2, rint(-1.5));
-    BOOST_TEST_EQUAL( 1, rint( 1.5));
-    BOOST_TEST_EQUAL( 2, rint( 2.5));
-#endif // defined LMI_COMPILER_PROVIDES_RINT
+    BOOST_TEST_EQUAL(-3, std::rint(-2.5));
+    BOOST_TEST_EQUAL(-2, std::rint(-1.5));
+    BOOST_TEST_EQUAL( 1, std::rint( 1.5));
+    BOOST_TEST_EQUAL( 2, std::rint( 2.5));
 
     fenv_rounding   (fe_upward);
     BOOST_TEST_EQUAL(fe_upward    , fenv_rounding());
-#if defined LMI_COMPILER_PROVIDES_RINT
-    BOOST_TEST_EQUAL(-2, rint(-2.5));
-    BOOST_TEST_EQUAL(-1, rint(-1.5));
-    BOOST_TEST_EQUAL( 2, rint( 1.5));
-    BOOST_TEST_EQUAL( 3, rint( 2.5));
-#endif // defined LMI_COMPILER_PROVIDES_RINT
+    BOOST_TEST_EQUAL(-2, std::rint(-2.5));
+    BOOST_TEST_EQUAL(-1, std::rint(-1.5));
+    BOOST_TEST_EQUAL( 2, std::rint( 1.5));
+    BOOST_TEST_EQUAL( 3, std::rint( 2.5));
 
     fenv_rounding   (fe_towardzero);
     BOOST_TEST_EQUAL(fe_towardzero, fenv_rounding());
-#if defined LMI_COMPILER_PROVIDES_RINT
-    BOOST_TEST_EQUAL(-2, rint(-2.5));
-    BOOST_TEST_EQUAL(-1, rint(-1.5));
-    BOOST_TEST_EQUAL( 1, rint( 1.5));
-    BOOST_TEST_EQUAL( 2, rint( 2.5));
-#endif // defined LMI_COMPILER_PROVIDES_RINT
+    BOOST_TEST_EQUAL(-2, std::rint(-2.5));
+    BOOST_TEST_EQUAL(-1, std::rint(-1.5));
+    BOOST_TEST_EQUAL( 1, std::rint( 1.5));
+    BOOST_TEST_EQUAL( 2, std::rint( 2.5));
 
     fenv_initialize();
     BOOST_TEST(fenv_validate());

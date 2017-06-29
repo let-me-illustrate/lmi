@@ -24,7 +24,6 @@
 #include "calendar_date.hpp"
 
 #include "alert.hpp"
-#include "assert_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -625,7 +624,7 @@ void CalendarDateTest::TestIntegralDuration()
     BOOST_TEST_EQUAL(-1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL(-1, duration_ceiling(base_date, other_date));
     BOOST_TEST_THROW
-        (years_and_months_since(base_date, other_date)
+        (years_and_months_since(base_date, other_date, true)
         ,std::runtime_error
         ,"Second date (1999-01-01) precedes first date (2000-01-01)."
         );
@@ -633,14 +632,14 @@ void CalendarDateTest::TestIntegralDuration()
     other_date = calendar_date(2000,  1,  1);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     other_date = calendar_date(2001,  1,  1);
     BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
@@ -653,14 +652,14 @@ void CalendarDateTest::TestIntegralDuration()
     other_date = calendar_date(2000,  2,  2);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 1, ym.second);
 
     other_date = calendar_date(2001,  2,  2);
     BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 2, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 1, ym.second);
 
@@ -683,28 +682,28 @@ void CalendarDateTest::TestIntegralDuration()
     other_date = calendar_date(2000,  2, 29);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     other_date = calendar_date(2000,  3,  1);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     other_date = calendar_date(2001,  2, 28);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     other_date = calendar_date(2001,  3,  1);
     BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
@@ -715,28 +714,28 @@ void CalendarDateTest::TestIntegralDuration()
     base_date  = calendar_date(1999,  2, 28);
     BOOST_TEST_EQUAL( 1, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 2, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 1, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     base_date  = calendar_date(1999,  3,  1);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL(11, ym.second);
 
     base_date  = calendar_date(2000,  2, 28);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 1, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
     base_date  = calendar_date(2000,  2, 29);
     BOOST_TEST_EQUAL( 0, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL( 0, duration_ceiling(base_date, other_date));
-    ym = years_and_months_since(base_date, other_date);
+    ym = years_and_months_since(base_date, other_date, true);
     BOOST_TEST_EQUAL( 0, ym.first );
     BOOST_TEST_EQUAL( 0, ym.second);
 
@@ -751,6 +750,68 @@ void CalendarDateTest::TestIntegralDuration()
     base_date  = calendar_date(2001,  3,  1);
     BOOST_TEST_EQUAL(-2, duration_floor  (base_date, other_date));
     BOOST_TEST_EQUAL(-1, duration_ceiling(base_date, other_date));
+
+    // Test years_and_months_since()'s 'is_curtate' argument.
+
+    base_date  = calendar_date(2000,  1,  1);
+    other_date = calendar_date(2001,  1, 15);
+    // Curtate: count full months completed during interval.
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 0, ym.second);
+    // Not curtate: count months begun during interval.
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+
+    base_date  = calendar_date(2000,  1, 15);
+    other_date = calendar_date(2001,  2,  1);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 0, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+
+    // Curtate == non-curtate for identical dates.
+    base_date  = calendar_date(2000,  1,  1);
+    other_date = calendar_date(2000,  1,  1);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL( 0, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL( 0, ym.second);
+
+    // Curtate == non-curtate for exact monthiversaries.
+    base_date  = calendar_date(2000,  1,  1);
+    other_date = calendar_date(2001,  2,  1);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 1, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+
+    // Interval beginning on leap-year day.
+    base_date  = calendar_date(2000,  2, 29);
+    other_date = calendar_date(2001,  1,  1);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL(10, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL(11, ym.second);
+
+    // Interval ending on leap-year day.
+    base_date  = calendar_date(2000,  1,  1);
+    other_date = calendar_date(2000,  2, 29);
+    ym = years_and_months_since(base_date, other_date, true);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL( 1, ym.second);
+    ym = years_and_months_since(base_date, other_date, false);
+    BOOST_TEST_EQUAL( 0, ym.first );
+    BOOST_TEST_EQUAL( 2, ym.second);
 
     // Demonstrate strong noncommutativity. To show that
     //    duration_floor(X, Y)
@@ -797,13 +858,24 @@ void CalendarDateTest::TestYearAndMonthDifferenceExhaustively()
             ;++e
             )
             {
-            std::pair<int,int> ym = years_and_months_since(d, e);
-            int y = ym.first;
-            int m = ym.second;
-            calendar_date a = add_years_and_months(d, y,     m, true);
-            calendar_date b = add_years_and_months(d, y, 1 + m, true);
-            LMI_ASSERT(a <= e    );
-            LMI_ASSERT(     e < b);
+                {
+                std::pair<int,int> ym = years_and_months_since(d, e, true);
+                int y = ym.first;
+                int m = ym.second;
+                calendar_date a = add_years_and_months(d, y, m    , true);
+                calendar_date b = add_years_and_months(d, y, m + 1, true);
+                BOOST_TEST(a <= e    );
+                BOOST_TEST(     e < b);
+                }
+                {
+                std::pair<int,int> ym = years_and_months_since(d, e, false);
+                int y = ym.first;
+                int m = ym.second;
+                calendar_date a = add_years_and_months(d, y, m - 1, true);
+                calendar_date b = add_years_and_months(d, y, m    , true);
+                BOOST_TEST(a < e     );
+                BOOST_TEST(    e <= b);
+                }
             }
         }
 }
@@ -987,6 +1059,7 @@ namespace
         std::string s = x.str();
         x = add_years_and_months(x, 1, 1, true);
         attained_age(y, x, oe_age_last_birthday);
+        y = minimum_birthdate(45, x, oe_age_last_birthday);
     }
 
     void mete_construct()
@@ -1023,6 +1096,11 @@ namespace
         attained_age(y, x, oe_age_last_birthday);
     }
 
+    void mete_dob_limit()
+    {
+        y = minimum_birthdate(45, x, oe_age_last_birthday);
+    }
+
 } // Unnamed namespace.
 
 void CalendarDateTest::TestSpeed()
@@ -1035,6 +1113,7 @@ void CalendarDateTest::TestSpeed()
         << "  Get y, m, d  : " << TimeAnAliquot(mete_get_y_m_d   ) << '\n'
         << "  Format       : " << TimeAnAliquot(mete_format      ) << '\n'
         << "  Calculate age: " << TimeAnAliquot(mete_attained_age) << '\n'
+        << "  DOB limit    : " << TimeAnAliquot(mete_dob_limit   ) << '\n'
         ;
 }
 

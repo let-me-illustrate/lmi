@@ -24,8 +24,8 @@
 
 #include "config.hpp"
 
-#include <algorithm>                    // std::find()
-#include <type_traits>                  // std::enable_if
+#include <algorithm>                    // find()
+#include <type_traits>                  // enable_if
 
 /// Determine whether a class has a find() member.
 ///

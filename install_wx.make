@@ -23,67 +23,38 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 # Configurable settings ########################################################
 
-wx_version    := 3.0.0
-
 mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
+exec_prefix   := $(prefix)
 
 cache_dir     := /cache_for_lmi/downloads
 
 wx_dir        := /opt/lmi/wx-scratch
 
-# URLs and archive md5sums #####################################################
+# git sha1sum and archive md5sum ###############################################
 
-wx-2.8.6-md5  := 8a130e5b25448a17454a6b957a5e075c
-wx-2.8.7-md5  := e3455083afdf6404a569a8bf0701cf13
-wx-2.8.9-md5  := b0b2d0f6915a21ca6f33896ee8f50387
-wx-2.8.10-md5 := 0461c2085ac1ad7e648aa84c4ba51dd1
-wx-2.9.0-md5  := 09058928eeb72853142c062bdec056ce
-wx-2.9.2-md5  := d6cec5bd331ba90b74c1e2fcb0563620
-wx-2.9.3-md5  := 6b6003713289ea4d3cd9b49c5db5b721
-wx-2.9.5-md5  := e98c5f92805493f150656403ffef3bb0
-wx-3.0.0-md5  := 241998efc12205172ed24c18788ea2cd
+# Use a string distinct from any official wxwidgets.org release name
+# and from any such string previously used in this makefile.
 
-wx_md5            := $(wx-$(wx_version)-md5)
+wx_version        := 3.1.0-p1
 
-wx_archive        := wxWidgets-$(wx_version).tar.bz2
+# Use a github archive as of a particular commit by specifying its
+# sha1sum--the "latest commit" shown here, for example:
+#   https://github.com/wxWidgets/wxWidgets
+# It is generally useful to retain only the last historical version.
+
+# wx_commit_sha     := 4c0e272589667c7cf57407d99f1810e2e83348e4
+# wx_md5            := 5fd8da132214bb973133d574fde5cbee
+wx_commit_sha     := 41045df7ea5f93e4c07c1bd846d7127a372705bd
+wx_md5            := 89775012799fe5c9bd8ea61e5fa43da7
+
+wx_archive        := wxWidgets-$(wx_commit_sha).zip
 
 $(wx_archive)-md5 := $(wx_md5)
 
-$(wx_archive)-url := ftp://ftp.wxwidgets.org/pub/$(wx_version)/$(wx_archive)
-
-# Enable this conditional section to use a github archive as of a
-# particular commit by specifying its sha1sum--the "latest commit"
-# shown here, for example:
-#   https://github.com/wxWidgets/wxWidgets
-
-use_git := Y
-
-ifneq ($(use_git), N)
-
-# wx_commit_sha     := 0b821adf903872b6d8b56630d2191c5b9c3362e5
-# wx_md5            := ac28a959aabe36e26ea039ed78a51b54
-# wx_commit_sha     := 730c1ee79b77b3eab58881492b2de6b659319ba2
-# wx_md5            := 1ce7f42362ba3075eeb4be4679f88dd3
-# wx_commit_sha     := 4475fe36a54cd62457dcd73c8739b1e7d46e1cde
-# wx_md5            := 47e4a36d8164ec4c69cab68a3d05f951
-# wx_commit_sha     := c4d06e8117f8930b57bffaf6a3323007c9df8d4b
-# wx_md5            := 97e6a75d1a83e5597942741f8382c3d4
-# wx_commit_sha     := 4c0e272589667c7cf57407d99f1810e2e83348e4
-# wx_md5            := 5fd8da132214bb973133d574fde5cbee
-  wx_commit_sha     := 41045df7ea5f93e4c07c1bd846d7127a372705bd
-  wx_md5            := 89775012799fe5c9bd8ea61e5fa43da7
-
-  wx_version        := $(wx_commit_sha)
-
-  wx_archive        := wxWidgets-$(wx_commit_sha).zip
-
-  $(wx_archive)-md5 := $(wx_md5)
-
-  $(wx_archive)-url := https://github.com/wxWidgets/wxWidgets/archive/$(wx_commit_sha).zip
-
-endif
+wx_server         := https://github.com/wxWidgets/wxWidgets/archive
+$(wx_archive)-url := $(wx_server)/$(wx_commit_sha).zip
 
 # Variables that normally should be left alone #################################
 
@@ -113,7 +84,8 @@ endif
 compiler       := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
 vendor         := $(subst .,,$(compiler))-$(wx_md5)
 
-build_dir      := $(wx_dir)/wxWidgets-$(wx_version)/$(vendor)
+source_dir     := $(wx_dir)/wxWidgets-$(wx_version)
+build_dir      := $(source_dir)/$(vendor)
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -123,24 +95,28 @@ wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
+  --exec-prefix=$(exec_prefix) \
   --build=$(build_type) \
   --host=$(host_type) \
   --disable-apple_ieee \
   --disable-aui \
-  --disable-compat24 \
+  --disable-compat30 \
+  --disable-dependency-tracking \
   --disable-fswatcher \
   --disable-gif \
   --disable-mediactrl \
+  --disable-precomp-headers \
   --disable-propgrid \
   --disable-ribbon \
   --disable-richtext \
   --disable-stc \
   --disable-webview \
   --enable-monolithic \
+  --enable-option-checking \
   --enable-shared \
-  --enable-std_iostreams \
   --enable-stl \
   --enable-vendor='$(vendor)' \
+  --with-cxx=11 \
   --without-libjpeg \
   --without-libtiff \
   --without-opengl \
@@ -150,7 +126,6 @@ config_options = \
 
 # Utilities ####################################################################
 
-CHMOD  := chmod
 ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
@@ -164,22 +139,24 @@ WGET   := wget
 
 source_archives := $(wx_archive)
 patchset        := wx-$(wx_version).patch
+PATCHFLAGS      := --directory=$(source_dir) --strip=1
 
 .PHONY: all
-all: clobber $(source_archives)
-	-[ -e $(patchset) ] && $(PATCH) --directory=$(wx_dir) --strip=1 <$(patchset)
+all: clobber_exec_prefix_only $(source_archives)
+	[ ! -e $(patchset) ] || $(PATCH) $(PATCHFLAGS) <$(patchset)
+	$(MKDIR) --parents $(build_dir)
 	$(MAKE) --file=$(this_makefile) --directory=$(build_dir) wx
-	$(MAKE) --file=$(this_makefile) --directory=$(prefix)/bin portable_script
 
 # Simulated order-only prerequisites.
 $(source_archives): initial_setup
-initial_setup: clobber
+initial_setup: clobber_exec_prefix_only
 
 .PHONY: initial_setup
 initial_setup:
 	$(MKDIR) --parents $(prefix)
+	$(MKDIR) --parents $(exec_prefix)
 	$(MKDIR) --parents $(cache_dir)
-	$(MKDIR) --parents $(build_dir)
+	$(MKDIR) --parents $(wx_dir)
 
 TARFLAGS := --keep-old-files
 %.tar.bz2: TARFLAGS += --bzip2
@@ -195,86 +172,43 @@ WGETFLAGS :=
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(TAR) --extract $(TARFLAGS) --directory=$(wx_dir) --file=$(cache_dir)/$@
 
+# Used only for retrieval from github by sha1sum.
+#
 # This archive is dynamically created by github, as of a commit
-# specified by the sha1sum embedded in the URL; '--output-document'
-# is used to add 'wxWidgets-' to its name. Not being a static file,
-# it doesn't bear a historical timestamp corresponding to the commit
-# date. See:
+# specified by the sha1sum embedded in the URL. Not being a static
+# file, it doesn't bear a historical timestamp corresponding to the
+# commit date--see:
 #   http://lists.nongnu.org/archive/html/lmi/2015-08/msg00012.html
+# By default, the cached archive's name would be just the sha1sum plus
+# a '.zip' extension, which does not obviously have anything to do
+# with wx, so use '--output-document' to prepend "wxWidgets-" to its
+# name (while this is not that option's intended purpose, it does the
+# right thing in this case). The resulting filename is appropriate for
+# caching, but the name of the directory into which it extracts is
+# inconvenient for actual use, so rename that directory immediately.
+
+%.zip: WGETFLAGS += '--output-document=$@'
 
 .PHONY: %.zip
 %.zip:
-	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) --output-document=$@ $($@-url)
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wx_dir)
+	mv $(wx_dir)/$(basename $@) $(source_dir)
 
 .PHONY: wx
 wx:
 	export PATH="$(mingw_bin_dir):${PATH}" \
 	  && ../configure $(config_options) && $(MAKE) && $(MAKE) install \
 
-# 'wx-config' is not portable. For example, it uses 'printf(1)', which
-# zsh supports only in versions after 4.0.1 . Far worse, it underlies
-# a problem discussed in these messages
-#   http://lists.gnu.org/archive/html/lmi/2006-04/msg00010.html
-#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00001.html
-#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00019.html
-#   http://lists.gnu.org/archive/html/lmi/2006-05/msg00021.html
-# and extensive offline discussions, which has consumed person-weeks
-# of our time; though we can't pinpoint the exact cause, we have never
-# encountered any such problem except with 'wx-config'. Therefore, we
-# run 'wx-config' only here (in bash, in the present makefile) and
-# write the results of the only commands actually used during lmi build
-# into a portable script.
-#
-# Even if a forgiving shell is used, this portable script runs an
-# order of magnitude faster than the one wx creates.
-# WX !! Is any useful advantage lost?
+# This incidentally removes wxPdfDoc, but it's probably a good idea
+# to rebuild that whenever wx is upgraded anyway.
 
-.PHONY: portable_script
-portable_script:
-	$(ECHO) '#!/bin/sh'                                              >wx-config-portable
-	$(ECHO) 'last_with_arg=0'                                       >>wx-config-portable
-	$(ECHO) 'while [ $$# -gt 0 ]; do'                               >>wx-config-portable
-	$(ECHO) '    case "$$1" in'                                     >>wx-config-portable
-	$(ECHO) '        --basename)'                                   >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --basename`"             >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --cflags | --cppflags | --cxxflags)'           >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --cxxflags`"             >>wx-config-portable
-	$(ECHO) '            this_with_arg=1'                           >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --host*)'                                      >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --libs)'                                       >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --libs`"                 >>wx-config-portable
-	$(ECHO) '            this_with_arg=1'                           >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --rescomp)'                                    >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --rescomp`"              >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --selected_config)'                            >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --selected_config`"      >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        --version)'                                    >>wx-config-portable
-	$(ECHO) "            echo `./wx-config --version`"              >>wx-config-portable
-	$(ECHO) '            ;;'                                        >>wx-config-portable
-	$(ECHO) '        *)'                                            >>wx-config-portable
-	$(ECHO) '            if [ "$$last_with_arg" -ne 1 ]; then'      >>wx-config-portable
-	$(ECHO) '                echo Bad argument $$1'                 >>wx-config-portable
-	$(ECHO) '                exit 1'                                >>wx-config-portable
-	$(ECHO) '            fi'                                        >>wx-config-portable
-	$(ECHO) '    esac'                                              >>wx-config-portable
-	$(ECHO) '    last_with_arg=$$this_with_arg'                     >>wx-config-portable
-	$(ECHO) '    shift'                                             >>wx-config-portable
-	$(ECHO) 'done'                                                  >>wx-config-portable
-	$(CHMOD) 755 wx-config-portable
-
-.PHONY: clobber
-clobber:
-# WX !! The 'uninstall' target doesn't remove quite everything.
-	-cd $(build_dir) && $(MAKE) uninstall distclean
-	-$(RM) --force --recursive $(prefix)/include/wx-$(basename $(wx_version))
-	-$(RM) --force --recursive $(prefix)/lib/wx
+.PHONY: clobber_exec_prefix_only
+clobber_exec_prefix_only:
+	-$(RM) --force --recursive $(exec_prefix)/bin/wx*
+	-$(RM) --force --recursive $(exec_prefix)/include/wx*
+	-$(RM) --force --recursive $(exec_prefix)/lib/wx*
+	-$(RM) --force --recursive $(exec_prefix)/lib/libwx*
 	-$(RM) --force --recursive $(wx_dir)
 

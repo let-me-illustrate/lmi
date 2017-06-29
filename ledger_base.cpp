@@ -29,11 +29,9 @@
 #include "miscellany.hpp"               // minmax
 #include "value_cast.hpp"
 
-#include <algorithm>
-#include <cmath>                        // std::pow()
-#include <functional>
-#include <numeric>
-#include <string>
+#include <algorithm>                    // max(), min(), transform()
+#include <cmath>                        // floor(), log10(), pow()
+#include <functional>                   // multiplies
 
 //============================================================================
 LedgerBase::LedgerBase(int a_Length)
@@ -221,7 +219,7 @@ namespace
 // cell issue dates differ, the result is valid only in that probably-
 // unexpected sense.
 LedgerBase& LedgerBase::PlusEq
-    (LedgerBase const&         a_Addend
+    (LedgerBase          const& a_Addend
     ,std::vector<double> const& a_Inforce
     )
 {
@@ -476,8 +474,6 @@ void LedgerBase::UpdateCRC(CRC& crc) const
 //============================================================================
 void LedgerBase::Spew(std::ostream& os) const
 {
-    static int const prec = max_stream_precision();
-
     for(auto const& i : AllVectors)
         {
         SpewVector(os, i.first, *i.second);
@@ -488,7 +484,7 @@ void LedgerBase::Spew(std::ostream& os) const
         os
             << i.first
             << "=="
-            << std::setprecision(prec) << *i.second
+            << std::setprecision(DECIMAL_DIG) << *i.second
             << '\n'
             ;
         }

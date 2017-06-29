@@ -36,9 +36,9 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
-#include <cstdio>                       // std::fclose(), std::fopen()
-#include <cstdlib>                      // std::exit(), EXIT_FAILURE
-#include <cstring>                      // std::memcpy()
+#include <cstdio>                       // fclose(), fopen()
+#include <cstdlib>                      // exit(), EXIT_FAILURE
+#include <cstring>                      // memcpy()
 #include <iomanip>
 #include <sstream>
 

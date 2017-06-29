@@ -31,7 +31,7 @@
 #include "outlay.hpp"
 #include "zero.hpp"
 
-#include <algorithm>                    // std::max(), std::min()
+#include <algorithm>                    // max(), min()
 
 /*
 IHS !! These issues have been addressed in lmi, but not here:

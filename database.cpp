@@ -32,7 +32,7 @@
 #include "product_data.hpp"
 #include "yare_input.hpp"
 
-#include <algorithm>                    // std::min()
+#include <algorithm>                    // min()
 
 /// Construct from essential input (product and axes).
 
@@ -199,7 +199,9 @@ void product_database::initialize(std::string const& product_name)
         }
     else
         {
-        std::string filename(product_data(product_name).datum("DatabaseFilename"));
+        product_data const p(product_name);
+        std::string const filename(p.datum("DatabaseFilename"));
+        LMI_ASSERT(!filename.empty());
         db_ = DBDictionary::read_via_cache(AddDataDir(filename));
         }
     maturity_age_ = static_cast<int>(Query(DB_MaturityAge));

@@ -34,7 +34,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>                    // std::find()
+#include <algorithm>                    // find()
 
 namespace
 {

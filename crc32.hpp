@@ -26,7 +26,7 @@
 
 #include "so_attributes.hpp"
 
-#include <cstring>                      // std::strlen()
+#include <cstring>                      // strlen()
 #include <string>
 #include <vector>
 

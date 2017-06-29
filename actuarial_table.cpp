@@ -34,8 +34,8 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>                    // std::max(), std::min()
-#include <cctype>                       // std::toupper()
+#include <algorithm>                    // max(), min()
+#include <cctype>                       // toupper()
 #include <climits>                      // CHAR_BIT
 #include <cstdint>
 #include <ios>

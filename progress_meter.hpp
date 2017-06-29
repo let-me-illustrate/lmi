@@ -193,7 +193,7 @@
 #include "so_attributes.hpp"
 
 #include <iosfwd>
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
 
 std::ostringstream& LMI_SO progress_meter_unit_test_stream();

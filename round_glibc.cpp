@@ -49,7 +49,7 @@ typedef uint32_t u_int32_t;
 // This file is intended only for use with MinGW-w64, which is always
 // little endian. It seemed best to preserve alternative definitions
 // in case they're ever wanted for some unanticipated purpose, and
-// to provide these alii mapping the macros used in the unmodified
+// to provide these aliases mapping the macros used in the unmodified
 // sources to gcc's standard predefinitions:
 #define __FLOAT_WORD_ORDER __FLOAT_WORD_ORDER__
 #define LITTLE_ENDIAN      __ORDER_LITTLE_ENDIAN__

@@ -51,8 +51,8 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstdio>                       // std::printf()
-#include <functional>                   // std::bind()
+#include <cstdio>                       // printf()
+#include <functional>                   // bind()
 #include <ios>
 #include <iostream>
 #include <ostream>

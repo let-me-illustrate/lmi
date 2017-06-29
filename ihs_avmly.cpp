@@ -44,8 +44,8 @@
 #include "stratified_algorithms.hpp"
 #include "stratified_charges.hpp"
 
-#include <algorithm>                    // std::min(), std::max()
-#include <cmath>                        // std::pow()
+#include <algorithm>                    // min(), max()
+#include <cmath>                        // pow()
 #include <limits>
 
 // Each month, process all transactions in order.
@@ -171,6 +171,12 @@ void AccountValue::DoMonthDR()
     // prior to accepting any payment?
     NetMaxNecessaryPremium   = Irc7702A_->DebugGetNetMaxNecPm  ();
     GrossMaxNecessaryPremium = Irc7702A_->DebugGetGrossMaxNecPm();
+
+    // Determine list-bill premiums only after transactions that
+    // might change specamt have been processed.
+    // SOMEDAY !! Should InvariantValues().ModalMinimumPremium be
+    // set here for that reason?
+    set_list_bill_premium();
 
     TxAscertainDesiredPayment();
     TxLimitPayment(max_non_mec_premium);

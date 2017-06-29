@@ -34,7 +34,7 @@
 
 #include <boost/filesystem/operations.hpp>
 
-#include <cmath>                        // std::fabs()
+#include <cmath>                        // fabs()
 
 namespace
 {

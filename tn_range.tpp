@@ -24,7 +24,7 @@
 #include "alert.hpp"
 #include "value_cast.hpp"
 
-#include <cmath>                        // std::pow()
+#include <cmath>                        // pow(), signbit()
 #include <exception>
 #include <istream>
 #include <limits>
@@ -99,29 +99,17 @@ namespace
         return strictly_between_extrema_tester<T>()(t);
     }
 
-    /// Signum, defined here to return 0 for NaNs.
+    /// Algebraic sign of argument.
     ///
-    /// To handle unsigned types without warnings, the value zero is
-    /// stored in a volatile variable, and the value negative one is
-    /// cast to the argument type.
+    /// Return value is of same type as argument, as for many members
+    /// of std::numeric_limits. Thus, (t * signum(t)) is of type T,
+    /// which would not always be the case if an int were returned.
 
     template<typename T>
     T signum(T t)
     {
         static_assert(std::is_arithmetic<T>::value, "");
-        T volatile zero = 0;
-        if(t < zero)
-            {
-            return static_cast<T>(-1);
-            }
-        else if(0 < t)
-            {
-            return 1;
-            }
-        else
-            {
-            return 0;
-            }
+        return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
     }
 
     /// Exact-integer determination for floating types.
@@ -236,23 +224,13 @@ namespace
             {
             return t;
             }
-
-        // The return values computed here are cast to T because, for
-        // instance, if T is signed char, then an integral promotion
-        // would be performed--even though these calculations are
-        // actually reachable only for floating-point types. This
-        // workaround is more compact than specializing the template.
         else if(t < direction)
             {
-            return static_cast<T>
-                (t * (1 + signum(t) * std::numeric_limits<T>::epsilon())
-                );
+            return t * (T(1) + signum(t) * std::numeric_limits<T>::epsilon());
             }
         else if(direction < t)
             {
-            return static_cast<T>
-                (t * (1 - signum(t) * std::numeric_limits<T>::epsilon())
-                );
+            return t * (T(1) - signum(t) * std::numeric_limits<T>::epsilon());
             }
         else
             {

@@ -54,7 +54,7 @@
 #include <boost/filesystem/convenience.hpp> // extension(), change_extension()
 #include <boost/filesystem/fstream.hpp>
 
-#include <algorithm>                    // std::min()
+#include <algorithm>                    // min()
 #include <iostream>
 #include <limits>
 #include <string>

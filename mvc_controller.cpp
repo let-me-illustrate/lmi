@@ -51,8 +51,8 @@
 #include <wx/wupdlock.h>
 #include <wx/xrc/xmlres.h>
 
-#include <cstddef>                      // std::size_t
-#include <cstring>                      // std::strlen()
+#include <cstddef>                      // size_t
+#include <cstring>                      // strlen()
 
 namespace
 {

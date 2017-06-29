@@ -30,7 +30,7 @@
 #include "timer.hpp"
 
 #include <algorithm>
-#include <cstddef>                      // std::size_t
+#include <cstddef>                      // size_t
 #include <functional>
 #include <iomanip>
 #include <ios>
@@ -269,12 +269,18 @@ void demo1()
 
 namespace
 {
-    // Global variables for timing tests. It would be in better taste
-    // to pass them as arguments, using std::bind. However, that
-    // would rule out using some compilers (e.g., borland), and it's
-    // best to test this with as many different toolsets as possible.
+    // Global variables for timing tests. They could alternatively be
+    // passed as arguments, e.g., by using std::bind, but that would
+    // increase complexity in return for no real benefit.
 
     int g_array_length = 1;
+
+    // Number of iterations for 'mete*' functions. This value is a
+    // compromise: higher values make this unit test take too long,
+    // while lower values may yield measurements that are less than
+    // a one-microsecond timer tick.
+
+    int const n_iter = 100;
 
     simple_array0 g_u(g_array_length);
     simple_array0 g_v(g_array_length);
@@ -287,20 +293,29 @@ namespace
 
 void mete_c()
 {
-    for(int i = 0; i < g_array_length; ++i)
+    for(int i = 0; i < n_iter; ++i)
         {
-        g_w[i] = g_u[i] + g_v[i];
+        for(int j = 0; j < g_array_length; ++j)
+            {
+            g_w[j] = g_u[j] + g_v[j];
+            }
         }
 }
 
 void mete_et()
 {
-    g_w = g_u + g_v;
+    for(int i = 0; i < n_iter; ++i)
+        {
+        g_w = g_u + g_v;
+        }
 }
 
 void mete_va()
 {
-    g_va_w = g_va_u + g_va_v;
+    for(int i = 0; i < n_iter; ++i)
+        {
+        g_va_w = g_va_u + g_va_v;
+        }
 }
 
 void time_one_array_length(int length)
@@ -329,7 +344,6 @@ void time_one_array_length(int length)
     BOOST_TEST_EQUAL(g_w   [n], 2.0 * n);
     double const va = TimeAnAliquot(mete_va, max_seconds).unit_time();
     BOOST_TEST_EQUAL(g_va_w[n], 2.0 * n);
-    LMI_ASSERT(0.0 != c);
     std::cout
         << std::setw( 7) << g_array_length
         << std::setw(15) << std::setprecision(3) << std::scientific << c

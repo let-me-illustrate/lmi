@@ -33,9 +33,9 @@
 #include "miscellany.hpp"               // lmi_array_size()
 #include "oecumenic_enumerations.hpp"
 
-#include <algorithm>                    // std::min()
+#include <algorithm>                    // min()
 #include <stdexcept>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 
 template class xml_serializable<Input>;
 
@@ -581,6 +581,7 @@ void Input::redintegrate_ex_post
             std::pair<int,int> ym0 = years_and_months_since
                 (EffectiveDate  .value()
                 ,InforceAsOfDate.value()
+                ,true
                 );
             InforceYear  = ym0.first;
             InforceMonth = ym0.second;

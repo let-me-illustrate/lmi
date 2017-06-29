@@ -107,6 +107,7 @@
       <IssueAge>45</IssueAge>
       <LastCoiReentryDate>2454040</LastCoiReentryDate>
       <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
+      <ListBillDate>2440588</ListBillDate>
       <LoanRate>0.06</LoanRate>
       <LoanRateType>Fixed loan rate</LoanRateType>
       <MaleProportion>1</MaleProportion>
@@ -304,6 +305,7 @@
       <IssueAge>45</IssueAge>
       <LastCoiReentryDate>2454040</LastCoiReentryDate>
       <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
+      <ListBillDate>2440588</ListBillDate>
       <LoanRate>0.06</LoanRate>
       <LoanRateType>Fixed loan rate</LoanRateType>
       <MaleProportion>1</MaleProportion>
@@ -501,6 +503,7 @@
       <IssueAge>45</IssueAge>
       <LastCoiReentryDate>2454040</LastCoiReentryDate>
       <LastMaterialChangeDate>2454040</LastMaterialChangeDate>
+      <ListBillDate>2440588</ListBillDate>
       <LoanRate>0.06</LoanRate>
       <LoanRateType>Fixed loan rate</LoanRateType>
       <MaleProportion>1</MaleProportion>

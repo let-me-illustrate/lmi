@@ -26,7 +26,7 @@
 #include "test_tools.hpp"
 
 #include <algorithm>
-#include <iterator>                     // std::ostream_iterator
+#include <iterator>                     // ostream_iterator
 
 class input_sequence_test
 {

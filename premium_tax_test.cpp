@@ -23,8 +23,10 @@
 
 #include "premium_tax.hpp"
 
+#include "data_directory.hpp"           // AddDataDir()
 #include "database.hpp"
 #include "dbdict.hpp"
+#include "global_settings.hpp"
 #include "path_utility.hpp"             // initialize_filesystem()
 #include "product_data.hpp"
 #include "stratified_charges.hpp"
@@ -35,23 +37,14 @@ class premium_tax_test
   public:
     static void test()
         {
-        write_prerequisite_files();
+        // Location of product files.
+        global_settings::instance().set_data_directory("/opt/lmi/data");
         test_rates();
         }
 
   private:
-    static void write_prerequisite_files();
     static void test_rates();
 };
-
-void premium_tax_test::write_prerequisite_files()
-{
-    DBDictionary       ::write_database_files ();
-    // product_database::initialize() requires a real '.product' file,
-    // even though it's not otherwise used in this TU.
-    product_data       ::write_policy_files   ();
-    stratified_charges ::write_strata_files   ();
-}
 
 /// Test premium-tax rates.
 
@@ -66,7 +59,7 @@ void premium_tax_test::test_rates()
         ,mce_nonmedical
         ,mce_s_CT
         );
-    stratified_charges strata("sample.strata");
+    stratified_charges strata(AddDataDir("sample.strata"));
 
     // Tax state = domicile; not tiered.
     {
@@ -97,7 +90,7 @@ void premium_tax_test::test_rates()
     BOOST_TEST_EQUAL(z.levy_rate                (), 0.0000);
     BOOST_TEST_EQUAL(z.load_rate                (), 0.0000);
     BOOST_TEST_EQUAL(z.maximum_load_rate        (), 0.0270);
-    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0010);
+    BOOST_TEST_EQUAL(z.minimum_load_rate        (), 0.0008);
     BOOST_TEST_EQUAL(z.is_tiered                (), true  );
     BOOST_TEST_EQUAL(z.calculate_load(1.0, strata), 0.0270);
     }

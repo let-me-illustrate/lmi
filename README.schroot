@@ -99,9 +99,9 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 #   rm /etc/schroot/chroot.d/cross-lmi.conf
 
 apt-get update
-apt-get --assume-yes install g++-mingw-w64-i686 automake libtool make \
+apt-get --assume-yes install g++-mingw-w64 automake libtool make \
  pkg-config git zsh bzip2 unzip sudo wine default-jre fop jing trang \
- g++-multilib libxslt1-dev vim vim-doc \
+ g++-multilib libxml2-utils libxslt1-dev vim vim-doc \
  >cross-lmi-apt-get-log 2>&1
 
 # This command should produce little output:
@@ -127,6 +127,10 @@ adduser --gid=1000 --uid=1000 greg
 
 mkdir -p /opt/lmi
 chown greg:greg /opt/lmi
+mkdir -p /etc/opt/lmi
+chown greg:greg /etc/opt/lmi
+mkdir -p /var/opt/lmi
+chown greg:greg /var/opt/lmi
 mkdir -p /cache_for_lmi
 chown greg:greg /cache_for_lmi
 
@@ -279,6 +283,29 @@ WINEDLLOVERRIDES=mscoree=d wine wineboot
 
 # Install java.
 wine /cache_for_lmi/jre-1_5_0-windows-i586.exe
+
+# Symlink directories used by lmi, so that both native and wine
+# builds use the same directories and can share the same
+# architecture-independent 'configurable_settings.xml'--much like the
+# "identity mount" technique used with cygwin. See:
+#   http://lists.nongnu.org/archive/html/lmi/2017-05/msg00018.html
+
+mkdir -p ~/.wine/drive_c/users/greg/opt/
+pushd ~/.wine/drive_c/users/greg/opt/
+ln --symbolic --relative --force --no-dereference /opt/lmi/ ./lmi
+popd
+
+mkdir -p ~/.wine/drive_c/users/greg/etc/opt/
+pushd ~/.wine/drive_c/users/greg/etc/opt/
+ln --symbolic --relative --force --no-dereference /etc/opt/lmi/ ./lmi
+popd
+
+mkdir -p ~/.wine/drive_c/users/greg/var/opt/
+pushd ~/.wine/drive_c/users/greg/var/opt/
+ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
+popd
+
+# Install lmi for wine.
 
 wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
 chmod +x install_msw.sh

@@ -49,7 +49,7 @@
 #include "facets.hpp"
 #include "rtti_lmi.hpp"
 
-#include <istream>                      // std::ws
+#include <istream>                      // ws
 #include <sstream>
 #include <stdexcept>
 #include <string>

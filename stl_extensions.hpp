@@ -53,8 +53,8 @@
 
 #include "config.hpp"
 
-#include <functional>                   // std::multiplies(), std::plus()
-#include <stdexcept>                    // std::logic_error()
+#include <functional>                   // multiplies, plus
+#include <stdexcept>                    // logic_error
 
 namespace nonstd
 {

@@ -27,7 +27,7 @@
 
 #include "test_tools.hpp"
 
-#include <algorithm>                    // std::min()
+#include <algorithm>                    // min()
 #include <sstream>
 
 // This should fail to compile:
@@ -134,28 +134,36 @@ template<typename T>
 void tn_range_test::test_auxiliary_functions(char const* file, int line)
 {
     T const maxT = std::numeric_limits<T>::max();
-    INVOKE_BOOST_TEST(!is_strictly_between_extrema(maxT), file, line);
-    // This test would fail for type bool.
-    INVOKE_BOOST_TEST( is_strictly_between_extrema(   1), file, line);
+    T const minT = std::numeric_limits<T>::lowest();
 
-    INVOKE_BOOST_TEST_EQUAL(-1, signum(T(-1)), file, line);
+    INVOKE_BOOST_TEST(!is_strictly_between_extrema(maxT), file, line);
+    if(1 < maxT)
+        {
+        INVOKE_BOOST_TEST( is_strictly_between_extrema<T>(1), file, line);
+        }
+
     INVOKE_BOOST_TEST_EQUAL( 0, signum(T( 0)), file, line);
     INVOKE_BOOST_TEST_EQUAL( 1, signum(T( 1)), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(-1, signum(-maxT), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 1, signum( maxT), file, line);
+    INVOKE_BOOST_TEST_EQUAL( 1, signum(maxT), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(-1), file, line);
-    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer( 0), file, line);
-    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer( 1), file, line);
+    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T( 0)), file, line);
+    INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T( 1)), file, line);
+
+    if(minT < 0)
+        {
+        INVOKE_BOOST_TEST_EQUAL(-1, signum(T(-1)), file, line);
+        INVOKE_BOOST_TEST_EQUAL(-1, signum(minT), file, line);
+        INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T(-1)), file, line);
+        }
 
     // Integer types truncate the argument, always resulting in an
     // exact integer.
     bool volatile exact = std::numeric_limits<T>::is_exact;
     if(!exact)
         {
-        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer( 0.5), file, line);
-        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(1.07), file, line);
+        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(T( 0.5)), file, line);
+        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(T(1.07)), file, line);
         }
 
     bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
@@ -171,8 +179,8 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     if(is_iec559 && has_quiet_NaN)
         {
         T const qnanT = std::numeric_limits<T>::quiet_NaN();
-        INVOKE_BOOST_TEST_EQUAL( 0, signum(-qnanT), file, line);
-        INVOKE_BOOST_TEST_EQUAL( 0, signum( qnanT), file, line);
+        INVOKE_BOOST_TEST_EQUAL(-1, signum(-qnanT), file, line);
+        INVOKE_BOOST_TEST_EQUAL( 1, signum( qnanT), file, line);
         }
 }
 
@@ -285,11 +293,13 @@ void tn_range_test::test_percentages(char const* file, int line)
 
 void tn_range_test::test()
 {
-    test_auxiliary_functions<signed char>(__FILE__, __LINE__);
-    test_auxiliary_functions<int        >(__FILE__, __LINE__);
-    test_auxiliary_functions<float      >(__FILE__, __LINE__);
-    test_auxiliary_functions<double     >(__FILE__, __LINE__);
-    test_auxiliary_functions<long double>(__FILE__, __LINE__);
+    test_auxiliary_functions<bool         >(__FILE__, __LINE__);
+    test_auxiliary_functions<signed char  >(__FILE__, __LINE__);
+    test_auxiliary_functions<unsigned char>(__FILE__, __LINE__);
+    test_auxiliary_functions<int          >(__FILE__, __LINE__);
+    test_auxiliary_functions<float        >(__FILE__, __LINE__);
+    test_auxiliary_functions<double       >(__FILE__, __LINE__);
+    test_auxiliary_functions<long double  >(__FILE__, __LINE__);
 
     test_floating_auxiliary_functions<float      >(__FILE__, __LINE__);
     test_floating_auxiliary_functions<double     >(__FILE__, __LINE__);

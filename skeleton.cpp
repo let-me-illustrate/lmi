@@ -100,7 +100,7 @@
 #include <wx/utils.h>                   // wxMilliSleep(), wxSafeYield()
 #include <wx/xrc/xmlres.h>
 
-#include <iterator>                     // std::insert_iterator
+#include <iterator>                     // insert_iterator
 #include <sstream>
 #include <stdexcept>
 #include <string>

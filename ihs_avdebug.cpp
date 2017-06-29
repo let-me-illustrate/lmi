@@ -34,7 +34,7 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <iterator>                     // std::ostream_iterator
+#include <iterator>                     // ostream_iterator
 #include <string>
 #include <vector>
 

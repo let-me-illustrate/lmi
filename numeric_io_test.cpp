@@ -31,7 +31,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <cmath>                        // std::exp()
+#include <cmath>                        // exp()
 #include <limits>
 #include <sstream>
 #include <stdexcept>

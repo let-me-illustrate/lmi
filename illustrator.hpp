@@ -30,7 +30,7 @@
 #include <boost/filesystem/path.hpp>
 
 #include <functional>
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <vector>
 
 class Input;

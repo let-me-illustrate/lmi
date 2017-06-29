@@ -57,7 +57,7 @@ std::vector<double> annual_rates()
 ///   qm = 1 - (1-q)^(1/12)
 ///   qm = qm / (1-qm)
 /// diverges even in the tenth significant digit. Values given here
-/// use expm1() and log1p() for better accuracy.
+/// use std::expm1() and std::log1p() for better accuracy.
 
 std::vector<double> monthly_rates()
 {

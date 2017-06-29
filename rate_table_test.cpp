@@ -32,7 +32,7 @@
 #include <boost/filesystem/operations.hpp>
 
 #include <fstream>
-#include <iomanip>                      // std::setw(), std::setfill()
+#include <iomanip>                      // setw(), setfill()
 #include <ios>
 #include <sstream>
 #include <stdexcept>

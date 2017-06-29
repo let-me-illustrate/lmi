@@ -28,7 +28,7 @@
 #include "test_tools.hpp"
 
 #include <cmath>
-#include <functional>                   // std::bind()
+#include <functional>                   // bind()
 
 inline void do_nothing()
 {}

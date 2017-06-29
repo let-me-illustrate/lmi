@@ -25,7 +25,10 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
+#include "mc_enum_type_enums.hpp"       // mcenum_mode
 #include "zero.hpp"
+
+class calendar_date;
 
 // TODO ?? Things to reconsider later:
 //
@@ -247,6 +250,15 @@ void irr
         ,decimals
         );
 }
+
+double list_bill_premium
+    (double               prem_ante
+    ,double               prem_post
+    ,mcenum_mode          mode
+    ,calendar_date const& cert_date
+    ,calendar_date const& bill_date
+    ,double               v12
+    );
 
 #endif // financial_hpp
 

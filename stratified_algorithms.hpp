@@ -27,7 +27,7 @@
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // minmax
 
-#include <algorithm>                    // std::is_sorted(), std::upper_bound()
+#include <algorithm>                    // is_sorted(), upper_bound()
 #include <functional>
 #include <vector>
 

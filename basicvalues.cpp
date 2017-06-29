@@ -36,8 +36,8 @@
 #include "premium_tax.hpp"
 #include "surrchg_rates.hpp"
 
-#include <algorithm>                    // std::max()
-#include <cmath>                        // std::pow()
+#include <algorithm>                    // max()
+#include <cmath>                        // pow()
 
 // IHS !! Instead of these hardcoded paths, lmi uses a configuration file.
 //

@@ -37,9 +37,9 @@
 
 #include <algorithm>
 #include <exception>
-#include <functional>                   // std::bind()
+#include <functional>                   // bind()
 #include <sstream>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 
 //============================================================================
 // Realize sequence strings with only numeric values.

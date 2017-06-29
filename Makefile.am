@@ -335,7 +335,6 @@ liblmi_common_sources = \
     dbvalue.cpp \
     death_benefits.cpp \
     emit_ledger.cpp \
-    expm1.c \
     facets.cpp \
     fenv_guard.cpp \
     fenv_lmi.cpp \
@@ -411,6 +410,7 @@ libantediluvian_la_LIBADD = \
 liblmi_la_SOURCES = \
     authenticity.cpp \
     commutation_functions.cpp \
+    financial.cpp \
     fund_data.cpp \
     gpt_input.cpp \
     gpt_server.cpp \
@@ -644,7 +644,6 @@ test_commutation_functions_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
   commutation_functions_test.cpp \
-  expm1.c \
   timer.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -706,7 +705,9 @@ test_file_command_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_financial_SOURCES = \
   $(common_test_objects) \
+  calendar_date.cpp \
   facets.cpp \
+  financial.cpp \
   financial_test.cpp \
   null_stream.cpp \
   stratified_algorithms.cpp \
@@ -733,7 +734,6 @@ test_global_settings_LDADD = \
 test_gpt_SOURCES = \
   $(common_test_objects) \
   commutation_functions.cpp \
-  expm1.c \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
   ihs_irc7702.cpp \
@@ -772,7 +772,6 @@ test_input_SOURCES = \
   dbdict.cpp \
   dbnames.cpp \
   dbvalue.cpp \
-  expm1.c \
   facets.cpp \
   global_settings.cpp \
   input.cpp \
@@ -825,7 +824,6 @@ test_istream_to_string_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_loads_SOURCES = \
   $(common_test_objects) \
-  expm1.c \
   loads.cpp \
   loads_test.cpp \
   timer.cpp
@@ -843,7 +841,6 @@ test_materially_equal_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_math_functors_SOURCES = \
   $(common_test_objects) \
-  expm1.c \
   math_functors_test.cpp \
   timer.cpp
 test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
@@ -873,7 +870,6 @@ test_miscellany_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_mortality_rates_SOURCES = \
   $(common_test_objects) \
-  expm1.c \
   ihs_mortal.cpp \
   mortality_rates_test.cpp
 test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
@@ -1159,7 +1155,6 @@ noinst_HEADERS = \
     edit_mvc_docview_parameters.hpp \
     emit_ledger.hpp \
     exit_codes.hpp \
-    expm1.h \
     facets.hpp \
     fenv_guard.hpp \
     fenv_lmi.hpp \
@@ -1213,7 +1208,6 @@ noinst_HEADERS = \
     map_lookup.hpp \
     materially_equal.hpp \
     math_functors.hpp \
-    max_stream_precision.hpp \
     mc_enum.hpp \
     mc_enum.tpp \
     mc_enum_aux.hpp \

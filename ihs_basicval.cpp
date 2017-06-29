@@ -31,6 +31,7 @@
 #include "database.hpp"
 #include "death_benefits.hpp"
 #include "et_vector.hpp"
+#include "financial.hpp"                // list_bill_premium()
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt_specamt.hpp"
@@ -52,7 +53,8 @@
 #include "value_cast.hpp"
 
 #include <algorithm>
-#include <cmath>                        // std::pow()
+#include <cmath>                        // pow()
+#include <functional>                   // multiplies
 #include <limits>
 #include <numeric>
 #include <stdexcept>
@@ -1043,47 +1045,40 @@ double BasicValues::GetModalPremGSP
     return round_max_premium()(ldbl_eps_plus_one() * z);
 }
 
-/// Determine an approximate "pay as you go" modal premium.
+/// Calculate a monthly-deduction discount factor on the fly.
 ///
-/// Rationale for overloading this function and its siblings. The
-/// simple three-argument form is intended for general use, parallel
-/// to similar 'GetModalPrem*' functions; it simply forwards to the
-/// four-argument implementation. That four-argument version, with an
-/// extra yare_input argument, is intended for calculating premiums
-/// under scenarios that differ from actual input, motivated by the
-/// group premium quote's need for premiums with and without certain
-/// riders. Another means to the same end would be to add an argument
-/// for each rider of interest, but that set of riders might expand,
-/// whereas the chosen technique is more future-proof.
+/// This factor depends on the general-account rate, which is always
+/// specified, even for separate-account-only products.
+///
+/// This concept is at the same time overelaborate and inadequate.
+/// If the crediting rate changes during a policy year, it results in
+/// a "pay-deductions" premium that varies between anniversaries, yet
+/// may not prevent the contract from lapsing; both those outcomes are
+/// likely to frustrate customers.
 
-double BasicValues::GetModalPremMlyDed
-    (int         a_year
-    ,mcenum_mode a_mode
-    ,double      a_specamt
-    ) const
+double BasicValues::mly_ded_discount_factor(int year, mcenum_mode mode) const
 {
-    return GetModalPremMlyDed(a_year, a_mode, a_specamt, yare_input_);
+    LMI_ASSERT(0.0 != mode);
+    double spread = 0.0;
+    if(mce_monthly != mode)
+        {
+        spread = MinPremIntSpread_[year] * 1.0 / mode;
+        }
+    double const z = i_upper_12_over_12_from_i<double>()
+        (   yare_input_.GeneralAccountRate[year]
+        -   spread
+        );
+    double const u = 1.0 + std::max
+        (z
+        ,InterestRates_->GenAcctNetRate
+            (mce_gen_guar
+            ,mce_monthly_rate
+            )[year]
+        );
+    return 1.0 / u;
 }
 
-double BasicValues::GetModalPremMlyDedEe
-    (int         a_year
-    ,mcenum_mode a_mode
-    ,double      a_specamt
-    ) const
-{
-    return GetModalPremMlyDedEe(a_year, a_mode, a_specamt, yare_input_);
-}
-
-double BasicValues::GetModalPremMlyDedEr
-    (int         a_year
-    ,mcenum_mode a_mode
-    ,double      a_specamt
-    ) const
-{
-    return GetModalPremMlyDedEr(a_year, a_mode, a_specamt, yare_input_);
-}
-
-/// Determine an approximate "pay as you go" modal premium.
+/// Determine approximate monthly deductions.
 ///
 /// This more or less represents actual monthly deductions, at least
 /// for monthly mode on an option B contract, generally favoring
@@ -1107,243 +1102,302 @@ double BasicValues::GetModalPremMlyDedEr
 /// If annual_policy_fee is not zero, then level premium on any mode
 /// other than annual cannot precisely cover monthly deductions due
 /// to the fee's uneven incidence.
+///
+/// It might be objected that this function's name suggests that all
+/// deductions are monthly, whereas it returns "annual" and "monthly"
+/// deductions. Naming rationale: "monthly deduction" is a standard
+/// term with an unambiguous meaning; the "annual" policy fee is part
+/// of the monthly deduction on anniversary only.
+///
+/// This function and the modal-premium function implemented in terms
+/// of it are intended for use with group UL products for which the
+/// employer typically pays the approximate monthly deductions, but
+/// may also be used with any UL product when such a payment pattern
+/// is desired.
+
+std::pair<double,double> BasicValues::approx_mly_ded
+    (int    year
+    ,double specamt
+    ) const
+{
+    double mly_ded = specamt * DBDiscountRate[year];
+    mly_ded *= GetBandedCoiRates(mce_gen_curr, specamt)[year];
+
+    if(yare_input_.AccidentalDeathBenefit)
+        {
+        double const r = MortalityRates_->AdbRates()[year];
+        mly_ded += r * std::min(specamt, AdbLimit);
+        }
+
+    if(yare_input_.SpouseRider)
+        {
+        double const r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[year];
+        mly_ded += r * yare_input_.SpouseRiderAmount;
+        }
+
+    if(yare_input_.ChildRider)
+        {
+        double const r = MortalityRates_->ChildRiderRates()[year];
+        mly_ded += r * yare_input_.ChildRiderAmount;
+        }
+
+    if(true) // Written thus for parallelism and to keep 'r' local.
+        {
+        double const r = Loads_->specified_amount_load(mce_gen_curr)[year];
+        mly_ded += r * std::min(specamt, SpecAmtLoadLimit);
+        }
+
+    mly_ded += Loads_->monthly_policy_fee(mce_gen_curr)[year];
+
+    double ann_ded = Loads_->annual_policy_fee(mce_gen_curr)[year];
+
+    if(yare_input_.WaiverOfPremiumBenefit)
+        {
+        double const r = MortalityRates_->WpRates()[year];
+        switch(WaiverChargeMethod)
+            {
+            case oe_waiver_times_specamt:
+                {
+                mly_ded += r * std::min(specamt, WpLimit);
+                }
+                break;
+            case oe_waiver_times_deductions:
+                {
+                mly_ded *= 1.0 + r;
+                ann_ded *= 1.0 + r;
+                }
+                break;
+            default:
+                {
+                alarum()
+                    << "Case '"
+                    << WaiverChargeMethod
+                    << "' not found."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        }
+
+    double const load = Loads_->target_premium_load_maximum_premium_tax()[year];
+    mly_ded /= 1.0 - load;
+    ann_ded /= 1.0 - load;
+
+    return std::make_pair(ann_ded, mly_ded);
+}
+
+/// Determine approximate monthly deductions split between ee and er.
+///
+/// This function is similar to approx_mly_ded(), but splits monthly
+/// deductions between employee and employer in a plausible way. It is
+/// intended for use with group UL products for which the ee and er
+/// typically pay these approximate monthly deductions; it and the
+/// modal-premium function implemented in terms of it are of narrow
+/// applicability and generally not useful with other products.
+///
+/// Any once-a-year monthly deduction is deliberately ignored for
+/// simplicity--if any annual charge is not zero, this function simply
+/// sets the deductions it calculates to zero. Once-a-year deductions
+/// (e.g., a fee to offset underwriting costs for private placements)
+/// are extraordinary, and occur only on products for which a split
+/// between ee and er would not be wanted.
+
+std::pair<double,double> BasicValues::approx_mly_ded_ex
+    (int    year
+    ,double specamt
+    ,double termamt
+    ) const
+{
+    if(0.0 != Loads_->annual_policy_fee(mce_gen_curr)[year])
+        {
+        return {0.0, 0.0};
+        }
+
+    double ee_ded = termamt * DBDiscountRate[year];
+    double er_ded = specamt * DBDiscountRate[year];
+
+    ee_ded *= GetCurrentTermRates()[year];
+    er_ded *= GetBandedCoiRates(mce_gen_curr, specamt)[year];
+
+    // Paid by er.
+    if(yare_input_.AccidentalDeathBenefit)
+        {
+        double const r = MortalityRates_->AdbRates()[year];
+        er_ded += r * std::min(specamt, AdbLimit);
+        }
+
+    // Paid by ee.
+    if(yare_input_.SpouseRider)
+        {
+        double const r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[year];
+        ee_ded += r * yare_input_.SpouseRiderAmount;
+        }
+
+    // Paid by ee.
+    if(yare_input_.ChildRider)
+        {
+        double const r = MortalityRates_->ChildRiderRates()[year];
+        ee_ded += r * yare_input_.ChildRiderAmount;
+        }
+
+    // Paid by er.
+    if(true) // Written thus for parallelism and to keep 'r' local.
+        {
+        double const r = Loads_->specified_amount_load(mce_gen_curr)[year];
+        er_ded += r * std::min(specamt, SpecAmtLoadLimit);
+        }
+
+    // Paid by er.
+    er_ded += Loads_->monthly_policy_fee(mce_gen_curr)[year];
+
+    if(yare_input_.WaiverOfPremiumBenefit)
+        {
+        double const r = MortalityRates_->WpRates()[year];
+        switch(WaiverChargeMethod)
+            {
+            case oe_waiver_times_specamt:
+                {
+                // Paid by er. (In this case, WP excludes term.)
+                er_ded += r * std::min(specamt, WpLimit);
+                }
+                break;
+            case oe_waiver_times_deductions:
+                {
+                // Paid by ee and er both.
+                ee_ded *= 1.0 + r;
+                er_ded *= 1.0 + r;
+                }
+                break;
+            default:
+                {
+                alarum()
+                    << "Case '"
+                    << WaiverChargeMethod
+                    << "' not found."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        }
+
+    double const load = Loads_->target_premium_load_maximum_premium_tax()[year];
+    ee_ded /= 1.0 - load;
+    er_ded /= 1.0 - load;
+
+    return std::make_pair(ee_ded, er_ded);
+}
+
+/// Determine an approximate "pay as you go" modal premium.
 
 double BasicValues::GetModalPremMlyDed
-    (int               a_year
-    ,mcenum_mode       a_mode
-    ,double            a_specamt
-    ,yare_input const& a_yi
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
     ) const
 {
-    double z = a_specamt * DBDiscountRate[a_year];
-    z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
+    auto const deductions = approx_mly_ded(year, specamt);
+    double const ann_ded = deductions.first;
+    double const mly_ded = deductions.second;
+    double const v12 = mly_ded_discount_factor(year, mode);
+    double const annuity = (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
+    return round_min_premium()(ann_ded + mly_ded * annuity);
+}
 
-    if(a_yi.AccidentalDeathBenefit)
-        {
-        double r = MortalityRates_->AdbRates()[a_year];
-        z += r * std::min(a_specamt, AdbLimit);
-        }
+/// Determine approximate ee and er "pay as you go" modal premiums.
 
-    if(a_yi.SpouseRider)
-        {
-        double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
-        z += r * a_yi.SpouseRiderAmount;
-        }
+std::pair<double,double> BasicValues::GetModalPremMlyDedEx
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
+    ,double      termamt
+    ) const
+{
+    auto const deductions = approx_mly_ded_ex(year, specamt, termamt);
+    double const ee_ded = deductions.first;
+    double const er_ded = deductions.second;
+    double const v12 = DBDiscountRate[year];
+    double const annuity = (1.0 - std::pow(v12, 12.0 / mode)) / (1.0 - v12);
+    return std::make_pair
+        (round_min_premium()(ee_ded * annuity)
+        ,round_min_premium()(er_ded * annuity)
+        );
+}
 
-    if(a_yi.ChildRider)
-        {
-        double r = MortalityRates_->ChildRiderRates()[a_year];
-        z += r * a_yi.ChildRiderAmount;
-        }
+/// Possibly off-anniversary premium to be shown on list bill.
+///
+/// Implemented in terms of list_bill_premium(), q.v.
+///
+/// Ascertain deductions at the current age, and then again at the
+/// next age iff that is less than the maturity age, otherwise
+/// assuming that deductions are zero after maturity. Return their
+/// present value, discounted at an interest rate determined as of
+/// the list-bill date.
+///
+/// Any once-a-year monthly deduction is deliberately ignored for
+/// simplicity--if any annual charge is not zero, this function simply
+/// sets the premiums it calculates to zero. Once-a-year deductions
+/// (e.g., a fee to offset underwriting costs for private placements)
+/// are extraordinary, and occur only on products for which list bills
+/// would not be wanted.
 
-    if(true) // Written thus for parallelism and to keep 'r' local.
-        {
-        double r = Loads_->specified_amount_load(mce_gen_curr)[a_year];
-        z += r * std::min(a_specamt, SpecAmtLoadLimit);
-        }
-
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
-
-    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
-
-    if(a_yi.WaiverOfPremiumBenefit)
-        {
-        double const r = MortalityRates_->WpRates()[a_year];
-        switch(WaiverChargeMethod)
-            {
-            case oe_waiver_times_specamt:
-                {
-                z += r * std::min(a_specamt, WpLimit);
-                }
-                break;
-            case oe_waiver_times_deductions:
-                {
-                z *= 1.0 + r;
-                annual_charge *= 1.0 + r;
-                }
-                break;
-            default:
-                {
-                alarum()
-                    << "Case '"
-                    << WaiverChargeMethod
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
-                }
-            }
-        }
-
-    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
-
-    z *= GetAnnuityValueMlyDed(a_year, a_mode);
-
-    z += annual_charge;
-
+double BasicValues::GetListBillPremMlyDed
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
+    ) const
+{
+    double const p0 = approx_mly_ded(year, specamt).second;
+    int const next_year = 1 + year;
+    double const p1 =
+        (next_year < GetLength())
+        ? approx_mly_ded(next_year, specamt).second
+        : 0.0
+        ;
+    double const z = list_bill_premium
+        (p0
+        ,p1
+        ,mode
+        ,yare_input_.EffectiveDate
+        ,yare_input_.ListBillDate
+        ,mly_ded_discount_factor(year, mode)
+        );
     return round_min_premium()(z);
 }
 
-// The "-Ee" and "-Er" variants are written with preprocessor
-// conditionals for ease of comparison to the unsuffixed original.
-
-double BasicValues::GetModalPremMlyDedEe
-    (int               a_year
-    ,mcenum_mode       a_mode
-    ,double            a_specamt
-    ,yare_input const& a_yi
+std::pair<double,double> BasicValues::GetListBillPremMlyDedEx
+    (int         year
+    ,mcenum_mode mode
+    ,double      specamt
+    ,double      termamt
     ) const
 {
-    double z = a_specamt * DBDiscountRate[a_year];
-    z *= GetCurrentTermRates()[a_year];
-#if 0
-    if(a_yi.AccidentalDeathBenefit)
-        {
-        double r = MortalityRates_->AdbRates()[a_year];
-        z += r * std::min(a_specamt, AdbLimit);
-        }
-#endif // 0
-    if(a_yi.SpouseRider)
-        {
-        double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
-        z += r * a_yi.SpouseRiderAmount;
-        }
-
-    if(a_yi.ChildRider)
-        {
-        double r = MortalityRates_->ChildRiderRates()[a_year];
-        z += r * a_yi.ChildRiderAmount;
-        }
-
-#if 0
-    if(true) // Written thus for parallelism and to keep 'r' local.
-        {
-        double r = Loads_->specified_amount_load(mce_gen_curr)[a_year];
-        z += r * std::min(a_specamt, SpecAmtLoadLimit);
-        }
-
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
-
-    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
-#endif // 0
-
-    if(a_yi.WaiverOfPremiumBenefit)
-        {
-        double const r = MortalityRates_->WpRates()[a_year];
-        switch(WaiverChargeMethod)
-            {
-            case oe_waiver_times_specamt:
-                {
-                z += r * std::min(a_specamt, WpLimit);
-                }
-                break;
-            case oe_waiver_times_deductions:
-                {
-                z *= 1.0 + r;
-#if 0
-                annual_charge *= 1.0 + r;
-#endif // 0
-                }
-                break;
-            default:
-                {
-                alarum()
-                    << "Case '"
-                    << WaiverChargeMethod
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
-                }
-            }
-        }
-
-    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
-
-    double u = DBDiscountRate[a_year];
-    z *= (1.0 - std::pow(u, 12.0 / a_mode)) / (1.0 - u);
-
-#if 0
-    z += annual_charge;
-#endif // 0
-
-    return round_min_premium()(z);
-}
-
-double BasicValues::GetModalPremMlyDedEr
-    (int               a_year
-    ,mcenum_mode       a_mode
-    ,double            a_specamt
-    ,yare_input const& a_yi
-    ) const
-{
-    double z = a_specamt * DBDiscountRate[a_year];
-    z *= GetBandedCoiRates(mce_gen_curr, a_specamt)[a_year];
-
-    if(a_yi.AccidentalDeathBenefit)
-        {
-        double r = MortalityRates_->AdbRates()[a_year];
-        z += r * std::min(a_specamt, AdbLimit);
-        }
-
-#if 0
-    if(a_yi.SpouseRider)
-        {
-        double r = MortalityRates_->SpouseRiderRates(mce_gen_curr)[a_year];
-        z += r * a_yi.SpouseRiderAmount;
-        }
-
-    if(a_yi.ChildRider)
-        {
-        double r = MortalityRates_->ChildRiderRates()[a_year];
-        z += r * a_yi.ChildRiderAmount;
-        }
-#endif // 0
-
-    if(true) // Written thus for parallelism and to keep 'r' local.
-        {
-        double r = Loads_->specified_amount_load(mce_gen_curr)[a_year];
-        z += r * std::min(a_specamt, SpecAmtLoadLimit);
-        }
-
-    z += Loads_->monthly_policy_fee(mce_gen_curr)[a_year];
-
-    double annual_charge = Loads_->annual_policy_fee(mce_gen_curr)[a_year];
-
-    if(a_yi.WaiverOfPremiumBenefit)
-        {
-        double const r = MortalityRates_->WpRates()[a_year];
-        switch(WaiverChargeMethod)
-            {
-            case oe_waiver_times_specamt:
-                {
-                z += r * std::min(a_specamt, WpLimit);
-                }
-                break;
-            case oe_waiver_times_deductions:
-                {
-                z *= 1.0 + r;
-                annual_charge *= 1.0 + r;
-                }
-                break;
-            default:
-                {
-                alarum()
-                    << "Case '"
-                    << WaiverChargeMethod
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
-                }
-            }
-        }
-
-    z /= 1.0 - Loads_->target_premium_load_maximum_premium_tax()[a_year];
-
-    double u = DBDiscountRate[a_year];
-    z *= (1.0 - std::pow(u, 12.0 / a_mode)) / (1.0 - u);
-
-    z += annual_charge;
-
-    return round_min_premium()(z);
+    auto const p0 = approx_mly_ded_ex(year, specamt, termamt);
+    int const next_year = 1 + year;
+    auto const p1 =
+        (next_year < GetLength())
+        ? approx_mly_ded_ex(next_year, specamt, termamt)
+        : decltype(p0)()
+        ;
+    double const ee_prem = list_bill_premium
+        (p0.first
+        ,p1.first
+        ,mode
+        ,yare_input_.EffectiveDate
+        ,yare_input_.ListBillDate
+        ,DBDiscountRate[year]
+        );
+    double const er_prem = list_bill_premium
+        (p0.second
+        ,p1.second
+        ,mode
+        ,yare_input_.EffectiveDate
+        ,yare_input_.ListBillDate
+        ,DBDiscountRate[year]
+        );
+    return std::make_pair
+        (round_min_premium()(ee_prem)
+        ,round_min_premium()(er_prem)
+        );
 }
 
 //============================================================================
@@ -1506,40 +1560,6 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
         {
         return MortalityRates_->MonthlyCoiRatesBand0(rate_basis);
         }
-}
-
-/// Calculate a special modal factor on the fly.
-///
-/// This factor depends on the general-account rate, which is always
-/// specified, even for separate-account-only products.
-///
-/// This concept is at the same time overelaborate and inadequate.
-/// If the crediting rate changes during a policy year, it results in
-/// a "pay-deductions" premium that varies between anniversaries, yet
-/// may not prevent the contract from lapsing; both those outcomes are
-/// likely to frustrate customers.
-
-double BasicValues::GetAnnuityValueMlyDed(int a_year, mcenum_mode a_mode) const
-{
-    LMI_ASSERT(0.0 != a_mode);
-    double spread = 0.0;
-    if(mce_monthly != a_mode)
-        {
-        spread = MinPremIntSpread_[a_year] * 1.0 / a_mode;
-        }
-    double z = i_upper_12_over_12_from_i<double>()
-        (   yare_input_.GeneralAccountRate[a_year]
-        -   spread
-        );
-    double u = 1.0 + std::max
-        (z
-        ,InterestRates_->GenAcctNetRate
-            (mce_gen_guar
-            ,mce_monthly_rate
-            )[a_year]
-        );
-    u = 1.0 / u;
-    return (1.0 - std::pow(u, 12.0 / a_mode)) / (1.0 - u);
 }
 
 /// This forwarding function prevents the 'actuarial_table' module

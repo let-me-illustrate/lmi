@@ -32,8 +32,8 @@
 
 #include <windows.h>
 
-#include <iostream>                     // std::cout, std::endl
-#include <iterator>                     // std::istream_iterator
+#include <iostream>                     // cout, endl
+#include <iterator>                     // istream_iterator
 #include <sstream>
 
 MswDllPreloader::MswDllPreloader()

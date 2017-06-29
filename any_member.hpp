@@ -66,7 +66,7 @@
 #include "rtti_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>                    // std::lower_bound(), std::swap()
+#include <algorithm>                    // lower_bound(), swap()
 #include <map>
 #include <sstream>
 #include <stdexcept>

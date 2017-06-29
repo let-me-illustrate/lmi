@@ -26,6 +26,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 mingw_dir     := /MinGW_
 
 prefix        := /opt/lmi/local
+exec_prefix   := $(prefix)
 
 cache_dir     := /cache_for_lmi/downloads
 
@@ -38,8 +39,7 @@ wxpdfdoc_dir  := /opt/lmi/wxpdfdoc-scratch
 # name, so we need a separate "urlbase" variable.
 
 wxpdfdoc_commit             := 5ac28a73e74916cf44d0ce286976e21d948e9bd8
-wxpdfdoc_basename           := wxpdfdoc-$(wxpdfdoc_commit)
-wxpdfdoc_archive            := $(wxpdfdoc_basename).zip
+wxpdfdoc_archive            := wxpdfdoc-$(wxpdfdoc_commit).zip
 $(wxpdfdoc_archive)-urlbase := $(wxpdfdoc_commit).zip
 $(wxpdfdoc_archive)-root    := https://github.com/vadz/wxpdfdoc/archive
 $(wxpdfdoc_archive)-url     := $($(wxpdfdoc_archive)-root)/$($(wxpdfdoc_archive)-urlbase)
@@ -58,17 +58,22 @@ ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
   host_type     := i686-w64-mingw32
 endif
 
-compiler       := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
+compiler         := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
 
-wx_cc_flags    := -fno-omit-frame-pointer
-wx_cxx_flags   := -fno-omit-frame-pointer -std=c++11
+wxpdfdoc_version := 0.9.4
+source_dir       := $(wxpdfdoc_dir)/wxPdfDoc-$(wxpdfdoc_version)
+
+wx_cc_flags      := -fno-omit-frame-pointer
+wx_cxx_flags     := -fno-omit-frame-pointer -std=c++11
 
 config_options = \
   --prefix=$(prefix) \
+  --exec-prefix=$(exec_prefix) \
+  --with-wx-prefix=$(prefix) \
+  --with-wx-exec-prefix=$(exec_prefix) \
   --build=$(build_type) \
   --host=$(host_type) \
   --disable-dependency-tracking \
-  --with-wx-config=$(prefix)/bin/wx-config-portable \
   CFLAGS='$(wx_cc_flags)' \
   CXXFLAGS='$(wx_cxx_flags)' \
 
@@ -78,44 +83,44 @@ ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
 RM     := rm
-RMDIR  := rmdir
 UNZIP  := unzip
 WGET   := wget
 
 # Targets ######################################################################
 
 .PHONY: all
-all: clobber
+all: clobber_exec_prefix_only
 	$(MAKE) --file=$(this_makefile) wxpdfdoc
 
 .PHONY: initial_setup
 initial_setup:
 	$(MKDIR) --parents $(prefix)
+	$(MKDIR) --parents $(exec_prefix)
 	$(MKDIR) --parents $(cache_dir)
 	$(MKDIR) --parents $(wxpdfdoc_dir)
 
 UNZIPFLAGS := -q
 
 WGETFLAGS :=
+%.zip: WGETFLAGS += '--output-document=$@'
 
 .PHONY: %.zip
 %.zip: initial_setup
-	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) --output-document=$@ $($@-url)
+	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wxpdfdoc_dir)
+	mv $(wxpdfdoc_dir)/$(basename $@) $(source_dir)
 
 .PHONY: wxpdfdoc
 wxpdfdoc: $(wxpdfdoc_archive)
-	cd $(wxpdfdoc_dir)/$(wxpdfdoc_basename) \
+	cd $(source_dir) \
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
 	  && ./configure $(config_options) \
 	  && $(MAKE) install_pdfdoc_dll install_pdfdoc_dll_headers \
 
-.PHONY: clobber
-clobber:
-# The 'uninstall_pdfdoc_dll_headers' target doesn't remove the (now empty)
-# directory where the headers are installed, so do it separately ourselves.
-	-cd $(wxpdfdoc_dir)/$(wxpdfdoc_basename) && \
-	    $(MAKE) uninstall_pdfdoc_dll uninstall_pdfdoc_dll_headers
-	-$(RMDIR) $(prefix)/include/wx
+.PHONY: clobber_exec_prefix_only
+clobber_exec_prefix_only:
+	-$(RM) --force --recursive $(exec_prefix)/lib/*wxcode*pdfdoc*
+	-$(RM) --force --recursive $(exec_prefix)/src/pdf*.inc
 	-$(RM) --force --recursive $(wxpdfdoc_dir)
+

@@ -35,7 +35,7 @@
 
 toolset      := como
 
-src_dir      := $(CURDIR)
+srcdir       := $(CURDIR)
 
 gcc_version  :=
 
@@ -218,10 +218,10 @@ CXX := \
 	@export PATH=$(como_bin_dir):$(gcc2_bin_dir):$$PATH; \
 	export COMO_MIN_INCLUDE=$(gcc2_inc_dir); \
 	$(MAKE) \
-	  --file=$(src_dir)/GNUmakefile \
+	  --file=$(srcdir)/GNUmakefile \
 	  --jobs=1 \
 	                        gcc_version='$(gcc_version)' \
-	                            src_dir='$(src_dir)' \
+	                             srcdir='$(srcdir)' \
 	                            toolset='$(toolset)' \
 	                         C_WARNINGS='$(C_WARNINGS)' \
 	                       CXX_WARNINGS='$(CXX_WARNINGS)' \

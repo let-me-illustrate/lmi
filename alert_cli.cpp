@@ -23,7 +23,7 @@
 
 #include "alert.hpp"
 
-#include <cstdio>                       // std::fputs(), std::getchar()
+#include <cstdio>                       // fputs(), getchar()
 #include <iostream>
 #include <stdexcept>
 

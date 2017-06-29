@@ -23,7 +23,7 @@
 
 #include "test_tools.hpp"
 
-#include <stdio.h>                      // snprintf() (C99, not C++98).
+#include <stdio.h>                      // snprintf()
 #include <string>
 
 int test_main(int, char*[])
@@ -35,40 +35,40 @@ int test_main(int, char*[])
     char buf[1000] = "zzzzzzzzz";
     int len;
 
-    len = snprintf(nullptr, 0, "%4d", 1234);
+    len = std::snprintf(nullptr, 0, "%4d", 1234);
     BOOST_TEST_EQUAL(4, len);
 
     // All tests in this group fail with the defective msvc rtl.
-    len = snprintf(buf, 0, "%4d", 1234);
+    len = std::snprintf(buf, 0, "%4d", 1234);
     BOOST_TEST_EQUAL(4, len);
 
     // All tests in this group fail with the defective msvc rtl.
-    len = snprintf(buf, 3, "%4d", 1234);
+    len = std::snprintf(buf, 3, "%4d", 1234);
     BOOST_TEST_EQUAL(4, len);
     // This test fails with borland C++ 5.5.1 .
     BOOST_TEST_EQUAL(std::string(buf, 9), std::string("12\0zzzzzz\0", 9));
 
-    len = snprintf(buf, 4, "%4d", 1234);
+    len = std::snprintf(buf, 4, "%4d", 1234);
     BOOST_TEST_EQUAL(4, len);
     // This test fails with the defective msvc rtl and also
     // with borland C++ 5.5.1 .
     BOOST_TEST_EQUAL(std::string(buf, 9), std::string("123\0zzzzz\0", 9));
 
-    len = snprintf(buf, 5, "%4d", 1234);
+    len = std::snprintf(buf, 5, "%4d", 1234);
     BOOST_TEST_EQUAL(4, len);
     BOOST_TEST_EQUAL(std::string(buf, 9), std::string("1234\0zzzz\0", 9));
 
     long double z = 2.718281828459045L;
-    len = snprintf(buf, 5, "%.5Lf", z);
+    len = std::snprintf(buf, 5, "%.5Lf", z);
     BOOST_TEST_EQUAL(7, len);
     // This should truncate to 2.71, not round to 2.72 .
     BOOST_TEST_EQUAL(std::string(buf, 9), std::string("2.71\0zzzz\0", 9));
-    len = snprintf(buf, 7, "%.5Lf", z);
+    len = std::snprintf(buf, 7, "%.5Lf", z);
     BOOST_TEST_EQUAL(7, len);
     BOOST_TEST_EQUAL(std::string(buf, 9), std::string("2.7182\0zz\0", 9));
-    len = snprintf(buf,       0, "%1.12Lf", z);
+    len = std::snprintf(buf,       0, "%1.12Lf", z);
     BOOST_TEST_EQUAL(14, len);
-    len = snprintf(buf, 1 + len, "%1.12Lf", z);
+    len = std::snprintf(buf, 1 + len, "%1.12Lf", z);
     BOOST_TEST_EQUAL(14, len);
     BOOST_TEST_EQUAL(std::string(buf, 15), std::string("2.718281828459\0", 15));
 
@@ -76,16 +76,16 @@ int test_main(int, char*[])
     //   http://comments.gmane.org/gmane.comp.gnu.mingw.devel/2945
     //     [2008-05-11T11:46Z from François-Xavier Coudert]
     double g = 39.0;
-    len = snprintf(buf,       0, "%9.0e", g);
+    len = std::snprintf(buf,       0, "%9.0e", g);
     BOOST_TEST_EQUAL(9, len);
-    len = snprintf(buf, 1 + len, "%9.0e", g);
+    len = std::snprintf(buf, 1 + len, "%9.0e", g);
     BOOST_TEST_EQUAL(9, len);
     BOOST_TEST_EQUAL(std::string(buf, 9), std::string("    4e+01\0", 9));
 
     double d = 1e+161;
-    len = snprintf(buf,       0, "%#.*f", 16, d);
+    len = std::snprintf(buf,       0, "%#.*f", 16, d);
     BOOST_TEST_EQUAL(179, len);
-    len = snprintf(buf, 1 + len, "%#.*f", 16, d);
+    len = std::snprintf(buf, 1 + len, "%#.*f", 16, d);
     BOOST_TEST_EQUAL(179, len);
     std::string e
         ("1"

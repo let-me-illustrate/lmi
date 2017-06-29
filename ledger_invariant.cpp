@@ -133,6 +133,9 @@ void LedgerInvariant::Alloc(int len)
     ScalableScalars ["InitGLP"               ] = &InitGLP                ;
     ScalableScalars ["InitTgtPrem"           ] = &InitTgtPrem            ;
     ScalableScalars ["InitMinPrem"           ] = &InitMinPrem            ;
+    ScalableScalars ["ListBillPremium"       ] = &ListBillPremium        ;
+    ScalableScalars ["EeListBillPremium"     ] = &EeListBillPremium      ;
+    ScalableScalars ["ErListBillPremium"     ] = &ErListBillPremium      ;
     ScalableScalars ["ModalMinimumDumpin"    ] = &ModalMinimumDumpin     ;
     ScalableScalars ["Dumpin"                ] = &Dumpin                 ;
     ScalableScalars ["External1035Amount"    ] = &External1035Amount     ;
@@ -184,6 +187,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["Has1035ExchCharge"     ] = &Has1035ExchCharge      ;
     OtherScalars    ["EffDateJdn"            ] = &EffDateJdn             ;
     OtherScalars    ["DateOfBirthJdn"        ] = &DateOfBirthJdn         ;
+    OtherScalars    ["ListBillDateJdn"       ] = &ListBillDateJdn        ;
     OtherScalars    ["InforceAsOfDateJdn"    ] = &InforceAsOfDateJdn     ;
     OtherScalars    ["SplitFundAllocation"   ] = &SplitFundAllocation    ;
     OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
@@ -402,6 +406,7 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     // Scalars of type not compatible with double.
     EffDate                = obj.EffDate               ;
     DateOfBirth            = obj.DateOfBirth           ;
+    ListBillDate           = obj.ListBillDate          ;
     InforceAsOfDate        = obj.InforceAsOfDate       ;
     InitErMode             = obj.InitErMode            ;
     InitDBOpt              = obj.InitDBOpt             ;
@@ -620,6 +625,9 @@ void LedgerInvariant::Init(BasicValues const* b)
 //  InitSevenPayPrem        =
 //  InitTgtPrem             =
 //  InitMinPrem             =
+//  ListBillPremium         =
+//  EeListBillPremium       =
+//  ErListBillPremium       =
 //  ModalMinimumDumpin      =
 
     MaleProportion          = b->yare_input_.MaleProportion;
@@ -886,6 +894,8 @@ void LedgerInvariant::Init(BasicValues const* b)
     EffDateJdn              = calendar_date(b->yare_input_.EffectiveDate  ).julian_day_number();
     DateOfBirth             = calendar_date(b->yare_input_.DateOfBirth    ).str();
     DateOfBirthJdn          = calendar_date(b->yare_input_.DateOfBirth    ).julian_day_number();
+    ListBillDate            = calendar_date(b->yare_input_.ListBillDate   ).str();
+    ListBillDateJdn         = calendar_date(b->yare_input_.ListBillDate   ).julian_day_number();
     InforceAsOfDate         = calendar_date(b->yare_input_.InforceAsOfDate).str();
     InforceAsOfDateJdn      = calendar_date(b->yare_input_.InforceAsOfDate).julian_day_number();
     InitErMode              = mc_str(b->Outlay_->er_premium_modes()[0]);
@@ -1012,6 +1022,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     EffDateJdn                    = a_Addend.EffDateJdn;
     DateOfBirth                   = a_Addend.DateOfBirth;
     DateOfBirthJdn                = a_Addend.DateOfBirthJdn;
+    ListBillDate                  = a_Addend.ListBillDate;
+    ListBillDateJdn               = a_Addend.ListBillDateJdn;
     InforceAsOfDate               = a_Addend.InforceAsOfDate;
     InforceAsOfDateJdn            = a_Addend.InforceAsOfDateJdn;
     InitErMode                    = a_Addend.InitErMode;

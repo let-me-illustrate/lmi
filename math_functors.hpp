@@ -27,56 +27,12 @@
 #include "assert_lmi.hpp"
 #include "et_vector.hpp"
 
-#include <algorithm>                    // std::max(), std::min()
-#include <cmath>                        // C99 expm1(), log1p()
+#include <algorithm>                    // max(), min()
+#include <cmath>                        // expm1(), log1p()
 #include <functional>
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
-
-// For Comeau, implement expm1l() and log1pl() using type double, not
-// long double, because of an apparent incompatibility in the way
-// Comeau and MinGW pass long doubles.
-
-#if !defined LMI_COMPILER_PROVIDES_EXPM1L
-#   if defined LMI_COMO_WITH_MINGW
-extern "C" double expm1(double);
-inline double expm1l(double x) {return expm1(x);}
-#   else  // !defined LMI_COMO_WITH_MINGW
-extern "C" long double expm1l(long double);
-#   endif // !defined LMI_COMO_WITH_MINGW
-#endif // !defined LMI_COMPILER_PROVIDES_EXPM1L
-
-#if !defined LMI_COMPILER_PROVIDES_LOG1PL
-#   if defined LMI_COMO_WITH_MINGW
-extern "C" double log1p(double);
-inline double log1pl(double x) {return log1p(x);}
-#   else  // !defined LMI_COMO_WITH_MINGW
-extern "C" long double log1pl(long double);
-#   endif // !defined LMI_COMO_WITH_MINGW
-#endif // !defined LMI_COMPILER_PROVIDES_LOG1PL
-
-// For Comeau, implement expm1l() and log1pl() using type double, not
-// long double, because of an apparent incompatibility in the way
-// Comeau and MinGW pass long doubles.
-
-#if !defined LMI_COMPILER_PROVIDES_EXPM1L
-#   if defined LMI_COMO_WITH_MINGW
-extern "C" double expm1(double);
-inline double expm1l(double x) {return expm1(x);}
-#   else  // !defined LMI_COMO_WITH_MINGW
-extern "C" long double expm1l(long double);
-#   endif // !defined LMI_COMO_WITH_MINGW
-#endif // !defined LMI_COMPILER_PROVIDES_EXPM1L
-
-#if !defined LMI_COMPILER_PROVIDES_LOG1PL
-#   if defined LMI_COMO_WITH_MINGW
-extern "C" double log1p(double);
-inline double log1pl(double x) {return log1p(x);}
-#   else  // !defined LMI_COMO_WITH_MINGW
-extern "C" long double log1pl(long double);
-#   endif // !defined LMI_COMO_WITH_MINGW
-#endif // !defined LMI_COMPILER_PROVIDES_LOG1PL
 
 // TODO ?? Write functors here for other refactorable uses of
 // std::pow() found throughout the program.
@@ -147,7 +103,7 @@ struct mean
 //
 // Implementation note: greater accuracy and speed are obtained by
 // applying the transformation
-//   (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
+//   (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
 // to naive power-based formulas.
 
 template<typename T, int n>
@@ -169,8 +125,8 @@ struct i_upper_n_over_n_from_i
 
         static long double const reciprocal_n = 1.0L / n;
         // naively:    (1+i)^(1/n) - 1
-        // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
-        long double z = expm1l(log1pl(i) * reciprocal_n);
+        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
+        long double z = std::expm1l(std::log1pl(i) * reciprocal_n);
         return static_cast<T>(z);
         }
 };
@@ -195,8 +151,8 @@ struct i_from_i_upper_n_over_n
     T operator()(T const& i) const
         {
         // naively:    (1+i)^n - 1
-        // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
-        long double z = expm1l(log1pl(i) * n);
+        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
+        long double z = std::expm1l(std::log1pl(i) * n);
         return static_cast<T>(z);
         }
 };
@@ -232,8 +188,8 @@ struct d_upper_n_from_i
 
         static long double const reciprocal_n = 1.0L / n;
         // naively:    n * (1 - (1+i)^(-1/n))
-        // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
-        long double z = -n * expm1l(log1pl(i) * -reciprocal_n);
+        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
+        long double z = -n * std::expm1l(std::log1pl(i) * -reciprocal_n);
         return static_cast<T>(z);
         }
 };
@@ -269,12 +225,12 @@ struct net_i_from_gross
         //   -   (1+spread)^(1/n)
         //   -         fee *(1/n)
         //   )^n - 1
-        // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
-        long double z = expm1l
+        // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
+        long double z = std::expm1l
             (
-            n * log1pl
-                (   expm1l(reciprocal_n * log1pl(i))
-                -   expm1l(reciprocal_n * log1pl(spread))
+            n * std::log1pl
+                (   std::expm1l(reciprocal_n * std::log1pl(i))
+                -   std::expm1l(reciprocal_n * std::log1pl(spread))
                 -          reciprocal_n * fee
                 )
             );
@@ -334,8 +290,8 @@ struct coi_rate_from_q
             {
             static long double const reciprocal_12 = 1.0L / 12;
             // naively:    1 - (1-q)^(1/12)
-            // substitute: (1+i)^n - 1 <-> expm1l(log1pl(i) * n)
-            long double monthly_q = -expm1l(log1pl(-q) * reciprocal_12);
+            // substitute: (1+i)^n - 1 <-> std::expm1(std::log1p(i) * n)
+            long double monthly_q = -std::expm1l(std::log1pl(-q) * reciprocal_12);
             if(1.0L == monthly_q)
                 {
                 throw std::logic_error("Monthly q equals unity.");

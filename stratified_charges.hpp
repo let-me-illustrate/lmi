@@ -1,4 +1,4 @@
-// Rates that depend on the amount they're muliplied by.
+// Rates that depend on the amount they're multiplied by.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
 //
@@ -36,25 +36,25 @@ enum e_stratified
     {e_stratified_first
 
     ,e_topic_premium_banded
-    ,e_curr_sepacct_load_banded_by_premium
-    ,e_guar_sepacct_load_banded_by_premium
+    ,e_curr_sepacct_load_banded_by_premium  // CurrSepAcctLoadBandedByPrem
+    ,e_guar_sepacct_load_banded_by_premium  // GuarSepAcctLoadBandedByPrem
 
     ,e_topic_asset_banded
-    ,e_curr_sepacct_load_banded_by_assets
-    ,e_guar_sepacct_load_banded_by_assets
+    ,e_curr_sepacct_load_banded_by_assets   // CurrSepAcctLoadBandedByAssets
+    ,e_guar_sepacct_load_banded_by_assets   // GuarSepAcctLoadBandedByAssets
 
     ,e_topic_asset_tiered
-    ,e_curr_m_and_e_tiered_by_assets
-    ,e_guar_m_and_e_tiered_by_assets
-    ,e_asset_based_comp_tiered_by_assets
-    ,e_investment_mgmt_fee_tiered_by_assets
-    ,e_curr_sepacct_load_tiered_by_assets
-    ,e_guar_sepacct_load_tiered_by_assets
+    ,e_curr_m_and_e_tiered_by_assets        // CurrMandETieredByAssets
+    ,e_guar_m_and_e_tiered_by_assets        // GuarMandETieredByAssets
+    ,e_asset_based_comp_tiered_by_assets    // AssetCompTieredByAssets
+    ,e_investment_mgmt_fee_tiered_by_assets // InvestmentMgmtFeeTieredByAssets
+    ,e_curr_sepacct_load_tiered_by_assets   // CurrSepAcctLoadTieredByAssets
+    ,e_guar_sepacct_load_tiered_by_assets   // GuarSepAcctLoadTieredByAssets
 
     ,e_topic_tiered_premium_tax
-    ,e_tiered_ak_premium_tax
-    ,e_tiered_de_premium_tax
-    ,e_tiered_sd_premium_tax
+    ,e_tiered_ak_premium_tax                // TieredAKPremTax
+    ,e_tiered_de_premium_tax                // TieredDEPremTax
+    ,e_tiered_sd_premium_tax                // TieredSDPremTax
 
     ,e_stratified_last
     };
@@ -210,6 +210,10 @@ class LMI_SO stratified_charges final
 
 void LMI_SO load(stratified_charges      &, fs::path const&);
 void LMI_SO save(stratified_charges const&, fs::path const&);
+
+stratified_entity const& LMI_SO StatutoryAKPremTax();
+stratified_entity const& LMI_SO StatutoryDEPremTax();
+stratified_entity const& LMI_SO StatutorySDPremTax();
 
 #endif // stratified_charges_hpp
 

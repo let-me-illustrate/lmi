@@ -79,7 +79,7 @@ MAKEFLAGS := \
 
 # Directories.
 
-src_dir := $(CURDIR)
+srcdir := $(CURDIR)
 
 ################################################################################
 
@@ -87,15 +87,15 @@ src_dir := $(CURDIR)
 
 # Don't remake this file.
 
-GNUmakefile $(src_dir)/GNUmakefile:: ;
+GNUmakefile $(srcdir)/GNUmakefile:: ;
 
 # Included files that don't need to be remade are given explicit empty
 # commands, which significantly reduces the number of lines emitted by
 # 'make -d', making debug output easier to read.
 #
 # Included makefiles are cited by absolute pathname, e.g.
-#   include $(src_dir)/included-file
-#   $(src_dir)/included-file:: ;
+#   include $(srcdir)/included-file
+#   $(srcdir)/included-file:: ;
 # An '--include-dir' option could make an absolute path unnecessary
 # in the 'include' statement itself, but the empty remake command
 # would not respect '--include-dir'.
@@ -109,16 +109,16 @@ GNUmakefile $(src_dir)/GNUmakefile:: ;
 
 # Configuration.
 
-include $(src_dir)/configuration.make
-$(src_dir)/configuration.make:: ;
+include $(srcdir)/configuration.make
+$(srcdir)/configuration.make:: ;
 
 # Local options.
 #
 # See the documentation in 'local_options.sh'. Including this file
 # defines $(local_options), which is passed to submakefiles.
 
--include $(src_dir)/local_options.make
-$(src_dir)/local_options.make:: ;
+-include $(srcdir)/local_options.make
+$(srcdir)/local_options.make:: ;
 
 ################################################################################
 
@@ -131,7 +131,7 @@ $(src_dir)/local_options.make:: ;
 build_type ?= ship
 toolset ?= gcc
 build_directory := \
-  $(src_dir)/../build/$(notdir $(src_dir))/$(uname)/$(toolset)/$(build_type)
+  $(srcdir)/../build/$(notdir $(srcdir))/$(uname)/$(toolset)/$(build_type)
 
 gpl_files := \
   COPYING \
@@ -146,10 +146,10 @@ gpl_files := \
 MAKETARGET = \
   $(MAKE) \
     --directory=$@ \
-    --file=$(src_dir)/workhorse.make \
+    --file=$(srcdir)/workhorse.make \
     --no-print-directory \
     $(local_options) $(MAKEOVERRIDES) \
-                         src_dir='$(src_dir)' \
+                          srcdir='$(srcdir)' \
                          toolset='$(toolset)' \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
@@ -224,16 +224,16 @@ COPYING:
 	$(error Cannot build because file $@ is missing)
 
 quoted_gpl: COPYING
-	<$(src_dir)/COPYING \
-	$(SED) --file=$(src_dir)/text_to_strings.sed \
+	<$(srcdir)/COPYING \
+	$(SED) --file=$(srcdir)/text_to_strings.sed \
 	| $(TR) --delete '\r' \
-	>$(src_dir)/$@
+	>$(srcdir)/$@
 
 quoted_gpl_html: COPYING
-	<$(src_dir)/COPYING \
-	$(SED) --file=$(src_dir)/text_to_html_strings.sed \
+	<$(srcdir)/COPYING \
+	$(SED) --file=$(srcdir)/text_to_html_strings.sed \
 	| $(TR) --delete '\r' \
-	>$(src_dir)/$@
+	>$(srcdir)/$@
 
 define gpl_notices :=
 // Copyright (C) $(yyyy) Gregory W. Chicares.
@@ -288,7 +288,7 @@ distclean mostlyclean maintainer-clean: clean
 
 .PHONY: clobber
 clobber: source_clean
-	-$(RM) --force --recursive $(src_dir)/../build
+	-$(RM) --force --recursive $(srcdir)/../build
 
 ################################################################################
 
@@ -298,7 +298,7 @@ TEST_CODING_RULES := $(build_directory)/test_coding_rules$(EXEEXT)
 
 .PHONY: custom_tools
 custom_tools:
-	@$(MAKE) --file=$(this_makefile) --directory=$(src_dir) test_coding_rules$(EXEEXT)
+	@$(MAKE) --file=$(this_makefile) --directory=$(srcdir) test_coding_rules$(EXEEXT)
 	@$(CP) --preserve --update $(TEST_CODING_RULES) /opt/lmi/local/bin
 
 ################################################################################
@@ -451,7 +451,7 @@ happy_new_year: source_clean
 
 # TODO ?? This is an evolving experiment. Possible enhancements include:
 #   - Add other tests, particularly system tests.
-#       Consider using $(src_dir)/../products/src if it exists.
+#       Consider using $(srcdir)/../products/src if it exists.
 #       Also consider using the repository only, with testdecks stored
 #         either there or in ftp.
 #   - Test skeleton branch, too.

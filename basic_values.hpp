@@ -32,8 +32,9 @@
 #include "so_attributes.hpp"
 #include "yare_input.hpp"
 
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
+#include <utility>                      // pair
 #include <vector>
 
 // Let's do this through once for UL, then think about extending it to other
@@ -228,33 +229,22 @@ class LMI_SO BasicValues
         ,double      a_bft_amt
         ,double      a_specamt
         ) const;
-    double GetModalPremMlyDedEe
-        (int         a_year
-        ,mcenum_mode a_mode
-        ,double      a_specamt
+    std::pair<double,double> GetModalPremMlyDedEx
+        (int         year
+        ,mcenum_mode mode
+        ,double      specamt
+        ,double      termamt
         ) const;
-    double GetModalPremMlyDedEr
-        (int         a_year
-        ,mcenum_mode a_mode
-        ,double      a_specamt
+    double GetListBillPremMlyDed
+        (int         year
+        ,mcenum_mode mode
+        ,double      specamt
         ) const;
-    double GetModalPremMlyDed
-        (int         a_year
-        ,mcenum_mode a_mode
-        ,double      a_specamt
-        ,yare_input const&
-        ) const;
-    double GetModalPremMlyDedEe
-        (int         a_year
-        ,mcenum_mode a_mode
-        ,double      a_specamt
-        ,yare_input const&
-        ) const;
-    double GetModalPremMlyDedEr
-        (int         a_year
-        ,mcenum_mode a_mode
-        ,double      a_specamt
-        ,yare_input const&
+    std::pair<double,double> GetListBillPremMlyDedEx
+        (int         year
+        ,mcenum_mode mode
+        ,double      specamt
+        ,double      termamt
         ) const;
     double GetModalSpecAmtMax      (double annualized_pmt) const;
     double GetModalSpecAmtTgt      (double annualized_pmt) const;
@@ -389,17 +379,26 @@ class LMI_SO BasicValues
         ,double                a_specamt
         ,oenum_modal_prem_type a_prem_type
         ) const;
+    double mly_ded_discount_factor(int year, mcenum_mode mode) const;
+    std::pair<double,double> approx_mly_ded
+        (int    year
+        ,double specamt
+        ) const;
+    std::pair<double,double> approx_mly_ded_ex
+        (int    year
+        ,double specamt
+        ,double termamt
+        ) const;
     double GetModalPremMlyDed
-        (int         a_year
-        ,mcenum_mode a_mode
-        ,double      a_specamt
+        (int         year
+        ,mcenum_mode mode
+        ,double      specamt
         ) const;
     double GetModalSpecAmt
         (double                annualized_pmt
         ,oenum_modal_prem_type premium_type
         ) const;
     double GetModalSpecAmtMlyDed(double annualized_pmt, mcenum_mode) const;
-    double GetAnnuityValueMlyDed(int a_year, mcenum_mode a_mode) const;
 
     std::vector<double> GetActuarialTable
         (std::string const& TableFile

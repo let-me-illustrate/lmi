@@ -59,9 +59,9 @@
 
 #include <algorithm>
 #include <cctype>
-#include <cstddef>                      // std::size_t
-#include <istream>                      // std::ws
-#include <iterator>                     // std::insert_iterator
+#include <cstddef>                      // size_t
+#include <istream>                      // ws
+#include <iterator>                     // insert_iterator
 #include <sstream>
 
 namespace

@@ -28,11 +28,14 @@
 #include "sigfpe.hpp"
 
 #include <csignal>
-#include <exception>                    // std::set_terminate()
+#include <exception>                    // set_terminate()
+#include <stdexcept>
+
 #if defined LMI_MSW
 #   include <fcntl.h>                   // _O_BINARY
+#   include <io.h>                      // _setmode()
+#   include <stdio.h>                   // _fileno()
 #endif // defined LMI_MSW
-#include <stdexcept>
 
 #if defined __MINGW32__
 /// Conform to C99 [7.19.6.1/8]:
@@ -67,8 +70,8 @@ void initialize_application()
         {
 #if defined LMI_MSW
         // Force standard output streams to binary mode.
-        setmode(fileno(stdout), O_BINARY);
-        setmode(fileno(stderr), O_BINARY);
+        _setmode(_fileno(stdout), _O_BINARY);
+        _setmode(_fileno(stderr), _O_BINARY);
 #endif // defined LMI_MSW
 
         // This line forces mpatrol to link when it otherwise might not.

@@ -30,7 +30,7 @@
 
 #include <fstream>
 #include <iosfwd>
-#include <memory>                       // std::shared_ptr
+#include <memory>                       // shared_ptr
 #include <string>
 #include <vector>
 
@@ -290,6 +290,9 @@ class LMI_SO AccountValue
     double MinInitPrem() const;
     double ModalMinInitPremShortfall() const;
 
+    void   set_list_bill_year_and_month();
+    void   set_list_bill_premium();
+
     void   SetMaxLoan              ();
     void   SetMaxWD                ();
     double GetRefundableSalesLoad  () const;
@@ -538,6 +541,9 @@ class LMI_SO AccountValue
 
     bool    SplitMinPrem;
     bool    UnsplitSplitMinPrem;
+
+    int     list_bill_year_  {methuselah};
+    int     list_bill_month_ {13};
 
     bool    TermCanLapse;
     bool    TermRiderActive;

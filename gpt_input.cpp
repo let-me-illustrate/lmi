@@ -35,11 +35,11 @@
 #include "map_lookup.hpp"
 #include "miscellany.hpp"               // each_equal(), lmi_array_size()
 
-#include <algorithm>                    // std::max()
+#include <algorithm>                    // max()
 #include <exception>
 #include <limits>
 #include <sstream>
-#include <utility>                      // std::pair
+#include <utility>                      // pair
 
 template class xml_serializable<gpt_input>;
 
@@ -535,6 +535,7 @@ void gpt_input::DoTransmogrify()
     std::pair<int,int> ym0 = years_and_months_since
         (EffectiveDate  .value()
         ,InforceAsOfDate.value()
+        ,true
         );
     InforceYear  = ym0.first;
     InforceMonth = ym0.second;
@@ -542,6 +543,7 @@ void gpt_input::DoTransmogrify()
     std::pair<int,int> ym1 = years_and_months_since
         (LastMaterialChangeDate.value()
         ,InforceAsOfDate       .value()
+        ,true
         );
     InforceContractYear  = ym1.first;
     InforceContractMonth = ym1.second;
