@@ -225,6 +225,7 @@ common_common_objects := \
   interpolate_string.o \
   ledger.o \
   ledger_base.o \
+  ledger_evaluator.o \
   ledger_invariant.o \
   ledger_pdf.o \
   ledger_pdf_generator.o \

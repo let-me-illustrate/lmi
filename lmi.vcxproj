@@ -510,6 +510,7 @@
     <ClCompile Include="interpolate_string.cpp" />
     <ClCompile Include="ledger.cpp" />
     <ClCompile Include="ledger_base.cpp" />
+    <ClCompile Include="ledger_evaluator.cpp" />
     <ClCompile Include="ledger_invariant.cpp" />
     <ClCompile Include="ledger_pdf.cpp" />
     <ClCompile Include="ledger_pdf_generator.cpp" />

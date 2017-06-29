@@ -313,5 +313,8 @@
     <ClCompile Include="interpolate_string.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ledger_evaluator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
