@@ -39,6 +39,7 @@
 
 #include <wx/pdfdc.h>
 
+#include <cstdint>                      // SIZE_MAX
 #include <map>
 #include <memory>
 #include <sstream>
@@ -140,6 +141,11 @@ class html_interpolator
         return evaluator_(name);
     }
 
+    std::string evaluate(std::string const& name, std::size_t index) const
+    {
+        return evaluator_(name, index);
+    }
+
   private:
     // The expansion function used with interpolate_string().
     text expand_html(std::string const& s) const
@@ -151,7 +157,41 @@ class html_interpolator
             return it->second;
             }
 
-        // Then look in the ledger.
+        // Then look in the ledger, either as a scalar or a vector depending on
+        // whether it has "[index]" part or not.
+        if(!s.empty() && *s.rbegin() == ']')
+            {
+            auto const open_pos = s.find('[');
+            if(open_pos == std::string::npos)
+                {
+                throw std::runtime_error
+                    ("Variable '" + s + "' doesn't have the expected '['"
+                    );
+                }
+
+            char* stop = nullptr;
+            auto const index = std::strtoul(s.c_str() + open_pos + 1, &stop, 10);
+
+            // Conversion must have stopped at the closing bracket character
+            // and also check for overflow (notice that index == SIZE_MAX
+            // doesn't, in theory, need to indicate overflow, but in practice
+            // we're never going to have valid indices close to this number).
+            if(stop != s.c_str() + s.length() - 1 || index >= SIZE_MAX)
+                {
+                throw std::runtime_error
+                    ("Index of vector variable '" + s + "' is not a valid number"
+                    );
+                }
+
+            // Cast below is valid because of the check for overflow above.
+            return text::from
+                (evaluator_
+                    (s.substr(0, open_pos)
+                    ,static_cast<std::size_t>(index)
+                    )
+                );
+            }
+
         return text::from(evaluator_(s));
     }
 
