@@ -348,7 +348,6 @@ ledger_evaluator Ledger::make_evaluator() const
 
 // F3: scaled by 100, zero decimals, with '%' at end:
 // > Format as percentage with no decimal places (##0%)
-    format_map["SalesLoadRefund"                   ] = f3;
     format_map["SalesLoadRefundRate0"              ] = f3;
     format_map["SalesLoadRefundRate1"              ] = f3;
 
@@ -389,6 +388,7 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["HasADD"                            ] = f1;
     format_map["HasChildRider"                     ] = f1;
     format_map["HasHoneymoon"                      ] = f1;
+    format_map["HasSalesLoadRefund"                ] = f1;
     format_map["HasSpouseRider"                    ] = f1;
     format_map["HasSupplSpecAmt"                   ] = f1;
     format_map["HasTerm"                           ] = f1;
@@ -692,12 +692,12 @@ ledger_evaluator Ledger::make_evaluator() const
     strings["PrepMonth"] = &PrepMonth;
     strings["PrepDay"  ] = &PrepDay;
 
-    double SalesLoadRefund =
+    double HasSalesLoadRefund =
         !each_equal(ledger_invariant_->RefundableSalesLoad, 0.0);
     double SalesLoadRefundRate0 = ledger_invariant_->RefundableSalesLoad[0];
     double SalesLoadRefundRate1 = ledger_invariant_->RefundableSalesLoad[1];
 
-    scalars["SalesLoadRefund"     ] = &SalesLoadRefund     ;
+    scalars["HasSalesLoadRefund"  ] = &HasSalesLoadRefund  ;
     scalars["SalesLoadRefundRate0"] = &SalesLoadRefundRate0;
     scalars["SalesLoadRefundRate1"] = &SalesLoadRefundRate1;
 
