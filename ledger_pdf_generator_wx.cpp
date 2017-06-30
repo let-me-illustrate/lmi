@@ -277,6 +277,37 @@ class pdf_illustration : protected html_interpolator
             + text::from(", ")
             + text::from(evaluate("PrepYear"))
             );
+
+        auto indent = text::nbsp();
+        add_variable("Space1", indent);
+
+        indent += indent;
+        add_variable("Space2", indent);
+
+        indent += indent;
+        add_variable("Space4", indent);
+
+        indent += indent;
+        add_variable("Space8", indent);
+
+        auto const abbreviate_if_necessary = [](std::string s, size_t len)
+            {
+            if(s.length() > len)
+                {
+                s.replace(len - 3, std::string::npos, "...");
+                }
+            return s;
+            };
+
+        add_variable
+            ("CorpNameAbbrev50"
+            ,abbreviate_if_necessary(evaluate("CorpName"), 50)
+            );
+
+        add_variable
+            ("Insured1Abbrev50"
+            ,abbreviate_if_necessary(evaluate("Insured1"), 50)
+            );
     }
 
     // Use non-default font sizes to make it simpler to replicate the existing
@@ -611,6 +642,217 @@ class numbered_page : public page_with_footer
 
 int numbered_page::last_page_number_ = 0;
 
+// Wrap the given HTML in a paragraph tag using (smaller) body font size.
+text add_body_paragraph_html(text const& t)
+{
+    return tag::p(tag::font[attr::size("-1")](t));
+}
+
+// Return HTML with the standard page header.
+text get_header_html
+    (LedgerInvariant const& invar
+    ,html_interpolator const& interpolate_html
+    )
+{
+    // Some convenient helpers for performing common operations.
+    auto const add_line = [=](char const* s) -> text
+        {
+        return tag::br + interpolate_html(s);
+        };
+
+    text header_html = interpolate_html
+        (R"(
+{{#IsInforce}}
+LIFE INSURANCE IN FORCE BASIC ILLUSTRATION
+{{/IsInforce}}
+{{^IsInforce}}
+LIFE INSURANCE BASIC ILLUSTRATION
+{{/IsInforce}}
+)"
+        );
+
+    header_html += add_line("{{InsCoName}}");
+
+    if(invar.ProducerName != "0")
+        {
+        header_html += add_line("Presented by: {{ProducerName}}");
+        }
+
+    if(invar.ProducerStreet != "0")
+        {
+        header_html += add_line("{{ProducerStreet}}");
+        }
+
+    if(invar.ProducerCity != "0")
+        {
+        header_html += add_line("{{ProducerCity}}");
+        }
+
+    // Construct the left-hand side of the summary table.
+    text lhs_html = text::from("Prepared for:");
+
+    lhs_html += add_line("{{Space8}}Group Name:{{CorpNameAbbrev50}}");
+
+    lhs_html += add_line
+        (R"(
+{{#Composite}}
+Composite Illustration
+{{/Composite}}
+{{^Composite}}
+{{Space8}}Insured:{{Insured1Abbrev50}}
+{{/Composite}}
+)"
+        );
+
+    if(!interpolate_html.test_variable("Composite"))
+        {
+        lhs_html += add_line("{{Space8}}Age: {{Age}}");
+        }
+
+    lhs_html += add_line
+        (R"(
+Product: {{PolicyForm}}{{Space1}}{{PolicyMktgName}}
+)"
+        );
+
+    lhs_html += add_line
+        (R"(
+{{#ModifiedSinglePremium}}
+Modified Single Premium Adjustable Life Insurance Policy
+{{/ModifiedSinglePremium}}
+{{^ModifiedSinglePremium}}
+{{PolicyLegalName}}
+{{/ModifiedSinglePremium}}
+)"
+        );
+
+    if(!interpolate_html.test_variable("IsInforce"))
+        {
+        lhs_html += add_line
+            (R"(
+{{^SinglePremium}}
+Initial Premium:
+{{/SinglePremium}}
+{{#SinglePremium}}
+Single Premium:
+{{/SinglePremium}}
+{{Space1}}${{InitPrem}}
+)"
+            );
+        }
+
+    if(!interpolate_html.test_variable("Composite"))
+        {
+        lhs_html += add_line
+            ("Initial Death Benefit Option: {{InitDBOpt}}"
+            );
+        }
+
+    // Now the right-hand side.
+    auto rhs_html = interpolate_html
+        (R"(
+Initial {{#HasTerm}}Total{{/HasTerm}}
+Selected Face Amount: ${{InitTotalSA}}
+)"
+        );
+
+    if(interpolate_html.test_variable("HasTerm"))
+        {
+        rhs_html += add_line
+            ("Initial Base Face Amount: ${{InitBaseSpecAmt}}"
+            );
+
+        rhs_html += add_line
+            ("Initial Term Face Amount: ${{InitTermSpecAmt}}"
+            );
+        }
+
+    rhs_html += add_line
+        ("Guaranteed Crediting Rate: {{InitAnnGenAcctInt_Guaranteed}}"
+        );
+
+    rhs_html += add_line
+        (R"(
+Current Illustrated Crediting Rate:
+{{#InforceYear}}
+{{UltimateInterestRate}}
+{{/InforceYear}}
+{{^InforceYear}}
+{{InitAnnGenAcctInt_Current}}
+{{/InforceYear}}
+)"
+        );
+
+    if
+        (   interpolate_html.test_variable("SinglePremium")
+        &&  invar.InforceYear <= 4
+        )
+        {
+        rhs_html += add_line
+            (R"(
+Ultimate Illustrated Crediting Rate:
+{{#ModifiedSinglePremium0}}
+{{AnnGAIntRate_Current[11]}}
+{{/ModifiedSinglePremium0}}
+{{^ModifiedSinglePremium0}}
+{{AnnGAIntRate_Current[6]}}
+{{/ModifiedSinglePremium0}}
+)"
+            );
+        }
+
+    if(!interpolate_html.test_variable("Composite"))
+        {
+        rhs_html += add_line
+            (R"(
+Underwriting Type:
+{{#UWTypeIsMedical}}
+Fully underwritten
+{{/UWTypeIsMedical}}
+{{^UWTypeIsMedical}}
+{{UWType}}
+{{/UWTypeIsMedical}}
+)"
+            );
+
+        rhs_html += add_line
+            (R"(
+Rate Classification: {{UWClass}}, {{Smoker}}, {{Gender}}
+)"
+            );
+
+        if(invar.UWClass == "Rated")
+            {
+            rhs_html += add_line
+                ("{{Space2}}{{Space1}}Table Rating: {{SubstandardTable}}"
+                );
+            }
+        }
+
+    // Put everything together.
+    return
+        tag::font[attr::size("-1")]
+            (tag::p[attr::align("center")]
+                (header_html
+                )
+            )
+            (tag::p
+                (text::nbsp()
+                )
+            )
+            (tag::table
+                [attr::width("100%")]
+                [attr::cellspacing("0")]
+                [attr::cellpadding("0")]
+                [attr::valign("top")]
+                (tag::tr
+                    (tag::td(lhs_html))
+                    (tag::td(rhs_html))
+                )
+            )
+        ;
+}
+
 class narrative_summary_page : public numbered_page
 {
   public:
@@ -623,18 +865,16 @@ class narrative_summary_page : public numbered_page
     {
         numbered_page::render(ledger, writer, dc, interpolate_html);
 
-        text summary_html =
-            tag::p[attr::align("center")]
-                (text::from("NARRATIVE SUMMARY")
-                )
-            ;
+        text summary_html = get_header_html
+            (ledger.GetLedgerInvariant()
+            ,interpolate_html
+            );
 
-        // Just a helper performing a common operation.
-        auto const add_body_paragraph_html = [](text const& t) -> text
-            {
-            return tag::p(tag::font[attr::size("-1")](t));
-            };
+        summary_html += tag::p[attr::align("center")]
+            (text::from("NARRATIVE SUMMARY")
+            );
 
+        // Just a convenient helper performing a common operation.
         auto const add_body_paragraph = [=](std::string const& s) -> text
             {
             return add_body_paragraph_html(interpolate_html(s));
@@ -932,6 +1172,16 @@ class pdf_illustration_regular : public pdf_illustration
         add_variable
             ("StateIsTX"
             ,invar.GetStatePostalAbbrev() == "TX"
+            );
+
+        add_variable
+            ("UWTypeIsMedical"
+            ,invar.UWType == "Medical"
+            );
+
+        add_variable
+            ("UltimateInterestRate"
+            ,evaluate("AnnGAIntRate_Current", invar.InforceYear + 1)
             );
 
         // Add all the pages.
