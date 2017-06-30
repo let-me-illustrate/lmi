@@ -846,8 +846,8 @@ Rate Classification: {{UWClass}}, {{Smoker}}, {{Gender}}
                 [attr::cellpadding("0")]
                 [attr::valign("top")]
                 (tag::tr
-                    (tag::td(lhs_html))
-                    (tag::td(rhs_html))
+                    (tag::td[attr::width("60%")](lhs_html))
+                    (tag::td[attr::width("40%")](rhs_html))
                 )
             )
         ;
