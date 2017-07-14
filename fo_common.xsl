@@ -824,20 +824,8 @@
             <xsl:call-template name="company-logo"/>
           </fo:block>
 
-<!--
-          <fo:block padding-top="1em">
-            <xsl:value-of select="$scalars/InsCoName"/>
-          </fo:block>
-          <fo:block padding-bottom="1em">
-            <xsl:value-of select="$scalars/InsCoAddr"/>
-          </fo:block>
--->
-          <fo:block font-size="9pt">
-            <xsl:value-of select="$scalars/InsCoShortName"/> Financial Group is
-            a marketing name for <xsl:value-of select="$scalars/InsCoName"/>
-            (<xsl:value-of select="$scalars/InsCoShortName"/>) and its affiliated
-            companies and sales representatives,
-            <xsl:value-of select="$scalars/InsCoAddr"/>.
+          <fo:block font-size="9pt" padding-bottom="1em">
+            <xsl:value-of select="$scalars/MarketingNameFootnote"/>
           </fo:block>
         </fo:block>
       </fo:flow>
