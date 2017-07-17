@@ -268,7 +268,7 @@
     <xsl:attribute name="padding-bottom">2pt</xsl:attribute>
     <xsl:attribute name="text-align">right</xsl:attribute>
     <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
-    <xsl:attribute name="border-bottom-color">blue</xsl:attribute>
+    <xsl:attribute name="border-bottom-color">#002F6C</xsl:attribute>
   </xsl:template>
   <!--
   Same as 'header-cell', but add a bottom border of 1pt.
@@ -758,7 +758,7 @@
   <xsl:template name="generic-cover">
     <fo:page-sequence master-reference="cover" force-page-count="no-force">
       <fo:flow flow-name="xsl-region-body">
-        <fo:block border="2pt solid blue" font-size="14pt" font-family="sans-serif" text-align="center">
+        <fo:block border="2pt solid #002F6C" font-size="14pt" font-family="sans-serif" text-align="center">
 
           <fo:block font-size="20pt" font-weight="bold" padding-top="5em">
             <xsl:value-of select="$scalars/PolicyMktgName"/>
@@ -855,7 +855,7 @@
             <xsl:copy-of select="$top-block"/>
           </fo:block>
         </xsl:if>
-        <fo:block padding-top=".5em" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
+        <fo:block padding-top=".5em" border-top-style="solid" border-top-width="1pt" border-top-color="#002F6C">
           <xsl:if test="$subtop-block">
             <fo:block padding=".5em 0">
               <xsl:copy-of select="$subtop-block"/>
