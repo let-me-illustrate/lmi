@@ -750,7 +750,7 @@
 
   <xsl:template name="company-logo">
     <xsl:if test="not($hide-company-logo)">
-      <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+      <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.jpg"/>
     </xsl:if>
   </xsl:template>
 
