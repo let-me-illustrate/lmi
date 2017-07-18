@@ -54,6 +54,8 @@
   <!--
   Define this parameter to true to exclude company logo. This should be useful
   for text output where any graphics is replaced by a grid of '#' symbols.
+  (This was overengineering: no use case exists to justify the complexity,
+  so it is okay to ignore this.)
   -->
   <xsl:param name="hide-company-logo" select="boolean(0)"/>
 
@@ -748,9 +750,12 @@
     </xsl:choose>
   </xsl:template>
 
+  <!--
+    Use a smaller logo after the first page, but no smaller than this.
+  -->
   <xsl:template name="company-logo">
     <xsl:if test="not($hide-company-logo)">
-      <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.jpg"/>
+      <fo:external-graphic width="1.5in" src="company_logo.jpg"/>
     </xsl:if>
   </xsl:template>
 
@@ -820,8 +825,11 @@
             </fo:block>
           </fo:block>
 
-          <fo:block padding="9em 0 4em">
-            <xsl:call-template name="company-logo"/>
+          <!--
+            Use a larger logo for the cover page.
+          -->
+          <fo:block padding="0.8in">
+            <fo:external-graphic width="2.5in" src="company_logo.jpg"/>
           </fo:block>
 
           <fo:block font-size="9pt" padding-bottom="1em">
