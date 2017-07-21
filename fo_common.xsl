@@ -835,6 +835,10 @@
           <fo:block font-size="9pt" padding-bottom="1em">
             <xsl:value-of select="$scalars/MarketingNameFootnote"/>
           </fo:block>
+
+          <fo:block padding-bottom="1em" font-size="9pt" text-align="left" text-indent="4em">
+            <xsl:value-of select="$scalars/StateMarketingImprimatur"/>
+          </fo:block>
         </fo:block>
       </fo:flow>
     </fo:page-sequence>
