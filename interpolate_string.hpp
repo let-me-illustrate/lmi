@@ -30,7 +30,8 @@
 enum class interpolate_lookup_kind
 {
     variable,
-    section
+    section,
+    partial
 };
 
 using lookup_function
@@ -45,12 +46,13 @@ using lookup_function
 ///  - Simple variable expansion for {{variable}}.
 ///  - Conditional expansion using {{#variable}}...{{/variable}}.
 ///  - Negated checks of the form {{^variable}}...{{/variable}}.
+///  - Partials support, i.e. {{>filename}}.
 ///
 /// The following features are explicitly _not_ supported:
 ///  - HTML escaping: this is done by a separate html::text class.
 ///  - Separate types: 0/1 is false/true, anything else is an error.
 ///  - Lists/section iteration (not needed yet).
-///  - Lambdas, partials, comments, delimiter changes: omitted for simplicity.
+///  - Lambdas, comments, delimiter changes: omitted for simplicity.
 ///
 /// To allow embedding literal "{{" fragment into the returned string, create a
 /// pseudo-variable expanding to these characters as its expansion, there is no
