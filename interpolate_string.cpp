@@ -31,7 +31,7 @@
 
 std::string interpolate_string
     (char const* s
-    ,std::function<std::string (std::string const&)> const& lookup
+    ,lookup_function const& lookup
     )
 {
     std::string out;
@@ -107,7 +107,10 @@ std::string interpolate_string
                             bool active = is_active();
                             if(active)
                                 {
-                                auto const value = lookup(real_name);
+                                auto const value = lookup
+                                    (real_name
+                                    ,interpolate_lookup_kind::section
+                                    );
                                 if(value == "1")
                                     {
                                     active = true;
@@ -176,7 +179,10 @@ std::string interpolate_string
                                 // variable name may seem strange, but why not
                                 // allow using "{{}}" to insert something into
                                 // the interpolated string, after all?
-                                out += lookup(name);
+                                out += lookup
+                                    (name
+                                    ,interpolate_lookup_kind::variable
+                                    );
                                 }
                         }
 

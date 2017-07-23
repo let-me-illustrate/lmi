@@ -27,6 +27,15 @@
 #include <functional>
 #include <string>
 
+enum class interpolate_lookup_kind
+{
+    variable,
+    section
+};
+
+using lookup_function
+    = std::function<std::string (std::string const&, interpolate_lookup_kind)>;
+
 /// Interpolate string containing embedded variable references.
 ///
 /// Return the input string after replacing all {{variable}} references in it
@@ -50,7 +59,7 @@
 /// Throw if the lookup function throws or if the string uses invalid syntax.
 std::string interpolate_string
     (char const* s
-    ,std::function<std::string (std::string const&)> const& lookup
+    ,lookup_function const& lookup
     );
 
 #endif // interpolate_string_hpp

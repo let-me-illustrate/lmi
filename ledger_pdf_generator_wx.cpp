@@ -91,7 +91,10 @@ class html_interpolator
         return text::from_html
             (interpolate_string
                 (s
-                ,[this](std::string const& s) { return expand_html(s).as_html(); }
+                ,[this](std::string const& s, interpolate_lookup_kind)
+                    {
+                    return expand_html(s).as_html();
+                    }
                 )
             );
     }
