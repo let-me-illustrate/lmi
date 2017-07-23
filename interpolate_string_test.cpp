@@ -82,6 +82,61 @@ int test_main(int, char*[])
         ,"ae"
         );
 
+    // Partials.
+    auto const partial_test = [](char const* s)
+        {
+        return interpolate_string
+            (s
+            ,[](std::string const& s, interpolate_lookup_kind) -> std::string
+                {
+                if(s == "header")       return "[header with {{var}}]";
+                if(s == "footer")       return "[footer with {{var}}]";
+                if(s == "nested")       return "[header with {{>footer}}]";
+                if(s == "recursive")    return "{{>recursive}}";
+                if(s == "sec" )         return "1" ;
+                if(s == "var" )         return "variable" ;
+
+                throw std::runtime_error("no such variable '" + s + "'");
+                }
+            );
+        };
+
+    BOOST_TEST_EQUAL
+        (partial_test("{{>header}}")
+        ,"[header with variable]"
+        );
+
+    BOOST_TEST_EQUAL
+        (partial_test("{{>header}}{{var}} in body{{>footer}}")
+        ,"[header with variable]variable in body[footer with variable]"
+        );
+
+    BOOST_TEST_EQUAL
+        (partial_test("{{#sec}}{{>header}}{{/sec}}")
+        ,"[header with variable]"
+        );
+
+    BOOST_TEST_EQUAL
+        (partial_test("only{{^sec}}{{>header}}{{/sec}}{{>footer}}")
+        ,"only[footer with variable]"
+        );
+
+    BOOST_TEST_EQUAL
+        (partial_test("{{>nested}}")
+        ,"[header with [footer with variable]]"
+        );
+
+    BOOST_TEST_THROW
+        (partial_test("{{>recursive}}")
+        ,std::runtime_error
+        ,lmi_test::what_regex("Nesting level too deep")
+        );
+
+    BOOST_TEST_EQUAL
+        (partial_test("no {{^sec}}{{>recursive}}{{/sec}} problem")
+        ,"no  problem"
+        );
+
     // Some special cases.
     BOOST_TEST_EQUAL
         (interpolate_string
@@ -101,8 +156,9 @@ int test_main(int, char*[])
     // Check that the kind of variable being expanded is correct.
     BOOST_TEST_EQUAL
         (interpolate_string
-            ("{{#section1}}{{^section0}}{{variable}}{{/section0}}{{/section1}}"
-            ,[](std::string const& s, interpolate_lookup_kind kind)
+            ("{{>test}}"
+             "{{#section1}}{{^section0}}{{variable}}{{/section0}}{{/section1}}"
+             ,[](std::string const& s, interpolate_lookup_kind kind) -> std::string
                 {
                 switch(kind)
                     {
@@ -112,12 +168,15 @@ int test_main(int, char*[])
                     case interpolate_lookup_kind::section:
                         // Get rid of the "section" prefix.
                         return s.substr(7);
+
+                    case interpolate_lookup_kind::partial:
+                        return s + " partial included\n";
                     }
 
                 throw std::runtime_error("invalid lookup kind");
                 }
             )
-        ,"value of variable"
+        ,"test partial included\nvalue of variable"
         );
 
     // Should throw if the input syntax is invalid.
