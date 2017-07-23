@@ -29,7 +29,10 @@ int test_main(int, char*[])
 {
     auto const test_interpolate = [](char const* s)
         {
-        return interpolate_string(s, [](std::string const& k) { return k; });
+        return interpolate_string
+            (s
+            ,[](std::string const& k, interpolate_lookup_kind) { return k; }
+            );
         };
 
     // Check that basic interpolation works.
@@ -46,7 +49,7 @@ int test_main(int, char*[])
         {
         return interpolate_string
             (s
-            ,[](std::string const& s) -> std::string
+            ,[](std::string const& s, interpolate_lookup_kind) -> std::string
                 {
                 if(s == "var0") return "0";
                 if(s == "var1") return "1";
@@ -83,7 +86,7 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL
         (interpolate_string
             ("{{expanded}}"
-            ,[](std::string const& s) -> std::string
+            ,[](std::string const& s, interpolate_lookup_kind) -> std::string
                 {
                 if(s == "expanded")
                     {
@@ -93,6 +96,28 @@ int test_main(int, char*[])
                 }
             )
         ,"{{unexpanded}}"
+        );
+
+    // Check that the kind of variable being expanded is correct.
+    BOOST_TEST_EQUAL
+        (interpolate_string
+            ("{{#section1}}{{^section0}}{{variable}}{{/section0}}{{/section1}}"
+            ,[](std::string const& s, interpolate_lookup_kind kind)
+                {
+                switch(kind)
+                    {
+                    case interpolate_lookup_kind::variable:
+                        return "value of " + s;
+
+                    case interpolate_lookup_kind::section:
+                        // Get rid of the "section" prefix.
+                        return s.substr(7);
+                    }
+
+                throw std::runtime_error("invalid lookup kind");
+                }
+            )
+        ,"value of variable"
         );
 
     // Should throw if the input syntax is invalid.
@@ -131,7 +156,7 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (interpolate_string
             ("{{x}}"
-            ,[](std::string const& s) -> std::string
+            ,[](std::string const& s, interpolate_lookup_kind) -> std::string
                 {
                 throw std::runtime_error("no such variable '" + s + "'");
                 }
