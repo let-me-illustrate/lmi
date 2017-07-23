@@ -29,6 +29,7 @@
 #include "force_linking.hpp"
 #include "html.hpp"
 #include "interpolate_string.hpp"
+#include "istream_to_string.hpp"
 #include "ledger.hpp"
 #include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
@@ -40,6 +41,7 @@
 #include <wx/pdfdc.h>
 
 #include <cstdint>                      // SIZE_MAX
+#include <fstream>
 #include <map>
 #include <memory>
 #include <sstream>
@@ -91,9 +93,22 @@ class html_interpolator
         return text::from_html
             (interpolate_string
                 (s
-                ,[this](std::string const& s, interpolate_lookup_kind)
+                ,[this]
+                    (std::string const& s
+                    ,interpolate_lookup_kind kind
+                    ) -> std::string
                     {
-                    return expand_html(s).as_html();
+                    switch(kind)
+                        {
+                        case interpolate_lookup_kind::variable:
+                        case interpolate_lookup_kind::section:
+                            return expand_html(s).as_html();
+
+                        case interpolate_lookup_kind::partial:
+                            return load_partial_from_file(s);
+                        }
+
+                    throw std::runtime_error("invalid lookup kind");
                     }
                 )
             );
@@ -196,6 +211,23 @@ class html_interpolator
             }
 
         return text::from(evaluator_(s));
+    }
+
+    std::string load_partial_from_file(std::string const& file) const
+    {
+        std::ifstream ifs(file + ".mustache");
+        if(!ifs)
+            {
+            alarum()
+                << "Template file \""
+                << file
+                << ".mustache\" not found."
+                << std::flush
+                ;
+            }
+        std::string partial;
+        istream_to_string(ifs, partial);
+        return partial;
     }
 
     // Object used for variables expansion.
@@ -1691,6 +1723,26 @@ from lapsing, or payment required to reinstate the policy.
     }
 };
 
+class numeric_summary_page : public numbered_page
+{
+  public:
+    void render
+        (Ledger const& ledger
+        ,pdf_writer_wx& writer
+        ,wxDC& dc
+        ,html_interpolator const& interpolate_html
+        ) override
+    {
+        numbered_page::render(ledger, writer, dc, interpolate_html);
+
+        writer.output_html
+            (writer.get_horz_margin()
+            ,writer.get_vert_margin()
+            ,writer.get_page_width()
+            ,interpolate_html("{{>numeric_summary}}")
+            );
+    }
+};
 
 // Regular illustration.
 class pdf_illustration_regular : public pdf_illustration
@@ -1750,6 +1802,11 @@ class pdf_illustration_regular : public pdf_illustration
             }
 
         add_variable
+            ("HasProducerCity"
+            ,invar.ProducerCity != "0"
+            );
+
+        add_variable
             ("HasGuarPrem"
             ,invar.GuarPrem != 0
             );
@@ -1789,6 +1846,7 @@ class pdf_illustration_regular : public pdf_illustration
         add<narrative_summary_page>();
         add<narrative_summary_cont_page>();
         add<columns_headings_page>();
+        add<numeric_summary_page>();
     }
 };
 

@@ -1,0 +1,105 @@
+<font size=-1>
+<p align="center">
+    {{#IsInforce}}
+        LIFE INSURANCE IN FORCE BASIC ILLUSTRATION
+    {{/IsInforce}}
+    {{^IsInforce}}
+        LIFE INSURANCE BASIC ILLUSTRATION
+    {{/IsInforce}}
+
+    <br>{{InsCoName}}
+    <br>Presented by: {{ProducerName}}
+    <br>{{ProducerStreet}}
+    {{#HasProducerCity}}
+        <br>{{ProducerCity}}
+    {{/HasProducerCity}}
+</p>
+<p>
+    &nbsp;
+</p>
+<table width="100%" cellspacing="0" cellpadding="0" valign="top">
+    <tr>
+        <td width="60%">
+            Prepared for:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Group Name: {{CorpNameAbbrev50}}<br>
+            {{#Composite}}
+                Composite Illustration
+            {{/Composite}}
+            {{^Composite}}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Insured: {{Insured1Abbrev50}}
+            {{/Composite}}
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age: {{Age}}<br>
+            Product: {{PolicyForm}}&nbsp;{{PolicyMktgName}}<br>
+            {{#ModifiedSinglePremium}}
+                Modified Single Premium Adjustable Life Insurance Policy
+            {{/ModifiedSinglePremium}}
+            {{^ModifiedSinglePremium}}
+                {{PolicyLegalName}}
+            {{/ModifiedSinglePremium}}
+            <br>
+
+            {{^IsInforce}}
+                {{^SinglePremium}}
+                    Initial Premium:
+                {{/SinglePremium}}
+                {{#SinglePremium}}
+                    Single Premium:
+                {{/SinglePremium}}
+                &nbsp;${{InitPrem}}
+            {{/IsInforce}}
+            <br>
+
+            {{^Composite}}
+                Initial Death Benefit Option: {{InitDBOpt}}
+            {{/Composite}}
+        </td>
+        <td width="40%">
+            Initial {{#HasTerm}}Total{{/HasTerm}}
+            Selected Face Amount: ${{InitTotalSA}}<br>
+
+            {{#HasTerm}}
+                Initial Base Face Amount: ${{InitBaseSpecAmt}}<br>
+                Initial Term Face Amount: ${{InitTermSpecAmt}}<br>
+            {{/HasTerm}}
+
+            Guaranteed Crediting Rate: {{InitAnnGenAcctInt_Guaranteed}}<br>
+
+            Current Illustrated Crediting Rate:
+            {{#InforceYear}}
+                {{UltimateInterestRate}}
+            {{/InforceYear}}
+            {{^InforceYear}}
+                {{InitAnnGenAcctInt_Current}}
+            {{/InforceYear}}
+            <br>
+
+            {{#SinglePremium}}
+                {{#InforceYearLE4}}
+                    Ultimate Illustrated Crediting Rate:
+                    {{#ModifiedSinglePremium0}}
+                        {{AnnGAIntRate_Current[11]}}
+                    {{/ModifiedSinglePremium0}}
+                    {{^ModifiedSinglePremium0}}
+                        {{AnnGAIntRate_Current[6]}}
+                    {{/ModifiedSinglePremium0}}
+                    <br>
+                {{/InforceYearLE4}}
+            {{/SinglePremium}}
+
+            {{^Composite}}
+                Underwriting Type:
+                {{#UWTypeIsMedical}}
+                    Fully underwritten
+                {{/UWTypeIsMedical}}
+                {{^UWTypeIsMedical}}
+                    {{UWType}}
+                {{/UWTypeIsMedical}}
+                <br>
+            {{/Composite}}
+
+            Rate Classification: {{UWClass}}, {{Smoker}}, {{Gender}}<br>
+        </td>
+    </tr>
+</table>
+</font>
