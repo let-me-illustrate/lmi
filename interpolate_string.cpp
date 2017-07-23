@@ -29,44 +29,64 @@
 #include <stdexcept>
 #include <vector>
 
-std::string interpolate_string
+namespace
+{
+
+// Information about a single section that we're currently in.
+struct section_info
+{
+    section_info(std::string const& name, bool active)
+        :name_(name)
+        ,active_(active)
+    {
+    }
+
+    // Name of the section, i.e. the part after "#".
+    //
+    // TODO: In C++14 this could be replaced with string_view which would
+    // save on memory allocations without compromising safety, as we know
+    // that the input string doesn't change during this function execution.
+    std::string const name_;
+
+    // If true, output section contents, otherwise simply eat it.
+    bool const active_;
+
+    // Note: we could also store the position of the section start here to
+    // improve error reporting. Currently this is done as templates we use
+    // are small and errors shouldn't be difficult to find even without the
+    // exact position, but this could change in the future.
+};
+
+// The only context we need is the stack of sections entered so far.
+using context = std::stack<section_info, std::vector<section_info>>;
+
+// The real interpolation recursive function, called by the public one to do
+// all the work.
+void do_interpolate_string_in_context
     (char const* s
     ,lookup_function const& lookup
+    ,std::string& out
+    ,context& sections
+    ,std::string const& partial = std::string()
+    ,int recursion_level = 0
     )
 {
-    std::string out;
-
-    // This is probably not going to be enough as replacements of the
-    // interpolated variables tend to be longer than the variables names
-    // themselves, but it's difficult to estimate the resulting string length
-    // any better than this.
-    out.reserve(strlen(s));
-
-    // The stack contains all the sections that we're currently in.
-    struct section_info
-    {
-        section_info(std::string const& name, bool active)
-            :name_(name)
-            ,active_(active)
+    // Guard against too deep recursion to avoid crashing on code using too
+    // many nested partials (either unintentionally, e.g. due to including a
+    // partial from itself, or maliciously).
+    //
+    // The maximum recursion level is chosen completely arbitrarily, the only
+    // criteria are that it shouldn't be too big to crash due to stack overflow
+    // before it is reached nor too small to break legitimate use cases.
+    if(recursion_level >= 100)
         {
+        alarum()
+            << "Nesting level too deep while expanding the partial \""
+            << partial
+            << "\""
+            << std::flush
+            ;
         }
-
-        // Name of the section, i.e. the part after "#".
-        //
-        // TODO: In C++14 this could be replaced with string_view which would
-        // save on memory allocations without compromising safety, as we know
-        // that the input string doesn't change during this function execution.
-        std::string const name_;
-
-        // If true, output section contents, otherwise simply eat it.
-        bool const active_;
-
-        // Note: we could also store the position of the section start here to
-        // improve error reporting. Currently this is done as templates we use
-        // are small and errors shouldn't be difficult to find even without the
-        // exact position, but this could change in the future.
-    };
-    std::stack<section_info, std::vector<section_info>> sections;
 
     // Check if the output is currently active or suppressed because we're
     // inside an inactive section.
@@ -171,6 +191,25 @@ std::string interpolate_string
                             sections.pop();
                             break;
 
+                        case '>':
+                            if(is_active())
+                                {
+                                auto const& real_name = name.substr(1);
+
+                                do_interpolate_string_in_context
+                                    (lookup
+                                        (real_name
+                                        ,interpolate_lookup_kind::partial
+                                        ).c_str()
+                                    ,lookup
+                                    ,out
+                                    ,sections
+                                    ,real_name
+                                    ,recursion_level + 1
+                                    );
+                                }
+                            break;
+
                         default:
                             if(is_active())
                                 {
@@ -217,6 +256,27 @@ std::string interpolate_string
             out += *p;
             }
         }
+}
+
+} // Unnamed namespace.
+
+std::string interpolate_string
+    (char const* s
+    ,lookup_function const& lookup
+    )
+{
+    std::string out;
+
+    // This is probably not going to be enough as replacements of the
+    // interpolated variables tend to be longer than the variables names
+    // themselves, but it's difficult to estimate the resulting string length
+    // any better than this.
+    out.reserve(strlen(s));
+
+    // The stack contains all the sections that we're currently in.
+    std::stack<section_info, std::vector<section_info>> sections;
+
+    do_interpolate_string_in_context(s, lookup, out, sections);
 
     if(!sections.empty())
         {
