@@ -56,6 +56,9 @@ using namespace html;
 namespace
 {
 
+// Colour used for lines and border in the generated illustrations.
+const wxColour HIGHLIGHT_COL(0x00, 0x2f, 0x6c);
+
 // This function is also provided in <boost/algorithm/string/predicate.hpp>,
 // but it's arguably not worth adding dependency on this Boost library just for
 // this function.
@@ -393,7 +396,7 @@ class cover_page : public page
         ,html_interpolator const& interpolate_html
         ) override
     {
-        dc.SetPen(wxPen(*wxBLUE, 2));
+        dc.SetPen(wxPen(HIGHLIGHT_COL, 2));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
         auto const frame_horz_margin = writer.get_horz_margin();
@@ -645,7 +648,7 @@ class page_with_footer : public page
             ,footer_html
             );
 
-        dc.SetPen(*wxBLUE);
+        dc.SetPen(HIGHLIGHT_COL);
         dc.DrawLine
             (frame_horz_margin
             ,footer_top
