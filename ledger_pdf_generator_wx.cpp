@@ -745,9 +745,7 @@ Composite Illustration
         }
 
     lhs_html += add_line
-        (R"(
-Product: {{PolicyForm}}{{Space1}}{{PolicyMktgName}}
-)"
+        ("Product: {{PolicyForm}}{{Space1}}{{PolicyMktgName}}"
         );
 
     lhs_html += add_line
