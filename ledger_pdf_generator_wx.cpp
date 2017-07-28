@@ -1109,7 +1109,7 @@ and values set forth in the illustration are not guaranteed.
 
         summary_html += add_body_paragraph
             (R"(
-{{^StateIsTX}}
+{{^StateIsTexas}}
 This illustration assumes that the currently illustrated
 non-guaranteed elements will continue unchanged
 for all years shown. This is not likely to occur
@@ -1118,8 +1118,8 @@ The non-guaranteed benefits and values are not guaranteed
 and are based on assumptions such as interest credited
 and current monthly charges, which are subject to change by
 {{InsCoName}}.
-{{/StateIsTX}}
-{{#StateIsTX}}
+{{/StateIsTexas}}
+{{#StateIsTexas}}
 This illustration is based on both non-guaranteed
 and guaranteed assumptions. Non-guaranteed assumptions
 include interest rates and monthly charges.
@@ -1130,7 +1130,7 @@ and actual results may be more or less favorable than shown.
 Factors that may affect future policy performance include
 the company's expectations for future mortality, investments,
 persistency, profits and expenses.
-{{/StateIsTX}}
+{{/StateIsTexas}}
 )"
             );
 
@@ -1589,7 +1589,7 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
-            ("StateIsTX"
+            ("StateIsTexas"
             ,state_abbrev == "TX"
             );
 
