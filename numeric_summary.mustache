@@ -1,3 +1,138 @@
 {{>header}}
 
 <p align="center">Numeric Summary</p>
+
+<font size="-1">
+
+<p align="center">
+Values shown are in
+{{^HasScaleUnit}}
+dollars
+{{/HasScaleUnit}}
+{{#HasScaleUnit}}
+{{HasScaleUnit}}s of dollars
+{{/HasScaleUnit}}
+</p>
+
+{{#Composite}}
+<p>
+    The year of policy lapse on a guaranteed, midpoint
+    and current basis is not depicted in the above table of values
+    for this composite illustration because it is not applicable
+    on a case basis.
+</p>
+{{/Composite}}
+
+{{#LapseYear_Guaranteed_LT_MaxDuration}}
+<p>
+    Additional premium will be required
+    in year {{LapseYear_Guaranteed_Plus1}}
+    or contract will lapse based on guaranteed monthly charges
+    and interest rate.
+</p>
+{{/LapseYear_Guaranteed_LT_MaxDuration}}
+
+{{#LapseYear_Midpoint_LT_MaxDuration}}
+<p>
+    Additional premium will be required
+    in year {{LapseYear_Midpoint_Plus1}}
+    or contract will lapse based on midpoint monthly charges
+    and interest rate.
+</p>
+{{/LapseYear_Midpoint_LT_MaxDuration}}
+
+{{#LapseYear_Current_LT_MaxDuration}}
+<p>
+    Additional premium will be required
+    in year {{LapseYear_Current_Plus1}}
+    or contract will lapse based on current monthly charges
+    and interest rate.
+</p>
+{{/LapseYear_Current_LT_MaxDuration}}
+
+{{#IsMec}}
+<p>
+            IMPORTANT TAX DISCLOSURE: This is a Modified Endowment Contract.
+            Please refer to the Narrative Summary for additional information.
+</p>
+{{/IsMec}}
+
+<br>
+<br>
+
+<p align="center">Certification Statements</p>
+    <p>
+      CONTRACT OWNER / APPLICANT
+    </p>
+    <xsl:if test="$scalars/InterestDisclaimer!=''">
+      <p>
+        I understand that at the present time higher current interest rates
+        are credited for policies with case premiums in the amount
+        of {{InterestDisclaimer}}
+      </p>
+    </xsl:if>
+    <p>
+    {{#StateIsIllinoisOrTexas}}
+        {{#StateIsIllinois}}
+            I have received a copy of this illustration and understand
+            that this illustration assumes that the currently illustrated
+            non-guaranteed elements will continue unchanged
+            for all years shown. This is not likely to occur,
+            and actual results may be more or less favorable than those shown.
+        {{/StateIsIllinois}}
+        {{#StateIsTexas}}
+              A copy of this illustration has been provided
+              to the Applicant/Policyowner.
+        {{/StateIsTexas}}
+    {{/StateIsIllinoisOrTexas}}
+    {{^StateIsIllinoisOrTexas}}
+          I have received a copy of this illustration, and I understand
+          that any non-guaranteed elements illustrated are subject
+          to change and could be either higher or lower. Additionally,
+          I have been informed by my agent that these values
+          are not guaranteed.
+    {{/StateIsIllinoisOrTexas}}
+    </p>
+    <br>
+    <br>
+    <p>
+        <u>{{Space64}}{{Space32}}</u> {{Space32}} <u>{{Space32}}</u>
+        <br>
+        CONTRACT OWNER OR APPLICANT SIGNATURE {{Space32}}{{Space8}}{{Space4}} DATE
+    </p>
+    <br>
+    <br>
+    <p>
+      AGENT / AUTHORIZED REPRESENTATIVE
+    </p>
+    <p>
+        {{#StateIsIllinoisOrTexas}}
+            {{#StateIsIllinois}}
+                I have informed the applicant or policyowner
+                that this illustration assumes that the currently illustrated
+                non-guaranteed elements will continue unchanged
+                for all years shown. This is not likely to occur,
+                and actual results may be more or less favorable than those shown.
+            {{/StateIsIllinois}}
+            {{#StateIsTexas}}
+                A copy of this illustration has been provided
+                to the Applicant/Policyowner.
+            {{/StateIsTexas}}
+        {{/StateIsIllinoisOrTexas}}
+        {{^StateIsIllinoisOrTexas}}
+            I certify that this illustration has been presented
+            to the applicant, and that I have explained
+            that any non-guaranteed elements illustrated
+            are subject to change. I have made no statements
+            that are inconsistent with the illustration.
+        {{/StateIsIllinoisOrTexas}}
+    </p>
+    <br>
+    <br>
+    <p>
+        <u>{{Space64}}{{Space32}}</u> {{Space32}}{{Space1}} <u>{{Space32}}</u>
+        <br>
+        AGENT OR AUTHORIZED REPRESENTATIVE {{Space32}}{{Space16}}{{Space4}} DATE
+    </p>
+
+</font>

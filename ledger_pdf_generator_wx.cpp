@@ -33,6 +33,7 @@
 #include "ledger.hpp"
 #include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "miscellany.hpp"               // lmi_tolower()
 #include "pdf_writer_wx.hpp"
 #include "value_cast.hpp"
@@ -324,6 +325,15 @@ class pdf_illustration : protected html_interpolator
 
         indent += indent;
         add_variable("Space8", indent);
+
+        indent += indent;
+        add_variable("Space16", indent);
+
+        indent += indent;
+        add_variable("Space32", indent);
+
+        indent += indent;
+        add_variable("Space64", indent);
 
         auto const abbreviate_if_necessary = [](std::string s, size_t len)
             {
@@ -1572,6 +1582,11 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
+            ("HasScaleUnit"
+            ,!invar.ScaleUnit().empty()
+            );
+
+        add_variable
             ("DefnLifeInsIsGPT"
             ,invar.DefnLifeIns == "GPT"
             );
@@ -1579,6 +1594,11 @@ class pdf_illustration_regular : public pdf_illustration
         add_variable
             ("StateIsCarolina"
             ,state_abbrev == "NC" || state_abbrev == "SC"
+            );
+
+        add_variable
+            ("StateIsIllinois"
+            ,state_abbrev == "IL"
             );
 
         add_variable
@@ -1592,6 +1612,11 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
+            ("StateIsIllinoisOrTexas"
+            ,state_abbrev == "IL" || state_abbrev == "TX"
+            );
+
+        add_variable
             ("UWTypeIsMedical"
             ,invar.UWType == "Medical"
             );
@@ -1599,6 +1624,41 @@ class pdf_illustration_regular : public pdf_illustration
         add_variable
             ("UltimateInterestRate"
             ,evaluate("AnnGAIntRate_Current", invar.InforceYear + 1)
+            );
+
+        auto const max_duration = invar.EndtAge - invar.Age;
+        auto const lapse_year_guaruanteed = ledger.GetGuarFull().LapseYear;
+        auto const lapse_year_midpoint = ledger.GetMdptFull().LapseYear;
+        auto const lapse_year_current = ledger.GetCurrFull().LapseYear;
+
+        add_variable
+            ("LapseYear_Guaranteed_LT_MaxDuration"
+            ,lapse_year_guaruanteed < max_duration
+            );
+
+        add_variable
+            ("LapseYear_Guaranteed_Plus1"
+            ,lapse_year_guaruanteed + 1
+            );
+
+        add_variable
+            ("LapseYear_Midpoint_LT_MaxDuration"
+            ,lapse_year_midpoint < max_duration
+            );
+
+        add_variable
+            ("LapseYear_Midpoint_Plus1"
+            ,lapse_year_midpoint + 1
+            );
+
+        add_variable
+            ("LapseYear_Current_LT_MaxDuration"
+            ,lapse_year_current < max_duration
+            );
+
+        add_variable
+            ("LapseYear_Current_Plus1"
+            ,lapse_year_current + 1
             );
 
         // Add all the pages.
