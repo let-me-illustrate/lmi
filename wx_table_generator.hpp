@@ -52,14 +52,15 @@ class wx_table_generator
     // Adds a column to the table. The total number of added columns determines
     // the number of the expected value in output_row() calls.
     //
-    // Providing an empty header suppresses the table display, while still
-    // taking into account in output_row(), providing a convenient way to hide
-    // a single column without changing the data representation.
+    // Providing an empty header suppresses the column display, while still
+    // taking it into account in output_row(), providing a convenient way to
+    // hide a single column without changing the data representation.
     //
     // Each column must either have a fixed width, specified as the width of
     // the longest text that may appear in this column, or be expandable
     // meaning that the rest of the page width is allocated to it which will be
     // the case if widest_text is empty.
+    //
     // Notice that column headers may be multiline strings.
     void add_column(std::string const& header, std::string const& widest_text);
 
