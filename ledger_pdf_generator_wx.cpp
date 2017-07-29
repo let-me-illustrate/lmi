@@ -1674,7 +1674,10 @@ class pdf_illustration_regular : public pdf_illustration
         add<narrative_summary_page>();
         add<narrative_summary_cont_page>();
         add<columns_headings_page>();
-        add<numeric_summary_page>();
+        if(!invar.IsInforce)
+            {
+            add<numeric_summary_page>();
+            }
     }
 };
 
