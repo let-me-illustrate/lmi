@@ -1029,13 +1029,14 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
     os_ << "   Year      Outlay       Value       Value     Benefit       Value       Value     Benefit       Value       Value     Benefit" << endrow;
     os_ << endrow;
 
-    int summary_rows[] = {4, 9, 19, std::min(99, 69 - value_cast<int>(invar().Age))};
+    int summary_rows[] = {4, 9, 19, 69 - value_cast<int>(invar().Age)};
 
     for(auto const& row : summary_rows)
         {
-        // Skip row if it doesn't exist. For instance, if issue age is
-        // 85 and maturity age is 100, then there is no twentieth duration.
-        if(ledger_.GetMaxLength() < 1 + row)
+        // Skip row if it doesn't exist. For instance, if the issue
+        // age is 85 and the contract remains in force until age 100,
+        // then there is no twentieth duration and no age-70 row.
+        if(!(0 <= row && row < ledger_.GetMaxLength()))
             {
             continue;
             }
