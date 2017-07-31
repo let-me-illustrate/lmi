@@ -881,21 +881,26 @@ void PrintLedgerFlatText
 
 // One column of seven characters ('Age 100')
 // plus ten columns of twelve characters each (' 999,999,999')
-// equals 127 columns; a nine-point font can do that on a page
+// equals 127 columns; a nine-point font can print that on a page
 // eight inches wide and still leave about a half-inch margin
 // on both sides.
 //
-// TODO ?? Avoid overflow by scaling everything if anything's $1B or over.
-// TODO ?? Add thousands separators.
+// SOMEDAY !! The formatting of this simple reference implementation
+// could be improved in several ways:
+//   - Avoid overflow by scaling everything if anything's $1B or over.
+//   - Add thousands separators.
+//   - Show at least premiums as dollars and cents.
+//   - Split into numbered pages, adding serial page numbers to footer.
+//   - Wrap long strings.
 namespace
 {
     int g_width = 128;
     std::string center(std::string const& s)
         {
         int z = s.length();
-        // TODO ?? Strings in the input class might be too wide;
-        // absent more graceful handling, at least no attempt is made
-        // to cure that problem with a negative number of spaces.
+        // Strings in the input class might be too wide; absent more
+        // graceful handling, at least no attempt is made to cure that
+        // problem with a negative number of spaces.
         std::string spaces(std::max(0, (g_width - z) / 2), char(' '));
         return spaces + s;
         }
@@ -920,7 +925,6 @@ void FlatTextLedgerPrinter::Print() const
 {
     set_default_format_flags(os_);
 
-    // TODO ?? Split into numbered pages; add page number to footer.
     PrintHeader             ();
     PrintNarrativeSummary   ();
     PrintKeyTerms           ();
