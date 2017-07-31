@@ -39,10 +39,10 @@
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>
+#include <algorithm>                    // find()
 #include <fstream>
-#include <iomanip>
-#include <ios>
+#include <iomanip>                      // setprecision()
+#include <ios>                          // ios_base
 #include <locale>
 #include <map>
 #include <ostream>
