@@ -463,7 +463,7 @@ void PrintCellTabDelimited
     LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
     LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
 
-    int max_length = ledger_values.GetMaxLength();
+    int const max_length = ledger_values.GetMaxLength();
 
     // TODO ?? This const_cast is safe, but it's still unclean.
     LedgerInvariant& unclean = const_cast<LedgerInvariant&>(Invar);
@@ -897,10 +897,10 @@ void PrintLedgerFlatText
 //   - Wrap long strings.
 namespace
 {
-    int g_width = 128;
+    int const g_width = 128;
     std::string center(std::string const& s)
         {
-        int z = s.length();
+        int const z = s.length();
         // Strings in the input class might be too wide; absent more
         // graceful handling, at least no attempt is made to cure that
         // problem with a negative number of spaces.
@@ -1123,7 +1123,7 @@ void FlatTextLedgerPrinter::PrintTabularDetailHeader() const
 
 void FlatTextLedgerPrinter::PrintTabularDetail() const
 {
-    int age = value_cast<int>(invar().Age);
+    int const age = value_cast<int>(invar().Age);
     for(int j = 0; j < ledger_.GetMaxLength(); ++j)
         {
         os_.setf(std::ios_base::fixed, std::ios_base::floatfield);
