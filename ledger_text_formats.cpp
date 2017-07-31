@@ -1030,6 +1030,9 @@ void FlatTextLedgerPrinter::PrintKeyTerms() const
 
 void FlatTextLedgerPrinter::PrintNumericalSummary() const
 {
+    int const age = value_cast<int>(invar().Age);
+    int const max_length = ledger_.GetMaxLength();
+
     os_ << center("Numerical summary") << endrow;
     os_ << endrow;
     os_ << "                    ------------Guaranteed------------- -------------Midpoint-------------- ----------Non-guaranteed-----------" << endrow;
@@ -1041,14 +1044,14 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
     // substitute duration thirty for age seventy: see illustration reg
     // section (7)(C)(1).
 
-    std::vector<int> summary_rows = {4, 9, 19, 69 - value_cast<int>(invar().Age)};
+    std::vector<int> summary_rows = {4, 9, 19, 69 - age};
 
     for(auto const& row : summary_rows)
         {
         // Skip row if it doesn't exist. For instance, if the issue
         // age is 85 and the contract remains in force until age 100,
         // then there is no twentieth duration and no age-70 row.
-        if(!(0 <= row && row < ledger_.GetMaxLength()))
+        if(!(0 <= row && row < max_length))
             {
             continue;
             }
@@ -1124,7 +1127,8 @@ void FlatTextLedgerPrinter::PrintTabularDetailHeader() const
 void FlatTextLedgerPrinter::PrintTabularDetail() const
 {
     int const age = value_cast<int>(invar().Age);
-    for(int j = 0; j < ledger_.GetMaxLength(); ++j)
+    int const max_length = ledger_.GetMaxLength();
+    for(int j = 0; j < max_length; ++j)
         {
         os_.setf(std::ios_base::fixed, std::ios_base::floatfield);
         os_.precision(0);
