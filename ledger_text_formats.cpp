@@ -865,8 +865,11 @@ class FlatTextLedgerPrinter final
     LedgerVariant   const& guar_() const;
     LedgerVariant   const& mdpt_() const;
 
+    // Required ctor arguments.
     Ledger const& ledger_;
     std::ostream& os_;
+
+    mutable int page_number_ {0};
 };
 
 void PrintLedgerFlatText
@@ -971,6 +974,7 @@ void FlatTextLedgerPrinter::PrintHeader() const
 
 void FlatTextLedgerPrinter::PrintFooter() const
 {
+    os_ << "Page " << ++page_number_ << " of 3";
     os_ << "\f";
 }
 
