@@ -1029,7 +1029,11 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
     os_ << "   Year      Outlay       Value       Value     Benefit       Value       Value     Benefit       Value       Value     Benefit" << endrow;
     os_ << endrow;
 
-    int summary_rows[] = {4, 9, 19, 69 - value_cast<int>(invar().Age)};
+    // For multi-life contracts (which lmi does not currently support),
+    // substitute duration thirty for age seventy: see illustration reg
+    // section (7)(C)(1).
+
+    std::vector<int> summary_rows = {4, 9, 19, 69 - value_cast<int>(invar().Age)};
 
     for(auto const& row : summary_rows)
         {
@@ -1045,7 +1049,14 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
         os_.precision(0);
         os_.width(7);
 
-        os_ << std::setw( 7) << (1 + row)               ;
+        if(&row == &summary_rows.back())
+            {
+            os_ << " Age 70";
+            }
+        else
+            {
+            os_ << std::setw( 7) << (1 + row)               ;
+            }
 
         os_.precision(2);
 
@@ -1066,10 +1077,6 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
         os_ << endrow;
         }
 
-// TODO ?? Print "Age  70" instead of duration for last row. The NAIC
-// illustration reg (7)(C)(1) requires the numeric summary to show:
-//  - durations 5, 10, and 20; and age 70 if applicable; but
-//  - durations 5, 10, 20, and 30 for multiple-life policies.
     os_ << endrow;
 }
 
