@@ -1089,6 +1089,29 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
         }
 
     os_ << endrow;
+
+    auto const lapse_year = [age, max_length] (LedgerVariant const& basis)
+        {
+        int const z = basis.LapseYear;
+        std::string s =
+              (z < max_length)
+            ? "Lapses in year " + value_cast<std::string>(1 + z)
+            : "Matures at age " + value_cast<std::string>(    z + age)
+            ;
+        s = std::string(9, char(' ')) + s;
+        s.resize(12 + 12 + 12, char(' ')); // Spans three columns.
+        return s;
+        };
+
+    os_
+        << "                    "
+        << lapse_year(guar_())
+        << lapse_year(mdpt_())
+        << lapse_year(curr_())
+        << endrow
+        ;
+
+    os_ << endrow;
 }
 
 void FlatTextLedgerPrinter::PrintRequiredSignatures() const
