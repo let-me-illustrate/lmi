@@ -41,7 +41,7 @@ Female Preferred Smoker, issue age 45
 This is an illustration of a life insurance policy. It is not an offer of insurance. Availability is subject to underwriting.
 
 The premium outlay that must be paid to guarantee coverage for the term of the contract, subject to maximum premiums allowable
-to qualify as a life insurance policy under the applicable provisions of the Internal Revenue Code, is
+to qualify as a life insurance policy under the applicable provisions of the Internal Revenue Code, is 0 annually.
 
 Policy features, riders or options, guaranteed or non-guaranteed, shown in the basic illustration include:
 
@@ -77,7 +77,7 @@ Non-guaranteed values reflect non-guaranteed interest and Deductions, which are 
 
 Midpoint values reflect the midpoint of guaranteed and non-guaranteed interest and Deductions.
 
-                                                       Numerical summary
+Page 1 of 3                                                       Numerical summary
 
                     ------------Guaranteed------------- -------------Midpoint-------------- ----------Non-guaranteed-----------
             Premium     Account   Surrender       Death     Account   Surrender       Death     Account   Surrender       Death
@@ -86,7 +86,9 @@ Midpoint values reflect the midpoint of guaranteed and non-guaranteed interest a
       5    45967.35   210057.03   210057.03  1000000.00   233181.96   233181.96  1000000.00   257167.49   257167.49  1000000.00
      10    45967.35   449015.91   449015.91  1000000.00   519025.00   519025.00  1000000.00   593477.27   593477.27  1000000.00
      20        0.00   469942.03   469942.03  1000000.00   727988.77   727988.77  1000000.00   999999.91   999999.91  1219999.89
-     25        0.00   426739.26   426739.26  1000000.00   869774.56   869774.56  1008938.49  1298850.53  1298850.53  1506666.61
+ Age 70        0.00   426739.26   426739.26  1000000.00   869774.56   869774.56  1008938.49  1298850.53  1298850.53  1506666.61
+
+                             Matures at age 100                  Matures at age 100                  Matures at age 100
 
                                                       Required signatures
 
@@ -107,7 +109,7 @@ are inconsistent with the illustration.
 
 ___________________________________________  ______
 Producer or other authorized representative  Date
-Tabular detail
+Page 2 of 3Tabular detail
 
                                 ------------Guaranteed------------- ----------Non-guaranteed-----------
              Age at     Premium     Account   Surrender       Death     Account   Surrender       Death
@@ -168,7 +170,7 @@ Producer or other authorized representative  Date
      53          98        0.00        0.00        0.00        0.00  5580843.19  5580843.19  5580843.19
      54          99        0.00        0.00        0.00        0.00  5889539.70  5889539.70  5889539.70
      55         100        0.00        0.00        0.00        0.00  6215438.61  6215438.61  6215438.61
-</small></pre><hr>
+Page 3 of 3</small></pre><hr>
 
     Calculations: 12 milliseconds<BR>
     Output:       5 milliseconds<BR>
