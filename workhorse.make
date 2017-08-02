@@ -1175,7 +1175,6 @@ cli_test-%:
 	  >$*.touchstone
 	@<$*.touchstone \
 	  $(DIFF) \
-	      --ignore-all-space \
 	      --ignore-matching-lines='Prepared on' \
 	      - $(srcdir)/$*.touchstone \
 	  | $(WC)   -l \
@@ -1194,7 +1193,6 @@ cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 	@$(PERFORM) ./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in >cgi.touchstone
 	@<cgi.touchstone \
 	  $(DIFF) \
-	      --ignore-all-space \
 	      --ignore-matching-lines='Prepared on' \
 	      --ignore-matching-lines='Compiled at' \
 	      --ignore-matching-lines=':[ 0-9]*milliseconds' \

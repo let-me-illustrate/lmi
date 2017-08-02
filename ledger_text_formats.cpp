@@ -939,6 +939,9 @@ void FlatTextLedgerPrinter::Print() const
     PrintTabularDetail      ();
     PrintFooter             ();
 
+    // 'os_' may be a std::ofstream, and files should end in a newline.
+    os_ << '\n';
+
     LMI_ASSERT(os_.good());
 }
 
@@ -1090,7 +1093,8 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
 
     os_ << endrow;
 
-    auto const lapse_year = [age, max_length] (LedgerVariant const& basis)
+    // Illustration reg (7)(C)(2) "year in which coverage ceases".
+    auto const brink = [age, max_length] (LedgerVariant const& basis)
         {
         int const z = basis.LapseYear;
         std::string s =
@@ -1103,13 +1107,9 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
         return s;
         };
 
-    os_
-        << "                    "
-        << lapse_year(guar_())
-        << lapse_year(mdpt_())
-        << lapse_year(curr_())
-        << endrow
-        ;
+    std::string s = brink(guar_()) + brink(mdpt_()) + brink(curr_());
+    rtrim(s, " ");
+    os_ << "                    " << s << endrow;
 
     os_ << endrow;
 }
