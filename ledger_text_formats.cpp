@@ -986,7 +986,7 @@ void FlatTextLedgerPrinter::PrintNarrativeSummary() const
     os_ << "This is an illustration of a life insurance policy. It is not an offer of insurance. Availability is subject to underwriting." << endrow;
     os_ << endrow;
     os_ << "The premium outlay that must be paid to guarantee coverage for the term of the contract, subject to maximum premiums allowable" << endrow;
-    os_ << "to qualify as a life insurance policy under the applicable provisions of the Internal Revenue Code, is" << endrow;
+    os_ << "to qualify as a life insurance policy under the applicable provisions of the Internal Revenue Code, is " << value_cast<std::string>(invar().GuarPrem) << " annually." << endrow;
     os_ << endrow;
     os_ << "Policy features, riders or options, guaranteed or non-guaranteed, shown in the basic illustration include:" << endrow;
     os_ << endrow;
