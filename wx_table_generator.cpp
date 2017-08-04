@@ -216,7 +216,10 @@ void wx_table_generator::do_output_values
     int const y_text = y + char_height_;
     y += row_height_;
 
-    do_output_vert_separator(x, y_top, y);
+    if(draw_separators_)
+        {
+        do_output_vert_separator(x, y_top, y);
+        }
 
     std::size_t const num_columns = columns_.size();
     for(std::size_t col = 0; col < num_columns; ++col)
@@ -247,7 +250,10 @@ void wx_table_generator::do_output_values
             dc_.DrawText(s, x_text, y_text);
             }
         x += width;
-        do_output_vert_separator(x, y_top, y);
+        if(draw_separators_)
+            {
+            do_output_vert_separator(x, y_top, y);
+            }
         }
 }
 
@@ -328,9 +334,12 @@ void wx_table_generator::output_header(int* pos_y)
         }
 
     // Finally draw the separators above and (a double one) below them.
-    do_output_horz_separator(left_margin_, x,  y_top    );
-    do_output_horz_separator(left_margin_, x, *pos_y - 1);
-    do_output_horz_separator(left_margin_, x, *pos_y    );
+    if(draw_separators_)
+        {
+        do_output_horz_separator(left_margin_, x,  y_top    );
+        do_output_horz_separator(left_margin_, x, *pos_y - 1);
+        do_output_horz_separator(left_margin_, x, *pos_y    );
+        }
 }
 
 void wx_table_generator::output_row
@@ -341,7 +350,10 @@ void wx_table_generator::output_row
     int x = left_margin_;
     do_output_values(x, *pos_y, values);
 
-    do_output_horz_separator(left_margin_, x, *pos_y);
+    if(draw_separators_)
+        {
+        do_output_horz_separator(left_margin_, x, *pos_y);
+        }
 }
 
 void wx_table_generator::output_highlighted_cell
