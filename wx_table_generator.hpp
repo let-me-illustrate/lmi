@@ -105,6 +105,9 @@ class wx_table_generator
     // output a separator after the last column.
     void output_vert_separator(std::size_t before_column, int y);
 
+    // Disable separator lines drawn by default.
+    void disable_separators() {draw_separators_ = false;}
+
   private:
     // Return the font used for the headers.
     wxFont get_header_font() const;
@@ -161,6 +164,11 @@ class wx_table_generator
     // Maximal number of lines in any column header, initially 1 but can be
     // higher if multiline headers are used.
     std::size_t max_header_lines_;
+
+    // If false, separator lines are not drawn automatically (they can still be
+    // drawn by calling output_horz_separator() or output_vert_separator()
+    // explicitly).
+    bool draw_separators_ = true;
 };
 
 #endif // wx_table_generator_hpp
