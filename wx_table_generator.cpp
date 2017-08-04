@@ -64,6 +64,18 @@ wx_table_generator::wx_table_generator
     dc_.SetPen(pen);
 }
 
+void wx_table_generator::use_condensed_style()
+{
+    row_height_ = char_height_;
+    draw_separators_ = false;
+    use_bold_headers_ = false;
+}
+
+void wx_table_generator::align_right()
+{
+    align_right_ = true;
+}
+
 void wx_table_generator::add_column
     (std::string const& header
     ,std::string const& widest_text
@@ -77,7 +89,11 @@ void wx_table_generator::add_column
         }
     else
         {
-        wxDCFontChanger set_header_font(dc_, get_header_font());
+        wxDCFontChanger set_header_font(dc_);
+        if(use_bold_headers_)
+            {
+            set_header_font.Set(get_header_font());
+            }
 
         // Set width to the special value of 0 for the variable width columns.
         width = widest_text.empty() ? 0 : dc_.GetTextExtent(widest_text).x;
@@ -236,16 +252,24 @@ void wx_table_generator::do_output_values
         if(!s.empty())
             {
             int x_text = x;
-            if(ci.is_centered_)
+
+            if(align_right_)
                 {
-                // Centre the text for the columns configured to do it.
-                x_text += (width - dc_.GetTextExtent(s).x) / 2;
+                x_text += width - dc_.GetTextExtent(s).x;
                 }
             else
                 {
-                // Otherwise just offset it by ~1 em.
-                x_text += dc_.GetTextExtent("M").x;
-                }
+                if(ci.is_centered_)
+                    {
+                    // Centre the text for the columns configured to do it.
+                    x_text += (width - dc_.GetTextExtent(s).x) / 2;
+                    }
+                else
+                    {
+                    // Otherwise just offset it by ~1 em.
+                    x_text += dc_.GetTextExtent("M").x;
+                    }
+            }
 
             dc_.DrawText(s, x_text, y_text);
             }
@@ -297,7 +321,11 @@ void wx_table_generator::output_header(int* pos_y)
 {
     do_compute_column_widths_if_necessary();
 
-    wxDCFontChanger set_header_font(dc_, get_header_font());
+    wxDCFontChanger set_header_font(dc_);
+    if(use_bold_headers_)
+        {
+        set_header_font.Set(get_header_font());
+        }
 
     // Split headers in single lines and fill up the entire columns*lines 2D
     // matrix, using empty strings for the headers with less than the maximal

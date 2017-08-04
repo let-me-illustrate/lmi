@@ -105,8 +105,14 @@ class wx_table_generator
     // output a separator after the last column.
     void output_vert_separator(std::size_t before_column, int y);
 
-    // Disable separator lines drawn by default.
-    void disable_separators() {draw_separators_ = false;}
+    // Use condensed style: don't draw separators between rows and make them
+    // smaller.
+    void use_condensed_style();
+
+    // By default, columns are centered if they have fixed size or left-aligned
+    // otherwise. By calling this method, this alignment auto-detection is
+    // turned off and all columns are right-aligned.
+    void align_right();
 
   private:
     // Return the font used for the headers.
@@ -132,7 +138,7 @@ class wx_table_generator
 
     // These values could be recomputed, but cache them for performance.
     int const char_height_;
-    int const row_height_;
+    int row_height_;
 
     struct column_info
     {
@@ -169,6 +175,13 @@ class wx_table_generator
     // drawn by calling output_horz_separator() or output_vert_separator()
     // explicitly).
     bool draw_separators_ = true;
+
+    // If true, headers are drawn in bold.
+    bool use_bold_headers_ = true;
+
+    // If true, force right alignment for all columns instead of centering them
+    // automatically if they have fixed size.
+    bool align_right_ = false;
 };
 
 #endif // wx_table_generator_hpp
