@@ -317,6 +317,11 @@ void wx_table_generator::output_horz_separator
     do_output_horz_separator(x1, x2, y);
 }
 
+int wx_table_generator::get_header_height() const
+{
+    return max_header_lines_*row_height_;
+}
+
 void wx_table_generator::output_header(int* pos_y)
 {
     do_compute_column_widths_if_necessary();

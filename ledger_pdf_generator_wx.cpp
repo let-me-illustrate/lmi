@@ -39,6 +39,7 @@
 #include "pdf_writer_wx.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
+#include "wx_table_generator.hpp"
 
 #include <wx/pdfdc.h>
 
@@ -48,6 +49,7 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <utility>                      // std::pair
 #include <vector>
 
 LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
@@ -156,14 +158,13 @@ class html_interpolator
             ;
     }
 
-  protected:
-    // Used by derived classes to define variables based on the existing
-    // variables values.
+    // Return the value of a single scalar variable.
     std::string evaluate(std::string const& name) const
     {
         return evaluator_(name);
     }
 
+    // Return a single value of a vector variable.
     std::string evaluate(std::string const& name, std::size_t index) const
     {
         return evaluator_(name, index);
@@ -728,15 +729,10 @@ class page_with_footer : public page
 ///
 /// In addition to actually providing page_with_footer with the correct string
 /// to show in the footer, this class implicitly handles the page count by
-/// incrementing it whenever a new object of this class is created.
+/// incrementing it whenever a new object of this class is pre-rendered.
 class numbered_page : public page_with_footer
 {
   public:
-    numbered_page()
-        :this_page_number_(++last_page_number_)
-    {
-    }
-
     void pre_render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
@@ -745,6 +741,8 @@ class numbered_page : public page_with_footer
         ) override
     {
         page_with_footer::pre_render(ledger, writer, dc, interpolate_html);
+
+        this_page_number_ = ++last_page_number_;
 
         extra_pages_ = get_extra_pages_needed
             (ledger
@@ -791,10 +789,10 @@ class numbered_page : public page_with_footer
     // Derived classes may override this method if they may need more than one
     // physical page to show their contents.
     virtual int get_extra_pages_needed
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
-        ,wxDC& dc
-        ,html_interpolator const& interpolate_html
+        (Ledger const&              ledger
+        ,pdf_writer_wx&             writer
+        ,wxDC&                      dc
+        ,html_interpolator const&   interpolate_html
         ) const
     {
         stifle_warning_for_unused_value(ledger);
@@ -813,7 +811,7 @@ class numbered_page : public page_with_footer
     }
 
     static int last_page_number_;
-    int        this_page_number_;
+    int        this_page_number_     = 0;
     int        extra_pages_          = 0;
 };
 
@@ -1640,6 +1638,184 @@ class numeric_summary_page : public numbered_page
     }
 };
 
+class tabular_detail2_page : public numbered_page
+{
+  public:
+    void render
+        (Ledger const& ledger
+        ,pdf_writer_wx& writer
+        ,wxDC& dc
+        ,html_interpolator const& interpolate_html
+        ) override
+    {
+        numbered_page::render(ledger, writer, dc, interpolate_html);
+
+        wx_table_generator table{create_table_generator(writer, dc)};
+
+        std::vector<std::string> values(column_max);
+
+        // The table may need several pages, loop over them.
+        int const row_height = table.row_height();
+        int const year_max = ledger.GetMaxLength();
+        for(int year = 0; year < year_max; ++year)
+            {
+            int pos_y = render_or_measure_fixed_page_part
+                (table
+                ,writer
+                ,dc
+                ,interpolate_html
+                );
+
+            dc.SetPen(HIGHLIGHT_COL);
+            table.output_horz_separator(column_policy_year, column_max, pos_y);
+
+            for(; year < year_max; ++year)
+                {
+                values[column_policy_year] = interpolate_html.evaluate("PolicyYear", year);
+                values[column_end_of_year_age] = interpolate_html.evaluate("AttainedAge", year);
+                values[column_ill_crediting_rate] = interpolate_html.evaluate("AnnGAIntRate_Current", year);
+                values[column_selected_face_amount] = interpolate_html.evaluate("SpecAmt", year);
+
+                table.output_row(&pos_y, values.data());
+
+                // Insert a space after every 5th row for readability.
+                if((year + 1) % rows_per_group == 0)
+                    {
+                    pos_y += row_height;
+
+                    // Start a new page if necessary, which will be the case if we
+                    // don't have enough space for another full group because we
+                    // don't want to have page breaks in the middle of a group.
+                    if(pos_y >= get_footer_top() - rows_per_group*row_height)
+                        {
+                        next_page(dc);
+                        numbered_page::render(ledger, writer, dc, interpolate_html);
+                        break;
+                        }
+                    }
+                }
+            }
+    }
+
+  private:
+    enum
+        {column_policy_year
+        ,column_end_of_year_age
+        ,column_ill_crediting_rate
+        ,column_selected_face_amount
+        ,column_max
+        };
+
+    static int const rows_per_group = 5;
+
+    // Helper of render() and get_extra_pages_needed(): either outputs the
+    // fixed part of the page or just measures the space needed by it,
+    // depending on the output_mode parameter. Returns the vertical position of
+    // the table that should follow.
+    int render_or_measure_fixed_page_part
+        (wx_table_generator& table
+        ,pdf_writer_wx& writer
+        ,wxDC& dc
+        ,html_interpolator const& interpolate_html
+        ,enum_output_mode output_mode = e_output_normal
+        ) const
+    {
+        int pos_y = writer.get_vert_margin();
+
+        pos_y += writer.output_html
+            (writer.get_horz_margin()
+            ,pos_y
+            ,writer.get_page_width()
+            ,interpolate_html("{{>tabular_details2}}")
+            ,output_mode
+            );
+
+        // Decrease the font size for the table to match the main page
+        // body text size.
+        dc.SetFont(dc.GetFont().Smaller());
+
+        table.output_header(&pos_y, output_mode);
+
+        pos_y += 5;
+
+        return pos_y;
+    }
+
+    // Common part of render() and get_extra_pages_needed(): create the table
+    // generator to use.
+    wx_table_generator create_table_generator
+        (pdf_writer_wx& writer
+        ,wxDC& dc
+        ) const
+    {
+        wx_table_generator table
+            (dc
+            ,writer.get_horz_margin()
+            ,writer.get_page_width()
+            );
+
+        table.use_condensed_style();
+        table.align_right();
+
+        std::vector<std::pair<std::string, std::string>> const
+            columns =
+            {{ "Policy\nYear",                        "999" }
+            ,{ "End of\nYear Age",                    "999" }
+            ,{ "Illustrated\nCrediting Rate",      "99.99%" }
+            ,{ "Selected\nFace Amount",       "999,000,000" }
+            };
+
+        for(auto const& i : columns)
+            {
+            table.add_column(i.first, i.second);
+            }
+
+        return table;
+    }
+
+    // Override the base class method as the table may overflow onto the next
+    // page(s).
+    int get_extra_pages_needed
+        (Ledger const&              ledger
+        ,pdf_writer_wx&             writer
+        ,wxDC&                      dc
+        ,html_interpolator const&   interpolate_html
+        ) const override
+    {
+        wx_table_generator table{create_table_generator(writer, dc)};
+
+        int const pos_y = render_or_measure_fixed_page_part
+            (table
+            ,writer
+            ,dc
+            ,interpolate_html
+            ,e_output_measure_only
+            );
+
+        int const rows_per_page = (get_footer_top() - pos_y) / table.row_height();
+
+        if(rows_per_page < rows_per_group)
+            {
+            // We can't afford to continue in this case as we can never output
+            // the table as the template simply doesn't leave enough space for
+            // it on the page.
+            throw std::runtime_error("no space left for tabular details table");
+            }
+
+        // Each group actually takes rows_per_group+1 rows because of the
+        // separator row between groups, hence the second +1, but there is no
+        // need for the separator after the last group, hence the first +1.
+        int const groups_per_page = (rows_per_page + 1) / (rows_per_group + 1);
+
+        // But we are actually interested in the number of years per page and
+        // not the number of groups.
+        int const years_per_page = groups_per_page * rows_per_group;
+
+        // Finally determine how many pages we need to show all the years.
+        return ledger.GetMaxLength() / years_per_page;
+    }
+};
+
 // Regular illustration.
 class pdf_illustration_regular : public pdf_illustration
 {
@@ -1807,6 +1983,7 @@ class pdf_illustration_regular : public pdf_illustration
             {
             add<numeric_summary_page>();
             }
+        add<tabular_detail2_page>();
     }
 };
 
