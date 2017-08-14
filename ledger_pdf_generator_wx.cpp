@@ -581,6 +581,34 @@ affiliated company and sales representatives, {{InsCoAddr}}.
 class page_with_footer : public page
 {
   public:
+    // Override pre_render() to compute footer_top_ which is needed in the
+    // derived classes overridden get_extra_pages_needed().
+    void pre_render
+        (Ledger const& /* ledger */
+        ,pdf_writer_wx& writer
+        ,wxDC& /* dc */
+        ,html_interpolator const& interpolate_html
+        ) override
+    {
+        // Note that we implicitly assume here that get_footer_html() result
+        // doesn't materially depend on the exact value of last_page_number_ as
+        // we don't know its definitive value here yet. In theory, this doesn't
+        // need to be true, e.g. we may later discover that 10 pages are needed
+        // instead of 9 and the extra digit might result in a line wrapping on
+        // a new line and this increasing the footer height, but in practice
+        // this doesn't risk happening and taking into account this possibility
+        // wouldn't be simple at all, so just ignore this possibility.
+        auto const footer_height = writer.output_html
+            (writer.get_horz_margin()
+            ,0
+            ,writer.get_page_width()
+            ,get_footer_html(interpolate_html)
+            ,e_output_measure_only
+            );
+
+        footer_top_ = writer.get_page_bottom() - footer_height;
+    }
+
     void render
         (Ledger const& /* ledger */
         ,pdf_writer_wx& writer
@@ -588,7 +616,46 @@ class page_with_footer : public page
         ,html_interpolator const& interpolate_html
         ) override
     {
-        auto footer_html =
+        auto const frame_horz_margin = writer.get_horz_margin();
+        auto const frame_width       = writer.get_page_width();
+
+        writer.output_html
+            (frame_horz_margin
+            ,footer_top_
+            ,frame_width
+            ,get_footer_html(interpolate_html)
+            );
+
+        dc.SetPen(HIGHLIGHT_COL);
+        dc.DrawLine
+            (frame_horz_margin
+            ,footer_top_
+            ,frame_width + frame_horz_margin
+            ,footer_top_
+            );
+    }
+
+  protected:
+    // Helper for the derived pages to get the vertical position of the footer.
+    // Notice that it can only be used after calling our pre_render() method
+    // as this is where it is computed.
+    int get_footer_top() const
+    {
+        LMI_ASSERT(footer_top_ != 0);
+
+        return footer_top_;
+    }
+
+  private:
+    // Method to be overridden in the base class which should actually return
+    // the contents of the (middle part of the) footer.
+    virtual std::string get_footer_contents() const = 0;
+
+    // This method uses get_footer_contents() and returns the HTML wrapping it
+    // and other fixed information appearing in the footer.
+    html::text get_footer_html(html_interpolator const& interpolate_html) const
+    {
+        return
             tag::font[attr::size("-2")]
                 (tag::table[attr::width("100%")]
                           [attr::cellspacing("0")]
@@ -652,39 +719,9 @@ class page_with_footer : public page
                         )
                     )
                 );
-
-        auto const frame_horz_margin = writer.get_horz_margin();
-        auto const frame_width       = writer.get_page_width();
-
-        auto const footer_height = writer.output_html
-            (frame_horz_margin
-            ,0
-            ,frame_width
-            ,footer_html
-            ,e_output_measure_only
-            );
-
-        auto const footer_top = writer.get_page_bottom() - footer_height;
-        writer.output_html
-            (frame_horz_margin
-            ,footer_top
-            ,frame_width
-            ,footer_html
-            );
-
-        dc.SetPen(HIGHLIGHT_COL);
-        dc.DrawLine
-            (frame_horz_margin
-            ,footer_top
-            ,frame_width + frame_horz_margin
-            ,footer_top
-            );
     }
 
-  private:
-    // Method to be overridden in the base class which should actually return
-    // the contents of the (middle part of the) footer.
-    virtual std::string get_footer_contents() const = 0;
+    int footer_top_ = 0;
 };
 
 /// Base class for all pages showing the page number in the footer.
