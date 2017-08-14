@@ -24,6 +24,7 @@
 #include "ledger_pdf_generator.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "force_linking.hpp"
@@ -699,7 +700,74 @@ class numbered_page : public page_with_footer
     {
     }
 
+    void pre_render
+        (Ledger const& ledger
+        ,pdf_writer_wx& writer
+        ,wxDC& dc
+        ,html_interpolator const& interpolate_html
+        ) override
+    {
+        page_with_footer::pre_render(ledger, writer, dc, interpolate_html);
+
+        extra_pages_ = get_extra_pages_needed
+            (ledger
+            ,writer
+            ,dc
+            ,interpolate_html
+            );
+
+        LMI_ASSERT(extra_pages_ >= 0);
+
+        last_page_number_ += extra_pages_;
+    }
+
+    ~numbered_page() override
+    {
+        // Check that next_page() was called the expected number of times.
+        // Unfortunately we can't use LMI_ASSERT() in the (noexcept) dtor, so
+        // use warning() instead.
+        if(extra_pages_)
+            {
+            warning()
+                << "Logic error: "
+                << extra_pages_
+                << " missing extra pages."
+                << LMI_FLUSH
+                ;
+            }
+    }
+
+  protected:
+    void next_page(wxDC& dc)
+    {
+        // This method may only be called if we had reserved enough physical
+        // pages for this logical pages by overriding get_extra_pages_needed().
+        LMI_ASSERT(extra_pages_ > 0);
+
+        dc.StartPage();
+
+        this_page_number_++;
+        extra_pages_--;
+    }
+
   private:
+    // Derived classes may override this method if they may need more than one
+    // physical page to show their contents.
+    virtual int get_extra_pages_needed
+        (Ledger const& ledger
+        ,pdf_writer_wx& writer
+        ,wxDC& dc
+        ,html_interpolator const& interpolate_html
+        ) const
+    {
+        stifle_warning_for_unused_value(ledger);
+        stifle_warning_for_unused_value(writer);
+        stifle_warning_for_unused_value(dc);
+        stifle_warning_for_unused_value(interpolate_html);
+
+        return 0;
+    }
+
     std::string get_footer_contents() const override
     {
         std::ostringstream oss;
@@ -709,6 +777,7 @@ class numbered_page : public page_with_footer
 
     static int last_page_number_;
     int        this_page_number_;
+    int        extra_pages_          = 0;
 };
 
 int numbered_page::last_page_number_ = 0;
