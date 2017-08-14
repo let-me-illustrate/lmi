@@ -80,6 +80,10 @@ class wx_table_generator
         ,std::string const& value
         );
 
+    // Compute and return the height of the header without outputting it as
+    // output_header() does.
+    int get_header_height() const;
+
     // Return the height of a single table row.
     int row_height() const {return row_height_;}
 
