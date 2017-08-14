@@ -254,6 +254,24 @@ class page
     // virtual dtor, if only to avoid gcc warnings about not having it.
     virtual ~page() = default;
 
+    // Called before rendering any pages to prepare for doing this, e.g. by
+    // computing the number of pages needed.
+    //
+    // This method must not draw anything on the wxDC, it is provided only for
+    // measurement purposes.
+    virtual void pre_render
+        (Ledger const& ledger
+        ,pdf_writer_wx& writer
+        ,wxDC& dc
+        ,html_interpolator const& interpolate_html
+        )
+    {
+        stifle_warning_for_unused_value(ledger);
+        stifle_warning_for_unused_value(writer);
+        stifle_warning_for_unused_value(dc);
+        stifle_warning_for_unused_value(interpolate_html);
+    }
+
     // Render this page contents.
     virtual void render
         (Ledger const& ledger
@@ -288,6 +306,11 @@ class pdf_illustration : protected html_interpolator
     // Render all pages.
     void render_all()
     {
+        for(auto const& page : pages_)
+            {
+            page->pre_render(ledger_, writer_, dc_, *this);
+            }
+
         bool first = true;
         for(auto const& page : pages_)
             {
