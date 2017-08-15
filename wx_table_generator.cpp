@@ -388,6 +388,35 @@ void wx_table_generator::output_header(int* pos_y, enum_output_mode output_mode)
         }
 }
 
+void wx_table_generator::output_super_header
+        (std::string const& header
+        ,std::size_t        begin_column
+        ,std::size_t        end_column
+        ,int*               pos_y
+        ,enum_output_mode   output_mode
+        )
+{
+    switch(output_mode)
+        {
+        case e_output_normal:
+            break;
+        case e_output_measure_only:
+            *pos_y += row_height_;
+            return;
+        }
+
+    // We don't have a function for getting the rectangle of a span of columns,
+    // but we can reuse the existing text_rect() if we just increase its width
+    // by the width of all the extra (i.e. not counting the starting one)
+    // columns in this span.
+    auto rect = text_rect(begin_column, *pos_y);
+    rect.width += do_get_cell_x(end_column) - do_get_cell_x(begin_column + 1);
+
+    dc_.DrawLabel(header, rect, wxALIGN_CENTER_HORIZONTAL);
+
+    *pos_y += row_height_;
+}
+
 void wx_table_generator::output_row
     (int* pos_y
     ,std::string const* values
