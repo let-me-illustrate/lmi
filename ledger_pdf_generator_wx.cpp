@@ -1747,7 +1747,14 @@ class page_with_tabular_report : public numbered_page
                 for(std::size_t col = 0; col < columns.size(); ++col)
                     {
                     std::string const variable_name = columns[col].variable_name;
-                    values[col] = interpolate_html.evaluate(variable_name, year);
+
+                    // Special hack for the dummy columns used in some reports,
+                    // whose value is always empty as it's used only as
+                    // separator.
+                    values[col] = variable_name.empty()
+                        ? std::string{}
+                        : interpolate_html.evaluate(variable_name, year)
+                        ;
                     }
 
                 if(table.output_and_check_for_page_break(year, &pos_y, values.data()))
@@ -1837,6 +1844,110 @@ class page_with_tabular_report : public numbered_page
 
         // Finally determine how many pages we need to show all the years.
         return ledger.GetMaxLength() / years_per_page;
+    }
+};
+
+class tabular_detail_page : public page_with_tabular_report
+{
+  private:
+    enum
+        {column_policy_year
+        ,column_end_of_year_age
+        ,column_premium_outlay
+        ,column_guar_account_value
+        ,column_guar_cash_surr_value
+        ,column_guar_death_benefit
+        ,column_dummy_separator
+        ,column_cur_account_value
+        ,column_cur_cash_surr_value
+        ,column_cur_death_benefit
+        ,column_max
+        };
+
+    int render_or_measure_fixed_page_part
+        (illustration_table_generator&  table
+        ,pdf_writer_wx&                 writer
+        ,wxDC&                          dc
+        ,html_interpolator const&       interpolate_html
+        ,enum_output_mode               output_mode
+        ) const override
+    {
+        int pos_y = writer.get_vert_margin();
+
+        pos_y += writer.output_html
+            (writer.get_horz_margin()
+            ,pos_y
+            ,writer.get_page_width()
+            ,interpolate_html("{{>tabular_details}}")
+            ,output_mode
+            );
+
+        // Decrease the font size for the table to match the main page
+        // body text size.
+        dc.SetFont(dc.GetFont().Smaller());
+        dc.SetPen(HIGHLIGHT_COL);
+
+        // Make a copy because we want the real pos_y to be modified only once,
+        // not twice, by both output_super_header() calls.
+        auto pos_y_copy = pos_y;
+        table.output_super_header
+            ("Guaranteed Values"
+            ,column_guar_account_value
+            ,column_dummy_separator
+            ,&pos_y_copy
+            ,output_mode
+            );
+        table.output_super_header
+            ("Non-Guaranteed Values"
+            ,column_cur_account_value
+            ,column_max
+            ,&pos_y
+            ,output_mode
+            );
+
+        pos_y += table.get_separator_line_height();
+        table.output_horz_separator
+            (column_guar_account_value
+            ,column_dummy_separator
+            ,pos_y
+            ,output_mode
+            );
+        table.output_horz_separator
+            (column_cur_account_value
+            ,column_max
+            ,pos_y
+            ,output_mode
+            );
+
+        table.output_header(&pos_y, output_mode);
+
+        pos_y += table.get_separator_line_height();
+        table.output_horz_separator
+            (0
+            ,column_max
+            ,pos_y
+            ,output_mode
+            );
+
+        return pos_y;
+    }
+
+    columns const& get_report_columns() const override
+    {
+        static columns const columns =
+            {{ "PolicyYear"             , "Policy\nYear"       ,       "999" }
+            ,{ "AttainedAge"            , "End of\nYear Age"   ,       "999" }
+            ,{ "GrossPmt"               , "Premium\nOutlay"    ,   "999,999" }
+            ,{ "AcctVal_Guaranteed"     , "Account\nValue"     ,   "999,999" }
+            ,{ "CSVNet_Guaranteed"      , "Cash Surr\nValue"   ,   "999,999" }
+            ,{ "EOYDeathBft_Guaranteed" , "Death\nBenefit"     , "9,999,999" }
+            ,{ ""                       , " "                  ,      "----" }
+            ,{ "AcctVal_Current"        , "Account\nValue"     ,   "999,999" }
+            ,{ "CSVNet_Current"         , "Cash Surr\nValue"   ,   "999,999" }
+            ,{ "EOYDeathBft_Current"    , "Death\nBenefit"     , "9,999,999" }
+            };
+
+        return columns;
     }
 };
 
@@ -2062,6 +2173,7 @@ class pdf_illustration_regular : public pdf_illustration
             {
             add<numeric_summary_page>();
             }
+        add<tabular_detail_page>();
         add<tabular_detail2_page>();
     }
 };
