@@ -1779,21 +1779,14 @@ class tabular_detail2_page : public numbered_page
             ,pos_y
             ,writer.get_page_width()
             ,interpolate_html("{{>tabular_details2}}")
+            ,output_mode
             );
 
         // Decrease the font size for the table to match the main page
         // body text size.
         dc.SetFont(dc.GetFont().Smaller());
 
-        switch(output_mode)
-            {
-            case e_output_normal:
-                table.output_header(&pos_y);
-                break;
-            case e_output_measure_only:
-                pos_y += table.get_header_height();
-                break;
-            }
+        table.output_header(&pos_y, output_mode);
 
         pos_y += table.get_separator_line_height();
 
