@@ -243,6 +243,71 @@ class html_interpolator
     std::map<std::string, text> vars_;
 };
 
+// A slightly specialized table generator for the tables used in the
+// illustrations.
+class illustration_table_generator : public wx_table_generator
+{
+  public:
+    static int const rows_per_group = 5;
+
+    illustration_table_generator
+        (pdf_writer_wx& writer
+        ,wxDC& dc
+        ,int page_bottom
+        )
+        :wx_table_generator
+            (dc
+            ,writer.get_horz_margin()
+            ,writer.get_page_width()
+            )
+        ,page_bottom_(page_bottom)
+    {
+        use_condensed_style();
+        align_right();
+    }
+
+    // This is a wrapper around the base class output_row() which also adds
+    // breaks between row groups for readability and returns true if we need to
+    // start a new page.
+    bool output_and_check_for_page_break
+        (int year
+        ,int* pos_y
+        ,std::string const* values
+        )
+    {
+        wx_table_generator::output_row(pos_y, values);
+
+        if((year + 1) % rows_per_group == 0)
+            {
+            // We need a group break.
+            *pos_y += row_height();
+
+            // And possibly a page break, which will be necessary if we don't
+            // have enough space for another full group because we don't want
+            // to have page breaks in the middle of a group.
+            if(*pos_y >= page_bottom_ - rows_per_group*row_height())
+                {
+                return true;
+                }
+            }
+
+        // No need for a page break yet.
+        return false;
+    }
+
+    // Return the amount of vertical space taken by separator lines in the
+    // table headers.
+    int get_separator_line_height() const
+    {
+        // This is completely arbitrary and chosen just because it seems to
+        // look well.
+        return row_height() / 2;
+    }
+
+  private:
+    int page_bottom_ = 0;
+};
+
 class page
 {
   public:
@@ -1650,12 +1715,11 @@ class tabular_detail2_page : public numbered_page
     {
         numbered_page::render(ledger, writer, dc, interpolate_html);
 
-        wx_table_generator table{create_table_generator(writer, dc)};
+        illustration_table_generator table{create_table_generator(writer, dc)};
 
         std::vector<std::string> values(column_max);
 
         // The table may need several pages, loop over them.
-        int const row_height = table.row_height();
         int const year_max = ledger.GetMaxLength();
         for(int year = 0; year < year_max; ++year)
             {
@@ -1676,22 +1740,12 @@ class tabular_detail2_page : public numbered_page
                 values[column_ill_crediting_rate] = interpolate_html.evaluate("AnnGAIntRate_Current", year);
                 values[column_selected_face_amount] = interpolate_html.evaluate("SpecAmt", year);
 
-                table.output_row(&pos_y, values.data());
 
-                // Insert a space after every 5th row for readability.
-                if((year + 1) % rows_per_group == 0)
+                if(table.output_and_check_for_page_break(year, &pos_y, values.data()))
                     {
-                    pos_y += row_height;
-
-                    // Start a new page if necessary, which will be the case if we
-                    // don't have enough space for another full group because we
-                    // don't want to have page breaks in the middle of a group.
-                    if(pos_y >= get_footer_top() - rows_per_group*row_height)
-                        {
-                        next_page(dc);
-                        numbered_page::render(ledger, writer, dc, interpolate_html);
-                        break;
-                        }
+                    next_page(dc);
+                    numbered_page::render(ledger, writer, dc, interpolate_html);
+                    break;
                     }
                 }
             }
@@ -1705,8 +1759,6 @@ class tabular_detail2_page : public numbered_page
         ,column_selected_face_amount
         ,column_max
         };
-
-    static int const rows_per_group = 5;
 
     // Helper of render() and get_extra_pages_needed(): either outputs the
     // fixed part of the page or just measures the space needed by it,
@@ -1736,26 +1788,19 @@ class tabular_detail2_page : public numbered_page
 
         table.output_header(&pos_y, output_mode);
 
-        pos_y += 5;
+        pos_y += table.get_separator_line_height();
 
         return pos_y;
     }
 
     // Common part of render() and get_extra_pages_needed(): create the table
     // generator to use.
-    wx_table_generator create_table_generator
+    illustration_table_generator create_table_generator
         (pdf_writer_wx& writer
         ,wxDC& dc
         ) const
     {
-        wx_table_generator table
-            (dc
-            ,writer.get_horz_margin()
-            ,writer.get_page_width()
-            );
-
-        table.use_condensed_style();
-        table.align_right();
+        illustration_table_generator table(writer, dc, get_footer_top());
 
         std::vector<std::pair<std::string, std::string>> const
             columns =
@@ -1782,7 +1827,7 @@ class tabular_detail2_page : public numbered_page
         ,html_interpolator const&   interpolate_html
         ) const override
     {
-        wx_table_generator table{create_table_generator(writer, dc)};
+        illustration_table_generator table{create_table_generator(writer, dc)};
 
         int const pos_y = render_or_measure_fixed_page_part
             (table
@@ -1793,6 +1838,8 @@ class tabular_detail2_page : public numbered_page
             );
 
         int const rows_per_page = (get_footer_top() - pos_y) / table.row_height();
+
+        int const rows_per_group = illustration_table_generator::rows_per_group;
 
         if(rows_per_page < rows_per_group)
             {
