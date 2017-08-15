@@ -25,6 +25,7 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
+#include "output_mode.hpp"
 
 #include <wx/html/winpars.h>
 
@@ -34,11 +35,6 @@
 #include <memory>                       // std::unique_ptr
 
 namespace html { class text; }
-
-enum enum_output_mode
-    {e_output_normal
-    ,e_output_measure_only
-    };
 
 class pdf_writer_wx
 {
