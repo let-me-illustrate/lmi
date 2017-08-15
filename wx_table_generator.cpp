@@ -299,8 +299,17 @@ void wx_table_generator::output_horz_separator
     (std::size_t begin_column
     ,std::size_t end_column
     ,int y
+    ,enum_output_mode output_mode
     )
 {
+    switch(output_mode)
+        {
+        case e_output_normal:
+            break;
+        case e_output_measure_only:
+            return;
+        }
+
     LMI_ASSERT(begin_column < end_column);
     LMI_ASSERT(end_column <= columns_.size());
 
@@ -317,13 +326,17 @@ void wx_table_generator::output_horz_separator
     do_output_horz_separator(x1, x2, y);
 }
 
-int wx_table_generator::get_header_height() const
+void wx_table_generator::output_header(int* pos_y, enum_output_mode output_mode)
 {
-    return max_header_lines_*row_height_;
-}
+    switch(output_mode)
+        {
+        case e_output_normal:
+            break;
+        case e_output_measure_only:
+            *pos_y += max_header_lines_ * row_height_;
+            return;
+        }
 
-void wx_table_generator::output_header(int* pos_y)
-{
     do_compute_column_widths_if_necessary();
 
     wxDCFontChanger set_header_font(dc_);

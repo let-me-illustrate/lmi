@@ -24,6 +24,8 @@
 
 #include "config.hpp"
 
+#include "output_mode.hpp"
+
 #include <wx/dc.h>
 #include <wx/font.h>
 
@@ -65,7 +67,10 @@ class wx_table_generator
     void add_column(std::string const& header, std::string const& widest_text);
 
     // Render the headers at the given position and update it.
-    void output_header(int* pos_y);
+    void output_header
+        (int*             pos_y
+        ,enum_output_mode output_mode = e_output_normal
+        );
 
     // Render a row with the given values at the given position and update it.
     // The values here can be single-line only and there must be exactly the
@@ -79,10 +84,6 @@ class wx_table_generator
         ,int                y
         ,std::string const& value
         );
-
-    // Compute and return the height of the header without outputting it as
-    // output_header() does.
-    int get_header_height() const;
 
     // Return the height of a single table row.
     int row_height() const {return row_height_;}
@@ -99,9 +100,10 @@ class wx_table_generator
     // Output a horizontal separator line across the specified columns,
     // using the usual C++ close/open interval convention.
     void output_horz_separator
-        (std::size_t begin_column
-        ,std::size_t end_column
-        ,int         y
+        (std::size_t      begin_column
+        ,std::size_t      end_column
+        ,int              y
+        ,enum_output_mode output_mode = e_output_normal
         );
 
     // Output a vertical separator line before the given column. Notice that
