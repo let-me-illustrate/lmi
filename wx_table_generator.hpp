@@ -72,6 +72,16 @@ class wx_table_generator
         ,enum_output_mode output_mode = e_output_normal
         );
 
+    // Render a super-header, i.e. a header spanning over several columns. The
+    // columns range is specified as a close/open interval, as usual in C++.
+    void output_super_header
+        (std::string const& header
+        ,std::size_t        begin_column
+        ,std::size_t        end_column
+        ,int*               pos_y
+        ,enum_output_mode   output_mode = e_output_normal
+        );
+
     // Render a row with the given values at the given position and update it.
     // The values here can be single-line only and there must be exactly the
     // same number of them as the number of columns.
