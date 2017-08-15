@@ -49,7 +49,6 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
-#include <utility>                      // std::pair
 #include <vector>
 
 LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
@@ -241,6 +240,14 @@ class html_interpolator
 
     // Variables defined for all pages of this illustration.
     std::map<std::string, text> vars_;
+};
+
+// Description of a single table column.
+struct illustration_table_column
+{
+    char const* variable_name;
+    char const* label;
+    char const* widest_text;
 };
 
 // A slightly specialized table generator for the tables used in the
@@ -1703,7 +1710,9 @@ class numeric_summary_page : public numbered_page
     }
 };
 
-class tabular_detail2_page : public numbered_page
+// Helper base class for pages showing a table displaying values for all
+// contract years after some fixed content.
+class page_with_tabular_report : public numbered_page
 {
   public:
     void render
@@ -1717,7 +1726,9 @@ class tabular_detail2_page : public numbered_page
 
         illustration_table_generator table{create_table_generator(writer, dc)};
 
-        std::vector<std::string> values(column_max);
+        auto const& columns = get_report_columns();
+
+        std::vector<std::string> values(columns.size());
 
         // The table may need several pages, loop over them.
         int const year_max = ledger.GetMaxLength();
@@ -1728,18 +1739,16 @@ class tabular_detail2_page : public numbered_page
                 ,writer
                 ,dc
                 ,interpolate_html
+                ,e_output_normal
                 );
-
-            dc.SetPen(HIGHLIGHT_COL);
-            table.output_horz_separator(column_policy_year, column_max, pos_y);
 
             for(; year < year_max; ++year)
                 {
-                values[column_policy_year] = interpolate_html.evaluate("PolicyYear", year);
-                values[column_end_of_year_age] = interpolate_html.evaluate("AttainedAge", year);
-                values[column_ill_crediting_rate] = interpolate_html.evaluate("AnnGAIntRate_Current", year);
-                values[column_selected_face_amount] = interpolate_html.evaluate("SpecAmt", year);
-
+                for(std::size_t col = 0; col < columns.size(); ++col)
+                    {
+                    std::string const variable_name = columns[col].variable_name;
+                    values[col] = interpolate_html.evaluate(variable_name, year);
+                    }
 
                 if(table.output_and_check_for_page_break(year, &pos_y, values.data()))
                     {
@@ -1751,48 +1760,24 @@ class tabular_detail2_page : public numbered_page
             }
     }
 
+  protected:
+    using columns = std::vector<illustration_table_column>;
+
+    // Must be overridden to return the description of the table columns.
+    virtual columns const& get_report_columns() const = 0;
+
+    // Must be overridden to render (only if output_mode is e_output_normal)
+    // the fixed page part and (in any case) return the vertical coordinate of
+    // its bottom, where the tabular report starts.
+    virtual int render_or_measure_fixed_page_part
+        (illustration_table_generator&  table
+        ,pdf_writer_wx&                 writer
+        ,wxDC&                          dc
+        ,html_interpolator const&       interpolate_html
+        ,enum_output_mode               output_mode
+        ) const = 0;
+
   private:
-    enum
-        {column_policy_year
-        ,column_end_of_year_age
-        ,column_ill_crediting_rate
-        ,column_selected_face_amount
-        ,column_max
-        };
-
-    // Helper of render() and get_extra_pages_needed(): either outputs the
-    // fixed part of the page or just measures the space needed by it,
-    // depending on the output_mode parameter. Returns the vertical position of
-    // the table that should follow.
-    int render_or_measure_fixed_page_part
-        (wx_table_generator& table
-        ,pdf_writer_wx& writer
-        ,wxDC& dc
-        ,html_interpolator const& interpolate_html
-        ,enum_output_mode output_mode = e_output_normal
-        ) const
-    {
-        int pos_y = writer.get_vert_margin();
-
-        pos_y += writer.output_html
-            (writer.get_horz_margin()
-            ,pos_y
-            ,writer.get_page_width()
-            ,interpolate_html("{{>tabular_details2}}")
-            ,output_mode
-            );
-
-        // Decrease the font size for the table to match the main page
-        // body text size.
-        dc.SetFont(dc.GetFont().Smaller());
-
-        table.output_header(&pos_y, output_mode);
-
-        pos_y += table.get_separator_line_height();
-
-        return pos_y;
-    }
-
     // Common part of render() and get_extra_pages_needed(): create the table
     // generator to use.
     illustration_table_generator create_table_generator
@@ -1802,17 +1787,9 @@ class tabular_detail2_page : public numbered_page
     {
         illustration_table_generator table(writer, dc, get_footer_top());
 
-        std::vector<std::pair<std::string, std::string>> const
-            columns =
-            {{ "Policy\nYear",                        "999" }
-            ,{ "End of\nYear Age",                    "999" }
-            ,{ "Illustrated\nCrediting Rate",      "99.99%" }
-            ,{ "Selected\nFace Amount",       "999,000,000" }
-            };
-
-        for(auto const& i : columns)
+        for(auto const& i : get_report_columns())
             {
-            table.add_column(i.first, i.second);
+            table.add_column(i.label, i.widest_text);
             }
 
         return table;
@@ -1846,7 +1823,7 @@ class tabular_detail2_page : public numbered_page
             // We can't afford to continue in this case as we can never output
             // the table as the template simply doesn't leave enough space for
             // it on the page.
-            throw std::runtime_error("no space left for tabular details table");
+            throw std::runtime_error("no space left for tabular report");
             }
 
         // Each group actually takes rows_per_group+1 rows because of the
@@ -1861,6 +1838,61 @@ class tabular_detail2_page : public numbered_page
         // Finally determine how many pages we need to show all the years.
         return ledger.GetMaxLength() / years_per_page;
     }
+};
+
+class tabular_detail2_page : public page_with_tabular_report
+{
+  private:
+    enum
+        {column_policy_year
+        ,column_end_of_year_age
+        ,column_ill_crediting_rate
+        ,column_selected_face_amount
+        ,column_max
+        };
+
+    columns const& get_report_columns() const override
+    {
+        static columns const columns =
+            {{ "PolicyYear"          , "Policy\nYear"               ,         "999" }
+            ,{ "AttainedAge"         , "End of\nYear Age"           ,         "999" }
+            ,{ "AnnGAIntRate_Current", "Illustrated\nCrediting Rate",      "99.99%" }
+            ,{ "SpecAmt"             , "Selected\nFace Amount"      , "999,000,000" }
+            };
+
+        return columns;
+    }
+
+    int render_or_measure_fixed_page_part
+        (illustration_table_generator&  table
+        ,pdf_writer_wx&                 writer
+        ,wxDC&                          dc
+        ,html_interpolator const&       interpolate_html
+        ,enum_output_mode               output_mode
+        ) const override
+    {
+        int pos_y = writer.get_vert_margin();
+
+        pos_y += writer.output_html
+            (writer.get_horz_margin()
+            ,pos_y
+            ,writer.get_page_width()
+            ,interpolate_html("{{>tabular_details2}}")
+            ,output_mode
+            );
+
+        // Decrease the font size for the table to match the main page
+        // body text size.
+        dc.SetFont(dc.GetFont().Smaller());
+
+        table.output_header(&pos_y, output_mode);
+
+        pos_y += table.get_separator_line_height();
+        table.output_horz_separator(0, column_max, pos_y, output_mode);
+
+        return pos_y;
+    }
+
 };
 
 // Regular illustration.
