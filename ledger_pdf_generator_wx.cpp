@@ -473,7 +473,8 @@ class pdf_illustration : protected html_interpolator
     std::vector<std::unique_ptr<page>> pages_;
 };
 
-std::array<int, 7> const pdf_illustration::html_font_sizes =
+std::array<int, 7> const pdf_illustration::html_font_sizes
+    {
     { 8
     , 9
     ,10
@@ -481,6 +482,7 @@ std::array<int, 7> const pdf_illustration::html_font_sizes =
     ,14
     ,18
     ,20
+    }
     };
 
 class cover_page : public page
