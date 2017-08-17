@@ -49,6 +49,7 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>                  // std::conditional
 #include <vector>
 
 LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
@@ -652,7 +653,7 @@ affiliated company and sales representatives, {{InsCoAddr}}.
     }
 };
 
-/// Base class for all with a footer.
+/// Base class for all pages with a footer.
 class page_with_footer : public page
 {
   public:
@@ -797,6 +798,16 @@ class page_with_footer : public page
     }
 
     int footer_top_ = 0;
+};
+
+/// Base class for attachment pages.
+class attachment_page : public page_with_footer
+{
+  private:
+    std::string get_footer_contents() const override
+    {
+        return "Attachment";
+    }
 };
 
 /// Base class for all pages showing the page number in the footer.
@@ -1691,7 +1702,21 @@ class columns_headings_page : public numbered_page
     }
 };
 
-class numeric_summary_page : public numbered_page
+// Numeric summary page appears twice, once as a normal page and once as an
+// attachment, with the only difference being that the base class is different,
+// so make it a template to avoid duplicating the code.
+
+// Just a helper alias.
+template<bool is_attachment>
+using numbered_or_attachment_base = typename std::conditional
+    <is_attachment
+    ,attachment_page
+    ,numbered_page
+    >::type;
+
+template<bool is_attachment>
+class numeric_summary_or_attachment_page
+    : public numbered_or_attachment_base<is_attachment>
 {
   public:
     void render
@@ -1701,7 +1726,12 @@ class numeric_summary_page : public numbered_page
         ,html_interpolator const& interpolate_html
         ) override
     {
-        numbered_page::render(ledger, writer, dc, interpolate_html);
+        numbered_or_attachment_base<is_attachment>::render
+            (ledger
+            ,writer
+            ,dc
+            ,interpolate_html
+            );
 
         writer.output_html
             (writer.get_horz_margin()
@@ -2173,10 +2203,14 @@ class pdf_illustration_regular : public pdf_illustration
         add<columns_headings_page>();
         if(!invar.IsInforce)
             {
-            add<numeric_summary_page>();
+            add<numeric_summary_or_attachment_page<false>>();
             }
         add<tabular_detail_page>();
         add<tabular_detail2_page>();
+        if(!invar.IsInforce)
+            {
+            add<numeric_summary_or_attachment_page<true>>();
+            }
     }
 };
 
