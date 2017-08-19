@@ -1672,7 +1672,7 @@ consult with your own independent tax or legal counsel.
     }
 };
 
-class columns_headings_page : public numbered_page
+class column_headings_page : public numbered_page
 {
   public:
     void render
@@ -2529,7 +2529,7 @@ class pdf_illustration_regular : public pdf_illustration
         add<cover_page>();
         add<narrative_summary_page>();
         add<narrative_summary_cont_page>();
-        add<columns_headings_page>();
+        add<column_headings_page>();
         if(!invar.IsInforce)
             {
             add<numeric_summary_or_attachment_page<false>>();
