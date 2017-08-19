@@ -250,12 +250,9 @@ class illustration_table_generator : public wx_table_generator
   public:
     static int const rows_per_group = 5;
 
-    illustration_table_generator
-        (pdf_writer_wx& writer
-        ,wxDC& dc
-        )
+    explicit illustration_table_generator(pdf_writer_wx& writer)
         :wx_table_generator
-            (dc
+            (writer.dc()
             ,writer.get_horz_margin()
             ,writer.get_page_width()
             )
@@ -296,10 +293,9 @@ class using_illustration_table
     // virtual method.
     illustration_table_generator create_table_generator
         (pdf_writer_wx& writer
-        ,wxDC& dc
         ) const
     {
-        illustration_table_generator table(writer, dc);
+        illustration_table_generator table(writer);
 
         for(auto const& i : get_table_columns())
             {
@@ -331,13 +327,11 @@ class page
     virtual void pre_render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         )
     {
         stifle_warning_for_unused_value(ledger);
         stifle_warning_for_unused_value(writer);
-        stifle_warning_for_unused_value(dc);
         stifle_warning_for_unused_value(interpolate_html);
     }
 
@@ -345,7 +339,6 @@ class page
     virtual void render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         ) = 0;
 };
@@ -359,7 +352,6 @@ class pdf_illustration : protected html_interpolator
                     )
         :html_interpolator(ledger.make_evaluator())
         ,writer_(output.string(), wxPORTRAIT, &html_font_sizes)
-        ,dc_(writer_.dc())
         ,ledger_(ledger)
     {
         init_variables();
@@ -377,7 +369,7 @@ class pdf_illustration : protected html_interpolator
     {
         for(auto const& page : pages_)
             {
-            page->pre_render(ledger_, writer_, dc_, *this);
+            page->pre_render(ledger_, writer_, *this);
             }
 
         bool first = true;
@@ -389,10 +381,10 @@ class pdf_illustration : protected html_interpolator
                 }
             else
                 {
-                dc_.StartPage();
+                writer_.dc().StartPage();
                 }
 
-            page->render(ledger_, writer_, dc_, *this);
+            page->render(ledger_, writer_, *this);
             }
     }
 
@@ -457,10 +449,6 @@ class pdf_illustration : protected html_interpolator
     // Writer object used for the page metrics and higher level functions.
     pdf_writer_wx writer_;
 
-    // The DC associated with the writer, it could be accessed via it, but as
-    // it's needed often, provide a shorter alias for it.
-    wxDC& dc_;
-
     // Source of the data.
     Ledger const& ledger_;
 
@@ -486,10 +474,11 @@ class cover_page : public page
     void render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         ) override
     {
+        auto& dc = writer.dc();
+
         dc.SetPen(wxPen(HIGHLIGHT_COL, 2));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
@@ -656,7 +645,6 @@ class page_with_footer : public page
     void pre_render
         (Ledger const& /* ledger */
         ,pdf_writer_wx& writer
-        ,wxDC& /* dc */
         ,html_interpolator const& interpolate_html
         ) override
     {
@@ -682,7 +670,6 @@ class page_with_footer : public page
     void render
         (Ledger const& /* ledger */
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         ) override
     {
@@ -695,6 +682,8 @@ class page_with_footer : public page
             ,frame_width
             ,get_footer_html(interpolate_html)
             );
+
+        auto& dc = writer.dc();
 
         dc.SetPen(HIGHLIGHT_COL);
         dc.DrawLine
@@ -815,18 +804,16 @@ class numbered_page : public page_with_footer
     void pre_render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         ) override
     {
-        page_with_footer::pre_render(ledger, writer, dc, interpolate_html);
+        page_with_footer::pre_render(ledger, writer, interpolate_html);
 
         this_page_number_ = ++last_page_number_;
 
         extra_pages_ = get_extra_pages_needed
             (ledger
             ,writer
-            ,dc
             ,interpolate_html
             );
 
@@ -852,13 +839,13 @@ class numbered_page : public page_with_footer
     }
 
   protected:
-    void next_page(wxDC& dc)
+    void next_page(pdf_writer_wx& writer)
     {
         // This method may only be called if we had reserved enough physical
         // pages for this logical pages by overriding get_extra_pages_needed().
         LMI_ASSERT(extra_pages_ > 0);
 
-        dc.StartPage();
+        writer.dc().StartPage();
 
         this_page_number_++;
         extra_pages_--;
@@ -870,13 +857,11 @@ class numbered_page : public page_with_footer
     virtual int get_extra_pages_needed
         (Ledger const&              ledger
         ,pdf_writer_wx&             writer
-        ,wxDC&                      dc
         ,html_interpolator const&   interpolate_html
         ) const
     {
         stifle_warning_for_unused_value(ledger);
         stifle_warning_for_unused_value(writer);
-        stifle_warning_for_unused_value(dc);
         stifle_warning_for_unused_value(interpolate_html);
 
         return 0;
@@ -1111,11 +1096,10 @@ class narrative_summary_page : public numbered_page
     void render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         ) override
     {
-        numbered_page::render(ledger, writer, dc, interpolate_html);
+        numbered_page::render(ledger, writer, interpolate_html);
 
         text summary_html = get_header_html
             (ledger.GetLedgerInvariant()
@@ -1366,11 +1350,10 @@ class narrative_summary_cont_page : public numbered_page
     void render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         ) override
     {
-        numbered_page::render(ledger, writer, dc, interpolate_html);
+        numbered_page::render(ledger, writer, interpolate_html);
 
         // Just a convenient helper performing a common operation.
         auto const add_body_paragraph = [=](std::string const& s) -> text
@@ -1681,11 +1664,10 @@ class columns_headings_page : public numbered_page
     void render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         ) override
     {
-        numbered_page::render(ledger, writer, dc, interpolate_html);
+        numbered_page::render(ledger, writer, interpolate_html);
 
         writer.output_html
             (writer.get_horz_margin()
@@ -1716,14 +1698,12 @@ class numeric_summary_or_attachment_page
     void render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         ) override
     {
         numbered_or_attachment_base<is_attachment>::render
             (ledger
             ,writer
-            ,dc
             ,interpolate_html
             );
 
@@ -1746,13 +1726,12 @@ class page_with_tabular_report
     void render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
-        ,wxDC& dc
         ,html_interpolator const& interpolate_html
         ) override
     {
-        numbered_page::render(ledger, writer, dc, interpolate_html);
+        numbered_page::render(ledger, writer, interpolate_html);
 
-        illustration_table_generator table{create_table_generator(writer, dc)};
+        illustration_table_generator table{create_table_generator(writer)};
 
         auto const& columns = get_table_columns();
 
@@ -1769,7 +1748,6 @@ class page_with_tabular_report
             int pos_y = render_or_measure_fixed_page_part
                 (table
                 ,writer
-                ,dc
                 ,interpolate_html
                 ,e_output_normal
                 );
@@ -1801,8 +1779,8 @@ class page_with_tabular_report
                     // to have page breaks in the middle of a group.
                     if(pos_y >= page_bottom - rows_per_group*row_height)
                         {
-                        next_page(dc);
-                        numbered_page::render(ledger, writer, dc, interpolate_html);
+                        next_page(writer);
+                        numbered_page::render(ledger, writer, interpolate_html);
                         break;
                         }
                     }
@@ -1817,7 +1795,6 @@ class page_with_tabular_report
     virtual int render_or_measure_fixed_page_part
         (illustration_table_generator&  table
         ,pdf_writer_wx&                 writer
-        ,wxDC&                          dc
         ,html_interpolator const&       interpolate_html
         ,enum_output_mode               output_mode
         ) const = 0;
@@ -1828,16 +1805,14 @@ class page_with_tabular_report
     int get_extra_pages_needed
         (Ledger const&              ledger
         ,pdf_writer_wx&             writer
-        ,wxDC&                      dc
         ,html_interpolator const&   interpolate_html
         ) const override
     {
-        illustration_table_generator table{create_table_generator(writer, dc)};
+        illustration_table_generator table{create_table_generator(writer)};
 
         int const pos_y = render_or_measure_fixed_page_part
             (table
             ,writer
-            ,dc
             ,interpolate_html
             ,e_output_measure_only
             );
@@ -1888,7 +1863,6 @@ class tabular_detail_page : public page_with_tabular_report
     int render_or_measure_fixed_page_part
         (illustration_table_generator&  table
         ,pdf_writer_wx&                 writer
-        ,wxDC&                          dc
         ,html_interpolator const&       interpolate_html
         ,enum_output_mode               output_mode
         ) const override
@@ -1902,6 +1876,8 @@ class tabular_detail_page : public page_with_tabular_report
             ,interpolate_html("{{>tabular_details}}")
             ,output_mode
             );
+
+        auto& dc = writer.dc();
 
         // Decrease the font size for the table to match the main page
         // body text size.
@@ -1998,7 +1974,6 @@ class tabular_detail2_page : public page_with_tabular_report
     int render_or_measure_fixed_page_part
         (illustration_table_generator&  table
         ,pdf_writer_wx&                 writer
-        ,wxDC&                          dc
         ,html_interpolator const&       interpolate_html
         ,enum_output_mode               output_mode
         ) const override
@@ -2015,6 +1990,7 @@ class tabular_detail2_page : public page_with_tabular_report
 
         // Decrease the font size for the table to match the main page
         // body text size.
+        auto& dc = writer.dc();
         dc.SetFont(dc.GetFont().Smaller());
 
         table.output_header(&pos_y, output_mode);
