@@ -24,6 +24,7 @@
 #include "ledger_pdf_generator.hpp"
 
 #include "alert.hpp"
+#include "bourn_cast.hpp"
 #include "assert_lmi.hpp"
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
@@ -139,10 +140,22 @@ class html_interpolator
         add_variable(name, text::from(value));
     }
 
+    void add_variable(std::string const& name, int value)
+    {
+        std::ostringstream oss;
+        oss << value;
+        add_variable(name, oss.str());
+    }
+
     void add_variable(std::string const& name, bool value)
     {
         add_variable(name, std::string(value ? "1" : "0"));
     }
+
+    // Detect, at compile-time, mistaken attempts to add floating point
+    // variables: all those are only available from ledger_evaluator as they
+    // must be formatted correctly.
+    void add_variable(std::string const& name, double value) = delete;
 
     // Test a boolean variable: the value must be "0" or "1", which is mapped
     // to false or true respectively. Anything else results in an exception.
@@ -2050,7 +2063,7 @@ class pdf_illustration_regular : public pdf_illustration
 
         add_variable
             ("MecYearPlus1"
-            ,invar.MecYear + 1
+            ,bourn_cast<int>(invar.MecYear) + 1
             );
 
         // Variable representing the premium payment frequency with the
@@ -2133,7 +2146,7 @@ class pdf_illustration_regular : public pdf_illustration
 
         add_variable
             ("LapseYear_Guaranteed_Plus1"
-            ,lapse_year_guaruanteed + 1
+            ,bourn_cast<int>(lapse_year_guaruanteed) + 1
             );
 
         add_variable
@@ -2143,7 +2156,7 @@ class pdf_illustration_regular : public pdf_illustration
 
         add_variable
             ("LapseYear_Midpoint_Plus1"
-            ,lapse_year_midpoint + 1
+            ,bourn_cast<int>(lapse_year_midpoint) + 1
             );
 
         add_variable
@@ -2153,7 +2166,7 @@ class pdf_illustration_regular : public pdf_illustration
 
         add_variable
             ("LapseYear_Current_Plus1"
-            ,lapse_year_current + 1
+            ,bourn_cast<int>(lapse_year_current) + 1
             );
 
         // Add all the pages.
