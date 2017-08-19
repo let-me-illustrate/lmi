@@ -14,6 +14,21 @@ dollars
 {{/HasScaleUnit}}
 </p>
 
+<br></br>
+<br></br>
+
+<numeric_summary_table></numeric_summary_table>
+
+<br></br>
+<br></br>
+
+<!--
+This is a workaround for what looks like a wxHTML bug, without explicitly
+resetting the alignment here, the next paragraph would be centered, somehow
+keeping the center alignment of the last "p" tag above.
+-->
+<p align="left"></p>
+
 {{#Composite}}
 <p>
     The year of policy lapse on a guaranteed, midpoint
