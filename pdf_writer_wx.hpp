@@ -34,6 +34,8 @@
 #include <array>
 #include <memory>                       // std::unique_ptr
 
+class wxFileSystem;
+
 namespace html { class text; }
 
 class pdf_writer_wx
@@ -86,6 +88,10 @@ class pdf_writer_wx
   private:
     wxPrintData print_data_;
     wxPdfDC pdf_dc_;
+
+    // Order is potentially important here: html_parser_ uses html_vfs_, so
+    // must be declared after it in order to be destroyed before it.
+    std::unique_ptr<wxFileSystem> html_vfs_;
     wxHtmlWinParser html_parser_;
 
     wxSize const total_page_size_;
