@@ -261,46 +261,15 @@ class illustration_table_generator : public wx_table_generator
     illustration_table_generator
         (pdf_writer_wx& writer
         ,wxDC& dc
-        ,int page_bottom
         )
         :wx_table_generator
             (dc
             ,writer.get_horz_margin()
             ,writer.get_page_width()
             )
-        ,page_bottom_(page_bottom)
     {
         use_condensed_style();
         align_right();
-    }
-
-    // This is a wrapper around the base class output_row() which also adds
-    // breaks between row groups for readability and returns true if we need to
-    // start a new page.
-    bool output_and_check_for_page_break
-        (int year
-        ,int* pos_y
-        ,std::string const* values
-        )
-    {
-        wx_table_generator::output_row(pos_y, values);
-
-        if((year + 1) % rows_per_group == 0)
-            {
-            // We need a group break.
-            *pos_y += row_height();
-
-            // And possibly a page break, which will be necessary if we don't
-            // have enough space for another full group because we don't want
-            // to have page breaks in the middle of a group.
-            if(*pos_y >= page_bottom_ - rows_per_group*row_height())
-                {
-                return true;
-                }
-            }
-
-        // No need for a page break yet.
-        return false;
     }
 
     // Return the amount of vertical space taken by separator lines in the
@@ -311,9 +280,6 @@ class illustration_table_generator : public wx_table_generator
         // look well.
         return row_height() / 2;
     }
-
-  private:
-    int page_bottom_ = 0;
 };
 
 class page
@@ -1760,6 +1726,10 @@ class page_with_tabular_report : public numbered_page
 
         auto const& columns = get_report_columns();
 
+        // Just some cached values used inside the loop below.
+        auto const row_height = table.row_height();
+        auto const page_bottom = get_footer_top();
+        auto const rows_per_group = illustration_table_generator::rows_per_group;
         std::vector<std::string> values(columns.size());
 
         // The table may need several pages, loop over them.
@@ -1789,11 +1759,22 @@ class page_with_tabular_report : public numbered_page
                         ;
                     }
 
-                if(table.output_and_check_for_page_break(year, &pos_y, values.data()))
+                table.output_row(&pos_y, values.data());
+
+                if((year + 1) % rows_per_group == 0)
                     {
-                    next_page(dc);
-                    numbered_page::render(ledger, writer, dc, interpolate_html);
-                    break;
+                    // We need a group break.
+                    pos_y += row_height;
+
+                    // And possibly a page break, which will be necessary if we don't
+                    // have enough space for another full group because we don't want
+                    // to have page breaks in the middle of a group.
+                    if(pos_y >= page_bottom - rows_per_group*row_height)
+                        {
+                        next_page(dc);
+                        numbered_page::render(ledger, writer, dc, interpolate_html);
+                        break;
+                        }
                     }
                 }
             }
