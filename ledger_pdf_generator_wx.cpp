@@ -506,166 +506,29 @@ class cover_page : public page
 {
   public:
     void render
-        (Ledger const& ledger
+        (Ledger const& /* ledger */
         ,pdf_writer_wx& writer
         ,html_interpolator const& interpolate_html
         ) override
     {
+        int const height_contents = render_page_template
+            ("cover"
+            ,writer
+            ,interpolate_html
+            );
+
+        // There is no way to draw a border around the page contents in wxHTML
+        // currently, so do it manually.
         auto& dc = writer.dc();
 
         dc.SetPen(wxPen(HIGHLIGHT_COL, 2));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-        auto const frame_horz_margin = writer.get_horz_margin();
-        auto const frame_vert_margin = writer.get_vert_margin();
-        auto const frame_width       = writer.get_page_width();
-        auto const frame_height      = writer.get_page_height();
-
         dc.DrawRectangle
-            (frame_horz_margin
-            ,frame_vert_margin
-            ,frame_width
-            ,frame_height
-            );
-
-        auto const& invar = ledger.GetLedgerInvariant();
-
-        // We use empty table cells to insert spaces into the table below.
-        auto const space = tag::tr(tag::td(text::nbsp()));
-
-        auto const cover_html =
-            tag::table[attr::width("100%")]
-                (tag::tr
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("+4")]
-                            (tag::b(text::from(invar.PolicyMktgName))
-                            )
-                        )
-                    )
-                )
-                (tag::tr
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("+4")]
-                            (tag::b
-                                (text::from
-                                    (invar.IsInforce
-                                        ? "In Force Life Insurance Illustration"
-                                        : "Life Insurance Illustration"
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-                (space)
-                (space)
-                (tag::tr
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("+2")]
-                            (tag::b
-                                (text::from("Prepared for:")
-                                )
-                            )
-                        )
-                    )
-                )
-                (tag::tr
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("+2")]
-                            (text::from
-                                (ledger.is_composite()
-                                    ? invar.CorpName
-                                    : invar.Insured1
-                                )
-                            )
-                        )
-                    )
-                )
-                (space)
-                (space)
-                (tag::tr
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("+2")]
-                            (tag::b
-                                (text::from("Presented by:")
-                                )
-                            )
-                        )
-                    )
-                )
-                (tag::tr
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("+2")]
-                            (text::from(invar.ProducerName)
-                            )
-                        )
-                    )
-                )
-                (tag::tr
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("+2")]
-                            (text::from(invar.ProducerStreet)
-                            )
-                        )
-                    )
-                )
-                (tag::tr
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("+2")]
-                            (text::from(invar.ProducerCity)
-                            )
-                        )
-                    )
-                )
-                (space)
-                (tag::tr
-                    (tag::td[attr::align("center")]
-                        (tag::font[attr::size("+2")]
-                            (interpolate_html("{{date_prepared}}")
-                            )
-                        )
-                    )
-                )
-                ;
-
-        auto const text_horz_margin = 2*frame_horz_margin;
-        auto const text_width       = frame_width - 2*frame_horz_margin;
-        writer.output_html
-            (text_horz_margin
-            ,4*frame_vert_margin
-            ,text_width
-            ,cover_html
-            );
-
-        auto const footer_html = tag::p[attr::align("center")]
-            (tag::font[attr::size("-1")]
-                (interpolate_html
-                    (R"(
-{{InsCoShortName}} Financial Group is a marketing
-name for {{InsCoName}} ({{InsCoShortName}}) and its
-affiliated company and sales representatives, {{InsCoAddr}}.
-)"
-                    )
-                )
-            );
-
-        // Compute the footer height (which depends on how long it is, as it
-        // can be wrapped to take more than one line)...
-        int const footer_height = writer.output_html
-            (text_horz_margin
-            ,0
-            ,text_width
-            ,footer_html
-            ,e_output_measure_only
-            );
-
-        // ... in order to be able to position it precisely at the bottom of
-        // our blue frame.
-        writer.output_html
-            (text_horz_margin
-            ,frame_vert_margin + frame_height - footer_height
-            ,text_width
-            ,footer_html
+            (writer.get_horz_margin()
+            ,writer.get_vert_margin()
+            ,writer.get_page_width()
+            ,height_contents
             );
     }
 };
