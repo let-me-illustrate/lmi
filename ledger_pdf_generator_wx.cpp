@@ -243,14 +243,6 @@ class html_interpolator
     std::map<std::string, text> vars_;
 };
 
-// Description of a single table column.
-struct illustration_table_column
-{
-    char const* variable_name;
-    char const* label;
-    char const* widest_text;
-};
-
 // A slightly specialized table generator for the tables used in the
 // illustrations.
 class illustration_table_generator : public wx_table_generator
@@ -279,6 +271,42 @@ class illustration_table_generator : public wx_table_generator
         // This is completely arbitrary and chosen just because it seems to
         // look well.
         return row_height() / 2;
+    }
+};
+
+// A helper mix-in class for pages using tables.
+class using_illustration_table
+{
+  protected:
+    // Description of a single table column.
+    struct illustration_table_column
+    {
+        char const* variable_name;
+        char const* label;
+        char const* widest_text;
+    };
+
+    using illustration_table_columns = std::vector<illustration_table_column>;
+
+    // Must be overridden to return the description of the table columns.
+    virtual illustration_table_columns const& get_table_columns() const = 0;
+
+    // Useful helper for creating the table generator using the columns defined
+    // by the separate (and simpler to implement) get_table_columns() pure
+    // virtual method.
+    illustration_table_generator create_table_generator
+        (pdf_writer_wx& writer
+        ,wxDC& dc
+        ) const
+    {
+        illustration_table_generator table(writer, dc);
+
+        for(auto const& i : get_table_columns())
+            {
+            table.add_column(i.label, i.widest_text);
+            }
+
+        return table;
     }
 };
 
@@ -1710,7 +1738,9 @@ class numeric_summary_or_attachment_page
 
 // Helper base class for pages showing a table displaying values for all
 // contract years after some fixed content.
-class page_with_tabular_report : public numbered_page
+class page_with_tabular_report
+    :public numbered_page
+    ,protected using_illustration_table
 {
   public:
     void render
@@ -1724,7 +1754,7 @@ class page_with_tabular_report : public numbered_page
 
         illustration_table_generator table{create_table_generator(writer, dc)};
 
-        auto const& columns = get_report_columns();
+        auto const& columns = get_table_columns();
 
         // Just some cached values used inside the loop below.
         auto const row_height = table.row_height();
@@ -1781,11 +1811,6 @@ class page_with_tabular_report : public numbered_page
     }
 
   protected:
-    using columns = std::vector<illustration_table_column>;
-
-    // Must be overridden to return the description of the table columns.
-    virtual columns const& get_report_columns() const = 0;
-
     // Must be overridden to render (only if output_mode is e_output_normal)
     // the fixed page part and (in any case) return the vertical coordinate of
     // its bottom, where the tabular report starts.
@@ -1798,23 +1823,6 @@ class page_with_tabular_report : public numbered_page
         ) const = 0;
 
   private:
-    // Common part of render() and get_extra_pages_needed(): create the table
-    // generator to use.
-    illustration_table_generator create_table_generator
-        (pdf_writer_wx& writer
-        ,wxDC& dc
-        ) const
-    {
-        illustration_table_generator table(writer, dc, get_footer_top());
-
-        for(auto const& i : get_report_columns())
-            {
-            table.add_column(i.label, i.widest_text);
-            }
-
-        return table;
-    }
-
     // Override the base class method as the table may overflow onto the next
     // page(s).
     int get_extra_pages_needed
@@ -1945,9 +1953,9 @@ class tabular_detail_page : public page_with_tabular_report
         return pos_y;
     }
 
-    columns const& get_report_columns() const override
+    illustration_table_columns const& get_table_columns() const override
     {
-        static columns const columns =
+        static illustration_table_columns const columns =
             {{ "PolicyYear"             , "Policy\nYear"       ,       "999" }
             ,{ "AttainedAge"            , "End of\nYear Age"   ,       "999" }
             ,{ "GrossPmt"               , "Premium\nOutlay"    ,   "999,999" }
@@ -1975,9 +1983,9 @@ class tabular_detail2_page : public page_with_tabular_report
         ,column_max
         };
 
-    columns const& get_report_columns() const override
+    illustration_table_columns const& get_table_columns() const override
     {
-        static columns const columns =
+        static illustration_table_columns const columns =
             {{ "PolicyYear"          , "Policy\nYear"               ,         "999" }
             ,{ "AttainedAge"         , "End of\nYear Age"           ,         "999" }
             ,{ "AnnGAIntRate_Current", "Illustrated\nCrediting Rate",      "99.99%" }
