@@ -355,6 +355,26 @@ class page
         ,pdf_writer_wx& writer
         ,html_interpolator const& interpolate_html
         ) = 0;
+
+  protected:
+    // Helper method for rendering the contents of the given external template,
+    // which is expected to be found in the file with the provided name and
+    // ".mustache" extension in the data directory.
+    //
+    // Return the height of the page contents.
+    int render_page_template
+        (std::string const& template_name
+        ,pdf_writer_wx& writer
+        ,html_interpolator const& interpolate_html
+        )
+    {
+        return writer.output_html
+            (writer.get_horz_margin()
+            ,writer.get_vert_margin()
+            ,writer.get_page_width()
+            ,interpolate_html("{{>" + template_name + "}}")
+            );
+    }
 };
 
 // This is just a container for the illustration-global data.
@@ -1683,12 +1703,7 @@ class column_headings_page : public numbered_page
     {
         numbered_page::render(ledger, writer, interpolate_html);
 
-        writer.output_html
-            (writer.get_horz_margin()
-            ,writer.get_vert_margin()
-            ,writer.get_page_width()
-            ,interpolate_html("{{>column_headings}}")
-            );
+        render_page_template("column_headings", writer, interpolate_html);
     }
 };
 
@@ -2071,12 +2086,7 @@ class numeric_summary_or_attachment_page
         numeric_summary_table_cell::pdf_context_setter
             set_pdf_context(ledger, writer, interpolate_html);
 
-        writer.output_html
-            (writer.get_horz_margin()
-            ,writer.get_vert_margin()
-            ,writer.get_page_width()
-            ,interpolate_html("{{>numeric_summary}}")
-            );
+        this->render_page_template("numeric_summary", writer, interpolate_html);
     }
 };
 
