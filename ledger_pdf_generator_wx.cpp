@@ -43,6 +43,8 @@
 
 #include <wx/pdfdc.h>
 
+#include <wx/html/m_templ.h>
+
 #include <cstdint>                      // SIZE_MAX
 #include <fstream>
 #include <map>
@@ -1690,6 +1692,353 @@ class columns_headings_page : public numbered_page
     }
 };
 
+// Helper classes used to show the numeric summary table. The approach used
+// here is to define a custom HTML tag (<numeric_summary_table>) and use the
+// existing illustration_table_generator to replace it with the actual table
+// when rendering.
+//
+// Notice that we currently make the simplifying assumption that this table is
+// always short enough so that everything fits on the same page as it would be
+// much more complicated to handle page breaks in the table in the middle of a
+// page (page_with_tabular_report below handles them only for the table at the
+// bottom of the page, after all the other contents, and this is already more
+// complicated and can't be done with just a custom HTML tag as we do it here).
+
+// An HTML cell showing the contents of the numeric summary table.
+class numeric_summary_table_cell
+    :public wxHtmlCell
+    ,private using_illustration_table
+{
+  public:
+    // Before using this class a pdf_context_setter object needs to be
+    // instantiated (and remain alive for as long as this class is used).
+    class pdf_context_setter
+    {
+      public:
+        // References passed to the ctor must have lifetime greater than that
+        // of this object itself.
+        explicit pdf_context_setter
+            (Ledger const& ledger
+            ,pdf_writer_wx& writer
+            ,html_interpolator const& interpolate_html
+            )
+        {
+            numeric_summary_table_cell::pdf_context_for_html_output.set
+                (&ledger
+                ,&writer
+                ,&interpolate_html
+                );
+        }
+
+        ~pdf_context_setter()
+        {
+            numeric_summary_table_cell::pdf_context_for_html_output.set
+                (nullptr
+                ,nullptr
+                ,nullptr
+                );
+        }
+    };
+
+    numeric_summary_table_cell()
+    {
+        m_Height = render_or_measure(0, e_output_measure_only);
+    }
+
+    // Override the base class method to actually render the table.
+    void Draw
+        (wxDC& dc
+        ,int x
+        ,int y
+        ,int view_y1
+        ,int view_y2,
+        wxHtmlRenderingInfo& info
+        ) override
+    {
+        // The DC passed to this function is supposed to be the same as the one
+        // associated with the writer we will use for rendering, but check that
+        // this is really so in order to avoid unexpectedly drawing the table
+        // on something else.
+        LMI_ASSERT(&dc == &pdf_context_for_html_output.writer().dc());
+
+        // We ignore the horizontal coordinate which is always 0 for this cell
+        // anyhow.
+        stifle_warning_for_unused_value(x);
+
+        // There is no need to optimize drawing by restricting it to the
+        // currently shown positions, we always render the cell entirely.
+        stifle_warning_for_unused_value(view_y1);
+        stifle_warning_for_unused_value(view_y2);
+
+        // We don't care about rendering state as we don't support interactive
+        // selection anyhow.
+        stifle_warning_for_unused_value(info);
+
+        render_or_measure(y + m_PosY, e_output_normal);
+    }
+
+  private:
+    enum
+        {column_policy_year
+        ,column_premium_outlay
+        ,column_guar_account_value
+        ,column_guar_cash_surr_value
+        ,column_guar_death_benefit
+        ,column_separator_guar_non_guar
+        ,column_mid_account_value
+        ,column_mid_cash_surr_value
+        ,column_mid_death_benefit
+        ,column_separator_mid_cur
+        ,column_cur_account_value
+        ,column_cur_cash_surr_value
+        ,column_cur_death_benefit
+        ,column_max
+        };
+
+    illustration_table_columns const& get_table_columns() const override
+    {
+        static illustration_table_columns const columns =
+            {{ "PolicyYear"             , "Policy\nYear"       ,       "999" }
+            ,{ "GrossPmt"               , "Premium\nOutlay"    ,   "999,999" }
+            ,{ "AcctVal_Guaranteed"     , "Account\nValue"     ,   "999,999" }
+            ,{ "CSVNet_Guaranteed"      , "Cash Surr\nValue"   ,   "999,999" }
+            ,{ "EOYDeathBft_Guaranteed" , "Death\nBenefit"     , "9,999,999" }
+            ,{ ""                       , " "                  ,         "-" }
+            ,{ "AcctVal_Midpoint"       , "Account\nValue"     ,   "999,999" }
+            ,{ "CSVNet_Midpoint"        , "Cash Surr\nValue"   ,   "999,999" }
+            ,{ "EOYDeathBft_Midpoint"   , "Death\nBenefit"     , "9,999,999" }
+            ,{ ""                       , " "                  ,         "-" }
+            ,{ "AcctVal_Current"        , "Account\nValue"     ,   "999,999" }
+            ,{ "CSVNet_Current"         , "Cash Surr\nValue"   ,   "999,999" }
+            ,{ "EOYDeathBft_Current"    , "Death\nBenefit"     , "9,999,999" }
+            };
+
+        return columns;
+    }
+
+    int render_or_measure(int pos_y, enum_output_mode output_mode)
+    {
+        auto& writer = pdf_context_for_html_output.writer();
+        auto& dc = writer.dc();
+        wxDCFontChanger set_smaller_font(dc, dc.GetFont().Smaller());
+
+        illustration_table_generator table{create_table_generator(writer)};
+
+        // Output multiple rows of headers.
+
+        // Make a copy because we want pos_y to be modified only once, not
+        // twice, by both output_super_header() calls.
+        auto y_copy = pos_y;
+        table.output_super_header
+            ("Guaranteed Values"
+            ,column_guar_account_value
+            ,column_separator_guar_non_guar
+            ,&y_copy
+            ,output_mode
+            );
+        table.output_super_header
+            ("Non-Guaranteed Values"
+            ,column_mid_account_value
+            ,column_max
+            ,&pos_y
+            ,output_mode
+            );
+
+        pos_y += table.get_separator_line_height();
+        table.output_horz_separator
+            (column_guar_account_value
+            ,column_separator_guar_non_guar
+            ,pos_y
+            ,output_mode
+            );
+        table.output_horz_separator
+            (column_mid_account_value
+            ,column_max
+            ,pos_y
+            ,output_mode
+            );
+
+        y_copy = pos_y;
+        table.output_super_header
+            ("Midpoint Values"
+            ,column_mid_account_value
+            ,column_separator_mid_cur
+            ,&y_copy
+            ,output_mode
+            );
+
+        table.output_super_header
+            ("Current Values"
+            ,column_cur_account_value
+            ,column_max
+            ,&pos_y
+            ,output_mode
+            );
+
+        pos_y += table.get_separator_line_height();
+        table.output_horz_separator
+            (column_mid_account_value
+            ,column_separator_mid_cur
+            ,pos_y
+            ,output_mode
+            );
+
+        table.output_horz_separator
+            (column_cur_account_value
+            ,column_max
+            ,pos_y
+            ,output_mode
+            );
+
+        table.output_header(&pos_y, output_mode);
+
+        pos_y += table.get_separator_line_height();
+        table.output_horz_separator(0, column_max, pos_y, output_mode);
+
+        // And now the table values themselves.
+        auto const& columns = get_table_columns();
+        std::vector<std::string> values(columns.size());
+
+        auto const& ledger = pdf_context_for_html_output.ledger();
+        auto const& invar = ledger.GetLedgerInvariant();
+        auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
+
+        int const year_max = pdf_context_for_html_output.ledger().GetMaxLength();
+        int const age_last = 70;
+        std::array<int, 4> const summary_years =
+            {{5, 10, 20, age_last - bourn_cast<int>(invar.Age)}
+            };
+        for(auto const& year : summary_years)
+            {
+            // Skip row if it doesn't exist. For instance, if the issue
+            // age is 85 and the contract remains in force until age 100,
+            // then there is no twentieth duration and no age-70 row.
+            if(!(0 < year && year <= year_max))
+                {
+                continue;
+                }
+
+            switch(output_mode)
+                {
+                case e_output_measure_only:
+                    pos_y += table.row_height();
+                    break;
+
+                case e_output_normal:
+                    for(std::size_t col = 0; col < columns.size(); ++col)
+                        {
+                        std::string const variable_name = columns[col].variable_name;
+
+                        // According to regulations, we need to replace the
+                        // policy year in the last row with the age.
+                        if(col == column_policy_year)
+                            {
+                            if(&year == &summary_years.back())
+                                {
+                                std::ostringstream oss;
+                                oss << "Age " << age_last;
+                                values[col] = oss.str();
+                                continue;
+                                }
+                            }
+
+                        // Special hack for the dummy columns whose value is always
+                        // empty as it's used only as separator.
+                        values[col] = variable_name.empty()
+                            ? std::string{}
+                            : interpolate_html.evaluate(variable_name, year - 1)
+                            ;
+                        }
+
+                    table.output_row(&pos_y, values.data());
+                    break;
+                }
+            }
+
+        return pos_y;
+    }
+
+    // This is ugly, but we have to use a global variable to make pdf_writer_wx
+    // and wxDC objects used by the main code accessible to this cell class,
+    // there is no way to pass them as parameters through wxHTML machinery.
+    //
+    // To at least make it a little bit safer to deal with this, the variable
+    // itself is private and a public pdf_context_setter class is provided to
+    // actually set it.
+    class pdf_context
+    {
+      public:
+        void set
+            (Ledger const* ledger
+            ,pdf_writer_wx* writer
+            ,html_interpolator const* interpolate_html
+            )
+        {
+            ledger_ = ledger;
+            writer_ = writer;
+            interpolate_html_ = interpolate_html;
+        }
+
+        Ledger const& ledger() const
+        {
+            LMI_ASSERT(ledger_);
+            return *ledger_;
+        }
+
+        pdf_writer_wx& writer() const
+        {
+            LMI_ASSERT(writer_);
+            return *writer_;
+        }
+
+        html_interpolator const& interpolate_html() const
+        {
+            LMI_ASSERT(interpolate_html_);
+            return *interpolate_html_;
+        }
+
+      private:
+        Ledger const* ledger_ = nullptr;
+        pdf_writer_wx* writer_ = nullptr;
+        html_interpolator const* interpolate_html_ = nullptr;
+    };
+
+    static pdf_context pdf_context_for_html_output;
+
+    friend pdf_context_setter;
+};
+
+numeric_summary_table_cell::pdf_context
+numeric_summary_table_cell::pdf_context_for_html_output;
+
+// Custom tag which is replaced by the numeric summary table.
+TAG_HANDLER_BEGIN(numeric_summary_table, "NUMERIC_SUMMARY_TABLE")
+    TAG_HANDLER_PROC(tag)
+    {
+        // The tag argument would be useful if we defined any parameters for
+        // it, but currently we don't.
+        stifle_warning_for_unused_value(tag);
+
+        m_WParser->GetContainer()->InsertCell(new numeric_summary_table_cell());
+
+        // This tag isn't supposed to have any inner contents, so return true
+        // to not even try parsing it.
+        return true;
+    }
+TAG_HANDLER_END(numeric_summary_table)
+
+// In wxWidgets versions prior to 3.1.1, there is an extra semicolon at the end
+// of TAGS_MODULE_BEGIN() expansion resulting in a warning with -pedantic used
+// by lmi, so suppress this warning here (this could be removed once 3.1.1 is
+// required).
+wxGCC_WARNING_SUPPRESS(pedantic)
+
+TAGS_MODULE_BEGIN(lmi_illustration)
+    TAGS_MODULE_ADD(numeric_summary_table)
+TAGS_MODULE_END(lmi_illustration)
+
+wxGCC_WARNING_RESTORE(pedantic)
+
 // Numeric summary page appears twice, once as a normal page and once as an
 // attachment, with the only difference being that the base class is different,
 // so make it a template to avoid duplicating the code.
@@ -1718,6 +2067,9 @@ class numeric_summary_or_attachment_page
             ,writer
             ,interpolate_html
             );
+
+        numeric_summary_table_cell::pdf_context_setter
+            set_pdf_context(ledger, writer, interpolate_html);
 
         writer.output_html
             (writer.get_horz_margin()
