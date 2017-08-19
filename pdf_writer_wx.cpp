@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "html.hpp"
 
+#include <wx/filesys.h>
 #include <wx/html/htmlcell.h>
 
 namespace
@@ -102,6 +103,8 @@ pdf_writer_wx::pdf_writer_wx
             ,"Courier"
             );
         }
+    html_vfs_.reset(new wxFileSystem());
+    html_parser_.SetFS(html_vfs_.get());
 }
 
 /// Output an image at the given scale into the PDF.
