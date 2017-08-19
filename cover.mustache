@@ -1,0 +1,129 @@
+<table width="100%">
+    <!--
+    Rows such as this are used as separators between visible table elements,
+    this is unfortunately necessary because wxHTML doesn't support
+    margin/padding on table elements.
+    -->
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td align="center">
+            <font size="+4">
+                <b>{{PolicyMktgName}}</b>
+            </font>
+        </td>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+4">
+                <b>
+    {{#IsInforce}}
+    In Force Life Insurance Illustration
+    {{/IsInforce}}
+    {{^IsInforce}}
+    Life Insurance Illustration
+    {{/IsInforce}}
+                </b>
+            </font>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                <b>Prepared for:</b>
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+    {{#Composite}}
+    {{CorpName}}
+    {{/Composite}}
+    {{^Composite}}
+    {{Insured1}}
+    {{/Composite}}
+            </font>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                <b>Presented by:</b>
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{ProducerName}}
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{ProducerStreet}}
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{ProducerCity}}
+            </font>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{date_prepared}}
+            </font>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+</table>
+
+<!--
+This is ugly and error-prone, but there is no way to put the paragraph below at
+the bottom of the page currently, so we just insert enough white space to push
+it roughly where we want it to appear.
+-->
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<p align="center">
+    <font size="-1">
+{{InsCoShortName}} Financial Group is a marketing
+name for {{InsCoName}} ({{InsCoShortName}}) and its
+affiliated company and sales representatives, {{InsCoAddr}}.
+    </font>
+</p>
