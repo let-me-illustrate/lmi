@@ -141,16 +141,18 @@ ifeq      (3.4.4,$(gnu_cpp_version))
 else ifeq (3.4.5,$(gnu_cpp_version))
 else ifeq (4.9.1,$(gnu_cpp_version))
 else ifeq (4.9.2,$(gnu_cpp_version))
+else ifeq (6.3.0,$(gnu_cpp_version))
 else
-  $(error Untested $(GNU_CPP) version '$(gnu_cpp_version)')
+  $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
 
 ifeq      (3.4.4,$(gnu_cxx_version))
 else ifeq (3.4.5,$(gnu_cxx_version))
 else ifeq (4.9.1,$(gnu_cxx_version))
 else ifeq (4.9.2,$(gnu_cxx_version))
+else ifeq (6.3.0,$(gnu_cxx_version))
 else
-  $(error Untested $(GNU_CXX) version '$(gnu_cxx_version)')
+  $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
 
 ################################################################################
@@ -368,7 +370,7 @@ else ifeq (3.4.5,$(gcc_version))
   # Use a correct snprintf() implementation:
   #   http://article.gmane.org/gmane.comp.gnu.mingw.user/27539
   cxx_standard += -posix
-else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
+else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2 6.3.0))
   # See:
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
@@ -475,6 +477,13 @@ endif
 
 # Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
 # being redundant for C++.
+
+# This file contains hexadecimal floating constants. There is no
+# specific compiler option to allow them.
+
+ifeq (6.3.0,$(gcc_version))
+  value_cast_test.o: tutelary_flag := -std=gnu++11
+endif
 
 C_WARNINGS = \
   $(gcc_c_warnings) \
