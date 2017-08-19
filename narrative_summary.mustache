@@ -1,0 +1,182 @@
+{{>header}}
+
+<p align="center">NARRATIVE SUMMARY</p>
+
+<font size="-1">
+
+<p>
+{{^SinglePremium}}
+    {{PolicyMktgName}} is a
+    {{#GroupExperienceRating}}group{{/GroupExperienceRating}}
+    {{#GroupCarveout}}group{{/GroupCarveout}}
+    flexible premium adjustable life insurance contract.
+    {{#GroupExperienceRating}}
+    It is a no-load policy and is intended for large case sales.
+    It is primarily marketed to financial institutions
+    to fund certain corporate liabilities.
+    {{/GroupExperienceRating}}
+    It features accumulating account values, adjustable benefits,
+    and flexible premiums.
+{{/SinglePremium}}
+{{#SinglePremium}}
+    {{#ModifiedSinglePremiumOrModifiedSinglePremium0}}
+        {{PolicyMktgName}}
+        is a modified single premium adjustable life
+        insurance contract. It features accumulating
+        account values, adjustable benefits, and single premium.
+    {{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
+    {{^ModifiedSinglePremiumOrModifiedSinglePremium0}}
+        {{PolicyMktgName}}
+        is a single premium adjustable life insurance contract.
+        It features accumulating account values,
+        adjustable benefits, and single premium.
+    {{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
+{{/SinglePremium}}
+</p>
+
+{{^IsInforce}}
+    <p>
+    Coverage may be available on a Guaranteed Standard Issue basis.
+    All proposals are based on case characteristics and must
+    be approved by the {{InsCoShortName}}
+    Home Office. For details regarding underwriting
+    and coverage limitations refer to your offer letter
+    or contact your {{InsCoShortName}} representative.
+    </p>
+{{/IsInforce}}
+
+<p>
+{{AvName}} &nbsp; {{MonthlyChargesPaymentFootnote}}
+</p>
+
+<p>
+{{^SinglePremium}}
+    Premiums are assumed to be paid on {{ErModeLCWithArticle}}
+    basis and received at the beginning of the contract year.
+{{/SinglePremium}}
+{{#SinglePremium}}
+    The single premium is assumed to be paid at the beginning
+    of the contract year.
+{{/SinglePremium}}
+
+{{AvName}} Values, {{CsvName}} Values,
+and death benefits are illustrated as of the end
+of the contract year. The method we use to allocate
+overhead expenses is the fully allocated expense method.
+</p>
+
+{{^SinglePremium}}
+    <p>
+    In order to guarantee coverage to age
+    {{EndtAge}}, {{ErModeLCWithArticle}} premium
+    {{#HasGuarPrem}}
+    of ${{GuarPrem}} must be paid.
+    {{/HasGuarPrem}}
+    {{^HasGuarPrem}}
+    is defined.
+    {{/HasGuarPrem}}
+    This amount is based on the guaranteed monthly charges
+    and the guaranteed interest crediting rate.
+    {{#DefnLifeInsIsGPT}}
+    This premium may be in excess of the maximum premium allowable
+    in order to qualify this policy as life insurance.
+    {{/DefnLifeInsIsGPT}}
+    </p>
+{{/SinglePremium}}
+
+<p>
+Loaned amounts of the {{AvName}}
+Value will be credited a rate equal to the loan interest rate less
+a spread, guaranteed not to exceed
+{{#GroupCarveout}}
+1.25%.
+{{/GroupCarveout}}
+{{^GroupCarveout}}
+3.00%.
+{{/GroupCarveout}}
+</p>
+
+{{#HasTerm}}
+    <p>
+    The term rider provides the option to purchase monthly
+    term insurance on the life of the insured. The term rider
+    selected face amount supplements the selected face amount
+    of the contract. If the term rider is attached, the policy
+    to which it is attached may have a lower annual cutoff premium
+    and, as a result, the lower overall sales loads paid may be
+    lower than a contract having the same total face amount,
+    but with no term rider.
+    {{#NoLapse}}
+      Also, the lapse protection feature of the contract's
+      {{NoLapseProvisionName}}
+      does not apply to the term rider's selected face amount.
+    {{/NoLapse}}
+    </p>
+{{/HasTerm}}
+
+{{#HasWP}}
+    <p>
+    The Waiver of Monthly Charges Rider provides for waiver
+    of monthly charges in the event of the disability
+    of the insured that begins before attained age 65
+    and continues for at least 6 months, as described in the rider.
+    An additional charge is associated with this rider. Please refer
+    to your contract for specific provisions and a detailed schedule
+    of charges.
+    </p>
+{{/HasWP}}
+
+{{#HasADD}}
+    <p>
+    The Accidental Death benefit provides an additional benefit
+    if death is due to accident. An additional charge is associated
+    with this rider. Please refer to your contract
+    for specific provisions and a detailed schedule of charges.
+    </p>
+{{/HasADD}}
+
+<p>
+The definition of life insurance for this contract is the
+{{#DefnLifeInsIsGPT}}
+    guideline premium test. The guideline single premium
+    is ${{InitGSP}}
+    and the guideline level premium
+    is ${{InitGLP}}
+{{/DefnLifeInsIsGPT}}
+{{^DefnLifeInsIsGPT}}
+    cash value accumulation test.
+{{/DefnLifeInsIsGPT}}
+</p>
+
+<p>
+This is an illustration only. An illustration is not intended
+to predict actual performance. Interest rates
+and values set forth in the illustration are not guaranteed.
+</p>
+
+<p>
+{{^StateIsTexas}}
+    This illustration assumes that the currently illustrated
+    non-guaranteed elements will continue unchanged
+    for all years shown. This is not likely to occur
+    and actual results may be more or less favorable than shown.
+    The non-guaranteed benefits and values are not guaranteed
+    and are based on assumptions such as interest credited
+    and current monthly charges, which are subject to change by
+    {{InsCoName}}.
+{{/StateIsTexas}}
+{{#StateIsTexas}}
+    This illustration is based on both non-guaranteed
+    and guaranteed assumptions. Non-guaranteed assumptions
+    include interest rates and monthly charges.
+    This illustration assumes that the currently illustrated
+    non-guaranteed elements will continue unchanged
+    for all years shown. This is not likely to occur
+    and actual results may be more or less favorable than shown.
+    Factors that may affect future policy performance include
+    the company's expectations for future mortality, investments,
+    persistency, profits and expenses.
+{{/StateIsTexas}}
+</p>
+
+</font>
