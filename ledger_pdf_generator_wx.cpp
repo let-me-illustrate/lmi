@@ -38,7 +38,6 @@
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"               // lmi_tolower()
 #include "pdf_writer_wx.hpp"
-#include "value_cast.hpp"
 #include "version.hpp"
 #include "wx_table_generator.hpp"
 
