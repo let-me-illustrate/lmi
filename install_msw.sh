@@ -130,9 +130,9 @@ then
 
     restore_MinGW_mount=`mount --mount-entries | grep '/MinGW_ '`
     [ -z "$restore_MinGW_mount" ] \
-      || printf "$restore_MinGW_mount\n" | grep --silent 'C:/opt/lmi/MinGW-4_9_1' \
+      || printf "$restore_MinGW_mount\n" | grep --silent 'C:/opt/lmi/MinGW-6_3_0' \
       || printf "Replacing former MinGW_ mount:\n $restore_MinGW_mount\n" >/dev/tty
-    mount --force "C:/opt/lmi/MinGW-4_9_1" "/MinGW_"
+    mount --force "C:/opt/lmi/MinGW-6_3_0" "/MinGW_"
 
     restore_cache_mount=`mount --mount-entries | grep '/cache_for_lmi '`
     [ -z "$restore_cache_mount" ] \
