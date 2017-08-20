@@ -85,6 +85,27 @@ class html_interpolator
     {
     }
 
+    // This function is provided to be able to delegate to it in custom
+    // interpolation functions, but usually shouldn't be called directly, just
+    // use operator() below instead.
+    std::string interpolation_func
+        (std::string const& s
+        ,interpolate_lookup_kind kind
+        ) const
+    {
+        switch(kind)
+            {
+            case interpolate_lookup_kind::variable:
+            case interpolate_lookup_kind::section:
+                return expand_html(s).as_html();
+
+            case interpolate_lookup_kind::partial:
+                return load_partial_from_file(s);
+            }
+
+        throw std::runtime_error("invalid lookup kind");
+    }
+
     // A method which can be used to interpolate an HTML string containing
     // references to the variables defined for this illustration. The general
     // syntax is the same as in the global interpolate_string() function, i.e.
@@ -105,19 +126,9 @@ class html_interpolator
                 ,[this]
                     (std::string const& s
                     ,interpolate_lookup_kind kind
-                    ) -> std::string
+                    )
                     {
-                    switch(kind)
-                        {
-                        case interpolate_lookup_kind::variable:
-                        case interpolate_lookup_kind::section:
-                            return expand_html(s).as_html();
-
-                        case interpolate_lookup_kind::partial:
-                            return load_partial_from_file(s);
-                        }
-
-                    throw std::runtime_error("invalid lookup kind");
+                        return interpolation_func(s, kind);
                     }
                 )
             );
@@ -609,72 +620,30 @@ class page_with_footer : public page
 
     // This method uses get_footer_contents() and returns the HTML wrapping it
     // and other fixed information appearing in the footer.
-    html::text get_footer_html(html_interpolator const& interpolate_html) const
+    text get_footer_html(html_interpolator const& interpolate_html) const
     {
-        return
-            tag::font[attr::size("-2")]
-                (tag::table[attr::width("100%")]
-                          [attr::cellspacing("0")]
-                          [attr::cellpadding("0")]
-                    (tag::tr
-                        (tag::td[attr::colspan("3")]
-                            (text::nbsp())
-                        )
-                    )
-                    (tag::tr
-                        (tag::td
-                            (interpolate_html
-                                ("Date Prepared: {{date_prepared}}"
-                                )
-                            )
-                        )
-                        (tag::td[attr::align("center")]
-                            (text::from(get_footer_contents())
-                            )
-                        )
-                        (tag::td[attr::align("right")]
-                            (interpolate_html
-                                ("{{InsCoName}}"
-                                )
-                            )
-                        )
-                    )
-                    (tag::tr
-                        (tag::td
-                            (interpolate_html
-                                ("System Version: {{LmiVersion}}"
-                                )
-                            )
-                        )
-                        (tag::td
-                            (text::nbsp()
-                            )
-                        )
-                        (tag::td[attr::align("right")]
-                            (interpolate_html
-                                (R"(
-    {{#IsInforce}}
-        {{#Composite}}
-            {{ImprimaturInforceComposite}}
-        {{/Composite}}
-        {{^Composite}}
-            {{ImprimaturInforce}}
-        {{/Composite}}
-    {{/IsInforce}}
-    {{^IsInforce}}
-        {{#Composite}}
-            {{ImprimaturPresaleComposite}}
-        {{/Composite}}
-        {{^Composite}}
-            {{ImprimaturPresale}}
-        {{/Composite}}
-    {{/IsInforce}}
-    )"
-                                )
-                            )
-                        )
-                    )
-                );
+        auto const contents = get_footer_contents();
+
+        // Use our own interpolation function to handle the special
+        // "footer_contents" variable that is replaced with the actual
+        // (possibly dynamic) footer contents.
+        return text::from_html
+            (interpolate_string
+                ("{{>footer}}"
+                ,[contents, interpolate_html]
+                    (std::string const& s
+                    ,interpolate_lookup_kind kind
+                    ) -> std::string
+                    {
+                    if(s == "footer_contents")
+                        {
+                        return contents;
+                        }
+
+                    return interpolate_html.interpolation_func(s, kind);
+                    }
+                )
+            );
     }
 
     int footer_top_ = 0;
