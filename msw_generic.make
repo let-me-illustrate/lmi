@@ -53,7 +53,12 @@ RC      := $(gcc_bin_dir)$(host_prefix)windres
 
 # Identify run-time libraries for redistribution.
 
-compiler_sysroot := /usr/lib/gcc/i686-w64-mingw32/4.9-win32
+# It might seem more robust to write something like
+#   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/i686-w64-mingw32/*-win32)
+# but that would actually weaken makefile portability, and there
+# is no guarantee that this directory will be named similarly in
+# future debian releases, much less on other OSs.
+compiler_sysroot := /usr/lib/gcc/i686-w64-mingw32/6.3-win32
 
 compiler_runtime_files := \
   $(compiler_sysroot)/libstdc++-6.dll \

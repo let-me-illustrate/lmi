@@ -28,7 +28,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 # rather than release its own; lmi uses i686 builds with native
 # threads and SJLJ exceptions.
 
-version   := MinGW-4_9_1
+version   := MinGW-6_3_0
 
 file_list  = $($(version))
 
@@ -54,12 +54,13 @@ mirror    := http://downloads.sourceforge.net/mingw-w64
 
 # File lists ###################################################################
 
-# MinGW-w64 git c6f0d3d981c70ad31bb1c2bfc2850b827281e189
-MinGW-4_9_1 := i686-4.9.1-release-win32-sjlj-rt_v3-rev3.7z
+#MinGW-6_3_0 := i686-6.3.0-release-win32-sjlj-rt_v5-rev1.7z
+MinGW-6_3_0 := i686-6.3.0-release-win32-sjlj-rt_v5-rev2.7z
 
 # Archive md5sums ##############################################################
 
-$(MinGW-4_9_1)-md5 := b9911d63b9c4c57d17f356460a2b0135
+#$(MinGW-6_3_0)-md5 := b92e8480cf8d5904da78ab6d94f1a047
+$(MinGW-6_3_0)-md5 := 6e15de993400279c24b40b1f978e9380
 
 # Utilities ####################################################################
 
@@ -116,9 +117,12 @@ BSDTARFLAGS := --keep-old-files
 
 WGETFLAGS :=
 
+# Fall back on a native binary if libarchive issue 629 occurs.
+
 .PHONY: %.7z
 %.7z:
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $(mirror)/$@
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
-	-$(BSDTAR) --extract $(BSDTARFLAGS) --directory=scratch --file=$(cache_dir)/$@
+	$(BSDTAR) --extract $(BSDTARFLAGS) --directory=scratch --file=$(cache_dir)/$@ \
+	  || c:/Program\ Files/7-Zip/7z x `cygpath -w $(cache_dir)/$@` -oscratch
 
