@@ -28,6 +28,7 @@
 #include "authenticity.hpp"
 #include "bourn_cast.hpp"
 #include "calendar_date.hpp"
+#include "data_directory.hpp"           // AddDataDir()
 #include "force_linking.hpp"
 #include "html.hpp"
 #include "interpolate_string.hpp"
@@ -246,7 +247,7 @@ class html_interpolator
 
     std::string load_partial_from_file(std::string const& file) const
     {
-        std::ifstream ifs(file + ".mustache");
+        std::ifstream ifs(AddDataDir(file + ".mustache"));
         if(!ifs)
             {
             alarum()
