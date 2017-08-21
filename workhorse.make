@@ -298,7 +298,6 @@ all_source_directories := \
   $(srcdir) \
   /opt/lmi/third_party/src/boost/libs/filesystem/src \
   /opt/lmi/third_party/src/boost/libs/regex/src \
-  /opt/lmi/third_party/src/boost/libs/system/src \
   /opt/lmi/third_party/src/cgicc \
 
 vpath lib%.a          $(CURDIR)
@@ -695,11 +694,6 @@ REQUIRED_CXXFLAGS = \
 
 REQUIRED_ARFLAGS = \
   -rus
-
-# Boost filesystem library #includes additional file. Furthermore, there's
-# a warning while compiling it.
-$(boost_filesystem_objects): REQUIRED_CPPFLAGS += -I/opt/lmi/third_party/src/boost
-$(boost_filesystem_objects): REQUIRED_CXXFLAGS += -Wno-error
 
 # Prefer to invoke GNU 'ld' through the compiler frontends 'gcc' and
 # 'g++' because that takes care of linking the required libraries for
