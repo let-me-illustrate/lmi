@@ -314,18 +314,37 @@ class using_illustration_table
     // Must be overridden to return the description of the table columns.
     virtual illustration_table_columns const& get_table_columns() const = 0;
 
+    // May be overridden to return false if the given column shouldn't be shown
+    // for the specific ledger values (currently used to exclude individual
+    // columns from composite illustrations).
+    virtual bool should_show_column(Ledger const& ledger, int column) const
+    {
+        stifle_warning_for_unused_value(ledger);
+        stifle_warning_for_unused_value(column);
+        return true;
+    }
+
     // Useful helper for creating the table generator using the columns defined
     // by the separate (and simpler to implement) get_table_columns() pure
     // virtual method.
     illustration_table_generator create_table_generator
-        (pdf_writer_wx& writer
+        (Ledger const& ledger
+        ,pdf_writer_wx& writer
         ) const
     {
         illustration_table_generator table(writer);
 
+        int column = 0;
         for(auto const& i : get_table_columns())
             {
-            table.add_column(i.label, i.widest_text);
+            std::string label;
+            if(should_show_column(ledger, column++))
+                {
+                label = i.label;
+                }
+            //else: Leave the label empty to avoid showing the column.
+
+            table.add_column(label, i.widest_text);
             }
 
         return table;
@@ -919,11 +938,13 @@ class numeric_summary_table_cell
 
     int render_or_measure(int pos_y, enum_output_mode output_mode)
     {
+        auto const& ledger = pdf_context_for_html_output.ledger();
         auto& writer = pdf_context_for_html_output.writer();
         auto& dc = writer.dc();
         wxDCFontChanger set_smaller_font(dc, dc.GetFont().Smaller());
 
-        illustration_table_generator table{create_table_generator(writer)};
+        illustration_table_generator
+            table{create_table_generator(ledger, writer)};
 
         // Output multiple rows of headers.
 
@@ -1000,7 +1021,6 @@ class numeric_summary_table_cell
         auto const& columns = get_table_columns();
         std::vector<std::string> values(columns.size());
 
-        auto const& ledger = pdf_context_for_html_output.ledger();
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
 
@@ -1191,7 +1211,8 @@ class page_with_tabular_report
     {
         numbered_page::render(ledger, writer, interpolate_html);
 
-        illustration_table_generator table{create_table_generator(writer)};
+        illustration_table_generator
+            table{create_table_generator(ledger, writer)};
 
         auto const& columns = get_table_columns();
 
@@ -1268,7 +1289,8 @@ class page_with_tabular_report
         ,html_interpolator const&   interpolate_html
         ) const override
     {
-        illustration_table_generator table{create_table_generator(writer)};
+        illustration_table_generator
+            table{create_table_generator(ledger, writer)};
 
         int const pos_y = render_or_measure_fixed_page_part
             (table
@@ -1406,6 +1428,12 @@ class tabular_detail_page : public page_with_tabular_report
 
         return columns;
     }
+
+    bool should_show_column(Ledger const& ledger, int column) const override
+    {
+        // One column should be hidden for composite ledgers.
+        return column != column_end_of_year_age || !ledger.is_composite();
+    }
 };
 
 class tabular_detail2_page : public page_with_tabular_report
@@ -1429,6 +1457,12 @@ class tabular_detail2_page : public page_with_tabular_report
             };
 
         return columns;
+    }
+
+    bool should_show_column(Ledger const& ledger, int column) const override
+    {
+        // One column should be hidden for composite ledgers.
+        return column != column_end_of_year_age || !ledger.is_composite();
     }
 
     int render_or_measure_fixed_page_part
