@@ -64,20 +64,12 @@ gcc_bin_dir := /MinGW_/bin/
 #host_prefix := i686-w64-mingw32-
 host_prefix :=
 
-# MinGW-w64 gcc fails unless its binaries are on $PATH. See:
-#   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00017.html
-# This defect is observed only with the native binaries
-# distributed by the MinGW-w64 project, not with the
-# cross compiler distributed by debian.
-
-yick := PATH="$(gcc_bin_dir):$$PATH"
-
-AR      := $(yick) $(gcc_bin_dir)$(host_prefix)ar
-CC      := $(yick) $(gcc_bin_dir)$(host_prefix)gcc
-CPP     := $(yick) $(gcc_bin_dir)$(host_prefix)cpp
-CXX     := $(yick) $(gcc_bin_dir)$(host_prefix)g++
-LD      := $(yick) $(gcc_bin_dir)$(host_prefix)g++
-RC      := $(yick) $(gcc_bin_dir)$(host_prefix)windres
+AR      := $(gcc_bin_dir)$(host_prefix)ar
+CC      := $(gcc_bin_dir)$(host_prefix)gcc
+CPP     := $(gcc_bin_dir)$(host_prefix)cpp
+CXX     := $(gcc_bin_dir)$(host_prefix)g++
+LD      := $(gcc_bin_dir)$(host_prefix)g++
+RC      := $(gcc_bin_dir)$(host_prefix)windres
 
 # Identify run-time libraries for redistribution. See:
 #   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
