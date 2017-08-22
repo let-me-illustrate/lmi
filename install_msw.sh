@@ -113,6 +113,10 @@ java -version
 mkdir --parents /opt/lmi/src
 cd /opt/lmi/src
 
+# Preserve any preexisting source directory, moving it aside so that
+# 'git clone' will install a pristine working copy.
+mv lmi lmi-moved-$stamp0
+
 # Favor http over git's own protocol only because corporate firewalls
 # in lmi's target industry tend to block the latter.
 git clone http://git.savannah.nongnu.org/r/lmi.git
@@ -180,6 +184,7 @@ export minimal_path=/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/bin:/bin:/usr/sbi
 
 make $coefficiency --output-sync=recurse PATH=$minimal_path wx_config_check
 make $coefficiency --output-sync=recurse PATH=$minimal_path show_flags
+make $coefficiency --output-sync=recurse PATH=$minimal_path clean
 make $coefficiency --output-sync=recurse PATH=$minimal_path install
 
 if [ "CYGWIN" = "$platform" ]
