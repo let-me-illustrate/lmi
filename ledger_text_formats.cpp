@@ -1063,6 +1063,14 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
         os_.precision(0);
         os_.width(7);
 
+        // For composites, don't print the age-70 row (because age
+        // is undefined) or lapse durations (which generally vary).
+        if(ledger_.is_composite() && &row == &summary_rows.back())
+            {
+            os_ << endrow;
+            return;
+            }
+
         if(&row == &summary_rows.back())
             {
             os_ << " Age 70";
