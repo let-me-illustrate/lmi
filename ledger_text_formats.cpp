@@ -1059,10 +1059,6 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
             continue;
             }
 
-        os_.setf(std::ios_base::fixed, std::ios_base::floatfield);
-        os_.precision(0);
-        os_.width(7);
-
         // For composites, don't print the age-70 row (because age
         // is undefined) or lapse durations (which generally vary).
         if(ledger_.is_composite() && &row == &summary_rows.back())
@@ -1070,6 +1066,10 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
             os_ << endrow;
             return;
             }
+
+        os_.setf(std::ios_base::fixed, std::ios_base::floatfield);
+        os_.precision(0);
+        os_.width(7);
 
         if(&row == &summary_rows.back())
             {
