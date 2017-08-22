@@ -1039,6 +1039,17 @@ class numeric_summary_table_cell
                 continue;
                 }
 
+            // Last row, showing the values for "Age 70" normally, needs to be
+            // handled specially.
+            bool const is_last_row = &year == &summary_years.back();
+
+            // For composite ledgers, "Age" doesn't make sense and so this row
+            // should be just skipped for them.
+            if(is_last_row && ledger.is_composite())
+                {
+                continue;
+                }
+
             switch(output_mode)
                 {
                 case e_output_measure_only:
@@ -1054,7 +1065,7 @@ class numeric_summary_table_cell
                         // policy year in the last row with the age.
                         if(col == column_policy_year)
                             {
-                            if(&year == &summary_years.back())
+                            if(is_last_row)
                                 {
                                 std::ostringstream oss;
                                 oss << "Age " << age_last;
