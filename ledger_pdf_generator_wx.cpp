@@ -1582,6 +1582,11 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
+            ("UWClassIsRated"
+            ,invar.UWClass == "Rated"
+            );
+
+        add_variable
             ("UltimateInterestRate"
             ,evaluate("AnnGAIntRate_Current", invar.InforceYear + 1)
             );
