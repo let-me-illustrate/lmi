@@ -893,18 +893,21 @@ data_files := \
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \
 
+.PHONY: preinstall
+preinstall:
+	@[ -z "$(compiler_runtime_files)" ] \
+	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
+
 .PHONY: install
-install: $(default_targets)
+install: preinstall $(default_targets)
 	+@[ -d $(exec_prefix)    ] || $(MKDIR) --parents $(exec_prefix)
 	+@[ -d $(bindir)         ] || $(MKDIR) --parents $(bindir)
 	+@[ -d $(datadir)        ] || $(MKDIR) --parents $(datadir)
 	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
-	@$(CP) --preserve --update $^ $(bindir)
+	@$(CP) --preserve --update $(default_targets) $(bindir)
 	@$(CP) --preserve --update $(data_files) $(datadir)
 	@$(CP) --preserve --update $(help_files) $(datadir)
-	@[ -z "$(compiler_runtime_files)" ] \
-	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
 else
