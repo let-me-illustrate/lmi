@@ -230,11 +230,12 @@ bool test_one_case
         // term epsilon**2 vanish.
         //
         // TODO ?? Shouldn't one epsilon here be epsilon of
-        // max-precision-real type?
+        // max-precision-real type, as shown in a comment?
+        // But consider using std::nextafter instead of (1+epsilon).
         tolerance =
                (1.0 + std::numeric_limits<RealType>::epsilon())
              * (1.0 + std::numeric_limits<RealType>::epsilon())
-// TODO ??        * (1.0 + std::numeric_limits<max_prec_real>::epsilon())
+//           * (1.0 + std::numeric_limits<max_prec_real>::epsilon())
              - 1.0
              ;
         }
