@@ -60,13 +60,15 @@ RC      := $(gcc_bin_dir)$(host_prefix)windres
 # future debian releases, much less on other OSs.
 compiler_sysroot := /usr/lib/gcc/i686-w64-mingw32/6.3-win32
 
-# 'libwinpthread*' is not needed for cross builds--see:
+# 'libwinpthread*' is no longer needed for debian cross builds--see:
 #   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=748353
 # | Provide compilers using Windows and POSIX threads. The default setup
 # | uses Windows threads, thus avoiding the dependency on the pthreads DLL
+# but including in this list with $(wildcard) does no harm.
 compiler_runtime_files := \
-  $(compiler_sysroot)/libstdc++-6.dll \
-  $(compiler_sysroot)/libgcc_s_sjlj-1.dll \
+  $(wildcard $(compiler_sysroot)/libgcc*.dll) \
+  $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
+  $(wildcard $(compiler_sysroot)/libwinpthread-1.dll) \
 
 ################################################################################
 
