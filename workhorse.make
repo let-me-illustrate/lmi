@@ -482,10 +482,14 @@ endif
 # Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
 # being redundant for C++.
 
-# This file contains hexadecimal floating constants. There is no
-# specific compiler option to allow them.
-
 ifeq (6.3.0,$(gcc_version))
+  # The default '-fno-rounding-math' means something like
+  #   #pragma STDC FENV ACCESS OFF
+  # which causes harm while bringing no countervailing benefit--see:
+  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+  tutelary_flag += -frounding-math
+  # This file contains hexadecimal floating constants. There is no
+  # specific compiler option to allow them.
   value_cast_test.o: tutelary_flag += -std=gnu++11
 endif
 
