@@ -348,6 +348,10 @@ physical_closure_files := \
 
 ################################################################################
 
+# Overriding options--simply expanded, and empty by default.
+
+tutelary_flag :=
+
 # Warning options for gcc.
 
 c_standard   := -std=c99
@@ -482,7 +486,7 @@ endif
 # specific compiler option to allow them.
 
 ifeq (6.3.0,$(gcc_version))
-  value_cast_test.o: tutelary_flag := -std=gnu++11
+  value_cast_test.o: tutelary_flag += -std=gnu++11
 endif
 
 C_WARNINGS = \
@@ -563,7 +567,7 @@ $(my_unoptimizable_files): optimization_flag := -O0 -fno-omit-frame-pointer
 # it is too easily overridden by specifying $(CXXFLAGS) on the command
 # line. This flag overrides such overrides:
 
-$(my_unoptimizable_files): tutelary_flag := -O0 -fno-omit-frame-pointer
+$(my_unoptimizable_files): tutelary_flag += -O0 -fno-omit-frame-pointer
 
 ################################################################################
 
