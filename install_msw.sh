@@ -118,8 +118,10 @@ cd /opt/lmi/src
 mv lmi lmi-moved-$stamp0
 
 # Favor http over git's own protocol only because corporate firewalls
-# in lmi's target industry tend to block the latter.
-git clone http://git.savannah.nongnu.org/r/lmi.git
+# in lmi's target industry tend to block the latter. If even git's
+# http protocol is blocked, try Vadim's copy as a last resort.
+git clone http://git.savannah.nongnu.org/r/lmi.git \
+  || git clone https://github.com/vadz/lmi.git
 # Use git's own wherever possible.
 # git clone git://git.savannah.nongnu.org/lmi.git
 
