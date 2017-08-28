@@ -117,6 +117,7 @@ $(libxml2_version)_options := \
   --without-iconv \
   --without-modules \
   --without-schematron \
+  --without-zlib \
 
 # The '--with-libxml-prefix' option is documented thus:
 #   "Specify location of libxml config"
