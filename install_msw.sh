@@ -25,7 +25,7 @@ set -v
 
 # To get the latest version of this script:
 #
-# wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
+# wget -N 'https://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
 
 # To remove lmi prior to reinstalling with this script:
 #
@@ -117,10 +117,10 @@ cd /opt/lmi/src
 # 'git clone' will install a pristine working copy.
 mv lmi lmi-moved-$stamp0
 
-# Favor http over git's own protocol only because corporate firewalls
+# Favor https over git's own protocol only because corporate firewalls
 # in lmi's target industry tend to block the latter. If even git's
-# http protocol is blocked, try Vadim's copy as a last resort.
-git clone http://git.savannah.nongnu.org/r/lmi.git \
+# https protocol is blocked, try Vadim's copy as a last resort.
+git clone https://git.savannah.nongnu.org/r/lmi.git \
   || git clone https://github.com/vadz/lmi.git
 # Use git's own wherever possible.
 # git clone git://git.savannah.nongnu.org/lmi.git
