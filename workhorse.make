@@ -374,7 +374,7 @@ else ifeq (3.4.5,$(gcc_version))
   # Use a correct snprintf() implementation:
   #   http://article.gmane.org/gmane.comp.gnu.mingw.user/27539
   cxx_standard += -posix
-else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2 6.3.0))
+else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   # See:
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
@@ -387,6 +387,26 @@ else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2 6.3.0))
     -Wno-unused-variable \
 
   cxx_standard := -std=c++11
+else ifneq (,$(filter $(gcc_version), 6.3.0))
+  # See:
+  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
+  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
+  # XMLWRAPP !! '-Wno-deprecated-declarations' needed for auto_ptr
+  gcc_version_specific_warnings := \
+    -Wno-conversion \
+    -Wno-deprecated-declarations \
+    -Wno-parentheses \
+    -Wno-unused-local-typedefs \
+    -Wno-unused-variable \
+
+  cxx_standard := -std=c++17
+
+# The default '-fno-rounding-math' means something like
+  #   #pragma STDC FENV ACCESS OFF
+  # which causes harm while bringing no countervailing benefit--see:
+  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+  c_standard   += -frounding-math
+  cxx_standard += -frounding-math
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
@@ -481,17 +501,6 @@ endif
 
 # Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
 # being redundant for C++.
-
-ifeq (6.3.0,$(gcc_version))
-  # The default '-fno-rounding-math' means something like
-  #   #pragma STDC FENV ACCESS OFF
-  # which causes harm while bringing no countervailing benefit--see:
-  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
-  tutelary_flag += -frounding-math
-  # This file contains hexadecimal floating constants. There is no
-  # specific compiler option to allow them.
-  value_cast_test.o: tutelary_flag += -std=gnu++11
-endif
 
 C_WARNINGS = \
   $(gcc_c_warnings) \

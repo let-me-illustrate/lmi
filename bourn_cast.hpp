@@ -174,7 +174,7 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
     using from_traits = std::numeric_limits<From>;
     static_assert(to_traits::is_integer && !from_traits::is_integer, "");
 
-    static From const limit = std::ldexp(From(1), to_traits::digits);
+    constexpr From limit = std::ldexp(From(1), to_traits::digits);
 
     constexpr bool is_twos_complement(~To(0) == -To(1));
 
