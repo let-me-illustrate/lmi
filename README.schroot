@@ -281,6 +281,16 @@ git config --global log.date iso8601
 #   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
 WINEDLLOVERRIDES=mscoree=d wine wineboot
 
+# Configure wine:
+winecfg
+# on "Graphics" tab, set DPI to 192
+# fix any application that gets the wrong X tab order
+#   "Applications": "add"; then
+#   "Graphics": "Emulate virtual desktop"
+#     specify appropriate size: e.g., 1900x1120 for a 1920x1200 monitor
+#     (the other options don't seem to matter)
+#   then restart the application
+
 # Install java.
 wine /cache_for_lmi/jre-1_5_0-windows-i586.exe
 
@@ -364,6 +374,11 @@ cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
 # Remove object files previously built without proprietary source:
 rm /opt/lmi/src/build/lmi/Linux/gcc/ship/my*
 
+# Regenerate the binary database:
+cd /opt/lmi/data
+rm proprietary.dat proprietary.ndx
+wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+
 # Run a system test.
 cd /opt/lmi/src/lmi
 make $coefficiency system_test 2>&1 |less
@@ -374,6 +389,14 @@ cp -a /opt/lmi/test/* /opt/lmi/touchstone
 rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
 # ...and rerun the test, which should now succeed:
 make $coefficiency system_test 2>&1 |less
+
+# Create a local mirror of the gnu.org repository:
+cd /opt/lmi
+mkdir --parents free/src
+cd free/src
+git clone git://git.savannah.nongnu.org/lmi.git
+# Reconsider this:
+# git remote set-url origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 
 # Exit the chroot.
 exit
