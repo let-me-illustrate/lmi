@@ -33,21 +33,21 @@ apt-get install schroot debootstrap
 # Download all OS essentials. This step may be done a single time, and
 # its tarball used repeatedly. The target ('/tmp/eraseme') directory
 # will be created and erased automatically.
-debootstrap --arch=amd64 --make-tarball=/var/cache/jessie_bootstrap.tar jessie /tmp/eraseme
+debootstrap --arch=amd64 --make-tarball=/var/cache/stretch_bootstrap.tar stretch /tmp/eraseme
 
 # Unpack the OS tarball into the particular chroot being created.
 # (If the preceding apt-get and debootstrap steps have already been
 # completed once, then skip them and start here.)
 mkdir -p /srv/chroot/cross-lmi
-debootstrap --arch=amd64 --unpack-tarball=/var/cache/jessie_bootstrap.tar \
- jessie /srv/chroot/cross-lmi >cross-lmi-debootstrap-log 2>&1
+debootstrap --arch=amd64 --unpack-tarball=/var/cache/stretch_bootstrap.tar \
+ stretch /srv/chroot/cross-lmi >cross-lmi-debootstrap-log 2>&1
 
 # This command should produce no output:
 grep --invert-match '^I:' cross-lmi-debootstrap-log
 
 cat >/etc/schroot/chroot.d/cross-lmi.conf <<\EOF
 [cross-lmi]
-description=debian-8 cross build
+description=debian-9 cross build
 directory=/srv/chroot/cross-lmi
 users=greg
 groups=greg
@@ -173,22 +173,21 @@ autoload -U compinit
 compinit -u
 EOF
 
-# Repair /usr/share/libtool/config/ltmain.sh as indicated here:
+# Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   http://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
 # Do this as root because root owns the file.
 
 cat >/home/greg/ltmain.sh.patch <<\EOF
---- /usr/share/libtool/config/ltmain.sh.original 2016-01-25 03:43:07.768000000 +0000
-+++ /usr/share/libtool/config/ltmain.sh 2016-01-25 03:44:17.100000000 +0000
-@@ -4178,7 +4178,8 @@
+--- /usr/share/libtool/build-aux/ltmain.sh.orig 2016-08-20 12:34:31.000000000 +0000
++++ /usr/share/libtool/build-aux/ltmain.sh 2017-08-10 13:10:28.466155965 +0000
+@@ -5555,7 +5555,7 @@
  /* declarations of non-ANSI functions */
- #if defined(__MINGW32__)
+ #if defined __MINGW32__
  # ifdef __STRICT_ANSI__
 -int _putenv (const char *);
-+     /* int _putenv (const char *); */
 +_CRTIMP int _putenv (const char *);
  # endif
- #elif defined(__CYGWIN__)
+ #elif defined __CYGWIN__
  # ifdef __STRICT_ANSI__
 EOF
 
@@ -273,9 +272,7 @@ git config --global user.name "Gregory W. Chicares"
 git config --global user.email gchicares@sbcglobal.net
 git config --global color.ui auto
 git config --global push.default simple
-# git config --global log.date iso8601-strict
-# "strict" if supported; else:
-git config --global log.date iso8601
+git config --global log.date iso8601-strict
 
 # Initialize wine. See:
 #   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
