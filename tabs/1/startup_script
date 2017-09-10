@@ -1,0 +1,17 @@
+#!/bin/zsh
+
+a='schroot --chroot=cross-lmi'
+
+b='cd /opt/lmi/free/src/lmi'
+c='git remote -v update'
+d='git pull'
+
+print -rs $b ; echo $b ; eval $b
+print -rs $c ; echo $c ; eval $c
+print -rs $d ; echo $d ;
+
+unset a
+unset b
+unset c
+unset d
+

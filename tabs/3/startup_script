@@ -1,0 +1,32 @@
+#!/bin/zsh
+
+a='schroot --chroot=cross-lmi'
+
+b='cd /opt/lmi/src/lmi'
+c='make $coefficiency install check_physical_closure 2>&1 |less -S'
+d='make $coefficiency cgi_tests cli_tests 2>&1 |less -S'
+e='make $coefficiency system_test 2>&1 |less -S'
+f="make \$coefficiency unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log"
+g='make $coefficiency all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 |less -S'
+h='make $coefficiency cgi_tests cli_tests build_type=safestdlib  2>&1 |less -S'
+i="make \$coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log"
+
+print -rs $b ; echo $b ; eval $b
+print -rs $c ; echo $c
+print -rs $d ; echo $d
+print -rs $e ; echo $e
+print -rs $f ; echo $f
+print -rs $g ; echo $g
+print -rs $h ; echo $h
+print -rs $i ; echo $i
+
+unset a
+unset b
+unset c
+unset d
+unset e
+unset f
+unset g
+unset h
+unset i
+

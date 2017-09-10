@@ -171,6 +171,9 @@ setopt HIST_IGNORE_DUPS
 
 autoload -U compinit
 compinit -u
+
+# This alias is explained in 'tabs/konsole_tabs'.
+alias asdf='. ./startup_script'
 EOF
 
 # Repair /usr/share/libtool/.../ltmain.sh as indicated here:
