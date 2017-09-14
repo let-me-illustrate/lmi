@@ -611,9 +611,28 @@ void Input::redintegrate_ex_post
         {
         // Version 7 introduced 'InforceSpecAmtLoadBase'; previously,
         // the first element of 'SpecamtHistory' had been used in its
-        // place, which would have disregarded any term rider.
+        // place, which would have disregarded the load limit as well
+        // as any term rider.
+
+        // This product_database object could be constructed outside
+        // this inner block if it ever becomes useful for any other
+        // purpose. It is not obvious whether it can be merged with
+        // the earlier instantiation in this function, which uses a
+        // dummy value for StateOfJurisdiction.
+        product_database db
+            (ProductName          .value()
+            ,Gender               .value()
+            ,UnderwritingClass    .value()
+            ,Smoking              .value()
+            ,IssueAge             .value()
+            ,GroupUnderwritingType.value()
+            ,StateOfJurisdiction  .value()
+            );
         RealizeSpecifiedAmount();
-        InforceSpecAmtLoadBase = TermRiderAmount.value() + SpecifiedAmountRealized_[0].value();
+        InforceSpecAmtLoadBase = std::min
+            (TermRiderAmount.value() + SpecifiedAmountRealized_[0].value()
+            ,db.Query(DB_SpecAmtLoadLimit)
+            );
         }
 }
 
