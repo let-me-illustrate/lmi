@@ -803,7 +803,7 @@ division of the general account with respect to the loan.</xs:documentation>
   <xs:element name="InforceSpecAmtLoadBase" type="nonnegative_double">
     <xs:annotation>
       <xs:documentation>Amount on which specified-amount load is charged, with due
-regard to term rider.</xs:documentation>
+regard to term rider and corridor.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="InforceTaxBasis" type="xs:double">

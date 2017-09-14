@@ -272,7 +272,7 @@ cell_element = element cell
     ,## Inforce 7702A seven-pay premium.
      element InforceSevenPayPremium           {nonnegative_double}
     ,## Amount on which specified-amount load is charged, with due
-     ## regard to term rider.
+     ## regard to term rider and corridor.
      element InforceSpecAmtLoadBase           {nonnegative_double}
     ,## Inforce tax basis.
      element InforceTaxBasis                  {xsd:double}
