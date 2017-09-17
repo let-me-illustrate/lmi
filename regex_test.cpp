@@ -25,7 +25,14 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#ifdef __clang__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif // __clang__
 #include <boost/regex.hpp>
+#ifdef __clang__
+#   pragma GCC diagnostic pop
+#endif // __clang__
 
 #include <sstream>
 #include <string>

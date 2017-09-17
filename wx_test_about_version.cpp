@@ -32,7 +32,14 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
+#ifdef __clang__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif // __clang__
 #include <boost/regex.hpp>
+#ifdef __clang__
+#   pragma GCC diagnostic pop
+#endif // __clang__
 
 #include <climits>                      // INT_MAX
 
