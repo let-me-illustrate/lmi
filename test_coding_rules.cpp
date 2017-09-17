@@ -30,7 +30,15 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
 #include <boost/filesystem/path.hpp>
+
+#ifdef __clang__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif // __clang__
 #include <boost/regex.hpp>
+#ifdef __clang__
+#   pragma GCC diagnostic pop
+#endif // __clang__
 
 #include <algorithm>                    // is_sorted()
 #include <cstddef>                      // size_t
