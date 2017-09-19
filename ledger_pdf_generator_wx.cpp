@@ -351,6 +351,121 @@ class using_illustration_table
     }
 };
 
+// Base class for our custom HTML cells providing a way to pass them
+// information about the PDF document being generated and the ledger used to
+// generate it.
+class html_cell_for_pdf_output : public wxHtmlCell
+{
+  public:
+    // Before using this class a pdf_context_setter object needs to be
+    // instantiated (and remain alive for as long as this class is used).
+    class pdf_context_setter
+    {
+      public:
+        // References passed to the ctor must have lifetime greater than that
+        // of this object itself.
+        explicit pdf_context_setter
+            (Ledger const& ledger
+            ,pdf_writer_wx& writer
+            ,html_interpolator const& interpolate_html
+            )
+        {
+            html_cell_for_pdf_output::pdf_context_for_html_output.set
+                (&ledger
+                ,&writer
+                ,&interpolate_html
+                );
+        }
+
+        ~pdf_context_setter()
+        {
+            html_cell_for_pdf_output::pdf_context_for_html_output.set
+                (nullptr
+                ,nullptr
+                ,nullptr
+                );
+        }
+    };
+
+  protected:
+    // This is ugly, but we have to use a global variable to make pdf_writer_wx
+    // and wxDC objects used by the main code accessible to this cell class,
+    // there is no way to pass them as parameters through wxHTML machinery.
+    //
+    // To at least make it a little bit safer to deal with this, the variable
+    // itself is private and a public pdf_context_setter class is provided to
+    // actually set it.
+    class pdf_context
+    {
+      public:
+        void set
+            (Ledger const* ledger
+            ,pdf_writer_wx* writer
+            ,html_interpolator const* interpolate_html
+            )
+        {
+            ledger_ = ledger;
+            writer_ = writer;
+            interpolate_html_ = interpolate_html;
+        }
+
+        Ledger const& ledger() const
+        {
+            LMI_ASSERT(ledger_);
+            return *ledger_;
+        }
+
+        pdf_writer_wx& writer() const
+        {
+            LMI_ASSERT(writer_);
+            return *writer_;
+        }
+
+        html_interpolator const& interpolate_html() const
+        {
+            LMI_ASSERT(interpolate_html_);
+            return *interpolate_html_;
+        }
+
+      private:
+        Ledger const* ledger_ = nullptr;
+        pdf_writer_wx* writer_ = nullptr;
+        html_interpolator const* interpolate_html_ = nullptr;
+    };
+
+    // Small helper to check that we're using the expected DC and, also, acting
+    // as a sink for the never used parameters of Draw().
+    void draw_check_precondition
+        (wxDC& dc
+        ,int view_y1
+        ,int view_y2,
+        wxHtmlRenderingInfo& info
+        )
+    {
+        // The DC passed to this function is supposed to be the same as the one
+        // associated with the writer we will use for rendering, but check that
+        // this is really so in order to avoid unexpectedly drawing the table
+        // on something else.
+        LMI_ASSERT(&dc == &pdf_context_for_html_output.writer().dc());
+
+        // There is no need to optimize drawing by restricting it to the
+        // currently shown positions, we always render the cell entirely.
+        stifle_warning_for_unused_value(view_y1);
+        stifle_warning_for_unused_value(view_y2);
+
+        // We don't care about rendering state as we don't support interactive
+        // selection anyhow.
+        stifle_warning_for_unused_value(info);
+    }
+
+    static pdf_context pdf_context_for_html_output;
+
+    friend pdf_context_setter;
+};
+
+html_cell_for_pdf_output::pdf_context
+html_cell_for_pdf_output::pdf_context_for_html_output;
+
 class page
 {
   public:
@@ -432,6 +547,9 @@ class pdf_illustration : protected html_interpolator
     // Render all pages.
     void render_all()
     {
+        html_cell_for_pdf_output::pdf_context_setter
+            set_pdf_context(ledger_, writer_, *this);
+
         for(auto const& page : pages_)
             {
             page->pre_render(ledger_, writer_, *this);
@@ -826,40 +944,10 @@ class column_headings_page : public numbered_page
 
 // An HTML cell showing the contents of the numeric summary table.
 class numeric_summary_table_cell
-    :public wxHtmlCell
+    :public html_cell_for_pdf_output
     ,private using_illustration_table
 {
   public:
-    // Before using this class a pdf_context_setter object needs to be
-    // instantiated (and remain alive for as long as this class is used).
-    class pdf_context_setter
-    {
-      public:
-        // References passed to the ctor must have lifetime greater than that
-        // of this object itself.
-        explicit pdf_context_setter
-            (Ledger const& ledger
-            ,pdf_writer_wx& writer
-            ,html_interpolator const& interpolate_html
-            )
-        {
-            numeric_summary_table_cell::pdf_context_for_html_output.set
-                (&ledger
-                ,&writer
-                ,&interpolate_html
-                );
-        }
-
-        ~pdf_context_setter()
-        {
-            numeric_summary_table_cell::pdf_context_for_html_output.set
-                (nullptr
-                ,nullptr
-                ,nullptr
-                );
-        }
-    };
-
     numeric_summary_table_cell()
     {
         m_Height = render_or_measure(0, e_output_measure_only);
@@ -875,24 +963,11 @@ class numeric_summary_table_cell
         wxHtmlRenderingInfo& info
         ) override
     {
-        // The DC passed to this function is supposed to be the same as the one
-        // associated with the writer we will use for rendering, but check that
-        // this is really so in order to avoid unexpectedly drawing the table
-        // on something else.
-        LMI_ASSERT(&dc == &pdf_context_for_html_output.writer().dc());
+        draw_check_precondition(dc, view_y1, view_y2, info);
 
         // We ignore the horizontal coordinate which is always 0 for this cell
         // anyhow.
         stifle_warning_for_unused_value(x);
-
-        // There is no need to optimize drawing by restricting it to the
-        // currently shown positions, we always render the cell entirely.
-        stifle_warning_for_unused_value(view_y1);
-        stifle_warning_for_unused_value(view_y2);
-
-        // We don't care about rendering state as we don't support interactive
-        // selection anyhow.
-        stifle_warning_for_unused_value(info);
 
         render_or_measure(y + m_PosY, e_output_normal);
     }
@@ -1089,59 +1164,7 @@ class numeric_summary_table_cell
 
         return pos_y;
     }
-
-    // This is ugly, but we have to use a global variable to make pdf_writer_wx
-    // and wxDC objects used by the main code accessible to this cell class,
-    // there is no way to pass them as parameters through wxHTML machinery.
-    //
-    // To at least make it a little bit safer to deal with this, the variable
-    // itself is private and a public pdf_context_setter class is provided to
-    // actually set it.
-    class pdf_context
-    {
-      public:
-        void set
-            (Ledger const* ledger
-            ,pdf_writer_wx* writer
-            ,html_interpolator const* interpolate_html
-            )
-        {
-            ledger_ = ledger;
-            writer_ = writer;
-            interpolate_html_ = interpolate_html;
-        }
-
-        Ledger const& ledger() const
-        {
-            LMI_ASSERT(ledger_);
-            return *ledger_;
-        }
-
-        pdf_writer_wx& writer() const
-        {
-            LMI_ASSERT(writer_);
-            return *writer_;
-        }
-
-        html_interpolator const& interpolate_html() const
-        {
-            LMI_ASSERT(interpolate_html_);
-            return *interpolate_html_;
-        }
-
-      private:
-        Ledger const* ledger_ = nullptr;
-        pdf_writer_wx* writer_ = nullptr;
-        html_interpolator const* interpolate_html_ = nullptr;
-    };
-
-    static pdf_context pdf_context_for_html_output;
-
-    friend pdf_context_setter;
 };
-
-numeric_summary_table_cell::pdf_context
-numeric_summary_table_cell::pdf_context_for_html_output;
 
 // Custom tag which is replaced by the numeric summary table.
 TAG_HANDLER_BEGIN(numeric_summary_table, "NUMERIC_SUMMARY_TABLE")
@@ -1199,9 +1222,6 @@ class numeric_summary_or_attachment_page
             ,writer
             ,interpolate_html
             );
-
-        numeric_summary_table_cell::pdf_context_setter
-            set_pdf_context(ledger, writer, interpolate_html);
 
         this->render_page_template("numeric_summary", writer, interpolate_html);
     }
