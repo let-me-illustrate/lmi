@@ -44,6 +44,9 @@
 
 #include <wx/pdfdc.h>
 
+#include <wx/image.h>
+#include <wx/log.h>
+
 #include <wx/html/m_templ.h>
 
 #include <cstdint>                      // SIZE_MAX
@@ -465,6 +468,115 @@ class html_cell_for_pdf_output : public wxHtmlCell
 
 html_cell_for_pdf_output::pdf_context
 html_cell_for_pdf_output::pdf_context_for_html_output;
+
+// Define scaffolding for a custom HTML "scaled_image" tag which must be used
+// instead of the standard "a" in order to allow specifying the scaling factor
+// that we want to use for the image in the PDF. Unfortunately this can't be
+// achieved by simply using "width" and/or "height" attributes of the "a" tag
+// because their values can only be integers which is not precise enough to
+// avoid (slightly but noticeably) distorting the image due to the aspect ratio
+// being not quite right.
+
+class scaled_image_cell : public html_cell_for_pdf_output
+{
+  public:
+    scaled_image_cell
+        (wxImage const& image
+        ,wxString const& src
+        ,double scale_factor
+        )
+        :image_(image)
+        ,src_(src)
+        ,scale_factor_(scale_factor)
+    {
+        m_Width  = wxRound(image.GetWidth () / scale_factor);
+        m_Height = wxRound(image.GetHeight() / scale_factor);
+    }
+
+    // Override the base class method to actually render the image.
+    void Draw
+        (wxDC& dc
+        ,int x
+        ,int y
+        ,int view_y1
+        ,int view_y2,
+        wxHtmlRenderingInfo& info
+        ) override
+    {
+        draw_check_precondition(dc, view_y1, view_y2, info);
+
+        auto& writer = pdf_context_for_html_output.writer();
+
+        x += m_PosX;
+
+        int pos_y = y + m_PosY;
+        writer.output_image(image_, src_.utf8_str(), scale_factor_, x, &pos_y);
+    }
+
+  private:
+    wxImage const image_;
+    wxString const src_;
+    double const scale_factor_;
+};
+
+TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
+    TAG_HANDLER_PROC(tag)
+    {
+        wxString src;
+        if (!tag.GetParamAsString("SRC", &src))
+            {
+            throw std::runtime_error
+                ("missing mandatory \"src\" attribute of \"scaled_image\" tag"
+                );
+            }
+
+        // The scale factor is optional.
+        double scale_factor = 1.;
+
+        // But if it is given, we currently specify its inverse in HTML just
+        // because it so happens that for the scale factors we use the inverse
+        // can be expressed exactly in decimal notation, while the factor
+        // itself can't. In principle, the converse could also happen and we
+        // might add support for "factor" attribute too in this case. Or we
+        // could use separate "numerator" and "denominator" attributes. But for
+        // now implement just the bare minimum of what we need.
+        wxString inv_factor_str;
+        if (tag.GetParamAsString("INV_FACTOR", &inv_factor_str))
+            {
+            double inv_factor = 0.;
+            if (!inv_factor_str.ToCDouble(&inv_factor) || inv_factor == 0.)
+                {
+                throw std::runtime_error
+                    ( "invalid value for \"inv_factor\" attribute of "
+                      "\"scaled_image\" tag: \""
+                    + inv_factor_str.ToStdString()
+                    + "\""
+                    );
+                }
+
+            scale_factor = 1./inv_factor;
+            }
+
+        wxImage image;
+        // Disable error logging, we'll simply ignore the tag if the image is
+        // not present.
+            {
+            wxLogNull noLog;
+            image.LoadFile(src);
+            }
+
+        if (image.IsOk())
+            {
+            m_WParser->GetContainer()->InsertCell
+                (new scaled_image_cell(image, src, scale_factor)
+                );
+            }
+
+        // This tag isn't supposed to have any inner contents, so return true
+        // to not even try parsing it.
+        return true;
+    }
+TAG_HANDLER_END(scaled_image)
 
 class page
 {
@@ -1189,6 +1301,7 @@ TAG_HANDLER_END(numeric_summary_table)
 wxGCC_WARNING_SUPPRESS(pedantic)
 
 TAGS_MODULE_BEGIN(lmi_illustration)
+    TAGS_MODULE_ADD(scaled_image)
     TAGS_MODULE_ADD(numeric_summary_table)
 TAGS_MODULE_END(lmi_illustration)
 
