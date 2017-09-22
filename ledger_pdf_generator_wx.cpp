@@ -650,10 +650,13 @@ class pdf_illustration : protected html_interpolator
     }
 
     // Add a page.
-    template<typename T>
-    void add()
+    //
+    // This is a template just in order to save on writing std::make_unique<>()
+    // in the code using it to make it slightly shorter.
+    template<typename T, typename... Args>
+    void add(Args&&... args)
     {
-        pages_.emplace_back(new T());
+        pages_.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
     }
 
     // Render all pages.
@@ -997,9 +1000,19 @@ class numbered_page : public page_with_footer
 
 int numbered_page::last_page_number_ = 0;
 
-class narrative_summary_page : public numbered_page
+// Simplest possible page which is entirely defined by its external template
+// whose name must be specified when constructing it.
+class standard_page : public numbered_page
 {
   public:
+    // Accept only string literals as template names, there should be no need
+    // to use anything else.
+    template<int N>
+    explicit standard_page(char const (&page_template_name)[N])
+        :page_template_name_(page_template_name)
+    {
+    }
+
     void render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
@@ -1008,38 +1021,11 @@ class narrative_summary_page : public numbered_page
     {
         numbered_page::render(ledger, writer, interpolate_html);
 
-        render_page_template("narrative_summary", writer, interpolate_html);
+        render_page_template(page_template_name_, writer, interpolate_html);
     }
-};
 
-class narrative_summary_cont_page : public numbered_page
-{
-  public:
-    void render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
-        ,html_interpolator const& interpolate_html
-        ) override
-    {
-        numbered_page::render(ledger, writer, interpolate_html);
-
-        render_page_template("narrative_summary_cont", writer, interpolate_html);
-    }
-};
-
-class column_headings_page : public numbered_page
-{
-  public:
-    void render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
-        ,html_interpolator const& interpolate_html
-        ) override
-    {
-        numbered_page::render(ledger, writer, interpolate_html);
-
-        render_page_template("column_headings", writer, interpolate_html);
-    }
+  private:
+    char const* const page_template_name_;
 };
 
 // Helper classes used to show the numeric summary table. The approach used
@@ -1806,9 +1792,9 @@ class pdf_illustration_regular : public pdf_illustration
 
         // Add all the pages.
         add<cover_page>();
-        add<narrative_summary_page>();
-        add<narrative_summary_cont_page>();
-        add<column_headings_page>();
+        add<standard_page>("narrative_summary");
+        add<standard_page>("narrative_summary_cont");
+        add<standard_page>("column_headings");
         if(!invar.IsInforce)
             {
             add<numeric_summary_or_attachment_page<false>>();
