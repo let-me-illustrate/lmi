@@ -1835,7 +1835,7 @@ void ledger_pdf_generator_wx::write
     switch(z)
         {
         case mce_ill_reg:
-            pdf_ill.reset(new pdf_illustration_regular(ledger, output));
+            pdf_ill = std::make_unique<pdf_illustration_regular>(ledger, output);
             break;
         case mce_nasd:
         case mce_group_private_placement:
