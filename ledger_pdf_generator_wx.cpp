@@ -867,29 +867,29 @@ class page_with_footer : public page
 
   private:
     // Method to be overridden in the base class which should actually return
-    // the contents of the (middle part of the) footer.
-    virtual std::string get_footer_contents() const = 0;
+    // the page number or equivalent string (e.g. "Appendix").
+    virtual std::string get_page_number() const = 0;
 
-    // This method uses get_footer_contents() and returns the HTML wrapping it
+    // This method uses get_page_number() and returns the HTML wrapping it
     // and other fixed information appearing in the footer.
     text get_footer_html(html_interpolator const& interpolate_html) const
     {
-        auto const contents = get_footer_contents();
+        auto const page_number_str = get_page_number();
 
         // Use our own interpolation function to handle the special
-        // "footer_contents" variable that is replaced with the actual
-        // (possibly dynamic) footer contents.
+        // "page_number" variable that is replaced with the actual
+        // (possibly dynamic) page number.
         return text::from_html
             (interpolate_string
                 ("{{>footer}}"
-                ,[contents, interpolate_html]
+                ,[page_number_str, interpolate_html]
                     (std::string const& s
                     ,interpolate_lookup_kind kind
                     ) -> std::string
                     {
-                    if(s == "footer_contents")
+                    if(s == "page_number")
                         {
-                        return contents;
+                        return page_number_str;
                         }
 
                     return interpolate_html.interpolation_func(s, kind);
@@ -905,7 +905,7 @@ class page_with_footer : public page
 class attachment_page : public page_with_footer
 {
   private:
-    std::string get_footer_contents() const override
+    std::string get_page_number() const override
     {
         return "Attachment";
     }
@@ -985,7 +985,7 @@ class numbered_page : public page_with_footer
         return 0;
     }
 
-    std::string get_footer_contents() const override
+    std::string get_page_number() const override
     {
         std::ostringstream oss;
         oss << "Page " << this_page_number_ << " of " << last_page_number_;
