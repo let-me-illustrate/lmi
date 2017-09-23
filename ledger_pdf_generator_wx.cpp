@@ -745,51 +745,21 @@ class pdf_illustration : protected html_interpolator
 
         auto const& invar = ledger_.GetLedgerInvariant();
 
-        // Build the combined string containing the master and individual
-        // contract numbers, omitting each of them if it's not specified and
-        // also truncating them to either 15 characters if both are present or
-        // 30 if only one of them is.
+        // Define the variables needed by contract_numbers template.
         add_variable
-            ("ContractNumbers"
-            ,[this,invar]() -> std::string
-            {
-                std::ostringstream oss;
-
-                bool const use_master_number
-                    =  !invar.MasterContractNumber.empty();
-
-                bool const use_policy_number
-                    =  !invar.ContractNumber.empty()
-                    && !ledger_.is_composite()
-                    ;
-
-                size_t const full_abbrev_length = 30;
-
-                if(use_master_number)
-                    {
-                    oss << "Master contract: "
-                        << abbreviate_if_necessary
-                            (invar.MasterContractNumber
-                            ,use_policy_number
-                                ? full_abbrev_length / 2
-                                : full_abbrev_length
-                            );
-                    }
-                if(use_policy_number)
-                    {
-                    oss << "Contract number: "
-                        << abbreviate_if_necessary
-                            (invar.ContractNumber
-                            ,use_master_number
-                                ? full_abbrev_length / 2
-                                : full_abbrev_length
-                            );
-                    }
-
-                return oss.str();
-            }()
+            ("HasMasterContract"
+            ,!invar.MasterContractNumber.empty()
+            );
+        add_variable
+            ("HasPolicyNumber"
+            ,!invar.ContractNumber.empty()
             );
 
+        size_t const full_abbrev_length = 30;
+        add_abbreviated_variable("MasterContractNumber", full_abbrev_length);
+        add_abbreviated_variable("MasterContractNumber", full_abbrev_length / 2);
+        add_abbreviated_variable("ContractNumber", full_abbrev_length);
+        add_abbreviated_variable("ContractNumber", full_abbrev_length / 2);
     }
 
     // Use non-default font sizes to make it simpler to replicate the existing
