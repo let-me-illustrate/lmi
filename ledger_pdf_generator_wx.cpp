@@ -587,8 +587,7 @@ class page
     page(page const&) = delete;
     page& operator=(page const&) = delete;
 
-    // Pages are never used polymorphically currently, but still give them a
-    // virtual dtor, if only to avoid gcc warnings about not having it.
+    // Make base class dtor virtual.
     virtual ~page() = default;
 
     // Called before rendering any pages to prepare for doing this, e.g. by
