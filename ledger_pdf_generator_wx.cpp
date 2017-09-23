@@ -792,6 +792,11 @@ class pdf_illustration : protected html_interpolator
         add_abbreviated_variable("ContractNumber", full_abbrev_length / 2);
 
         add_variable
+            ("HasScaleUnit"
+            ,!invar.ScaleUnit().empty()
+            );
+
+        add_variable
             ("UWTypeIsMedical"
             ,invar.UWType == "Medical"
             );
@@ -1807,11 +1812,6 @@ class pdf_illustration_regular : public pdf_illustration
         add_variable
             ("HasGuarPrem"
             ,invar.GuarPrem != 0
-            );
-
-        add_variable
-            ("HasScaleUnit"
-            ,!invar.ScaleUnit().empty()
             );
 
         add_variable
