@@ -577,6 +577,8 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
     }
 TAG_HANDLER_END(scaled_image)
 
+class pdf_illustration;
+
 class page
 {
   public:
@@ -588,6 +590,18 @@ class page
 
     // Make base class dtor virtual.
     virtual ~page() = default;
+
+    // Associate the illustration object using this page with it.
+    //
+    // This object is not passed as a ctor argument because it would be
+    // redundant, instead it is associated with the page when it's added to an
+    // illustration. This method is supposed to be called only once.
+    void illustration(pdf_illustration const& illustration)
+    {
+        LMI_ASSERT(!illustration_);
+
+        illustration_ = &illustration;
+    }
 
     // Called before rendering any pages to prepare for doing this, e.g. by
     // computing the number of pages needed.
@@ -631,6 +645,10 @@ class page
             ,interpolate_html("{{>" + template_name + "}}")
             );
     }
+
+    // The associated illustration, which will be non-null by the time our
+    // virtual methods such as pre_render() and render() are called.
+    pdf_illustration const* illustration_ = nullptr;
 };
 
 // This is just a container for the illustration-global data.
@@ -657,7 +675,9 @@ class pdf_illustration : protected html_interpolator
     template<typename T, typename... Args>
     void add(Args&&... args)
     {
-        pages_.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
+        auto page = std::make_unique<T>(std::forward<Args>(args)...);
+        page->illustration(*this);
+        pages_.emplace_back(std::move(page));
     }
 
     // Render all pages.
@@ -686,6 +706,13 @@ class pdf_illustration : protected html_interpolator
             page->render(ledger_, writer_, *this);
             }
     }
+
+    // Methods to be implemented by the derived classes to indicate which
+    // templates should be used for the upper (above the separating line) and
+    // the lower parts of the footer. The upper template name may be empty if
+    // it is not used at all.
+    virtual std::string get_upper_footer_template_name() const = 0;
+    virtual std::string get_lower_footer_template_name() const = 0;
 
   protected:
     // Helper for abbreviating a string to at most the given length (in bytes).
@@ -855,21 +882,37 @@ class page_with_footer : public page
         ,html_interpolator const& interpolate_html
         ) override
     {
-        // Note that we implicitly assume here that get_footer_html() result
-        // doesn't materially depend on the exact value of last_page_number_ as
+        auto const frame_horz_margin = writer.get_horz_margin();
+        auto const frame_width       = writer.get_page_width();
+
+        // We implicitly assume here that get_footer_lower_html() result
+        // doesn't materially depend on the exact value of the page number as
         // we don't know its definitive value here yet. In theory, this doesn't
         // need to be true, e.g. we may later discover that 10 pages are needed
         // instead of 9 and the extra digit might result in a line wrapping on
         // a new line and this increasing the footer height, but in practice
         // this doesn't risk happening and taking into account this possibility
         // wouldn't be simple at all, so just ignore this possibility.
-        auto const footer_height = writer.output_html
-            (writer.get_horz_margin()
+        auto footer_height = writer.output_html
+            (frame_horz_margin
             ,0
-            ,writer.get_page_width()
-            ,get_footer_html(interpolate_html)
+            ,frame_width
+            ,get_footer_lower_html(interpolate_html)
             ,e_output_measure_only
             );
+
+        auto const&
+            upper_template = illustration_->get_upper_footer_template_name();
+        if(!upper_template.empty())
+            {
+            footer_height += writer.output_html
+                (frame_horz_margin
+                ,0
+                ,frame_width
+                ,interpolate_html("{{>" + upper_template + "}}")
+                ,e_output_measure_only
+                );
+            }
 
         footer_top_ = writer.get_page_bottom() - footer_height;
     }
@@ -883,11 +926,25 @@ class page_with_footer : public page
         auto const frame_horz_margin = writer.get_horz_margin();
         auto const frame_width       = writer.get_page_width();
 
+        auto y = footer_top_;
+
+        auto const&
+            upper_template = illustration_->get_upper_footer_template_name();
+        if(!upper_template.empty())
+            {
+            y += writer.output_html
+                (frame_horz_margin
+                ,footer_top_
+                ,frame_width
+                ,interpolate_html("{{>" + upper_template + "}}")
+                );
+            }
+
         writer.output_html
             (frame_horz_margin
-            ,footer_top_
+            ,y
             ,frame_width
-            ,get_footer_html(interpolate_html)
+            ,get_footer_lower_html(interpolate_html)
             );
 
         auto& dc = writer.dc();
@@ -895,9 +952,9 @@ class page_with_footer : public page
         dc.SetPen(HIGHLIGHT_COL);
         dc.DrawLine
             (frame_horz_margin
-            ,footer_top_
+            ,y
             ,frame_width + frame_horz_margin
-            ,footer_top_
+            ,y
             );
     }
 
@@ -918,17 +975,19 @@ class page_with_footer : public page
     virtual std::string get_page_number() const = 0;
 
     // This method uses get_page_number() and returns the HTML wrapping it
-    // and other fixed information appearing in the footer.
-    text get_footer_html(html_interpolator const& interpolate_html) const
+    // and other fixed information appearing in the lower part of the footer.
+    text get_footer_lower_html(html_interpolator const& interpolate_html) const
     {
         auto const page_number_str = get_page_number();
+
+        auto const templ = illustration_->get_lower_footer_template_name();
 
         // Use our own interpolation function to handle the special
         // "page_number" variable that is replaced with the actual
         // (possibly dynamic) page number.
         return text::from_html
             (interpolate_string
-                ("{{>footer}}"
+                (("{{>" + templ + "}}").c_str()
                 ,[page_number_str, interpolate_html]
                     (std::string const& s
                     ,interpolate_lookup_kind kind
@@ -1835,6 +1894,9 @@ class pdf_illustration_regular : public pdf_illustration
             add<numeric_summary_or_attachment_page<true>>();
             }
     }
+
+    std::string get_upper_footer_template_name() const override { return {}; }
+    std::string get_lower_footer_template_name() const override { return "footer"; }
 };
 
 // NASD illustration.
@@ -1848,6 +1910,16 @@ class pdf_illustration_nasd : public pdf_illustration
         :pdf_illustration(ledger, output)
     {
         add<cover_page>();
+    }
+
+    std::string get_upper_footer_template_name() const override
+    {
+        return "nasd_footer_upper";
+    }
+
+    std::string get_lower_footer_template_name() const override
+    {
+        return "nasd_footer_lower";
     }
 };
 
