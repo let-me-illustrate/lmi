@@ -761,6 +761,28 @@ class pdf_illustration : protected html_interpolator
         add_abbreviated_variable("MasterContractNumber", full_abbrev_length / 2);
         add_abbreviated_variable("ContractNumber", full_abbrev_length);
         add_abbreviated_variable("ContractNumber", full_abbrev_length / 2);
+
+        add_variable
+            ("UWTypeIsMedical"
+            ,invar.UWType == "Medical"
+            );
+
+        add_variable
+            ("UWClassIsRated"
+            ,invar.UWClass == "Rated"
+            );
+
+        auto const& policy_name = invar.PolicyLegalName;
+        add_variable
+            ("GroupCarveout"
+            ,policy_name == "Group Flexible Premium Adjustable Life Insurance Certificate"
+            );
+
+        auto const& state_abbrev = invar.GetStatePostalAbbrev();
+        add_variable
+            ("StateIsCarolina"
+            ,state_abbrev == "NC" || state_abbrev == "SC"
+            );
     }
 
     // Use non-default font sizes to make it simpler to replicate the existing
@@ -1689,11 +1711,6 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
-            ("GroupCarveout"
-            ,policy_name == "Group Flexible Premium Adjustable Life Insurance Certificate"
-            );
-
-        add_variable
             ("GroupExperienceRating"
             ,policy_name == "Group Flexible Premium Adjustable Life Insurance Policy"
             );
@@ -1742,11 +1759,6 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
-            ("StateIsCarolina"
-            ,state_abbrev == "NC" || state_abbrev == "SC"
-            );
-
-        add_variable
             ("StateIsIllinois"
             ,state_abbrev == "IL"
             );
@@ -1764,16 +1776,6 @@ class pdf_illustration_regular : public pdf_illustration
         add_variable
             ("StateIsIllinoisOrTexas"
             ,state_abbrev == "IL" || state_abbrev == "TX"
-            );
-
-        add_variable
-            ("UWTypeIsMedical"
-            ,invar.UWType == "Medical"
-            );
-
-        add_variable
-            ("UWClassIsRated"
-            ,invar.UWClass == "Rated"
             );
 
         add_variable
