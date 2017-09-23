@@ -1,0 +1,25 @@
+{{#HasMasterContract}}
+    Master contract:
+    {{#HasPolicyNumber}}
+        {{^Composite}}
+            {{MasterContractNumberAbbrev15}}
+        {{/Composite}}
+        {{#Composite}}
+            {{MasterContractNumberAbbrev30}}
+        {{/Composite}}
+    {{/HasPolicyNumber}}
+    {{^HasPolicyNumber}}
+        {{MasterContractNumberAbbrev30}}
+    {{/HasPolicyNumber}}
+{{/HasMasterContract}}
+{{#HasPolicyNumber}}
+    {{^Composite}}
+        Contract number:
+        {{#HasMasterContract}}
+            {{ContractNumberAbbrev15}}
+        {{/HasMasterContract}}
+        {{^HasMasterContract}}
+            {{ContractNumberAbbrev30}}
+        {{/HasMasterContract}}
+    {{/Composite}}
+{{/HasPolicyNumber}}
