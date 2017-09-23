@@ -1910,7 +1910,35 @@ class pdf_illustration_nasd : public pdf_illustration
         )
         :pdf_illustration(ledger, output)
     {
+        auto const& invar = ledger.GetLedgerInvariant();
+
+        add_abbreviated_variable("CorpName", 60);
+        add_abbreviated_variable("Insured1", 30);
+
+        if(!invar.ContractName.empty())
+            {
+            std::string s = invar.ContractName;
+            for(auto& c : s)
+                {
+                c = lmi_tolower(c);
+                }
+            s[0] = lmi_toupper(s[0]);
+
+            add_variable("ContractNameCap", s);
+            }
+
+        add_variable
+            ("UWTypeIsGuaranteedIssueInTexasWithFootnote"
+            ,invar.UWType == "Guaranteed issue"
+            );
+
+        add_variable
+            ("HasTermOrSupplSpecAmt"
+            ,test_variable("HasTerm") || test_variable("HasSupplSpecAmt")
+            );
+
         add<cover_page>();
+        add<standard_page>("nasd_column_headings");
     }
 
     std::string get_upper_footer_template_name() const override
