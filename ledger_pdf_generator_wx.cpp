@@ -1897,6 +1897,220 @@ class pdf_illustration_regular : public pdf_illustration
     std::string get_lower_footer_template_name() const override { return "footer"; }
 };
 
+class nasd_basic : public page_with_tabular_report
+{
+  private:
+    enum
+        {column_policy_year
+        ,column_end_of_year_age
+        ,column_premium_outlay
+        ,column_guar0_cash_surr_value
+        ,column_guar0_death_benefit
+        ,column_separator_guar0_guar
+        ,column_guar_cash_surr_value
+        ,column_guar_death_benefit
+        ,column_separator_guar_cur0
+        ,column_cur0_cash_surr_value
+        ,column_cur0_death_benefit
+        ,column_separator_cur0_cur
+        ,column_cur_cash_surr_value
+        ,column_cur_death_benefit
+        ,column_max
+        };
+
+    illustration_table_columns const& get_table_columns() const override
+    {
+        static illustration_table_columns const columns =
+            {{ "PolicyYear"                 , "Policy\nYear"     ,       "999" }
+            ,{ "AttainedAge"                , "End of\nYear Age" ,       "999" }
+            ,{ "GrossPmt"                   , "Premium\nOutlay"  ,   "999,999" }
+            ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue" ,   "999,999" }
+            ,{ "EOYDeathBft_GuaranteedZero" , "Death\nBenefit"   , "9,999,999" }
+            ,{ ""                           , " "                ,         "-" }
+            ,{ "CSVNet_Guaranteed"          , "Cash Surr\nValue" ,   "999,999" }
+            ,{ "EOYDeathBft_Guaranteed"     , "Death\nBenefit"   , "9,999,999" }
+            ,{ ""                           , " "                ,         "-" }
+            ,{ "CSVNet_CurrentZero"         , "Cash Surr\nValue" ,   "999,999" }
+            ,{ "EOYDeathBft_CurrentZero"    , "Death\nBenefit"   , "9,999,999" }
+            ,{ ""                           , " "                ,         "-" }
+            ,{ "CSVNet_Current"             , "Cash Surr\nValue" ,   "999,999" }
+            ,{ "EOYDeathBft_Current"        , "Death\nBenefit"   , "9,999,999" }
+            };
+
+        return columns;
+    }
+
+    bool should_show_column(Ledger const& ledger, int column) const override
+    {
+        // One column should be hidden for composite ledgers.
+        return column != column_end_of_year_age || !ledger.is_composite();
+    }
+
+    int render_or_measure_fixed_page_part
+        (illustration_table_generator&  table
+        ,pdf_writer_wx&                 writer
+        ,html_interpolator const&       interpolate_html
+        ,enum_output_mode               output_mode
+        ) const override
+    {
+        int pos_y = writer.get_vert_margin();
+
+        pos_y += writer.output_html
+            (writer.get_horz_margin()
+            ,pos_y
+            ,writer.get_page_width()
+            ,interpolate_html("{{>nasd_basic}}")
+            ,output_mode
+            );
+
+        // Output the first super header row.
+
+        auto pos_y_copy = pos_y;
+        table.output_super_header
+            ("Using guaranteed charges"
+            ,column_guar0_cash_surr_value
+            ,column_separator_guar_cur0
+            ,&pos_y
+            ,output_mode
+            );
+
+        pos_y = pos_y_copy;
+        table.output_super_header
+            ("Using current charges"
+            ,column_cur0_cash_surr_value
+            ,column_max
+            ,&pos_y
+            ,output_mode
+            );
+
+        pos_y += table.get_separator_line_height();
+        table.output_horz_separator
+            (column_guar0_cash_surr_value
+            ,column_separator_guar_cur0
+            ,pos_y
+            ,output_mode
+            );
+        table.output_horz_separator
+            (column_cur0_cash_surr_value
+            ,column_max
+            ,pos_y
+            ,output_mode
+            );
+
+        // Output the second super header row which is composed of three
+        // physical lines.
+
+        enum class base
+            {guaranteed
+            ,current
+            };
+
+        enum class interest_rate
+            {zero
+            ,non_zero
+            };
+
+        // This function outputs all lines of a single header, corresponding to
+        // the "Guaranteed" or "Current", "Zero" or not, column and returns the
+        // vertical position below the header.
+        auto const output_two_column_super_header = [=,&table]
+            (base           guar_or_cur
+            ,interest_rate  zero_or_not
+            ,std::size_t    begin_column
+            ) -> int
+            {
+                std::size_t end_column = begin_column + 2;
+                LMI_ASSERT(end_column <= column_max);
+
+                auto y = pos_y;
+
+                std::string const suffix_short = [=]()
+                    {
+                        switch(guar_or_cur)
+                            {
+                            case base::guaranteed: return "Guaranteed";
+                            case base::current:    return "Current"   ;
+                            }
+                        throw "Unreachable--unknown base value";
+                    }()
+                    ;
+
+                std::string const suffix_full = suffix_short + [=]()
+                    {
+                        switch(zero_or_not)
+                            {
+                            case interest_rate::zero:     return "Zero";
+                            case interest_rate::non_zero: return ""    ;
+                            }
+                        throw "Unreachable--unknown interest_rate value";
+                    }()
+                    ;
+
+
+                std::array<std::string, 3> const header_lines =
+                    {
+                    {"{{InitAnnSepAcctGrossInt_" + suffix_full + "}} Assumed Sep Acct"
+                    ,"Gross Rate* ({{InitAnnSepAcctNetInt_" + suffix_full + "}} net)"
+                    ,"{{InitAnnGenAcctInt_" + suffix_short + "}} GPA rate"
+                    }
+                    };
+
+                for(auto const& line : header_lines)
+                    {
+                    table.output_super_header
+                        (interpolate_html(line).as_html()
+                        ,begin_column
+                        ,end_column
+                        ,&y
+                        ,output_mode
+                        );
+                    }
+
+                y += table.get_separator_line_height();
+                table.output_horz_separator
+                    (begin_column
+                    ,end_column
+                    ,y
+                    ,output_mode
+                    );
+
+                return y;
+            };
+
+        output_two_column_super_header
+            (base::guaranteed
+            ,interest_rate::zero
+            ,column_guar0_cash_surr_value
+            );
+
+        output_two_column_super_header
+            (base::guaranteed
+            ,interest_rate::non_zero
+            ,column_guar_cash_surr_value
+            );
+
+        output_two_column_super_header
+            (base::current
+            ,interest_rate::zero
+            ,column_cur0_cash_surr_value
+            );
+
+        pos_y = output_two_column_super_header
+            (base::current
+            ,interest_rate::non_zero
+            ,column_cur_cash_surr_value
+            );
+
+        // Finally output the standard header.
+        table.output_header(&pos_y, output_mode);
+
+        pos_y += table.get_separator_line_height();
+        table.output_horz_separator(0, column_max, pos_y, output_mode);
+
+        return pos_y;
+    }
+};
+
 // NASD illustration.
 class pdf_illustration_nasd : public pdf_illustration
 {
@@ -1909,6 +2123,7 @@ class pdf_illustration_nasd : public pdf_illustration
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
+        // Define variables specific to this illustration.
         add_abbreviated_variable("CorpName", 60);
         add_abbreviated_variable("Insured1", 30);
 
@@ -1934,7 +2149,9 @@ class pdf_illustration_nasd : public pdf_illustration
             ,test_variable("HasTerm") || test_variable("HasSupplSpecAmt")
             );
 
+        // Add all the pages.
         add<cover_page>();
+        add<nasd_basic>();
         add<standard_page>("nasd_column_headings");
     }
 
