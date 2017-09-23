@@ -210,6 +210,10 @@ void do_interpolate_string_in_context
                                 }
                             break;
 
+                        case '!':
+                            // This is a comment, we just ignore it completely.
+                            break;
+
                         default:
                             if(is_active())
                                 {

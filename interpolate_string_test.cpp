@@ -44,6 +44,11 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( test_interpolate("foo{{bar}}"),     "foobar"  );
     BOOST_TEST_EQUAL( test_interpolate("{{foo}}{{bar}}"), "foobar"  );
 
+    // Comments should be just ignored.
+    BOOST_TEST_EQUAL( test_interpolate("{{! ignore me}}", ""        );
+    BOOST_TEST_EQUAL( test_interpolate("{{! too}}{{x}}",  "x"       );
+    BOOST_TEST_EQUAL( test_interpolate("{{x}}{{!also}}",  "x"       );
+
     // Sections.
     auto const section_test = [](char const* s)
         {
