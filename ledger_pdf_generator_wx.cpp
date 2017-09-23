@@ -335,7 +335,18 @@ class using_illustration_table
         ,pdf_writer_wx& writer
         ) const
     {
+        // Set the smaller font used for all tables before creating the table
+        // generator which uses the DC font for its measurements.
+        auto& dc = writer.dc();
+        auto font = dc.GetFont();
+        font.SetPointSize(9);
+        dc.SetFont(font);
+
         illustration_table_generator table(writer);
+
+        // But set the highlight colour for drawing separator lines after
+        // creating it to override its default pen.
+        dc.SetPen(HIGHLIGHT_COL);
 
         int column = 0;
         for(auto const& i : get_table_columns())
@@ -1224,8 +1235,6 @@ class numeric_summary_table_cell
     {
         auto const& ledger = pdf_context_for_html_output.ledger();
         auto& writer = pdf_context_for_html_output.writer();
-        auto& dc = writer.dc();
-        wxDCFontChanger set_smaller_font(dc, dc.GetFont().Smaller());
 
         illustration_table_generator
             table{create_table_generator(ledger, writer)};
@@ -1600,13 +1609,6 @@ class tabular_detail_page : public page_with_tabular_report
             ,output_mode
             );
 
-        auto& dc = writer.dc();
-
-        // Decrease the font size for the table to match the main page
-        // body text size.
-        dc.SetFont(dc.GetFont().Smaller());
-        dc.SetPen(HIGHLIGHT_COL);
-
         // Make a copy because we want the real pos_y to be modified only once,
         // not twice, by both output_super_header() calls.
         auto pos_y_copy = pos_y;
@@ -1722,11 +1724,6 @@ class tabular_detail2_page : public page_with_tabular_report
             ,interpolate_html("{{>tabular_details2}}")
             ,output_mode
             );
-
-        // Decrease the font size for the table to match the main page
-        // body text size.
-        auto& dc = writer.dc();
-        dc.SetFont(dc.GetFont().Smaller());
 
         table.output_header(&pos_y, output_mode);
 
