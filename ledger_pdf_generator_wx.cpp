@@ -648,6 +648,9 @@ class pdf_illustration : protected html_interpolator
         init_variables();
     }
 
+    // Make base class dtor virtual.
+    virtual ~pdf_illustration() = default;
+
     // Add a page.
     //
     // This is a template just in order to save on writing std::make_unique<>()
