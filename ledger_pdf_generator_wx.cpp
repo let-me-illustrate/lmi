@@ -2350,6 +2350,31 @@ class pdf_illustration_nasd : public pdf_illustration
     }
 };
 
+// Private group placement illustration.
+class pdf_illustration_reg_d_group : public pdf_illustration
+{
+  public:
+    pdf_illustration_reg_d_group
+        (Ledger const& ledger
+        ,fs::path const& output
+        )
+        :pdf_illustration(ledger, output)
+    {
+        // Add all the pages.
+        add<cover_page>();
+    }
+
+    std::string get_upper_footer_template_name() const override
+    {
+        return "reg_d_group_footer_upper";
+    }
+
+    std::string get_lower_footer_template_name() const override
+    {
+        return "reg_d_group_footer_lower";
+    }
+};
+
 class ledger_pdf_generator_wx : public ledger_pdf_generator
 {
   public:
@@ -2384,6 +2409,8 @@ void ledger_pdf_generator_wx::write
             pdf_ill = std::make_unique<pdf_illustration_nasd>(ledger, output);
             break;
         case mce_group_private_placement:
+            pdf_ill = std::make_unique<pdf_illustration_reg_d_group>(ledger, output);
+            break;
         case mce_individual_private_placement:
             // TODO
             alarum() << "Illustrating ledger type '" << z << "' not implemented yet" << LMI_FLUSH;
