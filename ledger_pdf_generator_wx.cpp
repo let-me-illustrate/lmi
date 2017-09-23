@@ -744,14 +744,52 @@ class pdf_illustration : protected html_interpolator
         indent += indent;
         add_variable("Space64", indent);
 
-        auto const abbreviate_if_necessary = [](std::string s, size_t len)
+        auto const& invar = ledger_.GetLedgerInvariant();
+
+        // Build the combined string containing the master and individual
+        // contract numbers, omitting each of them if it's not specified and
+        // also truncating them to either 15 characters if both are present or
+        // 30 if only one of them is.
+        add_variable
+            ("ContractNumbers"
+            ,[this,invar]() -> std::string
             {
-            if(s.length() > len)
-                {
-                s.replace(len - 3, std::string::npos, "...");
-                }
-            return s;
-            };
+                std::ostringstream oss;
+
+                bool const use_master_number
+                    =  !invar.MasterContractNumber.empty();
+
+                bool const use_policy_number
+                    =  !invar.ContractNumber.empty()
+                    && !ledger_.is_composite()
+                    ;
+
+                size_t const full_abbrev_length = 30;
+
+                if(use_master_number)
+                    {
+                    oss << "Master contract: "
+                        << abbreviate_if_necessary
+                            (invar.MasterContractNumber
+                            ,use_policy_number
+                                ? full_abbrev_length / 2
+                                : full_abbrev_length
+                            );
+                    }
+                if(use_policy_number)
+                    {
+                    oss << "Contract number: "
+                        << abbreviate_if_necessary
+                            (invar.ContractNumber
+                            ,use_master_number
+                                ? full_abbrev_length / 2
+                                : full_abbrev_length
+                            );
+                    }
+
+                return oss.str();
+            }()
+            );
 
     }
 
