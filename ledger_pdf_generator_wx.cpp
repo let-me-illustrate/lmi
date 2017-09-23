@@ -685,6 +685,30 @@ class pdf_illustration : protected html_interpolator
             }
     }
 
+  protected:
+    // Helper for abbreviating a string to at most the given length (in bytes).
+    static std::string abbreviate_if_necessary(std::string s, size_t len)
+    {
+        if(s.length() > len && len > 3)
+            {
+            s.replace(len - 3, std::string::npos, "...");
+            }
+
+        return s;
+    }
+
+    // Helper for creating abbreviated variables in the derived classes: such
+    // variables have the name based on the name of the original variable with
+    // "Abbrev" and "len" appended to it and their value is at most "len" bytes
+    // long.
+    void add_abbreviated_variable(std::string const& var, size_t len)
+    {
+        add_variable
+            (var + "Abbrev" + std::to_string(len)
+            ,abbreviate_if_necessary(evaluate(var), len)
+            );
+    }
+
   private:
     // Initialize the variables that can be interpolated later.
     void init_variables()
@@ -728,15 +752,6 @@ class pdf_illustration : protected html_interpolator
             return s;
             };
 
-        add_variable
-            ("CorpNameAbbrev50"
-            ,abbreviate_if_necessary(evaluate("CorpName"), 50)
-            );
-
-        add_variable
-            ("Insured1Abbrev50"
-            ,abbreviate_if_necessary(evaluate("Insured1"), 50)
-            );
     }
 
     // Use non-default font sizes to make it simpler to replicate the existing
@@ -1640,6 +1655,9 @@ class pdf_illustration_regular : public pdf_illustration
         auto const& state_abbrev = invar.GetStatePostalAbbrev();
 
         // Define variables specific to this illustration.
+        add_abbreviated_variable("CorpName", 50);
+        add_abbreviated_variable("Insured1", 50);
+
         add_variable
             ("ModifiedSinglePremium"
             ,starts_with(policy_name, "Single") && state_abbrev == "MA"
