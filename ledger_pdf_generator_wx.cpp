@@ -1835,6 +1835,20 @@ class pdf_illustration_regular : public pdf_illustration
     }
 };
 
+// NASD illustration.
+class pdf_illustration_nasd : public pdf_illustration
+{
+  public:
+    pdf_illustration_nasd
+        (Ledger const& ledger
+        ,fs::path const& output
+        )
+        :pdf_illustration(ledger, output)
+    {
+        add<cover_page>();
+    }
+};
+
 class ledger_pdf_generator_wx : public ledger_pdf_generator
 {
   public:
@@ -1866,6 +1880,8 @@ void ledger_pdf_generator_wx::write
             pdf_ill = std::make_unique<pdf_illustration_regular>(ledger, output);
             break;
         case mce_nasd:
+            pdf_ill = std::make_unique<pdf_illustration_nasd>(ledger, output);
+            break;
         case mce_group_private_placement:
         case mce_individual_private_placement:
             // TODO
