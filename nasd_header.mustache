@@ -1,80 +1,9 @@
-<scaled_image inv_factor="0.36" src="company_logo.png"></scaled_image>
-
+{{!
+    The header is split in two parts, upper and lower one, only to allow
+    inserting the title between them, as a couple of pages do. But we still
+    provide this "full header" template for the pages that don't have any
+    title to make them simpler.
+ }}
+{{>nasd_header_upper}}
 <br></br>
-<br></br>
-
-<p>
-The purpose of this illustration is to show how the performance
-of the underlying investment account could affect the
-{{ContractName}} account value and death benefit.
-<b>
-These hypothetical returns do not reflect past performance
-and are not predictive of future results. Actual results could be
-less than or greater than the hypothetical results
-and in all likelihood will vary from year to year.
-</b>
-</p>
-
-<br></br>
-<br></br>
-
-<table width="100%" cellspacing="0" cellpadding="0" valign="top">
-    <tr>
-        <td>
-        {{#Composite}}
-            {{CorpNameAbbrev60}}
-        {{/Composite}}
-        {{^Composite}}
-            {{Insured1Abbrev30}}
-        {{/Composite}},
-        {{Gender}} {{Smoker}} rates, Age {{Age}}<br>
-        {{#Composite}}
-            Composite<br>
-        {{/Composite}}
-        {{ContractNameCap}}: {{PolicyMktgName}}<br>
-        {{#GroupCarveout}}
-            Minimum Initial Premium: ${{InitMinPrem}}<br>
-        {{/GroupCarveout}}
-        First Year Premium: ${{InitPrem}}<br>
-        {{^Composite}}
-            {{#UWTypeIsMedical}}
-              Fully underwritten,
-            {{/UWTypeIsMedical}}
-            {{^UWTypeIsMedical}}
-                {{#UWTypeIsGuaranteedIssueInTexasWithFootnote}}
-                    Substandard ***,
-                {{/UWTypeIsGuaranteedIssueInTexasWithFootnote}}
-                {{^UWTypeIsGuaranteedIssueInTexasWithFootnote}}
-                    {{UWType}},
-                {{/UWTypeIsGuaranteedIssueInTexasWithFootnote}}
-            {{/UWTypeIsMedical}}
-            {{UWClass}}, Initial Death Benefit Option: {{InitDBOpt}}<br>
-            {{#UWClassIsRated}}
-                Table Rating: {{SubstandardTable}}<br>
-            {{/UWClassIsRated}}
-        {{/Composite}}
-        {{>contract_numbers}}
-        </td>
-        <td>
-            Assumed Premium Allocation:**<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;Separate Account: {{GenAcctAllocationComplementPercent}}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;Guaranteed Principal Account (GPA): {{GenAcctAllocationPercent}}<br>
-            Initial
-                {{#HasTermOrSupplSpecAmt}}
-                    Total
-                {{/HasTermOrSupplSpecAmt}}
-                Face Amount: ${{InitTotalSA}}<br>
-            {{#HasTermOrSupplSpecAmt}}
-                Initial Base Face Amount: ${{InitBaseSpecAmt}}<br>
-                Initial
-                    {{#HasTerm}}
-                        Term Face Amount:
-                    {{/HasTerm}}
-                    {{#HasSupplSpecAmt}}
-                        Supplemental Face Amount:
-                    {{/HasSupplSpecAmt}}
-                  ${{InitTermSpecAmt}}<br>
-            {{/HasTermOrSupplSpecAmt}}
-        </td>
-    </tr>
-</table>
+{{>nasd_header_lower}}
