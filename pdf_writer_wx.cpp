@@ -174,6 +174,10 @@ int pdf_writer_wx::output_html
     ,enum_output_mode output_mode
     )
 {
+    // We don't really want to change the font, but to preserve the current DC
+    // font which is changed by rendering the HTML contents.
+    wxDCFontChanger preserve_font(pdf_dc_, wxFont());
+
     auto const html_str = wxString::FromUTF8(html.as_html());
     std::unique_ptr<wxHtmlContainerCell> const cell
         (static_cast<wxHtmlContainerCell*>(html_parser_.Parse(html_str))
