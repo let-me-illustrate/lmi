@@ -350,6 +350,8 @@ ledger_evaluator Ledger::make_evaluator() const
 // > Format as percentage with no decimal places (##0%)
     format_map["SalesLoadRefundRate0"              ] = f3;
     format_map["SalesLoadRefundRate1"              ] = f3;
+    format_map["GenAcctAllocationPercent"          ] = f3;
+    format_map["GenAcctAllocationComplementPercent"] = f3;
 
 // >
 // F2: two decimals, commas
@@ -700,6 +702,12 @@ ledger_evaluator Ledger::make_evaluator() const
     scalars["HasSalesLoadRefund"  ] = &HasSalesLoadRefund  ;
     scalars["SalesLoadRefundRate0"] = &SalesLoadRefundRate0;
     scalars["SalesLoadRefundRate1"] = &SalesLoadRefundRate1;
+
+    double GenAcctAllocation           = ledger_invariant_->GenAcctAllocation;
+    double GenAcctAllocationComplement = 1. - GenAcctAllocation;
+
+    scalars["GenAcctAllocationPercent"          ] = &GenAcctAllocation;
+    scalars["GenAcctAllocationComplementPercent"] = &GenAcctAllocationComplement;
 
     std::string ScaleUnit = ledger_invariant_->ScaleUnit();
     strings["ScaleUnit"] = &ScaleUnit;
