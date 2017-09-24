@@ -53,6 +53,7 @@ wx_table_generator::wx_table_generator
     ,total_width_(total_width)
     ,char_height_(dc_.GetCharHeight())
     ,row_height_((4 * char_height_ + 2) / 3) // Arbitrarily use 1.333 line spacing.
+    ,column_margin_(dc_.GetTextExtent("M").x)
     ,has_column_widths_(false)
     ,max_header_lines_(1)
 {
@@ -110,8 +111,7 @@ void wx_table_generator::add_column
             {
             increase_to_if_smaller(width, dc_.GetMultiLineTextExtent(header).x);
 
-            // Add roughly 1 em margins on both sides.
-            width += dc_.GetTextExtent("MM").x;
+            width += 2*column_margin_;
             }
         }
 
@@ -173,6 +173,8 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         return;
         }
 
+    has_column_widths_ = true;
+
     int num_expand = 0;
     int total_fixed = 0;
 
@@ -195,7 +197,43 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
 
     if(total_width_ < total_fixed)
         {
-        warning() << "Not enough space for all fixed columns." << LMI_FLUSH;
+        auto const overflow = total_fixed - total_width_;
+
+        // If we have only fixed columns, try to make them fit by decreasing
+        // the margins around them if this can help, assuming that we can
+        // reduce them by up to half if really needed.
+        if(!num_expand)
+            {
+            int const num_columns = columns_.size();
+            auto const overflow_per_column =
+                (overflow + num_columns - 1)/num_columns;
+            if(overflow_per_column <= column_margin_)
+                {
+                for(auto& i : columns_)
+                    {
+                    if(i.is_hidden())
+                        {
+                        continue;
+                        }
+
+                    i.width_ -= overflow_per_column;
+                    }
+
+                column_margin_ -= (overflow_per_column + 1)/2;
+
+                // We condensed the columns enough to make them fit, so no need
+                // for the warning and we don't have any expanding columns, so
+                // we're done.
+                return;
+                }
+            }
+
+        warning()
+            << "Not enough space for all fixed columns: "
+            << overflow
+            << " more pixels needed."
+            << LMI_FLUSH
+            ;
         return;
         }
 
@@ -217,8 +255,6 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
                 }
             }
         }
-
-    has_column_widths_ = true;
 }
 
 void wx_table_generator::do_output_values
@@ -266,8 +302,7 @@ void wx_table_generator::do_output_values
                     }
                 else
                     {
-                    // Otherwise just offset it by ~1 em.
-                    x_text += dc_.GetTextExtent("M").x;
+                    x_text += column_margin_;
                     }
             }
 
