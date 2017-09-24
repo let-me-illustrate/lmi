@@ -2117,10 +2117,14 @@ class nasd_supplemental : public page_with_tabular_report
     enum
         {column_policy_year
         ,column_end_of_year_age
+        ,column_er_gross_payment
+        ,column_ee_gross_payment
         ,column_premium_outlay
         ,column_admin_charge
         ,column_premium_tax_load
         ,column_dac_tax_load
+        ,column_er_min_premium
+        ,column_ee_min_premium
         ,column_net_premium
         ,column_cost_of_insurance_charges
         ,column_cur_account_value
@@ -2132,17 +2136,21 @@ class nasd_supplemental : public page_with_tabular_report
     illustration_table_columns const& get_table_columns() const override
     {
         static illustration_table_columns const columns =
-            {{ "PolicyYear"          ,  "Policy\nYear"                ,       "999" }
-            ,{ "AttainedAge"         ,  "End of\nYear Age"            ,       "999" }
-            ,{ "GrossPmt"            ,  "Premium\nOutlay"             ,   "999,999" }
-            ,{ "PolicyFee_Current"   ,  "Admin\nCharge"               ,   "999,999" }
-            ,{ "PremTaxLoad_Current" ,  "Premium\nTax Load"           ,   "999,999" }
-            ,{ "DacTaxLoad_Current"  ,  "DAC\nTax Load"               ,   "999,999" }
-            ,{ "NetPmt_Current"      ,  "Net\nPremium"                ,   "999,999" }
-            ,{ "COICharge_Current"   ,  "Cost of\nInsurance\nCharges" ,   "999,999" }
-            ,{ "AcctVal_Current"     ,  "Current\nAccount\nValue"     ,   "999,999" }
-            ,{ "CSVNet_Current"      ,  "Current\nCash Surr\nValue"   ,   "999,999" }
-            ,{ "EOYDeathBft_Current" ,  "Current\nDeath\nBenefit"     , "9,999,999" }
+            {{ "PolicyYear"           , "Policy\nYear"               ,       "999" }
+            ,{ "AttainedAge"          , "End of\nYear Age"           ,       "999" }
+            ,{ "ErGrossPmt"           , "ER Gross\nPayment"          ,   "999,999" }
+            ,{ "EeGrossPmt"           , "EE Gross\nPayment"          ,   "999,999" }
+            ,{ "GrossPmt"             , "Premium\nOutlay"            ,   "999,999" }
+            ,{ "PolicyFee_Current"    , "Admin\nCharge"              ,   "999,999" }
+            ,{ "PremTaxLoad_Current"  , "Premium\nTax Load"          ,   "999,999" }
+            ,{ "DacTaxLoad_Current"   , "DAC\nTax Load"              ,   "999,999" }
+            ,{ "ErModalMinimumPremium", "ER Modal\nMinimum\nPremium" ,   "999,999" }
+            ,{ "EeModalMinimumPremium", "EE Modal\nMinimum\nPremium" ,   "999,999" }
+            ,{ "NetPmt_Current"       , "Net\nPremium"               ,   "999,999" }
+            ,{ "COICharge_Current"    , "Cost of\nInsurance\nCharges",   "999,999" }
+            ,{ "AcctVal_Current"      , "Current\nAccount\nValue"    ,   "999,999" }
+            ,{ "CSVNet_Current"       , "Current\nCash Surr\nValue"  ,   "999,999" }
+            ,{ "EOYDeathBft_Current"  , "Current\nDeath\nBenefit"    , "9,999,999" }
             };
 
         return columns;
@@ -2150,8 +2158,43 @@ class nasd_supplemental : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        auto const& invar = ledger.GetLedgerInvariant();
+
+        // The supplemental page in NASD illustrations exists in two versions:
+        // default one and one with split premiums. Hide columns that are not
+        // needed for the current illustration.
+        switch(column)
+            {
+            case column_end_of_year_age:
+                // This column doesn't make sense for composite ledgers.
+                return !ledger.is_composite();
+
+            case column_admin_charge:
+            case column_premium_tax_load:
+            case column_dac_tax_load:
+                // These columns only appear in non-split premiums case.
+                return invar.SplitMinPrem == 0.;
+
+            case column_er_gross_payment:
+            case column_ee_gross_payment:
+            case column_er_min_premium:
+            case column_ee_min_premium:
+                // While those only appear in split premiums case.
+                return invar.SplitMinPrem == 1.;
+
+            case column_policy_year:
+            case column_premium_outlay:
+            case column_net_premium:
+            case column_cost_of_insurance_charges:
+            case column_cur_account_value:
+            case column_cur_cash_surr_value:
+            case column_cur_death_benefit:
+            case column_max:
+                // These columns are common to both cases and never hidden.
+                break;
+            }
+
+        return true;
     }
 
     int render_or_measure_fixed_page_part
@@ -2174,7 +2217,12 @@ class nasd_supplemental : public page_with_tabular_report
         table.output_header(&pos_y, output_mode);
 
         pos_y += table.get_separator_line_height();
-        table.output_horz_separator(0, column_max, pos_y, output_mode);
+        table.output_horz_separator
+            (0
+            ,table.columns_count()
+            ,pos_y
+            ,output_mode
+            );
 
         return pos_y;
     }
