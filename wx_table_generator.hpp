@@ -155,6 +155,7 @@ class wx_table_generator
     // These values could be recomputed, but cache them for performance.
     int const char_height_;
     int row_height_;
+    int column_margin_;
 
     struct column_info
     {
