@@ -803,6 +803,13 @@ class pdf_illustration : protected html_interpolator
         add_abbreviated_variable("ContractNumber", full_abbrev_length / 2);
 
         add_variable
+            ("HasComplianceTrackingNumber"
+            ,(*this)("{{>compliance_tracking_number}}")
+                .as_html().find_first_not_of(" \n")
+                != std::string::npos
+            );
+
+        add_variable
             ("HasScaleUnit"
             ,!invar.ScaleUnit().empty()
             );
@@ -837,6 +844,11 @@ class pdf_illustration : protected html_interpolator
         add_variable
             ("StateIsCarolina"
             ,state_abbrev == "NC" || state_abbrev == "SC"
+            );
+
+        add_variable
+            ("StateIsMaryland"
+            ,state_abbrev == "MD"
             );
     }
 
@@ -1822,11 +1834,6 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
-            ("StateIsMaryland"
-            ,state_abbrev == "MD"
-            );
-
-        add_variable
             ("StateIsTexas"
             ,state_abbrev == "TX"
             );
@@ -2278,6 +2285,7 @@ class pdf_illustration_nasd : public pdf_illustration
         add<nasd_supplemental>();
         add<standard_page>("nasd_column_headings");
         add<standard_page>("nasd_notes1");
+        add<standard_page>("nasd_notes2");
     }
 
     std::string get_upper_footer_template_name() const override
