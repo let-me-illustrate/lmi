@@ -807,6 +807,16 @@ class pdf_illustration : protected html_interpolator
             );
 
         add_variable
+            ("DefnLifeInsIsGPT"
+            ,invar.DefnLifeIns == "GPT"
+            );
+
+        add_variable
+            ("MecYearPlus1"
+            ,bourn_cast<int>(invar.MecYear) + 1
+            );
+
+        add_variable
             ("UWTypeIsMedical"
             ,invar.UWType == "Medical"
             );
@@ -1777,11 +1787,6 @@ class pdf_illustration_regular : public pdf_illustration
             ,policy_name == "Group Flexible Premium Adjustable Life Insurance Policy"
             );
 
-        add_variable
-            ("MecYearPlus1"
-            ,bourn_cast<int>(invar.MecYear) + 1
-            );
-
         // Variable representing the premium payment frequency with the
         // appropriate indefinite article preceding it, e.g. "an annual" or "a
         // monthly".
@@ -1808,11 +1813,6 @@ class pdf_illustration_regular : public pdf_illustration
         add_variable
             ("HasGuarPrem"
             ,invar.GuarPrem != 0
-            );
-
-        add_variable
-            ("DefnLifeInsIsGPT"
-            ,invar.DefnLifeIns == "GPT"
             );
 
         add_variable
@@ -2265,11 +2265,18 @@ class pdf_illustration_nasd : public pdf_illustration
             ,test_variable("HasTerm") || test_variable("HasSupplSpecAmt")
             );
 
+        auto const& state_abbrev = invar.GetStatePostalAbbrev();
+        add_variable
+            ("StateIsNewYork"
+            ,state_abbrev == "NY"
+            );
+
         // Add all the pages.
         add<cover_page>();
         add<nasd_basic>();
         add<nasd_supplemental>();
         add<standard_page>("nasd_column_headings");
+        add<standard_page>("nasd_notes1");
     }
 
     std::string get_upper_footer_template_name() const override
