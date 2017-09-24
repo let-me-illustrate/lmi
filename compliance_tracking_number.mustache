@@ -1,0 +1,20 @@
+{{!
+    This template defines the compliance tracking number used in a few
+    different places to avoid duplicating this logic in all of them.
+}}
+{{#IsInforce}}
+    {{#Composite}}
+        {{ImprimaturInforceComposite}}
+    {{/Composite}}
+    {{^Composite}}
+        {{ImprimaturInforce}}
+    {{/Composite}}
+{{/IsInforce}}
+{{^IsInforce}}
+    {{#Composite}}
+        {{ImprimaturPresaleComposite}}
+    {{/Composite}}
+    {{^Composite}}
+        {{ImprimaturPresale}}
+    {{/Composite}}
+{{/IsInforce}}

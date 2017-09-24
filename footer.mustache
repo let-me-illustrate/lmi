@@ -12,24 +12,7 @@
     <tr>
         <td>System Version: {{LmiVersion}}</td>
         <td>&nbsp;</td>
-        <td align="right">
-        {{#IsInforce}}
-            {{#Composite}}
-                {{ImprimaturInforceComposite}}
-            {{/Composite}}
-            {{^Composite}}
-                {{ImprimaturInforce}}
-            {{/Composite}}
-        {{/IsInforce}}
-        {{^IsInforce}}
-            {{#Composite}}
-                {{ImprimaturPresaleComposite}}
-            {{/Composite}}
-            {{^Composite}}
-                {{ImprimaturPresale}}
-            {{/Composite}}
-        {{/IsInforce}}
-        </td>
+        <td align="right">{{>compliance_tracking_number}}</td>
     </tr>
 </table>
 
