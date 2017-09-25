@@ -1541,17 +1541,70 @@ class page_with_tabular_report
     }
 
   protected:
-    // Must be overridden to render (only if output_mode is e_output_normal)
-    // the fixed page part and (in any case) return the vertical coordinate of
-    // its bottom, where the tabular report starts.
-    virtual int render_or_measure_fixed_page_part
+    // Must be overridden to return the contents of the fixed page part. This
+    // string will be interpolated and typically will be just "{{>template}}".
+    virtual std::string get_fixed_page_contents() const = 0;
+
+    // May be overridden to render (only if output_mode is e_output_normal)
+    // the extra headers just above the regular table headers.
+    //
+    // If this function does anything, it must show the first super-header at
+    // pos_y and update it to account for the added lines. The base class
+    // version does nothing.
+    virtual void render_or_measure_extra_headers
+        (illustration_table_generator&  table
+        ,html_interpolator const&       interpolate_html
+        ,int*                           pos_y
+        ,enum_output_mode               output_mode
+        ) const
+    {
+        stifle_warning_for_unused_value(table);
+        stifle_warning_for_unused_value(interpolate_html);
+        stifle_warning_for_unused_value(pos_y);
+        stifle_warning_for_unused_value(output_mode);
+    }
+
+  private:
+    // Render (only if output_mode is e_output_normal) the fixed page part and
+    // (in any case) return the vertical coordinate of its bottom, where the
+    // tabular report starts.
+    int render_or_measure_fixed_page_part
         (illustration_table_generator&  table
         ,pdf_writer_wx&                 writer
         ,html_interpolator const&       interpolate_html
         ,enum_output_mode               output_mode
-        ) const = 0;
+        ) const
+    {
+        int pos_y = writer.get_vert_margin();
 
-  private:
+        pos_y += writer.output_html
+            (writer.get_horz_margin()
+            ,pos_y
+            ,writer.get_page_width()
+            ,interpolate_html(get_fixed_page_contents())
+            ,output_mode
+            );
+
+        render_or_measure_extra_headers
+            (table
+            ,interpolate_html
+            ,&pos_y,
+            output_mode
+            );
+
+        table.output_header(&pos_y, output_mode);
+
+        pos_y += table.get_separator_line_height();
+        table.output_horz_separator
+            (0
+            ,table.columns_count()
+            ,pos_y
+            ,output_mode
+            );
+
+        return pos_y;
+    }
+
     // Override the base class method as the table may overflow onto the next
     // page(s).
     int get_extra_pages_needed
@@ -1613,26 +1666,23 @@ class tabular_detail_page : public page_with_tabular_report
         ,column_max
         };
 
-    int render_or_measure_fixed_page_part
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>tabular_details}}";
+    }
+
+    void render_or_measure_extra_headers
         (illustration_table_generator&  table
-        ,pdf_writer_wx&                 writer
         ,html_interpolator const&       interpolate_html
+        ,int*                           pos_y
         ,enum_output_mode               output_mode
         ) const override
     {
-        int pos_y = writer.get_vert_margin();
-
-        pos_y += writer.output_html
-            (writer.get_horz_margin()
-            ,pos_y
-            ,writer.get_page_width()
-            ,interpolate_html("{{>tabular_details}}")
-            ,output_mode
-            );
+        stifle_warning_for_unused_value(interpolate_html);
 
         // Make a copy because we want the real pos_y to be modified only once,
         // not twice, by both output_super_header() calls.
-        auto pos_y_copy = pos_y;
+        auto pos_y_copy = *pos_y;
         table.output_super_header
             ("Guaranteed Values"
             ,column_guar_account_value
@@ -1644,35 +1694,23 @@ class tabular_detail_page : public page_with_tabular_report
             ("Non-Guaranteed Values"
             ,column_cur_account_value
             ,column_max
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
-        pos_y += table.get_separator_line_height();
+        *pos_y += table.get_separator_line_height();
         table.output_horz_separator
             (column_guar_account_value
             ,column_dummy_separator
-            ,pos_y
+            ,*pos_y
             ,output_mode
             );
         table.output_horz_separator
             (column_cur_account_value
             ,column_max
-            ,pos_y
+            ,*pos_y
             ,output_mode
             );
-
-        table.output_header(&pos_y, output_mode);
-
-        pos_y += table.get_separator_line_height();
-        table.output_horz_separator
-            (0
-            ,column_max
-            ,pos_y
-            ,output_mode
-            );
-
-        return pos_y;
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -1711,6 +1749,11 @@ class tabular_detail2_page : public page_with_tabular_report
         ,column_max
         };
 
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>tabular_details2}}";
+    }
+
     illustration_table_columns const& get_table_columns() const override
     {
         static illustration_table_columns const columns =
@@ -1728,32 +1771,6 @@ class tabular_detail2_page : public page_with_tabular_report
         // One column should be hidden for composite ledgers.
         return column != column_end_of_year_age || !ledger.is_composite();
     }
-
-    int render_or_measure_fixed_page_part
-        (illustration_table_generator&  table
-        ,pdf_writer_wx&                 writer
-        ,html_interpolator const&       interpolate_html
-        ,enum_output_mode               output_mode
-        ) const override
-    {
-        int pos_y = writer.get_vert_margin();
-
-        pos_y += writer.output_html
-            (writer.get_horz_margin()
-            ,pos_y
-            ,writer.get_page_width()
-            ,interpolate_html("{{>tabular_details2}}")
-            ,output_mode
-            );
-
-        table.output_header(&pos_y, output_mode);
-
-        pos_y += table.get_separator_line_height();
-        table.output_horz_separator(0, column_max, pos_y, output_mode);
-
-        return pos_y;
-    }
-
 };
 
 // Regular illustration.
@@ -1924,6 +1941,11 @@ class nasd_basic : public page_with_tabular_report
         ,column_max
         };
 
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>nasd_basic}}";
+    }
+
     illustration_table_columns const& get_table_columns() const override
     {
         static illustration_table_columns const columns =
@@ -1952,54 +1974,44 @@ class nasd_basic : public page_with_tabular_report
         return column != column_end_of_year_age || !ledger.is_composite();
     }
 
-    int render_or_measure_fixed_page_part
+    void render_or_measure_extra_headers
         (illustration_table_generator&  table
-        ,pdf_writer_wx&                 writer
         ,html_interpolator const&       interpolate_html
+        ,int*                           pos_y
         ,enum_output_mode               output_mode
         ) const override
     {
-        int pos_y = writer.get_vert_margin();
-
-        pos_y += writer.output_html
-            (writer.get_horz_margin()
-            ,pos_y
-            ,writer.get_page_width()
-            ,interpolate_html("{{>nasd_basic}}")
-            ,output_mode
-            );
-
         // Output the first super header row.
 
-        auto pos_y_copy = pos_y;
+        auto pos_y_copy = *pos_y;
         table.output_super_header
             ("Using guaranteed charges"
             ,column_guar0_cash_surr_value
             ,column_separator_guar_cur0
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
-        pos_y = pos_y_copy;
+        *pos_y = pos_y_copy;
         table.output_super_header
             ("Using current charges"
             ,column_cur0_cash_surr_value
             ,column_max
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
-        pos_y += table.get_separator_line_height();
+        *pos_y += table.get_separator_line_height();
         table.output_horz_separator
             (column_guar0_cash_surr_value
             ,column_separator_guar_cur0
-            ,pos_y
+            ,*pos_y
             ,output_mode
             );
         table.output_horz_separator
             (column_cur0_cash_surr_value
             ,column_max
-            ,pos_y
+            ,*pos_y
             ,output_mode
             );
 
@@ -2028,7 +2040,7 @@ class nasd_basic : public page_with_tabular_report
                 std::size_t end_column = begin_column + 2;
                 LMI_ASSERT(end_column <= column_max);
 
-                auto y = pos_y;
+                auto y = *pos_y;
 
                 std::string const suffix_short = [=]()
                     {
@@ -2101,19 +2113,11 @@ class nasd_basic : public page_with_tabular_report
             ,column_cur0_cash_surr_value
             );
 
-        pos_y = output_two_column_super_header
+        *pos_y = output_two_column_super_header
             (base::current
             ,interest_rate::non_zero
             ,column_cur_cash_surr_value
             );
-
-        // Finally output the standard header.
-        table.output_header(&pos_y, output_mode);
-
-        pos_y += table.get_separator_line_height();
-        table.output_horz_separator(0, column_max, pos_y, output_mode);
-
-        return pos_y;
     }
 };
 
@@ -2138,6 +2142,11 @@ class nasd_supplemental : public page_with_tabular_report
         ,column_cur_death_benefit
         ,column_max
         };
+
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>nasd_supplemental}}";
+    }
 
     illustration_table_columns const& get_table_columns() const override
     {
@@ -2201,36 +2210,6 @@ class nasd_supplemental : public page_with_tabular_report
             }
 
         return true;
-    }
-
-    int render_or_measure_fixed_page_part
-        (illustration_table_generator&  table
-        ,pdf_writer_wx&                 writer
-        ,html_interpolator const&       interpolate_html
-        ,enum_output_mode               output_mode
-        ) const override
-    {
-        int pos_y = writer.get_vert_margin();
-
-        pos_y += writer.output_html
-            (writer.get_horz_margin()
-            ,pos_y
-            ,writer.get_page_width()
-            ,interpolate_html("{{>nasd_supplemental}}")
-            ,output_mode
-            );
-
-        table.output_header(&pos_y, output_mode);
-
-        pos_y += table.get_separator_line_height();
-        table.output_horz_separator
-            (0
-            ,table.columns_count()
-            ,pos_y
-            ,output_mode
-            );
-
-        return pos_y;
     }
 };
 
