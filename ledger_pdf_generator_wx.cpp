@@ -2444,6 +2444,35 @@ class pdf_illustration_reg_d_group : public pdf_illustration
     }
 };
 
+// Private individual placement illustration.
+class pdf_illustration_reg_d_individual : public pdf_illustration
+{
+  public:
+    pdf_illustration_reg_d_individual
+        (Ledger const& ledger
+        ,fs::path const& output
+        )
+        :pdf_illustration(ledger, output)
+    {
+        // Define variables specific to this illustration.
+        add_abbreviated_variable("CorpName", 140);
+        add_abbreviated_variable("Insured1", 140);
+
+        // Add all the pages.
+        add<standard_page>("reg_d_individual_cover_page");
+    }
+
+    std::string get_upper_footer_template_name() const override
+    {
+        return "reg_d_individual_footer_upper";
+    }
+
+    std::string get_lower_footer_template_name() const override
+    {
+        return "reg_d_individual_footer_lower";
+    }
+};
+
 class ledger_pdf_generator_wx : public ledger_pdf_generator
 {
   public:
@@ -2481,8 +2510,7 @@ void ledger_pdf_generator_wx::write
             pdf_ill = std::make_unique<pdf_illustration_reg_d_group>(ledger, output);
             break;
         case mce_individual_private_placement:
-            // TODO
-            alarum() << "Illustrating ledger type '" << z << "' not implemented yet" << LMI_FLUSH;
+            pdf_ill = std::make_unique<pdf_illustration_reg_d_individual>(ledger, output);
             break;
         default:
             alarum() << "Unknown ledger type '" << z << "'." << LMI_FLUSH;
