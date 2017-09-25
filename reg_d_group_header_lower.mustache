@@ -1,0 +1,53 @@
+<table width="100%" cellspacing="0" cellpadding="0" valign="top">
+    <tr>
+        <td>
+        {{#Composite}}
+            {{CorpNameAbbrev60}}
+        {{/Composite}}
+        {{^Composite}}
+            {{Insured1Abbrev30}}
+        {{/Composite}},
+        {{Gender}} {{Smoker}} rates, Age {{Age}}<br>
+        {{#Composite}}
+            Composite<br>
+        {{/Composite}}
+        Contract: {{PolicyMktgName}}<br>
+        Initial Premium: ${{InitPrem}}<br>
+        {{#GroupCarveout}}
+            Minimum Initial Premium: ${{InitMinPrem}}<br>
+        {{/GroupCarveout}}
+        First Year Premium: ${{InitPrem}}<br>
+        {{^Composite}}
+            {{#UWTypeIsMedical}}
+              Fully underwritten,
+            {{/UWTypeIsMedical}}
+            {{^UWTypeIsMedical}}
+              {{UWType}},
+            {{/UWTypeIsMedical}}
+            {{UWClass}}, Initial Death Benefit Option: {{InitDBOpt}}<br>
+        {{/Composite}}
+        {{#HasWP}}
+            Waiver of Monthly Charges Rider elected.<br>
+        {{/HasWP}}
+        {{>contract_numbers}}
+        </td>
+        <td>
+        Assumed Gross Rate: {{InitAnnSepAcctGrossInt_Current}}
+        ({{InitAnnSepAcctNetInt_Current}} Net)*<br>
+        Initial
+        {{#HasTerm}}
+            Total
+        {{/HasTerm}}
+        Face Amount: ${{InitTotalSA}}<br>
+        {{#HasTerm}}
+            Initial Base Face Amount: ${{InitBaseSpecAmt}}<br>
+            Initial Term Face Amount: ${{InitTermSpecAmt}}<br>
+        {{/HasTerm}}
+        {{^Composite}}
+            {{#UWClassIsRated}}
+                  Table Rating: {{SubstandardTable}}<br>
+            {{/UWClassIsRated}}
+        {{/Composite}}
+        </td>
+    </tr>
+</table>

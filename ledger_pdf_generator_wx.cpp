@@ -2383,6 +2383,30 @@ class pdf_illustration_nasd : public pdf_illustration
     }
 };
 
+// Basic illustration page of the private group placement illustration.
+class reg_d_group_basic : public page_with_basic_tabular_report
+{
+  private:
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>reg_d_group_basic}}";
+    }
+
+    std::string get_two_column_header
+        (std::string const& suffix_full
+        ,std::string const& suffix_short
+        ) const override
+    {
+        std::ostringstream oss;
+        oss
+            << "{{InitAnnSepAcctGrossInt_" << suffix_full << "}} "
+            << "Hypothetical Gross\n"
+            << "Return ({{InitAnnSepAcctNetInt_" << suffix_full << "}} net)"
+            ;
+        return oss.str();
+    }
+};
+
 // Private group placement illustration.
 class pdf_illustration_reg_d_group : public pdf_illustration
 {
@@ -2395,6 +2419,7 @@ class pdf_illustration_reg_d_group : public pdf_illustration
     {
         // Add all the pages.
         add<cover_page>();
+        add<reg_d_group_basic>();
     }
 
     std::string get_upper_footer_template_name() const override
