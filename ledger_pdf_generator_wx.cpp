@@ -37,7 +37,7 @@
 #include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "miscellany.hpp"               // lmi_tolower()
+#include "miscellany.hpp"               // lmi_tolower(), split_into_lines()
 #include "pdf_writer_wx.hpp"
 #include "version.hpp"
 #include "wx_table_generator.hpp"
@@ -1921,9 +1921,26 @@ class pdf_illustration_regular : public pdf_illustration
     std::string get_lower_footer_template_name() const override { return "footer"; }
 };
 
-class nasd_basic : public page_with_tabular_report
+// Common base class for basic illustration pages using the same columns in
+// both NASD and private group placement illustrations.
+class page_with_basic_tabular_report : public page_with_tabular_report
 {
   private:
+    // This method must be overridden to return the text of the super-header
+    // used for all pairs of "cash surrogate value" and "death benefit"
+    // columns. The return value is subject to HTML interpolation and so may
+    // contain {{variables}} and also can be multiline but, if so, it must have
+    // the same number of lines for all input arguments.
+    //
+    // The suffix_xxx arguments can be used to construct the full name of the
+    // variable appropriate for the current column pair: the short one is
+    // either "Guaranteed" or "Current" while the full one also includes "Zero"
+    // for the column pairs using zero interest-rate assumption.
+    virtual std::string get_two_column_header
+        (std::string const& suffix_full
+        ,std::string const& suffix_short
+        ) const = 0;
+
     enum
         {column_policy_year
         ,column_end_of_year_age
@@ -1941,11 +1958,6 @@ class nasd_basic : public page_with_tabular_report
         ,column_cur_death_benefit
         ,column_max
         };
-
-    std::string get_fixed_page_contents() const override
-    {
-        return "{{>nasd_basic}}";
-    }
 
     illustration_table_columns const& get_table_columns() const override
     {
@@ -2066,14 +2078,9 @@ class nasd_basic : public page_with_tabular_report
                     ;
 
 
-                std::array<std::string, 3> const header_lines =
-                    {
-                    {"{{InitAnnSepAcctGrossInt_" + suffix_full + "}} Assumed Sep Acct"
-                    ,"Gross Rate* ({{InitAnnSepAcctNetInt_" + suffix_full + "}} net)"
-                    ,"{{InitAnnGenAcctInt_" + suffix_short + "}} GPA rate"
-                    }
-                    };
-
+                auto const header_lines = split_into_lines
+                    (get_two_column_header(suffix_full, suffix_short)
+                    );
                 for(auto const& line : header_lines)
                     {
                     table.output_super_header
@@ -2119,6 +2126,31 @@ class nasd_basic : public page_with_tabular_report
             ,interest_rate::non_zero
             ,column_cur_cash_surr_value
             );
+    }
+};
+
+class nasd_basic : public page_with_basic_tabular_report
+{
+  private:
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>nasd_basic}}";
+    }
+
+    std::string get_two_column_header
+        (std::string const& suffix_full
+        ,std::string const& suffix_short
+        ) const override
+    {
+        std::ostringstream oss;
+        oss
+            << "{{InitAnnSepAcctGrossInt_" << suffix_full << "}} "
+            << "Assumed Sep Acct\n"
+            << "Gross Rate* "
+            << "({{InitAnnSepAcctNetInt_" << suffix_full << "}} net)\n"
+            << "{{InitAnnGenAcctInt_" << suffix_short << "}} GPA rate"
+            ;
+        return oss.str();
     }
 };
 
