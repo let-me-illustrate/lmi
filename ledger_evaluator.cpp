@@ -607,6 +607,14 @@ ledger_evaluator Ledger::make_evaluator() const
     vectors["AttainedAge"] = &AttainedAge;
     vectors["PolicyYear" ] = &PolicyYear ;
 
+    std::vector<double> InitAnnLoanDueRate(max_duration);
+    std::fill
+        (InitAnnLoanDueRate.begin()
+        ,InitAnnLoanDueRate.end()
+        ,ledger_invariant_->GetInitAnnLoanDueRate()
+        );
+    vectors["InitAnnLoanDueRate"] = &InitAnnLoanDueRate;
+
     vectors["InforceLives"] = &ledger_invariant_->InforceLives;
 
     vectors["FundNumbers"    ] = &ledger_invariant_->FundNumbers    ;
