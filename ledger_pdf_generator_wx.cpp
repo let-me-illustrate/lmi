@@ -37,7 +37,7 @@
 #include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "miscellany.hpp"               // lmi_tolower(), split_into_lines()
+#include "miscellany.hpp"               // lmi_tolower()
 #include "pdf_writer_wx.hpp"
 #include "version.hpp"
 #include "wx_table_generator.hpp"
@@ -2081,19 +2081,16 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                     ;
 
 
-                auto const header_lines = split_into_lines
-                    (get_two_column_header(suffix_full, suffix_short)
+                auto const header =
+                    get_two_column_header(suffix_full, suffix_short)
+                    ;
+                table.output_super_header
+                    (interpolate_html(header).as_html()
+                    ,begin_column
+                    ,end_column
+                    ,&y
+                    ,output_mode
                     );
-                for(auto const& line : header_lines)
-                    {
-                    table.output_super_header
-                        (interpolate_html(line).as_html()
-                        ,begin_column
-                        ,end_column
-                        ,&y
-                        ,output_mode
-                        );
-                    }
 
                 y += table.get_separator_line_height();
                 table.output_horz_separator
