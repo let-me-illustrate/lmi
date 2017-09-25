@@ -74,6 +74,7 @@ class wx_table_generator
 
     // Render a super-header, i.e. a header spanning over several columns. The
     // columns range is specified as a close/open interval, as usual in C++.
+    // The header string may be multiline, just as with normal headers.
     void output_super_header
         (std::string const& header
         ,std::size_t        begin_column

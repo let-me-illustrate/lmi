@@ -431,12 +431,14 @@ void wx_table_generator::output_super_header
         ,enum_output_mode   output_mode
         )
 {
+    std::vector<std::string> const lines(split_into_lines(header));
+
     switch(output_mode)
         {
         case e_output_normal:
             break;
         case e_output_measure_only:
-            *pos_y += row_height_;
+            *pos_y += row_height_*lines.size();
             return;
         }
 
@@ -447,9 +449,13 @@ void wx_table_generator::output_super_header
     auto rect = text_rect(begin_column, *pos_y);
     rect.width += do_get_cell_x(end_column) - do_get_cell_x(begin_column + 1);
 
-    dc_.DrawLabel(header, rect, wxALIGN_CENTER_HORIZONTAL);
+    for(auto const& line : lines)
+        {
+        dc_.DrawLabel(line, rect, wxALIGN_CENTER_HORIZONTAL);
 
-    *pos_y += row_height_;
+        rect.y += row_height_;
+        *pos_y += row_height_;
+        }
 }
 
 void wx_table_generator::output_row
