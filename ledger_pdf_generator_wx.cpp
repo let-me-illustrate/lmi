@@ -2443,6 +2443,164 @@ class pdf_illustration_reg_d_group : public pdf_illustration
     }
 };
 
+// This page exists in two almost identical versions, one using guaranteed and
+// the other one using current values, use a base class to share the common
+// parts.
+class reg_d_individual_irr_base : public page_with_tabular_report
+{
+  private:
+    enum
+        {column_policy_year
+        ,column_end_of_year_age
+        ,column_premium_outlay
+        ,column_zero_cash_surr_value
+        ,column_zero_death_benefit
+        ,column_zero_irr_surr_value
+        ,column_zero_irr_death_benefit
+        ,column_separator
+        ,column_nonzero_cash_surr_value
+        ,column_nonzero_death_benefit
+        ,column_nonzero_irr_surr_value
+        ,column_nonzero_irr_death_benefit
+        ,column_max
+        };
+
+    // Must be overridden to return the base being used.
+    virtual base get_base() const = 0;
+
+    bool should_show_column(Ledger const& ledger, int column) const override
+    {
+        // One column should be hidden for composite ledgers.
+        return column != column_end_of_year_age || !ledger.is_composite();
+    }
+
+    void render_or_measure_extra_headers
+        (illustration_table_generator&  table
+        ,html_interpolator const&       interpolate_html
+        ,int*                           pos_y
+        ,enum_output_mode               output_mode
+        ) const override
+    {
+        std::ostringstream header_zero;
+        header_zero
+            << "{{InitAnnSepAcctGrossInt_"
+            << base_suffix(get_base())
+            << ir_suffix(interest_rate::zero)
+            << "}} Hypothetical Rate of\n"
+            << "Return*"
+            ;
+
+        auto pos_y_copy = *pos_y;
+        table.output_super_header
+            (interpolate_html(header_zero.str()).as_html()
+            ,column_zero_cash_surr_value
+            ,column_zero_irr_surr_value
+            ,pos_y
+            ,output_mode
+            );
+
+        std::ostringstream header_nonzero;
+        header_nonzero
+            << "{{InitAnnSepAcctGrossInt_"
+            << base_suffix(get_base())
+            << ir_suffix(interest_rate::non_zero)
+            << "}} Hypothetical Rate of\n"
+            << "Return*"
+            ;
+
+        *pos_y = pos_y_copy;
+        table.output_super_header
+            (interpolate_html(header_nonzero.str()).as_html()
+            ,column_nonzero_cash_surr_value
+            ,column_nonzero_irr_surr_value
+            ,pos_y
+            ,output_mode
+            );
+
+        *pos_y += table.get_separator_line_height();
+        table.output_horz_separator
+            (column_zero_cash_surr_value
+            ,column_zero_irr_surr_value
+            ,*pos_y
+            ,output_mode
+            );
+        table.output_horz_separator
+            (column_nonzero_cash_surr_value
+            ,column_nonzero_irr_surr_value
+            ,*pos_y
+            ,output_mode
+            );
+    }
+};
+
+class reg_d_individual_guar_irr : public reg_d_individual_irr_base
+{
+  private:
+    base get_base() const override
+    {
+        return base::guaranteed;
+    }
+
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>reg_d_individual_guar_irr}}";
+    }
+
+    illustration_table_columns const& get_table_columns() const override
+    {
+        static illustration_table_columns const columns =
+            {{ "PolicyYear"                 , "Policy\nYear"       ,       "999" }
+            ,{ "AttainedAge"                , "End of\nYear Age"   ,       "999" }
+            ,{ "GrossPmt"                   , "Premium\nOutlay"    ,   "999,999" }
+            ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"   ,   "999,999" }
+            ,{ "EOYDeathBft_GuaranteedZero" , "Death\nBenefit"     , "9,999,999" }
+            ,{ "IrrCsv_GuaranteedZero"      , "IRR on\nSurr Value" ,    "99.99%" }
+            ,{ "IrrDb_GuaranteedZero"       , "IRR on\nDeath Bft"  ,    "99.99%" }
+            ,{ ""                           , " "                  ,         "-" }
+            ,{ "CSVNet_Guaranteed"          , "Cash Surr\nValue"   ,   "999,999" }
+            ,{ "EOYDeathBft_Guaranteed"     , "Death\nBenefit"     , "9,999,999" }
+            ,{ "IrrCsv_Guaranteed"          , "IRR on\nSurr Value" ,    "99.99%" }
+            ,{ "IrrDb_Guaranteed"           , "IRR on\nDeath Bft"  ,    "99.99%" }
+            };
+
+        return columns;
+    }
+};
+
+class reg_d_individual_cur_irr : public reg_d_individual_irr_base
+{
+  private:
+    base get_base() const override
+    {
+        return base::current;
+    }
+
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>reg_d_individual_cur_irr}}";
+    }
+
+    illustration_table_columns const& get_table_columns() const override
+    {
+        static illustration_table_columns const columns =
+            {{ "PolicyYear"                 , "Policy\nYear"       ,       "999" }
+            ,{ "AttainedAge"                , "End of\nYear Age"   ,       "999" }
+            ,{ "GrossPmt"                   , "Premium\nOutlay"    ,   "999,999" }
+            ,{ "CSVNet_CurrentZero"         , "Cash Surr\nValue"   ,   "999,999" }
+            ,{ "EOYDeathBft_CurrentZero"    , "Death\nBenefit"     , "9,999,999" }
+            ,{ "IrrCsv_CurrentZero"         , "IRR on\nSurr Value" ,    "99.99%" }
+            ,{ "IrrDb_CurrentZero"          , "IRR on\nDeath Bft"  ,    "99.99%" }
+            ,{ ""                           , " "                  ,         "-" }
+            ,{ "CSVNet_Current"             , "Cash Surr\nValue"   ,   "999,999" }
+            ,{ "EOYDeathBft_Current"        , "Death\nBenefit"     , "9,999,999" }
+            ,{ "IrrCsv_Current"             , "IRR on\nSurr Value" ,    "99.99%" }
+            ,{ "IrrDb_Current"              , "IRR on\nDeath Bft"  ,    "99.99%" }
+            };
+
+        return columns;
+    }
+};
+
 // Private individual placement illustration.
 class pdf_illustration_reg_d_individual : public pdf_illustration
 {
@@ -2459,6 +2617,8 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
 
         // Add all the pages.
         add<standard_page>("reg_d_individual_cover_page");
+        add<reg_d_individual_guar_irr>();
+        add<reg_d_individual_cur_irr>();
     }
 
     std::string get_upper_footer_template_name() const override
