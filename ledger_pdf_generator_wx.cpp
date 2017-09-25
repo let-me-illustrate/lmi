@@ -2214,6 +2214,77 @@ class nasd_supplemental : public page_with_tabular_report
     }
 };
 
+class nasd_assumption_detail : public page_with_tabular_report
+{
+  private:
+    enum
+        {column_policy_year
+        ,column_withdrawal
+        ,column_loan
+        ,column_end_of_year_age
+        ,column_sep_acct_crediting_rate
+        ,column_gen_acct_crediting_rate
+        ,column_m_and_e
+        ,column_ee_payment_mode
+        ,column_er_payment_mode
+        ,column_assumed_loan_interest
+        ,column_max
+        };
+
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>nasd_assumption_detail}}";
+    }
+
+    illustration_table_columns const& get_table_columns() const override
+    {
+        static illustration_table_columns const columns =
+            {{ "PolicyYear"          , "Policy\nYear"                ,        "999" }
+            ,{ "NetWD"               , "Withdrawal"                  ,    "999,999" }
+            ,{ "NewCashLoan"         , "Loan"                        ,    "999,999" }
+            ,{ "AttainedAge"         , "End of\nYear Age"            ,        "999" }
+            ,{ "AnnSAIntRate_Current", "Sep Acct Net\nInv Rate"      ,     "99.99%" }
+            ,{ "AnnGAIntRate_Current", "Gen Acct\nCurrent Rate"      ,     "99.99%" }
+            ,{ "CurrMandE"           , "M&E"                         ,     "99.99%" }
+            ,{ "EeMode"              , "Indiv\nPmt Mode"             , "Semiannual" }
+            ,{ "ErMode"              , "Corp\nPmt Mode"              , "Semiannual" }
+            ,{ "InitAnnLoanDueRate"  , "Assumed\nLoan Interest"      ,     "99.99%" }
+            };
+
+        return columns;
+    }
+
+    bool should_show_column(Ledger const& ledger, int column) const override
+    {
+        // This table looks very differently for individual and composite
+        // illustrations.
+        switch(column)
+            {
+            case column_withdrawal:
+            case column_loan:
+                // Shown only for composite illustrations.
+                return ledger.is_composite();
+
+            case column_end_of_year_age:
+            case column_sep_acct_crediting_rate:
+            case column_gen_acct_crediting_rate:
+            case column_m_and_e:
+            case column_ee_payment_mode:
+            case column_er_payment_mode:
+            case column_assumed_loan_interest:
+                // Shown only for individual ones.
+                return !ledger.is_composite();
+
+            case column_policy_year:
+            case column_max:
+                // Always shown.
+                break;
+            }
+
+        return true;
+    }
+};
+
 // NASD illustration.
 class pdf_illustration_nasd : public pdf_illustration
 {
@@ -2265,6 +2336,7 @@ class pdf_illustration_nasd : public pdf_illustration
         add<standard_page>("nasd_column_headings");
         add<standard_page>("nasd_notes1");
         add<standard_page>("nasd_notes2");
+        add<nasd_assumption_detail>();
     }
 
     std::string get_upper_footer_template_name() const override
