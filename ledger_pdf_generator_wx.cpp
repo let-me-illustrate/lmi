@@ -77,6 +77,39 @@ bool starts_with(std::string const& s, char const* prefix)
     return s.compare(0, strlen(prefix), prefix) == 0;
 }
 
+// Helper enums identifying the possible {Guaranteed,Current}{Zero,}
+// combinations.
+enum class base
+    {guaranteed
+    ,current
+    };
+
+enum class interest_rate
+    {zero
+    ,non_zero
+    };
+
+// And functions to retrieve their string representation.
+std::string base_suffix(base guar_or_cur)
+{
+    switch(guar_or_cur)
+        {
+        case base::guaranteed: return "Guaranteed";
+        case base::current:    return "Current"   ;
+        }
+    throw "Unreachable--unknown base value";
+}
+
+std::string ir_suffix(interest_rate zero_or_not)
+{
+    switch(zero_or_not)
+        {
+        case interest_rate::zero:     return "Zero";
+        case interest_rate::non_zero: return ""    ;
+        }
+    throw "Unreachable--unknown interest_rate value";
+}
+
 // Helper class grouping functions for dealing with interpolating strings
 // containing variable references.
 class html_interpolator
@@ -2035,16 +2068,6 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         // Output the second super header row which is composed of three
         // physical lines.
 
-        enum class base
-            {guaranteed
-            ,current
-            };
-
-        enum class interest_rate
-            {zero
-            ,non_zero
-            };
-
         // This function outputs all lines of a single header, corresponding to
         // the "Guaranteed" or "Current", "Zero" or not, column and returns the
         // vertical position below the header.
@@ -2059,31 +2082,10 @@ class page_with_basic_tabular_report : public page_with_tabular_report
 
                 auto y = *pos_y;
 
-                std::string const suffix_short = [=]()
-                    {
-                        switch(guar_or_cur)
-                            {
-                            case base::guaranteed: return "Guaranteed";
-                            case base::current:    return "Current"   ;
-                            }
-                        throw "Unreachable--unknown base value";
-                    }()
-                    ;
-
-                std::string const suffix_full = suffix_short + [=]()
-                    {
-                        switch(zero_or_not)
-                            {
-                            case interest_rate::zero:     return "Zero";
-                            case interest_rate::non_zero: return ""    ;
-                            }
-                        throw "Unreachable--unknown interest_rate value";
-                    }()
-                    ;
-
-
-                auto const header =
-                    get_two_column_header(suffix_full, suffix_short)
+                auto const header = get_two_column_header
+                    (base_suffix(guar_or_cur) + ir_suffix(zero_or_not)
+                    ,base_suffix(guar_or_cur)
+                    )
                     ;
                 table.output_super_header
                     (interpolate_html(header).as_html()
