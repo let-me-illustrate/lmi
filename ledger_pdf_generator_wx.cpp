@@ -2416,9 +2416,20 @@ class pdf_illustration_reg_d_group : public pdf_illustration
         )
         :pdf_illustration(ledger, output)
     {
+        // Define variables specific to this illustration.
+        auto const& invar = ledger.GetLedgerInvariant();
+
+        add_variable
+            ("MecYearIs0"
+            ,invar.MecYear == 0
+            );
+
         // Add all the pages.
         add<cover_page>();
         add<reg_d_group_basic>();
+        add<standard_page>("reg_d_group_column_headings");
+        add<standard_page>("reg_d_group_narrative_summary");
+        add<standard_page>("reg_d_group_narrative_summary2");
     }
 
     std::string get_upper_footer_template_name() const override
