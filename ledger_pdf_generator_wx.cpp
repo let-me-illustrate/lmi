@@ -785,6 +785,9 @@ class pdf_illustration : protected html_interpolator
 
         auto const& invar = ledger_.GetLedgerInvariant();
 
+        add_abbreviated_variable("CorpName", 60);
+        add_abbreviated_variable("Insured1", 30);
+
         // Define the variables needed by contract_numbers template.
         add_variable
             ("HasMasterContract"
@@ -1786,7 +1789,8 @@ class pdf_illustration_regular : public pdf_illustration
         auto const& policy_name = invar.PolicyLegalName;
         auto const& state_abbrev = invar.GetStatePostalAbbrev();
 
-        // Define variables specific to this illustration.
+        // Define variables specific to this illustration which doesn't use the
+        // standard 60/30 lengths for whatever reason.
         add_abbreviated_variable("CorpName", 50);
         add_abbreviated_variable("Insured1", 50);
 
@@ -2329,9 +2333,6 @@ class pdf_illustration_nasd : public pdf_illustration
         auto const& invar = ledger.GetLedgerInvariant();
 
         // Define variables specific to this illustration.
-        add_abbreviated_variable("CorpName", 60);
-        add_abbreviated_variable("Insured1", 30);
-
         if(!invar.ContractName.empty())
             {
             std::string s = invar.ContractName;
