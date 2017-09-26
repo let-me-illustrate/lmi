@@ -1994,13 +1994,12 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     // contain {{variables}} and also can be multiline but, if so, it must have
     // the same number of lines for all input arguments.
     //
-    // The suffix_xxx arguments can be used to construct the full name of the
-    // variable appropriate for the current column pair: the short one is
-    // either "Guaranteed" or "Current" while the full one also includes "Zero"
-    // for the column pairs using zero interest-rate assumption.
+    // The base and interest_rate arguments can be used to construct the full
+    // name of the variable appropriate for the current column pair, with the
+    // help of base_suffix() and ir_suffix() functions.
     virtual std::string get_two_column_header
-        (std::string const& suffix_full
-        ,std::string const& suffix_short
+        (base          guar_or_cur
+        ,interest_rate zero_or_not
         ) const = 0;
 
     enum
@@ -2108,10 +2107,9 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                 auto y = *pos_y;
 
                 auto const header = get_two_column_header
-                    (base_suffix(guar_or_cur) + ir_suffix(zero_or_not)
-                    ,base_suffix(guar_or_cur)
-                    )
-                    ;
+                    (guar_or_cur
+                    ,zero_or_not
+                    );
                 table.output_super_header
                     (interpolate_html(header).as_html()
                     ,begin_column
@@ -2166,17 +2164,25 @@ class nasd_basic : public page_with_basic_tabular_report
     }
 
     std::string get_two_column_header
-        (std::string const& suffix_full
-        ,std::string const& suffix_short
+        (base          guar_or_cur
+        ,interest_rate zero_or_not
         ) const override
     {
         std::ostringstream oss;
         oss
-            << "{{InitAnnSepAcctGrossInt_" << suffix_full << "}} "
+            << "{{InitAnnSepAcctGrossInt_"
+            << base_suffix(guar_or_cur)
+            << ir_suffix(zero_or_not)
+            << "}} "
             << "Assumed Sep Acct\n"
             << "Gross Rate* "
-            << "({{InitAnnSepAcctNetInt_" << suffix_full << "}} net)\n"
-            << "{{InitAnnGenAcctInt_" << suffix_short << "}} GPA rate"
+            << "({{InitAnnSepAcctNetInt_"
+            << base_suffix(guar_or_cur)
+            << ir_suffix(zero_or_not)
+            << "}} net)\n"
+            << "{{InitAnnGenAcctInt_"
+            << base_suffix(guar_or_cur)
+            << "}} GPA rate"
             ;
         return oss.str();
     }
@@ -2390,15 +2396,21 @@ class reg_d_group_basic : public page_with_basic_tabular_report
     }
 
     std::string get_two_column_header
-        (std::string const& suffix_full
-        ,std::string const& suffix_short
+        (base          guar_or_cur
+        ,interest_rate zero_or_not
         ) const override
     {
         std::ostringstream oss;
         oss
-            << "{{InitAnnSepAcctGrossInt_" << suffix_full << "}} "
+            << "{{InitAnnSepAcctGrossInt_"
+            << base_suffix(guar_or_cur)
+            << ir_suffix(zero_or_not)
+            << "}} "
             << "Hypothetical Gross\n"
-            << "Return ({{InitAnnSepAcctNetInt_" << suffix_full << "}} net)"
+            << "Return ({{InitAnnSepAcctNetInt_"
+            << base_suffix(guar_or_cur)
+            << ir_suffix(zero_or_not)
+            << "}} net)"
             ;
         return oss.str();
     }
