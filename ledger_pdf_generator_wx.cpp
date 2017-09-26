@@ -755,6 +755,9 @@ class pdf_illustration : protected html_interpolator
     // templates should be used for the upper (above the separating line) and
     // the lower parts of the footer. The upper template name may be empty if
     // it is not used at all.
+    //
+    // Notice that the upper footer template name can be overridden at the page
+    // level, the methods here define the default for all illustration pages.
     virtual std::string get_upper_footer_template_name() const = 0;
     virtual std::string get_lower_footer_template_name() const = 0;
 
@@ -975,8 +978,7 @@ class page_with_footer : public page
             ,e_output_measure_only
             );
 
-        auto const&
-            upper_template = illustration_->get_upper_footer_template_name();
+        auto const& upper_template = get_upper_footer_template_name();
         if(!upper_template.empty())
             {
             footer_height += writer.output_html
@@ -1002,8 +1004,7 @@ class page_with_footer : public page
 
         auto y = footer_top_;
 
-        auto const&
-            upper_template = illustration_->get_upper_footer_template_name();
+        auto const& upper_template = get_upper_footer_template_name();
         if(!upper_template.empty())
             {
             y += writer.output_html
@@ -1047,6 +1048,13 @@ class page_with_footer : public page
     // Method to be overridden in the base class which should actually return
     // the page number or equivalent string (e.g. "Appendix").
     virtual std::string get_page_number() const = 0;
+
+    // This method forwards to the illustration by default, but can be
+    // overridden to define a page-specific footer if necessary.
+    virtual std::string get_upper_footer_template_name() const
+    {
+        return illustration_->get_upper_footer_template_name();
+    }
 
     // This method uses get_page_number() and returns the HTML wrapping it
     // and other fixed information appearing in the lower part of the footer.
@@ -1707,6 +1715,11 @@ class tabular_detail_page : public page_with_tabular_report
         return "{{>tabular_details}}";
     }
 
+    std::string get_upper_footer_template_name() const override
+    {
+        return "footer_disclaimer";
+    }
+
     void render_or_measure_extra_headers
         (illustration_table_generator&  table
         ,html_interpolator const&       interpolate_html
@@ -1788,6 +1801,11 @@ class tabular_detail2_page : public page_with_tabular_report
     std::string get_fixed_page_contents() const override
     {
         return "{{>tabular_details2}}";
+    }
+
+    std::string get_upper_footer_template_name() const override
+    {
+        return "footer_disclaimer";
     }
 
     illustration_table_columns const& get_table_columns() const override
