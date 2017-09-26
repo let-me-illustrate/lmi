@@ -989,6 +989,11 @@ class page_with_footer : public page
                 ,interpolate_html("{{>" + upper_template + "}}")
                 ,e_output_measure_only
                 );
+
+            // Leave a gap between the upper part of the footer and the main
+            // page contents to separate them in absence of a separator line
+            // which delimits the lower part.
+            footer_height += writer.dc().GetCharHeight();
             }
 
         footer_top_ = writer.get_page_bottom() - footer_height;
@@ -1003,14 +1008,18 @@ class page_with_footer : public page
         auto const frame_horz_margin = writer.get_horz_margin();
         auto const frame_width       = writer.get_page_width();
 
+        auto& dc = writer.dc();
+
         auto y = footer_top_;
 
         auto const& upper_template = get_upper_footer_template_name();
         if(!upper_template.empty())
             {
+            y += dc.GetCharHeight();
+
             y += writer.output_html
                 (frame_horz_margin
-                ,footer_top_
+                ,y
                 ,frame_width
                 ,interpolate_html("{{>" + upper_template + "}}")
                 );
@@ -1022,8 +1031,6 @@ class page_with_footer : public page
             ,frame_width
             ,get_footer_lower_html(interpolate_html)
             );
-
-        auto& dc = writer.dc();
 
         dc.SetPen(HIGHLIGHT_COL);
         dc.DrawLine
