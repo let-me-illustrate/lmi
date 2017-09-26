@@ -340,9 +340,9 @@ class using_illustration_table
     // Description of a single table column.
     struct illustration_table_column
     {
-        char const* variable_name;
-        char const* label;
-        char const* widest_text;
+        std::string const variable_name;
+        std::string const label;
+        std::string const widest_text;
     };
 
     using illustration_table_columns = std::vector<illustration_table_column>;
