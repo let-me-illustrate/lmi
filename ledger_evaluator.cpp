@@ -634,6 +634,19 @@ ledger_evaluator Ledger::make_evaluator() const
     LedgerVariant   const& Curr_ = GetCurrFull();
     LedgerVariant   const& Guar_ = GetGuarFull();
 
+    std::vector<double> PremiumLoads(max_duration);
+    std::vector<double> AdminCharges(max_duration);
+    for(int j = 0; j < max_duration; ++j)
+        {
+        PremiumLoads[j] = Invar.GrossPmt[j] - Curr_.NetPmt[j];
+        AdminCharges[j] = Curr_.SpecAmtLoad[j] + Curr_.PolicyFee[j];
+        }
+
+    vectors   ["PremiumLoads"] = &PremiumLoads;
+    format_map["PremiumLoads"] = f1;
+    vectors   ["AdminCharges"] = &AdminCharges;
+    format_map["AdminCharges"] = f1;
+
     // ET !! Easier to write as
     //   std::vector<double> NetDeathBenefit =
     //     Curr_.EOYDeathBft - Curr_.TotalLoanBalance;
