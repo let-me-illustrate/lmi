@@ -762,6 +762,9 @@ class pdf_illustration : protected html_interpolator
     virtual std::string get_lower_footer_template_name() const = 0;
 
   protected:
+    // Explicitly retrieve the base class.
+    html_interpolator const& get_interpolator() const {return *this;}
+
     // Helper for abbreviating a string to at most the given length (in bytes).
     static std::string abbreviate_if_necessary(std::string s, size_t len)
     {
@@ -1834,6 +1837,52 @@ class tabular_detail2_page : public page_with_tabular_report
     }
 };
 
+class supplemental_report : public page_with_tabular_report
+{
+  public:
+    explicit supplemental_report(html_interpolator const& interpolate_html)
+    {
+        constexpr std::size_t max_columns = 12;
+        std::string const empty_column_name("[none]");
+
+        for(std::size_t i = 0; i < max_columns; ++i)
+            {
+            auto name = interpolate_html.evaluate("SupplementalReportColumnsNames", i);
+            if(name != empty_column_name)
+                {
+                // We currently don't have the field width information for
+                // arbitrary fields, so use fixed width that should be
+                // sufficient for almost all of them.
+                columns_.emplace_back
+                    (illustration_table_column
+                        {std::move(name)
+                        ,interpolate_html.evaluate("SupplementalReportColumnsTitles", i)
+                        ,"999,999"
+                        }
+                    );
+                }
+            }
+    }
+
+  private:
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>supplemental_report}}";
+    }
+
+    std::string get_upper_footer_template_name() const override
+    {
+        return "footer_disclaimer";
+    }
+
+    illustration_table_columns const& get_table_columns() const override
+    {
+        return columns_;
+    }
+
+    illustration_table_columns columns_;
+};
+
 // Regular illustration.
 class pdf_illustration_regular : public pdf_illustration
 {
@@ -1972,6 +2021,10 @@ class pdf_illustration_regular : public pdf_illustration
             }
         add<tabular_detail_page>();
         add<tabular_detail2_page>();
+        if(invar.SupplementalReport)
+            {
+            add<supplemental_report>(get_interpolator());
+            }
         if(!invar.IsInforce)
             {
             add<numeric_summary_or_attachment_page<true>>();
