@@ -2694,6 +2694,9 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         add<reg_d_individual_guar_irr>();
         add<reg_d_individual_cur_irr>();
         add<reg_d_individual_cur>();
+        add<standard_page>("reg_d_individual_notes1");
+        add<standard_page>("reg_d_individual_notes2");
+        add<standard_page>("reg_d_individual_notes3");
     }
 
     std::string get_upper_footer_template_name() const override
