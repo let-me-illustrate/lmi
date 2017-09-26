@@ -2600,6 +2600,81 @@ class reg_d_individual_cur_irr : public reg_d_individual_irr_base
     }
 };
 
+class reg_d_individual_cur : public page_with_tabular_report
+{
+  private:
+    enum
+        {column_policy_year
+        ,column_end_of_year_age
+        ,column_premium_outlay
+        ,column_premium_loads
+        ,column_admin_charges
+        ,column_cur_mortality_charges
+        ,column_cur_asset_charges
+        ,column_cur_investment_income
+        ,column_cur_account_value
+        ,column_cur_cash_surr_value
+        ,column_cur_death_benefit
+        ,column_max
+        };
+
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>reg_d_individual_cur}}";
+    }
+
+    illustration_table_columns const& get_table_columns() const override
+    {
+        static illustration_table_columns const columns =
+            {{ "PolicyYear"              , "Policy\nYear"      ,       "999" }
+            ,{ "AttainedAge"             , "End of\nYear Age"  ,       "999" }
+            ,{ "GrossPmt"                , "Premium\nOutlay"   ,   "999,999" }
+            ,{ "PremiumLoads"            , "Premium\nLoads"    ,   "999,999" }
+            ,{ "AdminCharges"            , "Admin\nCharges"    ,   "999,999" }
+            ,{ "COICharge_Current"       , "Mortality\nCharges",   "999,999" }
+            ,{ "SepAcctCharges_Current"  , "Asset\nCharges"    ,   "999,999" }
+            ,{ "GrossIntCredited_Current", "Investment\nIncome",   "999,999" }
+            ,{ "AcctVal_Current"         , "Account\nValue"    ,   "999,999" }
+            ,{ "CSVNet_Current"          , "Cash\nSurr Value"  ,   "999,999" }
+            ,{ "EOYDeathBft_Current"     , "Death\nBenefit"    , "9,999,999" }
+            };
+
+        return columns;
+    }
+
+    bool should_show_column(Ledger const& ledger, int column) const override
+    {
+        // One column should be hidden for composite ledgers.
+        return column != column_end_of_year_age || !ledger.is_composite();
+    }
+
+    void render_or_measure_extra_headers
+        (illustration_table_generator&  table
+        ,html_interpolator const&       interpolate_html
+        ,int*                           pos_y
+        ,enum_output_mode               output_mode
+        ) const override
+    {
+        table.output_super_header
+            (interpolate_html
+                ("{{InitAnnSepAcctGrossInt_Guaranteed}} Hypothetical Rate of Return*"
+                ).as_html()
+            ,column_cur_investment_income
+            ,column_max
+            ,pos_y
+            ,output_mode
+            );
+
+        *pos_y += table.get_separator_line_height();
+        table.output_horz_separator
+            (column_cur_investment_income
+            ,column_max
+            ,*pos_y
+            ,output_mode
+            );
+    }
+};
+
 // Private individual placement illustration.
 class pdf_illustration_reg_d_individual : public pdf_illustration
 {
@@ -2618,6 +2693,7 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         add<standard_page>("reg_d_individual_cover_page");
         add<reg_d_individual_guar_irr>();
         add<reg_d_individual_cur_irr>();
+        add<reg_d_individual_cur>();
     }
 
     std::string get_upper_footer_template_name() const override
