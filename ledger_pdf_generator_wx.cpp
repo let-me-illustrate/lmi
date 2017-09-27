@@ -232,6 +232,15 @@ class html_interpolator
         return evaluator_(name, index);
     }
 
+    // Interpolate the contents of the given external template.
+    //
+    // This is exactly the same as interpolating "{{>template_name}}" string
+    // but a bit more convenient to use and simpler to read.
+    text expand_template(std::string const& template_name) const
+    {
+        return (*this)("{{>" + template_name + "}}");
+    }
+
   private:
     // The expansion function used with interpolate_string().
     text expand_html(std::string const& s) const
@@ -687,7 +696,7 @@ class page
             (writer.get_horz_margin()
             ,writer.get_vert_margin()
             ,writer.get_page_width()
-            ,interpolate_html("{{>" + template_name + "}}")
+            ,interpolate_html.expand_template(template_name)
             );
     }
 
@@ -846,7 +855,7 @@ class pdf_illustration : protected html_interpolator
 
         add_variable
             ("HasComplianceTrackingNumber"
-            ,(*this)("{{>compliance_tracking_number}}")
+            ,expand_template("compliance_tracking_number")
                 .as_html().find_first_not_of(" \n")
                 != std::string::npos
             );
@@ -989,7 +998,7 @@ class page_with_footer : public page
                 (frame_horz_margin
                 ,0
                 ,frame_width
-                ,interpolate_html("{{>" + upper_template + "}}")
+                ,interpolate_html.expand_template(upper_template)
                 ,e_output_measure_only
                 );
 
@@ -1024,7 +1033,7 @@ class page_with_footer : public page
                 (frame_horz_margin
                 ,y
                 ,frame_width
-                ,interpolate_html("{{>" + upper_template + "}}")
+                ,interpolate_html.expand_template(upper_template)
                 );
             }
 
@@ -1649,7 +1658,9 @@ class page_with_tabular_report
             (writer.get_horz_margin()
             ,pos_y
             ,writer.get_page_width()
-            ,interpolate_html("{{>" + get_fixed_page_contents_template_name() + "}}")
+            ,interpolate_html.expand_template
+                (get_fixed_page_contents_template_name()
+                )
             ,output_mode
             );
 
