@@ -1610,9 +1610,8 @@ class page_with_tabular_report
     }
 
   protected:
-    // Must be overridden to return the contents of the fixed page part. This
-    // string will be interpolated and typically will be just "{{>template}}".
-    virtual std::string get_fixed_page_contents() const = 0;
+    // Must be overridden to return the template containing the fixed page part.
+    virtual std::string get_fixed_page_contents_template_name() const = 0;
 
     // May be overridden to render (only if output_mode is e_output_normal)
     // the extra headers just above the regular table headers.
@@ -1650,7 +1649,7 @@ class page_with_tabular_report
             (writer.get_horz_margin()
             ,pos_y
             ,writer.get_page_width()
-            ,interpolate_html(get_fixed_page_contents())
+            ,interpolate_html("{{>" + get_fixed_page_contents_template_name() + "}}")
             ,output_mode
             );
 
@@ -1735,9 +1734,9 @@ class tabular_detail_page : public page_with_tabular_report
         ,column_max
         };
 
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>tabular_details}}";
+        return "tabular_details";
     }
 
     std::string get_upper_footer_template_name() const override
@@ -1823,9 +1822,9 @@ class tabular_detail2_page : public page_with_tabular_report
         ,column_max
         };
 
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>tabular_details2}}";
+        return "tabular_details2";
     }
 
     std::string get_upper_footer_template_name() const override
@@ -1870,9 +1869,9 @@ class standard_supplemental_report : public page_with_tabular_report
         return columns_;
     }
 
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>" + page_template_ + "}}";
+        return page_template_;
     }
 
     // Helper function used by the ctor to initialize the const columns_ field.
@@ -2252,9 +2251,9 @@ class page_with_basic_tabular_report : public page_with_tabular_report
 class nasd_basic : public page_with_basic_tabular_report
 {
   private:
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>nasd_basic}}";
+        return "nasd_basic";
     }
 
     std::string get_two_column_header
@@ -2304,9 +2303,9 @@ class nasd_supplemental : public page_with_tabular_report
         ,column_max
         };
 
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>nasd_supplemental}}";
+        return "nasd_supplemental";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2389,9 +2388,9 @@ class nasd_assumption_detail : public page_with_tabular_report
         ,column_max
         };
 
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>nasd_assumption_detail}}";
+        return "nasd_assumption_detail";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2492,9 +2491,9 @@ class pdf_illustration_nasd : public pdf_illustration
 class reg_d_group_basic : public page_with_basic_tabular_report
 {
   private:
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>reg_d_group_basic}}";
+        return "reg_d_group_basic";
     }
 
     std::string get_two_column_header
@@ -2661,9 +2660,9 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
         return base::guaranteed;
     }
 
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>reg_d_individual_guar_irr}}";
+        return "reg_d_individual_guar_irr";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2695,9 +2694,9 @@ class reg_d_individual_cur_irr : public reg_d_individual_irr_base
         return base::current;
     }
 
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>reg_d_individual_cur_irr}}";
+        return "reg_d_individual_cur_irr";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2739,9 +2738,9 @@ class reg_d_individual_cur : public page_with_tabular_report
         ,column_max
         };
 
-    std::string get_fixed_page_contents() const override
+    std::string get_fixed_page_contents_template_name() const override
     {
-        return "{{>reg_d_individual_cur}}";
+        return "reg_d_individual_cur";
     }
 
     illustration_table_columns const& get_table_columns() const override
