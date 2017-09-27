@@ -1838,10 +1838,10 @@ class tabular_detail2_page : public page_with_tabular_report
     }
 };
 
-class supplemental_report : public page_with_tabular_report
+class supplemental_report_base : public page_with_tabular_report
 {
   public:
-    explicit supplemental_report(html_interpolator const& interpolate_html)
+    explicit supplemental_report_base(html_interpolator const& interpolate_html)
     {
         constexpr std::size_t max_columns = 12;
         std::string const empty_column_name("[none]");
@@ -1866,6 +1866,20 @@ class supplemental_report : public page_with_tabular_report
     }
 
   private:
+    illustration_table_columns const& get_table_columns() const override
+    {
+        return columns_;
+    }
+
+    illustration_table_columns columns_;
+};
+
+class supplemental_report : public supplemental_report_base
+{
+  public:
+    using supplemental_report_base::supplemental_report_base;
+
+  private:
     std::string get_fixed_page_contents() const override
     {
         return "{{>supplemental_report}}";
@@ -1875,13 +1889,6 @@ class supplemental_report : public page_with_tabular_report
     {
         return "footer_disclaimer";
     }
-
-    illustration_table_columns const& get_table_columns() const override
-    {
-        return columns_;
-    }
-
-    illustration_table_columns columns_;
 };
 
 // Regular illustration.
@@ -2374,6 +2381,18 @@ class nasd_assumption_detail : public page_with_tabular_report
     // all of its columns, including the "AttainedAge" one, are always shown.
 };
 
+class nasd_supplemental_report : public supplemental_report_base
+{
+  public:
+    using supplemental_report_base::supplemental_report_base;
+
+  private:
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>nasd_supplemental_report}}";
+    }
+};
+
 // NASD illustration.
 class pdf_illustration_nasd : public pdf_illustration
 {
@@ -2425,6 +2444,10 @@ class pdf_illustration_nasd : public pdf_illustration
         if(!ledger.is_composite())
             {
             add<nasd_assumption_detail>();
+            }
+        if(invar.SupplementalReport)
+            {
+            add<nasd_supplemental_report>(get_interpolator());
             }
     }
 
