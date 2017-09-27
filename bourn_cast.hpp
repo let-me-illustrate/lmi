@@ -115,25 +115,6 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
     return static_cast<To>(from);
 }
 
-namespace lmi
-{
-/// A constexpr replacement for std::ldexp().
-///
-/// See:
-///   https://lists.nongnu.org/archive/html/lmi/2017-09/msg00003.html
-/// et seqq.
-
-template<typename T>
-constexpr T ldexp(T t, int exp)
-{
-    for(int i = 0; i < exp; ++i)
-        {
-        t *= T(2);
-        }
-    return t;
-}
-} // namespace lmi
-
 /// Floating to integral.
 ///
 /// Integral max() must be one less than an integer power of two,
@@ -193,7 +174,7 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
     using from_traits = std::numeric_limits<From>;
     static_assert(to_traits::is_integer && !from_traits::is_integer, "");
 
-    constexpr From limit = lmi::ldexp(From(1), to_traits::digits);
+    From const limit = std::ldexp(From(1), to_traits::digits);
 
     constexpr bool is_twos_complement(~To(0) == -To(1));
 
