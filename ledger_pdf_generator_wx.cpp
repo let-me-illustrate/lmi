@@ -1837,31 +1837,16 @@ class tabular_detail2_page : public page_with_tabular_report
     }
 };
 
-class supplemental_report_base : public page_with_tabular_report
+class standard_supplemental_report : public page_with_tabular_report
 {
   public:
-    explicit supplemental_report_base(html_interpolator const& interpolate_html)
+    explicit standard_supplemental_report
+        (html_interpolator const& interpolate_html
+        ,std::string       const& page_template
+        )
+        :columns_(build_columns(interpolate_html))
+        ,page_template_(page_template)
     {
-        constexpr std::size_t max_columns = 12;
-        std::string const empty_column_name("[none]");
-
-        for(std::size_t i = 0; i < max_columns; ++i)
-            {
-            auto name = interpolate_html.evaluate("SupplementalReportColumnsNames", i);
-            if(name != empty_column_name)
-                {
-                // We currently don't have the field width information for
-                // arbitrary fields, so use fixed width that should be
-                // sufficient for almost all of them.
-                columns_.emplace_back
-                    (illustration_table_column
-                        {std::move(name)
-                        ,interpolate_html.evaluate("SupplementalReportColumnsTitles", i)
-                        ,"999,999"
-                        }
-                    );
-                }
-            }
     }
 
   private:
@@ -1870,20 +1855,54 @@ class supplemental_report_base : public page_with_tabular_report
         return columns_;
     }
 
-    illustration_table_columns columns_;
-};
-
-class supplemental_report : public supplemental_report_base
-{
-  public:
-    using supplemental_report_base::supplemental_report_base;
-
-  private:
     std::string get_fixed_page_contents() const override
     {
-        return "{{>supplemental_report}}";
+        return "{{>" + page_template_ + "}}";
     }
 
+    // Helper function used by the ctor to initialize the const columns_ field.
+    illustration_table_columns build_columns
+        (html_interpolator const& interpolate_html
+        )
+    {
+        constexpr std::size_t max_columns = 12;
+        std::string const empty_column_name("[none]");
+
+        illustration_table_columns columns;
+        for(std::size_t i = 0; i < max_columns; ++i)
+            {
+            auto name = interpolate_html.evaluate("SupplementalReportColumnsNames", i);
+            if(name != empty_column_name)
+                {
+                // We currently don't have the field width information for
+                // arbitrary fields, so use fixed width that should be
+                // sufficient for almost all of them.
+                columns.emplace_back
+                    (illustration_table_column
+                        {std::move(name)
+                        ,interpolate_html.evaluate("SupplementalReportColumnsTitles", i)
+                        ,"999,999"
+                        }
+                    );
+                }
+            }
+
+        return columns;
+    }
+
+    illustration_table_columns const columns_      ;
+    std::string                const page_template_;
+};
+
+class supplemental_report : public standard_supplemental_report
+{
+  public:
+    explicit supplemental_report(html_interpolator const& interpolate_html)
+        :standard_supplemental_report(interpolate_html, "supplemental_report")
+    {
+    }
+
+  private:
     std::string get_upper_footer_template_name() const override
     {
         return "footer_disclaimer";
@@ -2380,18 +2399,6 @@ class nasd_assumption_detail : public page_with_tabular_report
     // all of its columns, including the "AttainedAge" one, are always shown.
 };
 
-class nasd_supplemental_report : public supplemental_report_base
-{
-  public:
-    using supplemental_report_base::supplemental_report_base;
-
-  private:
-    std::string get_fixed_page_contents() const override
-    {
-        return "{{>nasd_supplemental_report}}";
-    }
-};
-
 // NASD illustration.
 class pdf_illustration_nasd : public pdf_illustration
 {
@@ -2446,7 +2453,10 @@ class pdf_illustration_nasd : public pdf_illustration
             }
         if(invar.SupplementalReport)
             {
-            add<nasd_supplemental_report>(get_interpolator());
+            add<standard_supplemental_report>
+                (get_interpolator()
+                ,"nasd_supplemental_report"
+                );
             }
     }
 
@@ -2491,18 +2501,6 @@ class reg_d_group_basic : public page_with_basic_tabular_report
     }
 };
 
-class reg_d_group_supplemental_report : public supplemental_report_base
-{
-  public:
-    using supplemental_report_base::supplemental_report_base;
-
-  private:
-    std::string get_fixed_page_contents() const override
-    {
-        return "{{>reg_d_group_supplemental_report}}";
-    }
-};
-
 // Private group placement illustration.
 class pdf_illustration_reg_d_group : public pdf_illustration
 {
@@ -2529,7 +2527,10 @@ class pdf_illustration_reg_d_group : public pdf_illustration
         add<standard_page>("reg_d_group_narrative_summary2");
         if(invar.SupplementalReport)
             {
-            add<reg_d_group_supplemental_report>(get_interpolator());
+            add<standard_supplemental_report>
+                (get_interpolator()
+                ,"reg_d_group_supplemental_report"
+                );
             }
     }
 
@@ -2777,18 +2778,6 @@ class reg_d_individual_cur : public page_with_tabular_report
     }
 };
 
-class reg_d_individual_supplemental_report : public supplemental_report_base
-{
-  public:
-    using supplemental_report_base::supplemental_report_base;
-
-  private:
-    std::string get_fixed_page_contents() const override
-    {
-        return "{{>reg_d_individual_supplemental_report}}";
-    }
-};
-
 // Private individual placement illustration.
 class pdf_illustration_reg_d_individual : public pdf_illustration
 {
@@ -2815,7 +2804,10 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         add<standard_page>("reg_d_individual_notes3");
         if(invar.SupplementalReport)
             {
-            add<reg_d_individual_supplemental_report>(get_interpolator());
+            add<standard_supplemental_report>
+                (get_interpolator()
+                ,"reg_d_individual_supplemental_report"
+                );
             }
     }
 
