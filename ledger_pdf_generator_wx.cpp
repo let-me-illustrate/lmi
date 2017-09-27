@@ -1118,6 +1118,19 @@ class attachment_page : public page_with_footer
 class numbered_page : public page_with_footer
 {
   public:
+    // Must be called before creating the first numbered page.
+    static void start_numbering()
+    {
+        last_page_number_ = 0;
+    }
+
+    numbered_page()
+    {
+        // This assert would fail if start_numbering() hadn't been called
+        // before creating a numbered page, as it should be.
+        LMI_ASSERT(last_page_number_ >= 0);
+    }
+
     void pre_render
         (Ledger const& ledger
         ,pdf_writer_wx& writer
@@ -1196,7 +1209,8 @@ class numbered_page : public page_with_footer
     int        extra_pages_          = 0;
 };
 
-int numbered_page::last_page_number_ = 0;
+// Initial value is invalid, use start_numbering() to change it.
+int numbered_page::last_page_number_ = -1;
 
 // Simplest possible page which is entirely defined by its external template
 // whose name must be specified when constructing it.
@@ -2039,6 +2053,7 @@ class pdf_illustration_regular : public pdf_illustration
 
         // Add all the pages.
         add<cover_page>();
+        numbered_page::start_numbering();
         add<standard_page>("narrative_summary");
         add<standard_page>("narrative_summary_cont");
         add<standard_page>("column_headings");
@@ -2443,6 +2458,7 @@ class pdf_illustration_nasd : public pdf_illustration
 
         // Add all the pages.
         add<cover_page>();
+        numbered_page::start_numbering();
         add<nasd_basic>();
         add<nasd_supplemental>();
         add<standard_page>("nasd_column_headings");
@@ -2522,6 +2538,7 @@ class pdf_illustration_reg_d_group : public pdf_illustration
 
         // Add all the pages.
         add<cover_page>();
+        numbered_page::start_numbering();
         add<reg_d_group_basic>();
         add<standard_page>("reg_d_group_column_headings");
         add<standard_page>("reg_d_group_narrative_summary");
@@ -2796,6 +2813,7 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         add_abbreviated_variable("Insured1", 140);
 
         // Add all the pages.
+        numbered_page::start_numbering();
         add<standard_page>("reg_d_individual_cover_page");
         add<reg_d_individual_guar_irr>();
         add<reg_d_individual_cur_irr>();
