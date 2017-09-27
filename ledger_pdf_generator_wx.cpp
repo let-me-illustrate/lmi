@@ -2492,6 +2492,18 @@ class reg_d_group_basic : public page_with_basic_tabular_report
     }
 };
 
+class reg_d_group_supplemental_report : public supplemental_report_base
+{
+  public:
+    using supplemental_report_base::supplemental_report_base;
+
+  private:
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>reg_d_group_supplemental_report}}";
+    }
+};
+
 // Private group placement illustration.
 class pdf_illustration_reg_d_group : public pdf_illustration
 {
@@ -2516,6 +2528,10 @@ class pdf_illustration_reg_d_group : public pdf_illustration
         add<standard_page>("reg_d_group_column_headings");
         add<standard_page>("reg_d_group_narrative_summary");
         add<standard_page>("reg_d_group_narrative_summary2");
+        if(invar.SupplementalReport)
+            {
+            add<reg_d_group_supplemental_report>(get_interpolator());
+            }
     }
 
     std::string get_upper_footer_template_name() const override
@@ -2762,6 +2778,18 @@ class reg_d_individual_cur : public page_with_tabular_report
     }
 };
 
+class reg_d_individual_supplemental_report : public supplemental_report_base
+{
+  public:
+    using supplemental_report_base::supplemental_report_base;
+
+  private:
+    std::string get_fixed_page_contents() const override
+    {
+        return "{{>reg_d_individual_supplemental_report}}";
+    }
+};
+
 // Private individual placement illustration.
 class pdf_illustration_reg_d_individual : public pdf_illustration
 {
@@ -2772,6 +2800,8 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         )
         :pdf_illustration(ledger, output)
     {
+        auto const& invar = ledger.GetLedgerInvariant();
+
         // Define variables specific to this illustration.
         add_abbreviated_variable("CorpName", 140);
         add_abbreviated_variable("Insured1", 140);
@@ -2784,6 +2814,10 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         add<standard_page>("reg_d_individual_notes1");
         add<standard_page>("reg_d_individual_notes2");
         add<standard_page>("reg_d_individual_notes3");
+        if(invar.SupplementalReport)
+            {
+            add<reg_d_individual_supplemental_report>(get_interpolator());
+            }
     }
 
     std::string get_upper_footer_template_name() const override
