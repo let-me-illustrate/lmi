@@ -378,10 +378,8 @@ else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   # See:
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
-  # XMLWRAPP !! '-Wno-deprecated-declarations' needed for auto_ptr
   gcc_version_specific_warnings := \
     -Wno-conversion \
-    -Wno-deprecated-declarations \
     -Wno-parentheses \
     -Wno-unused-local-typedefs \
     -Wno-unused-variable \
@@ -391,10 +389,8 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   # See:
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
-  # XMLWRAPP !! '-Wno-deprecated-declarations' needed for auto_ptr
   gcc_version_specific_warnings := \
     -Wno-conversion \
-    -Wno-deprecated-declarations \
     -Wno-parentheses \
     -Wno-unused-local-typedefs \
     -Wno-unused-variable \
@@ -660,6 +656,7 @@ REQUIRED_CPPFLAGS = \
   $(platform_defines) \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
+  -DBOOST_NO_AUTO_PTR \
   -DBOOST_STRICT_CONFIG \
 
 REQUIRED_CFLAGS = \
