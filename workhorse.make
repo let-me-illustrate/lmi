@@ -424,11 +424,6 @@ gcc_common_warnings := \
   -Wundef \
   -Wwrite-strings \
 
-# Some boost libraries treat 'long long' as part of the language,
-# which it probably soon will be, so permit it now.
-
-gcc_common_warnings += -Wno-long-long
-
 gcc_c_warnings := \
   $(c_standard) \
   $(gcc_common_warnings) \
@@ -494,9 +489,6 @@ endif
 
 # Too many warnings for libstdc++:
 #  -Wunreachable-code \
-
-# Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
-# being redundant for C++.
 
 C_WARNINGS = \
   $(gcc_c_warnings) \
