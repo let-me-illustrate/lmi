@@ -422,6 +422,7 @@ gcc_common_warnings := \
   -Wredundant-decls \
   -Wsign-compare \
   -Wundef \
+  -Wunreachable-code \
   -Wwrite-strings \
 
 gcc_c_warnings := \
@@ -486,9 +487,6 @@ endif
 # Too many warnings for various boost libraries:
 #  -Wold-style-cast \
 #  -Wshadow \
-
-# Too many warnings for libstdc++:
-#  -Wunreachable-code \
 
 C_WARNINGS = \
   $(gcc_c_warnings) \
