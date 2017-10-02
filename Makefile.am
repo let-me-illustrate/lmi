@@ -1086,6 +1086,7 @@ noinst_HEADERS = \
     assert_lmi.hpp \
     authenticity.hpp \
     basic_values.hpp \
+    boost_regex.hpp \
     bourn_cast.hpp \
     cache_file_reads.hpp \
     calendar_date.hpp \

@@ -21,11 +21,10 @@
 
 #include "pchfile.hpp"
 
+#include "boost_regex.hpp"
 #include "contains.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
-
-#include <boost/regex.hpp>
 
 #include <sstream>
 #include <string>

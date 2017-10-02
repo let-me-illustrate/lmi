@@ -22,6 +22,7 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
+#include "boost_regex.hpp"
 #include "calendar_date.hpp"
 #include "version.hpp"
 #include "wx_test_case.hpp"
@@ -31,8 +32,6 @@
 #include <wx/html/htmlwin.h>
 #include <wx/testing.h>
 #include <wx/uiaction.h>
-
-#include <boost/regex.hpp>
 
 #include <climits>                      // INT_MAX
 

@@ -20,6 +20,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 #include "assert_lmi.hpp"
+#include "boost_regex.hpp"
 #include "contains.hpp"
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
@@ -30,7 +31,6 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
 #include <boost/filesystem/path.hpp>
-#include <boost/regex.hpp>
 
 #include <algorithm>                    // is_sorted()
 #include <cstddef>                      // size_t
