@@ -595,7 +595,7 @@ void tn_range_test::test_absurd_limits()
         );
 
     BOOST_TEST_THROW
-        (r_absurd a;
+        (r_absurd b;
         ,std::runtime_error
         ,"Lower bound 1 exceeds upper bound 0 ."
         );

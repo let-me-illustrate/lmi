@@ -420,6 +420,7 @@ gcc_common_warnings := \
   -Wpacked \
   -Wpointer-arith \
   -Wredundant-decls \
+  -Wshadow \
   -Wsign-compare \
   -Wundef \
   -Wunreachable-code \
@@ -465,6 +466,10 @@ endif
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialized
 
+# The boost regex library is incompatible with '-Wshadow'.
+
+$(boost_regex_objects): gcc_common_extra_warnings += -Wno-shadow
+
 # The boost regex library improperly defines "NOMINMAX":
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
 # at least in version 1.33.1, and there seems to be no easy workaround
@@ -484,9 +489,8 @@ endif
 # any workarounds for gcc-3.3+ . However, it gives a number of
 # warnings with wx-2.5.4 (that have been fixed in a later version).
 
-# Too many warnings for various boost libraries:
+# Too many warnings for wx and various boost libraries:
 #  -Wold-style-cast \
-#  -Wshadow \
 
 C_WARNINGS = \
   $(gcc_c_warnings) \
