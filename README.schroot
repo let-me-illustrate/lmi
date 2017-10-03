@@ -161,6 +161,9 @@ bindkey "^[[1;5D" backward-word  # Ctrl-left
 bindkey "^[[1;5C" forward-word   # Ctrl-right
 bindkey '\e[1;3D' backward-word  # Alt-left
 bindkey '\e[1;3C' forward-word   # Alt-right
+# By default, zsh unfortunately binds ^S for this purpose;
+# use ^T instead, leaving ^S for flow control.
+bindkey '^T' history-incremental-search-forward
 
 prompt='%d[%?]%(!.#.$)'
 
