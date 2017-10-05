@@ -150,9 +150,12 @@ export DISPLAY=":0.0"
 export coefficiency='--jobs=32'
 
 # export TZ=UCT
-# export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
-#  No--better to do this:
+export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+# It is generally preferable to do this:
 # update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+# but neither the chroot's nor the host's /etc/default/locale is
+# sourced by schroot, which strives to set as few environment
+# variables as possible.
 
 # bindkey "\e[3~" delete-char      # Del
 # bindkey '\e[H' beginning-of-line # Home
