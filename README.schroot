@@ -245,6 +245,20 @@ set history=1000
 set virtualedit=all
 EOF
 
+# Enable stable and security upgrades:
+
+cat >/etc/apt/sources.list <<\EOF
+deb http://deb.debian.org/debian/ stretch main
+deb http://deb.debian.org/debian/ stretch-updates main
+deb http://security.debian.org/   stretch/updates main
+EOF
+
+# Apply any available upgrades:
+
+apt-get update
+apt-get upgrade
+apt-get dist-upgrade
+
 # Exit from the root shell in the chroot.
 exit
 
