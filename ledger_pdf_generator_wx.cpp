@@ -90,9 +90,9 @@ enum class interest_rate
     };
 
 // And functions to retrieve their string representation.
-std::string base_suffix(base guar_or_cur)
+std::string base_suffix(base guar_or_curr)
 {
-    switch(guar_or_cur)
+    switch(guar_or_curr)
         {
         case base::guaranteed: return "Guaranteed";
         case base::current:    return "Current"   ;
@@ -1302,10 +1302,10 @@ class numeric_summary_table_cell
         ,column_mid_account_value
         ,column_mid_cash_surr_value
         ,column_mid_death_benefit
-        ,column_separator_mid_cur
-        ,column_cur_account_value
-        ,column_cur_cash_surr_value
-        ,column_cur_death_benefit
+        ,column_separator_mid_curr
+        ,column_curr_account_value
+        ,column_curr_cash_surr_value
+        ,column_curr_death_benefit
         ,column_max
         };
 
@@ -1376,14 +1376,14 @@ class numeric_summary_table_cell
         table.output_super_header
             ("Midpoint Values"
             ,column_mid_account_value
-            ,column_separator_mid_cur
+            ,column_separator_mid_curr
             ,&y_copy
             ,output_mode
             );
 
         table.output_super_header
             ("Current Values"
-            ,column_cur_account_value
+            ,column_curr_account_value
             ,column_max
             ,&pos_y
             ,output_mode
@@ -1392,13 +1392,13 @@ class numeric_summary_table_cell
         pos_y += table.get_separator_line_height();
         table.output_horz_separator
             (column_mid_account_value
-            ,column_separator_mid_cur
+            ,column_separator_mid_curr
             ,pos_y
             ,output_mode
             );
 
         table.output_horz_separator
-            (column_cur_account_value
+            (column_curr_account_value
             ,column_max
             ,pos_y
             ,output_mode
@@ -1739,9 +1739,9 @@ class tabular_detail_page : public page_with_tabular_report
         ,column_guar_cash_surr_value
         ,column_guar_death_benefit
         ,column_dummy_separator
-        ,column_cur_account_value
-        ,column_cur_cash_surr_value
-        ,column_cur_death_benefit
+        ,column_curr_account_value
+        ,column_curr_cash_surr_value
+        ,column_curr_death_benefit
         ,column_max
         };
 
@@ -1776,7 +1776,7 @@ class tabular_detail_page : public page_with_tabular_report
             );
         table.output_super_header
             ("Non-Guaranteed Values"
-            ,column_cur_account_value
+            ,column_curr_account_value
             ,column_max
             ,pos_y
             ,output_mode
@@ -1790,7 +1790,7 @@ class tabular_detail_page : public page_with_tabular_report
             ,output_mode
             );
         table.output_horz_separator
-            (column_cur_account_value
+            (column_curr_account_value
             ,column_max
             ,*pos_y
             ,output_mode
@@ -2102,7 +2102,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     // name of the variable appropriate for the current column pair, with the
     // help of base_suffix() and ir_suffix() functions.
     virtual std::string get_two_column_header
-        (base          guar_or_cur
+        (base          guar_or_curr
         ,interest_rate zero_or_not
         ) const = 0;
 
@@ -2115,12 +2115,12 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         ,column_separator_guar0_guar
         ,column_guar_cash_surr_value
         ,column_guar_death_benefit
-        ,column_separator_guar_cur0
-        ,column_cur0_cash_surr_value
-        ,column_cur0_death_benefit
-        ,column_separator_cur0_cur
-        ,column_cur_cash_surr_value
-        ,column_cur_death_benefit
+        ,column_separator_guar_curr0
+        ,column_curr0_cash_surr_value
+        ,column_curr0_death_benefit
+        ,column_separator_curr0_curr
+        ,column_curr_cash_surr_value
+        ,column_curr_death_benefit
         ,column_max
         };
 
@@ -2165,7 +2165,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         table.output_super_header
             ("Using guaranteed charges"
             ,column_guar0_cash_surr_value
-            ,column_separator_guar_cur0
+            ,column_separator_guar_curr0
             ,pos_y
             ,output_mode
             );
@@ -2173,7 +2173,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         *pos_y = pos_y_copy;
         table.output_super_header
             ("Using current charges"
-            ,column_cur0_cash_surr_value
+            ,column_curr0_cash_surr_value
             ,column_max
             ,pos_y
             ,output_mode
@@ -2182,12 +2182,12 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         *pos_y += table.get_separator_line_height();
         table.output_horz_separator
             (column_guar0_cash_surr_value
-            ,column_separator_guar_cur0
+            ,column_separator_guar_curr0
             ,*pos_y
             ,output_mode
             );
         table.output_horz_separator
-            (column_cur0_cash_surr_value
+            (column_curr0_cash_surr_value
             ,column_max
             ,*pos_y
             ,output_mode
@@ -2200,7 +2200,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         // the "Guaranteed" or "Current", "Zero" or not, column and returns the
         // vertical position below the header.
         auto const output_two_column_super_header = [=,&table]
-            (base           guar_or_cur
+            (base           guar_or_curr
             ,interest_rate  zero_or_not
             ,std::size_t    begin_column
             ) -> int
@@ -2211,7 +2211,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                 auto y = *pos_y;
 
                 auto const header = get_two_column_header
-                    (guar_or_cur
+                    (guar_or_curr
                     ,zero_or_not
                     );
                 table.output_super_header
@@ -2248,13 +2248,13 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         output_two_column_super_header
             (base::current
             ,interest_rate::zero
-            ,column_cur0_cash_surr_value
+            ,column_curr0_cash_surr_value
             );
 
         *pos_y = output_two_column_super_header
             (base::current
             ,interest_rate::non_zero
-            ,column_cur_cash_surr_value
+            ,column_curr_cash_surr_value
             );
     }
 };
@@ -2268,24 +2268,24 @@ class nasd_basic : public page_with_basic_tabular_report
     }
 
     std::string get_two_column_header
-        (base          guar_or_cur
+        (base          guar_or_curr
         ,interest_rate zero_or_not
         ) const override
     {
         std::ostringstream oss;
         oss
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(guar_or_cur)
+            << base_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
             << "Assumed Sep Acct\n"
             << "Gross Rate* "
             << "({{InitAnnSepAcctNetInt_"
-            << base_suffix(guar_or_cur)
+            << base_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} net)\n"
             << "{{InitAnnGenAcctInt_"
-            << base_suffix(guar_or_cur)
+            << base_suffix(guar_or_curr)
             << "}} GPA rate"
             ;
         return oss.str();
@@ -2308,9 +2308,9 @@ class nasd_supplemental : public page_with_tabular_report
         ,column_ee_min_premium
         ,column_net_premium
         ,column_cost_of_insurance_charges
-        ,column_cur_account_value
-        ,column_cur_cash_surr_value
-        ,column_cur_death_benefit
+        ,column_curr_account_value
+        ,column_curr_cash_surr_value
+        ,column_curr_death_benefit
         ,column_max
         };
 
@@ -2372,9 +2372,9 @@ class nasd_supplemental : public page_with_tabular_report
             case column_premium_outlay:
             case column_net_premium:
             case column_cost_of_insurance_charges:
-            case column_cur_account_value:
-            case column_cur_cash_surr_value:
-            case column_cur_death_benefit:
+            case column_curr_account_value:
+            case column_curr_cash_surr_value:
+            case column_curr_death_benefit:
             case column_max:
                 // These columns are common to both cases and never hidden.
                 break;
@@ -2508,19 +2508,19 @@ class reg_d_group_basic : public page_with_basic_tabular_report
     }
 
     std::string get_two_column_header
-        (base          guar_or_cur
+        (base          guar_or_curr
         ,interest_rate zero_or_not
         ) const override
     {
         std::ostringstream oss;
         oss
             << "{{InitAnnSepAcctGrossInt_"
-            << base_suffix(guar_or_cur)
+            << base_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} "
             << "Hypothetical Gross\n"
             << "Return ({{InitAnnSepAcctNetInt_"
-            << base_suffix(guar_or_cur)
+            << base_suffix(guar_or_curr)
             << ir_suffix(zero_or_not)
             << "}} net)"
             ;
@@ -2697,7 +2697,7 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
     }
 };
 
-class reg_d_individual_cur_irr : public reg_d_individual_irr_base
+class reg_d_individual_curr_irr : public reg_d_individual_irr_base
 {
   private:
     base get_base() const override
@@ -2707,7 +2707,7 @@ class reg_d_individual_cur_irr : public reg_d_individual_irr_base
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "reg_d_individual_cur_irr";
+        return "reg_d_individual_curr_irr";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2731,7 +2731,7 @@ class reg_d_individual_cur_irr : public reg_d_individual_irr_base
     }
 };
 
-class reg_d_individual_cur : public page_with_tabular_report
+class reg_d_individual_curr : public page_with_tabular_report
 {
   private:
     enum
@@ -2740,18 +2740,18 @@ class reg_d_individual_cur : public page_with_tabular_report
         ,column_premium_outlay
         ,column_premium_loads
         ,column_admin_charges
-        ,column_cur_mortality_charges
-        ,column_cur_asset_charges
-        ,column_cur_investment_income
-        ,column_cur_account_value
-        ,column_cur_cash_surr_value
-        ,column_cur_death_benefit
+        ,column_curr_mortality_charges
+        ,column_curr_asset_charges
+        ,column_curr_investment_income
+        ,column_curr_account_value
+        ,column_curr_cash_surr_value
+        ,column_curr_death_benefit
         ,column_max
         };
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "reg_d_individual_cur";
+        return "reg_d_individual_curr";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2790,7 +2790,7 @@ class reg_d_individual_cur : public page_with_tabular_report
             (interpolate_html
                 ("{{InitAnnSepAcctGrossInt_Guaranteed}} Hypothetical Rate of Return*"
                 ).as_html()
-            ,column_cur_investment_income
+            ,column_curr_investment_income
             ,column_max
             ,pos_y
             ,output_mode
@@ -2798,7 +2798,7 @@ class reg_d_individual_cur : public page_with_tabular_report
 
         *pos_y += table.get_separator_line_height();
         table.output_horz_separator
-            (column_cur_investment_income
+            (column_curr_investment_income
             ,column_max
             ,*pos_y
             ,output_mode
@@ -2826,8 +2826,8 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
         numbered_page::start_numbering();
         add<standard_page>("reg_d_individual_cover_page");
         add<reg_d_individual_guar_irr>();
-        add<reg_d_individual_cur_irr>();
-        add<reg_d_individual_cur>();
+        add<reg_d_individual_curr_irr>();
+        add<reg_d_individual_curr>();
         add<standard_page>("reg_d_individual_notes1");
         add<standard_page>("reg_d_individual_notes2");
         add<standard_page>("reg_d_individual_notes3");
