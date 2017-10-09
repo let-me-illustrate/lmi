@@ -292,13 +292,13 @@ class html_interpolator
 
     std::string load_partial_from_file(std::string const& file) const
     {
-        std::ifstream ifs(AddDataDir(file + ".mustache"));
+        std::ifstream ifs(AddDataDir(file + ".mst"));
         if(!ifs)
             {
             alarum()
                 << "Template file \""
                 << file
-                << ".mustache\" not found."
+                << ".mst\" not found."
                 << std::flush
                 ;
             }
@@ -683,7 +683,7 @@ class page
   protected:
     // Helper method for rendering the contents of the given external template,
     // which is expected to be found in the file with the provided name and
-    // ".mustache" extension in the data directory.
+    // ".mst" extension in the data directory.
     //
     // Return the height of the page contents.
     int render_page_template
