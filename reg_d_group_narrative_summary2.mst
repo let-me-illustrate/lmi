@@ -92,7 +92,7 @@ The state of issue is {{StatePostalAbbrev}}.
 
 {{#HasComplianceTrackingNumber}}
     <p>
-    Compliance tracking number: {{>compliance_tracking_number}}
+    Compliance tracking number: {{>imprimatur}}
     </p>
 {{/HasComplianceTrackingNumber}}
 

@@ -855,7 +855,7 @@ class pdf_illustration : protected html_interpolator
 
         add_variable
             ("HasComplianceTrackingNumber"
-            ,expand_template("compliance_tracking_number")
+            ,expand_template("imprimatur")
                 .as_html().find_first_not_of(" \n")
                 != std::string::npos
             );

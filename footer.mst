@@ -12,7 +12,7 @@
     <tr>
         <td>System Version: {{LmiVersion}}</td>
         <td>&nbsp;</td>
-        <td align="right">{{>compliance_tracking_number}}</td>
+        <td align="right">{{>imprimatur}}</td>
     </tr>
 </table>
 
