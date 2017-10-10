@@ -18,9 +18,16 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
-{{>header}}
+{{>reg_d_indiv_header}}
 
-<p align="center">Tabular Detail, continued</p>
+<font size="-1">
 
-<br></br>
-<br></br>
+<p align="center">
+End of Year Policy Values using Current Charges
+</p>
+
+{{>dollar_units}}
+
+</font>
+
+{{! The current charges values table is generated from C++ code }}

@@ -1525,7 +1525,7 @@ using numbered_or_attachment_base = typename std::conditional
     >::type;
 
 template<bool is_attachment>
-class numeric_summary_or_attachment_page
+class reg_numeric_summary_or_attachment_page
     : public numbered_or_attachment_base<is_attachment>
 {
   public:
@@ -1541,7 +1541,11 @@ class numeric_summary_or_attachment_page
             ,interpolate_html
             );
 
-        this->render_page_template("numeric_summary", writer, interpolate_html);
+        this->render_page_template
+            ("reg_numeric_summary"
+            ,writer
+            ,interpolate_html
+            );
     }
 };
 
@@ -1728,7 +1732,7 @@ class page_with_tabular_report
     }
 };
 
-class tabular_detail_page : public page_with_tabular_report
+class reg_tabular_detail_page : public page_with_tabular_report
 {
   private:
     enum
@@ -1747,12 +1751,12 @@ class tabular_detail_page : public page_with_tabular_report
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "tabular_details";
+        return "reg_tabular_details";
     }
 
     std::string get_upper_footer_template_name() const override
     {
-        return "footer_disclaimer";
+        return "reg_footer_disclaimer";
     }
 
     void render_or_measure_extra_headers
@@ -1822,7 +1826,7 @@ class tabular_detail_page : public page_with_tabular_report
     }
 };
 
-class tabular_detail2_page : public page_with_tabular_report
+class reg_tabular_detail2_page : public page_with_tabular_report
 {
   private:
     enum
@@ -1835,12 +1839,12 @@ class tabular_detail2_page : public page_with_tabular_report
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "tabular_details2";
+        return "reg_tabular_details2";
     }
 
     std::string get_upper_footer_template_name() const override
     {
-        return "footer_disclaimer";
+        return "reg_footer_disclaimer";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -1919,18 +1923,18 @@ class standard_supplemental_report : public page_with_tabular_report
     std::string                const page_template_;
 };
 
-class supplemental_report : public standard_supplemental_report
+class reg_supplemental_report : public standard_supplemental_report
 {
   public:
-    explicit supplemental_report(html_interpolator const& interpolate_html)
-        :standard_supplemental_report(interpolate_html, "supplemental_report")
+    explicit reg_supplemental_report(html_interpolator const& interpolate_html)
+        :standard_supplemental_report(interpolate_html, "reg_supp_report")
     {
     }
 
   private:
     std::string get_upper_footer_template_name() const override
     {
-        return "footer_disclaimer";
+        return "reg_footer_disclaimer";
     }
 };
 
@@ -2064,27 +2068,29 @@ class pdf_illustration_regular : public pdf_illustration
         // Add all the pages.
         add<cover_page>();
         numbered_page::start_numbering();
-        add<standard_page>("narrative_summary");
-        add<standard_page>("narrative_summary_cont");
-        add<standard_page>("column_headings");
+        add<standard_page>("reg_narr_summary");
+        add<standard_page>("reg_narr_summary2");
+        add<standard_page>("reg_column_headings");
         if(!invar.IsInforce)
             {
-            add<numeric_summary_or_attachment_page<false>>();
+            add<reg_numeric_summary_or_attachment_page<false>>();
             }
-        add<tabular_detail_page>();
-        add<tabular_detail2_page>();
+        add<reg_tabular_detail_page>();
+        add<reg_tabular_detail2_page>();
         if(invar.SupplementalReport)
             {
-            add<supplemental_report>(get_interpolator());
+            add<reg_supplemental_report>(get_interpolator());
             }
         if(!invar.IsInforce)
             {
-            add<numeric_summary_or_attachment_page<true>>();
+            add<reg_numeric_summary_or_attachment_page<true>>();
             }
     }
 
-    std::string get_upper_footer_template_name() const override { return {}; }
-    std::string get_lower_footer_template_name() const override { return "footer"; }
+    std::string get_upper_footer_template_name() const override
+        { return {}; }
+    std::string get_lower_footer_template_name() const override
+        { return "reg_footer"; }
 };
 
 // Common base class for basic illustration pages using the same columns in
@@ -2316,7 +2322,7 @@ class nasd_supplemental : public page_with_tabular_report
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "nasd_supplemental";
+        return "nasd_supp";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2482,7 +2488,7 @@ class pdf_illustration_nasd : public pdf_illustration
             {
             add<standard_supplemental_report>
                 (get_interpolator()
-                ,"nasd_supplemental_report"
+                ,"nasd_supp_report"
                 );
             }
     }
@@ -2551,13 +2557,13 @@ class pdf_illustration_reg_d_group : public pdf_illustration
         numbered_page::start_numbering();
         add<reg_d_group_basic>();
         add<standard_page>("reg_d_group_column_headings");
-        add<standard_page>("reg_d_group_narrative_summary");
-        add<standard_page>("reg_d_group_narrative_summary2");
+        add<standard_page>("reg_d_group_narr_summary");
+        add<standard_page>("reg_d_group_narr_summary2");
         if(invar.SupplementalReport)
             {
             add<standard_supplemental_report>
                 (get_interpolator()
-                ,"reg_d_group_supplemental_report"
+                ,"reg_d_group_supp_report"
                 );
             }
     }
@@ -2673,7 +2679,7 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "reg_d_individual_guar_irr";
+        return "reg_d_indiv_guar_irr";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2707,7 +2713,7 @@ class reg_d_individual_curr_irr : public reg_d_individual_irr_base
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "reg_d_individual_curr_irr";
+        return "reg_d_indiv_curr_irr";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2751,7 +2757,7 @@ class reg_d_individual_curr : public page_with_tabular_report
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "reg_d_individual_curr";
+        return "reg_d_indiv_curr";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -2824,30 +2830,30 @@ class pdf_illustration_reg_d_individual : public pdf_illustration
 
         // Add all the pages.
         numbered_page::start_numbering();
-        add<standard_page>("reg_d_individual_cover_page");
+        add<standard_page>("reg_d_indiv_cover_page");
         add<reg_d_individual_guar_irr>();
         add<reg_d_individual_curr_irr>();
         add<reg_d_individual_curr>();
-        add<standard_page>("reg_d_individual_notes1");
-        add<standard_page>("reg_d_individual_notes2");
-        add<standard_page>("reg_d_individual_notes3");
+        add<standard_page>("reg_d_indiv_notes1");
+        add<standard_page>("reg_d_indiv_notes2");
+        add<standard_page>("reg_d_indiv_notes3");
         if(invar.SupplementalReport)
             {
             add<standard_supplemental_report>
                 (get_interpolator()
-                ,"reg_d_individual_supplemental_report"
+                ,"reg_d_indiv_supp_report"
                 );
             }
     }
 
     std::string get_upper_footer_template_name() const override
     {
-        return "reg_d_individual_footer_upper";
+        return "reg_d_indiv_footer_upper";
     }
 
     std::string get_lower_footer_template_name() const override
     {
-        return "reg_d_individual_footer_lower";
+        return "reg_d_indiv_footer_lower";
     }
 };
 

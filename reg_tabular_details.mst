@@ -18,10 +18,11 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
-{{>header}}
+{{>reg_header}}
 
-<p align="center">{{SupplementalReportTitle}}</p>
+<p align="center">Tabular Detail</p>
 
 {{>dollar_units}}
 
-{{! The supplemental report table itself is generated from C++ code }}
+<br></br>
+<br></br>

@@ -18,7 +18,7 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
-{{>header}}
+{{>reg_header}}
 
 <p align="center">Numeric Summary</p>
 

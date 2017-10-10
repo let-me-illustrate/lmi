@@ -18,16 +18,16 @@
     email: <gchicares@sbcglobal.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
-{{>reg_d_individual_header}}
+{{>reg_d_indiv_header}}
 
 <font size="-1">
 
 <p align="center">
-End of Year Policy Values using Current Charges
+End of Year Policy Values using Guaranteed Charges
 </p>
 
 {{>dollar_units}}
 
 </font>
 
-{{! The current charges values table is generated from C++ code }}
+{{! The IRR values table is generated from C++ code }}
