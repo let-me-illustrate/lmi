@@ -45,15 +45,15 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( test_interpolate("{{foo}}{{bar}}"), "foobar"  );
 
     // Comments should be just ignored.
-    BOOST_TEST_EQUAL( test_interpolate("{{! ignore me}}", ""        );
-    BOOST_TEST_EQUAL( test_interpolate("{{! too}}{{x}}",  "x"       );
-    BOOST_TEST_EQUAL( test_interpolate("{{x}}{{!also}}",  "x"       );
+    BOOST_TEST_EQUAL( test_interpolate("{{! ignore me}}"), ""       );
+    BOOST_TEST_EQUAL( test_interpolate("{{! too}}{{x}}"),  "x"      );
+    BOOST_TEST_EQUAL( test_interpolate("{{x}}{{!also}}"),  "x"      );
 
     // Sections.
-    auto const section_test = [](char const* s)
+    auto const section_test = [](char const* str)
         {
         return interpolate_string
-            (s
+            (str
             ,[](std::string const& s, interpolate_lookup_kind) -> std::string
                 {
                 if(s == "var0") return "0";
@@ -88,10 +88,10 @@ int test_main(int, char*[])
         );
 
     // Partials.
-    auto const partial_test = [](char const* s)
+    auto const partial_test = [](char const* str)
         {
         return interpolate_string
-            (s
+            (str
             ,[](std::string const& s, interpolate_lookup_kind) -> std::string
                 {
                 if(s == "header")       return "[header with {{var}}]";
