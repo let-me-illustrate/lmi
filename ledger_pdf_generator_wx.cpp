@@ -494,8 +494,8 @@ class html_cell_for_pdf_output : public wxHtmlCell
     void draw_check_precondition
         (wxDC& dc
         ,int view_y1
-        ,int view_y2,
-        wxHtmlRenderingInfo& info
+        ,int view_y2
+        ,wxHtmlRenderingInfo& info
         )
     {
         // The DC passed to this function is supposed to be the same as the one
@@ -552,8 +552,8 @@ class scaled_image_cell : public html_cell_for_pdf_output
         ,int x
         ,int y
         ,int view_y1
-        ,int view_y2,
-        wxHtmlRenderingInfo& info
+        ,int view_y2
+        ,wxHtmlRenderingInfo& info
         ) override
     {
         draw_check_precondition(dc, view_y1, view_y2, info);
@@ -1278,8 +1278,8 @@ class numeric_summary_table_cell
         ,int x
         ,int y
         ,int view_y1
-        ,int view_y2,
-        wxHtmlRenderingInfo& info
+        ,int view_y2
+        ,wxHtmlRenderingInfo& info
         ) override
     {
         draw_check_precondition(dc, view_y1, view_y2, info);
@@ -1671,8 +1671,8 @@ class page_with_tabular_report
         render_or_measure_extra_headers
             (table
             ,interpolate_html
-            ,&pos_y,
-            output_mode
+            ,&pos_y
+            ,output_mode
             );
 
         table.output_header(&pos_y, output_mode);
