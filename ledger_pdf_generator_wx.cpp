@@ -150,11 +150,10 @@ class html_interpolator
     // "{{#name}}..{{/name}}" or "{{^name}}..{{/name}}" are also allowed and
     // their contents is included in the expansion if and only if the variable
     // with the given name has value "1" for the former or "0" for the latter.
-    // The variable names understood by this function are:
-    //  - Scalar fields of GetLedgerInvariant().
-    //  - Special variables defined in this class, such as "lmi_version" and
-    //    "date_prepared".
-    //  - Any additional fields defined in the derived classes.
+    //
+    // The variable names recognized by this function are either those defined
+    // by ledger_evaluator, i.e. scalar and vector fields of the ledger, or any
+    // variables explicitly defined by add_variable() calls.
     text operator()(char const* s) const
     {
         return text::from_html
@@ -342,7 +341,13 @@ class illustration_table_generator : public wx_table_generator
     }
 };
 
-// A helper mix-in class for pages using tables.
+// A helper mix-in class for pages using tables which is also reused by the
+// custom wxHtmlCell showing a table.
+//
+// Derived classes must provide get_table_columns() and may also override
+// should_show_column() to hide some of these columns dynamically and then can
+// use create_table_generator() to obtain the generator object that can be used
+// to render a table with the specified columns.
 class using_illustration_table
 {
   protected:
@@ -633,6 +638,11 @@ TAG_HANDLER_END(scaled_image)
 
 class pdf_illustration;
 
+// Base class for all logical illustration pages.
+//
+// A single logical page may result in multiple physical pages of output, e.g.
+// if it contains a table not fitting on one page, but mostly these page
+// objects correspond to a single physical page of the resulting illustration.
 class page
 {
   public:
@@ -649,7 +659,8 @@ class page
     //
     // This object is not passed as a ctor argument because it would be
     // redundant, instead it is associated with the page when it's added to an
-    // illustration. This method is supposed to be called only once.
+    // illustration. This method is supposed to be called only once and only by
+    // pdf_illustration this page is being added to.
     void illustration(pdf_illustration const& illustration)
     {
         LMI_ASSERT(!illustration_);
@@ -705,7 +716,12 @@ class page
     pdf_illustration const* illustration_ = nullptr;
 };
 
-// This is just a container for the illustration-global data.
+// Base class for the different kinds of illustrations.
+//
+// This object contains pages, added to it using its add() method, as well as
+// illustration-global data registered as variables with html_interpolator and
+// so available for the pages when expanding the external templates defining
+// their contents.
 class pdf_illustration : protected html_interpolator
 {
   public:
@@ -750,10 +766,14 @@ class pdf_illustration : protected html_interpolator
             {
             if(first)
                 {
+                // We shouldn't start a new page before the very first one.
                 first = false;
                 }
             else
                 {
+                // Do start a new physical page before rendering all the
+                // subsequent pages (notice that a page is also free to call
+                // StartPage() from its render()).
                 writer_.dc().StartPage();
                 }
 
@@ -768,6 +788,8 @@ class pdf_illustration : protected html_interpolator
     //
     // Notice that the upper footer template name can be overridden at the page
     // level, the methods here define the default for all illustration pages.
+    //
+    // These methods are used by the pages deriving from page_with_footer.
     virtual std::string get_upper_footer_template_name() const = 0;
     virtual std::string get_lower_footer_template_name() const = 0;
 
@@ -799,9 +821,14 @@ class pdf_illustration : protected html_interpolator
     }
 
   private:
-    // Initialize the variables that can be interpolated later.
+    // Define variables that can be used when interpolating pages contents.
     void init_variables()
     {
+        // The variables defined here are used by all, or at least more than
+        // one, illustration kinds. Variables only used in the templates of a
+        // single illustration type should be defined in the corresponding
+        // derived pdf_illustration_xxx class instead.
+
         add_variable
             ("date_prepared"
             , text::from(evaluate("PrepMonth"))
@@ -903,8 +930,8 @@ class pdf_illustration : protected html_interpolator
             );
     }
 
-    // Use non-default font sizes to make it simpler to replicate the existing
-    // illustrations.
+    // This array stores the non-default font sizes that are used to make it
+    // simpler to replicate the existing illustrations.
     static std::array<int, 7> const html_font_sizes;
 
     // Writer object used for the page metrics and higher level functions.
@@ -929,6 +956,7 @@ std::array<int, 7> const pdf_illustration::html_font_sizes
     }
     };
 
+// Cover page used by several different illustration kinds.
 class cover_page : public page
 {
   public:
@@ -960,7 +988,7 @@ class cover_page : public page
     }
 };
 
-/// Base class for all pages with a footer.
+// Base class for all pages with a footer.
 class page_with_footer : public page
 {
   public:
@@ -1109,7 +1137,7 @@ class page_with_footer : public page
     int footer_top_ = 0;
 };
 
-/// Base class for attachment pages.
+// Base class for attachment pages.
 class attachment_page : public page_with_footer
 {
   private:
@@ -1119,11 +1147,11 @@ class attachment_page : public page_with_footer
     }
 };
 
-/// Base class for all pages showing the page number in the footer.
-///
-/// In addition to actually providing page_with_footer with the correct string
-/// to show in the footer, this class implicitly handles the page count by
-/// incrementing it whenever a new object of this class is pre-rendered.
+// Base class for all pages showing the page number in the footer.
+//
+// In addition to actually providing page_with_footer with the correct string
+// to show in the footer, this class implicitly handles the page count by
+// incrementing it whenever a new object of this class is pre-rendered.
 class numbered_page : public page_with_footer
 {
   public:
@@ -1866,6 +1894,10 @@ class reg_tabular_detail2_page : public page_with_tabular_report
     }
 };
 
+// Class for pages showing supplemental report after the fixed template
+// contents. It can be either used directly or further derived from, e.g. to
+// override some of its inherited virtual methods such as
+// get_upper_footer_template_name() as done below.
 class standard_supplemental_report : public page_with_tabular_report
 {
   public:
