@@ -161,11 +161,11 @@ class html_interpolator
             (interpolate_string
                 (s
                 ,[this]
-                    (std::string const& s
+                    (std::string const& str
                     ,interpolate_lookup_kind kind
                     )
                     {
-                        return interpolation_func(s, kind);
+                        return interpolation_func(str, kind);
                     }
                 )
             );
