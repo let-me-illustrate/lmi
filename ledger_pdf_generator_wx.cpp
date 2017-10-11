@@ -60,8 +60,6 @@
 
 LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
 
-using namespace html;
-
 namespace
 {
 
@@ -154,9 +152,9 @@ class html_interpolator
     // The variable names recognized by this function are either those defined
     // by ledger_evaluator, i.e. scalar and vector fields of the ledger, or any
     // variables explicitly defined by add_variable() calls.
-    text operator()(char const* s) const
+    html::text operator()(char const* s) const
     {
-        return text::from_html
+        return html::text::from_html
             (interpolate_string
                 (s
                 ,[this]
@@ -170,7 +168,7 @@ class html_interpolator
             );
     }
 
-    text operator()(std::string const& s) const
+    html::text operator()(std::string const& s) const
     {
         return (*this)(s.c_str());
     }
@@ -178,14 +176,14 @@ class html_interpolator
     // Add a variable, providing either its raw text or already escaped HTML
     // representation. Boolean values are converted to strings "0" or "1" as
     // expected.
-    void add_variable(std::string const& name, text const& value)
+    void add_variable(std::string const& name, html::text const& value)
     {
         vars_[name] = value;
     }
 
     void add_variable(std::string const& name, std::string const& value)
     {
-        add_variable(name, text::from(value));
+        add_variable(name, html::text::from(value));
     }
 
     void add_variable(std::string const& name, int value)
@@ -235,14 +233,14 @@ class html_interpolator
     //
     // This is exactly the same as interpolating "{{>template_name}}" string
     // but a bit more convenient to use and simpler to read.
-    text expand_template(std::string const& template_name) const
+    html::text expand_template(std::string const& template_name) const
     {
         return (*this)("{{>" + template_name + "}}");
     }
 
   private:
     // The expansion function used with interpolate_string().
-    text expand_html(std::string const& s) const
+    html::text expand_html(std::string const& s) const
     {
         // Check our own variables first:
         auto const it = vars_.find(s);
@@ -278,7 +276,7 @@ class html_interpolator
                 }
 
             // Cast below is valid because of the check for overflow above.
-            return text::from
+            return html::text::from
                 (evaluator_
                     (s.substr(0, open_pos)
                     ,static_cast<std::size_t>(index)
@@ -286,7 +284,7 @@ class html_interpolator
                 );
             }
 
-        return text::from(evaluator_(s));
+        return html::text::from(evaluator_(s));
     }
 
     std::string load_partial_from_file(std::string const& file) const
@@ -310,7 +308,7 @@ class html_interpolator
     ledger_evaluator const evaluator_;
 
     // Variables defined for all pages of this illustration.
-    std::map<std::string, text> vars_;
+    std::map<std::string, html::text> vars_;
 };
 
 // A slightly specialized table generator for the tables used in the
@@ -831,14 +829,14 @@ class pdf_illustration : protected html_interpolator
 
         add_variable
             ("date_prepared"
-            , text::from(evaluate("PrepMonth"))
-            + text::nbsp()
-            + text::from(evaluate("PrepDay"))
-            + text::from(", ")
-            + text::from(evaluate("PrepYear"))
+            , html::text::from(evaluate("PrepMonth"))
+            + html::text::nbsp()
+            + html::text::from(evaluate("PrepDay"))
+            + html::text::from(", ")
+            + html::text::from(evaluate("PrepYear"))
             );
 
-        auto indent = text::nbsp();
+        auto indent = html::text::nbsp();
         add_variable("Space1", indent);
 
         indent += indent;
@@ -1106,7 +1104,7 @@ class page_with_footer : public page
 
     // This method uses get_page_number() and returns the HTML wrapping it
     // and other fixed information appearing in the lower part of the footer.
-    text get_footer_lower_html(html_interpolator const& interpolate_html) const
+    html::text get_footer_lower_html(html_interpolator const& interpolate_html) const
     {
         auto const page_number_str = get_page_number();
 
@@ -1115,7 +1113,7 @@ class page_with_footer : public page
         // Use our own interpolation function to handle the special
         // "page_number" variable that is replaced with the actual
         // (possibly dynamic) page number.
-        return text::from_html
+        return html::text::from_html
             (interpolate_string
                 (("{{>" + templ + "}}").c_str()
                 ,[page_number_str, interpolate_html]
