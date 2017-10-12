@@ -72,7 +72,7 @@ class SolveHelper
 /// return the difference between actual and target CSV at the
 /// specified target duration. However, if the policy lapsed before
 /// that duration, this naive approach would return zero. That's not
-/// desirable: even if it lead to the right answer, it provides little
+/// desirable: even if it leads to a valid answer, it provides little
 /// information that the solve routine can use to refine the input
 /// value. Instead, therefore, certain steps are taken to make the
 /// objective function more tractable as its value approaches zero
