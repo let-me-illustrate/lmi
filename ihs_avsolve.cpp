@@ -95,18 +95,29 @@ class SolveHelper
 ///
 /// 4. If either 2. or 3. is negative, return the difference between
 /// whichever of them is more negative and the target value; else
-/// return the difference between the target value and the CSV at the
-/// solve target duration. (Non-MEC solves (v.i.) return something
-/// altogether different.)
+/// return the difference between the target and actual values at the
+/// solve target duration, the "actual" value being CSV in general,
+/// but NAAR in the case of NAAR solves. (Non-MEC solves (v.i.) return
+/// something altogether different.)
 ///
 /// In all cases, solves use the same CSV as lapse processing, which
 /// is not always the same as the CSV printed on an illustration. For
 /// example, any sales-load refund increases the value for which the
-/// contract can be surrendered, but does not prevent lapse.
+/// contract can be surrendered, but does not prevent lapse. (NAAR
+/// solves use AV rather than CSV in the second part of step 4 above.)
 ///
 /// "Solve for endowment" is deemed to mean that CSV equals specified
 /// amount at the target duration, so the target value is the same for
 /// all death benefit options.
+///
+/// NAAR solves work the same way as CSV solves up to step 4's "else"
+/// clause, where they return the difference between the target value
+/// and the NAAR at the target duration. For this purpose, NAAR is
+/// defined as (DB-AV) at EOY: the difference between the DB and AV
+/// columns printed on an illustration, which is what agents expect.
+/// This is not the same as the NAAR used in calculating COI charges,
+/// which discounts the EOM DB for one month's guaranteed interest and
+/// subtracts BOM AV.
 ///
 /// Non-MEC solves use an extremely simple objective function that
 /// disregards any input target value or duration. The duration is
@@ -194,6 +205,18 @@ double AccountValue::SolveTest(double a_CandidateValue)
     // counters and iterators--it's one past the end--but indexing
     // must decrement it.
     double value = VariantValues().CSVNet[SolveTargetDuration_ - 1];
+    // This temporary expedient avoids any change to the GUI. It uses
+    // yare_input_.SolveTargetCashSurrenderValue for now as the target
+    // NAAR. Ultimately, it will instead use its own (new) input field
+    // as the target, and a NAAR solve will be chosen by a new
+    // enumerator such as 'mce_solve_for_naar'.
+    if(contains(yare_input_.Comments, "idiosyncrasyN"))
+        {
+        value =
+              VariantValues().EOYDeathBft[SolveTargetDuration_ - 1]
+            - VariantValues().AcctVal    [SolveTargetDuration_ - 1]
+            ;
+        }
     if(worst_negative < 0.0)
         {
         value = std::min(value, worst_negative);
