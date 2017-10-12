@@ -23,6 +23,7 @@
 
 #include "currency.hpp"
 
+#include "materially_equal.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -151,9 +152,9 @@ void currency_test::test_double()
     BOOST_TEST_EQUAL(currency::from_value( 0.005).total_cents(),  1);
     BOOST_TEST_EQUAL(currency::from_value(-0.005).total_cents(), -1);
 
-    auto c = currency::from_value(    14857345.859999999404);
-    BOOST_TEST_EQUAL(c.total_cents() ,1485734586);
-    BOOST_TEST_EQUAL(c.value()       ,14857345.86);
+    auto c = currency::from_value(         14857345.859999999404);
+    BOOST_TEST_EQUAL(c.total_cents()     , 1485734586);
+    BOOST_TEST(materially_equal(c.value(), 14857345.86));
 }
 
 void test_stream_roundtrip

@@ -29,6 +29,7 @@
 
 #include <algorithm>                    // min()
 #include <sstream>
+#include <type_traits>                  // is_same, remove_cv
 
 // This should fail to compile:
 //    template class tn_range<double, std::string>;
@@ -137,7 +138,7 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     T const minT = std::numeric_limits<T>::lowest();
 
     INVOKE_BOOST_TEST(!is_strictly_between_extrema(maxT), file, line);
-    if(1 < maxT)
+    if(!std::is_same<bool,typename std::remove_cv<T>::type>::value)
         {
         INVOKE_BOOST_TEST( is_strictly_between_extrema<T>(1), file, line);
         }
@@ -152,8 +153,12 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
 
     if(minT < 0)
         {
-        INVOKE_BOOST_TEST_EQUAL(-1, signum(T(-1)), file, line);
-        INVOKE_BOOST_TEST_EQUAL(-1, signum(minT), file, line);
+        // The left-hand side is cast to T to avoid gcc 'bool-compare'
+        // diagnostics. An 'is_bool' conditional wouldn't prevent the
+        // macros from being expanded. See:
+        //   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00029.html
+        INVOKE_BOOST_TEST_EQUAL(T(-1), signum(T(-1)), file, line);
+        INVOKE_BOOST_TEST_EQUAL(T(-1), signum(minT ), file, line);
         INVOKE_BOOST_TEST_EQUAL(true , is_exact_integer(T(-1)), file, line);
         }
 
@@ -590,7 +595,7 @@ void tn_range_test::test_absurd_limits()
         );
 
     BOOST_TEST_THROW
-        (r_absurd a;
+        (r_absurd b;
         ,std::runtime_error
         ,"Lower bound 1 exceeds upper bound 0 ."
         );

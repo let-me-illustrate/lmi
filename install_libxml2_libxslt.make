@@ -23,16 +23,16 @@
 
 # Archives and their md5sums
 
-zlib_version    := zlib-1.2.8
+xz_version      := xz-5.2.3
 libxml2_version := libxml2-2.9.4
 libxslt_version := libxslt-1.1.29
 
-zlib-1.2.8.tar.gz-md5     := 44d667c142d7cda120332623eab69f40
+xz-5.2.3.tar.gz-md5       := ef68674fb47a8b8e741b34e429d86e9d
 libxml2-2.9.4.tar.gz-md5  := ae249165c173b1ff386ee8ad676815f5
 libxslt-1.1.29.tar.gz-md5 := a129d3c44c022de3b9dcf6d6f288d72e
 
 # Libraries are ordered by dependency, rather than alphabetically.
-libraries := $(zlib_version) $(libxml2_version) $(libxslt_version)
+libraries := $(xz_version) $(libxml2_version) $(libxslt_version)
 
 source_archives := $(addsuffix .tar.gz, $(libraries))
 
@@ -43,8 +43,8 @@ source_archives := $(addsuffix .tar.gz, $(libraries))
 host          := ftp://xmlsoft.org
 host_path     := libxml2
 
-$(zlib_version).tar.gz: host      := http://zlib.net
-$(zlib_version).tar.gz: host_path :=
+$(xz_version).tar.gz: host      := https://sourceforge.net
+$(xz_version).tar.gz: host_path := projects/lzmautils/files
 
 mingw_dir     := /MinGW_
 
@@ -68,26 +68,12 @@ ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
   host_type     := i686-w64-mingw32
 endif
 
-# zlib's 'configure' was written by hand; it doesn't even recognize
-# fundamental autoconf options such as '--build'. For the overrides
-# specified here, see:
-#   http://lists.nongnu.org/archive/html/lmi/2016-07/msg00036.html
-#
-# The unprefixed "gcc" in "LDSHARED" seems odd for cross compiling,
-# but it seems to work, at least with cygwin.
-#
-# zlib's makefile doesn't install the 'libz1.dll.a' import library
-# that it builds; apparently that doesn't matter because libxml2
-# doesn't link it explicitly.
-
-$(zlib_version)_options := \
+$(xz_version)_options := \
   --prefix=$(prefix) \
-  --eprefix=$(exec_prefix) \
-
-$(zlib_version)_overrides := \
-  LDSHARED='gcc -shared -Wl,--out-implib,libz1.dll.a' \
-  LDSHAREDLIBC='' \
-  SHAREDLIBV='libz1.dll' \
+  --exec-prefix=$(exec_prefix) \
+  --build=$(build_type) \
+  --host=$(host_type) \
+  --disable-dependency-tracking \
 
 # For 'host' and 'build' configure options, see:
 #   http://cygwin.com/ml/cygwin/2002-01/msg00837.html
@@ -113,10 +99,12 @@ xmlsoft_common_options := \
 
 $(libxml2_version)_options := \
   $(xmlsoft_common_options) \
+  --with-lzma=$(prefix) \
   --with-schemas \
   --without-iconv \
   --without-modules \
   --without-schematron \
+  --without-zlib \
 
 # The '--with-libxml-prefix' option is documented thus:
 #   "Specify location of libxml config"
@@ -147,7 +135,7 @@ all: clobber_exec_prefix_only $(source_archives) $(libraries)
 
 # Order-only prerequisites.
 
-$(libxml2_version):| $(zlib_version)
+$(libxml2_version):| $(xz_version)
 $(libxslt_version):| $(libxml2_version)
 $(libraries)      :| $(source_archives)
 $(source_archives):| initial_setup
@@ -191,28 +179,36 @@ $(libraries):
 	-[ -e $@-lmi.patch ] && $(PATCH) --directory=$(xml_dir) --strip=1 <$@-lmi.patch
 	cd $(xml_dir)/$@ \
 	  && export PATH="$(mingw_bin_dir):${PATH}" \
-	  && $($@_overrides) ./configure $($@_options) \
+	  && PKG_CONFIG_PATH="$(prefix)/lib/pkgconfig" \
+	    $($@_overrides) ./configure $($@_options) \
 	  && $(MAKE) \
 	  && $(MAKE) install \
 
 # Nonchalantly remove pkgconfig and cmake subdirectories, even though
 # other libraries might someday write files in them, because lmi never
-# uses them.
+# uses them outside of this makefile.
+#
+# It would probably be much better to use an 'uninstall' target in
+# each package's makefile.
 
 .PHONY: clobber_exec_prefix_only
 clobber_exec_prefix_only:
+	-$(RM) --force --recursive $(exec_prefix)/bin/liblzma*
+	-$(RM) --force --recursive $(exec_prefix)/bin/lz*
+	-$(RM) --force --recursive $(exec_prefix)/bin/xz*
+	-$(RM) --force --recursive $(exec_prefix)/bin/unlz*
+	-$(RM) --force --recursive $(exec_prefix)/bin/unxz*
 	-$(RM) --force --recursive $(exec_prefix)/bin/*xml2*
 	-$(RM) --force --recursive $(exec_prefix)/bin/*xslt*
 	-$(RM) --force --recursive $(exec_prefix)/bin/xmllint*
 	-$(RM) --force --recursive $(exec_prefix)/bin/xmlcatalog*
+	-$(RM) --force --recursive $(exec_prefix)/include/lzma*
 	-$(RM) --force --recursive $(exec_prefix)/include/libxml2
 	-$(RM) --force --recursive $(exec_prefix)/include/libxslt
 	-$(RM) --force --recursive $(exec_prefix)/include/libexslt
-	-$(RM) --force --recursive $(exec_prefix)/include/zconf.h
-	-$(RM) --force --recursive $(exec_prefix)/include/zlib.h
+	-$(RM) --force --recursive $(exec_prefix)/lib/liblzma*
 	-$(RM) --force --recursive $(exec_prefix)/lib/*xml2*
 	-$(RM) --force --recursive $(exec_prefix)/lib/*xslt*
-	-$(RM) --force --recursive $(exec_prefix)/lib/libz*
 	-$(RM) --force --recursive $(exec_prefix)/lib/cmake
 	-$(RM) --force --recursive $(exec_prefix)/lib/pkgconfig
 	-$(RM) --force --recursive $(xml_dir)

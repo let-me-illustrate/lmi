@@ -1,0 +1,58 @@
+# Set up the environment I use for lmi development.
+#
+# It is my custom to keep a number of terminals open, using each one
+# for running a few related commands in a particular directory in a
+# chroot. This file automates recreating that environment by opening
+# tabbed terminals in directories that each contain a single zsh
+# script. Each script, when sourced, runs certain commands and places
+# other commands in history: for example, a script might change to a
+# source directory, run 'git remote -v update' on startup, and push
+# discretionary commands like 'git pull' onto the history stack. This
+# automates my earlier practice of keeping 'gwc/develop1.txt' open
+# and cutting and pasting routine commands codified therein into a
+# terminal.
+#
+# Scripts are arranged in a directory tree because schroot makes it
+# hard to pass a single environment variable ('--preserve-environment'
+# passes them all, unnecessarily weakening security), but easy to
+# specify a directory, which in effect can serve as an environment
+# variable.
+#
+# Scripting is done in zsh because, while terminal emulators generally
+# offer some sort of scripting facilities, each is dysfunctional in
+# its own way. For example, konsole-4.8.4 (debian 7) ignores 'workdir'
+# in 'konsole_tabs', and prints an "Application may misbehave" D-Bus
+# warning on startup, which konsole-16.12.0 (debian 9) opens an extra
+# tab that was not specified in 'konsole_tabs'.
+#
+# The zsh scripts are to be sourced rather than executed because they
+# use 'print -s' to push commands into history.
+#
+# Invocation:
+#   $konsole --tabs-from-file ~/konsole_tabs &
+# Navigate to each tab and source the script in its startup directory.
+# To make this easy, all scripts have the same name, 'startup_script'.
+# To make it even easier, I've added this line:
+#   alias asdf='. ./startup_script'
+# to the chroot's '~/.zshrc' because "asdf" can readily be typed and
+# is unlikely to be used for any other purpose. Although admittedly
+# quirky, this one small dab of silly glue binds these tools together
+# robustly without the complexity of, say, D-Bus.
+#
+# Original motivation: I put this together when I was developing for
+# msw with cygwin in a VM that crashed every few hours, and found it
+# annoying to spend several minutes recreating my working environment.
+#
+# Alternatives: A multiplexer like 'screen' or 'tmux' might be used
+# instead, but this lightweight solution fulfills all my needs simply;
+# I cannot comfortably read more than about 30 x 100 characters at
+# full-screen resolution, and therefore have little use for multiple
+# panes. Having figured out how to start various terminals with tabbed
+# sessions, I do wonder whether I should have used 'expect'.
+#
+title: ONE   ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/1
+title: TWO   ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/2
+title: THREE ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/3
+title: FOUR  ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/4
+title: FIVE  ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/5
+

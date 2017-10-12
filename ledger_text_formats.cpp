@@ -39,10 +39,10 @@
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>
+#include <algorithm>                    // find()
 #include <fstream>
-#include <iomanip>
-#include <ios>
+#include <iomanip>                      // setprecision()
+#include <ios>                          // ios_base
 #include <locale>
 #include <map>
 #include <ostream>
@@ -463,7 +463,7 @@ void PrintCellTabDelimited
     LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
     LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
 
-    int max_length = ledger_values.GetMaxLength();
+    int const max_length = ledger_values.GetMaxLength();
 
     // TODO ?? This const_cast is safe, but it's still unclean.
     LedgerInvariant& unclean = const_cast<LedgerInvariant&>(Invar);
@@ -865,8 +865,11 @@ class FlatTextLedgerPrinter final
     LedgerVariant   const& guar_() const;
     LedgerVariant   const& mdpt_() const;
 
+    // Required ctor arguments.
     Ledger const& ledger_;
     std::ostream& os_;
+
+    mutable int page_number_ {0};
 };
 
 void PrintLedgerFlatText
@@ -881,21 +884,26 @@ void PrintLedgerFlatText
 
 // One column of seven characters ('Age 100')
 // plus ten columns of twelve characters each (' 999,999,999')
-// equals 127 columns; a nine-point font can do that on a page
+// equals 127 columns; a nine-point font can print that on a page
 // eight inches wide and still leave about a half-inch margin
 // on both sides.
 //
-// TODO ?? Avoid overflow by scaling everything if anything's $1B or over.
-// TODO ?? Add thousands separators.
+// SOMEDAY !! The formatting of this simple reference implementation
+// could be improved in several ways:
+//   - Avoid overflow by scaling everything if anything's $1B or over.
+//   - Add thousands separators.
+//   - Show at least premiums as dollars and cents.
+//   - Split into numbered pages, adding serial page numbers to footer.
+//   - Wrap long strings.
 namespace
 {
-    int g_width = 128;
+    int const g_width = 128;
     std::string center(std::string const& s)
         {
-        int z = s.length();
-        // TODO ?? Strings in the input class might be too wide;
-        // absent more graceful handling, at least no attempt is made
-        // to cure that problem with a negative number of spaces.
+        int const z = s.length();
+        // Strings in the input class might be too wide; absent more
+        // graceful handling, at least no attempt is made to cure that
+        // problem with a negative number of spaces.
         std::string spaces(std::max(0, (g_width - z) / 2), char(' '));
         return spaces + s;
         }
@@ -920,7 +928,6 @@ void FlatTextLedgerPrinter::Print() const
 {
     set_default_format_flags(os_);
 
-    // TODO ?? Split into numbered pages; add page number to footer.
     PrintHeader             ();
     PrintNarrativeSummary   ();
     PrintKeyTerms           ();
@@ -931,6 +938,9 @@ void FlatTextLedgerPrinter::Print() const
     PrintTabularDetailHeader();
     PrintTabularDetail      ();
     PrintFooter             ();
+
+    // 'os_' may be a std::ofstream, and files should end in a newline.
+    os_ << '\n';
 
     LMI_ASSERT(os_.good());
 }
@@ -967,6 +977,7 @@ void FlatTextLedgerPrinter::PrintHeader() const
 
 void FlatTextLedgerPrinter::PrintFooter() const
 {
+    os_ << "Page " << ++page_number_ << " of 3";
     os_ << "\f";
 }
 
@@ -978,7 +989,7 @@ void FlatTextLedgerPrinter::PrintNarrativeSummary() const
     os_ << "This is an illustration of a life insurance policy. It is not an offer of insurance. Availability is subject to underwriting." << endrow;
     os_ << endrow;
     os_ << "The premium outlay that must be paid to guarantee coverage for the term of the contract, subject to maximum premiums allowable" << endrow;
-    os_ << "to qualify as a life insurance policy under the applicable provisions of the Internal Revenue Code, is" << endrow;
+    os_ << "to qualify as a life insurance policy under the applicable provisions of the Internal Revenue Code, is " << value_cast<std::string>(invar().GuarPrem) << " annually." << endrow;
     os_ << endrow;
     os_ << "Policy features, riders or options, guaranteed or non-guaranteed, shown in the basic illustration include:" << endrow;
     os_ << endrow;
@@ -1022,6 +1033,9 @@ void FlatTextLedgerPrinter::PrintKeyTerms() const
 
 void FlatTextLedgerPrinter::PrintNumericalSummary() const
 {
+    int const age = value_cast<int>(invar().Age);
+    int const max_length = ledger_.GetMaxLength();
+
     os_ << center("Numerical summary") << endrow;
     os_ << endrow;
     os_ << "                    ------------Guaranteed------------- -------------Midpoint-------------- ----------Non-guaranteed-----------" << endrow;
@@ -1029,22 +1043,42 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
     os_ << "   Year      Outlay       Value       Value     Benefit       Value       Value     Benefit       Value       Value     Benefit" << endrow;
     os_ << endrow;
 
-    int summary_rows[] = {4, 9, 19, std::min(99, 69 - value_cast<int>(invar().Age))};
+    // For multi-life contracts (which lmi does not currently support),
+    // substitute duration thirty for age seventy: see illustration reg
+    // section (7)(C)(1).
+
+    std::vector<int> summary_rows = {4, 9, 19, 69 - age};
 
     for(auto const& row : summary_rows)
         {
-        // Skip row if it doesn't exist. For instance, if issue age is
-        // 85 and maturity age is 100, then there is no twentieth duration.
-        if(ledger_.GetMaxLength() < 1 + row)
+        // Skip row if it doesn't exist. For instance, if the issue
+        // age is 85 and the contract remains in force until age 100,
+        // then there is no twentieth duration and no age-70 row.
+        if(!(0 <= row && row < max_length))
             {
             continue;
+            }
+
+        // For composites, don't print the age-70 row (because age
+        // is undefined) or lapse durations (which generally vary).
+        if(ledger_.is_composite() && &row == &summary_rows.back())
+            {
+            os_ << endrow;
+            return;
             }
 
         os_.setf(std::ios_base::fixed, std::ios_base::floatfield);
         os_.precision(0);
         os_.width(7);
 
-        os_ << std::setw( 7) << (1 + row)               ;
+        if(&row == &summary_rows.back())
+            {
+            os_ << " Age 70";
+            }
+        else
+            {
+            os_ << std::setw( 7) << (1 + row)               ;
+            }
 
         os_.precision(2);
 
@@ -1065,10 +1099,26 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
         os_ << endrow;
         }
 
-// TODO ?? Print "Age  70" instead of duration for last row. The NAIC
-// illustration reg (7)(C)(1) requires the numeric summary to show:
-//  - durations 5, 10, and 20; and age 70 if applicable; but
-//  - durations 5, 10, 20, and 30 for multiple-life policies.
+    os_ << endrow;
+
+    // Illustration reg (7)(C)(2) "year in which coverage ceases".
+    auto const brink = [age, max_length] (LedgerVariant const& basis)
+        {
+        int const z = basis.LapseYear;
+        std::string s =
+              (z < max_length)
+            ? "Lapses in year " + value_cast<std::string>(1 + z)
+            : "Matures at age " + value_cast<std::string>(    z + age)
+            ;
+        s = std::string(9, char(' ')) + s;
+        s.resize(12 + 12 + 12, char(' ')); // Spans three columns.
+        return s;
+        };
+
+    std::string s = brink(guar_()) + brink(mdpt_()) + brink(curr_());
+    rtrim(s, " ");
+    os_ << "                    " << s << endrow;
+
     os_ << endrow;
 }
 
@@ -1107,8 +1157,9 @@ void FlatTextLedgerPrinter::PrintTabularDetailHeader() const
 
 void FlatTextLedgerPrinter::PrintTabularDetail() const
 {
-    int age = value_cast<int>(invar().Age);
-    for(int j = 0; j < ledger_.GetMaxLength(); ++j)
+    int const age = value_cast<int>(invar().Age);
+    int const max_length = ledger_.GetMaxLength();
+    for(int j = 0; j < max_length; ++j)
         {
         os_.setf(std::ios_base::fixed, std::ios_base::floatfield);
         os_.precision(0);
@@ -1203,11 +1254,12 @@ std::string ledger_format
 }
 
 std::vector<std::string> ledger_format
-    (std::vector<double>               dv
+    (std::vector<double> const&        dv
     ,std::pair<int,oenum_format_style> f
     )
 {
     std::vector<std::string> sv;
+    sv.reserve(dv.size());
     for(auto const& i : dv)
         {
         sv.push_back(ledger_format(i, f));

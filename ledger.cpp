@@ -94,7 +94,6 @@ void Ledger::SetRunBases(int length)
             break;
         case mce_group_private_placement:      // Deliberately fall through.
         case mce_individual_private_placement: // Deliberately fall through.
-        case mce_variable_annuity:             // Deliberately fall through.
         case mce_nasd:
             {
             l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);

@@ -10,8 +10,8 @@ b2ff8388b5e68e3d2c89c37d60cf093b *include/cgicc/HTMLClasses.h
 38a240edd02522d014824dd5a878b833 *include/cgicc/HTMLGeneric.h
 0145c1e857d84337f035b9e34c0ff1eb *include/cgicc/HTTPHeaders.h
 1dae375bc0784e2e488c2618fdc61ef6 *include/cgicc/MStreamable.h
-40b971901c9128c1fba50516d0f7f93d *src/cgicc/CgiEnvironment.cpp
-d4b9bc750124e5ec763fbfe19cc7ebd9 *src/cgicc/CgiUtils.cpp
+c927d5d69c82302a7a61f2bccf6c3343 *src/cgicc/CgiEnvironment.cpp
+3115028b1436767f65590dfad49a40b6 *src/cgicc/CgiUtils.cpp
 36dad1abec35c6cc94d70af00934a44a *src/cgicc/Cgicc.cpp
 29a3f059727c5c2e30560c002e5510f5 *src/cgicc/FormEntry.cpp
 931388cbf6a0adaff7e55f60f3f018c7 *src/cgicc/FormFile.cpp

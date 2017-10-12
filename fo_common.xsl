@@ -54,6 +54,8 @@
   <!--
   Define this parameter to true to exclude company logo. This should be useful
   for text output where any graphics is replaced by a grid of '#' symbols.
+  (This was overengineering: no use case exists to justify the complexity,
+  so it is okay to ignore this.)
   -->
   <xsl:param name="hide-company-logo" select="boolean(0)"/>
 
@@ -268,7 +270,7 @@
     <xsl:attribute name="padding-bottom">2pt</xsl:attribute>
     <xsl:attribute name="text-align">right</xsl:attribute>
     <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
-    <xsl:attribute name="border-bottom-color">blue</xsl:attribute>
+    <xsl:attribute name="border-bottom-color">#002F6C</xsl:attribute>
   </xsl:template>
   <!--
   Same as 'header-cell', but add a bottom border of 1pt.
@@ -748,9 +750,12 @@
     </xsl:choose>
   </xsl:template>
 
+  <!--
+    Use a smaller logo after the first page, but no smaller than this.
+  -->
   <xsl:template name="company-logo">
     <xsl:if test="not($hide-company-logo)">
-      <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+      <fo:external-graphic width="1.5in" src="company_logo.jpg"/>
     </xsl:if>
   </xsl:template>
 
@@ -758,7 +763,7 @@
   <xsl:template name="generic-cover">
     <fo:page-sequence master-reference="cover" force-page-count="no-force">
       <fo:flow flow-name="xsl-region-body">
-        <fo:block border="2pt solid blue" font-size="14pt" font-family="sans-serif" text-align="center">
+        <fo:block border="2pt solid #002F6C" font-size="14pt" font-family="sans-serif" text-align="center">
 
           <fo:block font-size="20pt" font-weight="bold" padding-top="5em">
             <xsl:value-of select="$scalars/PolicyMktgName"/>
@@ -820,24 +825,19 @@
             </fo:block>
           </fo:block>
 
-          <fo:block padding="9em 0 4em">
-            <xsl:call-template name="company-logo"/>
+          <!--
+            Use a larger logo for the cover page.
+          -->
+          <fo:block padding="0.8in">
+            <fo:external-graphic width="2.5in" src="company_logo.jpg"/>
           </fo:block>
 
-<!--
-          <fo:block padding-top="1em">
-            <xsl:value-of select="$scalars/InsCoName"/>
+          <fo:block font-size="9pt" padding-bottom="1em">
+            <xsl:value-of select="$scalars/MarketingNameFootnote"/>
           </fo:block>
-          <fo:block padding-bottom="1em">
-            <xsl:value-of select="$scalars/InsCoAddr"/>
-          </fo:block>
--->
-          <fo:block font-size="9pt">
-            <xsl:value-of select="$scalars/InsCoShortName"/> Financial Group is
-            a marketing name for <xsl:value-of select="$scalars/InsCoName"/>
-            (<xsl:value-of select="$scalars/InsCoShortName"/>) and its affiliated
-            companies and sales representatives,
-            <xsl:value-of select="$scalars/InsCoAddr"/>.
+
+          <fo:block padding-bottom="1em" font-size="9pt" text-align="left" text-indent="4em">
+            <xsl:value-of select="$scalars/StateMarketingImprimatur"/>
           </fo:block>
         </fo:block>
       </fo:flow>
@@ -867,7 +867,7 @@
             <xsl:copy-of select="$top-block"/>
           </fo:block>
         </xsl:if>
-        <fo:block padding-top=".5em" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
+        <fo:block padding-top=".5em" border-top-style="solid" border-top-width="1pt" border-top-color="#002F6C">
           <xsl:if test="$subtop-block">
             <fo:block padding=".5em 0">
               <xsl:copy-of select="$subtop-block"/>

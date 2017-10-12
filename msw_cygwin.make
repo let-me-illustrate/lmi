@@ -78,8 +78,9 @@ RC      := $(gcc_bin_dir)$(host_prefix)windres
 compiler_sysroot := /MinGW_/i686-w64-mingw32/lib
 
 compiler_runtime_files := \
-  $(compiler_sysroot)/libstdc++-6.dll \
-  $(compiler_sysroot)/libgcc_s_sjlj-1.dll \
+  $(wildcard $(compiler_sysroot)/libgcc*.dll) \
+  $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
+  $(wildcard $(compiler_sysroot)/libwinpthread-1.dll) \
 
 ################################################################################
 

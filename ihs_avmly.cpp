@@ -1599,12 +1599,15 @@ void AccountValue::TxSetBOMAV()
             {
             LMI_ASSERT(0.0 == InvariantValues().TermSpecAmt[0]);
             }
+        LMI_ASSERT(yare_input_.InforceSpecAmtLoadBase <= SpecAmtLoadLimit);
         SpecAmtLoadBase =
             (0 == Year && 0 == Month)
-            ? InvariantValues().TermSpecAmt[0] + InvariantValues().SpecAmt[0]
+            ? std::max
+                (InvariantValues().TermSpecAmt[0] + InvariantValues().SpecAmt[0]
+                ,NetPmts[0] * YearsCorridorFactor
+                )
             : yare_input_.InforceSpecAmtLoadBase
             ;
-        SpecAmtLoadBase = std::max(SpecAmtLoadBase, NetPmts[Month] * YearsCorridorFactor);
         SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
         }
 

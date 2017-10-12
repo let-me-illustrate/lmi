@@ -158,7 +158,7 @@ void init_test_census
         :public wxExpectModalBase<MvcController>
     {
         change_name_in_cell_dialog(std::string const& insured_name)
-            :insured_name(insured_name)
+            :insured_name_(insured_name)
             {
             }
 
@@ -170,7 +170,7 @@ void init_test_census
             wx_test_focus_controller_child(*dialog, "InsuredName");
 
             wxUIActionSimulator ui;
-            ui.Text(insured_name.c_str());
+            ui.Text(insured_name_.c_str());
             wxYield();
 
             return wxID_OK;
@@ -181,7 +181,7 @@ void init_test_census
             return "census cell dialog";
             }
 
-        std::string const& insured_name;
+        std::string const& insured_name_;
     };
 
     ui.Char('e', wxMOD_CONTROL); // "Census|Edit cell"

@@ -240,12 +240,14 @@ int extra_tests0()
         ,strip( ".00000000000000000000123300000000")
         );
 
+    {
     char const* nptr = "0.";
     char rendptr[100] = {'\0'};
     char* endptr = rendptr;
     std::strtod(nptr, &endptr);
     BOOST_TEST_EQUAL('\0', *endptr);
     BOOST_TEST_UNEQUAL(nptr, endptr);
+    }
 
     BOOST_TEST_EQUAL("0", strip("00."  ));
     BOOST_TEST_EQUAL("0", strip( "0."  ));

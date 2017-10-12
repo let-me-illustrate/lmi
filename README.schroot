@@ -33,21 +33,21 @@ apt-get install schroot debootstrap
 # Download all OS essentials. This step may be done a single time, and
 # its tarball used repeatedly. The target ('/tmp/eraseme') directory
 # will be created and erased automatically.
-debootstrap --arch=amd64 --make-tarball=/var/cache/jessie_bootstrap.tar jessie /tmp/eraseme
+debootstrap --arch=amd64 --make-tarball=/var/cache/stretch_bootstrap.tar stretch /tmp/eraseme
 
 # Unpack the OS tarball into the particular chroot being created.
 # (If the preceding apt-get and debootstrap steps have already been
 # completed once, then skip them and start here.)
 mkdir -p /srv/chroot/cross-lmi
-debootstrap --arch=amd64 --unpack-tarball=/var/cache/jessie_bootstrap.tar \
- jessie /srv/chroot/cross-lmi >cross-lmi-debootstrap-log 2>&1
+debootstrap --arch=amd64 --unpack-tarball=/var/cache/stretch_bootstrap.tar \
+ stretch /srv/chroot/cross-lmi >cross-lmi-debootstrap-log 2>&1
 
 # This command should produce no output:
 grep --invert-match '^I:' cross-lmi-debootstrap-log
 
 cat >/etc/schroot/chroot.d/cross-lmi.conf <<\EOF
 [cross-lmi]
-description=debian-8 cross build
+description=debian-9 cross build
 directory=/srv/chroot/cross-lmi
 users=greg
 groups=greg
@@ -101,7 +101,7 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 apt-get update
 apt-get --assume-yes install g++-mingw-w64 automake libtool make \
  pkg-config git zsh bzip2 unzip sudo wine default-jre fop jing trang \
- g++-multilib libxml2-utils libxslt1-dev vim vim-doc \
+ g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc vim-fugitive \
  >cross-lmi-apt-get-log 2>&1
 
 # This command should produce little output:
@@ -150,9 +150,12 @@ export DISPLAY=":0.0"
 export coefficiency='--jobs=32'
 
 # export TZ=UCT
-# export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
-#  No--better to do this:
+export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+# It is generally preferable to do this:
 # update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+# but neither the chroot's nor the host's /etc/default/locale is
+# sourced by schroot, which strives to set as few environment
+# variables as possible.
 
 # bindkey "\e[3~" delete-char      # Del
 # bindkey '\e[H' beginning-of-line # Home
@@ -161,6 +164,9 @@ bindkey "^[[1;5D" backward-word  # Ctrl-left
 bindkey "^[[1;5C" forward-word   # Ctrl-right
 bindkey '\e[1;3D' backward-word  # Alt-left
 bindkey '\e[1;3C' forward-word   # Alt-right
+# By default, zsh unfortunately binds ^S for this purpose;
+# use ^T instead, leaving ^S for flow control.
+bindkey '^T' history-incremental-search-forward
 
 prompt='%d[%?]%(!.#.$)'
 
@@ -171,24 +177,26 @@ setopt HIST_IGNORE_DUPS
 
 autoload -U compinit
 compinit -u
+
+# This alias is explained in 'tabs/konsole_tabs'.
+alias asdf='. ./startup_script'
 EOF
 
-# Repair /usr/share/libtool/config/ltmain.sh as indicated here:
+# Repair /usr/share/libtool/.../ltmain.sh as indicated here:
 #   http://lists.gnu.org/archive/html/libtool-patches/2011-06/msg00001.html
 # Do this as root because root owns the file.
 
 cat >/home/greg/ltmain.sh.patch <<\EOF
---- /usr/share/libtool/config/ltmain.sh.original 2016-01-25 03:43:07.768000000 +0000
-+++ /usr/share/libtool/config/ltmain.sh 2016-01-25 03:44:17.100000000 +0000
-@@ -4178,7 +4178,8 @@
+--- /usr/share/libtool/build-aux/ltmain.sh.orig 2016-08-20 12:34:31.000000000 +0000
++++ /usr/share/libtool/build-aux/ltmain.sh 2017-08-10 13:10:28.466155965 +0000
+@@ -5555,7 +5555,7 @@
  /* declarations of non-ANSI functions */
- #if defined(__MINGW32__)
+ #if defined __MINGW32__
  # ifdef __STRICT_ANSI__
 -int _putenv (const char *);
-+     /* int _putenv (const char *); */
 +_CRTIMP int _putenv (const char *);
  # endif
- #elif defined(__CYGWIN__)
+ #elif defined __CYGWIN__
  # ifdef __STRICT_ANSI__
 EOF
 
@@ -237,6 +245,20 @@ set history=1000
 set virtualedit=all
 EOF
 
+# Enable stable and security upgrades:
+
+cat >/etc/apt/sources.list <<\EOF
+deb http://deb.debian.org/debian/ stretch main
+deb http://deb.debian.org/debian/ stretch-updates main
+deb http://security.debian.org/   stretch/updates main
+EOF
+
+# Apply any available upgrades:
+
+apt-get update
+apt-get upgrade
+apt-get dist-upgrade
+
 # Exit from the root shell in the chroot.
 exit
 
@@ -273,13 +295,21 @@ git config --global user.name "Gregory W. Chicares"
 git config --global user.email gchicares@sbcglobal.net
 git config --global color.ui auto
 git config --global push.default simple
-# git config --global log.date iso8601-strict
-# "strict" if supported; else:
-git config --global log.date iso8601
+git config --global log.date iso8601-strict
 
 # Initialize wine. See:
 #   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
 WINEDLLOVERRIDES=mscoree=d wine wineboot
+
+# Configure wine:
+winecfg
+# on "Graphics" tab, set DPI to 192
+# fix any application that gets the wrong X tab order
+#   "Applications": "add"; then
+#   "Graphics": "Emulate virtual desktop"
+#     specify appropriate size: e.g., 1900x1120 for a 1920x1200 monitor
+#     (the other options don't seem to matter)
+#   then restart the application
 
 # Install java.
 wine /cache_for_lmi/jre-1_5_0-windows-i586.exe
@@ -332,6 +362,7 @@ cp -a /opt/lmi/third_party/bin/md5sum.exe /opt/lmi/local/bin
 
 # Symlink the repository's hooks/ directory:
 cd /opt/lmi/src/lmi
+mv .git/hooks .git/hooks-orig
 ln --symbolic --force --no-dereference ../hooks .git
 
 # Iff this chroot needs write access to savannah, then reconfigure
@@ -349,6 +380,7 @@ git clone -b master file:///opt/lmi/blessed/proprietary
 cd proprietary
 git rev-parse HEAD
 # ...then symlink its hooks/ directory:
+mv .git/hooks .git/hooks-orig
 ln --symbolic --force --no-dereference ../hooks .git
 
 # Create and populate the proprietary source directory used by 'vpath':
@@ -362,6 +394,11 @@ cp -a /opt/lmi/proprietary/test/* /opt/lmi/touchstone/
 # Remove object files previously built without proprietary source:
 rm /opt/lmi/src/build/lmi/Linux/gcc/ship/my*
 
+# Regenerate the binary database:
+cd /opt/lmi/data
+rm proprietary.dat proprietary.ndx
+wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+
 # Run a system test.
 cd /opt/lmi/src/lmi
 make $coefficiency system_test 2>&1 |less
@@ -373,5 +410,14 @@ rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/
 # ...and rerun the test, which should now succeed:
 make $coefficiency system_test 2>&1 |less
 
+# Create a local mirror of the gnu.org repository:
+cd /opt/lmi
+mkdir --parents free/src
+cd free/src
+git clone git://git.savannah.nongnu.org/lmi.git
+# Reconsider this:
+# git remote set-url origin chicares@git.sv.gnu.org:/srv/git/lmi.git
+
 # Exit the chroot.
 exit
+

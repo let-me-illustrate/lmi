@@ -99,12 +99,13 @@ cvs -z3 update -l lmi
 
   # Set mirror timestamps to match working directory's
   #
-  # This is slow, so consider specifying the names of changed files
-  # instead of using '*' at the beginning
-  #
   # ...for git:
 
 for z in * ; do [ -f $z ] && ( [ $z -nt /opt/lmi/src/lmi/$z ] || [ $z -ot /opt/lmi/src/lmi/$z ] ) && touch --reference=/opt/lmi/src/lmi/$z $z; done
+
+  # But that's slow, so specify the files to change, thus:
+
+for z in $(git diff HEAD^ --name-only) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done
 
   # Third screen: only for building and testing
 
@@ -137,7 +138,8 @@ make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make >../log 2>&1
 
   # Shift differing system-test files among directories:
 cd /opt/lmi/touchstone
-for z in *; do cmp --quiet $z ../test/$z || ( mv $z ../touchstone_intermediate_eraseme/$z; mv ../test/$z ./$z; ) ; done
+d="/opt/lmi/touchstone-old/touchstone-$(date -u +'%Y%m%dT%H%MZ')" && mkdir -p $d \
+&& for z in *; do cmp --quiet $z ../test/$z || ( mv $z $d/$z; mv ../test/$z ./$z; ) ; done
 
   # Validate xrc files
 

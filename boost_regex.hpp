@@ -1,3 +1,5 @@
+// Include boost/regex.hpp, guarding it with a pragma.
+//
 // Copyright (C) 2017 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
@@ -17,11 +19,19 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef version_hpp
-#define version_hpp
+#ifndef boost_regex_hpp
+#define boost_regex_hpp
 
 #include "config.hpp"
 
-#define LMI_VERSION "20170721T1310Z"
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wshadow"
+#endif // defined __GNUC__
+#include <boost/regex.hpp>
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
 
-#endif // version_hpp
+#endif // boost_regex_hpp
+

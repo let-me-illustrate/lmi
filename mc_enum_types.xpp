@@ -166,7 +166,7 @@
     ,"obsolete ledger type 4--do not use" \
     ,"obsolete ledger type 5--do not use" \
     ,"individual_private_placement" \
-    ,"variable_annuity" \
+    ,"obsolete ledger type 7--do not use" \
     };
 
 #define uw_basis_VALUES \

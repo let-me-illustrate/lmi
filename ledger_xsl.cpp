@@ -49,7 +49,6 @@ std::string xsl_filename(Ledger const& ledger)
         case mce_nasd:                         return "nasd.xsl";
         case mce_group_private_placement:      return "reg_d_group.xsl";
         case mce_individual_private_placement: return "reg_d_individual.xsl";
-        case mce_variable_annuity:             return "variable_annuity.xsl";
         default:
             {
             alarum() << "Case '" << z << "' not found." << LMI_FLUSH;

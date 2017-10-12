@@ -20,7 +20,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 [Just go here:
-  http://lists.nongnu.org/archive/html/lmi/2008-05/msg00001.html
+  https://lists.nongnu.org/archive/html/lmi/2008-05/msg00001.html
 if you're not running ms windows.]
 
 (1) Install Cygwin
@@ -41,8 +41,8 @@ Copy and paste the following lines into the "Command Prompt" window:
 
 Save the following files into the 'C:\cache_for_lmi' directory:
 
-  http://cygwin.com/setup-x86.exe
-  http://git.savannah.gnu.org/cgit/lmi.git/plain/install_cygwin.bat
+  https://cygwin.com/setup-x86.exe
+  https://git.savannah.gnu.org/cgit/lmi.git/plain/install_cygwin.bat
 
 Copy and paste the following lines into the "Command prompt" window:
 
@@ -65,7 +65,7 @@ Copy the following, and paste it (Shift-Insert) into the shell:
 
   mkdir -p /tmp
   export TMP=/tmp
-  install_script='http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
+  install_script='https://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
   cd /tmp
   wget -N $install_script
   chmod +x install_msw.sh
@@ -86,4 +86,5 @@ should see an illustration in your 'pdf' viewer. But if you see
 then (for printing only) you need 'java'. You can install a version
 that's been tested with lmi by running this file:
   http://download.java.net/jdk/jre-1_5_0-windows-i586.exe
+[http because that site doesn't support https as of 2017-08-28]
 

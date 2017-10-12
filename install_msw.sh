@@ -25,7 +25,7 @@ set -v
 
 # To get the latest version of this script:
 #
-# wget -N 'http://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
+# wget -N 'https://git.savannah.gnu.org/cgit/lmi.git/plain/install_msw.sh'
 
 # To remove lmi prior to reinstalling with this script:
 #
@@ -113,9 +113,15 @@ java -version
 mkdir --parents /opt/lmi/src
 cd /opt/lmi/src
 
-# Favor http over git's own protocol only because corporate firewalls
-# in lmi's target industry tend to block the latter.
-git clone http://git.savannah.nongnu.org/r/lmi.git
+# Preserve any preexisting source directory, moving it aside so that
+# 'git clone' will install a pristine working copy.
+mv lmi lmi-moved-$stamp0
+
+# Favor https over git's own protocol only because corporate firewalls
+# in lmi's target industry tend to block the latter. If even git's
+# https protocol is blocked, try Vadim's copy as a last resort.
+git clone https://git.savannah.nongnu.org/r/lmi.git \
+  || git clone https://github.com/vadz/lmi.git
 # Use git's own wherever possible.
 # git clone git://git.savannah.nongnu.org/lmi.git
 
@@ -130,9 +136,9 @@ then
 
     restore_MinGW_mount=`mount --mount-entries | grep '/MinGW_ '`
     [ -z "$restore_MinGW_mount" ] \
-      || printf "$restore_MinGW_mount\n" | grep --silent 'C:/opt/lmi/MinGW-4_9_1' \
+      || printf "$restore_MinGW_mount\n" | grep --silent 'C:/opt/lmi/MinGW-6_3_0' \
       || printf "Replacing former MinGW_ mount:\n $restore_MinGW_mount\n" >/dev/tty
-    mount --force "C:/opt/lmi/MinGW-4_9_1" "/MinGW_"
+    mount --force "C:/opt/lmi/MinGW-6_3_0" "/MinGW_"
 
     restore_cache_mount=`mount --mount-entries | grep '/cache_for_lmi '`
     [ -z "$restore_cache_mount" ] \
@@ -180,6 +186,7 @@ export minimal_path=/opt/lmi/local/bin:/opt/lmi/local/lib:/usr/bin:/bin:/usr/sbi
 
 make $coefficiency --output-sync=recurse PATH=$minimal_path wx_config_check
 make $coefficiency --output-sync=recurse PATH=$minimal_path show_flags
+make $coefficiency --output-sync=recurse PATH=$minimal_path clean
 make $coefficiency --output-sync=recurse PATH=$minimal_path install
 
 if [ "CYGWIN" = "$platform" ]

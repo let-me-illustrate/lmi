@@ -29,7 +29,7 @@
 
 #include <iosfwd>
 #include <string>
-#include <utility>
+#include <utility>                      // pair
 #include <vector>
 
 class Ledger;
@@ -50,7 +50,7 @@ std::string LMI_SO ledger_format
     );
 
 std::vector<std::string> LMI_SO ledger_format
-    (std::vector<double>               dv
+    (std::vector<double> const&        dv
     ,std::pair<int,oenum_format_style> f
     );
 

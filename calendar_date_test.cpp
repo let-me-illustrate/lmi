@@ -1052,20 +1052,20 @@ namespace
 
     void mete()
     {
-        calendar_date x;
-        calendar_date y(1899, 12, 31);
-        x = y;
-        x++;
-        std::string s = x.str();
-        x = add_years_and_months(x, 1, 1, true);
-        attained_age(y, x, oe_age_last_birthday);
-        y = minimum_birthdate(45, x, oe_age_last_birthday);
+        calendar_date t;
+        calendar_date u(1899, 12, 31);
+        t = u;
+        t++;
+        std::string s = t.str();
+        t = add_years_and_months(t, 1, 1, true);
+        attained_age(u, t, oe_age_last_birthday);
+        u = minimum_birthdate(45, t, oe_age_last_birthday);
     }
 
     void mete_construct()
     {
-        calendar_date x;
-        calendar_date y(1899, 12, 31);
+        calendar_date t;
+        calendar_date u(1899, 12, 31);
     }
 
     void mete_assign()

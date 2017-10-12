@@ -20,6 +20,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 #include "assert_lmi.hpp"
+#include "boost_regex.hpp"
 #include "contains.hpp"
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
@@ -30,7 +31,6 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
 #include <boost/filesystem/path.hpp>
-#include <boost/regex.hpp>
 
 #include <algorithm>                    // is_sorted()
 #include <cstddef>                      // size_t
@@ -484,9 +484,11 @@ void check_copyright(file const& f)
     LMI_ASSERT(nullptr != t1);
     int const year = 1900 + t1->tm_year;
 
+    { // Scope to avoid unwanted '-Wshadow' diagnostic.
     std::ostringstream oss;
     oss << R"(Copyright \(C\)[^\n]*)" << year;
     require(f, oss.str(), "lacks current copyright.");
+    }
 
     if(f.is_of_phylum(e_html) && !f.phyloanalyze("^COPYING"))
         {

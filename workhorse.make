@@ -141,16 +141,18 @@ ifeq      (3.4.4,$(gnu_cpp_version))
 else ifeq (3.4.5,$(gnu_cpp_version))
 else ifeq (4.9.1,$(gnu_cpp_version))
 else ifeq (4.9.2,$(gnu_cpp_version))
+else ifeq (6.3.0,$(gnu_cpp_version))
 else
-  $(error Untested $(GNU_CPP) version '$(gnu_cpp_version)')
+  $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
 
 ifeq      (3.4.4,$(gnu_cxx_version))
 else ifeq (3.4.5,$(gnu_cxx_version))
 else ifeq (4.9.1,$(gnu_cxx_version))
 else ifeq (4.9.2,$(gnu_cxx_version))
+else ifeq (6.3.0,$(gnu_cxx_version))
 else
-  $(error Untested $(GNU_CXX) version '$(gnu_cxx_version)')
+  $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
 
 ################################################################################
@@ -348,6 +350,10 @@ physical_closure_files := \
 
 ################################################################################
 
+# Overriding options--simply expanded, and empty by default.
+
+tutelary_flag :=
+
 # Warning options for gcc.
 
 c_standard   := -std=c99
@@ -374,15 +380,31 @@ else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
   # See:
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
   #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
-  # XMLWRAPP !! '-Wno-deprecated-declarations' needed for auto_ptr
   gcc_version_specific_warnings := \
     -Wno-conversion \
-    -Wno-deprecated-declarations \
     -Wno-parentheses \
     -Wno-unused-local-typedefs \
     -Wno-unused-variable \
 
   cxx_standard := -std=c++11
+else ifneq (,$(filter $(gcc_version), 6.3.0))
+  # See:
+  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
+  #   http://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
+  gcc_version_specific_warnings := \
+    -Wno-conversion \
+    -Wno-parentheses \
+    -Wno-unused-local-typedefs \
+    -Wno-unused-variable \
+
+  cxx_standard := -std=c++17
+
+# The default '-fno-rounding-math' means something like
+  #   #pragma STDC FENV ACCESS OFF
+  # which causes harm while bringing no countervailing benefit--see:
+  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+  c_standard   += -frounding-math
+  cxx_standard += -frounding-math
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
@@ -400,14 +422,11 @@ gcc_common_warnings := \
   -Wpacked \
   -Wpointer-arith \
   -Wredundant-decls \
+  -Wshadow \
   -Wsign-compare \
   -Wundef \
+  -Wunreachable-code \
   -Wwrite-strings \
-
-# Some boost libraries treat 'long long' as part of the language,
-# which it probably soon will be, so permit it now.
-
-gcc_common_warnings += -Wno-long-long
 
 gcc_c_warnings := \
   $(c_standard) \
@@ -450,6 +469,10 @@ endif
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-unused-parameter
 operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialized
 
+# The boost regex library is incompatible with '-Wshadow'.
+
+$(boost_regex_objects): gcc_common_extra_warnings += -Wno-shadow
+
 # The boost regex library improperly defines "NOMINMAX":
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
 # at least in version 1.33.1, and there seems to be no easy workaround
@@ -469,15 +492,8 @@ endif
 # any workarounds for gcc-3.3+ . However, it gives a number of
 # warnings with wx-2.5.4 (that have been fixed in a later version).
 
-# Too many warnings for various boost libraries:
+# Too many warnings for wx and various boost libraries:
 #  -Wold-style-cast \
-#  -Wshadow \
-
-# Too many warnings for libstdc++:
-#  -Wunreachable-code \
-
-# Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
-# being redundant for C++.
 
 C_WARNINGS = \
   $(gcc_c_warnings) \
@@ -557,7 +573,7 @@ $(my_unoptimizable_files): optimization_flag := -O0 -fno-omit-frame-pointer
 # it is too easily overridden by specifying $(CXXFLAGS) on the command
 # line. This flag overrides such overrides:
 
-$(my_unoptimizable_files): tutelary_flag := -O0 -fno-omit-frame-pointer
+$(my_unoptimizable_files): tutelary_flag += -O0 -fno-omit-frame-pointer
 
 ################################################################################
 
@@ -675,6 +691,7 @@ REQUIRED_CPPFLAGS = \
   $(platform_defines) \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
+  -DBOOST_NO_AUTO_PTR \
   -DBOOST_STRICT_CONFIG \
   $(actually_used_pch_flags) \
 
@@ -931,18 +948,21 @@ data_files := \
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \
 
+.PHONY: preinstall
+preinstall:
+	@[ -z "$(compiler_runtime_files)" ] \
+	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
+
 .PHONY: install
-install: $(default_targets)
+install: preinstall $(default_targets)
 	+@[ -d $(exec_prefix)    ] || $(MKDIR) --parents $(exec_prefix)
 	+@[ -d $(bindir)         ] || $(MKDIR) --parents $(bindir)
 	+@[ -d $(datadir)        ] || $(MKDIR) --parents $(datadir)
 	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
-	@$(CP) --preserve --update $^ $(bindir)
+	@$(CP) --preserve --update $(default_targets) $(bindir)
 	@$(CP) --preserve --update $(data_files) $(datadir)
 	@$(CP) --preserve --update $(help_files) $(datadir)
-	@[ -z "$(compiler_runtime_files)" ] \
-	  || $(CP) --preserve --update $(compiler_runtime_files) /opt/lmi/local/bin
 ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
 else
@@ -1222,7 +1242,6 @@ cli_test-%:
 	  >$*.touchstone
 	@<$*.touchstone \
 	  $(DIFF) \
-	      --ignore-all-space \
 	      --ignore-matching-lines='Prepared on' \
 	      - $(srcdir)/$*.touchstone \
 	  | $(WC)   -l \
@@ -1241,7 +1260,6 @@ cgi_tests: $(test_data) configurable_settings.xml antediluvian_cgi$(EXEEXT)
 	@$(PERFORM) ./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in >cgi.touchstone
 	@<cgi.touchstone \
 	  $(DIFF) \
-	      --ignore-all-space \
 	      --ignore-matching-lines='Prepared on' \
 	      --ignore-matching-lines='Compiled at' \
 	      --ignore-matching-lines=':[ 0-9]*milliseconds' \
