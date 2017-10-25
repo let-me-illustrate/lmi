@@ -31,7 +31,6 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
     ,wxWindow*            parent
     )
     :wxWindow        (parent, wxID_ANY, wxDefaultPosition, wxSize(0, 0))
-    ,selection_index_(-1)
 {
     if(!title.IsEmpty())
         {
@@ -46,23 +45,11 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
             }
         menu_.Append(j, s);
         }
-    Connect
-        (0
-        ,choices.GetCount()
-        ,wxEVT_COMMAND_MENU_SELECTED
-        ,wxCommandEventHandler(SingleChoicePopupMenu::UponMenuChoice)
-        );
 }
 
 // WX !! Can't be const because PopupMenu() isn't.
 int SingleChoicePopupMenu::Choose()
 {
-    PopupMenu(&menu_);
-    return selection_index_;
+    int const selection_index = GetPopupMenuSelectionFromUser(menu_);
+    return selection_index != wxID_NONE ? selection_index : -1;
 }
-
-void SingleChoicePopupMenu::UponMenuChoice(wxCommandEvent& e)
-{
-    selection_index_ = e.GetId();
-}
-
