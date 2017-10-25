@@ -29,7 +29,6 @@
 #include <wx/arrstr.h>                  // wxArrayString
 #include <wx/menu.h>
 #include <wx/string.h>
-#include <wx/window.h>
 
 /// Design notes for class SingleChoicePopupMenu.
 ///
@@ -41,21 +40,19 @@
 /// the same character as its own accelerator.
 
 class SingleChoicePopupMenu
-    :public wxWindow
 {
   public:
     SingleChoicePopupMenu
         (wxArrayString const& choices
         ,wxString const&      title  = wxEmptyString
-        ,wxWindow*            parent = &TopWindow()
+        ,wxWindow&            parent = TopWindow()
         );
-
-    ~SingleChoicePopupMenu() override = default;
 
     int Choose();
 
   private:
     wxMenu menu_;
+    wxWindow& parent_;
 };
 
 #endif // single_choice_popup_menu_hpp
