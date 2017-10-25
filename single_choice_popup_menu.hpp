@@ -55,10 +55,7 @@ class SingleChoicePopupMenu
     int Choose();
 
   private:
-    void UponMenuChoice(wxCommandEvent&);
-
     wxMenu menu_;
-    int selection_index_;
 };
 
 #endif // single_choice_popup_menu_hpp
