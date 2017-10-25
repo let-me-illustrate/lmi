@@ -23,14 +23,14 @@
 
 #include "single_choice_popup_menu.hpp"
 
-#include <wx/gdicmn.h>                  // wxDefaultPosition, wxSize
+#include <wx/window.h>
 
 SingleChoicePopupMenu::SingleChoicePopupMenu
     (wxArrayString const& choices
     ,wxString const&      title
-    ,wxWindow*            parent
+    ,wxWindow&            parent
     )
-    :wxWindow        (parent, wxID_ANY, wxDefaultPosition, wxSize(0, 0))
+    :parent_(parent)
 {
     if(!title.IsEmpty())
         {
@@ -50,6 +50,6 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
 // WX !! Can't be const because PopupMenu() isn't.
 int SingleChoicePopupMenu::Choose()
 {
-    int const selection_index = GetPopupMenuSelectionFromUser(menu_);
+    int const selection_index = parent_.GetPopupMenuSelectionFromUser(menu_);
     return selection_index != wxID_NONE ? selection_index : -1;
 }
