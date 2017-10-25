@@ -23,6 +23,7 @@
 
 #include "single_choice_popup_menu.hpp"
 
+#include <wx/evtloop.h>
 #include <wx/window.h>
 
 SingleChoicePopupMenu::SingleChoicePopupMenu
@@ -51,5 +52,15 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
 int SingleChoicePopupMenu::Choose()
 {
     int const selection_index = parent_.GetPopupMenuSelectionFromUser(menu_);
+
+    if (wxEventLoopBase* const loop = wxEventLoopBase::GetActive())
+        {
+        // This function can often be used to get users choice before starting
+        // some time-consuming operation. Ensure that the area previously
+        // covered by the menu shown by GetPopupMenuSelectionFromUser() is
+        // repainted to avoid leaving it invalidated for a possibly long time.
+        loop->YieldFor(wxEVT_CATEGORY_UI);
+        }
+
     return selection_index != wxID_NONE ? selection_index : -1;
 }
