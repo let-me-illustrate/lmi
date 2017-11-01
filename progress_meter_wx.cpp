@@ -73,7 +73,9 @@ class concrete_progress_meter
     bool show_progress_message() override;
     void culminate_ui() override;
 
-    wxProgressDialog progress_dialog_;
+// Temporarily overridden while wx issues are being addressed:
+//    wxProgressDialog progress_dialog_;
+    wxGenericProgressDialog progress_dialog_;
 };
 
 // TODO ?? CALCULATION_SUMMARY Resolve this issue.
