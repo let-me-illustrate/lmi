@@ -5,7 +5,7 @@ a='schroot --chroot=cross-lmi'
 b='cd /opt/lmi/free/src/lmi'
 c='git remote -v update'
 d='git pull'
-e='for z in $(git diff HEAD^ --name-only) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done'
+e='for z in $(git diff HEAD~5 --name-only) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c ; eval $c

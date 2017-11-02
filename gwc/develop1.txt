@@ -103,9 +103,10 @@ cvs -z3 update -l lmi
 
 for z in * ; do [ -f $z ] && ( [ $z -nt /opt/lmi/src/lmi/$z ] || [ $z -ot /opt/lmi/src/lmi/$z ] ) && touch --reference=/opt/lmi/src/lmi/$z $z; done
 
-  # But that's slow, so specify the files to change, thus:
+  # But that's slow, so specify the files to change, thus
+  # (adjusting the '~5' if fewer or more commits have been made):
 
-for z in $(git diff HEAD^ --name-only) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done
+for z in $(git diff HEAD~5 --name-only) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done
 
   # Third screen: only for building and testing
 
