@@ -3,7 +3,7 @@
 a='schroot --chroot=cross-lmi'
 
 b='cd /opt/lmi/free/src/lmi'
-c='git remote -v update'
+c='git fetch --all --dry-run'
 d='git pull'
 e='for z in $(git diff HEAD@{1} --name-only) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done'
 
