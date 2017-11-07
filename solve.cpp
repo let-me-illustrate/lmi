@@ -134,7 +134,7 @@ double SolveTest()
                 }
             }
             break;
-        case mce_solve_for_target:
+        case mce_solve_for_target_csv:
             {
             y = ThatSolveTargetCSV;
             }
