@@ -795,6 +795,11 @@ false // Silly workaround for now.
     SolveTarget.allow(mce_solve_for_tax_basis, actually_solving);
     SolveTarget.allow(mce_solve_for_non_mec  , actually_solving && mce_solve_loan != SolveType);
 
+    // There is no fundamental reason for forbidding non-MEC solves on
+    // bases other than current, but no one has ever complained about
+    // that restriction, and the (very simple) present implementation
+    // considers MEC status on the current basis only.
+
     SolveExpenseGeneralAccountBasis.enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
     SolveExpenseGeneralAccountBasis.allow(mce_gen_curr, actually_solving);
     SolveExpenseGeneralAccountBasis.allow(mce_gen_guar, actually_solving);
