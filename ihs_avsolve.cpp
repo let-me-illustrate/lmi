@@ -205,12 +205,10 @@ double AccountValue::SolveTest(double a_CandidateValue)
     // counters and iterators--it's one past the end--but indexing
     // must decrement it.
     double value = VariantValues().CSVNet[SolveTargetDuration_ - 1];
-    // This temporary expedient avoids any change to the GUI. It uses
-    // yare_input_.SolveTargetCashSurrenderValue for now as the target
-    // NAAR. Ultimately, it will instead use its own (new) input field
-    // as the target, and a NAAR solve will be chosen by a new
-    // enumerator such as 'mce_solve_for_naar'.
-    if(contains(yare_input_.Comments, "idiosyncrasyN"))
+    // INPUT !! Rename: s/SolveTargetCashSurrenderValue/SolveTargetValue/
+    // Use yare_input_.SolveTargetCashSurrenderValue as the target
+    // NAAR, for now at least.
+    if(mce_solve_for_target_naar == SolveTarget_)
         {
         value =
               VariantValues().EOYDeathBft[SolveTargetDuration_ - 1]

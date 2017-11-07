@@ -790,10 +790,11 @@ false // Silly workaround for now.
 #endif // 0
 
     SolveTarget.enable(actually_solving);
-    SolveTarget.allow(mce_solve_for_endt      , actually_solving);
-    SolveTarget.allow(mce_solve_for_target_csv, actually_solving);
-    SolveTarget.allow(mce_solve_for_tax_basis , actually_solving);
-    SolveTarget.allow(mce_solve_for_non_mec   , actually_solving && mce_solve_loan != SolveType);
+    SolveTarget.allow(mce_solve_for_endt       , actually_solving);
+    SolveTarget.allow(mce_solve_for_target_csv , actually_solving);
+    SolveTarget.allow(mce_solve_for_target_naar, actually_solving);
+    SolveTarget.allow(mce_solve_for_tax_basis  , actually_solving);
+    SolveTarget.allow(mce_solve_for_non_mec    , actually_solving && mce_solve_loan != SolveType);
 
     // There is no fundamental reason for forbidding non-MEC solves on
     // bases other than current, but no one has ever complained about
@@ -810,7 +811,8 @@ false // Silly workaround for now.
     SolveSeparateAccountBasis.allow(mce_sep_zero, actually_solving && allow_sep_acct);
     SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(GleanedLedgerType_));
 
-    SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target_csv == SolveTarget);
+    // INPUT !! Rename: s/SolveTargetCashSurrenderValue/SolveTargetValue/
+    SolveTargetCashSurrenderValue.enable(actually_solving && (mce_solve_for_target_csv == SolveTarget || mce_solve_for_target_naar == SolveTarget));
 
     bool enable_reduce_to_avoid_mec =
             !(actually_solving && mce_solve_for_non_mec == SolveTarget)

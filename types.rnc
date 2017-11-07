@@ -151,6 +151,7 @@ solve_type =
 solve_target =
       "Endowment"
     | "Target CSV"
+    | "Target NAAR"
     | "CSV = tax basis"
     | "Avoid MEC"
 

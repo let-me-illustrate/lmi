@@ -139,7 +139,8 @@ double SolveTest()
             y = ThatSolveTargetCSV;
             }
             break;
-        case mce_solve_for_tax_basis: // Fall through.
+        case mce_solve_for_target_naar: // Fall through.
+        case mce_solve_for_tax_basis:   // Fall through.
         case mce_solve_for_non_mec:
             {
             alarum() << "Not implemented.";

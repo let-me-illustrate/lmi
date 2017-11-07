@@ -1882,6 +1882,7 @@ here, but it looks weird if we don't make this look like its siblings.
                 <content>
                     <item>Endowment</item>
                     <item>Target CSV</item>
+                    <item>Target NAAR</item>
                     <item>CSV = tax basis</item>
                     <item>Avoid MEC</item>
                 </content>

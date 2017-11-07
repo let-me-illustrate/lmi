@@ -253,6 +253,7 @@ but none use both, so a single set of enumerators suffices.</xs:documentation>
     <xs:restriction base="xs:token">
       <xs:enumeration value="Endowment"/>
       <xs:enumeration value="Target CSV"/>
+      <xs:enumeration value="Target NAAR"/>
       <xs:enumeration value="CSV = tax basis"/>
       <xs:enumeration value="Avoid MEC"/>
     </xs:restriction>
