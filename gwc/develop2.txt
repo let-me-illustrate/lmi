@@ -31,9 +31,9 @@ git commit --all -m"Another set of changes"
   # When everything is ready to share...
 
 cd /opt/lmi/proprietary
-git bundle create YourBundleName ^origin/master HEAD --branches
+git bundle create YourBundleName origin/master..HEAD --branches
   # for example (substitute your own initials)
-git bundle create /opt/lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle ^origin/master HEAD --branches
+git bundle create /opt/lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle origin/master..HEAD --branches
 
   # Email that bundle, then push the changes to your "blessed" repository
 
