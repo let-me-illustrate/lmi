@@ -4,10 +4,22 @@
   #   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
 
   # Initial setup: create a working copy, cloned from the
-  # already-provided "blessed" repo
+  # already-provided "blessed" repo...
 
 cd /opt/lmi
 git clone file:///opt/lmi/blessed/proprietary
+
+  # ...then symlink its hooks/ directory:
+
+cd /opt/lmi/proprietary
+mv .git/hooks .git/hooks-orig
+ln --symbolic --force --no-dereference ../hooks .git
+
+  # When migrating to a new machine, restore that symlink explicitly
+  # in case the working copy was transferred by simplistic means:
+
+cd /opt/lmi/proprietary
+ln --symbolic --force --no-dereference ../hooks .git
 
   # Create a bundle to share by email
 
