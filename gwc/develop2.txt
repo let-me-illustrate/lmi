@@ -11,7 +11,20 @@ git clone file:///opt/lmi/blessed/proprietary
 
   # Create a bundle to share by email
 
-  # Make some changes, then test concinnity before every commit
+  # Make some changes, then run both the following sets of commands
+  # before each and every commit:
+
+  # (1) force permissions
+
+cd /opt/lmi/proprietary
+printf "forcing correct permissions "
+  for d in src data test tables; do (\
+       printf "$d..." \
+    && find ./$d -maxdepth 1 -type f -not -name '*.sh' -not -name '*.sed' | xargs chmod -x \
+  )done; \
+printf "all permissions forced\n"
+
+  # (2) test concinnity
   # (a pre-commit hook shows these commands' output, filtered)
 
 cd /opt/lmi/proprietary/data/
