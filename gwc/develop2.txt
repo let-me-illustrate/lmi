@@ -27,31 +27,28 @@ ln --symbolic --force --no-dereference ../hooks .git
 cd /opt/lmi/proprietary
 ln --symbolic --force --no-dereference ../hooks .git
 
-  # Create a bundle to share by email
-
-  # Make some changes, then run both the following sets of commands
-  # before each and every commit:
-
-  # (1) force permissions
+  # To verify proper setup at any time:
 
 cd /opt/lmi/proprietary
-printf "forcing correct permissions "
-  for d in src data test tables; do (\
-       printf "$d..." \
-    && find ./$d -maxdepth 1 -type f -not -name '*.sh' -not -name '*.sed' | xargs chmod -x \
-  )done; \
-printf "all permissions forced\n"
+readlink -f .git/hooks
 
-  # (2) test concinnity
-  # (a pre-commit hook shows these commands' output, filtered)
+  # The output should be
+  #   /opt/lmi/proprietary/hooks
+  # indicating that everything is in order. If the output is
+  #   /opt/lmi/.git/hooks
+  # then the 'ln' command above has not executed correctly.
 
-cd /opt/lmi/proprietary/data/
-cd ../data  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../src   ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../test  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../tables; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+  # For msw (cygwin) only, this command:
 
-  # Commit the changes in whatever batches make sense
+git config --get-all core.filemode
+
+  # should print the word "false".
+
+  # Create a bundle to share by email
+
+  # After verifying proper setup as above, make some changes, then
+  # commit them in whatever batches make sense (see the section
+  # "When committing fails" below if anything goes wrong)
 
 cd /opt/lmi/proprietary
   # [commit selected files by name...]
@@ -88,3 +85,40 @@ rm proprietary.dat proprietary.ndx
 /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
   # msw cross build:
 wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+
+  # When committing fails
+
+  # As long as git hooks are set up correctly, every commit is tested
+  # for common problems, and fails if any are found. Take these steps
+  # to diagnose or fix such failures.
+
+  # (1) Permissions may have been scrambled by msw (cygwin). Lines like
+  #   mode change 100644 => 100755 data/sample.database
+  # on the screen indicate such problems. For msw (cygwin) only, this
+  # command:
+
+git config --get-all core.filemode
+
+  # should print the word "false", in which case this nightmare should
+  # not occur.
+
+  # To unscramble permissions if necessary, before committing do:
+
+cd /opt/lmi/proprietary
+printf "forcing correct permissions "
+  for d in src data test tables; do (\
+       printf "$d..." \
+    && find ./$d -maxdepth 1 -type f -not -name '*.sh' -not -name '*.sed' | xargs chmod -x \
+  )done; \
+printf "all permissions forced\n"
+
+  # (2) Test concinnity. The git pre-commit hook shows these commands'
+  # output, filtered; these commands show the same thing, unfiltered
+  # so that the diagnostics are easier to understand.
+
+cd /opt/lmi/proprietary/data/
+cd ../data  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../src   ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../test  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../tables; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+
