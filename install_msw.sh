@@ -106,6 +106,11 @@ then
     #   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
     export CYGCHECK=`cygpath --mixed /usr/bin/cygcheck`
     cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
+
+    # 'core.fileMode' rationale:
+    #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
+
+    git config --global core.fileMode false
 fi
 
 java -version

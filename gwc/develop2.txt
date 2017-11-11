@@ -3,6 +3,12 @@
   # Discussed in detail here:
   #   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
 
+  # First of all, to avoid agony, do the following for msw (cygwin)
+  # only, for the reasons given here:
+  #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
+
+git config --global core.fileMode false
+
   # Initial setup: create a working copy, cloned from the
   # already-provided "blessed" repo...
 
