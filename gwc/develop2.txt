@@ -7,7 +7,7 @@
   # only, for the reasons given here:
   #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
 
-git config --global core.fileMode false
+git config --global core.filemode false
 
   # Initial setup: create a working copy, cloned from the
   # already-provided "blessed" repo...
