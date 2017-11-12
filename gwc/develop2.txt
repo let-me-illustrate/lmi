@@ -3,46 +3,19 @@
   # Discussed in detail here:
   #   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
 
-  # First of all, to avoid agony, do the following for msw (cygwin)
-  # only, for the reasons given here:
-  #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
-
-git config --global core.filemode false
-
   # Initial setup: create a working copy, cloned from the
   # already-provided "blessed" repo...
 
 cd /opt/lmi
 git clone file:///opt/lmi/blessed/proprietary
 
-  # ...then symlink its hooks/ directory:
+  # ...then make sure it's set up as intended:
 
 cd /opt/lmi/proprietary
-mv .git/hooks .git/hooks-orig
-ln --symbolic --force --no-dereference ../hooks .git
+./check_git_setup.sh
 
-  # When migrating to a new machine, restore that symlink explicitly
-  # in case the working copy was transferred by simplistic means:
-
-cd /opt/lmi/proprietary
-ln --symbolic --force --no-dereference ../hooks .git
-
-  # To verify proper setup at any time:
-
-cd /opt/lmi/proprietary
-readlink -f .git/hooks
-
-  # The output should be
-  #   /opt/lmi/proprietary/hooks
-  # indicating that everything is in order. If the output is
-  #   /opt/lmi/.git/hooks
-  # then the 'ln' command above has not executed correctly.
-
-  # For msw (cygwin) only, this command:
-
-git config --get-all core.filemode
-
-  # should print the word "false".
+  # ...and do that also when migrating to a new machine, in case a
+  # working copy was transferred by simplistic means.
 
   # Create a bundle to share by email
 
@@ -86,7 +59,7 @@ rm proprietary.dat proprietary.ndx
   # msw cross build:
 wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
 
-  # When committing fails
+  # To recover from errors
 
   # As long as git hooks are set up correctly, every commit is tested
   # for common problems, and fails if any are found. Take these steps

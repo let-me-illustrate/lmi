@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# Ensure sound git configuration.
+
+# Copyright (C) 2017 Gregory W. Chicares.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+# http://savannah.nongnu.org/projects/lmi
+# email: <gchicares@sbcglobal.net>
+# snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+# For msw (cygwin) only, make sure 'core.filemode' is "false". See:
+#   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
+
+if [ "$(expr substr $(uname -s) 1 6)" = "CYGWIN" ]
+then
+    printf "cygwin detected\n"
+    git config --global core.filemode false
+fi
+
+printf "core.filemode is '%s'\n" $(git config --get-all core.filemode)
+
+# Make sure the hooks in the repository's hooks/ directory are used.
+
+cd $(git rev-parse --show-toplevel)
+case "$(readlink -f .git/hooks)" in
+  ("$(pwd)/.git/hooks")
+    printf "must reconfigure git hooks directory\n"
+    mv .git/hooks .git/hooks-orig
+    ln --symbolic --force --no-dereference ../hooks .git
+    ;;
+  ("$(pwd)/hooks")
+    printf "git hooks directory is properly symlinked\n"
+    ;;
+  (*)
+    printf "unanticipated error\n"
+    ;;
+esac
+
+printf "  'readlink -f .git/hooks':\n"
+printf "    expected '%s'\n" "$(pwd)"/hooks
+printf "    observed '%s'\n" "$(readlink -f .git/hooks)"
+
