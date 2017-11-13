@@ -24,11 +24,15 @@
 # For msw (cygwin) only, make sure 'core.filemode' is "false". See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
 
-if [ "$(expr substr $(uname -s) 1 6)" = "CYGWIN" ]
-then
+case $(uname -s) in
+  (CYGWIN*)
     printf "cygwin detected\n"
     git config --global core.filemode false
-fi
+    ;;
+  (*)
+    printf "cygwin not detected--assuming OS is POSIX\n"
+    ;;
+esac
 
 printf "core.filemode is '%s'\n" $(git config --get-all core.filemode)
 

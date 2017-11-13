@@ -43,6 +43,9 @@ then
     export coefficiency='--jobs=4'
 fi
 
+# SOMEDAY !! After testing 'check_git_setup.sh' thoroughly, use its
+# 'case' statement here instead of this 'expr substr' thing.
+
 export platform
 if [ "$(expr substr $(uname -s) 1 6)" = "CYGWIN" ]
 then
