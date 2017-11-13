@@ -41,21 +41,30 @@ printf "core.filemode is '%s'\n" $(git config --get-all core.filemode)
 # deliberately the "toplevel" directory.
 
 cd $(dirname $(readlink --canonicalize $0))
+
 case "$(readlink -f .git/hooks)" in
   ("$(pwd)/.git/hooks")
-    printf "must reconfigure git hooks directory\n"
-    mv .git/hooks .git/hooks-orig
-    ln --symbolic --force --no-dereference ../hooks .git
-    ;;
-  ("$(pwd)/hooks")
-    printf "git hooks directory is properly symlinked\n"
-    ;;
-  (*)
-    printf "unanticipated error\n"
+    printf "moving old hooks directory to hooks-orig/ and creating symlink\n"
+    mv .git/hooks .git/hooks-orig && ln --symbolic --force --no-dereference ../hooks .git
     ;;
 esac
 
 printf "  'readlink -f .git/hooks':\n"
 printf "    expected '%s'\n" "$(pwd)"/hooks
 printf "    observed '%s'\n" "$(readlink -f .git/hooks)"
+
+case "$(readlink -f .git/hooks)" in
+  ("$(pwd)/hooks")
+    printf "git hooks directory is properly symlinked\n"
+    exit 0
+    ;;
+  ("$(pwd)/.git/hooks")
+    printf "attempted hooks/ change failed\n"
+    exit 1
+    ;;
+  (*)
+    printf "unanticipated error\n"
+    exit 2
+    ;;
+esac
 
