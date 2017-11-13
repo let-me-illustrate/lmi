@@ -27,7 +27,7 @@
 case $(uname -s) in
   (CYGWIN*)
     printf "cygwin detected\n"
-    git config --global core.filemode false
+    git config core.filemode false
     ;;
   (*)
     printf "cygwin not detected--assuming OS is POSIX\n"
