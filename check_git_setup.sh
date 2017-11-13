@@ -37,8 +37,10 @@ esac
 printf "core.filemode is '%s'\n" $(git config --get-all core.filemode)
 
 # Make sure the hooks in the repository's hooks/ directory are used.
+# Do this in the directory where this script resides, which is
+# deliberately the "toplevel" directory.
 
-cd $(git rev-parse --show-toplevel)
+cd $(dirname $(readlink --canonicalize $0))
 case "$(readlink -f .git/hooks)" in
   ("$(pwd)/.git/hooks")
     printf "must reconfigure git hooks directory\n"
