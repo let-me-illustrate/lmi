@@ -370,7 +370,14 @@ double AccountValue::Solve
 // is not satisfactory; what would be better?
             solve_set_fn = &AccountValue::SolveSetSpecAmt;
             decimals     = round_specamt().decimals();
-            // TODO ?? Respect minimum specamt?
+            // Generally, base and term are independent, and it is
+            // the base specamt that's being solved for here, so set
+            // the minimum as though there were no term.
+            lower_bound = minimum_specified_amount
+                (  0 == SolveBeginYear_
+                && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
+                ,false
+                );
             }
             break;
         case mce_solve_ee_prem:
