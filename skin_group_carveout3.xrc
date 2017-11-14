@@ -768,14 +768,14 @@
                                             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxStaticText">
-                                                <label>Target CSV value</label>
+                                                <label>Target amount</label>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
                                             <flag>wxGROW|wxTOP</flag>
                                             <border>4</border>
                                             <object class="wxTextCtrl" name="SolveTargetCashSurrenderValue">
-                                                <help>Target surrender value</help>
+                                                <help>Target amount</help>
                                             </object>
                                         </object>
                                     </object>

@@ -1909,13 +1909,13 @@ here, but it looks weird if we don't make this look like its siblings.
                                 <object class="sizeritem">
                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <object class="wxStaticText">
-                                        <label>Target CSV amount </label>
+                                        <label>Target amount </label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxTextCtrl" name="SolveTargetCashSurrenderValue">
-                                        <help>Target surrender value</help>
+                                        <help>Target amount</help>
                                         <size>10,-1</size>
                                     </object>
                                 </object>

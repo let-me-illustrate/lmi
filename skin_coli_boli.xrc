@@ -2224,14 +2224,14 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
                                     <border>2</border>
                                     <object class="wxStaticText">
-                                        <label>Target CSV amount</label>
+                                        <label>Target amount</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxBOTTOM</flag>
                                     <border>2</border>
                                     <object class="wxTextCtrl" name="SolveTargetCashSurrenderValue">
-                                        <help>Target surrender value</help>
+                                        <help>Target amount</help>
                                     </object>
                                 </object>
                             </object>
