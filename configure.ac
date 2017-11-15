@@ -380,22 +380,22 @@ else
     if test -z "$XMLWRAPP_CFLAGS" -o -z "$XMLWRAPP_LIBS"; then
         dnl --- XMLWRAPP (required) -------------------
         AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
-        if test "x$lmi_xmlwrapp_config" != "xyes"; then
+        if test "$lmi_xmlwrapp_config" = "no"; then
             AC_MSG_ERROR([Unable to find xmlwrapp configuration program xmlwrapp-config in the path.])
         fi
 
         dnl make sure xmlwrapp was compiled with XSLT support:
-        if xmlwrapp-config --libs | grep -v -q xslt; then
+        if $lmi_xmlwrapp_config --libs | grep -v -q xslt; then
             AC_MSG_ERROR([xmlwrapp with XSLT support is required.])
         fi
     fi
 
     if test -z "$XMLWRAPP_CFLAGS"; then
-        XMLWRAPP_CFLAGS=`xmlwrapp-config --cxxflags`
+        XMLWRAPP_CFLAGS=`$lmi_xmlwrapp_config --cxxflags`
     fi
 
     if test -z "$XMLWRAPP_LIBS"; then
-        XMLWRAPP_LIBS=`xmlwrapp-config --libs`
+        XMLWRAPP_LIBS=`$lmi_xmlwrapp_config --libs`
     fi
 
     AC_SUBST(XMLWRAPP_CFLAGS)
