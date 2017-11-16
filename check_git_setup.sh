@@ -42,11 +42,16 @@ esac
 printf "core.filemode is '%s'\n" $(git config --get-all core.filemode)
 
 # Make sure the hooks in the repository's hooks/ directory are used.
+#
+# The mv command is a nicety; it's okay if it fails because no
+# .git/hooks subdirectory exists.
 
 case "$(readlink -f .git/hooks)" in
   ("$PWD/.git/hooks")
-    printf "moving old hooks directory to hooks-orig/ and creating symlink\n"
-    mv .git/hooks .git/hooks-orig && ln --symbolic --force --no-dereference ../hooks .git
+    mv .git/hooks .git/hooks-orig && printf "moved" || printf "didn't move"
+    printf " old hooks/ directory to hooks-orig/\n"
+    printf "creating symlink\n"
+    ln --symbolic --force --no-dereference ../hooks .git
     ;;
 esac
 
