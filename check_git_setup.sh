@@ -24,7 +24,7 @@
 # Do this in the directory where this script resides, which is
 # deliberately the "toplevel" directory.
 
-cd $(dirname $(readlink --canonicalize $0))
+cd $(dirname $(readlink -f $0))
 
 # For msw (cygwin) only, make sure 'core.filemode' is "false". See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
