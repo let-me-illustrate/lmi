@@ -21,6 +21,11 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Do this in the directory where this script resides, which is
+# deliberately the "toplevel" directory.
+
+cd $(dirname $(readlink --canonicalize $0))
+
 # For msw (cygwin) only, make sure 'core.filemode' is "false". See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
 
@@ -37,10 +42,6 @@ esac
 printf "core.filemode is '%s'\n" $(git config --get-all core.filemode)
 
 # Make sure the hooks in the repository's hooks/ directory are used.
-# Do this in the directory where this script resides, which is
-# deliberately the "toplevel" directory.
-
-cd $(dirname $(readlink --canonicalize $0))
 
 case "$(readlink -f .git/hooks)" in
   ("$(pwd)/.git/hooks")
