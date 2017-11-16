@@ -44,22 +44,22 @@ printf "core.filemode is '%s'\n" $(git config --get-all core.filemode)
 # Make sure the hooks in the repository's hooks/ directory are used.
 
 case "$(readlink -f .git/hooks)" in
-  ("$(pwd)/.git/hooks")
+  ("$PWD/.git/hooks")
     printf "moving old hooks directory to hooks-orig/ and creating symlink\n"
     mv .git/hooks .git/hooks-orig && ln --symbolic --force --no-dereference ../hooks .git
     ;;
 esac
 
 printf "  'readlink -f .git/hooks':\n"
-printf "    expected '%s'\n" "$(pwd)"/hooks
+printf "    expected '%s'\n" "$PWD"/hooks
 printf "    observed '%s'\n" "$(readlink -f .git/hooks)"
 
 case "$(readlink -f .git/hooks)" in
-  ("$(pwd)/hooks")
+  ("$PWD/hooks")
     printf "git hooks directory is properly symlinked\n"
     exit 0
     ;;
-  ("$(pwd)/.git/hooks")
+  ("$PWD/.git/hooks")
     printf "attempted hooks/ change failed\n"
     exit 1
     ;;
