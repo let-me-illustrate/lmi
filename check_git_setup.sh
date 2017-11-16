@@ -63,8 +63,13 @@ printf "  'readlink -f .git/hooks':\n"
 printf "    expected '%s'\n" "$PWD"/hooks
 printf "    observed '%s'\n" "$(readlink -f .git/hooks)"
 
+# Verify that .git/hooks is a symlink to the repository's hooks/
+# directory, and that it contains an executable pre-commit hook.
+# (There may be other hooks, but that one should always exist.)
+
 case "$(readlink -f .git/hooks)" in
   ("$PWD/hooks")
+    [ -x ".git/hooks/pre-commit" ] || { printf "fail: missing hook\n"; exit 2; }
     printf "git hooks directory is properly symlinked\n"
     exit 0
     ;;
