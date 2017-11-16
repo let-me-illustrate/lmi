@@ -337,10 +337,12 @@ double AccountValue::Solve
     LMI_ASSERT(0 < SolveTargetDuration_);
     LMI_ASSERT(    SolveTargetDuration_ <= BasicValues::GetLength());
 
-    // Defaults: may be overridden by some cases
-    // We aren't interested in negative solve results
+    // Default bounds (may be overridden in some cases).
+    // Solve results are constrained to be nonnegative.
     double lower_bound = 0.0;
-    double upper_bound = 0.0;
+    // No amount solved for can plausibly reach one billion dollars.
+    double upper_bound = 999999999.99;
+
     root_bias bias =
         mce_solve_for_tax_basis == SolveTarget_
         ? bias_lower
@@ -348,26 +350,10 @@ double AccountValue::Solve
         ;
     int decimals = 0;
 
-    // Many things don't plausibly exceed max input face
-    for(int j = 0; j < SolveTargetDuration_; j++)
-        {
-        upper_bound = std::max
-            (upper_bound
-            ,DeathBfts_->specamt()[j] + yare_input_.TermRiderAmount
-            );
-        }
-    // TODO ?? Wait--initial premium may exceed input face, so
-    // for now we'll bail out with this: no amount solved for can
-    // plausibly reach one billion dollars.
-    upper_bound = 999999999.99;
-
     switch(a_SolveType)
         {
         case mce_solve_specamt:
             {
-// This:
-//          upper_bound  = 1000000.0 * Outlay_->GetPmts()[0];
-// is not satisfactory; what would be better?
             solve_set_fn = &AccountValue::SolveSetSpecAmt;
             decimals     = round_specamt().decimals();
             // Generally, base and term are independent, and it is
