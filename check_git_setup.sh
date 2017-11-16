@@ -21,10 +21,14 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# Do this in the directory where this script resides, which is
-# deliberately the "toplevel" directory.
+# Navigate to the directory where this script resides, and make sure
+# it's a git "toplevel" directory.
 
 cd $(dirname $(readlink -f $0))
+toplevel=$(git rev-parse --show-toplevel)
+printf "'%s' is current directory\n" $PWD
+printf "'%s' is git toplevel directory\n" $toplevel
+[ "$PWD" = "$toplevel" ] || { printf "fail: PWD is not toplevel\n"; exit 1; }
 
 # For msw (cygwin) only, make sure 'core.filemode' is "false". See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
@@ -66,11 +70,11 @@ case "$(readlink -f .git/hooks)" in
     ;;
   ("$PWD/.git/hooks")
     printf "attempted hooks/ change failed\n"
-    exit 1
+    exit 3
     ;;
   (*)
     printf "unanticipated error\n"
-    exit 2
+    exit 4
     ;;
 esac
 
