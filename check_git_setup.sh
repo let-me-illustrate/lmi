@@ -59,9 +59,14 @@ case "$(readlink -f .git/hooks)" in
     ;;
 esac
 
-printf "  'readlink -f .git/hooks':\n"
-printf "    expected '%s'\n" "$PWD"/hooks
-printf "    observed '%s'\n" "$(readlink -f .git/hooks)"
+# So many readlink options, so little time...just use them all.
+
+printf "testing .git/hooks symlink:\n"
+printf "  readlink   : '%s'\n" "$(readlink    .git/hooks)"
+printf "  readlink -e: '%s'\n" "$(readlink -e .git/hooks)"
+printf "  readlink -f: '%s'\n" "$(readlink -f .git/hooks)"
+printf "  readlink -m: '%s'\n" "$(readlink -m .git/hooks)"
+printf "  expected   : '%s'\n" "$PWD"/hooks
 
 # Verify that .git/hooks is a symlink to the repository's hooks/
 # directory, and that it contains an executable pre-commit hook.
