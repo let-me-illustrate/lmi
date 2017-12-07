@@ -357,6 +357,31 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
     return z;
 }
 
+/// Suggest updating rates each year.
+///
+/// AZ rates vary by calendar year:
+///   https://insurance.az.gov/sites/default/files/documents/files/RegulatoryBulletin2016-02_20160705.pdf
+///   2017 0.0190
+///   2018 0.0185
+///   2019 0.0180
+///   2020 0.0175
+///   2021 0.0170
+///
+/// Without this assertion, it's too easy to forget to update this
+/// rate when building lmi in December for release in January. Each
+/// year, expunge the particular assertion that failed, after updating
+/// the AZ rate manually. It is better not to make the rate update
+/// itself automatically because the schedule of future rates may have
+/// changed in the meantime (and actually did, in the 20170508T1544Z
+/// commit). Expunge this block comment when the last assertion is
+/// expunged.
+
+static_assert('D' != __DATE__[0] || '7' != __DATE__[10]);
+static_assert('D' != __DATE__[0] || '8' != __DATE__[10]);
+static_assert('D' != __DATE__[0] || '9' != __DATE__[10]);
+static_assert('D' != __DATE__[0] || '0' != __DATE__[10]);
+static_assert('D' != __DATE__[0] || '1' != __DATE__[10]);
+
 /// Premium-tax rates for life insurance without retaliation.
 ///
 /// A single table suffices for every domicile, because retaliation is
@@ -369,14 +394,6 @@ double premium_tax::calculate_load(double payment, stratified_charges const& str
 ///
 /// Fictitious state XX may be used where no premium tax applies, as
 /// for offshore business.
-///
-/// AZ rates:
-///   https://insurance.az.gov/sites/default/files/documents/files/RegulatoryBulletin2016-02_20160705.pdf
-///   2017 0.0190
-///   2018 0.0185
-///   2019 0.0180
-///   2020 0.0175
-///   2021 0.0170
 
 std::vector<double> const& premium_tax_rates_for_life_insurance()
 {
