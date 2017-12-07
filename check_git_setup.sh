@@ -30,12 +30,19 @@ printf "'%s' is current directory\n" $PWD
 printf "'%s' is git toplevel directory\n" $toplevel
 [ "$PWD" = "$toplevel" ] || { printf "fail: PWD is not toplevel\n"; exit 1; }
 
-# For msw (cygwin) only, make sure 'core.filemode' is "false". See:
+# For msw (cygwin) only, force correct permissions, and make sure
+#'core.filemode' is "false". See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
 
 case $(uname -s) in
   (CYGWIN*)
     printf "cygwin detected\n"
+    printf "forcing correct permissions "
+      for d in . gwc; do (\
+           printf "$d..." \
+        && find ./$d -maxdepth 1 -type f -not -name '*.sh' -not -name '*.sed' | xargs chmod -x \
+      )done; \
+    printf "all permissions forced\n"
     git config core.filemode false
     ;;
   (*)
