@@ -1,6 +1,6 @@
 // Include boost/regex.hpp, guarding it with a pragma.
 //
-// Copyright (C) 2017 Gregory W. Chicares.
+// Copyright (C) 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
