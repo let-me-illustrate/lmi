@@ -100,7 +100,7 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 
 apt-get update
 apt-get --assume-yes install g++-mingw-w64 automake libtool make \
- pkg-config git zsh bzip2 unzip sudo wine default-jre fop jing trang \
+ pkg-config git cvs zsh bzip2 unzip sudo wine default-jre fop jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc vim-fugitive \
  >cross-lmi-apt-get-log 2>&1
 
