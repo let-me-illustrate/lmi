@@ -274,6 +274,11 @@ exit
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
 #   cp -a ~/.ssh/ /srv/chroot/cross-lmi/home/greg
+# Make sure the .ssh/config file contains:
+#   Protocol 2
+#   HashKnownHosts no
+# See the discussion of hashing (inter alia) here:
+#   http://lists.nongnu.org/archive/html/lmi/2018-01/msg00003.html
 
 # Use an msw-native java to let lmi write illustrations to pdf. See:
 #   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00010.html
