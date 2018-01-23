@@ -45,7 +45,5 @@ check_concinnity()
 }
 
 printf "checking..."
-# Comment this out temporarily to permit committing files verbatim
-# from a 2017 branch.
-#check_concinnity
+check_concinnity
 printf "okay\n"
