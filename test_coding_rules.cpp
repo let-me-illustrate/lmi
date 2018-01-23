@@ -484,7 +484,9 @@ void check_copyright(file const& f)
     std::time_t const t0 = std::time(nullptr);
     std::tm const*const t1 = std::localtime(&t0);
     LMI_ASSERT(nullptr != t1);
-    int const year = 1900 + t1->tm_year;
+// Temporarily accept 201*:
+//  int const year = 1900 + t1->tm_year;
+    int const year = 201;
 
     { // Scope to avoid unwanted '-Wshadow' diagnostic.
     std::ostringstream oss;
