@@ -71,6 +71,7 @@ enum enum_phylum
     ,e_touchstone = 1 << 17
     ,e_xml_input  = 1 << 18
     ,e_xml_other  = 1 << 19
+    ,e_mustache   = 1 << 20
     };
 
 enum enum_kingdom
@@ -195,6 +196,7 @@ file::file(std::string const& file_path)
         : ".xrc"        == extension() ? e_xml_other
         : ".xsd"        == extension() ? e_xml_other
         : ".xsl"        == extension() ? e_xml_other
+        : ".mst"        == extension() ? e_mustache
         : phyloanalyze("^ChangeLog-")  ? e_binary
         : phyloanalyze("^tags$")       ? e_expungible
         : phyloanalyze("^COPYING$")    ? e_gpl
