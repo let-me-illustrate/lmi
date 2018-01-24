@@ -1,0 +1,136 @@
+{{!
+    Copyright (C) 2017 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+{{>nasd_header}}
+
+<font size="-1">
+
+<p align="center"><b>IMPORTANT TAX DISCLOSURE</b></p>
+
+<p>
+As illustrated, this {{ContractName}}
+{{#IsMec}}
+    becomes
+{{/IsMec}}
+{{^IsMec}}
+    would not become
+{{/IsMec}}
+a Modified Endowment Contract (MEC)
+under the Internal Revenue Code
+{{#IsMec}}
+    in year {{MecYearPlus1}}
+{{/IsMec}}
+To the extent of gain in the {{ContractName}}, loans, distributions
+and withdrawals from a MEC are subject to income tax
+and may also trigger a penalty tax.
+</p>
+
+{{^IsInforce}}
+    <p>
+    The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
+    </p>
+{{/IsInforce}}
+
+<p>
+No tax charge is made to the Separate Account. However,
+such a charge may be made in the future.
+</p>
+
+<p>
+<b>
+The information contained in this illustration is not written
+or intended as tax or legal advice.
+Neither {{InsCoShortName}}
+nor any of its employees or representatives are authorized
+to give tax or legal advice. For more information pertaining
+to the tax consequences of purchasing or owning this
+{{ContractName}},
+consult with your own independent tax or legal counsel.
+</b>
+</p>
+
+<br></br>
+
+<p align="center"><b>EXPLANATORY NOTES</b></p>
+
+<p>
+{{PolicyMktgName}} is a {{PolicyLegalName}} issued by {{InsCoName}}.
+{{ProductDescription}}
+</p>
+
+<p>
+{{NoVanishPremiumFootnote}}
+</p>
+
+{{#NoLapse}}
+    {{^StateIsNewYork}}
+        <p>
+        {{NoLapseProvisionName}}:
+        The {{NoLapseProvisionName}} is a lapse protection feature. If met,
+        this test allows your {{ContractName}} to stay in force for a period of
+        time even if there is insufficient {{AvName}} Value to cover the
+        {{AvName}} Value charges. Refer to your {{ContractName}} for specific
+        requirements of meeting the {{NoLapseProvisionName}}.
+        </p>
+    {{/StateIsNewYork}}
+{{/NoLapse}}
+
+{{#NoLapseAlwaysActive}}
+    <p>
+    No-Lapse Guarantee: The {{ContractName}} will remain in force after the
+    first premium has been paid, even if there is insufficient {{AvName}} Value
+    to cover the monthly charges provided that the insured is not in a
+    substandard rating class and the {{ContractName}} debt does not exceed
+    {{AvName}} Value.
+    </p>
+{{/NoLapseAlwaysActive}}
+
+<p>
+The definition of life insurance elected for this
+{{ContractName}} is the
+{{#DefnLifeInsIsGPT}}
+    guideline premium test. The guideline single premium is
+    ${{InitGSP}} and the guideline
+    level premium is ${{InitGLP}}.
+{{/DefnLifeInsIsGPT}}
+{{^DefnLifeInsIsGPT}}
+    cash value accumulation test.
+{{/DefnLifeInsIsGPT}}
+</p>
+
+{{#DefnLifeInsIsGPT}}
+<p>
+{{GptFootnote}}
+</p>
+{{/DefnLifeInsIsGPT}}
+
+<p>
+{{InsCoName}} has the right to promptly refund any amount of premium paid if it
+will increase the net amount at risk (referred to in the {{ContractName}} as
+the Amount of Insurance that Requires a Charge).
+</p>
+
+<p>
+Premium payments are assumed to be made at the beginning of the year. Account
+values, cash surrender values, and death benefits are illustrated as of the end
+of the year. {{MinimumPremiumFootnote}}
+</p>
+
+</font>

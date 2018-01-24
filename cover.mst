@@ -1,0 +1,147 @@
+{{!
+    Copyright (C) 2017 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+<table width="100%">
+    <!--
+    Rows such as this are used as separators between visible table elements,
+    this is unfortunately necessary because wxHTML doesn't support
+    margin/padding on table elements.
+    -->
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td align="center">
+            <font size="+4">
+                <b>{{PolicyMktgName}}</b>
+            </font>
+        </td>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+4">
+                <b>
+    {{#IsInforce}}
+    In Force Life Insurance Illustration
+    {{/IsInforce}}
+    {{^IsInforce}}
+    Life Insurance Illustration
+    {{/IsInforce}}
+                </b>
+            </font>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                <b>Prepared for:</b>
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+    {{#Composite}}
+    {{CorpName}}
+    {{/Composite}}
+    {{^Composite}}
+    {{Insured1}}
+    {{/Composite}}
+            </font>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                <b>Presented by:</b>
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{ProducerName}}
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{ProducerStreet}}
+            </font>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{ProducerCity}}
+            </font>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td align="center">
+            <font size="+2">
+                {{date_prepared}}
+            </font>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+</table>
+
+<!--
+This is ugly and error-prone, but there is no way to put the paragraph below at
+the bottom of the page currently, so we just insert enough white space to push
+it roughly where we want it to appear.
+-->
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+<p align="center"><scaled_image inv_factor="0.6" src="company_logo.png"></scaled_image></p>
+
+<br></br>
+<br></br>
+<br></br>
+
+<font size="-1">
+
+<p align="center">{{MarketingNameFootnote}}</p>
+
+<p>{{StateMarketingImprimatur}}</p>
+
+</font>

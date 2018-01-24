@@ -1,0 +1,95 @@
+{{!
+    Copyright (C) 2017 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+{{>nasd_header}}
+
+<p align="center"><b>Column Definitions and Key Terms</b></p>
+
+<p>
+<b>Account Value</b>
+<br>
+{{AccountValueFootnote}}
+</p>
+
+<p>
+<b>Cash Surrender Value</b>
+<br>
+{{CashSurrValueFootnote}}
+</p>
+
+<p>
+<b>Death Benefit</b>
+<br>
+{{DeathBenefitFootnote}}
+</p>
+
+{{^Composite}}
+<p>
+<b>End of Year Age</b>
+<br>
+{{AttainedAgeFootnote}}
+</p>
+{{/Composite}}
+
+{{#GroupCarveout}}
+<p>
+<b>Gross Payment</b>
+<br>
+{{GrossPremiumFootnote}}
+</p>
+{{/GroupCarveout}}
+
+<p>
+<b>Gross Rate</b>
+<br>
+{{GrossRateFootnote}}
+</p>
+
+{{#GroupCarveout}}
+<p>
+<b>Minimum Premium</b>
+<br>
+{{InitialPremiumFootnote}}
+</p>
+{{/GroupCarveout}}
+
+<p>
+<b>Net Premium</b>
+<br>
+{{NetPremiumFootnote}}
+</p>
+
+<p>
+<b>Net Rate</b>
+<br>
+{{NetRateFootnote}}
+</p>
+
+<p>
+<b>Policy Year</b>
+<br>
+{{PolicyYearFootnote}}
+</p>
+
+<p>
+<b>Premium Outlay</b>
+<br>
+{{OutlayFootnote}}
+</p>

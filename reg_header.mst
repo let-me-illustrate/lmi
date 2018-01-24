@@ -1,0 +1,130 @@
+{{!
+    Copyright (C) 2017 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+<scaled_image inv_factor="0.36" src="company_logo.png"></scaled_image>
+
+<font size=-1>
+<p align="center">
+    {{#IsInforce}}
+        LIFE INSURANCE IN FORCE BASIC ILLUSTRATION
+    {{/IsInforce}}
+    {{^IsInforce}}
+        LIFE INSURANCE BASIC ILLUSTRATION
+    {{/IsInforce}}
+
+    <br>{{InsCoName}}
+    <br>Presented by: {{ProducerName}}
+    <br>{{ProducerStreet}}
+    {{#HasProducerCity}}
+        <br>{{ProducerCity}}
+    {{/HasProducerCity}}
+</p>
+<p>
+    &nbsp;
+</p>
+<table width="100%" cellspacing="0" cellpadding="0" valign="top">
+    <tr>
+        <td width="60%">
+            Prepared for:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Group Name: {{CorpNameAbbrev50}}<br>
+            {{#Composite}}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Composite Illustration<br>
+            {{/Composite}}
+            {{^Composite}}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Insured: {{Insured1Abbrev50}}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age: {{Age}}<br>
+            {{/Composite}}
+            Product: {{PolicyForm}}&nbsp;{{PolicyMktgName}}<br>
+            {{#ModifiedSinglePremium}}
+                Modified Single Premium Adjustable Life Insurance Policy
+            {{/ModifiedSinglePremium}}
+            {{^ModifiedSinglePremium}}
+                {{PolicyLegalName}}
+            {{/ModifiedSinglePremium}}
+            <br>
+
+            {{^IsInforce}}
+                {{^SinglePremium}}
+                    Initial Premium:
+                {{/SinglePremium}}
+                {{#SinglePremium}}
+                    Single Premium:
+                {{/SinglePremium}}
+                &nbsp;${{InitPrem}}
+            {{/IsInforce}}
+            <br>
+
+            {{^Composite}}
+                Initial Death Benefit Option: {{InitDBOpt}}<br>
+            {{/Composite}}
+            {{>contract_numbers}}
+        </td>
+        <td width="40%">
+            Initial {{#HasTerm}}Total{{/HasTerm}}
+            Selected Face Amount: ${{InitTotalSA}}<br>
+
+            {{#HasTerm}}
+                Initial Base Face Amount: ${{InitBaseSpecAmt}}<br>
+                Initial Term Face Amount: ${{InitTermSpecAmt}}<br>
+            {{/HasTerm}}
+
+            Guaranteed Crediting Rate: {{InitAnnGenAcctInt_Guaranteed}}<br>
+
+            Current Illustrated Crediting Rate:
+            {{#InforceYear}}
+                {{UltimateInterestRate}}
+            {{/InforceYear}}
+            {{^InforceYear}}
+                {{InitAnnGenAcctInt_Current}}
+            {{/InforceYear}}
+            <br>
+
+            {{#SinglePremium}}
+                {{#InforceYearLE4}}
+                    Ultimate Illustrated Crediting Rate:
+                    {{#ModifiedSinglePremium0}}
+                        {{AnnGAIntRate_Current[11]}}
+                    {{/ModifiedSinglePremium0}}
+                    {{^ModifiedSinglePremium0}}
+                        {{AnnGAIntRate_Current[6]}}
+                    {{/ModifiedSinglePremium0}}
+                    <br>
+                {{/InforceYearLE4}}
+            {{/SinglePremium}}
+
+            {{^Composite}}
+                Underwriting Type:
+                {{#UWTypeIsMedical}}
+                    Fully underwritten
+                {{/UWTypeIsMedical}}
+                {{^UWTypeIsMedical}}
+                    {{UWType}}
+                {{/UWTypeIsMedical}}
+                <br>
+            {{/Composite}}
+
+            Rate Classification: {{UWClass}}, {{Smoker}}, {{Gender}}<br>
+            {{#UWClassIsRated}}
+            &nbsp;&nbsp;&nbsp;Table Rating: {{SubstandardTable}}<br>
+            {{/UWClassIsRated}}
+        </td>
+    </tr>
+</table>
+</font>
