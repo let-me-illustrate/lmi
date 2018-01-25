@@ -24,6 +24,6 @@
     inserting the title between them, as a couple of pages do. But we still
     provide this "full header" template for the pages that don't have any
     title to make them simpler.
- }}
+}}
 {{>nasd_header_upper}}
 {{>nasd_header_lower}}

@@ -24,6 +24,6 @@
     inserting the title between them, as a couple of pages do. But we still
     provide this "full header" template for the pages that don't have any
     title to make them simpler.
- }}
+}}
 {{>reg_d_group_header_upper}}
 {{>reg_d_group_header_lower}}
