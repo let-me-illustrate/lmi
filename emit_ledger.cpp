@@ -30,8 +30,8 @@
 #include "file_command.hpp"
 #include "group_quote_pdf_gen.hpp"
 #include "ledger.hpp"
+#include "ledger_pdf.hpp"
 #include "ledger_text_formats.hpp"
-#include "ledger_xsl.hpp"
 #include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "path_utility.hpp"             // unique_filepath()
 #include "timer.hpp"
