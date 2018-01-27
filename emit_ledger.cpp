@@ -32,6 +32,8 @@
 #include "ledger.hpp"
 #include "ledger_pdf.hpp"
 #include "ledger_text_formats.hpp"
+// PDF !! Expunge the next line:
+#include "ledger_xsl.hpp"
 #include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "path_utility.hpp"             // unique_filepath()
 #include "timer.hpp"
