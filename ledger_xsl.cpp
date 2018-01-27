@@ -94,11 +94,13 @@ fs::path xsl_filepath(Ledger const& ledger)
 /// filenames must be transformed is that apache fop is java, and
 /// java is "portable".
 
-std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
+std::string write_ledger_as_pdf_via_xsl(Ledger const& ledger, fs::path const& filepath)
 {
     throw_if_interdicted(ledger);
 
     fs::path print_dir(configurable_settings::instance().print_directory());
+    // Old implementation: write to a distinctive subdirectory.
+    print_dir = print_dir / "old";
 
     fs::path real_filepath(orthodox_filename(filepath.leaf()));
     LMI_ASSERT(fs::portable_name(real_filepath.string()));

@@ -30,7 +30,7 @@
 
 class Ledger;
 
-std::string write_ledger_as_pdf(Ledger const&, fs::path const&);
+std::string write_ledger_as_pdf_via_xsl(Ledger const&, fs::path const&);
 
 fs::path xsl_filepath(Ledger const&);
 

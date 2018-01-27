@@ -24,17 +24,29 @@
 #include "ledger_pdf.hpp"
 
 #include "configurable_settings.hpp"
+#include "global_settings.hpp" // PDF !! expunge
 #include "ledger.hpp"
 #include "ledger_pdf_generator.hpp"
+#include "ledger_xsl.hpp" // PDF !! expunge
 #include "path_utility.hpp"
 
 /// Write ledger as pdf.
 
 std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 {
+    // PDF !! Expunge this conditional block:
+    if(global_settings::instance().ash_nazg())
+        {
+        // Execute both the new and the old code so that their results
+        // may be compared.
+        write_ledger_as_pdf_via_xsl(ledger, filepath);
+        }
+
     throw_if_interdicted(ledger);
 
     fs::path print_dir(configurable_settings::instance().print_directory());
+    // PDF !! Either orthodox_filename() should be used here, or its
+    // use should be reconsidered everywhere else.
     fs::path pdf_out_file = unique_filepath(print_dir / filepath, ".pdf");
 
     auto const pdf = ledger_pdf_generator::create();
