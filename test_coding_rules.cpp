@@ -485,7 +485,7 @@ void check_copyright(file const& f)
     std::time_t const t0 = std::time(nullptr);
     std::tm const*const t1 = std::localtime(&t0);
     LMI_ASSERT(nullptr != t1);
-// Temporarily accept 201*:
+// PDF !! Temporarily accept 201*:
 //  int const year = 1900 + t1->tm_year;
     int const year = 201;
 
