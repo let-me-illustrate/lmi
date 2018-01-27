@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "ledger_evaluator.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi.hpp"
@@ -102,13 +103,7 @@ class LMI_SO Ledger
     unsigned int CalculateCRC() const;
     void Spew(std::ostream& os) const;
 
-    void read (xml::element const&);
-    void write(xml::element&) const;
-    int                class_version() const;
-    std::string const& xml_root_name() const;
-
-    void write       (std::ostream& os) const;
-    void write_xsl_fo(std::ostream& os) const;
+    ledger_evaluator make_evaluator() const;
 
   private:
     LedgerVariant const& GetOneVariantLedger(mcenum_run_basis) const;
