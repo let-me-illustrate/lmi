@@ -1,6 +1,6 @@
 // Test files for consistency with various rules.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -485,9 +485,7 @@ void check_copyright(file const& f)
     std::time_t const t0 = std::time(nullptr);
     std::tm const*const t1 = std::localtime(&t0);
     LMI_ASSERT(nullptr != t1);
-// PDF !! Temporarily accept 201*:
-//  int const year = 1900 + t1->tm_year;
-    int const year = 201;
+    int const year = 1900 + t1->tm_year;
 
     { // Scope to avoid unwanted '-Wshadow' diagnostic.
     std::ostringstream oss;
