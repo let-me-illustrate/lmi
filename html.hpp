@@ -24,6 +24,8 @@
 
 #include "config.hpp"
 
+#include "so_attributes.hpp"
+
 #include <string>
 #include <utility>                      // std::move
 
@@ -157,7 +159,7 @@ class attribute
 namespace detail
 {
 
-class any_element
+class LMI_SO any_element
 {
   public:
     /// Ctor should only be used with literal strings as argument.
@@ -195,7 +197,7 @@ class any_element
 ///             )
 ///         ;
 
-class element : private detail::any_element
+class LMI_SO element : private detail::any_element
 {
   public:
     /// Ctor should only be used with literal strings as argument.
@@ -287,14 +289,14 @@ class void_element : private detail::any_element
 namespace attr
 {
 
-extern attribute const align;
-extern attribute const cellpadding;
-extern attribute const cellspacing;
-extern attribute const colspan;
-extern attribute const nowrap;
-extern attribute const size;
-extern attribute const valign;
-extern attribute const width;
+extern LMI_SO attribute const align;
+extern LMI_SO attribute const cellpadding;
+extern LMI_SO attribute const cellspacing;
+extern LMI_SO attribute const colspan;
+extern LMI_SO attribute const nowrap;
+extern LMI_SO attribute const size;
+extern LMI_SO attribute const valign;
+extern LMI_SO attribute const width;
 
 } // namespace attr
 
@@ -303,14 +305,14 @@ extern attribute const width;
 namespace tag
 {
 
-extern element      const b;
-extern void_element const br;
-extern element      const font;
-extern element      const i;
-extern element      const p;
-extern element      const table;
-extern element      const td;
-extern element      const tr;
+extern LMI_SO element      const b;
+extern LMI_SO void_element const br;
+extern LMI_SO element      const font;
+extern LMI_SO element      const i;
+extern LMI_SO element      const p;
+extern LMI_SO element      const table;
+extern LMI_SO element      const td;
+extern LMI_SO element      const tr;
 
 } // namespace tag
 
