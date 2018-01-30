@@ -1,0 +1,203 @@
+{{!
+    Copyright (C) 2017, 2018 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+
+{{>reg_header}}
+
+<p align="center">Numeric Summary</p>
+
+{{>dollar_units}}
+
+<font size="-1">
+
+<br></br>
+<br></br>
+
+<numeric_summary_table></numeric_summary_table>
+
+<br></br>
+<br></br>
+
+<!--
+This is a workaround for what looks like a wxHTML bug, without explicitly
+resetting the alignment here, the next paragraph would be centered, somehow
+keeping the center alignment of the last "p" tag above.
+-->
+<p align="left"></p>
+
+{{#Composite}}
+<p>
+    The year of policy lapse on a guaranteed, midpoint
+    and current basis is not depicted in the above table of values
+    for this composite illustration because it is not applicable
+    on a case basis.
+</p>
+{{/Composite}}
+
+{{#LapseYear_Guaranteed_LT_MaxDuration}}
+<p>
+    Additional premium will be required
+    in year {{LapseYear_Guaranteed_Plus1}}
+    or contract will lapse based on guaranteed monthly charges
+    and interest rate.
+</p>
+{{/LapseYear_Guaranteed_LT_MaxDuration}}
+
+{{#LapseYear_Midpoint_LT_MaxDuration}}
+<p>
+    Additional premium will be required
+    in year {{LapseYear_Midpoint_Plus1}}
+    or contract will lapse based on midpoint monthly charges
+    and interest rate.
+</p>
+{{/LapseYear_Midpoint_LT_MaxDuration}}
+
+{{#LapseYear_Current_LT_MaxDuration}}
+<p>
+    Additional premium will be required
+    in year {{LapseYear_Current_Plus1}}
+    or contract will lapse based on current monthly charges
+    and interest rate.
+</p>
+{{/LapseYear_Current_LT_MaxDuration}}
+
+{{#IsMec}}
+<p>
+            IMPORTANT TAX DISCLOSURE: This is a Modified Endowment Contract.
+            Please refer to the Narrative Summary for additional information.
+</p>
+{{/IsMec}}
+
+<br>
+<br>
+
+<p align="center">Certification Statements</p>
+    <p>
+      CONTRACT OWNER / APPLICANT
+    </p>
+    {{#HasInterestDisclaimer}}
+      <p>
+        I understand that at the present time higher current interest rates
+        are credited for policies with case premiums in the amount
+        of {{InterestDisclaimer}}
+      </p>
+    {{/HasInterestDisclaimer}}
+    <p>
+    {{#StateIsIllinoisOrTexas}}
+        {{#StateIsIllinois}}
+            I have received a copy of this illustration and understand
+            that this illustration assumes that the currently illustrated
+            non-guaranteed elements will continue unchanged
+            for all years shown. This is not likely to occur,
+            and actual results may be more or less favorable than those shown.
+        {{/StateIsIllinois}}
+        {{#StateIsTexas}}
+              A copy of this illustration has been provided
+              to the Applicant/Policyowner.
+        {{/StateIsTexas}}
+    {{/StateIsIllinoisOrTexas}}
+    {{^StateIsIllinoisOrTexas}}
+          I have received a copy of this illustration, and I understand
+          that any non-guaranteed elements illustrated are subject
+          to change and could be either higher or lower. Additionally,
+          I have been informed by my agent that these values
+          are not guaranteed.
+    {{/StateIsIllinoisOrTexas}}
+    </p>
+    <br>
+    <br>
+    <table cellspacing="0" cellpadding="0" valign="top">
+        <tr>
+            <td>
+                <u>{{Space64}}{{Space32}}</u>
+            </td>
+            <td>
+                {{Space32}}
+            </td>
+            <td>
+                <u>{{Space32}}</u>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                CONTRACT OWNER OR APPLICANT SIGNATURE
+            </td>
+            <td>
+                {{Space32}}
+            </td>
+            <td>
+                DATE
+            </td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <p>
+      AGENT / AUTHORIZED REPRESENTATIVE
+    </p>
+    <p>
+        {{#StateIsIllinoisOrTexas}}
+            {{#StateIsIllinois}}
+                I have informed the applicant or policyowner
+                that this illustration assumes that the currently illustrated
+                non-guaranteed elements will continue unchanged
+                for all years shown. This is not likely to occur,
+                and actual results may be more or less favorable than those shown.
+            {{/StateIsIllinois}}
+            {{#StateIsTexas}}
+                A copy of this illustration has been provided
+                to the Applicant/Policyowner.
+            {{/StateIsTexas}}
+        {{/StateIsIllinoisOrTexas}}
+        {{^StateIsIllinoisOrTexas}}
+            I certify that this illustration has been presented
+            to the applicant, and that I have explained
+            that any non-guaranteed elements illustrated
+            are subject to change. I have made no statements
+            that are inconsistent with the illustration.
+        {{/StateIsIllinoisOrTexas}}
+    </p>
+    <br>
+    <br>
+    <table cellspacing="0" cellpadding="0" valign="top">
+        <tr>
+            <td>
+                <u>{{Space64}}{{Space32}}</u>
+            </td>
+            <td>
+                {{Space32}}
+            </td>
+            <td>
+                <u>{{Space32}}</u>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                AGENT OR AUTHORIZED REPRESENTATIVE
+            </td>
+            <td>
+                {{Space32}}
+            </td>
+            <td>
+                DATE
+            </td>
+        </tr>
+    </table>
+</font>

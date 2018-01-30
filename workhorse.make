@@ -896,7 +896,7 @@ test_dir       := $(exec_prefix)/test
 touchstone_dir := $(exec_prefix)/touchstone
 
 data_files := \
-  $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
+  $(wildcard $(addprefix $(srcdir)/,*.ico *.mst *.png *.xml *.xrc *.xsd *.xsl)) \
 
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \

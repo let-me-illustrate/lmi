@@ -174,6 +174,11 @@ cli_objects := \
 
 # Illustrations: files shared by the antediluvian and production branches.
 
+# PDF !! Expunge these two object files
+#  ledger_xml_io.o
+#  ledger_xsl.o
+# from the list below.
+
 common_common_objects := \
   $(boost_filesystem_objects) \
   $(xmlwrapp_objects) \
@@ -205,6 +210,7 @@ common_common_objects := \
   global_settings.o \
   group_quote_pdf_gen.o \
   group_values.o \
+  html.o \
   illustrator.o \
   input.o \
   input_harmonization.o \
@@ -214,13 +220,17 @@ common_common_objects := \
   input_sequence_parser.o \
   input_xml_io.o \
   interest_rates.o \
+  interpolate_string.o \
   ledger.o \
   ledger_base.o \
+  ledger_evaluator.o \
   ledger_invariant.o \
-  ledger_text_formats.o \
-  ledger_variant.o \
+  ledger_pdf.o \
+  ledger_pdf_generator.o \
   ledger_xml_io.o \
   ledger_xsl.o \
+  ledger_text_formats.o \
+  ledger_variant.o \
   ledgervalues.o \
   license.o \
   loads.o \
@@ -322,6 +332,7 @@ skeleton_objects := \
   illustration_document.o \
   illustration_view.o \
   input_sequence_entry.o \
+  ledger_pdf_generator_wx.o \
   main_common.o \
   mec_document.o \
   mec_view.o \
@@ -330,6 +341,7 @@ skeleton_objects := \
   multidimgrid_tools.o \
   mvc_controller.o \
   mvc_view.o \
+  pdf_writer_wx.o \
   policy_document.o \
   policy_view.o \
   preferences_view.o \
@@ -421,6 +433,7 @@ unit_test_targets := \
   ieee754_test \
   input_sequence_test \
   input_test \
+  interpolate_string_test \
   irc7702a_test \
   istream_to_string_test \
   loads_test \
@@ -689,6 +702,11 @@ input_test$(EXEEXT): \
   tn_range_types.o \
   xml_lmi.o \
   yare_input.o \
+
+interpolate_string_test$(EXEEXT): \
+  $(common_test_objects) \
+  interpolate_string.o \
+  interpolate_string_test.o \
 
 irc7702a_test$(EXEEXT): \
   $(boost_filesystem_objects) \

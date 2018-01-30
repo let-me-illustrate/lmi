@@ -1,0 +1,202 @@
+{{!
+    Copyright (C) 2017, 2018 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+
+<!-- No header for this page, just the logo -->
+<scaled_image inv_factor="0.36" src="company_logo.png"></scaled_image>
+
+<p align="center">
+Column Headings and Key Terms Used in This Illustration
+</p>
+<font size="-1">
+<p>
+<b>{{AvName}} Value:</b>
+The accumulation at interest of the net premiums paid,
+{{#SinglePremium}}
+less any withdrawals,
+{{/SinglePremium}}
+less any monthly charges deducted.
+</p>
+<p>
+<b>{{CsvName}} Value:</b>
+{{AvName}} Value less policy debt.
+{{#Has1035ExchCharge}}
+{{CashSurrValueFootnote}}
+{{/Has1035ExchCharge}}
+</p>
+{{^IsInforce}}
+<p>
+<b>Current Illustrated Crediting Rate:</b>
+{{CreditingRateFootnote}}
+</p>
+{{/IsInforce}}
+<p>
+<b>Current Values:</b>
+Values assuming current interest crediting rates
+and current monthly charges. These values are not guaranteed
+and are based on the assumption that premium is paid
+as illustrated.
+</p>
+<p>
+<b>Death Benefit:</b>
+The amount of benefit provided by the Death Benefit Option
+in effect on the date of death, prior to adjustments
+for policy debt and monthly charges payable to the date of death.
+<!--
+Presumably the description of death benefit options should be moved into
+'ProductDescription' (as has already been done in other '.xsl' files).
+-->
+</p>
+<p>
+<b>Death Benefit Option 1:</b>
+Option in which the death benefit is equal to the selected
+face amount of the contract on the date of death of the insured,
+or if greater the {{AvName}} Value
+{{#HasSalesLoadRefund}}
+plus the refund of sales loads (if applicable)
+{{/HasSalesLoadRefund}}
+on the insured's date of death multiplied by the minimum face
+amount percentage for the insured's attained age at death
+(minimum face amount). Please refer to the contract
+for a detailed schedule of death benefit factors.
+</p>
+<!-- Group Experience Rating Logic -->
+{{^GroupExperienceRating}}
+<p>
+<b>Death Benefit Option 2:</b>
+Option in which the death benefit is equal to the selected
+face amount of the contract
+plus the {{AvName}} Value
+on the date of death of the insured, or if greater,
+the {{AvName}} Value
+{{#HasSalesLoadRefund}}
+plus the refund of sales loads (if applicable)
+{{/HasSalesLoadRefund}}
+on the insured's date of death multiplied
+by the death benefit factor for the insured's attained age
+at death (minimum face amount). Please refer to the contract
+for a detailed schedule of death benefit factors.
+{{/GroupExperienceRating}}
+<!-- Group Experience Rating Logic -->
+{{#GroupExperienceRating}}
+</p>
+<p>
+<b>Experience Rating Risk Charge:</b>
+Applies only to certain experience rated groups.
+This charge is based on the cost of insurance charges
+assessed during the certificate year. It may be assessed against
+the account value once per certificate anniversary date
+and upon surrender of the group policy.
+</p>
+{{/GroupExperienceRating}}
+<!-- Group Experience Rating Logic -->
+{{^GroupExperienceRating}}
+{{#Has1035ExchCharge}}
+<p>
+<b>Exchange Charge:</b>
+{{ExchangeChargeFootnote1}}
+</p>
+{{/Has1035ExchCharge}}
+{{/GroupExperienceRating}}
+
+<!-- Single Premium Logic -->
+{{^SinglePremium}}
+<p>
+<b>Flexible Premiums:</b>
+Premiums that may be increased, reduced, or not paid,
+if the account value is sufficient to cover the monthly charges.
+{{/SinglePremium}}
+</p>
+<p>
+<b>Guaranteed Values:</b>
+Values assuming the guaranteed crediting rate
+and the guaranteed maximum monthly charges. These values
+are based on the assumption that premium is paid as illustrated.
+</p>
+<p>
+<b>MEC:</b>
+Modified Endowment Contract - this classification is given
+to a contract in violation of TAMRA
+(Technical and Miscellaneous Revenue Act), which limits
+the amount of premium that can be paid into a life
+insurance contract. To the extent of gain in the contract, loans,
+distributions and withdrawals from a MEC are subject
+to income tax and may also trigger a tax penalty.
+</p>
+{{^IsInforce}}
+<p>
+<b>Midpoint Values:</b>
+Values assuming interest rates that are the average
+of the illustrated current crediting rates
+and the guaranteed minimum interest rate, and monthly charges
+that are the average of the current monthly charges
+and the guaranteed monthly charges.
+These values are not guaranteed and are based on the assumption
+that premium is paid as illustrated.
+</p>
+{{/IsInforce}}
+<!-- Single Premium Logic -->
+{{#ModifiedSinglePremiumOrModifiedSinglePremium0}}
+<p>
+<b>Modified Single Premium:</b>
+After the single premium is paid, additional payment
+under this policy will only be accepted for repayment
+of policy debt, payment required to keep the policy
+from lapsing, or payment required to reinstate the policy.
+</p>
+{{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
+<p>
+<b>Monthly Charges:</b>
+The monthly charges for the following month which include:
+cost of insurance, plus face amount charges (if applicable),
+plus the administrative charge shown
+on the contract schedule page.
+</p>
+<p>
+<b>Premium Outlay:</b>
+The amount of premium assumed to be paid by the contract owner
+or other premium payor.
+</p>
+<p>
+<b>Selected Face Amount:</b>
+The Selected Face Amount may be decreased upon written application
+satisfactory to {{InsCoName}}. A
+requested decrease is allowed only once per Policy Year, and the
+resulting Selected Face Amount after decrease must meet the
+minimum defined in your policy.
+</p>
+<!-- Single Premium Logic -->
+{{#SinglePremium}}
+{{#ModifiedSinglePremiumOrModifiedSinglePremium0}}
+<p>
+<b>Single Premium:</b>
+After the single premium is paid, additional payment
+under this policy will only be accepted for repayment
+of policy debt, payment required to keep the policy
+from lapsing, or payment required to reinstate the policy.
+</p>
+{{/ModifiedSinglePremiumOrModifiedSinglePremium0}}
+<!-- Single Premium Logic -->
+<p>
+<b>Ultimate Illustrated Crediting Rate:</b>
+{{UltCreditingRateFootnote}}
+{{/SinglePremium}}
+</p>
+</font>

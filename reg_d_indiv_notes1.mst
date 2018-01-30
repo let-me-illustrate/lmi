@@ -1,0 +1,135 @@
+{{!
+    Copyright (C) 2017, 2018 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+
+{{! No header on this page, but still use the logo. }}
+<scaled_image inv_factor="0.36" src="company_logo.png"></scaled_image>
+
+<p align="center"><font size="+1"><b>Explanatory Notes</b></font></p>
+
+<font size="-1">
+
+<p>
+<font size="+1"><b><u>The Illustration</u></b></font>
+</p>
+
+<p>
+This illustration is not a policy or an offer or solicitation
+to purchase a policy. Offers are made only through the
+Confidential Private Placement Memorandum ("the PPM") for {{PolicyMktgName}}.
+</p>
+
+<p>
+  {{ProductDescription}}.
+</p>
+
+<br></br>
+<br></br>
+
+<p>
+<font size="+1"><b><u>The Policy</u></b></font>
+</p>
+
+<p>
+<b>Policy Requirements:</b>
+This policy is only available to persons who are deemed
+accredited investors and qualified purchasers under applicable
+federal securities laws. The policy owner must be able to bear
+the risk of loss of the entire investment in the policy. The
+policy owner must be familiar with and understand the fundamental
+risks and financial hazards of investing in the policy, and be
+willing to represent as such to {{InsCoShortName}}.
+</p>
+
+<p>
+<b>Maximum Net Amount at Risk Limitation:</b> {{MaxNaarFootnote}}
+</p>
+
+<p>
+<b>Monthly Charges:</b> &nbsp; {{MonthlyChargesFootnote}}
+</p>
+
+<p>
+<b>Surrender Charges:</b> &nbsp; {{PremTaxSurrChgFootnote}}
+</p>
+
+<br></br>
+<br></br>
+
+<p>
+<font size="+1"><b><u>Column Definitions</u></b></font>
+</p>
+
+<p>
+<b>Account Value:</b> &nbsp; {{AccountValueFootnote}}
+</p>
+
+<p>
+<b>Administrative Charge:</b> &nbsp; {{PolicyFeeFootnote}}
+</p>
+
+<p>
+<b>Asset Charges:</b> &nbsp; {{AssetChargeFootnote}}
+</p>
+
+<p>
+<b>Cash Surrender Value:</b> &nbsp; {{CashSurrValueFootnote}}
+</p>
+
+<p>
+<b>Death Benefit:</b> &nbsp; {{DeathBenefitFootnote}}
+</p>
+
+<p>
+<b>End of Year Age:</b> &nbsp; {{AttainedAgeFootnote}}
+</p>
+
+<p>
+<b>Investment Income:</b> &nbsp; {{InvestmentIncomeFootnote}}
+</p>
+
+<p>
+<b>IRR on Death Benefit:</b> &nbsp; {{IrrDbFootnote}}
+</p>
+
+<p>
+<b>IRR on Surrender Value:</b> &nbsp; {{IrrCsvFootnote}}
+</p>
+
+<p>
+<b>Mortality Charges:</b> &nbsp; {{MortalityChargesFootnote}}
+</p>
+
+<p>
+<b>Policy Year:</b> &nbsp; {{PolicyYearFootnote}}
+</p>
+
+<p>
+<b>Premium Loads:</b> The applicable state premium tax, deferred acquisition
+cost tax charge, sales load (if any), separate account administrative charge
+(if any), and other charges incurred as a result of retaining an unaffiliated
+money manager (if any).
+</p>
+
+<p>
+<b>Premium Outlay:</b> &nbsp; {{OutlayFootnote}}
+</p>
+
+</font>

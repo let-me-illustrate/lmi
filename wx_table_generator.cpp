@@ -53,6 +53,7 @@ wx_table_generator::wx_table_generator
     ,total_width_(total_width)
     ,char_height_(dc_.GetCharHeight())
     ,row_height_((4 * char_height_ + 2) / 3) // Arbitrarily use 1.333 line spacing.
+    ,column_margin_(dc_.GetTextExtent("M").x)
     ,has_column_widths_(false)
     ,max_header_lines_(1)
 {
@@ -62,6 +63,18 @@ wx_table_generator::wx_table_generator
     wxPen pen(*wxBLACK, 0);
     pen.SetCap(wxCAP_ROUND);
     dc_.SetPen(pen);
+}
+
+void wx_table_generator::use_condensed_style()
+{
+    row_height_ = char_height_;
+    draw_separators_ = false;
+    use_bold_headers_ = false;
+}
+
+void wx_table_generator::align_right()
+{
+    align_right_ = true;
 }
 
 void wx_table_generator::add_column
@@ -77,7 +90,11 @@ void wx_table_generator::add_column
         }
     else
         {
-        wxDCFontChanger set_header_font(dc_, get_header_font());
+        wxDCFontChanger set_header_font(dc_);
+        if(use_bold_headers_)
+            {
+            set_header_font.Set(get_header_font());
+            }
 
         // Set width to the special value of 0 for the variable width columns.
         width = widest_text.empty() ? 0 : dc_.GetTextExtent(widest_text).x;
@@ -94,8 +111,7 @@ void wx_table_generator::add_column
             {
             increase_to_if_smaller(width, dc_.GetMultiLineTextExtent(header).x);
 
-            // Add roughly 1 em margins on both sides.
-            width += dc_.GetTextExtent("MM").x;
+            width += 2*column_margin_;
             }
         }
 
@@ -157,6 +173,8 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         return;
         }
 
+    has_column_widths_ = true;
+
     int num_expand = 0;
     int total_fixed = 0;
 
@@ -179,7 +197,43 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
 
     if(total_width_ < total_fixed)
         {
-        warning() << "Not enough space for all fixed columns." << LMI_FLUSH;
+        auto const overflow = total_fixed - total_width_;
+
+        // If we have only fixed columns, try to make them fit by decreasing
+        // the margins around them if this can help, assuming that we can
+        // reduce them by up to half if really needed.
+        if(!num_expand)
+            {
+            int const num_columns = columns_.size();
+            auto const overflow_per_column =
+                (overflow + num_columns - 1)/num_columns;
+            if(overflow_per_column <= column_margin_)
+                {
+                for(auto& i : columns_)
+                    {
+                    if(i.is_hidden())
+                        {
+                        continue;
+                        }
+
+                    i.width_ -= overflow_per_column;
+                    }
+
+                column_margin_ -= (overflow_per_column + 1)/2;
+
+                // We condensed the columns enough to make them fit, so no need
+                // for the warning and we don't have any expanding columns, so
+                // we're done.
+                return;
+                }
+            }
+
+        warning()
+            << "Not enough space for all fixed columns: "
+            << overflow
+            << " more pixels needed."
+            << LMI_FLUSH
+            ;
         return;
         }
 
@@ -201,8 +255,6 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
                 }
             }
         }
-
-    has_column_widths_ = true;
 }
 
 void wx_table_generator::do_output_values
@@ -216,7 +268,10 @@ void wx_table_generator::do_output_values
     int const y_text = y + char_height_;
     y += row_height_;
 
-    do_output_vert_separator(x, y_top, y);
+    if(draw_separators_)
+        {
+        do_output_vert_separator(x, y_top, y);
+        }
 
     std::size_t const num_columns = columns_.size();
     for(std::size_t col = 0; col < num_columns; ++col)
@@ -233,21 +288,31 @@ void wx_table_generator::do_output_values
         if(!s.empty())
             {
             int x_text = x;
-            if(ci.is_centered_)
+
+            if(align_right_)
                 {
-                // Centre the text for the columns configured to do it.
-                x_text += (width - dc_.GetTextExtent(s).x) / 2;
+                x_text += width - dc_.GetTextExtent(s).x;
                 }
             else
                 {
-                // Otherwise just offset it by ~1 em.
-                x_text += dc_.GetTextExtent("M").x;
-                }
+                if(ci.is_centered_)
+                    {
+                    // Centre the text for the columns configured to do it.
+                    x_text += (width - dc_.GetTextExtent(s).x) / 2;
+                    }
+                else
+                    {
+                    x_text += column_margin_;
+                    }
+            }
 
             dc_.DrawText(s, x_text, y_text);
             }
         x += width;
-        do_output_vert_separator(x, y_top, y);
+        if(draw_separators_)
+            {
+            do_output_vert_separator(x, y_top, y);
+            }
         }
 }
 
@@ -269,8 +334,17 @@ void wx_table_generator::output_horz_separator
     (std::size_t begin_column
     ,std::size_t end_column
     ,int y
+    ,enum_output_mode output_mode
     )
 {
+    switch(output_mode)
+        {
+        case e_output_normal:
+            break;
+        case e_output_measure_only:
+            return;
+        }
+
     LMI_ASSERT(begin_column < end_column);
     LMI_ASSERT(end_column <= columns_.size());
 
@@ -287,11 +361,24 @@ void wx_table_generator::output_horz_separator
     do_output_horz_separator(x1, x2, y);
 }
 
-void wx_table_generator::output_header(int* pos_y)
+void wx_table_generator::output_header(int* pos_y, enum_output_mode output_mode)
 {
+    switch(output_mode)
+        {
+        case e_output_normal:
+            break;
+        case e_output_measure_only:
+            *pos_y += max_header_lines_ * row_height_;
+            return;
+        }
+
     do_compute_column_widths_if_necessary();
 
-    wxDCFontChanger set_header_font(dc_, get_header_font());
+    wxDCFontChanger set_header_font(dc_);
+    if(use_bold_headers_)
+        {
+        set_header_font.Set(get_header_font());
+        }
 
     // Split headers in single lines and fill up the entire columns*lines 2D
     // matrix, using empty strings for the headers with less than the maximal
@@ -328,9 +415,47 @@ void wx_table_generator::output_header(int* pos_y)
         }
 
     // Finally draw the separators above and (a double one) below them.
-    do_output_horz_separator(left_margin_, x,  y_top    );
-    do_output_horz_separator(left_margin_, x, *pos_y - 1);
-    do_output_horz_separator(left_margin_, x, *pos_y    );
+    if(draw_separators_)
+        {
+        do_output_horz_separator(left_margin_, x,  y_top    );
+        do_output_horz_separator(left_margin_, x, *pos_y - 1);
+        do_output_horz_separator(left_margin_, x, *pos_y    );
+        }
+}
+
+void wx_table_generator::output_super_header
+        (std::string const& header
+        ,std::size_t        begin_column
+        ,std::size_t        end_column
+        ,int*               pos_y
+        ,enum_output_mode   output_mode
+        )
+{
+    std::vector<std::string> const lines(split_into_lines(header));
+
+    switch(output_mode)
+        {
+        case e_output_normal:
+            break;
+        case e_output_measure_only:
+            *pos_y += row_height_*lines.size();
+            return;
+        }
+
+    // We don't have a function for getting the rectangle of a span of columns,
+    // but we can reuse the existing text_rect() if we just increase its width
+    // by the width of all the extra (i.e. not counting the starting one)
+    // columns in this span.
+    auto rect = text_rect(begin_column, *pos_y);
+    rect.width += do_get_cell_x(end_column) - do_get_cell_x(begin_column + 1);
+
+    for(auto const& line : lines)
+        {
+        dc_.DrawLabel(line, rect, wxALIGN_CENTER_HORIZONTAL);
+
+        rect.y += row_height_;
+        *pos_y += row_height_;
+        }
 }
 
 void wx_table_generator::output_row
@@ -341,7 +466,10 @@ void wx_table_generator::output_row
     int x = left_margin_;
     do_output_values(x, *pos_y, values);
 
-    do_output_horz_separator(left_margin_, x, *pos_y);
+    if(draw_separators_)
+        {
+        do_output_horz_separator(left_margin_, x, *pos_y);
+        }
 }
 
 void wx_table_generator::output_highlighted_cell

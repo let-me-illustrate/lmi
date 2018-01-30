@@ -1,6 +1,6 @@
-// Ledger xsl operations.
+// Output mode enum used in PDF generation helpers.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,20 +19,17 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef ledger_xsl_hpp
-#define ledger_xsl_hpp
+#ifndef output_mode_hpp
+#define output_mode_hpp
 
 #include "config.hpp"
 
-#include <boost/filesystem/path.hpp>
+/// Convenient enum used with functions that can either actually render
+/// something or just pretend doing it in order to compute the space that would
+/// be taken by it, in the layout phase.
+enum enum_output_mode
+    {e_output_normal
+    ,e_output_measure_only
+    };
 
-#include <string>
-
-class Ledger;
-
-std::string write_ledger_as_pdf_via_xsl(Ledger const&, fs::path const&);
-
-fs::path xsl_filepath(Ledger const&);
-
-#endif // ledger_xsl_hpp
-
+#endif // output_mode_hpp

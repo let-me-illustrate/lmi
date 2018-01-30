@@ -1,0 +1,123 @@
+{{!
+    Copyright (C) 2017, 2018 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+
+{{>reg_d_group_header_upper}}
+<p align="center">Narrative Summary</p>
+{{>reg_d_group_header_lower}}
+
+<p>
+{{PolicyMktgName}} is a {{PolicyLegalName}} issued by {{InsCoName}}.
+{{ProductDescription}}
+</p>
+
+<p>
+<u>Stable Value Feature</u>&nbsp;{{StableValueFootnote}}
+</p>
+
+<p>
+This illustration assumes Initial Death Benefit Option {{InitDBOpt}}.
+</p>
+
+<p>
+This policy is only available to entities that meet the definition
+of "accredited investor" or "qualified purchaser" under applicable
+Federal securities laws.  Purchase of this policy is suitable
+only for entities of substantial economic means. Each prospective
+purchaser will be required to represent that it is familiar
+with and understands the fundamental risks and financial hazards
+of purchasing the policy. Each prospective purchaser must
+also represent that it meets minimum financial and other
+suitability standards.
+</p>
+
+<p>
+{{NoVanishPremiumFootnote}}
+</p>
+
+<p>
+The definition of life insurance elected for this contract
+is the
+{{#DefnLifeInsIsGPT}}
+    guideline premium test. The guideline single premium
+    is ${{InitGSP}}
+    and the guideline level premium
+    is ${{InitGLP}}.
+{{/DefnLifeInsIsGPT}}
+{{^DefnLifeInsIsGPT}}
+    cash value accumulation test.
+{{/DefnLifeInsIsGPT}}
+</p>
+
+<p>
+{{InsCoName}}
+{{RejectPremiumFootnote}}
+</p>
+
+<p>
+Account values, cash surrender values, and death benefits
+are illustrated as of the end of the year.
+</p>
+
+<p>
+PLEASE READ THE FOLLOWING IMPORTANT TAX DISCLOSURE
+<br>
+The initial 7-pay premium limit is ${{InitSevenPayPrem}}.
+As illustrated, this contract
+{{#IsMec}}
+    fails
+{{/IsMec}}
+{{^IsMec}}
+    passes
+{{/IsMec}}
+the seven-pay test defined in Section 7702A
+of the Internal Revenue Code and therefore
+{{#IsMec}}
+    {{^MecYearIs0}}
+        becomes a Modified Endowment Contract (MEC) in policy year
+        {{MecYearPlus1}}.
+    {{/MecYearIs0}}
+    {{#MecYearIs0}}
+        is a Modified Endowment Contract (MEC).
+    {{/MecYearIs0}}
+    As a MEC, any loans or withdrawals are taxed to the extent
+    of any gain in the contract, and an additional 10% penalty
+    tax will apply to the taxable portion of the loan
+    or withdrawal.
+{{/IsMec}}
+{{^IsMec}}
+    is not a Modified Endowment Contract (MEC).
+    Subsequent changes in the contract, including but not limited
+    to increases and decreases in premiums or benefits, may cause
+    the contract to be retested and may result in the contract
+    becoming a MEC.
+{{/IsMec}}
+</p>
+
+<p>
+<b>
+This illustration is not written or intended as tax
+or legal advice and may not be relied on for purposes
+of avoiding any federal tax penalties. For more information
+pertaining to the tax consequences of purchasing
+or owning this policy, consult with your own independent tax
+or legal counsel.
+</b>
+</p>

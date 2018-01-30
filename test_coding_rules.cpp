@@ -49,6 +49,7 @@ std::string my_taboo_indulgence();       // See 'my_test_coding_rules.cpp'.
 
 std::map<std::string, bool> my_taboos(); // See 'my_test_coding_rules.cpp'.
 
+// Sort these enumerators alphabetically.
 enum enum_phylum
     {e_no_phylum  = 0
     ,e_binary     = 1 <<  0
@@ -63,14 +64,15 @@ enum enum_phylum
     ,e_log        = 1 <<  9
     ,e_make       = 1 << 10
     ,e_md5        = 1 << 11
-    ,e_patch      = 1 << 12
-    ,e_rates      = 1 << 13
-    ,e_relax_ng   = 1 << 14
-    ,e_script     = 1 << 15
-    ,e_synopsis   = 1 << 16
-    ,e_touchstone = 1 << 17
-    ,e_xml_input  = 1 << 18
-    ,e_xml_other  = 1 << 19
+    ,e_mustache   = 1 << 12
+    ,e_patch      = 1 << 13
+    ,e_rates      = 1 << 14
+    ,e_relax_ng   = 1 << 15
+    ,e_script     = 1 << 16
+    ,e_synopsis   = 1 << 17
+    ,e_touchstone = 1 << 18
+    ,e_xml_input  = 1 << 19
+    ,e_xml_other  = 1 << 20
     };
 
 enum enum_kingdom
@@ -171,6 +173,7 @@ file::file(std::string const& file_path)
         : ".html"       == extension() ? e_html
         : ".make"       == extension() ? e_make
         : ".md5sums"    == extension() ? e_md5
+        : ".mst"        == extension() ? e_mustache
         : ".patch"      == extension() ? e_patch
         : ".rates"      == extension() ? e_rates
         : ".rnc"        == extension() ? e_relax_ng
@@ -669,6 +672,7 @@ void check_defect_markers(file const& f)
             &&  "IHS "         != z[1]
             &&  "INELEGANT "   != z[1]
             &&  "INPUT "       != z[1]
+            &&  "PDF "         != z[1]
             &&  "PORT "        != z[1]
             &&  "SOMEDAY "     != z[1]
             &&  "TAXATION "    != z[1]

@@ -1,0 +1,244 @@
+{{!
+    Copyright (C) 2017, 2018 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+
+{{>nasd_header}}
+
+<font size="-1">
+
+<p align="center"><b>EXPLANATORY NOTES</b></p>
+
+<p>
+{{GuarMortalityFootnote}}
+</p>
+
+<p>
+This illustration assumes death of the insured at
+age {{EndtAge}}.
+</p>
+
+{{#StateIsCarolina}}
+    <p>
+    In the states of North Carolina and South Carolina, Guaranteed Issue
+    Underwriting is referred to as "Limited Underwriting" and Simplified Issue
+    Underwriting is referred to as "Simplified Underwriting".
+    </p>
+{{/StateIsCarolina}}
+
+{{#StateIsMaryland}}
+    <p>
+    In the state of Maryland, Guaranteed Issue Underwriting
+    is referred to as "Nonstandard Limited Underwriting"
+    and Simplified Issue Underwriting is referred to as
+    "Nonstandard Simplified Underwriting".
+    </p>
+{{/StateIsMaryland}}
+
+<p>
+{{LoanFootnote}}
+</p>
+
+<p>
+{{PortabilityFootnote}}
+</p>
+
+{{#HasTerm}}
+    <p>
+    {{TermFootnote}}
+    </p>
+{{/HasTerm}}
+
+{{#HasSupplSpecAmt}}
+    <p>
+    {{TermFootnote}}
+    </p>
+{{/HasSupplSpecAmt}}
+
+{{#HasWP}}
+    <p>
+    {{WaiverFootnote}}
+    </p>
+{{/HasWP}}
+
+<p>
+{{AccelBftRiderFootnote}}
+</p>
+
+{{#DefnLifeInsIsGPT}}
+    <p>
+    {{OverloanRiderFootnote}}
+    </p>
+{{/DefnLifeInsIsGPT}}
+
+{{#HasADD}}
+    <p>
+    {{ADDFootnote}}
+    </p>
+{{/HasADD}}
+
+{{#HasChildRider}}
+    <p>
+    The ${{ChildRiderAmount}}&nbsp; {{ChildFootnote}}
+    </p>
+{{/HasChildRider}}
+
+{{#HasSpouseRider}}
+    <p>
+    The ${{SpouseRiderAmount}}&nbsp; {{SpouseFootnote}}
+    </p>
+{{/HasSpouseRider}}
+
+{{#UsePartialMort}}
+    <p>
+    This illustration reflects the client's mortality assumption
+    of {{PartMortTableMult[1]}} of the {{PartMortTableName}}
+    table with all deaths at the end of the year.
+    </p>
+{{/UsePartialMort}}
+
+{{#GenderBlended}}
+    <p>
+    Custom blending of cost of insurance charges is based
+    on the plan's assumed distribution of initial selected
+    face amount by gender and tobacco use. This illustration
+    assumes that the distribution remains constant
+    in future years. Custom blending is available only on plans
+    of 100 or more lives. Custom blend assumptions:
+    {{#SmokerBlended}}
+        tobacco = {{SmokerPct}};
+    {{/SmokerBlended}}
+    {{^SmokerBlended}}
+        no blending by tobacco use;
+    {{/SmokerBlended}}
+    male = {{MalePct}}.
+    </p>
+{{/GenderBlended}}
+{{#SmokerBlended}}
+    <p>
+    Custom blending of cost of insurance charges is based
+    on the plan's assumed distribution of initial selected
+    face amount by gender and tobacco use. This illustration
+    assumes that the distribution remains constant
+    in future years. Custom blending is available only on plans
+    of 100 or more lives. Custom blend assumptions:
+    tobacco = {{SmokerPct}};
+    {{#GenderBlended}}
+        male = {{MalePct}}.
+    {{/GenderBlended}}
+    {{^GenderBlended}}
+        no blending by gender.
+    {{/GenderBlended}}
+    </p>
+{{/SmokerBlended}}
+
+<p>
+The state of issue is
+{{StatePostalAbbrev}}.
+</p>
+
+{{#IsInforce}}
+    <p>
+    This illustration assumes a beginning account value of
+    ${{InforceUnloanedAV}} as
+    of the date of this illustration.
+    </p>
+
+    <p>
+    This illustration assumes a beginning cost basis of
+    ${{InforceTaxBasis}} as
+    of the date of this illustration; the actual cost basis
+    may be higher or lower. Consult the Home Office for cost
+    basis information.
+    </p>
+{{/IsInforce}}
+
+{{#HasComplianceTrackingNumber}}
+    <p>
+    Compliance tracking number: {{>imprimatur}}
+    </p>
+{{/HasComplianceTrackingNumber}}
+
+{{#UWTypeIsGuaranteedIssueInTexasWithFootnote}}
+    <p>
+    *** This policy is classified as substandard guaranteed issue
+    per the requirements of the Texas Insurance Department.
+    </p>
+{{/UWTypeIsGuaranteedIssueInTexasWithFootnote}}
+
+<p align="center"><b>GUARANTEED PRINCIPAL ACCOUNT</b></p>
+
+<p>
+The Guaranteed Principal Account (GPA) has a guaranteed
+minimum annual interest rate of
+{{InitAnnGenAcctInt_Guaranteed}}.
+Guarantees are based on the claims-paying ability of the
+issuing company or companies.
+</p>
+
+<p align="center"><b>SEPARATE ACCOUNT</b></p>
+
+<p>
+{{HypotheticalRatesFootnote}}
+</p>
+
+{{^Composite}}
+    <p>
+    This illustration is based on total Separate Account
+    fund expenses of {{TotalIMF[1]}}.
+    </p>
+    {{#AvgFund}}
+        <p>
+        Investment management fees are based on equal
+        initial allocations among the available funds.
+        </p>
+    {{/AvgFund}}
+    {{#CustomFund}}
+        <p>
+        Investment management fees are based on an initial allocation
+        of 100% to a custom fund selected by the purchaser.
+        </p>
+    {{/CustomFund}}
+{{/Composite}}
+
+<p>
+<b>
+This material must be preceded or accompanied by the current prospectus for the
+{{PolicyMktgName}} Insurance {{ContractName}} and the prospectuses (or summary
+prospectuses, if available) for its underlying investment choices. Before
+purchasing a {{ContractName}}, you should carefully consider the investment
+objectives, risks, charges and expenses of the {{ContractName}} and its
+underlying investment choices. Please read the prospectuses carefully before
+investing or sending money.
+</b>
+</p>
+
+<p>
+{{SubsidiaryFootnote}}
+</p>
+
+<p>
+Securities offered through registered representatives of
+{{CoUnderwriter}}&nbsp;
+{{CoUnderwriterAddress}}
+or a broker-dealer that has a selling agreement with
+{{MainUnderwriter}}.
+</p>
+
+</font>

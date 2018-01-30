@@ -1,0 +1,90 @@
+{{!
+    Copyright (C) 2017, 2018 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+
+<scaled_image inv_factor="0.36" src="company_logo.png"></scaled_image>
+
+<font size="-1">
+
+<p align="center">
+{{^IsInforce}}
+    Illustration for Flexible Premium Variable Adjustable
+    Life Insurance Contract.
+{{/IsInforce}}
+{{#IsInforce}}
+    In Force Illustration for Flexible Premium Variable Adjustable
+    Life Insurance Contract.
+{{/IsInforce}}
+
+<br></br>
+<br></br>
+
+The purpose of the Illustration is to show how the performance of the
+underlying separate account divisions could affect the policy's
+account values and death benefits. This Illustration is hypothetical
+and may not be used to project or predict investment results.
+</p>
+
+<br></br>
+<br></br>
+
+<table width="100%" cellspacing="0" cellpadding="0" valign="top">
+    <tr>
+        <td width="60%">
+            Date Prepared: {{date_prepared}}<br>
+            {{#Composite}}
+                Composite of individuals<br>
+            {{/Composite}}
+            {{^Composite}}
+                Prepared for: {{Insured1Abbrev30}}<br>
+                Age: {{Age}}<br>
+                Issue State: {{StatePostalAbbrev}}<br>
+            {{/Composite}}
+            Selected Face Amount: ${{InitTotalSA}}<br>
+            Initial Death Benefit Option: {{InitDBOpt}}<br>
+        </td>
+        <td width="40%">
+            Policy: {{PolicyMktgName}}<br>
+            {{^Composite}}
+                Underwriting Type:
+                {{#UWTypeIsMedical}}
+                    Fully underwritten<br>
+                {{/UWTypeIsMedical}}
+                {{^UWTypeIsMedical}}
+                    {{UWType}}<br>
+                {{/UWTypeIsMedical}}
+
+                Rate Classification: {{Gender}}, {{Smoker}}, {{UWClass}}<br>
+
+                {{#UWClassIsRated}}
+                    Table Rating: {{SubstandardTable}}<br>
+                    {{!
+                        Flats don't require "Rated" class; and does this value actually print anyway?
+                        These questions apply as well to the original:
+                        http://svn.savannah.nongnu.org/viewvc/lmi/trunk/individual_private_placement.xsl?annotate=696&root=lmi&pathrev=3585
+                    }}
+                    Initial Annual Flat Extra: {{AnnualFlatExtra[1]}} per 1,000<br>
+                {{/UWClassIsRated}}
+            {{/Composite}}
+        </td>
+    </tr>
+</table>
+
+</font>

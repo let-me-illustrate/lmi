@@ -1,6 +1,6 @@
-// Ledger xsl operations.
+// Generate PDF files with ledger data.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+// Copyright (C) 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,20 +19,28 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef ledger_xsl_hpp
-#define ledger_xsl_hpp
+#include "pchfile.hpp"
 
-#include "config.hpp"
+#include "ledger_pdf_generator.hpp"
 
-#include <boost/filesystem/path.hpp>
+#include "callback.hpp"
 
-#include <string>
+namespace
+{
+callback<ledger_pdf_generator::creator_type>
+    group_quote_pdf_generator_create_callback;
+} // Unnamed namespace.
 
-class Ledger;
+typedef ledger_pdf_generator::creator_type FunctionPointer;
+template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = nullptr;
 
-std::string write_ledger_as_pdf_via_xsl(Ledger const&, fs::path const&);
+bool ledger_pdf_generator::set_creator(creator_type f)
+{
+    group_quote_pdf_generator_create_callback.initialize(f);
+    return true;
+}
 
-fs::path xsl_filepath(Ledger const&);
-
-#endif // ledger_xsl_hpp
-
+std::shared_ptr<ledger_pdf_generator> ledger_pdf_generator::create()
+{
+    return group_quote_pdf_generator_create_callback()();
+}
