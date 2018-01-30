@@ -227,10 +227,10 @@ common_common_objects := \
   ledger_invariant.o \
   ledger_pdf.o \
   ledger_pdf_generator.o \
-  ledger_xml_io.o \
-  ledger_xsl.o \
   ledger_text_formats.o \
   ledger_variant.o \
+  ledger_xml_io.o \
+  ledger_xsl.o \
   ledgervalues.o \
   license.o \
   loads.o \
