@@ -25,6 +25,8 @@
 
 #include "test_tools.hpp"
 
+#include <stdexcept>
+
 int test_main(int, char*[])
 {
     auto const test_interpolate = [](char const* s)

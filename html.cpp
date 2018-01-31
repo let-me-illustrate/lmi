@@ -23,7 +23,7 @@
 
 #include "html.hpp"
 
-#include <cstring>
+#include <cstring>                      // strlen()
 
 namespace html
 {

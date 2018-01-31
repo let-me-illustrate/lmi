@@ -30,6 +30,8 @@
 #include <wx/filesys.h>
 #include <wx/html/htmlcell.h>
 
+#include <limits>
+
 namespace
 {
 

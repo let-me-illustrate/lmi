@@ -27,7 +27,7 @@
 #include "so_attributes.hpp"
 
 #include <string>
-#include <utility>                      // std::move
+#include <utility>                      // move()
 
 /// Namespace for helpers used for HTML generation.
 ///

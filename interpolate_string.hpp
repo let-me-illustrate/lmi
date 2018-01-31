@@ -26,7 +26,7 @@
 
 #include "so_attributes.hpp"
 
-#include <functional>
+#include <functional>                   // function
 #include <string>
 
 enum class interpolate_lookup_kind

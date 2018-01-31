@@ -25,9 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "authenticity.hpp"
 #include "bourn_cast.hpp"
-#include "calendar_date.hpp"
 #include "data_directory.hpp"           // AddDataDir()
 #include "force_linking.hpp"
 #include "html.hpp"
@@ -39,7 +37,6 @@
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"               // lmi_tolower()
 #include "pdf_writer_wx.hpp"
-#include "version.hpp"
 #include "wx_table_generator.hpp"
 
 #include <wx/pdfdc.h>
@@ -49,13 +46,18 @@
 
 #include <wx/html/m_templ.h>
 
+#include <array>
+#include <cstddef>                      // size_t
 #include <cstdint>                      // SIZE_MAX
+#include <cstdlib>                      // strtoul()
 #include <fstream>
 #include <map>
-#include <memory>
+#include <memory>                       // make_unique(), shared_ptr, unique_ptr
 #include <sstream>
 #include <stdexcept>
-#include <type_traits>                  // std::conditional
+#include <string>
+#include <type_traits>                  // conditional
+#include <utility>                      // forward(), move()
 #include <vector>
 
 LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)

@@ -32,7 +32,7 @@
 #include <wx/pdfdc.h>
 
 #include <array>
-#include <memory>                       // std::unique_ptr
+#include <memory>                       // unique_ptr
 
 class wxFileSystem;
 

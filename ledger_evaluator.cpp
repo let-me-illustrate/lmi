@@ -26,7 +26,6 @@
 #include "alert.hpp"
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
-#include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
@@ -41,10 +40,10 @@
 #include "value_cast.hpp"
 #include "version.hpp"
 
-#include <algorithm>                    // transform()
+#include <algorithm>                    // fill(), transform()
 #include <functional>                   // minus
 #include <unordered_map>
-#include <utility>                      // pair
+#include <utility>                      // move(), pair
 
 namespace
 {
