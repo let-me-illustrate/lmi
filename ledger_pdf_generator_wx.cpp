@@ -2062,6 +2062,11 @@ class pdf_illustration_regular : public pdf_illustration
             ,evaluate("AnnGAIntRate_Current", invar.InforceYear + 1)
             );
 
+        add_variable
+            ("InforceYearLE4"
+            ,invar.InforceYear < 4
+            );
+
         auto const max_duration = invar.EndtAge - invar.Age;
         auto const lapse_year_guaruanteed = ledger.GetGuarFull().LapseYear;
         auto const lapse_year_midpoint = ledger.GetMdptFull().LapseYear;
