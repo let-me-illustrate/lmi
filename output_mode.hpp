@@ -27,6 +27,7 @@
 /// Convenient enum used with functions that can either actually render
 /// something or just pretend doing it in order to compute the space that would
 /// be taken by it, in the layout phase.
+
 enum enum_output_mode
     {e_output_normal
     ,e_output_measure_only

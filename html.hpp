@@ -41,6 +41,7 @@
 /// for structured HTML generation, which guarantees that the result is
 /// well-formed. By using predefined constants in html::tag and html::attr
 /// namespaces, typos in the element names can also be automatically avoided.
+
 namespace html
 {
 
@@ -53,6 +54,7 @@ namespace html
 ///
 /// As it still needs to be converted to a string sooner or later to be really
 /// used, it does provide a conversion -- but it can be used only once.
+
 class text
 {
   public:
@@ -67,6 +69,7 @@ class text
     /// appears correctly inside HTML element contents. Notice that we don't
     /// need to escape quotes here as we never use the result of this function
     /// inside an HTML attribute, only inside HTML elements.
+
     static text from(std::string const& s)
     {
         std::string z;
@@ -87,12 +90,14 @@ class text
 
     /// Use the given string with HTML inside it directly. No escaping is done
     /// by this ctor.
+
     static text from_html(std::string s)
     {
         return text{std::move(s)};
     }
 
     /// Just a symbolic name for a non breaking space HTML entiry.
+
     static text nbsp()
     {
         return text::from_html("&nbsp;");
@@ -102,6 +107,7 @@ class text
     ///
     /// This method allows chained invocation for appending more than one
     /// fragment at once.
+
     text& operator+=(text const& t)
     {
         m_html += t.m_html;
@@ -130,6 +136,7 @@ class text
 };
 
 /// Represents a single attribute of an HTML element.
+
 class attribute
 {
   public:
@@ -162,7 +169,7 @@ namespace detail
 class LMI_SO any_element
 {
   public:
-    /// Ctor should only be used with literal strings as argument.
+    // Ctor should only be used with literal strings as argument.
     explicit any_element(char const* name)
         :name_(name)
     {
@@ -200,7 +207,7 @@ class LMI_SO any_element
 class LMI_SO element : private detail::any_element
 {
   public:
-    /// Ctor should only be used with literal strings as argument.
+    // Ctor should only be used with literal strings as argument.
     explicit element(char const* name)
         :detail::any_element(name)
     {
@@ -210,6 +217,7 @@ class LMI_SO element : private detail::any_element
     element(element&&) = default;
 
     /// Add an attribute.
+
     element operator[](attribute const& attr) const&
     {
         element e{*this};
@@ -224,6 +232,7 @@ class LMI_SO element : private detail::any_element
     }
 
     /// Add inner contents.
+
     element operator()(text contents) const&
     {
         element e{*this};
@@ -245,6 +254,7 @@ class LMI_SO element : private detail::any_element
     /// text in our own operator() and also use operator+() defined below to
     /// concatenate HTML elements without having to convert them to text
     /// beforehand.
+
     operator text() const;
 
   private:
@@ -254,6 +264,7 @@ class LMI_SO element : private detail::any_element
 };
 
 /// Represents a void HTML element which can't have anything inside it.
+
 class void_element : private detail::any_element
 {
   public:

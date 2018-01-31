@@ -61,6 +61,7 @@ using lookup_function
 /// built-in way to escape them.
 ///
 /// Throw if the lookup function throws or if the string uses invalid syntax.
+
 std::string LMI_SO interpolate_string
     (char const* s
     ,lookup_function const& lookup

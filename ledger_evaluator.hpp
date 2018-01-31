@@ -33,6 +33,7 @@
 
 /// Class allowing to retrieve the string representation of any scalar or
 /// vector stored in a ledger.
+
 class LMI_SO ledger_evaluator
 {
   public:
