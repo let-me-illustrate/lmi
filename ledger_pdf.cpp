@@ -25,6 +25,7 @@
 
 #include "configurable_settings.hpp"
 #include "global_settings.hpp" // PDF !! expunge
+#include "handle_exceptions.hpp" // PDF !! expunge
 #include "ledger.hpp"
 #include "ledger_pdf_generator.hpp"
 #include "ledger_xsl.hpp" // PDF !! expunge
@@ -37,9 +38,15 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     // PDF !! Expunge this conditional block:
     if(global_settings::instance().ash_nazg())
         {
-        // Execute both the new and the old code so that their results
-        // may be compared.
-        write_ledger_as_pdf_via_xsl(ledger, filepath);
+        try
+            {
+            // Execute both the new and the old code so that their results
+            // may be compared.
+            write_ledger_as_pdf_via_xsl(ledger, filepath);
+            }
+        // Show any diagnostics, but swallow them so that any error in
+        // the old code doesn't prevent the new code from running.
+        catch(...) {report_exception();}
         }
 
     throw_if_interdicted(ledger);
