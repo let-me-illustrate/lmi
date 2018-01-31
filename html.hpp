@@ -96,7 +96,7 @@ class text
         return text{std::move(s)};
     }
 
-    /// Just a symbolic name for a non breaking space HTML entiry.
+    /// Just a symbolic name for a non breaking space HTML entity.
 
     static text nbsp()
     {
