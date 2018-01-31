@@ -32,6 +32,7 @@
 #include "path_utility.hpp"
 #include "system_command.hpp"
 
+#include <boost/filesystem/convenience.hpp> // create_directories()
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
@@ -106,6 +107,7 @@ std::string write_ledger_as_pdf_via_xsl(Ledger const& ledger, fs::path const& fi
         // implementation is accepted), keep the old behavior (i.e.,
         // don't execute this line).
         print_dir = print_dir / "old";
+        fs::create_directories(print_dir);
         }
 
     fs::path real_filepath(orthodox_filename(filepath.leaf()));
