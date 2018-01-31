@@ -859,5 +859,7 @@ ledger_evaluator Ledger::make_evaluator() const
         stringvectors["SupplementalReportColumnsTitles"] = std::move(SupplementalReportColumnsTitles);
         }
 
+    // PDF !! Is the old pyx="values_tsv" facility still wanted?
+
     return ledger_evaluator(std::move(stringscalars), std::move(stringvectors));
 }
