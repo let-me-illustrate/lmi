@@ -43,7 +43,7 @@ struct section_info
 
     // Name of the section, i.e. the part after "#".
     //
-    // TODO: In C++14 this could be replaced with string_view which would
+    // PDF !! In C++14 this could be replaced with string_view which would
     // save on memory allocations without compromising safety, as we know
     // that the input string doesn't change during this function execution.
     std::string const name_;

@@ -62,7 +62,7 @@ std::string attribute::as_string() const
     if(!value_.empty())
         {
         s += "=";
-        // TODO: Escape quotes.
+        // PDF !! Escape quotes.
         s += value_;
         }
     return s;

@@ -130,7 +130,7 @@ void wx_table_generator::do_output_horz_separator(int x1, int x2, int y)
 
 void wx_table_generator::do_output_vert_separator(int x, int y1, int y2)
 {
-    // TODO: add a possibility to have a thick border between the columns.
+    // PDF !! add a possibility to have a thick border between the columns.
     dc_.DrawLine(x, y1, x, y2);
 }
 
