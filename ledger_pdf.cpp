@@ -25,11 +25,12 @@
 
 #include "configurable_settings.hpp"
 #include "global_settings.hpp" // PDF !! expunge
-#include "handle_exceptions.hpp" // PDF !! expunge
 #include "ledger.hpp"
 #include "ledger_pdf_generator.hpp"
 #include "ledger_xsl.hpp" // PDF !! expunge
 #include "path_utility.hpp"             // unique_filepath()
+
+#include <iostream>                     // cerr // PDF !! expunge
 
 /// Write ledger as pdf.
 
@@ -44,9 +45,18 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
             // may be compared.
             write_ledger_as_pdf_via_xsl(ledger, filepath);
             }
-        // Show any diagnostics, but swallow them so that any error in
-        // the old code doesn't prevent the new code from running.
-        catch(...) {report_exception();}
+        // The developer-only password having been specified, show
+        // diagnostics only on the console, and don't let them escape
+        // (so that any error in the old code doesn't prevent the new
+        // code from running).
+        catch(std::exception const& e)
+            {
+            std::cerr << e.what() << std::endl;
+            }
+        catch(...)
+            {
+            throw;
+            }
         }
 
     throw_if_interdicted(ledger);
