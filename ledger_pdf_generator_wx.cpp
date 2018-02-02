@@ -50,6 +50,7 @@
 #include <cstddef>                      // size_t
 #include <cstdint>                      // SIZE_MAX
 #include <cstdlib>                      // strtoul()
+#include <exception>                    // uncaught_exceptions()
 #include <fstream>
 #include <map>
 #include <memory>                       // make_unique(), shared_ptr, unique_ptr
@@ -1191,10 +1192,13 @@ class numbered_page : public page_with_footer
 
     ~numbered_page() override
     {
-        // Check that next_page() was called the expected number of times.
-        // Unfortunately we can't use LMI_ASSERT() in the (noexcept) dtor, so
-        // use warning() instead.
-        if(extra_pages_)
+        // Check that next_page() was called the expected number of times,
+        // unless we're unwinding the stack due to some other error, in which
+        // case it is normal that extra pages haven't been generated.
+        //
+        // Notice that we shouldn't use LMI_ASSERT() in the dtor by default,
+        // and it's better to use warning() instead of using noexcept(false).
+        if(extra_pages_ && !std::uncaught_exceptions())
             {
             warning()
                 << "Logic error: "
