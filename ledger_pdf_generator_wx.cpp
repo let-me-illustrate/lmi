@@ -1614,7 +1614,7 @@ class page_with_tabular_report
                 ,e_output_normal
                 );
 
-            for(; year < year_max; ++year)
+            for(;;)
                 {
                 for(std::size_t col = 0; col < columns.size(); ++col)
                     {
@@ -1631,7 +1631,14 @@ class page_with_tabular_report
 
                 table.output_row(&pos_y, values.data());
 
-                if((year + 1) % rows_per_group == 0)
+                ++year;
+                if(year == year_max)
+                    {
+                    // We will also leave the outer loop.
+                    break;
+                    }
+
+                if(year % rows_per_group == 0)
                     {
                     // We need a group break.
                     pos_y += row_height;
@@ -1755,8 +1762,8 @@ class page_with_tabular_report
         // not the number of groups.
         int const years_per_page = groups_per_page * rows_per_group;
 
-        // Finally determine how many pages we need to show all the years.
-        return ledger.GetMaxLength() / years_per_page;
+        // Finally determine how many extra pages we need to show all the years.
+        return (ledger.GetMaxLength() + years_per_page - 1) / years_per_page - 1;
     }
 };
 
