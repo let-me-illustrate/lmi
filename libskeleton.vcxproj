@@ -460,6 +460,7 @@
     <ClCompile Include="illustration_document.cpp" />
     <ClCompile Include="illustration_view.cpp" />
     <ClCompile Include="input_sequence_entry.cpp" />
+    <ClCompile Include="ledger_pdf_generator_wx.cpp" />
     <ClCompile Include="mec_document.cpp" />
     <ClCompile Include="mec_view.cpp" />
     <ClCompile Include="msw_workarounds.cpp" />
@@ -467,6 +468,7 @@
     <ClCompile Include="multidimgrid_tools.cpp" />
     <ClCompile Include="mvc_controller.cpp" />
     <ClCompile Include="mvc_view.cpp" />
+    <ClCompile Include="pdf_writer_wx.cpp" />
     <ClCompile Include="policy_document.cpp" />
     <ClCompile Include="policy_view.cpp" />
     <ClCompile Include="preferences_view.cpp" />

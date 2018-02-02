@@ -488,6 +488,7 @@
     <ClCompile Include="gpt_xml_document.cpp" />
     <ClCompile Include="group_quote_pdf_gen.cpp" />
     <ClCompile Include="group_values.cpp" />
+    <ClCompile Include="html.cpp" />
     <ClCompile Include="ihs_acctval.cpp" />
     <ClCompile Include="ihs_avdebug.cpp" />
     <ClCompile Include="ihs_avmly.cpp" />
@@ -507,9 +508,13 @@
     <ClCompile Include="input_sequence_parser.cpp" />
     <ClCompile Include="input_xml_io.cpp" />
     <ClCompile Include="interest_rates.cpp" />
+    <ClCompile Include="interpolate_string.cpp" />
     <ClCompile Include="ledger.cpp" />
     <ClCompile Include="ledger_base.cpp" />
+    <ClCompile Include="ledger_evaluator.cpp" />
     <ClCompile Include="ledger_invariant.cpp" />
+    <ClCompile Include="ledger_pdf.cpp" />
+    <ClCompile Include="ledger_pdf_generator.cpp" />
     <ClCompile Include="ledger_text_formats.cpp" />
     <ClCompile Include="ledger_variant.cpp" />
     <ClCompile Include="ledger_xml_io.cpp" />

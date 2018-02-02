@@ -142,5 +142,11 @@
     <ClCompile Include="group_quote_pdf_gen_wx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ledger_pdf_generator_wx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pdf_writer_wx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
