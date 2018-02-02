@@ -24,6 +24,7 @@
 #include "ledger_pdf.hpp"
 
 #include "configurable_settings.hpp"
+#include "contains.hpp" // PDF !! expunge
 #include "global_settings.hpp" // PDF !! expunge
 #include "ledger.hpp"
 #include "ledger_pdf_generator.hpp"
@@ -37,13 +38,17 @@
 std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 {
     // PDF !! Expunge this conditional block:
-    if(global_settings::instance().ash_nazg())
+    if
+        (global_settings::instance().ash_nazg()
+        && !contains(global_settings::instance().pyx(), "only_new_pdf")
+        )
         {
+        std::string z;
         try
             {
             // Execute both the new and the old code so that their results
             // may be compared.
-            write_ledger_as_pdf_via_xsl(ledger, filepath);
+            z = write_ledger_as_pdf_via_xsl(ledger, filepath);
             }
         // The developer-only password having been specified, show
         // diagnostics only on the console, and don't let them escape
@@ -57,6 +62,8 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
             {
             throw;
             }
+        if(contains(global_settings::instance().pyx(), "only_old_pdf"))
+            return z;
         }
 
     throw_if_interdicted(ledger);
