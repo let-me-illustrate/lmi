@@ -1,6 +1,6 @@
 // Solves.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -72,7 +72,7 @@ class SolveHelper
 /// return the difference between actual and target CSV at the
 /// specified target duration. However, if the policy lapsed before
 /// that duration, this naive approach would return zero. That's not
-/// desirable: even if it lead to the right answer, it provides little
+/// desirable: even if it leads to a valid answer, it provides little
 /// information that the solve routine can use to refine the input
 /// value. Instead, therefore, certain steps are taken to make the
 /// objective function more tractable as its value approaches zero
@@ -95,18 +95,29 @@ class SolveHelper
 ///
 /// 4. If either 2. or 3. is negative, return the difference between
 /// whichever of them is more negative and the target value; else
-/// return the difference between the target value and the CSV at the
-/// solve target duration. (Non-MEC solves (v.i.) return something
-/// altogether different.)
+/// return the difference between the target and actual values at the
+/// solve target duration, the "actual" value being CSV in general,
+/// but NAAR in the case of NAAR solves. (Non-MEC solves (v.i.) return
+/// something altogether different.)
 ///
 /// In all cases, solves use the same CSV as lapse processing, which
 /// is not always the same as the CSV printed on an illustration. For
 /// example, any sales-load refund increases the value for which the
-/// contract can be surrendered, but does not prevent lapse.
+/// contract can be surrendered, but does not prevent lapse. (NAAR
+/// solves use AV rather than CSV in the second part of step 4 above.)
 ///
 /// "Solve for endowment" is deemed to mean that CSV equals specified
 /// amount at the target duration, so the target value is the same for
 /// all death benefit options.
+///
+/// NAAR solves work the same way as CSV solves up to step 4's "else"
+/// clause, where they return the difference between the target value
+/// and the NAAR at the target duration. For this purpose, NAAR is
+/// defined as (DB-AV) at EOY: the difference between the DB and AV
+/// columns printed on an illustration, which is what agents expect.
+/// This is not the same as the NAAR used in calculating COI charges,
+/// which discounts the EOM DB for one month's guaranteed interest and
+/// subtracts BOM AV.
 ///
 /// Non-MEC solves use an extremely simple objective function that
 /// disregards any input target value or duration. The duration is
@@ -194,6 +205,15 @@ double AccountValue::SolveTest(double a_CandidateValue)
     // counters and iterators--it's one past the end--but indexing
     // must decrement it.
     double value = VariantValues().CSVNet[SolveTargetDuration_ - 1];
+    // INPUT !! Rename: s/SolveTargetCashSurrenderValue/SolveTargetValue/
+    // because it's used for both target CSV and target NAAR.
+    if(mce_solve_for_target_naar == SolveTarget_)
+        {
+        value =
+              VariantValues().EOYDeathBft[SolveTargetDuration_ - 1]
+            - VariantValues().AcctVal    [SolveTargetDuration_ - 1]
+            ;
+        }
     if(worst_negative < 0.0)
         {
         value = std::min(value, worst_negative);
@@ -317,10 +337,12 @@ double AccountValue::Solve
     LMI_ASSERT(0 < SolveTargetDuration_);
     LMI_ASSERT(    SolveTargetDuration_ <= BasicValues::GetLength());
 
-    // Defaults: may be overridden by some cases
-    // We aren't interested in negative solve results
+    // Default bounds (may be overridden in some cases).
+    // Solve results are constrained to be nonnegative.
     double lower_bound = 0.0;
-    double upper_bound = 0.0;
+    // No amount solved for can plausibly reach one billion dollars.
+    double upper_bound = 999999999.99;
+
     root_bias bias =
         mce_solve_for_tax_basis == SolveTarget_
         ? bias_lower
@@ -328,29 +350,20 @@ double AccountValue::Solve
         ;
     int decimals = 0;
 
-    // Many things don't plausibly exceed max input face
-    for(int j = 0; j < SolveTargetDuration_; j++)
-        {
-        upper_bound = std::max
-            (upper_bound
-            ,DeathBfts_->specamt()[j] + yare_input_.TermRiderAmount
-            );
-        }
-    // TODO ?? Wait--initial premium may exceed input face, so
-    // for now we'll bail out with this: no amount solved for can
-    // plausibly reach one billion dollars.
-    upper_bound = 999999999.99;
-
     switch(a_SolveType)
         {
         case mce_solve_specamt:
             {
-// This:
-//          upper_bound  = 1000000.0 * Outlay_->GetPmts()[0];
-// is not satisfactory; what would be better?
             solve_set_fn = &AccountValue::SolveSetSpecAmt;
             decimals     = round_specamt().decimals();
-            // TODO ?? Respect minimum specamt?
+            // Generally, base and term are independent, and it is
+            // the base specamt that's being solved for here, so set
+            // the minimum as though there were no term.
+            lower_bound = minimum_specified_amount
+                (  0 == SolveBeginYear_
+                && yare_input_.EffectiveDate == yare_input_.InforceAsOfDate
+                ,false
+                );
             }
             break;
         case mce_solve_ee_prem:

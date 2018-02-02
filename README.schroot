@@ -1,6 +1,6 @@
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -100,7 +100,7 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 
 apt-get update
 apt-get --assume-yes install g++-mingw-w64 automake libtool make \
- pkg-config git zsh bzip2 unzip sudo wine default-jre fop jing trang \
+ pkg-config git cvs zsh bzip2 unzip sudo wine default-jre fop jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc vim-fugitive \
  >cross-lmi-apt-get-log 2>&1
 
@@ -274,6 +274,11 @@ exit
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
 #   cp -a ~/.ssh/ /srv/chroot/cross-lmi/home/greg
+# Make sure the .ssh/config file contains:
+#   Protocol 2
+#   HashKnownHosts no
+# See the discussion of hashing (inter alia) here:
+#   http://lists.nongnu.org/archive/html/lmi/2018-01/msg00003.html
 
 # Use an msw-native java to let lmi write illustrations to pdf. See:
 #   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00010.html
@@ -296,6 +301,7 @@ git config --global user.email gchicares@sbcglobal.net
 git config --global color.ui auto
 git config --global push.default simple
 git config --global log.date iso8601-strict
+git config --global log.follow true
 
 # Initialize wine. See:
 #   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html

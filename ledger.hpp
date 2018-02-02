@@ -1,6 +1,6 @@
 // Ledger data.
 //
-// Copyright (C) 1998, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "ledger_evaluator.hpp"
 #include "mc_enum_type_enums.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi.hpp"
@@ -101,6 +102,10 @@ class LMI_SO Ledger
 
     unsigned int CalculateCRC() const;
     void Spew(std::ostream& os) const;
+
+    ledger_evaluator make_evaluator() const;
+
+    // PDF !! Expunge the following six function declarations:
 
     void read (xml::element const&);
     void write(xml::element&) const;

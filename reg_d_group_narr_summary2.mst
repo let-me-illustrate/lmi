@@ -1,0 +1,161 @@
+{{!
+    Copyright (C) 2017, 2018 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <gchicares@sbcglobal.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+}}
+
+{{>reg_d_group_header_upper}}
+<p align="center">Narrative Summary</p>
+{{>reg_d_group_header_lower}}
+
+<p>
+{{GuarMortalityFootnote}}
+</p>
+
+<p>
+The loan interest rate may be fixed or adjustable as elected
+by the policy owner.
+</p>
+
+<p>
+{{#UseExperienceRating}}
+    {{ExpRatingFootnote}}
+{{/UseExperienceRating}}
+{{^UseExperienceRating}}
+    The illustration does not assume any mortality
+    experience rating.
+{{/UseExperienceRating}}
+</p>
+
+<p>
+<b>
+This illustration may only be used when preceded or accompanied
+by the offering memorandum for {{PolicyLegalName}} ({{PolicyMktgName}})
+insurance contract and its underlying investment choices.
+For a complete listing of the underlying investment choices,
+please refer to the offering memorandum. Before purchasing
+a variable life insurance contract, investors should
+carefully consider the investment objectives, risks, charges
+and expenses of the variable life insurance contract
+and its underlying investment choices. Please read
+the offering memorandum carefully before investing
+or sending money.
+</b>
+</p>
+
+{{#HasTerm}}
+    <p>
+    {{TermFootnote}}
+    </p>
+{{/HasTerm}}
+
+{{#HasWP}}
+    <p>
+    {{WaiverFootnote}}
+    </p>
+{{/HasWP}}
+
+{{#UsePartialMort}}
+    <p>
+    This illustration reflects an initial mortality assumption
+    of {{PartMortTableMult[1]}} of the {{PartMortTableName}} table
+    with all deaths at the end of the year.
+    </p>
+{{/UsePartialMort}}
+
+{{#GenderBlended}}
+    <p>
+    {{MortalityBlendFootnote}}
+    Custom blend assumptions:
+    {{#SmokerBlended}}
+        tobacco = {{SmokerPct}};
+    {{/SmokerBlended}}
+    {{^SmokerBlended}}
+        no blending by tobacco use;
+    {{/SmokerBlended}}
+    male = {{MalePct}}.
+    </p>
+{{/GenderBlended}}
+{{^GenderBlended}}
+    {{#SmokerBlended}}
+        <p>
+        {{MortalityBlendFootnote}}
+        Custom blend assumptions:
+        tobacco = {{SmokerPct}};
+        {{#GenderBlended}}
+            male = {{MalePct}}.
+        {{/GenderBlended}}
+        {{^GenderBlended}}
+            no blending by gender.
+        {{/GenderBlended}}
+      </p>
+    {{/SmokerBlended}}
+{{/GenderBlended}}
+
+<p>
+The state of issue is {{StatePostalAbbrev}}.
+</p>
+
+{{#HasComplianceTrackingNumber}}
+    <p>
+    Compliance tracking number: {{>imprimatur}}
+    </p>
+{{/HasComplianceTrackingNumber}}
+
+<p>
+SEPARATE ACCOUNT
+</p>
+
+<p>
+{{HypotheticalRatesFootnote}}
+</p>
+
+<p>
+This illustration is based on total Separate Account fund expenses
+of {{TotalIMF[1]}}.
+</p>
+
+<p>
+<b>
+This illustration may not reflect your actual tax
+and accounting consequences and is not intended as tax advice
+nor may it be relied on for purposes of avoiding any federal
+tax penalties. Consult professional tax advisors for tax advice.
+</b>
+</p>
+
+<p>
+Placement Agents:
+{{CoUnderwriter}} serves as the
+placement agent for contracts sold by its registered
+representatives.
+&nbsp;{{MainUnderwriter}}
+serves as the placement agent for contracts sold by registered
+representatives of other broker-dealers that have entered into
+distribution agreements with
+&nbsp;{{MainUnderwriter}}.
+</p>
+
+<p>
+{{CoUnderwriter}} and
+&nbsp;{{MainUnderwriter}} are
+subsidiaries of {{InsCoName}}
+({{InsCoShortName}}) and are
+located at {{InsCoStreet}}.
+</p>
+</p>

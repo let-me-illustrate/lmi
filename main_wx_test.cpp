@@ -1,6 +1,6 @@
 // Main file for automated testing of wx interface.
 //
-// Copyright (C) 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -56,6 +56,7 @@
 
 LMI_FORCE_LINKING_EX_SITU(file_command_wx)
 LMI_FORCE_LINKING_EX_SITU(group_quote_pdf_generator_wx)
+LMI_FORCE_LINKING_EX_SITU(ledger_pdf_generator_wx)
 LMI_FORCE_LINKING_EX_SITU(progress_meter_wx)
 LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 

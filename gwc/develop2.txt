@@ -4,23 +4,24 @@
   #   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00031.html
 
   # Initial setup: create a working copy, cloned from the
-  # already-provided "blessed" repo
+  # already-provided "blessed" repo...
 
 cd /opt/lmi
 git clone file:///opt/lmi/blessed/proprietary
 
+  # ...then make sure it's set up as intended:
+
+cd /opt/lmi/proprietary
+./check_git_setup.sh
+
+  # ...and do that also when migrating to a new machine, in case a
+  # working copy was transferred by simplistic means.
+
   # Create a bundle to share by email
 
-  # Make some changes, then test concinnity before every commit
-  # (a pre-commit hook shows these commands' output, filtered)
-
-cd /opt/lmi/proprietary/data/
-cd ../data  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../src   ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../test  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-cd ../tables; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
-
-  # Commit the changes in whatever batches make sense
+  # After verifying proper setup as above, make some changes, then
+  # commit them in whatever batches make sense (see the section
+  # "When committing fails" below if anything goes wrong)
 
 cd /opt/lmi/proprietary
   # [commit selected files by name...]
@@ -31,9 +32,9 @@ git commit --all -m"Another set of changes"
   # When everything is ready to share...
 
 cd /opt/lmi/proprietary
-git bundle create YourBundleName ^origin/master HEAD --branches
+git bundle create YourBundleName origin/master..HEAD --branches
   # for example (substitute your own initials)
-git bundle create /opt/lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle ^origin/master HEAD --branches
+git bundle create /opt/lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-gwc.bundle origin/master..HEAD --branches
 
   # Email that bundle, then push the changes to your "blessed" repository
 
@@ -55,5 +56,80 @@ cd /opt/lmi/data
 rm proprietary.dat proprietary.ndx
   # native:
 /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+/opt/lmi/bin/rate_table_tool --accept --file=proprietary --verify
   # msw cross build:
 wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --verify
+
+  # To recover from errors
+
+  # As long as git hooks are set up correctly, every commit is tested
+  # for common problems, and fails if any are found. Take these steps
+  # to diagnose or fix such failures.
+
+  # (1) Permissions may have been scrambled by msw (cygwin). Lines like
+  #   mode change 100644 => 100755 data/sample.database
+  # on the screen indicate such problems. For msw (cygwin) only, this
+  # command:
+
+git config --get-all core.filemode
+
+  # should print the word "false", in which case this nightmare should
+  # not occur.
+
+  # To unscramble permissions if necessary, before committing do:
+
+cd /opt/lmi/proprietary
+printf "forcing correct permissions "
+  for d in src data test tables; do (\
+       printf "$d..." \
+    && find ./$d -maxdepth 1 -type f -not -name '*.sh' -not -name '*.sed' | xargs chmod -x \
+  )done; \
+printf "all permissions forced\n"
+
+  # (2) Test concinnity. The git pre-commit hook shows these commands'
+  # output, filtered; these commands show the same thing, unfiltered
+  # so that the diagnostics are easier to understand.
+
+cd /opt/lmi/proprietary/data/
+cd ../data  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../src   ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../test  ; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+cd ../tables; make srcdir=/opt/lmi/src/lmi -f /opt/lmi/src/lmi/GNUmakefile check_concinnity 2>&1 |less -S
+
+  # To update copyright notices annually
+
+  # Source files are so few that it's expedient to treat them manually
+  # by editing all files in
+  #   /opt/lmi/proprietary/.
+  #   /opt/lmi/proprietary/src/
+  #   /opt/lmi/proprietary/hooks/
+  #   /opt/lmi/proprietary/test/ChangeLog
+  # and adding the current year to each copyright notice, using an
+  # expression such as
+  #   /Copyright/s/201X/201X, 201Y/
+  # (of course modifying the 'X' and 'Y' years)
+
+  # Regenerating XML product files in /opt/lmi/data updates their
+  # copyright notices automatically to show the current year.
+  # (Historical years aren't necessary for these generated files.)
+  # To produce the same effect in the proprietary repository,
+  # run a command such as the following (of course modifying the
+  # 'X' and 'Y' years):
+
+cd /opt/lmi/proprietary/data/
+for z in *; do sed -i $z -e'/Copyright/s/201X/201Y/'; done
+
+  # and compare to the regenerated set in /opt/lmi/data
+
+  # Use the same command to update rate tables similarly:
+
+cd /opt/lmi/proprietary/tables
+for z in *; do sed -i $z -e'/Copyright/s/2016/2017/'; done
+
+  # and regenerate the binary database.
+
+  # Files in the test/ subdirectory (except test/ChangeLog treated
+  # above) need not be updated: they aren't distributed and need no
+  # current copyright notice.
+

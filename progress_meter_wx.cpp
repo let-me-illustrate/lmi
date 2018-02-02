@@ -1,6 +1,6 @@
 // Show progress on lengthy operations--wx interface.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -73,14 +73,23 @@ class concrete_progress_meter
     bool show_progress_message() override;
     void culminate_ui() override;
 
-    wxProgressDialog progress_dialog_;
+// Temporarily overridden while wx issues are being addressed:
+//    wxProgressDialog progress_dialog_;
+    wxGenericProgressDialog progress_dialog_;
 };
 
-// TODO ?? CALCULATION_SUMMARY Resolve this issue.
-// WX !! A wxProgressDialog created with maximum = 0 is displayed even
+// A wxProgressDialog created with maximum = 0 is displayed even
 // though that's apparently just a nuisance. Calling Update(0) right
-// after creation seems to be a reasonable workaround, but it would be
-// better to change this in the library itself.
+// after creation seems to be a reasonable workaround. This situation
+// no longer occurs in practice as this is written in 2017-11, though
+// formerly it did arise with an earlier version of the calculation
+// summary, where some number (determined at runtime) of columns were
+// updated in a context where that number might be zero. It doesn't
+// make much sense to change wx to treat this as a special case: the
+// wxProgressDialog implementation calls neither ShowModal() nor
+// Show(), so it is reasonable always to show the dialog. It might
+// make sense to treat this as a special case in this ctor, but it
+// doesn't seem to be worth the bother.
 
 concrete_progress_meter::concrete_progress_meter
     (int                               max_count

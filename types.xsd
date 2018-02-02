@@ -3,7 +3,7 @@
   <!--
     RELAX NG schema for custom types.
 
-    Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+    Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -253,6 +253,7 @@ but none use both, so a single set of enumerators suffices.</xs:documentation>
     <xs:restriction base="xs:token">
       <xs:enumeration value="Endowment"/>
       <xs:enumeration value="Target CSV"/>
+      <xs:enumeration value="Target NAAR"/>
       <xs:enumeration value="CSV = tax basis"/>
       <xs:enumeration value="Avoid MEC"/>
     </xs:restriction>

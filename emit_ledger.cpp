@@ -1,6 +1,6 @@
 // Emit a ledger or a group of ledgers in various guises.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -30,7 +30,9 @@
 #include "file_command.hpp"
 #include "group_quote_pdf_gen.hpp"
 #include "ledger.hpp"
+#include "ledger_pdf.hpp"
 #include "ledger_text_formats.hpp"
+// PDF !! Expunge the next line:
 #include "ledger_xsl.hpp"
 #include "miscellany.hpp"               // ios_out_trunc_binary()
 #include "path_utility.hpp"             // unique_filepath()

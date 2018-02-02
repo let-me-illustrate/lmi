@@ -1,6 +1,6 @@
 // Single-choice popup menu: a wxGetSingleChoiceIndex alternative.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -23,15 +23,15 @@
 
 #include "single_choice_popup_menu.hpp"
 
-#include <wx/gdicmn.h>                  // wxDefaultPosition, wxSize
+#include <wx/evtloop.h>
+#include <wx/window.h>
 
 SingleChoicePopupMenu::SingleChoicePopupMenu
     (wxArrayString const& choices
     ,wxString const&      title
-    ,wxWindow*            parent
+    ,wxWindow&            parent
     )
-    :wxWindow        (parent, wxID_ANY, wxDefaultPosition, wxSize(0, 0))
-    ,selection_index_(-1)
+    :parent_(parent)
 {
     if(!title.IsEmpty())
         {
@@ -46,23 +46,21 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
             }
         menu_.Append(j, s);
         }
-    Connect
-        (0
-        ,choices.GetCount()
-        ,wxEVT_COMMAND_MENU_SELECTED
-        ,wxCommandEventHandler(SingleChoicePopupMenu::UponMenuChoice)
-        );
 }
 
 // WX !! Can't be const because PopupMenu() isn't.
 int SingleChoicePopupMenu::Choose()
 {
-    PopupMenu(&menu_);
-    return selection_index_;
-}
+    int const selection_index = parent_.GetPopupMenuSelectionFromUser(menu_);
 
-void SingleChoicePopupMenu::UponMenuChoice(wxCommandEvent& e)
-{
-    selection_index_ = e.GetId();
-}
+    if (wxEventLoopBase* const loop = wxEventLoopBase::GetActive())
+        {
+        // This function can often be used to get users choice before starting
+        // some time-consuming operation. Ensure that the area previously
+        // covered by the menu shown by GetPopupMenuSelectionFromUser() is
+        // repainted to avoid leaving it invalidated for a possibly long time.
+        loop->YieldFor(wxEVT_CATEGORY_UI);
+        }
 
+    return selection_index != wxID_NONE ? selection_index : -1;
+}

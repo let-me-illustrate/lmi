@@ -1,7 +1,7 @@
 # Master automake makefile, run automake to generate Makefile.am from it (this
 # is also done by autogen.sh script)
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Vadim Zeitlin.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Vadim Zeitlin.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -137,6 +137,7 @@ TESTS = \
     test_ieee754 \
     test_input_seq \
     test_input \
+    test_interpolate_string \
     test_irc7702a \
     test_istream_to_string \
     test_ledger_pdf_generator_wx \
@@ -200,6 +201,7 @@ libskeleton_la_SOURCES = \
     illustration_document.cpp \
     illustration_view.cpp \
     input_sequence_entry.cpp \
+    ledger_pdf_generator_wx.cpp \
     main_common.cpp \
     mec_document.cpp \
     mec_view.cpp \
@@ -208,6 +210,7 @@ libskeleton_la_SOURCES = \
     multidimgrid_tools.cpp \
     mvc_controller.cpp \
     mvc_view.cpp \
+    pdf_writer_wx.cpp \
     policy_document.cpp \
     policy_view.cpp \
     preferences_view.cpp \
@@ -344,6 +347,7 @@ liblmi_common_sources = \
     global_settings.cpp \
     group_values.cpp \
     group_quote_pdf_gen.cpp \
+    html.cpp \
     illustrator.cpp \
     input.cpp \
     input_harmonization.cpp \
@@ -353,13 +357,15 @@ liblmi_common_sources = \
     input_sequence_parser.cpp \
     input_xml_io.cpp \
     interest_rates.cpp \
+    interpolate_string.cpp \
     ledger.cpp \
     ledger_base.cpp \
+    ledger_evaluator.cpp \
     ledger_invariant.cpp \
+    ledger_pdf.cpp \
+    ledger_pdf_generator.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
-    ledger_xml_io.cpp \
-    ledger_xsl.cpp \
     ledgervalues.cpp \
     license.cpp \
     loads.cpp \
@@ -803,6 +809,11 @@ test_input_LDADD = \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
+test_interpolate_string_SOURCES = \
+  $(common_test_objects) \
+  interpolate_string.cpp \
+  interpolate_string_test.cpp
+
 test_irc7702a_SOURCES = \
   $(common_test_objects) \
   ihs_irc7702a.cpp \
@@ -1191,6 +1202,7 @@ noinst_HEADERS = \
     group_quote_pdf_gen.hpp \
     group_values.hpp \
     handle_exceptions.hpp \
+    html.hpp \
     icon_monger.hpp \
     ieee754.hpp \
     ihs_irc7702.hpp \
@@ -1207,13 +1219,16 @@ noinst_HEADERS = \
     input_sequence_interval.hpp \
     input_sequence_parser.hpp \
     interest_rates.hpp \
+    interpolate_string.hpp \
     istream_to_string.hpp \
     ledger.hpp \
     ledger_base.hpp \
+    ledger_evaluator.hpp \
     ledger_invariant.hpp \
+    ledger_pdf.hpp \
+    ledger_pdf_generator.hpp \
     ledger_text_formats.hpp \
     ledger_variant.hpp \
-    ledger_xsl.hpp \
     ledgervalues.hpp \
     license.hpp \
     lmi.hpp \

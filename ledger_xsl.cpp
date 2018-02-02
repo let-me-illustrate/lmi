@@ -1,6 +1,6 @@
 // Ledger xsl operations.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -32,6 +32,7 @@
 #include "path_utility.hpp"
 #include "system_command.hpp"
 
+#include <boost/filesystem/convenience.hpp> // create_directories()
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
@@ -94,11 +95,20 @@ fs::path xsl_filepath(Ledger const& ledger)
 /// filenames must be transformed is that apache fop is java, and
 /// java is "portable".
 
-std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
+std::string write_ledger_as_pdf_via_xsl(Ledger const& ledger, fs::path const& filepath)
 {
     throw_if_interdicted(ledger);
 
     fs::path print_dir(configurable_settings::instance().print_directory());
+    if(global_settings::instance().ash_nazg())
+        {
+        // Old implementation: write to a distinctive subdirectory,
+        // but only for testing. For production (until the new PDF
+        // implementation is accepted), keep the old behavior (i.e.,
+        // don't execute this line).
+        print_dir = print_dir / "old";
+        fs::create_directories(print_dir);
+        }
 
     fs::path real_filepath(orthodox_filename(filepath.leaf()));
     LMI_ASSERT(fs::portable_name(real_filepath.string()));

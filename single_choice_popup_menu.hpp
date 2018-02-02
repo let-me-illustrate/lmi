@@ -1,6 +1,6 @@
 // Single-choice popup menu: a wxGetSingleChoiceIndex alternative.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -29,7 +29,6 @@
 #include <wx/arrstr.h>                  // wxArrayString
 #include <wx/menu.h>
 #include <wx/string.h>
-#include <wx/window.h>
 
 /// Design notes for class SingleChoicePopupMenu.
 ///
@@ -41,24 +40,19 @@
 /// the same character as its own accelerator.
 
 class SingleChoicePopupMenu
-    :public wxWindow
 {
   public:
     SingleChoicePopupMenu
         (wxArrayString const& choices
         ,wxString const&      title  = wxEmptyString
-        ,wxWindow*            parent = &TopWindow()
+        ,wxWindow&            parent = TopWindow()
         );
-
-    ~SingleChoicePopupMenu() override = default;
 
     int Choose();
 
   private:
-    void UponMenuChoice(wxCommandEvent&);
-
     wxMenu menu_;
-    int selection_index_;
+    wxWindow& parent_;
 };
 
 #endif // single_choice_popup_menu_hpp

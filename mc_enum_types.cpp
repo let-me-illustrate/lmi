@@ -1,6 +1,6 @@
 // Instantiation of specific mc_enum types.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -134,7 +134,7 @@ MC_DEFINE(ledger_type,8)
 MC_DEFINE(uw_basis,5)
 MC_DEFINE(table_rating,11)
 MC_DEFINE(solve_type,6)
-MC_DEFINE(solve_target,4)
+MC_DEFINE(solve_target,5)
 MC_DEFINE(pmt_strategy,8)
 MC_DEFINE(sa_strategy,8)
 MC_DEFINE(gen_acct_rate_type,2)

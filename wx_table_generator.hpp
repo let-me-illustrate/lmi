@@ -1,6 +1,6 @@
 // Generate a table using wxDC.
 //
-// Copyright (C) 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -23,6 +23,8 @@
 #define wx_table_generator_hpp
 
 #include "config.hpp"
+
+#include "output_mode.hpp"
 
 #include <wx/dc.h>
 #include <wx/font.h>
@@ -52,19 +54,34 @@ class wx_table_generator
     // Adds a column to the table. The total number of added columns determines
     // the number of the expected value in output_row() calls.
     //
-    // Providing an empty header suppresses the table display, while still
-    // taking into account in output_row(), providing a convenient way to hide
-    // a single column without changing the data representation.
+    // Providing an empty header suppresses the column display, while still
+    // taking it into account in output_row(), providing a convenient way to
+    // hide a single column without changing the data representation.
     //
     // Each column must either have a fixed width, specified as the width of
     // the longest text that may appear in this column, or be expandable
     // meaning that the rest of the page width is allocated to it which will be
     // the case if widest_text is empty.
+    //
     // Notice that column headers may be multiline strings.
     void add_column(std::string const& header, std::string const& widest_text);
 
     // Render the headers at the given position and update it.
-    void output_header(int* pos_y);
+    void output_header
+        (int*             pos_y
+        ,enum_output_mode output_mode = e_output_normal
+        );
+
+    // Render a super-header, i.e. a header spanning over several columns. The
+    // columns range is specified as a close/open interval, as usual in C++.
+    // The header string may be multiline, just as with normal headers.
+    void output_super_header
+        (std::string const& header
+        ,std::size_t        begin_column
+        ,std::size_t        end_column
+        ,int*               pos_y
+        ,enum_output_mode   output_mode = e_output_normal
+        );
 
     // Render a row with the given values at the given position and update it.
     // The values here can be single-line only and there must be exactly the
@@ -78,6 +95,9 @@ class wx_table_generator
         ,int                y
         ,std::string const& value
         );
+
+    // Return the number of columns.
+    std::size_t columns_count() const {return columns_.size();}
 
     // Return the height of a single table row.
     int row_height() const {return row_height_;}
@@ -94,15 +114,25 @@ class wx_table_generator
     // Output a horizontal separator line across the specified columns,
     // using the usual C++ close/open interval convention.
     void output_horz_separator
-        (std::size_t begin_column
-        ,std::size_t end_column
-        ,int         y
+        (std::size_t      begin_column
+        ,std::size_t      end_column
+        ,int              y
+        ,enum_output_mode output_mode = e_output_normal
         );
 
     // Output a vertical separator line before the given column. Notice that
     // the column index here may be equal to the number of columns in order to
     // output a separator after the last column.
     void output_vert_separator(std::size_t before_column, int y);
+
+    // Use condensed style: don't draw separators between rows and make them
+    // smaller.
+    void use_condensed_style();
+
+    // By default, columns are centered if they have fixed size or left-aligned
+    // otherwise. By calling this method, this alignment auto-detection is
+    // turned off and all columns are right-aligned.
+    void align_right();
 
   private:
     // Return the font used for the headers.
@@ -128,7 +158,8 @@ class wx_table_generator
 
     // These values could be recomputed, but cache them for performance.
     int const char_height_;
-    int const row_height_;
+    int row_height_;
+    int column_margin_;
 
     struct column_info
     {
@@ -160,6 +191,18 @@ class wx_table_generator
     // Maximal number of lines in any column header, initially 1 but can be
     // higher if multiline headers are used.
     std::size_t max_header_lines_;
+
+    // If false, separator lines are not drawn automatically (they can still be
+    // drawn by calling output_horz_separator() or output_vert_separator()
+    // explicitly).
+    bool draw_separators_ = true;
+
+    // If true, headers are drawn in bold.
+    bool use_bold_headers_ = true;
+
+    // If true, force right alignment for all columns instead of centering them
+    // automatically if they have fixed size.
+    bool align_right_ = false;
 };
 
 #endif // wx_table_generator_hpp

@@ -2,7 +2,7 @@
 
 # For msw, download and build lmi and required libraries.
 
-# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -42,6 +42,9 @@ if [ -z "$coefficiency" ]
 then
     export coefficiency='--jobs=4'
 fi
+
+# SOMEDAY !! After testing 'check_git_setup.sh' thoroughly, use its
+# 'case' statement here instead of this 'expr substr' thing.
 
 export platform
 if [ "$(expr substr $(uname -s) 1 6)" = "CYGWIN" ]
@@ -106,6 +109,11 @@ then
     #   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
     export CYGCHECK=`cygpath --mixed /usr/bin/cygcheck`
     cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
+
+    # 'core.fileMode' rationale:
+    #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
+
+    git config --global core.fileMode false
 fi
 
 java -version

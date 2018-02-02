@@ -1,6 +1,6 @@
 // Life-insurance illustration input--control harmonization.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -790,10 +790,16 @@ false // Silly workaround for now.
 #endif // 0
 
     SolveTarget.enable(actually_solving);
-    SolveTarget.allow(mce_solve_for_endt     , actually_solving);
-    SolveTarget.allow(mce_solve_for_target   , actually_solving);
-    SolveTarget.allow(mce_solve_for_tax_basis, actually_solving);
-    SolveTarget.allow(mce_solve_for_non_mec  , actually_solving && mce_solve_loan != SolveType);
+    SolveTarget.allow(mce_solve_for_endt       , actually_solving);
+    SolveTarget.allow(mce_solve_for_target_csv , actually_solving);
+    SolveTarget.allow(mce_solve_for_target_naar, actually_solving);
+    SolveTarget.allow(mce_solve_for_tax_basis  , actually_solving);
+    SolveTarget.allow(mce_solve_for_non_mec    , actually_solving && mce_solve_loan != SolveType);
+
+    // There is no fundamental reason for forbidding non-MEC solves on
+    // bases other than current, but no one has ever complained about
+    // that restriction, and the (very simple) present implementation
+    // considers MEC status on the current basis only.
 
     SolveExpenseGeneralAccountBasis.enable(actually_solving && mce_solve_for_non_mec != SolveTarget);
     SolveExpenseGeneralAccountBasis.allow(mce_gen_curr, actually_solving);
@@ -805,7 +811,8 @@ false // Silly workaround for now.
     SolveSeparateAccountBasis.allow(mce_sep_zero, actually_solving && allow_sep_acct);
     SolveSeparateAccountBasis.allow(mce_sep_half, actually_solving && allow_sep_acct && is_three_rate_nasd(GleanedLedgerType_));
 
-    SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
+    // INPUT !! Rename: s/SolveTargetCashSurrenderValue/SolveTargetValue/
+    SolveTargetCashSurrenderValue.enable(actually_solving && (mce_solve_for_target_csv == SolveTarget || mce_solve_for_target_naar == SolveTarget));
 
     bool enable_reduce_to_avoid_mec =
             !(actually_solving && mce_solve_for_non_mec == SolveTarget)
