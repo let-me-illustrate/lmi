@@ -50,6 +50,22 @@ cvs diff -U3 file0.cpp file1.cpp >/dev/clipboard
 
 git am --scissors /path/to/patch
 
+  # Apply a patch by merging from a remote: first, view all remotes...
+
+git remote -v
+
+  # ...and set up the remote if needed (one time only)...
+
+git remote add xanadu https://github.com/vadz/lmi.git
+
+  # ...then update the remote...
+
+git fetch xanadu
+
+  # ...and cherry-pick the "pull request":
+
+git cherry-pick ..xanadu/name_of_pull_request
+
   # Discard local changes to particular files
 
 git checkout -- ce_skin_name.cpp ce_skin_name.hpp
