@@ -1610,7 +1610,7 @@ class page_with_tabular_report
 
         // The table may need several pages, loop over them.
         int const year_max = ledger.GetMaxLength();
-        for(int year = 0; year < year_max; ++year)
+        for(int year = 0; year < year_max; )
             {
             int pos_y = render_or_measure_fixed_page_part
                 (table
