@@ -1648,10 +1648,17 @@ class page_with_tabular_report
                     // We need a group break.
                     pos_y += row_height;
 
-                    // And possibly a page break, which will be necessary if we don't
-                    // have enough space for another full group because we don't want
-                    // to have page breaks in the middle of a group.
-                    if(pos_y > page_bottom - rows_per_group*row_height)
+                    // And possibly a page break, which will be necessary if we
+                    // don't have enough space for another group because we
+                    // don't want to have page breaks in the middle of a group.
+                    auto rows_in_next_group = rows_per_group;
+                    if(year_max - year < rows_per_group)
+                        {
+                        // The next group is the last one and will be incomplete.
+                        rows_in_next_group = year_max - year;
+                        }
+
+                    if(pos_y > page_bottom - rows_in_next_group*row_height)
                         {
                         next_page(writer);
                         numbered_page::render(ledger, writer, interpolate_html);
@@ -1767,8 +1774,26 @@ class page_with_tabular_report
         // not the number of groups.
         int const years_per_page = groups_per_page * rows_per_group;
 
-        // Finally determine how many extra pages we need to show all the years.
-        return (ledger.GetMaxLength() + years_per_page - 1) / years_per_page - 1;
+        int const total_years = ledger.GetMaxLength();
+
+        // Finally determine how many pages are needed to show all the years.
+        int num_pages = (total_years + years_per_page - 1) / years_per_page;
+
+        // The last page may not be needed if all the rows on it can fit into the
+        // remaining space, too small for a full group, but perhaps sufficient for
+        // these rows, in the last by one page.
+        if (num_pages > 1)
+            {
+            auto const rows_on_last_page = total_years - (num_pages - 1)*years_per_page;
+            auto const free_rows = rows_per_page - groups_per_page*(rows_per_group + 1);
+            if(rows_on_last_page <= free_rows)
+                {
+                num_pages--;
+                }
+            }
+
+        // We return the number of extra pages only, hence -1.
+        return num_pages - 1;
     }
 };
 
