@@ -1651,7 +1651,7 @@ class page_with_tabular_report
                     // And possibly a page break, which will be necessary if we don't
                     // have enough space for another full group because we don't want
                     // to have page breaks in the middle of a group.
-                    if(pos_y >= page_bottom - rows_per_group*row_height)
+                    if(pos_y > page_bottom - rows_per_group*row_height)
                         {
                         next_page(writer);
                         numbered_page::render(ledger, writer, interpolate_html);
