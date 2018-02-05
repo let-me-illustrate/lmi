@@ -1201,9 +1201,10 @@ class numbered_page : public page_with_footer
         if(extra_pages_ && !std::uncaught_exceptions())
             {
             warning()
-                << "Logic error: "
+                << "Logic error: there should have been "
                 << extra_pages_
-                << " missing extra pages."
+                << " more page(s) after the page "
+                << this_page_number_
                 << LMI_FLUSH
                 ;
             }
@@ -1609,7 +1610,7 @@ class page_with_tabular_report
 
         // The table may need several pages, loop over them.
         int const year_max = ledger.GetMaxLength();
-        for(int year = 0; year < year_max; ++year)
+        for(int year = 0; year < year_max; )
             {
             int pos_y = render_or_measure_fixed_page_part
                 (table
@@ -1650,7 +1651,7 @@ class page_with_tabular_report
                     // And possibly a page break, which will be necessary if we don't
                     // have enough space for another full group because we don't want
                     // to have page breaks in the middle of a group.
-                    if(pos_y >= page_bottom - rows_per_group*row_height)
+                    if(pos_y > page_bottom - rows_per_group*row_height)
                         {
                         next_page(writer);
                         numbered_page::render(ledger, writer, interpolate_html);
