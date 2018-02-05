@@ -1201,9 +1201,10 @@ class numbered_page : public page_with_footer
         if(extra_pages_ && !std::uncaught_exceptions())
             {
             warning()
-                << "Logic error: "
+                << "Logic error: there should have been "
                 << extra_pages_
-                << " missing extra pages."
+                << " more page(s) after the page "
+                << this_page_number_
                 << LMI_FLUSH
                 ;
             }
