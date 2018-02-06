@@ -35,7 +35,7 @@
 #include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "miscellany.hpp"               // lmi_tolower()
+#include "miscellany.hpp"               // lmi_tolower(), get_needed_pages_count()
 #include "pdf_writer_wx.hpp"
 #include "wx_table_generator.hpp"
 
@@ -1765,35 +1765,12 @@ class page_with_tabular_report
             throw std::runtime_error("no space left for tabular report");
             }
 
-        // Each group actually takes rows_per_group+1 rows because of the
-        // separator row between groups, hence the second +1, but there is no
-        // need for the separator after the last group, hence the first +1.
-        int const groups_per_page = (rows_per_page + 1) / (rows_per_group + 1);
-
-        // But we are actually interested in the number of years per page and
-        // not the number of groups.
-        int const years_per_page = groups_per_page * rows_per_group;
-
-        int const total_years = ledger.GetMaxLength();
-
-        // Finally determine how many pages are needed to show all the years.
-        int num_pages = (total_years + years_per_page - 1) / years_per_page;
-
-        // The last page may not be needed if all the rows on it can fit into the
-        // remaining space, too small for a full group, but perhaps sufficient for
-        // these rows, in the last by one page.
-        if (num_pages > 1)
-            {
-            auto const rows_on_last_page = total_years - (num_pages - 1)*years_per_page;
-            auto const free_rows = rows_per_page - groups_per_page*(rows_per_group + 1);
-            if(rows_on_last_page <= free_rows)
-                {
-                num_pages--;
-                }
-            }
-
         // We return the number of extra pages only, hence -1.
-        return num_pages - 1;
+        return get_needed_pages_count
+            (ledger.GetMaxLength()
+            ,rows_per_page
+            ,rows_per_group
+            ) - 1;
     }
 };
 
