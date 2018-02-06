@@ -190,3 +190,41 @@ std::string iso_8601_datestamp_terse()
     return s;
 }
 
+int get_needed_pages_count
+    (int total_rows
+    ,int rows_per_page
+    ,int rows_per_group
+    )
+{
+    // The caller must check for this precondition because this function is too
+    // low-level to be able to handle it correctly, e.g. it can't even use the
+    // appropriate error message.
+    LMI_ASSERT(rows_per_page >= rows_per_group);
+
+    // Each group actually takes rows_per_group+1 rows because of the
+    // separator row between groups, hence the second +1, but there is no
+    // need for the separator after the last group, hence the first +1.
+    int const groups_per_page = (rows_per_page + 1) / (rows_per_group + 1);
+
+    // But we are actually interested in the number of rows we can fit per page
+    // and not the number of groups.
+    int const used_per_page = groups_per_page * rows_per_group;
+
+    // Finally determine how many pages are needed to show all the rows.
+    int num_pages = (total_rows + used_per_page - 1) / used_per_page;
+
+    // The last page may not be needed if all the rows on it can fit into the
+    // remaining space, too small for a full group, but perhaps sufficient for
+    // these rows, in the last by one page.
+    if (num_pages > 1)
+        {
+        auto const rows_on_last_page = total_rows - (num_pages - 1)*used_per_page;
+        auto const free_rows = rows_per_page - groups_per_page*(rows_per_group + 1);
+        if(rows_on_last_page <= free_rows)
+            {
+            num_pages--;
+            }
+        }
+
+    return num_pages;
+}
