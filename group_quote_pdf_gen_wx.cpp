@@ -314,7 +314,7 @@ class group_quote_pdf_generator_wx
     void output_footer
         (pdf_writer_wx&   pdf_writer
         ,int*             pos_y
-        ,enum_output_mode output_mode = e_output_normal
+        ,enum_output_mode output_mode
         );
 
     class totals_data; // Fwd decl for fill_global_report_data() argument.
@@ -798,7 +798,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         pos_y += 2 * vert_skip;
         }
 
-    output_footer(pdf_writer, &pos_y);
+    output_footer(pdf_writer, &pos_y, e_output_normal);
 
     LMI_ASSERT(current_page == total_pages);
     output_page_number_and_version(pdf_writer, total_pages, current_page);
