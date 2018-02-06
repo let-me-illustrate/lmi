@@ -236,6 +236,25 @@ void test_trimming()
     BOOST_TEST_EQUAL(s, "a ; a");
 }
 
+void test_get_needed_pages_count()
+{
+    // Fix the number of rows per page and per group, we can reasonably suppose
+    // that nothing critically depends on their precise values and all the
+    // logic of this function will be tested by just trying the different
+    // numbers of total rows.
+    auto const do_test = [](int total_rows) -> int
+        {
+        return get_needed_pages_count(total_rows, 28, 5);
+        };
+
+    BOOST_TEST_EQUAL(do_test( 1), 1); // Edge case (0 rows is not allowed).
+    BOOST_TEST_EQUAL(do_test(17), 1); // Just a trivial sanity test.
+    BOOST_TEST_EQUAL(do_test(24), 1); // 4 full groups + incomplete last group.
+    BOOST_TEST_EQUAL(do_test(25), 2); // 5 full groups don't fit on one page.
+    BOOST_TEST_EQUAL(do_test(44), 2); // 4 + 4 groups + incomplete last one.
+    BOOST_TEST_EQUAL(do_test(45), 3); // 9 full groups don't fit on two pages.
+}
+
 int test_main(int, char*[])
 {
     test_each_equal();
@@ -243,6 +262,7 @@ int test_main(int, char*[])
     test_minmax();
     test_prefix_and_suffix();
     test_trimming();
+    test_get_needed_pages_count();
 
     return 0;
 }
