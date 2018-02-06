@@ -126,19 +126,19 @@ pdf_writer_wx::pdf_writer_wx
 /// image at the given scale.
 
 void pdf_writer_wx::output_image
-    (wxImage const&   image
-    ,char const*      image_name
-    ,double           scale
-    ,int              x
-    ,int*             pos_y
-    ,enum_output_mode output_mode
+    (wxImage const&               image
+    ,char const*                  image_name
+    ,double                       scale
+    ,int                          x
+    ,int*                         pos_y
+    ,oenum_render_or_only_measure output_mode
     )
 {
     int const y = wxRound(image.GetHeight() / scale);
 
     switch(output_mode)
         {
-        case e_output_normal:
+        case oe_render:
             {
             // Use wxPdfDocument API directly as wxDC doesn't provide a way to
             // set the image scale at PDF level and also because passing via
@@ -152,7 +152,7 @@ void pdf_writer_wx::output_image
             pdf_doc->SetImageScale(1);
             }
             break;
-        case e_output_measure_only:
+        case oe_only_measure:
             // Do nothing.
             break;
         default:
@@ -169,11 +169,11 @@ void pdf_writer_wx::output_image
 /// Return the height of the output (using this width).
 
 int pdf_writer_wx::output_html
-    (int x
-    ,int y
-    ,int width
-    ,html::text const& html
-    ,enum_output_mode output_mode
+    (int                          x
+    ,int                          y
+    ,int                          width
+    ,html::text const&            html
+    ,oenum_render_or_only_measure output_mode
     )
 {
     // We don't really want to change the font, but to preserve the current DC
@@ -189,7 +189,7 @@ int pdf_writer_wx::output_html
     cell->Layout(width);
     switch(output_mode)
         {
-        case e_output_normal:
+        case oe_render:
             {
             wxHtmlRenderingInfo rendering_info;
             cell->Draw
@@ -202,7 +202,7 @@ int pdf_writer_wx::output_html
                 );
             }
             break;
-        case e_output_measure_only:
+        case oe_only_measure:
             // Do nothing.
             break;
         default:

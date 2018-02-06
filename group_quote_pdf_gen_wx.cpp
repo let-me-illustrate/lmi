@@ -312,9 +312,9 @@ class group_quote_pdf_generator_wx
         ,int*                pos_y
         );
     void output_footer
-        (pdf_writer_wx&   pdf_writer
-        ,int*             pos_y
-        ,enum_output_mode output_mode
+        (pdf_writer_wx&               pdf_writer
+        ,int*                         pos_y
+        ,oenum_render_or_only_measure output_mode
         );
 
     class totals_data; // Fwd decl for fill_global_report_data() argument.
@@ -743,7 +743,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     int const header_height = pos_y - y_before_header;
 
     int y_after_footer = pos_y;
-    output_footer(pdf_writer, &y_after_footer, e_output_measure_only);
+    output_footer(pdf_writer, &y_after_footer, oe_only_measure);
     int const footer_height = y_after_footer - pos_y;
 
     int const last_row_y = pdf_writer.get_page_bottom();
@@ -798,7 +798,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         pos_y += 2 * vert_skip;
         }
 
-    output_footer(pdf_writer, &pos_y, e_output_normal);
+    output_footer(pdf_writer, &pos_y, oe_render);
 
     LMI_ASSERT(current_page == total_pages);
     output_page_number_and_version(pdf_writer, total_pages, current_page);
@@ -1173,9 +1173,9 @@ void group_quote_pdf_generator_wx::output_aggregate_values
 }
 
 void group_quote_pdf_generator_wx::output_footer
-    (pdf_writer_wx& pdf_writer
-    ,int* pos_y
-    ,enum_output_mode output_mode
+    (pdf_writer_wx&               pdf_writer
+    ,int*                         pos_y
+    ,oenum_render_or_only_measure output_mode
     )
 {
     wxImage logo_image(load_image("company_logo.png"));

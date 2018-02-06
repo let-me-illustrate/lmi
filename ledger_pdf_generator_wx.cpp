@@ -1017,7 +1017,7 @@ class page_with_footer : public page
             ,0
             ,frame_width
             ,get_footer_lower_html(interpolate_html)
-            ,e_output_measure_only
+            ,oe_only_measure
             );
 
         auto const& upper_template = get_upper_footer_template_name();
@@ -1028,7 +1028,7 @@ class page_with_footer : public page
                 ,0
                 ,frame_width
                 ,interpolate_html.expand_template(upper_template)
-                ,e_output_measure_only
+                ,oe_only_measure
                 );
 
             // Leave a gap between the upper part of the footer and the main
@@ -1302,7 +1302,7 @@ class numeric_summary_table_cell
   public:
     numeric_summary_table_cell()
     {
-        m_Height = render_or_measure(0, e_output_measure_only);
+        m_Height = render_or_measure(0, oe_only_measure);
     }
 
     // Override the base class method to actually render the table.
@@ -1321,7 +1321,7 @@ class numeric_summary_table_cell
         // anyhow.
         stifle_warning_for_unused_value(x);
 
-        render_or_measure(y + m_PosY, e_output_normal);
+        render_or_measure(y + m_PosY, oe_render);
     }
 
   private:
@@ -1363,7 +1363,7 @@ class numeric_summary_table_cell
         return columns;
     }
 
-    int render_or_measure(int pos_y, enum_output_mode output_mode)
+    int render_or_measure(int pos_y, oenum_render_or_only_measure output_mode)
     {
         auto const& ledger = pdf_context_for_html_output.ledger();
         auto& writer = pdf_context_for_html_output.writer();
@@ -1477,11 +1477,11 @@ class numeric_summary_table_cell
 
             switch(output_mode)
                 {
-                case e_output_measure_only:
+                case oe_only_measure:
                     pos_y += table.row_height();
                     break;
 
-                case e_output_normal:
+                case oe_render:
                     for(std::size_t col = 0; col < columns.size(); ++col)
                         {
                         std::string const variable_name = columns[col].variable_name;
@@ -1616,7 +1616,7 @@ class page_with_tabular_report
                 (table
                 ,writer
                 ,interpolate_html
-                ,e_output_normal
+                ,oe_render
                 );
 
             for(;;)
@@ -1673,17 +1673,17 @@ class page_with_tabular_report
     // Must be overridden to return the template containing the fixed page part.
     virtual std::string get_fixed_page_contents_template_name() const = 0;
 
-    // May be overridden to render (only if output_mode is e_output_normal)
+    // May be overridden to render (only if output_mode is oe_render)
     // the extra headers just above the regular table headers.
     //
     // If this function does anything, it must show the first super-header at
     // pos_y and update it to account for the added lines. The base class
     // version does nothing.
     virtual void render_or_measure_extra_headers
-        (illustration_table_generator&  table
-        ,html_interpolator const&       interpolate_html
-        ,int*                           pos_y
-        ,enum_output_mode               output_mode
+        (illustration_table_generator& table
+        ,html_interpolator const&      interpolate_html
+        ,int*                          pos_y
+        ,oenum_render_or_only_measure  output_mode
         ) const
     {
         stifle_warning_for_unused_value(table);
@@ -1693,14 +1693,14 @@ class page_with_tabular_report
     }
 
   private:
-    // Render (only if output_mode is e_output_normal) the fixed page part and
+    // Render (only if output_mode is oe_render) the fixed page part and
     // (in any case) return the vertical coordinate of its bottom, where the
     // tabular report starts.
     int render_or_measure_fixed_page_part
-        (illustration_table_generator&  table
-        ,pdf_writer_wx&                 writer
-        ,html_interpolator const&       interpolate_html
-        ,enum_output_mode               output_mode
+        (illustration_table_generator& table
+        ,pdf_writer_wx&                writer
+        ,html_interpolator const&      interpolate_html
+        ,oenum_render_or_only_measure  output_mode
         ) const
     {
         int pos_y = writer.get_vert_margin();
@@ -1750,7 +1750,7 @@ class page_with_tabular_report
             (table
             ,writer
             ,interpolate_html
-            ,e_output_measure_only
+            ,oe_only_measure
             );
 
         int const rows_per_page = (get_footer_top() - pos_y) / table.row_height();
@@ -1825,10 +1825,10 @@ class reg_tabular_detail_page : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator&  table
-        ,html_interpolator const&       interpolate_html
-        ,int*                           pos_y
-        ,enum_output_mode               output_mode
+        (illustration_table_generator& table
+        ,html_interpolator const&      interpolate_html
+        ,int*                          pos_y
+        ,oenum_render_or_only_measure  output_mode
         ) const override
     {
         stifle_warning_for_unused_value(interpolate_html);
@@ -2233,10 +2233,10 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator&  table
-        ,html_interpolator const&       interpolate_html
-        ,int*                           pos_y
-        ,enum_output_mode               output_mode
+        (illustration_table_generator& table
+        ,html_interpolator const&      interpolate_html
+        ,int*                          pos_y
+        ,oenum_render_or_only_measure  output_mode
         ) const override
     {
         // Output the first super header row.
@@ -2685,10 +2685,10 @@ class reg_d_individual_irr_base : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator&  table
-        ,html_interpolator const&       interpolate_html
-        ,int*                           pos_y
-        ,enum_output_mode               output_mode
+        (illustration_table_generator& table
+        ,html_interpolator const&      interpolate_html
+        ,int*                          pos_y
+        ,oenum_render_or_only_measure  output_mode
         ) const override
     {
         std::ostringstream header_zero;
@@ -2860,10 +2860,10 @@ class reg_d_individual_curr : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator&  table
-        ,html_interpolator const&       interpolate_html
-        ,int*                           pos_y
-        ,enum_output_mode               output_mode
+        (illustration_table_generator& table
+        ,html_interpolator const&      interpolate_html
+        ,int*                          pos_y
+        ,oenum_render_or_only_measure  output_mode
         ) const override
     {
         table.output_super_header

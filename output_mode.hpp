@@ -24,13 +24,10 @@
 
 #include "config.hpp"
 
-/// Convenient enum used with functions that can either actually render
-/// something or just pretend doing it in order to compute the space that would
-/// be taken by it, in the layout phase.
-
-enum enum_output_mode
-    {e_output_normal
-    ,e_output_measure_only
+enum oenum_render_or_only_measure
+    {oe_render
+    ,oe_only_measure
     };
+// [...to be moved to 'oecumenic_enumerations.hpp' presently]
 
 #endif // output_mode_hpp
