@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include "output_mode.hpp"
+#include "oecumenic_enumerations.hpp"
 
 #include <wx/dc.h>
 #include <wx/font.h>

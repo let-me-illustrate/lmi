@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
-#include "output_mode.hpp"
+#include "oecumenic_enumerations.hpp"
 
 #include <wx/html/winpars.h>
 

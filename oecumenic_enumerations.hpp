@@ -94,6 +94,11 @@ enum oenum_premium_tax_tier_period
     };
 #endif // 0
 
+enum oenum_render_or_only_measure
+    {oe_render
+    ,oe_only_measure
+    };
+
 enum oenum_smoking_or_tobacco
     {oe_smoker_nonsmoker
     ,oe_tobacco_nontobacco
