@@ -213,5 +213,14 @@ inline void stifle_warning_for_unused_value(T const& t)
     (void)&t;
 }
 
+/// Compute the number of pages needed to display the given number of non-blank
+/// rows in groups of the specified size separated by blank rows.
+
+int LMI_SO get_needed_pages_count
+    (int total_rows
+    ,int rows_per_page
+    ,int rows_per_group
+    );
+
 #endif // miscellany_hpp
 
