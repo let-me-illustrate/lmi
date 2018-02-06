@@ -331,17 +331,17 @@ void wx_table_generator::output_vert_separator
 }
 
 void wx_table_generator::output_horz_separator
-    (std::size_t begin_column
-    ,std::size_t end_column
-    ,int y
-    ,enum_output_mode output_mode
+    (std::size_t                  begin_column
+    ,std::size_t                  end_column
+    ,int                          y
+    ,oenum_render_or_only_measure output_mode
     )
 {
     switch(output_mode)
         {
-        case e_output_normal:
+        case oe_render:
             break;
-        case e_output_measure_only:
+        case oe_only_measure:
             return;
         }
 
@@ -361,13 +361,16 @@ void wx_table_generator::output_horz_separator
     do_output_horz_separator(x1, x2, y);
 }
 
-void wx_table_generator::output_header(int* pos_y, enum_output_mode output_mode)
+void wx_table_generator::output_header
+    (int* pos_y
+    ,oenum_render_or_only_measure output_mode
+    )
 {
     switch(output_mode)
         {
-        case e_output_normal:
+        case oe_render:
             break;
-        case e_output_measure_only:
+        case oe_only_measure:
             *pos_y += max_header_lines_ * row_height_;
             return;
         }
@@ -424,20 +427,20 @@ void wx_table_generator::output_header(int* pos_y, enum_output_mode output_mode)
 }
 
 void wx_table_generator::output_super_header
-        (std::string const& header
-        ,std::size_t        begin_column
-        ,std::size_t        end_column
-        ,int*               pos_y
-        ,enum_output_mode   output_mode
+        (std::string const&           header
+        ,std::size_t                  begin_column
+        ,std::size_t                  end_column
+        ,int*                         pos_y
+        ,oenum_render_or_only_measure output_mode
         )
 {
     std::vector<std::string> const lines(split_into_lines(header));
 
     switch(output_mode)
         {
-        case e_output_normal:
+        case oe_render:
             break;
-        case e_output_measure_only:
+        case oe_only_measure:
             *pos_y += row_height_*lines.size();
             return;
         }

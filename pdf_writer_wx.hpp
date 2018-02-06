@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
-#include "output_mode.hpp"
+#include "oecumenic_enumerations.hpp"
 
 #include <wx/html/winpars.h>
 
@@ -56,20 +56,20 @@ class pdf_writer_wx
 
     // High level functions which should be preferably used if possible.
     int output_html
-        (int x
-        ,int y
-        ,int width
-        ,html::text const& html
-        ,enum_output_mode output_mode = e_output_normal
+        (int                          x
+        ,int                          y
+        ,int                          width
+        ,html::text const&            html
+        ,oenum_render_or_only_measure output_mode = oe_render
         );
 
     void output_image
-        (wxImage const&   image
-        ,char const*      image_name
-        ,double           scale
-        ,int              x
-        ,int*             pos_y
-        ,enum_output_mode output_mode = e_output_normal
+        (wxImage const&               image
+        ,char const*                  image_name
+        ,double                       scale
+        ,int                          x
+        ,int*                         pos_y
+        ,oenum_render_or_only_measure output_mode = oe_render
         );
 
     // Accessors allowing to use lower level wxDC API directly.

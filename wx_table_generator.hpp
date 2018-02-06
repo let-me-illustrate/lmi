@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include "output_mode.hpp"
+#include "oecumenic_enumerations.hpp"
 
 #include <wx/dc.h>
 #include <wx/font.h>
@@ -68,19 +68,19 @@ class wx_table_generator
 
     // Render the headers at the given position and update it.
     void output_header
-        (int*             pos_y
-        ,enum_output_mode output_mode = e_output_normal
+        (int*                         pos_y
+        ,oenum_render_or_only_measure output_mode = oe_render
         );
 
     // Render a super-header, i.e. a header spanning over several columns. The
     // columns range is specified as a close/open interval, as usual in C++.
     // The header string may be multiline, just as with normal headers.
     void output_super_header
-        (std::string const& header
-        ,std::size_t        begin_column
-        ,std::size_t        end_column
-        ,int*               pos_y
-        ,enum_output_mode   output_mode = e_output_normal
+        (std::string const&           header
+        ,std::size_t                  begin_column
+        ,std::size_t                  end_column
+        ,int*                         pos_y
+        ,oenum_render_or_only_measure output_mode = oe_render
         );
 
     // Render a row with the given values at the given position and update it.
@@ -114,10 +114,10 @@ class wx_table_generator
     // Output a horizontal separator line across the specified columns,
     // using the usual C++ close/open interval convention.
     void output_horz_separator
-        (std::size_t      begin_column
-        ,std::size_t      end_column
-        ,int              y
-        ,enum_output_mode output_mode = e_output_normal
+        (std::size_t                  begin_column
+        ,std::size_t                  end_column
+        ,int                          y
+        ,oenum_render_or_only_measure output_mode = oe_render
         );
 
     // Output a vertical separator line before the given column. Notice that
