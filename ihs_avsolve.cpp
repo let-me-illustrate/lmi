@@ -352,6 +352,11 @@ double AccountValue::Solve
 
     switch(a_SolveType)
         {
+        case mce_solve_none:
+            {
+            alarum() << "Unreachable--cannot solve for nothing." << LMI_FLUSH;
+            }
+            break;
         case mce_solve_specamt:
             {
             solve_set_fn = &AccountValue::SolveSetSpecAmt;
@@ -402,10 +407,6 @@ double AccountValue::Solve
                 }
             }
             break;
-        default:
-            {
-            alarum() << "Case " << a_SolveType << " not found." << LMI_FLUSH;
-            }
         }
 
     std::ostream os_trace(status().rdbuf());
