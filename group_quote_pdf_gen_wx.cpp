@@ -631,10 +631,6 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 alarum() << "Unreachable." << LMI_FLUSH;
                 }
                 break;
-            default:
-                {
-                alarum() << "Case " << col << " not found." << LMI_FLUSH;
-                }
             }
         }
 
@@ -727,10 +723,6 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 alarum() << "Unreachable." << LMI_FLUSH;
                 }
                 break;
-            default:
-                {
-                alarum() << "Case " << col << " not found." << LMI_FLUSH;
-                }
             }
 
         table_gen.add_column(header, cd.widest_text_);

@@ -99,11 +99,8 @@ std::string SequenceParser::token_type_name(SequenceParser::token_type t)
             {
             return "keyword";
             }
-        default:
-            {
-            return std::string("unknown: ") + static_cast<char>(t);
-            }
         }
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 // GRAMMAR interval-begin: one of [ (

@@ -74,12 +74,8 @@ namespace
         case mce_semiannual: return 1; // S
         case mce_quarterly:  return 2; // Q
         case mce_monthly:    return 3; // M
-        default:
-            {
-            alarum() << "Case " << a_mode << " not found." << LMI_FLUSH;
-            throw "Unreachable--silences a compiler diagnostic.";
-            }
         }
+    throw "Unreachable--silences a compiler diagnostic.";
     }
 } // Unnamed namespace.
 
