@@ -50,9 +50,12 @@ std::string xsl_filename(Ledger const& ledger)
         case mce_nasd:                         return "nasd.xsl";
         case mce_group_private_placement:      return "reg_d_group.xsl";
         case mce_individual_private_placement: return "reg_d_individual.xsl";
-        default:
+        case mce_prospectus_obsolete:                 // fall through
+        case mce_offshore_private_placement_obsolete: // fall through
+        case mce_ill_reg_private_placement_obsolete:  // fall through
+        case mce_variable_annuity:
             {
-            alarum() << "Case '" << z << "' not found." << LMI_FLUSH;
+            alarum() << "Case '" << z << "' not supported." << LMI_FLUSH;
             }
         }
     throw "Unreachable--silences a compiler diagnostic.";

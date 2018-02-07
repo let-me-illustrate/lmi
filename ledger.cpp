@@ -108,7 +108,7 @@ void Ledger::SetRunBases(int length)
         // has become inoperative, but the code is preserved in case
         // such a format becomes desirable for some other reason.
         //
-        case nonexistent:  // {current, 0% int, 1/2 int%} X {guar, curr}
+        case mce_prospectus_obsolete: // {curr, 0% int, 1/2 int%} X {guar, curr}
             {
             l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);
             l_map_rep[mce_run_gen_guar_sep_full] = LedgerVariant(length);
@@ -119,9 +119,12 @@ void Ledger::SetRunBases(int length)
             }
             break;
 #endif
-        default:
+        case mce_prospectus_obsolete:                 // fall through
+        case mce_offshore_private_placement_obsolete: // fall through
+        case mce_ill_reg_private_placement_obsolete:  // fall through
+        case mce_variable_annuity:
             {
-            alarum() << "Case '" << ledger_type_ << "' not found." << LMI_FLUSH;
+            alarum() << "Unsupported ledger type '" << ledger_type_ << "'." << LMI_FLUSH;
             }
         }
 
