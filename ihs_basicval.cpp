@@ -1651,8 +1651,8 @@ std::vector<double> BasicValues::GetTable
     (std::string const& TableFile
     ,e_database_key     TableID
     ,bool               IsTableValid
-    ,EBlend      const& CanBlendSmoking
-    ,EBlend      const& CanBlendGender
+    ,EBlend      const  CanBlendSmoking
+    ,EBlend      const  CanBlendGender
     ) const
 {
     if(!IsTableValid)
