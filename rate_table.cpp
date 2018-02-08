@@ -270,6 +270,10 @@ struct soa_field
     char const* name;               // Field name in the text format.
 };
 
+// The following two enums are deliberately distinct despite their
+// close similarity, for reasons explained at length here:
+//   https://lists.nongnu.org/archive/html/lmi/2018-02/msg00030.html
+
 // This enum defines the indices of all the known fields in soa_fields array,
 // its elements are consecutive.
 enum enum_soa_field
