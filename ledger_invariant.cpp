@@ -849,7 +849,7 @@ void LedgerInvariant::Init(BasicValues const* b)
             );
     if(oe_tobacco_nontobacco == smoke_or_tobacco)
         {
-        switch(mce_smoking(b->yare_input_.Smoking).value())
+        switch(b->yare_input_.Smoking)
             {
             case mce_smoker:
                 {
