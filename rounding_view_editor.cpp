@@ -266,9 +266,10 @@ void RoundingButtons::DiscardEdits()
 
 void RoundingButtons::UponButtonClick( wxCommandEvent & event )
 {
-    int id = event.GetId();
     rounding_style style;
-    switch(id)
+    // This switch condition is not of enumerative type. The default
+    // case is necessary for values that match none of the enumerators.
+    switch(event.GetId())
         {
         case e_rbi_not_at_all:
             style = r_not_at_all;

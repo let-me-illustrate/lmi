@@ -169,18 +169,12 @@ std::vector<double> actuarial_table::values_elaborated
             return v;
             }
             // break;
-        case e_reenter_never: // Fall through.
-        default:
+        case e_reenter_never:
             {
-            alarum()
-                << "Table-lookup method "
-                << method
-                << " is not valid in this context."
-                << LMI_FLUSH
-                ;
-            throw "Unreachable--silences a compiler diagnostic.";
+            alarum() << "Cannot use 'e_reenter_never' here." << LMI_FLUSH;
             }
         }
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 /// Find the table specified by table_number_.
