@@ -52,10 +52,6 @@ std::streambuf* select_streambuf(progress_meter::enum_display_mode display_mode)
             z = progress_meter_unit_test_stream().rdbuf();
             }
             break;
-        default:
-            {
-            alarum() << "Case " << display_mode << " not found." << LMI_FLUSH;
-            }
         }
     return z;
 }

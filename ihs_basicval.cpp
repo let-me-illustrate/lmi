@@ -508,15 +508,6 @@ void BasicValues::Init7702()
             // do nothing
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case "
-                << yare_input_.LoanRateType
-                << " not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 */
 
@@ -853,15 +844,6 @@ void BasicValues::SetMaxSurvivalDur()
             MaxSurvivalDur = std::accumulate(z.begin(), z.end(), 0.0);
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case "
-                << yare_input_.SurviveToType
-                << " not found."
-                << LMI_FLUSH
-                ;
-            }
         }
     LMI_ASSERT(MaxSurvivalDur <= EndtAge);
 }
@@ -1167,15 +1149,6 @@ std::pair<double,double> BasicValues::approx_mly_ded
                 ann_ded *= 1.0 + r;
                 }
                 break;
-            default:
-                {
-                alarum()
-                    << "Case '"
-                    << WaiverChargeMethod
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
-                }
             }
         }
 
@@ -1268,15 +1241,6 @@ std::pair<double,double> BasicValues::approx_mly_ded_ex
                 er_ded *= 1.0 + r;
                 }
                 break;
-            default:
-                {
-                alarum()
-                    << "Case '"
-                    << WaiverChargeMethod
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
-                }
             }
         }
 
@@ -1683,15 +1647,6 @@ std::vector<double> BasicValues::GetTable
             BlendSmoking = true;
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << CanBlendSmoking
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     bool BlendGender = false;
@@ -1712,15 +1667,6 @@ std::vector<double> BasicValues::GetTable
             BlendGender = true;
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << CanBlendGender
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     // Case 1: blending is not allowed or not requested--return unblended table
@@ -1896,15 +1842,6 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
             {
             Non7702CompliantCorridor = std::vector<double>(GetLength(), 1.0);
             return Non7702CompliantCorridor;
-            }
-        default:
-            {
-            alarum()
-                << "Case "
-                << yare_input_.DefinitionOfLifeInsurance
-                << " not found."
-                << LMI_FLUSH
-                ;
             }
         }
     throw "Unreachable--silences a compiler diagnostic.";

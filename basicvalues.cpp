@@ -191,15 +191,6 @@ double BasicValues::GetModalTgtPrem
             spread = 0.0000;
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case "
-                << a_mode
-                << " not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     double u = 1.0 + std::max
@@ -275,15 +266,6 @@ double BasicValues::GetModalTgtSpecAmt
             spread = 0.0000;
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case "
-                << a_mode
-                << " not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     double u = 1.0 + std::max

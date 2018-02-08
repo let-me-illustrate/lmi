@@ -102,12 +102,8 @@ double AccountValue::CalculateSpecAmtFromStrategy
             {
             return GetModalSpecAmtSalary   (actual_year);
             }
-        default:
-            {
-            alarum() << "Case " << strategy << " not found." << LMI_FLUSH;
-            throw "Unreachable--silences a compiler diagnostic.";
-            }
         }
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 /// Set specamt according to selected strategy, respecting minimum.
@@ -310,17 +306,8 @@ double AccountValue::DoPerformPmtStrategy
                 / a_CurrentMode
                 ;
             }
-        default:
-            {
-            alarum()
-                << "Case "
-                << a_StrategyVector[Year]
-                << " not found."
-                << LMI_FLUSH
-                ;
-            throw "Unreachable--silences a compiler diagnostic.";
-            }
         }
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 /// Set employee payment according to selected strategy.
