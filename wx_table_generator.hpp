@@ -161,8 +161,9 @@ class wx_table_generator
     int row_height_;
     int column_margin_;
 
-    struct column_info
+    class column_info
     {
+      public:
         column_info(std::string const& header, int width)
             :header_(header)
             ,width_(width)
@@ -191,6 +192,7 @@ class wx_table_generator
         // and hence is non-const.
         int width_;
 
+      private:
         bool const is_variable_width_;
     };
 
