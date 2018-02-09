@@ -195,7 +195,7 @@ class alarum_buf
 template<typename T>
 inline std::ostream& alert_stream()
 {
-    static_assert(std::is_base_of<alert_buf,T>::value, "");
+    static_assert(std::is_base_of<alert_buf,T>::value);
     static T buffer_;
     static std::ostream stream_(&buffer_);
     stream_.clear();

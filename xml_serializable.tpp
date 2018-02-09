@@ -43,8 +43,8 @@ xml_serializable<T>::~xml_serializable()
     // Assert that static_cast<T cv&> doesn't engender undefined
     // behavior, and that class T provides the expected operator[]()
     // and member_names() functions.
-    static_assert(std::is_base_of<xml_serializable <T>,T>::value, "");
-    static_assert(std::is_base_of<MemberSymbolTable<T>,T>::value, "");
+    static_assert(std::is_base_of<xml_serializable <T>,T>::value);
+    static_assert(std::is_base_of<MemberSymbolTable<T>,T>::value);
 }
 
 template<typename T>

@@ -109,7 +109,7 @@ struct mc_enum_key
 template<typename T, std::size_t N, T const (&E)[N], char const*const (&C)[N]>
 struct mc_enum_data
 {
-    static_assert(0 < N, "");
+    static_assert(0 < N);
 
     static std::size_t const n_ = N;
     static T    const*        e() {return E;}

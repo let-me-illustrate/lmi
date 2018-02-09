@@ -67,7 +67,6 @@ class DatabaseTableAdapter
         (
            static_cast<int>(DatabaseTableAdapter::eda_max)
         == static_cast<int>(e_number_of_axes)
-        ,""
         );
   public:
     DatabaseTableAdapter(database_entity* db_value = nullptr);

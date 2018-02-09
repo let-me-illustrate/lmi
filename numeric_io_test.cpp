@@ -98,7 +98,7 @@ void mete_infinity()
 // that deviates from that standard is probably so rare that it can
 // reasonably be ignored, with an appropriate runtime message.
 
-static_assert(std::numeric_limits<double>::is_iec559, "");
+static_assert(std::numeric_limits<double>::is_iec559);
 
 int test_main(int, char*[])
 {

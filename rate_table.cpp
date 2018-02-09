@@ -82,7 +82,7 @@ using std::uint64_t;
 // The SOA binary format uses IEEE 754 for the floating point values
 // representation and the code in this file won't work correctly if it is
 // different from their in memory representation.
-static_assert(std::numeric_limits<double>::is_iec559, "");
+static_assert(std::numeric_limits<double>::is_iec559);
 
 // Helper functions used to swap bytes on big endian platforms.
 //

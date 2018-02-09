@@ -98,7 +98,7 @@ class mc_enum
     ,private boost::equality_comparable<mc_enum<T>,T>
     ,private boost::equality_comparable<mc_enum<T>,std::string>
 {
-    static_assert(std::is_enum<T>::value, "");
+    static_assert(std::is_enum<T>::value);
 
     friend class mc_enum_test;
     template<typename U> friend std::vector<std::string> const& all_strings();

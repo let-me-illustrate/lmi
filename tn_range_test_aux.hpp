@@ -37,7 +37,7 @@ template<typename T>
 class percentage_trammel
     :public trammel_base<T>
 {
-    static_assert(100 <= std::numeric_limits<T>::max(), "");
+    static_assert(100 <= std::numeric_limits<T>::max());
     T nominal_minimum() const override {return   0;}
     T default_value()   const override {return   0;}
     T nominal_maximum() const override {return 100;}

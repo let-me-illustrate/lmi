@@ -215,8 +215,8 @@ void test_floating_conversions(char const* file, int line)
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
 
-    static_assert(  to_traits::is_iec559, "");
-    static_assert(from_traits::is_iec559, "");
+    static_assert(  to_traits::is_iec559);
+    static_assert(from_traits::is_iec559);
 
     // std::isnormal values representable in any IEC559 'arithmetic
     // format' (i.e., excluding the binary16 'interchange format').
@@ -311,12 +311,12 @@ void test_conv_fpint(char const* file, int line)
     using i_traits = std::numeric_limits<I>;
     using f_traits = std::numeric_limits<F>;
 
-    static_assert(i_traits::is_integer, "");
-    static_assert(f_traits::is_iec559, "");
+    static_assert(i_traits::is_integer);
+    static_assert(f_traits::is_iec559);
 
     // Make sure 'digits' comparisons below are valid.
-    static_assert(2 == i_traits::radix, "");
-    static_assert(2 == f_traits::radix, "");
+    static_assert(2 == i_traits::radix);
+    static_assert(2 == f_traits::radix);
 
     // Integral to floating and back.
 
@@ -646,8 +646,8 @@ void mete_static()
 {
     enum {N = 1000000};
     using from_traits = std::numeric_limits<From>;
-    static_assert(from_traits::is_specialized, "");
-    static_assert(N < from_traits::max(), "");
+    static_assert(from_traits::is_specialized);
+    static_assert(N < from_traits::max());
     To volatile z(0);
     for(From j = 0; j < N; ++j)
         {
@@ -663,8 +663,8 @@ void mete_bourn()
 {
     enum {N = 1000000};
     using from_traits = std::numeric_limits<From>;
-    static_assert(from_traits::is_specialized, "");
-    static_assert(N < from_traits::max(), "");
+    static_assert(from_traits::is_specialized);
+    static_assert(N < from_traits::max());
     To volatile z(0);
     for(From j = 0; j < N; ++j)
         {

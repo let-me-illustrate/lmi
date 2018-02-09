@@ -109,7 +109,7 @@ template<typename T>
 class date_trammel
     :public trammel_base<T>
 {
-    static_assert(std::is_same<calendar_date,T>::value, "");
+    static_assert(std::is_same<calendar_date,T>::value);
 
     T nominal_minimum() const override {return gregorian_epoch();}
     T default_value()   const override {return today          ();}

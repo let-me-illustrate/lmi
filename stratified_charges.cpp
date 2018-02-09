@@ -243,7 +243,7 @@ namespace
         ,"stratified_last"
         };
 
-    static_assert(sizeof s_stratified_nodes / sizeof(char const*) == 1 + e_stratified_last, "");
+    static_assert(sizeof s_stratified_nodes / sizeof(char const*) == 1 + e_stratified_last);
 } // Unnamed namespace.
 
 stratified_entity& stratified_charges::raw_entity(e_stratified e)

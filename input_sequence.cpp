@@ -213,7 +213,7 @@ void InputSequence::initialize_from_vector(std::vector<T> const& v)
 {
     bool const T_is_double = std::is_same<T,double     >::value;
     bool const T_is_string = std::is_same<T,std::string>::value;
-    static_assert(T_is_double || T_is_string, "");
+    static_assert(T_is_double || T_is_string);
 
     ValueInterval default_interval;
     default_interval.value_is_keyword = T_is_string;

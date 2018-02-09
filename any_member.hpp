@@ -622,7 +622,6 @@ void MemberSymbolTable<ClassType>::ascribe
             <MemberSymbolTable<ClassType>
             ,ClassType
             >::value
-        ,""
         );
     static_assert
         (
@@ -630,7 +629,6 @@ void MemberSymbolTable<ClassType>::ascribe
             <SameOrBaseClassType
             ,ClassType
             >::value
-        ,""
         );
 
     ClassType* class_object = static_cast<ClassType*>(this);

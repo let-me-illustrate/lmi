@@ -76,7 +76,7 @@ inline To bourn_cast(From from, std::false_type, std::false_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
-    static_assert(!to_traits::is_integer && !from_traits::is_integer, "");
+    static_assert(!to_traits::is_integer && !from_traits::is_integer);
 
     if(std::isnan(from))
         return to_traits::quiet_NaN();
@@ -103,10 +103,10 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
-    static_assert(!to_traits::is_integer && from_traits::is_integer, "");
+    static_assert(!to_traits::is_integer && from_traits::is_integer);
 
     // If this assertion fails, the comparisons below may be UB.
-    static_assert(from_traits::digits < to_traits::max_exponent, "");
+    static_assert(from_traits::digits < to_traits::max_exponent);
 
     if(from < to_traits::lowest())
         throw std::runtime_error("Cast would transgress lower limit.");
@@ -172,7 +172,7 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
-    static_assert(to_traits::is_integer && !from_traits::is_integer, "");
+    static_assert(to_traits::is_integer && !from_traits::is_integer);
 
     From const limit = std::ldexp(From(1), to_traits::digits);
 
@@ -228,7 +228,7 @@ inline To bourn_cast(From from, std::true_type, std::true_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
-    static_assert(to_traits::is_integer && from_traits::is_integer, "");
+    static_assert(to_traits::is_integer && from_traits::is_integer);
 
     if(! to_traits::is_signed && from < 0)
         throw std::runtime_error("Cannot cast negative to unsigned.");
@@ -314,17 +314,17 @@ inline To bourn_cast(From from)
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
 
-    static_assert(  to_traits::is_specialized, "");
-    static_assert(from_traits::is_specialized, "");
+    static_assert(  to_traits::is_specialized);
+    static_assert(from_traits::is_specialized);
 
-    static_assert(2 ==   to_traits::radix, "");
-    static_assert(2 == from_traits::radix, "");
+    static_assert(2 ==   to_traits::radix);
+    static_assert(2 == from_traits::radix);
 
     constexpr bool   to_integer =   to_traits::is_integer;
     constexpr bool from_integer = from_traits::is_integer;
 
-    static_assert(  to_integer ||   to_traits::is_iec559, "");
-    static_assert(from_integer || from_traits::is_iec559, "");
+    static_assert(  to_integer ||   to_traits::is_iec559);
+    static_assert(from_integer || from_traits::is_iec559);
 
     return bourn_cast<To,From>
         (from
