@@ -186,6 +186,17 @@ class wx_table_generator
             return !is_variable_width_;
         }
 
+        // Return true if the contents of this column needs to be clipped when
+        // outputting it.
+        bool needs_clipping() const
+        {
+            // Variable width columns can have practically unlimited length and
+            // hence overflow into the next column or even beyond and must be
+            // clipped to prevent this from happening. Fixed width columns are
+            // not supposed to overflow anyhow, so clipping them is unnecessary.
+            return is_variable_width_;
+        }
+
         std::string const header_;
 
         // Note that this field is modified directly by wx_table_generator code
