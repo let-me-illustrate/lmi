@@ -212,9 +212,9 @@ void actuarial_table::find_table()
     // TODO ?? Assert endianness too? SOA tables are not portable;
     // probably they can easily be read only on x86 hardware.
 
-    static_assert(8 == CHAR_BIT, "");
-    static_assert(4 == sizeof(int), "");
-    static_assert(2 == sizeof(short int), "");
+    static_assert(8 == CHAR_BIT);
+    static_assert(4 == sizeof(int));
+    static_assert(2 == sizeof(short int));
 
     // 27.4.3.2/2 requires that this be interpreted as invalid.
     // Reinitialize it here for robustness, even though the ctor
@@ -224,7 +224,7 @@ void actuarial_table::find_table()
     int const index_record_length(58);
     char index_record[index_record_length] = {0};
 
-    static_assert(sizeof(std::int32_t) <= sizeof(int), "");
+    static_assert(sizeof(std::int32_t) <= sizeof(int));
     while(index_ifs)
         {
         int index_table_number = deserialize_cast<std::int32_t>(index_record);

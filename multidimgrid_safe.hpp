@@ -259,7 +259,7 @@ template<typename AdjustControl, typename BaseAxisType = MultiDimAxisAny>
 class MultiDimAdjustableAxis
     :public BaseAxisType
 {
-    static_assert(std::is_base_of<MultiDimAxisAny,BaseAxisType>::value, "");
+    static_assert(std::is_base_of<MultiDimAxisAny,BaseAxisType>::value);
 
   protected:
     typedef AdjustControl AxisAdjustControl;

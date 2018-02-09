@@ -253,7 +253,7 @@ template<typename RealType>
 class round_to
     :public std::unary_function<RealType,RealType>
 {
-    static_assert(std::is_floating_point<RealType>::value, "");
+    static_assert(std::is_floating_point<RealType>::value);
 
   public:
     /// The default ctor only makes the class DefaultConstructible;

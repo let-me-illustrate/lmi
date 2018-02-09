@@ -49,7 +49,7 @@
 template<typename ViewType>
 std::string ViewName()
 {
-    static_assert(std::is_base_of<wxView,ViewType>::value, "");
+    static_assert(std::is_base_of<wxView,ViewType>::value);
     return lmi::TypeInfo(typeid(ViewType)).Name();
 }
 
