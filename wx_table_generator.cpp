@@ -304,7 +304,7 @@ void wx_table_generator::do_output_values
                     {
                     x_text += column_margin_;
                     }
-            }
+                }
 
             dc_.DrawText(s, x_text, y_text);
             }
