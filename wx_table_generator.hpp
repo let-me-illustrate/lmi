@@ -177,9 +177,9 @@ class wx_table_generator
         // doesn't appear in the output at all.
         bool is_hidden() const { return header_.empty(); }
 
-        std::string header_;
+        std::string const header_;
         int width_;
-        bool is_centered_;
+        bool const is_centered_;
     };
 
     std::vector<column_info> columns_;
