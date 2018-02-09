@@ -178,7 +178,11 @@ class wx_table_generator
         bool is_hidden() const { return header_.empty(); }
 
         std::string const header_;
+
+        // Note that this field is modified directly by wx_table_generator code
+        // and hence is non-const.
         int width_;
+
         bool const is_centered_;
     };
 
