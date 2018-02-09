@@ -295,7 +295,7 @@ void wx_table_generator::do_output_values
                 }
             else
                 {
-                if(ci.is_centered_)
+                if(ci.is_centered())
                     {
                     // Centre the text for the columns configured to do it.
                     x_text += (width - dc_.GetTextExtent(s).x) / 2;
