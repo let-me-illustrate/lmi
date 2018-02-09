@@ -306,7 +306,28 @@ void wx_table_generator::do_output_values
                     }
                 }
 
-            dc_.DrawText(s, x_text, y_text);
+            // Tiny helper to avoid duplicating the same DrawText() call in
+            // both branches of the "if" statement below. It might not be that
+            // useful now, but could become so if this simple DrawText() gets
+            // more complicated in the future.
+            auto const do_output = [=]() { dc_.DrawText(s, x_text, y_text); };
+
+            if(ci.needs_clipping())
+                {
+                wxDCClipper clip
+                    (dc_
+                    ,wxRect
+                        {wxPoint{x, y_top}
+                        ,wxSize{width - column_margin_, row_height_}
+                        }
+                    );
+
+                do_output();
+                }
+            else
+                {
+                do_output();
+                }
             }
         x += width;
         if(draw_separators_)
