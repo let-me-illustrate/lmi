@@ -1763,25 +1763,30 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         return;
         }
 
+    auto selection = cell_parms().size();
     if(!document().IsModified() && !document().GetDocumentSaved())
         {
         case_parms ().clear();
         case_parms ().push_back(exemplar);
         class_parms().clear();
         class_parms().push_back(exemplar);
-        cell_parms ().clear();
+        cell_parms ().swap(cells);
+
+        selection = 0;
+        }
+    else
+        {
+        cell_parms().reserve(cell_parms().size() + cells.size());
+        std::back_insert_iterator<std::vector<Input>> iip(cell_parms());
+        std::copy(cells.begin(), cells.end(), iip);
         }
 
-    auto selection = cell_parms().size();
-    std::back_insert_iterator<std::vector<Input>> iip(cell_parms());
-    std::copy(cells.begin(), cells.end(), iip);
     document().Modify(true);
     list_model_->Reset(cell_parms().size());
     Update();
     // Reset() leaves the listview unreachable from the keyboard
     // because no row is selected--so select the first added row
     // if possible, else the row after which no row was inserted.
-    selection = std::min(selection, cell_parms().size());
     wxDataViewItem const& z = list_model_->GetItem(selection);
     list_window_->Select(z);
     list_window_->EnsureVisible(z);
