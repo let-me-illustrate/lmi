@@ -1773,6 +1773,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         }
 
     auto selection = cell_parms().size();
+    cell_parms().reserve(cell_parms().size() + cells.size());
     std::back_insert_iterator<std::vector<Input>> iip(cell_parms());
     std::copy(cells.begin(), cells.end(), iip);
     document().Modify(true);
