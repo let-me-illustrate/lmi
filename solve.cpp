@@ -117,11 +117,6 @@ double SolveTest()
                     y = ConstThat->InvariantValues().SpecAmt[ThatSolveTgtYear - 1];
                     }
                     break;
-                case mce_rop:
-                    {
-                    // IHS !! What should be done here? See lmi.
-                    }
-// fall through...
                 default:
                     {
                     alarum()

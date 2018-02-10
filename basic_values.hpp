@@ -269,8 +269,8 @@ class LMI_SO BasicValues
         (std::string const& TableFile
         ,e_database_key     TableID
         ,bool               IsTableValid    = true
-        ,EBlend      const& CanBlendSmoking = CannotBlend
-        ,EBlend      const& CanBlendGender  = CannotBlend
+        ,EBlend             CanBlendSmoking = CannotBlend
+        ,EBlend             CanBlendGender  = CannotBlend
         ) const;
 
     std::vector<double> const& GetBandedCoiRates

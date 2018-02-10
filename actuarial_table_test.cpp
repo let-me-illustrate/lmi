@@ -269,7 +269,7 @@ void test_precondition_failures()
     BOOST_TEST_THROW
         (z.values_elaborated(80, 42, e_reenter_never, 0, 0)
         ,std::runtime_error
-        ,"Table-lookup method 0 is not valid in this context."
+        ,"Cannot use 'e_reenter_never' here."
         );
 }
 

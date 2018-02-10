@@ -694,8 +694,7 @@ census_run_result run_census::operator()
     // Use the first cell's run order for the entire census, ignoring
     // any conflicting run order for any other cell--which would have
     // been prevented upstream by assert_consistent_run_order().
-    mcenum_run_order order = yare_input(cells[0]).RunOrder;
-    switch(order)
+    switch(yare_input(cells[0]).RunOrder)
         {
         case mce_life_by_life:
             {
@@ -717,15 +716,6 @@ census_run_result run_census::operator()
                 );
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case "
-                << order
-                << " not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     // Indicate cancellation on the statusbar. This may be of little

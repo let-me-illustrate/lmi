@@ -301,15 +301,6 @@ void AccountValue::process_payment(double payment)
             IncrementAVPreferentially(ee_net_pmt, ee_premium_preferred_account);
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << ee_premium_allocation_method
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
     switch(er_premium_allocation_method)
         {
@@ -323,15 +314,6 @@ void AccountValue::process_payment(double payment)
             IncrementAVPreferentially(er_net_pmt, er_premium_preferred_account);
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << er_premium_allocation_method
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     // TODO ?? Perhaps now we should transfer funds from the separate
@@ -366,15 +348,6 @@ void AccountValue::IncrementAVPreferentially
             AVSepAcct += increment;
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << preferred_account
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 }
 
@@ -395,15 +368,6 @@ void AccountValue::process_deduction(double decrement)
             DecrementAVProgressively(decrement, deduction_preferred_account);
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << deduction_method
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 }
 
@@ -423,15 +387,6 @@ void AccountValue::process_distribution(double decrement)
             DecrementAVProgressively(decrement, distribution_preferred_account);
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << distribution_method
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 }
 
@@ -528,15 +483,6 @@ void AccountValue::DecrementAVProgressively
             AVGenAcct -= progressively_reduce(AVSepAcct, AVGenAcct, decrement);
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << preferred_account
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 }
 
@@ -762,15 +708,6 @@ void AccountValue::ChangeSpecAmtBy(double delta)
                 ProportionAppliedToTerm = 0.0;
                 }
                 break;
-            default:
-                {
-                alarum()
-                    << "Case "
-                    << yare_input_.TermAdjustmentMethod
-                    << " not found."
-                    << LMI_FLUSH
-                    ;
-                }
             }
 
         ActualSpecAmt += delta * (1.0 - ProportionAppliedToTerm);
@@ -999,10 +936,6 @@ void AccountValue::TxOptionChange()
                 // Do nothing.
                 }
             break;
-        default:
-            {
-            alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
-            }
         }
 }
 
@@ -1672,10 +1605,6 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
             DB7702A        = ActualSpecAmt + std::max(0.0, CumPmts);
             }
             break;
-        default:
-            {
-            alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
-            }
         }
 
     // Surrender charges are generally ignored here, but any negative
@@ -1945,15 +1874,6 @@ void AccountValue::TxSetRiderDed()
                         );
                 }
                 break;
-            default:
-                {
-                alarum()
-                    << "Case '"
-                    << WaiverChargeMethod
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
-                }
             }
         }
 }
@@ -2126,10 +2046,6 @@ void AccountValue::ApplyDynamicMandE(double assets)
                 ;
             }
             break;
-        default:
-            {
-            alarum() << "Case " << GenBasis_ << " not found." << LMI_FLUSH;
-            }
         }
 
 // TODO ?? Implement tiered comp and tiered management fee.
@@ -2352,12 +2268,8 @@ double AccountValue::anticipated_deduction
             {
             return MlyDed * (1 + MonthsToNextModalPmtDate());
             }
-        default:
-            {
-            alarum() << "Case " << method << " not found." << LMI_FLUSH;
-            throw "Unreachable--silences a compiler diagnostic.";
-            }
         }
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 /// Calculate maximum permissible withdrawal.
@@ -2654,10 +2566,6 @@ void AccountValue::TxTakeWD()
                 }
             }
             break;
-        default:
-            {
-            alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
-            }
         }
 
     CumPmts     -= NetWD;

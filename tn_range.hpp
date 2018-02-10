@@ -234,7 +234,7 @@ class tn_range
     ,private boost::equality_comparable<tn_range<Number,Trammel>,Number>
     ,private boost::equality_comparable<tn_range<Number,Trammel>,std::string>
 {
-    static_assert(std::is_base_of<trammel_base<Number>,Trammel>::value, "");
+    static_assert(std::is_base_of<trammel_base<Number>,Trammel>::value);
 
     friend class tn_range_test;
 

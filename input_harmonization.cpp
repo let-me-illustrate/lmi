@@ -985,15 +985,6 @@ void Input::set_solve_durations()
             SolveTargetYear = years_to_maturity();
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << SolveTgtAtWhich.value()
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     switch(SolveFromWhich.value())
@@ -1018,15 +1009,6 @@ void Input::set_solve_durations()
             SolveBeginYear = years_to_retirement();
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << SolveFromWhich.value()
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     switch(SolveToWhich.value())
@@ -1051,15 +1033,6 @@ void Input::set_solve_durations()
             SolveEndYear = years_to_maturity();
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << SolveToWhich.value()
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     // Remove the following three lines (and <algorithm>) after fixing this:

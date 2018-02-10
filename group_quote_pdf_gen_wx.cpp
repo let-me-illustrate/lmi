@@ -256,7 +256,7 @@ column_definition const column_definitions[] =
     ,{"Total\n%s\nPremium"             ,   "$9,999,999,999.00"} // e_col_total_premium
     };
 
-static_assert(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max, "");
+static_assert(sizeof column_definitions / sizeof(column_definitions[0]) == e_col_max);
 
 class group_quote_pdf_generator_wx
     :public group_quote_pdf_generator
@@ -631,10 +631,6 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
                 alarum() << "Unreachable." << LMI_FLUSH;
                 }
                 break;
-            default:
-                {
-                alarum() << "Case " << col << " not found." << LMI_FLUSH;
-                }
             }
         }
 
@@ -727,10 +723,6 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 alarum() << "Unreachable." << LMI_FLUSH;
                 }
                 break;
-            default:
-                {
-                alarum() << "Case " << col << " not found." << LMI_FLUSH;
-                }
             }
 
         table_gen.add_column(header, cd.widest_text_);

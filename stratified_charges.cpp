@@ -243,7 +243,7 @@ namespace
         ,"stratified_last"
         };
 
-    static_assert(sizeof s_stratified_nodes / sizeof(char const*) == 1 + e_stratified_last, "");
+    static_assert(sizeof s_stratified_nodes / sizeof(char const*) == 1 + e_stratified_last);
 } // Unnamed namespace.
 
 stratified_entity& stratified_charges::raw_entity(e_stratified e)
@@ -288,10 +288,6 @@ double stratified_charges::stratified_sepacct_load
                 ;
             }
             break;
-        default:
-            {
-            alarum() << "Case '" << basis << "' not found." << LMI_FLUSH;
-            }
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }
@@ -360,10 +356,6 @@ double stratified_charges::tiered_m_and_e(mcenum_gen_basis basis, double assets)
                 ;
             }
             break;
-        default:
-            {
-            alarum() << "Case '" << basis << "' not found." << LMI_FLUSH;
-            }
         }
     throw "Unreachable--silences a compiler diagnostic.";
 }

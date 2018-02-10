@@ -2947,8 +2947,11 @@ void ledger_pdf_generator_wx::write
         case mce_individual_private_placement:
             pdf_ill = std::make_unique<pdf_illustration_reg_d_individual>(ledger, output);
             break;
-        default:
-            alarum() << "Unknown ledger type '" << z << "'." << LMI_FLUSH;
+        case mce_prospectus_obsolete:                 // fall through
+        case mce_offshore_private_placement_obsolete: // fall through
+        case mce_ill_reg_private_placement_obsolete:  // fall through
+        case mce_variable_annuity:
+            alarum() << "Unsupported ledger type '" << z << "'." << LMI_FLUSH;
         }
 
     pdf_ill->render_all();

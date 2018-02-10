@@ -108,7 +108,7 @@ To numeric_io_cast(From from, To = To())
 
 /// A compile-time failure iff this template is ever instantiated is
 /// desired, but the straightforward
-///   static_assert(0, "");
+///   static_assert(0);
 /// can fail even if it's never instantiated; instead, it is asserted
 /// that both template parameters are void, which 14.1/7 forbids.
 /// To make assurance doubly sure, a run-time exception is thrown in
@@ -117,8 +117,8 @@ To numeric_io_cast(From from, To = To())
 template<typename To, typename From>
 struct numeric_converter
 {
-    static_assert(std::is_void<To  >::value, "");
-    static_assert(std::is_void<From>::value, "");
+    static_assert(std::is_void<To  >::value);
+    static_assert(std::is_void<From>::value);
 
     To operator()(From const&) const
         {
@@ -132,7 +132,7 @@ struct numeric_converter
 template<typename To>
 struct numeric_converter<To, std::string>
 {
-    static_assert(std::is_arithmetic<To>::value, "");
+    static_assert(std::is_arithmetic<To>::value);
 
     typedef std::string From;
     To operator()(From const& from) const
@@ -201,7 +201,7 @@ struct numeric_converter<To, char const*>
 template<typename From>
 struct numeric_converter<std::string, From>
 {
-    static_assert(std::is_arithmetic<From>::value, "");
+    static_assert(std::is_arithmetic<From>::value);
 
     typedef std::string To;
     To operator()(From const& from) const

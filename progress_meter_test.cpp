@@ -36,7 +36,6 @@ class progress_meter_test
         test_quiet_display_mode();
         test_distinct_metered_operations();
         test_empty_title_and_zero_max_count();
-        test_invalid_display_mode();
         test_postcondition_failure();
         }
 
@@ -45,7 +44,6 @@ class progress_meter_test
     static void test_quiet_display_mode();
     static void test_distinct_metered_operations();
     static void test_empty_title_and_zero_max_count();
-    static void test_invalid_display_mode();
     static void test_postcondition_failure();
 };
 
@@ -161,23 +159,6 @@ void progress_meter_test::test_empty_title_and_zero_max_count()
     BOOST_TEST_EQUAL
         ("\n"
         ,progress_meter_unit_test_stream().str()
-        );
-}
-
-void progress_meter_test::test_invalid_display_mode()
-{
-    progress_meter_unit_test_stream().str("");
-    int const max_count = 0;
-    BOOST_TEST_THROW
-        (std::shared_ptr<progress_meter> meter
-            (create_progress_meter
-                (max_count
-                ,""
-                ,progress_meter::enum_display_mode(99)
-                )
-            )
-        ,std::runtime_error
-        ,"Case 99 not found."
         );
 }
 

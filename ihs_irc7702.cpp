@@ -827,20 +827,10 @@ Irc7702::EIOBasis Irc7702::Get4PctBasis
 {
     switch(a_DBOpt)
         {
-        case mce_option1_for_7702:
-            {
-            return Opt1Int4Pct;
-            }
-        case mce_option2_for_7702:
-            {
-            return Opt2Int4Pct;
-            }
-        default:
-            {
-            alarum() << "Case '" << a_DBOpt << "' not found." << LMI_FLUSH;
-            throw "Unreachable--silences a compiler diagnostic.";
-            }
+        case mce_option1_for_7702: return Opt1Int4Pct;
+        case mce_option2_for_7702: return Opt2Int4Pct;
         }
+    throw "Unreachable--silences a compiler diagnostic.";
 }
 
 //============================================================================

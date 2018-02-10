@@ -155,10 +155,6 @@ void pdf_writer_wx::output_image
         case oe_only_measure:
             // Do nothing.
             break;
-        default:
-            {
-            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
-            }
         }
 
     *pos_y += y;
@@ -205,10 +201,6 @@ int pdf_writer_wx::output_html
         case oe_only_measure:
             // Do nothing.
             break;
-        default:
-            {
-            alarum() << "Case " << output_mode << " not found." << LMI_FLUSH;
-            }
         }
 
     return cell->GetHeight();

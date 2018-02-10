@@ -82,7 +82,7 @@ using std::uint64_t;
 // The SOA binary format uses IEEE 754 for the floating point values
 // representation and the code in this file won't work correctly if it is
 // different from their in memory representation.
-static_assert(std::numeric_limits<double>::is_iec559, "");
+static_assert(std::numeric_limits<double>::is_iec559);
 
 // Helper functions used to swap bytes on big endian platforms.
 //
@@ -269,6 +269,10 @@ struct soa_field
     boost::uint16_t record_type;    // Field record type in the binary format.
     char const* name;               // Field name in the text format.
 };
+
+// The following two enums are deliberately distinct despite their
+// close similarity, for reasons explained at length here:
+//   https://lists.nongnu.org/archive/html/lmi/2018-02/msg00030.html
 
 // This enum defines the indices of all the known fields in soa_fields array,
 // its elements are consecutive.

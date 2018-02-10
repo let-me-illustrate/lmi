@@ -100,9 +100,8 @@ To stream_cast(From from, To = To())
     static_assert
         (   !std::is_arithmetic<From>::value
         ||  !std::is_arithmetic<To  >::value
-        ,""
         );
-    static_assert(!std::is_pointer<To>::value, "");
+    static_assert(!std::is_pointer<To>::value);
 
     std::stringstream interpreter;
     std::ostringstream err;

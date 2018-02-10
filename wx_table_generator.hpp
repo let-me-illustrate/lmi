@@ -161,15 +161,13 @@ class wx_table_generator
     int row_height_;
     int column_margin_;
 
-    struct column_info
+    class column_info
     {
+      public:
         column_info(std::string const& header, int width)
             :header_(header)
             ,width_(width)
-            // Fixed width columns are centered by default, variable width ones
-            // are not as long strings look better with the default left
-            // alignment.
-            ,is_centered_(width != 0)
+            ,is_variable_width_(width == 0)
             {
             }
 
@@ -177,9 +175,36 @@ class wx_table_generator
         // doesn't appear in the output at all.
         bool is_hidden() const { return header_.empty(); }
 
-        std::string header_;
+        // Return true if this column should be centered, rather than
+        // left-aligned. Notice that this is ignored for globally right-aligned
+        // tables.
+        bool is_centered() const
+        {
+            // Fixed width columns are centered by default, variable width ones
+            // are not as long strings look better with the default left
+            // alignment.
+            return !is_variable_width_;
+        }
+
+        // Return true if the contents of this column needs to be clipped when
+        // outputting it.
+        bool needs_clipping() const
+        {
+            // Variable width columns can have practically unlimited length and
+            // hence overflow into the next column or even beyond and must be
+            // clipped to prevent this from happening. Fixed width columns are
+            // not supposed to overflow anyhow, so clipping them is unnecessary.
+            return is_variable_width_;
+        }
+
+        std::string const header_;
+
+        // Note that this field is modified directly by wx_table_generator code
+        // and hence is non-const.
         int width_;
-        bool is_centered_;
+
+      private:
+        bool const is_variable_width_;
     };
 
     std::vector<column_info> columns_;

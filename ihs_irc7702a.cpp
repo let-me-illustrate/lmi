@@ -150,15 +150,6 @@ Irc7702A::Irc7702A
             DBDefn = e_death_benefit_7702A;
             }
             break;
-        default:
-            {
-            alarum()
-                << "Case '"
-                << DefnMaterialChange
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
         }
 
     // Make sure the 7pp and NSP factors are all in (0, 1].

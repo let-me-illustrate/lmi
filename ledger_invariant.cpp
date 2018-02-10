@@ -849,33 +849,11 @@ void LedgerInvariant::Init(BasicValues const* b)
             );
     if(oe_tobacco_nontobacco == smoke_or_tobacco)
         {
-        switch(mce_smoking(b->yare_input_.Smoking).value())
+        switch(b->yare_input_.Smoking)
             {
-            case mce_smoker:
-                {
-                Smoker = "Tobacco";
-                }
-                break;
-            case mce_nonsmoker:
-                {
-                Smoker = "Nontobacco";
-                }
-                break;
-            case mce_unismoke:
-                {
-                Smoker = "Unitobacco";
-                }
-                break;
-            default:
-                {
-                alarum()
-                    << "Case '"
-                    << smoke_or_tobacco
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
-                }
-                break;
+            case mce_smoker:    Smoker =    "Tobacco"; break;
+            case mce_nonsmoker: Smoker = "Nontobacco"; break;
+            case mce_unismoke:  Smoker = "Unitobacco"; break;
             }
         }
     else if(oe_smoker_nonsmoker == smoke_or_tobacco)

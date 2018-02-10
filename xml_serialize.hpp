@@ -56,7 +56,7 @@ namespace xml_serialize
 template<typename T>
 struct xml_io
 {
-    static_assert(!std::is_enum<T>::value, ""); // Prefer mc_enum.
+    static_assert(!std::is_enum<T>::value); // Prefer mc_enum.
 
     static void to_xml(xml::element& e, T const& t)
     {
@@ -89,7 +89,7 @@ template<typename T>
 struct xml_sequence_io
 {
     typedef typename T::value_type item_t;
-    static_assert(std::is_same<T,std::vector<item_t>>::value, "");
+    static_assert(std::is_same<T,std::vector<item_t>>::value);
 
     static void to_xml(xml::element& e, T const& t)
     {
