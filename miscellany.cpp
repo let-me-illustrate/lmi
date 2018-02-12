@@ -199,7 +199,7 @@ int get_needed_pages_count
     // The caller must check for this precondition because this function is too
     // low-level to be able to handle it correctly, e.g. it can't even use the
     // appropriate error message.
-    LMI_ASSERT(rows_per_page >= rows_per_group);
+    LMI_ASSERT(rows_per_group <= rows_per_page);
 
     // Each group actually takes rows_per_group+1 rows because of the
     // separator row between groups, hence the second +1, but there is no
@@ -216,7 +216,7 @@ int get_needed_pages_count
     // The last page may not be needed if all the rows on it can fit into the
     // remaining space, too small for a full group, but perhaps sufficient for
     // these rows, in the last by one page.
-    if (num_pages > 1)
+    if(1 < num_pages)
         {
         auto const rows_on_last_page = total_rows - (num_pages - 1)*used_per_page;
         auto const free_rows = rows_per_page - groups_per_page*(rows_per_group + 1);

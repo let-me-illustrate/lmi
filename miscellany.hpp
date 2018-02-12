@@ -216,7 +216,7 @@ inline void stifle_warning_for_unused_value(T const& t)
 /// Compute the number of pages needed to display the given number of non-blank
 /// rows in groups of the specified size separated by blank rows.
 ///
-/// Preconditions: total_rows > 0 && rows_per_page >= rows_per_group > 0
+/// Preconditions: 0 < total_rows && 0 < rows_per_group <= rows_per_page
 
 int LMI_SO get_needed_pages_count
     (int total_rows
