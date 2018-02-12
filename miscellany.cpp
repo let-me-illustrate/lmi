@@ -218,8 +218,8 @@ int get_needed_pages_count
     // these rows, in the last by one page.
     if(1 < num_pages)
         {
-        auto const rows_on_last_page = total_rows - (num_pages - 1)*used_per_page;
-        auto const free_rows = rows_per_page - groups_per_page*(rows_per_group + 1);
+        auto const rows_on_last_page = total_rows - (num_pages - 1) * used_per_page;
+        auto const free_rows = rows_per_page - groups_per_page * (rows_per_group + 1);
         if(rows_on_last_page <= free_rows)
             {
             num_pages--;
