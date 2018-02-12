@@ -24,6 +24,7 @@
 #include "pdf_writer_wx.hpp"
 
 #include "alert.hpp"
+#include "contains.hpp"
 #include "global_settings.hpp"
 #include "html.hpp"
 
@@ -74,6 +75,10 @@ pdf_writer_wx::pdf_writer_wx
     pdf_dc_.SetMapMode(wxMM_POINTS);
 
     pdf_dc_.StartDoc(wxString()); // Argument is not used.
+    pdf_dc_.GetPdfDocument()->SetCompression
+        (
+        !contains(global_settings::instance().pyx(), "uncompressed_pdf")
+        );
     pdf_dc_.StartPage();
 
     // Use a standard PDF Helvetica font (without embedding any custom fonts in
