@@ -61,8 +61,6 @@ bool each_equal(RangeExpression const& range, T const& t)
     return true;
 }
 
-/// Test whether two files are identical. Arguments are filenames.
-
 bool files_are_identical(std::string const&, std::string const&);
 
 /// Ascertain vector minimum and maximum efficiently.
@@ -95,31 +93,17 @@ template<typename T> bool operator<=(T t, minmax<T> m) {return t <= m.minimum();
 template<typename T> bool operator< (minmax<T> m, T t) {return m.maximum() <  t;}
 template<typename T> bool operator<=(minmax<T> m, T t) {return m.maximum() <= t;}
 
-/// Return the number of newline characters in a string.
-
 std::size_t LMI_SO count_newlines(std::string const&);
-
-/// Split an internally-newline-delimited string into lines.
 
 std::vector<std::string> LMI_SO split_into_lines(std::string const&);
 
-/// Escape text for html, e.g., "a < b" --> "a &lt; b".
-
 std::string htmlize(std::string const&);
-
-/// Ascertain whether string begins with prefix.
 
 bool LMI_SO begins_with(std::string const& s, std::string const& prefix);
 
-/// Ascertain whether string ends with suffix.
-
 bool LMI_SO ends_with(std::string const& s, std::string const& suffix);
 
-/// Remove superfluous characters from beginning of string.
-
 void LMI_SO ltrim(std::string& s, char const* superfluous);
-
-/// Remove superfluous characters from end of string.
 
 void LMI_SO rtrim(std::string& s, char const* superfluous);
 
@@ -156,11 +140,7 @@ inline std::ios::fmtflags set_default_format_flags(std::ios_base& stream)
     return stream.setf(std::ios::skipws | std::ios::dec);
 }
 
-/// Omitting colons yields a valid posix path.
-
 std::string iso_8601_datestamp_terse();
-
-/// Colons separate HH:MM:SS, so result is not a valid posix path.
 
 std::string iso_8601_datestamp_verbose();
 
@@ -188,11 +168,6 @@ inline unsigned char lmi_toupper(unsigned char c)
 {
     return static_cast<unsigned char>(std::toupper(c));
 }
-
-/// Compute the number of pages needed to display the given number of non-blank
-/// rows in groups of the specified size separated by blank rows.
-///
-/// Preconditions: 0 < total_rows && 0 < rows_per_group <= rows_per_page
 
 int LMI_SO page_count
     (int total_rows

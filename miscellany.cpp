@@ -58,6 +58,8 @@ bool streams_are_identical(std::istream& is0, std::istream& is1)
 }
 } // Unnamed namespace.
 
+/// Test whether two files are identical. Arguments are filenames.
+
 bool files_are_identical(std::string const& file0, std::string const& file1)
 {
     std::ifstream ifs0(file0.c_str(), ios_in_binary());
@@ -67,10 +69,14 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
     return streams_are_identical(ifs0, ifs1);
 }
 
+/// Return the number of newline characters in a string.
+
 std::size_t count_newlines(std::string const& s)
 {
     return std::count(s.begin(), s.end(), '\n');
 }
+
+/// Split an internally-newline-delimited string into lines.
 
 std::vector<std::string> split_into_lines(std::string const& s)
 {
@@ -123,6 +129,8 @@ std::string htmlize(std::string const& raw_text)
     return html;
 }
 
+/// Ascertain whether string begins with prefix.
+
 bool begins_with(std::string const& s, std::string const& prefix)
 {
     return
@@ -130,12 +138,16 @@ bool begins_with(std::string const& s, std::string const& prefix)
         && std::equal(prefix.begin(), prefix.end(), s.begin());
 }
 
+/// Ascertain whether string ends with suffix.
+
 bool ends_with(std::string const& s, std::string const& suffix)
 {
     return
            (suffix.size() <= s.size())
         && std::equal(suffix.rbegin(), suffix.rend(), s.rbegin());
 }
+
+/// Remove superfluous characters from beginning of string.
 
 void ltrim(std::string& s, char const* superfluous)
 {
@@ -150,6 +162,8 @@ void ltrim(std::string& s, char const* superfluous)
         }
 }
 
+/// Remove superfluous characters from end of string.
+
 void rtrim(std::string& s, char const* superfluous)
 {
     std::string::size_type p = s.find_last_not_of(superfluous);
@@ -163,6 +177,8 @@ void rtrim(std::string& s, char const* superfluous)
         }
 }
 
+/// Omitting colons yields a valid posix path.
+///
 /// http://groups.google.com/group/borland.public.cpp.borlandcpp/msg/638d1f25e66472d9
 ///   [2001-07-18T22:25:15Z from Greg Chicares]
 
@@ -178,6 +194,8 @@ std::string iso_8601_datestamp_verbose()
     return s;
 }
 
+/// Colons separate HH:MM:SS, so result is not a valid posix path.
+
 std::string iso_8601_datestamp_terse()
 {
     std::size_t const len = sizeof "CCYYMMDDTHHMMSSZ";
@@ -189,6 +207,11 @@ std::string iso_8601_datestamp_terse()
     LMI_ASSERT(0 != rc);
     return s;
 }
+
+/// Compute the number of pages needed to display the given number of non-blank
+/// rows in groups of the specified size separated by blank rows.
+///
+/// Preconditions: 0 < total_rows && 0 < rows_per_group <= rows_per_page
 
 int page_count
     (int total_rows
