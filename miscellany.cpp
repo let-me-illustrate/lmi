@@ -219,10 +219,9 @@ int page_count
     ,int rows_per_page
     )
 {
-    // The caller must check for this precondition because this function is too
-    // low-level to be able to handle it correctly, e.g. it can't even use the
-    // appropriate error message.
-    LMI_ASSERT(rows_per_group <= rows_per_page);
+    LMI_ASSERT(0 < total_rows);
+    LMI_ASSERT(0 < rows_per_group                 );
+    LMI_ASSERT(    rows_per_group <= rows_per_page);
 
     // Each group actually takes rows_per_group+1 rows because of the
     // separator row between groups, hence the second +1, but there is no
