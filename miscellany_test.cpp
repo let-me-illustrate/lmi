@@ -236,7 +236,7 @@ void test_trimming()
     BOOST_TEST_EQUAL(s, "a ; a");
 }
 
-void test_get_needed_pages_count()
+void test_page_count()
 {
     // Fix the number of rows per page and per group, we can reasonably suppose
     // that nothing critically depends on their precise values and all the
@@ -244,7 +244,7 @@ void test_get_needed_pages_count()
     // numbers of total rows.
     auto const do_test = [](int total_rows) -> int
         {
-        return get_needed_pages_count(total_rows, 28, 5);
+        return page_count(total_rows, 28, 5);
         };
 
     BOOST_TEST_EQUAL(do_test( 1), 1); // Edge case (0 rows is not allowed).
@@ -262,7 +262,7 @@ int test_main(int, char*[])
     test_minmax();
     test_prefix_and_suffix();
     test_trimming();
-    test_get_needed_pages_count();
+    test_page_count();
 
     return 0;
 }

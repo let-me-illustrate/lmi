@@ -35,7 +35,7 @@
 #include "ledger_evaluator.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "miscellany.hpp"               // lmi_tolower(), get_needed_pages_count()
+#include "miscellany.hpp"               // lmi_tolower(), page_count()
 #include "pdf_writer_wx.hpp"
 #include "wx_table_generator.hpp"
 
@@ -1766,7 +1766,7 @@ class page_with_tabular_report
             }
 
         // We return the number of extra pages only, hence -1.
-        return get_needed_pages_count
+        return page_count
             (ledger.GetMaxLength()
             ,rows_per_page
             ,rows_per_group

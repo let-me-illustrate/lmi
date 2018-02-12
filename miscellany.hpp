@@ -218,7 +218,7 @@ inline void stifle_warning_for_unused_value(T const& t)
 ///
 /// Preconditions: 0 < total_rows && 0 < rows_per_group <= rows_per_page
 
-int LMI_SO get_needed_pages_count
+int LMI_SO page_count
     (int total_rows
     ,int rows_per_page
     ,int rows_per_group

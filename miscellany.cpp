@@ -190,7 +190,7 @@ std::string iso_8601_datestamp_terse()
     return s;
 }
 
-int get_needed_pages_count
+int page_count
     (int total_rows
     ,int rows_per_page
     ,int rows_per_group
