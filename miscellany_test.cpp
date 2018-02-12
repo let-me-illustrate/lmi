@@ -159,7 +159,7 @@ void test_page_count()
     // numbers of total rows.
     auto const do_test = [](int total_rows) -> int
         {
-        return page_count(total_rows, 28, 5);
+        return page_count(total_rows, 5, 28);
         };
 
     BOOST_TEST_EQUAL(do_test( 1), 1); // Edge case (0 rows is not allowed).

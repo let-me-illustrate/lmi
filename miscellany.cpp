@@ -192,8 +192,8 @@ std::string iso_8601_datestamp_terse()
 
 int page_count
     (int total_rows
-    ,int rows_per_page
     ,int rows_per_group
+    ,int rows_per_page
     )
 {
     // The caller must check for this precondition because this function is too

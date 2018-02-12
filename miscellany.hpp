@@ -196,8 +196,8 @@ inline unsigned char lmi_toupper(unsigned char c)
 
 int LMI_SO page_count
     (int total_rows
-    ,int rows_per_page
     ,int rows_per_group
+    ,int rows_per_page
     );
 
 /// DWISOTT
