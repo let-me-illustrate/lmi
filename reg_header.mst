@@ -89,12 +89,12 @@
             Guaranteed Crediting Rate: {{InitAnnGenAcctInt_Guaranteed}}<br>
 
             Current Illustrated Crediting Rate:
-            {{#InforceYear}}
-                {{UltimateInterestRate}}
-            {{/InforceYear}}
-            {{^InforceYear}}
+            {{#InforceYearEq0}}
                 {{InitAnnGenAcctInt_Current}}
-            {{/InforceYear}}
+            {{/InforceYearEq0}}
+            {{^InforceYearEq0}}
+                {{UltimateInterestRate}}
+            {{/InforceYearEq0}}
             <br>
 
             {{#SinglePremium}}

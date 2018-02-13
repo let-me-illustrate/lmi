@@ -2077,6 +2077,11 @@ class pdf_illustration_regular : public pdf_illustration
             );
 
         add_variable
+            ("InforceYearEq0"
+            ,invar.InforceYear == 0
+            );
+
+        add_variable
             ("InforceYearLE4"
             ,invar.InforceYear < 4
             );
