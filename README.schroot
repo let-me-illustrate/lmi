@@ -300,7 +300,7 @@ git config --global user.name "Gregory W. Chicares"
 git config --global user.email gchicares@sbcglobal.net
 git config --global color.ui auto
 git config --global push.default simple
-git config --global log.date iso8601-strict
+git config --global log.date iso8601-strict-local
 git config --global log.follow true
 
 # Initialize wine. See:
