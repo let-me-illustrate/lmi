@@ -118,7 +118,33 @@ AC_PROG_CC
 CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
-AX_CXX_COMPILE_STDCXX(11, noext)
+CXX="$CXX -std=c++17"
+
+dnl Check if the compiler supports C++17: this is a rather ad hoc test as it
+dnl doesn't check for full C++17 support, but it's enough for the subset of it
+dnl that is currently used in lmi and this check passes with with g++ 6, which
+dnl can be used for compiling lmi even though it doesn't implement C++17 fully.
+m4_define([lmi_cxx_std17_test], [[
+#ifndef __cplusplus
+#error Not C++ compiler.
+#elif __cplusplus <= 201402L
+#error Only C++14.
+#else
+static_assert(true);
+#endif
+]])
+
+AC_CACHE_CHECK([whether compiler supports C++17],
+    lmi_cv_cxx_std17,
+    [
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_std17_test])],
+            lmi_cv_cxx_std17=yes,
+            lmi_cv_cxx_std17=no
+            )
+        AC_LANG_POP([C++])
+    ]
+)
 
 AC_PROG_LD
 
