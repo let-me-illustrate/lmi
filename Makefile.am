@@ -338,6 +338,8 @@ liblmi_common_sources = \
     ledger_pdf_generator.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
+    ledger_xml_io.cpp \
+    ledger_xsl.cpp \
     ledgervalues.cpp \
     license.cpp \
     loads.cpp \
