@@ -1687,25 +1687,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 
         while(std::getline(iss_line, token, '\t'))
             {
-#if 0 // expunge soon?
-            static std::string const space(" ");
-            if(std::string::npos == token.find_first_not_of(space))
-                {
-                warning()
-                    << "Line #" << current_line << ": "
-                    << " (" << line << ") "
-                    << "has a value that contains no non-blank characters. "
-                    << "Last valid value, if any: " << values.back()
-                    << LMI_FLUSH
-                    ;
-// TODO ?? It would be better to use alarum() instead of
-// warning() followed by alarum() with a short string, but
-// apparently that can segfault with very long strings. Is there
-// a limit on exception size that should be tested here? See:
-//   http://savannah.nongnu.org/bugs/?20240
-                alarum() << "Invalid input." << LMI_FLUSH;
-                }
-#endif // 0
             values.push_back(token);
             }
 
