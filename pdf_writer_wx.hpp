@@ -59,7 +59,7 @@ class pdf_writer_wx
         (int                          x
         ,int                          y
         ,int                          width
-        ,html::text const&            html
+        ,html::text&&                 html
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 

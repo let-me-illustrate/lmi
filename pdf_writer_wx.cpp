@@ -173,7 +173,7 @@ int pdf_writer_wx::output_html
     (int                          x
     ,int                          y
     ,int                          width
-    ,html::text const&            html
+    ,html::text&&                 html
     ,oenum_render_or_only_measure output_mode
     )
 {
@@ -181,7 +181,7 @@ int pdf_writer_wx::output_html
     // font which is changed by rendering the HTML contents.
     wxDCFontChanger preserve_font(pdf_dc_, wxFont());
 
-    auto const html_str = wxString::FromUTF8(html.as_html());
+    auto const html_str = wxString::FromUTF8(std::move(html).as_html());
     std::unique_ptr<wxHtmlContainerCell> const cell
         (static_cast<wxHtmlContainerCell*>(html_parser_.Parse(html_str))
         );
