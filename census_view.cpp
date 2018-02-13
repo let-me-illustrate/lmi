@@ -1669,6 +1669,8 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         ; // Do nothing: neither age nor DOB pasted.
         }
 
+    cells.reserve(std::count(census_data.begin(), census_data.end(), '\n'));
+
     // Read each subsequent line into an input object representing one cell.
     int current_line = 0;
     while(std::getline(iss_census, line, '\n'))
@@ -1764,6 +1766,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         }
 
     auto selection = cell_parms().size();
+
     if(!document().IsModified() && !document().GetDocumentSaved())
         {
         case_parms ().clear();
@@ -1771,7 +1774,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         class_parms().clear();
         class_parms().push_back(exemplar);
         cell_parms ().swap(cells);
-
         selection = 0;
         }
     else
