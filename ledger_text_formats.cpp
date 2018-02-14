@@ -198,10 +198,10 @@ calculation_summary_formatter::calculation_summary_formatter
             }
         else
             {
-            unclean.IrrCsvCurrInput.resize(length);
-            unclean.IrrCsvGuarInput.resize(length);
-            unclean.IrrDbCurrInput .resize(length);
-            unclean.IrrDbGuarInput .resize(length);
+            unclean.IrrCsvCurrInput.resize(length, -1.0);
+            unclean.IrrCsvGuarInput.resize(length, -1.0);
+            unclean.IrrDbCurrInput .resize(length, -1.0);
+            unclean.IrrDbGuarInput .resize(length, -1.0);
             }
         }
 }
@@ -473,8 +473,8 @@ void PrintCellTabDelimited
         }
     else
         {
-        unclean.IrrCsvCurrInput.resize(max_length);
-        unclean.IrrDbCurrInput .resize(max_length);
+        unclean.IrrCsvCurrInput.resize(max_length, -1.0);
+        unclean.IrrDbCurrInput .resize(max_length, -1.0);
         }
 
     std::ofstream os(file_name.c_str(), ios_out_app_binary());
