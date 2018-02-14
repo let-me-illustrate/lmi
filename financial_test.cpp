@@ -70,21 +70,7 @@ int test_main(int, char*[])
     std::vector<double> results(p.size());
     irr(p.begin(), p.end(), b.begin(), results.begin(), 5);
 
-/* TODO ?? Reconsider:
-
-Formerly, we used this tolerance:
     double const tolerance = 0.000005;
-but the algorithm is good only to within double that tolerance.
-Consider making it find irr to within that undoubled tolerance.
-
-std::cout << std::setprecision(12);
-std::cout << "results[0]: " << results[0] << '\n';
-std::cout << "99.00000 - results[ 0]: " << (99.00000 - results[ 0]) << '\n';
-std::cout << "std::fabs(99.00000 - results[ 0]): " << std::fabs(99.00000 - results[ 0]) << '\n';
-std::cout << "tolerance = .000005: " << .000005 << '\n';
-*/
-
-    double const tolerance = 0.000010;
 
     BOOST_TEST(std::fabs(99.00000 - results[ 0]) <= tolerance);
     BOOST_TEST(std::fabs(12.17744 - results[ 1]) <= tolerance);
