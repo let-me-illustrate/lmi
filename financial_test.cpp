@@ -94,7 +94,17 @@ int test_main(int, char*[])
     BOOST_TEST(materially_equal( 0.666120736082859, results[ 9], 1e-9));
     BOOST_TEST(materially_equal( 0.017575671480682, results[99]));
 
-    // An NPV test will soon be added here.
+    // For any stream, NPV at the IRR rate should ideally be zero.
+    std::vector<double> q{p};
+    q.push_back(-b.back());
+    double r = npv(q.begin(), q.end(), results.back());
+    // This NPV is -9.777068044058979E-12 in a gnumeric spreadsheet,
+    // versus -9.86988e-014 with MinGW-w64 gcc-6.3.0; the 1e-13
+    // tolerance is simply the materially_equal() default.
+    BOOST_TEST(std::fabs(r) <= 1e-13);
+
+    // Trivially, NPV at 0% interest is summation.
+    BOOST_TEST(materially_equal(-4950.0, npv(q.begin(), q.end(), 0.0)));
 
     // Test const vectors.
     std::vector<double> const cp(p);
