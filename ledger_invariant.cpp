@@ -1277,7 +1277,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         (Outlay
         ,Guar_.CSVNet
         ,IrrCsvGuarInput
-        ,static_cast<unsigned int>(Guar_.LapseYear)
+        ,Guar_.LapseYear
         ,max_length
         ,irr_precision_
         );
@@ -1286,7 +1286,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         (Outlay
         ,Guar_.EOYDeathBft
         ,IrrDbGuarInput
-        ,static_cast<unsigned int>(Guar_.LapseYear)
+        ,Guar_.LapseYear
         ,max_length
         ,irr_precision_
         );
@@ -1295,7 +1295,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         (Outlay
         ,Curr_.CSVNet
         ,IrrCsvCurrInput
-        ,static_cast<unsigned int>(Curr_.LapseYear)
+        ,Curr_.LapseYear
         ,max_length
         ,irr_precision_
         );
@@ -1304,7 +1304,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         (Outlay
         ,Curr_.EOYDeathBft
         ,IrrDbCurrInput
-        ,static_cast<unsigned int>(Curr_.LapseYear)
+        ,Curr_.LapseYear
         ,max_length
         ,irr_precision_
         );
@@ -1337,7 +1337,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         (Outlay
         ,Guar0.CSVNet
         ,IrrCsvGuar0
-        ,static_cast<unsigned int>(Guar0.LapseYear)
+        ,Guar0.LapseYear
         ,max_length
         ,irr_precision_
         );
@@ -1346,7 +1346,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         (Outlay
         ,Guar0.EOYDeathBft
         ,IrrDbGuar0
-        ,static_cast<unsigned int>(Guar0.LapseYear)
+        ,Guar0.LapseYear
         ,max_length
         ,irr_precision_
         );
@@ -1355,7 +1355,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         (Outlay
         ,Curr0.CSVNet
         ,IrrCsvCurr0
-        ,static_cast<unsigned int>(Curr0.LapseYear)
+        ,Curr0.LapseYear
         ,max_length
         ,irr_precision_
         );
@@ -1364,7 +1364,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         (Outlay
         ,Curr0.EOYDeathBft
         ,IrrDbCurr0
-        ,static_cast<unsigned int>(Curr0.LapseYear)
+        ,Curr0.LapseYear
         ,max_length
         ,irr_precision_
         );
