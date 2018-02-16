@@ -51,6 +51,7 @@
 //============================================================================
 LedgerInvariant::LedgerInvariant(int len)
     :LedgerBase(len)
+    ,irr_initialized_(false)
     ,FullyInitialized(false)
 {
     Alloc(len);
@@ -59,6 +60,7 @@ LedgerInvariant::LedgerInvariant(int len)
 //============================================================================
 LedgerInvariant::LedgerInvariant(LedgerInvariant const& obj)
     :LedgerBase(obj)
+    ,irr_initialized_(false)
     ,FullyInitialized(false)
 {
     Alloc(obj.GetLength());
@@ -411,12 +413,14 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
 
     // Private internals.
     irr_precision_         = obj.irr_precision_        ;
+    irr_initialized_       = false; // IRR vectors are not copied.
     FullyInitialized       = obj.FullyInitialized      ;
 }
 
 //============================================================================
 void LedgerInvariant::Destroy()
 {
+    irr_initialized_ = false;
     FullyInitialized = false;
 }
 
@@ -446,6 +450,7 @@ void LedgerInvariant::Init()
     SupplementalReport  = false;
 
     irr_precision_      = 0;
+    irr_initialized_    = false;
     FullyInitialized    = false;
 }
 
@@ -936,6 +941,8 @@ if(1 != b->yare_input_.InforceDataSource)
     SupplementalReportColumn10 = mc_str(b->yare_input_.SupplementalReportColumn10);
     SupplementalReportColumn11 = mc_str(b->yare_input_.SupplementalReportColumn11);
 
+    // irr_initialized_ is deliberately not set here: it's not
+    // encompassed by 'FullyInitialized'.
     FullyInitialized = true;
 }
 
@@ -1260,6 +1267,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
 void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
+    irr_initialized_ = false;
+
     int max_length = LedgerValues.GetMaxLength();
 
     LedgerVariant const& Curr_ = LedgerValues.GetCurrFull();
@@ -1316,6 +1325,8 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
             )
         )
         {
+        // PDF !! Initialize the '0'-suffixed IRRs here.
+        irr_initialized_ = true;
         return;
         }
 
@@ -1357,6 +1368,8 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         ,max_length
         ,irr_precision_
         );
+
+    irr_initialized_ = true;
 }
 
 //============================================================================

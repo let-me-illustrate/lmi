@@ -53,8 +53,9 @@ class LMI_SO LedgerInvariant
 
     LedgerInvariant& PlusEq(LedgerInvariant const& a_Addend);
 
+    bool                         is_irr_initialized()    const;
     bool                         IsFullyInitialized()    const;
-    int                  GetLength()             const override;
+    int                          GetLength()             const override;
     std::vector<double> const&   GetInforceLives()       const;
     double                       GetInitAnnLoanDueRate() const;
     std::string const&           GetStatePostalAbbrev()  const;
@@ -414,8 +415,14 @@ class LMI_SO LedgerInvariant
     // Special cases.
     int             Length;
     int             irr_precision_;
-    bool            FullyInitialized;   // I.e. by Init(BasicValues const* b).
+    bool            irr_initialized_;  // CalculateIrrs() succeeded
+    bool            FullyInitialized;  // Init(BasicValues const*) succeeded
 };
+
+inline bool LedgerInvariant::is_irr_initialized() const
+{
+    return irr_initialized_;
+}
 
 inline bool LedgerInvariant::IsFullyInitialized() const
 {
