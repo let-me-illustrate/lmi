@@ -579,6 +579,18 @@ ledger_evaluator Ledger::make_evaluator() const
         {
         ledger_invariant_->CalculateIrrs(*this);
         }
+    else
+        {
+        ledger_invariant_->IrrCsvGuar0    .resize(max_duration, -1.0);
+        ledger_invariant_->IrrDbGuar0     .resize(max_duration, -1.0);
+        ledger_invariant_->IrrCsvCurr0    .resize(max_duration, -1.0);
+        ledger_invariant_->IrrDbCurr0     .resize(max_duration, -1.0);
+        ledger_invariant_->IrrCsvGuarInput.resize(max_duration, -1.0);
+        ledger_invariant_->IrrDbGuarInput .resize(max_duration, -1.0);
+        ledger_invariant_->IrrCsvCurrInput.resize(max_duration, -1.0);
+        ledger_invariant_->IrrDbCurrInput .resize(max_duration, -1.0);
+        }
+
     vectors["IrrCsv_GuaranteedZero" ] = &ledger_invariant_->IrrCsvGuar0    ;
     vectors["IrrDb_GuaranteedZero"  ] = &ledger_invariant_->IrrDbGuar0     ;
     vectors["IrrCsv_CurrentZero"    ] = &ledger_invariant_->IrrCsvCurr0    ;
