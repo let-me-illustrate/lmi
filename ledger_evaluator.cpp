@@ -563,6 +563,12 @@ ledger_evaluator Ledger::make_evaluator() const
     scalar_map          scalars = ledger_invariant_->AllScalars;
     string_map          strings = ledger_invariant_->Strings;
 
+// GetMaxLength() is max *composite* length.
+//    int max_length = GetMaxLength();
+    double MaxDuration = ledger_invariant_->EndtAge - ledger_invariant_->Age;
+    scalars["MaxDuration"] = &MaxDuration;
+    int max_duration = static_cast<int>(MaxDuration);
+
     // Now we add the stuff that wasn't in the invariant
     // ledger's class's maps (indexable by name). Because we're
     // working with maps of pointers, we need pointers here.
@@ -581,12 +587,6 @@ ledger_evaluator Ledger::make_evaluator() const
     vectors["IrrDb_Guaranteed"      ] = &ledger_invariant_->IrrDbGuarInput ;
     vectors["IrrCsv_Current"        ] = &ledger_invariant_->IrrCsvCurrInput;
     vectors["IrrDb_Current"         ] = &ledger_invariant_->IrrDbCurrInput ;
-
-// GetMaxLength() is max *composite* length.
-//    int max_length = GetMaxLength();
-    double MaxDuration = ledger_invariant_->EndtAge - ledger_invariant_->Age;
-    scalars["MaxDuration"] = &MaxDuration;
-    int max_duration = static_cast<int>(MaxDuration);
 
     std::vector<double> PolicyYear;
     std::vector<double> AttainedAge;
