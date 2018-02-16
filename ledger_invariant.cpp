@@ -389,8 +389,6 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
 {
     LedgerBase::Copy(obj);
 
-    irr_precision          = obj.irr_precision         ;
-
     // Vectors of type not compatible with double.
     EeMode                 = obj.EeMode                ;
     ErMode                 = obj.ErMode                ;
@@ -411,6 +409,8 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     InitErMode             = obj.InitErMode            ;
     InitDBOpt              = obj.InitDBOpt             ;
 
+    // Private internals.
+    irr_precision_         = obj.irr_precision_        ;
     FullyInitialized       = obj.FullyInitialized      ;
 }
 
@@ -425,8 +425,6 @@ void LedgerInvariant::Init()
 {
     // Zero-initialize elements of AllVectors and AllScalars.
     LedgerBase::Initialize(GetLength());
-
-    irr_precision       = 0;
 
     EeMode              .assign(Length, mce_mode(mce_annual));
     ErMode              .assign(Length, mce_mode(mce_annual));
@@ -447,6 +445,7 @@ void LedgerInvariant::Init()
 
     SupplementalReport  = false;
 
+    irr_precision_      = 0;
     FullyInitialized    = false;
 }
 
@@ -456,7 +455,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     // Zero-initialize almost everything.
     Init();
 
-    irr_precision = b->round_irr().decimals();
+    irr_precision_ = b->round_irr().decimals();
 
 // TODO ?? These names are confusing. EePmt and ErPmt are *input* values.
 // If they're entered as $1000 for all years, then they have that value
@@ -945,7 +944,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 {
     LedgerBase::PlusEq(a_Addend, a_Addend.InforceLives);
 
-    irr_precision = a_Addend.irr_precision;
+    irr_precision_ = a_Addend.irr_precision_;
 
     std::vector<double> const& N = a_Addend.InforceLives;
     int Max = std::min(Length, a_Addend.Length);
@@ -1271,7 +1270,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         ,IrrCsvGuarInput
         ,static_cast<unsigned int>(Guar_.LapseYear)
         ,max_length
-        ,irr_precision
+        ,irr_precision_
         );
 
     irr
@@ -1280,7 +1279,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         ,IrrDbGuarInput
         ,static_cast<unsigned int>(Guar_.LapseYear)
         ,max_length
-        ,irr_precision
+        ,irr_precision_
         );
 
     irr
@@ -1289,7 +1288,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         ,IrrCsvCurrInput
         ,static_cast<unsigned int>(Curr_.LapseYear)
         ,max_length
-        ,irr_precision
+        ,irr_precision_
         );
 
     irr
@@ -1298,7 +1297,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         ,IrrDbCurrInput
         ,static_cast<unsigned int>(Curr_.LapseYear)
         ,max_length
-        ,irr_precision
+        ,irr_precision_
         );
 
     // Calculate these IRRs only for ledger types that actually use a
@@ -1329,7 +1328,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         ,IrrCsvGuar0
         ,static_cast<unsigned int>(Guar0.LapseYear)
         ,max_length
-        ,irr_precision
+        ,irr_precision_
         );
 
     irr
@@ -1338,7 +1337,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         ,IrrDbGuar0
         ,static_cast<unsigned int>(Guar0.LapseYear)
         ,max_length
-        ,irr_precision
+        ,irr_precision_
         );
 
     irr
@@ -1347,7 +1346,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         ,IrrCsvCurr0
         ,static_cast<unsigned int>(Curr0.LapseYear)
         ,max_length
-        ,irr_precision
+        ,irr_precision_
         );
 
     irr
@@ -1356,7 +1355,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
         ,IrrDbCurr0
         ,static_cast<unsigned int>(Curr0.LapseYear)
         ,max_length
-        ,irr_precision
+        ,irr_precision_
         );
 }
 

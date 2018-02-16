@@ -64,7 +64,6 @@ class LMI_SO LedgerInvariant
     //   columns would need to be stored.
     // No: its purpose is to push IRR calculations into formatting
     //   routines, which ought not to do any serious calculations.
-    int irr_precision;
     void CalculateIrrs(Ledger const&);
 
     void UpdateCRC(CRC& a_crc) const override;
@@ -414,6 +413,7 @@ class LMI_SO LedgerInvariant
 
     // Special cases.
     int             Length;
+    int             irr_precision_;
     bool            FullyInitialized;   // I.e. by Init(BasicValues const* b).
 };
 
