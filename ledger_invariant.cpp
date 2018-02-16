@@ -1269,45 +1269,17 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
     irr_initialized_ = false;
 
-    int max_length = LedgerValues.GetMaxLength();
+    // Terse aliases for invariants.
+    int const m = LedgerValues.GetMaxLength();
+    int const n = irr_precision_;
 
     LedgerVariant const& Curr_ = LedgerValues.GetCurrFull();
     LedgerVariant const& Guar_ = LedgerValues.GetGuarFull();
-    irr
-        (Outlay
-        ,Guar_.CSVNet
-        ,IrrCsvGuarInput
-        ,Guar_.LapseYear
-        ,max_length
-        ,irr_precision_
-        );
 
-    irr
-        (Outlay
-        ,Guar_.EOYDeathBft
-        ,IrrDbGuarInput
-        ,Guar_.LapseYear
-        ,max_length
-        ,irr_precision_
-        );
-
-    irr
-        (Outlay
-        ,Curr_.CSVNet
-        ,IrrCsvCurrInput
-        ,Curr_.LapseYear
-        ,max_length
-        ,irr_precision_
-        );
-
-    irr
-        (Outlay
-        ,Curr_.EOYDeathBft
-        ,IrrDbCurrInput
-        ,Curr_.LapseYear
-        ,max_length
-        ,irr_precision_
-        );
+    irr(Outlay, Guar_.CSVNet,      IrrCsvGuarInput, Guar_.LapseYear, m, n);
+    irr(Outlay, Guar_.EOYDeathBft, IrrDbGuarInput,  Guar_.LapseYear, m, n);
+    irr(Outlay, Curr_.CSVNet,      IrrCsvCurrInput, Curr_.LapseYear, m, n);
+    irr(Outlay, Curr_.EOYDeathBft, IrrDbCurrInput,  Curr_.LapseYear, m, n);
 
     // Calculate these IRRs only for ledger types that actually use a
     // basis with a zero percent separate-account rate. This is a
@@ -1333,41 +1305,10 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
     LedgerVariant const& Curr0 = LedgerValues.GetCurrZero();
     LedgerVariant const& Guar0 = LedgerValues.GetGuarZero();
 
-    irr
-        (Outlay
-        ,Guar0.CSVNet
-        ,IrrCsvGuar0
-        ,Guar0.LapseYear
-        ,max_length
-        ,irr_precision_
-        );
-
-    irr
-        (Outlay
-        ,Guar0.EOYDeathBft
-        ,IrrDbGuar0
-        ,Guar0.LapseYear
-        ,max_length
-        ,irr_precision_
-        );
-
-    irr
-        (Outlay
-        ,Curr0.CSVNet
-        ,IrrCsvCurr0
-        ,Curr0.LapseYear
-        ,max_length
-        ,irr_precision_
-        );
-
-    irr
-        (Outlay
-        ,Curr0.EOYDeathBft
-        ,IrrDbCurr0
-        ,Curr0.LapseYear
-        ,max_length
-        ,irr_precision_
-        );
+    irr(Outlay, Guar0.CSVNet,      IrrCsvGuar0, Guar0.LapseYear, m, n);
+    irr(Outlay, Guar0.EOYDeathBft, IrrDbGuar0,  Guar0.LapseYear, m, n);
+    irr(Outlay, Curr0.CSVNet,      IrrCsvCurr0, Curr0.LapseYear, m, n);
+    irr(Outlay, Curr0.EOYDeathBft, IrrDbCurr0,  Curr0.LapseYear, m, n);
 
     irr_initialized_ = true;
 }
