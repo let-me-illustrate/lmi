@@ -185,29 +185,16 @@ calculation_summary_formatter::calculation_summary_formatter
 
     // TODO ?? This const_cast is safe, but it's still unclean.
     LedgerInvariant& unclean = const_cast<LedgerInvariant&>(invar_);
+    // Calculate IRRs only when necessary, because of the palpable
+    // effect on responsiveness--see:
+    //   https://lists.nongnu.org/archive/html/lmi/2018-02/msg00098.html
     bool want_any_irr =
            contains(columns_, "IrrCsv_Current"   )
         || contains(columns_, "IrrCsv_Guaranteed")
         || contains(columns_, "IrrDb_Current"    )
         || contains(columns_, "IrrDb_Guaranteed" )
         ;
-    // IRRs in the set available in the calculation summary have
-    // not necessarily been calculated: they may be either empty
-    // or filled with a -100% default. This code to test whether
-    // any has not already been calculated is arguably cumbersome
-    // enough to warrant adding an irrs_have_been_calculated flag
-    // to the appropriate ledger class.
-    bool lack_any_irr =
-           invar_.IrrCsvCurrInput.empty()
-        || invar_.IrrCsvGuarInput.empty()
-        || invar_.IrrDbCurrInput .empty()
-        || invar_.IrrDbGuarInput .empty()
-        || each_equal(invar_.IrrCsvCurrInput, -1.0)
-        || each_equal(invar_.IrrCsvGuarInput, -1.0)
-        || each_equal(invar_.IrrDbCurrInput , -1.0)
-        || each_equal(invar_.IrrDbGuarInput , -1.0)
-        ;
-    if(want_any_irr && lack_any_irr && !invar_.IsInforce)
+    if(want_any_irr && !invar_.is_irr_initialized() && !invar_.IsInforce)
         {
         unclean.CalculateIrrs(ledger_);
         }
