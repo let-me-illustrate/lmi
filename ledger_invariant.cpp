@@ -1263,12 +1263,23 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
 /// Perform costly IRR calculations on demand only.
 ///
+/// IRRs are not calculated for inforce illustrations because full
+/// payment history is generally not available. It would be possible
+/// of course to calculate IRRs from the inforce date forward, but
+/// it is feared that they'd be misinterpreted: e.g., IRR columns
+/// on illustrations run in different inforce years might be taken
+/// as directly comparable when they certainly are not.
+///
 /// IRRs on zero-sepacct-interest bases cannot be calculated for
 /// ledger types that do not generate values on those bases (any
 /// attempt to access such values as irr() arguments would throw).
 /// Here, such impossible calculations are avoided by explicit
 /// logic (they might be avoided implicitly if IRRs were set in
 /// class LedgerVariant instead).
+///
+/// Post-construction invariants: All IRR vectors have the same length
+/// as any typical vector member. They contain calculated IRRs if
+/// possible, or safe initial values of -100% otherwise.
 ///
 /// TODO ?? This function's purpose is to let formatting routines
 /// decide whether to calculate IRRs, because those calculations
@@ -1285,13 +1296,23 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
     irr_initialized_ = false;
 
+    IrrCsvGuar0    .resize(Length, -1.0);
+    IrrDbGuar0     .resize(Length, -1.0);
+    IrrCsvCurr0    .resize(Length, -1.0);
+    IrrDbCurr0     .resize(Length, -1.0);
+    IrrCsvGuarInput.resize(Length, -1.0);
+    IrrDbGuarInput .resize(Length, -1.0);
+    IrrCsvCurrInput.resize(Length, -1.0);
+    IrrDbCurrInput .resize(Length, -1.0);
+
+    if(IsInforce) {irr_initialized_ = true; return;}
+
     auto const& r = LedgerValues.GetRunBases();
     bool const run_curr_sep_zero = contains(r, mce_run_gen_curr_sep_zero);
     bool const run_guar_sep_zero = contains(r, mce_run_gen_guar_sep_zero);
     LMI_ASSERT(run_curr_sep_zero == run_guar_sep_zero);
     // Emphasize that one of those is used as a proxy for both:
     bool const zero_sepacct_interest_bases_undefined = !run_curr_sep_zero;
-    // PDF !! Initialize the '0'-suffixed IRRs regardless.
 
     // Terse aliases for invariants.
     int const m = LedgerValues.GetMaxLength();
@@ -1305,11 +1326,7 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
     irr(Outlay, Curr_.CSVNet,      IrrCsvCurrInput, Curr_.LapseYear, m, n);
     irr(Outlay, Curr_.EOYDeathBft, IrrDbCurrInput,  Curr_.LapseYear, m, n);
 
-    if(zero_sepacct_interest_bases_undefined)
-        {
-        irr_initialized_ = true;
-        return;
-        }
+    if(zero_sepacct_interest_bases_undefined) {irr_initialized_ = true; return;}
 
     LedgerVariant const& Curr0 = LedgerValues.GetCurrZero();
     LedgerVariant const& Guar0 = LedgerValues.GetGuarZero();

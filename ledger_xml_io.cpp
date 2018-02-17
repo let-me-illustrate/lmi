@@ -560,13 +560,9 @@ void Ledger::write(xml::element& x) const
     // Now we add the stuff that wasn't in the invariant
     // ledger's class's maps (indexable by name). Because we're
     // working with maps of pointers, we need pointers here.
-    //
-    // The IRRs are the worst of all.
 
-    if(!ledger_invariant_->IsInforce)
-        {
-        ledger_invariant_->CalculateIrrs(*this);
-        }
+    ledger_invariant_->CalculateIrrs(*this);
+
     vectors["IrrCsv_GuaranteedZero" ] = &ledger_invariant_->IrrCsvGuar0    ;
     vectors["IrrDb_GuaranteedZero"  ] = &ledger_invariant_->IrrDbGuar0     ;
     vectors["IrrCsv_CurrentZero"    ] = &ledger_invariant_->IrrCsvCurr0    ;
