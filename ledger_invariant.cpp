@@ -1260,10 +1260,11 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     return *this;
 }
 
-//============================================================================
-// TODO ?? It is extraordinary that this "invariant" class uses and
-// even sets some data that vary by basis and therefore seem to belong
-// in the complementary "variant" class.
+/// Perform costly IRR calculations on demand only.
+///
+/// TODO ?? It is extraordinary that this "invariant" class uses and
+/// even sets some data that vary by basis and therefore seem to
+/// belong in the complementary "variant" class instead.
 
 void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
@@ -1281,19 +1282,22 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
     irr(Outlay, Curr_.CSVNet,      IrrCsvCurrInput, Curr_.LapseYear, m, n);
     irr(Outlay, Curr_.EOYDeathBft, IrrDbCurrInput,  Curr_.LapseYear, m, n);
 
-    // Calculate these IRRs only for ledger types that actually use a
-    // basis with a zero percent separate-account rate. This is a
-    // matter not of efficiency but of validity: values for unused
-    // bases are not dependably initialized.
-    //
-    // This calculation should be distributed among the variant
-    // ledgers, so that it gets run for every basis actually used.
+    // IRRs on zero-sepacct-interest bases cannot be calculated for
+    // ledger types that do not generate values on those bases (any
+    // attempt to access such values as irr() arguments would throw).
+    // Here, such impossible calculations are avoided by explicit
+    // logic (they might be avoided implicitly if IRRs were set in
+    // class LedgerVariant instead). In that logic, it is plausibly
+    // assumed that
+    //   mce_run_gen_curr_sep_zero
+    //   mce_run_gen_guar_sep_zero
+    // are always used in pairs, so that either may be tested as a
+    // proxy for the other.
     if
         (0 == std::count
             (LedgerValues.GetRunBases().begin()
             ,LedgerValues.GetRunBases().end()
             ,mce_run_gen_curr_sep_zero
-            // Proxy for mce_run_gen_guar_sep_zero too.
             )
         )
         {
