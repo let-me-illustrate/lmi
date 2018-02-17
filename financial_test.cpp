@@ -169,6 +169,23 @@ int test_main(int, char*[])
     BOOST_TEST(std::fabs(-1.00000 - results[ 9]) <= tolerance);
     BOOST_TEST(std::fabs(-1.00000 - results[99]) <= tolerance);
 
+    // Test nonempty cashflow streams consisting only of zeros.
+
+    std::vector<double> p0(7);       // Payments.
+    std::vector<double> b0(7);       // Benefits.
+    std::vector<double> r0(7, 3.14); // Results.
+
+    // This version leaves 'results' unchanged. Test it to make
+    // sure it doesn't segfault.
+    irr(p0.begin(), p0.begin(), b0.begin(), r0.begin(), decimals);
+    BOOST_TEST_EQUAL(r0[3], 3.14);
+
+    // SOMEDAY !! The zero polynomial has an infinitude of roots,
+    // but, given that we must return only one, wouldn't some
+    // value like 0% or -100% be more suitable?
+    irr(p0, b0, r0, p0.size(), p0.size(), decimals);
+    BOOST_TEST_EQUAL(r0[3], 1000);
+
     // Test fv().
 
     static long double const i = .05L;
