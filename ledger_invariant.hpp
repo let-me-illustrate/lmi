@@ -60,11 +60,6 @@ class LMI_SO LedgerInvariant
     double                       GetInitAnnLoanDueRate() const;
     std::string const&           GetStatePostalAbbrev()  const;
 
-    // TODO ?? Does this really belong here?
-    // Yes: it keeps the ledger object small; otherwise, numerous IRR
-    //   columns would need to be stored.
-    // No: its purpose is to push IRR calculations into formatting
-    //   routines, which ought not to do any serious calculations.
     void CalculateIrrs(Ledger const&);
 
     void UpdateCRC(CRC& a_crc) const override;

@@ -1274,9 +1274,16 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 /// are always used in pairs, so that either may be tested as a
 /// proxy for the other.
 ///
-/// TODO ?? It is extraordinary that this "invariant" class uses and
-/// even sets some data that vary by basis and therefore seem to
-/// belong in the complementary "variant" class instead.
+/// TODO ?? This function's purpose is to let formatting routines
+/// decide whether to calculate IRRs, because those calculations
+/// are costly and their results might not be used. Yet pushing any
+/// calculations into formatting routines vitiates the separation of
+/// concerns.
+///
+/// TODO ?? It is extraordinary that this function in an "invariant"
+/// class uses and even sets data that vary by basis. Consider moving
+/// this function into the base class, and the IRR variables into class
+/// LedgerVariant.
 
 void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
