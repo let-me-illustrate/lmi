@@ -1293,13 +1293,14 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
     //   mce_run_gen_guar_sep_zero
     // are always used in pairs, so that either may be tested as a
     // proxy for the other.
-    if
+    bool const zero_sepacct_interest_bases_undefined =
         (0 == std::count
             (LedgerValues.GetRunBases().begin()
             ,LedgerValues.GetRunBases().end()
             ,mce_run_gen_curr_sep_zero
             )
-        )
+        );
+    if(zero_sepacct_interest_bases_undefined)
         {
         // PDF !! Initialize the '0'-suffixed IRRs here.
         irr_initialized_ = true;
