@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
+#include "contains.hpp"                 // for CalculateIrrs()
 #include "crc32.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -1267,12 +1268,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 /// attempt to access such values as irr() arguments would throw).
 /// Here, such impossible calculations are avoided by explicit
 /// logic (they might be avoided implicitly if IRRs were set in
-/// class LedgerVariant instead). In that logic, it is plausibly
-/// assumed that
-///   mce_run_gen_curr_sep_zero
-///   mce_run_gen_guar_sep_zero
-/// are always used in pairs, so that either may be tested as a
-/// proxy for the other.
+/// class LedgerVariant instead).
 ///
 /// TODO ?? This function's purpose is to let formatting routines
 /// decide whether to calculate IRRs, because those calculations
@@ -1289,13 +1285,12 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
     irr_initialized_ = false;
 
-    bool const zero_sepacct_interest_bases_undefined =
-        (0 == std::count
-            (LedgerValues.GetRunBases().begin()
-            ,LedgerValues.GetRunBases().end()
-            ,mce_run_gen_curr_sep_zero
-            )
-        );
+    auto const& r = LedgerValues.GetRunBases();
+    bool const run_curr_sep_zero = contains(r, mce_run_gen_curr_sep_zero);
+    bool const run_guar_sep_zero = contains(r, mce_run_gen_guar_sep_zero);
+    LMI_ASSERT(run_curr_sep_zero == run_guar_sep_zero);
+    // Emphasize that one of those is used as a proxy for both:
+    bool const zero_sepacct_interest_bases_undefined = !run_curr_sep_zero;
     // PDF !! Initialize the '0'-suffixed IRRs regardless.
 
     // Terse aliases for invariants.
