@@ -1262,6 +1262,18 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
 /// Perform costly IRR calculations on demand only.
 ///
+/// IRRs on zero-sepacct-interest bases cannot be calculated for
+/// ledger types that do not generate values on those bases (any
+/// attempt to access such values as irr() arguments would throw).
+/// Here, such impossible calculations are avoided by explicit
+/// logic (they might be avoided implicitly if IRRs were set in
+/// class LedgerVariant instead). In that logic, it is plausibly
+/// assumed that
+///   mce_run_gen_curr_sep_zero
+///   mce_run_gen_guar_sep_zero
+/// are always used in pairs, so that either may be tested as a
+/// proxy for the other.
+///
 /// TODO ?? It is extraordinary that this "invariant" class uses and
 /// even sets some data that vary by basis and therefore seem to
 /// belong in the complementary "variant" class instead.
@@ -1269,6 +1281,15 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
     irr_initialized_ = false;
+
+    bool const zero_sepacct_interest_bases_undefined =
+        (0 == std::count
+            (LedgerValues.GetRunBases().begin()
+            ,LedgerValues.GetRunBases().end()
+            ,mce_run_gen_curr_sep_zero
+            )
+        );
+    // PDF !! Initialize the '0'-suffixed IRRs regardless.
 
     // Terse aliases for invariants.
     int const m = LedgerValues.GetMaxLength();
@@ -1282,27 +1303,8 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
     irr(Outlay, Curr_.CSVNet,      IrrCsvCurrInput, Curr_.LapseYear, m, n);
     irr(Outlay, Curr_.EOYDeathBft, IrrDbCurrInput,  Curr_.LapseYear, m, n);
 
-    // IRRs on zero-sepacct-interest bases cannot be calculated for
-    // ledger types that do not generate values on those bases (any
-    // attempt to access such values as irr() arguments would throw).
-    // Here, such impossible calculations are avoided by explicit
-    // logic (they might be avoided implicitly if IRRs were set in
-    // class LedgerVariant instead). In that logic, it is plausibly
-    // assumed that
-    //   mce_run_gen_curr_sep_zero
-    //   mce_run_gen_guar_sep_zero
-    // are always used in pairs, so that either may be tested as a
-    // proxy for the other.
-    bool const zero_sepacct_interest_bases_undefined =
-        (0 == std::count
-            (LedgerValues.GetRunBases().begin()
-            ,LedgerValues.GetRunBases().end()
-            ,mce_run_gen_curr_sep_zero
-            )
-        );
     if(zero_sepacct_interest_bases_undefined)
         {
-        // PDF !! Initialize the '0'-suffixed IRRs here.
         irr_initialized_ = true;
         return;
         }
@@ -1310,10 +1312,10 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
     LedgerVariant const& Curr0 = LedgerValues.GetCurrZero();
     LedgerVariant const& Guar0 = LedgerValues.GetGuarZero();
 
-    irr(Outlay, Guar0.CSVNet,      IrrCsvGuar0, Guar0.LapseYear, m, n);
-    irr(Outlay, Guar0.EOYDeathBft, IrrDbGuar0,  Guar0.LapseYear, m, n);
-    irr(Outlay, Curr0.CSVNet,      IrrCsvCurr0, Curr0.LapseYear, m, n);
-    irr(Outlay, Curr0.EOYDeathBft, IrrDbCurr0,  Curr0.LapseYear, m, n);
+    irr(Outlay, Guar0.CSVNet,      IrrCsvGuar0,     Guar0.LapseYear, m, n);
+    irr(Outlay, Guar0.EOYDeathBft, IrrDbGuar0,      Guar0.LapseYear, m, n);
+    irr(Outlay, Curr0.CSVNet,      IrrCsvCurr0,     Curr0.LapseYear, m, n);
+    irr(Outlay, Curr0.EOYDeathBft, IrrDbCurr0,      Curr0.LapseYear, m, n);
 
     irr_initialized_ = true;
 }
