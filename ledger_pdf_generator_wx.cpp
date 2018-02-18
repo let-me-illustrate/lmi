@@ -1558,7 +1558,7 @@ using numbered_or_attachment_base = typename std::conditional
     >::type;
 
 template<bool is_attachment>
-class reg_numeric_summary_or_attachment_page
+class ill_reg_numeric_summary_or_attachment_page
     : public numbered_or_attachment_base<is_attachment>
 {
   public:
@@ -1575,7 +1575,7 @@ class reg_numeric_summary_or_attachment_page
             );
 
         this->render_page_template
-            ("reg_numeric_summary"
+            ("ill_reg_numeric_summary"
             ,writer
             ,interpolate_html
             );
@@ -1774,7 +1774,7 @@ class page_with_tabular_report
     }
 };
 
-class reg_tabular_detail_page : public page_with_tabular_report
+class ill_reg_tabular_detail_page : public page_with_tabular_report
 {
   private:
     enum
@@ -1793,12 +1793,12 @@ class reg_tabular_detail_page : public page_with_tabular_report
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "reg_tabular_details";
+        return "ill_reg_tabular_details";
     }
 
     std::string get_upper_footer_template_name() const override
     {
-        return "reg_footer_disclaimer";
+        return "ill_reg_footer_disclaimer";
     }
 
     void render_or_measure_extra_headers
@@ -1868,7 +1868,7 @@ class reg_tabular_detail_page : public page_with_tabular_report
     }
 };
 
-class reg_tabular_detail2_page : public page_with_tabular_report
+class ill_reg_tabular_detail2_page : public page_with_tabular_report
 {
   private:
     enum
@@ -1881,12 +1881,12 @@ class reg_tabular_detail2_page : public page_with_tabular_report
 
     std::string get_fixed_page_contents_template_name() const override
     {
-        return "reg_tabular_details2";
+        return "ill_reg_tabular_details2";
     }
 
     std::string get_upper_footer_template_name() const override
     {
-        return "reg_footer_disclaimer";
+        return "ill_reg_footer_disclaimer";
     }
 
     illustration_table_columns const& get_table_columns() const override
@@ -1969,18 +1969,18 @@ class standard_supplemental_report : public page_with_tabular_report
     std::string                const page_template_;
 };
 
-class reg_supplemental_report : public standard_supplemental_report
+class ill_reg_supplemental_report : public standard_supplemental_report
 {
   public:
-    explicit reg_supplemental_report(html_interpolator const& interpolate_html)
-        :standard_supplemental_report(interpolate_html, "reg_supp_report")
+    explicit ill_reg_supplemental_report(html_interpolator const& interpolate_html)
+        :standard_supplemental_report(interpolate_html, "ill_reg_supp_report")
     {
     }
 
   private:
     std::string get_upper_footer_template_name() const override
     {
-        return "reg_footer_disclaimer";
+        return "ill_reg_footer_disclaimer";
     }
 };
 
@@ -2124,29 +2124,29 @@ class pdf_illustration_regular : public pdf_illustration
         // Add all the pages.
         add<cover_page>();
         numbered_page::start_numbering();
-        add<standard_page>("reg_narr_summary");
-        add<standard_page>("reg_narr_summary2");
-        add<standard_page>("reg_column_headings");
+        add<standard_page>("ill_reg_narr_summary");
+        add<standard_page>("ill_reg_narr_summary2");
+        add<standard_page>("ill_reg_column_headings");
         if(!invar.IsInforce)
             {
-            add<reg_numeric_summary_or_attachment_page<false>>();
+            add<ill_reg_numeric_summary_or_attachment_page<false>>();
             }
-        add<reg_tabular_detail_page>();
-        add<reg_tabular_detail2_page>();
+        add<ill_reg_tabular_detail_page>();
+        add<ill_reg_tabular_detail2_page>();
         if(invar.SupplementalReport)
             {
-            add<reg_supplemental_report>(get_interpolator());
+            add<ill_reg_supplemental_report>(get_interpolator());
             }
         if(!invar.IsInforce)
             {
-            add<reg_numeric_summary_or_attachment_page<true>>();
+            add<ill_reg_numeric_summary_or_attachment_page<true>>();
             }
     }
 
     std::string get_upper_footer_template_name() const override
         { return {}; }
     std::string get_lower_footer_template_name() const override
-        { return "reg_footer"; }
+        { return "ill_reg_footer"; }
 };
 
 // Common base class for basic illustration pages using the same columns in
