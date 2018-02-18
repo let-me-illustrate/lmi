@@ -53,7 +53,9 @@ namespace html
 /// escaping internally).
 ///
 /// As it still needs to be converted to a string sooner or later to be really
-/// used, it does provide a conversion -- but it can be used only once.
+/// used, it does provide a conversion, as_html(), which uses move semantics,
+/// so it requires an rvalue reference and must be the last member function
+/// called on an instance of this class.
 
 class text
 {
@@ -113,11 +115,6 @@ class text
         m_html += t.m_html;
 
         return *this;
-    }
-
-    std::string const& as_html() const&
-    {
-        return m_html;
     }
 
     std::string&& as_html() &&

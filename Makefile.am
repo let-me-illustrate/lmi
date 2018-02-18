@@ -318,6 +318,11 @@ wx_test_LDADD = \
 
 # libraries
 
+# PDF !! Expunge these two object files
+#  ledger_xml_io.o
+#  ledger_xsl.o
+# from the list below.
+
 liblmi_common_sources = \
     actuarial_table.cpp \
     alert.cpp \
@@ -366,6 +371,8 @@ liblmi_common_sources = \
     ledger_pdf_generator.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
+    ledger_xml_io.cpp \
+    ledger_xsl.cpp \
     ledgervalues.cpp \
     license.cpp \
     loads.cpp \
@@ -1128,6 +1135,9 @@ test_zero_CXXFLAGS = $(AM_CXXFLAGS)
 
 # headers: we need to include them or they wouldn't appear in the distribution
 # this list should contain everything in `ls *.h *.hpp *.tpp *.xpp`
+# PDF !! Expunge this header
+#  ledger_xsl.hpp
+# from the list below.
 noinst_HEADERS = \
     about_dialog.hpp \
     account_value.hpp \
@@ -1229,6 +1239,7 @@ noinst_HEADERS = \
     ledger_pdf_generator.hpp \
     ledger_text_formats.hpp \
     ledger_variant.hpp \
+    ledger_xsl.hpp \
     ledgervalues.hpp \
     license.hpp \
     lmi.hpp \

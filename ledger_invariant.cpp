@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
+#include "contains.hpp"                 // for CalculateIrrs()
 #include "crc32.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -51,6 +52,7 @@
 //============================================================================
 LedgerInvariant::LedgerInvariant(int len)
     :LedgerBase(len)
+    ,irr_initialized_(false)
     ,FullyInitialized(false)
 {
     Alloc(len);
@@ -59,6 +61,7 @@ LedgerInvariant::LedgerInvariant(int len)
 //============================================================================
 LedgerInvariant::LedgerInvariant(LedgerInvariant const& obj)
     :LedgerBase(obj)
+    ,irr_initialized_(false)
     ,FullyInitialized(false)
 {
     Alloc(obj.GetLength());
@@ -389,8 +392,6 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
 {
     LedgerBase::Copy(obj);
 
-    irr_precision          = obj.irr_precision         ;
-
     // Vectors of type not compatible with double.
     EeMode                 = obj.EeMode                ;
     ErMode                 = obj.ErMode                ;
@@ -411,12 +412,16 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     InitErMode             = obj.InitErMode            ;
     InitDBOpt              = obj.InitDBOpt             ;
 
+    // Private internals.
+    irr_precision_         = obj.irr_precision_        ;
+    irr_initialized_       = false; // IRR vectors are not copied.
     FullyInitialized       = obj.FullyInitialized      ;
 }
 
 //============================================================================
 void LedgerInvariant::Destroy()
 {
+    irr_initialized_ = false;
     FullyInitialized = false;
 }
 
@@ -425,8 +430,6 @@ void LedgerInvariant::Init()
 {
     // Zero-initialize elements of AllVectors and AllScalars.
     LedgerBase::Initialize(GetLength());
-
-    irr_precision       = 0;
 
     EeMode              .assign(Length, mce_mode(mce_annual));
     ErMode              .assign(Length, mce_mode(mce_annual));
@@ -447,6 +450,8 @@ void LedgerInvariant::Init()
 
     SupplementalReport  = false;
 
+    irr_precision_      = 0;
+    irr_initialized_    = false;
     FullyInitialized    = false;
 }
 
@@ -456,7 +461,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     // Zero-initialize almost everything.
     Init();
 
-    irr_precision = b->round_irr().decimals();
+    irr_precision_ = b->round_irr().decimals();
 
 // TODO ?? These names are confusing. EePmt and ErPmt are *input* values.
 // If they're entered as $1000 for all years, then they have that value
@@ -937,6 +942,8 @@ if(1 != b->yare_input_.InforceDataSource)
     SupplementalReportColumn10 = mc_str(b->yare_input_.SupplementalReportColumn10);
     SupplementalReportColumn11 = mc_str(b->yare_input_.SupplementalReportColumn11);
 
+    // irr_initialized_ is deliberately not set here: it's not
+    // encompassed by 'FullyInitialized'.
     FullyInitialized = true;
 }
 
@@ -945,7 +952,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 {
     LedgerBase::PlusEq(a_Addend, a_Addend.InforceLives);
 
-    irr_precision = a_Addend.irr_precision;
+    irr_precision_ = a_Addend.irr_precision_;
 
     std::vector<double> const& N = a_Addend.InforceLives;
     int Max = std::min(Length, a_Addend.Length);
@@ -1254,110 +1261,82 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     return *this;
 }
 
-//============================================================================
-// TODO ?? It is extraordinary that this "invariant" class uses and
-// even sets some data that vary by basis and therefore seem to belong
-// in the complementary "variant" class.
+/// Perform costly IRR calculations on demand only.
+///
+/// IRRs are not calculated for inforce illustrations because full
+/// payment history is generally not available. It would be possible
+/// of course to calculate IRRs from the inforce date forward, but
+/// it is feared that they'd be misinterpreted: e.g., IRR columns
+/// on illustrations run in different inforce years might be taken
+/// as directly comparable when they certainly are not.
+///
+/// IRRs on zero-sepacct-interest bases cannot be calculated for
+/// ledger types that do not generate values on those bases (any
+/// attempt to access such values as irr() arguments would throw).
+/// Here, such impossible calculations are avoided by explicit
+/// logic (they might be avoided implicitly if IRRs were set in
+/// class LedgerVariant instead).
+///
+/// Post-construction invariants: All IRR vectors have the same length
+/// as any typical vector member. They contain calculated IRRs if
+/// possible, or safe initial values of -100% otherwise.
+///
+/// TODO ?? This function's purpose is to let formatting routines
+/// decide whether to calculate IRRs, because those calculations
+/// are costly and their results might not be used. Yet pushing any
+/// calculations into formatting routines vitiates the separation of
+/// concerns.
+///
+/// TODO ?? It is extraordinary that this function in an "invariant"
+/// class uses and even sets data that vary by basis. Consider moving
+/// this function into the base class, and the IRR variables into class
+/// LedgerVariant.
 
 void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
-    int max_length = LedgerValues.GetMaxLength();
+    irr_initialized_ = false;
+
+    IrrCsvGuar0    .resize(Length, -1.0);
+    IrrDbGuar0     .resize(Length, -1.0);
+    IrrCsvCurr0    .resize(Length, -1.0);
+    IrrDbCurr0     .resize(Length, -1.0);
+    IrrCsvGuarInput.resize(Length, -1.0);
+    IrrDbGuarInput .resize(Length, -1.0);
+    IrrCsvCurrInput.resize(Length, -1.0);
+    IrrDbCurrInput .resize(Length, -1.0);
+
+    if(IsInforce) {irr_initialized_ = true; return;}
+
+    auto const& r = LedgerValues.GetRunBases();
+    bool const run_curr_sep_zero = contains(r, mce_run_gen_curr_sep_zero);
+    bool const run_guar_sep_zero = contains(r, mce_run_gen_guar_sep_zero);
+    LMI_ASSERT(run_curr_sep_zero == run_guar_sep_zero);
+    // Emphasize that one of those is used as a proxy for both:
+    bool const zero_sepacct_interest_bases_undefined = !run_curr_sep_zero;
+
+    // Terse aliases for invariants.
+    int const m = LedgerValues.GetMaxLength();
+    int const n = irr_precision_;
 
     LedgerVariant const& Curr_ = LedgerValues.GetCurrFull();
     LedgerVariant const& Guar_ = LedgerValues.GetGuarFull();
-    irr
-        (Outlay
-        ,Guar_.CSVNet
-        ,IrrCsvGuarInput
-        ,static_cast<unsigned int>(Guar_.LapseYear)
-        ,max_length
-        ,irr_precision
-        );
 
-    irr
-        (Outlay
-        ,Guar_.EOYDeathBft
-        ,IrrDbGuarInput
-        ,static_cast<unsigned int>(Guar_.LapseYear)
-        ,max_length
-        ,irr_precision
-        );
+    irr(Outlay, Guar_.CSVNet,      IrrCsvGuarInput, Guar_.LapseYear, m, n);
+    irr(Outlay, Guar_.EOYDeathBft, IrrDbGuarInput,  Guar_.LapseYear, m, n);
+    irr(Outlay, Curr_.CSVNet,      IrrCsvCurrInput, Curr_.LapseYear, m, n);
+    irr(Outlay, Curr_.EOYDeathBft, IrrDbCurrInput,  Curr_.LapseYear, m, n);
 
-    irr
-        (Outlay
-        ,Curr_.CSVNet
-        ,IrrCsvCurrInput
-        ,static_cast<unsigned int>(Curr_.LapseYear)
-        ,max_length
-        ,irr_precision
-        );
-
-    irr
-        (Outlay
-        ,Curr_.EOYDeathBft
-        ,IrrDbCurrInput
-        ,static_cast<unsigned int>(Curr_.LapseYear)
-        ,max_length
-        ,irr_precision
-        );
-
-    // Calculate these IRRs only for ledger types that actually use a
-    // basis with a zero percent separate-account rate. This is a
-    // matter not of efficiency but of validity: values for unused
-    // bases are not dependably initialized.
-    //
-    // This calculation should be distributed among the variant
-    // ledgers, so that it gets run for every basis actually used.
-    if
-        (0 == std::count
-            (LedgerValues.GetRunBases().begin()
-            ,LedgerValues.GetRunBases().end()
-            ,mce_run_gen_curr_sep_zero
-            // Proxy for mce_run_gen_guar_sep_zero too.
-            )
-        )
-        {
-        return;
-        }
+    if(zero_sepacct_interest_bases_undefined) {irr_initialized_ = true; return;}
 
     LedgerVariant const& Curr0 = LedgerValues.GetCurrZero();
     LedgerVariant const& Guar0 = LedgerValues.GetGuarZero();
 
-    irr
-        (Outlay
-        ,Guar0.CSVNet
-        ,IrrCsvGuar0
-        ,static_cast<unsigned int>(Guar0.LapseYear)
-        ,max_length
-        ,irr_precision
-        );
+    irr(Outlay, Guar0.CSVNet,      IrrCsvGuar0,     Guar0.LapseYear, m, n);
+    irr(Outlay, Guar0.EOYDeathBft, IrrDbGuar0,      Guar0.LapseYear, m, n);
+    irr(Outlay, Curr0.CSVNet,      IrrCsvCurr0,     Curr0.LapseYear, m, n);
+    irr(Outlay, Curr0.EOYDeathBft, IrrDbCurr0,      Curr0.LapseYear, m, n);
 
-    irr
-        (Outlay
-        ,Guar0.EOYDeathBft
-        ,IrrDbGuar0
-        ,static_cast<unsigned int>(Guar0.LapseYear)
-        ,max_length
-        ,irr_precision
-        );
-
-    irr
-        (Outlay
-        ,Curr0.CSVNet
-        ,IrrCsvCurr0
-        ,static_cast<unsigned int>(Curr0.LapseYear)
-        ,max_length
-        ,irr_precision
-        );
-
-    irr
-        (Outlay
-        ,Curr0.EOYDeathBft
-        ,IrrDbCurr0
-        ,static_cast<unsigned int>(Curr0.LapseYear)
-        ,max_length
-        ,irr_precision
-        );
+    irr_initialized_ = true;
 }
 
 //============================================================================

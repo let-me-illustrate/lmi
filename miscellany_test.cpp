@@ -170,18 +170,25 @@ void test_page_count()
 
     // Test preconditions.
 
-    // No data rows--doesn't actually throw.
-//    BOOST_TEST_THROW
-//        (page_count(0, 1, 1)
-//        ,std::runtime_error
-//        ,""
-//        );
+    // No data rows.
+    BOOST_TEST_THROW
+        (page_count(0, 1, 1)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Assertion.*failed")
+        );
+
+    // Zero rows per group.
+    BOOST_TEST_THROW
+        (page_count(1, 0, 1)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Assertion.*failed")
+        );
 
     // Insufficient room to print even one group.
     BOOST_TEST_THROW
         (page_count(1, 7, 3)
         ,std::runtime_error
-        ,""
+        ,lmi_test::what_regex("^Assertion.*failed")
         );
 
     // A single row of data.

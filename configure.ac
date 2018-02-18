@@ -142,7 +142,33 @@ AC_PROG_CC
 CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
-AX_CXX_COMPILE_STDCXX(11, noext)
+CXX="$CXX -std=c++17"
+
+dnl Check if the compiler supports C++17: this is a rather ad hoc test as it
+dnl doesn't check for full C++17 support, but it's enough for the subset of it
+dnl that is currently used in lmi and this check passes with with g++ 6, which
+dnl can be used for compiling lmi even though it doesn't implement C++17 fully.
+m4_define([lmi_cxx_std17_test], [[
+#ifndef __cplusplus
+#error Not C++ compiler.
+#elif __cplusplus <= 201402L
+#error Only C++14.
+#else
+static_assert(true);
+#endif
+]])
+
+AC_CACHE_CHECK([whether compiler supports C++17],
+    lmi_cv_cxx_std17,
+    [
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE([AC_LANG_SOURCE([lmi_cxx_std17_test])],
+            lmi_cv_cxx_std17=yes,
+            lmi_cv_cxx_std17=no
+            )
+        AC_LANG_POP([C++])
+    ]
+)
 
 AC_PROG_LD
 
@@ -404,22 +430,22 @@ else
     if test -z "$XMLWRAPP_CFLAGS" -o -z "$XMLWRAPP_LIBS"; then
         dnl --- XMLWRAPP (required) -------------------
         AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
-        if test "x$lmi_xmlwrapp_config" != "xyes"; then
+        if test "$lmi_xmlwrapp_config" = "no"; then
             AC_MSG_ERROR([Unable to find xmlwrapp configuration program xmlwrapp-config in the path.])
         fi
 
         dnl make sure xmlwrapp was compiled with XSLT support:
-        if xmlwrapp-config --libs | grep -v -q xslt; then
+        if $lmi_xmlwrapp_config --libs | grep -v -q xslt; then
             AC_MSG_ERROR([xmlwrapp with XSLT support is required.])
         fi
     fi
 
     if test -z "$XMLWRAPP_CFLAGS"; then
-        XMLWRAPP_CFLAGS=`xmlwrapp-config --cxxflags`
+        XMLWRAPP_CFLAGS=`$lmi_xmlwrapp_config --cxxflags`
     fi
 
     if test -z "$XMLWRAPP_LIBS"; then
-        XMLWRAPP_LIBS=`xmlwrapp-config --libs`
+        XMLWRAPP_LIBS=`$lmi_xmlwrapp_config --libs`
     fi
 
     AC_SUBST(XMLWRAPP_CFLAGS)

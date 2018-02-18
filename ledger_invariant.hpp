@@ -53,18 +53,13 @@ class LMI_SO LedgerInvariant
 
     LedgerInvariant& PlusEq(LedgerInvariant const& a_Addend);
 
+    bool                         is_irr_initialized()    const;
     bool                         IsFullyInitialized()    const;
-    int                  GetLength()             const override;
+    int                          GetLength()             const override;
     std::vector<double> const&   GetInforceLives()       const;
     double                       GetInitAnnLoanDueRate() const;
     std::string const&           GetStatePostalAbbrev()  const;
 
-    // TODO ?? Does this really belong here?
-    // Yes: it keeps the ledger object small; otherwise, numerous IRR
-    //   columns would need to be stored.
-    // No: its purpose is to push IRR calculations into formatting
-    //   routines, which ought not to do any serious calculations.
-    int irr_precision;
     void CalculateIrrs(Ledger const&);
 
     void UpdateCRC(CRC& a_crc) const override;
@@ -414,8 +409,15 @@ class LMI_SO LedgerInvariant
 
     // Special cases.
     int             Length;
-    bool            FullyInitialized;   // I.e. by Init(BasicValues const* b).
+    int             irr_precision_;
+    bool            irr_initialized_;  // CalculateIrrs() succeeded
+    bool            FullyInitialized;  // Init(BasicValues const*) succeeded
 };
+
+inline bool LedgerInvariant::is_irr_initialized() const
+{
+    return irr_initialized_;
+}
 
 inline bool LedgerInvariant::IsFullyInitialized() const
 {

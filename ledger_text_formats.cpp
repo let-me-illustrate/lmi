@@ -182,27 +182,21 @@ calculation_summary_formatter::calculation_summary_formatter
     columns_.insert(columns_.begin(), "PolicyYear");
 
     unsigned int const length = invar_.GetLength();
-    if(length != invar_.IrrCsvCurrInput.size())
+
+    // Calculate IRRs only when necessary, because of the palpable
+    // effect on responsiveness--see:
+    //   https://lists.nongnu.org/archive/html/lmi/2018-02/msg00098.html
+    bool want_any_irr =
+           contains(columns_, "IrrCsv_Current"   )
+        || contains(columns_, "IrrCsv_Guaranteed")
+        || contains(columns_, "IrrDb_Current"    )
+        || contains(columns_, "IrrDb_Guaranteed" )
+        ;
+    if(want_any_irr && !invar_.is_irr_initialized())
         {
         // TODO ?? This const_cast is safe, but it's still unclean.
         LedgerInvariant& unclean = const_cast<LedgerInvariant&>(invar_);
-        bool want_any_irr =
-               contains(columns_, "IrrCsv_Current"   )
-            || contains(columns_, "IrrCsv_Guaranteed")
-            || contains(columns_, "IrrDb_Current"    )
-            || contains(columns_, "IrrDb_Guaranteed" )
-            ;
-        if(want_any_irr && !invar_.IsInforce)
-            {
-            unclean.CalculateIrrs(ledger_);
-            }
-        else
-            {
-            unclean.IrrCsvCurrInput.resize(length);
-            unclean.IrrCsvGuarInput.resize(length);
-            unclean.IrrDbCurrInput .resize(length);
-            unclean.IrrDbGuarInput .resize(length);
-            }
+        unclean.CalculateIrrs(ledger_);
         }
 }
 
@@ -467,15 +461,7 @@ void PrintCellTabDelimited
 
     // TODO ?? This const_cast is safe, but it's still unclean.
     LedgerInvariant& unclean = const_cast<LedgerInvariant&>(Invar);
-    if(!Invar.IsInforce)
-        {
-        unclean.CalculateIrrs(ledger_values);
-        }
-    else
-        {
-        unclean.IrrCsvCurrInput.resize(max_length);
-        unclean.IrrDbCurrInput .resize(max_length);
-        }
+    unclean.CalculateIrrs(ledger_values);
 
     std::ofstream os(file_name.c_str(), ios_out_app_binary());
 

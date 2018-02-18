@@ -34,6 +34,8 @@ int test_main(int, char*[])
     BOOST_TEST( materially_equal(0.0,  0.0));
     BOOST_TEST( materially_equal(0.0, -0.0));
     BOOST_TEST(!materially_equal(0.0, epsilon));
+    // https://lists.nongnu.org/archive/html/lmi/2018-02/msg00099.html
+    BOOST_TEST(!materially_equal(0.0, 1e-100));
 
     BOOST_TEST( materially_equal(1, 1));
     BOOST_TEST(!materially_equal(1, 2));

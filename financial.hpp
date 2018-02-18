@@ -66,10 +66,8 @@ long double fv
     return z / (vn * v);
 }
 
-#if 0
-// TODO ?? Have we any use for this (untested) template function?
 template<typename InputIterator>
-long double const npv
+long double npv
     (InputIterator first
     ,InputIterator last
     ,long double i
@@ -90,7 +88,6 @@ long double const npv
         }
     return z;
 }
-#endif // 0
 
 template<typename InputIterator>
 class irr_helper
