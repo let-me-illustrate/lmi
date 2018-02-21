@@ -37,11 +37,14 @@
 
 std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 {
-    // PDF !! Expunge this conditional block:
-    if
-        (global_settings::instance().ash_nazg()
-        && !contains(global_settings::instance().pyx(), "only_new_pdf")
-        )
+    global_settings const& g = global_settings::instance();
+    bool const ash_nazg      = g.ash_nazg();
+    bool const pyx_only_new  = contains(g.pyx(), "only_new_pdf");
+    bool const pyx_only_old  = contains(g.pyx(), "only_old_pdf");
+    bool const do_the_old    = ash_nazg ? !pyx_only_new : true;
+    bool const skip_the_new  = ash_nazg ?  pyx_only_old : true;
+    // PDF !! Expunge this conditional block and the defns above:
+    if(do_the_old)
         {
         std::string z;
         try
@@ -62,8 +65,7 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
             {
             throw;
             }
-        if(contains(global_settings::instance().pyx(), "only_old_pdf"))
-            return z;
+        if(skip_the_new) return z;
         }
 
     throw_if_interdicted(ledger);
