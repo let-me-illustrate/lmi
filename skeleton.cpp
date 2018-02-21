@@ -1360,16 +1360,40 @@ void Skeleton::OpenCommandLineFiles(std::vector<std::string> const& files)
 void Skeleton::UpdateViews()
 {
     wxBusyCursor wait;
-    for(auto const& i : frame_->GetChildren())
+
+    // Update the given child frame: this is a local function used for updating
+    // the active child, first, and then all the other ones, in a loop, below.
+    auto const updateView = [](wxWindow* w)
         {
-        wxDocMDIChildFrame const* c = dynamic_cast<wxDocMDIChildFrame*>(i);
+        wxDocMDIChildFrame const* c = dynamic_cast<wxDocMDIChildFrame*>(w);
         if(c)
             {
             IllustrationView* v = dynamic_cast<IllustrationView*>(c->GetView());
             if(v)
                 {
                 v->DisplaySelectedValuesAsHtml();
+
+                // Update the display immediately to display the new data as
+                // soon as possible, without waiting for the other views.
+                v->GetFrame()->Update();
                 }
+            }
+        };
+
+    // Start with the active child to update it as soon as possible.
+    auto const activeChild = frame_->GetActiveChild();
+    if(activeChild)
+        {
+        updateView(activeChild);
+        }
+
+    for(auto const& i : frame_->GetChildren())
+        {
+        // The active child, if any, was already updated above, no need to do
+        // it twice.
+        if(i != activeChild)
+            {
+            updateView(i);
             }
         }
 }
