@@ -101,6 +101,7 @@
 #include <wx/xrc/xmlres.h>
 
 #include <iterator>                     // insert_iterator
+#include <list>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -1357,18 +1358,36 @@ void Skeleton::OpenCommandLineFiles(std::vector<std::string> const& files)
         }
 }
 
+/// Update all MVC views potentially affected by a global change.
+///
+/// As of 2018-02, the only update trigger is editing the preferences
+/// dialog, which may change the calculation-summary column selection.
+///
+/// To improve responsiveness, update any active child first.
+
 void Skeleton::UpdateViews()
 {
     wxBusyCursor wait;
-    for(auto const& i : frame_->GetChildren())
+
+    // Assignment implicitly ensures that this is not a wx legacy
+    // container, and thus that std::list operations are valid.
+    std::list<wxWindow*> z = frame_->GetChildren();
+    wxMDIChildFrame*     a = frame_->GetActiveChild();
+    // Bring any active child to front so it's updated first.
+    // It doesn't matter here if it's null: that's filtered below.
+    z.remove(a);
+    z.push_front(a);
+
+    for(auto const& i : z)
         {
-        wxDocMDIChildFrame const* c = dynamic_cast<wxDocMDIChildFrame*>(i);
+        wxDocMDIChildFrame* c = dynamic_cast<wxDocMDIChildFrame*>(i);
         if(c)
             {
             IllustrationView* v = dynamic_cast<IllustrationView*>(c->GetView());
             if(v)
                 {
                 v->DisplaySelectedValuesAsHtml();
+                c->Update();
                 }
             }
         }
