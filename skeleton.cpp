@@ -101,7 +101,6 @@
 #include <wx/xrc/xmlres.h>
 
 #include <iterator>                     // insert_iterator
-#include <list>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -1369,14 +1368,21 @@ void Skeleton::UpdateViews()
 {
     wxBusyCursor wait;
 
-    // Assignment implicitly ensures that this is not a wx legacy
-    // container, and thus that std::list operations are valid.
-    std::list<wxWindow*> z = frame_->GetChildren();
-    wxMDIChildFrame*     a = frame_->GetActiveChild();
     // Bring any active child to front so it's updated first.
     // It doesn't matter here if it's null: that's filtered below.
-    z.remove(a);
-    z.push_front(a);
+    wxMDIChildFrame* const a = frame_->GetActiveChild();
+    std::vector<wxWindow*> z;
+    for(auto const& i : frame_->GetChildren())
+        {
+        if(i == a)
+            {
+            z.insert(z.begin(), a);
+            }
+        else
+            {
+            z.push_back(a);
+            }
+        }
 
     for(auto const& i : z)
         {
