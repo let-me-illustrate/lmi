@@ -1369,12 +1369,12 @@ void Skeleton::UpdateViews()
 {
     wxBusyCursor wait;
 
-    // Assignment implicitly ensures that this is not a wx legacy
-    // container, and thus that std::list operations are valid.
-    std::list<wxWindow*> z = frame_->GetChildren();
-    wxMDIChildFrame*     a = frame_->GetActiveChild();
+    // Make a local copy of the list for modification.
     // Bring any active child to front so it's updated first.
     // It doesn't matter here if it's null: that's filtered below.
+    wxMDIChildFrame*     a = frame_->GetActiveChild();
+    wxWindowList const&  y = frame_->GetChildren();
+    std::list<wxWindow*> z(y.begin(), y.end());
     z.remove(a);
     z.push_front(a);
 
