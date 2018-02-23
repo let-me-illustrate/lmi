@@ -430,14 +430,19 @@ void product_data::redintegrate_ex_post
 /// (rather than defaulted to empty strings), are intended to be
 /// plausible, if perhaps whimsical.
 ///
-/// The 'sample2' product is designed to facilitate replacement of
-/// XSL with wxPdfDoc; it may be removed when that task is complete.
+/// The 'sample2*' products are designed to facilitate replacement of
+/// XSL with wxPdfDoc, and may be removed when that task is complete.
+/// There is one for each supported ledger type:
+///   sample2naic  mce_ill_reg
+///   sample2nasd  mce_nasd
+///   sample2gpp   mce_group_private_placement
+///   sample2ipp   mce_individual_private_placement
 /// "*Filename" members are names of actual lmi product files, or
 /// basenames of mortality-table databases, and their values must
 /// nominate actual files. Member 'InsCoDomicile' is used to
 /// determine retaliatory premium-tax rates, and must be a two-letter
 /// USPS abbreviation. All other members represent text that is used
-/// for formatting reports; in order to make 'sample2' more useful for
+/// for report formatting; in order to make 'sample2*' more useful for
 /// developing and testing reports, each has a nonempty value that is
 /// its member name enclosed in braces ("{}"). Braces aren't otherwise
 /// used in values, so any output substring like "{contract}" here:
@@ -531,7 +536,7 @@ void product_data::write_policy_files()
 
     z.save(AddDataDir("sample.policy"));
 
-    // 'sample2' product
+    // 'sample2*' products
 
     for(auto const& i : z.member_names())
         {
@@ -568,7 +573,16 @@ void product_data::write_policy_files()
     // Other data that affect calculations.
     z.InsCoDomicile              = glossed_string("WI");
 
-    z.save(AddDataDir("sample2.policy"));
+    z.save(AddDataDir("sample2naic.policy"));
+
+    z.DatabaseFilename           = glossed_string("sample2nasd.database");
+    z.save(AddDataDir("sample2nasd.policy"));
+
+    z.DatabaseFilename           = glossed_string("sample2gpp.database");
+    z.save(AddDataDir("sample2gpp.policy"));
+
+    z.DatabaseFilename           = glossed_string("sample2ipp.database");
+    z.save(AddDataDir("sample2ipp.policy"));
 }
 
 /// Load from file. This free function can be invoked across dll
