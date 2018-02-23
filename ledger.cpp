@@ -122,7 +122,7 @@ void Ledger::SetRunBases(int length)
         case mce_prospectus_obsolete:                 // fall through
         case mce_offshore_private_placement_obsolete: // fall through
         case mce_ill_reg_private_placement_obsolete:  // fall through
-        case mce_variable_annuity:
+        case mce_variable_annuity_obsolete:
             {
             alarum() << "Unsupported ledger type '" << ledger_type_ << "'." << LMI_FLUSH;
             }

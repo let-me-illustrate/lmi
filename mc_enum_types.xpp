@@ -156,7 +156,7 @@
     ,mce_offshore_private_placement_obsolete \
     ,mce_ill_reg_private_placement_obsolete \
     ,mce_individual_private_placement \
-    ,mce_variable_annuity \
+    ,mce_variable_annuity_obsolete \
     };
 #define ledger_type_NAMES \
     {"illustration_reg" \
