@@ -1027,6 +1027,8 @@ fardel_files := \
 extra_fardel_checksummed_files = \
   configurable_settings.xml \
 
+# PDF !! Add "*.mst" below, only when the MST implementation is released.
+
 fardel_checksummed_files = \
   $(extra_fardel_checksummed_files) \
   *.dat *.database *.funds *.ndx *.policy *.rounding *.strata \
