@@ -112,24 +112,24 @@ class text
 
     text& operator+=(text const& t)
     {
-        m_html += t.m_html;
+        html_ += t.html_;
 
         return *this;
     }
 
     std::string&& as_html() &&
     {
-        return std::move(m_html);
+        return std::move(html_);
     }
 
   private:
     // This move ctor is private and does not perform any escaping.
     explicit text(std::string&& html)
-        :m_html{html}
+        :html_{html}
     {
     }
 
-    std::string m_html;
+    std::string html_;
 };
 
 /// Represents a single attribute of an HTML element.
