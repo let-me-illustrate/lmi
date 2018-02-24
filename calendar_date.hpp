@@ -177,12 +177,6 @@ class LMI_SO calendar_date
     mutable int cached_day_;
 };
 
-// gcc-3.x and bc-5.5.1 do not work at all well with this technique
-// suggested as a space optimization in the boost documentation:
-//    template struct boost::additive<calendar_date,int>;
-//    template struct boost::totally_ordered<calendar_date>;
-//    template struct boost::unit_steppable<calendar_date>;
-
 std::ostream& LMI_SO operator<<(std::ostream& os, calendar_date const&);
 std::istream& LMI_SO operator>>(std::istream& is, calendar_date&);
 
