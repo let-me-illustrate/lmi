@@ -125,7 +125,6 @@ jdn_t LMI_SO YmdToJdn(ymd_t);
 
 class LMI_SO calendar_date
     :boost::additive<calendar_date,int>
-    ,boost::totally_ordered<calendar_date>
 {
   public:
     enum
@@ -152,7 +151,9 @@ class LMI_SO calendar_date
     int julian_day_number() const;
 
     bool operator==(calendar_date const&) const;
-    bool operator<(calendar_date const&) const;
+    bool operator!=(calendar_date const&) const;
+    bool operator< (calendar_date const&) const;
+    bool operator<=(calendar_date const&) const;
 
     int year() const;
     int month() const;

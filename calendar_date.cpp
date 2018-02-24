@@ -272,9 +272,19 @@ bool calendar_date::operator==(calendar_date const& z) const
     return jdn_ == z.jdn_;
 }
 
+bool calendar_date::operator!=(calendar_date const& z) const
+{
+    return jdn_ != z.jdn_;
+}
+
 bool calendar_date::operator<(calendar_date const& z) const
 {
     return jdn_ < z.jdn_;
+}
+
+bool calendar_date::operator<=(calendar_date const& z) const
+{
+    return jdn_ <= z.jdn_;
 }
 
 int calendar_date::year() const
