@@ -86,8 +86,8 @@ std::string insert_spaces_between_words(std::string const& s)
 struct tn_range_variant_data
     :public wxVariantData
 {
-    tn_range_variant_data(std::string const& value_, double min_, double max_)
-        :value(value_), min(min_), max(max_)
+    tn_range_variant_data(std::string const& a_value, double a_min, double a_max)
+        :value(a_value), min(a_min), max(a_max)
     {
     }
 
@@ -347,8 +347,8 @@ std::string DateRenderer::DoGetValueFromEditor(wxWindow* editor)
 struct input_sequence_variant_data
     :public wxVariantData
 {
-    input_sequence_variant_data(std::string const& value_, Input const* input_, std::string const& field_)
-        :value(value_), input(input_), field(field_)
+    input_sequence_variant_data(std::string const& a_value, Input const* a_input, std::string const& a_field)
+        :value(a_value), input(a_input), field(a_field)
     {
     }
 
