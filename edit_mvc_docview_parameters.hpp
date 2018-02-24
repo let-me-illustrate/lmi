@@ -56,7 +56,7 @@ oenum_mvc_dv_rc edit_mvc_docview_parameters
         ;
     if(wxID_OK == z)
         {
-        if(parameters != edited_parameters)
+        if(!(parameters == edited_parameters))
             {
             rc = oe_mvc_dv_changed;
             parameters = edited_parameters;

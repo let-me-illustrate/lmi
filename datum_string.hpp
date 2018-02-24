@@ -28,15 +28,12 @@
 
 #include "value_cast.hpp"
 
-#include <boost/operators.hpp>
-
 #include <string>
 
 // Implicitly-declared special member functions do the right thing.
 
 class datum_string
     :public datum_base
-    ,private boost::equality_comparable<datum_string,datum_string>
 {
   public:
     datum_string() = default;
