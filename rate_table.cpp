@@ -33,17 +33,6 @@
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-// Work around unused parameters in Boost 1.33.1 comparison operators for
-// optional.
-#ifdef __clang__
-#   pragma clang diagnostic push
-#   pragma clang diagnostic ignored "-Wunused-parameter"
-#endif // __clang__
-#include <boost/optional.hpp>
-#ifdef __clang__
-#   pragma clang diagnostic pop
-#endif // __clang__
-
 #include <algorithm>                    // count()
 #include <climits>                      // ULLONG_MAX
 #include <cstdint>
@@ -59,6 +48,9 @@
 #include <sstream>
 #include <stdexcept>
 #include <utility>                      // make_pair(), swap()
+
+#include <experimental/optional>
+namespace Exp {using std::experimental::optional;}
 
 using std::uint8_t;
 using std::uint16_t;
@@ -186,7 +178,7 @@ void to_bytes(char* bytes, T value)
 // the later Boost.Optional versions.
 template<typename T, typename U>
 inline
-T get_value_or(boost::optional<T> const& o, U v)
+T get_value_or(Exp::optional<T> const& o, U v)
 {
     return o ? *o : v;
 }
@@ -405,17 +397,17 @@ class writer
     explicit writer(std::ostream& os) : os_(os) {}
 
     template<typename T>
-    void write(enum_soa_field field, boost::optional<T> const& onum);
+    void write(enum_soa_field field, Exp::optional<T> const& onum);
     void write_table_type(table_type tt);
-    void write(enum_soa_field field, boost::optional<std::string> const& ostr);
+    void write(enum_soa_field field, Exp::optional<std::string> const& ostr);
 
     void write_values
             (std::vector<double> const& values
-            ,boost::optional<uint16_t> const& num_decimals
-            ,boost::optional<uint16_t> const& min_age
-            ,boost::optional<uint16_t> const& max_age
-            ,boost::optional<uint16_t> const& select_period
-            ,boost::optional<uint16_t> const& max_select_age
+            ,Exp::optional<uint16_t> const& num_decimals
+            ,Exp::optional<uint16_t> const& min_age
+            ,Exp::optional<uint16_t> const& max_age
+            ,Exp::optional<uint16_t> const& select_period
+            ,Exp::optional<uint16_t> const& max_select_age
             );
 
     void end();
@@ -430,11 +422,11 @@ class writer
 
 void writer::write_values
         (std::vector<double> const& values
-        ,boost::optional<uint16_t> const& num_decimals
-        ,boost::optional<uint16_t> const& min_age
-        ,boost::optional<uint16_t> const& max_age
-        ,boost::optional<uint16_t> const& select_period
-        ,boost::optional<uint16_t> const& max_select_age
+        ,Exp::optional<uint16_t> const& num_decimals
+        ,Exp::optional<uint16_t> const& min_age
+        ,Exp::optional<uint16_t> const& max_age
+        ,Exp::optional<uint16_t> const& select_period
+        ,Exp::optional<uint16_t> const& max_select_age
         )
 {
     // Notice that to keep things more interesting, number of decimals comes
@@ -510,7 +502,7 @@ void writer::do_write_field(enum_soa_field field, T num)
 }
 
 template<typename T>
-void writer::write(enum_soa_field field, boost::optional<T> const& onum)
+void writer::write(enum_soa_field field, Exp::optional<T> const& onum)
 {
     if(onum)
         {
@@ -523,7 +515,7 @@ void writer::write_table_type(table_type tt)
     do_write_field(e_field_table_type, static_cast<uint8_t>(tt));
 }
 
-void writer::write(enum_soa_field field, boost::optional<std::string> const& ostr)
+void writer::write(enum_soa_field field, Exp::optional<std::string> const& ostr)
 {
     if(ostr)
         {
@@ -576,15 +568,15 @@ class writer
     explicit writer(std::ostream& os) : os_(os) {}
 
     template<typename T>
-    void write(enum_soa_field field, boost::optional<T> const& oval);
+    void write(enum_soa_field field, Exp::optional<T> const& oval);
     void write_table_type(table_type tt);
     void write_values
             (std::vector<double> const& values
-            ,boost::optional<uint16_t> const& num_decimals
-            ,boost::optional<uint16_t> const& min_age
-            ,boost::optional<uint16_t> const& max_age
-            ,boost::optional<uint16_t> const& select_period
-            ,boost::optional<uint16_t> const& max_select_age
+            ,Exp::optional<uint16_t> const& num_decimals
+            ,Exp::optional<uint16_t> const& min_age
+            ,Exp::optional<uint16_t> const& max_age
+            ,Exp::optional<uint16_t> const& select_period
+            ,Exp::optional<uint16_t> const& max_select_age
             );
 
     void end();
@@ -594,7 +586,7 @@ class writer
 };
 
 template<typename T>
-void writer::write(enum_soa_field field, boost::optional<T> const& oval)
+void writer::write(enum_soa_field field, Exp::optional<T> const& oval)
 {
     if(oval)
         {
@@ -611,11 +603,11 @@ void writer::write_table_type(table_type tt)
 
 void writer::write_values
         (std::vector<double> const& values
-        ,boost::optional<uint16_t> const& num_decimals
-        ,boost::optional<uint16_t> const& min_age
-        ,boost::optional<uint16_t> const& max_age
-        ,boost::optional<uint16_t> const& select_period
-        ,boost::optional<uint16_t> const& max_select_age
+        ,Exp::optional<uint16_t> const& num_decimals
+        ,Exp::optional<uint16_t> const& min_age
+        ,Exp::optional<uint16_t> const& max_age
+        ,Exp::optional<uint16_t> const& select_period
+        ,Exp::optional<uint16_t> const& max_select_age
         )
 {
     write(e_field_min_age            , min_age             );
@@ -718,13 +710,13 @@ struct field_and_value
 // explaining the problem.
 //
 // The line_num and table_number are only used for diagnostics.
-boost::optional<field_and_value> parse_field_and_value
+Exp::optional<field_and_value> parse_field_and_value
     (std::string const& line
     ,int line_num
-    ,boost::optional<uint32_t> const& table_number
+    ,Exp::optional<uint32_t> const& table_number
     )
 {
-    boost::optional<field_and_value> const no_field;
+    Exp::optional<field_and_value> const no_field;
 
     auto const pos_colon = line.find(':');
     if(pos_colon == std::string::npos)
@@ -878,7 +870,7 @@ class table_impl final
     // read_xxx() methods for binary format.
 
     static void read_string
-            (boost::optional<std::string>& ostr
+            (Exp::optional<std::string>& ostr
             ,enum_soa_field field
             ,std::istream& ifs
             ,uint16_t length
@@ -891,7 +883,7 @@ class table_impl final
 
     template<typename T>
     static void read_number
-            (boost::optional<T>& onum
+            (Exp::optional<T>& onum
             ,enum_soa_field field
             ,std::istream& ifs
             ,uint16_t length
@@ -904,7 +896,7 @@ class table_impl final
     // after reading them, this would already result in a "duplicate field"
     // error).
     void read_number_before_values
-            (boost::optional<uint16_t>& onum
+            (Exp::optional<uint16_t>& onum
             ,enum_soa_field field
             ,std::istream& ifs
             ,uint16_t length
@@ -919,7 +911,7 @@ class table_impl final
     // This method returns the pointer to ostr string value to allow further
     // modifying it later in the caller.
     static std::string* parse_string
-            (boost::optional<std::string>& ostr
+            (Exp::optional<std::string>& ostr
             ,enum_soa_field field
             ,int line_num
             ,std::string const& value
@@ -935,7 +927,7 @@ class table_impl final
 
     template<typename T>
     static void parse_number
-            (boost::optional<T>& onum
+            (Exp::optional<T>& onum
             ,enum_soa_field field
             ,int line_num
             ,std::string const& value
@@ -1007,11 +999,11 @@ class table_impl final
     template<typename T>
     void do_write(std::ostream& os) const;
 
-    // The values are not represented by boost::optional<>, the emptiness of
+    // The values are not represented by Exp::optional<>, the emptiness of
     // the vector signals if we have any values or not.
     std::vector<double> values_;
 
-    boost::optional<std::string>
+    Exp::optional<std::string>
         name_,
         contributor_,
         data_source_,
@@ -1022,18 +1014,18 @@ class table_impl final
         published_reference_,
         comments_;
 
-    boost::optional<uint32_t>
+    Exp::optional<uint32_t>
         number_,
         hash_value_;
 
-    boost::optional<uint16_t>
+    Exp::optional<uint16_t>
         num_decimals_,
         min_age_,
         max_age_,
         select_period_,
         max_select_age_;
 
-    boost::optional<table_type>
+    Exp::optional<table_type>
         type_;
 };
 
@@ -1088,7 +1080,7 @@ void throw_if_unexpected_length
 // is true.
 template<typename T>
 inline
-void throw_if_missing_field(boost::optional<T> const& o, enum_soa_field field)
+void throw_if_missing_field(Exp::optional<T> const& o, enum_soa_field field)
 {
     if(!o)
         {
@@ -1104,13 +1096,13 @@ void throw_if_missing_field(boost::optional<T> const& o, enum_soa_field field)
 } // anonymous namespace
 
 void table_impl::read_string
-        (boost::optional<std::string>& ostr
+        (Exp::optional<std::string>& ostr
         ,enum_soa_field field
         ,std::istream& ifs
         ,uint16_t length
         )
 {
-    throw_if_duplicate_record(ostr.is_initialized(), field);
+    throw_if_duplicate_record(ostr.operator bool(), field);
 
     std::string str;
     str.resize(length);
@@ -1141,7 +1133,7 @@ T table_impl::do_read_number(char const* name, std::istream& ifs)
 
 void table_impl::read_type(std::istream& ifs, uint16_t length)
 {
-    throw_if_duplicate_record(type_.is_initialized(), e_field_table_type);
+    throw_if_duplicate_record(type_.operator bool(), e_field_table_type);
 
     throw_if_unexpected_length(length, sizeof(uint8_t), e_field_table_type);
 
@@ -1161,13 +1153,13 @@ void table_impl::read_type(std::istream& ifs, uint16_t length)
 
 template<typename T>
 void table_impl::read_number
-        (boost::optional<T>& onum
+        (Exp::optional<T>& onum
         ,enum_soa_field field
         ,std::istream& ifs
         ,uint16_t length
         )
 {
-    throw_if_duplicate_record(onum.is_initialized(), field);
+    throw_if_duplicate_record(onum.operator bool(), field);
 
     throw_if_unexpected_length(length, sizeof(T), field);
 
@@ -1175,7 +1167,7 @@ void table_impl::read_number
 }
 
 void table_impl::read_number_before_values
-        (boost::optional<uint16_t>& onum
+        (Exp::optional<uint16_t>& onum
         ,enum_soa_field field
         ,std::istream& ifs
         ,uint16_t length
@@ -1296,13 +1288,13 @@ void table_impl::read_values(std::istream& ifs, uint16_t /* length */)
 }
 
 std::string* table_impl::parse_string
-        (boost::optional<std::string>& ostr
+        (Exp::optional<std::string>& ostr
         ,enum_soa_field field
         ,int line_num
         ,std::string const& value
         )
 {
-    throw_if_duplicate_record(ostr.is_initialized(), field, line_num);
+    throw_if_duplicate_record(ostr.operator bool(), field, line_num);
 
     // With slight regret, allow the comments field to be empty because
     // some historical files have put commentary in table name instead.
@@ -1319,7 +1311,7 @@ std::string* table_impl::parse_string
 
     ostr = value;
 
-    return &ostr.get();
+    return &ostr.operator *();
 }
 
 unsigned long table_impl::do_parse_number
@@ -1359,13 +1351,13 @@ unsigned long table_impl::do_parse_number
 
 template<typename T>
 void table_impl::parse_number
-        (boost::optional<T>& onum
+        (Exp::optional<T>& onum
         ,enum_soa_field field
         ,int line_num
         ,std::string const& value
         )
 {
-    throw_if_duplicate_record(onum.is_initialized(), field, line_num);
+    throw_if_duplicate_record(onum.operator bool(), field, line_num);
 
     onum = do_parse_number(field, line_num, std::numeric_limits<T>::max(), value);
 }
@@ -1375,7 +1367,7 @@ void table_impl::parse_table_type
         ,std::string const& value
         )
 {
-    throw_if_duplicate_record(type_.is_initialized(), e_field_table_type, line_num);
+    throw_if_duplicate_record(type_.operator bool(), e_field_table_type, line_num);
 
     if(value == table_type_as_string(table_type::aggregate))
         {
