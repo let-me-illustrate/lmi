@@ -136,9 +136,9 @@ class RangeTypeRenderer
     virtual wxWindow* DoCreateEditor(wxWindow* parent, wxRect const& rect, tn_range_variant_data const& data) = 0;
     virtual std::string DoGetValueFromEditor(wxWindow* editor) = 0;
 
-    std::string m_value;
-    double m_min;
-    double m_max;
+    std::string value_;
+    double      min_;
+    double      max_;
 };
 
 RangeTypeRenderer::RangeTypeRenderer()
@@ -164,19 +164,19 @@ wxWindow* RangeTypeRenderer::CreateEditorCtrl(wxWindow* parent, wxRect labelRect
 bool RangeTypeRenderer::GetValueFromEditorCtrl(wxWindow* editor, wxVariant& value)
 {
     std::string const val = DoGetValueFromEditor(editor);
-    value = new(wx) tn_range_variant_data(val, m_min, m_max);
+    value = new(wx) tn_range_variant_data(val, min_, max_);
     return true;
 }
 
 bool RangeTypeRenderer::Render(wxRect rect, wxDC* dc, int state)
 {
-    RenderText(m_value, 0, rect, dc, state);
+    RenderText(value_, 0, rect, dc, state);
     return true;
 }
 
 wxSize RangeTypeRenderer::GetSize() const
 {
-    wxSize sz = GetTextExtent(m_value);
+    wxSize sz = GetTextExtent(value_);
 
     // Allow some space for the spin button, which is approximately the size of
     // a scrollbar (and getting pixel-exact value would be complicated). Also
@@ -192,15 +192,15 @@ bool RangeTypeRenderer::SetValue(wxVariant const& value)
     tn_range_variant_data const* data = dynamic_cast<tn_range_variant_data*>(value.GetData());
     LMI_ASSERT(data);
 
-    m_value = data->value;
-    m_min = data->min;
-    m_max = data->max;
+    value_ = data->value;
+    min_   = data->min;
+    max_   = data->max;
     return true;
 }
 
 bool RangeTypeRenderer::GetValue(wxVariant& value) const
 {
-    value = new(wx) tn_range_variant_data(m_value, m_min, m_max);
+    value = new(wx) tn_range_variant_data(value_, min_, max_);
     return true;
 }
 
@@ -329,7 +329,7 @@ wxWindow* DateRenderer::DoCreateEditor
 bool DateRenderer::Render(wxRect rect, wxDC* dc, int state)
 {
     // Use wx for date formatting so that it is identical to the way wxDatePickerCtrl does it.
-    wxDateTime const date = ConvertDateToWx(value_cast<calendar_date>(m_value));
+    wxDateTime const date = ConvertDateToWx(value_cast<calendar_date>(value_));
     RenderText(date.FormatDate(), 0, rect, dc, state);
     return true;
 }
@@ -390,14 +390,14 @@ class DatumSequenceRenderer
     bool SetValue(wxVariant const& value) override;
     bool GetValue(wxVariant& value) const override;
 
-    std::string  m_value;
-    Input const* m_input;
-    std::string  m_field;
+    std::string  value_;
+    Input const* input_;
+    std::string  field_;
 };
 
 DatumSequenceRenderer::DatumSequenceRenderer()
     :wxDataViewCustomRenderer(typeid(input_sequence_variant_data).name(), wxDATAVIEW_CELL_EDITABLE, wxDVR_DEFAULT_ALIGNMENT)
-    ,m_input(nullptr)
+    ,input_(nullptr)
 {
 }
 
@@ -432,13 +432,13 @@ bool DatumSequenceRenderer::GetValueFromEditorCtrl(wxWindow* editor, wxVariant& 
 
 bool DatumSequenceRenderer::Render(wxRect rect, wxDC* dc, int state)
 {
-    RenderText(m_value, 0, rect, dc, state);
+    RenderText(value_, 0, rect, dc, state);
     return true;
 }
 
 wxSize DatumSequenceRenderer::GetSize() const
 {
-    wxSize sz = GetTextExtent(m_value);
+    wxSize sz = GetTextExtent(value_);
 
     // Add size of the "..." button. We assume it will use the same font that this renderer
     // uses and add some extra whitespace in addition to InputSequenceButton's 8px padding.
@@ -452,15 +452,15 @@ bool DatumSequenceRenderer::SetValue(wxVariant const& value)
     input_sequence_variant_data const* data = dynamic_cast<input_sequence_variant_data*>(value.GetData());
     LMI_ASSERT(data);
 
-    m_value = data->value;
-    m_input = data->input;
-    m_field = data->field;
+    value_ = data->value;
+    input_ = data->input;
+    field_ = data->field;
     return true;
 }
 
 bool DatumSequenceRenderer::GetValue(wxVariant& value) const
 {
-    value = new(wx) input_sequence_variant_data(m_value, m_input, m_field);
+    value = new(wx) input_sequence_variant_data(value_, input_, field_);
     return true;
 }
 
