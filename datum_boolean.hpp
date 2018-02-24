@@ -26,13 +26,10 @@
 
 #include "datum_base.hpp"
 
-#include <boost/operators.hpp>
-
 // Implicitly-declared special member functions do the right thing.
 
 class datum_boolean
     :public datum_base
-    ,private boost::equality_comparable<datum_boolean,datum_boolean>
 {
   public:
     explicit datum_boolean(bool = true);

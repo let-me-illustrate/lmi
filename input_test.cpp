@@ -324,7 +324,7 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     Input copy0(original);
     BOOST_TEST(original == copy0);
     copy0["InsuredName"] = "Claude Proulx";
-    BOOST_TEST(original != copy0);
+    BOOST_TEST(!(original == copy0));
     BOOST_TEST(std::string("Claude Proulx") == copy0   .InsuredName.value());
     BOOST_TEST(std::string("Full Name")     == original.InsuredName.value());
 
@@ -333,7 +333,7 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     copy1 = original;
     BOOST_TEST(original == copy1);
     copy1["InsuredName"] = "Angela";
-    BOOST_TEST(original != copy1);
+    BOOST_TEST(!(original == copy1));
     BOOST_TEST(std::string("Angela")    == copy1   .InsuredName.value());
     BOOST_TEST(std::string("Full Name") == original.InsuredName.value());
 

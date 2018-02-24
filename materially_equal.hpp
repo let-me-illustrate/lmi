@@ -32,9 +32,11 @@
 ///   they're actually equal; or
 ///   the absolute value of their difference is less than a specified
 ///     tolerance times the lesser in absolute value.
-/// This is the "essentially equal to" operator defined in Knuth,
-/// TAOCP, volume 2, section 4.2.2, equation (34), on page 219 of the
-/// second edition.
+/// This is akin to the "essentially equal to" relation described in
+/// Knuth, TAOCP, volume 2, section 4.2.2, equation (34), on page 219
+/// of the second edition...but see:
+///   https://lists.nongnu.org/archive/html/lmi/2018-02/msg00099.html
+/// et seqq.
 ///
 /// The default tolerance is 1.0E-13, a popular default value for the
 /// APL language's 'comparison tolerance', and the only such value

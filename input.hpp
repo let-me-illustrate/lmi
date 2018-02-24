@@ -40,8 +40,6 @@
 
 class product_database;
 
-#include <boost/operators.hpp>
-
 #include <map>
 #include <memory>                       // unique_ptr
 #include <string>
@@ -119,7 +117,6 @@ class LMI_SO Input final
     :public  xml_serializable           <Input>
     ,public  MvcModel
     ,public  MemberSymbolTable          <Input>
-    ,private boost::equality_comparable <Input>
 {
     friend class input_test;
     friend class yare_input;

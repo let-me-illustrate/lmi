@@ -2955,7 +2955,7 @@ void ledger_pdf_generator_wx::write
         case mce_prospectus_obsolete:                 // fall through
         case mce_offshore_private_placement_obsolete: // fall through
         case mce_ill_reg_private_placement_obsolete:  // fall through
-        case mce_variable_annuity:
+        case mce_variable_annuity_obsolete:
             alarum() << "Unsupported ledger type '" << z << "'." << LMI_FLUSH;
         }
 

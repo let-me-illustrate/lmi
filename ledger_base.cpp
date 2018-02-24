@@ -35,16 +35,16 @@
 
 //============================================================================
 LedgerBase::LedgerBase(int a_Length)
-    :m_scaling_factor(1.0)
-    ,m_scale_unit("")
+    :scale_factor_(1.0)
+    ,scale_unit_  ("")
 {
     Initialize(a_Length);
 }
 
 //============================================================================
 LedgerBase::LedgerBase(LedgerBase const& obj)
-    :m_scaling_factor(obj.m_scaling_factor)
-    ,m_scale_unit(obj.m_scale_unit)
+    :scale_factor_(obj.scale_factor_)
+    ,scale_unit_  (obj.scale_unit_)
 {
     Initialize(obj.GetLength());
     Copy(obj);
@@ -223,8 +223,8 @@ LedgerBase& LedgerBase::PlusEq
     ,std::vector<double> const& a_Inforce
     )
 {
-    LMI_ASSERT(0.0 != m_scaling_factor);
-    if(m_scaling_factor != a_Addend.m_scaling_factor)
+    LMI_ASSERT(0.0 != scale_factor_);
+    if(scale_factor_ != a_Addend.scale_factor_)
         {
         alarum() << "Cannot add differently scaled ledgers." << LMI_FLUSH;
         }
@@ -411,22 +411,22 @@ namespace
 void LedgerBase::ApplyScaleFactor(double a_Mult)
 {
     LMI_ASSERT(0.0 != a_Mult);
-    LMI_ASSERT(0.0 != m_scaling_factor);
-    if(1.0 != m_scaling_factor)
+    LMI_ASSERT(0.0 != scale_factor_);
+    if(1.0 != scale_factor_)
         {
         alarum() << "Cannot scale the same ledger twice." << LMI_FLUSH;
         }
 
-    m_scaling_factor = a_Mult;
-    if(1.0 == m_scaling_factor)
+    scale_factor_ = a_Mult;
+    if(1.0 == scale_factor_)
         {
         // Don't waste time multiplying all these vectors by one
         return;
         }
-    m_scale_unit = look_up_scale_unit(m_scaling_factor);
+    scale_unit_ = look_up_scale_unit(scale_factor_);
 
     // ET !! *i.second *= M;
-    std::vector<double>M(GetLength(), m_scaling_factor);
+    std::vector<double>M(GetLength(), scale_factor_);
     for(auto& i : ScalableVectors)
         {
         std::vector<double>& v = *i.second;
@@ -443,13 +443,13 @@ void LedgerBase::ApplyScaleFactor(double a_Mult)
 //============================================================================
 std::string const& LedgerBase::ScaleUnit() const
 {
-    return m_scale_unit;
+    return scale_unit_;
 }
 
 //============================================================================
 double LedgerBase::ScaleFactor() const
 {
-    return m_scaling_factor;
+    return scale_factor_;
 }
 
 //============================================================================

@@ -101,6 +101,7 @@
 #include <wx/xrc/xmlres.h>
 
 #include <iterator>                     // insert_iterator
+#include <list>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -1357,43 +1358,37 @@ void Skeleton::OpenCommandLineFiles(std::vector<std::string> const& files)
         }
 }
 
+/// Update all MVC views potentially affected by a global change.
+///
+/// As of 2018-02, the only update trigger is editing the preferences
+/// dialog, which may change the calculation-summary column selection.
+///
+/// To improve responsiveness, update any active child first.
+
 void Skeleton::UpdateViews()
 {
     wxBusyCursor wait;
 
-    // Update the given child frame: this is a local function used for updating
-    // the active child, first, and then all the other ones, in a loop, below.
-    auto const updateView = [](wxWindow* w)
+    // Make a local copy of the list for modification.
+    // Bring any active child to front so it's updated first.
+    // It doesn't matter here if it's null: that's filtered below.
+    wxMDIChildFrame*     a = frame_->GetActiveChild();
+    wxWindowList const&  y = frame_->GetChildren();
+    std::list<wxWindow*> z(y.begin(), y.end());
+    z.remove(a);
+    z.push_front(a);
+
+    for(auto const& i : z)
         {
-        wxDocMDIChildFrame const* c = dynamic_cast<wxDocMDIChildFrame*>(w);
+        wxDocMDIChildFrame* c = dynamic_cast<wxDocMDIChildFrame*>(i);
         if(c)
             {
             IllustrationView* v = dynamic_cast<IllustrationView*>(c->GetView());
             if(v)
                 {
                 v->DisplaySelectedValuesAsHtml();
-
-                // Update the display immediately to display the new data as
-                // soon as possible, without waiting for the other views.
-                v->GetFrame()->Update();
+                c->Update();
                 }
-            }
-        };
-
-    // Start with the active child to update it as soon as possible.
-    auto const activeChild = frame_->GetActiveChild();
-    if(activeChild)
-        {
-        updateView(activeChild);
-        }
-
-    for(auto const& i : frame_->GetChildren())
-        {
-        // The active child, if any, was already updated above, no need to do
-        // it twice.
-        if(i != activeChild)
-            {
-            updateView(i);
             }
         }
 }

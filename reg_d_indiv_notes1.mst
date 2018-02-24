@@ -37,7 +37,10 @@ Confidential Private Placement Memorandum ("the PPM") for {{PolicyMktgName}}.
 </p>
 
 <p>
-  {{ProductDescription}}.
+  {{! PDF !! Multiline text wanted here (and perhaps elsewhere)--see:
+        http://lists.nongnu.org/archive/html/lmi/2018-02/msg00118.html
+  }}
+  {{ProductDescription}}
 </p>
 
 <br></br>

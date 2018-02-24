@@ -153,6 +153,9 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( 1.1, material_difference(1.1, 0.0));
     BOOST_TEST_EQUAL(-1.1, material_difference(0.0, 1.1));
 
+    // https://lists.nongnu.org/archive/html/lmi/2018-02/msg00099.html
+    BOOST_TEST_UNEQUAL(0.0, material_difference(0.0, 1e-100));
+
     BOOST_TEST_EQUAL
         (0.0
         ,material_difference(1234567890.123456789, 1234567890.123456789)
@@ -167,7 +170,6 @@ int test_main(int, char*[])
         (0.0
         ,material_difference(1234567890.123456789, 1234567890.123)
         );
-
     return 0;
 }
 

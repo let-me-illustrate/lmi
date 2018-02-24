@@ -956,6 +956,15 @@ void DBDictionary::write_database_files()
     z.Add(database_entity(DB_ExpRatAmortPeriod   , 4.0));
 
     z.WriteDB(AddDataDir("sample.database"));
+
+    z.Add(database_entity(DB_LedgerType          , mce_nasd));
+    z.WriteDB(AddDataDir("sample2nasd.database"));
+
+    z.Add(database_entity(DB_LedgerType          , mce_group_private_placement));
+    z.WriteDB(AddDataDir("sample2gpp.database"));
+
+    z.Add(database_entity(DB_LedgerType          , mce_individual_private_placement));
+    z.WriteDB(AddDataDir("sample2ipp.database"));
 }
 
 /// Initialize the built-in database for the antediluvian branch.

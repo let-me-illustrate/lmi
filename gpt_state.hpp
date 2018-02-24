@@ -28,9 +28,6 @@
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
-#include <boost/filesystem/path.hpp>
-#include <boost/operators.hpp>
-
 #include <string>
 
 /// Transient state of guideline premium test.
@@ -49,7 +46,6 @@
 class LMI_SO gpt_state final
     :public  xml_serializable           <gpt_state>
     ,public  MemberSymbolTable          <gpt_state>
-    ,private boost::equality_comparable <gpt_state>
 {
     friend class Irc7702A;
 

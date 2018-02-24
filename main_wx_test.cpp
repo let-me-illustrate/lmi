@@ -520,7 +520,7 @@ void application_test::list_tests()
 } // Unnamed namespace.
 
 wx_base_test_case::wx_base_test_case(char const* name)
-    :m_name(name)
+    :name_(name)
 {
     application_test::instance().add_test(this);
 }

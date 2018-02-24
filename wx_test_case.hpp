@@ -37,7 +37,7 @@ class wx_base_test_case
     /// This function should throw an exception to signal any failures.
     virtual void run() = 0;
 
-    char const* get_name() const { return m_name; }
+    char const* get_name() const { return name_; }
 
     // Only required to fix g++ warning about a class having virtual functions
     // but a non-virtual dtor, as this class is not used polymorphically the
@@ -92,7 +92,7 @@ class wx_base_test_case
     /// The argument must be a literal, as we just store the pointer.
     explicit wx_base_test_case(char const* name);
 
-    char const* const m_name;
+    char const* const name_;
 
   private:
     wx_base_test_case(wx_base_test_case const&) = delete;

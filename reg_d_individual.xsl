@@ -304,7 +304,7 @@
               <xsl:value-of select="$scalars/PolicyMktgName"/>.
             </fo:block>
             <fo:block padding-top="1em">
-              <xsl:value-of select="$scalars/ProductDescription"/>.
+              <xsl:value-of select="$scalars/ProductDescription"/>
             </fo:block>
           </fo:block>
 

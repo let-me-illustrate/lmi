@@ -199,3 +199,7 @@ std::ostream& ce_product_name::write(std::ostream& os) const
     return os << str();
 }
 
+bool operator==(std::string const& s, ce_product_name const& z)
+{
+    return z == s;
+}

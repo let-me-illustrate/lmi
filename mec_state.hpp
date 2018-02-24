@@ -28,9 +28,6 @@
 #include "so_attributes.hpp"
 #include "xml_serializable.hpp"
 
-#include <boost/filesystem/path.hpp>
-#include <boost/operators.hpp>
-
 #include <string>
 
 /// Transient state of MEC testing.
@@ -45,7 +42,6 @@
 class LMI_SO mec_state final
     :public  xml_serializable           <mec_state>
     ,public  MemberSymbolTable          <mec_state>
-    ,private boost::equality_comparable <mec_state>
 {
     friend class Irc7702A;
 

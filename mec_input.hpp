@@ -40,8 +40,6 @@
 
 class product_database;
 
-#include <boost/operators.hpp>
-
 #include <memory>                       // unique_ptr
 #include <string>
 #include <vector>
@@ -66,7 +64,6 @@ class LMI_SO mec_input final
     :public  xml_serializable           <mec_input>
     ,public  MvcModel
     ,public  MemberSymbolTable          <mec_input>
-    ,private boost::equality_comparable <mec_input>
 {
   public:
     mec_input();

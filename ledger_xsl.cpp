@@ -53,7 +53,7 @@ std::string xsl_filename(Ledger const& ledger)
         case mce_prospectus_obsolete:                 // fall through
         case mce_offshore_private_placement_obsolete: // fall through
         case mce_ill_reg_private_placement_obsolete:  // fall through
-        case mce_variable_annuity:
+        case mce_variable_annuity_obsolete:
             {
             alarum() << "Case '" << z << "' not supported." << LMI_FLUSH;
             }

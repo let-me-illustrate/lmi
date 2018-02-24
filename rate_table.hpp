@@ -45,8 +45,6 @@ namespace soa_v3_format
 class table_impl;
 class database_impl;
 
-using std::shared_ptr;
-
 /// A single table in SOA database.
 ///
 /// This class has value semantics.
@@ -94,12 +92,12 @@ class table
 
   private:
     // Private ctor used only by database.
-    explicit table(shared_ptr<table_impl> const& impl)
+    explicit table(std::shared_ptr<table_impl> const& impl)
         :impl_(impl)
     {
     }
 
-    shared_ptr<table_impl> impl_;
+    std::shared_ptr<table_impl> impl_;
 
     friend database_impl;
 };
@@ -138,9 +136,9 @@ class database final
     // The index stream is passed by reference because it is only used in the
     // ctor and can be safely closed/destroyed once it returns, however the
     // data stream will continue to be used for loading table data on demand
-    // and so is passed by shared_ptr<> to ensure that the database can use it
-    // for as long as it needs it.
-    database(std::istream& index_is, shared_ptr<std::istream> data_is);
+    // and so is passed by std::shared_ptr<> to ensure that the database can
+    // use it for as long as it needs it.
+    database(std::istream& index_is, std::shared_ptr<std::istream> data_is);
 
     ~database();
 

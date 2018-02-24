@@ -28,8 +28,6 @@
 
 #include "value_cast.hpp"
 
-#include <boost/operators.hpp>
-
 #include <map>
 #include <string>
 
@@ -67,7 +65,6 @@
 
 class datum_sequence
     :public datum_string
-    ,private boost::equality_comparable<datum_sequence,datum_sequence>
 {
   public:
     datum_sequence();
@@ -114,7 +111,6 @@ bool operator==(datum_sequence const&, datum_sequence const&);
 
 class numeric_sequence
     :public datum_sequence
-    ,private boost::equality_comparable<numeric_sequence,numeric_sequence>
 {
   public:
     numeric_sequence() = default;
@@ -145,7 +141,6 @@ template<> inline std::string value_cast<std::string,numeric_sequence>
 
 class payment_sequence
     :public datum_sequence
-    ,private boost::equality_comparable<payment_sequence,payment_sequence>
 {
   public:
     payment_sequence() = default;
@@ -176,7 +171,6 @@ template<> inline std::string value_cast<std::string,payment_sequence>
 
 class mode_sequence
     :public datum_sequence
-    ,private boost::equality_comparable<mode_sequence,mode_sequence>
 {
   public:
     mode_sequence() = default;
@@ -208,7 +202,6 @@ template<> inline std::string value_cast<std::string,mode_sequence>
 
 class specamt_sequence
     :public datum_sequence
-    ,private boost::equality_comparable<specamt_sequence,specamt_sequence>
 {
   public:
     specamt_sequence() = default;
@@ -239,7 +232,6 @@ template<> inline std::string value_cast<std::string,specamt_sequence>
 
 class dbo_sequence
     :public datum_sequence
-    ,private boost::equality_comparable<dbo_sequence,dbo_sequence>
 {
   public:
     dbo_sequence() = default;

@@ -408,10 +408,10 @@ class LMI_SO LedgerInvariant
     double          InitAnnLoanDueRate;
 
     // Special cases.
-    int             Length;
-    int             irr_precision_;
-    bool            irr_initialized_;  // CalculateIrrs() succeeded
-    bool            FullyInitialized;  // Init(BasicValues const*) succeeded
+    int  Length;
+    int  irr_precision_;
+    bool irr_initialized_ {false}; // CalculateIrrs() succeeded
+    bool FullyInitialized {false}; // Init(BasicValues const*) succeeded
 };
 
 inline bool LedgerInvariant::is_irr_initialized() const

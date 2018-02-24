@@ -230,8 +230,8 @@ class LMI_SO LedgerBase
     string_map          Strings;
 
   private:
-    double              m_scaling_factor;
-    std::string         m_scale_unit; // E.g. "thousands", "millions".
+    double              scale_factor_;
+    std::string         scale_unit_; // E.g. "thousands", "millions".
 };
 
 template<typename T> void SpewVector
