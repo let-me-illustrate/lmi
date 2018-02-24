@@ -30,38 +30,16 @@
 #   error This file is not intended for separate inclusion.
 #endif // OK_TO_INCLUDE_CONFIG_MSVC_HPP
 
+#if _MSC_VER < 1900
+#   error At least MSVS 2017 is required.
+#endif
+
 #define LMI_COMPILER_USES_PCH
 
 // MSVC standard library defines many POSIX symbols but with additional
 // underscores to indicate that they are not ANSI C90
 #define snprintf _snprintf
 #define access _access
-
-// MSVC 7/8 CRT #define's some standard functions as macros even in <cstdio>
-// while this is explicitly forbidden by the C++ 1998 standard in 17.4.1.2/6,
-// in particular the footnote 159 explicitly states
-//
-//          This disallows the practice, allowed in C, of providing a
-//          "masking macro" in addition to the function prototype.
-//
-// so we need to remove these masking macros to use the real function as
-// otherwise expressions such as "std::ferror(f)" wouldn't compile
-#if defined(__cplusplus) && _MSC_VER < 1600 // 1600 is VC9 a.k.a. MSVC2008
-    #include <cstdio>
-
-    #undef clearerr
-    #undef feof
-    #undef ferror
-    #undef getc
-    #undef getchar
-    #undef putc
-    #undef putchar
-#endif
-
-#if _MSC_VER >= 1800
-    #define LMI_COMPILER_PROVIDES_EXPM1L
-    #define LMI_COMPILER_PROVIDES_LOG1PL
-#endif
 
 // MSVC does not define these constants from fcntl.h however, amazingly enough,
 // uses the same values as Unix systems do with its _access() function (except
