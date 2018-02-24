@@ -127,7 +127,7 @@ bool Transferor::Validate(wxWindow*)
 
 bool Transferor::PerformTransfer(transfer_direction td)
 {
-    if(!m_validatorWindow)
+    if(!GetWindow())
         {
         alarum()
             << "Validator for '"
@@ -136,7 +136,7 @@ bool Transferor::PerformTransfer(transfer_direction td)
             << LMI_FLUSH
             ;
         }
-    wxWindowBase* control = m_validatorWindow;
+    wxWindowBase* control = GetWindow();
 
     wxButton         * button       ;
     wxCheckBox       * checkbox     ;

@@ -1617,7 +1617,7 @@ wxObject* InputSequenceEntryXmlHandler::DoCreateResource()
     XRC_MAKE_INSTANCE(control, InputSequenceEntry)
 
     control->Create
-        (m_parentAsWindow
+        (GetParentAsWindow()
         ,GetID()
         ,GetName()
         );

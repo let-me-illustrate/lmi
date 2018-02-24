@@ -373,7 +373,7 @@ wxObject* RoundingButtonsXmlHandler::DoCreateResource()
     XRC_MAKE_INSTANCE(control, RoundingButtons)
 
     control->Create
-        (m_parentAsWindow
+        (GetParentAsWindow()
         ,GetID()
         ,GetPosition()
         ,GetSize()
