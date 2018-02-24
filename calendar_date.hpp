@@ -126,7 +126,6 @@ jdn_t LMI_SO YmdToJdn(ymd_t);
 class LMI_SO calendar_date
     :boost::additive<calendar_date,int>
     ,boost::totally_ordered<calendar_date>
-    ,boost::unit_steppable<calendar_date>
 {
   public:
     enum

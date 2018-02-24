@@ -1055,7 +1055,7 @@ namespace
         calendar_date t;
         calendar_date u(1899, 12, 31);
         t = u;
-        t++;
+        ++t;
         std::string s = t.str();
         t = add_years_and_months(t, 1, 1, true);
         attained_age(u, t, oe_age_last_birthday);
@@ -1075,7 +1075,7 @@ namespace
 
     void mete_increment()
     {
-        x++;
+        ++x;
     }
 
     void mete_get_y_m_d()
