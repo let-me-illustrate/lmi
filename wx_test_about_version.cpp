@@ -22,7 +22,6 @@
 #include "pchfile_wx.hpp"
 
 #include "assert_lmi.hpp"
-#include "boost_regex.hpp"
 #include "calendar_date.hpp"
 #include "version.hpp"
 #include "wx_test_case.hpp"
@@ -34,6 +33,7 @@
 #include <wx/uiaction.h>
 
 #include <climits>                      // INT_MAX
+#include <regex>
 
 /// Validate version string (timestamp) from "About" dialog title.
 ///
@@ -109,17 +109,16 @@ int extract_last_copyright_year(wxString const& html)
     // Notice also the use of utf8_str() to ensure that conversion from
     // wxString never fails (it could if the string contained non-ASCII
     // characters such as the copyright sign), while avoiding the use of wide
-    // char boost::regex functions that are not available under all platforms
-    // and notably not with MinGW 3.4. As we are only interested in matching
+    // char std::regex functions. As we are only interested in matching
     // ASCII characters such as digits, using UTF-8 is safe even though
-    // boost::regex has no real support for it.
+    // std::regex has no real support for it.
     std::string const copyright_line_utf8(copyright_line.utf8_str());
-    boost::smatch m;
+    std::smatch m;
     LMI_ASSERT_WITH_MSG
-        (boost::regex_search
+        (std::regex_search
             (copyright_line_utf8
             ,m
-            ,boost::regex("(?:\\d{4}, )+(\\d{4})")
+            ,std::regex("(?:\\d{4}, )+(\\d{4})")
             )
         , "Copyright line \""
         + copyright_line
