@@ -376,7 +376,7 @@ int verify(fs::path const& database_filename)
 
     // Also make a copy of the database using our code.
     std::stringstream index_ss;
-    shared_ptr<std::stringstream> data_ss = std::make_shared<std::stringstream>();
+    std::shared_ptr<std::stringstream> data_ss = std::make_shared<std::stringstream>();
 
     auto const tables_count = orig_db.tables_count();
     {

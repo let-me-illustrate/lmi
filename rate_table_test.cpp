@@ -400,7 +400,7 @@ void do_test_copy(std::string const& path)
     auto const tables_count = db_orig.tables_count();
 
     std::stringstream index_ss;
-    shared_ptr<std::stringstream> data_ss = std::make_shared<std::stringstream>();
+    std::shared_ptr<std::stringstream> data_ss = std::make_shared<std::stringstream>();
 
     // Make a copy of the database under new name.
     {
