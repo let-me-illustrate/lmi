@@ -31,9 +31,15 @@
 
 #include "multidimgrid_any.hpp"
 
-#include <boost/any.hpp>
-
 #include <type_traits>
+
+#include <experimental/any>
+namespace Exp
+{
+    using std::experimental::any;
+    using std::experimental::any_cast;
+    using std::experimental::bad_any_cast;
+}
 
 /// MultiDim* type-safe classes
 /// ---------------------------
@@ -70,7 +76,7 @@ class MultiDimAxis
 
     MultiDimAxis(std::string const& name);
 
-    boost::any GetValue(unsigned int n) const override;
+    Exp::any GetValue(unsigned int n) const override;
 
   protected:
     /// Implement this function returning values of the type ValueType
@@ -222,18 +228,18 @@ class MultiDimTable
     T    DoGetValue(Coords const&) const;
     void DoSetValue(Coords const&, T const&);
 
-    /// Helper methods for unwrapping/wrapping a value from/into boost::any.
+    /// Helper methods for unwrapping/wrapping a value from/into Exp::any.
     template<typename A>
-    static A UnwrapAny(boost::any const&);
+    static A UnwrapAny(Exp::any const&);
     template<typename A>
-    static boost::any WrapAny(A const&);
+    static Exp::any WrapAny(A const&);
 
   private:
     /// MultiDimTableAny overrides.
-    boost::any DoGetValueAny(Coords const&) const override;
-    void       DoSetValueAny(Coords const&, boost::any const&) override;
-    boost::any  StringToValue(std::string const&) const override;
-    std::string ValueToString(boost::any const&) const override;
+    Exp::any    DoGetValueAny(Coords const&) const override;
+    void        DoSetValueAny(Coords const&, Exp::any const&) override;
+    Exp::any    StringToValue(std::string const&) const override;
+    std::string ValueToString(Exp::any const&) const override;
 };
 
 /// Design notes for MultiDimAdjustableAxis<AdjustControl,BaseAxisType>

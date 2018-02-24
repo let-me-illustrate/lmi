@@ -437,7 +437,7 @@ wxGrid& MultiDimGrid::grid() const
 
 void MultiDimGrid::FixAxisValue
     (std::string const& axisName
-    ,boost::any const& value
+    ,Exp::any    const& value
     )
 {
     int sel = GetAxisIndexByName(axisName);
@@ -1154,7 +1154,7 @@ wxString MultiDimGrid::GetValue(int row, int col)
 
 std::string MultiDimGrid::DoGetValue(unsigned int row, unsigned int col) const
 {
-    boost::any value = table().GetValueAny(PrepareFixedCoords(row, col));
+    Exp::any value = table().GetValueAny(PrepareFixedCoords(row, col));
     return table().ValueToString(value);
 }
 
