@@ -45,8 +45,6 @@
 
 class ce_skin_name
     :public mc_enum_base
-    ,private boost::equality_comparable<ce_skin_name,ce_skin_name>
-    ,private boost::equality_comparable<ce_skin_name,std::string>
 {
   public:
     ce_skin_name();
