@@ -29,6 +29,12 @@
 // Namespace alii.
 namespace boost {namespace filesystem {} }
 namespace fs = boost::filesystem;
+
+#if __cplusplus >= 201703L
+// A compiler claiming C++17 support must have C++17 standard library.
+#define LMI_COMPILER_HAS_CXX17_STDLIB
+#endif // C++17 compiler
+
 #endif // Not C++.
 
 // The msw platform-identifying macro that its vendor encourages

@@ -49,8 +49,13 @@
 #include <stdexcept>
 #include <utility>                      // make_pair(), swap()
 
+#ifdef LMI_COMPILER_HAS_CXX17_STDLIB
+#include <optional>
+namespace Exp { using std::optional; }
+#else
 #include <experimental/optional>
 namespace Exp {using std::experimental::optional;}
+#endif
 
 // Note about error handling in this code: with a few exceptions (e.g.
 // strict_parse_number), most of the functions in this file throw on error.

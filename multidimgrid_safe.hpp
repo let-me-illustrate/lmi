@@ -33,6 +33,15 @@
 
 #include <type_traits>
 
+#ifdef LMI_COMPILER_HAS_CXX17_STDLIB
+#include <any>
+namespace Exp
+{
+    using std::any;
+    using std::any_cast;
+    using std::bad_any_cast;
+}
+#else
 #include <experimental/any>
 namespace Exp
 {
@@ -40,6 +49,7 @@ namespace Exp
     using std::experimental::any_cast;
     using std::experimental::bad_any_cast;
 }
+#endif
 
 /// MultiDim* type-safe classes
 /// ---------------------------
