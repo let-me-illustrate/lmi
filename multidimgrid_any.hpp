@@ -100,8 +100,13 @@
 #include <utility>                      // pair
 #include <vector>
 
+#ifdef LMI_COMPILER_HAS_CXX17_STDLIB
+#include <any>
+namespace Exp { using std::any; }
+#else
 #include <experimental/any>
 namespace Exp {using std::experimental::any;}
+#endif
 
 class MultiDimAxisAny;
 class MultiDimAxisAnyChoice;

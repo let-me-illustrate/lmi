@@ -36,6 +36,8 @@
 
 #define LMI_COMPILER_USES_PCH
 
+#define LMI_COMPILER_HAS_CXX17_STDLIB
+
 // MSVC standard library defines many POSIX symbols but with additional
 // underscores to indicate that they are not ANSI C90
 #define snprintf _snprintf
