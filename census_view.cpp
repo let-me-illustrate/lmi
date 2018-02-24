@@ -137,7 +137,8 @@ class RangeTypeRenderer
     virtual std::string DoGetValueFromEditor(wxWindow* editor) = 0;
 
     std::string m_value;
-    double m_min, m_max;
+    double m_min;
+    double m_max;
 };
 
 RangeTypeRenderer::RangeTypeRenderer()
