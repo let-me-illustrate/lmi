@@ -92,12 +92,15 @@ inline int floating_point_decimals(T t)
 inline std::string simplify_floating_point(std::string const& s)
 {
     std::string::const_reverse_iterator ri = s.rbegin();
-  loop:
-    switch(*ri)
+    for(;ri != s.rend(); ++ri)
         {
-        case '0': if(++ri != s.rend()) goto loop;
-        case '.': ++ri;
-        default : ;
+        if(*ri != '0')
+            {
+            if(*ri == '.')
+                ++ri;
+
+            break;
+            }
         }
     return std::string(s.begin(), ri.base());
 }
