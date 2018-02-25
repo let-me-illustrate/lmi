@@ -89,7 +89,7 @@
 ///
 /// Future directions.
 ///
-/// Perhaps this class could be supplanted by boost::function. One of
+/// Perhaps this class could be supplanted by std::function. One of
 /// those facilities should be used in 'progress_meter*.?pp' and in
 /// 'alert*.?pp'.
 
