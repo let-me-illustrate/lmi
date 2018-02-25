@@ -87,6 +87,24 @@ bool mc_enum<T>::operator==(std::string const& s) const
 }
 
 template<typename T>
+bool mc_enum<T>::operator!=(mc_enum<T> const& z) const
+{
+    return !operator==(z);
+}
+
+template<typename T>
+bool mc_enum<T>::operator!=(T t) const
+{
+    return !operator==(t);
+}
+
+template<typename T>
+bool mc_enum<T>::operator!=(std::string const& s) const
+{
+    return !operator==(s);
+}
+
+template<typename T>
 std::size_t mc_enum<T>::ordinal(std::string const& s)
 {
     std::size_t v = std::find(c(), c() + n(), s) - c();

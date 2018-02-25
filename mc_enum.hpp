@@ -26,8 +26,6 @@
 
 #include "datum_base.hpp"
 
-#include <boost/operators.hpp>
-
 #include <cstddef>                      // size_t
 #include <deque>
 #include <string>
@@ -94,9 +92,6 @@ class LMI_SO mc_enum_base
 template<typename T>
 class mc_enum
     :public mc_enum_base
-    ,private boost::equality_comparable<mc_enum<T>,mc_enum<T>>
-    ,private boost::equality_comparable<mc_enum<T>,T>
-    ,private boost::equality_comparable<mc_enum<T>,std::string>
 {
     static_assert(std::is_enum<T>::value);
 
@@ -116,6 +111,9 @@ class mc_enum
     bool operator==(mc_enum<T>  const&) const;
     bool operator==(T                 ) const;
     bool operator==(std::string const&) const;
+    bool operator!=(mc_enum<T>  const&) const;
+    bool operator!=(T                 ) const;
+    bool operator!=(std::string const&) const;
 
     static std::size_t ordinal(std::string const&);
 
@@ -141,6 +139,30 @@ class mc_enum
 
     T value_;
 };
+
+template<typename U>
+bool operator==(U u, mc_enum<U> const& z)
+{
+    return z.operator==(u);
+}
+
+template<typename U>
+bool operator==(std::string const& s, mc_enum<U> const& z)
+{
+    return z.operator==(s);
+}
+
+template<typename U>
+bool operator!=(U u, mc_enum<U> const& z)
+{
+    return !z.operator==(u);
+}
+
+template<typename U>
+bool operator!=(std::string const& s, mc_enum<U> const& z)
+{
+    return !z.operator==(s);
+}
 
 template<typename U>
 std::vector<std::string> const& all_strings()
