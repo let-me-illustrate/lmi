@@ -27,8 +27,6 @@
 #include "oecumenic_enumerations.hpp"   // oenum_alb_or_anb
 #include "so_attributes.hpp"
 
-#include <boost/operators.hpp>
-
 #include <iosfwd>
 #include <string>
 #include <utility>
@@ -124,7 +122,6 @@ jdn_t LMI_SO YmdToJdn(ymd_t);
 /// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO calendar_date
-    :boost::additive<calendar_date,int>
 {
   public:
     enum
@@ -176,6 +173,10 @@ class LMI_SO calendar_date
     mutable int cached_month_;
     mutable int cached_day_;
 };
+
+calendar_date LMI_SO operator+(int, calendar_date);
+calendar_date LMI_SO operator+(calendar_date, int);
+calendar_date LMI_SO operator-(calendar_date, int);
 
 std::ostream& LMI_SO operator<<(std::ostream& os, calendar_date const&);
 std::istream& LMI_SO operator>>(std::istream& is, calendar_date&);
