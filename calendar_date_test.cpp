@@ -43,6 +43,7 @@ struct CalendarDateTest
         TestYMDBounds();
         TestYmdToJdnAndJdnToYmd();
         TestLeapYear();
+        TestMixedModeArithmetic();
         TestIncrementing();
         TestAgeCalculations();
         TestIntegralDuration();
@@ -60,6 +61,7 @@ struct CalendarDateTest
     static void TestYMDBounds();
     static void TestYmdToJdnAndJdnToYmd();
     static void TestLeapYear();
+    static void TestMixedModeArithmetic();
     static void TestIncrementing();
     static void TestAgeCalculations();
     static void TestIntegralDuration();
@@ -228,6 +230,31 @@ void CalendarDateTest::TestLeapYear()
     BOOST_TEST(!calendar_date(2003,  1,  1).is_leap_year());
     BOOST_TEST( calendar_date(2004,  1,  1).is_leap_year());
     BOOST_TEST( calendar_date(4000,  1,  1).is_leap_year());
+}
+
+void CalendarDateTest::TestMixedModeArithmetic()
+{
+    calendar_date const d = calendar_date(2003, 12, 31);
+
+    BOOST_TEST_EQUAL(    1 + d, calendar_date(2004,  1,  1));
+    BOOST_TEST_EQUAL(    d + 1, calendar_date(2004,  1,  1));
+    BOOST_TEST_EQUAL(    d - 1, calendar_date(2003, 12, 30));
+//  BOOST_TEST_EQUAL(    1 - d, calendar_date(2004, 12, 30)); // forbidden
+    BOOST_TEST_EQUAL(1 + d - 1, calendar_date(2003, 12, 31));
+
+    BOOST_TEST_EQUAL(    3 + d, calendar_date(2004,  1,  3));
+    BOOST_TEST_EQUAL(    d + 3, calendar_date(2004,  1,  3));
+    BOOST_TEST_EQUAL(    d - 3, calendar_date(2003, 12, 28));
+    BOOST_TEST_EQUAL(3 + d - 3, calendar_date(2003, 12, 31));
+    BOOST_TEST_EQUAL(7 + d - 5, calendar_date(2004,  1,  2));
+
+    calendar_date e = calendar_date(2000,  2, 28);
+
+//  BOOST_TEST_EQUAL(    3 += e, calendar_date(2000,  3,  3)); // forbidden
+    BOOST_TEST_EQUAL(    e += 3, calendar_date(2000,  3,  2));
+    BOOST_TEST_EQUAL(    e -= 3, calendar_date(2000,  2, 28));
+    BOOST_TEST_EQUAL(3 + e -= 3, calendar_date(2000,  2, 28));
+    BOOST_TEST_EQUAL(7 + e -= 5, calendar_date(2000,  3,  1));
 }
 
 void CalendarDateTest::TestIncrementing()
