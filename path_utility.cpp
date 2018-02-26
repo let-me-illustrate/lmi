@@ -89,7 +89,6 @@
 
 void initialize_filesystem()
 {
-    fs::path::default_name_check(fs::native);
     fs::initial_path();
 }
 
@@ -268,7 +267,7 @@ fs::path serial_file_path
         {
         s = '.' + orthodox_filename(personal_name) + s;
         }
-    return fs::change_extension(exemplar.leaf(), s);
+    return fs::path(exemplar.leaf()).replace_extension(s);
 }
 
 /// Create a unique file path, following input as closely as possible.
