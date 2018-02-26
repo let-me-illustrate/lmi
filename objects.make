@@ -512,6 +512,7 @@ any_member_test$(EXEEXT): \
   $(common_test_objects) \
   any_member_test.o \
   facets.o \
+  miscellany.o \
 
 assert_lmi_test$(EXEEXT): \
   $(common_test_objects) \
@@ -642,6 +643,7 @@ gpt_test$(EXEEXT): \
   gpt_commutation_functions.o \
   gpt_test.o \
   ihs_irc7702.o \
+  miscellany.o \
   timer.o \
 
 handle_exceptions_test$(EXEEXT): \
@@ -772,6 +774,7 @@ name_value_pairs_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   facets.o \
+  miscellany.o \
   name_value_pairs.o \
   name_value_pairs_test.o \
 
@@ -781,6 +784,7 @@ ncnnnpnn_test$(EXEEXT): \
 
 numeric_io_test$(EXEEXT): \
   $(common_test_objects) \
+  miscellany.o \
   numeric_io_test.o \
   timer.o \
 
@@ -824,6 +828,7 @@ premium_tax_test$(EXEEXT): \
 print_matrix_test$(EXEEXT): \
   $(common_test_objects) \
   facets.o \
+  miscellany.o \
   print_matrix_test.o \
 
 product_file_test$(EXEEXT): \
@@ -935,12 +940,14 @@ tn_range_test$(EXEEXT): \
   $(common_test_objects) \
   datum_base.o \
   facets.o \
+  miscellany.o \
   tn_range_test.o \
   tn_range_test_aux.o \
 
 value_cast_test$(EXEEXT): \
   $(common_test_objects) \
   facets.o \
+  miscellany.o \
   value_cast_test.o \
 
 vector_test$(EXEEXT): \
@@ -956,6 +963,7 @@ xml_serialize_test$(EXEEXT): \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
   facets.o \
+  miscellany.o \
   timer.o \
   xml_lmi.o \
   xml_serialize_test.o \

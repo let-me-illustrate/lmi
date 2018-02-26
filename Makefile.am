@@ -569,7 +569,8 @@ test_alert_CXXFLAGS = $(AM_CXXFLAGS)
 test_any_member_SOURCES = \
   $(common_test_objects) \
   any_member_test.cpp \
-  facets.cpp
+  facets.cpp \
+  miscellany.cpp
 test_any_member_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_assert_lmi_SOURCES = \
@@ -723,6 +724,7 @@ test_gpt_SOURCES = \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
   ihs_irc7702.cpp \
+  miscellany.cpp \
   timer.cpp
 test_gpt_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -868,6 +870,7 @@ test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
 test_name_value_pairs_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  miscellany.cpp \
   name_value_pairs.cpp \
   name_value_pairs_test.cpp
 test_name_value_pairs_CXXFLAGS = $(AM_CXXFLAGS)
@@ -881,6 +884,7 @@ test_ncnnnpnn_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_numeric_io_SOURCES = \
   $(common_test_objects) \
+  miscellany.cpp \
   numeric_io_test.cpp \
   timer.cpp
 test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
@@ -929,6 +933,7 @@ test_premium_tax_LDADD = \
 test_print_matrix_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  miscellany.cpp \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -1054,6 +1059,7 @@ test_tn_range_SOURCES = \
   $(common_test_objects) \
   datum_base.cpp \
   facets.cpp \
+  miscellany.cpp \
   tn_range_test.cpp \
   tn_range_test_aux.cpp
 test_tn_range_CXXFLAGS = $(AM_CXXFLAGS)
@@ -1061,6 +1067,7 @@ test_tn_range_CXXFLAGS = $(AM_CXXFLAGS)
 test_value_cast_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  miscellany.cpp \
   value_cast_test.cpp
 test_value_cast_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -1078,6 +1085,7 @@ test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
 test_xml_serialize_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  miscellany.cpp \
   timer.cpp \
   xml_lmi.cpp \
   xml_serialize_test.cpp

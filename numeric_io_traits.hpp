@@ -26,6 +26,7 @@
 
 #include "bourn_cast.hpp"
 #include "ieee754.hpp"                  // is_infinite<>()
+#include "miscellany.hpp"               // rtrim()
 
 #include <algorithm>                    // max()
 #include <cmath>                        // fabs(), log10()
@@ -92,15 +93,10 @@ inline int floating_point_decimals(T t)
 
 inline std::string simplify_floating_point(std::string const& s)
 {
-    std::string::const_reverse_iterator ri = s.rbegin();
-  loop:
-    switch(*ri)
-        {
-        case '0': ++ri; goto loop;
-        case '.': ++ri;
-        default : ;
-        }
-    return std::string(s.begin(), ri.base());
+    std::string z(s);
+    rtrim(z, "0");
+    rtrim(z, ".");
+    return z;
 }
 
 /// Traits for conversion between arithmetic types and strings.
