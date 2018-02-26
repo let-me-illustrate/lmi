@@ -27,8 +27,6 @@
 #include "platform_dependent.hpp"       // access()
 #include "xml_lmi.hpp"
 
-#include <boost/filesystem/convenience.hpp> // basename()
-
 #include <xmlwrapp/nodes_view.h>
 
 #include <algorithm>                    // copy(), find()
@@ -69,7 +67,7 @@ template<typename T>
 void xml_serializable<T>::save(fs::path const& path) const
 {
     xml_lmi::xml_document document(xml_root_name());
-    write_proem(document, fs::basename(path));
+    write_proem(document, path.stem().string());
     immit_members_into(document.root_node());
     document.save(path.string());
 }

@@ -27,7 +27,6 @@
 #include "main_common.hpp"
 #include "miscellany.hpp"               // begins_with(), split_into_lines()
 
-#include <boost/filesystem/convenience.hpp> // fs::extension()
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>  // fs::exists(), fs::is_directory()
 #include <boost/filesystem/path.hpp>
@@ -135,7 +134,7 @@ file::file(std::string const& file_path)
     :path_      {file_path}
     ,full_name_ {file_path}
     ,leaf_name_ {path_.filename.string()}
-    ,extension_ {fs::extension(path_)}
+    ,extension_ {path_.extension_().string()}
     ,phylum_    {e_no_phylum}
 {
     if(!fs::exists(path_))

@@ -149,9 +149,10 @@ void merge
         fs::directory_iterator const eod;
         for(; i != eod; ++i)
             {
-            if(".rates" == fs::extension(*i))
+            auto const p{i->path()};
+            if(".rates" == p.extension())
                 {
-                table_names.push_back(*i);
+                table_names.push_back(p);
                 }
             }
         std::sort(table_names.begin(), table_names.end());

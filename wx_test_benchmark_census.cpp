@@ -44,7 +44,7 @@ class census_benchmark
   public:
     explicit census_benchmark(fs::path const& path)
         :status_ {get_main_window_statusbar()}
-        ,name_   {path.leaf().string()}
+        ,name_   {path.filename().string()}
         {
         wxUIActionSimulator z;
         z.Char('o', wxMOD_CONTROL); // "File|Open"

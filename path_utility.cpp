@@ -258,7 +258,7 @@ fs::path serial_file_path
     )
 {
     LMI_ASSERT(!exemplar.empty());
-    LMI_ASSERT(exemplar.has_leaf());
+    LMI_ASSERT(exemplar.has_filename());
     std::string s(serial_extension(serial_number, extension));
     if
         (  !personal_name.empty()
@@ -267,7 +267,7 @@ fs::path serial_file_path
         {
         s = '.' + orthodox_filename(personal_name) + s;
         }
-    return fs::path(exemplar.leaf()).replace_extension(s);
+    return exemplar.filename().replace_extension(s);
 }
 
 /// Create a unique file path, following input as closely as possible.
@@ -312,7 +312,7 @@ fs::path unique_filepath
     )
 {
     fs::path filepath(original_filepath);
-    filepath = fs::change_extension(filepath, supplied_extension);
+    filepath.replace_extension(supplied_extension);
     if(!fs::exists(filepath))
         {
         return filepath;
@@ -325,10 +325,13 @@ fs::path unique_filepath
         }
     catch(std::exception const&)
         {
-        std::string basename  = fs::basename (filepath);
-        std::string extension = fs::extension(filepath);
-        basename += '-' + iso_8601_datestamp_terse() + extension;
-        filepath = filepath.branch_path() / basename;
+        auto const stem  = filepath.stem();
+        auto const extension = filepath.extension();
+        filepath = filepath.parent_path()
+            / stem
+            / ('-' + iso_8601_datestamp_terse())
+            / extension
+            ;
         if(fs::exists(filepath))
             {
             alarum()

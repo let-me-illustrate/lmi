@@ -47,11 +47,12 @@ std::vector<std::string> fetch_product_names()
     fs::directory_iterator end_i;
     for(; i != end_i; ++i)
         {
-        if(".policy" != fs::extension(*i) || is_directory(*i))
+        auto const p{i->path()};
+        if(".policy" != p.extension() || is_directory(p))
             {
             continue;
             }
-        names.push_back(basename(*i));
+        names.push_back(p.stem().string());
         }
 
     if(names.empty())

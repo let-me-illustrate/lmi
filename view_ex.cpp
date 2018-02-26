@@ -209,5 +209,5 @@ std::string ViewEx::base_filename() const
 {
     std::string t(GetDocument()->GetUserReadableName().ToStdString(wxConvUTF8));
     fs::path path(t);
-    return path.has_leaf() ? path.leaf().string() : std::string("Hastur");
+    return path.has_filename() ? path.filename().string() : std::string("Hastur");
 }

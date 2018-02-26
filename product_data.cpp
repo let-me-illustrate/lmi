@@ -142,8 +142,8 @@ product_data::product_data(std::string const& product_name)
     ascribe_members();
 
     fs::path path(product_name);
-    LMI_ASSERT(product_name == fs::basename(path));
-    path = fs::change_extension(path, ".policy");
+    LMI_ASSERT(product_name == path.stem());
+    path.replace_extension(".policy");
     load(AddDataDir(path.string()));
 }
 

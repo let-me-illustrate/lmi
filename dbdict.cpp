@@ -1081,15 +1081,17 @@ void print_databases()
     fs::directory_iterator end_i;
     for(; i != end_i; ++i)
         {
-        if(is_directory(*i) || ".database" != fs::extension(*i))
+        auto const p{i->path()};
+        if(is_directory(p) || ".database" != p.extension())
             {
             continue;
             }
         try
             {
-            DBDictionary const z(i->path().string());
+            DBDictionary const z(p.string());
 
-            fs::path out_file = fs::change_extension(*i, ".dbt");
+            fs::path out_file{p};
+            out_file.replace_extension(".dbt");
             fs::ofstream os(out_file, ios_out_trunc_binary());
             for(auto const& j : z.member_names())
                 {

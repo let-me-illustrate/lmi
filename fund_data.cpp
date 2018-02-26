@@ -32,7 +32,6 @@
 #include "xml_lmi.hpp"
 #include "xml_serialize.hpp"
 
-#include <boost/filesystem/convenience.hpp> // basename()
 #include <boost/filesystem/path.hpp>
 
 //============================================================================
@@ -121,7 +120,7 @@ void FundData::Write(std::string const& a_Filename) const
     xml_lmi::xml_document document(xml_root_name());
     xml::element& root = document.root_node();
 
-    ::write_proem(document, fs::basename(fs::path(a_Filename)));
+    ::write_proem(document, fs::path(a_Filename).stem().string());
 
     xml_lmi::set_attr(root, "version", "0");
     xml_serialize::to_xml(root, FundInfo_);

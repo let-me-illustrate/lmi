@@ -2342,12 +2342,14 @@ class database_impl final
   public:
     static fs::path get_index_path(fs::path const& path)
         {
-        return fs::change_extension(path, ".ndx");
+        fs::path index_path{path};
+        return index_path.replace_extension(".ndx");
         }
 
     static fs::path get_data_path(fs::path const& path)
         {
-        return fs::change_extension(path, ".dat");
+        fs::path data_path{path};
+        return data_path.replace_extension(".dat");
         }
 
     explicit database_impl(fs::path const& path);
@@ -2865,7 +2867,14 @@ void database_impl::save(fs::path const& path)
                 ,char     const* description
                 ,char     const* extension
                 )
-                :path_ {fs::change_extension(path, extension)}
+                :path_
+                    {[=]()
+                        {
+                        fs::path z{path};
+                        z.replace_extension(extension);
+                        return z;
+                        }()
+                    }
                 ,temp_path_
                     {fs::exists(path_)
                         ? unique_filepath(path_, extension + std::string(".tmp"))

@@ -510,7 +510,7 @@ gpt_server::gpt_server(mcenum_emission emission) : emission_(emission)
 
 bool gpt_server::operator()(fs::path const& file_path)
 {
-    std::string const extension = fs::extension(file_path);
+    std::string const extension = file_path.extension().string();
     if(".gpt" == extension)
         {
         Timer timer;
@@ -540,7 +540,9 @@ bool gpt_server::operator()(fs::path const& file_path, gpt_input const& z)
     timer.restart();
     if(mce_emit_test_data & emission_)
         {
-        state_.save(fs::change_extension(file_path, ".gpt.xml"));
+        fs::path state_path{file_path};
+        state_path.replace_extension(".gpt.xml");
+        state_.save(state_path);
         }
     seconds_for_output_       = timer.stop().elapsed_seconds();
     conditionally_show_timings_on_stdout();

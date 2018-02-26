@@ -50,8 +50,6 @@
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
 
-#include <boost/filesystem/convenience.hpp> // basename()
-
 #include <wx/dataview.h>
 #include <wx/datectrl.h>
 #include <wx/menu.h>
@@ -1944,7 +1942,7 @@ void CensusView::DoCopyCensus() const
     configurable_settings const& c = configurable_settings::instance();
     std::string const& print_dir = c.print_directory();
     std::string const& tsv_ext = c.spreadsheet_file_extension();
-    std::string const f = fs::basename(base_filename()) + ".census.cns";
+    std::string const f = fs::path{base_filename()}.stem().string() + ".census.cns";
     fs::path const g(modify_directory(f, print_dir));
     std::string file_name = unique_filepath(g, tsv_ext).string();
     std::ofstream ofs(file_name.c_str(), ios_out_app_binary());
