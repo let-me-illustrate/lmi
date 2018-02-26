@@ -95,7 +95,7 @@ inline std::string simplify_floating_point(std::string const& s)
   loop:
     switch(*ri)
         {
-        case '0': if(++ri != s.rend()) goto loop;
+        case '0': ++ri; goto loop;
         case '.': ++ri;
         default : ;
         }
