@@ -79,15 +79,16 @@ inline int floating_point_decimals(T t)
 
 /// Simplify a formatted floating-point number.
 ///
-/// Precondition: 's' is a floating-point number formatted as if by
-/// std::snprintf() with format "%#.*f" or "%#.*Lf".
+/// Precondition: the argument is a floating-point number formatted as
+/// if by std::snprintf() with format "%#.*f" or "%#.*Lf". Therefore,
+/// it contains a decimal point (because of '#') preceded by at least
+/// one digit (because of 'f'). These preconditions are not tested:
+/// testing them would be costly, and this function is intended only
+/// for internal use in a context that ensures their satisfaction.
 ///
 /// Returns: 's' without any insignificant characters (trailing zeros
 /// after the decimal point, and the decimal point itself if followed
 /// by no nonzero digits).
-///
-/// Note: The '#' flag ensures the presence of a decimal point in the
-/// argument, which this algorithm uses as a sentinel.
 
 inline std::string simplify_floating_point(std::string const& s)
 {
