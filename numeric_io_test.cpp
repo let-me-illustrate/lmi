@@ -29,6 +29,16 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#if defined __has_include
+#   if __has_include(<valgrind/valgrind.h>)
+#       include <valgrind/valgrind.h>
+#   endif // valgrind.h present.
+#endif // Can test for valgrind.h presence.
+
+#if !defined RUNNING_ON_VALGRIND
+#   define RUNNING_ON_VALGRIND (0)
+#endif // !defined RUNNING_ON_VALGRIND
+
 #include <boost/lexical_cast.hpp>
 
 #include <cmath>                        // exp()
@@ -145,7 +155,13 @@ int test_main(int, char*[])
     // mistake that was found before committing, i.e., using log10()
     // instead of std::log10() in the implementation caused C function
     // log10(double) to be called instead of log10l().
-    BOOST_TEST_EQUAL(15, floating_point_decimals(0.4503599627370497));
+    // It also fails when running under Valgrind because it only implements 64
+    // bit precision for floating point operations and this test relies on 80
+    // bit precision of x87 FPU.
+    if(!RUNNING_ON_VALGRIND)
+        {
+        BOOST_TEST_EQUAL(15, floating_point_decimals(0.4503599627370497));
+        }
 
     BOOST_TEST_EQUAL(   "3.14", simplify_floating_point(    "3.14"));
     BOOST_TEST_EQUAL(   "3.14", simplify_floating_point( "3.14000"));
