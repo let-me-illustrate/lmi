@@ -748,7 +748,6 @@ test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_input_SOURCES = \
   $(common_test_objects) \
-  antediluvian_stubs.cpp \
   calendar_date.cpp \
   ce_product_name.cpp \
   configurable_settings.cpp \
@@ -770,6 +769,7 @@ test_input_SOURCES = \
   input_sequence_parser.cpp \
   input_test.cpp \
   input_xml_io.cpp \
+  lmi.cpp \
   mc_enum.cpp \
   mc_enum_types.cpp \
   mc_enum_types_aux.cpp \
@@ -780,7 +780,9 @@ test_input_SOURCES = \
   null_stream.cpp \
   path_utility.cpp \
   premium_tax.cpp \
+  product_data.cpp \
   single_cell_document.cpp \
+  stratified_charges.cpp \
   timer.cpp \
   tn_range_types.cpp \
   xml_lmi.cpp \
@@ -805,7 +807,6 @@ test_irc7702a_SOURCES = \
   xml_lmi.cpp
 test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 test_irc7702a_LDADD = \
-  liblmi.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
@@ -979,11 +980,16 @@ test_progress_meter_SOURCES = \
 test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_rate_table_SOURCES = \
-  alert_cli.cpp \
+  $(common_test_objects) \
+  calendar_date.cpp \
+  crc32.cpp \
+  global_settings.cpp \
+  miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp \
   rate_table.cpp \
   rate_table_test.cpp
 test_rate_table_LDADD = \
-  liblmi.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
