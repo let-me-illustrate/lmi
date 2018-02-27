@@ -875,9 +875,9 @@ rate_table_test$(EXEEXT): \
   calendar_date.o \
   crc32.o \
   global_settings.o \
-  path_utility.o \
   miscellany.o \
   null_stream.o \
+  path_utility.o \
   rate_table.o \
   rate_table_test.o \
 
