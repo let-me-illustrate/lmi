@@ -58,6 +58,8 @@ class CensusView final
 
     void update_visible_columns();
 
+    void paste_out_to_spreadsheet() const;
+
     CensusDocument& document() const;
 
     // ViewEx required implementation.

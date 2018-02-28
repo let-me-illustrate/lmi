@@ -26,18 +26,20 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "census_document.hpp"
+#include "configurable_settings.hpp"
 #include "contains.hpp"
 #include "default_view.hpp"
 #include "edit_mvc_docview_parameters.hpp"
 #include "facets.hpp"                   // tab_is_not_whitespace_locale()
+#include "global_settings.hpp"
 #include "illustration_view.hpp"
 #include "illustrator.hpp"
 #include "input.hpp"
 #include "input_sequence_entry.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
-#include "miscellany.hpp"               // is_ok_for_cctype()
-#include "path_utility.hpp"
+#include "miscellany.hpp"               // is_ok_for_cctype(), ios_out_app_binary()
+#include "path_utility.hpp"             // unique_filepath()
 #include "rtti_lmi.hpp"                 // lmi::TypeInfo
 #include "safely_dereference_as.hpp"
 #include "single_choice_popup_menu.hpp"
@@ -45,6 +47,8 @@
 #include "value_cast.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"               // class ClipboardEx
+
+#include <boost/filesystem/convenience.hpp> // basename()
 
 #include <wx/dataview.h>
 #include <wx/datectrl.h>
@@ -60,6 +64,7 @@
 #include <algorithm>
 #include <cctype>
 #include <cstddef>                      // size_t
+#include <fstream>
 #include <istream>                      // ws
 #include <iterator>                     // insert_iterator
 #include <sstream>
@@ -1225,6 +1230,64 @@ void CensusView::update_visible_columns()
         }
 }
 
+/// Paste from the census manager into a "spreadsheet" (TSV) file.
+///
+/// Include exactly those columns whose rows aren't all identical,
+/// considering as "rows" the individual cells--and also the case
+/// defaults, even though they aren't displayed in any row.
+///
+/// Motivation: Some census changes are more easily made by exporting
+/// data from lmi, manipulating it in a spreadsheet, and then pasting
+/// it back into lmi.
+///
+/// Never extract "UseDOB": it's always set by UponPasteCensus().
+/// Never extract "IssueAge". If it's present, then "UseDOB" must also
+/// be, and "UseDOB" preserves information that "IssueAge" loses.
+
+void CensusView::paste_out_to_spreadsheet() const
+{
+    configurable_settings const& c = configurable_settings::instance();
+    std::string const& e = c.spreadsheet_file_extension();
+    std::string const  f = fs::basename(base_filename()) + "_pasted_out";
+    std::string file_name = unique_filepath(f, e).string();
+    std::ofstream os(file_name.c_str(), ios_out_app_binary());
+
+    std::vector<std::string> distinct_headers;
+    std::vector<std::string> const& all_headers(case_parms()[0].member_names());
+    for(auto const& header : all_headers)
+        {
+        if(column_value_varies_across_cells(header, cell_parms()))
+            {
+            if(header != "UseDOB" && header != "IssueAge")
+                {
+                distinct_headers.push_back(header);
+                }
+            }
+        }
+
+    for(auto const& header : distinct_headers)
+        {
+        // Assume that the trailing '\t' doesn't matter.
+        os << header << '\t';
+        }
+    os << '\n';
+
+    for(auto const& cell : cell_parms())
+        {
+        for(auto const& header : distinct_headers)
+            {
+            // Assume that the trailing '\t' doesn't matter.
+            os << cell[header].str() << '\t';
+            }
+        os << '\n';
+        }
+
+    if(!os)
+        {
+        alarum() << "Unable to write '" << file_name << "'." << LMI_FLUSH;
+        }
+}
+
 char const* CensusView::icon_xrc_resource() const
 {
     return "census_view_icon";
@@ -1337,6 +1400,14 @@ void CensusView::UponRightClick(wxDataViewEvent& e)
     LMI_ASSERT(census_menu);
     list_window_->PopupMenu(census_menu);
     delete census_menu;
+
+    // For the nonce, this option is not discoverable. After testing,
+    // it is likely to be offered on the menu and toolbar.
+    global_settings const& g = global_settings::instance();
+    if(contains(g.pyx(), "paste_out_to_spreadsheet"))
+        {
+        paste_out_to_spreadsheet();
+        }
 }
 
 void CensusView::UponUpdateAlwaysDisabled(wxUpdateUIEvent& e)
