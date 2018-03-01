@@ -33,7 +33,18 @@
 
 #include <iostream>                     // cerr // PDF !! expunge
 
-/// Write ledger as pdf.
+/// Write a scaled copy of the ledger to a PDF file.
+///
+/// PDF !! Does the following block comment actually apply here? and
+/// is it time to address the comment about shared_ptr members in
+/// class ledger?
+///
+/// The original ledger must not be modified because scaling is not
+/// reentrant. However, copying does not prevent that problem here,
+/// because what is scaled is actually not copied due to use of
+/// shared_ptr; see comment on
+///   https://savannah.nongnu.org/bugs/index.php?13599
+/// in the ledger-class implementation.
 
 std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 {
@@ -75,8 +86,10 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     // use should be reconsidered everywhere else.
     fs::path pdf_out_file = unique_filepath(print_dir / filepath, ".pdf");
 
+    Ledger scaled_ledger(ledger);
+    scaled_ledger.AutoScale();
     auto const pdf = ledger_pdf_generator::create();
-    pdf->write(ledger, pdf_out_file);
+    pdf->write(scaled_ledger, pdf_out_file);
 
     return pdf_out_file.string();
 }
