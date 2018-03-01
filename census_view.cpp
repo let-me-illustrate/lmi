@@ -1006,8 +1006,6 @@ wxWindow* CensusView::CreateChildWindow()
 
     list_window_->Select(list_model_->GetItem(0));
 
-    status() << std::flush;
-
     return list_window_;
 }
 
@@ -1845,8 +1843,6 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     wxDataViewItem const& z = list_model_->GetItem(selection);
     list_window_->Select(z);
     list_window_->EnsureVisible(z);
-
-    status() << std::flush;
 
     LMI_ASSERT(1 == case_parms().size());
     LMI_ASSERT(!cell_parms ().empty());
