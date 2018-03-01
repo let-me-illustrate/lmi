@@ -40,7 +40,14 @@
 #include <sstream>
 #include <stdexcept>
 
-//============================================================================
+/// Default constructor.
+///
+/// Postconditions: Case, class, and cell parameters all consist of
+/// exactly one default cell.
+///
+/// Calls assert_vector_sizes_are_sane() to assert general invariants
+/// for uniformity, even though it seems impossible for them to be violated.
+
 multiple_cell_document::multiple_cell_document()
     :case_parms_  (1)
     ,class_parms_ (1)
@@ -49,7 +56,14 @@ multiple_cell_document::multiple_cell_document()
     assert_vector_sizes_are_sane();
 }
 
-//============================================================================
+/// Construct from filename.
+///
+/// Postconditions established by parse(): Case, class, and cell
+/// parameters are of sizes {==1, >=1, >=1) respectively.
+///
+/// Calls assert_vector_sizes_are_sane() to assert the postconditions
+/// redundantly, even though they're established by parse().
+
 multiple_cell_document::multiple_cell_document(std::string const& filename)
 {
     xml_lmi::dom_parser parser(filename);
@@ -81,7 +95,8 @@ int multiple_cell_document::class_version() const
     return 2;
 }
 
-//============================================================================
+/// Name of xml root element.
+
 std::string const& multiple_cell_document::xml_root_name() const
 {
     static std::string const s("multiple_cell_document");
@@ -110,6 +125,8 @@ T& hurl(std::string const& s)
 } // Unnamed namespace.
 
 /// Read xml into vectors of class Input.
+///
+/// Calls assert_vector_sizes_are_sane() to assert postconditions.
 
 void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
@@ -163,6 +180,8 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
 }
 
 /// Parse obsolete version 0 xml (for backward compatibility).
+///
+/// Calls assert_vector_sizes_are_sane() to assert postconditions.
 
 void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
 {
@@ -401,7 +420,8 @@ bool multiple_cell_document::data_source_is_external(xml::document const& d) con
     return false;
 }
 
-//============================================================================
+/// Coarsely validate file format with XSD schema.
+
 void multiple_cell_document::validate_with_xsd_schema
     (xml::document const& xml
     ,std::string const&   xsd
@@ -433,7 +453,8 @@ xslt::stylesheet& multiple_cell_document::cell_sorter() const
     return z;
 }
 
-//============================================================================
+/// Filename of XSD schema for coarsely validating file format.
+
 std::string multiple_cell_document::xsd_schema_name(int version) const
 {
     static std::string const s("multiple_cell_document.xsd");
@@ -451,14 +472,20 @@ std::string multiple_cell_document::xsd_schema_name(int version) const
     return oss.str();
 }
 
-//============================================================================
+/// Read from xml file.
+///
+/// Postconditions: established by parse().
+
 void multiple_cell_document::read(std::istream const& is)
 {
     xml_lmi::dom_parser parser(is);
     parse(parser);
 }
 
-//============================================================================
+/// Write to xml file.
+///
+/// Calls assert_vector_sizes_are_sane() to assert preconditions.
+
 void multiple_cell_document::write(std::ostream& os) const
 {
     assert_vector_sizes_are_sane();

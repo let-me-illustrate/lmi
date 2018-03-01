@@ -38,7 +38,8 @@
 #include <ostream>
 #include <sstream>
 
-//============================================================================
+/// Copy constructor.
+
 single_cell_document::single_cell_document(Input const& z)
     :input_data_(z)
 {
@@ -66,14 +67,16 @@ int single_cell_document::class_version() const
     return 2;
 }
 
-//============================================================================
+/// Name of xml root element.
+
 std::string const& single_cell_document::xml_root_name() const
 {
     static std::string const s("single_cell_document");
     return s;
 }
 
-//============================================================================
+/// Read xml into an instance of class Input.
+
 void single_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
     xml::element const& root(parser.root_node(xml_root_name()));
@@ -157,7 +160,8 @@ bool single_cell_document::data_source_is_external(xml::document const& d) const
     return false;
 }
 
-//============================================================================
+/// Coarsely validate file format with XSD schema.
+
 void single_cell_document::validate_with_xsd_schema
     (xml::document const& xml
     ,std::string const&   xsd
@@ -189,7 +193,8 @@ xslt::stylesheet& single_cell_document::cell_sorter() const
     return z;
 }
 
-//============================================================================
+/// Filename of XSD schema for coarsely validating file format.
+
 std::string single_cell_document::xsd_schema_name(int version) const
 {
     static std::string const s("single_cell_document.xsd");
@@ -207,14 +212,16 @@ std::string single_cell_document::xsd_schema_name(int version) const
     return oss.str();
 }
 
-//============================================================================
+/// Read from xml file.
+
 void single_cell_document::read(std::istream const& is)
 {
     xml_lmi::dom_parser parser(is);
     parse(parser);
 }
 
-//============================================================================
+/// Write to xml file.
+
 void single_cell_document::write(std::ostream& os) const
 {
     xml_lmi::xml_document document(xml_root_name());
