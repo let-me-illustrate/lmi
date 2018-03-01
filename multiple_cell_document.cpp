@@ -61,14 +61,12 @@ multiple_cell_document::multiple_cell_document()
 /// Postconditions established by parse(): Case, class, and cell
 /// parameters are of sizes {==1, >=1, >=1) respectively.
 ///
-/// Calls assert_vector_sizes_are_sane() to assert the postconditions
-/// redundantly, even though they're established by parse().
+/// Postconditions: established by parse().
 
 multiple_cell_document::multiple_cell_document(std::string const& filename)
 {
     xml_lmi::dom_parser parser(filename);
     parse(parser);
-    assert_vector_sizes_are_sane();
 }
 
 /// Verify invariants.
