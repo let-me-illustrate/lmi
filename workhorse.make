@@ -142,6 +142,7 @@ else ifeq (3.4.5,$(gnu_cpp_version))
 else ifeq (4.9.1,$(gnu_cpp_version))
 else ifeq (4.9.2,$(gnu_cpp_version))
 else ifeq (6.3.0,$(gnu_cpp_version))
+else ifeq (7.2-win32,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -151,6 +152,7 @@ else ifeq (3.4.5,$(gnu_cxx_version))
 else ifeq (4.9.1,$(gnu_cxx_version))
 else ifeq (4.9.2,$(gnu_cxx_version))
 else ifeq (6.3.0,$(gnu_cxx_version))
+else ifeq (7.2-win32,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
