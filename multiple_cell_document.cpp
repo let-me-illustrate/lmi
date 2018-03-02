@@ -25,7 +25,10 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
+#include "global_settings.hpp"
+#include "timer.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
@@ -144,10 +147,19 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
         alarum() << "Incompatible file version." << LMI_FLUSH;
         }
 
+    Timer timer;
+    double seconds_for_validation      {0.0};
+    double seconds_for_reading         {0.0};
+    double seconds_for_reconciliation  {0.0};
+    double seconds_for_reconciliation2 {0.0};
+
     if(data_source_is_external(parser.document()))
         {
+        status() << "Validating..." << std::flush;
         validate_with_xsd_schema(parser.document(), xsd_schema_name(file_version));
         }
+    seconds_for_validation = timer.stop().elapsed_seconds();
+    timer.restart();
 
     case_parms_ .clear();
     class_parms_.clear();
@@ -175,6 +187,54 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
         }
 
     assert_vector_sizes_are_sane();
+
+    global_settings const& g = global_settings::instance();
+    if(contains(g.pyx(), "skip_reconciliation"))
+        {
+        return;
+        }
+
+    seconds_for_reading = timer.stop().elapsed_seconds();
+    timer.restart();
+
+    // This is structured to measure the three steps separately. If
+    // the Reconcile() step here is to be kept, it should be merged
+    // into the preceding loop.
+    if(data_source_is_external(parser.document()))
+        {
+        int c = 0;
+        status() << "Reconciling..." << std::flush;
+        for(auto& j : case_parms_ ) {j.Reconcile(); status() << ++c << std::flush;}
+        for(auto& j : cell_parms_ ) {j.Reconcile(); status() << ++c << std::flush;}
+        for(auto& j : class_parms_) {j.Reconcile(); status() << ++c << std::flush;}
+        status() << "Reconciled." << std::flush;
+        }
+    seconds_for_reconciliation = timer.stop().elapsed_seconds();
+    // Repeat to see whether the second time is faster.
+    timer.restart();
+    if(data_source_is_external(parser.document()))
+        {
+        int c = 0;
+        status() << "Reconciling..." << std::flush;
+        for(auto& j : case_parms_ ) {j.Reconcile(); status() << ++c << std::flush;}
+        for(auto& j : cell_parms_ ) {j.Reconcile(); status() << ++c << std::flush;}
+        for(auto& j : class_parms_) {j.Reconcile(); status() << ++c << std::flush;}
+        status() << "Reconciled." << std::flush;
+        }
+    seconds_for_reconciliation2 = timer.stop().elapsed_seconds();
+
+    status()
+        << "Read " << counter << " cells"
+        << "; validation: "
+        << Timer::elapsed_msec_str(seconds_for_validation)
+        << "; reading: "
+        << Timer::elapsed_msec_str(seconds_for_reading)
+        << "; reconciliation: "
+        << Timer::elapsed_msec_str(seconds_for_reconciliation)
+        << "; repeat: "
+        << Timer::elapsed_msec_str(seconds_for_reconciliation2)
+        << std::flush
+        ;
 }
 
 /// Parse obsolete version 0 xml (for backward compatibility).
