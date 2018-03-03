@@ -51,20 +51,25 @@ CXX     := $(gcc_bin_dir)$(host_prefix)g++
 LD      := $(gcc_bin_dir)$(host_prefix)g++
 RC      := $(gcc_bin_dir)$(host_prefix)windres
 
-# Identify run-time libraries for redistribution.
-
+# Identify run-time libraries for redistribution. See:
+#   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00046.html
+# Perhaps gcc's '-print-sysroot' would be more suitable, but that
+# option returns an empty string with debian cross compilers.
+#
 # It might seem more robust to write something like
 #   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/i686-w64-mingw32/*-win32)
 # but that would actually weaken makefile portability, and there
 # is no guarantee that this directory will be named similarly in
 # future debian releases, much less on other OSs.
-compiler_sysroot := /usr/lib/gcc/i686-w64-mingw32/6.3-win32
+
+compiler_sysroot := $(dir $(shell $(CXX) -print-libgcc-file-name))
 
 # 'libwinpthread*' is no longer needed for debian cross builds--see:
 #   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=748353
 # | Provide compilers using Windows and POSIX threads. The default setup
 # | uses Windows threads, thus avoiding the dependency on the pthreads DLL
 # but including in this list with $(wildcard) does no harm.
+
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \
   $(wildcard $(compiler_sysroot)/libstdc++*.dll) \

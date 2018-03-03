@@ -405,6 +405,28 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
   c_standard   += -frounding-math
   cxx_standard += -frounding-math
+else ifneq (,$(filter $(gcc_version), 7.2-win32))
+  # Rationale:
+  # -Wno-conversion             regrettable, but needed for wx
+  # -Wno-implicit-fallthrough   only for boost
+  # -Wno-parentheses            beyond pedantic
+  # -Wno-register               only for boost; unthinkable anyway
+  # -Wno-unused-local-typedefs  only for boost static assert
+  gcc_version_specific_warnings := \
+    -Wno-conversion \
+    -Wno-implicit-fallthrough \
+    -Wno-parentheses \
+    -Wno-register \
+    -Wno-unused-local-typedefs \
+
+  cxx_standard := -std=c++17
+
+# The default '-fno-rounding-math' means something like
+  #   #pragma STDC FENV ACCESS OFF
+  # which causes harm while bringing no countervailing benefit--see:
+  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+  c_standard   += -frounding-math
+  cxx_standard += -frounding-math
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
