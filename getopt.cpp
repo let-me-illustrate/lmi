@@ -599,7 +599,7 @@ GetOpt::operator()()
                 return '?';
 
               case LIST_ARG:
-                list_option = pfound;
+                list_option = pfound; // fall through
 
               default:
                 optarg = nameend + 1;

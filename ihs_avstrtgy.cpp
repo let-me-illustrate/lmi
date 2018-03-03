@@ -261,6 +261,7 @@ double AccountValue::DoPerformPmtStrategy
                 return GetModalMinPrem(Year, a_CurrentMode, sa);
                 }
             }
+            break;
         case mce_pmt_target:
             {
             int const target_year = TgtPremFixedAtIssue ? 0 : Year;
