@@ -599,6 +599,10 @@ void input_sequence_test::test()
     check(__FILE__, __LINE__, n, d, e, g);
     InputSequence const seq(e, 10, 90, 95, 0, 2002);
     std::vector<ValueInterval> const& i(seq.intervals());
+    BOOST_TEST_EQUAL(e_inception , i[0].begin_mode);
+    BOOST_TEST_EQUAL(e_retirement, i[0].end_mode  );
+    BOOST_TEST_EQUAL(e_retirement, i[1].begin_mode);
+    BOOST_TEST_EQUAL(e_maturity  , i[1].end_mode  );
     }
 
     // Duration keywords, with a one-time-only event at retirement.
