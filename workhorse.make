@@ -408,16 +408,10 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
 else ifneq (,$(filter $(gcc_version), 7.2-win32))
   # Rationale:
   # -Wno-conversion             regrettable, but needed for wx
-  # -Wno-implicit-fallthrough   only for boost
   # -Wno-parentheses            beyond pedantic
-  # -Wno-register               only for boost; unthinkable anyway
-  # -Wno-unused-local-typedefs  only for boost static assert
   gcc_version_specific_warnings := \
     -Wno-conversion \
-    -Wno-implicit-fallthrough \
     -Wno-parentheses \
-    -Wno-register \
-    -Wno-unused-local-typedefs \
 
   cxx_standard := -std=c++17
 
@@ -493,6 +487,16 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialize
 # The boost regex library is incompatible with '-Wshadow'.
 
 $(boost_regex_objects): gcc_common_extra_warnings += -Wno-shadow
+
+boost_dependent_objects := \
+  $(boost_regex_objects) \
+  expression_template_0_test.o \
+  regex_test.o \
+  test_coding_rules.o \
+
+$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-implicit-fallthrough
+$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-register
+$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-unused-local-typedefs
 
 # The boost regex library improperly defines "NOMINMAX":
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
@@ -667,6 +671,14 @@ ifneq (,$(USE_SO_ATTRIBUTES))
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
 endif
 
+# The BOOST_STATIC_ASSERT definition seems to belong in CPPFLAGS with
+# the other macro definitions. However, writing it there elicits:
+#   warning: ISO C99 requires whitespace after the macro name
+# which may simply be a gnu CPP defect--the documentation:
+#   https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
+# says "-D'name(args...)=definition' works", and adding a blank either
+# before or after '=' is an error.
+
 REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(all_include_directories)) \
   $(lmi_wx_new_so_attributes) \
@@ -676,12 +688,14 @@ REQUIRED_CPPFLAGS = \
   $(wx_predefinitions) \
   -DBOOST_NO_AUTO_PTR \
   -DBOOST_STRICT_CONFIG \
+  -DBOOST_STATIC_ASSERT_HPP \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
 
 REQUIRED_CXXFLAGS = \
   $(CXX_WARNINGS) \
+  -D'BOOST_STATIC_ASSERT(A)=static_assert((A))' \
 
 REQUIRED_ARFLAGS = \
   -rus
