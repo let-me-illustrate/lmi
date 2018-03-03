@@ -181,8 +181,6 @@ calculation_summary_formatter::calculation_summary_formatter
         }
     columns_.insert(columns_.begin(), "PolicyYear");
 
-    unsigned int const length = invar_.GetLength();
-
     // Calculate IRRs only when necessary, because of the palpable
     // effect on responsiveness--see:
     //   https://lists.nongnu.org/archive/html/lmi/2018-02/msg00098.html
