@@ -394,8 +394,6 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   gcc_version_specific_warnings := \
     -Wno-conversion \
     -Wno-parentheses \
-    -Wno-unused-local-typedefs \
-    -Wno-unused-variable \
 
   cxx_standard := -std=c++17
 
