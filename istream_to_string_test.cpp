@@ -52,7 +52,6 @@ void istream_to_string_2
     ,std::basic_string<Char_t,Traits,Allocator>& s
     )
 {
-    typedef std::basic_string<Char_t,Traits,Allocator> string_type;
     std::basic_ostringstream<Char_t,Traits,Allocator> oss;
     if(Traits::eof() != is.rdbuf()->sgetc())
         {
