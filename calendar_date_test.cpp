@@ -1072,64 +1072,82 @@ void CalendarDateTest::TestIo()
         );
 }
 
+// It would be nice to have a facility that would prevent the compiler
+// from optimizing away anything that's passed to it, such as the
+// bodies of these speed-test functions. For now, writing to a quasi-
+// global volatile variable is intended to serve that function, though
+// it's difficult to be sure it's correctly used in each case, and
+// calling julian_day_number() or size() just to get a value to write
+// to that volatile variable is an ugly artifice.
+
 namespace
 {
-    calendar_date x(1776,  7,  4);
-    calendar_date y(1899, 12, 31);
-
-    void mete()
-    {
-        calendar_date t;
-        calendar_date u(1899, 12, 31);
-        t = u;
-        ++t;
-        std::string s = t.str();
-        t = add_years_and_months(t, 1, 1, true);
-        attained_age(u, t, oe_age_last_birthday);
-        u = minimum_birthdate(45, t, oe_age_last_birthday);
-    }
-
-    void mete_construct()
-    {
-        calendar_date t;
-        calendar_date u(1899, 12, 31);
-    }
-
-    void mete_assign()
-    {
-        x = y;
-    }
-
-    void mete_stepping()
-    {
-        ++x;
-        --x;
-    }
-
-    void mete_get_y_m_d()
-    {
-        x.year();
-        x.month();
-        x.day();
-    }
-
-    void mete_format()
-    {
-        std::string s = x.str();
-    }
-
-    void mete_attained_age()
-    {
-        calendar_date t = add_years_and_months(x, 1, 1, true);
-        attained_age(y, t, oe_age_last_birthday);
-    }
-
-    void mete_dob_limit()
-    {
-        y = minimum_birthdate(45, x, oe_age_last_birthday);
-    }
-
+    static volatile int scupper;
 } // Unnamed namespace.
+
+void mete()
+{
+    calendar_date t;
+    calendar_date u(2525, 12, 31);
+    t = u;
+    ++t;
+    scupper = t.str().size();
+    t = add_years_and_months(t, 1, 1, true);
+    scupper = attained_age(u, t, oe_age_last_birthday);
+    u = minimum_birthdate(45, t, oe_age_last_birthday);
+    scupper = u.julian_day_number();
+}
+
+void mete_construct()
+{
+    calendar_date t;
+    calendar_date u(3535, 12, 31);
+    scupper = t.julian_day_number();
+    scupper = u.julian_day_number();
+}
+
+void mete_assign()
+{
+    static const calendar_date t(4545, 12, 31);
+    static calendar_date u;
+    u = t;
+    scupper = u.julian_day_number();
+}
+
+void mete_stepping()
+{
+    static calendar_date t(5555, 12, 31);
+    scupper = (++t).julian_day_number();
+    scupper = (--t).julian_day_number();
+}
+
+void mete_get_y_m_d()
+{
+    static const calendar_date t(6565, 12, 31);
+    scupper = t.year();
+    scupper = t.month();
+    scupper = t.day();
+}
+
+void mete_format()
+{
+    static const calendar_date t(7510, 12, 31);
+    scupper = t.str().size();
+}
+
+void mete_attained_age()
+{
+    static const calendar_date t(8510, 12, 31);
+    calendar_date u = add_years_and_months(t, 1, 1, true);
+    scupper = attained_age(t, u, oe_age_last_birthday);
+}
+
+void mete_dob_limit()
+{
+    static const calendar_date t(9595, 12, 31);
+    calendar_date u = minimum_birthdate(45, t, oe_age_last_birthday);
+    scupper = u.julian_day_number();
+}
 
 void CalendarDateTest::TestSpeed()
 {
