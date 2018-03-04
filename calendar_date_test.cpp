@@ -1074,7 +1074,7 @@ void CalendarDateTest::TestIo()
 
 namespace
 {
-    calendar_date x;
+    calendar_date x(1776,  7,  4);
     calendar_date y(1899, 12, 31);
 
     void mete()
@@ -1100,9 +1100,10 @@ namespace
         x = y;
     }
 
-    void mete_increment()
+    void mete_stepping()
     {
         ++x;
+        --x;
     }
 
     void mete_get_y_m_d()
@@ -1119,8 +1120,8 @@ namespace
 
     void mete_attained_age()
     {
-        x = add_years_and_months(x, 1, 1, true);
-        attained_age(y, x, oe_age_last_birthday);
+        calendar_date t = add_years_and_months(x, 1, 1, true);
+        attained_age(y, t, oe_age_last_birthday);
     }
 
     void mete_dob_limit()
@@ -1136,7 +1137,7 @@ void CalendarDateTest::TestSpeed()
         << "  Aggregate    : " << TimeAnAliquot(mete             ) << '\n'
         << "  Construct    : " << TimeAnAliquot(mete_construct   ) << '\n'
         << "  Assign       : " << TimeAnAliquot(mete_assign      ) << '\n'
-        << "  Increment    : " << TimeAnAliquot(mete_increment   ) << '\n'
+        << "  Stepping     : " << TimeAnAliquot(mete_stepping    ) << '\n'
         << "  Get y, m, d  : " << TimeAnAliquot(mete_get_y_m_d   ) << '\n'
         << "  Format       : " << TimeAnAliquot(mete_format      ) << '\n'
         << "  Calculate age: " << TimeAnAliquot(mete_attained_age) << '\n'
