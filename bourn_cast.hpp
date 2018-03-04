@@ -38,6 +38,9 @@
 #   if 5 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wbool-compare"
 #   endif // 5 <= __GNUC__
+#   if 7 <= __GNUC__
+#       pragma GCC diagnostic ignored "-Wbool-operation"
+#   endif // 7 <= __GNUC__
 #elif defined LMI_MSC
 #   pragma warning(push)
 #   pragma warning(disable : 4018)
