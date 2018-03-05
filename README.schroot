@@ -99,7 +99,7 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 #   rm /etc/schroot/chroot.d/lmi-buster.conf
 
 apt-get update
-apt-get --assume-yes install g++-mingw-w64 automake libtool make \
+apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  pkg-config git cvs zsh bzip2 unzip sudo wine default-jre fop jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc vim-fugitive \
  >lmi-buster-apt-get-log 2>&1
