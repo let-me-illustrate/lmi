@@ -233,6 +233,12 @@ au BufReadPost,BufNewFile *.tpp set ft=cpp
 au BufReadPost,BufNewFile *.xpp set ft=cpp
 " au BufReadPost,BufNewFile *.?pp set ft=cpp
 
+" mustache--"ignored" is preferable to default:
+"   https://lists.gnu.org/archive/html/lmi/2017-10/msg00016.html
+" for a plugin, see:
+"   https://lists.gnu.org/archive/html/lmi/2017-10/msg00017.html
+au BufReadPost,BufNewFile *.mst set ft=ignored
+
 syntax on
 set hlsearch
 
