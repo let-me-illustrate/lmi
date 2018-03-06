@@ -270,7 +270,9 @@ exit
 # to this directory (after making sure it's up to date):
 #   cp --dereference --preserve --recursive /WHEREVER/blessed /srv/cache_for_lmi
 #   cp -a /srv/cache_for_lmi/* /srv/chroot/lmi-buster/cache_for_lmi/
-# Also install any desired msw software into the chroot now.
+# Also copy any desired msw software into the chroot now--but if it
+# requires running an "install" program, postpone that until wine has
+# been installed, below.
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
@@ -301,9 +303,20 @@ git config --global log.follow true
 WINEDLLOVERRIDES=mscoree=d wine wineboot
 
 # Configure wine:
+
 winecfg
-# on "Graphics" tab, set DPI to 192
-# fix any application that gets the wrong X tab order
+# First, to make it usable in general ("Default Settings"):
+#   on "Applications" tab, set "Windows Version" to "XP"
+#   on "Graphics" tab, set DPI to 192
+
+wine regedit
+# HKCU\Control Panel\International:
+#   set sShortDate and sLongDate to "yyyy-MM-dd"
+
+# Troubleshoot wine:
+#
+# Later, to fix any application that gets the wrong X tab order:
+# winecfg
 #   "Applications": "add"; then
 #   "Graphics": "Emulate virtual desktop"
 #     specify appropriate size: e.g., 1900x1120 for a 1920x1200 monitor
