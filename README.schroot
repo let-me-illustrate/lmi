@@ -408,14 +408,14 @@ wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/p
 
 # Run a system test.
 cd /opt/lmi/src/lmi
-make $coefficiency system_test 2>&1 |less
+make $coefficiency system_test 2>&1 |less -S
 # That test fails the first time because no results are saved in
 # touchstone/ yet. Copy the results just generated...
 cp -a /opt/lmi/test/* /opt/lmi/touchstone
 # ...removing summaries...
 rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
 # ...and rerun the test, which should now succeed:
-make $coefficiency system_test 2>&1 |less
+make $coefficiency system_test 2>&1 |less -S
 
 # Create a local mirror of the gnu.org repository:
 cd /opt/lmi
