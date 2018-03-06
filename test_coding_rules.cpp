@@ -1119,8 +1119,7 @@ statistics statistics::analyze_file(file const& f)
         ||  f.is_of_phylum(e_patch)
         ||  f.is_of_phylum(e_touchstone)
         ||  f.is_of_phylum(e_xml_input)
-        ||  f.phyloanalyze("^INSTALL")
-        ||  f.phyloanalyze("^README")
+        ||  f.is_of_phylum(e_synopsis)
         )
         {
         return z;
