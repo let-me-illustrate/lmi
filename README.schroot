@@ -270,6 +270,7 @@ exit
 # to this directory (after making sure it's up to date):
 #   cp --dereference --preserve --recursive /WHEREVER/blessed /srv/cache_for_lmi
 #   cp -a /srv/cache_for_lmi/* /srv/chroot/lmi-buster/cache_for_lmi/
+# Also install any desired msw software into the chroot now.
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
@@ -279,15 +280,6 @@ exit
 #   HashKnownHosts no
 # See the discussion of hashing (inter alia) here:
 #   http://lists.nongnu.org/archive/html/lmi/2018-01/msg00003.html
-
-# Use an msw-native java to let lmi write illustrations to pdf. See:
-#   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00010.html
-# It's convenient to obtain it outside a chroot, where a web browser
-# is available--e.g., save this file:
-#   http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase5-419410.html
-# to /srv/cache_for_lmi/, then copy it into the chroot's filesystem:
-#   cp -a /srv/cache_for_lmi/jre-1_5_0-windows-i586.exe /srv/chroot/lmi-buster/cache_for_lmi
-# where it can be run later. Only the JRE is wanted, and nothing else.
 
 # Enter the chroot as a normal user
 
@@ -317,9 +309,6 @@ winecfg
 #     specify appropriate size: e.g., 1900x1120 for a 1920x1200 monitor
 #     (the other options don't seem to matter)
 #   then restart the application
-
-# Install java.
-wine /cache_for_lmi/jre-1_5_0-windows-i586.exe
 
 # Symlink directories used by lmi, so that both native and wine
 # builds use the same directories and can share the same
