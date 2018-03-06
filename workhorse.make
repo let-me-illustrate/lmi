@@ -497,8 +497,6 @@ boost_dependent_objects := \
   regex_test.o \
   test_coding_rules.o \
 
-$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-implicit-fallthrough
-$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-register
 $(boost_dependent_objects): gcc_common_extra_warnings += -Wno-unused-local-typedefs
 
 # The boost regex library improperly defines "NOMINMAX":
