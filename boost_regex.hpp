@@ -26,6 +26,10 @@
 
 #if defined __GNUC__
 #   pragma GCC diagnostic push
+#   if 7 <= __GNUC__
+#       pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#       pragma GCC diagnostic ignored "-Wregister"
+#   endif // 7 <= __GNUC__
 #   pragma GCC diagnostic ignored "-Wshadow"
 #endif // defined __GNUC__
 #include <boost/regex.hpp>
