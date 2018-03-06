@@ -128,21 +128,24 @@ effective_default_target: $(default_targets)
 
 ################################################################################
 
+# $(subst): workaround for debian, whose MinGW-w64 identifies its
+# version 7.2.0 as "7.2-win32".
+
 ifeq (gcc,$(toolset))
-  gcc_version := $(shell $(CXX) -dumpversion)
+  gcc_version   := $(subst 7.2-win32,7.2.0,$(shell $(CXX)     -dumpversion))
 endif
 
 # These are defined even for toolsets other than gcc.
 
-gnu_cpp_version := $(shell $(GNU_CPP) -dumpversion)
-gnu_cxx_version := $(shell $(GNU_CXX) -dumpversion)
+gnu_cpp_version := $(subst 7.2-win32,7.2.0,$(shell $(GNU_CPP) -dumpversion))
+gnu_cxx_version := $(subst 7.2-win32,7.2.0,$(shell $(GNU_CXX) -dumpversion))
 
 ifeq      (3.4.4,$(gnu_cpp_version))
 else ifeq (3.4.5,$(gnu_cpp_version))
 else ifeq (4.9.1,$(gnu_cpp_version))
 else ifeq (4.9.2,$(gnu_cpp_version))
 else ifeq (6.3.0,$(gnu_cpp_version))
-else ifeq (7.2-win32,$(gnu_cpp_version))
+else ifeq (7.2.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -152,7 +155,7 @@ else ifeq (3.4.5,$(gnu_cxx_version))
 else ifeq (4.9.1,$(gnu_cxx_version))
 else ifeq (4.9.2,$(gnu_cxx_version))
 else ifeq (6.3.0,$(gnu_cxx_version))
-else ifeq (7.2-win32,$(gnu_cxx_version))
+else ifeq (7.2.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
@@ -403,7 +406,7 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
   c_standard   += -frounding-math
   cxx_standard += -frounding-math
-else ifneq (,$(filter $(gcc_version), 7.2-win32))
+else ifneq (,$(filter $(gcc_version), 7.2.0))
   # Rationale:
   # -Wno-conversion             regrettable, but needed for wx
   # -Wno-parentheses            beyond pedantic
@@ -1458,6 +1461,9 @@ clean_edg:
 
 .PHONY: show_flags
 show_flags:
+	@$(ECHO) gcc_version             = '$(gcc_version)'
+	@$(ECHO) gnu_cpp_version         = '$(gnu_cpp_version)'
+	@$(ECHO) gnu_cxx_version         = '$(gnu_cxx_version)'
 	@$(ECHO) ALL_CPPFLAGS            = '$(ALL_CPPFLAGS)'
 	@$(ECHO) ALL_CFLAGS              = '$(ALL_CFLAGS)'
 	@$(ECHO) ALL_CXXFLAGS            = '$(ALL_CXXFLAGS)'
