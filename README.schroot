@@ -235,6 +235,18 @@ highlight TabLineSel                 ctermbg=239 ctermfg=202
 " From tpope's 'sensible.vim':
 set tabpagemax=50
 
+" Show invisibles: 'eol' and 'tab' are meant to be unobtrusive,
+" while 'nbsp' and 'trail' are meant to stand out; 'extends' and
+" 'precedes' normally wouldn't be seen because of 'set wrap'.
+set list
+" On second thought, 'eol' should probably be left alone.
+" set listchars=nbsp:◙,eol:☜,tab:☞☞,extends:»,precedes:«,trail:▒
+set listchars=nbsp:◙,tab:☞☞,extends:»,precedes:«,trail:▒
+highlight clear NonText
+highlight NonText    ctermfg=gray " eol, extends, precedes
+highlight clear SpecialKey
+highlight SpecialKey ctermfg=red  " nbsp, tab, trail
+
 let g:netrw_liststyle=3
 map <Tab> <C-W>w
 
