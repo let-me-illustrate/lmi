@@ -518,11 +518,11 @@ if test "$GCC" == "yes"; then
             -Wdisabled-optimization \
             -Wimport \
             -Wmultichar \
-            -Wno-long-long \
-            -Wno-variadic-macros \
             -Wpacked \
             -Wpointer-arith \
+            -Wshadow \
             -Wsign-compare \
+            -Wunreachable-code \
             -Wwrite-strings"
     fi
 
