@@ -109,7 +109,7 @@ WGETFLAGS :=
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wxpdfdoc_dir)
-	mv $(wxpdfdoc_dir)/$(basename $@) $(source_dir)
+	cp -a $(wxpdfdoc_dir)/$(basename $@) $(source_dir)
 
 .PHONY: wxpdfdoc
 wxpdfdoc: $(wxpdfdoc_archive)

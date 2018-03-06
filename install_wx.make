@@ -194,7 +194,7 @@ WGETFLAGS :=
 	cd $(cache_dir) && [ -e $@ ] || $(WGET) $(WGETFLAGS) $($@-url)
 	cd $(cache_dir) && $(ECHO) "$($@-md5) *$@" | $(MD5SUM) --check
 	-$(UNZIP) $(UNZIPFLAGS) $(cache_dir)/$@ -d $(wx_dir)
-	mv $(wx_dir)/$(basename $@) $(source_dir)
+	cp -a $(wx_dir)/$(basename $@) $(source_dir)
 
 .PHONY: wx
 wx:

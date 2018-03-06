@@ -67,12 +67,12 @@ $(MinGW-7_2_0)-md5 := f34ff6eca4aa7a645f60c977b107c5d2
 # Utilities ####################################################################
 
 BSDTAR := bsdtar
+CP     := cp
 ECHO   := echo
 MD5SUM := md5sum
 MKDIR  := mkdir
 MV     := mv
 RM     := rm
-RMDIR  := rmdir
 WGET   := wget
 
 # Error messages ###############################################################
@@ -101,8 +101,8 @@ scratch_exists = \
 
 .PHONY: all
 all: $(file_list)
-	$(MV) scratch/mingw32 $(prefix)
-	$(RMDIR) scratch
+	$(CP) --archive scratch/mingw32 $(prefix)
+	$(RM) --force --recursive scratch
 
 $(file_list): initial_setup
 
