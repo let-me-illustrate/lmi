@@ -205,6 +205,43 @@ patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
 
 # Configure vim.
 
+# Without this, 'zg' gives an error message; with it, vim creates a
+# spellfile the first time 'zg' is used, if none already exists.
+mkdir ~/.vim
+# It's a much better idea to copy a mature spellfile hither:
+# ~/.vim/spell/en.utf-8.add
+# and then (imperatively) run this command:
+# :mkspell! ~/.vim/spell/en.utf-8.add
+
+cat >~/.vimrc <<\EOF
+" This shouldn't be necessary, but it is: $LANG is 'en_US.UTF-8',
+" yet vim uses Latin-1 nevertheless.
+set encoding=utf-8
+
+set background=dark
+highlight clear SpellBad
+highlight SpellBad   cterm=underline ctermbg=240 ctermfg=226
+highlight clear SpellCap
+highlight SpellCap   cterm=underline ctermbg=240 ctermfg=252
+highlight clear SpellLocal
+highlight SpellLocal cterm=underline ctermbg=240 ctermfg=154
+highlight clear SpellRare
+highlight SpellRare  cterm=underline ctermbg=240 ctermfg=208
+
+highlight TabLineFill                            ctermfg=16
+highlight TabLine                    ctermbg=237 ctermfg=124
+highlight TabLineSel                 ctermbg=239 ctermfg=202
+
+" From tpope's 'sensible.vim':
+set tabpagemax=50
+
+let g:netrw_liststyle=3
+map <Tab> <C-W>w
+
+" Prevent gvim cursor from blinking
+:set guicursor+=a:blinkon0
+EOF
+
 cat >/etc/vim/vimrc.local <<\EOF
 set shortmess=Il
 
