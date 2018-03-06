@@ -1461,20 +1461,20 @@ clean_edg:
 
 .PHONY: show_flags
 show_flags:
-	@$(ECHO) gcc_version             = '$(gcc_version)'
-	@$(ECHO) gnu_cpp_version         = '$(gnu_cpp_version)'
-	@$(ECHO) gnu_cxx_version         = '$(gnu_cxx_version)'
-	@$(ECHO) ALL_CPPFLAGS            = '$(ALL_CPPFLAGS)'
-	@$(ECHO) ALL_CFLAGS              = '$(ALL_CFLAGS)'
-	@$(ECHO) ALL_CXXFLAGS            = '$(ALL_CXXFLAGS)'
-	@$(ECHO) ALL_ARFLAGS             = '$(ALL_ARFLAGS)'
-	@$(ECHO) ALL_LDFLAGS             = '$(ALL_LDFLAGS)'
-	@$(ECHO) ALL_RCFLAGS             = '$(ALL_RCFLAGS)'
-	@$(ECHO) srcdir                  = '$(srcdir)'
-	@$(ECHO) all_include_directories = '$(all_include_directories)'
-	@$(ECHO) all_source_directories  = '$(all_source_directories)'
-	@$(ECHO) wx_include_paths        = '$(wx_include_paths)'
-	@$(ECHO) wx_libraries            = '$(wx_libraries)'
-	@$(ECHO) wx_library_paths        = '$(wx_library_paths)'
-	@$(ECHO) wx_predefinitions       = '$(wx_predefinitions)'
+	@printf "gcc_version             = '%s'\n" "$(gcc_version)"
+	@printf "gnu_cpp_version         = '%s'\n" "$(gnu_cpp_version)"
+	@printf "gnu_cxx_version         = '%s'\n" "$(gnu_cxx_version)"
+	@printf "ALL_CPPFLAGS            = '%s'\n" "$(ALL_CPPFLAGS)"
+	@printf "ALL_CFLAGS              = '%s'\n" "$(ALL_CFLAGS)"
+	@printf "ALL_CXXFLAGS            = '%s'\n" "$(ALL_CXXFLAGS)"
+	@printf "ALL_ARFLAGS             = '%s'\n" "$(ALL_ARFLAGS)"
+	@printf "ALL_LDFLAGS             = '%s'\n" "$(ALL_LDFLAGS)"
+	@printf "ALL_RCFLAGS             = '%s'\n" "$(ALL_RCFLAGS)"
+	@printf "srcdir                  = '%s'\n" "$(srcdir)"
+	@printf "all_include_directories = '%s'\n" "$(all_include_directories)"
+	@printf "all_source_directories  = '%s'\n" "$(all_source_directories)"
+	@printf "wx_include_paths        = '%s'\n" "$(wx_include_paths)"
+	@printf "wx_libraries            = '%s'\n" "$(wx_libraries)"
+	@printf "wx_library_paths        = '%s'\n" "$(wx_library_paths)"
+	@printf "wx_predefinitions       = '%s'\n" "$(wx_predefinitions)"
 
