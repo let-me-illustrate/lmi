@@ -479,8 +479,6 @@ cd /opt/lmi
 mkdir --parents free/src
 cd free/src
 git clone git://git.savannah.nongnu.org/lmi.git
-# Reconsider this:
-# git remote set-url origin chicares@git.sv.gnu.org:/srv/git/lmi.git
 
 # Exit the chroot.
 exit
