@@ -25,8 +25,9 @@ The copyright notice, license, and disclaimers at the top of this file
 apply to all graphics files (*.ico *.png) in this directory. They are
 original works except for the derived works listed below.
 
-Derived from the gnome-icon-theme icon set (version 2.12, sizes 24x24
-and 16x16):
+Derived from the gnome-icon-theme icon set, version 2.12:
+  https://download.gnome.org/sources/gnome-icon-theme/2.12/gnome-icon-theme-2.12.0.tar.bz2
+sizes 24x24 and 16x16:
 
   about[-16].png                    from stock_about.png
   close[-16].png                    from stock_close.png
@@ -44,12 +45,14 @@ and 16x16):
   new[-16].png                      from stock_new.png
   open[-16].png                     from stock_open.png
   paste-case[-16].png               from stock_paste.png
+  paste-out[-16].png                from stock_paste.png
   preferences[-16].png              from gnome-settings.png
   print-case[-16].png               from stock_print.png
   print-case-pdf[-16].png           from stock_print.png
   print-options[-16].png            from stock_print-options.png
   print-preview[-16].png            from stock_print-preview.png
   print[-16].png                    from stock_print.png
+  quote[-16].png                    from stock_edit.png
   roster[-16].png                   from stock_edit.png
   run-case[-16].png                 from stock_print-layout.png
   run-cell[-16].png                 from stock_print-layout.png
