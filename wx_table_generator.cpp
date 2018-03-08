@@ -175,6 +175,7 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
 
     has_column_widths_ = true;
 
+    int num_columns = 0; // This counts only visible columns.
     int num_expand = 0;
     int total_fixed = 0;
 
@@ -184,6 +185,8 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
             {
             continue;
             }
+
+        num_columns++;
 
         if(0 == i.width_)
             {
@@ -204,7 +207,6 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         // reduce them by up to half if really needed.
         if(!num_expand)
             {
-            int const num_columns = columns_.size();
             auto const overflow_per_column =
                 (overflow + num_columns - 1)/num_columns;
             if(overflow_per_column <= column_margin_)
