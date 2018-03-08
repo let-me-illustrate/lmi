@@ -25,7 +25,10 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "contains.hpp"
 #include "data_directory.hpp"           // AddDataDir()
+#include "global_settings.hpp"
+#include "timer.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
@@ -40,7 +43,14 @@
 #include <sstream>
 #include <stdexcept>
 
-//============================================================================
+/// Default constructor.
+///
+/// Postconditions: Case, class, and cell parameters all consist of
+/// exactly one default cell.
+///
+/// Calls assert_vector_sizes_are_sane() to assert general invariants
+/// for uniformity, even though it seems impossible for them to be violated.
+
 multiple_cell_document::multiple_cell_document()
     :case_parms_  (1)
     ,class_parms_ (1)
@@ -49,12 +59,17 @@ multiple_cell_document::multiple_cell_document()
     assert_vector_sizes_are_sane();
 }
 
-//============================================================================
+/// Construct from filename.
+///
+/// Postconditions established by parse(): Case, class, and cell
+/// parameters are of sizes {==1, >=1, >=1) respectively.
+///
+/// Postconditions: established by parse().
+
 multiple_cell_document::multiple_cell_document(std::string const& filename)
 {
     xml_lmi::dom_parser parser(filename);
     parse(parser);
-    assert_vector_sizes_are_sane();
 }
 
 /// Verify invariants.
@@ -81,7 +96,8 @@ int multiple_cell_document::class_version() const
     return 2;
 }
 
-//============================================================================
+/// Name of xml root element.
+
 std::string const& multiple_cell_document::xml_root_name() const
 {
     static std::string const s("multiple_cell_document");
@@ -110,6 +126,8 @@ T& hurl(std::string const& s)
 } // Unnamed namespace.
 
 /// Read xml into vectors of class Input.
+///
+/// Calls assert_vector_sizes_are_sane() to assert postconditions.
 
 void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
 {
@@ -129,10 +147,19 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
         alarum() << "Incompatible file version." << LMI_FLUSH;
         }
 
+    Timer timer;
+    double seconds_for_validation      {0.0};
+    double seconds_for_reading         {0.0};
+    double seconds_for_reconciliation  {0.0};
+    double seconds_for_reconciliation2 {0.0};
+
     if(data_source_is_external(parser.document()))
         {
+        status() << "Validating..." << std::flush;
         validate_with_xsd_schema(parser.document(), xsd_schema_name(file_version));
         }
+    seconds_for_validation = timer.stop().elapsed_seconds();
+    timer.restart();
 
     case_parms_ .clear();
     class_parms_.clear();
@@ -160,9 +187,59 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
         }
 
     assert_vector_sizes_are_sane();
+
+    global_settings const& g = global_settings::instance();
+    if(contains(g.pyx(), "skip_reconciliation"))
+        {
+        return;
+        }
+
+    seconds_for_reading = timer.stop().elapsed_seconds();
+    timer.restart();
+
+    // This is structured to measure the three steps separately. If
+    // the Reconcile() step here is to be kept, it should be merged
+    // into the preceding loop.
+    if(data_source_is_external(parser.document()))
+        {
+        int c = 0;
+        status() << "Reconciling..." << std::flush;
+        for(auto& j : case_parms_ ) {j.Reconcile(); status() << ++c << std::flush;}
+        for(auto& j : cell_parms_ ) {j.Reconcile(); status() << ++c << std::flush;}
+        for(auto& j : class_parms_) {j.Reconcile(); status() << ++c << std::flush;}
+        status() << "Reconciled." << std::flush;
+        }
+    seconds_for_reconciliation = timer.stop().elapsed_seconds();
+    // Repeat to see whether the second time is faster.
+    timer.restart();
+    if(data_source_is_external(parser.document()))
+        {
+        int c = 0;
+        status() << "Reconciling..." << std::flush;
+        for(auto& j : case_parms_ ) {j.Reconcile(); status() << ++c << std::flush;}
+        for(auto& j : cell_parms_ ) {j.Reconcile(); status() << ++c << std::flush;}
+        for(auto& j : class_parms_) {j.Reconcile(); status() << ++c << std::flush;}
+        status() << "Reconciled." << std::flush;
+        }
+    seconds_for_reconciliation2 = timer.stop().elapsed_seconds();
+
+    status()
+        << "Read " << counter << " cells"
+        << "; validation: "
+        << Timer::elapsed_msec_str(seconds_for_validation)
+        << "; reading: "
+        << Timer::elapsed_msec_str(seconds_for_reading)
+        << "; reconciliation: "
+        << Timer::elapsed_msec_str(seconds_for_reconciliation)
+        << "; repeat: "
+        << Timer::elapsed_msec_str(seconds_for_reconciliation2)
+        << std::flush
+        ;
 }
 
 /// Parse obsolete version 0 xml (for backward compatibility).
+///
+/// Calls assert_vector_sizes_are_sane() to assert postconditions.
 
 void multiple_cell_document::parse_v0(xml_lmi::dom_parser const& parser)
 {
@@ -401,7 +478,8 @@ bool multiple_cell_document::data_source_is_external(xml::document const& d) con
     return false;
 }
 
-//============================================================================
+/// Coarsely validate file format with XSD schema.
+
 void multiple_cell_document::validate_with_xsd_schema
     (xml::document const& xml
     ,std::string const&   xsd
@@ -433,7 +511,8 @@ xslt::stylesheet& multiple_cell_document::cell_sorter() const
     return z;
 }
 
-//============================================================================
+/// Filename of XSD schema for coarsely validating file format.
+
 std::string multiple_cell_document::xsd_schema_name(int version) const
 {
     static std::string const s("multiple_cell_document.xsd");
@@ -451,14 +530,20 @@ std::string multiple_cell_document::xsd_schema_name(int version) const
     return oss.str();
 }
 
-//============================================================================
+/// Read from xml file.
+///
+/// Postconditions: established by parse().
+
 void multiple_cell_document::read(std::istream const& is)
 {
     xml_lmi::dom_parser parser(is);
     parse(parser);
 }
 
-//============================================================================
+/// Write to xml file.
+///
+/// Calls assert_vector_sizes_are_sane() to assert preconditions.
+
 void multiple_cell_document::write(std::ostream& os) const
 {
     assert_vector_sizes_are_sane();

@@ -524,6 +524,24 @@ bool tn_range<Number,Trammel>::operator==(std::string const& s) const
 }
 
 template<typename Number, typename Trammel>
+bool tn_range<Number,Trammel>::operator!=(tn_range<Number,Trammel> const& z) const
+{
+    return !operator==(z);
+}
+
+template<typename Number, typename Trammel>
+bool tn_range<Number,Trammel>::operator!=(Number n) const
+{
+    return !operator==(n);
+}
+
+template<typename Number, typename Trammel>
+bool tn_range<Number,Trammel>::operator!=(std::string const& s) const
+{
+    return !operator==(s);
+}
+
+template<typename Number, typename Trammel>
 bool tn_range<Number,Trammel>::operator<(tn_range<Number,Trammel> const& z) const
 {
     return value_ < z.value_;

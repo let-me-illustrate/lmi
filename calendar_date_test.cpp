@@ -43,6 +43,7 @@ struct CalendarDateTest
         TestYMDBounds();
         TestYmdToJdnAndJdnToYmd();
         TestLeapYear();
+        TestMixedModeArithmetic();
         TestIncrementing();
         TestAgeCalculations();
         TestIntegralDuration();
@@ -60,6 +61,7 @@ struct CalendarDateTest
     static void TestYMDBounds();
     static void TestYmdToJdnAndJdnToYmd();
     static void TestLeapYear();
+    static void TestMixedModeArithmetic();
     static void TestIncrementing();
     static void TestAgeCalculations();
     static void TestIntegralDuration();
@@ -228,6 +230,31 @@ void CalendarDateTest::TestLeapYear()
     BOOST_TEST(!calendar_date(2003,  1,  1).is_leap_year());
     BOOST_TEST( calendar_date(2004,  1,  1).is_leap_year());
     BOOST_TEST( calendar_date(4000,  1,  1).is_leap_year());
+}
+
+void CalendarDateTest::TestMixedModeArithmetic()
+{
+    calendar_date const d = calendar_date(2003, 12, 31);
+
+    BOOST_TEST_EQUAL(    1 + d, calendar_date(2004,  1,  1));
+    BOOST_TEST_EQUAL(    d + 1, calendar_date(2004,  1,  1));
+    BOOST_TEST_EQUAL(    d - 1, calendar_date(2003, 12, 30));
+//  BOOST_TEST_EQUAL(    1 - d, calendar_date(2004, 12, 30)); // forbidden
+    BOOST_TEST_EQUAL(1 + d - 1, calendar_date(2003, 12, 31));
+
+    BOOST_TEST_EQUAL(    3 + d, calendar_date(2004,  1,  3));
+    BOOST_TEST_EQUAL(    d + 3, calendar_date(2004,  1,  3));
+    BOOST_TEST_EQUAL(    d - 3, calendar_date(2003, 12, 28));
+    BOOST_TEST_EQUAL(3 + d - 3, calendar_date(2003, 12, 31));
+    BOOST_TEST_EQUAL(7 + d - 5, calendar_date(2004,  1,  2));
+
+    calendar_date e = calendar_date(2000,  2, 28);
+
+//  BOOST_TEST_EQUAL(    3 += e, calendar_date(2000,  3,  3)); // forbidden
+    BOOST_TEST_EQUAL(    e += 3, calendar_date(2000,  3,  2));
+    BOOST_TEST_EQUAL(    e -= 3, calendar_date(2000,  2, 28));
+    BOOST_TEST_EQUAL(3 + e -= 3, calendar_date(2000,  2, 28));
+    BOOST_TEST_EQUAL(7 + e -= 5, calendar_date(2000,  3,  1));
 }
 
 void CalendarDateTest::TestIncrementing()
@@ -1045,63 +1072,82 @@ void CalendarDateTest::TestIo()
         );
 }
 
+// It would be nice to have a facility that would prevent the compiler
+// from optimizing away anything that's passed to it, such as the
+// bodies of these speed-test functions. For now, writing to a quasi-
+// global volatile variable is intended to serve that function, though
+// it's difficult to be sure it's correctly used in each case, and
+// calling julian_day_number() or size() just to get a value to write
+// to that volatile variable is an ugly artifice.
+
 namespace
 {
-    calendar_date x;
-    calendar_date y(1899, 12, 31);
-
-    void mete()
-    {
-        calendar_date t;
-        calendar_date u(1899, 12, 31);
-        t = u;
-        t++;
-        std::string s = t.str();
-        t = add_years_and_months(t, 1, 1, true);
-        attained_age(u, t, oe_age_last_birthday);
-        u = minimum_birthdate(45, t, oe_age_last_birthday);
-    }
-
-    void mete_construct()
-    {
-        calendar_date t;
-        calendar_date u(1899, 12, 31);
-    }
-
-    void mete_assign()
-    {
-        x = y;
-    }
-
-    void mete_increment()
-    {
-        x++;
-    }
-
-    void mete_get_y_m_d()
-    {
-        x.year();
-        x.month();
-        x.day();
-    }
-
-    void mete_format()
-    {
-        std::string s = x.str();
-    }
-
-    void mete_attained_age()
-    {
-        x = add_years_and_months(x, 1, 1, true);
-        attained_age(y, x, oe_age_last_birthday);
-    }
-
-    void mete_dob_limit()
-    {
-        y = minimum_birthdate(45, x, oe_age_last_birthday);
-    }
-
+    static volatile int scupper;
 } // Unnamed namespace.
+
+void mete()
+{
+    calendar_date t;
+    calendar_date u(2525, 12, 31);
+    t = u;
+    ++t;
+    scupper = t.str().size();
+    t = add_years_and_months(t, 1, 1, true);
+    scupper = attained_age(u, t, oe_age_last_birthday);
+    u = minimum_birthdate(45, t, oe_age_last_birthday);
+    scupper = u.julian_day_number();
+}
+
+void mete_construct()
+{
+    calendar_date t;
+    calendar_date u(3535, 12, 31);
+    scupper = t.julian_day_number();
+    scupper = u.julian_day_number();
+}
+
+void mete_assign()
+{
+    static const calendar_date t(4545, 12, 31);
+    static calendar_date u;
+    u = t;
+    scupper = u.julian_day_number();
+}
+
+void mete_stepping()
+{
+    static calendar_date t(5555, 12, 31);
+    scupper = (++t).julian_day_number();
+    scupper = (--t).julian_day_number();
+}
+
+void mete_get_y_m_d()
+{
+    static const calendar_date t(6565, 12, 31);
+    scupper = t.year();
+    scupper = t.month();
+    scupper = t.day();
+}
+
+void mete_format()
+{
+    static const calendar_date t(7510, 12, 31);
+    scupper = t.str().size();
+}
+
+void mete_attained_age()
+{
+    static const calendar_date t(8510, 12, 31);
+    calendar_date u = add_years_and_months(t, 1, 1, true);
+    scupper = attained_age(t, u, oe_age_last_birthday);
+}
+
+void mete_dob_limit()
+{
+    static const calendar_date t(9595, 12, 31);
+    calendar_date u = minimum_birthdate(45, t, oe_age_last_birthday);
+    scupper = u.julian_day_number();
+}
 
 void CalendarDateTest::TestSpeed()
 {
@@ -1109,7 +1155,7 @@ void CalendarDateTest::TestSpeed()
         << "  Aggregate    : " << TimeAnAliquot(mete             ) << '\n'
         << "  Construct    : " << TimeAnAliquot(mete_construct   ) << '\n'
         << "  Assign       : " << TimeAnAliquot(mete_assign      ) << '\n'
-        << "  Increment    : " << TimeAnAliquot(mete_increment   ) << '\n'
+        << "  Stepping     : " << TimeAnAliquot(mete_stepping    ) << '\n'
         << "  Get y, m, d  : " << TimeAnAliquot(mete_get_y_m_d   ) << '\n'
         << "  Format       : " << TimeAnAliquot(mete_format      ) << '\n'
         << "  Calculate age: " << TimeAnAliquot(mete_attained_age) << '\n'

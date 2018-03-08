@@ -597,7 +597,8 @@ test_alert_CXXFLAGS = $(AM_CXXFLAGS)
 test_any_member_SOURCES = \
   $(common_test_objects) \
   any_member_test.cpp \
-  facets.cpp
+  facets.cpp \
+  miscellany.cpp
 test_any_member_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_assert_lmi_SOURCES = \
@@ -751,6 +752,7 @@ test_gpt_SOURCES = \
   gpt_commutation_functions.cpp \
   gpt_test.cpp \
   ihs_irc7702.cpp \
+  miscellany.cpp \
   timer.cpp
 test_gpt_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -774,7 +776,6 @@ test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_input_SOURCES = \
   $(common_test_objects) \
-  antediluvian_stubs.cpp \
   calendar_date.cpp \
   ce_product_name.cpp \
   configurable_settings.cpp \
@@ -796,6 +797,7 @@ test_input_SOURCES = \
   input_sequence_parser.cpp \
   input_test.cpp \
   input_xml_io.cpp \
+  lmi.cpp \
   mc_enum.cpp \
   mc_enum_types.cpp \
   mc_enum_types_aux.cpp \
@@ -806,7 +808,9 @@ test_input_SOURCES = \
   null_stream.cpp \
   path_utility.cpp \
   premium_tax.cpp \
+  product_data.cpp \
   single_cell_document.cpp \
+  stratified_charges.cpp \
   timer.cpp \
   tn_range_types.cpp \
   xml_lmi.cpp \
@@ -831,7 +835,6 @@ test_irc7702a_SOURCES = \
   xml_lmi.cpp
 test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_CFLAGS)
 test_irc7702a_LDADD = \
-  liblmi.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
@@ -909,6 +912,7 @@ test_mortality_rates_CXXFLAGS = $(AM_CXXFLAGS)
 test_name_value_pairs_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  miscellany.cpp \
   name_value_pairs.cpp \
   name_value_pairs_test.cpp
 test_name_value_pairs_CXXFLAGS = $(AM_CXXFLAGS)
@@ -922,6 +926,7 @@ test_ncnnnpnn_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_numeric_io_SOURCES = \
   $(common_test_objects) \
+  miscellany.cpp \
   numeric_io_test.cpp \
   timer.cpp
 test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
@@ -970,6 +975,7 @@ test_premium_tax_LDADD = \
 test_print_matrix_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  miscellany.cpp \
   print_matrix_test.cpp
 test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -1015,11 +1021,16 @@ test_progress_meter_SOURCES = \
 test_progress_meter_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_rate_table_SOURCES = \
-  alert_cli.cpp \
+  $(common_test_objects) \
+  calendar_date.cpp \
+  crc32.cpp \
+  global_settings.cpp \
+  miscellany.cpp \
+  null_stream.cpp \
+  path_utility.cpp \
   rate_table.cpp \
   rate_table_test.cpp
 test_rate_table_LDADD = \
-  liblmi.la \
   $(BOOST_LIBS) \
   $(XMLWRAPP_LIBS)
 
@@ -1095,6 +1106,7 @@ test_tn_range_SOURCES = \
   $(common_test_objects) \
   datum_base.cpp \
   facets.cpp \
+  miscellany.cpp \
   tn_range_test.cpp \
   tn_range_test_aux.cpp
 test_tn_range_CXXFLAGS = $(AM_CXXFLAGS)
@@ -1102,6 +1114,7 @@ test_tn_range_CXXFLAGS = $(AM_CXXFLAGS)
 test_value_cast_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  miscellany.cpp \
   value_cast_test.cpp
 test_value_cast_CXXFLAGS = $(AM_CXXFLAGS)
 
@@ -1119,6 +1132,7 @@ test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
 test_xml_serialize_SOURCES = \
   $(common_test_objects) \
   facets.cpp \
+  miscellany.cpp \
   timer.cpp \
   xml_lmi.cpp \
   xml_serialize_test.cpp

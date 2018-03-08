@@ -153,11 +153,20 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(    "100", simplify_floating_point( "100.000"));
     BOOST_TEST_EQUAL( "0.0001", simplify_floating_point(  "0.0001"));
     BOOST_TEST_EQUAL( "0.0001", simplify_floating_point( "0.00010"));
+    BOOST_TEST_EQUAL(      "0", simplify_floating_point(     "0.0"));
     BOOST_TEST_EQUAL(      "0", simplify_floating_point(      "0."));
+    BOOST_TEST_EQUAL(     "-0", simplify_floating_point(    "-0.0"));
     BOOST_TEST_EQUAL(     "-0", simplify_floating_point(     "-0."));
     BOOST_TEST_EQUAL(    "nan", simplify_floating_point(     "nan"));
     BOOST_TEST_EQUAL(    "inf", simplify_floating_point(     "inf"));
     BOOST_TEST_EQUAL(   "-inf", simplify_floating_point(    "-inf"));
+
+    // Also test strings that violate preconditions, just to make sure
+    // they don't cause abrupt termination.
+    simplify_floating_point( ".0");
+    simplify_floating_point("-.0");
+    simplify_floating_point(  "0");
+    simplify_floating_point(   "");
 
     std::cout
         << "Conversions:"

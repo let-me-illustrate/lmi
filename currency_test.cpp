@@ -24,6 +24,7 @@
 #include "currency.hpp"
 
 #include "materially_equal.hpp"
+#include "miscellany.hpp"               // stifle_warning_for_unused_value()
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -265,9 +266,11 @@ void do_some_arithmetic(T t)
         u += t - f;
         u = convert_from_double<T>(std::floor(convert_to_double(u) * 1.03));
         T volatile v(u);
+        stifle_warning_for_unused_value(v);
         }
 
     T volatile w(t);
+    stifle_warning_for_unused_value(w);
 }
 
 void mete_double()

@@ -128,20 +128,24 @@ effective_default_target: $(default_targets)
 
 ################################################################################
 
+# $(subst): workaround for debian, whose MinGW-w64 identifies its
+# version 7.2.0 as "7.2-win32".
+
 ifeq (gcc,$(toolset))
-  gcc_version := $(shell $(CXX) -dumpversion)
+  gcc_version   := $(subst 7.2-win32,7.2.0,$(shell $(CXX)     -dumpversion))
 endif
 
 # These are defined even for toolsets other than gcc.
 
-gnu_cpp_version := $(shell $(GNU_CPP) -dumpversion)
-gnu_cxx_version := $(shell $(GNU_CXX) -dumpversion)
+gnu_cpp_version := $(subst 7.2-win32,7.2.0,$(shell $(GNU_CPP) -dumpversion))
+gnu_cxx_version := $(subst 7.2-win32,7.2.0,$(shell $(GNU_CXX) -dumpversion))
 
 ifeq      (3.4.4,$(gnu_cpp_version))
 else ifeq (3.4.5,$(gnu_cpp_version))
 else ifeq (4.9.1,$(gnu_cpp_version))
 else ifeq (4.9.2,$(gnu_cpp_version))
 else ifeq (6.3.0,$(gnu_cpp_version))
+else ifeq (7.2.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -151,6 +155,7 @@ else ifeq (3.4.5,$(gnu_cxx_version))
 else ifeq (4.9.1,$(gnu_cxx_version))
 else ifeq (4.9.2,$(gnu_cxx_version))
 else ifeq (6.3.0,$(gnu_cxx_version))
+else ifeq (7.2.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
@@ -394,8 +399,22 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   gcc_version_specific_warnings := \
     -Wno-conversion \
     -Wno-parentheses \
-    -Wno-unused-local-typedefs \
-    -Wno-unused-variable \
+
+  cxx_standard := -std=c++17
+
+# The default '-fno-rounding-math' means something like
+  #   #pragma STDC FENV ACCESS OFF
+  # which causes harm while bringing no countervailing benefit--see:
+  #   http://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+  c_standard   += -frounding-math
+  cxx_standard += -frounding-math
+else ifneq (,$(filter $(gcc_version), 7.2.0))
+  # Rationale:
+  # -Wno-conversion             regrettable, but needed for wx
+  # -Wno-parentheses            beyond pedantic
+  gcc_version_specific_warnings := \
+    -Wno-conversion \
+    -Wno-parentheses \
 
   cxx_standard := -std=c++17
 
@@ -472,6 +491,16 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialize
 # The boost regex library is incompatible with '-Wshadow'.
 
 $(boost_regex_objects): gcc_common_extra_warnings += -Wno-shadow
+
+boost_dependent_objects := \
+  $(boost_regex_objects) \
+  expression_template_0_test.o \
+  regex_test.o \
+  test_coding_rules.o \
+
+$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-implicit-fallthrough
+$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-register
+$(boost_dependent_objects): gcc_common_extra_warnings += -Wno-unused-local-typedefs
 
 # The boost regex library improperly defines "NOMINMAX":
 #   http://lists.boost.org/Archives/boost/2006/03/102189.php
@@ -684,6 +713,14 @@ ifneq (,$(USE_SO_ATTRIBUTES))
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
 endif
 
+# The BOOST_STATIC_ASSERT definition seems to belong in CPPFLAGS with
+# the other macro definitions. However, writing it there elicits:
+#   warning: ISO C99 requires whitespace after the macro name
+# which may simply be a gnu CPP defect--the documentation:
+#   https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
+# says "-D'name(args...)=definition' works", and adding a blank either
+# before or after '=' is an error.
+
 REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(all_include_directories)) \
   $(lmi_wx_new_so_attributes) \
@@ -693,6 +730,7 @@ REQUIRED_CPPFLAGS = \
   $(wx_predefinitions) \
   -DBOOST_NO_AUTO_PTR \
   -DBOOST_STRICT_CONFIG \
+  -DBOOST_STATIC_ASSERT_HPP \
   $(actually_used_pch_flags) \
 
 REQUIRED_CFLAGS = \
@@ -700,6 +738,7 @@ REQUIRED_CFLAGS = \
 
 REQUIRED_CXXFLAGS = \
   $(CXX_WARNINGS) \
+  -D'BOOST_STATIC_ASSERT(A)=static_assert((A))' \
 
 REQUIRED_ARFLAGS = \
   -rus
@@ -1469,17 +1508,20 @@ clean_edg:
 
 .PHONY: show_flags
 show_flags:
-	@$(ECHO) ALL_CPPFLAGS            = '$(ALL_CPPFLAGS)'
-	@$(ECHO) ALL_CFLAGS              = '$(ALL_CFLAGS)'
-	@$(ECHO) ALL_CXXFLAGS            = '$(ALL_CXXFLAGS)'
-	@$(ECHO) ALL_ARFLAGS             = '$(ALL_ARFLAGS)'
-	@$(ECHO) ALL_LDFLAGS             = '$(ALL_LDFLAGS)'
-	@$(ECHO) ALL_RCFLAGS             = '$(ALL_RCFLAGS)'
-	@$(ECHO) srcdir                  = '$(srcdir)'
-	@$(ECHO) all_include_directories = '$(all_include_directories)'
-	@$(ECHO) all_source_directories  = '$(all_source_directories)'
-	@$(ECHO) wx_include_paths        = '$(wx_include_paths)'
-	@$(ECHO) wx_libraries            = '$(wx_libraries)'
-	@$(ECHO) wx_library_paths        = '$(wx_library_paths)'
-	@$(ECHO) wx_predefinitions       = '$(wx_predefinitions)'
+	@printf "gcc_version             = '%s'\n" "$(gcc_version)"
+	@printf "gnu_cpp_version         = '%s'\n" "$(gnu_cpp_version)"
+	@printf "gnu_cxx_version         = '%s'\n" "$(gnu_cxx_version)"
+	@printf "ALL_CPPFLAGS            = '%s'\n" "$(ALL_CPPFLAGS)"
+	@printf "ALL_CFLAGS              = '%s'\n" "$(ALL_CFLAGS)"
+	@printf "ALL_CXXFLAGS            = '%s'\n" "$(ALL_CXXFLAGS)"
+	@printf "ALL_ARFLAGS             = '%s'\n" "$(ALL_ARFLAGS)"
+	@printf "ALL_LDFLAGS             = '%s'\n" "$(ALL_LDFLAGS)"
+	@printf "ALL_RCFLAGS             = '%s'\n" "$(ALL_RCFLAGS)"
+	@printf "srcdir                  = '%s'\n" "$(srcdir)"
+	@printf "all_include_directories = '%s'\n" "$(all_include_directories)"
+	@printf "all_source_directories  = '%s'\n" "$(all_source_directories)"
+	@printf "wx_include_paths        = '%s'\n" "$(wx_include_paths)"
+	@printf "wx_libraries            = '%s'\n" "$(wx_libraries)"
+	@printf "wx_library_paths        = '%s'\n" "$(wx_library_paths)"
+	@printf "wx_predefinitions       = '%s'\n" "$(wx_predefinitions)"
 

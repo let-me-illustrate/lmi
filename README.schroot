@@ -33,22 +33,22 @@ apt-get install schroot debootstrap
 # Download all OS essentials. This step may be done a single time, and
 # its tarball used repeatedly. The target ('/tmp/eraseme') directory
 # will be created and erased automatically.
-debootstrap --arch=amd64 --make-tarball=/var/cache/stretch_bootstrap.tar stretch /tmp/eraseme
+debootstrap --arch=amd64 --make-tarball=/var/cache/buster_bootstrap.tar buster /tmp/eraseme
 
 # Unpack the OS tarball into the particular chroot being created.
 # (If the preceding apt-get and debootstrap steps have already been
 # completed once, then skip them and start here.)
-mkdir -p /srv/chroot/cross-lmi
-debootstrap --arch=amd64 --unpack-tarball=/var/cache/stretch_bootstrap.tar \
- stretch /srv/chroot/cross-lmi >cross-lmi-debootstrap-log 2>&1
+mkdir -p /srv/chroot/lmi-buster
+debootstrap --arch=amd64 --unpack-tarball=/var/cache/buster_bootstrap.tar \
+ buster /srv/chroot/lmi-buster >lmi-buster-debootstrap-log 2>&1
 
 # This command should produce no output:
-grep --invert-match '^I:' cross-lmi-debootstrap-log
+grep --invert-match '^I:' lmi-buster-debootstrap-log
 
-cat >/etc/schroot/chroot.d/cross-lmi.conf <<\EOF
-[cross-lmi]
-description=debian-9 cross build
-directory=/srv/chroot/cross-lmi
+cat >/etc/schroot/chroot.d/lmi-buster.conf <<\EOF
+[lmi-buster]
+description=debian buster cross build
+directory=/srv/chroot/lmi-buster
 users=greg
 groups=greg
 root-groups=root
@@ -61,7 +61,7 @@ exit
 # This command--to start a root shell in the chroot--can be run as a
 # normal user. It will prompt for the root password.
 
-schroot --chroot=cross-lmi --user=root --directory=/
+schroot --chroot=lmi-buster --user=root --directory=/
 # enter password
 
 # Add i386 before installing wine, so that wine can run 32-bit .exe's .
@@ -92,20 +92,20 @@ mount -t proc -o rw,nosuid,nodev,noexec,relatime proc /proc
 #   umount ./dev/pts
 #   umount ./proc
 # ...or outside chroot:
-#   umount /srv/chroot/cross-lmi/dev/pts/
-#   umount /srv/chroot/cross-lmi/proc/
+#   umount /srv/chroot/lmi-buster/dev/pts/
+#   umount /srv/chroot/lmi-buster/proc/
 # Then, and only then:
-#   rm -rf /srv/chroot/cross-lmi/
-#   rm /etc/schroot/chroot.d/cross-lmi.conf
+#   rm -rf /srv/chroot/lmi-buster/
+#   rm /etc/schroot/chroot.d/lmi-buster.conf
 
 apt-get update
-apt-get --assume-yes install g++-mingw-w64 automake libtool make \
+apt-get --assume-yes install wget g++-mingw-w64 automake libtool make \
  pkg-config git cvs zsh bzip2 unzip sudo wine default-jre fop jing trang \
  g++-multilib libxml2-utils libxslt1-dev vim-gtk vim-doc vim-fugitive \
- >cross-lmi-apt-get-log 2>&1
+ >lmi-buster-apt-get-log 2>&1
 
 # This command should produce little output:
-<cross-lmi-apt-get-log sed -e'0,/^Preconfiguring/d' \
+<lmi-buster-apt-get-log sed -e'0,/^Preconfiguring/d' \
  -e'/^Fetched\|^Preparing\|^Unpacking\|^Configuring\|^Selecting/d' \
  -e'/^Setting up\|^Processing\|^Adding\|^update-alternatives\|^[Dd]one./d' \
  -e'/^(Reading database\|^Linking\|^Moving old\|^Regenerating/d' \
@@ -205,6 +205,55 @@ patch --dry-run --strip=0 </home/greg/ltmain.sh.patch \
 
 # Configure vim.
 
+# Without this, 'zg' gives an error message; with it, vim creates a
+# spellfile the first time 'zg' is used, if none already exists.
+mkdir ~/.vim
+# It's a much better idea to copy a mature spellfile hither:
+# ~/.vim/spell/en.utf-8.add
+# and then (imperatively) run this command:
+# :mkspell! ~/.vim/spell/en.utf-8.add
+
+cat >~/.vimrc <<\EOF
+" This shouldn't be necessary, but it is: $LANG is 'en_US.UTF-8',
+" yet vim uses Latin-1 nevertheless.
+set encoding=utf-8
+
+set background=dark
+highlight clear SpellBad
+highlight SpellBad   cterm=underline ctermbg=240 ctermfg=226
+highlight clear SpellCap
+highlight SpellCap   cterm=underline ctermbg=240 ctermfg=252
+highlight clear SpellLocal
+highlight SpellLocal cterm=underline ctermbg=240 ctermfg=154
+highlight clear SpellRare
+highlight SpellRare  cterm=underline ctermbg=240 ctermfg=208
+
+highlight TabLineFill                            ctermfg=16
+highlight TabLine                    ctermbg=237 ctermfg=124
+highlight TabLineSel                 ctermbg=239 ctermfg=202
+
+" From tpope's 'sensible.vim':
+set tabpagemax=50
+
+" Show invisibles: 'eol' and 'tab' are meant to be unobtrusive,
+" while 'nbsp' and 'trail' are meant to stand out; 'extends' and
+" 'precedes' normally wouldn't be seen because of 'set wrap'.
+set list
+" On second thought, 'eol' should probably be left alone.
+" set listchars=nbsp:◙,eol:☜,tab:☞☞,extends:»,precedes:«,trail:▒
+set listchars=nbsp:◙,tab:☞☞,extends:»,precedes:«,trail:▒
+highlight clear NonText
+highlight NonText    ctermfg=gray " eol, extends, precedes
+highlight clear SpecialKey
+highlight SpecialKey ctermfg=red  " nbsp, tab, trail
+
+let g:netrw_liststyle=3
+map <Tab> <C-W>w
+
+" Prevent gvim cursor from blinking
+:set guicursor+=a:blinkon0
+EOF
+
 cat >/etc/vim/vimrc.local <<\EOF
 set shortmess=Il
 
@@ -233,6 +282,12 @@ au BufReadPost,BufNewFile *.tpp set ft=cpp
 au BufReadPost,BufNewFile *.xpp set ft=cpp
 " au BufReadPost,BufNewFile *.?pp set ft=cpp
 
+" mustache--"ignored" is preferable to default:
+"   https://lists.gnu.org/archive/html/lmi/2017-10/msg00016.html
+" for a plugin, see:
+"   https://lists.gnu.org/archive/html/lmi/2017-10/msg00017.html
+au BufReadPost,BufNewFile *.mst set ft=ignored
+
 syntax on
 set hlsearch
 
@@ -248,9 +303,9 @@ EOF
 # Enable stable and security upgrades:
 
 cat >/etc/apt/sources.list <<\EOF
-deb http://deb.debian.org/debian/ stretch main
-deb http://deb.debian.org/debian/ stretch-updates main
-deb http://security.debian.org/   stretch/updates main
+deb http://deb.debian.org/debian/ buster main
+deb http://deb.debian.org/debian/ buster-updates main
+deb http://security.debian.org/   buster/updates main
 EOF
 
 # Apply any available upgrades:
@@ -269,29 +324,23 @@ exit
 # chroot. For convenience, add a bare repository of proprietary files
 # to this directory (after making sure it's up to date):
 #   cp --dereference --preserve --recursive /WHEREVER/blessed /srv/cache_for_lmi
-#   cp -a /srv/cache_for_lmi/* /srv/chroot/cross-lmi/cache_for_lmi/
+#   cp -a /srv/cache_for_lmi/* /srv/chroot/lmi-buster/cache_for_lmi/
+# Also copy any desired msw software into the chroot now--but if it
+# requires running an "install" program, postpone that until wine has
+# been installed, below.
 
 # Configure ssh, iff this chroot needs write access to savannah.
 # The easiest way is to copy existing credentials, e.g.:
-#   cp -a ~/.ssh/ /srv/chroot/cross-lmi/home/greg
+#   cp -a ~/.ssh/ /srv/chroot/lmi-buster/home/greg
 # Make sure the .ssh/config file contains:
 #   Protocol 2
 #   HashKnownHosts no
 # See the discussion of hashing (inter alia) here:
 #   http://lists.nongnu.org/archive/html/lmi/2018-01/msg00003.html
 
-# Use an msw-native java to let lmi write illustrations to pdf. See:
-#   http://lists.nongnu.org/archive/html/lmi/2016-10/msg00010.html
-# It's convenient to obtain it outside a chroot, where a web browser
-# is available--e.g., save this file:
-#   http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase5-419410.html
-# to /srv/cache_for_lmi/, then copy it into the chroot's filesystem:
-#   cp -a /srv/cache_for_lmi/jre-1_5_0-windows-i586.exe /srv/chroot/cross-lmi/cache_for_lmi
-# where it can be run later. Only the JRE is wanted, and nothing else.
-
 # Enter the chroot as a normal user
 
-schroot --chroot=cross-lmi
+schroot --chroot=lmi-buster
 
 # Configure git. See:
 #   http://lists.nongnu.org/archive/html/lmi/2016-03/msg00006.html
@@ -309,17 +358,25 @@ git config --global log.follow true
 WINEDLLOVERRIDES=mscoree=d wine wineboot
 
 # Configure wine:
+
 winecfg
-# on "Graphics" tab, set DPI to 192
-# fix any application that gets the wrong X tab order
+# First, to make it usable in general ("Default Settings"):
+#   on "Applications" tab, set "Windows Version" to "XP"
+#   on "Graphics" tab, set DPI to 192
+
+wine regedit
+# HKCU\Control Panel\International:
+#   set sShortDate and sLongDate to "yyyy-MM-dd"
+
+# Troubleshoot wine:
+#
+# Later, to fix any application that gets the wrong X tab order:
+# winecfg
 #   "Applications": "add"; then
 #   "Graphics": "Emulate virtual desktop"
 #     specify appropriate size: e.g., 1900x1120 for a 1920x1200 monitor
 #     (the other options don't seem to matter)
 #   then restart the application
-
-# Install java.
-wine /cache_for_lmi/jre-1_5_0-windows-i586.exe
 
 # Symlink directories used by lmi, so that both native and wine
 # builds use the same directories and can share the same
@@ -408,14 +465,14 @@ wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/p
 
 # Run a system test.
 cd /opt/lmi/src/lmi
-make $coefficiency system_test 2>&1 |less
+make $coefficiency system_test 2>&1 |less -S
 # That test fails the first time because no results are saved in
 # touchstone/ yet. Copy the results just generated...
 cp -a /opt/lmi/test/* /opt/lmi/touchstone
 # ...removing summaries...
 rm /opt/lmi/touchstone/analysis* /opt/lmi/touchstone/diffs* /opt/lmi/touchstone/md5sum*
 # ...and rerun the test, which should now succeed:
-make $coefficiency system_test 2>&1 |less
+make $coefficiency system_test 2>&1 |less -S
 
 # Create a local mirror of the gnu.org repository:
 cd /opt/lmi

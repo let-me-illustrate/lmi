@@ -72,9 +72,9 @@ inline std::string ncnnnpnn(long double value)
                 do
                     {
                     if('.' == *sin_it) break;
-                    s_out += ',';
-        case 0:     s_out += *sin_it++;
-        case 2:     s_out += *sin_it++;
+                    s_out += ',';       // fall through
+        case 0:     s_out += *sin_it++; // fall through
+        case 2:     s_out += *sin_it++; // fall through
         case 1:     s_out += *sin_it++;
                     } while(*sin_it);
         }

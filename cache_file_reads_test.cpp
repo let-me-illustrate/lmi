@@ -103,12 +103,14 @@ void cache_file_reads_test::mete_uncached()
 {
     X const x("sample.ill");
     std::string::size_type volatile z = x.s().size();
+    stifle_warning_for_unused_value(z);
 }
 
 void cache_file_reads_test::mete_cached()
 {
     X const& x(*X::read_via_cache("sample.ill"));
     std::string::size_type volatile z = x.s().size();
+    stifle_warning_for_unused_value(z);
 }
 
 int test_main(int, char*[])

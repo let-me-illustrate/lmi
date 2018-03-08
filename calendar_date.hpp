@@ -27,8 +27,6 @@
 #include "oecumenic_enumerations.hpp"   // oenum_alb_or_anb
 #include "so_attributes.hpp"
 
-#include <boost/operators.hpp>
-
 #include <iosfwd>
 #include <string>
 #include <utility>
@@ -124,9 +122,6 @@ jdn_t LMI_SO YmdToJdn(ymd_t);
 /// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO calendar_date
-    :boost::additive<calendar_date,int>
-    ,boost::totally_ordered<calendar_date>
-    ,boost::unit_steppable<calendar_date>
 {
   public:
     enum
@@ -153,7 +148,9 @@ class LMI_SO calendar_date
     int julian_day_number() const;
 
     bool operator==(calendar_date const&) const;
-    bool operator<(calendar_date const&) const;
+    bool operator!=(calendar_date const&) const;
+    bool operator< (calendar_date const&) const;
+    bool operator<=(calendar_date const&) const;
 
     int year() const;
     int month() const;
@@ -177,11 +174,9 @@ class LMI_SO calendar_date
     mutable int cached_day_;
 };
 
-// gcc-3.x and bc-5.5.1 do not work at all well with this technique
-// suggested as a space optimization in the boost documentation:
-//    template struct boost::additive<calendar_date,int>;
-//    template struct boost::totally_ordered<calendar_date>;
-//    template struct boost::unit_steppable<calendar_date>;
+calendar_date LMI_SO operator+(int, calendar_date);
+calendar_date LMI_SO operator+(calendar_date, int);
+calendar_date LMI_SO operator-(calendar_date, int);
 
 std::ostream& LMI_SO operator<<(std::ostream& os, calendar_date const&);
 std::istream& LMI_SO operator>>(std::istream& is, calendar_date&);

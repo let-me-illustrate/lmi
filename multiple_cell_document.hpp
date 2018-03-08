@@ -114,27 +114,28 @@ class LMI_SO multiple_cell_document final
     xslt::stylesheet& cell_sorter() const;
     std::string xsd_schema_name(int version) const;
 
-    // Default parameters for the whole case, stored as a vector for
-    // parallelism with class_parms_ and cell_parms_. Naturally, this
-    // vector must have exactly one element.
     std::vector<Input> case_parms_;
-
-    // Default parameters for each employee class.
     std::vector<Input> class_parms_;
-
-    // Parameters for each cell.
     std::vector<Input> cell_parms_;
 };
+
+/// Default parameters for the whole case, stored as a vector for
+/// parallelism with class_parms_ and cell_parms_. Naturally, this
+/// vector must have exactly one element.
 
 inline std::vector<Input> const& multiple_cell_document::case_parms() const
 {
     return case_parms_;
 }
 
+/// Default parameters for each employee class.
+
 inline std::vector<Input> const& multiple_cell_document::class_parms() const
 {
     return class_parms_;
 }
+
+/// Parameters for each cell.
 
 inline std::vector<Input> const& multiple_cell_document::cell_parms() const
 {

@@ -26,8 +26,6 @@
 
 #include "datum_base.hpp"
 
-#include <boost/operators.hpp>
-
 #include <string>
 #include <type_traits>
 #include <typeinfo>
@@ -230,9 +228,6 @@ class LMI_SO tn_range_base
 template<typename Number, typename Trammel>
 class tn_range
     :public tn_range_base
-    ,private boost::totally_ordered    <tn_range<Number,Trammel>>
-    ,private boost::equality_comparable<tn_range<Number,Trammel>,Number>
-    ,private boost::equality_comparable<tn_range<Number,Trammel>,std::string>
 {
     static_assert(std::is_base_of<trammel_base<Number>,Trammel>::value);
 
@@ -260,6 +255,9 @@ class tn_range
     bool operator==(tn_range<Number,Trammel> const&) const;
     bool operator==(Number) const;
     bool operator==(std::string const&) const;
+    bool operator!=(tn_range<Number,Trammel> const&) const;
+    bool operator!=(Number) const;
+    bool operator!=(std::string const&) const;
     bool operator<(tn_range<Number,Trammel> const&) const;
 
     Trammel const& trammel() const;
@@ -289,6 +287,38 @@ class tn_range
     Number maximum_;
     Number value_;
 };
+
+// Define these few equality operators inline.
+//
+// To avoid bloat, great pains are taken to instantiate tn_range types
+// explicitly in a single translation unit. The same could be done for
+// these operators; however, explicit instantiations of four operators
+// would take four times as many statements as one class needs, with
+// little incremental effect on bloat.
+
+template<typename Number, typename Trammel>
+bool operator==(Number n, tn_range<Number,Trammel> const& z)
+{
+    return z.operator==(n);
+}
+
+template<typename Number, typename Trammel>
+bool operator==(std::string const& s, tn_range<Number,Trammel> const& z)
+{
+    return z.operator==(s);
+}
+
+template<typename Number, typename Trammel>
+bool operator!=(Number n, tn_range<Number,Trammel> const& z)
+{
+    return !z.operator==(n);
+}
+
+template<typename Number, typename Trammel>
+bool operator!=(std::string const& s, tn_range<Number,Trammel> const& z)
+{
+    return !z.operator==(s);
+}
 
 #endif // tn_range_hpp
 

@@ -26,6 +26,7 @@
 
 #include "bourn_cast.hpp"
 #include "ieee754.hpp"                  // is_infinite<>()
+#include "miscellany.hpp"               // rtrim()
 
 #include <algorithm>                    // max()
 #include <cmath>                        // fabs(), log10()
@@ -79,27 +80,23 @@ inline int floating_point_decimals(T t)
 
 /// Simplify a formatted floating-point number.
 ///
-/// Precondition: 's' is a floating-point number formatted as if by
-/// std::snprintf() with format "%#.*f" or "%#.*Lf".
+/// Precondition: the argument is a floating-point number formatted as
+/// if by std::snprintf() with format "%#.*f" or "%#.*Lf". Therefore,
+/// it contains a decimal point (because of '#') preceded by at least
+/// one digit (because of 'f'). These preconditions are not tested:
+/// testing them would be costly, and this function is intended only
+/// for internal use in a context that ensures their satisfaction.
 ///
 /// Returns: 's' without any insignificant characters (trailing zeros
 /// after the decimal point, and the decimal point itself if followed
 /// by no nonzero digits).
-///
-/// Note: The '#' flag ensures the presence of a decimal point in the
-/// argument, which this algorithm uses as a sentinel.
 
 inline std::string simplify_floating_point(std::string const& s)
 {
-    std::string::const_reverse_iterator ri = s.rbegin();
-  loop:
-    switch(*ri)
-        {
-        case '0': if(++ri != s.rend()) goto loop;
-        case '.': ++ri;
-        default : ;
-        }
-    return std::string(s.begin(), ri.base());
+    std::string z(s);
+    rtrim(z, "0");
+    rtrim(z, ".");
+    return z;
 }
 
 /// Traits for conversion between arithmetic types and strings.

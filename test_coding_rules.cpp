@@ -298,10 +298,16 @@ void taboo
 /// Throw if the file contains a character outside the union of
 /// ISO-8859-15 and the minimal POSIX whitespace set " \f\n\r\t\v".
 ///
-/// To locate violations: "grep -P '[\x00-\x08\x0e-\x1f\x7f-\x9f]'".
+/// To locate violations:
+///   LC_ALL=C grep -P '[\x00-\x08\x0e-\x1f\x7f-\x9f]' list-of-files
 
 void assay_non_latin(file const& f)
 {
+    if(f.phyloanalyze("^README.schroot$"))
+        {
+        return;
+        }
+
     static boost::regex const forbidden(R"([\x00-\x08\x0e-\x1f\x7f-\x9f])");
     if(boost::regex_search(f.data(), forbidden))
         {
@@ -1119,8 +1125,7 @@ statistics statistics::analyze_file(file const& f)
         ||  f.is_of_phylum(e_patch)
         ||  f.is_of_phylum(e_touchstone)
         ||  f.is_of_phylum(e_xml_input)
-        ||  f.phyloanalyze("^INSTALL")
-        ||  f.phyloanalyze("^README")
+        ||  f.is_of_phylum(e_synopsis)
         )
         {
         return z;

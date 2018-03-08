@@ -50,9 +50,9 @@
 # panes. Having figured out how to start various terminals with tabbed
 # sessions, I do wonder whether I should have used 'expect'.
 #
-title: Mirror ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/1
-title: Commit ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/2
-title: Build  ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/3
-title: Misc   ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/4
-title: Test   ;; profile: Shell ;; command: schroot --chroot=cross-lmi --directory=/opt/lmi/src/lmi/tabs/5
+title: Mirror ;; profile: Shell ;; command: schroot --chroot=lmi-buster --directory=/opt/lmi/src/lmi/tabs/1
+title: Commit ;; profile: Shell ;; command: schroot --chroot=lmi-buster --directory=/opt/lmi/src/lmi/tabs/2
+title: Build  ;; profile: Shell ;; command: schroot --chroot=lmi-buster --directory=/opt/lmi/src/lmi/tabs/3
+title: Edit   ;; profile: Shell ;; command: schroot --chroot=lmi-buster --directory=/opt/lmi/src/lmi/tabs/4
+title: Run    ;; profile: Shell ;; command: schroot --chroot=lmi-buster --directory=/opt/lmi/src/lmi/tabs/5
 

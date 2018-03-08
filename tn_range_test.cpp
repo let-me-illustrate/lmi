@@ -250,7 +250,7 @@ void tn_range_test::test_percentages(char const* file, int line)
 
     T t_percentage;
     t_percentage = 50;
-    INVOKE_BOOST_TEST_EQUAL(50, t_percentage, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(50), t_percentage, file, line);
 
     INVOKE_BOOST_TEST(!t_percentage.is_valid( n1), file, line);
     INVOKE_BOOST_TEST( t_percentage.is_valid(  0), file, line);
@@ -274,26 +274,26 @@ void tn_range_test::test_percentages(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(101), 100, file, line);
 
     T t0(n10);
-    INVOKE_BOOST_TEST_EQUAL(  0, t0, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(  0), t0, file, line);
     T t1(  0);
-    INVOKE_BOOST_TEST_EQUAL(  0, t1, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(  0), t1, file, line);
     T t2(  1);
-    INVOKE_BOOST_TEST_EQUAL(  1, t2, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(  1), t2, file, line);
     T t3(100);
-    INVOKE_BOOST_TEST_EQUAL(100, t3, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(100), t3, file, line);
     T t4(101);
-    INVOKE_BOOST_TEST_EQUAL(100, t4, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(100), t4, file, line);
 
     t_percentage = n10;
-    INVOKE_BOOST_TEST_EQUAL(  0, t_percentage, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(  0), t_percentage, file, line);
     t_percentage =   0;
-    INVOKE_BOOST_TEST_EQUAL(  0, t_percentage, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(  0), t_percentage, file, line);
     t_percentage =   1;
-    INVOKE_BOOST_TEST_EQUAL(  1, t_percentage, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(  1), t_percentage, file, line);
     t_percentage = 100;
-    INVOKE_BOOST_TEST_EQUAL(100, t_percentage, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(100), t_percentage, file, line);
     t_percentage = 101;
-    INVOKE_BOOST_TEST_EQUAL(100, t_percentage, file, line);
+    INVOKE_BOOST_TEST_EQUAL(N(100), t_percentage, file, line);
 }
 
 void tn_range_test::test()

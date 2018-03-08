@@ -272,9 +272,19 @@ bool calendar_date::operator==(calendar_date const& z) const
     return jdn_ == z.jdn_;
 }
 
+bool calendar_date::operator!=(calendar_date const& z) const
+{
+    return jdn_ != z.jdn_;
+}
+
 bool calendar_date::operator<(calendar_date const& z) const
 {
     return jdn_ < z.jdn_;
+}
+
+bool calendar_date::operator<=(calendar_date const& z) const
+{
+    return jdn_ <= z.jdn_;
 }
 
 int calendar_date::year() const
@@ -331,6 +341,21 @@ void calendar_date::cache_gregorian_elements() const
 bool calendar_date::is_verified_jdn(int z)
 {
     return min_verified_jdn <= z && z <= max_verified_jdn;
+}
+
+calendar_date operator+(int i, calendar_date z)
+{
+    return z += i;
+}
+
+calendar_date operator+(calendar_date z, int i)
+{
+    return z += i;
+}
+
+calendar_date operator-(calendar_date z, int i)
+{
+    return z -= i;
 }
 
 std::ostream& operator<<(std::ostream& os, calendar_date const& date)

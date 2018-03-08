@@ -80,9 +80,6 @@ std::size_t count_newlines(std::string const& s)
 
 std::vector<std::string> split_into_lines(std::string const& s)
 {
-    // BOOST !! Unfortunately boost::split() can't be easily used with the
-    // current ancient version of the library (1.33), so we reimplement it
-    // here.
     std::vector<std::string> lines;
     std::string line;
     for(std::string::const_iterator i = s.begin(); ; ++i)

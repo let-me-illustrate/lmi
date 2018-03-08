@@ -99,7 +99,7 @@ class DatabaseTableAdapter
     bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int) override;
     bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int) override;
 
-    /// Helper, converts array of boost::any into array of ints
+    /// Helper, converts array of std::any into array of ints
     static void ConvertValue(Coords const&, std::vector<int>&);
 
     bool IsVoid() const;
