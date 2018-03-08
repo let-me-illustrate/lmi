@@ -38,8 +38,8 @@ namespace
 
 // These margins are arbitrary and can be changed to conform to subjective
 // preferences.
-constexpr int horz_margin = 24;
-constexpr int vert_margin = 36;
+constexpr int horz_margin = 18;
+constexpr int vert_margin = 24;
 
 wxPrintData make_print_data
     (wxString const&    output_filename
