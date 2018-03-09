@@ -965,7 +965,7 @@
       <fo:table-cell number-rows-spanned="2">
         <xsl:call-template name="header-cell-with-border"/>
         <fo:block>Sep Acct Net</fo:block>
-        <fo:block>Inv Rate</fo:block>
+        <fo:block>Int Rate</fo:block>
       </fo:table-cell>
       <fo:table-cell number-rows-spanned="2">
         <xsl:call-template name="header-cell-with-border"/>

@@ -1895,7 +1895,7 @@ class ill_reg_tabular_detail2_page : public page_with_tabular_report
             {{ "PolicyYear"          , "Policy\nYear"               ,         "999" }
             ,{ "AttainedAge"         , "End of\nYear Age"           ,         "999" }
             ,{ "AnnGAIntRate_Current", "Illustrated\nCrediting Rate",      "99.99%" }
-            ,{ "SpecAmt"             , "Selected\nFace Amount"      , "999,000,000" }
+            ,{ "SpecAmt"             , "Selected\nFace Amount"      , "999,999,999" }
             };
 
         return columns;
@@ -2471,7 +2471,7 @@ class nasd_assumption_detail : public page_with_tabular_report
         static illustration_table_columns const columns =
             {{ "PolicyYear"          , "Policy\nYear"                ,        "999" }
             ,{ "AttainedAge"         , "End of\nYear Age"            ,        "999" }
-            ,{ "AnnSAIntRate_Current", "Sep Acct Net\nInv Rate"      ,     "99.99%" }
+            ,{ "AnnSAIntRate_Current", "Sep Acct Net\nInt Rate"      ,     "99.99%" }
             ,{ "AnnGAIntRate_Current", "Gen Acct\nCurrent Rate"      ,     "99.99%" }
             ,{ "CurrMandE"           , "M&E"                         ,     "99.99%" }
             ,{ "EeMode"              , "Indiv\nPmt Mode"             , "Semiannual" }
