@@ -2155,7 +2155,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
 {
   private:
     // This method must be overridden to return the text of the super-header
-    // used for all pairs of "cash surrogate value" and "death benefit"
+    // used for all pairs of "cash surrender value" and "death benefit"
     // columns. The return value is subject to HTML interpolation and so may
     // contain {{variables}} and also can be multiline but, if so, it must have
     // the same number of lines for all input arguments.
