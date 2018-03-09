@@ -207,6 +207,13 @@ pushd /opt/lmi/bin
 ./lmi_cli_shared --file=sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_pdf_file,emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1  2>&1 |less -S
 popd
 
+  # Use native java to produce PDF illustrations from XSL-FO files
+  # created by a cross build--see:
+  #   https://lists.nongnu.org/archive/html/lmi/2018-02/msg00112.html
+  # PDF !! Remove this when XSL-FO is replaced.
+
+for XYZZY in billion; do JAVA_HOME=$(dirname $(dirname $(dirname $(readlink -f $(whence java))))) /opt/lmi/third_party/fop-0.20.5/fop.sh -fo "/opt/lmi/bin/old/$XYZZY.fo.xml" -pdf "/opt/lmi/bin/old/$XYZZY.pdf"; done 2>&1 |less -S
+
   # Miscellany (no particular screen)
 
 cd /opt/lmi/src/lmi

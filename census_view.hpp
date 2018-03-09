@@ -82,6 +82,7 @@ class CensusView final
     void UponRunCase                (wxCommandEvent&);
     void UponRunCaseToSpreadsheet   (wxCommandEvent&);
     void UponRunCaseToGroupRoster   (wxCommandEvent&);
+    void UponRunCaseToGroupQuote    (wxCommandEvent&);
     void UponUpdateAlwaysDisabled   (wxUpdateUIEvent&);
     void UponUpdateAlwaysEnabled    (wxUpdateUIEvent&);
     void UponUpdateSingleSelection  (wxUpdateUIEvent&);

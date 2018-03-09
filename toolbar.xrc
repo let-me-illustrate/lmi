@@ -118,6 +118,11 @@
         <bitmap stock_id="roster"/>
         <longhelp>Run and print all cells to a group roster</longhelp>
     </object>
+    <object class="tool" name="print_group_quote">
+        <tooltip>Print group quote</tooltip>
+        <bitmap stock_id="quote"/>
+        <longhelp>Run and print all cells to a group premium quote</longhelp>
+    </object>
     <object class="separator"/>
     <object class="tool" name="paste_census">
         <tooltip>Paste census</tooltip>
