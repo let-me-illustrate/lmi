@@ -207,10 +207,18 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         // reduce them by up to half if really needed.
         if(!num_expand)
             {
+            // We need to round up in division here to be sure that all columns
+            // fit into the available width.
             auto const overflow_per_column =
                 (overflow + num_columns - 1)/num_columns;
             if(overflow_per_column <= column_margin_)
                 {
+                // We are going to reduce the total width by more than
+                // necessary, in general, because of rounding up above, so
+                // compensate for it by giving 1 extra pixel until we run out
+                // of these "underflow" pixels.
+                auto underflow = overflow_per_column*num_columns - overflow;
+
                 for(auto& i : columns_)
                     {
                     if(i.is_hidden())
@@ -219,6 +227,12 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
                         }
 
                     i.width_ -= overflow_per_column;
+
+                    if(underflow > 0)
+                        {
+                        i.width_++;
+                        underflow--;
+                        }
                     }
 
                 column_margin_ -= (overflow_per_column + 1)/2;
