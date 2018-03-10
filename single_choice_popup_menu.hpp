@@ -34,10 +34,6 @@
 ///
 /// A wxGetSingleChoiceIndex alternative. No distracting dialog frame.
 /// No needless OK button--requires only a single click or keystroke.
-///
-/// WX !! Warning: the first character in 'title' (if specified) seems
-/// to become an accelerator, interfering with any menuitem that uses
-/// the same character as its own accelerator.
 
 class SingleChoicePopupMenu
 {
