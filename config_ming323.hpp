@@ -24,9 +24,9 @@
 #ifndef config_ming323_hpp
 #define config_ming323_hpp
 
-#ifndef OK_TO_INCLUDE_CONFIG_MING323_HPP
+#if !defined OK_TO_INCLUDE_CONFIG_MING323_HPP
 #   error This file is not intended for separate inclusion.
-#endif // OK_TO_INCLUDE_CONFIG_MING323_HPP
+#endif // !defined OK_TO_INCLUDE_CONFIG_MING323_HPP
 
 #if 30203 <= LMI_GCC_VERSION
 #   // Copacetic.

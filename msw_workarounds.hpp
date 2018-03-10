@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#ifdef LMI_MSW
+#if defined LMI_MSW
 
 #include <deque>
 #include <string>
@@ -64,7 +64,7 @@ class MswDllPreloader final
     std::deque<std::string> SuccessfullyPreloadedDlls_;
 };
 
-#endif // LMI_MSW defined.
+#endif // defined LMI_MSW
 
 #endif // msw_workarounds_hpp
 

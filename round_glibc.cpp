@@ -105,7 +105,7 @@ typedef union
   } parts;
   uint64_t word;
 } ieee_double_shape_type;
-#endif
+#endif // __FLOAT_WORD_ORDER == BIG_ENDIAN
 
 #if __FLOAT_WORD_ORDER == LITTLE_ENDIAN
 typedef union
@@ -118,7 +118,7 @@ typedef union
   } parts;
   uint64_t word;
 } ieee_double_shape_type;
-#endif
+#endif // __FLOAT_WORD_ORDER == LITTLE_ENDIAN
 
 /* Get two 32 bit ints from a double.  */
 
@@ -131,7 +131,7 @@ do {                                                            \
 } while (0)
 
 /* Set a double from two 32 bit ints.  */
-#ifndef INSERT_WORDS
+#if !defined INSERT_WORDS
 # define INSERT_WORDS(d,ix0,ix1)                                \
 do {                                                            \
   ieee_double_shape_type iw_u;                                  \
@@ -139,7 +139,7 @@ do {                                                            \
   iw_u.parts.lsw = (ix1);                                       \
   (d) = iw_u.value;                                             \
 } while (0)
-#endif
+#endif // !defined INSERT_WORDS
 
 /* A union which permits us to convert between a float and a 32 bit
    int.  */
@@ -151,24 +151,24 @@ typedef union
 } ieee_float_shape_type;
 
 /* Get a 32 bit int from a float.  */
-#ifndef GET_FLOAT_WORD
+#if !defined GET_FLOAT_WORD
 # define GET_FLOAT_WORD(i,d)                                    \
 do {                                                            \
   ieee_float_shape_type gf_u;                                   \
   gf_u.value = (d);                                             \
   (i) = gf_u.word;                                              \
 } while (0)
-#endif
+#endif // !defined GET_FLOAT_WORD
 
 /* Set a float from a 32 bit int.  */
-#ifndef SET_FLOAT_WORD
+#if !defined SET_FLOAT_WORD
 # define SET_FLOAT_WORD(d,i)                                    \
 do {                                                            \
   ieee_float_shape_type sf_u;                                   \
   sf_u.word = (i);                                              \
   (d) = sf_u.value;                                             \
 } while (0)
-#endif
+#endif // !defined SET_FLOAT_WORD
 
 // https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=sysdeps/ieee754/ldbl-96/math_ldbl.h
 
@@ -187,7 +187,7 @@ typedef union
     u_int32_t lsw;
   } parts;
 } ieee_long_double_shape_type;
-#endif
+#endif // __FLOAT_WORD_ORDER == BIG_ENDIAN
 
 #if __FLOAT_WORD_ORDER == LITTLE_ENDIAN
 typedef union
@@ -201,7 +201,7 @@ typedef union
     unsigned int empty:16;
   } parts;
 } ieee_long_double_shape_type;
-#endif
+#endif // __FLOAT_WORD_ORDER == LITTLE_ENDIAN
 
 /* Get three 32 bit ints from a double.  */
 

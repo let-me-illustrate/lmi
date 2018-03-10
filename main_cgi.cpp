@@ -50,11 +50,11 @@
 #include <cgicc/CgiEnvironment.h>
 #include <cgicc/CgiUtils.h>             // gLogFile
 #include <cgicc/HTMLClasses.h>
-#ifdef USING_CURRENT_CGICC
+#if defined USING_CURRENT_CGICC
 #   include <cgicc/HTTPHTMLHeader.h>    // cgicc-3.2.3
-#else // USING_CURRENT_CGICC not defined.
+#else  // !defined USING_CURRENT_CGICC
 #   include <cgicc/HTTPHeaders.h>
-#endif // USING_CURRENT_CGICC not defined.
+#endif // !defined USING_CURRENT_CGICC
 
 #include <cstring>
 #include <exception>
@@ -69,7 +69,7 @@
 
 #if defined HAVE_SYS_TIME_H && HAVE_SYS_TIME_H
 #  include <sys/time.h>
-#endif
+#endif // defined HAVE_SYS_TIME_H && HAVE_SYS_TIME_H
 
 // To use logging, the variable gLogFile MUST be defined, and it _must_
 // be an ofstream.

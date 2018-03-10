@@ -1020,7 +1020,7 @@ double Irc7702::premiums_paid() const
 }
 
 // TAXATION !! TODO ?? This should be a separate, standalone unit test.
-#ifdef TESTING
+#if 0
 
 #include "ihs_timer.hpp"
 
@@ -1075,5 +1075,5 @@ int main()
     cout << timer.stop().elapsed_msec_str();
     delete Irc7702_;
 }
-#endif  // TESTING
+#endif // 0
 

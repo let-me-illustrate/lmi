@@ -24,9 +24,9 @@
 #ifndef config_como_mingw_hpp
 #define config_como_mingw_hpp
 
-#ifndef OK_TO_INCLUDE_CONFIG_COMO_WITH_MINGW_HPP
+#if !defined OK_TO_INCLUDE_CONFIG_COMO_WITH_MINGW_HPP
 #   error This file is not intended for separate inclusion.
-#endif // OK_TO_INCLUDE_CONFIG_COMO_WITH_MINGW_HPP
+#endif // !defined OK_TO_INCLUDE_CONFIG_COMO_WITH_MINGW_HPP
 
 #if defined LMI_COMO_WITH_MINGW
 #   // Copacetic.

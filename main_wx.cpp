@@ -53,16 +53,16 @@ LMI_FORCE_LINKING_EX_SITU(system_command_wx)
 IMPLEMENT_APP_NO_MAIN(Skeleton)
 IMPLEMENT_WX_THEME_SUPPORT
 
-#ifndef LMI_MSW
+#if !defined LMI_MSW
 int main(int argc, char* argv[])
-#else // LMI_MSW defined.
+#else  // defined LMI_MSW
 int WINAPI WinMain
     (HINSTANCE hInstance
     ,HINSTANCE hPrevInstance
     ,LPSTR     lpCmdLine
     ,int       nCmdShow
     )
-#endif // LMI_MSW defined.
+#endif // defined LMI_MSW
 {
     // (Historical notes.) Using wx-2.5.1 and mpatrol-1.4.8, both
     // dynamically linked to this application built with gcc-3.2.3,
@@ -89,11 +89,11 @@ int WINAPI WinMain
         {
         initialize_application();
         initialize_filesystem();
-#ifndef LMI_MSW
+#if !defined LMI_MSW
         result = wxEntry(argc, argv);
-#else // LMI_MSW defined.
+#else  // defined LMI_MSW
         result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
-#endif // LMI_MSW defined.
+#endif // defined LMI_MSW
         }
     catch(...)
         {

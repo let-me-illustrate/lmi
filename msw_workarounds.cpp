@@ -23,7 +23,7 @@
 
 #include "msw_workarounds.hpp"
 
-#ifdef LMI_MSW
+#if defined LMI_MSW
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"
@@ -113,4 +113,4 @@ void MswDllPreloader::UnloadOneDll(std::string const& dll_name)
         }
 }
 
-#endif // LMI_MSW defined.
+#endif // defined LMI_MSW

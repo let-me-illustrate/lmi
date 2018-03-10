@@ -23,28 +23,28 @@
 
 #include "timer.hpp"
 
-#ifdef LMI_MSW
+#if defined LMI_MSW
     // TRICKY !! There being no standard way to ascertain whether
     // <windows.h> has been included, we resort to this hack:
 #   if defined STDCALL || defined WM_COMMAND
 #       define LMI_MS_HEADER_INCLUDED
 #   endif // defined STDCALL || defined WM_COMMAND
     // I'm not willing to bring in a zillion msw headers...
-    //#ifdef LMI_MSW
+    //#if defined LMI_MSW
     //#   include <windows.h>
-    //#endif // LMI_MSW
+    //#endif // defined LMI_MSW
     // ...just to get a couple of prototypes, because that can materially
     // increase compile times for small programs, and because it requires
     // ms extensions and defines many macros.
-#   ifndef LMI_MS_HEADER_INCLUDED
+#   if !defined LMI_MS_HEADER_INCLUDED
     // These declarations would be erroneous if the ms headers were
     // included. It's necessary to guard against that explicitly,
     // because those headers might be implicitly included by a pch
     // mechanism.
         extern "C" int __stdcall QueryPerformanceCounter(elapsed_t*);
         extern "C" int __stdcall QueryPerformanceFrequency(elapsed_t*);
-#   endif // LMI_MS_HEADER_INCLUDED
-#endif // LMI_MSW
+#   endif // !defined LMI_MS_HEADER_INCLUDED
+#endif // defined LMI_MSW
 
 /// Suspend execution for a given number of seconds.
 
@@ -150,15 +150,15 @@ elapsed_t Timer::calibrate()
 #if defined LMI_POSIX
     return 1000000;
 #elif defined LMI_MSW
-#   ifdef LMI_MS_HEADER_INCLUDED
+#   if defined LMI_MS_HEADER_INCLUDED
     LARGE_INTEGER z;
     QueryPerformanceFrequency(&z);
     return z.QuadPart;
-#   else
+#   else  // !defined LMI_MS_HEADER_INCLUDED
     elapsed_t z;
     QueryPerformanceFrequency(&z);
     return z;
-#   endif // LMI_MS_HEADER_INCLUDED
+#   endif // !defined LMI_MS_HEADER_INCLUDED
 #else // Unknown platform.
     return CLOCKS_PER_SEC;
 #endif // Unknown platform.
@@ -188,15 +188,15 @@ elapsed_t Timer::inspect() const
     gettimeofday(&x, nullptr);
     return elapsed_t(1000000) * x.tv_sec + x.tv_usec;
 #elif defined LMI_MSW
-#   ifdef LMI_MS_HEADER_INCLUDED
+#   if defined LMI_MS_HEADER_INCLUDED
     LARGE_INTEGER z;
     QueryPerformanceCounter(&z);
     return z.QuadPart;
-#   else
+#   else  // !defined LMI_MS_HEADER_INCLUDED
     elapsed_t z;
     QueryPerformanceCounter(&z);
     return z;
-#   endif // LMI_MS_HEADER_INCLUDED
+#   endif // !defined LMI_MS_HEADER_INCLUDED
 #else // Unknown platform.
     return std::clock();
 #endif // Unknown platform.

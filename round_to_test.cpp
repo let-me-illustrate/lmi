@@ -239,7 +239,7 @@ bool test_one_case
              - 1.0
              ;
         }
-#ifdef LMI_COMO_WITH_MINGW
+#if defined LMI_COMO_WITH_MINGW
     // COMPILER !! This looks like a como porting defect: with mingw
     // as the underlying C compiler, a long double should occupy
     // twelve bytes, ten significant and two for padding.

@@ -25,11 +25,11 @@
 #ifndef config_hpp
 #define config_hpp
 
-#ifdef __cplusplus
+#if defined __cplusplus
 // Namespace alii.
 namespace boost {namespace filesystem {} }
 namespace fs = boost::filesystem;
-#endif // Not C++.
+#endif // defined __cplusplus
 
 // The msw platform-identifying macro that its vendor encourages
 // people to use contains the word "win". I don't consider a non-free
@@ -118,7 +118,7 @@ namespace fs = boost::filesystem;
 #if defined __GNUC__
 #   define LMI_GCC_VERSION \
         (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-#endif // __GNUC__
+#endif // defined __GNUC__
 
 #if defined __COMO__
 #   define LMI_COMO_VERSION __COMO_VERSION__
@@ -138,12 +138,12 @@ namespace fs = boost::filesystem;
 #   if defined __MINGW32_VERSION || defined __MINGW_H
 #       define LMI_COMO_WITH_MINGW
 #   endif // defined __MINGW32_VERSION || defined __MINGW_H
-#endif // __COMO__
+#endif // defined __COMO__
 
 #if defined __MINGW32__
 //  Get definition of __MINGW32_VERSION.
 #   include <_mingw.h>
-#endif // __MINGW32__
+#endif // defined __MINGW32__
 
 // lmi used the mingw.org toolchain through gcc-3.4.5, and switched
 // to MinGW-w64's gcc-4.9.2 circa 2016-01-01. To distinguish one from
@@ -158,7 +158,7 @@ namespace fs = boost::filesystem;
 #if defined __MINGW32_VERSION || defined __MINGW64_VERSION_MAJOR
 #   define LMI_MINGW_VERSION \
         (__MINGW32_MAJOR_VERSION * 100 + __MINGW32_MINOR_VERSION)
-#endif // __MINGW32_VERSION
+#endif // defined __MINGW32_VERSION || defined __MINGW64_VERSION_MAJOR
 
 #if defined __BORLANDC__ && __BORLANDC__ < 0x0550
 #    error Obsolete compiler not supported.

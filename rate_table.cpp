@@ -89,7 +89,7 @@ std::uint8_t swap_bytes_if_big_endian(std::uint8_t val)
 // We rely on makefile defining WORDS_BIGENDIAN on big endian architectures,
 // conversions from little endian format are only needed there and are trivial
 // on little endian machines.
-#ifdef WORDS_BIGENDIAN
+#if defined WORDS_BIGENDIAN
 inline
 std::uint16_t swap_bytes_if_big_endian(std::uint16_t val)
 {
@@ -132,7 +132,7 @@ double swap_bytes_if_big_endian(double val)
     // And vice versa.
     return *reinterpret_cast<double*>(&ui64);
 }
-#else // !WORDS_BIGENDIAN
+#else // !defined WORDS_BIGENDIAN
 inline
 std::uint16_t swap_bytes_if_big_endian(std::uint16_t val)
 {
@@ -150,7 +150,7 @@ double swap_bytes_if_big_endian(double val)
 {
     return val;
 }
-#endif // WORDS_BIGENDIAN/!WORDS_BIGENDIAN
+#endif // !defined WORDS_BIGENDIAN
 
 template<typename T>
 inline
@@ -433,7 +433,7 @@ void writer::write_values
     write(e_field_select_period      , select_period       );
     write(e_field_max_select_age     , max_select_age      );
 
-#ifdef WORDS_BIGENDIAN
+#if defined WORDS_BIGENDIAN
     // Convert the values to their on disk representation.
     std::vector<double> little_endian_values;
     little_endian_values.reserve(values.size());
@@ -442,11 +442,11 @@ void writer::write_values
         {
         little_endian_values.push_back(swap_bytes_if_big_endian(v));
         }
-#else // !WORDS_BIGENDIAN
+#else // !defined WORDS_BIGENDIAN
     // No conversion necessary, don't create an extra vector needlessly, just
     // alias the existing one.
     std::vector<double> const& little_endian_values = values;
-#endif // WORDS_BIGENDIAN/!WORDS_BIGENDIAN
+#endif // !defined WORDS_BIGENDIAN
 
     std::size_t const length = values.size()*sizeof(double);
 

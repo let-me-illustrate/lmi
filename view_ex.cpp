@@ -179,12 +179,12 @@ bool ViewEx::DoOnCreate(wxDocument* doc, long int)
     child->SetFocus();
 
     // WX !! This should be done inside the library.
-#ifdef __X__
+#if defined __X__
     // The X Window Toolkit seems to require a forced resize.
     int x, y;
     GetFrame()->GetSize(&x, &y);
     GetFrame()->SetSize(wxDefaultCoord, wxDefaultCoord, x, y);
-#endif
+#endif // defined __X__
 
     GetFrame()->Show(true);
     Activate(true);
