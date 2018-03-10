@@ -306,6 +306,8 @@ LedgerBase& LedgerBase::PlusEq
 //   1000000000.0 (max width)
 //   and 1.0E-18 (highest number we translate to words)
 // and make them variables.
+// PDF !! This seems not to be rigorously correct: $999,999,999.99 is
+// less than one billion, but rounds to $1,000,000,000.
 double LedgerBase::DetermineScaleFactor() const
 {
     double min_val = 0.0;
