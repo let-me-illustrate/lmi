@@ -24,12 +24,12 @@
 #include "single_choice_popup_menu.hpp"
 
 #include <wx/evtloop.h>
-#include <wx/window.h>
+#include <wx/toplevel.h>
 
 SingleChoicePopupMenu::SingleChoicePopupMenu
     (wxArrayString const& choices
     ,wxString const&      title
-    ,wxWindow&            parent
+    ,wxTopLevelWindow&    parent
     )
     :parent_(parent)
 {

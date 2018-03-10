@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include "wx_utility.hpp"
+#include "wx_utility.hpp"               // TopWindow()
 
 #include <wx/arrstr.h>                  // wxArrayString
 #include <wx/menu.h>
@@ -41,14 +41,14 @@ class SingleChoicePopupMenu
     SingleChoicePopupMenu
         (wxArrayString const& choices
         ,wxString const&      title  = wxEmptyString
-        ,wxWindow&            parent = TopWindow()
+        ,wxTopLevelWindow&    parent = TopWindow()
         );
 
     int Choose();
 
   private:
     wxMenu menu_;
-    wxWindow& parent_;
+    wxTopLevelWindow& parent_;
 };
 
 #endif // single_choice_popup_menu_hpp

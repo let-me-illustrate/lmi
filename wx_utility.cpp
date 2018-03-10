@@ -37,6 +37,7 @@
 #include <wx/clipbrd.h>
 #include <wx/datetime.h>
 #include <wx/msgdlg.h>
+#include <wx/toplevel.h>
 #include <wx/utils.h>                   // wxSafeYield()
 #include <wx/window.h>
 
@@ -280,16 +281,26 @@ wxApp& TheApp()
 }
 
 /// Safe cover function for wxApp::GetTopWindow(): throws if null.
+///
+/// If GetTopWindow() returns nullptr, then wx is probably starting up
+/// or shutting down; therefore, diagnostics are displayed through a
+/// mechanism that should work even in such circumstances.
 
-wxWindow& TopWindow()
+wxTopLevelWindow& TopWindow()
 {
     wxWindow* w = TheApp().GetTopWindow();
     if(!w)
         {
-        safely_show_message("Top window not found.");
+        safely_show_message("No top window found.");
         throw 0;
         }
-    return *w;
+    wxTopLevelWindow* t = dynamic_cast<wxTopLevelWindow*>(w);
+    if(!t)
+        {
+        safely_show_message("Top window is not a wxTopLevelWindow.");
+        throw 0;
+        }
+    return *t;
 }
 
 /// Convert a filename to an NTBS std::string, throwing upon failure.
