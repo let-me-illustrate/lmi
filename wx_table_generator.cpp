@@ -211,7 +211,7 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
             // fit into the available width.
             auto const overflow_per_column =
                 (overflow + num_columns - 1)/num_columns;
-            if(overflow_per_column <= column_margin_)
+            if(overflow_per_column <= 2 * column_margin_)
                 {
                 // We are going to reduce the total width by more than
                 // necessary, in general, because of rounding up above, so
