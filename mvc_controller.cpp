@@ -111,6 +111,10 @@ MvcController::MvcController
         alarum() << "Unable to load dialog." << LMI_FLUSH;
         }
 
+    // Work around a 'wine' issue--see:
+    //   https://lists.nongnu.org/archive/html/lmi/2018-03/msg00041.html
+    SetIcons(TopWindow().GetIcons());
+
     BookControl().ChangeSelection(last_selected_page[view_.ResourceFileName()]);
 
     // This assignment must follow the call to LoadDialog().
