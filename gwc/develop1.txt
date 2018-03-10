@@ -95,8 +95,8 @@ for z in * ; do grep --directories=skip --quiet --files-with-matches '$Id:' $z &
   # commit it (without first running 'make check_concinnity', which
   # would catch the error), fix it thus:
 
-git update-index --chmod=+x some-file-name
-git update-index --chmod=-x some-file-name
+git add --chmod=+x some-file-name
+git add --chmod=-x some-file-name
 
   # Second screen: only for updating local shadow copy of repository
   #

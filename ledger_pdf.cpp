@@ -55,7 +55,9 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
     bool const pyx_only_old  = contains(g.pyx(), "only_old_pdf");
     bool const do_the_old    = ash_nazg ? !pyx_only_new : true;
     bool const skip_the_new  = ash_nazg ?  pyx_only_old : true;
-    // PDF !! Expunge this conditional block and the defns above:
+    // Without secret password, preserve old behavior exactly:
+    if(!ash_nazg) return write_ledger_as_pdf_via_xsl(ledger, filepath);
+    // PDF !! Expunge this conditional block and everything above it:
     if(do_the_old)
         {
         std::string z;
