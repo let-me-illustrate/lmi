@@ -720,7 +720,7 @@ ledger_evaluator Ledger::make_evaluator() const
     scalars["SalesLoadRefundRate1"] = &SalesLoadRefundRate1;
 
     double GenAcctAllocation           = ledger_invariant_->GenAcctAllocation;
-    double GenAcctAllocationComplement = 1. - GenAcctAllocation;
+    double GenAcctAllocationComplement = 1.0 - GenAcctAllocation;
 
     scalars["GenAcctAllocationPercent"          ] = &GenAcctAllocation;
     scalars["GenAcctAllocationComplementPercent"] = &GenAcctAllocationComplement;

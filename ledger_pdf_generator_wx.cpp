@@ -602,8 +602,8 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
         wxString inv_factor_str;
         if (tag.GetParamAsString("INV_FACTOR", &inv_factor_str))
             {
-            double inv_factor = 0.;
-            if (!inv_factor_str.ToCDouble(&inv_factor) || inv_factor == 0.)
+            double inv_factor = 0.0;
+            if (!inv_factor_str.ToCDouble(&inv_factor) || inv_factor == 0.0)
                 {
                 throw std::runtime_error
                     ( "invalid value for \"inv_factor\" attribute of "
@@ -2421,14 +2421,14 @@ class nasd_supplemental : public page_with_tabular_report
             case column_premium_tax_load:
             case column_dac_tax_load:
                 // These columns only appear in non-split premiums case.
-                return invar.SplitMinPrem == 0.;
+                return invar.SplitMinPrem == 0.0;
 
             case column_er_gross_payment:
             case column_ee_gross_payment:
             case column_er_min_premium:
             case column_ee_min_premium:
                 // While those only appear in split premiums case.
-                return invar.SplitMinPrem == 1.;
+                return invar.SplitMinPrem == 1.0;
 
             case column_policy_year:
             case column_premium_outlay:
