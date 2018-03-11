@@ -448,7 +448,7 @@ void writer::write_values
     std::vector<double> const& little_endian_values = values;
 #endif // !defined WORDS_BIGENDIAN
 
-    std::size_t const length = values.size()*sizeof(double);
+    std::size_t const length = values.size() * sizeof(double);
 
     // As explained in table_impl::read_values(), length field is too small to
     // store the length of this record in general, but we still write the data
@@ -1271,7 +1271,7 @@ void table_impl::read_values(std::istream& ifs, std::uint16_t /* length */)
     unsigned const num_values = get_expected_number_of_values();
 
     values_.resize(num_values);
-    if(!stream_read(ifs, &values_[0], num_values*sizeof(double)))
+    if(!stream_read(ifs, &values_[0], num_values * sizeof(double)))
         {
         alarum() << "failed to read the values" << std::flush;
         }
@@ -1727,7 +1727,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
                 // After the max select age only the last column remains, just
                 // skip the spaces until it.
                 skip_spaces
-                    (*select_period_*text_format::get_value_width(*num_decimals_)
+                    (*select_period_ * text_format::get_value_width(*num_decimals_)
                     ,start
                     ,current
                     ,line_num
@@ -2252,7 +2252,7 @@ unsigned long table_impl::compute_hash_value() const
     std::string s = oss.str();
 
     // Truncate the string for compatibility with the original code.
-    s.resize(values_.size()*value_width);
+    s.resize(values_.size() * value_width);
 
     CRC crc;
     crc += s;

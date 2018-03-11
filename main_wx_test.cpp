@@ -284,7 +284,7 @@ void remove_arg(int n, int& argc, char* argv[])
 {
     // We include argv[argc] in the elements being copied, this guarantees that
     // the array remains 0-terminated.
-    std::memmove(argv + n, argv + n + 1, (argc - n)*sizeof(char*));
+    std::memmove(argv + n, argv + n + 1, (argc - n) * sizeof(char*));
 
     argc--;
 }

@@ -590,7 +590,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
             }
 
         // The scale factor is optional.
-        double scale_factor = 1.;
+        double scale_factor = 1.0;
 
         // But if it is given, we currently specify its inverse in HTML just
         // because it so happens that for the scale factors we use the inverse
@@ -613,7 +613,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
                     );
                 }
 
-            scale_factor = 1./inv_factor;
+            scale_factor = 1.0 / inv_factor;
             }
 
         wxImage image;
@@ -1658,7 +1658,7 @@ class page_with_tabular_report
                         rows_in_next_group = year_max - year;
                         }
 
-                    if(pos_y > page_bottom - rows_in_next_group*row_height)
+                    if(pos_y > page_bottom - rows_in_next_group * row_height)
                         {
                         next_page(writer);
                         numbered_page::render(ledger, writer, interpolate_html);

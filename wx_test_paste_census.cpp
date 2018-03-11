@@ -263,8 +263,8 @@ LMI_WX_TEST_CASE(paste_census)
     ui.MouseMove
         (list_window->ClientToScreen
             (wxPoint
-                (10*list_window->GetCharWidth()
-                ,3*list_window->GetCharHeight()
+                (10 * list_window->GetCharWidth()
+                , 3 * list_window->GetCharHeight()
                 )
             )
         );
