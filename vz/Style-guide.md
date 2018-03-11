@@ -156,6 +156,17 @@ Rationale: This makes it impossible to use an uninitialized field and avoids
 duplication of the same values among different constructors.
 
 
+Preprocessor Conditions
+-----------------------
+
+### Prefer `#if defined FOO` to `#ifdef FOO`
+
+Similarly, use `#if !defined FOO` rather than `#ifndef Foo`.
+
+Also write the comment after `#else` (if any) or `#endif` as `// defined FOO`
+for symmetry (rather than just `// FOO` which would match `#if FOO`).
+
+
 Special Member Functions
 ------------------------
 
