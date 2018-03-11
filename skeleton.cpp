@@ -94,6 +94,7 @@
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/msgout.h>
+#include <wx/persist/toplevel.h>
 #include <wx/textctrl.h>
 #include <wx/textdlg.h>                 // wxGetTextFromUser()
 #include <wx/toolbar.h>
@@ -745,8 +746,12 @@ bool Skeleton::OnInit()
 
         frame_->Bind(wxEVT_MENU_OPEN, &Skeleton::UponMenuOpen, this);
         frame_->DragAcceptFiles(true);
-        frame_->Centre(wxBOTH);
-        frame_->Maximize(true);
+
+        if(!wxPersistentRegisterAndRestore(frame_, "lmi_main"))
+            {
+            frame_->Centre(wxBOTH);
+            frame_->Maximize(true);
+            }
 
         if
             (  custom_io_0_run_if_file_exists(doc_manager_)
