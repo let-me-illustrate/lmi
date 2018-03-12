@@ -228,7 +228,7 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
 
                     i.width_ -= overflow_per_column;
 
-                    if(underflow > 0)
+                    if(0 < underflow)
                         {
                         i.width_++;
                         underflow--;

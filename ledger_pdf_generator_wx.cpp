@@ -271,7 +271,7 @@ class html_interpolator
             // and also check for overflow (notice that index == SIZE_MAX
             // doesn't, in theory, need to indicate overflow, but in practice
             // we're never going to have valid indices close to this number).
-            if(stop != s.c_str() + s.length() - 1 || index >= SIZE_MAX)
+            if(stop != s.c_str() + s.length() - 1 || SIZE_MAX <= index)
                 {
                 throw std::runtime_error
                     ("Index of vector variable '" + s + "' is not a valid number"
@@ -801,7 +801,7 @@ class pdf_illustration : protected html_interpolator
     // Helper for abbreviating a string to at most the given length (in bytes).
     static std::string abbreviate_if_necessary(std::string s, size_t len)
     {
-        if(s.length() > len && len > 3)
+        if(len < s.length() && 3 < len)
             {
             s.replace(len - 3, std::string::npos, "...");
             }
@@ -1166,7 +1166,7 @@ class numbered_page : public page_with_footer
     {
         // This assert would fail if start_numbering() hadn't been called
         // before creating a numbered page, as it should be.
-        LMI_ASSERT(last_page_number_ >= 0);
+        LMI_ASSERT(0 <= last_page_number_);
     }
 
     void pre_render
@@ -1185,7 +1185,7 @@ class numbered_page : public page_with_footer
             ,interpolate_html
             );
 
-        LMI_ASSERT(extra_pages_ >= 0);
+        LMI_ASSERT(0 <= extra_pages_);
 
         last_page_number_ += extra_pages_;
     }
@@ -1215,7 +1215,7 @@ class numbered_page : public page_with_footer
     {
         // This method may only be called if we had reserved enough physical
         // pages for this logical pages by overriding get_extra_pages_needed().
-        LMI_ASSERT(extra_pages_ > 0);
+        LMI_ASSERT(0 < extra_pages_);
 
         writer.dc().StartPage();
 
@@ -1658,7 +1658,7 @@ class page_with_tabular_report
                         rows_in_next_group = year_max - year;
                         }
 
-                    if(pos_y > page_bottom - rows_in_next_group * row_height)
+                    if(page_bottom - rows_in_next_group * row_height < pos_y)
                         {
                         next_page(writer);
                         numbered_page::render(ledger, writer, interpolate_html);

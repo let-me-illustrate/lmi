@@ -78,7 +78,7 @@ void do_interpolate_string_in_context
     // The maximum recursion level is chosen completely arbitrarily, the only
     // criteria are that it shouldn't be too big to crash due to stack overflow
     // before it is reached nor too small to break legitimate use cases.
-    if(recursion_level >= 100)
+    if(100 <= recursion_level)
         {
         alarum()
             << "Nesting level too deep while expanding the partial \""
