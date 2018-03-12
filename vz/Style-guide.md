@@ -113,6 +113,10 @@ for(;;)
     }
 ```
 
+### Use space around arithmeric operators
+
+E.g. `(x + y) * z` instead of `(x+y)*z`.
+
 
 Naming Conventions
 ------------------
@@ -133,6 +137,14 @@ by the presence of `_` at the end.
 
 Although some legacy code does use this prefix, it shouldn't be used in new
 code if possible.
+
+
+Other
+-----
+
+### Explicitly write fractional part of floating point numbers as 0
+
+I.e. `1.0` instead of just `1.`.
 
 
 Semantic Rules
