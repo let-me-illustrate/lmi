@@ -1949,14 +1949,11 @@ class standard_supplemental_report : public page_with_tabular_report
             auto name = interpolate_html.evaluate("SupplementalReportColumnsNames", i);
             if(name != empty_column_name)
                 {
-                // We currently don't have the field width information for
-                // arbitrary fields, so use fixed width that should be
-                // sufficient for almost all of them.
                 columns.emplace_back
                     (illustration_table_column
                         {std::move(name)
                         ,interpolate_html.evaluate("SupplementalReportColumnsTitles", i)
-                        ,"999,999"
+                        ,"999,999,999"
                         }
                     );
                 }
@@ -2386,17 +2383,17 @@ class nasd_supplemental : public page_with_tabular_report
         static illustration_table_columns const columns =
             {{ "PolicyYear"           , "Policy\nYear"               ,         "999" }
             ,{ "AttainedAge"          , "End of\nYear Age"           ,         "999" }
-            ,{ "ErGrossPmt"           , "ER Gross\nPayment"          ,     "999,999" }
-            ,{ "EeGrossPmt"           , "EE Gross\nPayment"          ,     "999,999" }
+            ,{ "ErGrossPmt"           , "ER Gross\nPayment"          , "999,999,999" }
+            ,{ "EeGrossPmt"           , "EE Gross\nPayment"          , "999,999,999" }
             ,{ "GrossPmt"             , "Premium\nOutlay"            , "999,999,999" }
-            ,{ "PolicyFee_Current"    , "Admin\nCharge"              ,     "999,999" }
-            ,{ "PremTaxLoad_Current"  , "Premium\nTax Load"          ,     "999,999" }
-            ,{ "DacTaxLoad_Current"   , "DAC\nTax Load"              ,     "999,999" }
-            ,{ "ErModalMinimumPremium", "ER Modal\nMinimum\nPremium" ,     "999,999" }
-            ,{ "EeModalMinimumPremium", "EE Modal\nMinimum\nPremium" ,     "999,999" }
-            ,{ "NetPmt_Current"       , "Net\nPremium"               ,     "999,999" }
-            ,{ "COICharge_Current"    , "Cost of\nInsurance\nCharges",     "999,999" }
-            ,{ "AcctVal_Current"      , "Current\nAccount\nValue"    ,     "999,999" }
+            ,{ "PolicyFee_Current"    , "Admin\nCharge"              , "999,999,999" }
+            ,{ "PremTaxLoad_Current"  , "Premium\nTax Load"          , "999,999,999" }
+            ,{ "DacTaxLoad_Current"   , "DAC\nTax Load"              , "999,999,999" }
+            ,{ "ErModalMinimumPremium", "ER Modal\nMinimum\nPremium" , "999,999,999" }
+            ,{ "EeModalMinimumPremium", "EE Modal\nMinimum\nPremium" , "999,999,999" }
+            ,{ "NetPmt_Current"       , "Net\nPremium"               , "999,999,999" }
+            ,{ "COICharge_Current"    , "Cost of\nInsurance\nCharges", "999,999,999" }
+            ,{ "AcctVal_Current"      , "Current\nAccount\nValue"    , "999,999,999" }
             ,{ "CSVNet_Current"       , "Current\nCash Surr\nValue"  , "999,999,999" }
             ,{ "EOYDeathBft_Current"  , "Current\nDeath\nBenefit"    , "999,999,999" }
             };
@@ -2740,6 +2737,7 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
 
     illustration_table_columns const& get_table_columns() const override
     {
+        // PDF !! Here and elsewhere, IRR columns must be widened.
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"       ,         "999" }
             ,{ "AttainedAge"                , "End of\nYear Age"   ,         "999" }
@@ -2822,12 +2820,12 @@ class reg_d_individual_curr : public page_with_tabular_report
             {{ "PolicyYear"              , "Policy\nYear"      ,         "999" }
             ,{ "AttainedAge"             , "End of\nYear Age"  ,         "999" }
             ,{ "GrossPmt"                , "Premium\nOutlay"   , "999,999,999" }
-            ,{ "PremiumLoads"            , "Premium\nLoads"    ,     "999,999" }
-            ,{ "AdminCharges"            , "Admin\nCharges"    ,     "999,999" }
-            ,{ "COICharge_Current"       , "Mortality\nCharges",     "999,999" }
-            ,{ "SepAcctCharges_Current"  , "Asset\nCharges"    ,     "999,999" }
-            ,{ "GrossIntCredited_Current", "Investment\nIncome",     "999,999" }
-            ,{ "AcctVal_Current"         , "Account\nValue"    ,     "999,999" }
+            ,{ "PremiumLoads"            , "Premium\nLoads"    , "999,999,999" }
+            ,{ "AdminCharges"            , "Admin\nCharges"    , "999,999,999" }
+            ,{ "COICharge_Current"       , "Mortality\nCharges", "999,999,999" }
+            ,{ "SepAcctCharges_Current"  , "Asset\nCharges"    , "999,999,999" }
+            ,{ "GrossIntCredited_Current", "Investment\nIncome", "999,999,999" }
+            ,{ "AcctVal_Current"         , "Account\nValue"    , "999,999,999" }
             ,{ "CSVNet_Current"          , "Cash\nSurr Value"  , "999,999,999" }
             ,{ "EOYDeathBft_Current"     , "Death\nBenefit"    , "999,999,999" }
             };
