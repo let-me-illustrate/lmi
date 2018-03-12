@@ -355,7 +355,21 @@ namespace
         double power = -std::log10(a_ScalingFactor);
         // Assert absolute equality of two floating-point quantities, because
         // they must both have integral values.
-        LMI_ASSERT(power == std::floor(power));
+        // PDF !! Fails with MinGW-w64 gcc-7.2.0 .
+        if(power != std::floor(power))
+            {
+            long double discrepancy0 = power - std::floor(power);
+            long double discrepancy1 = power - std::ceil (power);
+            warning()
+                << "Scaling factor is not an integral power of ten."
+                << "\n  " << value_cast<std::string>(power)             << " logarithm"
+                << "\n  " << value_cast<std::string>(std::floor(power)) << " integer"
+                << "\n  " << value_cast<std::string>(discrepancy0) << " lower difference"
+                << "\n  " << value_cast<std::string>(discrepancy1) << " upper difference"
+                << LMI_FLUSH
+                ;
+            }
+//      LMI_ASSERT(power == std::floor(power));
         int z = static_cast<int>(power);
 
         // US names are used; UK names are different.
