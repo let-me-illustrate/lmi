@@ -44,13 +44,11 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
 #include <utility>                      // make_pair(), swap()
-
-#include <experimental/optional>
-namespace Exp {using std::experimental::optional;}
 
 // Note about error handling in this code: with a few exceptions (e.g.
 // strict_parse_number), most of the functions in this file throw on error.
@@ -173,7 +171,7 @@ void to_bytes(char* bytes, T value)
 // the later Boost.Optional versions.
 template<typename T, typename U>
 inline
-T get_value_or(Exp::optional<T> const& o, U v)
+T get_value_or(std::optional<T> const& o, U v)
 {
     return o ? *o : v;
 }
@@ -392,17 +390,17 @@ class writer
     explicit writer(std::ostream& os) : os_(os) {}
 
     template<typename T>
-    void write(enum_soa_field field, Exp::optional<T> const& onum);
+    void write(enum_soa_field field, std::optional<T> const& onum);
     void write_table_type(table_type tt);
-    void write(enum_soa_field field, Exp::optional<std::string> const& ostr);
+    void write(enum_soa_field field, std::optional<std::string> const& ostr);
 
     void write_values
             (std::vector<double>          const& values
-            ,Exp::optional<std::uint16_t> const& num_decimals
-            ,Exp::optional<std::uint16_t> const& min_age
-            ,Exp::optional<std::uint16_t> const& max_age
-            ,Exp::optional<std::uint16_t> const& select_period
-            ,Exp::optional<std::uint16_t> const& max_select_age
+            ,std::optional<std::uint16_t> const& num_decimals
+            ,std::optional<std::uint16_t> const& min_age
+            ,std::optional<std::uint16_t> const& max_age
+            ,std::optional<std::uint16_t> const& select_period
+            ,std::optional<std::uint16_t> const& max_select_age
             );
 
     void end();
@@ -417,11 +415,11 @@ class writer
 
 void writer::write_values
         (std::vector<double>          const& values
-        ,Exp::optional<std::uint16_t> const& num_decimals
-        ,Exp::optional<std::uint16_t> const& min_age
-        ,Exp::optional<std::uint16_t> const& max_age
-        ,Exp::optional<std::uint16_t> const& select_period
-        ,Exp::optional<std::uint16_t> const& max_select_age
+        ,std::optional<std::uint16_t> const& num_decimals
+        ,std::optional<std::uint16_t> const& min_age
+        ,std::optional<std::uint16_t> const& max_age
+        ,std::optional<std::uint16_t> const& select_period
+        ,std::optional<std::uint16_t> const& max_select_age
         )
 {
     // Notice that to keep things more interesting, number of decimals comes
@@ -497,7 +495,7 @@ void writer::do_write_field(enum_soa_field field, T num)
 }
 
 template<typename T>
-void writer::write(enum_soa_field field, Exp::optional<T> const& onum)
+void writer::write(enum_soa_field field, std::optional<T> const& onum)
 {
     if(onum)
         {
@@ -510,7 +508,7 @@ void writer::write_table_type(table_type tt)
     do_write_field(e_field_table_type, static_cast<std::uint8_t>(tt));
 }
 
-void writer::write(enum_soa_field field, Exp::optional<std::string> const& ostr)
+void writer::write(enum_soa_field field, std::optional<std::string> const& ostr)
 {
     if(ostr)
         {
@@ -563,15 +561,15 @@ class writer
     explicit writer(std::ostream& os) : os_(os) {}
 
     template<typename T>
-    void write(enum_soa_field field, Exp::optional<T> const& oval);
+    void write(enum_soa_field field, std::optional<T> const& oval);
     void write_table_type(table_type tt);
     void write_values
             (std::vector<double>          const& values
-            ,Exp::optional<std::uint16_t> const& num_decimals
-            ,Exp::optional<std::uint16_t> const& min_age
-            ,Exp::optional<std::uint16_t> const& max_age
-            ,Exp::optional<std::uint16_t> const& select_period
-            ,Exp::optional<std::uint16_t> const& max_select_age
+            ,std::optional<std::uint16_t> const& num_decimals
+            ,std::optional<std::uint16_t> const& min_age
+            ,std::optional<std::uint16_t> const& max_age
+            ,std::optional<std::uint16_t> const& select_period
+            ,std::optional<std::uint16_t> const& max_select_age
             );
 
     void end();
@@ -581,7 +579,7 @@ class writer
 };
 
 template<typename T>
-void writer::write(enum_soa_field field, Exp::optional<T> const& oval)
+void writer::write(enum_soa_field field, std::optional<T> const& oval)
 {
     if(oval)
         {
@@ -598,11 +596,11 @@ void writer::write_table_type(table_type tt)
 
 void writer::write_values
         (std::vector<double>          const& values
-        ,Exp::optional<std::uint16_t> const& num_decimals
-        ,Exp::optional<std::uint16_t> const& min_age
-        ,Exp::optional<std::uint16_t> const& max_age
-        ,Exp::optional<std::uint16_t> const& select_period
-        ,Exp::optional<std::uint16_t> const& max_select_age
+        ,std::optional<std::uint16_t> const& num_decimals
+        ,std::optional<std::uint16_t> const& min_age
+        ,std::optional<std::uint16_t> const& max_age
+        ,std::optional<std::uint16_t> const& select_period
+        ,std::optional<std::uint16_t> const& max_select_age
         )
 {
     write(e_field_min_age            , min_age             );
@@ -705,13 +703,13 @@ struct field_and_value
 // explaining the problem.
 //
 // The line_num and table_number are only used for diagnostics.
-Exp::optional<field_and_value> parse_field_and_value
+std::optional<field_and_value> parse_field_and_value
     (std::string const&                  line
     ,int                                 line_num
-    ,Exp::optional<std::uint32_t> const& table_number
+    ,std::optional<std::uint32_t> const& table_number
     )
 {
-    Exp::optional<field_and_value> const no_field;
+    std::optional<field_and_value> const no_field;
 
     auto const pos_colon = line.find(':');
     if(pos_colon == std::string::npos)
@@ -865,7 +863,7 @@ class table_impl final
     // read_xxx() methods for binary format.
 
     static void read_string
-            (Exp::optional<std::string>& ostr
+            (std::optional<std::string>& ostr
             ,enum_soa_field              field
             ,std::istream&               ifs
             ,std::uint16_t               length
@@ -878,7 +876,7 @@ class table_impl final
 
     template<typename T>
     static void read_number
-            (Exp::optional<T>& onum
+            (std::optional<T>& onum
             ,enum_soa_field    field
             ,std::istream&     ifs
             ,std::uint16_t     length
@@ -891,7 +889,7 @@ class table_impl final
     // after reading them, this would already result in a "duplicate field"
     // error).
     void read_number_before_values
-            (Exp::optional<std::uint16_t>& onum
+            (std::optional<std::uint16_t>& onum
             ,enum_soa_field                field
             ,std::istream&                 ifs
             ,std::uint16_t                 length
@@ -906,7 +904,7 @@ class table_impl final
     // This method returns the pointer to ostr string value to allow further
     // modifying it later in the caller.
     static std::string* parse_string
-            (Exp::optional<std::string>& ostr
+            (std::optional<std::string>& ostr
             ,enum_soa_field              field
             ,int                         line_num
             ,std::string const&          value
@@ -922,7 +920,7 @@ class table_impl final
 
     template<typename T>
     static void parse_number
-            (Exp::optional<T>&  onum
+            (std::optional<T>&  onum
             ,enum_soa_field     field
             ,int                line_num
             ,std::string const& value
@@ -994,11 +992,11 @@ class table_impl final
     template<typename T>
     void do_write(std::ostream& os) const;
 
-    // The values are not represented by Exp::optional<>, the emptiness of
+    // The values are not represented by std::optional<>, the emptiness of
     // the vector signals if we have any values or not.
     std::vector<double> values_;
 
-    Exp::optional<std::string>
+    std::optional<std::string>
         name_,
         contributor_,
         data_source_,
@@ -1009,18 +1007,18 @@ class table_impl final
         published_reference_,
         comments_;
 
-    Exp::optional<std::uint32_t>
+    std::optional<std::uint32_t>
         number_,
         hash_value_;
 
-    Exp::optional<std::uint16_t>
+    std::optional<std::uint16_t>
         num_decimals_,
         min_age_,
         max_age_,
         select_period_,
         max_select_age_;
 
-    Exp::optional<table_type>
+    std::optional<table_type>
         type_;
 };
 
@@ -1075,7 +1073,7 @@ void throw_if_unexpected_length
 // is true.
 template<typename T>
 inline
-void throw_if_missing_field(Exp::optional<T> const& o, enum_soa_field field)
+void throw_if_missing_field(std::optional<T> const& o, enum_soa_field field)
 {
     if(!o)
         {
@@ -1091,7 +1089,7 @@ void throw_if_missing_field(Exp::optional<T> const& o, enum_soa_field field)
 } // anonymous namespace
 
 void table_impl::read_string
-        (Exp::optional<std::string>& ostr
+        (std::optional<std::string>& ostr
         ,enum_soa_field              field
         ,std::istream&               ifs
         ,std::uint16_t               length
@@ -1148,7 +1146,7 @@ void table_impl::read_type(std::istream& ifs, std::uint16_t length)
 
 template<typename T>
 void table_impl::read_number
-        (Exp::optional<T>& onum
+        (std::optional<T>& onum
         ,enum_soa_field    field
         ,std::istream&     ifs
         ,std::uint16_t     length
@@ -1162,7 +1160,7 @@ void table_impl::read_number
 }
 
 void table_impl::read_number_before_values
-        (Exp::optional<std::uint16_t>& onum
+        (std::optional<std::uint16_t>& onum
         ,enum_soa_field                field
         ,std::istream&                 ifs
         ,std::uint16_t                 length
@@ -1283,7 +1281,7 @@ void table_impl::read_values(std::istream& ifs, std::uint16_t /* length */)
 }
 
 std::string* table_impl::parse_string
-        (Exp::optional<std::string>& ostr
+        (std::optional<std::string>& ostr
         ,enum_soa_field              field
         ,int                         line_num
         ,std::string const&          value
@@ -1346,7 +1344,7 @@ unsigned long table_impl::do_parse_number
 
 template<typename T>
 void table_impl::parse_number
-        (Exp::optional<T>&  onum
+        (std::optional<T>&  onum
         ,enum_soa_field     field
         ,int                line_num
         ,std::string const& value
