@@ -29,16 +29,6 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#if defined __has_include
-#   if __has_include(<valgrind/valgrind.h>)
-#       include <valgrind/valgrind.h>
-#   endif // valgrind.h present.
-#endif // Can test for valgrind.h presence.
-
-#if !defined RUNNING_ON_VALGRIND
-#   define RUNNING_ON_VALGRIND (0)
-#endif // !defined RUNNING_ON_VALGRIND
-
 #include <boost/lexical_cast.hpp>
 
 #include <cmath>                        // exp()
@@ -46,6 +36,14 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+
+#if __has_include(<valgrind/valgrind.h>)
+#   include <valgrind/valgrind.h>
+#endif // valgrind.h present.
+
+#if !defined RUNNING_ON_VALGRIND
+#   define RUNNING_ON_VALGRIND (0)
+#endif // !defined RUNNING_ON_VALGRIND
 
 template<typename T>
 void test_interconvertibility
