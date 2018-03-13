@@ -886,6 +886,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__STDC_IEC_559__"
         ,"__STDC__"
         ,"__cplusplus"
+        ,"__has_include"
     // Platform identification.
         ,"_M_IX86"
         ,"_M_X64"
