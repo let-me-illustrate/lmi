@@ -663,10 +663,10 @@ void InputSequenceEditor::insert_row(int new_row)
         ,wxDefaultSize
         ,wxBU_AUTODRAW | wxBU_EXACTFIT | wxBORDER_NONE
         );
-#ifdef __WXGTK__
+#if defined __WXGTK__
     wxBitmap removeBmp = wxArtProvider::GetBitmap("gtk-remove", wxART_BUTTON);
     remove->SetBitmap(removeBmp);
-#endif
+#endif // defined __WXGTK__
 
     remove->SetToolTip("Remove this row");
     remove->Connect
@@ -685,10 +685,10 @@ void InputSequenceEditor::insert_row(int new_row)
         ,wxDefaultSize
         ,wxBU_AUTODRAW | wxBU_EXACTFIT | wxBORDER_NONE
         );
-#ifdef __WXGTK__
+#if defined __WXGTK__
     wxBitmap addBmp = wxArtProvider::GetBitmap("gtk-add", wxART_BUTTON);
     add->SetBitmap(addBmp);
-#endif
+#endif // defined __WXGTK__
 
     add->SetToolTip("Insert a new row after this one");
     add->Connect

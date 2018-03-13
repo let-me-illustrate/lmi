@@ -37,7 +37,7 @@
 /// control.
 ///
 /// As an added twist, each of the classes here is available in two versions:
-///      - type-unsafe but template-less version using Exp::any and thus
+///      - type-unsafe but template-less version using std::any and thus
 ///        capable of containing any, possibly even heterogeneous, values;
 ///        these classes are called FooAny below
 ///      - type-safe version requiring to specify the value and axis types
@@ -94,19 +94,12 @@
 #include <wx/choice.h>
 #include <wx/grid.h>
 
+#include <any>
 #include <cstddef>                      // size_t
 #include <memory>                       // shared_ptr
 #include <string>
 #include <utility>                      // pair
 #include <vector>
-
-#ifdef LMI_COMPILER_HAS_CXX17_STDLIB
-#include <any>
-namespace Exp { using std::any; }
-#else
-#include <experimental/any>
-namespace Exp {using std::experimental::any;}
-#endif
 
 class MultiDimAxisAny;
 class MultiDimAxisAnyChoice;
@@ -115,7 +108,7 @@ class MultiDimTableAny;
 class WXDLLIMPEXP_FWD_CORE wxBoxSizer;
 class WXDLLIMPEXP_FWD_CORE wxGridBagSizer;
 
-/// Type-unsafe classes using Exp::any as value type
+/// Type-unsafe classes using std::any as value type
 /// --------------------------------------------------
 
 /// Design notes for MultiDimAxisAny
@@ -203,7 +196,7 @@ class MultiDimAxisAny
 
     virtual unsigned int GetCardinality() const = 0;
     virtual std::string  GetLabel(unsigned int n) const = 0;
-    virtual Exp::any     GetValue(unsigned int n) const = 0;
+    virtual std::any     GetValue(unsigned int n) const = 0;
 
     virtual MultiDimAxisAnyChoice* CreateChoiceControl
         (MultiDimGrid&
@@ -293,7 +286,7 @@ class MultiDimTableAny
 {
   public:
     /// Coordinates for an element of the table
-    typedef std::vector<Exp::any> Coords;
+    typedef std::vector<std::any> Coords;
     typedef std::shared_ptr<MultiDimAxisAny> AxisAnyPtr;
     typedef std::vector<AxisAnyPtr> AxesAny;
 
@@ -313,18 +306,18 @@ class MultiDimTableAny
     virtual void MakeVaryByDimension(unsigned int n, bool varies) = 0;
     virtual bool VariesByDimension(unsigned int n) const = 0;
 
-    Exp::any GetValueAny(Coords const& coords) const;
-    void     SetValueAny(Coords const& coords, Exp::any const& value);
+    std::any GetValueAny(Coords const& coords) const;
+    void     SetValueAny(Coords const& coords, std::any const& value);
 
     /// Value conversion methods to be overriden in derived classes.
-    virtual Exp::any    StringToValue(std::string const& value) const = 0;
-    virtual std::string ValueToString(Exp::any const& value) const = 0;
+    virtual std::any    StringToValue(std::string const& value) const = 0;
+    virtual std::string ValueToString(std::any const& value) const = 0;
 
   protected:
     virtual AxesAny DoGetAxesAny() = 0;
     virtual unsigned int DoGetDimension() const = 0;
-    virtual Exp::any DoGetValueAny(Coords const&) const = 0;
-    virtual void     DoSetValueAny(Coords const&, Exp::any const&) = 0;
+    virtual std::any DoGetValueAny(Coords const&) const = 0;
+    virtual void     DoSetValueAny(Coords const&, std::any const&) = 0;
 
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
@@ -363,7 +356,7 @@ inline bool MultiDimTableAny::RefreshAxisAdjustment
     EnsureValidDimensionIndex(n);
     return DoRefreshAxisAdjustment(axis, n);
 }
-inline Exp::any MultiDimTableAny::GetValueAny(Coords const& coords) const
+inline std::any MultiDimTableAny::GetValueAny(Coords const& coords) const
 {
     if(coords.size() != GetDimension())
         {
@@ -373,7 +366,7 @@ inline Exp::any MultiDimTableAny::GetValueAny(Coords const& coords) const
 }
 inline void MultiDimTableAny::SetValueAny
     (Coords   const& coords
-    ,Exp::any const& value
+    ,std::any const& value
     )
 {
     if(coords.size() != GetDimension())
@@ -500,7 +493,7 @@ class MultiDimGrid
         ,wxSize const& size = wxDefaultSize
         );
 
-    void FixAxisValue(std::string const& axis, Exp::any const& sel);
+    void FixAxisValue(std::string const& axis, std::any const& sel);
     void RefreshTableData();
     bool RefreshTableAxis(std::string const& name);
     bool RefreshTableAxis();
@@ -560,7 +553,7 @@ class MultiDimGrid
         ,std::string const&
         );
 
-    /// Array of Exp::any values
+    /// Array of std::any values
     typedef MultiDimTableAny::Coords Coords;
 
     /// Helper function used by SetValue() and GetValue() functions

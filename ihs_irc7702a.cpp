@@ -931,7 +931,7 @@ double Irc7702A::UpdateBft7702A
         }
     // One school of thought treats any Bft increase following any unnec prem
     // as a MatChg.
-#ifdef THIS_IS_NOT_DEFINED
+#if 0
     // TODO ?? TAXATION !! Recognizing a MatChg wipes the slate clean: it is as though no
     // unnecessary premium had ever been paid. So 'UnnecPremEver' is
     // a nonsensical notion.
@@ -939,7 +939,7 @@ double Irc7702A::UpdateBft7702A
         {
         is_material_change = true;
         }
-#endif
+#endif // 0
 
     if(is_material_change)
         {

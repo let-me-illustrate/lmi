@@ -34,9 +34,9 @@ MultiDimAxis<E>::MultiDimAxis(std::string const& name)
 }
 
 template<typename E>
-Exp::any MultiDimAxis<E>::GetValue(unsigned int n) const
+std::any MultiDimAxis<E>::GetValue(unsigned int n) const
 {
-    return Exp::any(static_cast<ValueType>(DoGetValue(n)));
+    return std::any(static_cast<ValueType>(DoGetValue(n)));
 }
 
 /// MultiDimEnumAxis<E>
@@ -226,7 +226,7 @@ inline void MultiDimTable<T, D, C>::SetValue(Coords const& coords, T const& t)
 }
 
 template<typename T, typename D, typename C>
-Exp::any MultiDimTable<T, D, C>::DoGetValueAny
+std::any MultiDimTable<T, D, C>::DoGetValueAny
     (Coords const& coords
     ) const
 {
@@ -236,14 +236,14 @@ Exp::any MultiDimTable<T, D, C>::DoGetValueAny
 template<typename T, typename D, typename C>
 void MultiDimTable<T, D, C>::DoSetValueAny
     (Coords   const& coords
-    ,Exp::any const& value
+    ,std::any const& value
     )
 {
     return SetValue(coords, UnwrapAny<T>(value));
 }
 
 template<typename T, typename D, typename C>
-Exp::any MultiDimTable<T, D, C>::StringToValue
+std::any MultiDimTable<T, D, C>::StringToValue
     (std::string const& text
     ) const
 {
@@ -252,7 +252,7 @@ Exp::any MultiDimTable<T, D, C>::StringToValue
 
 template<typename T, typename D, typename C>
 std::string MultiDimTable<T, D, C>::ValueToString
-    (Exp::any const& value
+    (std::any const& value
     ) const
 {
     return static_cast<C const&>(*this).ValueToString(UnwrapAny<T>(value));
@@ -260,13 +260,13 @@ std::string MultiDimTable<T, D, C>::ValueToString
 
 template<typename T, typename D, typename C>
 template<typename A>
-A MultiDimTable<T, D, C>::UnwrapAny(Exp::any const& any)
+A MultiDimTable<T, D, C>::UnwrapAny(std::any const& any)
 {
     try
         {
-        return Exp::any_cast<A>(any);
+        return std::any_cast<A>(any);
         }
-    catch(Exp::bad_any_cast const& e)
+    catch(std::bad_any_cast const& e)
         {
         alarum() << "Type mismatch : " << e.what() << LMI_FLUSH;
         throw "Unreachable--silences a compiler diagnostic.";
@@ -275,8 +275,8 @@ A MultiDimTable<T, D, C>::UnwrapAny(Exp::any const& any)
 
 template<typename T, typename D, typename C>
 template<typename A>
-Exp::any MultiDimTable<T, D, C>::WrapAny(A const& a)
+std::any MultiDimTable<T, D, C>::WrapAny(A const& a)
 {
-    return Exp::any(a);
+    return std::any(a);
 }
 

@@ -271,7 +271,7 @@ class html_interpolator
             // and also check for overflow (notice that index == SIZE_MAX
             // doesn't, in theory, need to indicate overflow, but in practice
             // we're never going to have valid indices close to this number).
-            if(stop != s.c_str() + s.length() - 1 || index >= SIZE_MAX)
+            if(stop != s.c_str() + s.length() - 1 || SIZE_MAX <= index)
                 {
                 throw std::runtime_error
                     ("Index of vector variable '" + s + "' is not a valid number"
@@ -590,7 +590,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
             }
 
         // The scale factor is optional.
-        double scale_factor = 1.;
+        double scale_factor = 1.0;
 
         // But if it is given, we currently specify its inverse in HTML just
         // because it so happens that for the scale factors we use the inverse
@@ -602,8 +602,8 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
         wxString inv_factor_str;
         if (tag.GetParamAsString("INV_FACTOR", &inv_factor_str))
             {
-            double inv_factor = 0.;
-            if (!inv_factor_str.ToCDouble(&inv_factor) || inv_factor == 0.)
+            double inv_factor = 0.0;
+            if (!inv_factor_str.ToCDouble(&inv_factor) || inv_factor == 0.0)
                 {
                 throw std::runtime_error
                     ( "invalid value for \"inv_factor\" attribute of "
@@ -613,7 +613,7 @@ TAG_HANDLER_BEGIN(scaled_image, "SCALED_IMAGE")
                     );
                 }
 
-            scale_factor = 1./inv_factor;
+            scale_factor = 1.0 / inv_factor;
             }
 
         wxImage image;
@@ -801,7 +801,7 @@ class pdf_illustration : protected html_interpolator
     // Helper for abbreviating a string to at most the given length (in bytes).
     static std::string abbreviate_if_necessary(std::string s, size_t len)
     {
-        if(s.length() > len && len > 3)
+        if(len < s.length() && 3 < len)
             {
             s.replace(len - 3, std::string::npos, "...");
             }
@@ -1166,7 +1166,7 @@ class numbered_page : public page_with_footer
     {
         // This assert would fail if start_numbering() hadn't been called
         // before creating a numbered page, as it should be.
-        LMI_ASSERT(last_page_number_ >= 0);
+        LMI_ASSERT(0 <= last_page_number_);
     }
 
     void pre_render
@@ -1185,7 +1185,7 @@ class numbered_page : public page_with_footer
             ,interpolate_html
             );
 
-        LMI_ASSERT(extra_pages_ >= 0);
+        LMI_ASSERT(0 <= extra_pages_);
 
         last_page_number_ += extra_pages_;
     }
@@ -1215,7 +1215,7 @@ class numbered_page : public page_with_footer
     {
         // This method may only be called if we had reserved enough physical
         // pages for this logical pages by overriding get_extra_pages_needed().
-        LMI_ASSERT(extra_pages_ > 0);
+        LMI_ASSERT(0 < extra_pages_);
 
         writer.dc().StartPage();
 
@@ -1658,7 +1658,7 @@ class page_with_tabular_report
                         rows_in_next_group = year_max - year;
                         }
 
-                    if(pos_y > page_bottom - rows_in_next_group*row_height)
+                    if(page_bottom - rows_in_next_group * row_height < pos_y)
                         {
                         next_page(writer);
                         numbered_page::render(ledger, writer, interpolate_html);
@@ -1949,14 +1949,11 @@ class standard_supplemental_report : public page_with_tabular_report
             auto name = interpolate_html.evaluate("SupplementalReportColumnsNames", i);
             if(name != empty_column_name)
                 {
-                // We currently don't have the field width information for
-                // arbitrary fields, so use fixed width that should be
-                // sufficient for almost all of them.
                 columns.emplace_back
                     (illustration_table_column
                         {std::move(name)
                         ,interpolate_html.evaluate("SupplementalReportColumnsTitles", i)
-                        ,"999,999"
+                        ,"999,999,999"
                         }
                     );
                 }
@@ -2386,17 +2383,17 @@ class nasd_supplemental : public page_with_tabular_report
         static illustration_table_columns const columns =
             {{ "PolicyYear"           , "Policy\nYear"               ,         "999" }
             ,{ "AttainedAge"          , "End of\nYear Age"           ,         "999" }
-            ,{ "ErGrossPmt"           , "ER Gross\nPayment"          ,     "999,999" }
-            ,{ "EeGrossPmt"           , "EE Gross\nPayment"          ,     "999,999" }
+            ,{ "ErGrossPmt"           , "ER Gross\nPayment"          , "999,999,999" }
+            ,{ "EeGrossPmt"           , "EE Gross\nPayment"          , "999,999,999" }
             ,{ "GrossPmt"             , "Premium\nOutlay"            , "999,999,999" }
-            ,{ "PolicyFee_Current"    , "Admin\nCharge"              ,     "999,999" }
-            ,{ "PremTaxLoad_Current"  , "Premium\nTax Load"          ,     "999,999" }
-            ,{ "DacTaxLoad_Current"   , "DAC\nTax Load"              ,     "999,999" }
-            ,{ "ErModalMinimumPremium", "ER Modal\nMinimum\nPremium" ,     "999,999" }
-            ,{ "EeModalMinimumPremium", "EE Modal\nMinimum\nPremium" ,     "999,999" }
-            ,{ "NetPmt_Current"       , "Net\nPremium"               ,     "999,999" }
-            ,{ "COICharge_Current"    , "Cost of\nInsurance\nCharges",     "999,999" }
-            ,{ "AcctVal_Current"      , "Current\nAccount\nValue"    ,     "999,999" }
+            ,{ "PolicyFee_Current"    , "Admin\nCharge"              , "999,999,999" }
+            ,{ "PremTaxLoad_Current"  , "Premium\nTax Load"          , "999,999,999" }
+            ,{ "DacTaxLoad_Current"   , "DAC\nTax Load"              , "999,999,999" }
+            ,{ "ErModalMinimumPremium", "ER Modal\nMinimum\nPremium" , "999,999,999" }
+            ,{ "EeModalMinimumPremium", "EE Modal\nMinimum\nPremium" , "999,999,999" }
+            ,{ "NetPmt_Current"       , "Net\nPremium"               , "999,999,999" }
+            ,{ "COICharge_Current"    , "Cost of\nInsurance\nCharges", "999,999,999" }
+            ,{ "AcctVal_Current"      , "Current\nAccount\nValue"    , "999,999,999" }
             ,{ "CSVNet_Current"       , "Current\nCash Surr\nValue"  , "999,999,999" }
             ,{ "EOYDeathBft_Current"  , "Current\nDeath\nBenefit"    , "999,999,999" }
             };
@@ -2421,14 +2418,14 @@ class nasd_supplemental : public page_with_tabular_report
             case column_premium_tax_load:
             case column_dac_tax_load:
                 // These columns only appear in non-split premiums case.
-                return invar.SplitMinPrem == 0.;
+                return invar.SplitMinPrem == 0.0;
 
             case column_er_gross_payment:
             case column_ee_gross_payment:
             case column_er_min_premium:
             case column_ee_min_premium:
                 // While those only appear in split premiums case.
-                return invar.SplitMinPrem == 1.;
+                return invar.SplitMinPrem == 1.0;
 
             case column_policy_year:
             case column_premium_outlay:
@@ -2740,6 +2737,7 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
 
     illustration_table_columns const& get_table_columns() const override
     {
+        // PDF !! Here and elsewhere, IRR columns must be widened.
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"       ,         "999" }
             ,{ "AttainedAge"                , "End of\nYear Age"   ,         "999" }
@@ -2822,12 +2820,12 @@ class reg_d_individual_curr : public page_with_tabular_report
             {{ "PolicyYear"              , "Policy\nYear"      ,         "999" }
             ,{ "AttainedAge"             , "End of\nYear Age"  ,         "999" }
             ,{ "GrossPmt"                , "Premium\nOutlay"   , "999,999,999" }
-            ,{ "PremiumLoads"            , "Premium\nLoads"    ,     "999,999" }
-            ,{ "AdminCharges"            , "Admin\nCharges"    ,     "999,999" }
-            ,{ "COICharge_Current"       , "Mortality\nCharges",     "999,999" }
-            ,{ "SepAcctCharges_Current"  , "Asset\nCharges"    ,     "999,999" }
-            ,{ "GrossIntCredited_Current", "Investment\nIncome",     "999,999" }
-            ,{ "AcctVal_Current"         , "Account\nValue"    ,     "999,999" }
+            ,{ "PremiumLoads"            , "Premium\nLoads"    , "999,999,999" }
+            ,{ "AdminCharges"            , "Admin\nCharges"    , "999,999,999" }
+            ,{ "COICharge_Current"       , "Mortality\nCharges", "999,999,999" }
+            ,{ "SepAcctCharges_Current"  , "Asset\nCharges"    , "999,999,999" }
+            ,{ "GrossIntCredited_Current", "Investment\nIncome", "999,999,999" }
+            ,{ "AcctVal_Current"         , "Account\nValue"    , "999,999,999" }
             ,{ "CSVNet_Current"          , "Cash\nSurr Value"  , "999,999,999" }
             ,{ "EOYDeathBft_Current"     , "Death\nBenefit"    , "999,999,999" }
             };

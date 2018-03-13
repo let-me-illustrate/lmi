@@ -281,6 +281,18 @@ Missing compulsory include directive.
 #endif // eraseme_hpp_006_hpp
 EOF
 
+cat >eraseme_hpp_007.hpp <<EOF
+$boilerplate
+#ifndef eraseme_hpp_007_hpp
+#define eraseme_hpp_007_hpp
+#include "config.hpp"
+Should be 'defined XYZ'.
+#ifdef XYZ
+Should be '!defined __cplusplus'.
+#ifndef __cplusplus
+#endif // eraseme_hpp_007_hpp
+EOF
+
 # Log files.
 
 cat >eraseme_log_000.Log <<EOF
@@ -389,6 +401,8 @@ File 'eraseme_hpp_005.hpp' must include 'config.hpp' first.
 File 'eraseme_hpp_006.hpp' must include 'config.hpp'.
 File 'eraseme_hpp_006.hpp' lacks line '#include "config.hpp"'.
 File 'eraseme_hpp_006.hpp' must include 'config.hpp' first.
+File 'eraseme_hpp_007.hpp' should write '#if [!]defined' instead of '#if[n]def': '#ifdef XYZ'.
+File 'eraseme_hpp_007.hpp' should write '#if [!]defined' instead of '#if[n]def': '#ifndef __cplusplus'.
 File 'eraseme_log_001.Log' lacks expected 'MAINTENANCE' line.
 File 'eraseme_log_001.Log' violates seventy-character limit:
 0000000001111111111222222222233333333334444444444555555555566666666667

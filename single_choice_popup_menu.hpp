@@ -24,7 +24,7 @@
 
 #include "config.hpp"
 
-#include "wx_utility.hpp"
+#include "wx_utility.hpp"               // TopWindow()
 
 #include <wx/arrstr.h>                  // wxArrayString
 #include <wx/menu.h>
@@ -34,10 +34,6 @@
 ///
 /// A wxGetSingleChoiceIndex alternative. No distracting dialog frame.
 /// No needless OK button--requires only a single click or keystroke.
-///
-/// WX !! Warning: the first character in 'title' (if specified) seems
-/// to become an accelerator, interfering with any menuitem that uses
-/// the same character as its own accelerator.
 
 class SingleChoicePopupMenu
 {
@@ -45,14 +41,14 @@ class SingleChoicePopupMenu
     SingleChoicePopupMenu
         (wxArrayString const& choices
         ,wxString const&      title  = wxEmptyString
-        ,wxWindow&            parent = TopWindow()
+        ,wxTopLevelWindow&    parent = TopWindow()
         );
 
     int Choose();
 
   private:
     wxMenu menu_;
-    wxWindow& parent_;
+    wxTopLevelWindow& parent_;
 };
 
 #endif // single_choice_popup_menu_hpp

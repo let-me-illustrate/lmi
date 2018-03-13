@@ -77,11 +77,11 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(""      , n_v_pairs_0.string_value("c"));
     BOOST_TEST_EQUAL("="     , n_v_pairs_0.string_value("d"));
     BOOST_TEST_EQUAL("1=."   , n_v_pairs_0.string_value("e"));
-#ifndef LMI_MSW
+#if !defined LMI_MSW
     BOOST_TEST_EQUAL(" f \r" , n_v_pairs_0.string_value("f"));
-#else  // LMI_MSW
+#else  // defined LMI_MSW
     BOOST_TEST_EQUAL(" f "   , n_v_pairs_0.string_value("f"));
-#endif // LMI_MSW
+#endif // defined LMI_MSW
     BOOST_TEST_EQUAL("a test", n_v_pairs_0.string_value("this"));
 
     // Test numeric_value().

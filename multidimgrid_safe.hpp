@@ -31,25 +31,8 @@
 
 #include "multidimgrid_any.hpp"
 
-#include <type_traits>
-
-#ifdef LMI_COMPILER_HAS_CXX17_STDLIB
 #include <any>
-namespace Exp
-{
-    using std::any;
-    using std::any_cast;
-    using std::bad_any_cast;
-}
-#else
-#include <experimental/any>
-namespace Exp
-{
-    using std::experimental::any;
-    using std::experimental::any_cast;
-    using std::experimental::bad_any_cast;
-}
-#endif
+#include <type_traits>
 
 /// MultiDim* type-safe classes
 /// ---------------------------
@@ -86,7 +69,7 @@ class MultiDimAxis
 
     MultiDimAxis(std::string const& name);
 
-    Exp::any GetValue(unsigned int n) const override;
+    std::any GetValue(unsigned int n) const override;
 
   protected:
     /// Implement this function returning values of the type ValueType
@@ -238,18 +221,18 @@ class MultiDimTable
     T    DoGetValue(Coords const&) const;
     void DoSetValue(Coords const&, T const&);
 
-    /// Helper methods for unwrapping/wrapping a value from/into Exp::any.
+    /// Helper methods for unwrapping/wrapping a value from/into std::any.
     template<typename A>
-    static A UnwrapAny(Exp::any const&);
+    static A UnwrapAny(std::any const&);
     template<typename A>
-    static Exp::any WrapAny(A const&);
+    static std::any WrapAny(A const&);
 
   private:
     /// MultiDimTableAny overrides.
-    Exp::any    DoGetValueAny(Coords const&) const override;
-    void        DoSetValueAny(Coords const&, Exp::any const&) override;
-    Exp::any    StringToValue(std::string const&) const override;
-    std::string ValueToString(Exp::any const&) const override;
+    std::any    DoGetValueAny(Coords const&) const override;
+    void        DoSetValueAny(Coords const&, std::any const&) override;
+    std::any    StringToValue(std::string const&) const override;
+    std::string ValueToString(std::any const&) const override;
 };
 
 /// Design notes for MultiDimAdjustableAxis<AdjustControl,BaseAxisType>

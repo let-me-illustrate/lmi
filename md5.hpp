@@ -51,14 +51,14 @@
 #include <cstdio>                       // GWC added this required header.
 
 /* GWC: Make this header usable with C++. */
-#ifdef __cplusplus
+#if defined __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif // defined __cplusplus
 
 /* GWC: Unconditionally assume we have the standard C headers.
  * #if defined HAVE_LIMITS_H || _LIBC
  * # include <limits.h>
- * #endif
+ * #endif // defined HAVE_LIMITS_H || _LIBC
  */
 #include <limits.h>
 
@@ -70,10 +70,10 @@ extern "C" {
  * is usually not possible.
  */
 
-#ifdef _LIBC
+#if defined _LIBC
 # include <sys/types.h>
 typedef u_int32_t md5_uint32;
-#else
+#else // !defined _LIBC
 #  define INT_MAX_32_BITS 2147483647
 
 /* If UINT_MAX isn't defined, assume it's a 32-bit type.
@@ -82,27 +82,27 @@ typedef u_int32_t md5_uint32;
  * (that certainly have <limits.h>) have 64+-bit integral types.
  */
 
-# ifndef INT_MAX
+# if !defined INT_MAX
 #  define INT_MAX INT_MAX_32_BITS
-# endif
+# endif // !defined INT_MAX
 
 # if INT_MAX == INT_MAX_32_BITS
    typedef unsigned int md5_uint32;
-# else
+# else // !INT_MAX == INT_MAX_32_BITS
 #  if SHRT_MAX == INT_MAX_32_BITS
     typedef unsigned short int md5_uint32;
-#  else
+#  else // !SHRT_MAX == INT_MAX_32_BITS
 #   if LONG_MAX == INT_MAX_32_BITS
      typedef unsigned long int md5_uint32;
-#   else
+#   else // !LONG_MAX == INT_MAX_32_BITS
      /* The following line is intended to evoke an error.
       * Using #error is not portable enough.
       */
      "Cannot determine unsigned 32-bit data type."
-#   endif
-#  endif
-# endif
-#endif
+#   endif // !LONG_MAX == INT_MAX_32_BITS
+#  endif // !SHRT_MAX == INT_MAX_32_BITS
+# endif // !INT_MAX == INT_MAX_32_BITS
+#endif // !defined _LIBC
 
 /* GWC: Here, __STDC__ is tested, but what should be done if that test
  * fails? The gnu project assumes it may have a pre-1989 C compiler. I
@@ -119,11 +119,11 @@ typedef u_int32_t md5_uint32;
  * avoid triggering lmi's tests for reserved identifiers.
  *
  * #undef MD5_P
- * #if defined (__STDC__) && __STDC__
+ * #if defined __STDC__ && __STDC__
  * #define MD5_P(x) x
- * #else
+ * #else  // !(defined __STDC__ && __STDC__)
  * #define MD5_P(x) ()
- * #endif
+ * #endif // !(defined __STDC__ && __STDC__)
  */
 #define LMI_P(x) x
 
@@ -197,9 +197,9 @@ extern int md5_stream LMI_P ((std::FILE *stream, void *resblock));
  * digest.
  */
 extern void *md5_buffer LMI_P ((const char *buffer, std::size_t len, void *resblock));
-#ifdef __cplusplus
+#if defined __cplusplus
 } /* extern "C" */
-#endif /* __cplusplus */
+#endif // defined __cplusplus
 
 /* GWC: Explicitly undefine prototype macro. */
 #undef LMI_P

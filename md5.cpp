@@ -43,9 +43,9 @@
 #include "pchfile.hpp"
 
 // Suppress this because we wouldn't have glibc's 'config.h'.
-//#ifdef HAVE_CONFIG_H
+//#if defined HAVE_CONFIG_H
 //# include <config.h>
-//#endif
+//#endif // defined HAVE_CONFIG_H
 
 #include <sys/types.h>
 
@@ -59,11 +59,11 @@
 #if 1
 # include <cstdlib>                     // GWC replaced <stdlib.h> .
 # include <cstring>                     // GWC replaced <string.h> .
-#else
-# ifndef HAVE_MEMCPY
+#else  // 0
+# if !defined HAVE_MEMCPY
 #  define memcpy(d, s, n) bcopy ((s), (d), (n))
-# endif
-#endif
+# endif // !defined HAVE_MEMCPY
+#endif // 0
 
 /* GWC: Suppress this unneeded, nonstandard header.
  * #include "ansidecl.h"
@@ -71,20 +71,20 @@
 /* GWC: File renamed md5.h --> md5.hpp . */
 #include "md5.hpp"
 
-#ifdef _LIBC
+#if defined _LIBC
 # include <endian.h>
 # if __BYTE_ORDER == __BIG_ENDIAN
 #  define WORDS_BIGENDIAN 1
-# endif
-#endif
+# endif // __BYTE_ORDER == __BIG_ENDIAN
+#endif // defined _LIBC
 
 /* intel x86 is litte-endian */
-#ifdef WORDS_BIGENDIAN
+#if defined WORDS_BIGENDIAN
 # define SWAP(n)                            \
     (((n) << 24) | (((n) & 0xff00) << 8) | (((n) >> 8) & 0xff00) | ((n) >> 24))
-#else
+#else  // !defined WORDS_BIGENDIAN
 # define SWAP(n) (n)
-#endif
+#endif // !defined WORDS_BIGENDIAN
 
 /* This array contains the bytes used to pad the buffer to the next
  * 64-byte boundary. (RFC 1321, 3.1: Step 1)

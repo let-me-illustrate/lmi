@@ -563,6 +563,30 @@ void check_cxx(file const& f)
         }
     }
 
+    {
+    static boost::regex const r(R"(\n# *ifn*def[^\n]+\n)");
+    boost::sregex_iterator i(f.data().begin(), f.data().end(), r);
+    boost::sregex_iterator const omega;
+    for(; i != omega; ++i)
+        {
+        boost::smatch const& z(*i);
+        std::string s = z[0];
+        static boost::regex const include_guard(R"(# *ifndef *\l[_\d\l]*_hpp\W)");
+        if(!boost::regex_search(s, include_guard))
+            {
+            ltrim(s, "\n");
+            rtrim(s, "\n");
+            std::ostringstream oss;
+            oss
+                << "should write '#if [!]defined' instead of '#if[n]def': '"
+                << s
+                << "'."
+                ;
+            complain(f, oss.str());
+            }
+        }
+    }
+
     // Tests above: C or C++. Tests below: C++ only.
     if(!f.is_of_phylum(e_cxx))
         {
@@ -862,6 +886,7 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__STDC_IEC_559__"
         ,"__STDC__"
         ,"__cplusplus"
+        ,"__has_include"
     // Platform identification.
         ,"_M_IX86"
         ,"_M_X64"

@@ -24,9 +24,9 @@
 #ifndef config_bc551_hpp
 #define config_bc551_hpp
 
-#ifndef OK_TO_INCLUDE_CONFIG_BC551_HPP
+#if !defined OK_TO_INCLUDE_CONFIG_BC551_HPP
 #   error This file is not intended for separate inclusion.
-#endif // OK_TO_INCLUDE_CONFIG_BC551_HPP
+#endif // !defined OK_TO_INCLUDE_CONFIG_BC551_HPP
 
 #if defined __BORLANDC__ && 0x0550 <= __BORLANDC__
 #   // Copacetic.

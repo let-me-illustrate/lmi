@@ -111,7 +111,7 @@ void wx_table_generator::add_column
             {
             increase_to_if_smaller(width, dc_.GetMultiLineTextExtent(header).x);
 
-            width += 2*column_margin_;
+            width += 2 * column_margin_;
             }
         }
 
@@ -210,14 +210,14 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
             // We need to round up in division here to be sure that all columns
             // fit into the available width.
             auto const overflow_per_column =
-                (overflow + num_columns - 1)/num_columns;
-            if(overflow_per_column <= column_margin_)
+                (overflow + num_columns - 1) / num_columns;
+            if(overflow_per_column <= 2 * column_margin_)
                 {
                 // We are going to reduce the total width by more than
                 // necessary, in general, because of rounding up above, so
                 // compensate for it by giving 1 extra pixel until we run out
                 // of these "underflow" pixels.
-                auto underflow = overflow_per_column*num_columns - overflow;
+                auto underflow = overflow_per_column * num_columns - overflow;
 
                 for(auto& i : columns_)
                     {
@@ -228,14 +228,14 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
 
                     i.width_ -= overflow_per_column;
 
-                    if(underflow > 0)
+                    if(0 < underflow)
                         {
                         i.width_++;
                         underflow--;
                         }
                     }
 
-                column_margin_ -= (overflow_per_column + 1)/2;
+                column_margin_ -= (overflow_per_column + 1) / 2;
 
                 // We condensed the columns enough to make them fit, so no need
                 // for the warning and we don't have any expanding columns, so
@@ -256,7 +256,7 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
     if(num_expand)
         {
         int const per_expand
-            = (total_width_ - total_fixed + num_expand - 1)/num_expand;
+            = (total_width_ - total_fixed + num_expand - 1) / num_expand;
 
         for(auto& i : columns_)
             {
@@ -478,7 +478,7 @@ void wx_table_generator::output_super_header
         case oe_render:
             break;
         case oe_only_measure:
-            *pos_y += row_height_*lines.size();
+            *pos_y += row_height_ * lines.size();
             return;
         }
 

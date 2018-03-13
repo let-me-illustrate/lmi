@@ -38,6 +38,7 @@ class LMI_SO_FWD_DECL calendar_date;
 class WXDLLIMPEXP_FWD_CORE wxApp;
 class WXDLLIMPEXP_FWD_CORE wxBookCtrlBase;
 class WXDLLIMPEXP_FWD_CORE wxDateTime;
+class WXDLLIMPEXP_FWD_CORE wxTopLevelWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class jdn_t;
 
@@ -135,7 +136,7 @@ std::vector<wxWindow*> Lineage(wxWindow const*);
 std::string NameLabelId(wxWindow const*);
 
 wxApp& TheApp();
-wxWindow& TopWindow();
+wxTopLevelWindow& TopWindow();
 
 std::string ValidateAndConvertFilename(wxString const&);
 

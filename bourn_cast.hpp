@@ -72,10 +72,7 @@
 /// case of a signaling NaN [C99 F.2.1].
 
 template<typename To, typename From>
-#if 201402L < __cplusplus
-constexpr
-#endif // 201402L < __cplusplus
-inline To bourn_cast(From from, std::false_type, std::false_type)
+constexpr inline To bourn_cast(From from, std::false_type, std::false_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
@@ -99,10 +96,7 @@ inline To bourn_cast(From from, std::false_type, std::false_type)
 /// Integral to floating.
 
 template<typename To, typename From>
-#if 201402L < __cplusplus
-constexpr
-#endif // 201402L < __cplusplus
-inline To bourn_cast(From from, std::false_type, std::true_type)
+constexpr inline To bourn_cast(From from, std::false_type, std::true_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
@@ -168,10 +162,7 @@ inline To bourn_cast(From from, std::false_type, std::true_type)
 /// no need here for scalbln().
 
 template<typename To, typename From>
-#if 201402L < __cplusplus
-constexpr
-#endif // 201402L < __cplusplus
-inline To bourn_cast(From from, std::true_type, std::false_type)
+constexpr inline To bourn_cast(From from, std::true_type, std::false_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
@@ -224,10 +215,7 @@ inline To bourn_cast(From from, std::true_type, std::false_type)
 /// distributed under the GPL-compatible Boost Software License.
 
 template<typename To, typename From>
-#if 201402L < __cplusplus
-constexpr
-#endif // 201402L < __cplusplus
-inline To bourn_cast(From from, std::true_type, std::true_type)
+constexpr inline To bourn_cast(From from, std::true_type, std::true_type)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
@@ -309,10 +297,7 @@ inline To bourn_cast(From from, std::true_type, std::true_type)
 /// order to avoid undefined behavior.
 
 template<typename To, typename From>
-#if 201402L < __cplusplus
-constexpr
-#endif // 201402L < __cplusplus
-inline To bourn_cast(From from)
+constexpr inline To bourn_cast(From from)
 {
     using   to_traits = std::numeric_limits<To  >;
     using from_traits = std::numeric_limits<From>;
