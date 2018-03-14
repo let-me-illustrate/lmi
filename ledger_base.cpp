@@ -55,6 +55,8 @@ LedgerBase& LedgerBase::operator=(LedgerBase const& obj)
 {
     if(this != &obj)
         {
+        scale_factor_ = obj.scale_factor_;
+        scale_unit_   = obj.scale_unit_;
         Initialize(obj.GetLength());
         Copy(obj);
         }
@@ -100,6 +102,9 @@ void LedgerBase::Copy(LedgerBase const& obj)
     // design of this class, and are not information in and of themselves.
     // Rather, their contents are information that is added in by derived
     // classes.
+    //
+    // scale_factor_ and scale_unit_ aren't copied here because they're
+    // copied explicitly by the caller.
     //
     // TODO ?? There has to be a way to abstract this.
 
