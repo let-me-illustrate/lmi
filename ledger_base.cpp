@@ -307,7 +307,7 @@ LedgerBase& LedgerBase::PlusEq
 
 /// Triple-power-of-ten scaling to keep ledger extremum < 10^max_power.
 
-int LedgerBase::DetermineScalePower() const
+int LedgerBase::DetermineScalePower(int max_power) const
 {
     double min_value = 0.0;
     double max_value = 0.0;
@@ -327,17 +327,13 @@ int LedgerBase::DetermineScalePower() const
         ,max_value
         );
 
-// TODO ?? It would be nicer to factor out
-//   1000000000.0 (max width)
-//   and 1.0E-18 (highest number we translate to words)
-// and make them variables.
-// PDF !! This seems not to be rigorously correct: $999,999,999.99 is
-// less than one billion, but rounds to $1,000,000,000.
-    if(widest < 1000000000.0 || widest == 0)
+    if(widest < nonstd::power(10.0, max_power) || widest == 0)
         {
         return 0;
         }
 
+// PDF !! This seems not to be rigorously correct: $999,999,999.99 is
+// less than one billion, but rounds to $1,000,000,000.
     double d = std::log10(widest);
     d = std::floor(d / 3.0);
     int k = 3 * static_cast<int>(d);

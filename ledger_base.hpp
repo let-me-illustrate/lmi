@@ -176,7 +176,7 @@ class LMI_SO LedgerBase
 
     void               ApplyScaleFactor(int decimal_power);
 
-    int                DetermineScalePower() const;
+    int                DetermineScalePower(int max_power) const;
     std::string const& ScaleUnit() const;
 // PDF !! expunge
     int                ScalePower() const;

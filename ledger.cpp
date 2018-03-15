@@ -315,12 +315,14 @@ int Ledger::GetMaxLength() const
 // largest absolute value of any number in any column of every subledger.
 void Ledger::AutoScale()
 {
-    int k = ledger_invariant_->DetermineScalePower();
+    int const max_power = 9;
+
+    int k = ledger_invariant_->DetermineScalePower(max_power);
 
     ledger_map_t& l_map_rep = ledger_map_->held_;
     for(auto const& i : l_map_rep)
         {
-        k = std::max(k, i.second.DetermineScalePower());
+        k = std::max(k, i.second.DetermineScalePower(max_power));
         }
 
     ledger_invariant_->ApplyScaleFactor(k);
