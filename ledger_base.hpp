@@ -174,11 +174,12 @@ class LMI_SO LedgerBase
   public:
     virtual ~LedgerBase() = default;
 
-    void               ApplyScaleFactor(double a_Mult);
+    void               ApplyScaleFactor(int decimal_power);
 
-    double             DetermineScaleFactor() const;
+    int                DetermineScalePower() const;
     std::string const& ScaleUnit() const;
-    double             ScaleFactor() const;
+// PDF !! expunge
+    int                ScalePower() const;
     std::string        value_str(std::string const& map_key, int index) const;
     std::string        value_str(std::string const& map_key) const;
 
@@ -230,8 +231,8 @@ class LMI_SO LedgerBase
     string_map          Strings;
 
   private:
-    double              scale_factor_;
-    std::string         scale_unit_; // E.g. "thousands", "millions".
+    int                 scale_power_; // E.g., for (000,000): 6
+    std::string         scale_unit_;  // E.g., for (000,000): "millions"
 };
 
 template<typename T> void SpewVector

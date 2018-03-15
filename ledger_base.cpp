@@ -27,24 +27,25 @@
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
 #include "miscellany.hpp"               // minmax
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "value_cast.hpp"
 
 #include <algorithm>                    // max(), min(), transform()
-#include <cmath>                        // floor(), log10(), pow()
+#include <cmath>                        // floor(), log10()
 #include <functional>                   // multiplies
 
 //============================================================================
 LedgerBase::LedgerBase(int a_Length)
-    :scale_factor_(1.0)
-    ,scale_unit_  ("")
+    :scale_power_(0)
+    ,scale_unit_ ("")
 {
     Initialize(a_Length);
 }
 
 //============================================================================
 LedgerBase::LedgerBase(LedgerBase const& obj)
-    :scale_factor_(obj.scale_factor_)
-    ,scale_unit_  (obj.scale_unit_)
+    :scale_power_(obj.scale_power_)
+    ,scale_unit_ (obj.scale_unit_)
 {
     Initialize(obj.GetLength());
     Copy(obj);
@@ -55,8 +56,8 @@ LedgerBase& LedgerBase::operator=(LedgerBase const& obj)
 {
     if(this != &obj)
         {
-        scale_factor_ = obj.scale_factor_;
-        scale_unit_   = obj.scale_unit_;
+        scale_power_ = obj.scale_power_;
+        scale_unit_  = obj.scale_unit_;
         Initialize(obj.GetLength());
         Copy(obj);
         }
@@ -103,7 +104,7 @@ void LedgerBase::Copy(LedgerBase const& obj)
     // Rather, their contents are information that is added in by derived
     // classes.
     //
-    // scale_factor_ and scale_unit_ aren't copied here because they're
+    // scale_power_ and scale_unit_ aren't copied here because they're
     // copied explicitly by the caller.
     //
     // TODO ?? There has to be a way to abstract this.
@@ -228,8 +229,7 @@ LedgerBase& LedgerBase::PlusEq
     ,std::vector<double> const& a_Inforce
     )
 {
-    LMI_ASSERT(0.0 != scale_factor_);
-    if(scale_factor_ != a_Addend.scale_factor_)
+    if(scale_power_ != a_Addend.scale_power_)
         {
         alarum() << "Cannot add differently scaled ledgers." << LMI_FLUSH;
         }
@@ -313,7 +313,7 @@ LedgerBase& LedgerBase::PlusEq
 // and make them variables.
 // PDF !! This seems not to be rigorously correct: $999,999,999.99 is
 // less than one billion, but rounds to $1,000,000,000.
-double LedgerBase::DetermineScaleFactor() const
+int LedgerBase::DetermineScalePower() const
 {
     double min_val = 0.0;
     double max_val = 0.0;
@@ -335,44 +335,27 @@ double LedgerBase::DetermineScaleFactor() const
 
     if(widest < 1000000000.0 || widest == 0)
         {
-        return 1.0;
+        return 0;
         }
+
     double d = std::log10(widest);
-    d = 3.0 * std::floor(d / 3.0);
-    d = std::pow(10.0, 6.0 - d);
+    d = std::floor(d / 3.0);
+    int k = 3 * static_cast<int>(d);
+    k = k - 6;
 
-    LMI_ASSERT(1.0E-18 <= d);
-    LMI_ASSERT(d <= 1.0);
+    LMI_ASSERT(0 <= k);
+    LMI_ASSERT(k <= 18);
 
-    return d;
+    return k;
 }
 
 namespace
 {
-    static std::string look_up_scale_unit(double a_ScalingFactor)
+    static std::string look_up_scale_unit(int decimal_power)
         {
-        if(0.0 == a_ScalingFactor)
-            {
-            alarum() << "Scaling factor is zero." << LMI_FLUSH;
-            return "ZERO";
-            }
-
-        double power = -std::log10(a_ScalingFactor);
-        // Assert absolute equality of two floating-point quantities, because
-        // they must both have integral values.
-        // PDF !! Suppress the assertion because, with MinGW-w64 gcc-7.2.0,
-        // it fails--apparently floor() gives the wrong answer, but trunc()
-        // and static_cast<int>() give the right answer for the test case
-        // described in the git commit message for 1c1bafa40. Obviously this
-        // needs further work because the behavior in other cases is unknown,
-        // and adding a small quantity to a near-integer to force it to round
-        // "correctly" is surely bogus.
-        // LMI_ASSERT(power == std::floor(power));
-        int z = static_cast<int>(0.1 + power);
-
         // US names are used; UK names are different.
         // Assume that numbers over 999 quintillion (US) will not be needed.
-        switch(z)
+        switch(decimal_power)
             {
             case 0:
                 {
@@ -411,7 +394,7 @@ namespace
                 //  break;
             default:
                 {
-                alarum() << "Case '" << z << "' not found." << LMI_FLUSH;
+                alarum() << "Case '" << decimal_power << "' not found." << LMI_FLUSH;
                 throw "Unreachable--silences a compiler diagnostic.";
                 }
             }
@@ -419,28 +402,27 @@ namespace
 } // Unnamed namespace.
 
 //============================================================================
-// Multiplies all scalable vectors by the factor from DetermineScaleFactor().
+// Multiplies all scalable vectors by the factor from DetermineScalePower().
 // Only columns are scaled, so we operate here only on vectors. A header
 // that shows e.g. face amount should show the true face amount, unscaled.
-void LedgerBase::ApplyScaleFactor(double a_Mult)
+void LedgerBase::ApplyScaleFactor(int decimal_power)
 {
-    LMI_ASSERT(0.0 != a_Mult);
-    LMI_ASSERT(0.0 != scale_factor_);
-    if(1.0 != scale_factor_)
+    if(0 != scale_power_)
         {
         alarum() << "Cannot scale the same ledger twice." << LMI_FLUSH;
         }
 
-    scale_factor_ = a_Mult;
-    if(1.0 == scale_factor_)
+    scale_power_ = decimal_power;
+    if(0 == scale_power_)
         {
         // Don't waste time multiplying all these vectors by one
         return;
         }
-    scale_unit_ = look_up_scale_unit(scale_factor_);
+
+    scale_unit_ = look_up_scale_unit(scale_power_);
 
     // ET !! *i.second *= M;
-    std::vector<double>M(GetLength(), scale_factor_);
+    std::vector<double>M(GetLength(), 1.0 / nonstd::power(10.0, scale_power_));
     for(auto& i : ScalableVectors)
         {
         std::vector<double>& v = *i.second;
@@ -461,9 +443,10 @@ std::string const& LedgerBase::ScaleUnit() const
 }
 
 //============================================================================
-double LedgerBase::ScaleFactor() const
+// PDF !! expunge
+int LedgerBase::ScalePower() const
 {
-    return scale_factor_;
+    return scale_power_;
 }
 
 //============================================================================
