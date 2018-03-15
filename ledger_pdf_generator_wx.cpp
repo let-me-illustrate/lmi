@@ -43,6 +43,7 @@
 
 #include <wx/image.h>
 #include <wx/log.h>
+#include <wx/utils.h>                   // wxBusyCursor
 
 #include <wx/html/m_templ.h>
 
@@ -2933,6 +2934,8 @@ void ledger_pdf_generator_wx::write
     ,fs::path const& output
     )
 {
+    wxBusyCursor reverie;
+
     std::unique_ptr<pdf_illustration> pdf_ill;
 
     auto const z = ledger.ledger_type();
