@@ -327,7 +327,7 @@ int LedgerBase::DetermineScalePower(int max_power) const
         ,max_value
         );
 
-    if(widest < nonstd::power(10.0, max_power) || widest == 0)
+    if(0 == widest || widest < nonstd::power(10.0, max_power))
         {
         return 0;
         }
