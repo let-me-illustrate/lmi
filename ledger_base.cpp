@@ -309,22 +309,22 @@ LedgerBase& LedgerBase::PlusEq
 
 int LedgerBase::DetermineScalePower() const
 {
-    double min_val = 0.0;
-    double max_val = 0.0;
+    double min_value = 0.0;
+    double max_value = 0.0;
 
     for(auto const& i : ScalableVectors)
         {
         minmax<double> extrema(*i.second);
-        min_val = std::min(min_val, extrema.minimum());
-        max_val = std::max(max_val, extrema.maximum());
+        min_value = std::min(min_value, extrema.minimum());
+        max_value = std::max(max_value, extrema.maximum());
         }
 
     // If minimum value is negative, it needs an extra character to
     // display the minus sign. So it needs as many characters as
     // ten times its absolute value.
     double widest = std::max
-        (max_val
-        ,min_val * -10
+        (min_value * -10
+        ,max_value
         );
 
 // TODO ?? It would be nicer to factor out
