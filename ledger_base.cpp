@@ -26,25 +26,27 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
+#include "et_vector.hpp"
 #include "miscellany.hpp"               // minmax
+#include "stl_extensions.hpp"           // nonstd::power()
 #include "value_cast.hpp"
 
-#include <algorithm>                    // max(), min(), transform()
-#include <cmath>                        // floor(), log10(), pow()
-#include <functional>                   // multiplies
+#include <algorithm>                    // max(), min()
+#include <cmath>                        // floor(), log10()
+#include <stdexcept>                    // logic_error
 
 //============================================================================
 LedgerBase::LedgerBase(int a_Length)
-    :scale_factor_(1.0)
-    ,scale_unit_  ("")
+    :scale_power_(0)
+    ,scale_unit_ ("")
 {
     Initialize(a_Length);
 }
 
 //============================================================================
 LedgerBase::LedgerBase(LedgerBase const& obj)
-    :scale_factor_(obj.scale_factor_)
-    ,scale_unit_  (obj.scale_unit_)
+    :scale_power_(obj.scale_power_)
+    ,scale_unit_ (obj.scale_unit_)
 {
     Initialize(obj.GetLength());
     Copy(obj);
@@ -55,6 +57,8 @@ LedgerBase& LedgerBase::operator=(LedgerBase const& obj)
 {
     if(this != &obj)
         {
+        scale_power_ = obj.scale_power_;
+        scale_unit_  = obj.scale_unit_;
         Initialize(obj.GetLength());
         Copy(obj);
         }
@@ -100,6 +104,9 @@ void LedgerBase::Copy(LedgerBase const& obj)
     // design of this class, and are not information in and of themselves.
     // Rather, their contents are information that is added in by derived
     // classes.
+    //
+    // scale_power_ and scale_unit_ aren't copied here because they're
+    // copied explicitly by the caller.
     //
     // TODO ?? There has to be a way to abstract this.
 
@@ -223,8 +230,7 @@ LedgerBase& LedgerBase::PlusEq
     ,std::vector<double> const& a_Inforce
     )
 {
-    LMI_ASSERT(0.0 != scale_factor_);
-    if(scale_factor_ != a_Addend.scale_factor_)
+    if(scale_power_ != a_Addend.scale_power_)
         {
         alarum() << "Cannot add differently scaled ledgers." << LMI_FLUSH;
         }
@@ -308,7 +314,7 @@ LedgerBase& LedgerBase::PlusEq
 // and make them variables.
 // PDF !! This seems not to be rigorously correct: $999,999,999.99 is
 // less than one billion, but rounds to $1,000,000,000.
-double LedgerBase::DetermineScaleFactor() const
+int LedgerBase::DetermineScalePower() const
 {
     double min_val = 0.0;
     double max_val = 0.0;
@@ -330,129 +336,62 @@ double LedgerBase::DetermineScaleFactor() const
 
     if(widest < 1000000000.0 || widest == 0)
         {
-        return 1.0;
+        return 0;
         }
+
     double d = std::log10(widest);
-    d = 3.0 * std::floor(d / 3.0);
-    d = std::pow(10.0, 6.0 - d);
+    d = std::floor(d / 3.0);
+    int k = 3 * static_cast<int>(d);
+    k = k - 6;
 
-    LMI_ASSERT(1.0E-18 <= d);
-    LMI_ASSERT(d <= 1.0);
+    LMI_ASSERT(0 <= k);
+    LMI_ASSERT(k <= 18);
 
-    return d;
+    return k;
 }
 
 namespace
 {
-    static std::string look_up_scale_unit(double a_ScalingFactor)
+    // US names are used; obsolescent UK names are different.
+    // Assume that values over US$ 999 quintillion will not arise.
+    std::string look_up_scale_unit(int decimal_power)
         {
-        if(0.0 == a_ScalingFactor)
-            {
-            alarum() << "Scaling factor is zero." << LMI_FLUSH;
-            return "ZERO";
-            }
-
-        double power = -std::log10(a_ScalingFactor);
-        // Assert absolute equality of two floating-point quantities, because
-        // they must both have integral values.
-        // PDF !! Fails with MinGW-w64 gcc-7.2.0 .
-        if(power != std::floor(power))
-            {
-            long double discrepancy0 = power - std::floor(power);
-            long double discrepancy1 = power - std::ceil (power);
-            warning()
-                << "Scaling factor is not an integral power of ten."
-                << "\n  " << value_cast<std::string>(power)             << " logarithm"
-                << "\n  " << value_cast<std::string>(std::floor(power)) << " integer"
-                << "\n  " << value_cast<std::string>(discrepancy0) << " lower difference"
-                << "\n  " << value_cast<std::string>(discrepancy1) << " upper difference"
-                << LMI_FLUSH
-                ;
-            }
-//      LMI_ASSERT(power == std::floor(power));
-        int z = static_cast<int>(power);
-
-        // US names are used; UK names are different.
-        // Assume that numbers over 999 quintillion (US) will not be needed.
-        switch(z)
-            {
-            case 0:
-                {
-                return "";
-                }
-                //  break;
-            case 3:
-                {
-                return "thousand";
-                }
-                //  break;
-            case 6:
-                {
-                return "million";
-                }
-                //  break;
-            case 9:
-                {
-                return "billion";
-                }
-                //  break;
-            case 12:
-                {
-                return "trillion";
-                }
-                //  break;
-            case 15:
-                {
-                return "quadrillion";
-                }
-                //  break;
-            case 18:
-                {
-                return "quintillion";
-                }
-                //  break;
-            default:
-                {
-                alarum() << "Case '" << z << "' not found." << LMI_FLUSH;
-                throw "Unreachable--silences a compiler diagnostic.";
-                }
-            }
+        return
+             ( 0 == decimal_power) ? ""
+            :( 3 == decimal_power) ? "thousand"
+            :( 6 == decimal_power) ? "million"
+            :( 9 == decimal_power) ? "billion"
+            :(12 == decimal_power) ? "trillion"
+            :(15 == decimal_power) ? "quadrillion"
+            :(18 == decimal_power) ? "quintillion"
+            : throw std::logic_error("Unnamed scaling unit.")
+            ;
         }
 } // Unnamed namespace.
 
 //============================================================================
-// Multiplies all scalable vectors by the factor from DetermineScaleFactor().
+// Multiplies all scalable vectors by the factor from DetermineScalePower().
 // Only columns are scaled, so we operate here only on vectors. A header
 // that shows e.g. face amount should show the true face amount, unscaled.
-void LedgerBase::ApplyScaleFactor(double a_Mult)
+void LedgerBase::ApplyScaleFactor(int decimal_power)
 {
-    LMI_ASSERT(0.0 != a_Mult);
-    LMI_ASSERT(0.0 != scale_factor_);
-    if(1.0 != scale_factor_)
+    if(0 != scale_power_)
         {
         alarum() << "Cannot scale the same ledger twice." << LMI_FLUSH;
         }
 
-    scale_factor_ = a_Mult;
-    if(1.0 == scale_factor_)
+    scale_power_ = decimal_power;
+    if(0 == scale_power_)
         {
         // Don't waste time multiplying all these vectors by one
         return;
         }
-    scale_unit_ = look_up_scale_unit(scale_factor_);
 
-    // ET !! *i.second *= M;
-    std::vector<double>M(GetLength(), scale_factor_);
+    scale_unit_ = look_up_scale_unit(scale_power_);
+
     for(auto& i : ScalableVectors)
         {
-        std::vector<double>& v = *i.second;
-        std::transform
-            (v.begin()
-            ,v.end()
-            ,M.begin()
-            ,v.begin()
-            ,std::multiplies<double>()
-            );
+        *i.second *= 1.0 / nonstd::power(10.0, scale_power_);
         }
 }
 
@@ -463,9 +402,10 @@ std::string const& LedgerBase::ScaleUnit() const
 }
 
 //============================================================================
-double LedgerBase::ScaleFactor() const
+// PDF !! expunge
+int LedgerBase::ScalePower() const
 {
-    return scale_factor_;
+    return scale_power_;
 }
 
 //============================================================================

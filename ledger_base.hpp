@@ -114,7 +114,7 @@ class CRC;
 /// end-of-year data. Some are "arithmetic"; others are not. Arithmetic, an
 /// adjective, here means that arithmetic can be performed upon them in the
 /// sense of the following example. Payments can be multiplied by a scale
-/// factor (1000, 1000000, etc.) to make them print in a given width, and
+/// factor (1/1000, 1/1000000, etc.) to make them print in a given width, and
 /// can be added together when combining multiple ledgers into a composite,
 /// so they are arithmetic. Interest rates are not.
 ///
@@ -174,11 +174,12 @@ class LMI_SO LedgerBase
   public:
     virtual ~LedgerBase() = default;
 
-    void               ApplyScaleFactor(double a_Mult);
+    void               ApplyScaleFactor(int decimal_power);
 
-    double             DetermineScaleFactor() const;
+    int                DetermineScalePower() const;
     std::string const& ScaleUnit() const;
-    double             ScaleFactor() const;
+// PDF !! expunge
+    int                ScalePower() const;
     std::string        value_str(std::string const& map_key, int index) const;
     std::string        value_str(std::string const& map_key) const;
 
@@ -205,7 +206,7 @@ class LMI_SO LedgerBase
     // TODO ?? A priori, protected data is a defect.
 
     // Pointers to std::vector<double> members are stored in these maps for
-    // reasons discussed in the .cpp file.
+    // reasons discussed in the design notes above.
     //
     // "Arithmetic" vectors representing BOY quantities.
     double_vector_map   BegYearVectors;
@@ -230,8 +231,8 @@ class LMI_SO LedgerBase
     string_map          Strings;
 
   private:
-    double              scale_factor_;
-    std::string         scale_unit_; // E.g. "thousands", "millions".
+    int                 scale_power_; // E.g., for (000,000): 6
+    std::string         scale_unit_;  // E.g., for (000,000): "millions"
 };
 
 template<typename T> void SpewVector

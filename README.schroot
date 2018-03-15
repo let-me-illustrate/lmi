@@ -483,3 +483,13 @@ git clone git://git.savannah.nongnu.org/lmi.git
 # Exit the chroot.
 exit
 
+# Configure a file manager.
+#
+# A minimalist cross-building chroot wouldn't normally contain its own
+# file manager--one in the host is enough. To set a bookmark into the
+# chroot, add a line such as:
+#   file:///srv/chroot/lmi-buster/opt/lmi/src/lmi
+# to the GTK bookmarks file, which may be one of the following:
+#   vim ~/.gtk-bookmarks
+#   vim ~/.config/gtk-3.0/bookmarks
+
