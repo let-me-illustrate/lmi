@@ -355,25 +355,12 @@ namespace
         double power = -std::log10(a_ScalingFactor);
         // Assert absolute equality of two floating-point quantities, because
         // they must both have integral values.
-        // PDF !! Fails with MinGW-w64 gcc-7.2.0 .
-        if(power != std::floor(power))
-            {
-            long double discrepancy0 = power - std::floor(power);
-            long double discrepancy1 = power - std::ceil (power);
-            warning()
-                << "Scaling factor is not an integral power of ten."
-                << "\n  " <<                        (power)             << " logarithm"
-                << "\n  " <<                        (std::floor(power)) << " floor()"
-                << "\n  " <<                        (std::trunc(power)) << " trunc()"
-                << "\n  " << value_cast<std::string>(power)             << " logarithm"
-                << "\n  " << value_cast<std::string>(std::floor(power)) << " floor()"
-                << "\n  " << value_cast<std::string>(std::trunc(power)) << " trunc()"
-                << "\n  " << value_cast<std::string>(discrepancy0) << " lower difference"
-                << "\n  " << value_cast<std::string>(discrepancy1) << " upper difference"
-                << LMI_FLUSH
-                ;
-            }
-//      LMI_ASSERT(power == std::floor(power));
+        // PDF !! Suppress the assertion because, with MinGW-w64 gcc-7.2.0,
+        // it fails--apparently floor() gives the wrong answer, but trunc()
+        // and static_cast<int>() give the right answer for the test case
+        // described in the git commit message for 1c1bafa40. Obviously this
+        // needs further work because the behavior in other cases is unknown.
+        // LMI_ASSERT(power == std::floor(power));
         int z = static_cast<int>(power);
 
         // US names are used; UK names are different.
