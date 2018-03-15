@@ -305,15 +305,8 @@ LedgerBase& LedgerBase::PlusEq
     return *this;
 }
 
-//============================================================================
-// Multiplier to keep max < one billion units.
-//
-// TODO ?? It would be nicer to factor out
-//   1000000000.0 (max width)
-//   and 1.0E-18 (highest number we translate to words)
-// and make them variables.
-// PDF !! This seems not to be rigorously correct: $999,999,999.99 is
-// less than one billion, but rounds to $1,000,000,000.
+/// Triple-power-of-ten scaling to keep ledger extremum < 10^max_power.
+
 int LedgerBase::DetermineScalePower() const
 {
     double min_val = 0.0;
@@ -334,6 +327,12 @@ int LedgerBase::DetermineScalePower() const
         ,min_val * -10
         );
 
+// TODO ?? It would be nicer to factor out
+//   1000000000.0 (max width)
+//   and 1.0E-18 (highest number we translate to words)
+// and make them variables.
+// PDF !! This seems not to be rigorously correct: $999,999,999.99 is
+// less than one billion, but rounds to $1,000,000,000.
     if(widest < 1000000000.0 || widest == 0)
         {
         return 0;
@@ -369,10 +368,16 @@ namespace
         }
 } // Unnamed namespace.
 
-//============================================================================
-// Multiplies all scalable vectors by the factor from DetermineScalePower().
-// Only columns are scaled, so we operate here only on vectors. A header
-// that shows e.g. face amount should show the true face amount, unscaled.
+/// Scale all scalable vectors by 10^-DetermineScalePower().
+///
+/// Scale only designated columns (vectors). Interest-rate columns,
+/// e.g., are not scaled because they aren't denominated in dollars.
+///
+/// Scalars are never scaled: e.g., a $1,000,000,000 specified amount
+/// is shown as such in a header (using a scalar variable representing
+/// its initial value) even if a column representing the same quantity
+/// (using a vector variable) depicts it as $1,000,000 thousands.
+
 void LedgerBase::ApplyScaleFactor(int decimal_power)
 {
     if(0 != scale_power_)
