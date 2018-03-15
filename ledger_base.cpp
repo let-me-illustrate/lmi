@@ -27,12 +27,11 @@
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
 #include "et_vector.hpp"
-#include "miscellany.hpp"               // minmax
+#include "miscellany.hpp"               // minmax, scale_power()
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "value_cast.hpp"
 
 #include <algorithm>                    // max(), min()
-#include <cmath>                        // floor(), log10()
 #include <stdexcept>                    // logic_error
 
 //============================================================================
@@ -319,30 +318,7 @@ int LedgerBase::DetermineScalePower(int max_power) const
         max_value = std::max(max_value, extrema.maximum());
         }
 
-    // If minimum value is negative, it needs an extra character to
-    // display the minus sign. So it needs as many characters as
-    // ten times its absolute value.
-    double widest = std::max
-        (min_value * -10
-        ,max_value
-        );
-
-    if(0 == widest || widest < nonstd::power(10.0, max_power))
-        {
-        return 0;
-        }
-
-// PDF !! This seems not to be rigorously correct: $999,999,999.99 is
-// less than one billion, but rounds to $1,000,000,000.
-    double d = std::log10(widest);
-    d = std::floor(d / 3.0);
-    int k = 3 * static_cast<int>(d);
-    k = k - 6;
-
-    LMI_ASSERT(0 <= k);
-    LMI_ASSERT(k <= 18);
-
-    return k;
+    return scale_power(max_power, min_value, max_value);
 }
 
 namespace

@@ -25,8 +25,10 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "stl_extensions.hpp"           // nonstd::power()
 
-#include <algorithm>                    // equal()
+#include <algorithm>                    // equal(), max()
+#include <cmath>                        // floor(), log10()
 #include <ctime>
 #include <fstream>
 #include <istream>
@@ -67,6 +69,36 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
     if(!ifs0) alarum() << "Unable to open '" << file0 << "'." << LMI_FLUSH;
     if(!ifs1) alarum() << "Unable to open '" << file1 << "'." << LMI_FLUSH;
     return streams_are_identical(ifs0, ifs1);
+}
+
+/// Triple-power-of-ten scaling to keep extremum < 10^max_power.
+
+int scale_power(int max_power, double min_value, double max_value)
+{
+    // If minimum value is negative, it needs an extra character to
+    // display the minus sign. So it needs as many characters as
+    // ten times its absolute value.
+    double widest = std::max
+        (min_value * -10
+        ,max_value
+        );
+
+    if(0 == widest || widest < nonstd::power(10.0, max_power))
+        {
+        return 0;
+        }
+
+// PDF !! This seems not to be rigorously correct: $999,999,999.99 is
+// less than one billion, but rounds to $1,000,000,000.
+    double d = std::log10(widest);
+    d = std::floor(d / 3.0);
+    int k = 3 * static_cast<int>(d);
+    k = k - 6;
+
+    LMI_ASSERT(0 <= k);
+    LMI_ASSERT(k <= 18);
+
+    return k;
 }
 
 /// Return the number of newline characters in a string.

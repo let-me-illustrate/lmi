@@ -93,6 +93,8 @@ template<typename T> bool operator<=(T t, minmax<T> m) {return t <= m.minimum();
 template<typename T> bool operator< (minmax<T> m, T t) {return m.maximum() <  t;}
 template<typename T> bool operator<=(minmax<T> m, T t) {return m.maximum() <= t;}
 
+int LMI_SO scale_power(int max_power, double min_value, double max_value);
+
 std::size_t LMI_SO count_newlines(std::string const&);
 
 std::vector<std::string> LMI_SO split_into_lines(std::string const&);
