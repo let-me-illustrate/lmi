@@ -33,6 +33,7 @@
 
 #include <algorithm>                    // max(), min()
 #include <cmath>                        // floor(), log10()
+#include <stdexcept>                    // logic_error
 
 //============================================================================
 LedgerBase::LedgerBase(int a_Length)
@@ -351,53 +352,20 @@ int LedgerBase::DetermineScalePower() const
 
 namespace
 {
-    static std::string look_up_scale_unit(int decimal_power)
+    // US names are used; obsolescent UK names are different.
+    // Assume that values over US$ 999 quintillion will not arise.
+    std::string look_up_scale_unit(int decimal_power)
         {
-        // US names are used; UK names are different.
-        // Assume that numbers over 999 quintillion (US) will not be needed.
-        switch(decimal_power)
-            {
-            case 0:
-                {
-                return "";
-                }
-                //  break;
-            case 3:
-                {
-                return "thousand";
-                }
-                //  break;
-            case 6:
-                {
-                return "million";
-                }
-                //  break;
-            case 9:
-                {
-                return "billion";
-                }
-                //  break;
-            case 12:
-                {
-                return "trillion";
-                }
-                //  break;
-            case 15:
-                {
-                return "quadrillion";
-                }
-                //  break;
-            case 18:
-                {
-                return "quintillion";
-                }
-                //  break;
-            default:
-                {
-                alarum() << "Case '" << decimal_power << "' not found." << LMI_FLUSH;
-                throw "Unreachable--silences a compiler diagnostic.";
-                }
-            }
+        return
+             ( 0 == decimal_power) ? ""
+            :( 3 == decimal_power) ? "thousand"
+            :( 6 == decimal_power) ? "million"
+            :( 9 == decimal_power) ? "billion"
+            :(12 == decimal_power) ? "trillion"
+            :(15 == decimal_power) ? "quadrillion"
+            :(18 == decimal_power) ? "quintillion"
+            : throw std::logic_error("Unnamed scaling unit.")
+            ;
         }
 } // Unnamed namespace.
 
