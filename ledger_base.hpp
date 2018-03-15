@@ -205,7 +205,7 @@ class LMI_SO LedgerBase
     // TODO ?? A priori, protected data is a defect.
 
     // Pointers to std::vector<double> members are stored in these maps for
-    // reasons discussed in the .cpp file.
+    // reasons discussed in the design notes above.
     //
     // "Arithmetic" vectors representing BOY quantities.
     double_vector_map   BegYearVectors;
