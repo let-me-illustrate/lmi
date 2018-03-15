@@ -362,8 +362,12 @@ namespace
             long double discrepancy1 = power - std::ceil (power);
             warning()
                 << "Scaling factor is not an integral power of ten."
+                << "\n  " <<                        (power)             << " logarithm"
+                << "\n  " <<                        (std::floor(power)) << " floor()"
+                << "\n  " <<                        (std::trunc(power)) << " trunc()"
                 << "\n  " << value_cast<std::string>(power)             << " logarithm"
-                << "\n  " << value_cast<std::string>(std::floor(power)) << " integer"
+                << "\n  " << value_cast<std::string>(std::floor(power)) << " floor()"
+                << "\n  " << value_cast<std::string>(std::trunc(power)) << " trunc()"
                 << "\n  " << value_cast<std::string>(discrepancy0) << " lower difference"
                 << "\n  " << value_cast<std::string>(discrepancy1) << " upper difference"
                 << LMI_FLUSH
