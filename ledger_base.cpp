@@ -26,13 +26,13 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
+#include "et_vector.hpp"
 #include "miscellany.hpp"               // minmax
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "value_cast.hpp"
 
-#include <algorithm>                    // max(), min(), transform()
+#include <algorithm>                    // max(), min()
 #include <cmath>                        // floor(), log10()
-#include <functional>                   // multiplies
 
 //============================================================================
 LedgerBase::LedgerBase(int a_Length)
@@ -421,18 +421,9 @@ void LedgerBase::ApplyScaleFactor(int decimal_power)
 
     scale_unit_ = look_up_scale_unit(scale_power_);
 
-    // ET !! *i.second *= M;
-    std::vector<double>M(GetLength(), 1.0 / nonstd::power(10.0, scale_power_));
     for(auto& i : ScalableVectors)
         {
-        std::vector<double>& v = *i.second;
-        std::transform
-            (v.begin()
-            ,v.end()
-            ,M.begin()
-            ,v.begin()
-            ,std::multiplies<double>()
-            );
+        *i.second *= 1.0 / nonstd::power(10.0, scale_power_);
         }
 }
 
