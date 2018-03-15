@@ -114,7 +114,7 @@ class CRC;
 /// end-of-year data. Some are "arithmetic"; others are not. Arithmetic, an
 /// adjective, here means that arithmetic can be performed upon them in the
 /// sense of the following example. Payments can be multiplied by a scale
-/// factor (1000, 1000000, etc.) to make them print in a given width, and
+/// factor (1/1000, 1/1000000, etc.) to make them print in a given width, and
 /// can be added together when combining multiple ledgers into a composite,
 /// so they are arithmetic. Interest rates are not.
 ///
