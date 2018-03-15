@@ -101,7 +101,7 @@ MvcController::MvcController
     // that function is normally quite fast. Messageboxes are not
     // expected to appear in the rest of this ctor unless something
     // is gravely wrong.
-    wxBusyCursor wait;
+    wxBusyCursor reverie;
 
     char const* resource_file_name = view_.ResourceFileName();
     LMI_ASSERT(nullptr != resource_file_name && 0 != std::strlen(resource_file_name));

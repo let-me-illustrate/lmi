@@ -1120,7 +1120,7 @@ void CensusView::apply_changes
     ,bool         for_this_class_only
     )
 {
-    wxBusyCursor wait;
+    wxBusyCursor reverie;
 
     // Case or class default parameters were edited and changed.
     // Compare the default parameters before and after editing;
@@ -1518,7 +1518,7 @@ bool CensusView::DoAllCells(mcenum_emission emission)
 
 void CensusView::UponAddCell(wxCommandEvent&)
 {
-    wxBusyCursor wait;
+    wxBusyCursor reverie;
     Timer timer;
 
     cell_parms().push_back(case_parms()[0]);
@@ -1575,7 +1575,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         return;
         }
 
-    wxBusyCursor wait;
+    wxBusyCursor reverie;
     Timer timer;
 
     wxArrayInt erasures;

@@ -1368,7 +1368,7 @@ void Skeleton::OpenCommandLineFiles(std::vector<std::string> const& files)
 
 void Skeleton::UpdateViews()
 {
-    wxBusyCursor wait;
+    wxBusyCursor reverie;
 
     // Make a local copy of the list for modification.
     // Bring any active child to front so it's updated first.

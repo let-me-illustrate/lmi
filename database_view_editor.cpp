@@ -240,7 +240,7 @@ void DatabaseTableAdapter::ReshapeTableData
 
     if(!user_confirm || ConfirmOperation(count))
         {
-        wxBusyCursor busy;
+        wxBusyCursor reverie;
 
         db_value_->reshape(axis_lengths);
         SetModified();

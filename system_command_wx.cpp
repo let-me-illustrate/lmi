@@ -81,7 +81,7 @@ void assemble_console_lines
 void concrete_system_command(std::string const& command_line)
 {
     Timer timer;
-    wxBusyCursor wait;
+    wxBusyCursor reverie;
 
     bool const b =
                                   wxTheApp
