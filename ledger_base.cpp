@@ -359,9 +359,11 @@ namespace
         // it fails--apparently floor() gives the wrong answer, but trunc()
         // and static_cast<int>() give the right answer for the test case
         // described in the git commit message for 1c1bafa40. Obviously this
-        // needs further work because the behavior in other cases is unknown.
+        // needs further work because the behavior in other cases is unknown,
+        // and adding a small quantity to a near-integer to force it to round
+        // "correctly" is surely bogus.
         // LMI_ASSERT(power == std::floor(power));
-        int z = static_cast<int>(power);
+        int z = static_cast<int>(0.1 + power);
 
         // US names are used; UK names are different.
         // Assume that numbers over 999 quintillion (US) will not be needed.
