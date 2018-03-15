@@ -23,5 +23,7 @@
 
 <p align="center">Tabular Detail, continued</p>
 
+{{>dollar_units}}
+
 <br></br>
 <br></br>
