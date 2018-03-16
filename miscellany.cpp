@@ -108,15 +108,13 @@ int scale_power(int max_power, double min_value, double max_value)
     LMI_ASSERT(3 <= max_power);
     LMI_ASSERT(min_value <= max_value);
 
-    auto round_away_from_zero = [&](double d)
-        {return (d < 0) ? std::floor(d) : std::ceil(d);};
-
-    min_value = round_away_from_zero(min_value);
-    max_value = round_away_from_zero(max_value);
-
-    // A negative value needs an extra '-' character: i.e., as many
+    // Round to int, away from zero, and multiply by ten if negative:
+    // a negative value needs an extra '-' character: i.e., as many
     // total characters as ten times its absolute value requires.
-    double widest = std::max(min_value * -10, max_value);
+    auto adjust = [](double d)
+        {return (d < 0) ? -10.0 * std::floor(d) : std::ceil(d);};
+
+    double widest = std::max(adjust(min_value), adjust(max_value));
 
     if(0 == widest || widest < nonstd::power(10.0, max_power))
         {
