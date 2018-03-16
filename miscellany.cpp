@@ -28,7 +28,7 @@
 #include "stl_extensions.hpp"           // nonstd::power()
 
 #include <algorithm>                    // equal(), max()
-#include <cmath>                        // floor(), log10()
+#include <cmath>                        // ceil(), floor(), log10()
 #include <ctime>
 #include <fstream>
 #include <istream>
@@ -88,6 +88,17 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
 /// max_power itself need not be an integral multiple of three:
 /// a column might reasonably provide room for "99,999,999" only.
 ///
+/// It is reasonable to assume that rounding is away from infinity
+/// (potentially making formatted values wider), and no coarser than
+/// to whole units. Thus, 999.99 might be formatted as 1000. However,
+/// 600 would not become 1000 because round-to-nearest-hundred is not
+/// a reasonable rule for currency amounts--although, of course, after
+/// scaling by 10^3 it may become 1 (in thousands). These are the most
+/// conservative plausible rounding assumptions; actual rounding
+/// parameters are of course not knowable here because of separation
+/// of concerns, and knowing them would not enable any significant
+/// refinement.
+///
 /// Asserted preconditions:
 ///   3 <= max_power
 ///   min_value <= max_value
@@ -96,6 +107,12 @@ int scale_power(int max_power, double min_value, double max_value)
 {
     LMI_ASSERT(3 <= max_power);
     LMI_ASSERT(min_value <= max_value);
+
+    auto round_away_from_zero = [&](double d)
+        {return (d < 0) ? std::floor(d) : std::ceil(d);};
+
+    min_value = round_away_from_zero(min_value);
+    max_value = round_away_from_zero(max_value);
 
     // A negative value needs an extra '-' character: i.e., as many
     // total characters as ten times its absolute value requires.
@@ -106,8 +123,6 @@ int scale_power(int max_power, double min_value, double max_value)
         return 0;
         }
 
-// PDF !! This seems not to be rigorously correct: $999,999,999.99 is
-// less than one billion, but rounds to $1,000,000,000.
     double d = std::log10(widest);
     d = std::floor(d / 3.0);
     int k = 3 * static_cast<int>(d);
