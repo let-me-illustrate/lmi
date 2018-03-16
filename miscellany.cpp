@@ -99,6 +99,20 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
 /// of concerns, and knowing them would not enable any significant
 /// refinement.
 ///
+/// Commas are disregarded as being incidental--in effect, treated as
+/// having zero width--but the minus sign is treated as having the
+/// same width as any digit. For PDF illustrations, "tabular figures"
+/// (monospace digits) and thousands separators are used, but commas
+/// and minus signs are narrow, so this is conservative: values of
+///   1,000,000,000
+///    -100,000,000
+/// are not equally wide. For flat-text output, however, values of
+///   1000000000
+///   -100000000
+/// have the same formatted width, with an all-monospace font and no
+/// thousands separators. In practice, this rarely matters, because
+/// typical negative values on illustrations are relatively small.
+///
 /// Asserted preconditions:
 ///   3 <= max_power
 ///   min_value <= max_value

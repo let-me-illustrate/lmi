@@ -314,7 +314,14 @@ void test_scale_power()
 
     // 999,999,999.0 rounds to 999,999,999
     BOOST_TEST_EQUAL( 0, scale_power( 9,     -99'999'999.0,     999'999'999.0));
-    // 999,999.999.9 may round to 1,000,000,000
+
+    // 999,999.999.9 may round to 1,000,000,000; and
+    // -99,999,999.9 may round to  -100,000,000
+    //   which is equally wide if widths are reckoned as [,]:0 and [-0-9]:1
+    //   (as for a monospace font with comma-less formatting).
+    // Test with such a maximal value on LHS, RHS, and both sides.
+    BOOST_TEST_EQUAL( 3, scale_power( 9,     -99'999'999.9,         999'999.9));
+    BOOST_TEST_EQUAL( 3, scale_power( 9,        -999'999.9,     999'999'999.9));
     BOOST_TEST_EQUAL( 3, scale_power( 9,     -99'999'999.9,     999'999'999.9));
 
     BOOST_TEST_EQUAL( 3, scale_power( 9,    -999'999'999.0,   1'999'999'999.0));
