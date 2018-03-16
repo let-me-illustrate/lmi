@@ -72,16 +72,34 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
 }
 
 /// Triple-power-of-ten scaling to keep extremum < 10^max_power.
+///
+/// Returns a small nonnegative integer N. The values whose extrema
+/// are passed as arguments will be divided by 10^N. N is a multiple
+/// of three because it is common to write a caption like "(000)" or
+/// "values in thousands", but "values in myriads" would not be seen
+/// in the US. Similarly, "values in kibidollars" would not be seen
+/// in finance.
+///
+/// After that scaling division, no value is wider when formatted
+/// than 10^max_power - 1. Thus, if max_power is 6, scaled values
+/// are in [-99,999, 999,999], with due regard to the minus sign.
+/// Because the scaling power N is a multiple of three, it would
+/// make no sense for max_power to be less than three. However,
+/// max_power itself need not be an integral multiple of three:
+/// a column might reasonably provide room for "99,999,999" only.
+///
+/// Asserted preconditions:
+///   3 <= max_power
+///   min_value <= max_value
 
 int scale_power(int max_power, double min_value, double max_value)
 {
-    // If minimum value is negative, it needs an extra character to
-    // display the minus sign. So it needs as many characters as
-    // ten times its absolute value.
-    double widest = std::max
-        (min_value * -10
-        ,max_value
-        );
+    LMI_ASSERT(3 <= max_power);
+    LMI_ASSERT(min_value <= max_value);
+
+    // A negative value needs an extra '-' character: i.e., as many
+    // total characters as ten times its absolute value requires.
+    double widest = std::max(min_value * -10, max_value);
 
     if(0 == widest || widest < nonstd::power(10.0, max_power))
         {
