@@ -312,6 +312,11 @@ void test_scale_power()
     BOOST_TEST_EQUAL( 0, scale_power( 9,     -99'999'999.0,               0.0));
     BOOST_TEST_EQUAL( 0, scale_power( 9,     999'999'999.0,     999'999'999.0));
 
+    // 999,999,999.0 rounds to 999,999,999
+    BOOST_TEST_EQUAL( 0, scale_power( 9,     -99'999'999.0,     999'999'999.0));
+    // 999,999.999.9 may round to 1,000,000,000
+    BOOST_TEST_EQUAL( 3, scale_power( 9,     -99'999'999.9,     999'999'999.9));
+
     BOOST_TEST_EQUAL( 3, scale_power( 9,    -999'999'999.0,   1'999'999'999.0));
 }
 
