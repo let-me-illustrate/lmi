@@ -299,6 +299,9 @@ void test_scale_power()
     BOOST_TEST_EQUAL( 0, scale_power( 9,               0.0,     999'999'999.0));
     BOOST_TEST_EQUAL( 0, scale_power( 9,     -99'999'999.0,               0.0));
     BOOST_TEST_EQUAL( 0, scale_power( 9,     999'999'999.0,     999'999'999.0));
+
+    BOOST_TEST_EQUAL( 3, scale_power( 9,    -999'999'999.0,   1'999'999'999.0));
+    BOOST_TEST_EQUAL( 3, scale_power( 9,   1'999'999'999.0,    -999'999'999.0));
 }
 
 void test_trimming()
