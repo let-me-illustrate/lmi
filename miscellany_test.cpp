@@ -293,6 +293,14 @@ void test_prefix_and_suffix()
     BOOST_TEST(!ends_with  (s, "KLMNOP"));
 }
 
+void test_scale_power()
+{
+    BOOST_TEST_EQUAL( 0, scale_power( 9,               0.0,               0.0));
+    BOOST_TEST_EQUAL( 0, scale_power( 9,               0.0,     999'999'999.0));
+    BOOST_TEST_EQUAL( 0, scale_power( 9,     -99'999'999.0,               0.0));
+    BOOST_TEST_EQUAL( 0, scale_power( 9,     999'999'999.0,     999'999'999.0));
+}
+
 void test_trimming()
 {
     char const*const superfluous = " ;";
@@ -337,6 +345,7 @@ int test_main(int, char*[])
     test_minmax();
     test_page_count();
     test_prefix_and_suffix();
+    test_scale_power();
     test_trimming();
 
     return 0;
