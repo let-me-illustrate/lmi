@@ -325,6 +325,57 @@ void test_scale_power()
     BOOST_TEST_EQUAL( 3, scale_power( 9,     -99'999'999.9,     999'999'999.9));
 
     BOOST_TEST_EQUAL( 3, scale_power( 9,    -999'999'999.0,   1'999'999'999.0));
+
+    // Test threshold values for the scale_power=9 setting that is
+    // still hardcoded in lmi as this is written in 2018-03.
+
+    BOOST_TEST_EQUAL( 0, scale_power( 9, 0.0,                   999'999'999.0));
+    BOOST_TEST_EQUAL( 3, scale_power( 9, 0.0,                   999'999'999.1));
+    BOOST_TEST_EQUAL( 3, scale_power( 9, 0.0,               999'999'999'999.0));
+    BOOST_TEST_EQUAL( 6, scale_power( 9, 0.0,               999'999'999'999.1));
+    // This test passes with MinGW-w64 gcc-7.2.0 with optimization,
+    // but fails with an optimized 'safestdlib' build:
+//  BOOST_TEST_EQUAL( 6, scale_power( 9, 0.0,           999'999'999'999'999.0));
+    BOOST_TEST_EQUAL( 9, scale_power( 9, 0.0,           999'999'999'999'999.1));
+
+    // In the last test above, the threshold is not     999'999'999'999'999.01
+    // as a logarithm-based algorithm that rounds fractions toward
+    // infinity would have it (with infinite-precision real numbers),
+    // because 'binary64' doesn't have seventeen exact decimal digits.
+    // In this range, successive values show a granularity of 1/8:
+
+    BOOST_TEST_EQUAL(          999'999'999'999'999     ,999'999'999'999'999.0);
+    BOOST_TEST_EQUAL(          999'999'999'999'999.125 ,999'999'999'999'999.1);
+    BOOST_TEST_EQUAL(          999'999'999'999'999.25  ,999'999'999'999'999.2);
+    BOOST_TEST_EQUAL(          999'999'999'999'999.25  ,999'999'999'999'999.3);
+    BOOST_TEST_EQUAL(          999'999'999'999'999.375 ,999'999'999'999'999.4);
+    BOOST_TEST_EQUAL(          999'999'999'999'999.5   ,999'999'999'999'999.5);
+    BOOST_TEST_EQUAL(          999'999'999'999'999.625 ,999'999'999'999'999.6);
+    BOOST_TEST_EQUAL(          999'999'999'999'999.75  ,999'999'999'999'999.7);
+    BOOST_TEST_EQUAL(          999'999'999'999'999.75  ,999'999'999'999'999.8);
+    BOOST_TEST_EQUAL(          999'999'999'999'999.875 ,999'999'999'999'999.9);
+
+    // As more decimal triplets are added, exactness erodes. Between
+    //                                    2^52 =      4'503'599'627'370'496
+    // 2^52 and 2^53, all 'binary64' values are exact integers, and
+    // no significant digit is accurate after the decimal point.
+    //                                    2^53 =      9'007'199'254'740'992
+    // That double's integer successor is not representable exactly;
+    // the same is true of this 80-bit extended precision value:
+    //                                    2^64 = 18'446'744'073'709'551'616
+    // Thus, this test would fail for a 'binary64' double:
+//  BOOST_TEST_EQUAL( 9, scale_power( 9, 0.0,       999'999'999'999'999'999.0));
+    // that value being indistinguishable from    1'000'000'000'000'000'000.0
+    // of which neither is representable exactly. The next several
+    // tests accidentally "work" as one might naively imagine...
+    BOOST_TEST_EQUAL(12, scale_power( 9, 0.0,       999'999'999'999'999'999.1));
+    BOOST_TEST_EQUAL(12, scale_power( 9, 0.0,     1'000'000'000'000'000'000.0));
+    BOOST_TEST_EQUAL(15, scale_power( 9, 0.0, 1'000'000'000'000'000'000'000.0));
+    // ...but this one happens not to...
+//  BOOST_TEST_EQUAL(18, scale_power(9,0, 1'000'000'000'000'000'000'000'000.0));
+    // ...just as this "worked" above...
+//  BOOST_TEST_EQUAL( 9, scale_power( 9, 0.0,           999'999'999'999'999.1));
+    // but wouldn't have "worked" with the value        999'999'999'999'999.01
 }
 
 void test_trimming()
