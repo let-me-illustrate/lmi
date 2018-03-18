@@ -333,9 +333,7 @@ void test_scale_power()
     BOOST_TEST_EQUAL( 3, scale_power( 9, 0.0,                   999'999'999.1));
     BOOST_TEST_EQUAL( 3, scale_power( 9, 0.0,               999'999'999'999.0));
     BOOST_TEST_EQUAL( 6, scale_power( 9, 0.0,               999'999'999'999.1));
-    // This test passes with MinGW-w64 gcc-7.2.0 with optimization,
-    // but fails with an optimized 'safestdlib' build:
-//  BOOST_TEST_EQUAL( 6, scale_power( 9, 0.0,           999'999'999'999'999.0));
+    BOOST_TEST_EQUAL( 6, scale_power( 9, 0.0,           999'999'999'999'999.0));
     BOOST_TEST_EQUAL( 9, scale_power( 9, 0.0,           999'999'999'999'999.1));
 
     // In the last test above, the threshold is not     999'999'999'999'999.01

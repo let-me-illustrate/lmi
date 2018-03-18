@@ -135,7 +135,7 @@ int scale_power(int max_power, double min_value, double max_value)
         return 0;
         }
 
-    double d = std::log10(widest);
+    double d = static_cast<int>(std::log10(widest));
     d = std::floor(d / 3.0);
     int k = 3 * static_cast<int>(d);
     k = k - 6;
