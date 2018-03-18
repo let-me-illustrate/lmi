@@ -374,6 +374,24 @@ void test_scale_power()
     // ...just as this "worked" above...
 //  BOOST_TEST_EQUAL( 9, scale_power( 9, 0.0,           999'999'999'999'999.1));
     // but wouldn't have "worked" with the value        999'999'999'999'999.01
+
+    // Test threshold values for scale_power=8.
+
+    BOOST_TEST_EQUAL( 0, scale_power( 8, 0.0,                    99'999'999.0));
+    BOOST_TEST_EQUAL( 3, scale_power( 8, 0.0,                    99'999'999.1));
+    BOOST_TEST_EQUAL( 3, scale_power( 8, 0.0,                99'999'999'999.0));
+    BOOST_TEST_EQUAL( 6, scale_power( 8, 0.0,                99'999'999'999.1));
+    BOOST_TEST_EQUAL( 6, scale_power( 8, 0.0,            99'999'999'999'999.0));
+    BOOST_TEST_EQUAL( 9, scale_power( 8, 0.0,            99'999'999'999'999.1));
+
+    // Test threshold values for scale_power=7.
+
+    BOOST_TEST_EQUAL( 0, scale_power( 7, 0.0,                     9'999'999.0));
+    BOOST_TEST_EQUAL( 3, scale_power( 7, 0.0,                     9'999'999.1));
+    BOOST_TEST_EQUAL( 3, scale_power( 7, 0.0,                 9'999'999'999.0));
+    BOOST_TEST_EQUAL( 6, scale_power( 7, 0.0,                 9'999'999'999.1));
+    BOOST_TEST_EQUAL( 6, scale_power( 7, 0.0,             9'999'999'999'999.0));
+    BOOST_TEST_EQUAL( 9, scale_power( 7, 0.0,             9'999'999'999'999.1));
 }
 
 void test_trimming()
