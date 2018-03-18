@@ -135,13 +135,16 @@ int scale_power(int max_power, double min_value, double max_value)
         return 0;
         }
 
-    int k = static_cast<int>(std::log10(widest));
-    k = 3 * (k / 3) - 6;
+    // Only characters [0-9-] to the left of any decimal point matter.
+    int const chars_required  = 1 + static_cast<int>(std::log10(widest));
+    int const chars_available = max_power;
+    int const excess = chars_required - chars_available;
+    int const r = 3 * (1 + (excess - 1) / 3);
 
-    LMI_ASSERT(0 <= k);
-    LMI_ASSERT(k <= 18);
+    LMI_ASSERT(0 <= r);
+    LMI_ASSERT(r <= 18);
 
-    return k;
+    return r;
 }
 
 /// Return the number of newline characters in a string.
