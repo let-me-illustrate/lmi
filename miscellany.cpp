@@ -135,10 +135,8 @@ int scale_power(int max_power, double min_value, double max_value)
         return 0;
         }
 
-    double d = static_cast<int>(std::log10(widest));
-    d = std::floor(d / 3.0);
-    int k = 3 * static_cast<int>(d);
-    k = k - 6;
+    int k = static_cast<int>(std::log10(widest));
+    k = 3 * (k / 3) - 6;
 
     LMI_ASSERT(0 <= k);
     LMI_ASSERT(k <= 18);
