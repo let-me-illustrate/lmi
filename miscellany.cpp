@@ -139,6 +139,7 @@ int scale_power(int max_power, double min_value, double max_value)
     int const chars_required  = 1 + static_cast<int>(std::log10(widest));
     int const chars_available = max_power;
     int const excess = chars_required - chars_available;
+    LMI_ASSERT(0 < excess);
     int const r = 3 * (1 + (excess - 1) / 3);
 
     LMI_ASSERT(0 <= r);
