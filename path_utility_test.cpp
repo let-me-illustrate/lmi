@@ -269,12 +269,6 @@ void test_unique_filepath_with_ludicrous_filenames()
 
     fs::path path2 = unique_filepath(fs::path(""), "");
     BOOST_TEST_EQUAL(path2.string(), "");
-
-    BOOST_TEST_THROW
-        (unique_filepath(fs::path(".."), "..")
-        ,fs::filesystem_error
-        ,""
-        );
 }
 
 void test_path_inserter()
