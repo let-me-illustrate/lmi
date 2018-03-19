@@ -358,13 +358,13 @@ void LedgerBase::ApplyScaleFactor(int decimal_power)
         }
 
     scale_power_ = decimal_power;
+    scale_unit_ = look_up_scale_unit(scale_power_);
+
     if(0 == scale_power_)
         {
         // Don't waste time multiplying all these vectors by one
         return;
         }
-
-    scale_unit_ = look_up_scale_unit(scale_power_);
 
     for(auto& i : ScalableVectors)
         {
