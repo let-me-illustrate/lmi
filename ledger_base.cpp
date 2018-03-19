@@ -27,7 +27,6 @@
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
 #include "et_vector.hpp"
-#include "miscellany.hpp"               // minmax, scale_power()
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "value_cast.hpp"
 
@@ -304,21 +303,18 @@ LedgerBase& LedgerBase::PlusEq
     return *this;
 }
 
-/// Triple-power-of-ten scaling to keep ledger extremum < 10^max_power.
+/// Return highest and lowest scalable values.
 
-int LedgerBase::DetermineScalePower(int max_power) const
+minmax<double> LedgerBase::scalable_extrema() const
 {
-    double min_value = 0.0;
-    double max_value = 0.0;
+    minmax<double> extrema;
 
     for(auto const& i : ScalableVectors)
         {
-        minmax<double> extrema(*i.second);
-        min_value = std::min(min_value, extrema.minimum());
-        max_value = std::max(max_value, extrema.maximum());
+        extrema.subsume(minmax<double>(*i.second));
         }
 
-    return scale_power(max_power, min_value, max_value);
+    return extrema;
 }
 
 namespace
@@ -340,7 +336,7 @@ namespace
         }
 } // Unnamed namespace.
 
-/// Scale all scalable vectors by 10^-DetermineScalePower().
+/// Scale all scalable vectors by a decimal power.
 ///
 /// Scale only designated columns (vectors). Interest-rate columns,
 /// e.g., are not scaled because they aren't denominated in dollars.

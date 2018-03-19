@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "miscellany.hpp"               // minmax
 #include "so_attributes.hpp"
 
 #include <algorithm>                    // copy()
@@ -176,7 +177,7 @@ class LMI_SO LedgerBase
 
     void               ApplyScaleFactor(int decimal_power);
 
-    int                DetermineScalePower(int max_power) const;
+    minmax<double>     scalable_extrema() const;
     std::string const& ScaleUnit() const;
 // PDF !! expunge
     int                ScalePower() const;

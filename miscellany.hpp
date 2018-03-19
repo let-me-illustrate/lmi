@@ -33,6 +33,7 @@
 #include <cstdio>                       // EOF
 #include <ios>
 #include <iterator>                     // distance()
+#include <limits>                       // numeric_limits
 #include <string>
 #include <utility>
 #include <vector>
@@ -68,16 +69,30 @@ bool files_are_identical(std::string const&, std::string const&);
 /// Heterogeneous relational operators are necessarily free functions.
 ///
 /// Implicitly-declared special member functions do the right thing.
+///
+/// SOMEDAY !! Make this usable with other containers than vector.
 
 template<typename T>
 class minmax
 {
   public:
+    minmax()
+        :minimum_(std::numeric_limits<T>::max())
+        ,maximum_(std::numeric_limits<T>::min())
+        {
+        }
+
     explicit minmax(std::vector<T> const& v)
         {
         auto const& extrema = std::minmax_element(v.begin(), v.end());
         minimum_ = *extrema.first ;
         maximum_ = *extrema.second;
+        }
+
+    void subsume(minmax<T> const& z)
+        {
+        minimum_ = std::min(minimum_, z.minimum_);
+        maximum_ = std::max(maximum_, z.maximum_);
         }
 
     T minimum() const {return minimum_;}
