@@ -116,6 +116,8 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
 /// Asserted preconditions:
 ///   3 <= max_power
 ///   min_value <= max_value
+/// Asserted postcondition:
+///   return value is nonnegative
 
 int scale_power(int max_power, double min_value, double max_value)
 {
@@ -143,7 +145,6 @@ int scale_power(int max_power, double min_value, double max_value)
     int const r = 3 * (1 + (excess - 1) / 3);
 
     LMI_ASSERT(0 <= r);
-    LMI_ASSERT(r <= 18);
 
     return r;
 }
