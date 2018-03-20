@@ -175,11 +175,11 @@ class LMI_SO LedgerBase
   public:
     virtual ~LedgerBase() = default;
 
-    void               ApplyScaleFactor(int decimal_power);
+    void               apply_scale_factor(int decimal_power);
 
     minmax<double>     scalable_extrema() const;
     std::string const& ScaleUnit() const;
-// PDF !! expunge
+// PDF !! expunge ScalePower(); rename ScaleUnit()
     int                ScalePower() const;
     std::string        value_str(std::string const& map_key, int index) const;
     std::string        value_str(std::string const& map_key) const;

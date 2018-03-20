@@ -346,7 +346,7 @@ namespace
 /// its initial value) even if a column representing the same quantity
 /// (using a vector variable) depicts it as $1,000,000 thousands.
 
-void LedgerBase::ApplyScaleFactor(int decimal_power)
+void LedgerBase::apply_scale_factor(int decimal_power)
 {
     if(0 != scale_power_)
         {

@@ -327,11 +327,11 @@ void Ledger::AutoScale()
     int const max_power = 9;
     int const k = scale_power(max_power, extrema.minimum(), extrema.maximum());
 
-    ledger_invariant_->ApplyScaleFactor(k);
+    ledger_invariant_->apply_scale_factor(k);
 
     for(auto& i : l_map_rep)
         {
-        i.second.ApplyScaleFactor(k);
+        i.second.apply_scale_factor(k);
         }
 }
 
