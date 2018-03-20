@@ -146,6 +146,7 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
 
     if(data_source_is_external(parser.document()))
         {
+        status() << "Validating..." << std::flush;
         validate_with_xsd_schema(parser.document(), xsd_schema_name(file_version));
         }
 
@@ -169,6 +170,10 @@ void multiple_cell_document::parse(xml_lmi::dom_parser const& parser)
         for(auto const& j : subelements)
             {
             j >> cell;
+            if(data_source_is_external(parser.document()))
+                {
+                cell.Reconcile();
+                }
             v.push_back(cell);
             status() << "Read " << ++counter << " cells." << std::flush;
             }
