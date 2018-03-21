@@ -25,10 +25,10 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "stl_extensions.hpp"           // nonstd::power()
 
 #include <algorithm>                    // equal(), max()
-#include <cmath>                        // ceil(), floor(), log10()
+#include <cmath>                        // ceil(), floor()
+#include <cstdio>                       // snprintf()
 #include <ctime>
 #include <fstream>
 #include <istream>
@@ -124,22 +124,26 @@ int scale_power(int max_power, double min_value, double max_value)
     LMI_ASSERT(3 <= max_power);
     LMI_ASSERT(min_value <= max_value);
 
-    // Round to int, away from zero, and multiply by ten if negative:
-    // a negative value needs an extra '-' character: i.e., as many
-    // total characters as ten times its absolute value requires.
-    auto adjust = [](double d)
-        {return (d < 0) ? -10.0 * std::floor(d) : std::ceil(d);};
+    // Round to int, away from zero.
+    auto round_outward = [](double d)
+        {return (d < 0) ? std::floor(d) : std::ceil(d);};
 
-    double widest = std::max(adjust(min_value), adjust(max_value));
+    // One value; two names; two meanings.
+    //  extremum < 10^max_power <-> formatted width <= chars_available
+    // for nonnegative extrema (and negatives are handled correctly).
+    int const chars_available = max_power;
 
-    if(0 == widest || widest < nonstd::power(10.0, max_power))
+    int const chars_required = std::max
+        (std::snprintf(nullptr, 0, "%.f", round_outward(min_value))
+        ,std::snprintf(nullptr, 0, "%.f", round_outward(max_value))
+        );
+
+    if(chars_required <= chars_available)
         {
         return 0;
         }
 
     // Only characters [0-9-] to the left of any decimal point matter.
-    int const chars_required  = 1 + static_cast<int>(std::log10(widest));
-    int const chars_available = max_power;
     int const excess = chars_required - chars_available;
     LMI_ASSERT(0 < excess);
     int const r = 3 * (1 + (excess - 1) / 3);
