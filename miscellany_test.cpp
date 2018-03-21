@@ -27,6 +27,7 @@
 
 #include <cstdio>                       // remove()
 #include <fstream>
+#include <limits>
 
 void test_each_equal()
 {
@@ -307,10 +308,28 @@ void test_scale_power()
         ,lmi_test::what_regex("^Assertion.*failed")
         );
 
+    using D = std::numeric_limits<double>;
+    if(D::has_quiet_NaN)
+        {
+        BOOST_TEST_THROW
+            (scale_power(9, D::quiet_NaN(), D::quiet_NaN())
+            ,std::runtime_error
+            ,lmi_test::what_regex("^Assertion.*failed")
+            );
+        }
+
+    // Test positive and negative zeros.
+
     BOOST_TEST_EQUAL( 0, scale_power( 9,               0.0,               0.0));
     BOOST_TEST_EQUAL( 0, scale_power( 9,               0.0,     999'999'999.0));
     BOOST_TEST_EQUAL( 0, scale_power( 9,     -99'999'999.0,               0.0));
-    BOOST_TEST_EQUAL( 0, scale_power( 9,     999'999'999.0,     999'999'999.0));
+
+    BOOST_TEST_EQUAL( 0, scale_power( 9,              -0.0,              -0.0));
+    BOOST_TEST_EQUAL( 0, scale_power( 9,              -0.0,     999'999'999.0));
+    BOOST_TEST_EQUAL( 0, scale_power( 9,     -99'999'999.0,              -0.0));
+
+    BOOST_TEST_EQUAL( 0, scale_power( 9,               0.0,              -0.0));
+    BOOST_TEST_EQUAL( 0, scale_power( 9,              -0.0,               0.0));
 
     // Test values for which rounding toward infinity crosses a threshold.
 
