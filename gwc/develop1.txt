@@ -66,6 +66,33 @@ git fetch xanadu
 
 git cherry-pick ..xanadu/name_of_pull_request
 
+  # Commit to a digressionary branch...
+
+  # See:
+  #   https://lists.nongnu.org/archive/html/lmi/2018-03/msg00082.html
+  # I use branch-name prefix 'odd/', e.g., 'odd/1e24-vs-1e24L'
+
+  # ...for pure divagations
+
+git branch odd/foo
+git checkout odd/foo
+git commit sandbox_test.cpp
+git checkout master
+git push origin odd/foo
+
+  # ...for failing unit tests that are to be...
+
+git branch odd/foo
+git checkout odd/foo
+git commit miscellany_test.cpp -m"Add a failing unit test"
+  # ...corrected later (see:
+  #   https://lists.nongnu.org/archive/html/lmi/2018-03/msg00084.html
+  # for a git-merge alternative)
+git checkout master
+git cherry-pick --no-commit ..odd/foo
+git commit miscellany.cpp miscellany_test.cpp -m"Enhance to pass new unit test"
+git push origin odd/foo
+
   # Discard local changes to particular files
 
 git checkout -- ce_skin_name.cpp ce_skin_name.hpp
