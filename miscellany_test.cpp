@@ -312,9 +312,11 @@ void test_scale_power()
     BOOST_TEST_EQUAL( 0, scale_power( 9,     -99'999'999.0,               0.0));
     BOOST_TEST_EQUAL( 0, scale_power( 9,     999'999'999.0,     999'999'999.0));
 
+    // Test values for which rounding toward infinity crosses a threshold.
+
     // 999,999,999.0 rounds to 999,999,999
     BOOST_TEST_EQUAL( 0, scale_power( 9,     -99'999'999.0,     999'999'999.0));
-
+    // However:
     // 999,999.999.9 may round to 1,000,000,000; and
     // -99,999,999.9 may round to  -100,000,000
     //   which is equally wide if widths are reckoned as [,]:0 and [-0-9]:1
@@ -324,10 +326,32 @@ void test_scale_power()
     BOOST_TEST_EQUAL( 3, scale_power( 9,        -999'999.9,     999'999'999.9));
     BOOST_TEST_EQUAL( 3, scale_power( 9,     -99'999'999.9,     999'999'999.9));
 
-    BOOST_TEST_EQUAL( 3, scale_power( 9,    -999'999'999.0,   1'999'999'999.0));
+    // Test values of like sign in threshold neighborhood.
 
-    // Test threshold values for the scale_power=9 setting that is
-    // still hardcoded in lmi as this is written in 2018-03.
+    // both positive, below threshold
+    BOOST_TEST_EQUAL( 6, scale_power( 6,               0.1, 999'999'999'999.0));
+    BOOST_TEST_EQUAL( 6, scale_power( 6,     123'456'789.0, 999'999'999'999.0));
+    BOOST_TEST_EQUAL( 6, scale_power( 6, 999'999'999'999.0, 999'999'999'999.0));
+
+    // both positive, threshold
+    BOOST_TEST_EQUAL( 9, scale_power( 6,               0.1, 999'999'999'999.1));
+    BOOST_TEST_EQUAL( 9, scale_power( 6,     123'456'789.0, 999'999'999'999.1));
+    BOOST_TEST_EQUAL( 9, scale_power( 6, 999'999'999'999.0, 999'999'999'999.1));
+    BOOST_TEST_EQUAL( 9, scale_power( 6, 999'999'999'999.1, 999'999'999'999.1));
+
+    // both negative, below threshold
+    BOOST_TEST_EQUAL( 6, scale_power( 6, -99'999'999'999.0,              -0.1));
+    BOOST_TEST_EQUAL( 6, scale_power( 6, -99'999'999'999.0,    -123'456'789.0));
+    BOOST_TEST_EQUAL( 6, scale_power( 6, -99'999'999'999.0, -99'999'999'999.0));
+
+    // both negative, threshold
+    BOOST_TEST_EQUAL( 9, scale_power( 6, -99'999'999'999.1,              -0.1));
+    BOOST_TEST_EQUAL( 9, scale_power( 6, -99'999'999'999.1,    -123'456'789.0));
+    BOOST_TEST_EQUAL( 9, scale_power( 6, -99'999'999'999.1, -99'999'999'999.0));
+    BOOST_TEST_EQUAL( 9, scale_power( 6, -99'999'999'999.1, -99'999'999'999.1));
+
+    // Test threshold neighborhood for the scale_power=9 setting that
+    // is still hardcoded in lmi as this is written in 2018-03.
 
     BOOST_TEST_EQUAL( 0, scale_power( 9, 0.0,                   999'999'999.0));
     BOOST_TEST_EQUAL( 3, scale_power( 9, 0.0,                   999'999'999.1));
@@ -375,7 +399,7 @@ void test_scale_power()
 //  BOOST_TEST_EQUAL( 9, scale_power( 9, 0.0,           999'999'999'999'999.1));
     // but wouldn't have "worked" with the value        999'999'999'999'999.01
 
-    // Test threshold values for scale_power=8.
+    // Test threshold neighborhood for scale_power=8.
 
     BOOST_TEST_EQUAL( 0, scale_power( 8, 0.0,                    99'999'999.0));
     BOOST_TEST_EQUAL( 3, scale_power( 8, 0.0,                    99'999'999.1));
@@ -384,7 +408,7 @@ void test_scale_power()
     BOOST_TEST_EQUAL( 6, scale_power( 8, 0.0,            99'999'999'999'999.0));
     BOOST_TEST_EQUAL( 9, scale_power( 8, 0.0,            99'999'999'999'999.1));
 
-    // Test threshold values for scale_power=7.
+    // Test threshold neighborhood for scale_power=7.
 
     BOOST_TEST_EQUAL( 0, scale_power( 7, 0.0,                     9'999'999.0));
     BOOST_TEST_EQUAL( 3, scale_power( 7, 0.0,                     9'999'999.1));
@@ -392,6 +416,17 @@ void test_scale_power()
     BOOST_TEST_EQUAL( 6, scale_power( 7, 0.0,                 9'999'999'999.1));
     BOOST_TEST_EQUAL( 6, scale_power( 7, 0.0,             9'999'999'999'999.0));
     BOOST_TEST_EQUAL( 9, scale_power( 7, 0.0,             9'999'999'999'999.1));
+
+    // Test threshold neighborhood for scale_power=6.
+
+    BOOST_TEST_EQUAL( 0, scale_power( 6, 0.0,                       999'999.0));
+    BOOST_TEST_EQUAL( 3, scale_power( 6, 0.0,                       999'999.1));
+    BOOST_TEST_EQUAL( 3, scale_power( 6, 0.0,                   999'999'999.0));
+    BOOST_TEST_EQUAL( 6, scale_power( 6, 0.0,                   999'999'999.1));
+    BOOST_TEST_EQUAL( 6, scale_power( 6, 0.0,               999'999'999'999.0));
+    BOOST_TEST_EQUAL( 9, scale_power( 6, 0.0,               999'999'999'999.1));
+    BOOST_TEST_EQUAL( 9, scale_power( 6, 0.0,           999'999'999'999'999.0));
+    BOOST_TEST_EQUAL(12, scale_power( 6, 0.0,           999'999'999'999'999.1));
 }
 
 void test_trimming()
