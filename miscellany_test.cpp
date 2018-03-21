@@ -318,6 +318,11 @@ void test_scale_power()
             );
         }
 
+    if(D::has_infinity)
+        {
+        BOOST_TEST_EQUAL( 0, scale_power( 9,   D::infinity(),   D::infinity()));
+        }
+
     // Test positive and negative zeros.
 
     BOOST_TEST_EQUAL( 0, scale_power( 9,               0.0,               0.0));
@@ -380,8 +385,8 @@ void test_scale_power()
     BOOST_TEST_EQUAL( 9, scale_power( 9, 0.0,           999'999'999'999'999.1));
 
     // In the last test above, the threshold is not     999'999'999'999'999.01
-    // as a logarithm-based algorithm that rounds fractions toward
-    // infinity would have it (with infinite-precision real numbers),
+    // as the scale_power() algorithm, which rounds fractions toward
+    // infinity, would have it (with infinite-precision real numbers),
     // because 'binary64' doesn't have seventeen exact decimal digits.
     // In this range, successive values show a granularity of 1/8:
 
