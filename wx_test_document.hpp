@@ -68,7 +68,7 @@ class wx_test_document_base
         // test failure, as this is not a bug in the test code then.
         if(opened_)
             {
-            if(std::uncaught_exception())
+            if(std::uncaught_exceptions())
                 {
                 // Moreover, in case of exception, try to close the window to
                 // avoid showing message boxes asking the user if it should be
