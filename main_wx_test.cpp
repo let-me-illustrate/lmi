@@ -566,7 +566,7 @@ void wx_base_test_case::skip_if_not_distribution()
 wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name)
 {
     // First find the window anywhere inside the dialog.
-    wxWindow* const w = wxWindow::FindWindowByName(name, &dialog);
+    wxWindow* const w = dialog.FindWindow(name);
     LMI_ASSERT_WITH_MSG(w, "window named \"" << name << "\" not found");
 
     // Then find the book control containing it by walking up the window chain
