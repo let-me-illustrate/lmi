@@ -138,6 +138,11 @@ by the presence of `_` at the end.
 Although some legacy code does use this prefix, it shouldn't be used in new
 code if possible.
 
+### Standard variable names
+
+Use `z` for local variables whose names are unimportant (similar to `_` in some
+other languages).
+
 
 Other
 -----
