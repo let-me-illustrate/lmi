@@ -30,7 +30,7 @@
 #include <wx/testing.h>
 #include <wx/uiaction.h>
 
-#include <exception>
+#include <exception>                    // uncaught_exceptions()
 
 /// Helper function for finding and focusing a control with the specified name
 /// inside MvcController (actually it could be any top level window containing

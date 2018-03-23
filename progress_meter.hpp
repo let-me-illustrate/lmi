@@ -138,7 +138,7 @@
 /// is taken as a postcondition of code that uses the progress meter,
 /// so it might seem natural to test it in this class's dtor; however,
 /// the postcondition won't be established if the metered loop is
-/// exited by throwing an exception. Perhaps std::uncaught_exception
+/// exited by throwing an exception. Perhaps std::uncaught_exceptions
 /// could distinguish that special case, but as this is written in
 /// 2007-06 some compilers don't implement that standard facility
 /// reliably. Postcondition failure engenders only a warning because

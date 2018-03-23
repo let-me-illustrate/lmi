@@ -48,7 +48,7 @@
 
 #include <algorithm>                    // sort()
 #include <cstring>                      // strcmp()
-#include <exception>                    // uncaught_exception()
+#include <exception>                    // uncaught_exceptions()
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
