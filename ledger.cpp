@@ -31,6 +31,7 @@
 #include "ledger_variant.hpp"
 #include "map_lookup.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
+#include "miscellany.hpp"               // minmax, scale_power()
 
 #include <algorithm>
 #include <ostream>
@@ -315,19 +316,22 @@ int Ledger::GetMaxLength() const
 // largest absolute value of any number in any column of every subledger.
 void Ledger::AutoScale()
 {
-    int k = ledger_invariant_->DetermineScalePower();
+    minmax<double> extrema = ledger_invariant_->scalable_extrema();
 
     ledger_map_t& l_map_rep = ledger_map_->held_;
     for(auto const& i : l_map_rep)
         {
-        k = std::max(k, i.second.DetermineScalePower());
+        extrema.subsume(i.second.scalable_extrema());
         }
 
-    ledger_invariant_->ApplyScaleFactor(k);
+    int const max_power = 9;
+    int const k = scale_power(max_power, extrema.minimum(), extrema.maximum());
+
+    ledger_invariant_->apply_scale_factor(k);
 
     for(auto& i : l_map_rep)
         {
-        i.second.ApplyScaleFactor(k);
+        i.second.apply_scale_factor(k);
         }
 }
 

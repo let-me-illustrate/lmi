@@ -336,7 +336,7 @@ template<> struct numeric_conversion_traits<float>
 #if defined LMI_MSVCRT
         {return strtoFDL_msvc(nptr, endptr);}
 #else  // !defined LMI_MSVCRT
-        {return strtof(nptr, endptr);}
+        {return std::strtof(nptr, endptr);}
 #endif // !defined LMI_MSVCRT
 };
 

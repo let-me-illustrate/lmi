@@ -27,12 +27,10 @@
 #include "assert_lmi.hpp"
 #include "crc32.hpp"
 #include "et_vector.hpp"
-#include "miscellany.hpp"               // minmax
 #include "stl_extensions.hpp"           // nonstd::power()
 #include "value_cast.hpp"
 
 #include <algorithm>                    // max(), min()
-#include <cmath>                        // floor(), log10()
 #include <stdexcept>                    // logic_error
 
 //============================================================================
@@ -305,49 +303,18 @@ LedgerBase& LedgerBase::PlusEq
     return *this;
 }
 
-//============================================================================
-// Multiplier to keep max < one billion units.
-//
-// TODO ?? It would be nicer to factor out
-//   1000000000.0 (max width)
-//   and 1.0E-18 (highest number we translate to words)
-// and make them variables.
-// PDF !! This seems not to be rigorously correct: $999,999,999.99 is
-// less than one billion, but rounds to $1,000,000,000.
-int LedgerBase::DetermineScalePower() const
+/// Return highest and lowest scalable values.
+
+minmax<double> LedgerBase::scalable_extrema() const
 {
-    double min_val = 0.0;
-    double max_val = 0.0;
+    minmax<double> extrema;
 
     for(auto const& i : ScalableVectors)
         {
-        minmax<double> extrema(*i.second);
-        min_val = std::min(min_val, extrema.minimum());
-        max_val = std::max(max_val, extrema.maximum());
+        extrema.subsume(minmax<double>(*i.second));
         }
 
-    // If minimum value is negative, it needs an extra character to
-    // display the minus sign. So it needs as many characters as
-    // ten times its absolute value.
-    double widest = std::max
-        (max_val
-        ,min_val * -10
-        );
-
-    if(widest < 1000000000.0 || widest == 0)
-        {
-        return 0;
-        }
-
-    double d = std::log10(widest);
-    d = std::floor(d / 3.0);
-    int k = 3 * static_cast<int>(d);
-    k = k - 6;
-
-    LMI_ASSERT(0 <= k);
-    LMI_ASSERT(k <= 18);
-
-    return k;
+    return extrema;
 }
 
 namespace
@@ -369,11 +336,17 @@ namespace
         }
 } // Unnamed namespace.
 
-//============================================================================
-// Multiplies all scalable vectors by the factor from DetermineScalePower().
-// Only columns are scaled, so we operate here only on vectors. A header
-// that shows e.g. face amount should show the true face amount, unscaled.
-void LedgerBase::ApplyScaleFactor(int decimal_power)
+/// Scale all scalable vectors by a decimal power.
+///
+/// Scale only designated columns (vectors). Interest-rate columns,
+/// e.g., are not scaled because they aren't denominated in dollars.
+///
+/// Scalars are never scaled: e.g., a $1,000,000,000 specified amount
+/// is shown as such in a header (using a scalar variable representing
+/// its initial value) even if a column representing the same quantity
+/// (using a vector variable) depicts it as $1,000,000 thousands.
+
+void LedgerBase::apply_scale_factor(int decimal_power)
 {
     if(0 != scale_power_)
         {
@@ -381,13 +354,13 @@ void LedgerBase::ApplyScaleFactor(int decimal_power)
         }
 
     scale_power_ = decimal_power;
+    scale_unit_ = look_up_scale_unit(scale_power_);
+
     if(0 == scale_power_)
         {
         // Don't waste time multiplying all these vectors by one
         return;
         }
-
-    scale_unit_ = look_up_scale_unit(scale_power_);
 
     for(auto& i : ScalableVectors)
         {

@@ -26,7 +26,9 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 
-#include <algorithm>                    // equal()
+#include <algorithm>                    // equal(), max()
+#include <cmath>                        // ceil(), floor()
+#include <cstdio>                       // snprintf()
 #include <ctime>
 #include <fstream>
 #include <istream>
@@ -67,6 +69,88 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
     if(!ifs0) alarum() << "Unable to open '" << file0 << "'." << LMI_FLUSH;
     if(!ifs1) alarum() << "Unable to open '" << file1 << "'." << LMI_FLUSH;
     return streams_are_identical(ifs0, ifs1);
+}
+
+/// Triple-power-of-ten scaling to keep extremum < 10^max_power.
+///
+/// Returns a small nonnegative integer N. The values whose extrema
+/// are passed as arguments will be divided by 10^N. N is a multiple
+/// of three because it is common to write a caption like "(000)" or
+/// "values in thousands", but "values in myriads" would not be seen
+/// in the US. Similarly, "values in kibidollars" would not be seen
+/// in finance.
+///
+/// After that scaling division, no value is wider when formatted
+/// than 10^max_power - 1. Thus, if max_power is 6, scaled values
+/// are in [-99,999, 999,999], with due regard to the minus sign.
+/// Because the scaling power N is a multiple of three, it would
+/// make no sense for max_power to be less than three. However,
+/// max_power itself need not be an integral multiple of three:
+/// a column might reasonably provide room for "99,999,999" only.
+///
+/// It is reasonable to assume that rounding is away from infinity
+/// (potentially making formatted values wider), and no coarser than
+/// to whole units. Thus, 999.99 might be formatted as 1000. However,
+/// 600 would not become 1000 because round-to-nearest-hundred is not
+/// a reasonable rule for currency amounts--although, of course, after
+/// scaling by 10^3 it may become 1 (in thousands). These are the most
+/// conservative plausible rounding assumptions; actual rounding
+/// parameters are of course not knowable here because of separation
+/// of concerns, and knowing them would not enable any significant
+/// refinement.
+///
+/// Commas are disregarded as being incidental--in effect, treated as
+/// having zero width--but the minus sign is treated as having the
+/// same width as any digit. For PDF illustrations, "tabular figures"
+/// (monospace digits) and thousands separators are used, but commas
+/// and minus signs are narrow, so this is conservative: values of
+///   1,000,000,000
+///    -100,000,000
+/// are not equally wide. For flat-text output, however, values of
+///   1000000000
+///   -100000000
+/// have the same formatted width, with an all-monospace font and no
+/// thousands separators. In practice, this rarely matters, because
+/// typical negative values on illustrations are relatively small.
+///
+/// Asserted preconditions:
+///   3 <= max_power
+///   min_value <= max_value
+/// Asserted postcondition:
+///   return value is nonnegative
+
+int scale_power(int max_power, double min_value, double max_value)
+{
+    LMI_ASSERT(3 <= max_power);
+    LMI_ASSERT(min_value <= max_value);
+
+    // Round to int, away from zero.
+    auto round_outward = [](double d)
+        {return (d < 0) ? std::floor(d) : std::ceil(d);};
+
+    // One value; two names; two meanings.
+    //  extremum < 10^max_power <-> formatted width <= chars_available
+    // for nonnegative extrema (and negatives are handled correctly).
+    int const chars_available = max_power;
+
+    int const chars_required = std::max
+        (std::snprintf(nullptr, 0, "%.f", round_outward(min_value))
+        ,std::snprintf(nullptr, 0, "%.f", round_outward(max_value))
+        );
+
+    if(chars_required <= chars_available)
+        {
+        return 0;
+        }
+
+    // Only characters [0-9-] to the left of any decimal point matter.
+    int const excess = chars_required - chars_available;
+    LMI_ASSERT(0 < excess);
+    int const r = 3 * (1 + (excess - 1) / 3);
+
+    LMI_ASSERT(0 <= r);
+
+    return r;
 }
 
 /// Return the number of newline characters in a string.
