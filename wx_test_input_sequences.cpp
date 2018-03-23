@@ -97,7 +97,7 @@ LMI_WX_TEST_CASE(input_sequences)
             wxYield();
 
             char const* const field_name = test_data_.field;
-            if(!wxWindow::FindWindowByName(field_name, dialog))
+            if(!dialog->FindWindow(field_name))
                 {
                 // Check whether the field name is valid at all. If it
                 // isn't, then the input model must have changed, so
