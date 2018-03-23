@@ -760,7 +760,7 @@ void SkeletonTest::OnAssertFailure
     // another exception is already in flight as this would just result in the
     // program termination without any useful information about the reason of
     // the failure whatsoever.
-    if(is_running_tests_ && !std::uncaught_exception())
+    if(is_running_tests_ && !std::uncaught_exceptions())
         {
         throw test_assertion_failure_exception(msg ? msg : cond, file, line, func);
         }
