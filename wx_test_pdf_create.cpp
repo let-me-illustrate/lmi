@@ -58,13 +58,44 @@ std::string fo_suffix(int n)
 ///
 /// Run these commands:
 ///   File | New | Illustration
+///     [multiply specamt and pmts by 1000]
+///     OK
 ///   File | Print to PDF
 /// and verify that the PDF file was created; then erase it.
 
 LMI_WX_TEST_CASE(pdf_illustration)
 {
-    // Create a new illustration.
-    wx_test_new_illustration ill;
+    struct billion_dollar_illustration
+        :public wxExpectModalBase<MvcController>
+    {
+        int OnInvoked(MvcController* dialog) const override
+            {
+            dialog->Show();
+            wxYield();
+
+            wx_test_focus_controller_child(*dialog, "SpecifiedAmount");
+
+            wxUIActionSimulator ui;
+            ui.Text("1000000000");
+            wxYield();
+
+            wx_test_focus_controller_child(*dialog, "Payment");
+
+            ui.Text("20000000");
+            wxYield();
+
+            return wxID_OK;
+            }
+
+        wxString GetDefaultDescription() const override
+            {
+            return "edit cell dialog to test $1,000,000,000 scaling";
+            }
+    };
+
+    // Create a new billion-dollar illustration.
+    // Double parentheses circumvent the most vexing parse.
+    wx_test_new_illustration ill((billion_dollar_illustration()));
 
     // Ensure that the output file doesn't exist in the first place.
     output_pdf_existence_checker output_pdf(get_current_document_name());
@@ -74,7 +105,7 @@ LMI_WX_TEST_CASE(pdf_illustration)
     wxYield();
 
     // Close the illustration, we don't need it any more.
-    ill.close();
+    ill.close_discard_changes();
 
     // Finally check for the expected output file existence.
     LMI_ASSERT(output_pdf.exists());
