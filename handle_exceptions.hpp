@@ -96,6 +96,9 @@ class stealth_exception
 ///   http://groups.google.com/group/comp.lang.c++.moderated/msg/aa7ce713ee90c044
 ///   "The only problem with uncaught_exception is that it doesn't
 ///   tell you when you're in a catch(...) { ... throw; } block"
+/// and see also:
+///   https://lists.nongnu.org/archive/html/lmi/2018-03/msg00100.html
+/// "uncaught_exception{,s}() would always return {false,0}" here.
 ///
 /// See
 ///  http://article.gmane.org/gmane.comp.gnu.mingw.user/18355
