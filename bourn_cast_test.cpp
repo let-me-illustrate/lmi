@@ -653,7 +653,7 @@ void mete_static()
         {
         z = static_cast<To>(j);
         }
-    (void)&z;
+    stifle_warning_for_unused_variable(z);
 }
 
 /// Speed test: convert one million times, using bourn_cast.
@@ -670,7 +670,7 @@ void mete_bourn()
         {
         z = bourn_cast<To>(j);
         }
-    (void)&z;
+    stifle_warning_for_unused_variable(z);
 }
 
 void assay_speed()
