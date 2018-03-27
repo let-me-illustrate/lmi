@@ -84,8 +84,9 @@ class stealth_exception
 ///  - the safe default action (throwing this exception) was accepted,
 /// in which case it's pointless to repeat the same message.
 ///
-/// It may seem like a good idea to test std::uncaught_exception()
-/// right before the try block, as recommended here:
+/// It may seem like a good idea to test std::uncaught_exceptions()
+/// right before the try block, as recommended here [these references
+/// speak of the related facility deprecated by C++17]:
 ///   http://groups.google.com/group/comp.lang.c++.moderated/msg/ec0ef69dd3949955
 ///   "Before the try-block in report_exception, query
 ///   std::uncaught_exception() to determine if an exception is
