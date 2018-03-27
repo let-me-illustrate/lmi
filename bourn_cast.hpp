@@ -24,12 +24,9 @@
 
 #include "config.hpp"
 
-#include "rtti_lmi.hpp"                 // lmi::TypeInfo [demangling]
-
 #include <cmath>                        // isinf(), isnan(), ldexp(), signbit()
 #include <limits>
-#include <sstream>
-#include <stdexcept>
+#include <stdexcept>                    // runtime_error
 #include <type_traits>                  // integral_constant
 
 #if defined __GNUC__
@@ -185,16 +182,7 @@ constexpr inline To bourn_cast(From from, std::true_type, std::false_type)
     To const r = static_cast<To>(from);
     if(r != from)
         {
-        lmi::TypeInfo from_type(typeid(From));
-        lmi::TypeInfo   to_type(typeid(To  ));
-        std::ostringstream oss;
-        oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
-        oss
-            << "Cast from " << from << " [" << from_type << "]"
-            << " to "       << r    << " [" << to_type   << "]"
-            << " would not preserve value."
-            ;
-        throw std::runtime_error(oss.str());
+        throw std::runtime_error("Cast would not preserve value.");
         }
     return r;
 }
