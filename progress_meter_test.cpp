@@ -37,6 +37,7 @@ class progress_meter_test
         test_distinct_metered_operations();
         test_empty_title_and_zero_max_count();
         test_postcondition_failure();
+        test_failure_to_culminate();
         }
 
   private:
@@ -45,6 +46,7 @@ class progress_meter_test
     static void test_distinct_metered_operations();
     static void test_empty_title_and_zero_max_count();
     static void test_postcondition_failure();
+    static void test_failure_to_culminate();
 };
 
 void progress_meter_test::test_normal_usage()
@@ -173,11 +175,11 @@ void progress_meter_test::test_postcondition_failure()
             ,progress_meter::e_unit_test_mode
             )
         );
-    std::cout
-        << "Expect '3 iterations expected, but only 0 completed.':"
-        << std::endl
-        ;
-    meter->culminate();
+    BOOST_TEST_THROW
+        (meter->culminate()
+        ,std::runtime_error
+        ,"3 iterations expected, but only 0 completed."
+        );
 
     for(int i = 0; i < max_count; ++i)
         {
@@ -193,11 +195,11 @@ void progress_meter_test::test_postcondition_failure()
             {
             }
         }
-    std::cout
-        << "Expect '3 iterations expected, but only 2 completed.':"
-        << std::endl
-        ;
-    meter->culminate();
+    BOOST_TEST_THROW
+        (meter->culminate()
+        ,std::runtime_error
+        ,"3 iterations expected, but only 2 completed."
+        );
 
     meter->reflect_progress();
     BOOST_TEST_THROW
@@ -205,6 +207,23 @@ void progress_meter_test::test_postcondition_failure()
         ,std::runtime_error
         ,"Progress meter maximum count exceeded."
         );
+}
+
+void progress_meter_test::test_failure_to_culminate()
+{
+    progress_meter_unit_test_stream().str("");
+    int const max_count = 3;
+    std::shared_ptr<progress_meter> meter
+        (create_progress_meter
+            (max_count
+            ,"Some title"
+            ,progress_meter::e_unit_test_mode
+            )
+        );
+    std::cout
+        << "Expect 'Please report this: culminate() not called.':"
+        << std::endl
+        ;
 }
 
 int test_main(int, char*[])
