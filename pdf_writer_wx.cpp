@@ -23,7 +23,6 @@
 
 #include "pdf_writer_wx.hpp"
 
-#include "alert.hpp"
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "html.hpp"
