@@ -727,11 +727,8 @@ class page
 class pdf_illustration : protected html_interpolator
 {
   public:
-    pdf_illustration(Ledger const& ledger
-                    ,fs::path const& output
-                    )
+    explicit pdf_illustration(Ledger const& ledger)
         :html_interpolator(ledger.make_evaluator())
-        ,writer_(output.string(), wxPORTRAIT, &html_font_sizes)
         ,ledger_(ledger)
     {
         init_variables();
@@ -752,15 +749,17 @@ class pdf_illustration : protected html_interpolator
         pages_.emplace_back(std::move(page));
     }
 
-    // Render all pages.
-    void render_all()
+    // Render all pages to the specified PDF file.
+    void render_all(fs::path const& output)
     {
+        pdf_writer_wx writer(output.string(), wxPORTRAIT, &html_font_sizes);
+
         html_cell_for_pdf_output::pdf_context_setter
-            set_pdf_context(ledger_, writer_, *this);
+            set_pdf_context(ledger_, writer, *this);
 
         for(auto const& page : pages_)
             {
-            page->pre_render(ledger_, writer_, *this);
+            page->pre_render(ledger_, writer, *this);
             }
 
         bool first = true;
@@ -776,11 +775,13 @@ class pdf_illustration : protected html_interpolator
                 // Do start a new physical page before rendering all the
                 // subsequent pages (notice that a page is also free to call
                 // StartPage() from its render()).
-                writer_.dc().StartPage();
+                writer.dc().StartPage();
                 }
 
-            page->render(ledger_, writer_, *this);
+            page->render(ledger_, writer, *this);
             }
+
+        std::move(writer).save();
     }
 
     // Methods to be implemented by the derived classes to indicate which
@@ -935,9 +936,6 @@ class pdf_illustration : protected html_interpolator
     // This array stores the non-default font sizes that are used to make it
     // simpler to replicate the existing illustrations.
     static std::array<int, 7> const html_font_sizes;
-
-    // Writer object used for the page metrics and higher level functions.
-    pdf_writer_wx writer_;
 
     // Source of the data.
     Ledger const& ledger_;
@@ -1986,10 +1984,8 @@ class ill_reg_supplemental_report : public standard_supplemental_report
 class pdf_illustration_regular : public pdf_illustration
 {
   public:
-    pdf_illustration_regular(Ledger const& ledger
-                            ,fs::path const& output
-                            )
-        :pdf_illustration(ledger, output)
+    explicit pdf_illustration_regular(Ledger const& ledger)
+        :pdf_illustration(ledger)
     {
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& policy_name = invar.PolicyLegalName;
@@ -2489,11 +2485,8 @@ class nasd_assumption_detail : public page_with_tabular_report
 class pdf_illustration_nasd : public pdf_illustration
 {
   public:
-    pdf_illustration_nasd
-        (Ledger const& ledger
-        ,fs::path const& output
-        )
-        :pdf_illustration(ledger, output)
+    explicit pdf_illustration_nasd(Ledger const& ledger)
+        :pdf_illustration(ledger)
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
@@ -2592,11 +2585,8 @@ class reg_d_group_basic : public page_with_basic_tabular_report
 class pdf_illustration_reg_d_group : public pdf_illustration
 {
   public:
-    pdf_illustration_reg_d_group
-        (Ledger const& ledger
-        ,fs::path const& output
-        )
-        :pdf_illustration(ledger, output)
+    explicit pdf_illustration_reg_d_group(Ledger const& ledger)
+        :pdf_illustration(ledger)
     {
         // Define variables specific to this illustration.
         auto const& invar = ledger.GetLedgerInvariant();
@@ -2871,11 +2861,8 @@ class reg_d_individual_curr : public page_with_tabular_report
 class pdf_illustration_reg_d_individual : public pdf_illustration
 {
   public:
-    pdf_illustration_reg_d_individual
-        (Ledger const& ledger
-        ,fs::path const& output
-        )
-        :pdf_illustration(ledger, output)
+    explicit pdf_illustration_reg_d_individual(Ledger const& ledger)
+        :pdf_illustration(ledger)
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
@@ -2942,16 +2929,16 @@ void ledger_pdf_generator_wx::write
     switch(z)
         {
         case mce_ill_reg:
-            pdf_ill = std::make_unique<pdf_illustration_regular>(ledger, output);
+            pdf_ill = std::make_unique<pdf_illustration_regular>(ledger);
             break;
         case mce_nasd:
-            pdf_ill = std::make_unique<pdf_illustration_nasd>(ledger, output);
+            pdf_ill = std::make_unique<pdf_illustration_nasd>(ledger);
             break;
         case mce_group_private_placement:
-            pdf_ill = std::make_unique<pdf_illustration_reg_d_group>(ledger, output);
+            pdf_ill = std::make_unique<pdf_illustration_reg_d_group>(ledger);
             break;
         case mce_individual_private_placement:
-            pdf_ill = std::make_unique<pdf_illustration_reg_d_individual>(ledger, output);
+            pdf_ill = std::make_unique<pdf_illustration_reg_d_individual>(ledger);
             break;
         case mce_prospectus_obsolete:                 // fall through
         case mce_offshore_private_placement_obsolete: // fall through
@@ -2960,7 +2947,7 @@ void ledger_pdf_generator_wx::write
             alarum() << "Unsupported ledger type '" << z << "'." << LMI_FLUSH;
         }
 
-    pdf_ill->render_all();
+    pdf_ill->render_all(output);
 }
 
 volatile bool ensure_setup = ledger_pdf_generator::set_creator
