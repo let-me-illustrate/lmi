@@ -26,15 +26,9 @@
 #include "alert.hpp"
 
 #if !defined LMI_MSW
-
-#   include <cstdlib>
-
+#   include <cstdlib>                   // system()
 #else  // defined LMI_MSW
-
 #   include <windows.h>
-
-#   include <cstring>
-
 #endif // defined LMI_MSW
 
 namespace
@@ -61,17 +55,21 @@ void concrete_system_command(std::string const& command_line)
 
 void concrete_system_command(std::string const& command_line)
 {
-    STARTUPINFO startup_info;
-    std::memset(&startup_info, 0, sizeof(STARTUPINFO));
+    STARTUPINFO startup_info = {};
     startup_info.cb = sizeof(STARTUPINFO);
 
     PROCESS_INFORMATION process_info;
 
-    char* non_const_cmd_line_copy = new char[1 + command_line.size()];
-    std::strcpy(non_const_cmd_line_copy, command_line.c_str());
+    // For 'wine' at least, this argument cannot be const, even though
+    // this authority:
+    //   https://blogs.msdn.microsoft.com/oldnewthing/20090601-00/?p=18083
+    // says that requirement affects "only the Unicode version". It
+    // would seem wrong to change this wrapper's argument type (for
+    // POSIX too) because of this msw implementation detail.
+    std::string non_const_cmd_line_copy = command_line;
     ::CreateProcessA
         (0
-        ,non_const_cmd_line_copy
+        ,non_const_cmd_line_copy.data()
         ,0
         ,0
         ,true
@@ -81,7 +79,6 @@ void concrete_system_command(std::string const& command_line)
         ,&startup_info
         ,&process_info
         );
-    delete[]non_const_cmd_line_copy;
 
     DWORD exit_code = 12345;
     ::CloseHandle(process_info.hThread);
