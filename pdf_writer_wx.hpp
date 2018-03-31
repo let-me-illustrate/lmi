@@ -52,7 +52,16 @@ class pdf_writer_wx
     pdf_writer_wx(pdf_writer_wx const&) = delete;
     pdf_writer_wx& operator=(pdf_writer_wx const&) = delete;
 
+    // Dtor checks if save() had been called, so don't forget to do it.
     ~pdf_writer_wx();
+
+    // Save the PDF to the output file name specified in the ctor.
+    //
+    // This object becomes unusable after saving, i.e. no other methods can be
+    // called on it. To help with preventing using any of them accidentally,
+    // this method is rvalue-reference-qualified, meaning that calling
+    // std::move() is required to call it.
+    void save() &&;
 
     // High level functions which should be preferably used if possible.
     int output_html
@@ -73,7 +82,7 @@ class pdf_writer_wx
         );
 
     // Accessors allowing to use lower level wxDC API directly.
-    wxDC& dc() { return pdf_dc_; }
+    wxDC& dc();
 
     // Page metrics: the page width and height are the size of the page region
     // reserved for the normal contents, excluding horizontal and vertical
@@ -95,6 +104,9 @@ class pdf_writer_wx
     wxHtmlWinParser html_parser_;
 
     wxSize const total_page_size_;
+
+    // Set to true after save() was called.
+    bool was_saved_{false};
 };
 
 #endif // pdf_writer_wx_hpp
