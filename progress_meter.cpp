@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "timer.hpp"                    // lmi_sleep()
 
+#include <exception>                    // uncaught_exceptions()
 #include <sstream>
 
 std::ostringstream& progress_meter_unit_test_stream()
@@ -77,6 +78,14 @@ progress_meter::progress_meter
 {
 }
 
+progress_meter::~progress_meter()
+{
+    if(!std::uncaught_exceptions() && !are_postconditions_met())
+        {
+        safely_show_message("Please report this: culminate() not called.");
+        }
+}
+
 void progress_meter::dawdle(int seconds)
 {
     do_dawdle(seconds);
@@ -100,9 +109,9 @@ bool progress_meter::reflect_progress()
 void progress_meter::culminate()
 {
     culminate_ui();
-    if(!was_cancelled_ && max_count_ != count_)
+    if(!are_postconditions_met())
         {
-        warning()
+        alarum()
             << max_count_
             << " iterations expected, but only "
             << count_
@@ -131,5 +140,10 @@ int progress_meter::max_count() const
 void progress_meter::do_dawdle(int seconds)
 {
     lmi_sleep(seconds);
+}
+
+bool progress_meter::are_postconditions_met() const
+{
+    return was_cancelled_ || max_count_ == count_;
 }
 

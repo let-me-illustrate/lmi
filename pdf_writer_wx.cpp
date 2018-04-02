@@ -23,6 +23,8 @@
 
 #include "pdf_writer_wx.hpp"
 
+#include "alert.hpp"                    // safely_show_message()
+#include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "global_settings.hpp"
 #include "html.hpp"
@@ -30,7 +32,9 @@
 #include <wx/filesys.h>
 #include <wx/html/htmlcell.h>
 
+#include <exception>                    // uncaught_exceptions()
 #include <limits>
+#include <sstream>
 
 namespace
 {
@@ -121,6 +125,18 @@ pdf_writer_wx::pdf_writer_wx
     html_parser_.SetFS(html_vfs_.get());
 }
 
+wxDC& pdf_writer_wx::dc()
+{
+    LMI_ASSERT_WITH_MSG
+        (!was_saved_
+        ,"Can't use device context of the PDF file \""
+            << print_data_.GetFilename().ToStdString(wxConvUTF8)
+            << "\" which was already saved"
+        );
+
+    return pdf_dc_;
+}
+
 /// Output an image at the given scale into the PDF.
 ///
 /// The scale specifies how many times the image should be shrunk:
@@ -138,6 +154,13 @@ void pdf_writer_wx::output_image
     ,oenum_render_or_only_measure output_mode
     )
 {
+    LMI_ASSERT_WITH_MSG
+        (!was_saved_
+        ,"Can't add an image to the PDF file \""
+            << print_data_.GetFilename().ToStdString(wxConvUTF8)
+            << "\" which was already saved"
+        );
+
     int const y = wxRound(image.GetHeight() / scale);
 
     switch(output_mode)
@@ -176,6 +199,13 @@ int pdf_writer_wx::output_html
     ,oenum_render_or_only_measure output_mode
     )
 {
+    LMI_ASSERT_WITH_MSG
+        (!was_saved_
+        ,"Can't output HTML to the PDF file \""
+            << print_data_.GetFilename().ToStdString(wxConvUTF8)
+            << "\" which was already saved"
+        );
+
     // We don't really want to change the font, but to preserve the current DC
     // font which is changed by rendering the HTML contents.
     wxDCFontChanger preserve_font(pdf_dc_, wxFont());
@@ -240,8 +270,30 @@ int pdf_writer_wx::get_page_bottom() const
     return total_page_size_.y - vert_margin;
 }
 
+void pdf_writer_wx::save() &&
+{
+    pdf_dc_.EndDoc();
+
+    was_saved_ = true;
+}
+
 pdf_writer_wx::~pdf_writer_wx()
 {
-    // This will finally generate the PDF file.
-    pdf_dc_.EndDoc();
+    // We keep things simple and just check whether any exceptions are
+    // currently in progress instead of storing the number of exceptions being
+    // handled in ctor and checking if this number is greater here, because it
+    // seems highly unlikely that a pdf_writer_wx object would ever be created
+    // in a dtor of some other object, which is the only situation in which the
+    // two versions would behave differently -- and even if it did happen, it
+    // would just result in incorrectly skipping the check, i.e. not critical.
+    if(!std::uncaught_exceptions() && !was_saved_)
+        {
+        std::ostringstream oss;
+        oss
+            << "Please report this: PDF file \""
+            << print_data_.GetFilename().ToStdString(wxConvUTF8)
+            << "\" was not saved."
+            ;
+        safely_show_message(oss.str());
+        }
 }

@@ -63,8 +63,7 @@
 /// cancelled and true otherwise.
 ///
 /// culminate(): Perform postprocessing: call culminate_ui(); then
-/// display a warning if the iteration counter doesn't equal its
-/// maximum, unless the operation was cancelled.
+/// throw if are_postconditions_met() returns false.
 ///
 /// Protected interface--nonvirtual.
 ///
@@ -75,6 +74,11 @@
 /// the private data.
 ///
 /// Protected interface--virtual.
+///
+/// dtor: Warn if are_postconditions_met() returns false but the stack
+/// is not being unwound. In that case, an exception should have been
+/// thrown by culminate(), which therefore must not have been called
+/// when it should have been.
 ///
 /// do_dawdle(): Implement dawdle().
 ///
@@ -87,6 +91,13 @@
 /// culminate_ui(): Apply finishing touches to the user interface. For
 /// example, the command-line implementation writes a newline and
 /// flushes its stream.
+///
+/// Private interface.
+///
+/// are_postconditions_met(): Determine whether postconditions have been
+/// fulfilled, i.e., either
+///  - the iteration counter equals its maximum, or
+///  - the operation was cancelled.
 ///
 /// Data members.
 ///
@@ -133,19 +144,10 @@
 /// in the canonical 'for' statement
 ///   for(int i = 0; i < maximum; ++i) {assert(i < maximum);}
 ///
-/// culminate() warns if the iteration counter hasn't been incremented
-/// exactly to its maximum, unless the operation was cancelled. This
-/// is taken as a postcondition of code that uses the progress meter,
-/// so it might seem natural to test it in this class's dtor; however,
-/// the postcondition won't be established if the metered loop is
-/// exited by throwing an exception. Today, std::uncaught_exceptions()
-/// could distinguish that special case, but that was not reliably
-/// possible when this was designed in 2007; there's no need to change
-/// it now. Postcondition failure engenders only a warning because
-/// of other possibilities--e.g., a loop might throw an exception
-/// inside a try-block whose catch-clause doesn't rethrow; perhaps it
-/// would be better to throw an exception instead, depending on the
-/// value of a boolean argument.
+/// It might seem natural to dispense with culminate() and fold its
+/// code into the dtor. However, lmi dtors are designed not to throw,
+/// so the dtor merely warns if culminate() appears not to have been
+/// called when it should have been.
 ///
 /// An argument could be made for making count() public. That's easy
 /// enough to change if wanted, but would promote a usage for which
@@ -177,8 +179,8 @@
 ///     [2005-04-20T01:20:14Z from Greg Chicares]
 ///
 /// Not all data members are actually accessed in any concrete derived
-/// class: max_count_ and title_ are not, but are provided anyway in
-/// case they someday become useful. It might seem desirable to omit
+/// class: for example, title_ is not, but it is provided anyway in
+/// case it someday becomes useful. It might seem desirable to omit
 /// the corresponding create_progress_meter() arguments and set these
 /// members through mutators in this base class after construction
 /// instead of in a derived class's ctor; however, that would not work
@@ -218,7 +220,7 @@ class LMI_SO progress_meter
         ,enum_display_mode
         );
 
-    virtual ~progress_meter() = default;
+    virtual ~progress_meter();
 
     int count() const;
     int max_count() const;
@@ -237,6 +239,8 @@ class LMI_SO progress_meter
   private:
     progress_meter(progress_meter const&) = delete;
     progress_meter& operator=(progress_meter const&) = delete;
+
+    bool are_postconditions_met() const;
 
     int               count_;
     int               max_count_;
