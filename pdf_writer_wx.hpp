@@ -54,12 +54,6 @@ class pdf_writer_wx
 
     ~pdf_writer_wx();
 
-    // Save the PDF to the output file name specified in the ctor.
-    //
-    // This object becomes unusable after saving, i.e. no other methods can be
-    // called on it. To help with preventing using any of them accidentally,
-    // this method is rvalue-reference-qualified, meaning that calling
-    // std::move() is required to call it.
     void save() &&;
 
     // Wherever possible, use the following high-level functions

@@ -253,6 +253,13 @@ int pdf_writer_wx::get_page_bottom() const
     return total_page_size_.y - vert_margin;
 }
 
+/// Save the PDF to the output file name specified in the ctor.
+///
+/// This object becomes unusable after saving, i.e. no other methods can be
+/// called on it. To help with preventing using any of them accidentally,
+/// this method is rvalue-reference-qualified, meaning that calling
+/// std::move() is required to call it.
+
 void pdf_writer_wx::save() &&
 {
     pdf_dc_.EndDoc();
