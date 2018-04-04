@@ -52,7 +52,6 @@ class pdf_writer_wx
     pdf_writer_wx(pdf_writer_wx const&) = delete;
     pdf_writer_wx& operator=(pdf_writer_wx const&) = delete;
 
-    // Dtor checks if save() had been called, so don't forget to do it.
     ~pdf_writer_wx();
 
     // Save the PDF to the output file name specified in the ctor.

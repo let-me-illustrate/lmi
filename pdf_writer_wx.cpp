@@ -260,15 +260,18 @@ void pdf_writer_wx::save() &&
     save_has_been_called_ = true;
 }
 
+/// Dtor: validates that save() has been called.
+///
+/// Canonically, std::uncaught_exceptions() would be called in each
+/// ctor, and its result there compared to its result here. Instead,
+/// for simplicity it's called only here--in effect, presuming that
+/// no object of this class is created by another object's dtor. At
+/// worst, this simplification would result in displaying a warning
+/// that wouldn't otherwise be shown, in a situation so weird that
+/// a warning would be appropriate.
+
 pdf_writer_wx::~pdf_writer_wx()
 {
-    // We keep things simple and just check whether any exceptions are
-    // currently in progress instead of storing the number of exceptions being
-    // handled in ctor and checking if this number is greater here, because it
-    // seems highly unlikely that a pdf_writer_wx object would ever be created
-    // in a dtor of some other object, which is the only situation in which the
-    // two versions would behave differently -- and even if it did happen, it
-    // would just result in incorrectly skipping the check, i.e. not critical.
     if(!std::uncaught_exceptions() && !save_has_been_called_)
         {
         safely_show_message("Please report this: save() not called for PDF.");
