@@ -781,7 +781,7 @@ class pdf_illustration : protected html_interpolator
             page->render(ledger_, writer, *this);
             }
 
-        std::move(writer).save();
+        writer.save();
     }
 
     // Methods to be implemented by the derived classes to indicate which

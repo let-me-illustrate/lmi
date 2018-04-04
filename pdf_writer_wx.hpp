@@ -54,7 +54,7 @@ class pdf_writer_wx
 
     ~pdf_writer_wx();
 
-    void save() &&;
+    void save();
 
     // Wherever possible, use the following high-level functions
     // instead of working at a lower level with the dc() accessor.

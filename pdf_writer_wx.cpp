@@ -254,13 +254,8 @@ int pdf_writer_wx::get_page_bottom() const
 }
 
 /// Save the PDF to the output file name specified in the ctor.
-///
-/// This object becomes unusable after saving, i.e. no other methods can be
-/// called on it. To help with preventing using any of them accidentally,
-/// this method is rvalue-reference-qualified, meaning that calling
-/// std::move() is required to call it.
 
-void pdf_writer_wx::save() &&
+void pdf_writer_wx::save()
 {
     LMI_ASSERT(!save_has_been_called_);
     pdf_dc_.EndDoc();
