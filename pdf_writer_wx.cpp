@@ -127,13 +127,7 @@ pdf_writer_wx::pdf_writer_wx
 
 wxDC& pdf_writer_wx::dc()
 {
-    LMI_ASSERT_WITH_MSG
-        (!save_has_been_called_
-        ,"Can't use device context of the PDF file \""
-            << print_data_.GetFilename().ToStdString(wxConvUTF8)
-            << "\" which was already saved"
-        );
-
+    LMI_ASSERT(!save_has_been_called_);
     return pdf_dc_;
 }
 
@@ -154,12 +148,7 @@ void pdf_writer_wx::output_image
     ,oenum_render_or_only_measure output_mode
     )
 {
-    LMI_ASSERT_WITH_MSG
-        (!save_has_been_called_
-        ,"Can't add an image to the PDF file \""
-            << print_data_.GetFilename().ToStdString(wxConvUTF8)
-            << "\" which was already saved"
-        );
+    LMI_ASSERT(!save_has_been_called_);
 
     int const y = wxRound(image.GetHeight() / scale);
 
@@ -199,12 +188,7 @@ int pdf_writer_wx::output_html
     ,oenum_render_or_only_measure output_mode
     )
 {
-    LMI_ASSERT_WITH_MSG
-        (!save_has_been_called_
-        ,"Can't output HTML to the PDF file \""
-            << print_data_.GetFilename().ToStdString(wxConvUTF8)
-            << "\" which was already saved"
-        );
+    LMI_ASSERT(!save_has_been_called_);
 
     // We don't really want to change the font, but to preserve the current DC
     // font which is changed by rendering the HTML contents.
