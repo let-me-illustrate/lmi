@@ -262,8 +262,8 @@ int pdf_writer_wx::get_page_bottom() const
 
 void pdf_writer_wx::save() &&
 {
+    LMI_ASSERT(!save_has_been_called_);
     pdf_dc_.EndDoc();
-
     save_has_been_called_ = true;
 }
 
