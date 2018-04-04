@@ -62,7 +62,9 @@ class pdf_writer_wx
     // std::move() is required to call it.
     void save() &&;
 
-    // High level functions which should be preferably used if possible.
+    // Wherever possible, use the following high-level functions
+    // instead of working at a lower level with the dc() accessor.
+
     int output_html
         (int                          x
         ,int                          y
@@ -80,12 +82,12 @@ class pdf_writer_wx
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
-    // Accessors allowing to use lower level wxDC API directly.
     wxDC& dc();
 
     // Page metrics: the page width and height are the size of the page region
     // reserved for the normal contents, excluding horizontal and vertical
     // margins. Total width and height include the margins.
+
     int get_horz_margin() const;
     int get_vert_margin() const;
     int get_page_width()  const;
