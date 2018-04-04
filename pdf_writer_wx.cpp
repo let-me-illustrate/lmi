@@ -34,7 +34,6 @@
 
 #include <exception>                    // uncaught_exceptions()
 #include <limits>
-#include <sstream>
 
 namespace
 {
@@ -272,12 +271,6 @@ pdf_writer_wx::~pdf_writer_wx()
     // would just result in incorrectly skipping the check, i.e. not critical.
     if(!std::uncaught_exceptions() && !save_has_been_called_)
         {
-        std::ostringstream oss;
-        oss
-            << "Please report this: PDF file \""
-            << print_data_.GetFilename().ToStdString(wxConvUTF8)
-            << "\" was not saved."
-            ;
-        safely_show_message(oss.str());
+        safely_show_message("Please report this: save() not called for PDF.");
         }
 }
