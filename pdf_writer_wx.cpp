@@ -128,7 +128,7 @@ pdf_writer_wx::pdf_writer_wx
 wxDC& pdf_writer_wx::dc()
 {
     LMI_ASSERT_WITH_MSG
-        (!was_saved_
+        (!save_has_been_called_
         ,"Can't use device context of the PDF file \""
             << print_data_.GetFilename().ToStdString(wxConvUTF8)
             << "\" which was already saved"
@@ -155,7 +155,7 @@ void pdf_writer_wx::output_image
     )
 {
     LMI_ASSERT_WITH_MSG
-        (!was_saved_
+        (!save_has_been_called_
         ,"Can't add an image to the PDF file \""
             << print_data_.GetFilename().ToStdString(wxConvUTF8)
             << "\" which was already saved"
@@ -200,7 +200,7 @@ int pdf_writer_wx::output_html
     )
 {
     LMI_ASSERT_WITH_MSG
-        (!was_saved_
+        (!save_has_been_called_
         ,"Can't output HTML to the PDF file \""
             << print_data_.GetFilename().ToStdString(wxConvUTF8)
             << "\" which was already saved"
@@ -274,7 +274,7 @@ void pdf_writer_wx::save() &&
 {
     pdf_dc_.EndDoc();
 
-    was_saved_ = true;
+    save_has_been_called_ = true;
 }
 
 pdf_writer_wx::~pdf_writer_wx()
@@ -286,7 +286,7 @@ pdf_writer_wx::~pdf_writer_wx()
     // in a dtor of some other object, which is the only situation in which the
     // two versions would behave differently -- and even if it did happen, it
     // would just result in incorrectly skipping the check, i.e. not critical.
-    if(!std::uncaught_exceptions() && !was_saved_)
+    if(!std::uncaught_exceptions() && !save_has_been_called_)
         {
         std::ostringstream oss;
         oss

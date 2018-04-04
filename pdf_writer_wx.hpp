@@ -105,8 +105,7 @@ class pdf_writer_wx
 
     wxSize const total_page_size_;
 
-    // Set to true after save() was called.
-    bool was_saved_{false};
+    bool save_has_been_called_{false};
 };
 
 #endif // pdf_writer_wx_hpp
