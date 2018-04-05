@@ -24,10 +24,10 @@
 #include "round_to.hpp"
 
 #include "fenv_lmi.hpp"
+#include "miscellany.hpp"               // floating_rep()
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
-#include <cstddef>                      // size_t
 #include <ios>
 #include <iostream>
 #include <ostream>
@@ -107,56 +107,6 @@ void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
         // indeterminate.
         default_rounding_style() = r_indeterminate;
         }
-}
-
-// print_hex_val() bears the following copyright and permission:
-/* boost limits_test.cpp   test your <limits> file for important
- *
- * Copyright Jens Maurer 2000
- * Permission to use, copy, modify, sell, and distribute this software
- * is hereby granted without free [sic] provided that the above copyright notice
- * appears in all copies and that both that copyright notice and this
- * permission notice appear in supporting documentation,
- *
- * Jens Maurer makes no representations about the suitability of this
- * software for any purpose. It is provided "as is" without express or
- * implied warranty.
- *
- */
-// GWC modified the code as noted below, e.g. to print in byte-reversed
-// order as well, and made some trivial formatting changes.
-template<typename T>
-void print_hex_val(T t, char const* name)
-{
-  // GWC changed C cast to reinterpret_cast:
-  unsigned char const* p = reinterpret_cast<unsigned char const*>(&t);
-  std::cout << "hex value of " << name << " is: ";
-
-// GWC modifications begin
-  // For gcc with x87, sizeof(long double) == 12, but only
-  // ten bytes are significant--the other two are padding.
-  std::size_t size_of_T = sizeof(T);
-#if defined __GNUC__ && defined LMI_X87
-  if(12 == size_of_T)
-    size_of_T = 10;
-#endif // defined __GNUC__ && defined LMI_X87
-// GWC modifications end
-
-  for(unsigned int i = 0; i < size_of_T; ++i) { // modified by GWC
-    if(p[i] <= 0xF)
-      std::cout << "0";
-    // GWC changed C cast to static_cast:
-    std::cout << std::hex << static_cast<int>(p[i]);
-  }
-// GWC modifications begin
-  std::cout << " / ";
-  for(int i = size_of_T - 1; 0 <= i; --i) {
-    if(p[i] <= 0xF)
-      std::cout << "0";
-    std::cout << std::hex << static_cast<int>(p[i]);
-  }
-  std::cout << std::dec << std::endl;
-// GWC modifications end
 }
 
 template<typename RealType>
@@ -273,12 +223,9 @@ bool test_one_case
             ;
         std::cout << '\n';
 
-        std::cout << "  ";
-        print_hex_val(unrounded, "input   ");
-        std::cout << "  ";
-        print_hex_val(expected,  "expected");
-        std::cout << "  ";
-        print_hex_val(observed,  "observed");
+        std::cout << "  input    " << floating_rep(unrounded) << '\n';
+        std::cout << "  expected " << floating_rep(expected)  << '\n';
+        std::cout << "  observed " << floating_rep(observed)  << '\n';
 
         std::cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
         std::cout
