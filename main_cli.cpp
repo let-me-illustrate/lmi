@@ -134,11 +134,15 @@ void self_test()
             ;
         }
 
+#if defined _GLIBCXX_DEBUG
+    std::cout << "Timing test skipped: takes too long in debug mode " << std::endl;
+#else  // !defined _GLIBCXX_DEBUG
     std::cout
         << "Test solve speed: "
         << TimeAnAliquot(std::bind(z, "CLI_selftest", IP), 0.1)
         << '\n'
         ;
+#endif // !defined _GLIBCXX_DEBUG
 }
 
 /// Run self-test repeatedly (intended for use with 'gprof').
