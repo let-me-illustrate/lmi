@@ -31,9 +31,11 @@
 #include <climits>                      // UCHAR_MAX
 #include <cstddef>                      // size_t
 #include <cstdio>                       // EOF
+#include <iomanip>
 #include <ios>
 #include <iterator>                     // distance()
 #include <limits>                       // numeric_limits
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -63,6 +65,21 @@ bool each_equal(RangeExpression const& range, T const& t)
 }
 
 bool files_are_identical(std::string const&, std::string const&);
+
+template<typename T>
+std::string floating_rep(T t)
+{
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0');
+    int realsize = sizeof(T);
+#if defined __GNUC__
+    if(12 == realsize) realsize = 10;
+#endif // defined __GNUC__
+    unsigned char const* u = reinterpret_cast<unsigned char const*>(&t);
+    for(int j = realsize - 1; 0 <= j; --j)
+        oss << std::setw(2) << static_cast<int>(u[j]);
+    return oss.str();
+}
 
 /// Ascertain vector minimum and maximum efficiently.
 ///
