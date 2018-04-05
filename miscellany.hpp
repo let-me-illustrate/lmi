@@ -71,10 +71,13 @@ std::string floating_rep(T t)
 {
     std::ostringstream oss;
     oss << std::hex << std::setfill('0');
-    int realsize = sizeof(T);
-#if defined __GNUC__
-    if(12 == realsize) realsize = 10;
-#endif // defined __GNUC__
+    std::size_t realsize = sizeof(T);
+#if defined __GNUC__ && defined LMI_X87
+    // For gcc with x87, sizeof(long double) == 12, but only
+    // ten bytes are significant--the other two are padding.
+    if(12 == realsize)
+        realsize = 10;
+#endif // defined __GNUC__ && defined LMI_X87
     unsigned char const* u = reinterpret_cast<unsigned char const*>(&t);
     for(int j = realsize - 1; 0 <= j; --j)
         oss << std::setw(2) << static_cast<int>(u[j]);
