@@ -91,7 +91,7 @@ mkdir -p $build_dir
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
 
 wx_cc_flags=-fno-omit-frame-pointer
-wx_cxx_flags=$wx_cc_flags
+wx_cxx_flags=-fno-omit-frame-pointer
 
 config_options="
   --prefix=$prefix
