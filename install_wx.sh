@@ -81,7 +81,7 @@ esac
 
 # Construct a vendor string for this build using the compiler name and version
 # and the unique commit SHA-1.
-gcc_version=`${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '.\r'`
+gcc_version=`${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '\r'`
 vendor=gcc-$gcc_version-$wx_commit_sha
 
 build_dir=$wx_dir/lmi-gcc-$gcc_version

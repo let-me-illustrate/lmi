@@ -82,7 +82,7 @@ ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
 endif
 
 compiler       := gcc-$(shell $(mingw_bin_dir)$(host_type)-gcc -dumpversion)
-vendor         := $(subst .,,$(compiler))-$(wx_md5)
+vendor         := $(compiler)-$(wx_md5)
 
 source_dir     := $(wx_dir)/wxWidgets-$(wx_version)
 build_dir      := $(source_dir)/$(vendor)
