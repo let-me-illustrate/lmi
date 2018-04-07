@@ -52,7 +52,7 @@ then
     cd $wx_dir
 else
     cd $wx_dir
-    if [ `git rev-parse HEAD` = $wx_commit_sha ]
+    if [ $(git rev-parse HEAD) = "$wx_commit_sha" ]
     then
         # Don't bother updating anything if we already had the correct version
         # of the tree.
@@ -62,11 +62,11 @@ else
         # it yet.
         if ! git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null
         then
-            git fetch $wx_git_url
+            git fetch "$wx_git_url"
         fi
     fi
 
-    [ -n "$skip_update" ] || git checkout $wx_commit_sha
+    [ -n "$skip_update" ] || git checkout "$wx_commit_sha"
 fi
 
 if [ "$skip_update" != 1 ]
@@ -83,7 +83,7 @@ then
                 ;;
         esac
 
-        suburl=`git config --file .gitmodules --get submodule.${subpath}.url`
+        suburl=$(git config --file .gitmodules --get submodule.${subpath}.url)
 
         # Configure the submodule to use URL relative to the one used for the
         # super-repository itself: this doesn't change anything when using the
@@ -92,7 +92,7 @@ then
         # a mirror, avoiding (slow and possibly unreliable) network access.
         git config submodule.${subpath}.url ${wx_git_url%/*}/${suburl##*/}
 
-        git submodule update --init $subpath
+        git submodule update --init "$subpath"
     done
 fi
 
