@@ -184,8 +184,8 @@ make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
 make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
-make $coefficiency --output-sync=recurse -f install_wx.make
-# ./install_wx.sh
+# make $coefficiency --output-sync=recurse -f install_wx.make
+./install_wx.sh
 
 make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make
 
