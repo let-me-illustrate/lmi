@@ -64,9 +64,8 @@ else
         then
             git fetch "$wx_git_url"
         fi
+        git checkout "$wx_commit_sha"
     fi
-
-    [ -n "$skip_update" ] || git checkout "$wx_commit_sha"
 fi
 
 if [ "$skip_update" != 1 ]
