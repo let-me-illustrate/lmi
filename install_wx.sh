@@ -48,16 +48,16 @@ then
     wx_dir_parent=${wx_dir%/*}
     [ -d $wx_dir_parent ] || mkdir -p $wx_dir_parent
     cd $wx_dir_parent
-    git clone $wx_git_url ${wx_dir##*/}
+    git clone "$wx_git_url" ${wx_dir##*/}
     cd $wx_dir
 else
     cd $wx_dir
-    git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null || git fetch $wx_git_url
+    git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null || git fetch "$wx_git_url"
 fi
 
-if [ `git rev-parse HEAD` != $wx_commit_sha ]
+if [ $(git rev-parse HEAD) != "$wx_commit_sha" ]
 then
-    git checkout $wx_commit_sha
+    git checkout "$wx_commit_sha"
     git submodule update --init
 fi
 
@@ -70,10 +70,10 @@ rm --force --recursive $exec_prefix/include/wx*
 rm --force --recursive $exec_prefix/lib/wx*
 rm --force --recursive $exec_prefix/lib/libwx*
 
-build_type=`$wx_dir/config.guess`
+build_type=$($wx_dir/config.guess)
 host_type=i686-w64-mingw32
 
-case `uname` in
+case $(uname) in
     CYGWIN*)
         mingw_bin_dir=$mingw_dir/bin/
         ;;
@@ -81,11 +81,11 @@ esac
 
 # Construct a vendor string for this build using the compiler name and version
 # and the unique commit SHA-1.
-gcc_version=`${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '\r'`
+gcc_version=$(${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '\r')
 vendor=gcc-$gcc_version-$wx_commit_sha
 
 build_dir=$wx_dir/lmi-gcc-$gcc_version
-mkdir -p $build_dir
+mkdir -p "$build_dir"
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -130,10 +130,10 @@ config_options="
   LDFLAGS=-L$exec_prefix/lib
 "
 
-[ -n $mingw_bin_dir ] && export PATH="$mingw_bin_dir:${PATH}"
+[ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
 
-cd $build_dir
-../configure $config_options
+cd "$build_dir"
+../configure "$config_options"
 $MAKE
 $MAKE install
 

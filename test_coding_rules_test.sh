@@ -35,14 +35,14 @@ rm --force eraseme*
 
 # Boilerplate required in most files.
 
-good_copyright="...Copyright (C)...`date -u +'%Y'`..."
+good_copyright="...Copyright (C)...$(date -u +'%Y')..."
 
 # Dollar signs must be escaped with '\' in here-documents; writing
 # them on different lines prevents RCS substitution here.
 
 good_url="...http://savannah.nongnu.org/projects/lmi..."
 
-boilerplate=$(printf "$good_copyright\n$good_url")
+boilerplate=$(printf "%s\n%s" "$good_copyright" "$good_url")
 
 # Files in general.
 
@@ -61,7 +61,7 @@ cat >eraseme_copyright_001 <<EOF
 $good_url
 Copyright (C)
   is expected to be on the same line as
-`date -u +'%Y'`
+$(date -u +'%Y')
 "(c) 1999": lower-case 'c' is incorrect in ASCII copyright symbol.
 EOF
 
@@ -69,13 +69,13 @@ EOF
 
 cat >eraseme_copyright_002.html <<EOF
 $boilerplate
-Copyright &copy; `date -u +'%Y'`
+Copyright &copy; $(date -u +'%Y')
 EOF
 
 cat >eraseme_copyright_003.html <<EOF
 $good_url
 Missing "(C)" copyright.
-Copyright &copy; `date -u +'%Y'`
+Copyright &copy; $(date -u +'%Y')
 EOF
 
 cat >eraseme_copyright_004.html <<EOF

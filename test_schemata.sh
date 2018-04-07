@@ -25,7 +25,7 @@ echo "  Test schemata..."
 
 # Directory where this script resides.
 
-srcdir=$(dirname $(readlink --canonicalize $0))
+srcdir=$(dirname $(readlink --canonicalize "$0"))
 
 # Directory where 'jing.jar' and 'trang.jar' reside, along with their
 # support files--extracted from:
@@ -197,8 +197,8 @@ java -jar $jar_dir/trang.jar multiple_cell_document.rnc    multiple_cell_documen
 java -jar $jar_dir/trang.jar single_cell_document.rnc      single_cell_document.xsd
 java -jar $jar_dir/trang.jar multiple_cell_document_01.rnc multiple_cell_document_01.xsd
 java -jar $jar_dir/trang.jar single_cell_document_01.rnc   single_cell_document_01.xsd
-sed -e 's/  *$//' -i *.xsd
-diff --unified=0 --from-file=$srcdir *.xsd || echo "Dubious '*.xsd' in repository."
+sed -e 's/  *$//' -i ./*.xsd
+diff --unified=0 --from-file="$srcdir" ./*.xsd || echo "Dubious '*.xsd' in repository."
 
 echo "  Done."
 

@@ -90,7 +90,7 @@ then
     # Regardless of version, only system mounts are wanted here, and they
     # are never overridden.
 
-    restore_opt_mount=`mount --mount-entries | grep '/opt/lmi '`
+    restore_opt_mount=$(mount --mount-entries | grep '/opt/lmi ')
 
     umount "/opt"
     umount "/opt/lmi"
@@ -100,15 +100,16 @@ then
     umount "/opt"
     mount --force "C:/opt/lmi" "/opt/lmi"
 
-    [ -z "$restore_opt_mount" ] || sh -c mount $restore_opt_mount
+    [ -z "$restore_opt_mount" ] || sh -c mount "$restore_opt_mount"
 
     # Read this entire thread for $CYGCHECK rationale:
     #   https://cygwin.com/ml/cygwin/2012-02/threads.html#00910
     #   https://cygwin.com/ml/cygwin/2012-03/threads.html#00005
     # Cf.:
     #   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
-    export CYGCHECK=`cygpath --mixed /usr/bin/cygcheck`
-    cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
+    CYGCHECK=$(cygpath --mixed /usr/bin/cygcheck)
+    export CYGCHECK
+    cmd /c "$CYGCHECK" -s -v -r | tr --delete '\r'
 
     # 'core.fileMode' rationale:
     #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
@@ -119,11 +120,11 @@ fi
 java -version
 
 mkdir --parents /opt/lmi/src
-cd /opt/lmi/src
+cd /opt/lmi/src || print "Cannot cd"
 
 # Preserve any preexisting source directory, moving it aside so that
 # 'git clone' will install a pristine working copy.
-mv lmi lmi-moved-$stamp0
+mv lmi lmi-moved-"$stamp0"
 
 # Favor https over git's own protocol only because corporate firewalls
 # in lmi's target industry tend to block the latter. If even git's
@@ -133,7 +134,7 @@ git clone https://git.savannah.nongnu.org/r/lmi.git \
 # Use git's own wherever possible.
 # git clone git://git.savannah.nongnu.org/lmi.git
 
-cd /opt/lmi/src/lmi
+cd /opt/lmi/src/lmi || print "Cannot cd"
 
 if [ "CYGWIN" = "$platform" ]
 then
@@ -142,16 +143,16 @@ then
     # It seems quite unlikely that anyone who's building lmi would have
     # any other need for mounts with the names used here.
 
-    restore_MinGW_mount=`mount --mount-entries | grep '/MinGW_ '`
+    restore_MinGW_mount=$(mount --mount-entries | grep '/MinGW_ ')
     [ -z "$restore_MinGW_mount" ] \
-      || printf "$restore_MinGW_mount\n" | grep --silent 'C:/opt/lmi/MinGW-7_2_0' \
-      || printf "Replacing former MinGW_ mount:\n $restore_MinGW_mount\n" >/dev/tty
+      || printf "%s\n" "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-7_2_0' \
+      || printf "Replacing former MinGW_ mount:\n %s\n" "$restore_MinGW_mount" >/dev/tty
     mount --force "C:/opt/lmi/MinGW-7_2_0" "/MinGW_"
 
-    restore_cache_mount=`mount --mount-entries | grep '/cache_for_lmi '`
+    restore_cache_mount=$(mount --mount-entries | grep '/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \
-      || printf "$restore_cache_mount\n" | grep --silent 'C:/cache_for_lmi' \
-      || printf "Replacing former cache mount:\n  $restore_cache_mount\n" >/dev/tty
+      || printf "%s\n" "$restore_cache_mount" | grep --silent 'C:/cache_for_lmi' \
+      || printf "Replacing former cache mount:\n  %s\n" "$restore_cache_mount" >/dev/tty
     mount --force "C:/cache_for_lmi" "/cache_for_lmi"
 fi
 
@@ -163,7 +164,7 @@ mkdir --parents /cache_for_lmi/downloads
 
 mount
 
-md5sum $0
+md5sum "$0"
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
 rm --force --recursive scratch
@@ -203,8 +204,8 @@ then
     # No lmi binary should depend on any Cygwin library.
 
     for z in /opt/lmi/bin/*; \
-      do cmd /c $CYGCHECK $z 2>&1 | grep --silent cygwin \
-        && printf "\ncygcheck $z\n" && cmd /c $CYGCHECK $z; \
+      do cmd /c "$CYGCHECK $z" 2>&1 | grep --silent cygwin \
+        && printf "\ncygcheck %s\n" "$z" && cmd /c "$CYGCHECK $z"; \
       done
 fi
 
@@ -249,7 +250,7 @@ fi
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
 
-seconds=$(expr $(date '+%s' -d $stamp1) - $(date '+%s' -d $stamp0))
+seconds=$(expr $(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0"))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
 
