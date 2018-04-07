@@ -52,12 +52,12 @@ then
     cd $wx_dir
 else
     cd $wx_dir
-    git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null || git fetch "$wx_git_url"
+    git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null || git fetch $wx_git_url
 fi
 
-if [ $(git rev-parse HEAD) != "$wx_commit_sha" ]
+if [ `git rev-parse HEAD` != $wx_commit_sha ]
 then
-    git checkout "$wx_commit_sha"
+    git checkout $wx_commit_sha
     git submodule update --init
 fi
 
