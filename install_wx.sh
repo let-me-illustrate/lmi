@@ -133,7 +133,7 @@ config_options="
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
 
 cd "$build_dir"
-../configure "$config_options"
+../configure $config_options
 $MAKE
 $MAKE install
 
