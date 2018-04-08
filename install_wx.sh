@@ -27,7 +27,7 @@ set -vxe
 
 wx_git_url=${wx_git_url:-"https://github.com/wxWidgets/wxWidgets.git"}
 
-wx_commit_sha=${wx_commit_sha:-"41045df7ea5f93e4c07c1bd846d7127a372705bd"}
+wx_commit_sha=${wx_commit_sha:-"e38866d3a603f600f87016458260f73593627348"}
 
 coefficiency=${coefficiency:-"--jobs=4"}
 MAKE=${MAKE:-"make $coefficiency"}
