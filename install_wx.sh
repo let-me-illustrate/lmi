@@ -121,6 +121,12 @@ vendor=gcc-$gcc_version-$wx_commit_sha
 build_dir=$wx_dir/lmi-gcc-$gcc_version
 mkdir -p "$build_dir"
 
+exclusions=$(git rev-parse --git-dir)/info/exclude
+if ! grep -q "^$build_dir/$" "$exclusions"
+then
+    printf "%s/\n" "$build_dir" >> "$exclusions"
+fi
+
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
 
