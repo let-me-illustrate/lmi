@@ -145,9 +145,9 @@ then
 
     restore_MinGW_mount=$(mount --mount-entries | grep '/MinGW_ ')
     [ -z "$restore_MinGW_mount" ] \
-      || printf "%s\n" "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-7_2_0' \
+      || printf "%s\n" "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-7_3_0' \
       || printf "Replacing former MinGW_ mount:\n %s\n" "$restore_MinGW_mount" >/dev/tty
-    mount --force "C:/opt/lmi/MinGW-7_2_0" "/MinGW_"
+    mount --force "C:/opt/lmi/MinGW-7_3_0" "/MinGW_"
 
     restore_cache_mount=$(mount --mount-entries | grep '/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \

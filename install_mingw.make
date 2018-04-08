@@ -28,7 +28,7 @@ this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 # rather than release its own; lmi uses i686 builds with native
 # threads and SJLJ exceptions.
 
-version   := MinGW-7_2_0
+version   := MinGW-7_3_0
 
 file_list  = $($(version))
 
@@ -57,12 +57,14 @@ mirror    := http://downloads.sourceforge.net/mingw-w64
 #MinGW-6_3_0 := i686-6.3.0-release-win32-sjlj-rt_v5-rev1.7z
 MinGW-6_3_0 := i686-6.3.0-release-win32-sjlj-rt_v5-rev2.7z
 MinGW-7_2_0 := i686-7.2.0-release-win32-sjlj-rt_v5-rev0.7z
+MinGW-7_3_0 := i686-7.3.0-release-win32-sjlj-rt_v5-rev0.7z
 
 # Archive md5sums ##############################################################
 
 #$(MinGW-6_3_0)-md5 := b92e8480cf8d5904da78ab6d94f1a047
 $(MinGW-6_3_0)-md5 := 6e15de993400279c24b40b1f978e9380
 $(MinGW-7_2_0)-md5 := f34ff6eca4aa7a645f60c977b107c5d2
+$(MinGW-7_3_0)-md5 := 37d964d08ce48dc170cc95a84679cc4f
 
 # Utilities ####################################################################
 
