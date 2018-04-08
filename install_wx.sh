@@ -21,6 +21,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+set -vxe
+
 # Configurable settings ########################################################
 
 wx_git_url=${wx_git_url:-"https://github.com/wxWidgets/wxWidgets.git"}
@@ -40,8 +42,6 @@ exec_prefix=${prefix}
 wx_dir=/opt/lmi/third_party/vcs/wxWidgets
 
 # Script commands ##############################################################
-
-set -e
 
 if [ ! -d $wx_dir ]
 then
