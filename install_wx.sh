@@ -49,51 +49,40 @@ then
     [ -d $wx_dir_parent ] || mkdir -p $wx_dir_parent
     cd $wx_dir_parent
     git clone "$wx_git_url" ${wx_dir##*/}
-    cd $wx_dir
-else
-    cd $wx_dir
-    if [ $(git rev-parse HEAD) = "$wx_commit_sha" ]
-    then
-        # Don't bother updating anything if we already had the correct version
-        # of the tree.
-        skip_update=1
-    else
-        # Get the missing commit from the upstream repository if we don't have
-        # it yet.
-        if ! git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null
-        then
-            git fetch "$wx_git_url"
-        fi
-        git checkout "$wx_commit_sha"
-    fi
 fi
 
-if [ "$skip_update" != 1 ]
+cd $wx_dir
+
+# Fetch the desired commit from the upstream repository if it's missing.
+if ! git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null
 then
-    # Initialize all the not yet initialized submodules (except for the known
-    # exceptions, i.e. the submodules that we know that we won't need). This
-    # will be necessary after the initial clone, but may also need doing after
-    # updating an existing working tree if a new submodule is added upstream.
-    git submodule status | grep '^-' | cut -d' ' -f2 | while read -r subpath
-    do
-        case $subpath in
-            src/jpeg | src/tiff)
-                continue
-                ;;
-        esac
-
-        suburl=$(git config --file .gitmodules --get submodule.${subpath}.url)
-
-        # Configure the submodule to use URL relative to the one used for the
-        # super-repository itself: this doesn't change anything when using the
-        # canonical wxWidgets GitHub URL, but allows to download submodules
-        # from a local mirror when wxWidgets itself is being cloned from such
-        # a mirror, avoiding (slow and possibly unreliable) network access.
-        git config submodule.${subpath}.url ${wx_git_url%/*}/${suburl##*/}
-
-        git submodule update --init "$subpath"
-    done
+    git fetch "$wx_git_url"
 fi
+git checkout "$wx_commit_sha"
+
+# Initialize all the not yet initialized submodules (except for the known
+# exceptions, i.e. the submodules that we know that we won't need). This
+# will be necessary after the initial clone, but may also need doing after
+# updating an existing working tree if a new submodule is added upstream.
+git submodule status | grep '^-' | cut -d' ' -f2 | while read -r subpath
+do
+    case $subpath in
+        src/jpeg | src/tiff)
+            continue
+            ;;
+    esac
+
+    suburl=$(git config --file .gitmodules --get submodule.${subpath}.url)
+
+    # Configure the submodule to use URL relative to the one used for the
+    # super-repository itself: this doesn't change anything when using the
+    # canonical wxWidgets GitHub URL, but allows to download submodules
+    # from a local mirror when wxWidgets itself is being cloned from such
+    # a mirror, avoiding (slow and possibly unreliable) network access.
+    git config submodule.${subpath}.url ${wx_git_url%/*}/${suburl##*/}
+
+    git submodule update --init "$subpath"
+done
 
 [ "$wx_skip_clean" = 1 ] || git clean -dfx
 
