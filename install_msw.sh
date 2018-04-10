@@ -126,13 +126,13 @@ cd /opt/lmi/src || print "Cannot cd"
 # 'git clone' will install a pristine working copy.
 mv lmi lmi-moved-"$stamp0"
 
-# Favor https over git's own protocol only because corporate firewalls
-# in lmi's target industry tend to block the latter. If even git's
-# https protocol is blocked, try Vadim's copy as a last resort.
-git clone https://git.savannah.nongnu.org/r/lmi.git \
+# Use git's own protocol wherever possible. In case that's blocked
+# by a corporate firewall, fall back on https. In case a firewall
+# inexplicably blocks the gnu.org domain, try Vadim's github clone
+# as a last resort.
+git clone git://git.savannah.nongnu.org/lmi.git \
+  || git clone https://git.savannah.nongnu.org/r/lmi.git \
   || git clone https://github.com/vadz/lmi.git
-# Use git's own wherever possible.
-# git clone git://git.savannah.nongnu.org/lmi.git
 
 cd /opt/lmi/src/lmi || print "Cannot cd"
 
