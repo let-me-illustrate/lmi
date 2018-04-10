@@ -66,12 +66,6 @@ git checkout "$wx_commit_sha"
 # updating an existing working tree if a new submodule is added upstream.
 git submodule status | grep '^-' | cut -d' ' -f2 | while read -r subpath
 do
-    case $subpath in
-        src/jpeg | src/tiff)
-            continue
-            ;;
-    esac
-
     suburl=$(git config --file .gitmodules --get submodule.${subpath}.url)
 
     # Configure the submodule to use URL relative to the one used for the
@@ -149,8 +143,6 @@ config_options="
   --with-expat=builtin
   --with-libpng=builtin
   --with-zlib=builtin
-  --without-libjpeg
-  --without-libtiff
   --without-opengl
   --without-subdirs
   CPPFLAGS=-I$prefix/include

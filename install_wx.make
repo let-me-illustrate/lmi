@@ -117,8 +117,6 @@ config_options = \
   --enable-stl \
   --enable-vendor='$(vendor)' \
   --with-cxx=11 \
-  --without-libjpeg \
-  --without-libtiff \
   --without-opengl \
   --without-subdirs \
   CFLAGS='$(wx_cc_flags)' \
