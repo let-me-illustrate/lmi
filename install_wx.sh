@@ -39,7 +39,7 @@ mingw_dir=/MinGW_
 prefix=/opt/lmi/local
 exec_prefix=${prefix}
 
-wx_dir=/opt/lmi/third_party/vcs/wxWidgets
+wx_dir=${prefix%/*}/vcs/wxWidgets
 
 # Script commands ##############################################################
 
