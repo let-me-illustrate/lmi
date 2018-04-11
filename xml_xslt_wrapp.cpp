@@ -34,9 +34,11 @@
 #include "libxml/node_iterator.cxx"
 #include "libxml/node_manip.cxx"
 #include "libxml/nodes_view.cxx"
+#include "libxml/relaxng.cxx"
 #include "libxml/schema.cxx"
 #include "libxml/tree_parser.cxx"
 #include "libxml/utility.cxx"
+#include "libxml/xpath.cxx"
 #include "libxslt/init.cxx"
 #include "libxslt/stylesheet.cxx"
 
