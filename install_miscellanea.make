@@ -269,7 +269,7 @@ TARFLAGS := --keep-old-files
 
 UNZIPFLAGS := -q
 
-WGETFLAGS :=
+WGETFLAGS := --no-check-certificate
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
