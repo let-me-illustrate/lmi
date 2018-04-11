@@ -26,10 +26,10 @@ prefix    := /opt/lmi
 cache_dir := /cache_for_lmi/downloads
 
 # In the past, it seemed necessary to specify a mirror, e.g.:
-#  mirror := http://easynews.dl.sourceforge.net/sourceforge
+#  mirror := https://easynews.dl.sourceforge.net/sourceforge
 # but as of about 2006-12 sf.net seems to select one automatically
 # when this is passed to wget:
-sf_mirror := http://downloads.sourceforge.net
+sf_mirror := https://downloads.sourceforge.net
 
 # Nonconfigurable settings #####################################################
 
@@ -71,12 +71,12 @@ sample:               stem = data
 
 $(boost_archive)-url    := $(sf_mirror)/boost/$(boost_archive)
 $(cgicc_archive)-url    := ftp://ftp.gnu.org/pub/gnu/cgicc/$(cgicc_archive)
-$(fop_archive)-url      := http://archive.apache.org/dist/xmlgraphics/fop/binaries/$(fop_archive)
-$(jing_archive)-url     := http://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(jing_archive)
+$(fop_archive)-url      := https://archive.apache.org/dist/xmlgraphics/fop/binaries/$(fop_archive)
+$(jing_archive)-url     := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(jing_archive)
 $(md5sum_msw_exe)-url   := http://etree.org/cgi-bin/counter.cgi/software/md5sum.exe#!md5!eb574b236133e60c989c6f472f07827b
-$(sample_archive)-url   := http://download.savannah.gnu.org/releases/lmi/$(sample_archive)
-$(trang_archive)-url    := http://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(trang_archive)
-$(xmlwrapp_archive)-url := http://github.com/vslavik/xmlwrapp/releases/download/v0.9.0/$(xmlwrapp_archive)
+$(sample_archive)-url   := https://download.savannah.gnu.org/releases/lmi/$(sample_archive)
+$(trang_archive)-url    := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jing-trang/$(trang_archive)
+$(xmlwrapp_archive)-url := https://github.com/vslavik/xmlwrapp/releases/download/v0.9.0/$(xmlwrapp_archive)
 
 $(boost_archive)-md5    := 2b999b2fb7798e1737d1fff8fac602ef
 $(cgicc_archive)-md5    := 6cb5153fc9fa64b4e50c7962aa557bbe
