@@ -124,7 +124,8 @@ cd /opt/lmi/src || print "Cannot cd"
 
 # Preserve any preexisting source directory, moving it aside so that
 # 'git clone' will install a pristine working copy.
-mv lmi lmi-moved-"$stamp0"
+cp --archive lmi lmi-moved-"$stamp0"
+rm -rf /opt/lmi/src/lmi
 
 # Use git's own protocol wherever possible. In case that's blocked
 # by a corporate firewall, fall back on https. In case a firewall
