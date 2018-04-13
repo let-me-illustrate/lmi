@@ -41,13 +41,6 @@ mkdir --parents "$cache_dir"
 if git ls-remote "$cache_dir"/"$wx_repository" >/dev/null
 then
     default_url="$cache_dir"/"$wx_repository"
-    # Now we could make a list of submodules...
-    cd "$default_url"
-    git show master:.gitmodules |sed -e'/\.git$/!d' -e's!.*\/!!'
-    # ...and download any that are missing to local cache, but
-    # that seems awfully fancy. Instead, we'll let the code that
-    # follows download them to our clone, and if we're mindful,
-    # we'll move them from there to the cache.
 fi
 
 # Configurable settings ########################################################
@@ -94,6 +87,13 @@ git checkout "$wx_commit_sha"
 git submodule status | grep '^-' | cut -d' ' -f2 | while read -r subpath
 do
     suburl=$(git config --file .gitmodules --get submodule.${subpath}.url)
+
+    # If the submodule hasn't been cached yet, clone it to cache now.
+    cache_url="$cache_dir"/${suburl##*/}
+    if ! git ls-remote "$cache_url" >/dev/null
+    then
+        git clone --bare "$suburl" "$cache_url"
+    fi
 
     # Configure the submodule to use URL relative to the one used for the
     # super-repository itself: this doesn't change anything when using the
