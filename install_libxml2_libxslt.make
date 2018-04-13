@@ -68,12 +68,19 @@ ifeq (CYGWIN,$(findstring CYGWIN,$(uname)))
   host_type     := i686-w64-mingw32
 endif
 
+xz_cflags := \
+  -Wno-format \
+  -Wno-format-extra-args \
+  -Wno-implicit-fallthrough \
+  -Wno-maybe-uninitialized \
+
 $(xz_version)_options := \
   --prefix=$(prefix) \
   --exec-prefix=$(exec_prefix) \
   --build=$(build_type) \
   --host=$(host_type) \
   --disable-dependency-tracking \
+  CFLAGS="-g -O2 $(xz_cflags)" \
 
 # For 'host' and 'build' configure options, see:
 #   http://cygwin.com/ml/cygwin/2002-01/msg00837.html
@@ -84,6 +91,28 @@ $(xz_version)_options := \
 #   c:/MinGW-20050827/bin/../lib/gcc/mingw32/3.4.4/include/stddef.h:
 # which elicit fatal errors such as this:
 #   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
+
+xmlsoft_common_cflags := \
+  -Wno-cpp \
+  -Wno-discarded-qualifiers \
+  -Wno-format \
+  -Wno-format-extra-args \
+  -Wno-implicit-fallthrough \
+  -Wno-implicit-function-declaration \
+  -Wno-maybe-uninitialized \
+  -Wno-misleading-indentation \
+  -Wno-missing-format-attribute \
+  -Wno-missing-prototypes \
+  -Wno-nested-externs \
+  -Wno-pedantic \
+  -Wno-pointer-sign \
+  -Wno-sign-compare \
+  -Wno-strict-prototypes \
+  -Wno-suggest-attribute=format \
+  -Wno-unused-but-set-variable \
+  -Wno-unused-function \
+  -Wno-unused-parameter \
+  -Wno-unused-variable \
 
 xmlsoft_common_options := \
   --prefix=$(prefix) \
@@ -96,6 +125,8 @@ xmlsoft_common_options := \
   --with-debug \
   --without-python \
   LDFLAGS='-lws2_32' \
+  CPPFLAGS="-w" \
+  CFLAGS="-g -O2 $(xmlsoft_common_cflags)" \
 
 $(libxml2_version)_options := \
   $(xmlsoft_common_options) \
