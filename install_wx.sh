@@ -23,9 +23,36 @@
 
 set -vxe
 
+# Preliminarily check local cache ##############################################
+
+# Repositories are kept in /cache_for_lmi/vcs/ whence they can be
+# cloned cheaply and reliably--whereas cloning them from a remote
+# host takes considerable time and bandwidth, and fails if internet
+# connectivity is lost, or the host is temporarily unavailable, or
+# it is blocked by a corporate firewall.
+
+wx_repository="wxWidgets.git"
+default_server="https://github.com/wxWidgets"
+default_url="$default_server"/"$wx_repository"
+
+cache_dir="/cache_for_lmi/vcs"
+mkdir --parents "$cache_dir"
+
+if git ls-remote "$cache_dir"/"$wx_repository" >/dev/null
+then
+    default_url="$cache_dir"/"$wx_repository"
+    # Now we could make a list of submodules...
+    cd "$default_url"
+    git show master:.gitmodules |sed -e'/\.git$/!d' -e's!.*\/!!'
+    # ...and download any that are missing to local cache, but
+    # that seems awfully fancy. Instead, we'll let the code that
+    # follows download them to our clone, and if we're mindful,
+    # we'll move them from there to the cache.
+fi
+
 # Configurable settings ########################################################
 
-wx_git_url=${wx_git_url:-"https://github.com/wxWidgets/wxWidgets.git"}
+wx_git_url=${wx_git_url:-"$default_url"}
 
 wx_commit_sha=${wx_commit_sha:-"e38866d3a603f600f87016458260f73593627348"}
 
