@@ -48,7 +48,7 @@ then
     wx_dir_parent=${wx_dir%/*}
     [ -d $wx_dir_parent ] || mkdir -p $wx_dir_parent
     cd $wx_dir_parent
-    git clone "$wx_git_url" ${wx_dir##*/}
+    git clone --shared "$wx_git_url" ${wx_dir##*/}
 fi
 
 cd $wx_dir
