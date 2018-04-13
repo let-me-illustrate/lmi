@@ -74,9 +74,9 @@ do
     # from a local mirror when wxWidgets itself is being cloned from such
     # a mirror, avoiding (slow and possibly unreliable) network access.
     git config submodule.${subpath}.url ${wx_git_url%/*}/${suburl##*/}
-
-    git submodule update --init "$subpath"
 done
+
+git submodule update --recursive --jobs $(nproc) --init
 
 [ "$wx_skip_clean" = 1 ] || git clean -dfx
 
