@@ -89,10 +89,10 @@ do
     suburl=$(git config --file .gitmodules --get submodule.${subpath}.url)
 
     # If the submodule hasn't been cached yet, clone it to cache now.
-    cache_url="$cache_dir"/${suburl##*/}
-    if ! git ls-remote "$cache_url" >/dev/null
+    cache_suburl="$cache_dir"/${suburl##*/}
+    if ! git ls-remote "$cache_suburl" >/dev/null
     then
-        git clone --bare "$suburl" "$cache_url"
+        git clone --bare "$suburl" "$cache_suburl"
     fi
 
     # Configure the submodule to use URL relative to the one used for the
