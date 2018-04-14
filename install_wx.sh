@@ -38,10 +38,14 @@ default_url="$default_server"/"$wx_repository"
 cache_dir="/cache_for_lmi/vcs"
 mkdir --parents "$cache_dir"
 
-if git ls-remote "$cache_dir"/"$wx_repository" >/dev/null
+cache_wx_url="$cache_dir"/"$wx_repository"
+
+if ! git ls-remote "$cache_wx_url" >/dev/null
 then
-    default_url="$cache_dir"/"$wx_repository"
+    git clone --bare "$default_url" "$cache_wx_url"
 fi
+
+default_url="$cache_wx_url"
 
 # Configurable settings ########################################################
 
