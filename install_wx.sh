@@ -75,17 +75,6 @@ git checkout "$wx_commit_sha"
 # Get any new submodules that may have been added, even if nested.
 git submodule update "$coefficiency" --recursive --init
 
-if [ "$wx_skip_clean" != 1 ]
-then
-    rm --force --recursive "$build_dir"
-    # This incidentally removes wxPdfDoc, but it's a good idea to rebuild that
-    # whenever wx is upgraded anyway.
-    rm --force --recursive $exec_prefix/bin/wx*
-    rm --force --recursive $exec_prefix/include/wx*
-    rm --force --recursive $exec_prefix/lib/wx*
-    rm --force --recursive $exec_prefix/lib/libwx*
-fi
-
 build_type=$("$proxy_wx_dir"/config.guess)
 host_type=i686-w64-mingw32
 
@@ -99,9 +88,6 @@ esac
 # and the unique commit SHA-1.
 gcc_version=$(${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '\r')
 vendor=gcc-$gcc_version-$wx_commit_sha
-
-build_dir="$prefix"/../wx-scratch/lmi-gcc-$gcc_version
-mkdir --parents "$build_dir"
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -145,6 +131,21 @@ config_options="
 "
 
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
+
+build_dir="$prefix"/../wx-scratch/lmi-gcc-$gcc_version
+
+if [ "$wx_skip_clean" != 1 ]
+then
+    rm --force --recursive ./"$build_dir"
+    # This incidentally removes wxPdfDoc, but it's a good idea to rebuild that
+    # whenever wx is upgraded anyway.
+    rm --force --recursive ./$exec_prefix/bin/wx*
+    rm --force --recursive ./$exec_prefix/include/wx*
+    rm --force --recursive ./$exec_prefix/lib/wx*
+    rm --force --recursive ./$exec_prefix/lib/libwx*
+fi
+
+mkdir --parents "$build_dir"
 
 cd "$build_dir"
 "$proxy_wx_dir"/configure $config_options
