@@ -59,7 +59,7 @@ proxy_wx_dir="$proxy_parent_dir"/wxWidgets
 if [ ! -d "$proxy_wx_dir" ]
 then
     cd "$proxy_parent_dir"
-    git clone "$coefficiency" --recurse-submodules "$remote_host_url" wxWidgets
+    git clone "$remote_host_url" wxWidgets
 fi
 
 cd "$proxy_wx_dir"
@@ -71,6 +71,22 @@ then
 fi
 
 git checkout "$wx_commit_sha"
+
+# Configure all submodules to use URL relative to the one used for the
+# super-repository itself: this doesn't change anything when using the
+# canonical wxWidgets GitHub URL, but allows to download submodules from a
+# local mirror when wxWidgets itself is being cloned from such a mirror,
+# avoiding (slow and possibly unreliable) network access.
+#
+# Note that this is always necessary after the initial clone, but may also
+# need doing after updating an existing working tree if a new submodule is
+# added upstream.
+git submodule status | grep '^-' | cut -d' ' -f2 | while read -r subpath
+do
+    suburl=$(git config --file .gitmodules --get submodule.${subpath}.url)
+
+    git config submodule.${subpath}.url ${remote_host_url%/*}/${suburl##*/}
+done
 
 # Get any new submodules that may have been added, even if nested.
 git submodule update "$coefficiency" --recursive --init
