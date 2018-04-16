@@ -35,6 +35,8 @@ remote_host_url=${remote_host_url:-"https://github.com/wxWidgets/wxWidgets.git"}
 
 wx_commit_sha=${wx_commit_sha:-"e38866d3a603f600f87016458260f73593627348"}
 
+wx_skip_clean=${wx_skip_clean:-"0"}
+
 coefficiency=${coefficiency:-"--jobs=4"}
 
 MAKE=${MAKE:-"make $coefficiency"}
@@ -73,14 +75,16 @@ git checkout "$wx_commit_sha"
 # Get any new submodules that may have been added, even if nested.
 git submodule update "$coefficiency" --recursive --init
 
-[ "$wx_skip_clean" = 1 ] || git clean -dfx
-
-# This incidentally removes wxPdfDoc, but it's a good idea to rebuild that
-# whenever wx is upgraded anyway.
-rm --force --recursive $exec_prefix/bin/wx*
-rm --force --recursive $exec_prefix/include/wx*
-rm --force --recursive $exec_prefix/lib/wx*
-rm --force --recursive $exec_prefix/lib/libwx*
+if [ "$wx_skip_clean" = 1 ]
+then
+    rm --force --recursive "$build_dir"
+    # This incidentally removes wxPdfDoc, but it's a good idea to rebuild that
+    # whenever wx is upgraded anyway.
+    rm --force --recursive $exec_prefix/bin/wx*
+    rm --force --recursive $exec_prefix/include/wx*
+    rm --force --recursive $exec_prefix/lib/wx*
+    rm --force --recursive $exec_prefix/lib/libwx*
+fi
 
 build_type=$("$proxy_wx_dir"/config.guess)
 host_type=i686-w64-mingw32
