@@ -257,9 +257,10 @@ fi
 # to be discarded, and any differences in the '.git' subdirectory,
 # which are presumably important to keep.
 
+cd /opt/lmi/src
 if [ -d lmi-moved-"$stamp0" ]
 then
-cd /opt/lmi/src && mv lmi lmi-new-"$stamp0" && mv lmi-moved-"$stamp0" lmi
+mv lmi lmi-new-"$stamp0" && mv lmi-moved-"$stamp0" lmi
 fi
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
