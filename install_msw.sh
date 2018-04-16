@@ -43,14 +43,12 @@ then
     export coefficiency='--jobs=4'
 fi
 
-# SOMEDAY !! After testing 'check_git_setup.sh' thoroughly, use its
-# 'case' statement here instead of this 'expr substr' thing.
-
 export platform
-if [ "$(expr substr $(uname -s) 1 6)" = "CYGWIN" ]
-then
-    platform=CYGWIN
-fi
+case $(uname) in
+    CYGWIN*)
+        platform=CYGWIN
+        ;;
+esac
 
 if [ "CYGWIN" = "$platform" ]
 then
@@ -136,6 +134,8 @@ git clone git://git.savannah.nongnu.org/lmi.git \
   || git clone https://github.com/vadz/lmi.git
 
 cd /opt/lmi/src/lmi || print "Cannot cd"
+
+./check_git_setup.sh
 
 if [ "CYGWIN" = "$platform" ]
 then
