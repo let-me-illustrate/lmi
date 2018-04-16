@@ -23,37 +23,20 @@
 
 set -vxe
 
-# Preliminarily check local cache ##############################################
-
-# Repositories are kept in /cache_for_lmi/vcs/ whence they can be
-# cloned cheaply and reliably--whereas cloning them from a remote
+# A repository is cached in /cache_for_lmi/vcs/, where it can be kept
+# up to date and reused cheaply--whereas cloning it from a remote
 # host takes considerable time and bandwidth, and fails if internet
 # connectivity is lost, or the host is temporarily unavailable, or
 # it is blocked by a corporate firewall.
 
-wx_repository="wxWidgets.git"
-default_server="https://github.com/wxWidgets"
-default_url="$default_server"/"$wx_repository"
-
-cache_dir="/cache_for_lmi/vcs"
-mkdir --parents "$cache_dir"
-
-cache_wx_url="$cache_dir"/"$wx_repository"
-
-if ! git ls-remote "$cache_wx_url" >/dev/null
-then
-    git clone --bare "$default_url" "$cache_wx_url"
-fi
-
-default_url="$cache_wx_url"
-
 # Configurable settings ########################################################
 
-wx_git_url=${wx_git_url:-"$default_url"}
+remote_host_url=${remote_host_url:-"https://github.com/wxWidgets/wxWidgets.git"}
 
 wx_commit_sha=${wx_commit_sha:-"e38866d3a603f600f87016458260f73593627348"}
 
 coefficiency=${coefficiency:-"--jobs=4"}
+
 MAKE=${MAKE:-"make $coefficiency"}
 
 # Variables that normally should be left alone #################################
@@ -61,53 +44,34 @@ MAKE=${MAKE:-"make $coefficiency"}
 mingw_dir=/MinGW_
 
 prefix=/opt/lmi/local
-exec_prefix=${prefix}
-
-wx_dir=${prefix%/*}/vcs/wxWidgets
+exec_prefix="$prefix"
 
 # Script commands ##############################################################
 
-if [ ! -d $wx_dir ]
+proxy_parent_dir="/cache_for_lmi/vcs"
+mkdir --parents "$proxy_parent_dir"
+
+proxy_wx_dir="$proxy_parent_dir"/wxWidgets
+
+# Create a local mirror if it doesn't already exist.
+if [ ! -d "$proxy_wx_dir" ]
 then
-    wx_dir_parent=${wx_dir%/*}
-    [ -d $wx_dir_parent ] || mkdir -p $wx_dir_parent
-    cd $wx_dir_parent
-    git clone --shared "$wx_git_url" ${wx_dir##*/}
+    cd "$proxy_parent_dir"
+    git clone "$coefficiency" --recurse-submodules "$remote_host_url"
 fi
 
-cd $wx_dir
+cd "$proxy_wx_dir"
 
-# Fetch the desired commit from the upstream repository if it's missing.
+# Fetch desired commit from remote host if missing.
 if ! git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null
 then
-    git fetch "$wx_git_url"
+    git fetch "$proxy_wx_dir"
 fi
+
 git checkout "$wx_commit_sha"
 
-# Initialize all the not yet initialized submodules (except for the known
-# exceptions, i.e. the submodules that we know that we won't need). This
-# will be necessary after the initial clone, but may also need doing after
-# updating an existing working tree if a new submodule is added upstream.
-git submodule status | grep '^-' | cut -d' ' -f2 | while read -r subpath
-do
-    suburl=$(git config --file .gitmodules --get submodule.${subpath}.url)
-
-    # If the submodule hasn't been cached yet, clone it to cache now.
-    cache_suburl="$cache_dir"/${suburl##*/}
-    if ! git ls-remote "$cache_suburl" >/dev/null
-    then
-        git clone --bare "$suburl" "$cache_suburl"
-    fi
-
-    # Configure the submodule to use URL relative to the one used for the
-    # super-repository itself: this doesn't change anything when using the
-    # canonical wxWidgets GitHub URL, but allows to download submodules
-    # from a local mirror when wxWidgets itself is being cloned from such
-    # a mirror, avoiding (slow and possibly unreliable) network access.
-    git config submodule.${subpath}.url ${wx_git_url%/*}/${suburl##*/}
-done
-
-git submodule update --recursive --jobs $(nproc) --init
+# Get any new submodules that may have been added, even if nested.
+git submodule update "$coefficiency" --recursive --init
 
 [ "$wx_skip_clean" = 1 ] || git clean -dfx
 
@@ -118,7 +82,7 @@ rm --force --recursive $exec_prefix/include/wx*
 rm --force --recursive $exec_prefix/lib/wx*
 rm --force --recursive $exec_prefix/lib/libwx*
 
-build_type=$($wx_dir/config.guess)
+build_type=$("$proxy_wx_dir"/config.guess)
 host_type=i686-w64-mingw32
 
 case $(uname) in
@@ -132,14 +96,8 @@ esac
 gcc_version=$(${mingw_bin_dir}${host_type}-gcc -dumpversion|tr -d '\r')
 vendor=gcc-$gcc_version-$wx_commit_sha
 
-build_dir=$wx_dir/lmi-gcc-$gcc_version
-mkdir -p "$build_dir"
-
-exclusions=$(git rev-parse --git-dir)/info/exclude
-if ! grep -q "^$build_dir/$" "$exclusions"
-then
-    printf "%s/\n" "$build_dir" >> "$exclusions"
-fi
+build_dir="$prefix"/../wx-scratch/lmi-gcc-$gcc_version
+mkdir --parents "$build_dir"
 
 # Configuration reference:
 #   http://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
@@ -185,7 +143,7 @@ config_options="
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
 
 cd "$build_dir"
-../configure $config_options
+"$proxy_wx_dir"/configure $config_options
 $MAKE
 $MAKE install
 
