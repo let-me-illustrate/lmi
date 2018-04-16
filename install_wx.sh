@@ -59,7 +59,7 @@ proxy_wx_dir="$proxy_parent_dir"/wxWidgets
 if [ ! -d "$proxy_wx_dir" ]
 then
     cd "$proxy_parent_dir"
-    git clone "$coefficiency" --recurse-submodules "$remote_host_url"
+    git clone "$coefficiency" --recurse-submodules "$remote_host_url" wxWidgets
 fi
 
 cd "$proxy_wx_dir"
