@@ -75,7 +75,7 @@ git checkout "$wx_commit_sha"
 # Get any new submodules that may have been added, even if nested.
 git submodule update "$coefficiency" --recursive --init
 
-if [ "$wx_skip_clean" = 1 ]
+if [ "$wx_skip_clean" != 1 ]
 then
     rm --force --recursive "$build_dir"
     # This incidentally removes wxPdfDoc, but it's a good idea to rebuild that
