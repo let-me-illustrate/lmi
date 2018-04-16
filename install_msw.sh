@@ -122,6 +122,7 @@ cd /opt/lmi/src || print "Cannot cd"
 
 # Preserve any preexisting source directory, moving it aside so that
 # 'git clone' will install a pristine working copy.
+
 cp --archive lmi lmi-moved-"$stamp0"
 rm -rf /opt/lmi/src/lmi
 
@@ -129,6 +130,7 @@ rm -rf /opt/lmi/src/lmi
 # by a corporate firewall, fall back on https. In case a firewall
 # inexplicably blocks the gnu.org domain, try Vadim's github clone
 # as a last resort.
+
 git clone git://git.savannah.nongnu.org/lmi.git \
   || git clone https://git.savannah.nongnu.org/r/lmi.git \
   || git clone https://github.com/vadz/lmi.git
@@ -245,6 +247,19 @@ EOF
 if [ "CYGWIN" != "$platform" ]
 then
     sed -i /opt/lmi/data/configurable_settings.xml -e's/C://g'
+fi
+
+# Restore any preexisting source directory that had been preserved
+# above, renaming the pristine checkout that had replaced it.
+#
+# Simply running 'git pull' should make the two directories identical
+# except for any local changes or additions, which are presumably not
+# to be discarded, and any differences in the '.git' subdirectory,
+# which are presumably important to keep.
+
+if [ -d lmi-moved-"$stamp0" ]
+then
+cd /opt/lmi/src && mv lmi lmi-new-"$stamp0" && mv lmi-moved-"$stamp0" lmi
 fi
 
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
