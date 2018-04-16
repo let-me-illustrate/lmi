@@ -136,13 +136,13 @@ build_dir="$prefix"/../wx-scratch/lmi-gcc-$gcc_version
 
 if [ "$wx_skip_clean" != 1 ]
 then
-    rm --force --recursive ./"$build_dir"
+    rm --force --recursive "$build_dir"
     # This incidentally removes wxPdfDoc, but it's a good idea to rebuild that
     # whenever wx is upgraded anyway.
-    rm --force --recursive ./$exec_prefix/bin/wx*
-    rm --force --recursive ./$exec_prefix/include/wx*
-    rm --force --recursive ./$exec_prefix/lib/wx*
-    rm --force --recursive ./$exec_prefix/lib/libwx*
+    rm --force --recursive $exec_prefix/bin/wx*
+    rm --force --recursive $exec_prefix/include/wx*
+    rm --force --recursive $exec_prefix/lib/wx*
+    rm --force --recursive $exec_prefix/lib/libwx*
 fi
 
 mkdir --parents "$build_dir"
