@@ -67,7 +67,7 @@ cd "$proxy_wx_dir"
 # Fetch desired commit from remote host if missing.
 if ! git rev-parse --quiet --verify "$wx_commit_sha^{commit}" >/dev/null
 then
-    git fetch "$proxy_wx_dir"
+    git fetch origin
 fi
 
 git checkout "$wx_commit_sha"
