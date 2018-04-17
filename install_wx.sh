@@ -48,18 +48,20 @@ mingw_dir=/MinGW_
 prefix=/opt/lmi/local
 exec_prefix="$prefix"
 
+repo_name="wxWidgets"
+
 # Script commands ##############################################################
 
 proxy_parent_dir="/cache_for_lmi/vcs"
 mkdir --parents "$proxy_parent_dir"
 
-proxy_wx_dir="$proxy_parent_dir"/wxWidgets
+proxy_wx_dir="$proxy_parent_dir"/$repo_name
 
 # Create a local mirror if it doesn't already exist.
 if [ ! -d "$proxy_wx_dir" ]
 then
     cd "$proxy_parent_dir"
-    git clone "$coefficiency" --recurse-submodules "$remote_host_url" wxWidgets
+    git clone "$coefficiency" --recurse-submodules "$remote_host_url" $repo_name
 fi
 
 cd "$proxy_wx_dir"
