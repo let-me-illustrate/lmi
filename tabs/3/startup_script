@@ -3,12 +3,12 @@
 a='schroot --chroot=cross-lmi'
 
 b='cd /opt/lmi/src/lmi'
-c='make $coefficiency install check_physical_closure 2>&1 |less -S'
-d='make $coefficiency cgi_tests cli_tests 2>&1 |less -S'
-e='make $coefficiency system_test 2>&1 |less -S'
+c='make $coefficiency install check_physical_closure 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
+d='make $coefficiency cgi_tests cli_tests 2>&1 | less -S'
+e='make $coefficiency system_test 2>&1 | less -S'
 f="make \$coefficiency unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log"
-g='make $coefficiency all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 |less -S'
-h='make $coefficiency cgi_tests cli_tests build_type=safestdlib  2>&1 |less -S'
+g='make $coefficiency all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
+h='make $coefficiency cgi_tests cli_tests build_type=safestdlib 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
 i="make \$coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log"
 
 print -rs $b ; echo $b ; eval $b
