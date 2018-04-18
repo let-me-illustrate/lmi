@@ -51,8 +51,6 @@ a) wxWidgets: create any directory (it will be called wx-build below),
                 --enable-std_string \
                 --disable-threads \
                 --disable-apple_ieee \
-                --without-libjpeg \
-                --without-libtiff \
                 --disable-gif
 
         You may add "--prefix=" option if you are building shared libraries

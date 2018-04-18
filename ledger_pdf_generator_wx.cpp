@@ -781,7 +781,7 @@ class pdf_illustration : protected html_interpolator
             page->render(ledger_, writer, *this);
             }
 
-        std::move(writer).save();
+        writer.save();
     }
 
     // Methods to be implemented by the derived classes to indicate which
@@ -2923,31 +2923,26 @@ void ledger_pdf_generator_wx::write
 {
     wxBusyCursor reverie;
 
-    std::unique_ptr<pdf_illustration> pdf_ill;
-
-    auto const z = ledger.ledger_type();
-    switch(z)
+    switch(ledger.ledger_type())
         {
         case mce_ill_reg:
-            pdf_ill = std::make_unique<pdf_illustration_regular>(ledger);
+            pdf_illustration_regular         (ledger).render_all(output);
             break;
         case mce_nasd:
-            pdf_ill = std::make_unique<pdf_illustration_nasd>(ledger);
+            pdf_illustration_nasd            (ledger).render_all(output);
             break;
         case mce_group_private_placement:
-            pdf_ill = std::make_unique<pdf_illustration_reg_d_group>(ledger);
+            pdf_illustration_reg_d_group     (ledger).render_all(output);
             break;
         case mce_individual_private_placement:
-            pdf_ill = std::make_unique<pdf_illustration_reg_d_individual>(ledger);
+            pdf_illustration_reg_d_individual(ledger).render_all(output);
             break;
         case mce_prospectus_obsolete:                 // fall through
         case mce_offshore_private_placement_obsolete: // fall through
         case mce_ill_reg_private_placement_obsolete:  // fall through
         case mce_variable_annuity_obsolete:
-            alarum() << "Unsupported ledger type '" << z << "'." << LMI_FLUSH;
+            alarum() << "Unsupported ledger type." << LMI_FLUSH;
         }
-
-    pdf_ill->render_all(output);
 }
 
 volatile bool ensure_setup = ledger_pdf_generator::set_creator

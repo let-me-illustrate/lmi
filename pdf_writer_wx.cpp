@@ -34,7 +34,6 @@
 
 #include <exception>                    // uncaught_exceptions()
 #include <limits>
-#include <sstream>
 
 namespace
 {
@@ -127,13 +126,7 @@ pdf_writer_wx::pdf_writer_wx
 
 wxDC& pdf_writer_wx::dc()
 {
-    LMI_ASSERT_WITH_MSG
-        (!was_saved_
-        ,"Can't use device context of the PDF file \""
-            << print_data_.GetFilename().ToStdString(wxConvUTF8)
-            << "\" which was already saved"
-        );
-
+    LMI_ASSERT(!save_has_been_called_);
     return pdf_dc_;
 }
 
@@ -154,12 +147,7 @@ void pdf_writer_wx::output_image
     ,oenum_render_or_only_measure output_mode
     )
 {
-    LMI_ASSERT_WITH_MSG
-        (!was_saved_
-        ,"Can't add an image to the PDF file \""
-            << print_data_.GetFilename().ToStdString(wxConvUTF8)
-            << "\" which was already saved"
-        );
+    LMI_ASSERT(!save_has_been_called_);
 
     int const y = wxRound(image.GetHeight() / scale);
 
@@ -199,12 +187,7 @@ int pdf_writer_wx::output_html
     ,oenum_render_or_only_measure output_mode
     )
 {
-    LMI_ASSERT_WITH_MSG
-        (!was_saved_
-        ,"Can't output HTML to the PDF file \""
-            << print_data_.GetFilename().ToStdString(wxConvUTF8)
-            << "\" which was already saved"
-        );
+    LMI_ASSERT(!save_has_been_called_);
 
     // We don't really want to change the font, but to preserve the current DC
     // font which is changed by rendering the HTML contents.
@@ -270,30 +253,29 @@ int pdf_writer_wx::get_page_bottom() const
     return total_page_size_.y - vert_margin;
 }
 
-void pdf_writer_wx::save() &&
-{
-    pdf_dc_.EndDoc();
+/// Save the PDF to the output file name specified in the ctor.
 
-    was_saved_ = true;
+void pdf_writer_wx::save()
+{
+    LMI_ASSERT(!save_has_been_called_);
+    pdf_dc_.EndDoc();
+    save_has_been_called_ = true;
 }
+
+/// Dtor: validates that save() has been called.
+///
+/// Canonically, std::uncaught_exceptions() would be called in each
+/// ctor, and its result there compared to its result here. Instead,
+/// for simplicity it's called only here--in effect, presuming that
+/// no object of this class is created by another object's dtor. At
+/// worst, this simplification would result in displaying a warning
+/// that wouldn't otherwise be shown, in a situation so weird that
+/// a warning would be appropriate.
 
 pdf_writer_wx::~pdf_writer_wx()
 {
-    // We keep things simple and just check whether any exceptions are
-    // currently in progress instead of storing the number of exceptions being
-    // handled in ctor and checking if this number is greater here, because it
-    // seems highly unlikely that a pdf_writer_wx object would ever be created
-    // in a dtor of some other object, which is the only situation in which the
-    // two versions would behave differently -- and even if it did happen, it
-    // would just result in incorrectly skipping the check, i.e. not critical.
-    if(!std::uncaught_exceptions() && !was_saved_)
+    if(!std::uncaught_exceptions() && !save_has_been_called_)
         {
-        std::ostringstream oss;
-        oss
-            << "Please report this: PDF file \""
-            << print_data_.GetFilename().ToStdString(wxConvUTF8)
-            << "\" was not saved."
-            ;
-        safely_show_message(oss.str());
+        safely_show_message("Please report this: save() not called for PDF.");
         }
 }

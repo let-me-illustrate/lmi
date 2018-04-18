@@ -32,10 +32,10 @@ START "Installing Cygwin" /WAIT setup-x86 ^
   --wait --quiet-mode ^
   --site http://mirrors.kernel.org/sourceware/cygwin/ ^
   --root C:/cygwin-lmi --packages ^
-   bsdtar,cvs,dos2unix,doxygen,gdb,git,git-cvs,git-svn,libtool,make,openssh,patch,rsync,subversion,unzip,wget,zip,zsh
+   autoconf,automake,bsdtar,dos2unix,doxygen,gdb,git,libtool,make,openssh,patch,rsync,unzip,wget,zip,zsh
 cd C:\cygwin-lmi\etc
 echo # >> fstab
-echo C:/opt/lmi/MinGW-7_2_0 /MinGW_        lmi_specific binary,user 0 0 >> fstab
+echo C:/opt/lmi/MinGW-7_3_0 /MinGW_        lmi_specific binary,user 0 0 >> fstab
 echo C:/opt/lmi             /opt/lmi       lmi_specific binary,user 0 0 >> fstab
 echo C:/lmi                 /lmi           lmi_specific binary,user 0 0 >> fstab
 echo C:/cache_for_lmi       /cache_for_lmi lmi_specific binary,user 0 0 >> fstab

@@ -795,7 +795,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     LMI_ASSERT(current_page == total_pages);
     output_page_number_and_version(pdf_writer, total_pages, current_page);
 
-    std::move(pdf_writer).save();
+    pdf_writer.save();
 }
 
 int group_quote_pdf_generator_wx::compute_pages_for_table_rows

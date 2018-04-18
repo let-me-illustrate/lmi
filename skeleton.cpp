@@ -94,6 +94,7 @@
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/msgout.h>
+#include <wx/persist/toplevel.h>
 #include <wx/textctrl.h>
 #include <wx/textdlg.h>                 // wxGetTextFromUser()
 #include <wx/toolbar.h>

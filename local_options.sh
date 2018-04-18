@@ -52,7 +52,7 @@
 #     [2005-01-17T18:15:26Z from Aaron W. LaFramboise]
 # when multiple versions of MinGW gcc are installed.
 
-echo "# Copyright (C) `date -u +'%Y'` [you]."     > local_options.make
+echo "# Copyright (C) $(date -u +'%Y') [you]."    > local_options.make
 echo "# http://savannah.nongnu.org/projects/lmi" >> local_options.make
 echo ""                                          >> local_options.make
 echo "# Local options"                           >> local_options.make

@@ -24,10 +24,10 @@
 # Navigate to the directory where this script resides, and make sure
 # it's a git "toplevel" directory.
 
-cd $(dirname $(readlink -f $0))
+cd $(dirname $(readlink -f "$0")) || print "Cannot cd"
 toplevel=$(git rev-parse --show-toplevel)
-printf "'%s' is current directory\n" $PWD
-printf "'%s' is git toplevel directory\n" $toplevel
+printf "'%s' is current directory\n" "$PWD"
+printf "'%s' is git toplevel directory\n" "$toplevel"
 [ "$PWD" = "$toplevel" ] || { printf "fail: PWD is not toplevel\n"; exit 1; }
 
 # For msw (cygwin) only, force correct permissions, and make sure
@@ -39,7 +39,7 @@ case $(uname -s) in
     printf "cygwin detected\n"
     printf "forcing correct permissions "
       for d in . gwc; do (\
-           printf "$d..." \
+           printf "%s..." "$d" \
         && find ./$d -maxdepth 1 -type f -not -name '*.sh' -not -name '*.sed' | xargs chmod -x \
       )done; \
     printf "all permissions forced\n"

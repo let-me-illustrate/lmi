@@ -21,7 +21,7 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-set -v
+set -vx
 
 # To get the latest version of this script:
 #
@@ -43,14 +43,12 @@ then
     export coefficiency='--jobs=4'
 fi
 
-# SOMEDAY !! After testing 'check_git_setup.sh' thoroughly, use its
-# 'case' statement here instead of this 'expr substr' thing.
-
 export platform
-if [ "$(expr substr $(uname -s) 1 6)" = "CYGWIN" ]
-then
-    platform=CYGWIN
-fi
+case $(uname) in
+    CYGWIN*)
+        platform=CYGWIN
+        ;;
+esac
 
 if [ "CYGWIN" = "$platform" ]
 then
@@ -90,7 +88,7 @@ then
     # Regardless of version, only system mounts are wanted here, and they
     # are never overridden.
 
-    restore_opt_mount=`mount --mount-entries | grep '/opt/lmi '`
+    restore_opt_mount=$(mount --mount-entries | grep '/opt/lmi ')
 
     umount "/opt"
     umount "/opt/lmi"
@@ -100,15 +98,16 @@ then
     umount "/opt"
     mount --force "C:/opt/lmi" "/opt/lmi"
 
-    [ -z "$restore_opt_mount" ] || sh -c mount $restore_opt_mount
+    [ -z "$restore_opt_mount" ] || sh -c mount "$restore_opt_mount"
 
     # Read this entire thread for $CYGCHECK rationale:
     #   https://cygwin.com/ml/cygwin/2012-02/threads.html#00910
     #   https://cygwin.com/ml/cygwin/2012-03/threads.html#00005
     # Cf.:
     #   https://lists.nongnu.org/archive/html/lmi/2016-01/msg00092.html
-    export CYGCHECK=`cygpath --mixed /usr/bin/cygcheck`
-    cmd /c $CYGCHECK -s -v -r | tr --delete '\r'
+    CYGCHECK=$(cygpath --mixed /usr/bin/cygcheck)
+    export CYGCHECK
+    cmd /c "$CYGCHECK" -s -v -r | tr --delete '\r'
 
     # 'core.fileMode' rationale:
     #   https://lists.nongnu.org/archive/html/lmi/2017-11/msg00018.html
@@ -119,21 +118,26 @@ fi
 java -version
 
 mkdir --parents /opt/lmi/src
-cd /opt/lmi/src
+cd /opt/lmi/src || print "Cannot cd"
 
 # Preserve any preexisting source directory, moving it aside so that
 # 'git clone' will install a pristine working copy.
-mv lmi lmi-moved-$stamp0
 
-# Favor https over git's own protocol only because corporate firewalls
-# in lmi's target industry tend to block the latter. If even git's
-# https protocol is blocked, try Vadim's copy as a last resort.
-git clone https://git.savannah.nongnu.org/r/lmi.git \
+cp --archive lmi lmi-moved-"$stamp0"
+rm -rf /opt/lmi/src/lmi
+
+# Use git's own protocol wherever possible. In case that's blocked
+# by a corporate firewall, fall back on https. In case a firewall
+# inexplicably blocks the gnu.org domain, try Vadim's github clone
+# as a last resort.
+
+git clone git://git.savannah.nongnu.org/lmi.git \
+  || git clone https://git.savannah.nongnu.org/r/lmi.git \
   || git clone https://github.com/vadz/lmi.git
-# Use git's own wherever possible.
-# git clone git://git.savannah.nongnu.org/lmi.git
 
-cd /opt/lmi/src/lmi
+cd /opt/lmi/src/lmi || print "Cannot cd"
+
+./check_git_setup.sh
 
 if [ "CYGWIN" = "$platform" ]
 then
@@ -142,16 +146,16 @@ then
     # It seems quite unlikely that anyone who's building lmi would have
     # any other need for mounts with the names used here.
 
-    restore_MinGW_mount=`mount --mount-entries | grep '/MinGW_ '`
+    restore_MinGW_mount=$(mount --mount-entries | grep '/MinGW_ ')
     [ -z "$restore_MinGW_mount" ] \
-      || printf "$restore_MinGW_mount\n" | grep --silent 'C:/opt/lmi/MinGW-7_2_0' \
-      || printf "Replacing former MinGW_ mount:\n $restore_MinGW_mount\n" >/dev/tty
-    mount --force "C:/opt/lmi/MinGW-7_2_0" "/MinGW_"
+      || printf "%s\\n" "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-7_3_0' \
+      || printf "Replacing former MinGW_ mount:\\n %s\\n" "$restore_MinGW_mount" >/dev/tty
+    mount --force "C:/opt/lmi/MinGW-7_3_0" "/MinGW_"
 
-    restore_cache_mount=`mount --mount-entries | grep '/cache_for_lmi '`
+    restore_cache_mount=$(mount --mount-entries | grep '/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \
-      || printf "$restore_cache_mount\n" | grep --silent 'C:/cache_for_lmi' \
-      || printf "Replacing former cache mount:\n  $restore_cache_mount\n" >/dev/tty
+      || printf "%s\\n" "$restore_cache_mount" | grep --silent 'C:/cache_for_lmi' \
+      || printf "Replacing former cache mount:\\n  %s\\n" "$restore_cache_mount" >/dev/tty
     mount --force "C:/cache_for_lmi" "/cache_for_lmi"
 fi
 
@@ -163,7 +167,7 @@ mkdir --parents /cache_for_lmi/downloads
 
 mount
 
-md5sum $0
+md5sum "$0"
 find /cache_for_lmi/downloads -type f | xargs md5sum
 
 rm --force --recursive scratch
@@ -183,7 +187,7 @@ make $coefficiency --output-sync=recurse -f install_miscellanea.make
 
 make $coefficiency --output-sync=recurse -f install_libxml2_libxslt.make
 
-make $coefficiency --output-sync=recurse -f install_wx.make
+./install_wx.sh
 
 make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make
 
@@ -202,14 +206,14 @@ then
     # No lmi binary should depend on any Cygwin library.
 
     for z in /opt/lmi/bin/*; \
-      do cmd /c $CYGCHECK $z 2>&1 | grep --silent cygwin \
-        && printf "\ncygcheck $z\n" && cmd /c $CYGCHECK $z; \
+      do cmd /c "$CYGCHECK $z" 2>&1 | grep --silent cygwin \
+        && printf "\\ncygcheck %s\\n" "$z" && cmd /c "$CYGCHECK $z"; \
       done
 fi
 
-printf "2450449 2458849"                            >/opt/lmi/data/expiry
-printf "0efd124fac6b15e6a9cd0b3dd718eea5  expiry\n" >/opt/lmi/data/validated.md5
-printf "8fa614e38dde6f7ab0f9fade87dfa2e3"           >/opt/lmi/data/passkey
+printf "2450449 2458849"                             >/opt/lmi/data/expiry
+printf "0efd124fac6b15e6a9cd0b3dd718eea5  expiry\\n" >/opt/lmi/data/validated.md5
+printf "8fa614e38dde6f7ab0f9fade87dfa2e3"            >/opt/lmi/data/passkey
 
 # Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
 
@@ -245,10 +249,23 @@ then
     sed -i /opt/lmi/data/configurable_settings.xml -e's/C://g'
 fi
 
+# Restore any preexisting source directory that had been preserved
+# above, renaming the pristine checkout that had replaced it.
+#
+# Simply running 'git pull' should make the two directories identical
+# except for any local changes or additions, which are presumably not
+# to be discarded, and any differences in the '.git' subdirectory,
+# which are presumably important to keep.
+
+if [ -d /opt/lmi/src/lmi-moved-"$stamp0" ]
+then
+cd /opt/lmi/src && mv lmi lmi-new-"$stamp0" && mv lmi-moved-"$stamp0" lmi
+fi
+
 stamp1=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 echo "Finished: $stamp1"
 
-seconds=$(expr $(date '+%s' -d $stamp1) - $(date '+%s' -d $stamp0))
+seconds=$(expr $(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0"))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
 

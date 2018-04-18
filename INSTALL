@@ -57,6 +57,9 @@ Close the "Command prompt" window.
 
 (2) Install lmi
 
+[Experienced users: Make sure 'C:\cache_for_lmi\' contains any files
+you need to download manually due to corporate firewall weirdness.]
+
 Start a Cygwin shell:
 
   Start | Programs | Cygwin | Cygwin Terminal

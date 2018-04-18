@@ -57,17 +57,8 @@
 #   error Disable wxUSE_APPLE_IEEE in wx setup.
 #endif // wxUSE_APPLE_IEEE
 
-// Graphics format with potential patent issues.
-#if wxUSE_LIBJPEG
-#   error Disable wxUSE_LIBJPEG in wx setup.
-#endif // wxUSE_LIBJPEG
-
-// Graphics format with potential patent issues.
-#if wxUSE_LIBTIFF
-#   error Disable wxUSE_LIBTIFF in wx setup.
-#endif // wxUSE_LIBTIFF
-
-// Patented: incompatible with software freedom.
+// The patents have expired, but the stench lingers:
+//   https://www.gnu.org/philosophy/gif.html
 #if wxUSE_GIF
 #   error Disable wxUSE_GIF in wx setup.
 #endif // wxUSE_GIF

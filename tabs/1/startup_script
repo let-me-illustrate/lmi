@@ -6,15 +6,18 @@ b='cd /opt/lmi/free/src/lmi'
 c='git fetch --all --dry-run'
 d='git pull'
 e='for z in $(git diff HEAD@{1} --name-only) ; do touch --reference=/opt/lmi/src/lmi/$z $z; done'
+f='git log --date=short --pretty=format:"%h %cd %s" --since=2018-01-01'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c ; eval $c
 print -rs $d ; echo $d ;
 print -rs $e ; echo $e ;
+print -rs $f ; echo $f ;
 
 unset a
 unset b
 unset c
 unset d
 unset e
+unset f
 
