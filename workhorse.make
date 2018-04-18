@@ -489,7 +489,11 @@ operations_posix_windows.o: gcc_common_extra_warnings += -Wno-maybe-uninitialize
 
 # The boost regex library is incompatible with '-Wshadow'.
 
-$(boost_regex_objects): gcc_common_extra_warnings += -Wno-shadow
+$(boost_regex_objects): gcc_common_extra_warnings += \
+  -Wno-conversion \
+  -Wno-implicit-fallthrough \
+  -Wno-register \
+  -Wno-shadow \
 
 boost_dependent_objects := \
   $(boost_regex_objects) \
