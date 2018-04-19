@@ -135,7 +135,7 @@ void self_test()
         }
 
 #if defined _GLIBCXX_DEBUG
-    std::cout << "Timing test skipped: takes too long in debug mode " << std::endl;
+    std::cout << "Timing test skipped: takes too long in debug mode" << std::endl;
 #else  // !defined _GLIBCXX_DEBUG
     std::cout
         << "Test solve speed: "
