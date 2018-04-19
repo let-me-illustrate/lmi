@@ -231,9 +231,8 @@ cd /opt/lmi/bin
 
   # Test all valid emission types
 
-pushd /opt/lmi/bin
-./lmi_cli_shared --file=sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_pdf_file,emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1  2>&1 |less -S
-./lmi_cli_shared --file=sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_pdf_file,emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1  2>&1 |less -S
+/opt/lmi/bin/lmi_cli_shared --file=/opt/lmi/src/lmi/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1  2>&1 |less -S
+/opt/lmi/bin/lmi_cli_shared --file=/opt/lmi/src/lmi/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1  2>&1 |less -S
 popd
 
   # Use native java to produce PDF illustrations from XSL-FO files
