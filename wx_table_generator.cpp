@@ -195,28 +195,64 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         else
             {
             total_fixed += i.width_;
+// Total width of all "fixed" columns, including the margins on both sides.
+//
+// This width_ is determined from a mask like "999,999".
+// (We should instead have a global map with the field names as keys
+// and their names and maximal width as values.)
+//
+// It's calculated from the mask, then increased to the header width, if
+// it's greater, and then increased by 2*column_margin_. All this happens in
+// wx_table_generator::add_column().
             }
         }
 
     if(total_width_ < total_fixed)
         {
+// As originally laid out, the table is too wide. Calculate the number
+// of pixels by which it overflows--for the whole table:
         auto const overflow = total_fixed - total_width_;
+// where total_width_ is the width of the page, e.g., 210mm for A4
+// and total_fixed is width of all fixed-width columns, as originally laid out
 
         // If we have only fixed columns, try to make them fit by decreasing
         // the margins around them if this can help, assuming that we can
-        // reduce them by up to half if really needed.
+        // reduce them to the extent necessary.
         if(!num_expand)
             {
+// Also calculate the number of pixels by which it overflows for each column
             // We need to round up in division here to be sure that all columns
             // fit into the available width.
             auto const overflow_per_column =
                 (overflow + num_columns - 1) / num_columns;
+// Now determine whether reducing the margins will make the table fit.
+// If that works, then do it; else don't do it, and print a warning.
+//
+// column_margin_ is the padding on each side of every column, so
+// the number of pixels between columns, as the table was originally
+// laid out, is two times column_margin_--which, as we just determined,
+// was too generous, so we're going to try reducing it.
+// Then this conditional compares
+//   the number of pixels by which we must shrink each column, to
+//   the number of pixels of padding between columns
+// Reducing the padding is a workable strategy if the desired reduction
+// is less than the padding.
+//
+// Is this as good as it can be, given that coordinates are integers?
             if(overflow_per_column <= 2 * column_margin_)
                 {
                 // We are going to reduce the total width by more than
                 // necessary, in general, because of rounding up above, so
                 // compensate for it by giving 1 extra pixel until we run out
                 // of these "underflow" pixels.
+// Defect: the number of pixels separating columns might now be zero.
+// '9' is five PDF pixels wide; do we need, say, two pixels between columns?
+//
+// Suggestion: change the
+//   overflow_per_column <= column_margin_
+// condition to something like:
+//    overflow_per_column <= column_margin_ - 4 // two pixels on each side
+//    overflow_per_column <= column_margin_ - 2 // one pixel on each side
                 auto underflow = overflow_per_column * num_columns - overflow;
 
                 for(auto& i : columns_)
@@ -242,6 +278,27 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
                 // we're done.
                 return;
                 }
+// If overflow_per_column is 1, then column_margin_ -= 1
+// "           "          "  2,   "        "           1
+// "           "          "  3,   "        "           2
+// "           "          "  4,   "        "           2
+// The 'underflow' logic shrinks columns by the exact number of pixels
+// to use up all the available width. But the column_margin_ reduction
+// isn't exact due to truncation: when the margin is added (on both sides),
+// is the total of all (margin+column+margin) widths lower than the maximum,
+// so that this is just a small aesthetic issue, or is it too wide, so that
+// not everything fits?
+//
+// Answer:
+// This is an issue of aligning the column text, not of fitting, because the
+// margin is used when positioning the text inside the column width. And the
+// width is correct, so the worst that can happen here is that the text is
+// offset by 0.5 pixels -- but, of course, if we rounded it down, it would be
+// offset by 0.5 pixels in the other direction. So maybe we should write
+//
+//     column_margin_ -= overflow_per_column / 2;
+//
+// just because it's shorter and not necessarily worse (nor better).
             }
 
         warning()
