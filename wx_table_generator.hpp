@@ -346,8 +346,8 @@ class wx_table_generator
 
     std::vector<column_info> columns_;
 
-    // Initially false, set to true after do_compute_column_widths() call
-    // meaning that all column_info::width_ values are now valid.
+    // Initially false, set to true after do_compute_column_widths_if_necessary()
+    // call meaning that all column_info::width_ values are now valid.
     bool has_column_widths_;
 
     // Maximal number of lines in any column header, initially 1 but can be

@@ -166,6 +166,36 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
     return text_rect;
 }
 
+// class members used, mutably or immutably:
+//
+// const    total_width_
+// mutable  has_column_widths_
+// mutable  column_margin_
+// mutable  columns_
+//   i.e. std::vector<column_info> columns_;
+// mutable  column_info elements
+//   the only column_info member called is is_hidden()
+//
+// meanings (written before each variable, as in header documentation):
+//
+    // ctor parameter:
+    // The table has the given total width
+// const    total_width_
+    // Initialized to false in ctor. Changed to true after this function
+    // has been called.
+    // "meaning that all column_info::width_ values are now valid"
+    // in what sense are they not valid otherwise?
+    // is this "...if_necessary()" function in fact always called?
+    // is it unnecessary is certain context, or just unnecessary to
+    // call it again after it has been called once?
+// mutable  has_column_widths_
+    // spacing on both left and right of column
+    // initialized in ctor to # pixels in one em: (dc_.GetTextExtent("M").x)
+    // changed in this function and nowhere else
+// mutable  column_margin_
+    // std::vector<column_info>
+// mutable  columns_
+
 void wx_table_generator::do_compute_column_widths_if_necessary()
 {
     if(has_column_widths_)
