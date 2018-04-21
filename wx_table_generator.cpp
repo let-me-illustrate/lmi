@@ -90,12 +90,10 @@ void wx_table_generator::add_column
         }
     else
         {
-        wxDCFontChanger set_header_font(dc_);
+        wxDCFontChanger header_font_setter(dc_);
         if(use_bold_headers_)
             {
-// set(get()) sounds like a do-nothing operation;
-// how can it make a font bold?
-            set_header_font.Set(get_header_font());
+            header_font_setter.Set(get_header_font());
             }
 
         // Set width to the special value of 0 for the variable width columns.
@@ -546,10 +544,10 @@ void wx_table_generator::output_header
 
     do_compute_column_widths_if_necessary();
 
-    wxDCFontChanger set_header_font(dc_);
+    wxDCFontChanger header_font_setter(dc_);
     if(use_bold_headers_)
         {
-        set_header_font.Set(get_header_font());
+        header_font_setter.Set(get_header_font());
         }
 
     // Split headers in single lines and fill up the entire columns*lines 2D
