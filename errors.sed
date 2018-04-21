@@ -1,6 +1,6 @@
-# Parse compiler output for errors.
+# Parse 'nychthemeral_test.sh' output for errors.
 #
-# Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Gregory W. Chicares.
+# Copyright (C) 2018 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -18,5 +18,35 @@
 # http://savannah.nongnu.org/projects/lmi
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
-#
-# to be repurposed...
+
+# Suggested use:
+# $make clobber; ./nychthemeral_test.sh 2>&1 | tee /tmp/lmi/logs/log | sed -f errors.sed
+
+/^# install; check physical closure/d
+/^# cgi and cli tests/d
+/^Test common gateway interface:/d
+/^Test command line interface:/d
+/^Test sample.cns:/d
+/^Test sample.ill:/d
+/^# system test/d
+/^System test:/d
+/^All [1-9][0-9]* files match./d
+/^# unit tests/d
+/^[1-9][0-9]* tests succeeded/d
+/^# build with shared-object attributes/d
+/^# cgi and cli tests in libstdc++ debug mode/d
+/^Test common gateway interface:/d
+/^Test command line interface:/d
+/^Test sample.cns:/d
+/^Test sample.ill:/d
+/^# unit tests in libstdc++ debug mode/d
+/^[1-9][0-9]* tests succeeded/d
+/^# test concinnity/d
+/^  Problems detected by xmllint:/d
+/^  Miscellaneous problems:/d
+/^  *[1-9][0-9]* source files/d
+/^  *[1-9][0-9]* source lines/d
+/^  *[1-9][0-9]* marked defects/d
+/^# schema tests/d
+/^# test all valid emission types/d
+/^$/d
