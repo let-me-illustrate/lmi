@@ -60,23 +60,6 @@
 /^[^ ]*ar: creating /d
 /^Creating library file:.*.a$/d
 /^< [a-z0-9].d0/d
-  # Delete expected output from como build.
-/^como  -c/d
-/^como -o/d
-/^Comeau/d
-/^Copyright/d
-/^MODE:.*C++/d
-/^C++ prelinker:.*assigned to file [^ ]*o$/d
-/^C++ prelinker:.*adopted by file [^ ]*o$/d
-/^C++ prelinker:.*no longer needed in [^ ]*o$/d
-/^C++ prelinker: executing:/d
-  # Delete expected output from borland build.
-/^[^ ]*bcc_cc  *--accept/d
-/^Borland C++/d
-/^Loaded pre-compiled headers\.$/d
-/^[^ ]*bcc_ld  *--accept/d
-/^Turbo Incremental Link/d
-/^\\[/A-Za-z0-9_]*.cpp:$/d
   # Delete multiple blank lines.
 /./,/^$/!d
 
