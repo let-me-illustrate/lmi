@@ -46,6 +46,12 @@
 /^make.*\[[0-9]*\]: warning: -jN forced in submake: disabling jobserver mode.$/d
 /^make.*\[[0-9]*\]: \*\*\* \[.*\] Error [0-9]*$/d
 /^make.*\[[0-9]*\]: \[.*\] Error [0-9]* (ignored)$/d
+  # Often, make says 'not remade because of errors' if it encounters
+  # an error; but sometimes it doesn't. It is more robust to look for
+  # three successive asterisks, then discard lines reporting errors
+  # we have told make to ignore, thus:
+#/\*\*\*/!d
+#/Error *[1-9][0-9]* *(ignored)$/d
   # Delete expected output from gnu cpp.
 /^[^ ]*CPP *-x/d
 /^[^ ]*cpp *-x/d
