@@ -323,6 +323,11 @@ class wx_table_generator
             return !is_variable_width_;
         }
 
+        bool is_variable_width() const
+        {
+            return is_variable_width_;
+        }
+
         // Return true if the contents of this column needs to be clipped when
         // outputting it.
         bool needs_clipping() const

@@ -208,12 +208,7 @@ void wx_table_generator::do_compute_column_widths()
     // Number of non-hidden columns.
     int num_columns = 0;
 
-    // Number of non-hidden columns whose width at this moment is
-    // zero. That's not the same as counting columns for which
-    // is_variable_width_ is true, which means their width was zero
-    // at the moment of construction. At the present moment, each
-    // column's width is at least its header width (plus margins),
-    // so can the number of columns in this category ever be nonzero?
+    // Number of non-hidden columns with variable width.
     //
     // In practice, only the "Participant" column on group quotes has
     // this property.
@@ -232,8 +227,7 @@ void wx_table_generator::do_compute_column_widths()
     // Total width of all non-hidden columns, reflecting header width
     // and the "999,999" mask for column contents, and including the
     // margins that have already been added in (but may be removed
-    // later). "Variable-width" columns are apparently excluded--or
-    // maybe not?
+    // later).
     int total_fixed = 0;
 
     for(auto const& i : columns_)
@@ -247,16 +241,12 @@ void wx_table_generator::do_compute_column_widths()
 
         num_columns++;
 
-        if(0 == i.width_)
+        if(i.is_variable_width())
             {
             num_expand++;
             }
-// It seems odd to put this in an 'else' clause--to save the work of
-// adding zero, even though that would do nothing? Or should the
-// 'if' condition actually be
-//   if(i.is_variable_width_)
-// ? IOW, if the collection includes one "variable-width" column,
-// should that column's header width be counted here, or excluded?
+// If the collection includes one "variable-width" column, should
+// that column's header width be counted here, or excluded?
         else
             {
             total_fixed += i.width_;
@@ -390,7 +380,7 @@ void wx_table_generator::do_compute_column_widths()
                 continue;
                 }
 
-            if(0 == i.width_)
+            if(i.is_variable_width())
                 {
                 i.width_ = per_expand;
                 }
