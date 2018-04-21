@@ -336,8 +336,10 @@ class wx_table_generator
 
         std::string const header_;
 
-        // Note that this field is modified directly by wx_table_generator code
-        // and hence is non-const.
+        // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
+        // pixel is one point = 1/72 inch.
+        //
+        // Modified directly by wx_table_generator code, hence not const.
         int width_;
 
       private:
