@@ -93,6 +93,8 @@ void wx_table_generator::add_column
         wxDCFontChanger set_header_font(dc_);
         if(use_bold_headers_)
             {
+// set(get()) sounds like a do-nothing operation;
+// how can it make a font bold?
             set_header_font.Set(get_header_font());
             }
 
@@ -174,12 +176,17 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 // mutable  columns_
 //   i.e. std::vector<column_info> columns_;
 // mutable  column_info elements
-//   the only column_info member called is is_hidden()
+//   the only column_info function member called is is_hidden()
+//   the only column_info data member modified is width_
 //
 // meanings (written before each variable, as in header documentation):
 //
     // ctor parameter:
     // The table has the given total width
+    // Comes from pdf_writer_wx::get_page_width() which sets it thus:
+    //   total_page_size_.x - 2 * horz_margin;
+    // where
+    //   total_page_size_   {pdf_dc_.GetSize()}
 // const    total_width_
     // Initialized to false in ctor. Changed to true after this function
     // has been called.
@@ -205,12 +212,41 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
 
     has_column_widths_ = true;
 
-    int num_columns = 0; // This counts only visible columns.
+    // Number of non-hidden columns.
+    int num_columns = 0;
+
+    // Number of non-hidden columns whose width at this moment is
+    // zero. That's not the same as counting columns for which
+    // is_variable_width_ is true, which means their width was zero
+    // at the moment of construction. At the present moment, each
+    // column's width is at least its header width (plus margins),
+    // so can the number of columns in this category ever be nonzero?
+    //
+    // In practice, only the "Participant" column on group quotes has
+    // this property.
+    //
+    // The rationale for this property is that, once adequate width
+    // has been allocated to each column, any excess width left over
+    // is to be distributed among such "variable-width" columns only.
+    //
+    // If there is no such excess width, then it would appear that
+    // "variable-width" columns would have zero width, which would
+    // be a defect. Or is it the case that a nonzero header width
+    // prevents a column from having a width of zero? In any case,
+    // should it be asserted that no column's final width is zero?
     int num_expand = 0;
+
+    // Total width of all non-hidden columns, reflecting header width
+    // and the "999,999" mask for column contents, and including the
+    // margins that have already been added in (but may be removed
+    // later). "Variable-width" columns are apparently excluded--or
+    // maybe not?
     int total_fixed = 0;
 
     for(auto const& i : columns_)
         {
+// Instead of retaining hidden columns, and explicitly skipping them
+// here and repeatedly later, why not just remove them from the vector?
         if(i.is_hidden())
             {
             continue;
@@ -222,6 +258,12 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
             {
             num_expand++;
             }
+// It seems odd to put this in an 'else' clause--to save the work of
+// adding zero, even though that would do nothing? Or should the
+// 'if' condition actually be
+//   if(i.is_variable_width_)
+// ? IOW, if the collection includes one "variable-width" column,
+// should that column's header width be counted here, or excluded?
         else
             {
             total_fixed += i.width_;
@@ -248,6 +290,9 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         // If we have only fixed columns, try to make them fit by decreasing
         // the margins around them if this can help, assuming that we can
         // reduce them to the extent necessary.
+        //
+        // Thus, if there's at least one "variable-width" column...
+        // ...just fail?
         if(!num_expand)
             {
 // Also calculate the number of pixels by which it overflows for each column
