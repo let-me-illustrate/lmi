@@ -42,7 +42,7 @@ good_copyright="...Copyright (C)...$(date -u +'%Y')..."
 
 good_url="...http://savannah.nongnu.org/projects/lmi..."
 
-boilerplate=$(printf "%s\n%s" "$good_copyright" "$good_url")
+boilerplate=$(printf '%s\n%s' "$good_copyright" "$good_url")
 
 # Files in general.
 
@@ -138,25 +138,25 @@ $boilerplate
 Spaces are permitted; they  can   be    consecutive.
 EOF
 
-ascii_ff=$(printf "\f")
+ascii_ff=$(printf '\f')
 cat >eraseme_whitespace_001 <<EOF
 $boilerplate
 $ascii_ff
 EOF
 
-ascii_cr=$(printf "\r")
+ascii_cr=$(printf '\r')
 cat >eraseme_whitespace_002 <<EOF
 $boilerplate
 $ascii_cr
 EOF
 
-ascii_ht=$(printf "\t")
+ascii_ht=$(printf '\t')
 cat >eraseme_whitespace_003 <<EOF
 $boilerplate
 $ascii_ht
 EOF
 
-ascii_vt=$(printf "\v")
+ascii_vt=$(printf '\v')
 cat >eraseme_whitespace_004 <<EOF
 $boilerplate
 $ascii_vt
