@@ -143,7 +143,7 @@ class wx_table_generator
     void do_output_horz_separator(int x1, int x2, int y );
     void do_output_vert_separator(int x , int y1, int y2);
 
-    void do_compute_column_widths_if_necessary();
+    void do_compute_column_widths();
 
     void do_output_values
         (int&               pos_x
@@ -348,9 +348,9 @@ class wx_table_generator
 
     std::vector<column_info> columns_;
 
-    // Initially false, set to true after do_compute_column_widths_if_necessary()
-    // call meaning that all column_info::width_ values are now valid.
-    bool has_column_widths_;
+    // Initially false, set to true after do_compute_column_widths()
+    // has been called to make all column_info::width_ values valid.
+    bool column_widths_already_computed_;
 
     // Maximal number of lines in any column header, initially 1 but can be
     // higher if multiline headers are used.

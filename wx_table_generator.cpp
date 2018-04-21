@@ -54,7 +54,7 @@ wx_table_generator::wx_table_generator
     ,char_height_(dc_.GetCharHeight())
     ,row_height_((4 * char_height_ + 2) / 3) // Arbitrarily use 1.333 line spacing.
     ,column_margin_(dc_.GetTextExtent("M").x)
-    ,has_column_widths_(false)
+    ,column_widths_already_computed_(false)
     ,max_header_lines_(1)
 {
     // Set a pen with 0 width to get the thin lines and butt cap style for the
@@ -136,7 +136,7 @@ void wx_table_generator::do_output_vert_separator(int x, int y1, int y2)
 
 int wx_table_generator::do_get_cell_x(std::size_t column)
 {
-    do_compute_column_widths_if_necessary();
+    do_compute_column_widths();
 
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
@@ -169,7 +169,7 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 // class members used, mutably or immutably:
 //
 // const    total_width_
-// mutable  has_column_widths_
+// mutable  column_widths_already_computed_
 // mutable  column_margin_
 // mutable  columns_
 //   i.e. std::vector<column_info> columns_;
@@ -186,14 +186,8 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
     // where
     //   total_page_size_   {pdf_dc_.GetSize()}
 // const    total_width_
-    // Initialized to false in ctor. Changed to true after this function
-    // has been called.
-    // "meaning that all column_info::width_ values are now valid"
-    // in what sense are they not valid otherwise?
-    // is this "...if_necessary()" function in fact always called?
-    // is it unnecessary is certain context, or just unnecessary to
-    // call it again after it has been called once?
-// mutable  has_column_widths_
+    // Used to prevent this function from being called more than once.
+// mutable  column_widths_already_computed_
     // spacing on both left and right of column
     // initialized in ctor to # pixels in one em: (dc_.GetTextExtent("M").x)
     // changed in this function and nowhere else
@@ -201,14 +195,15 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
     // std::vector<column_info>
 // mutable  columns_
 
-void wx_table_generator::do_compute_column_widths_if_necessary()
-{
-    if(has_column_widths_)
-        {
-        return;
-        }
+/// Compute column widths.
+///
+/// This function is to be called exactly once. Reason...
 
-    has_column_widths_ = true;
+void wx_table_generator::do_compute_column_widths()
+{
+    if(column_widths_already_computed_) return;
+
+    column_widths_already_computed_ = true;
 
     // Number of non-hidden columns.
     int num_columns = 0;
@@ -515,7 +510,7 @@ void wx_table_generator::output_horz_separator
     LMI_ASSERT(begin_column < end_column);
     LMI_ASSERT(end_column <= columns_.size());
 
-    do_compute_column_widths_if_necessary();
+    do_compute_column_widths();
 
     int const x1 = do_get_cell_x(begin_column);
 
@@ -542,7 +537,7 @@ void wx_table_generator::output_header
             return;
         }
 
-    do_compute_column_widths_if_necessary();
+    do_compute_column_widths();
 
     wxDCFontChanger header_font_setter(dc_);
     if(use_bold_headers_)
