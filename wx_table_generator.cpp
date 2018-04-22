@@ -256,17 +256,18 @@ void wx_table_generator::do_compute_column_widths()
 
     if(total_width_ < total_fixed)
         {
-// As originally laid out, the table is too wide. Calculate the number
-// of pixels by which it overflows--for the whole table:
-        auto const overflow = total_fixed - total_width_;
-// and total_fixed is width of all fixed-width columns, as originally laid out
-
-        // If we have only fixed columns, try to make them fit by decreasing
-        // the margins around them if this can help, assuming that we can
-        // reduce them to the extent necessary.
+        // The fixed-width columns don't all fit with their original
+        // one-em presumptive bilateral margins. Try to make them fit
+        // by reducing the margins slightly.
         //
-        // Thus, if there's at least one "variable-width" column...
-        // ...just fail?
+        // The number of pixels that would need to be removed is:
+        auto const overflow = total_fixed - total_width_;
+
+        // Because fixed-width columns take more than the available
+        // horizontal space, there's no room to fit any variable-width
+        // columns, so the column-fitting problem is overconstrained.
+        // Therefore, don't even try reducing margins if there are any
+        // variable-width columns.
         if(!num_expand)
             {
 // Also calculate the number of pixels by which it overflows for each column
