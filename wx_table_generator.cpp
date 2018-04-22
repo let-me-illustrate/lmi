@@ -224,10 +224,15 @@ void wx_table_generator::do_compute_column_widths()
     // should it be asserted that no column's final width is zero?
     int num_expand = 0;
 
-    // Total width of all non-hidden columns, reflecting header width
-    // and the "999,999" mask for column contents, and including the
-    // margins that have already been added in (but may be removed
-    // later).
+    // Total width of all non-hidden fixed-width columns.
+    // The width of each fixed-width column reflects:
+    //  - a mask like "999,999" (ideally, there would instead be a
+    //    quasi-global data structure mapping symbolic column names
+    //    to their corresponding headers and maximal widths)
+    //  - the header width
+    //  - the bilateral margins that have already been added
+    // The margins may be slightly reduced by this function to make
+    // everything fit when it otherwise wouldn't.
     int total_fixed = 0;
 
     for(auto const& i : columns_)
@@ -250,15 +255,6 @@ void wx_table_generator::do_compute_column_widths()
         else
             {
             total_fixed += i.width_;
-// Total width of all "fixed" columns, including the margins on both sides.
-//
-// This width_ is determined from a mask like "999,999".
-// (We should instead have a global map with the field names as keys
-// and their names and maximal width as values.)
-//
-// It's calculated from the mask, then increased to the header width, if
-// it's greater, and then increased by 2*column_margin_. All this happens in
-// wx_table_generator::add_column().
             }
         }
 
