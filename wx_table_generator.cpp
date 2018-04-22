@@ -54,7 +54,7 @@ wx_table_generator::wx_table_generator
     ,char_height_(dc_.GetCharHeight())
     ,row_height_((4 * char_height_ + 2) / 3) // Arbitrarily use 1.333 line spacing.
     ,column_margin_(dc_.GetTextExtent("M").x)
-    ,has_column_widths_(false)
+    ,column_widths_already_computed_(false)
     ,max_header_lines_(1)
 {
     // Set a pen with 0 width to get the thin lines and butt cap style for the
@@ -90,10 +90,10 @@ void wx_table_generator::add_column
         }
     else
         {
-        wxDCFontChanger set_header_font(dc_);
+        wxDCFontChanger header_font_setter(dc_);
         if(use_bold_headers_)
             {
-            set_header_font.Set(get_header_font());
+            header_font_setter.Set(get_header_font());
             }
 
         // Set width to the special value of 0 for the variable width columns.
@@ -136,7 +136,7 @@ void wx_table_generator::do_output_vert_separator(int x, int y1, int y2)
 
 int wx_table_generator::do_get_cell_x(std::size_t column)
 {
-    do_compute_column_widths_if_necessary();
+    do_compute_column_widths();
 
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
@@ -166,21 +166,70 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
     return text_rect;
 }
 
-void wx_table_generator::do_compute_column_widths_if_necessary()
+// class members used, mutably or immutably:
+//
+// const    total_width_
+// mutable  column_widths_already_computed_
+// mutable  column_margin_
+// mutable  columns_
+//   i.e. std::vector<column_info> columns_;
+// mutable  column_info elements
+//   the only column_info function member called is is_hidden()
+//   the only column_info data member modified is width_
+//
+// meanings (written before each variable, as in header documentation):
+//
+    // ctor parameter:
+    // max table width (page width minus horizontal page margins)
+// const    total_width_
+    // Used to prevent this function from being called more than once.
+// mutable  column_widths_already_computed_
+    // spacing on both left and right of column
+    // initialized in ctor to # pixels in one em: (dc_.GetTextExtent("M").x)
+    // changed in this function and nowhere else
+// mutable  column_margin_
+    // std::vector<column_info>
+// mutable  columns_
+
+/// Compute column widths.
+///
+/// This function is to be called exactly once. Reason...
+
+void wx_table_generator::do_compute_column_widths()
 {
-    if(has_column_widths_)
-        {
-        return;
-        }
+    if(column_widths_already_computed_) return;
 
-    has_column_widths_ = true;
+    column_widths_already_computed_ = true;
 
-    int num_columns = 0; // This counts only visible columns.
+    // Number of non-hidden columns.
+    int num_columns = 0;
+
+    // Number of non-hidden columns with variable width.
+    //
+    // In practice, only the "Participant" column on group quotes has
+    // this property.
+    //
+    // The rationale for this property is that, once adequate width
+    // has been allocated to each column, any excess width left over
+    // is to be distributed among such "variable-width" columns only:
+    // i.e., they (and only they) are to be "expanded".
     int num_expand = 0;
+
+    // Total width of all non-hidden fixed-width columns.
+    // The width of each fixed-width column reflects:
+    //  - a mask like "999,999" (ideally, there would instead be a
+    //    quasi-global data structure mapping symbolic column names
+    //    to their corresponding headers and maximal widths)
+    //  - the header width
+    //  - the bilateral margins that have already been added
+    // The margins may be slightly reduced by this function to make
+    // everything fit when it otherwise wouldn't.
     int total_fixed = 0;
 
     for(auto const& i : columns_)
         {
+// Instead of retaining hidden columns, and explicitly skipping them
+// here and repeatedly later, why not just remove them from the vector?
         if(i.is_hidden())
             {
             continue;
@@ -188,7 +237,7 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
 
         num_columns++;
 
-        if(0 == i.width_)
+        if(i.is_variable_width())
             {
             num_expand++;
             }
@@ -200,23 +249,53 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
 
     if(total_width_ < total_fixed)
         {
+        // The fixed-width columns don't all fit with their original
+        // one-em presumptive bilateral margins. Try to make them fit
+        // by reducing the margins slightly.
+        //
+        // The number of pixels that would need to be removed is:
         auto const overflow = total_fixed - total_width_;
 
-        // If we have only fixed columns, try to make them fit by decreasing
-        // the margins around them if this can help, assuming that we can
-        // reduce them by up to half if really needed.
+        // Because fixed-width columns take more than the available
+        // horizontal space, there's no room to fit any variable-width
+        // columns, so the column-fitting problem is overconstrained.
+        // Therefore, don't even try reducing margins if there are any
+        // variable-width columns.
         if(!num_expand)
             {
+// Also calculate the number of pixels by which it overflows for each column
             // We need to round up in division here to be sure that all columns
             // fit into the available width.
             auto const overflow_per_column =
                 (overflow + num_columns - 1) / num_columns;
+// Now determine whether reducing the margins will make the table fit.
+// If that works, then do it; else don't do it, and print a warning.
+//
+// column_margin_ is the padding on each side of every column, so
+// the number of pixels between columns, as the table was originally
+// laid out, is two times column_margin_--which, as we just determined,
+// was too generous, so we're going to try reducing it.
+// Then this conditional compares
+//   the number of pixels by which we must shrink each column, to
+//   the number of pixels of padding between columns
+// Reducing the padding is a workable strategy if the desired reduction
+// is less than the padding.
+//
+// Is this as good as it can be, given that coordinates are integers?
             if(overflow_per_column <= 2 * column_margin_)
                 {
                 // We are going to reduce the total width by more than
                 // necessary, in general, because of rounding up above, so
                 // compensate for it by giving 1 extra pixel until we run out
                 // of these "underflow" pixels.
+// Defect: the number of pixels separating columns might now be zero.
+// '9' is five PDF pixels wide; do we need, say, two pixels between columns?
+//
+// Suggestion: change the
+//   overflow_per_column <= column_margin_
+// condition to something like:
+//    overflow_per_column <= column_margin_ - 4 // two pixels on each side
+//    overflow_per_column <= column_margin_ - 2 // one pixel on each side
                 auto underflow = overflow_per_column * num_columns - overflow;
 
                 for(auto& i : columns_)
@@ -242,6 +321,27 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
                 // we're done.
                 return;
                 }
+// If overflow_per_column is 1, then column_margin_ -= 1
+// "           "          "  2,   "        "           1
+// "           "          "  3,   "        "           2
+// "           "          "  4,   "        "           2
+// The 'underflow' logic shrinks columns by the exact number of pixels
+// to use up all the available width. But the column_margin_ reduction
+// isn't exact due to truncation: when the margin is added (on both sides),
+// is the total of all (margin+column+margin) widths lower than the maximum,
+// so that this is just a small aesthetic issue, or is it too wide, so that
+// not everything fits?
+//
+// Answer:
+// This is an issue of aligning the column text, not of fitting, because the
+// margin is used when positioning the text inside the column width. And the
+// width is correct, so the worst that can happen here is that the text is
+// offset by 0.5 pixels -- but, of course, if we rounded it down, it would be
+// offset by 0.5 pixels in the other direction. So maybe we should write
+//
+//     column_margin_ -= overflow_per_column / 2;
+//
+// just because it's shorter and not necessarily worse (nor better).
             }
 
         warning()
@@ -253,6 +353,25 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
         return;
         }
 
+    // Lay out variable-width columns in whatever space is left over
+    // after accounting for all fixed-width columns.
+    //
+    // If there's more than enough space for them, then expand them
+    // to consume all available space.
+    //
+    // If there isn't enough space for their headers and contents,
+    // then clip them. Motivation: the archetypal variable-width
+    // column is a personal name, which has practically unlimited
+    // width. On a group premium quote, numeric columns must never
+    // be truncated, but truncating one extremely long personal name
+    // is preferable to failing to produce any quote at all. It would
+    // of course be possible to take the header of such a column as
+    // its minimal width, but that would be a useless refinement in
+    // the problem domain. In the most extreme conceivable case, all
+    // fixed-width columns would fit, but there would be not a single
+    // pixel available for variable-width columns and they would all
+    // in effect be dropped; again, in the problem domain, that would
+    // actually be preferable to failing to produce any output.
     if(num_expand)
         {
         int const per_expand
@@ -265,7 +384,7 @@ void wx_table_generator::do_compute_column_widths_if_necessary()
                 continue;
                 }
 
-            if(0 == i.width_)
+            if(i.is_variable_width())
                 {
                 i.width_ = per_expand;
                 }
@@ -385,7 +504,7 @@ void wx_table_generator::output_horz_separator
     LMI_ASSERT(begin_column < end_column);
     LMI_ASSERT(end_column <= columns_.size());
 
-    do_compute_column_widths_if_necessary();
+    do_compute_column_widths();
 
     int const x1 = do_get_cell_x(begin_column);
 
@@ -412,12 +531,12 @@ void wx_table_generator::output_header
             return;
         }
 
-    do_compute_column_widths_if_necessary();
+    do_compute_column_widths();
 
-    wxDCFontChanger set_header_font(dc_);
+    wxDCFontChanger header_font_setter(dc_);
     if(use_bold_headers_)
         {
-        set_header_font.Set(get_header_font());
+        header_font_setter.Set(get_header_font());
         }
 
     // Split headers in single lines and fill up the entire columns*lines 2D

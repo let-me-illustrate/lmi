@@ -1,0 +1,127 @@
+#!/bin/zsh
+
+# Run a comprehensive set of tests (excluding the automated GUI test).
+
+# Copyright (C) 2018 Gregory W. Chicares.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+# http://savannah.nongnu.org/projects/lmi
+# email: <gchicares@sbcglobal.net>
+# snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+# SOMEDAY !! Not all tests return nonzero on failure, so 'set -e'
+# doesn't reliably exit after the first test failure.
+
+set -e
+
+# This is why 'zsh' is specified in the hash-bang (the POSIX shell
+# provides no convenient alternative):
+setopt PIPE_FAIL
+
+if [ "$LMI_HOST" = "i686-w64-mingw32" ]
+then
+    PERFORM=wine
+fi
+
+coefficiency=${coefficiency:-"--jobs=$(nproc)"}
+
+build_clutter='
+/^make.*\[[0-9]*\]: Entering directory/d
+/^make.*\[[0-9]*\]: Leaving directory/d
+/^make.*\[[0-9]*\]: Nothing to be done for/d
+/^make.*\[[0-9]*\]: warning: -jN forced in submake: disabling jobserver mode.$/d
+/^[^ ]*cpp -x /d
+/^[^ ]*g++ -[Mo]/d
+/^[^ ]*windres -o /d
+'
+
+install_clutter='
+/^Generating product files.$/d
+/^All product files written.$/d
+/^$/d
+'
+
+cli_cgi_clutter='
+/^cp /d
+/^Test solve speed: /d
+/^Timing test skipped: takes too long in debug mode$/d
+/^    Input:        [0-9]* milliseconds$/d
+/^    Calculations: [0-9]* milliseconds$/d
+/^    Output:       [0-9]* milliseconds$/d
+/^  0 errors$/d
+'
+
+concinnity_clutter='
+/.*\/test_coding_rules_test\.sh$/d
+/^Testing .test_coding_rules.\.$/d
+'
+
+# Directory for test logs.
+mkdir --parents /tmp/lmi/logs
+
+cd /opt/lmi/src/lmi
+
+printf '# install; check physical closure\n\n'
+make "$coefficiency" install check_physical_closure 2>&1 | tee /tmp/lmi/logs/install | sed -e "$build_clutter" -e "$install_clutter"
+
+printf '\n# cgi and cli tests\n\n'
+make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 | tee /tmp/lmi/logs/cgi-cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
+
+printf '\n# system test\n\n'
+make "$coefficiency" system_test 2>&1 | tee /tmp/lmi/logs/system-test | sed -e "$build_clutter" -e "$install_clutter"
+
+printf '\n# unit tests\n\n'
+make "$coefficiency" unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >/tmp/lmi/logs/unit-tests
+
+printf '\n# build with shared-object attributes\n\n'
+make "$coefficiency" all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 | tee /tmp/lmi/logs/so_test | sed -e "$build_clutter"
+
+printf '\n# cgi and cli tests in libstdc++ debug mode\n\n'
+make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safestdlib 2>&1 | tee /tmp/lmi/logs/cgi-cli-safestdlib | sed -e "$build_clutter" -e "$cli_cgi_clutter"
+
+printf '\n# unit tests in libstdc++ debug mode\n\n'
+make "$coefficiency" unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >/tmp/lmi/logs/unit-tests-safestdlib
+
+printf '\n# test concinnity\n\n'
+make "$coefficiency" check_concinnity 2>&1 | sed -e "$build_clutter" -e "$concinnity_clutter"
+
+# Run the following tests in a throwaway directory so that the files
+# they create can be cleaned up easily.
+cd /tmp
+mkdir --parents /tmp/lmi/tmp
+cd /tmp/lmi/tmp
+
+# Copy these files hither because the emission tests write some
+# output files to the input file's directory.
+cp /opt/lmi/src/lmi/sample.ill .
+cp /opt/lmi/src/lmi/sample.cns .
+
+printf '\n# test all valid emission types\n\n'
+
+"$PERFORM" /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+
+"$PERFORM" /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+
+printf '\n# schema tests\n\n'
+/opt/lmi/src/lmi/test_schemata.sh >/tmp/lmi/logs/schemata  2>&1
+
+# Clean up stray output. (The zsh '(N)' glob qualifier turns on
+# null_glob for a single expansion.)
+for z in /tmp/lmi/tmp/*(N); do rm "$z"; done
+
+# The automated GUI test simulates keyboard and mouse actions, so
+# no such actions must be performed manually while it is running.
+# Therefore, it is deliberately excluded from this script.
+printf '\nDo not forget to run wx_test.\n'

@@ -148,14 +148,14 @@ then
 
     restore_MinGW_mount=$(mount --mount-entries | grep '/MinGW_ ')
     [ -z "$restore_MinGW_mount" ] \
-      || printf "%s\\n" "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-7_3_0' \
-      || printf "Replacing former MinGW_ mount:\\n %s\\n" "$restore_MinGW_mount" >/dev/tty
+      || printf '%s\n' "$restore_MinGW_mount" | grep --silent 'C:/opt/lmi/MinGW-7_3_0' \
+      || printf 'Replacing former MinGW_ mount:\n %s\n' "$restore_MinGW_mount" >/dev/tty
     mount --force "C:/opt/lmi/MinGW-7_3_0" "/MinGW_"
 
     restore_cache_mount=$(mount --mount-entries | grep '/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \
-      || printf "%s\\n" "$restore_cache_mount" | grep --silent 'C:/cache_for_lmi' \
-      || printf "Replacing former cache mount:\\n  %s\\n" "$restore_cache_mount" >/dev/tty
+      || printf '%s\n' "$restore_cache_mount" | grep --silent 'C:/cache_for_lmi' \
+      || printf 'Replacing former cache mount:\n  %s\n' "$restore_cache_mount" >/dev/tty
     mount --force "C:/cache_for_lmi" "/cache_for_lmi"
 fi
 
@@ -207,13 +207,13 @@ then
 
     for z in /opt/lmi/bin/*; \
       do cmd /c "$CYGCHECK $z" 2>&1 | grep --silent cygwin \
-        && printf "\\ncygcheck %s\\n" "$z" && cmd /c "$CYGCHECK $z"; \
+        && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z"; \
       done
 fi
 
-printf "2450449 2458849"                             >/opt/lmi/data/expiry
-printf "0efd124fac6b15e6a9cd0b3dd718eea5  expiry\\n" >/opt/lmi/data/validated.md5
-printf "8fa614e38dde6f7ab0f9fade87dfa2e3"            >/opt/lmi/data/passkey
+printf '2450449 2458849'                            >/opt/lmi/data/expiry
+printf '0efd124fac6b15e6a9cd0b3dd718eea5  expiry\n' >/opt/lmi/data/validated.md5
+printf '8fa614e38dde6f7ab0f9fade87dfa2e3'           >/opt/lmi/data/passkey
 
 # Tailored to msw; for POSIX, s|C:|| and s|CMD /c|/bin/sh| (e.g.).
 
