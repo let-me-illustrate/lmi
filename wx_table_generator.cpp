@@ -212,12 +212,6 @@ void wx_table_generator::do_compute_column_widths()
     // The rationale for this property is that, once adequate width
     // has been allocated to each column, any excess width left over
     // is to be distributed among such "variable-width" columns only.
-    //
-    // If there is no such excess width, then it would appear that
-    // "variable-width" columns would have zero width, which would
-    // be a defect. Or is it the case that a nonzero header width
-    // prevents a column from having a width of zero? In any case,
-    // should it be asserted that no column's final width is zero?
     int num_expand = 0;
 
     // Total width of all non-hidden fixed-width columns.
@@ -246,8 +240,6 @@ void wx_table_generator::do_compute_column_widths()
             {
             num_expand++;
             }
-// If the collection includes one "variable-width" column, should
-// that column's header width be counted here, or excluded?
         else
             {
             total_fixed += i.width_;
@@ -360,6 +352,25 @@ void wx_table_generator::do_compute_column_widths()
         return;
         }
 
+    // Lay out variable-width columns in whatever space is left over
+    // after accounting for all fixed-width columns.
+    //
+    // If there's more than enough space for them, then widen them
+    // to consume all available space.
+    //
+    // If there isn't enough space for their headers and contents,
+    // then clip them. Motivation: the archetypal variable-width
+    // column is a personal name, which has practically unlimited
+    // width. On a group premium quote, numeric columns must never
+    // be truncated, but truncating one extremely long personal name
+    // is preferable to failing to produce any quote at all. It would
+    // of course be possible to take the header of such a column as
+    // its minimal width, but that would be a useless refinement in
+    // the problem domain. In the most extreme conceivable case, all
+    // fixed-width columns would fit, but there would be not a single
+    // pixel available for variable-width columns and they would all
+    // in effect be dropped; again, in the problem domain, that would
+    // actually be preferable to failing to produce any output.
     if(num_expand)
         {
         int const per_expand
