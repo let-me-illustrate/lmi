@@ -211,7 +211,8 @@ void wx_table_generator::do_compute_column_widths()
     //
     // The rationale for this property is that, once adequate width
     // has been allocated to each column, any excess width left over
-    // is to be distributed among such "variable-width" columns only.
+    // is to be distributed among such "variable-width" columns only:
+    // i.e., they (and only they) are to be "expanded".
     int num_expand = 0;
 
     // Total width of all non-hidden fixed-width columns.
@@ -355,7 +356,7 @@ void wx_table_generator::do_compute_column_widths()
     // Lay out variable-width columns in whatever space is left over
     // after accounting for all fixed-width columns.
     //
-    // If there's more than enough space for them, then widen them
+    // If there's more than enough space for them, then expand them
     // to consume all available space.
     //
     // If there isn't enough space for their headers and contents,
