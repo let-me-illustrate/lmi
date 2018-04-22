@@ -44,6 +44,7 @@
 #include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
 #include <wx/datectrl.h>
+#include <wx/persist/bookctrl.h>
 #include <wx/radiobox.h>
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
@@ -56,11 +57,6 @@
 
 namespace
 {
-/// Open new bookcontrol to page selected in most recent instance.
-///
-/// A page selection is maintained for each bookcontrol resource.
-
-std::map<std::string,std::size_t> last_selected_page;
 
 /// Custom event to trigger a call to SetFocus(). This action requires
 /// a custom event because wxFocusEvent does not change focus--it only
@@ -115,7 +111,16 @@ MvcController::MvcController
     //   https://lists.nongnu.org/archive/html/lmi/2018-03/msg00041.html
     SetIcons(TopWindow().GetIcons());
 
-    BookControl().ChangeSelection(last_selected_page[view_.ResourceFileName()]);
+    // Use resource file name as the unique identifier of the particular
+    // controller, as different controllers use different book controls with
+    // different number of pages, and so shouldn't reuse the last saved page of
+    // each other.
+    //
+    // For cosmetic purposes, remove the ".xrc" suffix of the resource file
+    // name as it doesn't really make much sense in the config file/registry
+    // context.
+    wxString const name{view_.ResourceFileName()};
+    wxPersistentRegisterAndRestore(&BookControl(), name.BeforeLast('.'));
 
     // This assignment must follow the call to LoadDialog().
     // Initialization to 'parent' in the ctor-initializer-list
@@ -731,10 +736,6 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
 void MvcController::UponPageChanged(wxBookCtrlBaseEvent& event)
 {
     event.Skip();
-
-    int const z = event.GetSelection();
-    LMI_ASSERT(wxNOT_FOUND != z);
-    last_selected_page[view_.ResourceFileName()] = z;
 
     ConditionallyEnable();
 }
