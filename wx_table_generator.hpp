@@ -161,6 +161,30 @@ class wx_table_generator
     int row_height_;
     int column_margin_;
 
+    class column_info;
+    std::vector<column_info> columns_;
+
+    // Initially false, set to true after do_compute_column_widths()
+    // has been called to make all column_info::width_ values valid.
+    bool column_widths_already_computed_;
+
+    // Maximal number of lines in any column header, initially 1 but can be
+    // higher if multiline headers are used.
+    std::size_t max_header_lines_;
+
+    // If false, separator lines are not drawn automatically (they can still be
+    // drawn by calling output_horz_separator() or output_vert_separator()
+    // explicitly).
+    bool draw_separators_ = true;
+
+    // If true, headers are drawn in bold.
+    bool use_bold_headers_ = true;
+
+    // If true, force right alignment for all columns instead of centering them
+    // automatically if they have fixed size.
+    bool align_right_ = false;
+};
+
 //   is_centered_ is a member variable, initialized in the ctor
 //   is_hidden() is a member function, whose return value is dynamic
 // Should these really be implemented in those two different ways?
@@ -298,80 +322,57 @@ class wx_table_generator
 // used, while the various accessors discussed above are just its
 // implementation details.
 
-    class column_info
+class wx_table_generator::column_info
+{
+  public:
+    column_info(std::string const& header, int width)
+        :header_(header)
+        ,width_(width)
+        ,is_variable_width_(width == 0)
+        {
+        }
+
+    // A column with empty header is considered to be suppressed and
+    // doesn't appear in the output at all.
+    bool is_hidden() const { return header_.empty(); }
+
+    // Return true if this column should be centered, rather than
+    // left-aligned. Notice that this is ignored for globally right-aligned
+    // tables.
+    bool is_centered() const
     {
-      public:
-        column_info(std::string const& header, int width)
-            :header_(header)
-            ,width_(width)
-            ,is_variable_width_(width == 0)
-            {
-            }
+        // Fixed width columns are centered by default, variable width ones
+        // are not as long strings look better with the default left
+        // alignment.
+        return !is_variable_width_;
+    }
 
-        // A column with empty header is considered to be suppressed and
-        // doesn't appear in the output at all.
-        bool is_hidden() const { return header_.empty(); }
+    bool is_variable_width() const
+    {
+        return is_variable_width_;
+    }
 
-        // Return true if this column should be centered, rather than
-        // left-aligned. Notice that this is ignored for globally right-aligned
-        // tables.
-        bool is_centered() const
-        {
-            // Fixed width columns are centered by default, variable width ones
-            // are not as long strings look better with the default left
-            // alignment.
-            return !is_variable_width_;
-        }
+    // Return true if the contents of this column needs to be clipped when
+    // outputting it.
+    bool needs_clipping() const
+    {
+        // Variable width columns can have practically unlimited length and
+        // hence overflow into the next column or even beyond and must be
+        // clipped to prevent this from happening. Fixed width columns are
+        // not supposed to overflow anyhow, so clipping them is unnecessary.
+        return is_variable_width_;
+    }
 
-        bool is_variable_width() const
-        {
-            return is_variable_width_;
-        }
+    std::string const header_;
 
-        // Return true if the contents of this column needs to be clipped when
-        // outputting it.
-        bool needs_clipping() const
-        {
-            // Variable width columns can have practically unlimited length and
-            // hence overflow into the next column or even beyond and must be
-            // clipped to prevent this from happening. Fixed width columns are
-            // not supposed to overflow anyhow, so clipping them is unnecessary.
-            return is_variable_width_;
-        }
+    // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
+    // pixel is one point = 1/72 inch.
+    //
+    // Modified directly by wx_table_generator code, hence not const.
+    int width_;
 
-        std::string const header_;
-
-        // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
-        // pixel is one point = 1/72 inch.
-        //
-        // Modified directly by wx_table_generator code, hence not const.
-        int width_;
-
-      private:
-        bool const is_variable_width_;
-    };
-
-    std::vector<column_info> columns_;
-
-    // Initially false, set to true after do_compute_column_widths()
-    // has been called to make all column_info::width_ values valid.
-    bool column_widths_already_computed_;
-
-    // Maximal number of lines in any column header, initially 1 but can be
-    // higher if multiline headers are used.
-    std::size_t max_header_lines_;
-
-    // If false, separator lines are not drawn automatically (they can still be
-    // drawn by calling output_horz_separator() or output_vert_separator()
-    // explicitly).
-    bool draw_separators_ = true;
-
-    // If true, headers are drawn in bold.
-    bool use_bold_headers_ = true;
-
-    // If true, force right alignment for all columns instead of centering them
-    // automatically if they have fixed size.
-    bool align_right_ = false;
+  private:
+    bool const is_variable_width_;
 };
 
 #endif // wx_table_generator_hpp
