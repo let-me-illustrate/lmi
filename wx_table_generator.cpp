@@ -180,11 +180,7 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 // meanings (written before each variable, as in header documentation):
 //
     // ctor parameter:
-    // The table has the given total width
-    // Comes from pdf_writer_wx::get_page_width() which sets it thus:
-    //   total_page_size_.x - 2 * horz_margin;
-    // where
-    //   total_page_size_   {pdf_dc_.GetSize()}
+    // max table width (page width minus horizontal page margins)
 // const    total_width_
     // Used to prevent this function from being called more than once.
 // mutable  column_widths_already_computed_
@@ -263,7 +259,6 @@ void wx_table_generator::do_compute_column_widths()
 // As originally laid out, the table is too wide. Calculate the number
 // of pixels by which it overflows--for the whole table:
         auto const overflow = total_fixed - total_width_;
-// where total_width_ is the width of the page, e.g., 210mm for A4
 // and total_fixed is width of all fixed-width columns, as originally laid out
 
         // If we have only fixed columns, try to make them fit by decreasing
