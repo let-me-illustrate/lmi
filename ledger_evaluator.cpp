@@ -66,6 +66,7 @@ std::vector<std::string> const suffixes
 
 typedef std::unordered_map<std::string, std::pair<int,oenum_format_style>> format_map_t;
 typedef std::unordered_map<std::string, std::string> title_map_t;
+typedef std::unordered_map<std::string, std::string> mask_map_t;
 
 // For all numbers (so-called 'scalars' and 'vectors', but not
 // 'strings') grabbed from all ledgers, look for a format. If one
@@ -296,6 +297,132 @@ ledger_evaluator Ledger::make_evaluator() const
     // product--though it does not accommodate strings as this is
     // written in 2006-07. DATABASE !! So consider adding them there
     // when the database is revamped.
+
+    mask_map_t mask_map;
+
+    mask_map ["AVGenAcct_CurrentZero"           ] = "999,999,999";
+    mask_map ["AVGenAcct_GuaranteedZero"        ] = "999,999,999";
+    mask_map ["AVRelOnDeath_Current"            ] = "999,999,999";
+    mask_map ["AVSepAcct_CurrentZero"           ] = "999,999,999";
+    mask_map ["AVSepAcct_GuaranteedZero"        ] = "999,999,999";
+    mask_map ["AcctVal_Current"                 ] = "999,999,999";
+    mask_map ["AcctVal_CurrentZero"             ] = "999,999,999";
+    mask_map ["AcctVal_Guaranteed"              ] = "999,999,999";
+    mask_map ["AcctVal_GuaranteedZero"          ] = "999,999,999";
+    mask_map ["AddonCompOnAssets"               ] = "999,999,999";
+    mask_map ["AddonCompOnPremium"              ] = "999,999,999";
+    mask_map ["AddonMonthlyFee"                 ] = "999,999,999";
+    mask_map ["AnnGAIntRate_Current"            ] = "999,999,999";
+    mask_map ["AnnGAIntRate_Guaranteed"         ] = "999,999,999";
+    mask_map ["AnnHoneymoonValueRate_Current"   ] = "999,999,999";
+    mask_map ["AnnHoneymoonValueRate_Guaranteed"] = "999,999,999";
+    mask_map ["AnnPostHoneymoonRate_Current"    ] = "999,999,999";
+    mask_map ["AnnPostHoneymoonRate_Guaranteed" ] = "999,999,999";
+    mask_map ["AnnSAIntRate_Current"            ] = "999,999,999";
+    mask_map ["AnnSAIntRate_Guaranteed"         ] = "999,999,999";
+    mask_map ["AttainedAge"                     ] = "999,999,999";
+    mask_map ["AvgDeathBft_Current"             ] = "999,999,999";
+    mask_map ["AvgDeathBft_Guaranteed"          ] = "999,999,999";
+    mask_map ["BaseDeathBft_Current"            ] = "999,999,999";
+    mask_map ["BaseDeathBft_Guaranteed"         ] = "999,999,999";
+    mask_map ["COICharge_Current"               ] = "999,999,999";
+    mask_map ["COICharge_Guaranteed"            ] = "999,999,999";
+    mask_map ["CSVNet_Current"                  ] = "999,999,999";
+    mask_map ["CSVNet_CurrentZero"              ] = "999,999,999";
+    mask_map ["CSVNet_Guaranteed"               ] = "999,999,999";
+    mask_map ["CSVNet_GuaranteedZero"           ] = "999,999,999";
+    mask_map ["CV7702_Current"                  ] = "999,999,999";
+    mask_map ["CV7702_Guaranteed"               ] = "999,999,999";
+    mask_map ["ClaimsPaid_Current"              ] = "999,999,999";
+    mask_map ["ClaimsPaid_Guaranteed"           ] = "999,999,999";
+    mask_map ["CorpTaxBracket"                  ] = "999,999,999";
+    mask_map ["CorridorFactor"                  ] = "999,999,999";
+    mask_map ["CurrMandE"                       ] = "999,999,999";
+    mask_map ["DBOpt"                           ] = "999,999,999";
+    mask_map ["DacTaxLoad_Current"              ] = "999,999,999";
+    mask_map ["DacTaxLoad_Guaranteed"           ] = "999,999,999";
+    mask_map ["DacTaxRsv_Current"               ] = "999,999,999";
+    mask_map ["DacTaxRsv_Guaranteed"            ] = "999,999,999";
+    mask_map ["DeathProceedsPaid_Current"       ] = "999,999,999";
+    mask_map ["DeathProceedsPaid_Guaranteed"    ] = "999,999,999";
+    mask_map ["EOYDeathBft_Current"             ] = "999,999,999";
+    mask_map ["EOYDeathBft_Guaranteed"          ] = "999,999,999";
+    mask_map ["EeGrossPmt"                      ] = "999,999,999";
+    mask_map ["EeModalMinimumPremium"           ] = "999,999,999";
+    mask_map ["EeMode"                          ] = "999,999,999";
+// This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
+    mask_map ["EePmt"                           ] = "999,999,999";
+    mask_map ["ErGrossPmt"                      ] = "999,999,999";
+    mask_map ["ErModalMinimumPremium"           ] = "999,999,999";
+    mask_map ["ErMode"                          ] = "999,999,999";
+// This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
+    mask_map ["ErPmt"                           ] = "999,999,999";
+    mask_map ["ExpenseCharges_Current"          ] = "999,999,999";
+    mask_map ["ExpenseCharges_Guaranteed"       ] = "999,999,999";
+    mask_map ["ExperienceReserve_Current"       ] = "999,999,999";
+    mask_map ["GptForceout"                     ] = "999,999,999";
+    mask_map ["GrossIntCredited_Current"        ] = "999,999,999";
+    mask_map ["GrossIntCredited_Guaranteed"     ] = "999,999,999";
+    mask_map ["GrossPmt"                        ] = "999,999,999";
+    mask_map ["HoneymoonValueSpread"            ] = "999,999,999";
+    mask_map ["IndvTaxBracket"                  ] = "999,999,999";
+    mask_map ["InforceLives"                    ] = "999,999,999";
+    mask_map ["IrrCsv_Current"                  ] = "999,999,999";
+    mask_map ["IrrCsv_Guaranteed"               ] = "999,999,999";
+    mask_map ["IrrDb_Current"                   ] = "999,999,999";
+    mask_map ["IrrDb_Guaranteed"                ] = "999,999,999";
+    mask_map ["KFactor_Current"                 ] = "999,999,999";
+    mask_map ["LoanIntAccrued_Current"          ] = "999,999,999";
+    mask_map ["LoanIntAccrued_Guaranteed"       ] = "999,999,999";
+    mask_map ["MlyGAIntRate_Current"            ] = "999,999,999";
+    mask_map ["MlyGAIntRate_Guaranteed"         ] = "999,999,999";
+    mask_map ["MlyHoneymoonValueRate_Current"   ] = "999,999,999";
+    mask_map ["MlyHoneymoonValueRate_Guaranteed"] = "999,999,999";
+    mask_map ["MlyPostHoneymoonRate_Current"    ] = "999,999,999";
+    mask_map ["MlyPostHoneymoonRate_Guaranteed" ] = "999,999,999";
+    mask_map ["MlySAIntRate_Current"            ] = "999,999,999";
+    mask_map ["MlySAIntRate_Guaranteed"         ] = "999,999,999";
+    mask_map ["ModalMinimumPremium"             ] = "999,999,999";
+    mask_map ["AnnualFlatExtra"                 ] = "999,999,999";
+//    mask_map ["NaarForceout"                    ] = "999,999,999";
+    mask_map ["NetCOICharge_Current"            ] = "999,999,999";
+    mask_map ["NetClaims_Current"               ] = "999,999,999";
+    mask_map ["NetClaims_Guaranteed"            ] = "999,999,999";
+    mask_map ["NetIntCredited_Current"          ] = "999,999,999";
+    mask_map ["NetIntCredited_Guaranteed"       ] = "999,999,999";
+    mask_map ["NetPmt_Current"                  ] = "999,999,999";
+    mask_map ["NetPmt_Guaranteed"               ] = "999,999,999";
+    mask_map ["NetWD"                           ] = "999,999,999";
+    mask_map ["NewCashLoan"                     ] = "999,999,999";
+    mask_map ["Outlay"                          ] = "999,999,999";
+    mask_map ["PartMortTableMult"               ] = "999,999,999";
+    mask_map ["PolicyFee_Current"               ] = "999,999,999";
+    mask_map ["PolicyFee_Guaranteed"            ] = "999,999,999";
+    mask_map ["PolicyYear"                      ] = "999,999,999";
+    mask_map ["PrefLoanBalance_Current"         ] = "999,999,999";
+    mask_map ["PrefLoanBalance_Guaranteed"      ] = "999,999,999";
+    mask_map ["PremTaxLoad_Current"             ] = "999,999,999";
+    mask_map ["PremTaxLoad_Guaranteed"          ] = "999,999,999";
+// Excluded because it's unimplemented:
+//    mask_map ["ProducerCompensation"            ] = "999,999,999";
+    mask_map ["ProjectedCoiCharge_Current"      ] = "999,999,999";
+    mask_map ["RefundableSalesLoad"             ] = "999,999,999";
+    mask_map ["RiderCharges_Current"            ] = "999,999,999";
+    mask_map ["Salary"                          ] = "999,999,999";
+    mask_map ["SepAcctCharges_Current"          ] = "999,999,999";
+    mask_map ["SepAcctCharges_Guaranteed"       ] = "999,999,999";
+    mask_map ["SpecAmt"                         ] = "999,999,999";
+    mask_map ["SpecAmtLoad_Current"             ] = "999,999,999";
+    mask_map ["SpecAmtLoad_Guaranteed"          ] = "999,999,999";
+    mask_map ["SurrChg_Current"                 ] = "999,999,999";
+    mask_map ["SurrChg_Guaranteed"              ] = "999,999,999";
+    mask_map ["TermPurchased_Current"           ] = "999,999,999";
+    mask_map ["TermPurchased_Guaranteed"        ] = "999,999,999";
+    mask_map ["TermSpecAmt"                     ] = "999,999,999";
+    mask_map ["TgtPrem"                         ] = "999,999,999";
+    mask_map ["TotalIMF"                        ] = "999,999,999";
+    mask_map ["TotalLoanBalance_Current"        ] = "999,999,999";
+    mask_map ["TotalLoanBalance_Guaranteed"     ] = "999,999,999";
 
 // Here's my top-level analysis of the formatting specification.
 //
@@ -655,6 +782,7 @@ ledger_evaluator Ledger::make_evaluator() const
         );
     vectors   ["NetDeathBenefit"] = &NetDeathBenefit;
     title_map ["NetDeathBenefit"] = "Net\nDeath\nBenefit";
+    mask_map  ["NetDeathBenefit"] = "999,999,999";
     format_map["NetDeathBenefit"] = f1;
 
     std::vector<double> SupplDeathBft_Current   (Curr_.TermPurchased);
@@ -663,12 +791,15 @@ ledger_evaluator Ledger::make_evaluator() const
     vectors   ["SupplDeathBft_Guaranteed"] = &SupplDeathBft_Guaranteed;
     title_map ["SupplDeathBft_Current"   ] = "Curr Suppl\nDeath\nBenefit";
     title_map ["SupplDeathBft_Guaranteed"] = "Guar Suppl\nDeath\nBenefit";
+    mask_map  ["SupplDeathBft_Current"   ] = "999,999,999";
+    mask_map  ["SupplDeathBft_Guaranteed"] = "999,999,999";
     format_map["SupplDeathBft_Current"   ] = f1;
     format_map["SupplDeathBft_Guaranteed"] = f1;
 
     std::vector<double> SupplSpecAmt(Invar.TermSpecAmt);
     vectors   ["SupplSpecAmt"            ] = &SupplSpecAmt;
     title_map ["SupplSpecAmt"            ] = "Suppl\nSpecified\nAmount";
+    mask_map  ["SupplSpecAmt"            ] = "999,999,999";
     format_map["SupplSpecAmt"            ] = f1;
 
     // [End of derived columns.]
@@ -846,13 +977,18 @@ ledger_evaluator Ledger::make_evaluator() const
         std::vector<std::string> SupplementalReportColumnsTitles;
         SupplementalReportColumnsTitles.reserve(SupplementalReportColumns.size());
 
+        std::vector<std::string> SupplementalReportColumnsMasks;
+        SupplementalReportColumnsMasks.reserve(SupplementalReportColumns.size());
+
         for(auto const& j : SupplementalReportColumns)
             {
             SupplementalReportColumnsTitles.push_back(title_map[j]);
+            SupplementalReportColumnsMasks .push_back(mask_map [j]);
             }
 
         stringvectors["SupplementalReportColumnsNames"] = std::move(SupplementalReportColumns);
         stringvectors["SupplementalReportColumnsTitles"] = std::move(SupplementalReportColumnsTitles);
+        stringvectors["SupplementalReportColumnsMasks" ] = std::move(SupplementalReportColumnsMasks );
         }
 
     // PDF !! Is the old pyx="values_tsv" facility still wanted?

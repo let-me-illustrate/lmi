@@ -1952,7 +1952,7 @@ class standard_supplemental_report : public page_with_tabular_report
                     (illustration_table_column
                         {std::move(name)
                         ,interpolate_html.evaluate("SupplementalReportColumnsTitles", i)
-                        ,"999,999,999"
+                        ,interpolate_html.evaluate("SupplementalReportColumnsMasks" , i)
                         }
                     );
                 }
