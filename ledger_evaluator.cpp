@@ -184,7 +184,7 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map["AnnPostHoneymoonRate_Guaranteed" ] = "Guar Post\nHoneymoon\nRate";
     title_map["AnnSAIntRate_Current"            ] = "Curr Ann\nSep Acct\nInt Rate";
     title_map["AnnSAIntRate_Guaranteed"         ] = "Guar Ann\nSep Acct\nInt Rate";
-    title_map["AttainedAge"                     ] = "End of\nYear Age";
+    title_map["AttainedAge"                     ] = "End of\nYear\nAge";
     title_map["AvgDeathBft_Current"             ] = "Curr Avg\nDeath\nBenefit";
     title_map["AvgDeathBft_Guaranteed"          ] = "Guar Avg\nDeath\nBenefit";
     title_map["BaseDeathBft_Current"            ] = "Curr Base\nDeath\nBenefit";
@@ -320,7 +320,7 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map ["AnnPostHoneymoonRate_Guaranteed" ] = "999,999,999";
     mask_map ["AnnSAIntRate_Current"            ] = "999,999,999";
     mask_map ["AnnSAIntRate_Guaranteed"         ] = "999,999,999";
-    mask_map ["AttainedAge"                     ] = "999,999,999";
+    mask_map ["AttainedAge"                     ] =         "999";
     mask_map ["AvgDeathBft_Current"             ] = "999,999,999";
     mask_map ["AvgDeathBft_Guaranteed"          ] = "999,999,999";
     mask_map ["BaseDeathBft_Current"            ] = "999,999,999";
@@ -336,7 +336,7 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map ["ClaimsPaid_Current"              ] = "999,999,999";
     mask_map ["ClaimsPaid_Guaranteed"           ] = "999,999,999";
     mask_map ["CorpTaxBracket"                  ] = "999,999,999";
-    mask_map ["CorridorFactor"                  ] = "999,999,999";
+    mask_map ["CorridorFactor"                  ] =       "9999%";
     mask_map ["CurrMandE"                       ] = "999,999,999";
     mask_map ["DBOpt"                           ] = "999,999,999";
     mask_map ["DacTaxLoad_Current"              ] = "999,999,999";
@@ -398,7 +398,7 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map ["PartMortTableMult"               ] = "999,999,999";
     mask_map ["PolicyFee_Current"               ] = "999,999,999";
     mask_map ["PolicyFee_Guaranteed"            ] = "999,999,999";
-    mask_map ["PolicyYear"                      ] = "999,999,999";
+    mask_map ["PolicyYear"                      ] =         "999";
     mask_map ["PrefLoanBalance_Current"         ] = "999,999,999";
     mask_map ["PrefLoanBalance_Guaranteed"      ] = "999,999,999";
     mask_map ["PremTaxLoad_Current"             ] = "999,999,999";
