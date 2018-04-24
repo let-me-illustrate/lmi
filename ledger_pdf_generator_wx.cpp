@@ -366,9 +366,14 @@ class using_illustration_table
     // Must be overridden to return the description of the table columns.
     virtual illustration_table_columns const& get_table_columns() const = 0;
 
-    // May be overridden to return false if the given column shouldn't be shown
-    // for the specific ledger values (currently used to exclude individual
-    // columns from composite illustrations).
+    // PDF !! Most overrides have exactly this function body:
+    //    {
+    //    // Don't show AttainedAge on a composite.
+    //    return !(ledger.is_composite() && column == column_end_of_year_age);
+    //    }
+    // However, that cannot be written here, once and only once,
+    // because 'column_end_of_year_age' is an enumerator whose value
+    // may differ in each derived class.
     virtual bool should_show_column(Ledger const& ledger, int column) const
     {
         stifle_warning_for_unused_value(ledger);
@@ -1776,6 +1781,11 @@ class page_with_tabular_report
 class ill_reg_tabular_detail_page : public page_with_tabular_report
 {
   private:
+    // PDF !! This derived class and its siblings each contain an enum
+    // like the following. Most of the enumerators are unused. They
+    // index the container returned by get_table_columns(), and must
+    // be maintained in parallel with it so that the two lists match
+    // perfectly.
     enum
         {column_policy_year
         ,column_end_of_year_age
@@ -1862,8 +1872,8 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 };
 
@@ -1902,8 +1912,8 @@ class ill_reg_tabular_detail2_page : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 };
 
@@ -2204,8 +2214,8 @@ class page_with_basic_tabular_report : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 
     void render_or_measure_extra_headers
@@ -2650,8 +2660,8 @@ class reg_d_individual_irr_base : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 
     void render_or_measure_extra_headers
@@ -2826,8 +2836,8 @@ class reg_d_individual_curr : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 
     void render_or_measure_extra_headers
