@@ -344,10 +344,20 @@ void wx_table_generator::do_compute_column_widths()
 // just because it's shorter and not necessarily worse (nor better).
             }
 
+        // PDF !! Before release, consider showing less information here.
         warning()
-            << "Not enough space for all fixed columns: "
-            << overflow
-            << " more pixels needed."
+            << "Not enough space for all " << num_columns << " columns."
+            << "\nPrintable width is " << total_width_ << " points."
+            << "\nData alone require " << total_fixed - 2 * column_margin_ * num_columns
+            << " points without any margins for legibility."
+            << "\nColumn margins of " << column_margin_ << " points on both sides"
+            << " would take up " << 2 * column_margin_ * num_columns << " additional points."
+            << "\nFor reference:"
+            << "\n'M' is " << dc_.GetTextExtent("M").x << " points wide."
+            << "\n'N' is " << dc_.GetTextExtent("N").x << " points wide."
+            << "\n'1' is " << dc_.GetTextExtent("1").x << " points wide."
+            << "\n'9' is " << dc_.GetTextExtent("9").x << " points wide."
+            << "\n',' is " << dc_.GetTextExtent(",").x << " points wide."
             << LMI_FLUSH
             ;
         return;
