@@ -242,6 +242,11 @@ popd
 
 for XYZZY in billion; do JAVA_HOME=$(dirname $(dirname $(dirname $(readlink -f $(whence java))))) /opt/lmi/third_party/fop-0.20.5/fop.sh -fo "/opt/lmi/bin/old/$XYZZY.fo.xml" -pdf "/opt/lmi/bin/old/$XYZZY.pdf"; done 2>&1 |less -S
 
+  # ...the exact number of "dirname" commands depends on where java is
+  # installed, so try a different number of them if that failed, e.g.:
+
+for XYZZY in billion; do JAVA_HOME=$(dirname $(dirname $(readlink -f $(whence java)))) /opt/lmi/third_party/fop-0.20.5/fop.sh -fo "/opt/lmi/bin/old/$XYZZY.fo.xml" -pdf "/opt/lmi/bin/old/$XYZZY.pdf"; done 2>&1 |less -S
+
   # Miscellany (no particular screen)
 
 cd /opt/lmi/src/lmi
