@@ -48,7 +48,7 @@ build_clutter='
 /^make.*\[[0-9]*\]: Leaving directory/d
 /^make.*\[[0-9]*\]: Nothing to be done for/d
 /^make.*\[[0-9]*\]: warning: -jN forced in submake: disabling jobserver mode.$/d
-/^make.*\[[0-9]*\]: '.*' is up to date\./d
+/^make.*\[[0-9]*\]: .* is up to date\./d
 /^[^ ]*cpp -x /d
 /^[^ ]*g++ -[Mo]/d
 /^[^ ]*windres -o /d
