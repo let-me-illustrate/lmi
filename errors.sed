@@ -19,9 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# Suggested use:
-# $make clobber; ./nychthemeral_test.sh 2>&1 | tee /tmp/lmi/logs/log | sed -f errors.sed
-
 /^# install; check physical closure/d
 /^# cgi and cli tests/d
 /^Test common gateway interface:/d

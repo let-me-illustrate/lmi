@@ -21,6 +21,12 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Suggested use:
+#   $make clobber; ./nychthemeral_test.sh 2>&1 | tee /tmp/lmi/logs/log | sed -f errors.sed
+# Omitting the 'clobber' step when it's known to be unnecessary makes
+# that command take two minutes instead of five on a dual E5-2630 v3
+# machine. What's difficult is knowing when it's truly unnecessary.
+
 # SOMEDAY !! Not all tests return nonzero on failure, so 'set -e'
 # doesn't reliably exit after the first test failure.
 
