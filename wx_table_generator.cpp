@@ -82,6 +82,8 @@ void wx_table_generator::add_column
     ,std::string const& widest_text
     )
 {
+    LMI_ASSERT(!column_widths_already_computed_);
+
     // There is no need to care about the column width for hidden columns.
     int width;
     if(header.empty())
@@ -193,7 +195,16 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 
 /// Compute column widths.
 ///
-/// This function is to be called exactly once. Reason...
+/// This function must be called after the last time add_column() is
+/// called, and before the first time that the column widths it sets
+/// are used. It is assumed to be fairly expensive, so that it should
+/// be called only once. There seems to be no simple way to impose
+/// those synchronization requirements upon clients, so
+///  - add_column() asserts that this function hasn't yet been called;
+///  - this function exits early if it has already been called.
+/// Thus, any violation of the first part of this contract is detected
+/// at run time. It is hoped that this function is called in enough
+/// places to fulfill the second part of the contract.
 
 void wx_table_generator::do_compute_column_widths()
 {
