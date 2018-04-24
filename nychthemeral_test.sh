@@ -54,6 +54,11 @@ build_clutter='
 /^[^ ]*windres -o /d
 '
 
+concinnity_clutter='
+/.*\/test_coding_rules_test\.sh$/d
+/^Testing .test_coding_rules.\.$/d
+'
+
 install_clutter='
 /^Generating product files.$/d
 /^All product files written.$/d
@@ -70,15 +75,13 @@ cli_cgi_clutter='
 /^  0 errors$/d
 '
 
-concinnity_clutter='
-/.*\/test_coding_rules_test\.sh$/d
-/^Testing .test_coding_rules.\.$/d
-'
-
 # Directory for test logs.
 mkdir --parents /tmp/lmi/logs
 
 cd /opt/lmi/src/lmi
+
+printf '\n# test concinnity\n\n'
+make "$coefficiency" check_concinnity 2>&1 | sed -e "$build_clutter" -e "$concinnity_clutter"
 
 printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 | tee /tmp/lmi/logs/install | sed -e "$build_clutter" -e "$install_clutter"
@@ -102,9 +105,6 @@ make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safest
 
 printf '\n# unit tests in libstdc++ debug mode\n\n'
 make "$coefficiency" unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >/tmp/lmi/logs/unit-tests-safestdlib
-
-printf '\n# test concinnity\n\n'
-make "$coefficiency" check_concinnity 2>&1 | sed -e "$build_clutter" -e "$concinnity_clutter"
 
 # Run the following tests in a throwaway directory so that the files
 # they create can be cleaned up easily.
