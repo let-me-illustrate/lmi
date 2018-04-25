@@ -36,7 +36,7 @@
 /// Simplifies outputting tabular data on wxDC.
 ///
 /// To create a table, columns must be initialized first by calling
-/// set_column() for each of them once. After this, output_header() and
+/// add_column() for each of them once. After this, output_header() and
 /// output_row() can be called reusing the same pos_y argument which contains
 /// the coordinate of the top of the header or row to output and is updated to
 /// correspond to the value for the next row by these functions.
