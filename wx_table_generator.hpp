@@ -52,7 +52,7 @@ class wx_table_generator
     wx_table_generator(wxDC& dc, int left_margin, int total_width);
 
     // Adds a column to the table. The total number of added columns determines
-    // the number of the expected value in output_row() calls.
+    // the cardinality of the 'values' argument in output_row() calls.
     //
     // Providing an empty header suppresses the column display, while still
     // taking it into account in output_row(), providing a convenient way to
