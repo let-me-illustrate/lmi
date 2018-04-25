@@ -50,6 +50,7 @@
 #include <wx/textctrl.h>
 #include <wx/utils.h>                   // wxBusyCursor
 #include <wx/wupdlock.h>
+#include <wx/persist/bookctrl.h>
 #include <wx/xrc/xmlres.h>
 
 #include <cstddef>                      // size_t
