@@ -1448,7 +1448,7 @@ class numeric_summary_table_cell
 
         // And now the table values themselves.
         auto const& columns = get_table_columns();
-        std::vector<std::string> values(columns.size());
+        std::vector<std::string> output_values(columns.size());
 
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
@@ -1498,20 +1498,20 @@ class numeric_summary_table_cell
                                 {
                                 std::ostringstream oss;
                                 oss << "Age " << age_last;
-                                values[col] = oss.str();
+                                output_values[col] = oss.str();
                                 continue;
                                 }
                             }
 
                         // Special hack for the dummy columns whose value is always
                         // empty as it's used only as separator.
-                        values[col] = variable_name.empty()
+                        output_values[col] = variable_name.empty()
                             ? std::string{}
                             : interpolate_html.evaluate(variable_name, year - 1)
                             ;
                         }
 
-                    table.output_row(&pos_y, values.data());
+                    table.output_row(&pos_y, output_values.data());
                     break;
                 }
             }
@@ -1610,7 +1610,7 @@ class page_with_tabular_report
         auto const row_height = table.row_height();
         auto const page_bottom = get_footer_top();
         auto const rows_per_group = illustration_table_generator::rows_per_group;
-        std::vector<std::string> values(columns.size());
+        std::vector<std::string> output_values(columns.size());
 
         // The table may need several pages, loop over them.
         int const year_max = ledger.GetMaxLength();
@@ -1632,13 +1632,13 @@ class page_with_tabular_report
                     // Special hack for the dummy columns used in some reports,
                     // whose value is always empty as it's used only as
                     // separator.
-                    values[col] = variable_name.empty()
+                    output_values[col] = variable_name.empty()
                         ? std::string{}
                         : interpolate_html.evaluate(variable_name, year)
                         ;
                     }
 
-                table.output_row(&pos_y, values.data());
+                table.output_row(&pos_y, output_values.data());
 
                 ++year;
                 if(year == year_max)
