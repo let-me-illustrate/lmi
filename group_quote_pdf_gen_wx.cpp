@@ -346,7 +346,8 @@ class group_quote_pdf_generator_wx
 
     struct row_data
         {
-        std::string output_values[e_col_max];
+        row_data() {output_values.resize(e_col_max);}
+        std::vector<std::string> output_values;
         };
     std::vector<row_data> rows_;
 
@@ -762,7 +763,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
     for(auto const& i : rows_)
         {
-        table_gen.output_row(&pos_y, i.output_values);
+        table_gen.output_row(&pos_y, i.output_values.data());
 
         if(last_row_y <= pos_y)
             {
