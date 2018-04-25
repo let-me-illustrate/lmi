@@ -763,7 +763,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
     for(auto const& i : rows_)
         {
-        table_gen.output_row(&pos_y, i.output_values.data());
+        table_gen.output_row(&pos_y, i.output_values);
 
         if(last_row_y <= pos_y)
             {

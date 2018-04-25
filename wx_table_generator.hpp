@@ -86,7 +86,7 @@ class wx_table_generator
     // Render a row with the given values at the given position and update it.
     // The values here can be single-line only and there must be exactly the
     // same number of them as the number of columns.
-    void output_row(int* pos_y, std::string const* values);
+    void output_row(int* pos_y, std::vector<std::string> const values);
 
     // Render a single highlighted (by shading its background) cell with the
     // given string displayed in it (always centered).
@@ -146,9 +146,9 @@ class wx_table_generator
     void do_compute_column_widths();
 
     void do_output_values
-        (int&               pos_x
-        ,int&               pos_y
-        ,std::string const* values
+        (int&                            pos_x
+        ,int&                            pos_y
+        ,std::vector<std::string> const& values
         );
 
     wxDC& dc_;

@@ -414,9 +414,9 @@ void wx_table_generator::do_compute_column_widths()
 }
 
 void wx_table_generator::do_output_values
-    (int& x
-    ,int& y
-    ,std::string const* values
+    (int&                            x
+    ,int&                            y
+    ,std::vector<std::string> const& values
     )
 {
     int const y_top = y;
@@ -586,12 +586,12 @@ void wx_table_generator::output_header
     int x = 0;
     for(std::size_t line = 0; line < max_header_lines_; ++line)
         {
-        x = left_margin_;
-        do_output_values
-            (x
-            ,*pos_y
-            ,&headers_by_line.at(line * num_columns)
+        std::vector<std::string> const nth_line
+            (headers_by_line.begin() +      line  * num_columns
+            ,headers_by_line.begin() + (1 + line) * num_columns
             );
+        x = left_margin_;
+        do_output_values(x, *pos_y, nth_line);
         }
 
     // Finally draw the separators above and (a double one) below them.
@@ -640,7 +640,7 @@ void wx_table_generator::output_super_header
 
 void wx_table_generator::output_row
     (int* pos_y
-    ,std::string const* values
+    ,std::vector<std::string> const values
     )
 {
     int x = left_margin_;

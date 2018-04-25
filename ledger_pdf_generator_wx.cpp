@@ -1511,7 +1511,7 @@ class numeric_summary_table_cell
                             ;
                         }
 
-                    table.output_row(&pos_y, output_values.data());
+                    table.output_row(&pos_y, output_values);
                     break;
                 }
             }
@@ -1638,7 +1638,7 @@ class page_with_tabular_report
                         ;
                     }
 
-                table.output_row(&pos_y, output_values.data());
+                table.output_row(&pos_y, output_values);
 
                 ++year;
                 if(year == year_max)
