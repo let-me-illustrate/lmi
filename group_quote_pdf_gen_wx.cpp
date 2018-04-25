@@ -346,8 +346,7 @@ class group_quote_pdf_generator_wx
 
     struct row_data
         {
-        row_data() {output_values.resize(e_col_max);}
-        std::vector<std::string> output_values;
+        std::vector<std::string> output_values {e_col_max};
         };
     std::vector<row_data> rows_;
 
