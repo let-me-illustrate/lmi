@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include <cstring>
 #include <sstream>
 #include <stdexcept>
 
@@ -49,8 +50,8 @@
             std::ostringstream assert_message;                  \
             assert_message                                      \
                 << "Assertion '" << (#condition) << "' failed." \
-                << "\n[file " << __FILE__                       \
-                << ", line " << __LINE__ << "]\n"               \
+                << "\n[" << 1 + std::strrchr("/" __FILE__, '/') \
+                << " : " << __LINE__ << "]\n"                   \
                 ;                                               \
             throw std::runtime_error(assert_message.str());     \
             }                                                   \
@@ -63,21 +64,21 @@
 /// that it can include streaming operators, e.g.:
 ///   "value is " << value
 
-#define LMI_ASSERT_WITH_MSG(condition,message)                 \
-    do                                                         \
-        {                                                      \
-        if(!(condition))                                       \
-            {                                                  \
-            std::ostringstream assert_message;                 \
-            assert_message                                     \
-                << "Assertion '" << (#condition) << "' failed" \
-                << "\n(" << message << ")."                    \
-                << "\n[file " << __FILE__                      \
-                << ", line " << __LINE__ << "]\n"              \
-                ;                                              \
-            throw std::runtime_error(assert_message.str());    \
-            }                                                  \
-        }                                                      \
+#define LMI_ASSERT_WITH_MSG(condition,message)                  \
+    do                                                          \
+        {                                                       \
+        if(!(condition))                                        \
+            {                                                   \
+            std::ostringstream assert_message;                  \
+            assert_message                                      \
+                << "Assertion '" << (#condition) << "' failed"  \
+                << "\n(" << message << ")."                     \
+                << "\n[" << 1 + std::strrchr("/" __FILE__, '/') \
+                << " : " << __LINE__ << "]\n"                   \
+                ;                                               \
+            throw std::runtime_error(assert_message.str());     \
+            }                                                   \
+        }                                                       \
     while(0)
 
 /// This LMI_ASSERT variant displays both its parameters if unequal.

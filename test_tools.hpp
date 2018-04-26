@@ -123,14 +123,15 @@ namespace lmi_test
 ///   - 'WHAT' matches the actual exception's what() up to but not
 ///      including any lmi exception-location string. (Some lmi
 ///      exceptions add a newline and the file name and line number,
-///      always beginning "\n[file "--cf. LMI_FLUSH).
+///      always beginning "\n["--cf. LMI_FLUSH--which sequence is
+///      assumed otherwise not to occur in what().)
 
 inline bool whats_what(std::string const& observed, std::string const& expected)
 {
     return
            expected.empty()
         || observed == expected
-        || 0 == observed.compare(0, observed.find("\n[file "), expected)
+        || 0 == observed.compare(0, observed.find("\n["), expected)
         ;
 }
 
