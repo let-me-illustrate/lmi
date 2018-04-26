@@ -157,6 +157,11 @@ class wx_table_generator
         ,std::vector<std::string> const& values
         );
 
+    // Const private accessors. Used in the implementation to
+    // distinguish access from mutation.
+    int column_margin() const;
+    std::vector<column_info> const& all_columns() const;
+
     wxDC& dc_;
 
     int left_margin_;

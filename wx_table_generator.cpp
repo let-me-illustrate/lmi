@@ -259,6 +259,16 @@ wx_table_generator::wx_table_generator(wx_table_generator const&) = default;
 
 wx_table_generator::~wx_table_generator() = default;
 
+int wx_table_generator::column_margin() const
+{
+    return column_margin_;
+}
+
+std::vector<wx_table_generator::column_info> const& wx_table_generator::all_columns() const
+{
+    return all_columns_;
+}
+
 void wx_table_generator::use_condensed_style()
 {
     row_height_ = char_height_;
