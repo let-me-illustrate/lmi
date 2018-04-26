@@ -168,15 +168,15 @@ class wx_table_generator::column_info
 {
   public:
     column_info(std::string const& header, int width)
-        :header_(header)
-        ,width_(width)
+        :col_header_(header)
+        ,col_width_(width)
         ,is_variable_width_(width == 0)
         {
         }
 
     // A column with empty header is considered to be suppressed and
     // doesn't appear in the output at all.
-    bool is_hidden() const { return header_.empty(); }
+    bool is_hidden() const { return col_header_.empty(); }
 
     // Return true if this column should be centered, rather than
     // left-aligned. Notice that this is ignored for globally right-aligned
@@ -205,13 +205,13 @@ class wx_table_generator::column_info
         return is_variable_width_;
     }
 
-    std::string const header_;
+    std::string const col_header_;
 
     // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
     // pixel is one point = 1/72 inch.
     //
     // Modified directly by wx_table_generator code, hence not const.
-    int width_;
+    int col_width_;
 
   private:
     bool const is_variable_width_;
@@ -347,7 +347,7 @@ int wx_table_generator::do_get_cell_x(std::size_t column)
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
         {
-        x += all_columns().at(col).width_;
+        x += all_columns().at(col).col_width_;
         }
 
     return x;
@@ -372,7 +372,7 @@ wxRect wx_table_generator::cell_rect(std::size_t column, int y)
     // below.
     int const x = do_get_cell_x(column);
 
-    return wxRect(x, y, all_columns().at(column).width_, row_height_);
+    return wxRect(x, y, all_columns().at(column).col_width_, row_height_);
 }
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y)
@@ -391,7 +391,7 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 //   i.e. std::vector<column_info> all_columns_;
 // mutable  column_info elements
 //   the only column_info function member called is is_hidden()
-//   the only column_info data member modified is width_
+//   the only column_info data member modified is col_width_
 //
 // meanings (written before each variable, as in header documentation):
 //
@@ -468,7 +468,7 @@ void wx_table_generator::do_compute_column_widths()
             }
         else
             {
-            total_fixed += i.width_;
+            total_fixed += i.col_width_;
             }
         }
 
@@ -530,11 +530,11 @@ void wx_table_generator::do_compute_column_widths()
                         continue;
                         }
 
-                    i.width_ -= overflow_per_column;
+                    i.col_width_ -= overflow_per_column;
 
                     if(0 < underflow)
                         {
-                        i.width_++;
+                        i.col_width_++;
                         underflow--;
                         }
                     }
@@ -621,7 +621,7 @@ void wx_table_generator::do_compute_column_widths()
 
             if(i.is_variable_width())
                 {
-                i.width_ = per_expand;
+                i.col_width_ = per_expand;
                 }
             }
         }
@@ -652,7 +652,7 @@ void wx_table_generator::do_output_values
             continue;
             }
 
-        int const width = ci.width_;
+        int const width = ci.col_width_;
 
         std::string const& s = values[col];
         if(!s.empty())
@@ -746,7 +746,7 @@ void wx_table_generator::output_horz_separator
     int x2 = x1;
     for(std::size_t col = begin_column; col < end_column; ++col)
         {
-        x2 += all_columns().at(col).width_;
+        x2 += all_columns().at(col).col_width_;
         }
 
     do_output_horz_separator(x1, x2, y);
@@ -782,7 +782,7 @@ void wx_table_generator::output_header
     for(std::size_t col = 0; col < num_columns; ++col)
         {
         column_info const& ci = all_columns().at(col);
-        std::vector<std::string> const lines(split_into_lines(ci.header_));
+        std::vector<std::string> const lines(split_into_lines(ci.col_header_));
 
         // Fill the elements from the bottom line to the top one, so that a
         // single line header is shown on the last line.
