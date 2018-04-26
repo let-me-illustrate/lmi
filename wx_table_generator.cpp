@@ -317,7 +317,7 @@ void wx_table_generator::add_column
             {
             increase_to_if_smaller(width, dc_.GetMultiLineTextExtent(header).x);
 
-            width += 2 * column_margin_;
+            width += 2 * column_margin();
             }
         }
 
@@ -347,7 +347,7 @@ int wx_table_generator::do_get_cell_x(std::size_t column)
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
         {
-        x += all_columns_.at(col).width_;
+        x += all_columns().at(col).width_;
         }
 
     return x;
@@ -355,7 +355,7 @@ int wx_table_generator::do_get_cell_x(std::size_t column)
 
 std::size_t wx_table_generator::columns_count() const
 {
-    return all_columns_.size();
+    return all_columns().size();
 }
 
 int wx_table_generator::row_height() const
@@ -365,14 +365,14 @@ int wx_table_generator::row_height() const
 
 wxRect wx_table_generator::cell_rect(std::size_t column, int y)
 {
-    LMI_ASSERT(column < all_columns_.size());
+    LMI_ASSERT(column < all_columns().size());
 
     // Note: call do_get_cell_x() here and not from the wxRect ctor arguments
     // list to ensure that the column width is initialized before it is used
     // below.
     int const x = do_get_cell_x(column);
 
-    return wxRect(x, y, all_columns_.at(column).width_, row_height_);
+    return wxRect(x, y, all_columns().at(column).width_, row_height_);
 }
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y)
@@ -451,7 +451,7 @@ void wx_table_generator::do_compute_column_widths()
     // everything fit when it otherwise wouldn't.
     int total_fixed = 0;
 
-    for(auto const& i : all_columns_)
+    for(auto const& i : all_columns())
         {
 // Instead of retaining hidden columns, and explicitly skipping them
 // here and repeatedly later, why not just remove them from the vector?
@@ -507,7 +507,7 @@ void wx_table_generator::do_compute_column_widths()
 // is less than the padding.
 //
 // Is this as good as it can be, given that coordinates are integers?
-            if(overflow_per_column <= 2 * column_margin_)
+            if(overflow_per_column <= 2 * column_margin())
                 {
                 // We are going to reduce the total width by more than
                 // necessary, in general, because of rounding up above, so
@@ -573,10 +573,10 @@ void wx_table_generator::do_compute_column_widths()
         warning()
             << "Not enough space for all " << num_columns << " columns."
             << "\nPrintable width is " << total_width_ << " points."
-            << "\nData alone require " << total_fixed - 2 * column_margin_ * num_columns
+            << "\nData alone require " << total_fixed - 2 * column_margin() * num_columns
             << " points without any margins for legibility."
-            << "\nColumn margins of " << column_margin_ << " points on both sides"
-            << " would take up " << 2 * column_margin_ * num_columns << " additional points."
+            << "\nColumn margins of " << column_margin() << " points on both sides"
+            << " would take up " << 2 * column_margin() * num_columns << " additional points."
             << "\nFor reference:"
             << "\n'M' is " << dc_.GetTextExtent("M").x << " points wide."
             << "\n'N' is " << dc_.GetTextExtent("N").x << " points wide."
@@ -643,10 +643,10 @@ void wx_table_generator::do_output_values
         do_output_vert_separator(x, y_top, y);
         }
 
-    std::size_t const num_columns = all_columns_.size();
+    std::size_t const num_columns = all_columns().size();
     for(std::size_t col = 0; col < num_columns; ++col)
         {
-        column_info const& ci = all_columns_.at(col);
+        column_info const& ci = all_columns().at(col);
         if(ci.is_hidden())
             {
             continue;
@@ -672,7 +672,7 @@ void wx_table_generator::do_output_values
                     }
                 else
                     {
-                    x_text += column_margin_;
+                    x_text += column_margin();
                     }
                 }
 
@@ -688,7 +688,7 @@ void wx_table_generator::do_output_values
                     (dc_
                     ,wxRect
                         {wxPoint{x, y_top}
-                        ,wxSize{width - column_margin_, row_height_}
+                        ,wxSize{width - column_margin(), row_height_}
                         }
                     );
 
@@ -712,7 +712,7 @@ void wx_table_generator::output_vert_separator
     ,int y
     )
 {
-    LMI_ASSERT(before_column <= all_columns_.size());
+    LMI_ASSERT(before_column <= all_columns().size());
 
     do_output_vert_separator
         (do_get_cell_x(before_column)
@@ -737,7 +737,7 @@ void wx_table_generator::output_horz_separator
         }
 
     LMI_ASSERT(begin_column < end_column);
-    LMI_ASSERT(end_column <= all_columns_.size());
+    LMI_ASSERT(end_column <= all_columns().size());
 
     do_compute_column_widths();
 
@@ -746,7 +746,7 @@ void wx_table_generator::output_horz_separator
     int x2 = x1;
     for(std::size_t col = begin_column; col < end_column; ++col)
         {
-        x2 += all_columns_.at(col).width_;
+        x2 += all_columns().at(col).width_;
         }
 
     do_output_horz_separator(x1, x2, y);
@@ -777,11 +777,11 @@ void wx_table_generator::output_header
     // Split headers in single lines and fill up the entire columns*lines 2D
     // matrix, using empty strings for the headers with less than the maximal
     // number of lines.
-    std::size_t const num_columns = all_columns_.size();
+    std::size_t const num_columns = all_columns().size();
     std::vector<std::string> headers_by_line(max_header_lines_ * num_columns);
     for(std::size_t col = 0; col < num_columns; ++col)
         {
-        column_info const& ci = all_columns_.at(col);
+        column_info const& ci = all_columns().at(col);
         std::vector<std::string> const lines(split_into_lines(ci.header_));
 
         // Fill the elements from the bottom line to the top one, so that a
@@ -872,7 +872,7 @@ void wx_table_generator::output_highlighted_cell
     ,std::string const& value
     )
 {
-    if(all_columns_.at(column).is_hidden())
+    if(all_columns().at(column).is_hidden())
         {
         return;
         }
