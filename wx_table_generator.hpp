@@ -167,7 +167,7 @@ class wx_table_generator
     int row_height_;
     int column_margin_;
 
-    std::vector<column_info> columns_;
+    std::vector<column_info> all_columns_;
 
     // Initially false, set to true after do_compute_column_widths()
     // has been called to make all column_info::width_ values valid.

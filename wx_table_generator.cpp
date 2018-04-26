@@ -311,7 +311,7 @@ void wx_table_generator::add_column
             }
         }
 
-    columns_.push_back(column_info(header, width));
+    all_columns_.push_back(column_info(header, width));
 }
 
 wxFont wx_table_generator::get_header_font() const
@@ -337,7 +337,7 @@ int wx_table_generator::do_get_cell_x(std::size_t column)
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
         {
-        x += columns_.at(col).width_;
+        x += all_columns_.at(col).width_;
         }
 
     return x;
@@ -345,7 +345,7 @@ int wx_table_generator::do_get_cell_x(std::size_t column)
 
 std::size_t wx_table_generator::columns_count() const
 {
-    return columns_.size();
+    return all_columns_.size();
 }
 
 int wx_table_generator::row_height() const
@@ -355,14 +355,14 @@ int wx_table_generator::row_height() const
 
 wxRect wx_table_generator::cell_rect(std::size_t column, int y)
 {
-    LMI_ASSERT(column < columns_.size());
+    LMI_ASSERT(column < all_columns_.size());
 
     // Note: call do_get_cell_x() here and not from the wxRect ctor arguments
     // list to ensure that the column width is initialized before it is used
     // below.
     int const x = do_get_cell_x(column);
 
-    return wxRect(x, y, columns_.at(column).width_, row_height_);
+    return wxRect(x, y, all_columns_.at(column).width_, row_height_);
 }
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y)
@@ -377,8 +377,8 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 // const    total_width_
 // mutable  column_widths_already_computed_
 // mutable  column_margin_
-// mutable  columns_
-//   i.e. std::vector<column_info> columns_;
+// mutable  all_columns_
+//   i.e. std::vector<column_info> all_columns_;
 // mutable  column_info elements
 //   the only column_info function member called is is_hidden()
 //   the only column_info data member modified is width_
@@ -395,7 +395,7 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
     // changed in this function and nowhere else
 // mutable  column_margin_
     // std::vector<column_info>
-// mutable  columns_
+// mutable  all_columns_
 
 /// Compute column widths.
 ///
@@ -441,7 +441,7 @@ void wx_table_generator::do_compute_column_widths()
     // everything fit when it otherwise wouldn't.
     int total_fixed = 0;
 
-    for(auto const& i : columns_)
+    for(auto const& i : all_columns_)
         {
 // Instead of retaining hidden columns, and explicitly skipping them
 // here and repeatedly later, why not just remove them from the vector?
@@ -513,7 +513,7 @@ void wx_table_generator::do_compute_column_widths()
 //    overflow_per_column <= column_margin_ - 2 // one pixel on each side
                 auto underflow = overflow_per_column * num_columns - overflow;
 
-                for(auto& i : columns_)
+                for(auto& i : all_columns_)
                     {
                     if(i.is_hidden())
                         {
@@ -602,7 +602,7 @@ void wx_table_generator::do_compute_column_widths()
         int const per_expand
             = (total_width_ - total_fixed + num_expand - 1) / num_expand;
 
-        for(auto& i : columns_)
+        for(auto& i : all_columns_)
             {
             if(i.is_hidden())
                 {
@@ -633,10 +633,10 @@ void wx_table_generator::do_output_values
         do_output_vert_separator(x, y_top, y);
         }
 
-    std::size_t const num_columns = columns_.size();
+    std::size_t const num_columns = all_columns_.size();
     for(std::size_t col = 0; col < num_columns; ++col)
         {
-        column_info const& ci = columns_.at(col);
+        column_info const& ci = all_columns_.at(col);
         if(ci.is_hidden())
             {
             continue;
@@ -702,7 +702,7 @@ void wx_table_generator::output_vert_separator
     ,int y
     )
 {
-    LMI_ASSERT(before_column <= columns_.size());
+    LMI_ASSERT(before_column <= all_columns_.size());
 
     do_output_vert_separator
         (do_get_cell_x(before_column)
@@ -727,7 +727,7 @@ void wx_table_generator::output_horz_separator
         }
 
     LMI_ASSERT(begin_column < end_column);
-    LMI_ASSERT(end_column <= columns_.size());
+    LMI_ASSERT(end_column <= all_columns_.size());
 
     do_compute_column_widths();
 
@@ -736,7 +736,7 @@ void wx_table_generator::output_horz_separator
     int x2 = x1;
     for(std::size_t col = begin_column; col < end_column; ++col)
         {
-        x2 += columns_.at(col).width_;
+        x2 += all_columns_.at(col).width_;
         }
 
     do_output_horz_separator(x1, x2, y);
@@ -767,11 +767,11 @@ void wx_table_generator::output_header
     // Split headers in single lines and fill up the entire columns*lines 2D
     // matrix, using empty strings for the headers with less than the maximal
     // number of lines.
-    std::size_t const num_columns = columns_.size();
+    std::size_t const num_columns = all_columns_.size();
     std::vector<std::string> headers_by_line(max_header_lines_ * num_columns);
     for(std::size_t col = 0; col < num_columns; ++col)
         {
-        column_info const& ci = columns_.at(col);
+        column_info const& ci = all_columns_.at(col);
         std::vector<std::string> const lines(split_into_lines(ci.header_));
 
         // Fill the elements from the bottom line to the top one, so that a
@@ -862,7 +862,7 @@ void wx_table_generator::output_highlighted_cell
     ,std::string const& value
     )
 {
-    if(columns_.at(column).is_hidden())
+    if(all_columns_.at(column).is_hidden())
         {
         return;
         }
