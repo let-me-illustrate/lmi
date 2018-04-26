@@ -43,6 +43,8 @@
 
 class wx_table_generator
 {
+    class column_info;
+
   public:
     // The life time of the specified wxDC must be greater than the life time
     // of this object itself and nothing should be using it while this object
@@ -165,7 +167,6 @@ class wx_table_generator
     int row_height_;
     int column_margin_;
 
-    class column_info;
     std::vector<column_info> columns_;
 
     // Initially false, set to true after do_compute_column_widths()
