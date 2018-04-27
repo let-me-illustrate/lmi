@@ -367,10 +367,10 @@ ledger_evaluator Ledger::make_evaluator() const
     mask_map ["HoneymoonValueSpread"            ] = "999,999,999";
     mask_map ["IndvTaxBracket"                  ] = "999,999,999";
     mask_map ["InforceLives"                    ] = "999,999,999";
-    mask_map ["IrrCsv_Current"                  ] = "999,999,999";
-    mask_map ["IrrCsv_Guaranteed"               ] = "999,999,999";
-    mask_map ["IrrDb_Current"                   ] = "999,999,999";
-    mask_map ["IrrDb_Guaranteed"                ] = "999,999,999";
+    mask_map ["IrrCsv_Current"                  ] =  "100000.00%";
+    mask_map ["IrrCsv_Guaranteed"               ] =  "100000.00%";
+    mask_map ["IrrDb_Current"                   ] =  "100000.00%";
+    mask_map ["IrrDb_Guaranteed"                ] =  "100000.00%";
     mask_map ["KFactor_Current"                 ] = "999,999,999";
     mask_map ["LoanIntAccrued_Current"          ] = "999,999,999";
     mask_map ["LoanIntAccrued_Guaranteed"       ] = "999,999,999";

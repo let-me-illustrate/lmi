@@ -2738,20 +2738,19 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
 
     illustration_table_columns const& get_table_columns() const override
     {
-        // PDF !! Here and elsewhere, IRR columns must be widened.
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
             ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_GuaranteedZero" , "Death\nBenefit"              , "999,999,999" }
-            ,{ "IrrCsv_GuaranteedZero"      , "IRR on\nSurr Value"          ,      "99.99%" }
-            ,{ "IrrDb_GuaranteedZero"       , "IRR on\nDeath Bft"           ,      "99.99%" }
+            ,{ "IrrCsv_GuaranteedZero"      , "IRR on\nSurr Value"          ,  "100000.00%" }
+            ,{ "IrrDb_GuaranteedZero"       , "IRR on\nDeath Bft"           ,  "100000.00%" }
             ,{ ""                           , " "                           ,           "-" }
             ,{ "CSVNet_Guaranteed"          , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_Guaranteed"     , "Death\nBenefit"              , "999,999,999" }
-            ,{ "IrrCsv_Guaranteed"          , "IRR on\nSurr Value"          ,      "99.99%" }
-            ,{ "IrrDb_Guaranteed"           , "IRR on\nDeath Bft"           ,      "99.99%" }
+            ,{ "IrrCsv_Guaranteed"          , "IRR on\nSurr Value"          ,  "100000.00%" }
+            ,{ "IrrDb_Guaranteed"           , "IRR on\nDeath Bft"           ,  "100000.00%" }
             };
 
         return columns;
@@ -2779,13 +2778,13 @@ class reg_d_individual_curr_irr : public reg_d_individual_irr_base
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_CurrentZero"         , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_CurrentZero"    , "Death\nBenefit"              , "999,999,999" }
-            ,{ "IrrCsv_CurrentZero"         , "IRR on\nSurr Value"          ,      "99.99%" }
-            ,{ "IrrDb_CurrentZero"          , "IRR on\nDeath Bft"           ,      "99.99%" }
+            ,{ "IrrCsv_CurrentZero"         , "IRR on\nSurr Value"          ,  "100000.00%" }
+            ,{ "IrrDb_CurrentZero"          , "IRR on\nDeath Bft"           ,  "100000.00%" }
             ,{ ""                           , " "                           ,           "-" }
             ,{ "CSVNet_Current"             , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_Current"        , "Death\nBenefit"              , "999,999,999" }
-            ,{ "IrrCsv_Current"             , "IRR on\nSurr Value"          ,      "99.99%" }
-            ,{ "IrrDb_Current"              , "IRR on\nDeath Bft"           ,      "99.99%" }
+            ,{ "IrrCsv_Current"             , "IRR on\nSurr Value"          ,  "100000.00%" }
+            ,{ "IrrDb_Current"              , "IRR on\nDeath Bft"           ,  "100000.00%" }
             };
 
         return columns;
