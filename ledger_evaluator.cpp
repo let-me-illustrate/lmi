@@ -571,7 +571,6 @@ ledger_evaluator Ledger::make_evaluator() const
     format_map["AnnHoneymoonValueRate"             ] = f4;
     format_map["AnnPostHoneymoonRate"              ] = f4;
     format_map["AnnSAIntRate"                      ] = f4;
-    format_map["CashFlowIRR"                       ] = f4;
     format_map["CorpTaxBracket"                    ] = f4;
     format_map["CurrMandE"                         ] = f4;
     format_map["HoneymoonValueSpread"              ] = f4;
