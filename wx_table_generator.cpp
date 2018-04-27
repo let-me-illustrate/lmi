@@ -168,15 +168,15 @@ class wx_table_generator::column_info
 {
   public:
     column_info(std::string const& header, int width)
-        :col_header_(header)
-        ,col_width_(width)
-        ,is_variable_width_(width == 0)
+        :col_header_       (header)
+        ,col_width_        (width)
+        ,is_variable_width_(0 == width)
         {
         }
 
     // A column with empty header is considered to be suppressed and
     // doesn't appear in the output at all.
-    bool is_hidden() const { return col_header_.empty(); }
+    bool is_hidden() const { return col_header().empty(); }
 
     // Return true if this column should be centered, rather than
     // left-aligned. Notice that this is ignored for globally right-aligned
@@ -205,8 +205,13 @@ class wx_table_generator::column_info
         return is_variable_width_;
     }
 
+    std::string const& col_header() const {return col_header_;}
+    int col_width() const {return col_width_;}
+
+  private:
     std::string const col_header_;
 
+  public: // but dubiously so
     // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
     // pixel is one point = 1/72 inch.
     //
@@ -347,7 +352,7 @@ int wx_table_generator::do_get_cell_x(std::size_t column)
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
         {
-        x += all_columns().at(col).col_width_;
+        x += all_columns().at(col).col_width();
         }
 
     return x;
@@ -372,7 +377,7 @@ wxRect wx_table_generator::cell_rect(std::size_t column, int y)
     // below.
     int const x = do_get_cell_x(column);
 
-    return wxRect(x, y, all_columns().at(column).col_width_, row_height_);
+    return wxRect(x, y, all_columns().at(column).col_width(), row_height_);
 }
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y)
@@ -468,7 +473,7 @@ void wx_table_generator::do_compute_column_widths()
             }
         else
             {
-            total_fixed += i.col_width_;
+            total_fixed += i.col_width();
             }
         }
 
@@ -652,7 +657,7 @@ void wx_table_generator::do_output_values
             continue;
             }
 
-        int const width = ci.col_width_;
+        int const width = ci.col_width();
 
         std::string const& s = values[col];
         if(!s.empty())
@@ -746,7 +751,7 @@ void wx_table_generator::output_horz_separator
     int x2 = x1;
     for(std::size_t col = begin_column; col < end_column; ++col)
         {
-        x2 += all_columns().at(col).col_width_;
+        x2 += all_columns().at(col).col_width();
         }
 
     do_output_horz_separator(x1, x2, y);
@@ -782,7 +787,7 @@ void wx_table_generator::output_header
     for(std::size_t col = 0; col < num_columns; ++col)
         {
         column_info const& ci = all_columns().at(col);
-        std::vector<std::string> const lines(split_into_lines(ci.col_header_));
+        std::vector<std::string> const lines(split_into_lines(ci.col_header()));
 
         // Fill the elements from the bottom line to the top one, so that a
         // single line header is shown on the last line.
