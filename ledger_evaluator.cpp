@@ -169,9 +169,9 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map["AVRelOnDeath_Current"            ] = "Account\nValue\nReleased\non Death";
     title_map["AVSepAcct_CurrentZero"           ] = "Curr Charges\n0% Account\nValue\nSep Acct";
     title_map["AVSepAcct_GuaranteedZero"        ] = "Guar Charges\n0% Account\nValue\nSep Acct";
-    title_map["AcctVal_Current"                 ] = "Curr Account\nValue";
+    title_map["AcctVal_Current"                 ] = "Curr\nAccount\nValue";
     title_map["AcctVal_CurrentZero"             ] = "Curr Charges\n0% Account\nValue";
-    title_map["AcctVal_Guaranteed"              ] = "Guar Account\nValue";
+    title_map["AcctVal_Guaranteed"              ] = "Guar\nAccount\nValue";
     title_map["AcctVal_GuaranteedZero"          ] = "Guar Charges\n0% Account\nValue";
     title_map["AddonCompOnAssets"               ] = "Additional\nComp on\nAssets";
     title_map["AddonCompOnPremium"              ] = "Additional\nComp on\nPremium";
@@ -257,7 +257,7 @@ ledger_evaluator Ledger::make_evaluator() const
     title_map["NetPmt_Current"                  ] = "Curr Net\nPayment";
     title_map["NetPmt_Guaranteed"               ] = "Guar Net\nPayment";
     title_map["NetWD"                           ] = "Withdrawal";
-    title_map["NewCashLoan"                     ] = "Annual Loan";
+    title_map["NewCashLoan"                     ] = "Annual\nLoan";
     title_map["Outlay"                          ] = "Net Outlay";
     title_map["PartMortTableMult"               ] = "Partial\nMortality\nMuliplier";
     title_map["PolicyFee_Current"               ] = "Curr\nPolicy\nFee";
