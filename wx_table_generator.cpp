@@ -293,13 +293,10 @@ void wx_table_generator::add_column
 {
     LMI_ASSERT(!column_widths_already_computed_);
 
-    // There is no need to care about the column width for hidden columns.
-    int width;
-    if(header.empty())
-        {
-        width = 0;
-        }
-    else
+    // If a column's header is empty, then it is to be hidden--so its
+    // width isn't used and may as well be initialized to zero.
+    int width = 0;
+    if(!header.empty())
         {
         wxDCFontChanger header_font_setter(dc_);
         if(use_bold_headers_)
