@@ -164,6 +164,24 @@
 // used, while the various accessors discussed above are just its
 // implementation details.
 
+//  - is_hidden(): A column with empty header is considered to be
+//    suppressed and doesn't appear in the output at all.
+//
+//  - is_centered(): Indicate whether column should be centered,
+//    rather than left-aligned. Ignored for globally right-aligned
+//    tables. [Fixed width columns are centered by default, variable
+//    width ones are not as long strings look better with the default
+//    left alignment.]
+//
+//  - is_variable_width():
+//
+//  - needs_clipping(): Indicate whether column contents need to be
+//    clipped when outputting it. [Variable width columns can have
+//    practically unlimited length and hence overflow into the next
+//    column or even beyond and must be clipped to prevent this from
+//    happening. Fixed width columns are not supposed to overflow
+//    anyhow, so clipping them is unnecessary.]
+
 class wx_table_generator::column_info
 {
   public:
@@ -174,39 +192,13 @@ class wx_table_generator::column_info
         {
         }
 
-    // A column with empty header is considered to be suppressed and
-    // doesn't appear in the output at all.
-    bool is_hidden() const { return col_header().empty(); }
-
-    // Return true if this column should be centered, rather than
-    // left-aligned. Notice that this is ignored for globally right-aligned
-    // tables.
-    bool is_centered() const
-    {
-        // Fixed width columns are centered by default, variable width ones
-        // are not as long strings look better with the default left
-        // alignment.
-        return !is_variable_width_;
-    }
-
-    bool is_variable_width() const
-    {
-        return is_variable_width_;
-    }
-
-    // Return true if the contents of this column needs to be clipped when
-    // outputting it.
-    bool needs_clipping() const
-    {
-        // Variable width columns can have practically unlimited length and
-        // hence overflow into the next column or even beyond and must be
-        // clipped to prevent this from happening. Fixed width columns are
-        // not supposed to overflow anyhow, so clipping them is unnecessary.
-        return is_variable_width_;
-    }
+    bool is_hidden()         const {return col_header().empty();}
+    bool is_centered()       const {return !is_variable_width_;}
+    bool is_variable_width() const {return  is_variable_width_;}
+    bool needs_clipping()    const {return  is_variable_width_;}
 
     std::string const& col_header() const {return col_header_;}
-    int col_width() const {return col_width_;}
+    int col_width()                 const {return col_width_;}
 
   private:
     std::string const col_header_;
