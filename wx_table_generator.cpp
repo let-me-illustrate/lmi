@@ -657,8 +657,6 @@ void wx_table_generator::do_output_values
             continue;
             }
 
-        int const width = ci.col_width();
-
         std::string const& s = values[col];
         if(!s.empty())
             {
@@ -666,14 +664,14 @@ void wx_table_generator::do_output_values
 
             if(align_right_)
                 {
-                x_text += width - dc_.GetTextExtent(s).x;
+                x_text += ci.col_width() - dc_.GetTextExtent(s).x;
                 }
             else
                 {
                 if(ci.is_centered())
                     {
                     // Centre the text for the columns configured to do it.
-                    x_text += (width - dc_.GetTextExtent(s).x) / 2;
+                    x_text += (ci.col_width() - dc_.GetTextExtent(s).x) / 2;
                     }
                 else
                     {
@@ -693,7 +691,7 @@ void wx_table_generator::do_output_values
                     (dc_
                     ,wxRect
                         {wxPoint{x, y_top}
-                        ,wxSize{width - column_margin(), row_height_}
+                        ,wxSize{ci.col_width() - column_margin(), row_height_}
                         }
                     );
 
@@ -704,7 +702,7 @@ void wx_table_generator::do_output_values
                 do_output();
                 }
             }
-        x += width;
+        x += ci.col_width();
         if(draw_separators_)
             {
             do_output_vert_separator(x, y_top, y);
