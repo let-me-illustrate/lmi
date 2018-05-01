@@ -24,6 +24,9 @@
     inserting the title between them, as a couple of pages do. But we still
     provide this "full header" template for the pages that don't have any
     title to make them simpler.
+
+    PDF !! The title that's inserted in between can be moved after the header,
+    which then won't need to be split in two parts.
 }}
 {{>nasd_header_upper}}
 {{>nasd_header_lower}}

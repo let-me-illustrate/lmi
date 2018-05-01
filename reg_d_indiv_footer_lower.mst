@@ -19,6 +19,13 @@
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 }}
 
+{{!
+    PDF !! This is almost the same as 'reg_d_group_footer_lower.mst',
+    which is better because it includes 'date_prepared'. It appears
+    that one universal MST file could serve this purpose for all
+    illustration formats.
+}}
+
 <font size="-2">
 
 <table width="100%" cellspacing="0" cellpadding="0">
