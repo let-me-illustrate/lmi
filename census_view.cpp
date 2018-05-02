@@ -1276,7 +1276,15 @@ void CensusView::paste_out_to_spreadsheet() const
         for(auto const& header : distinct_headers)
             {
             // Assume that the trailing '\t' doesn't matter.
-            os << cell[header].str() << '\t';
+            // Show calendar dates as YYYY-MM-DD rather than JDN.
+            if(auto const& z = exact_cast<tnr_date>(cell[header]))
+                {
+                os << z->value().str() << '\t';
+                }
+            else
+                {
+                os << cell[header].str() << '\t';
+                }
             }
         os << '\n';
         }
