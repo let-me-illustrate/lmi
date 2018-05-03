@@ -1095,13 +1095,13 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <object class="wxStaticText">
-                                        <label>Issue age </label>
+                                        <label>Birthdate </label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW</flag>
-                                    <object class="wxSpinCtrl" name="IssueAge">
-                                        <help>Insurance age on date of issue</help>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                    <object class="wxDatePickerCtrl" name="DateOfBirth">
+                                        <help>Date of birth</help>
                                     </object>
                                 </object>
                             </object>
@@ -1114,13 +1114,13 @@
                                 <object class="sizeritem">
                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <object class="wxStaticText">
-                                        <label>Birthdate </label>
+                                        <label>Issue age </label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                                    <object class="wxDatePickerCtrl" name="DateOfBirth">
-                                        <help>Date of birth</help>
+                                    <flag>wxGROW</flag>
+                                    <object class="wxSpinCtrl" name="IssueAge">
+                                        <help>Insurance age on date of issue</help>
                                     </object>
                                 </object>
                             </object>
