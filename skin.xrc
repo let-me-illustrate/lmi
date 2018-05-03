@@ -1084,7 +1084,7 @@
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxCheckBox" name="UseDOB">
                                 <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
-                                <label>Birthdate overrides issue age </label>
+                                <label>Birthdate overrides issue age</label>
                             </object>
                         </object>
                         <object class="sizeritem">
