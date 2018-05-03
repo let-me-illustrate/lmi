@@ -1022,7 +1022,7 @@
             <flag>wxGROW|wxALL</flag>
             <object class="wxFlexGridSizer">
                 <rows>1</rows>
-                <growablecols>3</growablecols>
+                <growablecols>0,1,2</growablecols>
                 <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
@@ -1079,7 +1079,7 @@
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablecols>0</growablecols>
-                        <growablerows>0,1,2,3</growablerows>
+                        <growablerows>0,1</growablerows>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxCheckBox" name="UseDOB">
@@ -1090,54 +1090,41 @@
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
-                                <rows>1</rows>
-                                <growablecols>1</growablecols>
+                                <cols>2</cols>
+                                <growablecols>0</growablecols>
+                                <growablerows>0,1,2</growablerows>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxStaticText">
                                         <label>Birthdate </label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
                                     </object>
                                 </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <rows>1</rows>
-                                <growablecols>1</growablecols>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxStaticText">
                                         <label>Issue age </label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="IssueAge">
                                         <help>Insurance age on date of issue</help>
                                     </object>
                                 </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <rows>1</rows>
-                                <growablecols>1</growablecols>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxStaticText">
                                         <label>Retirement age </label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW</flag>
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="RetirementAge">
                                         <help>Insurance age on date of retirement</help>
                                     </object>
