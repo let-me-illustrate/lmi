@@ -881,131 +881,50 @@
             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
-                <cols>3</cols>
                 <rows>1</rows>
-                <growablecols>1</growablecols>
-                <growablerows>0</growablerows>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
-                    <border>0</border>
+                    <border>2</border>
                     <object class="wxStaticBoxSizer">
-                        <orient>wxVERTICAL</orient>
-                        <label>Issue age</label>
+                        <orient>wxHORIZONTAL</orient>
+                        <label>Country COI multiplier</label>
                         <object class="sizeritem">
-                            <flag>wxALIGN_LEFT|wxBOTTOM</flag>
-                            <border>0</border>
-                            <object class="wxFlexGridSizer">
-                                <cols>0</cols>
-                                <rows>2</rows>
-                                <growablecols>0</growablecols>
-                                <growablerows>0,1</growablerows>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
-                                    <border>10</border>
-                                    <object class="wxSpinCtrl" name="IssueAge">
-                                        <help>Insurance age on date of issue</help>
-                                        <size>50,-1</size>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT|wxBOTTOM</flag>
-                                    <border>2</border>
-                                    <object class="wxRadioBox" name="UseDOB">
-                                        <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
-                                        <style>wxRA_SPECIFY_COLS</style>
-                                        <label>Use date</label>
-                                        <content>
-                                            <item>No</item>
-                                            <item>Yes</item>
-                                        </content>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM</flag>
-                                    <border>2</border>
-                                    <object class="wxDatePickerCtrl" name="DateOfBirth">
-                                        <help>Date of birth</help>
-                                    </object>
-                                </object>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxCheckBox" name="OverrideCoiMultiplier">
+                                <help>Override default country COI multiplier for current COI rates</help>
+                                <label>Override</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
+                            <object class="wxTextCtrl" name="CountryCoiMultiplier">
+                                <help>Country multiplier for current COI rates</help>
                             </object>
                         </object>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
+                    <flag>wxGROW|wxALL</flag>
                     <border>2</border>
-                    <object class="wxFlexGridSizer">
-                        <cols>0</cols>
-                        <rows>1</rows>
-                        <growablecols>0</growablecols>
-                        <growablerows>0</growablerows>
+                    <object class="wxStaticBoxSizer">
+                        <orient>wxHORIZONTAL</orient>
+                        <label>Substandard</label>
                         <object class="sizeritem">
-                            <flag>wxALIGN_RIGHT|wxALIGN_TOP|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
                             <object class="wxStaticText">
-                                <label>Retirement Age</label>
+                                <label>Table rating</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>2</border>
-                            <object class="wxSpinCtrl" name="RetirementAge">
-                                <help>Insurance age on date of retirement</help>
-                                <size>50,-1</size>
-                            </object>
-                        </object>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
-                    <object class="wxFlexGridSizer">
-                        <cols>1</cols>
-                        <rows>0</rows>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxStaticBoxSizer">
-                                <orient>wxHORIZONTAL</orient>
-                                <label>Country COI multiplier</label>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxCheckBox" name="OverrideCoiMultiplier">
-                                        <help>Override default country COI multiplier for current COI rates</help>
-                                        <label>Override</label>
-                                        <checked>0</checked>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxTextCtrl" name="CountryCoiMultiplier">
-                                        <help>Country multiplier for current COI rates</help>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxTOP</flag>
-                            <border>2</border>
-                            <object class="wxStaticBoxSizer">
-                                <orient>wxHORIZONTAL</orient>
-                                <label>Substandard</label>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_TOP|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxStaticText">
-                                        <label>Table rating</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_TOP|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxComboBox" name="SubstandardTable">
-                                        <help>Substandard table rating</help>
-                                        <size>-1,20</size>
-                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                    </object>
-                                </object>
+                            <object class="wxComboBox" name="SubstandardTable">
+                                <help>Substandard table rating</help>
+                                <size>-1,20</size>
+                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
                     </object>
@@ -1059,6 +978,66 @@
                             <item helptext="Table rated">Rated</item>
                             <item helptext="Ultra-preferred class">Ultra</item>
                         </content>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <border>2</border>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0,1</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <object class="wxCheckBox" name="UseDOB">
+                                <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
+                                <label>Birthdate overrides issue age</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>0</growablecols>
+                                <growablerows>0,1,2</growablerows>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxStaticText">
+                                        <label>Birthdate </label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxDatePickerCtrl" name="DateOfBirth">
+                                        <help>Date of birth</help>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxStaticText">
+                                        <label>Issue age </label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxSpinCtrl" name="IssueAge">
+                                        <help>Insurance age on date of issue</help>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxStaticText">
+                                        <label>Retirement age </label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxSpinCtrl" name="RetirementAge">
+                                        <help>Insurance age on date of retirement</help>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
                     </object>
                 </object>
             </object>
