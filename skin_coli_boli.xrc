@@ -1395,9 +1395,8 @@
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceYear">
+                                    <object class="wxTextCtrl" name="InforceYear">
                                         <help>Years elapsed since issue</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1410,9 +1409,8 @@
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceMonth">
+                                    <object class="wxTextCtrl" name="InforceMonth">
                                         <help>Months elapsed since issue</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1870,9 +1868,8 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceContractMonth">
+                                    <object class="wxTextCtrl" name="InforceContractMonth">
                                         <help>Months elapsed since beginning of most recent seven-pay period</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1885,9 +1882,8 @@ here, but it looks weird if we don't make this look like its siblings.
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceContractYear">
+                                    <object class="wxTextCtrl" name="InforceContractYear">
                                         <help>Years elapsed since beginning of most recent seven-pay period</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
