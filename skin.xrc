@@ -1145,7 +1145,7 @@
                 <growablecols>0</growablecols>
                 <growablerows>0,1,2,3</growablerows>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
+                    <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>
@@ -1166,7 +1166,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
+                    <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>
@@ -1186,7 +1186,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
+                    <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>
@@ -1207,7 +1207,7 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
+                    <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>
