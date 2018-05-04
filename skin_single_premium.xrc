@@ -758,7 +758,7 @@ appropriate input.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
-                                        <size>-1,-1</size>
+                                        <size>80,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -771,7 +771,7 @@ appropriate input.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="IssueAge">
                                         <help>Insurance age on date of issue</help>
-                                        <size>0,-1</size>
+                                        <size>80,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -784,7 +784,7 @@ appropriate input.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxSpinCtrl" name="RetirementAge">
                                         <help>Insurance age on date of retirement</help>
-                                        <size>0,-1</size>
+                                        <size>80,-1</size>
                                     </object>
                                 </object>
                             </object>
