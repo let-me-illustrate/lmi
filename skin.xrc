@@ -1151,6 +1151,27 @@
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxCheckBox" name="OverrideCoiMultiplier">
+                                <help>Override default country COI multiplier for current COI rates</help>
+                                <label>Override country COI multiplier </label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW</flag>
+                            <object class="wxTextCtrl" name="CountryCoiMultiplier">
+                                <help>Country multiplier for current COI rates</help>
+                                <size>10,-1</size>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>1</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <object class="wxStaticText">
                                 <label>Substandard table </label>
                             </object>
@@ -1201,27 +1222,6 @@
                             <object class="InputSequenceEntry" name="ProjectedSalary">
                                 <title>Projected annual salary</title>
                                 <help>Projected annual salary</help>
-                                <size>10,-1</size>
-                            </object>
-                        </object>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
-                    <object class="wxFlexGridSizer">
-                        <rows>1</rows>
-                        <growablecols>1</growablecols>
-                        <object class="sizeritem">
-                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <object class="wxCheckBox" name="OverrideCoiMultiplier">
-                                <help>Override default country COI multiplier for current COI rates</help>
-                                <label>Override country COI multiplier </label>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW</flag>
-                            <object class="wxTextCtrl" name="CountryCoiMultiplier">
-                                <help>Country multiplier for current COI rates</help>
                                 <size>10,-1</size>
                             </object>
                         </object>
