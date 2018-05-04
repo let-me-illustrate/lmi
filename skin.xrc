@@ -607,6 +607,7 @@
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="SurviveToAge">
                                         <help>Partial mortality survival age limit</help>
+                                        <style>wxSP_ARROW_KEYS</style>
                                         <max>100</max>
                                     </object>
                                 </object>
@@ -620,6 +621,7 @@
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="SurviveToYear">
                                         <help>Partial mortality survival year limit</help>
+                                        <style>wxSP_ARROW_KEYS</style>
                                         <max>100</max>
                                         <value>99</value>
                                     </object>
@@ -1117,6 +1119,7 @@
                                     <object class="wxSpinCtrl" name="IssueAge">
                                         <help>Insurance age on date of issue</help>
                                         <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1130,6 +1133,7 @@
                                     <object class="wxSpinCtrl" name="RetirementAge">
                                         <help>Insurance age on date of retirement</help>
                                         <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                             </object>
@@ -1953,6 +1957,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <object class="wxSpinCtrl" name="SolveBeginYear">
                                                         <help>Solve beginning duration</help>
                                                         <size>20,-1</size>
+                                                        <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -1969,6 +1974,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <object class="wxSpinCtrl" name="SolveBeginTime">
                                                         <help>Solve beginning age</help>
                                                         <size>20,-1</size>
+                                                        <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -2013,6 +2019,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <object class="wxSpinCtrl" name="SolveEndYear">
                                                         <help>Solve ending duration</help>
                                                         <size>20,-1</size>
+                                                        <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -2029,6 +2036,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <object class="wxSpinCtrl" name="SolveEndTime">
                                                         <help>Solve ending age</help>
                                                         <size>20,-1</size>
+                                                        <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -2073,6 +2081,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <object class="wxSpinCtrl" name="SolveTargetYear">
                                                         <help>Duration to achieve target surrender value</help>
                                                         <size>20,-1</size>
+                                                        <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -2089,6 +2098,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <object class="wxSpinCtrl" name="SolveTargetTime">
                                                         <help>Attained age to achieve target surrender value</help>
                                                         <size>20,-1</size>
+                                                        <style>wxSP_ARROW_KEYS</style>
                                                         <max>100</max>
                                                         <value>99</value>
                                                     </object>
@@ -2953,6 +2963,7 @@ the other is perforce ignored.
                                     <object class="wxSpinCtrl" name="SpouseIssueAge">
                                         <help>Spouse's insurance age on date of issue</help>
                                         <size>50,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                             </object>

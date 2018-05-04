@@ -264,6 +264,7 @@
                                     <border>4</border>
                                     <object class="wxSpinCtrl" name="SurviveToAge">
                                         <help>Partial mortality survival age limit</help>
+                                        <style>wxSP_ARROW_KEYS</style>
                                         <max>100</max>
                                     </object>
                                 </object>
@@ -278,6 +279,7 @@
                                     <flag>wxGROW</flag>
                                     <object class="wxSpinCtrl" name="SurviveToYear">
                                         <help>Partial mortality survival year limit</help>
+                                        <style>wxSP_ARROW_KEYS</style>
                                         <max>100</max>
                                         <value>99</value>
                                     </object>
@@ -772,6 +774,7 @@ appropriate input.
                                     <object class="wxSpinCtrl" name="IssueAge">
                                         <help>Insurance age on date of issue</help>
                                         <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -785,6 +788,7 @@ appropriate input.
                                     <object class="wxSpinCtrl" name="RetirementAge">
                                         <help>Insurance age on date of retirement</help>
                                         <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                             </object>

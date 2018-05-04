@@ -319,6 +319,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <object class="wxSpinCtrl" name="IssueAge">
                                         <help>Insurance age on date of issue</help>
                                         <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                                 <object class="sizeritem">

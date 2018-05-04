@@ -287,6 +287,7 @@
                     <flag>wxGROW</flag>
                     <object class="wxSpinCtrl" name="SecondsToPauseBetweenPrintouts">
                         <help>Number of seconds to pause between batched printouts, to prevent the printer from scrambling their order</help>
+                        <style>wxSP_ARROW_KEYS</style>
                     </object>
                 </object>
             </object>
