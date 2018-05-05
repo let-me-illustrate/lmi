@@ -124,7 +124,7 @@ void input_sequence_test::check
     catch(std::exception const& x)
         {
         std::string const y = x.what();
-        std::string const i = y.substr(0, y.find("\n[file "));
+        std::string const i = y.substr(0, y.find("\n["));
         std::string const j = (nullptr == m) ? std::string() : std::string(m);
         bool const b = i == j;
         if(!b)

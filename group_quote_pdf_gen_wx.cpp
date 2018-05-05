@@ -346,7 +346,7 @@ class group_quote_pdf_generator_wx
 
     struct row_data
         {
-        std::string values[e_col_max];
+        std::vector<std::string> output_values {e_col_max};
         };
     std::vector<row_data> rows_;
 
@@ -546,22 +546,22 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_number:
                 {
                 // Row numbers shown to human beings should be 1-based.
-                rd.values[col] = wxString::Format("%d", row_num_ + 1).ToStdString();
+                rd.output_values[col] = wxString::Format("%d", row_num_ + 1).ToStdString();
                 }
                 break;
             case e_col_name:
                 {
-                rd.values[col] = invar.Insured1;
+                rd.output_values[col] = invar.Insured1;
                 }
                 break;
             case e_col_age:
                 {
-                rd.values[col] = wxString::Format("%.0f", invar.Age).ToStdString();
+                rd.output_values[col] = wxString::Format("%.0f", invar.Age).ToStdString();
                 }
                 break;
             case e_col_dob:
                 {
-                rd.values[col] = ConvertDateToWx
+                rd.output_values[col] = ConvertDateToWx
                     (jdn_t(static_cast<int>(invar.DateOfBirthJdn))
                     ).FormatDate().ToStdString(wxConvUTF8);
                 }
@@ -569,7 +569,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_basic_face_amount:
                 {
                 double const z = invar.SpecAmt.at(year);
-                rd.values[col] = '$' + ledger_format(z, f0);
+                rd.output_values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
                     totals_.total(col, z);
@@ -579,7 +579,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_basic_premium:
                 {
                 double const z = invar.ErModalMinimumPremium.at(year);
-                rd.values[col] = '$' + ledger_format(z, f2);
+                rd.output_values[col] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
                     totals_.total(col, z);
@@ -589,7 +589,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_supplemental_face_amount:
                 {
                 double const z = invar.TermSpecAmt.at(year);
-                rd.values[col] = '$' + ledger_format(z, f0);
+                rd.output_values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
                     totals_.total(col, z);
@@ -599,7 +599,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_additional_premium:
                 {
                 double const z = invar.EeModalMinimumPremium.at(year) + invar.ModalMinimumDumpin;
-                rd.values[col] = '$' + ledger_format(z, f2);
+                rd.output_values[col] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
                     totals_.total(col, z);
@@ -609,7 +609,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_total_face_amount:
                 {
                 double const z = invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year);
-                rd.values[col] = '$' + ledger_format(z, f0);
+                rd.output_values[col] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
                     totals_.total(col, z);
@@ -619,7 +619,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_total_premium:
                 {
                 double const z = invar.ModalMinimumPremium.at(year) + invar.ModalMinimumDumpin;
-                rd.values[col] = '$' + ledger_format(z, f2);
+                rd.output_values[col] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
                     totals_.total(col, z);
@@ -762,7 +762,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
     for(auto const& i : rows_)
         {
-        table_gen.output_row(&pos_y, i.values);
+        table_gen.output_row(&pos_y, i.output_values);
 
         if(last_row_y <= pos_y)
             {

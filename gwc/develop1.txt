@@ -80,6 +80,7 @@ git commit sandbox_test.cpp
 git checkout master
 git push origin odd/foo
   # (to expunge branch if later cherry-picked)
+git branch --delete odd/foo
 git push origin --delete odd/foo
 
   # ...for failing unit tests that are to be...

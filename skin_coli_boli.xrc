@@ -641,6 +641,7 @@
                                     <object class="wxSpinCtrl" name="SurviveToAge">
                                         <help>Partial mortality survival age limit</help>
                                         <size>30,-1d</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -649,6 +650,7 @@
                                     <object class="wxSpinCtrl" name="SurviveToYear">
                                         <help>Partial mortality survival year limit</help>
                                         <size>30,-1d</size>
+                                        <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
                             </object>
@@ -878,141 +880,6 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-            <border>4</border>
-            <object class="wxFlexGridSizer">
-                <cols>3</cols>
-                <rows>1</rows>
-                <growablecols>1</growablecols>
-                <growablerows>0</growablerows>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
-                    <border>0</border>
-                    <object class="wxStaticBoxSizer">
-                        <orient>wxVERTICAL</orient>
-                        <label>Issue age</label>
-                        <object class="sizeritem">
-                            <flag>wxALIGN_LEFT|wxBOTTOM</flag>
-                            <border>0</border>
-                            <object class="wxFlexGridSizer">
-                                <cols>0</cols>
-                                <rows>2</rows>
-                                <growablecols>0</growablecols>
-                                <growablerows>0,1</growablerows>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
-                                    <border>10</border>
-                                    <object class="wxSpinCtrl" name="IssueAge">
-                                        <help>Insurance age on date of issue</help>
-                                        <size>50,-1</size>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT|wxBOTTOM</flag>
-                                    <border>2</border>
-                                    <object class="wxRadioBox" name="UseDOB">
-                                        <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
-                                        <style>wxRA_SPECIFY_COLS</style>
-                                        <label>Use date</label>
-                                        <content>
-                                            <item>No</item>
-                                            <item>Yes</item>
-                                        </content>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM</flag>
-                                    <border>2</border>
-                                    <object class="wxDatePickerCtrl" name="DateOfBirth">
-                                        <help>Date of birth</help>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
-                    <border>2</border>
-                    <object class="wxFlexGridSizer">
-                        <cols>0</cols>
-                        <rows>1</rows>
-                        <growablecols>0</growablecols>
-                        <growablerows>0</growablerows>
-                        <object class="sizeritem">
-                            <flag>wxALIGN_RIGHT|wxALIGN_TOP|wxALL</flag>
-                            <border>2</border>
-                            <object class="wxStaticText">
-                                <label>Retirement Age</label>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
-                            <border>2</border>
-                            <object class="wxSpinCtrl" name="RetirementAge">
-                                <help>Insurance age on date of retirement</help>
-                                <size>50,-1</size>
-                            </object>
-                        </object>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
-                    <object class="wxFlexGridSizer">
-                        <cols>1</cols>
-                        <rows>0</rows>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALL</flag>
-                            <object class="wxStaticBoxSizer">
-                                <orient>wxHORIZONTAL</orient>
-                                <label>Country COI multiplier</label>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxCheckBox" name="OverrideCoiMultiplier">
-                                        <help>Override default country COI multiplier for current COI rates</help>
-                                        <label>Override</label>
-                                        <checked>0</checked>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxTextCtrl" name="CountryCoiMultiplier">
-                                        <help>Country multiplier for current COI rates</help>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxTOP</flag>
-                            <border>2</border>
-                            <object class="wxStaticBoxSizer">
-                                <orient>wxHORIZONTAL</orient>
-                                <label>Substandard</label>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_TOP|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxStaticText">
-                                        <label>Table rating</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_TOP|wxALL</flag>
-                                    <border>2</border>
-                                    <object class="wxComboBox" name="SubstandardTable">
-                                        <help>Substandard table rating</help>
-                                        <size>-1,20</size>
-                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                    </object>
-                </object>
-            </object>
-        </object>
-        <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
@@ -1061,43 +928,160 @@
                         </content>
                     </object>
                 </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALL</flag>
+                    <border>2</border>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <growablecols>0</growablecols>
+                        <growablerows>0,1</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <object class="wxCheckBox" name="UseDOB">
+                                <help>Calculate issue age based on date of birth and effective date, automatically reflecting changes in effective date</help>
+                                <label>Birthdate overrides issue age</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <cols>2</cols>
+                                <growablecols>0</growablecols>
+                                <growablerows>0,1,2</growablerows>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxStaticText">
+                                        <label>Birthdate </label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxDatePickerCtrl" name="DateOfBirth">
+                                        <help>Date of birth</help>
+                                        <size>80,-1</size>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxStaticText">
+                                        <label>Issue age </label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxSpinCtrl" name="IssueAge">
+                                        <help>Insurance age on date of issue</help>
+                                        <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxStaticText">
+                                        <label>Retirement age </label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxSpinCtrl" name="RetirementAge">
+                                        <help>Insurance age on date of retirement</help>
+                                        <size>80,-1</size>
+                                        <style>wxSP_ARROW_KEYS</style>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
             </object>
         </object>
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
-            <border>4</border>
             <object class="wxFlexGridSizer">
-                <cols>2</cols>
-                <rows>2</rows>
-                <growablecols>1</growablecols>
+                <cols>1</cols>
+                <growablecols>0</growablecols>
+                <growablerows>0,1,2,3</growablerows>
                 <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>2</border>
-                    <object class="wxStaticText">
-                        <label>Salary</label>
+                    <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>1</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxCheckBox" name="OverrideCoiMultiplier">
+                                <help>Override default country COI multiplier for current COI rates</help>
+                                <label>Override country COI multiplier </label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW</flag>
+                            <object class="wxTextCtrl" name="CountryCoiMultiplier">
+                                <help>Country multiplier for current COI rates</help>
+                                <size>10,-1</size>
+                            </object>
+                        </object>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
-                    <border>2</border>
-                    <object class="InputSequenceEntry" name="ProjectedSalary">
-                        <title>Projected annual salary</title>
-                        <help>Projected annual salary</help>
+                    <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>1</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxStaticText">
+                                <label>Substandard table </label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW</flag>
+                            <object class="wxComboBox" name="SubstandardTable">
+                                <help>Substandard table rating</help>
+                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                            </object>
+                        </object>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>2</border>
-                    <object class="wxStaticText">
-                        <label>Flat extra</label>
+                    <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>1</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxStaticText">
+                                <label>Flat extra </label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW</flag>
+                            <object class="InputSequenceEntry" name="FlatExtra">
+                                <title>Annual flat extra per thousand</title>
+                                <help>Annual flat extra per thousand</help>
+                                <size>10,-1</size>
+                            </object>
+                        </object>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
-                    <border>2</border>
-                    <object class="InputSequenceEntry" name="FlatExtra">
-                        <title>Annual flat extra per thousand</title>
-                        <help>Annual flat extra per thousand</help>
+                    <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>1</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <object class="wxStaticText">
+                                <label>Salary </label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW</flag>
+                            <object class="InputSequenceEntry" name="ProjectedSalary">
+                                <title>Projected annual salary</title>
+                                <help>Projected annual salary</help>
+                                <size>10,-1</size>
+                            </object>
+                        </object>
                     </object>
                 </object>
             </object>
@@ -1413,9 +1397,8 @@
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceYear">
+                                    <object class="wxTextCtrl" name="InforceYear">
                                         <help>Years elapsed since issue</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1428,9 +1411,8 @@
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceMonth">
+                                    <object class="wxTextCtrl" name="InforceMonth">
                                         <help>Months elapsed since issue</help>
-                                        <style>wxSP_ARROW_KEYS</style>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1883,14 +1865,13 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>2</border>
                                     <object class="wxStaticText">
-                                        <label>Contract month</label>
+                                        <label>Contract year</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceContractMonth">
-                                        <help>Months elapsed since beginning of most recent seven-pay period</help>
-                                        <style>wxSP_ARROW_KEYS</style>
+                                    <object class="wxTextCtrl" name="InforceContractYear">
+                                        <help>Years elapsed since beginning of most recent seven-pay period</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -1898,14 +1879,13 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>2</border>
                                     <object class="wxStaticText">
-                                        <label>Contract year</label>
+                                        <label>Contract month</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceContractYear">
-                                        <help>Years elapsed since beginning of most recent seven-pay period</help>
-                                        <style>wxSP_ARROW_KEYS</style>
+                                    <object class="wxTextCtrl" name="InforceContractMonth">
+                                        <help>Months elapsed since beginning of most recent seven-pay period</help>
                                         <size>80,-1</size>
                                     </object>
                                 </object>
@@ -2063,6 +2043,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                             <object class="wxSpinCtrl" name="SolveBeginYear">
                                                 <help>Solve beginning duration</help>
                                                 <size>50,-1</size>
+                                                <style>wxSP_ARROW_KEYS</style>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -2086,6 +2067,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                             <object class="wxSpinCtrl" name="SolveBeginTime">
                                                 <help>Solve beginning age</help>
                                                 <size>50,-1</size>
+                                                <style>wxSP_ARROW_KEYS</style>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -2142,6 +2124,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                             <object class="wxSpinCtrl" name="SolveEndYear">
                                                 <help>Solve ending duration</help>
                                                 <size>50,-1</size>
+                                                <style>wxSP_ARROW_KEYS</style>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -2165,6 +2148,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                             <object class="wxSpinCtrl" name="SolveEndTime">
                                                 <help>Solve ending age</help>
                                                 <size>50,-1</size>
+                                                <style>wxSP_ARROW_KEYS</style>
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -2277,6 +2261,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <object class="wxSpinCtrl" name="SolveTargetYear">
                                                         <help>Duration to achieve target surrender value</help>
                                                         <size>50,-1</size>
+                                                        <style>wxSP_ARROW_KEYS</style>
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem">
@@ -2300,6 +2285,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                                     <object class="wxSpinCtrl" name="SolveTargetTime">
                                                         <help>Attained age to achieve target surrender value</help>
                                                         <size>50,-1</size>
+                                                        <style>wxSP_ARROW_KEYS</style>
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem">
@@ -3250,6 +3236,7 @@ here, but it looks weird if we don't make this look like its siblings.
                             <object class="wxSpinCtrl" name="SpouseIssueAge">
                                 <help>Spouse insurance age on date of issue</help>
                                 <size>50,-1</size>
+                                <style>wxSP_ARROW_KEYS</style>
                             </object>
                         </object>
                     </object>

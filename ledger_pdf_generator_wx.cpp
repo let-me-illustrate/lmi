@@ -366,9 +366,14 @@ class using_illustration_table
     // Must be overridden to return the description of the table columns.
     virtual illustration_table_columns const& get_table_columns() const = 0;
 
-    // May be overridden to return false if the given column shouldn't be shown
-    // for the specific ledger values (currently used to exclude individual
-    // columns from composite illustrations).
+    // PDF !! Most overrides have exactly this function body:
+    //    {
+    //    // Don't show AttainedAge on a composite.
+    //    return !(ledger.is_composite() && column == column_end_of_year_age);
+    //    }
+    // However, that cannot be written here, once and only once,
+    // because 'column_end_of_year_age' is an enumerator whose value
+    // may differ in each derived class.
     virtual bool should_show_column(Ledger const& ledger, int column) const
     {
         stifle_warning_for_unused_value(ledger);
@@ -391,7 +396,7 @@ class using_illustration_table
         font.SetPointSize(9);
         dc.SetFont(font);
 
-        illustration_table_generator table(writer);
+        illustration_table_generator table_gen(writer);
 
         // But set the highlight colour for drawing separator lines after
         // creating it to override its default pen.
@@ -407,10 +412,10 @@ class using_illustration_table
                 }
             //else: Leave the label empty to avoid showing the column.
 
-            table.add_column(label, i.widest_text);
+            table_gen.add_column(label, i.widest_text);
             }
 
-        return table;
+        return table_gen;
     }
 };
 
@@ -1368,21 +1373,21 @@ class numeric_summary_table_cell
         auto& writer = pdf_context_for_html_output.writer();
 
         illustration_table_generator
-            table{create_table_generator(ledger, writer)};
+            table_gen{create_table_generator(ledger, writer)};
 
         // Output multiple rows of headers.
 
         // Make a copy because we want pos_y to be modified only once, not
         // twice, by both output_super_header() calls.
         auto y_copy = pos_y;
-        table.output_super_header
+        table_gen.output_super_header
             ("Guaranteed Values"
             ,column_guar_account_value
             ,column_separator_guar_non_guar
             ,&y_copy
             ,output_mode
             );
-        table.output_super_header
+        table_gen.output_super_header
             ("Non-Guaranteed Values"
             ,column_mid_account_value
             ,column_max
@@ -1390,14 +1395,14 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        pos_y += table.get_separator_line_height();
-        table.output_horz_separator
+        pos_y += table_gen.get_separator_line_height();
+        table_gen.output_horz_separator
             (column_guar_account_value
             ,column_separator_guar_non_guar
             ,pos_y
             ,output_mode
             );
-        table.output_horz_separator
+        table_gen.output_horz_separator
             (column_mid_account_value
             ,column_max
             ,pos_y
@@ -1405,7 +1410,7 @@ class numeric_summary_table_cell
             );
 
         y_copy = pos_y;
-        table.output_super_header
+        table_gen.output_super_header
             ("Midpoint Values"
             ,column_mid_account_value
             ,column_separator_mid_curr
@@ -1413,7 +1418,7 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        table.output_super_header
+        table_gen.output_super_header
             ("Current Values"
             ,column_curr_account_value
             ,column_max
@@ -1421,29 +1426,29 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        pos_y += table.get_separator_line_height();
-        table.output_horz_separator
+        pos_y += table_gen.get_separator_line_height();
+        table_gen.output_horz_separator
             (column_mid_account_value
             ,column_separator_mid_curr
             ,pos_y
             ,output_mode
             );
 
-        table.output_horz_separator
+        table_gen.output_horz_separator
             (column_curr_account_value
             ,column_max
             ,pos_y
             ,output_mode
             );
 
-        table.output_header(&pos_y, output_mode);
+        table_gen.output_header(&pos_y, output_mode);
 
-        pos_y += table.get_separator_line_height();
-        table.output_horz_separator(0, column_max, pos_y, output_mode);
+        pos_y += table_gen.get_separator_line_height();
+        table_gen.output_horz_separator(0, column_max, pos_y, output_mode);
 
         // And now the table values themselves.
         auto const& columns = get_table_columns();
-        std::vector<std::string> values(columns.size());
+        std::vector<std::string> output_values(columns.size());
 
         auto const& invar = ledger.GetLedgerInvariant();
         auto const& interpolate_html = pdf_context_for_html_output.interpolate_html();
@@ -1477,7 +1482,7 @@ class numeric_summary_table_cell
             switch(output_mode)
                 {
                 case oe_only_measure:
-                    pos_y += table.row_height();
+                    pos_y += table_gen.row_height();
                     break;
 
                 case oe_render:
@@ -1493,20 +1498,20 @@ class numeric_summary_table_cell
                                 {
                                 std::ostringstream oss;
                                 oss << "Age " << age_last;
-                                values[col] = oss.str();
+                                output_values[col] = oss.str();
                                 continue;
                                 }
                             }
 
                         // Special hack for the dummy columns whose value is always
                         // empty as it's used only as separator.
-                        values[col] = variable_name.empty()
+                        output_values[col] = variable_name.empty()
                             ? std::string{}
                             : interpolate_html.evaluate(variable_name, year - 1)
                             ;
                         }
 
-                    table.output_row(&pos_y, values.data());
+                    table_gen.output_row(&pos_y, output_values);
                     break;
                 }
             }
@@ -1597,22 +1602,22 @@ class page_with_tabular_report
         numbered_page::render(ledger, writer, interpolate_html);
 
         illustration_table_generator
-            table{create_table_generator(ledger, writer)};
+            table_gen{create_table_generator(ledger, writer)};
 
         auto const& columns = get_table_columns();
 
         // Just some cached values used inside the loop below.
-        auto const row_height = table.row_height();
+        auto const row_height = table_gen.row_height();
         auto const page_bottom = get_footer_top();
         auto const rows_per_group = illustration_table_generator::rows_per_group;
-        std::vector<std::string> values(columns.size());
+        std::vector<std::string> output_values(columns.size());
 
         // The table may need several pages, loop over them.
         int const year_max = ledger.GetMaxLength();
         for(int year = 0; year < year_max; )
             {
             int pos_y = render_or_measure_fixed_page_part
-                (table
+                (table_gen
                 ,writer
                 ,interpolate_html
                 ,oe_render
@@ -1627,13 +1632,13 @@ class page_with_tabular_report
                     // Special hack for the dummy columns used in some reports,
                     // whose value is always empty as it's used only as
                     // separator.
-                    values[col] = variable_name.empty()
+                    output_values[col] = variable_name.empty()
                         ? std::string{}
                         : interpolate_html.evaluate(variable_name, year)
                         ;
                     }
 
-                table.output_row(&pos_y, values.data());
+                table_gen.output_row(&pos_y, output_values);
 
                 ++year;
                 if(year == year_max)
@@ -1679,13 +1684,13 @@ class page_with_tabular_report
     // pos_y and update it to account for the added lines. The base class
     // version does nothing.
     virtual void render_or_measure_extra_headers
-        (illustration_table_generator& table
+        (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
         ,int*                          pos_y
         ,oenum_render_or_only_measure  output_mode
         ) const
     {
-        stifle_warning_for_unused_value(table);
+        stifle_warning_for_unused_value(table_gen);
         stifle_warning_for_unused_value(interpolate_html);
         stifle_warning_for_unused_value(pos_y);
         stifle_warning_for_unused_value(output_mode);
@@ -1696,7 +1701,7 @@ class page_with_tabular_report
     // (in any case) return the vertical coordinate of its bottom, where the
     // tabular report starts.
     int render_or_measure_fixed_page_part
-        (illustration_table_generator& table
+        (illustration_table_generator& table_gen
         ,pdf_writer_wx&                writer
         ,html_interpolator const&      interpolate_html
         ,oenum_render_or_only_measure  output_mode
@@ -1715,18 +1720,18 @@ class page_with_tabular_report
             );
 
         render_or_measure_extra_headers
-            (table
+            (table_gen
             ,interpolate_html
             ,&pos_y
             ,output_mode
             );
 
-        table.output_header(&pos_y, output_mode);
+        table_gen.output_header(&pos_y, output_mode);
 
-        pos_y += table.get_separator_line_height();
-        table.output_horz_separator
+        pos_y += table_gen.get_separator_line_height();
+        table_gen.output_horz_separator
             (0
-            ,table.columns_count()
+            ,table_gen.columns_count()
             ,pos_y
             ,output_mode
             );
@@ -1743,16 +1748,16 @@ class page_with_tabular_report
         ) const override
     {
         illustration_table_generator
-            table{create_table_generator(ledger, writer)};
+            table_gen{create_table_generator(ledger, writer)};
 
         int const pos_y = render_or_measure_fixed_page_part
-            (table
+            (table_gen
             ,writer
             ,interpolate_html
             ,oe_only_measure
             );
 
-        int const rows_per_page = (get_footer_top() - pos_y) / table.row_height();
+        int const rows_per_page = (get_footer_top() - pos_y) / table_gen.row_height();
 
         int const rows_per_group = illustration_table_generator::rows_per_group;
 
@@ -1776,6 +1781,11 @@ class page_with_tabular_report
 class ill_reg_tabular_detail_page : public page_with_tabular_report
 {
   private:
+    // PDF !! This derived class and its siblings each contain an enum
+    // like the following. Most of the enumerators are unused. They
+    // index the container returned by get_table_columns(), and must
+    // be maintained in parallel with it so that the two lists match
+    // perfectly.
     enum
         {column_policy_year
         ,column_end_of_year_age
@@ -1801,7 +1811,7 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table
+        (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
         ,int*                          pos_y
         ,oenum_render_or_only_measure  output_mode
@@ -1812,14 +1822,14 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
         // Make a copy because we want the real pos_y to be modified only once,
         // not twice, by both output_super_header() calls.
         auto pos_y_copy = *pos_y;
-        table.output_super_header
+        table_gen.output_super_header
             ("Guaranteed Values"
             ,column_guar_account_value
             ,column_dummy_separator
             ,&pos_y_copy
             ,output_mode
             );
-        table.output_super_header
+        table_gen.output_super_header
             ("Non-Guaranteed Values"
             ,column_curr_account_value
             ,column_max
@@ -1827,14 +1837,14 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
             ,output_mode
             );
 
-        *pos_y += table.get_separator_line_height();
-        table.output_horz_separator
+        *pos_y += table_gen.get_separator_line_height();
+        table_gen.output_horz_separator
             (column_guar_account_value
             ,column_dummy_separator
             ,*pos_y
             ,output_mode
             );
-        table.output_horz_separator
+        table_gen.output_horz_separator
             (column_curr_account_value
             ,column_max
             ,*pos_y
@@ -1862,8 +1872,8 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 };
 
@@ -1902,8 +1912,8 @@ class ill_reg_tabular_detail2_page : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 };
 
@@ -2204,12 +2214,12 @@ class page_with_basic_tabular_report : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table
+        (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
         ,int*                          pos_y
         ,oenum_render_or_only_measure  output_mode
@@ -2218,7 +2228,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         // Output the first super header row.
 
         auto pos_y_copy = *pos_y;
-        table.output_super_header
+        table_gen.output_super_header
             ("Using guaranteed charges"
             ,column_guar0_cash_surr_value
             ,column_separator_guar_curr0
@@ -2227,7 +2237,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             );
 
         *pos_y = pos_y_copy;
-        table.output_super_header
+        table_gen.output_super_header
             ("Using current charges"
             ,column_curr0_cash_surr_value
             ,column_max
@@ -2235,14 +2245,14 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ,output_mode
             );
 
-        *pos_y += table.get_separator_line_height();
-        table.output_horz_separator
+        *pos_y += table_gen.get_separator_line_height();
+        table_gen.output_horz_separator
             (column_guar0_cash_surr_value
             ,column_separator_guar_curr0
             ,*pos_y
             ,output_mode
             );
-        table.output_horz_separator
+        table_gen.output_horz_separator
             (column_curr0_cash_surr_value
             ,column_max
             ,*pos_y
@@ -2255,7 +2265,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         // This function outputs all lines of a single header, corresponding to
         // the "Guaranteed" or "Current", "Zero" or not, column and returns the
         // vertical position below the header.
-        auto const output_two_column_super_header = [=,&table]
+        auto const output_two_column_super_header = [=,&table_gen]
             (base           guar_or_curr
             ,interest_rate  zero_or_not
             ,std::size_t    begin_column
@@ -2270,7 +2280,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                     (guar_or_curr
                     ,zero_or_not
                     );
-                table.output_super_header
+                table_gen.output_super_header
                     (interpolate_html(header).as_html()
                     ,begin_column
                     ,end_column
@@ -2278,8 +2288,8 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                     ,output_mode
                     );
 
-                y += table.get_separator_line_height();
-                table.output_horz_separator
+                y += table_gen.get_separator_line_height();
+                table_gen.output_horz_separator
                     (begin_column
                     ,end_column
                     ,y
@@ -2650,12 +2660,12 @@ class reg_d_individual_irr_base : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table
+        (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
         ,int*                          pos_y
         ,oenum_render_or_only_measure  output_mode
@@ -2671,7 +2681,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             ;
 
         auto pos_y_copy = *pos_y;
-        table.output_super_header
+        table_gen.output_super_header
             (interpolate_html(header_zero.str()).as_html()
             ,column_zero_cash_surr_value
             ,column_zero_irr_surr_value
@@ -2689,7 +2699,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             ;
 
         *pos_y = pos_y_copy;
-        table.output_super_header
+        table_gen.output_super_header
             (interpolate_html(header_nonzero.str()).as_html()
             ,column_nonzero_cash_surr_value
             ,column_nonzero_irr_surr_value
@@ -2697,14 +2707,14 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             ,output_mode
             );
 
-        *pos_y += table.get_separator_line_height();
-        table.output_horz_separator
+        *pos_y += table_gen.get_separator_line_height();
+        table_gen.output_horz_separator
             (column_zero_cash_surr_value
             ,column_zero_irr_surr_value
             ,*pos_y
             ,output_mode
             );
-        table.output_horz_separator
+        table_gen.output_horz_separator
             (column_nonzero_cash_surr_value
             ,column_nonzero_irr_surr_value
             ,*pos_y
@@ -2728,20 +2738,19 @@ class reg_d_individual_guar_irr : public reg_d_individual_irr_base
 
     illustration_table_columns const& get_table_columns() const override
     {
-        // PDF !! Here and elsewhere, IRR columns must be widened.
         static illustration_table_columns const columns =
             {{ "PolicyYear"                 , "Policy\nYear"                ,         "999" }
             ,{ "AttainedAge"                , "End of\nYear Age"            ,         "999" }
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_GuaranteedZero"      , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_GuaranteedZero" , "Death\nBenefit"              , "999,999,999" }
-            ,{ "IrrCsv_GuaranteedZero"      , "IRR on\nSurr Value"          ,      "99.99%" }
-            ,{ "IrrDb_GuaranteedZero"       , "IRR on\nDeath Bft"           ,      "99.99%" }
+            ,{ "IrrCsv_GuaranteedZero"      , "IRR on\nSurr Value"          ,  "100000.00%" }
+            ,{ "IrrDb_GuaranteedZero"       , "IRR on\nDeath Bft"           ,  "100000.00%" }
             ,{ ""                           , " "                           ,           "-" }
             ,{ "CSVNet_Guaranteed"          , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_Guaranteed"     , "Death\nBenefit"              , "999,999,999" }
-            ,{ "IrrCsv_Guaranteed"          , "IRR on\nSurr Value"          ,      "99.99%" }
-            ,{ "IrrDb_Guaranteed"           , "IRR on\nDeath Bft"           ,      "99.99%" }
+            ,{ "IrrCsv_Guaranteed"          , "IRR on\nSurr Value"          ,  "100000.00%" }
+            ,{ "IrrDb_Guaranteed"           , "IRR on\nDeath Bft"           ,  "100000.00%" }
             };
 
         return columns;
@@ -2769,13 +2778,13 @@ class reg_d_individual_curr_irr : public reg_d_individual_irr_base
             ,{ "GrossPmt"                   , "Premium\nOutlay"             , "999,999,999" }
             ,{ "CSVNet_CurrentZero"         , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_CurrentZero"    , "Death\nBenefit"              , "999,999,999" }
-            ,{ "IrrCsv_CurrentZero"         , "IRR on\nSurr Value"          ,      "99.99%" }
-            ,{ "IrrDb_CurrentZero"          , "IRR on\nDeath Bft"           ,      "99.99%" }
+            ,{ "IrrCsv_CurrentZero"         , "IRR on\nSurr Value"          ,  "100000.00%" }
+            ,{ "IrrDb_CurrentZero"          , "IRR on\nDeath Bft"           ,  "100000.00%" }
             ,{ ""                           , " "                           ,           "-" }
             ,{ "CSVNet_Current"             , "Cash Surr\nValue"            , "999,999,999" }
             ,{ "EOYDeathBft_Current"        , "Death\nBenefit"              , "999,999,999" }
-            ,{ "IrrCsv_Current"             , "IRR on\nSurr Value"          ,      "99.99%" }
-            ,{ "IrrDb_Current"              , "IRR on\nDeath Bft"           ,      "99.99%" }
+            ,{ "IrrCsv_Current"             , "IRR on\nSurr Value"          ,  "100000.00%" }
+            ,{ "IrrDb_Current"              , "IRR on\nDeath Bft"           ,  "100000.00%" }
             };
 
         return columns;
@@ -2826,18 +2835,18 @@ class reg_d_individual_curr : public page_with_tabular_report
 
     bool should_show_column(Ledger const& ledger, int column) const override
     {
-        // One column should be hidden for composite ledgers.
-        return column != column_end_of_year_age || !ledger.is_composite();
+        // Don't show AttainedAge on a composite.
+        return !(ledger.is_composite() && column == column_end_of_year_age);
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table
+        (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
         ,int*                          pos_y
         ,oenum_render_or_only_measure  output_mode
         ) const override
     {
-        table.output_super_header
+        table_gen.output_super_header
             (interpolate_html
                 ("{{InitAnnSepAcctGrossInt_Guaranteed}} Hypothetical Rate of Return*"
                 ).as_html()
@@ -2847,8 +2856,8 @@ class reg_d_individual_curr : public page_with_tabular_report
             ,output_mode
             );
 
-        *pos_y += table.get_separator_line_height();
-        table.output_horz_separator
+        *pos_y += table_gen.get_separator_line_height();
+        table_gen.output_horz_separator
             (column_curr_investment_income
             ,column_max
             ,*pos_y

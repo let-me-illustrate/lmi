@@ -29,6 +29,7 @@
 // Instead of <iosfwd>, include <ostream> to make std::flush available
 // to modules that use the LMI_FLUSH macro.
 
+#include <cstring>
 #include <exception>
 #include <ostream>
 #include <string>
@@ -252,9 +253,9 @@ void LMI_SO test_catastrophe_report();
 
 /// Write file name and line number to diagnostic stream, and flush.
 
-#define LMI_FLUSH                     \
-       "\n[file " << __FILE__         \
-    << ", line " << __LINE__ << "]\n" \
+#define LMI_FLUSH                                   \
+       "\n[" << 1 + std::strrchr("/" __FILE__, '/') \
+    << " : " << __LINE__ << "]\n"                   \
     << std::flush
 
 #endif // alert_hpp

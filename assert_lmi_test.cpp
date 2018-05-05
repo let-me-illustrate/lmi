@@ -29,7 +29,7 @@
 #define DOUBLY_STRINGIFY(Z) SINGLY_STRINGIFY(Z)
 
 #define LMI_LOCATION \
-    "\n[file " __FILE__ ", line " DOUBLY_STRINGIFY(__LINE__) "]\n"
+    "\n[assert_lmi_test.cpp : " DOUBLY_STRINGIFY(__LINE__) "]\n"
 
 int test_main(int, char*[])
 {

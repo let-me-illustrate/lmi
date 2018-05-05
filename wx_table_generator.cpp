@@ -27,6 +27,193 @@
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // count_newlines(), split_into_lines()
 
+//   is_centered_ is a member variable, initialized in the ctor
+//   is_hidden() is a member function, whose return value is dynamic
+// Should these really be implemented in those two different ways?
+// Wouldn't it be better to treat is_hidden() the same as is_centered_?
+//
+// Is this a struct only because we want its members to be publicly
+// accessible? But their values can also be changed by clients, and
+// isn't that undesirable?
+//
+// In wx_table_generator::do_output_values():
+//   if(align_right_)
+//   if(ci.is_centered_)
+// it seems that right-alignment is a quasi-global, while
+// center-alignment is a column_info data member. Historically, this
+// evolved because right-alignment was recently added to support
+// illustrations, while center-alignment was already used for group
+// quotes. But when code is complex for "historical reasons", it's
+// natural to ask whether it ought to be refactored for uniformity.
+
+// Under what circumstances might columns be hidden, centered, or clipped?
+//
+// General answer:
+//  In principle, all of those are independent. In practice, fixed width
+// columns are centered and variable width columns are clipped and only the
+// former can be hidden. But I don't think this low level class should impose
+// such high level constraints on its use, which is why it doesn't do it.
+//
+// - is_hidden()
+//
+// Apparently used only for group premium quotes, e.g.:
+//
+//             case e_col_total_face_amount:
+//                 if(!has_suppl_amount)
+//                     // Leave the header empty to hide this column.
+//                     break;
+//                 // Fall through
+//             ...
+//                 header = cd.header_;
+//
+// Some columns are conditionally hidden by should_show_column():
+//
+//     // May be overridden to return false if the given column shouldn't be shown
+//     // for the specific ledger values (currently used to exclude individual
+//     // columns from composite illustrations).
+//     virtual bool should_show_column(Ledger const& ledger, int column) const
+//
+// but that technique seems to be orthogonal to is_hidden() and used
+// only for illustration PDFs.
+// --No, it's not orthogonal, should_show_column() is used to decide whether
+// the column label should be left empty, making the column hidden.
+//
+//  - is_centered()
+//
+// This seems to be used only in one place:
+//
+//     if(ci.is_centered())
+//         {
+//         // Centre the text for the columns configured to do it.
+//         x_text += (width - dc_.GetTextExtent(s).x) / 2;
+//         }
+//
+// What exactly does it mean for a column to be "centered"? I think this
+// is a different concept than using "center" alignment for cells in a
+// spreadsheet column, which would give, e.g.:
+//     1
+//   11111
+// --No, it's exactly the same concept.
+// In spreadsheet terminology, almost all our columns are numeric, and our
+// numeric columns are right-aligned. But the function is documented thus:
+//
+//     // Return true if this column should be centered, rather than
+//     // left-aligned. Notice that this is ignored for globally right-aligned
+//     // tables.
+//
+// Is it then the case that:
+//  - for illustration PDFs, all columns are right-aligned, and
+//  - is_centered is used only for group quotes, where it really does
+//    mean the same thing as "center" alignment in a spreadsheet
+// ?
+// Answer: yes.
+//  This is indeed not as lucid as I'd like, but the alternative would to
+// modify the PDF quotes code to align all the columns explicitly, which I
+// preferred not to do as part of illustrations work. Maybe now, that this is
+// merged, it's indeed worth changing this.
+//  OTOH, unlike a spreadsheet, this class doesn't have any notion of numeric
+// or text values, so its align_right() method is still useful to globally
+// configure all columns to be right-aligned. Perhaps we could just add a
+// similar align_centre() method and call it from the group PDF quotes code
+// and continue to handle the variable width columns specially by
+// left-aligning them in any case?
+//
+// Apparently is_centered() always returns true (but is ignored)
+// for illustrations, and this comment inside the function body
+// applies to group quotes only:
+//
+//     // Fixed width columns are centered by default, variable width ones
+//     // are not as long strings look better with the default left
+//     // alignment.
+//
+// What sort of columns are not centered?
+// Answer: Variable width ones (only used by PDF quotes).
+//
+// - needs_clipping()
+//
+// And what sort of columns need to be clipped? As currently implemented,
+// this function is the logical negation of is_centered(), so only columns
+// that are not centered need clipping--but what columns are those? Only
+// the "Participant" column on group quotes?
+// Answer: Currently, yes, as it's the only variable width column.
+//
+// Does this all boil down to...
+//  - left-align and clip the group-quote "Participant" column
+//  - center all other group-quote columns
+//  - ignore all these accessors for illustration PDFs
+// ?
+// Answer: yes.
+//
+// And what does 'is_variable_width_' mean? As implemented, it means
+// that the constructor's 'width' argument was zero at the time of
+// construction. Is that in effect just another way of identifying
+// the "Participant" column?
+// Answer:
+//  No, as with "centered" above, it really means what it says: a variable
+// width column is one whose width is not fixed, i.e. not defined by the
+// widest string that can appear in it, but takes all the available space
+// remaining from the other, fixed width columns (in principle, there can be
+// more than one variable width column, even if currently this is not the
+// case).
+// The fundamental distinction is really
+// between fixed and variable width columns: the latter ones are always
+// left-aligned and need to be clipped, while the former ones are either
+// centered or right-aligned (if align_right() was called) and not clipped.
+// And I think things are reasonably simple seen from this point of view and
+// this is how you're supposed to see them, because it's how this class is
+// used, while the various accessors discussed above are just its
+// implementation details.
+
+//  - is_hidden(): A column with empty header is considered to be
+//    suppressed and doesn't appear in the output at all.
+//
+//  - is_centered(): Indicate whether column should be centered,
+//    rather than left-aligned. Ignored for globally right-aligned
+//    tables. [Fixed width columns are centered by default, variable
+//    width ones are not as long strings look better with the default
+//    left alignment.]
+//
+//  - is_variable_width():
+//
+//  - needs_clipping(): Indicate whether column contents need to be
+//    clipped when outputting it. [Variable width columns can have
+//    practically unlimited length and hence overflow into the next
+//    column or even beyond and must be clipped to prevent this from
+//    happening. Fixed width columns are not supposed to overflow
+//    anyhow, so clipping them is unnecessary.]
+
+class wx_table_generator::column_info
+{
+  public:
+    column_info(std::string const& header, int width)
+        :col_header_       (header)
+        ,col_width_        (width)
+        ,is_variable_width_(0 == width)
+        {
+        }
+
+    bool is_hidden()         const {return col_header().empty();}
+    bool is_centered()       const {return !is_variable_width_;}
+    bool is_variable_width() const {return  is_variable_width_;}
+    bool needs_clipping()    const {return  is_variable_width_;}
+
+    std::string const& col_header() const {return col_header_;}
+    int col_width()                 const {return col_width_;}
+
+  private:
+    std::string const col_header_;
+
+  public: // but dubiously so
+    // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
+    // pixel is one point = 1/72 inch.
+    //
+    // Modified directly by wx_table_generator code, hence not const.
+    int col_width_;
+
+  private:
+    bool const is_variable_width_;
+};
+
 namespace
 {
 
@@ -65,6 +252,20 @@ wx_table_generator::wx_table_generator
     dc_.SetPen(pen);
 }
 
+wx_table_generator::wx_table_generator(wx_table_generator const&) = default;
+
+wx_table_generator::~wx_table_generator() = default;
+
+int wx_table_generator::column_margin() const
+{
+    return column_margin_;
+}
+
+std::vector<wx_table_generator::column_info> const& wx_table_generator::all_columns() const
+{
+    return all_columns_;
+}
+
 void wx_table_generator::use_condensed_style()
 {
     row_height_ = char_height_;
@@ -82,13 +283,12 @@ void wx_table_generator::add_column
     ,std::string const& widest_text
     )
 {
-    // There is no need to care about the column width for hidden columns.
-    int width;
-    if(header.empty())
-        {
-        width = 0;
-        }
-    else
+    LMI_ASSERT(!column_widths_already_computed_);
+
+    // If a column's header is empty, then it is to be hidden--so its
+    // width isn't used and may as well be initialized to zero.
+    int width = 0;
+    if(!header.empty())
         {
         wxDCFontChanger header_font_setter(dc_);
         if(use_bold_headers_)
@@ -111,11 +311,11 @@ void wx_table_generator::add_column
             {
             increase_to_if_smaller(width, dc_.GetMultiLineTextExtent(header).x);
 
-            width += 2 * column_margin_;
+            width += 2 * column_margin();
             }
         }
 
-    columns_.push_back(column_info(header, width));
+    all_columns_.push_back(column_info(header, width));
 }
 
 wxFont wx_table_generator::get_header_font() const
@@ -141,22 +341,32 @@ int wx_table_generator::do_get_cell_x(std::size_t column)
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
         {
-        x += columns_.at(col).width_;
+        x += all_columns().at(col).col_width();
         }
 
     return x;
 }
 
+std::size_t wx_table_generator::columns_count() const
+{
+    return all_columns().size();
+}
+
+int wx_table_generator::row_height() const
+{
+    return row_height_;
+}
+
 wxRect wx_table_generator::cell_rect(std::size_t column, int y)
 {
-    LMI_ASSERT(column < columns_.size());
+    LMI_ASSERT(column < all_columns().size());
 
     // Note: call do_get_cell_x() here and not from the wxRect ctor arguments
     // list to ensure that the column width is initialized before it is used
     // below.
     int const x = do_get_cell_x(column);
 
-    return wxRect(x, y, columns_.at(column).width_, row_height_);
+    return wxRect(x, y, all_columns().at(column).col_width(), row_height_);
 }
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y)
@@ -171,11 +381,11 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 // const    total_width_
 // mutable  column_widths_already_computed_
 // mutable  column_margin_
-// mutable  columns_
-//   i.e. std::vector<column_info> columns_;
+// mutable  all_columns_
+//   i.e. std::vector<column_info> all_columns_;
 // mutable  column_info elements
 //   the only column_info function member called is is_hidden()
-//   the only column_info data member modified is width_
+//   the only column_info data member modified is col_width_
 //
 // meanings (written before each variable, as in header documentation):
 //
@@ -189,11 +399,20 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
     // changed in this function and nowhere else
 // mutable  column_margin_
     // std::vector<column_info>
-// mutable  columns_
+// mutable  all_columns_
 
 /// Compute column widths.
 ///
-/// This function is to be called exactly once. Reason...
+/// This function must be called after the last time add_column() is
+/// called, and before the first time that the column widths it sets
+/// are used. It is assumed to be fairly expensive, so that it should
+/// be called only once. There seems to be no simple way to impose
+/// those synchronization requirements upon clients, so
+///  - add_column() asserts that this function hasn't yet been called;
+///  - this function exits early if it has already been called.
+/// Thus, any violation of the first part of this contract is detected
+/// at run time. It is hoped that this function is called in enough
+/// places to fulfill the second part of the contract.
 
 void wx_table_generator::do_compute_column_widths()
 {
@@ -226,7 +445,7 @@ void wx_table_generator::do_compute_column_widths()
     // everything fit when it otherwise wouldn't.
     int total_fixed = 0;
 
-    for(auto const& i : columns_)
+    for(auto const& i : all_columns())
         {
 // Instead of retaining hidden columns, and explicitly skipping them
 // here and repeatedly later, why not just remove them from the vector?
@@ -243,7 +462,7 @@ void wx_table_generator::do_compute_column_widths()
             }
         else
             {
-            total_fixed += i.width_;
+            total_fixed += i.col_width();
             }
         }
 
@@ -282,7 +501,7 @@ void wx_table_generator::do_compute_column_widths()
 // is less than the padding.
 //
 // Is this as good as it can be, given that coordinates are integers?
-            if(overflow_per_column <= 2 * column_margin_)
+            if(overflow_per_column <= 2 * column_margin())
                 {
                 // We are going to reduce the total width by more than
                 // necessary, in general, because of rounding up above, so
@@ -298,18 +517,18 @@ void wx_table_generator::do_compute_column_widths()
 //    overflow_per_column <= column_margin_ - 2 // one pixel on each side
                 auto underflow = overflow_per_column * num_columns - overflow;
 
-                for(auto& i : columns_)
+                for(auto& i : all_columns_)
                     {
                     if(i.is_hidden())
                         {
                         continue;
                         }
 
-                    i.width_ -= overflow_per_column;
+                    i.col_width_ -= overflow_per_column;
 
                     if(0 < underflow)
                         {
-                        i.width_++;
+                        i.col_width_++;
                         underflow--;
                         }
                     }
@@ -348,10 +567,10 @@ void wx_table_generator::do_compute_column_widths()
         warning()
             << "Not enough space for all " << num_columns << " columns."
             << "\nPrintable width is " << total_width_ << " points."
-            << "\nData alone require " << total_fixed - 2 * column_margin_ * num_columns
+            << "\nData alone require " << total_fixed - 2 * column_margin() * num_columns
             << " points without any margins for legibility."
-            << "\nColumn margins of " << column_margin_ << " points on both sides"
-            << " would take up " << 2 * column_margin_ * num_columns << " additional points."
+            << "\nColumn margins of " << column_margin() << " points on both sides"
+            << " would take up " << 2 * column_margin() * num_columns << " additional points."
             << "\nFor reference:"
             << "\n'M' is " << dc_.GetTextExtent("M").x << " points wide."
             << "\n'N' is " << dc_.GetTextExtent("N").x << " points wide."
@@ -387,7 +606,7 @@ void wx_table_generator::do_compute_column_widths()
         int const per_expand
             = (total_width_ - total_fixed + num_expand - 1) / num_expand;
 
-        for(auto& i : columns_)
+        for(auto& i : all_columns_)
             {
             if(i.is_hidden())
                 {
@@ -396,16 +615,16 @@ void wx_table_generator::do_compute_column_widths()
 
             if(i.is_variable_width())
                 {
-                i.width_ = per_expand;
+                i.col_width_ = per_expand;
                 }
             }
         }
 }
 
 void wx_table_generator::do_output_values
-    (int& x
-    ,int& y
-    ,std::string const* values
+    (int&                            x
+    ,int&                            y
+    ,std::vector<std::string> const& values
     )
 {
     int const y_top = y;
@@ -418,16 +637,14 @@ void wx_table_generator::do_output_values
         do_output_vert_separator(x, y_top, y);
         }
 
-    std::size_t const num_columns = columns_.size();
+    std::size_t const num_columns = all_columns().size();
     for(std::size_t col = 0; col < num_columns; ++col)
         {
-        column_info const& ci = columns_.at(col);
+        column_info const& ci = all_columns().at(col);
         if(ci.is_hidden())
             {
             continue;
             }
-
-        int const width = ci.width_;
 
         std::string const& s = values[col];
         if(!s.empty())
@@ -436,18 +653,18 @@ void wx_table_generator::do_output_values
 
             if(align_right_)
                 {
-                x_text += width - dc_.GetTextExtent(s).x;
+                x_text += ci.col_width() - dc_.GetTextExtent(s).x;
                 }
             else
                 {
                 if(ci.is_centered())
                     {
                     // Centre the text for the columns configured to do it.
-                    x_text += (width - dc_.GetTextExtent(s).x) / 2;
+                    x_text += (ci.col_width() - dc_.GetTextExtent(s).x) / 2;
                     }
                 else
                     {
-                    x_text += column_margin_;
+                    x_text += column_margin();
                     }
                 }
 
@@ -463,7 +680,7 @@ void wx_table_generator::do_output_values
                     (dc_
                     ,wxRect
                         {wxPoint{x, y_top}
-                        ,wxSize{width - column_margin_, row_height_}
+                        ,wxSize{ci.col_width() - column_margin(), row_height_}
                         }
                     );
 
@@ -474,7 +691,7 @@ void wx_table_generator::do_output_values
                 do_output();
                 }
             }
-        x += width;
+        x += ci.col_width();
         if(draw_separators_)
             {
             do_output_vert_separator(x, y_top, y);
@@ -487,7 +704,7 @@ void wx_table_generator::output_vert_separator
     ,int y
     )
 {
-    LMI_ASSERT(before_column <= columns_.size());
+    LMI_ASSERT(before_column <= all_columns().size());
 
     do_output_vert_separator
         (do_get_cell_x(before_column)
@@ -512,7 +729,7 @@ void wx_table_generator::output_horz_separator
         }
 
     LMI_ASSERT(begin_column < end_column);
-    LMI_ASSERT(end_column <= columns_.size());
+    LMI_ASSERT(end_column <= all_columns().size());
 
     do_compute_column_widths();
 
@@ -521,7 +738,7 @@ void wx_table_generator::output_horz_separator
     int x2 = x1;
     for(std::size_t col = begin_column; col < end_column; ++col)
         {
-        x2 += columns_.at(col).width_;
+        x2 += all_columns().at(col).col_width();
         }
 
     do_output_horz_separator(x1, x2, y);
@@ -552,12 +769,12 @@ void wx_table_generator::output_header
     // Split headers in single lines and fill up the entire columns*lines 2D
     // matrix, using empty strings for the headers with less than the maximal
     // number of lines.
-    std::size_t const num_columns = columns_.size();
+    std::size_t const num_columns = all_columns().size();
     std::vector<std::string> headers_by_line(max_header_lines_ * num_columns);
     for(std::size_t col = 0; col < num_columns; ++col)
         {
-        column_info const& ci = columns_.at(col);
-        std::vector<std::string> const lines(split_into_lines(ci.header_));
+        column_info const& ci = all_columns().at(col);
+        std::vector<std::string> const lines(split_into_lines(ci.col_header()));
 
         // Fill the elements from the bottom line to the top one, so that a
         // single line header is shown on the last line.
@@ -575,12 +792,12 @@ void wx_table_generator::output_header
     int x = 0;
     for(std::size_t line = 0; line < max_header_lines_; ++line)
         {
-        x = left_margin_;
-        do_output_values
-            (x
-            ,*pos_y
-            ,&headers_by_line.at(line * num_columns)
+        std::vector<std::string> const nth_line
+            (headers_by_line.begin() +      line  * num_columns
+            ,headers_by_line.begin() + (1 + line) * num_columns
             );
+        x = left_margin_;
+        do_output_values(x, *pos_y, nth_line);
         }
 
     // Finally draw the separators above and (a double one) below them.
@@ -629,7 +846,7 @@ void wx_table_generator::output_super_header
 
 void wx_table_generator::output_row
     (int* pos_y
-    ,std::string const* values
+    ,std::vector<std::string> const values
     )
 {
     int x = left_margin_;
@@ -647,7 +864,7 @@ void wx_table_generator::output_highlighted_cell
     ,std::string const& value
     )
 {
-    if(columns_.at(column).is_hidden())
+    if(all_columns().at(column).is_hidden())
         {
         return;
         }
