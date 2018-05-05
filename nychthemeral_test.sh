@@ -125,6 +125,9 @@ make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safest
 printf '\n# unit tests in libstdc++ debug mode\n\n'
 make "$coefficiency" unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >/tmp/lmi/logs/unit-tests-safestdlib
 
+printf '\n# xrc tests\n\n'
+java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc *.xrc 2>&1 | tee /tmp/lmi/logs/xrc
+
 # Run the following tests in a throwaway directory so that the files
 # they create can be cleaned up easily.
 cd /tmp
