@@ -751,12 +751,14 @@ void wx_table_generator::output_header
     ,oenum_render_or_only_measure output_mode
     )
 {
+    int const anticipated_pos_y = *pos_y + row_height() * max_header_lines_;
+
     switch(output_mode)
         {
         case oe_render:
             break;
         case oe_only_measure:
-            *pos_y += max_header_lines_ * row_height_;
+            *pos_y = anticipated_pos_y;
             return;
         }
 
@@ -809,6 +811,8 @@ void wx_table_generator::output_header
         do_output_horz_separator(left_margin_, x, *pos_y - 1);
         do_output_horz_separator(left_margin_, x, *pos_y    );
         }
+
+    LMI_ASSERT(anticipated_pos_y == *pos_y);
 }
 
 void wx_table_generator::output_super_header
@@ -820,13 +824,14 @@ void wx_table_generator::output_super_header
         )
 {
     std::vector<std::string> const lines(split_into_lines(header));
+    int const anticipated_pos_y = *pos_y + row_height() * lines.size();
 
     switch(output_mode)
         {
         case oe_render:
             break;
         case oe_only_measure:
-            *pos_y += row_height_ * lines.size();
+            *pos_y = anticipated_pos_y;
             return;
         }
 
@@ -844,6 +849,8 @@ void wx_table_generator::output_super_header
         rect.y += row_height_;
         *pos_y += row_height_;
         }
+
+    LMI_ASSERT(anticipated_pos_y == *pos_y);
 }
 
 void wx_table_generator::output_row
