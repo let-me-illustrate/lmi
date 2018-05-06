@@ -285,8 +285,10 @@ void wx_table_generator::add_column
 {
     LMI_ASSERT(!column_widths_already_computed_);
 
-    // If a column's header is empty, then it is to be hidden--so its
-    // width isn't used and may as well be initialized to zero.
+    // If a column's header is empty, then it is to be hidden--and its
+    // width must be initialized to zero, because other member functions
+    // calculate total width by accumulating the widths of all columns,
+    // whether hidden or not.
     int width = 0;
     if(!header.empty())
         {
