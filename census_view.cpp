@@ -1275,11 +1275,12 @@ void CensusView::paste_out_to_spreadsheet() const
         {
         for(auto const& header : distinct_headers)
             {
-            // Show calendar dates as YYYY-MM-DD rather than JDN.
+            // Show calendar dates as YYYYMMDD rather than JDN.
             std::string s = cell[header].str();
             if(exact_cast<tnr_date>(cell[header]))
                 {
-                s = calendar_date(JdnToYmd(jdn_t(value_cast<int>(s)))).str();
+                long int z = JdnToYmd(jdn_t(value_cast<long int>(s))).value();
+                s = value_cast<std::string>(z);
                 }
             // Assume that the trailing '\t' doesn't matter.
             os << s << '\t';
