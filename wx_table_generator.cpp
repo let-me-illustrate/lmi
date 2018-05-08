@@ -379,9 +379,9 @@ wxRect wx_table_generator::cell_rect(std::size_t column, int y)
 
 wxRect wx_table_generator::text_rect(std::size_t column, int y)
 {
-    wxRect text_rect = cell_rect(column, y).Deflate(dc_.GetCharWidth(), 0);
-    text_rect.Offset(0, char_height_);
-    return text_rect;
+    wxRect z = cell_rect(column, y).Deflate(dc_.GetCharWidth(), 0);
+    z.Offset(0, char_height_);
+    return z;
 }
 
 // class members used, mutably or immutably:
