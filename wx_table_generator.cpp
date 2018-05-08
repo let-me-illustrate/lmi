@@ -369,7 +369,9 @@ wxRect wx_table_generator::cell_rect(std::size_t column, int y)
 
     // Note: call do_get_cell_x() here and not from the wxRect ctor arguments
     // list to ensure that the column width is initialized before it is used
-    // below.
+    // below (because calling do_get_cell_x() calculates column widths as a
+    // side effect, but function arguments are evaluated in unspecified
+    // order).
     int const x = do_get_cell_x(column);
 
     return wxRect(x, y, all_columns().at(column).col_width(), row_height_);
