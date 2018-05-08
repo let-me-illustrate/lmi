@@ -325,6 +325,10 @@ wxFont wx_table_generator::get_header_font() const
     return dc_.GetFont().Bold();
 }
 
+// Horizontal and vertical separators are considered to be drawn in
+// interlinear space, so they are not counted when calculating the
+// positions of textual elements.
+
 void wx_table_generator::do_output_horz_separator(int x1, int x2, int y)
 {
     dc_.DrawLine(x1, y, x2, y);
