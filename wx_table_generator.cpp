@@ -678,6 +678,14 @@ void wx_table_generator::do_output_values
 
             if(ci.needs_clipping())
                 {
+                // It is assumed that the width of the "Participant" column
+                // on a group quote was initially zero, and then was expanded
+                // by some positive amount, and then incremented by one times
+                // the margin (not two times the margin as for other columns,
+                // because this column has only a left-hand unlateral margin).
+                // Make sure that any failure in this chain of assumptions
+                // doesn't result in (undefined) negative clipping.
+                LMI_ASSERT(0 <= ci.col_width() - column_margin());
                 wxDCClipper clip
                     (dc_
                     ,wxRect
