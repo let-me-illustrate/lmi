@@ -768,6 +768,12 @@ void wx_table_generator::output_header
     if(use_bold_headers_)
         {
         header_font_setter.Set(get_header_font());
+        // The distance from the font's descender line to its ascender
+        // line must not exceed the distance between lines.
+        LMI_ASSERT(dc_.GetCharHeight() <= row_height());
+        // do_output_values(), called below, uses a cached char_height_
+        // that is assumed not to differ from the bold GetCharHeight().
+        LMI_ASSERT(dc_.GetCharHeight() == char_height_);
         }
 
     // Split headers in single lines and fill up the entire columns*lines 2D
