@@ -353,11 +353,6 @@ int wx_table_generator::do_get_cell_x(std::size_t column)
     return x;
 }
 
-std::size_t wx_table_generator::columns_count() const
-{
-    return all_columns().size();
-}
-
 int wx_table_generator::row_height() const
 {
     return row_height_;

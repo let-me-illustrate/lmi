@@ -102,9 +102,6 @@ class wx_table_generator
         ,std::string const& value
         );
 
-    // Return the number of columns.
-    std::size_t columns_count() const;
-
     // Return the height of a single table row.
     int row_height() const;
 
