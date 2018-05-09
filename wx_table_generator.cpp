@@ -244,7 +244,7 @@ wx_table_generator::wx_table_generator
     ,column_widths_already_computed_(false)
     ,max_header_lines_(1)
 {
-    // Set a pen with 0 width to get the thin lines and butt cap style for the
+    // Set a pen with 0 width to get the thin lines, and round cap style for the
     // different segments drawn in do_output_values() to seamlessly combine
     // into a single line.
     wxPen pen(*wxBLACK, 0);
