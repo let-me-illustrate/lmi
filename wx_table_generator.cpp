@@ -232,8 +232,8 @@ void increase_to_if_smaller(T& first, T second)
 
 wx_table_generator::wx_table_generator
     (wxDC& dc
-    ,int left_margin
-    ,int total_width
+    ,int   left_margin
+    ,int   total_width
     )
     :dc_(dc)
     ,left_margin_(left_margin)
@@ -333,7 +333,6 @@ void wx_table_generator::add_column
         if(0 != width)
             {
             increase_to_if_smaller(width, dc_.GetMultiLineTextExtent(header).x);
-
             width += 2 * column_margin();
             }
         }
@@ -741,7 +740,7 @@ void wx_table_generator::do_output_values
 
 void wx_table_generator::output_vert_separator
     (std::size_t before_column
-    ,int y
+    ,int         y
     )
 {
     LMI_ASSERT(before_column <= all_columns().size());
@@ -790,7 +789,7 @@ void wx_table_generator::output_horz_separator
 /// Render the headers at the given position and update it.
 
 void wx_table_generator::output_header
-    (int* pos_y
+    (int*                         pos_y
     ,oenum_render_or_only_measure output_mode
     )
 {
@@ -911,7 +910,7 @@ void wx_table_generator::output_super_header
 /// same number of them as the number of columns.
 
 void wx_table_generator::output_row
-    (int* pos_y
+    (int*                           pos_y
     ,std::vector<std::string> const values
     )
 {
