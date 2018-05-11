@@ -38,7 +38,6 @@
 #include "transferor.hpp"
 #include "value_cast.hpp"
 #include "wx_utility.hpp"
-#include "wx_workarounds.hpp"
 
 #include <wx/app.h>                     // wxApp::IsActive()
 #include <wx/checkbox.h>
