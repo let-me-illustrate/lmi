@@ -41,6 +41,7 @@
 #include "version.hpp"
 #include "wx_table_generator.hpp"
 #include "wx_utility.hpp"               // ConvertDateToWx()
+#include "wx_workarounds.hpp"           // wxDCTextColorChanger
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -877,7 +878,7 @@ void group_quote_pdf_generator_wx::output_image_header
     auto& pdf_dc = pdf_writer.dc();
 
     wxDCFontChanger set_bigger_font(pdf_dc, pdf_dc.GetFont().Scaled(1.5));
-    wxDCTextColourChanger set_white_text(pdf_dc, *wxWHITE);
+    wxDCTextColorChanger set_white_text(pdf_dc, *wxWHITE);
 
     // Don't use html::text::from() here: instead, call
     // wxString::FromUTF8() directly, e.g., to preserve literal '&'.

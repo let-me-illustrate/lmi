@@ -67,8 +67,8 @@ LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
 namespace
 {
 
-// Colour used for lines and border in the generated illustrations.
-const wxColour HIGHLIGHT_COL(0x00, 0x2f, 0x6c);
+// Color used for lines and border in the generated illustrations.
+const wxColor HIGHLIGHT_COL(0x00, 0x2f, 0x6c);
 
 // This function is also provided in <boost/algorithm/string/predicate.hpp>,
 // but it's arguably not worth adding dependency on this Boost library just for
@@ -398,7 +398,7 @@ class using_illustration_table
 
         illustration_table_generator table_gen(writer);
 
-        // But set the highlight colour for drawing separator lines after
+        // But set the highlight color for drawing separator lines after
         // creating it to override its default pen.
         dc.SetPen(HIGHLIGHT_COL);
 

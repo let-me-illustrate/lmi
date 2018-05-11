@@ -444,7 +444,7 @@ inline void MultiDimTableAny::SetValueAny
 /// See also ApplyAxisAdjustment, DoRefreshAxisAdjustment,
 /// MultiDimAxisAny::RefreshAdjustment, MultiDimTableAny::RefreshAxisAdjustment
 ///
-/// SetXAxisColour(colour) and SetYAxisColour(colour): Set the X and Y axis
+/// SetXAxisColor(color) and SetYAxisColor(color): Set the X and Y axis
 /// highlighting color.
 /// Color used to highlight X/Y axis selection controls, vertical/horizontal
 /// labels in the data table and selected axis controls.
@@ -502,8 +502,8 @@ class MultiDimGrid
     bool RefreshTableFull();
     bool ApplyAxisAdjustment(std::string const& name);
     bool RefreshAxisAdjustment(std::string const& name);
-    void SetXAxisColour(wxColour const& colour);
-    void SetYAxisColour(wxColour const& colour);
+    void SetXAxisColor(wxColor const& color);
+    void SetYAxisColor(wxColor const& color);
 
     bool SetGridAxisSelection(std::pair<int,int> const&);
     std::pair<int,int> GetGridAxisSelection() const;
@@ -592,7 +592,7 @@ class MultiDimGrid
     wxChoice* CreateGridAxisSelection
         (enum_axis_x_or_y
         ,std::string const& label
-        ,wxColour const& selectedColour
+        ,wxColor const& selectedColor
         );
     /// Places the axis label control into the widget
     void SetAxisLabel(int axis_id, wxWindow&);
@@ -686,10 +686,10 @@ class MultiDimGrid
     CheckBoxes axis_varies_checkboxes_;
 
     /// Color used to highlight X axis selections
-    wxColour selected_first_color_;
+    wxColor selected_first_color_;
 
     /// Color used to highlight Y axis selections
-    wxColour selected_second_color_;
+    wxColor selected_second_color_;
 
     /// Refresh counter
     unsigned int table_data_refresh_counter_;
