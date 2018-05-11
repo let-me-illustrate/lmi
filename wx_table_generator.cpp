@@ -793,7 +793,11 @@ void wx_table_generator::output_header
     ,oenum_render_or_only_measure output_mode
     )
 {
-    int const anticipated_pos_y = *pos_y + row_height() * max_header_lines_;
+    int const anticipated_pos_y =
+          *pos_y
+        + draw_separators_
+        + row_height() * max_header_lines_
+        ;
 
     switch(output_mode)
         {
@@ -855,9 +859,9 @@ void wx_table_generator::output_header
     // Finally draw the separators above and (a double one) below them.
     if(draw_separators_)
         {
-        do_output_horz_separator(left_margin_, x,  y_top    );
-        do_output_horz_separator(left_margin_, x, *pos_y - 1);
-        do_output_horz_separator(left_margin_, x, *pos_y    );
+        do_output_horz_separator(left_margin_, x,  y_top);
+        do_output_horz_separator(left_margin_, x, *pos_y); *pos_y += 1;
+        do_output_horz_separator(left_margin_, x, *pos_y);
         }
 
     LMI_ASSERT(anticipated_pos_y == *pos_y);
