@@ -43,8 +43,8 @@ struct column_parameters
 
 /// Simplifies outputting tabular data on wxDC.
 ///
-/// output_header() and output_row() reuse the same pos_y argument (which
-/// is initially the coordinate of the top of the header or row to output)
+/// Several member functions reuse the same pos_y argument (which is
+/// initially the coordinate of the top of the header or row to output)
 /// and update it to designate the next row to be written.
 ///
 /// The life time of the specified wxDC must be greater than the life time
