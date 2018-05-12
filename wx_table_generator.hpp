@@ -43,11 +43,9 @@ struct column_parameters
 
 /// Simplifies outputting tabular data on wxDC.
 ///
-/// To create a table, columns must be initialized first by calling
-/// add_column() for each of them once. After this, output_header() and
-/// output_row() can be called reusing the same pos_y argument which contains
-/// the coordinate of the top of the header or row to output and is updated to
-/// correspond to the value for the next row by these functions.
+/// output_header() and output_row() reuse the same pos_y argument (which
+/// is initially the coordinate of the top of the header or row to output)
+/// and update it to designate the next row to be written.
 ///
 /// The life time of the specified wxDC must be greater than the life time
 /// of this object itself and nothing should be using it while this object
@@ -108,8 +106,8 @@ class wx_table_generator
     void align_right();
 
   private:
-    void add_column(std::string const& header, std::string const& widest_text);
-    void do_compute_column_widths();
+    void enroll_column(std::string const& header, std::string const& widest_text);
+    void compute_column_widths();
 
     wxFont get_header_font() const;
 
@@ -140,10 +138,6 @@ class wx_table_generator
     int column_margin_;
 
     std::vector<column_info> all_columns_;
-
-    // Initially false, set to true after do_compute_column_widths()
-    // has been called to make all column_info::col_width_ values valid.
-    bool column_widths_already_computed_;
 
     // Maximal number of lines in any column header, initially 1 but can be
     // higher if multiline headers are used.

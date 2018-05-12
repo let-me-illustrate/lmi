@@ -242,13 +242,13 @@ wx_table_generator::wx_table_generator
     ,char_height_(dc_.GetCharHeight())
     ,row_height_((4 * char_height_ + 2) / 3) // Arbitrarily use 1.333 line spacing.
     ,column_margin_(dc_.GetTextExtent("M").x)
-    ,column_widths_already_computed_(false)
     ,max_header_lines_(1)
 {
     for(auto const& i : vc)
         {
-        add_column(i.header, i.widest_text);
+        enroll_column(i.header, i.widest_text);
         }
+    compute_column_widths();
 
     // Set a pen with 0 width to get the thin lines, and round cap style for the
     // different segments drawn in do_output_values() to seamlessly combine
@@ -291,8 +291,10 @@ void wx_table_generator::align_right()
     align_right_ = true;
 }
 
-/// Adds a column to the table. The total number of added columns determines
-/// the cardinality of the 'values' argument in output_row() calls.
+/// Indicate an intention to include a column by storing its metadata.
+///
+/// The total number of columns thus enrolled determines the cardinality
+/// of the 'values' argument in output_row() calls.
 ///
 /// Providing an empty header suppresses the column display, while still
 /// taking it into account in output_row(), providing a convenient way to
@@ -300,18 +302,16 @@ void wx_table_generator::align_right()
 ///
 /// Each column must either have a fixed width, specified as the width of
 /// the longest text that may appear in this column, or be expandable
-/// meaning that the rest of the page width is allocated to it which will be
-/// the case if widest_text is empty.
+/// meaning that the rest of the page width is allocated to it which will
+/// be the case if widest_text is empty.
 ///
 /// Notice that column headers may be multiline strings.
 
-void wx_table_generator::add_column
+void wx_table_generator::enroll_column
     (std::string const& header
     ,std::string const& widest_text
     )
 {
-    LMI_ASSERT(!column_widths_already_computed_);
-
     // If a column's header is empty, then it is to be hidden--and its
     // width must be initialized to zero, because other member functions
     // calculate total width by accumulating the widths of all columns,
@@ -370,8 +370,6 @@ void wx_table_generator::do_output_vert_separator(int x, int y1, int y2)
 
 int wx_table_generator::do_get_cell_x(std::size_t column)
 {
-    do_compute_column_widths();
-
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
         {
@@ -392,16 +390,12 @@ int wx_table_generator::row_height() const
 
 wxRect wx_table_generator::cell_rect(std::size_t column, int y)
 {
-    LMI_ASSERT(column < all_columns().size());
-
-    // Note: call do_get_cell_x() here and not from the wxRect ctor arguments
-    // list to ensure that the column width is initialized before it is used
-    // below (because calling do_get_cell_x() calculates column widths as a
-    // side effect, but function arguments are evaluated in unspecified
-    // order).
-    int const x = do_get_cell_x(column);
-
-    return wxRect(x, y, all_columns().at(column).col_width(), row_height_);
+    return wxRect
+        (do_get_cell_x(column)
+        ,y
+        ,all_columns().at(column).col_width()
+        ,row_height_
+        );
 }
 
 /// Return the rectangle adjusted for the text contents of the cell: it is
@@ -419,7 +413,6 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 // class members used, mutably or immutably:
 //
 // const    total_width_
-// mutable  column_widths_already_computed_
 // mutable  column_margin_
 // mutable  all_columns_
 //   i.e. std::vector<column_info> all_columns_;
@@ -432,8 +425,6 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
     // ctor parameter:
     // max table width (page width minus horizontal page margins)
 // const    total_width_
-    // Used to prevent this function from being called more than once.
-// mutable  column_widths_already_computed_
     // spacing on both left and right of column
     // initialized in ctor to # pixels in one em: (dc_.GetTextExtent("M").x)
     // changed in this function and nowhere else
@@ -442,24 +433,9 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 // mutable  all_columns_
 
 /// Compute column widths.
-///
-/// This function must be called after the last time add_column() is
-/// called, and before the first time that the column widths it sets
-/// are used. It is assumed to be fairly expensive, so that it should
-/// be called only once. There seems to be no simple way to impose
-/// those synchronization requirements upon clients, so
-///  - add_column() asserts that this function hasn't yet been called;
-///  - this function exits early if it has already been called.
-/// Thus, any violation of the first part of this contract is detected
-/// at run time. It is hoped that this function is called in enough
-/// places to fulfill the second part of the contract.
 
-void wx_table_generator::do_compute_column_widths()
+void wx_table_generator::compute_column_widths()
 {
-    if(column_widths_already_computed_) return;
-
-    column_widths_already_computed_ = true;
-
     // Number of non-hidden columns.
     int num_columns = 0;
 
@@ -779,8 +755,6 @@ void wx_table_generator::output_horz_separator
     LMI_ASSERT(begin_column < end_column);
     LMI_ASSERT(end_column <= all_columns().size());
 
-    do_compute_column_widths();
-
     int const x1 = do_get_cell_x(begin_column);
 
     int x2 = x1;
@@ -813,8 +787,6 @@ void wx_table_generator::output_header
             *pos_y = anticipated_pos_y;
             return;
         }
-
-    do_compute_column_widths();
 
     wxDCFontChanger header_font_setter(dc_);
     if(use_bold_headers_)
