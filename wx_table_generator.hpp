@@ -33,6 +33,14 @@
 #include <string>
 #include <vector>
 
+/// Aggregate of per-column table-generator ctor arguments.
+
+struct column_parameters
+{
+    std::string header;
+    std::string widest_text;
+};
+
 /// Simplifies outputting tabular data on wxDC.
 ///
 /// To create a table, columns must be initialized first by calling
@@ -50,13 +58,16 @@ class wx_table_generator
     class column_info;
 
   public:
-    wx_table_generator(wxDC& dc, int left_margin, int total_width);
+    wx_table_generator
+        (std::vector<column_parameters> const& vc
+        ,wxDC&                                 dc
+        ,int                                   left_margin
+        ,int                                   total_width
+        );
 
     wx_table_generator(wx_table_generator const&);
 
     ~wx_table_generator();
-
-    void add_column(std::string const& header, std::string const& widest_text);
 
     void output_header
         (int*                         pos_y
@@ -97,14 +108,15 @@ class wx_table_generator
     void align_right();
 
   private:
+    void add_column(std::string const& header, std::string const& widest_text);
+    void do_compute_column_widths();
+
     wxFont get_header_font() const;
 
     int do_get_cell_x(std::size_t column);
 
     void do_output_horz_separator(int x1, int x2, int y );
     void do_output_vert_separator(int x , int y1, int y2);
-
-    void do_compute_column_widths();
 
     void do_output_values
         (int&                            pos_x

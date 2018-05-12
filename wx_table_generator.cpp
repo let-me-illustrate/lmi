@@ -231,9 +231,10 @@ void increase_to_if_smaller(T& first, T second)
 } // Unnamed namespace.
 
 wx_table_generator::wx_table_generator
-    (wxDC& dc
-    ,int   left_margin
-    ,int   total_width
+    (std::vector<column_parameters> const& vc
+    ,wxDC&                                 dc
+    ,int                                   left_margin
+    ,int                                   total_width
     )
     :dc_(dc)
     ,left_margin_(left_margin)
@@ -244,6 +245,11 @@ wx_table_generator::wx_table_generator
     ,column_widths_already_computed_(false)
     ,max_header_lines_(1)
 {
+    for(auto const& i : vc)
+        {
+        add_column(i.header, i.widest_text);
+        }
+
     // Set a pen with 0 width to get the thin lines, and round cap style for the
     // different segments drawn in do_output_values() to seamlessly combine
     // into a single line.

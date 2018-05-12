@@ -664,17 +664,12 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     output_document_header(pdf_writer, &pos_y);
     pos_y += 2 * vert_skip;
 
-    wx_table_generator table_gen
-        (pdf_writer.dc()
-        ,pdf_writer.get_horz_margin()
-        ,pdf_writer.get_page_width()
-        );
-
     // Some of the table columns don't need to be shown if all the values in
     // them are zeroes.
     bool const has_suppl_amount = totals_.total(e_col_supplemental_face_amount) != 0.0;
     bool const has_addl_premium = totals_.total(e_col_additional_premium      ) != 0.0;
 
+    std::vector<column_parameters> vc;
     for(int col = 0; col < e_col_max; ++col)
         {
         column_definition const& cd = column_definitions[col];
@@ -726,8 +721,15 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             }
 
-        table_gen.add_column(header, cd.widest_text_);
+        vc.push_back({header, cd.widest_text_});
         }
+
+    wx_table_generator table_gen
+        (vc
+        ,pdf_writer.dc()
+        ,pdf_writer.get_horz_margin()
+        ,pdf_writer.get_page_width()
+        );
 
     output_aggregate_values(pdf_writer, table_gen, &pos_y);
 

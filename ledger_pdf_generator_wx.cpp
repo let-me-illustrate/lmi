@@ -322,12 +322,13 @@ class illustration_table_generator : public wx_table_generator
   public:
     static int const rows_per_group = 5;
 
-    explicit illustration_table_generator(pdf_writer_wx& writer)
-        :wx_table_generator
-            (writer.dc()
-            ,writer.get_horz_margin()
-            ,writer.get_page_width()
-            )
+    illustration_table_generator
+        (std::vector<column_parameters> const& vc
+        ,wxDC&                                 dc
+        ,int                                   left_margin
+        ,int                                   total_width
+        )
+        :wx_table_generator(vc, dc, left_margin, total_width)
     {
         use_condensed_style();
         align_right();
@@ -389,19 +390,7 @@ class using_illustration_table
         ,pdf_writer_wx& writer
         ) const
     {
-        // Set the smaller font used for all tables before creating the table
-        // generator which uses the DC font for its measurements.
-        auto& pdf_dc = writer.dc();
-        auto font = pdf_dc.GetFont();
-        font.SetPointSize(9);
-        pdf_dc.SetFont(font);
-
-        illustration_table_generator table_gen(writer);
-
-        // But set the highlight color for drawing separator lines after
-        // creating it to override its default pen.
-        pdf_dc.SetPen(rule_color);
-
+        std::vector<column_parameters> vc;
         int column = 0;
         for(auto const& i : get_table_columns())
             {
@@ -411,9 +400,26 @@ class using_illustration_table
                 header = i.header;
                 }
             //else: Leave the header empty to avoid showing the column.
-
-            table_gen.add_column(header, i.widest_text);
+            vc.push_back({header, i.widest_text});
             }
+
+        // Set the smaller font used for all tables before creating the table
+        // generator which uses the DC font for its measurements.
+        auto& pdf_dc = writer.dc();
+        auto font = pdf_dc.GetFont();
+        font.SetPointSize(9);
+        pdf_dc.SetFont(font);
+
+        illustration_table_generator table_gen
+            (vc
+            ,writer.dc()
+            ,writer.get_horz_margin()
+            ,writer.get_page_width()
+            );
+
+        // But set the highlight color for drawing separator lines after
+        // creating it to override its default pen.
+        pdf_dc.SetPen(rule_color);
 
         return table_gen;
     }
