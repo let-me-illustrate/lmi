@@ -527,7 +527,7 @@ wx_base_test_case::wx_base_test_case(char const* name)
 
 void wx_base_test_case::skip_if_not_supported(char const* file)
 {
-    const wxString p(file);
+    wxString const p(file);
     if(!wxDocManager::GetDocumentManager()->FindTemplateForPath(p))
         {
         throw test_skipped_exception

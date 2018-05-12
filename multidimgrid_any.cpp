@@ -474,7 +474,7 @@ void MultiDimGrid::DoRefreshTableData()
     // data fit in it. At the same time, we want to keep some sensible
     // minimal width so that columns with short labels (e.g. states, age)
     // aren't too narrow.
-    const int cols = GetNumberCols();
+    int const cols = GetNumberCols();
     for(int i = 0; i < cols; ++i)
         {
             // set some minimal width for aesthetic reasons (otherwise
@@ -546,7 +546,7 @@ std::pair<int,int> MultiDimGrid::SuggestGridAxisSelection() const
     int newFirst = first_grid_axis_;
     int newSecond = second_grid_axis_;
 
-    const bool canReorder = newFirst == wxNOT_FOUND || newSecond == wxNOT_FOUND;
+    bool const canReorder = newFirst == wxNOT_FOUND || newSecond == wxNOT_FOUND;
 
     for(unsigned int i = 0; i < dimension_; ++i)
         {

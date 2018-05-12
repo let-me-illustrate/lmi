@@ -374,7 +374,7 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     rows_area_ = new(wx) wxScrolledWindow(this);
     top->Add(rows_area_, wxSizerFlags(1).Expand().DoubleBorder());
 
-    const wxSize sizerGap
+    wxSize const sizerGap
         (wxSizerFlags::GetDefaultBorder()
         ,wxSizerFlags::GetDefaultBorder()
         );

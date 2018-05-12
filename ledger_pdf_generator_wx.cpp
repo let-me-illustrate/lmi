@@ -68,7 +68,7 @@ namespace
 {
 
 // Color used for rules and borders in illustrations.
-const wxColor rule_color(0x00, 0x2f, 0x6c);
+wxColor const rule_color(0x00, 0x2f, 0x6c);
 
 // This function is also provided in <boost/algorithm/string/predicate.hpp>,
 // but it's arguably not worth adding dependency on this Boost library just for
