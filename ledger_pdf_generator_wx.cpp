@@ -357,7 +357,7 @@ class using_illustration_table
     struct illustration_table_column
     {
         std::string const variable_name;
-        std::string const label;
+        std::string const header;
         std::string const widest_text;
     };
 
@@ -391,28 +391,28 @@ class using_illustration_table
     {
         // Set the smaller font used for all tables before creating the table
         // generator which uses the DC font for its measurements.
-        auto& dc = writer.dc();
-        auto font = dc.GetFont();
+        auto& pdf_dc = writer.dc();
+        auto font = pdf_dc.GetFont();
         font.SetPointSize(9);
-        dc.SetFont(font);
+        pdf_dc.SetFont(font);
 
         illustration_table_generator table_gen(writer);
 
         // But set the highlight color for drawing separator lines after
         // creating it to override its default pen.
-        dc.SetPen(rule_color);
+        pdf_dc.SetPen(rule_color);
 
         int column = 0;
         for(auto const& i : get_table_columns())
             {
-            std::string label;
+            std::string header;
             if(should_show_column(ledger, column++))
                 {
-                label = i.label;
+                header = i.header;
                 }
-            //else: Leave the label empty to avoid showing the column.
+            //else: Leave the header empty to avoid showing the column.
 
-            table_gen.add_column(label, i.widest_text);
+            table_gen.add_column(header, i.widest_text);
             }
 
         return table_gen;
@@ -979,12 +979,12 @@ class cover_page : public page
 
         // There is no way to draw a border around the page contents in wxHTML
         // currently, so do it manually.
-        auto& dc = writer.dc();
+        auto& pdf_dc = writer.dc();
 
-        dc.SetPen(wxPen(rule_color, 2));
-        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        pdf_dc.SetPen(wxPen(rule_color, 2));
+        pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-        dc.DrawRectangle
+        pdf_dc.DrawRectangle
             (writer.get_horz_margin()
             ,writer.get_vert_margin()
             ,writer.get_page_width()
@@ -1053,14 +1053,14 @@ class page_with_footer : public page
         auto const frame_horz_margin = writer.get_horz_margin();
         auto const frame_width       = writer.get_page_width();
 
-        auto& dc = writer.dc();
+        auto& pdf_dc = writer.dc();
 
         auto y = footer_top_;
 
         auto const& upper_template = get_upper_footer_template_name();
         if(!upper_template.empty())
             {
-            y += dc.GetCharHeight();
+            y += pdf_dc.GetCharHeight();
 
             y += writer.output_html
                 (frame_horz_margin
@@ -1077,8 +1077,8 @@ class page_with_footer : public page
             ,get_footer_lower_html(interpolate_html)
             );
 
-        dc.SetPen(rule_color);
-        dc.DrawLine
+        pdf_dc.SetPen(rule_color);
+        pdf_dc.DrawLine
             (frame_horz_margin
             ,y
             ,frame_width + frame_horz_margin
