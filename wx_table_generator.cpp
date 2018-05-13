@@ -769,12 +769,12 @@ void wx_table_generator::output_horz_separator
 /// Render the headers at the given position and update it.
 
 void wx_table_generator::output_header
-    (int*                         pos_y
+    (int&                         pos_y
     ,oenum_render_or_only_measure output_mode
     )
 {
     int const anticipated_pos_y =
-          *pos_y
+          pos_y
         + draw_separators_
         + row_height() * max_header_lines_
         ;
@@ -784,7 +784,7 @@ void wx_table_generator::output_header
         case oe_render:
             break;
         case oe_only_measure:
-            *pos_y = anticipated_pos_y;
+            pos_y = anticipated_pos_y;
             return;
         }
 
@@ -822,7 +822,7 @@ void wx_table_generator::output_header
         }
 
     // And output all lines of all column headers.
-    int y_top = *pos_y;
+    int y_top = pos_y;
     int x = 0;
     for(std::size_t line = 0; line < max_header_lines_; ++line)
         {
@@ -831,18 +831,18 @@ void wx_table_generator::output_header
             ,headers_by_line.begin() + (1 + line) * num_columns
             );
         x = left_margin_;
-        do_output_single_row(x, *pos_y, nth_line);
+        do_output_single_row(x, pos_y, nth_line);
         }
 
     // Finally draw the separators above and (a double one) below them.
     if(draw_separators_)
         {
-        do_output_horz_separator(left_margin_, x,  y_top);
-        do_output_horz_separator(left_margin_, x, *pos_y); *pos_y += 1;
-        do_output_horz_separator(left_margin_, x, *pos_y);
+        do_output_horz_separator(left_margin_, x, y_top);
+        do_output_horz_separator(left_margin_, x, pos_y); ++pos_y;
+        do_output_horz_separator(left_margin_, x, pos_y);
         }
 
-    LMI_ASSERT(anticipated_pos_y == *pos_y);
+    LMI_ASSERT(anticipated_pos_y == pos_y);
 }
 
 /// Render a super-header, i.e. a header spanning over several columns. The
@@ -853,19 +853,19 @@ void wx_table_generator::output_super_header
         (std::string const&           header
         ,std::size_t                  begin_column
         ,std::size_t                  end_column
-        ,int*                         pos_y
+        ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode
         )
 {
     std::vector<std::string> const lines(split_into_lines(header));
-    int const anticipated_pos_y = *pos_y + row_height() * lines.size();
+    int const anticipated_pos_y = pos_y + row_height() * lines.size();
 
     switch(output_mode)
         {
         case oe_render:
             break;
         case oe_only_measure:
-            *pos_y = anticipated_pos_y;
+            pos_y = anticipated_pos_y;
             return;
         }
 
@@ -873,7 +873,7 @@ void wx_table_generator::output_super_header
     // but we can reuse the existing text_rect() if we just increase its width
     // by the width of all the extra (i.e. not counting the starting one)
     // columns in this span.
-    auto rect = text_rect(begin_column, *pos_y);
+    auto rect = text_rect(begin_column, pos_y);
     rect.width += do_get_cell_x(end_column) - do_get_cell_x(begin_column + 1);
 
     for(auto const& line : lines)
@@ -881,10 +881,10 @@ void wx_table_generator::output_super_header
         dc_.DrawLabel(line, rect, wxALIGN_CENTER_HORIZONTAL);
 
         rect.y += row_height_;
-        *pos_y += row_height_;
+        pos_y  += row_height_;
         }
 
-    LMI_ASSERT(anticipated_pos_y == *pos_y);
+    LMI_ASSERT(anticipated_pos_y == pos_y);
 }
 
 /// Render a row with the given values at the given position and update it.
@@ -892,16 +892,16 @@ void wx_table_generator::output_super_header
 /// same number of them as the number of columns.
 
 void wx_table_generator::output_row
-    (int*                           pos_y
+    (int&                           pos_y
     ,std::vector<std::string> const values
     )
 {
     int x = left_margin_;
-    do_output_single_row(x, *pos_y, values);
+    do_output_single_row(x, pos_y, values);
 
     if(draw_separators_)
         {
-        do_output_horz_separator(left_margin_, x, *pos_y);
+        do_output_horz_separator(left_margin_, x, pos_y);
         }
 }
 

@@ -68,7 +68,7 @@ class wx_table_generator
     ~wx_table_generator();
 
     void output_header
-        (int*                         pos_y
+        (int&                         pos_y
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
@@ -76,11 +76,11 @@ class wx_table_generator
         (std::string const&           header
         ,std::size_t                  begin_column
         ,std::size_t                  end_column
-        ,int*                         pos_y
+        ,int&                         pos_y
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
-    void output_row(int* pos_y, std::vector<std::string> const values);
+    void output_row(int& pos_y, std::vector<std::string> const values);
 
     void output_highlighted_cell
         (std::size_t        column

@@ -1390,14 +1390,14 @@ class numeric_summary_table_cell
             ("Guaranteed Values"
             ,column_guar_account_value
             ,column_separator_guar_non_guar
-            ,&y_copy
+            ,y_copy
             ,output_mode
             );
         table_gen.output_super_header
             ("Non-Guaranteed Values"
             ,column_mid_account_value
             ,column_max
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -1420,7 +1420,7 @@ class numeric_summary_table_cell
             ("Midpoint Values"
             ,column_mid_account_value
             ,column_separator_mid_curr
-            ,&y_copy
+            ,y_copy
             ,output_mode
             );
 
@@ -1428,7 +1428,7 @@ class numeric_summary_table_cell
             ("Current Values"
             ,column_curr_account_value
             ,column_max
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -1447,7 +1447,7 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        table_gen.output_header(&pos_y, output_mode);
+        table_gen.output_header(pos_y, output_mode);
 
         pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator(0, column_max, pos_y, output_mode);
@@ -1517,7 +1517,7 @@ class numeric_summary_table_cell
                             ;
                         }
 
-                    table_gen.output_row(&pos_y, output_values);
+                    table_gen.output_row(pos_y, output_values);
                     break;
                 }
             }
@@ -1644,7 +1644,7 @@ class page_with_tabular_report
                         ;
                     }
 
-                table_gen.output_row(&pos_y, output_values);
+                table_gen.output_row(pos_y, output_values);
 
                 ++year;
                 if(year == year_max)
@@ -1732,7 +1732,7 @@ class page_with_tabular_report
             ,output_mode
             );
 
-        table_gen.output_header(&pos_y, output_mode);
+        table_gen.output_header(pos_y, output_mode);
 
         pos_y += table_gen.get_separator_line_height();
         auto const ncols = get_table_columns().size();
@@ -1828,14 +1828,14 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
             ("Guaranteed Values"
             ,column_guar_account_value
             ,column_dummy_separator
-            ,&pos_y_copy
+            ,pos_y_copy
             ,output_mode
             );
         table_gen.output_super_header
             ("Non-Guaranteed Values"
             ,column_curr_account_value
             ,column_max
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -2234,7 +2234,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ("Using guaranteed charges"
             ,column_guar0_cash_surr_value
             ,column_separator_guar_curr0
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -2243,7 +2243,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ("Using current charges"
             ,column_curr0_cash_surr_value
             ,column_max
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -2286,7 +2286,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                     (interpolate_html(header).as_html()
                     ,begin_column
                     ,end_column
-                    ,&y
+                    ,y
                     ,output_mode
                     );
 
@@ -2687,7 +2687,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             (interpolate_html(header_zero.str()).as_html()
             ,column_zero_cash_surr_value
             ,column_zero_irr_surr_value
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -2705,7 +2705,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             (interpolate_html(header_nonzero.str()).as_html()
             ,column_nonzero_cash_surr_value
             ,column_nonzero_irr_surr_value
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -2854,7 +2854,7 @@ class reg_d_individual_curr : public page_with_tabular_report
                 ).as_html()
             ,column_curr_investment_income
             ,column_max
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
