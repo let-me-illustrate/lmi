@@ -1385,12 +1385,12 @@ class numeric_summary_table_cell
 
         // Make a copy because we want pos_y to be modified only once, not
         // twice, by both output_super_header() calls.
-        auto y_copy = pos_y;
+        auto pos_y_copy = pos_y;
         table_gen.output_super_header
             ("Guaranteed Values"
             ,column_guar_account_value
             ,column_separator_guar_non_guar
-            ,y_copy
+            ,pos_y_copy
             ,output_mode
             );
         table_gen.output_super_header
@@ -1415,12 +1415,12 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        y_copy = pos_y;
+        pos_y_copy = pos_y;
         table_gen.output_super_header
             ("Midpoint Values"
             ,column_mid_account_value
             ,column_separator_mid_curr
-            ,y_copy
+            ,pos_y_copy
             ,output_mode
             );
 
