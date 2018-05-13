@@ -638,19 +638,19 @@ void wx_table_generator::compute_column_widths()
 }
 
 void wx_table_generator::do_output_values
-    (int&                            x
-    ,int&                            y
+    (int&                            pos_x
+    ,int&                            pos_y
     ,std::vector<std::string> const& values
     )
 {
-    int const y_top = y;
+    int const y_top = pos_y;
 
-    int const y_text = y + char_height_;
-    y += row_height_;
+    int const y_text = pos_y + char_height_;
+    pos_y += row_height_;
 
     if(draw_separators_)
         {
-        do_output_vert_separator(x, y_top, y);
+        do_output_vert_separator(pos_x, y_top, pos_y);
         }
 
     std::size_t const num_columns = all_columns().size();
@@ -665,7 +665,7 @@ void wx_table_generator::do_output_values
         std::string const& s = values[col];
         if(!s.empty())
             {
-            int x_text = x;
+            int x_text = pos_x;
 
             if(align_right_)
                 {
@@ -697,7 +697,7 @@ void wx_table_generator::do_output_values
                 wxDCClipper clip
                     (dc_
                     ,wxRect
-                        {wxPoint{x, y_top}
+                        {wxPoint{pos_x, y_top}
                         ,wxSize{ci.col_width() - column_margin(), row_height_}
                         }
                     );
@@ -708,10 +708,10 @@ void wx_table_generator::do_output_values
                 dc_.DrawText(s, x_text, y_text);
                 }
             }
-        x += ci.col_width();
+        pos_x += ci.col_width();
         if(draw_separators_)
             {
-            do_output_vert_separator(x, y_top, y);
+            do_output_vert_separator(pos_x, y_top, pos_y);
             }
         }
 }
