@@ -116,7 +116,7 @@ class wx_table_generator
     void do_output_horz_separator(int x1, int x2, int y );
     void do_output_vert_separator(int x , int y1, int y2);
 
-    void do_output_values
+    void do_output_single_row
         (int&                            pos_x
         ,int&                            pos_y
         ,std::vector<std::string> const& values

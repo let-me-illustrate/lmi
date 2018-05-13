@@ -36,7 +36,7 @@
 // accessible? But their values can also be changed by clients, and
 // isn't that undesirable?
 //
-// In wx_table_generator::do_output_values():
+// In wx_table_generator::do_output_single_row():
 //   if(align_right_)
 //   if(ci.is_centered_)
 // it seems that right-alignment is a quasi-global, while
@@ -251,7 +251,7 @@ wx_table_generator::wx_table_generator
     compute_column_widths();
 
     // Set a pen with 0 width to get the thin lines, and round cap style for the
-    // different segments drawn in do_output_values() to seamlessly combine
+    // different segments drawn in do_output_single_row() to seamlessly combine
     // into a single line.
     wxPen pen(*wxBLACK, 0);
     pen.SetCap(wxCAP_ROUND);
@@ -637,7 +637,7 @@ void wx_table_generator::compute_column_widths()
         }
 }
 
-void wx_table_generator::do_output_values
+void wx_table_generator::do_output_single_row
     (int&                            pos_x
     ,int&                            pos_y
     ,std::vector<std::string> const& values
@@ -795,7 +795,7 @@ void wx_table_generator::output_header
         // The distance from the font's descender line to its ascender
         // line must not exceed the distance between lines.
         LMI_ASSERT(dc_.GetCharHeight() <= row_height());
-        // do_output_values(), called below, uses a cached char_height_
+        // do_output_single_row(), called below, uses a cached char_height_
         // that is assumed not to differ from the bold GetCharHeight().
         LMI_ASSERT(dc_.GetCharHeight() == char_height_);
         }
@@ -831,7 +831,7 @@ void wx_table_generator::output_header
             ,headers_by_line.begin() + (1 + line) * num_columns
             );
         x = left_margin_;
-        do_output_values(x, *pos_y, nth_line);
+        do_output_single_row(x, *pos_y, nth_line);
         }
 
     // Finally draw the separators above and (a double one) below them.
@@ -897,7 +897,7 @@ void wx_table_generator::output_row
     )
 {
     int x = left_margin_;
-    do_output_values(x, *pos_y, values);
+    do_output_single_row(x, *pos_y, values);
 
     if(draw_separators_)
         {
