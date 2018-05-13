@@ -2234,11 +2234,10 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ("Using guaranteed charges"
             ,column_guar0_cash_surr_value
             ,column_separator_guar_curr0
-            ,pos_y
+            ,pos_y_copy
             ,output_mode
             );
 
-        pos_y = pos_y_copy;
         table_gen.output_super_header
             ("Using current charges"
             ,column_curr0_cash_surr_value
@@ -2687,7 +2686,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             (interpolate_html(header_zero.str()).as_html()
             ,column_zero_cash_surr_value
             ,column_zero_irr_surr_value
-            ,pos_y
+            ,pos_y_copy
             ,output_mode
             );
 
@@ -2700,7 +2699,6 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             << "Return*"
             ;
 
-        pos_y = pos_y_copy;
         table_gen.output_super_header
             (interpolate_html(header_nonzero.str()).as_html()
             ,column_nonzero_cash_surr_value
