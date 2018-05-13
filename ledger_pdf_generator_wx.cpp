@@ -1692,7 +1692,7 @@ class page_with_tabular_report
     virtual void render_or_measure_extra_headers
         (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
+        ,int&                          pos_y
         ,oenum_render_or_only_measure  output_mode
         ) const
     {
@@ -1728,7 +1728,7 @@ class page_with_tabular_report
         render_or_measure_extra_headers
             (table_gen
             ,interpolate_html
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -1815,7 +1815,7 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
     void render_or_measure_extra_headers
         (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
+        ,int&                          pos_y
         ,oenum_render_or_only_measure  output_mode
         ) const override
     {
@@ -1823,7 +1823,7 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
 
         // Make a copy because we want the real pos_y to be modified only once,
         // not twice, by both output_super_header() calls.
-        auto pos_y_copy = *pos_y;
+        auto pos_y_copy = pos_y;
         table_gen.output_super_header
             ("Guaranteed Values"
             ,column_guar_account_value
@@ -1835,21 +1835,21 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
             ("Non-Guaranteed Values"
             ,column_curr_account_value
             ,column_max
-            ,pos_y
+            ,&pos_y
             ,output_mode
             );
 
-        *pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator
             (column_guar_account_value
             ,column_dummy_separator
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
         table_gen.output_horz_separator
             (column_curr_account_value
             ,column_max
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
     }
@@ -2223,41 +2223,41 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     void render_or_measure_extra_headers
         (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
+        ,int&                          pos_y
         ,oenum_render_or_only_measure  output_mode
         ) const override
     {
         // Output the first super header row.
 
-        auto pos_y_copy = *pos_y;
+        auto pos_y_copy = pos_y;
         table_gen.output_super_header
             ("Using guaranteed charges"
             ,column_guar0_cash_surr_value
             ,column_separator_guar_curr0
-            ,pos_y
+            ,&pos_y
             ,output_mode
             );
 
-        *pos_y = pos_y_copy;
+        pos_y = pos_y_copy;
         table_gen.output_super_header
             ("Using current charges"
             ,column_curr0_cash_surr_value
             ,column_max
-            ,pos_y
+            ,&pos_y
             ,output_mode
             );
 
-        *pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator
             (column_guar0_cash_surr_value
             ,column_separator_guar_curr0
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
         table_gen.output_horz_separator
             (column_curr0_cash_surr_value
             ,column_max
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -2276,7 +2276,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                 std::size_t end_column = begin_column + 2;
                 LMI_ASSERT(end_column <= column_max);
 
-                auto y = *pos_y;
+                auto y = pos_y;
 
                 auto const header = get_two_column_header
                     (guar_or_curr
@@ -2319,7 +2319,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ,column_curr0_cash_surr_value
             );
 
-        *pos_y = output_two_column_super_header
+        pos_y = output_two_column_super_header
             (base::current
             ,interest_rate::non_zero
             ,column_curr_cash_surr_value
@@ -2669,7 +2669,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
     void render_or_measure_extra_headers
         (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
+        ,int&                          pos_y
         ,oenum_render_or_only_measure  output_mode
         ) const override
     {
@@ -2682,12 +2682,12 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             << "Return*"
             ;
 
-        auto pos_y_copy = *pos_y;
+        auto pos_y_copy = pos_y;
         table_gen.output_super_header
             (interpolate_html(header_zero.str()).as_html()
             ,column_zero_cash_surr_value
             ,column_zero_irr_surr_value
-            ,pos_y
+            ,&pos_y
             ,output_mode
             );
 
@@ -2700,26 +2700,26 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             << "Return*"
             ;
 
-        *pos_y = pos_y_copy;
+        pos_y = pos_y_copy;
         table_gen.output_super_header
             (interpolate_html(header_nonzero.str()).as_html()
             ,column_nonzero_cash_surr_value
             ,column_nonzero_irr_surr_value
-            ,pos_y
+            ,&pos_y
             ,output_mode
             );
 
-        *pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator
             (column_zero_cash_surr_value
             ,column_zero_irr_surr_value
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
         table_gen.output_horz_separator
             (column_nonzero_cash_surr_value
             ,column_nonzero_irr_surr_value
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
     }
@@ -2844,7 +2844,7 @@ class reg_d_individual_curr : public page_with_tabular_report
     void render_or_measure_extra_headers
         (illustration_table_generator& table_gen
         ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
+        ,int&                          pos_y
         ,oenum_render_or_only_measure  output_mode
         ) const override
     {
@@ -2854,15 +2854,15 @@ class reg_d_individual_curr : public page_with_tabular_report
                 ).as_html()
             ,column_curr_investment_income
             ,column_max
-            ,pos_y
+            ,&pos_y
             ,output_mode
             );
 
-        *pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator
             (column_curr_investment_income
             ,column_max
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
     }
