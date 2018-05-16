@@ -320,8 +320,6 @@ class html_interpolator
 class illustration_table_generator : public wx_table_generator
 {
   public:
-    static int const rows_per_group = 5;
-
     illustration_table_generator
         (std::vector<column_parameters> const& vc
         ,wxDC&                                 dc
@@ -332,15 +330,6 @@ class illustration_table_generator : public wx_table_generator
     {
         use_condensed_style();
         align_right();
-    }
-
-    // Return the amount of vertical space taken by separator lines in the
-    // table headers.
-    int get_separator_line_height() const
-    {
-        // This is completely arbitrary and chosen just because it seems to
-        // look well.
-        return row_height() / 2;
     }
 };
 

@@ -56,6 +56,8 @@ class wx_table_generator
     class column_info;
 
   public:
+    static int const rows_per_group = 5;
+
     wx_table_generator
         (std::vector<column_parameters> const& vc
         ,wxDC&                                 dc
@@ -101,6 +103,8 @@ class wx_table_generator
         );
 
     void output_vert_separator(std::size_t before_column, int y);
+
+    int get_separator_line_height() const;
 
     void use_condensed_style();
     void align_right();

@@ -766,6 +766,15 @@ void wx_table_generator::output_horz_separator
     do_output_horz_separator(x1, x2, y);
 }
 
+// Return the amount of vertical space taken by separator lines in the
+// table headers.
+int wx_table_generator::get_separator_line_height() const
+{
+    // This is completely arbitrary and chosen just because it seems to
+    // look well.
+    return row_height() / 2;
+}
+
 /// Render the headers at the given position and update it.
 
 void wx_table_generator::output_header
