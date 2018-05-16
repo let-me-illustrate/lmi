@@ -315,24 +315,6 @@ class html_interpolator
     std::map<std::string, html::text> vars_;
 };
 
-// A slightly specialized table generator for the tables used in the
-// illustrations.
-class illustration_table_generator : public wx_table_generator
-{
-  public:
-    illustration_table_generator
-        (std::vector<column_parameters> const& vc
-        ,wxDC&                                 dc
-        ,int                                   left_margin
-        ,int                                   total_width
-        )
-        :wx_table_generator(vc, dc, left_margin, total_width)
-    {
-        use_condensed_style();
-        align_right();
-    }
-};
-
 // A helper mix-in class for pages using tables which is also reused by the
 // custom wxHtmlCell showing a table.
 //
@@ -374,7 +356,7 @@ class using_illustration_table
     // Useful helper for creating the table generator using the columns defined
     // by the separate (and simpler to implement) get_table_columns() pure
     // virtual method.
-    illustration_table_generator create_table_generator
+    wx_table_generator create_table_generator
         (Ledger const& ledger
         ,pdf_writer_wx& writer
         ) const
@@ -399,12 +381,15 @@ class using_illustration_table
         font.SetPointSize(9);
         pdf_dc.SetFont(font);
 
-        illustration_table_generator table_gen
+        wx_table_generator table_gen
             (vc
             ,writer.dc()
             ,writer.get_horz_margin()
             ,writer.get_page_width()
             );
+
+        table_gen.use_condensed_style();
+        table_gen.align_right();
 
         // But set the highlight color for drawing separator lines after
         // creating it to override its default pen.
@@ -1283,8 +1268,8 @@ class standard_page : public numbered_page
 
 // Helper classes used to show the numeric summary table. The approach used
 // here is to define a custom HTML tag (<numeric_summary_table>) and use the
-// existing illustration_table_generator to replace it with the actual table
-// when rendering.
+// existing wx_table_generator to replace it with the actual table when
+// rendering.
 //
 // Notice that we currently make the simplifying assumption that this table is
 // always short enough so that everything fits on the same page as it would be
@@ -1367,8 +1352,7 @@ class numeric_summary_table_cell
         auto const& ledger = pdf_context_for_html_output.ledger();
         auto& writer = pdf_context_for_html_output.writer();
 
-        illustration_table_generator
-            table_gen{create_table_generator(ledger, writer)};
+        wx_table_generator table_gen{create_table_generator(ledger, writer)};
 
         // Output multiple rows of headers.
 
@@ -1596,15 +1580,14 @@ class page_with_tabular_report
     {
         numbered_page::render(ledger, writer, interpolate_html);
 
-        illustration_table_generator
-            table_gen{create_table_generator(ledger, writer)};
+        wx_table_generator table_gen{create_table_generator(ledger, writer)};
 
         auto const& columns = get_table_columns();
 
         // Just some cached values used inside the loop below.
         auto const row_height = table_gen.row_height();
         auto const page_bottom = get_footer_top();
-        auto const rows_per_group = illustration_table_generator::rows_per_group;
+        auto const rows_per_group = wx_table_generator::rows_per_group;
         std::vector<std::string> output_values(columns.size());
 
         // The table may need several pages, loop over them.
@@ -1679,10 +1662,10 @@ class page_with_tabular_report
     // pos_y and update it to account for the added lines. The base class
     // version does nothing.
     virtual void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int&                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const
     {
         stifle_warning_for_unused_value(table_gen);
@@ -1696,10 +1679,10 @@ class page_with_tabular_report
     // (in any case) return the vertical coordinate of its bottom, where the
     // tabular report starts.
     int render_or_measure_fixed_page_part
-        (illustration_table_generator& table_gen
-        ,pdf_writer_wx&                writer
-        ,html_interpolator const&      interpolate_html
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,pdf_writer_wx&               writer
+        ,html_interpolator const&     interpolate_html
+        ,oenum_render_or_only_measure output_mode
         ) const
     {
         int pos_y = writer.get_vert_margin();
@@ -1738,8 +1721,7 @@ class page_with_tabular_report
         ,html_interpolator const&   interpolate_html
         ) const override
     {
-        illustration_table_generator
-            table_gen{create_table_generator(ledger, writer)};
+        wx_table_generator table_gen{create_table_generator(ledger, writer)};
 
         int const pos_y = render_or_measure_fixed_page_part
             (table_gen
@@ -1750,7 +1732,7 @@ class page_with_tabular_report
 
         int const rows_per_page = (get_footer_top() - pos_y) / table_gen.row_height();
 
-        int const rows_per_group = illustration_table_generator::rows_per_group;
+        int const rows_per_group = wx_table_generator::rows_per_group;
 
         if(rows_per_page < rows_per_group)
             {
@@ -1802,10 +1784,10 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int&                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const override
     {
         stifle_warning_for_unused_value(interpolate_html);
@@ -2210,10 +2192,10 @@ class page_with_basic_tabular_report : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int&                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const override
     {
         // Output the first super header row.
@@ -2655,10 +2637,10 @@ class reg_d_individual_irr_base : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int&                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const override
     {
         std::ostringstream header_zero;
@@ -2829,10 +2811,10 @@ class reg_d_individual_curr : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int&                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const override
     {
         table_gen.output_super_header
