@@ -251,7 +251,7 @@ wx_table_generator::wx_table_generator
 {
     for(auto const& i : vc)
         {
-        enroll_column(i.header, i.widest_text);
+        enroll_column(i);
         }
     compute_column_widths();
 
@@ -285,7 +285,7 @@ wx_table_generator::wx_table_generator
 {
     for(auto const& i : vc)
         {
-        enroll_column(i.header, i.widest_text);
+        enroll_column(i);
         }
     compute_column_widths();
 
@@ -322,17 +322,14 @@ std::vector<wx_table_generator::column_info> const& wx_table_generator::all_colu
 ///
 /// Notice that column headers may be multiline strings.
 
-void wx_table_generator::enroll_column
-    (std::string const& header
-    ,std::string const& widest_text
-    )
+void wx_table_generator::enroll_column(column_parameters const& z)
 {
     // If a column's header is empty, then it is to be hidden--and its
     // width must be initialized to zero, because other member functions
     // calculate total width by accumulating the widths of all columns,
     // whether hidden or not.
     int width = 0;
-    if(!header.empty())
+    if(!z.header.empty())
         {
         wxDCFontChanger header_font_setter(dc_);
         if(use_bold_headers_)
@@ -341,20 +338,20 @@ void wx_table_generator::enroll_column
             }
 
         // Set width to the special value of 0 for the variable width columns.
-        width = widest_text.empty() ? 0 : dc_.GetTextExtent(widest_text).x;
+        width = z.widest_text.empty() ? 0 : dc_.GetTextExtent(z.widest_text).x;
 
         // Keep track of the maximal number of lines in a header as this determines
         // the number of lines used for all of them. This is one plus the number of
         // newlines in the anticipated case where there is no newline character at
         // the beginning or end of the header's string representation.
         wxCoord w, h, lh;
-        dc_.GetMultiLineTextExtent(header, &w, &h, &lh, &dc_.GetFont());
+        dc_.GetMultiLineTextExtent(z.header, &w, &h, &lh, &dc_.GetFont());
         LMI_ASSERT(0 != lh);
         LMI_ASSERT(0 == h % lh);
 // Temporarily assert that this does the same as the code it replaced:
-LMI_ASSERT(h / lh == int(1u + count_newlines(header)));
+LMI_ASSERT(h / lh == int(1u + count_newlines(z.header)));
 // Check it again because of the unfortunate mixed-mode arithmetic:
-LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(header));
+LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
         increase_to_if_smaller(max_header_lines_, std::size_t(h / lh));
 
         // Also increase the column width to be sufficiently wide to fit
@@ -362,13 +359,13 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(header));
         if(0 != width)
             {
 // Temporarily assert that this does the same as the code it replaced:
-LMI_ASSERT(w == dc_.GetMultiLineTextExtent(header).x);
+LMI_ASSERT(w == dc_.GetMultiLineTextExtent(z.header).x);
             increase_to_if_smaller(width, w);
             width += 2 * column_margin();
             }
         }
 
-    all_columns_.push_back(column_info(header, width));
+    all_columns_.push_back(column_info(z.header, width));
 }
 
 /// Return the font used for the headers.

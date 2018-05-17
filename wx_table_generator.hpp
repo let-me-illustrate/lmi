@@ -127,7 +127,7 @@ class wx_table_generator
     int get_separator_line_height() const;
 
   private:
-    void enroll_column(std::string const& header, std::string const& widest_text);
+    void enroll_column(column_parameters const&);
     void compute_column_widths();
 
     wxFont get_header_font() const;
