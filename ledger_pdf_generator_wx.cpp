@@ -386,6 +386,7 @@ class using_illustration_table
             ,writer.dc()
             ,writer.get_horz_margin()
             ,writer.get_page_width()
+            ,e_illustration_style
             );
 
         table_gen.use_condensed_style();

@@ -41,6 +41,16 @@ struct column_parameters
     std::string widest_text;
 };
 
+/// Specialized style used as a wx_table_generator ctor argument.
+///
+/// It would be possible to derive a distinct class for each use case,
+/// but style differences are not great enough to warrant that.
+
+enum enum_pdf_table_style
+    {e_illustration_style
+    ,e_group_quote_style
+    };
+
 /// Simplifies outputting tabular data on wxDC.
 ///
 /// Several member functions reuse the same pos_y argument (which is
@@ -63,6 +73,7 @@ class wx_table_generator
         ,wxDC&                                 dc
         ,int                                   left_margin
         ,int                                   total_width
+        ,enum_pdf_table_style                  style
         );
 
     wx_table_generator(wx_table_generator const&);

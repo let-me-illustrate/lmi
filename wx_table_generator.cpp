@@ -235,6 +235,7 @@ wx_table_generator::wx_table_generator
     ,wxDC&                                 dc
     ,int                                   left_margin
     ,int                                   total_width
+    ,enum_pdf_table_style                  style
     )
     :dc_(dc)
     ,left_margin_(left_margin)
@@ -249,6 +250,20 @@ wx_table_generator::wx_table_generator
         enroll_column(i.header, i.widest_text);
         }
     compute_column_widths();
+
+    switch(style)
+        {
+        case e_illustration_style:
+            {
+            ; // do nothing yet
+            }
+            break;
+        case e_group_quote_style:
+            {
+            ; // do nothing yet
+            }
+            break;
+        }
 
     // Set a pen with 0 width to get the thin lines, and round cap style for the
     // different segments drawn in do_output_single_row() to seamlessly combine
