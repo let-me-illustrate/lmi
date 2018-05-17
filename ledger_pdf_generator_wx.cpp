@@ -379,11 +379,11 @@ class using_illustration_table
         pdf_dc.SetFont(font);
 
         return wx_table_generator
-            (vc
+            (illustration_style_tag{}
+            ,vc
             ,writer.dc()
             ,writer.get_horz_margin()
             ,writer.get_page_width()
-            ,e_illustration_style
             );
     }
 };

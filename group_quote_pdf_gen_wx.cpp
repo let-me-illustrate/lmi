@@ -725,11 +725,11 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         }
 
     wx_table_generator table_gen
-        (vc
+        (group_quote_style_tag{}
+        ,vc
         ,pdf_writer.dc()
         ,pdf_writer.get_horz_margin()
         ,pdf_writer.get_page_width()
-        ,e_group_quote_style
         );
 
     output_aggregate_values(pdf_writer, table_gen, &pos_y);

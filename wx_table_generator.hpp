@@ -41,15 +41,13 @@ struct column_parameters
     std::string widest_text;
 };
 
-/// Specialized style used as a wx_table_generator ctor argument.
+/// Specialized styles for first wx_table_generator ctor argument.
 ///
 /// It would be possible to derive a distinct class for each use case,
 /// but style differences are not great enough to warrant that.
 
-enum enum_pdf_table_style
-    {e_illustration_style
-    ,e_group_quote_style
-    };
+class group_quote_style_tag  {};
+class illustration_style_tag {};
 
 // Color of rules and borders in illustrations.
 wxColor const illustration_rule_color(0x00, 0x2f, 0x6c);
@@ -72,11 +70,19 @@ class wx_table_generator
     static int const rows_per_group = 5;
 
     wx_table_generator
-        (std::vector<column_parameters> const& vc
+        (group_quote_style_tag
+        ,std::vector<column_parameters> const& vc
         ,wxDC&                                 dc
         ,int                                   left_margin
         ,int                                   total_width
-        ,enum_pdf_table_style                  style
+        );
+
+    wx_table_generator
+        (illustration_style_tag
+        ,std::vector<column_parameters> const& vc
+        ,wxDC&                                 dc
+        ,int                                   left_margin
+        ,int                                   total_width
         );
 
     wx_table_generator(wx_table_generator const&);

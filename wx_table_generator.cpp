@@ -231,18 +231,23 @@ void increase_to_if_smaller(T& first, T second)
 } // Unnamed namespace.
 
 wx_table_generator::wx_table_generator
-    (std::vector<column_parameters> const& vc
+    (group_quote_style_tag                 // tag not referenced
+    ,std::vector<column_parameters> const& vc
     ,wxDC&                                 dc
     ,int                                   left_margin
     ,int                                   total_width
-    ,enum_pdf_table_style                  style
     )
-    :dc_(dc)
-    ,left_margin_(left_margin)
-    ,total_width_(total_width)
-    ,char_height_(dc_.GetCharHeight())
-    ,column_margin_(dc_.GetTextExtent("M").x)
-    ,max_header_lines_(1)
+    :dc_               (dc)
+    ,left_margin_      (left_margin)
+    ,total_width_      (total_width)
+    ,char_height_      (dc_.GetCharHeight())
+    // Arbitrarily use 1.333 line spacing.
+    ,row_height_       ((4 * char_height_ + 2) / 3)
+    ,column_margin_    (dc_.GetTextExtent("M").x)
+    ,max_header_lines_ (1)
+    ,draw_separators_  (true)
+    ,use_bold_headers_ (true)
+    ,align_right_      (false)
 {
     for(auto const& i : vc)
         {
@@ -250,35 +255,41 @@ wx_table_generator::wx_table_generator
         }
     compute_column_widths();
 
-    switch(style)
+    // Set a pen with zero width to make grid lines thin,
+    // and round cap style so that they combine seamlessly.
+    wxPen pen(*wxBLACK, 0);
+    pen.SetCap(wxCAP_ROUND);
+    dc_.SetPen(pen);
+}
+
+wx_table_generator::wx_table_generator
+    (illustration_style_tag                // tag not referenced
+    ,std::vector<column_parameters> const& vc
+    ,wxDC&                                 dc
+    ,int                                   left_margin
+    ,int                                   total_width
+    )
+    :dc_               (dc)
+    ,left_margin_      (left_margin)
+    ,total_width_      (total_width)
+    ,char_height_      (dc_.GetCharHeight())
+    ,row_height_       (char_height_)
+    ,column_margin_    (dc_.GetTextExtent("M").x)
+    ,max_header_lines_ (1)
+    ,draw_separators_  (false)
+    ,use_bold_headers_ (false)
+    // For the nonce, columns are centered by default because
+    // that's what group quotes need; this flag forces right
+    // alignment for illustrations.
+    ,align_right_      (true)
+{
+    for(auto const& i : vc)
         {
-        case e_illustration_style:
-            {
-            row_height_ = char_height_;
-            draw_separators_ = false;
-            use_bold_headers_ = false;
-            // For the nonce, columns are centered by default because
-            // that's what group quotes need; this flag forces right
-            // alignment for illustrations.
-            align_right_ = true;
-            dc_.SetPen(illustration_rule_color);
-            }
-            break;
-        case e_group_quote_style:
-            {
-            // Arbitrarily use 1.333 line spacing.
-            row_height_ = (4 * char_height_ + 2) / 3;
-            draw_separators_ = true;
-            use_bold_headers_ = true;
-            align_right_ = false;
-            // Set a pen with zero width to make grid lines thin,
-            // and round cap style so that they combine seamlessly.
-            wxPen pen(*wxBLACK, 0);
-            pen.SetCap(wxCAP_ROUND);
-            dc_.SetPen(pen);
-            }
-            break;
+        enroll_column(i.header, i.widest_text);
         }
+    compute_column_widths();
+
+    dc_.SetPen(illustration_rule_color);
 }
 
 wx_table_generator::wx_table_generator(wx_table_generator const&) = default;
