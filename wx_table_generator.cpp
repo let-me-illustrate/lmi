@@ -112,7 +112,7 @@
 // preferred not to do as part of illustrations work. Maybe now, that this is
 // merged, it's indeed worth changing this.
 //  OTOH, unlike a spreadsheet, this class doesn't have any notion of numeric
-// or text values, so its align_right() method is still useful to globally
+// or text values, so its align_right_ member is still useful to globally
 // configure all columns to be right-aligned. Perhaps we could just add a
 // similar align_centre() method and call it from the group PDF quotes code
 // and continue to handle the variable width columns specially by
@@ -158,7 +158,7 @@
 // The fundamental distinction is really
 // between fixed and variable width columns: the latter ones are always
 // left-aligned and need to be clipped, while the former ones are either
-// centered or right-aligned (if align_right() was called) and not clipped.
+// centered or right-aligned (if align_right_ is true) and not clipped.
 // And I think things are reasonably simple seen from this point of view and
 // this is how you're supposed to see them, because it's how this class is
 // used, while the various accessors discussed above are just its
@@ -241,7 +241,6 @@ wx_table_generator::wx_table_generator
     ,left_margin_(left_margin)
     ,total_width_(total_width)
     ,char_height_(dc_.GetCharHeight())
-    ,row_height_((4 * char_height_ + 2) / 3) // Arbitrarily use 1.333 line spacing.
     ,column_margin_(dc_.GetTextExtent("M").x)
     ,max_header_lines_(1)
 {
@@ -255,11 +254,23 @@ wx_table_generator::wx_table_generator
         {
         case e_illustration_style:
             {
+            row_height_ = char_height_;
+            draw_separators_ = false;
+            use_bold_headers_ = false;
+            // For the nonce, columns are centered by default because
+            // that's what group quotes need; this flag forces right
+            // alignment for illustrations.
+            align_right_ = true;
             dc_.SetPen(illustration_rule_color);
             }
             break;
         case e_group_quote_style:
             {
+            // Arbitrarily use 1.333 line spacing.
+            row_height_ = (4 * char_height_ + 2) / 3;
+            draw_separators_ = true;
+            use_bold_headers_ = true;
+            align_right_ = false;
             // Set a pen with zero width to make grid lines thin,
             // and round cap style so that they combine seamlessly.
             wxPen pen(*wxBLACK, 0);
@@ -282,25 +293,6 @@ int wx_table_generator::column_margin() const
 std::vector<wx_table_generator::column_info> const& wx_table_generator::all_columns() const
 {
     return all_columns_;
-}
-
-/// Use condensed style: don't draw separators between rows and make them
-/// smaller.
-
-void wx_table_generator::use_condensed_style()
-{
-    row_height_ = char_height_;
-    draw_separators_ = false;
-    use_bold_headers_ = false;
-}
-
-/// By default, columns are centered if they have fixed size or left-aligned
-/// otherwise. By calling this method, this alignment auto-detection is
-/// turned off and all columns are right-aligned.
-
-void wx_table_generator::align_right()
-{
-    align_right_ = true;
 }
 
 /// Indicate an intention to include a column by storing its metadata.

@@ -378,18 +378,13 @@ class using_illustration_table
         font.SetPointSize(9);
         pdf_dc.SetFont(font);
 
-        wx_table_generator table_gen
+        return wx_table_generator
             (vc
             ,writer.dc()
             ,writer.get_horz_margin()
             ,writer.get_page_width()
             ,e_illustration_style
             );
-
-        table_gen.use_condensed_style();
-        table_gen.align_right();
-
-        return table_gen;
     }
 };
 

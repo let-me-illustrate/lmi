@@ -120,9 +120,6 @@ class wx_table_generator
 
     int get_separator_line_height() const;
 
-    void use_condensed_style();
-    void align_right();
-
   private:
     void enroll_column(std::string const& header, std::string const& widest_text);
     void compute_column_widths();
@@ -164,14 +161,14 @@ class wx_table_generator
     // If false, separator lines are not drawn automatically (they can still be
     // drawn by calling output_horz_separator() or output_vert_separator()
     // explicitly).
-    bool draw_separators_ = true;
+    bool draw_separators_;
 
     // If true, headers are drawn in bold.
-    bool use_bold_headers_ = true;
+    bool use_bold_headers_;
 
     // If true, force right alignment for all columns instead of centering them
     // automatically if they have fixed size.
-    bool align_right_ = false;
+    bool align_right_;
 };
 
 #endif // wx_table_generator_hpp
