@@ -135,10 +135,10 @@ struct TestsResults
 
     // The sum of passed, skipped and failed is the same as total (except when
     // a test is in process of execution and its result is yet unknown).
-    int total,
-        passed,
-        skipped,
-        failed;
+    int total;
+    int passed;
+    int skipped;
+    int failed;
 };
 
 /// Run the tests.

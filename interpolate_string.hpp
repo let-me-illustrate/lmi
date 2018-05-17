@@ -30,11 +30,10 @@
 #include <string>
 
 enum class interpolate_lookup_kind
-{
-    variable,
-    section,
-    partial
-};
+    {variable
+    ,section
+    ,partial
+    };
 
 using lookup_function
     = std::function<std::string (std::string const&, interpolate_lookup_kind)>;

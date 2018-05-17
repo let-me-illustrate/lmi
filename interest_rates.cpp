@@ -1130,12 +1130,18 @@ void InterestRates::Initialize7702Rates()
 
     // ET !! Mly7702ig = -1.0 + 1.0 / DBDiscountRate;
     Mly7702ig = DBDiscountRate;
-    std::transform(Mly7702ig.begin(), Mly7702ig.end(), Mly7702ig.begin(),
-          std::bind1st(std::divides<double>(), 1.0)
-          );
-    std::transform(Mly7702ig.begin(), Mly7702ig.end(), Mly7702ig.begin(),
-          std::bind2nd(std::minus<double>(), 1.0)
-          );
+    std::transform
+        (Mly7702ig.begin()
+        ,Mly7702ig.end()
+        ,Mly7702ig.begin()
+        ,std::bind1st(std::divides<double>(), 1.0)
+        );
+    std::transform
+        (Mly7702ig.begin()
+        ,Mly7702ig.end()
+        ,Mly7702ig.begin()
+        ,std::bind2nd(std::minus<double>(), 1.0)
+        );
 }
 #endif // 0
 

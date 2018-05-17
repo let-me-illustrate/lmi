@@ -893,8 +893,8 @@ void group_quote_pdf_generator_wx::output_image_header
     pdf_dc.DrawLabel
         (image_text
         ,wxRect
-            (wxPoint(pdf_writer.get_horz_margin(), (pos_top + *pos_y) / 2),
-             pdf_dc.GetMultiLineTextExtent(image_text)
+            (wxPoint(pdf_writer.get_horz_margin(), (pos_top + *pos_y) / 2)
+            ,pdf_dc.GetMultiLineTextExtent(image_text)
             )
         ,wxALIGN_CENTER_HORIZONTAL
         );

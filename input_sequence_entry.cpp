@@ -82,7 +82,7 @@ choice_value const duration_mode_choice_values[] =
     {e_attained_age,     "until age"},
     {e_duration,         "until duration"},
     {e_number_of_years,  "for a period of"},
-    {e_maturity,         "until maturity"}    // e_maturity must be last
+    {e_maturity,         "until maturity"},    // e_maturity must be last
   };
 
 unsigned int const duration_mode_choices = sizeof(duration_mode_choice_values) / sizeof(choice_value);
@@ -265,16 +265,15 @@ class InputSequenceEditor
     wxString format_from_text(int row);
 
     enum Col
-    {
-        Col_Value,
-        Col_From,
-        Col_DurationMode,
-        Col_DurationNum,
-        Col_Then,
-        Col_Remove,
-        Col_Add,
-        Col_Max
-    };
+        {Col_Value
+        ,Col_From
+        ,Col_DurationMode
+        ,Col_DurationNum
+        ,Col_Then
+        ,Col_Remove
+        ,Col_Add
+        ,Col_Max
+        };
 
     wxTextEntry& value_field(int row)
     {
@@ -977,9 +976,9 @@ wxString InputSequenceEditor::format_from_text(int row)
                 i--;
                 }
             return wxString::Format
-                ("%s + %d years",
-                format_from_text(i + 1).c_str(),
-                yrs
+                ("%s + %d years"
+                ,format_from_text(i + 1).c_str()
+                ,yrs
                 );
             }
         case e_maturity:
