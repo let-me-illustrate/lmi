@@ -255,22 +255,19 @@ wx_table_generator::wx_table_generator
         {
         case e_illustration_style:
             {
-            ; // do nothing yet
+            dc_.SetPen(illustration_rule_color);
             }
             break;
         case e_group_quote_style:
             {
-            ; // do nothing yet
+            // Set a pen with zero width to make grid lines thin,
+            // and round cap style so that they combine seamlessly.
+            wxPen pen(*wxBLACK, 0);
+            pen.SetCap(wxCAP_ROUND);
+            dc_.SetPen(pen);
             }
             break;
         }
-
-    // Set a pen with 0 width to get the thin lines, and round cap style for the
-    // different segments drawn in do_output_single_row() to seamlessly combine
-    // into a single line.
-    wxPen pen(*wxBLACK, 0);
-    pen.SetCap(wxCAP_ROUND);
-    dc_.SetPen(pen);
 }
 
 wx_table_generator::wx_table_generator(wx_table_generator const&) = default;

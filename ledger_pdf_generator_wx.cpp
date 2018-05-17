@@ -67,9 +67,6 @@ LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
 namespace
 {
 
-// Color used for rules and borders in illustrations.
-wxColor const rule_color(0x00, 0x2f, 0x6c);
-
 // This function is also provided in <boost/algorithm/string/predicate.hpp>,
 // but it's arguably not worth adding dependency on this Boost library just for
 // this function.
@@ -391,10 +388,6 @@ class using_illustration_table
 
         table_gen.use_condensed_style();
         table_gen.align_right();
-
-        // But set the highlight color for drawing separator lines after
-        // creating it to override its default pen.
-        pdf_dc.SetPen(rule_color);
 
         return table_gen;
     }
@@ -962,7 +955,7 @@ class cover_page : public page
         // currently, so do it manually.
         auto& pdf_dc = writer.dc();
 
-        pdf_dc.SetPen(wxPen(rule_color, 2));
+        pdf_dc.SetPen(wxPen(illustration_rule_color, 2));
         pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
         pdf_dc.DrawRectangle
@@ -1058,7 +1051,7 @@ class page_with_footer : public page
             ,get_footer_lower_html(interpolate_html)
             );
 
-        pdf_dc.SetPen(rule_color);
+        pdf_dc.SetPen(illustration_rule_color);
         pdf_dc.DrawLine
             (frame_horz_margin
             ,y

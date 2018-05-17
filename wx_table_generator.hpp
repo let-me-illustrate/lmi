@@ -51,6 +51,9 @@ enum enum_pdf_table_style
     ,e_group_quote_style
     };
 
+// Color of rules and borders in illustrations.
+wxColor const illustration_rule_color(0x00, 0x2f, 0x6c);
+
 /// Simplifies outputting tabular data on wxDC.
 ///
 /// Several member functions reuse the same pos_y argument (which is
