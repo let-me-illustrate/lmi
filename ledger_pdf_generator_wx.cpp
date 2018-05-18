@@ -1407,7 +1407,7 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        table_gen.output_header(pos_y, output_mode);
+        table_gen.output_headers(pos_y, output_mode);
 
         pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator(0, column_max, pos_y, output_mode);
@@ -1691,7 +1691,7 @@ class page_with_tabular_report
             ,output_mode
             );
 
-        table_gen.output_header(pos_y, output_mode);
+        table_gen.output_headers(pos_y, output_mode);
 
         pos_y += table_gen.get_separator_line_height();
         auto const ncols = get_table_columns().size();

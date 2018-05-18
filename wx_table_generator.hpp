@@ -90,7 +90,7 @@ class wx_table_generator
 
     ~wx_table_generator();
 
-    void output_header
+    void output_headers
         (int&                         pos_y
         ,oenum_render_or_only_measure output_mode = oe_render
         );

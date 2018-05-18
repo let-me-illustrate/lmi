@@ -728,7 +728,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     output_aggregate_values(pdf_writer, table_gen, &pos_y);
 
     int const y_before_header = pos_y;
-    table_gen.output_header(pos_y);
+    table_gen.output_headers(pos_y);
     int const header_height = pos_y - y_before_header;
 
     int y_after_footer = pos_y;
@@ -769,7 +769,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             pdf_writer.dc().StartPage();
 
             pos_y = pdf_writer.get_vert_margin();
-            table_gen.output_header(pos_y);
+            table_gen.output_headers(pos_y);
             }
         }
 

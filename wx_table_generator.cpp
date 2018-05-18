@@ -777,7 +777,7 @@ int wx_table_generator::get_separator_line_height() const
 
 /// Render the headers at the given position and update it.
 
-void wx_table_generator::output_header
+void wx_table_generator::output_headers
     (int&                         pos_y
     ,oenum_render_or_only_measure output_mode
     )
