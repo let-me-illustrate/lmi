@@ -105,7 +105,7 @@ make "$coefficiency" check_concinnity 2>&1 | sed -e "$build_clutter" -e "$concin
 printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 | tee /tmp/lmi/logs/install | sed -e "$build_clutter" -e "$install_clutter"
 
-printf 'Production system built--ready to start GUI test in another session.\n' >> /dev/tty
+printf 'Production system built--ready to start GUI test in another session.\n' > /dev/tty
 
 printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 | tee /tmp/lmi/logs/cgi-cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
