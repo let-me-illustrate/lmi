@@ -287,12 +287,15 @@ std::vector<wx_table_generator::column_info> const& wx_table_generator::all_colu
 
 /// Indicate an intention to include a column by storing its metadata.
 ///
+/// Sets max_header_lines_.
+///
 /// The total number of columns thus enrolled determines the cardinality
 /// of the 'values' argument in output_row() calls.
 ///
-/// Making a column hidden suppresses the column display, while still
-/// taking it into account in output_row(), providing a convenient way to
-/// hide a single column without changing the data representation.
+/// All data for every row and every potential column are passed into
+/// this class, even for "hidden" columns that are to be suppressed so
+/// that they don't appear in the output at all. This approach trades
+/// extra complexity here for a uniform data representation elsewhere.
 ///
 /// Each column must either have a fixed width, specified as the width of
 /// the longest text that may appear in this column, or be expandable
@@ -300,6 +303,9 @@ std::vector<wx_table_generator::column_info> const& wx_table_generator::all_colu
 /// be the case if widest_text is empty.
 ///
 /// Notice that column headers may be multiline strings.
+///
+/// Design alternative: this could be written as a nonmember function,
+/// by passing the DC and the header font as arguments.
 
 void wx_table_generator::enroll_column(column_parameters const& z)
 {
@@ -318,10 +324,6 @@ void wx_table_generator::enroll_column(column_parameters const& z)
         // Set width to the special value of 0 for the variable width columns.
         width = z.widest_text.empty() ? 0 : dc_.GetTextExtent(z.widest_text).x;
 
-        // Keep track of the maximal number of lines in a header as this determines
-        // the number of lines used for all of them. This is one plus the number of
-        // newlines in the anticipated case where there is no newline character at
-        // the beginning or end of the header's string representation.
         wxCoord w, h, lh;
         dc_.GetMultiLineTextExtent(z.header, &w, &h, &lh, &dc_.GetFont());
         LMI_ASSERT(0 != lh);
@@ -330,6 +332,8 @@ void wx_table_generator::enroll_column(column_parameters const& z)
 LMI_ASSERT(h / lh == int(1u + count_newlines(z.header)));
 // Check it again because of the unfortunate mixed-mode arithmetic:
 LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
+        // Store number of lines used by tallest unhidden header:
+        // output_headers() uses it to write all headers as a block.
         increase_to_if_smaller(max_header_lines_, std::size_t(h / lh));
 
         // Also increase the column width to be sufficiently wide to fit
