@@ -362,13 +362,11 @@ class using_illustration_table
         int column = 0;
         for(auto const& i : get_table_columns())
             {
-            std::string header;
-            if(should_show_column(ledger, column++))
-                {
-                header = i.header;
-                }
-            //else: Leave the header empty to avoid showing the column.
-            vc.push_back({header, i.widest_text});
+            vc.push_back
+                ({i.header
+                 ,i.widest_text
+                 ,!should_show_column(ledger, column++)
+                });
             }
 
         // Set the smaller font used for all tables before creating the table

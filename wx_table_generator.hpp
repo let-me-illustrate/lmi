@@ -39,6 +39,7 @@ struct column_parameters
 {
     std::string header;
     std::string widest_text;
+    bool        hidden;
 };
 
 /// Specialized styles for first wx_table_generator ctor argument.

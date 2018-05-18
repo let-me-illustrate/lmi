@@ -674,6 +674,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         {
         column_definition const& cd = column_definitions[col];
         std::string header;
+        bool hidden = false;
 
         // The cast is only used to ensure that if any new elements are added
         // to the enum, the compiler would warn about their values not being
@@ -682,11 +683,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             {
             case e_col_supplemental_face_amount:
             case e_col_total_face_amount:
-                if(!has_suppl_amount)
-                    {
-                    // Leave the header empty to hide this column.
-                    break;
-                    }
+                if(!has_suppl_amount) {hidden = true;}
                 // Fall through
             case e_col_number:
             case e_col_name:
@@ -698,11 +695,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             case e_col_additional_premium:
             case e_col_total_premium:
-                if(!has_addl_premium)
-                    {
-                    // Leave the header empty to hide this column.
-                    break;
-                    }
+                if(!has_addl_premium) {hidden = true;}
                 // Fall through
             case e_col_basic_premium:
                 {
@@ -721,7 +714,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             }
 
-        vc.push_back({header, cd.widest_text_});
+        vc.push_back({header, cd.widest_text_, hidden});
         }
 
     wx_table_generator table_gen

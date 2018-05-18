@@ -27,11 +27,6 @@
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // count_newlines(), split_into_lines()
 
-//   is_centered_ is a member variable, initialized in the ctor
-//   is_hidden() is a member function, whose return value is dynamic
-// Should these really be implemented in those two different ways?
-// Wouldn't it be better to treat is_hidden() the same as is_centered_?
-//
 // Is this a struct only because we want its members to be publicly
 // accessible? But their values can also be changed by clients, and
 // isn't that undesirable?
@@ -56,27 +51,8 @@
 //
 // - is_hidden()
 //
-// Apparently used only for group premium quotes, e.g.:
-//
-//             case e_col_total_face_amount:
-//                 if(!has_suppl_amount)
-//                     // Leave the header empty to hide this column.
-//                     break;
-//                 // Fall through
-//             ...
-//                 header = cd.header_;
-//
-// Some columns are conditionally hidden by should_show_column():
-//
-//     // May be overridden to return false if the given column shouldn't be shown
-//     // for the specific ledger values (currently used to exclude individual
-//     // columns from composite illustrations).
-//     virtual bool should_show_column(Ledger const& ledger, int column) const
-//
-// but that technique seems to be orthogonal to is_hidden() and used
-// only for illustration PDFs.
-// --No, it's not orthogonal, should_show_column() is used to decide whether
-// the column label should be left empty, making the column hidden.
+// All potential data are passed for every row; is_hidden() suppresses
+// any column that needs to be filtered out.
 //
 //  - is_centered()
 //
@@ -164,8 +140,9 @@
 // used, while the various accessors discussed above are just its
 // implementation details.
 
-//  - is_hidden(): A column with empty header is considered to be
-//    suppressed and doesn't appear in the output at all.
+//  - is_hidden(): A hidden column is present in the data passed into
+//    this class, but is to be suppressed so that it doesn't appear in
+//    the output at all.
 //
 //  - is_centered(): Indicate whether column should be centered,
 //    rather than left-aligned. Ignored for globally right-aligned
@@ -185,14 +162,15 @@
 class wx_table_generator::column_info
 {
   public:
-    column_info(std::string const& header, int width)
+    column_info(std::string const& header, int width, bool hidden)
         :col_header_       (header)
         ,col_width_        (width)
+        ,is_hidden_        (hidden)
         ,is_variable_width_(0 == width)
         {
         }
 
-    bool is_hidden()         const {return col_header().empty();}
+    bool is_hidden()         const {return  is_hidden_;}
     bool is_centered()       const {return !is_variable_width_;}
     bool is_variable_width() const {return  is_variable_width_;}
     bool needs_clipping()    const {return  is_variable_width_;}
@@ -211,6 +189,7 @@ class wx_table_generator::column_info
     int col_width_;
 
   private:
+    bool const is_hidden_;
     bool const is_variable_width_;
 };
 
@@ -311,7 +290,7 @@ std::vector<wx_table_generator::column_info> const& wx_table_generator::all_colu
 /// The total number of columns thus enrolled determines the cardinality
 /// of the 'values' argument in output_row() calls.
 ///
-/// Providing an empty header suppresses the column display, while still
+/// Making a column hidden suppresses the column display, while still
 /// taking it into account in output_row(), providing a convenient way to
 /// hide a single column without changing the data representation.
 ///
@@ -324,12 +303,11 @@ std::vector<wx_table_generator::column_info> const& wx_table_generator::all_colu
 
 void wx_table_generator::enroll_column(column_parameters const& z)
 {
-    // If a column's header is empty, then it is to be hidden--and its
-    // width must be initialized to zero, because other member functions
-    // calculate total width by accumulating the widths of all columns,
-    // whether hidden or not.
+    // A hidden column's width must be initialized to zero, because
+    // other member functions calculate total width by accumulating
+    // the widths of all columns, whether hidden or not.
     int width = 0;
-    if(!z.header.empty())
+    if(!z.hidden)
         {
         wxDCFontChanger header_font_setter(dc_);
         if(use_bold_headers_)
@@ -365,7 +343,7 @@ LMI_ASSERT(w == dc_.GetMultiLineTextExtent(z.header).x);
             }
         }
 
-    all_columns_.push_back(column_info(z.header, width));
+    all_columns_.push_back(column_info(z.header, width, z.hidden));
 }
 
 /// Return the font used for the headers.
@@ -839,6 +817,11 @@ void wx_table_generator::output_header
     for(std::size_t col = 0; col < num_columns; ++col)
         {
         column_info const& ci = all_columns().at(col);
+        if(ci.is_hidden())
+            {
+            continue;
+            }
+
         std::vector<std::string> const lines(split_into_lines(ci.col_header()));
 
         // Fill the elements from the bottom line to the top one, so that a
