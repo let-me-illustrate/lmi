@@ -316,8 +316,8 @@ class html_interpolator
 // custom wxHtmlCell showing a table.
 //
 // Derived classes must provide get_table_columns() and may also override
-// hide_column() to hide some of these columns dynamically and then can use
-// create_table_generator() to obtain the generator object that can be used
+// should_hide_column() to hide some of these columns dynamically and then can
+// use create_table_generator() to obtain the generator object that can be used
 // to render a table with the specified columns.
 class using_illustration_table
 {
@@ -343,7 +343,7 @@ class using_illustration_table
     // However, that cannot be written here, once and only once,
     // because 'column_end_of_year_age' is an enumerator whose value
     // may differ in each derived class.
-    virtual bool hide_column(Ledger const& ledger, int column) const
+    virtual bool should_hide_column(Ledger const& ledger, int column) const
     {
         stifle_warning_for_unused_value(ledger);
         stifle_warning_for_unused_value(column);
@@ -365,7 +365,7 @@ class using_illustration_table
             vc.push_back
                 ({i.header
                  ,i.widest_text
-                 ,hide_column(ledger, column++) ? oe_hidden : oe_shown
+                 ,should_hide_column(ledger, column++) ? oe_hidden : oe_shown
                 });
             }
 
@@ -1830,7 +1830,7 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
         return columns;
     }
 
-    bool hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
         return ledger.is_composite() && column == column_end_of_year_age;
@@ -1870,7 +1870,7 @@ class ill_reg_tabular_detail2_page : public page_with_tabular_report
         return columns;
     }
 
-    bool hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
         return ledger.is_composite() && column == column_end_of_year_age;
@@ -2172,7 +2172,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         return columns;
     }
 
-    bool hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
         return ledger.is_composite() && column == column_end_of_year_age;
@@ -2367,7 +2367,7 @@ class nasd_supplemental : public page_with_tabular_report
         return columns;
     }
 
-    bool hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
@@ -2445,7 +2445,7 @@ class nasd_assumption_detail : public page_with_tabular_report
         return columns;
     }
 
-    // Notice that there is no need to override hide_column() in this
+    // Notice that there is no need to override should_hide_column() in this
     // class as this page is not included in composite illustrations and hence
     // all of its columns, including the "AttainedAge" one, are always shown.
 };
@@ -2617,7 +2617,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
     // Must be overridden to return the base being used.
     virtual base get_base() const = 0;
 
-    bool hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
         return ledger.is_composite() && column == column_end_of_year_age;
@@ -2791,7 +2791,7 @@ class reg_d_individual_curr : public page_with_tabular_report
         return columns;
     }
 
-    bool hide_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
         return ledger.is_composite() && column == column_end_of_year_age;
