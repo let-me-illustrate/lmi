@@ -579,7 +579,7 @@ void InputSequenceEditor::insert_row(int new_row)
 #define LARGEST_FROM_TEXT "from duration 999 + 999 years"
 #define LARGEST_THEN_TEXT "years, then"
 
-    wxSizerFlags const flags = wxSizerFlags().Align(wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
+    wxSizerFlags const flags = wxSizerFlags().Align(wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
 
     wxControl* value_ctrl;
     if(!keywords_.empty())
@@ -1598,7 +1598,7 @@ void InputSequenceEntry::DoOpenEditor()
         }
 
     editor.associate_text_ctrl(text_);
-    editor.CentreOnParent();
+    editor.CenterOnParent();
 
     editor.ShowModal();
 }

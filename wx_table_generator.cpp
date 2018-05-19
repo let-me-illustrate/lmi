@@ -60,7 +60,7 @@
 //
 //     if(ci.is_centered())
 //         {
-//         // Centre the text for the columns configured to do it.
+//         // Center the text for the columns configured to do it.
 //         x_text += (width - dc_.GetTextExtent(s).x) / 2;
 //         }
 //
@@ -90,7 +90,7 @@
 //  OTOH, unlike a spreadsheet, this class doesn't have any notion of numeric
 // or text values, so its align_right_ member is still useful to globally
 // configure all columns to be right-aligned. Perhaps we could just add a
-// similar align_centre() method and call it from the group PDF quotes code
+// similar align_center() method and call it from the group PDF quotes code
 // and continue to handle the variable width columns specially by
 // left-aligning them in any case?
 //
@@ -679,7 +679,7 @@ void wx_table_generator::do_output_single_row
                 {
                 if(ci.is_centered())
                     {
-                    // Centre the text for the columns configured to do it.
+                    // Center the text for the columns configured to do it.
                     x_text += (ci.col_width() - dc_.GetTextExtent(s).x) / 2;
                     }
                 else
