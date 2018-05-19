@@ -368,6 +368,8 @@ class using_illustration_table
                  ,should_hide_column(ledger, column++) ? oe_hidden : oe_shown
                 });
             }
+        // Arguably, should_hide_column() should return an enumerator--see:
+        //   https://lists.nongnu.org/archive/html/lmi/2018-05/msg00026.html
 
         // Set the smaller font used for all tables before creating the table
         // generator which uses the DC font for its measurements.
