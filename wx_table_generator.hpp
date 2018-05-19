@@ -37,9 +37,9 @@
 
 struct column_parameters
 {
-    std::string const header;
-    std::string const widest_text;
-    bool        const hidden;
+    std::string                const header;
+    std::string                const widest_text;
+    oenum_visibility           const visibility;
 };
 
 /// Specialized styles for first wx_table_generator ctor argument.

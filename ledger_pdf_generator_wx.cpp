@@ -365,7 +365,7 @@ class using_illustration_table
             vc.push_back
                 ({i.header
                  ,i.widest_text
-                 ,hide_column(ledger, column++)
+                 ,hide_column(ledger, column++) ? oe_hidden : oe_shown
                 });
             }
 

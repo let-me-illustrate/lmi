@@ -162,10 +162,14 @@
 class wx_table_generator::column_info
 {
   public:
-    column_info(std::string const& header, int width, bool hidden)
+    column_info
+        (std::string               const& header
+        ,int                              width
+        ,oenum_visibility          const  visibility
+        )
         :col_header_       (header)
         ,col_width_        (width)
-        ,is_hidden_        (hidden)
+        ,is_hidden_        (oe_hidden == visibility)
         ,is_variable_width_(0 == width)
         {
         }
@@ -313,7 +317,7 @@ void wx_table_generator::enroll_column(column_parameters const& z)
     // other member functions calculate total width by accumulating
     // the widths of all columns, whether hidden or not.
     int width = 0;
-    if(!z.hidden)
+    if(oe_shown == z.visibility)
         {
         wxDCFontChanger header_font_setter(dc_);
         if(use_bold_headers_)
@@ -347,7 +351,7 @@ LMI_ASSERT(w == dc_.GetMultiLineTextExtent(z.header).x);
             }
         }
 
-    all_columns_.push_back(column_info(z.header, width, z.hidden));
+    all_columns_.push_back(column_info(z.header, width, z.visibility));
 }
 
 /// Return the font used for the headers.
