@@ -163,16 +163,18 @@ class wx_table_generator::column_info
 {
   public:
     column_info
-        (std::string               const& header
-        ,int                              width
-        ,oenum_visibility          const  visibility
-        ,oenum_elasticity          const  elasticity
+        (std::string                const& header
+        ,int                               width
+        ,oenum_visibility           const  visibility
+        ,oenum_elasticity           const  elasticity
+        ,oenum_alignment_horizontal const  alignment
         )
         :col_header_       (header)
         ,col_width_        (width)
         ,is_hidden_        (oe_hidden  == visibility)
         ,is_variable_width_(oe_elastic == elasticity)
         {
+(void)&alignment; // Actually use this, soon.
 // Without the 'is_hidden_' condition, this assertion would fire.
 // But is_variable_width_ was initialized as (0 == width) before
 // this commit, so its meaning has changed. Formerly, all hidden
@@ -361,7 +363,7 @@ LMI_ASSERT(w == dc_.GetMultiLineTextExtent(z.header).x);
 
     all_columns_.push_back
         (column_info
-            (z.header, width, z.visibility, z.elasticity)
+            (z.header, width, z.visibility, z.elasticity, z.alignment)
         );
 }
 
