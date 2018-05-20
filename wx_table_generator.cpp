@@ -166,12 +166,20 @@ class wx_table_generator::column_info
         (std::string               const& header
         ,int                              width
         ,oenum_visibility          const  visibility
+        ,oenum_elasticity          const  elasticity
         )
         :col_header_       (header)
         ,col_width_        (width)
-        ,is_hidden_        (oe_hidden == visibility)
-        ,is_variable_width_(0 == width)
+        ,is_hidden_        (oe_hidden  == visibility)
+        ,is_variable_width_(oe_elastic == elasticity)
         {
+// Without the 'is_hidden_' condition, this assertion would fire.
+// But is_variable_width_ was initialized as (0 == width) before
+// this commit, so its meaning has changed. Formerly, all hidden
+// columns had is_variable_width_ set, even though their widest_text
+// was not empty, because enroll_column() sets the width of all
+// hidden columns to zero.
+LMI_ASSERT(is_hidden_ || is_variable_width_ == (0 == width));
         }
 
     bool is_hidden()         const {return  is_hidden_;}
@@ -351,7 +359,10 @@ LMI_ASSERT(w == dc_.GetMultiLineTextExtent(z.header).x);
             }
         }
 
-    all_columns_.push_back(column_info(z.header, width, z.visibility));
+    all_columns_.push_back
+        (column_info
+            (z.header, width, z.visibility, z.elasticity)
+        );
 }
 
 /// Return the font used for the headers.

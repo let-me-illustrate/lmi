@@ -366,6 +366,7 @@ class using_illustration_table
                 ({i.header
                  ,i.widest_text
                  ,should_hide_column(ledger, column++) ? oe_hidden : oe_shown
+                 ,oe_inelastic
                 });
             }
         // Arguably, should_hide_column() should return an enumerator--see:

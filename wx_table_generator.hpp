@@ -40,6 +40,7 @@ struct column_parameters
     std::string                const header;
     std::string                const widest_text;
     oenum_visibility           const visibility;
+    oenum_elasticity           const elasticity;
 };
 
 /// Specialized styles for first wx_table_generator ctor argument.
