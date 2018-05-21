@@ -674,13 +674,13 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         {
         column_definition const& cd = column_definitions[col];
         std::string header;
+        oenum_h_align alignment = oe_center;
+        // PDF !! This doesn't fit into the switch logic below.
+        if(e_col_name == col) {alignment = oe_left;}
         oenum_visibility visibility = oe_shown;
         oenum_elasticity elasticity = oe_inelastic;
         // PDF !! This doesn't fit into the switch logic below.
         if(e_col_name == col) {elasticity = oe_elastic;}
-        oenum_h_align alignment = oe_center;
-        // PDF !! This doesn't fit into the switch logic below.
-        if(e_col_name == col) {alignment = oe_left;}
 
         // The cast is only used to ensure that if any new elements are added
         // to the enum, the compiler would warn about their values not being
@@ -720,7 +720,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             }
 
-        vc.push_back({header, cd.widest_text_, visibility, elasticity, alignment});
+        vc.push_back({header, cd.widest_text_, alignment, visibility, elasticity});
         }
 
     wx_table_generator table_gen

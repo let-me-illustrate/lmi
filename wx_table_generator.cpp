@@ -165,9 +165,9 @@ class wx_table_generator::column_info
     column_info
         (std::string      const& header
         ,int                     width
+        ,oenum_h_align    const  alignment
         ,oenum_visibility const  visibility
         ,oenum_elasticity const  elasticity
-        ,oenum_h_align    const  alignment
         )
         :col_header_       (header)
         ,col_width_        (width)
@@ -363,7 +363,7 @@ LMI_ASSERT(w == dc_.GetMultiLineTextExtent(z.header).x);
 
     all_columns_.push_back
         (column_info
-            (z.header, width, z.visibility, z.elasticity, z.alignment)
+            (z.header, width, z.alignment, z.visibility, z.elasticity)
         );
 }
 
