@@ -678,7 +678,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         oenum_elasticity elasticity = oe_inelastic;
         // PDF !! This doesn't fit into the switch logic below.
         if(e_col_name == col) {elasticity = oe_elastic;}
-        oenum_alignment_horizontal alignment = oe_center;
+        oenum_h_align alignment = oe_center;
         // PDF !! This doesn't fit into the switch logic below.
         if(e_col_name == col) {alignment = oe_left;}
 

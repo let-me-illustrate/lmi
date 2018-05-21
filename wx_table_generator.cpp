@@ -163,11 +163,11 @@ class wx_table_generator::column_info
 {
   public:
     column_info
-        (std::string                const& header
-        ,int                               width
-        ,oenum_visibility           const  visibility
-        ,oenum_elasticity           const  elasticity
-        ,oenum_alignment_horizontal const  alignment
+        (std::string      const& header
+        ,int                     width
+        ,oenum_visibility const  visibility
+        ,oenum_elasticity const  elasticity
+        ,oenum_h_align    const  alignment
         )
         :col_header_       (header)
         ,col_width_        (width)
