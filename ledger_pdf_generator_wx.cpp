@@ -67,9 +67,6 @@ LMI_FORCE_LINKING_IN_SITU(ledger_pdf_generator_wx)
 namespace
 {
 
-// Colour used for lines and border in the generated illustrations.
-const wxColour HIGHLIGHT_COL(0x00, 0x2f, 0x6c);
-
 // This function is also provided in <boost/algorithm/string/predicate.hpp>,
 // but it's arguably not worth adding dependency on this Boost library just for
 // this function.
@@ -315,39 +312,11 @@ class html_interpolator
     std::map<std::string, html::text> vars_;
 };
 
-// A slightly specialized table generator for the tables used in the
-// illustrations.
-class illustration_table_generator : public wx_table_generator
-{
-  public:
-    static int const rows_per_group = 5;
-
-    explicit illustration_table_generator(pdf_writer_wx& writer)
-        :wx_table_generator
-            (writer.dc()
-            ,writer.get_horz_margin()
-            ,writer.get_page_width()
-            )
-    {
-        use_condensed_style();
-        align_right();
-    }
-
-    // Return the amount of vertical space taken by separator lines in the
-    // table headers.
-    int get_separator_line_height() const
-    {
-        // This is completely arbitrary and chosen just because it seems to
-        // look well.
-        return row_height() / 2;
-    }
-};
-
 // A helper mix-in class for pages using tables which is also reused by the
 // custom wxHtmlCell showing a table.
 //
 // Derived classes must provide get_table_columns() and may also override
-// should_show_column() to hide some of these columns dynamically and then can
+// should_hide_column() to hide some of these columns dynamically and then can
 // use create_table_generator() to obtain the generator object that can be used
 // to render a table with the specified columns.
 class using_illustration_table
@@ -357,7 +326,7 @@ class using_illustration_table
     struct illustration_table_column
     {
         std::string const variable_name;
-        std::string const label;
+        std::string const header;
         std::string const widest_text;
     };
 
@@ -369,53 +338,51 @@ class using_illustration_table
     // PDF !! Most overrides have exactly this function body:
     //    {
     //    // Don't show AttainedAge on a composite.
-    //    return !(ledger.is_composite() && column == column_end_of_year_age);
+    //    return ledger.is_composite() && column == column_end_of_year_age;
     //    }
     // However, that cannot be written here, once and only once,
     // because 'column_end_of_year_age' is an enumerator whose value
     // may differ in each derived class.
-    virtual bool should_show_column(Ledger const& ledger, int column) const
+    virtual bool should_hide_column(Ledger const& ledger, int column) const
     {
         stifle_warning_for_unused_value(ledger);
         stifle_warning_for_unused_value(column);
-        return true;
+        return false;
     }
 
     // Useful helper for creating the table generator using the columns defined
     // by the separate (and simpler to implement) get_table_columns() pure
     // virtual method.
-    illustration_table_generator create_table_generator
+    wx_table_generator create_table_generator
         (Ledger const& ledger
         ,pdf_writer_wx& writer
         ) const
     {
-        // Set the smaller font used for all tables before creating the table
-        // generator which uses the DC font for its measurements.
-        auto& dc = writer.dc();
-        auto font = dc.GetFont();
-        font.SetPointSize(9);
-        dc.SetFont(font);
-
-        illustration_table_generator table_gen(writer);
-
-        // But set the highlight colour for drawing separator lines after
-        // creating it to override its default pen.
-        dc.SetPen(HIGHLIGHT_COL);
-
+        std::vector<column_parameters> vc;
         int column = 0;
         for(auto const& i : get_table_columns())
             {
-            std::string label;
-            if(should_show_column(ledger, column++))
-                {
-                label = i.label;
-                }
-            //else: Leave the label empty to avoid showing the column.
-
-            table_gen.add_column(label, i.widest_text);
+            vc.push_back
+                ({i.header
+                 ,i.widest_text
+                 ,should_hide_column(ledger, column++) ? oe_hidden : oe_shown
+                });
             }
 
-        return table_gen;
+        // Set the smaller font used for all tables before creating the table
+        // generator which uses the DC font for its measurements.
+        auto& pdf_dc = writer.dc();
+        auto font = pdf_dc.GetFont();
+        font.SetPointSize(9);
+        pdf_dc.SetFont(font);
+
+        return wx_table_generator
+            (illustration_style_tag{}
+            ,vc
+            ,writer.dc()
+            ,writer.get_horz_margin()
+            ,writer.get_page_width()
+            );
     }
 };
 
@@ -979,12 +946,12 @@ class cover_page : public page
 
         // There is no way to draw a border around the page contents in wxHTML
         // currently, so do it manually.
-        auto& dc = writer.dc();
+        auto& pdf_dc = writer.dc();
 
-        dc.SetPen(wxPen(HIGHLIGHT_COL, 2));
-        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        pdf_dc.SetPen(wxPen(illustration_rule_color, 2));
+        pdf_dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-        dc.DrawRectangle
+        pdf_dc.DrawRectangle
             (writer.get_horz_margin()
             ,writer.get_vert_margin()
             ,writer.get_page_width()
@@ -1053,14 +1020,14 @@ class page_with_footer : public page
         auto const frame_horz_margin = writer.get_horz_margin();
         auto const frame_width       = writer.get_page_width();
 
-        auto& dc = writer.dc();
+        auto& pdf_dc = writer.dc();
 
         auto y = footer_top_;
 
         auto const& upper_template = get_upper_footer_template_name();
         if(!upper_template.empty())
             {
-            y += dc.GetCharHeight();
+            y += pdf_dc.GetCharHeight();
 
             y += writer.output_html
                 (frame_horz_margin
@@ -1077,8 +1044,8 @@ class page_with_footer : public page
             ,get_footer_lower_html(interpolate_html)
             );
 
-        dc.SetPen(HIGHLIGHT_COL);
-        dc.DrawLine
+        pdf_dc.SetPen(illustration_rule_color);
+        pdf_dc.DrawLine
             (frame_horz_margin
             ,y
             ,frame_width + frame_horz_margin
@@ -1288,8 +1255,8 @@ class standard_page : public numbered_page
 
 // Helper classes used to show the numeric summary table. The approach used
 // here is to define a custom HTML tag (<numeric_summary_table>) and use the
-// existing illustration_table_generator to replace it with the actual table
-// when rendering.
+// existing wx_table_generator to replace it with the actual table when
+// rendering.
 //
 // Notice that we currently make the simplifying assumption that this table is
 // always short enough so that everything fits on the same page as it would be
@@ -1372,26 +1339,25 @@ class numeric_summary_table_cell
         auto const& ledger = pdf_context_for_html_output.ledger();
         auto& writer = pdf_context_for_html_output.writer();
 
-        illustration_table_generator
-            table_gen{create_table_generator(ledger, writer)};
+        wx_table_generator table_gen{create_table_generator(ledger, writer)};
 
         // Output multiple rows of headers.
 
         // Make a copy because we want pos_y to be modified only once, not
         // twice, by both output_super_header() calls.
-        auto y_copy = pos_y;
+        auto pos_y_copy = pos_y;
         table_gen.output_super_header
             ("Guaranteed Values"
             ,column_guar_account_value
             ,column_separator_guar_non_guar
-            ,&y_copy
+            ,pos_y_copy
             ,output_mode
             );
         table_gen.output_super_header
             ("Non-Guaranteed Values"
             ,column_mid_account_value
             ,column_max
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -1409,12 +1375,12 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        y_copy = pos_y;
+        pos_y_copy = pos_y;
         table_gen.output_super_header
             ("Midpoint Values"
             ,column_mid_account_value
             ,column_separator_mid_curr
-            ,&y_copy
+            ,pos_y_copy
             ,output_mode
             );
 
@@ -1422,7 +1388,7 @@ class numeric_summary_table_cell
             ("Current Values"
             ,column_curr_account_value
             ,column_max
-            ,&pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -1441,7 +1407,7 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        table_gen.output_header(&pos_y, output_mode);
+        table_gen.output_headers(pos_y, output_mode);
 
         pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator(0, column_max, pos_y, output_mode);
@@ -1511,7 +1477,7 @@ class numeric_summary_table_cell
                             ;
                         }
 
-                    table_gen.output_row(&pos_y, output_values);
+                    table_gen.output_row(pos_y, output_values);
                     break;
                 }
             }
@@ -1601,15 +1567,14 @@ class page_with_tabular_report
     {
         numbered_page::render(ledger, writer, interpolate_html);
 
-        illustration_table_generator
-            table_gen{create_table_generator(ledger, writer)};
+        wx_table_generator table_gen{create_table_generator(ledger, writer)};
 
         auto const& columns = get_table_columns();
 
         // Just some cached values used inside the loop below.
         auto const row_height = table_gen.row_height();
         auto const page_bottom = get_footer_top();
-        auto const rows_per_group = illustration_table_generator::rows_per_group;
+        auto const rows_per_group = wx_table_generator::rows_per_group;
         std::vector<std::string> output_values(columns.size());
 
         // The table may need several pages, loop over them.
@@ -1638,7 +1603,7 @@ class page_with_tabular_report
                         ;
                     }
 
-                table_gen.output_row(&pos_y, output_values);
+                table_gen.output_row(pos_y, output_values);
 
                 ++year;
                 if(year == year_max)
@@ -1684,10 +1649,10 @@ class page_with_tabular_report
     // pos_y and update it to account for the added lines. The base class
     // version does nothing.
     virtual void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const
     {
         stifle_warning_for_unused_value(table_gen);
@@ -1701,10 +1666,10 @@ class page_with_tabular_report
     // (in any case) return the vertical coordinate of its bottom, where the
     // tabular report starts.
     int render_or_measure_fixed_page_part
-        (illustration_table_generator& table_gen
-        ,pdf_writer_wx&                writer
-        ,html_interpolator const&      interpolate_html
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,pdf_writer_wx&               writer
+        ,html_interpolator const&     interpolate_html
+        ,oenum_render_or_only_measure output_mode
         ) const
     {
         int pos_y = writer.get_vert_margin();
@@ -1722,19 +1687,15 @@ class page_with_tabular_report
         render_or_measure_extra_headers
             (table_gen
             ,interpolate_html
-            ,&pos_y
-            ,output_mode
-            );
-
-        table_gen.output_header(&pos_y, output_mode);
-
-        pos_y += table_gen.get_separator_line_height();
-        table_gen.output_horz_separator
-            (0
-            ,table_gen.columns_count()
             ,pos_y
             ,output_mode
             );
+
+        table_gen.output_headers(pos_y, output_mode);
+
+        pos_y += table_gen.get_separator_line_height();
+        auto const ncols = get_table_columns().size();
+        table_gen.output_horz_separator(0, ncols, pos_y, output_mode);
 
         return pos_y;
     }
@@ -1747,8 +1708,7 @@ class page_with_tabular_report
         ,html_interpolator const&   interpolate_html
         ) const override
     {
-        illustration_table_generator
-            table_gen{create_table_generator(ledger, writer)};
+        wx_table_generator table_gen{create_table_generator(ledger, writer)};
 
         int const pos_y = render_or_measure_fixed_page_part
             (table_gen
@@ -1759,7 +1719,7 @@ class page_with_tabular_report
 
         int const rows_per_page = (get_footer_top() - pos_y) / table_gen.row_height();
 
-        int const rows_per_group = illustration_table_generator::rows_per_group;
+        int const rows_per_group = wx_table_generator::rows_per_group;
 
         if(rows_per_page < rows_per_group)
             {
@@ -1811,22 +1771,22 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const override
     {
         stifle_warning_for_unused_value(interpolate_html);
 
         // Make a copy because we want the real pos_y to be modified only once,
         // not twice, by both output_super_header() calls.
-        auto pos_y_copy = *pos_y;
+        auto pos_y_copy = pos_y;
         table_gen.output_super_header
             ("Guaranteed Values"
             ,column_guar_account_value
             ,column_dummy_separator
-            ,&pos_y_copy
+            ,pos_y_copy
             ,output_mode
             );
         table_gen.output_super_header
@@ -1837,17 +1797,17 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
             ,output_mode
             );
 
-        *pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator
             (column_guar_account_value
             ,column_dummy_separator
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
         table_gen.output_horz_separator
             (column_curr_account_value
             ,column_max
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
     }
@@ -1870,10 +1830,10 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
         return columns;
     }
 
-    bool should_show_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return !(ledger.is_composite() && column == column_end_of_year_age);
+        return ledger.is_composite() && column == column_end_of_year_age;
     }
 };
 
@@ -1910,10 +1870,10 @@ class ill_reg_tabular_detail2_page : public page_with_tabular_report
         return columns;
     }
 
-    bool should_show_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return !(ledger.is_composite() && column == column_end_of_year_age);
+        return ledger.is_composite() && column == column_end_of_year_age;
     }
 };
 
@@ -2212,31 +2172,30 @@ class page_with_basic_tabular_report : public page_with_tabular_report
         return columns;
     }
 
-    bool should_show_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return !(ledger.is_composite() && column == column_end_of_year_age);
+        return ledger.is_composite() && column == column_end_of_year_age;
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const override
     {
         // Output the first super header row.
 
-        auto pos_y_copy = *pos_y;
+        auto pos_y_copy = pos_y;
         table_gen.output_super_header
             ("Using guaranteed charges"
             ,column_guar0_cash_surr_value
             ,column_separator_guar_curr0
-            ,pos_y
+            ,pos_y_copy
             ,output_mode
             );
 
-        *pos_y = pos_y_copy;
         table_gen.output_super_header
             ("Using current charges"
             ,column_curr0_cash_surr_value
@@ -2245,17 +2204,17 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ,output_mode
             );
 
-        *pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator
             (column_guar0_cash_surr_value
             ,column_separator_guar_curr0
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
         table_gen.output_horz_separator
             (column_curr0_cash_surr_value
             ,column_max
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
 
@@ -2274,7 +2233,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                 std::size_t end_column = begin_column + 2;
                 LMI_ASSERT(end_column <= column_max);
 
-                auto y = *pos_y;
+                auto y = pos_y;
 
                 auto const header = get_two_column_header
                     (guar_or_curr
@@ -2284,7 +2243,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                     (interpolate_html(header).as_html()
                     ,begin_column
                     ,end_column
-                    ,&y
+                    ,y
                     ,output_mode
                     );
 
@@ -2317,7 +2276,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ,column_curr0_cash_surr_value
             );
 
-        *pos_y = output_two_column_super_header
+        pos_y = output_two_column_super_header
             (base::current
             ,interest_rate::non_zero
             ,column_curr_cash_surr_value
@@ -2408,7 +2367,7 @@ class nasd_supplemental : public page_with_tabular_report
         return columns;
     }
 
-    bool should_show_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         auto const& invar = ledger.GetLedgerInvariant();
 
@@ -2419,20 +2378,20 @@ class nasd_supplemental : public page_with_tabular_report
             {
             case column_end_of_year_age:
                 // This column doesn't make sense for composite ledgers.
-                return !ledger.is_composite();
+                return ledger.is_composite();
 
             case column_admin_charge:
             case column_premium_tax_load:
             case column_dac_tax_load:
                 // These columns only appear in non-split premiums case.
-                return invar.SplitMinPrem == 0.0;
+                return invar.SplitMinPrem;
 
             case column_er_gross_payment:
             case column_ee_gross_payment:
             case column_er_min_premium:
             case column_ee_min_premium:
                 // While those only appear in split premiums case.
-                return invar.SplitMinPrem == 1.0;
+                return !invar.SplitMinPrem;
 
             case column_policy_year:
             case column_premium_outlay:
@@ -2446,7 +2405,7 @@ class nasd_supplemental : public page_with_tabular_report
                 break;
             }
 
-        return true;
+        return false;
     }
 };
 
@@ -2486,7 +2445,7 @@ class nasd_assumption_detail : public page_with_tabular_report
         return columns;
     }
 
-    // Notice that there is no need to override should_show_column() in this
+    // Notice that there is no need to override should_hide_column() in this
     // class as this page is not included in composite illustrations and hence
     // all of its columns, including the "AttainedAge" one, are always shown.
 };
@@ -2658,17 +2617,17 @@ class reg_d_individual_irr_base : public page_with_tabular_report
     // Must be overridden to return the base being used.
     virtual base get_base() const = 0;
 
-    bool should_show_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return !(ledger.is_composite() && column == column_end_of_year_age);
+        return ledger.is_composite() && column == column_end_of_year_age;
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const override
     {
         std::ostringstream header_zero;
@@ -2680,12 +2639,12 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             << "Return*"
             ;
 
-        auto pos_y_copy = *pos_y;
+        auto pos_y_copy = pos_y;
         table_gen.output_super_header
             (interpolate_html(header_zero.str()).as_html()
             ,column_zero_cash_surr_value
             ,column_zero_irr_surr_value
-            ,pos_y
+            ,pos_y_copy
             ,output_mode
             );
 
@@ -2698,7 +2657,6 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             << "Return*"
             ;
 
-        *pos_y = pos_y_copy;
         table_gen.output_super_header
             (interpolate_html(header_nonzero.str()).as_html()
             ,column_nonzero_cash_surr_value
@@ -2707,17 +2665,17 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             ,output_mode
             );
 
-        *pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator
             (column_zero_cash_surr_value
             ,column_zero_irr_surr_value
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
         table_gen.output_horz_separator
             (column_nonzero_cash_surr_value
             ,column_nonzero_irr_surr_value
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
     }
@@ -2833,17 +2791,17 @@ class reg_d_individual_curr : public page_with_tabular_report
         return columns;
     }
 
-    bool should_show_column(Ledger const& ledger, int column) const override
+    bool should_hide_column(Ledger const& ledger, int column) const override
     {
         // Don't show AttainedAge on a composite.
-        return !(ledger.is_composite() && column == column_end_of_year_age);
+        return ledger.is_composite() && column == column_end_of_year_age;
     }
 
     void render_or_measure_extra_headers
-        (illustration_table_generator& table_gen
-        ,html_interpolator const&      interpolate_html
-        ,int*                          pos_y
-        ,oenum_render_or_only_measure  output_mode
+        (wx_table_generator&          table_gen
+        ,html_interpolator const&     interpolate_html
+        ,int&                         pos_y
+        ,oenum_render_or_only_measure output_mode
         ) const override
     {
         table_gen.output_super_header
@@ -2856,11 +2814,11 @@ class reg_d_individual_curr : public page_with_tabular_report
             ,output_mode
             );
 
-        *pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.get_separator_line_height();
         table_gen.output_horz_separator
             (column_curr_investment_income
             ,column_max
-            ,*pos_y
+            ,pos_y
             ,output_mode
             );
     }

@@ -25,7 +25,7 @@
 default namespace     = "http://www.wxwidgets.org/wxxrc"
         namespace xrc = "http://www.wxwidgets.org/wxxrc"
 
-include "http://www.wxwidgets.org/wxxrc"
+include "/opt/lmi/vcs/wxWidgets/misc/schema/xrc_schema.rnc"
     {
     customClasses = InputSequenceEntry | RoundingButtons
     }

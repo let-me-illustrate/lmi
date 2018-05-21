@@ -26,5 +26,12 @@
 
 #include <wx/defs.h>
 
+class WXDLLIMPEXP_FWD_CORE wxDCTextColourChanger;
+typedef wxDCTextColourChanger wxDCTextColorChanger;
+
+#define GetForegroundColor    GetForegroundColour
+#define SetForegroundColor    SetForegroundColour
+#define SetOwnForegroundColor SetOwnForegroundColour
+
 #endif // wx_workarounds_hpp
 

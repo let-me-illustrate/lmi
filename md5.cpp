@@ -339,9 +339,9 @@ md5_process_block (void const* buffer, std::size_t len, struct md5_ctx* ctx)
 /* GWC: Conform to C++98.
  * const md5_uint32 *words = buffer;
  */
-  const md5_uint32 *words = (const md5_uint32*)buffer;
+  md5_uint32 const* words = (const md5_uint32*)buffer;
   std::size_t nwords = len / sizeof (md5_uint32);
-  const md5_uint32 *endp = words + nwords;
+  md5_uint32 const* endp = words + nwords;
   md5_uint32 A = ctx->A;
   md5_uint32 B = ctx->B;
   md5_uint32 C = ctx->C;

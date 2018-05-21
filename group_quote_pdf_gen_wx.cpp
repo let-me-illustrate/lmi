@@ -41,6 +41,7 @@
 #include "version.hpp"
 #include "wx_table_generator.hpp"
 #include "wx_utility.hpp"               // ConvertDateToWx()
+#include "wx_workarounds.hpp"           // wxDCTextColorChanger
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -663,21 +664,17 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     output_document_header(pdf_writer, &pos_y);
     pos_y += 2 * vert_skip;
 
-    wx_table_generator table_gen
-        (pdf_writer.dc()
-        ,pdf_writer.get_horz_margin()
-        ,pdf_writer.get_page_width()
-        );
-
     // Some of the table columns don't need to be shown if all the values in
     // them are zeroes.
     bool const has_suppl_amount = totals_.total(e_col_supplemental_face_amount) != 0.0;
     bool const has_addl_premium = totals_.total(e_col_additional_premium      ) != 0.0;
 
+    std::vector<column_parameters> vc;
     for(int col = 0; col < e_col_max; ++col)
         {
         column_definition const& cd = column_definitions[col];
         std::string header;
+        oenum_visibility visibility = oe_shown;
 
         // The cast is only used to ensure that if any new elements are added
         // to the enum, the compiler would warn about their values not being
@@ -686,11 +683,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             {
             case e_col_supplemental_face_amount:
             case e_col_total_face_amount:
-                if(!has_suppl_amount)
-                    {
-                    // Leave the header empty to hide this column.
-                    break;
-                    }
+                if(!has_suppl_amount) {visibility = oe_hidden;}
                 // Fall through
             case e_col_number:
             case e_col_name:
@@ -702,11 +695,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             case e_col_additional_premium:
             case e_col_total_premium:
-                if(!has_addl_premium)
-                    {
-                    // Leave the header empty to hide this column.
-                    break;
-                    }
+                if(!has_addl_premium) {visibility = oe_hidden;}
                 // Fall through
             case e_col_basic_premium:
                 {
@@ -725,13 +714,21 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             }
 
-        table_gen.add_column(header, cd.widest_text_);
+        vc.push_back({header, cd.widest_text_, visibility});
         }
+
+    wx_table_generator table_gen
+        (group_quote_style_tag{}
+        ,vc
+        ,pdf_writer.dc()
+        ,pdf_writer.get_horz_margin()
+        ,pdf_writer.get_page_width()
+        );
 
     output_aggregate_values(pdf_writer, table_gen, &pos_y);
 
     int const y_before_header = pos_y;
-    table_gen.output_header(&pos_y);
+    table_gen.output_headers(pos_y);
     int const header_height = pos_y - y_before_header;
 
     int y_after_footer = pos_y;
@@ -762,7 +759,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
 
     for(auto const& i : rows_)
         {
-        table_gen.output_row(&pos_y, i.output_values);
+        table_gen.output_row(pos_y, i.output_values);
 
         if(last_row_y <= pos_y)
             {
@@ -772,7 +769,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             pdf_writer.dc().StartPage();
 
             pos_y = pdf_writer.get_vert_margin();
-            table_gen.output_header(&pos_y);
+            table_gen.output_headers(pos_y);
             }
         }
 
@@ -877,7 +874,7 @@ void group_quote_pdf_generator_wx::output_image_header
     auto& pdf_dc = pdf_writer.dc();
 
     wxDCFontChanger set_bigger_font(pdf_dc, pdf_dc.GetFont().Scaled(1.5));
-    wxDCTextColourChanger set_white_text(pdf_dc, *wxWHITE);
+    wxDCTextColorChanger set_white_text(pdf_dc, *wxWHITE);
 
     // Don't use html::text::from() here: instead, call
     // wxString::FromUTF8() directly, e.g., to preserve literal '&'.
@@ -889,8 +886,8 @@ void group_quote_pdf_generator_wx::output_image_header
     pdf_dc.DrawLabel
         (image_text
         ,wxRect
-            (wxPoint(pdf_writer.get_horz_margin(), (pos_top + *pos_y) / 2),
-             pdf_dc.GetMultiLineTextExtent(image_text)
+            (wxPoint(pdf_writer.get_horz_margin(), (pos_top + *pos_y) / 2)
+            ,pdf_dc.GetMultiLineTextExtent(image_text)
             )
         ,wxALIGN_CENTER_HORIZONTAL
         );

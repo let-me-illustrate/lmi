@@ -330,11 +330,10 @@ static soa_field const soa_fields[] =
 };
 
 enum class table_type : std::uint8_t
-{
-    aggregate = 'A',
-    duration  = 'D',
-    select    = 'S',
-};
+    {aggregate = 'A'
+    ,duration  = 'D'
+    ,select    = 'S'
+    };
 
 char const* table_type_as_string(table_type tt)
 {
@@ -997,26 +996,29 @@ class table_impl final
     std::vector<double> values_;
 
     std::optional<std::string>
-        name_,
-        contributor_,
-        data_source_,
-        data_volume_,
-        obs_period_,
-        unit_of_obs_,
-        construction_method_,
-        published_reference_,
-        comments_;
+         name_
+        ,contributor_
+        ,data_source_
+        ,data_volume_
+        ,obs_period_
+        ,unit_of_obs_
+        ,construction_method_
+        ,published_reference_
+        ,comments_
+        ;
 
     std::optional<std::uint32_t>
-        number_,
-        hash_value_;
+         number_
+        ,hash_value_
+        ;
 
     std::optional<std::uint16_t>
-        num_decimals_,
-        min_age_,
-        max_age_,
-        select_period_,
-        max_select_age_;
+         num_decimals_
+        ,min_age_
+        ,max_age_
+        ,select_period_
+        ,max_select_age_
+        ;
 
     std::optional<table_type>
         type_;

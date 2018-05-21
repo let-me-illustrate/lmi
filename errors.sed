@@ -44,6 +44,7 @@
 /^  *[1-9][0-9]* source files/d
 /^  *[1-9][0-9]* source lines/d
 /^  *[1-9][0-9]* marked defects/d
+/^# xrc tests/d
 /^# schema tests/d
 /^# test all valid emission types/d
 /^$/d

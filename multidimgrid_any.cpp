@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "wx_new.hpp"
+#include "wx_workarounds.hpp"           // wx[GS]et.*groundColor()
 
 #include <wx/checkbox.h>
 #include <wx/colour.h>
@@ -278,9 +279,9 @@ void MultiDimGrid::Init()
     first_grid_axis_ = wxNOT_FOUND;
     second_grid_axis_ = wxNOT_FOUND;
 
-    // setting default colour to both X and Y axis
-    selected_first_color_ = GetForegroundColour();
-    selected_second_color_ = GetForegroundColour();
+    // setting default color to both X and Y axis
+    selected_first_color_ = GetForegroundColor();
+    selected_second_color_ = GetForegroundColor();
 
     // intialize refresh counter
     table_data_refresh_counter_ = 0;
@@ -473,7 +474,7 @@ void MultiDimGrid::DoRefreshTableData()
     // data fit in it. At the same time, we want to keep some sensible
     // minimal width so that columns with short labels (e.g. states, age)
     // aren't too narrow.
-    const int cols = GetNumberCols();
+    int const cols = GetNumberCols();
     for(int i = 0; i < cols; ++i)
         {
             // set some minimal width for aesthetic reasons (otherwise
@@ -545,7 +546,7 @@ std::pair<int,int> MultiDimGrid::SuggestGridAxisSelection() const
     int newFirst = first_grid_axis_;
     int newSecond = second_grid_axis_;
 
-    const bool canReorder = newFirst == wxNOT_FOUND || newSecond == wxNOT_FOUND;
+    bool const canReorder = newFirst == wxNOT_FOUND || newSecond == wxNOT_FOUND;
 
     for(unsigned int i = 0; i < dimension_; ++i)
         {
@@ -727,25 +728,25 @@ bool MultiDimGrid::DoApplyAxisAdjustment(unsigned int n)
     return updated;
 }
 
-void MultiDimGrid::SetXAxisColour(wxColour const& color)
+void MultiDimGrid::SetXAxisColor(wxColor const& color)
 {
     selected_first_color_ = color;
-    first_axis_choice_->SetForegroundColour(color);
+    first_axis_choice_->SetForegroundColor(color);
     // WX !! In the future wx releases wxGrid might add support
     // for label coloring.
-    // grid().SetColLabelColour(colour);
+    // grid().SetColLabelColor(color);
 
     // Update select axis labels
     DoSetGridAxisSelection();
 }
 
-void MultiDimGrid::SetYAxisColour(wxColour const& colour)
+void MultiDimGrid::SetYAxisColor(wxColor const& color)
 {
-    selected_second_color_ = colour;
-    second_axis_choice_->SetForegroundColour(colour);
+    selected_second_color_ = color;
+    second_axis_choice_->SetForegroundColor(color);
     // WX !! In the future wx releases wxGrid might add support
     // for label coloring.
-    // grid().SetRowLabelColour(colour);
+    // grid().SetRowLabelColor(color);
 
     // Update select axis labels
     DoSetGridAxisSelection();
@@ -766,7 +767,7 @@ std::pair<int,int> MultiDimGrid::GetGridAxisSelection() const
 wxChoice* MultiDimGrid::CreateGridAxisSelection
     (enum_axis_x_or_y x_or_y
     ,std::string const& label
-    ,wxColour const& selected_color
+    ,wxColor const& selected_color
     )
 {
     // wxChoice will grow to its default size if all choice strings are empty,
@@ -782,7 +783,7 @@ wxChoice* MultiDimGrid::CreateGridAxisSelection
         ,&only_empty_choice
         );
 
-    win->SetOwnForegroundColour(selected_color);
+    win->SetOwnForegroundColor(selected_color);
 
     unsigned int row =
           (x_or_y == e_axis_x)
@@ -958,8 +959,8 @@ void MultiDimGrid::DoSetGridAxisSelection()
             || (static_cast<int>(i) == second_grid_axis_)
             ;
 
-        // different colour to the selected axis
-        wxColour color = GetForegroundColour();
+        // different color to the selected axis
+        wxColor color = GetForegroundColor();
         if(selected)
             {
             color = (static_cast<int>(i) == first_grid_axis_)
@@ -967,9 +968,9 @@ void MultiDimGrid::DoSetGridAxisSelection()
                 : selected_second_color_
                 ;
             }
-        axis_labels_[i]->SetOwnForegroundColour(color);
+        axis_labels_[i]->SetOwnForegroundColor(color);
 
-        // text does not get repainted after font and colour changes, force it
+        // text does not get repainted after font and color changes, force it
         axis_labels_[i]->Refresh();
 
         // disable selected window choice control

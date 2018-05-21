@@ -151,7 +151,7 @@ void DocManagerEx::UponPreview(wxCommandEvent&)
         return;
         }
     PreviewFrameEx* frame = new PreviewFrameEx(preview);
-    frame->Centre(wxBOTH);
+    frame->Center(wxBOTH);
     frame->Initialize();
     frame->Show(true);
 }

@@ -82,7 +82,7 @@ choice_value const duration_mode_choice_values[] =
     {e_attained_age,     "until age"},
     {e_duration,         "until duration"},
     {e_number_of_years,  "for a period of"},
-    {e_maturity,         "until maturity"}    // e_maturity must be last
+    {e_maturity,         "until maturity"},    // e_maturity must be last
   };
 
 unsigned int const duration_mode_choices = sizeof(duration_mode_choice_values) / sizeof(choice_value);
@@ -265,16 +265,15 @@ class InputSequenceEditor
     wxString format_from_text(int row);
 
     enum Col
-    {
-        Col_Value,
-        Col_From,
-        Col_DurationMode,
-        Col_DurationNum,
-        Col_Then,
-        Col_Remove,
-        Col_Add,
-        Col_Max
-    };
+        {Col_Value
+        ,Col_From
+        ,Col_DurationMode
+        ,Col_DurationNum
+        ,Col_Then
+        ,Col_Remove
+        ,Col_Add
+        ,Col_Max
+        };
 
     wxTextEntry& value_field(int row)
     {
@@ -374,7 +373,7 @@ InputSequenceEditor::InputSequenceEditor(wxWindow* parent, wxString const& title
     rows_area_ = new(wx) wxScrolledWindow(this);
     top->Add(rows_area_, wxSizerFlags(1).Expand().DoubleBorder());
 
-    const wxSize sizerGap
+    wxSize const sizerGap
         (wxSizerFlags::GetDefaultBorder()
         ,wxSizerFlags::GetDefaultBorder()
         );
@@ -580,7 +579,7 @@ void InputSequenceEditor::insert_row(int new_row)
 #define LARGEST_FROM_TEXT "from duration 999 + 999 years"
 #define LARGEST_THEN_TEXT "years, then"
 
-    wxSizerFlags const flags = wxSizerFlags().Align(wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
+    wxSizerFlags const flags = wxSizerFlags().Align(wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
 
     wxControl* value_ctrl;
     if(!keywords_.empty())
@@ -977,9 +976,9 @@ wxString InputSequenceEditor::format_from_text(int row)
                 i--;
                 }
             return wxString::Format
-                ("%s + %d years",
-                format_from_text(i + 1).c_str(),
-                yrs
+                ("%s + %d years"
+                ,format_from_text(i + 1).c_str()
+                ,yrs
                 );
             }
         case e_maturity:
@@ -1599,7 +1598,7 @@ void InputSequenceEntry::DoOpenEditor()
         }
 
     editor.associate_text_ctrl(text_);
-    editor.CentreOnParent();
+    editor.CenterOnParent();
 
     editor.ShowModal();
 }

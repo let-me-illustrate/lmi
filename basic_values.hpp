@@ -72,10 +72,9 @@ class stratified_charges;
 // that case, we're better off not creating a blended table because
 // NAIC has published blended tables.
 enum EBlend
-    {
-    CannotBlend,
-    CanBlend,
-    MustBlend
+    {CannotBlend
+    ,CanBlend
+    ,MustBlend
     };
 
 class LMI_SO BasicValues

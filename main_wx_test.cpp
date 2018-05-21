@@ -135,10 +135,10 @@ struct TestsResults
 
     // The sum of passed, skipped and failed is the same as total (except when
     // a test is in process of execution and its result is yet unknown).
-    int total,
-        passed,
-        skipped,
-        failed;
+    int total;
+    int passed;
+    int skipped;
+    int failed;
 };
 
 /// Run the tests.
@@ -527,7 +527,7 @@ wx_base_test_case::wx_base_test_case(char const* name)
 
 void wx_base_test_case::skip_if_not_supported(char const* file)
 {
-    const wxString p(file);
+    wxString const p(file);
     if(!wxDocManager::GetDocumentManager()->FindTemplateForPath(p))
         {
         throw test_skipped_exception

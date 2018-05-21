@@ -32,7 +32,7 @@
 <object class="wxPanel" name="plan_panel">
     <object class="wxFlexGridSizer">
         <cols>2</cols>
-        <growablerows>0,1</growablerows>
+        <growablerows>1</growablerows>
         <growablecols>1</growablecols>
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
@@ -202,6 +202,7 @@
                                     <border>4</border>
                                     <object class="wxDatePickerCtrl" name="EffectiveDate">
                                         <help>Effective date</help>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -223,6 +224,7 @@
                                     <border>2</border>
                                     <object class="wxDatePickerCtrl" name="LastCoiReentryDate">
                                         <help>Last COI reentry date</help>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -244,6 +246,7 @@
                                     <border>2</border>
                                     <object class="wxDatePickerCtrl" name="ListBillDate">
                                         <help>List bill date</help>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -309,7 +312,7 @@
             <border>4</border>
             <object class="wxTextCtrl" name="Comments">
                 <help>Freeform comments</help>
-                <size>180,60</size>
+                <size>180,20</size>
                 <style>wxTE_MULTILINE</style>
             </object>
         </object>
@@ -438,7 +441,7 @@
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
-                                        <size>80,-1</size>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -480,10 +483,10 @@
             <object class="wxFlexGridSizer">
                 <cols>1</cols>
                 <growablecols>0</growablecols>
-                <growablerows>0,1</growablerows>
 <!-- This control really should be here, but end users are not accustomed to it.
                 <object class="sizeritem">
                     <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
+                    <border>4</border>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>
@@ -506,6 +509,7 @@
 -->
                 <object class="sizeritem">
                     <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
+                    <border>4</border>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>
@@ -526,6 +530,7 @@
                 </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_BOTTOM|wxGROW|wxALL</flag>
+                    <border>4</border>
                     <object class="wxFlexGridSizer">
                         <rows>1</rows>
                         <growablecols>1</growablecols>
@@ -616,6 +621,7 @@
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="InforceAsOfDate">
                                         <help>Monthiversary date as of which inforce data is provided</help>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1089,6 +1095,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="LastMaterialChangeDate">
                                         <help>Beginning of most recent seven-pay period</help>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">

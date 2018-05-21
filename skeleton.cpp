@@ -750,7 +750,7 @@ bool Skeleton::OnInit()
 
         if(!wxPersistentRegisterAndRestore(frame_, "lmi_main"))
             {
-            frame_->Centre(wxBOTH);
+            frame_->Center(wxBOTH);
             frame_->Maximize(true);
             }
 

@@ -75,6 +75,25 @@ cli_cgi_clutter='
 /^  0 errors$/d
 '
 
+schemata_clutter='
+/^  Test schemata\.\.\.$/d
+/^  Test RNC files with .jing.\.$/d
+/^  Test XSD files with .jing.\.$/d
+/^  Test XSD files with .xmllint.\.$/d
+/^sample\.cns validates$/d
+/^sample\.ill validates$/d
+/^  Generate RNG from RNC with .trang.\.$/d
+/^  Test RNG files with .jing.\.$/d
+/^  Test RNG files with .xmllint.\.$/d
+/^sample\.cns validates$/d
+/^sample\.ill validates$/d
+/^  Test invalid input\.\.\.$/d
+/^  Test invalid input: .\.cns.\.$/d
+/^  Test invalid input: .\.ill.\.$/d
+/^  Regenerate XSD files as they should appear in the repository\.$/d
+/^  Done\.$/d
+'
+
 # Directory for test logs.
 mkdir --parents /tmp/lmi/logs
 
@@ -86,7 +105,7 @@ make "$coefficiency" check_concinnity 2>&1 | sed -e "$build_clutter" -e "$concin
 printf '# install; check physical closure\n\n'
 make "$coefficiency" install check_physical_closure 2>&1 | tee /tmp/lmi/logs/install | sed -e "$build_clutter" -e "$install_clutter"
 
-printf 'Production system built--ready to start GUI test in another session.\n' >> /dev/tty
+printf 'Production system built--ready to start GUI test in another session.\n' > /dev/tty
 
 printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 | tee /tmp/lmi/logs/cgi-cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
@@ -106,6 +125,9 @@ make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safest
 printf '\n# unit tests in libstdc++ debug mode\n\n'
 make "$coefficiency" unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >/tmp/lmi/logs/unit-tests-safestdlib
 
+printf '\n# xrc tests\n\n'
+java -jar /opt/lmi/third_party/rng/jing.jar -c xrc.rnc *.xrc 2>&1 | tee /tmp/lmi/logs/xrc
+
 # Run the following tests in a throwaway directory so that the files
 # they create can be cleaned up easily.
 cd /tmp
@@ -124,7 +146,7 @@ printf '\n# test all valid emission types\n\n'
 "$PERFORM" /opt/lmi/bin/lmi_cli_shared --file=/tmp/lmi/tmp/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
 printf '\n# schema tests\n\n'
-/opt/lmi/src/lmi/test_schemata.sh >/tmp/lmi/logs/schemata  2>&1
+/opt/lmi/src/lmi/test_schemata.sh 2>&1 | tee /tmp/lmi/logs/schemata | sed -e "$schemata_clutter"
 
 # Clean up stray output. (The zsh '(N)' glob qualifier turns on
 # null_glob for a single expansion.)

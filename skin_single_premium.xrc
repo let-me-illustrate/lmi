@@ -83,6 +83,7 @@
                             <border>4</border>
                             <object class="wxDatePickerCtrl" name="EffectiveDate">
                                 <help>Effective date</help>
+                                <size>90,-1</size>
                             </object>
                         </object>
                     </object>
@@ -760,7 +761,7 @@ appropriate input.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
-                                        <size>80,-1</size>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">

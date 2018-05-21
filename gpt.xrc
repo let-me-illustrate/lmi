@@ -273,6 +273,7 @@
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="EffectiveDate">
                                         <help>Effective date</help>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -305,6 +306,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="DateOfBirth">
                                         <help>Date of birth</help>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -408,6 +410,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="InforceAsOfDate">
                                         <help>Monthiversary as of which inforce data is provided</help>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -440,6 +443,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxDatePickerCtrl" name="LastMaterialChangeDate">
                                         <help>Beginning of most recent seven-pay period</help>
+                                        <size>90,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
