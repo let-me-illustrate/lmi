@@ -656,24 +656,23 @@ void wx_table_generator::do_output_single_row
             {
             int x_text = pos_x;
 
-            if(align_right_)
+            switch(ci.alignment())
                 {
-LMI_ASSERT(oe_right == ci.alignment()); // To be removed in the next commit.
-                x_text += ci.col_width() - dc_.GetTextExtent(s).x;
-                }
-            else
-                {
-                if(ci.is_centered())
+                case oe_right:
                     {
-LMI_ASSERT(oe_center == ci.alignment()); // To be removed in the next commit.
-                    // Center the text for the columns configured to do it.
+                    x_text += ci.col_width() - dc_.GetTextExtent(s).x;
+                    }
+                    break;
+                case oe_center:
+                    {
                     x_text += (ci.col_width() - dc_.GetTextExtent(s).x) / 2;
                     }
-                else
+                    break;
+                case oe_left:
                     {
-LMI_ASSERT(oe_left == ci.alignment()); // To be removed in the next commit.
                     x_text += column_margin();
                     }
+                    break;
                 }
 
             if(ci.needs_clipping())
