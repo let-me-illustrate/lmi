@@ -284,6 +284,10 @@ void wx_table_generator::enroll_column(column_parameters const& z)
     // A hidden column's width must be initialized to zero, because
     // other member functions calculate total width by accumulating
     // the widths of all columns, whether hidden or not.
+    //
+    // An elastic column's width must be initialized to zero, because
+    // compute_column_widths() skips setting it when there's no room
+    // for any elastic column.
     int width = 0;
     if(oe_shown == z.visibility)
         {
@@ -318,8 +322,7 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
                 break;
             case oe_elastic:
                 {
-                // Set width to the special value of 0 for the elastic columns.
-                width = 0;
+                ; // Do nothing: 'width' already initialized to zero.
                 }
                 break;
             }
