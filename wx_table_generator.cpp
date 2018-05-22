@@ -658,9 +658,14 @@ void wx_table_generator::do_output_single_row
 
             switch(ci.alignment())
                 {
-                case oe_right:
+                case oe_left:
                     {
-                    x_text += ci.col_width() - dc_.GetTextExtent(s).x;
+                    // PDF !! 'x_text += 0;' here would parallel the other
+                    // cases. The implicit assumption here is that alignment
+                    // is oe_left iff elasticity is oe_elastic; col_width()
+                    // has been augmented by twice the margin for oe_inelastic
+                    // columns only, and this adjustment compensates for that.
+                    x_text += column_margin();
                     }
                     break;
                 case oe_center:
@@ -668,9 +673,9 @@ void wx_table_generator::do_output_single_row
                     x_text += (ci.col_width() - dc_.GetTextExtent(s).x) / 2;
                     }
                     break;
-                case oe_left:
+                case oe_right:
                     {
-                    x_text += column_margin();
+                    x_text += ci.col_width() - dc_.GetTextExtent(s).x;
                     }
                     break;
                 }
