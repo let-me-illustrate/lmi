@@ -307,9 +307,6 @@ void wx_table_generator::enroll_column(column_parameters const& z)
             header_font_setter.Set(get_header_font());
             }
 
-        // Set width to the special value of 0 for the elastic columns.
-        width = z.widest_text.empty() ? 0 : dc_.GetTextExtent(z.widest_text).x;
-
         wxCoord w, h, lh;
         dc_.GetMultiLineTextExtent(z.header, &w, &h, &lh, &dc_.GetFont());
         LMI_ASSERT(0 != lh);
@@ -326,6 +323,8 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
             {
             case oe_inelastic:
                 {
+LMI_ASSERT(!z.widest_text.empty()); // To be removed in the next commit.
+                width = dc_.GetTextExtent(z.widest_text).x;
                 // Also increase the column width to be sufficiently wide to fit
                 // this header line if it is inelastic.
                 increase_to_if_smaller(width, w);
@@ -334,6 +333,9 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
                 break;
             case oe_elastic:
                 {
+LMI_ASSERT(z.widest_text.empty()); // To be removed in the next commit.
+                // Set width to the special value of 0 for the elastic columns.
+                width = 0;
                 }
                 break;
             }
