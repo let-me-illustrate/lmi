@@ -157,22 +157,22 @@ class wx_table_generator::column_info
         )
         :col_header_ (header)
         ,col_width_  (width)
+        ,alignment_  (alignment)
         ,is_hidden_  (oe_hidden  == visibility)
         ,is_elastic_ (oe_elastic == elasticity)
         {
-(void)&alignment; // Actually use this, soon.
         }
 
-    bool is_hidden()      const {return is_hidden_;}
-    bool is_centered()    const {return !is_elastic();}
-    bool is_elastic()     const {return is_elastic_;}
-    bool needs_clipping() const {return is_elastic();}
-
-    std::string const& col_header() const {return col_header_;}
-    int col_width()                 const {return col_width_;}
+    std::string const& col_header()     const {return col_header_;}
+    int                col_width()      const {return col_width_;}
+    oenum_h_align      alignment()      const {return alignment_;}
+    bool               is_hidden()      const {return is_hidden_;}
+    bool               is_centered()    const {return !is_elastic();}
+    bool               is_elastic()     const {return is_elastic_;}
+    bool               needs_clipping() const {return is_elastic();}
 
   private:
-    std::string const col_header_;
+    std::string   const col_header_;
 
   public: // but dubiously so
     // Width in pixels. Because the wxPdfDC uses wxMM_POINTS, each
@@ -182,8 +182,9 @@ class wx_table_generator::column_info
     int col_width_;
 
   private:
-    bool const is_hidden_;
-    bool const is_elastic_;
+    oenum_h_align const alignment_;
+    bool          const is_hidden_;
+    bool          const is_elastic_;
 };
 
 wx_table_generator::wx_table_generator
@@ -657,17 +658,20 @@ void wx_table_generator::do_output_single_row
 
             if(align_right_)
                 {
+LMI_ASSERT(oe_right == ci.alignment()); // To be removed in the next commit.
                 x_text += ci.col_width() - dc_.GetTextExtent(s).x;
                 }
             else
                 {
                 if(ci.is_centered())
                     {
+LMI_ASSERT(oe_center == ci.alignment()); // To be removed in the next commit.
                     // Center the text for the columns configured to do it.
                     x_text += (ci.col_width() - dc_.GetTextExtent(s).x) / 2;
                     }
                 else
                     {
+LMI_ASSERT(oe_left == ci.alignment()); // To be removed in the next commit.
                     x_text += column_margin();
                     }
                 }
