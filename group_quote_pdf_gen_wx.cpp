@@ -238,7 +238,7 @@ enum_group_quote_columns const e_first_totalled_column = e_col_basic_face_amount
 struct column_definition
 {
     char const* header_;
-    char const* widest_text_; // Empty string means variable width.
+    char const* widest_text_; // PDF !! Empty string means variable width.
 };
 
 // Headers of premium columns include dynamically-determined payment
