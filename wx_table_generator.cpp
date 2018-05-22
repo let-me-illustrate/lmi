@@ -27,6 +27,8 @@
 #include "assert_lmi.hpp"
 #include "miscellany.hpp"               // count_newlines(), split_into_lines()
 
+#include <algorithm>                    // max()
+
 // Is this a struct only because we want its members to be publicly
 // accessible? But their values can also be changed by clients, and
 // isn't that undesirable?
@@ -323,17 +325,15 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
             {
             case oe_inelastic:
                 {
-LMI_ASSERT(!z.widest_text.empty()); // To be removed in the next commit.
-                width = dc_.GetTextExtent(z.widest_text).x;
-                // Also increase the column width to be sufficiently wide to fit
-                // this header line if it is inelastic.
-                increase_to_if_smaller(width, w);
+                // Greater of header width and 'widest_text' width.
+                width = std::max(w, dc_.GetTextExtent(z.widest_text).x);
+                // PDF !! Reconsider whether margin should be added here,
+                // because compute_column_widths() may need to remove it.
                 width += 2 * column_margin();
                 }
                 break;
             case oe_elastic:
                 {
-LMI_ASSERT(z.widest_text.empty()); // To be removed in the next commit.
                 // Set width to the special value of 0 for the elastic columns.
                 width = 0;
                 }
