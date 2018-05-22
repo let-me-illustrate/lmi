@@ -186,22 +186,6 @@ class wx_table_generator::column_info
     bool const is_elastic_;
 };
 
-namespace
-{
-
-/// Increase the first argument to the second one if it's smaller.
-
-template<typename T>
-void increase_to_if_smaller(T& first, T second)
-{
-    if(first < second)
-        {
-        first = second;
-        }
-}
-
-} // Unnamed namespace.
-
 wx_table_generator::wx_table_generator
     (group_quote_style_tag                 // tag not referenced
     ,std::vector<column_parameters> const& vc
@@ -319,7 +303,7 @@ LMI_ASSERT(h / lh == int(1u + count_newlines(z.header)));
 LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
         // Store number of lines used by tallest unhidden header:
         // output_headers() uses it to write all headers as a block.
-        increase_to_if_smaller(max_header_lines_, std::size_t(h / lh));
+        max_header_lines_ = std::max(max_header_lines_, std::size_t(h / lh));
 
         switch(z.elasticity)
             {
