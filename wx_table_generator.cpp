@@ -326,8 +326,6 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
             {
             case oe_inelastic:
                 {
-// Temporarily assert that this does the same as the code it replaced:
-LMI_ASSERT(w == dc_.GetMultiLineTextExtent(z.header).x);
                 // Also increase the column width to be sufficiently wide to fit
                 // this header line if it is inelastic.
                 increase_to_if_smaller(width, w);
