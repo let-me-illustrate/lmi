@@ -33,49 +33,44 @@
 // accessible? But their values can also be changed by clients, and
 // isn't that undesirable?
 
-// Under what circumstances might columns be hidden, centered, or clipped?
+// Elasticity and clipping
 //
-// General answer:
-//  In principle, all of those are independent. In practice, inelastic
-// columns are centered and elastic columns are clipped and only the
-// former can be hidden. But I don't think this low level class should impose
-// such high level constraints on its use, which is why it doesn't do it.
+// Most columns are inelastic: they have a fixed minimum width and
+// are not clipped lest crucial information (e.g., part of a number)
+// be lost. The archetypal elastic column is a personal name, whose
+// width is practically unlimited and might even exceed the total page
+// width; it is better to truncate one extremely long personal name
+// than to present an error message and produce no report at all.
 //
-// - is_hidden()
+// An ideal report generator might call GetTextExtent() on every row
+// of data to determine a column's ideal width, but this one favors
+// speed by setting a presumptive maximum width for each column.
+// Therefore, it treats a personal-name column as having no natural
+// width at all. Its minimum width might be set equal to its header
+// width, but such a refinement is needless in the problem domain. In
+// the most extreme case, all inelastic columns would fit, but there
+// would be not a single pixel available for elastic columns, which
+// would all in effect be dropped; again, in the problem domain, that
+// would actually be preferable to failing to produce any output.
 //
-// All potential data are passed for every row; is_hidden() suppresses
-// any column that needs to be filtered out.
+// Therefore, elastic columns are clipped, and inelastic ones are not.
+// All other column properties are independent, and specified by
+// arguments, but clipping depends on the elasticity argument. It is
+// distinguished only because clipping is a distinct layout operation.
 //
-// - is_clipped()
-//
-// And what sort of columns need to be clipped? As currently implemented,
-// this function is equivalent to is_elastic()--i.e., only
-// the "Participant" column on group quotes?
-// Answer: Currently, yes, as it's the only elastic column.
-//
-// Does this all boil down to...
-//  - left-align and clip the group-quote "Participant" column
-//  - center all other group-quote columns
-//  - ignore all these accessors for illustration PDFs
-// ?
-// Answer: yes.
-
-//  - is_hidden(): A hidden column is present in the data passed into
-//    this class, but is to be suppressed so that it doesn't appear in
-//    the output at all.
+//  - is_hidden(): Data for every row of all potential columns are
+//    passed into this class; hidden columns are suppressed so that
+//    they don't appear in the output at all.
 //
 //  - is_elastic(): An elastic column has no innate fixed or preferred
 //    width. After all inelastic columns have claimed their required
 //    widths, any remaining width available is prorated among elastic
 //    columns, which therefore may be wider than their widest contents
 //    or narrower than their narrowest. As a consequence, elastic
-//    columns must be clipped if necessary.
+//    columns are clipped--vide supra.
 //
-//  - is_clipped(): Indicate whether column contents need to be
-//    clipped when outputting it. Only elastic columns are clippable:
-//    for example, personal names are of unbounded length and might
-//    even exceed the total page width. Inelastic columns, OTOH, have
-//    fixed minimum widths and must never be clipped.
+//  - is_clipped(): A clipped column is truncated to fit its allotted
+//    space. Only elastic columns are clipped--vide supra.
 
 class wx_table_generator::column_info
 {
@@ -513,25 +508,11 @@ void wx_table_generator::compute_column_widths()
         return;
         }
 
-    // Lay out elastic columns in whatever space is left over
-    // after accounting for all inelastic columns.
+    // Lay out elastic columns in whatever space is left over after
+    // accounting for all inelastic columns. Clip to make them fit.
     //
     // If there's more than enough space for them, then expand them
     // to consume all available space.
-    //
-    // If there isn't enough space for their headers and contents,
-    // then clip them. Motivation: the archetypal elastic
-    // column is a personal name, which has practically unlimited
-    // width. On a group premium quote, numeric columns must never
-    // be truncated, but truncating one extremely long personal name
-    // is preferable to failing to produce any quote at all. It would
-    // of course be possible to take the header of such a column as
-    // its minimal width, but that would be a useless refinement in
-    // the problem domain. In the most extreme conceivable case, all
-    // inelastic columns would fit, but there would be not a single
-    // pixel available for elastic columns and they would all
-    // in effect be dropped; again, in the problem domain, that would
-    // actually be preferable to failing to produce any output.
     if(n_elastic)
         {
         int const width_of_each_elastic_column
