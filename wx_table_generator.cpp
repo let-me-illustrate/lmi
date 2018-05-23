@@ -46,7 +46,7 @@
 // All potential data are passed for every row; is_hidden() suppresses
 // any column that needs to be filtered out.
 //
-// - needs_clipping()
+// - is_clipped()
 //
 // And what sort of columns need to be clipped? As currently implemented,
 // this function is equivalent to is_elastic()--i.e., only
@@ -71,7 +71,7 @@
 //    or narrower than their narrowest. As a consequence, elastic
 //    columns must be clipped if necessary.
 //
-//  - needs_clipping(): Indicate whether column contents need to be
+//  - is_clipped(): Indicate whether column contents need to be
 //    clipped when outputting it. Only elastic columns are clippable:
 //    for example, personal names are of unbounded length and might
 //    even exceed the total page width. Inelastic columns, OTOH, have
@@ -95,12 +95,12 @@ class wx_table_generator::column_info
         {
         }
 
-    std::string const& col_header()     const {return col_header_;}
-    int                col_width()      const {return col_width_;}
-    oenum_h_align      alignment()      const {return alignment_;}
-    bool               is_hidden()      const {return is_hidden_;}
-    bool               is_elastic()     const {return is_elastic_;}
-    bool               needs_clipping() const {return is_elastic();}
+    std::string const& col_header() const {return col_header_;}
+    int                col_width()  const {return col_width_;}
+    oenum_h_align      alignment()  const {return alignment_;}
+    bool               is_hidden()  const {return is_hidden_;}
+    bool               is_elastic() const {return is_elastic_;}
+    bool               is_clipped() const {return is_elastic();}
 
   private:
     std::string   const col_header_;
@@ -606,7 +606,7 @@ void wx_table_generator::do_output_single_row
                     break;
                 }
 
-            if(ci.needs_clipping())
+            if(ci.is_clipped())
                 {
                 // It is assumed that the width of the "Participant" column
                 // on a group quote was initially zero, and then was expanded
