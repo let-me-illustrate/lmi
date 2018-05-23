@@ -1082,7 +1082,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
 
     for(int col = e_first_totalled_column; col < e_col_max; ++col)
         {
-        int const num_dec =
+        int const n_dec =
             ((e_col_basic_face_amount           == col) ? 0
             :(e_col_basic_premium               == col) ? 2
             :(e_col_supplemental_face_amount    == col) ? 0
@@ -1091,7 +1091,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
             :(e_col_total_premium               == col) ? 2
             :throw std::logic_error("Invalid column type.")
             );
-        std::pair<int,oenum_format_style> const f(num_dec, oe_format_normal);
+        std::pair<int,oenum_format_style> const f(n_dec, oe_format_normal);
 
         table_gen.output_highlighted_cell
             (col

@@ -124,8 +124,8 @@ void check_list_columns
 {
     std::set<std::string> remaining(expected.begin(), expected.end());
 
-    unsigned int const num_columns = dvc->GetColumnCount();
-    for(unsigned int n = 0; n < num_columns; ++n)
+    unsigned int const n_columns = dvc->GetColumnCount();
+    for(unsigned int n = 0; n < n_columns; ++n)
         {
         std::string const title = dvc->GetColumn(n)->GetTitle().ToStdString();
         LMI_ASSERT_WITH_MSG
@@ -152,8 +152,8 @@ unsigned int find_model_column_by_title
     ,std::string const& title
     )
 {
-    unsigned int const num_columns = dvc->GetColumnCount();
-    for(unsigned int n = 0; n < num_columns; ++n)
+    unsigned int const n_columns = dvc->GetColumnCount();
+    for(unsigned int n = 0; n < n_columns; ++n)
         {
         wxDataViewColumn const* column = dvc->GetColumn(n);
         if(column->GetTitle().ToStdString() == title)

@@ -587,8 +587,8 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
             {
             // We found the notebook, now we can use it to make the page
             // containing the target window current.
-            size_t const num_pages = book->GetPageCount();
-            for(size_t n = 0; n < num_pages; n++)
+            size_t const n_pages = book->GetPageCount();
+            for(size_t n = 0; n < n_pages; n++)
                 {
                 if(book->GetPage(n) == maybe_page)
                     {
