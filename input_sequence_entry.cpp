@@ -427,9 +427,8 @@ void InputSequenceEditor::sequence(InputSequence const& s)
         }
 
     std::vector<ValueInterval> const& intervals = s.intervals();
-    int const n_intervals = intervals.size();
 
-    for(int i = 0; i < n_intervals; ++i)
+    for(unsigned int i = 0; i < intervals.size(); ++i)
         {
         ValueInterval const& data = intervals[i];
 
