@@ -246,7 +246,7 @@ void application_test::process_test_name(char const* name)
     if (name[0] == '-')
         {
         run = run_no;
-        name++; // Skip the leading minus sign.
+        ++name; // Skip the leading minus sign.
         }
     else
         {
@@ -391,7 +391,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
             }
         else
             {
-            n++;
+            ++n;
             }
         }
 
@@ -445,7 +445,7 @@ TestsResults application_test::run()
         if ((run_all_ && i.run != run_no) || i.run == run_yes)
             {
             std::string error;
-            results.total++;
+            ++results.total;
 
             char const* const name = i.get_name();
 
@@ -459,12 +459,12 @@ TestsResults application_test::run()
                 wxLog::FlushActive();
                 wxPrintf("time=%ldms (for %s)\n", sw.Time(), name);
                 wxPrintf("%s: ok\n", name);
-                results.passed++;
+                ++results.passed;
                 }
             catch(test_skipped_exception const& e)
                 {
                 wxPrintf("%s: skipped (%s)\n", name, e.what());
-                results.skipped++;
+                ++results.skipped;
                 }
             catch(std::exception const& e)
                 {
@@ -477,7 +477,7 @@ TestsResults application_test::run()
 
             if (!error.empty())
                 {
-                results.failed++;
+                ++results.failed;
 
                 // Keep everything on a single line to ensure the full text of
                 // the error appears if the output is filtered by the test name
@@ -587,7 +587,7 @@ wxWindow* wx_test_focus_controller_child(MvcController& dialog, char const* name
             {
             // We found the notebook, now we can use it to make the page
             // containing the target window current.
-            for(size_t n = 0; n < book->GetPageCount(); n++)
+            for(size_t n = 0; n < book->GetPageCount(); ++n)
                 {
                 if(book->GetPage(n) == maybe_page)
                     {

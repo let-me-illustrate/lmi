@@ -1194,7 +1194,7 @@ class numbered_page : public page_with_footer
 
         writer.dc().StartPage();
 
-        this_page_number_++;
+        ++this_page_number_;
         extra_pages_--;
     }
 

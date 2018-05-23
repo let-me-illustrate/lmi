@@ -82,7 +82,7 @@ void Loads::Allocate(int length)
     target_total_load_     .resize(mc_n_gen_bases);
     excess_total_load_     .resize(mc_n_gen_bases);
 
-    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
         {
         monthly_policy_fee_    [j].resize(length);
         annual_policy_fee_     [j].resize(length);
@@ -143,7 +143,7 @@ void Loads::Calculate(load_details const& details)
 {
     premium_tax_load_.assign(details.length_, details.premium_tax_load_);
 
-    for(int j = mce_gen_curr; j != mc_n_gen_bases; j++)
+    for(int j = mce_gen_curr; j != mc_n_gen_bases; ++j)
         {
         // ET !! PETE could support an apply-and-assign operation, e.g.:
         // apply_to_self
@@ -175,7 +175,7 @@ void Loads::Calculate(load_details const& details)
                 )
             );
 
-        for(int j = mce_gen_curr; j != mc_n_gen_bases; j++)
+        for(int j = mce_gen_curr; j != mc_n_gen_bases; ++j)
             {
 #if 0
 // ET !! As for rounding, we do want an expression-template library
@@ -231,7 +231,7 @@ void Loads::Calculate(load_details const& details)
     // last two): they're always deducted whether or not any payment
     // is made.
 
-    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
         {
         if(mce_gen_mdpt == j)
             {

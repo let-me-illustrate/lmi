@@ -223,7 +223,7 @@ class InputSequenceEditor
         explicit LayoutOnceGuard(InputSequenceEditor* editor)
             :editor_(editor)
         {
-            editor_->layout_freeze_count_++;
+            ++editor_->layout_freeze_count_;
         }
 
         ~LayoutOnceGuard()
@@ -718,7 +718,7 @@ void InputSequenceEditor::insert_row(int new_row)
         sizer_->SetMinSize(sizer_->CalcMin());
         }
 
-    rows_count_++;
+    ++rows_count_;
     duration_scalars_.insert(duration_scalars_.begin() + new_row, -1);
 
     set_tab_order();

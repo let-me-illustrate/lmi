@@ -50,11 +50,11 @@ calendar_date get_first_next_month(calendar_date const& date)
     if(month == 12)
         {
         month = 1;
-        year++;
+        ++year;
         }
     else
         {
-        month++;
+        ++month;
         }
 
     return calendar_date(year, month, 1);

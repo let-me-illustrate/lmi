@@ -165,7 +165,7 @@ RealType round_up(RealType r)
         // in type 'RealType'. Then '++' doesn't increment it; it adds
         // unity, which doesn't change the value. That's OK though: in
         // that case, this code is unreachable.
-        i_part++;
+        ++i_part;
         }
     return i_part;
 }
@@ -202,7 +202,7 @@ RealType round_trunc(RealType r)
         }
     else if(RealType(0) < f_part && i_part < RealType(0))
         {
-        i_part++;
+        ++i_part;
         }
     return i_part;
 }
@@ -235,7 +235,7 @@ RealType round_near(RealType r)
             }
         else if(RealType(0) < f_part)
             {
-            i_part++;
+            ++i_part;
             }
         }
     return i_part;

@@ -751,7 +751,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
     AddSurrChgLayer(Year, std::max(0.0, ActualSpecAmt - prior_specamt));
 
     // Carry the new specamt forward into all future years.
-    for(int j = Year; j < BasicValues::GetLength(); j++)
+    for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
 // TODO ?? This seems wrong. If we're changing something that doesn't
 // vary across bases, why do we change it for all bases?
@@ -788,7 +788,7 @@ void AccountValue::ChangeSupplAmtBy(double delta)
     // At least for now, there is no effect on surrender charges.
 
     // Carry the new supplemental amount forward into all future years.
-    for(int j = Year; j < BasicValues::GetLength(); j++)
+    for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
         }
@@ -1728,7 +1728,7 @@ void AccountValue::EndTermRider(bool convert)
     TermSpecAmt = 0.0;
     TermDB = 0.0;
     // Carry the new term spec amt forward into all future years.
-    for(int j = Year; j < BasicValues::GetLength(); j++)
+    for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
         }

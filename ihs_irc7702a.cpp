@@ -380,7 +380,7 @@ bool Irc7702A::UpdateEOM7702A()
 {
     if(!(Ignore || IsMec))
         {
-        TestPeriodDur++;
+        ++TestPeriodDur;
         }
     return IsMec;
 }
@@ -1009,7 +1009,7 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
     for
         (int j = 0
         ; j < std::min(TestPeriodLen, 1 + TestPeriodDur) && prem_iter != Pmts.end()
-        ; j++, prem_iter++
+        ; ++j, ++prem_iter
         )
         {
         cum_prem += *prem_iter;

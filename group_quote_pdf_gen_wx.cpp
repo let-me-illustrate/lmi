@@ -648,7 +648,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     else
         {
         rows_.push_back(rd);
-        row_num_++;
+        ++row_num_;
         }
 }
 
@@ -758,7 +758,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         = remaining_space < (footer_height + 2 * vert_skip);
     if(footer_on_its_own_page)
         {
-        total_pages++;
+        ++total_pages;
         }
 
     int current_page = 1;
@@ -771,7 +771,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             {
             output_page_number_and_version(pdf_writer, total_pages, current_page);
 
-            current_page++;
+            ++current_page;
             pdf_writer.dc().StartPage();
 
             pos_y = pdf_writer.get_vert_margin();
@@ -783,7 +783,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         {
         output_page_number_and_version(pdf_writer, total_pages, current_page);
 
-        current_page++;
+        ++current_page;
         pdf_writer.dc().StartPage();
 
         pos_y = pdf_writer.get_vert_margin();

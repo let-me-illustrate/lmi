@@ -428,7 +428,7 @@ int try_main(int argc, char* argv[])
     line_type state = initial;
     line_type old_state;
 
-    for(int j = 0; ; j++)
+    for(int j = 0; ; ++j)
         {
         std::getline(is1, line1);
         std::getline(is2, line2);

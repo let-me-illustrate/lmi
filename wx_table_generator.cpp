@@ -385,11 +385,11 @@ void wx_table_generator::compute_column_widths()
             continue;
             }
 
-        n_columns++;
+        ++n_columns;
 
         if(i.is_elastic())
             {
-            n_expand++;
+            ++n_expand;
             }
         else
             {
@@ -459,7 +459,7 @@ void wx_table_generator::compute_column_widths()
 
                     if(0 < underflow)
                         {
-                        i.col_width_++;
+                        ++i.col_width_;
                         underflow--;
                         }
                     }

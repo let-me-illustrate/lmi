@@ -27,7 +27,7 @@
 
 fenv_guard::fenv_guard()
 {
-    instance_count_++;
+    ++instance_count_;
     fenv_initialize();
 }
 

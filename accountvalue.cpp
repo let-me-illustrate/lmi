@@ -239,7 +239,7 @@ double AccountValue::RunOneCell(mcenum_run_basis TheBasis)
 
     PerformSpecAmtStrategy();
 
-    for(Year = InforceYear; Year < BasicValues::GetLength(); Year++)
+    for(Year = InforceYear; Year < BasicValues::GetLength(); ++Year)
         {
         if(!ItLapsed)
             {
@@ -328,7 +328,7 @@ void AccountValue::DoYear
 
     // IHS !! Strategy here?
 
-    for(Month = a_InforceMonth; Month < 12; Month++)
+    for(Month = a_InforceMonth; Month < 12; ++Month)
         {
         DoMonth();
         if(ItLapsed)
@@ -484,7 +484,7 @@ void AccountValue::PerformSpecAmtStrategy()
 
     SA = round_specamt()(SA);
 
-    for(int j = 0; j < BasicValues::GetLength(); j++)
+    for(int j = 0; j < BasicValues::GetLength(); ++j)
         {
         InvariantValues().SpecAmt[j] = SA;
         }
@@ -542,7 +542,7 @@ void AccountValue::TxOptionChange()
     ActualSpecAmt = round_specamt()(ActualSpecAmt);
 
     // Carry the new spec amt forward into all future years.
-    for(int j = Year; j < BasicValues::GetLength(); j++)
+    for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
         }
@@ -572,7 +572,7 @@ void AccountValue::TxSpecAmtChange()
     ActualSpecAmt = std::max(MinSpecAmt, DeathBfts_->specamt()[Year]);
 
     // Carry the new spec amt forward into all future years.
-    for(int j = Year; j < BasicValues::GetLength(); j++)
+    for(int j = Year; j < BasicValues::GetLength(); ++j)
         {
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
         }
@@ -909,7 +909,7 @@ void AccountValue::TxTakeWD()
             // Maybe it can't happen because of max WD defn?
 
             // Carry the new spec amt forward into all future years.
-            for(int j = Year; j < BasicValues::GetLength(); j++)
+            for(int j = Year; j < BasicValues::GetLength(); ++j)
                 {
                 InvariantValues().SpecAmt[j] = ActualSpecAmt;
                 }
