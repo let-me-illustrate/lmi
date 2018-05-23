@@ -363,7 +363,7 @@ void wx_table_generator::compute_column_widths()
     // has been allocated to each column, any excess width left over
     // is to be distributed among such elastic columns only:
     // i.e., they (and only they) are to be "expanded".
-    int n_expand = 0;
+    int n_elastic = 0;
 
     // Total width of all non-hidden inelastic columns.
     // The width of each inelastic column reflects:
@@ -389,7 +389,7 @@ void wx_table_generator::compute_column_widths()
 
         if(i.is_elastic())
             {
-            ++n_expand;
+            ++n_elastic;
             }
         else
             {
@@ -411,7 +411,7 @@ void wx_table_generator::compute_column_widths()
         // columns, so the column-fitting problem is overconstrained.
         // Therefore, don't even try reducing margins if there are any
         // elastic columns.
-        if(!n_expand)
+        if(!n_elastic)
             {
 // Also calculate the number of pixels by which it overflows for each column
             // We need to round up in division here to be sure that all columns
@@ -467,7 +467,7 @@ void wx_table_generator::compute_column_widths()
                 column_margin_ -= (overflow_per_column + 1) / 2;
 
                 // We condensed the columns enough to make them fit, so no need
-                // for the warning and we don't have any expanding columns, so
+                // for the warning and we don't have any elastic columns, so
                 // we're done.
                 return;
                 }
@@ -532,10 +532,10 @@ void wx_table_generator::compute_column_widths()
     // pixel available for elastic columns and they would all
     // in effect be dropped; again, in the problem domain, that would
     // actually be preferable to failing to produce any output.
-    if(n_expand)
+    if(n_elastic)
         {
-        int const per_expand
-            = (total_width_ - total_inelastic_width + n_expand - 1) / n_expand;
+        int const width_of_each_elastic_column
+            = (total_width_ - total_inelastic_width + n_elastic - 1) / n_elastic;
 
         for(auto& i : all_columns_)
             {
@@ -546,7 +546,7 @@ void wx_table_generator::compute_column_widths()
 
             if(i.is_elastic())
                 {
-                i.col_width_ = per_expand;
+                i.col_width_ = width_of_each_elastic_column;
                 }
             }
         }
