@@ -36,7 +36,7 @@ As illustrated, this {{ContractName}}
 a Modified Endowment Contract (MEC)
 under the Internal Revenue Code
 {{#IsMec}}
-    in year {{MecYearPlus1}}
+    in year {{MecYearPlus1}}.
 {{/IsMec}}
 To the extent of gain in the {{ContractName}}, loans, distributions
 and withdrawals from a MEC are subject to income tax
