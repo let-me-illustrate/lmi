@@ -32,16 +32,6 @@
 // Is this a struct only because we want its members to be publicly
 // accessible? But their values can also be changed by clients, and
 // isn't that undesirable?
-//
-// In wx_table_generator::do_output_single_row():
-//   if(align_right_)
-//   if(ci.is_centered_)
-// it seems that right-alignment is a quasi-global, while
-// center-alignment is a column_info data member. Historically, this
-// evolved because right-alignment was recently added to support
-// illustrations, while center-alignment was already used for group
-// quotes. But when code is complex for "historical reasons", it's
-// natural to ask whether it ought to be refactored for uniformity.
 
 // Under what circumstances might columns be hidden, centered, or clipped?
 //
@@ -56,62 +46,10 @@
 // All potential data are passed for every row; is_hidden() suppresses
 // any column that needs to be filtered out.
 //
-//  - is_centered()
-//
-// This seems to be used only in one place:
-//
-//     if(ci.is_centered())
-//         {
-//         // Center the text for the columns configured to do it.
-//         x_text += (width - dc_.GetTextExtent(s).x) / 2;
-//         }
-//
-// What exactly does it mean for a column to be "centered"? I think this
-// is a different concept than using "center" alignment for cells in a
-// spreadsheet column, which would give, e.g.:
-//     1
-//   11111
-// --No, it's exactly the same concept.
-// In spreadsheet terminology, almost all our columns are numeric, and our
-// numeric columns are right-aligned. But the function is documented thus:
-//
-//     // Return true if this column should be centered, rather than
-//     // left-aligned. Notice that this is ignored for globally right-aligned
-//     // tables.
-//
-// Is it then the case that:
-//  - for illustration PDFs, all columns are right-aligned, and
-//  - is_centered is used only for group quotes, where it really does
-//    mean the same thing as "center" alignment in a spreadsheet
-// ?
-// Answer: yes.
-//  This is indeed not as lucid as I'd like, but the alternative would to
-// modify the PDF quotes code to align all the columns explicitly, which I
-// preferred not to do as part of illustrations work. Maybe now, that this is
-// merged, it's indeed worth changing this.
-//  OTOH, unlike a spreadsheet, this class doesn't have any notion of numeric
-// or text values, so its align_right_ member is still useful to globally
-// configure all columns to be right-aligned. Perhaps we could just add a
-// similar align_center() method and call it from the group PDF quotes code
-// and continue to handle the elastic columns specially by
-// left-aligning them in any case?
-//
-// Apparently is_centered() always returns true (but is ignored)
-// for illustrations, and this comment inside the function body
-// applies to group quotes only:
-//
-//     // Inelastic columns are centered by default, elastic ones
-//     // are not as long strings look better with the default left
-//     // alignment.
-//
-// What sort of columns are not centered?
-// Answer: elastic ones (only used by PDF quotes).
-//
 // - needs_clipping()
 //
 // And what sort of columns need to be clipped? As currently implemented,
-// this function is the logical negation of is_centered(), so only columns
-// that are not centered need clipping--but what columns are those? Only
+// this function is equivalent to is_elastic()--i.e., only
 // the "Participant" column on group quotes?
 // Answer: Currently, yes, as it's the only elastic column.
 //
@@ -125,12 +63,6 @@
 //  - is_hidden(): A hidden column is present in the data passed into
 //    this class, but is to be suppressed so that it doesn't appear in
 //    the output at all.
-//
-//  - is_centered(): Indicate whether column should be centered,
-//    rather than left-aligned. Ignored for globally right-aligned
-//    tables. [Inelastic columns are centered by default, elastic
-//    ones are not as long strings look better with the default
-//    left alignment.]
 //
 //  - is_elastic(): An elastic column has no innate fixed or preferred
 //    width. After all inelastic columns have claimed their required
@@ -167,7 +99,6 @@ class wx_table_generator::column_info
     int                col_width()      const {return col_width_;}
     oenum_h_align      alignment()      const {return alignment_;}
     bool               is_hidden()      const {return is_hidden_;}
-    bool               is_centered()    const {return !is_elastic();}
     bool               is_elastic()     const {return is_elastic_;}
     bool               needs_clipping() const {return is_elastic();}
 
@@ -204,7 +135,6 @@ wx_table_generator::wx_table_generator
     ,max_header_lines_ (1)
     ,draw_separators_  (true)
     ,use_bold_headers_ (true)
-    ,align_right_      (false)
 {
     for(auto const& i : vc)
         {
@@ -235,10 +165,6 @@ wx_table_generator::wx_table_generator
     ,max_header_lines_ (1)
     ,draw_separators_  (false)
     ,use_bold_headers_ (false)
-    // For the nonce, columns are centered by default because
-    // that's what group quotes need; this flag forces right
-    // alignment for illustrations.
-    ,align_right_      (true)
 {
     for(auto const& i : vc)
         {

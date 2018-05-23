@@ -174,10 +174,6 @@ class wx_table_generator
 
     // If true, headers are drawn in bold.
     bool use_bold_headers_;
-
-    // If true, force right alignment for all columns instead of centering them
-    // automatically if they have fixed size.
-    bool align_right_;
 };
 
 #endif // wx_table_generator_hpp
