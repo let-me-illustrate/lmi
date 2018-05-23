@@ -214,29 +214,29 @@ bool custom_io_0_read(Input& z, std::string const& filename)
             ;
         }
 
-    name_value_pairs n_v_pairs(actual_filename);
+    name_value_pairs nv_pairs(actual_filename);
 
     // The list is not complete; other items may be required eventually.
-    z["InforceYear"]                     = n_v_pairs.string_numeric_value("InforceYear");
-    z["InforceMonth"]                    = n_v_pairs.string_numeric_value("InforceMonth");
-    z["InforceGeneralAccountValue"]      = n_v_pairs.string_numeric_value("InforceAVGenAcct");
-    z["InforceSeparateAccountValue"]     = n_v_pairs.string_numeric_value("InforceAVSepAcct");
-    z["InforceRegularLoanValue"]         = n_v_pairs.string_numeric_value("InforceAVRegLn");
-    z["InforcePreferredLoanValue"]       = n_v_pairs.string_numeric_value("InforceAVPrfLn");
-    z["InforceCumulativeNoLapsePremium"] = n_v_pairs.string_numeric_value("InforceCumNoLapsePrem");
-    z["InforceCumulativeNoLapsePayments"]= n_v_pairs.string_numeric_value("InforceCumPmts");
+    z["InforceYear"]                     = nv_pairs.string_numeric_value("InforceYear");
+    z["InforceMonth"]                    = nv_pairs.string_numeric_value("InforceMonth");
+    z["InforceGeneralAccountValue"]      = nv_pairs.string_numeric_value("InforceAVGenAcct");
+    z["InforceSeparateAccountValue"]     = nv_pairs.string_numeric_value("InforceAVSepAcct");
+    z["InforceRegularLoanValue"]         = nv_pairs.string_numeric_value("InforceAVRegLn");
+    z["InforcePreferredLoanValue"]       = nv_pairs.string_numeric_value("InforceAVPrfLn");
+    z["InforceCumulativeNoLapsePremium"] = nv_pairs.string_numeric_value("InforceCumNoLapsePrem");
+    z["InforceCumulativeNoLapsePayments"]= nv_pairs.string_numeric_value("InforceCumPmts");
 
 // TRICKY !! Other input methods distinguish the insured's first, middle,
 // and last names. This method uses a single field to meet customer
 // requirements. Combining that single field with the middle and last
 // names works as long as we initialize the others to a nonempty string.
-    z["InsuredName"]               = n_v_pairs.string_value("ApplicantName");
+    z["InsuredName"]               = nv_pairs.string_value("ApplicantName");
 // Not yet used, but might be wanted someday:
-//  n_v_pairs.string_value("ApplicantDOB"); // ApplicantDOB=01/01/1968
-    z["IssueAge"]                  = n_v_pairs.string_numeric_value("ApplicantIssueAge");
+//  nv_pairs.string_value("ApplicantDOB"); // ApplicantDOB=01/01/1968
+    z["IssueAge"]                  = nv_pairs.string_numeric_value("ApplicantIssueAge");
     z["RetirementAge"]             = "100";
 
-    std::string gender = n_v_pairs.string_value("ApplicantGender");
+    std::string gender = nv_pairs.string_value("ApplicantGender");
     if("F" == gender)
         {
         z["Gender"] = "Female";
@@ -259,7 +259,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
             ;
         }
 
-    std::string tobacco = n_v_pairs.string_value("ApplicantTobacco");
+    std::string tobacco = nv_pairs.string_value("ApplicantTobacco");
     if("Y" == tobacco)
         {
         z["Smoking"] = "Smoker";
@@ -282,13 +282,13 @@ bool custom_io_0_read(Input& z, std::string const& filename)
             ;
         }
 
-    z["StateOfJurisdiction"]       = n_v_pairs.string_value("ApplicantState");
-    z["PremiumTaxState"]           = n_v_pairs.string_value("ApplicantState");
+    z["StateOfJurisdiction"]       = nv_pairs.string_value("ApplicantState");
+    z["PremiumTaxState"]           = nv_pairs.string_value("ApplicantState");
 
 // Not yet used, but might be wanted someday:
 // PaymentsPerYear=1
 
-    z["ProductName"]               = n_v_pairs.string_value("ProductCode");
+    z["ProductName"]               = nv_pairs.string_value("ProductCode");
 
     if("Standard" != z["UnderwritingClass"].str())
         {
@@ -298,7 +298,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
             ;
         }
 
-    std::string undw = n_v_pairs.string_value("ProductOption");
+    std::string undw = nv_pairs.string_value("ProductOption");
     if("P" == undw)
         {
         z["UnderwritingClass"]     = "Preferred";
@@ -326,7 +326,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
             ;
         }
 
-    std::string dbopt = n_v_pairs.string_value("DeathBenefitOption");
+    std::string dbopt = nv_pairs.string_value("DeathBenefitOption");
     if("L" == dbopt)
         {
         z["DeathBenefitOption"] = "a";
@@ -352,7 +352,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     // For single-premium cases, the specified amount would normally
     // be calculated by using a "corridor" specified-amount strategy,
     // but the customer wants to enter the specified amount explicitly.
-    z["SpecifiedAmount"]           = n_v_pairs.string_value("FaceAmt");
+    z["SpecifiedAmount"]           = nv_pairs.string_value("FaceAmt");
 
     // Zero out any default er premium.
     z["CorporationPayment"]        = "0";
@@ -360,7 +360,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     // treat it, contrary to fact, as paid by the insured; reason:
     // consistency with GUI--see ChangeLog for 20050825T0122Z .
     // SOMEDAY !! Revisit this later.
-    z["Payment"]                   = n_v_pairs.string_value("PremiumAmt") + ";0";
+    z["Payment"]                   = nv_pairs.string_value("PremiumAmt") + ";0";
 
 // Not yet used, but might be wanted someday:
 //ExchangeAmt=0
@@ -371,11 +371,11 @@ bool custom_io_0_read(Input& z, std::string const& filename)
 // Table ratings: not yet used, but might be wanted someday:
 // ApplicantRating=
 // ApplicantThruAge=
-    z["SubstandardTable"]          = n_v_pairs.string_value("ApplicantRating");
+    z["SubstandardTable"]          = nv_pairs.string_value("ApplicantRating");
 
-    double permanent_flat         = n_v_pairs.numeric_value("PermFlatExtraAmt");
-    double temporary_flat         = n_v_pairs.numeric_value("TempFlatExtraAmt");
-    double temporary_flat_max_age = n_v_pairs.numeric_value("TempFlatExtraThruAge");
+    double permanent_flat         = nv_pairs.numeric_value("PermFlatExtraAmt");
+    double temporary_flat         = nv_pairs.numeric_value("TempFlatExtraAmt");
+    double temporary_flat_max_age = nv_pairs.numeric_value("TempFlatExtraThruAge");
     if(z.issue_age() < temporary_flat_max_age)
         {
         z["FlatExtra"] =
@@ -401,11 +401,11 @@ bool custom_io_0_read(Input& z, std::string const& filename)
 
     double first_year_general_account_rate =
             0.01
-        *   n_v_pairs.numeric_value("InterestRateFirstYr")
+        *   nv_pairs.numeric_value("InterestRateFirstYr")
         ;
     double renewal_year_general_account_rate =
             0.01
-        *   n_v_pairs.numeric_value("InterestRateOngoing")
+        *   nv_pairs.numeric_value("InterestRateOngoing")
         ;
 
     std::vector<double> declared_rate;
@@ -426,20 +426,20 @@ bool custom_io_0_read(Input& z, std::string const& filename)
 // names works only  as long as we initialize the latter to a nonempty
 // string, which we do as a temporary workaround elsewhere; when that's
 // resolved, revisit this.
-    z["AgentName"]                 = n_v_pairs.string_value("AgentName");
-    z["AgentAddress"]              = n_v_pairs.string_value("AgentAddress");
-    z["AgentCity"]                 = n_v_pairs.string_value("AgentCity");
-    z["AgentState"]                = n_v_pairs.string_value("AgentState");
-    z["AgentZipCode"]              = n_v_pairs.string_value("AgentZip");
-    z["AgentPhone"]                = n_v_pairs.string_value("AgentPhone");
-    z["AgentId"]                   = n_v_pairs.string_value("AgentLicense");
+    z["AgentName"]                 = nv_pairs.string_value("AgentName");
+    z["AgentAddress"]              = nv_pairs.string_value("AgentAddress");
+    z["AgentCity"]                 = nv_pairs.string_value("AgentCity");
+    z["AgentState"]                = nv_pairs.string_value("AgentState");
+    z["AgentZipCode"]              = nv_pairs.string_value("AgentZip");
+    z["AgentPhone"]                = nv_pairs.string_value("AgentPhone");
+    z["AgentId"]                   = nv_pairs.string_value("AgentLicense");
 // Not yet used, but might be wanted someday:
 // AgentCompanyName
 // AgentLicense
 
     double separate_account_rate =
             0.01
-        *   n_v_pairs.numeric_value("InterestRateSepAcctFirstYr")
+        *   nv_pairs.numeric_value("InterestRateSepAcctFirstYr")
         ;
 
     z["SeparateAccountRate"]       = value_cast<std::string>(separate_account_rate);
@@ -448,7 +448,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     // it should be ignored, and must not be incorrectly converted to
     // zero. Yet one might actually wish to set the multiplier to zero;
     // that would be indicated by non-empty input evaluating to zero.
-    std::string coi_mult            = n_v_pairs.string_value("COIMult");
+    std::string coi_mult            = nv_pairs.string_value("COIMult");
     if(!coi_mult.empty())
         {
         z["OverrideCoiMultiplier"] = "Yes";
@@ -460,7 +460,7 @@ bool custom_io_0_read(Input& z, std::string const& filename)
     //   if "Y", then exit;
     //   else, leave the GUI active.
     // Ignored for command-line regression testing.
-    return "Y" == n_v_pairs.string_value("AutoClose");
+    return "Y" == nv_pairs.string_value("AutoClose");
 }
 
 /// Write custom output for a particular customer.

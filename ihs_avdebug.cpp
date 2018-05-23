@@ -42,8 +42,7 @@ namespace
 {
     inline std::string const& not_applicable()
         {
-        static char const* n_a = "---";
-        static std::string const s(n_a);
+        static std::string const s{"---"};
         return s;
         }
 

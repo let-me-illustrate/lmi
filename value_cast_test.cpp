@@ -80,7 +80,7 @@ int test_main(int, char*[])
     double d(1.23456);
     std::string s("test");
     X x;
-    NotDefaultConstructible n_d_c(std::cin);
+    NotDefaultConstructible ndc(std::cin);
 
     // Test which conversion is used for type double.
 
@@ -123,8 +123,8 @@ int test_main(int, char*[])
 
     BOOST_TEST_EQUAL(e_stream       ,method(   (char volatile*)nullptr, s));
 
-    n_d_c = value_cast<NotDefaultConstructible>(n_d_c);
-    n_d_c = value_cast(n_d_c, n_d_c);
+    ndc = value_cast<NotDefaultConstructible>(ndc);
+    ndc = value_cast(ndc, ndc);
 
     // Forbidden conversions to pointer, detected at compile time.
 //    cp = value_cast(d, cp);
