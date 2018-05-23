@@ -460,7 +460,7 @@ void wx_table_generator::compute_column_widths()
                     if(0 < underflow)
                         {
                         ++i.col_width_;
-                        underflow--;
+                        --underflow;
                         }
                     }
 

@@ -325,7 +325,7 @@ int page_count
         auto const free_rows = rows_per_page - groups_per_page * (rows_per_group + 1);
         if(rows_on_last_page <= free_rows)
             {
-            n_pages--;
+            --n_pages;
             }
         }
 

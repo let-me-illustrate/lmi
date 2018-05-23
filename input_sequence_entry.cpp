@@ -797,7 +797,7 @@ void InputSequenceEditor::set_tab_order()
 void InputSequenceEditor::remove_row(int row)
 {
     duration_scalars_.erase(duration_scalars_.begin() + row);
-    rows_count_--;
+    --rows_count_;
 
     // remove all controls from the row
     for(int i = 0; i < Col_Max; ++i)
@@ -972,7 +972,7 @@ wxString InputSequenceEditor::format_from_text(int row)
                 {
                 int num_i = duration_num_field(i).GetValue();
                 yrs += num_i;
-                i--;
+                --i;
                 }
             return wxString::Format
                 ("%s + %d years"

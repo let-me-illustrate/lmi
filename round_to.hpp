@@ -177,7 +177,7 @@ RealType round_down(RealType r)
     RealType i_part = std::rint(r);
     if(r < i_part)
         {
-        i_part--;
+        --i_part;
         }
     return i_part;
 }
@@ -198,7 +198,7 @@ RealType round_trunc(RealType r)
     //   get the next integer in the direction of zero.
     if(RealType(0) < i_part && f_part < RealType(0))
         {
-        i_part--;
+        --i_part;
         }
     else if(RealType(0) < f_part && i_part < RealType(0))
         {
@@ -231,7 +231,7 @@ RealType round_near(RealType r)
         {
         if(f_part < RealType(0))
             {
-            i_part--;
+            --i_part;
             }
         else if(RealType(0) < f_part)
             {
