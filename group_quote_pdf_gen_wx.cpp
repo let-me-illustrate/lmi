@@ -33,6 +33,7 @@
 #include "ledger_invariant.hpp"
 #include "ledger_text_formats.hpp"      // ledger_format()
 #include "ledger_variant.hpp"
+#include "math_functions.hpp"           // outward_quotient()
 #include "mc_enum_types_aux.hpp"        // is_subject_to_ill_reg()
 #include "miscellany.hpp"               // split_into_lines()
 #include "oecumenic_enumerations.hpp"   // oenum_format_style
@@ -822,7 +823,9 @@ int group_quote_pdf_generator_wx::compute_pages_for_table_rows
         int const first_row_y = pdf_writer.get_vert_margin() + header_height;
         int const page_area_y = last_row_y - first_row_y;
         int const rows_per_page = page_area_y / row_height;
-        total_pages += (remaining_rows + rows_per_page - 1) / rows_per_page;
+        auto total_pagesX = total_pages + (remaining_rows + rows_per_page - 1) / rows_per_page;
+        total_pages += outward_quotient(remaining_rows, rows_per_page);
+LMI_ASSERT(total_pagesX == total_pages);
         *remaining_space = page_area_y;
         remaining_rows %= rows_per_page;
         }

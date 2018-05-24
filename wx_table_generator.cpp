@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "math_functions.hpp"           // outward_quotient()
 #include "miscellany.hpp"               // count_newlines(), split_into_lines()
 
 #include <algorithm>                    // max()
@@ -397,8 +398,11 @@ void wx_table_generator::compute_column_widths()
 // Also calculate the number of pixels by which it overflows for each column
             // We need to round up in division here to be sure that all columns
             // fit into the available width.
-            auto const overflow_per_column =
+            auto const overflow_per_columnX =
                 (overflow + number_of_columns - 1) / number_of_columns;
+            auto const overflow_per_column =
+                outward_quotient(overflow, number_of_columns);
+LMI_ASSERT(overflow_per_columnX == overflow_per_column);
 // Now determine whether reducing the margins will make the table fit.
 // If that works, then do it; else don't do it, and print a warning.
 //
@@ -496,8 +500,11 @@ void wx_table_generator::compute_column_widths()
     // to consume all available space.
     if(number_of_elastic_columns)
         {
-        int const width_of_each_elastic_column
+        int const width_of_each_elastic_columnX
             = (total_width_ - total_inelastic_width + number_of_elastic_columns - 1) / number_of_elastic_columns;
+        int const width_of_each_elastic_column
+            = outward_quotient(total_width_ - total_inelastic_width, number_of_elastic_columns);
+LMI_ASSERT(width_of_each_elastic_columnX == width_of_each_elastic_column);
 
         for(auto& i : all_columns_)
             {
