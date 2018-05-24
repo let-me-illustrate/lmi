@@ -29,6 +29,9 @@
 
 #include <algorithm>                    // max()
 
+// Default size of various characters for illustrations and group quotes:
+//   'M' 7pt; 'N' 6pt; '1' 4pt; '9' 4pt; ',' 2pt
+
 // Is this a struct only because we want its members to be publicly
 // accessible? But their values can also be changed by clients, and
 // isn't that undesirable?
@@ -474,7 +477,6 @@ void wx_table_generator::compute_column_widths()
 // just because it's shorter and not necessarily worse (nor better).
             }
 
-        // PDF !! Before release, consider showing less information here.
         warning()
             << "Not enough space for all " << number_of_columns << " columns."
             << "\nPrintable width is " << total_width_ << " points."
@@ -482,12 +484,6 @@ void wx_table_generator::compute_column_widths()
             << " points without any margins for legibility."
             << "\nColumn margins of " << column_margin() << " points on both sides"
             << " would take up " << 2 * column_margin() * number_of_columns << " additional points."
-            << "\nFor reference:"
-            << "\n'M' is " << dc_.GetTextExtent("M").x << " points wide."
-            << "\n'N' is " << dc_.GetTextExtent("N").x << " points wide."
-            << "\n'1' is " << dc_.GetTextExtent("1").x << " points wide."
-            << "\n'9' is " << dc_.GetTextExtent("9").x << " points wide."
-            << "\n',' is " << dc_.GetTextExtent(",").x << " points wide."
             << LMI_FLUSH
             ;
         return;
