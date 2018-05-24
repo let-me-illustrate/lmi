@@ -21,7 +21,7 @@
 
 #include "pchfile.hpp"
 
-#include "math_functors.hpp"
+#include "math_functions.hpp"
 
 #include "fenv_lmi.hpp"
 #include "materially_equal.hpp"

@@ -19,8 +19,8 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef math_functors_hpp
-#define math_functors_hpp
+#ifndef math_functions_hpp
+#define math_functions_hpp
 
 #include "config.hpp"
 
@@ -346,5 +346,5 @@ void assign_midpoint
     assign(out, apply_binary(mean<T>(), in_0, in_1));
 }
 
-#endif // math_functors_hpp
+#endif // math_functions_hpp
 

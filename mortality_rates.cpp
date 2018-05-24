@@ -28,7 +28,7 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "math_functors.hpp"            // assign_midpoint()
+#include "math_functions.hpp"           // assign_midpoint()
 
 #include <algorithm>                    // min()
 

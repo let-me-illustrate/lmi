@@ -35,7 +35,7 @@
 #include "et_vector.hpp"
 #include "ihs_irc7702a.hpp"
 #include "materially_equal.hpp"         // material_difference()
-#include "math_functors.hpp"
+#include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
 #include "mec_input.hpp"
 #include "mec_xml_document.hpp"

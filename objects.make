@@ -439,7 +439,7 @@ unit_test_targets := \
   loads_test \
   map_lookup_test \
   materially_equal_test \
-  math_functors_test \
+  math_functions_test \
   mc_enum_test \
   miscellany_test \
   mortality_rates_test \
@@ -740,9 +740,9 @@ materially_equal_test$(EXEEXT): \
   $(common_test_objects) \
   materially_equal_test.o \
 
-math_functors_test$(EXEEXT): \
+math_functions_test$(EXEEXT): \
   $(common_test_objects) \
-  math_functors_test.o \
+  math_functions_test.o \
   timer.o \
 
 mc_enum_test$(EXEEXT): \

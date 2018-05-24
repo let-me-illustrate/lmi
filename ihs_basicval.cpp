@@ -41,7 +41,7 @@
 #include "input.hpp"
 #include "interest_rates.hpp"
 #include "loads.hpp"
-#include "math_functors.hpp"
+#include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_str()
 #include "mortality_rates.hpp"
 #include "outlay.hpp"

@@ -26,7 +26,7 @@
 
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
-#include "math_functors.hpp"
+#include "math_functions.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 

@@ -29,7 +29,7 @@
 #include "dbnames.hpp"
 #include "et_vector.hpp"
 #include "handle_exceptions.hpp"
-#include "math_functors.hpp"            // lesser_of()
+#include "math_functions.hpp"           // lesser_of()
 #include "print_matrix.hpp"
 #include "value_cast.hpp"
 #include "xml_serialize.hpp"
