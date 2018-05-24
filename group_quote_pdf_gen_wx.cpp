@@ -823,9 +823,7 @@ int group_quote_pdf_generator_wx::compute_pages_for_table_rows
         int const first_row_y = pdf_writer.get_vert_margin() + header_height;
         int const page_area_y = last_row_y - first_row_y;
         int const rows_per_page = page_area_y / row_height;
-        auto total_pagesX = total_pages + (remaining_rows + rows_per_page - 1) / rows_per_page;
         total_pages += outward_quotient(remaining_rows, rows_per_page);
-LMI_ASSERT(total_pagesX == total_pages);
         *remaining_space = page_area_y;
         remaining_rows %= rows_per_page;
         }
