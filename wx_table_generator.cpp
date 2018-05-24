@@ -347,7 +347,7 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 void wx_table_generator::compute_column_widths()
 {
     // Number of non-hidden columns.
-    int n_columns = 0;
+    int number_of_columns = 0;
 
     // Number of non-hidden elastic columns.
     //
@@ -358,7 +358,7 @@ void wx_table_generator::compute_column_widths()
     // has been allocated to each column, any excess width left over
     // is to be distributed among such elastic columns only:
     // i.e., they (and only they) are to be "expanded".
-    int n_elastic = 0;
+    int number_of_elastic_columns = 0;
 
     // Total width of all non-hidden inelastic columns.
     // The width of each inelastic column reflects:
@@ -380,11 +380,11 @@ void wx_table_generator::compute_column_widths()
             continue;
             }
 
-        ++n_columns;
+        ++number_of_columns;
 
         if(i.is_elastic())
             {
-            ++n_elastic;
+            ++number_of_elastic_columns;
             }
         else
             {
@@ -406,13 +406,13 @@ void wx_table_generator::compute_column_widths()
         // columns, so the column-fitting problem is overconstrained.
         // Therefore, don't even try reducing margins if there are any
         // elastic columns.
-        if(!n_elastic)
+        if(!number_of_elastic_columns)
             {
 // Also calculate the number of pixels by which it overflows for each column
             // We need to round up in division here to be sure that all columns
             // fit into the available width.
             auto const overflow_per_column =
-                (overflow + n_columns - 1) / n_columns;
+                (overflow + number_of_columns - 1) / number_of_columns;
 // Now determine whether reducing the margins will make the table fit.
 // If that works, then do it; else don't do it, and print a warning.
 //
@@ -441,7 +441,7 @@ void wx_table_generator::compute_column_widths()
 // condition to something like:
 //    overflow_per_column <= column_margin_ - 4 // two pixels on each side
 //    overflow_per_column <= column_margin_ - 2 // one pixel on each side
-                auto underflow = overflow_per_column * n_columns - overflow;
+                auto underflow = overflow_per_column * number_of_columns - overflow;
 
                 for(auto& i : all_columns_)
                     {
@@ -491,12 +491,12 @@ void wx_table_generator::compute_column_widths()
 
         // PDF !! Before release, consider showing less information here.
         warning()
-            << "Not enough space for all " << n_columns << " columns."
+            << "Not enough space for all " << number_of_columns << " columns."
             << "\nPrintable width is " << total_width_ << " points."
-            << "\nData alone require " << total_inelastic_width - 2 * column_margin() * n_columns
+            << "\nData alone require " << total_inelastic_width - 2 * column_margin() * number_of_columns
             << " points without any margins for legibility."
             << "\nColumn margins of " << column_margin() << " points on both sides"
-            << " would take up " << 2 * column_margin() * n_columns << " additional points."
+            << " would take up " << 2 * column_margin() * number_of_columns << " additional points."
             << "\nFor reference:"
             << "\n'M' is " << dc_.GetTextExtent("M").x << " points wide."
             << "\n'N' is " << dc_.GetTextExtent("N").x << " points wide."
@@ -513,10 +513,10 @@ void wx_table_generator::compute_column_widths()
     //
     // If there's more than enough space for them, then expand them
     // to consume all available space.
-    if(n_elastic)
+    if(number_of_elastic_columns)
         {
         int const width_of_each_elastic_column
-            = (total_width_ - total_inelastic_width + n_elastic - 1) / n_elastic;
+            = (total_width_ - total_inelastic_width + number_of_elastic_columns - 1) / number_of_elastic_columns;
 
         for(auto& i : all_columns_)
             {
@@ -549,8 +549,8 @@ void wx_table_generator::do_output_single_row
         do_output_vert_separator(pos_x, y_top, pos_y);
         }
 
-    std::size_t const n_columns = all_columns().size();
-    for(std::size_t col = 0; col < n_columns; ++col)
+    std::size_t const number_of_columns = all_columns().size();
+    for(std::size_t col = 0; col < number_of_columns; ++col)
         {
         column_info const& ci = all_columns().at(col);
         if(ci.is_hidden())
@@ -715,9 +715,9 @@ void wx_table_generator::output_headers
     // Split headers in single lines and fill up the entire columns*lines 2D
     // matrix, using empty strings for the headers with less than the maximal
     // number of lines.
-    std::size_t const n_columns = all_columns().size();
-    std::vector<std::string> headers_by_line(max_header_lines_ * n_columns);
-    for(std::size_t col = 0; col < n_columns; ++col)
+    std::size_t const number_of_columns = all_columns().size();
+    std::vector<std::string> headers_by_line(max_header_lines_ * number_of_columns);
+    for(std::size_t col = 0; col < number_of_columns; ++col)
         {
         column_info const& ci = all_columns().at(col);
         if(ci.is_hidden())
@@ -733,7 +733,7 @@ void wx_table_generator::output_headers
         for(std::size_t line = 0; line < lines.size(); ++line)
             {
             headers_by_line.at
-                ((first_line + line) * n_columns + col
+                ((first_line + line) * number_of_columns + col
                 ) = lines.at(line);
             }
         }
@@ -744,8 +744,8 @@ void wx_table_generator::output_headers
     for(std::size_t line = 0; line < max_header_lines_; ++line)
         {
         std::vector<std::string> const nth_line
-            (headers_by_line.begin() +      line  * n_columns
-            ,headers_by_line.begin() + (1 + line) * n_columns
+            (headers_by_line.begin() +      line  * number_of_columns
+            ,headers_by_line.begin() + (1 + line) * number_of_columns
             );
         x = left_margin_;
         do_output_single_row(x, pos_y, nth_line);
