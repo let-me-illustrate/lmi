@@ -34,7 +34,7 @@ enum oenum_alb_or_anb
     ,oe_age_nearest_birthday_ties_older
     };
 
-enum oenum_alignment_horizontal
+enum oenum_h_align
     {oe_left
     ,oe_center
     ,oe_right

@@ -192,7 +192,7 @@ int test_main(int, char*[])
     static double const one_plus_i = 1.0L + i;
     std::vector<double> accum_p(p.size());
     accum_p[0] = p[0] * one_plus_i;
-    for(unsigned int j = 1; j < p.size(); j++)
+    for(unsigned int j = 1; j < p.size(); ++j)
         {
         accum_p[j] = (accum_p[j - 1] + p[j]) * one_plus_i;
         }

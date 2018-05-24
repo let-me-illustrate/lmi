@@ -314,20 +314,20 @@ int page_count
     int const used_per_page = groups_per_page * rows_per_group;
 
     // Finally determine how many pages are needed to show all the rows.
-    int num_pages = (total_rows + used_per_page - 1) / used_per_page;
+    int number_of_pages = (total_rows + used_per_page - 1) / used_per_page;
 
     // The last page may not be needed if all the rows on it can fit into the
     // remaining space, too small for a full group, but perhaps sufficient for
     // these rows, in the last by one page.
-    if(1 < num_pages)
+    if(1 < number_of_pages)
         {
-        auto const rows_on_last_page = total_rows - (num_pages - 1) * used_per_page;
+        auto const rows_on_last_page = total_rows - (number_of_pages - 1) * used_per_page;
         auto const free_rows = rows_per_page - groups_per_page * (rows_per_group + 1);
         if(rows_on_last_page <= free_rows)
             {
-            num_pages--;
+            --number_of_pages;
             }
         }
 
-    return num_pages;
+    return number_of_pages;
 }

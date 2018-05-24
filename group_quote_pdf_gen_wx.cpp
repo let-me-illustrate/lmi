@@ -238,7 +238,7 @@ enum_group_quote_columns const e_first_totalled_column = e_col_basic_face_amount
 struct column_definition
 {
     char const* header_;
-    char const* widest_text_; // Empty string means variable width.
+    char const* widest_text_; // PDF !! Empty string means variable width.
 };
 
 // Headers of premium columns include dynamically-determined payment
@@ -648,7 +648,7 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     else
         {
         rows_.push_back(rd);
-        row_num_++;
+        ++row_num_;
         }
 }
 
@@ -674,7 +674,13 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         {
         column_definition const& cd = column_definitions[col];
         std::string header;
+        oenum_h_align alignment = oe_center;
+        // PDF !! This doesn't fit into the switch logic below.
+        if(e_col_name == col) {alignment = oe_left;}
         oenum_visibility visibility = oe_shown;
+        oenum_elasticity elasticity = oe_inelastic;
+        // PDF !! This doesn't fit into the switch logic below.
+        if(e_col_name == col) {elasticity = oe_elastic;}
 
         // The cast is only used to ensure that if any new elements are added
         // to the enum, the compiler would warn about their values not being
@@ -714,7 +720,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
                 break;
             }
 
-        vc.push_back({header, cd.widest_text_, visibility});
+        vc.push_back({header, cd.widest_text_, alignment, visibility, elasticity});
         }
 
     wx_table_generator table_gen
@@ -752,7 +758,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         = remaining_space < (footer_height + 2 * vert_skip);
     if(footer_on_its_own_page)
         {
-        total_pages++;
+        ++total_pages;
         }
 
     int current_page = 1;
@@ -765,7 +771,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             {
             output_page_number_and_version(pdf_writer, total_pages, current_page);
 
-            current_page++;
+            ++current_page;
             pdf_writer.dc().StartPage();
 
             pos_y = pdf_writer.get_vert_margin();
@@ -777,7 +783,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
         {
         output_page_number_and_version(pdf_writer, total_pages, current_page);
 
-        current_page++;
+        ++current_page;
         pdf_writer.dc().StartPage();
 
         pos_y = pdf_writer.get_vert_margin();
@@ -1076,7 +1082,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
 
     for(int col = e_first_totalled_column; col < e_col_max; ++col)
         {
-        int const num_dec =
+        int const decimals =
             ((e_col_basic_face_amount           == col) ? 0
             :(e_col_basic_premium               == col) ? 2
             :(e_col_supplemental_face_amount    == col) ? 0
@@ -1085,7 +1091,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
             :(e_col_total_premium               == col) ? 2
             :throw std::logic_error("Invalid column type.")
             );
-        std::pair<int,oenum_format_style> const f(num_dec, oe_format_normal);
+        std::pair<int,oenum_format_style> const f(decimals, oe_format_normal);
 
         table_gen.output_highlighted_cell
             (col

@@ -223,7 +223,7 @@ class InputSequenceEditor
         explicit LayoutOnceGuard(InputSequenceEditor* editor)
             :editor_(editor)
         {
-            editor_->layout_freeze_count_++;
+            ++editor_->layout_freeze_count_;
         }
 
         ~LayoutOnceGuard()
@@ -427,9 +427,8 @@ void InputSequenceEditor::sequence(InputSequence const& s)
         }
 
     std::vector<ValueInterval> const& intervals = s.intervals();
-    int const num_intervals = intervals.size();
 
-    for(int i = 0; i < num_intervals; ++i)
+    for(unsigned int i = 0; i < intervals.size(); ++i)
         {
         ValueInterval const& data = intervals[i];
 
@@ -719,7 +718,7 @@ void InputSequenceEditor::insert_row(int new_row)
         sizer_->SetMinSize(sizer_->CalcMin());
         }
 
-    rows_count_++;
+    ++rows_count_;
     duration_scalars_.insert(duration_scalars_.begin() + new_row, -1);
 
     set_tab_order();
@@ -798,7 +797,7 @@ void InputSequenceEditor::set_tab_order()
 void InputSequenceEditor::remove_row(int row)
 {
     duration_scalars_.erase(duration_scalars_.begin() + row);
-    rows_count_--;
+    --rows_count_;
 
     // remove all controls from the row
     for(int i = 0; i < Col_Max; ++i)
@@ -973,7 +972,7 @@ wxString InputSequenceEditor::format_from_text(int row)
                 {
                 int num_i = duration_num_field(i).GetValue();
                 yrs += num_i;
-                i--;
+                --i;
                 }
             return wxString::Format
                 ("%s + %d years"

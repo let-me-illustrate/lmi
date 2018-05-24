@@ -572,7 +572,7 @@ void LedgerInvariant::Init(BasicValues const* b)
         v.insert(v.end(), expected_number_of_funds - v.size(), 0.0);
         }
 
-    for(int j = 0; j < number_of_funds; j++)
+    for(int j = 0; j < number_of_funds; ++j)
         {
         FundNumbers.push_back(j);
         FundNames.push_back(b->FundData_->GetFundInfo(j).LongName());
@@ -960,7 +960,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // ET !! This is of the form 'x = (lengthof x) take y'.
     // Make sure total (this) has enough years to add all years of a_Addend to.
     LMI_ASSERT(a_Addend.Length <= Length);
-    for(int j = 0; j < Max; j++)
+    for(int j = 0; j < Max; ++j)
         {
         if(0.0 == N[j])
             break;

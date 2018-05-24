@@ -112,7 +112,7 @@ void LedgerBase::Copy(LedgerBase const& obj)
     for
         (double_vector_map::iterator svmi = AllVectors.begin()
         ;svmi != AllVectors.end()
-        ;svmi++, obj_svmi++
+        ;++svmi, ++obj_svmi
         )
         {
         *(*svmi).second = *(*obj_svmi).second;
@@ -122,7 +122,7 @@ void LedgerBase::Copy(LedgerBase const& obj)
     for
         (scalar_map::iterator svmi = AllScalars.begin()
         ;svmi != AllScalars.end()
-        ;svmi++, obj_sci++
+        ;++svmi, ++obj_sci
         )
         {
         *(*svmi).second = *(*obj_sci).second;
@@ -132,7 +132,7 @@ void LedgerBase::Copy(LedgerBase const& obj)
     for
         (string_map::iterator svmi = Strings.begin()
         ;svmi != Strings.end()
-        ;svmi++, obj_sti++
+        ;++svmi, ++obj_sti
         )
         {
         *(*svmi).second = *(*obj_sti).second;
@@ -240,7 +240,7 @@ LedgerBase& LedgerBase::PlusEq
     for
         (double_vector_map::iterator svmi = BegYearVectors.begin()
         ;svmi != BegYearVectors.end()
-        ;svmi++, a_Addend_svmi++
+        ;++svmi, ++a_Addend_svmi
         )
         {
         x_plus_eq_y_times_z
@@ -259,7 +259,7 @@ LedgerBase& LedgerBase::PlusEq
     for
         (double_vector_map::iterator svmi = EndYearVectors.begin()
         ;svmi != EndYearVectors.end()
-        ;svmi++, a_Addend_svmi++
+        ;++svmi, ++a_Addend_svmi
         )
         {
         x_plus_eq_y_times_z
@@ -278,7 +278,7 @@ LedgerBase& LedgerBase::PlusEq
     for
         (double_vector_map::iterator svmi = ForborneVectors.begin()
         ;svmi != ForborneVectors.end()
-        ;svmi++, a_Addend_svmi++
+        ;++svmi, ++a_Addend_svmi
         )
         {
         x_plus_eq_y_times_z
@@ -293,7 +293,7 @@ LedgerBase& LedgerBase::PlusEq
     for
         (scalar_map::iterator ssmi = ScalableScalars.begin()
         ;ssmi != ScalableScalars.end()
-        ;ssmi++, a_Addend_ssmi++
+        ;++ssmi, ++a_Addend_ssmi
         )
         {
         *(*ssmi).second += *(*a_Addend_ssmi).second * a_Inforce[0];

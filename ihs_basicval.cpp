@@ -351,7 +351,7 @@ double BasicValues::InvestmentManagementFee() const
     double total_sepacct_allocations = 0.0;
     FundData const& Funds = *FundData_;
 
-    for(int j = 0; j < Funds.GetNumberOfFunds(); j++)
+    for(int j = 0; j < Funds.GetNumberOfFunds(); ++j)
         {
         double weight;
         // If average of all funds, then use equal weights, but
@@ -1712,7 +1712,7 @@ std::vector<double> BasicValues::GetTable
             );
         double n = yare_input_.NonsmokerProportion;
         double s = 1.0 - n;
-        for(int j = 0; j < GetLength(); j++)
+        for(int j = 0; j < GetLength(); ++j)
             {
             BlendedTable.push_back(s * S[j] + n * N[j]);
             }
@@ -1747,7 +1747,7 @@ std::vector<double> BasicValues::GetTable
         double m_tpx = 1.0;
         double tpx;
         double tpx_prev = 1.0;
-        for(int j = 0; j < GetLength(); j++)
+        for(int j = 0; j < GetLength(); ++j)
             {
             f_tpx *= (1 - F[j]);
             m_tpx *= (1 - M[j]);
@@ -1758,7 +1758,7 @@ std::vector<double> BasicValues::GetTable
 */
 
 ///*
-        for(int j = 0; j < GetLength(); j++)
+        for(int j = 0; j < GetLength(); ++j)
             {
             BlendedTable.push_back(f * F[j] + m * M[j]);
             }
@@ -1800,7 +1800,7 @@ std::vector<double> BasicValues::GetTable
         double s = 1.0 - n;
         double m = yare_input_.MaleProportion;
         double f = 1.0 - m;
-        for(int j = 0; j < GetLength(); j++)
+        for(int j = 0; j < GetLength(); ++j)
             {
             BlendedTable.push_back
                 (   f * (s * FS[j] + n * FN[j])

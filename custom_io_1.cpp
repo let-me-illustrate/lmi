@@ -388,7 +388,7 @@ void custom_io_1_write(Ledger const& ledger_values, std::string const& filename)
     os.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
     int max_duration = static_cast<int>(Invar.EndtAge - Invar.Age);
-    for(int j = 0; j < max_duration; j++)
+    for(int j = 0; j < max_duration; ++j)
         {
         os
             << std::setprecision(2)

@@ -212,7 +212,7 @@ void database_entity::reshape(std::vector<int> const& new_dims)
     std::vector<int> src_idx(e_number_of_axes); // indexes '*this'
 
     std::vector<int> working_idx(e_number_of_axes);
-    for(int j = 0; j < n_iter; j++)
+    for(int j = 0; j < n_iter; ++j)
         {
         int z = j;
         std::vector<int>::const_iterator i = new_dims.begin();
@@ -222,8 +222,8 @@ void database_entity::reshape(std::vector<int> const& new_dims)
             LMI_ASSERT(0 != *i);
             *w = z % *i;
             z /= *i;
-            i++;
-            w++;
+            ++i;
+            ++w;
             }
         LMI_ASSERT(0 == z);
 
@@ -252,7 +252,7 @@ double& database_entity::operator[](std::vector<int> const& index)
     LMI_ASSERT(e_number_of_axes == index.size());
 
     int z = 0;
-    for(unsigned int j = 0; j < e_number_of_axes; j++)
+    for(unsigned int j = 0; j < e_number_of_axes; ++j)
         {
         if(1 != axis_lengths_[j])
             {
@@ -281,7 +281,7 @@ double const* database_entity::operator[](database_index const& idx) const
     LMI_ASSERT(e_number_of_axes == 1 + index.size());
 
     int z = 0;
-    for(unsigned int j = 0; j < e_number_of_axes - 1; j++)
+    for(unsigned int j = 0; j < e_number_of_axes - 1; ++j)
         {
         if(1 != axis_lengths_[j])
             {
@@ -392,8 +392,8 @@ void database_entity::assert_invariants() const
                 << LMI_FLUSH
                 ;
             }
-        ai++;
-        mi++;
+        ++ai;
+        ++mi;
         }
 
     if(max_dims.back() < axis_lengths_.back())

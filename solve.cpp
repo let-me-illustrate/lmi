@@ -82,7 +82,7 @@ double SolveTest()
     double Negative = 0.0;
 
     // IHS !! Start counting only at end of no-lapse period--lmi does that already.
-    for(int j = 0; j < ThatSolveTgtYear; j++)
+    for(int j = 0; j < ThatSolveTgtYear; ++j)
         {
         Negative = std::min
             (Negative

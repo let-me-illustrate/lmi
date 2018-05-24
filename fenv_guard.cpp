@@ -27,7 +27,7 @@
 
 fenv_guard::fenv_guard()
 {
-    instance_count_++;
+    ++instance_count_;
     fenv_initialize();
 }
 
@@ -35,7 +35,7 @@ fenv_guard::~fenv_guard()
 {
     try
         {
-        instance_count_--;
+        --instance_count_;
         fenv_validate(e_fenv_indulge_nothing);
         }
     catch(...)

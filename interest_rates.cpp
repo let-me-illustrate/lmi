@@ -193,7 +193,7 @@ void convert_interest_rates
     double previous_annual_gross_rate = 0.0;
     double previous_spread            = 0.0;
     double previous_floor             = 0.0;
-    for(unsigned int j = 0; j < length; j++)
+    for(unsigned int j = 0; j < length; ++j)
         {
         if
             (
@@ -413,16 +413,16 @@ void InterestRates::Initialize(BasicValues const& v)
 
     // Paranoid check.
     unsigned int z = static_cast<unsigned int>(Length_);
-    for(int i = mce_annual_rate; i < mc_n_rate_periods; i++)
+    for(int i = mce_annual_rate; i < mc_n_rate_periods; ++i)
         {
-        for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+        for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
             {
             // The next line gets executed more than once with
             // identical semantics, but it's cheap, and writing it
             // to avoid that little problem would make it unclear.
             LMI_ASSERT(z == GenAcctGrossRate_           [j]   .size());
             LMI_ASSERT(z == GenAcctNetRate_          [i][j]   .size());
-            for(int k = mce_sep_full; k < mc_n_sep_bases; k++)
+            for(int k = mce_sep_full; k < mc_n_sep_bases; ++k)
                 {
                 LMI_ASSERT(z == SepAcctGrossRate_          [k].size());
                 LMI_ASSERT(z == SepAcctNetRate_      [i][j][k].size());
@@ -479,7 +479,7 @@ void InterestRates::InitializeGeneralAccountRates()
         GenAcctNetRate_[mce_monthly_rate][mce_gen_mdpt] = Zero_;
         }
 
-    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
         {
         convert_interest_rates
             (GenAcctGrossRate_[j]
@@ -499,13 +499,13 @@ void InterestRates::InitializeSeparateAccountRates()
     SepAcctFloor_.assign(Length_, -1.0);
     if(!NeedSepAcctRates_)
         {
-        for(int i = mce_annual_rate; i < mc_n_rate_periods; i++)
+        for(int i = mce_annual_rate; i < mc_n_rate_periods; ++i)
             {
-            for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+            for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
                 {
                 SepAcctGrossRate_[mce_sep_zero] = Zero_;
                 SepAcctGrossRate_[mce_sep_half] = Zero_;
-                for(int k = mce_sep_full; k < mc_n_sep_bases; k++)
+                for(int k = mce_sep_full; k < mc_n_sep_bases; ++k)
                     {
                     SepAcctNetRate_[i][j][k] = Zero_;
                     }
@@ -523,7 +523,7 @@ void InterestRates::InitializeSeparateAccountRates()
     std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), ExtraSepAcctCharge_.begin(), miscellaneous_charges.begin(), std::plus<double>());
 
     std::vector<double> total_charges[mc_n_gen_bases];
-    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
         {
         if(mce_gen_mdpt == j)
             {
@@ -551,7 +551,7 @@ void InterestRates::InitializeSeparateAccountRates()
             << "Separate-account rate is unexpectedly a net rate."
             << LMI_FLUSH
             ;
-        for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+        for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
             {
             if(mce_gen_mdpt == j)
                 {
@@ -581,9 +581,9 @@ void InterestRates::InitializeSeparateAccountRates()
         ,std::bind1st(std::multiplies<double>(), 0.5)
         );
 
-    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
         {
-        for(int k = mce_sep_full; k < mc_n_sep_bases; k++)
+        for(int k = mce_sep_full; k < mc_n_sep_bases; ++k)
             {
             if(mce_gen_mdpt == j)
                 {
@@ -609,9 +609,9 @@ void InterestRates::InitializeLoanRates()
 {
     if(!NeedLoanRates_)
         {
-        for(int i = mce_annual_rate; i < mc_n_rate_periods; i++)
+        for(int i = mce_annual_rate; i < mc_n_rate_periods; ++i)
             {
-            for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+            for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
                 {
                 RegLnCredRate_[i][j] = Zero_;
                 RegLnDueRate_ [i][j] = Zero_;
@@ -640,7 +640,7 @@ void InterestRates::InitializeLoanRates()
         (  mce_fixed_loan_rate == LoanRateType_
         || each_equal(PrefLoanRateDecr_, 0.0)
         );
-    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
         {
         RegLnDueRate_[mce_annual_rate][j] = PublishedLoanRate_;
         PrfLnDueRate_[mce_annual_rate][j] = PublishedLoanRate_;
@@ -662,7 +662,7 @@ void InterestRates::InitializeLoanRates()
         assign_midpoint(PrfLoanSpread_[mce_gen_mdpt], PrfLoanSpread_[mce_gen_guar], PrfLoanSpread_[mce_gen_curr]);
         }
 
-    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
         {
         convert_interest_rates
             (RegLnDueRate_[mce_annual_rate ][j]
@@ -741,9 +741,9 @@ void InterestRates::InitializeHoneymoonRates()
 {
     if(!NeedHoneymoonRates_)
         {
-        for(int i = mce_annual_rate; i < mc_n_rate_periods; i++)
+        for(int i = mce_annual_rate; i < mc_n_rate_periods; ++i)
             {
-            for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+            for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
                 {
                 HoneymoonValueRate_      [i][j] = Zero_;
                 PostHoneymoonGenAcctRate_[i][j] = Zero_;
@@ -760,7 +760,7 @@ void InterestRates::InitializeHoneymoonRates()
     // implement it for honeymoon rates too.
     LMI_ASSERT(mce_credited_rate == GenAcctRateType_);
 
-    for(int j = mce_gen_curr; j < mc_n_gen_bases; j++)
+    for(int j = mce_gen_curr; j < mc_n_gen_bases; ++j)
         {
         convert_interest_rates
             (GenAcctNetRate_    [mce_annual_rate ][j]

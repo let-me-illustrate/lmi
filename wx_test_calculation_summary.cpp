@@ -208,7 +208,7 @@ void check_calculation_summary_columns
     pos = html.find("\n<td", pos);
     LMI_ASSERT(pos != wxString::npos);
 
-    pos++;                                          // skip the new line
+    ++pos;                                          // skip the new line
 
     // We have found the place where the columns are described in the HTML,
     // iterate over all of them.
@@ -219,7 +219,7 @@ void check_calculation_summary_columns
         pos = html.find(">", pos);                  // end of the <td> tag
         LMI_ASSERT(pos != wxString::npos);
 
-        pos++;                                      // <td> tag contents
+        ++pos;                                      // <td> tag contents
 
         size_t const next = html.find("\n", pos);   // the next line start
         LMI_ASSERT(next != wxString::npos);

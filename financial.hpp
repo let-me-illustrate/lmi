@@ -177,7 +177,7 @@ OutputIterator const irr
     // of the interval we want to pass to the subfunction. We could
     // use an auxiliary variable in the loop body instead:
     //   pmts_end = pmts;
-    //   pmts_end++;
+    //   ++pmts_end;
     // and then increment 'pmts' in a place that seems more normal,
     // but timing tests show that to be significantly slower with
     // some of the compilers we use, and we have demonstrated that

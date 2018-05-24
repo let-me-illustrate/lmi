@@ -467,7 +467,7 @@ int test_all_modes(bool synchronize)
     // created once and used many times, like this:
     round_to<double> const RoundToNearestHundredth(2, r_to_nearest);
     double sample_value = 1.0;
-    for(int j = 0; j < 1000; j++)
+    for(int j = 0; j < 1000; ++j)
         {
         sample_value *= 1.05;
         sample_value = RoundToNearestHundredth(sample_value);

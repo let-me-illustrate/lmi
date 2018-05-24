@@ -76,7 +76,7 @@ OLCommFns::OLCommFns
     m.resize(    Length);
 
     d[0] = 1.0;
-    for(int j = 0; j < Length; j++)
+    for(int j = 0; j < Length; ++j)
         {
         LMI_ASSERT(-1.0 != i[j]);
         double v = 1.0 / (1.0 + i[j]);
@@ -140,7 +140,7 @@ ULCommFns::ULCommFns
     int months_per_period = 12 / periods_per_year;
 
     ad[0] = 1.0;
-    for(int j = 0; j < Length; j++)
+    for(int j = 0; j < Length; ++j)
         {
         LMI_ASSERT( 0.0 <= qc[j] && qc[j] <= 1.0);
         LMI_ASSERT(-1.0 <  ic[j]);
