@@ -237,6 +237,8 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(2.0, greater_of<double>()(1.0, 2.0));
     BOOST_TEST_EQUAL(1.0, lesser_of <double>()(1.0, 2.0));
 
+    // Test mean<>().
+
     BOOST_TEST_EQUAL(1.5, mean<double>()(1.0, 2.0));
     BOOST_TEST_EQUAL(smallnumD, mean<double>()(smallnumD, smallnumD));
     BOOST_TEST_EQUAL(bignumD  , mean<double>()(bignumD  , bignumD  ));
@@ -244,6 +246,66 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(1.5, mean<long double>()(1.0, 2.0));
     BOOST_TEST_EQUAL(smallnumL, mean<long double>()(smallnumL, smallnumL));
     BOOST_TEST_EQUAL(bignumL  , mean<long double>()(bignumL  , bignumL  ));
+
+    // Test outward_quotient().
+
+    BOOST_TEST_EQUAL( 1, outward_quotient( 2,  2));
+    BOOST_TEST_EQUAL( 1, outward_quotient( 1,  2));
+    BOOST_TEST_EQUAL( 0, outward_quotient( 0,  2));
+    BOOST_TEST_EQUAL(-1, outward_quotient(-1,  2));
+    BOOST_TEST_EQUAL(-1, outward_quotient(-2,  2));
+
+    BOOST_TEST_EQUAL(-1, outward_quotient( 2, -2));
+    BOOST_TEST_EQUAL(-1, outward_quotient( 1, -2));
+    BOOST_TEST_EQUAL( 0, outward_quotient( 0, -2));
+    BOOST_TEST_EQUAL( 1, outward_quotient(-1, -2));
+    BOOST_TEST_EQUAL( 1, outward_quotient(-2, -2));
+
+    BOOST_TEST_EQUAL( 0ULL, outward_quotient( 0ULL,  2ULL));
+    BOOST_TEST_EQUAL( 1ULL, outward_quotient( 1ULL,  2ULL));
+    BOOST_TEST_EQUAL( 1ULL, outward_quotient( 2ULL,  2ULL));
+
+    BOOST_TEST_EQUAL( 0, outward_quotient( 0,  3));
+    BOOST_TEST_EQUAL( 1, outward_quotient( 1,  3));
+    BOOST_TEST_EQUAL( 1, outward_quotient( 2,  3));
+    BOOST_TEST_EQUAL( 1, outward_quotient( 3,  3));
+    BOOST_TEST_EQUAL( 2, outward_quotient( 4,  3));
+    BOOST_TEST_EQUAL( 2, outward_quotient( 5,  3));
+    BOOST_TEST_EQUAL( 2, outward_quotient( 6,  3));
+    BOOST_TEST_EQUAL( 3, outward_quotient( 7,  3));
+
+    BOOST_TEST_EQUAL(INT_MIN, outward_quotient(INT_MIN,       1));
+    BOOST_TEST_EQUAL(      1, outward_quotient(INT_MIN, INT_MIN));
+    BOOST_TEST_EQUAL(     -1, outward_quotient(      1, INT_MIN));
+
+    BOOST_TEST_EQUAL(INT_MAX, outward_quotient(INT_MAX,       1));
+    BOOST_TEST_EQUAL(      1, outward_quotient(INT_MAX, INT_MAX));
+    BOOST_TEST_EQUAL(      1, outward_quotient(      1, INT_MAX));
+
+    BOOST_TEST_EQUAL(UINT_MAX, outward_quotient(UINT_MAX,       1u));
+    BOOST_TEST_EQUAL(      1u, outward_quotient(UINT_MAX, UINT_MAX));
+    BOOST_TEST_EQUAL(      1u, outward_quotient(      1u, UINT_MAX));
+
+    // The language allows "false/true"; this is no sillier.
+    BOOST_TEST_EQUAL(false, outward_quotient(false, true));
+
+    BOOST_TEST_THROW
+        (outward_quotient(1, 0)
+        ,std::runtime_error
+        ,"Assertion '0 != denominator' failed."
+        );
+
+    BOOST_TEST_THROW
+        (outward_quotient(INT_MIN, -1)
+        ,std::runtime_error
+        ,lmi_test::what_regex("^Assertion.*failed")
+        );
+
+// Appropriately fails to compile due to conflicting types:
+//  outward_quotient( 1, 1u);
+
+// Appropriately fails to compile due to static assertion:
+//  outward_quotient(1.0, 1.0);
 
     // Actuarial functions.
 

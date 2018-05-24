@@ -30,15 +30,16 @@
 #include <algorithm>                    // max(), min()
 #include <cmath>                        // expm1(), log1p()
 #include <functional>
+#include <limits>
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
 
-// TODO ?? Write functors here for other refactorable uses of
-// std::pow() found throughout the program.
+// TODO ?? Write functions here for other refactorable uses of
+// std::pow() throughout lmi, to facilitate reuse and unit testing.
 
-// These functors are Adaptable Unary or Binary Functions wherever
-// possible.
+// Many of these are Adaptable Unary or Binary Functions because that
+// was good C++98 practice.
 
 template<typename T>
 struct greater_of
@@ -83,6 +84,29 @@ struct mean
     T operator()(T const& x, T const& y) const
         {return 0.5 * x + 0.5 * y;}
 };
+
+/// Divide integers, rounding away from zero.
+///
+/// This floating-point analogue may be useful for cross checking:
+///   long double z = (long double)numerator / (long double)denominator;
+///   return (T) (0 < z) ? std::ceil(z) : std::floor(z);
+
+template<typename T>
+inline T outward_quotient(T numerator, T denominator)
+{
+    static_assert(std::is_integral<T>::value);
+
+    LMI_ASSERT(0 != denominator);
+
+    // "INT_MIN / -1" would overflow; but "false/bool(-1)" would not,
+    // hence the "T(-1) < 0" test.
+    constexpr T min = std::numeric_limits<T>::min();
+    LMI_ASSERT(!(min == numerator && T(-1) < 0 && T(-1) == denominator));
+
+    T x = numerator / denominator;
+    T y = 0 != numerator % denominator;
+    return (0 < numerator == 0 < denominator) ? x + y : x - y;
+}
 
 // Actuarial functions.
 //
