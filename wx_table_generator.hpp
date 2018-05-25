@@ -115,7 +115,6 @@ class wx_table_generator
 
     int row_height() const;
 
-    wxRect cell_rect(std::size_t column, int y);
     wxRect text_rect(std::size_t column, int y);
 
     void output_horz_separator
@@ -134,6 +133,8 @@ class wx_table_generator
     void compute_column_widths();
 
     wxFont get_header_font() const;
+
+    wxRect cell_rect(std::size_t column, int y);
 
     int do_get_cell_x(std::size_t column);
 
