@@ -25,9 +25,13 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "math_functions.hpp"           // outward_quotient()
 #include "miscellany.hpp"               // count_newlines(), split_into_lines()
 
 #include <algorithm>                    // max()
+
+// Default size of various characters for illustrations and group quotes:
+//   'M' 7pt; 'N' 6pt; '1' 4pt; '9' 4pt; ',' 2pt
 
 // Is this a struct only because we want its members to be publicly
 // accessible? But their values can also be changed by clients, and
@@ -322,27 +326,26 @@ wxRect wx_table_generator::text_rect(std::size_t column, int y)
 
 // class members used, mutably or immutably:
 //
-// const    total_width_
-// mutable  column_margin_
-// mutable  all_columns_
-//   i.e. std::vector<column_info> all_columns_;
-// mutable  column_info elements
-//   the only column_info function member called is is_hidden()
-//   the only column_info data member modified is col_width_
+// const    total_width_    max table width (page width - page margins)
+// mutable  column_margin_  spacing on both left and right of column
+// mutable  all_columns_    std::vector<column_info>
+//   column_info::col_width_ is the only member changed
 //
-// meanings (written before each variable, as in header documentation):
-//
-    // ctor parameter:
-    // max table width (page width minus horizontal page margins)
-// const    total_width_
-    // spacing on both left and right of column
-    // initialized in ctor to # pixels in one em: (dc_.GetTextExtent("M").x)
-    // changed in this function and nowhere else
-// mutable  column_margin_
-    // std::vector<column_info>
-// mutable  all_columns_
+// column_margin_ and col_width_ are modified here and nowhere else
 
 /// Compute column widths.
+///
+/// First, allocate adequate width to each inelastic column; then
+/// distribute any excess width left over among elastic columns.
+///
+/// The width of each inelastic column reflects:
+///  - a mask like "999,999" (ideally, there would instead be a
+///    quasi-global data structure mapping symbolic column names
+///    to their corresponding headers and maximal widths)
+///  - the header width
+///  - the bilateral margins that have already been added
+/// The margins may be slightly reduced by this function to make
+/// everything fit when it otherwise wouldn't.
 
 void wx_table_generator::compute_column_widths()
 {
@@ -350,25 +353,9 @@ void wx_table_generator::compute_column_widths()
     int number_of_columns = 0;
 
     // Number of non-hidden elastic columns.
-    //
-    // In practice, only the "Participant" column on group quotes has
-    // this property.
-    //
-    // The rationale for this property is that, once adequate width
-    // has been allocated to each column, any excess width left over
-    // is to be distributed among such elastic columns only:
-    // i.e., they (and only they) are to be "expanded".
     int number_of_elastic_columns = 0;
 
     // Total width of all non-hidden inelastic columns.
-    // The width of each inelastic column reflects:
-    //  - a mask like "999,999" (ideally, there would instead be a
-    //    quasi-global data structure mapping symbolic column names
-    //    to their corresponding headers and maximal widths)
-    //  - the header width
-    //  - the bilateral margins that have already been added
-    // The margins may be slightly reduced by this function to make
-    // everything fit when it otherwise wouldn't.
     int total_inelastic_width = 0;
 
     for(auto const& i : all_columns())
@@ -411,8 +398,10 @@ void wx_table_generator::compute_column_widths()
 // Also calculate the number of pixels by which it overflows for each column
             // We need to round up in division here to be sure that all columns
             // fit into the available width.
-            auto const overflow_per_column =
-                (overflow + number_of_columns - 1) / number_of_columns;
+            auto const overflow_per_column = outward_quotient
+                (overflow
+                ,number_of_columns
+                );
 // Now determine whether reducing the margins will make the table fit.
 // If that works, then do it; else don't do it, and print a warning.
 //
@@ -427,6 +416,8 @@ void wx_table_generator::compute_column_widths()
 // is less than the padding.
 //
 // Is this as good as it can be, given that coordinates are integers?
+// Answer: Yes--the integers count points, not ems or characters, and
+// typographers wouldn't use any finer unit for this task.
             if(overflow_per_column <= 2 * column_margin())
                 {
                 // We are going to reduce the total width by more than
@@ -489,7 +480,6 @@ void wx_table_generator::compute_column_widths()
 // just because it's shorter and not necessarily worse (nor better).
             }
 
-        // PDF !! Before release, consider showing less information here.
         warning()
             << "Not enough space for all " << number_of_columns << " columns."
             << "\nPrintable width is " << total_width_ << " points."
@@ -497,12 +487,6 @@ void wx_table_generator::compute_column_widths()
             << " points without any margins for legibility."
             << "\nColumn margins of " << column_margin() << " points on both sides"
             << " would take up " << 2 * column_margin() * number_of_columns << " additional points."
-            << "\nFor reference:"
-            << "\n'M' is " << dc_.GetTextExtent("M").x << " points wide."
-            << "\n'N' is " << dc_.GetTextExtent("N").x << " points wide."
-            << "\n'1' is " << dc_.GetTextExtent("1").x << " points wide."
-            << "\n'9' is " << dc_.GetTextExtent("9").x << " points wide."
-            << "\n',' is " << dc_.GetTextExtent(",").x << " points wide."
             << LMI_FLUSH
             ;
         return;
@@ -515,8 +499,10 @@ void wx_table_generator::compute_column_widths()
     // to consume all available space.
     if(number_of_elastic_columns)
         {
-        int const width_of_each_elastic_column
-            = (total_width_ - total_inelastic_width + number_of_elastic_columns - 1) / number_of_elastic_columns;
+        int const width_of_each_elastic_column = outward_quotient
+            (total_width_ - total_inelastic_width
+            ,number_of_elastic_columns
+            );
 
         for(auto& i : all_columns_)
             {

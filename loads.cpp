@@ -30,7 +30,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "et_vector.hpp"
-#include "math_functors.hpp"            // assign_midpoint()
+#include "math_functions.hpp"           // assign_midpoint()
 #include "mc_enum_types_aux.hpp"        // mc_n_ enumerators
 #include "premium_tax.hpp"
 

@@ -24,7 +24,7 @@
 #include "commutation_functions.hpp"
 
 #include "et_vector.hpp"
-#include "math_functors.hpp"
+#include "math_functions.hpp"
 #include "miscellany.hpp"               // lmi_array_size()
 #include "test_tools.hpp"
 #include "timer.hpp"

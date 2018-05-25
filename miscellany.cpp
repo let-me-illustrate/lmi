@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "math_functions.hpp"           // outward_quotient()
 
 #include <algorithm>                    // equal(), max()
 #include <cmath>                        // ceil(), floor()
@@ -314,7 +315,7 @@ int page_count
     int const used_per_page = groups_per_page * rows_per_group;
 
     // Finally determine how many pages are needed to show all the rows.
-    int number_of_pages = (total_rows + used_per_page - 1) / used_per_page;
+    int number_of_pages = outward_quotient(total_rows, used_per_page);
 
     // The last page may not be needed if all the rows on it can fit into the
     // remaining space, too small for a full group, but perhaps sufficient for

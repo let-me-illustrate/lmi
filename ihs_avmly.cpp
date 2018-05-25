@@ -36,7 +36,7 @@
 #include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "materially_equal.hpp"
-#include "math_functors.hpp"
+#include "math_functions.hpp"
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"

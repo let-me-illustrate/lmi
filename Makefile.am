@@ -144,7 +144,7 @@ TESTS = \
     test_loads \
     test_map_lookup \
     test_materially_equal \
-    test_math_functors \
+    test_math_functions \
     test_mc_enum \
     test_miscellany \
     test_mortality_rates \
@@ -874,11 +874,11 @@ test_materially_equal_SOURCES = \
   materially_equal_test.cpp
 test_materially_equal_CXXFLAGS = $(AM_CXXFLAGS)
 
-test_math_functors_SOURCES = \
+test_math_functions_SOURCES = \
   $(common_test_objects) \
-  math_functors_test.cpp \
+  math_functions_test.cpp \
   timer.cpp
-test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
+test_math_functions_CXXFLAGS = $(AM_CXXFLAGS)
 
 test_mc_enum_SOURCES = \
   $(common_test_objects) \
@@ -1262,7 +1262,7 @@ noinst_HEADERS = \
     main_common.hpp \
     map_lookup.hpp \
     materially_equal.hpp \
-    math_functors.hpp \
+    math_functions.hpp \
     mc_enum.hpp \
     mc_enum.tpp \
     mc_enum_aux.hpp \

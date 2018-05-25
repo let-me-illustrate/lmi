@@ -38,7 +38,7 @@
 #include "ihs_irc7702a.hpp"
 #include "ihs_server7702.hpp"           // RunServer7702FromStruct()
 #include "materially_equal.hpp"         // material_difference()
-#include "math_functors.hpp"
+#include "math_functions.hpp"
 #include "mc_enum_types_aux.hpp"        // mc_state_from_string()
 #include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary()
 #include "oecumenic_enumerations.hpp"

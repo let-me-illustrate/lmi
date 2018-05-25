@@ -27,7 +27,7 @@
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "et_vector.hpp"
-#include "math_functors.hpp"            // assign_midpoint()
+#include "math_functions.hpp"           // assign_midpoint()
 
 #include <algorithm>                    // min()
 

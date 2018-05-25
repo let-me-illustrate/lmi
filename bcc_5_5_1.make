@@ -138,7 +138,7 @@ excluded_unit_test_targets := \
   irc7702a_test \
   istream_to_string_test \
   loads_test \
-  math_functors_test \
+  math_functions_test \
   mc_enum_test \
   mortality_rates_test \
   path_utility_test \
