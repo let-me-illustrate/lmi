@@ -105,18 +105,15 @@ class wx_table_generator
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
-    void output_row(int& pos_y, std::vector<std::string> const values);
-
     void output_highlighted_cell
         (std::size_t        column
         ,int                y
         ,std::string const& value
         );
 
-    int row_height() const;
+    void output_row(int& pos_y, std::vector<std::string> const values);
 
-    wxRect text_rect(std::size_t column, int y) const;
-
+    void output_vert_separator(std::size_t before_column, int y);
     void output_horz_separator
         (std::size_t                  begin_column
         ,std::size_t                  end_column
@@ -124,28 +121,29 @@ class wx_table_generator
         ,oenum_render_or_only_measure output_mode = oe_render
         );
 
-    void output_vert_separator(std::size_t before_column, int y);
-
+    int row_height() const;
     int get_separator_line_height() const;
+
+    wxRect text_rect(std::size_t column, int y) const;
 
   private:
     void enroll_column(column_parameters const&);
     void compute_column_widths();
-
-    wxFont get_header_font() const;
-
-    wxRect cell_rect(std::size_t column, int y) const;
-
-    int do_get_cell_x(std::size_t column) const;
-
-    void do_output_horz_separator(int x1, int x2, int y );
-    void do_output_vert_separator(int x , int y1, int y2);
 
     void do_output_single_row
         (int&                            pos_x
         ,int&                            pos_y
         ,std::vector<std::string> const& values
         );
+
+    void do_output_vert_separator(int x , int y1, int y2);
+    void do_output_horz_separator(int x1, int x2, int y );
+
+    int do_get_cell_x(std::size_t column) const;
+
+    wxRect cell_rect(std::size_t column, int y) const;
+
+    wxFont get_header_font() const;
 
     // Const private accessors. Used in the implementation to
     // distinguish access from mutation.
