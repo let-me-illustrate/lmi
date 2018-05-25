@@ -203,7 +203,7 @@ void wx_table_generator::output_headers
     wxDCFontChanger header_font_setter(dc_);
     if(use_bold_headers_)
         {
-        header_font_setter.Set(get_header_font());
+        header_font_setter.Set(header_font());
         // The distance from the font's descender line to its ascender
         // line must not exceed the distance between lines.
         LMI_ASSERT(dc().GetCharHeight() <= row_height());
@@ -402,7 +402,7 @@ int wx_table_generator::row_height() const
 
 // Return the amount of vertical space taken by separator lines in the
 // table headers.
-int wx_table_generator::get_separator_line_height() const
+int wx_table_generator::separator_line_height() const
 {
     // This is completely arbitrary and chosen just because it seems to
     // look well.
@@ -453,7 +453,7 @@ void wx_table_generator::enroll_column(column_parameters const& z)
         wxDCFontChanger header_font_setter(dc_);
         if(use_bold_headers_)
             {
-            header_font_setter.Set(get_header_font());
+            header_font_setter.Set(header_font());
             }
 
         wxCoord w, h, lh;
@@ -814,7 +814,7 @@ wxRect wx_table_generator::cell_rect(std::size_t column, int y) const
 
 /// Return the font used for the headers.
 
-wxFont wx_table_generator::get_header_font() const
+wxFont wx_table_generator::header_font() const
 {
     return dc().GetFont().Bold();
 }

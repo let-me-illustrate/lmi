@@ -1365,7 +1365,7 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_guar_account_value
             ,column_separator_guar_non_guar
@@ -1396,7 +1396,7 @@ class numeric_summary_table_cell
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_mid_account_value
             ,column_separator_mid_curr
@@ -1413,7 +1413,7 @@ class numeric_summary_table_cell
 
         table_gen.output_headers(pos_y, output_mode);
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator(0, column_max, pos_y, output_mode);
 
         // And now the table values themselves.
@@ -1697,7 +1697,7 @@ class page_with_tabular_report
 
         table_gen.output_headers(pos_y, output_mode);
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         auto const ncols = get_table_columns().size();
         table_gen.output_horz_separator(0, ncols, pos_y, output_mode);
 
@@ -1801,7 +1801,7 @@ class ill_reg_tabular_detail_page : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_guar_account_value
             ,column_dummy_separator
@@ -2208,7 +2208,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_guar0_cash_surr_value
             ,column_separator_guar_curr0
@@ -2251,7 +2251,7 @@ class page_with_basic_tabular_report : public page_with_tabular_report
                     ,output_mode
                     );
 
-                y += table_gen.get_separator_line_height();
+                y += table_gen.separator_line_height();
                 table_gen.output_horz_separator
                     (begin_column
                     ,end_column
@@ -2669,7 +2669,7 @@ class reg_d_individual_irr_base : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_zero_cash_surr_value
             ,column_zero_irr_surr_value
@@ -2818,7 +2818,7 @@ class reg_d_individual_curr : public page_with_tabular_report
             ,output_mode
             );
 
-        pos_y += table_gen.get_separator_line_height();
+        pos_y += table_gen.separator_line_height();
         table_gen.output_horz_separator
             (column_curr_investment_income
             ,column_max

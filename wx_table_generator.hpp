@@ -122,7 +122,7 @@ class wx_table_generator
         );
 
     int row_height() const;
-    int get_separator_line_height() const;
+    int separator_line_height() const;
 
     wxRect text_rect(std::size_t column, int y) const;
 
@@ -143,7 +143,7 @@ class wx_table_generator
 
     wxRect cell_rect(std::size_t column, int y) const;
 
-    wxFont get_header_font() const;
+    wxFont header_font() const;
 
     // Const private accessors. Used in the implementation to
     // distinguish access from mutation.
