@@ -178,6 +178,11 @@ wx_table_generator::wx_table_generator(wx_table_generator const&) = default;
 
 wx_table_generator::~wx_table_generator() = default;
 
+wxDC const& wx_table_generator::dc() const
+{
+    return dc_;
+}
+
 int wx_table_generator::column_margin() const
 {
     return column_margin_;
@@ -224,7 +229,7 @@ void wx_table_generator::enroll_column(column_parameters const& z)
             }
 
         wxCoord w, h, lh;
-        dc_.GetMultiLineTextExtent(z.header, &w, &h, &lh, &dc_.GetFont());
+        dc().GetMultiLineTextExtent(z.header, &w, &h, &lh, &dc().GetFont());
         LMI_ASSERT(0 != lh);
         LMI_ASSERT(0 == h % lh);
 // Temporarily assert that this does the same as the code it replaced:
@@ -240,7 +245,7 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
             case oe_inelastic:
                 {
                 // Greater of header width and 'widest_text' width.
-                width = std::max(w, dc_.GetTextExtent(z.widest_text).x);
+                width = std::max(w, dc().GetTextExtent(z.widest_text).x);
                 // PDF !! Reconsider whether margin should be added here,
                 // because compute_column_widths() may need to remove it.
                 width += 2 * column_margin();
@@ -264,7 +269,7 @@ LMI_ASSERT(std::size_t(h / lh) == 1u + count_newlines(z.header));
 
 wxFont wx_table_generator::get_header_font() const
 {
-    return dc_.GetFont().Bold();
+    return dc().GetFont().Bold();
 }
 
 // Horizontal and vertical separators are considered to be drawn in
@@ -282,7 +287,7 @@ void wx_table_generator::do_output_vert_separator(int x, int y1, int y2)
     dc_.DrawLine(x, y1, x, y2);
 }
 
-int wx_table_generator::do_get_cell_x(std::size_t column)
+int wx_table_generator::do_get_cell_x(std::size_t column) const
 {
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
@@ -302,7 +307,7 @@ int wx_table_generator::row_height() const
 
 /// Return the rectangle containing the cell area.
 
-wxRect wx_table_generator::cell_rect(std::size_t column, int y)
+wxRect wx_table_generator::cell_rect(std::size_t column, int y) const
 {
     return wxRect
         (do_get_cell_x(column)
@@ -317,9 +322,9 @@ wxRect wx_table_generator::cell_rect(std::size_t column, int y)
 /// text and its vertical position is adjusted so that it can be directly
 /// passed to wxDC::DrawLabel().
 
-wxRect wx_table_generator::text_rect(std::size_t column, int y)
+wxRect wx_table_generator::text_rect(std::size_t column, int y) const
 {
-    wxRect z = cell_rect(column, y).Deflate(dc_.GetCharWidth(), 0);
+    wxRect z = cell_rect(column, y).Deflate(dc().GetCharWidth(), 0);
     z.Offset(0, char_height_);
     return z;
 }
@@ -563,12 +568,12 @@ void wx_table_generator::do_output_single_row
                     break;
                 case oe_center:
                     {
-                    x_text += (ci.col_width() - dc_.GetTextExtent(s).x) / 2;
+                    x_text += (ci.col_width() - dc().GetTextExtent(s).x) / 2;
                     }
                     break;
                 case oe_right:
                     {
-                    x_text += ci.col_width() - dc_.GetTextExtent(s).x;
+                    x_text += ci.col_width() - dc().GetTextExtent(s).x;
                     }
                     break;
                 }
@@ -692,10 +697,10 @@ void wx_table_generator::output_headers
         header_font_setter.Set(get_header_font());
         // The distance from the font's descender line to its ascender
         // line must not exceed the distance between lines.
-        LMI_ASSERT(dc_.GetCharHeight() <= row_height());
+        LMI_ASSERT(dc().GetCharHeight() <= row_height());
         // do_output_single_row(), called below, uses a cached char_height_
         // that is assumed not to differ from the bold GetCharHeight().
-        LMI_ASSERT(dc_.GetCharHeight() == char_height_);
+        LMI_ASSERT(dc().GetCharHeight() == char_height_);
         }
 
     // Split headers in single lines and fill up the entire columns*lines 2D
