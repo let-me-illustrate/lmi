@@ -291,7 +291,7 @@ void wx_table_generator::output_super_header
     // by the width of all the extra (i.e. not counting the starting one)
     // columns in this span.
     auto rect = text_rect(begin_column, pos_y);
-    rect.width += do_get_cell_x(end_column) - do_get_cell_x(begin_column + 1);
+    rect.width += cell_pos_x(end_column) - cell_pos_x(begin_column + 1);
 
     for(auto const& line : lines)
         {
@@ -358,11 +358,7 @@ void wx_table_generator::output_vert_separator
 {
     LMI_ASSERT(before_column <= all_columns().size());
 
-    do_output_vert_separator
-        (do_get_cell_x(before_column)
-        ,y
-        ,y + row_height_
-        );
+    do_output_vert_separator(cell_pos_x(before_column), y, y + row_height_);
 }
 
 /// Output a horizontal separator line across the specified columns,
@@ -386,7 +382,7 @@ void wx_table_generator::output_horz_separator
     LMI_ASSERT(begin_column < end_column);
     LMI_ASSERT(end_column <= all_columns().size());
 
-    int const x1 = do_get_cell_x(begin_column);
+    int const x1 = cell_pos_x(begin_column);
 
     int x2 = x1;
     for(std::size_t col = begin_column; col < end_column; ++col)
@@ -793,7 +789,7 @@ void wx_table_generator::do_output_horz_separator(int x1, int x2, int y)
     dc_.DrawLine(x1, y, x2, y);
 }
 
-int wx_table_generator::do_get_cell_x(std::size_t column) const
+int wx_table_generator::cell_pos_x(std::size_t column) const
 {
     int x = left_margin_;
     for(std::size_t col = 0; col < column; ++col)
@@ -809,7 +805,7 @@ int wx_table_generator::do_get_cell_x(std::size_t column) const
 wxRect wx_table_generator::cell_rect(std::size_t column, int y) const
 {
     return wxRect
-        (do_get_cell_x(column)
+        (cell_pos_x(column)
         ,y
         ,all_columns().at(column).col_width()
         ,row_height_
