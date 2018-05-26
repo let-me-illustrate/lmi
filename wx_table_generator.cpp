@@ -217,9 +217,9 @@ void wx_table_generator::output_headers
     // number of lines.
     std::size_t const number_of_columns = all_columns().size();
     std::vector<std::string> headers_by_line(max_header_lines_ * number_of_columns);
-    for(std::size_t col = 0; col < number_of_columns; ++col)
+    for(std::size_t i = 0; i < number_of_columns; ++i)
         {
-        column_info const& ci = all_columns().at(col);
+        column_info const& ci = all_columns().at(i);
         if(ci.is_hidden())
             {
             continue;
@@ -230,22 +230,22 @@ void wx_table_generator::output_headers
         // Fill the elements from the bottom line to the top one, so that a
         // single line header is shown on the last line.
         std::size_t const first_line = max_header_lines_ - lines.size();
-        for(std::size_t line = 0; line < lines.size(); ++line)
+        for(std::size_t j = 0; j < lines.size(); ++j)
             {
             headers_by_line.at
-                ((first_line + line) * number_of_columns + col
-                ) = lines.at(line);
+                ((first_line + j) * number_of_columns + i
+                ) = lines.at(j);
             }
         }
 
     // And output all lines of all column headers.
     int y_top = pos_y;
     int x = 0;
-    for(std::size_t line = 0; line < max_header_lines_; ++line)
+    for(std::size_t i = 0; i < max_header_lines_; ++i)
         {
         std::vector<std::string> const nth_line
-            (headers_by_line.begin() +      line  * number_of_columns
-            ,headers_by_line.begin() + (1 + line) * number_of_columns
+            (headers_by_line.begin() +      i  * number_of_columns
+            ,headers_by_line.begin() + (1 + i) * number_of_columns
             );
         x = left_margin_;
         do_output_single_row(x, pos_y, nth_line);
@@ -294,10 +294,9 @@ void wx_table_generator::output_super_header
     auto rect = text_rect(begin_column, pos_y);
     rect.width += cell_pos_x(end_column) - cell_pos_x(begin_column + 1);
 
-    for(auto const& line : lines)
+    for(auto const& i : lines)
         {
-        dc_.DrawLabel(line, rect, wxALIGN_CENTER_HORIZONTAL);
-
+        dc_.DrawLabel(i, rect, wxALIGN_CENTER_HORIZONTAL);
         rect.y += row_height_;
         pos_y  += row_height_;
         }
@@ -388,9 +387,9 @@ void wx_table_generator::output_horz_separator
     int const x1 = cell_pos_x(begin_column);
 
     int x2 = x1;
-    for(std::size_t col = begin_column; col < end_column; ++col)
+    for(std::size_t i = begin_column; i < end_column; ++i)
         {
-        x2 += all_columns().at(col).col_width();
+        x2 += all_columns().at(i).col_width();
         }
 
     do_output_horz_separator(x1, x2, y);
@@ -709,15 +708,15 @@ void wx_table_generator::do_output_single_row
         }
 
     std::size_t const number_of_columns = all_columns().size();
-    for(std::size_t col = 0; col < number_of_columns; ++col)
+    for(std::size_t i = 0; i < number_of_columns; ++i)
         {
-        column_info const& ci = all_columns().at(col);
+        column_info const& ci = all_columns().at(i);
         if(ci.is_hidden())
             {
             continue;
             }
 
-        std::string const& s = values[col];
+        std::string const& s = values[i];
         if(!s.empty())
             {
             int x_text = pos_x;
@@ -796,9 +795,9 @@ void wx_table_generator::do_output_horz_separator(int x1, int x2, int y)
 int wx_table_generator::cell_pos_x(std::size_t column) const
 {
     int x = left_margin_;
-    for(std::size_t col = 0; col < column; ++col)
+    for(std::size_t i = 0; i < column; ++i)
         {
-        x += all_columns().at(col).col_width();
+        x += all_columns().at(i).col_width();
         }
 
     return x;

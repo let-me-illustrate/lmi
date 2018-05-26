@@ -357,9 +357,9 @@ class group_quote_pdf_generator_wx
       public:
         totals_data()
             {
-            for(int col = e_first_totalled_column; col < e_col_max; ++col)
+            for(int i = e_first_totalled_column; i < e_col_max; ++i)
                 {
-                value(col) = 0.0;
+                value(i) = 0.0;
                 }
             }
 
@@ -538,32 +538,32 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
     bool const is_composite = ledger.is_composite();
 
     row_data rd;
-    for(int col = 0; col < e_col_max; ++col)
+    for(int i = 0; i < e_col_max; ++i)
         {
         // The cast is only used to ensure that if any new elements are added
         // to the enum, the compiler would warn about their values not being
         // present in this switch.
-        switch(static_cast<enum_group_quote_columns>(col))
+        switch(static_cast<enum_group_quote_columns>(i))
             {
             case e_col_number:
                 {
                 // Row numbers shown to human beings should be 1-based.
-                rd.output_values[col] = wxString::Format("%d", row_num_ + 1).ToStdString();
+                rd.output_values[i] = wxString::Format("%d", row_num_ + 1).ToStdString();
                 }
                 break;
             case e_col_name:
                 {
-                rd.output_values[col] = invar.Insured1;
+                rd.output_values[i] = invar.Insured1;
                 }
                 break;
             case e_col_age:
                 {
-                rd.output_values[col] = wxString::Format("%.0f", invar.Age).ToStdString();
+                rd.output_values[i] = wxString::Format("%.0f", invar.Age).ToStdString();
                 }
                 break;
             case e_col_dob:
                 {
-                rd.output_values[col] = ConvertDateToWx
+                rd.output_values[i] = ConvertDateToWx
                     (jdn_t(static_cast<int>(invar.DateOfBirthJdn))
                     ).FormatDate().ToStdString(wxConvUTF8);
                 }
@@ -571,60 +571,60 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
             case e_col_basic_face_amount:
                 {
                 double const z = invar.SpecAmt.at(year);
-                rd.output_values[col] = '$' + ledger_format(z, f0);
+                rd.output_values[i] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
-                    totals_.total(col, z);
+                    totals_.total(i, z);
                     }
                 }
                 break;
             case e_col_basic_premium:
                 {
                 double const z = invar.ErModalMinimumPremium.at(year);
-                rd.output_values[col] = '$' + ledger_format(z, f2);
+                rd.output_values[i] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
-                    totals_.total(col, z);
+                    totals_.total(i, z);
                     }
                 }
                 break;
             case e_col_supplemental_face_amount:
                 {
                 double const z = invar.TermSpecAmt.at(year);
-                rd.output_values[col] = '$' + ledger_format(z, f0);
+                rd.output_values[i] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
-                    totals_.total(col, z);
+                    totals_.total(i, z);
                     }
                 }
                 break;
             case e_col_additional_premium:
                 {
                 double const z = invar.EeModalMinimumPremium.at(year) + invar.ModalMinimumDumpin;
-                rd.output_values[col] = '$' + ledger_format(z, f2);
+                rd.output_values[i] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
-                    totals_.total(col, z);
+                    totals_.total(i, z);
                     }
                 }
                 break;
             case e_col_total_face_amount:
                 {
                 double const z = invar.SpecAmt.at(year) + invar.TermSpecAmt.at(year);
-                rd.output_values[col] = '$' + ledger_format(z, f0);
+                rd.output_values[i] = '$' + ledger_format(z, f0);
                 if(is_composite)
                     {
-                    totals_.total(col, z);
+                    totals_.total(i, z);
                     }
                 }
                 break;
             case e_col_total_premium:
                 {
                 double const z = invar.ModalMinimumPremium.at(year) + invar.ModalMinimumDumpin;
-                rd.output_values[col] = '$' + ledger_format(z, f2);
+                rd.output_values[i] = '$' + ledger_format(z, f2);
                 if(is_composite)
                     {
-                    totals_.total(col, z);
+                    totals_.total(i, z);
                     }
                 }
                 break;
@@ -671,22 +671,22 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
     bool const has_addl_premium = totals_.total(e_col_additional_premium      ) != 0.0;
 
     std::vector<column_parameters> vc;
-    for(int col = 0; col < e_col_max; ++col)
+    for(int i = 0; i < e_col_max; ++i)
         {
-        column_definition const& cd = column_definitions[col];
+        column_definition const& cd = column_definitions[i];
         std::string header;
         oenum_h_align alignment = oe_center;
         // PDF !! This doesn't fit into the switch logic below.
-        if(e_col_name == col) {alignment = oe_left;}
+        if(e_col_name == i) {alignment = oe_left;}
         oenum_visibility visibility = oe_shown;
         oenum_elasticity elasticity = oe_inelastic;
         // PDF !! This doesn't fit into the switch logic below.
-        if(e_col_name == col) {elasticity = oe_elastic;}
+        if(e_col_name == i) {elasticity = oe_elastic;}
 
         // The cast is only used to ensure that if any new elements are added
         // to the enum, the compiler would warn about their values not being
         // present in this switch.
-        switch(static_cast<enum_group_quote_columns>(col))
+        switch(static_cast<enum_group_quote_columns>(i))
             {
             case e_col_supplemental_face_amount:
             case e_col_total_face_amount:
@@ -1081,23 +1081,23 @@ void group_quote_pdf_generator_wx::output_aggregate_values
         ,wxALIGN_RIGHT
         );
 
-    for(int col = e_first_totalled_column; col < e_col_max; ++col)
+    for(int i = e_first_totalled_column; i < e_col_max; ++i)
         {
         int const decimals =
-            ((e_col_basic_face_amount           == col) ? 0
-            :(e_col_basic_premium               == col) ? 2
-            :(e_col_supplemental_face_amount    == col) ? 0
-            :(e_col_additional_premium          == col) ? 2
-            :(e_col_total_face_amount           == col) ? 0
-            :(e_col_total_premium               == col) ? 2
+            ((e_col_basic_face_amount           == i) ? 0
+            :(e_col_basic_premium               == i) ? 2
+            :(e_col_supplemental_face_amount    == i) ? 0
+            :(e_col_additional_premium          == i) ? 2
+            :(e_col_total_face_amount           == i) ? 0
+            :(e_col_total_premium               == i) ? 2
             :throw std::logic_error("Invalid column type.")
             );
         std::pair<int,oenum_format_style> const f(decimals, oe_format_normal);
 
         table_gen.output_highlighted_cell
-            (col
+            (i
             ,y
-            ,'$' + ledger_format(totals_.total(col), f)
+            ,'$' + ledger_format(totals_.total(i), f)
             );
 
         // Average cost per $1000 is presented only for the "basic"
@@ -1122,7 +1122,7 @@ void group_quote_pdf_generator_wx::output_aggregate_values
         // The cast is only used to ensure that if any new elements are added
         // to the enum, the compiler would warn about their values not being
         // present in this switch.
-        switch(static_cast<enum_group_quote_columns>(col))
+        switch(static_cast<enum_group_quote_columns>(i))
             {
             case e_col_basic_premium:
                 {
@@ -1152,13 +1152,13 @@ void group_quote_pdf_generator_wx::output_aggregate_values
                 break;
             default:
                 {
-                alarum() << "Case " << col << " not found." << LMI_FLUSH;
+                alarum() << "Case " << i << " not found." << LMI_FLUSH;
                 }
             }
 
         // For columns that do not have averages, writing an empty
         // string ensures that the background is homogeneous.
-        table_gen.output_highlighted_cell(col, y_next, average_text);
+        table_gen.output_highlighted_cell(i, y_next, average_text);
         }
 
     table_gen.output_vert_separator(e_col_max, y);

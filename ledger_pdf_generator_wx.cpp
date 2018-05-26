@@ -733,13 +733,13 @@ class pdf_illustration : protected html_interpolator
         html_cell_for_pdf_output::pdf_context_setter
             set_pdf_context(ledger_, writer, *this);
 
-        for(auto const& page : pages_)
+        for(auto const& i : pages_)
             {
-            page->pre_render(ledger_, writer, *this);
+            i->pre_render(ledger_, writer, *this);
             }
 
         bool first = true;
-        for(auto const& page : pages_)
+        for(auto const& i : pages_)
             {
             if(first)
                 {
@@ -754,7 +754,7 @@ class pdf_illustration : protected html_interpolator
                 writer.dc().StartPage();
                 }
 
-            page->render(ledger_, writer, *this);
+            i->render(ledger_, writer, *this);
             }
 
         writer.save();
@@ -1456,26 +1456,27 @@ class numeric_summary_table_cell
                     break;
 
                 case oe_render:
-                    for(std::size_t col = 0; col < columns.size(); ++col)
+                    for(std::size_t j = 0; j < columns.size(); ++j)
                         {
-                        std::string const variable_name = columns[col].variable_name;
+                        std::string const variable_name = columns[j].variable_name;
 
-                        // According to regulations, we need to replace the
-                        // policy year in the last row with the age.
-                        if(col == column_policy_year)
+                        // The illustration reg calls for values at certain
+                        // durations, and then at one summary age, so change
+                        // beginning of last row from a duration to an age.
+                        if(j == column_policy_year)
                             {
                             if(is_last_row)
                                 {
                                 std::ostringstream oss;
                                 oss << "Age " << age_last;
-                                output_values[col] = oss.str();
+                                output_values[j] = oss.str();
                                 continue;
                                 }
                             }
 
                         // Special hack for the dummy columns whose value is always
                         // empty as it's used only as separator.
-                        output_values[col] = variable_name.empty()
+                        output_values[j] = variable_name.empty()
                             ? std::string{}
                             : interpolate_html.evaluate(variable_name, year - 1)
                             ;
@@ -1594,14 +1595,14 @@ class page_with_tabular_report
 
             for(;;)
                 {
-                for(std::size_t col = 0; col < columns.size(); ++col)
+                for(std::size_t j = 0; j < columns.size(); ++j)
                     {
-                    std::string const variable_name = columns[col].variable_name;
+                    std::string const variable_name = columns[j].variable_name;
 
                     // Special hack for the dummy columns used in some reports,
                     // whose value is always empty as it's used only as
                     // separator.
-                    output_values[col] = variable_name.empty()
+                    output_values[j] = variable_name.empty()
                         ? std::string{}
                         : interpolate_html.evaluate(variable_name, year)
                         ;
