@@ -58,7 +58,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <type_traits>                  // conditional
 #include <utility>                      // forward(), move()
 #include <vector>
 
@@ -1113,16 +1112,6 @@ class page_with_footer : public page
     int footer_top_ = 0;
 };
 
-// Base class for attachment pages.
-class attachment_page : public page_with_footer
-{
-  private:
-    std::string get_page_number() const override
-    {
-        return "Attachment";
-    }
-};
-
 // Base class for all pages showing the page number in the footer.
 //
 // In addition to actually providing page_with_footer with the correct string
@@ -1520,40 +1509,27 @@ TAGS_MODULE_END(lmi_illustration)
 
 wxGCC_WARNING_RESTORE(pedantic)
 
-// Numeric summary page appears twice, once as a normal page and once as an
-// attachment, with the only difference being that the base class is different,
-// so make it a template to avoid duplicating the code.
-
-// Just a helper alias.
-template<bool is_attachment>
-using numbered_or_attachment_base = typename std::conditional
-    <is_attachment
-    ,attachment_page
-    ,numbered_page
-    >::type;
-
-template<bool is_attachment>
-class ill_reg_numeric_summary_or_attachment_page
-    : public numbered_or_attachment_base<is_attachment>
+// Numeric summary page is used on its own, as a regular page, but also as the
+// base class for ill_reg_numeric_summary_attachment below, which is exactly
+// the same page, but appearing as an attachment at the end of the document.
+class ill_reg_numeric_summary_page : public standard_page
 {
   public:
-    void render
-        (Ledger const& ledger
-        ,pdf_writer_wx& writer
-        ,html_interpolator const& interpolate_html
-        ) override
+    ill_reg_numeric_summary_page()
+        :standard_page("ill_reg_numeric_summary")
     {
-        numbered_or_attachment_base<is_attachment>::render
-            (ledger
-            ,writer
-            ,interpolate_html
-            );
+    }
+};
 
-        this->render_page_template
-            ("ill_reg_numeric_summary"
-            ,writer
-            ,interpolate_html
-            );
+class ill_reg_numeric_summary_attachment : public ill_reg_numeric_summary_page
+{
+  public:
+    using ill_reg_numeric_summary_page::ill_reg_numeric_summary_page;
+
+  private:
+    std::string get_page_number() const override
+    {
+        return "Attachment";
     }
 };
 
@@ -2098,7 +2074,7 @@ class pdf_illustration_regular : public pdf_illustration
         add<standard_page>("ill_reg_column_headings");
         if(!invar.IsInforce)
             {
-            add<ill_reg_numeric_summary_or_attachment_page<false>>();
+            add<ill_reg_numeric_summary_page>();
             }
         add<ill_reg_tabular_detail_page>();
         add<ill_reg_tabular_detail2_page>();
@@ -2108,7 +2084,7 @@ class pdf_illustration_regular : public pdf_illustration
             }
         if(!invar.IsInforce)
             {
-            add<ill_reg_numeric_summary_or_attachment_page<true>>();
+            add<ill_reg_numeric_summary_attachment>();
             }
     }
 
