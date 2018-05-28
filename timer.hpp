@@ -218,13 +218,11 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
     double const start_time = static_cast<double>(timer.time_when_started_);
     double const expiry_min = start_time + 0.01 * limit;
     double const expiry_max = start_time +        limit;
-    double minimum = limit;
+    double       now        = start_time;
+    double       previous   = start_time;
+    double       minimum    = limit;
     int j = 0;
-    for
-        (double now = start_time, previous = start_time
-        ;now < expiry_min || j < 100 && now < expiry_max
-        ;++j
-        )
+    for(; now < expiry_min || j < 100 && now < expiry_max; ++j)
         {
         f_();
         previous = now;
