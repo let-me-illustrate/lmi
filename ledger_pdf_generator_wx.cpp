@@ -1523,9 +1523,6 @@ class ill_reg_numeric_summary_page : public standard_page
 
 class ill_reg_numeric_summary_attachment : public ill_reg_numeric_summary_page
 {
-  public:
-    using ill_reg_numeric_summary_page::ill_reg_numeric_summary_page;
-
   private:
     std::string get_page_number() const override
     {
