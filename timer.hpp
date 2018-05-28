@@ -57,6 +57,15 @@ void lmi_sleep(unsigned int seconds);
 /// and that latency is a significant concern. This class uses a high-
 /// resolution timer if available; it's a sharp tool that lets you
 /// make your own decision about that rationale.
+///
+/// SOMEDAY !! Following the glibc guidance below, replace elapsed_t
+/// with double in the interface and the implementation.
+///
+/// http://www.gnu.org/software/libc/manual/html_node/Processor-And-CPU-Time.html
+/// "clock_t and ... CLOCKS_PER_SEC can be either integer or floating-point
+/// types. Casting CPU time values to double ... makes sure that operations
+/// such as arithmetic and printing work properly and consistently no matter
+/// what the underlying representation is."
 
 class LMI_SO Timer
 {
@@ -209,17 +218,17 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
     double const start_time = static_cast<double>(timer.time_when_started_);
     double const expiry_min = start_time + 0.01 * limit;
     double const expiry_max = start_time +        limit;
-    elapsed_t minimum = limit;
+    double minimum = limit;
     int j = 0;
     for
-        (elapsed_t now = start_time, previous = start_time
+        (double now = start_time, previous = start_time
         ;now < expiry_min || j < 100 && now < expiry_max
         ;++j
         )
         {
         f_();
         previous = now;
-        now = timer.inspect();
+        now = static_cast<double>(timer.inspect());
         if(now - previous < minimum)
             {
             minimum = now - previous;
