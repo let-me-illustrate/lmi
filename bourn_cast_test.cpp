@@ -463,7 +463,14 @@ void test_m64_neighborhood()
     // unsigned integer is UB.
 
     unsigned long long int const ull_max = ull_traits::max();
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wfloat-conversion"
+#endif // defined __GNUC__
     float const f_ull_max = ull_max;
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
     BOOST_TEST(f_ull_max == static_cast<float>(ull_max));
     // Suppressed because behavior is undefined:
     // BOOST_TEST(ull_max == static_cast<unsigned long long int>(f_ull_max));
@@ -495,8 +502,15 @@ void test_m64_neighborhood()
     // about half a trillion units.
 
     double const d_2_64 = nonstd::power(2.0, 64);
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wfloat-conversion"
+#endif // defined __GNUC__
     double const d_interesting = 0.5 * (d_2_64 + std::nextafterf(d_2_64, 0));
     unsigned long long int const ull_interesting = d_interesting;
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
     float const f_interesting = bourn_cast<float>(ull_interesting);
     BOOST_TEST_THROW
         (bourn_cast<unsigned long long int>(f_interesting)

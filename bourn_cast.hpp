@@ -83,7 +83,7 @@ constexpr inline To bourn_cast(From from, std::false_type, std::false_type)
             ? -to_traits::infinity()
             :  to_traits::infinity()
             ;
-    if(from < to_traits::lowest())
+    if(                   from < to_traits::lowest())
         throw std::runtime_error("Cast would transgress lower limit.");
     if(to_traits::max() < from)
         throw std::runtime_error("Cast would transgress upper limit.");
@@ -91,6 +91,15 @@ constexpr inline To bourn_cast(From from, std::false_type, std::false_type)
 }
 
 /// Integral to floating.
+///
+/// The inequality comparisons in the 'if' statements cannot exhibit
+/// UB because of the static assertion immediately preceding them.
+/// Writing static_cast in these comparisons looks unnatural, because
+/// it doesn't change the outcome (without it, integral-to-floating
+/// conversion would take place anyway); it serves only to suppress
+/// compiler warnings, for which purpose it seems less unnatural (and
+/// is certainly more portable) than surrounding the 'if' statements
+/// with pragmata.
 
 template<typename To, typename From>
 constexpr inline To bourn_cast(From from, std::false_type, std::true_type)
@@ -99,12 +108,11 @@ constexpr inline To bourn_cast(From from, std::false_type, std::true_type)
     using from_traits = std::numeric_limits<From>;
     static_assert(!to_traits::is_integer && from_traits::is_integer);
 
-    // If this assertion fails, the comparisons below may be UB.
     static_assert(from_traits::digits < to_traits::max_exponent);
 
-    if(from < to_traits::lowest())
+    if(                   static_cast<To>(from) < to_traits::lowest())
         throw std::runtime_error("Cast would transgress lower limit.");
-    if(to_traits::max() < from)
+    if(to_traits::max() < static_cast<To>(from))
         throw std::runtime_error("Cast would transgress upper limit.");
     return static_cast<To>(from);
 }
@@ -180,7 +188,7 @@ constexpr inline To bourn_cast(From from, std::true_type, std::false_type)
     if(limit <= from)
         throw std::runtime_error("Cast would transgress upper limit.");
     To const r = static_cast<To>(from);
-    if(r != from)
+    if(static_cast<From>(r) != from)
         {
         throw std::runtime_error("Cast would not preserve value.");
         }
