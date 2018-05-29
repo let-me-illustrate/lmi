@@ -26,20 +26,6 @@
 
 #include "so_attributes.hpp"
 
-#if defined LMI_POSIX
-#   include <sys/time.h>                // gettimeofday()
-    typedef double elapsed_t;
-#elif defined LMI_MSW
-    // Compilers for this platform use various types for its high-
-    // resolution timer, but they use the same platform API, so
-    // it's sufficient to use the same 64-bit integer type for all.
-#   include <cstdint>
-    typedef std::uint64_t elapsed_t;
-#else // Unknown platform.
-#   include <ctime>
-    typedef std::clock_t elapsed_t;
-#endif // Unknown platform.
-
 #include <iomanip>
 #include <ios>
 #include <ostream>
@@ -57,15 +43,6 @@ void lmi_sleep(unsigned int seconds);
 /// and that latency is a significant concern. This class uses a high-
 /// resolution timer if available; it's a sharp tool that lets you
 /// make your own decision about that rationale.
-///
-/// SOMEDAY !! Following the glibc guidance below, replace elapsed_t
-/// with double in the interface and the implementation.
-///
-/// http://www.gnu.org/software/libc/manual/html_node/Processor-And-CPU-Time.html
-/// "clock_t and ... CLOCKS_PER_SEC can be either integer or floating-point
-/// types. Casting CPU time values to double ... makes sure that operations
-/// such as arithmetic and printing work properly and consistently no matter
-/// what the underlying representation is."
 
 class LMI_SO Timer
 {
@@ -76,8 +53,8 @@ class LMI_SO Timer
     Timer();
     ~Timer() = default;
 
-    Timer&      restart();
-    Timer&      stop();
+    Timer& restart();
+    Timer& stop();
 
     static std::string elapsed_msec_str(double seconds);
     std::string        elapsed_msec_str() const;
@@ -87,16 +64,16 @@ class LMI_SO Timer
     Timer(Timer const&) = delete;
     Timer& operator=(Timer const&) = delete;
 
-    elapsed_t   calibrate();
-    void        start();
+    double calibrate();
+    void   start();
 
-    elapsed_t   inspect() const;
+    double inspect() const;
 
-    elapsed_t   elapsed_time_;
-    elapsed_t   frequency_;
-    bool        is_running_;
-    elapsed_t   time_when_started_;
-    elapsed_t   time_when_stopped_;
+    double elapsed_time_;
+    double frequency_;
+    bool   is_running_;
+    double time_when_started_;
+    double time_when_stopped_;
 };
 
 /// Time an operation over an actively-adjusted number of repetitions.
@@ -173,7 +150,7 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
     ,max_seconds_(max_seconds)
 {
     Timer timer;
-    if(max_seconds_ * static_cast<double>(timer.frequency_) < 1.0)
+    if(max_seconds_ * timer.frequency_ < 1.0)
         {
         std::ostringstream oss;
         oss
@@ -213,9 +190,9 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
         }
 
     Timer timer;
-    double const dbl_freq   = static_cast<double>(timer.frequency_);
+    double const dbl_freq   = timer.frequency_;
     double const limit      = max_seconds_ * dbl_freq;
-    double const start_time = static_cast<double>(timer.time_when_started_);
+    double const start_time = timer.time_when_started_;
     double const expiry_min = start_time + 0.01 * limit;
     double const expiry_max = start_time +        limit;
     double       now        = start_time;
@@ -226,7 +203,7 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
         {
         f_();
         previous = now;
-        now = static_cast<double>(timer.inspect());
+        now = timer.inspect();
         if(now - previous < minimum)
             {
             minimum = now - previous;
