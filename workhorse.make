@@ -410,10 +410,8 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   cxx_standard += -frounding-math
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   # Rationale:
-  # -Wno-conversion             regrettable, but needed for wx
-  # -Wno-parentheses            beyond pedantic
+  # -Wno-parentheses [its diagnostics are beyond pedantic]
   gcc_version_specific_warnings := \
-    -Wno-conversion \
     -Wno-parentheses \
 
   cxx_standard := -std=c++17
@@ -473,6 +471,26 @@ gcc_cxx_warnings := \
 
 gcc_common_extra_warnings := \
   -Wcast-qual \
+
+# SOMEDAY !! Address some of these '-Wconversion' issues.
+
+wno_conv_objects := \
+  CgiUtils.o \
+  currency_test.o \
+  facets.o \
+  rate_table.o \
+  round_glibc.o \
+  tn_range_test.o \
+
+$(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion
+
+wno_float_conv_objects := \
+  financial_test.o \
+  gpt_server.o \
+  ihs_basicval.o \
+  mec_server.o \
+
+$(wno_float_conv_objects): gcc_common_extra_warnings += -Wno-float-conversion
 
 ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   ifeq (3.4.5,$(gcc_version))
