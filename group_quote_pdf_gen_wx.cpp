@@ -380,8 +380,8 @@ class group_quote_pdf_generator_wx
     };
     totals_data totals_;
 
-    int row_num_              {0};
-    int individual_selection_ {99};
+    int  row_num_              {0};
+    bool individual_selection_ {}; // Initialized by add_ledger().
 };
 
 void assert_nonblank(std::string const& value, std::string const& name)
@@ -515,7 +515,13 @@ void group_quote_pdf_generator_wx::add_ledger(Ledger const& ledger)
 
     LedgerInvariant const& invar = ledger.GetLedgerInvariant();
 
-    if(99 == individual_selection_) // no previous ledger processed yet
+    // 'GroupIndivSelection' isn't an input field, so it cannot be
+    // checked by assert_okay_to_run_group_quote(). It must be tested
+    // (here) because some legacy products unfortunately combined
+    // mandatory (unismoke) and voluntary (smoker-distinct) rates in
+    // the same plancode, when they should have used distinct subplans
+    // because they serve different market segments.
+    if(0 == row_num_)
         {
         individual_selection_ = invar.GroupIndivSelection;
         }

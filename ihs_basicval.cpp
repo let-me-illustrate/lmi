@@ -344,7 +344,7 @@ double BasicValues::InvestmentManagementFee() const
 
     if(yare_input_.OverrideFundManagementFee)
         {
-        return yare_input_.InputFundManagementFee / 10000.0L;
+        return yare_input_.InputFundManagementFee / 10000.0;
         }
 
     double z = 0.0;

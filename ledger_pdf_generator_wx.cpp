@@ -2013,19 +2013,20 @@ class pdf_illustration_regular : public pdf_illustration
             ,state_abbrev == "IL" || state_abbrev == "TX"
             );
 
+        int const inforce_year = bourn_cast<int>(invar.InforceYear);
         add_variable
             ("UltimateInterestRate"
-            ,evaluate("AnnGAIntRate_Current", invar.InforceYear + 1)
+            ,evaluate("AnnGAIntRate_Current", inforce_year + 1)
             );
 
         add_variable
             ("InforceYearEq0"
-            ,invar.InforceYear == 0
+            ,inforce_year == 0
             );
 
         add_variable
             ("InforceYearLE4"
-            ,invar.InforceYear < 4
+            ,inforce_year < 4
             );
 
         auto const max_duration = invar.EndtAge - invar.Age;

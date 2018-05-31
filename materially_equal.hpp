@@ -51,11 +51,8 @@
 /// always treats nonzero quantities of opposite sign as materially
 /// different.
 
-inline bool materially_equal
-    (long double t
-    ,long double u
-    ,long double tolerance = 1.0E-13L
-    )
+template<typename T>
+inline bool materially_equal(T t, T u, long double tolerance = 1.0E-13L)
 {
     return
             t == u
@@ -76,11 +73,8 @@ inline bool materially_equal
 /// that can assume an implausibly enormous value unless differences
 /// that are mere rounding artifacts are not actively suppressed.
 
-inline long double material_difference
-    (long double t
-    ,long double u
-    ,long double tolerance = 1.0E-13L
-    )
+template<typename T>
+inline T material_difference(T t, T u, long double tolerance = 1.0E-13L)
 {
     return materially_equal(t, u, tolerance) ? 0.0 : t - u;
 }

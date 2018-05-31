@@ -104,7 +104,7 @@ int test_main(int, char*[])
     BOOST_TEST(std::fabs(r) <= 1e-13);
 
     // Trivially, NPV at 0% interest is summation.
-    BOOST_TEST(materially_equal(-4950.0, npv(q.begin(), q.end(), 0.0)));
+    BOOST_TEST(materially_equal(-4950.0L, npv(q.begin(), q.end(), 0.0)));
 
     // Test const vectors.
     std::vector<double> const cp(p);

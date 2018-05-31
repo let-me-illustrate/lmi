@@ -33,15 +33,28 @@ int test_main(int, char*[])
     BOOST_TEST(is_infinite(infinity<double     >()));
     BOOST_TEST(is_infinite(infinity<long double>()));
 
+    // Narrowing conversions commented out here:
     BOOST_TEST(is_infinite<float      >(-infinity<float      >()));
-    BOOST_TEST(is_infinite<float      >(-infinity<double     >()));
-    BOOST_TEST(is_infinite<float      >(-infinity<long double>()));
+//  BOOST_TEST(is_infinite<float      >(-infinity<double     >()));
+//  BOOST_TEST(is_infinite<float      >(-infinity<long double>()));
     BOOST_TEST(is_infinite<double     >(-infinity<float      >()));
     BOOST_TEST(is_infinite<double     >(-infinity<double     >()));
-    BOOST_TEST(is_infinite<double     >(-infinity<long double>()));
+//  BOOST_TEST(is_infinite<double     >(-infinity<long double>()));
     BOOST_TEST(is_infinite<long double>(-infinity<float      >()));
     BOOST_TEST(is_infinite<long double>(-infinity<double     >()));
     BOOST_TEST(is_infinite<long double>(-infinity<long double>()));
+
+    // Narrowing conversions tested here:
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wfloat-conversion"
+#endif // defined __GNUC__
+    BOOST_TEST(is_infinite<float      >(-infinity<double     >()));
+    BOOST_TEST(is_infinite<float      >(-infinity<long double>()));
+    BOOST_TEST(is_infinite<double     >(-infinity<long double>()));
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
 
     BOOST_TEST(!is_infinite(0.0));
     BOOST_TEST(!is_infinite( std::numeric_limits<double>::max()));

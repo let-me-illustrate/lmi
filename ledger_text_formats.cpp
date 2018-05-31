@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "authenticity.hpp"
+#include "bourn_cast.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"    // effective_calculation_summary_columns()
@@ -1088,7 +1089,7 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
     // Illustration reg (7)(C)(2) "year in which coverage ceases".
     auto const brink = [age, max_length] (LedgerVariant const& basis)
         {
-        int const z = basis.LapseYear;
+        int const z = bourn_cast<int>(basis.LapseYear);
         std::string s =
               (z < max_length)
             ? "Lapses in year " + value_cast<std::string>(1 + z)

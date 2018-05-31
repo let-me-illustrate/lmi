@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "calendar_date.hpp"
 #include "contains.hpp"
 #include "wx_new.hpp"
@@ -121,8 +122,8 @@ calendar_date ConvertDateFromWx(wxDateTime const& wx_date)
 wxDateTime ConvertDateToWx(calendar_date const& lmi_date)
 {
     wxDateTime wx_date
-        (lmi_date.day()
-        ,static_cast<wxDateTime::Month>(lmi_date.month() - 1)
+        (bourn_cast <wxDateTime::wxDateTime_t>(lmi_date.day())
+        ,static_cast<wxDateTime::Month>       (lmi_date.month() - 1)
         ,lmi_date.year()
         );
     AssertWxTimeIsMidnight(wx_date);
