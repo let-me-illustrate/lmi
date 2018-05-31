@@ -25,8 +25,11 @@
 #include "config.hpp"
 
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "mc_enum_type_enums.hpp"       // mcenum_mode
 #include "zero.hpp"
+
+#include <iterator>                     // iterator_traits
 
 class calendar_date;
 
@@ -188,7 +191,9 @@ OutputIterator const irr
     InputIterator1 bfts = first1;
     for(;pmts != last0; ++bfts, ++result)
         {
-        *result = irr_helper<InputIterator0>(first0, ++pmts, *bfts, decimals)();
+        auto z = irr_helper<InputIterator0>(first0, ++pmts, *bfts, decimals)();
+        typedef typename std::iterator_traits<OutputIterator>::value_type T;
+        *result = bourn_cast<T>(z);
         }
     return result;
 }

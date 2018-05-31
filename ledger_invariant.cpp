@@ -26,6 +26,7 @@
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "basic_values.hpp"
+#include "bourn_cast.hpp"
 #include "contains.hpp"                 // for CalculateIrrs()
 #include "crc32.hpp"
 #include "database.hpp"
@@ -1321,20 +1322,20 @@ void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
     LedgerVariant const& Curr_ = LedgerValues.GetCurrFull();
     LedgerVariant const& Guar_ = LedgerValues.GetGuarFull();
 
-    irr(Outlay, Guar_.CSVNet,      IrrCsvGuarInput, Guar_.LapseYear, m, n);
-    irr(Outlay, Guar_.EOYDeathBft, IrrDbGuarInput,  Guar_.LapseYear, m, n);
-    irr(Outlay, Curr_.CSVNet,      IrrCsvCurrInput, Curr_.LapseYear, m, n);
-    irr(Outlay, Curr_.EOYDeathBft, IrrDbCurrInput,  Curr_.LapseYear, m, n);
+    irr(Outlay, Guar_.CSVNet,      IrrCsvGuarInput, bourn_cast<int>(Guar_.LapseYear), m, n);
+    irr(Outlay, Guar_.EOYDeathBft, IrrDbGuarInput,  bourn_cast<int>(Guar_.LapseYear), m, n);
+    irr(Outlay, Curr_.CSVNet,      IrrCsvCurrInput, bourn_cast<int>(Curr_.LapseYear), m, n);
+    irr(Outlay, Curr_.EOYDeathBft, IrrDbCurrInput,  bourn_cast<int>(Curr_.LapseYear), m, n);
 
     if(zero_sepacct_interest_bases_undefined) {irr_initialized_ = true; return;}
 
     LedgerVariant const& Curr0 = LedgerValues.GetCurrZero();
     LedgerVariant const& Guar0 = LedgerValues.GetGuarZero();
 
-    irr(Outlay, Guar0.CSVNet,      IrrCsvGuar0,     Guar0.LapseYear, m, n);
-    irr(Outlay, Guar0.EOYDeathBft, IrrDbGuar0,      Guar0.LapseYear, m, n);
-    irr(Outlay, Curr0.CSVNet,      IrrCsvCurr0,     Curr0.LapseYear, m, n);
-    irr(Outlay, Curr0.EOYDeathBft, IrrDbCurr0,      Curr0.LapseYear, m, n);
+    irr(Outlay, Guar0.CSVNet,      IrrCsvGuar0,     bourn_cast<int>(Guar0.LapseYear), m, n);
+    irr(Outlay, Guar0.EOYDeathBft, IrrDbGuar0,      bourn_cast<int>(Guar0.LapseYear), m, n);
+    irr(Outlay, Curr0.CSVNet,      IrrCsvCurr0,     bourn_cast<int>(Curr0.LapseYear), m, n);
+    irr(Outlay, Curr0.EOYDeathBft, IrrDbCurr0,      bourn_cast<int>(Curr0.LapseYear), m, n);
 
     irr_initialized_ = true;
 }
