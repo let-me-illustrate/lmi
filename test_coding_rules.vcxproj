@@ -37,7 +37,7 @@
   <PropertyGroup Label="Globals">
     <ProjectName>test_coding_rules</ProjectName>
     <ProjectGuid>{CBFFFF79-193C-48C9-A5A9-09C67791149B}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'" Label="Configuration">
