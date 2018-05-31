@@ -477,7 +477,6 @@ gcc_common_extra_warnings := \
 wno_conv_objects := \
   CgiUtils.o \
   currency_test.o \
-  facets.o \
   rate_table.o \
   round_glibc.o \
 
