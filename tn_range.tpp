@@ -182,17 +182,27 @@ namespace
         static_assert(std::is_floating_point<T>::value);
         bool operator()(T t)
             {
+            // SOMEDAY !! nonstd::power() [SGI extension] may be
+            // preferable, because std::pow() might not be exact.
             static T z0 = std::pow
                 (static_cast<T>(std::numeric_limits<T>::radix)
                 ,static_cast<T>(std::numeric_limits<T>::digits)
                 );
             long int z1 = std::numeric_limits<long int>::max();
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wconversion"
+#endif // defined __GNUC__
             return
                    -z0 < t
                 &&       t < z0
                 && -z1 < t
                 &&       t < z1
-                && t == static_cast<long int>(t);
+                && t == static_cast<long int>(t)
+                ;
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
             }
     };
 

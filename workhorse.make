@@ -480,7 +480,6 @@ wno_conv_objects := \
   facets.o \
   rate_table.o \
   round_glibc.o \
-  tn_range_test.o \
 
 $(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion
 
