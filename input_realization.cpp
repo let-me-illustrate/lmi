@@ -304,10 +304,9 @@ std::string Input::RealizeExtraCompensationOnAssets()
     //   numeric-value: numeric-literal %%
     // then we might say "100%" here.
 
-    // TODO ?? Defect: currently entered in basis points.
-    if(10000.0 < highest)
+    if(1.0 < highest)
         {
-        return "Add-on compensation cannot exceed 10000 basis points.";
+        return "Add-on compensation cannot exceed 1 (meaning 100% of assets).";
         }
 
     return "";

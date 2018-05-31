@@ -193,11 +193,11 @@ void LoadsTest::TestCalculations(char const* file, int line)
 int test_main(int, char*[])
 {
     round_to<double> round_interest_rate(0, r_not_at_all);
-    std::vector<double> extra_comp_load  (length,  0.0170);
-    std::vector<double> extra_asset_comp (length, 19.0000); // In bp, sadly.
-    std::vector<double> extra_policy_fee (length,  0.6000);
-    std::vector<double> guar_specamt_load(length,  0.0007);
-    std::vector<double> curr_specamt_load(length,  0.0005);
+    std::vector<double> extra_comp_load  (length, 0.0170);
+    std::vector<double> extra_asset_comp (length, 0.0019);
+    std::vector<double> extra_policy_fee (length, 0.6000);
+    std::vector<double> guar_specamt_load(length, 0.0007);
+    std::vector<double> curr_specamt_load(length, 0.0005);
 
     load_details details
         (length                 // length_

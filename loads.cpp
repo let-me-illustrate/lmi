@@ -165,13 +165,12 @@ void Loads::Calculate(load_details const& details)
     // elsewhere as an interest spread.
     if(oe_asset_charge_load == details.asset_charge_type_)
         {
-        static long double const units_per_bp = 1.0L / 10000.0L;
         std::vector<double> extra_asset_comp(details.length_);
         assign
             (extra_asset_comp
             ,apply_unary
                 (i_upper_12_over_12_from_i<double>()
-                ,details.VectorExtraAssetComp_ * units_per_bp
+                ,details.VectorExtraAssetComp_
                 )
             );
 
