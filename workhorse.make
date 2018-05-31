@@ -485,7 +485,6 @@ wno_conv_objects := \
 $(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion
 
 wno_float_conv_objects := \
-  financial_test.o \
   gpt_server.o \
   ihs_basicval.o \
   mec_server.o \
