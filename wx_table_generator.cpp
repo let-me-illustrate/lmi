@@ -755,14 +755,14 @@ void wx_table_generator::do_output_single_row
                 // Make sure that any failure in this chain of assumptions
                 // doesn't result in (undefined) negative clipping.
                 LMI_ASSERT(0 <= ci.col_width() - column_margin());
-                wxDCClipper clip
-                    (dc_
-                    ,wxRect
+                dc_.SetClippingRegion
+                    (wxRect
                         {wxPoint{pos_x, y_top}
                         ,wxSize{ci.col_width() - column_margin(), row_height_}
                         }
                     );
                 dc_.DrawText(s, x_text, y_text);
+                dc_.DestroyClippingRegion();
                 }
             else
                 {
