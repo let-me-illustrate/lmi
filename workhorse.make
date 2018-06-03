@@ -489,6 +489,20 @@ wno_float_conv_objects := \
 
 $(wno_float_conv_objects): gcc_common_extra_warnings += -Wno-float-conversion
 
+wno_sign_conv_objects := \
+  $(boost_filesystem_objects) \
+  $(boost_regex_objects) \
+  $(xmlwrapp_objects) \
+  CgiEnvironment.o \
+  CgiUtils.o \
+  crc32.o \
+  getopt.o \
+  md5.o \
+  rate_table.o \
+  round_glibc.o \
+
+$(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
+
 ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   ifeq (3.4.5,$(gcc_version))
     expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
