@@ -472,37 +472,6 @@ gcc_cxx_warnings := \
 gcc_common_extra_warnings := \
   -Wcast-qual \
 
-# SOMEDAY !! Address some of these '-Wconversion' issues.
-
-wno_conv_objects := \
-  CgiUtils.o \
-  currency_test.o \
-  rate_table.o \
-  round_glibc.o \
-
-$(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion
-
-wno_float_conv_objects := \
-  gpt_server.o \
-  ihs_basicval.o \
-  mec_server.o \
-
-$(wno_float_conv_objects): gcc_common_extra_warnings += -Wno-float-conversion
-
-wno_sign_conv_objects := \
-  $(boost_filesystem_objects) \
-  $(boost_regex_objects) \
-  $(xmlwrapp_objects) \
-  CgiEnvironment.o \
-  CgiUtils.o \
-  crc32.o \
-  getopt.o \
-  md5.o \
-  rate_table.o \
-  round_glibc.o \
-
-$(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
-
 ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   ifeq (3.4.5,$(gcc_version))
     expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
@@ -553,6 +522,38 @@ endif
 
 # Too many warnings for wx and various boost libraries:
 #  -Wold-style-cast \
+
+# SOMEDAY !! Address some of these '-Wconversion' issues.
+
+wno_conv_objects := \
+  CgiUtils.o \
+  currency_test.o \
+  rate_table.o \
+  round_glibc.o \
+
+$(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion
+
+wno_float_conv_objects := \
+  gpt_server.o \
+  ihs_basicval.o \
+  mec_server.o \
+
+$(wno_float_conv_objects): gcc_common_extra_warnings += -Wno-float-conversion
+
+wno_sign_conv_objects := \
+  $(boost_dependent_objects) \
+  $(boost_filesystem_objects) \
+  $(boost_regex_objects) \
+  $(xmlwrapp_objects) \
+  CgiEnvironment.o \
+  CgiUtils.o \
+  crc32.o \
+  getopt.o \
+  md5.o \
+  rate_table.o \
+  round_glibc.o \
+
+$(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
 
 C_WARNINGS = \
   $(gcc_c_warnings) \
