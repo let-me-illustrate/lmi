@@ -459,6 +459,7 @@ unit_test_targets := \
   safely_dereference_as_test \
   sandbox_test \
   snprintf_test \
+  ssize_lmi_test \
   stratified_algorithms_test \
   stream_cast_test \
   system_command_test \
@@ -911,6 +912,10 @@ sandbox_test$(EXEEXT): \
 snprintf_test$(EXEEXT): \
   $(common_test_objects) \
   snprintf_test.o \
+
+ssize_lmi_test$(EXEEXT): \
+  $(common_test_objects) \
+  ssize_lmi_test.o \
 
 stratified_algorithms_test$(EXEEXT): \
   $(common_test_objects) \
