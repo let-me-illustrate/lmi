@@ -280,7 +280,7 @@ void actuarial_table::find_table()
 /// The record types of interest here are coded as:
 ///   9999 end of table
 ///   2    4-byte integer:  Table number
-///   3    [unsigned] char: Table type: {A, D, S} --> {age, duration, select}
+///   3    1-byte char   :  Table type: {A, D, S} --> {age, duration, select}
 ///   12   2-byte integer:  Minimum age
 ///   13   2-byte integer:  Maximum age
 ///   14   2-byte integer:  Select period
@@ -328,7 +328,7 @@ void actuarial_table::parse_table()
                 LMI_ASSERT(z == table_number_);
                 }
                 break;
-            case 3: // [unsigned] char: Table type.
+            case 3: // char: Table type.
                 {
                 // Meaning: {A, D, S} --> {age, duration, select}.
                 // SOA apparently permits upper or lower case.
