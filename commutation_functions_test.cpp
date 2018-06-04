@@ -26,6 +26,7 @@
 #include "et_vector.hpp"
 #include "math_functions.hpp"
 #include "miscellany.hpp"               // lmi_array_size()
+#include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -178,7 +179,7 @@ void TestEckleyTable2()
     {
     double tolerance = 0.0000005;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < coi.size(); ++j)
+    for(int j = 0; j < lmi::ssize(coi); ++j)
         {
         double d0 = std::fabs(nsp    [j] - Ax[j]);
         double d1 = std::fabs(annuity[j] - ax[j]);
@@ -213,7 +214,7 @@ void TestEckleyTable2()
     {
     double tolerance = 0.000005;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < coi.size(); ++j)
+    for(int j = 0; j < lmi::ssize(coi); ++j)
         {
         double d0 = std::fabs(premium[j] - Px[j] * .001);
         double d1 = std::fabs(reserve[j] - Vx[j] * .001);
@@ -300,7 +301,7 @@ void TestEckleyTables3and4()
 
     double tolerance = 0.000005;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < coi.size(); ++j)
+    for(int j = 0; j < lmi::ssize(coi); ++j)
         {
         double d0 = std::fabs(premium[j] - Px[j] * .001);
         double d1 = std::fabs(reserve[j] - Vx[j] * .001);
@@ -383,7 +384,7 @@ void TestEckleyTable5()
 
     double tolerance = 0.0000005;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < coi.size(); ++j)
+    for(int j = 0; j < lmi::ssize(coi); ++j)
         {
         double d0 = std::fabs(CF.aD()[j]        - Dx  [j]);
         double d1 = std::fabs(CF.kD()[j] / 12.0 - Dx12[j]);
@@ -533,7 +534,7 @@ void Test_1954_1958_IET_3pct()
 
     double tolerance = 0.01;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < q.size(); ++j)
+    for(int j = 0; j < lmi::ssize(q); ++j)
         {
         double d0 = std::fabs(Dx[0] * CF.D()[j] - Dx[j]);
         double d1 = std::fabs(Dx[0] * CF.N()[j] - Nx[j]);
@@ -653,7 +654,7 @@ void Test_1980_CSO_Male_ANB()
 
     double tolerance = 1.0e-13;
     double worst_discrepancy = 0.0;
-    for(unsigned int j = 0; j < q.size(); ++j)
+    for(int j = 0; j < lmi::ssize(q); ++j)
         {
         double d0 = std::fabs(reserve[j] - Vx[j]);
         worst_discrepancy = std::max(worst_discrepancy, d0);

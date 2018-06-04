@@ -680,7 +680,7 @@ std::string Input::RealizeGeneralAccountRate()
         general_account_max_rate.assign(general_account_max_rate.size(), 0.12);
         }
 
-    for(unsigned int j = 0; j < general_account_max_rate.size(); ++j)
+    for(int j = 0; j < lmi::ssize(general_account_max_rate); ++j)
         {
         if(general_account_max_rate[j] < GeneralAccountRateRealized_[j].value())
             {
@@ -704,7 +704,7 @@ std::string Input::RealizeGeneralAccountRate()
         {
         return "";
         }
-    for(unsigned int j = 0; j < general_account_max_rate.size(); ++j)
+    for(int j = 0; j < lmi::ssize(general_account_max_rate); ++j)
         {
         if(GeneralAccountRateRealized_[j].value() < guar_int)
             {

@@ -252,7 +252,7 @@ double& database_entity::operator[](std::vector<int> const& index)
     LMI_ASSERT(e_number_of_axes == index.size());
 
     int z = 0;
-    for(unsigned int j = 0; j < e_number_of_axes; ++j)
+    for(int j = 0; j < e_number_of_axes; ++j)
         {
         if(1 != axis_lengths_[j])
             {
@@ -281,7 +281,7 @@ double const* database_entity::operator[](database_index const& idx) const
     LMI_ASSERT(e_number_of_axes == 1 + index.size());
 
     int z = 0;
-    for(unsigned int j = 0; j < e_number_of_axes - 1; ++j)
+    for(int j = 0; j < e_number_of_axes - 1; ++j)
         {
         if(1 != axis_lengths_[j])
             {

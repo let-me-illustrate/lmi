@@ -31,6 +31,7 @@
 #include "input_sequence_aux.hpp"       // extract_keys_from_string_map()
 #include "mvc_controller.hpp"
 #include "numeric_io_cast.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 #include "wx_new.hpp"
 #include "wx_utility.hpp"
@@ -85,7 +86,7 @@ choice_value const duration_mode_choice_values[] =
     {e_maturity,         "until maturity"},    // e_maturity must be last
   };
 
-unsigned int const duration_mode_choices = sizeof(duration_mode_choice_values) / sizeof(choice_value);
+int const duration_mode_choices = sizeof(duration_mode_choice_values) / sizeof(choice_value);
 
 DurationModeChoice::DurationModeChoice(wxWindow* parent)
 {
@@ -155,7 +156,7 @@ duration_mode DurationModeChoice::value() const
     int const sel = GetSelection();
 
     LMI_ASSERT(0 <= sel);
-    LMI_ASSERT(sel < static_cast<int>(duration_mode_choices));
+    LMI_ASSERT(sel < duration_mode_choices);
 
     return duration_mode_choice_values[sel].mode;
 }
@@ -428,7 +429,7 @@ void InputSequenceEditor::sequence(InputSequence const& s)
 
     std::vector<ValueInterval> const& intervals = s.intervals();
 
-    for(unsigned int i = 0; i < intervals.size(); ++i)
+    for(int i = 0; i < lmi::ssize(intervals); ++i)
         {
         ValueInterval const& data = intervals[i];
 

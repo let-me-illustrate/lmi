@@ -38,6 +38,7 @@
 #include "miscellany.hpp"               // each_equal(), ios_out_trunc_binary(), lmi_array_size()
 #include "oecumenic_enumerations.hpp"
 #include "path_utility.hpp"             // fs::path inserter
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
@@ -808,7 +809,7 @@ void Ledger::write(xml::element& x) const
         std::vector<std::string> const& v = j.second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
-        for(unsigned int k = 0; k < v.size(); ++k)
+        for(int k = 0; k < lmi::ssize(v); ++k)
             {
             xml::element duration("duration");
             xml_lmi::set_attr(duration, "number", value_cast<std::string>(k).c_str());
@@ -892,12 +893,12 @@ void Ledger::write(xml::element& x) const
             }
         ofs << '\n';
 
-        for(unsigned int i = 0; i < static_cast<unsigned int>(GetMaxLength()); ++i)
+        for(int i = 0; i < GetMaxLength(); ++i)
             {
             for(auto const& j : stringvectors)
                 {
                 std::vector<std::string> const& v = j.second;
-                if(i < v.size())
+                if(i < lmi::ssize(v))
                     {
                     ofs << v[i] << '\t';
                     }

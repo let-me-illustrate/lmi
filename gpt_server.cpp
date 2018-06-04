@@ -46,6 +46,7 @@
 #include "premium_tax.hpp"
 #include "product_data.hpp"
 #include "round_to.hpp"
+#include "ssize_lmi.hpp"
 #include "stratified_algorithms.hpp"    // TieredGrossToNet()
 #include "stratified_charges.hpp"
 #include "timer.hpp"
@@ -337,7 +338,7 @@ gpt_state test_one_days_gpt_transactions
     double const LoadTarget = target_sales_load[InforceYear] + target_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
     double const LoadExcess = excess_sales_load[InforceYear] + excess_premium_load[InforceYear] + dac_tax_load[InforceYear] + premium_tax_load;
 
-    LMI_ASSERT(static_cast<unsigned int>(InforceContractYear) < input.BenefitHistoryRealized().size());
+    LMI_ASSERT(InforceContractYear < lmi::ssize(input.BenefitHistoryRealized()));
     double const old_benefit_amount = input.BenefitHistoryRealized()[InforceContractYear];
 
     double const total_1035_amount = round_max_premium

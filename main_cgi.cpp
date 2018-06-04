@@ -43,6 +43,7 @@
 #include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "platform_dependent.hpp"       // putenv() [GWC]
+#include "ssize_lmi.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 
@@ -615,7 +616,7 @@ void ShowCensusOutput
                 ;
             }
 
-        for(unsigned int j = 0; j < headers.size(); ++j)
+        for(int j = 0; j < lmi::ssize(headers); ++j)
             {
             input[headers[j]] = values[j];
             }

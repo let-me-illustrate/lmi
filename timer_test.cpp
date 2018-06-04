@@ -36,9 +36,9 @@ inline void do_nothing()
 void foo()
 {
     double volatile d;
-    for(unsigned int j = 0; j < 100; ++j)
+    for(int j = 0; j < 100; ++j)
         {
-        d = std::log10(1U + j * j);
+        d = std::log10(1 + j * j);
         stifle_warning_for_unused_value(d);
         }
 }

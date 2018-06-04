@@ -43,6 +43,7 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "premium_tax.hpp"
+#include "ssize_lmi.hpp"
 #include "stratified_algorithms.hpp"
 #include "surrchg_rates.hpp"
 
@@ -136,8 +137,8 @@ AccountValue::AccountValue(Input const& input)
     // Of course, a contract is not normally in force after maturity.
 
     LMI_ASSERT
-        (   InvariantValues().InforceLives.size()
-        ==  static_cast<unsigned int>(1 + BasicValues::GetLength())
+        (   lmi::ssize(InvariantValues().InforceLives)
+        ==  1 + BasicValues::GetLength()
         );
     partial_mortality_q.resize(BasicValues::GetLength());
     // TODO ?? 'InvariantValues().InforceLives' may be thought of as

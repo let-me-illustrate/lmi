@@ -243,7 +243,7 @@ void Irc7702A::Initialize7702A
     Bfts.assign(max_dur, 0.0);
 
     LMI_ASSERT(lmi::ssize(a_Pmts) <= max_years);
-    for(unsigned int j = 0; j < a_Pmts.size(); ++j)
+    for(int j = 0; j < lmi::ssize(a_Pmts); ++j)
         {
         // TODO ?? TAXATION !! OK to treat premium history as annual?
         Pmts[j * months_per_year] = a_Pmts[j];
@@ -271,8 +271,8 @@ void Irc7702A::Initialize7702A
         ( (    PolicyYear +     PolicyMonth / 12.0)
         - (a_ContractYear + a_ContractMonth / 12.0)
         );
-    unsigned int const duration_of_last_mc = static_cast<unsigned int>(z);
-    LMI_ASSERT(duration_of_last_mc < SevenPPRateVec.size());
+    int const duration_of_last_mc = static_cast<int>(z);
+    LMI_ASSERT(duration_of_last_mc < lmi::ssize(SevenPPRateVec));
     Saved7PPRate    = SevenPPRateVec[duration_of_last_mc];
     state_.B2_deduced_px7_rate = SevenPPRateVec[duration_of_last_mc];
     SavedNecPrem    = 0.0;

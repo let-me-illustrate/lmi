@@ -30,6 +30,7 @@
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"   // methuselah
 #include "path_utility.hpp"             // fs::path inserter
+#include "ssize_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -556,7 +557,7 @@ std::vector<double> actuarial_table::specific_values
                 ;
             }
         }
-    LMI_ASSERT(v.size() == static_cast<unsigned int>(length));
+    LMI_ASSERT(lmi::ssize(v) == length);
     return v;
 }
 

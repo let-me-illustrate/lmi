@@ -45,6 +45,7 @@
 #include "outlay.hpp"
 #include "premium_tax.hpp"
 #include "product_data.hpp"
+#include "ssize_lmi.hpp"
 
 #include <algorithm>
 #include <ostream>
@@ -568,7 +569,7 @@ void LedgerInvariant::Init(BasicValues const* b)
     int const NumberOfFunds = 30; // DEPRECATED
     int expected_number_of_funds = std::max(number_of_funds, NumberOfFunds);
     std::vector<double> v(b->yare_input_.FundAllocations);
-    if(v.size() < static_cast<unsigned int>(expected_number_of_funds))
+    if(lmi::ssize(v) < expected_number_of_funds)
         {
         v.insert(v.end(), expected_number_of_funds - v.size(), 0.0);
         }

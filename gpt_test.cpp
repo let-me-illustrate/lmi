@@ -27,6 +27,7 @@
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
 #include "math_functions.hpp"
+#include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -501,7 +502,7 @@ void gpt_test::compare_premiums(int issue_age, double target)
 #endif // !defined LMI_COMO_WITH_MINGW
 
     int const omega = sample_q(0).size();
-    LMI_ASSERT(qab_waiver_rate.size() == static_cast<unsigned int>(omega - issue_age));
+    LMI_ASSERT(lmi::ssize(qab_waiver_rate) == omega - issue_age);
     for(int duration = 0; duration < omega - issue_age; ++duration)
         {
         parms.duration = duration;
