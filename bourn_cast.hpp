@@ -32,6 +32,7 @@
 #if defined __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wsign-compare"
+#   pragma GCC diagnostic ignored "-Wsign-conversion"
 #   if 5 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wbool-compare"
 #   endif // 5 <= __GNUC__

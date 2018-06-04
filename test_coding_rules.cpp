@@ -25,7 +25,7 @@
 #include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
-#include "miscellany.hpp"               // lmi_array_size(), split_into_lines()
+#include "miscellany.hpp"               // split_into_lines()
 
 #include <boost/filesystem/convenience.hpp> // fs::extension()
 #include <boost/filesystem/fstream.hpp>
@@ -33,7 +33,6 @@
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // is_sorted()
-#include <cstddef>                      // size_t
 #include <ctime>
 #include <iomanip>
 #include <ios>
@@ -869,7 +868,7 @@ void check_preamble(file const& f)
 
 bool check_reserved_name_exception(std::string const& s)
 {
-    static char const*const y[] =
+    static std::set<std::string> const z
     // Taboo, and therefore uglified here.
         {"D""__""W""IN32""__"
         ,"_""W""IN32"
@@ -977,8 +976,6 @@ bool check_reserved_name_exception(std::string const& s)
         ,"__XSLT_LIBXSLT_H__"
         ,"__mp_copymem"
         };
-    static int const n = lmi_array_size(y);
-    static std::set<std::string> const z(y, y + n);
     return contains(z, s);
 }
 
@@ -1119,9 +1116,9 @@ class statistics
     void print_summary() const;
 
   private:
-    std::size_t files_   {0};
-    std::size_t lines_   {0};
-    std::size_t defects_ {0};
+    int files_   {0};
+    int lines_   {0};
+    int defects_ {0};
 };
 
 statistics& statistics::operator+=(statistics const& z)

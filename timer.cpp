@@ -23,6 +23,8 @@
 
 #include "timer.hpp"
 
+#include "bourn_cast.hpp"
+
 #if defined LMI_POSIX
 #   include <sys/time.h>                // gettimeofday()
 #elif defined LMI_MSW
@@ -56,12 +58,12 @@
 
 #if defined LMI_POSIX
 #   include <unistd.h>                  // sleep()
-void lmi_sleep(unsigned int seconds) {sleep(seconds);}
+void lmi_sleep(int seconds) {sleep(bourn_cast<unsigned int>(seconds));}
 #elif defined LMI_MSW
 #   if !defined LMI_MS_HEADER_INCLUDED
 extern "C" void __stdcall Sleep(unsigned int);
 #   endif // !defined LMI_MS_HEADER_INCLUDED
-void lmi_sleep(unsigned int seconds) {Sleep(1000 * seconds);}
+void lmi_sleep(int seconds) {Sleep(bourn_cast<unsigned int>(1000 * seconds));}
 #else // Unknown platform.
 #   error Unknown platform.
 #endif // Unknown platform.

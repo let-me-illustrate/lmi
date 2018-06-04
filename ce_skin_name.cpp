@@ -29,12 +29,14 @@
 #include "global_settings.hpp"
 #include "miscellany.hpp"               // begins_with()
 #include "path_utility.hpp"             // fs::path inserter
+#include "ssize_lmi.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>                    // find()
+#include <cstddef>                      // ptrdiff_t
 
 namespace
 {
@@ -117,9 +119,9 @@ bool ce_skin_name::operator==(std::string const& s) const
     return s == str();
 }
 
-std::size_t ce_skin_name::ordinal(std::string const& s)
+int ce_skin_name::ordinal(std::string const& s)
 {
-    std::size_t v =
+    std::ptrdiff_t v =
             std::find
                 (skin_names().begin()
                 ,skin_names().end()
@@ -127,7 +129,7 @@ std::size_t ce_skin_name::ordinal(std::string const& s)
                 )
         -   skin_names().begin()
         ;
-    if(v == skin_names().size())
+    if(v == lmi::ssize(skin_names()))
         {
         alarum()
             << "Value '"
@@ -146,9 +148,9 @@ std::vector<std::string> const& ce_skin_name::all_strings() const
     return skin_names();
 }
 
-std::size_t ce_skin_name::cardinality() const
+int ce_skin_name::cardinality() const
 {
-    return skin_names().size();
+    return lmi::ssize(skin_names());
 }
 
 /// No skin is ever proscribed.
@@ -156,7 +158,7 @@ std::size_t ce_skin_name::cardinality() const
 void ce_skin_name::enforce_proscription()
 {}
 
-std::size_t ce_skin_name::ordinal() const
+int ce_skin_name::ordinal() const
 {
     return ordinal(value_);
 }

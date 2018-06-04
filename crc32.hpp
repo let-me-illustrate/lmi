@@ -25,8 +25,8 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
+#include "ssize_lmi.hpp"
 
-#include <cstring>                      // strlen()
 #include <string>
 #include <vector>
 
@@ -110,7 +110,7 @@ inline CRC& CRC::operator+=(unsigned            char const* z)
     {
     // std::strlen() is defined only for char const* arguments, so the
     // cast is required.
-    return update(z, std::strlen(reinterpret_cast<char const*>(z)));
+    return update(z, lmi::sstrlen(reinterpret_cast<char const*>(z)));
     }
 
 template<typename T>

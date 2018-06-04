@@ -37,6 +37,7 @@
 #include "mc_enum_types_aux.hpp"        // mc_str()
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
+#include "ssize_lmi.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 
@@ -119,7 +120,7 @@ census_run_result run_census_in_series::operator()
     census_run_result result;
     std::shared_ptr<progress_meter> meter
         (create_progress_meter
-            (cells.size()
+            (lmi::ssize(cells)
             ,"Calculating all cells"
             ,progress_meter_mode(emission)
             )
@@ -128,7 +129,7 @@ census_run_result run_census_in_series::operator()
     ledger_emitter emitter(file, emission);
     result.seconds_for_output_ += emitter.initiate();
 
-    for(unsigned int j = 0; j < cells.size(); ++j)
+    for(int j = 0; j < lmi::ssize(cells); ++j)
         {
         if(!cell_should_be_ignored(cells[j]))
             {
@@ -242,7 +243,7 @@ census_run_result run_census_in_parallel::operator()
     census_run_result result;
     std::shared_ptr<progress_meter> meter
         (create_progress_meter
-            (cells.size()
+            (lmi::ssize(cells)
             ,"Initializing all cells"
             ,progress_meter_mode(emission)
             )
@@ -607,7 +608,7 @@ census_run_result run_census_in_parallel::operator()
         } // End for.
 
     meter = create_progress_meter
-        (cell_values.size()
+        (lmi::ssize(cell_values)
         ,"Finalizing all cells"
         ,progress_meter_mode(emission)
         );
@@ -627,7 +628,7 @@ census_run_result run_census_in_parallel::operator()
     result.seconds_for_output_ += emitter.initiate();
 
     meter = create_progress_meter
-        (cell_values.size()
+        (lmi::ssize(cell_values)
         ,"Writing output for all cells"
         ,progress_meter_mode(emission)
         );

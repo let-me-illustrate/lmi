@@ -33,6 +33,7 @@
 #include "input_sequence_aux.hpp"       // convert_vector()
 #include "miscellany.hpp"               // each_equal(), minmax
 #include "round_to.hpp"
+#include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -967,11 +968,11 @@ int Input::must_overwrite_specamt_with_obsolete_history
     bool history_differs = false;
     bool future_differs  = false;
 
-    unsigned int const years_of_history = InforceYear.value() + (0 != InforceMonth.value());
-    LMI_ASSERT(years_of_history <= u.size());
-    LMI_ASSERT(years_of_history <= v.size());
+    int const years_of_history = InforceYear.value() + (0 != InforceMonth.value());
+    LMI_ASSERT(years_of_history <= lmi::ssize(u));
+    LMI_ASSERT(years_of_history <= lmi::ssize(v));
 
-    for(unsigned int j = 0; j < years_of_history; ++j)
+    for(int j = 0; j < years_of_history; ++j)
         {
         if(u[j] != v[j])
             {

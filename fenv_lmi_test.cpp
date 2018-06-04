@@ -95,7 +95,7 @@ int test_main(int, char*[])
 
     BOOST_TEST_EQUAL_BITS
         (intel_control_word_parameters::reserved_values
-        ,~0x01000 & x87_control_word()
+        ,~0x01000UL & x87_control_word()
         );
 
     // Make sure invalid PC values are forbidden. The implementation

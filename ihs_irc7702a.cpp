@@ -33,6 +33,7 @@
 #include "assert_lmi.hpp"
 #include "materially_equal.hpp"
 #include "miscellany.hpp"               // minmax
+#include "ssize_lmi.hpp"
 #include "stratified_algorithms.hpp"    // TieredNetToGross()
 
 #include <algorithm>
@@ -232,26 +233,26 @@ void Irc7702A::Initialize7702A
 
     SavedAVBeforeMatChg = a_AVBeforeMatChg;
 
-    unsigned int max_years =
+    int max_years =
             std::min(a_EndtAge, statutory_max_endowment_age)
         -   a_IssueAge
         ;
     // TODO ?? TAXATION !! Do we really need '1 +'?
-    unsigned int max_dur = 1 + months_per_year * max_years;
+    int max_dur = 1 + months_per_year * max_years;
     Pmts.assign(max_dur, 0.0);
     Bfts.assign(max_dur, 0.0);
 
-    LMI_ASSERT(a_Pmts.size() <= max_years);
+    LMI_ASSERT(lmi::ssize(a_Pmts) <= max_years);
     for(unsigned int j = 0; j < a_Pmts.size(); ++j)
         {
         // TODO ?? TAXATION !! OK to treat premium history as annual?
         Pmts[j * months_per_year] = a_Pmts[j];
         }
-    LMI_ASSERT(a_Bfts.size() <= max_years);
+    LMI_ASSERT(lmi::ssize(a_Bfts) <= max_years);
 // TAXATION !! UpdateBft7702A() updates this, thus:
 //    Bfts[TestPeriodDur] = current_bft;
 // so should we make sure Bfts[TestPeriodDur] is zero here?
-    for(unsigned int j = 0; j < a_Bfts.size(); ++j)
+    for(int j = 0; j < lmi::ssize(a_Bfts); ++j)
         {
         for(int k = 0; k < months_per_year; ++k)
             {

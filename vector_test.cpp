@@ -30,7 +30,6 @@
 #include "timer.hpp"
 
 #include <algorithm>
-#include <cstddef>                      // size_t
 #include <functional>
 #include <iomanip>
 #include <ios>
@@ -287,8 +286,8 @@ namespace
     simple_array0 g_w(g_array_length);
 
     std::valarray<double> g_va_u(g_array_length);
-    std::valarray<double> g_va_v(static_cast<std::size_t>(g_array_length));
-    std::valarray<double> g_va_w(static_cast<std::size_t>(g_array_length));
+    std::valarray<double> g_va_v(g_array_length);
+    std::valarray<double> g_va_w(g_array_length);
 } // Unnamed namespace.
 
 void mete_c()

@@ -27,6 +27,7 @@
 #include "rtti_lmi.hpp"
 
 #include <algorithm>                    // find()
+#include <cstddef>                      // ptrdiff_t
 #include <typeinfo>
 
 /// The header that defines class mc_enum is by design unaware of its
@@ -105,9 +106,9 @@ bool mc_enum<T>::operator!=(std::string const& s) const
 }
 
 template<typename T>
-std::size_t mc_enum<T>::ordinal(std::string const& s)
+int mc_enum<T>::ordinal(std::string const& s)
 {
-    std::size_t v = std::find(c(), c() + n(), s) - c();
+    std::ptrdiff_t v = std::find(c(), c() + n(), s) - c();
     if(v == n())
         {
         alarum()
@@ -129,7 +130,7 @@ std::vector<std::string> const& mc_enum<T>::all_strings() const
 }
 
 template<typename T>
-std::size_t mc_enum<T>::cardinality() const
+int mc_enum<T>::cardinality() const
 {
     return n();
 }
@@ -142,7 +143,7 @@ void mc_enum<T>::enforce_proscription()
         return;
         }
 
-    std::size_t z = first_allowed_ordinal();
+    int z = first_allowed_ordinal();
     if(z < cardinality())
         {
         value_ = e()[z];
@@ -150,9 +151,9 @@ void mc_enum<T>::enforce_proscription()
 }
 
 template<typename T>
-std::size_t mc_enum<T>::ordinal() const
+int mc_enum<T>::ordinal() const
 {
-    std::size_t i = std::find(e(), e() + n(), value_) - e();
+    std::ptrdiff_t i = std::find(e(), e() + n(), value_) - e();
     if(i == n())
         {
         alarum()
@@ -189,7 +190,7 @@ T mc_enum<T>::value() const
 // e() and in c() are unique? Can that be asserted at compile time?
 
 template<typename T>
-std::size_t        mc_enum<T>::n() {return mc_enum_key<T>::n_;}
+int                mc_enum<T>::n() {return mc_enum_key<T>::n_;}
 
 template<typename T>
 T    const*        mc_enum<T>::e() {return mc_enum_key<T>::e();}
@@ -237,7 +238,7 @@ std::istream& mc_enum<T>::read(std::istream& is)
     is >> s;
     is.imbue(old_locale);
 
-    std::size_t v = std::find(c(), c() + n(), s) - c();
+    std::ptrdiff_t v = std::find(c(), c() + n(), s) - c();
     if(n() == v)
         {
         v = std::find(c(), c() + n(), provide_for_backward_compatibility(s)) - c();

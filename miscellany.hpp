@@ -71,7 +71,7 @@ std::string floating_rep(T t)
 {
     std::ostringstream oss;
     oss << std::hex << std::setfill('0');
-    std::size_t realsize = sizeof(T);
+    int realsize = static_cast<int>(sizeof(T));
 #if defined __GNUC__ && defined LMI_X87
     // For gcc with x87, sizeof(long double) == 12, but only
     // ten bytes are significant--the other two are padding.
@@ -130,7 +130,7 @@ template<typename T> bool operator<=(minmax<T> m, T t) {return m.maximum() <= t;
 
 int LMI_SO scale_power(int max_power, double min_value, double max_value);
 
-std::size_t LMI_SO count_newlines(std::string const&);
+int LMI_SO count_newlines(std::string const&);
 
 std::vector<std::string> LMI_SO split_into_lines(std::string const&);
 

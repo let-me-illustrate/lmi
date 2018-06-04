@@ -26,7 +26,6 @@
 
 #include "datum_base.hpp"
 
-#include <cstddef>                      // size_t
 #include <deque>
 #include <string>
 #include <type_traits>
@@ -58,13 +57,13 @@ class LMI_SO mc_enum_base
 
     void allow(int, bool);
     void allow_all(bool);
-    std::size_t first_allowed_ordinal() const;
+    int  first_allowed_ordinal() const;
     bool is_allowed(int) const;
 
     virtual std::vector<std::string> const& all_strings() const = 0;
-    virtual std::size_t cardinality() const = 0;
+    virtual int cardinality() const = 0;
     virtual void enforce_proscription() = 0;
-    virtual std::size_t ordinal() const = 0;
+    virtual int ordinal() const = 0;
     virtual std::string str(int) const = 0;
 
   private:
@@ -115,20 +114,20 @@ class mc_enum
     bool operator!=(T                 ) const;
     bool operator!=(std::string const&) const;
 
-    static std::size_t ordinal(std::string const&);
+    static int ordinal(std::string const&);
 
     // mc_enum_base required implementation.
     std::vector<std::string> const& all_strings() const override;
-    std::size_t cardinality() const override;
+    int cardinality() const override;
     void enforce_proscription() override;
-    std::size_t ordinal() const override;
+    int ordinal() const override;
     std::string str(int) const override;
 
     std::string str() const;
     T value() const;
 
   private:
-    static std::size_t        n();
+    static int                n();
     static T    const*        e();
     static char const* const* c();
     static std::vector<std::string> const& s();

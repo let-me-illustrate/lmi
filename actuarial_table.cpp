@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "deserialize_cast.hpp"
 #include "miscellany.hpp"
 #include "oecumenic_enumerations.hpp"   // methuselah
@@ -65,7 +66,7 @@ namespace
     /// in order to avoid warnings for unsigned types.
 
     template<typename T>
-    T read_datum(std::istream& is, T& t, std::int16_t nominal_length)
+    T read_datum(std::istream& is, T& t, std::uint16_t nominal_length)
     {
         LMI_ASSERT(sizeof(T) == nominal_length);
         T const invalid(static_cast<T>(-1));
@@ -331,9 +332,9 @@ void actuarial_table::parse_table()
                 // Meaning: {A, D, S} --> {age, duration, select}.
                 // SOA apparently permits upper or lower case.
                 LMI_ASSERT(-1 == table_type_);
-                unsigned char z;
+                char z;
                 read_datum(data_ifs, z, nominal_length);
-                z = static_cast<unsigned char>(std::toupper(z));
+                z = bourn_cast<char>(std::toupper(z));
                 LMI_ASSERT('A' == z || 'D' == z || 'S' == z);
                 table_type_ = z;
                 }
@@ -452,7 +453,7 @@ void actuarial_table::read_values(std::istream& is, int nominal_length)
           +   1 + max_age_ - min_age_ - select_period_
           ;
         }
-    int deduced_length = number_of_values * sizeof(double);
+    int deduced_length = number_of_values * static_cast<int>(sizeof(double));
     LMI_ASSERT
         (   soa_table_length_max < deduced_length
         ||  nominal_length == deduced_length

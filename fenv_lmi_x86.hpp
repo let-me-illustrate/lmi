@@ -220,7 +220,7 @@ class control_word
     typedef typename std::bitset<ControlWordType::nbits>::reference ref_type;
 
   public:
-    control_word(int w)
+    control_word(unsigned long int w)
         {
         cw_ = ControlWordType::reserved_values | ControlWordType::settable & w;
         }
@@ -253,31 +253,27 @@ class control_word
     std::bitset<ControlWordType::nbits> const& bits() const {return cw_;}
 
   private:
-    ref_type im()     {return cw_[ControlWordType::im_bit];}
-    ref_type dm()     {return cw_[ControlWordType::dm_bit];}
-    ref_type zm()     {return cw_[ControlWordType::zm_bit];}
-    ref_type om()     {return cw_[ControlWordType::om_bit];}
-    ref_type um()     {return cw_[ControlWordType::um_bit];}
-    ref_type pm()     {return cw_[ControlWordType::pm_bit];}
+    ref_type im()     {return cw_[    ControlWordType::im_bit ];}
+    ref_type dm()     {return cw_[    ControlWordType::dm_bit ];}
+    ref_type zm()     {return cw_[    ControlWordType::zm_bit ];}
+    ref_type om()     {return cw_[    ControlWordType::om_bit ];}
+    ref_type um()     {return cw_[    ControlWordType::um_bit ];}
+    ref_type pm()     {return cw_[    ControlWordType::pm_bit ];}
     ref_type pc0()    {return cw_[0 + ControlWordType::pc_bit0];}
     ref_type pc1()    {return cw_[1 + ControlWordType::pc_bit0];}
     ref_type rc0()    {return cw_[0 + ControlWordType::rc_bit0];}
     ref_type rc1()    {return cw_[1 + ControlWordType::rc_bit0];}
 
-    // Not every implementation yet has operator[](std::size_t) const
-    //   http://www.comeaucomputing.com/iso/lwg-defects.html#11
-    // so test() is used where operator[] would suffice.
-
-    bool  im()  const {return cw_.test(ControlWordType::im_bit);}
-    bool  dm()  const {return cw_.test(ControlWordType::dm_bit);}
-    bool  zm()  const {return cw_.test(ControlWordType::zm_bit);}
-    bool  om()  const {return cw_.test(ControlWordType::om_bit);}
-    bool  um()  const {return cw_.test(ControlWordType::um_bit);}
-    bool  pm()  const {return cw_.test(ControlWordType::pm_bit);}
-    bool  pc0() const {return cw_.test(0 + ControlWordType::pc_bit0);}
-    bool  pc1() const {return cw_.test(1 + ControlWordType::pc_bit0);}
-    bool  rc0() const {return cw_.test(0 + ControlWordType::rc_bit0);}
-    bool  rc1() const {return cw_.test(1 + ControlWordType::rc_bit0);}
+    bool  im()  const {return cw_[    ControlWordType::im_bit ];}
+    bool  dm()  const {return cw_[    ControlWordType::dm_bit ];}
+    bool  zm()  const {return cw_[    ControlWordType::zm_bit ];}
+    bool  om()  const {return cw_[    ControlWordType::om_bit ];}
+    bool  um()  const {return cw_[    ControlWordType::um_bit ];}
+    bool  pm()  const {return cw_[    ControlWordType::pm_bit ];}
+    bool  pc0() const {return cw_[0 + ControlWordType::pc_bit0];}
+    bool  pc1() const {return cw_[1 + ControlWordType::pc_bit0];}
+    bool  rc0() const {return cw_[0 + ControlWordType::rc_bit0];}
+    bool  rc1() const {return cw_[1 + ControlWordType::rc_bit0];}
 
     std::bitset<ControlWordType::nbits> cw_;
 };

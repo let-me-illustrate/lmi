@@ -33,7 +33,7 @@
 #include <stdexcept>
 #include <string>
 
-void lmi_sleep(unsigned int seconds);
+void lmi_sleep(int seconds);
 
 /// Why another timer class?
 ///

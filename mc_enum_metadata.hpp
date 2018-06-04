@@ -102,16 +102,14 @@ struct mc_enum_key
 /// and writing them outside the struct definition would be balky.
 ///
 /// 'n' could have been provided as a function rather than a constant,
-/// but a constant is preferable because it can be used in an ICE. It
-/// could have been an enumeration, but declaring it as a std::size_t
-/// costs no more and makes its type definite and explicit.
+/// but a constant is preferable because it can be used in an ICE.
 
-template<typename T, std::size_t N, T const (&E)[N], char const*const (&C)[N]>
+template<typename T, std::size_t n, T const (&E)[n], char const*const (&C)[n]>
 struct mc_enum_data
 {
-    static_assert(0 < N);
+    static_assert(0 != n);
 
-    static std::size_t const n_ = N;
+    static int const          n_  {n};
     static T    const*        e() {return E;}
     static char const* const* c() {return C;}
 };

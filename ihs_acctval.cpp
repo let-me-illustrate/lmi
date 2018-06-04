@@ -1855,9 +1855,7 @@ double AccountValue::InforceLivesBoy() const
         return 0.0;
         }
 
-    unsigned int index = Year;
-    LMI_ASSERT(index < InvariantValues().InforceLives.size());
-    return InvariantValues().InforceLives[index];
+    return InvariantValues().InforceLives.at(Year);
 }
 
 //============================================================================
@@ -1871,9 +1869,7 @@ double AccountValue::InforceLivesEoy() const
         return 0.0;
         }
 
-    unsigned int index = 1 + Year;
-    LMI_ASSERT(index < InvariantValues().InforceLives.size());
-    return InvariantValues().InforceLives[index];
+    return InvariantValues().InforceLives.at(1 + Year);
 }
 
 //============================================================================
