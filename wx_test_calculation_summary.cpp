@@ -153,7 +153,7 @@ class expect_preferences_dialog_base
             }
         }
 
-    wxComboBox* focus_column_combobox(unsigned n)
+    wxComboBox* focus_column_combobox(unsigned int n)
         {
             wxWindow* const column_window = wx_test_focus_controller_child
                 (*dialog_
@@ -314,7 +314,7 @@ LMI_WX_TEST_CASE(calculation_summary)
                 std::vector<std::string> const&
                     summary_columns = effective_calculation_summary_columns();
 
-                for(unsigned n = 0; n < number_of_custom_columns; ++n)
+                for(unsigned int n = 0; n < number_of_custom_columns; ++n)
                     {
                     wxString const& column = focus_column_combobox(n)->GetValue();
                     if(n < summary_columns.size())
@@ -344,7 +344,7 @@ LMI_WX_TEST_CASE(calculation_summary)
             set_use_builtin_summary(false);
 
             wxUIActionSimulator ui;
-            for(unsigned n = 0; n < total_number_of_columns; ++n)
+            for(unsigned int n = 0; n < total_number_of_columns; ++n)
                 {
                 focus_column_combobox(n);
                 ui.Select(n == 2 ? "NewCashLoan" : empty_column_name);
@@ -375,7 +375,7 @@ LMI_WX_TEST_CASE(calculation_summary)
                 );
 
             // And all the rest of the columns are (still) empty.
-            for(unsigned n = 1; n < total_number_of_columns; ++n)
+            for(unsigned int n = 1; n < total_number_of_columns; ++n)
                 {
                 LMI_ASSERT_EQUAL
                     (focus_column_combobox(n)->GetValue()
@@ -410,7 +410,7 @@ LMI_WX_TEST_CASE(calculation_summary)
                 ,"NewCashLoan"
                 );
 
-            for(unsigned n = 1; n < total_number_of_columns; ++n)
+            for(unsigned int n = 1; n < total_number_of_columns; ++n)
                 {
                 LMI_ASSERT_EQUAL
                     (focus_column_combobox(n)->GetValue()

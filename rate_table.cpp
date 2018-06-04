@@ -225,7 +225,7 @@ void remove_nothrow(fs::path const& path)
 // field of the struct is filled with the parsed value.
 struct parse_result
 {
-    unsigned long long num = 0;
+    unsigned long long int num = 0;
     char const* end = nullptr;
 };
 
@@ -846,7 +846,7 @@ class table_impl final
     void name(std::string const& name) { name_ = name; }
     std::uint32_t number() const { return *number_; }
     std::string const& name() const { return *name_; }
-    unsigned long compute_hash_value() const;
+    unsigned long int compute_hash_value() const;
 
   private:
     table_impl(table_impl const&) = delete;
@@ -910,10 +910,10 @@ class table_impl final
             );
 
     // Parse number checking that it is less than the given maximal value.
-    static unsigned long do_parse_number
+    static unsigned long int do_parse_number
             (enum_soa_field     field
             ,int                line_num
-            ,unsigned long      max_num
+            ,unsigned long int  max_num
             ,std::string const& value
             );
 
@@ -969,7 +969,7 @@ class table_impl final
     // values and the select period and max select age if specified.
     //
     // Throws if minimum or maximum ares are not defined or are invalid.
-    unsigned get_expected_number_of_values() const;
+    unsigned int get_expected_number_of_values() const;
 
     // Implementations of the public factory functions.
     void read_from_binary(std::istream& is, std::uint32_t offset);
@@ -1181,7 +1181,7 @@ void table_impl::read_number_before_values
     read_number(onum, field, ifs, length);
 }
 
-unsigned table_impl::get_expected_number_of_values() const
+unsigned int table_impl::get_expected_number_of_values() const
 {
     throw_if_missing_field(min_age_, e_field_min_age);
     throw_if_missing_field(max_age_, e_field_max_age);
@@ -1203,7 +1203,7 @@ unsigned table_impl::get_expected_number_of_values() const
     // Considering that max age is a 16 bit number and int, used for
     // computations, is at least 32 bits, there is no possibility of integer
     // overflow here.
-    unsigned num_values = *max_age_ - *min_age_ + 1;
+    unsigned int num_values = *max_age_ - *min_age_ + 1;
 
     // We are liberal in what we accept and use the default values for the
     // selection period and max select age because we don't need them, strictly
@@ -1229,20 +1229,20 @@ unsigned table_impl::get_expected_number_of_values() const
 
         // In a further application of Postel's law, we consider non-specified
         // or 0 maximum select age as meaning "unlimited".
-        unsigned effective_max_select = get_value_or(max_select_age_, 0);
+        unsigned int effective_max_select = get_value_or(max_select_age_, 0);
         if(effective_max_select == 0)
             {
             effective_max_select = *max_age_;
             }
 
-        unsigned select_range = effective_max_select - *min_age_ + 1;
+        unsigned int select_range = effective_max_select - *min_age_ + 1;
 
         // Maximum possible select_range value is 2^16 and multiplying it by
-        // also 16 bit select_period_ still fits in a 32 bit unsigned value, so
-        // there is no risk of overflow here neither.
+        // also 16 bit select_period_ still fits in a 32 bit unsigned int
+        // value, so there is no risk of overflow here neither.
         select_range *= *select_period_;
 
-        if(std::numeric_limits<unsigned>::max() - num_values < select_range)
+        if(std::numeric_limits<unsigned int>::max() - num_values < select_range)
             {
             alarum()
                 << "too many values in the table with maximum age " << *max_age_
@@ -1268,7 +1268,7 @@ void table_impl::read_values(std::istream& ifs, std::uint16_t /* length */)
     // tables occurring in real-world. Because of this we don't trust the
     // length field from the file at all but deduce the number of values from
     // the previously specified age-related fields instead.
-    unsigned const num_values = get_expected_number_of_values();
+    unsigned int const num_values = get_expected_number_of_values();
 
     values_.resize(num_values);
     if(!stream_read(ifs, &values_[0], num_values * sizeof(double)))
@@ -1309,10 +1309,10 @@ std::string* table_impl::parse_string
     return &ostr.operator *();
 }
 
-unsigned long table_impl::do_parse_number
+unsigned long int table_impl::do_parse_number
         (enum_soa_field     field
         ,int                line_num
-        ,unsigned long      max_num
+        ,unsigned long int  max_num
         ,std::string const& value
         )
 {
@@ -1341,7 +1341,7 @@ unsigned long table_impl::do_parse_number
             ;
         }
 
-    return static_cast<unsigned long>(res.num);
+    return static_cast<unsigned long int>(res.num);
 }
 
 template<typename T>
@@ -1406,8 +1406,8 @@ void table_impl::parse_select_header(std::istream& is, int& line_num) const
         }
 
     std::istringstream iss(line);
-    unsigned actual;
-    for(unsigned expected = 1; iss >> actual; ++expected)
+    unsigned int actual;
+    for(unsigned int expected = 1; iss >> actual; ++expected)
         {
         if(actual != expected)
             {
@@ -1638,7 +1638,7 @@ void table_impl::skip_spaces
 // where "s" is the max select age and "m" is the max age (min age here is 1).
 void table_impl::parse_values(std::istream& is, int& line_num)
 {
-    unsigned const num_values = get_expected_number_of_values();
+    unsigned int const num_values = get_expected_number_of_values();
     values_.reserve(num_values);
 
     if(!num_decimals_)
@@ -2228,7 +2228,7 @@ bool table_impl::is_equal(table_impl const& other) const
         ;
 }
 
-unsigned long table_impl::compute_hash_value() const
+unsigned long int table_impl::compute_hash_value() const
 {
     // This is a bug-for-bug reimplementation of the hash value computation
     // algorithm used in the original SOA format which produces compatible
@@ -2242,7 +2242,7 @@ unsigned long table_impl::compute_hash_value() const
         ;
 
     oss << std::fixed << std::setprecision(*num_decimals_);
-    unsigned const value_width = *num_decimals_ + 2;
+    unsigned int const value_width = *num_decimals_ + 2;
 
     for(auto const& v : values_)
         {
@@ -2330,7 +2330,7 @@ std::string const& table::name() const
     return impl_->name();
 }
 
-unsigned long table::compute_hash_value() const
+unsigned long int table::compute_hash_value() const
 {
     return impl_->compute_hash_value();
 }
@@ -2450,7 +2450,7 @@ class database_impl final
 
     // Map allowing efficient table lookup by its number. Its values are
     // indices into index_ vector.
-    typedef std::map<table::Number, unsigned> NumberToIndexMap;
+    typedef std::map<table::Number, unsigned int> NumberToIndexMap;
     NumberToIndexMap index_by_number_;
 
     // Path to the database, used only for the error messages.
@@ -2574,7 +2574,7 @@ void database_impl::read_index(std::istream& index_is)
             offset = from_bytes<std::uint32_t>(&index_record[e_index_pos_offset]);
 
         // Check that the cast to int below is safe.
-        if(static_cast<unsigned>(std::numeric_limits<int>::max()) <= number)
+        if(static_cast<unsigned int>(std::numeric_limits<int>::max()) <= number)
             {
             alarum()
                 << "database index is corrupt: "

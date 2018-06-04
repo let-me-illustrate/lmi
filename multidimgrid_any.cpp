@@ -112,7 +112,7 @@ class MultiDimGridGrid
         ,wxWindowID
         ,wxPoint const& = wxDefaultPosition
         ,wxSize const& = wxDefaultSize
-        ,long style = 0 // no wxWANTS_CHARS, as is wxGrid's default
+        ,long int style = 0 // no wxWANTS_CHARS, as is wxGrid's default
         ,std::string const& name = wxPanelNameStr
         );
     ~MultiDimGridGrid() override = default;
@@ -134,7 +134,7 @@ inline MultiDimGridGrid::MultiDimGridGrid
     ,wxWindowID id
     ,wxPoint const& pos
     ,wxSize const& size
-    ,long style
+    ,long int style
     ,std::string const& name
     )
     :wxGrid(parent, id, pos, size, style, name)

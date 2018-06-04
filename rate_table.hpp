@@ -84,7 +84,7 @@ class table
     std::string const& name() const;
 
     // Method computing the hash value as used in the original SOA format.
-    unsigned long compute_hash_value() const;
+    unsigned long int compute_hash_value() const;
 
     // Comparison with another table: all fields are compared.
     bool operator==(table const& other) const;

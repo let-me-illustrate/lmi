@@ -233,9 +233,9 @@ wxWindow* IntSpinRenderer::DoCreateEditor
         ,rect.GetTopLeft()
         ,rect.GetSize()
         ,wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER
-        ,static_cast<long>(data.min)
-        ,static_cast<long>(data.max)
-        ,value_cast<long>(data.value));
+        ,static_cast<long int>(data.min)
+        ,static_cast<long int>(data.max)
+        ,value_cast <long int>(data.value));
 }
 
 std::string IntSpinRenderer::DoGetValueFromEditor(wxWindow* editor)
@@ -747,9 +747,9 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
 
     wxString GetColumnType(unsigned int col) const override;
 
-    std::string const& col_name(unsigned col) const;
-    any_member<Input>& cell_at(unsigned row, unsigned col);
-    any_member<Input> const& cell_at(unsigned row, unsigned col) const;
+    std::string const& col_name(unsigned int col) const;
+    any_member<Input>& cell_at(unsigned int row, unsigned int col);
+    any_member<Input> const& cell_at(unsigned int row, unsigned int col) const;
 
   private:
     std::vector<std::string> const& all_headers() const;
@@ -757,11 +757,11 @@ class CensusViewDataViewModel : public wxDataViewIndexListModel
     CensusView& view_;
 };
 
-void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned row, unsigned col) const
+void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned int row, unsigned int col) const
 {
     if(col == Col_CellNum)
         {
-        variant = static_cast<long>(1 + row);
+        variant = static_cast<long int>(1 + row);
         }
     else
         {
@@ -773,7 +773,7 @@ void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned row, un
         }
 }
 
-bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned row, unsigned col)
+bool CensusViewDataViewModel::SetValueByRow(wxVariant const& variant, unsigned int row, unsigned int col)
 {
     LMI_ASSERT(col != Col_CellNum);
 
@@ -816,18 +816,18 @@ wxString CensusViewDataViewModel::GetColumnType(unsigned int col) const
         }
 }
 
-std::string const& CensusViewDataViewModel::col_name(unsigned col) const
+std::string const& CensusViewDataViewModel::col_name(unsigned int col) const
 {
     LMI_ASSERT(0 < col);
     return all_headers()[col - 1];
 }
 
-inline any_member<Input>& CensusViewDataViewModel::cell_at(unsigned row, unsigned col)
+inline any_member<Input>& CensusViewDataViewModel::cell_at(unsigned int row, unsigned int col)
 {
     return view_.cell_parms()[row][col_name(col)];
 }
 
-inline any_member<Input> const& CensusViewDataViewModel::cell_at(unsigned row, unsigned col) const
+inline any_member<Input> const& CensusViewDataViewModel::cell_at(unsigned int row, unsigned int col) const
 {
     return view_.cell_parms()[row][col_name(col)];
 }

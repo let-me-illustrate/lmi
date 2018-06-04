@@ -68,7 +68,7 @@ namespace
 // converted to an int value.
 int year_from_string(wxString const& s)
 {
-    unsigned long year;
+    unsigned long int year;
 
     LMI_ASSERT(s.ToCULong(&year));
     LMI_ASSERT(year < INT_MAX);

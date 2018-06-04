@@ -45,7 +45,7 @@ class RoundingButtons
         ,wxWindowID         id
         ,wxPoint const&     pos   = wxDefaultPosition
         ,wxSize const&      size  = wxDefaultSize
-        ,long               style = 0
+        ,long int           style = 0
         ,std::string const& name  = wxPanelNameStr
         );
     RoundingButtons(RoundingButtons const&) = delete;
@@ -57,7 +57,7 @@ class RoundingButtons
         ,wxWindowID         id
         ,wxPoint const&     pos   = wxDefaultPosition
         ,wxSize const&      size  = wxDefaultSize
-        ,long               style = 0
+        ,long int           style = 0
         ,wxString const&    name  = wxPanelNameStr
         );
 

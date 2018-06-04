@@ -446,7 +446,7 @@ void test_m64_neighborhood()
         {
         std::cout
             << "test_m64_neighborhood() not run because"
-            << "\nunsigned long long is not a 64-bit type."
+            << "\nunsigned long long int is not a 64-bit type."
             << std::endl
             ;
         return;
@@ -837,16 +837,16 @@ int test_main(int, char*[])
         ,"Cannot cast negative to unsigned."
         );
 
-    // Still forbidden even if unsigned type is wider.
+    // Still forbidden even if unsigned type is wider than signed type.
     BOOST_TEST_THROW
-        (bourn_cast<unsigned long>(std::numeric_limits<signed char>::lowest())
+        (bourn_cast<unsigned long int>(std::numeric_limits<signed char>::lowest())
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
         );
 
     // Still forbidden even if value is only "slightly" negative.
     BOOST_TEST_THROW
-        (bourn_cast<unsigned long>(-1)
+        (bourn_cast<unsigned long int>(-1)
         ,std::runtime_error
         ,"Cannot cast negative to unsigned."
         );

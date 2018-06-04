@@ -164,7 +164,7 @@ RoundingButtons::RoundingButtons
     ,wxWindowID         id
     ,wxPoint const&     pos
     ,wxSize const&      size
-    ,long               style
+    ,long int           style
     ,std::string const& name
     )
     :wxPanel()
@@ -178,7 +178,7 @@ void RoundingButtons::Create
     ,wxWindowID         id
     ,wxPoint const&     pos
     ,wxSize const&      size
-    ,long               style
+    ,long int           style
     ,wxString const&    name
     )
 {
