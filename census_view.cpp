@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "census_document.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -233,9 +234,10 @@ wxWindow* IntSpinRenderer::DoCreateEditor
         ,rect.GetTopLeft()
         ,rect.GetSize()
         ,wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER
-        ,static_cast<long int>(data.min)
-        ,static_cast<long int>(data.max)
-        ,value_cast <long int>(data.value));
+        ,bourn_cast<int>(data.min)
+        ,bourn_cast<int>(data.max)
+        ,value_cast<int>(data.value)
+        );
 }
 
 std::string IntSpinRenderer::DoGetValueFromEditor(wxWindow* editor)
@@ -761,7 +763,9 @@ void CensusViewDataViewModel::GetValueByRow(wxVariant& variant, unsigned int row
 {
     if(col == Col_CellNum)
         {
-        variant = static_cast<long int>(1 + row);
+        // WX !! wxVariant::operator=() is overloaded for numerous
+        // types, including 'long int' but excluding 'int'.
+        variant = static_cast<long int>(bourn_cast<int>(1 + row));
         }
     else
         {
