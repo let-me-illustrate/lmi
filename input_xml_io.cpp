@@ -32,6 +32,7 @@
 #include "map_lookup.hpp"
 #include "miscellany.hpp"               // lmi_array_size()
 #include "oecumenic_enumerations.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>                    // min()
 #include <stdexcept>
@@ -317,6 +318,22 @@ void Input::redintegrate_ex_ante
                 : ("VLR"   == value) ? "Variable loan rate"
                 : throw std::runtime_error(value + ": unexpected loan-rate type.")
                 ;
+            }
+        }
+
+    if(file_version < 8)
+        {
+        // Prior to 2018-06, 'InputFundManagementFee' was entered in
+        // basis points, rather than as a pure number. Presumably few
+        // if any new private-placement input files have been saved
+        // since version 8's inception; for any that have, this field
+        // will be limited to unity, and any saved value of one basis
+        // point or greater will therefore be translated to 10000 bp,
+        // resulting in a -100% net rate and a noticeably conservative
+        // separate-account value.
+        if("InputFundManagementFee" == name)
+            {
+            value = value_cast<std::string>(value_cast<double>(value) / 10000.0);
             }
         }
 }

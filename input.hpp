@@ -275,7 +275,7 @@ class LMI_SO Input final
     mce_yes_or_no            UseAverageOfAllFunds            ;
     mce_yes_or_no            OverrideFundManagementFee       ;
     mce_fund_input_method    FundChoiceType                  ;
-    tnr_nonnegative_double   InputFundManagementFee          ;
+    tnr_proportion           InputFundManagementFee          ;
     mce_run_order            RunOrder                        ;
     tnr_nonnegative_integer  NumberOfIdenticalLives          ;
     mce_yes_or_no            UseExperienceRating             ;

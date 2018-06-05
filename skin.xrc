@@ -2612,13 +2612,6 @@ the other is perforce ignored.
                                 <help>Investment management fee for custom fund</help>
                             </object>
                         </object>
-                        <object class="sizeritem">
-                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <border>4</border>
-                            <object class="wxStaticText">
-                                <label>bp</label>
-                            </object>
-                        </object>
                     </object>
                 </object>
             </object>
