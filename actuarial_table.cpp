@@ -43,6 +43,7 @@
 #include <ios>
 #include <istream>
 #include <limits>
+#include <type_traits>                  // endian
 
 namespace
 {
@@ -90,6 +91,17 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
     ,max_select_age_ (-1)
     ,table_offset_   (-1)
 {
+    // Binary tables in the SOA format are not portable; this code
+    // presumably works only on little-endian hardware.
+#if 201900L < __cplusplus
+    #error Use the proper C++20 value, which was unknown when this was written.
+    static_assert(std::endian::native == std::endian::little);
+#endif // 201900L < __cplusplus
+
+    static_assert(8 == CHAR_BIT);
+    static_assert(4 == sizeof(int));
+    static_assert(2 == sizeof(short int));
+
     if(table_number_ <= 0)
         {
         alarum()
@@ -210,13 +222,6 @@ void actuarial_table::find_table()
             << LMI_FLUSH
             ;
         }
-
-    // TODO ?? Assert endianness too? SOA tables are not portable;
-    // probably they can easily be read only on x86 hardware.
-
-    static_assert(8 == CHAR_BIT);
-    static_assert(4 == sizeof(int));
-    static_assert(2 == sizeof(short int));
 
     // 27.4.3.2/2 requires that this be interpreted as invalid.
     // Reinitialize it here for robustness, even though the ctor
