@@ -531,14 +531,8 @@ wno_conv_objects := \
   rate_table.o \
   round_glibc.o \
 
-$(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion
-
-wno_float_conv_objects := \
-  gpt_server.o \
-  ihs_basicval.o \
-  mec_server.o \
-
-$(wno_float_conv_objects): gcc_common_extra_warnings += -Wno-float-conversion
+$(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conversion
+currency_test.o: gcc_common_extra_warnings += -Wno-float-conversion
 
 wno_sign_conv_objects := \
   $(boost_dependent_objects) \
