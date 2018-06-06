@@ -122,10 +122,10 @@ inline bool is_infinite(T t)
 /// circumstances avoids this embarrassment while introducing an error
 /// that shouldn't matter.
 
-inline long double ldbl_eps_plus_one()
+inline double ldbl_eps_plus_one_times(double z)
 {
-    static long double const z = 1.0L + std::numeric_limits<long double>::epsilon();
-    return z;
+    static long double const y = 1.0L + std::numeric_limits<long double>::epsilon();
+    return static_cast<double>(y * z);
 }
 
 #endif // ieee754_hpp

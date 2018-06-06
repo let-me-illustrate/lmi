@@ -36,6 +36,7 @@
 #include "et_vector.hpp"
 #include "gpt_input.hpp"
 #include "gpt_xml_document.hpp"
+#include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702a.hpp"
 #include "ihs_server7702.hpp"           // RunServer7702FromStruct()
 #include "materially_equal.hpp"         // material_difference()
@@ -58,7 +59,6 @@
 
 #include <algorithm>                    // min()
 #include <iostream>
-#include <limits>
 #include <string>
 #include <vector>
 
@@ -273,11 +273,6 @@ gpt_state test_one_days_gpt_transactions
     z.UpdateBOY7702A(InforceYear);
     z.UpdateBOM7702A(InforceMonth);
 
-    // See the implementation of class BasicValues.
-    long double const epsilon_plus_one =
-        1.0L + std::numeric_limits<long double>::epsilon()
-        ;
-
     double AnnualTargetPrem = 1000000000.0; // No higher premium is anticipated.
     int const target_year =
           database.Query(DB_TgtPremFixedAtIssue)
@@ -294,18 +289,22 @@ gpt_state test_one_days_gpt_transactions
         // the target premium should be the same as for oe_modal_table
         // with a 7Px table and a DB_TgtPremMonthlyPolFee of zero.
         AnnualTargetPrem = round_max_premium
-            (   InforceTargetSpecifiedAmount
-            *   epsilon_plus_one
-            *   tabular_7Px[target_year]
+            (ldbl_eps_plus_one_times
+                ( InforceTargetSpecifiedAmount
+                * tabular_7Px[target_year]
+                )
             );
         }
     else if(oe_modal_table == target_premium_type)
         {
         AnnualTargetPrem = round_max_premium
-            (   database.Query(DB_TgtPremMonthlyPolFee)
-            +       InforceTargetSpecifiedAmount
-                *   epsilon_plus_one
-                *   TargetPremiumRates[target_year]
+            (ldbl_eps_plus_one_times
+                (   database.Query(DB_TgtPremMonthlyPolFee)
+                +
+                    ( InforceTargetSpecifiedAmount
+                    * TargetPremiumRates[target_year]
+                    )
+                )
             );
         }
     else

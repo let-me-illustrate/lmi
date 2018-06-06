@@ -36,7 +36,7 @@
 #include "fund_data.hpp"
 #include "global_settings.hpp"
 #include "gpt_specamt.hpp"
-#include "ieee754.hpp"                  // ldbl_eps_plus_one()
+#include "ieee754.hpp"                  // ldbl_eps_plus_one_times()
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "input.hpp"
@@ -919,7 +919,7 @@ double BasicValues::GetModalPremMaxNonMec
 {
     // TAXATION !! No table available if 7PP calculated from first principles.
     double temp = MortalityRates_->SevenPayRates()[0];
-    return round_max_premium()(temp * ldbl_eps_plus_one() * a_specamt / a_mode);
+    return round_max_premium()(ldbl_eps_plus_one_times(temp * a_specamt / a_mode));
 }
 
 /// Calculate premium using a target-premium ratio.
@@ -953,13 +953,13 @@ double BasicValues::GetModalPremTgtFromTable
     ) const
 {
     return round_max_premium()
-        (
-            (   TgtPremMonthlyPolFee * 12
-            +       a_specamt
-                *   ldbl_eps_plus_one()
-                *   MortalityRates_->TargetPremiumRates()[0]
+        (ldbl_eps_plus_one_times
+            (
+                ( TgtPremMonthlyPolFee * 12
+                + (a_specamt * MortalityRates_->TargetPremiumRates()[0])
+                )
+            /   a_mode
             )
-        /   a_mode
         );
 }
 
@@ -976,7 +976,7 @@ double BasicValues::GetModalPremCorridor
     ) const
 {
     double temp = GetCorridorFactor()[0];
-    return round_max_premium()((ldbl_eps_plus_one() * a_specamt / temp) / a_mode);
+    return round_max_premium()(ldbl_eps_plus_one_times((a_specamt / temp) / a_mode));
 }
 
 //============================================================================
@@ -1002,7 +1002,7 @@ double BasicValues::GetModalPremGLP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(ldbl_eps_plus_one() * z);
+    return round_max_premium()(ldbl_eps_plus_one_times(z));
 }
 
 //============================================================================
@@ -1025,7 +1025,7 @@ double BasicValues::GetModalPremGSP
 // term rider, dumpin
 
     z /= a_mode;
-    return round_max_premium()(ldbl_eps_plus_one() * z);
+    return round_max_premium()(ldbl_eps_plus_one_times(z));
 }
 
 /// Calculate a monthly-deduction discount factor on the fly.
