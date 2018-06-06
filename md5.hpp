@@ -48,6 +48,7 @@
 #include "config.hpp"
 
 #include <cstddef>                      // size_t
+#include <cstdint>                      // GWC added this.
 #include <cstdio>                       // GWC added this required header.
 
 /* GWC: Make this header usable with C++. */
@@ -62,47 +63,7 @@ extern "C" {
  */
 #include <limits.h>
 
-/* The following contortions are an attempt to use the C preprocessor
- * to determine an unsigned integral type that is 32 bits wide. An
- * alternative approach is to use autoconf's AC_CHECK_SIZEOF macro, but
- * doing that would require that the configure script compile and *run*
- * the resulting executable. Locally running cross-compiled executables
- * is usually not possible.
- */
-
-#if defined _LIBC
-# include <sys/types.h>
-typedef u_int32_t md5_uint32;
-#else // !defined _LIBC
-#  define INT_MAX_32_BITS 2147483647
-
-/* If UINT_MAX isn't defined, assume it's a 32-bit type.
- * This should be valid for all systems GNU cares about because
- * that doesn't include 16-bit systems, and only modern systems
- * (that certainly have <limits.h>) have 64+-bit integral types.
- */
-
-# if !defined INT_MAX
-#  define INT_MAX INT_MAX_32_BITS
-# endif // !defined INT_MAX
-
-# if INT_MAX == INT_MAX_32_BITS
-   typedef unsigned int md5_uint32;
-# else // !INT_MAX == INT_MAX_32_BITS
-#  if SHRT_MAX == INT_MAX_32_BITS
-    typedef unsigned short int md5_uint32;
-#  else // !SHRT_MAX == INT_MAX_32_BITS
-#   if LONG_MAX == INT_MAX_32_BITS
-     typedef unsigned long int md5_uint32;
-#   else // !LONG_MAX == INT_MAX_32_BITS
-     /* The following line is intended to evoke an error.
-      * Using #error is not portable enough.
-      */
-     "Cannot determine unsigned 32-bit data type."
-#   endif // !LONG_MAX == INT_MAX_32_BITS
-#  endif // !SHRT_MAX == INT_MAX_32_BITS
-# endif // !INT_MAX == INT_MAX_32_BITS
-#endif // !defined _LIBC
+typedef std::uint32_t md5_uint32;
 
 /* GWC: Here, __STDC__ is tested, but what should be done if that test
  * fails? The gnu project assumes it may have a pre-1989 C compiler. I
