@@ -35,7 +35,6 @@
 
 #include <algorithm>                    // count()
 #include <climits>                      // ULLONG_MAX
-#include <cstdint>
 #include <cstdlib>                      // strtoull()
 #include <cstring>                      // strncmp()
 #include <iomanip>
@@ -846,7 +845,7 @@ class table_impl final
     void name(std::string const& name) { name_ = name; }
     std::uint32_t number() const { return *number_; }
     std::string const& name() const { return *name_; }
-    unsigned long int compute_hash_value() const;
+    std::uint32_t compute_hash_value() const;
 
   private:
     table_impl(table_impl const&) = delete;
@@ -910,10 +909,10 @@ class table_impl final
             );
 
     // Parse number checking that it is less than the given maximal value.
-    static unsigned long int do_parse_number
+    static std::uint32_t do_parse_number
             (enum_soa_field     field
             ,int                line_num
-            ,unsigned long int  max_num
+            ,std::uint32_t      max_num
             ,std::string const& value
             );
 
@@ -1309,10 +1308,10 @@ std::string* table_impl::parse_string
     return &ostr.operator *();
 }
 
-unsigned long int table_impl::do_parse_number
+std::uint32_t table_impl::do_parse_number
         (enum_soa_field     field
         ,int                line_num
-        ,unsigned long int  max_num
+        ,std::uint32_t      max_num
         ,std::string const& value
         )
 {
@@ -1341,7 +1340,7 @@ unsigned long int table_impl::do_parse_number
             ;
         }
 
-    return static_cast<unsigned long int>(res.num);
+    return static_cast<std::uint32_t>(res.num);
 }
 
 template<typename T>
@@ -2228,7 +2227,7 @@ bool table_impl::is_equal(table_impl const& other) const
         ;
 }
 
-unsigned long int table_impl::compute_hash_value() const
+std::uint32_t table_impl::compute_hash_value() const
 {
     // This is a bug-for-bug reimplementation of the hash value computation
     // algorithm used in the original SOA format which produces compatible
@@ -2330,7 +2329,7 @@ std::string const& table::name() const
     return impl_->name();
 }
 
-unsigned long int table::compute_hash_value() const
+std::uint32_t table::compute_hash_value() const
 {
     return impl_->compute_hash_value();
 }

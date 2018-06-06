@@ -27,6 +27,7 @@
 #include <boost/filesystem/path.hpp>
 
 #include <cstddef>                      // size_t
+#include <cstdint>
 #include <iosfwd>
 #include <memory>                       // shared_ptr
 #include <string>
@@ -84,7 +85,7 @@ class table
     std::string const& name() const;
 
     // Method computing the hash value as used in the original SOA format.
-    unsigned long int compute_hash_value() const;
+    std::uint32_t compute_hash_value() const;
 
     // Comparison with another table: all fields are compared.
     bool operator==(table const& other) const;

@@ -54,7 +54,7 @@ void calculate_and_display_crcs(fs::path const& database_filename)
     for(int i = 0; i != table_file.tables_count(); ++i)
         {
         table const& t = table_file.get_nth_table(i);
-        unsigned long int crc = t.compute_hash_value();
+        std::uint32_t crc = t.compute_hash_value();
         std::cout
             << std::dec << std::setw( 5) << std::setfill('0')
             << t.number().value()
