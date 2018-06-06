@@ -25,6 +25,7 @@
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "calendar_date.hpp"
 #include "contains.hpp"
 #include "data_directory.hpp"
@@ -1536,7 +1537,7 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 std::vector<double> BasicValues::GetActuarialTable
     (std::string const& TableFile
     ,e_database_key     TableID
-    ,long int           TableNumber
+    ,int                TableNumber
     ) const
 {
     if(DB_CurrCoiTable == TableID && e_reenter_never != CoiInforceReentry)
@@ -1571,7 +1572,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     return GetActuarialTable
         (TableFile
         ,TableID
-        ,static_cast<long int>(Database_->Query(TableID))
+        ,bourn_cast<int>(Database_->Query(TableID))
         );
 }
 
@@ -1587,7 +1588,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     return GetActuarialTable
         (TableFile
         ,TableID
-        ,static_cast<long int>(Database_->Query(TableID, index))
+        ,bourn_cast<int>(Database_->Query(TableID, index))
         );
 }
 
@@ -1975,7 +1976,7 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(ProductData_->datum("CurrSpouseRiderFilename"))
-        ,static_cast<long int>(Database_->Query(DB_SpouseRiderTable))
+        ,bourn_cast<int>(Database_->Query(DB_SpouseRiderTable))
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
         );
@@ -1992,7 +1993,7 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 
     std::vector<double> z = actuarial_table_rates
         (AddDataDir(ProductData_->datum("GuarSpouseRiderFilename"))
-        ,static_cast<long int>(Database_->Query(DB_SpouseRiderGuarTable))
+        ,bourn_cast<int>(Database_->Query(DB_SpouseRiderGuarTable))
         ,yare_input_.SpouseIssueAge
         ,EndtAge - yare_input_.SpouseIssueAge
         );

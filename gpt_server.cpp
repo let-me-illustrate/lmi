@@ -26,6 +26,7 @@
 #include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
+#include "bourn_cast.hpp"
 #include "commutation_functions.hpp"
 #include "configurable_settings.hpp"
 #include "contains.hpp"
@@ -147,7 +148,7 @@ gpt_state test_one_days_gpt_transactions
         {
         TargetPremiumRates = actuarial_table_rates
             (AddDataDir(product_filenames.datum("TgtPremFilename"))
-            ,static_cast<long int>(database.Query(DB_TgtPremTable))
+            ,bourn_cast<int>(database.Query(DB_TgtPremTable))
             ,input.issue_age()
             ,input.years_to_maturity()
             );
@@ -159,7 +160,7 @@ gpt_state test_one_days_gpt_transactions
 
     std::vector<double> const CvatCorridorFactors = actuarial_table_rates
         (AddDataDir(product_filenames.datum("CvatCorridorFilename"))
-        ,static_cast<long int>(database.Query(DB_CorridorTable))
+        ,bourn_cast<int>(database.Query(DB_CorridorTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
@@ -174,14 +175,14 @@ gpt_state test_one_days_gpt_transactions
 
     std::vector<double> const tabular_7Px = actuarial_table_rates
         (AddDataDir(product_filenames.datum("SevenPayFilename"))
-        ,static_cast<long int>(database.Query(DB_SevenPayTable))
+        ,bourn_cast<int>(database.Query(DB_SevenPayTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
 
     std::vector<double> Mly7702qc = actuarial_table_rates
         (AddDataDir(product_filenames.datum("Irc7702QFilename"))
-        ,static_cast<long int>(database.Query(DB_Irc7702QTable))
+        ,bourn_cast<int>(database.Query(DB_Irc7702QTable))
         ,input.issue_age()
         ,input.years_to_maturity()
         );
