@@ -1283,7 +1283,7 @@ void CensusView::paste_out_to_spreadsheet() const
             std::string s = cell[header].str();
             if(exact_cast<tnr_date>(cell[header]))
                 {
-                long int z = JdnToYmd(jdn_t(value_cast<long int>(s))).value();
+                int z = JdnToYmd(jdn_t(value_cast<int>(s))).value();
                 s = value_cast<std::string>(z);
                 }
             // Assume that the trailing '\t' doesn't matter.
@@ -1765,11 +1765,11 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
             {
             if(exact_cast<tnr_date>(current_cell[headers[j]]))
                 {
-                static long int const jdn_min = calendar_date::gregorian_epoch_jdn;
-                static long int const jdn_max = calendar_date::last_yyyy_date_jdn;
-                static long int const ymd_min = JdnToYmd(jdn_t(jdn_min)).value();
-                static long int const ymd_max = JdnToYmd(jdn_t(jdn_max)).value();
-                long int z = value_cast<long int>(values[j]);
+                static int const jdn_min = calendar_date::gregorian_epoch_jdn;
+                static int const jdn_max = calendar_date::last_yyyy_date_jdn;
+                static int const ymd_min = JdnToYmd(jdn_t(jdn_min)).value();
+                static int const ymd_max = JdnToYmd(jdn_t(jdn_max)).value();
+                int z = value_cast<int>(values[j]);
                 if(jdn_min <= z && z <= jdn_max)
                     {
                     ; // Do nothing: JDN is the default expectation.
