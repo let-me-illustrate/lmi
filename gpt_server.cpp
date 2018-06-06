@@ -512,11 +512,7 @@ gpt_state test_one_days_gpt_transactions
 }
 } // Unnamed namespace.
 
-gpt_server::gpt_server(mcenum_emission emission)
-    :emission_                 (emission)
-    ,seconds_for_input_        (0.0)
-    ,seconds_for_calculations_ (0.0)
-    ,seconds_for_output_       (0.0)
+gpt_server::gpt_server(mcenum_emission emission) : emission_(emission)
 {
 }
 

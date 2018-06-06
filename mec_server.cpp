@@ -494,8 +494,7 @@ mec_state test_one_days_7702A_transactions
 }
 } // Unnamed namespace.
 
-mec_server::mec_server(mcenum_emission emission)
-    :emission_                 (emission)
+mec_server::mec_server(mcenum_emission emission) : emission_(emission)
 {
 }
 
