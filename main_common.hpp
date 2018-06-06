@@ -27,6 +27,9 @@
 // Included so that try_main() definitions can use EXIT_SUCCESS, EXIT_FAILURE.
 #include <cstdlib>
 
+static_assert(8 == CHAR_BIT);
+static_assert(4 <= sizeof(int));
+
 void initialize_application();
 int try_main(int argc, char* argv[]);
 

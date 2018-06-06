@@ -98,10 +98,6 @@ actuarial_table::actuarial_table(std::string const& filename, int table_number)
     static_assert(std::endian::native == std::endian::little);
 #endif // 201900L < __cplusplus
 
-    static_assert(8 == CHAR_BIT);
-    static_assert(4 == sizeof(int));
-    static_assert(2 == sizeof(short int));
-
     if(table_number_ <= 0)
         {
         alarum()
