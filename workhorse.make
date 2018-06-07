@@ -467,10 +467,16 @@ gcc_cxx_warnings := \
 # 'extra' flags. This makefile used to inhibit these flags for source
 # files that seemed to depend on wx according to a casual heuristic,
 # but now they're inhibited by a #pragma in the PCH file that all wx-
-# dependent TUs must include.
+# dependent TUs must include. For clarity, define this empty variable
+# and spell out the warnings here so that all warnings can be seen in
+# this one makefile.
+
+wx_dependent_objects :=
 
 gcc_common_extra_warnings := \
   -Wcast-qual \
+
+$(wx_dependent_objects): gcc_common_extra_warnings += -Wno-cast-qual
 
 ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   ifeq (3.4.5,$(gcc_version))
@@ -537,6 +543,7 @@ wno_sign_conv_objects := \
   $(boost_dependent_objects) \
   $(boost_filesystem_objects) \
   $(boost_regex_objects) \
+  $(wx_dependent_objects) \
   $(xmlwrapp_objects) \
   CgiEnvironment.o \
   CgiUtils.o \
