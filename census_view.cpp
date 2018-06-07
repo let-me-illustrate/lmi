@@ -43,6 +43,7 @@
 #include "path_utility.hpp"             // unique_filepath()
 #include "rtti_lmi.hpp"                 // lmi::TypeInfo
 #include "safely_dereference_as.hpp"
+#include "ssize_lmi.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 #include "wx_new.hpp"
@@ -1035,7 +1036,7 @@ oenum_mvc_dv_rc CensusView::edit_parameters
 int CensusView::selected_row()
 {
     int row = list_model_->GetRow(list_window_->GetSelection());
-    LMI_ASSERT(0 <= row && static_cast<unsigned int>(row) < list_model_->GetCount());
+    LMI_ASSERT(0 <= row && row < bourn_cast<int>(list_model_->GetCount()));
     return row;
 }
 
@@ -1205,7 +1206,7 @@ void CensusView::update_visible_columns()
     // still information--so if the user made them different from any cell
     // wrt some column, we respect that conscious decision.
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
-    unsigned int column = 0;
+    int column = 0;
     for(auto const& i : all_headers)
         {
         ++column;
@@ -1375,7 +1376,7 @@ void CensusView::UponColumnWidthVarying(wxCommandEvent&)
     autosize_columns_ = true;
 
     wxWindowUpdateLocker u(list_window_);
-    for(unsigned int j = 0; j < list_window_->GetColumnCount(); ++j)
+    for(int j = 0; j < bourn_cast<int>(list_window_->GetColumnCount()); ++j)
         {
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_AUTOSIZE);
         }
@@ -1389,7 +1390,7 @@ void CensusView::UponColumnWidthFixed(wxCommandEvent&)
     autosize_columns_ = false;
 
     wxWindowUpdateLocker u(list_window_);
-    for(unsigned int j = 0; j < list_window_->GetColumnCount(); ++j)
+    for(int j = 0; j < bourn_cast<int>(list_window_->GetColumnCount()); ++j)
         {
         list_window_->GetColumn(j)->SetWidth(wxCOL_WIDTH_DEFAULT);
         }
@@ -1439,8 +1440,7 @@ void CensusView::UponUpdateSingleSelection(wxUpdateUIEvent& e)
 void CensusView::UponUpdateNonemptySelection(wxUpdateUIEvent& e)
 {
     wxDataViewItemArray selection;
-    unsigned int n_sel_items = list_window_->GetSelections(selection);
-    e.Enable(0 < n_sel_items);
+    e.Enable(0 < list_window_->GetSelections(selection));
 }
 
 /// Update the dataview display.
@@ -1549,10 +1549,10 @@ void CensusView::UponAddCell(wxCommandEvent&)
 
 void CensusView::UponDeleteCells(wxCommandEvent&)
 {
-    unsigned int n_items = list_model_->GetCount();
+    int n_items = bourn_cast<int>(list_model_->GetCount());
     wxDataViewItemArray selection;
-    unsigned int n_sel_items = list_window_->GetSelections(selection);
-    LMI_ASSERT(n_sel_items == selection.size());
+    int n_sel_items = bourn_cast<int>(list_window_->GetSelections(selection));
+    LMI_ASSERT(n_sel_items == lmi::ssize(selection));
     // This handler should have been disabled if no cell is selected.
     LMI_ASSERT(0 < n_sel_items);
 
@@ -1596,26 +1596,26 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         }
     std::sort(erasures.begin(), erasures.end());
 
-    LMI_ASSERT(cell_parms().size() == n_items);
+    LMI_ASSERT(lmi::ssize(cell_parms()) == n_items);
 
     for(int j = erasures.size() - 1; 0 <= j; --j)
         {
         cell_parms().erase(erasures[j] + cell_parms().begin());
         }
-    LMI_ASSERT(cell_parms().size() == n_items - n_sel_items);
+    LMI_ASSERT(lmi::ssize(cell_parms()) == n_items - n_sel_items);
 
     // Send notifications about changes to the wxDataViewCtrl model. Two things
     // changed: some rows were deleted and cell number of some rows shifted
     // accordingly.
     list_model_->RowsDeleted(erasures);
-    for(unsigned int j = erasures.front(); j < cell_parms().size(); ++j)
+    for(int j = erasures.front(); j < lmi::ssize(cell_parms()); ++j)
         {
         list_model_->RowValueChanged(j, CensusViewDataViewModel::Col_CellNum);
         }
 
-    unsigned int const newsel = std::min
-        (static_cast<std::size_t>(erasures.front())
-        ,cell_parms().size() - 1
+    int const newsel = std::min
+        (erasures.front()
+        ,lmi::ssize(cell_parms()) - 1
         );
     wxDataViewItem const& z = list_model_->GetItem(newsel);
     list_window_->Select(z);
@@ -1761,7 +1761,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
                 ;
             }
 
-        for(unsigned int j = 0; j < headers.size(); ++j)
+        for(int j = 0; j < lmi::ssize(headers); ++j)
             {
             if(exact_cast<tnr_date>(current_cell[headers[j]]))
                 {
