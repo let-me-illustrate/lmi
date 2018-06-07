@@ -545,6 +545,11 @@ wno_sign_conv_objects := \
   md5.o \
   round_glibc.o \
 
+# '-Wsign-conversion' is generally unusable with C++ because the STL
+# defectively uses unsigned types. It is useful to enable it from
+# time to time and filter the output thus:
+#   grep 'error:' | sed -e '/size_type/d'
+
 $(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
 
 C_WARNINGS = \
