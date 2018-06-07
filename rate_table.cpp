@@ -24,6 +24,7 @@
 #include "rate_table.hpp"
 
 #include "alert.hpp"
+#include "bourn_cast.hpp"
 #include "crc32.hpp"
 #include "miscellany.hpp"               // ios_in_binary(), ios_out_trunc_binary()
 #include "path_utility.hpp"
@@ -508,8 +509,7 @@ void writer::write(enum_soa_field field, std::optional<std::string> const& ostr)
 {
     if(ostr)
         {
-        std::string::size_type const length = ostr->size();
-        if(std::numeric_limits<std::uint16_t>::max() < length)
+        if(std::numeric_limits<std::uint16_t>::max() < ostr->size())
             {
             alarum()
                 << "the value of the field '"
@@ -519,6 +519,7 @@ void writer::write(enum_soa_field field, std::optional<std::string> const& ostr)
                 ;
             }
 
+        auto const length = bourn_cast<std::uint16_t>(ostr->size());
         do_write_record_header(soa_fields[field].record_type, length);
         stream_write(os_, ostr->c_str(), length);
         }
@@ -646,7 +647,8 @@ void writer::write_values
             }
 
         // And finish with the lines having just the ultimate values.
-        for(std::uint16_t age = *max_select_age + period + 1; age <= *max_age; ++age)
+        auto ult_beg = bourn_cast<std::uint16_t>(*max_select_age + period + 1);
+        for(std::uint16_t age = ult_beg; age <= *max_age; ++age)
             {
             os_ << std::setw(text_format::age_width) << age;
 
@@ -1554,7 +1556,7 @@ double table_impl::parse_single_value
     if(0 == *num_decimals_)
         {
         current = res_int_part.end;
-        return res_int_part.num;
+        return bourn_cast<double>(res_int_part.num);
         }
 
     if(*res_int_part.end != '.')
@@ -1770,7 +1772,7 @@ void table_impl::parse_values(std::istream& is, int& line_num)
                 {
                 // There is a jump in ages when switching from the 2D to 1D
                 // part of the select and ultimate table after the select age.
-                age += *select_period_;
+                age = bourn_cast<std::uint16_t>(age + *select_period_);
                 }
             }
         }
@@ -1849,7 +1851,9 @@ void table_impl::validate()
             }
 
         std::uint16_t putative_num_decimals = *num_decimals_;
-        std::uint16_t required_num_decimals = deduce_number_of_decimals(values_);
+        std::uint16_t required_num_decimals = bourn_cast<std::uint16_t>
+            (deduce_number_of_decimals(values_)
+            );
         // This condition is true only if the table is defective,
         // which should occur rarely enough that the cost of
         // recalculating the hash value both here and below
