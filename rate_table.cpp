@@ -176,16 +176,18 @@ T get_value_or(std::optional<T> const& o, U v)
 
 // Functions doing the same thing as istream::read() and ostream::write()
 // respectively, but taking void pointers and this allowing to avoid ugly casts
-// to char in the calling code.
+// to char in the calling code. SOMEDAY !! Consider changing the type of
+// 'length', which is always cast to something else before use.
+
 inline bool stream_write(std::ostream& os, void const* data, std::size_t length)
 {
-    os.write(static_cast<char const*>(data), length);
+    os.write(static_cast<char const*>(data), bourn_cast<std::streamsize>(length));
     return !os.fail();
 }
 
 inline bool stream_read(std::istream& is, void* data, std::size_t length)
 {
-    is.read(static_cast<char*>(data), length);
+    is.read(static_cast<char*>(data), bourn_cast<std::streamsize>(length));
     return is.gcount() == static_cast<std::streamsize>(length);
 }
 
@@ -747,7 +749,7 @@ std::optional<field_and_value> parse_field_and_value
                     {
                     alarum()
                         << "value expected after '" << name << ":'"
-                        << location_info(line_num, pos_colon + 1)
+                        << location_info(line_num, bourn_cast<int>(pos_colon + 1))
                         << std::flush
                         ;
                     }
@@ -756,7 +758,7 @@ std::optional<field_and_value> parse_field_and_value
                     {
                     alarum()
                         << "space expected after '" << name << ":'"
-                        << location_info(line_num, pos_colon + 1)
+                        << location_info(line_num, bourn_cast<int>(pos_colon + 1))
                         << std::flush
                         ;
                     }
@@ -775,7 +777,7 @@ std::optional<field_and_value> parse_field_and_value
     // A valid field name can consist of a few words only, so check for this
     // to avoid giving warnings about colons appearing in the middle (or even
     // at the end of) a line.
-    if(3 < std::count(line.begin(), line.begin() + pos_colon, ' '))
+    if(3 < std::count(line.begin(), line.begin() + bourn_cast<int>(pos_colon), ' '))
         {
         return no_field;
         }
@@ -1202,7 +1204,7 @@ unsigned int table_impl::get_expected_number_of_values() const
     // Considering that max age is a 16 bit number and int, used for
     // computations, is at least 32 bits, there is no possibility of integer
     // overflow here.
-    unsigned int num_values = *max_age_ - *min_age_ + 1;
+    unsigned int num_values = bourn_cast<unsigned int>(*max_age_ - *min_age_ + 1);
 
     // We are liberal in what we accept and use the default values for the
     // selection period and max select age because we don't need them, strictly
@@ -1601,7 +1603,7 @@ void table_impl::skip_spaces
     ,int          line_num
     )
 {
-    if(std::strncmp(current, std::string(num_spaces, ' ').c_str(), num_spaces) != 0)
+    if(std::strncmp(current, std::string(bourn_cast<unsigned int>(num_spaces), ' ').c_str(), bourn_cast<unsigned int>(num_spaces)) != 0)
         {
         alarum()
             << "expected " << num_spaces << " spaces"
@@ -2243,11 +2245,11 @@ std::uint32_t table_impl::compute_hash_value() const
         ;
 
     oss << std::fixed << std::setprecision(*num_decimals_);
-    unsigned int const value_width = *num_decimals_ + 2;
+    unsigned int const value_width = bourn_cast<unsigned int>(*num_decimals_ + 2);
 
     for(auto const& v : values_)
         {
-        oss << std::setw(value_width) << v;
+        oss << std::setw(bourn_cast<int>(value_width)) << v;
         }
 
     std::string s = oss.str();
@@ -2323,7 +2325,7 @@ void table::name(std::string const& n)
 
 table::Number table::number() const
 {
-    return table::Number(impl_->number());
+    return table::Number(bourn_cast<int>(impl_->number()));
 }
 
 std::string const& table::name() const
@@ -2395,7 +2397,7 @@ class database_impl final
             ,std::uint32_t               offset
             ,std::shared_ptr<table_impl> table
             )
-            :number_(number.value())
+            :number_(bourn_cast<std::uint32_t>(number.value()))
             ,offset_(offset)
             ,table_ (table)
         {
@@ -2536,7 +2538,7 @@ void database_impl::remove_index_entry(table::Number number)
     // Remove the entry corresponding to this table from both the index and the
     // lookup map.
     auto const index_deleted = it->second;
-    index_.erase(index_.begin() + index_deleted);
+    index_.erase(index_.begin() + bourn_cast<int>(index_deleted));
     index_by_number_.erase(it);
 
     // But also update the remaining lookup map indices.
@@ -2602,7 +2604,7 @@ int database_impl::tables_count() const
 
 table database_impl::get_nth_table(int idx) const
 {
-    return do_get_table(index_.at(idx));
+    return do_get_table(index_.at(bourn_cast<unsigned int>(idx)));
 }
 
 std::shared_ptr<table_impl> database_impl::do_get_table_impl

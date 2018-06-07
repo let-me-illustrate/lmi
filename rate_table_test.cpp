@@ -202,7 +202,7 @@ void test_table_access_by_index()
 
     BOOST_TEST_THROW
         (qx_cso.get_nth_table(-1)
-        ,std::out_of_range
+        ,std::runtime_error
         ,""
         );
 
